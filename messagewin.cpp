@@ -315,7 +315,7 @@ QSize MessageWin::initView()
 			topLayout->addSpacing(vspace);
 			topLayout->addStretch();
 			// Don't include any horizontal margins if message is 2/3 screen width
-			if (text->sizeHint().width() >= KWinModule().workArea().width()*2/3)
+			if (text->sizeHint().width() >= KWinModule(0, KWinModule::INFO_DESKTOP).workArea().width()*2/3)
 				topLayout->addWidget(text, 1, Qt::AlignHCenter);
 			else
 			{
