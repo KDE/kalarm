@@ -29,7 +29,7 @@
 
 #include <dcopobject.h>
 // Don't use #include "alarmdaemoniface.h" so that programs other than kalarmd can compile
-#include <kalarmd/alarmdaemoniface.h>
+#include <kalarm/kalarmd/alarmdaemoniface.h>
 
 /**
  * Client applications should inherit from this class to receive notifications
