@@ -19,13 +19,13 @@
 #include <qpainter.h>
 
 #include <kmenubar.h>
+#include <kpopupmenu.h>
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kpopupmenu.h>
 
 #include "kalarmapp.h"
 #include "editdlg.h"
@@ -38,6 +38,7 @@
 KAlarmMainWindow::KAlarmMainWindow(const char* name)
 	: KMainWindow(0L, name, WGroupLeader)
 {
+	kdDebug() << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(name);
 	initActions();
@@ -48,6 +49,7 @@ KAlarmMainWindow::KAlarmMainWindow(const char* name)
 	connect(listView, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotSelection()));
 	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)), this,
 	        SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
+	theApp()->addWindow(this);
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
@@ -137,7 +139,9 @@ void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEven
 */
 void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 {
+kdDebug() << "KAlarmMainWindow::deleteMessage(): "<<event.id()<<endl;
 	AlarmListViewItem* item = listView->getEntry(event.id());
+kdDebug() << "KAlarmMainWindow::deleteMessage(): " << (item?"Found":"Not found")<<endl;
 	if (item)
 		listView->deleteEntry(item, true);
 	else

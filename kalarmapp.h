@@ -77,6 +77,7 @@ class KAlarmApp : public KUniqueApplication
 		static KAlarmApp* getInstance();
 		AlarmCalendar&    getCalendar()       { return calendar; }
 		GeneralSettings*  generalSettings()   { return m_generalSettings; }
+		void              addWindow(KAlarmMainWindow*);
 		void              deleteWindow(KAlarmMainWindow*);
 		void              resetDaemon();
 		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
@@ -100,13 +101,13 @@ class KAlarmApp : public KUniqueApplication
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
-		bool              initCheck(bool daemon = true);
+		bool              initCheck(bool calendarOnly = false);
 		bool              stopDaemon();
 		void              startDaemon();
 		void              reloadDaemon();
 		void              handleMessage(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool              handleMessage(const QString& eventID, EventFunc);
-		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc);
+		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
 		static KAlarmApp*         theInstance;
