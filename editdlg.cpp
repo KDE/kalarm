@@ -288,6 +288,10 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	label = new QLabel(i18n("Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
+#ifdef SIMPLE_REP
+	QWhatsThis::add(box,
+	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
+#endif
 	QWhatsThis::add(box,
 	      i18n("How often the alarm recurs.\nThe alarm's recurrence is configured in the Recurrence tab."));
 	box->setFixedHeight(box->sizeHint().height());
@@ -767,6 +771,10 @@ TimeSelector* EditAlarmDlg::createLateCancelSelector(bool allowHourMinute, QWidg
 	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
 	                         "If unchecked, the alarm will be triggered at the first opportunity after "
 	                         "its scheduled time, regardless of how late it is.");
+	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
+	QWhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
+	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
+
 	TimeSelector* widget = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                        whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                        allowHourMinute, parent, name);
@@ -1147,6 +1155,21 @@ void EditAlarmDlg::slotOk()
 			}
 		}
 	}
+#ifdef SIMPLE_REP
+	if (mSimpleRepetition->count() * mSimpleRepetition->interval() >= longestRecurInterval)
+	{
+		KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval"));
+		mSimpleRepetition->activate();   // display the alarm repetition dialog again
+		return;
+	}
+	if (mSimpleRepetition->interval() % 1440
+	&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
+	{
+		KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
+		mSimpleRepetition->activate();   // display the alarm repetition dialog again
+		return;
+	}
+#endif
 	if (checkText(mAlarmMessage))
 		accept();
 }
