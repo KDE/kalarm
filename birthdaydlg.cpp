@@ -67,6 +67,8 @@ class AddresseeItem : public QListViewItem
 };
 
 
+const KABC::AddressBook* BirthdayDlg::mAddressBook = 0;
+
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
 	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays From KAddressBook"), Ok|Cancel, Ok, parent),
@@ -90,7 +92,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
-	connect(mPrefix, SIGNAL(lostFocus()), SLOT(slotTextLostFocus()));
+	connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
 	QWhatsThis::add(mPrefix,
 	      i18n("Enter text to appear before the person's name in the alarm message, "
 	           "including any necessary trailing spaces."));
@@ -100,7 +102,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
-	connect(mSuffix, SIGNAL(lostFocus()), SLOT(slotTextLostFocus()));
+	connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
 	QWhatsThis::add(mSuffix,
 	      i18n("Enter text to appear after the person's name in the alarm message, "
 	           "including any necessary leading spaces."));
@@ -201,7 +203,30 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 		mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
 
 	// Initialise the birthday selection list and disable the OK button
-	updateSelectionList();
+	loadAddressBook();
+}
+
+/******************************************************************************
+* Load the address book in preparation for displaying the birthday selection list.
+*/
+void BirthdayDlg::loadAddressBook()
+{
+	if (!mAddressBook)
+	{
+#if KDE_IS_VERSION(3,1,90)
+        	mAddressBook = KABC::StdAddressBook::self(true);
+		if (mAddressBook)
+                	connect(mAddressBook, SIGNAL(addressBookChanged(AddressBook*)), SLOT(updateSelectionList()));
+#else
+		mAddressBook = KABC::StdAddressBook::self();
+		if (mAddressBook)
+			updateSelectionList();
+#endif
+	}
+	else
+		updateSelectionList();
+        if (!mAddressBook)
+                KMessageBox::error(this, i18n("Error reading address book"));
 }
 
 /******************************************************************************
@@ -225,42 +250,36 @@ void BirthdayDlg::updateSelectionList()
 	}
 
 	// Fetch all birthdays from the address book
-	mAddressBook = KABC::StdAddressBook::self( true );
-	if (!mAddressBook)
-		KMessageBox::error(this, i18n("Error reading address book"));
-	else
+	for (KABC::AddressBook::ConstIterator abit = mAddressBook->begin();  abit != mAddressBook->end();  ++abit)
 	{
-		for (KABC::AddressBook::ConstIterator abit = mAddressBook->begin();  abit != mAddressBook->end();  ++abit)
+		const KABC::Addressee& addressee = *abit;
+		if (addressee.birthday().isValid())
 		{
-			const KABC::Addressee& addressee = *abit;
-			if (addressee.birthday().isValid())
+			// Create a list entry for this birthday
+			QDate birthday = addressee.birthday().date();
+			QString name = addressee.nickName();
+			if (name.isEmpty())
+				name = addressee.realName();
+			// Check if the birthday already has an alarm
+			QString text = mPrefixText + name + mSuffixText;
+			bool alarmExists = (messageList.find(text) != messageList.end());
+			// Check if the birthday is already in the selection list
+			bool inSelectionList = false;
+			AddresseeItem* item = 0;
+			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
 			{
-				// Create a list entry for this birthday
-				QDate birthday = addressee.birthday().date();
-				QString name = addressee.nickName();
-				if (name.isEmpty())
-					name = addressee.realName();
-				// Check if the birthday already has an alarm
-				QString text = mPrefixText + name + mSuffixText;
-				bool alarmExists = (messageList.find(text) != messageList.end());
-				// Check if the birthday is already in the selection list
-				bool inSelectionList = false;
-				AddresseeItem* item = 0;
-				for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
+				item = dynamic_cast<AddresseeItem*>(qitem);
+				if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
 				{
-					item = dynamic_cast<AddresseeItem*>(qitem);
-					if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
-					{
-						inSelectionList = true;
-						break;
-					}
+					inSelectionList = true;
+					break;
 				}
-
-				if (alarmExists  &&  inSelectionList)
-					delete item;     // alarm exists, so remove from selection list
-				else if (!alarmExists  &&  !inSelectionList)
-					new AddresseeItem(mAddresseeList, name, birthday);   // add to list
 			}
+
+			if (alarmExists  &&  inSelectionList)
+				delete item;     // alarm exists, so remove from selection list
+			else if (!alarmExists  &&  !inSelectionList)
+				new AddresseeItem(mAddresseeList, name, birthday);   // add to list
 		}
 	}
 //	mAddresseeList->setUpdatesEnabled(true);
@@ -374,7 +393,7 @@ void BirthdayDlg::slotTextLostFocus()
 		// Text has changed - re-evaluate the selection list
 		mPrefixText = prefix;
 		mSuffixText = suffix;
-		updateSelectionList();
+		loadAddressBook();
 	}
 }
 

@@ -54,10 +54,12 @@ class BirthdayDlg : public KDialogBase
 		void              slotTextLostFocus();
 		void              slotFontColourSelected();
 		void              slotBgColourSelected(const QColor&);
-
-	private:
 		void              updateSelectionList();
 
+	private:
+		void              loadAddressBook();
+
+		static const KABC::AddressBook* mAddressBook;
 		KListView*               mAddresseeList;
 		BLineEdit*               mPrefix;
 		BLineEdit*               mSuffix;
@@ -69,7 +71,6 @@ class BirthdayDlg : public KDialogBase
 		LateCancelSelector*      mLateCancel;
 		SpecialActionsButton*    mSpecialActionsButton;
 		RepetitionButton*        mSimpleRepetition;
-		const KABC::AddressBook* mAddressBook;
 		QString                  mPrefixText;   // last entered value of prefix text
 		QString                  mSuffixText;   // last entered value of suffix text
 		int                      mFlags;        // event flag bits
@@ -85,9 +86,9 @@ class BLineEdit : public QLineEdit
 		BLineEdit(const QString& text, QWidget* parent = 0, const char* name = 0)
 			     : QLineEdit(text, parent, name) { }
 	signals:
-		void         lostFocus();
+		void         focusLost();
 	protected:
-		virtual void focusOutEvent(QFocusEvent*)  { emit lostFocus(); }
+		virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
 };
 
 #endif // BIRTHDAYDLG_H
