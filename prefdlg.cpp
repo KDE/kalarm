@@ -25,7 +25,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include "prefdlg.h"
+#include "prefs.h"
 #include "prefdlg.moc"
 
 
@@ -34,11 +34,15 @@ KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
 {
 	setIconListAllVisible(true);
 
-	QVBox* frame = addVBoxPage( i18n("Miscellaneous"), i18n("Miscellaneous settings"), DesktopIcon("misc"));
+	QVBox* frame = addVBoxPage( i18n("Miscellaneous"), i18n("Miscellaneous"), DesktopIcon("misc"));
 	m_miscPage = new MiscPrefs(frame);
 	m_miscPage->setSettings(sets);
 
-	frame = addVBoxPage(i18n("Appearance"), i18n("Message appearance settings"), DesktopIcon("appearance"));
+	frame = addVBoxPage(i18n("Edit Defaults"), i18n("Alarm Edit Defaults"), DesktopIcon("edit"));
+	m_defaultPage = new DefaultPrefs(frame);
+	m_defaultPage->setSettings(sets);
+
+	frame = addVBoxPage(i18n("Appearance"), i18n("Message Appearance"), DesktopIcon("appearance"));
 	m_appearancePage = new AppearancePrefs(frame);
 	m_appearancePage->setSettings(sets);
 
@@ -54,6 +58,7 @@ void KAlarmPrefDlg::slotDefault()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
 	m_appearancePage->setDefaults();
+	m_defaultPage->setDefaults();
 	m_miscPage->setDefaults();
 }
 
@@ -67,6 +72,7 @@ void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
 	m_appearancePage->apply(false);
+	m_defaultPage->apply(false);
 	m_miscPage->apply(true);
 }
 
@@ -83,6 +89,7 @@ void KAlarmPrefDlg::slotCancel()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
 	m_appearancePage->restore();
+	m_defaultPage->restore();
 	m_miscPage->restore();
 
 	KDialogBase::slotCancel();

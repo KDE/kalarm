@@ -24,9 +24,11 @@
 #include <qsize.h>
 #include <qdatetime.h>
 #include <ktabctl.h>
+#include "recurrenceedit.h"
 class QCheckBox;
 class QRadioButton;
 class QSpinBox;
+class QComboBox;
 class FontColourChooser;
 class Settings;
 class TimeSpinBox;
@@ -89,6 +91,27 @@ class MiscPrefs : public PrefsBase
 		QCheckBox*     mConfirmAlarmDeletion;
 		QSpinBox*      mDaemonTrayCheckInterval;
 		TimeSpinBox*   mStartOfDay;
+};
+
+
+// Defaults tab of the Preferences dialog
+class DefaultPrefs : public PrefsBase
+{
+		Q_OBJECT
+	public:
+		DefaultPrefs(QWidget* parent);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private:
+		QCheckBox*     mDefaultLateCancel;
+		QCheckBox*     mDefaultConfirmAck;
+		QCheckBox*     mDefaultBeep;
+		QComboBox*     mDefaultRecurPeriod;
+		
+		static int recurIndex(RecurrenceEdit::RepeatType);
 };
 
 #endif // PREFS_H

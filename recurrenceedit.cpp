@@ -45,6 +45,8 @@
 
 #include <libkcal/event.h>
 
+#include "kalarmapp.h"
+#include "prefsettings.h"
 #include "datetime.h"
 #include "msgevent.h"
 using namespace KCal;
@@ -742,7 +744,17 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	QDate fromDate = from.date();
 
 	noEmitTypeChanged = true;
-	ruleButtonGroup->setButton(subdailyButtonId);   // this must come before repeatButtonGroup->setButton()
+	int button;
+	switch (theApp()->settings()->defaultRecurPeriod())
+	{
+		case ANNUAL:  button = yearlyButtonId;   break;
+		case MONTHLY: button = monthlyButtonId;  break;
+		case WEEKLY:  button = weeklyButtonId;   break;
+		case DAILY:   button = dailyButtonId;    break;
+		case SUBDAILY:
+		default:      button = subdailyButtonId; break;
+	}
+	ruleButtonGroup->setButton(button);   // this must come before repeatButtonGroup->setButton()
 	noEmitTypeChanged = false;
 	repeatButtonGroup->setButton(repeatButtonGroup->id(noneRadio));
 	noEndDateButton->setChecked(true);

@@ -27,6 +27,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
+#include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qstyle.h>
 
@@ -157,26 +158,26 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]:"), page);
-	lbl->setFixedSize(lbl->sizeHint());
-	layout->addWidget(lbl);
+	QLabel* label = new QLabel(i18n("System tray icon update interval [seconds]:"), page);
+	label->setFixedSize(label->sizeHint());
+	layout->addWidget(label);
 	layout->addStretch();
 	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, page, "daemonCheck");
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
-	layout->addWidget(mDaemonTrayCheckInterval);
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
+	layout->addWidget(mDaemonTrayCheckInterval);
 
 	layout = new QHBoxLayout(topLayout);
-	lbl = new QLabel(i18n("Start of day for date-only alarms:"), page);
-	lbl->setFixedSize(lbl->sizeHint());
-	layout->addWidget(lbl);
+	label = new QLabel(i18n("Start of day for date-only alarms:"), page);
+	label->setFixedSize(label->sizeHint());
+	layout->addWidget(label);
 	layout->addStretch();
 	mStartOfDay = new TimeSpinBox(page);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
-	layout->addWidget(mStartOfDay);
 	QWhatsThis::add(mStartOfDay,
 	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
+	layout->addWidget(mStartOfDay);
 
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), page, "confirmDeletion");
 	mConfirmAlarmDeletion->setFixedSize(mConfirmAlarmDeletion->sizeHint());
@@ -187,7 +188,7 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
 
-	addTab(page, i18n("&Miscellaneous"));
+	addTab(page, i18n("Miscellaneous"));
 }
 
 void MiscPrefs::restore()
@@ -249,7 +250,7 @@ AppearancePrefs::AppearancePrefs(QWidget* parent)
 
 	page->setMinimumSize(sizeHintForWidget(page));
 
-	addTab(page, i18n("Message &Appearance"));
+	addTab(page, i18n("Message Appearance"));
 }
 
 void AppearancePrefs::restore()
@@ -269,4 +270,98 @@ void AppearancePrefs::setDefaults()
 {
 	mFontChooser->setBgColour(Settings::default_defaultBgColour);
 	mFontChooser->setFont(Settings::default_messageFont);
+}
+
+
+DefaultPrefs::DefaultPrefs(QWidget* parent)
+	: PrefsBase(parent)
+{
+	QWidget* page = new QWidget(this );
+	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint() );
+	topLayout->setMargin(KDialog::marginHint());
+
+	mDefaultLateCancel = new QCheckBox(i18n("Cancel if late"), page, "defCancelLate");
+	mDefaultLateCancel->setFixedSize(mDefaultLateCancel->sizeHint());
+	QWhatsThis::add(mDefaultLateCancel,
+	      i18n("The default setting for \"Cancel if late\" in the alarm edit dialog."));
+	topLayout->addWidget(mDefaultLateCancel);
+
+	mDefaultConfirmAck = new QCheckBox(i18n("Confirm acknowledgement"), page, "defConfAck");
+	mDefaultConfirmAck->setFixedSize(mDefaultConfirmAck->sizeHint());
+	QWhatsThis::add(mDefaultConfirmAck,
+	      i18n("The default setting for \"Confirm acknowledgement\" in the alarm edit dialog."));
+	topLayout->addWidget(mDefaultConfirmAck);
+
+	mDefaultBeep = new QCheckBox(i18n("Beep"), page, "defBeep");
+	mDefaultBeep->setFixedSize(mDefaultBeep->sizeHint());
+	QWhatsThis::add(mDefaultBeep,
+	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
+	topLayout->addWidget(mDefaultBeep);
+
+	QBoxLayout* layout = new QHBoxLayout(topLayout);
+	QLabel* label = new QLabel(i18n("Recurrence period:"), page);
+	label->setFixedSize(label->sizeHint());
+	layout->addWidget(label);
+	mDefaultRecurPeriod = new QComboBox(page, "defRecur");
+	mDefaultRecurPeriod->insertItem(i18n("Hours/Minutes"));
+	mDefaultRecurPeriod->insertItem(i18n("Days"));
+	mDefaultRecurPeriod->insertItem(i18n("Weeks"));
+	mDefaultRecurPeriod->insertItem(i18n("Months"));
+	mDefaultRecurPeriod->insertItem(i18n("Years"));
+	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
+	QWhatsThis::add(mDefaultRecurPeriod,
+	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
+	layout->addWidget(mDefaultRecurPeriod);
+	layout->addStretch();
+
+	topLayout->addStretch(1);
+	page->setMinimumSize(sizeHintForWidget(page));
+
+	addTab(page, i18n("Alarm Edit Defaults"));
+}
+
+void DefaultPrefs::restore()
+{
+	mDefaultLateCancel->setChecked(mSettings->mDefaultLateCancel);
+	mDefaultConfirmAck->setChecked(mSettings->mDefaultConfirmAck);
+	mDefaultBeep->setChecked(mSettings->mDefaultBeep);
+	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->mDefaultRecurPeriod));
+}
+
+void DefaultPrefs::apply(bool syncToDisc)
+{
+	mSettings->mDefaultLateCancel = mDefaultLateCancel->isChecked();
+	mSettings->mDefaultConfirmAck = mDefaultConfirmAck->isChecked();
+	mSettings->mDefaultBeep       = mDefaultBeep->isChecked();
+	switch (mDefaultRecurPeriod->currentItem())
+	{
+		case 4:  mSettings->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
+		case 3:  mSettings->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
+		case 2:  mSettings->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
+		case 1:  mSettings->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
+		case 0:
+		default: mSettings->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
+	}
+	PrefsBase::apply(syncToDisc);
+}
+
+void DefaultPrefs::setDefaults()
+{
+	mDefaultLateCancel->setChecked(mSettings->default_defaultLateCancel);
+	mDefaultConfirmAck->setChecked(mSettings->default_defaultConfirmAck);
+	mDefaultBeep->setChecked(mSettings->default_defaultBeep);
+	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->default_defaultRecurPeriod));
+}
+
+int DefaultPrefs::recurIndex(RecurrenceEdit::RepeatType type)
+{
+	switch (type)
+	{
+		case RecurrenceEdit::ANNUAL:   return 4;
+		case RecurrenceEdit::MONTHLY:  return 3;
+		case RecurrenceEdit::WEEKLY:   return 2;
+		case RecurrenceEdit::DAILY:    return 1;
+		case RecurrenceEdit::SUBDAILY:
+		default:                       return 0;
+	}
 }

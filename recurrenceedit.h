@@ -28,15 +28,18 @@
 #define RECURRENCEEDIT_H
 
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <libkcal/event.h>
 
 class QWidgetStack;
+class QLabel;
 class QSpinBox;
 class QComboBox;
 class QCheckBox;
 class DateSpinBox;
 class TimeSpinBox;
 class ButtonGroup;
+class KAlarmEvent;
 
 using namespace KCal;
 

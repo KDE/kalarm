@@ -33,6 +33,10 @@ const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
 const QColor Settings::default_defaultBgColour(red);
 const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
 const QTime  Settings::default_startOfDay(0, 0);
+const bool   Settings::default_defaultLateCancel       = false;
+const bool   Settings::default_defaultConfirmAck       = false;
+const bool   Settings::default_defaultBeep             = false;
+const RecurrenceEdit::RepeatType Settings::default_defaultRecurPeriod = RecurrenceEdit::SUBDAILY;
 
 // Config file entry names
 static const QString GENERAL_SECTION        = QString::fromLatin1("General");
@@ -45,6 +49,11 @@ static const QString CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmD
 static const QString DAEMON_TRAY_INTERVAL   = QString::fromLatin1("DaemonTrayCheckInterval");
 static const QString START_OF_DAY           = QString::fromLatin1("StartOfDay");
 static const QString START_OF_DAY_CHECK     = QString::fromLatin1("Sod");
+static const QString DEFAULTS_SECTION       = QString::fromLatin1("Defaults");
+static const QString DEF_LATE_CANCEL        = QString::fromLatin1("DefLateCancel");
+static const QString DEF_CONFIRM_ACK        = QString::fromLatin1("DefConfirmAck");
+static const QString DEF_BEEP               = QString::fromLatin1("DefBeep");
+static const QString DEF_RECUR_PERIOD       = QString::fromLatin1("DefRecurPeriod");
 
 inline int Settings::startOfDayCheck() const
 {
@@ -74,6 +83,13 @@ void Settings::loadSettings()
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mStartOfDayChanged       = (config->readNumEntry(START_OF_DAY_CHECK, 0) != startOfDayCheck());
+	config->setGroup(DEFAULTS_SECTION);
+	mDefaultLateCancel       = config->readBoolEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
+	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
+	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
+	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
 	emit settingsChanged();
 }
 
@@ -90,6 +106,11 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
+	config->setGroup(DEFAULTS_SECTION);
+	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
+	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
+	config->writeEntry(DEF_BEEP, mDefaultBeep);
+	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	if (syncToDisc)
 		config->sync();
 }

@@ -22,7 +22,10 @@
 #define PREFDLG_H
 
 #include <kdialogbase.h>
-#include "prefs.h"
+class Settings;
+class AppearancePrefs;
+class DefaultPrefs;
+class MiscPrefs;
 
 class KAlarmPrefDlg : public KDialogBase
 {
@@ -32,6 +35,7 @@ class KAlarmPrefDlg : public KDialogBase
 		~KAlarmPrefDlg();
 
 		AppearancePrefs* m_appearancePage;
+		DefaultPrefs*    m_defaultPage;
 		MiscPrefs*       m_miscPage;
 
 	protected slots:

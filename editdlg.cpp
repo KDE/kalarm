@@ -267,19 +267,22 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	else
 	{
 		// Set the values to their defaults
+		Settings* settings = theApp()->settings();
 #ifdef SELECT_FONT
-		fontColour->setColour(theApp()->settings()->defaultBgColour());
-		fontColour->setFont(theApp()->settings()->messageFont());
+		fontColour->setColour(settings->defaultBgColour());
+		fontColour->setFont(settings->messageFont());
 #else
-		bgColourChoose->setColour(theApp()->settings()->defaultBgColour());     // set colour before setting alarm type buttons
+		bgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 #endif
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		timeWidget->setDateTime(defaultTime, false);
 		singleLineOnly = false;
 		messageEdit->setText(QString::null);
 		actionGroup->setButton(actionGroup->id(messageRadio));
+		lateCancel->setChecked(settings->defaultLateCancel());
+		confirmAck->setChecked(settings->defaultConfirmAck());
 		recurrenceEdit->setDefaults(defaultTime);   // must be called after timeWidget is set up, to ensure correct date-only enabling
-		sound->setChecked(false);
+		sound->setChecked(settings->defaultBeep());
 	}
 
 	size = basicSize;
