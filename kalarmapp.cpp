@@ -292,12 +292,11 @@ int KAlarmApp::newInstance()
 					alMessage = args->arg(0);
 				}
 
-				QDateTime* alarmTime = 0;
-				bool       alarmNoTime = false;
-				QDateTime  wakeup, endTime;
-				QColor bgColour = mSettings->defaultBgColour();
-				int    repeatCount = 0;
-				int    repeatInterval = 0;
+				bool      alarmNoTime = false;
+				QDateTime alarmTime, endTime;
+				QColor    bgColour = mSettings->defaultBgColour();
+				int       repeatCount = 0;
+				int       repeatInterval = 0;
 				KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
 				if (args->isSet("color"))
 				{
@@ -317,13 +316,14 @@ int KAlarmApp::newInstance()
 				if (args->isSet("time"))
 				{
 					QCString dateTime = args->getOption("time");
-					if (!convWakeTime(dateTime, wakeup, alarmNoTime))
+					if (!convWakeTime(dateTime, alarmTime, alarmNoTime))
 					{
 						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--time"));
 						break;
 					}
-					alarmTime = &wakeup;
 				}
+				else
+					alarmTime = QDateTime::currentDateTime();
 
 				if (args->isSet("interval"))
 				{
@@ -337,13 +337,6 @@ int KAlarmApp::newInstance()
 					{
 						usage = i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--until"));
 						break;
-					}
-					if (!alarmTime)
-					{
-						wakeup = QDateTime::currentDateTime();
-						QTime t = wakeup.time();
-						wakeup.setTime(QTime(t.hour(), t.minute(), 0));   // round down to whole number of minutes
-						alarmTime = &wakeup;
 					}
 					bool ok;
 					if (args->isSet("repeat"))
@@ -363,7 +356,7 @@ int KAlarmApp::newInstance()
 							usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until"));
 							break;
 						}
-						if (alarmTime && endTime < *alarmTime)
+						if (endTime < alarmTime)
 						{
 							usage = i18n("%1 earlier than %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--time"));
 							break;
@@ -377,9 +370,18 @@ int KAlarmApp::newInstance()
 					uint length = optval.length();
 					switch (optval[length - 1])
 					{
-						case 'Y':  recurType = KAlarmEvent::ANNUAL_DATE;  break;
-						case 'W':  recurType = KAlarmEvent::WEEKLY;  break;
-						case 'D':  recurType = KAlarmEvent::DAILY;  break;
+						case 'Y':
+							recurType = KAlarmEvent::ANNUAL_DATE;
+							optval = optval.left(length - 1);
+							break;
+						case 'W':
+							recurType = KAlarmEvent::WEEKLY;
+							optval = optval.left(length - 1);
+							break;
+						case 'D':
+							recurType = KAlarmEvent::DAILY;
+							optval = optval.left(length - 1);
+							break;
 						case 'M':
 						{
 							int i = optval.find('H');
@@ -657,52 +659,53 @@ bool KAlarmApp::runInSystemTray() const
 }
 
 /******************************************************************************
-* Called in response to a DCOP notification that a new alarm should be scheduled.
-* Reply = true unless there was an error opening calendar file.
+* Called to schedule a new alarm, either in response to a DCOP notification or
+* to command line options.
+* Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime, const QColor& bg,
+bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime, const QColor& bg,
                               int flags, KAlarmAlarm::Type type, KAlarmEvent::RecurType recurType,
                               int repeatInterval, int repeatCount, const QDateTime& endTime)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
-	bool display = true;
-	QDateTime alarmTime, now;
-	if (dateTime)
-	{
-		alarmTime = *dateTime;
-		now = QDateTime::currentDateTime();
-		if ((flags & KAlarmEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-maxLateness()))
-			return true;               // alarm time was already expired too long ago
-		display = (alarmTime <= now);
-	}
+	if (!dateTime.isValid())
+		return false;
+	QDateTime now = QDateTime::currentDateTime();
+	if ((flags & KAlarmEvent::LATE_CANCEL)  &&  dateTime < now.addSecs(-maxLateness()))
+		return true;               // alarm time was already expired too long ago
+	QDateTime alarmTime = dateTime;
+	// Round down to the nearest minute to avoid scheduling being messed up
+	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
+	bool display = (alarmTime <= now);
+
 	KAlarmEvent event(alarmTime, message, bg, type, flags);
 	switch (recurType)
 	{
 		case KAlarmEvent::MINUTELY:
-			event.setRecurMinutely(repeatInterval, repeatCount);
+			event.setRecurMinutely(repeatInterval, repeatCount, endTime);
 			break;
 		case KAlarmEvent::DAILY:
-			event.setRecurDaily(repeatInterval, repeatCount);
+			event.setRecurDaily(repeatInterval, repeatCount, endTime.date());
 			break;
 		case KAlarmEvent::WEEKLY:
 		{
 			QBitArray days(7);
 			days.setBit(QDate::currentDate().dayOfWeek() - 1);
-			event.setRecurWeekly(repeatInterval, days, repeatCount);
+			event.setRecurWeekly(repeatInterval, days, repeatCount, endTime.date());
 			break;
 		}
 		case KAlarmEvent::MONTHLY_DAY:
 		{
 			QValueList<int> days;
 			days.append(QDate::currentDate().day());
-			event.setRecurMonthlyByDate(repeatInterval, days, repeatCount);
+			event.setRecurMonthlyByDate(repeatInterval, days, repeatCount, endTime.date());
 			break;
 		}
 		case KAlarmEvent::ANNUAL_DATE:
 		{
 			QValueList<int> months;
 			months.append(QDate::currentDate().month());
-			event.setRecurAnnualByDate(repeatInterval, months, repeatCount);
+			event.setRecurAnnualByDate(repeatInterval, months, repeatCount, endTime.date());
 			break;
 		}
 		default:
@@ -713,7 +716,6 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime,
 	{
 		// Alarm is due for display already
 		execAlarm(event, event.firstAlarm(), false);
-//TODO: adjust recurrence correctly
 		if (recurType == KAlarmEvent::NO_RECUR
 		||  event.setNextOccurrence(now) == KAlarmEvent::NO_OCCURRENCE)
 			return true;
@@ -1550,7 +1552,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 
 			}
 		}
-		theApp()->scheduleEvent(text, &dateTime, bgColour, flags, type, recurType, repeatInterval, repeatCount, endTime);
+		theApp()->scheduleEvent(text, dateTime, bgColour, flags, type, recurType, repeatInterval, repeatCount, endTime);
 		replyType = "void";
 	}
 	return true;
