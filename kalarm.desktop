@@ -1,12 +1,10 @@
 # KDE Config File  
 [Desktop Entry]
-Type=Application
-Exec=kalarm -caption "%c" %i %m  
-Icon=kalarm.png
-MiniIcon=kalarm.png
-DocPath=kalarm/index.html
-Comment=An alarm/reminder message scheduler
-Comment[de]=
-Terminal=0
 Name=KAlarm
 Name[de]=KAlarm
+Type=Application
+Exec=kalarm -caption "%c" %i 
+Icon=kalarm.png
+DocPath=kalarm/index.html
+Comment=Alarm/reminder message scheduler
+Terminal=0
