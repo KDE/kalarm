@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef KAMAIL_H
@@ -34,6 +24,9 @@
 #include <qstring.h>
 class KAEvent;
 class EmailAddressList;
+namespace KMime { namespace Types {
+  struct Address;
+} }
 
 
 class KAMail
@@ -42,8 +35,8 @@ class KAMail
 		static QString    send(const KAEvent&, bool allowNotify = true);
 		static int        checkAddress(QString& address);
 		static int        checkAttachment(QString& attachment, KURL* = 0);
+		static bool       checkAttachment(const KURL&);
 		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
-		static QString    convertAddresses(const QString& addresses, QStringList&);
 		static QString    convertAttachments(const QString& attachments, QStringList& list);
 		static const QString EMAIL_QUEUED_NOTIFY;
 		static QString    i18n_NeedFromEmailAddress();
@@ -56,6 +49,7 @@ class KAMail
 		static QString    sendKMail(const KAEvent&, const QString& from, const QString& bcc, bool allowNotify);
 		static QString    initHeaders(const KAEvent&, const QString& from, const QString& bcc, bool dateId);
 		static QString    appendBodyAttachments(QString& message, const KAEvent&);
+		static QString    convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void       notifyQueued(const KAEvent&);
 		static char*      base64Encode(const char* in, Offset size, Offset& outSize);
 };

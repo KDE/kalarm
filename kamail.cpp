@@ -457,44 +457,85 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 	// parse an address-list
 	QValueList<KMime::Types::Address> maybeAddressList;
 	if (!HeaderParsing::parseAddressList(ad, ad + addrs.length(), maybeAddressList))
-		return QString::fromLocal8Bit(ad);
+		return QString::fromLocal8Bit(ad);    // return the address in error
 
 	// extract the mailboxes and complain if there are groups
 	for (QValueList<KMime::Types::Address>::ConstIterator it = maybeAddressList.begin();
 	     it != maybeAddressList.end();  ++it)
 	{
-		if (!(*it).displayName.isEmpty())
-		{
-			kdDebug(5950) << "mailbox groups not allowed! Name: \"" << (*it).displayName << "\"" << endl;
-			return (*it).displayName;
-		}
-		const QValueList<KMime::Types::Mailbox>& mblist = (*it).mailboxList;
-		for (QValueList<KMime::Types::Mailbox>::ConstIterator mb = mblist.begin();
-		     mb != mblist.end();  ++mb)
-		{
-			QString addrPart = (*mb).addrSpec.localPart;
-			if (!(*mb).addrSpec.domain.isEmpty())
-			{
-				addrPart += QChar('@');
-				addrPart += (*mb).addrSpec.domain;
-			}
-			list += KCal::Person((*mb).displayName, addrPart);
-		}
+		QString bad = convertAddress(*it, list);
+		if (!bad.isEmpty())
+			return bad;
 	}
 	return QString::null;
 }
 
+#if 0
+/******************************************************************************
+*  Parse an email address, optionally containing display name, entered by the
+*  user, and append it to the specified list.
+*  Reply = the invalid item if error, else empty string.
+*/
+QString KAMail::convertAddress(const QString& item, EmailAddressList& list)
+{
+	QCString addr = item.local8Bit();
+	const char* ad = static_cast<const char*>(addr);
+	KMime::Types::Address maybeAddress;
+	if (!HeaderParsing::parseAddress(ad, ad + addr.length(), maybeAddress))
+		return item;     // error
+	return convertAddress(maybeAddress, list);
+}
+#endif
+
+/******************************************************************************
+*  Convert a single KMime::Types address to a KCal::Person instance and append
+*  it to the specified list.
+*/
+QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& list)
+{
+	if (!addr.displayName.isEmpty())
+	{
+		kdDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"" << endl;
+		return addr.displayName;
+	}
+	const QValueList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
+	for (QValueList<KMime::Types::Mailbox>::ConstIterator mb = mblist.begin();
+	     mb != mblist.end();  ++mb)
+	{
+		QString addrPart = (*mb).addrSpec.localPart;
+		if (!(*mb).addrSpec.domain.isEmpty())
+		{
+			addrPart += QChar('@');
+			addrPart += (*mb).addrSpec.domain;
+		}
+		list += KCal::Person((*mb).displayName, addrPart);
+	}
+	return QString::null;
+}
+
+/*
 QString KAMail::convertAddresses(const QString& items, QStringList& list)
 {
 	EmailAddressList addrs;
 	QString item = convertAddresses(items, addrs);
-	if (item.isEmpty())
+	if (!item.isEmpty())
+		return item;
+	for (EmailAddressList::Iterator ad = addrs.begin();  ad != addrs.end();  ++ad)
 	{
-		for (EmailAddressList::Iterator ad = addrs.begin();  ad != addrs.end();  ++ad)
-			list += (*ad).fullName().local8Bit();
+		item = (*ad).fullName().local8Bit();
+		switch (checkAddress(item))
+		{
+			case 1:      // OK
+				list += item;
+				break;
+			case 0:      // null address
+				break;
+			case -1:     // invalid address
+				return item;
+		}
 	}
-	return item;
-}
+	return QString::null;
+}*/
 
 /******************************************************************************
 *  Check the validity of an email address.
@@ -580,9 +621,49 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 	return QString::null;
 }
 
+#if 0
+/******************************************************************************
+*  Convert a comma or semicolon delimited list of attachments into a
+*  KURL::List. The items are checked for validity.
+*  Reply = the invalid item if error, else empty string.
+*/
+QString KAMail::convertAttachments(const QString& items, KURL::List& list)
+{
+	KURL url;
+	list.clear();
+	QCString addrs = items.local8Bit();
+	int length = items.length();
+	for (int next = 0;  next < length;  )
+	{
+		// Find the first delimiter character (, or ;)
+		int i = items.find(',', next);
+		if (i < 0)
+			i = items.length();
+		int sc = items.find(';', next);
+		if (sc < 0)
+			sc = items.length();
+		if (sc < i)
+			i = sc;
+		QString item = items.mid(next, i - next);
+		switch (checkAttachment(item, &url))
+		{
+			case 1:   list += url;  break;
+			case 0:   break;          // empty attachment name
+			case -1:
+			default:  return item;    // error
+		}
+		next = i + 1;
+	}
+	return QString::null;
+}
+#endif
+
 /******************************************************************************
 *  Check for the existence of the attachment file.
 *  If non-null, '*url' receives the KURL of the attachment.
+*  Reply = 1 if attachment exists
+*        = 0 if null name
+*        = -1 if doesn't exist.
 */
 int KAMail::checkAttachment(QString& attachment, KURL* url)
 {
@@ -598,13 +679,21 @@ int KAMail::checkAttachment(QString& attachment, KURL* url)
 	u.cleanPath();
 	if (url)
 		*url = u;
+	return checkAttachment(u) ? 1 : -1;
+}
+
+/******************************************************************************
+*  Check for the existence of the attachment file.
+*/
+bool KAMail::checkAttachment(const KURL& url)
+{
 	KIO::UDSEntry uds;
-	if (!KIO::NetAccess::stat(u, uds))
-		return -1;       // doesn't exist
-	KFileItem fi(uds, u);
+	if (!KIO::NetAccess::stat(url, uds))
+		return false;       // doesn't exist
+	KFileItem fi(uds, url);
 	if (fi.isDir()  ||  !fi.isReadable())
-		return -1;
-	return 1;
+		return false;
+	return true;
 }
 
 
