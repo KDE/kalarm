@@ -8,8 +8,9 @@ Add simple repetition facility, including repetition within a recurrence.
 New revised DCOP request interface (old interface still kept for compatibility).
 Limit range of entered date/time to valid values in deferral dialogue.
 
-=== Version 1.1.5 --- 29 August 2004 ===
+=== Version 1.1.5 --- 1 September 2004 ===
 Show erroneous control in alarm edit dialog when an error message is displayed.
+Make alarm edit dialog always appear on current desktop.
 Make weekly/monthly/yearly recurrences scheduled from command line correspond
   correctly to the start date.
 Fix start date for monthly/yearly recurrences scheduled from the command line.

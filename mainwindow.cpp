@@ -469,7 +469,6 @@ void KAlarmMainWindow::slotNew()
 */
 void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const QString& text)
 {
-#warning "Doesn't appear on current desktop if a main window is displayed elsewhere"
 	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg");
 	if (!text.isNull())
 		editDlg.setAction(action, text);
