@@ -107,7 +107,7 @@ class SpinBox2 : public QFrame
 
 		int                 pageStep() const            { return spinbox->pageStep(); }
 		void                setSteps(int line, int page){ spinbox->setSteps(line, page);  updown2->setLineStep(page); }
-		void                setShiftSteps(int line, int page)  { }
+		void                setShiftSteps(int, int)  { }
 
 		int                 bound(int b) const          { return spinbox->bound(b); }
 

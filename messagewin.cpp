@@ -182,25 +182,25 @@ QSize MessageWin::initView()
 		      i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
 	}
 
-	QLabel* label;
+	QLabel* fileCommandLabel = 0;
 	if (type == KAlarmAlarm::FILE  ||  type == KAlarmAlarm::COMMAND)
 	{
 		// Display the file name or command
-		label = new QLabel(message, topWidget);
-		label->setFrameStyle(QFrame::Box | QFrame::Raised);
-		label->setFixedSize(label->sizeHint());
-		topLayout->addWidget(label, 0, Qt::AlignHCenter);
+		fileCommandLabel = new QLabel(message, topWidget);
+		fileCommandLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+		fileCommandLabel->setFixedSize(fileCommandLabel->sizeHint());
+		topLayout->addWidget(fileCommandLabel, 0, Qt::AlignHCenter);
 	}
 	switch (type)
 	{
 		case KAlarmAlarm::COMMAND:
 		{
-			QWhatsThis::add(label, i18n("The command to execute"));
+			QWhatsThis::add(fileCommandLabel, i18n("The command to execute"));
 			break;
 		}
 		case KAlarmAlarm::FILE:
 		{
-			QWhatsThis::add(label, i18n("The file whose contents are displayed below"));
+			QWhatsThis::add(fileCommandLabel, i18n("The file whose contents are displayed below"));
 
 			// Display contents of file
 			bool opened = false;

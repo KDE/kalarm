@@ -630,7 +630,7 @@ void EditAlarmDlg::slotEditDeferral()
 void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
 	bool recurs = recurRadio->isOn();
-	timeWidget->enableAnyTime(!recurs || recurrenceEdit->repeatType() != RecurrenceEdit::SUBDAILY);
+	timeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
 	if (deferGroup)
 		deferGroup->setEnabled(recurs);
 }
@@ -697,7 +697,7 @@ bool EditAlarmDlg::checkEmailAddresses()
 /******************************************************************************
 *  Called when one of the message type radio buttons is clicked.
 */
-void EditAlarmDlg::slotAlarmTypeClicked(int id)
+void EditAlarmDlg::slotAlarmTypeClicked(int)
 {
 	if (messageRadio->isOn())
 	{
