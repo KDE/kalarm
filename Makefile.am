@@ -2,7 +2,7 @@
 INCLUDES= $(all_includes) -I$(top_srcdir)/libkcal
 
 bin_PROGRAMS = kalarm
-kalarm_SOURCES = main.cpp msgevent.cpp messagewin.cpp fontcolour.cpp fontchooser.cpp colourcombo.cpp prefsettings.cpp prefs.cpp prefdlg.cpp mainwindow.cpp kalarmapp.cpp editdlg.cpp
+kalarm_SOURCES = kalarmapp.cpp main.cpp msgevent.cpp messagewin.cpp fontcolour.cpp fontchooser.cpp colourcombo.cpp prefsettings.cpp prefs.cpp prefdlg.cpp mainwindow.cpp editdlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
