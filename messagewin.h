@@ -29,7 +29,7 @@ class MessageWin : public KMainWindow
 		MessageWin();     // for session management restoration only
 		explicit MessageWin(const MessageEvent&, bool delete_event = true);
 		~MessageWin();
-		virtual void paintEvent(QPaintEvent*);
+		virtual void showEvent(QShowEvent*);
 
 	protected:
 		virtual void saveProperties(KConfig*);

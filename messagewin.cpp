@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
+#include <kwin.h>
 #include <knotifyclient.h>
 #include <kaudioplayer.h>
 #include <kdebug.h>
@@ -115,6 +116,9 @@ QSize MessageWin::initView()
 	topLayout->activate();
 	QSize size(butsize.width()*3, topLayout->sizeHint().height());
 	setMinimumSize(size);
+	
+	KWin::setState(winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
+	KWin::setOnAllDesktops(winId(), true);
 	return size;
 }
 
@@ -147,12 +151,13 @@ void MessageWin::readProperties(KConfig* config)
 }
 
 /******************************************************************************
-*  Display the message window.
-*  The first time, output any required audio notification.
+*  Called when the window is shown.
+*  The first time, output any required audio notification, and delete the event
+*  from the calendar file.
 */
-void MessageWin::paintEvent(QPaintEvent* pe)
+void MessageWin::showEvent(QShowEvent* se)
 {
-	KMainWindow::paintEvent(pe);
+	KMainWindow::showEvent(se);
 	if (!shown)
 	{
 		if (beep)

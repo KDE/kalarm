@@ -21,7 +21,6 @@
 #include <kio/netaccess.h>
 #include <ktempfile.h>
 #include <dcopclient.h>
-#include <kwin.h>
 #include <kdebug.h>
 
 #include <vcaldrag.h>
@@ -77,11 +76,9 @@ KAlarmApp* KAlarmApp::getInstance()
 int KAlarmApp::newInstance()
 {
 	kdDebug()<<"KAlarmApp::newInstance(): New instance\n";
-	static bool firstTime = true;
-	bool firstTimeThrough = firstTime;
-	firstTime = false;
+	static bool restored = false;
 	int exitCode = 0;      // default = success
-	if (firstTimeThrough  &&  isRestored())
+	if (!restored  &&  isRestored())
 	{
 		// Process is being restored by session management.
 		exitCode = !initCheck(false);       // open the calendar file (needed for main windows)
@@ -93,6 +90,7 @@ int KAlarmApp::newInstance()
 				(new MessageWin)->restore(i);
 		}
 		initCheck();     // register with the alarm daemon
+		restored = true;     // make sure we restore only once
 	}
 	else
 	{
@@ -236,7 +234,6 @@ void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 		if (*it == win)
 		{
 			mainWindowList.erase(it);
-//			win->close();
 			break;
 		}
 }
@@ -391,8 +388,8 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 void KAlarmApp::displayMessageWin(const MessageEvent& event, bool delete_event)
 {
 	MessageWin* win = new MessageWin(event, delete_event);
-	KWin::setState(win->winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
-	KWin::setOnAllDesktops(win->winId(), true);
+//	KWin::setState(win->winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
+//	KWin::setOnAllDesktops(win->winId(), true);
 	win->show();
 }
 
