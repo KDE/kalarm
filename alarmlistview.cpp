@@ -134,29 +134,35 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 			case KAlarmEvent::SUB_DAILY:
 				repeatOrder = 2;
 				if (repeatInterval < 60)
-					data.repeatText = (repeatInterval == 1) ? i18n("1 Minute") : i18n("%1 Minutes").arg(repeatInterval);
+				{
+					data.repeatText = i18n("1 Minute","%n Minutes",repeatInterval);
+				}
 				else if (repeatInterval % 60 == 0)
-					data.repeatText = (repeatInterval == 60) ? i18n("1 Hour") : i18n("%1 Hours").arg(repeatInterval/60);
+				{
+					data.repeatText = i18n("1 Hour","%n Hours",repeatInterval);
+				}
 				else
-					data.repeatText = i18n("%1H %02M").arg(QString::number(repeatInterval/60)).arg(QString::number(repeatInterval%60));
+				{
+					data.repeatText = i18n("Hours and Minutes","%1H %02M").arg(QString::number(repeatInterval/60)).arg(QString::number(repeatInterval%60));
+				}
 				break;
 			case KAlarmEvent::DAILY:
 				repeatOrder = 3;
-				data.repeatText = (repeatInterval == 1) ? i18n("1 Day") : i18n("%1 Days").arg(repeatInterval);
+				data.repeatText = i18n("1 Day","%n Days",repeatInterval);
 				break;
 			case KAlarmEvent::WEEKLY:
 				repeatOrder = 4;
-				data.repeatText = (repeatInterval == 1) ? i18n("1 Week") : i18n("%1 Weeks").arg(repeatInterval);
+				data.repeatText = i18n("1 Week","%n Weeks",repeatInterval);
 				break;
 			case KAlarmEvent::MONTHLY_DAY:
 			case KAlarmEvent::MONTHLY_POS:
 				repeatOrder = 5;
-				data.repeatText = (repeatInterval == 1) ? i18n("1 Month") : i18n("%1 Months").arg(repeatInterval);
+				data.repeatText = i18n("1 Month","%n Months",repeatInterval);
 				break;
 			case KAlarmEvent::ANNUAL_DATE:
 			case KAlarmEvent::ANNUAL_DAY:
 				repeatOrder = 6;
-				data.repeatText = (repeatInterval == 1) ? i18n("1 Year") : i18n("%1 Years").arg(repeatInterval);
+				data.repeatText = i18n("1 Year","%n Years",repeatInterval);
 				break;
 			case KAlarmEvent::NO_RECUR:
 			default:
