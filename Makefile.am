@@ -21,11 +21,11 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	alarmlistview.cpp kamail.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
-	-lkabc $(LIB_KDEUI) \
 	$(top_builddir)/libkcal/libkcal.la \
 	$(top_builddir)/libkdenetwork/libkdenetwork.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
-	$(top_builddir)/libkdepim/libkdepim.la
+	$(top_builddir)/libkdepim/libkdepim.la \
+	-lkabc $(LIB_KDEUI) -lartskde
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
 	messagewin.h editdlg.h editdlgprivate.h \
 	recurrenceedit.h recurrenceeditprivate.h deferdlg.h birthdaydlg.h \
