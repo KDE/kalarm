@@ -332,7 +332,6 @@ class KAlarmEvent : public KAAlarmEventBase
 		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result) const;
 		const KCal::DateList& exceptionDates() const      { return mExceptionDates; }
-		const KCal::DateTimeList& exceptionDateTimes() const { return mExceptionDateTimes; }
 		int                flags() const;
 		bool               toBeArchived() const           { return mArchive; }
 		bool               updated() const                { return mUpdated; }
@@ -349,7 +348,6 @@ class KAlarmEvent : public KAAlarmEventBase
 			QBitArray  days;        // days in week
 		};
 		void               setExceptionDates(const KCal::DateList& d)      { mExceptionDates = d; }
-		void               setExceptionDates(const KCal::DateTimeList& dt) { mExceptionDateTimes = dt; }
 		void               setNoRecur()            { initRecur(); }
 		void               setRecurrence(const KCal::Recurrence&);
 		void               setRecurMinutely(int freq, int count)
@@ -465,7 +463,6 @@ class KAlarmEvent : public KAAlarmEventBase
 		KCal::Recurrence*  mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
 		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
-		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderDeferral; // deferred alarm is a deferred reminder
