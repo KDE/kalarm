@@ -12,6 +12,8 @@
 
 #include "kalarm.h"
 
+#include <stdlib.h>
+
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>

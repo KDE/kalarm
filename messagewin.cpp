@@ -43,17 +43,21 @@ static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to tr
 
 
 /******************************************************************************
-*  Construct the message window.
+*  Construct the message window for the specified alarm.
+*  Other alarms in the supplied event may have been updated by the caller, so
+*  the whole event needs to be stored for updating the calendar file when it is
+*  displayed.
 */
-MessageWin::MessageWin(const KAlarmEvent& event, const KAlarmAlarm& alarm, bool reschedule_event)
+MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event)
 	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader),
+	  event(evnt),
 	  message(alarm.messageIsFileName() ? alarm.fileName() : alarm.message()),
 	  font(theApp()->generalSettings()->messageFont()),
 	  colour(alarm.colour()),
-	  dateTime(alarm.repeatAtLogin() ? event.firstAlarm().dateTime() : alarm.dateTime()),
-	  eventID(event.id()),
+	  dateTime(alarm.repeatAtLogin() ? evnt.firstAlarm().dateTime() : alarm.dateTime()),
+	  eventID(evnt.id()),
 //	  audioFile(alarm.audioFile()),
-	  alarmSeq(alarm.id()),
+	  alarmID(alarm.id()),
 	  flags(alarm.flags()),
 	  beep(alarm.beep()),
 	  file(alarm.messageIsFileName()),
@@ -79,6 +83,7 @@ MessageWin::MessageWin(const KAlarmEvent& event, const KAlarmAlarm& alarm, bool 
 MessageWin::MessageWin()
 	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  deferHeight(0),
+	  rescheduleEvent(false),
 	  shown(true)
 {
 	kdDebug() << "MessageWin::MessageWin()" << endl;
@@ -245,16 +250,21 @@ QSize MessageWin::initView()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
-	config->writeEntry(QString::fromLatin1("EventID"), eventID);
-	config->writeEntry(QString::fromLatin1("AlarmID"), alarmSeq);
-	config->writeEntry(QString::fromLatin1("Message"), message);
-	config->writeEntry(QString::fromLatin1("File"), file);
-	config->writeEntry(QString::fromLatin1("Font"), font);
-	config->writeEntry(QString::fromLatin1("Colour"), colour);
-	if (dateTime.isValid())
-		config->writeEntry(QString::fromLatin1("Time"), dateTime);
-	config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
-	config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
+	if (shown)
+	{
+		config->writeEntry(QString::fromLatin1("EventID"), eventID);
+		config->writeEntry(QString::fromLatin1("AlarmID"), alarmID);
+		config->writeEntry(QString::fromLatin1("Message"), message);
+		config->writeEntry(QString::fromLatin1("File"), file);
+		config->writeEntry(QString::fromLatin1("Font"), font);
+		config->writeEntry(QString::fromLatin1("Colour"), colour);
+		if (dateTime.isValid())
+			config->writeEntry(QString::fromLatin1("Time"), dateTime);
+		config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
+		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
+	}
+	else
+		config->writeEntry(QString::fromLatin1("AlarmID"), -1);
 }
 
 /******************************************************************************
@@ -265,7 +275,7 @@ void MessageWin::saveProperties(KConfig* config)
 void MessageWin::readProperties(KConfig* config)
 {
 	eventID       = config->readEntry(QString::fromLatin1("EventID"));
-	alarmSeq      = config->readNumEntry(QString::fromLatin1("AlarmID"));
+	alarmID       = config->readNumEntry(QString::fromLatin1("AlarmID"));
 	message       = config->readEntry(QString::fromLatin1("Message"));
 	file          = config->readBoolEntry(QString::fromLatin1("File"));
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
@@ -274,7 +284,8 @@ void MessageWin::readProperties(KConfig* config)
 	dateTime      = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	initView();
+	if (alarmID > 0)
+		initView();
 }
 
 /******************************************************************************
@@ -296,7 +307,7 @@ void MessageWin::showEvent(QShowEvent* se)
 		if (!audioFile.isEmpty())
 			KAudioPlayer::play(audioFile.latin1());
 		if (rescheduleEvent)
-			theApp()->rescheduleAlarm(eventID, alarmSeq);
+			theApp()->rescheduleAlarm(event, alarmID);
 		shown = true;
 	}
 }

@@ -136,8 +136,9 @@ void KAlarmEvent::set(const Event& event)
 
 	// Incorporate the alarms' details into the overall event
 	AlarmMap::ConstIterator it = alarmMap.begin();
-	mAlarmSeq = it.key();
+	mMainAlarmID = -1;    // initialise as invalid
 	mAlarmCount = 0;
+	bool set = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
 		const AlarmData& data = it.data();
@@ -145,8 +146,14 @@ void KAlarmEvent::set(const Event& event)
 		{
 			mRepeatAtLogin = true;
 			mRepeatAtLoginDateTime = data.dateTime;
+			mRepeatAtLoginAlarmID = it.key();
 		}
 		else
+			mMainAlarmID = it.key();
+
+		// Ensure that the basic fields are set up even if the repeat-at-login
+		// alarm is the only alarm in the event (which shouldn't happen!)
+		if (!data.repeatAtLogin  ||  !set)
 		{
 			mMessageOrFile = data.messageOrFile;
 			mFile          = data.file;
@@ -154,9 +161,11 @@ void KAlarmEvent::set(const Event& event)
 			mRepeatCount   = data.repeatCount;
 			mRepeatMinutes = data.repeatMinutes;
 			mLateCancel    = data.lateCancel;
+			set = true;
 		}
 		++mAlarmCount;
 	}
+	mUpdated = false;
 }
 
 void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, bool file, int flags, int repeatCount, int repeatInterval)
@@ -168,6 +177,7 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	mRepeatCount   = repeatCount;
 	mRepeatMinutes = repeatInterval;
 	set(flags);
+	mUpdated = false;
 }
 
 void KAlarmEvent::set(int flags)
@@ -179,17 +189,18 @@ void KAlarmEvent::set(int flags)
 
 bool KAlarmEvent::operator==(const KAlarmEvent& event)
 {
-	return mMessageOrFile == event.mMessageOrFile
-	&&     mDateTime      == event.mDateTime
-	&&     mColour        == event.mColour
-	&&     mRevision      == event.mRevision
-	&&     mAlarmSeq      == event.mAlarmSeq
-	&&     mRepeatCount   == event.mRepeatCount
-	&&     mRepeatMinutes == event.mRepeatMinutes
-	&&     mBeep          == event.mBeep
-	&&     mFile          == event.mFile
-	&&     mRepeatAtLogin == event.mRepeatAtLogin
-	&&     mLateCancel    == event.mLateCancel;
+	return mMessageOrFile        == event.mMessageOrFile
+	&&     mDateTime             == event.mDateTime
+	&&     mColour               == event.mColour
+	&&     mRevision             == event.mRevision
+	&&     mMainAlarmID          == event.mMainAlarmID
+	&&     mRepeatAtLoginAlarmID == event.mRepeatAtLoginAlarmID
+	&&     mRepeatCount          == event.mRepeatCount
+	&&     mRepeatMinutes        == event.mRepeatMinutes
+	&&     mBeep                 == event.mBeep
+	&&     mFile                 == event.mFile
+	&&     mRepeatAtLogin        == event.mRepeatAtLogin
+	&&     mLateCancel           == event.mLateCancel;
 }
 
 int KAlarmEvent::flags() const
@@ -264,17 +275,17 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 	al.mFile          = mFile;
 	al.mColour        = mColour;
 	al.mBeep          = mBeep;
-	if (alarmID == mAlarmSeq)
+	if (alarmID == mMainAlarmID)
 	{
-		al.mAlarmSeq      = mAlarmSeq;
+		al.mAlarmSeq      = mMainAlarmID;
 		al.mDateTime      = mDateTime;
 		al.mRepeatCount   = mRepeatCount;
 		al.mRepeatMinutes = mRepeatMinutes;
 		al.mLateCancel    = mLateCancel;
 	}
-	else if (alarmID == mAlarmSeq + REPEAT_AT_LOGIN_OFFSET  &&  mRepeatAtLogin)
+	else if (alarmID == mRepeatAtLoginAlarmID  &&  mRepeatAtLogin)
 	{
-		al.mAlarmSeq      = mAlarmSeq + REPEAT_AT_LOGIN_OFFSET;
+		al.mAlarmSeq      = mRepeatAtLoginAlarmID;
 		al.mDateTime      = mRepeatAtLoginDateTime;
 //		al.mDateTime      = QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
 		al.mRepeatAtLogin = true;
@@ -282,18 +293,27 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 	return al;
 }
 
+KAlarmAlarm KAlarmEvent::firstAlarm() const
+{
+	if (mMainAlarmID > 0)
+		return alarm(mMainAlarmID);
+	if (mRepeatAtLogin)
+		return alarm(mRepeatAtLoginAlarmID);
+	return KAlarmAlarm();
+}
+
 KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
 {
-	if (alrm.id() != mAlarmSeq  ||  !mRepeatAtLogin)
+	if (alrm.id() != mMainAlarmID  ||  !mRepeatAtLogin)
 		return KAlarmAlarm();
-	return alarm(alrm.id() + REPEAT_AT_LOGIN_OFFSET);
+	return alarm(mRepeatAtLoginAlarmID);
 }
 
 void KAlarmEvent::removeAlarm(int alarmID)
 {
-	if (alarmID == mAlarmSeq)
+	if (alarmID == mMainAlarmID)
 		mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
-	else if (alarmID == mAlarmSeq + REPEAT_AT_LOGIN_OFFSET)
+	else if (alarmID == mRepeatAtLoginAlarmID)
 	{
 	   mRepeatAtLogin = false;
 	   --mAlarmCount;

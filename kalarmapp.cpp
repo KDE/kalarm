@@ -277,10 +277,10 @@ int KAlarmApp::newInstance()
 */
 void KAlarmApp::addWindow(KAlarmMainWindow* win)
 {
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it == win)
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w == win)
 			return;
-	mainWindowList.push_back(win);
+	mainWindowList.append(win);
 }
 
 
@@ -289,10 +289,10 @@ void KAlarmApp::addWindow(KAlarmMainWindow* win)
 */
 void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 {
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it == win)
+	for (QPtrListIterator<KAlarmMainWindow> it(mainWindowList);  it.current();  ++it)
+		if (it.current() == win)
 		{
-			mainWindowList.erase(it);
+			mainWindowList.remove();
 			break;
 		}
 }
@@ -383,6 +383,8 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 			QDateTime now = QDateTime::currentDateTime();
 			bool updateCalAndDisplay = false;
 			KAlarmAlarm displayAlarm;
+			// Check all the alarms in turn.
+			// Note that the main alarm is fetched before any other alarms.
 			for (KAlarmAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
 			{
 				// Check whether this alarm is due yet
@@ -398,10 +400,9 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 					if (secs < MAX_LATENESS + 30)
 						continue;
 
-					// Check if the main alarm is due yet; if so, display it instead.
+					// Check if the main alarm is already being displayed.
 					// (We don't want to display both at the same time.)
-					KAlarmAlarm al = event.alarm(alarm.sequence() - KAlarmEvent::REPEAT_AT_LOGIN_OFFSET);
-					if (al.valid()  &&  al.dateTime().secsTo(now) >= 0)
+					if (displayAlarm.valid())
 						continue;
 				}
 				if (alarm.lateCancel())
@@ -446,21 +447,21 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 }
 
 /******************************************************************************
-* Reschedule the specified alarm for its next repetition. If no repetitions
-* remain, cancel it.
+* Called when an alarm is displayed to reschedule it for its next repetition.
+* If no repetitions remain, cancel it.
 */
-void KAlarmApp::rescheduleAlarm(const QString& eventID, int alarmID)
+void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, int alarmID)
 {
-	kdDebug() << "KAlarmApp::rescheduleAlarm(): " << eventID << ":" << alarmID << endl;
-	Event* kcalEvent = calendar.getEvent(eventID);
+	kdDebug() << "KAlarmApp::rescheduleAlarm(): " << event.id() << ":" << alarmID << endl;
+	Event* kcalEvent = calendar.getEvent(event.id());
 	if (!kcalEvent)
-		kdError() << "KAlarmApp::rescheduleAlarm(): event ID not found: " << eventID << endl;
+		kdError() << "KAlarmApp::rescheduleAlarm(): event ID not found: " << event.id() << endl;
 	else
 	{
-		KAlarmEvent event(*kcalEvent);
+//		KAlarmEvent event(*kcalEvent);
 		KAlarmAlarm alarm = event.alarm(alarmID);
 		if (!alarm.valid())
-			kdError() << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << eventID << ":" << alarmID << endl;
+			kdError() << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << event.id() << ":" << alarmID << endl;
 		handleAlarm(event, alarm, ALARM_RESCHEDULE, true);
 	}
 }
@@ -503,6 +504,8 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 
 							if (updateCalAndDisplay)
 								updateMessage(event, 0L);     // update the window lists and calendar file
+							else
+								event.setUpdated();    // note that the calendar file needs to be updated
 							break;
 						}
 					}
@@ -510,6 +513,8 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 					break;
 				}
 			}
+			else if (updateCalAndDisplay  &&  event.updated())
+				updateMessage(event, 0L);     // update the window lists and calendar file
 			break;
 
 		case ALARM_CANCEL:
@@ -545,9 +550,9 @@ void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 	reloadDaemon();
 
 	// Update the window lists
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it != win)
-			(*it)->addMessage(event);
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w != win)
+			w->addMessage(event);
 }
 
 /******************************************************************************
@@ -569,9 +574,9 @@ void KAlarmApp::modifyMessage(const QString& oldEventID, const KAlarmEvent& newE
 	reloadDaemon();
 
 	// Update the window lists
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it != win)
-			(*it)->modifyMessage(oldEventID, newEvent);
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w != win)
+			w->modifyMessage(oldEventID, newEvent);
 }
 
 /******************************************************************************
@@ -593,9 +598,9 @@ void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 	reloadDaemon();
 
 	// Update the window lists
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it != win)
-			(*it)->modifyMessage(event);
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w != win)
+			w->modifyMessage(event);
 }
 
 /******************************************************************************
@@ -608,9 +613,9 @@ void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool te
 	kdDebug() << "KAlarmApp::deleteMessage(): " << event.id() << endl;
 
 	// Update the window lists
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it != win)
-			(*it)->deleteMessage(event);
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w != win)
+			w->deleteMessage(event);
 
 	// Delete the event from the calendar file
 	calendar.deleteEvent(event.id());

@@ -31,7 +31,6 @@
  *   colour - stored as a hex string prefixed by #, as the first category (event CATEGORIES field)
  *   elapsed repeat count - stored as the revision number (event SEQUENCE field)
  *   beep - stored as a "BEEP" category (event CATEGORIES field)
- *   highest used alarm sequence number - stored as a "SEQnnn" category (event CATEGORIES field)
  */
 
 // KAlarmAlarm corresponds to a single KCal::Alarm instance
@@ -84,7 +83,7 @@ class KAlarmEvent
 			BEEP            = 0x02,
 			REPEAT_AT_LOGIN = 0x04
 		};
-		KAlarmEvent()    : mRevision(0), mAlarmSeq(1), mRepeatCount(0) { }
+		KAlarmEvent()    : mRevision(0), mMainAlarmID(1), mRepeatCount(0) { }
 		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, bool file, int flags, int repeatCount = 0, int repeatMinutes = 0)
 		                                                                  { set(dt, message, c, file, flags, repeatCount, repeatMinutes); }
 		explicit KAlarmEvent(const KCal::Event& e)  { set(e); }
@@ -103,16 +102,17 @@ class KAlarmEvent
 		void             set(int flags);
 		KCal::Event*     event() const;    // convert to new Event
 		KAlarmAlarm      alarm(int alarmID) const;
-		KAlarmAlarm      firstAlarm() const         { return alarm(mAlarmSeq); }
+		KAlarmAlarm      firstAlarm() const;
 		KAlarmAlarm      nextAlarm(const KAlarmAlarm&) const;
 		bool             updateEvent(KCal::Event&) const;
 		void             removeAlarm(int alarmID);
 		void             incrementRevision()        { ++mRevision; }
+		void             setUpdated()               { mUpdated = true; }
+		bool             updated() const            { return mUpdated; }
 
 		bool             operator==(const KAlarmEvent&);
 		bool             operator!=(const KAlarmEvent& e)  { return !operator==(e); }
 		const QString&   id() const                 { return mEventID; }
-		int              alarmSequence() const      { return mAlarmSeq; }
 		int              alarmCount() const         { return mAlarmCount; }
 		const QDateTime& dateTime() const           { return mDateTime; }
 		QDate            date() const               { return mDateTime.date(); }
@@ -139,7 +139,8 @@ class KAlarmEvent
 		QDateTime        mRepeatAtLoginDateTime;  // repeat at login time
 		QColor           mColour;           // background colour of alarm message
 		int              mRevision;         // revision number of the original alarm, or 0
-		int              mAlarmSeq;         // sequence number of main alarm
+		int              mMainAlarmID;      // sequence number of main alarm
+		int              mRepeatAtLoginAlarmID; // sequence number of repeat-at-login alarm
 		int              mAlarmCount;       // number of alarms
 		int              mRepeatCount;      // number of times to repeat the alarm
 		int              mRepeatMinutes;    // interval (minutes) between repeated alarms
@@ -147,6 +148,7 @@ class KAlarmEvent
 		bool             mFile;             // mMessageOrFile is a file URL
 		bool             mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool             mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
+		bool             mUpdated;          // event has been updated but not written to calendar file
 };
 
 #endif // KALARMEVENT_H

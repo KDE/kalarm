@@ -13,8 +13,6 @@
 #ifndef KALARMAPP_H
 #define KALARMAPP_H
 
-#include <vector>
-
 #include <kuniqueapp.h>
 #include <kurl.h>
 
@@ -84,7 +82,7 @@ class KAlarmApp : public KUniqueApplication
 		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		void              updateMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              deleteMessage(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
-		void              rescheduleAlarm(const QString& eventID, int alarmID);
+		void              rescheduleAlarm(KAlarmEvent&, int alarmID);
 		void              displayMessage(const QString& eventID)        { handleMessage(eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& eventID)         { handleMessage(eventID, EVENT_CANCEL); }
 		QSize             readConfigWindowSize(const char* window, const QSize& defaultSize);
@@ -110,12 +108,12 @@ class KAlarmApp : public KUniqueApplication
 		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
-		static KAlarmApp*         theInstance;
-		MainWidget*               mainWidget;          // the parent of the DCOP receiver object
-		vector<KAlarmMainWindow*> mainWindowList;      // active main windows
-		AlarmCalendar             calendar;
-		bool                      daemonRegistered;    // true if we've registered with alarm daemon
-		GeneralSettings*          m_generalSettings;   // general program preferences
+		static KAlarmApp*          theInstance;
+		MainWidget*                mainWidget;          // the parent of the DCOP receiver object
+		QPtrList<KAlarmMainWindow> mainWindowList;      // active main windows
+		AlarmCalendar              calendar;
+		bool                       daemonRegistered;    // true if we've registered with alarm daemon
+		GeneralSettings*           m_generalSettings;   // general program preferences
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

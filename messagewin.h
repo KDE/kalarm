@@ -46,13 +46,14 @@ class MessageWin : public KMainWindow
 	private:
 		QSize             initView();
 		// KAlarmEvent properties
+		KAlarmEvent       event;            // the whole event, for updating the calendar file
 		QString           message;
 		QFont             font;
 		QColor            colour;
 		QDateTime         dateTime;
 		QString           eventID;
 		QString           audioFile;
-		int               alarmSeq;
+		int               alarmID;
 		int               flags;
 		bool              beep;
 		bool              file;
