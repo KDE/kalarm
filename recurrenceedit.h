@@ -43,134 +43,134 @@ using namespace KCal;
 
 class RecurrenceEdit : public QWidget
 {
-      Q_OBJECT
-   public:
-      RecurrenceEdit (const QString& groupBoxTitle, QWidget* parent = 0L, const char* name = 0L);
-      virtual ~RecurrenceEdit()  { }
+		Q_OBJECT
+	public:
+		RecurrenceEdit (const QString& groupBoxTitle, QWidget* parent = 0L, const char* name = 0L);
+		virtual ~RecurrenceEdit()  { }
 
-      /** Set widgets to default values */
-      void         setDefaults(const QDateTime& from, bool allday);
-      /** Initialise according to a specified event */
-      void         set(const KAlarmEvent&, bool repeatAtLogin);
-      /** Write event settings to event object */
-      void         writeEvent(KAlarmEvent&);
-      bool         repeatAtLogin() const  { return repeatAtLoginRadio->isOn(); }
+		/** Set widgets to default values */
+		void         setDefaults(const QDateTime& from, bool allday);
+		/** Initialise according to a specified event */
+		void         set(const KAlarmEvent&, bool repeatAtLogin);
+		/** Write event settings to event object */
+		void         writeEvent(KAlarmEvent&);
+		bool         repeatAtLogin() const  { return repeatAtLoginRadio->isOn(); }
 
-      /** Check if the input is valid. */
-      bool         validateInput();
+		/** Check if the input is valid. */
+		bool         validateInput();
 
-      enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
+		enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
-   public slots:
-      void         setDateTime(const QDateTime& start)   { currStartDateTime = start; }
+	public slots:
+		void         setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 
-   signals:
-      void         typeChanged(int recurType);   // returns a RepeatType value
+	signals:
+		void         typeChanged(int recurType);   // returns a RepeatType value
 
-   protected slots:
-      void         repeatTypeClicked(int);
-      void         periodClicked(int);
-      void         monthlyClicked(int);
-      void         yearlyClicked(int);
-      void         disableRange(bool);
-      void         enableDurationRange(bool);
-      void         enableDateRange(bool);
+	protected slots:
+		void         repeatTypeClicked(int);
+		void         periodClicked(int);
+		void         monthlyClicked(int);
+		void         yearlyClicked(int);
+		void         disableRange(bool);
+		void         enableDurationRange(bool);
+		void         enableDateRange(bool);
 
-   protected:
-      void         unsetAllCheckboxes();
-      void         setDefaults(const QDateTime& from);
-      void         checkDay(int day);
-      void         getCheckedDays(QBitArray& rDays);
-      void         setCheckedDays(QBitArray& rDays);
+	protected:
+		void         unsetAllCheckboxes();
+		void         setDefaults(const QDateTime& from);
+		void         checkDay(int day);
+		void         getCheckedDays(QBitArray& rDays);
+		void         setCheckedDays(QBitArray& rDays);
 
-      void         initNone();
-      void         initSubdaily();
-      void         initDaily();
-      void         initWeekly();
-      void         initMonthly();
-      void         initYearly();
+		void         initNone();
+		void         initSubdaily();
+		void         initDaily();
+		void         initWeekly();
+		void         initMonthly();
+		void         initYearly();
 
-   private:
-      /* main rule box and choices. */
-      QGroupBox*    ruleGroupBox;
-      QGroupBox*    recurGroup;
-      QFrame*       ruleFrame;
-      QWidgetStack* ruleStack;
+	private:
+		/* main rule box and choices. */
+		QGroupBox*    ruleGroupBox;
+		QGroupBox*    recurGroup;
+		QFrame*       ruleFrame;
+		QWidgetStack* ruleStack;
 
-      ButtonGroup*  repeatButtonGroup;
-      QRadioButton* noneRadio;
-      QRadioButton* recurRadio;
-      QRadioButton* repeatAtLoginRadio;
+		ButtonGroup*  repeatButtonGroup;
+		QRadioButton* noneRadio;
+		QRadioButton* recurRadio;
+		QRadioButton* repeatAtLoginRadio;
 
-      ButtonGroup*  ruleButtonGroup;
-      QRadioButton* subdailyButton;
-      QRadioButton* dailyButton;
-      QRadioButton* weeklyButton;
-      QRadioButton* monthlyButton;
-      QRadioButton* yearlyButton;
-      int           subdailyButtonId;
-      int           dailyButtonId;
-      int           weeklyButtonId;
-      int           monthlyButtonId;
-      int           yearlyButtonId;
-      RepeatType    ruleButtonType;
+		ButtonGroup*  ruleButtonGroup;
+		QRadioButton* subdailyButton;
+		QRadioButton* dailyButton;
+		QRadioButton* weeklyButton;
+		QRadioButton* monthlyButton;
+		QRadioButton* yearlyButton;
+		int           subdailyButtonId;
+		int           dailyButtonId;
+		int           weeklyButtonId;
+		int           monthlyButtonId;
+		int           yearlyButtonId;
+		RepeatType    ruleButtonType;
 
-      QWidgetStack* recurFrequencyStack;
-      QSpinBox*     recurFrequency;
-      TimeSpinBox*  recurHourMinFrequency;
+		QWidgetStack* recurFrequencyStack;
+		QSpinBox*     recurFrequency;
+		TimeSpinBox*  recurHourMinFrequency;
 
-      QFrame*       noneFrame;
+		QFrame*       noneFrame;
 
-      /* weekly rule choices */
-      QFrame*       weeklyFrame;
-      QCheckBox*    dayBox[7];
+		/* weekly rule choices */
+		QFrame*       weeklyFrame;
+		QCheckBox*    dayBox[7];
 
-      /* monthly rule choices */
-      QFrame*       monthlyFrame;
-      ButtonGroup*  monthlyButtonGroup;
-      QRadioButton* onNthDayButton;
-      QComboBox*    nthDayEntry;
-      QRadioButton* onNthTypeOfDayButton;
-      QComboBox*    nthNumberEntry;
-      QComboBox*    nthTypeOfDayEntry;
-      int           onNthDayButtonId;
-      int           onNthTypeOfDayButtonId;
+		/* monthly rule choices */
+		QFrame*       monthlyFrame;
+		ButtonGroup*  monthlyButtonGroup;
+		QRadioButton* onNthDayButton;
+		QComboBox*    nthDayEntry;
+		QRadioButton* onNthTypeOfDayButton;
+		QComboBox*    nthNumberEntry;
+		QComboBox*    nthTypeOfDayEntry;
+		int           onNthDayButtonId;
+		int           onNthTypeOfDayButtonId;
 
-      /* yearly rule choices */
-      QFrame*       yearlyFrame;
-      ButtonGroup*  yearlyButtonGroup;
-      QRadioButton* yearMonthButton;
-      QRadioButton* yearDayButton;
-      QComboBox*    yearMonthDayEntry;
-      QComboBox*    yearMonthComboBox;
-      QSpinBox*     yearDayEntry;
-      int           yearMonthButtonId;
-      int           yearDayButtonId;
+		/* yearly rule choices */
+		QFrame*       yearlyFrame;
+		ButtonGroup*  yearlyButtonGroup;
+		QRadioButton* yearMonthButton;
+		QRadioButton* yearDayButton;
+		QComboBox*    yearMonthDayEntry;
+		QComboBox*    yearMonthComboBox;
+		QSpinBox*     yearDayEntry;
+		int           yearMonthButtonId;
+		int           yearDayButtonId;
 
-      /* range stuff */
-      QButtonGroup* rangeButtonGroup;
-      QRadioButton* noEndDateButton;
-      QRadioButton* repeatCountButton;
-      QSpinBox*     repeatCountEntry;
-      QLabel*       repeatCountLabel;
-      QRadioButton* endDateButton;
-      DateSpinBox*  endDateEdit;
-      TimeSpinBox*  endTimeEdit;
+		/* range stuff */
+		QButtonGroup* rangeButtonGroup;
+		QRadioButton* noEndDateButton;
+		QRadioButton* repeatCountButton;
+		QSpinBox*     repeatCountEntry;
+		QLabel*       repeatCountLabel;
+		QRadioButton* endDateButton;
+		DateSpinBox*  endDateEdit;
+		TimeSpinBox*  endTimeEdit;
 
-      // current start date and time
-      QDateTime     currStartDateTime;
-      bool          noEmitTypeChanged;    // suppress typeChanged() signal
+		// current start date and time
+		QDateTime     currStartDateTime;
+		bool          noEmitTypeChanged;    // suppress typeChanged() signal
 };
 
 
 
 class ButtonGroup : public QButtonGroup
 {
-      Q_OBJECT
-   public:
-      ButtonGroup(QWidget* parent, const char* name = 0)  : QButtonGroup(parent, name) { }
-      ButtonGroup(int strips, Qt::Orientation o, QWidget* parent, const char* name = 0)  : QButtonGroup(strips, o, parent, name) { }
-      virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit clicked(id); }
+		Q_OBJECT
+	public:
+		ButtonGroup(QWidget* parent, const char* name = 0)  : QButtonGroup(parent, name) { }
+		ButtonGroup(int strips, Qt::Orientation o, QWidget* parent, const char* name = 0)  : QButtonGroup(strips, o, parent, name) { }
+		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit clicked(id); }
 };
 
 #endif // RECURRENCEEDIT_H

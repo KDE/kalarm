@@ -51,176 +51,176 @@
 
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
-                           const KAlarmEvent* event)
-   : KDialogBase(parent, name, true, caption, Ok|Cancel|Try, Ok, true)
+	                        const KAlarmEvent* event)
+	: KDialogBase(parent, name, true, caption, Ok|Cancel|Try, Ok, true)
 {
-   QWidget* page = new QWidget(this);
-   setMainWidget(page);
-   QVBoxLayout* topLayout = new QVBoxLayout(page, marginHint(), spacingHint());
+	QWidget* page = new QWidget(this);
+	setMainWidget(page);
+	QVBoxLayout* topLayout = new QVBoxLayout(page, marginHint(), spacingHint());
 
-   // Message label + multi-line editor
+	// Message label + multi-line editor
 
-   actionGroup = new QButtonGroup(i18n("Action"), page, "actionGroup");
-   connect(actionGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
-   topLayout->addWidget(actionGroup);
-   QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
-   grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	actionGroup = new QButtonGroup(i18n("Action"), page, "actionGroup");
+	connect(actionGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
+	topLayout->addWidget(actionGroup);
+	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
+	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
-   // Message radio button has an ID of 0
-   messageRadio = new QRadioButton(i18n("Text"), actionGroup, "messageButton");
-   messageRadio->setFixedSize(messageRadio->sizeHint());
-   QWhatsThis::add(messageRadio,
-         i18n("The edit field below contains the alarm message text."));
-   grid->addWidget(messageRadio, 1, 0, AlignLeft);
-   grid->setColStretch(0, 1);
+	// Message radio button has an ID of 0
+	messageRadio = new QRadioButton(i18n("Text"), actionGroup, "messageButton");
+	messageRadio->setFixedSize(messageRadio->sizeHint());
+	QWhatsThis::add(messageRadio,
+	      i18n("The edit field below contains the alarm message text."));
+	grid->addWidget(messageRadio, 1, 0, AlignLeft);
+	grid->setColStretch(0, 1);
 
-   // Command radio button has an ID of 1
-   commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
-   commandRadio->setFixedSize(commandRadio->sizeHint());
-   QWhatsThis::add(commandRadio,
-         i18n("The edit field below contains a shell command to execute."));
-   grid->addWidget(commandRadio, 1, 1, AlignLeft);
-   grid->setColStretch(1, 1);
+	// Command radio button has an ID of 1
+	commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
+	commandRadio->setFixedSize(commandRadio->sizeHint());
+	QWhatsThis::add(commandRadio,
+	      i18n("The edit field below contains a shell command to execute."));
+	grid->addWidget(commandRadio, 1, 1, AlignLeft);
+	grid->setColStretch(1, 1);
 
-   // File radio button has an ID of 2
-   fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
-   fileRadio->setFixedSize(fileRadio->sizeHint());
-   QWhatsThis::add(fileRadio,
-         i18n("The edit field below contains the name of a text file whose contents will be "
-              "displayed as the alarm message text."));
-   grid->addWidget(fileRadio, 1, 2, AlignRight);
+	// File radio button has an ID of 2
+	fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
+	fileRadio->setFixedSize(fileRadio->sizeHint());
+	QWhatsThis::add(fileRadio,
+	      i18n("The edit field below contains the name of a text file whose contents will be "
+	           "displayed as the alarm message text."));
+	grid->addWidget(fileRadio, 1, 2, AlignRight);
 
-   // Browse button
-   browseButton = new QPushButton(i18n("&Browse..."), actionGroup);
-   browseButton->setFixedSize(browseButton->sizeHint());
-   QWhatsThis::add(browseButton,
-         i18n("Select a text file to display."));
-   grid->addWidget(browseButton, 1, 3, AlignLeft);
+	// Browse button
+	browseButton = new QPushButton(i18n("&Browse..."), actionGroup);
+	browseButton->setFixedSize(browseButton->sizeHint());
+	QWhatsThis::add(browseButton,
+	      i18n("Select a text file to display."));
+	grid->addWidget(browseButton, 1, 3, AlignLeft);
 
-   messageEdit = new QMultiLineEdit(actionGroup);
-   QSize size = messageEdit->sizeHint();
-   size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
-   messageEdit->setMinimumSize(size);
-   messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
-   connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
-   grid->addMultiCellWidget(messageEdit, 2, 2, 0, 3);
+	messageEdit = new QMultiLineEdit(actionGroup);
+	QSize size = messageEdit->sizeHint();
+	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
+	messageEdit->setMinimumSize(size);
+	messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
+	connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
+	grid->addMultiCellWidget(messageEdit, 2, 2, 0, 3);
 
-   // Date and time entry
-   timeWidget = new AlarmTimeWidget(i18n("Time"), 0, page, "timeGroup");
-   topLayout->addWidget(timeWidget);
+	// Date and time entry
+	timeWidget = new AlarmTimeWidget(i18n("Time"), 0, page, "timeGroup");
+	topLayout->addWidget(timeWidget);
 
-   // Repeating alarm
+	// Repeating alarm
 
-   recurrenceEdit = new RecurrenceEdit(i18n("Repetition"), page);
-   recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
-   topLayout->addWidget(recurrenceEdit);
-   connect(recurrenceEdit, SIGNAL(typeChanged(int)), this, SLOT(slotRepeatTypeChange(int)));
+	recurrenceEdit = new RecurrenceEdit(i18n("Repetition"), page);
+	recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
+	topLayout->addWidget(recurrenceEdit);
+	connect(recurrenceEdit, SIGNAL(typeChanged(int)), this, SLOT(slotRepeatTypeChange(int)));
 
-   // Late display checkbox - default = allow late display
+	// Late display checkbox - default = allow late display
 
-   grid = new QGridLayout(1, 3);
-   topLayout->addLayout(grid);
+	grid = new QGridLayout(1, 3);
+	topLayout->addLayout(grid);
 
-   lateCancel = new QCheckBox(page);
-   lateCancel->setText(i18n("Cancel if late"));
-   lateCancel->setFixedSize(lateCancel->sizeHint());
-   lateCancel->setChecked(false);
-   grid->addWidget(lateCancel, 0, 0, AlignLeft);
-   QWhatsThis::add(lateCancel,
-         i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
-              "minute of the specified time. Possible reasons for not triggering include your "
-              "being logged off, X not running, or the alarm daemon not running.\n\n"
-              "If unchecked, the alarm will be triggered at the first opportunity after "
-              "the specified time, regardless of how late it is."));
+	lateCancel = new QCheckBox(page);
+	lateCancel->setText(i18n("Cancel if late"));
+	lateCancel->setFixedSize(lateCancel->sizeHint());
+	lateCancel->setChecked(false);
+	grid->addWidget(lateCancel, 0, 0, AlignLeft);
+	QWhatsThis::add(lateCancel,
+	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
+	           "minute of the specified time. Possible reasons for not triggering include your "
+	           "being logged off, X not running, or the alarm daemon not running.\n\n"
+	           "If unchecked, the alarm will be triggered at the first opportunity after "
+	           "the specified time, regardless of how late it is."));
 
-   // Beep checkbox - default = no beep
+	// Beep checkbox - default = no beep
 
-   beep = new QCheckBox(page);
-   beep->setText(i18n("Beep"));
-   beep->setFixedSize(beep->sizeHint());
-   beep->setChecked(false);
-   grid->addWidget(beep, 0, 1, AlignLeft);
-   QWhatsThis::add(beep,
-         i18n("If checked, a beep will sound when the message is displayed."));
+	beep = new QCheckBox(page);
+	beep->setText(i18n("Beep"));
+	beep->setFixedSize(beep->sizeHint());
+	beep->setChecked(false);
+	grid->addWidget(beep, 0, 1, AlignLeft);
+	QWhatsThis::add(beep,
+	      i18n("If checked, a beep will sound when the message is displayed."));
 
 #ifdef SELECT_FONT
-   // Font and colour choice drop-down list
+	// Font and colour choice drop-down list
 
-   fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
-   size = fontColour->sizeHint();
-   fontColour->setMinimumHeight(size.height() + 4);
-   topLayout->addWidget(fontColour, 6);
-   QWhatsThis::add(fontColour,
-         i18n("Choose the font and background color for the alarm message."));
+	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
+	size = fontColour->sizeHint();
+	fontColour->setMinimumHeight(size.height() + 4);
+	topLayout->addWidget(fontColour, 6);
+	QWhatsThis::add(fontColour,
+	      i18n("Choose the font and background color for the alarm message."));
 #else
-   // Colour choice drop-down list
+	// Colour choice drop-down list
 
-   bgColourChoose = new ColourCombo(page);
-   size = bgColourChoose->sizeHint();
-   bgColourChoose->setMinimumHeight(size.height() + 4);
-   grid->addWidget(bgColourChoose, 0, 2, AlignRight);
-   QWhatsThis::add(bgColourChoose,
-         i18n("Choose the background color for the alarm message."));
+	bgColourChoose = new ColourCombo(page);
+	size = bgColourChoose->sizeHint();
+	bgColourChoose->setMinimumHeight(size.height() + 4);
+	grid->addWidget(bgColourChoose, 0, 2, AlignRight);
+	QWhatsThis::add(bgColourChoose,
+	      i18n("Choose the background color for the alarm message."));
 #endif
 
-   setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
+	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
-   topLayout->activate();
+	topLayout->activate();
 
-   size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
-   resize(size);
+	size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
+	resize(size);
 
-   // Set up initial values
-   if (event)
-   {
-      // Set the values to those for the specified event
+	// Set up initial values
+	if (event)
+	{
+		// Set the values to those for the specified event
 #ifdef SELECT_FONT
-      fontColour->setColour(event->colour());
-      fontColour->setFont(?);
+		fontColour->setColour(event->colour());
+		fontColour->setFont(?);
 #else
-      bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
+		bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
 #endif
-      timeWidget->setDateTime(event->dateTime(), event->anyTime());
-      QRadioButton* radio;
-      singleLineOnly = false;       // ensure the text isn't changed erroneously
-      switch (event->type())
-      {
-         case KAlarmAlarm::FILE:
-            radio = fileRadio;
-            break;
-         case KAlarmAlarm::COMMAND:
-            radio = commandRadio;
-            break;
-         case KAlarmAlarm::MESSAGE:
-         default:
-            radio = messageRadio;
-            break;
-      }
-      messageEdit->setText(event->cleanText());
-      actionGroup->setButton(actionGroup->id(radio));
-      lateCancel->setChecked(event->lateCancel());
-      beep->setChecked(event->beep());
-      recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
-   }
-   else
-   {
-      // Set the values to their defaults
+		timeWidget->setDateTime(event->dateTime(), event->anyTime());
+		QRadioButton* radio;
+		singleLineOnly = false;       // ensure the text isn't changed erroneously
+		switch (event->type())
+		{
+			case KAlarmAlarm::FILE:
+				radio = fileRadio;
+				break;
+			case KAlarmAlarm::COMMAND:
+				radio = commandRadio;
+				break;
+			case KAlarmAlarm::MESSAGE:
+			default:
+				radio = messageRadio;
+				break;
+		}
+		messageEdit->setText(event->cleanText());
+		actionGroup->setButton(actionGroup->id(radio));
+		lateCancel->setChecked(event->lateCancel());
+		beep->setChecked(event->beep());
+		recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
+	}
+	else
+	{
+		// Set the values to their defaults
 #ifdef SELECT_FONT
-      fontColour->setColour(theApp()->settings()->defaultBgColour());
-      fontColour->setFont(theApp()->settings()->messageFont());
+		fontColour->setColour(theApp()->settings()->defaultBgColour());
+		fontColour->setFont(theApp()->settings()->messageFont());
 #else
-      bgColourChoose->setColour(theApp()->settings()->defaultBgColour());     // set colour before setting alarm type buttons
+		bgColourChoose->setColour(theApp()->settings()->defaultBgColour());     // set colour before setting alarm type buttons
 #endif
-      QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
-      timeWidget->setDateTime(defaultTime, false);
-      singleLineOnly = false;
-      messageEdit->setText(QString::null);
-      actionGroup->setButton(actionGroup->id(messageRadio));
-      recurrenceEdit->setDefaults(defaultTime, false);   // must be called after timeWidget is set up, to ensure correct date-only enabling
-   }
+		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
+		timeWidget->setDateTime(defaultTime, false);
+		singleLineOnly = false;
+		messageEdit->setText(QString::null);
+		actionGroup->setButton(actionGroup->id(messageRadio));
+		recurrenceEdit->setDefaults(defaultTime, false);   // must be called after timeWidget is set up, to ensure correct date-only enabling
+	}
 
-   slotMessageTypeClicked(-1);    // enable/disable things appropriately
-   messageEdit->setFocus();
+	slotMessageTypeClicked(-1);    // enable/disable things appropriately
+	messageEdit->setFocus();
 }
 
 
@@ -235,8 +235,8 @@ EditAlarmDlg::~EditAlarmDlg()
  */
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
-   event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-   recurrenceEdit->writeEvent(event);
+	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
+	recurrenceEdit->writeEvent(event);
 }
 
 /******************************************************************************
@@ -244,10 +244,10 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
  */
 int EditAlarmDlg::getAlarmFlags() const
 {
-   return (beep->isChecked()               ? KAlarmEvent::BEEP : 0)
-        | (lateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
-        | (recurrenceEdit->repeatAtLogin() ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-        | (alarmAnyTime                    ? KAlarmEvent::ANY_TIME : 0);
+	return (beep->isChecked()               ? KAlarmEvent::BEEP : 0)
+	     | (lateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (recurrenceEdit->repeatAtLogin() ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (alarmAnyTime                    ? KAlarmEvent::ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -255,9 +255,9 @@ int EditAlarmDlg::getAlarmFlags() const
  */
 KAlarmAlarm::Type EditAlarmDlg::getAlarmType() const
 {
-   return fileRadio->isOn()    ? KAlarmAlarm::FILE
-        : commandRadio->isOn() ? KAlarmAlarm::COMMAND
-        :                        KAlarmAlarm::MESSAGE;
+	return fileRadio->isOn()    ? KAlarmAlarm::FILE
+	     : commandRadio->isOn() ? KAlarmAlarm::COMMAND
+	     :                        KAlarmAlarm::MESSAGE;
 }
 
 /******************************************************************************
@@ -267,8 +267,8 @@ KAlarmAlarm::Type EditAlarmDlg::getAlarmType() const
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
-   theApp()->writeConfigWindowSize("EditDialog", re->size());
-   KDialog::resizeEvent(re);
+	theApp()->writeConfigWindowSize("EditDialog", re->size());
+	KDialog::resizeEvent(re);
 }
 
 
@@ -278,11 +278,11 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-   if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
-   {
-      if (checkText(alarmMessage))
-         accept();
-   }
+	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
+	{
+		if (checkText(alarmMessage))
+			accept();
+	}
 }
 
 /******************************************************************************
@@ -291,17 +291,17 @@ void EditAlarmDlg::slotOk()
 */
 void EditAlarmDlg::slotTry()
 {
-   QString text;
-   if (checkText(text))
-   {
-      KAlarmEvent event;
-      event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-      if (theApp()->execAlarm(event, event.firstAlarm(), false, false))
-      {
-         if (commandRadio->isOn())
-            KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
-      }
-   }
+	QString text;
+	if (checkText(text))
+	{
+		KAlarmEvent event;
+		event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
+		if (theApp()->execAlarm(event, event.firstAlarm(), false, false))
+		{
+			if (commandRadio->isOn())
+				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
+		}
+	}
 }
 
 /******************************************************************************
@@ -309,7 +309,7 @@ void EditAlarmDlg::slotTry()
 */
 void EditAlarmDlg::slotCancel()
 {
-   reject();
+	reject();
 }
 
 /******************************************************************************
@@ -318,7 +318,7 @@ void EditAlarmDlg::slotCancel()
 */
 void EditAlarmDlg::slotRepeatTypeChange(int repeatType)
 {
-   timeWidget->enableAnyTime(repeatType != RecurrenceEdit::SUBDAILY);
+	timeWidget->enableAnyTime(repeatType != RecurrenceEdit::SUBDAILY);
 }
 
 /******************************************************************************
@@ -326,75 +326,75 @@ void EditAlarmDlg::slotRepeatTypeChange(int repeatType)
 */
 bool EditAlarmDlg::checkText(QString& result)
 {
-   QString alarmtext = getMessageText();
-   if (fileRadio->isOn())
-   {
-      // Convert any relative file path to absolute
-      // (using home directory as the default)
-      enum Err { NONE = 0, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT, HTML };
-      Err err = NONE;
-      KURL url;
-      int i = alarmtext.find(QString::fromLatin1("/"));
-      if (i > 0  &&  alarmtext[i - 1] == ':')
-      {
-         url = alarmtext;
-         url.cleanPath();
-         alarmtext = url.prettyURL();
-         KIO::UDSEntry uds;
-         if (!KIO::NetAccess::stat(url, uds))
-            err = NONEXISTENT;
-         else
-         {
-            KFileItem fi(uds, url);
-            if (fi.isDir())             err = DIRECTORY;
-            else if (!fi.isReadable())  err = UNREADABLE;
-         }
-      }
-      else
-      {
-         // It's a local file - convert to absolute path & check validity
-         QFileInfo info(alarmtext);
-         QDir::setCurrent(QDir::homeDirPath());
-         alarmtext = info.absFilePath();
-         url.setPath(alarmtext);
-         alarmtext = QString::fromLatin1("file:") + alarmtext;
-         if      (info.isDir())        err = DIRECTORY;
-         else if (!info.exists())      err = NONEXISTENT;
-         else if (!info.isReadable())  err = UNREADABLE;
-      }
-      if (!err)
-      {
-         switch (KAlarmApp::isTextFile(url))
-         {
-            case 1:   break;
-            case 2:   err = HTML;  break;
-            default:  err = NOT_TEXT;  break;
-         }
-      }
-      if (err)
-      {
-         messageEdit->setFocus();
-         QString errmsg;
-         switch (err)
-         {
-            case NONEXISTENT:  errmsg = i18n("%1\nnot found");  break;
-            case DIRECTORY:    errmsg = i18n("%1\nis a directory");  break;
-            case UNREADABLE:   errmsg = i18n("%1\nis not readable");  break;
-            case NOT_TEXT:     errmsg = i18n("%1\nappears not to be a text file");  break;
-            case HTML:         errmsg = i18n("%1\nis an html/xml file");  break;
-            case NONE:
-            default:
-               break;
-         }
-         if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null,
-                            i18n("Continue")) == KMessageBox::Cancel)
-            return false;
-      }
-   }
-   else
-      alarmtext.stripWhiteSpace();
-   result = alarmtext;
-   return true;
+	QString alarmtext = getMessageText();
+	if (fileRadio->isOn())
+	{
+		// Convert any relative file path to absolute
+		// (using home directory as the default)
+		enum Err { NONE = 0, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT, HTML };
+		Err err = NONE;
+		KURL url;
+		int i = alarmtext.find(QString::fromLatin1("/"));
+		if (i > 0  &&  alarmtext[i - 1] == ':')
+		{
+			url = alarmtext;
+			url.cleanPath();
+			alarmtext = url.prettyURL();
+			KIO::UDSEntry uds;
+			if (!KIO::NetAccess::stat(url, uds))
+				err = NONEXISTENT;
+			else
+			{
+				KFileItem fi(uds, url);
+				if (fi.isDir())             err = DIRECTORY;
+				else if (!fi.isReadable())  err = UNREADABLE;
+			}
+		}
+		else
+		{
+			// It's a local file - convert to absolute path & check validity
+			QFileInfo info(alarmtext);
+			QDir::setCurrent(QDir::homeDirPath());
+			alarmtext = info.absFilePath();
+			url.setPath(alarmtext);
+			alarmtext = QString::fromLatin1("file:") + alarmtext;
+			if      (info.isDir())        err = DIRECTORY;
+			else if (!info.exists())      err = NONEXISTENT;
+			else if (!info.isReadable())  err = UNREADABLE;
+		}
+		if (!err)
+		{
+			switch (KAlarmApp::isTextFile(url))
+			{
+				case 1:   break;
+				case 2:   err = HTML;  break;
+				default:  err = NOT_TEXT;  break;
+			}
+		}
+		if (err)
+		{
+			messageEdit->setFocus();
+			QString errmsg;
+			switch (err)
+			{
+				case NONEXISTENT:  errmsg = i18n("%1\nnot found");  break;
+				case DIRECTORY:    errmsg = i18n("%1\nis a directory");  break;
+				case UNREADABLE:   errmsg = i18n("%1\nis not readable");  break;
+				case NOT_TEXT:     errmsg = i18n("%1\nappears not to be a text file");  break;
+				case HTML:         errmsg = i18n("%1\nis an html/xml file");  break;
+				case NONE:
+				default:
+					break;
+			}
+			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null,
+			                                       i18n("Continue")) == KMessageBox::Cancel)
+				return false;
+		}
+	}
+	else
+		alarmtext.stripWhiteSpace();
+	result = alarmtext;
+	return true;
 }
 
 /******************************************************************************
@@ -403,81 +403,81 @@ bool EditAlarmDlg::checkText(QString& result)
 */
 void EditAlarmDlg::slotMessageTypeClicked(int id)
 {
-   if (id == actionGroup->id(browseButton))
-   {
-      // Browse button has been clicked
-      static QString defaultDir;
-      if (defaultDir.isEmpty())
-         defaultDir = QDir::homeDirPath();
-      KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose Text File to Display"));
-      if (!url.isEmpty())
-      {
-         alarmMessage = url.prettyURL();
-         messageEdit->setText(alarmMessage);
-         defaultDir = url.path();
-      }
-   }
-   else if (messageRadio->isOn())
-   {
-      // It's a multi-line edit mode
-      QWhatsThis::add(messageEdit,
-            i18n("Enter the text of the alarm message. It may be multi-line."));
-      setButtonWhatsThis(Try, i18n("Display the alarm message now"));
-      singleLineOnly = false;
-      if (!multiLineText.isEmpty())
-      {
-         // The edit text has not changed since previously switching to a
-         // single line edit mode, so restore the old text.
-         messageEdit->setText(multiLineText);
-         multiLineText = QString::null;
-      }
-      messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
-      browseButton->setEnabled(false);
+	if (id == actionGroup->id(browseButton))
+	{
+		// Browse button has been clicked
+		static QString defaultDir;
+		if (defaultDir.isEmpty())
+			defaultDir = QDir::homeDirPath();
+		KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose Text File to Display"));
+		if (!url.isEmpty())
+		{
+			alarmMessage = url.prettyURL();
+			messageEdit->setText(alarmMessage);
+			defaultDir = url.path();
+		}
+	}
+	else if (messageRadio->isOn())
+	{
+		// It's a multi-line edit mode
+		QWhatsThis::add(messageEdit,
+		      i18n("Enter the text of the alarm message. It may be multi-line."));
+		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
+		singleLineOnly = false;
+		if (!multiLineText.isEmpty())
+		{
+			// The edit text has not changed since previously switching to a
+			// single line edit mode, so restore the old text.
+			messageEdit->setText(multiLineText);
+			multiLineText = QString::null;
+		}
+		messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
+		browseButton->setEnabled(false);
 #ifndef SELECT_FONT
-      bgColourChoose->setEnabled(true);
+		bgColourChoose->setEnabled(true);
 #endif
-      beep->setEnabled(true);
-   }
-   else
-   {
-      // It's a single-line edit mode
-      if (fileRadio->isOn())
-      {
-         QWhatsThis::add(messageEdit,
-               i18n("Enter the name of a text file, or a URL, to display."));
-         setButtonWhatsThis(Try, i18n("Display the text file now"));
-         browseButton->setEnabled(true);
+		beep->setEnabled(true);
+	}
+	else
+	{
+		// It's a single-line edit mode
+		if (fileRadio->isOn())
+		{
+			QWhatsThis::add(messageEdit,
+		         i18n("Enter the name of a text file, or a URL, to display."));
+			setButtonWhatsThis(Try, i18n("Display the text file now"));
+			browseButton->setEnabled(true);
 #ifndef SELECT_FONT
-         bgColourChoose->setEnabled(true);
+			bgColourChoose->setEnabled(true);
 #endif
-         beep->setEnabled(true);
-      }
-      else if (commandRadio->isOn())
-      {
-         QWhatsThis::add(messageEdit,
-               i18n("Enter a shell command to execute."));
-         setButtonWhatsThis(Try, i18n("Execute the specified command now"));
-         browseButton->setEnabled(false);
+			beep->setEnabled(true);
+		}
+		else if (commandRadio->isOn())
+		{
+			QWhatsThis::add(messageEdit,
+			      i18n("Enter a shell command to execute."));
+			setButtonWhatsThis(Try, i18n("Execute the specified command now"));
+			browseButton->setEnabled(false);
 #ifndef SELECT_FONT
-         bgColourChoose->setEnabled(false);
+			bgColourChoose->setEnabled(false);
 #endif
-         beep->setEnabled(false);
-      }
-      singleLineOnly = true;
-      QString text = messageEdit->text();
-      int newline = text.find('\n');
-      if (newline >= 0)
-      {
-         // Existing text contains multiple lines. Save it so that it
-         // can be restored if the user switches straight back to a
-         // multi-line edit mode without touching the text.
-         messageEdit->setText(text.left(newline));
-         messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
-         multiLineText = text;
-      }
-      else
-         messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
-   }
+			beep->setEnabled(false);
+		}
+		singleLineOnly = true;
+		QString text = messageEdit->text();
+		int newline = text.find('\n');
+		if (newline >= 0)
+		{
+			// Existing text contains multiple lines. Save it so that it
+			// can be restored if the user switches straight back to a
+			// multi-line edit mode without touching the text.
+			messageEdit->setText(text.left(newline));
+			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+			multiLineText = text;
+		}
+		else
+			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+	}
 }
 
 /******************************************************************************
@@ -486,13 +486,13 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 */
 void EditAlarmDlg::slotMessageTextChanged()
 {
-   getMessageText();
-   if (!multiLineText.isEmpty())
-   {
-      // Now that the edit text has been changed, scrap the saved
-      // multi-line text from the previous message mode
-      multiLineText = QString::null;
-   }
+	getMessageText();
+	if (!multiLineText.isEmpty())
+	{
+		// Now that the edit text has been changed, scrap the saved
+		// multi-line text from the previous message mode
+		multiLineText = QString::null;
+	}
 }
 
 /******************************************************************************
@@ -500,13 +500,13 @@ void EditAlarmDlg::slotMessageTextChanged()
 */
 QString EditAlarmDlg::getMessageText()
 {
-   if (singleLineOnly)
-   {
-      QString text = messageEdit->text();
-      int newline = text.find('\n');
-      if (newline >= 0)
-         messageEdit->setText(text.remove(newline, 1));
-      return text;
-   }
-   return messageEdit->text();
+	if (singleLineOnly)
+	{
+		QString text = messageEdit->text();
+		int newline = text.find('\n');
+		if (newline >= 0)
+			messageEdit->setText(text.remove(newline, 1));
+		return text;
+	}
+	return messageEdit->text();
 }
