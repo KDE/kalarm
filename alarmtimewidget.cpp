@@ -63,6 +63,13 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 
 void AlarmTimeWidget::init(int mode)
 {
+	static QString enterDateText = i18n("Enter the date to schedule the alarm.");
+	static QString enterTimeText = i18n("Enter the time to schedule the alarm.");
+	static QString recurText = i18n("If a recurrence is configured, the start date/time will be adjusted "
+	                                    "to the first recurrence on or after the entered date/time."); 
+	static QString lengthText = i18n("Enter the length of time (in hours and minutes) after the current "
+	                                 "time to schedule the alarm.");
+
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
@@ -80,7 +87,8 @@ void AlarmTimeWidget::init(int mode)
 	mDateEdit = new DateEdit(this);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateTimeChanged()));
-	QWhatsThis::add(mDateEdit, i18n("Enter the date to schedule the alarm."));
+	QWhatsThis::add(mDateEdit, ((mode & DEFER_TIME) ? enterDateText
+	                   : i18n("%1\n%2").arg(enterDateText).arg(recurText)));
 	mAtTimeRadio->setFocusWidget(mDateEdit);
 
 	// Time edit box and Any time checkbox
@@ -90,7 +98,9 @@ void AlarmTimeWidget::init(int mode)
 	mTimeEdit->setValue(1439);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
-	QWhatsThis::add(mTimeEdit, i18n("Enter the time to schedule the alarm.\n%1").arg(TimeSpinBox::shiftWhatsThis()));
+	QWhatsThis::add(mTimeEdit,
+	                ((mode & DEFER_TIME) ? i18n("%1\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
+	                   : i18n("%1\n%2\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
 
 	if (mode & DEFER_TIME)
 	{
@@ -120,8 +130,8 @@ void AlarmTimeWidget::init(int mode)
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	QWhatsThis::add(mDelayTimeEdit,
-	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm.\n%1")
-	           .arg(TimeSpinBox::shiftWhatsThis()));
+	                ((mode & DEFER_TIME) ? i18n("%1\n%2").arg(lengthText).arg(TimeSpinBox::shiftWhatsThis())
+	                                     : i18n("%1\n%2\n%3").arg(lengthText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
