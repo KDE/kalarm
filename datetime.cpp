@@ -180,7 +180,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 	if (atTimeRadio->isOn())
 	{
 		dateTime.setDate(dateEdit->getDate());
-		anyTime = anyTimeCheckBox->isChecked();
+		anyTime = anyTimeCheckBox && anyTimeCheckBox->isChecked();
 		if (anyTime)
 		{
 			dateTime.setTime(QTime());
@@ -213,12 +213,14 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 /******************************************************************************
 *  Set the date/time.
 */
-void AlarmTimeWidget::setDateTime(const QDateTime& dt)
+void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 {
 	timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 	dateEdit->setDate(dt.date());
 	QDate now = QDate::currentDate();
 	dateEdit->setMinValue(DateSpinBox::getDateValue(dt.date() < now ? dt.date() : now));
+	if (anyTimeCheckBox)
+		anyTimeCheckBox->setChecked(anyTime);
 }
 
 /******************************************************************************
@@ -256,7 +258,8 @@ void AlarmTimeWidget::slotAtTimeToggled(bool on)
 		afterTimeRadio->setChecked(!on);
 	dateEdit->setEnabled(on);
 	timeEdit->setEnabled(on && (!anyTimeCheckBox || !anyTimeCheckBox->isChecked()));
-	anyTimeCheckBox->setEnabled(on);
+	if (anyTimeCheckBox)
+		anyTimeCheckBox->setEnabled(on);
 }
 
 /******************************************************************************

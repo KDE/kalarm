@@ -179,7 +179,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #else
 		bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
 #endif
-		timeWidget->setDateTime(event->dateTime());
+		timeWidget->setDateTime(event->dateTime(), event->anyTime());
 		QRadioButton* radio;
 		singleLineOnly = false;       // ensure the text isn't changed erroneously
 		switch (event->type())
@@ -211,7 +211,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		bgColourChoose->setColour(theApp()->settings()->defaultBgColour());     // set colour before setting alarm type buttons
 #endif
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
-		timeWidget->setDateTime(defaultTime);
+		timeWidget->setDateTime(defaultTime, false);
 		messageEdit->setText(QString::null);
 		actionGroup->setButton(actionGroup->id(messageRadio));
 		recurrenceEdit->setDefaults(defaultTime, false);

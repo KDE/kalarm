@@ -190,7 +190,7 @@ class KAlarmEvent
 		KAlarmRecurrence* recurrence() const          { return mRecurrence; }
 		int              repeatCount() const          { return mRepeatDuration; }
 		int              repeatMinutes() const        { return mRepeatMinutes; }
-		NextOccurType    getNextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
+		NextOccurType    nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
 		QDateTime        lastDateTime() const         { return mDateTime.addSecs(mRepeatDuration * mRepeatMinutes * 60); }
 		bool             lateCancel() const           { return mLateCancel; }
 		bool             repeatAtLogin() const        { return mRepeatAtLogin; }

@@ -26,6 +26,7 @@
 
 #include "kalarm.h"
 #include "kalarmapp.h"
+#include "prefsettings.h"
 #include "msgevent.h"
 using namespace KCal;
 
@@ -188,6 +189,8 @@ void KAlarmEvent::set(const Event& event)
 			mType           = data.type;
 			mCleanText      = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
 			mDateTime       = data.dateTime;
+			if (mAnyTime)
+				mDateTime.setTime(QTime());
 			mRepeatDuration = data.repeatCount;
 			mRepeatMinutes  = data.repeatMinutes;
 			mLateCancel     = data.lateCancel;
@@ -304,7 +307,10 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 	}
 	suffix += mCleanText;
 	al->setText(QString::number(sequence) + SEPARATOR + suffix);
-	al->setTime(mDateTime);
+	QDateTime aldt = mDateTime;
+	if (mAnyTime)
+		aldt.setTime(theApp()->settings()->startOfDay());
+	al->setTime(aldt);
 	al->setRepeatCount(mRepeatMinutes ? mRepeatDuration : 0);
 	al->setSnoozeTime(mRepeatMinutes);
 	QDateTime dt = mDateTime;
@@ -466,7 +472,7 @@ bool KAlarmEvent::repeats() const
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::getNextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
+KAlarmEvent::NextOccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
 {
 	if (checkRecur())
 		return nextRecurrence(preDateTime, result);

@@ -38,8 +38,9 @@ class AlarmTimeWidget : public QWidget
 		AlarmTimeWidget(const QString& groupBoxTitle, int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
 		AlarmTimeWidget(int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
 		bool           getDateTime(QDateTime&, bool& anyTime) const;
-		void           setDateTime(const QDateTime&);
-		QSize          sizeHint() const      { return minimumSizeHint(); }
+		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
+		void           setDateTime(const QDateTime&, bool anyTime);
+		QSize          sizeHint() const                             { return minimumSizeHint(); }
 	signals:
 		void deferred();
 	protected slots:

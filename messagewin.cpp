@@ -429,7 +429,7 @@ void MessageWin::slotShowDefer()
 		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
 		wlayout->addLayout(grid);
 		deferTime = new AlarmTimeWidget(deferSpacing, deferDlg, "deferTime");
-		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60));
+		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60), false);
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
 		if (!eventID.isNull()  &&  theApp()->getCalendar().getEvent(eventID))

@@ -671,23 +671,45 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (alarm.lateCancel())
 				{
 					// Alarm is due, and it is to be cancelled if late.
-					// Allow it to be just over a minute late before cancelling it.
-					int maxlate = maxLateness();
-					if (secs > maxlate)
+					if (event.anyTime())
 					{
-						// It's over the maximum interval late.
-						// Find the latest repetition time before the current time
-						if (alarm.lastDateTime().secsTo(now) > maxlate)
+						// The alarm has no time, so cancel it if its date is past
+						QDateTime limit(alarm.date().addDays(1), mSettings->startOfDay());
+						if (now >= limit)
 						{
-							handleAlarm(event, alarm, ALARM_CANCEL, false);      // all repetitions have expired
-							updateCalAndDisplay = true;
-							continue;
+							// Find the next recurrence of the alarm
+							QDateTime next;
+							if (event.nextOccurrence(limit, next) == KAlarmEvent::NO_OCCURRENCE)
+							{
+								handleAlarm(event, alarm, ALARM_CANCEL, false);      // all recurrences have expired
+								updateCalAndDisplay = true;
+								continue;
+							}
+							else
+							{
+							}
 						}
-						if (alarm.repeatMinutes()  &&  secs % (alarm.repeatMinutes() * 60) > maxlate)
+					}
+					else
+					{
+						// The alarm is timed. Allow it to be just over a minute late before cancelling it.
+						int maxlate = maxLateness();
+						if (secs > maxlate)
 						{
-							handleAlarm(event, alarm, ALARM_RESCHEDULE, false);  // the latest repetition was too long ago
-							updateCalAndDisplay = true;
-							continue;
+							// It's over the maximum interval late.
+							// Find the latest repetition time before the current time
+							if (alarm.lastDateTime().secsTo(now) > maxlate)
+							{
+								handleAlarm(event, alarm, ALARM_CANCEL, false);      // all repetitions have expired
+								updateCalAndDisplay = true;
+								continue;
+							}
+							if (alarm.repeatMinutes()  &&  secs % (alarm.repeatMinutes() * 60) > maxlate)
+							{
+								handleAlarm(event, alarm, ALARM_RESCHEDULE, false);  // the latest repetition was too long ago
+								updateCalAndDisplay = true;
+								continue;
+							}
 						}
 					}
 				}
