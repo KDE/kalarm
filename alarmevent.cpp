@@ -607,7 +607,13 @@ DateTime KAEvent::nextDateTime() const
 		if (!mReminderOnceOnly  ||  mDateTime == mStartDateTime)
 			return mDateTime.addSecs(-mReminderMinutes * 60);
 	}
-	return mDeferral ? QMIN(mDeferralTime, mDateTime) : mDateTime;
+	if (mDeferral)
+	{
+		if (mMainExpired)
+			return mDeferralTime;
+		return QMIN(mDeferralTime, mDateTime);
+	}
+	return mDateTime;
 }
 
 /******************************************************************************
@@ -1273,7 +1279,7 @@ void KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 			QDateTime now = QDateTime::currentDateTime();
 			if (mDateTime.dateTime() < now)
 			{
-				if (setNextOccurrence(now) == NO_OCCURRENCE)
+				if (!mMainExpired  &&  setNextOccurrence(now) == NO_OCCURRENCE)
 				{
 					mMainExpired = true;
 					--mAlarmCount;

@@ -62,7 +62,7 @@ class EditAlarmDlg : public KDialogBase
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0, const char* name = 0,
                              const KAEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
-		void         getEvent(KAEvent&);
+		bool         getEvent(KAEvent&);
 		void         setAction(KAEvent::Action, const QString& text);
 
 		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
@@ -187,6 +187,9 @@ class EditAlarmDlg : public KDialogBase
 		QStringList       mEmailAttachments;   // list of email attachment file names
 		int               mDeferGroupHeight;   // height added by deferred time widget
 		bool              mTemplate;           // editing an alarm template
+		bool              mExpiredRecurrence;  // initially a recurrence which has expired
+		mutable bool      mChanged;            // controls other than deferral have changed since dialog was displayed
+		mutable bool      mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
 		bool              mDesiredReadOnly;    // the specified read-only status of the dialogue
 		bool              mReadOnly;           // the actual read-only status of the dialogue
 

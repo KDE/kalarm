@@ -19,16 +19,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef RECURRENCEEDIT_H
@@ -44,6 +34,7 @@ class QWidgetStack;
 class QGroupBox;
 class QLabel;
 class QListBox;
+class QButton;
 class QPushButton;
 class QBoxLayout;
 class SpinBox;
@@ -80,6 +71,7 @@ class RecurrenceEdit : public QFrame
 		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
+		bool          stateChanged() const;
 
 		static QString i18n_Norecur();           // text of 'No recurrence' selection, lower case
 		static QString i18n_NoRecur();           // text of 'No Recurrence' selection, initial capitals
@@ -97,7 +89,7 @@ class RecurrenceEdit : public QFrame
 		static QString i18n_y_Yearly();          // text of '&Yearly' selection, with 'Y' shortcut
 
 	public slots:
-		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
+		void          setDateTime(const QDateTime& start)   { mCurrStartDateTime = start; }
 
 	signals:
 		void          shown();
@@ -122,9 +114,11 @@ class RecurrenceEdit : public QFrame
 
 	private:
 		void          setRuleDefaults(const QDate& start);
-		bool          getCheckedDays(QBitArray& rDays) const;
-		void          setCheckedDays(QBitArray& rDays);
+		bool          getCheckedDays(QBitArray& days) const;
+		void          setCheckedDays(QBitArray& days);
 		bool          getCheckedMonths(QValueList<int>& months) const;
+		void          getCheckedMonths(QBitArray& months) const;
+		void          saveState();
 		void          initDayOfMonth(RadioButton**, ComboBox**, QWidget* parent, QBoxLayout*);
 		void          initWeekOfMonth(RadioButton**, ComboBox** weekCombo, ComboBox** dayCombo, QWidget* parent, QBoxLayout*);
 
@@ -224,9 +218,23 @@ class RecurrenceEdit : public QFrame
 		QValueList<QDate> mExceptionDates;
 
 		// Current start date and time
-		QDateTime       currStartDateTime;
+		QDateTime       mCurrStartDateTime;
 		bool            noEmitTypeChanged;    // suppress typeChanged() signal
 		bool            mReadOnly;
+
+		// Initial state of all controls
+		QButton*        mSavedRuleButton;          // which rule button was selected
+		int             mSavedFrequency;           // frequency for the selected rule
+		QBitArray       mSavedDays;                // ticked days for weekly rule
+		bool            mSavedDayOfMonthSelected;  // day-of-month radio button was selected, false if month position
+		int             mSavedDayOfMonth;          // chosen day of month selected item
+		int             mSavedWeekOfMonth;         // chosen month position: selected week item
+		int             mSavedWeekDayOfMonth;      // chosen month position: selected day of week
+		QBitArray       mSavedMonths;              // ticked months for yearly rule
+		QButton*        mSavedRangeButton;         // which range button was selected
+		int             mSavedRepeatCount;         // repeat count
+		DateTime        mSavedEndDateTime;         // end date/time
+		QValueList<QDate> mSavedExceptionDates;    // exception dates
 };
 
 #endif // RECURRENCEEDIT_H

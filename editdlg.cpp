@@ -509,6 +509,9 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
 	setReadOnly();
 
+	mChanged           = false;
+	mOnlyDeferred      = false;
+	mExpiredRecurrence = false;
 	bool deferGroupVisible = false;
 	if (event)
 	{
@@ -559,8 +562,11 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 				}
 			}
 			else
+			{
+				mExpiredRecurrence = recurs && event->mainExpired();
 				mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
 				                         : recurs ? DateTime() : event->deferDateTime());
+			}
 		}
 
 		setAction(event->action(), event->cleanText());
@@ -842,11 +848,18 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 }
 
 /******************************************************************************
- * Check whether any of the controls other than the deferral time has changed
- * state since the dialog was first displayed.
+ * Check whether any of the controls has changed state since the dialog was
+ * first displayed.
+ * Reply = true if any non-deferral controls have changed, or if it's a new event.
+ *       = false if no non-deferral controls have changed. In this case,
+ *         mOnlyDeferred indicates whether deferral controls may have changed.
  */
 bool EditAlarmDlg::stateChanged() const
 {
+	mChanged      = true;
+	mOnlyDeferred = false;
+	if (!mSavedEvent)
+		return true;
 	QString textFileCommandMessage;
 	checkText(textFileCommandMessage, false);
 	if (mTemplate)
@@ -903,31 +916,22 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedEmailBcc     != mEmailBcc->isChecked())
 			return true;
 	}
-	if (mSavedEvent->recurType() != KAEvent::NO_RECUR)
-	{
-		if (!mSavedEvent->recurrence())
-			return true;
-		KAEvent event;
-		event.setTime(mSavedEvent->startDateTime().dateTime());
-		mRecurrenceEdit->updateEvent(event, false);
-		if (!event.recurrence())
-			return true;
-		event.recurrence()->setFloats(mSavedEvent->startDateTime().isDateOnly());
-		if (*event.recurrence() != *mSavedEvent->recurrence()
-		||  event.exceptionDates() != mSavedEvent->exceptionDates()
-		||  event.exceptionDateTimes() != mSavedEvent->exceptionDateTimes())
-			return true;
-	}
+	if (mRecurrenceEdit->stateChanged())
+		return true;
+	if (mSavedEvent  &&  mSavedEvent->deferred())
+		mOnlyDeferred = true;
+	mChanged = false;
 	return false;
 }
 
 /******************************************************************************
  * Get the currently entered message data.
- * The data is returned in the supplied Event instance.
+ * The data is returned in the supplied KAEvent instance.
+ * Reply = false if the only change has been to an existing deferral.
  */
-void EditAlarmDlg::getEvent(KAEvent& event)
+bool EditAlarmDlg::getEvent(KAEvent& event)
 {
-	if (!mSavedEvent  ||  stateChanged())
+	if (mChanged)
 	{
 		// It's a new event, or the edit controls have changed
 		QDateTime dt;
@@ -981,19 +985,21 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 		}
 		if (mTemplate)
 			event.setTemplate(mTemplateName->text(), mTemplateDefaultTime->isOn());
+		return true;
 	}
-	else
+
+	// Only the deferral time may have changed
+	event = *mSavedEvent;
+	if (mOnlyDeferred)
 	{
-		// Only the deferral time may have changed
-		event = *mSavedEvent;
-		if (mSavedEvent->deferred())
-		{
-			if (mDeferDateTime.isValid())
-				event.defer(mDeferDateTime, event.reminderDeferral(), false);
-			else
-				event.cancelDefer();
-		}
+		// Just modify the original event, to avoid expired recurring events
+		// being returned as rubbish.
+		if (mDeferDateTime.isValid())
+			event.defer(mDeferDateTime, event.reminderDeferral(), false);
+		else
+			event.cancelDefer();
 	}
+	return false;
 }
 
 /******************************************************************************
@@ -1065,6 +1071,15 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
+	if (!stateChanged())
+	{
+		// No changes have been made except possibly to an existing deferral
+		if (!mOnlyDeferred)
+			reject();
+		else
+			accept();
+		return;
+	}
 	if (mTimeWidget
 	&&  activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
@@ -1095,6 +1110,7 @@ void EditAlarmDlg::slotOk()
 		mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
 		if (errWidget)
 		{
+			// It's more than just an existing deferral being changed, so the time matters
 			showPage(mMainPageIndex);
 			errWidget->setFocus();
 			mTimeWidget->getDateTime();   // display the error message now
@@ -1243,22 +1259,30 @@ void EditAlarmDlg::slotEditDeferral()
 {
 	if (!mTimeWidget)
 		return;
-	DateTime start = mTimeWidget->getDateTime();
+	bool limit = true;
+	DateTime start = mTimeWidget->getDateTime(true, !mExpiredRecurrence);
 	if (!start.isValid())
-		return;
+	{
+		if (!mExpiredRecurrence)
+			return;
+		limit = false;
+	}
 
 	bool deferred = mDeferDateTime.isValid();
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
 	                       deferred, this, "deferDlg");
-	// Don't allow deferral past the next recurrence
-	int reminder = mReminder->minutes();
-	if (reminder)
+	if (limit)
 	{
-		DateTime remindTime = start.addMins(-reminder);
-		if (QDateTime::currentDateTime() < remindTime)
-			start = remindTime;
+		// Don't allow deferral past the next recurrence
+		int reminder = mReminder->minutes();
+		if (reminder)
+		{
+			DateTime remindTime = start.addMins(-reminder);
+			if (QDateTime::currentDateTime() < remindTime)
+				start = remindTime;
+		}
+		deferDlg.setLimit(start);
 	}
-	deferDlg.setLimit(start);
 	if (deferDlg.exec() == QDialog::Accepted)
 	{
 		mDeferDateTime = deferDlg.getDateTime();
