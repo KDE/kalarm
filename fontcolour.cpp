@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include <qobjectlist.h>
@@ -82,14 +86,14 @@ void FontColourChooser::setFgColour(const QColor& colour)
 {
    if (m_fgColourButton)
    {
-      m_fgColourButton->setColour(colour);
+      m_fgColourButton->setColor(colour);
       m_fontChooser->setColor(colour);
    }
 }
 
 void FontColourChooser::setBgColour(const QColor& colour)
 {
-   m_bgColourButton->setColour(colour);
+   m_bgColourButton->setColor(colour);
    m_fontChooser->setBackgroundColor(colour);
 }
 
