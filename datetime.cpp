@@ -45,8 +45,7 @@
 *  Construct a widget with a group box and title.
 */
 AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, const char* name)
-	: ButtonGroup(groupBoxTitle, parent, name),
-	  enteredDateTimeChanged(false)
+	: ButtonGroup(groupBoxTitle, parent, name)
 {
 	init(mode);
 }
@@ -55,8 +54,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 *  Construct a widget without a group box or title.
 */
 AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
-	: ButtonGroup(parent, name),
-	  enteredDateTimeChanged(false)
+	: ButtonGroup(parent, name)
 {
 	setFrameStyle(QFrame::NoFrame);
 	init(mode);
@@ -120,7 +118,7 @@ void AlarmTimeWidget::init(int mode)
 	delayTime->setFixedSize(delayTime->sizeHint());
 	QWhatsThis::add(delayTime,
 	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm."));
-	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
+	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(delayTimeChanged(int)));
 
 	// Set up the layout, either narrow or wide
 	if (mode & NARROW)
@@ -211,6 +209,7 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 {
 	timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 	dateEdit->setDate(dt.date());
+	dateTimeChanged();     // update the delay time edit box
 	QDate now = QDate::currentDate();
 	dateEdit->setMinDate(dt.date() < now ? dt.date() : now);
 	if (anyTimeCheckBox)
@@ -249,7 +248,7 @@ void AlarmTimeWidget::slotTimer()
 	if (atTimeRadio->isOn())
 		dateTimeChanged();
 	else
-		slotDelayTimeChanged(delayTime->value());
+		delayTimeChanged(delayTime->value());
 }
 
 
@@ -287,30 +286,34 @@ void AlarmTimeWidget::anyTimeToggled(bool on)
 */
 void AlarmTimeWidget::dateTimeChanged()
 {
-	if (!enteredDateTimeChanged)          // prevent infinite recursion !!
-	{
-		enteredDateTimeChanged = true;
-		QDateTime dt(dateEdit->date(), timeEdit->time());
-		int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
-		if (minutes <= 0  ||  minutes > delayTime->maxValue())
-			delayTime->setValid(false);
-		else
-			delayTime->setValue(minutes);
-		enteredDateTimeChanged = false;
-	}
+	QDateTime dt(dateEdit->date(), timeEdit->time());
+	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
+	bool blocked = delayTime->signalsBlocked();
+	delayTime->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
+	if (minutes <= 0  ||  minutes > delayTime->maxValue())
+		delayTime->setValid(false);
+	else
+		delayTime->setValue(minutes);
+	delayTime->blockSignals(blocked);
 }
 
 /******************************************************************************
-*  Called when the date or time edit box values have changed.
+*  Called when the delay time edit box value has changed.
 *  Updates the Date and Time edit boxes accordingly.
 */
-void AlarmTimeWidget::slotDelayTimeChanged(int minutes)
+void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
 	if (delayTime->valid())
 	{
 		QDateTime dt = QDateTime::currentDateTime().addSecs(minutes * 60);
+		bool blockedT = timeEdit->signalsBlocked();
+		bool blockedD = dateEdit->signalsBlocked();
+		timeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
+		timeEdit->blockSignals(true);
 		timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 		dateEdit->setDate(dt.date());
+		timeEdit->blockSignals(blockedT);
+		dateEdit->blockSignals(blockedD);
 	}
 }
 
@@ -338,6 +341,7 @@ TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
 	validator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
 	setValidator(validator);
 	setWrapping(true);
+	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 }
 
 // Construct a non-wrapping time spin box
@@ -349,6 +353,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 {
 	validator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
 	setValidator(validator);
+	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 }
 
 QTime TimeSpinBox::time() const

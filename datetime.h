@@ -57,7 +57,7 @@ class AlarmTimeWidget : public ButtonGroup
 		void           slotButtonSet(int id);
 		void           slotDateChanged(QDate)     { dateTimeChanged(); }
 		void           slotTimeChanged(int)       { dateTimeChanged(); }
-		void           slotDelayTimeChanged(int);
+		void           delayTimeChanged(int);
 		void           anyTimeToggled(bool);
 	private:
 		void           init(int mode);
@@ -72,7 +72,6 @@ class AlarmTimeWidget : public ButtonGroup
 		QTimer         timer;
 		bool           timerSyncing;            // timer is not yet synchronised to the minute boundary
 		bool           anyTimeAllowed;          // 'anyTimeCheckBox' is enabled
-		bool           enteredDateTimeChanged;  // prevent recursion through slotDelayTimeChanged()
 };
 
 
