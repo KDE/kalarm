@@ -220,7 +220,7 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 */
 TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
 {
-	int oldmins;
+	int oldmins = 0;
 	if (signal)
 		oldmins = minutes();
 	int index = mUnitsCombo->currentItem();
