@@ -82,6 +82,7 @@ class EditAlarmDlg : public KDialogBase
 	private:
 		bool            checkText(QString& result);
 		QString         getMessageText();
+		void            enableSound(bool);
 		void            setSoundPicker();
 
 		QButtonGroup*    actionGroup;

@@ -98,7 +98,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->addWidget(fileRadio, 1, 2, AlignRight);
 
 	// Browse button
-	browseButton = new QPushButton(i18n("&Browse..."), actionGroup);
+	browseButton = new QPushButton(actionGroup);
+	browseButton->setPixmap(SmallIcon("fileopen"));
 	browseButton->setFixedSize(browseButton->sizeHint());
 	QWhatsThis::add(browseButton, i18n("Select a text file to display."));
 	grid->addWidget(browseButton, 1, 3, AlignLeft);
@@ -144,15 +145,28 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	connect(recurrenceEdit, SIGNAL(resized(QSize,QSize)), this, SLOT(slotRecurrenceResized(QSize,QSize)));
 	topLayout->addWidget(recurrenceEdit);
 
+	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+
 	// Late display checkbox - default = allow late display
 
-	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	lateCancel = new QCheckBox(page);
+	lateCancel->setText(i18n("Cancel if late"));
+	lateCancel->setFixedSize(lateCancel->sizeHint());
+	lateCancel->setChecked(false);
+	QWhatsThis::add(lateCancel,
+	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
+	           "minute of the specified time. Possible reasons for not triggering include your "
+	           "being logged off, X not running, or the alarm daemon not running.\n\n"
+	           "If unchecked, the alarm will be triggered at the first opportunity after "
+	           "the specified time, regardless of how late it is."));
+	layout->addWidget(lateCancel);
+	layout->addStretch();
 
 	// Sound checkbox & sound picker button - default = no sound
 
 	QFrame* frame = new QFrame(page);
 	frame->setFrameStyle(QFrame::NoFrame);
-	QHBoxLayout* slayout = new QHBoxLayout(frame, 0, 2*spacingHint());
+	QHBoxLayout* slayout = new QHBoxLayout(frame, 0, spacingHint());
 	sound = new QCheckBox(frame);
 	sound->setText(i18n("Sound"));
 	sound->setFixedSize(sound->sizeHint());
@@ -173,19 +187,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	           "selected, a beep will sound."));
 	slayout->addWidget(soundPicker);
 	layout->addWidget(frame);
-	layout->addStretch();
-
-	lateCancel = new QCheckBox(page);
-	lateCancel->setText(i18n("Cancel if late"));
-	lateCancel->setFixedSize(lateCancel->sizeHint());
-	lateCancel->setChecked(false);
-	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
-	           "minute of the specified time. Possible reasons for not triggering include your "
-	           "being logged off, X not running, or the alarm daemon not running.\n\n"
-	           "If unchecked, the alarm will be triggered at the first opportunity after "
-	           "the specified time, regardless of how late it is."));
-	layout->addWidget(lateCancel);
 	layout->addStretch();
 
 #ifdef SELECT_FONT
@@ -276,7 +277,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	resize(size);
 
 	slotMessageTypeClicked(-1);    // enable/disable things appropriately
-	slotSoundToggled(sound->isChecked());
 	messageEdit->setFocus();
 }
 
@@ -410,6 +410,15 @@ void EditAlarmDlg::slotEditDeferral()
 }
 
 /******************************************************************************
+ * Enable/disable the Sound checkbox and sound picker button.
+ */
+void EditAlarmDlg::enableSound(bool enable)
+{
+	sound->setEnabled(enable);
+	slotSoundToggled(enable && sound->isChecked());
+}
+
+/******************************************************************************
  * Called when the sound checkbox is toggled.
  */
 void EditAlarmDlg::slotSoundToggled(bool on)
@@ -454,7 +463,7 @@ void EditAlarmDlg::setSoundPicker()
 		if (beep)
 			QToolTip::add(soundPicker, i18n("Beep"));
 		else
-			QToolTip::add(soundPicker, i18n("Playing '%1'").arg(soundFile));
+			QToolTip::add(soundPicker, i18n("Play '%1'").arg(soundFile));
 		soundPicker->setOn(!beep);
 	}
 }
@@ -544,14 +553,19 @@ bool EditAlarmDlg::checkText(QString& result)
 		else
 		{
 			// It's a local file - convert to absolute path & check validity
+			if (alarmtext.isEmpty())
+				err = DIRECTORY;    // blank file name - need to get its path, for the error message
 			QFileInfo info(alarmtext);
 			QDir::setCurrent(QDir::homeDirPath());
 			alarmtext = info.absFilePath();
 			url.setPath(alarmtext);
 			alarmtext = QString::fromLatin1("file:") + alarmtext;
-			if      (info.isDir())        err = DIRECTORY;
-			else if (!info.exists())      err = NONEXISTENT;
-			else if (!info.isReadable())  err = UNREADABLE;
+			if (!err)
+			{
+				if      (info.isDir())        err = DIRECTORY;
+				else if (!info.exists())      err = NONEXISTENT;
+				else if (!info.isReadable())  err = UNREADABLE;
+			}
 		}
 		if (!err)
 		{
@@ -627,7 +641,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 		bgColourChoose->setEnabled(true);
 #endif
-		sound->setEnabled(true);
+		enableSound(true);
 	}
 	else
 	{
@@ -641,7 +655,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(true);
 #endif
-			sound->setEnabled(true);
+			enableSound(true);
 		}
 		else if (commandRadio->isOn())
 		{
@@ -652,7 +666,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(false);
 #endif
-			sound->setEnabled(false);
+			enableSound(false);
 		}
 		singleLineOnly = true;
 		QString text = messageEdit->text();
