@@ -65,9 +65,6 @@ class RecurrenceEdit : public QWidget
 		virtual QSize sizeHint() const;
 		virtual QSize minimumSizeHint() const;
 
-		/** Check if the input is valid. */
-		bool          validateInput();
-
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 
@@ -186,9 +183,15 @@ class ButtonGroup : public QButtonGroup
 {
 		Q_OBJECT
 	public:
-		ButtonGroup(QWidget* parent, const char* name = 0)  : QButtonGroup(parent, name) { }
-		ButtonGroup(int strips, Qt::Orientation o, QWidget* parent, const char* name = 0)  : QButtonGroup(strips, o, parent, name) { }
+		ButtonGroup(QWidget* parent, const char* name = 0L)  : QButtonGroup(parent, name) { }
+		ButtonGroup(int strips, Qt::Orientation, QWidget* parent, const char* name = 0L);
 		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit clicked(id); }
+#if KDE_VERSION < 290
+		void setInsideMargin(int) { }
+		void addWidget(QWidget*, int stretch = 0, int alignment = 0);
+	private:
+		int  defaultAlignment;
+#endif
 };
 
 #endif // RECURRENCEEDIT_H
