@@ -141,15 +141,16 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mEvent(event),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mDeferDlg(0),
 	  mFlags(event.flags()),
+	  mLateCancel(event.lateCancel()),
 	  mErrorWindow(false),
 	  mNoPostAction(false),
 	  mRecreating(false),
 	  mBeep(event.beep()),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
-	  mDeferClosing(false),
-	  mDeferDlgShowing(false)
+	  mDeferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -177,13 +178,13 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mEvent(event),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mDeferDlg(0),
 	  mErrorWindow(true),
 	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
-	  mDeferClosing(false),
-	  mDeferDlgShowing(false)
+	  mDeferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	initView();
@@ -199,13 +200,13 @@ MessageWin::MessageWin()
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mSilenceButton(0),
+	  mDeferDlg(0),
 	  mErrorWindow(false),
 	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
-	  mDeferClosing(false),
-	  mDeferDlgShowing(false)
+	  mDeferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	mWindowList.append(this);
@@ -474,6 +475,8 @@ void MessageWin::initView()
 		QWhatsThis::add(mDeferButton,
 		      i18n("Defer the alarm until later.\n"
 		           "You will be prompted to specify when the alarm should be redisplayed."));
+
+		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 	}
 
 #ifndef WITHOUT_ARTS
@@ -525,7 +528,7 @@ void MessageWin::setRemainingTextDay()
 	if (days == 0  &&  !mDateTime.isDateOnly())
 	{
 		// The alarm is due today, so start refreshing every minute
-		DailyTimer::disconnect(this);
+		DailyTimer::disconnect(this, SLOT(setRemainingTextDay()));
 		setRemainingTextMinute();
 		MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
 	}
@@ -815,21 +818,30 @@ void MessageWin::stopPlay()
 }
 
 /******************************************************************************
-*  Re-output any required audio notification, and reschedule the alarm in the
-*  calendar file.
+*  Raise the alarm window, re-output any required audio notification, and
+*  reschedule the alarm in the calendar file.
 */
 void MessageWin::repeat(const KAAlarm& alarm)
 {
+	if (mDeferDlg)
+	{
+		// Cancel any deferral dialogue so that the user notices something's going on,
+		// and also because the deferral time limit will have changed.
+		delete mDeferDlg;
+		mDeferDlg = 0;
+	}
 	const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
-		if (!mDeferDlgShowing  ||  Preferences::instance()->modalMessages())
+		if (!mDeferDlg  ||  Preferences::instance()->modalMessages())
 		{
 			raise();
 			playAudio();
 		}
 		KAEvent event(*kcalEvent);
+		mDeferButton->setEnabled(true);
+		setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
 		theApp()->alarmShowing(event, mAlarmType, mDateTime);
 	}
 }
@@ -905,27 +917,70 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
+* Set up to disable the defer button when the deferral limit is reached.
+*/
+void MessageWin::setDeferralLimit(const KAEvent& event)
+{
+	if (mDeferButton)
+	{
+		// Ensure that defer button is disabled when the deferral limit is reached
+		mDeferLimit = event.deferralLimit().dateTime();
+		DailyTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+		checkDeferralLimit();
+	}
+}
+
+/******************************************************************************
+* Check whether the deferral limit has been reached.
+* If so, disable the Defer button.
+* N.B. Ideally, just a single QTimer::singleShot() call would be made to disable
+*      the defer button at the corret time. But for a 32-bit integer, the
+*      milliseconds parameter overflows in about 25 days, so instead a daily
+*      check is done until the day when the deferral limit is reached, followed
+*      by a non-overflowing QTimer::singleShot() call.
+*/
+void MessageWin::checkDeferralLimit()
+{
+	if (!mDeferButton)
+		return;
+	int n = QDate::currentDate().daysTo(mDeferLimit.date());
+	if (n > 0)
+		return;
+	DailyTimer::disconnect(this, SLOT(checkDeferralLimit()));
+	if (n == 0)
+	{
+		// The deferral limit will be reached today
+		n = QTime::currentTime().secsTo(mDeferLimit.time());
+		if (n > 0)
+		{
+			QTimer::singleShot(n * 1000, this, SLOT(checkDeferralLimit()));
+			return;
+		}
+	}
+	mDeferButton->setEnabled(false);
+}
+
+/******************************************************************************
 *  Called when the Defer... button is clicked.
 *  Displays the defer message dialog.
 */
 void MessageWin::slotDefer()
 {
-	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
-	                       false, this, "deferDlg");
-	deferDlg.setLimit(mEventID);
-	mDeferDlgShowing = true;
+	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
+	                              false, this, "deferDlg");
+	mDeferDlg->setLimit(mEventID);
 	if (!Preferences::instance()->modalMessages())
 		lower();
-	if (deferDlg.exec() == QDialog::Accepted)
+	if (mDeferDlg->exec() == QDialog::Accepted)
 	{
-		DateTime dateTime = deferDlg.getDateTime();
+		DateTime dateTime = mDeferDlg->getDateTime();
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
 			KAEvent event(*kcalEvent);
-			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
-			KAlarm::updateEvent(event, 0);
+			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
+			KAlarm::updateEvent(event, 0, true, !repeat);
 		}
 		else
 		{
@@ -939,7 +994,7 @@ void MessageWin::slotDefer()
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime.dateTime(), mMessage, mBgColour, mFgColour, mFont, mAction, mFlags);
+				event.set(dateTime.dateTime(), mMessage, mBgColour, mFgColour, mFont, mAction, mLateCancel, mFlags);
 				event.setAudioFile(mAudioFile, mVolume);
 				event.setArchive();
 				event.setEventID(mEventID);
@@ -963,7 +1018,8 @@ void MessageWin::slotDefer()
 	}
 	else
 		raise();
-	mDeferDlgShowing = false;
+	delete mDeferDlg;
+	mDeferDlg = 0;
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  dateedit.h  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,10 @@ class DateEdit : public KDateEdit
 		DateEdit(QWidget* parent = 0, const char* name = 0);
 		virtual bool validate(const QDate&);
 		bool         isValid() const              { return inputIsValid(); }
+		const QDate& minDate() const              { return mMinDate; }
+		const QDate& maxDate() const              { return mMaxDate; }
 		void         setMinDate(const QDate&, const QString& errorDate = QString::null);
+		void         setMaxDate(const QDate&, const QString& errorDate = QString::null);
 		void         setValid(bool);
 
 	protected:
@@ -38,11 +41,17 @@ class DateEdit : public KDateEdit
 		virtual void mouseMoveEvent(QMouseEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 		virtual void keyReleaseEvent(QKeyEvent*);
+
 	protected slots:
 		void         slotDateChanged(QDate);
+
 	private:
-		QDate    mMinDate;             // minimum allowed date, or invalid for no minimum
-		QString  mErrorDateString;     // error message when entered date < mMinDate
+		void         pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError);
+
+		QDate        mMinDate;             // minimum allowed date, or invalid for no minimum
+		QDate        mMaxDate;             // maximum allowed date, or invalid for no maximum
+		QString      mMinDateErrString;    // error message when entered date < mMinDate
+		QString      mMaxDateErrString;    // error message when entered date > mMaxDate
 };
 
 #endif // DATEEDIT_H

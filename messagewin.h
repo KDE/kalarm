@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef MESSAGEWIN_H
@@ -38,6 +28,7 @@ class QPushButton;
 class QLabel;
 class QTimer;
 class AlarmTimeWidget;
+class DeferAlarmDlg;
 class KArtsDispatcher;
 namespace KDE { class PlayObject; }
 
@@ -70,6 +61,7 @@ class MessageWin : public MainWindowBase
 
 	private slots:
 		void                slotDefer();
+		void                checkDeferralLimit();
 		void                displayMainWindow();
 		void                slotPlayAudio();
 		void                checkAudioPlay();
@@ -83,6 +75,7 @@ class MessageWin : public MainWindowBase
 		void                initAudio(bool firstTime);
 #endif
 		void                playAudio();
+		void                setDeferralLimit(const KAEvent&);
 
 		static QPtrList<MessageWin> mWindowList;  // list of existing message windows
 		// Properties needed by readProperties()
@@ -116,7 +109,10 @@ class MessageWin : public MainWindowBase
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
+		DeferAlarmDlg*      mDeferDlg;
+		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
 		int                 mFlags;
+		int                 mLateCancel;
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action
 		bool                mRecreating;      // window is about to be deleted and immediately recreated

@@ -951,7 +951,7 @@ void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 void RecurrenceEdit::setEndDateTime(const DateTime& end)
 {
 	mEndDateEdit->setDate(end.date());
-	mEndTimeEdit->setTime(end.time());
+	mEndTimeEdit->setValue(end.time());
 	mEndTimeEdit->setEnabled(!end.isDateOnly());
 	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
 }
@@ -1225,7 +1225,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	{
 		mEndDateButton->setChecked(true);
 		endtime = recurrence->endDateTime();
-		mEndTimeEdit->setTime(endtime.time());
+		mEndTimeEdit->setValue(endtime.time());
 	}
 	mEndDateEdit->setDate(endtime.date());
 
@@ -1541,40 +1541,3 @@ void RecurFrequency::setValue(int n)
 	if (mTimeSpinBox)
 		mTimeSpinBox->setValue(n);
 }
-
-#ifdef SIMPLE_REP
-RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent, const char* name)
-{
-	QWidget* page = new QWidget(this);
-	setMainWidget(page);
-	QVBoxLayout* topLayout = new QVBoxLayout(page, marginKDE2, spacingHint());
-
-	mDialog = new RepetitionDlg(i18n("Alarm Repetition"), mReadOnly, this);
-	QLabel* label = new QLabel(
-	     i18n("Use this dialog either:\n"
-	          "- instead of the Recurrence tab, or\n"
-	          "- after using the Recurrence tab, to set up a repetition within a repetition."),
-	     page);
-	mTimeSelector = new TimeSelector(i18n("Repeat every 10 minutes", "&Repeat every"), QString::null,
-	                  i18n("Check to repeat the alarm each time it recurs. "
-	                       "Instead of the alarm triggering once at each recurrence, "
-	                       "this option makes the alarm trigger multiple times at each recurrence."),
-	                  i18n("Enter the time between repetitions of the alarm"),
-	                  true, page);
-
-	mCountButton = new RadioButton(i18n("&Number of times:"), mButtonGroup);
-	QWhatsThis::add(mCountButton,
-	      i18n("Check to specify the number of times the alarm should repeat at each recurrence"));
-	mCount = new SpinBox(2, MAX_COUNT, 1, mButtonGroup);
-#warning "The repeat count showed 1 once"
-	QWhatsThis::add(mCount,
-	      i18n("Enter the total number of times to trigger the alarm, including its initial occurrence"));
-
-	mDurationButton = new RadioButton(i18n("&Duration:"), mButtonGroup);
-	QWhatsThis::add(mDurationButton,
-	      i18n("Check to specify how long the alarm is to be repeated"));
-	mDuration = new TimePeriod(true, mButtonGroup);
-	QWhatsThis::add(mDuration,
-	      i18n("Enter the length of time to repeat the alarm"));
-}
-#endif

@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,9 +34,17 @@ DateEdit::DateEdit(QWidget* parent, const char* name)
 void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
 {
 	mMinDate = d;
-	if (mMinDate.isValid() && inputIsValid() && date() < mMinDate)
+	if (mMinDate.isValid()  &&  inputIsValid()  &&  date() < mMinDate)
 		setDate(mMinDate);
-	mErrorDateString = errorDate;
+	mMinDateErrString = errorDate;
+}
+
+void DateEdit::setMaxDate(const QDate& d, const QString& errorDate)
+{
+	mMaxDate = d;
+	if (mMaxDate.isValid()  &&  inputIsValid()  &&  date() > mMaxDate)
+		setDate(mMaxDate);
+	mMaxDateErrString = errorDate;
 }
 
 void DateEdit::setValid(bool valid)
@@ -46,25 +54,38 @@ void DateEdit::setValid(bool valid)
 		setDate(QDate());
 }
 
-// Check a new date against any minimum date.
+// Check a new date against any minimum or maximum date.
 bool DateEdit::validate(const QDate& newDate)
 {
 	if (!newDate.isValid())
 		return false;
-	if (mMinDate.isValid() && newDate < mMinDate)
+	if (mMinDate.isValid()  &&  newDate < mMinDate)
 	{
-		QString minString = mErrorDateString;
-		if (mErrorDateString.isNull())
-		{
-			if (mMinDate == QDate::currentDate())
-				minString = i18n("today");
-			else
-				minString = KGlobal::locale()->formatDate(mMinDate, true);
-		}
-		KMessageBox::sorry(this, i18n("Date cannot be earlier than %1").arg(minString));
+		pastLimitMessage(mMinDate, mMinDateErrString,
+		                 i18n("Date cannot be earlier than %1"));
+		return false;
+	}
+	if (mMaxDate.isValid()  &&  newDate > mMaxDate)
+	{
+		pastLimitMessage(mMaxDate, mMaxDateErrString,
+		                 i18n("Date cannot be later than %1"));
 		return false;
 	}
 	return true;
+}
+
+void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError)
+{
+	QString errString = error;
+	if (errString.isNull())
+	{
+		if (limit == QDate::currentDate())
+			errString = i18n("today");
+		else
+			errString = KGlobal::locale()->formatDate(limit, true);
+		errString = defaultError.arg(errString);
+	}
+	KMessageBox::sorry(this, errString);
 }
 
 void DateEdit::slotDateChanged(QDate date)

@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,15 +21,13 @@
 #ifndef ALARMTIMEWIDGET_H
 #define ALARMTIMEWIDGET_H
 
-#include <qtimer.h>
-#include "datetime.h"
 #include "buttongroup.h"
+#include "datetime.h"
 
 class RadioButton;
 class CheckBox;
 class DateEdit;
 class TimeSpinBox;
-class DateTime;
 
 
 class AlarmTimeWidget : public ButtonGroup
@@ -43,36 +41,48 @@ class AlarmTimeWidget : public ButtonGroup
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
-		DateTime       getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
-		void           setDateTime(const DateTime&, bool setMinimum = true);
-		void           setMinDateToday();
-		void           setMinDate(bool);
-		void           setReadOnly(bool);
-		bool           anyTime() const               { return mAnyTime; }
-		void           enableAnyTime(bool enable);
-		QSize          sizeHint() const              { return minimumSizeHint(); }
-	signals:
-		void           anyTimeToggled(bool anyTime);
-	protected slots:
-		void           slotTimer();
-		void           slotButtonSet(int id);
-		void           dateTimeChanged();
-		void           delayTimeChanged(int);
-		void           slotAnyTimeToggled(bool);
-	private:
-		void           init(int mode);
-		void           setAnyTime();
+		DateTime         getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
+		void             setDateTime(const DateTime&);
+		void             setMinDateTimeIsCurrent();
+		void             setMinDateTime(const QDateTime& = QDateTime());
+		void             setMaxDateTime(const DateTime& = DateTime());
+		const QDateTime& maxDateTime() const           { return mMaxDateTime; }
+		void             setReadOnly(bool);
+		bool             anyTime() const               { return mAnyTime; }
+		void             enableAnyTime(bool enable);
+		QSize            sizeHint() const              { return minimumSizeHint(); }
 
-		RadioButton*   mAtTimeRadio;
-		RadioButton*   mAfterTimeRadio;
-		DateEdit*      mDateEdit;
-		TimeSpinBox*   mTimeEdit;
-		TimeSpinBox*   mDelayTimeEdit;
-		CheckBox*      mAnyTimeCheckBox;
-		QTimer         mTimer;
-		int            mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
-		bool           mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
-		bool           mTimerSyncing;     // mTimer is not yet synchronised to the minute boundary
+	signals:
+		void             anyTimeToggled(bool anyTime);
+		void             pastMax();
+
+	protected slots:
+		void             slotTimer();
+		void             slotButtonSet(int id);
+		void             dateTimeChanged();
+		void             delayTimeChanged(int);
+		void             slotAnyTimeToggled(bool);
+
+	private:
+		void             init(int mode);
+		void             setAnyTime();
+		void             setMaxDelayTime(const QDateTime& now);
+		void             setMaxMinTimeIf(const QDateTime& now);
+
+		RadioButton*     mAtTimeRadio;
+		RadioButton*     mAfterTimeRadio;
+		DateEdit*        mDateEdit;
+		TimeSpinBox*     mTimeEdit;
+		TimeSpinBox*     mDelayTimeEdit;
+		CheckBox*        mAnyTimeCheckBox;
+		QDateTime        mMinDateTime;      // earliest allowed date/time
+		QDateTime        mMaxDateTime;      // latest allowed date/time
+		int              mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
+		bool             mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
+		bool             mMinDateTimeIsNow; // earliest allowed date/time is the current time
+		bool             mPastMax;          // current time is past the maximum date/time
+		bool             mMinMaxTimeSet;    // limits have been set for the time edit control
+		bool             mTimerSyncing;     // mTimer is not yet synchronised to the minute boundary
 };
 
 #endif // ALARMTIMEWIDGET_H

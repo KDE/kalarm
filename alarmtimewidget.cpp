@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -40,19 +30,26 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include "datetime.h"
-#include "dateedit.h"
-#include "timespinbox.h"
 #include "checkbox.h"
+#include "dateedit.h"
+#include "datetime.h"
 #include "radiobutton.h"
+#include "synchtimer.h"
+#include "timespinbox.h"
 #include "alarmtimewidget.moc"
+
+static const QTime time_23_59(23, 59);
+static const int   maxDelayTime = 99*60 + 59;    // < 100 hours
 
 
 /******************************************************************************
 *  Construct a widget with a group box and title.
 */
 AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, const char* name)
-	: ButtonGroup(groupBoxTitle, parent, name)
+	: ButtonGroup(groupBoxTitle, parent, name),
+	  mMinDateTimeIsNow(false),
+	  mPastMax(false),
+	  mMinMaxTimeSet(false)
 {
 	init(mode);
 }
@@ -61,7 +58,10 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 *  Construct a widget without a group box or title.
 */
 AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
-	: ButtonGroup(parent, name)
+	: ButtonGroup(parent, name),
+	  mMinDateTimeIsNow(false),
+	  mPastMax(false),
+	  mMinMaxTimeSet(false)
 {
 	setFrameStyle(QFrame::NoFrame);
 	init(mode);
@@ -69,12 +69,8 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 
 void AlarmTimeWidget::init(int mode)
 {
-#ifdef SIMPLE_REP
 	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
-	                                      "to the first recurrence on or after the entered date/time."); 
-#endif
-	static const QString recurText = i18n("If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
@@ -137,7 +133,7 @@ void AlarmTimeWidget::init(int mode)
 	                                     : i18n("Schedule the alarm after the specified time interval from now.")));
 
 	// Delay time spin box
-	mDelayTimeEdit = new TimeSpinBox(1, 99*60+59, this);
+	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, this);
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
@@ -179,11 +175,7 @@ void AlarmTimeWidget::init(int mode)
 	setButton(id(mAtTimeRadio));
 
 	// Timeout every minute to update alarm time fields.
-	// But first synchronise to one second after the minute boundary.
-	int firstInterval = 61 - QTime::currentTime().second();
-	mTimer.start(1000 * firstInterval);
-	mTimerSyncing = (firstInterval != 60);
-	connect(&mTimer, SIGNAL(timeout()), SLOT(slotTimer()));
+	MinuteTimer::connect(this, SLOT(slotTimer()));
 }
 
 /******************************************************************************
@@ -280,11 +272,11 @@ DateTime AlarmTimeWidget::getDateTime(bool checkExpired, bool showErrorMessage, 
 /******************************************************************************
 *  Set the date/time.
 */
-void AlarmTimeWidget::setDateTime(const DateTime& dt, bool setMinimum)
+void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
 	if (dt.date().isValid())
 	{
-		mTimeEdit->setTime(dt.time());
+		mTimeEdit->setValue(dt.time());
 		mDateEdit->setDate(dt.date());
 		dateTimeChanged();     // update the delay time edit box
 	}
@@ -294,7 +286,6 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt, bool setMinimum)
 		mDateEdit->setValid(false);
 		mDelayTimeEdit->setValid(false);
 	}
-	setMinDate(setMinimum);
 	if (mAnyTimeCheckBox)
 	{
 		bool anyTime = dt.isDateOnly();
@@ -306,30 +297,96 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt, bool setMinimum)
 }
 
 /******************************************************************************
-*  Set the minimum date to today, adjusting the entered date if necessary.
+*  Set the minimum date/time to track the current time.
 */
-void AlarmTimeWidget::setMinDateToday()
+void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
-	QDate today = QDate::currentDate();
-	mDateEdit->setMinDate(today);
+	mMinDateTimeIsNow = true;
+	mMinDateTime = QDateTime();
+	QDateTime now = QDateTime::currentDateTime();
+	mDateEdit->setMinDate(now.date());
+	setMaxMinTimeIf(now);
 }
 
 /******************************************************************************
-*  Set whether the date has a minimum value.
+*  Set the minimum date/time, adjusting the entered date/time if necessary.
+*  If 'dt' is invalid, any current minimum date/time is cleared.
 */
-void AlarmTimeWidget::setMinDate(bool yes)
+void AlarmTimeWidget::setMinDateTime(const QDateTime& dt)
 {
-	if (yes)
+	mMinDateTimeIsNow = false;
+	mMinDateTime = dt;
+	mDateEdit->setMinDate(dt.date());
+	setMaxMinTimeIf(QDateTime::currentDateTime());
+}
+
+/******************************************************************************
+*  Set the maximum date/time, adjusting the entered date/time if necessary.
+*  If 'dt' is invalid, any current maximum date/time is cleared.
+*/
+void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
+{
+	mPastMax = false;
+	if (dt.isValid()  &&  dt.isDateOnly())
+		mMaxDateTime = dt.dateTime().addSecs(24*3600 - 60);
+	else
+		mMaxDateTime = dt.dateTime();
+	mDateEdit->setMaxDate(mMaxDateTime.date());
+	QDateTime now = QDateTime::currentDateTime();
+	setMaxMinTimeIf(now);
+	setMaxDelayTime(now);
+}
+
+/******************************************************************************
+*  If the minimum and maximum date/times fall on the same date, set the minimum
+*  and maximum times in the time edit box.
+*/
+void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
+{
+	int   mint = 0;
+	QTime maxt = time_23_59;
+	mMinMaxTimeSet = false;
+	if (mMaxDateTime.isValid())
 	{
-		if (mDateEdit->isValid())
+		bool set = true;
+		QDateTime minDT;
+		if (mMinDateTimeIsNow)
+			minDT = now.addSecs(60);
+		else if (mMinDateTime.isValid())
+			minDT = mMinDateTime;
+		else
+			set = false;
+		if (set  &&  mMaxDateTime.date() == minDT.date())
 		{
-			QDate today = QDate::currentDate();
-			QDate dt    = mDateEdit->date();
-			mDateEdit->setMinDate(dt < today ? dt : today);
+			// The minimum and maximum times are on the same date, so
+			// constrain the time value.
+			mint = minDT.time().hour()*60 + minDT.time().minute();
+			maxt = mMaxDateTime.time();
+			mMinMaxTimeSet = true;
 		}
 	}
-	else
-		mDateEdit->setMinDate(QDate());
+	mTimeEdit->setMinValue(mint);
+	mTimeEdit->setMaxValue(maxt);
+	mTimeEdit->setWrapping(!mint  &&  maxt == time_23_59);
+}
+
+/******************************************************************************
+*  Set the maximum value for the delay time edit box, depending on the maximum
+*  value for the date/time.
+*/
+void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
+{
+	int maxVal = maxDelayTime;
+	if (mMaxDateTime.isValid())
+	{
+		if (now.date().daysTo(mMaxDateTime.date()) < 100)    // avoid possible 32-bit overflow on secsTo()
+		{
+			maxVal = now.secsTo(mMaxDateTime) / 60;
+			if (maxVal > maxDelayTime)
+				maxVal = maxDelayTime;
+		}
+	}
+	mDelayTimeEdit->setMaxValue(maxVal);
 }
 
 /******************************************************************************
@@ -361,15 +418,44 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 
 /******************************************************************************
 *  Called every minute to update the alarm time data entry fields.
+*  If the maximum date/time has been reached, a 'pastMax()' signal is emitted.
 */
 void AlarmTimeWidget::slotTimer()
 {
-	if (mTimerSyncing)
+	QDateTime now;
+	if (mMinDateTimeIsNow)
 	{
-		// We've synced to the minute boundary. Now set timer to 1 minute intervals.
-		mTimer.changeInterval(1000 * 60);
-		mTimerSyncing = false;
+		// Make sure that the minimum date is updated when the day changes
+		now = QDateTime::currentDateTime();
+		mDateEdit->setMinDate(now.date());
 	}
+	if (mMaxDateTime.isValid())
+	{
+		if (!now.isValid())
+			now = QDateTime::currentDateTime();
+		if (!mPastMax)
+		{
+			// Check whether the maximum date/time has now been reached
+			if (now.date() >= mMaxDateTime.date())
+			{
+				// The current date has reached or has passed the maximum date
+				if (now.date() > mMaxDateTime.date()
+				||  !mAnyTime && now.time() > mTimeEdit->maxTime())
+				{
+					mPastMax = true;
+					emit pastMax();
+				}
+				else if (mMinDateTimeIsNow  &&  !mMinMaxTimeSet)
+				{
+					// The minimum date/time tracks the clock, so set the minimum
+					// and maximum times
+					setMaxMinTimeIf(now);
+				}
+			}
+		}
+		setMaxDelayTime(now);
+	}
+
 	if (mAtTimeRadio->isOn())
 		dateTimeChanged();
 	else
@@ -436,7 +522,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 		bool blockedD = mDateEdit->signalsBlocked();
 		mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
 		mDateEdit->blockSignals(true);
-		mTimeEdit->setTime(dt.time());
+		mTimeEdit->setValue(dt.time());
 		mDateEdit->setDate(dt.date());
 		mTimeEdit->blockSignals(blockedT);
 		mDateEdit->blockSignals(blockedD);
