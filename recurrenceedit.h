@@ -27,13 +27,13 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <libkcal/event.h>
 
 class QWidgetStack;
 class QSpinBox;
 class QComboBox;
-class QRadioButton;
+class QCheckBox;
 class DateSpinBox;
 class TimeSpinBox;
 class ButtonGroup;
@@ -54,8 +54,7 @@ class RecurrenceEdit : public QWidget
 		void         set(const KAlarmEvent&, bool repeatAtLogin);
 		/** Write event settings to event object */
 		void         writeEvent(KAlarmEvent&);
-		bool         repeatAtLogin() const  { return repeatAtLoginCheckBox->isChecked(); }
-		void         setRepeatAtLogin(bool set)   { repeatAtLoginCheckBox->setChecked(set); }
+		bool         repeatAtLogin() const  { return repeatAtLoginRadio->isOn(); }
 
 		/** Check if the input is valid. */
 		bool         validateInput();
@@ -96,9 +95,13 @@ class RecurrenceEdit : public QWidget
 		QGroupBox*    recurGroup;
 		QFrame*       ruleFrame;
 		QWidgetStack* ruleStack;
+
+		ButtonGroup*  repeatButtonGroup;
+		QRadioButton* noneRadio;
+		QRadioButton* recurRadio;
+		QRadioButton* repeatAtLoginRadio;
+
 		ButtonGroup*  ruleButtonGroup;
-		QCheckBox*    recurCheckBox;
-		QCheckBox*    repeatAtLoginCheckBox;
 		QRadioButton* subdailyButton;
 		QRadioButton* dailyButton;
 		QRadioButton* weeklyButton;

@@ -78,21 +78,30 @@ RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	QFrame* topFrame = new QFrame(ruleGroupBox,"repeatFrame");
 	QBoxLayout* topLayout = new QVBoxLayout(topFrame, 0, KDialog::spacingHint());
 
-	layout = new QHBoxLayout(topLayout, 0);
-	recurCheckBox = new QCheckBox(i18n("Recur"), topFrame);
-	recurCheckBox->setFixedSize(recurCheckBox->sizeHint());
-	QWhatsThis::add(recurCheckBox, i18n("Regularly repeat the alarm"));
-	connect(recurCheckBox, SIGNAL(toggled(bool)), this, SLOT(recurToggled(bool)));
-	layout->addWidget(recurCheckBox);
-	layout->addStretch();
+	// Create the repetition type radio buttons
 
-	// Repeat-at-login radio button
-	repeatAtLoginCheckBox = new QCheckBox(i18n("Repeat at login"), topFrame, "repeatAtLoginButton");
-	repeatAtLoginCheckBox->setFixedSize(repeatAtLoginCheckBox->sizeHint());
-	QWhatsThis::add(repeatAtLoginCheckBox,
+	repeatButtonGroup = new ButtonGroup(1, Vertical, topFrame);
+	repeatButtonGroup->setFrameStyle(QFrame::NoFrame);
+	repeatButtonGroup->setInsideMargin(0);
+	topLayout->addWidget(repeatButtonGroup);
+
+	noneRadio = new QRadioButton(i18n("No repetition"), repeatButtonGroup);
+	noneRadio->setFixedSize(noneRadio->sizeHint());
+	QWhatsThis::add(noneRadio,
+	      i18n("Trigger the alarm once only"));
+
+	repeatAtLoginRadio = new QRadioButton(i18n("Repeat at login"), repeatButtonGroup, "repeatAtLoginButton");
+	repeatAtLoginRadio->setFixedSize(repeatAtLoginRadio->sizeHint());
+	QWhatsThis::add(repeatAtLoginRadio,
 	      i18n("Repeat the alarm at every login until the specified time.\n"
 	           "Note that it will also be repeated any time the alarm daemon is restarted."));
-	layout->addWidget(repeatAtLoginCheckBox);
+
+	recurRadio = new QRadioButton(i18n("Recur"), repeatButtonGroup);
+	recurRadio->setFixedSize(recurRadio->sizeHint());
+	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
+	connect(recurRadio, SIGNAL(toggled(bool)), this, SLOT(recurToggled(bool)));
+
+	// Create the Recurrence Rule definitions
 
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), topFrame, "recurGroup");
 	topLayout->addWidget(recurGroup);
@@ -231,7 +240,7 @@ RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	connect(endDateButton, SIGNAL(toggled(bool)), this, SLOT(enableDateRange(bool)));
 }
 
-// Called when the Recur checkbox changes state
+// Called when the Recur radio button changes state
 void RecurrenceEdit::recurToggled(bool on)
 {
 	recurGroup->setEnabled(on);
@@ -269,12 +278,10 @@ void RecurrenceEdit::periodClicked(int id)
 	else
 		return;
 	ruleStack->raiseWidget(frame);
-
-        if ( subdaily )
-            recurFrequencyStack->raiseWidget(recurHourMinFrequency);
-        else
-            recurFrequencyStack->raiseWidget(recurFrequency);
-
+	if (subdaily)
+		recurFrequencyStack->raiseWidget(recurHourMinFrequency);
+	else
+		recurFrequencyStack->raiseWidget(recurFrequency);
 	endTimeEdit->setEnabled(subdaily && endDateButton->isChecked());
 	if (!subdaily)
 		QWhatsThis::add(recurFrequency, whatsThis);
@@ -486,9 +493,6 @@ void RecurrenceEdit::yearlyClicked(int id)
 
 void RecurrenceEdit::unsetAllCheckboxes()
 {
-	recurCheckBox->setChecked(false);
-	repeatAtLoginCheckBox->setChecked(false);
-
 	onNthDayButton->setChecked(false);
 	onNthTypeOfDayButton->setChecked(false);
 	yearMonthButton->setChecked(false);
@@ -516,9 +520,8 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 {
 	QDate fromDate = from.date();
 
-	recurCheckBox->setChecked(false);
+	repeatButtonGroup->setButton(repeatButtonGroup->id(noneRadio));
 	recurToggled(false);
-	repeatAtLoginCheckBox->setChecked(false);
 	ruleButtonGroup->setButton(dailyButtonId);
 	noEndDateButton->setChecked(true);
 
@@ -565,13 +568,14 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 {
 	// unset everything
 	unsetAllCheckboxes();
-	repeatAtLoginCheckBox->setChecked(repeatatlogin);
+	repeatAtLoginRadio->setChecked(repeatatlogin);
 //	currStartDateTime = event->dtStart();
 	currStartDateTime = event.dateTime();
-
-	if (event.repeats())
+	if (event.repeatAtLogin())
+		repeatButtonGroup->setButton(repeatButtonGroup->id(repeatAtLoginRadio));
+	else if (event.repeats())
 	{
-		recurCheckBox->setChecked(true);
+		repeatButtonGroup->setButton(repeatButtonGroup->id(recurRadio));
 		int repeatDuration;
 		Recurrence* recurrence = event.recurrence();
 		if (recurrence)
@@ -670,7 +674,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
  */
 void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 {
-	if (recurCheckBox->isChecked())
+	if (recurRadio->isChecked())
 	{
 		// Get end date and repeat count, common to all types of recurring events
 		QDate  endDate;
