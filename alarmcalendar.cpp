@@ -22,6 +22,8 @@
 #include <unistd.h>
 #include <time.h>
 
+#include <qfile.h>
+
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -32,6 +34,10 @@
 #include <ktempfile.h>
 #include <dcopclient.h>
 #include <kdebug.h>
+
+extern "C" {
+#include <ical.h>
+}
 
 #include <libkcal/vcaldrag.h>
 #include <libkcal/vcalformat.h>
@@ -49,16 +55,16 @@ const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
 */
 void AlarmCalendar::getURL() const
 {
-	if (!url.isValid())
+	if (!mUrl.isValid())
 	{
 		KConfig* config = kapp->config();
 		config->setGroup(QString::fromLatin1("General"));
-		*const_cast<KURL*>(&url) = config->readEntry(QString::fromLatin1("Calendar"),
+		*const_cast<KURL*>(&mUrl) = config->readEntry(QString::fromLatin1("Calendar"),
 		                                             locateLocal("appdata", DEFAULT_CALENDAR_FILE));
-		if (!url.isValid())
+		if (!mUrl.isValid())
 		{
-			kdDebug(5950) << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
-			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()),
+			kdDebug(5950) << "AlarmCalendar::getURL(): invalid name: " << mUrl.prettyURL() << endl;
+			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(mUrl.prettyURL()),
 			                   kapp->aboutData()->programName());
 			kapp->exit(1);
 		}
@@ -71,14 +77,14 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new CalendarLocal();
-	calendar->setLocalTime();    // write out using local time (i.e. no time zone)
+	mCalendar = new CalendarLocal();
+	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	// Find out whether the calendar is ICal or VCal format
-	QString ext = url.filename().right(4);
-	vCal = (ext == QString::fromLatin1(".vcs"));
+	QString ext = mUrl.filename().right(4);
+	mVCal = (ext == QString::fromLatin1(".vcs"));
 
-	if (!KIO::NetAccess::exists(url))
+	if (!KIO::NetAccess::exists(mUrl))
 	{
 		if (!create())      // create the calendar file
 			return false;
@@ -93,7 +99,7 @@ bool AlarmCalendar::open()
 			if (!create()  ||  load() <= 0)
 				return false;
 		case -1:
-/*	if (!KIO::NetAccess::exists(url))
+/*	if (!KIO::NetAccess::exists(mUrl))
 	{
 		if (!create()  ||  load() <= 0)
 			return false;
@@ -111,8 +117,8 @@ bool AlarmCalendar::create()
 	// Create the calendar file
 	KTempFile* tmpFile = 0L;
 	QString filename;
-	if (url.isLocalFile())
-		filename = url.path();
+	if (mUrl.isLocalFile())
+		filename = mUrl.path();
 	else
 	{
 		tmpFile = new KTempFile;
@@ -134,37 +140,50 @@ bool AlarmCalendar::create()
 int AlarmCalendar::load()
 {
 	getURL();
-	kdDebug(5950) << "AlarmCalendar::load(): " << url.prettyURL() << endl;
+	kdDebug(5950) << "AlarmCalendar::load(): " << mUrl.prettyURL() << endl;
 	QString tmpFile;
-	if (!KIO::NetAccess::download(url, tmpFile))
+	if (!KIO::NetAccess::download(mUrl, tmpFile))
 	{
 		kdError(5950) << "AlarmCalendar::load(): Load failure" << endl;
-		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(url.prettyURL()), kapp->aboutData()->programName());
+		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
 		return -1;
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-	kAlarmVersion = -1;
-	calendar->setTimeZoneId(QString::null);   // default to the local time zone for reading
-	bool loaded = calendar->load(tmpFile);
-	calendar->setLocalTime();                 // write using local time (i.e. no time zone)
+	mKAlarmVersion        = -1;
+	mKAlarmVersion057_UTC = false;
+	mCalendar->setTimeZoneId(QString::null);   // default to the local time zone for reading
+	bool loaded = mCalendar->load(tmpFile);
+	mCalendar->setLocalTime();                 // write using local time (i.e. no time zone)
 	if (!loaded)
 	{
 		// Check if the file is zero length
 		KIO::NetAccess::removeTempFile(tmpFile);
 		KIO::UDSEntry uds;
-		KIO::NetAccess::stat(url, uds);
-		KFileItem fi(uds, url);
+		KIO::NetAccess::stat(mUrl, uds);
+		KFileItem fi(uds, mUrl);
 		if (!fi.size())
 			return 0;     // file is zero length
 		kdDebug(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(url.prettyURL()),
+		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()),
 		                   kapp->aboutData()->programName());
 		return -1;
 	}
-	if (!localFile.isEmpty())
-		KIO::NetAccess::removeTempFile(localFile);
-	localFile = tmpFile;
+	if (!mLocalFile.isEmpty())
+		KIO::NetAccess::removeTempFile(mLocalFile);
+	mLocalFile = tmpFile;
 
+	// Find the version of KAlarm which wrote the calendar file, and do
+	// any necessary conversions to the current format
+	getKAlarmVersion();
+	if (mKAlarmVersion == KAlarmVersion(0,5,7))
+	{
+		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
+		// case it is the KDE 3.0.0 version which needs adjustment of summer times.
+		mKAlarmVersion057_UTC = isUTC();
+		kdDebug(5950) << "AlarmCalendar::load(): version 0.5.7 (" << (mKAlarmVersion057_UTC ? "" : "non-") << "UTC)\n";
+	}
+	else
+		kdDebug(5950) << "AlarmCalendar::load(): version " << mKAlarmVersion << endl;
 	KAlarmEvent::convertKCalEvents();    // convert events to current KAlarm format for when calendar is saved
 	return 1;
 }
@@ -175,9 +194,9 @@ int AlarmCalendar::load()
 */
 int AlarmCalendar::reload()
 {
-	if (!calendar)
+	if (!mCalendar)
 		return -2;
-	kdDebug(5950) << "AlarmCalendar::reload(): " << url.prettyURL() << endl;
+	kdDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyURL() << endl;
 	close();
 	return load();
 }
@@ -189,11 +208,11 @@ bool AlarmCalendar::save(const QString& filename)
 {
 	kdDebug(5950) << "AlarmCalendar::save(): " << filename << endl;
 	CalFormat* format;
-	if(vCal)
+	if(mVCal)
 		format = new VCalFormat;
 	else
 		format = new ICalFormat;
-	bool success = calendar->save(filename, format);
+	bool success = mCalendar->save(filename, format);
 	if (!success)
 	{
 		kdDebug(5950) << "AlarmCalendar::save(): calendar save failed." << endl;
@@ -201,11 +220,11 @@ bool AlarmCalendar::save(const QString& filename)
 	}
 
 	getURL();
-	if (!url.isLocalFile())
+	if (!mUrl.isLocalFile())
 	{
-		if (!KIO::NetAccess::upload(filename, url))
+		if (!KIO::NetAccess::upload(filename, mUrl))
 		{
-			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(url.prettyURL()), kapp->aboutData()->programName());
+			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
 			return false;
 		}
 	}
@@ -213,7 +232,7 @@ bool AlarmCalendar::save(const QString& filename)
 	// Tell the alarm daemon to reload the calendar
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName()) << url.url();
+	arg << QCString(kapp->aboutData()->appName()) << mUrl.url();
 	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdDebug(5950) << "AlarmCalendar::save(): addCal dcop send failed" << endl;
 	return true;
@@ -224,10 +243,10 @@ bool AlarmCalendar::save(const QString& filename)
 */
 void AlarmCalendar::close()
 {
-	if (!localFile.isEmpty())
-		KIO::NetAccess::removeTempFile(localFile);
-	if (calendar)
-		calendar->close();
+	if (!mLocalFile.isEmpty())
+		KIO::NetAccess::removeTempFile(mLocalFile);
+	if (mCalendar)
+		mCalendar->close();
 }
 
 /******************************************************************************
@@ -237,7 +256,7 @@ void AlarmCalendar::addEvent(const KAlarmEvent& event)
 {
 	Event* kcalEvent = new Event;
 	event.updateEvent(*kcalEvent);
-	calendar->addEvent(kcalEvent);
+	mCalendar->addEvent(kcalEvent);
 	const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
 }
 
@@ -259,20 +278,21 @@ void AlarmCalendar::deleteEvent(const QString& eventID)
 {
 	Event* kcalEvent = event(eventID);
 	if (kcalEvent)
-		calendar->deleteEvent(kcalEvent);
+		mCalendar->deleteEvent(kcalEvent);
 }
 
 /******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
-* Reply = e.g. 000507 for 0.5.7, or 0 if unknown.
+* The format is, for example, 000507 for 0.5.7, or 0 if unknown.
 */
-int AlarmCalendar::kalarmVersion() const
+void AlarmCalendar::getKAlarmVersion() const
 {
-	if (kAlarmVersion >= 0)
-		return kAlarmVersion;
-	if (calendar)
+	// N.B. Remember to change  KAlarmVersion(int major, int minor, int rev)
+	//      if the representation returned by this method changes.
+	mKAlarmVersion = 0;   // set default to KAlarm pre-0.3.5, or another program
+	if (mCalendar)
 	{
-		const QString& prodid = calendar->loadedProductId();
+		const QString& prodid = mCalendar->loadedProductId();
 		int i = prodid.find(theApp()->aboutData()->programName(), 0, false);
 		if (i >= 0)
 		{
@@ -303,8 +323,7 @@ int AlarmCalendar::kalarmVersion() const
 								{
 									// Allow other characters to follow last digit
 									v = ver.toInt();   // issue number
-									kAlarmVersion = version + (v < 9 ? v : 9);
-									return kAlarmVersion;
+									mKAlarmVersion = version + (v < 9 ? v : 9);
 								}
 							}
 						}
@@ -315,8 +334,7 @@ int AlarmCalendar::kalarmVersion() const
 							{
 								// Allow other characters to follow last digit
 								int v = ver.toInt();   // minor number
-								kAlarmVersion = version + (v < 9 ? v : 9) * 100;
-								return kAlarmVersion;
+								mKAlarmVersion = version + (v < 9 ? v : 9) * 100;
 							}
 						}
 					}
@@ -324,32 +342,45 @@ int AlarmCalendar::kalarmVersion() const
 			}
 		}
 	}
-	// It was saved either by KAlarm pre-0.3.5, or another program
-	kAlarmVersion = 0;
-	return 0;
 }
 
-#if 0
 /******************************************************************************
-* Find the default system time zone ID.
-*/
-const QString& AlarmCalendar::getDefaultTimeZoneID()
+ * Check whether the calendar file has its times stored as UTC times,
+ * indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
+ * Reply = true if times are stored in UTC
+ *       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
+ */
+bool AlarmCalendar::isUTC() const
 {
-	static QString zoneID;
-	char zonefilebuf[100];
-	int  len = readlink("/etc/localtime", zonefilebuf, 100);
-	if (len > 0 && len < 100)
+	// Read the calendar file into a QString
+	QFile file(mLocalFile);
+	if (!file.open(IO_ReadOnly))
+		return false;
+	QTextStream ts(&file);
+	ts.setEncoding(QTextStream::UnicodeUTF8);
+	QString text = ts.read();
+	file.close();
+
+	// Extract the CREATED property for the first VEVENT from the calendar
+	bool result = false;
+	icalcomponent* calendar = icalcomponent_new_from_string(text.local8Bit().data());
+	if (calendar)
 	{
-		zonefilebuf[len] = '\0';
-		zoneID = zonefilebuf;
-		zoneID = zoneID.mid(zoneID.find("zoneinfo/") + 9);
+		if (icalcomponent_isa(calendar) == ICAL_VCALENDAR_COMPONENT)
+		{
+			icalcomponent* c = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
+			if (c)
+			{
+				icalproperty* p = icalcomponent_get_first_property(c, ICAL_CREATED_PROPERTY);
+				if (p)
+				{
+					struct icaltimetype datetime = icalproperty_get_created(p);
+					if (datetime.is_utc)
+						result = true;
+				}
+			}
+		}
+		icalcomponent_free(calendar);
 	}
-	else
-	{
-		tzset();
-		zoneID = tzname[0];
-	}
-	kdDebug(5950) << "AlarmCalendar::getDefaultTimeZoneID(): " << zoneID << endl;
-	return zoneID;
+	return result;
 }
-#endif

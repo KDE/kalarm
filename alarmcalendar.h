@@ -29,31 +29,35 @@ using namespace KCal;
 class AlarmCalendar
 {
 	public:
-		AlarmCalendar() :     calendar(0L), kAlarmVersion(-1) { }
-		bool                  open();
-		int                   load();
-		int                   reload();
-		bool                  save()                              { return save(localFile); }
-		void                  close();
-		Event*                event(const QString& uniqueID)      { return calendar->event(uniqueID); }
-		QPtrList<Event>       events()                            { return calendar->events(); }
-		void                  addEvent(const KAlarmEvent&);
-		void                  updateEvent(const KAlarmEvent&);
-		void                  deleteEvent(const QString& eventID);
-		bool                  isOpen() const                      { return !!calendar; }
-		void                  getURL() const;
-		const QString         urlString() const                   { getURL();  return url.url(); }
-		int                   kalarmVersion() const;
-		static const QString& getDefaultTimeZoneID();
+		AlarmCalendar() : mCalendar(0L), mKAlarmVersion(-1), mKAlarmVersion057_UTC(false) { }
+		bool            open();
+		int             load();
+		int             reload();
+		bool            save()                              { return save(mLocalFile); }
+		void            close();
+		Event*          event(const QString& uniqueID)      { return mCalendar->event(uniqueID); }
+		QPtrList<Event> events()                            { return mCalendar->events(); }
+		void            addEvent(const KAlarmEvent&);
+		void            updateEvent(const KAlarmEvent&);
+		void            deleteEvent(const QString& eventID);
+		bool            isOpen() const                      { return !!mCalendar; }
+		void            getURL() const;
+		const QString   urlString() const                   { getURL();  return mUrl.url(); }
+		int             KAlarmVersion() const               { return mKAlarmVersion; }
+		bool            KAlarmVersion057_UTC() const        { return mKAlarmVersion057_UTC; }
+		static int      KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
 	private:
-		CalendarLocal*        calendar;
-		KURL                  url;           // URL of calendar file
-		QString               localFile;     // local name of calendar file
-		mutable int           kAlarmVersion; // version of KAlarm which created the loaded calendar file
-		bool                  vCal;          // true if calendar file is in VCal format
+		CalendarLocal*  mCalendar;
+		KURL            mUrl;           // URL of calendar file
+		QString         mLocalFile;     // local name of calendar file
+		mutable int     mKAlarmVersion; // version of KAlarm which created the loaded calendar file
+		mutable bool    mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
+		bool            mVCal;          // true if calendar file is in VCal format
 
-		bool                  create();
-		bool                  save(const QString& tempFile);
+		bool            create();
+		bool            save(const QString& tempFile);
+		void            getKAlarmVersion() const;
+		bool            isUTC() const;
 };
 
 #endif // ALARMCALENDAR_H
