@@ -1,7 +1,7 @@
 /*
  *  datetime.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,6 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 void AlarmTimeWidget::init(int mode)
 {
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
-	connect(this, SIGNAL(clicked(int)), SLOT(slotButtonClicked(int)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
 		topLayout->setMargin(marginKDE2 + KDialog::marginHint());
@@ -79,8 +78,9 @@ void AlarmTimeWidget::init(int mode)
 	// Date edit box
 	mDateEdit = new DateEdit(this);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
-	QWhatsThis::add(mDateEdit, i18n("Enter the date to schedule the alarm."));
 	connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
+	QWhatsThis::add(mDateEdit, i18n("Enter the date to schedule the alarm."));
+	mAtTimeRadio->setFocusWidget(mDateEdit);
 
 	// Time edit box and Any time checkbox
 	QHBox* timeBox = new QHBox(this);
@@ -88,8 +88,8 @@ void AlarmTimeWidget::init(int mode)
 	mTimeEdit = new TimeSpinBox(timeBox);
 	mTimeEdit->setValue(1439);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
-	QWhatsThis::add(mTimeEdit, i18n("Enter the time to schedule the alarm.\n%1").arg(TimeSpinBox::shiftWhatsThis()));
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
+	QWhatsThis::add(mTimeEdit, i18n("Enter the time to schedule the alarm.\n%1").arg(TimeSpinBox::shiftWhatsThis()));
 
 	if (mode & DEFER_TIME)
 	{
@@ -101,8 +101,8 @@ void AlarmTimeWidget::init(int mode)
 		mAnyTimeAllowed = true;
 		mAnyTimeCheckBox = new CheckBox(i18n("An&y time"), timeBox);
 		mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
+		connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		QWhatsThis::add(mAnyTimeCheckBox, i18n("Schedule the alarm for any time during the day"));
-		connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(anyTimeToggled(bool)));
 	}
 
 	// 'Time from now' radio button/label
@@ -117,10 +117,11 @@ void AlarmTimeWidget::init(int mode)
 	mDelayTimeEdit = new TimeSpinBox(1, 99*60+59, this);
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
+	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	QWhatsThis::add(mDelayTimeEdit,
 	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm.\n%1")
 	           .arg(TimeSpinBox::shiftWhatsThis()));
-	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
+	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
 	if (mode & NARROW)
@@ -233,7 +234,19 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 		if (anyTime)
 			mAnyTimeAllowed = true;
 		mAnyTimeCheckBox->setChecked(anyTime);
+		setAnyTime();
 	}
+}
+
+/******************************************************************************
+*  Set the status for whether a time is specified, or just a date.
+*/
+void AlarmTimeWidget::setAnyTime()
+{
+	bool old = mAnyTime;
+	mAnyTime = mAtTimeRadio->isOn() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
+	if (mAnyTime != old)
+		emit anyTimeToggled(mAnyTime);
 }
 
 /******************************************************************************
@@ -248,6 +261,7 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 		mAnyTimeCheckBox->setEnabled(enable && at);
 		if (at)
 			mTimeEdit->setEnabled(!enable || !mAnyTimeCheckBox->isChecked());
+		setAnyTime();
 	}
 }
 
@@ -286,25 +300,16 @@ void AlarmTimeWidget::slotButtonSet(int)
 	if (minutes <= 0)
 		mDelayTimeEdit->setValid(true);
 	mDelayTimeEdit->setEnabled(!at);
+	setAnyTime();
 }
 
 /******************************************************************************
-*  Called when the At or After time radio button has been clicked.
-*  Moves the focus to the appropriate date or time edit field.
-*/
-void AlarmTimeWidget::slotButtonClicked(int)
-{
-	if (mAtTimeRadio->isOn())
-		mDateEdit->setFocus();
-	else
-		mDelayTimeEdit->setFocus();
-}
-/******************************************************************************
 *  Called after the mAnyTimeCheckBox checkbox has been toggled.
 */
-void AlarmTimeWidget::anyTimeToggled(bool on)
+void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 {
 	mTimeEdit->setEnabled((!mAnyTimeAllowed || !on) && mAtTimeRadio->isOn());
+	setAnyTime();
 }
 
 /******************************************************************************

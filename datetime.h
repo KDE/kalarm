@@ -1,7 +1,7 @@
 /*
  *  datetime.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,22 +47,25 @@ class AlarmTimeWidget : public ButtonGroup
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
 		QWidget*       getDateTime(QDateTime&, bool& anyTime, bool showErrorMessage = true) const;
-		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
+		void           setDateTime(const QDate& d)   { setDateTime(d, true); }
 		void           setDateTime(const QDateTime&, bool anyTime = false);
 		void           setReadOnly(bool);
+		bool           anyTime() const               { return mAnyTime; }
 		void           enableAnyTime(bool enable);
-		QSize          sizeHint() const                             { return minimumSizeHint(); }
+		QSize          sizeHint() const              { return minimumSizeHint(); }
+	signals:
+		void           anyTimeToggled(bool anyTime);
 	protected slots:
 		void           slotTimer();
 		void           slotButtonSet(int id);
-		void           slotButtonClicked(int id);
-		void           slotDateChanged(QDate)     { dateTimeChanged(); }
-		void           slotTimeChanged(int)       { dateTimeChanged(); }
+		void           slotDateChanged(QDate)        { dateTimeChanged(); }
+		void           slotTimeChanged(int)          { dateTimeChanged(); }
 		void           delayTimeChanged(int);
-		void           anyTimeToggled(bool);
+		void           slotAnyTimeToggled(bool);
 	private:
 		void           init(int mode);
 		void           dateTimeChanged();
+		void           setAnyTime();
 
 		RadioButton*   mAtTimeRadio;
 		RadioButton*   mAfterTimeRadio;
@@ -71,8 +74,9 @@ class AlarmTimeWidget : public ButtonGroup
 		TimeSpinBox*   mDelayTimeEdit;
 		CheckBox*      mAnyTimeCheckBox;
 		QTimer         mTimer;
-		bool           mTimerSyncing;            // mTimer is not yet synchronised to the minute boundary
-		bool           mAnyTimeAllowed;          // 'mAnyTimeCheckBox' is enabled
+		bool           mTimerSyncing;     // mTimer is not yet synchronised to the minute boundary
+		bool           mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
+		bool           mAnyTime;          // whether a time is specified, or only a date
 };
 
 #endif // DATETIME_H
