@@ -897,9 +897,6 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			default:
 				break;
 		}
-		event.setAudioFile(mSoundPicker->file());
-		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
-		event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event);
