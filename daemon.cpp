@@ -67,7 +67,7 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 		                               const QString& calendarURL, const QCString& appName);
 		void         handleEvent(const QString& calendarURL, const QString& eventID);
 		void         handleEvent(const QString& /*iCalendarString*/)  { }   // not used by KAlarm
-		void         registered(bool reregister, bool success);
+		void         registered(bool reregister, int result);
 };
 
 
@@ -190,12 +190,12 @@ bool Daemon::registerWith(bool reregister)
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(kapp->aboutData()->appName()) << kapp->aboutData()->programName()
 	    << QCString(NOTIFY_DCOP_OBJECT)
-	    << static_cast<int>(disabledIfStopped ? ClientInfo::NO_START_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
+	    << static_cast<int>(disabledIfStopped ? ClientInfo::DCOP_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
 	    << (Q_INT8)0;
 	const char* func = reregister ? "reregisterApp(QCString,QString,QCString,int,bool)" : "registerApp(QCString,QString,QCString,int,bool)";
 	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, func, data))
 	{
-		registrationResult(reregister, false);
+		registrationResult(reregister, AlarmGuiIface::FAILURE);
 		return false;
 	}
 	mRegisterTimer = new QTimer(mInstance);
@@ -210,26 +210,41 @@ bool Daemon::registerWith(bool reregister)
 /******************************************************************************
 * Called when the daemon has notified us of the result of the register() DCOP call.
 */
-void Daemon::registrationResult(bool reregister, bool success)
+void Daemon::registrationResult(bool reregister, int result)
 {
 	kdDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
-	if (!success)
+	switch (result)
 	{
-		kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed" << endl;
-		if (!reregister)
-		{
-			if (mStatus == REGISTERED)
-				mStatus = READY;
-			if (!mRegisterFailMsg)
+		case AlarmGuiIface::SUCCESS:
+			break;
+		case AlarmGuiIface::NOT_FOUND:
+			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
+			KMessageBox::error(0, i18n("Alarms will be disabled if you stop %1.\n"
+			                           "(Installation or configuration error: %2 cannot locate %3 executable.)")
+					           .arg(kapp->aboutData()->programName())
+			                           .arg(QString::fromLatin1(DAEMON_APP_NAME))
+			                           .arg(kapp->aboutData()->appName()));
+			break;
+		case AlarmGuiIface::FAILURE:
+		default:
+			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
+			if (!reregister)
 			{
-				mRegisterFailMsg = true;
-				KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+				if (mStatus == REGISTERED)
+					mStatus = READY;
+				if (!mRegisterFailMsg)
+				{
+					mRegisterFailMsg = true;
+					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)")
+					                           .arg(QString::fromLatin1(DAEMON_APP_NAME)));
+				}
 			}
-		}
+			return;
 	}
-	else if (!reregister)
+
+	if (!reregister)
 	{
 		// Tell alarm daemon to load the calendar
 		QByteArray data;
@@ -660,9 +675,9 @@ void DaemonGuiHandler::handleEvent(const QString& url, const QString& eventId)
  * DCOP call from the alarm daemon to notify the success or failure of a
  * registration request from KAlarm.
  */
-void DaemonGuiHandler::registered(bool reregister, bool success)
+void DaemonGuiHandler::registered(bool reregister, int result)
 {
-	Daemon::registrationResult(reregister, success);
+	Daemon::registrationResult(reregister, result);
 }
 
 /******************************************************************************

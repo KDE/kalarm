@@ -25,6 +25,8 @@
 #include <qdatetime.h>
 #include <kaction.h>
 
+#include <kalarmd/alarmguiiface.h>
+
 class KAction;
 class KActionCollection;
 class AlarmCalendar;
@@ -62,7 +64,7 @@ class Daemon : public QObject
 		void             slotCalendarSaved(AlarmCalendar*);
 		void             checkIfStarted();
 		void             slotStarted()           { updateRegisteredStatus(true); }
-		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), false); }
+		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), AlarmGuiIface::FAILURE); }
 
 		void             setAlarmsEnabled(bool enable);
 		void             timerCheckIfRunning();
@@ -78,7 +80,7 @@ class Daemon : public QObject
 		};
 		explicit Daemon() { }
 		static bool      registerWith(bool reregister);
-		static void      registrationResult(bool reregister, bool success);
+		static void      registrationResult(bool reregister, int result);
 		static void      reload();
 		static void      updateRegisteredStatus(bool timeout = false);
 		static void      enableCalendar(bool enable);
