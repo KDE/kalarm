@@ -598,9 +598,10 @@ QString AlarmListViewItem::key(int column, bool) const
 
 QString AlarmListWhatsThis::text(const QPoint& pt)
 {
+	QPoint viewportPt = listView->viewport()->mapFrom(listView, pt);
 	QRect frame = listView->header()->frameGeometry();
 	if (frame.contains(pt)
-	||  listView->itemAt(QPoint(listView->itemMargin(), pt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
+	||  listView->itemAt(QPoint(listView->itemMargin(), viewportPt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
 	{
 		int column = listView->header()->sectionAt(pt.x());
 		if (column == listView->timeColumn())
