@@ -51,6 +51,7 @@ class SoundDlg : public KDialogBase
 		static QString i18n_p_Repeat();    // text of Repeat checkbox, with 'P' shortcut
 
 	protected:
+		virtual void   showEvent(QShowEvent*);
 		virtual void   resizeEvent(QResizeEvent*);
 
 	protected slots:
