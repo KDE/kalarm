@@ -91,7 +91,7 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
 #ifdef NEW_FROM_TEMPLATE
-	KAlarm::createNewFromTemplateAction(i18n("New Alarm from &Template"), actions, "tNewFromTempl")->plug(contextMenu());
+	KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, "tNewFromTempl")->plug(contextMenu());
 #endif
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
