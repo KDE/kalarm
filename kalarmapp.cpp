@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -103,10 +107,10 @@ KAlarmApp::KAlarmApp()
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
-	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
+	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), actions, "alarmenable");
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
-	                                 0, this, SLOT(slotDaemonPreferences()), this);
+	                                 0, this, SLOT(slotDaemonPreferences()), actions, "confdaemon");
 }
 
 /******************************************************************************
@@ -188,11 +192,14 @@ int KAlarmApp::newInstance()
 	if (!skip)
 	{
 		QString usage;
-		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
 		// Use a 'do' loop which is executed only once to allow easy error exits.
 		// Errors use 'break' to skip to the end of the function.
+
+		// Note that DCOP handling is only set up once the command line parameters
+		// have been checked, since we mustn't register with the alarm daemon only
+		// to quit immediately afterwards.
 		do
 		{
 			if (args->isSet("stop"))
@@ -212,6 +219,7 @@ int KAlarmApp::newInstance()
 				// Reset the alarm daemon
 				kdDebug(5950)<<"KAlarmApp::newInstance(): reset\n";
 				args->clear();      // free up memory
+				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				resetDaemon();
 			}
 			else
@@ -220,8 +228,9 @@ int KAlarmApp::newInstance()
 				// Display only the system tray icon
 				kdDebug(5950)<<"KAlarmApp::newInstance(): tray\n";
 				args->clear();      // free up memory
+				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!mKDEDesktop
-				||  !initCheck())    // open the calendar, register with daemon
+				||  !initCheck())   // open the calendar, register with daemon
 				{
 					exitCode = 1;
 					break;
@@ -257,7 +266,7 @@ int KAlarmApp::newInstance()
 					usage = i18n("%1, %2, %3 mutually exclusive").arg(QString::fromLatin1("--handleEvent")).arg(QString::fromLatin1("--triggerEvent")).arg(QString::fromLatin1("--cancelEvent"));
 					break;
 				}
-				if (!initCheck())
+				if (!initCheck(true))   // open the calendar, don't register with daemon yet
 				{
 					exitCode = 1;
 					break;
@@ -272,7 +281,8 @@ int KAlarmApp::newInstance()
 					}
 				}
 				QString eventID = args->getOption(option);
-				args->clear();          // free up memory
+				args->clear();      // free up memory
+				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!handleEvent(eventID, function))
 				{
 					exitCode = 1;
@@ -482,9 +492,10 @@ int KAlarmApp::newInstance()
 					flags |= KAlarmEvent::LATE_CANCEL;
 				if (args->isSet("login"))
 					flags |= KAlarmEvent::REPEAT_AT_LOGIN;
-				args->clear();               // free up memory
+				args->clear();      // free up memory
 
 				// Display or schedule the event
+				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!scheduleEvent(alMessage, alarmTime, bgColour, flags, audioFile, type, recurType,
 				                   repeatInterval, repeatCount, endTime))
 				{
@@ -516,7 +527,8 @@ int KAlarmApp::newInstance()
 					break;
 				}
 
-				args->clear();               // free up memory
+				args->clear();      // free up memory
+				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!initCheck())
 				{
 					exitCode = 1;
@@ -551,8 +563,22 @@ void KAlarmApp::quitIf(int exitCode)
 {
 	if (activeCount <= 0  &&  !KAlarmMainWindow::count()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
 	{
-		// This was the last/only running "instance" of the program, so exit completely.
-		kdDebug(5950) << "KAlarmApp::quitIf(): quitting" << endl;
+		/* This was the last/only running "instance" of the program, so exit completely.
+		 * First, change the name which we are registered with at the DCOP server. This is
+		 * to ensure that the alarm daemon immediately sees us as not running. It prevents
+		 * the following situation which otherwise has been observed:
+		 *
+		 * If KAlarm is not running and, for instance, it has registered more than one
+		 * calendar at some time in the past, when the daemon checks pending alarms, it
+		 * starts KAlarm to notify us of the first event. If this is for a different
+		 * calendar from what KAlarm expects, we exit. But without DCOP re-registration,
+		 * when the daemon then notifies us of the next event (from the correct calendar),
+		 * it will still see KAlarm as registered with DCOP and therefore tells us via a
+		 * DCOP call. The call of course never reaches KAlarm but the daemon sees it as
+		 * successful. The result is that the alarm is never seen.
+		 */
+		kdDebug(5950) << "KAlarmApp::quitIf(" << exitCode << "): quitting" << endl;
+		dcopClient()->registerAs(QCString(aboutData()->appName()) + "-quitting");
 		exit(exitCode);
 	}
 }
@@ -1251,7 +1277,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		startDaemon();
 
 	if (!calendarOnly)
-		setUpDcop();             // we're now ready to handle DCOP calls, so set up handlers
+		setUpDcop();            // we're now ready to handle DCOP calls, so set up handlers
 	return true;
 }
 
