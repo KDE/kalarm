@@ -752,9 +752,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Hours_Mins(), Reminder::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Days(), Reminder::DAYS);
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Weeks(), Reminder::WEEKS);
+	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Hours_Mins(), TimeSelector::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Days(), TimeSelector::DAYS);
+	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Weeks(), TimeSelector::WEEKS);
 	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
 	label->setBuddy(mDefaultReminderUnits);
 	QWhatsThis::add(box,
@@ -785,7 +785,11 @@ void EditPrefTab::restore()
 void EditPrefTab::apply(bool syncToDisc)
 {
 	Preferences* preferences = Preferences::instance();
+#ifdef NEW_CANCEL_IF_LATE
+	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked() ? 1 : 0;
+#else
 	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked();
+#endif
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
 	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
@@ -804,7 +808,7 @@ void EditPrefTab::apply(bool syncToDisc)
 		case 0:
 		default: preferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
-	preferences->mDefaultReminderUnits = static_cast<Reminder::Units>(mDefaultReminderUnits->currentItem());
+	preferences->mDefaultReminderUnits = static_cast<TimeSelector::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 

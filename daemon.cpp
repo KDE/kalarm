@@ -228,7 +228,7 @@ KAction* Daemon::createControlAction(KActionCollection* actions, const char* nam
 	return new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."),
 	                   0, mInstance, SLOT(slotControl()), actions, name);
 #else
-	KAction* prefs = KStdAction::preferences(this, "x", actions);
+	KAction* prefs = KStdAction::preferences(mInstance, "x", actions);
 	KAction* action = new KAction(i18n("Configure Alarm &Daemon..."), prefs->iconSet(),
 	                              0, mInstance, SLOT(slotControl()), actions, name);
 	delete prefs;

@@ -84,7 +84,7 @@ const QString    Preferences::default_emailBccAddress          = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
 const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
-const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
+const TimeSelector::Units        Preferences::default_defaultReminderUnits = TimeSelector::HOURS_MINUTES;
 const QString    Preferences::default_defaultPreAction;
 const QString    Preferences::default_defaultPostAction;
 
@@ -237,8 +237,8 @@ Preferences::Preferences()
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
 	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
-	mDefaultReminderUnits    = (reminderUnits < Reminder::HOURS_MINUTES || reminderUnits > Reminder::WEEKS)
-	                         ? default_defaultReminderUnits : (Reminder::Units)reminderUnits;
+	mDefaultReminderUnits    = (reminderUnits < TimeSelector::HOURS_MINUTES || reminderUnits > TimeSelector::WEEKS)
+	                         ? default_defaultReminderUnits : (TimeSelector::Units)reminderUnits;
 	mDefaultPreAction        = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
 	mDefaultPostAction       = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	emit preferencesChanged();

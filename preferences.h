@@ -42,7 +42,7 @@ class QWidget;
 
 #include "colourlist.h"
 #include "recurrenceedit.h"
-#include "reminder.h"
+#include "timeselector.h"
 
 
 // Settings configured in the Preferences dialog
@@ -91,12 +91,17 @@ class Preferences : public QObject
 		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
 		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
+#ifdef NEW_CANCEL_IF_LATE
+		int            defaultLateCancel() const        { return mDefaultLateCancel; }
+#else
 		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
+#endif
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
-		Reminder::Units defaultReminderUnits() const    { return mDefaultReminderUnits; }
+		TimeSelector::Units
+		               defaultReminderUnits() const     { return mDefaultReminderUnits; }
 		const QString& defaultPreAction() const         { return mDefaultPreAction; }
 		const QString& defaultPostAction() const        { return mDefaultPostAction; }
 
@@ -142,15 +147,20 @@ class Preferences : public QObject
 		static const int         default_expiredKeepDays;
 		static const QString     default_defaultSoundFile;
 		static const float       default_defaultSoundVolume;
+#ifdef NEW_CANCEL_IF_LATE
+		static const int         default_defaultLateCancel;
+#endif
 		static const bool        default_defaultSound;
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
+#ifndef NEW_CANCEL_IF_LATE
 		static const bool        default_defaultLateCancel;
+#endif
 		static const bool        default_defaultConfirmAck;
 		static const bool        default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                         default_defaultRecurPeriod;
-		static const Reminder::Units
+		static const TimeSelector::Units
 		                         default_defaultReminderUnits;
 		static const QString     default_defaultPreAction;
 		static const QString     default_defaultPostAction;
@@ -201,14 +211,19 @@ class Preferences : public QObject
 		// Default settings for Edit Alarm dialog
 		QString             mDefaultSoundFile;
 		float               mDefaultSoundVolume;
+#ifdef NEW_CANCEL_IF_LATE
+		int                 mDefaultLateCancel;
+#endif
 		bool                mDefaultSound;
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;
+#ifndef NEW_CANCEL_IF_LATE
 		bool                mDefaultLateCancel;
+#endif
 		bool                mDefaultConfirmAck;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
-		Reminder::Units     mDefaultReminderUnits;
+		TimeSelector::Units mDefaultReminderUnits;
 		QString             mDefaultPreAction;
 		QString             mDefaultPostAction;
 		// Change tracking

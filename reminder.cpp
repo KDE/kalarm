@@ -31,21 +31,16 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qlabel.h>
-#include <qhbox.h>
 #include <qwhatsthis.h>
-#include <qtooltip.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kdebug.h>
 
-#include "kalarmapp.h"
 #include "preferences.h"
 #include "checkbox.h"
-#include "combobox.h"
-#include "timeperiod.h"
+#include "timeselector.h"
 #include "reminder.moc"
 
 
@@ -53,65 +48,26 @@
 // translations across different modules.
 QString Reminder::i18n_first_recurrence_only()   { return i18n("Reminder for first recurrence only"); }
 QString Reminder::i18n_u_first_recurrence_only() { return i18n("Reminder for first rec&urrence only"); }
-QString Reminder::i18n_hours_mins()              { return i18n("hours/minutes"); }
-QString Reminder::i18n_Hours_Mins()              { return i18n("Hours/Minutes"); }
-QString Reminder::i18n_days()                    { return i18n("days"); }
-QString Reminder::i18n_Days()                    { return i18n("Days"); }
-QString Reminder::i18n_weeks()                   { return i18n("weeks"); }
-QString Reminder::i18n_Weeks()                   { return i18n("Weeks"); }
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name)
 	: QFrame(parent, name),
-	  mMaxDays(9999),
-	  mNoHourMinute(!allowHourMinute),
 	  mReadOnly(false),
 	  mOnceOnlyEnabled(showOnceOnly)
 {
 	setFrameStyle(QFrame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	mReminder = new CheckBox(caption, this);
-	mReminder->setFixedSize(mReminder->sizeHint());
-	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	QWhatsThis::add(mReminder, reminderWhatsThis);
-	layout->addWidget(mReminder);
 
-	QHBox* box = new QHBox(this);    // to group widgets for QWhatsThis text
-	box->setSpacing(KDialog::spacingHint());
-	layout->addWidget(box);
-	mCount = new TimePeriod(box);
-	mCount->setHourMinRange(1, 100*60-1);    // max 99H59M
-	mCount->setUnitRange(1, mMaxDays);
-	mCount->setUnitSteps(1, 10);
-	mCount->setFixedSize(mCount->sizeHint());
-	mCount->setSelectOnStep(false);
-	mReminder->setFocusWidget(mCount);
-
-	mUnitsCombo = new ComboBox(false, box);
-	if (mNoHourMinute)
-	{
-		mDateOnlyOffset = 1;
-		mCount->showHourMin(false);
-	}
-	else
-	{
-		mDateOnlyOffset = 0;
-		mUnitsCombo->insertItem(i18n_hours_mins());
-	}
-	mUnitsCombo->insertItem(i18n_days());
-	mUnitsCombo->insertItem(i18n_weeks());
-	mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
-	connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
-
-	mLabel = new QLabel(i18n("in advance"), box);
-	QWhatsThis::add(box, valueWhatsThis);
-	layout->addStretch();
+	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
+	                       valueWhatsThis, allowHourMinute, this, "timeOption");
+	mTime->setFixedSize(mTime->sizeHint());
+	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
+	topLayout->addWidget(mTime);
 
 	if (showOnceOnly)
 	{
-		layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 		layout->addSpacing(3*KDialog::spacingHint());
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
@@ -131,9 +87,7 @@ void Reminder::setReadOnly(bool ro)
 	if ((int)ro != (int)mReadOnly)
 	{
 		mReadOnly = ro;
-		mReminder->setReadOnly(mReadOnly);
-		mCount->setReadOnly(mReadOnly);
-		mUnitsCombo->setReadOnly(mReadOnly);
+		mTime->setReadOnly(mReadOnly);
 		if (mOnceOnly)
 			mOnceOnly->setReadOnly(mReadOnly);
 	}
@@ -141,7 +95,7 @@ void Reminder::setReadOnly(bool ro)
 
 bool Reminder::isReminder() const
 {
-	return mReminder->isChecked();
+	return mTime->isChecked();
 }
 
 bool Reminder::isOnceOnly() const
@@ -163,16 +117,13 @@ void Reminder::enableOnceOnly(bool enable)
 	if (mOnceOnly)
 	{
 		mOnceOnlyEnabled = enable;
-		mOnceOnly->setEnabled(enable && mReminder->isChecked());
+		mOnceOnly->setEnabled(enable && mTime->isChecked());
 	}
 }
 
 void Reminder::setMaximum(int hourmin, int days)
 {
-	if (hourmin)
-		mCount->setHourMinRange(1, hourmin);
-	mMaxDays = days;
-	setUnitRange();
+	mTime->setMaximum(hourmin, days);
 }
 
 /******************************************************************************
@@ -181,21 +132,7 @@ void Reminder::setMaximum(int hourmin, int days)
  */
 int Reminder::getMinutes() const
 {
-	if (!mReminder->isChecked())
-		return 0;
-	int warning = mCount->value();
-	switch (mUnitsCombo->currentItem() + mDateOnlyOffset)
-	{
-		case HOURS_MINUTES:
-			break;
-		case DAYS:
-			warning *= 24*60;
-			break;
-		case WEEKS:
-			warning *= 7*24*60;
-			break;
-	}
-	return warning;
+	return mTime->getMinutes();
 }
 
 /******************************************************************************
@@ -203,103 +140,15 @@ int Reminder::getMinutes() const
 */
 void Reminder::setMinutes(int minutes, bool dateOnly)
 {
-	if (!dateOnly  &&  mNoHourMinute)
-		dateOnly = true;
-	bool on = !!minutes;
-	mReminder->setChecked(on);
-	mCount->setEnabled(on);
-	mUnitsCombo->setEnabled(on);
-	mLabel->setEnabled(on);
-	int item;
-	if (minutes)
-	{
-		int count = minutes;
-		if (minutes % (24*60))
-			item = HOURS_MINUTES;
-		else if (minutes % (7*24*60))
-		{
-			item = DAYS;
-			count = minutes / (24*60);
-		}
-		else
-		{
-			item = WEEKS;
-			count = minutes / (7*24*60);
-		}
-		if (item < mDateOnlyOffset)
-			item = mDateOnlyOffset;
-		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
-		if (item == HOURS_MINUTES)
-			mCount->setHourMinValue(count);
-		else
-			mCount->setUnitValue(count);
-		item = setDateOnly(minutes, dateOnly);
-	}
-	else
-	{
-		item = Preferences::instance()->defaultReminderUnits();
-		if (item < mDateOnlyOffset)
-			item = mDateOnlyOffset;
-		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
-		if (dateOnly && !mDateOnlyOffset  ||  !dateOnly && mDateOnlyOffset)
-			item = setDateOnly(minutes, dateOnly);
-	}
-	mCount->showHourMin(item == HOURS_MINUTES  &&  !mNoHourMinute);
+	mTime->setMinutes(minutes, dateOnly, Preferences::instance()->defaultReminderUnits());
 }
 
 /******************************************************************************
 *  Set the advance reminder units to days if "Any time" is checked.
 */
-Reminder::Units Reminder::setDateOnly(int reminderMinutes, bool dateOnly)
+void Reminder::setDateOnly(bool dateOnly)
 {
-	int index = mUnitsCombo->currentItem();
-	Units units = static_cast<Units>(index + mDateOnlyOffset);
-	if (!mNoHourMinute)
-	{
-		if (!dateOnly  &&  mDateOnlyOffset)
-		{
-			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(i18n_hours_mins(), 0);
-			mDateOnlyOffset = 0;
-			mUnitsCombo->setCurrentItem(++index);
-		}
-		else if (dateOnly  &&  !mDateOnlyOffset)
-		{
-			// Change from allowing hours/minutes to date-only
-			mUnitsCombo->removeItem(0);
-			mDateOnlyOffset = 1;
-			if (index)
-				--index;
-			mUnitsCombo->setCurrentItem(index);
-			if (units == HOURS_MINUTES)
-			{
-				// Set units to days and round up the warning period
-				units = DAYS;
-				mUnitsCombo->setCurrentItem(DAYS - mDateOnlyOffset);
-				mCount->showUnit();
-				mCount->setUnitValue((reminderMinutes + 1439) / 1440);
-			}
-			mCount->showHourMin(false);
-		}
-	}
-	return units;
-}
-
-/******************************************************************************
-*  Set the maximum value which may be entered into the unit count field,
-*  depending on the current unit selection.
-*/
-void Reminder::setUnitRange()
-{
-	int maxval;
-	switch (static_cast<Units>(mUnitsCombo->currentItem() + mDateOnlyOffset))
-	{
-		case DAYS:   maxval = mMaxDays;  break;
-		case WEEKS:  maxval = mMaxDays / 7;  break;
-		case HOURS_MINUTES:
-		default:             return;
-	}
-	mCount->setUnitRange(1, maxval);
+	mTime->setDateOnly(dateOnly);
 }
 
 /******************************************************************************
@@ -307,7 +156,7 @@ void Reminder::setUnitRange()
 */
 void Reminder::setFocusOnCount()
 {
-	mCount->setFocus();
+	mTime->setFocusOnCount();
 }
 
 /******************************************************************************
@@ -315,20 +164,6 @@ void Reminder::setFocusOnCount()
 */
 void Reminder::slotReminderToggled(bool on)
 {
-	mUnitsCombo->setEnabled(on);
-	mCount->setEnabled(on);
-	mLabel->setEnabled(on);
-	if (on  &&  mDateOnlyOffset)
-	 	setDateOnly(getMinutes(), true);
 	if (mOnceOnly)
 		mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
-}
-
-/******************************************************************************
-*  Called when a new item is made current in the reminder units combo box.
-*/
-void Reminder::slotUnitsSelected(int index)
-{
-	setUnitRange();
-	mCount->showHourMin(index + mDateOnlyOffset == HOURS_MINUTES);
 }

@@ -33,58 +33,38 @@
 
 #include <qframe.h>
 
-class QLabel;
+class TimeSelector;
 class CheckBox;
-class ComboBox;
-class TimePeriod;
 
 
 class Reminder : public QFrame
 {
 		Q_OBJECT
 	public:
-		enum Units { HOURS_MINUTES, DAYS, WEEKS };
-
 		Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
 		         bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name = 0);
-		bool         isReminder() const;
-		bool         isOnceOnly() const;
-		int          getMinutes() const;
-		void         setMinutes(int minutes, bool dateOnly);
-		void         setReadOnly(bool);
-		Units        setDateOnly(bool dateOnly)   { return setDateOnly(getMinutes(), dateOnly); }
-		void         setMaximum(int hourmin, int days);
-		void         setFocusOnCount();
-		void         setOnceOnly(bool);
-		void         enableOnceOnly(bool enable);
+		bool           isReminder() const;
+		bool           isOnceOnly() const;
+		int            getMinutes() const;
+		void           setMinutes(int minutes, bool dateOnly);
+		void           setReadOnly(bool);
+		void           setDateOnly(bool dateOnly);
+		void           setMaximum(int hourmin, int days);
+		void           setFocusOnCount();
+		void           setOnceOnly(bool);
+		void           enableOnceOnly(bool enable);
 
 		static QString i18n_first_recurrence_only();    // plain text of 'Reminder for first recurrence only' checkbox
 		static QString i18n_u_first_recurrence_only();  // text of 'Reminder for first recurrence only' checkbox, with 'u' shortcut
-		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
-		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
-		static QString i18n_days();        // text of 'days' units, lower case
-		static QString i18n_Days();        // text of 'Days' units, initial capital
-		static QString i18n_weeks();       // text of 'weeks' units, lower case
-		static QString i18n_Weeks();       // text of 'Weeks' units, initial capital
 
 	protected slots:
-		void         slotReminderToggled(bool);
-		void         slotUnitsSelected(int index);
+		void           slotReminderToggled(bool);
 
 	private:
-		Units        setDateOnly(int minutes, bool dateOnly);
-		void         setUnitRange();
-
-		CheckBox*    mReminder;
-		TimePeriod*  mCount;
-		ComboBox*    mUnitsCombo;
-		QLabel*      mLabel;
-		CheckBox*    mOnceOnly;
-		int          mMaxDays;            // maximum day count
-		bool         mNoHourMinute;       // hours/minutes cannot be displayed, ever
-		bool         mReadOnly;           // the widget is read only
-		bool         mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
-		int          mDateOnlyOffset;     // 1 if hours/minutes is disabled, else 0
+		TimeSelector*  mTime;
+		CheckBox*      mOnceOnly;
+		bool           mReadOnly;           // the widget is read only
+		bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 };
 
 #endif // REMINDER_H
