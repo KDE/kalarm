@@ -71,7 +71,8 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new CalendarLocal(getDefaultTimeZoneID().local8Bit());
+	calendar = new CalendarLocal();
+	calendar->setLocalTime();
 	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
