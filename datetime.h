@@ -55,6 +55,7 @@ class AlarmTimeWidget : public ButtonGroup
 	protected slots:
 		void           slotTimer();
 		void           slotButtonSet(int id);
+		void           slotButtonClicked(int id);
 		void           slotDateChanged(QDate)     { dateTimeChanged(); }
 		void           slotTimeChanged(int)       { dateTimeChanged(); }
 		void           delayTimeChanged(int);
@@ -81,7 +82,7 @@ class TimeSpinBox : public SpinBox2
 	public:
 		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
 		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
-		bool            valid() const        { return !invalid; }
+		bool            valid() const;
 		QTime           time() const;
 		void            setValid(bool);
 		static QString  shiftWhatsThis();
@@ -96,7 +97,7 @@ class TimeSpinBox : public SpinBox2
 		class TimeValidator;
 		TimeValidator*  validator;
 		int             minimumValue;
-		bool            invalid;
+		bool            invalid;            // value is currently invalid (asterisks)
 		bool            enteredSetValue;    // to prevent infinite recursion in setValue()
 };
 

@@ -63,6 +63,7 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 void AlarmTimeWidget::init(int mode)
 {
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
+	connect(this, SIGNAL(clicked(int)), SLOT(slotButtonClicked(int)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
 		topLayout->setMargin(marginKDE2 + KDialog::marginHint());
@@ -85,7 +86,7 @@ void AlarmTimeWidget::init(int mode)
 	QHBox* timeBox = new QHBox(this);
 	timeBox->setSpacing(2*KDialog::spacingHint());
 	timeEdit = new TimeSpinBox(timeBox);
-	timeEdit->setValue(2399);
+	timeEdit->setValue(1439);
 	timeEdit->setFixedSize(timeEdit->sizeHint());
 	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm."));
 	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotTimeChanged(int)));
@@ -114,7 +115,7 @@ void AlarmTimeWidget::init(int mode)
 
 	// Delay time spin box
 	delayTime = new TimeSpinBox(1, 99*60+59, this);
-	delayTime->setValue(2399);
+	delayTime->setValue(1439);
 	delayTime->setFixedSize(delayTime->sizeHint());
 	QWhatsThis::add(delayTime,
 	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm."));
@@ -269,9 +270,19 @@ void AlarmTimeWidget::slotButtonSet(int)
 	if (minutes <= 0)
 		delayTime->setValid(true);
 	delayTime->setEnabled(!at);
-//setFocusProxy(at ? dateEdit : delayTime);
 }
 
+/******************************************************************************
+*  Called when the At or After time radio button has been clicked.
+*  Moves the focus to the appropriate date or time edit field.
+*/
+void AlarmTimeWidget::slotButtonClicked(int)
+{
+	if (atTimeRadio->isOn())
+		dateEdit->setFocus();
+	else
+		delayTime->setFocus();
+}
 /******************************************************************************
 *  Called after the anyTimeCheckBox checkbox has been toggled.
 */
@@ -309,7 +320,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 		bool blockedT = timeEdit->signalsBlocked();
 		bool blockedD = dateEdit->signalsBlocked();
 		timeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
-		timeEdit->blockSignals(true);
+		dateEdit->blockSignals(true);
 		timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 		dateEdit->setDate(dt.date());
 		timeEdit->blockSignals(blockedT);
@@ -358,7 +369,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 
 QString TimeSpinBox::shiftWhatsThis()
 {
-        return i18n("\nPress the Shift key while clicking the spin buttons to adjust the time by a larger step (6 hours / 5 minutes).");
+	return i18n("\nPress the Shift key while clicking the spin buttons to adjust the time by a larger step (6 hours / 5 minutes).");
 }
 
 QTime TimeSpinBox::time() const
@@ -427,23 +438,26 @@ void TimeSpinBox::setValid(bool valid)
 }
 
 /******************************************************************************
- * Set the spin box as valid or invalid.
- * If newly invalid, the value is displayed as asterisks.
- * If newly valid, the value is set to the minimum value.
+ * Set the spin box's value.
  */
-void TimeSpinBox::setValue(int value)
+void TimeSpinBox::setValue(int minutes)
 {
 	if (!enteredSetValue)
 	{
 		enteredSetValue = true;
-		if (invalid)
+		if (minutes > maxValue())
+			setValid(false);
+		else
 		{
-			invalid = false;
-			setSpecialValueText(QString());
-			setMinValue(minimumValue);
+			if (invalid)
+			{
+				invalid = false;
+				setSpecialValueText(QString());
+				setMinValue(minimumValue);
+			}
+			SpinBox2::setValue(minutes);
+			enteredSetValue = false;
 		}
-		SpinBox2::setValue(value);
-		enteredSetValue = false;
 	}
 }
 
@@ -465,6 +479,11 @@ void TimeSpinBox::stepDown()
 		setValid(true);
 	else
 		SpinBox2::stepDown();
+}
+
+bool TimeSpinBox::valid() const
+{
+	return value() >= minimumValue;
 }
 
 
