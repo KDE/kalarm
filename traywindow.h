@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,6 @@
 #define TRAYWINDOW_H
 
 #include <ksystemtray.h>
-class KPopupMenu;
-class KAction;
-class KActionCollection;
 
 class KAlarmMainWindow;
 class TrayTooltip;
@@ -63,13 +60,8 @@ class TrayWindow : public KSystemTray
 
 		KAlarmMainWindow*  mAssocMainWindow;     // main window associated with this, or null
 		QPixmap            mPixmapEnabled, mPixmapDisabled;
-		KAction*           mActionQuit;          // quit action for system tray window
 		TrayTooltip*       mTooltip;
 		int                mAlarmsEnabledId;     // alarms enabled item in menu
-#if KDE_VERSION < 310
-		KActionCollection* mActionCollection;
-		bool               mQuitReplaced;        // the context menu Quit item has been replaced
-#endif
 };
 
 #endif // TRAYWINDOW_H

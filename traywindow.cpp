@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,11 +21,9 @@
 #include <stdlib.h>
 
 #include <qtooltip.h>
-#include <qlabel.h>
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kstdaction.h>
 #include <kaboutdata.h>
 #include <kpopupmenu.h>
@@ -43,10 +41,6 @@
 #include "daemongui.h"
 #include "preferences.h"
 #include "traywindow.moc"
-
-#if !KDE_IS_VERSION(3,1,90)
-#define loadIcon BarIcon
-#endif
 
 
 class TrayTooltip : public QToolTip
@@ -74,10 +68,6 @@ const QString TrayWindow::QUIT_WARN = QString::fromLatin1("QuitWarn");
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent)
-#if KDE_VERSION < 310
-	  , mActionCollection(new KActionCollection(this)),
-	  mQuitReplaced(false)
-#endif
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -88,14 +78,10 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 		                         i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 
-#if KDE_VERSION >= 310
-	KAction* quit = actionCollection()->action(KStdAction::stdName(KStdAction::Quit));
-	actionCollection()->remove(quit);
-	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
-	actionCollection()->insert(mActionQuit);
-#else
-	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), mActionCollection);
-#endif
+	// Replace the default handler for the Quit context menu item
+	KActionCollection* actcol = actionCollection();
+	actcol->remove(actcol->action(KStdAction::stdName(KStdAction::Quit)));
+	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
 
 	// Set up the context menu
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -124,31 +110,12 @@ TrayWindow::~TrayWindow()
 
 /******************************************************************************
 * Called just before the context menu is displayed.
-* Modify the Quit context menu item to only close the system tray widget.
+* Update the Alarms Enabled item status.
 */
 void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 {
-#if KDE_VERSION < 310
-	if (!mQuitReplaced)
-	{
-		// Prevent Quit from quitting the program
-		QString quitText = mActionQuit->text();
-		for (unsigned n = 0;  n < menu->count();  ++n)
-		{
-			QString txt = menu->text(menu->idAt(n));
-			if (txt.startsWith(quitText))
-			{
-				menu->removeItemAt(n);
-				break;
-			}
-		}
-		mActionQuit->plug(menu);
-		mQuitReplaced = true;
-	}
-#endif
-
-	// Update the Alarms Enabled item status
 	theApp()->daemonGuiHandler()->checkStatus();
+	KSystemTray::contextMenuAboutToShow(menu);     // needed for KDE <= 3.1 compatibility
 }
 
 /******************************************************************************
@@ -160,13 +127,9 @@ void TrayWindow::slotQuit()
 {
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->alarmsDisabledIfStopped()
-#if KDE_VERSION < 290
-	&&  Preferences::notifying(QUIT_WARN, true)
-#endif
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
 	                                         "(once any alarm message windows are closed)."),
-	                              QString::null, mActionQuit->text(), KStdGuiItem::cancel(),
-	                              QUIT_WARN
+				      QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(), QUIT_WARN
 	                             ) != KMessageBox::Yes)
 		return;
 	if (theApp()->wantRunInSystemTray())
@@ -185,7 +148,7 @@ void TrayWindow::slotQuit()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-	kdDebug(5950)<<"TrayWindow::setEnabledStatus(" << (int)status << ")\n";
+	kdDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")\n";
 	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
 	contextMenu()->setItemChecked(mAlarmsEnabledId, status);
 }
@@ -310,9 +273,11 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			items.insert(iit, item);
 		}
         }
+	kdDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
 	int count = 0;
 	for (iit = items.begin();  iit != items.end();  ++iit)
 	{
+		kdDebug(5950) << "-- " << (count+1) << ") " << (*iit).text << endl;
 		text += "\n";
 		text += (*iit).text;
 		if (++count == maxCount)
@@ -377,6 +342,7 @@ void TrayTooltip::maybeTip(const QPoint&)
 		text = kapp->aboutData()->programName();
 	else
 		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
+	kdDebug(5950) << "TrayTooltip::maybeTip(): " << text << endl;
 	if (Preferences::instance()->tooltipAlarmCount())
 		parent->tooltipAlarmText(text);
 	tip(parent->rect(), text);
