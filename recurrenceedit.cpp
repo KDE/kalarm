@@ -51,6 +51,7 @@
 #include "datetime.h"
 #include "dateedit.h"
 #include "timespinbox.h"
+#include "timeperiod.h"
 #include "spinbox.h"
 #include "checkbox.h"
 #include "combobox.h"
@@ -112,22 +113,17 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 
 	recurEveryLabel = new QLabel(i18n("Recur e&very:"), ruleButtonGroup);
 	recurEveryLabel->setFixedSize(recurEveryLabel->sizeHint());
-	recurFrequencyStack = new QWidgetStack(ruleButtonGroup);
-	recurFrequency = new SpinBox(1, 999, 1, ruleButtonGroup);
-	recurFrequency->setLineShiftStep(10);
-	recurFrequency->setSelectOnStep(false);
-	recurFrequency->setReadOnly(mReadOnly);
-	recurFrequencyStack->addWidget(recurFrequency, 0);
-	recurHourMinFrequency = new TimeSpinBox(1, 99*60+59, ruleButtonGroup);
-	recurHourMinFrequency->setReadOnly(mReadOnly);
-	QWhatsThis::add(recurHourMinFrequency,
+	mRecurFrequency = new TimePeriod(ruleButtonGroup);
+	mRecurFrequency->setHourMinRange(1, 5999);
+	mRecurFrequency->setUnitRange(1, 999);
+	mRecurFrequency->setUnitSteps(1, 10);
+	mRecurFrequency->setFixedSize(mRecurFrequency->sizeHint());
+	mRecurFrequency->setSelectOnStep(false);
+	mRecurFrequency->setReadOnly(mReadOnly);
+	mRecurFrequency->setHourMinWhatsThis(
 	      i18n("Enter the time (in hours and minutes) between repetitions of the alarm.\n%1")
 	           .arg(TimeSpinBox::shiftWhatsThis()));
-	recurFrequencyStack->addWidget(recurHourMinFrequency, 1);
-	QSize size = recurFrequency->sizeHint().expandedTo(recurHourMinFrequency->sizeHint());
-	recurFrequency->setFixedSize(size);
-	recurHourMinFrequency->setFixedSize(size);
-	recurFrequencyStack->setFixedSize(size);
+	recurEveryLabel->setBuddy(mRecurFrequency);
 
 	subdailyButton = new RadioButton(i18n("Ho&urs/Minutes"), ruleButtonGroup);
 	subdailyButton->setFixedSize(subdailyButton->sizeHint());
@@ -202,7 +198,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	connect(noEndDateButton, SIGNAL(toggled(bool)), SLOT(disableRange(bool)));
 	QWhatsThis::add(noEndDateButton, i18n("Repeat the alarm indefinitely"));
 	vlayout->addWidget(noEndDateButton, 1, Qt::AlignLeft);
-	size = noEndDateButton->size();
+	QSize size = noEndDateButton->size();
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	repeatCountButton = new RadioButton(i18n("End a&fter:"), rangeButtonGroup);
@@ -534,19 +530,10 @@ void RecurrenceEdit::periodClicked(int id)
 		return;
 
 	ruleStack->raiseWidget(frame);
-	if (subdaily)
-	{
-		recurFrequencyStack->raiseWidget(recurHourMinFrequency);
-		recurEveryLabel->setBuddy(recurHourMinFrequency);
-	}
-	else
-	{
-		recurFrequencyStack->raiseWidget(recurFrequency);
-		recurEveryLabel->setBuddy(recurFrequency);
-	}
+	mRecurFrequency->showHourMin(subdaily);
 	endTimeEdit->setEnabled(subdaily && endDateButton->isChecked());
 	if (!subdaily)
-		QWhatsThis::add(recurFrequency, whatsThis);
+		mRecurFrequency->setUnitWhatsThis(whatsThis);
 	if (!noEmitTypeChanged)
 		emit typeChanged(ruleButtonType);
 }
@@ -669,8 +656,8 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	noEmitTypeChanged = false;
 	noEndDateButton->setChecked(true);
 
-	recurHourMinFrequency->setValue(1);
-	recurFrequency->setValue(1);
+	mRecurFrequency->setHourMinValue(1);
+	mRecurFrequency->setUnitValue(1);
 
 	checkDay(fromDate.dayOfWeek());
 	mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);    // date in month
@@ -749,7 +736,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 	{
 		case Recurrence::rMinutely:
 			ruleButtonGroup->setButton(subdailyButtonId);
-			recurHourMinFrequency->setValue(recurrence->frequency());
+			mRecurFrequency->setHourMinValue(recurrence->frequency());
 			break;
 
 		case Recurrence::rDaily:
@@ -821,7 +808,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 			return;
 	}
 
-	recurFrequency->setValue(recurrence->frequency());
+	mRecurFrequency->setUnitValue(recurrence->frequency());
 	repeatDuration = event.remainingRecurrences();
 
 	// get range information
@@ -863,28 +850,25 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 	}
 
 	// Set up the recurrence according to the type selected
+	int frequency = mRecurFrequency->value();
 	QButton* button = ruleButtonGroup->selected();
 	if (button == subdailyButton)
 	{
 		QDateTime endDateTime(endDate, endTime);
-		int frequency = recurHourMinFrequency->value();
 		event.setRecurMinutely(frequency, repeatCount, endDateTime);
 	}
 	else if (button == dailyButton)
 	{
-		int frequency = recurFrequency->value();
 		event.setRecurDaily(frequency, repeatCount, endDate);
 	}
 	else if (button == weeklyButton)
 	{
-		int frequency = recurFrequency->value();
 		QBitArray rDays(7);
 		getCheckedDays(rDays);
 		event.setRecurWeekly(frequency, rDays, repeatCount, endDate);
 	}
 	else if (button == monthlyButton)
 	{
-		int frequency = recurFrequency->value();
 		if (mMonthRuleOnNthTypeOfDayButton->isChecked())
 		{
 			// it's by position
@@ -909,7 +893,6 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 	}
 	else if (button == yearlyButton)
 	{
-		int frequency = recurFrequency->value();
 		if (mYearRuleOnNthTypeOfDayButton->isChecked())
 		{
 			// it's by position

@@ -42,6 +42,7 @@ class ComboBox;
 class RadioButton;
 class DateEdit;
 class TimeSpinBox;
+class TimePeriod;
 class ButtonGroup;
 class KAlarmEvent;
 
@@ -118,9 +119,7 @@ class RecurrenceEdit : public QFrame
 		int            yearlyButtonId;
 		RepeatType     ruleButtonType;
 
-		QWidgetStack*  recurFrequencyStack;
-		SpinBox*       recurFrequency;
-		TimeSpinBox*   recurHourMinFrequency;
+		TimePeriod*    mRecurFrequency;
 
 		// Rules without choices
 		QFrame*        mNoneRuleFrame;
