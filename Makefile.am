@@ -1,7 +1,7 @@
 # set the include path for X, qt and KDE and calendar library
 INCLUDES= -I$(top_srcdir) $(all_includes)
 
-bin_PROGRAMS = kalarm
+bin_PROGRAMS = kalarm kalarmautostart
 kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindow.cpp \
 	messagewin.cpp msgevent.cpp alarmcalendar.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
@@ -9,6 +9,11 @@ kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindo
 	fontcolour.cpp fontchooser.cpp colourcombo.cpp datetime.cpp spinbox2.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la $(top_builddir)/kalarmd/libkalarmd.la
+
+kalarmautostart_SOURCES = autostart.cpp
+kalarmautostart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kalarmautostart_LDADD   = $(LIB_KDECORE)
+
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
 	mainwindowbase.h traywindow.h traydcop.h alarmguiiface.h \
 	msgevent.h alarmcalendar.h datetime.h fontcolour.h fontchooser.h colourcombo.h \
