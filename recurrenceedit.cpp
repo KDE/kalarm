@@ -23,19 +23,15 @@
 #include "kalarm.h"
 
 #include <qtooltip.h>
-//#include <qfiledialog.h>
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-//#include <qvgroupbox.h>
 #include <qwidgetstack.h>
-//#include <qlistbox.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-//#include <qgroupbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
@@ -274,7 +270,7 @@ void RecurrenceEdit::periodClicked(int id)
 		return;
 	ruleStack->raiseWidget(frame);
 	recurFrequencyStack->raiseWidget(subdaily ? recurHourMinFrequency : recurFrequency);
-	endTimeEdit->setEnabled(subdaily);
+	endTimeEdit->setEnabled(subdaily && endDateButton->isChecked());
 	if (!subdaily)
 		QWhatsThis::add(recurFrequency, whatsThis);
 }
@@ -691,7 +687,7 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 		{
 			QDateTime endDateTime(endDate, endTime);
 			int frequency = recurHourMinFrequency->value();
-			event.setRecurSubDaily(repeatCount, frequency, endDateTime);
+			event.setRecurSubDaily(frequency, repeatCount, endDateTime);
 		}
 		else if (dailyButton->isChecked())
 		{
