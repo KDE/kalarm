@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -252,6 +253,31 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 
 //ruleStack->addWidget(rangeButtonGroup, 4);
 	noEmitTypeChanged = false;
+}
+
+/******************************************************************************
+ * Verify the consistency of the entered data.
+ */
+bool RecurrenceEdit::checkData(const QDateTime& startDateTime) const
+{
+	if (endDateButton->isChecked())
+	{
+		bool err;
+		QDate endDate = endDateEdit->getDate();
+		bool time = endTimeEdit->isEnabled();
+		if (time)
+			err = QDateTime(endDate, endTimeEdit->getTime()) < startDateTime;
+		else
+			err = endDate < startDateTime.date();
+		if (err)
+		{
+			KMessageBox::sorry(const_cast<RecurrenceEdit*>(this),
+			                   (time ? i18n("End date/time is earlier than start date/time")
+			                         : i18n("End date is earlier than start date")));
+			return false;
+		}
+	}
+	return true;
 }
 
 /******************************************************************************
@@ -696,6 +722,8 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	yearlyNthNumberEntry->setCurrentItem(day / 7);
 	yearlyNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
 	yeardayMonthComboBox->setCurrentItem(month);
+
+	endDateEdit->setDate(fromDate);
 }
 
 
@@ -819,6 +847,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 		repeatDuration = event.repeatCount();
 
 		// get range information
+		QDateTime endtime = currStartDateTime;
 		if (repeatDuration == -1)
 			noEndDateButton->setChecked(true);
 		else if (repeatDuration)
@@ -829,8 +858,10 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 		else
 		{
 			endDateButton->setChecked(true);
-			endDateEdit->setDate(recurrence->endDate());
+			endtime = recurrence->endDateTime();
+			endTimeEdit->setValue(endtime.time().hour()*60 + endtime.time().minute());
 		}
+		endDateEdit->setDate(endtime.date());
 	}
 	else
 	{

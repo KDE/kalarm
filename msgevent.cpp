@@ -150,21 +150,26 @@ void KAlarmEvent::set(const Event& event)
 		// deferral alarm is the only alarm in the event (which shouldn't happen!)
 		if (main  ||  !set)
 		{
-			mType           = data.type;
-			mCleanText      = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
-			mDateTime       = data.dateTime;
+			mType      = data.type;
+			mCleanText = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+			mDateTime  = data.dateTime;
+			if (data.repeatCount && data.repeatMinutes)
+			{
+				// Backwards compatibility with KAlarm pre-0.7 calendar files
+				repeatCount   = data.repeatCount;
+				repeatMinutes = data.repeatMinutes;
+				mAnyTime = false;
+			}
 			if (mAnyTime)
 				mDateTime.setTime(QTime());
-			repeatCount     = data.repeatCount;     // backwards compatibility with KAlarm pre-0.7 calendar files
-			repeatMinutes   = data.repeatMinutes;   // backwards compatibility with KAlarm pre-0.7 calendar files
-			mLateCancel     = data.lateCancel;
+			mLateCancel = data.lateCancel;
 			set = true;
 		}
 		++mAlarmCount;
 	}
 
 	Recurrence* recur = event.recurrence();
-	if (recur)
+	if (recur  &&  recur->doesRecur() != Recurrence::rNone)
 	{
 		// Copy the recurrence details.
 		QDateTime savedDT = mDateTime;
@@ -621,10 +626,24 @@ KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime,
  */
 KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const
 {
-	if (checkRecur() != NO_RECUR)
-		return previousRecurrence(afterDateTime, result);
-	result = QDateTime();
-	return NO_OCCURRENCE;
+	if (checkRecur() == NO_RECUR)
+	{
+		result = QDateTime();
+		return NO_OCCURRENCE;
+	}
+	QDateTime recurStart = mRecurrence->recurStart();
+	QDateTime after = afterDateTime;
+	if (mAnyTime  &&  afterDateTime.time() > theApp()->settings()->startOfDay())
+		after = after.addDays(1);    // today's recurrence (if today recurs) has passed
+	bool last;
+	result = mRecurrence->getPreviousDateTime(after, &last);
+	if (!result.isValid())
+		return NO_OCCURRENCE;
+	if (result == recurStart)
+		return FIRST_OCCURRENCE;
+	if (last)
+		return LAST_OCCURRENCE;
+	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
 /******************************************************************************
@@ -682,28 +701,6 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 		return LAST_OCCURRENCE;
 	}
 	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(result) + 1;
-	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
-}
-
-/******************************************************************************
- * Get the date/time of the last previous recurrence of the event, before the
- * specified date/time.
- * 'result' = date/time of previous occurrence, or invalid date/time if none.
- */
-KAlarmEvent::OccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const
-{
-	QDateTime recurStart = mRecurrence->recurStart();
-	QDateTime after = afterDateTime;
-	if (mAnyTime  &&  afterDateTime.time() > theApp()->settings()->startOfDay())
-		after = after.addDays(1);    // today's recurrence (if today recurs) has passed
-	bool last;
-	result = mRecurrence->getPreviousDateTime(after, &last);
-	if (!result.isValid())
-		return NO_OCCURRENCE;
-	if (result == recurStart)
-		return FIRST_OCCURRENCE;
-	if (last)
-		return LAST_OCCURRENCE;
 	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 

@@ -54,6 +54,7 @@ class RecurrenceEdit : public QWidget
 		void          set(const KAlarmEvent&, bool repeatAtLogin);
 		/** Write event settings to event object */
 		void          writeEvent(KAlarmEvent&);
+		bool          checkData(const QDateTime& startDateTime) const;
 		bool          repeatAtLogin() const    { return repeatAtLoginRadio->isOn(); }
 		bool          isSmallSize() const      { return (!recurrenceFrame || recurrenceFrame->isHidden()); }
 		int           noRecurHeight() const    { return noRepeatSize.height(); }

@@ -93,7 +93,7 @@ class KAlarmAlarm
 class KAlarmEvent
 {
 	public:
-		enum            // used in DCOP calls, etc.
+		enum            // flags for use in DCOP calls, etc.
 		{
 			LATE_CANCEL     = 0x01,
 			BEEP            = 0x02,
@@ -112,6 +112,7 @@ class KAlarmEvent
 			MONTHLY_POS = KCal::Recurrence::rMonthlyPos,
 			ANNUAL_DATE = KCal::Recurrence::rYearlyMonth,
 			ANNUAL_POS  = KCal::Recurrence::rYearlyPos,
+			// The following values are not implemented in KAlarm
 			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay,
 		};
 		enum OccurType
