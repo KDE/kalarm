@@ -1,6 +1,6 @@
 KAlarm
 
-Version 0.5.7
+Version 0.6.0
 
 KAlarm provides a graphical interface for setting up personal alarm/reminder
 messages. The messages pop up on the screen at the time you specify.
@@ -35,8 +35,8 @@ BUGS:
 
 Bugs can be reported to the KDE bug tracking system (http://bugs.kde.org).
 There you can also get information about the status of older bugs.
-KAlarm, as most other KDE 2 programs, offers a menu item "Report Bug"
-in the Help menu for convenient reporting of bugs or feature requests.
+KAlarm, as most other KDE programs, offers a menu item "Report Bug" in the
+Help menu for convenient reporting of bugs or feature requests.
 
 
 COMMENTS AND SUGGESTIONS:

@@ -1,5 +1,15 @@
 KAlarm
 
+=== Version 0.6.0--- 8 Mar 2002 ===
+Add option to execute a command instead of displaying an alarm message.
+Add Try button to alarm message edit dialog.
+Add icons in the alarm list to indicate each alarm's type.
+Display error message if a file to be displayed is not a text file.
+Reduce chance of lost late-cancel alarms when daemon check interval is reduced.
+Rename command line option --displayEvent to --triggerEvent.
+Rename DCOP function displayMessage() to triggerEvent().
+Rename DCOP function cancelMessage() to cancelEvent().
+
 === Version 0.5.7--- 17 Mar 2002 ===
 Show system tray icon on deferring command line-initiated message (run-in-
     system-tray mode).
@@ -13,7 +23,7 @@ Fix crash in some circumstances on changing run mode to run-on-demand.
 Fix crash on clicking KAlarm icon in command line-initiated message window.
 Fix crash on deferring alarm in command line-initiated message window.
 Fix duplication of repeat-at-login alarms at login.
-Fix error displaying text file messages (KDE 3).
+Fix error displaying text file messages.
 
 === Version 0.5.4--- 7 Feb 2002 ===
 Fix extra window being displayed in session restoration.

@@ -27,7 +27,7 @@
 #endif
 
 #undef VERSION
-#define VERSION "0.6.2"
+#define VERSION "0.6.0"
 
 
 #endif // KALARM_H
