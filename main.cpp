@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE personal alarm message and command scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux");
+		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and concatenate
