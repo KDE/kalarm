@@ -161,47 +161,30 @@ QString KAMail::sendKMail(const KAEvent& event, const QString& from, const QStri
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
 		// KMail is running - use a DCOP call
-		// Create the message headers, body and attachments
-		QString message = initHeaders(event, from, bcc, true);
-		QString err = appendBodyAttachments(message, event);
-		if (!err.isNull())
-			return err;
-
-		// Write to a temporary file for feeding to KMail
-		KTempFile tmpFile;
-		tmpFile.setAutoDelete(true);     // delete file when it is destructed
-		QTextStream* stream = tmpFile.textStream();
-		if (!stream)
-		{
-			kdError(5950) << "KAMail::send(): Unable to open a temporary mail file" << endl;
-			return QString("");
-		}
-		*stream << message;
-		tmpFile.close();
-		if (tmpFile.status())
-		{
-			kdError(5950) << "KAMail::send(): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
-			return QString("");
-		}
-
-		// Notify KMail of the message in the temporary file
 		QCString    replyType;
 		QByteArray  replyData;
-		QByteArray  data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QString::fromLatin1("outbox") << tmpFile.name();
-		int result = 0;
-		if (kapp->dcopClient()->call("kmail", "KMailIface",
-		                             "dcopAddMessage(QString,QString)",
-		                             data, replyType, replyData)
-		&&  replyType == "int")
+                int result = 0;
+                QByteArray data;
+                QDataStream arg( data, IO_WriteOnly );
+                arg << from;
+                arg << event.emailAddresses( ", " );
+                arg << "";
+                arg <<bcc;
+                arg << event.emailSubject();
+                arg << event.message();
+                KURL attachURL;
+                arg <<KURL::List(event.emailAttachments());
+                if ( kapp->dcopClient()->call( "kmail", "MailTransportServiceIface", 
+                              "sendMessage(QString, QString, QString, QString, QString, QString, KURL::List)",
+                                data, replyType, replyData )
+                    && replyType == "bool" )
 		{
-			QDataStream _reply_stream(replyData, IO_ReadOnly);
+			QDataStream _reply_stream( replyData, IO_ReadOnly );
 			_reply_stream >> result;
 		}
-		if (result <= 0)
+                if (result <= 0)
 		{
-			kdError(5950) << "sendKMail(): kmail dcopAddMessage() call failed (error code = " << result << ")" << endl;
+			kdError(5950) << "sendKMail(): kmail sendMessage() call failed (error code = " << result << ")" << endl;
 			return i18n("Error calling KMail");
 		}
 		if (allowNotify)
