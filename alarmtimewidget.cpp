@@ -179,54 +179,64 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 /******************************************************************************
 *  Fetch the entered date/time.
 *  If <= current time, and 'showErrorMessage' is true, output an error message.
-*  Reply = widget with the invalid value, if it is after the current time.
+*  If non-null, 'errorWidget' is set to point to the widget containing the error.
+*  Reply = invalid date/time if error.
 */
-QWidget* AlarmTimeWidget::getDateTime(DateTime& dateTime, bool showErrorMessage) const
+DateTime AlarmTimeWidget::getDateTime(bool showErrorMessage, QWidget** errorWidget) const
 {
+	if (errorWidget)
+		*errorWidget = 0;
 	QTime nowt = QTime::currentTime();
 	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
 	if (mAtTimeRadio->isOn())
 	{
 		bool anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
-		if (mDateEdit->isValid()  &&  mTimeEdit->isValid())
-		{
-			if (anyTime)
-			{
-				dateTime = mDateEdit->date();
-				if (dateTime.date() < now.date())
-				{
-					if (showErrorMessage)
-						KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
-					return mDateEdit;
-				}
-			}
-			else
-			{
-				dateTime.set(mDateEdit->date(), mTimeEdit->time());
-				if (dateTime <= now.addSecs(1))
-				{
-					if (showErrorMessage)
-						KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
-					return mTimeEdit;
-				}
-			}
-		}
-		else
+		if (!mDateEdit->isValid()  ||  !mTimeEdit->isValid())
 		{
 			// The date and/or time is invalid
 			if (!mDateEdit->isValid())
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid date"));
-				return mDateEdit;
+				if (errorWidget)
+					*errorWidget = mDateEdit;
 			}
 			else
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
-				return mTimeEdit;
+				if (errorWidget)
+					*errorWidget = mTimeEdit;
+			}
+			return DateTime();
+		}
+
+		DateTime result;
+		if (anyTime)
+		{
+			result = mDateEdit->date();
+			if (result.date() < now.date())
+			{
+				if (showErrorMessage)
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
+				if (errorWidget)
+					*errorWidget = mDateEdit;
+				return DateTime();
 			}
 		}
+		else
+		{
+			result.set(mDateEdit->date(), mTimeEdit->time());
+			if (result <= now.addSecs(1))
+			{
+				if (showErrorMessage)
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
+				if (errorWidget)
+					*errorWidget = mTimeEdit;
+				return DateTime();
+			}
+		}
+		return result;
 	}
 	else
 	{
@@ -234,11 +244,12 @@ QWidget* AlarmTimeWidget::getDateTime(DateTime& dateTime, bool showErrorMessage)
 		{
 			if (showErrorMessage)
 				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
-			return mDelayTimeEdit;
+			if (errorWidget)
+				*errorWidget = mDelayTimeEdit;
+			return DateTime();
 		}
-		dateTime = now.addSecs(mDelayTimeEdit->value() * 60);
+		return now.addSecs(mDelayTimeEdit->value() * 60);
 	}
-	return 0;
 }
 
 /******************************************************************************

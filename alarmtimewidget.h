@@ -26,7 +26,7 @@
 #define ALARMTIMEWIDGET_H
 
 #include <qtimer.h>
-#include <qdatetime.h>
+#include "datetime.h"
 #include "buttongroup.h"
 
 class RadioButton;
@@ -47,7 +47,7 @@ class AlarmTimeWidget : public ButtonGroup
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
-		QWidget*       getDateTime(DateTime&, bool showErrorMessage = true) const;
+		DateTime       getDateTime(bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void           setDateTime(const DateTime&);
 		void           setReadOnly(bool);
 		bool           anyTime() const               { return mAnyTime; }
