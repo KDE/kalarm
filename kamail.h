@@ -33,7 +33,7 @@ class EmailAddressList;
 class KAMail
 {
 	public:
-		static QString    send(const KAlarmEvent&);
+		static QString    send(const KAlarmEvent&, bool allowNotify = true);
 		static int        checkAddress(QString& address);
 		static int        checkAttachment(QString& attachment)  { return checkAttachment(attachment, true); }
 		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
@@ -45,7 +45,7 @@ class KAMail
 #else
 		typedef uint Offset;
 #endif
-		static QString    sendKMail(const KAlarmEvent&, const QString& from, const QString& bcc);
+		static QString    sendKMail(const KAlarmEvent&, const QString& from, const QString& bcc, bool allowNotify);
 		static QString    initHeaders(const KAlarmEvent&, const QString& from, const QString& bcc, bool dateId);
 		static QString    appendBodyAttachments(QString& message, const KAlarmEvent&);
 		static void       notifyQueued(const KAlarmEvent&);

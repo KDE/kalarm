@@ -76,7 +76,7 @@ const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNoti
 * Reply = reason for failure (which may be the empty string)
 *       = null string if success.
 */
-QString KAMail::send(const KAlarmEvent& event)
+QString KAMail::send(const KAlarmEvent& event, bool allowNotify)
 {
 	QString from = theApp()->preferences()->emailAddress();
 	QString bcc  = theApp()->preferences()->emailBccAddress();
@@ -127,19 +127,20 @@ QString KAMail::send(const KAlarmEvent& event)
 		}
 		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
-		notifyQueued(event);
+		if (allowNotify)
+			notifyQueued(event);
 		return QString::null;
 	}
 	else
 	{
-		return sendKMail(event, from, bcc);
+		return sendKMail(event, from, bcc, allowNotify);
 	}
 }
 
 /******************************************************************************
 * Send the email message via KMail.
 */
-QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const QString& bcc)
+QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const QString& bcc, bool allowNotify)
 {
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
@@ -187,7 +188,8 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const Q
 			kdError(5950) << "sendKMail(): kmail dcopAddMessage() call failed (error code = " << result << ")" << endl;
 			return i18n("Error calling KMail");
 		}
-		notifyQueued(event);
+		if (allowNotify)
+			notifyQueued(event);
 	}
 	else
 	{

@@ -1396,7 +1396,7 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 	else if (alarm.action() == KAlarmAlarm::EMAIL)
 	{
 		kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to: " << event.emailAddresses(", ") << endl;
-		QString err = KAMail::send(event);
+		QString err = KAMail::send(event, (reschedule || allowDefer));
 		if (!err.isNull())
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
