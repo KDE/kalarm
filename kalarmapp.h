@@ -65,8 +65,9 @@ class KAlarmApp : public KUniqueApplication
 		void              deleteWindow(KAlarmMainWindow*);
 		void              deleteWindow(TrayWindow*);
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
-		void              displayTrayIcon(bool show);
+		bool              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
+		bool              KDEDesktop() const              { return mKDEDesktop; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
@@ -118,6 +119,7 @@ class KAlarmApp : public KUniqueApplication
 		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
 		Settings*                  mSettings;          // program preferences
+		bool                       mKDEDesktop;
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }
