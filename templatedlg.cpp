@@ -25,6 +25,7 @@
 #include <qwhatsthis.h>
 
 #include <klocale.h>
+#include <kguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
