@@ -674,7 +674,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				int secs = alarm.dateTime().secsTo(now);
 				if (secs < 0)
 				{
-					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": not due\n";
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": not due for " << (-secs) << "s\n";
+kdDebug(5950) << "Alarm time: " << alarm.dateTime().toString(Qt::ISODate) << ", now: " << now.toString(Qt::ISODate) << endl;
 					continue;
 				}
 				if (alarm.repeatAtLogin())
