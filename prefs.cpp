@@ -77,7 +77,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	int row = 1;
 
 	// Run-in-system-tray radio button has an ID of 0
-	mRunInSystemTray = new QRadioButton(i18n("Run continuously in system tray"), group, "runTray");
+	mRunInSystemTray = new QRadioButton(i18n("Run continuously in system &tray"), group, "runTray");
 	mRunInSystemTray->setFixedSize(mRunInSystemTray->sizeHint());
 	connect(mRunInSystemTray, SIGNAL(toggled(bool)), this, SLOT(slotRunModeToggled(bool)));
 	QWhatsThis::add(mRunInSystemTray,
@@ -88,20 +88,20 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
 	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 1, AlignLeft);
 
-	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at login"), group, "autoTray");
+	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
 	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
 	grid->addWidget(mAutostartTrayIcon1, ++row, 1, AlignLeft);
 
-	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disable alarms while not running"), group, "disableAl");
+	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disa&ble alarms while not running"), group, "disableAl");
 	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
 	QWhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
 	grid->addWidget(mDisableAlarmsIfStopped, ++row, 1, AlignLeft);
 
 	// Run-on-demand radio button has an ID of 3
-	mRunOnDemand = new QRadioButton(i18n("Run only on demand"), group, "runDemand");
+	mRunOnDemand = new QRadioButton(i18n("&Run only on demand"), group, "runDemand");
 	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
 	connect(mRunOnDemand, SIGNAL(toggled(bool)), this, SLOT(slotRunModeToggled(bool)));
 	QWhatsThis::add(mRunOnDemand,
@@ -113,7 +113,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	++row;
 	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 1, AlignLeft);
 
-	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray icon at login"), group, "autoRun");
+	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group, "autoRun");
 	mAutostartTrayIcon2->setFixedSize(mAutostartTrayIcon2->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
@@ -122,23 +122,25 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("System tray icon update interval:"), box);
+	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
 	box->setStretchFactor(label, 1);
 	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, box, "daemonCheck");
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
+	label->setBuddy(mDaemonTrayCheckInterval);
 	label = new QLabel(i18n("seconds"), box);
 	box->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("Start of day for date-only alarms:"), box);
+	label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
 	box->setStretchFactor(label, 1);
 	mStartOfDay = new TimeSpinBox(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	QWhatsThis::add(mStartOfDay,
 	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
+	label->setBuddy(mStartOfDay);
 	box->setFixedHeight(box->sizeHint().height());
 
 #ifdef KALARM_EMAIL
@@ -148,10 +150,10 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	box->setStretchFactor(label, 1);
 	mEmailClient = new QButtonGroup(box);
 	mEmailClient->hide();
-	QRadioButton* radio = new QRadioButton(i18n("KMail"), box, "kmail");
+	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Settings::KMAIL);
-	radio = new QRadioButton(i18n("Sendmail"), box, "sendmail");
+	radio = new QRadioButton(i18n("S&endmail"), box, "sendmail");
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Settings::SENDMAIL);
 	box->setFixedHeight(box->sizeHint().height());
@@ -161,7 +163,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
 #endif
 
-	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), mPage, "confirmDeletion");
+	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), mPage, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	QWhatsThis::add(mConfirmAlarmDeletion,
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
@@ -248,24 +250,24 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 {
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
-	QString setting = i18n("Cancel if late");
+	QString setting = i18n("Cancel if &late");
 	mDefaultLateCancel = new QCheckBox(setting, mPage, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
 	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(setting));
 
-	setting = i18n("Confirm acknowledgement");
+	setting = i18n("Confirm ac&knowledgement");
 	mDefaultConfirmAck = new QCheckBox(setting, mPage, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
 	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(setting));
 
-	mDefaultBeep = new QCheckBox(i18n("Beep"), mPage, "defBeep");
+	mDefaultBeep = new QCheckBox(i18n("&Beep"), mPage, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
 	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	setting = i18n("Copy email to self");
+	setting = i18n("Copy email to &self");
 	mDefaultEmailBcc = new QCheckBox(setting, mPage, "defEmailBcc");
 	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
 	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(setting));
@@ -273,7 +275,7 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("Recurrence period:"), box);
+	QLabel* label = new QLabel(i18n("Recurrence &period:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
 	mDefaultRecurPeriod->insertItem(i18n("Hours/Minutes"));
@@ -284,6 +286,7 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	QWhatsThis::add(mDefaultRecurPeriod,
 	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
+	label->setBuddy(mDefaultRecurPeriod);
 	label = new QLabel(box);   // dummy to left-adjust the controls
 	box->setStretchFactor(label, 1);
 	box->setFixedHeight(box->sizeHint().height());
