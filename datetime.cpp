@@ -68,7 +68,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int mode
 		page = new QGroupBox(groupBoxTitle, this);
 		topLayout->addWidget(page);
 		topLayout = new QVBoxLayout(page, KDialog::spacingHint());
-		topLayout->setMargin(KDialog::marginHint());
+		topLayout->setMargin(marginKDE2 + KDialog::marginHint());
 	}
 	topLayout->addSpacing(fontMetrics().lineSpacing()/2);
 	QSize radioSize;

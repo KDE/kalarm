@@ -63,14 +63,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, marginKDE2, spacingHint());
 
 	// Message label + multi-line editor
 
 	actionGroup = new QButtonGroup(i18n("Action"), page, "actionGroup");
 	connect(actionGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
 	topLayout->addWidget(actionGroup);
-	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, marginHint(), spacingHint());
+	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, marginKDE2 + marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	// Message radio button has an ID of 0
@@ -204,6 +204,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	bgColourChoose = new ColourCombo(page);
 	size = bgColourChoose->sizeHint();
 	bgColourChoose->setMinimumHeight(size.height() + 4);
+	QToolTip::add(bgColourChoose, i18n("Message color"));
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background color for the alarm message."));
 	layout->addWidget(bgColourChoose);

@@ -83,9 +83,13 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 
 	// Create the repetition type radio buttons
 
-	repeatButtonGroup = new ButtonGroup(1, Vertical, topFrame);
-	repeatButtonGroup->setFrameStyle(QFrame::NoFrame);
+#if KDE_VERSION >= 290
+	repeatButtonGroup = new ButtonGroup(1, Qt::Vertical, topFrame);
 	repeatButtonGroup->setInsideMargin(0);
+#else
+	repeatButtonGroup = new ButtonGroup(topFrame);
+#endif
+	repeatButtonGroup->setFrameStyle(QFrame::NoFrame);
 	topLayout->addWidget(repeatButtonGroup);
 	connect(repeatButtonGroup, SIGNAL(clicked(int)), this, SLOT(repeatTypeClicked(int)));
 
@@ -104,6 +108,13 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	recurRadio->setFixedSize(recurRadio->sizeHint());
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
 
+#if KDE_VERSION < 290
+	QBoxLayout* butlayout = new QHBoxLayout(repeatButtonGroup, 0, KDialog::spacingHint());
+	butlayout->addWidget(noneRadio);
+	butlayout->addWidget(repeatAtLoginRadio);
+	butlayout->addWidget(recurRadio);
+#endif
+
 	noRepeatSize = QWidget::minimumSizeHint();
 	int margins = noRepeatSize.width() - repeatButtonGroup->sizeHint().width();
 
@@ -113,16 +124,31 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 
 	// Create the Recurrence Rule definitions
 
+#if KDE_VERSION >= 290
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), recurrenceFrame, "recurGroup");
+#else
+	recurGroup = new QGroupBox(i18n("Recurrence Rule"), recurrenceFrame, "recurGroup");
+	layout = new QVBoxLayout(recurGroup, 2*KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	QBoxLayout* boxLayout = new QHBoxLayout(layout);
+#endif
 	topLayout->addWidget(recurGroup);
 	ruleFrame = new QFrame(recurGroup, "ruleFrame");
+#if KDE_VERSION < 290
+	boxLayout->addWidget(ruleFrame);
+#endif
 	layout = new QVBoxLayout(ruleFrame, 0);
 	layout->addSpacing(KDialog::spacingHint()/2);
+//layout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	layout = new QHBoxLayout(layout, 0);
-	ruleButtonGroup = new ButtonGroup(1, Horizontal, ruleFrame);
-	ruleButtonGroup->setFrameStyle(QFrame::NoFrame);
+#if KDE_VERSION >= 290
+	ruleButtonGroup = new ButtonGroup(1, Qt::Horizontal, ruleFrame);
 	ruleButtonGroup->setInsideMargin(0);
+#else
+	ruleButtonGroup = new ButtonGroup(ruleFrame);
+#endif
+	ruleButtonGroup->setFrameStyle(QFrame::NoFrame);
 	layout->addWidget(ruleButtonGroup);
 	connect(ruleButtonGroup, SIGNAL(clicked(int)), this, SLOT(periodClicked(int)));
 
@@ -144,22 +170,37 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	subdailyButton->setFixedSize(subdailyButton->sizeHint());
 	QWhatsThis::add(subdailyButton,
 	      i18n("Set the alarm repetition interval to the number of hours and minutes entered"));
+
 	dailyButton    = new QRadioButton(i18n("Days"), ruleButtonGroup);
 	dailyButton->setFixedSize(dailyButton->sizeHint());
 	QWhatsThis::add(dailyButton,
 	      i18n("Set the alarm repetition interval to the number of days entered"));
+
 	weeklyButton   = new QRadioButton(i18n("Weeks"), ruleButtonGroup);
 	weeklyButton->setFixedSize(weeklyButton->sizeHint());
 	QWhatsThis::add(weeklyButton,
 	      i18n("Set the alarm repetition interval to the number of weeks entered"));
+
 	monthlyButton  = new QRadioButton(i18n("Months"), ruleButtonGroup);
 	monthlyButton->setFixedSize(monthlyButton->sizeHint());
 	QWhatsThis::add(monthlyButton,
 	      i18n("Set the alarm repetition interval to the number of months entered"));
+
 	yearlyButton   = new QRadioButton(i18n("Years"), ruleButtonGroup);
 	yearlyButton->setFixedSize(yearlyButton->sizeHint());
 	QWhatsThis::add(yearlyButton,
 	      i18n("Set the alarm repetition interval to the number of years entered"));
+
+#if KDE_VERSION < 290
+	butlayout = new QVBoxLayout(ruleButtonGroup, 0, KDialog::spacingHint());
+	butlayout->addWidget(label, 0, Qt::AlignLeft);
+	butlayout->addWidget(recurFrequencyStack, 0, Qt::AlignLeft);
+	butlayout->addWidget(subdailyButton, 0, Qt::AlignLeft);
+	butlayout->addWidget(dailyButton, 0, Qt::AlignLeft);
+	butlayout->addWidget(weeklyButton, 0, Qt::AlignLeft);
+	butlayout->addWidget(monthlyButton, 0, Qt::AlignLeft);
+	butlayout->addWidget(yearlyButton, 0, Qt::AlignLeft);
+#endif
 
 	subdailyButtonId = ruleButtonGroup->id(subdailyButton);
 	dailyButtonId    = ruleButtonGroup->id(dailyButton);
@@ -196,12 +237,12 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	rangeButtonGroup = new QButtonGroup(i18n("Recurrence End"), recurrenceFrame, "rangeButtonGroup");
 	topLayout->addWidget(rangeButtonGroup);
 
-	QVBoxLayout* vlayout = new QVBoxLayout(rangeButtonGroup, KDialog::marginHint(), KDialog::spacingHint());
-	vlayout->addSpacing(KDialog::spacingHint()*3/2);
+	QVBoxLayout* vlayout = new QVBoxLayout(rangeButtonGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 	noEndDateButton = new QRadioButton(i18n("No end"), rangeButtonGroup);
 	noEndDateButton->setFixedSize(noEndDateButton->sizeHint());
 	QWhatsThis::add(noEndDateButton, i18n("Repeat the alarm indefinitely"));
-	vlayout->addWidget(noEndDateButton, 1, 0);
+	vlayout->addWidget(noEndDateButton, 1, Qt::AlignLeft);
 	size = noEndDateButton->size();
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
@@ -251,7 +292,6 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	connect(repeatCountButton, SIGNAL(toggled(bool)), this, SLOT(enableDurationRange(bool)));
 	connect(endDateButton, SIGNAL(toggled(bool)), this, SLOT(enableDateRange(bool)));
 
-//ruleStack->addWidget(rangeButtonGroup, 4);
 	noEmitTypeChanged = false;
 }
 
@@ -465,7 +505,7 @@ void RecurrenceEdit::initWeekly()
 	weeklyFrame->setFrameStyle(QFrame::NoFrame);
 	QBoxLayout* topLayout = new QVBoxLayout(weeklyFrame);
 	topLayout->addStretch();
-	QGridLayout* layout = new QGridLayout(topLayout, 7, 2, ruleButtonGroup->insideSpacing());
+	QGridLayout* layout = new QGridLayout(topLayout, 7, 2, KDialog::spacingHint());
 	layout->setRowStretch(0, 1);
 
 	QLabel* label = new QLabel(i18n("On: Tuesday, for example", "On:"), weeklyFrame);
@@ -477,7 +517,7 @@ void RecurrenceEdit::initWeekly()
 		dayBox[i]->setFixedSize(dayBox[i]->sizeHint());
 		QWhatsThis::add(dayBox[i],
 		      i18n("Select the day(s) of the week on which to repeat the alarm"));
-		layout->addWidget(dayBox[i], i, 1);
+		layout->addWidget(dayBox[i], i, 1, Qt::AlignLeft);
 	}
 	layout->setColStretch(1, 1);
 }

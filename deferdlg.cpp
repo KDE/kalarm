@@ -40,7 +40,7 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
 
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
+	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
 
 	timeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, 0, page, "timeGroup");
 	timeWidget->setDateTime(initialDT);

@@ -59,6 +59,8 @@ const char* GUI_DCOP_OBJECT_NAME = "tray";
 const char* DAEMON_APP_NAME      = DAEMON_APP_NAME_DEF;
 const char* DAEMON_DCOP_OBJECT   = "ad";
 
+int         marginKDE2 = 0;
+
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
@@ -80,6 +82,9 @@ KAlarmApp::KAlarmApp()
 	  mDaemonRunning(false),
 	  mSessionClosingDown(false)
 {
+#if KDE_VERSION < 290
+	marginKDE2 = KDialog::marginHint();
+#endif
 	mSettings->loadSettings();
 	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
