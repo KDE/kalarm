@@ -355,7 +355,7 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 void KAlarmMainWindow::updateTrayIconAction()
 {
 	actionToggleTrayIcon->setEnabled(!theApp()->runInSystemTray());
-	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
+	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide from System &Tray") : i18n("Show in System &Tray"));
 }
 
 /******************************************************************************
