@@ -99,16 +99,22 @@ class KAlarmEvent
 	public:
 		enum            // flags for use in DCOP calls, etc.
 		{
+			// *** DON'T CHANGE THESE VALUES ***
+			// because they are part of KAlarm's external DCOP interface.
+			// (But it's alright to add new values.)
 			LATE_CANCEL     = 0x01,
 			BEEP            = 0x02,
 			REPEAT_AT_LOGIN = 0x04,
-			CONFIRM_ACK     = 0x08,
-			ANY_TIME        = 0x10,    // only a date is specified, not a time
+			ANY_TIME        = 0x08,    // only a date is specified, not a time
+			CONFIRM_ACK     = 0x10,
 			// The following values are read-only
 			DEFERRAL        = 0x80
 		};
 		enum RecurType
 		{
+			// *** DON'T CHANGE THESE VALUES ***
+			// because they are part of KAlarm's external DCOP interface.
+			// (But it's alright to add new values.)
 			NO_RECUR    = KCal::Recurrence::rNone,
 			MINUTELY    = KCal::Recurrence::rMinutely,
 			DAILY       = KCal::Recurrence::rDaily,
