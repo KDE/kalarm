@@ -27,7 +27,7 @@
 #endif
 
 #undef VERSION
-#define VERSION "0.7.3"
+#define VERSION "0.7.4"
 
 #include <kdeversion.h>
 extern int  marginKDE2;   // KDE2 compatibility
