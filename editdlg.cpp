@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm message
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	                        const KAlarmEvent* event)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
 {
-	QGroupBox* group;
+	QGroupBox*   group;
 	QVBoxLayout* layout;
 	QGridLayout* grid;
-	QLabel* lbl;
+	QLabel*      lbl;
 
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
@@ -119,8 +119,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
 	layout->addLayout(grid);
 
-	lbl = new QLabel(group);
-	lbl->setText(i18n("Count:"));
+	lbl = new QLabel(i18n("Count:"), group);
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->addWidget(lbl, 0, 0, AlignLeft);
 
@@ -131,8 +130,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	connect(repeatCount, SIGNAL(valueChanged(int)), this, SLOT(slotRepeatCountChanged(int)));
 	grid->addWidget(repeatCount, 0, 1, AlignLeft);
 
-	lbl = new QLabel(group);
-	lbl->setText(i18n("Interval:"));
+	lbl = new QLabel(i18n("Interval:"), group);
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->setColStretch(2, 1);
 	grid->addWidget(lbl, 0, 2, AlignRight);
