@@ -299,7 +299,7 @@ bool SpinBox::setShiftStepping(bool shift)
 		 * Then, if the mouse button is held down, the spin widget will continue to
 		 * step by the shift amount.
 		 */
-		int step;
+		int step = 0;
 		int adjust = 0;
 		int val = value();
 		switch (mCurrentButton)

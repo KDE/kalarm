@@ -856,7 +856,7 @@ void KAlarmMainWindow::dropEvent(QDropEvent* e)
 */
 void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 {
-	KAlarmEvent::Action action;
+	KAlarmEvent::Action action = KAlarmEvent::MESSAGE;
 	QString text;
 	KURL::List files;
 	if (KURLDrag::decode(e, files)  &&  files.count())
@@ -866,7 +866,6 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 	}
 	else if (QTextDrag::decode(e, text))
 	{
-		action = KAlarmEvent::MESSAGE;
 	}
 #if 0
 // KMail has not yet implemented drag of a message
@@ -875,6 +874,8 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 //		QByteArray data = e->encodedData("x-kmail-drag/message");
 	}
 #endif
+	else
+		return;
 	if (!text.isEmpty())
 		executeNew(win, action, text);
 }
