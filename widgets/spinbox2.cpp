@@ -25,9 +25,11 @@
 
 #include <qstyle.h>
 #include <qobjectlist.h>
+#include <qapplication.h>
 
 #include "spinbox2.moc"
 
+int SpinBox2::mReverseLayout = -1;
 
 SpinBox2::SpinBox2(QWidget* parent, const char* name)
 	: QFrame(parent, name)
@@ -38,7 +40,6 @@ SpinBox2::SpinBox2(QWidget* parent, const char* name)
 	spinbox = new SB2_SpinBox(0, 1, 1, this, spinboxFrame);
 	init();
 }
-
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
 	: QFrame(parent, name),
@@ -55,6 +56,8 @@ SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* par
 
 void SpinBox2::init()
 {
+	if (mReverseLayout < 0)
+		mReverseLayout = QApplication::reverseLayout() ? 1 : 0;
 	spinbox->setSelectOnStep(false);    // default
 	updown2->setSelectOnStep(false);    // always false
 	setFocusProxy(spinbox);
@@ -164,8 +167,8 @@ void SpinBox2::arrange()
 void SpinBox2::getMetrics() const
 {
 	QRect rect = updown2->style().querySubControlMetrics(QStyle::CC_SpinWidget, updown2, QStyle::SC_SpinWidgetButtonField);
-	xUpdown2 = rect.left();
-	wUpdown2 = updown2->width() - xUpdown2;
+	xUpdown2 = mReverseLayout ? 0 : rect.left();
+	wUpdown2 = updown2->width() - rect.left();
 	xSpinbox = spinbox->style().querySubControlMetrics(QStyle::CC_SpinWidget, spinbox, QStyle::SC_SpinWidgetEditField).left();
 	wGap = 0;
 
