@@ -1659,6 +1659,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
 	QString cmd;
+	QString tmpXtermFile;
 	if (flags & ProcData::EXEC_IN_XTERM)
 	{
 		// Execute the command in a terminal window.
@@ -1667,20 +1668,24 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		if (cmd.find("%C") >= 0)
 		{
 			// Execute the command from a temporary script file
-			QString tmpfile = createTempScriptFile(command, true, event, *alarm);
-			if (tmpfile.isEmpty())
-				return 0;
-			cmd.replace("%C", tmpfile);    // %C indicates where to insert the command
+			if (flags & ProcData::TEMP_FILE)
+				cmd.replace("%C", command);    // the command is already calling a temporary file
+			else
+			{
+				tmpXtermFile = createTempScriptFile(command, true, event, *alarm);
+				if (tmpXtermFile.isEmpty())
+					return 0;
+				cmd.replace("%C", tmpXtermFile);    // %C indicates where to insert the command
+			}
 		}
 		else if (cmd.find("%W") >= 0)
 		{
 			// Execute the command from a temporary script file,
 			// with a sleep after the command is executed
-			QString tmpfile = createTempScriptFile(command + QString::fromLatin1("\nsleep 86400\n"), true, event, *alarm);
-			if (tmpfile.isEmpty())
+			tmpXtermFile = createTempScriptFile(command + QString::fromLatin1("\nsleep 86400\n"), true, event, *alarm);
+			if (tmpXtermFile.isEmpty())
 				return 0;
-			cmd.replace("%W", tmpfile);    // %w indicates where to insert the command
-#warning Delete temporary file after execution
+			cmd.replace("%W", tmpXtermFile);    // %w indicates where to insert the command
 		}
 		else if (cmd.find("%w") >= 0)
 		{
@@ -1705,6 +1710,9 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
+	if (flags & ProcData::TEMP_FILE)
+		pd->tempFiles += command;
+	pd->tempFiles += tmpXtermFile;
 	mCommandProcesses.append(pd);
 	if (proc->start())
 		return proc;
@@ -2032,15 +2040,12 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 
 KAlarmApp::ProcData::~ProcData()
 {
-	if (tempFile())
+	while (tempFiles.count())
 	{
-		// Delete the temporary file containing the script which was executed
-		QString cmd = process->command();
-		int i = cmd.find(' ');
-		if (i > 0)
-			cmd = cmd.left(i);
-		QFile f(cmd);
+		// Delete the temporary file called by the XTerm command
+		QFile f(tempFiles.first());
 		f.remove();
+		tempFiles.remove(tempFiles.begin());
 	}
 	delete process;
 	delete event;

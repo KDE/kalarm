@@ -123,6 +123,7 @@ class KAlarmApp : public KUniqueApplication
 			KAEvent*             event;
 			KAAlarm*             alarm;
 			QGuardedPtr<QWidget> messageBoxParent;
+			QStringList          tempFiles;
 			int                  flags;
 		};
 		struct DcopQEntry
