@@ -735,74 +735,29 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 				frequency *= 60;
 				// fall through to Recurrence::rMinutely
 			case Recurrence::rMinutely:
-				if (duration)
-					recur->setMinutely(frequency, duration);
-				else
-					recur->setMinutely(frequency, endDateTime);
+				setRecurMinutely(*recur, frequency, duration, endDateTime);
 				break;
 			case Recurrence::rDaily:
-				if (duration)
-					recur->setDaily(frequency, duration);
-				else
-					recur->setDaily(frequency, endDateTime.date());
+				setRecurDaily(*recur, frequency, duration, endDateTime.date());
 				break;
 			case Recurrence::rWeekly:
-				if (duration)
-					recur->setWeekly(frequency, mRecurrence->days(), duration);
-				else
-					recur->setWeekly(frequency, mRecurrence->days(), endDateTime.date());
+				setRecurWeekly(*recur, frequency, mRecurrence->days(), duration, endDateTime.date());
 				break;
 			case Recurrence::rMonthlyDay:
-			{
-				if (duration)
-					recur->setMonthly(Recurrence::rMonthlyDay, frequency, duration);
-				else
-					recur->setMonthly(Recurrence::rMonthlyDay, frequency, endDateTime.date());
-				const QPtrList<int>& mdays = mRecurrence->monthDays();
-				for (QPtrListIterator<int> it(mdays);  it.current();  ++it)
-					recur->addMonthlyDay(*it.current());
+				setRecurMonthlyByDate(*recur, frequency, mRecurrence->monthDays(), duration, endDateTime.date());
 				break;
-			}
 			case Recurrence::rMonthlyPos:
-			{
-				if (duration)
-					recur->setMonthly(Recurrence::rMonthlyPos, frequency, duration);
-				else
-					recur->setMonthly(Recurrence::rMonthlyPos, frequency, endDateTime.date());
-				const QPtrList<Recurrence::rMonthPos>& mpos = mRecurrence->monthPositions();
-				for (QPtrListIterator<Recurrence::rMonthPos> it(mpos);  it.current();  ++it)
-				{
-					short weekno = it.current()->rPos;
-					if (it.current()->negative)
-						weekno = -weekno;
-					recur->addMonthlyPos(weekno, it.current()->rDays);
-				}
+				setRecurMonthlyByPos(*recur, frequency, mRecurrence->monthPositions(), duration, endDateTime.date());
 				break;
-			}
 			case Recurrence::rYearlyMonth:
-			case Recurrence::rYearlyPos:
-			case Recurrence::rYearlyDay:
-			{
-				if (duration)
-					recur->setYearly(rectype, frequency, duration);
-				else
-					recur->setYearly(rectype, frequency, endDateTime.date());
-				const QPtrList<int>& ynums = mRecurrence->yearNums();
-				for (QPtrListIterator<int> it(ynums);  it.current();  ++it)
-					recur->addYearlyNum(*it.current());
-				if (rectype == Recurrence::rYearlyPos)
-				{
-					const QPtrList<Recurrence::rMonthPos>& mpos = mRecurrence->yearMonthPositions();
-					for (QPtrListIterator<Recurrence::rMonthPos> it(mpos);  it.current();  ++it)
-					{
-						short weekno = it.current()->rPos;
-						if (it.current()->negative)
-							weekno = -weekno;
-						recur->addYearlyMonthPos(weekno, it.current()->rDays);
-					}
-				}
+				setRecurAnnualByDate(*recur, frequency, mRecurrence->yearNums(), duration, endDateTime.date());
 				break;
-			}
+			case Recurrence::rYearlyPos:
+				setRecurAnnualByPos(*recur, frequency, mRecurrence->yearMonthPositions(), mRecurrence->yearNums(), duration, endDateTime.date());
+				break;
+			case Recurrence::rYearlyDay:
+				setRecurAnnualByDay(*recur, frequency, mRecurrence->yearNums(), duration, endDateTime.date());
+				break;
 			default:
 				break;
 		}
@@ -1055,7 +1010,8 @@ void KAlarmEvent::removeExpiredAlarm(KAlarmAlarm::Type type)
 /******************************************************************************
  * Defer the event to the specified time.
  * If the main alarm time has passed, the main alarm is marked as expired.
- * Optionally ensure that the next scheduled recurrence is after the current time.
+ * If 'adjustRecurrence' is true, ensure that the next scheduled recurrence is
+ * after the current time.
  */
 void KAlarmEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurrence)
 {
@@ -1933,6 +1889,7 @@ int KAlarmEvent::recurInterval() const
  */
 bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 {
+#warning "Check"
 	bool changed = false;
 	QTime startOfDay = theApp()->preferences()->startOfDay();
 	for (QPtrListIterator<Event> it(events);  it.current();  ++it)
@@ -1958,17 +1915,48 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 					if (data.type & KAlarmAlarm::TIMED_DEFERRAL_FLAG)
 					{
 						// Timed deferral alarm, so adjust the offset
-						deferralOffset = alarm.endOffset().asSeconds();
-						alarm.setEndOffset(deferralOffset + adjustment);
+						deferralOffset = alarm.startOffset().asSeconds();
+						alarm.setStartOffset(deferralOffset + adjustment);
+#warning "Deferred reminder due in an hour: setting start of day 1 hour earlier immediately displays it"
 					}
 					else if (data.type == KAlarmAlarm::AUDIO__ALARM
-					&&       alarm.endOffset().asSeconds() == deferralOffset)
+					&&       alarm.startOffset().asSeconds() == deferralOffset)
 					{
 						// Audio alarm is set for the same time as the deferral alarm
-						alarm.setEndOffset(deferralOffset + adjustment);
+						alarm.setStartOffset(deferralOffset + adjustment);
 					}
 				}
-#warning "Check"
+				changed = true;
+			}
+		}
+		else
+		{
+			// It's a timed event. Fix any untimed alarms.
+			int deferralOffset = 0;
+			int newDeferralOffset = 0;
+			AlarmMap alarmMap;
+			readAlarms(*event, &alarmMap);
+			for (AlarmMap::Iterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
+			{
+				const AlarmData& data = it.data();
+				if ((data.type & KAlarmAlarm::DEFERRED_ALARM)
+				&&  !(data.type & KAlarmAlarm::TIMED_DEFERRAL_FLAG))
+				{
+					// Date-only deferral alarm, so adjust its time
+					QDateTime altime = data.alarm->time();
+					altime.setTime(startOfDay);
+					deferralOffset = data.alarm->startOffset().asSeconds();
+					newDeferralOffset = event->dtStart().secsTo(altime);
+					const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+					changed = true;
+				}
+				else if (data.type == KAlarmAlarm::AUDIO__ALARM
+				&&       data.alarm->startOffset().asSeconds() == deferralOffset)
+				{
+					// Audio alarm is set for the same time as the deferral alarm
+					const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+					changed = true;
+				}
 			}
 		}
 	}
