@@ -44,4 +44,14 @@
    <Action name="options_configure" />
   </Menu>
  </MenuBar>
+ <Menu name="listContext" >
+  <Action name="new" />
+  <Action name="copy" />
+  <Action name="modify" />
+  <Action name="delete" />
+  <Action name="undelete" />
+  <Action name="view" />
+  <Action name="createTemplate" />
+ </Menu>
+ <ActionProperties/>
 </kpartgui>
