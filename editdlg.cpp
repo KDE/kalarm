@@ -52,7 +52,6 @@
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
 #include <kabc/addresseedialog.h>
-#include <kabc/vcardconverter.h>
 #include <kdebug.h>
 
 #include <libkdepim/maillistdrag.h>
@@ -1958,11 +1957,12 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
-	QString     newText;
-	QStringList newEmails;
-	QString txt;
-	KPIM::MailList mailList;
-	KURL::List files;
+	QString               newText;
+	QStringList           newEmails;
+	QString               txt;
+	KPIM::MailList        mailList;
+	KURL::List            files;
+	KABC::Addressee::List addrList;
 
 	if (mType != Url
 	&&  e->provides(KPIM::MailListDrag::format())
@@ -1979,12 +1979,10 @@ void LineEdit::dropEvent(QDropEvent* e)
 	}
 	// This must come before KURLDrag
 	else if (mType == Emails
-	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, txt))
+	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
 	{
 		// KAddressBook entries
-		KABC::VCardConverter converter;
-		KABC::Addressee::List list = converter.parseVCards(txt);
-		for (KABC::Addressee::List::Iterator it = list.begin();  it != list.end();  ++it)
+		for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
 		{
 			QString em((*it).fullEmail());
 			if (!em.isEmpty())
