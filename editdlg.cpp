@@ -890,12 +890,15 @@ void EditAlarmDlg::slotShowMainPage()
 /******************************************************************************
 *  Called when the recurrence edit page is shown.
 *  The first time, for a new alarm, the recurrence end date is set according to
-*  the alarm start time.
+*  the alarm start time, and the recurrence defaults are set to correspond to
+*  the start date.
 */
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
 	mAlarmDateTime  = mTimeWidget->getDateTime(false);
+	if (!mRecurPageShown)
+		mRecurrenceEdit->setDefaults(mAlarmDateTime.dateTime());
 	if (mRecurSetDefaultEndDate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
