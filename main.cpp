@@ -60,7 +60,7 @@ static KCmdLineOptions options[] =
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
 	{ "m", 0, 0 },
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
-	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence in RFC2445 format"), 0 },
+	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
 	{ "r", 0, 0 },
