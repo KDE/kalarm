@@ -72,7 +72,9 @@ void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 	AlarmGuiChangeType changeType = AlarmGuiChangeType(alarmGuiChangeType);
 	switch (changeType)
 	{
-		case CHANGE_STATUS:    // daemon autostart status change
+		case CHANGE_STATUS:    // daemon status change
+			theApp()->readDaemonCheckInterval();
+			return;
 		case CHANGE_CLIENT:    // change to daemon's client application list
 			return;
 		default:
