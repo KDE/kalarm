@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,14 +60,10 @@ class AddresseeItem : public QListViewItem
 {
 	public:
 		enum columns { NAME = 0, BIRTHDAY = 1 };
-#if KDE_VERSION >= 290
-		AddresseeItem(QListView* parent, const KABC::Addressee&);
-#else
-		AddresseeItem(QListView* parent, AddressBook*, const AddressBook::Entry&);
-#endif
+		AddresseeItem(QListView* parent, const QString& name, const QDate& birthday);
 		QDate birthday() const   { return mBirthday; }
 		virtual QString key(int column, bool ascending) const;
-private:
+	private:
 		QDate     mBirthday;
 		QString   mBirthdayOrder;
 };
@@ -80,6 +76,35 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QWidget* topWidget = plainPage();
 	QBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setSpacing(spacingHint());
+
+	// Prefix and suffix to the name in the alarm text
+	// Get default prefix and suffix texts from config file
+	KConfig* config = kapp->config();
+	config->setGroup(QString::fromLatin1("General"));
+	mPrefixText = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
+	mSuffixText = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
+
+	QGroupBox* textGroup = new QGroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
+	topLayout->addWidget(textGroup);
+	QLabel* label = new QLabel(i18n("&Prefix:"), textGroup);
+	label->setFixedSize(label->sizeHint());
+	mPrefix = new BLineEdit(mPrefixText, textGroup);
+	mPrefix->setMinimumSize(mPrefix->sizeHint());
+	label->setBuddy(mPrefix);
+	connect(mPrefix, SIGNAL(lostFocus()), SLOT(slotTextLostFocus()));
+	QWhatsThis::add(mPrefix,
+	      i18n("Enter text to appear before the person's name in the alarm message, "
+	           "including any necessary trailing spaces."));
+
+	label = new QLabel(i18n("S&uffix:"), textGroup);
+	label->setFixedSize(label->sizeHint());
+	mSuffix = new BLineEdit(mSuffixText, textGroup);
+	mSuffix->setMinimumSize(mSuffix->sizeHint());
+	label->setBuddy(mSuffix);
+	connect(mSuffix, SIGNAL(textChanged()), SLOT(slotTextChanged()));
+	QWhatsThis::add(mSuffix,
+	      i18n("Enter text to appear after the person's name in the alarm message, "
+	           "including any necessary leading spaces."));
 
 	QGroupBox* group = new QGroupBox(1, Qt::Horizontal, i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
@@ -101,53 +126,24 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QBoxLayout* groupLayout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
-	// Prefix and suffix to the name in the alarm text
-	// Get default prefix and suffix texts from config file
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("General"));
-	QString prefix = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
-	QString suffix = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
-
-	QGroupBox* textGroup = new QGroupBox(2, Qt::Horizontal, i18n("Alarm text"), group);
-	groupLayout->addWidget(textGroup);
-	QLabel* label = new QLabel(i18n("&Prefix:"), textGroup);
-	label->setFixedSize(label->sizeHint());
-	mPrefix = new QLineEdit(prefix, textGroup);
-	mPrefix->setMinimumSize(mPrefix->sizeHint());
-	label->setBuddy(mPrefix);
-	QWhatsThis::add(mPrefix,
-	      i18n("Enter text to appear before the person's name in the alarm message, "
-	           "including any necessary trailing spaces."));
-
-	label = new QLabel(i18n("S&uffix:"), textGroup);
-	label->setFixedSize(label->sizeHint());
-	mSuffix = new QLineEdit(suffix, textGroup);
-	mSuffix->setMinimumSize(mSuffix->sizeHint());
-	label->setBuddy(mSuffix);
-	QWhatsThis::add(mSuffix,
-	      i18n("Enter text to appear after the person's name in the alarm message, "
-	           "including any necessary leading spaces."));
-
 	// How much to advance warning to give
-// Disable until a general warning mechanism is implemented in KAlarm
 	QBoxLayout* layout = new QHBoxLayout(groupLayout);
-	label = new QLabel(i18n("&Reminder"), group);
-	label->setFixedSize(label->sizeHint());
-label->setEnabled(false);
-	layout->addWidget(label);
-	mAdvance = new SpinBox(0, 364, 1, group);
-	mAdvance->setValue(364);
-	mAdvance->setFixedSize(mAdvance->sizeHint());
-	mAdvance->setValue(0);
-mAdvance->setEnabled(false);
-	label->setBuddy(mAdvance);
-	QWhatsThis::add(mAdvance,
+	mReminder = new CheckBox(i18n("&Reminder"), group);
+	mReminder->setFixedSize(mReminder->sizeHint());
+	QWhatsThis::add(mReminder,
+	      i18n("Check to display a reminder in advance of the birthday."));
+	layout->addWidget(mReminder);
+	mReminderTime = new SpinBox(1, 364, 1, group);
+	mReminderTime->setValue(364);
+	mReminderTime->setFixedSize(mReminderTime->sizeHint());
+	mReminderTime->setValue(1);
+	QWhatsThis::add(mReminderTime,
 	      i18n("Enter the number of days before each birthday to display a reminder."
 	           "This is in addition to the alarm which is displayed on the birthday."));
-	layout->addWidget(mAdvance);
+	mReminder->setFocusWidget(mReminderTime);
+	layout->addWidget(mReminderTime);
 	label = new QLabel(i18n("days before"), group);
 	label->setFixedSize(label->sizeHint());
-label->setEnabled(false);
 	layout->addWidget(label);
 	layout->addStretch();
 
@@ -185,6 +181,20 @@ label->setEnabled(false);
 	mConfirmAck->setChecked(settings->defaultConfirmAck());
 	mSoundPicker->setChecked(settings->defaultBeep());
 
+	// Initialise the birthday selection list and disable the OK button
+	updateSelectionList();
+}
+
+BirthdayDlg::~BirthdayDlg()
+{
+}
+
+/******************************************************************************
+* Initialise or update the birthday selection list by fetching all birthdays
+* from the address book and displaying those which do not already have alarms.
+*/
+void BirthdayDlg::updateSelectionList()
+{
 	// Compile a list of all pending alarm messages which look like birthdays
 	QStringList messageList;
 	KAlarmEvent event;
@@ -193,26 +203,26 @@ label->setEnabled(false);
 	{
 		event.set(*kcalEvent);
 		if (event.action() == KAlarmEvent::MESSAGE
-		&&  event.recurs() == KAlarmEvent::ANNUAL_DATE
-		&&  (prefix.isEmpty()  ||  event.message().startsWith(prefix)))
+		&&  event.recurType() == KAlarmEvent::ANNUAL_DATE
+		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
 			messageList.append(event.message());
 	}
+
+	mAddresseeList->setUpdatesEnabled(false);
 
 	// Fetch all birthdays from the address book
 #if KDE_VERSION >= 290
 	mAddressBook = KABC::StdAddressBook::self();
-	for (KABC::AddressBook::Iterator it = mAddressBook->begin(); it != mAddressBook->end(); ++it)
+	for (KABC::AddressBook::Iterator it = mAddressBook->begin();  it != mAddressBook->end();  ++it)
 	{
-		if ((*it).birthday().isValid())
+		const KABC::Addressee& addressee = *it;
+		if (addressee.birthday().isValid())
 		{
 			// Create a list entry for this birthday
-			AddresseeItem* item = new AddresseeItem(mAddresseeList, (*it));
-			// Remove the list entry if this birthday already has an alarm
-			QString text = prefix + item->text(AddresseeItem::NAME) + suffix;
-			if (messageList.find(text) != messageList.end())
-				delete item;
-		}
-	}
+			QDate birthday = addressee.birthday().date();
+			QString name = addressee.nickName();
+			if (name.isEmpty())
+				name = addressee.realName();
 #else
 	bool err = false;
 	KabAPI addrDialog;
@@ -227,16 +237,38 @@ label->setEnabled(false);
 			err = true;
 		else if (errcode != AddressBook::NoEntry)
 		{
+kdDebug()<<"BirthdayDlg: iterating\n";
 			for (std::list<AddressBook::Entry>::iterator it = entries.begin();  it != entries.end();  ++it)
 			{
+kdDebug()<<"BirthdayDlg: name="<<it->firstname<<" "<<it->lastname<<endl;
+kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 				if (it->birthday.isValid())
 				{
 					// Create a list entry for this birthday
-					AddresseeItem* item = new AddresseeItem(mAddresseeList, addrBook, *it);
-					// Remove the list entry if this birthday already has an alarm
-					QString text = prefix + item->text(AddresseeItem::NAME) + suffix;
-					if (messageList.find(text) != messageList.end())
-						delete item;
+					QDate birthday = it->birthday;
+					QString name;
+					addrBook->literalName(*it, name);
+#endif
+			// Check if the birthday already has an alarm
+			QString text = mPrefixText + name + mSuffixText;
+			bool alarmExists = (messageList.find(text) != messageList.end());
+			// Check if the birthday is already in the selection list
+			bool inSelectionList = false;
+			AddresseeItem* item;
+			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
+			{
+				item = dynamic_cast<AddresseeItem*>(qitem);
+				inSelectionList = (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday);
+			}
+
+			if (alarmExists  &&  inSelectionList)
+				delete item;     // alarm exists, so remove from selection list
+			else if (!alarmExists  &&  !inSelectionList)
+				new AddresseeItem(mAddresseeList, name, birthday);   // add to list
+#if KDE_VERSION >= 290
+		}
+	}
+#else
 				}
 			}
 		}
@@ -244,12 +276,17 @@ label->setEnabled(false);
 	if (err)
 		KMessageBox::error(this, i18n("Unable to open address book"));
 #endif
+	mAddresseeList->setUpdatesEnabled(true);
 
-	enableButtonOK(false);   // nothing is currently selected
-}
-
-BirthdayDlg::~BirthdayDlg()
-{
+	// Enable/disable OK button according to whether anything is currently selected
+	bool selection = false;
+	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
+		if (mAddresseeList->isSelected(item))
+		{
+			selection = true;
+			break;
+		}
+	enableButtonOK(selection);
 }
 
 /******************************************************************************
@@ -279,6 +316,8 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, -1);
 				event.setNextOccurrence(QDateTime(today, QTime(12,0,0)));
+				if (mReminder->isChecked())
+					event.setReminder(mReminderTime->value() * 1440);
 				list.append(event);
 			}
 		}
@@ -286,6 +325,9 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 	return list;
 }
 
+/******************************************************************************
+* Called when the OK button is selected to import the selected birthdays.
+*/
 void BirthdayDlg::slotOk()
 {
 	// Save prefix and suffix texts to use as future defaults
@@ -315,30 +357,36 @@ void BirthdayDlg::slotSelectionChanged()
 			return;
 		}
 	enableButtonOK(false);
-	
+
+}
+
+/******************************************************************************
+* Called when the prefix or suffix text has lost keyboard focus.
+* If the text has changed, re-evaluates the selection list according to the new
+* birthday alarm text format.
+*/
+void BirthdayDlg::slotTextLostFocus()
+{
+	QString prefix = mPrefix->text();
+	QString suffix = mSuffix->text();
+	if (prefix != mPrefixText  ||  suffix != mSuffixText)
+	{
+		// Text has changed - re-evaluate the selection list
+		mPrefixText = prefix;
+		mSuffixText = suffix;
+		updateSelectionList();
+	}
 }
 
 
-#if KDE_VERSION >= 290
-AddresseeItem::AddresseeItem(QListView* parent, const KABC::Addressee& addressee)
-#else
-AddresseeItem::AddresseeItem(QListView* parent, AddressBook* addrBook, const AddressBook::Entry& entry)
-#endif
+/*=============================================================================
+= Class: AddresseeItem
+=============================================================================*/
+
+AddresseeItem::AddresseeItem(QListView* parent, const QString& name, const QDate& birthday)
 	: QListViewItem(parent),
-#if KDE_VERSION >= 290
-	  mBirthday(addressee.birthday().date())
-#else
-	  mBirthday(entry.birthday)
-#endif
+	  mBirthday(birthday)
 {
-#if KDE_VERSION >= 290
-	QString name = addressee.nickName();
-	if (name.isEmpty())
-		name = addressee.realName();
-#else
-	QString name;
-	addrBook->literalName(entry, name);
-#endif
 	setText(NAME, name);
 	setText(BIRTHDAY, KGlobal::locale()->formatDate(mBirthday, true));
 	mBirthdayOrder.sprintf("%04d%03d", mBirthday.year(), mBirthday.dayOfYear());

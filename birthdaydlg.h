@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,12 +24,13 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
+#include <qlineedit.h>
 #include <kdialogbase.h>
 
 #include "msgevent.h"
 
+class QCheckBox;
 class KListView;
-class QLineEdit;
 class SpinBox;
 class CheckBox;
 class ColourCombo;
@@ -41,6 +42,19 @@ using KABC::AddressBook;
 class AddressBook;
 #endif
 
+		class BLineEdit : public QLineEdit
+		{
+				Q_OBJECT
+			public:
+				BLineEdit(QWidget* parent = 0, const char* name = 0)
+					     : QLineEdit(parent, name) { }
+				BLineEdit(const QString& text, QWidget* parent = 0, const char* name = 0)
+					     : QLineEdit(text, parent, name) { }
+			signals:
+				void         lostFocus();
+			protected:
+				virtual void focusOutEvent(QFocusEvent*)  { emit lostFocus(); }
+		};
 
 class BirthdayDlg : public KDialogBase
 {
@@ -54,18 +68,27 @@ class BirthdayDlg : public KDialogBase
 		virtual void   slotOk();
 	private slots:
 		void           slotSelectionChanged();
+		void           slotTextLostFocus();
 
 	private:
+
+		void           updateSelectionList();
+
 		KListView*     mAddresseeList;
-		QLineEdit*     mPrefix;
-		QLineEdit*     mSuffix;
-		SpinBox*       mAdvance;
+		BLineEdit*     mPrefix;
+		BLineEdit*     mSuffix;
+		CheckBox*      mReminder;
+		SpinBox*       mReminderTime;
 		SoundPicker*   mSoundPicker;
 		ColourCombo*   mBgColourChoose;
 		CheckBox*      mConfirmAck;
 		CheckBox*      mLateCancel;
 		AddressBook*   mAddressBook;
+		QString        mPrefixText;   // last entered value of prefix text
+		QString        mSuffixText;   // last entered value of suffix text
 		int            mFlags;        // event flag bits
 };
+
+
 
 #endif // BIRTHDAYDLG_H
