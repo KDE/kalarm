@@ -40,6 +40,7 @@ class AlarmCalendar
 		AlarmCalendar(const QString& file, KAlarmEvent::Status, const QString& icalFile = QString::null,
 		              const QString& configKey = QString::null);
 		bool                  valid() const                       { return mUrl.isValid(); }
+		KAlarmEvent::Status   type() const                        { return mType; }
 		bool                  open();
 		int                   load();
 		int                   reload();
