@@ -286,6 +286,9 @@ QSize MessageWin::initView()
 
 	// Close button
 	QPushButton* okButton = new QPushButton(KStdGuiItem::close().text(), topWidget);
+	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
+	okButton->clearFocus();
+	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
@@ -294,6 +297,7 @@ QSize MessageWin::initView()
 	{
 		// Defer button
 		deferButton = new QPushButton(i18n("&Defer..."), topWidget);
+		deferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
 		connect(deferButton, SIGNAL(clicked()), SLOT(slotShowDefer()));
 		grid->addWidget(deferButton, 0, 2, AlignHCenter);
 		QWhatsThis::add(deferButton,
