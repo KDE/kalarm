@@ -72,20 +72,15 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	setFrameStyle(QFrame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-//	QGridLayout* grid = new QGridLayout(this, 2, 3, 0, KDialog::spacingHint());
-//	grid->addColSpacing(0, KDialog::spacingHint());
-//	grid->setColStretch(2, 1);
 	mReminder = new CheckBox(caption, this);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 	QWhatsThis::add(mReminder, reminderWhatsThis);
 	layout->addWidget(mReminder);
-//	grid->addMultiCellWidget(mReminder, 0, 0, 0, 1, Qt::AlignLeft);
 
 	QHBox* box = new QHBox(this);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
-//	grid->addWidget(box, 0, 2, Qt::AlignLeft);
 	mCount = new TimePeriod(box);
 	mCount->setHourMinRange(1, 100*60-1);    // max 99H59M
 	mCount->setUnitRange(1, mMaxDays);
@@ -122,7 +117,6 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
 		QWhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);
-//		grid->addMultiCellWidget(mOnceOnly, 1, 1, 1, 2, Qt::AlignLeft);
 		layout->addStretch();
 	}
 	else
