@@ -336,7 +336,8 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 					arg >> repeatCount;
 				else
 					arg.readRawBytes((char*)&endTime, sizeof(endTime));
-				KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
+				KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount,
+				                       DateTime(dateTime, flags & KAEvent::ANY_TIME), endTime);
 			}
 			else if (!(function & PRE_091))
 			{

@@ -485,7 +485,7 @@ int KAlarmApp::newInstance()
 #endif
 
 					// Convert the recurrence parameters into a KCal::Recurrence
-					KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
+					KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, DateTime(alarmTime, alarmNoTime), endTime);
 				}
 				else
 				{
