@@ -213,7 +213,7 @@ QSize MessageWin::initView()
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
 	// OK button
-	QPushButton* okButton = new QPushButton(i18n("&OK"), topWidget);
+	QPushButton* okButton = new QPushButton(i18n("&Close"), topWidget);
 	okButton->setDefault(true);
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
@@ -236,7 +236,7 @@ QSize MessageWin::initView()
 	QPushButton* button = new QPushButton(topWidget);
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
-	connect(button, SIGNAL(clicked()), theApp(), SLOT(slotKAlarm()));
+	connect(button, SIGNAL(clicked()), theApp(), SLOT(displayMainWindow()));
 	grid->addWidget(button, 0, 3, AlignHCenter);
 	QWhatsThis::add(button, i18n("Activate %1").arg(kapp->aboutData()->programName()));
 

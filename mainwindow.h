@@ -39,10 +39,17 @@ class KAlarmMainWindow : public MainWindowBase
 		KAlarmMainWindow();
 		~KAlarmMainWindow();
 
-		void           addMessage(const KAlarmEvent&);
+//		void           addMessage(const KAlarmEvent&);
 		void           modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
 		void           modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
 		void           deleteMessage(const KAlarmEvent&);
+
+		static void    addMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		static void    modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
+		static void    modifyMessage(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyMessage(event.id(), event, w); }
+		static void    deleteMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
+		static KAlarmMainWindow* firstWindow()      { return windowList.first(); }
 
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);
@@ -56,15 +63,17 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotResetDaemon();
 		void           slotQuit();
 		void           slotSelection(QListViewItem*);
-		void           slotMouse(int button, QListViewItem* item, const QPoint&, int);
+		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
 		void           slotListRightClick(QListViewItem*, const QPoint&, int);
-		void           updateViewMenu();
+		void           updateTrayIconAction();
 		void           updateActionsMenu();
 		void           setAlarmEnabledStatus(bool status);
 
 	private:
 		void           initActions();
+		static bool    findWindow(KAlarmMainWindow*);
 
+		static QPtrList<KAlarmMainWindow> windowList;  // active main windows
 		AlarmListView* listView;
 		KAction*       actionNew;
 		KAction*       actionModify;
@@ -72,7 +81,6 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       actionToggleTrayIcon;
 		KAction*       actionResetDaemon;
 		KAction*       actionQuit;
-		KPopupMenu*    mViewMenu;
 		KPopupMenu*    mActionsMenu;
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 };

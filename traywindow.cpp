@@ -34,6 +34,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "daemongui.h"
 #include "traywindow.h"
 #include "traywindow.moc"
@@ -45,8 +46,9 @@
 = The KDE system tray window.
 =============================================================================*/
 
-TrayWindow::TrayWindow(const char* name)
+TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray(0, name),
+	  mAssocMainWindow(parent),
 	  mQuitReplaced(false)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
@@ -80,7 +82,7 @@ TrayWindow::TrayWindow(const char* name)
 TrayWindow::~TrayWindow()
 {
 	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
-	theApp()->deleteWindow(this);
+	theApp()->removeWindow(this);
 }
 
 /******************************************************************************
@@ -139,7 +141,19 @@ void TrayWindow::setEnabledStatus(bool status)
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
 	if (e->button() == LeftButton)
-		theApp()->slotKAlarm();      // left click: display the main window
+	{
+		// Left click: display/hide the first main window
+		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);
+	}
 	else
 		KSystemTray::mousePressEvent(e);
+}
+
+/******************************************************************************
+* Called when the associated main window is closed.
+*/
+void TrayWindow::removeWindow(KAlarmMainWindow* win)
+{
+	if (win == mAssocMainWindow)
+		mAssocMainWindow = 0;
 }

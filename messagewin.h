@@ -50,7 +50,6 @@ class MessageWin : public MainWindowBase
 	protected slots:
 		void              slotShowDefer();
 		void              slotDefer();
-//		void              slotKAlarm();
 
 	private:
 		QSize             initView();

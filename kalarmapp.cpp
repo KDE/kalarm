@@ -367,7 +367,7 @@ int KAlarmApp::newInstance()
 */
 void KAlarmApp::quitIf(int exitCode)
 {
-	if (activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
+	if (activeCount <= 0  &&  !KAlarmMainWindow::firstWindow()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
 	{
 		// This was the last/only running "instance" of the program, so exit completely.
 		exit(exitCode);
@@ -375,34 +375,9 @@ void KAlarmApp::quitIf(int exitCode)
 }
 
 /******************************************************************************
-* Called when a main window is created to add it to the main window list.
-*/
-void KAlarmApp::addWindow(KAlarmMainWindow* win)
-{
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w == win)
-			return;
-	mainWindowList.append(win);
-}
-
-
-/******************************************************************************
-* Called when a main window is closed to remove it from the main window list.
-*/
-void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
-{
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w == win)
-		{
-			mainWindowList.remove();
-			break;
-		}
-}
-
-/******************************************************************************
 * Called when the system tray main window is closed.
 */
-void KAlarmApp::deleteWindow(TrayWindow*)
+void KAlarmApp::removeWindow(TrayWindow*)
 {
 	mTrayWindow = 0L;
 	quitIf();
@@ -411,7 +386,7 @@ void KAlarmApp::deleteWindow(TrayWindow*)
 /******************************************************************************
 *  Display or close the system tray icon.
 */
-bool KAlarmApp::displayTrayIcon(bool show)
+bool KAlarmApp::displayTrayIcon(bool show, KAlarmMainWindow* parent)
 {
 	if (show)
 	{
@@ -419,23 +394,38 @@ bool KAlarmApp::displayTrayIcon(bool show)
 		{
 			if (!mKDEDesktop)
 				return false;
-			mTrayWindow = new TrayWindow;
+			mTrayWindow = new TrayWindow(parent ? parent : KAlarmMainWindow::firstWindow());
 			mTrayWindow->show();
+			emit trayIconToggled();
 		}
 	}
-	else
+	else if (mTrayWindow)
+	{
 		delete mTrayWindow;
+		emit trayIconToggled();
+	}
 	return true;
 }
 
 /******************************************************************************
-*  Activate a new instance of KAlarm.
+*  Display a main window.
 */
-void KAlarmApp::slotKAlarm()
+void KAlarmApp::displayMainWindow()
 {
-	KProcess proc;
-	proc << QString::fromLatin1(aboutData()->appName());
-	proc.start(KProcess::DontCare);
+	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
+	if (!win)
+	{
+		KProcess proc;
+		proc << QString::fromLatin1(aboutData()->appName());
+		proc.start(KProcess::DontCare);
+	}
+	else
+	{
+		// There is already a main window, so make it the active window
+		win->showNormal();
+		win->raise();
+		win->setActiveWindow();
+	}
 }
 
 /******************************************************************************
@@ -721,9 +711,7 @@ void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 	reloadDaemon();
 
 	// Update the window lists
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w != win)
-			w->addMessage(event);
+	KAlarmMainWindow::addMessage(event, win);
 }
 
 /******************************************************************************
@@ -745,9 +733,7 @@ void KAlarmApp::modifyMessage(const QString& oldEventID, const KAlarmEvent& newE
 	reloadDaemon();
 
 	// Update the window lists
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w != win)
-			w->modifyMessage(oldEventID, newEvent);
+	KAlarmMainWindow::modifyMessage(oldEventID, newEvent, win);
 }
 
 /******************************************************************************
@@ -769,9 +755,7 @@ void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 	reloadDaemon();
 
 	// Update the window lists
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w != win)
-			w->modifyMessage(event);
+	KAlarmMainWindow::modifyMessage(event, win);
 }
 
 /******************************************************************************
@@ -784,9 +768,7 @@ void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool te
 	kdDebug(5950) << "KAlarmApp::deleteMessage(): " << event.id() << endl;
 
 	// Update the window lists
-	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
-		if (w != win)
-			w->deleteMessage(event);
+	KAlarmMainWindow::deleteMessage(event, win);
 
 	// Delete the event from the calendar file
 	mCalendar->deleteEvent(event.id());

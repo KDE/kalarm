@@ -62,12 +62,10 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar&    getCalendar()                   { return *mCalendar; }
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
-		void              addWindow(KAlarmMainWindow*);
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
-		void              deleteWindow(KAlarmMainWindow*);
-		void              deleteWindow(TrayWindow*);
+		void              removeWindow(TrayWindow*);
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
-		bool              displayTrayIcon(bool show);
+		bool              displayTrayIcon(bool show, KAlarmMainWindow* = 0L);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
 		DaemonGuiHandler* daemonGuiHandler() const        { return mDaemonGuiHandler; }
 		ActionAlarmsEnabled* actionAlarmEnable() const    { return mActionAlarmEnable; }
@@ -92,8 +90,10 @@ class KAlarmApp : public KUniqueApplication
 		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }
 		static const int          MAX_LATENESS = 65;   // maximum number of seconds late to display a late-cancel alarm
 	public slots:
-		void              slotKAlarm();
+		void              displayMainWindow();
 		void              slotDaemonPreferences();
+	signals:
+		void              trayIconToggled();
 	protected:
 		KAlarmApp();
 	private slots:
@@ -117,7 +117,6 @@ class KAlarmApp : public KUniqueApplication
 		static int                 activeCount;        // number of active instances without main windows
 		DcopHandler*               mDcopHandler;       // the parent of the main DCOP receiver object
 		DaemonGuiHandler*          mDaemonGuiHandler;  // the parent of the system tray DCOP receiver object
-		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
 		TrayWindow*                mTrayWindow;        // active system tray icon
 		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
 		ActionAlarmsEnabled*       mActionAlarmEnable; // action to enable/disable alarms

@@ -105,6 +105,9 @@ class AlarmListViewItem : public QListViewItem
 =  Class: KAlarmMainWindow
 =============================================================================*/
 
+QPtrList<KAlarmMainWindow> KAlarmMainWindow::windowList;
+
+
 KAlarmMainWindow::KAlarmMainWindow()
 	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose)
 {
@@ -119,16 +122,19 @@ KAlarmMainWindow::KAlarmMainWindow()
 	listView->clearSelection();
 	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelection(QListViewItem*)));
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
-	        this, SLOT(slotMouse(int, QListViewItem*, const QPoint&, int)));
+	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
 	        this, SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
-	theApp()->addWindow(this);
+	windowList.append(this);
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
 {
 	kdDebug(5950) << "KAlarmMainWindow::~KAlarmMainWindow()\n";
-	theApp()->deleteWindow(this);
+	if (findWindow(this))
+		windowList.remove();
+	if (theApp()->trayWindow())
+		theApp()->trayWindow()->removeWindow(this);
 }
 
 /******************************************************************************
@@ -154,26 +160,30 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 }
 
 /******************************************************************************
-*  Initialise the menu and program actions.
+*  Initialise the menu, toolbar and main window actions.
 */
 void KAlarmMainWindow::initActions()
 {
-	actionQuit           = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
-	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
-	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
-	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
-	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
-	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
+	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), this);
+	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this, "new");
+	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
+	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
+	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
+	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this, "reset");
 
 	// Set up the menu bar
+
 	KMenuBar* menu = menuBar();
-	KPopupMenu* fileMenu = new KPopupMenu(this, "file");
-	menu->insertItem(i18n("&File"), fileMenu);
-	actionQuit->plug(fileMenu);
-	mViewMenu = new KPopupMenu(this, "view");
-	menu->insertItem(i18n("&View"), mViewMenu);
-	actionToggleTrayIcon->plug(mViewMenu);
-	connect(mViewMenu, SIGNAL(aboutToShow()), this, SLOT(updateViewMenu()));
+	KPopupMenu* submenu = new KPopupMenu(this, "file");
+	menu->insertItem(i18n("&File"), submenu);
+	actionQuit->plug(submenu);
+
+	submenu = new KPopupMenu(this, "view");
+	menu->insertItem(i18n("&View"), submenu);
+	actionToggleTrayIcon->plug(submenu);
+	connect(theApp(), SIGNAL(trayIconToggled()), this, SLOT(updateTrayIconAction()));
+	updateTrayIconAction();         // set the correct text for this action
+
 	mActionsMenu = new KPopupMenu(this, "actions");
 	menu->insertItem(i18n("&Actions"), mActionsMenu);
 	actionNew->plug(mActionsMenu);
@@ -193,20 +203,23 @@ void KAlarmMainWindow::initActions()
 
 	actionResetDaemon->plug(mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), this, SLOT(updateActionsMenu()));
-	KPopupMenu* settingsMenu = new KPopupMenu(this, "settings");
-	menu->insertItem(i18n("&Settings"), settingsMenu);
-	theApp()->actionPreferences()->plug(settingsMenu);
-	theApp()->actionDaemonPreferences()->plug(settingsMenu);
+
+	submenu = new KPopupMenu(this, "settings");
+	menu->insertItem(i18n("&Settings"), submenu);
+	theApp()->actionPreferences()->plug(submenu);
+	theApp()->actionDaemonPreferences()->plug(submenu);
+
 	menu->insertItem(i18n("&Help"), helpMenu());
 
 	// Set up the toolbar
-/*	KToolBar* toolbar = toolBar();
+
+	KToolBar* toolbar = toolBar();
 	actionNew->plug(toolbar);
 	actionModify->plug(toolbar);
 	actionDelete->plug(toolbar);
 	actionToggleTrayIcon->plug(toolbar);
-*/
-	
+
+
 	actionModify->setEnabled(false);
 	actionDelete->setEnabled(false);
 	if (!theApp()->KDEDesktop())
@@ -214,11 +227,34 @@ void KAlarmMainWindow::initActions()
 }
 
 /******************************************************************************
+* Add a new alarm message to every main window instance.
+* 'win' = initiating main window instance (which has already been updated)
+*/
+void KAlarmMainWindow::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+{
+	kdDebug(5950) << "KAlarmMainWindow::addMessage(): " << event.id() << endl;
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		if (w != win)
+			w->listView->addEntry(event, true);
+}
+
+/******************************************************************************
 * Add a message to the displayed list.
 */
-void KAlarmMainWindow::addMessage(const KAlarmEvent& event)
+/*void KAlarmMainWindow::addMessage(const KAlarmEvent& event)
 {
 	listView->addEntry(event, true);
+}*/
+
+/******************************************************************************
+* Modify a message in every main window instance.
+* 'win' = initiating main window instance (which has already been updated)
+*/
+void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
+{
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		if (w != win)
+			w->modifyMessage(oldEventID, newEvent);
 }
 
 /******************************************************************************
@@ -234,6 +270,17 @@ void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEven
 	}
 	else
 		listView->refresh();
+}
+
+/******************************************************************************
+* Delete a message from every main window instance.
+* 'win' = initiating main window instance (which has already been updated)
+*/
+void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+{
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		if (w != win)
+			w->deleteMessage(event);
 }
 
 /******************************************************************************
@@ -317,15 +364,15 @@ void KAlarmMainWindow::slotDelete()
 */
 void KAlarmMainWindow::slotToggleTrayIcon()
 {
-	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed());
+	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
 }
 
 /******************************************************************************
-* Called when the View menu is about to be displayed.
+* Called when the system tray icon is created or destroyed.
 * Set the system tray icon menu text according to whether or not the system
 * tray icon is currently visible.
 */
-void KAlarmMainWindow::updateViewMenu()
+void KAlarmMainWindow::updateTrayIconAction()
 {
 	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
 }
@@ -352,7 +399,7 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	theApp()->deleteWindow(this);
+	close();
 }
 
 /******************************************************************************
@@ -374,7 +421,7 @@ void KAlarmMainWindow::slotSelection(QListViewItem* item)
 *  Called when the mouse is clicked on the ListView.
 *  Deselects the current item and disables the actions if appropriate.
 */
-void KAlarmMainWindow::slotMouse(int, QListViewItem* item, const QPoint&, int)
+void KAlarmMainWindow::slotMouseClicked(int, QListViewItem* item, const QPoint&, int)
 {
 	if (!item)
 	{
@@ -393,6 +440,7 @@ void KAlarmMainWindow::slotListRightClick(QListViewItem* item, const QPoint& pt,
 {
 	if (item)
 	{
+		kdDebug(5950) << "KAlarmMainWindow::slotListRightClick(true)\n";
 		QPopupMenu* menu = new QPopupMenu(this, "ListContextMenu");
 		actionModify->plug(menu);
 		actionDelete->plug(menu);
@@ -408,6 +456,47 @@ void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
 {
 	kdDebug(5950) << "KAlarmMainWindow::setAlarmEnabledStatus(" << (int)status << ")\n";
 	mActionsMenu->setItemChecked(mAlarmsEnabledId, status);
+}
+
+/******************************************************************************
+*  Display or hide the specified main window.
+*/
+KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
+{
+	if (win  &&  findWindow(win))
+	{
+		// A window is specified (and it exists)
+		if (win->isVisible())
+		{
+			// The window is visible, so close it
+			win->close();
+			return 0L;
+		}
+		else
+		{
+			// The window is hidden, so display it
+			win->showNormal();
+			win->raise();
+			win->setActiveWindow();
+			return win;
+		}
+	}
+
+	// No window is specified, or the window doesn't exist. Open a new one.
+	win = new KAlarmMainWindow;
+	win->show();
+	return win;
+}
+
+/******************************************************************************
+* Find the specified window in the main window list.
+*/
+bool KAlarmMainWindow::findWindow(KAlarmMainWindow* win)
+{
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		if (w == win)
+			return true;
+	return false;
 }
 
 

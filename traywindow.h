@@ -25,29 +25,34 @@
 class KPopupMenu;
 class KAction;
 
+class KAlarmMainWindow;
+
 
 class TrayWindow : public KSystemTray
 {
 		Q_OBJECT
 	public:
-		TrayWindow(const char* name = 0L);
+		TrayWindow(KAlarmMainWindow* parent, const char* name = 0L);
 		~TrayWindow();
+		void              removeWindow(KAlarmMainWindow*);
+		KAlarmMainWindow* assocMainWindow() const  { return mAssocMainWindow; }
 
 	public slots:
-		void         slotQuit();
+		void              slotQuit();
 
 	protected:
-		virtual void contextMenuAboutToShow(KPopupMenu*);
-		void         mousePressEvent(QMouseEvent*);
+		virtual void      contextMenuAboutToShow(KPopupMenu*);
+		void              mousePressEvent(QMouseEvent*);
 
 	private slots:
-		void         setEnabledStatus(bool status);
+		void              setEnabledStatus(bool status);
 
 	private:
-		QPixmap      mPixmapEnabled, mPixmapDisabled;
-		KAction*     mActionQuit;          // quit action for system tray window
-		int          mAlarmsEnabledId;     // alarms enabled item in menu
-		bool         mQuitReplaced;        // the context menu Quit item has been replaced
+		KAlarmMainWindow* mAssocMainWindow;     // main window associated with this, or null
+		QPixmap           mPixmapEnabled, mPixmapDisabled;
+		KAction*          mActionQuit;          // quit action for system tray window
+		int               mAlarmsEnabledId;     // alarms enabled item in menu
+		bool              mQuitReplaced;        // the context menu Quit item has been replaced
 };
 
 #endif // TRAYWINDOW_H
