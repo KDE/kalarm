@@ -1,10 +1,19 @@
 # KDE Config File  
 [Desktop Entry]
 Name=KAlarm
-Name[de]=KAlarm
+Name[he]=KAlarm
+Name[ko]=KDE 알람
+Name[xxx]=xx
 Type=Application
 Exec=kalarm -caption "%c" %i 
 Icon=kalarm.png
 DocPath=kalarm/index.html
 Comment=Alarm/reminder message scheduler
+Comment[da]=Alarm/påminder besked skemalægger
+Comment[he]=מתזמן תזכורות והודעות
+Comment[hu]=Üzenetküldő program (időzített figyelmeztetésekhez, emlékeztetőkhöz)
+Comment[nl]=Alarm/herinneringsbericht
+Comment[xxx]=xx
+Comment[zh_TW.Big5]=警示/提醒訊息排程器
 Terminal=0
+X-DCOP-ServiceType=Unique
