@@ -52,18 +52,6 @@ class EditAlarmDlg : public KDialogBase
 		virtual ~EditAlarmDlg();
 
 		void              getEvent(KAlarmEvent&);
-		KAlarmAlarm::Type getAlarmType() const;
-		QDateTime         getDateTime(bool& anyTime) const  { anyTime = alarmAnyTime; return alarmDateTime; }
-#ifdef SELECT_FONT
-		const QColor      getBgColour() const     { return fontColour->bgColour(); }
-		const QFont       getFont() const         { return fontColour->font(); }
-#else
-		const QColor      getBgColour() const     { return bgColourChoose->color(); }
-#endif
-		int               getAlarmFlags() const;
-		bool              getLateCancel() const   { return lateCancel->isChecked(); }
-		bool              getBeep() const         { return sound->isChecked() && soundFile.isEmpty(); }
-		bool              getConfirmAck() const   { return confirmAck->isChecked(); }
 
 	protected:
 		virtual void showEvent(QShowEvent*);
@@ -81,10 +69,12 @@ class EditAlarmDlg : public KDialogBase
 		void         slotPickSound();
 
 	private:
-		bool            checkText(QString& result);
-		QString         getMessageText();
-		void            enableMessageControls(bool);
-		void            setSoundPicker();
+		KAlarmAlarm::Type getAlarmType() const;
+		int               getAlarmFlags() const;
+		bool              checkText(QString& result);
+		QString           getMessageText();
+		void              enableMessageControls(bool);
+		void              setSoundPicker();
 
 		QButtonGroup*    actionGroup;
 		QRadioButton*    messageRadio;
