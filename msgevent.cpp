@@ -515,7 +515,7 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 {
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	KAlarmAlarm al;
-	al.mEventID   = mEventID;
+	al.mEventID = mEventID;
 	if (alarmID == AUDIO_ALARM_ID)
 	{
 		al.mType      = KAlarmAlarm::AUDIO;
@@ -529,19 +529,19 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 		al.mCleanText = mCleanText;
 		al.mColour    = mColour;
 		al.mBeep      = mBeep;
-		if (alarmID == mMainAlarmID  &&  mMainAlarmID >= 0)
+		if (mMainAlarmID >= 0  &&  alarmID == mMainAlarmID)
 		{
 			al.mAlarmSeq   = mMainAlarmID;
 			al.mDateTime   = mDateTime;
 			al.mLateCancel = mLateCancel;
 		}
-		else if (alarmID == mRepeatAtLoginAlarmID  &&  mRepeatAtLogin)
+		else if (mRepeatAtLogin  &&  alarmID == mRepeatAtLoginAlarmID)
 		{
 			al.mAlarmSeq      = mRepeatAtLoginAlarmID;
 			al.mDateTime      = mRepeatAtLoginDateTime;
 			al.mRepeatAtLogin = true;
 		}
-		else if (alarmID == mDeferralAlarmID  &&  mDeferral)
+		else if (mDeferral  &&  alarmID == mDeferralAlarmID)
 		{
 			al.mAlarmSeq = mDeferralAlarmID;
 			al.mDateTime = mDeferralTime;
@@ -580,8 +580,8 @@ KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
 {
 	int next;
 	if (alrm.id() == mMainAlarmID)  next = 1;
-	else if (alrm.id() == mDeferralAlarmID)  next = 2;
-	else if (alrm.id() == mRepeatAtLoginAlarmID)  next = 3;
+	else if (mDeferral  &&  alrm.id() == mDeferralAlarmID)  next = 2;
+	else if (mRepeatAtLogin  &&  alrm.id() == mRepeatAtLoginAlarmID)  next = 3;
 	else next = -1;
 	switch (next)
 	{
@@ -610,20 +610,20 @@ void KAlarmEvent::removeAlarm(int alarmID)
 {
 	if (alarmID == mMainAlarmID)
 		mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
-	else if (alarmID == mRepeatAtLoginAlarmID)
+	else if (mRepeatAtLogin  &&  alarmID == mRepeatAtLoginAlarmID)
 	{
-	   mRepeatAtLogin = false;
-	   --mAlarmCount;
+		mRepeatAtLogin = false;
+		--mAlarmCount;
 	}
-	else if (alarmID == mDeferralAlarmID)
+	else if (mDeferral  &&  alarmID == mDeferralAlarmID)
 	{
-	   mDeferral = false;
-	   --mAlarmCount;
+		mDeferral = false;
+		--mAlarmCount;
 	}
 	else if (alarmID == AUDIO_ALARM_ID)
 	{
 		mAudioFile = "";
-	   --mAlarmCount;
+		--mAlarmCount;
 	}
 }
 
