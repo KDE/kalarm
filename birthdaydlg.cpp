@@ -74,7 +74,7 @@ class AddresseeItem : public QListViewItem
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
-	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays from KAddressBook"), Ok|Cancel, Ok, parent)
+	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays From KAddressBook"), Ok|Cancel, Ok, parent)
 {
 	QWidget* topWidget = plainPage();
 	QBoxLayout* topLayout = new QVBoxLayout(topWidget);

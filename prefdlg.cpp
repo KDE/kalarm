@@ -548,8 +548,8 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	QLabel* label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
-	mDefaultRecurPeriod->insertItem(i18n("No recurrence"));
-	mDefaultRecurPeriod->insertItem(i18n("At login"));
+	mDefaultRecurPeriod->insertItem(i18n("No Recurrence"));
+	mDefaultRecurPeriod->insertItem(i18n("At Login"));
 	mDefaultRecurPeriod->insertItem(i18n("Hourly/Minutely"));
 	mDefaultRecurPeriod->insertItem(i18n("Daily"));
 	mDefaultRecurPeriod->insertItem(i18n("Weekly"));
