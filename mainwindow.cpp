@@ -239,7 +239,7 @@ void KAlarmMainWindow::initActions()
 	actionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
 	actionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
 	actionShowTime       = new KAction(i18n("&Show Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
-	actionShowTimeTo     = new KAction(i18n("&Show Time To Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
+	actionShowTimeTo     = new KAction(i18n("&Show Time to Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
 	actionShowExpired    = new KAction(i18n("&Show Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
 	actionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
 	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");

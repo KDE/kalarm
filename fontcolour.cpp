@@ -102,7 +102,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
 		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
 		QWhatsThis::add(mRemoveColourButton,
-		      i18n("Remove the color currently shown in the Background Color chooser, from the color selection list."));
+		      i18n("Remove the color currently shown in the background color chooser, from the color selection list."));
 		layout->addWidget(mRemoveColourButton);
 	}
 
