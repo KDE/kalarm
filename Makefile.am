@@ -43,8 +43,7 @@ alarmguiiface_DIR = $(top_srcdir)/kalarmd
 autostart_DATA = kalarm.tray.desktop
 autostartdir = $(prefix)/share/autostart
 
-kdelnkdir = $(kde_appsdir)/Utilities/More
-kdelnk_DATA = kalarm.desktop
+xdg_apps_DATA = kalarm.desktop
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(kde_appsdir)/Applications
