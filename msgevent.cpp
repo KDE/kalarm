@@ -27,6 +27,7 @@
 #include "kalarm.h"
 #include "kalarmapp.h"
 #include "prefsettings.h"
+#include "alarmcalendar.h"
 #include "msgevent.h"
 using namespace KCal;
 
@@ -104,6 +105,8 @@ void KAlarmEvent::set(const Event& event)
 	mCleanText     = "";
 	mDateTime      = event.dtStart();
 	mAnyTime       = event.doesFloat();
+	if (theApp()->getCalendar().kalarmVersion() < 70)
+		mAnyTime = false;    // backwards compatibility with KAlarm pre-0.7 calendar files
 	initRecur(false);
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
@@ -158,7 +161,6 @@ void KAlarmEvent::set(const Event& event)
 				// Backwards compatibility with KAlarm pre-0.7 calendar files
 				repeatCount   = data.repeatCount;
 				repeatMinutes = data.repeatMinutes;
-				mAnyTime = false;
 			}
 			if (mAnyTime)
 				mDateTime.setTime(QTime());
