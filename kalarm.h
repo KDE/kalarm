@@ -26,7 +26,7 @@
 #include <config.h>
 #endif
 
-#define KALARM_VERSION "1.2.2"
+#define KALARM_VERSION "1.2.3"
 
 #include <kdeversion.h>
 extern int  marginKDE2;   // KDE2 compatibility

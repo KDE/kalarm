@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 1.2.3 --- 30 November 2004 ===
+Align times in alarm list.
+Fix random limit on expired alarm discard time if stepping with spinbox buttons.
+
 === Version 1.2.2 --- 27 November 2004 ===
 Make alarm daemon (kalarmd) exclusive to KAlarm.
 Move control options for alarm daemon into KAlarm preferences dialog.
@@ -9,6 +13,7 @@ Add facility to enable and disable individual alarms.
 Add simple repetition facility, including repetition within a recurrence.
 Add option to pick a KMail identity to use as sender of email alarms.
 Add option to copy emails sent via sendmail, to KMail sent-mail folder.
+Show scheduled times, not reminder times, in alarm list and system tray tooltip.
 Make time edit controls use 12-hour clock when that is the user's default.
 Also fill in alarm edit dialog email fields when email is dropped onto KAlarm.
 New revised DCOP request interface (old interface still kept for compatibility).
@@ -16,6 +21,7 @@ Make detection of email message display alarms independent of language.
 Use KMix whenever possible to set hardware sound volume.
 Limit range of entered date/time to valid values in deferral dialogue.
 Prevent kalarm failing to register with kalarmd except when really necessary.
+Fix time-to-alarm column in main window not always updating every minute.
 
 === Version 1.1.7 (KDE 3.3.2) --- 27 November 2004 ===
 Fix KAlarm button on message windows to make it always display main window.
