@@ -1,5 +1,5 @@
 /*
- *  alarmlistview.cpp  -  list of outstanding alarms
+ *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -36,9 +36,6 @@
 #include "alarmlistview.moc"
 
 
-const QString repeatAtLoginIndicator = QString::fromLatin1("L");
-
-
 class AlarmListWhatsThis : public QWhatsThis
 {
 	public:
@@ -59,7 +56,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  drawMessageInColour_(false)
 {
 	addColumn(i18n("Time"));           // date/time column
-	addColumn(i18n("Rep"));            // repeat count column
+	addColumn(i18n("Repeat"));         // repeat count column
 	addColumn(QString::null);          // colour column
 	addColumn(i18n("Message, File or Command"));
 	setColumnWidthMode(MESSAGE_COLUMN, QListView::Maximum);
@@ -117,25 +114,67 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 		data.dateTimeText += ' ';
 		data.dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';
 	}
-	data.repeatCountText = event.repeatCount() ? QString::number(event.repeatCount()) : QString();
+	QString dateTimeOrder;
+	dateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
+	                                          dateTime.time().hour(), dateTime.time().minute());
+
+	int repeatOrder = 0;
+	int repeatInterval = 0;
+	data.repeatText = QString();    // text displayed in Repeat column
 	if (event.repeatAtLogin())
-		data.repeatCountText += repeatAtLoginIndicator;
-	data.repeatCountOrder.sprintf("%010d%1d", event.repeatCount(), (event.repeatAtLogin() ? 1 : 0));
-	QString dateTimeText;
-	dateTimeText.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
-	                                         dateTime.time().hour(), dateTime.time().minute());
+	{
+		repeatOrder = 1;
+		data.repeatText = i18n("Login");
+	}
+	else
+	{
+		repeatInterval = event.recurInterval();
+		switch (event.recurs())
+		{
+			case KAlarmEvent::SUB_DAILY:
+				repeatOrder = 2;
+				if (repeatInterval < 60)
+					data.repeatText = (repeatInterval == 1) ? i18n("1 Minute") : i18n("%1 Minutes").arg(repeatInterval);
+				else if (repeatInterval % 60 == 0)
+					data.repeatText = (repeatInterval == 60) ? i18n("1 Hour") : i18n("%1 Hours").arg(repeatInterval/60);
+				else
+					data.repeatText = i18n("%1H %02M").arg(QString::number(repeatInterval/60)).arg(QString::number(repeatInterval%60));
+				break;
+			case KAlarmEvent::DAILY:
+				repeatOrder = 3;
+				data.repeatText = (repeatInterval == 1) ? i18n("1 Day") : i18n("%1 Days").arg(repeatInterval);
+				break;
+			case KAlarmEvent::WEEKLY:
+				repeatOrder = 4;
+				data.repeatText = (repeatInterval == 1) ? i18n("1 Week") : i18n("%1 Weeks").arg(repeatInterval);
+				break;
+			case KAlarmEvent::MONTHLY_DAY:
+			case KAlarmEvent::MONTHLY_POS:
+				repeatOrder = 5;
+				data.repeatText = (repeatInterval == 1) ? i18n("1 Month") : i18n("%1 Months").arg(repeatInterval);
+				break;
+			case KAlarmEvent::ANNUAL_DATE:
+			case KAlarmEvent::ANNUAL_DAY:
+				repeatOrder = 6;
+				data.repeatText = (repeatInterval == 1) ? i18n("1 Year") : i18n("%1 Years").arg(repeatInterval);
+				break;
+			case KAlarmEvent::NO_RECUR:
+			default:
+				break;
+		}
+	}
 
 	// Set the texts to what will be displayed, so as to make the columns the correct width
 	AlarmListViewItem* item = new AlarmListViewItem(this, data.dateTimeText, data.messageText);
 	data.messageWidth = item->width(fontMetrics(), this, MESSAGE_COLUMN);
 	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);
-	item->setText(REPEAT_COLUMN, data.repeatCountText);
+	item->setText(REPEAT_COLUMN, data.repeatText);
 	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
 
 	// Now set the texts so that the columns can be sorted. The visible text is different,
 	// being displayed by paintCell().
-	item->setText(TIME_COLUMN, dateTimeText);
-	item->setText(REPEAT_COLUMN, data.repeatCountOrder);
+	item->setText(TIME_COLUMN, dateTimeOrder);
+	item->setText(REPEAT_COLUMN, QString().sprintf("%c%08d", '0' + repeatOrder, repeatInterval));
 	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", (event.type() == KAlarmAlarm::COMMAND ? 0 : event.colour().rgb())));
 	item->setText(MESSAGE_COLUMN, data.messageText.lower());
 	entries[item] = data;
@@ -239,7 +278,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		break;
 	case AlarmListView::REPEAT_COLUMN:
 		painter->fillRect(box, bgColour);
-		painter->drawText(box, AlignVCenter | AlignHCenter, data->repeatCountText);
+		painter->drawText(box, AlignVCenter | AlignHCenter, data->repeatText);
 		break;
 	case AlarmListView::COLOUR_COLUMN:
 		// Paint the cell the colour of the alarm message
@@ -313,10 +352,7 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background color of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text, URL of text file to display, or command to execute. The alarm type is indicated by the icon at the left.");
-			case AlarmListView::REPEAT_COLUMN:
-				return i18n("Number of scheduled repetitions after the next scheduled display of the alarm.\n"
-				            "'%1' indicates that the alarm is repeated at every login.")
-				           .arg(repeatAtLoginIndicator);
+			case AlarmListView::REPEAT_COLUMN:   return i18n("The alarm's repetition type or recurrence interval.");
 		}
 	}
 	return i18n("List of scheduled alarms");

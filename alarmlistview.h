@@ -1,5 +1,5 @@
 /*
- *  alarmlistview.h  -  list of outstanding alarms
+ *  alarmlistview.h  -  widget showing list of outstanding alarms
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -36,8 +36,7 @@ struct AlarmItemData
 		KAlarmEvent event;
 		QString     messageText;       // message as displayed
 		QString     dateTimeText;      // date/time as displayed
-		QString     repeatCountText;   // repeat count as displayed
-		QString     repeatCountOrder;  // repeat count item ordering text
+		QString     repeatText;        // repeat interval/type as displayed
 		int         messageWidth;      // width required to display 'messageText'
 };
 
