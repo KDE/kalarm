@@ -88,7 +88,6 @@ class KAlarmApp : public KUniqueApplication
 		void              deleteEvent(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
 		bool              execAlarm(KAlarmEvent&, const KAlarmAlarm&, bool reschedule, bool allowDefer = true);
 		void              rescheduleAlarm(KAlarmEvent&, int alarmID);
-//		void              triggerEvent(const QString& eventID)        { handleEvent(eventID, EVENT_TRIGGER); }
 		void              deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
 		int               maxLateness();
 		// Methods called indirectly by the DCOP interface
