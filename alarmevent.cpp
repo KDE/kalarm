@@ -60,6 +60,7 @@ static const QString TIME_DEFERRAL_TYPE         = QString::fromLatin1("DEFERRAL"
 static const QString DATE_DEFERRAL_TYPE         = QString::fromLatin1("DATE_DEFERRAL");
 static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
 static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
+static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 
 // Event categories
 static const QString DATE_ONLY_CATEGORY      = QString::fromLatin1("DATE");
@@ -84,6 +85,7 @@ struct AlarmData
 	QDateTime              dateTime;
 	QFont                  font;
 	QColor                 bgColour, fgColour;
+	float                  soundVolume;
 	KAAlarm::SubType       type;
 	KAAlarmEventBase::Type action;
 	int                    displayingFlags;
@@ -143,6 +145,7 @@ void KAEvent::set(const Event& event)
 	mEventID                = event.uid();
 	mRevision               = event.revision();
 	mTemplateName           = QString::null;
+	mSoundVolume            = -1;
 	mTemplateDefaultTime    = false;
 	mBeep                   = false;
 	mRepeatSound            = false;
@@ -285,6 +288,7 @@ void KAEvent::set(const Event& event)
 			case KAAlarm::AUDIO__ALARM:
 				mAudioFile   = data.cleanText;
 				mBeep        = mAudioFile.isEmpty();
+				mSoundVolume = !mBeep ? data.soundVolume : -1;
 				mRepeatSound = !mBeep  &&  (data.repeatCount < 0);
 				break;
 			case KAAlarm::INVALID__ALARM:
@@ -422,10 +426,18 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			break;
 		}
 		case Alarm::Audio:
+		{
 			data.action    = T_AUDIO;
 			data.cleanText = alarm.audioFile();
 			data.type      = KAAlarm::AUDIO__ALARM;
+			bool ok = false;
+			QString property = alarm.customProperty(APPNAME, VOLUME_PROPERTY);
+			if (!property.isEmpty())
+				data.soundVolume = property.toFloat(&ok);
+			if (!ok)
+				data.soundVolume = -1;
 			return;
+		}
 		case Alarm::Invalid:
 			data.type = KAAlarm::INVALID__ALARM;
 			return;
@@ -507,6 +519,7 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mText                   = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
 	mTemplateName           = QString::null;
 	mAudioFile              = "";
+	mSoundVolume            = -1;
 	mBgColour               = bg;
 	mFgColour               = fg;
 	mFont                   = font;
@@ -909,6 +922,8 @@ Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringLis
 				alarm->setRepeatCount(-1);
 				alarm->setSnoozeTime(0);
 			}
+			if (!mAudioFile.isEmpty()  &&  mSoundVolume >= 0)
+				alarm->setCustomProperty(APPNAME, VOLUME_PROPERTY, QString::number(mSoundVolume, 'f', 2));
 			break;
 	}
 	alltypes += types;
@@ -934,6 +949,7 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mFont          = mFont;
 		al.mDefaultFont   = mDefaultFont;
 		al.mBeep          = mBeep;
+		al.mSoundVolume   = mSoundVolume;
 		al.mRepeatSound   = mRepeatSound;
 		al.mConfirmAck    = mConfirmAck;
 		al.mRepeatAtLogin = false;
@@ -2610,6 +2626,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mEmailAddresses   = rhs.mEmailAddresses;
 	mEmailSubject     = rhs.mEmailSubject;
 	mEmailAttachments = rhs.mEmailAttachments;
+	mSoundVolume      = rhs.mSoundVolume;
 	mActionType       = rhs.mActionType;
 	mBeep             = rhs.mBeep;
 	mRepeatSound      = rhs.mRepeatSound;
@@ -2675,7 +2692,13 @@ void KAAlarmEventBase::dumpDebug() const
 		kdDebug(5950) << "-- mFont:" << mFont.toString() << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
 	if (mActionType == T_AUDIO)
+	{
+		if (mSoundVolume >= 0)
+			kdDebug(5950) << "-- mSoundVolume:" << mSoundVolume << ":\n";
+		else
+			kdDebug(5950) << "-- mSoundVolume:-:\n";
 		kdDebug(5950) << "-- mRepeatSound:" << (mRepeatSound ? "true" : "false") << ":\n";
+	}
 	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";

@@ -105,6 +105,7 @@ class KAAlarmEventBase
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
+		float              mSoundVolume;      // volume for sound file, or < 0 for unspecified
 		Type               mActionType;       // alarm action type
 		bool               mBeep;             // whether to beep when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
@@ -178,6 +179,7 @@ class KAAlarm : public KAAlarmEventBase
 		QDate              date() const                 { return mDateTime.date(); }
 		QTime              time() const                 { return mDateTime.time(); }
 		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
+		float              soundVolume() const          { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && !mBeep && !mText.isEmpty() ? mSoundVolume : -1; }
 		bool               repeatSound() const          { return (mActionType == T_AUDIO) && mRepeatSound && !mBeep && !mText.isEmpty(); }
 		bool               reminder() const             { return mType == REMINDER__ALARM; }
 		void               setTime(const QDateTime& dt) { mDateTime = dt; }
@@ -290,7 +292,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
-		void               setAudioFile(const QString& filename)             { mAudioFile = filename;  mUpdated = true; }
+		void               setAudioFile(const QString& filename, float volume = -1) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
 		void               setTemplate(const QString& name, bool defaultTime){ mTemplateName = name; mTemplateDefaultTime = defaultTime; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
@@ -340,6 +342,7 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           nextDateTime() const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		const QString&     audioFile() const              { return mAudioFile; }
+		float              soundVolume() const            { return mSoundVolume >= 0  &&  !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
 		bool               recurs() const                 { return checkRecur() != NO_RECUR; }
 		RecurType          recurType() const              { return checkRecur(); }
