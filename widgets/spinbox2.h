@@ -144,10 +144,11 @@ class SpinBox2 : public QFrame
 
 		enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
+		static int       mReverseLayout;  // widgets are mirrored right to left
 		QFrame*          updown2Frame;
 		QFrame*          spinboxFrame;
-		SpinBox*         updown2;
-		SB2_SpinBox*     spinbox;
+		SpinBox*         updown2;         // the extra pair of spin buttons
+		SB2_SpinBox*     spinbox;         // the visible spin box
 		int              mMinValue;
 		int              mMaxValue;
 
