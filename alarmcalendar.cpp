@@ -72,8 +72,7 @@ bool AlarmCalendar::open()
 {
 	getURL();
 	calendar = new CalendarLocal();
-	calendar->setLocalTime();
-//	calendar->showDialogs(FALSE);
+	calendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	// Find out whether the calendar is ICal or VCal format
 	QString ext = url.filename().right(4);
@@ -145,7 +144,10 @@ int AlarmCalendar::load()
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
 	kAlarmVersion = -1;
-	if (!calendar->load(tmpFile))
+	calendar->setTimeZoneId(QString::null);   // default to the local time zone for reading
+	bool loaded = calendar->load(tmpFile);
+	calendar->setLocalTime();                 // write using local time (i.e. no time zone)
+	if (!loaded)
 	{
 		// Check if the file is zero length
 		KIO::NetAccess::removeTempFile(tmpFile);
@@ -186,10 +188,8 @@ bool AlarmCalendar::save(const QString& filename)
 	kdDebug(5950) << "AlarmCalendar::save(): " << filename << endl;
 	CalFormat* format;
 	if(vCal)
-//		format = new VCalFormat(calendar);
 		format = new VCalFormat;
 	else
-//		format = new ICalFormat(calendar);
 		format = new ICalFormat;
 	bool success = calendar->save(filename, format);
 	delete format;
@@ -290,28 +290,35 @@ int AlarmCalendar::kalarmVersion() const
 					if ((i = ver.find('.')) > 0)
 					{
 						bool ok;
-						int version = ver.left(i).toInt(&ok) * 100;
+						int version = ver.left(i).toInt(&ok) * 100;   // major version
 						if (ok)
 						{
 							ver = ver.mid(i + 1);
 							if ((i = ver.find('.')) > 0)
 							{
-								int v = ver.left(i).toInt(&ok);
+								int v = ver.left(i).toInt(&ok);   // minor version
 								if (ok)
 								{
-									if (v > 9)
-										v = 9;
-									version += v * 10;
+									version += (v < 9 ? v : 9) * 10;
 									ver = ver.mid(i + 1);
 									if (ver.at(0).isDigit())
 									{
 										// Allow other characters to follow last digit
-										v = ver.toInt();
-										if (v > 9)
-											v = 9;
-										kAlarmVersion = version + v;
+										v = ver.toInt();   // issue number
+										kAlarmVersion = version + (v < 9 ? v : 9);
 										return kAlarmVersion;
 									}
+								}
+							}
+							else
+							{
+								// There is no issue number
+								if (ver.at(0).isDigit())
+								{
+									// Allow other characters to follow last digit
+									int v = ver.toInt();   // minor number
+									kAlarmVersion = version + (v < 9 ? v : 9) * 10;
+									return kAlarmVersion;
 								}
 							}
 						}
@@ -325,6 +332,7 @@ int AlarmCalendar::kalarmVersion() const
 	return 0;
 }
 
+#if 0
 /******************************************************************************
 * Find the default system time zone ID.
 */
@@ -347,3 +355,4 @@ const QString& AlarmCalendar::getDefaultTimeZoneID()
 	kdDebug(5950) << "AlarmCalendar::getDefaultTimeZoneID(): " << zoneID << endl;
 	return zoneID;
 }
+#endif
