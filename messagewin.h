@@ -45,6 +45,7 @@ class MessageWin : public MainWindowBase
 		MessageWin(const QString& errmsg, const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true);
 		~MessageWin();
 		void               repeat();
+		bool               hasDefer() const       { return !!deferButton; }
 		bool               errorMessage() const   { return !errorMsg.isNull(); }
 		static int         instanceCount()        { return windowList.count(); }
 		static MessageWin* findEvent(const QString& eventID);

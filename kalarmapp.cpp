@@ -1157,10 +1157,16 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 	{
 		// Display a message or file, provided that the same event isn't already being displayed
 		MessageWin* win = MessageWin::findEvent(event.id());
-		if (win)
+		if (win  &&  (win->hasDefer() || alarm.repeatAtLogin()))
 			win->repeat();
 		else
+		{
+			// Either there isn't already a message for this event,
+			// or there is a repeat-at-login message with no Defer
+			// button, which needs to be replaced with a new message.
+			delete win;
 			(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+		}
 	}
 	return result;
 }
