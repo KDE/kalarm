@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,13 +58,11 @@ class AlarmTimeWidget : public ButtonGroup
 	protected slots:
 		void           slotTimer();
 		void           slotButtonSet(int id);
-		void           slotDateChanged(QDate)        { dateTimeChanged(); }
-		void           slotTimeChanged(int)          { dateTimeChanged(); }
+		void           dateTimeChanged();
 		void           delayTimeChanged(int);
 		void           slotAnyTimeToggled(bool);
 	private:
 		void           init(int mode);
-		void           dateTimeChanged();
 		void           setAnyTime();
 
 		RadioButton*   mAtTimeRadio;

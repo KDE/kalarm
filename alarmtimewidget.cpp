@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ void AlarmTimeWidget::init(int mode)
 	// Date edit box
 	mDateEdit = new DateEdit(this);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
-	connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
+	connect(mDateEdit, SIGNAL(dateChanged(QDate)), SLOT(dateTimeChanged()));
 	QWhatsThis::add(mDateEdit, i18n("Enter the date to schedule the alarm."));
 	mAtTimeRadio->setFocusWidget(mDateEdit);
 
@@ -89,7 +89,7 @@ void AlarmTimeWidget::init(int mode)
 	mTimeEdit = new TimeSpinBox(timeBox);
 	mTimeEdit->setValue(1439);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
-	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
+	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	QWhatsThis::add(mTimeEdit, i18n("Enter the time to schedule the alarm.\n%1").arg(TimeSpinBox::shiftWhatsThis()));
 
 	if (mode & DEFER_TIME)
