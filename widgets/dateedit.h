@@ -24,7 +24,7 @@
 #ifndef DATEEDIT_H
 #define DATEEDIT_H
 
-#include <libkdepim/kdateedit.h>
+#include "libkdepim/kdateedit.h"
 
 class DateEdit : public KDateEdit
 {
