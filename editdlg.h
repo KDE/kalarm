@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,8 +108,8 @@ class EditAlarmDlg : public KDialogBase
 
 		int               mMainPageIndex;
 		int               mRecurPageIndex;
-		bool              mRecurPageShown;     // true once the recurrence tab has been displayed
-		bool              mRecurSetEndDate;    // adjust end date/time when recurrence tab is displayed
+		bool              mRecurPageShown;           // true once the recurrence tab has been displayed
+		bool              mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
 
 		QButtonGroup*     mActionGroup;
 		RadioButton*      mMessageRadio;

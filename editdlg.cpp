@@ -87,7 +87,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	: KDialogBase(KDialogBase::Tabbed, caption, (readOnly ? Cancel|Try : Ok|Cancel|Try),
 	              (readOnly ? Cancel : Ok), parent, name),
 	  mRecurPageShown(false),
-	  mRecurSetEndDate(true),
+	  mRecurSetDefaultEndDate(true),
 	  mReminderDeferral(false),
 	  mReminderArchived(false),
 	  mEmailRemoveButton(0),
@@ -633,7 +633,9 @@ bool EditAlarmDlg::stateChanged() const
 		if (!event.recurrence())
 			return true;
 		event.recurrence()->setFloats(mSavedEvent->startDateTime().isDateOnly());
-		if (*event.recurrence() != *mSavedEvent->recurrence())
+		if (*event.recurrence() != *mSavedEvent->recurrence()
+		||  event.exceptionDates() != mSavedEvent->exceptionDates()
+		||  event.exceptionDateTimes() != mSavedEvent->exceptionDateTimes())
 			return true;
 	}
 	return false;
@@ -888,11 +890,11 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
 	mAlarmDateTime  = mTimeWidget->getDateTime(false);
-	if (mRecurSetEndDate)
+	if (mRecurSetDefaultEndDate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
-		mRecurrenceEdit->setEndDate(mAlarmDateTime.dateTime() >= now ? mAlarmDateTime.date() : now.date());
-		mRecurSetEndDate = false;
+		mRecurrenceEdit->setDefaultEndDate(mAlarmDateTime.dateTime() >= now ? mAlarmDateTime.date() : now.date());
+		mRecurSetDefaultEndDate = false;
 	}
 	mRecurrenceEdit->setStartDate(mAlarmDateTime.date());
 	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
