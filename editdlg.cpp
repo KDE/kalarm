@@ -102,6 +102,10 @@ QString EditAlarmDlg::i18n_n_CancelIfLate()     { return i18n("Ca&ncel if late")
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
+#ifdef NEW_CANCEL_IF_LATE
+QString EditAlarmDlg::i18n_AutoCloseWin()       { return i18n("Auto-close window after this time"); }
+QString EditAlarmDlg::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancelation time"); }
+#endif
 
 
 /******************************************************************************
@@ -777,14 +781,14 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
 TimeSelector* EditAlarmDlg::createLateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)
 {
 	QString whatsThis = i18n("If checked, the alarm will be canceled if it cannot be triggered within the "
-	                         "specified period after its scheduled time. Possible reasons for not triggering "
-	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
-	                         "If unchecked, the alarm will be triggered at the first opportunity after "
-	                         "its scheduled time, regardless of how late it is.");
-	TimeSelector* widget = new TimeSelector(i18n("Cancel if 10 minutes late", "Ca&ncel if"),
-	                                        i18n("Cancel if 10 minutes late", "late"),
+                                 "specified period after its scheduled time. Possible reasons for not triggering "
+                                 "include your being logged off, X not running, or the alarm daemon not running.\n\n"
+                                 "If unchecked, the alarm will be triggered at the first opportunity after "
+                                 "its scheduled time, regardless of how late it is.");
+	TimeSelector* widget = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                        whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                        allowHourMinute, parent, name);
+	QWhatsThis::add(mAutoClose, i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));
 	return widget;
 }
 #else
