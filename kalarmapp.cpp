@@ -1076,6 +1076,11 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 					default:
 						break;
 				}
+				if (event.deferred())
+				{
+					event.removeAlarm(KAlarmEvent::MAIN_ALARM_ID + KAlarmEvent::DEFERRAL_OFFSET);
+					update = true;
+				}
 			}
 			else if (updateCalAndDisplay  &&  event.updated())
 				update = true;
