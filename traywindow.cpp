@@ -57,6 +57,12 @@ class TrayTooltip : public QToolTip
 		virtual void maybeTip(const QPoint&);
 };
 
+struct TipItem
+{
+	QDateTime  dateTime;
+	QString    text;
+};
+
 
 /*=============================================================================
 = Class: TrayWindow
@@ -245,35 +251,17 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
-	KCal::Event::List events = theApp()->getCalendar().events(now.date(), true);
-	KCal::Event::List events2 = theApp()->getCalendar().events(now.date().addDays(1), true);
-	// Eliminate any duplicates from tomorrow's alarms - if an alarm recurs on
-	// both days, it will appear in both lists.
-	for (KCal::Event::List::Iterator i2 = events2.begin();  i2 != events2.end();  )
-	{
-		if (events.find(*i2) != events.end())
-			i2 = events2.remove(i2);
-		else
-			++i2;
-	}
-
+	QValueList<TipItem> items;
+	QValueList<TipItem>::Iterator iit;
 	int count = 0;
-	bool todayEvents = true;
-	KCal::Event::List::ConstIterator it1 = events.begin();
-	KCal::Event::List::ConstIterator it2 = events2.begin();
-        KCal::Event *kcalEvent;
-	if (it1 == events.end())
+	KCal::Event::List events = theApp()->getCalendar().eventsWithAlarms(now.date(), now.addDays(1));
+	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
-		todayEvents = false;
-		kcalEvent = (it2 == events2.end()) ? 0 : *it2;
-	}
-	else
-                kcalEvent = *it1;
-	while (kcalEvent  &&  count != maxCount)
-	{
+		KCal::Event* kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (!event.expired()  &&  event.action() == KAlarmEvent::MESSAGE)
 		{
+			TipItem item;
 			DateTime dateTime = event.nextDateTime();
 			if (dateTime.date() != now.date())
 			{
@@ -281,56 +269,51 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				if (dateTime.time() >= now.time())
 					break;
 			}
+			item.dateTime = dateTime.dateTime();
 
 			// The alarm is due today, or early tomorrow
-			text += "\n";
 			bool space = false;
 			if (preferences->showTooltipAlarmTime())
 			{
-				text += KGlobal::locale()->formatTime(dateTime.time());
-				text += ' ';
+				item.text += KGlobal::locale()->formatTime(item.dateTime.time());
+				item.text += ' ';
 				space = true;
 			}
 			if (preferences->showTooltipTimeToAlarm())
 			{
-				int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
+				int mins = (now.secsTo(item.dateTime) + 59) / 60;
 				if (mins < 0)
 					mins = 0;
 				char minutes[3] = "00";
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
 				if (preferences->showTooltipAlarmTime())
-					text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
+					item.text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
 				else
-					text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
-				text += ' ';
+					item.text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
+				item.text += ' ';
 				space = true;
 			}
 			if (space)
-				text += ' ';
-			text += AlarmListViewItem::alarmText(event);
-			++count;
-		}
+				item.text += ' ';
+			item.text += AlarmListViewItem::alarmText(event);
 
-		// Get the next event
-		if (todayEvents)
-		{
-			++it1;
-			if (it1 == events.end())
-				todayEvents = false;
-			else
-				kcalEvent = *it1;
+			// Insert the item into the list in time-sorted order
+			for (iit = items.begin();  iit != items.end();  ++iit)
+			{
+				if (item.dateTime <= (*iit).dateTime)
+					break;
+			}
+			items.insert(iit, item);
+			if (++count == maxCount)
+				break;
 		}
-		else
-			++it2;
-		if (!todayEvents)
-                {
-			if (it2 == events2.end())
-				kcalEvent = 0;
-			else
-				kcalEvent = *it2;
-	        }
         }
+	for (iit = items.begin();  iit != items.end();  ++iit)
+	{
+		text += "\n";
+		text += (*iit).text;
+	}
 }
 
 /******************************************************************************

@@ -394,6 +394,50 @@ void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 }
 
 /******************************************************************************
+* Return all events which have alarms falling within the specified time range.
+*/
+Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTime& to) const
+{
+	kdDebug(5950) << "AlarmCalendar::events(" << from.toString() << " - " << to.toString() << ")\n";
+	Event::List evnts;
+	if (!mCalendar)
+		return evnts;
+	QDateTime dt;
+	Event::List allEvents = mCalendar->rawEvents();
+	for (Event::List::ConstIterator it = allEvents.begin();  it != allEvents.end();  ++it)
+	{
+		Event* e = *it;
+		bool recurs = e->doesRecur();
+		for (Alarm::List::ConstIterator ait = e->alarms().begin();  ait != e->alarms().end();  ++ait)
+		{
+			if ((*ait)->enabled())
+			{
+				if (recurs)
+				{
+					if (e->recursOn(from.date()))
+					{
+						dt.setTime((*ait)->time().time());
+						dt.setDate(from.date());
+					}
+					else
+						dt = (*ait)->time();
+				}
+				else
+					dt = (*ait)->time();
+				if (dt >= from  &&  dt <= to)
+				{
+					kdDebug(5950) << "AlarmCalendar::events() '" << e->summary()
+					              << "': " << dt.toString() << endl;
+					evnts.append(e);
+					break;
+				}
+			}
+		}
+	}
+	return evnts;
+}
+
+/******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
 * The format is, for example, 000507 for 0.5.7, or 0 if unknown.
 */
