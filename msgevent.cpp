@@ -225,17 +225,26 @@ void KAlarmEvent::set(const Event& event)
 			case KAlarmAlarm::AUDIO_ALARM:
 				mAudioFile = data.cleanText;
 				mBeep      = mAudioFile.isEmpty();
+				if (!set)
+					mDateTime = data.dateTime;   // shouldn't ever happen, but just in case...
 				break;
+			case KAlarmAlarm::INVALID_ALARM:
 			default:
 				break;
 		}
 
-		// Ensure that the basic fields are set up even if there is no main
-		// alarm in the event (if it has expired and then been deferred)
-		if (!set)
+		if (data.action != T_AUDIO)
 		{
-			if (data.action != T_AUDIO)
+			// Ensure that the basic fields are set up even if there is no main
+			// alarm in the event (if it has expired and then been deferred)
+			if (!set)
 			{
+				mDateTime = data.dateTime;
+				if (mAnyTime
+				&&  ( data.type == KAlarmAlarm::MAIN_ALARM
+				   || data.type == KAlarmAlarm::DISPLAYING_ALARM  && !(data.displayingFlags & DEFERRAL)))
+#warning "Check whether time is shown in deferred any-time alarm message window"
+					mDateTime.setTime(QTime());
 				mActionType = data.action;
 				mText = (mActionType == T_COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
 				if (data.action == T_MESSAGE)
@@ -250,18 +259,12 @@ void KAlarmEvent::set(const Event& event)
 					mEmailSubject     = data.emailSubject;
 					mEmailAttachments = data.emailAttachments;
 				}
+				set = true;
 			}
-			mDateTime = data.dateTime;
-			if (mAnyTime
-			&&  ( data.type == KAlarmAlarm::MAIN_ALARM
-			   || data.type == KAlarmAlarm::DISPLAYING_ALARM  && !(data.displayingFlags & DEFERRAL)))
-#warning "Check whether time is shown in deferred any-time alarm message window"
-				mDateTime.setTime(QTime());
-			set = true;
+			if (data.action == T_FILE  &&  mActionType == T_MESSAGE)
+				mActionType = T_FILE;
+			++mAlarmCount;
 		}
-		if (data.action == T_FILE  &&  mActionType == T_MESSAGE)
-			mActionType = T_FILE;
-		++mAlarmCount;
 	}
 	if (reminderTime.isValid())
 	{
@@ -816,93 +819,84 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const QDateTime& dt, const QStri
 KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 {
 	checkRecur();     // ensure recurrence/repetition data is consistent
-	KAlarmAlarm al;
+	KAlarmAlarm al;   // this sets type to INVALID_ALARM
 	if (mAlarmCount)
 	{
-		al.mEventID = mEventID;
-		if (type == KAlarmAlarm::AUDIO_ALARM)
+		al.mEventID       = mEventID;
+		al.mActionType    = mActionType;
+		al.mText          = mText;
+		al.mBgColour      = mBgColour;
+		al.mFont          = mFont;
+		al.mDefaultFont   = mDefaultFont;
+		al.mBeep          = mBeep;
+		al.mConfirmAck    = mConfirmAck;
+		al.mRepeatAtLogin = false;
+		al.mDeferral      = false;
+		al.mLateCancel    = mLateCancel;
+		al.mEmailBcc      = mEmailBcc;
+		if (mActionType == T_EMAIL)
 		{
-			al.mType       = type;
-			al.mActionType = T_AUDIO;
-			al.mDateTime   = mDateTime;
-			al.mText       = mAudioFile;
+			al.mEmailAddresses   = mEmailAddresses;
+			al.mEmailSubject     = mEmailSubject;
+			al.mEmailAttachments = mEmailAttachments;
 		}
-		else
+		switch (type)
 		{
-			al.mType          = KAlarmAlarm::INVALID_ALARM;
-			al.mActionType    = mActionType;
-			al.mText          = mText;
-			al.mBgColour      = mBgColour;
-			al.mFont          = mFont;
-			al.mDefaultFont   = mDefaultFont;
-			al.mBeep          = mBeep;
-			al.mConfirmAck    = mConfirmAck;
-			al.mRepeatAtLogin = false;
-			al.mDeferral      = false;
-			al.mLateCancel    = mLateCancel;
-			al.mEmailBcc      = mEmailBcc;
-			if (mActionType == T_EMAIL)
-			{
-				al.mEmailAddresses   = mEmailAddresses;
-				al.mEmailSubject     = mEmailSubject;
-				al.mEmailAttachments = mEmailAttachments;
-			}
-			switch (type)
-			{
-				case KAlarmAlarm::MAIN_ALARM:
-					if (!mMainExpired)
+			case KAlarmAlarm::MAIN_ALARM:
+				if (!mMainExpired)
+				{
+					al.mType     = KAlarmAlarm::MAIN_ALARM;
+					al.mDateTime = mDateTime;
+				}
+				break;
+			case KAlarmAlarm::REMINDER_ALARM:
+				if (mReminderMinutes)
+				{
+					al.mType     = KAlarmAlarm::REMINDER_ALARM;
+					al.mDateTime = mDateTime.addSecs(-mReminderMinutes * 60);
+				}
+				break;
+			case KAlarmAlarm::DEFERRAL_ALARM:
+				if (!mReminderDeferralMinutes)
+				{
+					if (mDeferral)
 					{
-						al.mType     = KAlarmAlarm::MAIN_ALARM;
-						al.mDateTime = mDateTime;
-					}
-					break;
-				case KAlarmAlarm::REMINDER_ALARM:
-					if (mReminderMinutes)
-					{
-						al.mType     = KAlarmAlarm::REMINDER_ALARM;
-						al.mDateTime = mDateTime.addSecs(-mReminderMinutes * 60);
-					}
-					break;
-				case KAlarmAlarm::DEFERRAL_ALARM:
-					if (!mReminderDeferralMinutes)
-					{
-						if (mDeferral)
-						{
-							al.mType     = KAlarmAlarm::DEFERRAL_ALARM;
-							al.mDateTime = mDeferralTime;
-							al.mDeferral = true;
-						}
-						break;
-					}
-					// fall through to REMINDER_DEFERRAL_ALARM
-				case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
-					if (mReminderDeferralMinutes)
-					{
-						al.mType     = KAlarmAlarm::REMINDER_DEFERRAL_ALARM;
-						al.mDateTime = mDateTime.addSecs(-mReminderDeferralMinutes * 60);
+						al.mType     = KAlarmAlarm::DEFERRAL_ALARM;
+						al.mDateTime = mDeferralTime;
 						al.mDeferral = true;
 					}
 					break;
-				case KAlarmAlarm::AT_LOGIN_ALARM:
-					if (mRepeatAtLogin)
-					{
-						al.mType          = KAlarmAlarm::AT_LOGIN_ALARM;
-						al.mDateTime      = mAtLoginDateTime;
-						al.mRepeatAtLogin = true;
-						al.mLateCancel    = false;
-					}
-					break;
-				case KAlarmAlarm::DISPLAYING_ALARM:
-					if (mDisplaying)
-					{
-						al.mType       = KAlarmAlarm::DISPLAYING_ALARM;
-						al.mDateTime   = mDisplayingTime;
-						al.mDisplaying = true;
-					}
-					break;
-				default:
-					break;
-			}
+				}
+				// fall through to REMINDER_DEFERRAL_ALARM
+			case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
+				if (mReminderDeferralMinutes)
+				{
+					al.mType     = KAlarmAlarm::REMINDER_DEFERRAL_ALARM;
+					al.mDateTime = mDateTime.addSecs(-mReminderDeferralMinutes * 60);
+					al.mDeferral = true;
+				}
+				break;
+			case KAlarmAlarm::AT_LOGIN_ALARM:
+				if (mRepeatAtLogin)
+				{
+					al.mType          = KAlarmAlarm::AT_LOGIN_ALARM;
+					al.mDateTime      = mAtLoginDateTime;
+					al.mRepeatAtLogin = true;
+					al.mLateCancel    = false;
+				}
+				break;
+			case KAlarmAlarm::DISPLAYING_ALARM:
+				if (mDisplaying)
+				{
+					al.mType       = KAlarmAlarm::DISPLAYING_ALARM;
+					al.mDateTime   = mDisplayingTime;
+					al.mDisplaying = true;
+				}
+				break;
+			case KAlarmAlarm::AUDIO_ALARM:
+			case KAlarmAlarm::INVALID_ALARM:
+			default:
+				break;
 		}
 	}
 	return al;
@@ -956,9 +950,9 @@ KAlarmAlarm KAlarmEvent::nextAlarm(KAlarmAlarm::Type prevType) const
 				return alarm(KAlarmAlarm::DISPLAYING_ALARM);
 			// fall through to DISPLAYING_ALARM
 		case KAlarmAlarm::DISPLAYING_ALARM:
-			if (!mAudioFile.isEmpty())
-				return alarm(KAlarmAlarm::AUDIO_ALARM);
 			// fall through to default
+		case KAlarmAlarm::AUDIO_ALARM:
+		case KAlarmAlarm::INVALID_ALARM:
 		default:
 			break;
 	}
@@ -1011,9 +1005,7 @@ void KAlarmEvent::removeExpiredAlarm(KAlarmAlarm::Type type)
 			}
 			break;
 		case KAlarmAlarm::AUDIO_ALARM:
-			mAudioFile = "";
-			--mAlarmCount;
-			break;
+		case KAlarmAlarm::INVALID_ALARM:
 		default:
 			break;
 	}
@@ -1065,8 +1057,11 @@ void KAlarmEvent::defer(const QDateTime& dateTime, bool reminder, bool adjustRec
 				mDeferral = true;
 				++mAlarmCount;
 			}
-			mMainExpired = true;
-			--mAlarmCount;
+			if (!mMainExpired)
+			{
+				mMainExpired = true;
+				--mAlarmCount;
+			}
 		}
 	}
 	else if (reminder)
