@@ -69,6 +69,11 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 
 void AlarmTimeWidget::init(int mode)
 {
+#ifdef SIMPLE_REP
+	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
+	                                      "If a recurrence is configured, the start date/time will be adjusted "
+	                                      "to the first recurrence on or after the entered date/time."); 
+#endif
 	static const QString recurText = i18n("If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 
