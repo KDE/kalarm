@@ -55,7 +55,6 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    quit();
 		// Other methods
 		void    enableCal(const QString& urlString, bool enable);
-		void    setCal(const QCString& appname, const QString& urlString);
 		void    reloadCal(const QCString& appname, const QString& urlString, bool reset);
 		void    reloadCal(ADCalendar*, bool reset);
 		void    checkAlarms(ADCalendar*);

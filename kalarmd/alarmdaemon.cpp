@@ -89,46 +89,6 @@ void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 }
 
 /******************************************************************************
-* DCOP call to set the client's calendar to that specified.
-*/
-void AlarmDaemon::setCal(const QCString& appname, const QString& urlString)
-{
-	ClientInfo* client = ClientInfo::get(appname);
-	if (!client)
-	{
-		kdError(5900) << "AlarmDaemon::setCal(" << appname << "): client not registered" << endl;
-		return;
-	}
-	kdDebug(5900) << "AlarmDaemon::setCal(" << urlString << ")" << endl;
-	ADCalendar* cal = ADCalendar::getCalendar(urlString);
-	if (cal)
-	{
-		// Calendar is already being monitored
-		if (!cal->unregistered())
-			return;
-		if (cal->appName() == appname)
-		{
-			cal->setUnregistered(false);
-			reloadCal(cal, false);
-			return;
-		}
-		// The calendar used to belong to another client!
-		// Remove the old client and its calendar.
-		ClientInfo::remove(cal->appName());
-		ADConfigData::removeClient(cal->appName());
-	}
-
-	// Load the calendar
-	cal = client->setCalendar(urlString);
-	ADConfigData::setCalendar(appname, cal);
-	kdDebug(5900) << "AlarmDaemon::setCal(): calendar added" << endl;
-
-	// Start monitoring it
-	setTimerStatus();
-	checkAlarms(cal);
-}
-
-/******************************************************************************
 * DCOP call to reload, and optionally reset, the specified calendar.
 */
 void AlarmDaemon::reloadCal(const QCString& appname, const QString& urlString, bool reset)
@@ -201,7 +161,6 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 			if (client->calendar()  &&  client->calendar()->urlString() == calendarUrl)
 			{
 				keepCal = client->calendar();
-				keepCal->setUnregistered(true);
 				client->detachCalendar();
 			}
 			ClientInfo::remove(appName);    // this deletes the calendar if not detached
@@ -211,9 +170,9 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 			client = new ClientInfo(appName, appTitle, dcopObject, keepCal, startClient);
 		else
 			client = new ClientInfo(appName, appTitle, dcopObject, calendarUrl, startClient);
+		client->calendar()->setUnregistered(false);
 		ADConfigData::writeClient(appName, client);
 
-#warning Should autostart be enabled when client registers?
 		ADConfigData::enableAutoStart(true);
 		setTimerStatus();
 		notifyCalStatus(client->calendar());
@@ -456,9 +415,9 @@ void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
 	QCString appname = client->appName();
 	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname)))
 	{
-		kdDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << appname << " ->" << client->dcopObject() << endl;
 		KAlarmd::CalendarStatus change = cal->available() ? (cal->enabled() ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED)
 		                                                  : KAlarmd::CALENDAR_UNAVAILABLE;
+		kdDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << appname << " -> " << change << endl;
 		AlarmGuiIface_stub stub(appname, client->dcopObject());
 		stub.alarmDaemonUpdate(change, cal->urlString());
 		if (!stub.ok())
