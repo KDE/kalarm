@@ -103,6 +103,7 @@ class EditAlarmDlg : public KDialogBase
 		QHBox*           filePadding;
 		QCheckBox*       sound;
 		QPushButton*     soundPicker;
+		QString          soundDefaultDir;
 		QCheckBox*       confirmAck;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;

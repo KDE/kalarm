@@ -133,7 +133,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	initCommand(actionGroup);
 	alarmTypeStack = new QWidgetStack(actionGroup);
 	grid->addMultiCellWidget(alarmTypeStack, 2, 2, 0, 6);
-grid->setRowStretch(2, 1);
+	grid->setRowStretch(2, 1);
 	alarmTypeStack->addWidget(displayAlarmsFrame, 0);
 	alarmTypeStack->addWidget(commandFrame, 1);
 
@@ -155,22 +155,20 @@ grid->setRowStretch(2, 1);
 		deferGroup->addSpace(0);
 	}
 
-	layout = new QHBoxLayout(topLayout);
+	grid = new QGridLayout(topLayout, 3, 2, spacingHint());
 
 	// Date and time entry
 
 	timeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
-	                                 0, mainPage, "timeGroup");
-	layout->addWidget(timeWidget);
+	                                 mainPage, "timeGroup");
+	grid->addMultiCellWidget(timeWidget, 0, 2, 0, 0);
 
 	// Repetition type radio buttons
 
-	QBoxLayout* vlayout = new QVBoxLayout(layout);
-
 	ButtonGroup* repeatGroup = new ButtonGroup(1, Qt::Horizontal, i18n("Repetition"), mainPage);
-	connect(repeatGroup, SIGNAL(clicked(int)), SLOT(slotRepeatClicked(int)));
-	vlayout->addWidget(repeatGroup, 1);
-	vlayout->setStretchFactor(repeatGroup, 1);
+	connect(repeatGroup, SIGNAL(buttonSet(int)), SLOT(slotRepeatClicked(int)));
+	grid->addWidget(repeatGroup, 0, 1);
+	grid->setRowStretch(1, 1);
 
 	noRepeatRadio = new QRadioButton(i18n("&No repetition"), repeatGroup);
 	noRepeatRadio->setFixedSize(noRepeatRadio->sizeHint());
@@ -194,7 +192,6 @@ grid->setRowStretch(2, 1);
 #endif
 
 	// Late display checkbox - default = allow late display
-	vlayout->addStretch();
 	lateCancel = new QCheckBox(i18n("Cancel &if late"), mainPage);
 	lateCancel->setFixedSize(lateCancel->sizeHint());
 	QWhatsThis::add(lateCancel,
@@ -203,7 +200,8 @@ grid->setRowStretch(2, 1);
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
 	           "If unchecked, the alarm will be triggered at the first opportunity after "
 	           "the specified time, regardless of how late it is."));
-	vlayout->addWidget(lateCancel);
+	grid->addWidget(lateCancel, 1, 1);
+	grid->setColStretch(1, 1);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -222,9 +220,8 @@ grid->setRowStretch(2, 1);
 #ifdef SELECT_FONT
 		fontColour->setColour(event->colour());
 		fontColour->setFont(?);
-#else
-		bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
 #endif
+		bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
 		timeWidget->setDateTime(event->mainDateTime(), event->anyTime());
 
 		QRadioButton* radio;
@@ -270,9 +267,8 @@ grid->setRowStretch(2, 1);
 #ifdef SELECT_FONT
 		fontColour->setColour(settings->defaultBgColour());
 		fontColour->setFont(settings->messageFont());
-#else
-		bgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 #endif
+		bgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		timeWidget->setDateTime(defaultTime, false);
 		actionGroup->setButton(actionGroup->id(messageRadio));
@@ -288,6 +284,7 @@ grid->setRowStretch(2, 1);
 	resize(size);
 
 	slotAlarmTypeClicked(-1);    // enable/disable things appropriately
+	slotSoundToggled(sound->isChecked());
 }
 
 
@@ -362,7 +359,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	QWhatsThis::add(fontColour,
 	      i18n("Choose the font and background color for the alarm message."));
 	layout->addWidget(fontColour);
-#else
+#endif
 	// Colour choice drop-down list
 	bgColourChoose = new ColourCombo(displayAlarmsFrame);
 	QSize size = bgColourChoose->sizeHint();
@@ -371,7 +368,6 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background color for the alarm message."));
 	layout->addWidget(bgColourChoose);
-#endif
 
 	// Acknowledgement confirmation required - default = no confirmation
 	confirmAck = new QCheckBox(i18n("Confirm ac&knowledgement"), displayAlarmsFrame);
@@ -448,12 +444,23 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	label->setFixedSize(label->sizeHint());
 	attLayout->addWidget(label);
 	attLayout->addStretch();
-/*
-	emailAttachList = new QLineEdit(emailFrame);
+
+	emailAttachList = new QComboBox(emailFrame);
 	emailAttachList->setMinimumSize(emailAttachList->sizeHint());
+	label->setBuddy(emailAttachList);
 	QWhatsThis::add(emailAttachList,
 	      i18n("Files to send as attachments to the email."));
-	attLayout->addWidget(emailAttachList);*/
+	attLayout->addWidget(emailAttachList);
+
+	QPushButton* button = new QPushButton(i18n("Add..."), emailFrame);
+	connect(button, SIGNAL(clicked()), SLOT(slotAddAttachment()));
+	QWhatsThis::add(button, i18n("Add an attachment to the email."));
+	attLayout->addWidget(button);
+
+	emailRemoveButton = new QPushButton(i18n("Remo&ve"), emailFrame);
+	connect(emailRemoveButton, SIGNAL(clicked()), SLOT(slotRemoveAttachment()));
+	QWhatsThis::add(emailRemoveButton, i18n("Remove the highlighted attachment from the email."));
+	attLayout->addWidget(emailRemoveButton);
 
 	// BCC email to sender
 	emailBcc = new QCheckBox(i18n("Co&py email to self"), emailFrame);
@@ -473,12 +480,12 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
 	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
 	event.setAudioFile(soundFile);
-	recurrenceEdit->updateEvent(event);
-
-	if (recurRadio->isOn()
-	&&  deferDateTime.isValid()
-	&&  deferDateTime < alarmDateTime)
-		event.defer(deferDateTime);
+	if (recurRadio->isOn())
+	{
+		recurrenceEdit->updateEvent(event);
+		if (deferDateTime.isValid()  &&  deferDateTime < alarmDateTime)
+			event.defer(deferDateTime);
+	}
 }
 
 /******************************************************************************
@@ -486,12 +493,12 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
  */
 int EditAlarmDlg::getAlarmFlags() const
 {
-	return (sound->isVisible() && sound->isChecked() && soundFile.isEmpty()
-	                                                           ? KAlarmEvent::BEEP : 0)
-	     | (lateCancel->isChecked()                            ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (confirmAck->isVisible() && confirmAck->isChecked() ? KAlarmEvent::CONFIRM_ACK : 0)
-	     | (repeatAtLoginRadio->isChecked()                    ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (alarmAnyTime                                       ? KAlarmEvent::ANY_TIME : 0);
+	bool displayAlarm = messageRadio->isOn() || fileRadio->isOn();
+	return (displayAlarm && sound->isChecked() && soundFile.isEmpty() ? KAlarmEvent::BEEP : 0)
+	     | (lateCancel->isChecked()                                   ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (displayAlarm && confirmAck->isChecked()                   ? KAlarmEvent::CONFIRM_ACK : 0)
+	     | (repeatAtLoginRadio->isChecked()                           ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (alarmAnyTime                                              ? KAlarmEvent::ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -572,12 +579,12 @@ void EditAlarmDlg::slotOk()
 {
 	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
 	{
-		if (!recurrenceEdit->checkData(alarmDateTime))
+		bool noTime;
+		if (!recurrenceEdit->checkData(alarmDateTime, noTime))
 		{
 			showPage(recurPageIndex);
-bool time = true; //??????
-			KMessageBox::sorry(this, (time ? i18n("End date/time is earlier than start date/time")
-			                               : i18n("End date is earlier than start date")));
+			KMessageBox::sorry(this, (noTime ? i18n("End date is earlier than start date")
+			                                 : i18n("End date/time is earlier than start date/time")));
 		}
 		else if (checkText(alarmMessage))
 			accept();
@@ -690,8 +697,7 @@ bool EditAlarmDlg::checkEmailAddresses()
 #endif
 
 /******************************************************************************
-*  Called when one of the message type radio buttons is clicked, or
-*  the browse button is pressed to select a file to display.
+*  Called when one of the message type radio buttons is clicked.
 */
 void EditAlarmDlg::slotAlarmTypeClicked(int id)
 {
@@ -774,11 +780,13 @@ void EditAlarmDlg::slotPickSound()
 {
 	if (soundPicker->isOn())
 	{
-		QString prefix = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
-		QString fileName(KFileDialog::getOpenFileName(prefix, i18n("*.wav|Wav Files"), 0));
-		if (!fileName.isEmpty())
+		if (soundDefaultDir.isEmpty())
+			soundDefaultDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+		KURL url = KFileDialog::getOpenURL(soundDefaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose a Sound File"));
+		if (!url.isEmpty())
 		{
-			soundFile = fileName;
+			soundFile = url.prettyURL();
+			soundDefaultDir = url.path();
 			setSoundPicker();
 		}
 		else if (soundFile.isEmpty())
@@ -807,6 +815,24 @@ void EditAlarmDlg::setSoundPicker()
 		soundPicker->setOn(!beep);
 	}
 }
+
+#ifdef KALARM_EMAIL
+/******************************************************************************
+ * Select a file to attach to the email.
+ */
+void EditAlarmDlg::slotAddAttachment()
+{
+	if (attachDefaultDir.isEmpty())
+		attachDefaultDir = QDir::homeDirPath();
+	KURL url = KFileDialog::getOpenURL(attachDefaultDir, QString::null, this, i18n("Choose File to Attach"));
+	if (!url.isEmpty())
+	{
+		emailAttachList->insertItem(url.prettyURL());
+		attachDefaultDir = url.path();
+		emailRemoveButton->setEnabled(true);
+	}
+}
+#endif
 
 /******************************************************************************
 *  Clean up the alarm text, and if it's a file, check whether it's valid.
