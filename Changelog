@@ -1,8 +1,9 @@
 KAlarm
 
-=== Version 1.1.2 --- 6 July 2004 ===
-Fix hangup in interactions with alarm daemon introduced in version  1.1.1.
+=== Version 1.1.2 --- 11 July 2004 ===
+Fix hangup in interactions with alarm daemon introduced in version 1.1.1.
 Only tick Alarms Enabled menu items once alarms have actually been enabled.
+Fix build for "./configure --without-arts".
 
 === Version 1.1.1 (KDE 3.3 beta1) --- 20 June 2004 ===
 Output error message and disable alarms if can't register with alarm daemon.
