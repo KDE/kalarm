@@ -899,7 +899,8 @@ void RecurrenceEdit::deleteException()
 }
 
 /******************************************************************************
- * Delete the currently highlighted exception date.
+ * Enable/disable the exception group buttons according to whether any item is
+ * selected in the exceptions listbox.
  */
 void RecurrenceEdit::enableExceptionButtons()
 {
@@ -909,6 +910,9 @@ void RecurrenceEdit::enableExceptionButtons()
 		mDeleteExceptionButton->setEnabled(enable);
 	if (mChangeExceptionButton)
 		mChangeExceptionButton->setEnabled(enable);
+
+	// Prevent the exceptions list box receiving keyboard focus is it's empty
+	mExceptionDateList->setFocusPolicy(mExceptionDateList->count() ? QWidget::WheelFocus : QWidget::NoFocus);
 }
 
 /******************************************************************************
