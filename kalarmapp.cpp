@@ -55,6 +55,7 @@ const char* DAEMON_NAME             = "kalarmd";
 const char* DAEMON_DCOP_OBJECT_NAME = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
+int         KAlarmApp::activeCount = 0;
 
 
 /******************************************************************************
@@ -98,8 +99,10 @@ KAlarmApp* KAlarmApp::getInstance()
 int KAlarmApp::newInstance()
 {
 	kdDebug()<<"KAlarmApp::newInstance(): New instance\n";
+	++activeCount;
 	static bool restored = false;
 	int exitCode = 0;      // default = success
+	QString usage;
 	if (!restored  &&  isRestored())
 	{
 		// Process is being restored by session management.
@@ -119,173 +122,215 @@ int KAlarmApp::newInstance()
 	{
 		mainWidget = new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME));
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-		if (args->isSet("stop"))
-		{
-			// Stop the alarm daemon
-			args->clear();      // free up memory
-			if (!stopDaemon())
-				exitCode = 1;
-		}
-		else
-		if (args->isSet("reset"))
-		{
-			// Reset the alarm daemon
-			args->clear();      // free up memory
-			resetDaemon();
-		}
-		else
-		if (args->isSet("handleEvent")  ||  args->isSet("displayEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
-		{
-			// Display or delete the message with the specified event ID
-			kdDebug()<<"KAlarmApp::newInstance(): handle event\n";
-			EventFunc function = EVENT_HANDLE;
-			int count = 0;
-			const char* option = 0;
-			if (args->isSet("handleEvent"))  { function = EVENT_HANDLE;  option = "handleEvent";  ++count; }
-			if (args->isSet("displayEvent"))  { function = EVENT_DISPLAY;  option = "displayEvent";  ++count; }
-			if (args->isSet("cancelEvent"))  { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
-			if (!count)
-				args->usage(i18n("--calendarURL requires --handleEvent, --displayEvent or --cancelEvent"));    // exits program
-			if (count > 1)
-				args->usage(i18n("--handleEvent, --displayEvent, --cancelEvent mutually exclusive"));    // exits program
 
-			QString eventID = args->getOption(option);
-			if (!initCheck())
-				exitCode = 1;
-			else
-			if (args->isSet("calendarURL"))
+		// Use a 'do' loop which is executed only once to allow easy error exits.
+		// Errors use 'break' to skip to the end of the function.
+		do
+		{
+			if (args->isSet("stop"))
 			{
-				QString calendarUrl = args->getOption("calendarURL");
-				if (KURL(calendarUrl).url() != calendar.urlString())
+				// Stop the alarm daemon
+				args->clear();      // free up memory
+				if (!stopDaemon())
 				{
-					kdError() << "KAlarmApp::deleteMessage(): wrong calendar file " << calendarUrl << endl;
 					exitCode = 1;
+					break;
 				}
 			}
-			if (!exitCode)
+			else
+			if (args->isSet("reset"))
 			{
+				// Reset the alarm daemon
+				args->clear();      // free up memory
+				resetDaemon();
+			}
+			else
+			if (args->isSet("handleEvent")  ||  args->isSet("displayEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
+			{
+				// Display or delete the message with the specified event ID
+				kdDebug()<<"KAlarmApp::newInstance(): handle event\n";
+				EventFunc function = EVENT_HANDLE;
+				int count = 0;
+				const char* option = 0;
+				if (args->isSet("handleEvent"))  { function = EVENT_HANDLE;  option = "handleEvent";  ++count; }
+				if (args->isSet("displayEvent"))  { function = EVENT_DISPLAY;  option = "displayEvent";  ++count; }
+				if (args->isSet("cancelEvent"))  { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
+				if (!count)
+				{
+					usage = i18n("--calendarURL requires --handleEvent, --displayEvent or --cancelEvent");
+					break;
+				}
+				if (count > 1)
+				{
+					usage = i18n("--handleEvent, --displayEvent, --cancelEvent mutually exclusive");
+					break;
+				}
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				if (args->isSet("calendarURL"))
+				{
+					QString calendarUrl = args->getOption("calendarURL");
+					if (KURL(calendarUrl).url() != calendar.urlString())
+					{
+						usage = i18n("--calendarURL: wrong calendar file");
+						break;
+					}
+				}
+				QString eventID = args->getOption(option);
 				args->clear();          // free up memory
 				if (!handleMessage(eventID, function))
+				{
 					exitCode = 1;
-			}
-		}
-		else
-		if (args->isSet("file")  ||  args->count())
-		{
-			// Display a message or file
-			bool file = false;
-			QCString alMessage;
-			if (args->isSet("file"))
-			{
-				kdDebug()<<"KAlarmApp::newInstance(): file\n";
-				if (args->count())
-					args->usage(i18n("message incompatible with --file"));      // exits program
-				alMessage = args->getOption("file");
-				file = true;
+					break;
+				}
 			}
 			else
+			if (args->isSet("file")  ||  args->count())
 			{
-				kdDebug()<<"KAlarmApp::newInstance(): message\n";
-				alMessage = args->arg(0);
-			}
-
-			QDateTime* alarmTime = 0L;
-			QDateTime wakeup;
-			QColor bgColour = generalSettings()->defaultBgColour();
-			int    repeatCount = 0;
-			int    repeatInterval = 0;
-			if (args->isSet("colour"))
-			{
-				// Colour is specified
-				QCString colourText = args->getOption("colour");
-				if (static_cast<const char*>(colourText)[0] == '0'
-				&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
-					colourText.replace(0, 2, "#");
-				bgColour.setNamedColor(colourText);
-				if (!bgColour.isValid())
+				// Display a message or file
+				bool file = false;
+				QCString alMessage;
+				if (args->isSet("file"))
 				{
-					kdError() << "Invalid --colour parameter\n";
-					exitCode = 1;
+					kdDebug()<<"KAlarmApp::newInstance(): file\n";
+					if (args->count())
+					{
+						usage = i18n("message incompatible with --file");
+						break;
+					}
+					alMessage = args->getOption("file");
+					file = true;
 				}
-			}
-
-			if (args->isSet("time"))
-			{
-				QCString dateTime = args->getOption("time");
-				if (!convWakeTime(dateTime, wakeup))
+				else
 				{
-					kdError() << "Invalid --time parameter\n";
-					exitCode = 1;
+					kdDebug()<<"KAlarmApp::newInstance(): message\n";
+					alMessage = args->arg(0);
 				}
-				alarmTime = &wakeup;
-			}
 
-			if (args->isSet("repeat"))
-			{
-				// Repeat count is specified
-				if (!args->isSet("interval"))
-					args->usage(i18n("--repeat requires --interval"));   // exits program
-				bool ok;
-				repeatCount = args->getOption("repeat").toInt(&ok);
-				if (!ok || repeatCount < 0)
+				QDateTime* alarmTime = 0L;
+				QDateTime wakeup;
+				QColor bgColour = generalSettings()->defaultBgColour();
+				int    repeatCount = 0;
+				int    repeatInterval = 0;
+				if (args->isSet("colour"))
 				{
-					kdError() << "Invalid --repeat parameter\n";
-					exitCode = 1;
+					// Colour is specified
+					QCString colourText = args->getOption("colour");
+					if (static_cast<const char*>(colourText)[0] == '0'
+					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
+						colourText.replace(0, 2, "#");
+					bgColour.setNamedColor(colourText);
+					if (!bgColour.isValid())
+					{
+						usage = i18n("Invalid --colour parameter");
+						break;
+					}
 				}
-				repeatInterval = args->getOption("interval").toInt(&ok);
-				if (!ok || repeatInterval < 0)
+
+				if (args->isSet("time"))
 				{
-					kdError() << "Invalid --interval parameter\n";
-					exitCode = 1;
+					QCString dateTime = args->getOption("time");
+					if (!convWakeTime(dateTime, wakeup))
+					{
+						usage = i18n("Invalid --time parameter");
+						break;
+					}
+					alarmTime = &wakeup;
 				}
-			}
-			else if (args->isSet("interval"))
-				args->usage(i18n("--interval requires --repeat"));      // exits program
 
-			int flags = 0;
-			if (args->isSet("beep"))
-				flags |= KAlarmEvent::BEEP;
-			if (args->isSet("late-cancel"))
-				flags |= KAlarmEvent::LATE_CANCEL;
-			if (args->isSet("login"))
-				flags |= KAlarmEvent::REPEAT_AT_LOGIN;
-			args->clear();               // free up memory
+				if (args->isSet("repeat"))
+				{
+					// Repeat count is specified
+					if (!args->isSet("interval"))
+					{
+						usage = i18n("--repeat requires --interval");
+						break;
+					}
+					bool ok;
+					repeatCount = args->getOption("repeat").toInt(&ok);
+					if (!ok || repeatCount < 0)
+					{
+						usage = i18n("Invalid --repeat parameter");
+						break;
+					}
+					repeatInterval = args->getOption("interval").toInt(&ok);
+					if (!ok || repeatInterval < 0)
+					{
+						usage = i18n("Invalid --interval parameter");
+						break;
+					}
+				}
+				else if (args->isSet("interval"))
+				{
+					usage = i18n("--interval requires --repeat");
+					break;
+				}
 
-			if (!exitCode)
-			{
+				int flags = 0;
+				if (args->isSet("beep"))
+					flags |= KAlarmEvent::BEEP;
+				if (args->isSet("late-cancel"))
+					flags |= KAlarmEvent::LATE_CANCEL;
+				if (args->isSet("login"))
+					flags |= KAlarmEvent::REPEAT_AT_LOGIN;
+				args->clear();               // free up memory
+
 				// Display or schedule the message
 				if (!scheduleMessage(alMessage, alarmTime, bgColour, flags, file, repeatCount, repeatInterval))
+				{
 					exitCode = 1;
+					break;
+				}
 			}
-		}
-		else
-		{
-			QString invalidOptions;
-			if (args->isSet("beep"))
-				invalidOptions += "--beep ";
-			if (args->isSet("colour"))
-				invalidOptions += "--colour ";
-			if (args->isSet("late-cancel"))
-				invalidOptions += "--late-cancel ";
-			if (args->isSet("login"))
-				invalidOptions += "--login ";
-			if (args->isSet("time"))
-				invalidOptions += "--time ";
-			if (invalidOptions.length())
-				args->usage(invalidOptions + i18n(": option(s) only valid with a message/file"));    // exits program
-
-			args->clear();               // free up memory
-			if (!initCheck())
-				exitCode = 1;
 			else
 			{
+				if (args->isSet("beep"))
+					usage += QString::fromLatin1("--beep ");
+				if (args->isSet("colour"))
+					usage += QString::fromLatin1("--colour ");
+				if (args->isSet("late-cancel"))
+					usage += QString::fromLatin1("--late-cancel ");
+				if (args->isSet("login"))
+					usage += QString::fromLatin1("--login ");
+				if (args->isSet("time"))
+					usage += QString::fromLatin1("--time ");
+				if (!usage.isEmpty())
+				{
+					usage += i18n(": option(s) only valid with a message/file");
+					break;
+				}
+
+				args->clear();               // free up memory
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+
 				// No arguments - run interactively & display the dialogue
 				KAlarmMainWindow* mainWindow = new KAlarmMainWindow;
 				mainWindow->show();
 			}
-		}
+		} while (0);    // only execute once
 	}
 
+	if (!usage.isEmpty())
+	{
+		// Note: we can't use args->usage() since that also quits any other
+		// running 'instances' of the program.
+		cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
+		exitCode = 1;
+	}
+	if (--activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount())
+	{
+		// This is the last/only running "instance" of the program, so exit completely.
+		// Executing 'return' doesn't work very well since the program continues to
+		// run if no windows were created.
+		exit(exitCode);
+	}
 	return exitCode;
 }
 

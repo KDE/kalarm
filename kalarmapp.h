@@ -112,6 +112,7 @@ class KAlarmApp : public KUniqueApplication
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
 		static KAlarmApp*          theInstance;
+		static int                 activeCount;         // number of active instances without main windows
 		MainWidget*                mainWidget;          // the parent of the DCOP receiver object
 		QPtrList<KAlarmMainWindow> mainWindowList;      // active main windows
 		AlarmCalendar              calendar;
