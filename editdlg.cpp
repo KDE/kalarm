@@ -194,7 +194,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
 	           "If unchecked, the alarm will be triggered at the first opportunity after "
 	           "the specified time, regardless of how late it is."));
-	grid->addWidget(lateCancel, 1, 1);
+	grid->addWidget(lateCancel, 1, 1, Qt::AlignLeft);
 	grid->setColStretch(1, 1);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
