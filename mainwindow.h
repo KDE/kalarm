@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef MAINWINDOW_H
@@ -40,16 +44,20 @@ class KAlarmMainWindow : public MainWindowBase
 		~KAlarmMainWindow();
 		bool           trayParent() const;
 		bool           hiddenTrayParent() const     { return mHiddenTrayParent; }
+		bool           showingExpired() const       { return mShowExpired; }
 
 		void           modifyEvent(const KAlarmEvent& event)    { modifyEvent(event.id(), event); }
 		void           modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent);
-		void           deleteEvent(const KAlarmEvent&);
+		void           deleteEvent(const QString& eventID);
+		void           undeleteEvent(const QString& oldEventID, const KAlarmEvent& event);
 
 		static void    refresh();
+		static void    updateExpired();
 		static void    addEvent(const KAlarmEvent&, KAlarmMainWindow*);
 		static void    modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		static void    modifyEvent(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
-		static void    deleteEvent(const KAlarmEvent&, KAlarmMainWindow*);
+		static void    deleteEvent(const QString& eventID, KAlarmMainWindow*);
+		static void    undeleteEvent(const QString& oldEventID, const KAlarmEvent& event, KAlarmMainWindow*);
 		static void              closeAll();
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* mainMainWindow();
@@ -64,9 +72,12 @@ class KAlarmMainWindow : public MainWindowBase
 		virtual void   readProperties(KConfig*);
 
 	private slots:
-		void           slotDelete();
 		void           slotNew();
+		void           slotCopy();
 		void           slotModify();
+		void           slotDelete();
+		void           slotUndelete();
+		void           slotView();
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
 		void           slotQuit();
@@ -74,7 +85,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotSelection(QListViewItem*);
 		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
 		void           slotDoubleClicked(QListViewItem*);
-		void           slotSettingsChanged();
+		void           slotShowExpired();
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
 		void           setAlarmEnabledStatus(bool status);
@@ -86,16 +97,22 @@ class KAlarmMainWindow : public MainWindowBase
 		static QPtrList<KAlarmMainWindow> windowList;  // active main windows
 		AlarmListView* listView;
 		KAction*       actionNew;
+		KAction*       actionCopy;
 		KAction*       actionModify;
+		KAction*       actionView;
 		KAction*       actionDelete;
+		KAction*       actionUndelete;
 		KAction*       actionToggleTrayIcon;
 		KAction*       actionRefreshAlarms;
+		KAction*       actionShowExpired;
 		KAction*       actionQuit;
-		int            mViewMenuId;
-		KPopupMenu*    mViewMenu;
+		int            mShowExpiredId;
+		int            mShowTrayId;
 		KPopupMenu*    mActionsMenu;
+		KPopupMenu*    mViewMenu;
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 		bool           mHiddenTrayParent;    // on session restoration, hide this window
+		bool           mShowExpired;         // include expired alarms in the displayed list
 };
 
 #endif // MAINWINDOW_H

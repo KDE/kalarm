@@ -35,62 +35,57 @@ QCString execArguments;    // argument to --exec option
 
 static KCmdLineOptions options[] =
 {
-	{ "a", 0L, 0L },
-	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0L },
-#ifdef KALARM_EMAIL
-	{ "bcc", I18N_NOOP("Blind copy email to self"), 0L },
-#endif
-	{ "b", 0L, 0L },
-	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
-	{ "colour", 0L, 0L },
-	{ "c", 0L, 0L },
-	{ "color <color>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0L },
-	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0L },
-	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0L },
-	{ "e", 0L, 0L },
-	{ "exec <commandline>", I18N_NOOP("Execute a shell command line"), 0L },
-	{ "f", 0L, 0L },
-	{ "file <url>", I18N_NOOP("File to display"), 0L },
-	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0L },
-	{ "i", 0L, 0L },
-	{ "interval <period>", I18N_NOOP("Interval between alarm recurrences"), 0L },
-	{ "l", 0L, 0L },
-	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be triggered on time"), 0L },
-	{ "L", 0L, 0L },
-	{ "login", I18N_NOOP("Repeat alarm at every login"), 0L },
-#ifdef KALARM_EMAIL
-	{ "m", 0L, 0L },
-	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0L },
-#endif
-	{ "r", 0L, 0L },
-	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
-	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0L },
-	{ "s", 0L, 0L },
-	{ "sound <url>", I18N_NOOP("Audio file to play"), 0L },
-	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0L },
-#ifdef KALARM_EMAIL
-	{ "S", 0L, 0L },
-	{ "subject ", I18N_NOOP("Email subject line"), 0L },
-#endif
-	{ "t", 0L, 0L },
-	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
-	{ "tray", I18N_NOOP("Display system tray icon"), 0L },
-	{ "u", 0L, 0L },
-	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
-	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0L },
-	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0L },
-	{ "+[message]", I18N_NOOP("Message text to display"), 0L },
-	{ 0L, 0L, 0L }
+	{ "a", 0, 0 },
+	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0 },
+	{ "bcc", I18N_NOOP("Blind copy email to self"), 0 },
+	{ "b", 0, 0 },
+	{ "beep", I18N_NOOP("Beep when message is displayed"), 0 },
+	{ "colour", 0, 0 },
+	{ "c", 0, 0 },
+	{ "color <color>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0 },
+	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0 },
+	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0 },
+	{ "e", 0, 0 },
+	{ "exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
+	{ "f", 0, 0 },
+	{ "file <url>", I18N_NOOP("File to display"), 0 },
+	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0 },
+	{ "i", 0, 0 },
+	{ "interval <period>", I18N_NOOP("Interval between alarm recurrences"), 0 },
+	{ "l", 0, 0 },
+	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be triggered on time"), 0 },
+	{ "L", 0, 0 },
+	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
+	{ "m", 0, 0 },
+	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
+	{ "r", 0, 0 },
+	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0 },
+	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
+	{ "s", 0, 0 },
+	{ "sound <url>", I18N_NOOP("Audio file to play"), 0 },
+	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
+	{ "S", 0, 0 },
+	{ "subject ", I18N_NOOP("Email subject line"), 0 },
+	{ "t", 0, 0 },
+	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
+	{ "tray", I18N_NOOP("Display system tray icon"), 0 },
+	{ "u", 0, 0 },
+	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
+	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0 },
+	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
+	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
+	{ 0, 0, 0 }
 };
 
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"),
-		KALARM_VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " [-bcilLrstu] -f URL\n"
-		"       " PROGRAM_NAME " [-bcilLrstu] message\n"
+	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
+		I18N_NOOP("       " PROGRAM_NAME "\n"
+		"       " PROGRAM_NAME " [-abcilLrstu] message\n"
+		"       " PROGRAM_NAME " [-abcilLrstu] -f URL\n"
 		"       " PROGRAM_NAME " [-ilLrtu] -e commandline\n"
+		"       " PROGRAM_NAME " [-ilLrtu] [-m address]+ [-S subject] message\n"
 		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --triggerEvent eventID [--calendarURL url]\n"
@@ -98,8 +93,8 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE personal alarm message and command scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux/kalarm.html");
-	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
+		"(c) 2001, 2002, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
+	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and concatenate
 	// them into a single argument. Then change the leading '-'.
