@@ -1,5 +1,5 @@
 /*
- *  dockwindow.cpp  -  the KDE system tray applet
+ *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
  *  (C) 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -40,51 +40,25 @@
 #include "kalarmapp.h"
 #include "prefdlg.h"
 #include "prefsettings.h"
-#include "dockwindow.h"
-#include "dockwindow.moc"
-
-
-/*=============================================================================
-= Class: TrayMainWindow
-= This class exists only to ensure that when other main windows are closed, the
-= application does not terminate and close the system tray widget.
-= (Note that when the last KMainWindow closes, the application terminates.)
-=============================================================================*/
-
-TrayMainWindow::TrayMainWindow()
-	: KMainWindow(0L, 0L, WGroupLeader)
-{
-	kdDebug(5950) << "TrayMainWindow::TrayMainWindow()\n";
-	theApp()->addWindow(this);
-	QLabel* label = new QLabel(QString(""), this);
-	setCentralWidget(label);
-	mDockWindow = new DockWindow(this);
-	mDockWindow->show();
-}
-
-TrayMainWindow::~TrayMainWindow()
-{
-	kdDebug(5950) << "TrayMainWindow::~TrayMainWindow()\n";
-	delete mDockWindow;
-	theApp()->deleteWindow(this);
-}
+#include "traywindow.h"
+#include "traywindow.moc"
 
 
 
 /*=============================================================================
-= Class: DockWindow
+= Class: TrayWindow
 = The KDE system tray window.
 =============================================================================*/
 
-DockWindow::DockWindow(TrayMainWindow* parent, const char* name)
+TrayWindow::TrayWindow(const char* name)
 	: KSystemTray(0, name),
-	  mTrayWindow(parent),
 	  mDaemonStatusTimer(this),
 	  mDaemonStatusTimerCount(0),
 	  mQuitReplaced(false),
+	  mCalendarDisabled(false),
 	  mEnableCalPending(false)
 {
-	kdDebug(5950) << "DockWindow::DockWindow()\n";
+	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
 //	KGlobal::iconLoader()->addAppDir(kapp->aboutData()->appName());
 //	mPixmapEnabled  = KGlobal::iconLoader()->loadIcon("kalarm", KIcon::Panel);
@@ -122,11 +96,17 @@ DockWindow::DockWindow(TrayMainWindow* parent, const char* name)
 	QToolTip::add(this, kapp->aboutData()->programName());
 }
 
+TrayWindow::~TrayWindow()
+{
+	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
+	theApp()->deleteWindow(this);
+}
+
 /******************************************************************************
 * Called just before the context menu is displayed.
 * Modify the Quit context menu item to only close the system tray widget.
 */
-void DockWindow::contextMenuAboutToShow(KPopupMenu* menu)
+void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 {
 	if (!mQuitReplaced)
 	{
@@ -152,8 +132,9 @@ void DockWindow::contextMenuAboutToShow(KPopupMenu* menu)
 /******************************************************************************
 * Update the context menu to display the alarm monitoring status.
 */
-void DockWindow::updateCalendarStatus(bool monitoring)
+void TrayWindow::updateCalendarStatus(bool monitoring)
 {
+	mCalendarDisabled = !monitoring;
 	if (!isDaemonRunning(false))
 		monitoring = false;
 	KPopupMenu* menu = contextMenu();
@@ -163,7 +144,7 @@ void DockWindow::updateCalendarStatus(bool monitoring)
 /******************************************************************************
 * Tell the alarm daemon to enable/disable monitoring of the calendar file.
 */
-void DockWindow::enableCalendar(bool enable)
+void TrayWindow::enableCalendar(bool enable)
 {
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.enableCal(theApp()->getCalendar().urlString(), enable);
@@ -175,7 +156,7 @@ void DockWindow::enableCalendar(bool enable)
 * The alarm daemon is told to stop or start monitoring the calendar
 * file as appropriate.
 */
-void DockWindow::toggleAlarmsEnabled()
+void TrayWindow::toggleAlarmsEnabled()
 {
 	bool newstate = !contextMenu()->isItemChecked(mAlarmsEnabledId);
 	if (newstate  &&  !isDaemonRunning())
@@ -185,7 +166,7 @@ void DockWindow::toggleAlarmsEnabled()
 		if (execStr.isEmpty())
 		{
 			KMessageBox::error(this, i18n("Alarm Daemon not found"), i18n("%1 Error").arg(kapp->aboutData()->programName()));
-			kdError() << "DockWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
+			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}
 		system(QFile::encodeName(execStr));
@@ -200,7 +181,7 @@ void DockWindow::toggleAlarmsEnabled()
 * Called when the Configure KAlarm context menu item is selected.
 * Displays the KAlarm configuration dialog.
 */
-void DockWindow::slotConfigKAlarm()
+void TrayWindow::slotConfigKAlarm()
 {
 	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->settings());
 	if (pref->exec())
@@ -211,7 +192,7 @@ void DockWindow::slotConfigKAlarm()
 * Called when the Configure Daemon context menu item is selected.
 * Displays the alarm daemon configuration dialog.
 */
-void DockWindow::slotConfigDaemon()
+void TrayWindow::slotConfigDaemon()
 {
 	KProcess proc;
 	proc << QString::fromLatin1("kcmshell") << QString::fromLatin1("alarmdaemonctrl");
@@ -221,9 +202,8 @@ void DockWindow::slotConfigDaemon()
 /******************************************************************************
 *  Called when the Activate KAlarm context menu item is selected.
 */
-void DockWindow::slotKAlarm()
+void TrayWindow::slotKAlarm()
 {
-kdDebug()<<"DockWindow::slotKAlarm()\n";
 	KProcess proc;
 	proc << QString::fromLatin1(kapp->aboutData()->appName());
 	proc.start(KProcess::DontCare);
@@ -234,20 +214,23 @@ kdDebug()<<"DockWindow::slotKAlarm()\n";
 * Closes the system tray window, but does not exit the program if other windows
 * are still open.
 */
-void DockWindow::slotQuit()
+void TrayWindow::slotQuit()
 {
-kdDebug()<<"DockWindow::slotQuit()\n";
-	delete mTrayWindow;
+	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
+	delete this;
 }
 
 /******************************************************************************
 * Called by the timer after the Alarms Enabled context menu item is selected,
 * to update the GUI status once the daemon has responded to the command.
+* 'newstatus' is true of the daemon is running.
 */
-void DockWindow::setDaemonStatus(bool newstatus)
+void TrayWindow::setDaemonStatus(bool newstatus)
 {
 	bool oldstatus = contextMenu()->isItemChecked(mAlarmsEnabledId);
-	kdDebug(5950) << "DockWindow::setDaemonStatus(): "<<(int)oldstatus<<"->"<<(int)newstatus<<endl;
+	kdDebug(5950) << "TrayWindow::setDaemonStatus(): "<<(int)oldstatus<<"->"<<(int)newstatus<<endl;
+	if (mCalendarDisabled)
+		newstatus = false;
 	if (newstatus != oldstatus)
 	{
 		setPixmap(newstatus ? mPixmapEnabled : mPixmapDisabled);
@@ -259,7 +242,7 @@ void DockWindow::setDaemonStatus(bool newstatus)
 *  Called when the mouse is clicked over the panel icon.
 *  A left click displays the KAlarm main window.
 */
-void DockWindow::mousePressEvent(QMouseEvent* e)
+void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
 	if (e->button() == LeftButton)
 		slotKAlarm();      // left click: display the main window
@@ -270,9 +253,9 @@ void DockWindow::mousePressEvent(QMouseEvent* e)
 /******************************************************************************
 * Register as a GUI with the alarm daemon.
 */
-void DockWindow::registerWithDaemon()
+void TrayWindow::registerWithDaemon()
 {
-	kdDebug(5950) << "DockWindow::registerWithDaemon()\n";
+	kdDebug(5950) << "TrayWindow::registerWithDaemon()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.registerGui(kapp->aboutData()->appName(), TRAY_DCOP_OBJECT_NAME);
 }
@@ -280,7 +263,7 @@ void DockWindow::registerWithDaemon()
 /******************************************************************************
 * Check whether the alarm daemon is currently running.
 */
-bool DockWindow::isDaemonRunning(bool updateDockWindow)
+bool TrayWindow::isDaemonRunning(bool updateDockWindow)
 {
 	bool newstatus = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(DAEMON_APP_NAME));
 	if (!updateDockWindow)
@@ -304,7 +287,7 @@ bool DockWindow::isDaemonRunning(bool updateDockWindow)
 /******************************************************************************
 * Called by the timer to check whether the daemon is running.
 */
-void DockWindow::checkDaemonRunning()
+void TrayWindow::checkDaemonRunning()
 {
 	isDaemonRunning();
 	if (mDaemonStatusTimerCount > 0  &&  --mDaemonStatusTimerCount <= 0)   // limit how long we check at fast rate
@@ -314,7 +297,7 @@ void DockWindow::checkDaemonRunning()
 /******************************************************************************
 * Starts checking at a faster rate whether the daemon is running.
 */
-void DockWindow::setFastDaemonCheck()
+void TrayWindow::setFastDaemonCheck()
 {
 	mDaemonStatusTimer.start(500);     // check new status every half second
 	mDaemonStatusTimerCount = 20;      // don't check at this rate for more than 10 seconds
@@ -324,7 +307,7 @@ void DockWindow::setFastDaemonCheck()
 * Called when a program setting has changed.
 * If the system tray icon update interval has changed, reset the timer.
 */
-void DockWindow::slotSettingsChanged()
+void TrayWindow::slotSettingsChanged()
 {
 	int newInterval = theApp()->settings()->daemonTrayCheckInterval();
 	if (newInterval != mDaemonStatusTimerInterval)

@@ -21,7 +21,7 @@
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
 
-#include <kmainwindow.h>
+#include "mainwindowbase.h"
 
 #include "msgevent.h"
 using namespace KCal;
@@ -32,7 +32,7 @@ class AlarmTimeWidget;
 /**
  * MessageWin: A window to display an alarm message
  */
-class MessageWin : public KMainWindow
+class MessageWin : public MainWindowBase
 {
 		Q_OBJECT
 	public:

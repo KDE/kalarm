@@ -24,7 +24,7 @@
 
 #include <kalarmd/alarmdaemoniface.h>
 #include "kalarmapp.h"
-#include "dockwindow.h"
+#include "traywindow.h"
 #include "traydcop.h"
 #include "traydcop.moc"
 
@@ -44,8 +44,8 @@ void TrayDcopHandler::alarmDaemonUpdate(int alarmGuiChangeType,
                                         const QString& calendarURL, const QCString& /*appName*/)
 {
 	kdDebug(5950) << "TrayDcopHandler::alarmDaemonUpdate(" << alarmGuiChangeType << ")\n";
-	DockWindow* dockWin = theApp()->dockWindow();
-	if (!dockWin)
+	TrayWindow* trayWin = theApp()->trayWindow();
+	if (!trayWin)
 		return;
 	AlarmGuiChangeType changeType = AlarmGuiChangeType(alarmGuiChangeType);
 	switch (changeType)
@@ -82,7 +82,7 @@ void TrayDcopHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 				default:
 					return;
 			}
-			dockWin->updateCalendarStatus(monitoring);
+			trayWin->updateCalendarStatus(monitoring);
 			break;
 		}
 	}

@@ -1,7 +1,7 @@
 /*
- *  prefdlg.h  -  program preferences dialog
+ *  mainwindowbase.h  -  base class for main application windows
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,28 +18,27 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef PREFDLG_H
-#define PREFDLG_H
+#ifndef MAINWINDOWBASE_H
+#define MAINWINDOWBASE_H
 
-#include <kdialogbase.h>
-#include "prefs.h"
+#include <kmainwindow.h>
 
-class KAlarmPrefDlg : public KDialogBase
+
+class MainWindowBase : public KMainWindow
 {
 		Q_OBJECT
+
 	public:
-		KAlarmPrefDlg(Settings*);
-		~KAlarmPrefDlg();
+		MainWindowBase(QWidget* parent = 0, const char* name = 0, WFlags f = WType_TopLevel | WDestructiveClose)
+		                    : KMainWindow(parent, name, f), disableQuit(false) { }
 
-		AppearancePrefs* m_appearancePage;
-		MiscPrefs*       m_miscPage;
+	protected:
+		virtual void closeEvent(QCloseEvent*);
+		virtual bool queryExit();
 
-	protected slots:
-		virtual void slotOk();
-		virtual void slotApply();
-		virtual void slotHelp();
-		virtual void slotDefault();
-		virtual void slotCancel();
+	private:
+		bool  disableQuit;       // allow the application to quit
 };
 
-#endif // PREFDLG_H
+#endif // MAINWINDOWBASE_H
+

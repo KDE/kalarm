@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,10 +60,10 @@ int  MessageWin::nInstances = 0;
 *  displayed.
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event)
-	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
+	: MainWindowBase(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
 	  event(evnt),
 	  message(alarm.messageIsFileName() ? alarm.fileName() : alarm.message()),
-	  font(theApp()->generalSettings()->messageFont()),
+	  font(theApp()->settings()->messageFont()),
 	  colour(alarm.colour()),
 	  dateTime(alarm.repeatAtLogin() ? evnt.firstAlarm().dateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
@@ -93,7 +93,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 *  The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
-	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
+	: MainWindowBase(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  deferHeight(0),
 	  rescheduleEvent(false),
 	  shown(true)
@@ -307,7 +307,7 @@ void MessageWin::readProperties(KConfig* config)
 */
 void MessageWin::showEvent(QShowEvent* se)
 {
-	KMainWindow::showEvent(se);
+	MainWindowBase::showEvent(se);
 	if (!shown)
 	{
 		if (beep)
@@ -344,7 +344,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	{
 		if (file  &&  !fileError  &&  !deferHeight)
 			theApp()->writeConfigWindowSize("FileMessage", re->size());
-		KMainWindow::resizeEvent(re);
+		MainWindowBase::resizeEvent(re);
 	}
 }
 

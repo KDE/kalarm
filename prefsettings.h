@@ -2,7 +2,7 @@
  *  prefsettings.h  -  program preference settings
  *  Program:  kalarm
  *
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,40 +27,33 @@
 #include <qfont.h>
 class QWidget;
 
-class SettingsBase : public QObject
+
+// Settings configured in the Preferences dialog
+class Settings : public QObject
 {
-	Q_OBJECT
-public:
-	SettingsBase(QWidget* parent);
-	~SettingsBase();
+		Q_OBJECT
+	public:
+		Settings(QWidget* parent);
 
-	virtual void loadSettings() = 0;
-	virtual void saveSettings() = 0;
-	void emitSettingsChanged();
+		QColor       defaultBgColour() const          { return mDefaultBgColour; }
+		const QFont& messageFont() const              { return mMessageFont; }
+		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
+		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
+		void         loadSettings();
+		void         saveSettings();
+		void         emitSettingsChanged();
 
-signals:
-	void settingsChanged();
-};
+		static const QColor default_defaultBgColour;
+		static const QFont  default_messageFont;
+		static const bool   default_autostartTrayIcon;
+		static const int    default_daemonTrayCheckInterval;
+		bool                mAutostartTrayIcon;
+		int                 mDaemonTrayCheckInterval;
+		QColor              mDefaultBgColour;
+		QFont               mMessageFont;
 
-
-// Settings configured in the General tab of the Preferences dialog
-class GeneralSettings : public SettingsBase
-{
-	Q_OBJECT
-public:
-	GeneralSettings(QWidget* parent);
-	~GeneralSettings();
-
-	QColor defaultBgColour() const   { return m_defaultBgColour; }
-	const QFont&  messageFont() const   { return m_messageFont; }
-	// some virtual functions that will be overloaded from the base class
-	virtual void loadSettings();
-	virtual void saveSettings();
-
-	static const QColor default_defaultBgColour;
-	static const QFont  default_messageFont;
-	QColor m_defaultBgColour;
-	QFont  m_messageFont;
+	signals:
+		void settingsChanged();
 };
 
 #endif // PREFSETTINGS_H

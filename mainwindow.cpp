@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,12 +28,15 @@
 
 #include <kmenubar.h>
 #include <kpopupmenu.h>
+#include <kaccel.h>
+#include <kaction.h>
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
+#include <klistview.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -43,10 +46,61 @@
 #include "mainwindow.h"
 #include "mainwindow.moc"
 
-using namespace std;
+
+class AlarmListViewItem;
+struct AlarmItemData
+{
+		KAlarmEvent event;
+		QString     messageText;       // message as displayed
+		QString     dateTimeText;      // date/time as displayed
+		QString     repeatCountText;   // repeat count as displayed
+		QString     repeatCountOrder;  // repeat count item ordering text
+		int         messageWidth;      // width required to display 'messageText'
+};
+
+
+class AlarmListView : public KListView
+{
+	public:
+		enum { TIME_COLUMN, REPEAT_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
+
+		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
+		virtual void         clear();
+		void                 refresh();
+		AlarmListViewItem*   addEntry(const KAlarmEvent&, bool setSize = false);
+		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
+		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
+		const KAlarmEvent    getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
+		AlarmListViewItem*   getEntry(const QString& eventID);
+		const AlarmItemData* getData(AlarmListViewItem*) const;
+		void                 resizeLastColumn();
+		int                  itemHeight();
+		bool                 drawMessageInColour() const		    { return drawMessageInColour_; }
+		void                 setDrawMessageInColour(bool inColour)	{ drawMessageInColour_ = inColour; }
+		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
+		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
+	private:
+		typedef QMap<AlarmListViewItem*, AlarmItemData> EntryMap;
+		EntryMap             entries;
+		int                  lastColumnHeaderWidth_;
+		bool                 drawMessageInColour_;
+};
+
+
+class AlarmListViewItem : public QListViewItem
+{
+	public:
+		AlarmListViewItem(QListView* parent, const QString&, const QString&);
+		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
+		AlarmListView*       alarmListView() const		{ return (AlarmListView*)listView(); }
+};
+
+
+
 
 KAlarmMainWindow::KAlarmMainWindow()
-	: KMainWindow(0L, 0L, WGroupLeader | WStyle_ContextHelp)
+//	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp)
+	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose)
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
@@ -75,7 +129,7 @@ KAlarmMainWindow::~KAlarmMainWindow()
 void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 {
 	listView->resizeLastColumn();
-	KMainWindow::resizeEvent(re);
+	MainWindowBase::resizeEvent(re);
 }
 
 /******************************************************************************
@@ -86,7 +140,7 @@ void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 void KAlarmMainWindow::showEvent(QShowEvent* se)
 {
 	listView->resizeLastColumn();
-	KMainWindow::showEvent(se);
+	MainWindowBase::showEvent(se);
 }
 
 /******************************************************************************
@@ -94,11 +148,12 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 */
 void KAlarmMainWindow::initActions()
 {
-	actionQuit        = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
-	actionNew         = new KAction(i18n("&New"), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
-	actionModify      = new KAction(i18n("&Modify"), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
-	actionDelete      = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
-	actionResetDaemon = new KAction(i18n("&Reset Daemon"), "reset", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
+	actionQuit           = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
+	actionNew            = new KAction(i18n("&New"), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
+	actionModify         = new KAction(i18n("&Modify"), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
+	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
+	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
+	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
 	KAction* preferences = KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection());
 
 	KMenuBar* menu = menuBar();
@@ -111,7 +166,9 @@ void KAlarmMainWindow::initActions()
 	actionModify->plug(actionsMenu);
 	actionDelete->plug(actionsMenu);
 	actionsMenu->insertSeparator(3);
+	actionToggleTrayIcon->plug(actionsMenu);
 	actionResetDaemon->plug(actionsMenu);
+	connect(actionsMenu, SIGNAL(aboutToShow()), this, SLOT(setTrayIconActionText()));
 	KPopupMenu* settingsMenu = new KPopupMenu(this);
 	menu->insertItem(i18n("&Settings"), settingsMenu);
 	preferences->plug(settingsMenu);
@@ -166,12 +223,11 @@ void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 */
 void KAlarmMainWindow::slotNew()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Message"), this, "editDlg");
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New message"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;
 		editDlg->getEvent(event);
-//event->setOrganizer("KAlarm");
 
 		// Add the message to the displayed lists and to the calendar file
 		theApp()->addMessage(event, this);
@@ -222,6 +278,23 @@ void KAlarmMainWindow::slotDelete()
 }
 
 /******************************************************************************
+*  Called when the Display System Tray Icon menu item is selected.
+*/
+void KAlarmMainWindow::slotToggleTrayIcon()
+{
+	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed());
+}
+
+/******************************************************************************
+* Set the system tray icon menu text according to whether or not the system
+* tray icon is currently visible.
+*/
+void KAlarmMainWindow::setTrayIconActionText()
+{
+	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
+}
+
+/******************************************************************************
 *  Called when the Reset Daemon menu item is selected.
 */
 void KAlarmMainWindow::slotResetDaemon()
@@ -234,16 +307,9 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotPreferences()
 {
-#ifdef MISC_PREFS
-	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->generalSettings(), m_miscSettings);
-#else
-	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->generalSettings());
-#endif
+	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->settings());
 	if (pref->exec())
-	{
-		theApp()->generalSettings()->saveSettings();
-		KGlobal::config()->sync();
-	}
+		theApp()->settings()->saveSettings();
 }
 
 /******************************************************************************
@@ -346,9 +412,9 @@ void AlarmListView::refresh()
 
 AlarmListViewItem* AlarmListView::getEntry(const QString& eventID)
 {
-	for (map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.begin();  it != entries.end();  ++it)
-		if (it->second.event.id() == eventID)
-			return it->first;
+	for (EntryMap::ConstIterator it = entries.begin();  it != entries.end();  ++it)
+		if (it.data().event.id() == eventID)
+			return it.key();
 	return 0L;
 }
 
@@ -397,10 +463,10 @@ AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAl
 
 void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
 {
-	map<AlarmListViewItem*, AlarmItemData>::iterator it = entries.find(item);
+	EntryMap::Iterator it = entries.find(item);
 	if (it != entries.end())
 	{
-		entries.erase(it);
+		entries.remove(it);
 		delete item;
 		if (setSize)
 			resizeLastColumn();
@@ -409,10 +475,10 @@ void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
 
 const AlarmItemData* AlarmListView::getData(AlarmListViewItem* item) const
 {
-	map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.find(item);
+	EntryMap::ConstIterator it = entries.find(item);
 	if (it == entries.end())
 		return 0L;
-	return &it->second;
+	return &it.data();
 }
 
 /******************************************************************************
@@ -422,9 +488,9 @@ const AlarmItemData* AlarmListView::getData(AlarmListViewItem* item) const
 void AlarmListView::resizeLastColumn()
 {
 	int messageWidth = lastColumnHeaderWidth_;
-	for (map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.begin();  it != entries.end();  ++it)
+	for (EntryMap::ConstIterator it = entries.begin();  it != entries.end();  ++it)
 	{
-		int mw = it->second.messageWidth;
+		int mw = it.data().messageWidth;
 		if (mw > messageWidth)
 			messageWidth = mw;
 	}
@@ -440,7 +506,7 @@ void AlarmListView::resizeLastColumn()
 
 int AlarmListView::itemHeight()
 {
-	map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.begin();
+	EntryMap::ConstIterator it = entries.begin();
 	if (it == entries.end())
 	{
 		// The list is empty, so create a temporary item to find its height
@@ -450,7 +516,7 @@ int AlarmListView::itemHeight()
 		return height;
 	}
 	else
-		return it->first->height();
+		return it.key()->height();
 }
 
 /*=============================================================================

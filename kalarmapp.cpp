@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  description
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,11 @@
 
 #include "kalarm.h"
 
-#include <unistd.h>
+#include <stdlib.h>
 #include <ctype.h>
+#include <iostream>
 
 #include <qfile.h>
-
-#include <iostream>
 
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
@@ -47,14 +46,17 @@
 
 #include "mainwindow.h"
 #include "messagewin.h"
+#include "traydcop.h"
+#include "traywindow.h"
 #include "prefsettings.h"
 #include "kalarmapp.h"
 #include "kalarmapp.moc"
 
 const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
 const char* DCOP_OBJECT_NAME        = "display";
-const char* DAEMON_NAME             = "kalarmd";
-const char* DAEMON_DCOP_OBJECT_NAME = "ad";
+const char* TRAY_DCOP_OBJECT_NAME   = "tray";
+const char* DAEMON_APP_NAME         = "kalarmd";
+const char* DAEMON_DCOP_OBJECT      = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 int         KAlarmApp::activeCount = 0;
@@ -64,12 +66,14 @@ int         KAlarmApp::activeCount = 0;
 * Construct the application.
 */
 KAlarmApp::KAlarmApp()
-	:  KUniqueApplication(),
-		mainWidget(0L),
-		daemonRegistered(false),
-		m_generalSettings(new GeneralSettings(0L))
+	: KUniqueApplication(),
+	  dcopHandler(0L),
+	  mTrayDcopHandler(0L),
+	  mTrayWindow(0L),
+	  daemonRegistered(false),
+	  mSettings(new Settings(0L))
 {
-	m_generalSettings->loadSettings();
+	mSettings->loadSettings();
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
@@ -118,10 +122,14 @@ int KAlarmApp::newInstance()
 		}
 		initCheck();           // register with the alarm daemon
 		restored = true;       // make sure we restore only once
+
+		// Display the system tray icon if it is configured to be autostarted
+		if (settings()->autostartTrayIcon())
+			displayTrayIcon(true);
 	}
 	else
 	{
-		mainWidget = new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME));
+		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
 		// Use a 'do' loop which is executed only once to allow easy error exits.
@@ -144,6 +152,13 @@ int KAlarmApp::newInstance()
 				// Reset the alarm daemon
 				args->clear();      // free up memory
 				resetDaemon();
+			}
+			else
+			if (args->isSet("tray"))
+			{
+				// Display only the system tray icon
+				args->clear();      // free up memory
+				displayTrayIcon(true);
 			}
 			else
 			if (args->isSet("handleEvent")  ||  args->isSet("displayEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
@@ -213,7 +228,7 @@ int KAlarmApp::newInstance()
 
 				QDateTime* alarmTime = 0L;
 				QDateTime wakeup;
-				QColor bgColour = generalSettings()->defaultBgColour();
+				QColor bgColour = settings()->defaultBgColour();
 				int    repeatCount = 0;
 				int    repeatInterval = 0;
 				if (args->isSet("colour"))
@@ -325,14 +340,25 @@ int KAlarmApp::newInstance()
 		std::cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
 		exitCode = 1;
 	}
-	if (--activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount())
+	// Quit the application if this was the last/only running "instance" of the program.
+	// Executing 'return' doesn't work very well since the program continues to
+	// run if no windows were created.
+	quitIf(exitCode);
+	return exitCode;
+}
+
+/******************************************************************************
+* Quit the program if there are no more "instances" running.
+*/
+void KAlarmApp::quitIf(int exitCode)
+{
+	if (--activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
 	{
 		// This was the last/only running "instance" of the program, so exit completely.
 		// Executing 'return' doesn't work very well since the program continues to
 		// run if no windows were created.
 		exit(exitCode);
 	}
-	return exitCode;
 }
 
 /******************************************************************************
@@ -358,6 +384,32 @@ void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 			mainWindowList.remove();
 			break;
 		}
+}
+
+/******************************************************************************
+* Called when the system tray main window is closed.
+*/
+void KAlarmApp::deleteWindow(TrayWindow*)
+{
+	mTrayWindow = 0L;
+	quitIf();
+}
+
+/******************************************************************************
+*  Display or close the system tray icon.
+*/
+void KAlarmApp::displayTrayIcon(bool show)
+{
+	if (show)
+	{
+		if (!mTrayWindow)
+		{
+			mTrayWindow = new TrayWindow;
+			mTrayWindow->show();
+		}
+	}
+	else
+		delete mTrayWindow;
 }
 
 /******************************************************************************
@@ -689,6 +741,15 @@ void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool te
 }
 
 /******************************************************************************
+* Set up the DCOP handlers.
+*/
+void KAlarmApp::setUpDcop()
+{
+	dcopHandler      = new DcopHandler(QString::fromLatin1(DCOP_OBJECT_NAME));
+	mTrayDcopHandler = new TrayDcopHandler(QString::fromLatin1(TRAY_DCOP_OBJECT_NAME));
+}
+
+/******************************************************************************
 * If this is the first time through, open the calendar file, optionally start
 * the alarm daemon, and set up the DCOP handler.
 */
@@ -708,11 +769,8 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 	else if (!daemonRegistered)
 		startDaemon();
 
-	if (!calendarOnly  &&  !mainWidget)
-	{
-		// We're now ready to handle DCOP calls, so set up the handler
-		mainWidget = new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME));
-	}
+	if (!calendarOnly  &&  !dcopHandler)
+		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
 	return true;
 }
 
@@ -723,11 +781,11 @@ void KAlarmApp::startDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::startDaemon()\n";
 	calendar.getURL();    // check that the calendar file name is OK - program exit if not
-	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
+	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 	{
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe",QString::fromLatin1(DAEMON_NAME));
+		QString execStr = locate("exe",QString::fromLatin1(DAEMON_APP_NAME));
 		system(QFile::encodeName(execStr));
 		kdDebug(5950) << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
 	}
@@ -738,7 +796,7 @@ void KAlarmApp::startDaemon()
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(aboutData()->appName()) << aboutData()->programName()
 		    << QCString(DCOP_OBJECT_NAME) << (int)ClientInfo::COMMAND_LINE_NOTIFY << (Q_INT8)0;
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "registerApp(QCString,QString,QCString,int,bool)", data))
+		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "registerApp(QCString,QString,QCString,int,bool)", data))
 			kdDebug(5950) << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
 	}
 
@@ -747,7 +805,7 @@ void KAlarmApp::startDaemon()
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(aboutData()->appName()) << calendar.urlString();
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "addMsgCal(QCString,QString)", data))
+		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
 			kdDebug(5950) << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
 	}
 
@@ -761,10 +819,10 @@ void KAlarmApp::startDaemon()
 bool KAlarmApp::stopDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::stopDaemon()" << endl;
-	if (dcopClient()->isApplicationRegistered(DAEMON_NAME))
+	if (dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 	{
 		QByteArray data;
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "quit()", data))
+		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "quit()", data))
 		{
 			kdError(5950) << "KAlarmApp::restartDaemon(): quit dcop send failed" << endl;
 			return false;
@@ -779,14 +837,14 @@ bool KAlarmApp::stopDaemon()
 void KAlarmApp::resetDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::resetDaemon()" << endl;
-	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
+	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		startDaemon();
 	else
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(aboutData()->appName()) << calendar.urlString();
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "resetMsgCal(QCString,QString)", data))
+		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "resetMsgCal(QCString,QString)", data))
 			kdDebug(5950) << "KAlarmApp::resetDaemon(): addCal dcop send failed" << endl;
 	}
 }
@@ -799,7 +857,7 @@ void KAlarmApp::reloadDaemon()
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(aboutData()->appName()) << calendar.urlString();
-	if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
+	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdDebug(5950) << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
 }
 
@@ -1057,7 +1115,7 @@ bool AlarmCalendar::save(const QString& filename)
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(kapp->aboutData()->appName()) << url.url();
-	if (!kapp->dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
+	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdDebug(5950) << "AlarmCalendar::save(): addCal dcop send failed" << endl;
 	return true;
 }
@@ -1107,19 +1165,19 @@ void AlarmCalendar::deleteEvent(const QString& eventID)
 /******************************************************************************
 * This class's function is simply to act as a receiver for DCOP requests.
 */
-MainWidget::MainWidget(const char* dcopObject)
+DcopHandler::DcopHandler(const char* dcopObject)
 	: QWidget(),
 	  DCOPObject(dcopObject)
 {
-	kdDebug(5950) << "MainWidget::MainWidget()\n";
+	kdDebug(5950) << "DcopHandler::DcopHandler()\n";
 }
 
 /******************************************************************************
 * Process a DCOP request.
 */
-bool MainWidget::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
+bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
 {
-	kdDebug(5950) << "MainWidget::process(): " << func << endl;
+	kdDebug(5950) << "DcopHandler::process(): " << func << endl;
 	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n, SCHEDULE_FILE, SCHEDULE_FILE_n };
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
@@ -1145,7 +1203,7 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 		function = SCHEDULE_FILE_n;
 	else
 	{
-		kdDebug(5950) << "MainWidget::process(): unknown DCOP function" << endl;
+		kdDebug(5950) << "DcopHandler::process(): unknown DCOP function" << endl;
 		return false;
 	}
 

@@ -1,5 +1,5 @@
 /*
- *  dockwindow.h  -  the KDE system tray applet
+ *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
  *  (C) 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -23,32 +23,17 @@
 
 #include <qtimer.h>
 
-#include <kmainwindow.h>
 #include <ksystemtray.h>
 #include <kpopupmenu.h>
-
-#include "panelgui.h"
-class DockWindow;
+class KAction;
 
 
-class TrayMainWindow : public KMainWindow
+class TrayWindow : public KSystemTray
 {
 		Q_OBJECT
 	public:
-		TrayMainWindow();
-		~TrayMainWindow();
-		DockWindow*  dockWindow() const   { return mDockWindow; }
-
-	private:
-		DockWindow*  mDockWindow;
-};
-
-
-class DockWindow : public KSystemTray
-{
-		Q_OBJECT
-	public:
-		DockWindow(TrayMainWindow* parent, const char* name = 0L);
+		TrayWindow(const char* name = 0L);
+		~TrayWindow();
 
 		void         updateCalendarStatus(bool monitoring);
 
@@ -64,25 +49,25 @@ class DockWindow : public KSystemTray
 		void         mousePressEvent(QMouseEvent*);
 
 	private slots:
-		void            checkDaemonRunning();
+		void         checkDaemonRunning();
 		void         slotSettingsChanged();
 
 	private:
-		void            registerWithDaemon();
+		void         registerWithDaemon();
 		void         enableCalendar(bool enable);
 		void         setDaemonStatus(bool running);
-		bool            isDaemonRunning(bool updateDockWindow = true);
-		void            setFastDaemonCheck();
+		bool         isDaemonRunning(bool updateDockWindow = true);
+		void         setFastDaemonCheck();
 
-		TrayMainWindow* mTrayWindow;
 		QPixmap    mPixmapEnabled, mPixmapDisabled;
 		KAction*   mActionQuit;          // quit action for system tray window
 		int        mAlarmsEnabledId;     // alarms enabled item in menu
-		QTimer          mDaemonStatusTimer;   // timer for checking daemon status
-		int             mDaemonStatusTimerCount; // countdown for fast status checking
-		bool            mDaemonRunning;       // whether the alarm daemon is currently running
+		QTimer     mDaemonStatusTimer;   // timer for checking daemon status
+		int        mDaemonStatusTimerCount; // countdown for fast status checking
+		bool       mDaemonRunning;       // whether the alarm daemon is currently running
 		int        mDaemonStatusTimerInterval;  // timer interval (seconds) for checking daemon status
 		bool       mQuitReplaced;        // the context menu Quit item has been replaced
+		bool       mCalendarDisabled;    // monitoring of calendar is currently disabled
 		bool       mEnableCalPending;    // waiting to tell daemon to enable calendar
 
 };

@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  description
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,15 +30,21 @@ using namespace KCal;
 
 class KAlarmMainWindow;
 class MessageWin;
-class GeneralSettings;
+class TrayWindow;
+class TrayDcopHandler;
+class Settings;
+
+extern const char* DAEMON_APP_NAME;
+extern const char* DAEMON_DCOP_OBJECT;
+extern const char* TRAY_DCOP_OBJECT_NAME;
 
 
-class MainWidget : public QWidget, DCOPObject
+class DcopHandler : public QWidget, DCOPObject
 {
 		Q_OBJECT
 	public:
-		MainWidget(const char* name);
-		~MainWidget()  { }
+		DcopHandler(const char* name);
+		~DcopHandler()  { }
 		virtual bool process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray& replyData);
 };
 
@@ -77,9 +83,14 @@ class KAlarmApp : public KUniqueApplication
 		virtual int       newInstance();
 		static KAlarmApp* getInstance();
 		AlarmCalendar&    getCalendar()       { return calendar; }
-		GeneralSettings*  generalSettings()   { return m_generalSettings; }
+		Settings*         settings()          { return mSettings; }
 		void              addWindow(KAlarmMainWindow*);
+		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              deleteWindow(KAlarmMainWindow*);
+		void              deleteWindow(TrayWindow*);
+		TrayWindow*       trayWindow() const              { return mTrayWindow; }
+		void              displayTrayIcon(bool show);
+		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
 		void              resetDaemon();
 		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
@@ -103,6 +114,8 @@ class KAlarmApp : public KUniqueApplication
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
 		bool              initCheck(bool calendarOnly = false);
+		void              quitIf(int exitCode = 0);
+		void              setUpDcop();
 		bool              stopDaemon();
 		void              startDaemon();
 		void              reloadDaemon();
@@ -111,13 +124,15 @@ class KAlarmApp : public KUniqueApplication
 		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
-		static KAlarmApp*          theInstance;
-		static int                 activeCount;         // number of active instances without main windows
-		MainWidget*                mainWidget;          // the parent of the DCOP receiver object
-		QPtrList<KAlarmMainWindow> mainWindowList;      // active main windows
-		AlarmCalendar              calendar;
-		bool                       daemonRegistered;    // true if we've registered with alarm daemon
-		GeneralSettings*           m_generalSettings;   // general program preferences
+		static KAlarmApp*          theInstance;        // the one and only KAlarmApp instance
+		static int                 activeCount;        // number of active instances without main windows
+		DcopHandler*               dcopHandler;        // the parent of the main DCOP receiver object
+		TrayDcopHandler*           mTrayDcopHandler;   // the parent of the system tray DCOP receiver object
+		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
+		TrayWindow*                mTrayWindow;        // active system tray icon
+		AlarmCalendar              calendar;           // the calendar containing all the alarms
+		bool                       daemonRegistered;   // true if we've registered with alarm daemon
+		Settings*                  mSettings;          // program preferences
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

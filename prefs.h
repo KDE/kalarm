@@ -1,7 +1,7 @@
 /*
  *  prefs.h  -  program preferences
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,40 +23,60 @@
 
 #include <qsize.h>
 #include <ktabctl.h>
+class QCheckBox;
+class QSpinBox;
 class FontColourChooser;
-class GeneralSettings;
+class Settings;
 
 
 // Base class for each tab in the Preferences dialog
 class PrefsBase : public KTabCtl
 {
-	Q_OBJECT
-public:
-	PrefsBase(QWidget*);
-	~PrefsBase();
+		Q_OBJECT
+	public:
+		PrefsBase(QWidget* parent);
 
-	QSize        sizeHintForWidget(QWidget*);
-	virtual void restore() = 0;
-	virtual void apply() = 0;
-	virtual void setDefaults() = 0;
+		QSize        sizeHintForWidget(QWidget*);
+		void         setSettings(Settings*);
+		virtual void restore() = 0;
+		virtual void apply() = 0;
+		virtual void setDefaults() = 0;
+
+	protected:
+		Settings*    mSettings;
 };
 
-// General tab of the Preferences dialog
-class GeneralPrefs : public PrefsBase
+
+// Appearance tab of the Preferences dialog
+class AppearancePrefs : public PrefsBase
 {
-	Q_OBJECT
-public:
-	GeneralPrefs(QWidget*);
-	~GeneralPrefs();
+		Q_OBJECT
+	public:
+		AppearancePrefs(QWidget* parent);
 
-	void setSettings(GeneralSettings*);
+		virtual void restore();
+		virtual void apply();
+		virtual void setDefaults();
 
-	virtual void restore();
-	virtual void apply();
-	virtual void setDefaults();
+	private:
+		FontColourChooser*  mFontChooser;
+};
 
-	GeneralSettings* m_settings;
-	FontColourChooser*  m_fontChooser;
+
+// Miscellaneous tab of the Preferences dialog
+class MiscPrefs : public PrefsBase
+{
+		Q_OBJECT
+	public:
+		MiscPrefs(QWidget* parent);
+
+		virtual void restore();
+		virtual void apply();
+		virtual void setDefaults();
+
+	private:
+		QCheckBox*  mAutostartTrayIcon;
+		QSpinBox*   mDaemonTrayCheckInterval;
 };
 
 #endif // PREFS_H

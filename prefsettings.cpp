@@ -1,7 +1,7 @@
 /*
  *  prefsettings.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,58 +25,46 @@
 #include "prefsettings.moc"
 
 
-SettingsBase::SettingsBase(QWidget* parent)
+const bool   Settings::default_autostartTrayIcon       = true;
+const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
+const QColor Settings::default_defaultBgColour(red);
+const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
+
+static const QString GENERAL_SECTION      = QString::fromLatin1("General");
+static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("Message background colour");
+static const QString MESSAGE_FONT         = QString::fromLatin1("Message font");
+static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
+static const QString DAEMON_TRAY_INTERVAL = QString::fromLatin1("DaemonTrayCheckInterval");
+
+Settings::Settings(QWidget* parent)
 	: QObject(parent)
-{
-}
-
-SettingsBase::~SettingsBase()
-{
-}
-
-void SettingsBase::loadSettings()
-{
-	emitSettingsChanged();
-}
-
-void SettingsBase::saveSettings()
-{
-}
-
-void SettingsBase::emitSettingsChanged()
-{
-	emit settingsChanged();
-}
-
-
-
-const QColor GeneralSettings::default_defaultBgColour(red);
-const QFont GeneralSettings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
-
-GeneralSettings::GeneralSettings(QWidget* parent)
-	: SettingsBase(parent)
 {
 	loadSettings();
 }
 
-GeneralSettings::~GeneralSettings()
-{
-}
-
-void GeneralSettings::loadSettings()
+void Settings::loadSettings()
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	m_defaultBgColour = config->readColorEntry(QString::fromLatin1("Message background colour"), &default_defaultBgColour);
-	m_messageFont = config->readFontEntry(QString::fromLatin1("Message font"), &default_messageFont);
-	SettingsBase::loadSettings();
+	config->setGroup(GENERAL_SECTION);
+	mDefaultBgColour         = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
+	mMessageFont             = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
+	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, &default_autostartTrayIcon);
+	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
+	emit settingsChanged();
 }
 
-void GeneralSettings::saveSettings()
+void Settings::saveSettings()
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	config->writeEntry(QString::fromLatin1("Message background colour"), m_defaultBgColour);
-	config->writeEntry(QString::fromLatin1("Message font"), m_messageFont);
-	SettingsBase::saveSettings();
+	config->setGroup(GENERAL_SECTION);
+	config->writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
+	config->writeEntry(MESSAGE_FONT, mMessageFont);
+	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
+	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
+	config->sync();
+}
+
+void Settings::emitSettingsChanged()
+{
+	emit settingsChanged();
 }

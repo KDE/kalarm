@@ -1,7 +1,7 @@
 /*
  *  prefs.cpp  -  program preferences
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #include <qobjectlist.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qwhatsthis.h>
 
 #include <kdialog.h>
 #include <kglobal.h>
@@ -34,16 +37,12 @@
 #include "prefs.moc"
 
 
-PrefsBase::PrefsBase( QWidget* parent )
-	: KTabCtl( parent )
+PrefsBase::PrefsBase(QWidget* parent)
+	: KTabCtl(parent)
 {
 }
 
-PrefsBase::~PrefsBase()
-{
-}
-
-QSize PrefsBase::sizeHintForWidget( QWidget* widget )
+QSize PrefsBase::sizeHintForWidget(QWidget* widget)
 {
 	// The size is computed by adding the sizeHint().height() of all
 	// widget children and taking the width of the widest child and adding
@@ -51,17 +50,17 @@ QSize PrefsBase::sizeHintForWidget( QWidget* widget )
 
 	QSize size;
 	int numChild = 0;
-	QObjectList* l = (QObjectList*)(widget->children());
+	QObjectList* list = (QObjectList*)(widget->children());
 
-	for (uint i=0;  i < l->count();  i++)
+	for (uint i = 0;  i < list->count();  ++i)
 	{
-		QObject* o = l->at(i);
-		if (o->isWidgetType())
+		QObject* obj = list->at(i);
+		if (obj->isWidgetType())
 		{
-			numChild += 1;
-			QSize s = ((QWidget*)o)->sizeHint();
+			++numChild;
+			QSize s = static_cast<QWidget*>(obj)->sizeHint();
 			if (s.isEmpty())
-				s = QSize( 50, 100 ); // Default size
+				s = QSize(50, 100); // Default size
 			size.setHeight(size.height() + s.height());
 			if (s.width() > size.width())
 				size.setWidth(s.width());
@@ -79,28 +78,77 @@ QSize PrefsBase::sizeHintForWidget( QWidget* widget )
 	return size;
 }
 
+void PrefsBase::setSettings(Settings* setts)
+{
+	mSettings = setts;
+	restore();
+}
+
 void PrefsBase::apply()
 {
-}
-
-void PrefsBase::restore()
-{
-}
-
-void PrefsBase::setDefaults()
-{
+	mSettings->saveSettings();
+	mSettings->emitSettingsChanged();
 }
 
 
 
-GeneralPrefs::GeneralPrefs(QWidget* parent)
+MiscPrefs::MiscPrefs(QWidget* parent)
 	: PrefsBase(parent)
 {
 	QWidget* page = new QWidget(this );
 	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint());
 	layout->setMargin(KDialog::marginHint());
-	m_fontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
-	layout->addWidget(m_fontChooser);
+
+	mAutostartTrayIcon = new QCheckBox(i18n("Autostart system tray icon at login"), page, "autoTray");
+	layout->addWidget(mAutostartTrayIcon);
+	QWhatsThis::add(mAutostartTrayIcon,
+	      i18n("Check to display the system tray icon whenever you start KDE."));
+
+	QGridLayout* grid = new QGridLayout(page, 1, 2, KDialog::spacingHint());
+	layout->addLayout(grid);
+	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
+	lbl->setFixedSize(lbl->sizeHint());
+	grid->addWidget(lbl, 0, 0, AlignLeft);
+	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, page, "daemonCheck");
+	grid->addWidget(mDaemonTrayCheckInterval, 0, 1, AlignLeft);
+	QWhatsThis::add(mDaemonTrayCheckInterval,
+	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is running."));
+
+	layout->addStretch(1);
+	page->setMinimumSize(sizeHintForWidget(page));
+
+	addTab(page, i18n("&Miscellaneous"));
+}
+
+void MiscPrefs::restore()
+{
+	mAutostartTrayIcon->setChecked(mSettings->mAutostartTrayIcon);
+	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
+}
+
+void MiscPrefs::apply()
+{
+	mSettings->mAutostartTrayIcon       = mAutostartTrayIcon->isChecked();
+	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
+	PrefsBase::apply();
+}
+
+void MiscPrefs::setDefaults()
+{
+	mAutostartTrayIcon->setChecked(Settings::default_autostartTrayIcon);
+	mDaemonTrayCheckInterval->setValue(Settings::default_daemonTrayCheckInterval);
+}
+
+
+
+AppearancePrefs::AppearancePrefs(QWidget* parent)
+	: PrefsBase(parent)
+{
+	QWidget* page = new QWidget(this );
+	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint());
+	layout->setMargin(KDialog::marginHint());
+	mFontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
+	layout->addWidget(mFontChooser);
 
 	layout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
@@ -108,31 +156,21 @@ GeneralPrefs::GeneralPrefs(QWidget* parent)
 	addTab(page, i18n("Message &Appearance"));
 }
 
-GeneralPrefs::~GeneralPrefs()
+void AppearancePrefs::restore()
 {
+	mFontChooser->setBgColour(mSettings->mDefaultBgColour);
+	mFontChooser->setFont(mSettings->mMessageFont);
 }
 
-void GeneralPrefs::setSettings(GeneralSettings* setts)
+void AppearancePrefs::apply()
 {
-	m_settings = setts;
-	m_fontChooser->setBgColour(m_settings->m_defaultBgColour);
-	m_fontChooser->setFont(m_settings->m_messageFont);
+	mSettings->mDefaultBgColour = mFontChooser->bgColour();
+	mSettings->mMessageFont     = mFontChooser->font();
+	PrefsBase::apply();
 }
 
-void GeneralPrefs::restore()
+void AppearancePrefs::setDefaults()
 {
-}
-
-void GeneralPrefs::apply()
-{
-	m_settings->m_defaultBgColour = m_fontChooser->bgColour();
-	m_settings->m_messageFont = m_fontChooser->font();
-	m_settings->saveSettings();
-	m_settings->emitSettingsChanged();
-}
-
-void GeneralPrefs::setDefaults()
-{
-	m_fontChooser->setBgColour(GeneralSettings::default_defaultBgColour);
-	m_fontChooser->setFont(GeneralSettings::default_messageFont);
+	mFontChooser->setBgColour(Settings::default_defaultBgColour);
+	mFontChooser->setFont(Settings::default_messageFont);
 }

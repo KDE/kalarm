@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,24 +28,18 @@
 #include "prefdlg.moc"
 
 
-#ifdef MISC_PREFS
-KAlarmPrefDlg::KAlarmPrefDlg(GeneralSettings* genSets, MiscSettings* miscSets)
-#else
-KAlarmPrefDlg::KAlarmPrefDlg(GeneralSettings* genSets)
-#endif
+KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
 	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0L, 0L, true, true)
 {
 	setIconListAllVisible(true);
 
-	QVBox* frame = addVBoxPage(i18n("General"), i18n("General settings of the KAlarm program"), DesktopIcon("misc"));
-	m_generalPage = new GeneralPrefs(frame);
-	m_generalPage->setSettings(genSets);
+	QVBox* frame = addVBoxPage(i18n("Appearance"), i18n("Message appearance settings"), DesktopIcon("appearance"));
+	m_appearancePage = new AppearancePrefs(frame);
+	m_appearancePage->setSettings(sets);
 
-#ifdef MISC_PREFS
-	frame = addVBoxPage( i18n("Misc"), i18n("Miscellaneous settings"), DesktopIcon("misc"));
+	frame = addVBoxPage( i18n("Miscellaneous"), i18n("Miscellaneous settings"), DesktopIcon("misc"));
 	m_miscPage = new MiscPrefs(frame);
-	m_miscPage->setSettings(miscSets);
-#endif
+	m_miscPage->setSettings(sets);
 
 	adjustSize();
 }
@@ -54,14 +48,12 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 {
 }
 
+// Restore all defaults in the options...
 void KAlarmPrefDlg::slotDefault()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
-	// restore all defaults in the options...
-	m_generalPage->setDefaults();
-#ifdef MISC_PREFS
+	m_appearancePage->setDefaults();
 	m_miscPage->setDefaults();
-#endif
 }
 
 void KAlarmPrefDlg::slotHelp()
@@ -71,36 +63,30 @@ void KAlarmPrefDlg::slotHelp()
 	// and give help for that page
 }
 
+// Apply the settings that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
-	// Apply the settings that are currently selected
-	m_generalPage->apply();
-#ifdef MISC_PREFS
+	m_appearancePage->apply();
 	m_miscPage->apply();
-#endif
 }
 
+// Apply the settings that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
-	// Apply the settings that are currently selected
-	m_generalPage->apply();
-#ifdef MISC_PREFS
+	m_appearancePage->apply();
 	m_miscPage->apply();
-#endif
 
 	KDialogBase::slotOk();
 }
 
+// Discard the current settings and use the present ones
 void KAlarmPrefDlg::slotCancel()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
-	// discard the current settings and use the present ones
-	m_generalPage->restore();
-#ifdef MISC_PREFS
+	m_appearancePage->restore();
 	m_miscPage->restore();
-#endif
 
 	KDialogBase::slotCancel();
 }

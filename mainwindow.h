@@ -1,7 +1,7 @@
 /*
- *  mainwindow.h  -  description
+ *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,16 +21,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <map>
-
 #include <qvariant.h>
 class QListViewItem;
 
 #include <kapp.h>
-#include <kmainwindow.h>
-#include <kaccel.h>
-#include <kaction.h>
-#include <klistview.h>
+class KAction;
+
+#include "mainwindowbase.h"
 
 #include "msgevent.h"
 using namespace KCal;
@@ -38,7 +35,7 @@ using namespace KCal;
 class AlarmListView;
 
 
-class KAlarmMainWindow : public KMainWindow
+class KAlarmMainWindow : public MainWindowBase
 {
 		Q_OBJECT
 
@@ -62,67 +59,21 @@ class KAlarmMainWindow : public KMainWindow
 		KAction*        actionNew;
 		KAction*        actionModify;
 		KAction*        actionDelete;
+		KAction*        actionToggleTrayIcon;
 		KAction*        actionResetDaemon;
 		KAction*        actionQuit;
-		bool            hidden;      // this is the main window which is never displayed
 
 	protected slots:
 		virtual void slotDelete();
 		virtual void slotNew();
 		virtual void slotModify();
+		virtual void slotToggleTrayIcon();
 		virtual void slotResetDaemon();
 		virtual void slotPreferences();
 		virtual void slotQuit();
 		virtual void slotSelection();
 		virtual void slotListRightClick(QListViewItem*, const QPoint&, int);
-};
-
-
-class AlarmListViewItem;
-struct AlarmItemData
-{
-		KAlarmEvent event;
-		QString     messageText;     // message as displayed
-		QString     dateTimeText;    // date/time as displayed
-		QString     repeatCountText; // repeat count as displayed
-		QString     repeatCountOrder;  // repeat count item ordering text
-		int         messageWidth;    // width required to display 'messageText'
-};
-
-
-class AlarmListView : public KListView
-{
-	public:
-		enum { TIME_COLUMN, REPEAT_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
-
-		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
-		virtual void         clear();
-		void                 refresh();
-		AlarmListViewItem*   addEntry(const KAlarmEvent&, bool setSize = false);
-		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
-		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const KAlarmEvent    getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
-		AlarmListViewItem*   getEntry(const QString& eventID);
-		const AlarmItemData* getData(AlarmListViewItem*) const;
-		void                 resizeLastColumn();
-		int                  itemHeight();
-		bool                 drawMessageInColour() const		      { return drawMessageInColour_; }
-		void                 setDrawMessageInColour(bool inColour)	{ drawMessageInColour_ = inColour; }
-		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
-		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
-	private:
-		std::map<AlarmListViewItem*, AlarmItemData> entries;
-		int                  lastColumnHeaderWidth_;
-		bool                 drawMessageInColour_;
-};
-
-
-class AlarmListViewItem : public QListViewItem
-{
-	public:
-		AlarmListViewItem(QListView* parent, const QString&, const QString&);
-		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
-		AlarmListView*       alarmListView() const		{ return (AlarmListView*)listView(); }
+		virtual void setTrayIconActionText();
 };
 
 #endif // MAINWINDOW_H
