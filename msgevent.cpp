@@ -639,7 +639,7 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 		{
 			mDateTime = newTime;
 			if (mRepeatDuration > 0)
-				mRepeatDuration = remainingCount;
+				mRepeatDuration = remainingCount - 1;
 			mUpdated = true;
 		}
 	}
@@ -751,9 +751,9 @@ void KAlarmEvent::setRecurSubDaily(int freq, int minuteCount, const QDateTime& e
 	{
 		mRepeatMinutes = freq;
 		if (minuteCount)
-			mRepeatDuration = minuteCount;
+			mRepeatDuration = minuteCount - 1;
 		else
-			mRepeatDuration = (mDateTime.secsTo(end) / 60) / freq  + 1;
+			mRepeatDuration = (mDateTime.secsTo(end) / 60) / freq;
 	}
 }
 

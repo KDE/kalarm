@@ -206,12 +206,12 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	repeatCountButton = new QRadioButton(i18n("End after:"), rangeButtonGroup);
 	QWhatsThis::add(repeatCountButton,
-	      i18n("Repeat the alarm for the number of time intervals specified"));
-	repeatCountEntry  = new QSpinBox(1, 9999, 1, rangeButtonGroup);
+	      i18n("Repeat the alarm for the number of times specified"));
+	repeatCountEntry  = new QSpinBox(2, 9999, 1, rangeButtonGroup);
 	repeatCountEntry->setFixedSize(repeatCountEntry->sizeHint());
 	QWhatsThis::add(repeatCountEntry,
-	      i18n("Enter the number of time intervals over which to repeat the alarm"));
-	repeatCountLabel  = new QLabel(i18n("interval(s)"), rangeButtonGroup);
+	      i18n("Enter the total number of times to trigger the alarm"));
+	repeatCountLabel  = new QLabel(i18n("occurrence(s)"), rangeButtonGroup);
 	repeatCountLabel->setFixedSize(repeatCountLabel->sizeHint());
 	layout->addWidget(repeatCountButton);
 	layout->addSpacing(KDialog::spacingHint());
@@ -758,7 +758,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 		else if (repeatDuration)
 		{
 			repeatCountButton->setChecked(true);
-			repeatCountEntry->setValue(repeatDuration - 1);
+			repeatCountEntry->setValue(repeatDuration);
 		}
 		else
 		{
@@ -787,7 +787,7 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 		if (noEndDateButton->isChecked())
 			repeatCount = -1;
 		else if (repeatCountButton->isChecked())
-			repeatCount = repeatCountEntry->value() + 1;
+			repeatCount = repeatCountEntry->value();
 		else
 		{
 			repeatCount = 0;
