@@ -23,14 +23,13 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qtextview.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstdguiitem.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -38,6 +37,7 @@
 #include <kdialog.h>
 #include <kwin.h>
 #include <kprocess.h>
+#include <kpushbutton.h>
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
 #include <kaudioplayer.h>
@@ -215,9 +215,7 @@ QSize MessageWin::initView()
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
 	// Close button
-	KAction* action = KStdAction::close();
-	QPushButton* okButton = new QPushButton(action->text(), topWidget);
-	delete action;
+	QPushButton* okButton = new KPushButton(KStdGuiItem::close(), topWidget);
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
