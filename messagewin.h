@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include "alarmevent.h"
 
 class QPushButton;
+class KPushButton;
 class QLabel;
 class QTimer;
 class AlarmTimeWidget;
@@ -58,11 +59,13 @@ class MessageWin : public MainWindowBase
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!mDeferButton; }
 		bool                isValid() const        { return !mInvalid; }
+		virtual void        show();
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
 	protected:
 		virtual void        showEvent(QShowEvent*);
+		virtual void        moveEvent(QMoveEvent*);
 		virtual void        resizeEvent(QResizeEvent*);
 		virtual void        closeEvent(QCloseEvent*);
 		virtual void        saveProperties(KConfig*);
@@ -74,6 +77,7 @@ class MessageWin : public MainWindowBase
 		void                slotPlayAudio();
 		void                checkAudioPlay();
 		void                stopPlay();
+		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
 
@@ -82,6 +86,7 @@ class MessageWin : public MainWindowBase
 #ifndef WITHOUT_ARTS
 		void                initAudio(bool firstTime);
 #endif
+		void                displayComplete();
 		void                playAudio();
 
 		static QPtrList<MessageWin> mWindowList;  // list of existing message windows
@@ -114,8 +119,10 @@ class MessageWin : public MainWindowBase
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
+		KPushButton*        mOkButton;
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
+		QPushButton*        mKAlarmButton;
 		int                 mFlags;
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action
@@ -123,6 +130,7 @@ class MessageWin : public MainWindowBase
 		bool                mBeep;
 		bool                mRescheduleEvent; // true to delete event after message has been displayed
 		bool                mShown;           // true once the window has been displayed
+		bool                mPositioning;     // true when the window is being positioned initially
 		bool                mDeferClosing;    // the Defer button is closing the dialog
 		bool                mDeferDlgShowing; // the defer dialog is being displayed
 };

@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -148,6 +148,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mBeep(event.beep()),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
+	  mPositioning(false),
 	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
@@ -182,6 +183,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
+	  mPositioning(false),
 	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
@@ -204,6 +206,7 @@ MessageWin::MessageWin()
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
+	  mPositioning(false),
 	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
@@ -454,14 +457,14 @@ void MessageWin::initView()
 	int gridIndex = 1;
 
 	// Close button
-	KPushButton* okButton = new KPushButton(KStdGuiItem::close(), topWidget);
+	mOkButton = new KPushButton(KStdGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
-	okButton->clearFocus();
-	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
-	okButton->setFixedSize(okButton->sizeHint());
-	connect(okButton, SIGNAL(clicked()), SLOT(close()));
-	grid->addWidget(okButton, 0, gridIndex++, AlignHCenter);
-	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
+	mOkButton->clearFocus();
+	mOkButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+	mOkButton->setFixedSize(mOkButton->sizeHint());
+	connect(mOkButton, SIGNAL(clicked()), SLOT(close()));
+	grid->addWidget(mOkButton, 0, gridIndex++, AlignHCenter);
+	QWhatsThis::add(mOkButton, i18n("Acknowledge the alarm"));
 
 	if (!mNoDefer)
 	{
@@ -496,14 +499,21 @@ void MessageWin::initView()
 	// KAlarm button
 	KIconLoader iconLoader;
 	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(kapp->aboutData()->appName()), KIcon::MainToolbar);
-	QPushButton* button = new QPushButton(topWidget);
-	button->setPixmap(pixmap);
-	button->setFixedSize(button->sizeHint());
-	connect(button, SIGNAL(clicked()), SLOT(displayMainWindow()));
-	grid->addWidget(button, 0, gridIndex++, AlignHCenter);
+	mKAlarmButton = new QPushButton(topWidget);
+	mKAlarmButton->setPixmap(pixmap);
+	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
+	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
+	grid->addWidget(mKAlarmButton, 0, gridIndex++, AlignHCenter);
 	QString actKAlarm = i18n("Activate %1").arg(kapp->aboutData()->programName());
-	QToolTip::add(button, actKAlarm);
-	QWhatsThis::add(button, actKAlarm);
+	QToolTip::add(mKAlarmButton, actKAlarm);
+	QWhatsThis::add(mKAlarmButton, actKAlarm);
+
+	// Disable all buttons initially, to prevent accidental clicking on if they happento be
+	// under the mouse just as the window appears.
+	mOkButton->setEnabled(false);
+	if (mDeferButton)
+		mDeferButton->setEnabled(false);
+	mKAlarmButton->setEnabled(false);
 
 	topLayout->activate();
 	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
@@ -835,6 +845,19 @@ void MessageWin::repeat(const KAAlarm& alarm)
 }
 
 /******************************************************************************
+ * *  Display the window.
+ * *  If windows are being positioned away from the mouse cursor, it is initially
+ * *  positioned at the top left to slightly reduce the number of times the
+ * *  windows need to be moved in showEvent().
+ * */
+void MessageWin::show()
+{
+	if (Preferences::instance()->messageButtonDelay() == 0)
+		move(0, 0);
+	MainWindowBase::show();
+}
+
+/******************************************************************************
 *  Called when the window is shown.
 *  The first time, output any required audio notification, and reschedule or
 *  delete the event from the calendar file.
@@ -842,17 +865,91 @@ void MessageWin::repeat(const KAAlarm& alarm)
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (!mShown  &&  !mErrorWindow)
+	if (!mShown)
 	{
-		QSize s = sizeHint();     // fit the window round the message
-		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-			KAlarm::readConfigWindowSize("FileMessage", s);
-		resize(s);
-		playAudio();
-		if (mRescheduleEvent)
-			theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
+		if (mErrorWindow)
+			enableButtons();    // don't bother repositioning error messages
+		else
+		{
+			QSize s = sizeHint();     // fit the window round the message
+			if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
+				KAlarm::readConfigWindowSize("FileMessage", s);
+			resize(s);
+
+			if (Preferences::instance()->messageButtonDelay() == 0)
+			{
+				/* Try to ensure that the window can't accidentally be acknowledged
+				 * by the user clicking the mouse just as it appears.
+				 * To achieve this, move the window so that the OK button is as far away
+				 * from the cursor as possible.
+				 * N.B. This can't be done in show(), since the geometry of the window
+				 *      is not known until it is displayed. Unfortunately by moving the
+				 *      window in showEvent(), a flicker is unavoidable.
+				 *      See the Qt documentation on window geometry for more details.
+				 */
+				QRect desk = KGlobalSettings::desktopGeometry(this);
+				QPoint cursor = QCursor::pos();
+				QRect frame = frameGeometry();
+				QRect rect  = geometry();
+				// Find the offsets from the outside of the frame to the edges of the OK button
+				QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));
+				int buttonLeft   = button.left() + rect.left() - frame.left();
+				int buttonRight  = width() - button.right() + frame.right() - rect.right();
+				int buttonTop    = button.top() + rect.top() - frame.top();
+				int buttonBottom = height() - button.bottom() + frame.bottom() - rect.bottom();
+
+				int centrex = (desk.width() + buttonLeft - buttonRight) / 2;
+				int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
+				int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
+				int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
+				if (x != frame.left()  ||  y != frame.top())
+				{
+					mPositioning = true;
+					move(x, y);
+				}
+			}
+			if (!mPositioning)
+				displayComplete();    // play audio, etc.
+		}
 		mShown = true;
 	}
+}
+
+/******************************************************************************
+*  Called when the window has been moved.
+*/
+void MessageWin::moveEvent(QMoveEvent* e)
+{
+	MainWindowBase::moveEvent(e);
+	if (mPositioning)
+	{
+		// The window has just been initially positioned
+		mPositioning = false;
+		displayComplete();    // play audio, etc.
+	}
+}
+
+/******************************************************************************
+*  Called when the window has been displayed properly (in its correct position),
+*  to play sounds and reschedule the event.
+*/
+void MessageWin::displayComplete()
+{
+	playAudio();
+	if (mRescheduleEvent)
+		theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
+	enableButtons();
+}
+
+/******************************************************************************
+ * *  Enable the window's buttons.
+ * */
+void MessageWin::enableButtons()
+{
+	mOkButton->setEnabled(true);
+	mKAlarmButton->setEnabled(true);
+	if (mDeferButton)
+		mDeferButton->setEnabled(true);
 }
 
 /******************************************************************************

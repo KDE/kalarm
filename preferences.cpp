@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ const bool       Preferences::default_quitWarn                 = true;
 const bool       Preferences::default_autostartTrayIcon        = true;
 const bool       Preferences::default_confirmAlarmDeletion     = true;
 const bool       Preferences::default_modalMessages            = true;
+const int        Preferences::default_messageButtonDelay       = 0;
 const bool       Preferences::default_showExpiredAlarms        = false;
 const bool       Preferences::default_showAlarmTime            = true;
 const bool       Preferences::default_showTimeToAlarm          = false;
@@ -91,6 +92,7 @@ static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlar
 static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
 static const QString FEB29_RECUR_TYPE         = QString::fromLatin1("Feb29Recur");
 static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
+static const QString MESSAGE_BUTTON_DELAY     = QString::fromLatin1("MessageButtonDelay");
 static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
 static const QString SHOW_ALARM_TIME          = QString::fromLatin1("ShowAlarmTime");
 static const QString SHOW_TIME_TO_ALARM       = QString::fromLatin1("ShowTimeToAlarm");
@@ -174,6 +176,7 @@ Preferences::Preferences()
 	QCString feb29           = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
 	mFeb29RecurType          = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
 	mModalMessages           = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
+	mMessageButtonDelay      = config->readNumEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
 	mShowExpiredAlarms       = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
 	mShowTimeToAlarm         = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime           = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
@@ -255,6 +258,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(FEB29_RECUR_TYPE, (mFeb29RecurType == FEB29_MAR1 ? "Mar1" : mFeb29RecurType == FEB29_FEB28 ? "Feb28" : "None"));
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
+	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
 	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
 	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
 	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
