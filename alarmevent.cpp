@@ -2814,7 +2814,7 @@ QString EmailAddressList::join(const QString& separator) const
 			for (int i = 0;  i < len;  ++i)
 			{
 				QChar ch = name[i];
-				if (!ch.isLetterOrNumber() && !ch.isSpace())
+				if (!ch.isLetterOrNumber())
 				{
 					quote = true;
 					result += '\"';
