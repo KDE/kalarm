@@ -347,7 +347,8 @@ void EditAlarmDlg::slotRecurrenceResized(QSize old, QSize New)
 */
 void EditAlarmDlg::slotOk()
 {
-	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
+	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime)
+	&&  recurrenceEdit->checkData(alarmDateTime))
 	{
 		if (checkText(alarmMessage))
 			accept();
