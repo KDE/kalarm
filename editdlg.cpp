@@ -848,8 +848,11 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 }
 
 /******************************************************************************
- * Check whether any of the controls other than the deferral time has changed
- * state since the dialog was first displayed.
+ * Check whether any of the controls has changed state since the dialog was
+ * first displayed.
+ * Reply = true if any non-deferral controls have changed, or if it's a new event.
+ *       = false if no non-deferral controls have changed. In this case,
+ *         mOnlyDeferred indicates whether deferral controls may have changed.
  */
 bool EditAlarmDlg::stateChanged() const
 {
@@ -924,6 +927,7 @@ bool EditAlarmDlg::stateChanged() const
 /******************************************************************************
  * Get the currently entered message data.
  * The data is returned in the supplied KAEvent instance.
+ * Reply = false if the only change has been to an existing deferral.
  */
 bool EditAlarmDlg::getEvent(KAEvent& event)
 {
@@ -981,20 +985,21 @@ bool EditAlarmDlg::getEvent(KAEvent& event)
 		}
 		if (mTemplate)
 			event.setTemplate(mTemplateName->text(), mTemplateDefaultTime->isOn());
+		return true;
 	}
-	else if (mOnlyDeferred)
+
+	// Only the deferral time may have changed
+	event = *mSavedEvent;
+	if (mOnlyDeferred)
 	{
-		// Only the deferral time may have changed.
 		// Just modify the original event, to avoid expired recurring events
 		// being returned as rubbish.
-		event = *mSavedEvent;
 		if (mDeferDateTime.isValid())
 			event.defer(mDeferDateTime, event.reminderDeferral(), false);
 		else
 			event.cancelDefer();
-		return false;
 	}
-	return true;
+	return false;
 }
 
 /******************************************************************************
@@ -1069,7 +1074,10 @@ void EditAlarmDlg::slotOk()
 	if (!stateChanged())
 	{
 		// No changes have been made except possibly to an existing deferral
-		accept();
+		if (!mOnlyDeferred)
+			reject();
+		else
+			accept();
 		return;
 	}
 	if (mTimeWidget
