@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -69,14 +59,16 @@ const bool       Preferences::default_emailBccUseControlCentre = true;
 const bool       Preferences::default_emailUseControlCentre    = false;
 const bool       Preferences::default_emailBccUseControlCentre = false;
 #endif
-const QColor     Preferences::default_expiredColour(darkRed);
+const QColor     Preferences::default_disabledColour(Qt::lightGray);
+const QColor     Preferences::default_expiredColour(Qt::darkRed);
 const int        Preferences::default_expiredKeepDays          = 7;
 const QString    Preferences::default_defaultSoundFile         = QString::null;
 const float      Preferences::default_defaultSoundVolume       = -1;
+const int        Preferences::default_defaultLateCancel        = 0;
+const bool       Preferences::default_defaultAutoClose         = false;
 const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
 const bool       Preferences::default_defaultBeep              = false;
-const bool       Preferences::default_defaultLateCancel        = false;
 const bool       Preferences::default_defaultConfirmAck        = false;
 const bool       Preferences::default_defaultEmailBcc          = false;
 const QString    Preferences::default_emailAddress             = QString::null;
@@ -84,7 +76,7 @@ const QString    Preferences::default_emailBccAddress          = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
 const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
-const TimeSelector::Units        Preferences::default_defaultReminderUnits = TimeSelector::HOURS_MINUTES;
+const TimePeriod::Units          Preferences::default_defaultReminderUnits = TimePeriod::HOURS_MINUTES;
 const QString    Preferences::default_defaultPreAction;
 const QString    Preferences::default_defaultPostAction;
 
@@ -117,10 +109,12 @@ static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddres
 static const QString EMAIL_BCC_ADDRESS        = QString::fromLatin1("EmailBccAddress");
 static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
 static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
+static const QString DISABLED_COLOUR          = QString::fromLatin1("DisabledColour");
 static const QString EXPIRED_COLOUR           = QString::fromLatin1("ExpiredColour");
 static const QString EXPIRED_KEEP_DAYS        = QString::fromLatin1("ExpiredKeepDays");
 static const QString DEFAULTS_SECTION         = QString::fromLatin1("Defaults");
 static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCancel");
+static const QString DEF_AUTO_CLOSE           = QString::fromLatin1("DefAutoClose");
 static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
 static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
 static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
@@ -218,10 +212,12 @@ Preferences::Preferences()
 	int sod = config->readNumEntry(START_OF_DAY_CHECK, 0);
 	if (sod)
 		mOldStartOfDay = mOldStartOfDay.addMSecs(sod ^ SODxor);
+	mDisabledColour          = config->readColorEntry(DISABLED_COLOUR, &default_disabledColour);
 	mExpiredColour           = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
 	mExpiredKeepDays         = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
-	mDefaultLateCancel       = config->readBoolEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	mDefaultLateCancel       = config->readNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	mDefaultAutoClose        = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound            = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
@@ -237,8 +233,8 @@ Preferences::Preferences()
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
 	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
-	mDefaultReminderUnits    = (reminderUnits < TimeSelector::HOURS_MINUTES || reminderUnits > TimeSelector::WEEKS)
-	                         ? default_defaultReminderUnits : (TimeSelector::Units)reminderUnits;
+	mDefaultReminderUnits    = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
+	                         ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
 	mDefaultPreAction        = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
 	mDefaultPostAction       = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	emit preferencesChanged();
@@ -281,10 +277,12 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_BCC_ADDRESS, (mEmailBccUseControlCentre ? QString() : mEmailBccAddress));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
+	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
 	config->writeEntry(EXPIRED_KEEP_DAYS, mExpiredKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
+	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
 	config->writeEntry(DEF_SOUND, mDefaultSound);

@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -63,6 +53,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "latecancel.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "recurrenceedit.h"
@@ -217,14 +208,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "1. With this option selected, closing the system tray icon will quit %2.\n"
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, AlignLeft);
+	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
 	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
 	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disa&ble alarms while not running"), group, "disableAl");
@@ -232,14 +223,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	QWhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
 	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group, "disableAl");
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	QWhatsThis::add(mQuitWarn,
 	      i18n("Check to display a warning prompt before quitting %1.").arg(kapp->aboutData()->programName()));
-	grid->addWidget(mQuitWarn, row, 2, AlignLeft);
+	grid->addWidget(mQuitWarn, row, 2, Qt::AlignLeft);
 	++row;
 
 	// Run-on-demand radio button has an ID of 3
@@ -252,14 +243,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "1. Alarms are displayed even when %2 is not running, since alarm monitoring is done by the alarm daemon.\n"
 	           "2. With this option selected, the system tray icon can be displayed or hidden independently of %3.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, AlignLeft);
+	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
 	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group, "autoRun");
 	mAutostartTrayIcon2->setFixedSize(mAutostartTrayIcon2->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
-	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	QHBox* itemBox = new QHBox(mPage);
@@ -317,7 +308,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	connect(mKeepExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
 	QWhatsThis::add(mKeepExpired,
 	      i18n("Check to store alarms after expiry or deletion (except deleted alarms which were never triggered)."));
-	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, AlignLeft);
+	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, Qt::AlignLeft);
 
 	box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
@@ -333,14 +324,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mPurgeAfterLabel->setBuddy(mPurgeAfter);
 	QWhatsThis::add(box,
 	      i18n("Uncheck to store expired alarms indefinitely. Check to enter how long expired alarms should be stored."));
-	grid->addWidget(box, 2, 1, AlignLeft);
+	grid->addWidget(box, 2, 1, Qt::AlignLeft);
 
 	mClearExpired = new QPushButton(i18n("Clear Expired Alar&ms"), group);
 	mClearExpired->setMinimumSize(mClearExpired->sizeHint());
 	connect(mClearExpired, SIGNAL(clicked()), SLOT(slotClearExpired()));
 	QWhatsThis::add(mClearExpired,
 	      i18n("Delete all existing expired alarms."));
-	grid->addWidget(mClearExpired, 3, 1, AlignLeft);
+	grid->addWidget(mClearExpired, 3, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
@@ -357,7 +348,7 @@ void MiscPrefTab::restore()
 	mAutostartTrayIcon1->setChecked(preferences->mAutostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(preferences->mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(preferences->confirmAlarmDeletion());
-	mStartOfDay->setTime(preferences->mStartOfDay);
+	mStartOfDay->setValue(preferences->mStartOfDay);
 	mFeb29->setButton(preferences->mFeb29RecurType);
 	setExpiredControls(preferences->mExpiredKeepDays);
 	slotDisableIfStoppedToggled(true);
@@ -392,7 +383,7 @@ void MiscPrefTab::setDefaults()
 	mAutostartTrayIcon1->setChecked(Preferences::default_autostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
-	mStartOfDay->setTime(Preferences::default_startOfDay);
+	mStartOfDay->setValue(Preferences::default_startOfDay);
 	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	slotDisableIfStoppedToggled(true);
@@ -487,7 +478,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
 	QWhatsThis::add(mEmailUseControlCentre,
 	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
-	grid->addWidget(mEmailUseControlCentre, 2, 1, AlignLeft);
+	grid->addWidget(mEmailUseControlCentre, 2, 1, Qt::AlignLeft);
 
 	label = new QLabel(i18n("'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
@@ -507,7 +498,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	connect(mEmailBccUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailBccUseCCToggled(bool)));
 	QWhatsThis::add(mEmailBccUseControlCentre,
 	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
-	grid->addWidget(mEmailBccUseControlCentre, 4, 1, AlignLeft);
+	grid->addWidget(mEmailBccUseControlCentre, 4, 1, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -606,30 +597,41 @@ FontColourPrefTab::FontColourPrefTab(QVBox* frame)
 {
 	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Message Font && Color"), true, false);
 
-#if 0
-	QLabel* label = new QLabel(i18n("Disabled alarm color:"), box);
-	label->setMinimumSize(label->sizeHint());
-	box->setStretchFactor(new QWidget(box), 1);
-	mDisabledColour = new KColorCombo(box);
-	mDisabledColour->setMinimumSize(mDisabledColour->sizeHint());
-	label->setBuddy(mDisabledColour);
-	QWhatsThis::add(box,
-	      i18n("Choose the text color in the alarm list for disabled alarms."));
-#endif
-
 	QHBox* layoutBox = new QHBox(mPage);
 	QHBox* box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("E&xpired alarm color:"), box);
-	label->setMinimumSize(label->sizeHint());
+	QLabel* label1 = new QLabel(i18n("Di&sabled alarm color:"), box);
+//	label1->setMinimumSize(label1->sizeHint());
+	box->setStretchFactor(new QWidget(box), 1);
+	mDisabledColour = new KColorCombo(box);
+	mDisabledColour->setMinimumSize(mDisabledColour->sizeHint());
+	label1->setBuddy(mDisabledColour);
+	QWhatsThis::add(box,
+	      i18n("Choose the text color in the alarm list for disabled alarms."));
+	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
+	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
+
+	layoutBox = new QHBox(mPage);
+	box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label2 = new QLabel(i18n("E&xpired alarm color:"), box);
+//	label2->setMinimumSize(label2->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);
 	mExpiredColour = new KColorCombo(box);
 	mExpiredColour->setMinimumSize(mExpiredColour->sizeHint());
-	label->setBuddy(mExpiredColour);
+	label2->setBuddy(mExpiredColour);
 	QWhatsThis::add(box,
 	      i18n("Choose the text color in the alarm list for expired alarms."));
 	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
 	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
+
+	// Line up the two sets of colour controls
+	QSize size = label1->sizeHint();
+	QSize size2 = label2->sizeHint();
+	if (size2.width() > size.width())
+		size.setWidth(size2.width());
+	label1->setFixedSize(size);
+	label2->setFixedSize(size);
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
@@ -640,6 +642,7 @@ void FontColourPrefTab::restore()
 	mFontChooser->setBgColour(preferences->mDefaultBgColour);
 	mFontChooser->setColours(preferences->mMessageColours);
 	mFontChooser->setFont(preferences->mMessageFont);
+	mDisabledColour->setColor(preferences->mDisabledColour);
 	mExpiredColour->setColor(preferences->mExpiredColour);
 }
 
@@ -649,6 +652,7 @@ void FontColourPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultBgColour = mFontChooser->bgColour();
 	preferences->mMessageColours  = mFontChooser->colours();
 	preferences->mMessageFont     = mFontChooser->font();
+	preferences->mDisabledColour  = mDisabledColour->color();
 	preferences->mExpiredColour   = mExpiredColour->color();
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -658,6 +662,7 @@ void FontColourPrefTab::setDefaults()
 	mFontChooser->setBgColour(Preferences::default_defaultBgColour);
 	mFontChooser->setColours(Preferences::instance()->default_messageColours);
 	mFontChooser->setFont(Preferences::default_messageFont);
+	mDisabledColour->setColor(Preferences::default_disabledColour);
 	mExpiredColour->setColor(Preferences::default_expiredColour);
 }
 
@@ -671,11 +676,16 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 {
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
-	QHBox* box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultLateCancel = new QCheckBox(EditAlarmDlg::i18n_n_CancelIfLate(), box, "defCancelLate");
+	QHBox* box = new QHBox(mPage);
+	box->setSpacing(KDialog::spacingHint());
+	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(EditAlarmDlg::i18n_CancelIfLate()));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
+
+	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_AutoCloseWinLC(), box, "defAutoClose");
+	mDefaultAutoClose->setMinimumSize(mDefaultAutoClose->sizeHint());
+	QWhatsThis::add(mDefaultAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
 	box->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
@@ -703,13 +713,13 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), group, "defSound");
 	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
 	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound()));
-	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, AlignLeft);
+	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, Qt::AlignLeft);
 
 	mDefaultBeep = new QCheckBox(i18n("&Beep"), group, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
 	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
-	grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, Qt::AlignLeft);
 
 	box = new QHBox(group);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
@@ -730,7 +740,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	mDefaultSoundRepeat = new QCheckBox(i18n("Re&peat sound file"), group, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
 	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat()));
-	grid->addWidget(mDefaultSoundRepeat, 4, 2, AlignLeft);
+	grid->addWidget(mDefaultSoundRepeat, 4, 2, Qt::AlignLeft);
 #ifdef WITHOUT_ARTS
 	mDefaultSoundRepeat->hide();
 #endif
@@ -762,9 +772,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Hours_Mins(), TimeSelector::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Days(), TimeSelector::DAYS);
-	mDefaultReminderUnits->insertItem(TimeSelector::i18n_Weeks(), TimeSelector::WEEKS);
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
 	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
 	label->setBuddy(mDefaultReminderUnits);
 	QWhatsThis::add(box,
@@ -782,6 +792,7 @@ void EditPrefTab::restore()
 {
 	Preferences* preferences = Preferences::instance();
 	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
+	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
 	mDefaultBeep->setChecked(preferences->mDefaultBeep);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
@@ -795,11 +806,8 @@ void EditPrefTab::restore()
 void EditPrefTab::apply(bool syncToDisc)
 {
 	Preferences* preferences = Preferences::instance();
-#ifdef NEW_CANCEL_IF_LATE
 	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked() ? 1 : 0;
-#else
-	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked();
-#endif
+	preferences->mDefaultAutoClose   = mDefaultAutoClose->isChecked();
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
 	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
@@ -818,13 +826,14 @@ void EditPrefTab::apply(bool syncToDisc)
 		case 0:
 		default: preferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
-	preferences->mDefaultReminderUnits = static_cast<TimeSelector::Units>(mDefaultReminderUnits->currentItem());
+	preferences->mDefaultReminderUnits = static_cast<TimePeriod::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void EditPrefTab::setDefaults()
 {
 	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
+	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
@@ -896,7 +905,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	connect(mTooltipShowAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipAlarmsToggled(bool)));
 	QWhatsThis::add(mTooltipShowAlarms,
 	      i18n("Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours"));
-	grid->addMultiCellWidget(mTooltipShowAlarms, 1, 1, 0, 2, AlignLeft);
+	grid->addMultiCellWidget(mTooltipShowAlarms, 1, 1, 0, 2, Qt::AlignLeft);
 
 	QHBox* box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
@@ -909,21 +918,21 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QWhatsThis::add(box,
 	      i18n("Uncheck to display all of the next 24 hours' alarms in the system tray tooltip. "
 	           "Check to enter an upper limit on the number to be displayed."));
-	grid->addMultiCellWidget(box, 2, 2, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(box, 2, 2, 1, 2, Qt::AlignLeft);
 
 	mTooltipShowTime = new QCheckBox(KAlarmMainWindow::i18n_m_ShowAlarmTimes(), group, "tooltipTime");
 	mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
 	connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
 	QWhatsThis::add(mTooltipShowTime,
 	      i18n("Specify whether to show in the system tray tooltip, the time at which each alarm is due"));
-	grid->addMultiCellWidget(mTooltipShowTime, 3, 3, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mTooltipShowTime, 3, 3, 1, 2, Qt::AlignLeft);
 
 	mTooltipShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_l_ShowTimeToAlarms(), group, "tooltipTimeTo");
 	mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
 	connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
 	QWhatsThis::add(mTooltipShowTimeTo,
 	      i18n("Specify whether to show in the system tray tooltip, how long until each alarm is due"));
-	grid->addMultiCellWidget(mTooltipShowTimeTo, 4, 4, 1, 2, AlignLeft);
+	grid->addMultiCellWidget(mTooltipShowTimeTo, 4, 4, 1, 2, Qt::AlignLeft);
 
 	box = new QHBox(group);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
@@ -934,7 +943,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QWhatsThis::add(box,
 	      i18n("Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip"));
 	box->setFixedHeight(box->sizeHint().height());
-	grid->addWidget(box, 5, 2, AlignLeft);
+	grid->addWidget(box, 5, 2, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
 	mModalMessages = new QCheckBox(i18n("Message &windows have a title bar and take keyboard focus"), mPage, "modalMsg");

@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef PREFDLG_H
@@ -183,17 +173,18 @@ class EditPrefTab : public PrefsTabBase
 		void         slotBrowseSoundFile();
 
 	private:
-		QCheckBox*     mDefaultLateCancel;
-		QCheckBox*     mDefaultConfirmAck;
-		QCheckBox*     mDefaultEmailBcc;
-		QCheckBox*     mDefaultBeep;
-		QCheckBox*     mDefaultSound;
-		QLabel*        mDefaultSoundFileLabel;
-		QLineEdit*     mDefaultSoundFile;
-		QPushButton*   mDefaultSoundFileBrowse;
-		QCheckBox*     mDefaultSoundRepeat;
-		QComboBox*     mDefaultRecurPeriod;
-		QComboBox*     mDefaultReminderUnits;
+		QCheckBox*      mDefaultLateCancel;
+		QCheckBox*      mDefaultAutoClose;
+		QCheckBox*      mDefaultConfirmAck;
+		QCheckBox*      mDefaultEmailBcc;
+		QCheckBox*      mDefaultBeep;
+		QCheckBox*      mDefaultSound;
+		QLabel*         mDefaultSoundFileLabel;
+		QLineEdit*      mDefaultSoundFile;
+		QPushButton*    mDefaultSoundFileBrowse;
+		QCheckBox*      mDefaultSoundRepeat;
+		QComboBox*      mDefaultRecurPeriod;
+		QComboBox*      mDefaultReminderUnits;
 		SpecialActions* mDefaultSpecialActions;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
@@ -252,6 +243,7 @@ class FontColourPrefTab : public PrefsTabBase
 
 	private:
 		FontColourChooser*  mFontChooser;
+		KColorCombo*        mDisabledColour;
 		KColorCombo*        mExpiredColour;
 };
 

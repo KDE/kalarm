@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef PREFERENCES_H
@@ -42,7 +32,7 @@ class QWidget;
 
 #include "colourlist.h"
 #include "recurrenceedit.h"
-#include "timeselector.h"
+#include "timeperiod.h"
 
 
 // Settings configured in the Preferences dialog
@@ -84,6 +74,7 @@ class Preferences : public QObject
 		bool           emailBccUseControlCentre() const { return mEmailBccUseControlCentre; }
 		QString        emailAddress() const;
 		QString        emailBccAddress() const;
+		QColor         disabledColour() const           { return mDisabledColour; }
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
 		bool           defaultSound() const             { return mDefaultSound; }
@@ -91,16 +82,13 @@ class Preferences : public QObject
 		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
 		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
-#ifdef NEW_CANCEL_IF_LATE
 		int            defaultLateCancel() const        { return mDefaultLateCancel; }
-#else
-		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
-#endif
+		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
-		TimeSelector::Units
+		TimePeriod::Units
 		               defaultReminderUnits() const     { return mDefaultReminderUnits; }
 		const QString& defaultPreAction() const         { return mDefaultPreAction; }
 		const QString& defaultPostAction() const        { return mDefaultPostAction; }
@@ -143,24 +131,21 @@ class Preferences : public QObject
 		static const bool        default_emailBccUseControlCentre;
 		static const QString     default_emailAddress;
 		static const QString     default_emailBccAddress;
+		static const QColor      default_disabledColour;
 		static const QColor      default_expiredColour;
 		static const int         default_expiredKeepDays;
 		static const QString     default_defaultSoundFile;
 		static const float       default_defaultSoundVolume;
-#ifdef NEW_CANCEL_IF_LATE
 		static const int         default_defaultLateCancel;
-#endif
+		static const bool        default_defaultAutoClose;
 		static const bool        default_defaultSound;
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
-#ifndef NEW_CANCEL_IF_LATE
-		static const bool        default_defaultLateCancel;
-#endif
 		static const bool        default_defaultConfirmAck;
 		static const bool        default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                         default_defaultRecurPeriod;
-		static const TimeSelector::Units
+		static const TimePeriod::Units
 		                         default_defaultReminderUnits;
 		static const QString     default_defaultPreAction;
 		static const QString     default_defaultPostAction;
@@ -206,24 +191,21 @@ class Preferences : public QObject
 		bool                mEmailQueuedNotify;
 		bool                mEmailUseControlCentre;
 		bool                mEmailBccUseControlCentre;
+		QColor              mDisabledColour;
 		QColor              mExpiredColour;
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog
 		QString             mDefaultSoundFile;
 		float               mDefaultSoundVolume;
-#ifdef NEW_CANCEL_IF_LATE
 		int                 mDefaultLateCancel;
-#endif
+		bool                mDefaultAutoClose;
 		bool                mDefaultSound;
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;
-#ifndef NEW_CANCEL_IF_LATE
-		bool                mDefaultLateCancel;
-#endif
 		bool                mDefaultConfirmAck;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
-		TimeSelector::Units mDefaultReminderUnits;
+		TimePeriod::Units   mDefaultReminderUnits;
 		QString             mDefaultPreAction;
 		QString             mDefaultPostAction;
 		// Change tracking
