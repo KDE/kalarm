@@ -82,7 +82,7 @@ static KCmdLineOptions options[] =
 	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
-	{ "reminder-once <period>", I18N_NOOP("Display reminder once in advance of first alarm recurrence"), 0 },
+	{ "reminder-once <period>", I18N_NOOP("Display reminder once, before first alarm recurrence"), 0 },
 	{ "r", 0, 0 },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0 },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
