@@ -181,7 +181,7 @@ class Preferences : public QObject
 		friend class MiscPrefTab;
 		friend class EditPrefTab;
 		friend class ViewPrefTab;
-		friend class MessagePrefTab;
+		friend class FontColourPrefTab;
 		friend class EmailPrefTab;
 		void                setEmailAddress(bool useControlCentre, const QString& address);
 		void                setEmailBccAddress(bool useControlCentre, const QString& address);

@@ -50,7 +50,7 @@ class TimeSpinBox;
 class SpinBox;
 class SpecialActions;
 
-class MessagePrefTab;
+class FontColourPrefTab;
 class EditPrefTab;
 class EmailPrefTab;
 class ViewPrefTab;
@@ -65,11 +65,11 @@ class KAlarmPrefDlg : public KDialogBase
 		KAlarmPrefDlg();
 		~KAlarmPrefDlg();
 
-		MessagePrefTab* mMessagePage;
-		EditPrefTab*    mEditPage;
-		EmailPrefTab*   mEmailPage;
-		ViewPrefTab*    mViewPage;
-		MiscPrefTab*    mMiscPage;
+		FontColourPrefTab* mFontColourPage;
+		EditPrefTab*       mEditPage;
+		EmailPrefTab*      mEmailPage;
+		ViewPrefTab*       mViewPage;
+		MiscPrefTab*       mMiscPage;
 
 	protected slots:
 		virtual void slotOk();
@@ -239,12 +239,12 @@ class ViewPrefTab : public PrefsTabBase
 };
 
 
-// Message appearance tab of the Preferences dialog
-class MessagePrefTab : public PrefsTabBase
+// Font & Colour tab of the Preferences dialog
+class FontColourPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MessagePrefTab(QVBox*);
+		FontColourPrefTab(QVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);

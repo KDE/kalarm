@@ -91,8 +91,8 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	frame = addVBoxPage(i18n("View"), i18n("View Settings"), DesktopIcon("view_choose"));
 	mViewPage = new ViewPrefTab(frame);
 
-	frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("colorize"));
-	mMessagePage = new MessagePrefTab(frame);
+	frame = addVBoxPage(i18n("Font & Color"), i18n("Default Font and Color"), DesktopIcon("colorize"));
+	mFontColourPage = new FontColourPrefTab(frame);
 
 	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
 	mEditPage = new EditPrefTab(frame);
@@ -109,7 +109,7 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 void KAlarmPrefDlg::slotDefault()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
-	mMessagePage->setDefaults();
+	mFontColourPage->setDefaults();
 	mEmailPage->setDefaults();
 	mViewPage->setDefaults();
 	mEditPage->setDefaults();
@@ -137,7 +137,7 @@ void KAlarmPrefDlg::slotApply()
 		}
 	}
 	mValid = true;
-	mMessagePage->apply(false);
+	mFontColourPage->apply(false);
 	mEmailPage->apply(false);
 	mViewPage->apply(false);
 	mEditPage->apply(false);
@@ -167,7 +167,7 @@ void KAlarmPrefDlg::slotCancel()
 void KAlarmPrefDlg::restore()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::restore()" << endl;
-	mMessagePage->restore();
+	mFontColourPage->restore();
 	mEmailPage->restore();
 	mViewPage->restore();
 	mEditPage->restore();
@@ -599,13 +599,24 @@ QString EmailPrefTab::validateAddress()
 
 
 /*=============================================================================
-= Class MessagePrefTab
+= Class FontColourPrefTab
 =============================================================================*/
 
-MessagePrefTab::MessagePrefTab(QVBox* frame)
+FontColourPrefTab::FontColourPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Font && Color"), true, false);
+	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Message Font && Color"), true, false);
+
+#if 0
+	QLabel* label = new QLabel(i18n("Disabled alarm color:"), box);
+	label->setMinimumSize(label->sizeHint());
+	box->setStretchFactor(new QWidget(box), 1);
+	mDisabledColour = new KColorCombo(box);
+	mDisabledColour->setMinimumSize(mDisabledColour->sizeHint());
+	label->setBuddy(mDisabledColour);
+	QWhatsThis::add(box,
+	      i18n("Choose the text color in the alarm list for disabled alarms."));
+#endif
 
 	QHBox* layoutBox = new QHBox(mPage);
 	QHBox* box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
@@ -624,7 +635,7 @@ MessagePrefTab::MessagePrefTab(QVBox* frame)
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
-void MessagePrefTab::restore()
+void FontColourPrefTab::restore()
 {
 	Preferences* preferences = Preferences::instance();
 	mFontChooser->setBgColour(preferences->mDefaultBgColour);
@@ -633,7 +644,7 @@ void MessagePrefTab::restore()
 	mExpiredColour->setColor(preferences->mExpiredColour);
 }
 
-void MessagePrefTab::apply(bool syncToDisc)
+void FontColourPrefTab::apply(bool syncToDisc)
 {
 	Preferences* preferences = Preferences::instance();
 	preferences->mDefaultBgColour = mFontChooser->bgColour();
@@ -643,7 +654,7 @@ void MessagePrefTab::apply(bool syncToDisc)
 	PrefsTabBase::apply(syncToDisc);
 }
 
-void MessagePrefTab::setDefaults()
+void FontColourPrefTab::setDefaults()
 {
 	mFontChooser->setBgColour(Preferences::default_defaultBgColour);
 	mFontChooser->setColours(Preferences::instance()->default_messageColours);
