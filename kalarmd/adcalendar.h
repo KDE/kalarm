@@ -1,7 +1,7 @@
 /*
  *  adcalendar.h  -  calendar file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,33 +73,44 @@ class ADCalendar : public KCal::CalendarLocal
 		void            slotDownloadJobResult(KIO::Job*);
 
 	private:
+		struct EventKey
+		{
+			EventKey() : calendarIndex(-1) { }
+			EventKey(const QString& id, int cal) : eventID(id), calendarIndex(cal) { }
+			bool    operator<(const EventKey& k) const
+			            { return (calendarIndex == k.calendarIndex)
+			                   ? (eventID < k.eventID) : (calendarIndex < k.calendarIndex);
+			            }
+			QString eventID;
+			int     calendarIndex;
+		};
 		struct EventItem
 		{
 			EventItem() : eventSequence(0) { }
-			EventItem(const QString& url, int seqno, const QValueList<QDateTime>& alarmtimes)
-			        : calendarURL(url), eventSequence(seqno), alarmTimes(alarmtimes) {}
-
-			QString   calendarURL;
-			int       eventSequence;
+			EventItem(int seqno, const QValueList<QDateTime>& alarmtimes)
+			        : eventSequence(seqno), alarmTimes(alarmtimes) {}
+			int                   eventSequence;
 			QValueList<QDateTime> alarmTimes;
 		};
 
-		typedef QMap<QString, EventItem>  EventsMap;   // event ID, calendar URL/event sequence num
-		static EventsMap  mEventsHandled; // IDs of displayed KALARM type events
-		static QValueList<ADCalendar*> mCalendars;    // list of all constructed calendars
+		typedef QMap<EventKey, EventItem>  EventsMap;   // calendar/event ID, event sequence num
+		static EventsMap               mEventsHandled;  // IDs of already triggered events
+		static QStringList             mCalendarUrls;   // URLs of all calendars ever opened
+		static QValueList<ADCalendar*> mCalendars;      // list of all constructed calendars
 
 		ADCalendar(const ADCalendar&);             // prohibit copying
 		ADCalendar& operator=(const ADCalendar&);  // prohibit copying
 
 		void            loadLocalFile(const QString& filename);
 
-		QString           mUrlString;     // calendar file URL
-		QCString          mAppName;       // name of application owning this calendar
-		QString           mTempFileName;  // temporary file used if currently downloading, else null
-		bool              mLoaded;        // true if calendar file is currently loaded
+		QString           mUrlString;       // calendar file URL
+		QCString          mAppName;         // name of application owning this calendar
+		QString           mTempFileName;    // temporary file used if currently downloading, else null
+		int               mUrlIndex;        // unique index to URL in mCalendarUrls
+		bool              mLoaded;          // true if calendar file is currently loaded
 		bool              mLoadedConnected; // true if the loaded() signal has been connected to AlarmDaemon
-		bool              mUnregistered;  // client has registered, but has not since added the calendar
-		bool              mEnabled;       // events are currently manually enabled
+		bool              mUnregistered;    // client has registered, but has not since added the calendar
+		bool              mEnabled;         // events are currently manually enabled
 };
 
 #endif // ADCALENDAR_H

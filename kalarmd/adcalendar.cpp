@@ -1,7 +1,7 @@
 /*
  *  adcalendar.cpp  -  calendar file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 QValueList<ADCalendar*> ADCalendar::mCalendars;
 ADCalendar::EventsMap   ADCalendar::mEventsHandled;
+QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder anything in this list!
 
 
 ADCalendar::ADCalendar(const QString& url, const QCString& appname)
@@ -47,6 +48,12 @@ ADCalendar::ADCalendar(const QString& url, const QCString& appname)
 	{
 		kdError(5900) << "ADCalendar::ADCalendar(" << url << "): calendar already exists" << endl;
 		assert(0);
+	}
+	mUrlIndex = mCalendarUrls.findIndex(url);    // get unique index for this URL
+	if (mUrlIndex < 0)
+	{
+		mUrlIndex = static_cast<int>(mCalendarUrls.count());
+		mCalendarUrls.append(url);
 	}
 	loadFile(false);
 	mCalendars.append(this);
@@ -133,7 +140,7 @@ bool ADCalendar::setLoadedConnected()
 */
 bool ADCalendar::eventHandled(const KCal::Event* event, const QValueList<QDateTime>& alarmtimes)
 {
-	EventsMap::ConstIterator it = mEventsHandled.find(event->uid());
+	EventsMap::ConstIterator it = mEventsHandled.find(EventKey(event->uid(), mUrlIndex));
 	if (it == mEventsHandled.end())
 		return false;
 
@@ -160,7 +167,8 @@ void ADCalendar::setEventHandled(const KCal::Event* event, const QValueList<QDat
 	if (event)
 	{
 		kdDebug(5900) << "ADCalendar::setEventHandled(" << event->uid() << ")\n";
-		EventsMap::Iterator it = mEventsHandled.find(event->uid());
+		EventKey key(event->uid(), mUrlIndex);
+		EventsMap::Iterator it = mEventsHandled.find(key);
 		if (it != mEventsHandled.end())
 		{
 			// Update the existing entry for the event
@@ -168,8 +176,7 @@ void ADCalendar::setEventHandled(const KCal::Event* event, const QValueList<QDat
 			it.data().eventSequence = event->revision();
 		}
 		else
-			mEventsHandled.insert(event->uid(),
-			                      EventItem(mUrlString, event->revision(), alarmtimes));
+			mEventsHandled.insert(key, EventItem(event->revision(), alarmtimes));
 	}
 }
 
@@ -180,8 +187,8 @@ void ADCalendar::clearEventsHandled(bool nonexistentOnly)
 {
 	for (EventsMap::Iterator it = mEventsHandled.begin();  it != mEventsHandled.end();  )
 	{
-		if (it.data().calendarURL == mUrlString
-		&&  (!nonexistentOnly  ||  !event(it.key())))
+		if (it.key().calendarIndex == mUrlIndex
+		&&  (!nonexistentOnly  ||  !event(it.key().eventID)))
 		{
 			EventsMap::Iterator i = it;
 			++it;                      // prevent iterator becoming invalid with remove()
