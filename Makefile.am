@@ -44,3 +44,5 @@ messages:
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/kalarm.pot; \
 	fi
+
+include ../admin/Doxyfile.am
