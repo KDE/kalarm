@@ -59,27 +59,39 @@ class Daemon : public QObject
 		static bool      isRunning(bool startDaemon = true);
 		static int       maxTimeSinceCheck();
 		static void      readCheckInterval();
-		static int       readyState();
 		static void      registrationResult(bool reregister, bool success);
-		static bool      isRegistered()    { return mRegistered; }
+		static bool      isRegistered()    { return mStatus == REGISTERED; }
+		static void      allowRegisterFailMsg()  { mRegisterFailMsg = false; }
 
 	private slots:
 		void             slotControl();
 		void             slotCalendarSaved(AlarmCalendar*);
 		void             checkIfStarted();
+		void             slotStarted()           { updateRegisteredStatus(true); }
+		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), false); }
 
 	private:
+		enum Status    // daemon status.  KEEP IN THIS ORDER!!
+		{
+			STOPPED,     // daemon is not registered with DCOP
+			RUNNING,     // daemon is newly registered with DCOP
+			READY,       // daemon is ready to accept DCOP calls
+			REGISTERED   // we have registered with the daemon
+		};
 		explicit Daemon() { }
 		static bool      registerWith(bool reregister);
 		static void      reload();
+		static void      updateRegisteredStatus(bool timeout = false);
 
 		static Daemon*   mInstance;         // only one instance allowed
 		static QTimer*   mStartTimer;       // timer to check daemon status after starting daemon
+		static QTimer*   mRegisterTimer;    // timer to check whether daemon has sent registration status
 		static QDateTime mLastCheck;        // last time daemon checked alarms before check interval change
 		static QDateTime mNextCheck;        // next time daemon will check alarms after check interval change
 		static int       mCheckInterval;    // daemon check interval (seconds)
 		static int       mStartTimeout;     // remaining number of times to check if alarm daemon has started
-		static bool      mRegistered;       // true if we've registered with alarm daemon
+		static Status    mStatus;           // daemon status
+		static bool      mRegisterFailMsg;  // true if registration failure message has been displayed
 };
 
 #endif // DAEMON_H

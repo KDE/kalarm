@@ -75,7 +75,7 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 		void           alarmDaemonUpdate(int alarmGuiChangeType,
 		                                 const QString& calendarURL, const QCString& appName);
 		void           handleEvent(const QString& calendarURL, const QString& eventID);
-		void           handleEvent(const QString& iCalendarString) ;
+		void           handleEvent(const QString& iCalendarString);
 		void           registered(bool reregister, bool success);
 
 		QTimer         mDaemonStatusTimer;         // timer for checking daemon status
@@ -96,14 +96,13 @@ class AlarmEnableAction : public KToggleAction
 	public:
 		AlarmEnableAction(int accel, QObject* parent, const char* name = 0);
 	public slots:
-		void         setCheckedQuiet(bool);   // set state without emitting switched_extra() signal
-		virtual void setChecked(bool);        // set state and emit switched() and switched_extra() signals
+		void         setCheckedActual(bool);  // set state and emit switched() signal
+		virtual void setChecked(bool);        // request state change and emit userClicked() signal
 	signals:
 		void         switched(bool);          // state has changed (KToggleAction::toggled() is only emitted when clicked by user)
-		void         switched_extra(bool);
+		void         userClicked(bool);       // user has clicked the control (param = desired state)
 	private:
 		bool         mInitialised;
-		bool         mQuiet;           // true to suppress switched_extra() signal
 };
 
 #endif // DAEMONGUIHANDLER_H

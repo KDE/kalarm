@@ -58,13 +58,20 @@ const char*  DAEMON_DCOP_OBJECT  = "ad";        // DCOP name of kalarmd's DCOP i
 const char*  DCOP_OBJECT_NAME = "display";
 
 
-Daemon*   Daemon::mInstance = 0;
-QTimer*   Daemon::mStartTimer = 0;
-QDateTime Daemon::mLastCheck;
-QDateTime Daemon::mNextCheck;
-int       Daemon::mCheckInterval = 0;
-int       Daemon::mStartTimeout = 0;
-bool      Daemon::mRegistered = false;
+Daemon*        Daemon::mInstance = 0;
+QTimer*        Daemon::mStartTimer = 0;
+QTimer*        Daemon::mRegisterTimer = 0;
+QDateTime      Daemon::mLastCheck;
+QDateTime      Daemon::mNextCheck;
+int            Daemon::mCheckInterval = 0;
+int            Daemon::mStartTimeout = 0;
+Daemon::Status Daemon::mStatus = Daemon::STOPPED;
+bool           Daemon::mRegisterFailMsg = false;
+
+// How frequently to check the daemon's status after starting it.
+// This is equal to the length of time we wait after the daemon is registered with DCOP
+// before we assume that it is ready to accept DCOP calls.
+static const int startCheckInterval = 500;     // 500 milliseconds
 
 
 /******************************************************************************
@@ -87,13 +94,13 @@ void Daemon::initialise()
 bool Daemon::start()
 {
 	kdDebug(5950) << "Daemon::start()\n";
-	if (mStartTimer)
-		return true;     // we're currently waiting for the daemon to start
-	int ready = readyState();
-	if (ready <= 0  &&  !mStartTimer)
+	updateRegisteredStatus();
+	switch (mStatus)
 	{
-		if (ready < 0)
+		case STOPPED:
 		{
+			if (mStartTimer)
+				return true;     // we're currently waiting for the daemon to start
 			// Start the alarm daemon. It is a KUniqueApplication, which means that
 			// there is automatically only one instance of the alarm daemon running.
 			QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
@@ -105,27 +112,38 @@ bool Daemon::start()
 			}
 			KApplication::kdeinitExec(execStr);
 			kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
+			mStartTimeout = 5000/startCheckInterval + 1;    // check daemon status for 5 seconds before giving up
+			mStartTimer = new QTimer(mInstance);
+			connect(mStartTimer, SIGNAL(timeout()), mInstance, SLOT(checkIfStarted()));
+			mStartTimer->start(startCheckInterval);
+			mInstance->checkIfStarted();
+			return true;
 		}
-		const int startInterval = 500;   // milliseconds
-		mStartTimeout = 5000/startInterval + 1;    // check daemon status for 5 seconds before giving up
-		mStartTimer = new QTimer(mInstance);
-		connect(mStartTimer, SIGNAL(timeout()), mInstance, SLOT(checkIfStarted()));
-		mStartTimer->start(startInterval);
-		mInstance->checkIfStarted();
-		return true;
+		case RUNNING:
+			return true;     // we're waiting for the daemon to be completely ready
+		case READY:
+			// Daemon is ready. Register this application with it.
+			if (!registerWith(false))
+				return false;
+			break;
+		case REGISTERED:
+			break;
 	}
-
-	// Register this application with the alarm daemon
-	if (!registerWith(false))
-		return false;
 	return true;
 }
 
 /******************************************************************************
-* Start the alarm daemon if necessary, and register this application with it.
+* Register this application with the alarm daemon.
 */
 bool Daemon::registerWith(bool reregister)
 {
+	if (mRegisterTimer)
+		return true;
+	if (mStatus == STOPPED  ||  mStatus == RUNNING)
+		return false;
+	if (mStatus == REGISTERED  &&  !reregister)
+		return true;
+
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
 	QByteArray data;
@@ -140,6 +158,9 @@ bool Daemon::registerWith(bool reregister)
 		registrationResult(reregister, false);
 		return false;
 	}
+	mRegisterTimer = new QTimer(mInstance);
+	connect(mRegisterTimer, SIGNAL(timeout()), mInstance, SLOT(registerTimerExpired()));
+	mRegisterTimer->start(10000);     // wait up to 10 seconds for the reply
 
 	// Register as a GUI with the alarm daemon
 	theApp()->daemonGuiHandler()->registerWith();
@@ -152,11 +173,21 @@ bool Daemon::registerWith(bool reregister)
 void Daemon::registrationResult(bool reregister, bool success)
 {
 	kdDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
+	delete mRegisterTimer;
+	mRegisterTimer = 0;
 	if (!success)
 	{
 		kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed" << endl;
 		if (!reregister)
-			KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+		{
+			if (mStatus == REGISTERED)
+				mStatus = READY;
+			if (!mRegisterFailMsg)
+			{
+				mRegisterFailMsg = true;
+				KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+			}
+		}
 	}
 	else if (!reregister)
 	{
@@ -168,7 +199,8 @@ void Daemon::registrationResult(bool reregister, bool success)
 			kdError(5950) << "Daemon::start(): addMsgCal dcop send failed" << endl;
 		else
 		{
-			mRegistered = true;
+			mStatus = REGISTERED;
+			mRegisterFailMsg = false;
 			kdDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
 		}
 	}
@@ -179,52 +211,58 @@ void Daemon::registrationResult(bool reregister, bool success)
 */
 void Daemon::checkIfStarted()
 {
-	int state = readyState();
-	switch (state)
+	updateRegisteredStatus();
+	switch (mStatus)
 	{
-		case -1:
+		case STOPPED:
 			if (--mStartTimeout > 0)
 				return;     // wait a bit more to check again
 			kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
 			KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
 			break;
-		case 0:
-			if (--mStartTimeout > 0)
-				return;     // wait a bit more to check again
-			kdError(5950) << "Daemon::checkIfStarted(): daemon not ready" << endl;
-			KMessageBox::error(0, i18n("Cannot enable alarms:\nAlarm Daemon (%1) not ready").arg(QString::fromLatin1(DAEMON_APP_NAME)));
-			break;
-		case 1:
+		case RUNNING:
+		case READY:
+		case REGISTERED:
 			break;
 	}
 	delete mStartTimer;
 	mStartTimer = 0;
-
-	if (state > 0)
-		start();
 }
 
 /******************************************************************************
 * Check whether the alarm daemon has started yet, and if so, whether it is
 * ready to accept DCOP calls.
-* Reply = 1 if ready
-*       = 0 if running, but not ready for DCOP calls
-*       = -1 if not running.
 */
-int Daemon::readyState()
+void Daemon::updateRegisteredStatus(bool timeout)
 {
-kdDebug(5950) << "Daemon::readyState()\n";
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
-{kdDebug(5950) << "Daemon::readyState() -> -1\n";
-		return -1;
-}
-//	QCStringList objects = kapp->dcopClient()->remoteObjects(DAEMON_APP_NAME);
-//	if (objects.find(DAEMON_DCOP_OBJECT) == objects.end())
-//{kdDebug(5950) << "Daemon::readyState() -> 0\n";
-//		return 0;
-//}
-kdDebug(5950) << "Daemon::readyState() -> 1\n";
-	return 1;
+	{
+		mStatus = STOPPED;
+		mRegisterFailMsg = false;
+	}
+	else
+	{
+		switch (mStatus)
+		{
+			case STOPPED:
+				// The daemon has newly been detected as registered with DCOP.
+				// Wait for a short time to ensure that it is ready for DCOP calls.
+				mStatus = RUNNING;
+				QTimer::singleShot(startCheckInterval, mInstance, SLOT(slotStarted()));
+				break;
+			case RUNNING:
+				if (timeout)
+				{
+					mStatus = READY;
+					start();
+				}
+				break;
+			case READY:
+			case REGISTERED:
+				break;
+		}
+	}
+	kdDebug(5950) << "Daemon::updateRegisteredStatus() -> " << mStatus << endl;
 }
 
 /******************************************************************************
@@ -282,18 +320,16 @@ void Daemon::reload()
 bool Daemon::isRunning(bool startdaemon)
 {
 	static bool runState = false;
-kdDebug(5950) << "Daemon::isRunning()\n";
-	bool newRunState = (readyState() > 0);
+	updateRegisteredStatus();
+	bool newRunState = (mStatus == READY  ||  mStatus == REGISTERED);
 	if (newRunState != runState)
 	{
-kdDebug(5950) << "Daemon::isRunning(): changed\n";
 		// Daemon's status has changed
 		runState = newRunState;
 		if (runState  &&  startdaemon)
 			start();      // re-register with the daemon
 	}
-kdDebug(5950) << "Daemon::isRunning() -> " << (runState && mRegistered) << endl;
-	return runState && mRegistered;
+	return runState  &&  (mStatus == REGISTERED);
 }
 
 /******************************************************************************

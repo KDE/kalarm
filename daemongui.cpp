@@ -69,7 +69,6 @@ DaemonGuiHandler::DaemonGuiHandler()
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	connect(&mDaemonStatusTimer, SIGNAL(timeout()), SLOT(timerCheckDaemonRunning()));
 	mDaemonStatusTimer.start(mDaemonStatusTimerInterval * 1000);  // check regularly if daemon is running
-	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler(): exit\n";
 }
 
 /******************************************************************************
@@ -255,8 +254,8 @@ void DaemonGuiHandler::slotPreferencesChanged()
 AlarmEnableAction* DaemonGuiHandler::createAlarmEnableAction(KActionCollection* actions, const char* name)
 {
 	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions, name);
-	connect(a, SIGNAL(switched_extra(bool)), SLOT(setAlarmsEnabled(bool)));
-	connect(this, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedQuiet(bool)));
+	connect(a, SIGNAL(userClicked(bool)), SLOT(setAlarmsEnabled(bool)));
+	connect(this, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
 	return a;
 }
 
@@ -279,38 +278,37 @@ QString DaemonGuiHandler::expandURL(const QString& urlString)
 
 AlarmEnableAction::AlarmEnableAction(int accel, QObject* parent, const char* name)
 	: KToggleAction(QString::null, accel, parent, name),
-	  mInitialised(false),
-	  mQuiet(true)
+	  mInitialised(false)
 {
-	setChecked(false);    // set the correct text
+	setCheckedActual(false);    // set the correct text
 	mInitialised = true;
-	mQuiet = false;
-}
-
-/******************************************************************************
-*  Set the action state when the alarm daemon run state changes, but don't
-*  emit a switched_extra() signal.
-*/
-void AlarmEnableAction::setCheckedQuiet(bool running)
-{
-	kdDebug(5950) << "AlarmEnableAction::setCheckedQuiet(" << running << ")\n";
-	mQuiet = true;
-	setChecked(running);
-	mQuiet = false;
 }
 
 /******************************************************************************
 *  Set the checked status and the correct text for the Alarms Enabled action.
 */
+void AlarmEnableAction::setCheckedActual(bool running)
+{
+	kdDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
+	if (running != isChecked()  ||  !mInitialised)
+	{
+		setText(running ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
+		KToggleAction::setChecked(running);
+		emit switched(running);
+	}
+}
+
+/******************************************************************************
+*  Request a change in the checked status.
+*  The status is only actually changed when the alarm daemon run state changes.
+*/
 void AlarmEnableAction::setChecked(bool check)
 {
 	kdDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
-	if (check != isChecked()  ||  !mInitialised)
+	if (check != isChecked())
 	{
-		setText(check ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
-		KToggleAction::setChecked(check);
-		emit switched(check);
-		if (!mQuiet)
-			emit switched_extra(check);
+		if (check)
+			Daemon::allowRegisterFailMsg();
+		emit userClicked(check);
 	}
 }
