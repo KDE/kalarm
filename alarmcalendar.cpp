@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -47,29 +51,14 @@ extern "C" {
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
 
-const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
 
-
-/******************************************************************************
-* Read the calendar file URL from the config file (or use the default).
-* If there is an error, the program exits.
-*/
-void AlarmCalendar::getURL() const
+AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type)
+	: mCalendar(0),
+	  mType(type),
+	  mKAlarmVersion(-1),
+	  mKAlarmVersion057_UTC(false)
 {
-	if (!mUrl.isValid())
-	{
-		KConfig* config = kapp->config();
-		config->setGroup(QString::fromLatin1("General"));
-		*const_cast<KURL*>(&mUrl) = config->readEntry(QString::fromLatin1("Calendar"),
-		                                             locateLocal("appdata", DEFAULT_CALENDAR_FILE));
-		if (!mUrl.isValid())
-		{
-			kdDebug(5950) << "AlarmCalendar::getURL(): invalid name: " << mUrl.prettyURL() << endl;
-			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(mUrl.prettyURL()),
-			                   kapp->aboutData()->programName());
-			kapp->exit(1);
-		}
-	}
+	mUrl.setPath(path);    // N.B. constructor mUrl(path) doesn't work with UNIX paths
 }
 
 /******************************************************************************
@@ -77,7 +66,11 @@ void AlarmCalendar::getURL() const
 */
 bool AlarmCalendar::open()
 {
-	getURL();
+	if (mCalendar)
+		return true;
+	if (!mUrl.isValid())
+		return false;
+	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
@@ -88,35 +81,40 @@ bool AlarmCalendar::open()
 	if (!KIO::NetAccess::exists(mUrl))
 	{
 		if (!create())      // create the calendar file
+		{
+			delete mCalendar;
+			mCalendar = 0;
 			return false;
+		}
 	}
 
 	// Load the calendar file
 	switch (load())
 	{
-		case 1:
+		case 1:         // success
 			break;
-		case 0:
+		case 0:         // zero-length file
 			if (!create()  ||  load() <= 0)
+			{
+				delete mCalendar;
+				mCalendar = 0;
 				return false;
-		case -1:
-/*	if (!KIO::NetAccess::exists(mUrl))
-	{
-		if (!create()  ||  load() <= 0)
-			return false;
-	}*/
+			}
+		case -1:        // failure
+			delete mCalendar;
+			mCalendar = 0;
 			return false;
 	}
 	return true;
 }
 
 /******************************************************************************
-* Create a new calendar file.
+* Private method to create a new calendar file.
 */
 bool AlarmCalendar::create()
 {
 	// Create the calendar file
-	KTempFile* tmpFile = 0L;
+	KTempFile* tmpFile = 0;
 	QString filename;
 	if (mUrl.isLocalFile())
 		filename = mUrl.path();
@@ -140,13 +138,15 @@ bool AlarmCalendar::create()
 */
 int AlarmCalendar::load()
 {
-	getURL();
+	if (!mCalendar)
+		return -2;
+
 	kdDebug(5950) << "AlarmCalendar::load(): " << mUrl.prettyURL() << endl;
 	QString tmpFile;
 	if (!KIO::NetAccess::download(mUrl, tmpFile))
 	{
 		kdError(5950) << "AlarmCalendar::load(): Load failure" << endl;
-		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
+		KMessageBox::error(0, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
 		return -1;
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
@@ -164,8 +164,8 @@ int AlarmCalendar::load()
 		KFileItem fi(uds, mUrl);
 		if (!fi.size())
 			return 0;     // file is zero length
-		kdDebug(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()),
+		kdError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
+		KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()),
 		                   kapp->aboutData()->programName());
 		return -1;
 	}
@@ -179,13 +179,13 @@ int AlarmCalendar::load()
 	if (mKAlarmVersion == KAlarmVersion(0,5,7))
 	{
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-		// case it is the KDE 3.0.0 version which needs adjustment of summer times.
+		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
 		mKAlarmVersion057_UTC = isUTC();
 		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version 0.5.7 (" << (mKAlarmVersion057_UTC ? "" : "non-") << "UTC)\n";
 	}
 	else
 		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version " << mKAlarmVersion << endl;
-	KAlarmEvent::convertKCalEvents();    // convert events to current KAlarm format for when calendar is saved
+	KAlarmEvent::convertKCalEvents(*this);   // convert events to current KAlarm format for when calendar is saved
 	return 1;
 }
 
@@ -199,7 +199,7 @@ int AlarmCalendar::reload()
 		return -2;
 	kdDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyURL() << endl;
 	close();
-	return load();
+	return open();
 }
 
 /******************************************************************************
@@ -207,7 +207,10 @@ int AlarmCalendar::reload()
 */
 bool AlarmCalendar::save(const QString& filename)
 {
-	kdDebug(5950) << "AlarmCalendar::save(): " << filename << endl;
+	if (!mCalendar)
+		return false;
+
+	kdDebug(5950) << "AlarmCalendar::save(" << filename << ")\n";
 	CalFormat* format;
 	if(mVCal)
 		format = new VCalFormat;
@@ -216,26 +219,29 @@ bool AlarmCalendar::save(const QString& filename)
 	bool success = mCalendar->save(filename, format);
 	if (!success)
 	{
-		kdDebug(5950) << "AlarmCalendar::save(): calendar save failed." << endl;
+		kdError(5950) << "AlarmCalendar::save(" << filename << "): failed.\n";
 		return false;
 	}
 
-	getURL();
 	if (!mUrl.isLocalFile())
 	{
 		if (!KIO::NetAccess::upload(filename, mUrl))
 		{
-			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
+			kdError(5950) << "AlarmCalendar::save(" << filename << "): upload failed.\n";
+			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
 			return false;
 		}
 	}
 
-	// Tell the alarm daemon to reload the calendar
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName()) << mUrl.url();
-	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
-		kdDebug(5950) << "AlarmCalendar::save(): addCal dcop send failed" << endl;
+	if (mType == KAlarmEvent::ACTIVE)
+	{
+		// Tell the alarm daemon to reload the calendar
+		QByteArray data;
+		QDataStream arg(data, IO_WriteOnly);
+		arg << QCString(kapp->aboutData()->appName()) << mUrl.url();
+		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
+			kdError(5950) << "AlarmCalendar::save(): reloadMsgCal dcop send failed" << endl;
+	}
 	return true;
 }
 
@@ -247,18 +253,61 @@ void AlarmCalendar::close()
 	if (!mLocalFile.isEmpty())
 		KIO::NetAccess::removeTempFile(mLocalFile);
 	if (mCalendar)
+	{
 		mCalendar->close();
+		delete mCalendar;
+		mCalendar = 0;
+	}
+}
+
+/******************************************************************************
+* Purge all events from the calendar whose end time is longer ago than 'daysToKeep'.
+* All events are deleted if 'daysToKeep' is zero.
+*/
+void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
+{
+	if (daysToKeep >= 0)
+	{
+		bool purged = false;
+		QDate cutoff = QDate::currentDate().addDays(-daysToKeep);
+		QPtrList<Event> events = mCalendar->events();
+		for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
+		{
+			if (!daysToKeep  ||  kcalEvent->dtEnd().date() < cutoff)
+			{
+				mCalendar->deleteEvent(kcalEvent);
+				purged = true;
+			}
+		}
+		if (purged  &&  saveIfPurged)
+			save();
+	}
 }
 
 /******************************************************************************
 * Add the specified event to the calendar.
+* Reply = ID of the event as written to the calendar.
 */
-void AlarmCalendar::addEvent(const KAlarmEvent& event)
+QString AlarmCalendar::addEvent(const KAlarmEvent& event)
 {
+	if (!mCalendar)
+		return QString::null;
 	Event* kcalEvent = new Event;
-	event.updateEvent(*kcalEvent);
+	switch (mType)
+	{
+		case KAlarmEvent::ACTIVE:
+			const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
+			break;
+		case KAlarmEvent::EXPIRED:
+			kcalEvent->setUid(KAlarmEvent::uid(event.id(), KAlarmEvent::EXPIRED));
+			break;
+		case KAlarmEvent::DISPLAYING:
+			kcalEvent->setUid(KAlarmEvent::uid(event.id(), KAlarmEvent::DISPLAYING));
+			break;
+	}
+	event.updateEvent(*kcalEvent, false);
 	mCalendar->addEvent(kcalEvent);
-	const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
+	return kcalEvent->uid();
 }
 
 /******************************************************************************
@@ -267,19 +316,25 @@ void AlarmCalendar::addEvent(const KAlarmEvent& event)
 */
 void AlarmCalendar::updateEvent(const KAlarmEvent& evnt)
 {
-	Event* kcalEvent = event(evnt.id());
-	if (kcalEvent)
-		evnt.updateEvent(*kcalEvent);
+	if (mCalendar)
+	{
+		Event* kcalEvent = event(evnt.id());
+		if (kcalEvent)
+			evnt.updateEvent(*kcalEvent);
+	}
 }
 
 /******************************************************************************
-* Delete the specified event from the calendar.
+* Delete the specified event from the calendar, if it exists.
 */
 void AlarmCalendar::deleteEvent(const QString& eventID)
 {
-	Event* kcalEvent = event(eventID);
-	if (kcalEvent)
-		mCalendar->deleteEvent(kcalEvent);
+	if (mCalendar)
+	{
+		Event* kcalEvent = event(eventID);
+		if (kcalEvent)
+			mCalendar->deleteEvent(kcalEvent);
+	}
 }
 
 /******************************************************************************
