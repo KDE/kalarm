@@ -39,7 +39,7 @@ static int maxCount = 12;
 class UndoItem
 {
 	public:
-		enum Operation { ADD, EDIT, DELETE, MULTI };
+		enum Operation { ADD, EDIT, DELETE, REACTIVATE, DEACTIVATE, MULTI };
 		UndoItem();           // needed by QValueList
 		virtual ~UndoItem();
 		virtual Operation operation() const = 0;
@@ -51,30 +51,42 @@ class UndoItem
 		int               id() const            { return mId; }
 		Undo::Type        type() const          { return mType; }
 		void              setType(Undo::Type t) { mType = t; }
+		KAEvent::Status   calendar() const      { return mCalendar; }
+		virtual void      setCalendar(KAEvent::Status s) { mCalendar = s; }
 		virtual UndoItem* restore() = 0;
-		virtual bool      deleteID(const QString& id)  { return false; }
+		virtual bool      deleteID(const QString& /*id*/)  { return false; }
 
-		enum Error { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE };
+		enum Error { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_EXPIRED };
 		static int        mLastId;
 		static Error      mRestoreError;   // error code valid only if restore() returns 0
 
 	protected:
 		UndoItem(Undo::Type);
+		static QString    addDeleteDescription(KAEvent::Status, bool add);
+		void              replaceWith(UndoItem* item)   { Undo::replace(this, item); }
+
 		int               mId;     // unique identifier (only for mType = UNDO, REDO)
 		Undo::Type        mType;   // which list (if any) the object is in
+		KAEvent::Status   mCalendar;
 };
 
 class UndoAdd : public UndoItem
 {
 	public:
-		UndoAdd(Undo::Type, const QString& eventID);
+		UndoAdd(Undo::Type, const KAEvent&);
+		UndoAdd(Undo::Type, const QString& eventID, KAEvent::Status);
 		virtual Operation operation() const     { return ADD; }
 		virtual QString   description() const;
+		virtual QString   tooltip() const       { return mTooltip; }
 		virtual QString   eventID() const       { return mEventID; }
 		virtual QString   newEventID() const    { return mEventID; }
-		virtual UndoItem* restore();
+		virtual UndoItem* restore()             { return doRestore(); }
+	protected:
+		UndoItem*         doRestore(bool setArchive = false);
+		virtual UndoItem* createRedo(const KAEvent&);
 	private:
 		QString  mEventID;
+		QString  mTooltip;
 };
 
 class UndoEdit : public UndoItem
@@ -104,26 +116,69 @@ class UndoDelete : public UndoItem
 		virtual QString   oldEventID() const    { return mEvent->id(); }
 		virtual UndoItem* restore();
 		KAEvent*  event() const                 { return mEvent; }
+	protected:
+		virtual UndoItem* createRedo(const KAEvent&);
 	private:
 		KAEvent*  mEvent;
 };
 
-class UndoDeletes : public UndoItem
+class UndoReactivate : public UndoAdd
 {
 	public:
-		UndoDeletes(Undo::Type, const QValueList<KAEvent>&);
-		UndoDeletes(Undo::Type, Undo::List&);
-		~UndoDeletes();
-		virtual Operation operation() const     { return MULTI; }
+		UndoReactivate(Undo::Type t, const KAEvent& e)  : UndoAdd(t, e.id(), KAEvent::ACTIVE) { }
+		virtual Operation operation() const     { return REACTIVATE; }
 		virtual QString   description() const;
 		virtual UndoItem* restore();
+	protected:
+		virtual UndoItem* createRedo(const KAEvent&);
+};
+
+class UndoDeactivate : public UndoDelete
+{
+	public:
+		UndoDeactivate(Undo::Type t, const KAEvent& e)  : UndoDelete(t, e) { }
+		virtual Operation operation() const     { return DEACTIVATE; }
+		virtual QString   description() const;
+		virtual UndoItem* restore();
+	protected:
+		virtual UndoItem* createRedo(const KAEvent&);
+};
+
+template <class T> class UndoMulti : public UndoItem
+{
+	public:
+		UndoMulti(Undo::Type, const QValueList<KAEvent>&);
+		UndoMulti(Undo::Type, Undo::List&);
+		~UndoMulti();
+		virtual Operation operation() const     { return MULTI; }
+		virtual UndoItem* restore();
 		virtual bool      deleteID(const QString& id);
-	private:
+		virtual UndoItem* createRedo(Undo::List&) = 0;
+	protected:
 		Undo::List  mUndos;    // this list must always have > 1 entry
 };
 
-static bool getCurrentEvent(const QString& id, KAEvent::Status, KAEvent& result);
+class UndoDeletes : public UndoMulti<UndoDelete>
+{
+	public:
+		UndoDeletes(Undo::Type t, const QValueList<KAEvent>& events)
+		                  : UndoMulti<UndoDelete>(t, events) { }   // UNDO only
+		UndoDeletes(Undo::Type t, Undo::List& undos)
+		                  : UndoMulti<UndoDelete>(t, undos) { }
+		virtual QString   description() const;
+		virtual UndoItem* createRedo(Undo::List&);
+};
 
+class UndoReactivates : public UndoMulti<UndoReactivate>
+{
+	public:
+		UndoReactivates(Undo::Type t, const QValueList<KAEvent>& events)
+		                  : UndoMulti<UndoReactivate>(t, events) { }   // UNDO only
+		UndoReactivates(Undo::Type t, Undo::List& undos)
+		                  : UndoMulti<UndoReactivate>(t, undos) { }
+		virtual QString   description() const;
+		virtual UndoItem* createRedo(Undo::List&);
+};
 
 Undo*       Undo::mInstance = 0;
 Undo::List  Undo::mUndoList;
@@ -161,9 +216,9 @@ void Undo::clear()
 *  Create an undo item and add it to the list of undos.
 *  N.B. The base class constructor adds the object to the undo list.
 */
-void Undo::saveAdd(const QString& eventID)
+void Undo::saveAdd(const KAEvent& event)
 {
-	new UndoAdd(UNDO, eventID);
+	new UndoAdd(UNDO, event);
 	emitChanged();
 }
 
@@ -195,6 +250,24 @@ void Undo::saveDeletes(const QValueList<KAEvent>& events)
 	}
 }
 
+void Undo::saveReactivate(const KAEvent& event)
+{
+	new UndoReactivate(UNDO, event);
+	emitChanged();
+}
+
+void Undo::saveReactivates(const QValueList<KAEvent>& events)
+{
+	int count = events.count();
+	if (count == 1)
+		saveReactivate(events.first());
+	else if (count > 1)
+	{
+		new UndoReactivates(UNDO, events);
+		emitChanged();
+	}
+}
+
 /******************************************************************************
 *  Remove any redos which are made invalid by a new undo.
 */
@@ -204,6 +277,7 @@ void Undo::removeRedos(const QString& eventID)
 	for (Iterator it = mRedoList.begin();  it != mRedoList.end();  )
 	{
 		UndoItem* item = *it;
+kdDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<endl;
 		if (item->operation() == UndoItem::MULTI)
 		{
 			if (item->deleteID(id))
@@ -216,7 +290,7 @@ void Undo::removeRedos(const QString& eventID)
 		else if (item->eventID() == id)
 		{
 			if (item->operation() == UndoItem::EDIT)
-				id = item->newEventID();     // continue looking for its post-edit ID
+				id = item->oldEventID();   // continue looking for its post-edit ID
 			item->setType(NONE);    // prevent the destructor removing it from the list
 			delete item;
 			it = mRedoList.remove(it);
@@ -243,6 +317,7 @@ QString Undo::undo(Undo::Iterator it, Undo::Type type)
 				case UndoItem::ERR_NONE:       break;
 				case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
 				case UndoItem::ERR_CREATE:     err = i18n("Error recreating alarm");  break;
+				case UndoItem::ERR_EXPIRED:    err = i18n("Cannot reactivate expired alarm");  break;
 				case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
 				default:                       err = i18n("Unknown error");  break;
 			}
@@ -428,46 +503,171 @@ UndoItem::~UndoItem()
 		Undo::remove(this, (mType == Undo::UNDO));
 }
 
+/******************************************************************************
+*  Return a description of an add or delete Undo/Redo item for displaying.
+*/
+QString UndoItem::addDeleteDescription(KAEvent::Status calendar, bool add)
+{
+	switch (calendar)
+	{
+		case KAEvent::ACTIVE:
+			if (add)
+				return i18n("Action to create a new alarm", "New alarm");
+			else
+				return i18n("Action to delete an alarm", "Delete alarm");
+		case KAEvent::TEMPLATE:
+			if (add)
+				return i18n("Action to create a new alarm template", "New template");
+			else
+				return i18n("Action to delete an alarm template", "Delete template");
+		case KAEvent::EXPIRED:
+			return i18n("Delete expired alarm");
+		default:
+			break;
+	}
+	return QString::null;
+}
+
+
+/*=============================================================================
+=  Class: UndoMulti
+=  Undo item for multiple alarms.
+=============================================================================*/
+
+template <class T>
+UndoMulti<T>::UndoMulti(Undo::Type type, const QValueList<KAEvent>& events)
+	: UndoItem(type)    // UNDO only
+{
+	for (QValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
+		mUndos.append(new T(Undo::NONE, *it));
+}
+
+template <class T>
+UndoMulti<T>::UndoMulti(Undo::Type type, Undo::List& undos)
+	: UndoItem(type),
+	  mUndos(undos)
+{ }
+
+template <class T>
+UndoMulti<T>::~UndoMulti()
+{
+	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+		delete *it;
+}
+
+/******************************************************************************
+*  Undo the item, i.e. restore multiple alarms which were deleted (or delete
+*  alarms which were restored).
+*  Create a redo item to delete (or restore) the alarms again.
+*  Reply = redo item.
+*/
+template <class T>
+UndoItem* UndoMulti<T>::restore()
+{
+	Undo::List newUndos;
+	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	{
+		UndoItem* undo = (*it)->restore();
+		if (undo)
+			newUndos.append(undo);
+	}
+	if (newUndos.isEmpty())
+		return 0;
+
+	// Create a redo item to delete the alarm again
+	return createRedo(newUndos);
+}
+
+/******************************************************************************
+*  If one of the multiple items has the specified ID, delete it.
+*  If an item is deleted and there is only one item left, the UndoMulti
+*  instance is removed from its list and replaced by the remaining UndoItem instead.
+*  Reply = true if this instance was replaced. The caller must delete it.
+*        = false otherwise.
+*/
+template <class T>
+bool UndoMulti<T>::deleteID(const QString& id)
+{
+	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	{
+		if ((*it)->id() == id)
+		{
+			// Found a matching entry - remove it
+			UndoItem* item = *it;
+			mUndos.remove(it);
+			if (mUndos.count() == 1)
+			{
+				// There is only one entry left after removal.
+				// Replace 'this' multi instance with the remaining single entry.
+				replaceWith(item);
+				return true;
+			}
+			else
+			{
+				delete item;
+				return false;
+			}
+		}
+	}
+	return false;
+}
+
 
 /*=============================================================================
 =  Class: UndoAdd
 =  Undo item for alarm creation.
 =============================================================================*/
 
-UndoAdd::UndoAdd(Undo::Type type, const QString& eventID)
+UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event)
 	: UndoItem(type),
-	  mEventID(eventID)
-{ }
+	  mEventID(event.id()),
+#warning Tooltip here
+	  mTooltip()
+{
+	setCalendar(KAEvent::uidStatus(mEventID));
+}
+
+UndoAdd::UndoAdd(Undo::Type type, const QString& eventID, KAEvent::Status calendar)
+	: UndoItem(type),
+	  mEventID(KAEvent::uid(eventID, calendar)),
+#warning Tooltip here
+	  mTooltip()
+{
+	setCalendar(calendar);
+}
 
 /******************************************************************************
 *  Undo the item, i.e. delete the alarm which was added.
 *  Create a redo item to add the alarm back again.
 *  Reply = redo item.
 */
-UndoItem* UndoAdd::restore()
+UndoItem* UndoAdd::doRestore(bool setArchive)
 {
 	// Retrieve the current state of the alarm
-	KAEvent::Status status = KAEvent::uidStatus(mEventID);
-	KAEvent event;
-	if (!getCurrentEvent(mEventID, status, event))
+	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mEventID);
+	if (!kcalEvent)
 	{
-		mRestoreError = ERR_NOT_FOUND;
+		mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
 		return 0;
 	}
+	KAEvent event(*kcalEvent); 
 
-	// Create a redo item to recreate the alarm
-	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
-	UndoItem* undo = new UndoDelete(t, event);     // 'event' gets modified by KAlarm::deleteEvent()
+	// Create a redo item to recreate the alarm.
+	// Do it now, since 'event' gets modified by KAlarm::deleteEvent()
+	UndoItem* undo = createRedo(event);
 
-	switch (status)
+	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
+			if (setArchive)
+				event.setArchive();
 			KAlarm::deleteEvent(event, true);   // archive it if it has already triggered
 			break;
 		case KAEvent::TEMPLATE:
 			KAlarm::deleteTemplate(event);
 			break;
-		case KAEvent::EXPIRED:
+		case KAEvent::EXPIRED:    // redoing the deletion of an expired alarm
+			KAlarm::deleteEvent(event);
 			break;
 		default:
 			delete undo;
@@ -478,20 +678,20 @@ UndoItem* UndoAdd::restore()
 }
 
 /******************************************************************************
+*  Create a redo item to add the alarm back again.
+*/
+UndoItem* UndoAdd::createRedo(const KAEvent& event)
+{
+	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+	return new UndoDelete(t, event);
+}
+
+/******************************************************************************
 *  Return a description of the Undo item for displaying.
 */
 QString UndoAdd::description() const
 {
-	switch (KAEvent::uidStatus(mEventID))
-	{
-		case KAEvent::ACTIVE:
-			return i18n("Action to create a new alarm", "New alarm");
-		case KAEvent::TEMPLATE:
-			return i18n("Action to create a new alarm template", "New template");
-		default:
-			break;
-	}
-	return QString::null;
+	return addDeleteDescription(calendar(), (type() == Undo::UNDO));
 }
 
 
@@ -504,7 +704,9 @@ UndoEdit::UndoEdit(Undo::Type type, const KAEvent& oldEvent, const QString& newE
 	: UndoItem(type),
 	  mOldEvent(new KAEvent(oldEvent)),
 	  mNewEventID(newEventID)
-{ }
+{
+	setCalendar(KAEvent::uidStatus(mNewEventID));
+}
 
 UndoEdit::~UndoEdit()
 {
@@ -519,19 +721,19 @@ UndoEdit::~UndoEdit()
 UndoItem* UndoEdit::restore()
 {
 	// Retrieve the current state of the alarm
-	KAEvent::Status status = KAEvent::uidStatus(mNewEventID);
-	KAEvent newEvent;
-	if (!getCurrentEvent(mNewEventID, status, newEvent))
+	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mNewEventID);
+	if (!kcalEvent)
 	{
-		mRestoreError = ERR_NOT_FOUND;
+		mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
 		return 0;
 	}
+	KAEvent newEvent(*kcalEvent); 
 
 	// Create a redo item to restore the edit
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
 	UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id());
 
-	switch (status)
+	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
 			KAlarm::modifyEvent(newEvent, *mOldEvent, 0);
@@ -553,7 +755,7 @@ UndoItem* UndoEdit::restore()
 */
 QString UndoEdit::description() const
 {
-	switch (KAEvent::uidStatus(mNewEventID))
+	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
 			return i18n("Action to edit an alarm", "Edit alarm");
@@ -574,7 +776,9 @@ QString UndoEdit::description() const
 UndoDelete::UndoDelete(Undo::Type type, const KAEvent& event)
 	: UndoItem(type),
 	  mEvent(new KAEvent(event))
-{ }
+{
+	setCalendar(KAEvent::uidStatus(mEvent->id()));
+}
 
 UndoDelete::~UndoDelete()
 {
@@ -589,21 +793,26 @@ UndoDelete::~UndoDelete()
 UndoItem* UndoDelete::restore()
 {
 	// Restore the original event
-	QString id = mEvent->id();
-	switch (KAEvent::uidStatus(id))
+	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
-			if (!KAlarm::addEvent(*mEvent, 0, true))
-			{
-				mRestoreError = ERR_CREATE;
-				return 0;
-			}
 			if (mEvent->toBeArchived())
 			{
-				// Now that is has been restored to the active calendar,
-				// remove it from the archive calendar
+				// It was archived when it was deleted
 				mEvent->setUid(KAEvent::EXPIRED);
-				KAlarm::deleteEvent(*mEvent, false);
+				if (!KAlarm::undeleteEvent(*mEvent, 0, true))
+				{
+					mRestoreError = ERR_EXPIRED;
+					return 0;
+				}
+			}
+			else
+			{
+				if (!KAlarm::addEvent(*mEvent, 0, true))
+				{
+					mRestoreError = ERR_CREATE;
+					return 0;
+				}
 			}
 			break;
 		case KAEvent::TEMPLATE:
@@ -626,8 +835,16 @@ UndoItem* UndoDelete::restore()
 	}
 
 	// Create a redo item to delete the alarm again
+	return createRedo(*mEvent);
+}
+
+/******************************************************************************
+*  Create a redo item to archive the alarm again.
+*/
+UndoItem* UndoDelete::createRedo(const KAEvent& event)
+{
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
-	return new UndoAdd(t, id);
+	return new UndoAdd(t, event);
 }
 
 /******************************************************************************
@@ -635,18 +852,7 @@ UndoItem* UndoDelete::restore()
 */
 QString UndoDelete::description() const
 {
-	switch (KAEvent::uidStatus(mEvent->id()))
-	{
-		case KAEvent::ACTIVE:
-			return i18n("Action to delete an alarm", "Delete alarm");
-		case KAEvent::TEMPLATE:
-			return i18n("Action to delete an alarm template", "Delete template");
-		case KAEvent::EXPIRED:
-			return i18n("Delete expired alarm");
-		default:
-			break;
-	}
-	return QString::null;
+	return addDeleteDescription(calendar(), (type() == Undo::REDO));
 }
 
 
@@ -655,46 +861,13 @@ QString UndoDelete::description() const
 =  Undo item for multiple alarm deletion.
 =============================================================================*/
 
-UndoDeletes::UndoDeletes(Undo::Type type, const QValueList<KAEvent>& events)
-	: UndoItem(type)    // UNDO only
-{
-	for (QValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
-		mUndos.append(new UndoDelete(Undo::NONE, *it));
-}
-
-UndoDeletes::UndoDeletes(Undo::Type type, Undo::List& undos)
-	: UndoItem(type),
-	  mUndos(undos)
-{
-}
-
-UndoDeletes::~UndoDeletes()
-{
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
-		delete *it;
-}
-
 /******************************************************************************
-*  Undo the item, i.e. restore multiple alarms which were deleted (or delete
-*  alarms which were restored).
-*  Create a redo item to delete (or restore) the alarms again.
-*  Reply = redo item.
+*  Create a redo item to delete the alarms again.
 */
-UndoItem* UndoDeletes::restore()
+UndoItem* UndoDeletes::createRedo(Undo::List& undos)
 {
-	Undo::List newUndos;
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
-	{
-		UndoItem* undo = (*it)->restore();
-		if (undo)
-			newUndos.append(undo);
-	}
-	if (newUndos.isEmpty())
-		return 0;
-
-	// Create a redo item to delete the alarm again
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
-	return new UndoDeletes(t, newUndos);
+	return new UndoDeletes(t, undos);
 }
 
 /******************************************************************************
@@ -706,7 +879,7 @@ QString UndoDeletes::description() const
 		return QString::null;
 	for (Undo::List::ConstIterator it = mUndos.begin();  it != mUndos.end();  ++it)
 	{
-		switch (KAEvent::uidStatus((*it)->eventID()))
+		switch ((*it)->calendar())
 		{
 			case KAEvent::ACTIVE:
 				return i18n("Delete multiple alarms");
@@ -721,70 +894,112 @@ QString UndoDeletes::description() const
 	return i18n("Delete multiple expired alarms");
 }
 
+
+/*=============================================================================
+=  Class: UndoReactivate
+=  Undo item for alarm reactivation.
+=============================================================================*/
+
 /******************************************************************************
-*  If one of the multiple items has the specified ID, delete it.
-*  If an item is deleted and there is only one item left, the UndoDeletes
-*  instance is removed from its list and replaced by an UndoDelete/UndoAdd instead.
-*  Reply = true if this instance was replaced. The caller must delete it.
-*        = false otherwise.
+*  Undo the item, i.e. re-archive the alarm which was reactivated.
+*  Create a redo item to reactivate the alarm back again.
+*  Reply = redo item.
 */
-bool UndoDeletes::deleteID(const QString& id)
+UndoItem* UndoReactivate::restore()
 {
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	// Validate the alarm's calendar
+	switch (calendar())
 	{
-		if ((*it)->id() == id)
-		{
-			// Found a matching entry - remove it
-			UndoItem* item = *it;
-			mUndos.remove(it);
-			if (mUndos.count() == 1)
-			{
-				// There is only one entry left after removal.
-				// Replace 'this' multi instance with the remaining single entry.
-				Undo::replace(this, item);
-				return true;
-			}
-			else
-			{
-				delete item;
-				return false;
-			}
-		}
+		case KAEvent::ACTIVE:
+			break;
+		default:
+			mRestoreError = ERR_PROG;
+			return 0;
 	}
-	return false;
+	return UndoAdd::doRestore(true);     // restore alarm, ensuring that it is re-archived
+}
+
+/******************************************************************************
+*  Create a redo item to add the alarm back again.
+*/
+UndoItem* UndoReactivate::createRedo(const KAEvent& event)
+{
+	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+	return new UndoDeactivate(t, event);
+}
+
+/******************************************************************************
+*  Return a description of the Undo item for displaying.
+*/
+QString UndoReactivate::description() const
+{
+	return i18n("Reactivate alarm");
 }
 
 
 /*=============================================================================
-=  Local declarations.
+=  Class: UndoDeactivate
+=  Redo item for alarm reactivation.
 =============================================================================*/
 
 /******************************************************************************
-*  Fetch the current state of the alarm with a given ID.
+*  Undo the item, i.e. reactivate an alarm which was archived.
+*  Create a redo item to archive the alarm again.
+*  Reply = redo item.
 */
-static bool getCurrentEvent(const QString& id, KAEvent::Status status, KAEvent& event)
+UndoItem* UndoDeactivate::restore()
 {
-	AlarmCalendar* cal = 0;
-	switch (status)
+	// Validate the alarm's calendar
+	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
-			cal = AlarmCalendar::activeCalendar();
-			break;
-		case KAEvent::TEMPLATE:
-			cal = AlarmCalendar::templateCalendarOpen();
 			break;
 		default:
-			return false;
+			mRestoreError = ERR_PROG;
+			return 0;
 	}
-	if (!cal)
-		return false;
-	KCal::Event* kcalEvent = cal->event(id);
-	if (!kcalEvent)
-		return false;
 
-	// The alarm is still in the calendar
-	event.set(*kcalEvent); 
-	return true;
+	return UndoDelete::restore();
+}
+
+/******************************************************************************
+*  Create a redo item to archive the alarm again.
+*/
+UndoItem* UndoDeactivate::createRedo(const KAEvent& event)
+{
+	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+	return new UndoReactivate(t, event);
+}
+
+/******************************************************************************
+*  Return a description of the Undo item for displaying.
+*/
+QString UndoDeactivate::description() const
+{
+	return i18n("Reactivate alarm");
+}
+
+
+/*=============================================================================
+=  Class: UndoReactivates
+=  Undo item for multiple alarm reactivation.
+=============================================================================*/
+
+/******************************************************************************
+*  Create a redo item to reactivate the alarms again.
+*/
+UndoItem* UndoReactivates::createRedo(Undo::List& undos)
+{
+	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+	return new UndoReactivates(t, undos);
+}
+
+/******************************************************************************
+*  Return a description of the Undo item for displaying.
+*/
+QString UndoReactivates::description() const
+{
+	return i18n("Reactivate multiple alarms");
 }
 
 #endif
