@@ -41,6 +41,7 @@ class CheckBox;
 class ColourCombo;
 class FontColourButton;
 class SoundPicker;
+class SpecialActionsButton;
 class Reminder;
 namespace KABC { class AddressBook; }
 class BLineEdit;
@@ -55,6 +56,7 @@ class BirthdayDlg : public KDialogBase
 
 	protected slots:
 		virtual void      slotOk();
+
 	private slots:
 		void              slotSelectionChanged();
 		void              slotTextLostFocus();
@@ -62,22 +64,22 @@ class BirthdayDlg : public KDialogBase
 		void              slotBgColourSelected(const QColor&);
 
 	private:
-
 		void              updateSelectionList();
 
-		KListView*        mAddresseeList;
-		BLineEdit*        mPrefix;
-		BLineEdit*        mSuffix;
-		Reminder*         mReminder;
-		SoundPicker*      mSoundPicker;
-		FontColourButton* mFontColourButton;
-		ColourCombo*      mBgColourChoose;
-		CheckBox*         mConfirmAck;
-		CheckBox*         mLateCancel;
+		KListView*               mAddresseeList;
+		BLineEdit*               mPrefix;
+		BLineEdit*               mSuffix;
+		Reminder*                mReminder;
+		SoundPicker*             mSoundPicker;
+		FontColourButton*        mFontColourButton;
+		ColourCombo*             mBgColourChoose;
+		CheckBox*                mConfirmAck;
+		CheckBox*                mLateCancel;
+		SpecialActionsButton*    mSpecialActionsButton;
 		const KABC::AddressBook* mAddressBook;
-		QString           mPrefixText;   // last entered value of prefix text
-		QString           mSuffixText;   // last entered value of suffix text
-		int               mFlags;        // event flag bits
+		QString                  mPrefixText;   // last entered value of prefix text
+		QString                  mSuffixText;   // last entered value of suffix text
+		int                      mFlags;        // event flag bits
 };
 
 

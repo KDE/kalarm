@@ -46,15 +46,17 @@
 #include <kabc/stdaddressbook.h>
 #include <kdebug.h>
 
-#include "kalarmapp.h"
-#include "editdlg.h"
 #include "alarmcalendar.h"
-#include "soundpicker.h"
-#include "reminder.h"
 #include "checkbox.h"
 #include "colourcombo.h"
+#include "editdlg.h"
 #include "fontcolourbutton.h"
+#include "kalarmapp.h"
 #include "preferences.h"
+#include "reminder.h"
+#include "shellprocess.h"
+#include "soundpicker.h"
+#include "specialactions.h"
 #include "birthdaydlg.moc"
 
 using namespace KCal;
@@ -75,7 +77,8 @@ class AddresseeItem : public QListViewItem
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
-	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays From KAddressBook"), Ok|Cancel, Ok, parent)
+	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays From KAddressBook"), Ok|Cancel, Ok, parent),
+	  mSpecialActionsButton(0)
 {
 	QWidget* topWidget = plainPage();
 	QBoxLayout* topLayout = new QVBoxLayout(topWidget);
@@ -148,35 +151,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	layout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
-	layout = new QHBoxLayout(groupLayout);
 	mSoundPicker = new SoundPicker(group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	layout->addWidget(mSoundPicker);
-	layout->addSpacing(2*KDialog::spacingHint());
-	layout->addStretch();
-
-	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
-	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	layout->addWidget(mConfirmAck);
-	layout->addSpacing(2*KDialog::spacingHint());
-	layout->addStretch();
-
-	// Late display checkbox - default = allow late display
-	mLateCancel = EditAlarmDlg::createLateCancelCheckbox(group);
-	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	layout->addWidget(mLateCancel, Qt::AlignLeft);
-
-	// Set the values to their defaults
-	Preferences* preferences = Preferences::instance();
-	mFontColourButton->setDefaultFont();
-	mFontColourButton->setBgColour(preferences->defaultBgColour());
-	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
-	mLateCancel->setChecked(preferences->defaultLateCancel());
-	mConfirmAck->setChecked(preferences->defaultConfirmAck());
-	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
-	                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
 	// How much to advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
@@ -188,6 +165,39 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mReminder->setMaximum(0, 364);
 	mReminder->setMinutes(0, true);
 	groupLayout->addWidget(mReminder);
+
+	// Acknowledgement confirmation required - default = no confirmation
+	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
+	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
+	groupLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
+
+	// Late display checkbox - default = allow late display
+	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	mLateCancel = EditAlarmDlg::createLateCancelCheckbox(group);
+	mLateCancel->setFixedSize(mLateCancel->sizeHint());
+	layout->addWidget(mLateCancel);
+	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addStretch();
+
+	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
+	{
+		// Special actions button
+		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), group);
+		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
+		layout->addWidget(mSpecialActionsButton);
+	}
+
+	// Set the values to their defaults
+	Preferences* preferences = Preferences::instance();
+	mFontColourButton->setDefaultFont();
+	mFontColourButton->setBgColour(preferences->defaultBgColour());
+	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
+	mLateCancel->setChecked(preferences->defaultLateCancel());
+	mConfirmAck->setChecked(preferences->defaultConfirmAck());
+	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
+	                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+	if (mSpecialActionsButton)
+		mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
 
 	// Initialise the birthday selection list and disable the OK button
 	updateSelectionList();
@@ -288,9 +298,9 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
 				KAEvent event(date,
-				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
-				                  mBgColourChoose->color(), mFontColourButton->fgColour(),
-				                  mFontColourButton->font(), KAEvent::MESSAGE, mFlags);
+				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
+				              mBgColourChoose->color(), mFontColourButton->fgColour(),
+				              mFontColourButton->font(), KAEvent::MESSAGE, mFlags);
 				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 				QValueList<int> months;
 				months.append(date.month());
@@ -298,6 +308,9 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				event.setNextOccurrence(todayNoon);
 				if (reminder)
 					event.setReminder(reminder, false);
+				if (mSpecialActionsButton)
+					event.setActions(mSpecialActionsButton->preAction(),
+					                 mSpecialActionsButton->postAction());
 				list.append(event);
 			}
 		}
