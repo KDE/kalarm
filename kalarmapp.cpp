@@ -30,6 +30,7 @@
 
 #include <qobjectlist.h>
 #include <qtimer.h>
+#include <qregexp.h>
 
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
@@ -55,7 +56,7 @@
 #include "dcophandler.h"
 #include "traywindow.h"
 #include "kamail.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "prefdlg.h"
 #include "kalarmapp.moc"
 
@@ -89,7 +90,7 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
-	  mSettings(new Settings(0)),
+	  mPreferences(new Preferences(0)),
 	  mDaemonCheckInterval(0),
 	  mCalendarUpdateCount(0),
 	  mDaemonRegistered(false),
@@ -97,12 +98,15 @@ KAlarmApp::KAlarmApp()
 	  mDaemonRunning(false),
 	  mSessionClosingDown(false)
 {
-#if KDE_VERSION < 290
+#if KDE_VERSION >= 290
+	mNoShellAccess = authorize("shell_access");
+#else
+	mNoShellAccess = false;
 	marginKDE2 = KDialog::marginHint();
 #endif
 	mCommandProcesses.setAutoDelete(true);
-	mSettings->loadSettings();
-	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
+	mPreferences->loadPreferences();
+	connect(mPreferences, SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
@@ -117,16 +121,20 @@ KAlarmApp::KAlarmApp()
 	 *  3) A user-specific one which contains details of alarms which are currently
 	 *     being displayed to that user and which have not yet been acknowledged.
 	 */
+	QRegExp vcsRegExp = QString::fromLatin1("\\.vcs$");
+	QString ical      = QString::fromLatin1(".ics");
 	QString displayCal = locateLocal("appdata", DISPLAY_CALENDAR);
 	QString activeKey = QString::fromLatin1("Calendar");
-	QString activeCal = config->readEntry(activeKey, locateLocal("appdata", ACTIVE_CALENDAR));
-	if (activeCal == displayCal)
+	QString activeCal = config->readPathEntry(activeKey, locateLocal("appdata", ACTIVE_CALENDAR));
+	QString activeICal = activeCal;
+	activeICal.replace(vcsRegExp, ical);
+	if (activeICal == displayCal)
 	{
 		kdError(5950) << "KAlarmApp::KAlarmApp(): active calendar name = display calendar name\n";
 		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(activeKey).arg(activeCal), aboutData()->programName());
 		exit(1);
 	}
-	mCalendar = new AlarmCalendar(activeCal, KAlarmEvent::ACTIVE);
+	mCalendar = new AlarmCalendar(activeCal, KAlarmEvent::ACTIVE, activeICal, activeKey);
 	if (!mCalendar->valid())
 	{
 		QString path = mCalendar->path();
@@ -135,20 +143,22 @@ KAlarmApp::KAlarmApp()
 		exit(1);
 	}
 	QString expiredKey = QString::fromLatin1("ExpiredCalendar");
-	QString expiredCal = config->readEntry(expiredKey, locateLocal("appdata", ARCHIVE_CALENDAR));
-	if (expiredCal == activeCal)
+	QString expiredCal = config->readPathEntry(expiredKey, locateLocal("appdata", ARCHIVE_CALENDAR));
+	QString expiredICal = expiredCal;
+	expiredICal.replace(vcsRegExp, ical);
+	if (expiredICal == activeICal)
 	{
 		kdError(5950) << "KAlarmApp::KAlarmApp(): active calendar name = expired calendar name\n";
 		KMessageBox::error(0, i18n("%1, %2: file names must be different").arg(activeKey).arg(expiredKey), aboutData()->programName());
 		exit(1);
 	}
-	if (expiredCal == displayCal)
+	if (expiredICal == displayCal)
 	{
 		kdError(5950) << "KAlarmApp::KAlarmApp(): expired calendar name = display calendar name\n";
 		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(expiredKey).arg(expiredCal), aboutData()->programName());
 		exit(1);
 	}
-	mExpiredCalendar = new AlarmCalendar(expiredCal, KAlarmEvent::EXPIRED);
+	mExpiredCalendar = new AlarmCalendar(expiredCal, KAlarmEvent::EXPIRED, expiredICal, expiredKey);
 	mDisplayCalendar = new AlarmCalendar(displayCal, KAlarmEvent::DISPLAYING);
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
@@ -159,12 +169,12 @@ KAlarmApp::KAlarmApp()
 	mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
 	mSavedNoSystemTray      = mNoSystemTray;
 	mOldRunInSystemTray     = wantRunInSystemTray();
-	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && mSettings->disableAlarmsIfStopped();
-	mStartOfDay             = mSettings->startOfDay();
-	if (mSettings->startOfDayChanged())
+	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && mPreferences->disableAlarmsIfStopped();
+	mStartOfDay             = mPreferences->startOfDay();
+	if (mPreferences->startOfDayChanged())
 		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-	mOldExpiredColour   = mSettings->mExpiredColour;
-	mOldExpiredKeepDays = mSettings->mExpiredKeepDays;
+	mOldExpiredColour   = mPreferences->mExpiredColour;
+	mOldExpiredKeepDays = mPreferences->mExpiredKeepDays;
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
@@ -238,7 +248,7 @@ bool KAlarmApp::restoreSession()
 
 	// Try to display the system tray icon if it is configured to be autostarted,
 	// or if we're in run-in-system-tray mode.
-	if (mSettings->autostartTrayIcon()
+	if (mPreferences->autostartTrayIcon()
 	||  KAlarmMainWindow::count()  &&  wantRunInSystemTray())
 		displayTrayIcon(true, trayParent);
 
@@ -417,7 +427,7 @@ int KAlarmApp::newInstance()
 
 				bool      alarmNoTime = false;
 				QDateTime alarmTime, endTime;
-				QColor    bgColour = mSettings->defaultBgColour();
+				QColor    bgColour = mPreferences->defaultBgColour();
 				int       repeatCount = 0;
 				int       repeatInterval = 0;
 				KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
@@ -533,7 +543,7 @@ int KAlarmApp::newInstance()
 
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, mSettings->messageFont(), flags,
+				if (!scheduleEvent(alMessage, alarmTime, bgColour, mPreferences->messageFont(), flags,
 				                   audioFile, alAddresses, alSubject, alAttachments, action, recurType,
 				                   repeatInterval, repeatCount, endTime, reminderMinutes))
 				{
@@ -768,7 +778,7 @@ bool KAlarmApp::checkSystemTray()
 		config->sync();
 
 		// Update other settings and reregister with the alarm daemon
-		slotSettingsChanged();
+		slotPreferencesChanged();
 	}
 	else
 	{
@@ -779,15 +789,18 @@ bool KAlarmApp::checkSystemTray()
 }
 
 /******************************************************************************
-*  Display a main window.
+*  Display a main window with the specified event selected.
 */
-void KAlarmApp::displayMainWindow()
+KAlarmMainWindow* KAlarmApp::displayMainWindowSelected(const QString& eventID)
 {
 	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
 	if (!win)
 	{
 		if (initCheck())
-			(new KAlarmMainWindow)->show();
+		{
+			win = new KAlarmMainWindow;
+			win->show();
+		}
 	}
 	else
 	{
@@ -800,6 +813,9 @@ void KAlarmApp::displayMainWindow()
 		win->raise();
 		win->setActiveWindow();
 	}
+	if (win  &&  !eventID.isEmpty())
+		win->selectEvent(eventID);
+	return win;
 }
 
 KAlarmMainWindow* KAlarmApp::trayMainWindow() const
@@ -823,7 +839,7 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	(new KAlarmPrefDlg(mSettings))->exec();
+	(new KAlarmPrefDlg(mPreferences))->exec();
 }
 
 /******************************************************************************
@@ -843,9 +859,9 @@ void KAlarmApp::slotDaemonControl()
 }
 
 /******************************************************************************
-*  Called when KAlarm settings have changed.
+*  Called when KAlarm preferences have changed.
 */
-void KAlarmApp::slotSettingsChanged()
+void KAlarmApp::slotPreferencesChanged()
 {
 	bool newRunInSysTray = wantRunInSystemTray();
 	if (newRunInSysTray != mOldRunInSystemTray)
@@ -865,7 +881,7 @@ void KAlarmApp::slotSettingsChanged()
 		--activeCount;
 	}
 
-	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && mSettings->disableAlarmsIfStopped();
+	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && mPreferences->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
@@ -874,31 +890,31 @@ void KAlarmApp::slotSettingsChanged()
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
-	if (mSettings->startOfDay() != mStartOfDay)
+	if (mPreferences->startOfDay() != mStartOfDay)
 		changeStartOfDay();
 
 	bool refreshExpired = false;
-	if (mSettings->mExpiredColour != mOldExpiredColour)
+	if (mPreferences->mExpiredColour != mOldExpiredColour)
 	{
 		// The expired alarms text colour has changed
 		refreshExpired = true;
-		mOldExpiredColour = mSettings->mExpiredColour;
+		mOldExpiredColour = mPreferences->mExpiredColour;
 	}
 
-	if (mSettings->mExpiredKeepDays != mOldExpiredKeepDays)
+	if (mPreferences->mExpiredKeepDays != mOldExpiredKeepDays)
 	{
 		// Whether or not expired alarms are being kept has changed
 		if (mOldExpiredKeepDays < 0
-		||  mSettings->mExpiredKeepDays >= 0  &&  mSettings->mExpiredKeepDays < mOldExpiredKeepDays)
+		||  mPreferences->mExpiredKeepDays >= 0  &&  mPreferences->mExpiredKeepDays < mOldExpiredKeepDays)
 		{
 			// expired alarms are now being kept for less long
 			if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
-				mExpiredCalendar->purge(mSettings->expiredKeepDays(), true);
+				mExpiredCalendar->purge(mPreferences->expiredKeepDays(), true);
 			refreshExpired = true;
 		}
 		else if (!mOldExpiredKeepDays)
 			refreshExpired = true;
-		mOldExpiredKeepDays = mSettings->mExpiredKeepDays;
+		mOldExpiredKeepDays = mPreferences->mExpiredKeepDays;
 	}
 
 	if (refreshExpired)
@@ -912,8 +928,8 @@ void KAlarmApp::changeStartOfDay()
 {
 	if (KAlarmEvent::adjustStartOfDay(mCalendar->events()))
 		calendarSave();
-	mSettings->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
-	mStartOfDay = mSettings->startOfDay();
+	mPreferences->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
+	mStartOfDay = mPreferences->startOfDay();
 }
 
 /******************************************************************************
@@ -921,7 +937,7 @@ void KAlarmApp::changeStartOfDay()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return mSettings->runInSystemTray()  &&  mKDEDesktop;
+	return mPreferences->runInSystemTray()  &&  mKDEDesktop;
 }
 
 /******************************************************************************
@@ -1090,7 +1106,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					if (event.anyTime())
 					{
 						// The alarm has no time, so cancel it if its date is past
-						QDateTime limit(alarm.date().addDays(1), mSettings->startOfDay());
+						QDateTime limit(alarm.date().addDays(1), mPreferences->startOfDay());
 						if (now >= limit)
 						{
 							// It's too late to display the scheduled occurrence.
@@ -1104,7 +1120,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAlarmEvent::RECURRENCE_DATE_TIME:
 								case KAlarmEvent::LAST_OCCURRENCE:
 									limit.setDate(next.date().addDays(1));
-									limit.setTime(mSettings->startOfDay());
+									limit.setTime(mPreferences->startOfDay());
 									if (now >= limit)
 									{
 										if (type == KAlarmEvent::LAST_OCCURRENCE)
@@ -1312,43 +1328,52 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 	{
 		QString command = event.cleanText();
 		kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: " << command << endl;
-
-		// Find which shell to use.
-		// This is a duplication of what KShellProcess does, but we need to know
-		// which shell is used in order to decide what its exit code means.
-		QCString shell = "/bin/sh";
-		QCString envshell = QCString(getenv("SHELL")).stripWhiteSpace();
-		if (!envshell.isEmpty())
-		{
-			struct stat fileinfo;
-			if (stat(envshell.data(), &fileinfo) != -1  // ensure file exists
-			&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
-			&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
-			&&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
-#ifdef S_ISSOCK
-			&&  !S_ISSOCK(fileinfo.st_mode)             // and it's not a socket
-#endif
-			&&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
-			&&  !access(envshell.data(), X_OK))         // and it's executable
-				shell = envshell;
-		}
-		// Get the shell filename with the path stripped
-		QCString shellName = shell;
-		int i = shellName.findRev('/');
-		if (i >= 0)
-			shellName = shellName.mid(i + 1);
-
-		// Execute the command
-		KShellProcess* proc = new KShellProcess(shell);
-		*proc << command;
-		connect(proc, SIGNAL(processExited(KProcess*)), SLOT(slotCommandExited(KProcess*)));
-		mCommandProcesses.append(new ProcData(proc, new KAlarmEvent(event), new KAlarmAlarm(alarm), shellName));
-		result = proc;
-		if (!proc->start(KProcess::NotifyOnExit))
+		if (mNoShellAccess)
 		{
 			kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
-			(new MessageWin(event, alarm, i18n("Failed to execute command:"), command, reschedule))->show();
+			(new MessageWin(event, alarm, i18n("Failed to execute command (shell access not authorized):"),
+			                command, reschedule))->show();
 			result = 0;
+		}
+		else
+		{
+			// Find which shell to use.
+			// This is a duplication of what KShellProcess does, but we need to know
+			// which shell is used in order to decide what its exit code means.
+			QCString shell = "/bin/sh";
+			QCString envshell = QCString(getenv("SHELL")).stripWhiteSpace();
+			if (!envshell.isEmpty())
+			{
+				struct stat fileinfo;
+				if (stat(envshell.data(), &fileinfo) != -1  // ensure file exists
+				&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
+				&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
+				&&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
+#ifdef S_ISSOCK
+				&&  !S_ISSOCK(fileinfo.st_mode)             // and it's not a socket
+#endif
+				&&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
+				&&  !access(envshell.data(), X_OK))         // and it's executable
+					shell = envshell;
+			}
+			// Get the shell filename with the path stripped
+			QCString shellName = shell;
+			int i = shellName.findRev('/');
+			if (i >= 0)
+				shellName = shellName.mid(i + 1);
+
+			// Execute the command
+			KShellProcess* proc = new KShellProcess(shell);
+			*proc << command;
+			connect(proc, SIGNAL(processExited(KProcess*)), SLOT(slotCommandExited(KProcess*)));
+			mCommandProcesses.append(new ProcData(proc, new KAlarmEvent(event), new KAlarmAlarm(alarm), shellName));
+			result = proc;
+			if (!proc->start(KProcess::NotifyOnExit))
+			{
+				kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
+				(new MessageWin(event, alarm, i18n("Failed to execute command:"), command, reschedule))->show();
+				result = 0;
+			}
 		}
 		if (reschedule)
 			rescheduleAlarm(event, alarm, true);
@@ -1629,13 +1654,13 @@ void KAlarmApp::archiveEvent(KAlarmEvent& event)
 */
 AlarmCalendar* KAlarmApp::expiredCalendar(bool saveIfPurged)
 {
-	if (mSettings->expiredKeepDays())
+	if (mPreferences->expiredKeepDays())
 	{
 		// Expired events are being kept
 		if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
 		{
-			if (mSettings->expiredKeepDays() > 0)
-				mExpiredCalendar->purge(mSettings->expiredKeepDays(), saveIfPurged);
+			if (mPreferences->expiredKeepDays() > 0)
+				mExpiredCalendar->purge(mPreferences->expiredKeepDays(), saveIfPurged);
 			return mExpiredCalendar;
 		}
 		kdError(5950) << "KAlarmApp::expiredCalendar(): open error\n";
