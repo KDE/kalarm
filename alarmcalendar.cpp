@@ -334,6 +334,8 @@ Event* AlarmCalendar::addEvent(const KAlarmEvent& event, bool useEventID)
 {
 	if (!mCalendar)
 		return 0;
+	if (useEventID  &&  event.id().isEmpty())
+		useEventID = false;
 	Event* kcalEvent = new Event;
 	switch (mType)
 	{
