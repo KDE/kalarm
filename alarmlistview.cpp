@@ -139,15 +139,16 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 				repeatOrder = 2;
 				if (repeatInterval < 60)
 				{
-					data.repeatText = i18n("1 Minute","%n Minutes",repeatInterval);
+					data.repeatText = i18n("1 Minute", "%n Minutes", repeatInterval);
 				}
 				else if (repeatInterval % 60 == 0)
 				{
-					data.repeatText = i18n("1 Hour","%n Hours",repeatInterval);
+					data.repeatText = i18n("1 Hour", "%n Hours", repeatInterval/60);
 				}
 				else
 				{
-					data.repeatText = i18n("Hours and Minutes","%1H %02M").arg(QString::number(repeatInterval/60)).arg(QString::number(repeatInterval%60));
+					QString mins;
+					data.repeatText = i18n("Hours and Minutes", "%1H %2M").arg(QString::number(repeatInterval/60)).arg(mins.sprintf("%02d", repeatInterval%60));
 				}
 				break;
 			case KAlarmEvent::DAILY:
