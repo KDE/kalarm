@@ -24,7 +24,7 @@
 #include <qfileinfo.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qtextview.h>
+#include <qtextedit.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
@@ -158,7 +158,8 @@ QSize MessageWin::initView()
 			&&  qfile.open(IO_ReadOnly|IO_Translate))
 			{
 				opened = true;
-				QTextView* view = new QTextView(this, "fileContents");
+				QTextEdit* view = new QTextEdit(this, "fileContents");
+				view->setReadOnly(true);
 				topLayout->addWidget(view);
 				QFontMetrics fm = view->fontMetrics();
 				QString line;
@@ -178,7 +179,7 @@ QSize MessageWin::initView()
 				// is overridden by the user-set default stored in the config file.
 				// So there is no need to calculate an accurate size.
 				int h = fm.lineSpacing() * (n <= 20 ? n : 20) + 2*view->frameWidth();
-				view->resize(QSize(h, h).expandedTo(view->sizeHint()));
+//				view->resize(QSize(h, h).expandedTo(view->sizeHint()));
 				QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
 			}
 			KIO::NetAccess::removeTempFile(tmpFile);
@@ -432,6 +433,12 @@ void MessageWin::slotDefer()
 			// The event doesn't exist any more, so create a new one
 			KAlarmEvent event(dateTime, message, colour, file, flags);
 			theApp()->addMessage(event, 0L);
+		}
+		if (theApp()->runInSystemTray())
+		{
+			// Alarms are displayed only if the system tray icon is running,
+			// so start it if necessary so that the deferred alarm will be shown.
+			theApp()->displayTrayIcon(true);
 		}
 		close();
 	}
