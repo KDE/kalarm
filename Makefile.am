@@ -20,12 +20,15 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+if include_ARTS
+ARTSLIB = -lartskde
+endif
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkcal/libkcal.la \
 	$(top_builddir)/libkdenetwork/libkdenetwork.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
-	-lkabc $(LIB_KDEUI) -lartskde
+	-lkabc $(LIB_KDEUI) $(ARTSLIB)
 noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtimewidget.h \
 	birthdaydlg.h daemon.h daemongui.h datetime.h dcophandler.h deferdlg.h \
 	editdlg.h editdlgprivate.h eventlistviewbase.h fontcolour.h \
