@@ -43,7 +43,7 @@ static KCmdLineOptions options[] =
 	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0L },
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
-	{ "+[message]", I18N_NOOP("Message text to display"), "Alarm" },
+	{ "+[message]", I18N_NOOP("Message text to display"), 0L },
 	{ 0L, 0L, 0L }
 };
 

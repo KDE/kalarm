@@ -90,7 +90,7 @@ QSize MessageWin::initView()
 {
 	fileError = false;
 	setCaption(i18n("Message"));
-	QWidget* topWidget = new QWidget(this, "MessageWinTop");
+	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
 	topWidget->setBackgroundColor(colour);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, KDialog::marginHint(), KDialog::spacingHint());
@@ -122,7 +122,8 @@ QSize MessageWin::initView()
 		bool opened = false;
 		bool dir = false;
 		QString tmpFile;
-		KURL url(message);
+		KURL url;       // don't use KURL(message) since a UNIX file path may not initialise correctly
+		url.setPath(message);
 		if (KIO::NetAccess::download(url, tmpFile))
 		{
 			QFile qfile(tmpFile);
@@ -203,7 +204,7 @@ QSize MessageWin::initView()
 
 	// KAlarm button
 	KIconLoader iconLoader;
-	QPixmap pixmap = iconLoader.loadIcon(PROGRAM_NAME, KIcon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(PROGRAM_NAME), KIcon::MainToolbar);
 	QPushButton* button = new QPushButton(topWidget);
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
@@ -212,11 +213,7 @@ QSize MessageWin::initView()
 	QWhatsThis::add(button, i18n("Activate KAlarm"));
 
 	// Set the button sizes
-	button = new QPushButton(i18n("ABCDEF"), topWidget);
-	QSize minbutsize = button->sizeHint();
-	delete button;
-	minbutsize = minbutsize.expandedTo(okButton->sizeHint());
-	minbutsize = minbutsize.expandedTo(deferButton->sizeHint());
+	QSize minbutsize = okButton->sizeHint().expandedTo(deferButton->sizeHint());
 	okButton->setFixedSize(minbutsize);
 	deferButton->setFixedSize(minbutsize);
 
@@ -236,11 +233,11 @@ QSize MessageWin::initView()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
-	config->writeEntry("Message", message);
-	config->writeEntry("Font", font);
-	config->writeEntry("Colour", colour);
+	config->writeEntry(QString::fromLatin1("Message"), message);
+	config->writeEntry(QString::fromLatin1("Font"), font);
+	config->writeEntry(QString::fromLatin1("Colour"), colour);
 	if (dateTime.isValid())
-		config->writeEntry("Time", dateTime);
+		config->writeEntry(QString::fromLatin1("Time"), dateTime);
 }
 
 /******************************************************************************
@@ -250,11 +247,11 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	message  = config->readEntry("Message");
-	font     = config->readFontEntry("Font");
-	colour   = config->readColorEntry("Colour");
+	message  = config->readEntry(QString::fromLatin1("Message"));
+	font     = config->readFontEntry(QString::fromLatin1("Font"));
+	colour   = config->readColorEntry(QString::fromLatin1("Colour"));
 	QDateTime invalidDateTime;
-	dateTime = config->readDateTimeEntry("Time", &invalidDateTime);
+	dateTime = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	initView();
 }
 
@@ -306,7 +303,6 @@ void MessageWin::slotShowDefer()
 		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
 		wlayout->addLayout(grid);
 		deferTime = new AlarmTimeWidget(true, deferDlg, "deferTime");
-//		deferTime = new AlarmTimeWidget(true, this, "deferTime");
 		deferTime->setDateTime(QDateTime::currentDateTime());
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
@@ -319,7 +315,6 @@ void MessageWin::slotShowDefer()
 		}
 
 		QSize s(deferDlg->sizeHint());
-//		QSize s(deferTime->sizeHint());
 		if (s.width() > width())
 			resize(s.width(), height());     // this ensures that the background colour extends to edge
 		else if (width() > s.width())
@@ -341,14 +336,12 @@ void MessageWin::slotShowDefer()
 			setGeometry(rect);
 		}
 
+		deferDlgShown = true;
 		if (layout())
 			layout()->setEnabled(false);
 		deferDlg->setGeometry(0, height(), s.width(), s.height());
-//		deferTime->setGeometry(0, height(), s.width(), s.height());
 		setFixedSize(s.width(), height() + s.height());
 		deferDlg->show();
-//		deferTime->show();
-		deferDlgShown = true;
 	}
 }
 
@@ -386,6 +379,6 @@ void MessageWin::slotDefer()
 void MessageWin::slotKAlarm()
 {
 	KProcess proc;
-	proc << PROGRAM_NAME;
+	proc << QString::fromLatin1(PROGRAM_NAME);
 	proc.start(KProcess::DontCare);
 }

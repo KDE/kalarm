@@ -17,7 +17,6 @@
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qmultilinedit.h>
-#include <qfiledialog.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qmsgbox.h>
@@ -28,6 +27,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
@@ -39,8 +39,8 @@
 
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
-                           const MessageEvent* event)
-   : KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
+	                        const MessageEvent* event)
+	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
 {
 	QGroupBox* group;
 	QVBoxLayout* layout;
@@ -60,8 +60,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
 	layout->addLayout(grid);
 	// To have better control over the button layout, don't use a QButtonGroup
-//	QGridLayout* grid = new QGridLayout(1, 4);
-//	topLayout->addLayout(grid);
+// QGridLayout* grid = new QGridLayout(1, 4);
+// topLayout->addLayout(grid);
 
 	// Message radio button has an ID of 0
 	messageRadio = new QRadioButton(i18n("Text"), group, "messageButton");
@@ -79,7 +79,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(fileRadio,
 	      i18n("The edit field below contains the name of a text\n"
 	           "file whose contents will be displayed as the alarm\n"
-	           "message text."));
+	            "message text."));
 	grid->addWidget(fileRadio, 0, 2, AlignRight);
 
 	// Browse button
@@ -186,8 +186,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	size = bgColourChoose->sizeHint();
 	bgColourChoose->setMinimumHeight(size.height() + 4);
 	grid->addWidget(bgColourChoose, 0, 2, AlignRight);
-//	grid->setColStretch(2, 1);
-//	topLayout->addWidget(bgColourChoose, 6);
+// grid->setColStretch(2, 1);
+// topLayout->addWidget(bgColourChoose, 6);
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background colour for the alarm message."));
 #endif
@@ -233,7 +233,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		messageRadio->setChecked(true);
 		fileRadio->setChecked(false);
 		browseButton->setEnabled(false);
-		messageEdit->setText("");
+		messageEdit->setText(QString::null);
 		repeatCount->setValue(0);
 		repeatInterval->setValue(0);
 #ifdef SELECT_FONT
@@ -275,7 +275,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
 	theApp()->writeConfigWindowSize("EditDialog", re->size());
 #warning "Do the next 3 lines need to be reinstated for session restoration?"
-/*	KConfig* config = KGlobal::config();
+/* KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("EditDialog");
 	config->writeEntry("Size", re->size());*/
 	KDialog::resizeEvent(re);
@@ -292,10 +292,10 @@ void EditAlarmDlg::slotOk()
 			// (using home directory as the default)
 			int i = 0;
 			alarmMessage = messageEdit->text();
-			if (alarmMessage.startsWith("file:/"))
-				alarmMessage = alarmMessage.mid(6);
+			if (alarmMessage.startsWith(QString::fromLatin1("file:/")))
+				alarmMessage = alarmMessage.mid(5);
 			else
-				i = alarmMessage.find('/');
+				i = alarmMessage.find(QString::fromLatin1("/"));
 			if (i > 0  &&  alarmMessage[i - 1] == ':')
 			{
 				KURL url(alarmMessage);
@@ -324,11 +324,7 @@ void EditAlarmDlg::slotOk()
 		else
 			alarmMessage = messageEdit->text();
 		if (messageRadio->isOn())
-		{
 			alarmMessage.stripWhiteSpace();
-			if (alarmMessage.isEmpty())
-				alarmMessage = "Alarm";
-		}
 		accept();
 	}
 }
@@ -347,7 +343,16 @@ void EditAlarmDlg::slotBrowse()
 	static QString defaultDir;
 	if (defaultDir.isEmpty())
 		defaultDir = QDir::homeDirPath();
-	QFileDialog dlg(defaultDir, QString::null, this, "fileChooser", true);     // create modal dialog
+	KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose text file to display"));
+	if (!url.isEmpty())
+	{
+		alarmMessage = url.prettyURL();
+		if (alarmMessage.startsWith(QString::fromLatin1("file:/")))
+			alarmMessage = alarmMessage.mid(5);
+		messageEdit->setText(alarmMessage);
+		defaultDir = url.path();
+	}
+/*	QFileDialog dlg(defaultDir, QString::null, this, "fileChooser", true);   // create modal dialog
 	dlg.setCaption(i18n("Choose text file to display"));
 	dlg.setMode(QFileDialog::ExistingFile);
 	bool exists = true;
@@ -370,7 +375,7 @@ void EditAlarmDlg::slotBrowse()
 	{
 		messageEdit->setText(dlg.selectedFile());
 		defaultDir = dlg.dirPath();
-	}
+	}*/
 }
 
 void EditAlarmDlg::slotMessageToggled(bool on)

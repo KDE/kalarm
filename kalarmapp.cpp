@@ -33,8 +33,8 @@
 #include "kalarmapp.h"
 #include "kalarmapp.moc"
 
-const QString DCOP_OBJECT_NAME("display");
-const QString DEFAULT_CALENDAR_FILE("calendar.ics");
+const QString DCOP_OBJECT_NAME(QString::fromLatin1("display"));
+const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 
@@ -43,7 +43,7 @@ KAlarmApp*  KAlarmApp::theInstance = 0L;
 * Construct the application.
 */
 KAlarmApp::KAlarmApp()
-	:	KUniqueApplication(),
+	:  KUniqueApplication(),
 		mainWidget(new MainWidget(DCOP_OBJECT_NAME)),
 		daemonRegistered(false),
 		m_generalSettings(new GeneralSettings(0L))
@@ -84,7 +84,7 @@ int KAlarmApp::newInstance()
 		exitCode = !initCheck(false);       // open the calendar file (needed for main windows)
 		for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 		{
-			if (KMainWindow::classNameOfToplevel(i) == "KAlarmMainWindow")
+			if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("KAlarmMainWindow"))
 				(new KAlarmMainWindow)->restore(i);
 			else
 				(new MessageWin)->restore(i);
@@ -467,9 +467,9 @@ bool KAlarmApp::rescheduleMessage(MessageEvent* event)
 		if (remainingCount >= 0)
 		{
 			// Repetitions still remain, so rewrite the event
-//			MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
-//			newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
-//			modifyMessage(event, newEvent, 0L);
+//       MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
+//       newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
+//       modifyMessage(event, newEvent, 0L);
 // Should just call calendar update, but it doesn't seem to work
 			event->updateRepetition(event->dateTime().addSecs(n * repeatSecs), remainingCount);
 
@@ -529,7 +529,7 @@ void KAlarmApp::startDaemon()
 	{
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe","kalarmd");
+		QString execStr = locate("exe",QString::fromLatin1("kalarmd"));
 		system(execStr.latin1());
 		kdDebug() << "Alarm daemon started" << endl;
 	}
@@ -627,7 +627,7 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1(window));
 #warning "Should the next line be here? - for session resoration???"
-	config->writeEntry("Size", size);
+	config->writeEntry(QString::fromLatin1("Size"), size);
 	QWidget* desktop = KApplication::desktop();
 	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
 	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
@@ -698,8 +698,8 @@ bool KAlarmApp::convWakeTime(const QCString timeParam, QDateTime& dateTime)
 	// Compile the values into a date/time structure
 	QDateTime now = QDateTime::currentDateTime();
 	QDate date((dt[0] < 0 ? now.date().year() : dt[0]),
-	           (dt[1] < 0 ? now.date().month() : dt[1]),
-	           (dt[2] < 0 ? now.date().day() : dt[2]));
+				  (dt[1] < 0 ? now.date().month() : dt[1]),
+				  (dt[2] < 0 ? now.date().day() : dt[2]));
 	if (!date.isValid())
 		return false;
 	QTime time(dt[3], dt[4], 0);
@@ -720,8 +720,9 @@ void AlarmCalendar::getURL() const
 	if (!url.isValid())
 	{
 		KConfig* config = kapp->config();
-		config->setGroup("General");
-		*const_cast<KURL*>(&url) = config->readEntry("Calendar", locateLocal("appdata", DEFAULT_CALENDAR_FILE));
+		config->setGroup(QString::fromLatin1("General"));
+		*const_cast<KURL*>(&url) = config->readEntry(QString::fromLatin1("Calendar"),
+		                                             locateLocal("appdata", DEFAULT_CALENDAR_FILE));
 		if (!url.isValid())
 		{
 			kdDebug() << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
@@ -742,7 +743,7 @@ bool AlarmCalendar::open()
 
 	// Find out whether the calendar is ICal or VCal format
 	QString ext = url.filename().right(4);
-	vCal = (ext == ".vcs");
+	vCal = (ext == QString::fromLatin1(".vcs"));
 
 	if (!KIO::NetAccess::exists(url))
 	{
@@ -857,7 +858,7 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 	kdDebug() << "MainWidget::process(): " << func << endl;
 	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n, SCHEDULE_FILE, SCHEDULE_FILE_n };
 	int function;
-	if (func == "handleEvent(const QString&,const QString&)")
+	if      (func == "handleEvent(const QString&,const QString&)")
 		function = HANDLE;
 	else if (func == "cancelMessage(const QString&,const QString&)")
 		function = CANCEL;

@@ -35,7 +35,7 @@
 
 
 KAlarmMainWindow::KAlarmMainWindow(const char* name)
-   : KMainWindow(0L, name, WGroupLeader)
+	: KMainWindow(0L, name, WGroupLeader)
 {
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(name);
@@ -45,7 +45,8 @@ KAlarmMainWindow::KAlarmMainWindow(const char* name)
 	setCentralWidget(listView);
 	listView->refresh();          // populate the message list
 	connect(listView, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotSelection()));
-	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)), this, SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
+	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)), this,
+	        SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
@@ -294,7 +295,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	addColumn(i18n("Column 1"));
 	setColumnText(TIME_COLUMN, i18n("Time"));
 	addColumn(i18n("Rep"));            // repeat count column
-	addColumn("");                     // colour column
+	addColumn(QString::null);          // colour column
 	addColumn(i18n("Message or File"));
 	setColumnWidthMode(MESSAGE_COLUMN, QListView::Maximum);
 	setAllColumnsShowFocus(true);
@@ -343,10 +344,10 @@ AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSi
 	data.messageText = event->cleanText();
 	int newline = data.messageText.find('\n');
 	if (newline >= 0)
-		data.messageText = data.messageText.left(newline) + "...";
+		data.messageText = data.messageText.left(newline) + QString::fromLatin1("...");
 	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true) + ' '
 	                  + KGlobal::locale()->formatTime(dateTime.time()) + ' ';
-	data.repeatCountText = event->repeatCount() ? QString("%1").arg(event->repeatCount()) : QString();
+	data.repeatCountText = event->repeatCount() ? QString::fromLatin1("%1").arg(event->repeatCount()) : QString();
 	QString dateTimeText;
 	dateTimeText.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                         dateTime.time().hour(), dateTime.time().minute());
@@ -421,7 +422,7 @@ int AlarmListView::itemHeight()
 	if (it == entries.end())
 	{
 		// The list is empty, so create a temporary item to find its height
-		QListViewItem* item = new QListViewItem(this, "", "");
+		QListViewItem* item = new QListViewItem(this, QString::null);
 		int height = item->height();
 		delete item;
 		return height;
@@ -491,9 +492,9 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 	{
 		switch (listView->header()->sectionAt(pt.x()))
 		{
-			case AlarmListView::TIME_COLUMN:  return i18n("Next scheduled date and time of the alarm");
-			case AlarmListView::REPEAT_COLUMN:  return i18n("Number of scheduled repetitions after the\nnext scheduled display of the alarm");
-			case AlarmListView::COLOUR_COLUMN:  return i18n("Background colour of alarm message");
+			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
+			case AlarmListView::REPEAT_COLUMN:   return i18n("Number of scheduled repetitions after the\nnext scheduled display of the alarm");
+			case AlarmListView::COLOUR_COLUMN:   return i18n("Background colour of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text");
 		}
 	}

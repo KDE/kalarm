@@ -57,7 +57,7 @@ class MessageEvent : public KCal::Event
 		QDateTime        lastDateTime() const       { return alarm()->time().addSecs(alarm()->repeatCount() * repeatMinutes() * 60); }
 		QColor           colour() const;
 		int              flags() const;
-		bool             messageIsFileName() const  { return alarm()->text().startsWith("FILE:"); }
+		bool             messageIsFileName() const;
 		bool             lateCancel() const         { return !isMultiDay(); }
 		bool             beep() const               { return !!(flags() & BEEP); }
 	private:

@@ -43,7 +43,7 @@ void SettingsBase::emitSettingsChanged()
 
 
 const QColor GeneralSettings::default_defaultBgColour(red);
-const QFont GeneralSettings::default_messageFont("Helvetica", 16, QFont::Bold);
+const QFont GeneralSettings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
 
 GeneralSettings::GeneralSettings(QWidget* parent)
 	: SettingsBase(parent)
@@ -58,17 +58,17 @@ GeneralSettings::~GeneralSettings()
 void GeneralSettings::loadSettings()
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup("General");
-	m_defaultBgColour = config->readColorEntry("Message background colour", &default_defaultBgColour);
-	m_messageFont = config->readFontEntry("Message font", &default_messageFont);
+	config->setGroup(QString::fromLatin1("General"));
+	m_defaultBgColour = config->readColorEntry(QString::fromLatin1("Message background colour"), &default_defaultBgColour);
+	m_messageFont = config->readFontEntry(QString::fromLatin1("Message font"), &default_messageFont);
 	SettingsBase::loadSettings();
 }
 
 void GeneralSettings::saveSettings()
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup("General");
-	config->writeEntry("Message background colour", m_defaultBgColour);
-	config->writeEntry("Message font", m_messageFont);
+	config->setGroup(QString::fromLatin1("General"));
+	config->writeEntry(QString::fromLatin1("Message background colour"), m_defaultBgColour);
+	config->writeEntry(QString::fromLatin1("Message font"), m_messageFont);
 	SettingsBase::saveSettings();
 }

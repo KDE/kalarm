@@ -27,7 +27,7 @@ public:
 	FontColourChooser(QWidget* parent = 0L, const char* name = 0L,
 	       bool onlyFixed = false,
 	       const QStringList& fontList = QStringList(),
-	       bool makeFrame = true, const QString& frameLabel = "Requested font",
+	       bool makeFrame = true, const QString& frameLabel = i18n("Requested font"),
 	       bool fg = true, int visibleListSize=8);
 	~FontColourChooser();
 

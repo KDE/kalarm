@@ -18,6 +18,10 @@
 using namespace KCal;
 
 
+static const QString TEXT_PREFIX   = QString::fromLatin1("TEXT:");
+static const QString FILE_PREFIX   = QString::fromLatin1("FILE:");
+static const QString BEEP_CATEGORY = QString::fromLatin1("BEEP");
+
 MessageEvent::MessageEvent(const MessageEvent& event)
 	: Event()
 {
@@ -39,7 +43,7 @@ void MessageEvent::setMessage(const QDateTime& dateTime, int flags,
 	set(dateTime, !!(flags & LATE_CANCEL));
 	if (type >= 0)
 	{
-		QString text(type ? "FILE:" : "TEXT:");
+		QString text(type ? FILE_PREFIX : TEXT_PREFIX);
 		text += message;
 		alarm()->setText(text);
 	}
@@ -48,7 +52,7 @@ void MessageEvent::setMessage(const QDateTime& dateTime, int flags,
 	QStringList cats;
 	cats.append(colour.name());
 	if (flags & BEEP)
-		cats.append("BEEP");
+		cats.append(BEEP_CATEGORY);
 	setCategories(cats);
 	setRevision(0);
 }
@@ -75,26 +79,31 @@ void MessageEvent::updateRepetition(const QDateTime& dateTime, int remainingCoun
 	alarm()->setAlarmReadOnly(readonly);
 }
 
+bool MessageEvent::messageIsFileName() const
+{
+	return alarm()->text().startsWith(FILE_PREFIX);
+}
+
 QString MessageEvent::cleanText() const
 {
-	if (alarm()->text().startsWith("FILE:")
-	||  alarm()->text().startsWith("TEXT:"))
+	if (alarm()->text().startsWith(FILE_PREFIX)
+	||  alarm()->text().startsWith(TEXT_PREFIX))
 		return alarm()->text().mid(5);
 	return alarm()->text();
 }
 
 QString MessageEvent::message() const
 {
-	if (alarm()->text().startsWith("FILE:"))
+	if (alarm()->text().startsWith(FILE_PREFIX))
 		return QString::null;
-	if (alarm()->text().startsWith("TEXT:"))
+	if (alarm()->text().startsWith(TEXT_PREFIX))
 		return alarm()->text().mid(5);
 	return alarm()->text();
 }
 
 QString MessageEvent::fileName() const
 {
-	if (alarm()->text().startsWith("FILE:"))
+	if (alarm()->text().startsWith(FILE_PREFIX))
 		return alarm()->text().mid(5);
 	return QString::null;
 }
@@ -117,7 +126,7 @@ int MessageEvent::flags() const
 	const QStringList& cats = categories();
 	for (unsigned int i = 1;  i < cats.count();  ++i)
 	{
-		if ( cats[i] == "BEEP")
+		if ( cats[i] == BEEP_CATEGORY)
 			flags |= BEEP;
 	}
 	if (!isMultiDay())

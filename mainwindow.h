@@ -96,7 +96,7 @@ class AlarmListView : public KListView
 		const AlarmItemData* getData(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
 		int                  itemHeight();
-		bool                 drawMessageInColour() const		{ return drawMessageInColour_; }
+		bool                 drawMessageInColour() const		      { return drawMessageInColour_; }
 		void                 setDrawMessageInColour(bool inColour)	{ drawMessageInColour_ = inColour; }
 		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
 		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
