@@ -616,6 +616,16 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	emit shown();
 }
 
+/******************************************************************************
+ * Called when the value of the repeat count field changes, to reset the
+ * minimum value to 1 if the value was 0.
+ */
+void RecurrenceEdit::repeatCountChanged(int value)
+{
+	if (value > 0  &&  mRepeatCountEntry->minValue() == 0)
+		mRepeatCountEntry->setMinValue(1);
+}
+
 void RecurrenceEdit::unsetAllCheckboxes()
 {
 	mMonthRuleOnNthDayButton->setChecked(false);
@@ -818,6 +828,11 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 	else if (repeatDuration)
 	{
 		repeatCountButton->setChecked(true);
+		if (event.mainExpired())
+		{
+			mRepeatCountEntry->setMinValue(0);
+			repeatDuration = 0;
+		}
 		mRepeatCountEntry->setValue(repeatDuration);
 	}
 	else

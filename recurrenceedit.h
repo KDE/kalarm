@@ -46,8 +46,6 @@ class TimePeriod;
 class ButtonGroup;
 class KAlarmEvent;
 
-using namespace KCal;
-
 
 class RecurrenceEdit : public QFrame
 {
@@ -83,6 +81,7 @@ class RecurrenceEdit : public QFrame
 		void          disableRange(bool);
 		void          enableDurationRange(bool);
 		void          enableDateRange(bool);
+		void          repeatCountChanged(int value);
 
 	protected:
 		virtual void  showEvent(QShowEvent*);
