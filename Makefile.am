@@ -3,10 +3,12 @@ INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src \
           -I$(top_builddir)/libkdepim $(all_includes)
 
 bin_PROGRAMS = kalarm
-kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindow.cpp \
-	messagewin.cpp msgevent.cpp alarmcalendar.cpp \
+kalarm_SOURCES = editdlg.cpp alarmcalendar.cpp daemongui.cpp \
+        main.cpp kalarmapp.cpp \
+        mainwindowbase.cpp mainwindow.cpp \
+	messagewin.cpp msgevent.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
-	traywindow.cpp daemongui.cpp alarmguiiface.skel \
+	traywindow.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp \
 	fontcolour.cpp colourcombo.cpp datetime.cpp buttongroup.cpp \
 	alarmlistview.cpp dateedit.cpp spinbox2.cpp
