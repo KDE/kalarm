@@ -461,6 +461,27 @@ void MiscPrefTab::restore()
 
 void MiscPrefTab::apply(bool syncToDisc)
 {
+	// First validate anything entered in Other X-terminal command
+	int xtermID = mXtermType->selectedId();
+	if (xtermID >= mXtermCount)
+	{
+		QString cmd = mXtermCommand->text();
+		if (cmd.isEmpty())
+			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
+		else
+		{
+			int i = cmd.find(' ');    // find the end of the terminal window name
+			if (i > 0)
+				cmd = cmd.left(i);
+			if (KStandardDirs::findExe(cmd).isEmpty())
+			{
+				mXtermCommand->setFocus();
+				if (KMessageBox::warningContinueCancel(this, i18n("Command to invoke terminal window not found:\n%1").arg(cmd))
+				                != KMessageBox::Continue)
+					return;
+			}
+		}
+	}
 	Preferences* preferences = Preferences::instance();
 	preferences->mAutostartDaemon = mAutostartDaemon->isChecked();
 	bool systray = mRunInSystemTray->isChecked();
@@ -476,10 +497,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	preferences->mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
 	preferences->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
 	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
-	int id = mXtermType->selectedId();
-	if (id >= mXtermCount  &&  mXtermCommand->text().isEmpty())
-		id = 0;       // 'Other' is only acceptable if it's non-blank
-	preferences->mCmdXTermCommand = (id < mXtermCount) ? xtermCommands[id] : mXtermCommand->text();
+	preferences->mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
 
