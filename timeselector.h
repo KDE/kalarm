@@ -22,56 +22,40 @@
 #define TIMESELECTOR_H
 
 #include <qframe.h>
+#include "timeperiod.h"
 
 class QLabel;
 class CheckBox;
-class ComboBox;
-class TimePeriod;
 
 
 class TimeSelector : public QFrame
 {
 		Q_OBJECT
 	public:
-		enum Units { HOURS_MINUTES, DAYS, WEEKS };
-
 		TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
 		             const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent, const char* name = 0);
 		bool         isChecked() const;
 		void         setChecked(bool on);
 		int          minutes() const;
-		void         setMinutes(int minutes, bool dateOnly, Units defaultUnits);
+		void         setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits);
 		void         setReadOnly(bool);
-		void         setDateOnly(bool dateOnly)   { setDateOnly(minutes(), dateOnly); }
+		void         setDateOnly(bool dateOnly = true);
 		void         setMaximum(int hourmin, int days);
 		void         setFocusOnCount();
 
-		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
-		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
-		static QString i18n_days();        // text of 'days' units, lower case
-		static QString i18n_Days();        // text of 'Days' units, initial capital
-		static QString i18n_weeks();       // text of 'weeks' units, lower case
-		static QString i18n_Weeks();       // text of 'Weeks' units, initial capital
-
 	signals:
-		void         toggled(bool);        // selection checkbox has been toggled
+		void         toggled(bool);             // selection checkbox has been toggled
+		void         valueChanged(int minutes); // value has changed
 
 	protected slots:
-		void         slotSelectToggled(bool);
-		void         slotUnitsSelected(int index);
+		void         selectToggled(bool);
+		void         periodChanged(int minutes);
 
 	private:
-		Units        setDateOnly(int minutes, bool dateOnly);
-		void         setUnitRange();
-
 		CheckBox*    mSelect;
-		TimePeriod*  mCount;
-		ComboBox*    mUnitsCombo;
+		TimePeriod*  mPeriod;
 		QLabel*      mLabel;
-		int          mMaxDays;            // maximum day count
-		bool         mNoHourMinute;       // hours/minutes cannot be displayed, ever
 		bool         mReadOnly;           // the widget is read only
-		int          mDateOnlyOffset;     // for mUnitsCombo: 1 if hours/minutes is disabled, else 0
 };
 
 #endif // TIMESELECTOR_H

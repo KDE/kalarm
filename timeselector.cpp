@@ -30,26 +30,13 @@
 #include <kdebug.h>
 
 #include "checkbox.h"
-#include "combobox.h"
-#include "timeperiod.h"
 #include "timeselector.moc"
-
-
-// Collect these widget labels together to ensure consistent wording and
-// translations across different modules.
-QString TimeSelector::i18n_hours_mins()   { return i18n("hours/minutes"); }
-QString TimeSelector::i18n_Hours_Mins()   { return i18n("Hours/Minutes"); }
-QString TimeSelector::i18n_days()         { return i18n("days"); }
-QString TimeSelector::i18n_Days()         { return i18n("Days"); }
-QString TimeSelector::i18n_weeks()        { return i18n("weeks"); }
-QString TimeSelector::i18n_Weeks()        { return i18n("Weeks"); }
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent, const char* name)
 	: QFrame(parent, name),
-	  mMaxDays(9999),
-	  mNoHourMinute(!allowHourMinute),
+	  mLabel(0),
 	  mReadOnly(false)
 {
 	setFrameStyle(QFrame::NoFrame);
@@ -57,39 +44,26 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 	mSelect = new CheckBox(selectText, this);
 	mSelect->setFixedSize(mSelect->sizeHint());
-	connect(mSelect, SIGNAL(toggled(bool)), SLOT(slotSelectToggled(bool)));
+	connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
 	QWhatsThis::add(mSelect, selectWhatsThis);
 	layout->addWidget(mSelect);
 
 	QHBox* box = new QHBox(this);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
-	mCount = new TimePeriod(box);
-	mCount->setHourMinRange(1, 100*60-1);    // max 99H59M
-	mCount->setUnitRange(1, mMaxDays);
-	mCount->setUnitSteps(1, 10);
-	mCount->setFixedSize(mCount->sizeHint());
-	mCount->setSelectOnStep(false);
-	mSelect->setFocusWidget(mCount);
+	mPeriod = new TimePeriod(allowHourMinute, box);
+	mPeriod->setFixedSize(mPeriod->sizeHint());
+	mPeriod->setSelectOnStep(false);
+	connect(mPeriod, SIGNAL(valueChanged(int)), SLOT(periodChanged(int)));
+	mSelect->setFocusWidget(mPeriod);
+	mPeriod->setEnabled(false);
 
-	mUnitsCombo = new ComboBox(false, box);
-	if (mNoHourMinute)
+	if (!postfix.isEmpty())
 	{
-		mDateOnlyOffset = 1;
-		mCount->showHourMin(false);
+		mLabel = new QLabel(postfix, box);
+		QWhatsThis::add(box, valueWhatsThis);
+		mLabel->setEnabled(false);
 	}
-	else
-	{
-		mDateOnlyOffset = 0;
-		mUnitsCombo->insertItem(i18n_hours_mins());
-	}
-	mUnitsCombo->insertItem(i18n_days());
-	mUnitsCombo->insertItem(i18n_weeks());
-	mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
-	connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
-
-	mLabel = new QLabel(postfix, box);
-	QWhatsThis::add(box, valueWhatsThis);
 }
 
 /******************************************************************************
@@ -101,8 +75,7 @@ void TimeSelector::setReadOnly(bool ro)
 	{
 		mReadOnly = ro;
 		mSelect->setReadOnly(mReadOnly);
-		mCount->setReadOnly(mReadOnly);
-		mUnitsCombo->setReadOnly(mReadOnly);
+		mPeriod->setReadOnly(mReadOnly);
 	}
 }
 
@@ -113,15 +86,21 @@ bool TimeSelector::isChecked() const
 
 void TimeSelector::setChecked(bool on)
 {
-	mSelect->setChecked(on);
+	if (on != mSelect->isChecked())
+	{
+		mSelect->setChecked(on);
+		emit valueChanged(minutes());
+	}
 }
 
 void TimeSelector::setMaximum(int hourmin, int days)
 {
-	if (hourmin)
-		mCount->setHourMinRange(1, hourmin);
-	mMaxDays = days;
-	setUnitRange();
+	mPeriod->setMaximum(hourmin, days);
+}
+
+void TimeSelector::setDateOnly(bool dateOnly)
+{
+	mPeriod->setDateOnly(dateOnly);
 }
 
 /******************************************************************************
@@ -130,21 +109,7 @@ void TimeSelector::setMaximum(int hourmin, int days)
  */
 int TimeSelector::minutes() const
 {
-	if (!mSelect->isChecked())
-		return 0;
-	int warning = mCount->value();
-	switch (mUnitsCombo->currentItem() + mDateOnlyOffset)
-	{
-		case HOURS_MINUTES:
-			break;
-		case DAYS:
-			warning *= 24*60;
-			break;
-		case WEEKS:
-			warning *= 7*24*60;
-			break;
-	}
-	return warning;
+	return mSelect->isChecked() ? mPeriod->minutes() : 0;
 }
 
 /******************************************************************************
@@ -153,105 +118,13 @@ int TimeSelector::minutes() const
 *  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
 *  is true, it will never be initialised to hours/minutes.
 */
-void TimeSelector::setMinutes(int minutes, bool dateOnly, TimeSelector::Units defaultUnits)
+void TimeSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	if (!dateOnly  &&  mNoHourMinute)
-		dateOnly = true;
 	mSelect->setChecked(minutes);
-	mCount->setEnabled(minutes);
-	mUnitsCombo->setEnabled(minutes);
-	mLabel->setEnabled(minutes);
-	int item;
-	if (minutes)
-	{
-		int count = minutes;
-		if (minutes % (24*60))
-			item = HOURS_MINUTES;
-		else if (minutes % (7*24*60))
-		{
-			item = DAYS;
-			count = minutes / (24*60);
-		}
-		else
-		{
-			item = WEEKS;
-			count = minutes / (7*24*60);
-		}
-		if (item < mDateOnlyOffset)
-			item = mDateOnlyOffset;
-		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
-		if (item == HOURS_MINUTES)
-			mCount->setHourMinValue(count);
-		else
-			mCount->setUnitValue(count);
-		item = setDateOnly(minutes, dateOnly);
-	}
-	else
-	{
-		item = defaultUnits;
-		if (item < mDateOnlyOffset)
-			item = mDateOnlyOffset;
-		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
-		if (dateOnly && !mDateOnlyOffset  ||  !dateOnly && mDateOnlyOffset)
-			item = setDateOnly(minutes, dateOnly);
-	}
-	mCount->showHourMin(item == HOURS_MINUTES  &&  !mNoHourMinute);
-}
-
-/******************************************************************************
-*  Enable/disable hours/minutes units (if hours/minutes were permitted in the
-*  constructor).
-*/
-TimeSelector::Units TimeSelector::setDateOnly(int reminderMinutes, bool dateOnly)
-{
-	int index = mUnitsCombo->currentItem();
-	Units units = static_cast<Units>(index + mDateOnlyOffset);
-	if (!mNoHourMinute)
-	{
-		if (!dateOnly  &&  mDateOnlyOffset)
-		{
-			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(i18n_hours_mins(), 0);
-			mDateOnlyOffset = 0;
-			mUnitsCombo->setCurrentItem(++index);
-		}
-		else if (dateOnly  &&  !mDateOnlyOffset)
-		{
-			// Change from allowing hours/minutes to date-only
-			mUnitsCombo->removeItem(0);
-			mDateOnlyOffset = 1;
-			if (index)
-				--index;
-			mUnitsCombo->setCurrentItem(index);
-			if (units == HOURS_MINUTES)
-			{
-				// Set units to days and round up the warning period
-				units = DAYS;
-				mUnitsCombo->setCurrentItem(DAYS - mDateOnlyOffset);
-				mCount->showUnit();
-				mCount->setUnitValue((reminderMinutes + 1439) / 1440);
-			}
-			mCount->showHourMin(false);
-		}
-	}
-	return units;
-}
-
-/******************************************************************************
-*  Set the maximum value which may be entered into the unit count field,
-*  depending on the current unit selection.
-*/
-void TimeSelector::setUnitRange()
-{
-	int maxval;
-	switch (static_cast<Units>(mUnitsCombo->currentItem() + mDateOnlyOffset))
-	{
-		case DAYS:   maxval = mMaxDays;  break;
-		case WEEKS:  maxval = mMaxDays / 7;  break;
-		case HOURS_MINUTES:
-		default:             return;
-	}
-	mCount->setUnitRange(1, maxval);
+	mPeriod->setEnabled(minutes);
+	if (mLabel)
+		mLabel->setEnabled(minutes);
+	mPeriod->setMinutes(minutes, dateOnly, defaultUnits);
 }
 
 /******************************************************************************
@@ -259,27 +132,28 @@ void TimeSelector::setUnitRange()
 */
 void TimeSelector::setFocusOnCount()
 {
-	mCount->setFocus();
+	mPeriod->setFocusOnCount();
 }
 
 /******************************************************************************
 *  Called when the TimeSelector checkbox is toggled.
 */
-void TimeSelector::slotSelectToggled(bool on)
+void TimeSelector::selectToggled(bool on)
 {
-	mUnitsCombo->setEnabled(on);
-	mCount->setEnabled(on);
-	mLabel->setEnabled(on);
-	if (on  &&  mDateOnlyOffset)
-	 	setDateOnly(minutes(), true);
+	mPeriod->setEnabled(on);
+	if (mLabel)
+		mLabel->setEnabled(on);
+	if (on)
+		mPeriod->setFocus();
 	emit toggled(on);
+	emit valueChanged(minutes());
 }
 
 /******************************************************************************
-*  Called when a new item is made current in the time units combo box.
+*  Called when the period value changes.
 */
-void TimeSelector::slotUnitsSelected(int index)
+void TimeSelector::periodChanged(int minutes)
 {
-	setUnitRange();
-	mCount->showHourMin(index + mDateOnlyOffset == HOURS_MINUTES);
+	if (mSelect->isChecked())
+		emit valueChanged(minutes);
 }

@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,50 +21,63 @@
 #ifndef TIMEPERIOD_H
 #define TIMEPERIOD_H
 
-#include <qwidgetstack.h>
+#include <qhbox.h>
+#include <qstring.h>
 
-class QString;
+class QWidgetStack;
+class ComboBox;
 class SpinBox;
 class TimeSpinBox;
 
 
-class TimePeriod : public QWidgetStack
+class TimePeriod : public QHBox
 {
 		Q_OBJECT
 	public:
-		explicit TimePeriod(QWidget* parent, const char* name = 0);
-		virtual ~TimePeriod()  { }
+		enum Units { HOURS_MINUTES, DAYS, WEEKS };
+
+		TimePeriod(bool allowHourMinute, QWidget* parent, const char* name = 0);
 		bool          isReadOnly() const             { return mReadOnly; }
 		void          setReadOnly(bool);
-		void          setUnitRange(int minValue, int maxValue);
-		void          setHourMinRange(int minValue, int maxValue);
-		void          setUnitSteps(int step, int shiftStep);
-		void          setHourMinSteps(int minuteStep, int minuteShiftStep, int hourStep, int hourShiftStep);
-		void          setSelectOnStep(bool sel);
-		void          showUnit(bool show = true)     { setShowing(!show); }
-		void          showHourMin(bool show = true)  { setShowing(show); }
-		bool          showingUnit() const            { return !mHourMinute; }
-		void          setValue(int count)            { setValue(mHourMinute, count); }
-		void          setUnitValue(int count)        { setValue(false, count); }
-		void          setHourMinValue(int minutes)   { setValue(true, minutes); }
-		int           value() const                  { return value(mHourMinute); }
-		int           unitValue() const              { return value(mHourMinute); }
-		int           hourMinValue() const           { return value(mHourMinute); }
-		void          setWhatsThis(const QString& unitText, const QString& hourMinText = QString::null);
-		void          setUnitWhatsThis(const QString&);
-		void          setHourMinWhatsThis(const QString&);
-		virtual QSize minimumSizeHint() const;
-		virtual QSize sizeHint() const;
+		int           minutes() const;
+		void          setMinutes(int minutes, bool dateOnly, Units defaultUnits);
+		void          setDateOnly(bool dateOnly)     { setDateOnly(minutes(), dateOnly, true); }
+		void          setMaximum(int hourmin, int days);
+		void          setSelectOnStep(bool);
+		void          setFocusOnCount();
+		void          setWhatsThis(const QString& units, const QString& dayWeek, const QString& hourMin = QString::null);
+
+		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
+		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
+		static QString i18n_days();        // text of 'days' units, lower case
+		static QString i18n_Days();        // text of 'Days' units, initial capital
+		static QString i18n_weeks();       // text of 'weeks' units, lower case
+		static QString i18n_Weeks();       // text of 'Weeks' units, initial capital
+
+	signals:
+		void          valueChanged(int minutes);   // value has changed
+
+	private slots:
+		void          slotUnitsSelected(int index);
+		void          slotDaysChanged(int);
+		void          slotTimeChanged(int minutes);
 
 	private:
-		void          setShowing(bool hourMin);
-		void          setValue(bool hourMin, int count);
-		int           value(bool hourMin) const;
+		Units         setDateOnly(int minutes, bool dateOnly, bool signal);
+		void          setUnitRange();
+		void          showHourMin(bool hourMin);
+		void          adjustDayWeekShown();
 
-		SpinBox*      mSpinBox;
-		TimeSpinBox*  mTimeSpinBox;
-		bool          mReadOnly;
-		bool          mHourMinute;
+		QWidgetStack* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
+		SpinBox*      mSpinBox;            // the days/weeks value spinbox
+		TimeSpinBox*  mTimeSpinBox;        // the hours:minutes value spinbox
+		ComboBox*     mUnitsCombo;
+		int           mMaxDays;            // maximum day count
+		int           mDateOnlyOffset;     // for mUnitsCombo: 1 if hours/minutes is disabled, else 0
+		Units         mMaxUnitShown;       // for mUnitsCombo: maximum units shown
+		bool          mNoHourMinute;       // hours/minutes cannot be displayed, ever
+		bool          mReadOnly;           // the widget is read only
+		bool          mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
 };
 
 #endif // TIMEPERIOD_H
