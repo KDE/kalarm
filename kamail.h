@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,8 +45,10 @@ class KAMail
 #else
 		typedef uint Offset;
 #endif
-		static QString    sendKMail(const KAlarmEvent&, const QString& from);
+		static QString    sendKMail(const KAlarmEvent&, const QString& from, const QString& bcc);
+		static QString    initHeaders(const KAlarmEvent&, const QString& from, const QString& bcc);
 		static QString    appendBodyAttachments(QString& message, const KAlarmEvent&);
+		static void       notifyQueued(const KAlarmEvent&);
 		static int        checkAttachment(QString& attachment, bool check);
 		static Offset     base64Encode(char* in, char* out, Offset size);
 };

@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +58,11 @@ bool parseAddressList( const char* & scursor, const char * const send,
 		       QValueList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
+namespace
+{
+QString getHostName();
+}
+
 const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNotify");
 
 
@@ -67,6 +72,7 @@ const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNoti
 QString KAMail::send(const KAlarmEvent& event)
 {
 	QString from = theApp()->preferences()->emailAddress();
+	QString bcc  = theApp()->preferences()->emailBccAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail():\nFrom: " << from << "\nTo: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject()
 	              << "\nAttachment:\n" << event.emailAttachments(", ") << endl;
@@ -79,13 +85,7 @@ QString KAMail::send(const KAlarmEvent& event)
 		if (!command.isNull())
 		{
 			command += QString::fromLatin1(" -oi -t ");
-
-			textComplete += QString::fromLatin1("From: ") + from;
-			textComplete += QString::fromLatin1("\nTo: ") + event.emailAddresses(", ");
-			if (event.emailBcc())
-				textComplete += QString::fromLatin1("\nBcc: ") + from;
-			textComplete += QString::fromLatin1("\nSubject: ") + event.emailSubject();
-			textComplete += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(theApp()->aboutData()->programName());
+			textComplete = initHeaders(event, from, bcc);
 		}
 		else
 		{
@@ -99,7 +99,7 @@ QString KAMail::send(const KAlarmEvent& event)
 			if (event.emailBcc())
 			{
 				command += QString::fromLatin1(" -b ");
-				command += KShellProcess::quote(from);
+				command += KShellProcess::quote(bcc);
 			}
 
 			command += " ";
@@ -121,18 +121,19 @@ QString KAMail::send(const KAlarmEvent& event)
 		}
 		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
+		notifyQueued(event);
 		return QString::null;
 	}
 	else
 	{
-		return sendKMail(event, from);
+		return sendKMail(event, from, bcc);
 	}
 }
 
 /******************************************************************************
 * Send the email message via KMail.
 */
-QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
+QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const QString& bcc)
 {
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
@@ -143,7 +144,7 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 		QDataStream arg(data, IO_WriteOnly);
 		arg << event.emailAddresses(", ")
 		    << QString::null
-		    << (event.emailBcc() ? from : QString::null)
+		    << (event.emailBcc() ? bcc : QString::null)
 		    << event.emailSubject()
 		    << event.message();
 		if (!event.emailAttachments().count())
@@ -202,7 +203,7 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 		     << "--subject" << event.emailSubject().local8Bit()
 		     << "--body" << event.message().local8Bit();
 		if (event.emailBcc())
-			proc << "--bcc" << from.local8Bit();
+			proc << "--bcc" << bcc.local8Bit();
 		QStringList attachments = event.emailAttachments();
 		if (attachments.count())
 		{
@@ -219,6 +220,20 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 		}
 	}
 	return QString::null;
+}
+
+/******************************************************************************
+* Create the headers part of the email.
+*/
+QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const QString& bcc)
+{
+	QString message = QString::fromLatin1("From: ") + from;
+	message += QString::fromLatin1("\nTo: ") + event.emailAddresses(", ");
+	if (event.emailBcc())
+		message += QString::fromLatin1("\nBcc: ") + bcc;
+	message += QString::fromLatin1("\nSubject: ") + event.emailSubject();
+	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(theApp()->aboutData()->programName());
+	return message;
 }
 
 /******************************************************************************
@@ -335,7 +350,6 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 	return QString::null;
 }
 
-#ifdef NEW_KMAIL
 /******************************************************************************
 * If any of the destination email addresses are non-local, display a
 * notification message saying that an email has been queued for sending.
@@ -344,27 +358,27 @@ void KAMail::notifyQueued(const KAlarmEvent& event)
 {
 	KMime::Types::Address addr;
 	QString localhost = QString::fromLatin1("localhost");
+	QString hostname  = getHostName();
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (QValueList<KCal::Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
 	{
 		QCString email = (*it).email().local8Bit();
-		const char* em = static_cast<const char*>(email);
+		const char* em = email;
 		if (!email.isEmpty()
-		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
+		&&  KMime::HeaderParsing::parseAddress(em, em + email.length(), addr))
 		{
 			QString domain = addr.mailboxList.first().addrSpec.domain;
-			if (!domain.isEmpty()  &&  domain != localhost)
+			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
 				QString text = (theApp()->preferences()->emailClient() == Preferences::KMAIL)
 				             ? i18n("An email has been queued to be sent by KMail")
-				             : i18n("An email has been queued to send");
+				             : i18n("An email has been queued to be sent");
 				KMessageBox::information(0, text, QString::null, EMAIL_QUEUED_NOTIFY);
 				return;
 			}
 		}
 	}
 }
-#endif
 
 /******************************************************************************
 *  Parse a list of email addresses, optionally containing display names,
@@ -581,6 +595,20 @@ KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
 		out[outIndex++] = '\n';
 	}
 	return outIndex;
+}
+
+namespace
+{
+/******************************************************************************
+* Get the local system's host name.
+*/
+QString getHostName()
+{
+        char hname[256];
+        if (gethostname(hname, sizeof(hname)))
+                return QString::null;
+        return QString::fromLocal8Bit(hname);
+}
 }
 
 
