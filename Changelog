@@ -9,6 +9,7 @@ Monthly/yearly recurrence edit: adhere to user preference for start day of week.
 Eliminate multiple confirmation prompts when deleting multiple alarms.
 Eliminate duplicate alarms in system tray tooltip.
 Fix wrong status in system tray icon if KAlarm starts up with alarms disabled.
+Fix wrong number of days in Time-to-alarm column in main window.
 Fix omission of deferred alarms from system tray tooltip.
 
 === Version 0.9.5 --- 3 Sep 2003 ===
