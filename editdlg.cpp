@@ -123,7 +123,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	emailToEdit = new QLineEdit(actionGroup);
 	emailToEdit->setMinimumSize(emailToEdit->sizeHint());
 	QWhatsThis::add(emailToEdit,
-	      i18n("Enter the addresses of the email recipients. Multiple addresses may be separated by "
+	      i18n("Enter the addresses of the email recipients. Separate multiple addresses with "
 	           "commas or semicolons."));
 	grid->addMultiCellWidget(emailToEdit, 2, 2, 0, 3);
 
