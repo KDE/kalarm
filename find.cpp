@@ -20,7 +20,6 @@
 
 #include "kalarm.h"
 
-#ifdef FIND
 #include <qlayout.h>
 #include <qwhatsthis.h>
 #include <qgroupbox.h>
@@ -46,7 +45,7 @@ enum {
 	FIND_COMMAND = KFindDialog::MinimumUserOption << 4,
 	FIND_EMAIL   = KFindDialog::MinimumUserOption << 5
 };
-static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_EXPIRED;
+static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 
 
 Find::Find(EventListViewBase* parent)
@@ -131,7 +130,6 @@ void Find::display()
 		// Set defaults
 		mLive->setChecked(mOptions & FIND_LIVE);
 		mExpired->setChecked(mOptions & FIND_EXPIRED);
-		mExpired->setEnabled(showExpired);
 		mMessageType->setChecked(mOptions & FIND_MESSAGE);
 		mFileType->setChecked(mOptions & FIND_FILE);
 		mCommandType->setChecked(mOptions & FIND_COMMAND);
@@ -154,6 +152,7 @@ void Find::display()
 		mExpired->show();
 		mActiveExpiredSep->show();
 	}
+	mExpired->setEnabled(showExpired);
 
 	mDialog->setHasCursor(mListView->currentItem());
 	mDialog->show();
@@ -179,7 +178,7 @@ void Find::slotFind()
 	if (!mDialog)
 		return;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
-	mOptions &= ~FIND_KALARM_OPTIONS;
+	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
 	mOptions |= (mLive->isChecked()    ? FIND_LIVE : 0)
 	         |  (mExpired->isChecked() ? FIND_EXPIRED : 0)
 	         |  (mMessageType->isChecked() ? FIND_MESSAGE : 0)
@@ -251,6 +250,10 @@ if (item) kdDebug()<<"findNext() 2: event="<<item->event().id()<<endl; else kdDe
 		if (!mStartID.isNull()  &&  mStartID == event.id())
 			break;    // we've wrapped round and reached the starting alarm again
 kdDebug()<<"findNext() 3\n";
+		bool live = !event.expired();
+		if (live  &&  !(mOptions & FIND_LIVE)
+		||  !live  &&  !(mOptions & FIND_EXPIRED))
+			continue;     // we're not searching this type of alarm
 		switch (event.action())
 		{
 			case KAEvent::MESSAGE:
@@ -343,6 +346,3 @@ EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward)
 		it = item ? item->itemAbove() : mListView->lastItem();
 	return (EventListViewItemBase*)it;
 }
-
-#endif
-

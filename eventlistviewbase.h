@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.h  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 
 class QPixmap;
 class EventListViewItemBase;
+class Find;
 
 
 class EventListViewBase : public KListView
@@ -43,7 +44,7 @@ class EventListViewBase : public KListView
 		EventListViewBase(QWidget* parent = 0, const char* name = 0);
 		virtual ~EventListViewBase()  { }
 		void                   refresh();
-		EventListViewItemBase* getEntry(const QString& eventID);
+		EventListViewItemBase* getEntry(const QString& eventID) const;
 		void                   addEvent(const KAEvent& e)  { addEvent(e, instances(), this); }
 		void                   modifyEvent(const KAEvent& e)
 		                                              { modifyEvent(e.id(), e, instances(), this); }
@@ -59,20 +60,25 @@ class EventListViewBase : public KListView
 		                                              { modifyEvent(oldEventID, event, list, selectionView); }
 		void                   resizeLastColumn();
 		int                    itemHeight();
-		bool                   anySelected() const;    // are any items selected?
-		const KAEvent*         selectedEvent() const;
-		EventListViewItemBase* selectedItem() const   { return (EventListViewItemBase*)KListView::selectedItem(); }
 		EventListViewItemBase* currentItem() const    { return (EventListViewItemBase*)KListView::currentItem(); }
 		EventListViewItemBase* firstChild() const     { return (EventListViewItemBase*)KListView::firstChild(); }
-		EventListViewItemBase* singleSelectedItem() const;
+		bool                   anySelected() const;    // are any items selected?
+		const KAEvent*         selectedEvent() const;
+		EventListViewItemBase* selectedItem() const;
 		QValueList<EventListViewItemBase*> selectedItems() const;
 		int                    selectedCount() const;
 		int                    lastColumn() const     { return mLastColumn; }
 		virtual QString        whatsThisText(int column) const = 0;
 		virtual InstanceList   instances() = 0; // return all instances
 
+	public slots:
+		void                   slotFind();
+		void                   slotFindNext()         { findNext(true); }
+		void                   slotFindPrev()         { findNext(false); }
+
 	signals:
 		void                   itemDeleted();
+		void                   findActive(bool);
 
 	protected:
 		virtual void           populate() = 0;         // populate the list with all desired events
@@ -87,7 +93,9 @@ class EventListViewBase : public KListView
 
 	private:
 		void                   deleteEntry(EventListViewItemBase*, bool setSize = false);
+		void                   findNext(bool forward);
 
+		Find*                  mFind;                 // alarm search object
 		int                    mLastColumn;           // index to last column
 		int                    mLastColumnHeaderWidth;
 };

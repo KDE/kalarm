@@ -21,7 +21,6 @@
 #ifndef FIND_H
 #define FIND_H
 
-#ifdef FIND
 #include <qobject.h>
 #include <qstringlist.h>
 
@@ -70,6 +69,5 @@ class Find : public QObject
 		bool               mNoCurrentItem;   // there is no current item for the purposes of searching
 };
 
-#endif
 #endif // FIND_H
 

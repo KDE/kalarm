@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.cpp  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+#include "find.h"
 #include "eventlistviewbase.moc"
 
 
@@ -46,6 +47,7 @@ class EventListWhatsThisBase : public QWhatsThis
 
 EventListViewBase::EventListViewBase(QWidget* parent, const char* name)
 	: KListView(parent, name),
+	  mFind(0),
 	  mLastColumn(-1),
 	  mLastColumnHeaderWidth(0)
 {
@@ -68,19 +70,31 @@ void EventListViewBase::addLastColumn(const QString& title)
 */
 void EventListViewBase::refresh()
 {
+	QString currentID;
+	if (currentItem())
+		currentID = currentItem()->event().id();    // save current item for restoration afterwards
 	clear();
 	populate();
 	resizeLastColumn();
+	EventListViewItemBase* current = getEntry(currentID);
+	if (current)
+	{
+		setCurrentItem(current);
+		ensureItemVisible(current);
+	}
 }
 
 /******************************************************************************
 *  Get the item for a given event ID.
 */
-EventListViewItemBase* EventListViewBase::getEntry(const QString& eventID)
+EventListViewItemBase* EventListViewBase::getEntry(const QString& eventID) const
 {
-	for (EventListViewItemBase* item = firstChild();  item;  item = item->nextSibling())
-		if (item->event().id() == eventID)
-			return item;
+	if (!eventID.isEmpty())
+	{
+		for (EventListViewItemBase* item = firstChild();  item;  item = item->nextSibling())
+			if (item->event().id() == eventID)
+				return item;
+	}
 	return 0;
 }
 
@@ -177,6 +191,29 @@ void EventListViewBase::deleteEntry(EventListViewItemBase* item, bool setSize)
 }
 
 /******************************************************************************
+*  Called when the Find action is selected.
+*  Display the non-modal Find dialog.
+*/
+void EventListViewBase::slotFind()
+{
+	if (!mFind)
+	{
+		mFind = new Find(this);
+		connect(mFind, SIGNAL(active(bool)), SIGNAL(findActive(bool)));
+	}
+	mFind->display();
+}
+
+/******************************************************************************
+*  Called when the Find Next or Find Prev action is selected.
+*/
+void EventListViewBase::findNext(bool forward)
+{
+	if (mFind)
+		mFind->findNext(forward);
+}
+
+/******************************************************************************
 *  Check whether there are any selected items.
 */
 bool EventListViewBase::anySelected() const
@@ -196,6 +233,58 @@ const KAEvent* EventListViewBase::selectedEvent() const
 {
 	EventListViewItemBase* sel = selectedItem();
 	return sel ? &sel->event() : 0;
+}
+
+/******************************************************************************
+*  Fetch the single selected item.
+*  This method works in both Single and Multi selection mode, unlike
+*  QListView::selectedItem().
+*  Reply = null if no items are selected, or if multiple items are selected.
+*/
+EventListViewItemBase* EventListViewBase::selectedItem() const
+{
+	if (selectionMode() == QListView::Single)
+		return (EventListViewItemBase*)KListView::selectedItem();
+
+	QListViewItem* item = 0;
+	for (QListViewItem* it = firstChild();  it;  it = it->nextSibling())
+	{
+		if (isSelected(it))
+		{
+			if (item)
+				return 0;
+			item = it;
+		}
+	}
+	return (EventListViewItemBase*)item;
+}
+
+/******************************************************************************
+*  Fetch all selected items.
+*/
+QValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
+{
+	QValueList<EventListViewItemBase*> items;
+	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	{
+		if (isSelected(item))
+			items.append((EventListViewItemBase*)item);
+	}
+	return items;
+}
+
+/******************************************************************************
+*  Return how many items are selected.
+*/
+int EventListViewBase::selectedCount() const
+{
+	int count = 0;
+	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	{
+		if (isSelected(item))
+			++count;
+	}
+	return count;
 }
 
 /******************************************************************************
@@ -258,53 +347,6 @@ int EventListViewBase::itemHeight()
 	}
 	else
 		return item->height();
-}
-
-/******************************************************************************
-*  Fetch the single selected item.
-*  Reply = null if no items are selected, or if multiple items are selected.
-*/
-EventListViewItemBase* EventListViewBase::singleSelectedItem() const
-{
-	QListViewItem* item = 0;
-	for (QListViewItem* it = firstChild();  it;  it = it->nextSibling())
-	{
-		if (isSelected(it))
-		{
-			if (item)
-				return 0;
-			item = it;
-		}
-	}
-	return (EventListViewItemBase*)item;
-}
-
-/******************************************************************************
-*  Fetch all selected items.
-*/
-QValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
-{
-	QValueList<EventListViewItemBase*> items;
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			items.append((EventListViewItemBase*)item);
-	}
-	return items;
-}
-
-/******************************************************************************
-*  Return how many items are selected.
-*/
-int EventListViewBase::selectedCount() const
-{
-	int count = 0;
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			++count;
-	}
-	return count;
 }
 
 
