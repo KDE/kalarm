@@ -29,27 +29,28 @@ using namespace KCal;
 class AlarmCalendar
 {
 	public:
-		AlarmCalendar() : calendar(0L) { }
-		bool              open();
-		int               load();
-		bool              save()                              { return save(localFile); }
-		void              close();
-		Event*            getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
-		QPtrList<Event>   getAllEvents()                      { return calendar->getAllEvents(); }
-		void              addEvent(const KAlarmEvent&);
-		void              updateEvent(const KAlarmEvent&);
-		void              deleteEvent(const QString& eventID);
-		bool              isOpen() const                      { return !!calendar; }
-		void              getURL() const;
-		const QString     urlString() const                   { getURL();  return url.url(); }
+		AlarmCalendar() :     calendar(0L) { }
+		bool                  open();
+		int                   load();
+		bool                  save()                              { return save(localFile); }
+		void                  close();
+		Event*                getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
+		QPtrList<Event>       getAllEvents()                      { return calendar->getAllEvents(); }
+		void                  addEvent(const KAlarmEvent&);
+		void                  updateEvent(const KAlarmEvent&);
+		void                  deleteEvent(const QString& eventID);
+		bool                  isOpen() const                      { return !!calendar; }
+		void                  getURL() const;
+		const QString         urlString() const                   { getURL();  return url.url(); }
+		static const QString& getDefaultTimeZoneID();
 	private:
-		CalendarLocal*    calendar;
-		KURL              url;         // URL of calendar file
-		QString           localFile;   // local name of calendar file
-		bool              vCal;        // true if calendar file is in VCal format
+		CalendarLocal*        calendar;
+		KURL                  url;         // URL of calendar file
+		QString               localFile;   // local name of calendar file
+		bool                  vCal;        // true if calendar file is in VCal format
 
-		bool              create();
-		bool              save(const QString& tempFile);
+		bool                  create();
+		bool                  save(const QString& tempFile);
 };
 
 #endif // ALARMCALENDAR_H

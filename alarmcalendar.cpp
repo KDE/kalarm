@@ -19,6 +19,8 @@
  */
 
 #include "kalarm.h"
+#include <unistd.h>
+#include <time.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -69,7 +71,7 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new CalendarLocal;
+	calendar = new CalendarLocal(getDefaultTimeZoneID().local8Bit());
 	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
@@ -234,4 +236,27 @@ void AlarmCalendar::deleteEvent(const QString& eventID)
 	Event* kcalEvent = getEvent(eventID);
 	if (kcalEvent)
 		calendar->deleteEvent(kcalEvent);
+}
+
+/******************************************************************************
+* Find the default system time zone ID.
+*/
+const QString& AlarmCalendar::getDefaultTimeZoneID()
+{
+	static QString zoneID;
+	char zonefilebuf[100];
+	int  len = readlink("/etc/localtime", zonefilebuf, 100);
+	if (len > 0 && len < 100)
+	{
+		zonefilebuf[len] = '\0';
+		zoneID = zonefilebuf;
+		zoneID = zoneID.mid(zoneID.find("zoneinfo/") + 9);
+	}
+	else
+	{
+		tzset();
+		zoneID = tzname[0];
+	}
+	kdDebug(5950) << "AlarmCalendar::getDefaultTimeZoneID(): " << zoneID << endl;
+	return zoneID;
 }
