@@ -123,8 +123,8 @@ KAlarmApp::KAlarmApp()
 	 *  3) A user-specific one which contains details of alarms which are currently
 	 *     being displayed to that user and which have not yet been acknowledged.
 	 */
-	QRegExp vcsRegExp ( QString::fromLatin1("\\.vcs$") );
-	QString ical      = QString::fromLatin1(".ics");
+	QRegExp vcsRegExp(QString::fromLatin1("\\.vcs$"));
+	QString ical = QString::fromLatin1(".ics");
 	QString displayCal = locateLocal("appdata", DISPLAY_CALENDAR);
 	QString activeKey = QString::fromLatin1("Calendar");
 	QString activeCal = config->readPathEntry(activeKey, locateLocal("appdata", ACTIVE_CALENDAR));
@@ -1437,14 +1437,17 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 		QString err = KAMail::send(event, (reschedule || allowDefer));
 		if (!err.isNull())
 		{
-			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
 			QStringList errmsgs;
 			if (err.isEmpty())
+			{
 				errmsgs += i18n("Failed to send email");
+				kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
+			}
 			else
 			{
 				errmsgs += i18n("Failed to send email:");
 				errmsgs += err;
+				kdDebug(5950) << "KAlarmApp::execAlarm(): failed: " << err << endl;
 			}
 			(new MessageWin(event, alarm, errmsgs, reschedule))->show();
 			result = 0;

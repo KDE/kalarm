@@ -259,6 +259,28 @@ void Preferences::emitPreferencesChanged()
 	emit preferencesChanged();
 }
 
+QString Preferences::emailAddress() const
+{
+	if (mEmailUseControlCentre)
+	{
+		KEMailSettings e;
+		return e.getSetting(KEMailSettings::EmailAddress);
+	}
+	else
+		return mEmailAddress;
+}
+
+QString Preferences::emailBccAddress() const
+{
+	if (mEmailBccUseControlCentre)
+	{
+		KEMailSettings e;
+		return e.getSetting(KEMailSettings::EmailAddress);
+	}
+	else
+		return mEmailBccAddress;
+}
+
 void Preferences::setEmailAddress(bool useControlCentre, const QString& address)
 {
 	mEmailUseControlCentre = useControlCentre;

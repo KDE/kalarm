@@ -102,6 +102,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           initActions();
 		static KAlarmEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
+		static void    alarmWarnings(QWidget* parent, const KAlarmEvent&);
 		static bool    findWindow(KAlarmMainWindow*);
 
 		static QPtrList<KAlarmMainWindow> windowList;  // active main windows

@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,8 +69,8 @@ class Preferences : public QObject
 		bool           emailQueuedNotify() const        { return mEmailQueuedNotify; }
 		bool           emailUseControlCentre() const    { return mEmailUseControlCentre; }
 		bool           emailBccUseControlCentre() const { return mEmailBccUseControlCentre; }
-		const QString& emailAddress() const             { return mEmailAddress; }
-		const QString& emailBccAddress() const          { return mEmailBccAddress; }
+		QString        emailAddress() const;
+		QString        emailBccAddress() const;
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
 		const QString& defaultSoundFile() const         { return mDefaultBeep ? QString::null : mDefaultSoundFile; }

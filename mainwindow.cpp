@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@
 #include "traywindow.h"
 #include "birthdaydlg.h"
 #include "editdlg.h"
+#include "kamail.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "alarmlistview.h"
@@ -560,6 +561,8 @@ void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAlarmEvent::Action act
 			listView->clearSelection();
 			listView->setSelected(item, true);
 		}
+
+		alarmWarnings(&editDlg, event);
 	}
 }
 
@@ -584,6 +587,8 @@ void KAlarmMainWindow::slotCopy()
 			item = listView->addEntry(event, true);
 			listView->clearSelection();
 			listView->setSelected(item, true);
+
+			alarmWarnings(&editDlg, event);
 		}
 	}
 }
@@ -610,6 +615,8 @@ void KAlarmMainWindow::slotModify()
 			item = listView->updateEntry(item, newEvent, true);
 			listView->clearSelection();
 			listView->setSelected(item, true);
+
+			alarmWarnings(&editDlg, newEvent);
 		}
 	}
 }
@@ -1034,6 +1041,16 @@ void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
 {
 	kdDebug(5950) << "KAlarmMainWindow::setAlarmEnabledStatus(" << (int)status << ")\n";
 	mActionsMenu->setItemChecked(mAlarmsEnabledId, status);
+}
+
+/******************************************************************************
+* If it's an email alarm, warn if no 'From' email address is configured.
+*/
+void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAlarmEvent& event)
+{
+        if (event.action() == KAlarmEvent::EMAIL  &&  Preferences::instance()->emailAddress().isEmpty())
+                KMessageBox::information(parent, i18n("Please set the 'From' email address...",
+		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
 }
 
 /******************************************************************************

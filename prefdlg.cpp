@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,8 +38,10 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kemailsettings.h>
 #include <kiconloader.h>
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -111,6 +113,17 @@ void KAlarmPrefDlg::slotHelp()
 void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
+	QString errmsg = mEmailPage->validateAddress();
+	if (!errmsg.isEmpty())
+	{
+		showPage(pageIndex(mEmailPage->parentWidget()));
+		if (KMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
+		{
+			mValid = false;
+			return;
+		}
+	}
+	mValid = true;
 	mMessagePage->apply(false);
 	mEmailPage->apply(false);
 	mViewPage->apply(false);
@@ -122,8 +135,10 @@ void KAlarmPrefDlg::slotApply()
 void KAlarmPrefDlg::slotOk()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
+	mValid = true;
 	slotApply();
-	KDialogBase::slotOk();
+	if (mValid)
+		KDialogBase::slotOk();
 }
 
 // Discard the current preferences and use the present ones
@@ -413,7 +428,8 @@ void MiscPrefTab::slotClearExpired()
 =============================================================================*/
 
 EmailPrefTab::EmailPrefTab(QVBox* frame)
-	: PrefsTabBase(frame)
+	: PrefsTabBase(frame),
+	  mAddressChanged(false)
 {
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(2*KDialog::spacingHint());
@@ -442,6 +458,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mEmailAddress = new QLineEdit(group);
+	connect(mEmailAddress, SIGNAL(textChanged(const QString&)), SLOT(slotAddressChanged()));
 	label->setBuddy(mEmailAddress);
 	QWhatsThis::add(mEmailAddress,
 	      i18n("Your email address, used to identify you as the sender when sending email alarms."));
@@ -491,9 +508,10 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 void EmailPrefTab::restore()
 {
 	mEmailClient->setButton(mPreferences->mEmailClient);
-	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->emailAddress());
-	setEmailBccAddress(mPreferences->mEmailBccUseControlCentre, mPreferences->emailBccAddress());
+	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->mEmailAddress);
+	setEmailBccAddress(mPreferences->mEmailBccUseControlCentre, mPreferences->mEmailBccAddress);
 	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY, false));
+	mAddressChanged = false;
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
@@ -501,11 +519,11 @@ void EmailPrefTab::apply(bool syncToDisc)
 	int client = mEmailClient->id(mEmailClient->selected());
 	mPreferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
 #if KDE_VERSION >= 210
-	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
-	mPreferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text());
+	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text().stripWhiteSpace());
+	mPreferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text().stripWhiteSpace());
 #else
-	mPreferences->setEmailAddress(false, mEmailAddress->text());
-	mPreferences->setEmailBccAddress(false, mEmailBccAddress->text());
+	mPreferences->setEmailAddress(false, mEmailAddress->text().stripWhiteSpace());
+	mPreferences->setEmailBccAddress(false, mEmailBccAddress->text().stripWhiteSpace());
 #endif
 	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, false, mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
@@ -523,10 +541,10 @@ void EmailPrefTab::setEmailAddress(bool useControlCentre, const QString& address
 {
 #if KDE_VERSION >= 210
 	mEmailUseControlCentre->setChecked(useControlCentre);
-	mEmailAddress->setText(useControlCentre ? QString() : address);
+	mEmailAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 	slotEmailUseCCToggled(true);
 #else
-	mEmailAddress->setText(address);
+	mEmailAddress->setText(address.stripWhiteSpace());
 #endif
 }
 
@@ -534,6 +552,7 @@ void EmailPrefTab::slotEmailUseCCToggled(bool)
 {
 #if KDE_VERSION >= 210
 	mEmailAddress->setEnabled(!mEmailUseControlCentre->isChecked());
+	mAddressChanged = true;
 #endif
 }
 
@@ -541,10 +560,10 @@ void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& addr
 {
 #if KDE_VERSION >= 210
 	mEmailBccUseControlCentre->setChecked(useControlCentre);
-	mEmailBccAddress->setText(useControlCentre ? QString() : address);
+	mEmailBccAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 	slotEmailBccUseCCToggled(true);
 #else
-	mEmailBccAddress->setText(address);
+	mEmailBccAddress->setText(address.stripWhiteSpace());
 #endif
 }
 
@@ -553,6 +572,26 @@ void EmailPrefTab::slotEmailBccUseCCToggled(bool)
 #if KDE_VERSION >= 210
 	mEmailBccAddress->setEnabled(!mEmailBccUseControlCentre->isChecked());
 #endif
+}
+
+QString EmailPrefTab::validateAddress()
+{
+	if (!mAddressChanged)
+		return QString::null;
+	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(KAMail::i18n_NeedFromEmailAddress());
+#if KDE_VERSION >= 210
+	if (mEmailUseControlCentre->isChecked())
+	{
+		KEMailSettings e;
+		if (!e.getSetting(KEMailSettings::EmailAddress).isEmpty())
+			return QString::null;
+		errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
+	}
+	else
+#endif
+	if (!mEmailAddress->text().stripWhiteSpace().isEmpty())
+		return QString::null;
+	return errmsg;
 }
 
 
