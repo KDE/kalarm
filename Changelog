@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 0.9.7 --- 23 Nov 2003 ===
+=== Version 1.0.0 --- 7 Dec 2003 ===
 Allow entered start date for timed recurrence events to be earlier than now.
 Prevent attempted entry of recurrence end date earlier than start date or today.
 Fix error displaying time of expired repeat-at-login alarms.
