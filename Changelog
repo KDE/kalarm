@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 1.2.6 --- 21 February 2005 ===
+=== Version 1.2.6 --- 6 February 2005 ===
 Pop up message windows far from cursor to avoid accidental acknowledgement.
 Improve validation when reading configuration file values.
 
