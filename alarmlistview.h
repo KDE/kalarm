@@ -46,7 +46,7 @@ class AlarmListViewItem : public EventListViewItemBase
 		virtual QString     lastColumnText() const        { return alarmText(event()); }
 	private:
 		QString             alarmText(const KAEvent&) const;
-		QString             alarmTimeText() const;
+		QString             alarmTimeText(const DateTime&) const;
 		QString             timeToAlarmText(const QDateTime& now) const;
 
 		QString             mDateTimeOrder;     // controls ordering of date/time column

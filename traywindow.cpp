@@ -227,7 +227,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 		if (!event.expired()  &&  event.action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
-			DateTime dateTime = event.nextDateTime();
+			DateTime dateTime = event.nextDateTime(false);
 			if (dateTime.date() > now.date())
 			{
 				// Ignore alarms after tomorrow at the current clock time

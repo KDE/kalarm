@@ -262,15 +262,15 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 {
 	setLastColumnText();     // set the message column text
 
+	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime(false);
 	if (parent->timeColumn() >= 0)
-		setText(parent->timeColumn(), alarmTimeText());
+		setText(parent->timeColumn(), alarmTimeText(dateTime));
 	if (parent->timeToColumn() >= 0)
 	{
 		QString tta = timeToAlarmText(now);
 		setText(parent->timeToColumn(), tta);
 		mTimeToAlarmShown = !tta.isNull();
 	}
-	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime();
 	QTime t = dateTime.time();
 	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                           t.hour(), t.minute());
@@ -360,9 +360,8 @@ QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfSt
 /******************************************************************************
 *  Return the alarm time text in the form "date time".
 */
-QString AlarmListViewItem::alarmTimeText() const
+QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 {
-	DateTime dateTime = event().expired() ? event().startDateTime() : event().nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
 	if (!dateTime.isDateOnly())
 	{
@@ -378,8 +377,10 @@ QString AlarmListViewItem::alarmTimeText() const
 QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
 	if (event().expired())
+{kdDebug(5950)<<" --- timeToAlarmText(): expired\n";
 		return QString::null;
-	DateTime dateTime = event().nextDateTime();
+}
+	DateTime dateTime = event().nextDateTime(false);
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
@@ -387,7 +388,9 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	}
 	int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
 	if (mins < 0)
+{kdDebug(5950)<<" --- timeToAlarmText(): past\n";
 		return QString::null;
+}
 	char minutes[3] = "00";
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
@@ -416,6 +419,7 @@ void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDispla
 	else
 	{
 		QString tta = timeToAlarmText(now);
+kdDebug(5950)<<"---updateTimeToAlarm(): "<<tta<<endl;
 		if (forceDisplay  ||  tta != text(alarmListView()->timeToColumn()))
 			setText(alarmListView()->timeToColumn(), tta);
 		mTimeToAlarmShown = !tta.isNull();
