@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.0.1 --- 4 Jan 2004 ===
+Fix failure to see alarms if KAlarm is reactivated while restoring session.
+
 === Version 1.0.0 --- 7 Dec 2003 ===
 Allow entered start date for timed recurrence events to be earlier than now.
 Prevent attempted entry of recurrence end date earlier than start date or today.
