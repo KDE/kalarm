@@ -33,6 +33,8 @@
 #include "alarmevent.h"
 #include "datetime.h"
 
+class QButton;
+class QButtonGroup;
 class QGroupBox;
 class QMultiLineEdit;
 class QComboBox;
@@ -93,20 +95,22 @@ class EditAlarmDlg : public KDialogBase
 	private:
 		KAlarmEvent::Action getAlarmType() const;
 		int                 getAlarmFlags() const;
-		bool                checkText(QString& result, bool showErrorMessage = true);
+		bool                checkText(QString& result, bool showErrorMessage = true) const;
 		void                setSoundPicker();
 		bool                checkEmailData();
 
 		void                initDisplayAlarms(QWidget* parent);
 		void                initCommand(QWidget* parent);
 		void                initEmail(QWidget* parent);
-		void                saveState();
+		void                saveState(const KAlarmEvent*);
+		bool                stateChanged() const;
 
 		int               mMainPageIndex;
 		int               mRecurPageIndex;
 		bool              mRecurPageShown;     // true once the recurrence tab has been displayed
 		bool              mRecurSetEndDate;    // adjust end date/time when recurrence tab is displayed
 
+		QButtonGroup*     mActionGroup;
 		RadioButton*      mMessageRadio;
 		RadioButton*      mCommandRadio;
 		RadioButton*      mFileRadio;
@@ -122,6 +126,8 @@ class EditAlarmDlg : public KDialogBase
 		FontColourButton* mFontColourButton;
 		ColourCombo*      mBgColourChoose;
 		Reminder*         mReminder;
+		bool              mReminderDeferral;
+		bool              mReminderArchived;
 		// Text message alarm widgets
 		QMultiLineEdit*   mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
@@ -158,15 +164,14 @@ class EditAlarmDlg : public KDialogBase
 		bool              mReadOnly;           // the dialog is read only
 
 		// Initial state of all controls
-		RadioButton*      mSavedTypeRadio;      // mMessageRadio, etc
+		KAlarmEvent*      mSavedEvent;
+		QButton*          mSavedTypeRadio;      // mMessageRadio, etc
 		bool              mSavedBeep;           // mSoundPicker beep status
 		bool              mSavedSoundFile;      // mSoundPicker sound file
 		bool              mSavedConfirmAck;     // mConfirmAck status
 		QFont             mSavedFont;           // mFontColourButton font
 		QColor            mSavedBgColour;       // mBgColourChoose selection
-		bool              mSavedReminder;       // mReminder status
-		int               mSavedReminderCount;  // mReminderCount value
-		int               mSavedReminderUnits;  // mReminderUnits selection
+		int               mSavedReminder;       // mReminder value
 		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
 		QString           mSavedEmailTo;        // mEmailToEdit value
 		QString           mSavedEmailSubject;   // mEmailSubjectEdit value
@@ -174,6 +179,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              mSavedEmailBcc;       // mEmailBcc status
 		DateTime          mSavedDateTime;       // mTimeWidget value
 		bool              mSavedLateCancel;     // mLateCancel status
+		int               mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
 };
 
 
