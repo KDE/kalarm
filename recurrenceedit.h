@@ -23,7 +23,7 @@
     As a special exception, permission is given to link this program
     with any edition of Qt, and distribute the resulting executable,
     without including the source code for Qt in the source distribution.
-*/
+ */
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
@@ -44,47 +44,40 @@ class KAlarmEvent;
 using namespace KCal;
 
 
-class RecurrenceEdit : public QWidget
+class RecurrenceEdit : public QObject
 {
 		Q_OBJECT
 	public:
-		enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
+		enum RepeatType { SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
-		RecurrenceEdit (const QString& groupBoxTitle, QWidget* parent = 0L, const char* name = 0L);
+		RecurrenceEdit(QFrame* parent, const char* name = 0L);
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */
 		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
-		void          set(const KAlarmEvent&, bool repeatAtLogin);
+		void          set(const KAlarmEvent&);
 		/** Write event settings to event object */
-		void          writeEvent(KAlarmEvent&);
+		void          updateEvent(KAlarmEvent&);
 		bool          checkData(const QDateTime& startDateTime) const;
-		RepeatType    getRepeatType() const;
-		bool          repeatAtLogin() const    { return repeatAtLoginRadio->isOn(); }
-		bool          isSmallSize() const      { return (!recurrenceFrame || recurrenceFrame->isHidden()); }
-		int           noRecurHeight() const    { return noRepeatSize.height(); }
-		int           heightVariation() const  { return recurrenceHeight; }
-		virtual QSize sizeHint() const;
-		virtual QSize minimumSizeHint() const;
+		RepeatType    repeatType() const                    { return ruleButtonType; }
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 
 	signals:
 		void          typeChanged(int recurType);   // returns a RepeatType value
-		void          resized(QSize old, QSize New);
 
 	protected slots:
-		void          repeatTypeClicked(int);
 		void          periodClicked(int);
 		void          monthlyClicked(int);
 		void          yearlyClicked(int);
 		void          disableRange(bool);
+		void          rangeToggled(bool);
 		void          enableDurationRange(bool);
 		void          enableDateRange(bool);
 
-	protected:
+	private:
 		void          unsetAllCheckboxes();
 		void          checkDay(int day);
 		void          getCheckedDays(QBitArray& rDays);
@@ -97,25 +90,13 @@ class RecurrenceEdit : public QWidget
 		void          initMonthly();
 		void          initYearly();
 
-		virtual void  resizeEvent(QResizeEvent*);
-
-	private:
-		QSize         noRepeatSize;
-		int           recurrenceWidth;
-		int           recurrenceHeight;
-		QFrame*       recurrenceFrame;
-		/* main rule box and choices. */
-		QGroupBox*    ruleGroupBox;
+		// Main rule box and choices
 		QGroupBox*    recurGroup;
 		QFrame*       ruleFrame;
 		QWidgetStack* ruleStack;
 
-		ButtonGroup*  repeatButtonGroup;
-		QRadioButton* noneRadio;
-		QRadioButton* recurRadio;
-		QRadioButton* repeatAtLoginRadio;
-
 		ButtonGroup*  ruleButtonGroup;
+		QLabel*       recurEveryLabel;
 		QRadioButton* subdailyButton;
 		QRadioButton* dailyButton;
 		QRadioButton* weeklyButton;
@@ -132,13 +113,14 @@ class RecurrenceEdit : public QWidget
 		QSpinBox*     recurFrequency;
 		TimeSpinBox*  recurHourMinFrequency;
 
+		// Rules without choices
 		QFrame*       noneFrame;
 
-		/* weekly rule choices */
+		// Weekly rule choices
 		QFrame*       weeklyFrame;
 		QCheckBox*    dayBox[7];
 
-		/* monthly rule choices */
+		// Monthly rule choices
 		QFrame*       monthlyFrame;
 		ButtonGroup*  monthlyButtonGroup;
 		QRadioButton* onNthDayButton;
@@ -149,7 +131,7 @@ class RecurrenceEdit : public QWidget
 		int           onNthDayButtonId;
 		int           onNthTypeOfDayButtonId;
 
-		/* yearly rule choices */
+		// Yearly rule choices
 		QFrame*       yearlyFrame;
 		ButtonGroup*  yearlyButtonGroup;
 		QRadioButton* yearMonthButton;
@@ -165,7 +147,7 @@ class RecurrenceEdit : public QWidget
 //		int           yearDayButtonId;
 		int           yearlyOnNthTypeOfDayButtonId;
 
-		/* range stuff */
+		// Range
 		QButtonGroup* rangeButtonGroup;
 		QRadioButton* noEndDateButton;
 		QRadioButton* repeatCountButton;
@@ -175,26 +157,9 @@ class RecurrenceEdit : public QWidget
 		DateSpinBox*  endDateEdit;
 		TimeSpinBox*  endTimeEdit;
 
-		// current start date and time
+		// Current start date and time
 		QDateTime     currStartDateTime;
 		bool          noEmitTypeChanged;    // suppress typeChanged() signal
-};
-
-
-
-class ButtonGroup : public QButtonGroup
-{
-		Q_OBJECT
-	public:
-		ButtonGroup(QWidget* parent, const char* name = 0L)  : QButtonGroup(parent, name) { }
-		ButtonGroup(int strips, Qt::Orientation, QWidget* parent, const char* name = 0L);
-		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit clicked(id); }
-#if KDE_VERSION < 290
-		void setInsideMargin(int) { }
-		void addWidget(QWidget*, int stretch = 0, int alignment = 0);
-	private:
-		int  defaultAlignment;
-#endif
 };
 
 #endif // RECURRENCEEDIT_H

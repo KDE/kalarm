@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef DATETIME_H
@@ -38,7 +42,8 @@ class AlarmTimeWidget : public QWidget
 		enum {       // 'mode' values for constructor. May be OR'ed together.
 			AT_TIME      = 0x00,   // "At ..."
 			DEFER_TIME   = 0x01,   // "Defer to ..."
-			DEFER_BUTTON = 0x02    // with Defer... button
+			DEFER_BUTTON = 0x02,   // with Defer... button
+			NARROW       = 0x04    // make a narrow widget
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
