@@ -102,6 +102,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, bool def
 	{
 		// Defer button
 		QPushButton* deferButton = new QPushButton(i18n("&Defer"), page);
+		deferButton->setFixedSize(deferButton->sizeHint());
 		connect(deferButton, SIGNAL(clicked()), this, SLOT(slotDefer()));
 		QWhatsThis::add(deferButton, i18n("Defer the alarm until the specified time."));
 		grid->addWidget(deferButton, 1, 0, AlignLeft);
