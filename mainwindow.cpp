@@ -308,7 +308,7 @@ void AlarmListView::clear()
 */
 void AlarmListView::refresh()
 {
-	QList<Event> messages = theApp()->getCalendar().getAllEvents();
+	QPtrList<Event> messages = theApp()->getCalendar().getAllEvents();
 	clear();
 	for (Event* msg = messages.first();  msg;  msg = messages.next())
 		addEntry(static_cast<const MessageEvent*>(msg));

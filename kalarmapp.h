@@ -45,7 +45,7 @@ class AlarmCalendar
 		bool              save()                            { return save(localFile); }
 		void              close();
 		MessageEvent*     getEvent(const QString& uniqueID) { return static_cast<MessageEvent*>(calendar->getEvent(uniqueID)); }
-		QList<Event>      getAllEvents()                    { return calendar->getAllEvents(); }
+		QPtrList<Event>      getAllEvents()                    { return calendar->getAllEvents(); }
 		void              addEvent(const MessageEvent* e)   { calendar->addEvent(const_cast<MessageEvent*>(e)); }
 		void              deleteEvent(MessageEvent* e)      { calendar->deleteEvent(e); }
 		bool              isOpen() const                    { return !!calendar; }
