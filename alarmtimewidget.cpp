@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -267,8 +267,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt, bool setMinimum)
 {
 	if (dt.date().isValid())
 	{
-		QTime t = dt.time();
-		mTimeEdit->setValue(t.hour()*60 + t.minute());
+		mTimeEdit->setTime(dt.time());
 		mDateEdit->setDate(dt.date());
 		dateTimeChanged();     // update the delay time edit box
 	}
@@ -420,7 +419,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 		bool blockedD = mDateEdit->signalsBlocked();
 		mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
 		mDateEdit->blockSignals(true);
-		mTimeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
+		mTimeEdit->setTime(dt.time());
 		mDateEdit->setDate(dt.date());
 		mTimeEdit->blockSignals(blockedT);
 		mDateEdit->blockSignals(blockedD);
