@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 0.9.7 --- 21 Nov 2003 ===
+Fix memory leak when sending emails with attachments.
+Fix error sending emails with very small attachments.
+
 === Version 0.9.6 --- 2 Nov 2003 ===
 Add option to choose foreground colour for alarm messages.
 Create new alarm by dragging KMail email onto main window or system tray icon.

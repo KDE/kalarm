@@ -1,7 +1,7 @@
 /*
  *  kalarm.h  -  global header file
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef KALARM_H
@@ -30,7 +26,7 @@
 #include <config.h>
 #endif
 
-#define KALARM_VERSION "0.9.6"
+#define KALARM_VERSION "0.9.7"
 
 #include <kdeversion.h>
 extern int  marginKDE2;   // KDE2 compatibility
