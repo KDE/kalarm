@@ -270,17 +270,22 @@ void KAlarmEvent::set(const Event& event)
 				mDateTime   = alTime;
 				mActionType = data.action;
 				mText = (mActionType == T_COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
-				if (data.action == T_MESSAGE)
+				switch (data.action)
 				{
-					mFont        = data.font;
-					mDefaultFont = data.defaultFont;
-					mBgColour    = data.bgColour;
-				}
-				else if (data.action == T_EMAIL)
-				{
-					mEmailAddresses   = data.emailAddresses;
-					mEmailSubject     = data.emailSubject;
-					mEmailAttachments = data.emailAttachments;
+					case T_MESSAGE:
+						mFont        = data.font;
+						mDefaultFont = data.defaultFont;
+						// fall through to T_FILE
+					case T_FILE:
+						mBgColour    = data.bgColour;
+						break;
+					case T_EMAIL:
+						mEmailAddresses   = data.emailAddresses;
+						mEmailSubject     = data.emailSubject;
+						mEmailAttachments = data.emailAttachments;
+						break;
+					default:
+						break;
 				}
 				set = true;
 			}
@@ -788,7 +793,11 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStrin
 	{
 		case T_FILE:
 			alltypes += FILE_TYPE;
-			// fall through to T_MESSAGE
+			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
+			              QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
+			                                             .arg(QString::null)
+			                                             .arg(QString::null));
+			break;
 		case T_MESSAGE:
 			alarm->setDisplayAlarm(mText);
 			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
