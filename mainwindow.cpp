@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -248,9 +244,7 @@ void KAlarmMainWindow::initActions()
 
 	KMenuBar* menu = menuBar();
 	KPopupMenu* submenu = new KPopupMenu(this, "file");
-#if KDE_VERSION >= 290
 	actBirthday->plug(submenu);
-#endif
 	menu->insertItem(i18n("&File"), submenu);
 	actionQuit->plug(submenu);
 

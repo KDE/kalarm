@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -33,16 +29,11 @@
 
 #include <klistview.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <kconfig.h>
-#if KDE_VERSION >= 290
+#include <kmessagebox.h>
 #include <kabc/addressbook.h>
 #include <kabc/stdaddressbook.h>
-#else
-#include <kabapi.h>
-#include <addressbook.h>
-#include <kglobal.h>
-#include <kmessagebox.h>
-#endif
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -210,75 +201,44 @@ void BirthdayDlg::updateSelectionList()
 //	mAddresseeList->setUpdatesEnabled(false);
 
 	// Fetch all birthdays from the address book
-#if KDE_VERSION >= 290
 	mAddressBook = KABC::StdAddressBook::self();
-	for (KABC::AddressBook::Iterator it = mAddressBook->begin();  it != mAddressBook->end();  ++it)
-	{
-		const KABC::Addressee& addressee = *it;
-		if (addressee.birthday().isValid())
-		{
-			// Create a list entry for this birthday
-			QDate birthday = addressee.birthday().date();
-			QString name = addressee.nickName();
-			if (name.isEmpty())
-				name = addressee.realName();
-#else
-	bool err = false;
-	KabAPI addrDialog;
-	if (addrDialog.init() != AddressBook::NoError)
-		err = true;
+	if (!mAddressBook)
+		KMessageBox::error(this, i18n("Error reading address book"));
 	else
 	{
-		AddressBook* addrBook = addrDialog.addressbook();
-		std::list<AddressBook::Entry> entries;
-		AddressBook::ErrorCode errcode = addrBook->getEntries(entries);
-		if (errcode != AddressBook::NoError  &&  errcode != AddressBook::NoEntry)
-			err = true;
-		else if (errcode != AddressBook::NoEntry)
+		for (KABC::AddressBook::ConstIterator abit = mAddressBook->begin();  abit != mAddressBook->end();  ++abit)
 		{
-kdDebug()<<"BirthdayDlg: iterating\n";
-			for (std::list<AddressBook::Entry>::iterator it = entries.begin();  it != entries.end();  ++it)
+			const KABC::Addressee& addressee = *abit;
+			if (addressee.birthday().isValid())
 			{
-kdDebug()<<"BirthdayDlg: name="<<it->firstname<<" "<<it->lastname<<endl;
-kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
-				if (it->birthday.isValid())
+				// Create a list entry for this birthday
+				QDate birthday = addressee.birthday().date();
+				QString name = addressee.nickName();
+				if (name.isEmpty())
+					name = addressee.realName();
+				// Check if the birthday already has an alarm
+				QString text = mPrefixText + name + mSuffixText;
+				bool alarmExists = (messageList.find(text) != messageList.end());
+				// Check if the birthday is already in the selection list
+				bool inSelectionList = false;
+				AddresseeItem* item = 0;
+				for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
 				{
-					// Create a list entry for this birthday
-					QDate birthday = it->birthday;
-					QString name;
-					addrBook->literalName(*it, name);
-#endif
-			// Check if the birthday already has an alarm
-			QString text = mPrefixText + name + mSuffixText;
-			bool alarmExists = (messageList.find(text) != messageList.end());
-			// Check if the birthday is already in the selection list
-			bool inSelectionList = false;
-			AddresseeItem* item = 0;
-			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
-			{
-				item = dynamic_cast<AddresseeItem*>(qitem);
-				if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
-				{
-					inSelectionList = true;
-					break;
+					item = dynamic_cast<AddresseeItem*>(qitem);
+					if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
+					{
+						inSelectionList = true;
+						break;
+					}
 				}
-			}
 
-			if (alarmExists  &&  inSelectionList)
-				delete item;     // alarm exists, so remove from selection list
-			else if (!alarmExists  &&  !inSelectionList)
-				new AddresseeItem(mAddresseeList, name, birthday);   // add to list
-#if KDE_VERSION >= 290
-		}
-	}
-#else
-				}
+				if (alarmExists  &&  inSelectionList)
+					delete item;     // alarm exists, so remove from selection list
+				else if (!alarmExists  &&  !inSelectionList)
+					new AddresseeItem(mAddresseeList, name, birthday);   // add to list
 			}
 		}
 	}
-	if (err)
-		KMessageBox::error(this, i18n("Unable to open address book"));
-#endif
 //	mAddresseeList->setUpdatesEnabled(true);
 
 	// Enable/disable OK button according to whether anything is currently selected
