@@ -941,7 +941,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 */
 void MessageWin::checkDeferralLimit()
 {
-	if (!mDeferButton)
+	if (!mDeferButton  ||  !mDeferLimit.isValid())
 		return;
 	int n = QDate::currentDate().daysTo(mDeferLimit.date());
 	if (n > 0)
