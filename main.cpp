@@ -79,6 +79,8 @@ static KCmdLineOptions options[] =
 	{ "r", 0, 0 },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (including initial occasion)"), 0 },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
+	{ "s", 0, 0 },
+	{ "speak", I18N_NOOP("Speak the message when it is displayed"), 0 },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
 	{ "S", 0, 0 },
 	{ "subject ", I18N_NOOP("Email subject line"), 0 },
@@ -102,7 +104,7 @@ int main(int argc, char *argv[])
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
 		I18N_NOOP("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
-		"(c) 2001 - 2004, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
+		"(c) 2001 - 2005, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and

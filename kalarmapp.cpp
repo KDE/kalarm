@@ -538,6 +538,8 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					if (args->isSet("beep"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
+					if (args->isSet("speak"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--speak")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
 					if (args->isSet("volume"))
 					{
@@ -550,7 +552,13 @@ int KAlarmApp::newInstance()
 				}
 				else if (args->isSet("volume"))
 					USAGE(i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--volume")).arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
-
+				if (args->isSet("speak"))
+				{
+					if (args->isSet("beep"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1("--speak")))
+					if (!mSpeechEnabled)
+						USAGE(i18n("%1 requires speech synthesis to be configured using KTTSD").arg(QString::fromLatin1("--speak")))
+				}
 				int reminderMinutes = 0;
 				bool onceOnly = args->isSet("reminder-once");
 				if (args->isSet("reminder")  ||  onceOnly)
@@ -601,6 +609,8 @@ int KAlarmApp::newInstance()
 					flags |= KAEvent::AUTO_CLOSE;
 				if (args->isSet("beep"))
 					flags |= KAEvent::BEEP;
+				if (args->isSet("speak"))
+					flags |= KAEvent::SPEAK;
 				if (args->isSet("disable"))
 					flags |= KAEvent::DISABLED;
 				if (audioRepeat)
@@ -663,6 +673,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--reminder ");
 				if (args->isSet("reminder-once"))
 					usage += QString::fromLatin1("--reminder-once ");
+				if (args->isSet("speak"))
+					usage += QString::fromLatin1("--speak ");
 				if (args->isSet("subject"))
 					usage += QString::fromLatin1("--subject ");
 				if (args->isSet("time"))
