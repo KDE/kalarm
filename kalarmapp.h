@@ -146,6 +146,7 @@ class KAlarmApp : public KUniqueApplication
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
 		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
 		ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0);
+		QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&);
 		void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
 
 		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance

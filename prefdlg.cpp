@@ -70,12 +70,15 @@
 // Command strings for executing commands in different types of terminal windows.
 // %t = window title parameter
 // %c = command to execute in terminal
+// %w = command to execute in terminal, with 'sleep 86400' appended
+// %C = temporary command file to execute in terminal
+// %W = temporary command file to execute in terminal, with 'sleep 86400' appended
 static QString xtermCommands[] = {
 	QString::fromLatin1("xterm -sb -hold -title %t -e %c"),
-	QString::fromLatin1("konsole --noclose -T %t -e %c"),
-	QString::fromLatin1("gnome-terminal -t %t -x \"sh -c %c; wait\""),
-	QString::fromLatin1("eterm --pause -T %t -e %c"),
-	QString::fromLatin1("rxvt -title %t -e \"sh -c %c; wait\""),
+	QString::fromLatin1("konsole --noclose -T %t -e ${SHELL:-sh} -c %c"),
+	QString::fromLatin1("gnome-terminal -t %t -e %W"),
+	QString::fromLatin1("Eterm --pause -T %t -e %C"),
+	QString::fromLatin1("rxvt -title %t -e ${SHELL:-sh} -c %w"),
 	QString::null       // end of list indicator - don't change!
 };
 
@@ -383,18 +386,25 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mXtermType = new QButtonGroup(group);
 	mXtermType->hide();
 	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Check to execute command alarms in a terminal window by '%1'");
+	int index = 0;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
 		int i = cmd.find(' ');    // find the end of the terminal window name
 		QString term = cmd.left(i > 0 ? i : 1000);
+		if (KStandardDirs::findExe(term).isEmpty())
+			continue;
 		radio = new QRadioButton(term, group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
 		cmd.replace("%t", progname);
 		cmd.replace("%c", "<command>");
+		cmd.replace("%w", "<command; sleep>");
+		cmd.replace("%C", "[command]");
+		cmd.replace("%W", "[command; sleep]");
 		QWhatsThis::add(radio, whatsThis.arg(cmd));
-		grid->addWidget(radio, (row = mXtermCount/3 + 1), mXtermCount % 3, Qt::AlignAuto);
+		grid->addWidget(radio, (row = index/3 + 1), index % 3, Qt::AlignAuto);
+		++index;
 	}
 
 	box = new QHBox(group);
@@ -406,8 +416,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mXtermCommand = new QLineEdit(box);
 	QWhatsThis::add(box,
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
-	           "Use '%c' to indicate where the alarm's command string should be inserted; "
-	           "otherwise, the alarm's command string will be appended."));
+	           "By default the alarm's command string will be appended to what you enter here. "
+	           "See the %1 Handbook for details of special codes to tailor the command line.").arg(progname));
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
@@ -431,7 +441,7 @@ void MiscPrefTab::restore()
 	int id = 0;
 	for ( ;  id < mXtermCount;  ++id)
 	{
-		if (xtermCmd == xtermCommands[id])
+		if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
 			break;
 	}
 	mXtermType->setButton(id);

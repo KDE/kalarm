@@ -1606,30 +1606,15 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			{
 				// Store the command script in a temporary file for execution
 				kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)" << endl;
-				bool err = true;
-				KTempFile tmpFile(QString::null, QString::null, 0700);
-				tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
-				QTextStream* stream = tmpFile.textStream();
-				if (!stream)
-					kdError(5950) << "KAlarmApp::execAlarm(): Unable to create a temporary script file" << endl;
-				else
-				{
-					*stream << command;
-					tmpFile.close();
-					if (tmpFile.status())
-						kdError(5950) << "KAlarmApp::execAlarm(): Error " << tmpFile.status() << " writing to temporary script file" << endl;
-					else
-					{
-						err = false;
-						result = doShellCommand(tmpFile.name(), event, &alarm, (flags | ProcData::TEMP_FILE));
-					}
-				}
-				if (err)
+				QString tmpfile = createTempScriptFile(command, false, event, alarm);
+				if (tmpfile.isEmpty())
 				{
 					QStringList errmsgs(i18n("Error creating temporary script file"));
 					(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
 					result = 0;
 				}
+				else
+					result = doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE));
 			}
 			else
 			{
@@ -1679,13 +1664,41 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		// Execute the command in a terminal window.
 		cmd = Preferences::instance()->cmdXTermCommand();
 		cmd.replace("%t", aboutData()->programName());     // set the terminal window title
-		// Set the command to execute.
-		// Put it in quotes in case it contains characters such as [>|;].
-		QString exec = KShellProcess::quote(command);
-		if (cmd.find("%c") >= 0)
-			cmd.replace("%c", exec);    // %c indicates where to insert the command string
+		if (cmd.find("%C") >= 0)
+		{
+			// Execute the command from a temporary script file
+			QString tmpfile = createTempScriptFile(command, true, event, *alarm);
+			if (tmpfile.isEmpty())
+				return 0;
+			cmd.replace("%C", tmpfile);    // %C indicates where to insert the command
+		}
+		else if (cmd.find("%W") >= 0)
+		{
+			// Execute the command from a temporary script file,
+			// with a sleep after the command is executed
+			QString tmpfile = createTempScriptFile(command + QString::fromLatin1("\nsleep 86400\n"), true, event, *alarm);
+			if (tmpfile.isEmpty())
+				return 0;
+			cmd.replace("%W", tmpfile);    // %w indicates where to insert the command
+#warning Delete temporary file after execution
+		}
+		else if (cmd.find("%w") >= 0)
+		{
+			// Append a sleep to the command.
+			// Quote the command in case it contains characters such as [>|;].
+			QString exec = KShellProcess::quote(command + QString::fromLatin1("; sleep 86400"));
+			cmd.replace("%w", exec);    // %w indicates where to insert the command string
+		}
 		else
-			cmd.append(exec);           // otherwise, simply append the command string
+		{
+			// Set the command to execute.
+			// Put it in quotes in case it contains characters such as [>|;].
+			QString exec = KShellProcess::quote(command);
+			if (cmd.find("%c") >= 0)
+				cmd.replace("%c", exec);    // %c indicates where to insert the command string
+			else
+				cmd.append(exec);           // otherwise, simply append the command string
+		}
 	}
 	else
 		cmd = command;
@@ -1701,6 +1714,34 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	commandErrorMsg(proc, event, alarm, flags);
 	mCommandProcesses.removeRef(pd);
 	return 0;
+}
+
+/******************************************************************************
+* Create a temporary script file containing the specified command string.
+* Reply = path of temporary file, or null string if error.
+*/
+QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm)
+{
+	KTempFile tmpFile(QString::null, QString::null, 0700);
+	tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
+	QTextStream* stream = tmpFile.textStream();
+	if (!stream)
+		kdError(5950) << "KAlarmApp::createTempScript(): Unable to create a temporary script file" << endl;
+	else
+	{
+		if (insertShell)
+			;
+		*stream << command;
+		tmpFile.close();
+		if (tmpFile.status())
+			kdError(5950) << "KAlarmApp::createTempScript(): Error " << tmpFile.status() << " writing to temporary script file" << endl;
+		else
+			return tmpFile.name();
+	}
+
+	QStringList errmsgs(i18n("Error creating temporary script file"));
+	(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+	return QString::null;
 }
 
 /******************************************************************************
