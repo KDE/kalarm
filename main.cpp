@@ -31,32 +31,37 @@
 
 #define PROGRAM_NAME "kalarm"
 
+QCString execArguments;    // argument to --exec option
+
 static KCmdLineOptions options[] =
 {
 	{ "b", 0L, 0L },
 	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
+	{ "colour", 0L, 0L },
 	{ "c", 0L, 0L },
-	{ "color", 0L, 0L },
-	{ "colour <colour>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0L },
+	{ "color <color>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0L },
 	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0L },
-	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0L },
-	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0L },
+	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0L },
+	{ "e", 0L, 0L },
+	{ "exec <commandline>", I18N_NOOP("Execute a shell command line"), 0L },
 	{ "f", 0L, 0L },
 	{ "file <url>", I18N_NOOP("File to display"), 0L },
-	{ "handleEvent <eventID>", I18N_NOOP("Display or cancel message with the specified event ID"), 0L },
+	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0L },
 	{ "i", 0L, 0L },
-	{ "interval <minutes>", I18N_NOOP("Interval between display of repeated alarms"), 0L },
+	{ "interval <minutes>", I18N_NOOP("Interval between trigger of repeated alarms"), 0L },
 	{ "l", 0L, 0L },
-	{ "late-cancel", I18N_NOOP("Cancel message if it cannot be displayed on time"), 0L },
+	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be displayed on time"), 0L },
 	{ "L", 0L, 0L },
-	{ "login", I18N_NOOP("Repeat message at every login"), 0L },
+	{ "login", I18N_NOOP("Repeat alarm at every login"), 0L },
 	{ "r", 0L, 0L },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
-	{ "reset", I18N_NOOP("Reset the message scheduling daemon"), 0L },
-	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0L },
+	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0L },
+	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0L },
 	{ "t", 0L, 0L },
-	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
+	{ "time <time>", I18N_NOOP("Trigger alarm at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
 	{ "tray", I18N_NOOP("Display system tray icon"), 0L },
+	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0L },
+	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0L },
 	{ "+[message]", I18N_NOOP("Message text to display"), 0L },
 	{ 0L, 0L, 0L }
 };
@@ -68,17 +73,36 @@ int main(int argc, char *argv[])
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
 		"       " PROGRAM_NAME " [-bcilLrt] -f URL\n"
 		"       " PROGRAM_NAME " [-bcilLrt] message\n"
+		"       " PROGRAM_NAME " [-ilLrt] -e commandline\n"
 		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
-		"       " PROGRAM_NAME " --displayEvent eventID [--calendarURL url]\n"
+		"       " PROGRAM_NAME " --triggerEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --handleEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " [generic_options]\n\n"
-		"KDE alarm message scheduler"),
+		"KDE personal alarm message and command scheduler"),
 		KAboutData::License_GPL,
 		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux",
 		"software@astrojar.org.uk");
 	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
+	// Fetch all command line options/arguments after --exec and concatenate
+	// them into a single argument. Then change the leading '-'.
+	// This is necessary because the "!" indicator in the 'options'
+	// array above doesn't work (on KDE2, at least)
+	for (int i = 0;  i < argc;  ++i)
+	{
+		if (!strcmp(argv[i], "-e") || !strcmp(argv[i], "--exec"))
+		{
+			while (++i < argc)
+			{
+				execArguments += argv[i];
+				if (i < argc - 1)
+					execArguments += ' ';
+				argv[i][0] = 'x';     // in case it's an option
+			}
+			break;
+		}
+	}
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();

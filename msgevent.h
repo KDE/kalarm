@@ -23,17 +23,13 @@
 
 #include <libkcal/event.h>
 
-#include <kapp.h>
-#if KDE_VERSION < 290
-   #define Alarm KOAlarm
-#endif
-
 /*
  * KAlarm events are stored as alarms in the calendar file, as follows:
  * In the alarm object:
  *   next time/date - stored as the alarm time (alarm TRIGGER field)
  *   message text - stored as the alarm description, with prefix TEXT: (alarm DESCRIPTION field)
  *   file name to display text from - stored as the alarm description, with prefix FILE: (alarm DESCRIPTION field)
+ *   command to execute - stored as the alarm description, with prefix CMD: (alarm DESCRIPTION field)
  *   late cancel, repeat at login - stored in prefix to the alarm description (alarm DESCRIPTION field)
  * In the event object:
  *   colour - stored as a hex string prefixed by #, as the first category (event CATEGORIES field)
@@ -45,23 +41,27 @@
 class KAlarmAlarm
 {
 	public:
+		enum Type  { MESSAGE, FILE, COMMAND };
 		KAlarmAlarm()    : mAlarmSeq(-1), mRepeatCount(0), mBeep(false), mRepeatAtLogin(false), mLateCancel(false) { }
 		~KAlarmAlarm()  { }
 		void             set(int flags);
 		bool             valid() const              { return mAlarmSeq > 0; }
+		Type             type() const               { return mType; }
 		int              id() const                 { return mAlarmSeq; }
 		int              sequence() const           { return mAlarmSeq; }
 		const QString&   eventID() const            { return mEventID; }
 		const QDateTime& dateTime() const           { return mDateTime; }
 		QDate            date() const               { return mDateTime.date(); }
 		QTime            time() const               { return mDateTime.time(); }
-		QString          message() const            { return mFile ? QString::null : mMessageOrFile; }
-		QString          fileName() const           { return mFile ? mMessageOrFile : QString::null; }
+		const QString&   cleanText() const          { return mCleanText; }
+		QString          message() const            { return (mType == MESSAGE) ? mCleanText : QString::null; }
+		QString          fileName() const           { return (mType == FILE) ? mCleanText : QString::null; }
+		QString          command() const            { return (mType == COMMAND) ? mCleanText : QString::null; }
+		void             commandArgs(QStringList&) const;
 		const QColor&    colour() const             { return mColour; }
 		int              repeatCount() const        { return mRepeatCount; }
 		int              repeatMinutes() const      { return mRepeatMinutes; }
 		QDateTime        lastDateTime() const       { return mDateTime.addSecs(mRepeatCount * mRepeatMinutes * 60); }
-		bool             messageIsFileName() const  { return mFile; }
 		bool             lateCancel() const         { return mLateCancel; }
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
 		bool             beep() const               { return mBeep; }
@@ -71,15 +71,17 @@ class KAlarmAlarm
 #else
 		void             dumpDebug() const;
 #endif
+		static QString   commandFromArgs(const QStringList&);
+
 		QString          mEventID;          // KCal::Event unique ID
-		QString          mMessageOrFile;    // message text or file URL
+		QString          mCleanText;        // message text, file URL or command
 		QDateTime        mDateTime;         // next time to display the alarm
 		QColor           mColour;           // background colour of alarm message
+		Type             mType;             // message/file/command
 		int              mAlarmSeq;         // sequence number of main alarm
 		int              mRepeatCount;      // number of times to repeat the alarm
 		int              mRepeatMinutes;    // interval (minutes) between repeated alarms
 		bool             mBeep;             // whether to beep when the alarm is displayed
-		bool             mFile;             // mMessageOrFile is a file URL
 		bool             mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool             mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
 };
@@ -96,16 +98,18 @@ class KAlarmEvent
 			REPEAT_AT_LOGIN = 0x04
 		};
 		KAlarmEvent()    : mRevision(0), mMainAlarmID(1), mRepeatCount(0) { }
-		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, bool file, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                                                                  { set(dt, message, c, file, flags, repeatCount, repeatMinutes); }
+		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags, int repeatCount = 0, int repeatMinutes = 0)
+		                                                                  { set(dt, message, c, type, flags, repeatCount, repeatMinutes); }
 		explicit KAlarmEvent(const KCal::Event& e)  { set(e); }
 		~KAlarmEvent()  { }
 		void             set(const KCal::Event&);
-		void             set(const QDateTime& dt, const QString& message, const QColor&, bool file, int flags, int repeatCount = 0, int repeatMinutes = 0);
+		void             set(const QDateTime& dt, const QString& message, const QColor&, KAlarmAlarm::Type, int flags, int repeatCount = 0, int repeatMinutes = 0);
 		void             setMessage(const QDateTime& dt, const QString& message, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-											                 { set(dt, message, c, false, flags, repeatCount, repeatMinutes); }
+											{ set(dt, message, c, KAlarmAlarm::MESSAGE, flags, repeatCount, repeatMinutes); }
 		void             setFileName(const QDateTime& dt, const QString& filename, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-											                 { set(dt, filename, c, true, flags, repeatCount, repeatMinutes); }
+											{ set(dt, filename, c, KAlarmAlarm::FILE, flags, repeatCount, repeatMinutes); }
+		void             setCommand(const QDateTime& dt, const QString& command, int flags, int repeatCount = 0, int repeatMinutes = 0)
+											{ set(dt, command, QColor(), KAlarmAlarm::COMMAND, flags, repeatCount, repeatMinutes); }
 		void             setRepetition(int count, int minutes)   { mRepeatCount = count;  mRepeatMinutes = minutes; }
 		void             updateRepetition(const QDateTime& dt, int count)  { mRepeatCount = count;  mDateTime = dt; }
 		void             setEventID(const QString& id)                     { mEventID = id; }
@@ -118,28 +122,30 @@ class KAlarmEvent
 		KAlarmAlarm      nextAlarm(const KAlarmAlarm&) const;
 		bool             updateEvent(KCal::Event&) const;
 		void             removeAlarm(int alarmID);
-		void             incrementRevision()        { ++mRevision; }
-		void             setUpdated()               { mUpdated = true; }
-		bool             updated() const            { return mUpdated; }
+		void             incrementRevision()          { ++mRevision; }
+		void             setUpdated()                 { mUpdated = true; }
+		bool             updated() const              { return mUpdated; }
 
 		bool             operator==(const KAlarmEvent&);
 		bool             operator!=(const KAlarmEvent& e)  { return !operator==(e); }
-		const QString&   id() const                 { return mEventID; }
-		int              alarmCount() const         { return mAlarmCount; }
-		const QDateTime& dateTime() const           { return mDateTime; }
-		QDate            date() const               { return mDateTime.date(); }
-		QTime            time() const               { return mDateTime.time(); }
-		QString          message() const            { return mFile ? QString::null : mMessageOrFile; }
-		QString          fileName() const           { return mFile ? mMessageOrFile : QString::null; }
-		QString          messageOrFile() const      { return mMessageOrFile; }
-		const QColor&    colour() const             { return mColour; }
-		int              repeatCount() const        { return mRepeatCount; }
-		int              repeatMinutes() const      { return mRepeatMinutes; }
-		QDateTime        lastDateTime() const       { return mDateTime.addSecs(mRepeatCount * mRepeatMinutes * 60); }
-		bool             messageIsFileName() const  { return mFile; }
-		bool             lateCancel() const         { return mLateCancel; }
-		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
-		bool             beep() const               { return mBeep; }
+		KAlarmAlarm::Type type() const                { return mType; }
+		const QString&   id() const                   { return mEventID; }
+		int              alarmCount() const           { return mAlarmCount; }
+		const QDateTime& dateTime() const             { return mDateTime; }
+		QDate            date() const                 { return mDateTime.date(); }
+		QTime            time() const                 { return mDateTime.time(); }
+		const QString&   cleanText() const            { return mCleanText; }
+		QString          message() const              { return (mType == KAlarmAlarm::MESSAGE) ? mCleanText : QString::null; }
+		QString          fileName() const             { return (mType == KAlarmAlarm::FILE) ? mCleanText : QString::null; }
+		QString          command() const              { return (mType == KAlarmAlarm::COMMAND) ? mCleanText : QString::null; }
+		QString          messageFileOrCommand() const { return mCleanText; }
+		const QColor&    colour() const               { return mColour; }
+		int              repeatCount() const          { return mRepeatCount; }
+		int              repeatMinutes() const        { return mRepeatMinutes; }
+		QDateTime        lastDateTime() const         { return mDateTime.addSecs(mRepeatCount * mRepeatMinutes * 60); }
+		bool             lateCancel() const           { return mLateCancel; }
+		bool             repeatAtLogin() const        { return mRepeatAtLogin; }
+		bool             beep() const                 { return mBeep; }
 		int              flags() const;
 #ifdef NDEBUG
 		void             dumpDebug() const  { }
@@ -149,22 +155,22 @@ class KAlarmEvent
 		static const int REPEAT_AT_LOGIN_OFFSET;
 	private:
 
-		QString          mEventID;          // KCal::Event unique ID
-		QString          mMessageOrFile;    // message text or file URL
-		QDateTime        mDateTime;         // next time to display the alarm
-		QDateTime        mRepeatAtLoginDateTime;  // repeat at login time
-		QColor           mColour;           // background colour of alarm message
-		int              mRevision;         // revision number of the original alarm, or 0
-		int              mMainAlarmID;      // sequence number of main alarm
-		int              mRepeatAtLoginAlarmID; // sequence number of repeat-at-login alarm
-		int              mAlarmCount;       // number of alarms
-		int              mRepeatCount;      // number of times to repeat the alarm
-		int              mRepeatMinutes;    // interval (minutes) between repeated alarms
-		bool             mBeep;             // whether to beep when the alarm is displayed
-		bool             mFile;             // mMessageOrFile is a file URL
-		bool             mRepeatAtLogin;    // whether to repeat the alarm at every login
-		bool             mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
-		bool             mUpdated;          // event has been updated but not written to calendar file
+		QString           mEventID;          // KCal::Event unique ID
+		QString           mCleanText;        // message text, file URL or command
+		QDateTime         mDateTime;         // next time to display the alarm
+		QDateTime         mRepeatAtLoginDateTime;  // repeat at login time
+		QColor            mColour;           // background colour of alarm message
+		KAlarmAlarm::Type mType;             // message/file/command
+		int               mRevision;         // revision number of the original alarm, or 0
+		int               mMainAlarmID;      // sequence number of main alarm
+		int               mRepeatAtLoginAlarmID; // sequence number of repeat-at-login alarm
+		int               mAlarmCount;       // number of alarms
+		int               mRepeatCount;      // number of times to repeat the alarm
+		int               mRepeatMinutes;    // interval (minutes) between repeated alarms
+		bool              mBeep;             // whether to beep when the alarm is displayed
+		bool              mRepeatAtLogin;    // whether to repeat the alarm at every login
+		bool              mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
+		bool              mUpdated;          // event has been updated but not written to calendar file
 };
 
 #endif // KALARMEVENT_H

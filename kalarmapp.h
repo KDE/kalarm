@@ -27,9 +27,8 @@ class QDateTime;
 #include <kurl.h>
 class KAction;
 
+#include "msgevent.h"
 class AlarmCalendar;
-class KAlarmEvent;
-class KAlarmAlarm;
 class KAlarmMainWindow;
 class MessageWin;
 class TrayWindow;
@@ -78,23 +77,28 @@ class KAlarmApp : public KUniqueApplication
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
 		bool              isDaemonRunning();
-		bool              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
-		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
-		void              updateMessage(const KAlarmEvent&, KAlarmMainWindow*);
-		void              deleteMessage(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
-		void              rescheduleAlarm(KAlarmEvent&, int alarmID);
-		void              displayMessage(const QString& eventID)        { handleMessage(eventID, EVENT_DISPLAY); }
-		void              deleteMessage(const QString& eventID)         { handleMessage(eventID, EVENT_CANCEL); }
+		void              readDaemonCheckInterval();
 		QSize             readConfigWindowSize(const char* window, const QSize& defaultSize);
 		void              writeConfigWindowSize(const char* window, const QSize&);
 		virtual void      commitData(QSessionManager&);
+
+		bool              addEvent(const KAlarmEvent&, KAlarmMainWindow*);
+		void              modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
+		void              updateEvent(const KAlarmEvent&, KAlarmMainWindow*);
+		void              deleteEvent(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
+		bool              execAlarm(KAlarmEvent&, const KAlarmAlarm&, bool reschedule, bool allowDefer = true);
+		void              rescheduleAlarm(KAlarmEvent&, int alarmID);
+//		void              triggerEvent(const QString& eventID)        { handleEvent(eventID, EVENT_TRIGGER); }
+		void              deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
+		int               maxLateness();
 		// DCOP interface methods
-		bool              scheduleMessage(const QString& message, const QDateTime*, const QColor& bg,
-		                                  int flags, bool file, int repeatCount, int repeatInterval);
-		void              handleMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_HANDLE); }
-		void              displayMessage(const QString& calendarFile, const QString& eventID)   { handleMessage(calendarFile, eventID, EVENT_DISPLAY); }
-		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }
-		static const int          MAX_LATENESS;   // maximum number of seconds late to display a late-cancel alarm
+		bool              scheduleEvent(const QString& text, const QDateTime*, const QColor& bg,
+		                                int flags, KAlarmAlarm::Type, int repeatCount, int repeatInterval);
+		void              handleEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_HANDLE); }
+		void              triggerEvent(const QString& calendarFile, const QString& eventID)   { handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
+		void              deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }
+
+		static int        isTextFile(const KURL&);
 	public slots:
 		void              displayMainWindow();
 		void              slotDaemonPreferences();
@@ -107,8 +111,8 @@ class KAlarmApp : public KUniqueApplication
 		void              toggleAlarmsEnabled();
 		void              slotSettingsChanged();
 	private:
-		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
-		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
+		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
+		enum AlarmFunc { ALARM_TRIGGER, ALARM_CANCEL, ALARM_RESCHEDULE };
 		bool              initCheck(bool calendarOnly = false);
 		void              quitIf(int exitCode);
 		void              setUpDcop();
@@ -116,8 +120,8 @@ class KAlarmApp : public KUniqueApplication
 		void              startDaemon();
 		void              reloadDaemon();
 		void              registerWithDaemon();
-		void              handleMessage(const QString& calendarFile, const QString& eventID, EventFunc);
-		bool              handleMessage(const QString& eventID, EventFunc);
+		void              handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
+		bool              handleEvent(const QString& eventID, EventFunc);
 		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
@@ -130,8 +134,11 @@ class KAlarmApp : public KUniqueApplication
 		ActionAlarmsEnabled*  mActionAlarmEnable;  // action to enable/disable alarms
 		KAction*              mActionPrefs;        // action to display the preferences dialog
 		KAction*              mActionDaemonPrefs;  // action to display the alarm daemon preferences dialog
-		bool                  mDaemonRegistered;   // true if we've registered with alarm daemon
 		Settings*             mSettings;           // program preferences
+		QDateTime             mLastDaemonCheck;    // last time daemon checked alarms before check interval change
+		QDateTime             mNextDaemonCheck;    // next time daemon will check alarms after check interval change
+		int                   mDaemonCheckInterval;// daemon check interval (seconds)
+		bool                  mDaemonRegistered;   // true if we've registered with alarm daemon
 		bool                  mKDEDesktop;         // running on KDE desktop
 		bool                  mDaemonRunning;      // whether the alarm daemon is currently running
 		bool                  mSessionClosingDown; // session manager is closing the application

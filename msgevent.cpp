@@ -1,7 +1,7 @@
 /*
  *  msgevent.cpp  -  the event object for messages
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <qcolor.h>
+#include <qregexp.h>
 #include <kdebug.h>
 
 #include "kalarm.h"
@@ -35,30 +36,37 @@ using namespace KCal;
  * where
  *   SEQNO = sequence number of alarm within the event
  *   FLAGS = C for late-cancel, L for repeat-at-login
- *   TYPE = TEXT or FILE
- *   TEXT = message text or file name/URL
+ *   TYPE = TEXT or FILE or CMD
+ *   TEXT = message text, file name/URL or command
  */
 static const QChar   SEPARATOR        = QChar(';');
 static const QString TEXT_PREFIX      = QString::fromLatin1("TEXT:");
 static const QString FILE_PREFIX      = QString::fromLatin1("FILE:");
+static const QString COMMAND_PREFIX   = QString::fromLatin1("CMD:");
 static const QString LATE_CANCEL_CODE = QString::fromLatin1("C");
 static const QString AT_LOGIN_CODE    = QString::fromLatin1("L");   // subsidiary alarm at every login
 static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
 
-const int KAlarmEvent::REPEAT_AT_LOGIN_OFFSET = 1;
-
 struct AlarmData
 {
-	AlarmData() : file(false), lateCancel(false), repeatAtLogin(false) { }
-	QString   messageOrFile;
-	QDateTime dateTime;
-	int       repeatCount;
-	int       repeatMinutes;
-	bool      file;
-	bool      lateCancel;
-	bool      repeatAtLogin;
+	AlarmData() : type(KAlarmAlarm::MESSAGE), lateCancel(false), repeatAtLogin(false) { }
+	QString           cleanText;
+	QDateTime         dateTime;
+	int               repeatCount;
+	int               repeatMinutes;
+	KAlarmAlarm::Type type;
+	bool              lateCancel;
+	bool              repeatAtLogin;
 };
 typedef QMap<int, AlarmData> AlarmMap;
+
+
+/*=============================================================================
+= Class KAlarmEvent
+= Corresponds to a KCal::Event instance.
+=============================================================================*/
+
+const int KAlarmEvent::REPEAT_AT_LOGIN_OFFSET = 1;
 
 
 void KAlarmEvent::set(const Event& event)
@@ -82,10 +90,10 @@ void KAlarmEvent::set(const Event& event)
 
 	// Extract status from the event's alarms.
 	// First set up defaults.
-	mFile          = false;
+	mType          = KAlarmAlarm::MESSAGE;
 	mLateCancel    = false;
 	mRepeatAtLogin = false;
-	mMessageOrFile = "";
+	mCleanText     = "";
 	mDateTime      = event.dtStart();
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
@@ -129,16 +137,21 @@ void KAlarmEvent::set(const Event& event)
 					break;
 				}
 		}
-		if (txt.find(FILE_PREFIX, i) == i)
+		if (txt.find(TEXT_PREFIX, i) == i)
+			i += TEXT_PREFIX.length();
+		else if (txt.find(FILE_PREFIX, i) == i)
 		{
-			data.file = true;
+			data.type = KAlarmAlarm::FILE;
 			i += FILE_PREFIX.length();
 		}
-		else if (txt.find(TEXT_PREFIX, i) == i)
-			i += TEXT_PREFIX.length();
+		else if (txt.find(COMMAND_PREFIX, i) == i)
+		{
+			data.type = KAlarmAlarm::COMMAND;
+			i += COMMAND_PREFIX.length();
+		}
 		else
 			i = 0;
-		data.messageOrFile = txt.mid(i);
+		data.cleanText     = txt.mid(i);
 		data.dateTime      = alarm->time();
 		data.repeatCount   = alarm->repeatCount();
 		data.repeatMinutes = alarm->snoozeTime();
@@ -167,8 +180,8 @@ void KAlarmEvent::set(const Event& event)
 		// alarm is the only alarm in the event (which shouldn't happen!)
 		if (!data.repeatAtLogin  ||  !set)
 		{
-			mMessageOrFile = data.messageOrFile;
-			mFile          = data.file;
+			mType          = data.type;
+			mCleanText     = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
 			mDateTime      = data.dateTime;
 			mRepeatCount   = data.repeatCount;
 			mRepeatMinutes = data.repeatMinutes;
@@ -180,22 +193,16 @@ void KAlarmEvent::set(const Event& event)
 	mUpdated = false;
 }
 
-void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, bool file, int flags, int repeatCount, int repeatInterval)
+void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, KAlarmAlarm::Type type, int flags, int repeatCount, int repeatInterval)
 {
-	mEventID               = QString::null;
-	mMessageOrFile         = text;
-	mDateTime              = dateTime;
-	mRepeatAtLoginDateTime = QDateTime();
-	mColour                = colour;
-	mRevision              = 0;
-	mMainAlarmID           = 1;
-	mRepeatAtLoginAlarmID  = 0;
-	mAlarmCount            = 1;
-	mRepeatCount           = repeatCount;
-	mRepeatMinutes         = repeatInterval;
-	mFile                  = file;
+	mDateTime      = dateTime;
+	mCleanText     = (mType == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
+	mType          = type;
+	mColour        = colour;
+	mRepeatCount   = repeatCount;
+	mRepeatMinutes = repeatInterval;
 	set(flags);
-	mUpdated               = false;
+	mUpdated = false;
 }
 
 void KAlarmEvent::set(int flags)
@@ -207,16 +214,16 @@ void KAlarmEvent::set(int flags)
 
 bool KAlarmEvent::operator==(const KAlarmEvent& event)
 {
-	return mMessageOrFile        == event.mMessageOrFile
+	return mCleanText            == event.mCleanText
 	&&     mDateTime             == event.mDateTime
 	&&     mColour               == event.mColour
+	&&     mType                 == event.mType
 	&&     mRevision             == event.mRevision
 	&&     mMainAlarmID          == event.mMainAlarmID
 	&&     mRepeatAtLoginAlarmID == event.mRepeatAtLoginAlarmID
 	&&     mRepeatCount          == event.mRepeatCount
 	&&     mRepeatMinutes        == event.mRepeatMinutes
 	&&     mBeep                 == event.mBeep
-	&&     mFile                 == event.mFile
 	&&     mRepeatAtLogin        == event.mRepeatAtLogin
 	&&     mLateCancel           == event.mLateCancel;
 }
@@ -260,7 +267,14 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 	QString suffix;
 	if (mLateCancel)
 		suffix = LATE_CANCEL_CODE;
-	suffix += SEPARATOR + (mFile ? FILE_PREFIX : TEXT_PREFIX) + mMessageOrFile;
+	suffix += SEPARATOR;
+	switch (mType)
+	{
+		case KAlarmAlarm::MESSAGE:  suffix += TEXT_PREFIX;  break;
+		case KAlarmAlarm::FILE:     suffix += FILE_PREFIX;  break;
+		case KAlarmAlarm::COMMAND:  suffix += COMMAND_PREFIX;  break;
+	}
+	suffix += mCleanText;
 	al->setText(QString::number(sequence) + SEPARATOR + suffix);
 	al->setTime(mDateTime);
 	al->setRepeatCount(mRepeatCount);
@@ -273,7 +287,7 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		al->setText(QString::number(sequence + REPEAT_AT_LOGIN_OFFSET)
 		            + SEPARATOR + AT_LOGIN_CODE + suffix);
 		QDateTime dtl = mRepeatAtLoginDateTime.isValid() ? mRepeatAtLoginDateTime
-		                : QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
+		                : QDateTime::currentDateTime();
 		al->setTime(dtl);
 		if (dtl < dt)
 			dt = dtl;
@@ -288,8 +302,8 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 {
 	KAlarmAlarm al;
 	al.mEventID       = mEventID;
-	al.mMessageOrFile = mMessageOrFile;
-	al.mFile          = mFile;
+	al.mCleanText     = mCleanText;
+	al.mType          = mType;
 	al.mColour        = mColour;
 	al.mBeep          = mBeep;
 	if (alarmID == mMainAlarmID)
@@ -341,7 +355,7 @@ void KAlarmEvent::dumpDebug() const
 {
 	kdDebug(5950) << "KAlarmEvent dump:\n";
 	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
-	kdDebug(5950) << "-- mMessageOrFile:" << mMessageOrFile << ":\n";
+	kdDebug(5950) << "-- mCleanText:" << mCleanText << ":\n";
 	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLoginDateTime:" << mRepeatAtLoginDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
@@ -352,7 +366,7 @@ void KAlarmEvent::dumpDebug() const
 	kdDebug(5950) << "-- mRepeatCount:" << mRepeatCount << ":\n";
 	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mFile:" << (mFile ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmEvent dump end\n";
@@ -360,7 +374,10 @@ void KAlarmEvent::dumpDebug() const
 #endif
 
 
-
+/*=============================================================================
+= Class KAlarmAlarm
+= Corresponds to a single KCal::Alarm instance.
+=============================================================================*/
 
 void KAlarmAlarm::set(int flags)
 {
@@ -376,19 +393,105 @@ int KAlarmAlarm::flags() const
 	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0);
 }
 
+// Convert a string to command arguments
+void KAlarmAlarm::commandArgs(QStringList& list) const
+{
+	list.clear();
+	if (mType != COMMAND)
+		return;
+	int imax = mCleanText.length();
+	for (int i = 0;  i < imax;  )
+	{
+		// Find the first non-space
+		if ((i = mCleanText.find(QRegExp("[^\\s]"), i)) < 0)
+			break;
+
+		// Find the end of the next parameter.
+		// Allow for quoted parameters, and also for escaped characters.
+		int j, jmax;
+		QChar quote = mCleanText[i];
+		if (quote == QChar('\'')  ||  quote == QChar('"'))
+		{
+			for (j = i + 1;  j < imax; )
+			{
+				QChar ch = mCleanText[j++];
+				if (ch == quote)
+					break;
+				if (ch == QChar('\\')  &&  j < imax)
+					++j;
+			}
+			jmax = j;
+		}
+		else
+		{
+			for (j = i;  j < imax;  ++j)
+			{
+				QChar ch = mCleanText[j];
+				if (ch.isSpace())
+					break;
+				if (ch == QChar('\\')  &&  j < imax - 1)
+					++j;
+			}
+			jmax = j;
+		}
+		list.append(mCleanText.mid(i, jmax - i));
+		i = j;
+	}
+}
+
+// Convert a command with arguments to a string
+QString KAlarmAlarm::commandFromArgs(const QStringList& list)
+{
+	if (list.isEmpty())
+		return QString("");
+	QString cmd;
+	QStringList::ConstIterator it = list.begin();
+	for ( ;  it != list.end();  ++it)
+	{
+		QString value = *it;
+		if (value.find(QRegExp("\\s")) >= 0)
+		{
+			// Argument has spaces in it, so enclose it in quotes and
+			// escape any quotes within it.
+			const QChar quote('"');
+			cmd += quote;
+			for (unsigned i = 0;  i < value.length();  ++i)
+			{
+				if (value[i] == quote  ||  value[i] == QChar('\\'))
+					cmd += QChar('\\');
+				cmd += value[i];
+			}
+			cmd += quote;
+		}
+		else
+		{
+			// Argument has no spaces in it
+			for (unsigned i = 0;  i < value.length();  ++i)
+			{
+				if (value[i] == QChar('\\'))
+					cmd += QChar('\\');
+				cmd += value[i];
+			}
+		}
+		cmd += QChar(' ');
+	}
+	cmd.truncate(cmd.length() - 1);      // remove the trailing space
+	return cmd;
+}
+
 #ifndef NDEBUG
 void KAlarmAlarm::dumpDebug() const
 {
 	kdDebug(5950) << "KAlarmAlarm dump:\n";
 	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
-	kdDebug(5950) << "-- mMessageOrFile:" << mMessageOrFile << ":\n";
+	kdDebug(5950) << "-- mCleanText:" << mCleanText << ":\n";
 	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
 	kdDebug(5950) << "-- mAlarmSeq:" << mAlarmSeq << ":\n";
 	kdDebug(5950) << "-- mRepeatCount:" << mRepeatCount << ":\n";
 	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mFile:" << (mFile ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmAlarm dump end\n";
