@@ -232,7 +232,7 @@ Preferences::Preferences()
 	mDaemonTrayCheckInterval  = static_cast<int>(config->readUnsignedNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval));
 	if (mDaemonTrayCheckInterval < 1)
 		mDaemonTrayCheckInterval = 1;
-	QCString client           = config->readPathEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
+	QCString client           = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();  // don't use readPathEntry() here (values are hard-coded)
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
 	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
@@ -319,7 +319,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
 	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
-	config->writeEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
+	config->writePathEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
