@@ -34,8 +34,15 @@
 #include <klistview.h>
 #include <klocale.h>
 #include <kconfig.h>
+#if KDE_VERSION >= 290
 #include <kabc/addressbook.h>
 #include <kabc/stdaddressbook.h>
+#else
+#include <kabapi.h>
+#include <addressbook.h>
+#include <kglobal.h>
+#include <kmessagebox.h>
+#endif
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -48,19 +55,21 @@
 #include "prefsettings.h"
 #include "birthdaydlg.moc"
 
-using namespace KABC;
-
 
 class AddresseeItem : public QListViewItem
 {
-  public:
-    enum columns { Name = 0, Birthday = 1 };
-    AddresseeItem(QListView *parent, const Addressee &addressee);
-    Addressee       addressee() const { return mAddressee; }
-    virtual QString key(int column, bool ascending) const;
-  private:
-    Addressee mAddressee;
-    QString   mBirthdayOrder;
+	public:
+		enum columns { NAME = 0, BIRTHDAY = 1 };
+#if KDE_VERSION >= 290
+		AddresseeItem(QListView* parent, const KABC::Addressee&);
+#else
+		AddresseeItem(QListView* parent, AddressBook*, const AddressBook::Entry&);
+#endif
+		QDate birthday() const   { return mBirthday; }
+		virtual QString key(int column, bool ascending) const;
+private:
+		QDate     mBirthday;
+		QString   mBirthdayOrder;
 };
 
 
@@ -122,7 +131,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// How much to advance warning to give
 // Disable until a general warning mechanism is implemented in KAlarm
 	QBoxLayout* layout = new QHBoxLayout(groupLayout);
-	label = new QLabel(i18n("Set &alarm"), group);
+	label = new QLabel(i18n("&Reminder"), group);
 	label->setFixedSize(label->sizeHint());
 label->setEnabled(false);
 	layout->addWidget(label);
@@ -133,7 +142,8 @@ label->setEnabled(false);
 mAdvance->setEnabled(false);
 	label->setBuddy(mAdvance);
 	QWhatsThis::add(mAdvance,
-	      i18n("Enter the number of days before each birthday to set the alarm."));
+	      i18n("Enter the number of days before each birthday to display a reminder."
+	           "This is in addition to the alarm which is displayed on the birthday."));
 	layout->addWidget(mAdvance);
 	label = new QLabel(i18n("days before"), group);
 	label->setFixedSize(label->sizeHint());
@@ -189,19 +199,51 @@ label->setEnabled(false);
 	}
 
 	// Fetch all birthdays from the address book
-	mAddressBook = StdAddressBook::self();
-	for (AddressBook::Iterator it = mAddressBook->begin(); it != mAddressBook->end(); ++it)
+#if KDE_VERSION >= 290
+	mAddressBook = KABC::StdAddressBook::self();
+	for (KABC::AddressBook::Iterator it = mAddressBook->begin(); it != mAddressBook->end(); ++it)
 	{
 		if ((*it).birthday().isValid())
 		{
 			// Create a list entry for this birthday
 			AddresseeItem* item = new AddresseeItem(mAddresseeList, (*it));
 			// Remove the list entry if this birthday already has an alarm
-			QString text = prefix + item->text(AddresseeItem::Name) + suffix;
+			QString text = prefix + item->text(AddresseeItem::NAME) + suffix;
 			if (messageList.find(text) != messageList.end())
 				delete item;
 		}
 	}
+#else
+	bool err = false;
+	KabAPI addrDialog;
+	if (addrDialog.init() != AddressBook::NoError)
+		err = true;
+	else
+	{
+		AddressBook* addrBook = addrDialog.addressbook();
+		std::list<AddressBook::Entry> entries;
+		AddressBook::ErrorCode errcode = addrBook->getEntries(entries);
+		if (errcode != AddressBook::NoError  &&  errcode != AddressBook::NoEntry)
+			err = true;
+		else if (errcode != AddressBook::NoEntry)
+		{
+			for (std::list<AddressBook::Entry>::iterator it = entries.begin();  it != entries.end();  ++it)
+			{
+				if (it->birthday.isValid())
+				{
+					// Create a list entry for this birthday
+					AddresseeItem* item = new AddresseeItem(mAddresseeList, addrBook, *it);
+					// Remove the list entry if this birthday already has an alarm
+					QString text = prefix + item->text(AddresseeItem::NAME) + suffix;
+					if (messageList.find(text) != messageList.end())
+						delete item;
+				}
+			}
+		}
+	}
+	if (err)
+		KMessageBox::error(this, i18n("Unable to open address book"));
+#endif
 
 	enableButtonOK(false);   // nothing is currently selected
 }
@@ -225,12 +267,12 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 			AddresseeItem* aItem = dynamic_cast<AddresseeItem*>(item);
 			if (aItem)
 			{
-				QDate date = aItem->addressee().birthday().date();
+				QDate date = aItem->birthday();
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
 				KAlarmEvent event(date,
-				                  mPrefix->text() + aItem->text(AddresseeItem::Name) + mSuffix->text(),
+				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				                  mBgColourChoose->color(), KAlarmEvent::MESSAGE, mFlags);
 				event.setAudioFile(mSoundPicker->file());
 				QValueList<int> months;
@@ -277,22 +319,34 @@ void BirthdayDlg::slotSelectionChanged()
 }
 
 
-AddresseeItem::AddresseeItem(QListView* parent, const Addressee& addressee)
+#if KDE_VERSION >= 290
+AddresseeItem::AddresseeItem(QListView* parent, const KABC::Addressee& addressee)
+#else
+AddresseeItem::AddresseeItem(QListView* parent, AddressBook* addrBook, const AddressBook::Entry& entry)
+#endif
 	: QListViewItem(parent),
-	  mAddressee(addressee)
+#if KDE_VERSION >= 290
+	  mBirthday(addressee.birthday().date())
+#else
+	  mBirthday(entry.birthday)
+#endif
 {
+#if KDE_VERSION >= 290
 	QString name = addressee.nickName();
 	if (name.isEmpty())
 		name = addressee.realName();
-	setText(Name, name);
-	QDate date = addressee.birthday().date();
-	setText(Birthday, KGlobal::locale()->formatDate(date, true));
-	mBirthdayOrder.sprintf("%04d%03d", date.year(), date.dayOfYear());
+#else
+	QString name;
+	addrBook->literalName(entry, name);
+#endif
+	setText(NAME, name);
+	setText(BIRTHDAY, KGlobal::locale()->formatDate(mBirthday, true));
+	mBirthdayOrder.sprintf("%04d%03d", mBirthday.year(), mBirthday.dayOfYear());
 }
 
 QString AddresseeItem::key(int column, bool) const
 {
-	if (column == Birthday)
+	if (column == BIRTHDAY)
 		return mBirthdayOrder;
 	return text(column).lower();
 }
