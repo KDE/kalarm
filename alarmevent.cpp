@@ -1601,26 +1601,27 @@ QString KAEvent::recurrenceText(bool brief) const
 /******************************************************************************
  * Adjust the event date/time to the first recurrence of the event, on or after
  * start date/time. The event start date may not be a recurrence date, in which
- * case a later date will be set.
+ * case a later date will be set. Not to be called for sub-daily recurrences.
  */
 void KAEvent::setFirstRecurrence()
 {
-	if (checkRecur() != NO_RECUR)
+	RecurType rt = checkRecur();
+	if (rt == NO_RECUR  ||  rt == MINUTELY)
+		return;
+	QDateTime recurStart = mRecurrence->recurStart();
+	if (mRecurrence->recursOnPure(recurStart.date()))
+		return;           // it already recurs on the start date
+		
+	int remainingCount;
+	DateTime next;
+	nextRecurrence(mDateTime.dateTime(), next, remainingCount);
+	if (!next.isValid())
+		mRecurrence->setRecurStart(recurStart);   // reinstate the old value
+	else
 	{
-		int remainingCount;
-		DateTime next;
-		QDateTime recurStart = mRecurrence->recurStart();
-		QDateTime pre = mDateTime.dateTime().addDays(-1);
-		mRecurrence->setRecurStart(pre);
-		nextRecurrence(pre, next, remainingCount);
-		if (!next.isValid())
-			mRecurrence->setRecurStart(recurStart);   // reinstate the old value
-		else
-		{
-			mRecurrence->setRecurStart(next.dateTime());
-			mStartDateTime = mDateTime = next;
-			mUpdated = true;
-		}
+		mRecurrence->setRecurStart(next.dateTime());
+		mStartDateTime = mDateTime = next;
+		mUpdated = true;
 	}
 }
 

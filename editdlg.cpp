@@ -896,7 +896,6 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 		KAEvent event;
 		event.setTime(mSavedEvent->startDateTime().dateTime());
-#warning "Should parameter be false ??"
 		mRecurrenceEdit->updateEvent(event, false);
 		if (!event.recurrence())
 			return true;
@@ -1082,8 +1081,10 @@ void EditAlarmDlg::slotOk()
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
 				KAEvent event;
-				getEvent(event);
-				if (event.nextOccurrence(now, mAlarmDateTime) == KAEvent::NO_OCCURRENCE)
+				getEvent(event);     // this may adjust mAlarmDateTime
+				if ((mAlarmDateTime.date() < now.date()
+				     ||  !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+				&&  event.nextOccurrence(now, mAlarmDateTime) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return;

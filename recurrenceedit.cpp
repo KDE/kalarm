@@ -1325,8 +1325,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
-			if (adjustStart  &&  months.count())
-				event.setFirstRecurrence();
 		}
 /*		else if (mYearRuleDayButton->isChecked())
 		{
@@ -1342,86 +1340,10 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			if (daynum > 31)
 				daynum = 31 - daynum;
 			bool feb29 = (daynum == 29) && feb;
-			DateTime start = event.mainDateTime();
-			QDate d = start.date();
-			int startday = d.day();
-			event.setRecurAnnualByDate(frequency, months, (startday != daynum ? daynum : 0),
-			                           feb29, repeatCount, endDate);
-			if (adjustStart  &&  months.count())
-			{
-				// Some month(s) are specified, i.e. it's not a template, so if
-				// necessary adjust the start date to correspond with the recurrence.
-				if (daynum > 0)
-				{
-					bool adjust = false;
-					if (startday != daynum)
-					{
-						// The day of the month for the recurrence is different from the
-						// event start day, so adjust the event start to be the first
-						// recurrence after the preset event start.
-						if (daynum > startday)
-							do
-							{
-								d = d.addDays(-startday);    // last day of previous month
-							} while (d.day() < daynum);
-						d = d.addDays(daynum - d.day());
-						event.adjustStartDate(d);
-						adjust = true;
-					}
-					else
-					{
-						// The day of the month of the recurrence is the same as the event
-						// start day, so check that the start month is one of the selected
-						// recurrence months.
-						adjust = true;
-						int month = d.month();
-						for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
-						{
-							if (*it == month)
-							{
-								adjust = false;
-								break;
-							}
-						}
-					}
-					if (adjust)
-					{
-						DateTime newTime;
-						KAEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
-						if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
-							event.adjustStartDate(newTime.date());
-					}
-				}
-				else
-				{
-					// The recurrence is on the last day of the month, so adjust the
-					// event start to the first recurrence date.
-					// First adjust to a month which is supposed to recur.
-					bool adjust = true;
-					int month = d.month();
-					for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
-					{
-						if (*it == month)
-						{
-							adjust = false;
-							break;
-						}
-					}
-					if (adjust)
-					{
-						DateTime newTime;
-						KAEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
-						if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
-							event.adjustStartDate(newTime.date());
-						d = start.date();
-						startday = d.day();
-					}
-					int lastDay = d.daysInMonth();
-					if (startday != lastDay)
-						event.adjustStartDate(d.addDays(lastDay - startday));
-				}
-			}
+			event.setRecurAnnualByDate(frequency, months, daynum, feb29, repeatCount, endDate);
 		}
+		if (adjustStart  &&  months.count())
+			event.setFirstRecurrence();
 	}
 	else
 	{
