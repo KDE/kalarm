@@ -432,7 +432,9 @@ void MessageWin::slotShowDefer()
 		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60), false);
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
-		if (!eventID.isNull()  &&  theApp()->getCalendar().getEvent(eventID))
+		Event* event;
+		if (!eventID.isNull()  &&  (event = theApp()->getCalendar().getEvent(eventID)) != 0
+		&&  (!event->recurrence()  ||  event->recurrence()->doesRecur() == Recurrence::rNone))
 		{
 			// The event will only still exist if repetitions are outstanding
 			QLabel* warn = new QLabel(deferDlg);
