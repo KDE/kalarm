@@ -1,9 +1,10 @@
-SUBDIRS = libkmime widgets pixmaps
+SUBDIRS = widgets pixmaps
 
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libical/src \
-	-I$(top_builddir)/libkdepim $(all_includes)
+	-I$(top_builddir)/libkdepim \
+	-I$(top_srcdir)/libkdenetwork $(all_includes)
 
 bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
@@ -21,7 +22,7 @@ kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	-lkabc $(LIB_KDEUI) \
 	$(top_builddir)/libkcal/libkcal.la \
-	$(top_builddir)/kalarm/libkmime/libkmime.la \
+	$(top_builddir)/libkdenetwork/libkdenetwork.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \

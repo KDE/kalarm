@@ -45,7 +45,7 @@
 
 #include <libkcal/person.h>
 
-#include <libkmime/kmime_header_parsing.h>
+#include <kmime_header_parsing.h>
 
 #include "msgevent.h"
 #include "prefsettings.h"
