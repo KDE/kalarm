@@ -91,6 +91,7 @@ KAlarmApp::KAlarmApp()
 	  mTrayWindow(0),
 	  mSettings(new Settings(0)),
 	  mDaemonCheckInterval(0),
+	  mCalendarUpdateCount(0),
 	  mDaemonRegistered(false),
 	  mCheckingSystemTray(false),
 	  mDaemonRunning(false),
