@@ -44,8 +44,8 @@
 
 
 DaemonGuiHandler::DaemonGuiHandler(const char *name)
-	: QObject(),
-	  DCOPObject(name),
+	: DCOPObject(name), 
+          QObject(),
 	  mDaemonStatusTimer(this),
 	  mDaemonStatusTimerCount(0),
 	  mCalendarDisabled(false),
