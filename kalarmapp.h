@@ -1,5 +1,5 @@
 /*
- *  kalarmapp.h  -  description
+ *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -21,13 +21,15 @@
 #ifndef KALARMAPP_H
 #define KALARMAPP_H
 
+class QDateTime;
+
 #include <kuniqueapp.h>
 #include <kurl.h>
+class KAction;
 
-#include <libkcal/calendarlocal.h>
-#include "msgevent.h"
-using namespace KCal;
-
+class AlarmCalendar;
+class KAlarmEvent;
+class KAlarmAlarm;
 class KAlarmMainWindow;
 class MessageWin;
 class TrayWindow;
@@ -49,40 +51,14 @@ class DcopHandler : public QWidget, DCOPObject
 };
 
 
-class AlarmCalendar
-{
-	public:
-		AlarmCalendar() : calendar(0L) { }
-		bool              open();
-		int               load();
-		bool              save()                              { return save(localFile); }
-		void              close();
-		Event*            getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
-		QPtrList<Event>   getAllEvents()                      { return calendar->getAllEvents(); }
-		void              addEvent(const KAlarmEvent&);
-		void              updateEvent(const KAlarmEvent&);
-		void              deleteEvent(const QString& eventID);
-		bool              isOpen() const                      { return !!calendar; }
-		void              getURL() const;
-		const QString     urlString() const                   { getURL();  return url.url(); }
-	private:
-		CalendarLocal*    calendar;
-		KURL              url;         // URL of calendar file
-		QString           localFile;   // local name of calendar file
-		bool              vCal;        // true if calendar file is in VCal format
-
-		bool              create();
-		bool              save(const QString& tempFile);
-};
-
-
 class KAlarmApp : public KUniqueApplication
 {
+		Q_OBJECT
 	public:
 		~KAlarmApp();
 		virtual int       newInstance();
 		static KAlarmApp* getInstance();
-		AlarmCalendar&    getCalendar()       { return calendar; }
+		AlarmCalendar&    getCalendar()       { return *mCalendar; }
 		Settings*         settings()          { return mSettings; }
 		void              addWindow(KAlarmMainWindow*);
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
@@ -91,6 +67,8 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
 		void              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
+		KAction*          actionPreferences() const       { return mActionPrefs; }
+		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
 		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
@@ -108,8 +86,13 @@ class KAlarmApp : public KUniqueApplication
 		void              displayMessage(const QString& calendarFile, const QString& eventID)   { handleMessage(calendarFile, eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }
 		static const int          MAX_LATENESS = 65;   // maximum number of seconds late to display a late-cancel alarm
+	public slots:
+		void              slotKAlarm();
 	protected:
 		KAlarmApp();
+	private slots:
+		void              slotPreferences();
+		void              slotDaemonPreferences();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
@@ -126,12 +109,14 @@ class KAlarmApp : public KUniqueApplication
 
 		static KAlarmApp*          theInstance;        // the one and only KAlarmApp instance
 		static int                 activeCount;        // number of active instances without main windows
-		DcopHandler*               dcopHandler;        // the parent of the main DCOP receiver object
+		DcopHandler*               mDcopHandler;       // the parent of the main DCOP receiver object
 		TrayDcopHandler*           mTrayDcopHandler;   // the parent of the system tray DCOP receiver object
 		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
 		TrayWindow*                mTrayWindow;        // active system tray icon
-		AlarmCalendar              calendar;           // the calendar containing all the alarms
-		bool                       daemonRegistered;   // true if we've registered with alarm daemon
+		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
+		KAction*                   mActionPrefs;       // action to display the preferences dialog
+		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
+		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
 		Settings*                  mSettings;          // program preferences
 };
 

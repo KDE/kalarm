@@ -40,6 +40,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
+#include "alarmcalendar.h"
 #include "editdlg.h"
 #include "prefdlg.h"
 #include "prefsettings.h"
@@ -99,7 +100,6 @@ class AlarmListViewItem : public QListViewItem
 
 
 KAlarmMainWindow::KAlarmMainWindow()
-//	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp)
 	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose)
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
@@ -154,7 +154,7 @@ void KAlarmMainWindow::initActions()
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
 	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
-	KAction* preferences = KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection());
+//	KAction* preferences = KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection());
 
 	KMenuBar* menu = menuBar();
 	KPopupMenu* fileMenu = new KPopupMenu(this);
@@ -171,7 +171,10 @@ void KAlarmMainWindow::initActions()
 	connect(actionsMenu, SIGNAL(aboutToShow()), this, SLOT(setTrayIconActionText()));
 	KPopupMenu* settingsMenu = new KPopupMenu(this);
 	menu->insertItem(i18n("&Settings"), settingsMenu);
-	preferences->plug(settingsMenu);
+#warning "Remove this code"
+//	preferences->plug(settingsMenu);
+	theApp()->actionPreferences()->plug(settingsMenu);
+	theApp()->actionDaemonPreferences()->plug(settingsMenu);
 	menu->insertItem(i18n("&Help"), helpMenu());
 
 	actionModify->setEnabled(false);
@@ -305,12 +308,12 @@ void KAlarmMainWindow::slotResetDaemon()
 /******************************************************************************
 *  Called when the Preferences menu item is selected.
 */
-void KAlarmMainWindow::slotPreferences()
+/*void KAlarmMainWindow::slotPreferences()
 {
 	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->settings());
-	if (pref->exec())
-		theApp()->settings()->saveSettings();
-}
+	pref->exec();
+}*/
+#warning "Remove this code"
 
 /******************************************************************************
 *  Called when the Quit menu item is selected.
@@ -373,8 +376,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	: KListView(parent, name),
 	  drawMessageInColour_(false)
 {
-	addColumn(i18n("Column 1"));
-	setColumnText(TIME_COLUMN, i18n("Time"));
+	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Rep"));            // repeat count column
 	addColumn(QString::null);          // colour column
 	addColumn(i18n("Message or File"));

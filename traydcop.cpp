@@ -24,6 +24,7 @@
 
 #include <kalarmd/alarmdaemoniface.h>
 #include "kalarmapp.h"
+#include "alarmcalendar.h"
 #include "traywindow.h"
 #include "traydcop.h"
 #include "traydcop.moc"

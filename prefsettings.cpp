@@ -53,7 +53,7 @@ void Settings::loadSettings()
 	emit settingsChanged();
 }
 
-void Settings::saveSettings()
+void Settings::saveSettings(bool syncToDisc)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
@@ -61,7 +61,8 @@ void Settings::saveSettings()
 	config->writeEntry(MESSAGE_FONT, mMessageFont);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
-	config->sync();
+	if (syncToDisc)
+		config->sync();
 }
 
 void Settings::emitSettingsChanged()

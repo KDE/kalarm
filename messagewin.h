@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class MessageWin : public MainWindowBase
 	protected slots:
 		void              slotShowDefer();
 		void              slotDefer();
-		void              slotKAlarm();
+//		void              slotKAlarm();
 
 	private:
 		QSize             initView();

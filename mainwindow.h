@@ -69,7 +69,7 @@ class KAlarmMainWindow : public MainWindowBase
 		virtual void slotModify();
 		virtual void slotToggleTrayIcon();
 		virtual void slotResetDaemon();
-		virtual void slotPreferences();
+//		virtual void slotPreferences();
 		virtual void slotQuit();
 		virtual void slotSelection();
 		virtual void slotListRightClick(QListViewItem*, const QPoint&, int);

@@ -84,9 +84,9 @@ void PrefsBase::setSettings(Settings* setts)
 	restore();
 }
 
-void PrefsBase::apply()
+void PrefsBase::apply(bool syncToDisc)
 {
-	mSettings->saveSettings();
+	mSettings->saveSettings(syncToDisc);
 	mSettings->emitSettingsChanged();
 }
 
@@ -126,11 +126,11 @@ void MiscPrefs::restore()
 	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
 }
 
-void MiscPrefs::apply()
+void MiscPrefs::apply(bool syncToDisc)
 {
 	mSettings->mAutostartTrayIcon       = mAutostartTrayIcon->isChecked();
 	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
-	PrefsBase::apply();
+	PrefsBase::apply(syncToDisc);
 }
 
 void MiscPrefs::setDefaults()
@@ -162,11 +162,11 @@ void AppearancePrefs::restore()
 	mFontChooser->setFont(mSettings->mMessageFont);
 }
 
-void AppearancePrefs::apply()
+void AppearancePrefs::apply(bool syncToDisc)
 {
 	mSettings->mDefaultBgColour = mFontChooser->bgColour();
 	mSettings->mMessageFont     = mFontChooser->font();
-	PrefsBase::apply();
+	PrefsBase::apply(syncToDisc);
 }
 
 void AppearancePrefs::setDefaults()

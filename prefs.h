@@ -39,7 +39,7 @@ class PrefsBase : public KTabCtl
 		QSize        sizeHintForWidget(QWidget*);
 		void         setSettings(Settings*);
 		virtual void restore() = 0;
-		virtual void apply() = 0;
+		virtual void apply(bool syncToDisc) = 0;
 		virtual void setDefaults() = 0;
 
 	protected:
@@ -55,7 +55,7 @@ class AppearancePrefs : public PrefsBase
 		AppearancePrefs(QWidget* parent);
 
 		virtual void restore();
-		virtual void apply();
+		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
 
 	private:
@@ -71,7 +71,7 @@ class MiscPrefs : public PrefsBase
 		MiscPrefs(QWidget* parent);
 
 		virtual void restore();
-		virtual void apply();
+		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
 
 	private:

@@ -40,7 +40,7 @@ class Settings : public QObject
 		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		void         loadSettings();
-		void         saveSettings();
+		void         saveSettings(bool syncToDisc = true);
 		void         emitSettingsChanged();
 
 		static const QColor default_defaultBgColour;

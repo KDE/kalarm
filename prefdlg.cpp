@@ -67,17 +67,15 @@ void KAlarmPrefDlg::slotHelp()
 void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
-	m_appearancePage->apply();
-	m_miscPage->apply();
+	m_appearancePage->apply(false);
+	m_miscPage->apply(true);
 }
 
 // Apply the settings that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
-	m_appearancePage->apply();
-	m_miscPage->apply();
-
+	slotApply();
 	KDialogBase::slotOk();
 }
 

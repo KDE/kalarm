@@ -42,6 +42,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
+#include "alarmcalendar.h"
 #include "prefsettings.h"
 #include "datetime.h"
 #include "messagewin.h"
@@ -234,7 +235,7 @@ QSize MessageWin::initView()
 	QPushButton* button = new QPushButton(topWidget);
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
-	connect(button, SIGNAL(clicked()), SLOT(slotKAlarm()));
+	connect(button, SIGNAL(clicked()), theApp(), SLOT(slotKAlarm()));
 	grid->addWidget(button, 0, 3, AlignHCenter);
 	QWhatsThis::add(button, i18n("Activate %1").arg(kapp->aboutData()->programName()));
 
@@ -436,9 +437,10 @@ void MessageWin::slotDefer()
 *  Called when the KAlarm button is clicked.
 *  Displays the KAlarm main window.
 */
-void MessageWin::slotKAlarm()
+#warning "Remove this code"
+/*void MessageWin::slotKAlarm()
 {
 	KProcess proc;
 	proc << QString::fromLatin1(kapp->aboutData()->appName());
 	proc.start(KProcess::DontCare);
-}
+}*/

@@ -39,9 +39,9 @@ class TrayWindow : public KSystemTray
 
 	public slots:
 		void         toggleAlarmsEnabled();
-		void         slotKAlarm();
-		void         slotConfigKAlarm();
-		void         slotConfigDaemon();
+//		void         slotKAlarm();
+//		void         slotConfigKAlarm();
+//		void         slotConfigDaemon();
 		void         slotQuit();
 
 	protected:
