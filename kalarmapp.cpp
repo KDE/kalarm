@@ -673,14 +673,17 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				// Check whether this alarm is due yet
 				int secs = alarm.dateTime().secsTo(now);
 				if (secs < 0)
+				{
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": not due\n";
 					continue;
+				}
 				if (alarm.repeatAtLogin())
 				{
 					// Alarm is to be displayed at every login.
 					// Check if the alarm has only just been set up.
 					// (The alarm daemon will immediately notify that it is due
 					//  since it is set up with a time in the past.)
-
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": REPEAT_AT_LOGIN\n";
 					if (secs < maxLateness())
 						continue;
 
@@ -692,6 +695,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (alarm.lateCancel())
 				{
 					// Alarm is due, and it is to be cancelled if late.
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": LATE_CANCEL\n";
 					bool late = false;
 					bool cancel = false;
 					if (event.anyTime())
@@ -776,9 +780,12 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				}
 				if (alfunction == ALARM_TRIGGER)
 				{
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": display\n";
 					displayAlarm = alarm;             // note the alarm to be displayed
 					alfunction = ALARM_RESCHEDULE;    // only trigger one alarm for the event
 				}
+				else
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": skip\n";
 			}
 
 			// If there is an alarm to display, do this last after rescheduling/cancelling
@@ -787,6 +794,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				handleAlarm(event, displayAlarm, ALARM_TRIGGER, true);
 			else if (updateCalAndDisplay)
 				updateEvent(event, 0L);     // update the window lists and calendar file
+			else
+				kdDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
 			break;
 		}
 	}
