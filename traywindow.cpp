@@ -84,7 +84,7 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	mPixmapEnabled  = loadIcon("kalarm");
 	mPixmapDisabled = loadIcon("kalarm_disabled");
 	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
-		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
+		KMessageBox::sorry(this, i18n("Cannot load system tray icon."),
 		                         i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 
