@@ -1286,7 +1286,9 @@ void KAlarmApp::cancelAlarm(KAlarmEvent& event, KAlarmAlarm::Type alarmType, boo
 	if (alarmType == KAlarmAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the expired calendar file first.
+		QString id = event.id();    // save event ID since archiveEvent() changes it
 		archiveEvent(event);
+		event.setEventID(id);       // restore event ID
 	}
 	event.removeAlarm(alarmType);
 	if (!event.alarmCount())
