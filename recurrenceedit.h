@@ -153,7 +153,6 @@ class RecurrenceEdit : public QFrame
 		QFrame*         mWeekRuleFrame;
 		RecurFrequency* mWeekRecurFrequency;
 		CheckBox*       mWeekRuleDayBox[7];
-		int             mWeekRuleFirstDay;
 
 		// Monthly rule choices
 		QFrame*         mMonthRuleFrame;

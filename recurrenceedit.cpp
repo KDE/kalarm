@@ -64,7 +64,10 @@ using namespace KCal;
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
 
-static const char* const ordinal[] = {
+namespace
+{
+
+const char* const ordinal[] = {
 	I18N_NOOP("1st"),  I18N_NOOP("2nd"),  I18N_NOOP("3rd"),  I18N_NOOP("4th"),
 	I18N_NOOP("5th"),  I18N_NOOP("6th"),  I18N_NOOP("7th"),  I18N_NOOP("8th"),
 	I18N_NOOP("9th"),  I18N_NOOP("10th"), I18N_NOOP("11th"), I18N_NOOP("12th"),
@@ -74,6 +77,12 @@ static const char* const ordinal[] = {
 	I18N_NOOP("25th"), I18N_NOOP("26th"), I18N_NOOP("27th"), I18N_NOOP("28th"),
 	I18N_NOOP("29th"), I18N_NOOP("30th"), I18N_NOOP("31st")
 };
+
+int firstDayOfWeek = 1;
+inline int dayOfWeek_to_offset(int dayOfWeek)  { return (dayOfWeek + 7 - firstDayOfWeek) % 7; }
+inline int offset_to_dayOfWeek(int offset)     { return (offset + firstDayOfWeek - 1) % 7 + 1; }
+
+}
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
@@ -85,6 +94,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	  noEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
+#if KDE_VERSION >= 310
+	firstDayOfWeek = KGlobal::locale()->weekStartDay();
+#else
+	firstDayOfWeek = KGlobal::locale()->weekStartsMonday() ? 1 : 7;
+#endif
+
 	QBoxLayout* layout;
 	QVBoxLayout* topLayout = new QVBoxLayout(this, marginKDE2, KDialog::spacingHint());
 
@@ -391,14 +406,9 @@ void RecurrenceEdit::initWeekly()
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
-#if KDE_VERSION >= 310
-	mWeekRuleFirstDay = KGlobal::locale()->weekStartDay();
-#else
-	mWeekRuleFirstDay = KGlobal::locale()->weekStartsMonday() ? 1 : 7;
-#endif
 	for (int i = 0;  i < 7;  ++i)
 	{
-		int day = (i + mWeekRuleFirstDay - 1)%7 + 1;
+		int day = offset_to_dayOfWeek(i);
 		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
@@ -580,8 +590,11 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 
 	*dayCombo = new ComboBox(false, parent);
 	ComboBox* dc = *dayCombo;
-	for (i = 1;  i <= 7;  ++i)
-		dc->insertItem(KGlobal::locale()->weekDayName(i));    // starts Monday
+	for (i = 0;  i < 7;  ++i)
+	{
+		int day = offset_to_dayOfWeek(i);
+		dc->insertItem(KGlobal::locale()->weekDayName(day));
+	}
 	dc->setReadOnly(mReadOnly);
 	QWhatsThis::add(dc,
 	      i18n("Select the day of the week on which to repeat the alarm"));
@@ -695,10 +708,8 @@ void RecurrenceEdit::periodClicked(int id)
 	{
 		ruleStack->raiseWidget(frame);
 		if (oldType == NO_RECUR  ||  none)
-		{
 			mRangeButtonGroup->setEnabled(!none);
-			mExceptionGroup->setEnabled(!none);
-		}
+		mExceptionGroup->setEnabled(!(none || atLogin));
 		mEndAnyTimeCheckBox->setEnabled(atLogin);
 		if (!none)
 		{
@@ -927,7 +938,7 @@ bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 	for (int i = 0;  i < 7;  ++i)
 		if (mWeekRuleDayBox[i]->isChecked())
 		{
-			rDays.setBit((i + mWeekRuleFirstDay - 1) % 7, 1);
+			rDays.setBit(offset_to_dayOfWeek(i) - 1, 1);
 			found = true;
 		}
 	return found;
@@ -936,7 +947,7 @@ bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
 {
 	for (int i = 0;  i < 7;  ++i)
-		if (rDays.testBit((i + mWeekRuleFirstDay - 1) % 7))
+		if (rDays.testBit(offset_to_dayOfWeek(i) - 1))
 			mWeekRuleDayBox[i]->setChecked(true);
 }
 
@@ -1005,27 +1016,27 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 {
 	int day       = fromDate.day() - 1;
-	int dayOfWeek = fromDate.dayOfWeek() - 1;
+	int dayOfWeek = fromDate.dayOfWeek();
 	int month     = fromDate.month() - 1;
 	if (!mWeeklyShown)
 	{
 		for (int i = 0;  i < 7;  ++i)
 			mWeekRuleDayBox[i]->setChecked(false);
-		if (dayOfWeek >= 0  &&  dayOfWeek < 7)
-			mWeekRuleDayBox[(dayOfWeek + 8 - mWeekRuleFirstDay) % 7]->setChecked(true);
+		if (dayOfWeek > 0  &&  dayOfWeek <= 7)
+			mWeekRuleDayBox[dayOfWeek_to_offset(dayOfWeek)]->setChecked(true);
 	}
 	if (!mMonthlyShown)
 	{
 		mMonthRuleNthDayEntry->setCurrentItem(day);
 		mMonthRuleNthNumberEntry->setCurrentItem(day / 7);
-		mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
+		mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(dayOfWeek));
 	}
 	if (!mYearlyShown)
 	{
 //		mYearRuleDayEntry->setValue(fromDate.dayOfYear());
 		mYearRuleNthDayEntry->setCurrentItem(day);
 		mYearRuleNthNumberEntry->setCurrentItem(day / 7);
-		mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
+		mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(dayOfWeek));
 		for (int i = 0;  i < 12;  ++i)
 			mYearRuleMonthBox[i]->setChecked(i == month);
 	}
@@ -1080,7 +1091,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 				i += 5;
 			mMonthRuleNthNumberEntry->setCurrentItem(i);
 			for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-			mMonthRuleNthTypeOfDayEntry->setCurrentItem(i);
+			mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(i + 1));
 			break;
 		}
 		case Recurrence::rMonthlyDay:     // on nth day of the month
@@ -1122,7 +1133,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 					i += 5;
 				mYearRuleNthNumberEntry->setCurrentItem(i);
 				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-					mYearRuleNthTypeOfDayEntry->setCurrentItem(i);
+					mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(i + 1));
 			}
 			for (int i = 0;  i < 12;  ++i)
 				mYearRuleMonthBox[i]->setChecked(false);
@@ -1228,7 +1239,7 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			// it's by position
 			KAlarmEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(mMonthRuleNthTypeOfDayEntry->currentItem());
+			pos.days.setBit(offset_to_dayOfWeek(mMonthRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mMonthRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAlarmEvent::MonthPos> poses;
@@ -1258,7 +1269,7 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			// it's by position
 			KAlarmEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(mYearRuleNthTypeOfDayEntry->currentItem());
+			pos.days.setBit(offset_to_dayOfWeek(mYearRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mYearRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAlarmEvent::MonthPos> poses;
