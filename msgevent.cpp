@@ -19,6 +19,7 @@
  */
 
 #include <stdlib.h>
+#include <time.h>
 #include <ctype.h>
 #include <qcolor.h>
 #include <qregexp.h>
@@ -41,14 +42,15 @@ using namespace KCal;
  *   TYPE = TEXT or FILE or CMD
  *   TEXT = message text, file name/URL or command
  */
-static const QChar   SEPARATOR        = QChar(';');
-static const QString TEXT_PREFIX      = QString::fromLatin1("TEXT:");
-static const QString FILE_PREFIX      = QString::fromLatin1("FILE:");
-static const QString COMMAND_PREFIX   = QString::fromLatin1("CMD:");
-static const QString LATE_CANCEL_CODE = QString::fromLatin1("C");
-static const QString AT_LOGIN_CODE    = QString::fromLatin1("L");   // subsidiary alarm at every login
-static const QString DEFERRAL_CODE    = QString::fromLatin1("D");   // extra deferred alarm
-static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
+static const QChar   SEPARATOR            = QChar(';');
+static const QString TEXT_PREFIX          = QString::fromLatin1("TEXT:");
+static const QString FILE_PREFIX          = QString::fromLatin1("FILE:");
+static const QString COMMAND_PREFIX       = QString::fromLatin1("CMD:");
+static const QString LATE_CANCEL_CODE     = QString::fromLatin1("C");
+static const QString AT_LOGIN_CODE        = QString::fromLatin1("L");   // subsidiary alarm at every login
+static const QString DEFERRAL_CODE        = QString::fromLatin1("D");   // extra deferred alarm
+static const QString BEEP_CATEGORY        = QString::fromLatin1("BEEP");
+static const QString CONFIRM_ACK_CATEGORY = QString::fromLatin1("ACKCONF");
 
 struct AlarmData
 {
@@ -96,6 +98,7 @@ void KAlarmEvent::copy(const KAlarmEvent& event)
 	mRepeatAtLogin         = event.mRepeatAtLogin;
 	mDeferral              = event.mDeferral;
 	mLateCancel            = event.mLateCancel;
+	mConfirmAck            = event.mConfirmAck;
 	mUpdated               = event.mUpdated;
 	delete mRecurrence;
 	if (event.mRecurrence)
@@ -113,7 +116,8 @@ void KAlarmEvent::set(const Event& event)
 	mEventID  = event.uid();
 	mRevision = event.revision();
 	const QStringList& cats = event.categories();
-	mBeep   = false;
+	mBeep       = false;
+	mConfirmAck = false;
 	mColour = QColor(255, 255, 255);    // missing/invalid colour - return white
 	if (cats.count() > 0)
 	{
@@ -124,6 +128,8 @@ void KAlarmEvent::set(const Event& event)
 		for (unsigned int i = 1;  i < cats.count();  ++i)
 			if (cats[i] == BEEP_CATEGORY)
 				mBeep = true;
+			else if (cats[i] == CONFIRM_ACK_CATEGORY)
+				mConfirmAck = true;
 	}
 
 	// Extract status from the event's alarms.
@@ -344,6 +350,7 @@ void KAlarmEvent::set(int flags)
 	mBeep          = flags & BEEP;
 	mRepeatAtLogin = flags & REPEAT_AT_LOGIN;
 	mLateCancel    = flags & LATE_CANCEL;
+	mConfirmAck    = flags & CONFIRM_ACK;
 	mAnyTime       = flags & ANY_TIME;
 }
 
@@ -352,6 +359,7 @@ int KAlarmEvent::flags() const
 	return (mBeep          ? BEEP : 0)
 	     | (mRepeatAtLogin ? REPEAT_AT_LOGIN : 0)
 	     | (mLateCancel    ? LATE_CANCEL : 0)
+	     | (mConfirmAck    ? CONFIRM_ACK : 0)
 	     | (mAnyTime       ? ANY_TIME : 0)
 	     | (mDeferral      ? DEFERRAL : 0);
 }
@@ -382,6 +390,8 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 	cats.append(mColour.name());
 	if (mBeep)
 		cats.append(BEEP_CATEGORY);
+	if (mConfirmAck)
+		cats.append(CONFIRM_ACK_CATEGORY);
 	ev.setCategories(cats);
 	ev.setRevision(mRevision);
 
@@ -552,10 +562,11 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 	}
 	else
 	{
-		al.mType      = mType;
-		al.mCleanText = mCleanText;
-		al.mColour    = mColour;
-		al.mBeep      = mBeep;
+		al.mType       = mType;
+		al.mCleanText  = mCleanText;
+		al.mColour     = mColour;
+		al.mBeep       = mBeep;
+		al.mConfirmAck = mConfirmAck;
 		if (mMainAlarmID >= 0  &&  alarmID == mMainAlarmID)
 		{
 			al.mAlarmSeq   = mMainAlarmID;
@@ -1171,16 +1182,37 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
  */
 void KAlarmEvent::convertKCalEvents()
 {
-	if (theApp()->getCalendar().kalarmVersion() < 700)
+	if (theApp()->getCalendar().KAlarmVersion() < AlarmCalendar::KAlarmVersion(7,0,0))
 	{
+		bool adjustSummerTime = theApp()->getCalendar().KAlarmVersion057_UTC();
+		QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
+
 		QPtrList<Event> events = theApp()->getCalendar().events();
 		for (Event* event = events.first();  event;  event = events.next())
 		{
 			if (event->doesFloat())
 			{
-				// Backwards compatibility with KAlarm pre-0.7 calendar files
-				// Ensure that when the calendar is saved, the alarm time isn't lost
+				// Backwards compatibility with KAlarm pre-0.7 calendar files.
+				// Ensure that when the calendar is saved, the alarm time isn't lost.
 				event->setFloats(false);
+			}
+			if (adjustSummerTime)
+			{
+				// Backwards compatibility with the KDE 3.0.0 version of KAlarm 0.5.7.
+				// Summer time was ignored when converting to UTC.
+				QPtrList<Alarm> alarms = event->alarms();
+				for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+				{
+					Alarm* alarm = ia.current();
+					QDateTime dt = alarm->time();
+					time_t t = dt0.secsTo(dt);
+					struct tm* dtm = localtime(&t);
+					if (dtm->tm_isdst)
+					{
+						dt.addSecs(-3600);
+						alarm->setTime(dt);
+					}
+				}
 			}
 		}
 	}
@@ -1203,6 +1235,7 @@ void KAlarmEvent::dumpDebug() const
 	kdDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mRepeatDuration:" << mRepeatDuration << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";
@@ -1222,6 +1255,7 @@ void KAlarmAlarm::set(int flags)
 	mBeep          = flags & KAlarmEvent::BEEP;
 	mRepeatAtLogin = flags & KAlarmEvent::REPEAT_AT_LOGIN;
 	mLateCancel    = flags & KAlarmEvent::LATE_CANCEL;
+	mConfirmAck    = flags & KAlarmEvent::CONFIRM_ACK;
 	mDeferral      = flags & KAlarmEvent::DEFERRAL;
 }
 
@@ -1230,6 +1264,7 @@ int KAlarmAlarm::flags() const
 	return (mBeep          ? KAlarmEvent::BEEP : 0)
 	     | (mRepeatAtLogin ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (mConfirmAck    ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (mDeferral      ? KAlarmEvent::DEFERRAL : 0);
 }
 
@@ -1329,6 +1364,7 @@ void KAlarmAlarm::dumpDebug() const
 	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
 	kdDebug(5950) << "-- mAlarmSeq:" << mAlarmSeq << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";
