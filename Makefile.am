@@ -6,10 +6,12 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_builddir)/libkdepim $(all_includes)
 
 bin_PROGRAMS = kalarm
-kalarm_SOURCES = editdlg.cpp alarmcalendar.cpp daemongui.cpp \
+# Don't change the order of the kalarm_SOURCES files without first checking
+# that it builds with --enable-final !!!
+kalarm_SOURCES = msgevent.cpp editdlg.cpp alarmcalendar.cpp daemongui.cpp \
         main.cpp kalarmapp.cpp \
         mainwindowbase.cpp mainwindow.cpp \
-	messagewin.cpp msgevent.cpp \
+	messagewin.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp \
@@ -45,9 +47,6 @@ install-data-local:
 KDE_ICON = AUTO
 
 messages: 
-	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
-	if test -n "$$LIST"; then \
-	 $(XGETTEXT) $$LIST -o $(podir)/kalarm.pot; \
-	fi
+	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp -o $(podir)/kalarm.pot; \
 
-include $(top_srcdir)/admin/Doxyfile.am
+#include $(top_srcdir)/admin/Doxyfile.am
