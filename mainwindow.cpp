@@ -1047,6 +1047,12 @@ void MainWindow::dropEvent(QDropEvent* e)
 	executeDropEvent(this, e);
 }
 
+static QString getMailHeader(const char* header, KMime::Content& content)
+{
+	KMime::Headers::Base* hd = content.getHeaderByType(header);
+	return hd ? hd->asUnicodeString() : QString::null;
+}
+
 /******************************************************************************
 *  Called when an object is dropped on a main or system tray window, to
 *  evaluate the action required and extract the text.
@@ -1055,6 +1061,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
 	KAEvent::Action action = KAEvent::MESSAGE;
 	QString        text;
+	QByteArray     bytes;
 	AlarmText      alarmText;
 	KPIM::MailList mailList;
 	KURL::List     files;
@@ -1068,21 +1075,22 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		alarmText.setText(files.first().prettyURL());
 	}
 	else if (e->provides("message/rfc822")
-	&&       KPIM::MailListDrag::canDecode(e))
+	&&       !(bytes = e->encodedData("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
-		QByteArray bytes = e->encodedData("message/rfc822");
 		QCString mails(bytes.data(), bytes.size());
 		KMime::Content content;
 		content.setContent(mails);
-		QCString headers = content.head();
-		KMime::Content* bodyContent = content.textContent();
-		alarmText.setEmail(KMime::extractHeader(headers, "To"),
-		                   KMime::extractHeader(headers, "From"),
-		                   KMime::extractHeader(headers, "Date"),
-		                   KMime::extractHeader(headers, "Subject"),
-				   (bodyContent ? bodyContent->body() : QString::null));
+		content.parse();
+		QString body;
+		content.textContent()->decodedText(body, true, true);    // strip trailing newlines & spaces
+		alarmText.setEmail(getMailHeader("To", content),
+		                   getMailHeader("From", content),
+		                   getMailHeader("Cc", content),
+		                   getMailHeader("Date", content),
+		                   getMailHeader("Subject", content),
+				   body);
 	}
 	else if (e->provides(KPIM::MailListDrag::format())
 	&&       KPIM::MailListDrag::decode(e, mailList))
@@ -1095,8 +1103,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		QDateTime dt;
 		dt.setTime_t(summary.date());
 		QString body = KAMail::getMailBody(summary.serialNumber());
-		alarmText.setEmail(summary.to(), summary.from(), KGlobal::locale()->formatDateTime(dt),
-		                   summary.subject(), body);
+		alarmText.setEmail(summary.to(), summary.from(), QString::null,
+		                   KGlobal::locale()->formatDateTime(dt), summary.subject(), body);
 	}
 	else if (KCal::ICalDrag::decode(e, &calendar))
 	{

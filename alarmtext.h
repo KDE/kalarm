@@ -31,11 +31,12 @@ class AlarmText
 		AlarmText(const QString& text = QString::null)  { setText(text); }
 		void           setText(const QString&);
 		void           setScript(const QString& text)   { setText(text);  mIsScript = true; }
-		void           setEmail(const QString& to, const QString& from, const QString& time, const QString& subject, const QString& body);
+		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time, const QString& subject, const QString& body);
 		QString        displayText() const;
 		QString        calendarText() const;
 		QString        to() const        { return mTo; }
 		QString        from() const      { return mFrom; }
+		QString        cc() const        { return mCc; }
 		QString        time() const      { return mTime; }
 		QString        subject() const   { return mSubject; }
 		QString        body() const      { return mIsEmail ? mBody : QString::null; }
@@ -51,13 +52,15 @@ class AlarmText
 		static void    setUpTranslations();
 		static QString mFromPrefix;       // translated header prefixes
 		static QString mToPrefix;
+		static QString mCcPrefix;
 		static QString mDatePrefix;
 		static QString mSubjectPrefix;
 		static QString mFromPrefixEn;     // untranslated header prefixes
 		static QString mToPrefixEn;
+		static QString mCcPrefixEn;
 		static QString mDatePrefixEn;
 		static QString mSubjectPrefixEn;
-		QString        mBody, mFrom, mTo, mTime, mSubject;
+		QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
 		bool           mIsEmail;
 		bool           mIsScript;
 };

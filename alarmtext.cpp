@@ -29,10 +29,12 @@
 
 QString AlarmText::mFromPrefix;
 QString AlarmText::mToPrefix;
+QString AlarmText::mCcPrefix;
 QString AlarmText::mDatePrefix;
 QString AlarmText::mSubjectPrefix;
 QString AlarmText::mFromPrefixEn    = QString::fromLatin1("From:");
 QString AlarmText::mToPrefixEn      = QString::fromLatin1("To:");
+QString AlarmText::mCcPrefixEn      = QString::fromLatin1("Cc:");
 QString AlarmText::mDatePrefixEn    = QString::fromLatin1("Date:");
 QString AlarmText::mSubjectPrefixEn = QString::fromLatin1("Subject:");
 
@@ -42,15 +44,16 @@ void AlarmText::setText(const QString& text)
 	mBody     = text;
 	mIsScript = text.startsWith(QString::fromLatin1("#!"));
 	mIsEmail  = false;
-	mTo = mFrom = mTime = mSubject = QString::null;
+	mTo = mFrom = mCc = mTime = mSubject = QString::null;
 }
 
-void AlarmText::setEmail(const QString& to, const QString& from, const QString& time, const QString& subject, const QString& body)
+void AlarmText::setEmail(const QString& to, const QString& from, const QString& cc, const QString& time, const QString& subject, const QString& body)
 {
 	mIsScript = false;
 	mIsEmail  = true;
 	mTo       = to;
 	mFrom     = from;
+	mCc       = cc;
 	mTime     = time;
 	mSubject  = subject;
 	mBody     = body;
@@ -68,6 +71,8 @@ QString AlarmText::displayText() const
 		QString text;
 		text = mFromPrefix + '\t' + mFrom + '\n';
 		text += mToPrefix + '\t' + mTo + '\n';
+		if (!mCc.isEmpty())
+			text += mCcPrefix + '\t' + mCc + '\n';
 		text += mDatePrefix + '\t' + mTime + '\n';
 		text += mSubjectPrefix + '\t' + mSubject;
 		if (!mBody.isEmpty())
@@ -89,7 +94,7 @@ bool AlarmText::isEmpty() const
 		return false;
 	if (!mIsEmail)
 		return true;
-	return mFrom.isEmpty() && mTo.isEmpty() && mTime.isEmpty() && mSubject.isEmpty();
+	return mFrom.isEmpty() && mTo.isEmpty() && mCc.isEmpty() && mTime.isEmpty() && mSubject.isEmpty();
 }
 
 /******************************************************************************
@@ -101,15 +106,28 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 {
 	setUpTranslations();
 	QStringList lines = QStringList::split('\n', text);
-	if (lines.count() >= 4
+	int maxn = lines.count();
+	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefix)
-	&&  lines[1].startsWith(mToPrefix)
-	&&  lines[2].startsWith(mDatePrefix)
-	&&  lines[3].startsWith(mSubjectPrefix))
+	&&  lines[1].startsWith(mToPrefix))
 	{
-		if (subjectOnly)
-			return lines[3].mid(mSubjectPrefix.length()).stripWhiteSpace();
-		return lines[0] + '\n' + lines[1] + '\n' + lines[2] + '\n' + lines[3];
+		int n = 2;
+		if (lines[2].startsWith(mCcPrefix))
+			++n;
+		if (maxn > n + 1
+		&&  lines[n].startsWith(mDatePrefix)
+		&&  lines[n+1].startsWith(mSubjectPrefix))
+		{
+			if (subjectOnly)
+				return lines[n+1].mid(mSubjectPrefix.length()).stripWhiteSpace();
+			QString h = lines[0];
+			for (int i = 1;  i <= n + 1;  ++i)
+			{
+				h += '\n';
+				h += lines[i];
+			}
+			return h;
+		}
 	}
 	return QString::null;
 }
@@ -122,26 +140,34 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 QString AlarmText::fromCalendarText(const QString& text)
 {
 	QStringList lines = QStringList::split('\n', text);
-	if (lines.count() >= 4
+	int maxn = lines.count();
+	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefixEn)
-	&&  lines[1].startsWith(mToPrefixEn)
-	&&  lines[2].startsWith(mDatePrefixEn)
-	&&  lines[3].startsWith(mSubjectPrefixEn))
+	&&  lines[1].startsWith(mToPrefixEn))
 	{
-		setUpTranslations();
-		QString dispText;
-		dispText = mFromPrefix + lines[0].mid(mFromPrefixEn.length()) + '\n';
-		dispText += mToPrefix + lines[1].mid(mToPrefixEn.length()) + '\n';
-		dispText += mDatePrefix + lines[2].mid(mDatePrefixEn.length()) + '\n';
-		dispText += mSubjectPrefix + lines[3].mid(mSubjectPrefixEn.length());
-		int i = text.find(mSubjectPrefixEn);
-		i = text.find('\n', i);
-		if (i > 0)
-			dispText += text.mid(i);
-		return dispText;
+		int n = 2;
+		if (lines[2].startsWith(mCcPrefixEn))
+			++n;
+		if (maxn > n + 1
+		&&  lines[n].startsWith(mDatePrefixEn)
+		&&  lines[n+1].startsWith(mSubjectPrefixEn))
+		{
+			setUpTranslations();
+			QString dispText;
+			dispText = mFromPrefix + lines[0].mid(mFromPrefixEn.length()) + '\n';
+			dispText += mToPrefix + lines[1].mid(mToPrefixEn.length()) + '\n';
+			if (n == 3)
+				dispText += mCcPrefix + lines[2].mid(mCcPrefixEn.length()) + '\n';
+			dispText += mDatePrefix + lines[n].mid(mDatePrefixEn.length()) + '\n';
+			dispText += mSubjectPrefix + lines[n+1].mid(mSubjectPrefixEn.length());
+			int i = text.find(mSubjectPrefixEn);
+			i = text.find('\n', i);
+			if (i > 0)
+				dispText += text.mid(i);
+			return dispText;
+		}
 	}
-	else
-		return text;
+	return text;
 }
 
 /******************************************************************************
@@ -152,23 +178,32 @@ QString AlarmText::toCalendarText(const QString& text)
 {
 	setUpTranslations();
 	QStringList lines = QStringList::split('\n', text);
-	if (lines.count() >= 4
+	int maxn = lines.count();
+	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefix)
-	&&  lines[1].startsWith(mToPrefix)
-	&&  lines[2].startsWith(mDatePrefix)
-	&&  lines[3].startsWith(mSubjectPrefix))
+	&&  lines[1].startsWith(mToPrefix))
 	{
-		// Format the email into a text alarm
-		QString calText;
-		calText = mFromPrefixEn + lines[0].mid(mFromPrefix.length()) + '\n';
-		calText += mToPrefixEn + lines[1].mid(mToPrefix.length()) + '\n';
-		calText += mDatePrefixEn + lines[2].mid(mDatePrefix.length()) + '\n';
-		calText += mSubjectPrefixEn + lines[3].mid(mSubjectPrefix.length());
-		int i = text.find(mSubjectPrefix);
-		i = text.find('\n', i);
-		if (i > 0)
-			calText += text.mid(i);
-		return calText;
+		int n = 2;
+		if (lines[2].startsWith(mCcPrefix))
+			++n;
+		if (maxn > n + 1
+		&&  lines[n].startsWith(mDatePrefix)
+		&&  lines[n+1].startsWith(mSubjectPrefix))
+		{
+			// Format the email into a text alarm
+			QString calText;
+			calText = mFromPrefixEn + lines[0].mid(mFromPrefix.length()) + '\n';
+			calText += mToPrefixEn + lines[1].mid(mToPrefix.length()) + '\n';
+			if (n == 3)
+				calText += mCcPrefixEn + lines[2].mid(mCcPrefix.length()) + '\n';
+			calText += mDatePrefixEn + lines[n].mid(mDatePrefix.length()) + '\n';
+			calText += mSubjectPrefixEn + lines[n+1].mid(mSubjectPrefix.length());
+			int i = text.find(mSubjectPrefix);
+			i = text.find('\n', i);
+			if (i > 0)
+				calText += text.mid(i);
+			return calText;
+		}
 	}
 	return text;
 }
@@ -182,6 +217,7 @@ void AlarmText::setUpTranslations()
 	{
 		mFromPrefix    = EditAlarmDlg::i18n_EmailFrom();
 		mToPrefix      = EditAlarmDlg::i18n_EmailTo();
+		mCcPrefix      = i18n("Copy-to in email headers", "Cc:");
 		mDatePrefix    = i18n("Date:");
 		mSubjectPrefix = EditAlarmDlg::i18n_EmailSubject();
 	}
