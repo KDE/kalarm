@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 0.8.4 (KDE 3.1) --- 17 Nov 2002 ===
+=== Version 0.8.4 (KDE 3.1) --- 30 Nov 2002 ===
+Make KAlarm icon in message window bring main window to current desktop.
 Fix detection of KDE desktop.
 Fix entry of yearly recurrences on a specified date in the year.
 
@@ -72,7 +73,6 @@ Save and restore window sizes.
 Make click on system tray icon always bring KAlarm to top on current desktop.
 Fix alarms not being triggered (depending on time zone).
 
-
 === Version 0.6.0 --- 8 Mar 2002 ===
 Add option to execute a command instead of displaying an alarm message.
 Add Try button to alarm message edit dialog.
@@ -83,7 +83,25 @@ Rename command line option --displayEvent to --triggerEvent.
 Rename DCOP function displayMessage() to triggerEvent().
 Rename DCOP function cancelMessage() to cancelEvent().
 
-=== Version 0.5.7 --- 17 Mar 2002 ===
+=== Version 0.5.8 (KDE 3.0.5) --- 4 Oct 2002 ===
+Fix possible loss of alarms if KAlarm has previously used another calendar file.
+
+=== Version 0.5.8 (KDE 3.0.4) --- 18 Aug 2002 ===
+Make "Help -> Report Bug" use the KDE bug system (bug #43250).
+Fix right-to-left character sets not being displayed in message edit control.
+
+=== Version 0.5.8 (KDE 3.0.3) --- 5 Aug 2002 ===
+Adjust wrong summer times stored by version 0.5.7 (KDE 3.0.0).
+Display KAlarm handbook when Help clicked in configuration dialog.
+Make Close button on message window not the default button to reduce chance
+  of accidental acknowledgement.
+Fix session restoration often not occurring at login.
+
+=== Version 0.5.7 (KDE 3.0.1) --- 9 May 2002 ===
+Use local time for alarm times instead of using a time zone.
+Make click on system tray icon always bring KAlarm to top on current desktop.
+
+=== Version 0.5.7 (KDE 3.0) --- 17 Mar 2002 ===
 Show system tray icon on deferring command line-initiated message (run-in-
     system-tray mode).
 Associate main window with system tray icon when displayed from message window.
