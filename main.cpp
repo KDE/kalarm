@@ -51,7 +51,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP(PROGRAM_TITLE),
-		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
+		PROGRAM_VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
 		"       " PROGRAM_NAME " -f[bcilrt]\n"
 		"       " PROGRAM_NAME " [-bcilrt] message\n"
 		"       " PROGRAM_NAME " --reset | --stop\n"

@@ -33,9 +33,9 @@ class MessageEvent : public KCal::Event
 			LATE_CANCEL = 0x01,
 			BEEP        = 0x02
 		};
-		MessageEvent()  { }
+		MessageEvent()  { newAlarm(); }
 		MessageEvent(const QDateTime& dt, int flags, const QColor& colour, const QString& message, bool file)
-							  { setMessage(dt, flags, colour, message, file); }
+							  { newAlarm(); setMessage(dt, flags, colour, message, file); }
 		MessageEvent(const MessageEvent&);
 		~MessageEvent()  { }
 		void             set(const QDateTime&, bool lateCancel);
@@ -45,16 +45,16 @@ class MessageEvent : public KCal::Event
 		                            { setMessage(dt, flags, c, filename, 1); }
 		void             setRepetition(int minutes, int initialCount, int remainingCount = -1);
 		void             updateRepetition(const QDateTime&, int remainingCount);
-		const QDateTime& dateTime() const           { return alarm()->time(); }
-		QDate            date() const               { return alarm()->time().date(); }
-		QTime            time() const               { return alarm()->time().time(); }
+		const QDateTime& dateTime() const           { return alarms().getFirst()->time(); }
+		QDate            date() const               { return alarms().getFirst()->time().date(); }
+		QTime            time() const               { return alarms().getFirst()->time().time(); }
 		QString          cleanText() const;         // text with prefix cleaned off
 		QString          message() const;           // message text, or null if not a text message
 		QString          fileName() const;          // file name, or null if not a file name
-		int              repeatCount() const        { return alarm()->repeatCount(); }
-		int              repeatMinutes() const      { return alarm()->snoozeTime(); }
-		int              initialRepeatCount() const { return alarm()->repeatCount() + revision(); }
-		QDateTime        lastDateTime() const       { return alarm()->time().addSecs(alarm()->repeatCount() * repeatMinutes() * 60); }
+		int              repeatCount() const        { return alarms().getFirst()->repeatCount(); }
+		int              repeatMinutes() const      { return alarms().getFirst()->snoozeTime(); }
+		int              initialRepeatCount() const { return alarms().getFirst()->repeatCount() + revision(); }
+		QDateTime        lastDateTime() const       { return alarms().getFirst()->time().addSecs(alarms().getFirst()->repeatCount() * repeatMinutes() * 60); }
 		QColor           colour() const;
 		int              flags() const;
 		bool             messageIsFileName() const;

@@ -25,7 +25,7 @@ static const QString BEEP_CATEGORY = QString::fromLatin1("BEEP");
 MessageEvent::MessageEvent(const MessageEvent& event)
 	: Event()
 {
-	setMessage(event.dateTime(), event.flags(), event.colour(), event.alarm()->text(), -1);
+	setMessage(event.dateTime(), event.flags(), event.colour(), event.alarms().getFirst()->text(), -1);
 	setRepetition(event.repeatMinutes(), event.repeatCount());
 }
 
@@ -33,22 +33,22 @@ void MessageEvent::set(const QDateTime& dateTime, bool lateCancel)
 {
 	setDtStart(dateTime);
 	setDtEnd(dateTime.addDays(lateCancel ? 0 : 1));
-	alarm()->setTime(dateTime);
+	alarms().getFirst()->setTime(dateTime);
 }
 
 void MessageEvent::setMessage(const QDateTime& dateTime, int flags,
                               const QColor& colour, const QString& message, int type)
 {
-	alarm()->setEnabled(true);        // enable the alarm
+	alarms().getFirst()->setEnabled(true);        // enable the alarm
 	set(dateTime, !!(flags & LATE_CANCEL));
 	if (type >= 0)
 	{
 		QString text(type ? FILE_PREFIX : TEXT_PREFIX);
 		text += message;
-		alarm()->setText(text);
+		alarms().getFirst()->setText(text);
 	}
 	else
-		alarm()->setText(message);
+		alarms().getFirst()->setText(message);
 	QStringList cats;
 	cats.append(colour.name());
 	if (flags & BEEP)
@@ -61,50 +61,50 @@ void MessageEvent::setRepetition(int minutes, int initialCount, int remainingCou
 {
 	if (remainingCount < 0)
 		remainingCount = initialCount;
-	alarm()->setRepeatCount(remainingCount);
-	alarm()->setSnoozeTime(minutes);
+	alarms().getFirst()->setRepeatCount(remainingCount);
+	alarms().getFirst()->setSnoozeTime(minutes);
 	setRevision(initialCount - remainingCount);
 }
 
 void MessageEvent::updateRepetition(const QDateTime& dateTime, int remainingCount)
 {
 	bool readonly = isReadOnly();
-	alarm()->setAlarmReadOnly(false);
-	alarm()->setTime(dateTime);
+	alarms().getFirst()->setAlarmReadOnly(false);
+	alarms().getFirst()->setTime(dateTime);
 	int initialCount = initialRepeatCount();
-	alarm()->setRepeatCount(remainingCount);
+	alarms().getFirst()->setRepeatCount(remainingCount);
 	setReadOnly(false);
 	setRevision(initialCount - remainingCount);
 	setReadOnly(readonly);
-	alarm()->setAlarmReadOnly(readonly);
+	alarms().getFirst()->setAlarmReadOnly(readonly);
 }
 
 bool MessageEvent::messageIsFileName() const
 {
-	return alarm()->text().startsWith(FILE_PREFIX);
+	return alarms().getFirst()->text().startsWith(FILE_PREFIX);
 }
 
 QString MessageEvent::cleanText() const
 {
-	if (alarm()->text().startsWith(FILE_PREFIX)
-	||  alarm()->text().startsWith(TEXT_PREFIX))
-		return alarm()->text().mid(5);
-	return alarm()->text();
+	if (alarms().getFirst()->text().startsWith(FILE_PREFIX)
+	||  alarms().getFirst()->text().startsWith(TEXT_PREFIX))
+		return alarms().getFirst()->text().mid(5);
+	return alarms().getFirst()->text();
 }
 
 QString MessageEvent::message() const
 {
-	if (alarm()->text().startsWith(FILE_PREFIX))
+	if (alarms().getFirst()->text().startsWith(FILE_PREFIX))
 		return QString::null;
-	if (alarm()->text().startsWith(TEXT_PREFIX))
-		return alarm()->text().mid(5);
-	return alarm()->text();
+	if (alarms().getFirst()->text().startsWith(TEXT_PREFIX))
+		return alarms().getFirst()->text().mid(5);
+	return alarms().getFirst()->text();
 }
 
 QString MessageEvent::fileName() const
 {
-	if (alarm()->text().startsWith(FILE_PREFIX))
-		return alarm()->text().mid(5);
+	if (alarms().getFirst()->text().startsWith(FILE_PREFIX))
+		return alarms().getFirst()->text().mid(5);
 	return QString::null;
 }
 

@@ -53,7 +53,7 @@ MessageWin::MessageWin(const MessageEvent& event, bool reschedule_event)
 	  dateTime(event.dateTime()),
 	  eventID(event.VUID()),
 	  flags(event.flags()),
-	  audioFile(event.alarm()->audioFile()),
+//	  audioFile(event.alarm()->audioFile()),
 	  beep(event.beep()),
 	  file(event.messageIsFileName()),
 	  deferHeight(0),
