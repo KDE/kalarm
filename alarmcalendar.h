@@ -27,18 +27,23 @@
 
 #include <kurl.h>
 #include <libkcal/calendarlocal.h>
-#include "msgevent.h"
+#include "alarmevent.h"
 
 
+/** Provides read and write access to calendar files.
+ *  Either vCalendar or iCalendar files may be read, but the calendar is saved
+ *  only in iCalendar format to avoid information loss.
+ */
 class AlarmCalendar
 {
 	public:
-		AlarmCalendar(const QString& file, KAlarmEvent::Status);
+		AlarmCalendar(const QString& file, KAlarmEvent::Status, const QString& icalFile = QString::null,
+		              const QString& configKey = QString::null);
 		bool                  valid() const                       { return mUrl.isValid(); }
 		bool                  open();
 		int                   load();
 		int                   reload();
-		bool                  save()                              { return save(mLocalFile); }
+		bool                  save()                              { return saveCal(); }
 		void                  close();
 		void                  purge(int daysToKeep, bool saveIfPurged);
 		KCal::Event*          event(const QString& uniqueID)      { return mCalendar ? mCalendar->event(uniqueID) : 0; }
@@ -54,14 +59,17 @@ class AlarmCalendar
 		static int            KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
 	private:
 		bool                  create();
-		bool                  save(const QString& tempFile);
+		bool                  saveCal(const QString& tempFile = QString::null);
+		void                  convertToICal();
 		void                  getKAlarmVersion() const;
 		bool                  isUTC() const;
 
 		KCal::CalendarLocal* mCalendar;
-		KURL                 mUrl;              // URL of calendar file
+		KURL                 mUrl;              // URL of current calendar file
+		KURL                 mICalUrl;          // URL of iCalendar file
 		QString              mLocalFile;        // local name of calendar file
-		KAlarmEvent::Status mType;              // what type of events the calendar file is for
+		QString              mConfigKey;        // config file key for this calendar's URL
+		KAlarmEvent::Status  mType;             // what type of events the calendar file is for
 		mutable int          mKAlarmVersion;    // version of KAlarm which created the loaded calendar file
 		mutable bool         mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                 mVCal;             // true if calendar file is in VCal format

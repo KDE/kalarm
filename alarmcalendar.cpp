@@ -54,13 +54,17 @@ extern "C" {
 using namespace KCal;
 
 
-AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type)
+AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type, const QString& icalPath,
+                             const QString& configKey)
 	: mCalendar(0),
+	  mConfigKey(icalPath.isNull() ? QString::null : configKey),
 	  mType(type),
 	  mKAlarmVersion(-1),
 	  mKAlarmVersion057_UTC(false)
 {
-	mUrl.setPath(path);    // N.B. constructor mUrl(path) doesn't work with UNIX paths
+	mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
+	mICalUrl.setPath(icalPath.isNull() ? path : icalPath);
+	mVCal = (icalPath.isNull() || path != icalPath);    // is the calendar in ICal or VCal format?
 }
 
 /******************************************************************************
@@ -75,10 +79,6 @@ bool AlarmCalendar::open()
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
-
-	// Find out whether the calendar is ICal or VCal format
-	QString ext = mUrl.filename().right(4);
-	mVCal = (ext == QString::fromLatin1(".vcs"));
 
 	if (!KIO::NetAccess::exists(mUrl))
 	{
@@ -112,20 +112,21 @@ bool AlarmCalendar::open()
 
 /******************************************************************************
 * Private method to create a new calendar file.
+* It is always created in iCalendar format.
 */
 bool AlarmCalendar::create()
 {
 	// Create the calendar file
 	KTempFile* tmpFile = 0;
 	QString filename;
-	if (mUrl.isLocalFile())
-		filename = mUrl.path();
+	if (mICalUrl.isLocalFile())
+		filename = mICalUrl.path();
 	else
 	{
 		tmpFile = new KTempFile;
 		filename = tmpFile->name();
 	}
-	if (!save(filename))
+	if (!saveCal(filename))
 	{
 		delete tmpFile;
 		return false;
@@ -176,7 +177,7 @@ int AlarmCalendar::load()
 		return -1;
 	}
 	if (!mLocalFile.isEmpty())
-		KIO::NetAccess::removeTempFile(mLocalFile);
+		KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
 	mLocalFile = tmpFile;
 
 	// Find the version of KAlarm which wrote the calendar file, and do
@@ -211,32 +212,45 @@ int AlarmCalendar::reload()
 /******************************************************************************
 * Save the calendar from memory to file.
 */
-bool AlarmCalendar::save(const QString& filename)
+bool AlarmCalendar::saveCal(const QString& filename)
 {
 	if (!mCalendar)
 		return false;
 
-	kdDebug(5950) << "AlarmCalendar::save(" << filename << ")\n";
-	CalFormat* format;
-	if(mVCal)
-		format = new VCalFormat;
-	else
-		format = new ICalFormat;
-	bool success = mCalendar->save(filename, format);
+	kdDebug(5950) << "AlarmCalendar::saveCal(" << filename << ")\n";
+	QString saveFilename = filename.isNull() ? mLocalFile : filename;
+	if (mVCal  &&  filename.isNull()  &&  mUrl.isLocalFile())
+		saveFilename = mICalUrl.path();
+	bool success = mCalendar->save(saveFilename, new ICalFormat);
 	if (!success)
 	{
-		kdError(5950) << "AlarmCalendar::save(" << filename << "): failed.\n";
+		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
 		return false;
 	}
 
-	if (!mUrl.isLocalFile())
+	if (!mICalUrl.isLocalFile())
 	{
-		if (!KIO::NetAccess::upload(filename, mUrl))
+		if (!KIO::NetAccess::upload(saveFilename, mICalUrl))
 		{
-			kdError(5950) << "AlarmCalendar::save(" << filename << "): upload failed.\n";
-			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mUrl.prettyURL()), kapp->aboutData()->programName());
+			kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
+			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mICalUrl.prettyURL()), kapp->aboutData()->programName());
 			return false;
 		}
+	}
+
+	if (mVCal)
+	{
+		// The file was in vCalendar format, but has now been saved in iCalendar format.
+		// Save the change in the config file.
+		if (!mConfigKey.isNull())
+		{
+			KConfig* config = kapp->config();
+			config->setGroup(QString::fromLatin1("General"));
+			config->writePathEntry(mConfigKey, mICalUrl.path());
+			config->sync();
+		}
+		mUrl  = mICalUrl;
+		mVCal = false;
 	}
 
 	if (mType == KAlarmEvent::ACTIVE)
@@ -246,7 +260,7 @@ bool AlarmCalendar::save(const QString& filename)
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(kapp->aboutData()->appName()) << mUrl.url();
 		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
-			kdError(5950) << "AlarmCalendar::save(): reloadMsgCal dcop send failed" << endl;
+			kdError(5950) << "AlarmCalendar::saveCal(): reloadMsgCal dcop send failed" << endl;
 	}
 	return true;
 }
@@ -257,12 +271,32 @@ bool AlarmCalendar::save(const QString& filename)
 void AlarmCalendar::close()
 {
 	if (!mLocalFile.isEmpty())
-		KIO::NetAccess::removeTempFile(mLocalFile);
+		KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
 	if (mCalendar)
 	{
 		mCalendar->close();
 		delete mCalendar;
 		mCalendar = 0;
+	}
+}
+
+/******************************************************************************
+* If it is VCal format, convert the calendar URL to ICal and save the new URL
+* in the config file.
+*/
+void AlarmCalendar::convertToICal()
+{
+	if (mVCal)
+	{
+		if (!mConfigKey.isNull())
+		{
+			KConfig* config = kapp->config();
+			config->setGroup(QString::fromLatin1("General"));
+			config->writePathEntry(mConfigKey, mICalUrl.path());
+			config->sync();
+		}
+		mUrl  = mICalUrl;
+		mVCal = false;
 	}
 }
 
@@ -286,7 +320,7 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 			}
 		}
 		if (purged  &&  saveIfPurged)
-			save();
+			saveCal();
 	}
 }
 
@@ -350,7 +384,7 @@ void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 		{
 			mCalendar->deleteEvent(kcalEvent);
 			if (saveit)
-				save();
+				saveCal();
 		}
 	}
 }
