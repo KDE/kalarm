@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kurldrag.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfig.h>
@@ -837,7 +838,7 @@ void KAlarmMainWindow::dragEnterEvent(QDragEnterEvent* e)
 void KAlarmMainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
-	       || QUriDrag::canDecode(e));
+	       || KURLDrag::canDecode(e));
 }
 
 /******************************************************************************
@@ -857,20 +858,23 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 {
 	KAlarmEvent::Action action;
 	QString text;
-	QStrList files;
-	if (QUriDrag::decode(e, files)  &&  files.count())
+	KURL::List files;
+	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
 		action = KAlarmEvent::FILE;
-		text = files.getFirst();
+		text = files.first().prettyURL();
 	}
 	else if (QTextDrag::decode(e, text))
 	{
 		action = KAlarmEvent::MESSAGE;
 	}
+#if 0
+// KMail has not yet implemented drag of a message
 	else if (e->provides("x-kmail-drag/message"))
 	{
 //		QByteArray data = e->encodedData("x-kmail-drag/message");
 	}
+#endif
 	if (!text.isEmpty())
 		executeNew(win, action, text);
 }
