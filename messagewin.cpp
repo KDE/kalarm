@@ -92,8 +92,8 @@ class MessageText : public QTextEdit
 			setReadOnly(true);
 			setWordWrap(QTextEdit::NoWrap);
 		}
-		virtual QSize sizeHint() const
-		{ return QSize(contentsWidth(), contentsHeight() + horizontalScrollBar()->height()); }
+		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
+		virtual QSize sizeHint() const  { return QSize(contentsWidth(), contentsHeight() + scrollBarHeight()); }
 };
 
 
@@ -367,6 +367,9 @@ QSize MessageWin::initView()
 			text->setPaper(mBgColour);
 			text->setPaletteForegroundColor(mFgColour);
 			text->setFont(font);
+			int h = text->sizeHint().height();
+			text->setMinimumHeight(h - text->scrollBarHeight());
+			text->setMaximumHeight(h);
 			QWhatsThis::add(text, i18n("The alarm message"));
 			int lineSpacing = text->fontMetrics().lineSpacing();
 			int vspace = lineSpacing/2 - marginKDE2;
