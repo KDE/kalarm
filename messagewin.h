@@ -46,8 +46,8 @@ class MessageWin : public MainWindowBase
 		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, const QString& errmsg,
 		           const QString& errmsg2 = QString::null, bool reschedule_event = true);
 		~MessageWin();
-		void                repeat();
-		const QDateTime&    dateTime()             { return mDateTime; }
+		void                repeat(const KAlarmAlarm&);
+		const DateTime&     dateTime()             { return mDateTime; }
 		KAlarmAlarm::Type   alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!deferButton; }
 		bool                errorMessage() const   { return !errorMsg.isNull(); }
@@ -75,7 +75,7 @@ class MessageWin : public MainWindowBase
 		QString             message;
 		QFont               font;
 		QColor              colour;
-		QDateTime           mDateTime;        // date/time displayed in the message window
+		DateTime            mDateTime;        // date/time displayed in the message window
 		QString             eventID;
 		QString             audioFile;
 		QString             emailAddresses;

@@ -1103,7 +1103,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					kdDebug(5950) << "KAlarmApp::handleEvent(): LATE_CANCEL\n";
 					bool late = false;
 					bool cancel = false;
-					if (event.anyTime())
+					if (alarm.dateTime().isDateOnly())
 					{
 #warning "Cater for timed deferral alarms, etc."
 						// The alarm has no time, so cancel it if its date is past
@@ -1112,7 +1112,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						{
 							// It's too late to display the scheduled occurrence.
 							// Find the last previous occurrence of the alarm.
-							QDateTime next;
+							DateTime next;
 							KAlarmEvent::OccurType type = event.previousOccurrence(now, next);
 							switch (type)
 							{
@@ -1145,7 +1145,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						{
 							// It's over the maximum interval late.
 							// Find the last previous occurrence of the alarm.
-							QDateTime next;
+							DateTime next;
 							KAlarmEvent::OccurType type = event.previousOccurrence(now, next);
 							switch (type)
 							{
@@ -1153,7 +1153,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAlarmEvent::RECURRENCE_DATE:
 								case KAlarmEvent::RECURRENCE_DATE_TIME:
 								case KAlarmEvent::LAST_OCCURRENCE:
-									if (next.secsTo(now) > maxlate)
+									if (next.dateTime().secsTo(now) > maxlate)
 									{
 										if (type == KAlarmEvent::LAST_OCCURRENCE)
 											cancel = true;
@@ -1214,9 +1214,9 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 * with on-display status, and to reschedule it for its next repetition.
 * If no repetitions remain, cancel it.
 */
-void KAlarmApp::alarmShowing(KAlarmEvent& event, KAlarmAlarm::Type alarmType, const QDateTime& alarmTime)
+void KAlarmApp::alarmShowing(KAlarmEvent& event, KAlarmAlarm::Type alarmType, const DateTime& alarmTime)
 {
-	kdDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << (alarmType==KAlarmAlarm::MAIN_ALARM ? "MAIN" : alarmType==KAlarmAlarm::DEFERRAL_ALARM ? "DEFERRAL" : alarmType==KAlarmAlarm::AT_LOGIN_ALARM ? "LOGIN" : "?") << ")\n";
+	kdDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAlarmAlarm::debugType(alarmType) << ")\n";
 	Event* kcalEvent = mCalendar->event(event.id());
 	if (!kcalEvent)
 		kdError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
@@ -1229,7 +1229,7 @@ void KAlarmApp::alarmShowing(KAlarmEvent& event, KAlarmAlarm::Type alarmType, co
 		{
 			// Copy the alarm to the displaying calendar in case of a crash, etc.
 			KAlarmEvent dispEvent;
-			dispEvent.setDisplaying(event, alarmType, alarmTime);
+			dispEvent.setDisplaying(event, alarmType, alarmTime.dateTime());
 			if (mDisplayCalendar->open())
 			{
 				mDisplayCalendar->deleteEvent(dispEvent.id());   // in case it already exists
@@ -1287,7 +1287,7 @@ void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bo
 		}
 		if (event.deferred())
 		{
-			event.removeExpiredAlarm(KAlarmAlarm::DEFERRAL_ALARM);
+			event.removeExpiredAlarm(KAlarmAlarm::DEFERRED_ALARM);
 			update = true;
 		}
 	}
@@ -1409,7 +1409,7 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 		else
 		{
 			// Update the existing message window
-			win->repeat();    // N.B. this reschedules the alarm
+			win->repeat(alarm);    // N.B. this reschedules the alarm
 		}
 	}
 	return result;

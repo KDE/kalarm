@@ -1,7 +1,7 @@
 /*
  *  deferdlg.h  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,19 +25,20 @@
 #include <kdialogbase.h>
 
 class AlarmTimeWidget;
+class DateTime;
 
 
 class DeferAlarmDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
+		DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 		              bool cancelButton, QWidget* parent = 0, const char* name = 0);
 		virtual ~DeferAlarmDlg();
 
-		void              setLimit(const QDateTime& limitDT)     { limitDateTime = limitDT;  limitEventID = ""; }
-		void              setLimit(const QString& eventID)    { limitEventID = eventID; }
-		const QDateTime&  getDateTime() const  { return alarmDateTime; }
+		void              setLimit(const DateTime& limitDT)   { mLimitDateTime = limitDT;  mLimitEventID = ""; }
+		void              setLimit(const QString& eventID)    { mLimitEventID = eventID; }
+		const DateTime&   getDateTime() const  { return mAlarmDateTime; }
 
 	protected slots:
 		virtual void slotOk();
@@ -45,10 +46,10 @@ class DeferAlarmDlg : public KDialogBase
 		virtual void slotUser1();
 
 	private:
-		AlarmTimeWidget* timeWidget;
-		QDateTime        alarmDateTime;
-		QDateTime        limitDateTime;   // latest date/time allowed for deferral
-		QString          limitEventID;    // event from whose recurrences to derive the limit date/time for deferral
+		AlarmTimeWidget* mTimeWidget;
+		DateTime         mAlarmDateTime;
+		DateTime         mLimitDateTime;   // latest date/time allowed for deferral
+		QString          mLimitEventID;    // event from whose recurrences to derive the limit date/time for deferral
 };
 
 #endif // DEFERDLG_H

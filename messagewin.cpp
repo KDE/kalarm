@@ -84,7 +84,6 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  flags(alarm.flags()),
 	  beep(evnt.beep()),
 	  confirmAck(evnt.confirmAck()),
-	  dateOnly(evnt.anyTime()),
 	  action(alarm.action()),
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
 	  deferButton(0),
@@ -123,7 +122,6 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  flags(alarm.flags()),
 	  beep(false),
 	  confirmAck(evnt.confirmAck()),
-	  dateOnly(evnt.anyTime()),
 	  action(alarm.action()),
 	  errorMsg(errmsg),
 	  errorMsg2(errmsg2),
@@ -182,8 +180,9 @@ QSize MessageWin::initView()
 	{
 		// Alarm date/time
 		QLabel* label = new QLabel(topWidget);
-		label->setText(dateOnly ? KGlobal::locale()->formatDate(mDateTime.date(), true)
-		                        : KGlobal::locale()->formatDateTime(mDateTime));
+		label->setText(mDateTime.isDateOnly()
+		               ? KGlobal::locale()->formatDate(mDateTime.date(), true)
+		               : KGlobal::locale()->formatDateTime(mDateTime.dateTime()));
 		label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
 		topLayout->addWidget(label, 0, Qt::AlignHCenter);
@@ -399,8 +398,8 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("ConfirmAck"), confirmAck);
 		if (mDateTime.isValid())
 		{
-			config->writeEntry(QString::fromLatin1("Time"), mDateTime);
-			config->writeEntry(QString::fromLatin1("DateOnly"), dateOnly);
+			config->writeEntry(QString::fromLatin1("Time"), mDateTime.dateTime());
+			config->writeEntry(QString::fromLatin1("DateOnly"), mDateTime.isDateOnly());
 		}
 		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
@@ -427,8 +426,9 @@ void MessageWin::readProperties(KConfig* config)
 	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
 	confirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
-	mDateTime     = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
-	dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	QDateTime dt  = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	bool dateOnly = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	mDateTime.set(dt, dateOnly);
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
 	if (errorMsg.isNull()  &&  mAlarmType != KAlarmAlarm::INVALID_ALARM)
@@ -472,11 +472,12 @@ void MessageWin::playAudio()
 *  Re-output any required audio notification, and reschedule the alarm in the
 *  calendar file.
 */
-void MessageWin::repeat()
+void MessageWin::repeat(const KAlarmAlarm& alarm)
 {
 	const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
 	if (kcalEvent)
 	{
+		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
 		raise();
 		playAudio();
 		KAlarmEvent event(*kcalEvent);
@@ -561,8 +562,9 @@ void MessageWin::slotDefer()
 	deferDlg->setLimit(eventID);
 	if (deferDlg->exec() == QDialog::Accepted)
 	{
-		QDateTime dateTime = deferDlg->getDateTime();
+		DateTime dateTime = deferDlg->getDateTime();
 		const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
+#warning "Deferring a previously deferred repeat-at-login alarm displays an at-login alarm immediately"
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
@@ -582,7 +584,7 @@ void MessageWin::slotDefer()
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime, message, colour, font, (KAlarmEvent::Action)action, flags);
+				event.set(dateTime.dateTime(), message, colour, font, (KAlarmEvent::Action)action, flags);
 				event.setAudioFile(audioFile);
 				event.setArchive();
 				event.setEventID(eventID);

@@ -34,14 +34,15 @@
 #include <libkcal/recurrence.h>
 
 #include "kalarmapp.h"
-#include "datetime.h"
+#include "alarmtimewidget.h"
 #include "alarmevent.h"
+#include "datetime.h"
 #include "deferdlg.moc"
 
 using namespace KCal;
 
 
-DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
+DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
                              bool cancelButton, QWidget* parent, const char* name)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel|User1, Ok, false, i18n("Cancel &Deferral"))
 {
@@ -52,9 +53,9 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
 
-	timeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page, "timeGroup");
-	timeWidget->setDateTime(initialDT);
-	layout->addWidget(timeWidget);
+	mTimeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page, "timeGroup");
+	mTimeWidget->setDateTime(initialDT);
+	layout->addWidget(mTimeWidget);
 	layout->addSpacing(KDialog::spacingHint());
 
 	setButtonWhatsThis(Ok, i18n("Defer the alarm until the specified time."));
@@ -72,16 +73,15 @@ DeferAlarmDlg::~DeferAlarmDlg()
 */
 void DeferAlarmDlg::slotOk()
 {
-	bool anyTime;
-	if (!timeWidget->getDateTime(alarmDateTime, anyTime))
+	if (!mTimeWidget->getDateTime(mAlarmDateTime))
 	{
 		bool recurs = false;
 		bool reminder = false;
-		QDateTime endTime;
-		if (!limitEventID.isEmpty())
+		DateTime endTime;
+		if (!mLimitEventID.isEmpty())
 		{
 			// Get the event being deferred
-			const Event* kcalEvent = theApp()->getEvent(limitEventID);
+			const Event* kcalEvent = theApp()->getEvent(mLimitEventID);
 			if (kcalEvent)
 			{
 				KAlarmEvent event(*kcalEvent);
@@ -94,7 +94,7 @@ void DeferAlarmDlg::slotOk()
 					recurs = true;
 					if (event.reminder())
 					{
-						QDateTime reminderTime = endTime.addSecs(-event.reminder() * 60);
+						DateTime reminderTime = endTime.addMins(-event.reminder());
 						if (now < reminderTime)
 						{
 							endTime = reminderTime;
@@ -103,7 +103,7 @@ void DeferAlarmDlg::slotOk()
 					}
 				}
 				else if ((event.reminder() || event.reminderDeferral() || event.reminderArchived())
-				     &&  QDateTime::currentDateTime() < event.mainDateTime())
+				     &&  QDateTime::currentDateTime() < event.mainDateTime().dateTime())
 				{
 					// It's an advance warning alarm. Don't allow it to be deferred past its main alarm time.
 					endTime = event.mainDateTime();
@@ -112,13 +112,13 @@ void DeferAlarmDlg::slotOk()
 			}
 		}
 		else
-			endTime = limitDateTime;
-		if (endTime.isValid()  &&  alarmDateTime >= endTime)
+			endTime = mLimitDateTime;
+		if (endTime.isValid()  &&  mAlarmDateTime >= endTime)
 		{
 			QString text = !reminder ? i18n("Cannot defer past the alarm's next recurrence (currently %1)")
 			             : recurs    ? i18n("Cannot defer past the alarm's next reminder (currently %1)")
 			             :             i18n("Cannot defer reminder past the main alarm time (%1)");
-			KMessageBox::sorry(this, text.arg(KGlobal::locale()->formatDateTime(endTime)));
+			KMessageBox::sorry(this, text.arg(endTime.formatLocale()));
 		}
 		else
 			accept();
@@ -130,7 +130,7 @@ void DeferAlarmDlg::slotOk()
 */
 void DeferAlarmDlg::slotUser1()
 {
-	alarmDateTime = QDateTime();
+	mAlarmDateTime = DateTime();
 	accept();
 }
 

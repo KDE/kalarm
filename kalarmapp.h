@@ -99,7 +99,7 @@ class KAlarmApp : public KUniqueApplication
 		void               endCalendarUpdate();
 		void               calendarSave(bool reload = true);
 		void*              execAlarm(KAlarmEvent&, const KAlarmAlarm&, bool reschedule, bool allowDefer = true);
-		void               alarmShowing(KAlarmEvent&, KAlarmAlarm::Type, const QDateTime&);
+		void               alarmShowing(KAlarmEvent&, KAlarmAlarm::Type, const DateTime&);
 		void               deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(KProcess*, QWidget* parent);
 		int                maxLateness();

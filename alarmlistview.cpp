@@ -305,16 +305,17 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 	setText(AlarmListView::MESSAGE_COLUMN, messageText);
 	mMessageWidth = width(parent->fontMetrics(), parent, AlarmListView::MESSAGE_COLUMN);
 
-	QDateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime();
+	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
-	if (!event.anyTime()  ||  event.deferred())
+	if (!dateTime.isDateOnly())
 	{
 		dateTimeText += ' ';
 		dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';
 	}
 	setText(AlarmListView::TIME_COLUMN, dateTimeText);
+	QTime t = dateTime.time();
 	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
-	                                           dateTime.time().hour(), dateTime.time().minute());
+	                                           t.hour(), t.minute());
 
 	int repeatOrder = 0;
 	int repeatInterval = 0;
