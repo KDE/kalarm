@@ -1,0 +1,39 @@
+KAlarm
+
+=== Version 0.3.5 --- 5 Dec 2001 ===
+Add option to repeat alarms at login.
+Add context help button to main window and message window.
+Fix occasional crash on displaying non-repeating alarms.
+Fix possible failure to display alarms at login.
+Fix blank title bar when main window restored at login.
+Fix alarms not deleted from main window when displayed at login.
+Fix handling of zero-length calendar file.
+Improve error messages.
+Make documentation files installation dependent on KDE version.
+
+=== Version 0.3.1 --- 20 Nov 2001 ===
+Fix build fault when using ./configure --enable-final
+
+=== Version 0.3 --- 4 Nov 2001 ===
+Add option to display a file's contents instead of specifying a message.
+Add dialog option to set an alarm's time as an interval from the current time.
+Add defer option to alarm message window.
+Provide button in alarm message window to activate KAlarm.
+Make dialogs modal only for their parent window.
+
+=== Version 0.2 --- 20 Oct 2001 ===
+Implement repeating alarms.
+Add extra pair of arrow buttons to time spinbox to change the hour.
+Fix sorting by colour column.
+Better What's This? texts for the main window.
+Remove -r, -s short options (use --reset, --stop instead).
+Update libraries to kdepim-2.2.1 (standalone package).
+Reinstate libkcal holidays files (standalone package).
+
+=== Version 0.1.1 --- 1 Sep 2001 ===
+Fix documentation not being created by build.
+Remove KOrganizer-specific files from libkcal (standalone package).
+Change alarm daemon icon (standalone package).
+
+=== Version 0.1 --- 31 Aug 2001 ===
+Initial release.
