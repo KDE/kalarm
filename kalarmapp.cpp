@@ -1084,14 +1084,15 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 		if (!proc.start(KProcess::DontCare))
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
-			(new MessageWin(i18n("Failed to execute command:\n%1").arg(command), event, alarm, reschedule))->show();
+			QString msg = i18n("Failed to execute command:");
+			(new MessageWin(QString("%1\n%2").arg(msg).arg(command), event, alarm, reschedule))->show();
 			result = false;
 		}
 #if 0
 		else (!proc.normalExit())
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): killed\n";
-			(new MessageWin(i18n("Command killed:\n%1").arg(command), event, alarm, reschedule))->show();
+			(new MessageWin(i18n("Command execution error:"), event, alarm, reschedule))->show();
 			result = false;
 		}
 #endif
