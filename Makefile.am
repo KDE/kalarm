@@ -30,8 +30,7 @@ autostartdir = $(prefix)/share/autostart
 kdelnkdir = $(kde_appsdir)/Applications
 kdelnk_DATA = kalarm.desktop
 
-appicondir = $(kde_datadir)/kalarm/icons
-appicon_ICON = AUTO
+KDE_ICON = AUTO
 
 messages: 
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
