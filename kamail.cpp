@@ -77,7 +77,7 @@ QString KAMail::send(const KAlarmEvent& event, bool allowNotify)
 	QString from = Preferences::instance()->emailAddress();
 	QString bcc  = Preferences::instance()->emailBccAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
-	              << "\nSubject: " << event.emailSubject();
+	              << "\nSubject: " << event.emailSubject() << endl;
 
 	if (Preferences::instance()->emailClient() == Preferences::SENDMAIL)
 	{
@@ -305,7 +305,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 
 			message += QString::fromLatin1("\n--%1").arg(boundary);
 			message += QString::fromLatin1("\nContent-Type: %2; name=\"%3\"").arg(mimeType).arg(fi.text());
-			message += QString::fromLatin1("\nContent-Transfer-Encoding: %1").arg(text ? "8bit" : "BASE64");
+			message += QString::fromLatin1("\nContent-Transfer-Encoding: %1").arg(QString::fromLatin1(text ? "8bit" : "BASE64"));
 			message += QString::fromLatin1("\nContent-Disposition: attachment; filename=\"%4\"\n\n").arg(fi.text());
 
 			// Read the file contents
@@ -327,26 +327,32 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 			Q_LONG bytes = file.readBlock(contents, size);
 			file.close();
 			contents[size] = 0;
+			bool atterror = false;
 			if (bytes == -1  ||  (Offset)bytes < size) {
 				kdDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
-				return attachError.arg(attachment);
+				atterror = true;
 			}
-
-			if (text)
+			else if (text)
 			{
+				// Text attachment doesn't need conversion
 				message += contents;
 			}
 			else
 			{
 				// Convert the attachment to BASE64 encoding
-				char* base64 = new char [size * 2];
-				size = base64Encode(contents, base64, size);
-				if (size == (Offset)-1) {
+				Offset base64Size;
+				char* base64 = base64Encode(contents, size, base64Size);
+				if (base64Size == (Offset)-1) {
 					kdDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
-					return attachError.arg(attachment);
+					atterror = true;
 				}
-				message += QString::fromLatin1(base64, size);
+				else
+					message += QString::fromLatin1(base64, base64Size);
+				delete[] base64;
 			}
+			delete[] contents;
+			if (atterror)
+				return attachError.arg(attachment);
 		}
 		message += QString::fromLatin1("\n--%1--\n.\n").arg(boundary);
 	}
@@ -535,9 +541,12 @@ int KAMail::checkAttachment(QString& attachment, bool check)
 
 
 /******************************************************************************
-*  Optionally check for the existence of the attachment file.
+*  Convert a block of memory to Base64 encoding.
+*  'outSize' is set to the number of bytes used in the returned block, or to
+*            -1 if overflow.
+*  Reply = BASE64 buffer, which the caller must delete[] afterwards.
 */
-KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
+char* KAMail::base64Encode(const char* in, KAMail::Offset size, KAMail::Offset& outSize)
 {
 	const int MAX_LINELEN = 72;
 	static unsigned char dtable[65] =
@@ -545,6 +554,8 @@ KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
 		"abcdefghijklmnopqrstuvwxyz"
 		"0123456789+/";
 
+	char* out = new char [2*size + 5];
+	outSize = (Offset)-1;
 	Offset outIndex = 0;
 	int lineLength = 0;
 	for (Offset inIndex = 0;  inIndex < size;  )
@@ -576,8 +587,11 @@ KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
 				if (n < 2)
 					ogroup[2] = '=';
 			}
-			if (outIndex + 5 >= size*2)
-				return (Offset)-1;
+			if (outIndex >= size*2)
+			{
+				delete[] out;
+				return 0;
+			}
 			for (int i = 0;  i < 4;  ++i)
 			{
 				if (lineLength >= MAX_LINELEN)
@@ -597,7 +611,8 @@ KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
 		out[outIndex++] = '\r';
 		out[outIndex++] = '\n';
 	}
-	return outIndex;
+	outSize = outIndex;
+	return out;
 }
 
 namespace
