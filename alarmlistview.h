@@ -35,6 +35,7 @@
 #include "eventlistviewbase.h"
 
 class AlarmListView;
+class AlarmListTooltip;
 
 
 class AlarmListViewItem : public EventListViewItemBase
@@ -45,20 +46,24 @@ class AlarmListViewItem : public EventListViewItemBase
 		void                updateTimeToAlarm(const QDateTime& now, bool forceDisplay = false);
 		virtual void        paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
 		AlarmListView*      alarmListView() const     { return (AlarmListView*)listView(); }
-		static QString      alarmText(const KAEvent&);
+		bool                messageTruncated() const  { return mMessageLfStripped || mMessageNoRoom; }
+		static QString      alarmText(const KAEvent& e, bool full, bool* lfStripped = 0);
 		// Overridden base class methods
 		AlarmListViewItem*  nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
 		virtual QString     key(int column, bool ascending) const;
 	protected:
 		virtual QString     lastColumnText() const    { return alarmText(event()); }
 	private:
+		QString             alarmText(const KAEvent&) const;
 		QString             alarmTimeText() const;
 		QString             timeToAlarmText(const QDateTime& now) const;
 
-		QString             mDateTimeOrder;    // controls ordering of date/time column
-		QString             mRepeatOrder;      // controls ordering of repeat column
-		QString             mColourOrder;      // controls ordering of colour column
-		int                 mTimeToAlarmShown; // relative alarm time is displayed
+		QString             mDateTimeOrder;     // controls ordering of date/time column
+		QString             mRepeatOrder;       // controls ordering of repeat column
+		QString             mColourOrder;       // controls ordering of colour column
+		bool                mTimeToAlarmShown;  // relative alarm time is displayed
+		mutable bool        mMessageLfStripped; // multi-line message text has been truncated for the display
+		mutable bool        mMessageNoRoom;     // display is too narrow for message text
 };
 
 
@@ -119,6 +124,7 @@ class AlarmListView : public EventListViewBase
 		int                    mMessageColumn;        // index to message column
 		int                    mTimeColumnHeaderWidth;
 		int                    mTimeToColumnHeaderWidth;
+		AlarmListTooltip*      mTooltip;              // tooltip for showing full text of alarm messages
 		bool                   mDrawMessageInColour;
 		bool                   mShowExpired;          // true to show expired alarms
 };

@@ -30,9 +30,10 @@
 
 #include "kalarm.h"
 
-//#include <qheader.h>
+#include <qtooltip.h>
 #include <qpainter.h>
 #include <qstyle.h>
+#include <qheader.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -44,6 +45,15 @@
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "alarmlistview.h"
+
+
+class AlarmListTooltip : public QToolTip
+{
+	public:
+		AlarmListTooltip(QWidget* parent) : QToolTip(parent) { }
+	protected:
+		virtual void maybeTip(const QPoint&);
+};
 
 
 /*=============================================================================
@@ -81,10 +91,14 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	setColumnWidthMode(mColourColumn, QListView::Manual);
 
 	mInstanceList.append(this);
+
+	mTooltip = new AlarmListTooltip(viewport());
 }
 
 AlarmListView::~AlarmListView()
 {
+	delete mTooltip;
+	mTooltip = 0;
 	mInstanceList.remove(this);
 }
 
@@ -253,7 +267,9 @@ QString AlarmListView::whatsThisText(int column) const
 
 AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
 	: EventListViewItemBase(parent, event),
-	  mTimeToAlarmShown(false)
+	  mTimeToAlarmShown(false),
+	  mMessageLfStripped(false),
+	  mMessageNoRoom(false)
 {
 	setLastColumnText();     // set the message column text
 
@@ -312,20 +328,40 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 
 /******************************************************************************
 *  Return the alarm summary text.
+*  If 'full' is false, only a single line is returned.
+*  If 'lfStripped' is non-null, 
 */
-QString AlarmListViewItem::alarmText(const KAEvent& event)
+QString AlarmListViewItem::alarmText(const KAEvent& event) const
+{
+	bool lfStripped;
+	QString text = alarmText(event, false, &lfStripped);
+	mMessageLfStripped = lfStripped;
+	return text;
+}
+
+QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfStripped)
 {
 	QString text = (event.action() == KAEvent::EMAIL) ? event.emailSubject() : event.cleanText();
-	int newline = text.find('\n');
-	if (newline < 0)
-		return text;       // it's a single-line text
 	if (event.action() == KAEvent::MESSAGE)
 	{
 		// If the message is the text of an email, return its subject line
 		QString subject = KAlarmMainWindow::emailSubject(text);
 		if (!subject.isNull())
+		{
+			if (lfStripped)
+				*lfStripped = false;
 			return subject;
+		}
 	}
+	if (full)
+		return text;
+	if (lfStripped)
+		*lfStripped = false;
+	int newline = text.find('\n');
+	if (newline < 0)
+		return text;       // it's a single-line text
+	if (lfStripped)
+		*lfStripped = true;
 	return text.left(newline) + QString::fromLatin1("...");
 }
 
@@ -441,7 +477,9 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 //			painter->setPen(event().fgColour());
 		}
 		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
-		painter->drawText(textRect, AlignVCenter, text(column));
+		QString txt = text(column);
+		painter->drawText(textRect, AlignVCenter, txt);
+		mMessageNoRoom = (listView->fontMetrics().boundingRect(txt).width() > width);
 	}
 }
 
@@ -459,5 +497,30 @@ QString AlarmListViewItem::key(int column, bool) const
 	if (column == listView->colourColumn())
 		return mColourOrder;
 	return text(column).lower();
+}
+
+
+/*=============================================================================
+=  Class: AlarmListTooltip
+=  Displays the full alarm text in a tooltip when necessary.
+=============================================================================*/
+
+/******************************************************************************
+*  Displays the full alarm text in a tooltip, if it is not already displayed.
+*/
+void AlarmListTooltip::maybeTip(const QPoint& pt)
+{
+	AlarmListView* listView = (AlarmListView*)parentWidget()->parentWidget();
+	if (listView->header()->sectionAt(pt.x()) == listView->messageColumn())
+	{
+		AlarmListViewItem* item = (AlarmListViewItem*)listView->itemAt(pt);
+		if (item  &&  item->messageTruncated())
+		{
+			kdDebug(5950) << "AlarmListTooltip::maybeTip(): display\n";
+			QRect rect = listView->itemRect(item);
+			rect.setLeft(rect.right() + 1 - listView->columnWidth(listView->messageColumn()));
+			tip(rect, item->alarmText(item->event(), true));
+		}
+	}
 }
 

@@ -1,14 +1,15 @@
 KAlarm
 
-=== Version 1.1.0 --- 26 Mar 2004 ===
+=== Version 1.1.0 --- 27 Mar 2004 ===
 Add facility to define alarm templates.
 Add option to play sound file repeatedly until alarm window is closed.
 Rename command line option --sound to --play, add option --play-repeat.
 After creating/editing alarm, prompt to re-enable alarms if currently disabled.
 Middle mouse button over system tray icon displays new alarm dialog.
 Display time-to-alarm in reminder message window.
+For message texts which are truncated in main window, show full text in tooltip.
 Allow time of day to be entered in format HHMM in time spin boxes.
-Allow hour to be omitted when colon format time is entered in time spin boxes..
+Allow hour to be omitted when colon format time is entered in time spin boxes.
 Add "Don't ask again" option to alarm deletion confirmation prompt.
 Prevent expired alarm calendar purges clashing with other alarm actions.
 Remove obsolete --displayEvent command line option (replaced by --triggerEvent).

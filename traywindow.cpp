@@ -256,7 +256,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			}
 			if (space)
 				item.text += ' ';
-			item.text += AlarmListViewItem::alarmText(event);
+			item.text += AlarmListViewItem::alarmText(event, false);
 
 			// Insert the item into the list in time-sorted order
 			for (iit = items.begin();  iit != items.end();  ++iit)
