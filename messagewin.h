@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -122,6 +122,7 @@ class MessageWin : public MainWindowBase
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
 		int                 mFlags;
 		int                 mLateCancel;
+		int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action
 		bool                mRecreating;      // window is about to be deleted and immediately recreated

@@ -79,6 +79,10 @@ static const char* KMIX_APP_NAME    = "kmix";
 static const char* KMIX_DCOP_OBJECT = "Mixer0";
 #endif
 
+// The delay for enabling message window buttons if a zero delay is
+// configured, i.e. the windows are placed far from the cursor.
+static const int proximityButtonDelay = 1000;    // (milliseconds)
+static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
 // A text label widget which can be scrolled and copied with the mouse
 class MessageText : public QTextEdit
@@ -974,12 +978,14 @@ void MessageWin::showEvent(QShowEvent* se)
 				KAlarm::readConfigWindowSize("FileMessage", s);
 			resize(s);
 
-			if (Preferences::instance()->messageButtonDelay() == 0)
+			mButtonDelay = Preferences::instance()->messageButtonDelay() * 1000;
+			if (!mButtonDelay)
 			{
 				/* Try to ensure that the window can't accidentally be acknowledged
 				 * by the user clicking the mouse just as it appears.
 				 * To achieve this, move the window so that the OK button is as far away
-				 * from the cursor as possible.
+				 * from the cursor as possible. If the buttons are still too close to the
+				 * cursor, disable the buttons for a short time.
 				 * N.B. This can't be done in show(), since the geometry of the window
 				 *      is not known until it is displayed. Unfortunately by moving the
 				 *      window in showEvent(), a flicker is unavoidable.
@@ -1000,6 +1006,18 @@ void MessageWin::showEvent(QShowEvent* se)
 				int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
 				int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
 				int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
+
+				// Find the enclosing rectangle for the new button positions
+				// and check if the cursor is too near
+				QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
+				buttons.moveBy(rect.left() + x - frame.left(), rect.top() + y - frame.top());
+				int minDistance = proximityMultiple * mOkButton->height();
+				if ((abs(cursor.x() - buttons.left()) < minDistance
+				  || abs(cursor.x() - buttons.right()) < minDistance)
+				&&  (abs(cursor.y() - buttons.top()) < minDistance
+				  || abs(cursor.y() - buttons.bottom()) < minDistance))
+					mButtonDelay = proximityButtonDelay;    // too near - disable buttons initially
+
 				if (x != frame.left()  ||  y != frame.top())
 				{
 					mPositioning = true;
@@ -1038,9 +1056,8 @@ void MessageWin::displayComplete()
 		theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
 
 	// Enable the window's buttons either now or after the configured delay
-	int delay = Preferences::instance()->messageButtonDelay();
-	if (delay > 0)
-		QTimer::singleShot(delay * 1000, this, SLOT(enableButtons()));
+	if (mButtonDelay > 0)
+		QTimer::singleShot(mButtonDelay, this, SLOT(enableButtons()));
 	else
 		enableButtons();
 }
