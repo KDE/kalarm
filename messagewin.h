@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -43,14 +43,13 @@ class MessageWin : public MainWindowBase
 	public:
 		MessageWin();     // for session management restoration only
 		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true, bool allowDefer = true);
-		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, const QString& errmsg,
-		           const QString& errmsg2 = QString::null, bool reschedule_event = true);
+		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, const QStringList& errmsgs, bool reschedule_event = true);
 		~MessageWin();
 		void                repeat(const KAlarmAlarm&);
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAlarmAlarm::Type   alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!deferButton; }
-		bool                errorMessage() const   { return !errorMsg.isNull(); }
+		bool                errorMessage() const   { return mErrorMsgs.count(); }
 		static int          instanceCount()        { return windowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
@@ -86,7 +85,7 @@ class MessageWin : public MainWindowBase
 		bool                confirmAck;
 		bool                dateOnly;         // ignore event's time
 		KAlarmAlarm::Action action;
-		QString             errorMsg, errorMsg2;
+		QStringList         mErrorMsgs;
 		bool                noDefer;          // don't display a Defer option
 		// Miscellaneous
 		QPushButton*        deferButton;
