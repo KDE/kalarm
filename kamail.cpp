@@ -84,18 +84,17 @@ bool KAMail::send(const KAlarmEvent& event)
 			if (command.isNull())
 				return false; // give up
 
-			command += QString::fromLatin1(" -s \x22");
-			command += event.emailSubject();
-			command += QString::fromLatin1("\x22");
+			command += QString::fromLatin1(" -s ");
+			command += KProcess::quote(event.emailSubject());
 
 			if (event.emailBcc())
 			{
 				command += QString::fromLatin1(" -b ");
-				command += from;
+				command += KProcess::quote(from);
 			}
 
 			command += " ";
-			command += event.emailAddresses(" ");
+			command += event.emailAddresses(" "); // locally provided, okay
 		}
 
 		// Add the body and attachments to the message.
