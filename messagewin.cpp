@@ -564,7 +564,6 @@ void MessageWin::slotDefer()
 	{
 		DateTime dateTime = deferDlg->getDateTime();
 		const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
-#warning "Deferring a previously deferred repeat-at-login alarm displays an at-login alarm immediately"
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
