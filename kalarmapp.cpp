@@ -107,10 +107,10 @@ KAlarmApp::KAlarmApp()
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
-	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), actions, "alarmenable");
-	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
-	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
-	                                 0, this, SLOT(slotDaemonPreferences()), actions, "confdaemon");
+	mActionAlarmEnable   = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), actions, "alarmenable");
+	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
+	mActionDaemonControl = new KAction(i18n("Control Alarm &Daemon..."), mActionPrefs->iconSet(),
+	                                   0, this, SLOT(slotDaemonControl()), actions, "controldaemon");
 }
 
 /******************************************************************************
@@ -669,14 +669,14 @@ void KAlarmApp::slotPreferences()
 }
 
 /******************************************************************************
-* Called when a Configure Daemon menu item is selected.
-* Displays the alarm daemon configuration dialog.
+* Called when a Control Alarm Daemon menu item is selected.
+* Displays the alarm daemon control dialog.
 */
-void KAlarmApp::slotDaemonPreferences()
+void KAlarmApp::slotDaemonControl()
 {
 	KProcess proc;
 	proc << locate("exe", QString::fromLatin1("kcmshell"));
-	proc << QString::fromLatin1("alarmdaemonctrl");
+	proc << QString::fromLatin1("kcmkded");
 	proc.start(KProcess::DontCare);
 }
 
@@ -1128,9 +1128,9 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 #ifdef KALARM_EMAIL
 	else if (alarm.type() == KAlarmAlarm::EMAIL)
 	{
-		QString addresses = event.??();
+		QString addresses = event.emailAddresses();
 		kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL: " << command << endl;
-		if (??)
+		if (1)
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
 			(new MessageWin(i18n("Failed to send email"), event, alarm, reschedule))->show();
@@ -1631,6 +1631,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				case MESSAGE:  type = KAlarmAlarm::MESSAGE;  break;
 				case FILE:     type = KAlarmAlarm::FILE;     break;
 				case COMMAND:  type = KAlarmAlarm::COMMAND;  break;
+				default:  return false;
 			}
 			QDataStream arg(data, IO_ReadOnly);
 			QString   text, audioFile;
