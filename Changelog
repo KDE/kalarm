@@ -1,5 +1,10 @@
 KAlarm
 
+=== Version 0.4 --- 22 Dec 2001 ===
+Modify to use split alarm daemon/alarm daemon GUI.
+Prevent a command line error exiting all open KAlarm windows.
+Ensure the program exits after starting with --stop or --reset options.
+
 === Version 0.3.5 --- 5 Dec 2001 ===
 Add option to repeat alarms at login.
 Add context help button to main window and message window.
