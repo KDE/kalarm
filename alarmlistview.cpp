@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <libkcal/icaldrag.h>
+#include <libkcal/calendarlocal.h>
+
 #include "alarmcalendar.h"
 #include "alarmtext.h"
 #include "functions.h"
@@ -52,6 +55,7 @@ class AlarmListTooltip : public QToolTip
 =  Displays the list of outstanding alarms.
 =============================================================================*/
 QValueList<EventListViewBase*>  AlarmListView::mInstanceList;
+bool                            AlarmListView::mDragging = false;
 
 
 AlarmListView::AlarmListView(QWidget* parent, const char* name)
@@ -62,6 +66,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  mColourColumn(3),
 	  mTypeColumn(4),
 	  mMessageColumn(5),
+	  mMousePressed(false),
 	  mDrawMessageInColour(false),
 	  mShowExpired(false)
 {
@@ -258,6 +263,72 @@ QString AlarmListView::whatsThisText(int column) const
 	return i18n("List of scheduled alarms");
 }
 
+/******************************************************************************
+*  Called when the mouse button is pressed.
+*  Records the position of the mouse when the left button is pressed, for use
+*  in drag operations.
+*/
+void AlarmListView::contentsMousePressEvent(QMouseEvent* e)
+{
+	QListView::contentsMousePressEvent(e);
+	if (e->button() == Qt::LeftButton)
+	{
+		QPoint p(contentsToViewport(e->pos()));
+		if (itemAt(p))
+		{
+			mMousePressPos = e->pos();
+			mMousePressed  = true;
+		}
+		mDragging = false;
+	}
+}
+
+/******************************************************************************
+*  Called when the mouse is moved.
+*  Creates a drag object when the mouse drags one or more selected items.
+*/
+void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
+{
+	QListView::contentsMouseMoveEvent(e);
+	if (mMousePressed
+	&&  (mMousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+	{
+		// Create a calendar object containing all the currently selected alarms
+		kdDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
+		mMousePressed = false;
+		KCal::CalendarLocal cal;
+		cal.setLocalTime();    // write out using local time (i.e. no time zone)
+		QValueList<EventListViewItemBase*> items = selectedItems();
+		if (!items.count())
+			return;
+		for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+		{
+			const KAEvent& event = (*it)->event();
+			KCal::Event* kcalEvent = new KCal::Event;
+			event.updateKCalEvent(*kcalEvent, false, true);
+			kcalEvent->setUid(event.id());
+			cal.addEvent(kcalEvent);
+		}
+
+		// Create the drag object for the destination program to receive
+		mDragging = true;
+		KCal::ICalDrag* dobj = new KCal::ICalDrag(&cal, this);
+		dobj->dragCopy();       // the drag operation will copy the alarms
+	}
+}
+
+/******************************************************************************
+*  Called when the mouse button is released.
+*  Notes that the mouse left button is no longer pressed, for use in drag
+*  operations.
+*/
+void AlarmListView::contentsMouseReleaseEvent(QMouseEvent *e)
+{
+	QListView::contentsMouseReleaseEvent(e);
+	mMousePressed = false;
+	mDragging     = false;
+}
+
 
 /*=============================================================================
 =  Class: AlarmListViewItem
@@ -268,7 +339,7 @@ int AlarmListViewItem::mDigitWidth  = -1;
 
 AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
 	: EventListViewItemBase(parent, event),
-	  mMessageLfStripped(false),
+	  mMessageTruncated(false),
 	  mTimeToAlarmShown(false)
 {
 	setLastColumnText();     // set the message column text
@@ -331,43 +402,14 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 }
 
 /******************************************************************************
-*  Return the alarm summary text.
-*  If 'full' is false, only a single line is returned.
-*  If 'lfStripped' is non-null, it will be set true if the text is multi-line,
-*  else false.
+*  Return the single line alarm summary text.
 */
 QString AlarmListViewItem::alarmText(const KAEvent& event) const
 {
-	bool lfStripped;
-	QString text = alarmText(event, false, &lfStripped);
-	mMessageLfStripped = lfStripped;
+	bool truncated;
+	QString text = AlarmText::summary(event, 1, &truncated);
+	mMessageTruncated = truncated;
 	return text;
-}
-
-QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfStripped)
-{
-	QString text = (event.action() == KAEvent::EMAIL) ? event.emailSubject() : event.cleanText();
-	if (event.action() == KAEvent::MESSAGE)
-	{
-		// If the message is the text of an email, return its headers or just subject line
-		QString subject = AlarmText::emailHeaders(text, !full);
-		if (!subject.isNull())
-		{
-			if (lfStripped)
-				*lfStripped = true;
-			return subject;
-		}
-	}
-	if (full)
-		return text;
-	if (lfStripped)
-		*lfStripped = false;
-	int newline = text.find('\n');
-	if (newline < 0)
-		return text;       // it's a single-line text
-	if (lfStripped)
-		*lfStripped = true;
-	return text.left(newline) + QString::fromLatin1("...");
 }
 
 /******************************************************************************
@@ -577,7 +619,7 @@ void AlarmListTooltip::maybeTip(const QPoint& pt)
 			int columnX = listView->header()->sectionPos(column) - xOffset;
 			int columnWidth = listView->columnWidth(column);
 			int widthNeeded = item->messageColWidthNeeded();
-			if (!item->messageLfStripped()  &&  columnWidth >= widthNeeded)
+			if (!item->messageTruncated()  &&  columnWidth >= widthNeeded)
 			{
 				if (columnX + widthNeeded <= listView->viewport()->width())
 					return;
@@ -586,7 +628,7 @@ void AlarmListTooltip::maybeTip(const QPoint& pt)
 			rect.setLeft(columnX);
 			rect.setWidth(columnWidth);
 			kdDebug(5950) << "AlarmListTooltip::maybeTip(): display\n";
-			tip(rect, item->alarmText(item->event(), true));
+			tip(rect, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
 		}
 	}
 }
