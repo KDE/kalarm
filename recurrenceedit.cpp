@@ -47,7 +47,8 @@
 #include <libkcal/event.h>
 
 #include "kalarmapp.h"
-#include "prefsettings.h"
+#include "alarmevent.h"
+#include "preferences.h"
 #include "datetime.h"
 #include "dateedit.h"
 #include "timespinbox.h"
@@ -56,7 +57,6 @@
 #include "checkbox.h"
 #include "combobox.h"
 #include "radiobutton.h"
-#include "msgevent.h"
 #include "buttongroup.h"
 using namespace KCal;
 
@@ -654,7 +654,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 	noEmitTypeChanged = true;
 	int button;
-	switch (theApp()->settings()->defaultRecurPeriod())
+	switch (theApp()->preferences()->defaultRecurPeriod())
 	{
 		case ANNUAL:  button = yearlyButtonId;   break;
 		case MONTHLY: button = monthlyButtonId;  break;

@@ -1,7 +1,7 @@
 /*
  *  daemongui.cpp  -  handler for the alarm daemon GUI interface
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 
 #include <kalarmd/alarmdaemoniface_stub.h>
 #include "kalarmapp.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "alarmcalendar.h"
 #include "daemongui.h"
 #include "daemongui.moc"
@@ -56,8 +56,8 @@ DaemonGuiHandler::DaemonGuiHandler(const char *name)
 	// the program is still initialising.
 	mDaemonRunning = theApp()->isDaemonRunning(false);
 
-	mDaemonStatusTimerInterval = theApp()->settings()->daemonTrayCheckInterval();
-	connect(theApp()->settings(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
+	mDaemonStatusTimerInterval = theApp()->preferences()->daemonTrayCheckInterval();
+	connect(theApp()->preferences(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	connect(&mDaemonStatusTimer, SIGNAL(timeout()), SLOT(timerCheckDaemonRunning()));
 	mDaemonStatusTimer.start(mDaemonStatusTimerInterval * 1000);  // check regularly if daemon is running
 
@@ -228,9 +228,9 @@ void DaemonGuiHandler::setFastDaemonCheck()
 * Called when a program setting has changed.
 * If the system tray icon update interval has changed, reset the timer.
 */
-void DaemonGuiHandler::slotSettingsChanged()
+void DaemonGuiHandler::slotPreferencesChanged()
 {
-	int newInterval = theApp()->settings()->daemonTrayCheckInterval();
+	int newInterval = theApp()->preferences()->daemonTrayCheckInterval();
 	if (newInterval != mDaemonStatusTimerInterval)
 	{
 		// Daemon check interval has changed

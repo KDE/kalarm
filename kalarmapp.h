@@ -35,14 +35,14 @@ class KAction;
 class KProcess;
 namespace KCal { class Event; }
 
-#include "msgevent.h"
+#include "alarmevent.h"
 class DcopHandler;
 class AlarmCalendar;
 class KAlarmMainWindow;
 class MessageWin;
 class TrayWindow;
 class DaemonGuiHandler;
-class Settings;
+class Preferences;
 class ActionAlarmsEnabled;
 
 extern const char* DAEMON_APP_NAME;
@@ -61,15 +61,17 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar*     expiredCalendar(bool saveIfPurged = true);
 		AlarmCalendar&     displayCalendar()               { return *mDisplayCalendar; }
 		void               checkCalendar()                 { initCheck(); }
-		Settings*          settings()                      { return mSettings; }
+		Preferences*       preferences()                   { return mPreferences; }
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
+		bool               noShellAccess() const           { return mNoShellAccess; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
 		void               addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void               removeWindow(TrayWindow*);
+		KAlarmMainWindow*  displayMainWindowSelected(const QString& eventID = QString::null);
 		TrayWindow*        trayWindow() const              { return mTrayWindow; }
 		KAlarmMainWindow*  trayMainWindow() const;
 		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
@@ -114,7 +116,7 @@ class KAlarmApp : public KUniqueApplication
 
 		static int         isTextFile(const KURL&);
 	public slots:
-		void               displayMainWindow();
+		void               displayMainWindow()     { displayMainWindowSelected(); }
 		void               slotDaemonControl();
 	signals:
 		void               trayIconToggled();
@@ -123,7 +125,7 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void               slotPreferences();
 		void               toggleAlarmsEnabled();
-		void               slotSettingsChanged();
+		void               slotPreferencesChanged();
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
 	private:
@@ -166,7 +168,7 @@ class KAlarmApp : public KUniqueApplication
 		ActionAlarmsEnabled*  mActionAlarmEnable;   // action to enable/disable alarms
 		KAction*              mActionPrefs;         // action to display the preferences dialog
 		KAction*              mActionDaemonControl; // action to display the alarm daemon control dialog
-		Settings*             mSettings;            // program preferences
+		Preferences*          mPreferences;         // program preferences
 		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change
 		QTime                 mStartOfDay;          // start-of-day time currently in use
@@ -178,6 +180,7 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mCalendarUpdateSave;  // save() was called while mCalendarUpdateCount > 0
 		bool                  mCalendarUpdateReload;// reloadDaemon() was called while mCalendarUpdateCount > 0
 		bool                  mDaemonRegistered;    // true if we've registered with alarm daemon
+		bool                  mNoShellAccess;       // shell commands are not allowed (kiosk mode)
 		bool                  mKDEDesktop;          // running on KDE desktop
 		bool                  mNoSystemTray;        // no KDE system tray exists
 		bool                  mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true

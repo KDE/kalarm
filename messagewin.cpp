@@ -51,7 +51,7 @@
 
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "deferdlg.h"
 #include "messagewin.moc"
 
@@ -360,7 +360,7 @@ QSize MessageWin::initView()
 	QPushButton* button = new QPushButton(topWidget);
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
-	connect(button, SIGNAL(clicked()), theApp(), SLOT(displayMainWindow()));
+	connect(button, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(button, 0, 3, AlignHCenter);
 	QWhatsThis::add(button, i18n("Activate %1").arg(kapp->aboutData()->programName()));
 
@@ -604,6 +604,15 @@ void MessageWin::slotDefer()
 		deferClosing = true;   // allow window to close without confirmation prompt
 		close();
 	}
+}
+
+/******************************************************************************
+*  Called when the KAlarm icon button in the message window is clicked.
+*  Displays the main window, with the appropriate alarm selected.
+*/
+void MessageWin::displayMainWindow()
+{
+	theApp()->displayMainWindowSelected(eventID);
 }
 
 

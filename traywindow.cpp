@@ -43,7 +43,7 @@
 #include "mainwindow.h"
 #include "messagewin.h"
 #include "daemongui.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "traywindow.moc"
 
 

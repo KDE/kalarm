@@ -48,14 +48,13 @@
 #include "kalarmapp.h"
 #include "editdlg.h"
 #include "alarmcalendar.h"
-#include "editdlg.h"
 #include "soundpicker.h"
 #include "spinbox.h"
 #include "checkbox.h"
 #include "combobox.h"
 #include "colourcombo.h"
 #include "fontcolourbutton.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "birthdaydlg.moc"
 
 using namespace KCal;
@@ -190,14 +189,14 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	grid->addWidget(mLateCancel, 2, 0, Qt::AlignLeft);
 
 	// Set the values to their defaults
-	Settings* settings = theApp()->settings();
+	Preferences* preferences = theApp()->preferences();
 	mFontColourButton->setDefaultFont();
-	mFontColourButton->setBgColour(settings->defaultBgColour());
-	mBgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
-	mLateCancel->setChecked(settings->defaultLateCancel());
-	mConfirmAck->setChecked(settings->defaultConfirmAck());
-	mSoundPicker->setChecked(settings->defaultBeep());
-	mReminderUnits->setCurrentItem(theApp()->settings()->defaultReminderUnits() - EditAlarmDlg::REMIND_DAYS);
+	mFontColourButton->setBgColour(preferences->defaultBgColour());
+	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
+	mLateCancel->setChecked(preferences->defaultLateCancel());
+	mConfirmAck->setChecked(preferences->defaultConfirmAck());
+	mSoundPicker->setChecked(preferences->defaultBeep());
+	mReminderUnits->setCurrentItem(theApp()->preferences()->defaultReminderUnits() - EditAlarmDlg::REMIND_DAYS);
 	slotReminderToggled(false);
 
 	// Initialise the birthday selection list and disable the OK button

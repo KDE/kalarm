@@ -60,7 +60,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "datetime.h"
 #include "soundpicker.h"
 #include "recurrenceedit.h"
@@ -88,6 +88,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	  mDeferGroup(0),
 	  mReadOnly(readOnly)
 {
+	if (event  &&  event->action() == KAlarmEvent::COMMAND  &&  theApp()->noShellAccess())
+		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
+
 	QVBox* mainPageBox = addVBoxPage(i18n("&Alarm"));
 	mMainPageIndex = pageIndex(mainPageBox);
 	PageFrame* mainPage = new PageFrame(mainPageBox);
@@ -300,20 +303,22 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	else
 	{
 		// Set the values to their defaults
-		Settings* settings = theApp()->settings();
+		if (!theApp()->noShellAccess())
+			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
+		Preferences* preferences = theApp()->preferences();
 		mFontColourButton->setDefaultFont();
-		mFontColourButton->setBgColour(settings->defaultBgColour());
-		mBgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
+		mFontColourButton->setBgColour(preferences->defaultBgColour());
+		mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		mTimeWidget->setDateTime(defaultTime, false);
 		actionGroup->setButton(actionGroup->id(mMessageRadio));
 		repeatGroup->setButton(repeatGroup->id(mNoRepeatRadio));
-		mLateCancel->setChecked(settings->defaultLateCancel());
-		mConfirmAck->setChecked(settings->defaultConfirmAck());
+		mLateCancel->setChecked(preferences->defaultLateCancel());
+		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		setReminder(0);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mSoundPicker->setChecked(settings->defaultBeep());
-		mEmailBcc->setChecked(settings->defaultEmailBcc());
+		mSoundPicker->setChecked(preferences->defaultBeep());
+		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
 
 	size = mBasicSize;
@@ -784,7 +789,7 @@ void EditAlarmDlg::slotTry()
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
-					bcc = i18n("\nBcc: %1").arg(theApp()->settings()->emailAddress());
+					bcc = i18n("\nBcc: %1").arg(theApp()->preferences()->emailAddress());
 				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(mEmailAddresses.join("\n")).arg(bcc));
 			}
 		}
@@ -1067,7 +1072,7 @@ void EditAlarmDlg::setReminder(int minutes)
 	}
 	else
 	{
-		item = theApp()->settings()->defaultReminderUnits();
+		item = theApp()->preferences()->defaultReminderUnits();
 		mReminderUnits->setCurrentItem(item);
 	}
 	mReminderCount->showHourMin(item == REMIND_HOURS_MINUTES);
