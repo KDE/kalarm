@@ -227,7 +227,8 @@ bool AlarmCalendar::saveCal(const QString& filename)
 	if (!success)
 	{
 		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
-#warning "Need user error message here"
+#warning "Temporary untranslated string"
+		KMessageBox::error(0, QString::fromLatin1("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()), kapp->aboutData()->programName());
 		return false;
 	}
 

@@ -760,17 +760,13 @@ void EditAlarmDlg::slotOk()
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
-// Temporary during i18n string freeze
-DateTime savedDT = mAlarmDateTime;
 				KAlarmEvent event;
 				getEvent(event);
 				if (event.nextOccurrence(now, mAlarmDateTime) == KAlarmEvent::NO_OCCURRENCE)
 				{
-// Commented out due to i18n string freeze
-//					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
-//					return;
-// Temporary during i18n string freeze
-mAlarmDateTime = savedDT;
+#warning "Temporary untranslated string"
+					KMessageBox::sorry(this, QString::fromLatin1("Recurrence has already expired"));
+					return;
 				}
 			}
 		}
