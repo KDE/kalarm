@@ -48,7 +48,6 @@
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
 #include "daemon.h"
-#include "daemongui.h"
 #include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -133,7 +132,7 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	initActions();
 
 	mWindowList.append(this);
-	if (mWindowList.count() == 1  &&  theApp()->daemonGuiHandler())
+	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
 	{
 		// It's the first main window, and the DCOP handler is ready
 		if (theApp()->wantRunInSystemTray())
@@ -274,6 +273,7 @@ void KAlarmMainWindow::initActions()
 	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
 	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_Z, this, SLOT(slotUndelete()), actions, "undelete");
+	mActionEnable         = new KAction(QString::null, 0, Qt::CTRL+Qt::Key_B, this, SLOT(slotEnable()), actions, "disable");
 	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
 	mActionShowTime       = new KToggleAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "showAlarmTimes");
 	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
@@ -287,9 +287,7 @@ void KAlarmMainWindow::initActions()
 #endif
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
 	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
-	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
-	if (daemonGui)
-		daemonGui->createAlarmEnableAction(actions, "alarmEnable");
+	Daemon::createAlarmEnableAction(actions, "alarmEnable");
 	KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -305,6 +303,7 @@ void KAlarmMainWindow::initActions()
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
 	// Set menu item states
+	setEnableText(true);
 	mActionShowTime->setChecked(mShowTime);
 	mActionShowTimeTo->setChecked(mShowTimeTo);
 	mActionShowExpired->setChecked(mShowExpired);
@@ -317,12 +316,11 @@ void KAlarmMainWindow::initActions()
 	mActionDelete->setEnabled(false);
 	mActionUndelete->setEnabled(false);
 	mActionView->setEnabled(false);
+	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
-	if (daemonGui)
-	{
-		daemonGui->checkStatus();
-		daemonGui->monitoringAlarms();
-	}
+
+	Daemon::checkStatus();
+	Daemon::monitoringAlarms();
 }
 
 /******************************************************************************
@@ -458,10 +456,6 @@ void KAlarmMainWindow::selectEvent(const QString& eventID)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
-// SLOT IMPLEMENTATION
-/////////////////////////////////////////////////////////////////////
-
 /******************************************************************************
 *  Called when the New button is clicked to edit a new alarm to add to the list.
 */
@@ -475,6 +469,7 @@ void KAlarmMainWindow::slotNew()
 */
 void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const QString& text)
 {
+#warning "Doesn't appear on current desktop if a main window is displayed elsewhere"
 	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg");
 	if (!text.isNull())
 		editDlg.setAction(action, text);
@@ -542,10 +537,13 @@ void KAlarmMainWindow::slotModify()
 		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;
-			editDlg.getEvent(newEvent);
+			bool changeDeferral = !editDlg.getEvent(newEvent);
 
 			// Update the event in the displays and in the calendar file
-			KAlarm::modifyEvent(event, newEvent, mListView);
+			if (changeDeferral)
+				KAlarm::updateEvent(newEvent, mListView, true, false);   // keep the same event ID
+			else
+				KAlarm::modifyEvent(event, newEvent, mListView);
 
 			alarmWarnings(&editDlg, &newEvent);
 		}
@@ -621,6 +619,26 @@ void KAlarmMainWindow::slotUndelete()
 	}
 	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 	AlarmCalendar::expiredCalendar()->endUpdate();
+}
+
+/******************************************************************************
+*  Called when the Enable/Disable button is clicked to enable or disable the
+*  currently highlighted alarms in the list.
+*/
+void KAlarmMainWindow::slotEnable()
+{
+	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
+	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
+	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	{
+		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
+		KAEvent event = item->event();
+
+		// Enable the alarm in the displayed lists and in the calendar file
+		KAlarm::enableEvent(event, mListView, enable);
+	}
+	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 }
 
 /******************************************************************************
@@ -740,7 +758,7 @@ void KAlarmMainWindow::updateTrayIconAction()
 */
 void KAlarmMainWindow::updateActionsMenu()
 {
-	theApp()->daemonGuiHandler()->checkStatus();   // update the Alarms Enabled item status
+	Daemon::checkStatus();   // update the Alarms Enabled item status
 }
 
 /******************************************************************************
@@ -819,6 +837,7 @@ void KAlarmMainWindow::slotDeletion()
 		mActionView->setEnabled(false);
 		mActionDelete->setEnabled(false);
 		mActionUndelete->setEnabled(false);
+		mActionEnable->setEnabled(false);
 	}
 }
 
@@ -949,14 +968,27 @@ void KAlarmMainWindow::slotSelection()
 	int count = items.count();
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
 	bool enableUndelete = true;
+	bool enableEnableDisable = true;
+	bool enableEnable = false;
+	bool enableDisable = false;
+	QDateTime now = QDateTime::currentDateTime();
 	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
-		if (enableUndelete)
+		const KAEvent& event = ((AlarmListViewItem*)(*it))->event();
+		if (enableUndelete
+		&&  (!event.expired()  ||  !event.occursAfter(now, true)))
+			enableUndelete = false;
+		if (enableEnableDisable)
 		{
-			const KAEvent& event = ((AlarmListViewItem*)(*it))->event();
-			if (!event.expired()
-			||  !event.occursAfter(QDateTime::currentDateTime()))
-				enableUndelete = false;
+			if (event.expired())
+				enableEnableDisable = enableEnable = enableDisable = false;
+			else
+			{
+				if (!enableEnable  &&  !event.enabled())
+					enableEnable = true;
+				if (!enableDisable  &&  event.enabled())
+					enableDisable = true;
+			}
 		}
 	}
 
@@ -967,6 +999,9 @@ void KAlarmMainWindow::slotSelection()
 	mActionView->setEnabled(count == 1);
 	mActionDelete->setEnabled(count);
 	mActionUndelete->setEnabled(count && enableUndelete);
+	mActionEnable->setEnabled(enableEnable || enableDisable);
+	if (enableEnable || enableDisable)
+		setEnableText(enableEnable);
 }
 
 /******************************************************************************
@@ -991,6 +1026,7 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 		mActionView->setEnabled(false);
 		mActionDelete->setEnabled(false);
 		mActionUndelete->setEnabled(false);
+		mActionEnable->setEnabled(false);
 	}
 }
 
@@ -1012,7 +1048,6 @@ void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
 		slotNew();
 }
 
-#if 0
 /******************************************************************************
 *  Set the text of the Enable/Disable menu action.
 */
@@ -1021,7 +1056,6 @@ void KAlarmMainWindow::setEnableText(bool enable)
 	mActionEnableEnable = enable;
 	mActionEnable->setText(enable ? i18n("Ena&ble") : i18n("Disa&ble"));
 }
-#endif
 
 /******************************************************************************
 * Prompt the user to re-enable alarms if they are currently disabled, and if
@@ -1034,17 +1068,13 @@ void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAEvent* event)
 		KMessageBox::information(parent, i18n("Please set the 'From' email address...",
 		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
 
-	if (!theApp()->daemonGuiHandler()->monitoringAlarms())
+	if (!Daemon::monitoringAlarms())
 	{
 		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
 		                              QString::null, KStdGuiItem::yes(), KStdGuiItem::no(),
 		                              QString::fromLatin1("EditEnableAlarms"))
 		                == KMessageBox::Yes)
-		{
-			DaemonGuiHandler* dgh = theApp()->daemonGuiHandler();
-			if (dgh)
-				dgh->setAlarmsEnabled(true);
-		}
+			Daemon::setAlarmsEnabled();
 	}
 }
 
