@@ -72,7 +72,7 @@ void Find::display()
 
 	if (mDialog)
 	{
-#warning Does the desktop need to be set - presumably it is automatically on same as main window?
+//#warning Does the desktop need to be set - presumably it is automatically on same as main window?
 //		KWin::setOnDesktop(mDialog->winId(), KWin::currentDesktop());
 		KWin::activateWindow(mDialog->winId());
 	}
@@ -164,7 +164,7 @@ void Find::display()
 void Find::slotDlgDestroyed()
 {
 kdDebug()<<"slotDlgDestroyed()\n";
-#warning Should mFind be deleted here, or does it happen automatically?
+//#warning Should mFind be deleted here, or does it happen automatically?
 //	delete mFind;
 //	mFind   = 0;
 	mDialog = 0;

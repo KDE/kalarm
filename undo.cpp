@@ -36,7 +36,7 @@
 static int maxCount = 12;
 
 
-#warning Delete followed by Reactivate: Undo list should hide Delete
+//#warning Delete followed by Reactivate: Undo list should hide Delete
 class UndoItem
 {
 	public:
@@ -754,7 +754,7 @@ UndoEdit::UndoEdit(Undo::Type type, const KAEvent& oldEvent, const QString& newE
 	: UndoItem(type),
 	  mOldEvent(new KAEvent(oldEvent)),
 	  mNewEventID(newEventID),
-#warning Check that this handles templates correctly
+//#warning Check that this handles templates correctly
 	  mDescription(description)
 {
 	setCalendar(KAEvent::uidStatus(mNewEventID));
