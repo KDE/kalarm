@@ -123,36 +123,37 @@ class RecurrenceEdit : public QFrame
 		TimeSpinBox*   recurHourMinFrequency;
 
 		// Rules without choices
-		QFrame*        noneFrame;
+		QFrame*        mNoneRuleFrame;
 
 		// Weekly rule choices
-		QFrame*        weeklyFrame;
-		CheckBox*      dayBox[7];
+		QFrame*        mWeekRuleFrame;
+		CheckBox*      mWeekRuleDayBox[7];
+		int            mWeekRuleFirstDay;
 
 		// Monthly rule choices
-		QFrame*        monthlyFrame;
-		ButtonGroup*   monthlyButtonGroup;
-		RadioButton*   onNthDayButton;
-		ComboBox*      nthDayEntry;
-		RadioButton*   onNthTypeOfDayButton;
-		ComboBox*      nthNumberEntry;
-		ComboBox*      nthTypeOfDayEntry;
-		int            onNthDayButtonId;
-		int            onNthTypeOfDayButtonId;
+		QFrame*        mMonthRuleFrame;
+		ButtonGroup*   mMonthRuleButtonGroup;
+		RadioButton*   mMonthRuleOnNthDayButton;
+		ComboBox*      mMonthRuleNthDayEntry;
+		RadioButton*   mMonthRuleOnNthTypeOfDayButton;
+		ComboBox*      mMonthRuleNthNumberEntry;
+		ComboBox*      mMonthRuleNthTypeOfDayEntry;
+		int            mMonthRuleOnNthDayButtonId;
+		int            mMonthRuleOnNthTypeOfDayButtonId;
 
 		// Yearly rule choices
-		QFrame*        yearlyFrame;
-		ButtonGroup*   yearlyButtonGroup;
-		RadioButton*   yearMonthButton;
-//		RadioButton*   yearDayButton;
-		RadioButton*   yearlyOnNthTypeOfDayButton;
-//		QSpinBox*      yearDayEntry;
-		ComboBox*      yearlyNthNumberEntry;
-		ComboBox*      yearlyNthTypeOfDayEntry;
-		ComboBox*      yeardayMonthComboBox;
-		int            yearMonthButtonId;
-//		int            yearDayButtonId;
-		int            yearlyOnNthTypeOfDayButtonId;
+		QFrame*        mYearRuleFrame;
+		ButtonGroup*   mYearRuleButtonGroup;
+		RadioButton*   mYearRuleDayMonthButton;
+//		RadioButton*   mYearRuleDayButton;
+		RadioButton*   mYearRuleOnNthTypeOfDayButton;
+//		QSpinBox*      mYearRuleDayEntry;
+		ComboBox*      mYearRuleNthNumberEntry;
+		ComboBox*      mYearRuleNthTypeOfDayEntry;
+		ComboBox*      mYearRuleDayMonthComboBox;
+		int            mYearRuleDayMonthButtonId;
+//		int            mYearRuleDayButtonId;
+		int            mYearRuleOnNthTypeOfDayButtonId;
 
 		// Range
 		QButtonGroup*  rangeButtonGroup;
