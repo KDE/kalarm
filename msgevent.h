@@ -16,7 +16,7 @@
 #include <event.h>
 
 #include <kapp.h>
-#if KDE_VERSION < 300
+#if KDE_VERSION < 290
    #define Alarm KOAlarm
 #endif
 
