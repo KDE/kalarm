@@ -37,6 +37,10 @@
 #include <qdatetime.h>
 class QTimer;
 
+/*=============================================================================
+=  Class: SynchTimer
+=  Virtual base class for application-wide timer synchronised to a time boundary.
+=============================================================================*/
 class SynchTimer : public QObject
 {
 		Q_OBJECT
@@ -71,11 +75,15 @@ class SynchTimer : public QObject
 };
 
 
+/*=============================================================================
+=  Class: MinuteTimer
+=  Application-wide timer synchronised to the minute boundary.
+=============================================================================*/
 class MinuteTimer : public SynchTimer
 {
 		Q_OBJECT
 	public:
-		virtual ~MinuteTimer();
+		virtual ~MinuteTimer()  { mInstance = 0; }
 		static void connect(QObject* receiver, const char* member)
 		                   { instance()->connecT(receiver, member); }
 		static void disconnect(QObject* receiver, const char* member = 0)
@@ -95,19 +103,51 @@ class MinuteTimer : public SynchTimer
 };
 
 
+/*=============================================================================
+=  Class: DailyTimer
+=  Application-wide timer synchronised to midnight.
+=============================================================================*/
 class DailyTimer : public SynchTimer
 {
 		Q_OBJECT
 	public:
-		virtual ~DailyTimer();
+		virtual ~DailyTimer()  { mInstance = 0; }
 		static void connect(QObject* receiver, const char* member)
 		                   { instance()->connecT(receiver, member); }
 		static void disconnect(QObject* receiver, const char* member = 0)
 		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
 
 	protected:
-		DailyTimer();
+		DailyTimer() : SynchTimer() { }
 		static DailyTimer*  instance();
+		virtual void        start();
+
+	protected slots:
+		virtual void slotSynchronise()   { start(); }
+
+	private:
+		static DailyTimer*  mInstance;     // the one and only instance
+};
+
+
+/*=============================================================================
+=  Class: StartOfDayTimer
+=  Application-wide timer synchronised to the user-defined start-of-day time.
+=  It automatically adjusts to any changes in the start-of-day time.
+=============================================================================*/
+class StartOfDayTimer : public SynchTimer
+{
+		Q_OBJECT
+	public:
+		virtual ~StartOfDayTimer()  { mInstance = 0; }
+		static void connect(QObject* receiver, const char* member)
+		                   { instance()->connecT(receiver, member); }
+		static void disconnect(QObject* receiver, const char* member = 0)
+		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
+
+	protected:
+		StartOfDayTimer();
+		static StartOfDayTimer*  instance();
 		virtual void        start();
 
 	protected slots:
@@ -115,7 +155,7 @@ class DailyTimer : public SynchTimer
 		void         startOfDayChanged(const QTime& oldTime);
 
 	private:
-		static DailyTimer*  mInstance;     // the one and only instance
+		static StartOfDayTimer*  mInstance;     // the one and only instance
 		QTime               mStartOfDay;   // the current start-of-day time
 };
 

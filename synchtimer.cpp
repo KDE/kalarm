@@ -37,7 +37,7 @@
 
 /*=============================================================================
 =  Class: SynchTimer
-*  Provides an application-wide timer synchronised to a time boundary.
+=  Virtual base class for application-wide timer synchronised to a time boundary.
 =============================================================================*/
 
 SynchTimer::SynchTimer()
@@ -56,8 +56,11 @@ SynchTimer::~SynchTimer()
 */
 void SynchTimer::connecT(QObject* receiver, const char* member)
 {
+	Connection connection(receiver, member);
+	if (mConnections.find(connection) != mConnections.end())
+		return;           // the slot is already connected, so ignore request
 	connect(mTimer, SIGNAL(timeout()), receiver, member);
-	mConnections.append(Connection(receiver, member));
+	mConnections.append(connection);
 	if (!mTimer->isActive())
 	{
 		connect(mTimer, SIGNAL(timeout()), this, SLOT(slotSynchronise()));
@@ -96,15 +99,10 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 
 /*=============================================================================
 =  Class: MinuteTimer
-*  Provides an application-wide timer synchronised to the minute boundary.
+=  Application-wide timer synchronised to the minute boundary.
 =============================================================================*/
 
 MinuteTimer* MinuteTimer::mInstance = 0;
-
-MinuteTimer::~MinuteTimer()
-{
-	mInstance = 0;
-}
 
 MinuteTimer* MinuteTimer::instance()
 {
@@ -142,22 +140,10 @@ void MinuteTimer::slotSynchronise()
 
 /*=============================================================================
 =  Class: DailyTimer
-*  Provides an application-wide timer synchronised to the user-defined
-*  start-of-day time. It automatically adjusts to any changes in the
-*  start-of-day time.
+=  Application-wide timer synchronised to midnight.
 =============================================================================*/
 
 DailyTimer* DailyTimer::mInstance = 0;
-
-DailyTimer::DailyTimer()
-{
-	QObject::connect(Preferences::instance(), SIGNAL(startOfDayChanged(const QTime&)), SLOT(startOfDayChanged(const QTime&)));
-}
-
-DailyTimer::~DailyTimer()
-{
-	mInstance = 0;
-}
 
 DailyTimer* DailyTimer::instance()
 {
@@ -167,28 +153,60 @@ DailyTimer* DailyTimer::instance()
 }
 
 /******************************************************************************
-* Start the timer to expire at the start of the next day (using the user-
-* defined start-of-day time).
+* Start the timer to expire at midnight.
 */
 void DailyTimer::start()
 {
-	mStartOfDay = Preferences::instance()->startOfDay();
-	int interval = QTime::currentTime().secsTo(mStartOfDay);
-	if (interval < 0)
+	int interval = QTime::currentTime().secsTo(QTime());
+	if (interval <= 0)
 		interval += 86400;
 	mTimer->start(interval * 1000, true);
 	kdDebug(5950) << "DailyTimer::start()\n";
 }
 
-/******************************************************************************
-* Notify this instance of a change in the start-of-day time.
-* The purge timer is adjusted and if necessary alarms are purged.
-*/
-void DailyTimer::startOfDayChanged(const QTime&)
+
+/*=============================================================================
+=  Class: StartOfDayTimer
+=  Application-wide timer synchronised to the user-defined start-of-day time.
+=  It automatically adjusts to any changes in the start-of-day time.
+=============================================================================*/
+
+StartOfDayTimer* StartOfDayTimer::mInstance = 0;
+
+StartOfDayTimer::StartOfDayTimer()
 {
-	QTime sod = Preferences::instance()->startOfDay();
+	QObject::connect(Preferences::instance(), SIGNAL(startOfDayChanged(const QTime&)), SLOT(startOfDayChanged(const QTime&)));
+}
+
+StartOfDayTimer* StartOfDayTimer::instance()
+{
+	if (!mInstance)
+		mInstance = new StartOfDayTimer;
+	return mInstance;
+}
+
+/******************************************************************************
+* Start the timer to expire at the start of the next day (using the user-
+* defined start-of-day time).
+*/
+void StartOfDayTimer::start()
+{
+	mStartOfDay = Preferences::instance()->startOfDay();
+	int interval = QTime::currentTime().secsTo(mStartOfDay);
+	if (interval <= 0)
+		interval += 86400;
+	mTimer->start(interval * 1000, true);
+	kdDebug(5950) << "StartOfDayTimer::start(" << interval << "s)\n";
+}
+
+/******************************************************************************
+* Called when the start-of-day time has changed.
+* The timer is adjusted and if appropriate timer events are triggered now.
+*/
+void StartOfDayTimer::startOfDayChanged(const QTime&)
+{
 	QTime now = QTime::currentTime();
-	if (sod <= now  &&  now < mStartOfDay)
+	if (now < mStartOfDay  &&  Preferences::instance()->startOfDay() <= now)
 	{
 		// The start-of-day time is now earlier and it has arrived already.
 		// Trigger a timer event immediately.
