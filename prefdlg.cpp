@@ -1041,6 +1041,7 @@ void EditPrefTab::restore()
 	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
 	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
+	mDefaultSound->setChecked(preferences->mDefaultSound);
 	mDefaultBeep->setChecked(preferences->mDefaultBeep);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
 	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
@@ -1058,6 +1059,7 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked() ? 1 : 0;
 	preferences->mDefaultAutoClose   = mDefaultAutoClose->isChecked();
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
+	preferences->mDefaultSound       = mDefaultSound->isChecked();
 	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
@@ -1086,6 +1088,7 @@ void EditPrefTab::setDefaults()
 	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
 	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
+	mDefaultSound->setChecked(Preferences::default_defaultSound);
 	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);

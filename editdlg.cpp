@@ -728,6 +728,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+		mSoundPicker->setChecked(preferences->defaultSound());
 		mCmdTypeScript->setChecked(preferences->defaultCmdScript());
 		mCmdXterm->setChecked(preferences->defaultCmdXterm());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
