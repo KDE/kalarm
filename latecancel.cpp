@@ -36,6 +36,7 @@ QString LateCancelSelector::i18n_CancelIfLate()       { return i18n("Cancel if l
 QString LateCancelSelector::i18n_n_CancelIfLate()     { return i18n("Ca&ncel if late"); }
 QString LateCancelSelector::i18n_AutoCloseWin()       { return i18n("Auto-close window after this time"); }
 QString LateCancelSelector::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancelation time"); }
+QString LateCancelSelector::i18n_i_AutoCloseWinLC()   { return i18n("Auto-close w&indow after late-cancelation time"); }
 
 
 LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)

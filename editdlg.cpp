@@ -98,6 +98,11 @@ inline QString recurText(const KAEvent& event)
 // translations across different modules.
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
 QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
+QString EditAlarmDlg::i18n_EnterScript()        { return i18n("Enter a script"); }
+QString EditAlarmDlg::i18n_p_EnterScript()      { return i18n("Enter a scri&pt"); }
+QString EditAlarmDlg::i18n_ExecInTermWindow()   { return i18n("Execute in terminal window"); }
+QString EditAlarmDlg::i18n_w_ExecInTermWindow() { return i18n("Execute in terminal &window"); }
+QString EditAlarmDlg::i18n_u_ExecInTermWindow() { return i18n("Exec&ute in terminal window"); }
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
@@ -175,8 +180,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	// Alarm action
 
-	mActionGroup = new QButtonGroup(i18n("Action"), mainPage, "actionGroup");
-	connect(mActionGroup, SIGNAL(clicked(int)), SLOT(slotAlarmTypeClicked(int)));
+	mActionGroup = new ButtonGroup(i18n("Action"), mainPage, "actionGroup");
+	connect(mActionGroup, SIGNAL(buttonSet(int)), SLOT(slotAlarmTypeChanged(int)));
 	topLayout->addWidget(mActionGroup, 1);
 	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginKDE2 + marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
@@ -426,12 +431,31 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 {
 	mCommandFrame = new QFrame(parent);
 	mCommandFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* layout = new QVBoxLayout(mCommandFrame);
+	QBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame, 0, spacingHint());
 
-	mCommandMessageEdit = new LineEdit(LineEdit::Url, mCommandFrame);
-	QWhatsThis::add(mCommandMessageEdit, i18n("Enter a shell command to execute."));
-	layout->addWidget(mCommandMessageEdit);
-	layout->addStretch();
+	mCmdTypeScript = new CheckBox(i18n_p_EnterScript(), mCommandFrame);
+	mCmdTypeScript->setFixedSize(mCmdTypeScript->sizeHint());
+	connect(mCmdTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	QWhatsThis::add(mCmdTypeScript, i18n("Check to enter the contents of a script instead of a shell command line"));
+	frameLayout->addWidget(mCmdTypeScript, 0, Qt::AlignAuto);
+
+	mCmdCommandEdit = new LineEdit(LineEdit::Url, mCommandFrame);
+	QWhatsThis::add(mCmdCommandEdit, i18n("Enter a shell command to execute."));
+	frameLayout->addWidget(mCmdCommandEdit);
+
+	mCmdScriptEdit = new TextEdit(mCommandFrame);
+	QWhatsThis::add(mCmdScriptEdit, i18n("Enter the contents of a script to execute"));
+	frameLayout->addWidget(mCmdScriptEdit);
+
+	mCmdXterm = new CheckBox(i18n_u_ExecInTermWindow(), mCommandFrame);
+	mCmdXterm->setFixedSize(mCmdXterm->sizeHint());
+	QWhatsThis::add(mCmdXterm, i18n("Check to execute the command in a terminal window"));
+	frameLayout->addWidget(mCmdXterm, 0, Qt::AlignAuto);
+
+	// Top-adjust the controls
+	mCmdPadding = new QHBox(mCommandFrame);
+	frameLayout->addWidget(mCmdPadding);
+	frameLayout->setStretchFactor(mCmdPadding, 1);
 }
 
 /******************************************************************************
@@ -604,7 +628,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		}
 
 		KAEvent::Action action = event->action();
-		setAction(action, event->cleanText());
+		AlarmText altext;
+		if (event->commandScript())
+			altext.setScript(event->cleanText());
+		else
+			altext.setText(event->cleanText());
+		setAction(action, altext);
 		if (action == KAEvent::EMAIL)
 			mEmailAttachList->insertStringList(event->emailAttachments());
 
@@ -634,6 +663,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->repeatSound());
+		mCmdXterm->setChecked(event->commandXterm());
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
@@ -677,8 +707,11 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+		mCmdTypeScript->setChecked(preferences->defaultCmdScript());
+		mCmdXterm->setChecked(preferences->defaultCmdXterm());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
+	slotCmdScriptToggled(mCmdTypeScript->isChecked());
 
 	if (!deferGroupVisible)
 		mDeferGroup->hide();
@@ -733,7 +766,9 @@ void EditAlarmDlg::setReadOnly()
 	}
 
 	// Command alarm controls
-	mCommandMessageEdit->setReadOnly(mReadOnly);
+	mCmdTypeScript->setReadOnly(mReadOnly);
+	mCmdCommandEdit->setReadOnly(mReadOnly);
+	mCmdScriptEdit->setReadOnly(mReadOnly);
 
 	// Email alarm controls
 	mEmailToEdit->setReadOnly(mReadOnly);
@@ -762,6 +797,7 @@ void EditAlarmDlg::setReadOnly()
 void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 {
 	QString text = alarmText.displayText();
+	bool script;
 	QRadioButton* radio;
 	switch (action)
 	{
@@ -771,7 +807,13 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 			break;
 		case KAEvent::COMMAND:
 			radio = mCommandRadio;
-			mCommandMessageEdit->setText(text);
+			script = alarmText.isScript();
+			mCmdTypeScript->setChecked(script);
+			if (script)
+				mCmdScriptEdit->setText(text);
+#warning Does command script field get filled in when email is dragged onto KAlarm?
+			else
+				mCmdCommandEdit->setText(text);
 			break;
 		case KAEvent::EMAIL:
 			radio = mEmailRadio;
@@ -853,6 +895,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedPostAction = mSpecialActionsButton->postAction();
 	}
 	checkText(mSavedTextFileCommandMessage, false);
+	mSavedCmdScript      = mCmdTypeScript->isChecked();
+	mSavedCmdXterm       = mCmdXterm->isChecked();
 	if (mEmailFromList)
 		mSavedEmailFrom = mEmailFromList->currentIdentityName();
 	mSavedEmailTo        = mEmailToEdit->text();
@@ -930,6 +974,12 @@ bool EditAlarmDlg::stateChanged() const
 					return true;
 			}
 		}
+	}
+	else if (mCommandRadio->isOn())
+	{
+		if (mSavedCmdScript != mCmdTypeScript->isChecked()
+		||  mSavedCmdXterm  != mCmdXterm->isChecked())
+			return true;
 	}
 	else if (mEmailRadio->isOn())
 	{
@@ -1058,10 +1108,13 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 int EditAlarmDlg::getAlarmFlags() const
 {
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
+	bool cmdAlarm     = mCommandRadio->isOn();
 	return (displayAlarm && mSoundPicker->beep()          ? KAEvent::BEEP : 0)
 	     | (displayAlarm && mSoundPicker->repeat()        ? KAEvent::REPEAT_SOUND : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()    ? KAEvent::AUTO_CLOSE : 0)
+	     | (cmdAlarm && mCmdTypeScript->isChecked()       ? KAEvent::SCRIPT : 0)
+	     | (cmdAlarm && mCmdXterm->isChecked()            ? KAEvent::EXEC_IN_XTERM : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
@@ -1282,7 +1335,7 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
-			if (mCommandRadio->isOn())
+			if (mCommandRadio->isOn()  &&  !mCmdXterm->isChecked())
 			{
 				theApp()->commandMessage((ShellProcess*)proc, this);
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
@@ -1379,7 +1432,7 @@ void EditAlarmDlg::slotEditDeferral()
 */
 void EditAlarmDlg::slotShowMainPage()
 {
-	slotAlarmTypeClicked(-1);
+	slotAlarmTypeChanged(-1);
 	if (!mMainPageShown)
 	{
 		if (mTemplateName)
@@ -1539,7 +1592,7 @@ bool EditAlarmDlg::checkEmailData()
 *  Called when one of the alarm action type radio buttons is clicked,
 *  to display the appropriate set of controls for that action type.
 */
-void EditAlarmDlg::slotAlarmTypeClicked(int)
+void EditAlarmDlg::slotAlarmTypeChanged(int)
 {
 	bool displayAlarm = false;
 	QWidget* focus = 0;
@@ -1570,8 +1623,8 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 	{
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
 		mAlarmTypeStack->raiseWidget(mCommandFrame);
-		mCommandMessageEdit->setNoSelect();
-		focus = mCommandMessageEdit;
+		mCmdCommandEdit->setNoSelect();
+		focus = mCmdCommandEdit;
 	}
 	else if (mEmailRadio->isOn())
 	{
@@ -1584,6 +1637,28 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
 	if (focus)
 		focus->setFocus();
+}
+
+/******************************************************************************
+*  Called when one of the command type radio buttons is clicked,
+*  to display the appropriate edit field.
+*/
+void EditAlarmDlg::slotCmdScriptToggled(bool on)
+{
+	if (on)
+	{
+		mCmdCommandEdit->hide();
+		mCmdPadding->hide();
+		mCmdScriptEdit->show();
+		mCmdScriptEdit->setFocus();
+	}
+	else
+	{
+		mCmdScriptEdit->hide();
+		mCmdCommandEdit->show();
+		mCmdPadding->show();
+		mCmdCommandEdit->setFocus();
+	}
 }
 
 /******************************************************************************
@@ -1702,7 +1777,10 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		result = mEmailMessageEdit->text();
 	else if (mCommandRadio->isOn())
 	{
-		result = mCommandMessageEdit->text();
+		if (mCmdTypeScript->isChecked())
+			result = mCmdScriptEdit->text();
+		else
+			result = mCmdCommandEdit->text();
 		result.stripWhiteSpace();
 	}
 	else if (mFileRadio->isOn())
@@ -1803,6 +1881,7 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
 	setMinimumSize(tsize);
 }
+#warning Set complete message if dragging onto a text alarm edit field
 
 
 /*=============================================================================
@@ -1892,7 +1971,6 @@ void LineEdit::dropEvent(QDropEvent* e)
 				newText = mailList.first().from();
 			else
 				setText(mailList.first().subject());    // replace any existing text
-#warning Set complete message if dragging onto a text alarm edit field
 		}
 	}
 	// This must come before KURLDrag

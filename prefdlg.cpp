@@ -67,6 +67,15 @@
 #include "traywindow.h"
 #include "prefdlg.moc"
 
+// Command strings for executing commands in different types of terminal windows.
+// %t = window title parameter
+static QString xtermCommands[] = {
+	QString::fromLatin1("xterm -sb -hold -title %t -e "),
+	QString::fromLatin1("konsole --noclose -T %t -e "),
+	QString::fromLatin1("gnome-terminal -t %t -x "),
+	QString::null       // end of list indicator - don't change!
+};
+
 
 /*=============================================================================
 = Class KAlarmPrefDlg
@@ -289,6 +298,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	// How to handle February 29th in yearly recurrences
 	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
@@ -313,6 +323,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
 	           "Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting."));
 
+	// Confirm alarm deletion?
 	itemBox = new QHBox(mPage);   // this is to allow left adjustment
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
@@ -321,6 +332,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	// Expired alarms
 	group = new QGroupBox(i18n("Expired Alarms"), mPage);
 	grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(1, 1);
@@ -357,6 +369,42 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addWidget(mClearExpired, 3, 1, Qt::AlignAuto);
 	group->setFixedHeight(group->sizeHint().height());
 
+	// Terminal window to use for command alarms
+	group = new QGroupBox(i18n("Terminal for Command Alarms"), mPage);
+	QWhatsThis::add(group,
+	      i18n("Choose which application to use when a command alarm is executed in a terminal window"));
+	grid = new QGridLayout(group, 1, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	row = 0;
+
+	mXtermType = new QButtonGroup(group);
+	mXtermType->hide();
+	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Command alarms in a terminal window will be executed by '%1'");
+	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
+	{
+		QString cmd = xtermCommands[mXtermCount];
+		int i = cmd.find(' ');    // find the end of the terminal window name
+		QString term = cmd.left(i > 0 ? i : 1000);
+		radio = new QRadioButton(term, group);
+		radio->setMinimumSize(radio->sizeHint());
+		mXtermType->insert(radio, mXtermCount);
+		cmd.replace("%t", kapp->aboutData()->programName());
+		QWhatsThis::add(radio, whatsThis.arg(cmd));
+		grid->addWidget(radio, (row = mXtermCount/3 + 1), mXtermCount % 3, Qt::AlignAuto);
+	}
+
+	box = new QHBox(group);
+	grid->addMultiCellWidget(box, row + 1, row + 1, 0, 2, Qt::AlignAuto);
+	radio = new QRadioButton(i18n("Other:"), box);
+	radio->setFixedSize(radio->sizeHint());
+	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
+	mXtermType->insert(radio, mXtermCount);
+	mXtermCommand = new QLineEdit(box);
+	QWhatsThis::add(box,
+	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
+	           "The command string specified in the command alarm will be appended to what you enter here."
+	           "Remember to include a trailing space if necessary."));
+
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
@@ -375,6 +423,15 @@ void MiscPrefTab::restore()
 	mStartOfDay->setValue(preferences->mStartOfDay);
 	mFeb29->setButton(preferences->mFeb29RecurType);
 	setExpiredControls(preferences->mExpiredKeepDays);
+	QString xtermCmd = preferences->cmdXTermCommand();
+	int id = 0;
+	for ( ;  id < mXtermCount;  ++id)
+	{
+		if (xtermCmd == xtermCommands[id])
+			break;
+	}
+	mXtermType->setButton(id);
+	mXtermCommand->setText(id == mXtermCount ? xtermCmd : "");
 	slotDisableIfStoppedToggled(true);
 }
 
@@ -395,6 +452,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 	preferences->mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
 	preferences->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
 	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
+	int id = mXtermType->selectedId();
+	preferences->mCmdXTermCommand = (id < mXtermCount) ? xtermCommands[id] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -412,6 +471,7 @@ void MiscPrefTab::setDefaults()
 	mStartOfDay->setValue(Preferences::default_startOfDay);
 	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
+	mXtermType->setButton(0);
 	slotDisableIfStoppedToggled(true);
 }
 
@@ -463,6 +523,11 @@ void MiscPrefTab::slotClearExpired()
 	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
 	if (cal)
 		cal->purgeAll();
+}
+
+void MiscPrefTab::slotOtherTerminalToggled(bool on)
+{
+	mXtermCommand->setEnabled(on);
 }
 
 
@@ -786,36 +851,53 @@ void FontColourPrefTab::setDefaults()
 EditPrefTab::EditPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
+	int groupTopMargin = fontMetrics().lineSpacing()/2;
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
-	QHBox* box = new QHBox(mPage);
+	// DISPLAY ALARMS
+	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), mPage);
+	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(groupTopMargin);
+
+	QHBox* box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
+	layout->addWidget(box);
 	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
 	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_AutoCloseWinLC(), box, "defAutoClose");
+	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), box, "defAutoClose");
 	mDefaultAutoClose->setMinimumSize(mDefaultAutoClose->sizeHint());
 	QWhatsThis::add(mDefaultAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
 	box->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), box, "defConfAck");
+	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
 	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
+	layout->addWidget(mDefaultConfirmAck, 0, Qt::AlignAuto);
 
-	// BCC email to sender
-	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), box, "defEmailBcc");
-	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
+	box = new QHBox(group);
+	box->setSpacing(KDialog::spacingHint());
+	layout->addWidget(box);
+	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
+	label->setFixedSize(label->sizeHint());
+	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
+	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
+	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
+	label->setBuddy(mDefaultReminderUnits);
+	QWhatsThis::add(box,
+	      i18n("The default units for the reminder in the alarm edit dialog."));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	QGroupBox* group = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
+	mDefaultSpecialActions = new SpecialActions(group);
+	mDefaultSpecialActions->setFixedHeight(mDefaultSpecialActions->sizeHint().height());
+	layout->addWidget(mDefaultSpecialActions);
+
+	// SOUND
+	group = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
 	QGridLayout* grid = new QGridLayout(group, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, indentWidth());
@@ -849,7 +931,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 	grid->addMultiCellWidget(box, 3, 3, 1, 2);
 
-	mDefaultSoundRepeat = new QCheckBox(i18n("Re&peat sound file"), group, "defRepeatSound");
+	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), group, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
 	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat()));
 	grid->addWidget(mDefaultSoundRepeat, 4, 2, Qt::AlignAuto);
@@ -858,10 +940,39 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 #endif
 	group->setFixedHeight(group->sizeHint().height());
 
+	// COMMAND ALARMS
+	group = new QGroupBox(i18n("Command Alarms"), mPage);
+	layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(groupTopMargin);
+	layout = new QHBoxLayout(layout, KDialog::spacingHint());
+
+	mDefaultCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group, "defCmdScript");
+	mDefaultCmdScript->setMinimumSize(mDefaultCmdScript->sizeHint());
+	QWhatsThis::add(mDefaultCmdScript, defsetting.arg(EditAlarmDlg::i18n_EnterScript()));
+	layout->addWidget(mDefaultCmdScript);
+	layout->addStretch();
+
+	mDefaultCmdXterm = new QCheckBox(EditAlarmDlg::i18n_w_ExecInTermWindow(), group, "defCmdXterm");
+	mDefaultCmdXterm->setMinimumSize(mDefaultCmdXterm->sizeHint());
+	QWhatsThis::add(mDefaultCmdXterm, defsetting.arg(EditAlarmDlg::i18n_ExecInTermWindow()));
+	layout->addWidget(mDefaultCmdXterm);
+
+	// EMAIL ALARMS
+	group = new QGroupBox(i18n("Email Alarms"), mPage);
+	layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(groupTopMargin);
+
+	// BCC email to sender
+	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), group, "defEmailBcc");
+	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
+	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
+	layout->addWidget(mDefaultEmailBcc, 0, Qt::AlignAuto);
+
+	// RECURRENCE
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("&Recurrence:"), box);
+	label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
 	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur());
@@ -878,25 +989,6 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	box = new QHBox(itemBox);
-	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("Reminder &units:"), box);
-	label->setFixedSize(label->sizeHint());
-	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
-	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
-	label->setBuddy(mDefaultReminderUnits);
-	QWhatsThis::add(box,
-	      i18n("The default units for the reminder in the alarm edit dialog."));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);
-	itemBox->setFixedHeight(box->sizeHint().height());
-
-	mDefaultSpecialActions = new SpecialActions(i18n("Special Display Alarm Actions"), mPage);
-	mDefaultSpecialActions->setFixedHeight(mDefaultSpecialActions->sizeHint().height());
-
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
@@ -909,10 +1001,12 @@ void EditPrefTab::restore()
 	mDefaultBeep->setChecked(preferences->mDefaultBeep);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
 	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
+	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
+	mDefaultCmdScript->setChecked(preferences->mDefaultCmdScript);
+	mDefaultCmdXterm->setChecked(preferences->mDefaultCmdXterm);
 	mDefaultEmailBcc->setChecked(preferences->mDefaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(preferences->mDefaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(preferences->mDefaultReminderUnits);
-	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
 }
 
 void EditPrefTab::apply(bool syncToDisc)
@@ -924,6 +1018,8 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
+	preferences->mDefaultCmdScript   = mDefaultCmdScript->isChecked();
+	preferences->mDefaultCmdXterm    = mDefaultCmdXterm->isChecked();
 	preferences->mDefaultEmailBcc    = mDefaultEmailBcc->isChecked();
 	preferences->mDefaultPreAction   = mDefaultSpecialActions->preAction();
 	preferences->mDefaultPostAction  = mDefaultSpecialActions->postAction();
@@ -950,6 +1046,8 @@ void EditPrefTab::setDefaults()
 	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
+	mDefaultCmdScript->setChecked(Preferences::default_defaultCmdScript);
+	mDefaultCmdXterm->setChecked(Preferences::default_defaultCmdXterm);
 	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);

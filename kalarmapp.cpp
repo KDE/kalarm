@@ -27,6 +27,7 @@
 #include <qobjectlist.h>
 #include <qtimer.h>
 #include <qregexp.h>
+#include <qfile.h>
 
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -35,6 +36,7 @@
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kprocess.h>
+#include <ktempfile.h>
 #include <kfileitem.h>
 #include <kstdguiitem.h>
 #include <kstaticdeleter.h>
@@ -1598,9 +1600,42 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		}
 		case KAAlarm::COMMAND:
 		{
+			int flags = event.commandXterm() ? ProcData::EXEC_IN_XTERM : 0;
 			QString command = event.cleanText();
-			kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: " << command << endl;
-			result = doShellCommand(command, event, &alarm);
+			if (event.commandScript())
+			{
+				// Store the command script in a temporary file for execution
+				kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)" << endl;
+				bool err = true;
+				KTempFile tmpFile(QString::null, QString::null, 0700);
+				tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
+				QTextStream* stream = tmpFile.textStream();
+				if (!stream)
+					kdError(5950) << "KAlarmApp::execAlarm(): Unable to create a temporary script file" << endl;
+				else
+				{
+					*stream << command;
+					tmpFile.close();
+					if (tmpFile.status())
+						kdError(5950) << "KAlarmApp::execAlarm(): Error " << tmpFile.status() << " writing to temporary script file" << endl;
+					else
+					{
+						err = false;
+						result = doShellCommand(tmpFile.name(), event, &alarm, (flags | ProcData::TEMP_FILE));
+					}
+				}
+				if (err)
+				{
+					QStringList errmsgs(i18n("Error creating temporary script file"));
+					(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+					result = 0;
+				}
+			}
+			else
+			{
+				kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: " << command << endl;
+				result = doShellCommand(command, event, &alarm, flags);
+			}
 			if (reschedule)
 				rescheduleAlarm(event, alarm, true);
 			break;
@@ -1638,7 +1673,15 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
-	ShellProcess* proc = new ShellProcess(command);
+	QString cmd = command;
+	if (flags & ProcData::EXEC_IN_XTERM)
+	{
+		// Execute the command in a terminal window
+		QString terminalCmd = Preferences::instance()->cmdXTermCommand();
+		terminalCmd.replace("%t", aboutData()->programName());    // set the terminal window title
+		cmd.prepend(terminalCmd);
+	}
+	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
 	mCommandProcesses.append(pd);
@@ -1670,13 +1713,16 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 				kdWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "): " << errmsg << endl;
 				if (pd->messageBoxParent)
 				{
-					// Close the existing informational message box for this process
+					// Close the existing informational KMessageBox for this process
 					QObjectList* dialogs = pd->messageBoxParent->queryList("KDialogBase", 0, false, true);
 					KDialogBase* dialog = (KDialogBase*)dialogs->getFirst();
 					delete dialog;
 					delete dialogs;
-					errmsg += "\n";
-					errmsg += proc->command();
+					if (!pd->tempFile())
+					{
+						errmsg += "\n";
+						errmsg += proc->command();
+					}
 					KMessageBox::error(pd->messageBoxParent, errmsg);
 				}
 				else
@@ -1704,12 +1750,13 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 	else if (flags & ProcData::POST_ACTION)
 		errmsgs += i18n("Post-alarm action:");
 	errmsgs += proc->errorMessage();
-	errmsgs += proc->command();
+	if (!(flags & ProcData::TEMP_FILE))
+		errmsgs += proc->command();
 	(new MessageWin(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs))->show();
 }
 
 /******************************************************************************
-* Notes that a informational KMessageBox is displayed for this process.
+* Notes that an informational KMessageBox is displayed for this process.
 */
 void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 {
@@ -1936,6 +1983,16 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 
 KAlarmApp::ProcData::~ProcData()
 {
+	if (tempFile())
+	{
+		// Delete the temporary file containing the script which was executed
+		QString cmd = process->command();
+		int i = cmd.find(' ');
+		if (i > 0)
+			cmd = cmd.left(i);
+		QFile f(cmd);
+		f.remove();
+	}
 	delete process;
 	delete event;
 	delete alarm;

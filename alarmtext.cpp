@@ -37,19 +37,21 @@ QString AlarmText::mSubjectPrefixEn = QString::fromLatin1("Subject:");
 
 void AlarmText::setText(const QString& text)
 {
-	mIsEmail = false;
-	mBody    = text;
+	mBody     = text;
+	mIsScript = text.startsWith(QString::fromLatin1("#!"));
+	mIsEmail  = false;
 	mTo = mFrom = mTime = mSubject = QString::null;
 }
 
 void AlarmText::setEmail(const QString& to, const QString& from, const QString& time, const QString& subject, const QString& body)
 {
-	mIsEmail = true;
-	mTo      = to;
-	mFrom    = from;
-	mTime    = time;
-	mSubject = subject;
-	mBody    = body;
+	mIsScript = false;
+	mIsEmail  = true;
+	mTo       = to;
+	mFrom     = from;
+	mTime     = time;
+	mSubject  = subject;
+	mBody     = body;
 }
 
 /******************************************************************************

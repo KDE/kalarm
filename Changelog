@@ -1,8 +1,19 @@
 KAlarm
 
-=== Version 1.2.3 --- 30 November 2004 ===
+=== Version 1.2.4 --- 21 December 2004 ===
+Provide option to enter a script for a command alarm, instead of a command line.
+Add option to run command alarms in terminal windows.
+Accept drag and drop of KAddressBook entries to alarm edit dialog email fields.
+Drag and drop now inserts text where appropriate, rather than replacing it.
+Display correct controls after loading a template in alarm edit dialog.
+
+=== Version 1.2.3 --- 7 December 2004 ===
+Put alarm type icons in a separate, sortable, column in alarm list.
 Align times in alarm list.
+Fix crash when the last recurrence of an alarm is reached.
 Fix random limit on expired alarm discard time if stepping with spinbox buttons.
+Fix dialog layouts for right-to-left languages.
+Fix time spin box layout for right-to-left languages.
 
 === Version 1.2.2 --- 27 November 2004 ===
 Make alarm daemon (kalarmd) exclusive to KAlarm.

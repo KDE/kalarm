@@ -48,6 +48,7 @@ class LateCancelSelector : public QFrame
 		static QString i18n_n_CancelIfLate();   // text of 'Cancel if late' checkbox, with 'N' shortcut
 		static QString i18n_AutoCloseWin();     // plain text of 'Auto-close window after this time' checkbox
 		static QString i18n_AutoCloseWinLC();   // plain text of 'Auto-close window after late-cancelation time' checkbox
+		static QString i18n_i_AutoCloseWinLC(); // text of 'Auto-close window after late-cancelation time' checkbox, with 'I' shortcut
 
 	private slots:
 		void           slotToggled(bool);

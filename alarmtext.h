@@ -27,8 +27,9 @@
 class AlarmText
 {
 	public:
-		AlarmText(const QString& text = QString::null) : mBody(text), mIsEmail(false) { }
+		AlarmText(const QString& text = QString::null)  { setText(text); }
 		void           setText(const QString&);
+		void           setScript(const QString& text)   { setText(text);  mIsScript = true; }
 		void           setEmail(const QString& to, const QString& from, const QString& time, const QString& subject, const QString& body);
 		QString        displayText() const;
 		QString        calendarText() const;
@@ -39,6 +40,7 @@ class AlarmText
 		QString        body() const      { return mIsEmail ? mBody : QString::null; }
 		bool           isEmpty() const;
 		bool           isEmail() const   { return mIsEmail; }
+		bool           isScript() const  { return mIsScript; }
 		static QString emailHeaders(const QString&, bool subjectOnly);
 		static QString fromCalendarText(const QString&);
 		static QString toCalendarText(const QString&);
@@ -55,6 +57,7 @@ class AlarmText
 		static QString mSubjectPrefixEn;
 		QString        mBody, mFrom, mTo, mTime, mSubject;
 		bool           mIsEmail;
+		bool           mIsScript;
 };
 
 #endif // ALARMTEXT_H

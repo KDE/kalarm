@@ -73,6 +73,8 @@ const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
 const bool       Preferences::default_defaultBeep              = false;
 const bool       Preferences::default_defaultConfirmAck        = false;
+const bool       Preferences::default_defaultCmdScript         = false;
+const bool       Preferences::default_defaultCmdXterm          = false;
 const bool       Preferences::default_defaultEmailBcc          = false;
 const QString    Preferences::default_emailAddress             = QString::null;
 const QString    Preferences::default_emailBccAddress          = QString::null;
@@ -122,6 +124,7 @@ static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient
 static const QString EMAIL_COPY_TO_KMAIL      = QString::fromLatin1("EmailCopyToKMail");
 static const QString EMAIL_FROM               = QString::fromLatin1("EmailFrom");
 static const QString EMAIL_BCC_ADDRESS        = QString::fromLatin1("EmailBccAddress");
+static const QString CMD_XTERM_COMMAND        = QString::fromLatin1("CmdXTerm");
 static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
 static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
 static const QString DISABLED_COLOUR          = QString::fromLatin1("DisabledColour");
@@ -136,6 +139,8 @@ static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFil
 static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
 static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
 static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
+static const QString DEF_CMD_SCRIPT           = QString::fromLatin1("DefCmdScript");
+static const QString DEF_CMD_XTERM            = QString::fromLatin1("DefCmdXterm");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
 static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
@@ -233,6 +238,7 @@ Preferences::Preferences()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
+	mCmdXTermCommand          = config->readEntry(CMD_XTERM_COMMAND);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay               = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
@@ -255,6 +261,8 @@ Preferences::Preferences()
 	mDefaultSoundRepeat       = config->readBoolEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
 #endif
 	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
+	mDefaultCmdScript         = config->readBoolEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
+	mDefaultCmdXterm          = config->readBoolEntry(DEF_CMD_XTERM, default_defaultCmdXterm);
 	mDefaultEmailBcc          = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
@@ -303,6 +311,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
 	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
+	config->writeEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
@@ -316,6 +325,8 @@ void Preferences::save(bool syncToDisc)
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
 	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
+	config->writeEntry(DEF_CMD_SCRIPT, mDefaultCmdScript);
+	config->writeEntry(DEF_CMD_XTERM, mDefaultCmdXterm);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);

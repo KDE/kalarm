@@ -113,6 +113,7 @@ class MiscPrefTab : public PrefsTabBase
 		void         slotDisableIfStoppedToggled(bool);
 		void         slotExpiredToggled(bool);
 		void         slotClearExpired();
+		void         slotOtherTerminalToggled(bool);
 
 	private:
 		void         setExpiredControls(int purgeDays);
@@ -132,6 +133,9 @@ class MiscPrefTab : public PrefsTabBase
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
 		TimeEdit*      mStartOfDay;
+		QButtonGroup*  mXtermType;
+		QLineEdit*     mXtermCommand;
+		int            mXtermCount;              // number of terminal window types
 };
 
 
@@ -189,6 +193,8 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mDefaultLateCancel;
 		QCheckBox*      mDefaultAutoClose;
 		QCheckBox*      mDefaultConfirmAck;
+		QCheckBox*      mDefaultCmdScript;
+		QCheckBox*      mDefaultCmdXterm;
 		QCheckBox*      mDefaultEmailBcc;
 		QCheckBox*      mDefaultBeep;
 		QCheckBox*      mDefaultSound;

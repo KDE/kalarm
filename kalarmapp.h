@@ -111,11 +111,14 @@ class KAlarmApp : public KUniqueApplication
 			ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f = 0)
 			          : process(p), event(e), alarm(a), messageBoxParent(0), flags(f) { }
 			~ProcData();
-			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08 };
+			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
+			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20 };
 			bool                 preAction() const   { return flags & PRE_ACTION; }
 			bool                 postAction() const  { return flags & POST_ACTION; }
 			bool                 reschedule() const  { return flags & RESCHEDULE; }
 			bool                 allowDefer() const  { return flags & ALLOW_DEFER; }
+			bool                 tempFile() const    { return flags & TEMP_FILE; }
+			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
 			ShellProcess*        process;
 			KAEvent*             event;
 			KAAlarm*             alarm;

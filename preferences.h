@@ -78,6 +78,7 @@ class Preferences : public QObject
 		bool           emailBccUseControlCentre() const { return mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE; }
 		QString        emailAddress() const;
 		QString        emailBccAddress() const;
+		QString        cmdXTermCommand() const          { return mCmdXTermCommand; }
 		QColor         disabledColour() const           { return mDisabledColour; }
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
@@ -89,6 +90,8 @@ class Preferences : public QObject
 		int            defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
+		bool           defaultCmdScript() const         { return mDefaultCmdScript; }
+		bool           defaultCmdXterm() const          { return mDefaultCmdXterm; }
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
@@ -146,6 +149,8 @@ class Preferences : public QObject
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
 		static const bool        default_defaultConfirmAck;
+		static const bool        default_defaultCmdScript;
+		static const bool        default_defaultCmdXterm;
 		static const bool        default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                         default_defaultRecurPeriod;
@@ -201,6 +206,7 @@ class Preferences : public QObject
 		MailFrom            mEmailFrom;
 		MailFrom            mEmailBccFrom;
 		bool                mEmailCopyToKMail;
+		QString             mCmdXTermCommand;
 		QColor              mDisabledColour;
 		QColor              mExpiredColour;
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
@@ -213,6 +219,8 @@ class Preferences : public QObject
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;
 		bool                mDefaultConfirmAck;
+		bool                mDefaultCmdScript;
+		bool                mDefaultCmdXterm;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
 		TimePeriod::Units   mDefaultReminderUnits;

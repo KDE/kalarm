@@ -31,7 +31,6 @@
 #include "datetime.h"
 
 class QButton;
-class QButtonGroup;
 class QGroupBox;
 class QComboBox;
 class QTabWidget;
@@ -72,6 +71,11 @@ class EditAlarmDlg : public KDialogBase
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
 		static QString  i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
+		static QString  i18n_EnterScript();        // plain text of 'Enter a script' checkbox
+		static QString  i18n_p_EnterScript();      // text of 'Enter a script' checkbox, with 'P' shortcut
+		static QString  i18n_ExecInTermWindow();   // plain text of 'Execute in terminal window' checkbox
+		static QString  i18n_w_ExecInTermWindow(); // text of 'Execute in terminal window' checkbox, with 'W' shortcut
+		static QString  i18n_u_ExecInTermWindow(); // text of 'Execute in terminal window' checkbox, with 'U' shortcut
 		static QString  i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
 		static QString  i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
 		static QString  i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
@@ -92,7 +96,7 @@ class EditAlarmDlg : public KDialogBase
 	private slots:
 		void            slotRecurTypeChange(int repeatType);
 		void            slotRecurFrequencyChange();
-		void            slotAlarmTypeClicked(int id);
+		void            slotAlarmTypeChanged(int id);
 		void            slotEditDeferral();
 		void            slotBrowseFile();
 		void            slotFontColourSelected();
@@ -105,6 +109,7 @@ class EditAlarmDlg : public KDialogBase
 		void            slotAnyTimeToggled(bool anyTime);
 		void            slotTemplateTimeType(int id);
 		void            slotSetSimpleRepetition();
+		void            slotCmdScriptToggled(bool);
 
 	private:
 		void            initialise(const KAEvent*);
@@ -130,7 +135,7 @@ class EditAlarmDlg : public KDialogBase
 		bool                mRecurPageShown;           // true once the recurrence tab has been displayed
 		bool                mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
 
-		QButtonGroup*       mActionGroup;
+		ButtonGroup*        mActionGroup;
 		RadioButton*        mMessageRadio;
 		RadioButton*        mCommandRadio;
 		RadioButton*        mFileRadio;
@@ -165,7 +170,11 @@ class EditAlarmDlg : public KDialogBase
 		QString             mFileDefaultDir;     // default directory for browse button
 		// Command alarm widgets
 		QFrame*             mCommandFrame;
-		LineEdit*           mCommandMessageEdit; // command edit box
+		CheckBox*           mCmdTypeScript;      // entering a script
+		LineEdit*           mCmdCommandEdit;     // command line edit box
+		TextEdit*           mCmdScriptEdit;      // script edit box
+		CheckBox*           mCmdXterm;           // whether to execute command in terminal window
+		QWidget*            mCmdPadding;
 		// Email alarm widgets
 		QFrame*             mEmailFrame;
 		EmailIdCombo*       mEmailFromList;
@@ -222,12 +231,14 @@ class EditAlarmDlg : public KDialogBase
 		QString             mSavedPostAction;     // mSpecialActionsButton post-alarm action
 		int                 mSavedReminder;       // mReminder value
 		bool                mSavedOnceOnly;       // mReminder once-only status
-		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
+		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCmdCommandEdit/mEmailMessageEdit value
 		QString             mSavedEmailFrom;      // mEmailFromList current value
 		QString             mSavedEmailTo;        // mEmailToEdit value
 		QString             mSavedEmailSubject;   // mEmailSubjectEdit value
 		QStringList         mSavedEmailAttach;    // mEmailAttachList values
 		bool                mSavedEmailBcc;       // mEmailBcc status
+		bool                mSavedCmdScript;      // mCmdTypeScript status
+		bool                mSavedCmdXterm;       // mCmdXterm status
 		DateTime            mSavedDateTime;       // mTimeWidget value
 		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
 		int                 mSavedRepeatInterval; // alarm repetition interval (via mSimpleRepetition button)

@@ -67,6 +67,8 @@ class KAAlarmEventBase
 		const QFont&       font() const;
 		int                lateCancel() const          { return mLateCancel; }
 		bool               autoClose() const           { return mAutoClose; }
+		bool               commandScript() const       { return mCommandScript; }
+		bool               commandXterm() const        { return mCommandXterm; }
 		bool               confirmAck() const          { return mConfirmAck; }
 		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
 		int                repeatCount() const         { return mRepeatCount; }
@@ -106,6 +108,8 @@ class KAAlarmEventBase
 		int                mRepeatInterval;   // simple repetition interval (minutes)
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
+		bool               mCommandScript;    // the command text is a script, not a shell command line
+		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mBeep;             // whether to beep when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
@@ -232,6 +236,8 @@ class KAEvent : public KAAlarmEventBase
 			REPEAT_SOUND    = 0x80,    // repeat sound file while alarm is displayed
 			DISABLED        = 0x100,   // alarm is currently disabled
 			AUTO_CLOSE      = 0x200,   // auto-close alarm window after late-cancel period
+			SCRIPT          = 0x400,   // command is a script, not a shell command line
+			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
 #ifdef OLD_DCOP
 			// The following are read-only internal values, and may be changed
 #else

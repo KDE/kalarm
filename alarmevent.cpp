@@ -62,6 +62,7 @@ static const QString EMAIL_BCC_CATEGORY      = QString::fromLatin1("BCC");
 static const QString CONFIRM_ACK_CATEGORY    = QString::fromLatin1("ACKCONF");
 static const QString LATE_CANCEL_CATEGORY    = QString::fromLatin1("LATECANCEL;");
 static const QString AUTO_CLOSE_CATEGORY     = QString::fromLatin1("LATECLOSE;");
+static const QString EXEC_IN_XTERM_CATEGORY  = QString::fromLatin1("XTERM");
 static const QString TEMPL_DEF_TIME_CATEGORY = QString::fromLatin1("TMPLDEFTIME");
 static const QString ARCHIVE_CATEGORY        = QString::fromLatin1("SAVE");
 static const QString ARCHIVE_CATEGORIES      = QString::fromLatin1("SAVE:");
@@ -90,6 +91,7 @@ struct AlarmData
 	int                    displayingFlags;
 	bool                   defaultFont;
 	bool                   reminderOnceOnly;
+	bool                   commandScript;
 	int                    repeatCount;
 	int                    repeatInterval;
 };
@@ -183,6 +185,7 @@ void KAEvent::set(const Event& event)
 	mTemplateDefaultTime    = false;
 	mBeep                   = false;
 	mEmailBcc               = false;
+	mCommandXterm           = false;
 	mConfirmAck             = false;
 	mArchive                = false;
 	mReminderOnceOnly       = false;
@@ -204,6 +207,8 @@ void KAEvent::set(const Event& event)
 			mConfirmAck = true;
 		else if (cats[i] == EMAIL_BCC_CATEGORY)
 			mEmailBcc = true;
+		else if (cats[i] == EXEC_IN_XTERM_CATEGORY)
+			mCommandXterm = true;
 		else if (cats[i] == TEMPL_DEF_TIME_CATEGORY)
 			mTemplateDefaultTime = true;
 		else if (cats[i] == ARCHIVE_CATEGORY)
@@ -272,6 +277,7 @@ void KAEvent::set(const Event& event)
 	mRepeatAtLogin    = false;
 	mDisplaying       = false;
 	mRepeatSound      = false;
+	mCommandScript    = false;
 	mDeferral         = NO_DEFERRAL;
 	mSoundVolume      = -1;
 	mReminderMinutes  = 0;
@@ -390,6 +396,9 @@ void KAEvent::set(const Event& event)
 							mBgColour    = data.bgColour;
 							mFgColour    = data.fgColour;
 							break;
+						case T_COMMAND:
+							mCommandScript = data.commandScript;
+							break;
 						case T_EMAIL:
 							mEmailFromKMail   = data.emailFromKMail;
 							mEmailAddresses   = data.emailAddresses;
@@ -466,10 +475,15 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	switch (alarm.type())
 	{
 		case Alarm::Procedure:
-			data.action    = T_COMMAND;
-			data.cleanText = alarm.programFile();
+			data.action        = T_COMMAND;
+			data.cleanText     = alarm.programFile();
+			data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
 			if (!alarm.programArguments().isEmpty())
-				data.cleanText += " " + alarm.programArguments();
+			{
+				if (!data.commandScript)
+					data.cleanText += " ";
+				data.cleanText += alarm.programArguments();
+			}
 			break;
 		case Alarm::Email:
 			data.action           = T_EMAIL;
@@ -837,6 +851,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		cats.append(CONFIRM_ACK_CATEGORY);
 	if (mEmailBcc)
 		cats.append(EMAIL_BCC_CATEGORY);
+	if (mCommandXterm)
+		cats.append(EXEC_IN_XTERM_CATEGORY);
 	if (mLateCancel)
 		cats.append(QString("%1%2").arg(mAutoClose ? AUTO_CLOSE_CATEGORY : LATE_CANCEL_CATEGORY).arg(mLateCancel));
 	if (!mTemplateName.isEmpty()  &&  mTemplateDefaultTime)
@@ -1074,7 +1090,10 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 										     .arg(mDefaultFont ? QString::null : mFont.toString()));
 					break;
 				case T_COMMAND:
-					setProcedureAlarm(alarm, mText);
+					if (mCommandScript)
+						alarm->setProcedureAlarm("", mText);
+					else
+						setProcedureAlarm(alarm, mText);
 					break;
 				case T_EMAIL:
 					alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
@@ -1123,6 +1142,8 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mLateCancel    = mLateCancel;
 		al.mAutoClose     = mAutoClose;
 		al.mEmailBcc      = mEmailBcc;
+		al.mCommandScript = mCommandScript;
+		al.mCommandXterm  = mCommandXterm;
 		if (mActionType == T_EMAIL)
 		{
 			al.mEmailFromKMail   = mEmailFromKMail;
@@ -3110,6 +3131,8 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mEmailAttachments = rhs.mEmailAttachments;
 	mSoundVolume      = rhs.mSoundVolume;
 	mActionType       = rhs.mActionType;
+	mCommandScript    = rhs.mCommandScript;
+	mCommandXterm     = rhs.mCommandXterm;
 	mRepeatCount      = rhs.mRepeatCount;
 	mRepeatInterval   = rhs.mRepeatInterval;
 	mBeep             = rhs.mBeep;
@@ -3133,6 +3156,8 @@ void KAAlarmEventBase::set(int flags)
 	mConfirmAck    = flags & KAEvent::CONFIRM_ACK;
 	mDisplaying    = flags & KAEvent::DISPLAYING_;
 	mDefaultFont   = flags & KAEvent::DEFAULT_FONT;
+	mCommandScript = flags & KAEvent::SCRIPT;
+	mCommandXterm  = flags & KAEvent::EXEC_IN_XTERM;
 }
 
 int KAAlarmEventBase::flags() const
@@ -3140,11 +3165,13 @@ int KAAlarmEventBase::flags() const
 	return (mBeep          ? KAEvent::BEEP : 0)
 	     | (mRepeatSound   ? KAEvent::REPEAT_SOUND : 0)
 	     | (mRepeatAtLogin ? KAEvent::REPEAT_AT_LOGIN : 0)
-		 | (mAutoClose     ? KAEvent::AUTO_CLOSE : 0)
+	     | (mAutoClose     ? KAEvent::AUTO_CLOSE : 0)
 	     | (mEmailBcc      ? KAEvent::EMAIL_BCC : 0)
 	     | (mConfirmAck    ? KAEvent::CONFIRM_ACK : 0)
 	     | (mDisplaying    ? KAEvent::DISPLAYING_ : 0)
-	     | (mDefaultFont   ? KAEvent::DEFAULT_FONT : 0);
+	     | (mDefaultFont   ? KAEvent::DEFAULT_FONT : 0)
+	     | (mCommandScript ? KAEvent::SCRIPT : 0)
+	     | (mCommandXterm  ? KAEvent::EXEC_IN_XTERM : 0);
 
 }
 
@@ -3159,6 +3186,11 @@ void KAAlarmEventBase::dumpDebug() const
 	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
 	kdDebug(5950) << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??") << ":\n";
 	kdDebug(5950) << "-- mText:" << mText << ":\n";
+	if (mActionType == T_COMMAND)
+	{
+		kdDebug(5950) << "-- mCommandScript:" << (mCommandScript ? "true" : "false") << ":\n";
+		kdDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false") << ":\n";
+	}
 	kdDebug(5950) << "-- mNextMainDateTime:" << mNextMainDateTime.toString() << ":\n";
 	if (mActionType == T_EMAIL)
 	{
