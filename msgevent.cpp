@@ -1365,7 +1365,7 @@ QDate KAlarmRecurrence::getLastDateInMonth(const QDate& latestDate) const
 	}
 	else
 	{
-?// check logic of this section
+// check logic of this section
 		QDate monthBegin(latestDate.year(), latestDate.month(), 1);
 		QDate monthEnd(monthBegin.addDays(daysInMonth - 1));
 		int monthEndDayOfWeek = monthEnd.dayOfWeek();
