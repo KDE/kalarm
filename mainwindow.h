@@ -34,7 +34,7 @@ class KAlarmMainWindow : public MainWindowBase
 		Q_OBJECT
 
 	public:
-		KAlarmMainWindow(bool restored = false);
+		static KAlarmMainWindow* create(bool restored = false);
 		~KAlarmMainWindow();
 		bool           isTrayParent() const;
 		bool           isHiddenTrayParent() const   { return mHiddenTrayParent; }
@@ -97,6 +97,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           setAlarmEnabledStatus(bool status);
 
 	private:
+		KAlarmMainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
 		static KAlarmEvent::Action  getDropAction(QDropEvent*, QString& text);

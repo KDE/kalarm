@@ -225,15 +225,19 @@ bool KAlarmApp::restoreSession()
 
 	// Process is being restored by session management.
 	kdDebug(5950) << "KAlarmApp::restoreSession(): Restoring\n";
+	if (!initCheck(true))     // open the calendar file (needed for main windows)
+	{
+		quitIf(1, true);    // error opening the main calendar - quit
+		return true;
+	}
 	++activeCount;
-	int exitCode = !initCheck(true);     // open the calendar file (needed for main windows)
 	KAlarmMainWindow* trayParent = 0;
 	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 	{
 		QString type = KMainWindow::classNameOfToplevel(i);
 		if (type == QString::fromLatin1("KAlarmMainWindow"))
 		{
-			KAlarmMainWindow* win = new KAlarmMainWindow(true);
+			KAlarmMainWindow* win = KAlarmMainWindow::create(true);
 			win->restore(i, false);
 			if (win->isHiddenTrayParent())
 				trayParent = win;
@@ -259,7 +263,7 @@ bool KAlarmApp::restoreSession()
 		displayTrayIcon(true, trayParent);
 
 	--activeCount;
-	quitIf(exitCode);           // quit if no windows are open
+	quitIf(0);           // quit if no windows are open
 	return true;
 }
 
@@ -630,7 +634,7 @@ int KAlarmApp::newInstance()
 					break;
 				}
 
-				(new KAlarmMainWindow)->show();
+				(KAlarmMainWindow::create())->show();
 			}
 		} while (0);    // only execute once
 
@@ -657,23 +661,33 @@ int KAlarmApp::newInstance()
 }
 
 /******************************************************************************
-* Quit the program if there are no more "instances" running.
+* Quit the program, optionally only if there are no more "instances" running.
 */
-void KAlarmApp::quitIf(int exitCode)
+void KAlarmApp::quitIf(int exitCode, bool force)
 {
-	if (activeCount > 0  ||  MessageWin::instanceCount())
-		return;
-	int mwcount = KAlarmMainWindow::count();
-	KAlarmMainWindow* mw = mwcount ? KAlarmMainWindow::firstWindow() : 0;
-	if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->isTrayParent()))
-		return;
-	// There are no windows left except perhaps a main window which is a hidden tray icon parent
-	if (mTrayWindow)
+	if (force)
 	{
-		// There is a system tray icon.
-		// Don't exit unless the system tray doesn't seem to exist.
-		if (checkSystemTray())
+		// Quit regardless
+		KAlarmMainWindow::closeAll();
+		displayTrayIcon(false);
+	}
+	else
+	{
+		// Quit only if there are no more "instances" running
+		if (activeCount > 0  ||  MessageWin::instanceCount())
 			return;
+		int mwcount = KAlarmMainWindow::count();
+		KAlarmMainWindow* mw = mwcount ? KAlarmMainWindow::firstWindow() : 0;
+		if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->isTrayParent()))
+			return;
+		// There are no windows left except perhaps a main window which is a hidden tray icon parent
+		if (mTrayWindow)
+		{
+			// There is a system tray icon.
+			// Don't exit unless the system tray doesn't seem to exist.
+			if (checkSystemTray())
+				return;
+		}
 	}
 
 	/* This was the last/only running "instance" of the program, so exit completely.
@@ -756,7 +770,7 @@ bool KAlarmApp::displayTrayIcon(bool show, KAlarmMainWindow* parent)
 			if (!KAlarmMainWindow::count()  &&  wantRunInSystemTray())
 			{
 				creating = true;    // prevent main window constructor from creating an additional tray icon
-				parent = new KAlarmMainWindow;
+				parent = KAlarmMainWindow::create();
 				creating = false;
 			}
 			mTrayWindow = new TrayWindow(parent ? parent : KAlarmMainWindow::firstWindow());
@@ -839,7 +853,7 @@ KAlarmMainWindow* KAlarmApp::displayMainWindowSelected(const QString& eventID)
 	{
 		if (initCheck())
 		{
-			win = new KAlarmMainWindow;
+			win = KAlarmMainWindow::create();
 			win->show();
 		}
 	}

@@ -141,7 +141,7 @@ class KAlarmApp : public KUniqueApplication
 		};
 
 		bool               initCheck(bool calendarOnly = false);
-		void               quitIf(int exitCode);
+		void               quitIf(int exitCode, bool force = false);
 		void               redisplayAlarms();
 		bool               checkSystemTray();
 		void               changeStartOfDay();

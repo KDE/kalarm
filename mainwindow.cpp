@@ -36,6 +36,7 @@
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
+#include <dcopclient.h>
 #include <kdebug.h>
 
 #include <maillistdrag.h>
@@ -66,6 +67,17 @@ static QString messageSubjectPrefix = i18n("Email subject", "Subject:");
 QPtrList<KAlarmMainWindow> KAlarmMainWindow::windowList;
 
 
+/******************************************************************************
+* Construct an instance.
+* To avoid resize() events occurring while still opening the calendar (and
+* resultant crashes), the calendar is opened before constructing the instance.
+*/
+KAlarmMainWindow* KAlarmMainWindow::create(bool restored)
+{
+	theApp()->checkCalendar();    // ensure calendar is open
+	return new KAlarmMainWindow(restored);
+}
+
 KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mMinuteTimer(0),
@@ -82,7 +94,6 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 		resize(theApp()->readConfigWindowSize("MainWindow", size()));
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
-	theApp()->checkCalendar();    // ensure calendar is open
 	listView = new AlarmListView(this, "listView");
 	listView->selectTimeColumns(mShowTime, mShowTimeTo);
 	listView->showExpired(mShowExpired);
@@ -887,6 +898,28 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 		text += '\n';
 		text += messageSubjectPrefix + '\t';
 		text += summary.subject();
+
+		// Get the body of the email from KMail
+		QCString    replyType;
+		QByteArray  replyData;
+		QByteArray  data;
+		QDataStream arg(data, IO_WriteOnly);
+		arg << summary.serialNumber();
+		arg << (int)0;
+		QCString body;
+		if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(Q_UINT32,int)", data, replyType, replyData)
+		&&  replyType == "QString")
+		{
+			QDataStream reply_stream(replyData, IO_ReadOnly);
+			reply_stream >> body;
+			if (!body.isEmpty())
+			{
+				text += "\n\n";
+				text += body;
+			}
+		}
+		else
+			kdDebug(5950) << "KAlarmMainWindow::executeDropEvent(): kmail getDecodedBodyPart() call failed\n";
 	}
 	else if (QTextDrag::decode(e, text))
 	{
@@ -1029,7 +1062,7 @@ KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
 	}
 
 	// No window is specified, or the window doesn't exist. Open a new one.
-	win = new KAlarmMainWindow;
+	win = create();
 	win->show();
 	return win;
 }
