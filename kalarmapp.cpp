@@ -200,7 +200,7 @@ bool KAlarmApp::restoreSession()
 		{
 			MessageWin* win = new MessageWin;
 			win->restore(i, false);
-			if (win->errorMessage())
+			if (win->isInvalid())
 				delete win;
 			else
 				win->show();

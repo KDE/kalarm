@@ -144,6 +144,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
 	  mNoDefer(!allowDefer || alarm.repeatAtLogin()),
+	  mInvalid(false),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mOldVolume(-1),
@@ -172,7 +173,6 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 /******************************************************************************
 *  Construct the message window for a specified error message.
 */
-#warning "MessageWin shouldn't be saved at logoff??"
 MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, const QStringList& errmsgs)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mMessage(event.cleanText()),
@@ -184,6 +184,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mRestoreHeight(0),
 	  mConfirmAck(false),
 	  mNoDefer(true),
+	  mInvalid(false),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mEvent(event),
@@ -215,7 +216,7 @@ MessageWin::MessageWin()
 	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
-	  mShown(true),
+	  mShown(false),
 	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
@@ -606,7 +607,7 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
 	}
 	else
-		config->writeEntry(QString::fromLatin1("AlarmType"), KAAlarm::INVALID_ALARM);
+		config->writeEntry(QString::fromLatin1("Invalid"), true);
 }
 
 /******************************************************************************
@@ -616,6 +617,7 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
+	mInvalid       = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
 	mEventID       = config->readEntry(QString::fromLatin1("EventID"));
 	mAlarmType     = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
 	mMessage       = config->readEntry(QString::fromLatin1("Message"));
@@ -642,7 +644,6 @@ void MessageWin::readProperties(KConfig* config)
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 		if (kcalEvent)
 			mEvent.set(*kcalEvent);
-#warning "Check reinstatement of mEvent"
 		initView();
 	}
 }

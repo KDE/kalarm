@@ -57,7 +57,7 @@ class MessageWin : public MainWindowBase
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!mDeferButton; }
-		bool                errorMessage() const   { return mErrorMsgs.count(); }
+		bool                isInvalid() const      { return mInvalid; }
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
@@ -100,6 +100,7 @@ class MessageWin : public MainWindowBase
 		bool                mAudioRepeat;
 		bool                mConfirmAck;
 		bool                mNoDefer;         // don't display a Defer option
+		bool                mInvalid;         // restored window is invalid
 		// Sound file playing
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;

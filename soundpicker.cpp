@@ -44,9 +44,9 @@
 #include <arts/kplayobjectfactory.h>
 #endif
 
-#include "slider.h"
 #include "checkbox.h"
 #include "pushbutton.h"
+#include "slider.h"
 #include "soundpicker.moc"
 
 
