@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.2.5 --- 9 January 2005 ===
+=== Version 1.2.5 --- 21 January 2005 ===
+Prevent multiple "Failed to start Alarm Daemon" error messages at startup.
 Fix missing left border for time spinboxes in Plastik style.
 
 === Version 1.2.4 (KDE 3.4 beta1) --- 9 January 2005 ===
