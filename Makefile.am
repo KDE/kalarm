@@ -21,6 +21,9 @@ SUBDIRS = pixmaps
 alarmguiiface.h: $(top_srcdir)/kalarmd/alarmguiiface.h
 	cp $(top_srcdir)/kalarmd/alarmguiiface.h .
 
+autostart_DATA = kalarm.tray.desktop
+autostartdir = $(prefix)/share/autostart
+
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
 	$(INSTALL_DATA) $(srcdir)/kalarm.desktop $(kde_appsdir)/Applications/kalarm.desktop
