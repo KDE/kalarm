@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
 		I18N_NOOP("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
-		"(c) 2001 - 2003, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
+		"(c) 2001 - 2004, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and concatenate
