@@ -155,7 +155,7 @@ void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}
-		system(QFile::encodeName(execStr));
+		kapp->kdeinitExecWait(execStr);
 		mEnableCalPending = true;
 		setFastDaemonCheck();
 	}

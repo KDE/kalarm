@@ -1319,7 +1319,7 @@ void KAlarmApp::startDaemon()
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
 		QString execStr = locate("exe",QString::fromLatin1(DAEMON_APP_NAME));
-		system(QFile::encodeName(execStr));
+		kapp->kdeinitExecWait(execStr);
 		kdDebug(5950) << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
 	}
 
