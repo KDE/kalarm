@@ -47,8 +47,8 @@
 
 #include <kmime_header_parsing.h>
 
-#include "msgevent.h"
-#include "prefsettings.h"
+#include "alarmevent.h"
+#include "preferences.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 
@@ -64,12 +64,12 @@ bool parseAddressList( const char* & scursor, const char * const send,
 */
 bool KAMail::send(const KAlarmEvent& event)
 {
-	QString from = theApp()->settings()->emailAddress();
+	QString from = theApp()->preferences()->emailAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail():\nFrom: " << from << "\nTo: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject()
 	              << "\nAttachment:\n" << event.emailAttachments(", ") << endl;
 
-	if (theApp()->settings()->emailClient() == Settings::SENDMAIL)
+	if (theApp()->preferences()->emailClient() == Preferences::SENDMAIL)
 	{
 		QString textComplete;
 		QString command = KStandardDirs::findExe(QString::fromLatin1("sendmail"),
