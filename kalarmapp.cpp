@@ -185,7 +185,7 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (runInSystemTray())
+				if (runInSystemTray()  &&  !KAlarmMainWindow::count())
 					new KAlarmMainWindow;
 				if (!displayTrayIcon(true))
 				{
