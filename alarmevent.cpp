@@ -443,7 +443,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 		else if (data.type == KAlarmAlarm::DISPLAYING__ALARM)
 			data.displayingFlags = REPEAT_AT_LOGIN;
 	}
-//kdDebug()<<"ReadAlarm(): text="<<alarm.text()<<", time="<<alarm.time().toString()<<", valid time="<<alarm.time().isValid()<<endl;
+//kdDebug(5950)<<"ReadAlarm(): text="<<alarm.text()<<", time="<<alarm.time().toString()<<", valid time="<<alarm.time().isValid()<<endl;
 }
 
 /******************************************************************************
@@ -1188,7 +1188,7 @@ bool KAlarmEvent::setDisplaying(const KAlarmEvent& event, KAlarmAlarm::Type alar
 	  || alarmType == KAlarmAlarm::DEFERRED_ALARM
 	  || alarmType == KAlarmAlarm::AT_LOGIN_ALARM))
 	{
-kdDebug()<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAlarm::MAIN_ALARM?"MAIN":alarmType==KAlarmAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAlarmAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAlarmAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString()<<endl;
+//kdDebug(5950)<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAlarm::MAIN_ALARM?"MAIN":alarmType==KAlarmAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAlarmAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAlarmAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString()<<endl;
 		KAlarmAlarm al = event.alarm(alarmType);
 		if (al.valid())
 		{
