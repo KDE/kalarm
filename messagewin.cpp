@@ -74,11 +74,11 @@ class MessageText : public QTextEdit
 };
 
 
-class TextMimeSourceFactory : public QMimeSourceFactory
+class MWMimeSourceFactory : public QMimeSourceFactory
 {
 	public:
-		TextMimeSourceFactory(const QString& absPath, KTextBrowser*);
-		virtual ~TextMimeSourceFactory();
+		MWMimeSourceFactory(const QString& absPath, KTextBrowser*);
+		virtual ~MWMimeSourceFactory();
 		virtual const QMimeSource* data(const QString& abs_name) const;
 	private:
 		// Prohibit the following methods
@@ -205,6 +205,7 @@ MessageWin::~MessageWin()
 */
 QSize MessageWin::initView()
 {
+	bool reminder = (!mErrorMsgs.count()  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
@@ -212,16 +213,37 @@ QSize MessageWin::initView()
 
 	if (mDateTime.isValid())
 	{
+		// Show the alarm date/time, together with an "Advance reminder" text where appropriate
+		QFrame* frame = 0;
+		QVBoxLayout* layout = topLayout;
+		if (reminder)
+		{
+			frame = new QFrame(topWidget);
+			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
+			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
+			layout = new QVBoxLayout(frame, 2*frame->frameWidth(), KDialog::spacingHint());
+		}
+
 		// Alarm date/time
-		QLabel* label = new QLabel(topWidget);
+		QLabel* label = new QLabel(frame ? frame : topWidget);
 		label->setText(mDateTime.isDateOnly()
 		               ? KGlobal::locale()->formatDate(mDateTime.date(), true)
 		               : KGlobal::locale()->formatDateTime(mDateTime.dateTime()));
-		label->setFrameStyle(QFrame::Box | QFrame::Raised);
+		if (!frame)
+			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
-		topLayout->addWidget(label, 0, Qt::AlignHCenter);
+		layout->addWidget(label, 0, Qt::AlignHCenter);
 		QWhatsThis::add(label,
 		      i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
+
+		if (frame)
+		{
+			label = new QLabel(frame);
+			label->setText(i18n("Reminder"));
+			label->setFixedSize(label->sizeHint());
+			layout->addWidget(label, 0, Qt::AlignHCenter);
+			frame->setFixedSize(frame->sizeHint());
+		}
 	}
 
 	switch (action)
@@ -248,7 +270,7 @@ QSize MessageWin::initView()
 				{
 					opened = true;
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
-					TextMimeSourceFactory msf(tmpFile, view);
+					MWMimeSourceFactory msf(tmpFile, view);
 					view->setMinimumSize(view->sizeHint());
 					topLayout->addWidget(view);
 
@@ -324,10 +346,48 @@ QSize MessageWin::initView()
 				layout->addWidget(text, 1, Qt::AlignHCenter);
 				layout->addSpacing(hspace);
 			}
-			topLayout->addStretch();
+			if (!reminder)
+				topLayout->addStretch();
 			break;
 		}
 	}
+
+	if (reminder)
+	{
+		// Reminder: show remaining time until the actual alarm
+		QLabel* label = new QLabel(topWidget);
+		QString text;
+		int days = QDate::currentDate().daysTo(mDateTime.date());
+		if (days > 0  ||  mDateTime.isDateOnly())
+		{
+			if (days == 0)
+				text = i18n("today");
+			else if (days % 7)
+				text = i18n("tomorrow", "in %n days' time", days);
+			else
+				text = i18n("in 1 week's time", "in %n weeks' time", days/7);
+		}
+		else
+		{
+			int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
+			if (mins < 60)
+				text = i18n("in 1 minute's time", "in %n minutes' time", mins);
+			else if (mins % 60 == 0)
+				text = i18n("in 1 hour's time", "in %n hours' time", mins/60);
+			else if (mins % 60 == 1)
+				text = i18n("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
+			else
+				text = i18n("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60).arg(mins%60);
+		}
+		label->setText(text);
+		label->setFrameStyle(QFrame::Box | QFrame::Raised);
+		label->setMargin(label->frameWidth());
+		label->setFixedSize(label->sizeHint());
+		topLayout->addWidget(label, 0, Qt::AlignHCenter);
+		topLayout->addSpacing(KDialog::spacingHint());
+		topLayout->addStretch();
+	}
+
 	if (!mErrorMsgs.count())
 		topWidget->setBackgroundColor(mBgColour);
 	else
@@ -656,12 +716,12 @@ void MessageWin::displayMainWindow()
 
 
 /*=============================================================================
-= Class TextMimeSourceFactory
+= Class MWMimeSourceFactory
 * Gets the mime type of a text file from not only its extension (as per
 * QMimeSourceFactory), but also from its contents. This allows the detection
 * of plain text files without file name extensions.
 =============================================================================*/
-TextMimeSourceFactory::TextMimeSourceFactory(const QString& absPath, KTextBrowser* view)
+MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* view)
 	: QMimeSourceFactory(),
 	  mMimeType("text/plain"),
 	  mLast(0)
@@ -692,12 +752,12 @@ TextMimeSourceFactory::TextMimeSourceFactory(const QString& absPath, KTextBrowse
 	setFilePath(QFileInfo(absPath).dirPath(true));
 }
 
-TextMimeSourceFactory::~TextMimeSourceFactory()
+MWMimeSourceFactory::~MWMimeSourceFactory()
 {
 	delete mLast;
 }
 
-const QMimeSource* TextMimeSourceFactory::data(const QString& abs_name) const
+const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 {
 	if (abs_name == mTextFile)
 	{
