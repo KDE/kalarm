@@ -98,7 +98,7 @@ bool Daemon::start()
 			QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
 			if (execStr.isEmpty())
 			{
-				KMessageBox::error(0, i18n("Alarm Daemon not found"));
+				KMessageBox::error(0, i18n("Alarm daemon not found"));
 				kdError() << "Daemon::startApp(): " DAEMON_APP_NAME_DEF " not found" << endl;
 				return false;
 			}
