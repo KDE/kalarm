@@ -493,6 +493,7 @@ void KAlarmApp::slotSettingsChanged()
 		++activeCount;          // prevent the application from quitting
 		KAlarmMainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0L;
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
+		mTrayWindow = 0L;
 		mOldRunInSystemTray = newRunInSysTray;
 		if (newRunInSysTray)
 		{
@@ -502,7 +503,7 @@ void KAlarmApp::slotSettingsChanged()
 		}
 		else
 		{
-			if (win->isHidden())
+			if (win  &&  win->isHidden())
 				delete win;
 			displayTrayIcon(true);
 		}
