@@ -309,8 +309,9 @@ QString AlarmCalendar::addEvent(const KAlarmEvent& event)
 			kcalEvent->setUid(KAlarmEvent::uid(event.id(), KAlarmEvent::DISPLAYING));
 			break;
 	}
-	event.updateEvent(*kcalEvent, false);
+	event.updateEvent(*kcalEvent, false, mType == KAlarmEvent::EXPIRED);
 	mCalendar->addEvent(kcalEvent);
+	event.clearUpdated();
 	return kcalEvent->uid();
 }
 
@@ -324,7 +325,10 @@ void AlarmCalendar::updateEvent(const KAlarmEvent& evnt)
 	{
 		Event* kcalEvent = event(evnt.id());
 		if (kcalEvent)
+		{
 			evnt.updateEvent(*kcalEvent);
+			evnt.clearUpdated();
+		}
 	}
 }
 
