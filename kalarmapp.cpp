@@ -187,7 +187,7 @@ KAlarmApp::KAlarmApp()
 	                                               actions, "alarmenable");
 	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
 #if KDE_VERSION >= 308
-	mActionDaemonControl = new KAction(i18n("Control Alarm &Daemon..."), mActionPrefs->iconSet(),
+	mActionDaemonControl = new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."), mActionPrefs->iconSet(),
 #else
 	mActionDaemonControl = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 #endif

@@ -153,7 +153,7 @@ void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 		if (execStr.isEmpty())
 		{
 			KMessageBox::error(0, i18n("Alarm Daemon not found"),
-			                   i18n("%1 Error").arg(kapp->aboutData()->programName()));
+			                   i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
 			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}

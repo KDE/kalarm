@@ -438,7 +438,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	grid->setColStretch(1, 1);
-	label = new QLabel(i18n("&From:"), group);
+	label = new QLabel(i18n("'From' email address", "&From:"), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mEmailAddress = new QLineEdit(group);
@@ -456,7 +456,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	grid->addWidget(mEmailUseControlCentre, 2, 1, AlignLeft);
 #endif
 
-	label = new QLabel(i18n("&Bcc:"), group);
+	label = new QLabel(i18n("'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 3, 0);
 	mEmailBccAddress = new QLineEdit(group);

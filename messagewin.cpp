@@ -280,14 +280,14 @@ QSize MessageWin::initView()
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
 			QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
-			QLabel* label = new QLabel(i18n("To:"), frame);
+			QLabel* label = new QLabel(i18n("Email addressee", "To:"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 0, 0, Qt::AlignLeft);
 			label = new QLabel(mEvent.emailAddresses("\n"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
-			label = new QLabel(i18n("Subject:"), frame);
+			label = new QLabel(i18n("Email subject", "Subject:"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 1, 0, Qt::AlignLeft);
 			label = new QLabel(mEvent.emailSubject(), frame);
