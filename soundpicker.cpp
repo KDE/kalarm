@@ -40,7 +40,9 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#ifndef WITHOUT_ARTS
 #include <arts/kplayobjectfactory.h>
+#endif
 
 #include "checkbox.h"
 #include "pushbutton.h"
@@ -239,7 +241,11 @@ KURL SoundPicker::browseFile(const QString& initialFile, const QString& defaultD
 	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
 	                   : !defaultDir.isEmpty()  ? defaultDir
 	                   : KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+#ifdef WITHOUT_ARTS
+	KFileDialog fileDlg(initialDir, QString::fromLatin1("*.wav *.mp3 *.ogg|%1\n*|%2").arg(i18n("Sound Files")).arg(i18n("All Files")), 0, "soundFileDlg", true);
+#else
 	KFileDialog fileDlg(initialDir, KDE::PlayObjectFactory::mimeTypes().join(" "), 0, "soundFileDlg", true);
+#endif
 	fileDlg.setCaption(i18n("Choose Sound File"));
 	fileDlg.setMode(KFile::File | KFile::ExistingOnly);
 	if (!initialFile.isEmpty())
