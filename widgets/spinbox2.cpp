@@ -164,16 +164,22 @@ void SpinBox2::arrange()
 	spinbox->setGeometry(-xSpinbox, 0, spinboxFrame->width() + xSpinbox, height());
 }
 
+/******************************************************************************
+* Calculate the width and position of the extra pair of spin buttons.
+* Style-specific adjustments are made for a better appearance.
+*/
 void SpinBox2::getMetrics() const
 {
 	QRect rect = updown2->style().querySubControlMetrics(QStyle::CC_SpinWidget, updown2, QStyle::SC_SpinWidgetButtonField);
+	if (style().inherits("PlastikStyle"))
+		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	xUpdown2 = mReverseLayout ? 0 : rect.left();
 	wUpdown2 = updown2->width() - rect.left();
 	xSpinbox = spinbox->style().querySubControlMetrics(QStyle::CC_SpinWidget, spinbox, QStyle::SC_SpinWidgetEditField).left();
 	wGap = 0;
 
 	// Make style-specific adjustments for a better appearance
-	if (style().isA("QMotifPlusStyle"))
+	if (style().inherits("QMotifPlusStyle"))
 	{
 		xSpinbox = 0;      // show the edit control left border
 		wGap = 2;          // leave a space to the right of the left-hand pair of spin buttons
