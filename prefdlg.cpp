@@ -292,7 +292,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(Qt::WordBreak | Qt::AlignAuto);
+	label->setAlignment(Qt::WordBreak | alignment);
 	box = new QHBox(vbox);
 	box->setSpacing(2*KDialog::spacingHint());
 	mFeb29 = new QButtonGroup(box);
