@@ -217,6 +217,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mRepeatCountEntry->setReadOnly(mReadOnly);
 	QWhatsThis::add(mRepeatCountEntry,
 	      i18n("Enter the total number of times to trigger the alarm"));
+	repeatCountButton->setFocusWidget(mRepeatCountEntry);
 	repeatCountLabel = new QLabel(i18n("occurrence(s)"), rangeButtonGroup);
 	repeatCountLabel->setFixedSize(repeatCountLabel->sizeHint());
 	layout->addWidget(repeatCountButton);
@@ -237,6 +238,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	endDateEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(endDateEdit,
 	      i18n("Enter the last date to repeat the alarm"));
+	endDateButton->setFocusWidget(endDateEdit);
 	endTimeEdit = new TimeSpinBox(rangeButtonGroup);
 	endTimeEdit->setFixedSize(endTimeEdit->sizeHint());
 	endTimeEdit->setReadOnly(mReadOnly);
@@ -331,6 +333,7 @@ void RecurrenceEdit::initMonthly()
 	mMonthRuleNthDayEntry->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMonthRuleNthDayEntry,
 	      i18n("Select the day of the month on which to repeat the alarm"));
+	mMonthRuleOnNthDayButton->setFocusWidget(mMonthRuleNthDayEntry);
 	layout->addWidget(mMonthRuleNthDayEntry);
 	QLabel* label = new QLabel(i18n("day"), mMonthRuleButtonGroup);
 	label->setFixedSize(label->sizeHint());
@@ -352,6 +355,7 @@ void RecurrenceEdit::initMonthly()
 	mMonthRuleNthNumberEntry->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMonthRuleNthNumberEntry,
 	      i18n("Select the week of the month in which to repeat the alarm"));
+	mMonthRuleOnNthTypeOfDayButton->setFocusWidget(mMonthRuleNthNumberEntry);
 	layout->addWidget(mMonthRuleNthNumberEntry);
 	mMonthRuleNthTypeOfDayEntry = new ComboBox(false, mMonthRuleButtonGroup);
 	for (i = 1;  i <= 7;  ++i)
@@ -418,6 +422,7 @@ void RecurrenceEdit::initYearly()
 	mYearRuleNthNumberEntry->setReadOnly(mReadOnly);
 	QWhatsThis::add(mYearRuleNthNumberEntry,
 	      i18n("Select the week of the month in which to repeat the alarm"));
+	mYearRuleOnNthTypeOfDayButton->setFocusWidget(mYearRuleNthNumberEntry);
 	layout->addWidget(mYearRuleNthNumberEntry);
 
 	mYearRuleNthTypeOfDayEntry = new ComboBox(false, mYearRuleButtonGroup);
