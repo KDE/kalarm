@@ -67,6 +67,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
 		void               doQuit(QWidget* parent);
+		static void        displayFatalError(const QString& message);
 		void               addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void               removeWindow(TrayWindow*);
 		TrayWindow*        trayWindow() const              { return mTrayWindow; }
@@ -100,6 +101,7 @@ class KAlarmApp : public KUniqueApplication
 	protected:
 		KAlarmApp();
 	private slots:
+		void               quitFatal();
 		void               slotPreferencesChanged();
 		void               slotCommandExited(ShellProcess*);
 		void               slotSystemTrayTimer();
@@ -147,6 +149,8 @@ class KAlarmApp : public KUniqueApplication
 
 		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance
 		static int            mActiveCount;         // number of active instances without main windows
+		static int            mFatalError;          // a fatal error has occurred - just wait to exit
+		static QString        mFatalMessage;        // fatal error message to output
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
 		DaemonGuiHandler*     mDaemonGuiHandler;    // the parent of the system tray DCOP receiver object
 		TrayWindow*           mTrayWindow;          // active system tray icon

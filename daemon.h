@@ -49,8 +49,8 @@ class Daemon : public QObject
 	public:
 		static void      initialise();
 		static KAction*  createControlAction(KActionCollection*, const char* name);
-		static void      start();
-		static void      reregister()      { registerWith(true); }
+		static bool      start();
+		static bool      reregister()      { return registerWith(true); }
 		static bool      reset();
 		static bool      stop();
 		static bool      isRunning(bool startDaemon = true);
@@ -65,7 +65,7 @@ class Daemon : public QObject
 
 	private:
 		explicit Daemon() { }
-		static void      registerWith(bool reregister);
+		static bool      registerWith(bool reregister);
 		static void      reload();
 
 		static Daemon*   mInstance;         // only one instance allowed

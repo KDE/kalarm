@@ -163,15 +163,11 @@ void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 	if (enable  &&  !checkIfDaemonRunning())
 	{
 		// The daemon is not running, so start it
-		QString execStr = locate("exe", DAEMON_APP_NAME);
-		if (execStr.isEmpty())
+		if (!Daemon::start())
 		{
-			KMessageBox::error(0, i18n("Alarm Daemon not found"),
-			                   i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
-			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
+			emit daemonRunning(false);
 			return;
 		}
-		KApplication::kdeinitExec(execStr);
 		mEnableCalPending = true;
 		setFastDaemonCheck();
 	}

@@ -39,6 +39,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kaboutdata.h>
+#include <kmessagebox.h>
 #include <dcopclient.h>
 #include <kdebug.h>
 
@@ -50,10 +51,10 @@
 #include "daemon.moc"
 
 
-#define      DAEMON_APP_NAME_DEF   "kalarmd"
+#define      DAEMON_APP_NAME_DEF   "kalarmd"    // DCOP name of alarm daemon application
 const char*  DAEMON_APP_NAME     = DAEMON_APP_NAME_DEF;
-const char*  DAEMON_DCOP_OBJECT  = "ad";
-const char*  DCOP_OBJECT_NAME    = "display";
+const char*  DAEMON_DCOP_OBJECT  = "ad";        // DCOP name of kalarmd's DCOP interface
+const char*  DCOP_OBJECT_NAME    = "display";   // DCOP name of KAlarm's request interface
 
 
 Daemon*   Daemon::mInstance = 0;
@@ -80,8 +81,9 @@ void Daemon::initialise()
 
 /******************************************************************************
 * Start the alarm daemon if necessary, and register this application with it.
+* Reply = false if the daemon definitely couldn't be started or registered with.
 */
-void Daemon::start()
+bool Daemon::start()
 {
 	kdDebug(5950) << "Daemon::start()\n";
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME)  &&  !mStartTimer)
@@ -89,31 +91,40 @@ void Daemon::start()
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
 		QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
-		kapp->kdeinitExec(execStr);
+		if (execStr.isEmpty())
+		{
+			KMessageBox::error(0, i18n("Alarm Daemon not found"));
+			kdError() << "Daemon::startApp(): " DAEMON_APP_NAME_DEF " not found" << endl;
+			return false;
+		}
+		KApplication::kdeinitExec(execStr);
 		kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
+
 		const int startInterval = 500;   // milliseconds
 		mStartTimeout = 5000/startInterval + 1;    // check daemon status for 5 seconds before giving up
 		mStartTimer = new QTimer(mInstance);
 		connect(mStartTimer, SIGNAL(timeout()), mInstance, SLOT(checkIfStarted()));
 		mStartTimer->start(startInterval);
 		mInstance->checkIfStarted();
-		return;
+		return true;
 	}
 
 	// Register this application with the alarm daemon
-	registerWith(false);
+	if (!registerWith(false))
+		return false;
 
 	// Tell alarm daemon to load the calendar
+	QByteArray data;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
+	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
+		kdError(5950) << "Daemon::start(): addMsgCal dcop send failed" << endl;
+	else
 	{
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
-		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
-			kdError(5950) << "Daemon::start(): addMsgCal dcop send failed" << endl;
+		mRegistered = true;
+		kdDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
 	}
-
-	mRegistered = true;
-	kdDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
+	return true;
 }
 
 /******************************************************************************
@@ -125,6 +136,8 @@ void Daemon::checkIfStarted()
 	{
 		if (--mStartTimeout > 0)
 			return;     // wait a bit more to check again
+		kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
+		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
 	}
 	else
 		start();
@@ -136,10 +149,12 @@ void Daemon::checkIfStarted()
 /******************************************************************************
 * Start the alarm daemon if necessary, and register this application with it.
 */
-void Daemon::registerWith(bool reregister)
+bool Daemon::registerWith(bool reregister)
 {
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
+	QCString   replyType;
+	QByteArray replyData;
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(kapp->aboutData()->appName()) << kapp->aboutData()->programName()
@@ -147,8 +162,19 @@ void Daemon::registerWith(bool reregister)
 	    << static_cast<int>(disabledIfStopped ? ClientInfo::NO_START_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
 	    << (Q_INT8)0;
 	const char* func = reregister ? "reregisterApp(QCString,QString,QCString,int,bool)" : "registerApp(QCString,QString,QCString,int,bool)";
-	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, func, data))
-		kdError(5950) << "Daemon::registerWith(): registerApp dcop send failed" << endl;
+	if (kapp->dcopClient()->call(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, func, data, replyType, replyData)
+	&&  replyType == "bool")
+	{
+		bool reply;
+		QDataStream replyStream(replyData, IO_ReadOnly);
+		replyStream >> reply;
+		if (reply)
+			return true;     // success
+	}
+	kdError(5950) << "Daemon::registerWith(" << reregister << "): registerApp dcop send failed" << endl;
+	if (!reregister)
+		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+	return false;
 }
 
 /******************************************************************************
@@ -214,7 +240,7 @@ bool Daemon::isRunning(bool startdaemon)
 		if (runState  &&  startdaemon)
 			start();      // re-register with the daemon
 	}
-	return runState;
+	return runState && mRegistered;
 }
 
 /******************************************************************************

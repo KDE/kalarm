@@ -92,6 +92,8 @@ static inline int maxLateness()
 
 KAlarmApp*  KAlarmApp::theInstance  = 0;
 int         KAlarmApp::mActiveCount = 0;
+int         KAlarmApp::mFatalError  = 0;
+QString     KAlarmApp::mFatalMessage;
 
 
 /******************************************************************************
@@ -119,28 +121,29 @@ KAlarmApp::KAlarmApp()
 	                                       .arg(aboutData()->programName()));
 	KAEvent::setFeb29RecurType();
 
-	if (!AlarmCalendar::initialiseCalendars())
-		exit(1);    // calendar names clash, so give up
-	connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
-
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
 	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
 	const char* wmname = nri.wmName();
 	mKDEDesktop = wmname && !strcmp(wmname, "KWin");
 
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("General"));
-	mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
-	mSavedNoSystemTray      = mNoSystemTray;
-	mOldRunInSystemTray     = wantRunInSystemTray();
-	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && preferences->disableAlarmsIfStopped();
-	mStartOfDay             = preferences->startOfDay();
-	if (preferences->hasStartOfDayChanged())
-		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-	mPrefsExpiredColour   = preferences->expiredColour();
-	mPrefsExpiredKeepDays = preferences->expiredKeepDays();
-	mPrefsShowTime        = preferences->showAlarmTime();
-	mPrefsShowTimeTo      = preferences->showTimeToAlarm();
+	if (AlarmCalendar::initialiseCalendars())
+	{
+		connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
+
+		KConfig* config = kapp->config();
+		config->setGroup(QString::fromLatin1("General"));
+		mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
+		mSavedNoSystemTray      = mNoSystemTray;
+		mOldRunInSystemTray     = wantRunInSystemTray();
+		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && preferences->disableAlarmsIfStopped();
+		mStartOfDay             = preferences->startOfDay();
+		if (preferences->hasStartOfDayChanged())
+			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
+		mPrefsExpiredColour   = preferences->expiredColour();
+		mPrefsExpiredKeepDays = preferences->expiredKeepDays();
+		mPrefsShowTime        = preferences->showAlarmTime();
+		mPrefsShowTimeTo      = preferences->showTimeToAlarm();
+	}
 }
 
 /******************************************************************************
@@ -160,8 +163,13 @@ KAlarmApp* KAlarmApp::getInstance()
 	{
 		theInstance = new KAlarmApp;
 
-		// This is here instead of in the constructor to avoid recursion
-		Daemon::initialise();    // calendars must be initialised before calling this
+		if (mFatalError)
+			theInstance->quitFatal();
+		else
+		{
+			// This is here instead of in the constructor to avoid recursion
+			Daemon::initialise();    // calendars must be initialised before calling this
+		}
 	}
 	return theInstance;
 }
@@ -173,6 +181,11 @@ bool KAlarmApp::restoreSession()
 {
 	if (!isRestored())
 		return false;
+	if (mFatalError)
+	{
+		quitFatal();
+		return false;
+	}
 
 	// Process is being restored by session management.
 	kdDebug(5950) << "KAlarmApp::restoreSession(): Restoring\n";
@@ -226,6 +239,11 @@ bool KAlarmApp::restoreSession()
 int KAlarmApp::newInstance()
 {
 	kdDebug(5950)<<"KAlarmApp::newInstance()\n";
+	if (mFatalError)
+	{
+		quitFatal();
+		return 1;
+	}
 	++mActiveCount;
 	int exitCode = 0;               // default = success
 	static bool firstInstance = true;
@@ -734,6 +752,44 @@ void KAlarmApp::commitData(QSessionManager& sm)
 	mSessionClosingDown = true;
 	KUniqueApplication::commitData(sm);
 	mSessionClosingDown = false;         // reset in case shutdown is cancelled
+}
+
+/******************************************************************************
+* Display an error message for a fatal error. Prevent further actions since
+* the program state is unsafe.
+*/
+void KAlarmApp::displayFatalError(const QString& message)
+{
+	if (!mFatalError)
+	{
+		mFatalError = 1;
+		mFatalMessage = message;
+		if (theInstance)
+			QTimer::singleShot(0, theInstance, SLOT(quitFatal()));
+	}
+}
+
+/******************************************************************************
+* Quit the program, once the fatal error message has been acknowledged.
+*/
+void KAlarmApp::quitFatal()
+{
+	switch (mFatalError)
+	{
+		case 0:
+		case 2:
+			return;
+		case 1:
+			mFatalError = 2;
+			KMessageBox::error(0, mFatalMessage);
+			mFatalError = 3;
+			// fall through to '3'
+		case 3:
+			if (theInstance)
+				theInstance->quitIf(1, true);
+			break;
+	}
+	QTimer::singleShot(1000, this, SLOT(quitFatal()));
 }
 
 /******************************************************************************
