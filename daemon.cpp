@@ -54,7 +54,7 @@
 #define      DAEMON_APP_NAME_DEF   "kalarmd"    // DCOP name of alarm daemon application
 const char*  DAEMON_APP_NAME     = DAEMON_APP_NAME_DEF;
 const char*  DAEMON_DCOP_OBJECT  = "ad";        // DCOP name of kalarmd's DCOP interface
-const char*  DCOP_OBJECT_NAME    = "display";   // DCOP name of KAlarm's request interface
+const char*  DCOP_OBJECT_NAME = "display";
 
 
 Daemon*   Daemon::mInstance = 0;
@@ -86,20 +86,25 @@ void Daemon::initialise()
 bool Daemon::start()
 {
 	kdDebug(5950) << "Daemon::start()\n";
-	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME)  &&  !mStartTimer)
+	if (mStartTimer)
+		return true;     // we're currently waiting for the daemon to start
+	int ready = readyState();
+	if (ready <= 0  &&  !mStartTimer)
 	{
-		// Start the alarm daemon. It is a KUniqueApplication, which means that
-		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
-		if (execStr.isEmpty())
+		if (ready < 0)
 		{
-			KMessageBox::error(0, i18n("Alarm Daemon not found"));
-			kdError() << "Daemon::startApp(): " DAEMON_APP_NAME_DEF " not found" << endl;
-			return false;
+			// Start the alarm daemon. It is a KUniqueApplication, which means that
+			// there is automatically only one instance of the alarm daemon running.
+			QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
+			if (execStr.isEmpty())
+			{
+				KMessageBox::error(0, i18n("Alarm Daemon not found"));
+				kdError() << "Daemon::startApp(): " DAEMON_APP_NAME_DEF " not found" << endl;
+				return false;
+			}
+			KApplication::kdeinitExec(execStr);
+			kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
 		}
-		KApplication::kdeinitExec(execStr);
-		kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
-
 		const int startInterval = 500;   // milliseconds
 		mStartTimeout = 5000/startInterval + 1;    // check daemon status for 5 seconds before giving up
 		mStartTimer = new QTimer(mInstance);
@@ -132,18 +137,46 @@ bool Daemon::start()
 */
 void Daemon::checkIfStarted()
 {
-	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	int state = readyState();
+	switch (state)
 	{
-		if (--mStartTimeout > 0)
-			return;     // wait a bit more to check again
-		kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
-		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+		case -1:
+			if (--mStartTimeout > 0)
+				return;     // wait a bit more to check again
+			kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
+			KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+			break;
+		case 0:
+			if (--mStartTimeout > 0)
+				return;     // wait a bit more to check again
+			kdError(5950) << "Daemon::checkIfStarted(): daemon not ready" << endl;
+			KMessageBox::error(0, i18n("Cannot enable alarms:\nAlarm Daemon (%1) not ready").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+			break;
+		case 1:
+			break;
 	}
-	else
-		start();
-
 	delete mStartTimer;
 	mStartTimer = 0;
+
+	if (state > 0)
+		start();
+}
+
+/******************************************************************************
+* Check whether the alarm daemon has started yet, and if so, whether it is
+* ready to accept DCOP calls.
+* Reply = 1 if ready
+*       = 0 if running, but not ready for DCOP calls
+*       = -1 if not running.
+*/
+int Daemon::readyState()
+{
+	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+		return -1;
+	QCStringList objects = kapp->dcopClient()->remoteObjects(DAEMON_APP_NAME);
+	if (objects.find(DAEMON_DCOP_OBJECT) == objects.end())
+		return 0;
+	return 1;
 }
 
 /******************************************************************************
@@ -227,12 +260,12 @@ void Daemon::reload()
 }
 
 /******************************************************************************
-* Check whether the alarm daemon is currently running.
+* Check whether the alarm daemon is currently running and available.
 */
 bool Daemon::isRunning(bool startdaemon)
 {
 	static bool runState = false;
-	bool newRunState = kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME);
+	bool newRunState = (readyState() > 0);
 	if (newRunState != runState)
 	{
 		// Daemon's status has changed

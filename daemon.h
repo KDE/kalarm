@@ -56,6 +56,7 @@ class Daemon : public QObject
 		static bool      isRunning(bool startDaemon = true);
 		static int       maxTimeSinceCheck();
 		static void      readCheckInterval();
+		static int       readyState();
 		static bool      isRegistered()    { return mRegistered; }
 
 	private slots:
