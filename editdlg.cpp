@@ -212,6 +212,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #endif
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		timeWidget->setDateTime(defaultTime, false);
+		singleLineOnly = false;
 		messageEdit->setText(QString::null);
 		actionGroup->setButton(actionGroup->id(messageRadio));
 		recurrenceEdit->setDefaults(defaultTime, false);
