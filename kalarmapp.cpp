@@ -480,9 +480,6 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
 					if (alarmNoTime  &&  recurType == KAEvent::MINUTELY)
 						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
-#ifdef SIMPLE_REP
-						USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));
-#endif
 
 					// Convert the recurrence parameters into a KCal::Recurrence
 					KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, DateTime(alarmTime, alarmNoTime), endTime);
@@ -728,13 +725,20 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 void KAlarmApp::doQuit(QWidget* parent)
 {
 	kdDebug(5950) << "KAlarmApp::doQuit()\n";
-	if (mDisableAlarmsIfStopped
-	&&  KMessageBox::warningYesNo(parent, i18n("Quitting will disable alarms\n"
-	                                           "(once any alarm message windows are closed)."),
-	                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
-	                              Preferences::QUIT_WARN
-	                             ) != KMessageBox::Yes)
-		return;
+	if (mDisableAlarmsIfStopped)
+	{
+		// KMessageBox::warningYesNo() is used here because its default is No (Cancel).
+		// But if the user checks the box "Don't ask again" and selects Cancel, this
+		// would effectively disable the Quit menu option, which is not a good idea.
+		// So first reinstate Quit warnings if necessary. 
+		Preferences::instance()->validateQuitWarn();    // reinstate Quit warnings if defaulted to Don't Quit
+		if (KMessageBox::warningYesNo(parent, i18n("Quitting will disable alarms\n"
+		                                           "(once any alarm message windows are closed)."),
+		                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
+		                              Preferences::QUIT_WARN
+		                             ) != KMessageBox::Yes)
+			return;
+	}
 	quitIf(0, true);
 }
 
