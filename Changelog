@@ -1,7 +1,8 @@
 KAlarm
 
-=== Version 0.9.6 --- 1 Oct 2003 ===
+=== Version 0.9.6 --- 20 Oct 2003 ===
 Add option to choose foreground colour for alarm messages.
+Create new alarm by dragging KMail email onto main window or system tray icon.
 Set initial recurrence defaults to correspond to alarm start date.
 Add option for how February 29th recurrences are handled in non-leap years.
 Monthly/yearly recurrence edit: adhere to user preference for start day of week.
