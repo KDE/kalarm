@@ -64,10 +64,12 @@ class KAAlarmEventBase
 		const QColor&      fgColour() const           { return mFgColour; }
 		bool               defaultFont() const        { return mDefaultFont; }
 		const QFont&       font() const;
+		int                lateCancel() const         { return mLateCancel; }
+		bool               autoClose() const          { return mAutoClose; }
 		bool               confirmAck() const         { return mConfirmAck; }
-		bool               lateCancel() const         { return mLateCancel; }
 		bool               repeatAtLogin() const      { return mRepeatAtLogin; }
-		bool               deferred() const           { return mDeferral; }
+		int                repeatCount() const        { return mRepeatCount; }
+		int                repeatInterval() const     { return mRepeatInterval; }
 		bool               displaying() const         { return mDisplaying; }
 		bool               beep() const               { return mBeep; }
 		int                flags() const;
@@ -80,7 +82,8 @@ class KAAlarmEventBase
 	protected:
 		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
 
-		KAAlarmEventBase() : mBeep(false), mRepeatAtLogin(false), mDeferral(false), mDisplaying(false), mLateCancel(false), mEmailBcc(false), mConfirmAck(false) { }
+		KAAlarmEventBase() : mLateCancel(0), mAutoClose(false), mBeep(false), mRepeatAtLogin(false),
+		                     mDisplaying(false), mEmailBcc(false), mConfirmAck(false) { }
 		KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
 		KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
 		void               copy(const KAAlarmEventBase&);
@@ -88,7 +91,7 @@ class KAAlarmEventBase
 
 		QString            mEventID;          // UID: KCal::Event unique ID
 		QString            mText;             // message text, file URL, command, email body [or audio file for KAAlarm]
-		DateTime           mDateTime;         // next time to display the alarm
+		DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
 		QColor             mBgColour;         // background colour of alarm message
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
@@ -97,12 +100,14 @@ class KAAlarmEventBase
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
 		float              mSoundVolume;      // volume for sound file, or < 0 for unspecified
 		Type               mActionType;       // alarm action type
+		int                mRepeatCount;      // simple repetition count (excluding the first time)
+		int                mRepeatInterval;   // simple repetition interval (minutes)
+		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
+		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
 		bool               mBeep;             // whether to beep when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-		bool               mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		bool               mDisplaying;       // whether the alarm is currently being displayed
-		bool               mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
 		bool               mEmailBcc;         // blind copy the email to the user
 		bool               mConfirmAck;       // alarm acknowledgement requires confirmation by user
 		bool               mDefaultFont;      // use default message font, not mFont
@@ -166,7 +171,7 @@ class KAAlarm : public KAAlarmEventBase
 			POST_ACTION__ALARM            = POST_ACTION_ALARM
 		};
 
-		KAAlarm()          : mType(INVALID__ALARM) { }
+		KAAlarm()          : mType(INVALID__ALARM), mDeferred(false) { }
 		KAAlarm(const KAAlarm&);
 		~KAAlarm()  { }
 		Action             action() const               { return (Action)mActionType; }
@@ -174,14 +179,17 @@ class KAAlarm : public KAAlarmEventBase
 		Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
 		SubType            subType() const              { return mType; }
 		const QString&     eventID() const              { return mEventID; }
-		const DateTime&    dateTime() const             { return mDateTime; }
-		QDate              date() const                 { return mDateTime.date(); }
-		QTime              time() const                 { return mDateTime.time(); }
+		const DateTime&    dateTime() const             { return mNextMainDateTime; }
+		QDate              date() const                 { return mNextMainDateTime.date(); }
+		QTime              time() const                 { return mNextMainDateTime.time(); }
 		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
 		float              soundVolume() const          { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && !mBeep && !mText.isEmpty() ? mSoundVolume : -1; }
 		bool               repeatSound() const          { return (mActionType == T_AUDIO) && mRepeatSound && !mBeep && !mText.isEmpty(); }
 		bool               reminder() const             { return mType == REMINDER__ALARM; }
-		void               setTime(const QDateTime& dt) { mDateTime = dt; }
+		bool               deferred() const             { return mDeferred; }
+		void               setTime(const DateTime& dt)  { mNextMainDateTime = dt; }
+		void               setTime(const QDateTime& dt) { mNextMainDateTime = dt; }
+		int                flags() const;
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
 		static const char* debugType(Type)   { return ""; }
@@ -191,8 +199,11 @@ class KAAlarm : public KAAlarmEventBase
 #endif
 
 	private:
+		void               set(int flags);
+
 		SubType            mType;             // alarm type
 		bool               mRecurs;           // there is a recurrence rule for the alarm
+		bool               mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
 
 	friend class KAEvent;
 };
@@ -204,10 +215,12 @@ class KAEvent : public KAAlarmEventBase
 	public:
 		enum            // flags for use in DCOP calls, etc.
 		{
+#ifdef OLD_DCOP
 			// *** DON'T CHANGE THESE VALUES ***
 			// because they are part of KAlarm's external DCOP interface.
 			// (But it's alright to add new values.)
 			LATE_CANCEL     = 0x01,    // cancel alarm if not triggered within a minute of its scheduled time
+#endif
 			BEEP            = 0x02,    // sound audible beep when alarm is displayed
 			REPEAT_AT_LOGIN = 0x04,    // repeat alarm at every login
 			ANY_TIME        = 0x08,    // only a date is specified for the alarm, not a time
@@ -215,20 +228,28 @@ class KAEvent : public KAAlarmEventBase
 			EMAIL_BCC       = 0x20,    // blind copy the email to the user
 			DEFAULT_FONT    = 0x40,    // use default alarm message font
 			REPEAT_SOUND    = 0x80,    // repeat sound file while alarm is displayed
+			DISABLED        = 0x100,   // alarm is currently disabled
+			AUTO_CLOSE      = 0x200,   // auto-close alarm window after late-cancel period
+#ifdef OLD_DCOP
 			// The following are read-only internal values, and may be changed
-			REMINDER        = 0x100,
-			DEFERRAL        = 0x200,
-			TIMED_FLAG      = 0x400,
+#else
+			// The following are read-only internal values
+#endif
+			REMINDER        = 0x1000,
+			DEFERRAL        = 0x2000,
+			TIMED_FLAG      = 0x4000,
 			DATE_DEFERRAL   = DEFERRAL,
 			TIME_DEFERRAL   = DEFERRAL | TIMED_FLAG,
-			DISPLAYING_     = 0x800,
-			READ_ONLY_FLAGS = 0xF00    // mask for all read-only internal values
+			DISPLAYING_     = 0x8000,
+			READ_ONLY_FLAGS = 0xF000   // mask for all read-only internal values
 		};
 		enum RecurType
 		{
+#ifdef OLD_DCOP
 			// *** DON'T CHANGE THESE VALUES ***
 			// because they are part of KAlarm's external DCOP interface.
 			// (But it's alright to add new values.)
+#endif
 			NO_RECUR    = 0,
 			MINUTELY    = 1,
 			DAILY       = 3,
@@ -254,63 +275,85 @@ class KAEvent : public KAAlarmEventBase
 			COMMAND = T_COMMAND,
 			EMAIL   = T_EMAIL
 		};
-		enum OccurType
+		enum OccurType     // what type of occurrence is due
 		{
-			NO_OCCURRENCE,        // no occurrence is due
-			FIRST_OCCURRENCE,     // the first occurrence is due (takes precedence over LAST_OCCURRENCE)
-			RECURRENCE_DATE,      // a recurrence is due with only a date, not a time
-			RECURRENCE_DATE_TIME, // a recurrence is due with a date and time
-			LAST_OCCURRENCE       // the last occurrence is due
+			NO_OCCURRENCE               = 0,      // no occurrence is due
+			FIRST_OCCURRENCE            = 0x01,   // the first occurrence (takes precedence over LAST_RECURRENCE)
+			RECURRENCE_DATE             = 0x02,   // a recurrence with only a date, not a time
+			RECURRENCE_DATE_TIME        = 0x03,   // a recurrence with a date and time
+			LAST_RECURRENCE             = 0x04,   // the last recurrence
+			OCCURRENCE_REPEAT = 0x10,    // (bitmask for a repetition of an occurrence)
+			FIRST_OCCURRENCE_REPEAT     = OCCURRENCE_REPEAT | FIRST_OCCURRENCE,     // a repetition of the first occurrence
+			RECURRENCE_DATE_REPEAT      = OCCURRENCE_REPEAT | RECURRENCE_DATE,      // a repetition of a date-only recurrence
+			RECURRENCE_DATE_TIME_REPEAT = OCCURRENCE_REPEAT | RECURRENCE_DATE_TIME, // a repetition of a date/time recurrence
+			LAST_RECURRENCE_REPEAT      = OCCURRENCE_REPEAT | LAST_RECURRENCE       // a repetition of the last recurrence
+		};
+		enum OccurOption     // options for nextOccurrence()
+		{
+			IGNORE_REPETITION,    // check for recurrences only, ignore repetitions
+			RETURN_REPETITION,    // return repetition if it's the next occurrence
+			ALLOW_FOR_REPETITION  // check for repetition being the next occurrence, but return recurrence
+		};
+		enum DeferLimitType    // what type of occurrence currently limits a deferral
+		{
+			LIMIT_NONE,
+			LIMIT_MAIN,
+			LIMIT_RECURRENCE,
+			LIMIT_REPETITION,
+			LIMIT_REMINDER
 		};
 
 		KAEvent()          : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
-		KAEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
-		                                            : mRecurrence(0) { set(dt, message, bg, fg, f, action, flags); }
+		KAEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags)
+		                                        : mRecurrence(0) { set(dt, message, bg, fg, f, action, lateCancel, flags); }
 		explicit KAEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
 		KAEvent(const KAEvent& e)               : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAEvent()         { delete mRecurrence; }
 		KAEvent&           operator=(const KAEvent& e)       { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
-		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
-		                            { set(d, message, bg, fg, f, action, flags | ANY_TIME); }
-		void               set(const QDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int flags);
-		void               setMessage(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int flags)
-		                            { set(d, message, bg, fg, f, MESSAGE, flags | ANY_TIME); }
-		void               setMessage(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int flags)
-		                            { set(dt, message, bg, fg, f, MESSAGE, flags); }
-		void               setFileName(const QDate& d, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int flags)
-		                            { set(d, filename, bg, fg, f, FILE, flags | ANY_TIME); }
-		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int flags)
-		                            { set(dt, filename, bg, fg, f, FILE, flags); }
-		void               setCommand(const QDate& d, const QString& command, int flags)
-		                            { set(d, command, QColor(), QColor(), QFont(), COMMAND, flags | ANY_TIME); }
-		void               setCommand(const QDateTime& dt, const QString& command, int flags)
-		                            { set(dt, command, QColor(), QColor(), QFont(), COMMAND, flags); }
+		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags)
+		                            { set(d, message, bg, fg, f, action, lateCancel, flags | ANY_TIME); }
+		void               set(const QDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags);
+		void               setMessage(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
+		                            { set(d, message, bg, fg, f, MESSAGE, lateCancel, flags | ANY_TIME); }
+		void               setMessage(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
+		                            { set(dt, message, bg, fg, f, MESSAGE, lateCancel, flags); }
+		void               setFileName(const QDate& d, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
+		                            { set(d, filename, bg, fg, f, FILE, lateCancel, flags | ANY_TIME); }
+		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
+		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
+		void               setCommand(const QDate& d, const QString& command, int lateCancel, int flags)
+		                            { set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME); }
+		void               setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags)
+		                            { set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags); }
 		void               setEmail(const QDate&, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int flags);
+		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int flags);
+		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
-		void               setTemplate(const QString& name, bool defaultTime)  { mTemplateName = name;  mTemplateDefaultTime = defaultTime;  mUpdated = true; }
+		void               setTemplate(const QString& name, bool defaultTime)  { mTemplateName = name; mTemplateDefaultTime = defaultTime;  mUpdated = true; }
 		void               setActions(const QString& pre, const QString& post) { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
-		OccurType          setNextOccurrence(const QDateTime& preDateTime);
+		OccurType          setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions = false);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
 		void               adjustStartDate(const QDate&);
-		void               setDate(const QDate& d)                           { mDateTime.set(d);  mUpdated = true; }
-		void               setTime(const QDateTime& dt)                      { mDateTime.set(dt);  mUpdated = true; }
+		void               setDate(const QDate& d)                           { mNextMainDateTime.set(d);  mUpdated = true; }
+		void               setTime(const QDateTime& dt)                      { mNextMainDateTime.set(dt);  mUpdated = true; }
 		void               setSaveDateTime(const QDateTime& dt)              { mSaveDateTime = dt;  mUpdated = true; }
-		void               setLateCancel(bool lc)                            { mLateCancel = lc;  mUpdated = true; }
+		void               setLateCancel(int lc)                             { mLateCancel = lc;  mUpdated = true; }
+		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
-		void               setReminder(int minutes, bool onceOnly)           { mReminderMinutes = minutes;  mArchiveReminderMinutes = 0;  mReminderOnceOnly = onceOnly;  mUpdated = true; }
-		void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
+		void               setReminder(int minutes, bool onceOnly);
+		bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
+		void               cancelCancelledDeferral();
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QDateTime&);
 		void               reinstateFromDisplaying(const KAEvent& dispEvent);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
+		void               setEnabled(bool enable)                           { mEnabled = enable;  mUpdated = true; }
 		void               setUpdated()                                      { mUpdated = true; }
 		void               clearUpdated() const                              { mUpdated = false; }
 		void               removeExpiredAlarm(KAAlarm::Type);
@@ -325,20 +368,23 @@ class KAEvent : public KAAlarmEventBase
 		KAAlarm            nextAlarm(const KAAlarm& al) const  { return nextAlarm(al.type()); }
 		KAAlarm            nextAlarm(KAAlarm::Type) const;
 		KAAlarm            convertDisplayingAlarm() const;
-		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false) const;
+		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
 		Action             action() const                 { return (Action)mActionType; }
+		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE; }
 		const QString&     id() const                     { return mEventID; }
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
 		const DateTime&    startDateTime() const          { return mStartDateTime; }
-		const DateTime&    mainDateTime() const           { return mDateTime; }
-		QDate              mainDate() const               { return mDateTime.date(); }
-		QTime              mainTime() const               { return mDateTime.time(); }
+		const DateTime&    mainDateTime() const           { return mNextMainDateTime; }
+		QDate              mainDate() const               { return mNextMainDateTime.date(); }
+		QTime              mainTime() const               { return mNextMainDateTime.time(); }
+		DateTime           mainEndRepeatTime() const      { return mRepeatCount ? mNextMainDateTime.addSecs(mRepeatCount * mRepeatInterval * 60) : mNextMainDateTime; }
 		int                reminder() const               { return mReminderMinutes; }
 		bool               reminderOnceOnly() const       { return mReminderOnceOnly; }
-		bool               reminderDeferral() const       { return mReminderDeferral; }
+		bool               reminderDeferral() const       { return mDeferral == REMINDER_DEFERRAL; }
 		int                reminderArchived() const       { return mArchiveReminderMinutes; }
 		DateTime           deferDateTime() const          { return mDeferralTime; }
+		DateTime           deferralLimit(DeferLimitType* = 0) const;
 		DateTime           nextDateTime() const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		const QString&     audioFile() const              { return mAudioFile; }
@@ -351,16 +397,20 @@ class KAEvent : public KAAlarmEventBase
 		KCal::Recurrence*  recurrence() const             { return mRecurrence; }
 		bool               recursFeb29() const            { return mRecursFeb29; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
-		int                longestRecurrenceInterval() const;   // longest interval between any recurrences, in minutes
+		int                longestRecurrenceInterval() const    { return mRecurrence ? longestRecurrenceInterval(*mRecurrence) : 0; }
+		static int         longestRecurrenceInterval(const KCal::Recurrence&);   // longest interval between any recurrences, in minutes
 		QString            recurrenceText(bool brief = false) const;
+		QString            repetitionText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
-		bool               occursAfter(const QDateTime& preDateTime) const;
-		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result) const;
-		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result) const;
+		bool               occursAfter(const QDateTime& preDateTime, bool includeRepetitions) const;
+		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result, OccurOption = IGNORE_REPETITION) const;
+		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
 		const KCal::DateList& exceptionDates() const      { return mExceptionDates; }
 		const KCal::DateTimeList& exceptionDateTimes() const { return mExceptionDateTimes; }
 		int                flags() const;
+		bool               deferred() const               { return mDeferral > 0; }
 		bool               toBeArchived() const           { return mArchive; }
+		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
 		bool               expired() const                { return mDisplaying && mMainExpired  ||  uidStatus(mEventID) == EXPIRED; }
@@ -375,6 +425,7 @@ class KAEvent : public KAAlarmEventBase
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
+		bool               setRepetition(int interval, int count);
 		void               setExceptionDates(const KCal::DateList& d)      { mExceptionDates = d;  mUpdated = true; }
 		void               setExceptionDates(const KCal::DateTimeList& dt) { mExceptionDateTimes = dt;  mUpdated = true; }
 		void               setNoRecur()            { initRecur(); }
@@ -471,6 +522,13 @@ class KAEvent : public KAAlarmEventBase
 		static void        convertKCalEvents(AlarmCalendar&);
 
 	private:
+		enum DeferType {
+			CANCEL_DEFERRAL = -1,   // there was a deferred alarm, but it has been cancelled
+			NO_DEFERRAL = 0,        // there is no deferred alarm
+			NORMAL_DEFERRAL,        // the main alarm, a recurrence or a repeat is deferred
+			REMINDER_DEFERRAL       // a reminder alarm is deferred
+		};
+
 		void               copy(const KAEvent&);
 		bool               initRecur(const QDate& end = QDate(), int count = 0, bool feb29 = false);
 		RecurType          checkRecur() const;
@@ -479,6 +537,9 @@ class KAEvent : public KAAlarmEventBase
 		KCal::Alarm*       initKcalAlarm(KCal::Event&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		static void        readAlarms(const KCal::Event&, void* alarmMap);
 		static void        readAlarm(const KCal::Alarm&, AlarmData&);
+		inline void        set_deferral(DeferType);
+		inline void        set_reminder(int minutes);
+		inline void        set_archiveReminder();
 
 		QString            mTemplateName;     // alarm template's name, or null if normal event
 		QString            mAudioFile;        // ATTACH: audio file to play
@@ -498,13 +559,14 @@ class KAEvent : public KAAlarmEventBase
 		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
 		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
+		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		bool               mTemplateDefaultTime; // time not specified: use default time (applies to templates only)
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
-		bool               mReminderDeferral; // deferred alarm is a deferred reminder
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
 		bool               mArchiveRepeatAtLogin; // if now expired, original event was repeat-at-login
 		bool               mArchive;          // event has triggered in the past, so archive it when closed
+		bool               mEnabled;          // false if event is disabled
 		mutable bool       mUpdated;          // event has been updated but not written to calendar file
 };
 
