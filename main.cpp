@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ static KCmdLineOptions options[] =
 	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0L },
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
+	{ "tray", I18N_NOOP("Display system tray icon"), 0L },
 	{ "+[message]", I18N_NOOP("Message text to display"), 0L },
 	{ 0L, 0L, 0L }
 };
