@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,17 @@
 #include "alarmevent.h"
 #include "alarmtext.h"
 #include "mainwindowbase.h"
+#include "undo.h"
 
 class QListViewItem;
 class KAction;
 class KToggleAction;
+class KToolBarPopupAction;
+class KPopupMenu;
 class ActionAlarmsEnabled;
 class AlarmListView;
 class TemplateDlg;
+class TemplateMenuAction;
 
 
 class MainWindow : public MainWindowBase
@@ -49,7 +53,10 @@ class MainWindow : public MainWindowBase
 		static void        updateExpired();
 		static void        updateTimeColumns(bool oldTime, bool oldTimeTo);
 		static void        addEvent(const KAEvent&, MainWindow*);
-		static void        executeNew(MainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
+		static void        executeNew(MainWindow* w = 0, KAEvent::Action a = KAEvent::MESSAGE, const AlarmText& t = AlarmText())
+		                                      { executeNew(w, 0, a, t); }
+		static void        executeNew(const KAEvent& e, MainWindow* w = 0)
+		                                      { executeNew(w, &e); }
 		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
 		static void        closeAll();
@@ -84,11 +91,12 @@ class MainWindow : public MainWindowBase
 
 	private slots:
 		void           slotNew();
+		void           slotNewFromTemplate(const KAEvent&);
 		void           slotNewTemplate();
 		void           slotCopy();
 		void           slotModify();
 		void           slotDelete();
-		void           slotUndelete();
+		void           slotReactivate();
 		void           slotView();
 		void           slotEnable();
 		void           slotToggleTrayIcon();
@@ -108,6 +116,14 @@ class MainWindow : public MainWindowBase
 		void           slotShowTimeTo();
 		void           slotShowExpired();
 		void           slotUpdateTimeTo();
+		void           slotUndo();
+		void           slotUndoItem(int id);
+		void           slotRedo();
+		void           slotRedoItem(int id);
+		void           slotInitUndoMenu();
+		void           slotInitRedoMenu();
+		void           slotUndoStatus(const QString&, const QString&);
+		void           slotFindActive(bool);
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
 
@@ -117,36 +133,44 @@ class MainWindow : public MainWindowBase
 		void           initActions();
 		void           setEnableText(bool enable);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
+		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
+		static void    initUndoMenu(KPopupMenu*, Undo::Type);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
 		static bool    findWindow(MainWindow*);
 
-		static QPtrList<MainWindow> mWindowList;  // active main windows
-		static TemplateDlg* mTemplateDlg;      // the one and only template dialogue
-		AlarmListView* mListView;
-		KAction*       mActionTemplates;
-		KAction*       mActionNew;
-		KAction*       mActionCreateTemplate;
-		KAction*       mActionCopy;
-		KAction*       mActionModify;
-		KAction*       mActionView;
-		KAction*       mActionDelete;
-		KAction*       mActionUndelete;
-		KAction*       mActionEnable;
-		KToggleAction* mActionToggleTrayIcon;
-		KToggleAction* mActionShowTime;
-		KToggleAction* mActionShowTimeTo;
-		KToggleAction* mActionShowExpired;
-		KPopupMenu*    mActionsMenu;
-		KPopupMenu*    mContextMenu;
-		bool           mMinuteTimerActive;   // minute timer is active
-		bool           mHiddenTrayParent;    // on session restoration, hide this window
-		bool           mShowExpired;         // include expired alarms in the displayed list
-		bool           mShowTime;            // show alarm times
-		bool           mShowTimeTo;          // show time-to-alarms
-		bool           mActionEnableEnable;  // Enable/Disable action is set to "Enable"
-		bool           mMenuError;           // error occurred creating menus: need to show error message
+		static QPtrList<MainWindow> mWindowList;   // active main windows
+		static TemplateDlg*         mTemplateDlg;  // the one and only template dialogue
+
+		AlarmListView*       mListView;
+		KAction*             mActionTemplates;
+		KAction*             mActionNew;
+		TemplateMenuAction*  mActionNewFromTemplate;
+		KAction*             mActionCreateTemplate;
+		KAction*             mActionCopy;
+		KAction*             mActionModify;
+		KAction*             mActionView;
+		KAction*             mActionDelete;
+		KAction*             mActionReactivate;
+		KAction*             mActionEnable;
+		KAction*             mActionFindNext;
+		KAction*             mActionFindPrev;
+		KToolBarPopupAction* mActionUndo;
+		KToolBarPopupAction* mActionRedo;
+		KToggleAction*       mActionToggleTrayIcon;
+		KToggleAction*       mActionShowTime;
+		KToggleAction*       mActionShowTimeTo;
+		KToggleAction*       mActionShowExpired;
+		KPopupMenu*          mActionsMenu;
+		KPopupMenu*          mContextMenu;
+		bool                 mMinuteTimerActive;   // minute timer is active
+		bool                 mHiddenTrayParent;    // on session restoration, hide this window
+		bool                 mShowExpired;         // include expired alarms in the displayed list
+		bool                 mShowTime;            // show alarm times
+		bool                 mShowTimeTo;          // show time-to-alarms
+		bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
+		bool                 mMenuError;           // error occurred creating menus: need to show error message
 };
 
 #endif // MAINWINDOW_H

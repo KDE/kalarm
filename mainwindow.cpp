@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <kpopupmenu.h>
 #include <kaccel.h>
 #include <kaction.h>
+#include <kactionclasses.h>
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -43,8 +44,11 @@
 #include <kstdguiitem.h>
 
 #include <libkdepim/maillistdrag.h>
+#include <libkcal/calendarlocal.h>
+#include <libkcal/icaldrag.h>
 
 #include "alarmcalendar.h"
+#include "alarmevent.h"
 #include "alarmlistview.h"
 #include "alarmtext.h"
 #include "birthdaydlg.h"
@@ -64,6 +68,14 @@
 using namespace KCal;
 
 static const char* UI_FILE = "kalarmui.rc";
+QString   undoText;
+QString   undoTextStripped;
+QString   undoIcon;
+KShortcut undoShortcut;
+QString   redoText;
+QString   redoTextStripped;
+QString   redoIcon;
+KShortcut redoShortcut;
 
 
 /*=============================================================================
@@ -71,7 +83,7 @@ static const char* UI_FILE = "kalarmui.rc";
 =============================================================================*/
 
 QPtrList<MainWindow> MainWindow::mWindowList;
-TemplateDlg*  MainWindow::mTemplateDlg = 0;
+TemplateDlg*         MainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -284,29 +296,48 @@ void MainWindow::hideEvent(QHideEvent* he)
 void MainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
-	mActionTemplates      = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
-	mActionNew            = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions, "new");
-#ifdef NEW_FROM_TEMPLATE
-	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), actions, "newFromTempl");
-#endif
-	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
-	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
-	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
-	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
-	mActionUndelete       = new KAction(i18n("Reac&tivate"), 0, Qt::CTRL+Qt::Key_R, this, SLOT(slotUndelete()), actions, "undelete");
-	mActionEnable         = new KAction(QString::null, 0, Qt::CTRL+Qt::Key_B, this, SLOT(slotEnable()), actions, "disable");
-	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
-	mActionShowTime       = new KToggleAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "showAlarmTimes");
+	mActionTemplates       = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
+	mActionNew             = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions, "new");
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), this, SLOT(slotNewFromTemplate(const KAEvent&)), actions, "newFromTempl");
+	mActionCreateTemplate  = new KAction(i18n("Create Tem&plate..."), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
+	mActionCopy            = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
+	mActionModify          = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
+	mActionDelete          = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
+	mActionReactivate      = new KAction(i18n("Reac&tivate"), 0, Qt::CTRL+Qt::Key_R, this, SLOT(slotReactivate()), actions, "undelete");
+	mActionEnable          = new KAction(QString::null, 0, Qt::CTRL+Qt::Key_B, this, SLOT(slotEnable()), actions, "disable");
+	mActionView            = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
+	mActionShowTime        = new KToggleAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "showAlarmTimes");
 	mActionShowTime->setCheckedState(i18n("Hide &Alarm Times"));
-	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
+	mActionShowTimeTo      = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
 	mActionShowTimeTo->setCheckedState(i18n("Hide Time t&o Alarms"));
-	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), "history", Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
+	mActionShowExpired     = new KToggleAction(i18n_e_ShowExpiredAlarms(), "history", Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
 	mActionShowExpired->setCheckedState(i18n_e_HideExpiredAlarms());
-	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
+	mActionToggleTrayIcon  = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
 	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
 	Daemon::createAlarmEnableAction(actions, "alarmEnable");
+	if (undoText.isNull())
+	{
+		// Get standard texts, etc., for Undo and Redo actions
+		KAction* act = KStdAction::undo(this, 0, actions);
+		undoIcon         = act->icon();
+		undoShortcut     = act->shortcut();
+		undoText         = act->text();
+		undoTextStripped = KAlarm::stripAccel(undoText);
+		delete act;
+		act = KStdAction::redo(this, 0, actions);
+		redoIcon         = act->icon();
+		redoShortcut     = act->shortcut();
+		redoText         = act->text();
+		redoTextStripped = KAlarm::stripAccel(redoText);
+		delete act;
+	}
+	mActionUndo = new KToolBarPopupAction(undoText, undoIcon, undoShortcut, this, SLOT(slotUndo()), actions, "edit_undo");
+	mActionRedo = new KToolBarPopupAction(redoText, redoIcon, redoShortcut, this, SLOT(slotRedo()), actions, "edit_redo");
+	KStdAction::find(mListView, SLOT(slotFind()), actions);
+	mActionFindNext = KStdAction::findNext(mListView, SLOT(slotFindNext()), actions);
+	mActionFindPrev = KStdAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
 	KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -318,6 +349,12 @@ void MainWindow::initActions()
 	mActionsMenu = static_cast<KPopupMenu*>(factory()->container("actions", this));
 	mMenuError = (!mContextMenu  ||  !mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
+	connect(mActionUndo->popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
+	connect(mActionUndo->popupMenu(), SIGNAL(activated(int)), SLOT(slotUndoItem(int)));
+	connect(mActionRedo->popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
+	connect(mActionRedo->popupMenu(), SIGNAL(activated(int)), SLOT(slotRedoItem(int)));
+	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
+	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
@@ -329,15 +366,20 @@ void MainWindow::initActions()
 	if (!Preferences::instance()->expiredKeepDays())
 		mActionShowExpired->setEnabled(false);
 	updateTrayIconAction();         // set the correct text for this action
+	mActionUndo->setEnabled(Undo::haveUndo());
+	mActionRedo->setEnabled(Undo::haveRedo());
+	mActionFindNext->setEnabled(false);
+	mActionFindPrev->setEnabled(false);
 
 	mActionCopy->setEnabled(false);
 	mActionModify->setEnabled(false);
 	mActionDelete->setEnabled(false);
-	mActionUndelete->setEnabled(false);
+	mActionReactivate->setEnabled(false);
 	mActionView->setEnabled(false);
 	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
 
+	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
 	Daemon::monitoringAlarms();
 }
@@ -369,7 +411,7 @@ void MainWindow::refresh()
 void MainWindow::updateExpired()
 {
 	kdDebug(5950) << "MainWindow::updateExpired()\n";
-	bool enableShowExpired = !!Preferences::instance()->expiredKeepDays();
+	bool enableShowExpired = Preferences::instance()->expiredKeepDays();
 	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 	{
 		if (w->mShowExpired)
@@ -484,11 +526,12 @@ void MainWindow::slotNew()
 }
 
 /******************************************************************************
-*  Execute a New Alarm dialog, optionally setting the action and text.
+*  Execute a New Alarm dialog, optionally either presetting it to the supplied
+*  event, or setting the action and text.
 */
-void MainWindow::executeNew(MainWindow* win, KAEvent::Action action, const AlarmText& text)
+void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Action action, const AlarmText& text)
 {
-	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg");
+	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg", evnt);
 	if (!text.isEmpty())
 		editDlg.setAction(action, text);
 	if (editDlg.exec() == QDialog::Accepted)
@@ -498,9 +541,19 @@ void MainWindow::executeNew(MainWindow* win, KAEvent::Action action, const Alarm
 
 		// Add the alarm to the displayed lists and to the calendar file
 		KAlarm::addEvent(event, (win ? win->mListView : 0));
+		Undo::saveAdd(event);
 
 		alarmWarnings(&editDlg, &event);
 	}
+}
+
+/******************************************************************************
+*  Called when a template is selected from the New From Template popup menu.
+*  Executes a New Alarm dialog, preset from the selected template.
+*/
+void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
+{
+	executeNew(this, &tmplate);
 }
 
 /******************************************************************************
@@ -509,7 +562,7 @@ void MainWindow::executeNew(MainWindow* win, KAEvent::Action action, const Alarm
 */
 void MainWindow::slotNewTemplate()
 {
-	AlarmListViewItem* item = mListView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->selectedItem();
 	if (item)
 	{
 		KAEvent event = item->event();
@@ -523,22 +576,9 @@ void MainWindow::slotNewTemplate()
 */
 void MainWindow::slotCopy()
 {
-	AlarmListViewItem* item = mListView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->selectedItem();
 	if (item)
-	{
-		KAEvent event = item->event();
-		EditAlarmDlg editDlg(false, i18n("New Alarm"), this, "editDlg", &event);
-		if (editDlg.exec() == QDialog::Accepted)
-		{
-			KAEvent event;
-			editDlg.getEvent(event);
-
-			// Add the alarm to the displayed lists and to the calendar file
-			KAlarm::addEvent(event, mListView);
-
-			alarmWarnings(&editDlg, &event);
-		}
-	}
+		executeNew(this, &item->event());
 }
 
 /******************************************************************************
@@ -547,7 +587,7 @@ void MainWindow::slotCopy()
 */
 void MainWindow::slotModify()
 {
-	AlarmListViewItem* item = mListView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->selectedItem();
 	if (item)
 	{
 		KAEvent event = item->event();
@@ -562,6 +602,7 @@ void MainWindow::slotModify()
 				KAlarm::updateEvent(newEvent, mListView, true, false);   // keep the same event ID
 			else
 				KAlarm::modifyEvent(event, newEvent, mListView);
+			Undo::saveEdit(event, newEvent);
 
 			alarmWarnings(&editDlg, &newEvent);
 		}
@@ -574,7 +615,7 @@ void MainWindow::slotModify()
 */
 void MainWindow::slotView()
 {
-	AlarmListViewItem* item = mListView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->selectedItem();
 	if (item)
 	{
 		KAEvent event = item->event();
@@ -602,6 +643,8 @@ void MainWindow::slotDelete()
 		    != KMessageBox::Continue)
 			return;
 	}
+
+	QValueList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
 	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
@@ -610,33 +653,36 @@ void MainWindow::slotDelete()
 		KAEvent event = item->event();
 
 		// Delete the event from the calendar and displays
+		events.append(event);
 		KAlarm::deleteEvent(event);
 	}
 	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 	AlarmCalendar::expiredCalendar()->endUpdate();
+	Undo::saveDeletes(events);
 }
 
 /******************************************************************************
-*  Called when the Undelete button is clicked to reinstate the currently
+*  Called when the Reactivate button is clicked to reinstate the currently
 *  highlighted expired alarms in the list.
 */
-void MainWindow::slotUndelete()
+void MainWindow::slotReactivate()
 {
+	QValueList<KAEvent> events;
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	mListView->clearSelection();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
 	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
+		// Add the alarm to the displayed lists and to the calendar file
 		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
 		KAEvent event = item->event();
-		event.setArchive();    // ensure that it gets re-archived if it is deleted
-
-		// Add the alarm to the displayed lists and to the calendar file
-		KAlarm::undeleteEvent(event, mListView);
+		events.append(event);
+		KAlarm::reactivateEvent(event, mListView, true);
 	}
 	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 	AlarmCalendar::expiredCalendar()->endUpdate();
+	Undo::saveReactivates(events);
 }
 
 /******************************************************************************
@@ -775,6 +821,121 @@ void MainWindow::updateActionsMenu()
 }
 
 /******************************************************************************
+*  Called when the active status of Find changes.
+*/
+void MainWindow::slotFindActive(bool active)
+{
+	mActionFindNext->setEnabled(active);
+	mActionFindPrev->setEnabled(active);
+}
+
+/******************************************************************************
+*  Called when the Undo action is selected.
+*/
+void MainWindow::slotUndo()
+{
+	QString action = KAlarm::stripAccel(mActionUndo->text());    // save menu text - it will change before undo() returns
+	QString err = Undo::undo();
+	if (!err.isNull())
+		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+}
+
+/******************************************************************************
+*  Called when the Redo action is selected.
+*/
+void MainWindow::slotRedo()
+{
+	QString action = KAlarm::stripAccel(mActionRedo->text());    // save menu text - it will change before redo() returns
+	QString err = Undo::redo();
+	if (!err.isNull())
+		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+}
+
+/******************************************************************************
+*  Called when an Undo item is selected.
+*/
+void MainWindow::slotUndoItem(int id)
+{
+	QString action = Undo::actionText(Undo::UNDO, id);    // save menu text - it will change before undo() returns
+	QString err = Undo::undo(id);
+	if (!err.isNull())
+		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+}
+
+/******************************************************************************
+*  Called when a Redo item is selected.
+*/
+void MainWindow::slotRedoItem(int id)
+{
+	QString action = Undo::actionText(Undo::REDO, id);    // save menu text - it will change before redo() returns
+	QString err = Undo::redo(id);
+	if (!err.isNull())
+		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+}
+
+/******************************************************************************
+*  Called when the Undo menu is about to show.
+*  Populates the menu.
+*/
+void MainWindow::slotInitUndoMenu()
+{
+	initUndoMenu(mActionUndo->popupMenu(), Undo::UNDO);
+}
+
+/******************************************************************************
+*  Called when the Redo menu is about to show.
+*  Populates the menu.
+*/
+void MainWindow::slotInitRedoMenu()
+{
+	initUndoMenu(mActionRedo->popupMenu(), Undo::REDO);
+}
+
+/******************************************************************************
+*  Populate the undo or redo menu.
+*/
+void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
+{
+	menu->clear();
+	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
+	QValueList<int> ids = Undo::ids(type);
+	for (QValueList<int>::ConstIterator it = ids.begin();  it != ids.end();  ++it)
+	{
+		int id = *it;
+		menu->insertItem(i18n("Undo [action]: message", "%1 %2: %3")
+		                       .arg(action).arg(Undo::actionText(type, id)).arg(Undo::description(type, id)), id);
+	}
+}
+
+/******************************************************************************
+*  Called when the status of the Undo or Redo list changes.
+*  Change the Undo or Redo text to include the action which would be undone/redone.
+*/
+void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
+{
+	if (undo.isNull())
+	{
+		mActionUndo->setEnabled(false);
+		mActionUndo->setText(undoText);
+	}
+	else
+	{
+		mActionUndo->setEnabled(true);
+		mActionUndo->setText(QString("%1 %2").arg(undoText).arg(undo));
+	}
+	if (redo.isNull())
+	{
+		mActionRedo->setEnabled(false);
+		mActionRedo->setText(redoText);
+	}
+	else
+	{
+		mActionRedo->setEnabled(true);
+		mActionRedo->setText(QString("%1 %2").arg(redoText).arg(redo));
+	}
+}
+
+/******************************************************************************
 *  Called when the Reset Daemon menu item is selected.
 */
 void MainWindow::slotResetDaemon()
@@ -849,7 +1010,7 @@ void MainWindow::slotDeletion()
 		mActionModify->setEnabled(false);
 		mActionView->setEnabled(false);
 		mActionDelete->setEnabled(false);
-		mActionUndelete->setEnabled(false);
+		mActionReactivate->setEnabled(false);
 		mActionEnable->setEnabled(false);
 	}
 }
@@ -868,9 +1029,12 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 */
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
-	e->accept(QTextDrag::canDecode(e)
-	       || KURLDrag::canDecode(e)
-	       || KPIM::MailListDrag::canDecode(e));
+	if (KCal::ICalDrag::canDecode(e))
+		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
+	else
+		e->accept(QTextDrag::canDecode(e)
+		       || KURLDrag::canDecode(e)
+		       || KPIM::MailListDrag::canDecode(e));
 }
 
 /******************************************************************************
@@ -889,10 +1053,13 @@ void MainWindow::dropEvent(QDropEvent* e)
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
 	KAEvent::Action action = KAEvent::MESSAGE;
-	QString text;
-	AlarmText alarmText;
+	QString        text;
+	AlarmText      alarmText;
 	KPIM::MailList mailList;
-	KURL::List files;
+	KURL::List     files;
+	KCal::CalendarLocal calendar;
+	calendar.setLocalTime();    // default to local time (i.e. no time zone)
+
 	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
 		action = KAEvent::FILE;
@@ -911,6 +1078,17 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		alarmText.setEmail(summary.to(), summary.from(), KGlobal::locale()->formatDateTime(dt),
 		                   summary.subject(), body);
 	}
+	else if (KCal::ICalDrag::decode(e, &calendar))
+	{
+		// iCalendar - ignore all but the first event
+		KCal::Event::List events = calendar.rawEvents();
+		if (!events.isEmpty())
+		{
+			KAEvent ev(*events.first());
+			executeNew(win, &ev);
+		}
+		return;
+	}
 	else if (QTextDrag::decode(e, text))
 	{
 		alarmText.setText(text);
@@ -919,7 +1097,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		return;
 
 	if (!alarmText.isEmpty())
-		executeNew(win, action, alarmText);
+		executeNew(win, 0, action, alarmText);
 }
 
 /******************************************************************************
@@ -932,7 +1110,7 @@ void MainWindow::slotSelection()
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	int count = items.count();
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
-	bool enableUndelete = true;
+	bool enableReactivate = true;
 	bool enableEnableDisable = true;
 	bool enableEnable = false;
 	bool enableDisable = false;
@@ -940,9 +1118,9 @@ void MainWindow::slotSelection()
 	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)(*it))->event();
-		if (enableUndelete
+		if (enableReactivate
 		&&  (!event.expired()  ||  !event.occursAfter(now, true)))
-			enableUndelete = false;
+			enableReactivate = false;
 		if (enableEnableDisable)
 		{
 			if (event.expired())
@@ -963,7 +1141,7 @@ void MainWindow::slotSelection()
 	mActionModify->setEnabled(item && !mListView->expired(item));
 	mActionView->setEnabled(count == 1);
 	mActionDelete->setEnabled(count);
-	mActionUndelete->setEnabled(count && enableUndelete);
+	mActionReactivate->setEnabled(count && enableReactivate);
 	mActionEnable->setEnabled(enableEnable || enableDisable);
 	if (enableEnable || enableDisable)
 		setEnableText(enableEnable);
@@ -991,7 +1169,7 @@ void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint&
 		mActionModify->setEnabled(false);
 		mActionView->setEnabled(false);
 		mActionDelete->setEnabled(false);
-		mActionUndelete->setEnabled(false);
+		mActionReactivate->setEnabled(false);
 		mActionEnable->setEnabled(false);
 	}
 }
