@@ -47,10 +47,11 @@ void               resetDaemonIfQueued();    // must only be called from KAlarmA
 const KCal::Event* getEvent(const QString& eventID);
 bool               addEvent(const KAEvent&, AlarmListView* selectionView, bool useEventID = false);
 void               modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
-void               updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true);
+void               updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true);
 void               deleteEvent(KAEvent&, bool archive = true);
 void               deleteDisplayEvent(const QString& eventID);
 void               undeleteEvent(KAEvent&, AlarmListView* selectionView);
+void               enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
 void               archiveEvent(KAEvent&);
 
 int                localeFirstDayOfWeek();

@@ -33,6 +33,7 @@
 #include "alarmlistview.h"
 #include "daemon.h"
 #include "mainwindow.h"
+#include "messagewin.h"
 #include "preferences.h"
 #include "kalarmapp.h"
 #include "functions.h"
@@ -127,7 +128,8 @@ bool addEvent(const KAEvent& event, AlarmListView* selectionView, bool useEventI
 }
 
 /******************************************************************************
-* Modify an active (non-expired) alarm in every main window instance.
+* Modify an active (non-expired) alarm in the calendar file and in every main
+* window instance.
 * The new event will have a different event ID from the old one.
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * modified event in that listView instance.
@@ -152,12 +154,13 @@ void modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* sele
 }
 
 /******************************************************************************
-* Update an active (non-expired) alarm in every main window instance.
+* Update an active (non-expired) alarm from the calendar file and from every
+* main window instance.
 * The new event will have the same event ID as the old one.
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * updated event in that listView instance.
 */
-void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDelete)
+void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDelete, bool incRevision)
 {
 	kdDebug(5950) << "KAlarm::updateEvent(): " << event.id() << endl;
 
@@ -166,7 +169,8 @@ void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDel
 	else
 	{
 		// Update the event in the calendar file
-		event.incrementRevision();
+		if (incRevision)
+			event.incrementRevision();    // ensure alarm daemon sees the event has changed
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 		cal->updateEvent(event);
 		cal->save();
@@ -177,7 +181,7 @@ void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDel
 }
 
 /******************************************************************************
-* Delete an alarm from every main window instance.
+* Delete an alarm from the calendar file and from every main window instance.
 */
 void deleteEvent(KAEvent& event, bool archive)
 {
@@ -233,10 +237,10 @@ void undeleteEvent(KAEvent& event, AlarmListView* selectionView)
 	{
 		QString id = event.id();
 		QDateTime now = QDateTime::currentDateTime();
-		if (event.occursAfter(now))
+		if (event.occursAfter(now, true))
 		{
 			if (event.recurs())
-				event.setNextOccurrence(now);   // skip any recurrences in the past
+				event.setNextOccurrence(now, true);   // skip any recurrences in the past
 			AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 			cal->addEvent(event);
 			cal->save();
@@ -248,6 +252,37 @@ void undeleteEvent(KAEvent& event, AlarmListView* selectionView)
 			if (cal)
 				cal->deleteEvent(id, true);   // save calendar after deleting
 		}
+	}
+}
+
+/******************************************************************************
+* Enable or disable an alarm in the calendar file and in every main window instance.
+* The new event will have the same event ID as the old one.
+* If 'selectionView' is non-null, the selection highlight is moved to the
+* updated event in that listView instance.
+*/
+void enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
+{
+	kdDebug(5950) << "KAlarm::enableEvent(" << enable << "): " << event.id() << endl;
+
+	if (enable != event.enabled())
+	{
+		event.setEnabled(enable);
+
+		// Update the event in the calendar file
+		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+		cal->updateEvent(event);
+		cal->save();
+
+		// If we're disabling a display alarm, close any message window
+		if (!enable  &&  event.displayAction())
+		{
+			MessageWin* win = MessageWin::findEvent(event.id());
+			delete win;
+		}
+
+		// Update the window lists
+		AlarmListView::modifyEvent(event, selectionView);
 	}
 }
 
@@ -298,6 +333,21 @@ void resetDaemonIfQueued()
 		kdDebug(5950) << "KAlarm::resetDaemonIfNeeded()" << endl;
 		AlarmCalendar::activeCalendar()->reload();
 		AlarmCalendar::expiredCalendar()->reload();
+
+		// Close any message windows for alarms which are now disabled
+		KAEvent event;
+		KCal::Event::List events = AlarmCalendar::activeCalendar()->events();
+		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+		{
+			KCal::Event* kcalEvent = *it;
+			event.set(*kcalEvent);
+			if (!event.enabled()  &&  event.displayAction())
+			{
+				MessageWin* win = MessageWin::findEvent(event.id());
+				delete win;
+			}
+		}
+
 		KAlarmMainWindow::refresh();
 		if (!Daemon::reset())
 			Daemon::start();
