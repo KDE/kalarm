@@ -48,6 +48,10 @@
 #include "preferences.h"
 #include "traywindow.moc"
 
+#if !KDE_IS_VERSION(3,1,90)
+#define loadIcon BarIcon
+#endif
+
 
 class TrayTooltip : public QToolTip
 {
