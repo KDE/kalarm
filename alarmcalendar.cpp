@@ -719,6 +719,7 @@ void AlarmCalendar::getKAlarmVersion() const
 	// N.B. Remember to change  KAlarmVersion(int major, int minor, int rev)
 	//      if the representation returned by this method changes.
 	mKAlarmVersion = 0;   // set default to KAlarm pre-0.3.5, or another program
+	mKAlarmSubVersion = QString::null;
 	if (mCalendar)
 	{
 		const QString& prodid = mCalendar->loadedProductId();
@@ -747,13 +748,15 @@ void AlarmCalendar::getKAlarmVersion() const
 							int v = ver.left(i).toInt(&ok);   // minor version
 							if (ok)
 							{
-								version += (v < 9 ? v : 9) * 100;
+								version += (v < 99 ? v : 99) * 100;
 								ver = ver.mid(i + 1);
 								if (ver.at(0).isDigit())
 								{
 									// Allow other characters to follow last digit
 									v = ver.toInt();   // issue number
-									mKAlarmVersion = version + (v < 9 ? v : 9);
+									mKAlarmVersion = version + (v < 99 ? v : 99);
+									for (i = 1;  const_cast<const QString&>(ver).at(i).isDigit();  ++i) ;
+									mKAlarmSubVersion = ver.mid(i);
 								}
 							}
 						}
@@ -764,7 +767,7 @@ void AlarmCalendar::getKAlarmVersion() const
 							{
 								// Allow other characters to follow last digit
 								int v = ver.toInt();   // minor number
-								mKAlarmVersion = version + (v < 9 ? v : 9) * 100;
+								mKAlarmVersion = version + (v < 99 ? v : 99) * 100;
 							}
 						}
 					}

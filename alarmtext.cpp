@@ -21,13 +21,18 @@
 #include "kalarm.h"
 #include <qstringlist.h>
 #include <klocale.h>
+#include "editdlg.h"
 #include "alarmtext.h"
 
 
-QString AlarmText::mMessageFromPrefix;
-QString AlarmText::mMessageToPrefix;
-QString AlarmText::mMessageDatePrefix;
-QString AlarmText::mMessageSubjectPrefix;
+QString AlarmText::mFromPrefix;
+QString AlarmText::mToPrefix;
+QString AlarmText::mDatePrefix;
+QString AlarmText::mSubjectPrefix;
+QString AlarmText::mFromPrefixEn    = QString::fromLatin1("From:");
+QString AlarmText::mToPrefixEn      = QString::fromLatin1("To:");
+QString AlarmText::mDatePrefixEn    = QString::fromLatin1("Date:");
+QString AlarmText::mSubjectPrefixEn = QString::fromLatin1("Subject:");
 
 
 void AlarmText::setText(const QString& text)
@@ -48,26 +53,19 @@ void AlarmText::setEmail(const QString& to, const QString& from, const QString& 
 }
 
 /******************************************************************************
-*  Return the text for a text message alarm.
+*  Return the text for a text message alarm, in display format.
 */
-QString AlarmText::text() const
+QString AlarmText::displayText() const
 {
 	if (mIsEmail)
 	{
 		// Format the email into a text alarm
 		setUpTranslations();
 		QString text;
-		text = mMessageFromPrefix + '\t';
-		text += mFrom;
-		text += '\n';
-		text += mMessageToPrefix + '\t';
-		text += mTo;
-		text += '\n';
-		text += mMessageDatePrefix + '\t';
-		text += mTime;
-		text += '\n';
-		text += mMessageSubjectPrefix + '\t';
-		text += mSubject;
+		text = mFromPrefix + '\t' + mFrom + '\n';
+		text += mToPrefix + '\t' + mTo + '\n';
+		text += mDatePrefix + '\t' + mTime + '\n';
+		text += mSubjectPrefix + '\t' + mSubject;
 		if (!mBody.isEmpty())
 		{
 			text += "\n\n";
@@ -100,16 +98,75 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 	setUpTranslations();
 	QStringList lines = QStringList::split('\n', text);
 	if (lines.count() >= 4
-	&&  lines[0].startsWith(mMessageFromPrefix)
-	&&  lines[1].startsWith(mMessageToPrefix)
-	&&  lines[2].startsWith(mMessageDatePrefix)
-	&&  lines[3].startsWith(mMessageSubjectPrefix))
+	&&  lines[0].startsWith(mFromPrefix)
+	&&  lines[1].startsWith(mToPrefix)
+	&&  lines[2].startsWith(mDatePrefix)
+	&&  lines[3].startsWith(mSubjectPrefix))
 	{
 		if (subjectOnly)
-			return lines[3].mid(mMessageSubjectPrefix.length());
+			return lines[3].mid(mSubjectPrefix.length()).stripWhiteSpace();
 		return lines[0] + '\n' + lines[1] + '\n' + lines[2] + '\n' + lines[3];
 	}
 	return QString::null;
+}
+
+/******************************************************************************
+*  Translate an alarm calendar text to a display text.
+*  Translation is needed for email texts, since the alarm calendar stores
+*  untranslated email prefixes.
+*/
+QString AlarmText::fromCalendarText(const QString& text)
+{
+	QStringList lines = QStringList::split('\n', text);
+	if (lines.count() >= 4
+	&&  lines[0].startsWith(mFromPrefixEn)
+	&&  lines[1].startsWith(mToPrefixEn)
+	&&  lines[2].startsWith(mDatePrefixEn)
+	&&  lines[3].startsWith(mSubjectPrefixEn))
+	{
+		setUpTranslations();
+		QString dispText;
+		dispText = mFromPrefix + lines[0].mid(mFromPrefixEn.length()) + '\n';
+		dispText += mToPrefix + lines[1].mid(mToPrefixEn.length()) + '\n';
+		dispText += mDatePrefix + lines[2].mid(mDatePrefixEn.length()) + '\n';
+		dispText += mSubjectPrefix + lines[3].mid(mSubjectPrefixEn.length());
+		int i = text.find(mSubjectPrefixEn);
+		i = text.find('\n', i);
+		if (i > 0)
+			dispText += text.mid(i);
+		return dispText;
+	}
+	else
+		return text;
+}
+
+/******************************************************************************
+*  Return the text for a text message alarm, in alarm calendar format.
+*  (The prefix strings are untranslated in the calendar.)
+*/
+QString AlarmText::toCalendarText(const QString& text)
+{
+	setUpTranslations();
+	QStringList lines = QStringList::split('\n', text);
+	if (lines.count() >= 4
+	&&  lines[0].startsWith(mFromPrefix)
+	&&  lines[1].startsWith(mToPrefix)
+	&&  lines[2].startsWith(mDatePrefix)
+	&&  lines[3].startsWith(mSubjectPrefix))
+	{
+		// Format the email into a text alarm
+		QString calText;
+		calText = mFromPrefixEn + lines[0].mid(mFromPrefix.length()) + '\n';
+		calText += mToPrefixEn + lines[1].mid(mToPrefix.length()) + '\n';
+		calText += mDatePrefixEn + lines[2].mid(mDatePrefix.length()) + '\n';
+		calText += mSubjectPrefixEn + lines[3].mid(mSubjectPrefix.length());
+		int i = text.find(mSubjectPrefix);
+		i = text.find('\n', i);
+		if (i > 0)
+			calText += text.mid(i);
+		return calText;
+	}
+	return text;
 }
 
 /******************************************************************************
@@ -117,11 +174,11 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 */
 void AlarmText::setUpTranslations()
 {
-	if (mMessageFromPrefix.isNull())
+	if (mFromPrefix.isNull())
 	{
-		mMessageFromPrefix    = i18n("'From' email address", "From:");
-		mMessageToPrefix      = i18n("Email addressee", "To:");
-		mMessageDatePrefix    = i18n("Date:");
-		mMessageSubjectPrefix = i18n("Email subject", "Subject:");
+		mFromPrefix    = EditAlarmDlg::i18n_EmailFrom();
+		mToPrefix      = EditAlarmDlg::i18n_EmailTo();
+		mDatePrefix    = i18n("Date:");
+		mSubjectPrefix = EditAlarmDlg::i18n_EmailSubject();
 	}
 }

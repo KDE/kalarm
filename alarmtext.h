@@ -28,9 +28,10 @@ class AlarmText
 {
 	public:
 		AlarmText(const QString& text = QString::null) : mBody(text), mIsEmail(false) { }
-		void           setText(const QString& text);
+		void           setText(const QString&);
 		void           setEmail(const QString& to, const QString& from, const QString& time, const QString& subject, const QString& body);
-		QString        text() const;
+		QString        displayText() const;
+		QString        calendarText() const;
 		QString        to() const        { return mTo; }
 		QString        from() const      { return mFrom; }
 		QString        time() const      { return mTime; }
@@ -38,14 +39,20 @@ class AlarmText
 		QString        body() const      { return mIsEmail ? mBody : QString::null; }
 		bool           isEmpty() const;
 		bool           isEmail() const   { return mIsEmail; }
-		static QString emailHeaders(const QString& text, bool subjectOnly);
+		static QString emailHeaders(const QString&, bool subjectOnly);
+		static QString fromCalendarText(const QString&);
+		static QString toCalendarText(const QString&);
 
 	private:
 		static void    setUpTranslations();
-		static QString mMessageFromPrefix;
-		static QString mMessageToPrefix;
-		static QString mMessageDatePrefix;
-		static QString mMessageSubjectPrefix;
+		static QString mFromPrefix;       // translated header prefixes
+		static QString mToPrefix;
+		static QString mDatePrefix;
+		static QString mSubjectPrefix;
+		static QString mFromPrefixEn;     // untranslated header prefixes
+		static QString mToPrefixEn;
+		static QString mDatePrefixEn;
+		static QString mSubjectPrefixEn;
 		QString        mBody, mFrom, mTo, mTime, mSubject;
 		bool           mIsEmail;
 };

@@ -60,6 +60,7 @@ class AlarmCalendar : public QObject
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
 		int                   KAlarmVersion() const               { return mKAlarmVersion; }
+		const QString&        KAlarmSubVersion() const            { return mKAlarmSubVersion; }
 		bool                  KAlarmVersion057_UTC() const        { return mKAlarmVersion057_UTC; }
 		static int            KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
 
@@ -107,6 +108,7 @@ class AlarmCalendar : public QObject
 		KAEvent::Status       mType;               // what type of events the calendar file is for
 		int                   mPurgeDays;          // how long to keep alarms, 0 = don't keep, -1 = keep indefinitely
 		mutable int           mKAlarmVersion;      // version of KAlarm which created the loaded calendar file
+		mutable QString       mKAlarmSubVersion;   // sub-version of KAlarm which created the loaded calendar file
 		mutable bool          mKAlarmVersion057_UTC; // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mPurgeDaysQueued;    // >= 0 to purge the calendar when called from KAlarmApp::processLoop()
