@@ -88,14 +88,14 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 	layout->addStretch();
 
 	// Time spin box
+	QBoxLayout* timeLayout = new QHBoxLayout(layout, 2*KDialog::spacingHint());
 	timeEdit = new TimeSpinBox(page);
 	timeEdit->setValue(2399);
 	size = timeEdit->sizeHint();
 	timeEdit->setFixedSize(size);
 	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm."));
 	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
-	layout->addWidget(timeEdit);
-	layout->addStretch();
+	timeLayout->addWidget(timeEdit);
 
 	if (!deferSpacing)
 	{
@@ -104,9 +104,9 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 		anyTimeCheckBox->setFixedSize(anyTimeCheckBox->sizeHint());
 		QWhatsThis::add(anyTimeCheckBox, i18n("Schedule the alarm for any time during the day"));
 		connect(anyTimeCheckBox, SIGNAL(toggled(bool)), this, SLOT(anyTimeToggled(bool)));
-		layout->addWidget(anyTimeCheckBox);
-		layout->addStretch();
+		timeLayout->addWidget(anyTimeCheckBox);
 	}
+	layout->addStretch();
 
 	layout = new QHBoxLayout(topLayout, 0);
 	if (deferSpacing)
