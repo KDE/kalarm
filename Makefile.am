@@ -41,7 +41,7 @@ METASOURCES = AUTO
 alarmguiiface_DIR = $(top_srcdir)/kalarmd
 
 autostart_DATA = kalarm.tray.desktop
-autostartdir = $(prefix)/share/autostart
+autostartdir = $(datadir)/autostart
 
 xdg_apps_DATA = kalarm.desktop
 
