@@ -485,7 +485,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	minutes[1] = (mins%60) % 10 + '0';
 	if (mins < 24*60)
 		return i18n("hours:minutes", " %1:%2 ").arg(mins/60).arg(minutes);
-	int days = mins / 24*60;
+	int days = mins / (24*60);
 	mins = mins % (24*60);
 	return i18n("days hours:minutes", " %1d %2:%3 ").arg(days).arg(mins/60).arg(minutes);
 }
