@@ -26,6 +26,9 @@
 
 struct AlarmData;
 
+/*
+ * KCal::Recurrence, with some additional methods.
+ */
 class KAlarmRecurrence : public KCal::Recurrence
 {
 	public:
@@ -48,7 +51,7 @@ class KAlarmRecurrence : public KCal::Recurrence
  *   message text - stored as the alarm description, with prefix TEXT: (alarm DESCRIPTION field)
  *   file name to display text from - stored as the alarm description, with prefix FILE: (alarm DESCRIPTION field)
  *   command to execute - stored as the alarm description, with prefix CMD: (alarm DESCRIPTION field)
- *   late cancel, repeat at login - stored in prefix to the alarm description (alarm DESCRIPTION field)
+ *   late cancel, repeat at login, deferral - stored in prefix to the alarm description (alarm DESCRIPTION field)
  * In the event object:
  *   colour - stored as a hex string prefixed by #, as the first category (event CATEGORIES field)
  *   elapsed repeat count - stored as the revision number (event SEQUENCE field)
@@ -143,7 +146,7 @@ class KAlarmEvent
 			LAST_OCCURRENCE       // the last occurrence is due
 		};
 
-		KAlarmEvent()    : mRevision(0), mRecurrence(0L), mMainAlarmID(1), mRepeatDuration(0) { }
+		KAlarmEvent()    : mRevision(0), mRecurrence(0), mRepeatDuration(0), mMainAlarmID(1) { }
 		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags, int repeatCount = 0, int repeatMinutes = 0)
 																								: mRecurrence(0L) { set(dt, message, c, type, flags, repeatCount, repeatMinutes); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0L) { set(e); }
@@ -185,7 +188,7 @@ class KAlarmEvent
 
 		bool              operator==(const KAlarmEvent&);
 		bool              operator!=(const KAlarmEvent& e)  { return !operator==(e); }
-		KAlarmAlarm::Type type() const                { return mType; }
+		KAlarmAlarm::Type type() const                 { return mType; }
 		const QString&    id() const                   { return mEventID; }
 		int               alarmCount() const           { return mAlarmCount; }
 		const QDateTime&  dateTime() const             { return mDateTime; }
@@ -200,7 +203,7 @@ class KAlarmEvent
 		QString           messageFileOrCommand() const { return mCleanText; }
 		const QColor&     colour() const               { return mColour; }
 		bool              repeats() const;
-		KAlarmRecurrence* recurrence() const          { return mRecurrence; }
+		KAlarmRecurrence* recurrence() const           { return mRecurrence; }
 		int               repeatCount() const          { return mRepeatDuration; }
 		int               repeatMinutes() const        { return mRepeatMinutes; }
 		OccurType         nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
@@ -229,8 +232,6 @@ class KAlarmEvent
 		void              setRecurMonthlyByDate(int freq, const QValueList<int>& days, const QDate& end)   { setRecurMonthlyByDate(freq, days, 0, end); }
 		void              setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& mp, int monthCount)   { setRecurMonthlyByPos(freq, mp, monthCount, QDate()); }
 		void              setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& mp, const QDate& end) { setRecurMonthlyByPos(freq, mp, 0, end); }
-//		void              setRecurMonthlyByPos(int freq, const QValueList<KCal::Recurrence::rMonthPos>& mp, int monthCount)   { setRecurMonthlyByPos(freq, mp, monthCount, QDate()); }
-//		void              setRecurMonthlyByPos(int freq, const QValueList<KCal::Recurrence::rMonthPos>& mp, const QDate& end) { setRecurMonthlyByPos(freq, mp, 0, end); }
 		void              setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& mp, int monthCount)   { setRecurMonthlyByPos(freq, mp, monthCount, QDate()); }
 		void              setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& mp, const QDate& end) { setRecurMonthlyByPos(freq, mp, 0, end); }
 		void              setRecurAnnualByDate(int freq, const QValueList<int>& months, int yearCount)     { setRecurAnnualByDate(freq, months, yearCount, QDate()); }
@@ -244,7 +245,6 @@ class KAlarmEvent
 		void              setRecurMonthlyByDate(int freq, const QValueList<int>& days, int monthCount, const QDate& end);
 		void              setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int monthCount, const QDate& end);
 		void              setRecurMonthlyByPos(int freq, const QValueList<MonthPos>&, int monthCount, const QDate& end);
-//		void              setRecurMonthlyByPos(int freq, const QValueList<KCal::Recurrence::rMonthPos>&, int monthCount, const QDate& end);
 		void              setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, int monthCount, const QDate& end);
 		void              setRecurAnnualByDate(int freq, const QValueList<int>& months, int yearCount, const QDate& end);
 		void              setRecurAnnualByDate(int freq, const QPtrList<int>& months, int yearCount, const QDate& end);
@@ -277,12 +277,12 @@ class KAlarmEvent
 		KAlarmAlarm::Type mType;             // message/file/command
 		int               mRevision;         // revision number of the original alarm, or 0
 		KAlarmRecurrence* mRecurrence;       // recurrence specification, or 0 if none
+		int               mRepeatDuration;   // number of intervals to repeat the alarm after initial time, -1 to repeat indefinitely
+		int               mRepeatMinutes;    // interval (minutes) between repeated alarms
+		int               mAlarmCount;       // number of alarms
 		int               mMainAlarmID;      // sequence number of main alarm
 		int               mRepeatAtLoginAlarmID; // sequence number of repeat-at-login alarm (only if read from calendar file)
 		int               mDeferralAlarmID;  // sequence number of deferral alarm (only if read from calendar file)
-		int               mAlarmCount;       // number of alarms
-		int               mRepeatDuration;   // number of intervals to repeat the alarm after initial time, -1 to repeat indefinitely
-		int               mRepeatMinutes;    // interval (minutes) between repeated alarms
 		bool              mAnyTime;          // event has only a date, not a time
 		bool              mBeep;             // whether to beep when the alarm is displayed
 		bool              mRepeatAtLogin;    // whether to repeat the alarm at every login

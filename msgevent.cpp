@@ -36,7 +36,7 @@ using namespace KCal;
  *   SEQNO;[FLAGS];TYPE:TEXT
  * where
  *   SEQNO = sequence number of alarm within the event
- *   FLAGS = C for late-cancel, L for repeat-at-login
+ *   FLAGS = C for late-cancel, L for repeat-at-login, D for deferral
  *   TYPE = TEXT or FILE or CMD
  *   TEXT = message text, file name/URL or command
  */
@@ -124,6 +124,7 @@ void KAlarmEvent::set(const Event& event)
 	bool set = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
+		bool main = false;
 		const AlarmData& data = it.data();
 		if (data.repeatAtLogin)
 		{
@@ -138,11 +139,14 @@ void KAlarmEvent::set(const Event& event)
 			mDeferralAlarmID = it.key();
 		}
 		else
+		{
 			mMainAlarmID = it.key();
+			main = true;
+		}
 
-		// Ensure that the basic fields are set up even if the repeat-at-login
-		// alarm is the only alarm in the event (which shouldn't happen!)
-		if (!data.repeatAtLogin  ||  !set)
+		// Ensure that the basic fields are set up even if a repeat-at-login or
+		// deferral alarm is the only alarm in the event (which shouldn't happen!)
+		if (main  ||  !set)
 		{
 			mType           = data.type;
 			mCleanText      = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
@@ -162,6 +166,8 @@ void KAlarmEvent::set(const Event& event)
 	{
 		// Copy the recurrence details.
 		// This will clear any hours/minutes repetition details.
+		QDateTime savedDT = mDateTime;
+		mDateTime = recur->recurStart();
 		switch (recur->doesRecur())
 		{
 			case Recurrence::rDaily:
@@ -183,6 +189,7 @@ void KAlarmEvent::set(const Event& event)
 				setRecurAnnualByDay(recur->frequency(), recur->yearNums(), recur->duration(), recur->endDate());
 				break;
 			default:
+				mDateTime = savedDT;
 				break;
 		}
 	}
@@ -258,6 +265,9 @@ int KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	return sequence;
 }
 
+/******************************************************************************
+ * Initialise the KAlarmEvent with the specified parameters.
+ */
 void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, KAlarmAlarm::Type type, int flags, int repeatCount, int repeatInterval)
 {
 	initRecur(false);
@@ -269,7 +279,8 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	mRepeatDuration = repeatCount;
 	mRepeatMinutes  = repeatInterval;
 	set(flags);
-	mUpdated = false;
+	mDeferral       = false;
+	mUpdated        = false;
 }
 
 void KAlarmEvent::set(int flags)
@@ -373,7 +384,8 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		int frequency = mRecurrence->frequency();
 		int duration  = mRecurrence->duration();
 		const QDate& endDate = mRecurrence->endDate();
-		recur->setRecurStart(mDateTime.date());
+		dt = mRecurrence->recurStart();
+		recur->setRecurStart(dt);
 		switch (mRecurrence->doesRecur())
 		{
 			case Recurrence::rDaily:
@@ -690,7 +702,9 @@ KAlarmEvent::OccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDat
 /******************************************************************************
  * Get the date/time of the next repetition of the event, after the specified
  * date/time.
+ * Results:
  * 'result' = date/time of next occurrence, or invalid date/time if none.
+ * 'remainingCount' = number of repetitions due, including the next occurrence.
  */
 KAlarmEvent::OccurType KAlarmEvent::nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
 {
