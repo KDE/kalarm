@@ -76,8 +76,7 @@ class MiscPrefs : public PrefsBase
 		virtual void setDefaults();
 
 	private slots:
-		void         slotRunInTrayToggled(bool on);
-		void         slotRunOnDemandToggled(bool on);
+		void         slotRunModeToggled(bool on);
 
 	private:
 		QRadioButton*  mRunInSystemTray;
