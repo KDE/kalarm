@@ -1673,14 +1673,22 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
-	QString cmd = command;
+	QString cmd;
 	if (flags & ProcData::EXEC_IN_XTERM)
 	{
-		// Execute the command in a terminal window
-		QString terminalCmd = Preferences::instance()->cmdXTermCommand();
-		terminalCmd.replace("%t", aboutData()->programName());    // set the terminal window title
-		cmd.prepend(terminalCmd);
+		// Execute the command in a terminal window.
+		cmd = Preferences::instance()->cmdXTermCommand();
+		cmd.replace("%t", aboutData()->programName());     // set the terminal window title
+		// Set the command to execute.
+		// Put it in quotes in case it contains characters such as [>|;].
+		QString exec = KShellProcess::quote(command);
+		if (cmd.find("%c") >= 0)
+			cmd.replace("%c", exec);    // %c indicates where to insert the command string
+		else
+			cmd.append(exec);           // otherwise, simply append the command string
 	}
+	else
+		cmd = command;
 	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);

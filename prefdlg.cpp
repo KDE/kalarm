@@ -69,10 +69,13 @@
 
 // Command strings for executing commands in different types of terminal windows.
 // %t = window title parameter
+// %c = command to execute in terminal
 static QString xtermCommands[] = {
-	QString::fromLatin1("xterm -sb -hold -title %t -e "),
-	QString::fromLatin1("konsole --noclose -T %t -e "),
-	QString::fromLatin1("gnome-terminal -t %t -x "),
+	QString::fromLatin1("xterm -sb -hold -title %t -e %c"),
+	QString::fromLatin1("konsole --noclose -T %t -e %c"),
+	QString::fromLatin1("gnome-terminal -t %t -x \"sh -c %c; wait\""),
+	QString::fromLatin1("eterm --pause -T %t -e %c"),
+	QString::fromLatin1("rxvt -title %t -e \"sh -c %c; wait\""),
 	QString::null       // end of list indicator - don't change!
 };
 
@@ -379,7 +382,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 	mXtermType = new QButtonGroup(group);
 	mXtermType->hide();
-	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Command alarms in a terminal window will be executed by '%1'");
+	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Check to execute command alarms in a terminal window by '%1'");
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
@@ -388,7 +391,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 		radio = new QRadioButton(term, group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
-		cmd.replace("%t", kapp->aboutData()->programName());
+		cmd.replace("%t", progname);
+		cmd.replace("%c", "<command>");
 		QWhatsThis::add(radio, whatsThis.arg(cmd));
 		grid->addWidget(radio, (row = mXtermCount/3 + 1), mXtermCount % 3, Qt::AlignAuto);
 	}
@@ -402,8 +406,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mXtermCommand = new QLineEdit(box);
 	QWhatsThis::add(box,
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
-	           "The command string specified in the command alarm will be appended to what you enter here."
-	           "Remember to include a trailing space if necessary."));
+	           "Use '%c' to indicate where the alarm's command string should be inserted; "
+	           "otherwise, the alarm's command string will be appended."));
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
@@ -431,6 +435,7 @@ void MiscPrefTab::restore()
 			break;
 	}
 	mXtermType->setButton(id);
+	mXtermCommand->setEnabled(id == mXtermCount);
 	mXtermCommand->setText(id == mXtermCount ? xtermCmd : "");
 	slotDisableIfStoppedToggled(true);
 }
@@ -472,6 +477,7 @@ void MiscPrefTab::setDefaults()
 	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	mXtermType->setButton(0);
+	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
 }
 
