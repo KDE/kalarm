@@ -142,22 +142,21 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QWhatsThis::add(box, i18n("Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
-	QTabWidget* tabs = new QTabWidget(mainWidget);
-	tabs->setMargin(marginHint() + marginKDE2);
+	mTabs = new QTabWidget(mainWidget);
+	mTabs->setMargin(marginHint() + marginKDE2);
 
-	QVBox* mainPageBox = new QVBox(tabs);
+	QVBox* mainPageBox = new QVBox(mTabs);
 	mainPageBox->setSpacing(spacingHint());
-	tabs->addTab(mainPageBox, i18n("&Alarm"));
+	mTabs->addTab(mainPageBox, i18n("&Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
 	// Recurrence tab
-	QVBox* recurPage = new QVBox(tabs);
+	QVBox* recurPage = new QVBox(mTabs);
 	mainPageBox->setSpacing(spacingHint());
-	tabs->addTab(recurPage, i18n("&Recurrence"));
-	mRecurPageIndex = 1;
+	mTabs->addTab(recurPage, i18n("&Recurrence"));
 	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurPage, "recurPage");
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
@@ -1081,7 +1080,7 @@ void EditAlarmDlg::slotOk()
 		return;
 	}
 	if (mTimeWidget
-	&&  activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	&&  mTabs->currentPageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();    // does it recur other than at login?
 	if (mTemplate)
@@ -1111,7 +1110,7 @@ void EditAlarmDlg::slotOk()
 		if (errWidget)
 		{
 			// It's more than just an existing deferral being changed, so the time matters
-			showPage(mMainPageIndex);
+			mTabs->setCurrentPage(mMainPageIndex);
 			errWidget->setFocus();
 			mTimeWidget->getDateTime();   // display the error message now
 			return;
@@ -1144,7 +1143,7 @@ void EditAlarmDlg::slotOk()
 		QWidget* errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
 		if (errWidget)
 		{
-			showPage(mRecurPageIndex);
+			mTabs->setCurrentPage(mRecurPageIndex);
 			errWidget->setFocus();
 			KMessageBox::sorry(this, errmsg);
 			return;
@@ -1162,7 +1161,7 @@ void EditAlarmDlg::slotOk()
 				int minutes = event.longestRecurrenceInterval();
 				if (minutes  &&  reminder >= minutes)
 				{
-					showPage(mMainPageIndex);
+					mTabs->setCurrentPage(mMainPageIndex);
 					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
 					                             ).arg(Reminder::i18n_first_recurrence_only()));
@@ -1322,7 +1321,7 @@ void EditAlarmDlg::slotShowMainPage()
 */
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
-	mRecurPageIndex = activePageIndex();
+	mRecurPageIndex = mTabs->currentPageIndex();
 	if (!mReadOnly  &&  !mTemplate)
 	{
 		QDateTime now = QDateTime::currentDateTime();

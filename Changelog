@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.1.5 --- 22 August 2004 ===
+Show erroneous control in alarm edit dialog when an error message is displayed.
+
 === Version 1.1.4 --- 21 August 2004 ===
 Fix errors when altering or cancelling deferrals of expired recurrences.
 Fix message window size not fitting message (bug introduced in 1.1.3).

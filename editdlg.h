@@ -33,6 +33,7 @@ class QButton;
 class QButtonGroup;
 class QGroupBox;
 class QComboBox;
+class QTabWidget;
 class QHBox;
 class ColourCombo;
 class FontColourButton;
@@ -116,6 +117,7 @@ class EditAlarmDlg : public KDialogBase
 		void              saveState(const KAEvent*);
 		bool              stateChanged() const;
 
+		QTabWidget*       mTabs;                // the tabs in the dialog
 		int               mMainPageIndex;
 		int               mRecurPageIndex;
 		bool              mMainPageShown;            // true once the main tab has been displayed
