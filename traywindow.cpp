@@ -56,20 +56,17 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent),
 	  mQuitReplaced(false),
-	  mActionCollection(this)
+	  mActionCollection(new KActionCollection(this))
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
-//	KGlobal::iconLoader()->addAppDir(kapp->aboutData()->appName());
-//	mPixmapEnabled  = KGlobal::iconLoader()->loadIcon("kalarm", KIcon::Panel);
-//	mPixmapDisabled = KGlobal::iconLoader()->loadIcon("kalarm_disabled", KIcon::Panel);
 	mPixmapEnabled  = BarIcon("kalarm");
 	mPixmapDisabled = BarIcon("kalarm_disabled");
 	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
 		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
 		                         i18n("%1 Error").arg(kapp->aboutData()->programName()));
 
-	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), &mActionCollection);
+	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), mActionCollection);
 
 	// Set up the context menu
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -148,12 +145,22 @@ void TrayWindow::slotQuit()
 /******************************************************************************
 * Called to allow quit warning messages again.
 */
-void TrayWindow::allowQuitWarning()
+void TrayWindow::setQuitWarning(bool warn)
 {
 	KConfig* config = kapp->config();
 	config->setGroup(QString::fromLatin1("Notification Messages"));
-	config->writeEntry(QString::fromLatin1("QuitWarn"), false);
+	config->writeEntry(QString::fromLatin1("QuitWarn"), QString::fromLatin1(warn ? "" : "Yes"));
 	config->sync();
+}
+
+/******************************************************************************
+* Return whether quit warning messages are output.
+*/
+bool TrayWindow::quitWarning()
+{
+	KConfig* config = kapp->config();
+	config->setGroup(QString::fromLatin1("Notification Messages"));
+	return config->readEntry(QString::fromLatin1("QuitWarn")) != QString::fromLatin1("Yes");
 }
 
 /******************************************************************************

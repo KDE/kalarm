@@ -117,6 +117,7 @@ class MiscPrefTab : public PrefsTabBase
 
 	private slots:
 		void         slotRunModeToggled(bool on);
+		void         slotDisableIfStoppedToggled(bool on);
 		void         slotExpiredToggled(bool);
 		void         slotEmailUseCCToggled(bool);
 		void         slotClearExpired();
@@ -128,6 +129,7 @@ class MiscPrefTab : public PrefsTabBase
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
 		QCheckBox*     mDisableAlarmsIfStopped;
+		QCheckBox*     mQuitWarn;
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QCheckBox*     mConfirmAlarmDeletion;

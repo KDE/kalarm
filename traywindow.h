@@ -28,6 +28,7 @@
 #include <ksystemtray.h>
 class KPopupMenu;
 class KAction;
+class KActionCollection;
 
 class KAlarmMainWindow;
 
@@ -42,7 +43,8 @@ class TrayWindow : public KSystemTray
 		KAlarmMainWindow* assocMainWindow() const  { return mAssocMainWindow; }
 		void              setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
 		bool              inSystemTray() const;
-		static void       allowQuitWarning();
+		static bool       quitWarning();
+		static void       setQuitWarning(bool warn);
 
 	public slots:
 		void              slotQuit();
@@ -59,12 +61,12 @@ class TrayWindow : public KSystemTray
 		void              setEnabledStatus(bool status);
 
 	private:
-		KAlarmMainWindow* mAssocMainWindow;     // main window associated with this, or null
-		QPixmap           mPixmapEnabled, mPixmapDisabled;
-		KAction*          mActionQuit;          // quit action for system tray window
-		int               mAlarmsEnabledId;     // alarms enabled item in menu
-		bool              mQuitReplaced;        // the context menu Quit item has been replaced
-		KActionCollection mActionCollection;
+		KAlarmMainWindow*  mAssocMainWindow;     // main window associated with this, or null
+		QPixmap            mPixmapEnabled, mPixmapDisabled;
+		KAction*           mActionQuit;          // quit action for system tray window
+		int                mAlarmsEnabledId;     // alarms enabled item in menu
+		bool               mQuitReplaced;        // the context menu Quit item has been replaced
+		KActionCollection* mActionCollection;
 };
 
 #endif // TRAYWINDOW_H

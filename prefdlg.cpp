@@ -51,6 +51,7 @@
 #include "timespinbox.h"
 #include "preferences.h"
 #include "alarmcalendar.h"
+#include "traywindow.h"
 #include "kalarmapp.h"
 #include "prefdlg.moc"
 
@@ -158,9 +159,10 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
 	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
-	QGridLayout* grid = new QGridLayout(group, 6, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
-	grid->setColStretch(1, 1);
+	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, 3*KDialog::spacingHint());
+	grid->addColSpacing(1, 3*KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	int row = 1;
 
@@ -174,19 +176,30 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "1. With this option selected, closing the system tray icon will quit %2.\n"
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 1, AlignLeft);
+	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, AlignLeft);
+	++row;
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
 	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
-	grid->addWidget(mAutostartTrayIcon1, ++row, 1, AlignLeft);
+	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, AlignLeft);
+	++row;
 
 	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disa&ble alarms while not running"), group, "disableAl");
 	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
+	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	QWhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
-	grid->addWidget(mDisableAlarmsIfStopped, ++row, 1, AlignLeft);
+	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, AlignLeft);
+	++row;
+
+	mQuitWarn = new QCheckBox(i18n("Warn before quitting"), group, "disableAl");
+	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
+	QWhatsThis::add(mQuitWarn,
+	      i18n("Check to display a warning prompt before quitting %1.").arg(kapp->aboutData()->programName()));
+	grid->addWidget(mQuitWarn, row, 2, AlignLeft);
+	++row;
 
 	// Run-on-demand radio button has an ID of 3
 	mRunOnDemand = new QRadioButton(i18n("&Run only on demand"), group, "runDemand");
@@ -198,14 +211,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "1. Alarms are displayed even when %2 is not running, since alarm monitoring is done by the alarm daemon.\n"
 	           "2. With this option selected, the system tray icon can be displayed or hidden independently of %3.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
+	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, AlignLeft);
 	++row;
-	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 1, AlignLeft);
 
 	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group, "autoRun");
 	mAutostartTrayIcon2->setFixedSize(mAutostartTrayIcon2->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
-	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
+	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
@@ -326,6 +339,7 @@ void MiscPrefTab::restore()
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(mPreferences->mDisableAlarmsIfStopped);
+	mQuitWarn->setChecked(TrayWindow::quitWarning());
 	mAutostartTrayIcon1->setChecked(mPreferences->mAutostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(mPreferences->mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(mPreferences->mConfirmAlarmDeletion);
@@ -341,6 +355,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 	bool systray = mRunInSystemTray->isChecked();
 	mPreferences->mRunInSystemTray         = systray;
 	mPreferences->mDisableAlarmsIfStopped  = mDisableAlarmsIfStopped->isChecked();
+	if (mQuitWarn->isEnabled())
+		TrayWindow::setQuitWarning(mQuitWarn->isChecked());
 	mPreferences->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
 	mPreferences->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
 	mPreferences->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
@@ -350,7 +366,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	mPreferences->mEmailClient             = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
 	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
 	mPreferences->mExpiredKeepDays         = !mKeepExpired->isChecked() ? 0
-	                                    : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
+	                                       : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -360,6 +376,7 @@ void MiscPrefTab::setDefaults()
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(Preferences::default_disableAlarmsIfStopped);
+	mQuitWarn->setChecked(true);
 	mAutostartTrayIcon1->setChecked(Preferences::default_autostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
@@ -376,6 +393,12 @@ void MiscPrefTab::slotRunModeToggled(bool)
 	mAutostartTrayIcon2->setEnabled(!systray);
 	mAutostartTrayIcon1->setEnabled(systray);
 	mDisableAlarmsIfStopped->setEnabled(systray);
+}
+
+void MiscPrefTab::slotDisableIfStoppedToggled(bool)
+{
+	bool disable = (mDisableAlarmsIfStopped->isChecked());
+	mQuitWarn->setEnabled(disable);
 }
 
 void MiscPrefTab::setExpiredControls(int purgeDays)
@@ -501,18 +524,20 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("Recurrence &period:"), box);
+	QLabel* label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
-	mDefaultRecurPeriod->insertItem(i18n("Hours/Minutes"));
-	mDefaultRecurPeriod->insertItem(i18n("Days"));
-	mDefaultRecurPeriod->insertItem(i18n("Weeks"));
-	mDefaultRecurPeriod->insertItem(i18n("Months"));
-	mDefaultRecurPeriod->insertItem(i18n("Years"));
+	mDefaultRecurPeriod->insertItem(i18n("No recurrence"));
+	mDefaultRecurPeriod->insertItem(i18n("At login"));
+	mDefaultRecurPeriod->insertItem(i18n("Hourly/Minutely"));
+	mDefaultRecurPeriod->insertItem(i18n("Daily"));
+	mDefaultRecurPeriod->insertItem(i18n("Weekly"));
+	mDefaultRecurPeriod->insertItem(i18n("Monthly"));
+	mDefaultRecurPeriod->insertItem(i18n("Yearly"));
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	label->setBuddy(mDefaultRecurPeriod);
 	QWhatsThis::add(box,
-	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
+	      i18n("The default setting for the recurrence rule in the alarm edit dialog."));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
@@ -553,12 +578,14 @@ void DefaultPrefTab::apply(bool syncToDisc)
 	mPreferences->mDefaultEmailBcc   = mDefaultEmailBcc->isChecked();
 	switch (mDefaultRecurPeriod->currentItem())
 	{
-		case 4:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
-		case 3:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
-		case 2:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
-		case 1:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
+		case 6:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
+		case 5:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
+		case 4:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
+		case 3:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
+		case 2:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
+		case 1:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
 		case 0:
-		default: mPreferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
+		default: mPreferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
 	mPreferences->mDefaultReminderUnits = static_cast<Reminder::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
@@ -578,11 +605,13 @@ int DefaultPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 {
 	switch (type)
 	{
-		case RecurrenceEdit::ANNUAL:   return 4;
-		case RecurrenceEdit::MONTHLY:  return 3;
-		case RecurrenceEdit::WEEKLY:   return 2;
-		case RecurrenceEdit::DAILY:    return 1;
-		case RecurrenceEdit::SUBDAILY:
+		case RecurrenceEdit::ANNUAL:   return 6;
+		case RecurrenceEdit::MONTHLY:  return 5;
+		case RecurrenceEdit::WEEKLY:   return 4;
+		case RecurrenceEdit::DAILY:    return 3;
+		case RecurrenceEdit::SUBDAILY: return 2;
+		case RecurrenceEdit::AT_LOGIN: return 1;
+		case RecurrenceEdit::NO_RECUR:
 		default:                       return 0;
 	}
 }
