@@ -64,7 +64,7 @@ KAlarmMainWindow::KAlarmMainWindow()
 	theApp()->checkCalendar();    // ensure calendar is open
 	listView = new AlarmListView(this, "listView");
 	setCentralWidget(listView);
-	listView->refresh();          // populate the message list
+	listView->refresh();          // populate the alarm list
 	listView->clearSelection();
 
 	initActions();
@@ -250,32 +250,32 @@ void KAlarmMainWindow::slotSettingsChanged()
 }
 
 /******************************************************************************
-* Add a new alarm message to every main window instance.
+* Add a new alarm to every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
-void KAlarmMainWindow::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+void KAlarmMainWindow::addEvent(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
-	kdDebug(5950) << "KAlarmMainWindow::addMessage(): " << event.id() << endl;
+	kdDebug(5950) << "KAlarmMainWindow::addEvent(): " << event.id() << endl;
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 		if (w != win)
 			w->listView->addEntry(event, true);
 }
 
 /******************************************************************************
-* Modify a message in every main window instance.
+* Modify an alarm in every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
-void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
+void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
 {
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 		if (w != win)
-			w->modifyMessage(oldEventID, newEvent);
+			w->modifyEvent(oldEventID, newEvent);
 }
 
 /******************************************************************************
-* Modify a message in the displayed list.
+* Modify an alarm in the displayed list.
 */
-void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent)
+void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent)
 {
 	AlarmListViewItem* item = listView->getEntry(oldEventID);
 	if (item)
@@ -288,20 +288,20 @@ void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEven
 }
 
 /******************************************************************************
-* Delete a message from every main window instance.
+* Delete an alarm from every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
-void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+void KAlarmMainWindow::deleteEvent(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 		if (w != win)
-			w->deleteMessage(event);
+			w->deleteEvent(event);
 }
 
 /******************************************************************************
-* Delete a message from the displayed list.
+* Delete an alarm from the displayed list.
 */
-void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
+void KAlarmMainWindow::deleteEvent(const KAlarmEvent& event)
 {
 	AlarmListViewItem* item = listView->getEntry(event.id());
 	if (item)
@@ -315,19 +315,18 @@ void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 /////////////////////////////////////////////////////////////////////
 
 /******************************************************************************
-*  Called when the New button is clicked to edit a new message to add to the
-*  list.
+*  Called when the New button is clicked to edit a new alarm to add to the list.
 */
 void KAlarmMainWindow::slotNew()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Message"), this, "editDlg");
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;
 		editDlg->getEvent(event);
 
-		// Add the message to the displayed lists and to the calendar file
-		theApp()->addMessage(event, this);
+		// Add the alarm to the displayed lists and to the calendar file
+		theApp()->addEvent(event, this);
 		AlarmListViewItem* item = listView->addEntry(event, true);
 		listView->setSelected(item, true);
 	}
@@ -335,7 +334,7 @@ void KAlarmMainWindow::slotNew()
 
 /******************************************************************************
 *  Called when the Modify button is clicked to edit the currently highlighted
-*  message in the list.
+*  alarm in the list.
 */
 void KAlarmMainWindow::slotModify()
 {
@@ -343,14 +342,14 @@ void KAlarmMainWindow::slotModify()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEntry(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Message"), this, "editDlg", &event);
+		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Alarm"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
 			KAlarmEvent newEvent;
 			editDlg->getEvent(newEvent);
 
 			// Update the event in the displays and in the calendar file
-			theApp()->modifyMessage(event.id(), newEvent, this);
+			theApp()->modifyEvent(event.id(), newEvent, this);
 			item = listView->updateEntry(item, newEvent, true);
 			listView->setSelected(item, true);
 		}
@@ -359,7 +358,7 @@ void KAlarmMainWindow::slotModify()
 
 /******************************************************************************
 *  Called when the Delete button is clicked to delete the currently highlighted
-*  message in the list.
+*  alarm in the list.
 */
 void KAlarmMainWindow::slotDelete()
 {
@@ -369,7 +368,7 @@ void KAlarmMainWindow::slotDelete()
 		KAlarmEvent event = listView->getEntry(item);
 
 		// Delete the event from the displays
-		theApp()->deleteMessage(event, this);
+		theApp()->deleteEvent(event, this);
 		listView->deleteEntry(item, true);
 	}
 }
@@ -435,7 +434,7 @@ void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 		ce->ignore();
 	}
 	else
-		MainWindowBase::closeEvent(ce);
+		ce->accept();
 }
 
 /******************************************************************************

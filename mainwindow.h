@@ -41,14 +41,14 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           trayParent() const;
 		bool           hiddenTrayParent() const     { return mHiddenTrayParent; }
 
-		void           modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
-		void           modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
-		void           deleteMessage(const KAlarmEvent&);
+		void           modifyEvent(const KAlarmEvent& event)    { modifyEvent(event.id(), event); }
+		void           modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent);
+		void           deleteEvent(const KAlarmEvent&);
 
-		static void    addMessage(const KAlarmEvent&, KAlarmMainWindow*);
-		static void    modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
-		static void    modifyMessage(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyMessage(event.id(), event, w); }
-		static void    deleteMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		static void    addEvent(const KAlarmEvent&, KAlarmMainWindow*);
+		static void    modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
+		static void    modifyEvent(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
+		static void    deleteEvent(const KAlarmEvent&, KAlarmMainWindow*);
 		static void              closeAll();
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* firstWindow()      { return windowList.first(); }
