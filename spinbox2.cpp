@@ -49,6 +49,7 @@ SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* par
 
 void SpinBox2::initSpinBox2()
 {
+	setFocusProxy(spinbox);
 	updown2 = new QSpinWidget(this, "updown2");
 	connect(updown2, SIGNAL(stepUpPressed()), this, SLOT(pageUp()));
 	connect(updown2, SIGNAL(stepDownPressed()), this, SLOT(pageDown()));
