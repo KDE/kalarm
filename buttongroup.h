@@ -31,17 +31,22 @@ class ButtonGroup : public QButtonGroup
 {
 		Q_OBJECT
 	public:
-		ButtonGroup(QWidget* parent, const char* name = 0L)  : QButtonGroup(parent, name) { }
+		ButtonGroup(QWidget* parent, const char* name = 0L);
+		ButtonGroup(const QString& title, QWidget* parent, const char* name = 0L);
 		ButtonGroup(int strips, Qt::Orientation, QWidget* parent, const char* name = 0L);
 		ButtonGroup(int strips, Qt::Orientation, const QString& title, QWidget* parent, const char* name = 0L);
-		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit clicked(id); }
+		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit buttonSet(id); }
 #if QT_VERSION < 300
 		void setInsideMargin(int) { }
-		void addWidget(QWidget*, int stretch = 0, int alignment = 0);
+//??//		void addWidget(QWidget*, int stretch = 0, int alignment = 0);
+	protected:
+		virtual void childEvent(QChildEvent*);
 	private:
 		void init(Qt::Orientation);
 		int  defaultAlignment;
 #endif
+	signals:
+		void buttonSet(int id);
 };
 
 #endif // BUTTONGROUP_H

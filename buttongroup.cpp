@@ -29,10 +29,31 @@
 #include "buttongroup.moc"
 
 
+ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
+	: QButtonGroup(parent, name)
+#if QT_VERSION < 300
+	  , defaultAlignment(-1)
+#endif
+{
+	setFrameStyle(QFrame::NoFrame);
+	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+}
+
+ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name)
+	: QButtonGroup(title, parent, name)
+#if QT_VERSION < 300
+	  , defaultAlignment(-1)
+#endif
+{
+	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+}
+
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name)
 #if QT_VERSION >= 300
 	: QButtonGroup(strips, orient, parent, name)
-{ }
+{
+	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+}
 #else
 	: QButtonGroup(parent, name)
 {
@@ -43,7 +64,9 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, co
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name)
 #if QT_VERSION >= 300
 	: QButtonGroup(strips, orient, title, parent, name)
-{ }
+{
+	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+}
 #else
 	: QButtonGroup(title, parent, name)
 {
@@ -62,10 +85,19 @@ void ButtonGroup::init(Qt::Orientation orient)
 		new QHBoxLayout(this, 0, KDialog::spacingHint());
 		defaultAlignment = 0;
 	}
+	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 void ButtonGroup::addWidget(QWidget* w, int stretch, int alignment)
 {
-	((QBoxLayout*)layout())->addWidget(w, stretch, (alignment ? alignment : defaultAlignment));
+	if (defaultAlignment != -1)
+		((QBoxLayout*)layout())->addWidget(w, stretch, (alignment ? alignment : defaultAlignment));
+}
+
+void ButtonGroup::childEvent(QChildEvent *ce)
+{
+???	QButtonGroup::childEvent(ce);
+	if (defaultAlignment != -1  &&  ce->inserted()  &&  ce->child()->isWidgetType())
+		addWidget(ce->child());
 }
 #endif
