@@ -53,7 +53,6 @@
 #include "alarmcalendar.h"
 #include "prefsettings.h"
 #include "deferdlg.h"
-#include "datetime.h"
 #include "messagewin.moc"
 
 
