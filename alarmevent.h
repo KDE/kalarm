@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -103,6 +103,8 @@ class KAAlarmEventBase
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
 		float              mSoundVolume;      // volume for sound file, or < 0 for unspecified
+		float              mFadeVolume;       // initial volume for sound file, or < 0 for no fade
+		int                mFadeSeconds;      // fade time for sound file, or 0 if none
 		Type               mActionType;       // alarm action type
 		int                mRepeatCount;      // simple repetition count (excluding the first time)
 		int                mRepeatInterval;   // simple repetition interval (minutes)
@@ -189,7 +191,9 @@ class KAAlarm : public KAAlarmEventBase
 		QDate              date() const                 { return mNextMainDateTime.date(); }
 		QTime              time() const                 { return mNextMainDateTime.time(); }
 		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
-		float              soundVolume() const          { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && !mBeep && !mText.isEmpty() ? mSoundVolume : -1; }
+		float              soundVolume() const          { return (mActionType == T_AUDIO) && !mBeep && !mText.isEmpty() ? mSoundVolume : -1; }
+		float              fadeVolume() const           { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && mFadeSeconds && !mBeep && !mText.isEmpty() ? mFadeVolume : -1; }
+		int                fadeSeconds() const          { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && mFadeVolume >= 0 && !mBeep && !mText.isEmpty() ? mFadeSeconds : 0; }
 		bool               repeatSound() const          { return (mActionType == T_AUDIO) && mRepeatSound && !mBeep && !mText.isEmpty(); }
 		bool               reminder() const             { return mType == REMINDER__ALARM; }
 		bool               deferred() const             { return mDeferred; }
@@ -339,9 +343,9 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(const QDateTime&, const QString& from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const QString& from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
-		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
-		void               setTemplate(const QString& name, bool defaultTime)  { mTemplateName = name; mTemplateDefaultTime = defaultTime;  mUpdated = true; }
-		void               setActions(const QString& pre, const QString& post) { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
+		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
+		void               setTemplate(const QString& name, int afterTime = -1)  { mTemplateName = name;  mTemplateAfterTime = afterTime;  mUpdated = true; }
+		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions = false);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
@@ -370,7 +374,8 @@ class KAEvent : public KAAlarmEventBase
 		KCal::Event*       event() const;    // convert to new Event
 		bool               isTemplate() const             { return !mTemplateName.isEmpty(); }
 		const QString&     templateName() const           { return mTemplateName; }
-		bool               usingDefaultTime() const       { return mTemplateDefaultTime; }
+		bool               usingDefaultTime() const       { return mTemplateAfterTime == 0; }
+		int                templateAfterTime() const      { return mTemplateAfterTime; }
 		KAAlarm            alarm(KAAlarm::Type) const;
 		KAAlarm            firstAlarm() const;
 		KAAlarm            nextAlarm(const KAAlarm& al) const  { return nextAlarm(al.type()); }
@@ -396,7 +401,9 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           nextDateTime(bool includeReminders = true) const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		const QString&     audioFile() const              { return mAudioFile; }
-		float              soundVolume() const            { return mSoundVolume >= 0  &&  !mAudioFile.isEmpty() ? mSoundVolume : -1; }
+		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
+		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
+		int                fadeSeconds() const            { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeVolume >= 0 ? mFadeSeconds : 0; }
 		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
 		const QString&     preAction() const              { return mPreAction; }
 		const QString&     postAction() const             { return mPostAction; }
@@ -568,7 +575,7 @@ class KAEvent : public KAAlarmEventBase
 		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
-		bool               mTemplateDefaultTime; // time not specified: use default time (applies to templates only)
+		int                mTemplateAfterTime;// time not specified: use n minutes after default time, or -1 (applies to templates only)
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)

@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,18 +57,18 @@ static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLU
 static const QCString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
 
 // Event categories
-static const QString DATE_ONLY_CATEGORY      = QString::fromLatin1("DATE");
-static const QString EMAIL_BCC_CATEGORY      = QString::fromLatin1("BCC");
-static const QString CONFIRM_ACK_CATEGORY    = QString::fromLatin1("ACKCONF");
-static const QString LATE_CANCEL_CATEGORY    = QString::fromLatin1("LATECANCEL;");
-static const QString AUTO_CLOSE_CATEGORY     = QString::fromLatin1("LATECLOSE;");
-static const QString EXEC_IN_XTERM_CATEGORY  = QString::fromLatin1("XTERM");
-static const QString TEMPL_DEF_TIME_CATEGORY = QString::fromLatin1("TMPLDEFTIME");
-static const QString ARCHIVE_CATEGORY        = QString::fromLatin1("SAVE");
-static const QString ARCHIVE_CATEGORIES      = QString::fromLatin1("SAVE:");
+static const QString DATE_ONLY_CATEGORY        = QString::fromLatin1("DATE");
+static const QString EMAIL_BCC_CATEGORY        = QString::fromLatin1("BCC");
+static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
+static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL;");
+static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;");
+static const QString EXEC_IN_XTERM_CATEGORY    = QString::fromLatin1("XTERM");
+static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
+static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
+static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
 
 // Event status strings
-static const QString DISABLED_STATUS         = QString::fromLatin1("DISABLED");
+static const QString DISABLED_STATUS           = QString::fromLatin1("DISABLED");
 
 static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
@@ -86,6 +86,8 @@ struct AlarmData
 	QFont                  font;
 	QColor                 bgColour, fgColour;
 	float                  soundVolume;
+	float                  fadeVolume;
+	int                    fadeSeconds;
 	KAAlarm::SubType       type;
 	KAAlarmEventBase::Type action;
 	int                    displayingFlags;
@@ -163,7 +165,7 @@ void KAEvent::copy(const KAEvent& event)
 	mMainExpired             = event.mMainExpired;
 	mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
 	mArchive                 = event.mArchive;
-	mTemplateDefaultTime     = event.mTemplateDefaultTime;
+	mTemplateAfterTime       = event.mTemplateAfterTime;
 	mEnabled                 = event.mEnabled;
 	mUpdated                 = event.mUpdated;
 	delete mRecurrence;
@@ -182,7 +184,7 @@ void KAEvent::set(const Event& event)
 	mEventID                = event.uid();
 	mRevision               = event.revision();
 	mTemplateName           = QString::null;
-	mTemplateDefaultTime    = false;
+	mTemplateAfterTime      = -1;
 	mBeep                   = false;
 	mEmailBcc               = false;
 	mCommandXterm           = false;
@@ -209,8 +211,6 @@ void KAEvent::set(const Event& event)
 			mEmailBcc = true;
 		else if (cats[i] == EXEC_IN_XTERM_CATEGORY)
 			mCommandXterm = true;
-		else if (cats[i] == TEMPL_DEF_TIME_CATEGORY)
-			mTemplateDefaultTime = true;
 		else if (cats[i] == ARCHIVE_CATEGORY)
 			mArchive = true;
 		else if (cats[i].startsWith(ARCHIVE_CATEGORIES))
@@ -244,6 +244,13 @@ void KAEvent::set(const Event& event)
 					}
 				}
 			}
+		}
+		else if (cats[i].startsWith(TEMPL_AFTER_TIME_CATEGORY))
+		{
+			bool ok;
+			mTemplateAfterTime = static_cast<int>(cats[i].mid(TEMPL_AFTER_TIME_CATEGORY.length()).toUInt(&ok));
+			if (!ok)
+				mTemplateAfterTime = -1;    // invalid parameter
 		}
 		else if (cats[i].startsWith(LATE_CANCEL_CATEGORY))
 		{
@@ -280,6 +287,8 @@ void KAEvent::set(const Event& event)
 	mCommandScript    = false;
 	mDeferral         = NO_DEFERRAL;
 	mSoundVolume      = -1;
+	mFadeVolume       = -1;
+	mFadeSeconds      = 0;
 	mReminderMinutes  = 0;
 	mRepeatInterval   = 0;
 	mRepeatCount      = 0;
@@ -350,6 +359,8 @@ void KAEvent::set(const Event& event)
 				mAudioFile   = data.cleanText;
 				mBeep        = mAudioFile.isEmpty();
 				mSoundVolume = !mBeep ? data.soundVolume : -1;
+				mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
+				mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
 				mRepeatSound = !mBeep  &&  (data.repeatCount < 0);
 				break;
 			case KAAlarm::PRE_ACTION__ALARM:
@@ -524,15 +535,34 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 		}
 		case Alarm::Audio:
 		{
-			data.action    = T_AUDIO;
-			data.cleanText = alarm.audioFile();
-			data.type      = KAAlarm::AUDIO__ALARM;
-			bool ok = false;
+			data.action      = T_AUDIO;
+			data.cleanText   = alarm.audioFile();
+			data.type        = KAAlarm::AUDIO__ALARM;
+			data.soundVolume = -1;
+			data.fadeVolume  = -1;
+			data.fadeSeconds = 0;
 			QString property = alarm.customProperty(APPNAME, VOLUME_PROPERTY);
 			if (!property.isEmpty())
-				data.soundVolume = property.toFloat(&ok);
-			if (!ok)
-				data.soundVolume = -1;
+			{
+				bool ok;
+				float fadeVolume;
+				int   fadeSecs;
+				QStringList list = QStringList::split(QChar(';'), property, true);
+				data.soundVolume = list[0].toFloat(&ok);
+				if (!ok)
+					data.soundVolume = -1;
+				if (data.soundVolume >= 0  &&  list.count() >= 3)
+				{
+					fadeVolume = list[1].toFloat(&ok);
+					if (ok)
+						fadeSecs = static_cast<int>(list[2].toUInt(&ok));
+					if (ok  &&  fadeVolume >= 0  &&  data.fadeSeconds > 0)
+					{
+						data.fadeVolume  = fadeVolume;
+						data.fadeSeconds = fadeSecs;
+					}
+				}
+			}
 			return;
 		}
 		case Alarm::Invalid:
@@ -625,6 +655,9 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mPostAction             = QString::null;
 	mAudioFile              = "";
 	mSoundVolume            = -1;
+	mFadeVolume             = -1;
+	mTemplateAfterTime      = -1;
+	mFadeSeconds            = 0;
 	mBgColour               = bg;
 	mFgColour               = fg;
 	mFont                   = font;
@@ -641,7 +674,6 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mDisplaying             = false;
 	mMainExpired            = false;
 	mArchive                = false;
-	mTemplateDefaultTime    = false;
 	mUpdated                = false;
 }
 
@@ -674,6 +706,23 @@ void KAEvent::setEmail(const QString& from, const EmailAddressList& addresses, c
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
+}
+
+void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds)
+{
+	mAudioFile = filename;
+	mSoundVolume = filename.isEmpty() ? -1 : volume;
+	if (mSoundVolume >= 0)
+	{
+		mFadeVolume  = (fadeSeconds > 0) ? fadeVolume : -1;
+		mFadeSeconds = (mFadeVolume >= 0) ? fadeSeconds : 0;
+	}
+	else
+	{
+		mFadeVolume  = -1;
+		mFadeSeconds = 0;
+	}
+	mUpdated = true;
 }
 
 void KAEvent::setReminder(int minutes, bool onceOnly)
@@ -855,8 +904,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		cats.append(EXEC_IN_XTERM_CATEGORY);
 	if (mLateCancel)
 		cats.append(QString("%1%2").arg(mAutoClose ? AUTO_CLOSE_CATEGORY : LATE_CANCEL_CATEGORY).arg(mLateCancel));
-	if (!mTemplateName.isEmpty()  &&  mTemplateDefaultTime)
-		cats.append(TEMPL_DEF_TIME_CATEGORY);
+	if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
+		cats.append(QString("%1%2").arg(TEMPL_AFTER_TIME_CATEGORY).arg(mTemplateAfterTime));
 	if (mArchive  &&  !original)
 	{
 		QStringList params;
@@ -1064,7 +1113,10 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 				alarm->setSnoozeTime(0);
 			}
 			if (!mAudioFile.isEmpty()  &&  mSoundVolume >= 0)
-				alarm->setCustomProperty(APPNAME, VOLUME_PROPERTY, QString::number(mSoundVolume, 'f', 2));
+				alarm->setCustomProperty(APPNAME, VOLUME_PROPERTY,
+				              QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
+				                                             .arg(QString::number(mFadeVolume, 'f', 2))
+				                                             .arg(mFadeSeconds));
 			break;
 		case KAAlarm::PRE_ACTION_ALARM:
 			setProcedureAlarm(alarm, mPreAction);
@@ -1135,6 +1187,8 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mDefaultFont   = mDefaultFont;
 		al.mBeep          = mBeep;
 		al.mSoundVolume   = mSoundVolume;
+		al.mFadeVolume    = mFadeVolume;
+		al.mFadeSeconds   = mFadeSeconds;
 		al.mRepeatSound   = mRepeatSound;
 		al.mConfirmAck    = mConfirmAck;
 		al.mRepeatAtLogin = false;
@@ -2730,8 +2784,11 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	// KAlarm pre-1.1.1 LATECANCEL category with no parameter
 	static const QString LATE_CANCEL_CAT = QString::fromLatin1("LATECANCEL");
 
+	// KAlarm pre-1.3.0 TMPLDEFTIME category with no parameter
+	static const QString TEMPL_DEF_TIME_CAT = QString::fromLatin1("TMPLDEFTIME");
+
 	int version = calendar.KAlarmVersion();
-	if (version >= AlarmCalendar::KAlarmVersion(1,2,1))
+	if (version >= AlarmCalendar::KAlarmVersion(1,3,0))
 		return;
 
 	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting\n";
@@ -2740,6 +2797,7 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool pre_1_1_1 = (version < AlarmCalendar::KAlarmVersion(1,1,1));
 	bool pre_1_2_1 = (version < AlarmCalendar::KAlarmVersion(1,2,1));
+	bool pre_1_3_0 = (version < AlarmCalendar::KAlarmVersion(1,3,0));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::instance()->startOfDay();
@@ -2982,6 +3040,20 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			}
 		}
 
+		if (pre_1_3_0)
+		{
+			/*
+			 * It's a KAlarm pre-1.3.0 calendar file.
+			 * Convert simple TMPLDEFTIME category to TMPLAFTTIME:n where n = minutes after.
+			 */
+			QStringList::Iterator it;
+			while ((it = cats.find(TEMPL_DEF_TIME_CAT)) != cats.end())
+			{
+				cats.remove(it);
+				cats.append(QString("%1%2").arg(TEMPL_AFTER_TIME_CATEGORY).arg(0));
+			}
+		}
+
 		if (addLateCancel)
 			cats.append(QString("%1%2").arg(LATE_CANCEL_CATEGORY).arg(1));
 
@@ -2997,7 +3069,7 @@ void KAEvent::dumpDebug() const
 	if (!mTemplateName.isEmpty())
 	{
 		kdDebug(5950) << "-- mTemplateName:" << mTemplateName << ":\n";
-		kdDebug(5950) << "-- mTemplateDefaultTime:" << (mTemplateDefaultTime ? "true" : "false") << ":\n";
+		kdDebug(5950) << "-- mTemplateAfterTime:" << mTemplateAfterTime << ":\n";
 	}
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
@@ -3130,6 +3202,8 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mEmailSubject     = rhs.mEmailSubject;
 	mEmailAttachments = rhs.mEmailAttachments;
 	mSoundVolume      = rhs.mSoundVolume;
+	mFadeVolume       = rhs.mFadeVolume;
+	mFadeSeconds      = rhs.mFadeSeconds;
 	mActionType       = rhs.mActionType;
 	mCommandScript    = rhs.mCommandScript;
 	mCommandXterm     = rhs.mCommandXterm;
@@ -3209,7 +3283,16 @@ void KAAlarmEventBase::dumpDebug() const
 	if (mActionType == T_AUDIO)
 	{
 		if (mSoundVolume >= 0)
+		{
 			kdDebug(5950) << "-- mSoundVolume:" << mSoundVolume << ":\n";
+			if (mFadeVolume >= 0)
+			{
+				kdDebug(5950) << "-- mFadeVolume:" << mFadeVolume << ":\n";
+				kdDebug(5950) << "-- mFadeSeconds:" << mFadeSeconds << ":\n";
+			}
+			else
+				kdDebug(5950) << "-- mFadeVolume:-:\n";
+		}
 		else
 			kdDebug(5950) << "-- mSoundVolume:-:\n";
 		kdDebug(5950) << "-- mRepeatSound:" << (mRepeatSound ? "true" : "false") << ":\n";
