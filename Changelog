@@ -1,10 +1,11 @@
 KAlarm
 
-=== Version 0.8.1 (KDE 3.1) --- 14 Oct 2002 ===
+=== Version 0.8.1 (KDE 3.1) --- 16 Oct 2002 ===
 Adhere to KDE single/double click setting when clicking on alarm list.
 Fix possible loss of alarms if KAlarm has previously used another calendar file.
 Fix coordination between "At time" and "After time" values when they change.
 Always remove alarm deferral even when next recurrence triggers instead.
+When alarm triggers, replace any existing repeat-at-login alarm message window.
 Fix display of hour spin buttons in time edit spin boxes.
 Prevent time edit spin box buttons selecting the text.
 Clean up previous alarm list highlight properly when a new alarm is selected.
