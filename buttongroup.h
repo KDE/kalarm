@@ -38,11 +38,9 @@ class ButtonGroup : public QButtonGroup
 		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit buttonSet(id); }
 #if QT_VERSION < 300
 		void setInsideMargin(int) { }
-//??//		void addWidget(QWidget*, int stretch = 0, int alignment = 0);
 	protected:
 		virtual void childEvent(QChildEvent*);
 	private:
-		void init(Qt::Orientation);
 		int  defaultAlignment;
 #endif
 	signals:

@@ -32,72 +32,54 @@
 ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
 	: QButtonGroup(parent, name)
 #if QT_VERSION < 300
-	  , defaultAlignment(-1)
+	, defaultAlignment(-1)
 #endif
 {
-	setFrameStyle(QFrame::NoFrame);
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name)
 	: QButtonGroup(title, parent, name)
 #if QT_VERSION < 300
-	  , defaultAlignment(-1)
+	, defaultAlignment(-1)
 #endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name)
-#if QT_VERSION >= 300
 	: QButtonGroup(strips, orient, parent, name)
+#if QT_VERSION < 300
+	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
+#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
-#else
-	: QButtonGroup(parent, name)
-{
-	init(orient);
-}
-#endif
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name)
-#if QT_VERSION >= 300
 	: QButtonGroup(strips, orient, title, parent, name)
+#if QT_VERSION < 300
+	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
+#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
-#else
-	: QButtonGroup(title, parent, name)
-{
-	init(orient);
-}
 
-void ButtonGroup::init(Qt::Orientation orient)
-{
-	if (orient == Qt::Horizontal)
-	{
-		new QVBoxLayout(this, 0, KDialog::spacingHint());
-		defaultAlignment = Qt::AlignLeft;
-	}
-	else
-	{
-		new QHBoxLayout(this, 0, KDialog::spacingHint());
-		defaultAlignment = 0;
-	}
-	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
-}
-
-void ButtonGroup::addWidget(QWidget* w, int stretch, int alignment)
-{
-	if (defaultAlignment != -1)
-		((QBoxLayout*)layout())->addWidget(w, stretch, (alignment ? alignment : defaultAlignment));
-}
-
+#if QT_VERSION < 300
+/******************************************************************************
+ * In a vertical layout, this adds widgets left aligned instead of QT 2's
+ * centre aligned default.
+ */
 void ButtonGroup::childEvent(QChildEvent *ce)
 {
-???	QButtonGroup::childEvent(ce);
 	if (defaultAlignment != -1  &&  ce->inserted()  &&  ce->child()->isWidgetType())
-		addWidget(ce->child());
+	{
+		QWidget* child = (QWidget*)ce->child();
+		if (!child->isTopLevel())    //ignore dialogs etc.
+		{
+			((QBoxLayout*)layout())->addWidget(child, 0, defaultAlignment);
+			QApplication::postEvent(this, new QEvent(QEvent::LayoutHint));
+		}
+	}
 }
 #endif

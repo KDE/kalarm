@@ -29,7 +29,6 @@
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <qvbox.h>
-#include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qwidgetstack.h>
 #include <qframe.h>
@@ -87,7 +86,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), page, "recurGroup");
 #else
 	recurGroup = new QGroupBox(i18n("Recurrence Rule"), page, "recurGroup");
-	layout = new QVBoxLayout(recurGroup, 2*KDialog::marginHint(), KDialog::spacingHint());
+	layout = new QVBoxLayout(recurGroup, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(page->fontMetrics().lineSpacing()/2);
 	QBoxLayout* boxLayout = new QHBoxLayout(layout);
 #endif
@@ -144,16 +143,6 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	yearlyButton->setFixedSize(yearlyButton->sizeHint());
 	QWhatsThis::add(yearlyButton,
 	      i18n("Set the alarm repetition interval to the number of years entered"));
-
-#if KDE_VERSION < 290
-	ruleButtonGroup->addWidget(recurEveryLabel);
-	ruleButtonGroup->addWidget(recurFrequencyStack);
-	ruleButtonGroup->addWidget(subdailyButton);
-	ruleButtonGroup->addWidget(dailyButton);
-	ruleButtonGroup->addWidget(weeklyButton);
-	ruleButtonGroup->addWidget(monthlyButton);
-	ruleButtonGroup->addWidget(yearlyButton);
-#endif
 
 	subdailyButtonId = ruleButtonGroup->id(subdailyButton);
 	dailyButtonId    = ruleButtonGroup->id(dailyButton);

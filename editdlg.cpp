@@ -51,6 +51,7 @@
 #include <kmessagebox.h>
 #include <kwinmodule.h>
 #include <kstandarddirs.h>
+#include <kstdguiitem.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -184,12 +185,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	recurRadio = new QRadioButton(i18n("Rec&ur"), repeatGroup);
 	recurRadio->setFixedSize(recurRadio->sizeHint());
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
-
-#if KDE_VERSION < 290
-	repeatGroup->addWidget(noRepeatRadio);
-	repeatGroup->addWidget(repeatAtLoginRadio);
-	repeatGroup->addWidget(recurRadio);
-#endif
 
 	// Late display checkbox - default = allow late display
 	lateCancel = new QCheckBox(i18n("Cancel &if late"), mainPage);
@@ -911,7 +906,8 @@ bool EditAlarmDlg::checkText(QString& result)
 				default:
 					break;
 			}
-			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext)) == KMessageBox::Cancel)
+			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null, KStdGuiItem::cont().text())    // explicit button text is for KDE2 compatibility
+			    == KMessageBox::Cancel)
 				return false;
 		}
 		result = alarmtext;
