@@ -70,7 +70,7 @@ class RecurrenceEdit : public QFrame
 		QWidget*      checkData(const QDateTime& startDateTime, bool& noTime) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		void          setStartDate(const QDate&);
-		void          setEndDate(const QDate&);
+		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
 

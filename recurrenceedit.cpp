@@ -910,9 +910,10 @@ void RecurrenceEdit::setStartDate(const QDate& start)
 	mYearRuleNthDayEntry->setCurrentItem(day - 1);*/
 }
 
-void RecurrenceEdit::setEndDate(const QDate& end)
+void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 {
-	mEndDateEdit->setDate(end);
+	if (!mEndDateButton->isOn())
+		mEndDateEdit->setDate(end);
 }
 
 void RecurrenceEdit::setEndDateTime(const DateTime& end)
