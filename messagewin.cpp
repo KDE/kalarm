@@ -707,7 +707,7 @@ void MessageWin::checkAudioPlay()
 		else
 		{
 			// The file is slow to load, so attempt to replay the PlayObject
-			static Arts::poTime t0((long)0, (long)0, 0, string());
+			static Arts::poTime t0((long)0, (long)0, 0, std::string());
 			Arts::poTime current = mPlayObject->currentTime();
 			if (current.seconds || current.ms)
 				mPlayObject->seek(t0);
