@@ -36,6 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
@@ -398,10 +399,11 @@ void RecurrenceEdit::initWeekly()
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = offset_to_dayOfWeek(i);
-		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
+		mWeekRuleDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
 		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignLeft);
@@ -482,9 +484,10 @@ void RecurrenceEdit::initYearly()
 	// List the months of the year.
 	QWidget* box = new QWidget(mYearRuleButtonGroup);   // this is to control the QWhatsThis text display area
 	QGridLayout* mgrid = new QGridLayout(box, 4, 3, 0, KDialog::spacingHint());
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 12;  ++i)
 	{
-		mYearRuleMonthBox[i] = new CheckBox(KGlobal::locale()->monthName(i + 1), box);
+		mYearRuleMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
 		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
 		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
 		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignLeft);
@@ -582,10 +585,11 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 
 	*dayCombo = new ComboBox(false, parent);
 	ComboBox* dc = *dayCombo;
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (i = 0;  i < 7;  ++i)
 	{
 		int day = offset_to_dayOfWeek(i);
-		dc->insertItem(KGlobal::locale()->weekDayName(day));
+		dc->insertItem(calendar->weekDayName(day));
 	}
 	dc->setReadOnly(mReadOnly);
 	QWhatsThis::add(dc,
