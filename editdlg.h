@@ -34,6 +34,7 @@ class QButtonGroup;
 class QGroupBox;
 class QComboBox;
 class QTabWidget;
+class QVBox;
 class QHBox;
 class ColourCombo;
 class FontColourButton;
@@ -41,19 +42,18 @@ class ComboBox;
 class ButtonGroup;
 class TimeSpinBox;
 class RadioButton;
-class PushButton;
 class CheckBox;
+class LateCancelSelector;
 class AlarmTimeWidget;
 class RecurrenceEdit;
 class SoundPicker;
 class Reminder;
 class SpecialActionsButton;
+class RepetitionButton;
 class LineEdit;
 class TextEdit;
 
-/**
- * EditAlarmDlg: A dialog for the input of an alarm's details.
- */
+
 class EditAlarmDlg : public KDialogBase
 {
 		Q_OBJECT
@@ -61,166 +61,170 @@ class EditAlarmDlg : public KDialogBase
 		enum MessageType { MESSAGE, FILE };
 
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0, const char* name = 0,
-                             const KAEvent* = 0, bool readOnly = false);
+                     const KAEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
-		bool         getEvent(KAEvent&);
-		void         setAction(KAEvent::Action, const QString& text);
+		bool            getEvent(KAEvent&);
+		void            setAction(KAEvent::Action, const QString& text);
 
 		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
-		static CheckBox*    createLateCancelCheckbox(QWidget* parent, const char* name = 0);
-		static QString i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
-		static QString i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
-		static QString i18n_CancelIfLate();       // plain text of 'Cancel if late' checkbox
-		static QString i18n_l_CancelIfLate();     // text of 'Cancel if late' checkbox, with 'L' shortcut
-		static QString i18n_n_CancelIfLate();     // text of 'Cancel if late' checkbox, with 'N' shortcut
-		static QString i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
-		static QString i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
-		static QString i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
+
+		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
+		static QString  i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
+		static QString  i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
+		static QString  i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
+		static QString  i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
 
 	protected:
-		virtual void resizeEvent(QResizeEvent*);
-		virtual void showEvent(QShowEvent*);
+		virtual void    resizeEvent(QResizeEvent*);
+		virtual void    showEvent(QShowEvent*);
 	protected slots:
-		virtual void slotOk();
-		virtual void slotCancel();
-		virtual void slotTry();
-		virtual void slotDefault();   // Load Template
+		virtual void    slotOk();
+		virtual void    slotCancel();
+		virtual void    slotTry();
+		virtual void    slotDefault();   // Load Template
 	private slots:
-		void         slotRecurTypeChange(int repeatType);
-		void         slotRecurFrequencyChange();
-		void         slotAlarmTypeClicked(int id);
-		void         slotEditDeferral();
-		void         slotBrowseFile();
-		void         slotFontColourSelected();
-		void         slotBgColourSelected(const QColor&);
-		void         openAddressBook();
-		void         slotAddAttachment();
-		void         slotRemoveAttachment();
-		void         slotShowMainPage();
-		void         slotShowRecurrenceEdit();
-		void         slotAnyTimeToggled(bool anyTime);
-		void         slotTemplateTimeType(int id);
+		void            slotRecurTypeChange(int repeatType);
+		void            slotRecurFrequencyChange();
+		void            slotAlarmTypeClicked(int id);
+		void            slotEditDeferral();
+		void            slotBrowseFile();
+		void            slotFontColourSelected();
+		void            slotBgColourSelected(const QColor&);
+		void            openAddressBook();
+		void            slotAddAttachment();
+		void            slotRemoveAttachment();
+		void            slotShowMainPage();
+		void            slotShowRecurrenceEdit();
+		void            slotAnyTimeToggled(bool anyTime);
+		void            slotTemplateTimeType(int id);
+		void            slotSetSimpleRepetition();
 
 	private:
-		void              initialise(const KAEvent*);
-		void              setReadOnly();
-		KAEvent::Action   getAlarmType() const;
-		int               getAlarmFlags() const;
-		bool              checkText(QString& result, bool showErrorMessage = true) const;
-		void              setSoundPicker();
-		bool              checkEmailData();
+		void            initialise(const KAEvent*);
+		void            setReadOnly();
+		void            setEvent(KAEvent&, const QString& text, bool trial);
+		KAEvent::Action getAlarmType() const;
+		int             getAlarmFlags() const;
+		bool            checkText(QString& result, bool showErrorMessage = true) const;
+		void            setSoundPicker();
+		void            setRecurTabTitle(const KAEvent* = 0);
+		bool            checkEmailData();
 
-		void              initDisplayAlarms(QWidget* parent);
-		void              initCommand(QWidget* parent);
-		void              initEmail(QWidget* parent);
-		void              saveState(const KAEvent*);
-		bool              stateChanged() const;
+		void            initDisplayAlarms(QWidget* parent);
+		void            initCommand(QWidget* parent);
+		void            initEmail(QWidget* parent);
+		void            saveState(const KAEvent*);
+		bool            stateChanged() const;
 
-		QTabWidget*       mTabs;                // the tabs in the dialog
-		int               mMainPageIndex;
-		int               mRecurPageIndex;
-		bool              mMainPageShown;            // true once the main tab has been displayed
-		bool              mRecurPageShown;           // true once the recurrence tab has been displayed
-		bool              mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
+		QTabWidget*         mTabs;                // the tabs in the dialog
+		int                 mMainPageIndex;
+		int                 mRecurPageIndex;
+		bool                mMainPageShown;            // true once the main tab has been displayed
+		bool                mRecurPageShown;           // true once the recurrence tab has been displayed
+		bool                mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
 
-		QButtonGroup*     mActionGroup;
-		RadioButton*      mMessageRadio;
-		RadioButton*      mCommandRadio;
-		RadioButton*      mFileRadio;
-		RadioButton*      mEmailRadio;
-		QWidgetStack*     mAlarmTypeStack;
+		QButtonGroup*       mActionGroup;
+		RadioButton*        mMessageRadio;
+		RadioButton*        mCommandRadio;
+		RadioButton*        mFileRadio;
+		RadioButton*        mEmailRadio;
+		QWidgetStack*       mAlarmTypeStack;
 
 		// Templates
-		QLineEdit*        mTemplateName;
-		ButtonGroup*      mTemplateTimeGroup;
-		RadioButton*      mTemplateDefaultTime; // no alarm time is specified
-		RadioButton*      mTemplateAnyTime;     // alarms have date only, no time
-		RadioButton*      mTemplateUseTime;     // an alarm time is specified
-		TimeSpinBox*      mTemplateTime;        // the alarm time which is specified
+		QLineEdit*          mTemplateName;
+		ButtonGroup*        mTemplateTimeGroup;
+		RadioButton*        mTemplateDefaultTime; // no alarm time is specified
+		RadioButton*        mTemplateAnyTime;     // alarms have date only, no time
+		RadioButton*        mTemplateUseTime;     // an alarm time is specified
+		TimeSpinBox*        mTemplateTime;        // the alarm time which is specified
 
 		// Display alarm options widgets
-		QFrame*           mDisplayAlarmsFrame;
-		QHBox*            mFileBox;
-		QHBox*            mFilePadding;
-		SoundPicker*      mSoundPicker;
-		CheckBox*         mConfirmAck;
-		FontColourButton* mFontColourButton;
-		ColourCombo*      mBgColourChoose;
+		QFrame*             mDisplayAlarmsFrame;
+		QHBox*              mFileBox;
+		QHBox*              mFilePadding;
+		SoundPicker*        mSoundPicker;
+		CheckBox*           mConfirmAck;
+		FontColourButton*   mFontColourButton;
+		ColourCombo*        mBgColourChoose;
 		SpecialActionsButton* mSpecialActionsButton;
-		Reminder*         mReminder;
-		bool              mReminderDeferral;
-		bool              mReminderArchived;
+		Reminder*           mReminder;
+		bool                mReminderDeferral;
+		bool                mReminderArchived;
 		// Text message alarm widgets
-		TextEdit*         mTextMessageEdit;    // text message edit box
+		TextEdit*           mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
-		LineEdit*         mFileMessageEdit;    // text file URL edit box
-		QPushButton*      mFileBrowseButton;   // text file browse button
-		QString           mFileDefaultDir;     // default directory for browse button
+		LineEdit*           mFileMessageEdit;    // text file URL edit box
+		QPushButton*        mFileBrowseButton;   // text file browse button
+		QString             mFileDefaultDir;     // default directory for browse button
 		// Command alarm widgets
-		QFrame*           mCommandFrame;
-		LineEdit*         mCommandMessageEdit; // command edit box
+		QFrame*             mCommandFrame;
+		LineEdit*           mCommandMessageEdit; // command edit box
 		// Email alarm widgets
-		QFrame*           mEmailFrame;
-		LineEdit*         mEmailToEdit;
-		QPushButton*      mEmailAddressButton; // email open address book button
-		QLineEdit*        mEmailSubjectEdit;
-		TextEdit*         mEmailMessageEdit;   // email body edit box
-		QComboBox*        mEmailAttachList;
-		QPushButton*      mEmailAddAttachButton;
-		QPushButton*      mEmailRemoveButton;
-		CheckBox*         mEmailBcc;
-		QString           mAttachDefaultDir;
+		QFrame*             mEmailFrame;
+		LineEdit*           mEmailToEdit;
+		QPushButton*        mEmailAddressButton; // email open address book button
+		QLineEdit*          mEmailSubjectEdit;
+		TextEdit*           mEmailMessageEdit;   // email body edit box
+		QComboBox*          mEmailAttachList;
+		QPushButton*        mEmailAddAttachButton;
+		QPushButton*        mEmailRemoveButton;
+		CheckBox*           mEmailBcc;
+		QString             mAttachDefaultDir;
 
-		QGroupBox*        mDeferGroup;
-		QLabel*           mDeferTimeLabel;
-		QPushButton*      mDeferChangeButton;
+		QGroupBox*          mDeferGroup;
+		QLabel*             mDeferTimeLabel;
+		QPushButton*        mDeferChangeButton;
 
-		AlarmTimeWidget*  mTimeWidget;
-		CheckBox*         mLateCancel;
+		AlarmTimeWidget*    mTimeWidget;
+		LateCancelSelector* mLateCancel;
 
-		QLabel*           mRecurrenceText;
-		RecurrenceEdit*   mRecurrenceEdit;
+		RepetitionButton*   mSimpleRepetition;
+		QLabel*             mRecurrenceText;
+		RecurrenceEdit*     mRecurrenceEdit;
 
-		QString           mAlarmMessage;       // message text/file name/command/email message
-		DateTime          mAlarmDateTime;
-		DateTime          mDeferDateTime;
-		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
-		QStringList       mEmailAttachments;   // list of email attachment file names
-		int               mDeferGroupHeight;   // height added by deferred time widget
-		bool              mTemplate;           // editing an alarm template
-		bool              mExpiredRecurrence;  // initially a recurrence which has expired
-		mutable bool      mChanged;            // controls other than deferral have changed since dialog was displayed
-		mutable bool      mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
-		bool              mDesiredReadOnly;    // the specified read-only status of the dialogue
-		bool              mReadOnly;           // the actual read-only status of the dialogue
+		QString             mAlarmMessage;       // message text/file name/command/email message
+		DateTime            mAlarmDateTime;
+		DateTime            mDeferDateTime;
+		EmailAddressList    mEmailAddresses;     // list of addresses to send email to
+		QStringList         mEmailAttachments;   // list of email attachment file names
+		int                 mDeferGroupHeight;   // height added by deferred time widget
+		bool                mTemplate;           // editing an alarm template
+		bool                mExpiredRecurrence;  // initially a recurrence which has expired
+		mutable bool        mChanged;            // controls other than deferral have changed since dialog was displayed
+		mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
+		bool                mDesiredReadOnly;    // the specified read-only status of the dialogue
+		bool                mReadOnly;           // the actual read-only status of the dialogue
 
 		// Initial state of all controls
-		KAEvent*          mSavedEvent;
-		QString           mSavedTemplateName;   // mTemplateName value
-		QButton*          mSavedTemplateTimeType; // selected ID in mTemplateTimeGroup
-		QTime             mSavedTemplateTime;   // mTemplateTime value
-		QButton*          mSavedTypeRadio;      // mMessageRadio, etc
-		bool              mSavedBeep;           // mSoundPicker beep status
-		bool              mSavedRepeatSound;    // mSoundPicker repeat status
-		QString           mSavedSoundFile;      // mSoundPicker sound file
-		float             mSavedSoundVolume;    // mSoundPicker volume
-		bool              mSavedConfirmAck;     // mConfirmAck status
-		QFont             mSavedFont;           // mFontColourButton font
-		QColor            mSavedBgColour;       // mBgColourChoose selection
-		QColor            mSavedFgColour;       // mFontColourButton foreground colour
-		QString           mSavedPreAction;      // mSpecialActionsButton pre-alarm action
-		QString           mSavedPostAction;     // mSpecialActionsButton post-alarm action
-		int               mSavedReminder;       // mReminder value
-		bool              mSavedOnceOnly;       // mReminder once-only status
-		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
-		QString           mSavedEmailTo;        // mEmailToEdit value
-		QString           mSavedEmailSubject;   // mEmailSubjectEdit value
-		QStringList       mSavedEmailAttach;    // mEmailAttachList values
-		bool              mSavedEmailBcc;       // mEmailBcc status
-		DateTime          mSavedDateTime;       // mTimeWidget value
-		bool              mSavedLateCancel;     // mLateCancel status
-		int               mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
+		KAEvent*            mSavedEvent;
+		QString             mSavedTemplateName;   // mTemplateName value
+		QButton*            mSavedTemplateTimeType; // selected ID in mTemplateTimeGroup
+		QTime               mSavedTemplateTime;   // mTemplateTime value
+		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
+		bool                mSavedBeep;           // mSoundPicker beep status
+		bool                mSavedRepeatSound;    // mSoundPicker repeat status
+		QString             mSavedSoundFile;      // mSoundPicker sound file
+		float               mSavedSoundVolume;    // mSoundPicker volume
+		bool                mSavedConfirmAck;     // mConfirmAck status
+		QFont               mSavedFont;           // mFontColourButton font
+		QColor              mSavedBgColour;       // mBgColourChoose selection
+		QColor              mSavedFgColour;       // mFontColourButton foreground colour
+		QString             mSavedPreAction;      // mSpecialActionsButton pre-alarm action
+		QString             mSavedPostAction;     // mSpecialActionsButton post-alarm action
+		int                 mSavedReminder;       // mReminder value
+		bool                mSavedOnceOnly;       // mReminder once-only status
+		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
+		QString             mSavedEmailTo;        // mEmailToEdit value
+		QString             mSavedEmailSubject;   // mEmailSubjectEdit value
+		QStringList         mSavedEmailAttach;    // mEmailAttachList values
+		bool                mSavedEmailBcc;       // mEmailBcc status
+		DateTime            mSavedDateTime;       // mTimeWidget value
+		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
+		int                 mSavedRepeatInterval; // alarm repetition interval (via mSimpleRepetition button)
+		int                 mSavedRepeatCount;    // alarm repetition count (via mSimpleRepetition button)
+		int                 mSavedLateCancel;     // mLateCancel value
+		bool                mSavedAutoClose;      // mLateCancel->isAutoClose() value
 };
 
 #endif // EDITDLG_H

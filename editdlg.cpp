@@ -65,10 +65,12 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "latecancel.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
 #include "reminder.h"
+#include "repetition.h"
 #include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
@@ -82,20 +84,18 @@ using namespace KCal;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
 
+inline QString recurText(const KAEvent& event)
+{
+	return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+}
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
 QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
-QString EditAlarmDlg::i18n_CancelIfLate()       { return i18n("Cancel if late"); }
-QString EditAlarmDlg::i18n_n_CancelIfLate()     { return i18n("Ca&ncel if late"); }
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
-#ifdef NEW_CANCEL_IF_LATE
-QString EditAlarmDlg::i18n_AutoCloseWin()       { return i18n("Auto-close window after this time"); }
-QString EditAlarmDlg::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancelation time"); }
-#endif
 
 
 /******************************************************************************
@@ -154,10 +154,11 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
 	// Recurrence tab
-	QVBox* recurPage = new QVBox(mTabs);
+	QVBox* recurTab = new QVBox(mTabs);
 	mainPageBox->setSpacing(spacingHint());
-	mTabs->addTab(recurPage, i18n("&Recurrence"));
-	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurPage, "recurPage");
+	mTabs->addTab(recurTab, i18n("&Recurrence"));
+	mRecurPageIndex = 1;
+	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurTab, "recurPage");
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
 	connect(mRecurrenceEdit, SIGNAL(frequencyChanged()), SLOT(slotRecurFrequencyChange()));
@@ -271,35 +272,36 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
-		                                  mainPage, "timeGroup");
+		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, mainPage, "timeGroup");
 		connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-		layout->addWidget(mTimeWidget);
+		topLayout->addWidget(mTimeWidget);
 	}
 
-	layout->addSpacing(marginHint() - spacingHint());
-	QBoxLayout* vlayout = new QVBoxLayout(layout);
-	layout->addStretch();
-
 	// Recurrence type display
+	layout = new QHBoxLayout(topLayout);
 	QHBox* box = new QHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
-#ifdef SIMPLE_REP
 	QWhatsThis::add(box,
 	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
-#endif
-	QWhatsThis::add(box,
-	      i18n("How often the alarm recurs.\nThe alarm's recurrence is configured in the Recurrence tab."));
 	box->setFixedHeight(box->sizeHint().height());
-	vlayout->addWidget(box, 0, Qt::AlignLeft);
+	layout->addWidget(box);
+	layout->addSpacing(2*KDialog::spacingHint());
 
-	// Late display checkbox - default = allow late display
-	mLateCancel = createLateCancelCheckbox(mainPage);
-	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	vlayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
+	// Simple repetition button
+	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
+	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
+	connect(mSimpleRepetition, SIGNAL(needsInitialisation()), SLOT(slotSetSimpleRepetition()));
+	connect(mSimpleRepetition, SIGNAL(changed()), SLOT(slotRecurFrequencyChange()));
+	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
+	layout->addWidget(mSimpleRepetition);
+	layout->addStretch();
+
+	// Late cancel selector - default = allow late display
+	mLateCancel = new LateCancelSelector(true, mainPage);
+	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -518,7 +520,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		if (mTemplate)
 			mTemplateName->setText(event->templateName());
 		bool recurs = event->recurs();
-		if (recurs  &&  !mTemplate  &&  event->deferred())
+		if ((recurs || event->repeatCount())  &&  !mTemplate  &&  event->deferred())
 		{
 			deferGroupVisible = true;
 			mDeferDateTime = event->deferDateTime();
@@ -540,7 +542,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			                                    useTime ? mTemplateUseTime : mTemplateAnyTime);
 			mTemplateTimeGroup->setButton(button);
 			if (!noTime && useTime)
-				mTemplateTime->setTime(event->mainDateTime().time());
+				mTemplateTime->setValue(event->mainDateTime().time());
 		}
 		else
 		{
@@ -568,11 +570,16 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			}
 		}
 
-		setAction(event->action(), event->cleanText());
-		if (event->action() == KAEvent::EMAIL)
+		KAEvent::Action action = event->action();
+		setAction(action, event->cleanText());
+		if (action == KAEvent::EMAIL)
 			mEmailAttachList->insertStringList(event->emailAttachments());
 
-		mLateCancel->setChecked(event->lateCancel());
+		mLateCancel->setMinutes(event->lateCancel(), event->startDateTime().isDateOnly(),
+		                        TimePeriod::HOURS_MINUTES);
+		mLateCancel->showAutoClose(action == KAEvent::MESSAGE || action == KAEvent::FILE);
+		mLateCancel->setAutoClose(event->autoClose());
+		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		mConfirmAck->setChecked(event->confirmAck());
 		int reminder = event->reminder();
 		if (!reminder  &&  event->reminderDeferral()  &&  !recurs)
@@ -590,7 +597,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->enableOnceOnly(event->recurs());
 		if (mSpecialActionsButton)
 			mSpecialActionsButton->setActions(event->preAction(), event->postAction());
-		mRecurrenceText->setText(event->recurrenceText());
+		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
+		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->repeatSound());
 		mEmailToEdit->setText(event->emailAddresses(", "));
@@ -621,7 +629,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		else
 			mTimeWidget->setDateTime(defaultTime);
 		mActionGroup->setButton(mActionGroup->id(mMessageRadio));
-		mLateCancel->setChecked(preferences->defaultLateCancel());
+		mLateCancel->setMinutes((preferences->defaultLateCancel() ? 1 : 0), false, TimePeriod::HOURS_MINUTES);
+		mLateCancel->showAutoClose(true);
+		mLateCancel->setAutoClose(preferences->defaultAutoClose());
+		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		mReminder->setMinutes(0, false);
 		mReminder->enableOnceOnly(false);
@@ -663,6 +674,7 @@ void EditAlarmDlg::setReadOnly()
 		mDeferChangeButton->hide();
 	else
 		mDeferChangeButton->show();
+	mSimpleRepetition->setReadOnly(mReadOnly);
 
 	// Message alarm controls
 	mTextMessageEdit->setReadOnly(mReadOnly);
@@ -765,44 +777,6 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
 	return widget;
 }
 
-#ifdef NEW_CANCEL_IF_LATE
-/******************************************************************************
- * Create a "cancel if late" selector.
- */
-TimeSelector* EditAlarmDlg::createLateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)
-{
-	QString whatsThis = i18n("If checked, the alarm will be canceled if it cannot be triggered within the "
-	                         "specified period after its scheduled time. Possible reasons for not triggering "
-	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
-	                         "If unchecked, the alarm will be triggered at the first opportunity after "
-	                         "its scheduled time, regardless of how late it is.");
-	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
-	QWhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
-	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
-
-	TimeSelector* widget = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
-	                                        whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
-	                                        allowHourMinute, parent, name);
-	QWhatsThis::add(mAutoClose, i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));
-	return widget;
-}
-#else
-/******************************************************************************
- * Create a "cancel if late" checkbox.
- */
-CheckBox* EditAlarmDlg::createLateCancelCheckbox(QWidget* parent, const char* name)
-{
-	CheckBox* widget = new CheckBox(i18n_n_CancelIfLate(), parent, name);
-	QWhatsThis::add(widget,
-	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
-	           "minute of the specified time. Possible reasons for not triggering include your "
-	           "being logged off, X not running, or the alarm daemon not running.\n\n"
-	           "If unchecked, the alarm will be triggered at the first opportunity after "
-	           "the specified time, regardless of how late it is."));
-	return widget;
-}
-#endif
-
 /******************************************************************************
  * Save the state of all controls.
  */
@@ -830,8 +804,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedOnceOnly       = mReminder->isOnceOnly();
 	if (mSpecialActionsButton)
 	{
-		mSavedPreAction      = mSpecialActionsButton->preAction();
-		mSavedPostAction     = mSpecialActionsButton->postAction();
+		mSavedPreAction  = mSpecialActionsButton->preAction();
+		mSavedPostAction = mSpecialActionsButton->postAction();
 	}
 	checkText(mSavedTextFileCommandMessage, false);
 	mSavedEmailTo        = mEmailToEdit->text();
@@ -842,8 +816,11 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedEmailBcc       = mEmailBcc->isChecked();
 	if (mTimeWidget)
 		mSavedDateTime = mTimeWidget->getDateTime(false, false);
-	mSavedLateCancel     = mLateCancel->isChecked();
+	mSavedLateCancel     = mLateCancel->minutes();
+	mSavedAutoClose      = mLateCancel->isAutoClose();
 	mSavedRecurrenceType = mRecurrenceEdit->repeatType();
+	mSavedRepeatInterval = mSimpleRepetition->interval();
+	mSavedRepeatCount    = mSimpleRepetition->count();
 }
 
 /******************************************************************************
@@ -872,9 +849,11 @@ bool EditAlarmDlg::stateChanged() const
 		if (mSavedDateTime != mTimeWidget->getDateTime(false, false))
 			return true;
 	if (mSavedTypeRadio        != mActionGroup->selected()
-	||  mSavedLateCancel       != mLateCancel->isChecked()
+	||  mSavedLateCancel       != mLateCancel->minutes()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
-	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
+	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType()
+	||  mSavedRepeatInterval   != mSimpleRepetition->interval()
+	||  mSavedRepeatCount      != mSimpleRepetition->count())
 		return true;
 	if (mMessageRadio->isOn()  ||  mFileRadio->isOn())
 	{
@@ -884,7 +863,8 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedFgColour   != mFontColourButton->fgColour()
 		||  mSavedBgColour   != mBgColourChoose->color()
 		||  mSavedReminder   != mReminder->minutes()
-		||  mSavedOnceOnly   != mReminder->isOnceOnly())
+		||  mSavedOnceOnly   != mReminder->isOnceOnly()
+		||  mSavedAutoClose  != mLateCancel->isAutoClose())
 			return true;
 		if (mSpecialActionsButton)
 		{
@@ -924,7 +904,7 @@ bool EditAlarmDlg::stateChanged() const
 }
 
 /******************************************************************************
- * Get the currently entered message data.
+ * Get the currently entered dialogue data.
  * The data is returned in the supplied KAEvent instance.
  * Reply = false if the only change has been to an existing deferral.
  */
@@ -933,31 +913,61 @@ bool EditAlarmDlg::getEvent(KAEvent& event)
 	if (mChanged)
 	{
 		// It's a new event, or the edit controls have changed
-		QDateTime dt;
+		setEvent(event, mAlarmMessage, false);
+		return true;
+	}
+
+	// Only the deferral time may have changed
+	event = *mSavedEvent;
+	if (mOnlyDeferred)
+	{
+		// Just modify the original event, to avoid expired recurring events
+		// being returned as rubbish.
+		if (mDeferDateTime.isValid())
+			event.defer(mDeferDateTime, event.reminderDeferral(), false);
+		else
+			event.cancelDefer();
+	}
+	return false;
+}
+
+/******************************************************************************
+*  Extract the data in the dialogue and set up a KAEvent from it.
+*  If 'trial' is true, the event is set up for a simple one-off test, ignoring
+*  recurrence, reminder, template etc. data.
+*/
+void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
+{
+	QDateTime dt;
+	if (!trial)
+	{
 		if (!mTemplate)
 			dt = mAlarmDateTime.dateTime();
 		else if (mTemplateUseTime->isOn())
 			dt.setTime(mTemplateTime->time());
-		KAEvent::Action type = getAlarmType();
-		event.set(dt, mAlarmMessage, mBgColourChoose->color(),
-		          mFontColourButton->fgColour(), mFontColourButton->font(), type, getAlarmFlags());
-		switch (type)
-		{
-			case KAEvent::MESSAGE:
-			case KAEvent::FILE:
-				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
+	}
+	KAEvent::Action type = getAlarmType();
+	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),
+			  type, (trial ? 0 : mLateCancel->minutes()), getAlarmFlags());
+	switch (type)
+	{
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:
+			event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
+			if (!trial)
 				event.setReminder(mReminder->minutes(), mReminder->isOnceOnly());
-				if (mSpecialActionsButton)
-					event.setActions(mSpecialActionsButton->preAction(),
-					                 mSpecialActionsButton->postAction());
-				break;
-			case KAEvent::EMAIL:
-				event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
-				break;
-			case KAEvent::COMMAND:
-			default:
-				break;
-		}
+			if (mSpecialActionsButton)
+				event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
+			break;
+		case KAEvent::EMAIL:
+			event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
+			break;
+		case KAEvent::COMMAND:
+		default:
+			break;
+	}
+	if (!trial)
+	{
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
@@ -982,23 +992,11 @@ bool EditAlarmDlg::getEvent(KAEvent& event)
 					event.defer(mDeferDateTime, deferReminder, false);
 			}
 		}
+		if (mSimpleRepetition->count())
+			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mTemplate)
 			event.setTemplate(mTemplateName->text(), mTemplateDefaultTime->isOn());
-		return true;
 	}
-
-	// Only the deferral time may have changed
-	event = *mSavedEvent;
-	if (mOnlyDeferred)
-	{
-		// Just modify the original event, to avoid expired recurring events
-		// being returned as rubbish.
-		if (mDeferDateTime.isValid())
-			event.defer(mDeferDateTime, event.reminderDeferral(), false);
-		else
-			event.cancelDefer();
-	}
-	return false;
 }
 
 /******************************************************************************
@@ -1009,8 +1007,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
 	return (displayAlarm && mSoundPicker->beep()          ? KAEvent::BEEP : 0)
 	     | (displayAlarm && mSoundPicker->repeat()        ? KAEvent::REPEAT_SOUND : 0)
-	     | (mLateCancel->isChecked()                      ? KAEvent::LATE_CANCEL : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
+	     | (displayAlarm && mLateCancel->isAutoClose()    ? KAEvent::AUTO_CLOSE : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
@@ -1079,10 +1077,12 @@ void EditAlarmDlg::slotOk()
 			accept();
 		return;
 	}
+	RecurrenceEdit::RepeatType recurType = mRecurrenceEdit->repeatType();
 	if (mTimeWidget
-	&&  mTabs->currentPageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	&&  mTabs->currentPageIndex() == mRecurPageIndex  &&  recurType == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();    // does it recur other than at login?
+	bool repeated = mSimpleRepetition->count();
 	if (mTemplate)
 	{
 		// Check that the template name is not blank and is unique
@@ -1106,7 +1106,7 @@ void EditAlarmDlg::slotOk()
 	else
 	{
 		QWidget* errWidget;
-		mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
+		mAlarmDateTime = mTimeWidget->getDateTime(!(timedRecurrence || repeated), false, &errWidget);
 		if (errWidget)
 		{
 			// It's more than just an existing deferral being changed, so the time matters
@@ -1132,7 +1132,7 @@ void EditAlarmDlg::slotOk()
 				getEvent(event);     // this may adjust mAlarmDateTime
 				if ((mAlarmDateTime.date() < now.date()
 				     ||  !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
-				&&  event.nextOccurrence(now, mAlarmDateTime) == KAEvent::NO_OCCURRENCE)
+				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return;
@@ -1149,7 +1149,8 @@ void EditAlarmDlg::slotOk()
 			return;
 		}
 	}
-	if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
+	int longestRecurInterval = -1;
+	if (recurType != RecurrenceEdit::NO_RECUR)
 	{
 		int reminder = mReminder->minutes();
 		if (reminder)
@@ -1158,8 +1159,8 @@ void EditAlarmDlg::slotOk()
 			mRecurrenceEdit->updateEvent(event, false);
 			if (!mReminder->isOnceOnly())
 			{
-				int minutes = event.longestRecurrenceInterval();
-				if (minutes  &&  reminder >= minutes)
+				longestRecurInterval = event.longestRecurrenceInterval();
+				if (longestRecurInterval  &&  reminder >= longestRecurInterval)
 				{
 					mTabs->setCurrentPage(mMainPageIndex);
 					mReminder->setFocusOnCount();
@@ -1170,21 +1171,38 @@ void EditAlarmDlg::slotOk()
 			}
 		}
 	}
-#ifdef SIMPLE_REP
-	if (mSimpleRepetition->count() * mSimpleRepetition->interval() >= longestRecurInterval)
+	if (mSimpleRepetition->count())
 	{
-		KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval minus any reminder period"));
-		mSimpleRepetition->activate();   // display the alarm repetition dialog again
-		return;
+		switch (recurType)
+		{
+			case RecurrenceEdit::AT_LOGIN:    // alarm repeat not allowed
+				mSimpleRepetition->set(0, 0);
+				break;
+			default:          // repeat duration must be less than recurrence interval
+				if (longestRecurInterval < 0)
+				{
+					KAEvent event;
+					mRecurrenceEdit->updateEvent(event, false);
+					longestRecurInterval = event.longestRecurrenceInterval();
+				}
+				if (mSimpleRepetition->count() * mSimpleRepetition->interval() >= longestRecurInterval - mReminder->minutes())
+				{
+					KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval minus any reminder period"));
+					mSimpleRepetition->activate();   // display the alarm repetition dialog again
+					return;
+				}
+				// fall through to NO_RECUR
+			case RecurrenceEdit::NO_RECUR:    // no restriction on repeat duration
+				if (mSimpleRepetition->interval() % 1440
+				&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
+				{
+					KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
+					mSimpleRepetition->activate();   // display the alarm repetition dialog again
+					return;
+				}
+				break;
+		}
 	}
-	if (mSimpleRepetition->interval() % 1440
-	&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
-	{
-		KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
-		mSimpleRepetition->activate();   // display the alarm repetition dialog again
-		return;
-	}
-#endif
 	if (checkText(mAlarmMessage))
 		accept();
 }
@@ -1206,12 +1224,7 @@ void EditAlarmDlg::slotTry()
 				return;
 		}
 		KAEvent event;
-		event.set(QDateTime(), text, mBgColourChoose->color(), mFontColourButton->fgColour(),
-		          mFontColourButton->font(), getAlarmType(), getAlarmFlags());
-		event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
-		if (mSpecialActionsButton)
-			event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
-		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
+		setEvent(event, text, true);
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
@@ -1259,16 +1272,33 @@ void EditAlarmDlg::slotEditDeferral()
 	if (!mTimeWidget)
 		return;
 	bool limit = true;
-	DateTime start = mTimeWidget->getDateTime(true, !mExpiredRecurrence);
+	int repeatCount = mSimpleRepetition->count();
+	DateTime start = mTimeWidget->getDateTime(!repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
 		if (!mExpiredRecurrence)
 			return;
 		limit = false;
 	}
+	QDateTime now = QDateTime::currentDateTime();
+	if (limit)
+	{
+		if (repeatCount  &&  start < now)
+		{
+			// Simple repetition - find the time of the next one
+			int interval = mSimpleRepetition->interval() * 60;
+			int repetition = (start.secsTo(now) + interval - 1) / interval;
+			if (repetition > repeatCount)
+			{
+				mTimeWidget->getDateTime();    // output the appropriate error message
+				return;
+			}
+			start = start.addSecs(repetition * interval);
+		}
+	}
 
 	bool deferred = mDeferDateTime.isValid();
-	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
+	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(now.addSecs(60))),
 	                       deferred, this, "deferDlg");
 	if (limit)
 	{
@@ -1280,7 +1310,7 @@ void EditAlarmDlg::slotEditDeferral()
 			if (QDateTime::currentDateTime() < remindTime)
 				start = remindTime;
 		}
-		deferDlg.setLimit(start);
+		deferDlg.setLimit(start.addSecs(-60));
 	}
 	if (deferDlg.exec() == QDialog::Accepted)
 	{
@@ -1307,9 +1337,9 @@ void EditAlarmDlg::slotShowMainPage()
 		if (!mReadOnly  &&  mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 			mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 		if (mReadOnly  ||  mRecurrenceEdit->isTimedRepeatType())
-			mTimeWidget->setMinDate(false);
+			mTimeWidget->setMinDateTime();             // don't set a minimum date/time
 		else
-			mTimeWidget->setMinDateToday();
+			mTimeWidget->setMinDateTimeIsCurrent();    // set the minimum date/time to track the clock
 	}
 }
 
@@ -1363,14 +1393,43 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 }
 
 /******************************************************************************
-*  Called when the recurrence frequency selection changes.
+*  Called when the recurrence frequency selection changes, or the simple
+*  repetition interval changes.
 *  Updates the recurrence frequency text.
 */
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
 	KAEvent event;
 	mRecurrenceEdit->updateEvent(event, false);
-	mRecurrenceText->setText(event.recurrenceText());
+	event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
+	mRecurrenceText->setText(recurText(event));
+}
+
+/******************************************************************************
+*  Called when the Simple Repetition button has been pressed to display the
+*  alarm repetition dialog.
+*  Alarm repetition has the following restrictions:
+*  1) Not allowed for a repeat-at-login alarm
+*  2) For a date-only alarm, the repeat interval must be a whole number of days.
+*  3) The overall repeat duration must be less than the recurrence interval.
+*/
+void EditAlarmDlg::slotSetSimpleRepetition()
+{
+	bool dateOnly = mTemplate ? mTemplateAnyTime->isOn() : mTimeWidget->anyTime();
+	int maxDuration;
+	switch (mRecurrenceEdit->repeatType())
+	{
+		case RecurrenceEdit::NO_RECUR:  maxDuration = -1;  break;  // no restriction on repeat duration
+		case RecurrenceEdit::AT_LOGIN:  maxDuration = 0;  break;   // alarm repeat not allowed
+		default:          // repeat duration must be less than recurrence interval
+		{
+			KAEvent event;
+			mRecurrenceEdit->updateEvent(event, false);
+			maxDuration = event.longestRecurrenceInterval() - mReminder->minutes() - 1;
+			break;
+		}
+	}
+	mSimpleRepetition->initialise(mSimpleRepetition->interval(), mSimpleRepetition->count(), dateOnly, maxDuration);
 }
 
 /******************************************************************************
@@ -1428,6 +1487,7 @@ bool EditAlarmDlg::checkEmailData()
 */
 void EditAlarmDlg::slotAlarmTypeClicked(int)
 {
+	bool displayAlarm = false;
 	QWidget* focus = 0;
 	if (mMessageRadio->isOn())
 	{
@@ -1438,6 +1498,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		focus = mTextMessageEdit;
+		displayAlarm = true;
 	}
 	else if (mFileRadio->isOn())
 	{
@@ -1449,6 +1510,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
 		focus = mFileMessageEdit;
+		displayAlarm = true;
 	}
 	else if (mCommandRadio->isOn())
 	{
@@ -1464,6 +1526,8 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mEmailToEdit->setNoSelect();
 		focus = mEmailToEdit;
 	}
+	mLateCancel->showAutoClose(displayAlarm);
+	mLateCancel->setFixedSize(mLateCancel->sizeHint());
 	if (focus)
 		focus->setFocus();
 }
@@ -1513,12 +1577,13 @@ void EditAlarmDlg::slotFontColourSelected()
 
 /******************************************************************************
 *  Called when the "Any time" checkbox is toggled in the date/time widget.
-*  Sets the advance reminder units to days if any time is checked.
+*  Sets the advance reminder and late cancel units to days if any time is checked.
 */
 void EditAlarmDlg::slotAnyTimeToggled(bool anyTime)
 {
 	if (mReminder->isReminder())
-	 	mReminder->setDateOnly(anyTime);
+		mReminder->setDateOnly(anyTime);
+	mLateCancel->setDateOnly(anyTime);
 }
 
 /******************************************************************************
