@@ -86,14 +86,14 @@ TemplateDlg*  KAlarmMainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-const QString KAlarmMainWindow::i18n_a_ShowAlarmTimes    = i18n("Show &Alarm Times");
-const QString KAlarmMainWindow::i18n_t_ShowAlarmTimes    = i18n("Show alarm &time");
-const QString KAlarmMainWindow::i18n_m_ShowAlarmTimes    = i18n("Show alarm ti&me");
-const QString KAlarmMainWindow::i18n_o_ShowTimeToAlarms  = i18n("Show Time t&o Alarms");
-const QString KAlarmMainWindow::i18n_n_ShowTimeToAlarms  = i18n("Show time u&ntil alarm");
-const QString KAlarmMainWindow::i18n_l_ShowTimeToAlarms  = i18n("Show time unti&l alarm");
-const QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms = i18n("Show &Expired Alarms");
-const QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms = i18n("&Show expired alarms");
+QString KAlarmMainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
+QString KAlarmMainWindow::i18n_t_ShowAlarmTimes()    { return i18n("Show alarm &time"); }
+QString KAlarmMainWindow::i18n_m_ShowAlarmTimes()    { return i18n("Show alarm ti&me"); }
+QString KAlarmMainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
+QString KAlarmMainWindow::i18n_n_ShowTimeToAlarms()  { return i18n("Show time u&ntil alarm"); }
+QString KAlarmMainWindow::i18n_l_ShowTimeToAlarms()  { return i18n("Show time unti&l alarm"); }
+QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
+QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
 
 
 /******************************************************************************
@@ -282,9 +282,9 @@ void KAlarmMainWindow::initActions()
 	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_Z, this, SLOT(slotUndelete()), actions, "undelete");
 	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
 	mActionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
-	mActionShowTime       = new KAction(i18n_a_ShowAlarmTimes, Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "time");
-	mActionShowTimeTo     = new KAction(i18n_o_ShowTimeToAlarms, Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "timeTo");
-	mActionShowExpired    = new KAction(i18n_e_ShowExpiredAlarms, Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "expired");
+	mActionShowTime       = new KAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "time");
+	mActionShowTimeTo     = new KAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "timeTo");
+	mActionShowExpired    = new KAction(i18n_e_ShowExpiredAlarms(), Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "expired");
 	mActionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "tray");
 
 	// Set up the menu bar

@@ -58,14 +58,14 @@ class Reminder : public QFrame
 		void         setOnceOnly(bool);
 		void         enableOnceOnly(bool enable);
 
-		static const QString i18n_first_recurrence_only;    // plain text of 'Reminder for first recurrence only' checkbox
-		static const QString i18n_u_first_recurrence_only;  // text of 'Reminder for first recurrence only' checkbox, with 'u' shortcut
-		static const QString i18n_hours_mins;  // text of 'hours/minutes' units, lower case
-		static const QString i18n_Hours_Mins;  // text of 'Hours/Minutes' units, initial capitals
-		static const QString i18n_days;        // text of 'days' units, lower case
-		static const QString i18n_Days;        // text of 'Days' units, initial capital
-		static const QString i18n_weeks;       // text of 'weeks' units, lower case
-		static const QString i18n_Weeks;       // text of 'Weeks' units, initial capital
+		static QString i18n_first_recurrence_only();    // plain text of 'Reminder for first recurrence only' checkbox
+		static QString i18n_u_first_recurrence_only();  // text of 'Reminder for first recurrence only' checkbox, with 'u' shortcut
+		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
+		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
+		static QString i18n_days();        // text of 'days' units, lower case
+		static QString i18n_Days();        // text of 'Days' units, initial capital
+		static QString i18n_weeks();       // text of 'weeks' units, lower case
+		static QString i18n_Weeks();       // text of 'Weeks' units, initial capital
 
 	protected slots:
 		void         slotReminderToggled(bool);

@@ -56,12 +56,10 @@ class SoundPicker : public QFrame
 		bool           repeatSetting() const; // returns current repeat status regardless of beep setting
 		static KURL    browseFile(const QString& initialFile = QString::null, const QString& initialDir = QString::null);
 
-		static const QString i18n_Sound;     // plain text of Sound checkbox
-		static const QString i18n_s_Sound;   // text of Sound checkbox, with 'S' shortcut
-		static const QString i18n_SetVolume;   // plain text of Set volume checkbox
-		static const QString i18n_v_SetVolume; // text of Set volume checkbox, with 'V' shortcut
-		static const QString i18n_Repeat;    // plain text of Repeat checkbox
-		static const QString i18n_p_Repeat;  // text of Repeat checkbox, with 'P' shortcut
+		static QString i18n_Sound();     // plain text of Sound checkbox
+		static QString i18n_s_Sound();   // text of Sound checkbox, with 'S' shortcut
+		static QString i18n_Repeat();    // plain text of Repeat checkbox
+		static QString i18n_p_Repeat();  // text of Repeat checkbox, with 'P' shortcut
 
 	protected slots:
 		void           slotSoundToggled(bool on);

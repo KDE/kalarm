@@ -82,20 +82,20 @@ class RecurrenceEdit : public QFrame
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
 
-		static const QString i18n_Norecur;           // text of 'No recurrence' selection, lower case
-		static const QString i18n_NoRecur;           // text of 'No Recurrence' selection, initial capitals
-		static const QString i18n_AtLogin;           // text of 'At Login' selection
-		static const QString i18n_l_Atlogin;         // text of 'At &login' selection, with 'L' shortcut
-		static const QString i18n_HourlyMinutely;    // text of 'Hourly/Minutely'
-		static const QString i18n_u_HourlyMinutely;  // text of 'Ho&urly/Minutely' selection, with 'U' shortcut
-		static const QString i18n_Daily;             // text of 'Daily' selection
-		static const QString i18n_d_Daily;           // text of '&Daily' selection, with 'D' shortcut
-		static const QString i18n_Weekly;            // text of 'Weekly' selection
-		static const QString i18n_w_Weekly;          // text of '&Weekly' selection, with 'W' shortcut
-		static const QString i18n_Monthly;           // text of 'Monthly' selection
-		static const QString i18n_m_Monthly;         // text of '&Monthly' selection, with 'M' shortcut
-		static const QString i18n_Yearly;            // text of 'Yearly' selection
-		static const QString i18n_y_Yearly;          // text of '&Yearly' selection, with 'Y' shortcut
+		static QString i18n_Norecur();           // text of 'No recurrence' selection, lower case
+		static QString i18n_NoRecur();           // text of 'No Recurrence' selection, initial capitals
+		static QString i18n_AtLogin();           // text of 'At Login' selection
+		static QString i18n_l_Atlogin();         // text of 'At &login' selection, with 'L' shortcut
+		static QString i18n_HourlyMinutely();    // text of 'Hourly/Minutely'
+		static QString i18n_u_HourlyMinutely();  // text of 'Ho&urly/Minutely' selection, with 'U' shortcut
+		static QString i18n_Daily();             // text of 'Daily' selection
+		static QString i18n_d_Daily();           // text of '&Daily' selection, with 'D' shortcut
+		static QString i18n_Weekly();            // text of 'Weekly' selection
+		static QString i18n_w_Weekly();          // text of '&Weekly' selection, with 'W' shortcut
+		static QString i18n_Monthly();           // text of 'Monthly' selection
+		static QString i18n_m_Monthly();         // text of '&Monthly' selection, with 'M' shortcut
+		static QString i18n_Yearly();            // text of 'Yearly' selection
+		static QString i18n_y_Yearly();          // text of '&Yearly' selection, with 'Y' shortcut
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }

@@ -92,20 +92,20 @@ const char* const ordinal[] = {
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-const QString RecurrenceEdit::i18n_Norecur           = i18n("No recurrence");
-const QString RecurrenceEdit::i18n_NoRecur           = i18n("No Recurrence");
-const QString RecurrenceEdit::i18n_AtLogin           = i18n("At Login");
-const QString RecurrenceEdit::i18n_l_Atlogin         = i18n("At &login");
-const QString RecurrenceEdit::i18n_HourlyMinutely    = i18n("Hourly/Minutely");
-const QString RecurrenceEdit::i18n_u_HourlyMinutely  = i18n("Ho&urly/Minutely");
-const QString RecurrenceEdit::i18n_Daily             = i18n("Daily");
-const QString RecurrenceEdit::i18n_d_Daily           = i18n("&Daily");
-const QString RecurrenceEdit::i18n_Weekly            = i18n("Weekly");
-const QString RecurrenceEdit::i18n_w_Weekly          = i18n("&Weekly");
-const QString RecurrenceEdit::i18n_Monthly           = i18n("Monthly");
-const QString RecurrenceEdit::i18n_m_Monthly         = i18n("&Monthly");
-const QString RecurrenceEdit::i18n_Yearly            = i18n("Yearly");
-const QString RecurrenceEdit::i18n_y_Yearly          = i18n("&Yearly");
+QString RecurrenceEdit::i18n_Norecur()           { return i18n("No recurrence"); }
+QString RecurrenceEdit::i18n_NoRecur()           { return i18n("No Recurrence"); }
+QString RecurrenceEdit::i18n_AtLogin()           { return i18n("At Login"); }
+QString RecurrenceEdit::i18n_l_Atlogin()         { return i18n("At &login"); }
+QString RecurrenceEdit::i18n_HourlyMinutely()    { return i18n("Hourly/Minutely"); }
+QString RecurrenceEdit::i18n_u_HourlyMinutely()  { return i18n("Ho&urly/Minutely"); }
+QString RecurrenceEdit::i18n_Daily()             { return i18n("Daily"); }
+QString RecurrenceEdit::i18n_d_Daily()           { return i18n("&Daily"); }
+QString RecurrenceEdit::i18n_Weekly()            { return i18n("Weekly"); }
+QString RecurrenceEdit::i18n_w_Weekly()          { return i18n("&Weekly"); }
+QString RecurrenceEdit::i18n_Monthly()           { return i18n("Monthly"); }
+QString RecurrenceEdit::i18n_m_Monthly()         { return i18n("&Monthly"); }
+QString RecurrenceEdit::i18n_Yearly()            { return i18n("Yearly"); }
+QString RecurrenceEdit::i18n_y_Yearly()          { return i18n("&Yearly"); }
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
@@ -142,43 +142,43 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	lay->addStretch();    // top-adjust the interval radio buttons
 	connect(ruleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
 
-	mNoneButton = new RadioButton(i18n_Norecur, ruleButtonGroup);
+	mNoneButton = new RadioButton(i18n_Norecur(), ruleButtonGroup);
 	mNoneButton->setFixedSize(mNoneButton->sizeHint());
 	mNoneButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mNoneButton, i18n("Do not repeat the alarm"));
 
-	mAtLoginButton = new RadioButton(i18n_l_Atlogin, ruleButtonGroup);
+	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), ruleButtonGroup);
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mAtLoginButton,
 	      i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
 	           "Note that it will also be triggered any time the alarm daemon is restarted."));
 
-	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely, ruleButtonGroup);
+	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), ruleButtonGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
 	mSubDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mSubDailyButton,
 	      i18n("Repeat the alarm at hourly/minutely intervals"));
 
-	mDailyButton = new RadioButton(i18n_d_Daily, ruleButtonGroup);
+	mDailyButton = new RadioButton(i18n_d_Daily(), ruleButtonGroup);
 	mDailyButton->setFixedSize(mDailyButton->sizeHint());
 	mDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mDailyButton,
 	      i18n("Repeat the alarm at daily intervals"));
 
-	mWeeklyButton = new RadioButton(i18n_w_Weekly, ruleButtonGroup);
+	mWeeklyButton = new RadioButton(i18n_w_Weekly(), ruleButtonGroup);
 	mWeeklyButton->setFixedSize(mWeeklyButton->sizeHint());
 	mWeeklyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mWeeklyButton,
 	      i18n("Repeat the alarm at weekly intervals"));
 
-	mMonthlyButton = new RadioButton(i18n_m_Monthly, ruleButtonGroup);
+	mMonthlyButton = new RadioButton(i18n_m_Monthly(), ruleButtonGroup);
 	mMonthlyButton->setFixedSize(mMonthlyButton->sizeHint());
 	mMonthlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMonthlyButton,
 	      i18n("Repeat the alarm at monthly intervals"));
 
-	mYearlyButton = new RadioButton(i18n_y_Yearly, ruleButtonGroup);
+	mYearlyButton = new RadioButton(i18n_y_Yearly(), ruleButtonGroup);
 	mYearlyButton->setFixedSize(mYearlyButton->sizeHint());
 	mYearlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mYearlyButton,

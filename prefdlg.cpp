@@ -661,43 +661,43 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
 	QHBox* box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultLateCancel = new QCheckBox(EditAlarmDlg::i18n_n_CancelIfLate, box, "defCancelLate");
+	mDefaultLateCancel = new QCheckBox(EditAlarmDlg::i18n_n_CancelIfLate(), box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(EditAlarmDlg::i18n_CancelIfLate));
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(EditAlarmDlg::i18n_CancelIfLate()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck, box, "defConfAck");
+	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), box, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck));
+	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
 	// BCC email to sender
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf, box, "defEmailBcc");
+	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), box, "defEmailBcc");
 	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf));
+	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	QGroupBox* group = new QButtonGroup(SoundPicker::i18n_Sound, mPage, "soundGroup");
+	QGroupBox* group = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
 	QGridLayout* grid = new QGridLayout(group, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, 3*KDialog::spacingHint());
 	grid->addColSpacing(1, 3*KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
-	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound, group, "defSound");
+	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), group, "defSound");
 	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
-	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound));
+	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound()));
 	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, AlignLeft);
 
 	mDefaultBeep = new QCheckBox(i18n("&Beep"), group, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
-	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound));
+	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
 	grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, AlignLeft);
 
 	box = new QHBox(group);   // this is to control the QWhatsThis text display area
@@ -718,7 +718,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	mDefaultSoundRepeat = new QCheckBox(i18n("Re&peat sound file"), group, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
-	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat));
+	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat()));
 	grid->addWidget(mDefaultSoundRepeat, 4, 2, AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -728,13 +728,13 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QLabel* label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Daily);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Weekly);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Monthly);
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Daily());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Weekly());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Monthly());
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly());
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	label->setBuddy(mDefaultRecurPeriod);
 	QWhatsThis::add(box,
@@ -748,9 +748,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Hours_Mins, Reminder::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Days, Reminder::DAYS);
-	mDefaultReminderUnits->insertItem(Reminder::i18n_Weeks, Reminder::WEEKS);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Hours_Mins(), Reminder::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Days(), Reminder::DAYS);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Weeks(), Reminder::WEEKS);
 	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
 	label->setBuddy(mDefaultReminderUnits);
 	QWhatsThis::add(box,
@@ -844,14 +844,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
 
-	mListShowTime = new QCheckBox(KAlarmMainWindow::i18n_t_ShowAlarmTimes, group, "listTime");
+	mListShowTime = new QCheckBox(KAlarmMainWindow::i18n_t_ShowAlarmTimes(), group, "listTime");
 	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
 	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
 	QWhatsThis::add(mListShowTime,
 	      i18n("Specify whether to show in the alarm list, the time at which each alarm is due"));
 	layout->addWidget(mListShowTime, 0, Qt::AlignLeft);
 
-	mListShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_n_ShowTimeToAlarms, group, "listTimeTo");
+	mListShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_n_ShowTimeToAlarms(), group, "listTimeTo");
 	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
 	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
 	QWhatsThis::add(mListShowTimeTo,
@@ -886,14 +886,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "Check to enter an upper limit on the number to be displayed."));
 	grid->addMultiCellWidget(box, 2, 2, 1, 2, AlignLeft);
 
-	mTooltipShowTime = new QCheckBox(KAlarmMainWindow::i18n_m_ShowAlarmTimes, group, "tooltipTime");
+	mTooltipShowTime = new QCheckBox(KAlarmMainWindow::i18n_m_ShowAlarmTimes(), group, "tooltipTime");
 	mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
 	connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
 	QWhatsThis::add(mTooltipShowTime,
 	      i18n("Specify whether to show in the system tray tooltip, the time at which each alarm is due"));
 	grid->addMultiCellWidget(mTooltipShowTime, 3, 3, 1, 2, AlignLeft);
 
-	mTooltipShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_l_ShowTimeToAlarms, group, "tooltipTimeTo");
+	mTooltipShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_l_ShowTimeToAlarms(), group, "tooltipTimeTo");
 	mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
 	connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
 	QWhatsThis::add(mTooltipShowTimeTo,
@@ -920,7 +920,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(KAlarmMainWindow::i18n_s_ShowExpiredAlarms, mPage, "showExpired");
+	mShowExpiredAlarms = new QCheckBox(KAlarmMainWindow::i18n_s_ShowExpiredAlarms(), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
 	QWhatsThis::add(mShowExpiredAlarms,
 	      i18n("Specify whether to show expired alarms in the alarm list"));

@@ -78,14 +78,14 @@ class EditAlarmDlg : public KDialogBase
 		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
 		static CheckBox*    createLateCancelCheckbox(QWidget* parent, const char* name = 0);
-		static const QString i18n_ConfirmAck;         // plain text of 'Confirm acknowledgement' checkbox
-		static const QString i18n_k_ConfirmAck;       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
-		static const QString i18n_CancelIfLate;       // plain text of 'Cancel if late' checkbox
-		static const QString i18n_l_CancelIfLate;     // text of 'Cancel if late' checkbox, with 'L' shortcut
-		static const QString i18n_n_CancelIfLate;     // text of 'Cancel if late' checkbox, with 'N' shortcut
-		static const QString i18n_CopyEmailToSelf;    // plain text of 'Copy email to self' checkbox
-		static const QString i18n_e_CopyEmailToSelf;  // text of 'Copy email to self' checkbox, with 'E' shortcut
-		static const QString i18n_s_CopyEmailToSelf;  // text of 'Copy email to self' checkbox, with 'S' shortcut
+		static QString i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
+		static QString i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
+		static QString i18n_CancelIfLate();       // plain text of 'Cancel if late' checkbox
+		static QString i18n_l_CancelIfLate();     // text of 'Cancel if late' checkbox, with 'L' shortcut
+		static QString i18n_n_CancelIfLate();     // text of 'Cancel if late' checkbox, with 'N' shortcut
+		static QString i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
+		static QString i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
+		static QString i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
 
 	protected:
 		virtual void resizeEvent(QResizeEvent*);

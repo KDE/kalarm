@@ -51,14 +51,14 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-const QString Reminder::i18n_first_recurrence_only   = i18n("Reminder for first recurrence only");
-const QString Reminder::i18n_u_first_recurrence_only = i18n("Reminder for first rec&urrence only");
-const QString Reminder::i18n_hours_mins = i18n("hours/minutes");
-const QString Reminder::i18n_Hours_Mins = i18n("Hours/Minutes");
-const QString Reminder::i18n_days       = i18n("days");
-const QString Reminder::i18n_Days       = i18n("Days");
-const QString Reminder::i18n_weeks      = i18n("weeks");
-const QString Reminder::i18n_Weeks      = i18n("Weeks");
+QString Reminder::i18n_first_recurrence_only()   { return i18n("Reminder for first recurrence only"); }
+QString Reminder::i18n_u_first_recurrence_only() { return i18n("Reminder for first rec&urrence only"); }
+QString Reminder::i18n_hours_mins()              { return i18n("hours/minutes"); }
+QString Reminder::i18n_Hours_Mins()              { return i18n("Hours/Minutes"); }
+QString Reminder::i18n_days()                    { return i18n("days"); }
+QString Reminder::i18n_Days()                    { return i18n("Days"); }
+QString Reminder::i18n_weeks()                   { return i18n("weeks"); }
+QString Reminder::i18n_Weeks()                   { return i18n("Weeks"); }
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
@@ -98,10 +98,10 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	else
 	{
 		mDateOnlyOffset = 0;
-		mUnitsCombo->insertItem(i18n_hours_mins);
+		mUnitsCombo->insertItem(i18n_hours_mins());
 	}
-	mUnitsCombo->insertItem(i18n_days);
-	mUnitsCombo->insertItem(i18n_weeks);
+	mUnitsCombo->insertItem(i18n_days());
+	mUnitsCombo->insertItem(i18n_weeks());
 	mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
 	connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
 
@@ -113,7 +113,7 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	{
 		layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 		layout->addSpacing(3*KDialog::spacingHint());
-		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only, this);
+		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
 		QWhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);
@@ -259,7 +259,7 @@ Reminder::Units Reminder::setDateOnly(int reminderMinutes, bool dateOnly)
 		if (!dateOnly  &&  mDateOnlyOffset)
 		{
 			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(i18n_hours_mins, 0);
+			mUnitsCombo->insertItem(i18n_hours_mins(), 0);
 			mDateOnlyOffset = 0;
 			mUnitsCombo->setCurrentItem(++index);
 		}

@@ -94,13 +94,13 @@ static const char EDIT_DIALOG_NAME[] = "EditDialog";
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-const QString EditAlarmDlg::i18n_ConfirmAck         = i18n("Confirm acknowledgment");
-const QString EditAlarmDlg::i18n_k_ConfirmAck       = i18n("Confirm ac&knowledgment");
-const QString EditAlarmDlg::i18n_CancelIfLate       = i18n("Cancel if late");
-const QString EditAlarmDlg::i18n_n_CancelIfLate     = i18n("Ca&ncel if late");
-const QString EditAlarmDlg::i18n_CopyEmailToSelf    = i18n("Copy email to self");
-const QString EditAlarmDlg::i18n_e_CopyEmailToSelf  = i18n("Copy &email to self");
-const QString EditAlarmDlg::i18n_s_CopyEmailToSelf  = i18n("Copy email to &self");
+QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
+QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
+QString EditAlarmDlg::i18n_CancelIfLate()       { return i18n("Cancel if late"); }
+QString EditAlarmDlg::i18n_n_CancelIfLate()     { return i18n("Ca&ncel if late"); }
+QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
+QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
+QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
 
 
 /******************************************************************************
@@ -482,7 +482,7 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	grid->addWidget(mEmailRemoveButton, 1, 2);
 
 	// BCC email to sender
-	mEmailBcc = new CheckBox(i18n_s_CopyEmailToSelf, mEmailFrame);
+	mEmailBcc = new CheckBox(i18n_s_CopyEmailToSelf(), mEmailFrame);
 	mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
 	QWhatsThis::add(mEmailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
@@ -739,7 +739,7 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(QHBox** box, QWidget* parent, c
  */
 CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* name)
 {
-	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck, parent, name);
+	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck(), parent, name);
 	QWhatsThis::add(widget,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	return widget;
@@ -750,7 +750,7 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
  */
 CheckBox* EditAlarmDlg::createLateCancelCheckbox(QWidget* parent, const char* name)
 {
-	CheckBox* widget = new CheckBox(i18n_n_CancelIfLate, parent, name);
+	CheckBox* widget = new CheckBox(i18n_n_CancelIfLate(), parent, name);
 	QWhatsThis::add(widget,
 	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
 	           "minute of the specified time. Possible reasons for not triggering include your "
@@ -1069,7 +1069,7 @@ void EditAlarmDlg::slotOk()
 					showPage(mMainPageIndex);
 					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
-					                             ).arg(Reminder::i18n_first_recurrence_only));
+					                             ).arg(Reminder::i18n_first_recurrence_only()));
 					return;
 				}
 			}

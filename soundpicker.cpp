@@ -47,12 +47,12 @@
 #include "soundpicker.moc"
 
 
-const QString SoundPicker::i18n_Sound       = i18n("An audio sound", "Sound");
-const QString SoundPicker::i18n_s_Sound     = i18n("An audio sound", "&Sound");
-const QString SoundPicker::i18n_SetVolume   = i18n("Set volume");
-const QString SoundPicker::i18n_v_SetVolume = i18n("Set &volume");
-const QString SoundPicker::i18n_Repeat      = i18n("Repeat");
-const QString SoundPicker::i18n_p_Repeat    = i18n("Re&peat");
+// Collect these widget labels together to ensure consistent wording and
+// translations across different modules.
+QString SoundPicker::i18n_Sound()       { return i18n("An audio sound", "Sound"); }
+QString SoundPicker::i18n_s_Sound()     { return i18n("An audio sound", "&Sound"); }
+QString SoundPicker::i18n_Repeat()      { return i18n("Repeat"); }
+QString SoundPicker::i18n_p_Repeat()    { return i18n("Re&peat"); }
 
 
 SoundPicker::SoundPicker(QWidget* parent, const char* name)
@@ -62,7 +62,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	setFrameStyle(QFrame::NoFrame);
 	QHBoxLayout* soundLayout = new QHBoxLayout(this, 0, 2*KDialog::spacingHint());
 	soundLayout->setAlignment(Qt::AlignVCenter);
-	mCheckbox = new CheckBox(i18n_s_Sound, this);
+	mCheckbox = new CheckBox(i18n_s_Sound(), this);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotSoundToggled(bool)));
 	QWhatsThis::add(mCheckbox,
@@ -82,12 +82,12 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	soundLayout->addWidget(mFilePicker);
 
 	// Sound repetition checkbox
-	mRepeatCheckbox = new CheckBox(i18n_p_Repeat, this);
+	mRepeatCheckbox = new CheckBox(i18n_p_Repeat(), this);
 	mRepeatCheckbox->setFixedSize(mRepeatCheckbox->sizeHint());
 	QWhatsThis::add(mRepeatCheckbox,
 	      i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	soundLayout->addWidget(mRepeatCheckbox);
-#if KDE_VERSION < 290
+#if KDE_VERSION < 220
 	mRepeatCheckbox->hide();
 #endif
 
