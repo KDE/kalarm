@@ -1,22 +1,31 @@
 # KDE Config File
 [Desktop Entry]
 Name=KAlarm
-Name[fr]=Alarme
+Name[fr]=kAlarm
 Name[ko]=KDE 알람
 Name[sv]=Kalarm
 Name[xx]=xx
 Type=Application
-Exec=kalarmautostart kalarm --tray
+Exec=kalarm --tray
 Icon=kalarm
 Type=Application
 DocPath=kalarm/index.html
 Comment=Alarm/reminder message scheduler: start as system tray icon
 Comment[da]=Alarm/påminder besked-skemalægger: start som systembakke-ikon
+Comment[de]=Wecker, Erinnerer, Nachrichtenanzeiger: Im Andockbereich starten
 Comment[es]=Mensaje/alarma de recuerdo del programador de tareas: iniciar como icono de bandeja del sistema
+Comment[fi]=Hälytys/muistutusviestien ajastin: käynnistä paneelikuvake
+Comment[fr]=Une alarme programmable : elle se place dans la boîte à icônes au démarrage
 Comment[he]=מתזמן הודעות תזכורת: הפעלה בתור סמל במגש המערכת
 Comment[hu]=Emlékeztető/figyelmeztető szolgáltatás: indítás a paneltálcában
+Comment[lv]=Trauksmes/atgādinājumu ziņojumu plānotājs: sāknēt kā sistēmas teknes ikonu
+Comment[nl]=agenda voor berichtenherinneringen: start op als systeemvakpictogram
+Comment[pt]=Escalonador de mensagens de compromissos: iniciar como ícone da bandeja
+Comment[pt_BR]=Escalonador de mensagens de compromissos: iniciar como ícone da bandeja
+Comment[sk]=Plánovač alarmov a pripomenutí: spustiť v systémovej lište
 Comment[sl]=Razporejevalnik sporočil alarma in opomnika; zažene se kot sistemska ikona
 Comment[sv]=Schemaläggare för alarm- och påminnelsemeddelanden: starta som en i ikon i systembrickan
 Terminal=false
+X-KDE-autostart-phase=2
 X-KDE-autostart-after=panel
 X-KDE-autostart-condition=kalarmrc:General:AutostartTray:true
