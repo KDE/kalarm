@@ -431,7 +431,7 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAlarmEvent& e
 }
 
 /******************************************************************************
-*  Return the alarm time text in the form "date time".
+*  Return the alarm summary text.
 */
 QString AlarmListViewItem::alarmText(const KAlarmEvent& event)
 {
@@ -443,17 +443,18 @@ QString AlarmListViewItem::alarmText(const KAlarmEvent& event)
 	int newline = text.find('\n');
 	if (newline < 0)
 		return text;       // it's a single-line text
+#if 0
 	if (event.action() == KAlarmEvent::MESSAGE)
 	{
 		// If the message is the text of an email, return its subject line
 		QStringList lines = QStringList::split('\n', text);
-#warning Check the format of an email
 		if (lines.count() >= 3
 		&&  lines[0].startsWith(from)
 		&&  lines[1].startsWith(to)
 		&&  lines[2].startsWith(subject))
 			return lines[2].mid(subject.length()).stripWhiteSpace();
 	}
+#endif
 	return text.left(newline) + QString::fromLatin1("...");
 }
 
