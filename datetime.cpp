@@ -138,15 +138,15 @@ void AlarmTimeWidget::init(int mode)
 	}
 	else
 	{
-		QBoxLayout* hlayout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-		QBoxLayout* layout = new QVBoxLayout(hlayout);
-		layout->addWidget(atTimeRadio);
-		layout->addWidget(afterTimeRadio);
-		layout = new QVBoxLayout(hlayout);
-		hlayout = new QHBoxLayout(layout);
-		hlayout->addWidget(dateEdit);
-		hlayout->addWidget(timeBox);
-		layout->addWidget(delayTime);
+		QGridLayout* grid = new QGridLayout(topLayout, 2, 3, KDialog::spacingHint());
+		grid->addWidget(atTimeRadio, 0, 0, Qt::AlignLeft);
+		grid->addWidget(dateEdit, 0, 1, Qt::AlignLeft);
+		grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);
+		grid->setRowStretch(0, 1);
+		grid->addWidget(afterTimeRadio, 1, 0, Qt::AlignLeft);
+		grid->addWidget(delayTime, 1, 1, Qt::AlignLeft);
+		grid->setColStretch(3, 1);
+		topLayout->addStretch();
 	}
 
 	// Initialise the radio button statuses
