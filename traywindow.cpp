@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 #include "kalarm.h"
 #include <stdlib.h>
@@ -47,7 +51,7 @@
 =============================================================================*/
 
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
-	: KSystemTray((theApp()->runInSystemTray() ? parent : 0), name),
+	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent),
 	  mQuitReplaced(false),
 	  mActionCollection(this)
@@ -122,7 +126,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 void TrayWindow::slotQuit()
 {
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
-	if (theApp()->runInSystemTray())
+	if (theApp()->wantRunInSystemTray())
 	{
 		if (!MessageWin::instanceCount())
 			theApp()->quit();
@@ -150,7 +154,7 @@ void TrayWindow::setEnabledStatus(bool status)
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
 
-	if (e->button() == LeftButton  &&  !theApp()->runInSystemTray())
+	if (e->button() == LeftButton  &&  !theApp()->wantRunInSystemTray())
 	{
 		// Left click: display/hide the first main window
 		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);
@@ -183,4 +187,40 @@ void TrayWindow::removeWindow(KAlarmMainWindow* win)
 {
 	if (win == mAssocMainWindow)
 		mAssocMainWindow = 0;
+}
+
+
+#ifdef HAVE_X11_HEADERS
+	#include <X11/X.h>
+	#include <X11/Xlib.h>
+	#include <X11/Xutil.h>
+#endif
+
+/******************************************************************************
+* Check whether the widget is in the system tray.
+* Note that it is only sometime AFTER the show event that the system tray
+* becomes the widget's parent. So for a definitive status, call this method
+* only after waiting a bit...
+* Reply = true if the widget is in the system tray, or its status can't be determined.
+*       = false if it is not currently in the system tray.
+*/
+bool TrayWindow::inSystemTray() const
+{
+#ifdef HAVE_X11_HEADERS
+	Window  xParent;    // receives parent window
+	Window  root;
+	Window* children = 0;
+	unsigned int nchildren;
+  // Find the X parent window of the widget. This is not the same as the Qt parent widget.
+	if (!XQueryTree(qt_xdisplay(), winId(), &root, &xParent, &children, &nchildren))
+		return true;    // error determining its parent X window
+	if (children)
+		XFree(children);
+
+	// If it is in the system tray, the system tray window will be its X parent.
+	// Otherwise, the root window will be its X parent.
+	return xParent != root;
+#else
+	return true;
+#endif // HAVE_X11_HEADERS
 }

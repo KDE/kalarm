@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef TRAYWINDOW_H
@@ -32,11 +36,12 @@ class TrayWindow : public KSystemTray
 {
 		Q_OBJECT
 	public:
-		TrayWindow(KAlarmMainWindow* parent, const char* name = 0L);
+		TrayWindow(KAlarmMainWindow* parent, const char* name = 0);
 		~TrayWindow();
 		void              removeWindow(KAlarmMainWindow*);
 		KAlarmMainWindow* assocMainWindow() const  { return mAssocMainWindow; }
 		void              setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
+		bool              inSystemTray() const;
 
 	public slots:
 		void              slotQuit();
@@ -46,8 +51,8 @@ class TrayWindow : public KSystemTray
 
 	protected:
 		virtual void      contextMenuAboutToShow(KPopupMenu*);
-		void              mousePressEvent(QMouseEvent*);
-		void              mouseReleaseEvent(QMouseEvent*);
+		virtual void      mousePressEvent(QMouseEvent*);
+		virtual void      mouseReleaseEvent(QMouseEvent*);
 
 	private slots:
 		void              setEnabledStatus(bool status);
