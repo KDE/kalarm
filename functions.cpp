@@ -65,11 +65,11 @@ KAlarmMainWindow* displayMainWindowSelected(const QString& eventID)
 	else
 	{
 		// There is already a main window, so make it the active window
-		if (!win->isVisible())
-		{
+		bool visible = win->isVisible();
+		if (visible)
 			win->hide();        // in case it's on a different desktop
+		if (!visible  ||  win->isMinimized())
 			win->showNormal();
-		}
 		win->raise();
 		win->setActiveWindow();
 	}
