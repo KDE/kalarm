@@ -1,7 +1,7 @@
 /*
  *  colourlist.h  -  an ordered list of colours
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,38 +26,79 @@
 #include <qvaluelist.h>
 
 
+/**
+ *  The ColourList class holds a list of colours, sorted in RGB value order.
+ *
+ *  It provides a sorted QValueList of colours in RGB value order, with iterators
+ *  and other access methods which return either QRgb or QColor objects.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class ColourList
 {
 	public:
 		typedef size_t  size_type;
 		typedef QValueListConstIterator<QRgb>  const_iterator;
 
+		/** Constructs an empty list. */
 		ColourList()  { }
+		/** Copy constructor. */
 		ColourList(const ColourList& l)       : mList(l.mList) { }
-		ColourList(const QValueList<QRgb>& l) : mList(l) { qHeapSort(mList); }
-		ColourList(const QColor*);
+		/** Constructs a list whose values are preset to the colours in @p list. */
+		ColourList(const QValueList<QRgb>& list) : mList(list) { qHeapSort(mList); }
+		/** Constructs a list whose values are preset to the colours in the @p list.
+		 *  Terminate @p list by an invalid colour.
+		 */
+		ColourList(const QColor* list);
+		/** Assignment operator. */
 		ColourList&    operator=(const ColourList& l)        { mList = l.mList;  return *this; }
-		ColourList&    operator=(const QValueList<QRgb>& l)  { mList = l;  qHeapSort(mList);  return *this; }
+		/** Sets the list to comprise the colours in @p list. */
+		ColourList&    operator=(const QValueList<QRgb>& list) { mList = list;  qHeapSort(mList);  return *this; }
+		/** Removes all values from the list. */
 		void           clear()                               { mList.clear(); }
-		void           insert(const QColor&);
+		/** Adds the specified colour @p c to the list. */
+		void           insert(const QColor& c);
+		/** Removes the colour @p c from the list. */
 		void           remove(const QColor& c)               { mList.remove(c.rgb()); }
+		/** Adds the specified colour @p c to the list. */
 		ColourList&    operator+=(const QColor& c)           { insert(c);  return *this; }
-		ColourList&    operator+=(const ColourList& l)       { mList += l.mList;  qHeapSort(mList);  return *this; }
-
+		/** Adds the colours in @p list to this list. */
+		ColourList&    operator+=(const ColourList& list)    { mList += list.mList;  qHeapSort(mList);  return *this; }
+		/** Returns true if the colours in the two lists are the same. */
 		bool           operator==(const ColourList& l) const { return mList == l.mList; }
+		/** Returns true if the colours in the two lists differ. */
 		bool           operator!=(const ColourList& l) const { return mList != l.mList; }
+		/** Returns the number of colours in the list. */
 		size_type      count() const                         { return mList.count(); }
+		/** Returns true if the list is empty. */
 		bool           isEmpty() const                       { return mList.isEmpty(); }
+		/** Returns an iterator pointing to the first colour in the list. */
 		const_iterator begin() const                         { return mList.begin(); }
+		/** Returns an iterator pointing past the last colour in the list. */
 		const_iterator end() const                           { return mList.end(); }
+		/** Returns an iterator pointing to the last colour in the list, or end() if the list is empty. */
 		const_iterator fromLast() const                      { return mList.fromLast(); }
+		/** Returns an iterator pointing to the colour at position @p i in the list. */
 		const_iterator at(size_type i) const                 { return mList.at(i); }
+		/** Returns true if the list contains the colour @p c. */
 		size_type      contains(const QColor& c) const       { return mList.contains(c.rgb()); }
+		/** Returns an iterator pointing to the first occurrence of colour @p c in the list.
+		 *  Returns end() if colour @p c is not in the list.
+		 */
 		const_iterator find(const QColor& c) const           { return mList.find(c.rgb()); }
+		/** Returns an iterator pointing to the first occurrence of colour @p c in the list, starting.
+		 *  from position @p it. Returns end() if colour @p c is not in the list.
+		 */
 		const_iterator find(const_iterator it, const QColor& c) const   { return mList.find(it, c.rgb()); }
+		/** Returns the index to the first occurrence of colour @p c in the list.
+		 *  Returns -1 if colour @p c is not in the list.
+		 */
 		int            findIndex(const QColor& c) const      { return mList.findIndex(c.rgb()); }
+		/** Returns the first colour in the list. If the list is empty, the result is undefined. */
 		QColor         first() const                         { return QColor(mList.first()); }
+		/** Returns the last colour in the list. If the list is empty, the result is undefined. */
 		QColor         last() const                          { return QColor(mList.last()); }
+		/** Returns the colour at position @p i in the list. If the item does not exist, the result is undefined. */
 		QColor         operator[](size_type i) const         { return QColor(mList[i]); }
 	private:
 		void              sort();
