@@ -34,8 +34,8 @@ const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16,
 
 // Config file entry names
 static const QString GENERAL_SECTION      = QString::fromLatin1("General");
-static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("Message background colour");
-static const QString MESSAGE_FONT         = QString::fromLatin1("Message font");
+static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("MessageBackgroundColour");
+static const QString MESSAGE_FONT         = QString::fromLatin1("MessageFont");
 static const QString RUN_IN_SYSTEM_TRAY   = QString::fromLatin1("RunInSystemTray");
 static const QString DISABLE_IF_STOPPED   = QString::fromLatin1("DisableAlarmsIfStopped");
 static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
