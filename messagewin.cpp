@@ -23,6 +23,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
 #include <qtextview.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
@@ -37,7 +38,6 @@
 #include <kdialog.h>
 #include <kwin.h>
 #include <kprocess.h>
-#include <kpushbutton.h>
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
 #include <kaudioplayer.h>
