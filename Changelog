@@ -1,11 +1,12 @@
 KAlarm
 
-=== Version 0.5.7--- 5 Mar 2002 ===
+=== Version 0.5.7--- 6 Mar 2002 ===
 Show system tray icon on deferring command line-initiated message (run-in-
     system-tray mode).
 Associate main window with system tray icon when displayed from message window.
 Don't start KAlarm at login, until it has been run for the first time.
 Add startup notification to kalarm.desktop.
+Prevent open main window from cancelling KDE session shutdown.
 Fix failure to display messages after daemon is restarted (run-on-demand mode).
 Fix possible failure to display command line-initiated message.
 Fix crash in some circumstances on changing run mode to run-on-demand.
@@ -67,13 +68,9 @@ Add extra pair of arrow buttons to time spinbox to change the hour.
 Fix sorting by colour column.
 Better What's This? texts for the main window.
 Remove -r, -s short options (use --reset, --stop instead).
-Update libraries to kdepim-2.2.1 (standalone package).
-Reinstate libkcal holidays files (standalone package).
 
 === Version 0.1.1 --- 1 Sep 2001 ===
 Fix documentation not being created by build.
-Remove KOrganizer-specific files from libkcal (standalone package).
-Change alarm daemon icon (standalone package).
 
 === Version 0.1 --- 31 Aug 2001 ===
 Initial release.
