@@ -1,4 +1,4 @@
-SUBDIRS = widgets pixmaps
+SUBDIRS = kalarmd widgets pixmaps
 
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
@@ -27,7 +27,7 @@ endif
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkcal/libkcal.la \
 	$(top_builddir)/libkmime/libkmime.la \
-	$(top_builddir)/kalarmd/libkalarmd.la \
+	$(top_builddir)/kalarm/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
 	$(top_builddir)/libkpimidentities/libkpimidentities.la \
 	-lkabc $(LIB_KDEUI) $(ARTSLIB)
@@ -40,11 +40,10 @@ noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
 	reminder.h repetition.h soundpicker.h \
 	specialactions.h synchtimer.h templatedlg.h templatelistview.h \
 	templatepickdlg.h timeselector.h traywindow.h
-kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h
 
 METASOURCES = AUTO
 
-alarmguiiface_DIR = $(top_srcdir)/kalarmd
+alarmguiiface_DIR = $(top_srcdir)/kalarm/kalarmd
 
 autostart_DATA = kalarm.tray.desktop
 autostartdir = $(datadir)/autostart
