@@ -63,11 +63,6 @@
 
 using namespace KCal;
 
-static QString messageFromPrefix    = i18n("'From' email address", "From:");
-static QString messageToPrefix      = i18n("Email addressee", "To:");
-static QString messageDatePrefix    = i18n("Date:");
-static QString messageSubjectPrefix = i18n("Email subject", "Subject:");
-
 
 /*=============================================================================
 =  Class: KAlarmMainWindow
@@ -86,6 +81,10 @@ QString KAlarmMainWindow::i18n_n_ShowTimeToAlarms()  { return i18n("Show time u&
 QString KAlarmMainWindow::i18n_l_ShowTimeToAlarms()  { return i18n("Show time unti&l alarm"); }
 QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
 QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
+QString KAlarmMainWindow::mMessageFromPrefix;
+QString KAlarmMainWindow::mMessageToPrefix;
+QString KAlarmMainWindow::mMessageDatePrefix;
+QString KAlarmMainWindow::mMessageSubjectPrefix;
 
 
 /******************************************************************************
@@ -851,6 +850,20 @@ void KAlarmMainWindow::dropEvent(QDropEvent* e)
 }
 
 /******************************************************************************
+*  Set up messages used by executeDropEvent() and emailHeaders().
+*/
+void KAlarmMainWindow::setUpTranslations()
+{
+	if (mMessageFromPrefix.isNull())
+	{
+		mMessageFromPrefix    = i18n("'From' email address", "From:");
+		mMessageToPrefix      = i18n("Email addressee", "To:");
+		mMessageDatePrefix    = i18n("Date:");
+		mMessageSubjectPrefix = i18n("Email subject", "Subject:");
+	}
+}
+
+/******************************************************************************
 *  Called when an object is dropped on a main or system tray window, to
 *  evaluate the action required and extract the text.
 */
@@ -871,19 +884,20 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 		// KMail message(s). Ignore all but the first.
 		if (!mailList.count())
 			return;
+		setUpTranslations();
 		KPIM::MailSummary& summary = mailList.first();
-		text = messageFromPrefix + '\t';
+		text = mMessageFromPrefix + '\t';
 		text += summary.from();
 		text += '\n';
-		text += messageToPrefix + '\t';
+		text += mMessageToPrefix + '\t';
 		text += summary.to();
 		text += '\n';
-		text += messageDatePrefix + '\t';
+		text += mMessageDatePrefix + '\t';
 		QDateTime dt;
 		dt.setTime_t(summary.date());
 		text += KGlobal::locale()->formatDateTime(dt);
 		text += '\n';
-		text += messageSubjectPrefix + '\t';
+		text += mMessageSubjectPrefix + '\t';
 		text += summary.subject();
 
 		// Get the body of the email from KMail
@@ -924,15 +938,16 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 */
 QString KAlarmMainWindow::emailHeaders(const QString& text, bool subjectOnly)
 {
+	setUpTranslations();
 	QStringList lines = QStringList::split('\n', text);
 	if (lines.count() >= 4
-	&&  lines[0].startsWith(messageFromPrefix)
-	&&  lines[1].startsWith(messageToPrefix)
-	&&  lines[2].startsWith(messageDatePrefix)
-	&&  lines[3].startsWith(messageSubjectPrefix))
+	&&  lines[0].startsWith(mMessageFromPrefix)
+	&&  lines[1].startsWith(mMessageToPrefix)
+	&&  lines[2].startsWith(mMessageDatePrefix)
+	&&  lines[3].startsWith(mMessageSubjectPrefix))
 	{
 		if (subjectOnly)
-			return lines[3].mid(messageSubjectPrefix.length());
+			return lines[3].mid(mMessageSubjectPrefix.length());
 		return lines[0] + '\n' + lines[1] + '\n' + lines[2] + '\n' + lines[3];
 	}
 	return QString::null;
