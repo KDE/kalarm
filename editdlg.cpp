@@ -76,7 +76,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	int gridRow = 1;
 
 	// Message radio button
-	messageRadio = new QRadioButton(i18n("Text"), actionGroup, "messageButton");
+	messageRadio = new QRadioButton(i18n("Te&xt"), actionGroup, "messageButton");
 	messageRadio->setFixedSize(messageRadio->sizeHint());
 	QWhatsThis::add(messageRadio,
 	      i18n("If checked, the alarm will display a text message."));
@@ -85,7 +85,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// File radio button
 	QBoxLayout* layout = new QHBoxLayout(grid, spacingHint());
-	fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
+	fileRadio = new QRadioButton(i18n("&File"), actionGroup, "fileButton");
 	fileRadio->setFixedSize(fileRadio->sizeHint());
 	QWhatsThis::add(fileRadio,
 	      i18n("If checked, the alarm will display the contents of a text file."));
@@ -101,7 +101,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->setColStretch(1, 1);
 
 	// Command radio button
-	commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
+	commandRadio = new QRadioButton(i18n("Co&mmand"), actionGroup, "cmdButton");
 	commandRadio->setFixedSize(commandRadio->sizeHint());
 	QWhatsThis::add(commandRadio,
 	      i18n("If checked, the alarm will execute a shell command."));
@@ -110,7 +110,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 #ifdef KALARM_EMAIL
 	// Email radio button
-	emailRadio = new QRadioButton(i18n("Email"), actionGroup, "emailButton");
+	emailRadio = new QRadioButton(i18n("&Email"), actionGroup, "emailButton");
 	emailRadio->setFixedSize(emailRadio->sizeHint());
 	QWhatsThis::add(emailRadio,
 	      i18n("If checked, the alarm will send an email."));
@@ -133,7 +133,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	subGrid->addWidget(emailToEdit, 0, 1);
 
 	// Email subject
-	label = new QLabel(i18n("Subject:"), emailFrame);
+	label = new QLabel(i18n("Sub&ject:"), emailFrame);
 	label->setFixedSize(label->sizeHint());
 	subGrid->addWidget(label, 1, 0);
 
@@ -142,6 +142,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(emailSubjectEdit, i18n("Enter the email subject."));
 	subGrid->addWidget(emailSubjectEdit, 1, 1);
 	grid->addMultiCellWidget(emailFrame, gridRow, gridRow, 0, 3);
+
+	// Email attachments
+	QBoxLayout* attLayout = new QHBoxLayout(layout);
+	label = new QLabel(i18n("Attachment&s:"), emailFrame);
+	label->setFixedSize(label->sizeHint());
+	attLayout->addWidget(label);
+	attLayout->addStretch();
 #endif
 
 	++gridRow;
@@ -163,7 +170,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		deferDateTime = event->deferDateTime();
 		deferTimeLabel = new QLabel(KGlobal::locale()->formatDateTime(deferDateTime), deferGroup);
 
-		QPushButton* button = new QPushButton(i18n("&Change..."), deferGroup);
+		QPushButton* button = new QPushButton(i18n("C&hange..."), deferGroup);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), this, SLOT(slotEditDeferral()));
 		QWhatsThis::add(button, i18n("Change the alarm's deferred time, or cancel the deferral"));
@@ -188,7 +195,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Late display checkbox - default = allow late display
 
-	lateCancel = new QCheckBox(i18n("Cancel if late"), page);
+	lateCancel = new QCheckBox(i18n("Cancel &if late"), page);
 	lateCancel->setFixedSize(lateCancel->sizeHint());
 	QWhatsThis::add(lateCancel,
 	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
@@ -204,7 +211,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QFrame* frame = new QFrame(page);
 	frame->setFrameStyle(QFrame::NoFrame);
 	QHBoxLayout* slayout = new QHBoxLayout(frame, 0, spacingHint());
-	sound = new QCheckBox(i18n("Sound"), frame);
+	sound = new QCheckBox(i18n("&Sound"), frame);
 	sound->setFixedSize(sound->sizeHint());
 	connect(sound, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggled(bool)));
 	QWhatsThis::add(sound,
@@ -225,7 +232,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Acknowledgement confirmation required - default = no confirmation
 
-	confirmAck = new QCheckBox(i18n("Confirm acknowledgement"), page);
+	confirmAck = new QCheckBox(i18n("Confirm ac&knowledgement"), page);
 	confirmAck->setFixedSize(confirmAck->sizeHint());
 	QWhatsThis::add(confirmAck,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
@@ -234,7 +241,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
 
-	fontButton = new QPushButton(i18n("Font && Color..."), page);
+	fontButton = new QPushButton(i18n("Font && Co&lor..."), page);
 	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
 	size = fontColour->sizeHint();
 	fontColour->setMinimumHeight(size.height() + 4);
@@ -255,7 +262,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	emailBcc = new QCheckBox(i18n("Copy email to self"), page);
+	emailBcc = new QCheckBox(i18n("Co&py email to self"), page);
 	emailBcc->setFixedSize(emailBcc->sizeHint());
 	QWhatsThis::add(emailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
@@ -563,7 +570,7 @@ void EditAlarmDlg::slotTry()
 		if (emailRadio->isOn())
 		{
 			if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to send the email now to the specified recipient(s)?"),
-			                                       i18n("Confirm Email"), i18n("Send")) != KMessageBox::Continue)
+			                                       i18n("Confirm Email"), i18n("&Send")) != KMessageBox::Continue)
 				return;
 		}
 #endif
@@ -671,8 +678,7 @@ bool EditAlarmDlg::checkText(QString& result)
 				default:
 					break;
 			}
-			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null,
-			                                       i18n("Continue")) == KMessageBox::Cancel)
+			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext)) == KMessageBox::Cancel)
 				return false;
 		}
 	}
