@@ -67,6 +67,7 @@
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
@@ -1717,7 +1718,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			url.cleanPath();
 			alarmtext = url.prettyURL();
 			KIO::UDSEntry uds;
-			if (!KIO::NetAccess::stat(url, uds))
+			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
 				err = NONEXISTENT;
 			else
 			{
