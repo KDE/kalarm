@@ -16,6 +16,7 @@
 #include <vector>
 
 #include <kuniqueapp.h>
+#include <kurl.h>
 
 #include <calendarlocal.h>
 #include <msgevent.h>

@@ -31,6 +31,7 @@
 #include "prefdlg.h"
 #include "prefsettings.h"
 #include "mainwindow.h"
+#include <kpopupmenu.h>
 #include "mainwindow.moc"
 
 
