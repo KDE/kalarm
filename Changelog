@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 0.6.4 --- 8 May 2002 ===
+Make click on system tray icon always bring KAlarm to top on current desktop.
+Fix alarms not being triggered (depending on time zone)
+
 === Version 0.6.0--- 8 Mar 2002 ===
 Add option to execute a command instead of displaying an alarm message.
 Add Try button to alarm message edit dialog.
