@@ -1,7 +1,5 @@
-KAlarm
-
-Setting up on non-KDE desktops
-==============================
+Setting up KAlarm on non-KDE desktops
+=====================================
 
 Although KAlarm is a KDE application and requires KDE to be installed on your
 system, you can still use it while running other desktops or window managers.
@@ -9,7 +7,7 @@ system, you can still use it while running other desktops or window managers.
 In order to have alarms monitored and displayed automatically from one login
 session to the next, the alarm daemon (which monitors the alarm list and tells
 KAlarm to display each alarm when it becomes due) must be run automatically
-when you graphically login or otherwise start X. If you are running the KDE
+when you graphically log in or otherwise start X. If you are running the KDE
 desktop, the KAlarm installation process sets this up for you.
 
 If you want to use KAlarm with Gnome or another non-KDE window manager, you
