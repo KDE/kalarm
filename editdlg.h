@@ -75,6 +75,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotMessageTypeClicked(int id);
 		void         slotMessageTextChanged();
 		void         slotRecurrenceResized(QSize old, QSize New);
+		void         slotEditDeferral();
 
 	private:
 		bool            checkText(QString& result);
@@ -86,6 +87,8 @@ class EditAlarmDlg : public KDialogBase
 		QRadioButton*    fileRadio;
 		QPushButton*     browseButton;
 		QMultiLineEdit*  messageEdit;     // alarm message edit box
+		QGroupBox*       deferGroup;
+		QLabel*          deferTimeLabel;
 		AlarmTimeWidget* timeWidget;
 		RecurrenceEdit*  recurrenceEdit;
 		QCheckBox*       lateCancel;
@@ -97,12 +100,14 @@ class EditAlarmDlg : public KDialogBase
 #endif
 		QString          alarmMessage;
 		QDateTime        alarmDateTime;
-		QString          multiLineText;   // message text before single-line mode was selected
-		QSize            noRecurSize;     // size without a recurrence edit widget
-		bool             alarmAnyTime;    // alarmDateTime is only a date, not a time
-		bool             singleLineOnly;  // no multi-line text input allowed
-		bool             timeDialog;      // the dialog shows date/time fields only
-		bool             shown;           // the dialog has already been displayed
+		QDateTime        deferDateTime;
+		QString          multiLineText;    // message text before single-line mode was selected
+		QSize            basicSize;        // size without recurrence edit or deferred time widgets
+		int              deferGroupHeight; // height added by deferred time widget
+		bool             alarmAnyTime;     // alarmDateTime is only a date, not a time
+		bool             singleLineOnly;   // no multi-line text input allowed
+		bool             timeDialog;       // the dialog shows date/time fields only
+		bool             shown;            // the dialog has already been displayed
 };
 
 #endif // EDITDLG_H

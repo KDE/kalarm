@@ -152,6 +152,7 @@ class KAlarmEvent
 		void              setLateCancel(bool lc)                            { mLateCancel = lc; }
 		void              set(int flags);
 		void              defer(const QDateTime&);
+		void              cancelDefer();
 		KCal::Event*      event() const;    // convert to new Event
 		KAlarmAlarm       alarm(int alarmID) const;
 		KAlarmAlarm       firstAlarm() const;
@@ -167,11 +168,12 @@ class KAlarmEvent
 		KAlarmAlarm::Type type() const                 { return mType; }
 		const QString&    id() const                   { return mEventID; }
 		int               alarmCount() const           { return mAlarmCount; }
-		const QDateTime&  dateTime() const             { return mDateTime; }
-		QDate             date() const                 { return mDateTime.date(); }
-		QTime             time() const                 { return mDateTime.time(); }
+		const QDateTime&  mainDateTime() const         { return mDateTime; }
+		QDate             mainDate() const             { return mDateTime.date(); }
+		QTime             mainTime() const             { return mDateTime.time(); }
 		bool              anyTime() const              { return mAnyTime; }
 		const QDateTime&  deferDateTime() const        { return mDeferralTime; }
+		QDateTime         dateTime() const             { return mDeferral ? QMIN(mDeferralTime, mDateTime) : mDateTime; }
 		const QString&    cleanText() const            { return mCleanText; }
 		QString           message() const              { return (mType == KAlarmAlarm::MESSAGE) ? mCleanText : QString::null; }
 		QString           fileName() const             { return (mType == KAlarmAlarm::FILE) ? mCleanText : QString::null; }

@@ -35,11 +35,16 @@ class AlarmTimeWidget : public QWidget
 {
 		Q_OBJECT
 	public:
-		AlarmTimeWidget(const QString& groupBoxTitle, int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
-		AlarmTimeWidget(int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
+		enum {       // 'mode' values for constructor. May be OR'ed together.
+			AT_TIME      = 0x00,   // "At ..."
+			DEFER_TIME   = 0x01,   // "Defer to ..."
+			DEFER_BUTTON = 0x02,   // with Defer... button
+		};
+		AlarmTimeWidget(const QString& groupBoxTitle, int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
+		AlarmTimeWidget(int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
 		bool           getDateTime(QDateTime&, bool& anyTime) const;
 		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
-		void           setDateTime(const QDateTime&, bool anyTime);
+		void           setDateTime(const QDateTime&, bool anyTime = false);
 		void           enableAnyTime(bool enable);
 		QSize          sizeHint() const                             { return minimumSizeHint(); }
 	signals:
@@ -53,7 +58,7 @@ class AlarmTimeWidget : public QWidget
 		void           slotDelayTimeChanged(int);
 		void           anyTimeToggled(bool);
 	private:
-		void           init(const QString& groupBoxTitle, bool groupBox, int deferSpacing);
+		void           init(const QString& groupBoxTitle, bool groupBox, int mode, int deferSpacing);
 		QRadioButton*  atTimeRadio;
 		QRadioButton*  afterTimeRadio;
 		DateSpinBox*   dateEdit;
@@ -71,8 +76,8 @@ class TimeSpinBox : public SpinBox2
 {
 		Q_OBJECT
 	public:
-		TimeSpinBox(QWidget* parent = 0L, const char* name = 0L);
-		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0L, const char* name = 0L);
+		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
+		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
 		bool            valid() const        { return !invalid; }
 		QTime           getTime() const;
 		void            setValid(bool);
@@ -95,7 +100,7 @@ class TimeSpinBox : public SpinBox2
 class DateSpinBox : public QSpinBox
 {
 	public:
-		DateSpinBox(QWidget* parent = 0L, const char* name = 0L);
+		DateSpinBox(QWidget* parent = 0, const char* name = 0);
 		void            setDate(const QDate& d)       { setValue(getDateValue(d)); }
 		QDate           getDate();
 		static int      getDateValue(const QDate&);

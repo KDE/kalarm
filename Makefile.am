@@ -7,13 +7,14 @@ kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindo
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
 	traywindow.cpp daemongui.cpp alarmguiiface.skel \
 	fontcolour.cpp colourcombo.cpp datetime.cpp \
-	alarmlistview.cpp spinbox2.cpp recurrenceedit.cpp
+	alarmlistview.cpp spinbox2.cpp recurrenceedit.cpp deferdlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la $(top_builddir)/kalarmd/libkalarmd.la
 
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
 	mainwindowbase.h traywindow.h daemongui.h \
 	msgevent.h alarmcalendar.h alarmlistview.h datetime.h \
+	recurrenceedit.h deferdlg.h \
 	fontcolour.h colourcombo.h \
 	spinbox2.h prefs.h prefsettings.h prefdlg.h
 

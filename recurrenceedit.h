@@ -45,6 +45,8 @@ class RecurrenceEdit : public QWidget
 {
 		Q_OBJECT
 	public:
+		enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
+
 		RecurrenceEdit (const QString& groupBoxTitle, QWidget* parent = 0L, const char* name = 0L);
 		virtual ~RecurrenceEdit()  { }
 
@@ -55,6 +57,7 @@ class RecurrenceEdit : public QWidget
 		/** Write event settings to event object */
 		void          writeEvent(KAlarmEvent&);
 		bool          checkData(const QDateTime& startDateTime) const;
+		RepeatType    getRepeatType() const;
 		bool          repeatAtLogin() const    { return repeatAtLoginRadio->isOn(); }
 		bool          isSmallSize() const      { return (!recurrenceFrame || recurrenceFrame->isHidden()); }
 		int           noRecurHeight() const    { return noRepeatSize.height(); }
@@ -64,8 +67,6 @@ class RecurrenceEdit : public QWidget
 
 		/** Check if the input is valid. */
 		bool          validateInput();
-
-		enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }

@@ -280,6 +280,15 @@ bool RecurrenceEdit::checkData(const QDateTime& startDateTime) const
 	return true;
 }
 
+RecurrenceEdit::RepeatType RecurrenceEdit::getRepeatType() const
+{
+	if (noneRadio->isChecked())
+		return NONE;
+	if (repeatAtLoginRadio->isChecked())
+		return AT_LOGIN;
+	return ruleButtonType;
+}
+
 /******************************************************************************
  * Called when a repetition type radio button is clicked.
  */
@@ -755,7 +764,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 {
 	// unset everything
 	unsetAllCheckboxes();
-	currStartDateTime = event.dateTime();
+	currStartDateTime = event.mainDateTime();
 	if (event.repeatAtLogin())
 		repeatButtonGroup->setButton(repeatButtonGroup->id(repeatAtLoginRadio));
 	else if (event.recurs() != KAlarmEvent::NO_RECUR)
@@ -949,7 +958,7 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 			else
 			{
 				// it's by day
-/*				int daynum = event.date().dayOfYear();
+/*				int daynum = event.mainDate().dayOfYear();
 				QValueList<int> daynums;
 				daynums.append(daynum);
 				event.setRecurAnnualByDay(frequency, daynums, repeatCount, endDate);*/

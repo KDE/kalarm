@@ -950,9 +950,17 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 			break;
 
 		case ALARM_RESCHEDULE:
+		{
 			// Leave an alarm which repeats at every login until its main alarm is deleted
 			kdDebug(5950) << "KAlarmApp::handleAlarm(): RESCHEDULE" << endl;
-			if (!alarm.repeatAtLogin())
+			bool update = false;
+			if (alarm.deferred())
+			{
+				// It's an extra deferred alarm, so delete it
+				event.removeAlarm(alarm.id());
+				update = true;
+			}
+			else if (!alarm.repeatAtLogin())
 			{
 				switch (event.setNextOccurrence(QDateTime::currentDateTime()))
 				{
@@ -965,7 +973,7 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 					case KAlarmEvent::LAST_OCCURRENCE:
 						// The event is due by now and repetitions still remain, so rewrite the event
 						if (updateCalAndDisplay)
-							updateEvent(event, 0L);   // update the window lists and calendar file
+							update = true;
 						else
 							event.setUpdated();    // note that the calendar file needs to be updated
 						break;
@@ -976,9 +984,11 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 				}
 			}
 			else if (updateCalAndDisplay  &&  event.updated())
-				updateEvent(event, 0L);     // update the window lists and calendar file
+				update = true;
+			if (update)
+				updateEvent(event, 0);     // update the window lists and calendar file
 			break;
-
+		}
 		case ALARM_CANCEL:
 		{
 			kdDebug(5950) << "KAlarmApp::handleAlarm(): CANCEL" << endl;

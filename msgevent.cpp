@@ -589,6 +589,15 @@ void KAlarmEvent::defer(const QDateTime& dateTime)
 }
 
 /******************************************************************************
+ * Cancel any deferral alarm.
+ */
+void KAlarmEvent::cancelDefer()
+{
+	mDeferralTime = QDateTime();
+	mDeferral     = false;
+}
+
+/******************************************************************************
  * Check whether the event regularly repeats - with a recurrence specification
  * and/or an alarm repetition.
  */

@@ -48,12 +48,14 @@
 #include "prefsettings.h"
 #include "datetime.h"
 #include "recurrenceedit.h"
+#include "deferdlg.h"
 #include "editdlg.moc"
 
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
 	                        const KAlarmEvent* event)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel|Try, Ok, true),
+	  deferGroup(0),
 	  shown(false)
 {
 	QWidget* page = new QWidget(this);
@@ -95,8 +97,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Browse button
 	browseButton = new QPushButton(i18n("&Browse..."), actionGroup);
 	browseButton->setFixedSize(browseButton->sizeHint());
-	QWhatsThis::add(browseButton,
-	      i18n("Select a text file to display."));
+	QWhatsThis::add(browseButton, i18n("Select a text file to display."));
 	grid->addWidget(browseButton, 1, 3, AlignLeft);
 
 	messageEdit = new QMultiLineEdit(actionGroup);
@@ -109,15 +110,32 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 //messageEdit->setMaximumHeight(size.height());
 //actionGroup->setMaximumHeight(actionGroup->sizeHint().height());
 
+	if (event  &&  event->recurs() != KAlarmEvent::NO_RECUR  &&  event->deferred())
+	{
+		// Recurring event's deferred date/time
+		deferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), page, "deferGroup");
+		topLayout->addWidget(deferGroup);
+		QLabel* label = new QLabel(i18n("At date/time:"), deferGroup);
+		label->setFixedSize(label->sizeHint());
+		deferDateTime = event->deferDateTime();
+		deferTimeLabel = new QLabel(KGlobal::locale()->formatDateTime(deferDateTime), deferGroup);
+		QPushButton* button = new QPushButton(i18n("&Change..."), deferGroup);
+		button->setFixedSize(button->sizeHint());
+		connect(button, SIGNAL(clicked()), this, SLOT(slotEditDeferral()));
+		QWhatsThis::add(button, i18n("Change the alarm's deferred time, or cancel the deferral"));
+		deferGroup->addSpace(0);
+	}
+
 	// Date and time entry
-	timeWidget = new AlarmTimeWidget(i18n("Time"), 0, page, "timeGroup");
+
+	timeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, 0, page, "timeGroup");
 	topLayout->addWidget(timeWidget);
 
 	// Repeating alarm
 
 	recurrenceEdit = new RecurrenceEdit(i18n("Repetition"), page);
 	recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
-	// Don't add to the layout yet, so that we can see what the minimum widget size is.
+	topLayout->addWidget(recurrenceEdit);
 	connect(recurrenceEdit, SIGNAL(typeChanged(int)), this, SLOT(slotRepeatTypeChange(int)));
 	connect(recurrenceEdit, SIGNAL(resized(QSize,QSize)), this, SLOT(slotRecurrenceResized(QSize,QSize)));
 
@@ -170,15 +188,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
-//	noRecurSize = sizeHint();
-	topLayout->insertWidget(2, recurrenceEdit);
-
 	topLayout->activate();
 
-noRecurSize = theApp()->readConfigWindowSize("EditDialog", minimumSize());
-resize(noRecurSize);
-//	size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
-//	resize(size);
+	deferGroupHeight = deferGroup ? deferGroup->height() : 0;
+	size = minimumSize();
+	size.setHeight(size.height() - deferGroupHeight);
+	basicSize = theApp()->readConfigWindowSize("EditDialog", size);
+	resize(basicSize);
 
 	// Set up initial values
 	if (event)
@@ -190,7 +206,7 @@ resize(noRecurSize);
 #else
 		bgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
 #endif
-		timeWidget->setDateTime(event->dateTime(), event->anyTime());
+		timeWidget->setDateTime(event->mainDateTime(), event->anyTime());
 		QRadioButton* radio;
 		singleLineOnly = false;       // ensure the text isn't changed erroneously
 		switch (event->type())
@@ -229,11 +245,11 @@ resize(noRecurSize);
 		recurrenceEdit->setDefaults(defaultTime, false);   // must be called after timeWidget is set up, to ensure correct date-only enabling
 	}
 
-size = noRecurSize;
-if (recurrenceEdit  &&  !recurrenceEdit->isSmallSize())
-	size.setHeight(size.height() + recurrenceEdit->heightVariation());
-resize(size);
-//resize(sizeHint().width(), sizeHint().height() + recurrenceEdit->heightVariation());
+	size = basicSize;
+	size.setHeight(size.height() + deferGroupHeight);
+	if (recurrenceEdit  &&  !recurrenceEdit->isSmallSize())
+		size.setHeight(size.height() + recurrenceEdit->heightVariation());
+	resize(size);
 
 	slotMessageTypeClicked(-1);    // enable/disable things appropriately
 	messageEdit->setFocus();
@@ -253,6 +269,12 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
 	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
 	recurrenceEdit->writeEvent(event);
+
+	RecurrenceEdit::RepeatType type = recurrenceEdit->getRepeatType();
+	if (type != RecurrenceEdit::NONE  &&  type != RecurrenceEdit::AT_LOGIN
+	&&  deferDateTime.isValid()
+	&&  deferDateTime < alarmDateTime)
+		event.defer(deferDateTime);
 }
 
 /******************************************************************************
@@ -309,18 +331,19 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 }
 
 /******************************************************************************
-*  Called when the window's size has changed (before it is painted).
-*  Sets the last column in the list view to extend at least to the right
-*  hand edge of the list view.
+*  Called when the dialog's size has changed.
+*  Records the new size (adjusted to ignore the optional heights of the
+*  deferred time and recurrence edit widgets) in the config file.
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
 	if (isVisible())
 	{
-		noRecurSize = re->size();
+		basicSize = re->size();
+		basicSize.setHeight(basicSize.height() - deferGroupHeight);
 		if (recurrenceEdit  &&  !recurrenceEdit->isSmallSize())
-			noRecurSize.setHeight(noRecurSize.height() - recurrenceEdit->heightVariation());
-		theApp()->writeConfigWindowSize("EditDialog", noRecurSize);
+			basicSize.setHeight(basicSize.height() - recurrenceEdit->heightVariation());
+		theApp()->writeConfigWindowSize("EditDialog", basicSize);
 	}
 	KDialog::resizeEvent(re);
 }
@@ -332,7 +355,7 @@ void EditAlarmDlg::slotRecurrenceResized(QSize old, QSize New)
 {
 	if (recurrenceEdit)
 	{
-		int newheight = noRecurSize.height();
+		int newheight = basicSize.height() + deferGroupHeight;
 		if (New.height() > recurrenceEdit->noRecurHeight())
 			newheight += recurrenceEdit->heightVariation();
 		setMinimumHeight(newheight);
@@ -340,6 +363,25 @@ void EditAlarmDlg::slotRecurrenceResized(QSize old, QSize New)
 	}
 }
 
+/******************************************************************************
+ * Called when the Change deferral button is clicked.
+ */
+void EditAlarmDlg::slotEditDeferral()
+{
+	bool anyTime;
+	QDateTime start;
+	if (timeWidget->getDateTime(start, anyTime))
+	{
+		bool deferred = deferDateTime.isValid();
+		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? deferDateTime : QDateTime::currentDateTime().addSecs(60)),
+		                                            start, deferred, this, "deferDlg");
+		if (deferDlg->exec() == QDialog::Accepted)
+		{
+			deferDateTime = deferDlg->getDateTime();
+			deferTimeLabel->setText(deferDateTime.isValid() ? KGlobal::locale()->formatDateTime(deferDateTime) : QString::null);
+		}
+	}
+}
 
 /******************************************************************************
 *  Called when the OK button is clicked.
@@ -389,6 +431,8 @@ void EditAlarmDlg::slotCancel()
 void EditAlarmDlg::slotRepeatTypeChange(int repeatType)
 {
 	timeWidget->enableAnyTime(repeatType != RecurrenceEdit::SUBDAILY);
+	if (deferGroup)
+		deferGroup->setEnabled(repeatType != RecurrenceEdit::NONE && repeatType != RecurrenceEdit::AT_LOGIN);
 }
 
 /******************************************************************************

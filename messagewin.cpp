@@ -437,7 +437,7 @@ void MessageWin::slotShowDefer()
 		QVBoxLayout* wlayout = new QVBoxLayout(deferDlg, KDialog::spacingHint());
 		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
 		wlayout->addLayout(grid);
-		deferTime = new AlarmTimeWidget(deferSpacing, deferDlg, "deferTime");
+		deferTime = new AlarmTimeWidget(AlarmTimeWidget::DEFER_BUTTON, deferSpacing, deferDlg, "deferTime");
 		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60), false);
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
@@ -495,7 +495,7 @@ void MessageWin::slotDefer()
 			event.nextOccurrence(QDateTime::currentDateTime(), next);
 			if (next.isValid()  &&  dateTime >= next)
 			{
-				KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next occurrence (currently %1)")
+				KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
 				                    .arg(KGlobal::locale()->formatDateTime(next)));
 				return;
 			}
