@@ -142,7 +142,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mAudioFile(event.audioFile()),
 	  mVolume(event.soundVolume()),
 	  mFadeVolume(event.fadeVolume()),
-	  mFadeSeconds(event.fadeSeconds()),
+	  mFadeSeconds(QMIN(event.fadeSeconds(), 86400)),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
 	  mRestoreHeight(0),
@@ -163,6 +163,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mNoPostAction(false),
 	  mRecreating(false),
 	  mBeep(event.beep()),
+	  mSpeak(event.speak()),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
 	  mPositioning(false),
@@ -701,6 +702,42 @@ void MessageWin::playAudio()
 		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
 #endif
 	}
+	else if (mSpeak)
+	{
+		// The message is to be spoken. In case of error messges,
+		// call it on a timer to allow the window to display first.
+		QTimer::singleShot(0, this, SLOT(slotSpeak()));
+	}
+}
+
+/******************************************************************************
+*  Speak the message.
+*  Called asynchronously to avoid delaying the display of the message.
+*/
+void MessageWin::slotSpeak()
+{
+#if KDE_IS_VERSION(3,3,90)
+	DCOPClient* client = kapp->dcopClient();
+	if (!client->isApplicationRegistered("kttsd"))
+	{
+		// kttsd is not running, so start it
+		QString error;
+		if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error))
+		{
+			kdDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
+			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
+			return;
+		}
+	}
+	QByteArray  data;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << mMessage << "";
+	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
+	{
+		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
+		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP call sayMessage failed"));
+	}
+#endif
 }
 
 /******************************************************************************
@@ -771,14 +808,16 @@ void MessageWin::initAudio(bool firstTime)
 			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
 			mUsingKMix = false;
 		}
+
+		// Set the desired sound volume
+		float volume = mVolume;
+		if (mFadeVolume >= 0)
+			volume = mFadeVolume;
+		if (!mUsingKMix)
+			sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
+		else if (volume >= 0)
+			setKMixVolume(static_cast<int>(volume * 100));
 	}
-	float volume = mVolume;
-	if (mFadeVolume >= 0)
-		volume = mFadeVolume;
-	if (!mUsingKMix)
-		sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
-	else if (volume >= 0)
-		setKMixVolume(static_cast<int>(volume * 100));
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -802,12 +841,17 @@ void MessageWin::checkAudioPlay()
 	{
 		// The file has loaded and is ready to play, or play has completed
 		if (mPlayedOnce  &&  !mAudioRepeat)
+		{
+			// Play has completed
+			stopPlay();
 			return;
+		}
 
 		// Start playing the file, either for the first time or again
 		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
 		{
+			// Start playing the file for the first time
 			QTime now = QTime::currentTime();
 			mAudioFileLoadSecs = mAudioFileStart.secsTo(now);
 			if (mAudioFileLoadSecs < 0)
@@ -864,8 +908,8 @@ void MessageWin::checkAudioPlay()
 }
 
 /******************************************************************************
-*  Called when the Silence button is clicked.
-*  Stops playing the sound file.
+*  Called when play completes, the Silence button is clicked, or the window is
+*  closed, to reset the sound volume and terminate audio access.
 */
 void MessageWin::stopPlay()
 {
@@ -897,7 +941,10 @@ void MessageWin::stopPlay()
 	delete mPlayObject;      mPlayObject = 0;
 	delete mArtsDispatcher;  mArtsDispatcher = 0;
 	if (!mLocalAudioFile.isEmpty())
+	{
 		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
+		mLocalAudioFile = QString::null;
+	}
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);
 #endif
