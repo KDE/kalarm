@@ -223,26 +223,10 @@ QSize MessageWin::initView()
 				if (!(dir = info.isDir()))
 				{
 					opened = true;
-#if KDE_VERSION >= 290
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
 					TextMimeSourceFactory msf;
 					view->setMimeSourceFactory(&msf);
 					view->QTextBrowser::setSource(tmpFile);
-#else
-					QTextEdit* view = new QTextEdit(topWidget, "fileContents");
-					if (qfile.open(IO_ReadOnly|IO_Translate))
-					{
-						QString line;
-						while (qfile.readLine(line, 4096) > 0)
-						{
-							int nl = line.find('\n');
-							if (nl >= 0)
-								line = line.left(nl);
-							view->append(line);
-						}
-						qfile.close();
-					}
-#endif
 					view->setMinimumSize(view->sizeHint());
 					topLayout->addWidget(view);
 
