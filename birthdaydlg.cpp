@@ -114,7 +114,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	connect(mAddresseeList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 	QWhatsThis::add(mAddresseeList,
 	      i18n("Select birthdays to set alarms for.\n"
-	           "This list shows all birthdays in KAddressBook except those for which alarms already exist."));
+	           "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
+	           "You can select multiple birthdays at one time by dragging the mouse over the list, "
+	           "or by clicking the mouse while pressing Ctrl or Shift."));
 
 	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
