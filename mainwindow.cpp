@@ -155,8 +155,8 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 void KAlarmMainWindow::initActions()
 {
 	actionQuit           = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
-	actionNew            = new KAction(i18n("&New"), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
-	actionModify         = new KAction(i18n("&Modify"), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
+	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
+	actionModify         = new KAction(i18n("&Modify..."), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
 	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
