@@ -355,11 +355,10 @@ int KAlarmApp::newInstance()
 			{
 				// Display a message or file, execute a command, or send an email
 				KAlarmEvent::Action action = KAlarmEvent::MESSAGE;
-				QCString alMessage;
-				EmailAddressList  alAddresses;
-				QStringList  alAttachments;
-				QCStringList alAddrs;
-				QCString alSubject;
+				QCString         alMessage;
+				EmailAddressList alAddresses;
+				QStringList      alAttachments;
+				QCString         alSubject;
 				if (args->isSet("file"))
 				{
 					kdDebug(5950)<<"KAlarmApp::newInstance(): file\n";
@@ -385,14 +384,17 @@ int KAlarmApp::newInstance()
 					kdDebug(5950)<<"KAlarmApp::newInstance(): mail\n";
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
-					alAddrs = args->getOptionList("mail");
-					for (QCStringList::Iterator i = alAddrs.begin();  i != alAddrs.end();  ++i)
+					QCStringList params = args->getOptionList("mail");
+					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
-						QString addr = QString::fromLatin1(*i);
+						QString addr = QString::fromLocal8Bit(*i);
 						if (!KAMail::checkAddress(addr))
 							USAGE(i18n("%1: invalid email address").arg(QString::fromLatin1("--mail")))
 						alAddresses += Person(QString::null, addr);
 					}
+					params = args->getOptionList("attach");
+					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
+						alAttachments += QString::fromLocal8Bit(*i);
 					alMessage = args->arg(0);
 					action = KAlarmEvent::EMAIL;
 				}
@@ -406,6 +408,8 @@ int KAlarmApp::newInstance()
 				{
 					if (args->isSet("subject"))
 						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--subject")).arg(QString::fromLatin1("--mail")))
+					if (args->isSet("attach"))
+						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--attach")).arg(QString::fromLatin1("--mail")))
 					if (args->isSet("bcc"))
 						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--bcc")).arg(QString::fromLatin1("--mail")))
 				}
@@ -547,6 +551,8 @@ int KAlarmApp::newInstance()
 				kdDebug(5950)<<"KAlarmApp::newInstance(): interactive\n";
 				if (args->isSet("ack-confirm"))
 					usage += QString::fromLatin1("--ack-confirm ");
+				if (args->isSet("attach"))
+					usage += QString::fromLatin1("--attach ");
 				if (args->isSet("bcc"))
 					usage += QString::fromLatin1("--bcc ");
 				if (args->isSet("beep"))

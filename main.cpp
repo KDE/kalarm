@@ -37,6 +37,8 @@ static KCmdLineOptions options[] =
 {
 	{ "a", 0, 0 },
 	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0 },
+	{ "A", 0, 0 },
+	{ "attach <url>", I18N_NOOP("Attach file to email (repeat as needed)"), 0 },
 	{ "bcc", I18N_NOOP("Blind copy email to self"), 0 },
 	{ "b", 0, 0 },
 	{ "beep", I18N_NOOP("Beep when message is displayed"), 0 },
