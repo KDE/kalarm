@@ -246,7 +246,7 @@ void SoundPicker::slotPickFile()
 			mDefaultDir = url.path();
 			setFilePicker();
 		}
-		else if (mFile.isEmpty())
+		else
 			mFilePicker->setOn(false);
 	}
 	setFilePicker();
