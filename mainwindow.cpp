@@ -1057,7 +1057,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText      alarmText;
 	KPIM::MailList mailList;
 	KURL::List     files;
-	KCal::CalendarLocal calendar;
+	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
+
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 
 	if (KURLDrag::decode(e, files)  &&  files.count())

@@ -254,7 +254,7 @@ bool AlarmCalendar::open()
 
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	if (!mCalendar)
-		mCalendar = new CalendarLocal();
+		mCalendar = new CalendarLocal(QString::fromLatin1("UTC"));
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	// Check for file's existence, assuming that it does exist when uncertain,
