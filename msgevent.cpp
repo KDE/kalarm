@@ -1184,6 +1184,7 @@ void KAlarmEvent::convertKCalEvents()
 {
 	if (theApp()->getCalendar().KAlarmVersion() < AlarmCalendar::KAlarmVersion(0,7,0))
 	{
+		kdDebug()<<"KAlarmEvent::convertKCalEvents(): adjusting\n";
 		bool adjustSummerTime = theApp()->getCalendar().KAlarmVersion057_UTC();
 		QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 
@@ -1209,7 +1210,7 @@ void KAlarmEvent::convertKCalEvents()
 					struct tm* dtm = localtime(&t);
 					if (dtm->tm_isdst)
 					{
-						dt.addSecs(-3600);
+						dt = dt.addSecs(-3600);
 						alarm->setTime(dt);
 					}
 				}
