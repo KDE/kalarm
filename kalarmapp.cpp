@@ -433,7 +433,7 @@ void KAlarmApp::displayMainWindow()
 	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
 	if (!win)
 	{
-		if (initCheck())     // the calendar may not have been opened previously
+		if (initCheck())
 			(new KAlarmMainWindow)->show();
 	}
 	else
@@ -552,10 +552,7 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 		(new MessageWin(event, event.firstAlarm(), false))->show();
 		return true;
 	}
-	if (!initCheck())
-		return false;
-	addMessage(event, 0L);        // event instance will now belong to the calendar
-	return true;
+	return addMessage(event, 0L);    // event instance will now belong to the calendar
 }
 
 /******************************************************************************
@@ -767,9 +764,11 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
 */
-void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+bool KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
 	kdDebug(5950) << "KAlarmApp::addMessage(): " << event.id() << endl;
+	if (!initCheck())
+		return false;
 
 	// Save the message details in the calendar file, and get the new event ID
 	mCalendar->addEvent(event);
@@ -780,6 +779,7 @@ void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 
 	// Update the window lists
 	KAlarmMainWindow::addMessage(event, win);
+	return true;
 }
 
 /******************************************************************************

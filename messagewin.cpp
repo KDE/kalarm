@@ -370,7 +370,7 @@ void MessageWin::slotShowDefer()
 		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60));
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
-		if (theApp()->getCalendar().getEvent(eventID))
+		if (!eventID.isNull()  &&  theApp()->getCalendar().getEvent(eventID))
 		{
 			// The event will only still exist if repetitions are outstanding
 			QLabel* warn = new QLabel(deferDlg);
@@ -419,7 +419,7 @@ void MessageWin::slotDefer()
 	if (deferTime->getDateTime(dateTime))
 	{
 		// Get the event being deferred. It will only still exist if repetitions are outstanding.
-		const Event* kcalEvent = theApp()->getCalendar().getEvent(eventID);
+		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);
 		if (kcalEvent)
 		{
 			// It's a repeated alarm which may still exist in the calendar file

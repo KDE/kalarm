@@ -61,6 +61,7 @@ KAlarmMainWindow::KAlarmMainWindow()
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 
+	theApp()->checkCalendar();    // ensure calendar is open
 	listView = new AlarmListView(this, "listView");
 	setCentralWidget(listView);
 	listView->refresh();          // populate the message list

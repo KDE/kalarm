@@ -60,6 +60,7 @@ class KAlarmApp : public KUniqueApplication
 		virtual int       newInstance();
 		static KAlarmApp* getInstance();
 		AlarmCalendar&    getCalendar()                   { return *mCalendar; }
+		void              checkCalendar()                 { initCheck(); }
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
 		bool              runInSystemTray() const;
@@ -76,7 +77,7 @@ class KAlarmApp : public KUniqueApplication
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
 		bool              isDaemonRunning();
-		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		bool              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		void              updateMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              deleteMessage(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
