@@ -1,5 +1,16 @@
 KAlarm
 
+=== Version 1.2.1 --- 24 October 2004 ===
+Use KMix whenever possible to set hardware sound volume.
+Add option to copy emails sent via sendmail, to KMail sent-mail folder.
+Add option to pick a KMail identity to use as sender of email alarms.
+Also fill in alarm edit dialog email fields when email is dropped onto KAlarm.
+Make detection of email message display alarms independent of language.
+Prevent kalarm failing to register with kalarmd except when really necessary.
+Fix Defer button in message window being wrongly disabled (bug in 1.2.0 beta 1).
+Prevent crash, and output error message, if menu creation fails.
+Fix sound repetition being lost.
+
 === Version 1.2.0 --- 1 September 2004 ===
 Allow user to specify the late-cancellation period for an alarm.
 Add option to automatically close window after late-cancellation period.
