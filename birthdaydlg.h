@@ -33,7 +33,6 @@ class FontColourButton;
 class SoundPicker;
 class Reminder;
 namespace KABC { class AddressBook; }
-using KABC::AddressBook;
 class BLineEdit;
 
 
@@ -65,7 +64,7 @@ class BirthdayDlg : public KDialogBase
 		ColourCombo*      mBgColourChoose;
 		CheckBox*         mConfirmAck;
 		CheckBox*         mLateCancel;
-		const AddressBook* mAddressBook;
+		const KABC::AddressBook* mAddressBook;
 		QString           mPrefixText;   // last entered value of prefix text
 		QString           mSuffixText;   // last entered value of suffix text
 		int               mFlags;        // event flag bits
