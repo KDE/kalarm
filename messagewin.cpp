@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
