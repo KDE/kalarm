@@ -36,7 +36,7 @@
 #include <kdebug.h>
 
 extern "C" {
-#include <ical.h>
+#include <libical/ical.h>
 }
 
 #include <libkcal/vcaldrag.h>
