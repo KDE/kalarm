@@ -23,7 +23,8 @@
 
 ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaultColour)
    :  KColorCombo(parent, name),
-      selection(defaultColour)
+      selection(defaultColour),
+      disabled(false)
 {
 	deleteColours();
 }
@@ -63,5 +64,36 @@ void ColourCombo::deleteColours()
 		else if (colour == selection)
 			selitem = i;
 	}
-	setCurrentItem(selitem);
+	if (disabled)
+		addDisabledColour();
+	else
+		setCurrentItem(selitem);
+}
+
+void ColourCombo::setEnabled(bool enable)
+{
+	if (enable  &&  disabled)
+	{
+		disabled = false;
+		setColour(selection);
+	}
+	else if (!enable  &&  !disabled)
+	{
+		selection = color();
+		addDisabledColour();
+		disabled = true;
+	}
+	KColorCombo::setEnabled(enable);
+}
+
+void ColourCombo::addDisabledColour()
+{
+	int end = count();
+	if (end > 1)
+	{
+		QPixmap pm = *pixmap(1);
+		pm.fill(backgroundColor());
+		insertItem(pm);
+		setCurrentItem(end);
+	}
 }

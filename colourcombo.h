@@ -29,14 +29,19 @@ class ColourCombo : public KColorCombo
 	public:
 		ColourCombo(QWidget* parent = 0L, const char* name = 0L, const QColor& = 0xFFFFFF);
 		void    setColour(const QColor&);
+	public slots:
+		virtual void setEnabled(bool);
 	protected:
 		/**
 		 * @reimplemented
 		 */
 		virtual void resizeEvent(QResizeEvent*);
 	private:
-		void    deleteColours();
-		QColor  selection;
+		void         deleteColours();
+		void         addDisabledColour();
+
+		QColor       selection;
+		bool         disabled;
 };
 
 #endif // COLOURCOMBO_H
