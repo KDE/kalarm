@@ -41,6 +41,7 @@ class Settings : public QObject
 		bool         runInSystemTray() const          { return mRunInSystemTray; }
 		bool         disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
 		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
+		bool         confirmAlarmDeletion() const     { return mConfirmAlarmDeletion; }
 		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		const QTime& startOfDay() const               { return mStartOfDay; }
 		bool         startOfDayChanged() const        { return mStartOfDayChanged; }
@@ -55,10 +56,12 @@ class Settings : public QObject
 		static const bool   default_runInSystemTray;
 		static const bool   default_disableAlarmsIfStopped;
 		static const bool   default_autostartTrayIcon;
+		static const bool   default_confirmAlarmDeletion;
 		static const int    default_daemonTrayCheckInterval;
 		bool                mRunInSystemTray;
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
+		bool                mConfirmAlarmDeletion;
 		int                 mDaemonTrayCheckInterval;
 		QTime               mStartOfDay;
 		QColor              mDefaultBgColour;

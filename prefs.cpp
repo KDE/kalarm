@@ -178,6 +178,12 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	QWhatsThis::add(mStartOfDay,
 	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
 
+	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), page, "confirmDeletion");
+	mConfirmAlarmDeletion->setFixedSize(mConfirmAlarmDeletion->sizeHint());
+	QWhatsThis::add(mConfirmAlarmDeletion,
+	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
+	topLayout->addWidget(mConfirmAlarmDeletion);
+
 	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
 
@@ -192,6 +198,7 @@ void MiscPrefs::restore()
 	mDisableAlarmsIfStopped->setChecked(mSettings->mDisableAlarmsIfStopped);
 	mAutostartTrayIcon1->setChecked(mSettings->mAutostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(mSettings->mAutostartTrayIcon);
+	mConfirmAlarmDeletion->setChecked(mSettings->mConfirmAlarmDeletion);
 	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
 	mStartOfDay->setValue(mSettings->mStartOfDay.hour()*60 + mSettings->mStartOfDay.minute());
 }
@@ -202,6 +209,7 @@ void MiscPrefs::apply(bool syncToDisc)
 	mSettings->mRunInSystemTray         = systray;
 	mSettings->mDisableAlarmsIfStopped  = mDisableAlarmsIfStopped->isChecked();
 	mSettings->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+	mSettings->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
 	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	int sod = mStartOfDay->value();
 	mSettings->mStartOfDay.setHMS(sod/60, sod%60, 0);
@@ -216,6 +224,7 @@ void MiscPrefs::setDefaults()
 	mDisableAlarmsIfStopped->setChecked(Settings::default_disableAlarmsIfStopped);
 	mAutostartTrayIcon1->setChecked(Settings::default_autostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(Settings::default_autostartTrayIcon);
+	mConfirmAlarmDeletion->setChecked(Settings::default_confirmAlarmDeletion);
 	mDaemonTrayCheckInterval->setValue(Settings::default_daemonTrayCheckInterval);
 	mStartOfDay->setValue(Settings::default_startOfDay.hour()*60 + Settings::default_startOfDay.minute());
 }

@@ -86,6 +86,7 @@ class MiscPrefs : public PrefsBase
 		QCheckBox*     mDisableAlarmsIfStopped;
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
+		QCheckBox*     mConfirmAlarmDeletion;
 		QSpinBox*      mDaemonTrayCheckInterval;
 		TimeSpinBox*   mStartOfDay;
 };

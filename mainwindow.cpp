@@ -404,6 +404,14 @@ void KAlarmMainWindow::slotDelete()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
+		if (theApp()->settings()->confirmAlarmDeletion())
+		{
+			int n = 1;
+			if (KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the selected alarm?", "Are you sure you want to delete the %n selected alarms?", n),
+			                               i18n("Confirm Alarm Deletion"))
+			    != KMessageBox::Yes)
+				return;
+		}
 		KAlarmEvent event = listView->getEntry(item);
 
 		// Delete the event from the displays

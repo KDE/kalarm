@@ -28,25 +28,29 @@
 const bool   Settings::default_runInSystemTray         = true;
 const bool   Settings::default_disableAlarmsIfStopped  = true;
 const bool   Settings::default_autostartTrayIcon       = true;
+const bool   Settings::default_confirmAlarmDeletion    = true;
 const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
 const QColor Settings::default_defaultBgColour(red);
 const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
 const QTime  Settings::default_startOfDay(0, 0);
 
 // Config file entry names
-static const QString GENERAL_SECTION      = QString::fromLatin1("General");
-static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("MessageBackgroundColour");
-static const QString MESSAGE_FONT         = QString::fromLatin1("MessageFont");
-static const QString RUN_IN_SYSTEM_TRAY   = QString::fromLatin1("RunInSystemTray");
-static const QString DISABLE_IF_STOPPED   = QString::fromLatin1("DisableAlarmsIfStopped");
-static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
-static const QString DAEMON_TRAY_INTERVAL = QString::fromLatin1("DaemonTrayCheckInterval");
-static const QString START_OF_DAY         = QString::fromLatin1("StartOfDay");
-static const QString START_OF_DAY_CHECK   = QString::fromLatin1("Sod");
+static const QString GENERAL_SECTION        = QString::fromLatin1("General");
+static const QString MESSAGE_BG_COLOUR      = QString::fromLatin1("MessageBackgroundColour");
+static const QString MESSAGE_FONT           = QString::fromLatin1("MessageFont");
+static const QString RUN_IN_SYSTEM_TRAY     = QString::fromLatin1("RunInSystemTray");
+static const QString DISABLE_IF_STOPPED     = QString::fromLatin1("DisableAlarmsIfStopped");
+static const QString AUTOSTART_TRAY         = QString::fromLatin1("AutostartTray");
+static const QString CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmDeletion");
+static const QString DAEMON_TRAY_INTERVAL   = QString::fromLatin1("DaemonTrayCheckInterval");
+static const QString START_OF_DAY           = QString::fromLatin1("StartOfDay");
+static const QString START_OF_DAY_CHECK     = QString::fromLatin1("Sod");
 
 inline int Settings::startOfDayCheck() const
 {
-	return QTime().msecsTo(mStartOfDay) ^ 0x82451630;   // combine with a "random" constant to prevent clever people fiddling things
+	// Combine with a "random" constant to prevent 'clever' people fiddling the
+	// value, and thereby screwing things up.
+	return QTime().msecsTo(mStartOfDay) ^ 0x82451630;
 }
 
 
@@ -65,6 +69,7 @@ void Settings::loadSettings()
 	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
 	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
+	mConfirmAlarmDeletion    = config->readBoolEntry(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
@@ -81,6 +86,7 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
+	config->writeEntry(CONFIRM_ALARM_DELETION, mConfirmAlarmDeletion);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
