@@ -65,8 +65,6 @@ class AlarmGuiIface : virtual public DCOPObject
 		    @param result success/failure code. Value is of type RegisterResult.
 		 */
 		virtual ASYNC registered(bool reregister, int result) = 0;
-
-	public:
 };
 
 #endif
