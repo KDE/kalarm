@@ -99,7 +99,7 @@ KAlarmApp::KAlarmApp()
 	  mSessionClosingDown(false)
 {
 #if KDE_VERSION >= 290
-	mNoShellAccess = authorize("shell_access");
+	mNoShellAccess = !authorize("shell_access");
 #else
 	mNoShellAccess = false;
 	marginKDE2 = KDialog::marginHint();
