@@ -1,5 +1,24 @@
 KAlarm
 
+Add option to choose foreground colour for alarm messages.
+
+=== Version 0.9.5 --- 3 Sep 2003 ===
+Add option for non-modal alarm message windows.
+Add option to display a notification when an email alarm queues an email.
+Emails via KMail are sent without opening composer window, if KMail is running.
+Provide separate configuration for 'From' and 'Bcc' addresses for email alarms.
+Add exceptions to recurrence specification.
+Add multiple month selection to yearly recurrence.
+Add day of month selection in yearly recurrence.
+Add last day of month option in monthly and yearly recurrences.
+Add 2nd - 5th last week of month options in monthly and yearly recurrences.
+Add filename completion to file and command alarm edit fields.
+Display alarms-disabled indication in system tray tooltip.
+Enable file alarms to display image files.
+Fix file alarms not dislaying some text files, and improve HTML file display.
+Fix loss of edits of attachment list for email alarms.
+Fix wrong recurrence end date being displayed when editing an existing alarm.
+
 === Version 0.9.4 --- 3 Jul 2003 ===
 Add time-to-alarm display option to main alarm list.
 Add option to list next 24 hours' alarms in system tray tooltip.
