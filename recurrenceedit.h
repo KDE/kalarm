@@ -99,6 +99,7 @@ class RecurrenceEdit : public QFrame
 		void          yearDayOfMonthSelected(int);
 
 	private:
+		void          setRuleDefaults(const QDate& start);
 		bool          getCheckedDays(QBitArray& rDays) const;
 		void          setCheckedDays(QBitArray& rDays);
 		bool          getCheckedMonths(QValueList<int>& months) const;
@@ -133,6 +134,9 @@ class RecurrenceEdit : public QFrame
 		int             mMonthlyButtonId;
 		int             mYearlyButtonId;
 		RepeatType      mRuleButtonType;
+		bool            mWeeklyShown;
+		bool            mMonthlyShown;
+		bool            mYearlyShown;
 
 		// Rules without choices
 		QFrame*         mNoneRuleFrame;

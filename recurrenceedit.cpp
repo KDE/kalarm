@@ -79,6 +79,9 @@ static const char* const ordinal[] = {
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	: QFrame(parent, name),
 	  mRuleButtonType(INVALID_RECUR),
+	  mWeeklyShown(false),
+	  mMonthlyShown(false),
+	  mYearlyShown(false),
 	  noEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
@@ -668,16 +671,19 @@ void RecurrenceEdit::periodClicked(int id)
 	{
 		frame = mWeekRuleFrame;
 		mRuleButtonType = WEEKLY;
+		mWeeklyShown = true;
 	}
 	else if (id == mMonthlyButtonId)
 	{
 		frame = mMonthRuleFrame;
 		mRuleButtonType = MONTHLY;
+		mMonthlyShown = true;
 	}
 	else if (id == mYearlyButtonId)
 	{
 		frame = mYearRuleFrame;
 		mRuleButtonType = ANNUAL;
+		mYearlyShown = true;
 	}
 	else
 		return;
@@ -882,6 +888,7 @@ void RecurrenceEdit::enableExceptionButtons()
  */
 void RecurrenceEdit::setStartDate(const QDate& start)
 {
+	setRuleDefaults(start);
 	if (mExceptionDateEdit)
 		mExceptionDateEdit->setMinDate(start, i18n("Date cannot be earlier than start date", "start date"));
 }
@@ -963,27 +970,9 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	mMonthRecurFrequency->setValue(1);
 	mYearRecurFrequency->setValue(1);
 
-	for (int i = 0;  i < 7;  ++i)
-		mWeekRuleDayBox[i]->setChecked(false);
-	int day = fromDate.dayOfWeek();
-	if (day >= 1  &&  day <= 7)
-		mWeekRuleDayBox[(day + 7 - mWeekRuleFirstDay) % 7]->setChecked(true);
-
-	mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);    // date in month
-	day           = fromDate.day() - 1;
-	int dayOfWeek = fromDate.dayOfWeek() - 1;
-	int month     = fromDate.month() - 1;
-	mMonthRuleNthDayEntry->setCurrentItem(day);
-	mMonthRuleNthNumberEntry->setCurrentItem(day / 7);
-	mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
-
+	setRuleDefaults(fromDate);
+	mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);   // date in month
 	mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);     // date in year
-//	mYearRuleDayEntry->setValue(fromDate.dayOfYear());
-	mYearRuleNthDayEntry->setCurrentItem(day);
-	mYearRuleNthNumberEntry->setCurrentItem(day / 7);
-	mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
-	for (int i = 0;  i < 12;  ++i)
-		mYearRuleMonthBox[i]->setChecked(i == month);
 
 	mEndDateEdit->setDate(fromDate);
 
@@ -1004,6 +993,39 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	noEmitTypeChanged = false;
 	rangeTypeClicked();
 	enableExceptionButtons();
+}
+
+/******************************************************************************
+ * Set the controls for weekly, monthly and yearly rules to their default
+ * values, depending on the recurrence start date.
+ */
+void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
+{
+	int day       = fromDate.day() - 1;
+	int dayOfWeek = fromDate.dayOfWeek() - 1;
+	int month     = fromDate.month() - 1;
+	if (!mWeeklyShown)
+	{
+		for (int i = 0;  i < 7;  ++i)
+			mWeekRuleDayBox[i]->setChecked(false);
+		if (dayOfWeek >= 0  &&  dayOfWeek < 7)
+			mWeekRuleDayBox[(dayOfWeek + 8 - mWeekRuleFirstDay) % 7]->setChecked(true);
+	}
+	if (!mMonthlyShown)
+	{
+		mMonthRuleNthDayEntry->setCurrentItem(day);
+		mMonthRuleNthNumberEntry->setCurrentItem(day / 7);
+		mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
+	}
+	if (!mYearlyShown)
+	{
+//		mYearRuleDayEntry->setValue(fromDate.dayOfYear());
+		mYearRuleNthDayEntry->setCurrentItem(day);
+		mYearRuleNthNumberEntry->setCurrentItem(day / 7);
+		mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
+		for (int i = 0;  i < 12;  ++i)
+			mYearRuleMonthBox[i]->setChecked(i == month);
+	}
 }
 
 /******************************************************************************

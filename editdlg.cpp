@@ -897,8 +897,6 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
 	mAlarmDateTime  = mTimeWidget->getDateTime(false);
-	if (!mRecurPageShown)
-		mRecurrenceEdit->setDefaults(mAlarmDateTime.dateTime());
 	if (mRecurSetDefaultEndDate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
