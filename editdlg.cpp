@@ -591,7 +591,7 @@ void EditAlarmDlg::saveState(const KAlarmEvent* event)
 	for (int i = 0;  i < mEmailAttachList->count();  ++i)
 		mSavedEmailAttach += mEmailAttachList->text(i);
 	mSavedEmailBcc       = mEmailBcc->isChecked();
-	mSavedDateTime       = mTimeWidget->getDateTime(false);
+	mSavedDateTime       = mTimeWidget->getDateTime(false, false);
 	mSavedLateCancel     = mLateCancel->isChecked();
 	mSavedRecurrenceType = mRecurrenceEdit->repeatType();
 }
@@ -605,7 +605,7 @@ bool EditAlarmDlg::stateChanged() const
 	QString textFileCommandMessage;
 	checkText(textFileCommandMessage, false);
 	if (mSavedTypeRadio        != mActionGroup->selected()
-	||  mSavedDateTime         != mTimeWidget->getDateTime()
+	||  mSavedDateTime         != mTimeWidget->getDateTime(false, false)
 	||  mSavedLateCancel       != mLateCancel->isChecked()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
 	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
@@ -718,15 +718,6 @@ KAlarmEvent::Action EditAlarmDlg::getAlarmType() const
 }
 
 /******************************************************************************
-*  Return the alarm's start date and time.
-*/
-DateTime EditAlarmDlg::getDateTime()
-{
-	mAlarmDateTime = mTimeWidget->getDateTime();
-	return mAlarmDateTime;
-}
-
-/******************************************************************************
 *  Called when the dialog's size has changed.
 *  Records the new size (adjusted to ignore the optional height of the deferred
 *  time edit widget) in the config file.
@@ -751,7 +742,7 @@ void EditAlarmDlg::slotOk()
 	if (activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	QWidget* errWidget;
-	mAlarmDateTime = mTimeWidget->getDateTime(false, &errWidget);
+	mAlarmDateTime = mTimeWidget->getDateTime(!mRecurrenceEdit->isTimedRepeatType(), false, &errWidget);
 	if (errWidget)
 	{
 		showPage(mMainPageIndex);
@@ -887,8 +878,12 @@ void EditAlarmDlg::slotEditDeferral()
 void EditAlarmDlg::slotShowMainPage()
 {
 	slotAlarmTypeClicked(-1);
-	if (mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	if (!mReadOnly  &&  mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
+	if (mReadOnly  ||  mRecurrenceEdit->isTimedRepeatType())
+		mTimeWidget->setMinDate(false);
+	else
+		mTimeWidget->setMinDateToday();
 }
 
 /******************************************************************************
@@ -900,16 +895,20 @@ void EditAlarmDlg::slotShowMainPage()
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
-	mAlarmDateTime  = mTimeWidget->getDateTime(false);
-	if (mRecurSetDefaultEndDate)
+	if (!mReadOnly)
 	{
 		QDateTime now = QDateTime::currentDateTime();
-		mRecurrenceEdit->setDefaultEndDate(mAlarmDateTime.dateTime() >= now ? mAlarmDateTime.date() : now.date());
-		mRecurSetDefaultEndDate = false;
+		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+		bool expired = (mAlarmDateTime.dateTime() < now);
+		if (mRecurSetDefaultEndDate)
+		{
+			mRecurrenceEdit->setDefaultEndDate(expired ? now.date() : mAlarmDateTime.date());
+			mRecurSetDefaultEndDate = false;
+		}
+		mRecurrenceEdit->setStartDate(mAlarmDateTime.date(), now.date());
+		if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+			mRecurrenceEdit->setEndDateTime(expired ? now : mAlarmDateTime);
 	}
-	mRecurrenceEdit->setStartDate(mAlarmDateTime.date());
-	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
-		mRecurrenceEdit->setEndDateTime(mAlarmDateTime);
 	mRecurPageShown = true;
 }
 
@@ -924,7 +923,10 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 	if (mDeferGroup)
 		mDeferGroup->setEnabled(recurs);
 	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	{
+		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
 		mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
+	}
 	slotRecurFrequencyChange();
 }
 

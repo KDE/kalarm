@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001, 2002 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,8 +43,10 @@ class AlarmTimeWidget : public ButtonGroup
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
-		DateTime       getDateTime(bool showErrorMessage = true, QWidget** errorWidget = 0) const;
-		void           setDateTime(const DateTime&);
+		DateTime       getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
+		void           setDateTime(const DateTime&, bool setMinimum = true);
+		void           setMinDateToday();
+		void           setMinDate(bool);
 		void           setReadOnly(bool);
 		bool           anyTime() const               { return mAnyTime; }
 		void           enableAnyTime(bool enable);

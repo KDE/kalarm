@@ -1,11 +1,14 @@
 KAlarm
 
-=== Version 0.9.7 --- 21 Nov 2003 ===
+=== Version 0.9.7 --- 23 Nov 2003 ===
+Allow entered start date for timed recurrence events to be earlier than now.
+Prevent attempted entry of recurrence end date earlier than start date or today.
+Fix error displaying time of expired repeat-at-login alarms.
 Fix memory leak when sending emails with attachments.
-Fix error sending emails with very small attachments.
+Fix error trying to send emails with very small attachments.
 Eliminate duplicate reload-calendar calls to alarm daemon.
 
-=== Version 0.9.6 --- 2 Nov 2003 ===
+=== Version 0.9.6 (KDE 3.2 beta1) --- 7 Nov 2003 ===
 Add option to choose foreground colour for alarm messages.
 Create new alarm by dragging KMail email onto main window or system tray icon.
 Set initial recurrence defaults to correspond to alarm start date.

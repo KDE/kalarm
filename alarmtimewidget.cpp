@@ -185,11 +185,12 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 
 /******************************************************************************
 *  Fetch the entered date/time.
-*  If <= current time, and 'showErrorMessage' is true, output an error message.
-*  If non-null, 'errorWidget' is set to point to the widget containing the error.
+*  If 'checkExpired' is true and the entered value <= current time, an error occurs.
+*  In this case, if 'showErrorMessage' is true, output an error message.
+*  'errorWidget' if non-null, is set to point to the widget containing the error.
 *  Reply = invalid date/time if error.
 */
-DateTime AlarmTimeWidget::getDateTime(bool showErrorMessage, QWidget** errorWidget) const
+DateTime AlarmTimeWidget::getDateTime(bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const
 {
 	if (errorWidget)
 		*errorWidget = 0;
@@ -222,7 +223,7 @@ DateTime AlarmTimeWidget::getDateTime(bool showErrorMessage, QWidget** errorWidg
 		if (anyTime)
 		{
 			result = mDateEdit->date();
-			if (result.date() < now.date())
+			if (checkExpired  &&  result.date() < now.date())
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
@@ -234,7 +235,7 @@ DateTime AlarmTimeWidget::getDateTime(bool showErrorMessage, QWidget** errorWidg
 		else
 		{
 			result.set(mDateEdit->date(), mTimeEdit->time());
-			if (result <= now.addSecs(1))
+			if (checkExpired  &&  result <= now.addSecs(1))
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
@@ -262,7 +263,7 @@ DateTime AlarmTimeWidget::getDateTime(bool showErrorMessage, QWidget** errorWidg
 /******************************************************************************
 *  Set the date/time.
 */
-void AlarmTimeWidget::setDateTime(const DateTime& dt)
+void AlarmTimeWidget::setDateTime(const DateTime& dt, bool setMinimum)
 {
 	if (dt.date().isValid())
 	{
@@ -270,8 +271,6 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 		mTimeEdit->setValue(t.hour()*60 + t.minute());
 		mDateEdit->setDate(dt.date());
 		dateTimeChanged();     // update the delay time edit box
-		QDate now = QDate::currentDate();
-		mDateEdit->setMinDate(dt.date() < now ? dt.date() : now);
 	}
 	else
 	{
@@ -279,6 +278,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 		mDateEdit->setValid(false);
 		mDelayTimeEdit->setValid(false);
 	}
+	setMinDate(setMinimum);
 	if (mAnyTimeCheckBox)
 	{
 		bool anyTime = dt.isDateOnly();
@@ -287,6 +287,33 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 		mAnyTimeCheckBox->setChecked(anyTime);
 		setAnyTime();
 	}
+}
+
+/******************************************************************************
+*  Set the minimum date to today, adjusting the entered date if necessary.
+*/
+void AlarmTimeWidget::setMinDateToday()
+{
+	QDate today = QDate::currentDate();
+	mDateEdit->setMinDate(today);
+}
+
+/******************************************************************************
+*  Set whether the date has a minimum value.
+*/
+void AlarmTimeWidget::setMinDate(bool yes)
+{
+	if (yes)
+	{
+		if (mDateEdit->isValid())
+		{
+			QDate today = QDate::currentDate();
+			QDate dt    = mDateEdit->date();
+			mDateEdit->setMinDate(dt < today ? dt : today);
+		}
+	}
+	else
+		mDateEdit->setMinDate(QDate());
 }
 
 /******************************************************************************

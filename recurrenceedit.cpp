@@ -892,11 +892,25 @@ void RecurrenceEdit::enableExceptionButtons()
 /******************************************************************************
  * Notify this instance of a change in the alarm start date.
  */
-void RecurrenceEdit::setStartDate(const QDate& start)
+void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 {
-	setRuleDefaults(start);
-	if (mExceptionDateEdit)
-		mExceptionDateEdit->setMinDate(start, i18n("Date cannot be earlier than start date", "start date"));
+	if (!mReadOnly)
+	{
+		setRuleDefaults(start);
+		if (start < today)
+		{
+			mEndDateEdit->setMinDate(today);
+			if (mExceptionDateEdit)
+				mExceptionDateEdit->setMinDate(today);
+		}
+		else
+		{
+			const QString startString = i18n("Date cannot be earlier than start date", "start date");
+			mEndDateEdit->setMinDate(start, startString);
+			if (mExceptionDateEdit)
+				mExceptionDateEdit->setMinDate(start, startString);
+		}
+	}
 }
 
 /******************************************************************************

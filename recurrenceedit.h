@@ -52,6 +52,7 @@ class RecurrenceEdit : public QFrame
 {
 		Q_OBJECT
 	public:
+		// Don't alter the order of these recurrence types
 		enum RepeatType { INVALID_RECUR = -1, NO_RECUR, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
 		RecurrenceEdit(bool readOnly, QWidget* parent, const char* name = 0);
@@ -65,7 +66,8 @@ class RecurrenceEdit : public QFrame
 		void          updateEvent(KAlarmEvent&);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
-		void          setStartDate(const QDate&);
+		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
+		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
