@@ -26,4 +26,4 @@ autostartdir = $(datadir)/autostart
 app_DATA = kalarmd.desktop
 appdir = $(kde_appsdir)/.hidden
 
-include ../../admin/Doxyfile.am
+include $(top_srcdir)/doc/api/Doxyfile.am
