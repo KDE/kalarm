@@ -215,7 +215,8 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 	dateEdit->setMinDate(dt.date() < now ? dt.date() : now);
 	if (anyTimeCheckBox)
 	{
-		anyTimeAllowed = anyTime;
+		if (anyTime)
+			anyTimeAllowed = true;
 		anyTimeCheckBox->setChecked(anyTime);
 	}
 }
