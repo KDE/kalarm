@@ -73,56 +73,56 @@ DeferAlarmDlg::~DeferAlarmDlg()
 */
 void DeferAlarmDlg::slotOk()
 {
-	if (!mTimeWidget->getDateTime(mAlarmDateTime))
+	mAlarmDateTime = mTimeWidget->getDateTime();
+	if (!mAlarmDateTime.isValid())
+		return;
+	bool recurs = false;
+	bool reminder = false;
+	DateTime endTime;
+	if (!mLimitEventID.isEmpty())
 	{
-		bool recurs = false;
-		bool reminder = false;
-		DateTime endTime;
-		if (!mLimitEventID.isEmpty())
+		// Get the event being deferred
+		const Event* kcalEvent = theApp()->getEvent(mLimitEventID);
+		if (kcalEvent)
 		{
-			// Get the event being deferred
-			const Event* kcalEvent = theApp()->getEvent(mLimitEventID);
-			if (kcalEvent)
+			KAlarmEvent event(*kcalEvent);
+			Recurrence* recurrence = kcalEvent->recurrence();
+			if (recurrence  &&  recurrence->doesRecur() != Recurrence::rNone)
 			{
-				KAlarmEvent event(*kcalEvent);
-				Recurrence* recurrence = kcalEvent->recurrence();
-				if (recurrence  &&  recurrence->doesRecur() != Recurrence::rNone)
+				// It's a repeated alarm. Don't allow it to be deferred past its next occurrence.
+				QDateTime now = QDateTime::currentDateTime();
+				event.nextOccurrence(now, endTime);
+				recurs = true;
+				if (event.reminder())
 				{
-					// It's a repeated alarm. Don't allow it to be deferred past its next occurrence.
-					QDateTime now = QDateTime::currentDateTime();
-					event.nextOccurrence(now, endTime);
-					recurs = true;
-					if (event.reminder())
+					DateTime reminderTime = endTime.addMins(-event.reminder());
+					if (now < reminderTime)
 					{
-						DateTime reminderTime = endTime.addMins(-event.reminder());
-						if (now < reminderTime)
-						{
-							endTime = reminderTime;
-							reminder = true;
-						}
+						endTime = reminderTime;
+						reminder = true;
 					}
 				}
-				else if ((event.reminder() || event.reminderDeferral() || event.reminderArchived())
-				     &&  QDateTime::currentDateTime() < event.mainDateTime().dateTime())
-				{
-					// It's an advance warning alarm. Don't allow it to be deferred past its main alarm time.
-					endTime = event.mainDateTime();
-					reminder = true;
-				}
+			}
+			else if ((event.reminder() || event.reminderDeferral() || event.reminderArchived())
+			     &&  QDateTime::currentDateTime() < event.mainDateTime().dateTime())
+			{
+				// It's an advance warning alarm. Don't allow it to be deferred past its main alarm time.
+				endTime = event.mainDateTime();
+				reminder = true;
 			}
 		}
-		else
-			endTime = mLimitDateTime;
-		if (endTime.isValid()  &&  mAlarmDateTime >= endTime)
-		{
-			QString text = !reminder ? i18n("Cannot defer past the alarm's next recurrence (currently %1)")
-			             : recurs    ? i18n("Cannot defer past the alarm's next reminder (currently %1)")
-			             :             i18n("Cannot defer reminder past the main alarm time (%1)");
-			KMessageBox::sorry(this, text.arg(endTime.formatLocale()));
-		}
-		else
-			accept();
 	}
+	else
+		endTime = mLimitDateTime;
+	if (endTime.isValid()  &&  mAlarmDateTime >= endTime)
+	{
+		QString text = !reminder ? i18n("Cannot defer past the alarm's next recurrence (currently %1)")
+		             : recurs    ? i18n("Cannot defer past the alarm's next reminder (currently %1)")
+		             :             i18n("Cannot defer reminder past the main alarm time (%1)");
+		KMessageBox::sorry(this, text.arg(endTime.formatLocale()));
+	}
+	else
+		accept();
 }
 
 /******************************************************************************
