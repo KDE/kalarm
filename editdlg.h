@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm message
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "msgevent.h"
 using namespace KCal;
 
+class QButtonGroup;
 class QMultiLineEdit;
 class QSpinBox;
 class TimeSpinBox;
@@ -41,58 +42,61 @@ class AlarmTimeWidget;
  */
 class EditAlarmDlg : public KDialogBase
 {
-      Q_OBJECT
-   public:
-      enum MessageType { MESSAGE, FILE };
+		Q_OBJECT
+	public:
+		enum MessageType { MESSAGE, FILE };
 
-      EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L,
-                   const KAlarmEvent* = 0L);
-      virtual ~EditAlarmDlg();
+		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L,
+                             const KAlarmEvent* = 0L);
+		virtual ~EditAlarmDlg();
 
-      void            getEvent(KAlarmEvent&);
-      const QString&  getMessage() const      { return alarmMessage; }
-      MessageType     getMessageType() const  { return fileRadio->isOn() ? FILE : MESSAGE; }
-      QDateTime       getDateTime() const     { return alarmDateTime; }
+		void            getEvent(KAlarmEvent&);
+		const QString&  getMessage() const      { return alarmMessage; }
+		MessageType     getMessageType() const  { return fileRadio->isOn() ? FILE : MESSAGE; }
+		QDateTime       getDateTime() const     { return alarmDateTime; }
 #ifdef SELECT_FONT
-      const QColor    getBgColour() const     { return fontColour->bgColour(); }
-      const QFont     getFont() const         { return fontColour->font(); }
+		const QColor    getBgColour() const     { return fontColour->bgColour(); }
+		const QFont     getFont() const         { return fontColour->font(); }
 #else
-      const QColor    getBgColour() const     { return bgColourChoose->color(); }
+		const QColor    getBgColour() const     { return bgColourChoose->color(); }
 #endif
-      bool            getLateCancel() const   { return lateCancel->isChecked(); }
-      bool            getBeep() const         { return beep->isChecked(); }
+		bool            getLateCancel() const   { return lateCancel->isChecked(); }
+		bool            getBeep() const         { return beep->isChecked(); }
 
-   protected:
-      virtual void resizeEvent(QResizeEvent*);
-   protected slots:
-      void slotOk();
-      void slotCancel();
-      void slotMessageToggled(bool on);
-      void slotFileToggled(bool on);
-      void slotBrowse();
-      void slotMessageTextChanged();
-      void slotRepeatCountChanged(int);
+	protected:
+		virtual void resizeEvent(QResizeEvent*);
+	protected slots:
+		void slotOk();
+		void slotCancel();
+		void slotMessageTypeClicked(int id);
+		void slotMessageTextChanged();
+		void slotRepeatCountChanged(int);
 
-   private:
-      QRadioButton*    messageRadio;
-      QRadioButton*    fileRadio;
-      QPushButton*     browseButton;
-      QMultiLineEdit*  messageEdit;     // alarm message edit box
-      AlarmTimeWidget* timeWidget;
-      QCheckBox*       lateCancel;
-      QCheckBox*       beep;
-      QSpinBox*        repeatCount;
-      TimeSpinBox*     repeatInterval;
-      QCheckBox*       repeatAtLogin;
+	private:
+		QString         getMessageText();
+
+		QButtonGroup*    messageTypeGroup;
+		QRadioButton*    messageRadio;
+		QRadioButton*    fileRadio;
+		QPushButton*     browseButton;
+		QMultiLineEdit*  messageEdit;     // alarm message edit box
+		AlarmTimeWidget* timeWidget;
+		QCheckBox*       lateCancel;
+		QCheckBox*       beep;
+		QSpinBox*        repeatCount;
+		TimeSpinBox*     repeatInterval;
+		QCheckBox*       repeatAtLogin;
 #ifdef SELECT_FONT
-      FontColourChooser* fontColour;
+		FontColourChooser* fontColour;
 #else
-      ColourCombo*     bgColourChoose;
+		ColourCombo*     bgColourChoose;
 #endif
-      QString          alarmMessage;
-      QDateTime        alarmDateTime;
-//    QColor           bgColour;
-      bool             timeDialog;      // the dialog shows date/time fields only
+		QString          alarmMessage;
+		QDateTime        alarmDateTime;
+//		QColor           bgColour;
+		bool             timeDialog;      // the dialog shows date/time fields only
+		bool             singleLineOnly;  // no multi-line text input allowed
+		bool             multiLine;       // multi-line text when file/command selected
 };
 
 #endif // EDITDLG_H

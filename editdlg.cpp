@@ -26,6 +26,7 @@
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qmultilinedit.h>
+#include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qmsgbox.h>
@@ -50,7 +51,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	                        const KAlarmEvent* event)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
 {
-	QGroupBox*   group;
 	QVBoxLayout* layout;
 	QGridLayout* grid;
 	QLabel*      lbl;
@@ -61,41 +61,38 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Message label + multi-line editor
 
-	group = new QGroupBox(i18n("Message"), page, "messageGroup");
-	topLayout->addWidget(group);
-	layout = new QVBoxLayout(group, KDialog::spacingHint(), 0);
+	messageTypeGroup = new QButtonGroup(i18n("Message"), page, "messageGroup");
+	connect(messageTypeGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
+	topLayout->addWidget(messageTypeGroup);
+	layout = new QVBoxLayout(messageTypeGroup, KDialog::spacingHint(), 0);
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
-	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
+	grid = new QGridLayout(messageTypeGroup, 2, 4, KDialog::spacingHint());
 	layout->addLayout(grid);
-	// To have better control over the button layout, don't use a QButtonGroup
 
 	// Message radio button has an ID of 0
-	messageRadio = new QRadioButton(i18n("Text"), group, "messageButton");
+	messageRadio = new QRadioButton(i18n("Text"), messageTypeGroup, "messageButton");
 	messageRadio->setFixedSize(messageRadio->sizeHint());
-	connect(messageRadio, SIGNAL(toggled(bool)), this, SLOT(slotMessageToggled(bool)));
 	QWhatsThis::add(messageRadio,
 	      i18n("The edit field below contains the alarm message text."));
 	grid->addWidget(messageRadio, 0, 0, AlignLeft);
 	grid->setColStretch(0, 1);
 
 	// File radio button has an ID of 1
-	fileRadio = new QRadioButton(i18n("File"), group, "fileButton");
+	fileRadio = new QRadioButton(i18n("File"), messageTypeGroup, "fileButton");
 	fileRadio->setFixedSize(fileRadio->sizeHint());
-	connect(fileRadio, SIGNAL(toggled(bool)), this, SLOT(slotFileToggled(bool)));
 	QWhatsThis::add(fileRadio,
 	      i18n("The edit field below contains the name of a text file whose contents will be "
 	           "displayed as the alarm message text."));
 	grid->addWidget(fileRadio, 0, 2, AlignRight);
 
 	// Browse button
-	browseButton = new QPushButton(i18n("&Browse..."), group);
+	browseButton = new QPushButton(i18n("&Browse..."), messageTypeGroup);
 	browseButton->setFixedSize(browseButton->sizeHint());
-	connect(browseButton, SIGNAL(clicked()), this, SLOT(slotBrowse()));
 	QWhatsThis::add(browseButton,
 	      i18n("Select a text file to display."));
 	grid->addWidget(browseButton, 0, 3, AlignLeft);
 
-	messageEdit = new QMultiLineEdit(group);
+	messageEdit = new QMultiLineEdit(messageTypeGroup);
 	QSize size = messageEdit->sizeHint();
 	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
 	messageEdit->setMinimumSize(size);
@@ -109,7 +106,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Repeating alarm
 
-	group = new QGroupBox(i18n("Repetition"), page, "repetitionGroup");
+	QGroupBox* group = new QGroupBox(i18n("Repetition"), page, "repetitionGroup");
 	topLayout->addWidget(group);
 	layout = new QVBoxLayout(group, KDialog::spacingHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
@@ -209,15 +206,19 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	{
 		// Set the values to those for the specified event
 		timeWidget->setDateTime(event->dateTime());
-		bool fileMessageType = event->messageIsFileName();
-		messageRadio->setChecked(!fileMessageType);
-		fileRadio->setChecked(!fileMessageType);    // toggle the button to ensure things are set up correctly
-		fileRadio->setChecked(fileMessageType);
-		browseButton->setEnabled(fileMessageType);
-		if (fileMessageType)
+		QRadioButton* radio;
+		singleLineOnly = false;       // ensure the text isn't changed erroneously
+		if (event->messageIsFileName())
+		{
+			radio = fileRadio;
 			messageEdit->setText(event->fileName());
+		}
 		else
+		{
+			radio = messageRadio;
 			messageEdit->setText(event->message());
+		}
+		messageTypeGroup->setButton(messageTypeGroup->id(radio));
 		lateCancel->setChecked(event->lateCancel());
 		beep->setChecked(event->beep());
 		repeatCount->setValue(event->repeatCount());
@@ -234,10 +235,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	{
 		// Set the values to their defaults
 		timeWidget->setDateTime(QDateTime::currentDateTime().addSecs(60));
-		messageRadio->setChecked(false);    // toggle the button to ensure things are set up correctly
-		messageRadio->setChecked(true);
-		browseButton->setEnabled(false);
 		messageEdit->setText(QString::null);
+		messageTypeGroup->setButton(messageTypeGroup->id(messageRadio));
 		repeatCount->setValue(0);
 		repeatInterval->setValue(0);
 		repeatAtLogin->setChecked(false);
@@ -249,6 +248,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #endif
 	}
 
+	slotMessageTypeClicked(-1);    // enable/disable things appropriately
 	repeatInterval->setEnabled(repeatCount->value());
 	messageEdit->setFocus();
 }
@@ -288,11 +288,11 @@ void EditAlarmDlg::slotOk()
 {
 	if (timeWidget->getDateTime(alarmDateTime))
 	{
+		alarmMessage = getMessageText();
 		if (fileRadio->isOn())
 		{
 			// Convert any relative file path to absolute
 			// (using home directory as the default)
-			alarmMessage = messageEdit->text();
 			int i = alarmMessage.find(QString::fromLatin1("/"));
 			if (i > 0  &&  alarmMessage[i - 1] == ':')
 			{
@@ -321,8 +321,6 @@ void EditAlarmDlg::slotOk()
 			}
 		}
 		else
-			alarmMessage = messageEdit->text();
-		if (messageRadio->isOn())
 			alarmMessage.stripWhiteSpace();
 		accept();
 	}
@@ -335,62 +333,81 @@ void EditAlarmDlg::slotCancel()
 
 
 /******************************************************************************
-*  Called when the browse button is pressed to select a file to display.
+*  Called when one of the message type radio buttons is clicked, or
+*  the browse button is pressed to select a file to display.
 */
-void EditAlarmDlg::slotBrowse()
+void EditAlarmDlg::slotMessageTypeClicked(int id)
 {
-	static QString defaultDir;
-	if (defaultDir.isEmpty())
-		defaultDir = QDir::homeDirPath();
-	KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose Text File to Display"));
-	if (!url.isEmpty())
+	if (id == messageTypeGroup->id(browseButton))
 	{
-		alarmMessage = url.prettyURL();
-		messageEdit->setText(alarmMessage);
-		defaultDir = url.path();
+		// Browse button has been clicked
+		static QString defaultDir;
+		if (defaultDir.isEmpty())
+			defaultDir = QDir::homeDirPath();
+		KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose Text File to Display"));
+		if (!url.isEmpty())
+		{
+			alarmMessage = url.prettyURL();
+			messageEdit->setText(alarmMessage);
+			defaultDir = url.path();
+		}
 	}
-}
-
-void EditAlarmDlg::slotMessageToggled(bool on)
-{
-	if (on  &&  fileRadio->isOn()
-	||  !on  &&  !fileRadio->isOn())
-		fileRadio->setChecked(!on);
-	if (on)
+	else if (messageRadio->isOn())
 	{
 		QWhatsThis::add(messageEdit,
 		      i18n("Enter the text of the alarm message. It may be multi-line."));
+		singleLineOnly = false;
 		messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
+		browseButton->setEnabled(false);
 	}
-}
-
-void EditAlarmDlg::slotFileToggled(bool on)
-{
-	if (on  &&  messageRadio->isOn()
-	||  !on  &&  !messageRadio->isOn())
-		messageRadio->setChecked(!on);
-	browseButton->setEnabled(on);
-	if (on)
+	else
 	{
-		QWhatsThis::add(messageEdit,
-		      i18n("Enter the name of a text file, or a URL, to display."));
-		if (!messageEdit->text().contains('\n'))
+		if (fileRadio->isOn())
+		{
+			QWhatsThis::add(messageEdit,
+			      i18n("Enter the name of a text file, or a URL, to display."));
+			browseButton->setEnabled(true);
+		}
+		singleLineOnly = true;
+		multiLine = messageEdit->text().contains('\n');
+		if (!multiLine)
 			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
 	}
 }
 
+/******************************************************************************
+*  Called when the text in the message edit field changes.
+*  If multiple lines are not allowed, excess lines or newlines are removed.
+*/
 void EditAlarmDlg::slotMessageTextChanged()
 {
-	if (fileRadio->isOn())
+	getMessageText();
+}
+
+/******************************************************************************
+*  Removes excess lines or newlines if multiple lines are not allowed.
+*/
+QString EditAlarmDlg::getMessageText()
+{
+	if (singleLineOnly)
 	{
 		QString text = messageEdit->text();
 		int newline = text.find('\n');
 		if (newline >= 0)
 		{
-			messageEdit->setText(text.left(newline));
-			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+			if (multiLine)
+			{
+				text = text.left(newline);
+				messageEdit->setText(text);
+				messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+				multiLine = false;
+			}
+			else
+				messageEdit->setText(text.remove(newline, 1));
 		}
+		return text;
 	}
+	return messageEdit->text();
 }
 
 /******************************************************************************
