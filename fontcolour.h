@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,15 +25,19 @@
 #ifndef FONTCOLOUR_H
 #define FONTCOLOUR_H
 
+#include <kdeversion.h>
 #include <qwidget.h>
-#include <qsize.h>
-
+#include <qstringlist.h>
+#if KDE_VERSION >= 290
 #include <kfontdialog.h>
+#else
+#include "fontchooser.h"
+#endif
 
-#include "colourcombo.h"
+class QCheckBox;
+class ColourCombo;
 
 
-// General tab of the Preferences dialog
 class FontColourChooser : public QWidget
 {
 	Q_OBJECT
@@ -41,30 +45,29 @@ public:
 	FontColourChooser(QWidget* parent = 0, const char* name = 0,
 	       bool onlyFixed = false,
 	       const QStringList& fontList = QStringList(),
-	       bool makeFrame = true, const QString& frameLabel = i18n("Requested font"),
-	       bool fg = true, int visibleListSize = 8);
-	~FontColourChooser();
+	       const QString& frameLabel = i18n("Requested font"),
+	       bool fg = true, bool defaultFont = false, int visibleListSize = 8);
 
-	void setFont(const QFont& font, bool onlyFixed = false)  { m_fontChooser->setFont(font, onlyFixed); }
-	QFont font() const                       { return m_fontChooser->font(); }
-	QColor fgColour() const;
-	QColor bgColour() const                  { return m_bgColourButton->color(); }
-	void setFgColour(const QColor&);
-	void setBgColour(const QColor&);
-#if QT_VERSION < 300
-	void setCharset(const QString& charset)  { m_fontChooser->setCharset(charset); }
-	QString charset() const                  { return m_fontChooser->charset(); }
-#endif
-	QString sampleText() const               { return m_fontChooser->sampleText(); }
-	void setSampleText(const QString& text)  { m_fontChooser->setSampleText(text); }
-
-private:
-	ColourCombo*     m_fgColourButton;       // or null
-	ColourCombo*     m_bgColourButton;
-	KFontChooser*    m_fontChooser;
+	void     setDefaultFont();
+	void     setFont(const QFont&, bool onlyFixed = false);
+	bool     defaultFont() const;
+	QFont    font() const;
+	QColor   fgColour() const;
+	QColor   bgColour() const;
+	void     setFgColour(const QColor&);
+	void     setBgColour(const QColor&);
+	QString  sampleText() const;
+	void     setSampleText(const QString& text);
 
 private slots:
-	void setSampleColour();
+	void     setSampleColour();
+	void     slotDefaultFontToggled(bool);
+
+private:
+	ColourCombo*     mFgColourButton;       // or null
+	ColourCombo*     mBgColourButton;
+	KFontChooser*    mFontChooser;
+	QCheckBox*       mDefaultFont;          // or null
 };
 
 #endif

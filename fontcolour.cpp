@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,89 +25,150 @@
 #include <qobjectlist.h>
 #include <qwidget.h>
 #include <qgroupbox.h>
+#include <qcheckbox.h>
+#include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qwhatsthis.h>
 
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 
+#include "colourcombo.h"
 #include "fontcolour.moc"
 
 
 FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
           bool onlyFixed, const QStringList &fontList,
-          bool makeFrame, const QString& frameLabel, bool fg, int visibleListSize)
-   : QWidget(parent, name)
+          const QString& frameLabel, bool fg, bool defaultFont,
+          int visibleListSize)
+	: QWidget(parent, name)
 {
-   QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-   QWidget* page = this;
-   if (makeFrame)
-   {
-      page = new QGroupBox(frameLabel, this);
-      topLayout->addWidget(page);
-      topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-      topLayout->addSpacing(fontMetrics().lineSpacing()/2);
-   }
+	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QWidget* page = this;
+	if (!frameLabel.isNull())
+	{
+		page = new QGroupBox(frameLabel, this);
+		topLayout->addWidget(page);
+		topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
+		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+	}
+	if (fg)
+	{
+		QBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBox* box = new QHBox(page);    // to group widgets for QWhatsThis text
+		box->setSpacing(KDialog::spacingHint());
+		layout->addWidget(box);
 
-   QGridLayout* grid = new QGridLayout(topLayout, (fg ? 3 : 2), 2);
-   grid->addRowSpacing(0, KDialog::marginHint());
-   int gridRow = 1;
+		QLabel* label = new QLabel(i18n("&Foreground color:"), box);
+		label->setFixedSize(label->sizeHint());
+		mFgColourButton = new ColourCombo(box);
+		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
+		label->setBuddy(mFgColourButton);
+		QWhatsThis::add(box, i18n("Select the foreground color for the alarm message"));
+		layout->addWidget(new QWidget(box));    // left adjust the widgets
+	}
 
-   QLabel* label;
-   if (fg)
-   {
-      label = new QLabel(i18n("Foreground color:"), page);
-      grid->addWidget(label, gridRow, 0, AlignRight);
-      label->setFixedSize(label->sizeHint());
-      m_fgColourButton = new ColourCombo(page);
-      grid->addWidget(m_fgColourButton, gridRow, 1, AlignRight);
-      connect(m_fgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
-      ++gridRow;
-   }
+	QBoxLayout* layout = new QHBoxLayout(topLayout);
+	QHBox* box = new QHBox(page);    // to group widgets for QWhatsThis text
+	box->setSpacing(KDialog::spacingHint());
+	layout->addWidget(box);
 
-   label = new QLabel(i18n("Background color:"), page);
-   label->setMinimumSize(label->sizeHint());
-   grid->addWidget(label, gridRow, 0);
-   m_bgColourButton = new ColourCombo(page);
-   m_bgColourButton->setMinimumSize(m_bgColourButton->sizeHint());
-   grid->addWidget(m_bgColourButton, gridRow, 1, AlignRight);
-   connect(m_bgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
+	QLabel* label = new QLabel(i18n("&Background color:"), box);
+	label->setMinimumSize(label->sizeHint());
+	mBgColourButton = new ColourCombo(box);
+	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
+	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
+	label->setBuddy(mBgColourButton);
+	QWhatsThis::add(box, i18n("Select the foreground color for the alarm message"));
+	layout->addWidget(new QWidget(box));    // left adjust the widgets
 
-   m_fontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
-   topLayout->addWidget(m_fontChooser);
+	if (defaultFont)
+	{
+		layout = new QHBoxLayout(topLayout);
+		mDefaultFont = new QCheckBox(i18n("Use &default font"), page);
+		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
+		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
+		QWhatsThis::add(mDefaultFont,
+		      i18n("Check to use the default font current at the time the alarm is displayed."));
+		layout->addWidget(mDefaultFont);
+	}
+
+	mFontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
+	topLayout->addWidget(mFontChooser);
+
+	slotDefaultFontToggled(false);
 }
 
-FontColourChooser::~FontColourChooser()
+void FontColourChooser::setDefaultFont()
 {
+	if (mDefaultFont)
+		mDefaultFont->setChecked(true);
 }
 
-void FontColourChooser::setFgColour(const QColor& colour)
+void FontColourChooser::setFont(const QFont& font, bool onlyFixed)
 {
-   if (m_fgColourButton)
-   {
-      m_fgColourButton->setColor(colour);
-      m_fontChooser->setColor(colour);
-   }
+	if (mDefaultFont)
+		mDefaultFont->setChecked(false);
+	mFontChooser->setFont(font, onlyFixed);
+}
+
+bool FontColourChooser::defaultFont() const
+{
+	return mDefaultFont ? mDefaultFont->isChecked() : false;
+}
+
+QFont FontColourChooser::font() const
+{
+	return (mDefaultFont && mDefaultFont->isChecked()) ? QFont() : mFontChooser->font();
 }
 
 void FontColourChooser::setBgColour(const QColor& colour)
 {
-   m_bgColourButton->setColor(colour);
-   m_fontChooser->setBackgroundColor(colour);
+	mBgColourButton->setColor(colour);
+	mFontChooser->setBackgroundColor(colour);
 }
 
 void FontColourChooser::setSampleColour()
 {
-   QColor bg = m_bgColourButton->color();
-   m_fontChooser->setBackgroundColor(bg);
-   QColor fg = fgColour();
-   m_fontChooser->setColor(fg);
+	QColor bg = mBgColourButton->color();
+	mFontChooser->setBackgroundColor(bg);
+	QColor fg = fgColour();
+	mFontChooser->setColor(fg);
+}
+
+QColor FontColourChooser::bgColour() const
+{
+	return mBgColourButton->color();
 }
 
 QColor FontColourChooser::fgColour() const
 {
-   QColor bg = m_bgColourButton->color();
-   QPalette pal(bg, bg);
-   return pal.color(QPalette::Active, QColorGroup::Text);
+	QColor bg = mBgColourButton->color();
+	QPalette pal(bg, bg);
+	return pal.color(QPalette::Active, QColorGroup::Text);
+}
+
+QString FontColourChooser::sampleText() const
+{
+	return mFontChooser->sampleText();
+}
+
+void FontColourChooser::setSampleText(const QString& text)
+{
+	mFontChooser->setSampleText(text);
+}
+
+void FontColourChooser::setFgColour(const QColor& colour)
+{
+	if (mFgColourButton)
+	{
+		mFgColourButton->setColor(colour);
+		mFontChooser->setColor(colour);
+	}
+}
+
+void FontColourChooser::slotDefaultFontToggled(bool on)
+{
+	mFontChooser->setEnabled(!on);
 }
