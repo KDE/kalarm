@@ -2,12 +2,13 @@ KAlarm
 
 === Version 1.1.0 --- 14 May 2004 ===
 Add facility to define alarm templates.
+Add facility to specify pre- and post-alarm shell command actions.
 Add option to play sound file repeatedly until alarm window is closed.
 Add volume control for playing sound file.
 Add 'stop sound' button to alarm message window when sound file is played.
-Add facility to specify pre- and post-alarm shell command actions.
 Rename command line option --sound to --play, add option --play-repeat.
 Add command line option --volume.
+Add a Configure Shortcuts menu option in the main window.
 After creating/editing alarm, prompt to re-enable alarms if currently disabled.
 Middle mouse button over system tray icon displays new alarm dialog.
 Add option to display a reminder once only before the first alarm recurrence.

@@ -98,6 +98,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotBirthdays();
 		void           slotTemplates();
 		void           slotTemplatesEnd();
+		void           slotConfigureKeys();
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();

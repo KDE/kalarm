@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfig.h>
+#include <kkeydialog.h>
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -341,6 +342,8 @@ void KAlarmMainWindow::initActions()
 	submenu = new KPopupMenu(this, "settings");
 	menu->insertItem(i18n("&Settings"), submenu);
 	Daemon::actionControl()->plug(submenu);
+	submenu->insertSeparator(1);
+	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions)->plug(submenu);
 	theApp()->actionPreferences()->plug(submenu);
 
 	menu->insertItem(SmallIcon("help"), KStdGuiItem::help().text(), helpMenu());
@@ -791,6 +794,14 @@ void KAlarmMainWindow::updateActionsMenu()
 void KAlarmMainWindow::slotResetDaemon()
 {
 	KAlarm::resetDaemon();
+}
+
+/******************************************************************************
+*  Called when the Configure Keys menu item is selected.
+*/
+void KAlarmMainWindow::slotConfigureKeys()
+{
+	KKeyDialog::configure(actionCollection(), this);
 }
 
 /******************************************************************************
