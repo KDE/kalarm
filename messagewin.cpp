@@ -82,7 +82,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	++nInstances;
-	setAutoSaveSettings(QString::fromLatin1("MessageWindow"));     // save window sizes etc.
+	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
 	if (file  &&  !fileError)
 		size = theApp()->readConfigWindowSize("FileMessage", size);
@@ -99,12 +99,13 @@ MessageWin::MessageWin()
 	  rescheduleEvent(false),
 	  shown(true)
 {
-	kdDebug(5950) << "MessageWin::MessageWin()" << endl;
+	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	++nInstances;
 }
 
 MessageWin::~MessageWin()
 {
+	kdDebug(5950) << "MessageWin::~MessageWin()\n";
 	--nInstances;
 }
 
