@@ -97,6 +97,11 @@ QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowle
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
+QString EditAlarmDlg::i18n_EmailFrom()          { return i18n("'From' email address", "From:"); }
+QString EditAlarmDlg::i18n_f_EmailFrom()        { return i18n("'From' email address", "&From:"); }
+QString EditAlarmDlg::i18n_EmailTo()            { return i18n("Email addressee", "To:"); }
+QString EditAlarmDlg::i18n_EmailSubject()       { return i18n("Email subject", "Subject:"); }
+QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18n("Email subject", "Sub&ject:"); }
 
 
 /******************************************************************************
@@ -432,20 +437,36 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	mEmailFrame = new QFrame(parent);
 	mEmailFrame->setFrameStyle(QFrame::NoFrame);
 	QBoxLayout* layout = new QVBoxLayout(mEmailFrame, 0, spacingHint());
-	QGridLayout* grid = new QGridLayout(layout, 2, 3, spacingHint());
+	QGridLayout* grid = new QGridLayout(layout, 3, 3, spacingHint());
 	grid->setColStretch(1, 1);
 
+	mEmailFromList = 0;
+	if (Preferences::instance()->emailFrom() == Preferences::MAIL_FROM_KMAIL)
+	{
+		// Email sender identity
+		QLabel* label = new QLabel(i18n_EmailFrom(), mEmailFrame);
+		label->setFixedSize(label->sizeHint());
+		grid->addWidget(label, 0, 0);
+
+		mEmailFromList = new ComboBox(mEmailFrame);
+		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
+		label->setBuddy(mEmailFromList);
+		QWhatsThis::add(mEmailFromList,
+			  i18n("Your email identity, used to identify you as the sender when sending email alarms."));
+		grid->addWidget(mEmailFromList, 0, 1);
+	}
+
 	// Email recipients
-	QLabel* label = new QLabel(i18n("Email addressee", "To:"), mEmailFrame);
+	QLabel* label = new QLabel(i18n_EmailTo(), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 0, 0);
+	grid->addWidget(label, 1, 0);
 
 	mEmailToEdit = new LineEdit(LineEdit::EmailAddresses, mEmailFrame);
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
 	QWhatsThis::add(mEmailToEdit,
 	      i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
 	           "commas or semicolons."));
-	grid->addWidget(mEmailToEdit, 0, 1);
+	grid->addWidget(mEmailToEdit, 1, 1);
 
 	mEmailAddressButton = new QPushButton(mEmailFrame);
 	mEmailAddressButton->setPixmap(SmallIcon("contents"));
@@ -453,18 +474,18 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
 	QToolTip::add(mEmailAddressButton, i18n("Open address book"));
 	QWhatsThis::add(mEmailAddressButton, i18n("Select email addresses from your address book."));
-	grid->addWidget(mEmailAddressButton, 0, 2);
+	grid->addWidget(mEmailAddressButton, 1, 2);
 
 	// Email subject
-	label = new QLabel(i18n("Email subject", "Sub&ject:"), mEmailFrame);
+	label = new QLabel(i18n_j_EmailSubject(), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 1, 0);
+	grid->addWidget(label, 2, 0);
 
 	mEmailSubjectEdit = new LineEdit(mEmailFrame);
 	mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
 	label->setBuddy(mEmailSubjectEdit);
 	QWhatsThis::add(mEmailSubjectEdit, i18n("Enter the email subject."));
-	grid->addMultiCellWidget(mEmailSubjectEdit, 1, 1, 1, 2);
+	grid->addMultiCellWidget(mEmailSubjectEdit, 2, 2, 1, 2);
 
 	// Email body
 	mEmailMessageEdit = new TextEdit(mEmailFrame);
@@ -611,6 +632,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
+		if (mEmailFromList)
+		{
+			QStringList ids = KAMail::kmailIdentities();
+			mEmailFromList->insertStringList(ids);
+			mEmailFromList->setCurrentItem(KAMail::findIdentity(ids, event->emailFromKMail()));
+		}
 	}
 	else
 	{
@@ -650,6 +677,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
+		if (mEmailFromList)
+			mEmailFromList->insertStringList(KAMail::kmailIdentities());
 	}
 
 	if (!deferGroupVisible)
@@ -712,6 +741,8 @@ void EditAlarmDlg::setReadOnly()
 	mEmailSubjectEdit->setReadOnly(mReadOnly);
 	mEmailMessageEdit->setReadOnly(mReadOnly);
 	mEmailBcc->setReadOnly(mReadOnly);
+	if (mEmailFromList)
+		mEmailFromList->setReadOnly(mReadOnly);
 	if (mReadOnly)
 	{
 		mEmailAddressButton->hide();
@@ -731,7 +762,7 @@ void EditAlarmDlg::setReadOnly()
  */
 void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 {
-	QString text = alarmText.text();
+	QString text = alarmText.displayText();
 	QRadioButton* radio;
 	switch (action)
 	{
@@ -823,6 +854,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedPostAction = mSpecialActionsButton->postAction();
 	}
 	checkText(mSavedTextFileCommandMessage, false);
+	if (mEmailFromList)
+		mSavedEmailFrom  = mEmailFromList->text(mEmailFromList->currentItem());
 	mSavedEmailTo        = mEmailToEdit->text();
 	mSavedEmailSubject   = mEmailSubjectEdit->text();
 	mSavedEmailAttach.clear();
@@ -904,7 +937,8 @@ bool EditAlarmDlg::stateChanged() const
 		QStringList emailAttach;
 		for (int i = 0;  i < mEmailAttachList->count();  ++i)
 			emailAttach += mEmailAttachList->text(i);
-		if (mSavedEmailTo      != mEmailToEdit->text()
+		if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->text(mEmailFromList->currentItem())
+		||  mSavedEmailTo      != mEmailToEdit->text()
 		||  mSavedEmailSubject != mEmailSubjectEdit->text()
 		||  mSavedEmailAttach  != emailAttach
 		||  mSavedEmailBcc     != mEmailBcc->isChecked())
@@ -975,8 +1009,13 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 				event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 			break;
 		case KAEvent::EMAIL:
-			event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
+		{
+			QString from;
+			if (mEmailFromList)
+				from = KAMail::extractKMailIdentity(mEmailFromList->text(mEmailFromList->currentItem()));
+			event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 			break;
+		}
 		case KAEvent::COMMAND:
 		default:
 			break;
@@ -1254,7 +1293,7 @@ void EditAlarmDlg::slotTry()
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
-					bcc = i18n("\nBcc: %1").arg(Preferences::instance()->emailAddress());
+					bcc = i18n("\nBcc: %1").arg(Preferences::instance()->emailBccAddress());
 				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(mEmailAddresses.join("\n")).arg(bcc));
 			}
 		}

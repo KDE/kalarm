@@ -40,6 +40,7 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <ktempfile.h>
+#include <kemailsettings.h>
 #include <kdebug.h>
 
 #include <libkcal/person.h>
@@ -51,6 +52,36 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "kamail.h"
+
+class KMailIdentities
+{
+	public:
+		KMailIdentities();
+		~KMailIdentities()  { delete mConfig; }
+		bool     nextIdentity();
+		bool     gotoFirst()               { mIndex = -1;  return nextIdentity(); }
+		bool     gotoDefaultIdentity();
+		QString  identity() const          { return mIdentity; }
+		QString  emailAddress() const      { return mEmail; }
+		QString  name() const              { return mName; }
+		bool     defaultIdentity() const   { return mDefault; }
+		int      index() const             { return mIndex; }
+		int      defaultIndex() const      { return mDefaultIndex; }
+
+	private:
+		KConfig*                   mConfig;
+		QStringList                mGroups;
+		QStringList::ConstIterator mIter;
+		QStringList::ConstIterator mIterDefault;  // mGroups iterator for default identity, or end()
+		QString                    mDefaultUOID;
+		QString                    mIdentity;     // current identity
+		QString                    mEmail;        // email address for current identity
+		QString                    mName;         // name for current identity
+		int                        mIndex;        // index in list to current identity, or -1 if none
+		int                        mDefaultIndex; // index in list to default identity, or -1
+		bool                       mDefault;      // true if current identity is the default identity
+		bool                       mOldConfig;
+};
 
 namespace HeaderParsing
 {
@@ -82,6 +113,9 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18n("This should be translated the same as in kmail", "sent-mail"); }
 
+static QString i18n_Default()
+{ return i18n("Default"); }
+
 
 /******************************************************************************
 * Send the email message specified in an event.
@@ -92,16 +126,39 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 {
 	QString err;
 	Preferences* preferences = Preferences::instance();
-	KAMailData data(event, preferences->emailAddress(),
-	                (event.emailBcc() ? preferences->emailBccAddress() : QString::null),
-	                allowNotify);
-	if (data.from.isEmpty())
+	QString from;
+	if (event.emailFromKMail().isEmpty())
+		from = preferences->emailAddress();
+	else
 	{
-		errmsgs = errors(preferences->emailUseControlCentre()
-		                 ? i18n("No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the %1 Preferences dialog.").arg(kapp->aboutData()->programName())
-		                 : i18n("No 'From' email address is configured.\nPlease set it in the %1 Preferences dialog.").arg(kapp->aboutData()->programName()));
+		from = kmailAddress(event.emailFromKMail());
+		if (from.isEmpty())
+		{
+			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.").arg(event.emailFromKMail()));
+			return false;
+		}
+	}
+	if (from.isEmpty())
+	{
+		QString progname = kapp->aboutData()->programName();
+		switch (preferences->emailFrom())
+		{
+			case Preferences::MAIL_FROM_KMAIL:
+				errmsgs = errors(i18n("No 'From' email address is configured (no default KMail identity found)\nPlease set it in KMail or in the %1 Preferences dialog.").arg(progname));
+				break;
+			case Preferences::MAIL_FROM_CONTROL_CENTRE:
+				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the %1 Preferences dialog.").arg(progname));
+				break;
+			case Preferences::MAIL_FROM_ADDR:
+			default:
+				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the %1 Preferences dialog.").arg(progname));
+				break;
+		}
 		return false;
 	}
+	KAMailData data(event, from,
+	                (event.emailBcc() ? preferences->emailBccAddress() : QString::null),
+	                allowNotify);
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
@@ -221,7 +278,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 			arg << data.event.emailSubject();
 			arg << data.event.message();
 			arg << KURL::List(data.event.emailAttachments());
-			if (!callKMail(callData, "MailTransportServiceIface", sendFunction))
+			if (!callKMail(callData, "MailTransportServiceIface", sendFunction, "bool"))
 				return i18n("Error calling KMail");
 		}
 		else
@@ -295,7 +352,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder)
 	QByteArray  callData;
 	QDataStream arg(callData, IO_WriteOnly);
 	arg << QString::fromLatin1(folder) << tmpFile.name();
-	if (!callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)"))
+	if (!callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
 	{
 		kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error\n";
 		return i18n("Error calling KMail");
@@ -306,27 +363,40 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder)
 /******************************************************************************
 * Call KMail via DCOP. The DCOP function must return an 'int'.
 */
-bool KAMail::callKMail(const QByteArray& callData, const QCString& iface, const QCString& function)
+bool KAMail::callKMail(const QByteArray& callData, const QCString& iface, const QCString& function, const QCString& funcType)
 {
 	QCString   replyType;
 	QByteArray replyData;
 	if (!kapp->dcopClient()->call("kmail", iface, function, callData, replyType, replyData)
-	||  replyType != "int")
+	||  replyType != funcType)
 	{
 		QCString funcname = function;
 		funcname.replace(QRegExp("(.+$"), "()");
 		kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call failed\n";;
 		return false;
 	}
-	int result;
 	QDataStream replyStream(replyData, IO_ReadOnly);
-	replyStream >> result;
-	if (result <= 0)
+	QCString funcname = function;
+	funcname.replace(QRegExp("(.+$"), "()");
+	if (replyType == "int")
 	{
-		QCString funcname = function;
-		funcname.replace(QRegExp("(.+$"), "()");
-		kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error code = " << result << endl;
-		return false;
+		int result;
+		replyStream >> result;
+		if (result <= 0)
+		{
+			kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error code = " << result << endl;
+			return false;
+		}
+	}
+	else if (replyType == "bool")
+	{
+		bool result;
+		replyStream >> result;
+		if (!result)
+		{
+			kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error\n";
+			return false;
+		}
 	}
 	return true;
 }
@@ -438,9 +508,6 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			}
 			Offset size = file.size();
 			char* contents = new char [size + 1];
-#if QT_VERSION < 300
-			typedef int Q_LONG;
-#endif
 			Q_LONG bytes = file.readBlock(contents, size);
 			file.close();
 			contents[size] = 0;
@@ -504,6 +571,98 @@ void KAMail::notifyQueued(const KAEvent& event)
 			}
 		}
 	}
+}
+
+/******************************************************************************
+*  Fetch KMail's list of configured email identities.
+*/
+QStringList KAMail::kmailIdentities()
+{
+	QStringList result;
+	KMailIdentities ids;
+	while (ids.nextIdentity())
+	{
+		if (ids.defaultIdentity())
+			result.push_front(defaultIdentityString(ids.identity()));  // insert default identity at top of list
+		else
+			result += ids.identity();  // append non-default identities to the end of the list
+	}
+	return result;
+}
+
+/******************************************************************************
+*  Find the position of a specified identity in a list returned by kmailIdentities().
+*/
+int KAMail::findIdentity(const QStringList& identities, const QString& identity)
+{
+	QStringList::ConstIterator it = identities.begin();
+	if (it != identities.end())
+	{
+		if (*it == defaultIdentityString(identity))
+			return 0;
+		for (int i = 1;  ++it != identities.end();  ++i)
+		{
+			if (*it == identity)
+				return i;
+		}
+	}
+	return -1;
+}
+
+/******************************************************************************
+*  Get the address configured in KMail for the specified email identity.
+*  Set 'identity' to the empty string to specify the default identity.
+*/
+QString KAMail::kmailAddress(const QString& identity)
+{
+	KMailIdentities ids;
+	if (identity.isEmpty())
+	{
+		if (!ids.gotoDefaultIdentity())
+			return QString::null;
+	}
+	else
+	{
+		bool found = false;
+		while (!found  &&  ids.nextIdentity())
+			found = (ids.identity() == identity);
+		if (!found)
+			return QString::null;
+	}
+	if (ids.name().isEmpty())
+		return ids.emailAddress();
+	return QString::fromLatin1("\"%1\" <%2>").arg(ids.name()).arg(ids.emailAddress());
+}
+
+/******************************************************************************
+*  Get the identity from a string returned by kmailIdentities().
+*/
+QString KAMail::extractKMailIdentity(const QString& descrip)
+{
+	QString def = defaultIdentityString(QString::null);
+	if (descrip.endsWith(def))
+		return descrip.left(descrip.length() - def.length());
+	return descrip;
+}
+
+/******************************************************************************
+*  Get the display string for an identity which is the default identity.
+*/
+QString KAMail::defaultIdentityString(const QString& identity)
+{
+	QString def = i18n_Default();
+	if (identity == def  ||  identity == QString::fromLatin1("Default"))
+		return identity;
+	return QString::fromLatin1("%1 (%2)").arg(identity).arg(def);
+}
+
+/******************************************************************************
+*  Fetch the user's email address configured in the KDE Control Centre.
+*/
+QString KAMail::controlCentreAddress()
+{
+	KEMailSettings e;
+	return e.getSetting(KEMailSettings::EmailAddress);
 }
 
 /******************************************************************************
@@ -861,6 +1020,85 @@ QString getHostName()
                 return QString::null;
         return QString::fromLocal8Bit(hname);
 }
+}
+
+
+/*=============================================================================
+=  class: KMailIdentities
+=  Accesses KMail's email identities.
+=============================================================================*/
+
+
+/******************************************************************************
+*  Initialise access to KMail's list of configured email identities.
+*/
+KMailIdentities::KMailIdentities()
+	: mIndex(-1),
+	  mDefaultIndex(-1),
+	  mOldConfig(false)
+{
+	QString file = locate("config", QString::fromLatin1("emailidentities"));
+	if (file.isEmpty())
+	{
+		// Older versions of KMail used 'kmailrc' instead of 'emailidentities'
+		file = locate("config", QString::fromLatin1("kmailrc"));
+		mOldConfig = true;
+	}
+	mConfig = new KConfig(file);
+	if (!mOldConfig)
+	{
+		// Find the default identity's UOID
+		mConfig->setGroup(QString::fromLatin1("General"));
+		mDefaultUOID = mConfig->readEntry(QString::fromLatin1("Default Identity"));
+	}
+	mGroups = mConfig->groupList();
+	mIterDefault = mGroups.end();
+	mIndex = -1;
+}
+
+/******************************************************************************
+*  Step on to the next identity.
+*/
+bool KMailIdentities::nextIdentity()
+{
+	if (mIndex < 0)
+		mIter = mGroups.begin();
+	else
+		++mIter;
+	for ( ;  mIter != mGroups.end();  ++mIter)
+	{
+		if ((*mIter).startsWith(QString::fromLatin1("Identity")))
+		{
+			mConfig->setGroup(*mIter);
+			mEmail = mConfig->readEntry(QString::fromLatin1("Email Address"));
+			if (!mEmail.isEmpty())
+			{
+				++mIndex;
+				mIdentity = mConfig->readEntry(QString::fromLatin1("Identity"));
+				mName     = mConfig->readEntry(QString::fromLatin1("Name"));
+				mDefault = mOldConfig  &&  mIdentity == QString::fromLatin1("Default")
+				           ||  !mDefaultUOID.isEmpty()  &&  mConfig->readEntry(QString::fromLatin1("uoid")) == mDefaultUOID;
+				if (mDefault)
+				{
+					mIterDefault = mIter;
+					mDefaultIndex = mIndex;
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/******************************************************************************
+*  Step to the default identity.
+*/
+bool KMailIdentities::gotoDefaultIdentity()
+{
+	while (mDefaultIndex < 0  &&  nextIdentity());
+	mIndex = mDefaultIndex;
+	mIter  = mIterDefault;
+	return mIter != mGroups.end();
 }
 
 

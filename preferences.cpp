@@ -22,13 +22,14 @@
 
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kemailsettings.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
+#include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
+
 
 Preferences* Preferences::mInstance = 0;
 
@@ -55,13 +56,6 @@ const QString    Preferences::default_tooltipTimeToPrefix      = QString::fromLa
 const int        Preferences::default_daemonTrayCheckInterval  = 10;     // (seconds)
 const bool       Preferences::default_emailCopyToKMail         = false;
 const bool       Preferences::default_emailQueuedNotify        = false;
-#if KDE_VERSION >= 210
-const bool       Preferences::default_emailUseControlCentre    = true;
-const bool       Preferences::default_emailBccUseControlCentre = true;
-#else
-const bool       Preferences::default_emailUseControlCentre    = false;
-const bool       Preferences::default_emailBccUseControlCentre = false;
-#endif
 const QColor     Preferences::default_disabledColour(Qt::lightGray);
 const QColor     Preferences::default_expiredColour(Qt::darkRed);
 const int        Preferences::default_expiredKeepDays          = 7;
@@ -77,14 +71,28 @@ const bool       Preferences::default_defaultEmailBcc          = false;
 const QString    Preferences::default_emailAddress             = QString::null;
 const QString    Preferences::default_emailBccAddress          = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
+#if KDE_VERSION >= 210
+const Preferences::MailFrom      Preferences::default_emailBccFrom         = MAIL_FROM_CONTROL_CENTRE;
+#else
+const Preferences::MailFrom      Preferences::default_emailBccFrom         = MAIL_FROM_ADDR;
+#endif
 const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
 const TimePeriod::Units          Preferences::default_defaultReminderUnits = TimePeriod::HOURS_MINUTES;
 const QString    Preferences::default_defaultPreAction;
 const QString    Preferences::default_defaultPostAction;
 
-static const QString    defaultFeb29RecurType = QString::fromLatin1("Mar1");
-static const QString    defaultEmailClient    = QString::fromLatin1("kmail");
+Preferences::MailFrom Preferences::default_emailFrom()
+{
+#if KDE_VERSION >= 210
+	return KAMail::kmailIdentities().count() ? MAIL_FROM_KMAIL : MAIL_FROM_CONTROL_CENTRE;
+#else
+	return KAMail::kmailIdentities().count() ? MAIL_FROM_KMAIL : MAIL_FROM_ADDR;
+#endif
+}
+
+static const QString defaultFeb29RecurType    = QString::fromLatin1("Mar1");
+static const QString defaultEmailClient       = QString::fromLatin1("kmail");
 
 // Config file entry names
 static const QString GENERAL_SECTION          = QString::fromLatin1("General");
@@ -106,9 +114,7 @@ static const QString TOOLTIP_TIME_TO_PREFIX   = QString::fromLatin1("TooltipTime
 static const QString DAEMON_TRAY_INTERVAL     = QString::fromLatin1("DaemonTrayCheckInterval");
 static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient");
 static const QString EMAIL_COPY_TO_KMAIL      = QString::fromLatin1("EmailCopyToKMail");
-static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
-static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QString::fromLatin1("EmailBccUseControlCenter");
-static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
+static const QString EMAIL_FROM               = QString::fromLatin1("EmailFrom");
 static const QString EMAIL_BCC_ADDRESS        = QString::fromLatin1("EmailBccAddress");
 static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
 static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
@@ -129,6 +135,14 @@ static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPer
 static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
 static const QString DEF_PRE_ACTION           = QString::fromLatin1("DefPreAction");
 static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostAction");
+// Obsolete - compatibility with pre-1.2.1
+static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
+static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
+static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QString::fromLatin1("EmailBccUseControlCenter");
+
+// Values for EmailFrom entry
+static const QString FROM_CONTROL_CENTRE      = QString::fromLatin1("@ControlCenter");
+static const QString FROM_KMAIL               = QString::fromLatin1("@KMail");
 
 // Config file entry names for notification messages
 const QString Preferences::QUIT_WARN              = QString::fromLatin1("QuitWarn");
@@ -148,6 +162,8 @@ Preferences* Preferences::instance()
 {
 	if (!mInstance)
 	{
+		convertOldPrefs();    // convert preferences written by previous KAlarm versions
+
 		mInstance = new Preferences;
 
 		// Set the default button for the Quit warning message box to Cancel
@@ -182,42 +198,35 @@ Preferences::Preferences()
 				mMessageColours.insert(c);
 		}
 	}
-	mDefaultBgColour         = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
-	mMessageFont             = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
-	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
-	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
-	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
-	QCString feb29           = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
-	mFeb29RecurType          = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
-	mModalMessages           = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
-	mShowExpiredAlarms       = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
-	mShowTimeToAlarm         = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
-	mShowAlarmTime           = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
-	mTooltipAlarmCount       = config->readNumEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
-	mShowTooltipAlarmTime    = config->readBoolEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
-	mShowTooltipTimeToAlarm  = config->readBoolEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
-	mTooltipTimeToPrefix     = config->readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
-	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
-	QCString client          = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
-	mEmailClient             = (client == "sendmail" ? SENDMAIL : KMAIL);
-	mEmailCopyToKMail        = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
-	bool bccFrom             = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
-#if KDE_VERSION >= 210
-	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
-	mEmailBccUseControlCentre = bccFrom ? mEmailUseControlCentre      // compatibility with pre-0.9.5
-	                          : config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre);
-	if (mEmailUseControlCentre || mEmailBccUseControlCentre)
-	{
-		KEMailSettings e;
-		mEmailAddress = mEmailBccAddress = e.getSetting(KEMailSettings::EmailAddress);
-	}
-#else
-	mEmailUseControlCentre = mEmailBccUseControlCentre = false;
-#endif
-	if (!mEmailUseControlCentre)
-		mEmailAddress = config->readEntry(EMAIL_ADDRESS);
-	if (!mEmailBccUseControlCentre)
-		mEmailBccAddress = config->readEntry(EMAIL_BCC_ADDRESS);
+	mDefaultBgColour          = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
+	mMessageFont              = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
+	mRunInSystemTray          = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
+	mDisableAlarmsIfStopped   = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
+	mAutostartTrayIcon        = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
+	QCString feb29            = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
+	mFeb29RecurType           = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
+	mModalMessages            = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
+	mShowExpiredAlarms        = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
+	mShowTimeToAlarm          = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
+	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
+	mTooltipAlarmCount        = config->readNumEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
+	mShowTooltipAlarmTime     = config->readBoolEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
+	mShowTooltipTimeToAlarm   = config->readBoolEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
+	mTooltipTimeToPrefix      = config->readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
+	mDaemonTrayCheckInterval  = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
+	QCString client           = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
+	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
+	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
+	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
+	mEmailFrom                = emailFrom(from);
+	QString bccFrom           = config->readEntry(EMAIL_BCC_ADDRESS, emailFrom(default_emailBccFrom, false, true));
+	mEmailBccFrom             = emailFrom(bccFrom);
+	if (mEmailFrom == MAIL_FROM_CONTROL_CENTRE  ||  mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE)
+		mEmailAddress = mEmailBccAddress = KAMail::controlCentreAddress();
+	if (mEmailFrom == MAIL_FROM_ADDR)
+		mEmailAddress = from;
+	if (mEmailBccFrom == MAIL_FROM_ADDR)
+		mEmailBccAddress = bccFrom;
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
@@ -283,10 +292,8 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
 	config->writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
-	config->writeEntry(EMAIL_USE_CONTROL_CENTRE, mEmailUseControlCentre);
-	config->writeEntry(EMAIL_BCC_USE_CONTROL_CENTRE, mEmailBccUseControlCentre);
-	config->writeEntry(EMAIL_ADDRESS, (mEmailUseControlCentre ? QString() : mEmailAddress));
-	config->writeEntry(EMAIL_BCC_ADDRESS, (mEmailBccUseControlCentre ? QString() : mEmailBccAddress));
+	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
+	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
@@ -330,50 +337,97 @@ void Preferences::updateStartOfDayCheck()
 	mStartOfDayChanged = false;
 }
 
+QString Preferences::emailFrom(Preferences::MailFrom from, bool useAddress, bool bcc) const
+{
+	switch (from)
+	{
+		case MAIL_FROM_KMAIL:
+			return FROM_KMAIL;
+#if KDE_VERSION >= 210
+		case MAIL_FROM_CONTROL_CENTRE:
+			return FROM_CONTROL_CENTRE;
+#endif
+		case MAIL_FROM_ADDR:
+			return useAddress ? (bcc ? mEmailBccAddress : mEmailAddress) : QString::null;
+		default:
+			return QString::null;
+	}
+}
+
+Preferences::MailFrom Preferences::emailFrom(const QString& str)
+{
+	if (str == FROM_KMAIL)
+		return MAIL_FROM_KMAIL;
+#if KDE_VERSION >= 210
+	if (str == FROM_CONTROL_CENTRE)
+		return MAIL_FROM_CONTROL_CENTRE;
+#endif
+	return MAIL_FROM_ADDR;
+}
+
+/******************************************************************************
+* Get user's 'From' email address.
+* Reply = null if using KMail identities.
+*/
 QString Preferences::emailAddress() const
 {
-	if (mEmailUseControlCentre)
+	switch (mEmailFrom)
 	{
-		KEMailSettings e;
-		return e.getSetting(KEMailSettings::EmailAddress);
+		case MAIL_FROM_KMAIL:
+			return KAMail::kmailAddress();    // use default KMail identity
+		case MAIL_FROM_CONTROL_CENTRE:
+			return KAMail::controlCentreAddress();
+		case MAIL_FROM_ADDR:
+			return mEmailAddress;
+		default:
+			return QString::null;
 	}
-	else
-		return mEmailAddress;
 }
 
 QString Preferences::emailBccAddress() const
 {
-	if (mEmailBccUseControlCentre)
+	switch (mEmailBccFrom)
 	{
-		KEMailSettings e;
-		return e.getSetting(KEMailSettings::EmailAddress);
+		case MAIL_FROM_CONTROL_CENTRE:
+			return KAMail::controlCentreAddress();
+		case MAIL_FROM_ADDR:
+			return mEmailBccAddress;
+		default:
+			return QString::null;
 	}
-	else
-		return mEmailBccAddress;
 }
 
-void Preferences::setEmailAddress(bool useControlCentre, const QString& address)
+void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& address)
 {
-	mEmailUseControlCentre = useControlCentre;
-	if (useControlCentre)
+	switch (from)
 	{
-		KEMailSettings e;
-		mEmailAddress = e.getSetting(KEMailSettings::EmailAddress);
+		case MAIL_FROM_KMAIL:
+			break;
+#if KDE_VERSION >= 210
+		case MAIL_FROM_CONTROL_CENTRE:
+			mEmailAddress = KAMail::controlCentreAddress();
+			break;
+#endif
+		case MAIL_FROM_ADDR:
+			mEmailAddress = address;
+			break;
+		default:
+			return;
 	}
-	else
-		mEmailAddress = address;
+	mEmailFrom = from;
 }
 
 void Preferences::setEmailBccAddress(bool useControlCentre, const QString& address)
 {
-	mEmailBccUseControlCentre = useControlCentre;
+#if KDE_VERSION < 210
 	if (useControlCentre)
-	{
-		KEMailSettings e;
-		mEmailBccAddress = e.getSetting(KEMailSettings::EmailAddress);
-	}
+		return;
+#endif
+	if (useControlCentre)
+		mEmailBccAddress = KAMail::controlCentreAddress();
 	else
 		mEmailBccAddress = address;
+	mEmailBccFrom = useControlCentre ? MAIL_FROM_CONTROL_CENTRE : MAIL_FROM_ADDR;
 }
 
 /******************************************************************************
@@ -395,4 +449,37 @@ void Preferences::setNotify(const QString& messageID, bool notify)
 bool Preferences::notifying(const QString& messageID)
 {
 	return MessageBox::shouldBeShownContinue(messageID);
+}
+
+/******************************************************************************
+* If the preferences were written by a previous version of KAlarm, do any
+* necessary conversions.
+*/
+void Preferences::convertOldPrefs()
+{
+	KConfig* config = KGlobal::config();
+	QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
+	if (entries.find(EMAIL_FROM) == entries.end()
+	&&  entries.find(EMAIL_USE_CONTROL_CENTRE) != entries.end())
+	{
+		// Preferences were written by KAlarm pre-1.2.1
+		config->setGroup(GENERAL_SECTION);
+		bool useCC = false;
+		bool bccUseCC = false;
+#if KDE_VERSION >= 210
+		const bool default_emailUseControlCentre    = true;
+		const bool default_emailBccUseControlCentre = true;
+		useCC = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
+		// EmailBccUseControlCenter was missing in preferences written by KAlarm pre-0.9.5
+		bccUseCC = config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE)
+		         ? config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre)
+			 : useCC;
+#endif
+		config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS)));
+		config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS)));
+		config->deleteEntry(EMAIL_ADDRESS);
+		config->deleteEntry(EMAIL_BCC_USE_CONTROL_CENTRE);
+		config->deleteEntry(EMAIL_USE_CONTROL_CENTRE);
+		config->sync();
+	}
 }

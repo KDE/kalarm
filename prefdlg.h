@@ -26,6 +26,7 @@
 #include <ktabctl.h>
 #include <kdialogbase.h>
 
+#include "preferences.h"
 #include "recurrenceedit.h"
 
 class QButtonGroup;
@@ -136,28 +137,31 @@ class EmailPrefTab : public PrefsTabBase
 		EmailPrefTab(QVBox*);
 
 		QString      validateAddress();
+		QString      validateBccAddress();
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
 
 	private slots:
 		void         slotEmailClientChanged(int);
-		void         slotEmailUseCCToggled(bool);
-		void         slotEmailBccUseCCToggled(bool);
+		void         slotFromAddrChanged(int);
+		void         slotBccAddrChanged(int);
 		void         slotAddressChanged()    { mAddressChanged = true; }
 
 	private:
-		void         setEmailAddress(bool useControlCentre, const QString& address);
+		void         setEmailAddress(Preferences::MailFrom, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
+		QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
 
 		ButtonGroup*   mEmailClient;
+		ButtonGroup*   mFromAddressGroup;
 		QLineEdit*     mEmailAddress;
-		QCheckBox*     mEmailUseControlCentre;
+		ButtonGroup*   mBccAddressGroup;
 		QLineEdit*     mEmailBccAddress;
-		QCheckBox*     mEmailBccUseControlCentre;
 		QCheckBox*     mEmailQueuedNotify;
 		QCheckBox*     mEmailCopyToKMail;
 		bool           mAddressChanged;
+		bool           mBccAddressChanged;
 };
 
 

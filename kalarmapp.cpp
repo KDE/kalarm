@@ -1136,7 +1136,8 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	if (!audioFile.isEmpty())
 		event.setAudioFile(audioFile, audioVolume);
 	if (mailAddresses.count())
-		event.setEmail(mailAddresses, mailSubject, mailAttachments);
+#warning Need to be able to specify 'From' email address
+		event.setEmail(QString::null, mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
 	event.setRepetition(repeatInterval, repeatCount - 1);

@@ -22,6 +22,7 @@
 #define KAMAIL_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 class KAEvent;
 class EmailAddressList;
 namespace KMime { namespace Types {
@@ -40,6 +41,11 @@ class KAMail
 		static bool        checkAttachment(const KURL&);
 		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
+		static QStringList kmailIdentities();
+		static int         findIdentity(const QStringList& identities, const QString& identity);
+		static QString     kmailAddress(const QString& identity = QString::null);
+		static QString     extractKMailIdentity(const QString& descrip);
+		static QString     controlCentreAddress();
 		static QString     i18n_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
@@ -53,10 +59,11 @@ class KAMail
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
 		static QString     addToKMailFolder(const KAMailData&, const char* folder);
-		static bool        callKMail(const QByteArray& callData, const QCString& iface, const QCString& function);
+		static bool        callKMail(const QByteArray& callData, const QCString& iface, const QCString& function, const QCString& funcType);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, Offset size, Offset& outSize);
+		static QString     defaultIdentityString(const QString& identity);
 		static QStringList errors(const QString& error = QString::null, bool sendfail = true);
 };
 

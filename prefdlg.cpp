@@ -24,7 +24,6 @@
 #include <qlayout.h>
 #include <qbuttongroup.h>
 #include <qvbox.h>
-#include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -41,7 +40,6 @@
 #include <kmessagebox.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
-#include <kemailsettings.h>
 #include <kiconloader.h>
 #include <kcolorcombo.h>
 #include <kdebug.h>
@@ -53,9 +51,11 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "label.h"
 #include "latecancel.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "radiobutton.h"
 #include "recurrenceedit.h"
 #include "soundpicker.h"
 #include "specialactions.h"
@@ -117,6 +117,8 @@ void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
 	QString errmsg = mEmailPage->validateAddress();
+	if (errmsg.isEmpty())
+		errmsg = mEmailPage->validateBccAddress();
 	if (!errmsg.isEmpty())
 	{
 	
@@ -435,17 +437,18 @@ void MiscPrefTab::slotClearExpired()
 
 EmailPrefTab::EmailPrefTab(QVBox* frame)
 	: PrefsTabBase(frame),
-	  mAddressChanged(false)
+	  mAddressChanged(false),
+	  mBccAddressChanged(false)
 {
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(2*KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Email client:"), box);
 	mEmailClient = new ButtonGroup(box);
 	mEmailClient->hide();
-	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
+	RadioButton* radio = new RadioButton(i18n("&KMail"), box, "kmail");
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Preferences::KMAIL);
-	radio = new QRadioButton(i18n("&Sendmail"), box, "sendmail");
+	radio = new RadioButton(i18n("&Sendmail"), box, "sendmail");
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Preferences::SENDMAIL);
 	connect(mEmailClient, SIGNAL(buttonSet(int)), SLOT(slotEmailClientChanged(int)));
@@ -465,49 +468,88 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
+	// Your Email Address group box
 	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
-	QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	grid->setColStretch(1, 1);
-	label = new QLabel(i18n("'From' email address", "&From:"), group);
+
+	// 'From' email address controls ...
+	label = new Label(EditAlarmDlg::i18n_f_EmailFrom(), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
+	mFromAddressGroup = new ButtonGroup(group);
+	mFromAddressGroup->hide();
+	connect(mFromAddressGroup, SIGNAL(buttonSet(int)), SLOT(slotFromAddrChanged(int)));
+
+	// Line edit to enter a 'From' email address
+	radio = new RadioButton(group);
+	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_ADDR);
+	radio->setFixedSize(radio->sizeHint());
+	label->setBuddy(radio);
+	grid->addWidget(radio, 1, 1);
 	mEmailAddress = new QLineEdit(group);
 	connect(mEmailAddress, SIGNAL(textChanged(const QString&)), SLOT(slotAddressChanged()));
-	label->setBuddy(mEmailAddress);
-	QWhatsThis::add(mEmailAddress,
-	      i18n("Your email address, used to identify you as the sender when sending email alarms."));
-	grid->addWidget(mEmailAddress, 1, 1);
+	QString whatsThis = i18n("Your email address, used to identify you as the sender when sending email alarms.");
+	QWhatsThis::add(radio, whatsThis);
+	QWhatsThis::add(mEmailAddress, whatsThis);
+	radio->setFocusWidget(mEmailAddress);
+	grid->addWidget(mEmailAddress, 1, 2);
 
-	mEmailUseControlCentre = new QCheckBox(i18n("&Use address from Control Center"), group);
-	mEmailUseControlCentre->setFixedSize(mEmailUseControlCentre->sizeHint());
+	// 'From' email address to be taken from Control Centre
+	radio = new RadioButton(i18n("&Use address from Control Center"), group);
+	radio->setFixedSize(radio->sizeHint());
 #if KDE_VERSION < 210
-	mEmailUseControlCentre->hide();
+	radio->hide();
 #endif
-	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
-	QWhatsThis::add(mEmailUseControlCentre,
+	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
+	QWhatsThis::add(radio,
 	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
-	grid->addWidget(mEmailUseControlCentre, 2, 1, Qt::AlignLeft);
+	grid->addMultiCellWidget(radio, 2, 2, 1, 2, Qt::AlignLeft);
 
-	label = new QLabel(i18n("'Bcc' email address", "&Bcc:"), group);
+	// 'From' email address to be picked from KMail's identities when the email alarm is configured
+	radio = new RadioButton(i18n("Use KMail &identities"), group);
+	radio->setFixedSize(radio->sizeHint());
+	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_KMAIL);
+	QWhatsThis::add(radio,
+	      i18n("Check to use KMail's email identities to identify you as the sender when sending email alarms. "
+	           "For existing email alarms, KMail's default identity will be used. "
+	           "For new email alarms, you will be able to pick which of KMail's identities to use."));
+	grid->addMultiCellWidget(radio, 3, 3, 1, 2, Qt::AlignLeft);
+
+	// 'Bcc' email address controls ...
+	grid->addRowSpacing(4, KDialog::spacingHint());
+	label = new Label(i18n("'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 3, 0);
-	mEmailBccAddress = new QLineEdit(group);
-	label->setBuddy(mEmailBccAddress);
-	QWhatsThis::add(mEmailBccAddress,
-	      i18n("Your email address, used for blind copying email alarms to yourself. "
-	           "If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name."));
-	grid->addWidget(mEmailBccAddress, 3, 1);
+	grid->addWidget(label, 5, 0);
+	mBccAddressGroup = new ButtonGroup(group);
+	mBccAddressGroup->hide();
+	connect(mBccAddressGroup, SIGNAL(buttonSet(int)), SLOT(slotBccAddrChanged(int)));
 
-	mEmailBccUseControlCentre = new QCheckBox(i18n("Us&e address from Control Center"), group);
-	mEmailBccUseControlCentre->setFixedSize(mEmailBccUseControlCentre->sizeHint());
+	// Line edit to enter a 'Bcc' email address
+	radio = new RadioButton(group);
+	radio->setFixedSize(radio->sizeHint());
+	mBccAddressGroup->insert(radio, Preferences::MAIL_FROM_ADDR);
+	label->setBuddy(radio);
+	grid->addWidget(radio, 5, 1);
+	mEmailBccAddress = new QLineEdit(group);
+	whatsThis = i18n("Your email address, used for blind copying email alarms to yourself. "
+	                 "If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name.");
+	QWhatsThis::add(radio, whatsThis);
+	QWhatsThis::add(mEmailBccAddress, whatsThis);
+	radio->setFocusWidget(mEmailBccAddress);
+	grid->addWidget(mEmailBccAddress, 5, 2);
+
+	// 'Bcc' email address to be taken from Control Centre
+	radio = new RadioButton(i18n("Us&e address from Control Center"), group);
+	radio->setFixedSize(radio->sizeHint());
 #if KDE_VERSION < 210
-	mEmailBccUseControlCentre->hide();
+	radio->hide();
 #endif
-	connect(mEmailBccUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailBccUseCCToggled(bool)));
-	QWhatsThis::add(mEmailBccUseControlCentre,
+	mBccAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
+	QWhatsThis::add(radio,
 	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
-	grid->addWidget(mEmailBccUseControlCentre, 4, 1, Qt::AlignLeft);
+	grid->addMultiCellWidget(radio, 6, 6, 1, 2, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -528,10 +570,10 @@ void EmailPrefTab::restore()
 	Preferences* preferences = Preferences::instance();
 	mEmailClient->setButton(preferences->mEmailClient);
 	mEmailCopyToKMail->setChecked(preferences->emailCopyToKMail());
-	setEmailAddress(preferences->mEmailUseControlCentre, preferences->mEmailAddress);
-	setEmailBccAddress(preferences->mEmailBccUseControlCentre, preferences->mEmailBccAddress);
+	setEmailAddress(preferences->mEmailFrom, preferences->mEmailAddress);
+	setEmailBccAddress((preferences->mEmailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), preferences->mEmailBccAddress);
 	mEmailQueuedNotify->setChecked(preferences->emailQueuedNotify());
-	mAddressChanged = false;
+	mAddressChanged = mBccAddressChanged = false;
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
@@ -540,8 +582,8 @@ void EmailPrefTab::apply(bool syncToDisc)
 	int client = mEmailClient->id(mEmailClient->selected());
 	preferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
 	preferences->mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
-	preferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text().stripWhiteSpace());
-	preferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text().stripWhiteSpace());
+	preferences->setEmailAddress(static_cast<Preferences::MailFrom>(mFromAddressGroup->selectedId()), mEmailAddress->text().stripWhiteSpace());
+	preferences->setEmailBccAddress((mBccAddressGroup->selectedId() == Preferences::MAIL_FROM_CONTROL_CENTRE), mEmailBccAddress->text().stripWhiteSpace());
 	preferences->setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -549,16 +591,21 @@ void EmailPrefTab::apply(bool syncToDisc)
 void EmailPrefTab::setDefaults()
 {
 	mEmailClient->setButton(Preferences::default_emailClient);
-	setEmailAddress(Preferences::default_emailUseControlCentre, Preferences::default_emailAddress);
-	setEmailBccAddress(Preferences::default_emailBccUseControlCentre, Preferences::default_emailBccAddress);
+	setEmailAddress(Preferences::default_emailFrom(), Preferences::default_emailAddress);
+	setEmailBccAddress((Preferences::default_emailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::default_emailBccAddress);
 	mEmailQueuedNotify->setChecked(Preferences::default_emailQueuedNotify);
 }
 
-void EmailPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
+void EmailPrefTab::setEmailAddress(Preferences::MailFrom from, const QString& address)
 {
-	mEmailUseControlCentre->setChecked(useControlCentre);
-	mEmailAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
-	slotEmailUseCCToggled(true);
+	mFromAddressGroup->setButton(from);
+	mEmailAddress->setText(from == Preferences::MAIL_FROM_ADDR ? address.stripWhiteSpace() : QString());
+}
+
+void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
+{
+	mBccAddressGroup->setButton(useControlCentre ? Preferences::MAIL_FROM_CONTROL_CENTRE : Preferences::MAIL_FROM_ADDR);
+	mEmailBccAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 }
 
 void EmailPrefTab::slotEmailClientChanged(int id)
@@ -566,22 +613,16 @@ void EmailPrefTab::slotEmailClientChanged(int id)
 	mEmailCopyToKMail->setEnabled(id == Preferences::SENDMAIL);
 }
 
-void EmailPrefTab::slotEmailUseCCToggled(bool)
+void EmailPrefTab::slotFromAddrChanged(int id)
 {
-	mEmailAddress->setEnabled(!mEmailUseControlCentre->isChecked());
+	mEmailAddress->setEnabled(id == Preferences::MAIL_FROM_ADDR);
 	mAddressChanged = true;
 }
 
-void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
+void EmailPrefTab::slotBccAddrChanged(int id)
 {
-	mEmailBccUseControlCentre->setChecked(useControlCentre);
-	mEmailBccAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
-	slotEmailBccUseCCToggled(true);
-}
-
-void EmailPrefTab::slotEmailBccUseCCToggled(bool)
-{
-	mEmailBccAddress->setEnabled(!mEmailBccUseControlCentre->isChecked());
+	mEmailBccAddress->setEnabled(id == Preferences::MAIL_FROM_ADDR);
+	mBccAddressChanged = true;
 }
 
 QString EmailPrefTab::validateAddress()
@@ -589,17 +630,37 @@ QString EmailPrefTab::validateAddress()
 	if (!mAddressChanged)
 		return QString::null;
 	mAddressChanged = false;
-	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(KAMail::i18n_NeedFromEmailAddress());
-	if (mEmailUseControlCentre->isChecked())
-	{
-		KEMailSettings e;
-		if (!e.getSetting(KEMailSettings::EmailAddress).isEmpty())
-			return QString::null;
-		errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
-	}
-	else
-	if (!mEmailAddress->text().stripWhiteSpace().isEmpty())
+	return validateAddr(mFromAddressGroup, mEmailAddress, KAMail::i18n_NeedFromEmailAddress());
+}
+
+QString EmailPrefTab::validateBccAddress()
+{
+	if (!mBccAddressChanged)
 		return QString::null;
+	mBccAddressChanged = false;
+	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
+}
+
+QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
+{
+	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(msg);
+	switch (group->selectedId())
+	{
+		case Preferences::MAIL_FROM_CONTROL_CENTRE:
+			if (!KAMail::controlCentreAddress().isEmpty())
+				return QString::null;
+			errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
+			break;
+		case Preferences::MAIL_FROM_KMAIL:
+			if (KAMail::kmailIdentities().count())
+				return QString::null;
+			errmsg = i18n("No KMail identities currently exist. %1").arg(errmsg);
+			break;
+		case Preferences::MAIL_FROM_ADDR:
+			if (!addr->text().stripWhiteSpace().isEmpty())
+				return QString::null;
+			break;
+	}
 	return errmsg;
 }
 

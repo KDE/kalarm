@@ -75,6 +75,11 @@ class EditAlarmDlg : public KDialogBase
 		static QString  i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
 		static QString  i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
 		static QString  i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
+		static QString  i18n_EmailFrom();          // plain text of 'From:' (email address)
+		static QString  i18n_f_EmailFrom();        // text of 'From:' (email address), with 'F' shortcut
+		static QString  i18n_EmailTo();            // plain text of 'To:' (email addressee)
+		static QString  i18n_EmailSubject();       // plain text of 'Subject:' (email)
+		static QString  i18n_j_EmailSubject();     // text of 'Subject:' (email), with 'J' shortcut
 
 	protected:
 		virtual void    resizeEvent(QResizeEvent*);
@@ -163,6 +168,7 @@ class EditAlarmDlg : public KDialogBase
 		LineEdit*           mCommandMessageEdit; // command edit box
 		// Email alarm widgets
 		QFrame*             mEmailFrame;
+		ComboBox*           mEmailFromList;
 		LineEdit*           mEmailToEdit;
 		QPushButton*        mEmailAddressButton; // email open address book button
 		QLineEdit*          mEmailSubjectEdit;
@@ -217,6 +223,7 @@ class EditAlarmDlg : public KDialogBase
 		int                 mSavedReminder;       // mReminder value
 		bool                mSavedOnceOnly;       // mReminder once-only status
 		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
+		QString             mSavedEmailFrom;      // mEmailFromList current value
 		QString             mSavedEmailTo;        // mEmailToEdit value
 		QString             mSavedEmailSubject;   // mEmailSubjectEdit value
 		QStringList         mSavedEmailAttach;    // mEmailAttachList values

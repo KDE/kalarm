@@ -41,6 +41,7 @@ class Preferences : public QObject
 		Q_OBJECT
 	public:
 		enum MailClient { SENDMAIL, KMAIL };
+		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_CONTROL_CENTRE, MAIL_FROM_ADDR };
 		enum Feb29Type  { FEB29_MAR1, FEB29_FEB28, FEB29_NONE };
 
 		static Preferences* instance();
@@ -72,8 +73,8 @@ class Preferences : public QObject
 		bool           emailCopyToKMail() const         { return mEmailCopyToKMail  &&  mEmailClient == SENDMAIL; }
 		bool           emailQueuedNotify() const        { return notifying(EMAIL_QUEUED_NOTIFY); }
 		void           setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
-		bool           emailUseControlCentre() const    { return mEmailUseControlCentre; }
-		bool           emailBccUseControlCentre() const { return mEmailBccUseControlCentre; }
+		MailFrom       emailFrom() const                { return mEmailFrom; }
+		bool           emailBccUseControlCentre() const { return mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE; }
 		QString        emailAddress() const;
 		QString        emailBccAddress() const;
 		QColor         disabledColour() const           { return mDisabledColour; }
@@ -127,9 +128,9 @@ class Preferences : public QObject
 		static const int         default_daemonTrayCheckInterval;
 		static const MailClient  default_emailClient;
 		static const bool        default_emailCopyToKMail;
+		static MailFrom          default_emailFrom();
 		static const bool        default_emailQueuedNotify;
-		static const bool        default_emailUseControlCentre;
-		static const bool        default_emailBccUseControlCentre;
+		static const MailFrom    default_emailBccFrom;
 		static const QString     default_emailAddress;
 		static const QString     default_emailBccAddress;
 		static const QColor      default_disabledColour;
@@ -157,7 +158,10 @@ class Preferences : public QObject
 
 	private:
 		Preferences();     // only one instance allowed
+		static void         convertOldPrefs();
 		int                 startOfDayCheck() const;
+		QString	            emailFrom(MailFrom, bool useAddress, bool bcc) const;
+		static MailFrom     emailFrom(const QString&);
 		static void         setNotify(const QString& messageID, bool notify);
 		static bool         notifying(const QString& messageID);
 
@@ -171,7 +175,7 @@ class Preferences : public QObject
 		friend class ViewPrefTab;
 		friend class FontColourPrefTab;
 		friend class EmailPrefTab;
-		void                setEmailAddress(bool useControlCentre, const QString& address);
+		void                setEmailAddress(MailFrom, const QString& address);
 		void                setEmailBccAddress(bool useControlCentre, const QString& address);
 		ColourList          mMessageColours;
 		QColor              mDefaultBgColour;
@@ -191,9 +195,9 @@ class Preferences : public QObject
 		QString             mTooltipTimeToPrefix;
 		int                 mDaemonTrayCheckInterval;
 		MailClient          mEmailClient;
+		MailFrom            mEmailFrom;
+		MailFrom            mEmailBccFrom;
 		bool                mEmailCopyToKMail;
-		bool                mEmailUseControlCentre;
-		bool                mEmailBccUseControlCentre;
 		QColor              mDisabledColour;
 		QColor              mExpiredColour;
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
