@@ -55,6 +55,8 @@ static KCmdLineOptions options[] =
 	{ "exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
 	{ "f", 0, 0 },
 	{ "file <url>", I18N_NOOP("File to display"), 0 },
+	{ "F", 0, 0 },
+	{ "from-id <ID>", I18N_NOOP("KMail identity to use as sender of email"), 0 },
 	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0 },
 	{ "i", 0, 0 },
 	{ "interval <period>", I18N_NOOP("Interval between alarm repetitions"), 0 },

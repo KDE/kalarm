@@ -340,6 +340,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QCString         alMessage;
+				QCString         alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QCString         alSubject;
@@ -368,6 +369,8 @@ int KAlarmApp::newInstance()
 					kdDebug(5950)<<"KAlarmApp::newInstance(): mail\n";
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
+					if (args->isSet("from-id"))
+						alFromID = args->getOption("from-id");
 					QCStringList params = args->getOptionList("mail");
 					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
@@ -392,6 +395,8 @@ int KAlarmApp::newInstance()
 				{
 					if (args->isSet("subject"))
 						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--subject")).arg(QString::fromLatin1("--mail")))
+					if (args->isSet("from-id"))
+						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--from-id")).arg(QString::fromLatin1("--mail")))
 					if (args->isSet("attach"))
 						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--attach")).arg(QString::fromLatin1("--mail")))
 					if (args->isSet("bcc"))
@@ -605,7 +610,7 @@ int KAlarmApp::newInstance()
 				}
 				if (!scheduleEvent(action, alMessage, alarmTime, lateCancel, flags, bgColour, fgColour, QFont(), audioFile,
 				                   audioVolume, reminderMinutes, recurrence, repeatInterval, repeatCount,
-				                   alAddresses, alSubject, alAttachments))
+				                   alFromID, alAddresses, alSubject, alAttachments))
 				{
 					exitCode = 1;
 					break;
@@ -631,6 +636,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--colorfg ");
 				if (args->isSet("disable"))
 					usage += QString::fromLatin1("--disable ");
+				if (args->isSet("from-id"))
+					usage += QString::fromLatin1("--from-id ");
 				if (args->isSet("late-cancel"))
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
@@ -1114,9 +1121,9 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KCal::Recurrence& recurrence, int repeatInterval, int repeatCount,
-                              const EmailAddressList& mailAddresses, const QString& mailSubject,
-                              const QStringList& mailAttachments)
-	{
+                              const QString& mailFromID, const EmailAddressList& mailAddresses,
+                              const QString& mailSubject, const QStringList& mailAttachments)
+{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;
 	if (!dateTime.isValid())
 		return false;
@@ -1136,8 +1143,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	if (!audioFile.isEmpty())
 		event.setAudioFile(audioFile, audioVolume);
 	if (mailAddresses.count())
-#warning Need to be able to specify 'From' email address
-		event.setEmail(QString::null, mailAddresses, mailSubject, mailAttachments);
+		event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
 	event.setRepetition(repeatInterval, repeatCount - 1);

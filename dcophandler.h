@@ -58,13 +58,13 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 	                             int recurType, int recurInterval, int recurCount);
 	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             int recurType, int recurInterval, const QString& endDateTime);
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           const QString& recurrence, int recurInterval, int recurCount);
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int recurType, int recurInterval, int recurCount);
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int recurType, int recurInterval, const QString& endDateTime);
 
@@ -78,7 +78,7 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 	                         int repeatInterval = 0, int repeatCount = 0);
 	static bool scheduleCommand(const QString& commandLine, const DateTime& start, int lateCancel, unsigned flags,
                                 const KCal::Recurrence&, int repeatInterval = 0, int repeatCount = 0);
-	static bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                               const QString& attachments, const DateTime& start, int lateCancel, unsigned flags,
                               const KCal::Recurrence&, int repeatInterval = 0, int repeatCount = 0);
 	static DateTime  convertStartDateTime(const QString& startDateTime);

@@ -82,13 +82,28 @@ class KAlarmIface : virtual public DCOPObject
 	                             int repeatType, int repeatInterval, int repeatCount) = 0;
 	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             int repeatType, int repeatInterval, const QString& endDateTime) = 0;
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	/**
+	  Schedule an email alarm.
+	  @param fromID The KMail identity to use as the sender of the email, or QString::null to use KAlarm's default sender ID.
+	  @param addresses Comma-separated list of addresses to send the email to.
+	  @param subject Subject line of the email.
+	  @param message Email message's body text.
+	  @param attachments Comma- or semicolon-separated list of files to send as attachments to the email.
+	  @param startDateTime Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
+	  @param lateCancel Late-cancellation period in minutes, or 0 for no cancellation.
+	  @param flags OR of flag bits defined in enum above.
+	  @param recurrence Recurrence specification using iCalendar syntax (defined in RFC2445).
+	  @param repeatInterval Simple repetition repeat interval in minutes, or 0 for no simple repetition.
+	  @param repeatCount Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
+	  @return true if alarm was scheduled successfully, false if configuration errors were found.
+	 */
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           const QString& recurrence, int repeatInterval, int repeatCount) = 0;
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int repeatType, int repeatInterval, int repeatCount) = 0;
-	virtual bool scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int repeatType, int repeatInterval, const QString& endDateTime) = 0;
 };

@@ -158,7 +158,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 const QString& recurrence, int repeatInterval, int repeatCount)
 {
@@ -166,10 +166,10 @@ bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject
 	KCal::Recurrence recur(0);
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
-	return scheduleEmail(addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
+	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, int recurCount)
 {
@@ -177,10 +177,10 @@ bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject
 	KCal::Recurrence recur(0);
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
-	return scheduleEmail(addresses, subject, message, attachments, start, lateCancel, flags, recur);
+	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
+bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, const QString& endDateTime)
 {
@@ -188,7 +188,7 @@ bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject
 	KCal::Recurrence recur(0);
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
-	return scheduleEmail(addresses, subject, message, attachments, start, lateCancel, flags, recur);
+	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
 }
 
 
@@ -262,12 +262,21 @@ bool DcopHandler::scheduleCommand(const QString& commandLine,
 /******************************************************************************
 * Schedule an email alarm, after validating the addresses and attachments.
 */
-bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject, const QString& message,
-                                const QString& attachments,
+bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
+                                const QString& message, const QString& attachments,
                                 const DateTime& start, int lateCancel, unsigned flags,
                                 const KCal::Recurrence& recurrence, int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
+	if (!fromID.isEmpty())
+	{
+		QStringList ids = KAMail::kmailIdentities();
+		if (KAMail::findIdentity(ids, fromID) < 0)
+		{
+			kdError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
+			return false;
+		}
+	}
 	EmailAddressList addrs;
 	QString bad = KAMail::convertAddresses(addresses, addrs);
 	if (!bad.isEmpty())
@@ -288,7 +297,7 @@ bool DcopHandler::scheduleEmail(const QString& addresses, const QString& subject
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, addrs, subject, atts);
+	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
 }
 
 
@@ -736,7 +745,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 				format.fromString(&recurrence, rule);
 			}
 			return theApp()->scheduleEvent(action, text, dateTime, lateCancel, flags, bgColour, fgColour, font, audioFile,
-			                               audioVolume, reminderMinutes, recurrence, 0, 0, mailAddresses, mailSubject, mailAttachments);
+			                               audioVolume, reminderMinutes, recurrence, 0, 0, QString::null, mailAddresses, mailSubject, mailAttachments);
 		}
 	}
 	return false;
