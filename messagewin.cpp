@@ -158,7 +158,7 @@ QSize MessageWin::initView()
 			&&  qfile.open(IO_ReadOnly|IO_Translate))
 			{
 				opened = true;
-				QTextEdit* view = new QTextEdit(this, "fileContents");
+				QTextEdit* view = new QTextEdit(topWidget, "fileContents");
 				view->setReadOnly(true);
 				topLayout->addWidget(view);
 				QFontMetrics fm = view->fontMetrics();
