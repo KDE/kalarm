@@ -49,6 +49,7 @@
 #include <kfileitem.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kstdguiitem.h>
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
@@ -141,8 +142,10 @@ KAlarmApp::KAlarmApp()
 	mStartOfDay             = preferences->startOfDay();
 	if (preferences->hasStartOfDayChanged())
 		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-	mOldExpiredColour   = preferences->expiredColour();
-	mOldExpiredKeepDays = preferences->expiredKeepDays();
+	mPrefsExpiredColour   = preferences->expiredColour();
+	mPrefsExpiredKeepDays = preferences->expiredKeepDays();
+	mPrefsShowTime        = preferences->showAlarmTime();
+	mPrefsShowTimeTo      = preferences->showTimeToAlarm();
 
 	// Set up actions used by more than one menu
 	mActionCollection  = new KActionCollection(this);
@@ -954,19 +957,28 @@ void KAlarmApp::slotPreferencesChanged()
 
 	KAEvent::setFeb29RecurType();    // in case the date for February 29th recurrences has changed
 
-	if (preferences->expiredColour() != mOldExpiredColour)
+	if (preferences->showAlarmTime()   != mPrefsShowTime
+	||  preferences->showTimeToAlarm() != mPrefsShowTimeTo)
+	{
+		// The default alarm list time columns selection has changed
+		KAlarmMainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
+		mPrefsShowTime   = preferences->showAlarmTime();
+		mPrefsShowTimeTo = preferences->showTimeToAlarm();
+	}
+
+	if (preferences->expiredColour() != mPrefsExpiredColour)
 	{
 		// The expired alarms text colour has changed
 		mRefreshExpiredAlarms = true;
-		mOldExpiredColour = preferences->expiredColour();
+		mPrefsExpiredColour = preferences->expiredColour();
 	}
 
-	if (preferences->expiredKeepDays() != mOldExpiredKeepDays)
+	if (preferences->expiredKeepDays() != mPrefsExpiredKeepDays)
 	{
 		// How long expired alarms are being kept has changed.
 		// N.B. This also adjusts for any change in start-of-day time.
-		mOldExpiredKeepDays = preferences->expiredKeepDays();
-		AlarmCalendar::expiredCalendar()->setPurgeDays(mOldExpiredKeepDays);
+		mPrefsExpiredKeepDays = preferences->expiredKeepDays();
+		AlarmCalendar::expiredCalendar()->setPurgeDays(mPrefsExpiredKeepDays);
 	}
 
 	if (mRefreshExpiredAlarms)
@@ -1586,7 +1598,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 * which causes a hang!!
 		 */
 		AlarmCalendar::expiredCalendar()->open();
-		AlarmCalendar::expiredCalendar()->setPurgeDays(theInstance->mOldExpiredKeepDays);
+		AlarmCalendar::expiredCalendar()->setPurgeDays(theInstance->mPrefsExpiredKeepDays);
 
 		startdaemon = true;
 	}

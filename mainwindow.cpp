@@ -111,9 +111,9 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
+	  mShowExpired(Preferences::instance()->showExpiredAlarms()),
 	  mShowTime(Preferences::instance()->showAlarmTime()),
-	  mShowTimeTo(Preferences::instance()->showTimeToAlarm()),
-	  mShowExpired(Preferences::instance()->showExpiredAlarms())
+	  mShowTimeTo(Preferences::instance()->showTimeToAlarm())
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
@@ -343,7 +343,7 @@ void KAlarmMainWindow::initActions()
 	Daemon::actionControl()->plug(submenu);
 	theApp()->actionPreferences()->plug(submenu);
 
-	menu->insertItem(SmallIcon("help"),KStdGuiItem::help().text(), helpMenu());
+	menu->insertItem(SmallIcon("help"), KStdGuiItem::help().text(), helpMenu());
 
 	// Set up the toolbar
 
@@ -405,6 +405,39 @@ void KAlarmMainWindow::updateExpired()
 				w->mListView->refresh();
 		}
 		w->mActionShowExpired->setEnabled(enableShowExpired);
+	}
+}
+
+/******************************************************************************
+* Called when the show-alarm-time or show-time-to-alarm setting changes in the
+* user preferences.
+* Update the alarm list in every main window instance to show the new default
+* columns. No change is made if a window isn't using the old settings.
+*/
+void KAlarmMainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
+{
+	kdDebug(5950) << "KAlarmMainWindow::updateShowAlarmTimes()\n";
+	bool newTime   = Preferences::instance()->showAlarmTime();
+	bool newTimeTo = Preferences::instance()->showTimeToAlarm();
+	if (!newTime  &&  !newTimeTo)
+		newTime = true;     // at least one time column must be displayed
+	if (!oldTime  &&  !oldTimeTo)
+		oldTime = true;     // at least one time column must have been displayed
+	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
+	{
+		for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+		{
+			if (w->mShowTime   == oldTime
+			&&  w->mShowTimeTo == oldTimeTo)
+			{
+				w->mShowTime   = newTime;
+				w->mShowTimeTo = newTimeTo;
+				w->mViewMenu->setItemChecked(w->mShowTimeId, newTime);
+				w->mViewMenu->setItemChecked(w->mShowTimeToId, newTimeTo);
+				w->mListView->selectTimeColumns(newTime, newTimeTo);
+			}
+		}
+		setUpdateTimer();
 	}
 }
 
@@ -589,7 +622,8 @@ void KAlarmMainWindow::slotDelete()
 		int n = items.count();
 		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?",
 		                                                  "Do you really want to delete the %n selected alarms?", n),
-		                                       i18n("Delete Alarm", "Delete Alarms", n), KGuiItem( i18n("&Delete"), "editdelete"),
+		                                       i18n("Delete Alarm", "Delete Alarms", n),
+		                                       KGuiItem(i18n("&Delete"), "editdelete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
 			return;
@@ -899,10 +933,11 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 }
 
 /******************************************************************************
-*  Check whether a text is an email, and if so return its subject line.
-*  Reply = subject line, or QString::null if not the text of an email.
+*  Check whether a text is an email, and if so return its headers or optionally
+*  only its subject line.
+*  Reply = headers/subject line, or QString::null if not the text of an email.
 */
-QString KAlarmMainWindow::emailSubject(const QString& text)
+QString KAlarmMainWindow::emailHeaders(const QString& text, bool subjectOnly)
 {
 	QStringList lines = QStringList::split('\n', text);
 	if (lines.count() >= 4
@@ -910,7 +945,11 @@ QString KAlarmMainWindow::emailSubject(const QString& text)
 	&&  lines[1].startsWith(messageToPrefix)
 	&&  lines[2].startsWith(messageDatePrefix)
 	&&  lines[3].startsWith(messageSubjectPrefix))
-		return lines[3].mid(messageSubjectPrefix.length());
+	{
+		if (subjectOnly)
+			return lines[3].mid(messageSubjectPrefix.length());
+		return lines[0] + '\n' + lines[1] + '\n' + lines[2] + '\n' + lines[3];
+	}
 	return QString::null;
 }
 

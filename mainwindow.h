@@ -54,12 +54,13 @@ class KAlarmMainWindow : public MainWindowBase
 
 		static void    refresh();
 		static void    updateExpired();
+		static void    updateTimeColumns(bool oldTime, bool oldTimeTo);
 		static void    addEvent(const KAEvent&, KAlarmMainWindow*);
 		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const QString& text = QString::null);
 		static void    executeDragEnterEvent(QDragEnterEvent*);
 		static void    executeDropEvent(KAlarmMainWindow*, QDropEvent*);
 		static void    closeAll();
-		static QString emailSubject(const QString&);
+		static QString emailHeaders(const QString& text, bool subjectOnly);
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* mainMainWindow();
 		static KAlarmMainWindow* firstWindow()      { return mWindowList.first(); }
@@ -146,9 +147,9 @@ class KAlarmMainWindow : public MainWindowBase
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 		bool           mMinuteTimerActive;   // minute timer is active
 		bool           mHiddenTrayParent;    // on session restoration, hide this window
+		bool           mShowExpired;         // include expired alarms in the displayed list
 		bool           mShowTime;            // show alarm times
 		bool           mShowTimeTo;          // show time-to-alarms
-		bool           mShowExpired;         // include expired alarms in the displayed list
 };
 
 #endif // MAINWINDOW_H

@@ -153,8 +153,8 @@ class KAlarmApp : public KUniqueApplication
 		KAction*              mActionPrefs;         // action to display the preferences dialog
 		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
 		QTime                 mStartOfDay;          // start-of-day time currently in use
-		QColor                mOldExpiredColour;    // expired alarms text colour
-		int                   mOldExpiredKeepDays;  // how long expired alarms are being kept
+		QColor                mPrefsExpiredColour;  // expired alarms text colour
+		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
 		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
 		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
 		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed
@@ -167,6 +167,8 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
+		bool                  mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
+		bool                  mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }
