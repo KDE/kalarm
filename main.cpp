@@ -56,6 +56,8 @@ static KCmdLineOptions options[] =
 	{ "r", 0L, 0L },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0L },
+	{ "s", 0L, 0L },
+	{ "sound <url>", I18N_NOOP("Audio file to play"), 0L },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0L },
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
@@ -73,8 +75,8 @@ int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"),
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " [-bcilLrtu] -f URL\n"
-		"       " PROGRAM_NAME " [-bcilLrtu] message\n"
+		"       " PROGRAM_NAME " [-bcilLrstu] -f URL\n"
+		"       " PROGRAM_NAME " [-bcilLrstu] message\n"
 		"       " PROGRAM_NAME " [-ilLrtu] -e commandline\n"
 		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
