@@ -47,7 +47,7 @@ const bool       Preferences::default_defaultBeep             = false;
 const bool       Preferences::default_defaultEmailBcc         = false;
 const QString    Preferences::default_emailAddress            = "";
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
-const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::SUBDAILY;
+const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
 const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
 
 static const QString    defaultEmailClient = QString::fromLatin1("kmail");
