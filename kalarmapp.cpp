@@ -447,8 +447,6 @@ int KAlarmApp::newInstance()
 					// Repeat count is specified
 					if (args->isSet("login"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--interval")))
-					if (!args->isSet("repeat")  &&  !args->isSet("until"))
-						USAGE(i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--until")))
 					bool ok;
 					if (args->isSet("repeat"))
 					{
@@ -456,7 +454,7 @@ int KAlarmApp::newInstance()
 						if (!ok || !repeatCount || repeatCount < -1)
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat")))
 					}
-					else
+					else if (args->isSet("until"))
 					{
 						QCString dateTime = args->getOption("until");
 						if (!convWakeTime(dateTime, endTime, alarmNoTime))
@@ -464,11 +462,15 @@ int KAlarmApp::newInstance()
 						if (endTime < alarmTime)
 							USAGE(i18n("%1 earlier than %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--time")))
 					}
+					else
+						repeatCount = -1;
 
 					// Get the recurrence interval
 					if (!convInterval(args->getOption("interval"), recurType, repeatInterval)
 					||  repeatInterval < 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
+					if (alarmNoTime  &&  recurType == KAlarmEvent::MINUTELY)
+						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
 				}
 				else
 				{
@@ -501,7 +503,10 @@ int KAlarmApp::newInstance()
 					{
 						switch (recur)
 						{
-							case KAlarmEvent::MINUTELY:  break;
+							case KAlarmEvent::MINUTELY:
+								if (alarmNoTime)
+									USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--reminder")))
+								break;
 							case KAlarmEvent::DAILY:     reminderMinutes *= 1440;  break;
 							case KAlarmEvent::WEEKLY:    reminderMinutes *= 7*1440;  break;
 							default:   ok = false;  break;
@@ -522,6 +527,8 @@ int KAlarmApp::newInstance()
 					flags |= KAlarmEvent::REPEAT_AT_LOGIN;
 				if (args->isSet("bcc"))
 					flags |= KAlarmEvent::EMAIL_BCC;
+				if (alarmNoTime)
+					flags |= KAlarmEvent::ANY_TIME;
 				args->clear();      // free up memory
 
 				// Display or schedule the event
@@ -2098,7 +2105,7 @@ static bool convInterval(QCString timeParam, KAlarmEvent::RecurType& recurType, 
 			{
 				recurType = KAlarmEvent::MINUTELY;
 				interval = timeParam.left(i).toUInt(&ok) * 60;
-				timeParam = timeParam.right(length - i - 1);
+				timeParam = timeParam.mid(i + 1, length - i - 2);
 			}
 			break;
 		}
