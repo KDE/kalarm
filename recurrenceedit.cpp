@@ -85,11 +85,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	QBoxLayout* layout;
 	QVBoxLayout* topLayout = new QVBoxLayout(this, marginKDE2, KDialog::spacingHint());
 
-	// Create the recurrence rule Group box which holds the recurrence period
-	// selection buttons, and the weekly, monthly and yearly recurrence rule
-	// frames which specify options individual to each of these distinct
-	// sections of the recurrence rule. Each frame is made visible by the
-	// selection of its corresponding radio button.
+	/* Create the recurrence rule Group box which holds the recurrence period
+	 * selection buttons, and the weekly, monthly and yearly recurrence rule
+	 * frames which specify options individual to each of these distinct
+	 * sections of the recurrence rule. Each frame is made visible by the
+	 * selection of its corresponding radio button.
+	 */
 
 #if KDE_VERSION >= 290
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), this, "recurGroup");
@@ -269,21 +270,21 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	// Create the exceptions group which specifies dates to be excluded
 	// from the recurrence.
 
-	mExceptionGroup = new QGroupBox(i18n("Exceptions"), this, "mExceptionGroup");
+	mExceptionGroup = new QGroupBox(i18n("E&xceptions"), this, "mExceptionGroup");
 	topLayout->addWidget(mExceptionGroup);
-	QWidget* frame = new QWidget(mExceptionGroup);
-/*
+	topLayout->setStretchFactor(mExceptionGroup, 2);
 	vlayout = new QVBoxLayout(mExceptionGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
-  QGroupBox *groupBox = new QGroupBox( 1, Horizontal, i18n("Exceptions"), this );
-  topLayout->addWidget( groupBox );
+	QGridLayout *grid = new QGridLayout(vlayout, 5, 4, 0);
 
-  QWidget *box = new QWidget( groupBox );
-
-  QGridLayout *boxLayout = new QGridLayout( box );
-
-  mExceptionList = new QListBox(box);
-  boxLayout->addMultiCellWidget(mExceptionList, 0, 3, 0, 0);
+	mExceptionDateList = new QListBox(mExceptionGroup);
+	mExceptionDateList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	connect(mExceptionDateList, SIGNAL(selectionChanged()), SLOT(enableExceptionButtons()));
+	QWhatsThis::add(mExceptionDateList,
+	      i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
+	grid->addMultiCellWidget(mExceptionDateList, 0, 4, 0, 0);
+	grid->setColStretch(0, 1);
+	grid->addColSpacing(1, KDialog::spacingHint());
 
 	if (mReadOnly)
 	{
@@ -293,121 +294,38 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	}
 	else
 	{
-		mExceptionDateEdit = new DateEdit(box);
+		mExceptionDateEdit = new DateEdit(mExceptionGroup);
+		mExceptionDateEdit->setFixedSize(mExceptionDateEdit->sizeHint());
 		mExceptionDateEdit->setDate(QDate::currentDate());
-		boxLayout->addWidget(mExceptionDateEdit, 0, 1);
+		QWhatsThis::add(mExceptionDateEdit,
+		      i18n("Enter a date to insert in the exceptions list. "
+		           "Use in conjunction with the Add or Change button below."));
+		grid->addMultiCellWidget(mExceptionDateEdit, 0, 0, 2, 3, Qt::AlignLeft);
 
-		QPushButton* addExceptionButton = new QPushButton(i18n("Add"), box);
-		connect(addExceptionButton, SIGNAL(clicked()), SLOT(addException()));
-		boxLayout->addWidget(addExceptionButton, 1, 1);
+		QPushButton* button = new QPushButton(i18n("Add"), mExceptionGroup);
+		button->setFixedSize(button->sizeHint());
+		connect(button, SIGNAL(clicked()), SLOT(addException()));
+		QWhatsThis::add(button,
+		      i18n("Add the date entered above to the exceptions list"));
+		grid->addWidget(button, 1, 2);
 
-		mChangeExceptionButton = new QPushButton(i18n("Change"), box);
+		mChangeExceptionButton = new QPushButton(i18n("Change"), mExceptionGroup);
 		mChangeExceptionButton->setFixedSize(mChangeExceptionButton->sizeHint());
 		connect(mChangeExceptionButton, SIGNAL(clicked()), SLOT(changeException()));
-		boxLayout->addWidget(mChangeExceptionButton, 2, 1);
+		QWhatsThis::add(mChangeExceptionButton,
+		      i18n("Replace the currently highlighted item in the exceptions list with the date entered above"));
+		grid->addWidget(mChangeExceptionButton, 1, 3);
 
-		mDeleteExceptionButton = new QPushButton(i18n("Delete"), box);
+		mDeleteExceptionButton = new QPushButton(i18n("Delete"), mExceptionGroup);
 		mDeleteExceptionButton->setFixedSize(mDeleteExceptionButton->sizeHint());
 		connect(mDeleteExceptionButton, SIGNAL(clicked()), SLOT(deleteException()));
-		boxLayout->addWidget(mDeleteExceptionButton, 3, 1);
+		QWhatsThis::add(mDeleteExceptionButton,
+		      i18n("Remove the currently highlighted item from the exceptions list"));
+		grid->addMultiCellWidget(mDeleteExceptionButton, 3, 3, 2, 3, Qt::AlignLeft | Qt::AlignVCenter);
+		grid->setRowStretch(3, 2);
 	}
 
-  boxLayout->setRowStretch(4, 1);
-  boxLayout->setColStretch(1, 3);
-
-}
-
-void ExceptionsWidget::setDates( const DateList &dates )
-{
-  mExceptionList->clear();
-  mExceptionDates.clear();
-  DateList::ConstIterator dit;
-  for ( dit = dates.begin(); dit != dates.end(); ++dit ) {
-    mExceptionList->insertItem( KGlobal::locale()->formatDate(* dit ) );
-    mExceptionDates.append( *dit );
-  }
-}
-*/
-
-
-	topLayout->addStretch();
 	noEmitTypeChanged = false;
-}
-
-/******************************************************************************
- * Add the date entered in the exception date edit control to the list of
- * exception dates.
- */
-void RecurrenceEdit::addException()
-{
-	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
-		return;
-	QDate date = mExceptionDateEdit->date();
-	QValueList<QDate>::Iterator it;
-	int index = 0;
-	bool insert = true;
-	for (it = mExceptionDates.begin();  it != mExceptionDates.end();  ++index, ++it)
-	{
-		if (date <= *it)
-		{
-			insert = (date != *it);
-			break;
-		}
-	}
-	if (insert)
-	{
-		mExceptionDates.insert(it, date);
-		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(date), index);
-	}
-	mExceptionDateList->setCurrentItem(index);
-	enableExceptionButtons();
-}
-
-/******************************************************************************
- * Change the currently highlighted exception date to that entered in the
- * exception date edit control.
- */
-void RecurrenceEdit::changeException()
-{
-	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
-		return;
-	int index = mExceptionDateList->currentItem();
-	if (index >= 0)
-	{
-		QDate olddate = mExceptionDates[index];
-		QDate newdate = mExceptionDateEdit->date();
-		if (newdate != olddate)
-		{
-			mExceptionDates.remove(mExceptionDates.at(index));
-			mExceptionDateList->removeItem(index);
-			addException();
-		}
-	}
-}
-
-/******************************************************************************
- * Delete the currently highlighted exception date.
- */
-void RecurrenceEdit::deleteException()
-{
-	int index = mExceptionDateList->currentItem();
-	if (index >= 0)
-	{
-		mExceptionDates.remove(mExceptionDates.at(index));
-		mExceptionDateList->removeItem(index);
-		enableExceptionButtons();
-	}
-}
-/******************************************************************************
- * Delete the currently highlighted exception date.
- */
-void RecurrenceEdit::enableExceptionButtons()
-{
-	bool enable = (mExceptionDateList->currentItem() >= 0);
-	if (mDeleteExceptionButton)
-		mDeleteExceptionButton->setEnabled(enable);
-	if (mChangeExceptionButton)
-		mChangeExceptionButton->setEnabled(enable);
 }
 
 void RecurrenceEdit::initNone()
@@ -473,8 +391,8 @@ void RecurrenceEdit::initWeekly()
 
 	// List the days of the week starting at the user's start day of the week.
 	// Save the first day of the week, just in case it changes while the dialog is open.
-	QVBox* box = new QVBox(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
-	box->setSpacing(KDialog::spacingHint());
+	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
+	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
 #if KDE_VERSION >= 310
 	mWeekRuleFirstDay = KGlobal::locale()->weekStartDay();
 #else
@@ -486,10 +404,11 @@ void RecurrenceEdit::initWeekly()
 		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
+		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4);
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
-	      i18n("Select the day(s) of the week on which to repeat the alarm"));
+	      i18n("Select the days of the week on which to repeat the alarm"));
 	grid->addWidget(box, 0, 2, Qt::AlignLeft);
 	label->setBuddy(mWeekRuleDayBox[0]);
 	grid->setColStretch(3, 1);
@@ -547,6 +466,7 @@ void RecurrenceEdit::initYearly()
 
 	// Set up the yearly date widgets
 	initDayOfMonth(&mYearRuleDayMonthButton, &mYearRuleNthDayEntry, mYearRuleButtonGroup, groupLayout);
+	connect(mYearRuleNthDayEntry, SIGNAL(activated(int)), SLOT(yearDayOfMonthSelected(int)));
 
 	// Set up the yearly position widgets
 	initWeekOfMonth(&mYearRuleOnNthTypeOfDayButton, &mYearRuleNthNumberEntry, &mYearRuleNthTypeOfDayEntry, mYearRuleButtonGroup, groupLayout);
@@ -571,7 +491,7 @@ void RecurrenceEdit::initYearly()
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
-	      i18n("Select the month(s) of the year in which to repeat the alarm"));
+	      i18n("Select the months of the year in which to repeat the alarm"));
 	grid->addWidget(box, 1, 2, Qt::AlignLeft);
 	grid->setColStretch(2, 1);
 
@@ -596,6 +516,37 @@ void RecurrenceEdit::initYearly()
 	mYearRuleOnNthTypeOfDayButtonId = mYearRuleButtonGroup->id(mYearRuleOnNthTypeOfDayButton);
 
 	connect(mYearRuleButtonGroup, SIGNAL(buttonSet(int)), SLOT(yearlyClicked(int)));
+}
+
+/******************************************************************************
+ * Initialise a day-of-the-month selection combo box.
+ */
+void RecurrenceEdit::initDayOfMonth(RadioButton** radio, ComboBox** combo, QWidget* parent, QBoxLayout* groupLayout)
+{
+	QBoxLayout* layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
+	*radio = new RadioButton(i18n("On the 7th day", "O&n the"), parent);
+	RadioButton* r = *radio;
+	r->setFixedSize(r->sizeHint());
+	r->setReadOnly(mReadOnly);
+	QWhatsThis::add(r, i18n("Repeat the alarm on the selected day of the month"));
+	layout->addWidget(r);
+
+	*combo = new ComboBox(false, parent);
+	ComboBox* c = *combo;
+	c->setSizeLimit(11);
+	for (int i = 0;  i < 31;  ++i)
+		c->insertItem(i18n(ordinal[i]));
+	c->insertItem(i18n("Last day of month", "Last"));
+	c->setFixedSize(c->sizeHint());
+	c->setReadOnly(mReadOnly);
+	QWhatsThis::add(c, i18n("Select the day of the month on which to repeat the alarm"));
+	r->setFocusWidget(c);
+	layout->addWidget(c);
+
+	QLabel* label = new QLabel(i18n("day"), parent);
+	label->setFixedSize(label->sizeHint());
+	layout->addWidget(label);
+	layout->addStretch();
 }
 
 /******************************************************************************
@@ -641,51 +592,51 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 }
 
 /******************************************************************************
- * Initialise a day-of-the-month selection combo box.
- */
-void RecurrenceEdit::initDayOfMonth(RadioButton** radio, ComboBox** combo, QWidget* parent, QBoxLayout* groupLayout)
-{
-	QBoxLayout* layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
-	*radio = new RadioButton(i18n("On the 7th day", "O&n the"), parent);
-	RadioButton* r = *radio;
-	r->setFixedSize(r->sizeHint());
-	r->setReadOnly(mReadOnly);
-	QWhatsThis::add(r, i18n("Repeat the alarm on the selected day of the month"));
-	layout->addWidget(r);
-
-	*combo = new ComboBox(false, parent);
-	ComboBox* c = *combo;
-	c->setSizeLimit(11);
-	for (int i = 0;  i < 31;  ++i)
-		c->insertItem(i18n(ordinal[i]));
-	c->setFixedSize(c->sizeHint());
-	c->setReadOnly(mReadOnly);
-	QWhatsThis::add(c, i18n("Select the day of the month on which to repeat the alarm"));
-	r->setFocusWidget(c);
-	layout->addWidget(c);
-
-	QLabel* label = new QLabel(i18n("day"), parent);
-	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
-	layout->addStretch();
-}
-
-/******************************************************************************
  * Verify the consistency of the entered data.
  */
-QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, bool& noTime) const
+QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& errorMessage) const
 {
 	if (mAtLoginButton->isOn())
 		return 0;
 	const_cast<RecurrenceEdit*>(this)->currStartDateTime = startDateTime;
 	if (mEndDateButton->isChecked())
 	{
-		noTime = !mEndTimeEdit->isEnabled();
+		QWidget* errWidget = 0;
+		bool noTime = !mEndTimeEdit->isEnabled();
 		QDate endDate = mEndDateEdit->date();
 		if (endDate < startDateTime.date())
-			return mEndDateEdit;
-		if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime)
-			return mEndTimeEdit;
+			errWidget = mEndDateEdit;
+		else if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime)
+			errWidget = mEndTimeEdit;
+		if (errWidget)
+		{
+			errorMessage = noTime
+			             ? i18n("End date is earlier than start date")
+			             : i18n("End date/time is earlier than start date/time");
+			return errWidget;
+		}
+	}
+	QButton* button = ruleButtonGroup->selected();
+	if (button == mWeeklyButton)
+	{
+		// Weekly recurrence: check that at least one day is selected
+		QBitArray days(7);
+		if (!getCheckedDays(days))
+		{
+			errorMessage = i18n("No day selected");
+			return mWeekRuleDayBox[0];
+		}
+	}
+	else if (button == mYearlyButton)
+	{
+		// Yearly recurrence: check that at least one month is selected
+		QValueList<int> months;
+		getCheckedMonths(months);
+		if (!months.count())
+		{
+			errorMessage = i18n("No month selected");
+			return mYearRuleMonthBox[0];
+		}
 	}
 	return 0;
 }
@@ -819,6 +770,20 @@ void RecurrenceEdit::yearlyClicked(int id)
 	mYearRuleNthTypeOfDayEntry->setEnabled(!date);
 }
 
+/******************************************************************************
+ * Called when a day of the month is selected in a yearly recurrence, to
+ * disable months for which the day is out of range.
+ */
+void RecurrenceEdit::yearDayOfMonthSelected(int index)
+{
+	mYearRuleMonthBox[1]->setEnabled(index < 29  ||  index > 30);     // February
+	bool enable = (index != 30);
+	mYearRuleMonthBox[3]->setEnabled(enable);     // April
+	mYearRuleMonthBox[5]->setEnabled(enable);     // June
+	mYearRuleMonthBox[8]->setEnabled(enable);     // September
+	mYearRuleMonthBox[10]->setEnabled(enable);    // November
+}
+
 void RecurrenceEdit::showEvent(QShowEvent*)
 {
 	QButton* button = ruleButtonGroup->selected();
@@ -827,7 +792,7 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	           : (button == mWeeklyButton)   ? mWeekRecurFrequency
 	           : (button == mMonthlyButton)  ? mMonthRecurFrequency
 	           : (button == mYearlyButton)   ? mYearRecurFrequency
-	           : button;
+	           : (QWidget*)button;
 	w->setFocus();
 	emit shown();
 }
@@ -842,6 +807,163 @@ void RecurrenceEdit::repeatCountChanged(int value)
 		mRepeatCountEntry->setMinValue(1);
 }
 
+/******************************************************************************
+ * Add the date entered in the exception date edit control to the list of
+ * exception dates.
+ */
+void RecurrenceEdit::addException()
+{
+	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
+		return;
+	QDate date = mExceptionDateEdit->date();
+	QValueList<QDate>::Iterator it;
+	int index = 0;
+	bool insert = true;
+	for (it = mExceptionDates.begin();  it != mExceptionDates.end();  ++index, ++it)
+	{
+		if (date <= *it)
+		{
+			insert = (date != *it);
+			break;
+		}
+	}
+	if (insert)
+	{
+		mExceptionDates.insert(it, date);
+		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(date), index);
+	}
+	mExceptionDateList->setCurrentItem(index);
+	enableExceptionButtons();
+}
+
+/******************************************************************************
+ * Change the currently highlighted exception date to that entered in the
+ * exception date edit control.
+ */
+void RecurrenceEdit::changeException()
+{
+	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
+		return;
+	QListBoxItem* item = mExceptionDateList->selectedItem();
+	if (!item)
+		return;
+	int index = mExceptionDateList->index(item);
+	if (index >= 0)
+	{
+		QDate olddate = mExceptionDates[index];
+		QDate newdate = mExceptionDateEdit->date();
+		if (newdate != olddate)
+		{
+			mExceptionDates.remove(mExceptionDates.at(index));
+			mExceptionDateList->removeItem(index);
+			addException();
+		}
+	}
+}
+
+/******************************************************************************
+ * Delete the currently highlighted exception date.
+ */
+void RecurrenceEdit::deleteException()
+{
+	QListBoxItem* item = mExceptionDateList->selectedItem();
+	if (!item)
+		return;
+	int index = mExceptionDateList->index(item);
+	if (index >= 0)
+	{
+		mExceptionDates.remove(mExceptionDates.at(index));
+		mExceptionDateList->removeItem(index);
+		enableExceptionButtons();
+	}
+}
+
+/******************************************************************************
+ * Delete the currently highlighted exception date.
+ */
+void RecurrenceEdit::enableExceptionButtons()
+{
+	bool enable = mExceptionDateList->selectedItem();
+	if (mDeleteExceptionButton)
+		mDeleteExceptionButton->setEnabled(enable);
+	if (mChangeExceptionButton)
+		mChangeExceptionButton->setEnabled(enable);
+}
+
+/******************************************************************************
+ * Notify this instance of a change in the alarm start date.
+ */
+void RecurrenceEdit::setStartDate(const QDate& start)
+{
+	if (mExceptionDateEdit)
+		mExceptionDateEdit->setMinDate(start, i18n("Date cannot be earlier than start date", "start date"));
+}
+
+/******************************************************************************
+ * Specify the default recurrence end date.
+ */
+void RecurrenceEdit::setDefaultEndDate(const QDate& end)
+{
+	if (!mEndDateButton->isOn())
+		mEndDateEdit->setDate(end);
+}
+
+void RecurrenceEdit::setEndDateTime(const DateTime& end)
+{
+	mEndDateEdit->setDate(end.date());
+	mEndTimeEdit->setValue(end.time().hour()*60 + end.time().minute());
+	mEndTimeEdit->setEnabled(!end.isDateOnly());
+	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
+}
+
+DateTime RecurrenceEdit::endDateTime() const
+{
+	if (ruleButtonGroup->selected() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
+		return DateTime(mEndDateEdit->date());
+	return DateTime(mEndDateEdit->date(), mEndTimeEdit->time());
+}
+
+bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
+{
+	bool found = false;
+	rDays.fill(false);
+	for (int i = 0;  i < 7;  ++i)
+		if (mWeekRuleDayBox[i]->isChecked())
+		{
+			rDays.setBit((i + mWeekRuleFirstDay - 1) % 7, 1);
+			found = true;
+		}
+	return found;
+}
+
+void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
+{
+	for (int i = 0;  i < 7;  ++i)
+		if (rDays.testBit((i + mWeekRuleFirstDay - 1) % 7))
+			mWeekRuleDayBox[i]->setChecked(true);
+}
+
+/******************************************************************************
+ * Fetch which months have been checked (1 - 12).
+ * Reply = true if February has been checked.
+ */
+bool RecurrenceEdit::getCheckedMonths(QValueList<int>& months) const
+{
+	bool feb = false;
+	months.clear();
+	for (int i = 0;  i < 12;  ++i)
+		if (mYearRuleMonthBox[i]->isChecked()  &&  mYearRuleMonthBox[i]->isEnabled())
+		{
+			months.append(i + 1);
+			if (i == 1)
+				feb = true;
+		}
+	return feb;
+}
+
+/******************************************************************************
+ * Set all controls to their default values.
+ */
 void RecurrenceEdit::setDefaults(const QDateTime& from)
 {
 	currStartDateTime = from;
@@ -869,7 +991,6 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
 
 	mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);     // date in year
-//	setStartDate(fromDate);
 //	mYearRuleDayEntry->setValue(fromDate.dayOfYear());
 	mYearRuleNthDayEntry->setCurrentItem(day);
 	mYearRuleNthNumberEntry->setCurrentItem(day / 7);
@@ -895,55 +1016,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	ruleButtonGroup->setButton(button);
 	noEmitTypeChanged = false;
 	rangeTypeClicked();
-}
-
-void RecurrenceEdit::setStartDate(const QDate& start)
-{
-/*	int day = start.day();
-	int month = start.month();
-	if (month == 3  &&  day == 1  &&  !QDate::leapYear(start.year()))
-	{
-		// For a start date of March 1st in a non-leap year, a recurrence on
-		// either February 29th or March 1st is permissible
-		day = 29;
-	}
-	mYearRuleNthDayEntry->setCurrentItem(day - 1);*/
-}
-
-void RecurrenceEdit::setDefaultEndDate(const QDate& end)
-{
-	if (!mEndDateButton->isOn())
-		mEndDateEdit->setDate(end);
-}
-
-void RecurrenceEdit::setEndDateTime(const DateTime& end)
-{
-	mEndDateEdit->setDate(end.date());
-	mEndTimeEdit->setValue(end.time().hour()*60 + end.time().minute());
-	mEndTimeEdit->setEnabled(!end.isDateOnly());
-	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
-}
-
-DateTime RecurrenceEdit::endDateTime() const
-{
-	if (ruleButtonGroup->selected() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
-		return DateTime(mEndDateEdit->date());
-	return DateTime(mEndDateEdit->date(), mEndTimeEdit->time());
-}
-
-void RecurrenceEdit::getCheckedDays(QBitArray& rDays)
-{
-	rDays.fill(false);
-	for (int i = 0;  i < 7;  ++i)
-		if (mWeekRuleDayBox[i]->isChecked())
-			rDays.setBit((i + mWeekRuleFirstDay - 1) % 7, 1);
-}
-
-void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
-{
-	for (int i = 0;  i < 7;  ++i)
-		if (rDays.testBit((i + mWeekRuleFirstDay - 1) % 7))
-			mWeekRuleDayBox[i]->setChecked(true);
+	enableExceptionButtons();
 }
 
 /******************************************************************************
@@ -963,7 +1036,8 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 	Recurrence* recurrence = event.recurrence();
 	if (!recurrence)
 		return;
-	switch (recurrence->doesRecur())
+	short rtype = recurrence->doesRecur();
+	switch (rtype)
 	{
 		case Recurrence::rMinutely:
 			ruleButtonGroup->setButton(mSubDailyButtonId);
@@ -1003,17 +1077,46 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 			mMonthRecurFrequency->setValue(recurrence->frequency());
 			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);
 			QPtrList<int> rmd = recurrence->monthDays();
-			int i = *rmd.first() - 1;
+			int i = rmd.first() ? *rmd.first() : 1;
+			if (i > 0)
+				--i;
+			else
+				i = 30 - i;
 			mMonthRuleNthDayEntry->setCurrentItem(i);
 			break;
 		}
 		case Recurrence::rYearlyMonth:   // in the nth month of the year
+		case Recurrence::rYearlyPos:     // on the nth (Tuesday) of a month in the year
 		{
-			ruleButtonGroup->setButton(mYearlyButtonId);
-			mYearRecurFrequency->setValue(recurrence->frequency());
-			mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
-			int day = event.mainDate().day();
-			mYearRuleNthDayEntry->setCurrentItem(day == 1 && event.recursFeb29() ? 29-1 : day-1);
+			if (rtype == Recurrence::rYearlyMonth)
+			{
+				ruleButtonGroup->setButton(mYearlyButtonId);
+				mYearRecurFrequency->setValue(recurrence->frequency());
+				mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
+				int day = event.mainDate().day();
+				QPtrList<int> rmd = recurrence->monthDays();
+				if (rmd.first())
+					day = *rmd.first();
+				mYearRuleNthDayEntry->setCurrentItem(day < 0 ? 30 - day : day == 1 && event.recursFeb29() ? 29-1 : day-1);
+			}
+			else if (rtype == Recurrence::rYearlyPos)
+			{
+				ruleButtonGroup->setButton(mYearlyButtonId);
+				mYearRecurFrequency->setValue(recurrence->frequency());
+				mYearRuleButtonGroup->setButton(mYearRuleOnNthTypeOfDayButtonId);
+				QPtrList<Recurrence::rMonthPos> rmp = recurrence->yearMonthPositions();
+				int i = rmp.first()->rPos - 1;
+				if (rmp.first()->negative)
+					i += 5;
+				mYearRuleNthNumberEntry->setCurrentItem(i);
+				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
+					mYearRuleNthTypeOfDayEntry->setCurrentItem(i);
+			}
+			for (int i = 0;  i < 12;  ++i)
+				mYearRuleMonthBox[i]->setChecked(false);
+			QPtrList<int> rmd = recurrence->yearNums();
+			for (int* ii = rmd.first();  ii;  ii = rmd.next())
+				mYearRuleMonthBox[*ii - 1]->setChecked(true);
 			break;
 		}
 /*		case Recurrence::rYearlyDay:     // on the nth day of the year
@@ -1023,25 +1126,6 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 			mYearRuleButtonGroup->setButton(mYearRuleDayButtonId);
 			break;
 		}*/
-		case Recurrence::rYearlyPos:     // on the nth (Tuesday) of a month in the year
-		{
-			ruleButtonGroup->setButton(mYearlyButtonId);
-			mYearRecurFrequency->setValue(recurrence->frequency());
-			mYearRuleButtonGroup->setButton(mYearRuleOnNthTypeOfDayButtonId);
-			QPtrList<Recurrence::rMonthPos> rmp = recurrence->yearMonthPositions();
-			int i = rmp.first()->rPos - 1;
-			if (rmp.first()->negative)
-				i += 5;
-			mYearRuleNthNumberEntry->setCurrentItem(i);
-			for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-				mYearRuleNthTypeOfDayEntry->setCurrentItem(i);
-			for (i = 0;  i < 12;  ++i)
-				mYearRuleMonthBox[i]->setChecked(false);
-			QPtrList<int> rmd = recurrence->yearNums();
-			for (int* ii = rmd.first();  ii;  ii = rmd.next())
-				mYearRuleMonthBox[*ii - 1]->setChecked(true);
-			break;
-		}
 		case Recurrence::rNone:
 		default:
 			return;
@@ -1072,6 +1156,14 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 	mEndDateEdit->setDate(endtime.date());
 
 	// Get exception information
+	mExceptionDates = event.exceptionDates();
+	qHeapSort(mExceptionDates);
+	mExceptionDateList->clear();
+	for (DateList::ConstIterator it = mExceptionDates.begin();  it != mExceptionDates.end();  ++it)
+		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(*it));
+	enableExceptionButtons();
+
+	rangeTypeClicked();
 }
 
 /******************************************************************************
@@ -1136,6 +1228,8 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 		{
 			// it's by day
 			short daynum  = mMonthRuleNthDayEntry->currentItem() + 1;
+			if (daynum > 31)
+				daynum = 31 - daynum;
 			QValueList<int> daynums;
 			daynums.append(daynum);
 			event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
@@ -1144,15 +1238,8 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 	else if (button == mYearlyButton)
 	{
 		frequency = mYearRecurFrequency->value();
-		bool feb = false;
 		QValueList<int> months;
-		for (int i = 0;  i < 12;  ++i)
-			if (mYearRuleMonthBox[i]->isChecked())
-			{
-				months.append(i + 1);
-				if (i == 1)
-					feb = true;
-			}
+		bool feb = getCheckedMonths(months);
 
 		if (mYearRuleOnNthTypeOfDayButton->isChecked())
 		{
@@ -1178,33 +1265,93 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 		else
 		{
 			short daynum  = mYearRuleNthDayEntry->currentItem() + 1;
+			if (daynum > 31)
+				daynum = 31 - daynum;
 			bool feb29 = (daynum == 29) && feb;
-			event.setRecurAnnualByDate(frequency, months, feb29, repeatCount, endDate);
 			DateTime start = event.mainDateTime();
-			int startday = start.date().day();
-			if (startday != daynum)
+			QDate d = start.date();
+			int startday = d.day();
+			event.setRecurAnnualByDate(frequency, months, (startday != daynum ? daynum : 0),
+			                           feb29, repeatCount, endDate);
+			if (daynum > 0)
 			{
-#warning "Feb 29 doesn't work, e.g. if start date is 1/3/05"
-				// The day of the month for the recurrence is different from the
-				// event start day, to adjust the event start to be the first
-				// recurrence after the preset event start.
-				QDate d = start.date();
-				if (daynum > startday)
-					do
+				bool adjust = false;
+				if (startday != daynum)
+				{
+					// The day of the month for the recurrence is different from the
+					// event start day, so adjust the event start to be the first
+					// recurrence after the preset event start.
+					if (daynum > startday)
+						do
+						{
+							d = d.addDays(-startday);    // last day of previous month
+						} while (d.day() < daynum);
+					d = d.addDays(daynum - d.day());
+					event.adjustStartDate(d);
+					adjust = true;
+				}
+				else
+				{
+					// The day of the month of the recurrence is the same as the event
+					// start day, so check that the start month is one of the selected
+					// recurrence months.
+					adjust = true;
+					int month = d.month();
+					for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
 					{
-						d = d.addDays(-startday);    // last day of previous month
-					} while (d.day() < daynum);
-				d = d.addDays(daynum - d.day());
-				event.adjustStartDate(d);
-				DateTime newTime;
-				KAlarmEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
-				if (type != KAlarmEvent::FIRST_OCCURRENCE  &&  type != KAlarmEvent::NO_OCCURRENCE)
-					event.adjustStartDate(newTime.date());
+						if (*it == month)
+						{
+							adjust = false;
+							break;
+						}
+					}
+				}
+				if (adjust)
+				{
+					DateTime newTime;
+					KAlarmEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
+					if (type != KAlarmEvent::FIRST_OCCURRENCE  &&  type != KAlarmEvent::NO_OCCURRENCE)
+						event.adjustStartDate(newTime.date());
+				}
+			}
+			else
+			{
+				// The recurrence is on the last day of the month, so adjust the
+				// event start to the first recurrence date.
+				// First adjust to a month which is supposed to recur.
+				bool adjust = true;
+				int month = d.month();
+				for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
+				{
+					if (*it == month)
+					{
+						adjust = false;
+						break;
+					}
+				}
+				if (adjust)
+				{
+					DateTime newTime;
+					KAlarmEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
+					if (type != KAlarmEvent::FIRST_OCCURRENCE  &&  type != KAlarmEvent::NO_OCCURRENCE)
+						event.adjustStartDate(newTime.date());
+					d = start.date();
+					startday = d.day();
+				}
+				int lastDay = d.daysInMonth();
+				if (startday != lastDay)
+					event.adjustStartDate(d.addDays(lastDay - startday));
 			}
 		}
 	}
 	else
+	{
 		event.setNoRecur();
+		return;
+	}
+
+	// Set up exceptions
+	event.setExceptionDates(mExceptionDates);
 }
 
 /*=============================================================================

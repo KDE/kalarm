@@ -67,7 +67,7 @@ class RecurrenceEdit : public QFrame
 		void          set(const KAlarmEvent&);
 		/** Write event settings to event object */
 		void          updateEvent(KAlarmEvent&);
-		QWidget*      checkData(const QDateTime& startDateTime, bool& noTime) const;
+		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		void          setStartDate(const QDate&);
 		void          setDefaultEndDate(const QDate&);
@@ -95,13 +95,15 @@ class RecurrenceEdit : public QFrame
 		void          addException();
 		void          changeException();
 		void          deleteException();
+		void          enableExceptionButtons();
+		void          yearDayOfMonthSelected(int);
 
 	private:
-		void          getCheckedDays(QBitArray& rDays);
+		bool          getCheckedDays(QBitArray& rDays) const;
 		void          setCheckedDays(QBitArray& rDays);
+		bool          getCheckedMonths(QValueList<int>& months) const;
 		void          initDayOfMonth(RadioButton**, ComboBox**, QWidget* parent, QBoxLayout*);
 		void          initWeekOfMonth(RadioButton**, ComboBox** weekCombo, ComboBox** dayCombo, QWidget* parent, QBoxLayout*);
-		void          enableExceptionButtons();
 
 		void          initNone();
 		void          initSubDaily();
