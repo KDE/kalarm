@@ -4,7 +4,7 @@ INCLUDES= -I$(top_srcdir) $(all_includes)
 bin_PROGRAMS = kalarm
 kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp msgevent.cpp messagewin.cpp \
 	mainwindowbase.cpp mainwindow.cpp \
-	prefsettings.cpp prefs.cpp prefdlg.cpp \
+	prefsettings.cpp prefs.cpp prefdlg.cpp alarmcalendar.cpp \
 	traywindow.cpp traydcop.cpp traydcopiface.skel \
 	fontcolour.cpp fontchooser.cpp colourcombo.cpp datetime.cpp spinbox2.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -12,7 +12,7 @@ kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la $(top_builddir)
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
 	mainwindowbase.h traywindow.h traydcop.h traydcopiface.h \
 	msgevent.h datetime.h fontcolour.h fontchooser.h colourcombo.h \
-	spinbox2.h prefs.h prefsettings.h prefdlg.h
+	spinbox2.h prefs.h prefsettings.h prefdlg.h alarmcalendar.h
 
 METASOURCES = AUTO
 
