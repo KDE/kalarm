@@ -1,6 +1,19 @@
 KAlarm
 
-=== Version 0.5.2 --- 30 Jan 2002 ===
+=== Version 0.5.7--- 28 Feb 2002 ===
+Activate system tray icon on deferring command line-initiated message (in
+    run-in-system-tray mode).
+Associate main window with system tray icon when displayed from message window.
+Fix daemon not activating KAlarm after daemon is restarted (run-on-demand mode).
+Fix potential failure to display command line-initiated message.
+Fix crash in some circumstances on changing run mode to run-on-demand.
+Fix crash on clicking KAlarm icon in command line-initiated message window.
+Fix crash on deferring alarm in command line-initiated message window.
+
+=== Version 0.5.4--- 7 Feb 2002 ===
+Fix extra window being displayed in session restoration.
+
+=== Version 0.5.2 --- 31 Jan 2002 ===
 Fix session restore crash if in 'run continuously in system tray' mode.
 
 === Version 0.5.1 --- 30 Jan 2002 ===
