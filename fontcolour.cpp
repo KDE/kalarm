@@ -94,7 +94,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (editColours)
 	{
 		layout = new QHBoxLayout(topLayout);
-		QPushButton* button = new QPushButton(i18n("&Add Color..."), page);
+		QPushButton* button = new QPushButton(i18n("Add Co&lor..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
 		QWhatsThis::add(button, i18n("Choose a new color to add to the color selection list."));
