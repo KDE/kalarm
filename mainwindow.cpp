@@ -979,7 +979,8 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 	if (button == Qt::RightButton)
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
-		mContextMenu->popup(pt);
+		if (mContextMenu)
+			mContextMenu->popup(pt);
 	}
 	else if (!item)
 	{

@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.1.6 --- 19 September 2004 ===
+Prevent crash if kalarmui.rc is missing.
+
 === Version 1.1.5 --- 1 September 2004 ===
 Show erroneous control in alarm edit dialog when an error message is displayed.
 Make alarm edit dialog always appear on current desktop.
