@@ -148,17 +148,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	QHBoxLayout* layout = new QHBoxLayout(topLayout);
 
-#ifndef SOUND
-	// Beep checkbox - default = no beep
-
-	sound->setText(i18n("Beep"));
-	sound->setFixedSize(sound->sizeHint());
-	sound->setChecked(false);
-	connect(sound, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggled(bool)));
-	QWhatsThis::add(sound,
-	      i18n("If checked, a beep will sound when the message is displayed."));
-	layout->addWidget(sound);
-#else
 	// Sound checkbox & sound picker button - default = no sound
 
 	QFrame* frame = new QFrame(page);
@@ -185,7 +174,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	slayout->addWidget(soundPicker);
 	layout->addWidget(frame);
 	layout->addStretch();
-#endif
 
 	lateCancel = new QCheckBox(page);
 	lateCancel->setText(i18n("Cancel if late"));
@@ -260,9 +248,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		actionGroup->setButton(actionGroup->id(radio));
 		lateCancel->setChecked(event->lateCancel());
 		recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
-#ifdef SOUND
 		soundFile = event->audioFile();
-#endif
 		sound->setChecked(event->beep() || !soundFile.isEmpty());
 	}
 	else
@@ -432,7 +418,6 @@ void EditAlarmDlg::slotSoundToggled(bool on)
 	setSoundPicker();
 }
 
-#ifdef SOUND
 /******************************************************************************
  * Called when the sound picker button is clicked.
  */
@@ -456,14 +441,12 @@ void EditAlarmDlg::slotPickSound()
 		setSoundPicker();
 	}
 }
-#endif
 
 /******************************************************************************
  * Set the sound picker button according to whether a sound file is selected.
  */
 void EditAlarmDlg::setSoundPicker()
 {
-#ifdef SOUND
 	QToolTip::remove(soundPicker);
 	if (soundPicker->isEnabled())
 	{
@@ -474,7 +457,6 @@ void EditAlarmDlg::setSoundPicker()
 			QToolTip::add(soundPicker, i18n("Playing '%1'").arg(soundFile));
 		soundPicker->setOn(!beep);
 	}
-#endif
 }
 
 /******************************************************************************
@@ -502,6 +484,7 @@ void EditAlarmDlg::slotTry()
 	{
 		KAlarmEvent event;
 		event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
+		event.setAudioFile(soundFile);
 		if (theApp()->execAlarm(event, event.firstAlarm(), false, false))
 		{
 			if (commandRadio->isOn())
