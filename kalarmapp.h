@@ -64,6 +64,7 @@ class KAlarmApp : public KUniqueApplication
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
 		bool              runInSystemTray() const;
+		bool              sessionClosingDown() const      { return mSessionClosingDown; }
 		void              quitIf()                        { quitIf(0); }
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              removeWindow(TrayWindow*);
@@ -86,6 +87,7 @@ class KAlarmApp : public KUniqueApplication
 		void              deleteMessage(const QString& eventID)         { handleMessage(eventID, EVENT_CANCEL); }
 		QSize             readConfigWindowSize(const char* window, const QSize& defaultSize);
 		void              writeConfigWindowSize(const char* window, const QSize&);
+		virtual void      commitData(QSessionManager&);
 		// DCOP interface methods
 		bool              scheduleMessage(const QString& message, const QDateTime*, const QColor& bg,
 		                                  int flags, bool file, int repeatCount, int repeatInterval);
@@ -132,6 +134,7 @@ class KAlarmApp : public KUniqueApplication
 		Settings*             mSettings;           // program preferences
 		bool                  mKDEDesktop;         // running on KDE desktop
 		bool                  mDaemonRunning;      // whether the alarm daemon is currently running
+		bool                  mSessionClosingDown; // session manager is closing the application
 		bool                  mOldRunInSystemTray; // running continuously in system tray was selected
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 };

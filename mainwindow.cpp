@@ -422,17 +422,20 @@ void KAlarmMainWindow::slotQuit()
 }
 
 /******************************************************************************
-*  Called when the user attempts to close the window.
+*  Called when the user or the session manager attempts to close the window.
 */
 void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 {
-	if (trayParent())
+	if (!theApp()->sessionClosingDown()  &&  trayParent())
 	{
-		hide();          // closing would also close the system tray icon
+		// The user (not the session manager) wants to close the window.
+		// It's the parent window of the system tray icon, so just hide
+		// it to prevent the system tray icon closing.
+		hide();
 		ce->ignore();
 	}
 	else
-		ce->accept();
+		MainWindowBase::closeEvent(ce);
 }
 
 /******************************************************************************

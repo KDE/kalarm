@@ -71,7 +71,8 @@ KAlarmApp::KAlarmApp()
 	  mCalendar(new AlarmCalendar),
 	  mDaemonRegistered(false),
 	  mSettings(new Settings(0L)),
-	  mDaemonRunning(false)
+	  mDaemonRunning(false),
+	  mSessionClosingDown(false)
 {
 	mSettings->loadSettings();
 	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
@@ -393,6 +394,16 @@ void KAlarmApp::quitIf(int exitCode)
 		// This was the last/only running "instance" of the program, so exit completely.
 		exit(exitCode);
 	}
+}
+
+/******************************************************************************
+* Called when the session manager is about to close down the application.
+*/
+void KAlarmApp::commitData(QSessionManager& sm)
+{
+	mSessionClosingDown = true;
+	KUniqueApplication::commitData(sm);
+	mSessionClosingDown = false;         // reset in case shutdown is cancelled
 }
 
 /******************************************************************************
