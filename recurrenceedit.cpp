@@ -353,7 +353,7 @@ void RecurrenceEdit::initMonthly()
 	QBoxLayout* topLayout = new QVBoxLayout(monthlyButtonGroup, KDialog::marginHint());
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	onNthDayButton = new QRadioButton(i18n("Recur on The"), monthlyButtonGroup);
+	onNthDayButton = new QRadioButton(i18n("Recur on the"), monthlyButtonGroup);
 	onNthDayButton->setFixedSize(onNthDayButton->sizeHint());
 	QWhatsThis::add(onNthDayButton,
 	      i18n("Repeat the alarm on the selected day of the month"));
@@ -410,7 +410,7 @@ void RecurrenceEdit::initYearly()
 	QBoxLayout* topLayout = new QVBoxLayout(yearlyButtonGroup, KDialog::marginHint());
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	yearMonthButton = new QRadioButton(i18n("Recur On"), yearlyButtonGroup);
+	yearMonthButton = new QRadioButton(i18n("Recur on"), yearlyButtonGroup);
 	yearMonthButton->setFixedSize(yearMonthButton->sizeHint());
 	QWhatsThis::add(yearMonthButton,
 	      i18n("Repeat the alarm on the selected date in the year"));
