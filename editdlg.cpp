@@ -70,7 +70,6 @@
 #include "fontcolourbutton.h"
 #include "kamail.h"
 #include "deferdlg.h"
-#include "buttongroup.h"
 #include "radiobutton.h"
 #include "checkbox.h"
 #include "combobox.h"
@@ -621,7 +620,7 @@ bool EditAlarmDlg::stateChanged() const
 			emailAttach += mEmailAttachList->text(i);
 		if (mSavedEmailTo      != mEmailToEdit->text()
 		||  mSavedEmailSubject != mEmailSubjectEdit->text()
-		||  mSavedEmailAttach  != mSavedEmailAttach
+		||  mSavedEmailAttach  != emailAttach
 		||  mSavedEmailBcc     != mEmailBcc->isChecked())
 			return true;
 	}
