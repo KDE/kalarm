@@ -21,7 +21,6 @@
 #ifndef UNDO_H
 #define UNDO_H
 
-#ifdef UNDO_FEATURE
 #include <qvaluelist.h>
 #include <qstringlist.h>
 
@@ -36,10 +35,12 @@ class Undo : public QObject
 		enum Type { NONE, UNDO, REDO };
 
 		static Undo*       instance();
-		static void        saveAdd(const QString& eventID);
-		static void        saveEdit(const KAEvent& oldEvent, const QString& newEventID);
+		static void        saveAdd(const KAEvent&);
+		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent);
 		static void        saveDelete(const KAEvent&);
 		static void        saveDeletes(const QValueList<KAEvent>&);
+		static void        saveReactivate(const KAEvent&);
+		static void        saveReactivates(const QValueList<KAEvent>&);
 		static QString     undo()             { return undo(mUndoList.begin(), UNDO); }
 		static QString     undo(int id)       { return undo(findItem(id, UNDO), UNDO); }
 		static QString     redo()             { return undo(mRedoList.begin(), REDO); }
@@ -47,11 +48,14 @@ class Undo : public QObject
 		static void        clear();
 		static bool        haveUndo()         { return !mUndoList.isEmpty(); }
 		static bool        haveRedo()         { return !mRedoList.isEmpty(); }
-		static QString     description(Type);
+		static QString     actionText(Type);
+		static QString     actionText(Type, int id);
 		static QString     description(Type, int id);
-		static QString     tooltip(Type, int id);
 		static QValueList<int> ids(Type);
 		static void        emitChanged();
+
+		// Types for use by UndoItem class and its descendants
+		typedef QValueList<UndoItem*>  List;
 
 	signals:
 		void               changed(const QString& undo, const QString& redo);
@@ -63,7 +67,6 @@ class Undo : public QObject
 		static void        replace(UndoItem* old, UndoItem* New);
 
 	private:
-		typedef QValueList<UndoItem*>           List;
 		typedef QValueList<UndoItem*>::Iterator Iterator;
 
 		Undo(QObject* parent)  : QObject(parent) { }
@@ -79,11 +82,6 @@ class Undo : public QObject
 		static List        mRedoList;     // edit history for redo, latest redo first
 
 	friend class UndoItem;
-	friend class UndoAdd;
-	friend class UndoEdit;
-	friend class UndoDelete;
-	friend class UndoDeletes;
 };
 
-#endif
 #endif // UNDO_H

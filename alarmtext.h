@@ -1,7 +1,7 @@
 /*
  *  alarmtext.h  -  text/email alarm text conversion
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define ALARMTEXT_H
 
 #include <qstring.h>
+class KAEvent;
 
 
 class AlarmText
@@ -41,6 +42,7 @@ class AlarmText
 		bool           isEmpty() const;
 		bool           isEmail() const   { return mIsEmail; }
 		bool           isScript() const  { return mIsScript; }
+		static QString summary(const KAEvent&, int maxLines = 1, bool* truncated = 0);
 		static QString emailHeaders(const QString&, bool subjectOnly);
 		static QString fromCalendarText(const QString&);
 		static QString toCalendarText(const QString&);

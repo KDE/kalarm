@@ -1,7 +1,7 @@
 /*
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include "kalarm.h"
 #include <qstringlist.h>
 #include <klocale.h>
+
+#include "alarmevent.h"
 #include "editdlg.h"
 #include "alarmtext.h"
 
@@ -183,4 +185,42 @@ void AlarmText::setUpTranslations()
 		mDatePrefix    = i18n("Date:");
 		mSubjectPrefix = EditAlarmDlg::i18n_EmailSubject();
 	}
+}
+
+/******************************************************************************
+*  Return the alarm summary text for either single line or tooltip display.
+*  The maximum number of line returned is determined by 'maxLines'.
+*  If 'truncated' is non-null, it will be set true if the text returned has been
+*  truncated, other than to strip a trailing newline.
+*/
+QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
+{
+	QString text = (event.action() == KAEvent::EMAIL) ? event.emailSubject() : event.cleanText();
+	if (event.action() == KAEvent::MESSAGE)
+	{
+		// If the message is the text of an email, return its headers or just subject line
+		QString subject = emailHeaders(text, (maxLines <= 1));
+		if (!subject.isNull())
+		{
+			if (truncated)
+				*truncated = true;
+			return subject;
+		}
+	}
+	if (truncated)
+		*truncated = false;
+	if (text.contains('\n') < maxLines)
+		return text;
+	int newline = -1;
+	for (int i = 0;  i < maxLines;  ++i)
+	{
+		newline = text.find('\n', newline + 1);
+		if (newline < 0)
+			return text;       // not truncated after all !?!
+	}
+	if (newline == static_cast<int>(text.length()) - 1)
+		return text.left(newline);    // text ends in newline
+	if (truncated)
+		*truncated = true;
+	return text.left(newline + (maxLines <= 1 ? 0 : 1)) + QString::fromLatin1("...");
 }

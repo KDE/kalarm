@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "templatelistview.h"
+#include "undo.h"
 #include "templatedlg.moc"
 
 static const char TMPL_DIALOG_NAME[] = "TemplateDialog";
@@ -123,7 +124,7 @@ void TemplateDlg::slotNew()
 */
 void TemplateDlg::slotCopy()
 {
-	TemplateListViewItem* item = mTemplateList->singleSelectedItem();
+	TemplateListViewItem* item = mTemplateList->selectedItem();
 	if (item)
 	{
 		KAEvent event = item->event();
@@ -144,14 +145,8 @@ void TemplateDlg::createTemplate(const KAEvent* event, QWidget* parent, Template
 		editDlg.getEvent(event);
 
 		// Add the template to the displayed lists and to the calendar file
-		AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-		if (cal)
-		{
-			cal->addEvent(event);
-			cal->save();
-			cal->emitEmptyStatus();
-		}
-		TemplateListView::addEvent(event, view);
+		KAlarm::addTemplate(event, view);
+		Undo::saveAdd(event);
 	}
 }
 
@@ -161,7 +156,7 @@ void TemplateDlg::createTemplate(const KAEvent* event, QWidget* parent, Template
 */
 void TemplateDlg::slotEdit()
 {
-	TemplateListViewItem* item = mTemplateList->singleSelectedItem();
+	TemplateListViewItem* item = mTemplateList->selectedItem();
 	if (item)
 	{
 		KAEvent event = item->event();
@@ -170,17 +165,12 @@ void TemplateDlg::slotEdit()
 		{
 			KAEvent newEvent;
 			editDlg->getEvent(newEvent);
-
-			// Update the event in the displays and in the calendar file
 			QString id = event.id();
 			newEvent.setEventID(id);
-			AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-			if (cal)
-			{
-				cal->updateEvent(newEvent);
-				cal->save();
-			}
-			TemplateListView::modifyEvent(id, newEvent, mTemplateList);
+
+			// Update the event in the displays and in the calendar file
+			KAlarm::updateTemplate(newEvent, mTemplateList);
+			Undo::saveEdit(event, newEvent);
 		}
 	}
 }
@@ -198,24 +188,17 @@ void TemplateDlg::slotDelete()
 	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
+
+	QValueList<KAEvent> events;
 	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished
 	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		TemplateListViewItem* item = (TemplateListViewItem*)(*it);
-		KAEvent event = item->event();
-
-		// Delete the event from the displays
-		QString id = event.id();
-		AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-		if (cal)
-		{
-			cal->deleteEvent(id);
-			cal->save();
-			cal->emitEmptyStatus();
-		}
-		mTemplateList->deleteEvent(id);
+		events.append(item->event());
+		KAlarm::deleteTemplate(item->event());
 	}
 	AlarmCalendar::templateCalendar()->endUpdate();    // save the calendar now
+	Undo::saveDeletes(events);
 }
 
 /******************************************************************************
