@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 #include "kalarm.h"
 #include <stdlib.h>
@@ -251,6 +247,15 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	// Get today's and tomorrow's alarms, sorted in time order
 	KCal::Event::List events = theApp()->getCalendar().events(now.date(), true);
 	KCal::Event::List events2 = theApp()->getCalendar().events(now.date().addDays(1), true);
+	// Eliminate any duplicates from tomorrow's alarms - if an alarm recurs on
+	// both days, it will appear in both lists.
+	for (KCal::Event::List::Iterator i2 = events2.begin();  i2 != events2.end();  )
+	{
+		if (events.find(*i2) != events.end())
+			i2 = events2.remove(i2);
+		else
+			++i2;
+	}
 
 	int count = 0;
 	bool todayEvents = true;
