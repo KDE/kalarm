@@ -176,7 +176,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
 	connect(mTimeSelector, SIGNAL(valueChanged(int)), SLOT(intervalChanged(int)));
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
-	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
+	topLayout->addWidget(mTimeSelector, 0, Qt::AlignAuto);
 
 	mButtonGroup = new ButtonGroup(controls, "buttonGroup");
 	connect(mButtonGroup, SIGNAL(buttonSet(int)), SLOT(typeClicked()));
