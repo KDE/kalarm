@@ -175,7 +175,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
 	mLateCancel->setChecked(preferences->defaultLateCancel());
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
-	mSoundPicker->setChecked(preferences->defaultBeep());
+	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
+	                  preferences->defaultSoundRepeat());
 
 	// How much to advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
