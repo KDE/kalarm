@@ -29,11 +29,14 @@ class KAlarmRecurrence : public KCal::Recurrence
 	public:
 		KAlarmRecurrence(KCal::Incidence* parent) : KCal::Recurrence(parent) { }
 		QDate getNextRecurrence(const QDate& preDate) const;
+		QDate getPreviousRecurrence(const QDate& afterDate) const;
 	protected:
-		int KAlarmRecurrence::getFirstDayInWeek(int startDay) const;
-		QDate KAlarmRecurrence::getFirstDateInMonth(const QDate& earliestDate) const;
-		QDate KAlarmRecurrence::getFirstMonthInYear(const QDate& earliestDate) const;
-		QDate KAlarmRecurrence::getFirstDayInYear(const QDate& earliestDate) const;
+		int   getFirstDayInWeek(int startDay) const;
+		int   getLastDayInWeek(int endDay) const;
+		QDate getFirstDateInMonth(const QDate& earliestDate) const;
+		QDate getLastDateInMonth(const QDate& latestDate) const;
+		QDate getFirstDateInYear(const QDate& earliestDate) const;
+		QDate getLastDateInYear(const QDate& latestDate) const;
 };
 
 /*
@@ -76,6 +79,7 @@ class KAlarmAlarm
 		int              repeatCount() const        { return mRepeatCount; }
 		int              repeatMinutes() const      { return mRepeatMinutes; }
 		int              nextRepetition(const QDateTime& preDateTime, QDateTime& result) const;
+		int              previousRepetition(const QDateTime& after, QDateTime& result) const;
 		QDateTime        lastDateTime() const       { return mDateTime.addSecs(mRepeatCount * mRepeatMinutes * 60); }
 		bool             lateCancel() const         { return mLateCancel; }
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
@@ -191,6 +195,7 @@ class KAlarmEvent
 		int              repeatCount() const          { return mRepeatDuration; }
 		int              repeatMinutes() const        { return mRepeatMinutes; }
 		NextOccurType    nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
+		NextOccurType    previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const;
 		QDateTime        lastDateTime() const         { return mDateTime.addSecs(mRepeatDuration * mRepeatMinutes * 60); }
 		bool             lateCancel() const           { return mLateCancel; }
 		bool             repeatAtLogin() const        { return mRepeatAtLogin; }
@@ -245,6 +250,8 @@ class KAlarmEvent
 		bool             checkRecur() const;
 		NextOccurType    nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const;
 		NextOccurType    nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
+		NextOccurType    previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
+		NextOccurType    previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const;
 
 		QString           mEventID;          // KCal::Event unique ID
 		QString           mCleanText;        // message text, file URL or command
