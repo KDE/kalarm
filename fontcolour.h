@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@
 #endif
 #include "colourlist.h"
 
-class QCheckBox;
 class ColourCombo;
 class QPushButton;
+class CheckBox;
 
 
 class FontColourChooser : public QWidget
@@ -63,6 +63,8 @@ public:
 	void              setColours(const ColourList&);
 	QString           sampleText() const;
 	void              setSampleText(const QString& text);
+	bool              isReadOnly() const     { return mReadOnly; }
+	void              setReadOnly(bool);
 
 private slots:
 	void              setSampleColour();
@@ -75,8 +77,9 @@ private:
 	ColourCombo*     mBgColourButton;
 	QPushButton*     mRemoveColourButton;
 	KFontChooser*    mFontChooser;
-	QCheckBox*       mDefaultFont;          // or null
+	CheckBox*        mDefaultFont;          // or null
 	ColourList       mColourList;
+	bool             mReadOnly;
 };
 
 #endif

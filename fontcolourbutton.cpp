@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@
 =============================================================================*/
 
 FontColourButton::FontColourButton(QWidget* parent, const char* name)
-	: PushButton(i18n("Font && Co&lor..."), parent, name)
+	: PushButton(i18n("Font && Co&lor..."), parent, name),
+	  mReadOnly(false)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
 	QWhatsThis::add(this,
@@ -56,6 +57,7 @@ void FontColourButton::slotButtonPressed()
 {
 	FontColourDlg* dlg = new FontColourDlg(mBgColour, mFont, mDefaultFont, i18n("Choose Alarm Font & Color"),
 	                                       this, "fontColourDlg");
+	dlg->setReadOnly(mReadOnly);
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		mDefaultFont = dlg->defaultFont();
@@ -73,7 +75,8 @@ void FontColourButton::slotButtonPressed()
 
 FontColourDlg::FontColourDlg(const QColor& colour, const QFont& font, bool defaultFont,
                              const QString& caption, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false)
+	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false),
+	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
@@ -93,8 +96,16 @@ FontColourDlg::FontColourDlg(const QColor& colour, const QFont& font, bool defau
 */
 void FontColourDlg::slotOk()
 {
+	if (mReadOnly)
+		reject();
 	mDefaultFont = mChooser->defaultFont();
 	mFont        = mChooser->font();
 	mBgColour    = mChooser->bgColour();
 	accept();
+}
+
+void FontColourDlg::setReadOnly(bool ro)
+{
+	mReadOnly = ro;
+	mChooser->setReadOnly(mReadOnly);
 }

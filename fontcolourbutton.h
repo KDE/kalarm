@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,23 +38,26 @@ class FontColourButton : public PushButton
 		Q_OBJECT
 	public:
 		FontColourButton(QWidget* parent = 0, const char* name = 0);
-		void      setDefaultFont()                   { mDefaultFont = true; }
-		void      setFont(const QFont& font)         { mFont = font;  mDefaultFont = false; }
-		void      setBgColour(const QColor& colour)  { mBgColour = colour; }
-		bool      defaultFont() const                { return mDefaultFont; }
-		QFont     font() const                       { return mFont; }
-		QColor    bgColour() const                   { return mBgColour; }
+		void          setDefaultFont()                   { mDefaultFont = true; }
+		void          setFont(const QFont& font)         { mFont = font;  mDefaultFont = false; }
+		void          setBgColour(const QColor& colour)  { mBgColour = colour; }
+		bool          defaultFont() const                { return mDefaultFont; }
+		QFont         font() const                       { return mFont; }
+		QColor        bgColour() const                   { return mBgColour; }
+		virtual void  setReadOnly(bool ro)               { mReadOnly = ro; }
+		virtual bool  isReadOnly() const                 { return mReadOnly; }
 
 	signals:
-		void      selected();
+		void          selected();
 
 	protected slots:
-		void      slotButtonPressed();
+		void          slotButtonPressed();
 
 	private:
 		QColor    mBgColour;
 		QFont     mFont;
 		bool      mDefaultFont;
+		bool      mReadOnly;
 };
 
 
@@ -64,9 +67,11 @@ class FontColourDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		FontColourDlg(const QColor&, const QFont&, bool defaultFont, const QString& caption, QWidget* parent = 0, const char* name = 0);
-		bool      defaultFont() const   { return mDefaultFont; }
-		QFont     font() const          { return mFont; }
-		QColor    bgColour() const      { return mBgColour; }
+		bool         defaultFont() const   { return mDefaultFont; }
+		QFont        font() const          { return mFont; }
+		QColor       bgColour() const      { return mBgColour; }
+		void         setReadOnly(bool);
+		bool         isReadOnly() const    { return mReadOnly; }
 
 	protected slots:
 		virtual void slotOk();
@@ -76,6 +81,7 @@ class FontColourDlg : public KDialogBase
 		QColor             mBgColour;
 		QFont              mFont;
 		bool               mDefaultFont;
+		bool               mReadOnly;
 };
 
 #endif // FONTCOLOURBUTTON_H

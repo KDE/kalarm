@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <qobjectlist.h>
 #include <qwidget.h>
 #include <qgroupbox.h>
-#include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qhbox.h>
 #include <qlabel.h>
@@ -39,6 +38,7 @@
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "colourcombo.h"
+#include "checkbox.h"
 #include "fontcolour.moc"
 
 
@@ -47,8 +47,10 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
           const QString& frameLabel, bool editColours, bool fg, bool defaultFont,
           int visibleListSize)
 	: QWidget(parent, name),
+	  mFgColourButton(0),
 	  mRemoveColourButton(0),
-	  mColourList(theApp()->preferences()->messageColours())
+	  mColourList(theApp()->preferences()->messageColours()),
+	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QWidget* page = this;
@@ -109,7 +111,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (defaultFont)
 	{
 		layout = new QHBoxLayout(topLayout);
-		mDefaultFont = new QCheckBox(i18n("Use &default font"), page);
+		mDefaultFont = new CheckBox(i18n("Use &default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
 		QWhatsThis::add(mDefaultFont,
@@ -193,6 +195,18 @@ void FontColourChooser::setFgColour(const QColor& colour)
 	{
 		mFgColourButton->setColor(colour);
 		mFontChooser->setColor(colour);
+	}
+}
+
+void FontColourChooser::setReadOnly(bool ro)
+{
+	if (ro != mReadOnly)
+	{
+		mReadOnly = ro;
+		if (mFgColourButton)
+			mFgColourButton->setReadOnly(ro);
+		mBgColourButton->setReadOnly(ro);
+		mDefaultFont->setReadOnly(ro);
 	}
 }
 
