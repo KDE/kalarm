@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <pwd.h>
 
 #include <qfile.h>
 
@@ -50,6 +51,12 @@
 #include "prefsettings.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+
+namespace HeaderParsing
+{
+bool parseAddressList( const char* & scursor, const char * const send,
+		       QValueList<KMime::Types::Address> & result, bool isCRLF=false );
+}
 
 
 /******************************************************************************
@@ -336,7 +343,7 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 
 	// parse an address-list
 	QValueList<KMime::Types::Address> maybeAddressList;
-	if (!KMime::HeaderParsing::parseAddressList(ad, ad + addrs.length(), maybeAddressList))
+	if (!HeaderParsing::parseAddressList(ad, ad + addrs.length(), maybeAddressList))
 		return QString::fromLocal8Bit(ad);
 
 	// extract the mailboxes and complain if there are groups
@@ -539,3 +546,130 @@ KAMail::Offset KAMail::base64Encode(char* in, char* out, KAMail::Offset size)
 	}
 	return outIndex;
 }
+
+
+/*=============================================================================
+=  KMime::HeaderParsing :  modified and additional functions.
+=  The following functions are modified from, or additional to, those in
+=  libkdenetwork kmime_header_parsing.cpp.
+=============================================================================*/
+
+namespace HeaderParsing
+{
+
+using namespace KMime;
+using namespace KMime::Types;
+using namespace KMime::HeaderParsing;
+
+/******************************************************************************
+*  New function.
+*  Allow a local user name to be specified as an email address.
+*/
+bool parseUserName( const char* & scursor, const char * const send,
+                    QString & result, bool isCRLF ) {
+
+  QString maybeLocalPart;
+  QString tmp;
+
+  while ( scursor != send ) {
+    // first, eat any whitespace
+    eatCFWS( scursor, send, isCRLF );
+
+    char ch = *scursor++;
+    switch ( ch ) {
+    case '.': // dot
+    case '@':
+    case '"': // quoted-string
+      return false;
+
+    default: // atom
+      scursor--; // re-set scursor to point to ch again
+      tmp = QString::null;
+      if ( parseAtom( scursor, send, result, false /* no 8bit */ ) ) {
+        if (getpwnam(result.local8Bit()))
+          return true;
+      }
+      return false; // parseAtom can only fail if the first char is non-atext.
+    }
+  }
+  return false;
+}
+
+/******************************************************************************
+*  Modified function.
+*  Allow a local user name to be specified as an email address, and reinstate
+*  the original scursor on error return.
+*/
+bool parseAddress( const char* & scursor, const char * const send,
+		   Address & result, bool isCRLF ) {
+  // address       := mailbox / group
+
+  eatCFWS( scursor, send, isCRLF );
+  if ( scursor == send ) return false;
+
+  // first try if it's a single mailbox:
+  Mailbox maybeMailbox;
+  const char * oldscursor = scursor;
+  if ( parseMailbox( scursor, send, maybeMailbox, isCRLF ) ) {
+    // yes, it is:
+    result.displayName = QString::null;
+    result.mailboxList.append( maybeMailbox );
+    return true;
+  }
+  scursor = oldscursor;
+
+  // KAlarm: Allow a local user name to be specified
+  // no, it's not a single mailbox. Try if it's a local user name:
+  QString maybeUserName;
+  if ( parseUserName( scursor, send, maybeUserName, isCRLF ) ) {
+    // yes, it is:
+    maybeMailbox.displayName = QString::null;
+    maybeMailbox.addrSpec.localPart = maybeUserName;
+    maybeMailbox.addrSpec.domain = QString::null;
+    result.displayName = QString::null;
+    result.mailboxList.append( maybeMailbox );
+    return true;
+  }
+  scursor = oldscursor;
+
+  Address maybeAddress;
+
+  // no, it's not a single mailbox. Try if it's a group:
+  if ( !parseGroup( scursor, send, maybeAddress, isCRLF ) )
+  {
+    scursor = oldscursor;   // KAlarm: reinstate original scursor on error return
+    return false;
+  }
+
+  result = maybeAddress;
+  return true;
+}
+
+/******************************************************************************
+*  Modified function.
+*  Allow either ',' or ';' to be used as an email address separator.
+*/
+bool parseAddressList( const char* & scursor, const char * const send,
+		       QValueList<Address> & result, bool isCRLF ) {
+  while ( scursor != send ) {
+    eatCFWS( scursor, send, isCRLF );
+    // end of header: this is OK.
+    if ( scursor == send ) return true;
+    // empty entry: ignore:
+    if ( *scursor == ',' || *scursor == ';' ) { scursor++; continue; }   // KAlarm: allow ';' as address separator
+
+    // parse one entry
+    Address maybeAddress;
+    if ( !parseAddress( scursor, send, maybeAddress, isCRLF ) ) return false;
+    result.append( maybeAddress );
+
+    eatCFWS( scursor, send, isCRLF );
+    // end of header: this is OK.
+    if ( scursor == send ) return true;
+    // comma separating entries: eat it.
+    if ( *scursor == ',' || *scursor == ';' ) scursor++;   // KAlarm: allow ';' as address separator
+  }
+  return true;
+}
+
+} // namespace HeaderParsing
