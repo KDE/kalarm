@@ -31,6 +31,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qdragobject.h>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -41,6 +42,7 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <ktextbrowser.h>
+#include <kmimetype.h>
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <kwinmodule.h>
@@ -223,6 +225,8 @@ QSize MessageWin::initView()
 					opened = true;
 #if KDE_VERSION >= 290
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
+					TextMimeSourceFactory msf;
+					view->setMimeSourceFactory(&msf);
 					view->QTextBrowser::setSource(tmpFile);
 #else
 					QTextEdit* view = new QTextEdit(topWidget, "fileContents");
@@ -641,6 +645,10 @@ void MessageWin::displayMainWindow()
 }
 
 
+/*=============================================================================
+= Class MessageText
+=============================================================================*/
+
 MessageText::MessageText(const QString& text, const QString& context, QWidget* parent, const char* name)
 	: QTextEdit(text, context, parent, name)
 {
@@ -651,4 +659,43 @@ MessageText::MessageText(const QString& text, const QString& context, QWidget* p
 QSize MessageText::sizeHint() const
 {
 	return QSize(contentsWidth(), contentsHeight() + horizontalScrollBar()->height());
+}
+
+
+/*=============================================================================
+= Class TextMimeSourceFactory
+* Gets the mime type of a text file from not only its extension (as per
+* QMimeSourceFactory), but also from its contents. This allows the detection
+* of plain text files without file name extensions.
+=============================================================================*/
+
+TextMimeSourceFactory::~TextMimeSourceFactory()
+{
+	delete mLast;
+}
+
+const QMimeSource* TextMimeSourceFactory::data(const QString& abs_name) const
+{
+	const QMimeSource* r = 0;
+	QFileInfo fi(abs_name);
+	if (fi.isReadable())
+	{
+		// Find the mimetype
+		QString mimetype = KMimeType::findByURL(abs_name)->name();
+		QFile f(abs_name);
+		if (f.open(IO_ReadOnly)  &&  f.size())
+		{
+			QByteArray ba(f.size());
+			f.readBlock(ba.data(), ba.size());
+			QStoredDrag* sr = new QStoredDrag(KAlarmApp::isTextFile(mimetype) ? mimetype.latin1() : "text/plain");
+			sr->setEncodedData(ba);
+			r = sr;
+		}
+	}
+	if (!r)
+		r = QMimeSourceFactory::defaultFactory()->data(abs_name);
+
+	delete mLast;
+	mLast = r;
+	return r;
 }

@@ -38,4 +38,21 @@ class MessageText : public QTextEdit
 		virtual QSize sizeHint() const;
 };
 
+class QMimeSource;
+
+class TextMimeSourceFactory : public QMimeSourceFactory
+{
+	public:
+		TextMimeSourceFactory() : QMimeSourceFactory(), mLast(0) { }
+		virtual ~TextMimeSourceFactory();
+		virtual const QMimeSource* data(const QString& abs_name) const;
+	private:
+		// Prohibit the following methods
+		virtual void setData(const QString&, QMimeSource*) {}
+		virtual void setFilePath(const QStringList&) {}
+		virtual void setExtensionType(const QString&, const char*) {}
+
+		mutable const QMimeSource* mLast;
+};
+
 #endif // MESSAGEWINPRIVATE_H
