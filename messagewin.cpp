@@ -222,7 +222,7 @@ QSize MessageWin::initView()
 		QWhatsThis::add(deferButton,
 		      i18n("Defer the alarm until later.\n"
 		           "You will be prompted to specify when\n"
-		           "the alarm should be redisplayed"));
+		           "the alarm should be redisplayed."));
 	}
 
 	// KAlarm button
