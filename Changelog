@@ -1,5 +1,13 @@
 KAlarm
 
+=== Version 0.9.1 --- 16 Jan 2003 ===
+Add option to set advance reminders for alarms.
+In run-in-system-tray mode, warn that alarms will be disabled before quitting.
+Fix monthly and yearly recurrences on nth Monday etc. of the month.
+Fix yearly recurrences on February 29th.
+Fix recurrence start times stored in expired calendar file.
+Fix extra empty events being stored in expired calendar file.
+
 === Version 0.9.0 --- 29 Dec 2002 ===
 Add facility to import birthdays from KAddressBook
 Add option to send an email instead of displaying an alarm message.
@@ -16,7 +24,9 @@ Alarm message defer dialog: update recurrence deferral time limit in real time.
 Weekly recurrence edit: adhere to user preference for start day of week.
 Use standard action icons.
 
-=== Version 0.8.4 (KDE 3.1) --- 30 Nov 2002 ===
+=== Version 0.8.4 (KDE 3.1) --- 8 Jan 2003 ===
+*Fix monthly and yearly recurrences on nth Monday etc. of the month.
+*Fix yearly recurrences on February 29th.
 Make KAlarm icon in message window bring main window to current desktop.
 Fix detection of KDE desktop.
 Fix entry of yearly recurrences on a specified date in the year.
