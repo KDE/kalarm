@@ -1166,20 +1166,12 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 	KAEvent event(*kcalEvent);
 	switch (function)
 	{
-		case EVENT_TRIGGER:
-		{
-			// Only trigger one alarm from the event - we don't
-			// want multiple identical messages, for example.
-			KAAlarm alarm = event.firstAlarm();
-			if (alarm.valid())
-				execAlarm(event, alarm, true);
-			break;
-		}
 		case EVENT_CANCEL:
 			KAlarm::deleteEvent(event, true);
 			break;
 
-		case EVENT_HANDLE:
+		case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
+		case EVENT_HANDLE:     // handle it if it's due
 		{
 			QDateTime now = QDateTime::currentDateTime();
 			bool updateCalAndDisplay = false;
@@ -1315,10 +1307,22 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			// any others. This ensures that the updated event is only saved once to the calendar.
 			if (displayAlarm.valid())
 				execAlarm(event, displayAlarm, true, !displayAlarm.repeatAtLogin());
-			else if (updateCalAndDisplay)
-				KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
 			else
-				kdDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
+			{
+				if (function == EVENT_TRIGGER)
+				{
+					// The alarm is to be executed regardless of whether it's due.
+					// Only trigger one alarm from the event - we don't want multiple
+					// identical messages, for example.
+					KAAlarm alarm = event.firstAlarm();
+					if (alarm.valid())
+						execAlarm(event, alarm, false);
+				}
+				if (updateCalAndDisplay)
+					KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
+				else if (function != EVENT_TRIGGER)
+					kdDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
+			}
 			break;
 		}
 	}
