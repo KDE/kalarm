@@ -290,7 +290,7 @@ void RecurrenceEdit::initMonthly()
 	layout->addWidget(onNthDayButton);
 	nthDayEntry = new QComboBox(false, monthlyButtonGroup);
 	nthDayEntry->setSizeLimit(11);
-	for (i = 1;  i <= 31;  ++i)
+	for (i = 0;  i < 31;  ++i)
 		nthDayEntry->insertItem(i18n(ordinal[i]));
 	nthDayEntry->setFixedSize(nthDayEntry->sizeHint());
 	QWhatsThis::add(nthDayEntry,
@@ -308,7 +308,7 @@ void RecurrenceEdit::initMonthly()
 	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
 	layout->addWidget(onNthTypeOfDayButton);
 	nthNumberEntry = new QComboBox(false, monthlyButtonGroup);
-	for (i = 1;  i <= 5;  ++i)
+	for (i = 0;  i < 5;  ++i)
 		nthNumberEntry->insertItem(i18n(ordinal[i]));
 	nthNumberEntry->insertItem(i18n("Last"));
 	nthNumberEntry->setFixedSize(nthNumberEntry->sizeHint());
@@ -352,7 +352,7 @@ void RecurrenceEdit::initYearly()
 	layout->addWidget(yearMonthButton);
 	yearMonthDayEntry = new QComboBox(false, yearlyButtonGroup);
 	yearMonthDayEntry->setSizeLimit(11);
-	for (i = 1;  i <= 31;  ++i)
+	for (i = 0;  i < 31;  ++i)
 		yearMonthDayEntry->insertItem(i18n(ordinal[i]));
 	yearMonthDayEntry->setFixedSize(yearMonthDayEntry->sizeHint());
 	QWhatsThis::add(yearMonthDayEntry,
@@ -377,7 +377,7 @@ void RecurrenceEdit::initYearly()
 	layout->addWidget(yearlyOnNthTypeOfDayButton);
 
 	yearlyNthNumberEntry = new QComboBox(false, yearlyButtonGroup);
-	for (i = 1;  i <= 5;  ++i)
+	for (i = 0;  i < 5;  ++i)
 		yearlyNthNumberEntry->insertItem(i18n(ordinal[i]));
 	yearlyNthNumberEntry->insertItem(i18n("Last"));
 	yearlyNthNumberEntry->setFixedSize(yearlyNthNumberEntry->sizeHint());
