@@ -77,6 +77,7 @@ struct AlarmData
 typedef QMap<KAlarmAlarm::Type, AlarmData> AlarmMap;
 
 static void setProcedureAlarm(Alarm*, const QString& commandLine);
+static QStringList splitPropertyValue(const QChar& ch, const QString& value, bool allowEmptyEntries = false);
 
 
 /*=============================================================================
@@ -353,10 +354,23 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			data.action    = T_MESSAGE;
 			data.cleanText = alarm.text();
 			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
-			QStringList list = QStringList::split(QChar(';'), property, true);
-			data.bgColour = (list.count() > 0) ? list[0] : QColor(255, 255, 255);;
-			data.fgColour = (list.count() > 1) ? list[1] : QColor(0, 0, 0);
-			data.defaultFont = (list.count() <= 2 || list[2].isEmpty());
+			QStringList list = splitPropertyValue(QChar(';'), property, true);
+			data.bgColour = QColor(255, 255, 255);   // white
+			data.fgColour = QColor(0, 0, 0);         // black
+			int n = list.count();
+			if (n > 0)
+			{
+				QColor c(list[0]);
+				if (c.isValid())
+					data.bgColour = c;
+				if (n > 1)
+				{
+					QColor c(list[1]);
+					if (c.isValid())
+						data.fgColour = c;
+				}
+			}
+			data.defaultFont = (n <= 2 || list[2].isEmpty());
 			if (!data.defaultFont)
 				data.font.fromString(list[2]);
 			break;
@@ -371,20 +385,15 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			return;
 	}
 
-	bool atLogin = false;
+	bool atLogin  = false;
 	bool reminder = false;
 	bool deferral = false;
 	data.type = KAlarmAlarm::MAIN_ALARM;
 	QString property = alarm.customProperty(APPNAME, TYPE_PROPERTY);
-	QStringList types = QStringList::split(QChar(','), property);
+	QStringList types = splitPropertyValue(QChar(','), property);
 	for (unsigned int i = 0;  i < types.count();  ++i)
 	{
-		// iCalendar puts a \ character before commas, so remove it if there is one
 		QString type = types[i];
-		int last = type.length() - 1;
-		if (type[last] == QChar('\\'))
-			type.truncate(last);
-
 		if (type == AT_LOGIN_TYPE)
 			atLogin = true;
 		else if (type == FILE_TYPE  &&  data.action == T_MESSAGE)
@@ -1920,14 +1929,17 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 * Convert BEEP category into an audio alarm with no audio file.
 			 */
 			QStringList cats = event->categories();
-			QString colour = (cats.count() > 0) ? cats[0] : QString::null;
-			QPtrList<Alarm> alarms = event->alarms();
-			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+			if (cats.count() > 0)
 			{
-				Alarm* alarm = ia.current();
-				if (alarm->type() == Alarm::Display)
-					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
-					                         QString::fromLatin1("%1;;").arg(colour));
+				QPtrList<Alarm> alarms = event->alarms();
+				for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+				{
+					Alarm* alarm = ia.current();
+					if (alarm->type() == Alarm::Display)
+						alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
+						                         QString::fromLatin1("%1;;").arg(cats[0]));
+				}
+				cats.remove(cats.begin());
 			}
 
 			for (QStringList::iterator it = cats.begin();  it != cats.end();  ++it)
@@ -2237,4 +2249,21 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 	arguments = commandLine.mid(pos);
 
 	alarm->setProcedureAlarm(command, arguments);
+}
+
+/******************************************************************************
+ * Split an iCalendar property string into a list of values, using the
+ * specified separator character. This is necessary because iCalendar puts a
+ * \ character before commas, semicolons, etc.
+ */
+static QStringList splitPropertyValue(const QChar& ch, const QString& value, bool allowEmptyEntries)
+{
+	QStringList list = QStringList::split(ch, value, allowEmptyEntries);
+	for (QStringList::iterator it = list.begin();  it != list.end();  ++it)
+	{
+		int last = (*it).length() - 1;
+		if ((*it)[last] == QChar('\\'))
+			(*it).truncate(last);
+	}
+	return list;
 }
