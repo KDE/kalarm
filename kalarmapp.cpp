@@ -100,6 +100,7 @@ KAlarmApp::KAlarmApp()
 	  mDaemonRunning(false),
 	  mSessionClosingDown(false)
 {
+	kdDebug(5950) << "KAlarmApp::KAlarmApp()\n";
 #if KDE_VERSION >= 290
 	mNoShellAccess = !authorize("shell_access");
 #else
@@ -277,11 +278,12 @@ bool KAlarmApp::restoreSession()
 */
 int KAlarmApp::newInstance()
 {
-	kdDebug(5950)<<"KAlarmApp::newInstance()\n";
 	++activeCount;
 	int exitCode = 0;               // default = success
 	static bool firstInstance = true;
-	if (!firstInstance || !isRestored())
+	if (firstInstance  &&  isRestored())
+		kdDebug(5950)<<"KAlarmApp::newInstance(): restoring\n";
+	else
 	{
 		QString usage;
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -990,7 +992,7 @@ void KAlarmApp::slotPreferencesChanged()
 		||  Preferences::instance()->expiredKeepDays() >= 0  &&  Preferences::instance()->expiredKeepDays() < mOldExpiredKeepDays)
 		{
 			// expired alarms are now being kept for less long
-			if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
+			if (mExpiredCalendar->open())
 				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), true);
 			refreshExpired = true;
 		}
@@ -1727,7 +1729,7 @@ AlarmCalendar* KAlarmApp::expiredCalendar(bool saveIfPurged)
 	if (Preferences::instance()->expiredKeepDays())
 	{
 		// Expired events are being kept
-		if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
+		if (mExpiredCalendar->open())
 		{
 			if (Preferences::instance()->expiredKeepDays() > 0)
 				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), saveIfPurged);
@@ -1833,6 +1835,13 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 * which causes problems!!
 		 */
 		mDisplayCalendar->open();
+
+		/* Need to open the expired alarm calendar now, since otherwise if the daemon
+		 * immediately notifies multiple alarms, the second alarm is likely to be
+		 * processed while the calendar is executing open() (but before open() completes),
+		 * which causes a hang!!
+		 */
+		mExpiredCalendar->open();
 
 		startdaemon = true;
 	}

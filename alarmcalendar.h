@@ -80,7 +80,6 @@ class AlarmCalendar : public QObject
 		mutable bool         mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                 mVCal;             // true if calendar file is in VCal format
 		bool                 mOpen;             // true if the calendar file is open
-		bool                 mOpening;          // true if the calendar file is currently being opened
 };
 
 #endif // ALARMCALENDAR_H

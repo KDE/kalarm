@@ -58,8 +58,7 @@ AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type, cons
 	  mType(type),
 	  mKAlarmVersion(-1),
 	  mKAlarmVersion057_UTC(false),
-	  mOpen(false),
-	  mOpening(false)
+	  mOpen(false)
 {
 	mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
 	mICalUrl.setPath(icalPath.isNull() ? path : icalPath);
@@ -80,16 +79,6 @@ bool AlarmCalendar::open()
 		return true;
 	if (!mUrl.isValid())
 		return false;
-	if (mOpening)
-	{
-		// Another open() call is already in progress for this calendar file.
-		// To avoid failed updates, wait until it has completed.
-		while (mOpening)
-			sleep(1);   // wait for 1 second
-		return mOpen;
-	}
-	mOpening = true;
-
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
@@ -114,7 +103,6 @@ bool AlarmCalendar::open()
 		delete mCalendar;
 		mCalendar = 0;
 	}
-	mOpening = false;
 	return mOpen;
 }
 
@@ -280,7 +268,7 @@ void AlarmCalendar::close()
 		delete mCalendar;
 		mCalendar = 0;
 	}
-	mOpening = mOpen = false;
+	mOpen = false;
 }
 
 /******************************************************************************
@@ -309,6 +297,7 @@ void AlarmCalendar::convertToICal()
 */
 void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 {
+	kdDebug(5950) << "AlarmCalendar::purge(" << daysToKeep << ")\n";
 	if (daysToKeep >= 0)
 	{
 		bool purged = false;
@@ -336,6 +325,7 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 */
 Event* AlarmCalendar::addEvent(const KAlarmEvent& event, bool useEventID)
 {
+	kdDebug(5950) << "AlarmCalendar::addEvent(" << event.id() << ")\n";
 	if (!mCalendar)
 		return 0;
 	if (useEventID  &&  event.id().isEmpty())
