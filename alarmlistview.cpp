@@ -343,7 +343,7 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 	mRepeatOrder.sprintf("%c%08d", '0' + repeatOrder, repeatInterval);
 
 	bool showColour = (event.action() == KAlarmEvent::MESSAGE || event.action() == KAlarmEvent::FILE);
-	mColourOrder.sprintf("%06u", (showColour ? event.colour().rgb() : 0));
+	mColourOrder.sprintf("%06u", (showColour ? event.bgColour().rgb() : 0));
 }
 
 void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int column, int width, int /*align*/)
@@ -368,7 +368,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	case AlarmListView::COLOUR_COLUMN: {
 		// Paint the cell the colour of the alarm message
 		if (mEvent.action() == KAlarmEvent::MESSAGE || mEvent.action() == KAlarmEvent::FILE)
-			painter->fillRect(box, mEvent.colour());
+			painter->fillRect(box, mEvent.bgColour());
 		break;
 	}
 	case AlarmListView::MESSAGE_COLUMN:
@@ -395,9 +395,9 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		textRect.setLeft(box.left() + iconWidth + 3*frameWidth);
 		if (!selected  &&  listView->drawMessageInColour())
 		{
-			painter->fillRect(box, mEvent.colour());
-			painter->setBackgroundColor(mEvent.colour());
-//			painter->setPen(mEvent->fgColour());
+			painter->fillRect(box, mEvent.bgColour());
+			painter->setBackgroundColor(mEvent.bgColour());
+//			painter->setPen(mEvent.fgColour());
 		}
 		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
 		painter->drawText(textRect, AlignVCenter, text(column));
