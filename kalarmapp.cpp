@@ -677,7 +677,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						QDateTime limit(alarm.date().addDays(1), mSettings->startOfDay());
 						if (now >= limit)
 						{
-							// Find the next recurrence of the alarm
+							// Find the next occurrence of the alarm
 							QDateTime next;
 							if (event.nextOccurrence(limit, next) == KAlarmEvent::NO_OCCURRENCE)
 							{
