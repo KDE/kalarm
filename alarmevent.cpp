@@ -1889,7 +1889,7 @@ QString KAEvent::repetitionText(bool brief) const
 			QString mins;
 			return i18n("Hours and Minutes", "%1H %2M").arg(QString::number(mRepeatInterval/60)).arg(mins.sprintf("%02d", mRepeatInterval%60));
 		}
-		if (mRepeatInterval % 1440*7)
+		if (mRepeatInterval % (7*1440))
 			return i18n("1 Day", "%n Days", mRepeatInterval/1440);
 		return i18n("1 Week", "%n Weeks", mRepeatInterval/(7*1440));
 	}

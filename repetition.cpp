@@ -190,7 +190,6 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	      i18n("Check to specify the number of times the alarm should repeat after each recurrence"));
 	layout->addWidget(mCountButton);
 	mCount = new SpinBox(1, MAX_COUNT, 1, mButtonGroup);
-#warning "The repeat count showed 1 once"
 	mCount->setFixedSize(mCount->sizeHint());
 	mCount->setLineShiftStep(10);
 	mCount->setSelectOnStep(false);
@@ -307,7 +306,13 @@ int RepetitionDlg::count() const
 void RepetitionDlg::intervalChanged(int minutes)
 {
 	if (mTimeSelector->isChecked())
+	{
 		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / minutes : MAX_COUNT));
+		if (mCountButton->isOn())
+			countChanged(mCount->value());
+		else
+			durationChanged(mDuration->minutes());
+	}
 }
 
 /******************************************************************************
@@ -318,8 +323,13 @@ void RepetitionDlg::countChanged(int count)
 {
 	int interval = mTimeSelector->minutes();
 	if (interval)
-		mDuration->setMinutes((count - 1) * interval, mDateOnly,
+	{
+		bool blocked = mDuration->signalsBlocked();
+		mDuration->blockSignals(true);
+		mDuration->setMinutes(count * interval, mDateOnly,
 		                      (mDateOnly ? TimePeriod::DAYS : TimePeriod::HOURS_MINUTES));
+		mDuration->blockSignals(blocked);
+	}
 }
 
 /******************************************************************************
@@ -330,7 +340,12 @@ void RepetitionDlg::durationChanged(int minutes)
 {
 	int interval = mTimeSelector->minutes();
 	if (interval)
+	{
+		bool blocked = mCount->signalsBlocked();
+		mCount->blockSignals(true);
 		mCount->setValue(minutes / interval);
+		mCount->blockSignals(blocked);
+	}
 }
 
 /******************************************************************************
