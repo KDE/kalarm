@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,8 +25,9 @@
 #ifndef EDITDLGPRIVATE_H
 #define EDITDLGPRIVATE_H
 
-#include <qlineedit.h>
+#define KDE2_QTEXTEDIT_EDIT     // for KDE2 QTextEdit compatibility
 #include <qtextedit.h>
+#include <klineedit.h>
 
 
 class PageFrame : public QFrame
@@ -40,12 +41,11 @@ class PageFrame : public QFrame
 		void             shown();
 };
 
-class LineEdit : public QLineEdit
+class LineEdit : public KLineEdit
 {
 		Q_OBJECT
 	public:
-		LineEdit(QWidget* parent = 0, const char* name = 0)
-		          : QLineEdit(parent, name), noSelect(false) { }
+		explicit LineEdit(bool url, QWidget* parent = 0, const char* name = 0);
 		void setNoSelect()   { noSelect = true; }
 	protected:
 		virtual void focusInEvent(QFocusEvent*);
