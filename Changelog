@@ -1,5 +1,13 @@
 KAlarm
 
+=== Version 0.7.4 --- 8 August 2002 ===
+Add option to prompt for confirmation on alarm deletion.
+Add option to prompt for confirmation on alarm acknowedgement.
+Add preferences options to choose default settings for the Edit Alarm dialog.
+Display KAlarm handbook Preferences section when Help clicked in config dialog.
+Correctly adjust wrong summer times stored by version 0.5.7 (KDE 3.0.0).
+Make "Help -> Report Bug" use the KDE bug system (bug #43250).
+
 === Version 0.7.3 --- 24 July 2002 ===
 Fix loss of alarm times after saving pre-version 0.7 calendar file.
 Fix main alarm list display of hours or hours/minutes repeat interval.
