@@ -70,7 +70,8 @@ KAlarmApp::KAlarmApp()
 	  mTrayWindow(0L),
 	  mCalendar(new AlarmCalendar),
 	  mDaemonRegistered(false),
-	  mSettings(new Settings(0L))
+	  mSettings(new Settings(0L)),
+	  mDaemonRunning(false)
 {
 	mSettings->loadSettings();
 	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
@@ -79,11 +80,11 @@ KAlarmApp::KAlarmApp()
 	                                       .arg(aboutData()->programName()));
 	KWinModule wm;
 	mKDEDesktop             = wm.systemTrayWindows().count();
-	mOldRunInSystemTray     = mKDEDesktop ? mSettings->runInSystemTray() : false;
-	mDisableAlarmsIfStopped = mKDEDesktop ? mSettings->disableAlarmsIfStopped() : false;
+	mOldRunInSystemTray     = mKDEDesktop && mSettings->runInSystemTray();
+	mDisableAlarmsIfStopped = mOldRunInSystemTray && mSettings->disableAlarmsIfStopped();
 
 	// Set up actions used by more than one menu
-        KActionCollection* actions = new KActionCollection(this);
+	KActionCollection* actions = new KActionCollection(this);
 	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
@@ -510,11 +511,11 @@ void KAlarmApp::slotSettingsChanged()
 		--activeCount;
 	}
 
-	bool newDisableIfStopped = settings()->disableAlarmsIfStopped()  &&  mKDEDesktop;
+	bool newDisableIfStopped = mKDEDesktop && mSettings->runInSystemTray() && mSettings->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		registerWithDaemon();     // re-register with the alarm daemon
-		mDisableAlarmsIfStopped = !mDisableAlarmsIfStopped;
+		mDisableAlarmsIfStopped = newDisableIfStopped;
 	}
 }
 
@@ -992,7 +993,15 @@ void KAlarmApp::reloadDaemon()
 */
 bool KAlarmApp::isDaemonRunning()
 {
-	return dcopClient()->isApplicationRegistered(DAEMON_APP_NAME);
+	bool running = dcopClient()->isApplicationRegistered(DAEMON_APP_NAME);
+	if (running != mDaemonRunning)
+	{
+		// Daemon's status has changed
+		mDaemonRunning = running;
+		if (mDaemonRunning)
+			startDaemon();      // re-register with the daemon
+	}
+	return mDaemonRunning;
 }
 
 /******************************************************************************

@@ -131,6 +131,7 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mDaemonRegistered;   // true if we've registered with alarm daemon
 		Settings*             mSettings;           // program preferences
 		bool                  mKDEDesktop;         // running on KDE desktop
+		bool                  mDaemonRunning;      // whether the alarm daemon is currently running
 		bool                  mOldRunInSystemTray; // running continuously in system tray was selected
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 };
