@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ class Preferences : public QObject
 		void           setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
 		Feb29Type      feb29RecurType() const           { return mFeb29RecurType; }
 		bool           modalMessages() const            { return mModalMessages; }
+		int            messageButtonDelay() const       { return mMessageButtonDelay; }
 		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
 		bool           showAlarmTime() const            { return mShowAlarmTime; }
 		bool           showTimeToAlarm() const          { return mShowTimeToAlarm; }
@@ -123,6 +124,7 @@ class Preferences : public QObject
 		static const bool        default_confirmAlarmDeletion;
 		static const Feb29Type   default_feb29RecurType;
 		static const bool        default_modalMessages;
+		static const int         default_messageButtonDelay;
 		static const bool        default_showExpiredAlarms;
 		static const bool        default_showAlarmTime;
 		static const bool        default_showTimeToAlarm;
@@ -194,6 +196,7 @@ class Preferences : public QObject
 		bool                mAutostartTrayIcon;
 		Feb29Type           mFeb29RecurType;
 		bool                mModalMessages;
+		int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		bool                mShowExpiredAlarms;
 		bool                mShowAlarmTime;
 		bool                mShowTimeToAlarm;

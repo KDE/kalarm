@@ -25,6 +25,7 @@
 #include "alarmevent.h"
 
 class QPushButton;
+class KPushButton;
 class QLabel;
 class QTimer;
 class AlarmTimeWidget;
@@ -49,11 +50,13 @@ class MessageWin : public MainWindowBase
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!mDeferButton; }
 		bool                isValid() const        { return !mInvalid; }
+		virtual void        show();
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
 	protected:
 		virtual void        showEvent(QShowEvent*);
+		virtual void        moveEvent(QMoveEvent*);
 		virtual void        resizeEvent(QResizeEvent*);
 		virtual void        closeEvent(QCloseEvent*);
 		virtual void        saveProperties(KConfig*);
@@ -66,6 +69,7 @@ class MessageWin : public MainWindowBase
 		void                slotPlayAudio();
 		void                checkAudioPlay();
 		void                stopPlay();
+		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
 
@@ -76,6 +80,7 @@ class MessageWin : public MainWindowBase
 		int                 getKMixVolume();
 		void                setKMixVolume(int percent);
 #endif
+		void                displayComplete();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
 
@@ -109,8 +114,10 @@ class MessageWin : public MainWindowBase
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
+		KPushButton*        mOkButton;
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
+		QPushButton*        mKAlarmButton;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
 		int                 mFlags;
@@ -121,6 +128,7 @@ class MessageWin : public MainWindowBase
 		bool                mBeep;
 		bool                mRescheduleEvent; // true to delete event after message has been displayed
 		bool                mShown;           // true once the window has been displayed
+		bool                mPositioning;     // true when the window is being positioned initially
 		bool                mDeferClosing;    // the Defer button is closing the dialog
 		bool                mDeferDlgShowing; // the defer dialog is being displayed
 		bool                mUsingKMix;       // master volume is being set using kmix
