@@ -25,40 +25,41 @@
 #include <qglobal.h>
 #if QT_VERSION >= 300
 
-#include <kdebug.h>
 #include <qstyle.h>
-#if defined(QT_ACCESSIBILITY_SUPPORT)
-#include "qaccessible.h"
-#endif
-#include "spinbox2.h"
+
 #include "spinbox2.moc"
 
 
 SpinBox2::SpinBox2(QWidget* parent, const char* name)
-	: QWidget(parent, name)
+	: QFrame(parent, name)
 {
-	spinbox = new SpinBox2_(this);
+	updown2Frame = new QFrame(this);
+	spinboxFrame = new QFrame(this);
+	updown2 = new SB2_SpinWidget(updown2Frame, "updown2");
+	spinbox = new SB2_SpinBox(this, spinboxFrame);
 	initSpinBox2();
 }
 
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
-	: QWidget(parent, name)
+	: QFrame(parent, name)
 {
-	spinbox = new SpinBox2_(minValue, maxValue, step, this);
+	updown2Frame = new QFrame(this);
+	spinboxFrame = new QFrame(this);
+	updown2 = new SB2_SpinWidget(minValue, maxValue, step2, updown2Frame, "updown2");
+	spinbox = new SB2_SpinBox(minValue, maxValue, step, this, spinboxFrame);
 	spinbox->setSteps(step, step2);
 	initSpinBox2();
 }
 
-
 void SpinBox2::initSpinBox2()
 {
+	selectOnStep = false;
 	setFocusProxy(spinbox);
-	updown2 = new QSpinWidget(this, "updown2");
-	connect(updown2, SIGNAL(stepUpPressed()), this, SLOT(pageUp()));
-	connect(updown2, SIGNAL(stepDownPressed()), this, SLOT(pageDown()));
-	connect(spinbox, SIGNAL(valueChanged(int)), this, SLOT(valueChange()));
-	updateDisplay();
+	connect(spinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
+	connect(spinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
+	connect(spinbox, SIGNAL(valueChanged(const QString&)), SIGNAL(valueChanged(const QString&)));
+	connect(updown2, SIGNAL(stepped(int)), SLOT(stepped2(int)));
 }
 
 void SpinBox2::setButtonSymbols(QSpinBox::ButtonSymbols newSymbols)
@@ -66,15 +67,7 @@ void SpinBox2::setButtonSymbols(QSpinBox::ButtonSymbols newSymbols)
 	if (spinbox->buttonSymbols() == newSymbols)
 		return;
 	spinbox->setButtonSymbols(newSymbols);
-	switch (newSymbols)
-	{
-		case QSpinWidget::UpDownArrows:
-			updown2->setButtonSymbols(QSpinWidget::UpDownArrows);
-			break;
-		case QSpinWidget::PlusMinus:
-			updown2->setButtonSymbols(QSpinWidget::PlusMinus);
-			break;
-	}
+	updown2->setButtonSymbols(newSymbols);
 }
 
 void SpinBox2::addVal(int change)
@@ -105,61 +98,91 @@ void SpinBox2::addVal(int change)
 
 void SpinBox2::valueChange()
 {
-    updateDisplay();
-    emit valueChanged(spinbox->value());
-    emit valueChanged(spinbox->currentValueText());
-#if defined(QT_ACCESSIBILITY_SUPPORT)
-    QAccessible::updateAccessibility(this, 0, QAccessible::ValueChanged);
-#endif
+	bool blocked = updown2->signalsBlocked();
+	updown2->blockSignals(true);
+	updown2->setValue(spinbox->value());
+	updown2->blockSignals(blocked);
 }
 
-// Called after the widget has been resized.
-void SpinBox2::resizeEvent(QResizeEvent* e)
+void SpinBox2::stepped2(int direction)
 {
-	int w = spinbox->upRect().width();
-	int m = spinbox->style().defaultFrameWidth() + 1;
-	spinbox->setGeometry(w - m, 0, width() - w + m, height());
-	updown2->setGeometry(0, 0, w, height());
+	bool focus = selectOnStep && updown2->hasFocus();
+	if (focus)
+		spinbox->setFocus();    // make displayed text be selected, as for stepping with the spinbox buttons
+	int step = spinbox->pageStep();
+	addVal(direction >= 0 ? step : -step);
+	if (focus)
+		updown2->setFocus();
+}
+
+// Called when the widget is about to be displayed.
+// (At construction time, the spin button widths cannot be determined correctly,
+//  so we need to wait until now to definitively rearrange the widget.)
+void SpinBox2::showEvent(QShowEvent*)
+{
+	arrange();
 }
 
 QSize SpinBox2::sizeHint() const
 {
+	getMetrics();
 	QSize size = spinbox->sizeHint();
-	size.setWidth(size.width() + updown2->downRect().width());
+	size.setWidth(size.width() - xSpinbox + wUpdown2 + wGap);
 	return size;
 }
 
 QSize SpinBox2::minimumSizeHint() const
 {
+	getMetrics();
 	QSize size = spinbox->minimumSizeHint();
-	size.setWidth(size.width() + updown2->downRect().width());
+	size.setWidth(size.width() - xSpinbox + wUpdown2 + wGap);
 	return size;
 }
 
-void SpinBox2::updateDisplay()
+void SpinBox2::arrange()
 {
-	bool enabled = isEnabled();
-	bool wrap    = spinbox->wrapping();
-	int  value   = spinbox->value();
-	updown2->setUpEnabled(enabled  &&  (wrap || value < spinbox->maxValue()));
-	updown2->setDownEnabled(enabled  &&  (wrap || value > spinbox->minValue()));
-	// force an update of the QSpinBox display
-//	spinbox->setWrapping(!wrap);
-//	spinbox->setWrapping(wrap);
+	getMetrics();
+	updown2Frame->setGeometry(QStyle::visualRect(QRect(0, 0, wUpdown2, height()), this));
+	updown2->setGeometry(-xUpdown2, 0, updown2->width(), height());
+	spinboxFrame->setGeometry(QStyle::visualRect(QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height()), this));
+	spinbox->setGeometry(-xSpinbox, 0, spinboxFrame->width() + xSpinbox, height());
 }
 
-void SpinBox2::styleChange(QStyle& old)
+void SpinBox2::getMetrics() const
 {
-	updown2->arrange();
-//	spinbox->styleChange(old);
+	QRect rect = updown2->style().querySubControlMetrics(QStyle::CC_SpinWidget, updown2, QStyle::SC_SpinWidgetButtonField);
+	xUpdown2 = rect.left();
+	wUpdown2 = updown2->width() - xUpdown2;
+	xSpinbox = spinbox->style().querySubControlMetrics(QStyle::CC_SpinWidget, spinbox, QStyle::SC_SpinWidgetEditField).left();
+	wGap = 0;
+
+	// Make style-specific adjustments for a better appearance
+	if (style().isA("QMotifPlusStyle"))
+	{
+		xSpinbox = 0;      // show the edit control left border
+		wGap = 2;          // leave a space to the right of the left-hand pair of spin buttons
+	}
 }
 
-void SpinBox2::enabledChange(bool)
+
+void SpinBox2::SB2_SpinBox::valueChange()
 {
-	bool enabled = isEnabled();
-	spinbox->setEnabled(enabled);
-	updown2->setEnabled(enabled);
-	updateDisplay();
+	bool focus = !spinBox2->selectOnStep && hasFocus();
+	if (focus)
+		clearFocus();     // prevent selection of the spin box text
+	QSpinBox::valueChange();
+	if (focus)
+		setFocus();
+}
+
+void SB2_SpinWidget::valueChange()
+{
+	bool focus = hasFocus();
+	if (focus)
+		clearFocus();     // prevent selection of the invisible spin box text
+	QSpinBox::valueChange();
+	if (focus)
+		setFocus();
 }
 
 #endif // QT_VERSION >= 300
