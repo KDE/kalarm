@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include <stdlib.h>
@@ -33,37 +37,37 @@
 using namespace KCal;
 
 
-/*
- * Each alarm DESCRIPTION field contains the following:
- *   SEQNO;[FLAGS];TYPE:TEXT
- * where
- *   SEQNO = sequence number of alarm within the event
- *   FLAGS = C for late-cancel, L for repeat-at-login, D for deferral
- *   TYPE = TEXT or FILE or CMD
- *   TEXT = message text, file name/URL or command
- */
-static const QChar   SEPARATOR            = QChar(';');
-static const QString TEXT_PREFIX          = QString::fromLatin1("TEXT:");
-static const QString FILE_PREFIX          = QString::fromLatin1("FILE:");
-static const QString COMMAND_PREFIX       = QString::fromLatin1("CMD:");
-static const QString LATE_CANCEL_CODE     = QString::fromLatin1("C");
-static const QString AT_LOGIN_CODE        = QString::fromLatin1("L");   // subsidiary alarm at every login
-static const QString DEFERRAL_CODE        = QString::fromLatin1("D");   // extra deferred alarm
+const QCString APPNAME("KALARM");
+
+// Custom calendar properties
+static const QCString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
+static const QString FILE_TYPE        = QString::fromLatin1("FILE");
+static const QString AT_LOGIN_TYPE    = QString::fromLatin1("LOGIN");
+static const QString DEFERRAL_TYPE    = QString::fromLatin1("DEFERRAL");
+static const QString DISPLAYING_TYPE  = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
+
+// Event categories
 static const QString BEEP_CATEGORY        = QString::fromLatin1("BEEP");
+static const QString EMAIL_BCC_CATEGORY   = QString::fromLatin1("BCC");
 static const QString CONFIRM_ACK_CATEGORY = QString::fromLatin1("ACKCONF");
+static const QString LATE_CANCEL_CATEGORY = QString::fromLatin1("LATECANCEL");
+static const QString ARCHIVE_CATEGORY     = QString::fromLatin1("SAVE");
+
+static const QString EXPIRED_UID          = QString::fromLatin1("-exp-");
+static const QString DISPLAYING_UID       = QString::fromLatin1("-disp-");
 
 struct AlarmData
 {
-	QString           cleanText;       // text or audio file name
-	QDateTime         dateTime;
-	int               repeatCount;     // backwards compatibility with KAlarm pre-0.7 calendar files
-	int               repeatMinutes;   // backwards compatibility with KAlarm pre-0.7 calendar files
-	KAlarmAlarm::Type type;
-	bool              lateCancel;
-	bool              repeatAtLogin;
-	bool              deferral;
+	QString                cleanText;       // text or audio file name
+	EmailAddressList       emailAddresses;
+	QString                emailSubject;
+	QStringList            emailAttachments;
+	QDateTime              dateTime;
+	KAlarmAlarm::Type      type;
+	KAAlarmEventBase::Type action;
+	int                    displayingFlags;
 };
-typedef QMap<int, AlarmData> AlarmMap;
+typedef QMap<KAlarmAlarm::Type, AlarmData> AlarmMap;
 
 
 /*=============================================================================
@@ -71,40 +75,27 @@ typedef QMap<int, AlarmData> AlarmMap;
 = Corresponds to a KCal::Event instance.
 =============================================================================*/
 
-const int KAlarmEvent::MAIN_ALARM_ID          = 1;
-const int KAlarmEvent::REPEAT_AT_LOGIN_OFFSET = 1;
-const int KAlarmEvent::DEFERRAL_OFFSET        = 2;
-const int KAlarmEvent::AUDIO_ALARM_ID         = 100;   // not actually stored in the alarm
-
-
 void KAlarmEvent::copy(const KAlarmEvent& event)
 {
-	mEventID               = event.mEventID;
-	mCleanText             = event.mCleanText;
-	mAudioFile             = event.mAudioFile;
-	mDateTime              = event.mDateTime;
-	mRepeatAtLoginDateTime = event.mRepeatAtLoginDateTime;
-	mDeferralTime          = event.mDeferralTime;
-	mColour                = event.mColour;
-	mType                  = event.mType;
-	mRevision              = event.mRevision;
-	mRepeatDuration        = event.mRepeatDuration;
-	mAlarmCount            = event.mAlarmCount;
-	mMainAlarmID           = event.mMainAlarmID;
-	mRepeatAtLoginAlarmID  = event.mRepeatAtLoginAlarmID;
-	mDeferralAlarmID       = event.mDeferralAlarmID;
-	mAnyTime               = event.mAnyTime;
-	mBeep                  = event.mBeep;
-	mRepeatAtLogin         = event.mRepeatAtLogin;
-	mDeferral              = event.mDeferral;
-	mLateCancel            = event.mLateCancel;
-	mConfirmAck            = event.mConfirmAck;
-	mUpdated               = event.mUpdated;
+	KAAlarmEventBase::copy(event);
+	mAudioFile            = event.mAudioFile;
+	mEndDateTime          = event.mEndDateTime;
+	mAtLoginDateTime      = event.mAtLoginDateTime;
+	mDeferralTime         = event.mDeferralTime;
+	mDisplayingTime       = event.mDisplayingTime;
+	mDisplayingFlags      = event.mDisplayingFlags;
+	mRevision             = event.mRevision;
+	mRemainingRecurrences = event.mRemainingRecurrences;
+	mAlarmCount           = event.mAlarmCount;
+	mAnyTime              = event.mAnyTime;
+	mExpired              = event.mExpired;
+	mArchive              = event.mArchive;
+	mUpdated              = event.mUpdated;
 	delete mRecurrence;
 	if (event.mRecurrence)
-		mRecurrence = new Recurrence(*event.mRecurrence, 0L);
+		mRecurrence = new Recurrence(*event.mRecurrence, 0);
 	else
-		mRecurrence = 0L;
+		mRecurrence = 0;
 }
 
 /******************************************************************************
@@ -117,7 +108,10 @@ void KAlarmEvent::set(const Event& event)
 	mRevision = event.revision();
 	const QStringList& cats = event.categories();
 	mBeep       = false;
+	mEmailBcc   = false;
 	mConfirmAck = false;
+	mLateCancel = false;
+	mArchive    = false;
 	mColour = QColor(255, 255, 255);    // missing/invalid colour - return white
 	if (cats.count() > 0)
 	{
@@ -130,18 +124,29 @@ void KAlarmEvent::set(const Event& event)
 				mBeep = true;
 			else if (cats[i] == CONFIRM_ACK_CATEGORY)
 				mConfirmAck = true;
+			else if (cats[i] == EMAIL_BCC_CATEGORY)
+				mEmailBcc = true;
+			else if (cats[i] == LATE_CANCEL_CATEGORY)
+				mLateCancel = true;
+			else if (cats[i] == ARCHIVE_CATEGORY)
+				mArchive = true;
 	}
 
 	// Extract status from the event's alarms.
 	// First set up defaults.
-	mType          = KAlarmAlarm::MESSAGE;
-	mLateCancel    = false;
-	mRepeatAtLogin = false;
-	mDeferral      = false;
-	mCleanText     = "";
-	mAudioFile     = "";
-	mDateTime      = event.dtStart();
-	mAnyTime       = event.doesFloat();
+	mActionType     = T_MESSAGE;
+	mRepeatAtLogin  = false;
+	mDeferral       = false;
+	mDisplaying     = false;
+	mExpired        = true;
+	mText           = "";
+	mAudioFile      = "";
+	mEmailSubject   = "";
+	mEmailAddresses.clear();
+	mEmailAttachments.clear();
+	mDateTime       = event.dtStart();
+	mEndDateTime    = event.dtEnd();
+	mAnyTime        = event.doesFloat();
 	initRecur(false);
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
@@ -151,62 +156,66 @@ void KAlarmEvent::set(const Event& event)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		int sequence = readAlarm(*ia.current(), data);
-		alarmMap.insert(sequence, data);
+		readAlarm(*ia.current(), data);
+		alarmMap.insert(data.type, data);
 	}
 
 	// Incorporate the alarms' details into the overall event
 	AlarmMap::ConstIterator it = alarmMap.begin();
-	mMainAlarmID = -1;    // initialise as invalid
-	mAlarmCount = 0;
-	int repeatCount   = 0;    // backwards compatibility with KAlarm pre-0.7 calendar files
-	int repeatMinutes = 0;    // backwards compatibility with KAlarm pre-0.7 calendar files
+	mAlarmCount = 0;       // initialise as invalid
 	bool set = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
-		bool main = false;
 		const AlarmData& data = it.data();
-		if (data.type == KAlarmAlarm::AUDIO)
+		if (data.action == T_AUDIO)
 			mAudioFile = data.cleanText;
-		else if (data.repeatAtLogin)
-		{
-			mRepeatAtLogin         = true;
-			mRepeatAtLoginDateTime = data.dateTime;
-			mRepeatAtLoginAlarmID  = it.key();
-		}
-		else if (data.deferral)
-		{
-			mDeferral        = true;
-			mDeferralTime    = data.dateTime;
-			mDeferralAlarmID = it.key();
-		}
 		else
 		{
-			mMainAlarmID = it.key();
-			main = true;
+			switch (data.type)
+			{
+				case KAlarmAlarm::MAIN_ALARM:
+					mExpired = false;
+					break;
+				case KAlarmAlarm::AT_LOGIN_ALARM:
+					mRepeatAtLogin   = true;
+					mAtLoginDateTime = data.dateTime;
+					break;
+				case KAlarmAlarm::DEFERRAL_ALARM:
+					mDeferral     = true;
+					mDeferralTime = data.dateTime;
+					break;
+				case KAlarmAlarm::DISPLAYING_ALARM:
+					mDisplaying      = true;
+					mDisplayingTime  = data.dateTime;
+					mDisplayingFlags = data.displayingFlags;
+					break;
+				default:
+					break;
+			}
 		}
 
 		// Ensure that the basic fields are set up even if there is no main
 		// alarm in the event (which shouldn't ever happen!)
-		if (main  ||  !set)
+		if (!set)
 		{
-			if (data.type != KAlarmAlarm::AUDIO)
+			if (data.action != T_AUDIO)
 			{
-				mType      = data.type;
-				mCleanText = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+				mActionType = data.action;
+				mText = (mActionType == T_COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+				if (data.action == T_EMAIL)
+				{
+					mEmailAddresses   = data.emailAddresses;
+					mEmailSubject     = data.emailSubject;
+					mEmailAttachments = data.emailAttachments;
+				}
 			}
-			mDateTime  = data.dateTime;
-			if (data.repeatCount && data.repeatMinutes)
-			{
-				// Backwards compatibility with KAlarm pre-0.7 calendar files
-				repeatCount   = data.repeatCount;
-				repeatMinutes = data.repeatMinutes;
-			}
+			mDateTime = data.dateTime;
 			if (mAnyTime)
 				mDateTime.setTime(QTime());
-			mLateCancel = data.lateCancel;
 			set = true;
 		}
+		if (data.action == T_FILE  &&  mActionType == T_MESSAGE)
+			mActionType = T_FILE;
 		++mAlarmCount;
 	}
 
@@ -227,23 +236,15 @@ void KAlarmEvent::set(const Event& event)
 			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				delete mRecurrence;
-				mRecurrence = new Recurrence(*recur, 0L);
-				mRepeatDuration = recur->duration();
-				if (mRepeatDuration > 0)
-					mRepeatDuration -= recur->durationTo(savedDT) - 1;
+				mRecurrence = new Recurrence(*recur, 0);
+				mRemainingRecurrences = recur->duration();
+				if (mRemainingRecurrences > 0)
+					mRemainingRecurrences -= recur->durationTo(savedDT) - 1;
 				break;
 			default:
 				mDateTime = savedDT;
 				break;
 		}
-	}
-	else if (repeatCount > 0 && repeatMinutes > 0)
-	{
-		// Backwards compatibility with KAlarm pre-0.7 calendar files
-		delete mRecurrence;
-		mRecurrence = new Recurrence(0L);
-		mRepeatDuration = repeatCount + 1;
-		mRecurrence->setMinutely(repeatMinutes, mRepeatDuration);
 	}
 
 	mUpdated = false;
@@ -253,115 +254,198 @@ void KAlarmEvent::set(const Event& event)
  * Parse a KCal::Alarm.
  * Reply = alarm ID (sequence number)
  */
-int KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
+void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 {
 	// Parse the next alarm's text
-	int sequence;
-	data.lateCancel    = false;
-	data.repeatAtLogin = false;
-	data.deferral      = false;
+	data.dateTime = alarm.time();
+	data.displayingFlags = 0;
 	if (!alarm.audioFile().isEmpty())
 	{
-		data.type      = KAlarmAlarm::AUDIO;
+		data.action    = T_AUDIO;
 		data.cleanText = alarm.audioFile();
-		sequence = AUDIO_ALARM_ID;
+		data.type      = KAlarmAlarm::AUDIO_ALARM;
 	}
 	else
 	{
-		// It's a text message/file/command
-		data.type = KAlarmAlarm::MESSAGE;
-		sequence = MAIN_ALARM_ID;      // default main alarm ID
-		const QString& txt = alarm.text();
-		int length = txt.length();
-		int i = 0;
-		if (txt[0].isDigit())
+		// It's a text message/file/command/email
+		if (!alarm.programFile().isEmpty())
 		{
-			sequence = txt[0].digitValue();
-			for (i = 1;  i < length;  ++i)
-				if (txt[i].isDigit())
-					sequence = sequence * 10 + txt[i].digitValue();
-				else
-				{
-					if (txt[i++] == SEPARATOR)
-					{
-						while (i < length)
-						{
-							QChar ch = txt[i++];
-							if (ch == SEPARATOR)
-								break;
-							if (ch == LATE_CANCEL_CODE)
-								data.lateCancel = true;
-							else if (ch == AT_LOGIN_CODE)
-								data.repeatAtLogin = true;
-							else if (ch == DEFERRAL_CODE)
-								data.deferral = true;
-						}
-					}
-					else
-					{
-						i = 0;
-						sequence = MAIN_ALARM_ID;     // invalid sequence number - use default
-					}
-					break;
-				}
+			data.action    = T_COMMAND;
+			data.cleanText = alarm.programFile();
 		}
-		if (txt.find(TEXT_PREFIX, i) == i)
-			i += TEXT_PREFIX.length();
-		else if (txt.find(FILE_PREFIX, i) == i)
+		else if (alarm.mailAddresses().count() > 0)
 		{
-			data.type = KAlarmAlarm::FILE;
-			i += FILE_PREFIX.length();
-		}
-		else if (txt.find(COMMAND_PREFIX, i) == i)
-		{
-			data.type = KAlarmAlarm::COMMAND;
-			i += COMMAND_PREFIX.length();
+			data.action = T_EMAIL;
+			data.emailAddresses   = alarm.mailAddresses();
+			data.emailSubject     = alarm.mailSubject();
+			data.emailAttachments = alarm.mailAttachments();
+			data.cleanText        = alarm.text();
 		}
 		else
-			i = 0;
+		{
+			data.action    = T_MESSAGE;
+			data.cleanText = alarm.text();
+		}
 
-		data.cleanText  = txt.mid(i);
+		bool atLogin = false;
+		bool deferral = false;
+		data.type = KAlarmAlarm::MAIN_ALARM;
+		QString typelist = alarm.customProperty(APPNAME, TYPE_PROPERTY);
+		QStringList types = QStringList::split(QChar(','), typelist);
+		for (unsigned int i = 0;  i < types.count();  ++i)
+		{
+			// iCalendar puts a \ character before commas, so remove it if there is one
+			QString type = types[i];
+			int last = type.length() - 1;
+			if (type[last] == QChar('\\'))
+				type.truncate(last);
+
+			if (type == AT_LOGIN_TYPE)
+				atLogin = true;
+			else if (type == FILE_TYPE  &&  data.action == T_MESSAGE)
+				data.action = T_FILE;
+			else if (type == DEFERRAL_TYPE)
+				deferral = true;
+			else if (type == DISPLAYING_TYPE)
+				data.type = KAlarmAlarm::DISPLAYING_ALARM;
+		}
+
+		if (deferral)
+		{
+			if (data.type == KAlarmAlarm::MAIN_ALARM)
+				data.type = KAlarmAlarm::DEFERRAL_ALARM;
+			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+				data.displayingFlags = DEFERRAL;
+		}
+		if (atLogin)
+		{
+			if (data.type == KAlarmAlarm::MAIN_ALARM)
+				data.type = KAlarmAlarm::AT_LOGIN_ALARM;
+			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+				data.displayingFlags = REPEAT_AT_LOGIN;
+		}
 	}
-	data.dateTime      = alarm.time();
-	data.repeatCount   = alarm.repeatCount();  // backwards compatibility with KAlarm pre-0.7 calendar files
-	data.repeatMinutes = alarm.snoozeTime();   // backwards compatibility with KAlarm pre-0.7 calendar files
-	return sequence;
+//kdDebug()<<"ReadAlarm(): text="<<alarm.text()<<", time="<<alarm.time().toString()<<", valid time="<<alarm.time().isValid()<<endl;
 }
 
 /******************************************************************************
  * Initialise the KAlarmEvent with the specified parameters.
  */
-void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, KAlarmAlarm::Type type, int flags)
+void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, Action action, int flags)
 {
 	initRecur(false);
-	mMainAlarmID    = MAIN_ALARM_ID;
-	mDateTime       = dateTime;
-	mCleanText      = (type == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
-	mAudioFile      = "";
-	mType           = type;
-	mColour         = colour;
+	mDateTime = mEndDateTime = dateTime;
+	switch (action)
+	{
+		case MESSAGE:
+		case FILE:
+		case COMMAND:
+		case EMAIL:
+			mActionType = (KAAlarmEventBase::Type)action;
+			break;
+		default:
+			mActionType = T_MESSAGE;
+			break;
+	}
+	mText       = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
+	mAudioFile  = "";
+	mColour     = colour;
+	mAlarmCount = 1;
 	set(flags);
-	mDeferral       = false;
-	mUpdated        = false;
+	mDeferral   = false;
+	mDisplaying = false;
+	mExpired    = false;
+	mArchive    = false;
+	mUpdated    = false;
+}
+
+/******************************************************************************
+ * Initialise an email KAlarmEvent.
+ */
+void KAlarmEvent::setEmail(const QDate& d, const EmailAddressList& addresses, const QString& subject,
+			    const QString& message, const QStringList& attachments, int flags)
+{
+	set(d, message, QColor(), EMAIL, flags | ANY_TIME);
+	mEmailAddresses   = addresses;
+	mEmailSubject     = subject;
+	mEmailAttachments = attachments;
+}
+
+void KAlarmEvent::setEmail(const QDateTime& dt, const EmailAddressList& addresses, const QString& subject,
+			    const QString& message, const QStringList& attachments, int flags)
+{
+	set(dt, message, QColor(), EMAIL, flags);
+	mEmailAddresses   = addresses;
+	mEmailSubject     = subject;
+	mEmailAttachments = attachments;
+}
+
+void KAlarmEvent::setEmail(const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
+{
+	mEmailAddresses   = addresses;
+	mEmailSubject     = subject;
+	mEmailAttachments = attachments;
+}
+
+/******************************************************************************
+ * Convert a unique ID to indicate that the event is in a specified calendar file.
+ */
+QString KAlarmEvent::uid(const QString& id, Status status)
+{
+	QString result = id;
+	Status oldStatus;
+	int i, len;
+	if ((i = result.find(EXPIRED_UID)) > 0)
+	{
+		oldStatus = EXPIRED;
+		len = EXPIRED_UID.length();
+	}
+	else if ((i = result.find(DISPLAYING_UID)) > 0)
+	{
+		oldStatus = DISPLAYING;
+		len = DISPLAYING_UID.length();
+	}
+	else
+	{
+		oldStatus = ACTIVE;
+		i = result.findRev('-');
+		len = 1;
+	}
+	if (status != oldStatus  &&  i > 0)
+	{
+		QString part;
+		switch (status)
+		{
+			case ACTIVE:      part = "-";  break;
+			case EXPIRED:     part = EXPIRED_UID;  break;
+			case DISPLAYING:  part = DISPLAYING_UID;  break;
+		}
+		result.replace(i, len, part);
+	}
+	return result;
+}
+
+/******************************************************************************
+ * Get the calendar type for a unique ID.
+ */
+KAlarmEvent::Status KAlarmEvent::uidStatus(const QString& uid)
+{
+	if (uid.find(EXPIRED_UID) > 0)
+		return EXPIRED;
+	if (uid.find(DISPLAYING_UID) > 0)
+		return DISPLAYING;
+	return ACTIVE;
 }
 
 void KAlarmEvent::set(int flags)
 {
-	mBeep          = flags & BEEP;
-	mRepeatAtLogin = flags & REPEAT_AT_LOGIN;
-	mLateCancel    = flags & LATE_CANCEL;
-	mConfirmAck    = flags & CONFIRM_ACK;
-	mAnyTime       = flags & ANY_TIME;
+	KAAlarmEventBase::set(flags & ~(DEFERRAL | DISPLAYING_));    // DEFERRAL, DISPLAYING_ are read-only
+	mAnyTime = flags & ANY_TIME;
 }
 
 int KAlarmEvent::flags() const
 {
-	return (mBeep          ? BEEP : 0)
-	     | (mRepeatAtLogin ? REPEAT_AT_LOGIN : 0)
-	     | (mLateCancel    ? LATE_CANCEL : 0)
-	     | (mConfirmAck    ? CONFIRM_ACK : 0)
-	     | (mAnyTime       ? ANY_TIME : 0)
-	     | (mDeferral      ? DEFERRAL : 0);
+	return KAAlarmEventBase::flags() | (mAnyTime ? ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -377,9 +461,10 @@ Event* KAlarmEvent::event() const
 /******************************************************************************
  * Update an existing KCal::Event with the KAlarmEvent data.
  */
-bool KAlarmEvent::updateEvent(Event& ev) const
+bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 {
-	if (!mEventID.isEmpty()  &&  mEventID != ev.uid())
+	if (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev.uid()
+	||  !mAlarmCount)
 		return false;
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	bool readOnly = ev.isReadOnly();
@@ -392,61 +477,58 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		cats.append(BEEP_CATEGORY);
 	if (mConfirmAck)
 		cats.append(CONFIRM_ACK_CATEGORY);
+	if (mEmailBcc)
+		cats.append(EMAIL_BCC_CATEGORY);
+	if (mLateCancel)
+		cats.append(LATE_CANCEL_CATEGORY);
+	if (mArchive)
+		cats.append(ARCHIVE_CATEGORY);
 	ev.setCategories(cats);
 	ev.setRevision(mRevision);
-
-	// Add the main alarm
 	ev.clearAlarms();
-	Alarm* al = ev.newAlarm();
-	al->setEnabled(true);
-	QString suffix;
-	if (mLateCancel)
-		suffix = LATE_CANCEL_CODE;
-	suffix += SEPARATOR;
-	switch (mType)
+
+	QDateTime dtStart = mDateTime;
+	QDateTime dtMain  = mDateTime;
+	if (!mExpired)
 	{
-		case KAlarmAlarm::MESSAGE:  suffix += TEXT_PREFIX;  break;
-		case KAlarmAlarm::FILE:     suffix += FILE_PREFIX;  break;
-		case KAlarmAlarm::COMMAND:  suffix += COMMAND_PREFIX;  break;
-		case KAlarmAlarm::AUDIO:  break;   // never occurs in this context
+		// Add the main alarm
+		if (mAnyTime)
+			dtMain.setTime(theApp()->settings()->startOfDay());
+		initKcalAlarm(ev, dtMain, QStringList());
 	}
-	suffix += mCleanText;
-	al->setText(QString::number(MAIN_ALARM_ID) + SEPARATOR + suffix);
-	QDateTime aldt = mDateTime;
-	if (mAnyTime)
-		aldt.setTime(theApp()->settings()->startOfDay());
-	al->setTime(aldt);
-	QDateTime dt = mDateTime;
 
 	// Add subsidiary alarms
-	if (mRepeatAtLogin)
+	if (mRepeatAtLogin  &&  !mExpired)
 	{
-		al = ev.newAlarm();
-		al->setEnabled(true);        // enable the alarm
-		al->setText(QString::number(MAIN_ALARM_ID + REPEAT_AT_LOGIN_OFFSET)
-		            + SEPARATOR + AT_LOGIN_CODE + suffix);
-		QDateTime dtl = mRepeatAtLoginDateTime.isValid() ? mRepeatAtLoginDateTime
+		QDateTime dtl = mAtLoginDateTime.isValid() ? mAtLoginDateTime
 		                : QDateTime::currentDateTime();
-		al->setTime(dtl);
-		if (dtl < dt)
-			dt = dtl;
+		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
+		if (dtl < dtStart)
+			dtStart = dtl;
 	}
 	if (mDeferral)
 	{
-		al = ev.newAlarm();
-		al->setEnabled(true);        // enable the alarm
-		al->setText(QString::number(MAIN_ALARM_ID + DEFERRAL_OFFSET)
-		            + SEPARATOR + DEFERRAL_CODE + suffix);
-		al->setTime(mDeferralTime);
-		if (mDeferralTime < dt)
-			dt = mDeferralTime;
+		initKcalAlarm(ev, mDeferralTime, QStringList(DEFERRAL_TYPE));
+		if (mDeferralTime < dtStart)
+			dtStart = mDeferralTime;
+	}
+	if (mDisplaying)
+	{
+		QStringList list(DISPLAYING_TYPE);
+		if (mDisplayingFlags & REPEAT_AT_LOGIN)
+			list += AT_LOGIN_TYPE;
+		else if (mDisplayingFlags & DEFERRAL)
+			list += DEFERRAL_TYPE;
+		initKcalAlarm(ev, mDisplayingTime, list);
+		if (mDisplayingTime.isValid()  &&  mDisplayingTime < dtStart)
+			dtStart = mDisplayingTime;
 	}
 	if (!mAudioFile.isEmpty())
 	{
-		al = ev.newAlarm();
+		Alarm* al = ev.newAlarm();
 		al->setEnabled(true);        // enable the alarm
 		al->setAudioFile(mAudioFile);
-		al->setTime(aldt);           // set it for the main alarm time
+		al->setTime(dtMain);         // set it for the main alarm time
 	}
 
 	// Add recurrence data
@@ -456,8 +538,8 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		int frequency = mRecurrence->frequency();
 		int duration  = mRecurrence->duration();
 		const QDateTime& endDateTime = mRecurrence->endDateTime();
-		dt = mRecurrence->recurStart();
-		recur->setRecurStart(dt);
+		dtStart = mRecurrence->recurStart();
+		recur->setRecurStart(dtStart);
 		ushort rectype = mRecurrence->doesRecur();
 		switch (rectype)
 		{
@@ -538,52 +620,124 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		}
 	}
 
-	ev.setDtStart(dt);
-	ev.setDtEnd(dt);
+	ev.setDtStart(dtStart);
+	ev.setDtEnd(mEndDateTime);
 	ev.setFloats(mAnyTime);
 	ev.setReadOnly(readOnly);
 	return true;
 }
 
 /******************************************************************************
- * Return the alarm with the specified ID.
+ * Create a new alarm for a libkcal event, and initialise it according to the
+ * alarm action. If 'type' is non-null, it is appended to the X-KDE-KALARM-TYPE
+ * property value list.
  */
-KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
+Alarm* KAlarmEvent::initKcalAlarm(Event& event, const QDateTime& dt, const QStringList& types) const
+{
+	QStringList alltypes;
+	Alarm* alarm = event.newAlarm();
+	alarm->setEnabled(true);
+	alarm->setTime(dt);
+	switch (mActionType)
+	{
+		case T_FILE:
+			alltypes += FILE_TYPE;
+			// fall through to T_MESSAGE
+		case T_MESSAGE:
+			alarm->setText(mText);
+			break;
+		case T_COMMAND:
+			alarm->setProgramFile(mText);
+			break;
+		case T_EMAIL:
+			alarm->setText(mText);
+			if (mEmailAddresses.count() > 0)
+				alarm->setMailAddresses(mEmailAddresses);
+			alarm->setMailSubject(mEmailSubject);
+			if (mEmailAttachments.count() > 0)
+				alarm->setMailAttachments(mEmailAttachments);
+			break;
+		case T_AUDIO:     // never occurs in this context
+			break;
+	}
+	alltypes += types;
+	if (alltypes.count() > 0)
+		alarm->setCustomProperty(APPNAME, TYPE_PROPERTY, alltypes.join(","));
+	return alarm;
+}
+
+/******************************************************************************
+ * Return the alarm of the specified type.
+ */
+KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 {
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	KAlarmAlarm al;
-	al.mEventID = mEventID;
-	if (alarmID == AUDIO_ALARM_ID)
+	if (mAlarmCount)
 	{
-		al.mType      = KAlarmAlarm::AUDIO;
-		al.mAlarmSeq  = AUDIO_ALARM_ID;
-		al.mDateTime  = mDateTime;
-		al.mCleanText = mAudioFile;
-	}
-	else
-	{
-		al.mType       = mType;
-		al.mCleanText  = mCleanText;
-		al.mColour     = mColour;
-		al.mBeep       = mBeep;
-		al.mConfirmAck = mConfirmAck;
-		if (mMainAlarmID >= 0  &&  alarmID == mMainAlarmID)
+		al.mEventID = mEventID;
+		if (type == KAlarmAlarm::AUDIO_ALARM)
 		{
-			al.mAlarmSeq   = mMainAlarmID;
+			al.mType       = type;
+			al.mActionType = T_AUDIO;
 			al.mDateTime   = mDateTime;
-			al.mLateCancel = mLateCancel;
+			al.mText       = mAudioFile;
 		}
-		else if (mRepeatAtLogin  &&  alarmID == mRepeatAtLoginAlarmID)
+		else
 		{
-			al.mAlarmSeq      = mRepeatAtLoginAlarmID;
-			al.mDateTime      = mRepeatAtLoginDateTime;
-			al.mRepeatAtLogin = true;
-		}
-		else if (mDeferral  &&  alarmID == mDeferralAlarmID)
-		{
-			al.mAlarmSeq = mDeferralAlarmID;
-			al.mDateTime = mDeferralTime;
-			al.mDeferral = true;
+			al.mType          = KAlarmAlarm::INVALID_ALARM;
+			al.mActionType    = mActionType;
+			al.mText          = mText;
+			al.mColour        = mColour;
+			al.mBeep          = mBeep;
+			al.mConfirmAck    = mConfirmAck;
+			al.mRepeatAtLogin = false;
+			al.mDeferral      = false;
+			al.mLateCancel    = mLateCancel;
+			al.mEmailBcc      = mEmailBcc;
+			if (mActionType == T_EMAIL)
+			{
+				al.mEmailAddresses   = mEmailAddresses;
+				al.mEmailSubject     = mEmailSubject;
+				al.mEmailAttachments = mEmailAttachments;
+			}
+			switch (type)
+			{
+				case KAlarmAlarm::MAIN_ALARM:
+					if (!mExpired)
+					{
+						al.mType     = KAlarmAlarm::MAIN_ALARM;
+						al.mDateTime = mDateTime;
+					}
+					break;
+				case KAlarmAlarm::AT_LOGIN_ALARM:
+					if (mRepeatAtLogin)
+					{
+						al.mType          = KAlarmAlarm::AT_LOGIN_ALARM;
+						al.mDateTime      = mAtLoginDateTime;
+						al.mRepeatAtLogin = true;
+						al.mLateCancel    = false;
+					}
+					break;
+				case KAlarmAlarm::DEFERRAL_ALARM:
+					if (mDeferral)
+					{
+						al.mType     = KAlarmAlarm::DEFERRAL_ALARM;
+						al.mDateTime = mDeferralTime;
+						al.mDeferral = true;
+					}
+					break;
+				case KAlarmAlarm::DISPLAYING_ALARM:
+					if (mDisplaying)
+					{
+						al.mType       = KAlarmAlarm::DISPLAYING_ALARM;
+						al.mDateTime   = mDisplayingTime;
+						al.mDisplaying = true;
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	return al;
@@ -591,21 +745,19 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 
 /******************************************************************************
  * Return the main alarm for the event.
- * If for some strange reason the main alarm does not exist, one of the
- * subsidiary ones is returned if possible.
+ * If the main alarm does not exist, one of the subsidiary ones is returned if
+ * possible.
  * N.B. a repeat-at-login alarm can only be returned if it has been read from/
  * written to the calendar file.
  */
 KAlarmAlarm KAlarmEvent::firstAlarm() const
 {
-	if (mMainAlarmID > 0)
-		return alarm(mMainAlarmID);
-	if (mDeferral)
-		return alarm(mDeferralAlarmID);
-	if (mRepeatAtLogin)
-		return alarm(mRepeatAtLoginAlarmID);
-	if (!mAudioFile.isEmpty())
-		return alarm(AUDIO_ALARM_ID);
+	if (mAlarmCount)
+	{
+		if (!mExpired)
+			return alarm(KAlarmAlarm::MAIN_ALARM);
+		return nextAlarm(KAlarmAlarm::MAIN_ALARM);
+	}
 	return KAlarmAlarm();
 }
 
@@ -614,26 +766,25 @@ KAlarmAlarm KAlarmEvent::firstAlarm() const
  * N.B. a repeat-at-login alarm can only be returned if it has been read from/
  * written to the calendar file.
  */
-KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
+KAlarmAlarm KAlarmEvent::nextAlarm(KAlarmAlarm::Type prevType) const
 {
-	int next;
-	if (alrm.id() == mMainAlarmID)  next = 1;
-	else if (mDeferral  &&  alrm.id() == mDeferralAlarmID)  next = 2;
-	else if (mRepeatAtLogin  &&  alrm.id() == mRepeatAtLoginAlarmID)  next = 3;
-	else next = -1;
-	switch (next)
+	switch (prevType)
 	{
-		case 1:
+		case KAlarmAlarm::MAIN_ALARM:
 			if (mDeferral)
-				return alarm(mDeferralAlarmID);
-			// fall through to REPEAT
-		case 2:
+				return alarm(KAlarmAlarm::DEFERRAL_ALARM);
+			// fall through to DEFERRAL_ALARM
+		case KAlarmAlarm::DEFERRAL_ALARM:
 			if (mRepeatAtLogin)
-				return alarm(mRepeatAtLoginAlarmID);
-			// fall through to LOGIN
-		case 3:
+				return alarm(KAlarmAlarm::AT_LOGIN_ALARM);
+			// fall through to AT_LOGIN_ALARM
+		case KAlarmAlarm::AT_LOGIN_ALARM:
+			if (mDisplaying)
+				return alarm(KAlarmAlarm::DISPLAYING_ALARM);
+			// fall through to DISPLAYING_ALARM
+		case KAlarmAlarm::DISPLAYING_ALARM:
 			if (!mAudioFile.isEmpty())
-				return alarm(AUDIO_ALARM_ID);
+				return alarm(KAlarmAlarm::AUDIO_ALARM);
 			// fall through to default
 		default:
 			break;
@@ -642,37 +793,76 @@ KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
 }
 
 /******************************************************************************
- * Remove the alarm with the specified ID from the event.
+ * Remove the alarm of the specified type from the event.
  */
-void KAlarmEvent::removeAlarm(int alarmID)
+void KAlarmEvent::removeAlarm(KAlarmAlarm::Type type)
 {
-	if (alarmID == mMainAlarmID)
-		mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
-	else if (mRepeatAtLogin  &&  alarmID == mRepeatAtLoginAlarmID)
+	switch (type)
 	{
-		mRepeatAtLogin = false;
-		--mAlarmCount;
+		case KAlarmAlarm::MAIN_ALARM:
+			mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
+			break;
+		case KAlarmAlarm::AT_LOGIN_ALARM:
+			if (mRepeatAtLogin)
+			{
+				mRepeatAtLogin = false;
+				--mAlarmCount;
+			}
+			break;
+		case KAlarmAlarm::DEFERRAL_ALARM:
+			if (mDeferral)
+			{
+				mDeferral = false;
+				--mAlarmCount;
+			}
+			break;
+		case KAlarmAlarm::DISPLAYING_ALARM:
+			if (mDisplaying)
+			{
+				mDisplaying = false;
+				--mAlarmCount;
+			}
+			break;
+		case KAlarmAlarm::AUDIO_ALARM:
+			mAudioFile = "";
+			--mAlarmCount;
+			break;
+		default:
+			break;
 	}
-	else if (mDeferral  &&  alarmID == mDeferralAlarmID)
+}
+
+/******************************************************************************
+ * Defer the event to the specified time.
+ * Optionally ensure that the next scheduled recurrence is after the current time.
+ */
+void KAlarmEvent::defer(const QDateTime& dateTime, bool adjustRecurrence)
+{
+	if (checkRecur() == NO_RECUR)
+		mDateTime = dateTime;
+	else
 	{
-		mDeferral = false;
-		--mAlarmCount;
-	}
-	else if (alarmID == AUDIO_ALARM_ID)
-	{
-		mAudioFile = "";
-		--mAlarmCount;
+		addDefer(dateTime);
+		if (adjustRecurrence)
+		{
+			QDateTime now = QDateTime::currentDateTime();
+			if (mDateTime < now)
+				setNextOccurrence(now);
+		}
 	}
 }
 
 /******************************************************************************
  * Add a deferral alarm with the specified trigger time.
  */
-void KAlarmEvent::defer(const QDateTime& dateTime)
+void KAlarmEvent::addDefer(const QDateTime& dateTime)
 {
-	mDeferralTime    = dateTime;
-	mDeferralAlarmID = MAIN_ALARM_ID + DEFERRAL_OFFSET;
-	mDeferral        = true;
+	mDeferralTime = dateTime;
+	if (!mDeferral)
+	{
+		mDeferral = true;
+		++mAlarmCount;
+	}
 }
 
 /******************************************************************************
@@ -680,20 +870,85 @@ void KAlarmEvent::defer(const QDateTime& dateTime)
  */
 void KAlarmEvent::cancelDefer()
 {
-	mDeferralTime = QDateTime();
-	mDeferral     = false;
+	if (mDeferral)
+	{
+		mDeferralTime = QDateTime();
+		mDeferral     = false;
+		--mAlarmCount;
+	}
 }
 
 /******************************************************************************
- * Check whether the event regularly repeats - with a recurrence specification
- * and/or an alarm repetition.
+ * Set the event to be a copy of the specified event, making the specified
+ * alarm the 'displaying' alarm.
+ * The purpose of setting up a 'displaying' alarm is to be able to reinstate
+ * the alarm message in case of a crash, or to reinstate it should the user
+ * choose to defer the alarm. Note that even repeat-at-login alarms need to be
+ * saved in case their end time expires before the next login.
+ * Reply = true if successful, false if alarm was not copied.
  */
-KAlarmEvent::RecurType KAlarmEvent::recurs() const
+bool KAlarmEvent::setDisplaying(const KAlarmEvent& event, KAlarmAlarm::Type alarmType, const QDateTime& repeatAtLoginTime)
 {
-	RecurType type = checkRecur();
-	if (type == NO_RECUR  &&  mRepeatDuration)
-		return MINUTELY;
-	return type;
+	if (!mDisplaying
+	&&  (alarmType == KAlarmAlarm::MAIN_ALARM
+	  || alarmType == KAlarmAlarm::DEFERRAL_ALARM
+	  || alarmType == KAlarmAlarm::AT_LOGIN_ALARM))
+	{
+kdDebug()<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAlarm::MAIN_ALARM?"MAIN":alarmType==KAlarmAlarm::DEFERRAL_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString()<<endl;
+		KAlarmAlarm al = event.alarm(alarmType);
+		if (al.valid())
+		{
+			*this = event;
+			setUid(DISPLAYING);
+			mDisplaying      = true;
+			mDisplayingTime  = (alarmType == KAlarmAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime();
+			mDisplayingFlags = (alarmType == KAlarmAlarm::AT_LOGIN_ALARM) ? REPEAT_AT_LOGIN
+			                 : (alarmType == KAlarmAlarm::DEFERRAL_ALARM) ? DEFERRAL : 0;
+			++mAlarmCount;
+			return true;
+		}
+	}
+	return false;
+}
+
+/******************************************************************************
+ * Return the original alarm which the displaying alarm refers to.
+ */
+KAlarmAlarm KAlarmEvent::convertDisplayingAlarm() const
+{
+	KAlarmAlarm al;
+	if (mDisplaying)
+	{
+		al = alarm(KAlarmAlarm::DISPLAYING_ALARM);
+		if (mDisplayingFlags & REPEAT_AT_LOGIN)
+		{
+			al.mRepeatAtLogin = true;
+			al.mType = KAlarmAlarm::AT_LOGIN_ALARM;
+		}
+		else if (mDisplayingFlags & DEFERRAL)
+		{
+			al.mDeferral = true;
+			al.mType = KAlarmAlarm::DEFERRAL_ALARM;
+		}
+		else
+			al.mType = KAlarmAlarm::MAIN_ALARM;
+	}
+	return al;
+}
+
+/******************************************************************************
+ * Reinstate the original event from the 'displaying' event.
+ */
+void KAlarmEvent::reinstateFromDisplaying(const KAlarmEvent& dispEvent)
+{
+	if (dispEvent.mDisplaying)
+	{
+		*this = dispEvent;
+		setUid(ACTIVE);
+		mDisplaying = false;
+		--mAlarmCount;
+		mUpdated = true;
+	}
 }
 
 /******************************************************************************
@@ -762,7 +1017,7 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 		{
 			mDateTime = newTime;
 			if (mRecurrence->duration() > 0)
-				mRepeatDuration = remainingCount;
+				mRemainingRecurrences = remainingCount;
 			mUpdated = true;
 		}
 	}
@@ -1063,16 +1318,16 @@ bool KAlarmEvent::initRecur(bool endDate, int count)
 	if (endDate || count)
 	{
 		if (!mRecurrence)
-			mRecurrence = new Recurrence(0L);
+			mRecurrence = new Recurrence(0);
 		mRecurrence->setRecurStart(mDateTime);
-		mRepeatDuration = count;
+		mRemainingRecurrences = count;
 		return true;
 	}
 	else
 	{
 		delete mRecurrence;
-		mRecurrence = 0L;
-		mRepeatDuration = 0;
+		mRecurrence = 0;
+		mRemainingRecurrences = 0;
 		return false;
 	}
 }
@@ -1080,7 +1335,7 @@ bool KAlarmEvent::initRecur(bool endDate, int count)
 /******************************************************************************
  * Validate the event's recurrence and alarm repetition data, correcting any
  * inconsistencies (which should never occur!).
- * Reply = true if a recurrence (as opposed to a repetition) exists.
+ * Reply = true if a recurrence (as opposed to a login repetition) exists.
  */
 KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 {
@@ -1105,7 +1360,7 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 				if (mRecurrence)
 				{
 					delete mRecurrence;     // this shouldn't exist!!
-					const_cast<KAlarmEvent*>(this)->mRecurrence = 0L;
+					const_cast<KAlarmEvent*>(this)->mRecurrence = 0;
 				}
 				break;
 		}
@@ -1163,7 +1418,8 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 				// Parse the next alarm's text
 				Alarm& alarm = *it.current();
 				AlarmData data;
-				if (readAlarm(alarm, data) == MAIN_ALARM_ID)
+				readAlarm(alarm, data);
+				if (data.type == KAlarmAlarm::MAIN_ALARM)
 				{
 					alarm.setTime(QDateTime(alarm.time().date(), startOfDay));
 					changed = true;
@@ -1180,39 +1436,152 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.
  */
-void KAlarmEvent::convertKCalEvents()
+void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 {
-	if (theApp()->getCalendar().KAlarmVersion() < AlarmCalendar::KAlarmVersion(0,7,0))
-	{
-		kdDebug()<<"KAlarmEvent::convertKCalEvents(): adjusting\n";
-		bool adjustSummerTime = theApp()->getCalendar().KAlarmVersion057_UTC();
-		QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
+	// KAlarm pre-0.9 codes held in the DESCRIPTION property
+	static const QChar   SEPARATOR            = ';';
+	static const QChar   LATE_CANCEL_CODE     = 'C';
+	static const QChar   AT_LOGIN_CODE        = 'L';   // subsidiary alarm at every login
+	static const QChar   DEFERRAL_CODE        = 'D';   // extra deferred alarm
+	static const QString TEXT_PREFIX          = QString::fromLatin1("TEXT:");
+	static const QString FILE_PREFIX          = QString::fromLatin1("FILE:");
+	static const QString COMMAND_PREFIX       = QString::fromLatin1("CMD:");
 
-		QPtrList<Event> events = theApp()->getCalendar().events();
-		for (Event* event = events.first();  event;  event = events.next())
+	int version = calendar.KAlarmVersion();
+	if (version >= AlarmCalendar::KAlarmVersion(0,9,0))
+		return;
+
+	kdDebug(5950) << "KAlarmEvent::convertKCalEvents(): adjusting\n";
+	bool pre_0_7 = (version < AlarmCalendar::KAlarmVersion(0,7,0));
+	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
+	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
+
+	QPtrList<Event> events = calendar.events();
+	for (Event* event = events.first();  event;  event = events.next())
+	{
+		if (pre_0_7  &&  event->doesFloat())
 		{
-			if (event->doesFloat())
+			// It's a KAlarm pre-0.7 calendar file.
+			// Ensure that when the calendar is saved, the alarm time isn't lost.
+			event->setFloats(false);
+		}
+
+		QPtrList<Alarm> alarms = event->alarms();
+		for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+		{
+			Alarm* alarm = ia.current();
+			/*
+			 * It's a KAlarm pre-0.9 calendar file.
+			 * All alarms were of type DISPLAY. Instead of the X-KDE-KALARM-TYPE
+			 * alarm property, characteristics were stored as a prefix to the
+			 * alarm DESCRIPTION property, as follows:
+			 *   SEQNO;[FLAGS];TYPE:TEXT
+			 * where
+			 *   SEQNO = sequence number of alarm within the event
+			 *   FLAGS = C for late-cancel, L for repeat-at-login, D for deferral
+			 *   TYPE = TEXT or FILE or CMD
+			 *   TEXT = message text, file name/URL or command
+			 */
+			bool atLogin    = false;
+			bool deferral   = false;
+			bool lateCancel = false;
+			KAAlarmEventBase::Type action = T_MESSAGE;
+			QString txt = alarm->text();
+			int length = txt.length();
+			int i = 0;
+			if (txt[0].isDigit())
 			{
-				// Backwards compatibility with KAlarm pre-0.7 calendar files.
-				// Ensure that when the calendar is saved, the alarm time isn't lost.
-				event->setFloats(false);
+				while (++i < length  &&  txt[i].isDigit()) ;
+				if (i < length  &&  txt[i++] == SEPARATOR)
+				{
+					while (i < length)
+					{
+						QChar ch = txt[i++];
+						if (ch == SEPARATOR)
+							break;
+						if (ch == LATE_CANCEL_CODE)
+							lateCancel = true;
+						else if (ch == AT_LOGIN_CODE)
+							atLogin = true;
+						else if (ch == DEFERRAL_CODE)
+							deferral = true;
+					}
+				}
+				else
+					i = 0;     // invalid prefix
 			}
+			if (txt.find(TEXT_PREFIX, i) == i)
+				i += TEXT_PREFIX.length();
+			else if (txt.find(FILE_PREFIX, i) == i)
+			{
+				action = T_FILE;
+				i += FILE_PREFIX.length();
+			}
+			else if (txt.find(COMMAND_PREFIX, i) == i)
+			{
+				action = T_COMMAND;
+				i += COMMAND_PREFIX.length();
+			}
+			else
+				i = 0;
+			txt = txt.mid(i);
+
+			QStringList types;
+			switch (action)
+			{
+				case T_FILE:
+					types += FILE_TYPE;
+					// fall through to T_MESSAGE
+				case T_MESSAGE:
+					alarm->setText(txt);
+					break;
+				case T_COMMAND:
+					alarm->setProgramFile(txt);
+					break;
+				case T_EMAIL:     // email alarms were introduced in KAlarm 0.9
+				case T_AUDIO:     // never occurs in this context
+					break;
+			}
+			if (atLogin)
+			{
+				types += AT_LOGIN_TYPE;
+				lateCancel = false;
+			}
+			else if (deferral)
+				types += DEFERRAL_TYPE;
+			if (lateCancel)
+			{
+				QStringList cats = event->categories();
+				cats.append(LATE_CANCEL_CATEGORY);
+				event->setCategories(cats);
+			}
+			if (types.count() > 0)
+				alarm->setCustomProperty(APPNAME, TYPE_PROPERTY, types.join(","));
+
+			if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+			{
+				// It's a KAlarm pre-0.7 calendar file.
+				// Minutely recurrences were stored differently.
+				Recurrence* recur = event->recurrence();
+				if (recur  &&  recur->doesRecur() == Recurrence::rNone)
+				{
+					recur->setMinutely(alarm->snoozeTime(), alarm->repeatCount() + 1);
+					alarm->setRepeatCount(0);
+					alarm->setSnoozeTime(0);
+				}
+			}
+
 			if (adjustSummerTime)
 			{
-				// Backwards compatibility with the KDE 3.0.0 version of KAlarm 0.5.7.
+				// The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
 				// Summer time was ignored when converting to UTC.
-				QPtrList<Alarm> alarms = event->alarms();
-				for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+				QDateTime dt = alarm->time();
+				time_t t = dt0.secsTo(dt);
+				struct tm* dtm = localtime(&t);
+				if (dtm->tm_isdst)
 				{
-					Alarm* alarm = ia.current();
-					QDateTime dt = alarm->time();
-					time_t t = dt0.secsTo(dt);
-					struct tm* dtm = localtime(&t);
-					if (dtm->tm_isdst)
-					{
-						dt = dt.addSecs(-3600);
-						alarm->setTime(dt);
-					}
+					dt = dt.addSecs(-3600);
+					alarm->setTime(dt);
 				}
 			}
 		}
@@ -1223,24 +1592,25 @@ void KAlarmEvent::convertKCalEvents()
 void KAlarmEvent::dumpDebug() const
 {
 	kdDebug(5950) << "KAlarmEvent dump:\n";
-	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
-	kdDebug(5950) << "-- mCleanText:" << mCleanText << ":\n";
+	KAAlarmEventBase::dumpDebug();
 	kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
-	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
-	kdDebug(5950) << "-- mRepeatAtLoginDateTime:" << mRepeatAtLoginDateTime.toString() << ":\n";
-	kdDebug(5950) << "-- mDeferralTime:" << mDeferralTime.toString() << ":\n";
-	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
+	kdDebug(5950) << "-- mEndDateTime:" << mEndDateTime.toString() << ":\n";
+	if (mRepeatAtLogin)
+		kdDebug(5950) << "-- mAtLoginDateTime:" << mAtLoginDateTime.toString() << ":\n";
+	if (mDeferral)
+		kdDebug(5950) << "-- mDeferralTime:" << mDeferralTime.toString() << ":\n";
+	if (mDisplaying)
+	{
+		kdDebug(5950) << "-- mDisplayingTime:" << mDisplayingTime.toString() << ":\n";
+		kdDebug(5950) << "-- mDisplayingFlags:" << mDisplayingFlags << ":\n";
+	}
 	kdDebug(5950) << "-- mRevision:" << mRevision << ":\n";
-	kdDebug(5950) << "-- mMainAlarmID:" << mMainAlarmID << ":\n";
-	kdDebug(5950) << "-- mRepeatAtLoginAlarmID:" << mRepeatAtLoginAlarmID << ":\n";
 	kdDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mRepeatDuration:" << mRepeatDuration << ":\n";
-	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mType:" << mType << ":\n";
-	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
+	if (mRecurrence)
+		kdDebug(5950) << "-- mRemainingRecurrences:" << mRemainingRecurrences << ":\n";
+	kdDebug(5950) << "-- mAlarmCount:" << mAlarmCount << ":\n";
+	kdDebug(5950) << "-- mAnyTime:" << (mAnyTime ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mExpired:" << (mExpired ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmEvent dump end\n";
 }
 #endif
@@ -1251,125 +1621,153 @@ void KAlarmEvent::dumpDebug() const
 = Corresponds to a single KCal::Alarm instance.
 =============================================================================*/
 
-void KAlarmAlarm::set(int flags)
-{
-	mBeep          = flags & KAlarmEvent::BEEP;
-	mRepeatAtLogin = flags & KAlarmEvent::REPEAT_AT_LOGIN;
-	mLateCancel    = flags & KAlarmEvent::LATE_CANCEL;
-	mConfirmAck    = flags & KAlarmEvent::CONFIRM_ACK;
-	mDeferral      = flags & KAlarmEvent::DEFERRAL;
-}
-
-int KAlarmAlarm::flags() const
-{
-	return (mBeep          ? KAlarmEvent::BEEP : 0)
-	     | (mRepeatAtLogin ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (mConfirmAck    ? KAlarmEvent::CONFIRM_ACK : 0)
-	     | (mDeferral      ? KAlarmEvent::DEFERRAL : 0);
-}
-
-// Convert a string to command arguments
-void KAlarmAlarm::commandArgs(QStringList& list) const
-{
-	list.clear();
-	if (mType != COMMAND)
-		return;
-	int imax = mCleanText.length();
-	for (int i = 0;  i < imax;  )
-	{
-		// Find the first non-space
-		if ((i = mCleanText.find(QRegExp("[^\\s]"), i)) < 0)
-			break;
-
-		// Find the end of the next parameter.
-		// Allow for quoted parameters, and also for escaped characters.
-		int j, jmax;
-		QChar quote = mCleanText[i];
-		if (quote == QChar('\'')  ||  quote == QChar('"'))
-		{
-			for (j = i + 1;  j < imax; )
-			{
-				QChar ch = mCleanText[j++];
-				if (ch == quote)
-					break;
-				if (ch == QChar('\\')  &&  j < imax)
-					++j;
-			}
-			jmax = j;
-		}
-		else
-		{
-			for (j = i;  j < imax;  ++j)
-			{
-				QChar ch = mCleanText[j];
-				if (ch.isSpace())
-					break;
-				if (ch == QChar('\\')  &&  j < imax - 1)
-					++j;
-			}
-			jmax = j;
-		}
-		list.append(mCleanText.mid(i, jmax - i));
-		i = j;
-	}
-}
-
-// Convert a command with arguments to a string
-QString KAlarmAlarm::commandFromArgs(const QStringList& list)
-{
-	if (list.isEmpty())
-		return QString("");
-	QString cmd;
-	QStringList::ConstIterator it = list.begin();
-	for ( ;  it != list.end();  ++it)
-	{
-		QString value = *it;
-		if (value.find(QRegExp("\\s")) >= 0)
-		{
-			// Argument has spaces in it, so enclose it in quotes and
-			// escape any quotes within it.
-			const QChar quote('"');
-			cmd += quote;
-			for (unsigned i = 0;  i < value.length();  ++i)
-			{
-				if (value[i] == quote  ||  value[i] == QChar('\\'))
-					cmd += QChar('\\');
-				cmd += value[i];
-			}
-			cmd += quote;
-		}
-		else
-		{
-			// Argument has no spaces in it
-			for (unsigned i = 0;  i < value.length();  ++i)
-			{
-				if (value[i] == QChar('\\'))
-					cmd += QChar('\\');
-				cmd += value[i];
-			}
-		}
-		cmd += QChar(' ');
-	}
-	cmd.truncate(cmd.length() - 1);      // remove the trailing space
-	return cmd;
-}
+KAlarmAlarm::KAlarmAlarm(const KAlarmAlarm& alarm)
+	: KAAlarmEventBase(alarm),
+	  mType(alarm.mType),
+	  mRecurs(alarm.mRecurs)
+{ }
 
 #ifndef NDEBUG
 void KAlarmAlarm::dumpDebug() const
 {
 	kdDebug(5950) << "KAlarmAlarm dump:\n";
-	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
-	kdDebug(5950) << "-- mCleanText:" << mCleanText << ":\n";
-	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
-	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
-	kdDebug(5950) << "-- mAlarmSeq:" << mAlarmSeq << ":\n";
-	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mType:" << mType << ":\n";
-	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
+	KAAlarmEventBase::dumpDebug();
+	kdDebug(5950) << "-- mType:" << (mType == MAIN_ALARM ? "MAIN" : mType == DEFERRAL_ALARM ? "DEFERAL" : mType == AT_LOGIN_ALARM ? "LOGIN" : mType == DISPLAYING_ALARM ? "DISPLAYING" : mType == AUDIO_ALARM ? "AUDIO" : "INVALID") << ":\n";
+	kdDebug(5950) << "-- mRecurs:" << (mRecurs ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmAlarm dump end\n";
 }
 #endif
+
+
+/*=============================================================================
+= Class KAAlarmEventBase
+=============================================================================*/
+
+void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
+{
+	mEventID          = rhs.mEventID;
+	mText             = rhs.mText;
+	mDateTime         = rhs.mDateTime;
+	mColour           = rhs.mColour;
+	mEmailAddresses   = rhs.mEmailAddresses;
+	mEmailSubject     = rhs.mEmailSubject;
+	mEmailAttachments = rhs.mEmailAttachments;
+	mActionType       = rhs.mActionType;
+	mBeep             = rhs.mBeep;
+	mRepeatAtLogin    = rhs.mRepeatAtLogin;
+	mDeferral         = rhs.mDeferral;
+	mDisplaying       = rhs.mDisplaying;
+	mLateCancel       = rhs.mLateCancel;
+	mEmailBcc         = rhs.mEmailBcc;
+	mConfirmAck       = rhs.mConfirmAck;
+}
+
+void KAAlarmEventBase::set(int flags)
+{
+	mBeep          = flags & KAlarmEvent::BEEP;
+	mRepeatAtLogin = flags & KAlarmEvent::REPEAT_AT_LOGIN;
+	mLateCancel    = flags & KAlarmEvent::LATE_CANCEL;
+	mEmailBcc      = flags & KAlarmEvent::EMAIL_BCC;
+	mConfirmAck    = flags & KAlarmEvent::CONFIRM_ACK;
+	mDeferral      = flags & KAlarmEvent::DEFERRAL;
+	mDisplaying    = flags & KAlarmEvent::DISPLAYING_;
+}
+
+int KAAlarmEventBase::flags() const
+{
+	return (mBeep          ? KAlarmEvent::BEEP : 0)
+	     | (mRepeatAtLogin ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (mEmailBcc      ? KAlarmEvent::EMAIL_BCC : 0)
+	     | (mConfirmAck    ? KAlarmEvent::CONFIRM_ACK : 0)
+	     | (mDeferral      ? KAlarmEvent::DEFERRAL : 0)
+	     | (mDisplaying    ? KAlarmEvent::DISPLAYING_ : 0);
+
+}
+
+#ifndef NDEBUG
+void KAAlarmEventBase::dumpDebug() const
+{
+	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
+	kdDebug(5950) << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??") << ":\n";
+	kdDebug(5950) << "-- mText:" << mText << ":\n";
+	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
+	if (mActionType == T_EMAIL)
+	{
+		kdDebug(5950) << "-- mEmail: Addresses:" << mEmailAddresses.join(", ") << ":\n";
+		kdDebug(5950) << "--         Subject:" << mEmailSubject << ":\n";
+		kdDebug(5950) << "--         Attachments:" << mEmailAttachments.join(", ") << ":\n";
+		kdDebug(5950) << "--         Bcc:" << (mEmailBcc ? "true" : "false") << ":\n";
+	}
+	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
+	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mDeferral:" << (mDeferral ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mDisplaying:" << (mDisplaying ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
+}
+#endif
+
+
+/*=============================================================================
+= Class EmailAddressList
+=============================================================================*/
+
+/******************************************************************************
+ * Sets the list of email addresses, removing any empty addresses.
+ * Reply = false if empty addresses were found.
+ */
+EmailAddressList& EmailAddressList::operator=(const QValueList<Person>& addresses)
+{
+	clear();
+	for (QValueList<Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
+	{
+		if (!(*it).email().isEmpty())
+			append(*it);
+	}
+	return *this;
+}
+
+/******************************************************************************
+ * Return the email address list as a string, each address being delimited by
+ * the specified separator string.
+ */
+QString EmailAddressList::join(const QString& separator) const
+{
+	QString result;
+	bool first = true;
+	for (QValueList<Person>::ConstIterator it = begin();  it != end();  ++it)
+	{
+		if (first)
+			first = false;
+		else
+			result += separator;
+
+		bool quote = false;
+		QString name = (*it).name();
+		if (!name.isEmpty())
+		{
+			// Need to enclose the name in quotes if it has any special characters
+			int len = name.length();
+			for (int i = 0;  i < len;  ++i)
+			{
+				QChar ch = name[i];
+				if (!ch.isLetterOrNumber() && !ch.isSpace())
+				{
+					quote = true;
+					result += '\"';
+					break;
+				}
+			}
+			result += (*it).name();
+			result += (quote ? "\" <" : " <");
+			quote = true;    // need angle brackets round email address
+		}
+
+		result += (*it).email();
+		if (quote)
+			result += ">";
+	}
+	return result;
+}
