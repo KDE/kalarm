@@ -83,7 +83,8 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  deferHeight(0),
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
-	  shown(false)
+	  shown(false),
+	  deferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -121,7 +122,8 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 	  deferHeight(0),
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
-	  shown(false)
+	  shown(false),
+	  deferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -138,7 +140,8 @@ MessageWin::MessageWin()
 	: MainWindowBase(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  deferHeight(0),
 	  rescheduleEvent(false),
-	  shown(true)
+	  shown(true),
+	  deferClosing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	windowList.append(this);
@@ -481,8 +484,8 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-kdDebug()<<"closeEvent: closing down="<<(int)theApp()->sessionClosingDown()<<", confack="<<(int)confirmAck<<endl;
-	if (confirmAck  &&  !theApp()->sessionClosingDown())
+kdDebug()<<"closeEvent: defer closing="<<(int)deferClosing<<", confack="<<(int)confirmAck<<endl;
+	if (confirmAck  &&  !deferClosing  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
@@ -589,6 +592,7 @@ void MessageWin::slotDefer()
 			// so start it if necessary so that the deferred alarm will be shown.
 			theApp()->displayTrayIcon(true);
 		}
+		deferClosing = true;   // allow window to close without confirmation prompt
 		close();
 	}
 }

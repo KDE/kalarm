@@ -84,6 +84,7 @@ class MessageWin : public MainWindowBase
 		bool               rescheduleEvent;  // true to delete event after message has been displayed
 		bool               shown;            // true once the window has been displayed
 		bool               deferDlgShown;    // true if defer dialog is visible
+		bool               deferClosing;     // the Defer button is closing the dialog
 };
 
 #endif // MESSAGEWIN_H
