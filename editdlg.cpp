@@ -876,8 +876,8 @@ void EditAlarmDlg::slotEditDeferral()
 	if (start.isValid())
 	{
 		bool deferred = mDeferDateTime.isValid();
-		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
-		                                            deferred, this, "deferDlg");
+		DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
+		                       deferred, this, "deferDlg");
 		// Don't allow deferral past the next recurrence
 		int reminder = mReminder->getMinutes();
 		if (reminder)
@@ -886,10 +886,10 @@ void EditAlarmDlg::slotEditDeferral()
 			if (QDateTime::currentDateTime() < remindTime)
 				start = remindTime;
 		}
-		deferDlg->setLimit(start);
-		if (deferDlg->exec() == QDialog::Accepted)
+		deferDlg.setLimit(start);
+		if (deferDlg.exec() == QDialog::Accepted)
 		{
-			mDeferDateTime = deferDlg->getDateTime();
+			mDeferDateTime = deferDlg.getDateTime();
 			mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString::null);
 		}
 	}

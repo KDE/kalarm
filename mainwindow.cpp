@@ -543,13 +543,13 @@ void KAlarmMainWindow::slotNew()
 */
 void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAlarmEvent::Action action, const QString& text)
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), win, "editDlg");
+	EditAlarmDlg editDlg(i18n("New Alarm"), win, "editDlg");
 	if (!text.isNull())
-		editDlg->setAction(action, text);
-	if (editDlg->exec() == QDialog::Accepted)
+		editDlg.setAction(action, text);
+	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;
-		editDlg->getEvent(event);
+		editDlg.getEvent(event);
 
 		// Add the alarm to the displayed lists and to the calendar file
 		theApp()->addEvent(event, win);
@@ -573,11 +573,11 @@ void KAlarmMainWindow::slotCopy()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), this, "editDlg", &event);
-		if (editDlg->exec() == QDialog::Accepted)
+		EditAlarmDlg editDlg(i18n("New Alarm"), this, "editDlg", &event);
+		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAlarmEvent event;
-			editDlg->getEvent(event);
+			editDlg.getEvent(event);
 
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(event, this);
@@ -598,11 +598,11 @@ void KAlarmMainWindow::slotModify()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Alarm"), this, "editDlg", &event);
-		if (editDlg->exec() == QDialog::Accepted)
+		EditAlarmDlg editDlg(i18n("Edit Alarm"), this, "editDlg", &event);
+		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAlarmEvent newEvent;
-			editDlg->getEvent(newEvent);
+			editDlg.getEvent(newEvent);
 
 			// Update the event in the displays and in the calendar file
 			theApp()->modifyEvent(event, newEvent, this);
@@ -624,9 +624,9 @@ void KAlarmMainWindow::slotView()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg((event.expired() ? i18n("Expired Alarm") : i18n("View Alarm")),
-		                                         this, "editDlg", &event, true);
-		editDlg->exec();
+		EditAlarmDlg editDlg((event.expired() ? i18n("Expired Alarm") : i18n("View Alarm")),
+		                     this, "editDlg", &event, true);
+		editDlg.exec();
 	}
 }
 

@@ -897,7 +897,8 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	(new KAlarmPrefDlg(Preferences::instance()))->exec();
+	KAlarmPrefDlg prefDlg(Preferences::instance());
+	prefDlg.exec();
 }
 
 /******************************************************************************
