@@ -1,1 +1,2 @@
-#DO_NOT_COMPILE="$DO_NOT_COMPILE kalarm"
+KDE_FIND_PATH(kmix, KMIX, [$kde_default_bindirs])
+KDE_FIND_PATH(kttsd, KTTSD, [$kde_default_bindirs])
