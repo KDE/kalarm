@@ -1,11 +1,13 @@
 KAlarm
 
-=== Version 0.5.7--- 28 Feb 2002 ===
-Activate system tray icon on deferring command line-initiated message (in
-    run-in-system-tray mode).
+=== Version 0.5.7--- 1 Mar 2002 ===
+Show system tray icon on deferring command line-initiated message (run-in-
+    system-tray mode).
 Associate main window with system tray icon when displayed from message window.
-Fix daemon not activating KAlarm after daemon is restarted (run-on-demand mode).
-Fix potential failure to display command line-initiated message.
+Don't start KAlarm at login, until it has been run for the first time.
+Add startup notification to kalarm.desktop.
+Fix failure to display messages after daemon is restarted (run-on-demand mode).
+Fix possible failure to display command line-initiated message.
 Fix crash in some circumstances on changing run mode to run-on-demand.
 Fix crash on clicking KAlarm icon in command line-initiated message window.
 Fix crash on deferring alarm in command line-initiated message window.
