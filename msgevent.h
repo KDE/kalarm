@@ -66,7 +66,11 @@ class KAlarmAlarm
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
 		bool             beep() const               { return mBeep; }
 		int              flags() const;
-
+#ifdef NDEBUG
+		void             dumpDebug() const  { }
+#else
+		void             dumpDebug() const;
+#endif
 		QString          mEventID;          // KCal::Event unique ID
 		QString          mMessageOrFile;    // message text or file URL
 		QDateTime        mDateTime;         // next time to display the alarm
@@ -137,7 +141,11 @@ class KAlarmEvent
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
 		bool             beep() const               { return mBeep; }
 		int              flags() const;
-
+#ifdef NDEBUG
+		void             dumpDebug() const  { }
+#else
+		void             dumpDebug() const;
+#endif
 		static const int REPEAT_AT_LOGIN_OFFSET = 1;
 	private:
 

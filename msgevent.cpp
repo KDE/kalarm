@@ -180,14 +180,20 @@ void KAlarmEvent::set(const Event& event)
 
 void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, bool file, int flags, int repeatCount, int repeatInterval)
 {
-	mDateTime      = dateTime;
-	mMessageOrFile = text;
-	mFile          = file;
-	mColour        = colour;
-	mRepeatCount   = repeatCount;
-	mRepeatMinutes = repeatInterval;
+	mEventID               = QString::null;
+	mMessageOrFile         = text;
+	mDateTime              = dateTime;
+	mRepeatAtLoginDateTime = QDateTime();
+	mColour                = colour;
+	mRevision              = 0;
+	mMainAlarmID           = 1;
+	mRepeatAtLoginAlarmID  = 0;
+	mAlarmCount            = 1;
+	mRepeatCount           = repeatCount;
+	mRepeatMinutes         = repeatInterval;
+	mFile                  = file;
 	set(flags);
-	mUpdated = false;
+	mUpdated               = false;
 }
 
 void KAlarmEvent::set(int flags)
@@ -328,6 +334,29 @@ void KAlarmEvent::removeAlarm(int alarmID)
 	}
 }
 
+#ifndef NDEBUG
+void KAlarmEvent::dumpDebug() const
+{
+	kdDebug(5950) << "KAlarmEvent dump:\n";
+	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
+	kdDebug(5950) << "-- mMessageOrFile:" << mMessageOrFile << ":\n";
+	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
+	kdDebug(5950) << "-- mRepeatAtLoginDateTime:" << mRepeatAtLoginDateTime.toString() << ":\n";
+	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
+	kdDebug(5950) << "-- mRevision:" << mRevision << ":\n";
+	kdDebug(5950) << "-- mMainAlarmID:" << mMainAlarmID << ":\n";
+	kdDebug(5950) << "-- mRepeatAtLoginAlarmID:" << mRepeatAtLoginAlarmID << ":\n";
+	kdDebug(5950) << "-- mAlarmCount:" << mAlarmCount << ":\n";
+	kdDebug(5950) << "-- mRepeatCount:" << mRepeatCount << ":\n";
+	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
+	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mFile:" << (mFile ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
+	kdDebug(5950) << "KAlarmEvent dump end\n";
+}
+#endif
+
 
 
 
@@ -344,3 +373,22 @@ int KAlarmAlarm::flags() const
 	     | (mRepeatAtLogin ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0);
 }
+
+#ifndef NDEBUG
+void KAlarmAlarm::dumpDebug() const
+{
+	kdDebug(5950) << "KAlarmAlarm dump:\n";
+	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
+	kdDebug(5950) << "-- mMessageOrFile:" << mMessageOrFile << ":\n";
+	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
+	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
+	kdDebug(5950) << "-- mAlarmSeq:" << mAlarmSeq << ":\n";
+	kdDebug(5950) << "-- mRepeatCount:" << mRepeatCount << ":\n";
+	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
+	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mFile:" << (mFile ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mLateCancel:" << (mLateCancel ? "true" : "false") << ":\n";
+	kdDebug(5950) << "KAlarmAlarm dump end\n";
+}
+#endif
