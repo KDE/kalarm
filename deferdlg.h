@@ -31,10 +31,12 @@ class DeferAlarmDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		DeferAlarmDlg(const QString& caption, const QDateTime& initialDT, const QDateTime& limitDT,
+		DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
 		              bool cancelButton, QWidget* parent = 0, const char* name = 0);
 		virtual ~DeferAlarmDlg();
 
+		void              setLimit(const QDateTime& limitDT)     { limitDateTime = limitDT;  limitEventID = ""; }
+		void              setLimit(const QString& eventID)    { limitEventID = eventID; }
 		const QDateTime&  getDateTime() const  { return alarmDateTime; }
 
 	protected slots:
@@ -44,8 +46,9 @@ class DeferAlarmDlg : public KDialogBase
 
 	private:
 		AlarmTimeWidget* timeWidget;
-		QDateTime        limitDateTime;
 		QDateTime        alarmDateTime;
+		QDateTime        limitDateTime;   // latest date/time allowed for deferral
+		QString          limitEventID;    // event from whose recurrences to derive the limit date/time for deferral
 };
 
 #endif // DEFERDLG_H

@@ -30,14 +30,20 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <libkcal/event.h>
+#include <libkcal/recurrence.h>
+
+#include "kalarmapp.h"
 #include "datetime.h"
+#include "msgevent.h"
 #include "deferdlg.moc"
 
+using namespace KCal;
 
-DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT, const QDateTime& limitDT,
+
+DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
                              bool cancelButton, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel|User1, Ok, false, i18n("Cancel &Deferral")),
-	  limitDateTime(limitDT)
+	: KDialogBase(parent, name, true, caption, Ok|Cancel|User1, Ok, false, i18n("Cancel &Deferral"))
 {
 	if (!cancelButton)
 		showButton(User1, false);
@@ -69,9 +75,27 @@ void DeferAlarmDlg::slotOk()
 	bool anyTime;
 	if (!timeWidget->getDateTime(alarmDateTime, anyTime))
 	{
-		if (limitDateTime.isValid()  &&  alarmDateTime >= limitDateTime)
+		QDateTime endTime;
+		if (!limitEventID.isEmpty())
+		{
+			// Get the event being deferred
+			const Event* kcalEvent = theApp()->getEvent(limitEventID);
+			if (kcalEvent)
+			{
+				Recurrence* recurrence = kcalEvent->recurrence();
+				if (recurrence  &&  recurrence->doesRecur() != Recurrence::rNone)
+				{
+					// It's a repeated alarm. Don't allow it to be deferred past its next occurrence.
+					KAlarmEvent event(*kcalEvent);
+					event.nextOccurrence(QDateTime::currentDateTime(), endTime);
+				}
+			}
+		}
+		else
+			endTime = limitDateTime;
+		if (endTime.isValid()  &&  alarmDateTime >= endTime)
 			KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
-				                          .arg(KGlobal::locale()->formatDateTime(limitDateTime)));
+				                          .arg(KGlobal::locale()->formatDateTime(endTime)));
 		else
 			accept();
 	}
