@@ -1,7 +1,7 @@
 /*
  *  checkbox.h  -  check box with read-only option
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,16 +34,22 @@ class CheckBox : public QCheckBox
 	public:
 		CheckBox(QWidget* parent, const char* name = 0);
 		CheckBox(const QString& text, QWidget* parent, const char* name = 0);
-		void  setReadOnly(bool);
+		void     setReadOnly(bool);
+		QWidget* focusWidget() const         { return mFocusWidget; }
+		void     setFocusWidget(QWidget*, bool enable = true);
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
 		virtual void mouseMoveEvent(QMouseEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 		virtual void keyReleaseEvent(QKeyEvent*);
+	protected slots:
+		void         slotClicked();
 	private:
-		QWidget::FocusPolicy mFocusPolicy;   // default focus policy for the QCheckBox
-		bool                 mReadOnly;      // value cannot be changed
+		QWidget::FocusPolicy mFocusPolicy;       // default focus policy for the QCheckBox
+		QWidget*             mFocusWidget;       // widget to receive focus when button is clicked on
+		bool                 mFocusWidgetEnable; // enable focus widget before setting focus
+		bool                 mReadOnly;          // value cannot be changed
 };
 
 #endif // CHECKBOX_H
