@@ -86,9 +86,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	fileRadio->setFixedSize(fileRadio->sizeHint());
 	connect(fileRadio, SIGNAL(toggled(bool)), this, SLOT(slotFileToggled(bool)));
 	QWhatsThis::add(fileRadio,
-	      i18n("The edit field below contains the name of a text\n"
-	           "file whose contents will be displayed as the alarm\n"
-	            "message text."));
+	      i18n("The edit field below contains the name of a text "
+	           "file whose contents will be displayed as the alarm "
+	           "message text."));
 	grid->addWidget(fileRadio, 0, 2, AlignRight);
 
 	// Browse button
@@ -128,8 +128,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	repeatCount = new QSpinBox(0, 9999, 1, group);
 	repeatCount->setFixedSize(repeatCount->sizeHint());
 	QWhatsThis::add(repeatCount,
-	      i18n("Enter the number of times to repeat the alarm,\n"
-	           "after its initial display."));
+	      i18n("Enter the number of times to repeat the alarm, after its initial display."));
 	connect(repeatCount, SIGNAL(valueChanged(int)), this, SLOT(slotRepeatCountChanged(int)));
 	grid->addWidget(repeatCount, 0, 1, AlignLeft);
 
@@ -144,8 +143,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	size = repeatInterval->sizeHint();
 	repeatInterval->setFixedSize(size);
 	QWhatsThis::add(repeatInterval,
-	      i18n("Enter the time (in hours and minutes)\n"
-	           "between repetitions of the alarm."));
+	      i18n("Enter the time (in hours and minutes) between repetitions of the alarm."));
 	grid->addWidget(repeatInterval, 0, 3, AlignRight);
 
 	// Repeat-at-login radio button has an ID of 1
@@ -153,8 +151,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	repeatAtLogin->setFixedSize(repeatAtLogin->sizeHint());
 	QWhatsThis::add(repeatAtLogin,
 	      i18n("Repeat the alarm at every login until the specified time.\n"
-	           "Note that it will also be repeated any time the alarm\n"
-	           "daemon is restarted."));
+	           "Note that it will also be repeated any time the alarm daemon is restarted."));
 	grid->addWidget(repeatAtLogin, 1, 0, AlignLeft);
 
 	// Late display checkbox - default = allow late display
@@ -168,13 +165,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	lateCancel->setChecked(false);
 	grid->addWidget(lateCancel, 0, 0, AlignLeft);
 	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the message will be cancelled if it\n"
-	           "cannot be displayed within 1 minute of the specified\n"
-	           "time. Possible reasons for non-display include your\n"
-	           "being logged off, X not running, or the alarm daemon\n"
+	      i18n("If checked, the message will be cancelled if it "
+	           "cannot be displayed within 1 minute of the specified "
+	           "time. Possible reasons for non-display include your "
+	           "being logged off, X not running, or the alarm daemon "
 	           "not running.\n\n"
-	           "If unchecked, the message will be displayed at the\n"
-	           "first opportunity after the specified time, regardless\n"
+	           "If unchecked, the message will be displayed at the "
+	           "first opportunity after the specified time, regardless "
 	           "of how late it is."));
 
 	// Beep checkbox - default = no beep
@@ -185,8 +182,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	beep->setChecked(false);
 	grid->addWidget(beep, 0, 1, AlignLeft);
 	QWhatsThis::add(beep,
-	      i18n("If checked, a beep will sound when the message is\n"
-	           "displayed."));
+	      i18n("If checked, a beep will sound when the message is displayed."));
 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
@@ -374,8 +370,7 @@ void EditAlarmDlg::slotMessageToggled(bool on)
 	if (on)
 	{
 		QWhatsThis::add(messageEdit,
-		      i18n("Enter the text of the alarm message.\n"
-		           "It may be multi-line."));
+		      i18n("Enter the text of the alarm message. It may be multi-line."));
 		messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
 	}
 }

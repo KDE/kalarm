@@ -123,7 +123,7 @@ QSize MessageWin::initView()
 		label->setFixedSize(label->sizeHint());
 		topLayout->addWidget(label);
 		QWhatsThis::add(label,
-		      i18n("The scheduled date/time for the message\n"
+		      i18n("The scheduled date/time for the message "
 		           "(as opposed to the actual time of display)."));
 	}
 
@@ -221,8 +221,7 @@ QSize MessageWin::initView()
 		grid->addWidget(deferButton, 0, 2, AlignHCenter);
 		QWhatsThis::add(deferButton,
 		      i18n("Defer the alarm until later.\n"
-		           "You will be prompted to specify when\n"
-		           "the alarm should be redisplayed."));
+		           "You will be prompted to specify when the alarm should be redisplayed."));
 	}
 
 	// KAlarm button
