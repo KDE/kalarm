@@ -117,6 +117,7 @@ class KAlarmApp : public KUniqueApplication
 		void               deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }
 
 		static int         isTextFile(const KURL&);
+		static int         isTextFile(const QString& mimetype);
 	public slots:
 		void               displayMainWindow()     { displayMainWindowSelected(); }
 		void               slotDaemonControl();

@@ -2002,17 +2002,22 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 */
 int KAlarmApp::isTextFile(const KURL& url)
 {
+#if KDE_VERSION >= 290
+	QString mimetype = KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype();
+#else
+	QString mimetype = KFileItem(~0, ~0, url).mimetype();
+#endif
+	return isTextFile(mimetype);
+}
+
+int KAlarmApp::isTextFile(const QString& mimetype)
+{
 	static const char* applicationTypes[] = {
 		"x-shellscript", "x-nawk", "x-awk", "x-perl", "x-python",
 		"x-desktop", "x-troff", 0 };
 	static const char* formattedTextTypes[] = {
 		"html", "xml", 0 };
 
-#if KDE_VERSION >= 290
-	QString mimetype = KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype();
-#else
-	QString mimetype = KFileItem(~0, ~0, url).mimetype();
-#endif
 	int slash = mimetype.find('/');
 	if (slash < 0)
 		return 0;
