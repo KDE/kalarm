@@ -36,6 +36,7 @@
 
 #include <qlineedit.h>
 #include <qpalette.h>
+#include <qstringlist.h>
 
 class QComboBox;
 class QFont;

@@ -37,8 +37,10 @@ public:
 	QColor bgColour() const    { return m_bgColourButton->color(); }
 	void setFgColour(const QColor&);
 	void setBgColour(const QColor&);
+#if QT_VERSION < 300
 	void setCharset(const QString& charset)  { m_fontChooser->setCharset(charset); }
 	QString charset() const  { return m_fontChooser->charset(); }
+#endif
 	QString sampleText() const { return m_fontChooser->sampleText(); }
 	void setSampleText(const QString& text)  { m_fontChooser->setSampleText(text); }
 
