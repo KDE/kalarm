@@ -25,7 +25,6 @@
 #define BIRTHDAYDLG_H
 
 #include <kdialogbase.h>
-#include <kabc/addressee.h>
 
 #include "msgevent.h"
 
@@ -35,7 +34,12 @@ class SpinBox;
 class CheckBox;
 class ColourCombo;
 class SoundPicker;
+#if KDE_VERSION >= 290
 namespace KABC { class AddressBook; }
+using KABC::AddressBook;
+#else
+class AddressBook;
+#endif
 
 
 class BirthdayDlg : public KDialogBase
@@ -47,21 +51,21 @@ class BirthdayDlg : public KDialogBase
 		QValueList<KAlarmEvent> events() const;
 
 	protected slots:
-		virtual void            slotOk();
+		virtual void   slotOk();
 	private slots:
-		void                    slotSelectionChanged();
+		void           slotSelectionChanged();
 
 	private:
-		KListView*            mAddresseeList;
-		QLineEdit*            mPrefix;
-		QLineEdit*            mSuffix;
-		SpinBox*              mAdvance;
-		SoundPicker*          mSoundPicker;
-		ColourCombo*          mBgColourChoose;
-		CheckBox*             mConfirmAck;
-		CheckBox*             mLateCancel;
-		KABC::AddressBook*    mAddressBook;
-		int                   mFlags;        // event flag bits
+		KListView*     mAddresseeList;
+		QLineEdit*     mPrefix;
+		QLineEdit*     mSuffix;
+		SpinBox*       mAdvance;
+		SoundPicker*   mSoundPicker;
+		ColourCombo*   mBgColourChoose;
+		CheckBox*      mConfirmAck;
+		CheckBox*      mLateCancel;
+		AddressBook*   mAddressBook;
+		int            mFlags;        // event flag bits
 };
 
 #endif // BIRTHDAYDLG_H
