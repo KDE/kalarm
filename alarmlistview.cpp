@@ -328,7 +328,8 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 /******************************************************************************
 *  Return the alarm summary text.
 *  If 'full' is false, only a single line is returned.
-*  If 'lfStripped' is non-null, 
+*  If 'lfStripped' is non-null, it will be set true if the text is multi-line,
+*  else false.
 */
 QString AlarmListViewItem::alarmText(const KAEvent& event) const
 {
@@ -343,12 +344,12 @@ QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfSt
 	QString text = (event.action() == KAEvent::EMAIL) ? event.emailSubject() : event.cleanText();
 	if (event.action() == KAEvent::MESSAGE)
 	{
-		// If the message is the text of an email, return its subject line
-		QString subject = KAlarmMainWindow::emailSubject(text);
+		// If the message is the text of an email, return its headers or just subject line
+		QString subject = KAlarmMainWindow::emailHeaders(text, !full);
 		if (!subject.isNull())
 		{
 			if (lfStripped)
-				*lfStripped = false;
+				*lfStripped = true;
 			return subject;
 		}
 	}
