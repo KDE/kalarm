@@ -136,8 +136,12 @@ void KAlarmEvent::set(const Event& event)
 	mAudioFile     = "";
 	mDateTime      = event.dtStart();
 	mAnyTime       = event.doesFloat();
-	if (theApp()->getCalendar().kalarmVersion() < 70)
+	if (mAnyTime  &&  theApp()->getCalendar().kalarmVersion() < 70)
+	{
 		mAnyTime = false;    // backwards compatibility with KAlarm pre-0.7 calendar files
+		// Ensure that when the calendar is saved, the alarm time isn't lost
+		const_cast<Event&>(event).setFloats(false);
+	}
 	initRecur(false);
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
