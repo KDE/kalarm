@@ -32,6 +32,7 @@
 #include <qdatetime.h>
 #include <libkcal/event.h>
 
+#include "datetime.h"
 class QWidgetStack;
 class QGroupBox;
 class QButtonGroup;
@@ -51,7 +52,7 @@ class RecurrenceEdit : public QFrame
 {
 		Q_OBJECT
 	public:
-		enum RepeatType { SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
+		enum RepeatType { NO_RECUR, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
 		RecurrenceEdit(bool readOnly, QWidget* parent, const char* name = 0);
 		virtual ~RecurrenceEdit()  { }
@@ -63,9 +64,11 @@ class RecurrenceEdit : public QFrame
 		/** Write event settings to event object */
 		void          updateEvent(KAlarmEvent&);
 		QWidget*      checkData(const QDateTime& startDateTime, bool& noTime) const;
-		RepeatType    repeatType() const                    { return ruleButtonType; }
+		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		void          setStartDate(const QDate&);
 		void          setEndDate(const QDate&);
+		void          setEndDateTime(const DateTime&);
+		DateTime      endDateTime() const;
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
@@ -73,6 +76,7 @@ class RecurrenceEdit : public QFrame
 	signals:
 		void          shown();
 		void          typeChanged(int recurType);   // returns a RepeatType value
+		void          frequencyChanged();
 
 	protected slots:
 		void          periodClicked(int);
@@ -82,6 +86,7 @@ class RecurrenceEdit : public QFrame
 		void          enableDurationRange(bool);
 		void          enableDateRange(bool);
 		void          repeatCountChanged(int value);
+		void          slotAnyTimeToggled(bool);
 
 	protected:
 		virtual void  showEvent(QShowEvent*);
@@ -93,7 +98,7 @@ class RecurrenceEdit : public QFrame
 		void          setCheckedDays(QBitArray& rDays);
 
 		void          initNone();
-		void          initSubdaily();
+		void          initSubDaily();
 		void          initDaily();
 		void          initWeekly();
 		void          initMonthly();
@@ -105,31 +110,46 @@ class RecurrenceEdit : public QFrame
 		QWidgetStack*  ruleStack;
 
 		ButtonGroup*   ruleButtonGroup;
-		QLabel*        recurEveryLabel;
-		RadioButton*   subdailyButton;
-		RadioButton*   dailyButton;
-		RadioButton*   weeklyButton;
-		RadioButton*   monthlyButton;
-		RadioButton*   yearlyButton;
-		int            subdailyButtonId;
-		int            dailyButtonId;
-		int            weeklyButtonId;
-		int            monthlyButtonId;
-		int            yearlyButtonId;
-		RepeatType     ruleButtonType;
-
-		TimePeriod*    mRecurFrequency;
+		RadioButton*   mNoneButton;
+		RadioButton*   mAtLoginButton;
+		RadioButton*   mSubDailyButton;
+		RadioButton*   mDailyButton;
+		RadioButton*   mWeeklyButton;
+		RadioButton*   mMonthlyButton;
+		RadioButton*   mYearlyButton;
+		int            mNoneButtonId;
+		int            mAtLoginButtonId;
+		int            mSubDailyButtonId;
+		int            mDailyButtonId;
+		int            mWeeklyButtonId;
+		int            mMonthlyButtonId;
+		int            mYearlyButtonId;
+		RepeatType     mRuleButtonType;
 
 		// Rules without choices
 		QFrame*        mNoneRuleFrame;
 
+		// Subdaily rule choices
+		QFrame*        mSubDayRuleFrame;
+		QLabel*        mSubDayRecurLabel;
+		TimeSpinBox*   mSubDayRecurFrequency;
+
+		// Daily rule choices
+		QFrame*        mDayRuleFrame;
+		QLabel*        mDayRecurLabel;
+		SpinBox*       mDayRecurFrequency;
+
 		// Weekly rule choices
 		QFrame*        mWeekRuleFrame;
+		QLabel*        mWeekRecurLabel;
+		SpinBox*       mWeekRecurFrequency;
 		CheckBox*      mWeekRuleDayBox[7];
 		int            mWeekRuleFirstDay;
 
 		// Monthly rule choices
 		QFrame*        mMonthRuleFrame;
+		QLabel*        mMonthRecurLabel;
+		SpinBox*       mMonthRecurFrequency;
 		ButtonGroup*   mMonthRuleButtonGroup;
 		RadioButton*   mMonthRuleOnNthDayButton;
 		ComboBox*      mMonthRuleNthDayEntry;
@@ -141,6 +161,8 @@ class RecurrenceEdit : public QFrame
 
 		// Yearly rule choices
 		QFrame*        mYearRuleFrame;
+		QLabel*        mYearRecurLabel;
+		SpinBox*       mYearRecurFrequency;
 		ButtonGroup*   mYearRuleButtonGroup;
 		RadioButton*   mYearRuleFeb29Button;
 		RadioButton*   mYearRuleDayMonthButton;
@@ -156,14 +178,15 @@ class RecurrenceEdit : public QFrame
 		int            mYearRuleOnNthTypeOfDayButtonId;
 
 		// Range
-		QButtonGroup*  rangeButtonGroup;
-		RadioButton*   noEndDateButton;
-		RadioButton*   repeatCountButton;
+		QButtonGroup*  mRangeButtonGroup;
+		RadioButton*   mNoEndDateButton;
+		RadioButton*   mRepeatCountButton;
 		SpinBox*       mRepeatCountEntry;
-		QLabel*        repeatCountLabel;
-		RadioButton*   endDateButton;
-		DateEdit*      endDateEdit;
-		TimeSpinBox*   endTimeEdit;
+		QLabel*        mRepeatCountLabel;
+		RadioButton*   mEndDateButton;
+		DateEdit*      mEndDateEdit;
+		TimeSpinBox*   mEndTimeEdit;
+		CheckBox*      mEndAnyTimeCheckBox;
 
 		// Current start date and time
 		QDateTime      currStartDateTime;

@@ -77,8 +77,8 @@ class EditAlarmDlg : public KDialogBase
 		virtual void slotCancel();
 		virtual void slotTry();
 		void         slotRecurTypeChange(int repeatType);
+		void         slotRecurFrequencyChange();
 		void         slotAlarmTypeClicked(int id);
-		void         slotRepeatClicked(int id);
 		void         slotEditDeferral();
 		void         slotBrowseFile();
 		void         slotFontColourSelected();
@@ -93,7 +93,7 @@ class EditAlarmDlg : public KDialogBase
 	private:
 		KAlarmEvent::Action getAlarmType() const;
 		int                 getAlarmFlags() const;
-		bool                checkText(QString& result);
+		bool                checkText(QString& result, bool showErrorMessage = true);
 		void                setSoundPicker();
 		bool                checkEmailData();
 
@@ -104,8 +104,7 @@ class EditAlarmDlg : public KDialogBase
 
 		int               mMainPageIndex;
 		int               mRecurPageIndex;
-		QWidgetStack*     mRecurTabStack;
-		QLabel*           mRecurDisabled;
+		bool              mRecurPageShown;     // true once the recurrence tab has been displayed
 		bool              mRecurSetEndDate;    // adjust end date/time when recurrence tab is displayed
 
 		RadioButton*      mMessageRadio;
@@ -146,9 +145,7 @@ class EditAlarmDlg : public KDialogBase
 		AlarmTimeWidget*  mTimeWidget;
 		CheckBox*         mLateCancel;
 
-		RadioButton*      mNoRepeatRadio;
-		RadioButton*      mRepeatAtLoginRadio;
-		RadioButton*      mRecurRadio;
+		QLabel*           mRecurrenceText;
 		RecurrenceEdit*   mRecurrenceEdit;
 
 		QString           mAlarmMessage;       // message text/file name/command/email message
@@ -177,7 +174,6 @@ class EditAlarmDlg : public KDialogBase
 		bool              mSavedEmailBcc;       // mEmailBcc status
 		DateTime          mSavedDateTime;       // mTimeWidget value
 		bool              mSavedLateCancel;     // mLateCancel status
-		RadioButton*      mSavedRepeatRadio;    // mNoRepeatRadio, etc
 };
 
 

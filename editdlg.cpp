@@ -84,6 +84,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	                        const KAlarmEvent* event, bool readOnly)
 	: KDialogBase(KDialogBase::Tabbed, caption, (readOnly ? Cancel|Try : Ok|Cancel|Try),
 	              (readOnly ? Cancel : Ok), parent, name),
+	  mRecurPageShown(false),
 	  mRecurSetEndDate(true),
 	  mEmailRemoveButton(0),
 	  mDeferGroup(0),
@@ -101,16 +102,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Recurrence tab
 	QVBox* recurPage = addVBoxPage(i18n("&Recurrence"));
 	mRecurPageIndex = pageIndex(recurPage);
-	mRecurTabStack = new QWidgetStack(recurPage);
-
-	mRecurrenceEdit = new RecurrenceEdit(readOnly, mRecurTabStack, "recurPage");
-	mRecurTabStack->addWidget(mRecurrenceEdit, 0);
+	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurPage, "recurPage");
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
-
-	mRecurDisabled = new QLabel(i18n("The alarm does not recur.\nEnable recurrence in the Alarm tab."), mRecurTabStack);
-	mRecurDisabled->setAlignment(Qt::AlignCenter);
-	mRecurTabStack->addWidget(mRecurDisabled, 1);
+	connect(mRecurrenceEdit, SIGNAL(frequencyChanged()), SLOT(slotRecurFrequencyChange()));
 
 	// Alarm action
 
@@ -187,46 +182,34 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mDeferGroup->addSpace(0);
 	}
 
-	grid = new QGridLayout(topLayout, 3, 2, spacingHint());
+	QBoxLayout* layout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
-
 	mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
 	                                  mainPage, "timeGroup");
 	mTimeWidget->setReadOnly(mReadOnly);
 	connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-	grid->addMultiCellWidget(mTimeWidget, 0, 2, 0, 0);
+	layout->addWidget(mTimeWidget);
+
+	layout->addSpacing(marginHint() - spacingHint());
+	QBoxLayout* vlayout = new QVBoxLayout(layout);
+	layout->addStretch();
 
 	// Repetition type radio buttons
-
-	ButtonGroup* repeatGroup = new ButtonGroup(1, Qt::Horizontal, i18n("Repetition"), mainPage);
-	connect(repeatGroup, SIGNAL(buttonSet(int)), SLOT(slotRepeatClicked(int)));
-	grid->addWidget(repeatGroup, 0, 1);
-	grid->setRowStretch(1, 1);
-
-	mNoRepeatRadio = new RadioButton(i18n("No re&petition"), repeatGroup);
-	mNoRepeatRadio->setFixedSize(mNoRepeatRadio->sizeHint());
-	mNoRepeatRadio->setReadOnly(mReadOnly);
-	QWhatsThis::add(mNoRepeatRadio,
-	      i18n("Trigger the alarm once only"));
-
-	mRepeatAtLoginRadio = new RadioButton(i18n("Repeat at lo&gin"), repeatGroup, "repeatAtLoginButton");
-	mRepeatAtLoginRadio->setFixedSize(mRepeatAtLoginRadio->sizeHint());
-	mRepeatAtLoginRadio->setReadOnly(mReadOnly);
-	QWhatsThis::add(mRepeatAtLoginRadio,
-	      i18n("Repeat the alarm at every login until the specified time.\n"
-	           "Note that it will also be repeated any time the alarm daemon is restarted."));
-
-	mRecurRadio = new RadioButton(i18n("Rec&ur"), repeatGroup);
-	mRecurRadio->setFixedSize(mRecurRadio->sizeHint());
-	mRecurRadio->setReadOnly(mReadOnly);
-	QWhatsThis::add(mRecurRadio, i18n("Regularly repeat the alarm"));
+	QHBox* box = new QHBox(mainPage);   // this is to control the QWhatsThis text display area
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18n("Recurrence:"), box);
+	label->setFixedSize(label->sizeHint());
+	mRecurrenceText = new QLabel(box);
+	QWhatsThis::add(box,
+	      i18n("How often the alarm recurs.\nThe alarm's recurrence is configured in the Recurrence tab."));
+	box->setFixedHeight(box->sizeHint().height());
+	vlayout->addWidget(box, 0, Qt::AlignLeft);
 
 	// Late display checkbox - default = allow late display
 	mLateCancel = createLateCancelCheckbox(mReadOnly, mainPage);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	grid->addWidget(mLateCancel, 1, 1, Qt::AlignLeft);
-	grid->setColStretch(1, 1);
+	vlayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -275,17 +258,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		}
 		actionGroup->setButton(actionGroup->id(radio));
 
-		if (recurs)
-		{
-			radio = mRecurRadio;
-			mRecurSetEndDate = false;
-		}
-		else if (event->repeatAtLogin())
-			radio = mRepeatAtLoginRadio;
-		else
-			radio = mNoRepeatRadio;
-		repeatGroup->setButton(repeatGroup->id(radio));
-
 		mLateCancel->setChecked(event->lateCancel());
 		mConfirmAck->setChecked(event->confirmAck());
 		int reminder = event->reminder();
@@ -294,6 +266,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		if (!reminder  &&  event->reminderArchived()  &&  recurs)
 			reminder = event->reminderArchived();
 		mReminder->setMinutes(reminder, mTimeWidget->anyTime());
+		mRecurrenceText->setText(event->recurrenceText());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->setFile(event->audioFile());
 		mSoundPicker->setChecked(event->beep() || !event->audioFile().isEmpty());
@@ -313,11 +286,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		mTimeWidget->setDateTime(defaultTime);
 		actionGroup->setButton(actionGroup->id(mMessageRadio));
-		repeatGroup->setButton(repeatGroup->id(mNoRepeatRadio));
 		mLateCancel->setChecked(preferences->defaultLateCancel());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		mReminder->setMinutes(0, false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->setChecked(preferences->defaultBeep());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
@@ -576,22 +549,24 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
 void EditAlarmDlg::saveState()
 {
 #if 0
-	mSavedTypeRadio  = actionGroup->selected();
-	mSavedBeep       = mSoundPicker->beep();
-	mSavedSoundFile  = mSoundPicker->file()
-	mSavedConfirmAck = mConfirmAck->isChecked();
-	QFont             mSavedFont;           // mFontColourButton font
-	QColor            mSavedBgColour;       // mBgColourChoose selection
-	mSavedReminder   = mReminder->isReminder();
+	mSavedTypeRadio     = actionGroup->selected();
+	mSavedBeep          = mSoundPicker->beep();
+	mSavedSoundFile     = mSoundPicker->file()
+	mSavedConfirmAck    = mConfirmAck->isChecked();
+	mSavedFont          = mFontColourButton->font();
+	mSavedBgColour      = mBgColourChoose->color();
+	mSavedReminder      = mReminder->isReminder();
 	mSavedReminderCount = mReminder->getMinutes();
-	QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
-	mSavedEmailTo      = mEmailToEdit->text()
-	mSavedEmailSubject = mEmailSubjectEdit->text()
-	QStringList       mSavedEmailAttach;    // mEmailAttachList values
-	mSavedEmailBcc    = mEmailBcc->isChecked();
-	DateTime          mSavedDateTime;       // mTimeWidget value
-	mSavedLateCancel  = mLateCancel->isChecked();
-	mSavedRepeatRadio = repeatGroup->selected();
+	mSavedReminderUnits = ??;
+	checkText(mSavedTextFileCommandMessage, false);
+	mSavedEmailTo       = mEmailToEdit->text()
+	mSavedEmailSubject  = mEmailSubjectEdit->text()
+	mSavedEmailAttach.clear();
+	for (int i = 0;  i < mEmailAttachList->count();  ++i)
+		mSavedEmailAttach += mEmailAttachList->text(i);
+	mSavedEmailBcc      = mEmailBcc->isChecked();
+	mSavedDateTime      = mTimeWidget->getDateTime();
+	mSavedLateCancel    = mLateCancel->isChecked();
 #endif
 }
 
@@ -606,7 +581,7 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 	event.setAudioFile(mSoundPicker->file());
 	event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 	event.setReminder(mReminder->getMinutes());
-	if (mRecurRadio->isOn())
+	if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 	{
 		mRecurrenceEdit->updateEvent(event);
 		if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
@@ -634,7 +609,7 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (mLateCancel->isChecked()                      ? KAlarmEvent::LATE_CANCEL : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAlarmEvent::EMAIL_BCC : 0)
-	     | (mRepeatAtLoginRadio->isChecked()              ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (mAlarmDateTime.isDateOnly()                   ? KAlarmEvent::ANY_TIME : 0)
 	     | (mFontColourButton->defaultFont()              ? KAlarmEvent::DEFAULT_FONT : 0);
 }
@@ -655,7 +630,7 @@ KAlarmEvent::Action EditAlarmDlg::getAlarmType() const
 */
 DateTime EditAlarmDlg::getDateTime()
 {
-	mTimeWidget->getDateTime(mAlarmDateTime);
+	mAlarmDateTime = mTimeWidget->getDateTime();
 	return mAlarmDateTime;
 }
 
@@ -681,12 +656,15 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-	QWidget* errWidget = mTimeWidget->getDateTime(mAlarmDateTime, false);
+	if (activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
+	QWidget* errWidget;
+	mAlarmDateTime = mTimeWidget->getDateTime(false, &errWidget);
 	if (errWidget)
 	{
 		showPage(mMainPageIndex);
 		errWidget->setFocus();
-		mTimeWidget->getDateTime(mAlarmDateTime);   // display the error message now
+		mTimeWidget->getDateTime();   // display the error message now
 	}
 	else if (checkEmailData())
 	{
@@ -700,7 +678,7 @@ void EditAlarmDlg::slotOk()
 			                                 : i18n("End date/time is earlier than start date/time")));
 			return;
 		}
-		if (mRecurRadio->isOn())
+		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			int reminder = mReminder->getMinutes();
 			if (reminder)
@@ -787,8 +765,8 @@ void EditAlarmDlg::slotCancel()
  */
 void EditAlarmDlg::slotEditDeferral()
 {
-	DateTime start;
-	if (!mTimeWidget->getDateTime(start))
+	DateTime start = mTimeWidget->getDateTime();
+	if (start.isValid())
 	{
 		bool deferred = mDeferDateTime.isValid();
 		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
@@ -818,6 +796,8 @@ void EditAlarmDlg::slotEditDeferral()
 void EditAlarmDlg::slotShowMainPage()
 {
 	slotAlarmTypeClicked(-1);
+	if (mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 }
 
 /******************************************************************************
@@ -828,7 +808,7 @@ void EditAlarmDlg::slotShowMainPage()
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
-	mTimeWidget->getDateTime(mAlarmDateTime, false);
+	mAlarmDateTime  = mTimeWidget->getDateTime(false);
 	if (mRecurSetEndDate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
@@ -836,6 +816,9 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 		mRecurSetEndDate = false;
 	}
 	mRecurrenceEdit->setStartDate(mAlarmDateTime.date());
+	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		mRecurrenceEdit->setEndDateTime(mAlarmDateTime);
+	mRecurPageShown = true;
 }
 
 /******************************************************************************
@@ -844,10 +827,25 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 */
 void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
-	bool recurs = mRecurRadio->isOn();
+	bool recurs = (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR);
 	mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
 	if (mDeferGroup)
 		mDeferGroup->setEnabled(recurs);
+	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
+	slotRecurFrequencyChange();
+}
+
+/******************************************************************************
+*  Called when the recurrence frequency selection changes.
+*  Updates the recurrence frequency text.
+*/
+void EditAlarmDlg::slotRecurFrequencyChange()
+{
+	KAlarmEvent event;
+	mRecurrenceEdit->updateEvent(event);
+	QString text = event.recurrenceText();
+	mRecurrenceText->setText(text.isNull() ? i18n("None") : text);
 }
 
 /******************************************************************************
@@ -937,19 +935,6 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mEmailToEdit->setNoSelect();
 		mEmailToEdit->setFocus();
 	}
-}
-
-/******************************************************************************
-*  Called when one of the repetition radio buttons is clicked.
-*/
-void EditAlarmDlg::slotRepeatClicked(int)
-{
-	bool on = mRecurRadio->isOn();
-	if (on)
-		mRecurTabStack->raiseWidget(mRecurrenceEdit);
-	else
-		mRecurTabStack->raiseWidget(mRecurDisabled);
-	mRecurrenceEdit->setEnabled(on);
 }
 
 /******************************************************************************
@@ -1074,7 +1059,7 @@ void EditAlarmDlg::slotRemoveAttachment()
 /******************************************************************************
 *  Clean up the alarm text, and if it's a file, check whether it's valid.
 */
-bool EditAlarmDlg::checkText(QString& result)
+bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage)
 {
 	if (mMessageRadio->isOn())
 		result = mTextMessageEdit->text();
@@ -1135,7 +1120,7 @@ bool EditAlarmDlg::checkText(QString& result)
 				default:  err = NOT_TEXT;  break;
 			}
 		}
-		if (err)
+		if (err  &&  showErrorMessage)
 		{
 			mFileMessageEdit->setFocus();
 			QString errmsg;
