@@ -73,7 +73,6 @@ bool AlarmCalendar::open()
 	getURL();
 	calendar = new CalendarLocal();
 	calendar->setLocalTime();
-	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
 	QString ext = url.filename().right(4);
@@ -170,7 +169,9 @@ int AlarmCalendar::load()
 bool AlarmCalendar::save(const QString& filename)
 {
 	kdDebug(5950) << "AlarmCalendar::save(): " << filename << endl;
-	CalFormat* format = (vCal ? static_cast<CalFormat*>(new VCalFormat(calendar)) : static_cast<CalFormat*>(new ICalFormat(calendar)));
+	CalFormat *format;
+        if ( vCal ) format = new VCalFormat;
+        else format = new ICalFormat;
 	bool success = calendar->save(filename, format);
 	delete format;
 	if (!success)
