@@ -166,6 +166,19 @@ int AlarmCalendar::load()
 }
 
 /******************************************************************************
+* Reload the calendar file into memory.
+* Reply = 1 if success, -2 if failure, 0 if zero-length file exists.
+*/
+int AlarmCalendar::reload()
+{
+	if (!calendar)
+		return -2;
+	kdDebug(5950) << "AlarmCalendar::reload(): " << url.prettyURL() << endl;
+	close();
+	return load();
+}
+
+/******************************************************************************
 * Save the calendar from memory to file.
 */
 bool AlarmCalendar::save(const QString& filename)
@@ -212,6 +225,8 @@ void AlarmCalendar::close()
 {
 	if (!localFile.isEmpty())
 		KIO::NetAccess::removeTempFile(localFile);
+	if (calendar)
+		calendar->close();
 }
 
 /******************************************************************************

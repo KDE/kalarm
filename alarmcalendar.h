@@ -32,6 +32,7 @@ class AlarmCalendar
 		AlarmCalendar() :     calendar(0L), kAlarmVersion(-1) { }
 		bool                  open();
 		int                   load();
+		int                   reload();
 		bool                  save()                              { return save(localFile); }
 		void                  close();
 		Event*                getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
