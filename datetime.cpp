@@ -7,6 +7,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "kalarm.h"
@@ -105,8 +114,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, bool def
 	delayTime->setFixedSize(size);
 	grid->addWidget(delayTime, 1, 2, AlignRight);
 	QWhatsThis::add(delayTime,
-	      i18n("Enter the length of time (in hours and minutes) after the\n"
-	           "current time to schedule the alarm message."));
+	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm message."));
 	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
 
 	// Initialise the radio button statuses
@@ -262,11 +270,7 @@ class TimeSpinBox::TimeValidator : public QValidator
 
 // Construct a wrapping 00:00 - 23:59 time spin box
 TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
-#ifndef FIXED_QSPINBOX
-	: QSpinBox(0, 1439, 1, parent, name),
-#else
 	: SpinBox2(0, 1439, 1, 60, parent, name),
-#endif
 	  minimumValue(0),
 	  invalid(false),
 	  enteredSetValue(false)
@@ -278,11 +282,7 @@ TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
 
 // Construct a non-wrapping time spin box
 TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const char* name)
-#ifndef FIXED_QSPINBOX
-	: QSpinBox(minMinute, maxMinute, 1, parent, name),
-#else
 	: SpinBox2(minMinute, maxMinute, 1, 60, parent, name),
-#endif
 	  minimumValue(minMinute),
 	  invalid(false),
 	  enteredSetValue(false)
@@ -338,11 +338,7 @@ void TimeSpinBox::setValid(bool valid)
 	{
 		invalid = false;
 		if (value() < minimumValue)
-#ifndef FIXED_QSPINBOX
-                        QSpinBox::setValue(minimumValue);
-#else
 			SpinBox2::setValue(minimumValue);
-#endif
 		setSpecialValueText(QString());
 		setMinValue(minimumValue);
 	}
@@ -351,11 +347,7 @@ void TimeSpinBox::setValid(bool valid)
 		invalid = true;
 		setMinValue(minimumValue - 1);
 		setSpecialValueText(QString::fromLatin1("**:**"));
-#ifndef FIXED_QSPINBOX
-                QSpinBox::setValue(minimumValue - 1);
-#else
 		SpinBox2::setValue(minimumValue - 1);
-#endif
 	}
 }
 
@@ -375,11 +367,7 @@ void TimeSpinBox::setValue(int value)
 			setSpecialValueText(QString());
 			setMinValue(minimumValue);
 		}
-#ifndef FIXED_QSPINBOX
-                QSpinBox::setValue(value);
-#else
 		SpinBox2::setValue(value);
-#endif
 		enteredSetValue = false;
 	}
 }
@@ -393,11 +381,7 @@ void TimeSpinBox::stepUp()
 	if (invalid)
 		setValid(true);
 	else
-#ifndef FIXED_QSPINBOX
-		QSpinBox::stepUp();
-#else
 		SpinBox2::stepUp();
-#endif
 }
 
 void TimeSpinBox::stepDown()
@@ -405,11 +389,7 @@ void TimeSpinBox::stepDown()
 	if (invalid)
 		setValid(true);
 	else
-#ifndef FIXED_QSPINBOX
-		QSpinBox::stepDown();
-#else
 		SpinBox2::stepDown();
-#endif
 }
 
 

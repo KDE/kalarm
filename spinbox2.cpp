@@ -1,5 +1,5 @@
 /*
- *  spinbox2.cpp  -  spin box with extra pair of spin buttons
+ *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for QT3)
  *  Program:  kalarm
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
@@ -7,180 +7,154 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <qglobal.h>
+#if QT_VERSION >= 300
+
+#include <kdebug.h>
+#include <qstyle.h>
+#if defined(QT_ACCESSIBILITY_SUPPORT)
+#include "qaccessible.h"
+#endif
 #include "spinbox2.h"
 #include "spinbox2.moc"
 
 
 SpinBox2::SpinBox2(QWidget* parent, const char* name)
-	: QSpinBox(parent, name)
+	: QWidget(parent, name)
 {
+	spinbox = new SpinBox2_(this);
 	initSpinBox2();
 }
 
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
-	: QSpinBox(minValue, maxValue, step, parent, name)
+	: QWidget(parent, name)
 {
-	setSteps(step, step2);
+	spinbox = new SpinBox2_(minValue, maxValue, step, this);
+	spinbox->setSteps(step, step2);
 	initSpinBox2();
 }
 
 
 void SpinBox2::initSpinBox2()
 {
-#if QT_VERSION >= 300
 	updown2 = new QSpinWidget(this, "updown2");
 	connect(updown2, SIGNAL(stepUpPressed()), this, SLOT(pageUp()));
 	connect(updown2, SIGNAL(stepDownPressed()), this, SLOT(pageDown()));
-#else
-	QPushButton* up = upButton();
-	up2 = new QPushButton( this, "up2" );
-	up2->setFocusPolicy(up->focusPolicy());
-	up2->setAutoDefault(up->autoDefault());
-	up2->setAutoRepeat(up->autoRepeat());
-
-	QPushButton* down = downButton();
-	down2 = new QPushButton( this, "down2" );
-	down2->setFocusPolicy(down->focusPolicy());
-	down2->setAutoDefault(down->autoDefault());
-	down2->setAutoRepeat(down->autoRepeat());
-
-	connect(up2, SIGNAL(pressed()), this, SLOT(pageUp()));
-	connect(down2, SIGNAL(pressed()), this, SLOT(pageDown()));
-#endif
-
+	connect(spinbox, SIGNAL(valueChanged(int)), this, SLOT(valueChange()));
 	updateDisplay();
 }
 
-void SpinBox2::setButtonSymbols(ButtonSymbols newSymbols)
+void SpinBox2::setButtonSymbols(QSpinBox::ButtonSymbols newSymbols)
 {
-	if (buttonSymbols() == newSymbols)
+	if (spinbox->buttonSymbols() == newSymbols)
 		return;
-	QSpinBox::setButtonSymbols(newSymbols);
-#if QT_VERSION >= 300
+	spinbox->setButtonSymbols(newSymbols);
 	switch (newSymbols)
 	{
-		case UpDownArrows:
+		case QSpinWidget::UpDownArrows:
 			updown2->setButtonSymbols(QSpinWidget::UpDownArrows);
 			break;
-		case PlusMinus:
+		case QSpinWidget::PlusMinus:
 			updown2->setButtonSymbols(QSpinWidget::PlusMinus);
 			break;
 	}
-#else
-	up2->setPixmap(*upButton()->pixmap());
-	down2->setPixmap(*downButton()->pixmap());
-#endif
 }
 
 void SpinBox2::addVal(int change)
 {
-	int newval = value() + change;
-	if (newval > maxValue())
+	int newval = spinbox->value() + change;
+	if (newval > spinbox->maxValue())
 	{
-		if (wrapping())
+		if (spinbox->wrapping())
 		{
-			int range = maxValue() - minValue() + 1;
-			newval = minValue() + (newval - maxValue() - 1) % range;
+			int range = spinbox->maxValue() - spinbox->minValue() + 1;
+			newval = spinbox->minValue() + (newval - spinbox->maxValue() - 1) % range;
 		}
 		else
-			newval = maxValue();
+			newval = spinbox->maxValue();
 	}
-	else if (newval < minValue())
+	else if (newval < spinbox->minValue())
 	{
-		if (wrapping())
+		if (spinbox->wrapping())
 		{
-			int range = maxValue() - minValue() + 1;
-			newval = maxValue() - (minValue() - 1 - newval) % range;
+			int range = spinbox->maxValue() - spinbox->minValue() + 1;
+			newval = spinbox->maxValue() - (spinbox->minValue() - 1 - newval) % range;
 		}
 		else
-			newval = minValue();
+			newval = spinbox->minValue();
 	}
-	setValue(newval);
+	spinbox->setValue(newval);
 }
 
-/*!\reimp
-*/
+void SpinBox2::valueChange()
+{
+    updateDisplay();
+    emit valueChanged(spinbox->value());
+    emit valueChanged(spinbox->currentValueText());
+#if defined(QT_ACCESSIBILITY_SUPPORT)
+    QAccessible::updateAccessibility(this, 0, QAccessible::ValueChanged);
+#endif
+}
+
+// Called after the widget has been resized.
 void SpinBox2::resizeEvent(QResizeEvent* e)
 {
-	QSpinBox::resizeEvent(e);
-#if QT_VERSION >= 300
-	if (!updown2)
-		return;
-
-	QRect spinbox(QPoint(0, 0), size());
-	QRect edit = editor()->geometry();
-	int margin = spinbox.right() - upRect().right();
-	spinbox.setLeft(spinbox.left() + (spinbox.right() - edit.right() - edit.left()));
-	updown2->setGeometry(margin, 0, margin + upRect().right(), height() - 1);
-	QSpinBox::setGeometry(spinbox);
-#else
-	if (!up2 || !down2)
-		return;
-
-	QSize bs = upButton()->size();
-	if (bs != up2->size())
-	{
-		up2->resize(bs);
-		down2->resize(bs);
-		up2->setPixmap(*upButton()->pixmap());
-		down2->setPixmap(*downButton()->pixmap());
-	}
-	int margin = width() - upButton()->x() - bs.width();
-	QRect edit = editor()->geometry();
-	edit.setLeft(edit.left() + bs.width());
-	editor()->setGeometry(edit);
-	QRect frame = frameRect();
-	if (frame.right() != width())
-	{
-		frame.setLeft(frame.left() + bs.width());
-		setFrameRect(frame);
-	}
-	up2->move(margin, upButton()->y());
-	down2->move(margin, downButton()->y());
-#endif
+	int w = spinbox->upRect().width();
+	int m = spinbox->style().defaultFrameWidth() + 1;
+	spinbox->setGeometry(w - m, 0, width() - w + m, height());
+	updown2->setGeometry(0, 0, w, height());
 }
 
-/*!\reimp
-*/
 QSize SpinBox2::sizeHint() const
 {
-	QSize size = QSpinBox::sizeHint();
-#if QT_VERSION >= 300
+	QSize size = spinbox->sizeHint();
 	size.setWidth(size.width() + updown2->downRect().width());
-#else
-	QFontMetrics fm = fontMetrics();
-	int w = fontMetrics().height();
-	if ( w < 12 ) 	// ensure enough space for the button pixmaps
-		w = 12;
-	w -= frameWidth() * 2;
-	size.setWidth(size.width() + w);
-#endif
 	return size;
 }
 
-#if QT_VERSION >= 300
 QSize SpinBox2::minimumSizeHint() const
 {
-	QSize size = QSpinBox::minimumSizeHint();
+	QSize size = spinbox->minimumSizeHint();
 	size.setWidth(size.width() + updown2->downRect().width());
 	return size;
 }
 
 void SpinBox2::updateDisplay()
 {
-	updown2->setUpEnabled(isEnabled()  &&  (wrapping() || value() < maxValue()));
-	updown2->setDownEnabled(isEnabled()  &&  (wrapping() || value() > minValue()));
-	QSpinBox::updateDisplay();
+	bool enabled = isEnabled();
+	bool wrap    = spinbox->wrapping();
+	int  value   = spinbox->value();
+	updown2->setUpEnabled(enabled  &&  (wrap || value < spinbox->maxValue()));
+	updown2->setDownEnabled(enabled  &&  (wrap || value > spinbox->minValue()));
+	// force an update of the QSpinBox display
+//	spinbox->setWrapping(!wrap);
+//	spinbox->setWrapping(wrap);
 }
 
 void SpinBox2::styleChange(QStyle& old)
 {
 	updown2->arrange();
-	QSpinBox::styleChange(old);
+//	spinbox->styleChange(old);
 }
-#endif
+
+void SpinBox2::enabledChange(bool)
+{
+	bool enabled = isEnabled();
+	spinbox->setEnabled(enabled);
+	updown2->setEnabled(enabled);
+	updateDisplay();
+}
+
+#endif // QT_VERSION >= 300
