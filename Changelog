@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 0.9.6 --- 20 Oct 2003 ===
+=== Version 0.9.6 --- 25 Oct 2003 ===
 Add option to choose foreground colour for alarm messages.
 Create new alarm by dragging KMail email onto main window or system tray icon.
 Set initial recurrence defaults to correspond to alarm start date.
@@ -9,6 +9,7 @@ Monthly/yearly recurrence edit: adhere to user preference for start day of week.
 Eliminate multiple confirmation prompts when deleting multiple alarms.
 Eliminate duplicate alarms in system tray tooltip.
 Fix wrong status in system tray icon if KAlarm starts up with alarms disabled.
+Fix omission of deferred alarms from system tray tooltip.
 
 === Version 0.9.5 --- 3 Sep 2003 ===
 Add option for non-modal alarm message windows.
