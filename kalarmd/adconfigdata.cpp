@@ -106,7 +106,7 @@ void ADConfigData::writeClient(const QCString& appName, const ClientInfo* cinfo)
 	config->writeEntry(TITLE_KEY, cinfo->title());
 	config->writeEntry(DCOP_OBJECT_KEY, QString::fromLocal8Bit(cinfo->dcopObject()));
 	config->writeEntry(START_CLIENT_KEY, cinfo->startClient());
-	config->writeEntry(CALENDAR_KEY, cinfo->calendar()->urlString());
+	config->writePathEntry(CALENDAR_KEY, cinfo->calendar()->urlString());
 	config->sync();
 }
 
@@ -127,7 +127,7 @@ void ADConfigData::setCalendar(const QCString& appName, ADCalendar* cal)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
-	config->writeEntry(CALENDAR_KEY, cal->urlString());
+	config->writePathEntry(CALENDAR_KEY, cal->urlString());
         config->sync();
 }
 
