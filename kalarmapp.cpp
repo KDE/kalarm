@@ -432,7 +432,10 @@ void KAlarmApp::displayMainWindow()
 {
 	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
 	if (!win)
-		(new KAlarmMainWindow)->show();
+	{
+		if (initCheck())     // the calendar may not have been opened previously
+			(new KAlarmMainWindow)->show();
+	}
 	else
 	{
 		// There is already a main window, so make it the active window
