@@ -187,31 +187,56 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
 	if (mAtTimeRadio->isOn())
 	{
-		dateTime.setDate(mDateEdit->date());
 		anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
-		if (anyTime)
+		if (mDateEdit->isValid()  &&  mTimeEdit->isValid())
 		{
-			dateTime.setTime(QTime());
-			if (dateTime.date() < now.date())
+			dateTime.setDate(mDateEdit->date());
+			if (anyTime)
 			{
-				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
-				return mDateEdit;
+				dateTime.setTime(QTime());
+				if (dateTime.date() < now.date())
+				{
+					if (showErrorMessage)
+						KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
+					return mDateEdit;
+				}
+			}
+			else
+			{
+				dateTime.setTime(mTimeEdit->time());
+				if (dateTime <= now.addSecs(1))
+				{
+					if (showErrorMessage)
+						KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
+					return mTimeEdit;
+				}
 			}
 		}
 		else
 		{
-			dateTime.setTime(mTimeEdit->time());
-			if (dateTime <= now.addSecs(1))
+			// The date and/or time is invalid
+			if (!mDateEdit->isValid())
 			{
 				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid date"));
+				return mDateEdit;
+			}
+			else
+			{
+				if (showErrorMessage)
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
 				return mTimeEdit;
 			}
 		}
 	}
 	else
 	{
+		if (!mDelayTimeEdit->isValid())
+		{
+			if (showErrorMessage)
+				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
+			return mDelayTimeEdit;
+		}
 		dateTime = now.addSecs(mDelayTimeEdit->value() * 60);
 		anyTime = false;
 	}
@@ -223,11 +248,20 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 */
 void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 {
-	mTimeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
-	mDateEdit->setDate(dt.date());
-	dateTimeChanged();     // update the delay time edit box
-	QDate now = QDate::currentDate();
-	mDateEdit->setMinDate(dt.date() < now ? dt.date() : now);
+	if (dt.date().isValid())
+	{
+		mTimeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
+		mDateEdit->setDate(dt.date());
+		dateTimeChanged();     // update the delay time edit box
+		QDate now = QDate::currentDate();
+		mDateEdit->setMinDate(dt.date() < now ? dt.date() : now);
+	}
+	else
+	{
+		mTimeEdit->setValid(false);
+		mDateEdit->setValid(false);
+		mDelayTimeEdit->setValid(false);
+	}
 	if (mAnyTimeCheckBox)
 	{
 		if (anyTime)
@@ -334,7 +368,7 @@ void AlarmTimeWidget::dateTimeChanged()
 */
 void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
-	if (mDelayTimeEdit->valid())
+	if (mDelayTimeEdit->isValid())
 	{
 		QDateTime dt = QDateTime::currentDateTime().addSecs(minutes * 60);
 		bool blockedT = mTimeEdit->signalsBlocked();
