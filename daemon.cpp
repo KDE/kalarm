@@ -40,8 +40,6 @@
 #include "preferences.h"
 #include "daemon.moc"
 
-#define USE_STUBS
-
 
 static const char*  NOTIFY_DCOP_OBJECT  = "notify";    // DCOP name of KAlarm's interface for notification by alarm daemon
 
@@ -179,7 +177,6 @@ bool Daemon::registerWith(bool reregister)
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
-#ifdef USE_STUBS
 	QCString appname  = kapp->aboutData()->appName();
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	if (reregister)
@@ -191,22 +188,6 @@ bool Daemon::registerWith(bool reregister)
 		registrationResult(reregister, KAlarmd::FAILURE);
 		return false;
 	}
-#else
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName());
-	if (!reregister)
-		arg << kapp->aboutData()->programName()
-		    << QCString(NOTIFY_DCOP_OBJECT)
-		    << AlarmCalendar::activeCalendar()->urlString();
-	arg << !disabledIfStopped;
-	const char* func = reregister ? "registerChange(QCString,bool)" : "registerApp(QCString,QString,QCString,QString,bool)";
-	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, func, data))
-	{
-		registrationResult(reregister, KAlarmd::FAILURE);
-		return false;
-	}
-#endif
 	mRegisterTimer = new QTimer(mInstance);
 	connect(mRegisterTimer, SIGNAL(timeout()), mInstance, SLOT(registerTimerExpired()));
 	mRegisterTimer->start(10000);     // wait up to 10 seconds for the reply
@@ -326,7 +307,6 @@ bool Daemon::stop()
 	kdDebug(5950) << "Daemon::stop()" << endl;
 	if (kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 	{
-#ifdef USE_STUBS
 		AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 		s.quit();
 		if (!s.ok())
@@ -334,14 +314,6 @@ bool Daemon::stop()
 			kdError(5950) << "Daemon::stop(): dcop call failed" << endl;
 			return false;
 		}
-#else
-		QByteArray data;
-		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "quit()", data))
-		{
-			kdError(5950) << "Daemon::stop(): dcop call failed" << endl;
-			return false;
-		}
-#endif
 	}
 	return true;
 }
@@ -356,16 +328,9 @@ bool Daemon::reset()
 	kdDebug(5950) << "Daemon::reset()" << endl;
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		return false;
-#ifdef USE_STUBS
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.resetCalendar(QCString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
-#else
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
-	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "resetCalendar(QCString,QString)", data))
-#endif
 		kdError(5950) << "Daemon::reset(): resetCalendar dcop send failed" << endl;
 	return true;
 }
@@ -376,16 +341,9 @@ bool Daemon::reset()
 void Daemon::reload()
 {
 	kdDebug(5950) << "Daemon::reload()\n";
-#ifdef USE_STUBS
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.reloadCalendar(QCString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
-#else
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
-	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadCalendar(QCString,QString)", data))
-#endif
 		kdError(5950) << "Daemon::reload(): reloadCalendar dcop send failed" << endl;
 }
 
