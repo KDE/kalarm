@@ -157,7 +157,7 @@ void SpecialActions::init(const QString& frameLabel)
 	// Pre-alarm action
 	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);
 	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignLeft);
+	topLayout->addWidget(label, 0, Qt::AlignAuto);
 
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
@@ -171,7 +171,7 @@ void SpecialActions::init(const QString& frameLabel)
 	// Post-alarm action
 	label = new QLabel(i18n("Post-alar&m action:"), this);
 	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignLeft);
+	topLayout->addWidget(label, 0, Qt::AlignAuto);
 
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);

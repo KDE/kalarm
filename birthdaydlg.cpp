@@ -143,7 +143,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
+	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignAuto);
 
 	// How much to advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
@@ -159,7 +159,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Acknowledgement confirmation required - default = no confirmation
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	groupLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
+	groupLayout->addWidget(mConfirmAck, 0, Qt::AlignAuto);
 
 	// Late display checkbox - default = allow late display
 	layout = new QHBoxLayout(groupLayout, 2*spacingHint());

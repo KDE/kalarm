@@ -153,8 +153,8 @@ void AlarmTimeWidget::init(int mode)
 	{
 		QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
 		grid->addWidget(mAtTimeRadio, 0, 0);
-		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
-		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
+		grid->addWidget(mDateEdit, 0, 1, Qt::AlignAuto);
+		grid->addWidget(timeBox, 1, 1, Qt::AlignAuto);
 		grid->setColStretch(2, 1);
 		topLayout->addStretch();
 		QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
@@ -165,12 +165,12 @@ void AlarmTimeWidget::init(int mode)
 	else
 	{
 		QGridLayout* grid = new QGridLayout(topLayout, 2, 3, KDialog::spacingHint());
-		grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
-		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
-		grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);
+		grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignAuto);
+		grid->addWidget(mDateEdit, 0, 1, Qt::AlignAuto);
+		grid->addWidget(timeBox, 0, 2, Qt::AlignAuto);
 		grid->setRowStretch(0, 1);
-		grid->addWidget(mAfterTimeRadio, 1, 0, Qt::AlignLeft);
-		grid->addWidget(mDelayTimeEdit, 1, 1, Qt::AlignLeft);
+		grid->addWidget(mAfterTimeRadio, 1, 0, Qt::AlignAuto);
+		grid->addWidget(mDelayTimeEdit, 1, 1, Qt::AlignAuto);
 		grid->setColStretch(3, 1);
 		topLayout->addStretch();
 	}

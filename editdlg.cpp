@@ -232,7 +232,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	{
 		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
-		layout->addWidget(mTemplateTimeGroup, 0, Qt::AlignLeft);
+		layout->addWidget(mTemplateTimeGroup, 0, Qt::AlignAuto);
 		QBoxLayout* vlayout = new QVBoxLayout(mTemplateTimeGroup, marginKDE2 + marginHint(), spacingHint());
 		vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 
@@ -242,7 +242,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QWhatsThis::add(mTemplateDefaultTime,
 		      i18n("Do not specify a start time for alarms based on this template. "
 		           "The normal default start time will be used."));
-		vlayout->addWidget(mTemplateDefaultTime, 0, Qt::AlignLeft);
+		vlayout->addWidget(mTemplateDefaultTime, 0, Qt::AlignAuto);
 
 		QHBox* box = new QHBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
@@ -268,7 +268,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateAnyTime->setReadOnly(mReadOnly);
 		QWhatsThis::add(mTemplateAnyTime,
 		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
-		vlayout->addWidget(mTemplateAnyTime, 0, Qt::AlignLeft);
+		vlayout->addWidget(mTemplateAnyTime, 0, Qt::AlignAuto);
+
+		layout->addStretch();
 	}
 	else
 	{
@@ -295,12 +297,12 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QWhatsThis::add(box,
 	      i18n("How often the alarm recurs.\nThe alarm's recurrence is configured in the Recurrence tab."));
 	box->setFixedHeight(box->sizeHint().height());
-	vlayout->addWidget(box, 0, Qt::AlignLeft);
+	vlayout->addWidget(box, 0, Qt::AlignAuto);
 
 	// Late display checkbox - default = allow late display
 	mLateCancel = createLateCancelCheckbox(mainPage);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	vlayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
+	vlayout->addWidget(mLateCancel, 0, Qt::AlignAuto);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -374,7 +376,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
+	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignAuto);
 
 	// Reminder
 	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
@@ -383,7 +385,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
 	                         true, true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
-	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
+	frameLayout->addWidget(mReminder, 0, Qt::AlignAuto);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	layout = new QHBoxLayout(frameLayout);
@@ -502,7 +504,7 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
 	QWhatsThis::add(mEmailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
-	grid->addMultiCellWidget(mEmailBcc, 1, 1, 0, 1, Qt::AlignLeft);
+	grid->addMultiCellWidget(mEmailBcc, 1, 1, 0, 1, Qt::AlignAuto);
 }
 
 /******************************************************************************

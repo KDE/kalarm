@@ -223,7 +223,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
 	mNoEndDateButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mNoEndDateButton, i18n("Repeat the alarm indefinitely"));
-	vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignLeft);
+	vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignAuto);
 	QSize size = mNoEndDateButton->size();
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
@@ -416,12 +416,12 @@ void RecurrenceEdit::initWeekly()
 		mWeekRuleDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
-		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignLeft);
+		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignAuto);
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
 	      i18n("Select the days of the week on which to repeat the alarm"));
-	grid->addWidget(box, 0, 2, Qt::AlignLeft);
+	grid->addWidget(box, 0, 2, Qt::AlignAuto);
 	label->setBuddy(mWeekRuleDayBox[0]);
 	grid->setColStretch(3, 1);
 }
@@ -488,7 +488,7 @@ void RecurrenceEdit::initYearly()
 	grid->addRowSpacing(0, KDialog::marginHint());
 	QLabel* label = new QLabel(i18n("first week of January", "of:"), mYearRuleButtonGroup);
 	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 1, 0, Qt::AlignLeft | Qt::AlignTop);
+	grid->addWidget(label, 1, 0, Qt::AlignAuto | Qt::AlignTop);
 	grid->addColSpacing(1, KDialog::spacingHint());
 
 	// List the months of the year.
@@ -500,12 +500,12 @@ void RecurrenceEdit::initYearly()
 		mYearRuleMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
 		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
 		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
-		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignLeft);
+		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignAuto);
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
 	      i18n("Select the months of the year in which to repeat the alarm"));
-	grid->addWidget(box, 1, 2, Qt::AlignLeft);
+	grid->addWidget(box, 1, 2, Qt::AlignAuto);
 	grid->setColStretch(2, 1);
 
 /*	layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
