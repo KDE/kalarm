@@ -793,11 +793,7 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStrin
 	{
 		case T_FILE:
 			alltypes += FILE_TYPE;
-			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
-			              QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
-			                                             .arg(QString::null)
-			                                             .arg(QString::null));
-			break;
+			// fall through to T_MESSAGE
 		case T_MESSAGE:
 			alarm->setDisplayAlarm(mText);
 			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
