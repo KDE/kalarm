@@ -261,6 +261,28 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QHBox* box = new QHBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
 		vlayout->addWidget(box);
+#ifdef TEMPLATE_TFN
+		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box, "templateFromNowButton");
+		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
+		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateUseTimeAfter,
+		      i18n("Set alarms based on this template to start after the specified time "
+		           "interval from when the alarm is created."));
+		mTemplateTimeGroup->insert(mTemplateUseTimeAfter);
+		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, this);
+		mTemplateTimeAfter->setValue(1439);
+		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
+		mTemplateTimeAfter->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateTimeAfter,
+		      QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
+		                         .arg(TimeSpinBox::shiftWhatsThis()));
+		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+		box->setFixedHeight(box->sizeHint().height());
+
+		box = new QHBox(mTemplateTimeGroup);
+		box->setSpacing(spacingHint());
+		vlayout->addWidget(box);
+#endif
 		mTemplateUseTime = new RadioButton(i18n("Time:"), box, "templateTimeButton");
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
