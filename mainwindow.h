@@ -67,6 +67,9 @@ class KAlarmMainWindow : public MainWindowBase
 		static QString i18n_e_ShowExpiredAlarms();  // text of 'Show Expired Alarms' checkbox, with 'E' shortcut
 		static QString i18n_s_ShowExpiredAlarms();  // text of 'Show expired alarms' checkbox, with 'S' shortcut
 
+	public slots:
+		virtual void   show();
+
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);
 		virtual void   showEvent(QShowEvent*);
@@ -116,9 +119,14 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    enableTemplateMenuItem(bool);
 		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
 		static bool    findWindow(KAlarmMainWindow*);
+		static void    setUpTranslations();
 
 		static QPtrList<KAlarmMainWindow> mWindowList;  // active main windows
 		static TemplateDlg* mTemplateDlg;      // the one and only template dialogue
+		static QString mMessageFromPrefix;
+		static QString mMessageToPrefix;
+		static QString mMessageDatePrefix;
+		static QString mMessageSubjectPrefix;
 		AlarmListView* mListView;
 		KAction*       mActionTemplates;
 		KAction*       mActionNew;
@@ -141,6 +149,7 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           mShowTime;            // show alarm times
 		bool           mShowTimeTo;          // show time-to-alarms
 		bool           mActionEnableEnable;  // Enable/Disable action is set to "Enable"
+		bool           mMenuError;           // error occurred creating menus: need to show error message
 };
 
 #endif // MAINWINDOW_H
