@@ -238,3 +238,4 @@ void ColourCombo::keyReleaseEvent(QKeyEvent* e)
 	if (!mReadOnly)
 		QComboBox::keyReleaseEvent(e);
 }
+#include "colourcombo.moc"
