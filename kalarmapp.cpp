@@ -722,8 +722,8 @@ void KAlarmApp::slotSettingsChanged()
 	bool newDisableIfStopped = mKDEDesktop && mSettings->runInSystemTray() && mSettings->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
+		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
 		registerWithDaemon();     // re-register with the alarm daemon
-		mDisableAlarmsIfStopped = newDisableIfStopped;
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
