@@ -656,6 +656,7 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event);
+			mAlarmDateTime = event.startDateTime();
 			if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 			{
 				bool deferReminder = false;
