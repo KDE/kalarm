@@ -1635,10 +1635,10 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 	else
 	{
 		result = DateTime();
-		return NO_OCCURRENCE;
+		type = NO_OCCURRENCE;
 	}
 
-	if (result <= preDateTime)
+	if (type != NO_OCCURRENCE  &&  result <= preDateTime)
 	{
 		// The next occurrence is a simple repetition
 		int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
