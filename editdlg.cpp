@@ -679,6 +679,7 @@ bool EditAlarmDlg::checkEmailAddresses()
 			{
 				emailToEdit->setFocus();
 				KMessageBox::error(this, i18n("Invalid email address:\n%1").arg(bad));
+				KMessageBox::error(this, i18n("Invalid email attachment:\n%1").arg(att));
 				return false;
 			}
 		}
