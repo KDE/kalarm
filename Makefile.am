@@ -45,4 +45,4 @@ messages:
 	 $(XGETTEXT) $$LIST -o $(podir)/kalarm.pot; \
 	fi
 
-include ../admin/Doxyfile.am
+include $(top_srcdir)/admin/Doxyfile.am
