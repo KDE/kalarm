@@ -229,7 +229,7 @@ void ColourCombo::mouseMoveEvent(QMouseEvent* e)
 
 void ColourCombo::keyPressEvent(QKeyEvent* e)
 {
-	if (!mReadOnly)
+	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
 		QComboBox::keyPressEvent(e);
 }
 

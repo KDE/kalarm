@@ -67,7 +67,7 @@ void ComboBox::mouseMoveEvent(QMouseEvent* e)
 
 void ComboBox::keyPressEvent(QKeyEvent* e)
 {
-	if (!mReadOnly)
+	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
 		QComboBox::keyPressEvent(e);
 }
 

@@ -84,8 +84,7 @@ void Slider::mouseMoveEvent(QMouseEvent* e)
 
 void Slider::keyPressEvent(QKeyEvent* e)
 {
-#warning "Do any focus-shifting keys need to be let through??"
-	if (!mReadOnly)
+	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
 		QSlider::keyPressEvent(e);
 }
 

@@ -119,6 +119,7 @@ void RadioButton::keyPressEvent(QKeyEvent* e)
 			case Key_Right:
 			case Key_Down:
 				// Process keys which shift the focus
+			case Key_Escape:
 				break;
 			default:
 				return;
