@@ -444,7 +444,7 @@ void KAlarmMainWindow::slotCopy()
 
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(event, this);
-			AlarmListViewItem* item = listView->addEntry(event, true);
+			item = listView->addEntry(event, true);
 			listView->setSelected(item, true);
 		}
 	}
@@ -468,6 +468,7 @@ void KAlarmMainWindow::slotModify()
 
 			// Update the event in the displays and in the calendar file
 			theApp()->modifyEvent(event, newEvent, this);
+			item = listView->getEntry(event.id());   // in case item deleted since dialog was shown
 			item = listView->updateEntry(item, newEvent, true);
 			listView->setSelected(item, true);
 		}
@@ -499,6 +500,7 @@ void KAlarmMainWindow::slotDelete()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
+		KAlarmEvent event = listView->getEvent(item);
 		if (theApp()->settings()->confirmAlarmDeletion())
 		{
 			int n = 1;
@@ -507,10 +509,10 @@ void KAlarmMainWindow::slotDelete()
 			    != KMessageBox::Continue)
 				return;
 		}
-		KAlarmEvent event = listView->getEvent(item);
 
 		// Delete the event from the displays
 		theApp()->deleteEvent(event, this);
+		item = listView->getEntry(event.id());   // in case item deleted since dialog was shown
 		listView->deleteEntry(item, true);
 	}
 }
