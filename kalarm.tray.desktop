@@ -27,5 +27,4 @@ Comment[sl]=Razporejevalnik sporočil alarma in opomnika; zažene se kot sistems
 Comment[sv]=Schemaläggare för alarm- och påminnelsemeddelanden: starta som en i ikon i systembrickan
 Terminal=false
 X-KDE-autostart-phase=2
-X-KDE-autostart-after=panel
 X-KDE-autostart-condition=kalarmrc:General:AutostartTray:true
