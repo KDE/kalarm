@@ -43,29 +43,23 @@ class AlarmTimeWidget : public ButtonGroup
 		enum {       // 'mode' values for constructor. May be OR'ed together.
 			AT_TIME      = 0x00,   // "At ..."
 			DEFER_TIME   = 0x01,   // "Defer to ..."
-			DEFER_BUTTON = 0x02,   // with Defer... button
-			NARROW       = 0x04    // make a narrow widget
+			NARROW       = 0x02    // make a narrow widget
 		};
-		AlarmTimeWidget(const QString& groupBoxTitle, int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
-		AlarmTimeWidget(int mode, int deferSpacing = 0, QWidget* parent = 0, const char* name = 0);
+		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
+		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
 		bool           getDateTime(QDateTime&, bool& anyTime) const;
 		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
 		void           setDateTime(const QDateTime&, bool anyTime = false);
 		void           enableAnyTime(bool enable);
 		QSize          sizeHint() const                             { return minimumSizeHint(); }
-	signals:
-		void           deferred();
 	protected slots:
-		void           slotDefer();
 		void           slotTimer();
 		void           slotButtonSet(int id);
-//??//		void           slotAtTimeToggled(bool on);
-//??//		void           slotAfterTimeToggled(bool on);
 		void           slotDateTimeChanged(int);
 		void           slotDelayTimeChanged(int);
 		void           anyTimeToggled(bool);
 	private:
-		void           init(int mode, int deferSpacing);
+		void           init(int mode);
 
 		QRadioButton*  atTimeRadio;
 		QRadioButton*  afterTimeRadio;

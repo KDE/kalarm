@@ -44,30 +44,25 @@
 /******************************************************************************
 *  Construct a widget with a group box and title.
 */
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, int deferSpacing, QWidget* parent, const char* name)
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, const char* name)
 	: ButtonGroup(groupBoxTitle, parent, name),
 	  enteredDateTimeChanged(false)
 {
-	init(mode, deferSpacing);
+	init(mode);
 }
 
 /******************************************************************************
 *  Construct a widget without a group box or title.
 */
-AlarmTimeWidget::AlarmTimeWidget(int mode, int deferSpacing, QWidget* parent, const char* name)
+AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 	: ButtonGroup(parent, name),
 	  enteredDateTimeChanged(false)
 {
-	init(mode, deferSpacing);
+	init(mode);
 }
 
-void AlarmTimeWidget::init(int mode, int deferSpacing)
+void AlarmTimeWidget::init(int mode)
 {
-	if (mode & DEFER_BUTTON)
-	{
-		mode |= DEFER_TIME;
-		mode &= ~NARROW;
-	}
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
@@ -110,20 +105,6 @@ void AlarmTimeWidget::init(int mode, int deferSpacing)
 		connect(anyTimeCheckBox, SIGNAL(toggled(bool)), this, SLOT(anyTimeToggled(bool)));
 	}
 
-	QPushButton* deferButton = 0;
-	if (mode & DEFER_BUTTON)
-	{
-		// Defer button
-		// The width of this button is too narrow, so set it to correspond
-		// with the width of the original "Defer..." button
-		deferButton = new QPushButton(i18n("&Defer"), this);
-		int width  = deferButton->fontMetrics().boundingRect(deferButton->text()).width() + deferSpacing;
-		int height = deferButton->sizeHint().height();
-		deferButton->setFixedSize(QSize(width, height));
-		connect(deferButton, SIGNAL(clicked()), this, SLOT(slotDefer()));
-		QWhatsThis::add(deferButton, i18n("Defer the alarm until the specified time."));
-	}
-
 	// 'Time from now' radio button/label
 	afterTimeRadio = new QRadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n("Time from no&w:")),
 	                                  this, "afterTimeRadio");
@@ -140,11 +121,11 @@ void AlarmTimeWidget::init(int mode, int deferSpacing)
 	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm."));
 	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
 
-	// Set up the layout, depending on the options specified
+	// Set up the layout, either narrow or wide
+	QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
+	grid->addWidget(atTimeRadio, 0, 0);
 	if (mode & NARROW)
 	{
-		QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
-		grid->addWidget(atTimeRadio, 0, 0);
 		grid->addWidget(dateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
 		grid->setColStretch(2, 1);
@@ -154,22 +135,8 @@ void AlarmTimeWidget::init(int mode, int deferSpacing)
 		layout->addWidget(delayTime);
 		layout->addStretch();
 	}
-	else if (mode & DEFER_BUTTON)
-	{
-		QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-		layout->addWidget(atTimeRadio);
-		layout->addWidget(dateEdit);
-		layout->addWidget(timeBox);
-		layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-		layout->addWidget(deferButton);
-		layout->addStretch();
-		layout->addWidget(afterTimeRadio);
-		layout->addWidget(delayTime);
-	}
 	else
 	{
-		QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
-		grid->addWidget(atTimeRadio, 0, 0);
 		QBoxLayout* layout = new QHBoxLayout(this, 0, KDialog::spacingHint());
 		layout->addWidget(dateEdit);
 		layout->addWidget(timeBox);
@@ -260,14 +227,6 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 		if (at)
 			timeEdit->setEnabled(!enable || !anyTimeCheckBox->isChecked());
 	}
-}
-
-/******************************************************************************
-*  Called when the defer button is clicked.
-*/
-void AlarmTimeWidget::slotDefer()
-{
-	emit deferred();
 }
 
 /******************************************************************************
