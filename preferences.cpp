@@ -232,7 +232,7 @@ Preferences::Preferences()
 	mDaemonTrayCheckInterval  = static_cast<int>(config->readUnsignedNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval));
 	if (mDaemonTrayCheckInterval < 1)
 		mDaemonTrayCheckInterval = 1;
-	QCString client           = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
+	QCString client           = config->readPathEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
 	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
@@ -245,7 +245,7 @@ Preferences::Preferences()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
-	mCmdXTermCommand          = config->readEntry(CMD_XTERM_COMMAND);
+	mCmdXTermCommand          = config->readPathEntry(CMD_XTERM_COMMAND);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay               = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);

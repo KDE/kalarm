@@ -611,7 +611,7 @@ void MessageWin::saveProperties(KConfig* config)
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
 			// Only need to restart sound file playing if it's being repeated
-			config->writeEntry(QString::fromLatin1("AudioFile"), mAudioFile);
+			config->writePathEntry(QString::fromLatin1("AudioFile"), mAudioFile);
 			config->writeEntry(QString::fromLatin1("Volume"), static_cast<int>(mVolume * 100));
 		}
 #endif
@@ -643,7 +643,7 @@ void MessageWin::readProperties(KConfig* config)
 	bool dateOnly  = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
 #ifndef WITHOUT_ARTS
-	mAudioFile     = config->readEntry(QString::fromLatin1("AudioFile"));
+	mAudioFile     = config->readPathEntry(QString::fromLatin1("AudioFile"));
 	mVolume        = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;

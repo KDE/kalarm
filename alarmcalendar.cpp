@@ -102,7 +102,7 @@ bool AlarmCalendar::initialiseCalendars()
 	if (!errorKey1.isNull())
 	{
 		kdError(5950) << "AlarmCalendar::initialiseCalendars(): '" << errorKey1 << "' calendar name = display calendar name\n";
-		QString file = config->readEntry(errorKey1);
+		QString file = config->readPathEntry(errorKey1);
 		KAlarmApp::displayFatalError(i18n("%1: file name not permitted: %2").arg(errorKey1).arg(file));
 		return false;
 	}
