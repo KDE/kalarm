@@ -301,7 +301,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	{
 		// Set the values to their defaults
 		Settings* settings = theApp()->settings();
-		mFontColourButton->setFont(settings->messageFont());
+		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(settings->defaultBgColour());
 		mBgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
