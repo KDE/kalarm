@@ -41,9 +41,10 @@ class KAMail
 	public:
 		static QString    send(const KAEvent&, bool allowNotify = true);
 		static int        checkAddress(QString& address);
-		static int        checkAttachment(QString& attachment)  { return checkAttachment(attachment, true); }
+		static int        checkAttachment(QString& attachment, KURL* = 0);
 		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
-		static QString    convertAttachments(const QString& attachments, QStringList& list, bool check);
+		static QString    convertAddresses(const QString& addresses, QStringList&);
+		static QString    convertAttachments(const QString& attachments, QStringList& list);
 		static const QString EMAIL_QUEUED_NOTIFY;
 		static QString    i18n_NeedFromEmailAddress();
 	private:
@@ -56,7 +57,6 @@ class KAMail
 		static QString    initHeaders(const KAEvent&, const QString& from, const QString& bcc, bool dateId);
 		static QString    appendBodyAttachments(QString& message, const KAEvent&);
 		static void       notifyQueued(const KAEvent&);
-		static int        checkAttachment(QString& attachment, bool check);
 		static char*      base64Encode(const char* in, Offset size, Offset& outSize);
 };
 

@@ -38,6 +38,7 @@
 #include <pwd.h>
 
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <kstandarddirs.h>
 #include <dcopclient.h>
@@ -160,31 +161,91 @@ QString KAMail::sendKMail(const KAEvent& event, const QString& from, const QStri
 {
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
-		// KMail is running - use a DCOP call
+		// KMail is running - use a DCOP call.
+		// First, determine which DCOP call to use.
+		bool useSend = false;
+		QCString funcname = "sendMessage()";
+		QCString function = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
+		QCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
+		for (QCStringList::Iterator it=funcs.begin();  it != funcs.end() && !useSend;  ++it)
+		{
+			QCString func = DCOPClient::normalizeFunctionSignature(*it);
+			if (func.left(5) == "bool ")
+			{
+				func = func.mid(5);
+				func.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
+				useSend = (func == function);
+			}
+		}
+		if (!useSend)
+		{
+			funcname = "dcopAddMessage()";
+			function = "dcopAddMessage(QString,QString)";
+		}
+
 		QCString    replyType;
 		QByteArray  replyData;
-                int result = 0;
-                QByteArray data;
-                QDataStream arg( data, IO_WriteOnly );
-                arg << from;
-                arg << event.emailAddresses( ", " );
-                arg << "";
-                arg <<bcc;
-                arg << event.emailSubject();
-                arg << event.message();
-                KURL attachURL;
-                arg <<KURL::List(event.emailAttachments());
-                if ( kapp->dcopClient()->call( "kmail", "MailTransportServiceIface", 
-                              "sendMessage(QString, QString, QString, QString, QString, QString, KURL::List)",
-                                data, replyType, replyData )
-                    && replyType == "bool" )
+		QByteArray  data;
+		QDataStream arg(data, IO_WriteOnly);
+		int result = 0;
+		kdDebug(5950) << "KAMail::sendKMail(): using " << funcname << endl;
+		if (useSend)
 		{
-			QDataStream _reply_stream( replyData, IO_ReadOnly );
+			// This version of KMail has the sendMessage() function,
+			// which transmits the message immediately.
+			arg << from;
+			arg << event.emailAddresses(", ");
+			arg << "";
+			arg << bcc;
+			arg << event.emailSubject();
+			arg << event.message();
+			arg << KURL::List(event.emailAttachments());
+			if (kapp->dcopClient()->call("kmail", "MailTransportServiceIface", function,
+			                             data, replyType, replyData)
+			&&  replyType == "bool")
+				result = 1;
+		}
+		else
+		{
+			// KMail is an older version, so use dcopAddMessage()
+			// to add the message to the outbox for later transmission.
+			QString message = initHeaders(event, from, bcc, true);
+			QString err = appendBodyAttachments(message, event);
+			if (!err.isNull())
+				return err;
+
+			// Write to a temporary file for feeding to KMail
+			KTempFile tmpFile;
+			tmpFile.setAutoDelete(true);     // delete file when it is destructed
+			QTextStream* stream = tmpFile.textStream();
+			if (!stream)
+			{
+				kdError(5950) << "KAMail::sendKMail(): Unable to open a temporary mail file" << endl;
+				return QString("");
+			}
+			*stream << message;
+			tmpFile.close();
+			if (tmpFile.status())
+			{
+				kdError(5950) << "KAMail::sendKMail(): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
+				return QString("");
+			}
+
+			// Notify KMail of the message in the temporary file
+			arg << QString::fromLatin1("outbox") << tmpFile.name();
+			if (kapp->dcopClient()->call("kmail", "KMailIface", "dcopAddMessage(QString,QString)",
+			                             data, replyType, replyData)
+			&&  replyType == "int")
+				result = 1;
+		}
+		if (result)
+		{
+			QDataStream _reply_stream(replyData, IO_ReadOnly);
 			_reply_stream >> result;
 		}
-                if (result <= 0)
+		if (result <= 0)
 		{
-			kdError(5950) << "sendKMail(): kmail sendMessage() call failed (error code = " << result << ")" << endl;
+			kdError(5950) << "KAMail::sendKMail(): kmail " << funcname << " call failed (error code = " << result << ")" << endl;
 			return i18n("Error calling KMail");
 		}
 		if (allowNotify)
@@ -433,40 +494,16 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 	return QString::null;
 }
 
-/******************************************************************************
-*  Convert a comma or semicolon delimited list of attachments into a
-*  QStringList. The items are checked for validity.
-*  Reply = the invalid item if error, else empty string.
-*/
-QString KAMail::convertAttachments(const QString& items, QStringList& list, bool check)
+QString KAMail::convertAddresses(const QString& items, QStringList& list)
 {
-	list.clear();
-	QCString addrs = items.local8Bit();
-	int length = items.length();
-	for (int next = 0;  next < length;  )
+	EmailAddressList addrs;
+	QString item = convertAddresses(items, addrs);
+	if (item.isEmpty())
 	{
-		// Find the first delimiter character (, or ;)
-		int i = items.find(',', next);
-		if (i < 0)
-			i = items.length();
-		int sc = items.find(';', next);
-		if (sc < 0)
-			sc = items.length();
-		if (sc < i)
-			i = sc;
-		QString item = items.mid(next, i - next);
-		int checkResult;
-		checkResult = checkAttachment(item, check);
-		switch (checkResult)
-		{
-			case 1:   list += item;  break;
-			case 0:   break;          // empty attachment name
-			case -1:
-			default:  return item;    // error
-		}
-		next = i + 1;
+		for (EmailAddressList::Iterator ad = addrs.begin();  ad != addrs.end();  ++ad)
+			list += (*ad).fullName().local8Bit();
 	}
-	return QString::null;
+	return item;
 }
 
 /******************************************************************************
@@ -520,25 +557,64 @@ int KAMail::checkAddress(QString& address)
 }
 
 /******************************************************************************
-*  Optionally check for the existence of the attachment file.
+*  Convert a comma or semicolon delimited list of attachments into a
+*  QStringList. The items are checked for validity.
+*  Reply = the invalid item if error, else empty string.
 */
-int KAMail::checkAttachment(QString& attachment, bool check)
+QString KAMail::convertAttachments(const QString& items, QStringList& list)
+{
+	KURL url;
+	list.clear();
+	QCString addrs = items.local8Bit();
+	int length = items.length();
+	for (int next = 0;  next < length;  )
+	{
+		// Find the first delimiter character (, or ;)
+		int i = items.find(',', next);
+		if (i < 0)
+			i = items.length();
+		int sc = items.find(';', next);
+		if (sc < 0)
+			sc = items.length();
+		if (sc < i)
+			i = sc;
+		QString item = items.mid(next, i - next);
+		switch (checkAttachment(item))
+		{
+			case 1:   list += item;  break;
+			case 0:   break;          // empty attachment name
+			case -1:
+			default:  return item;    // error
+		}
+		next = i + 1;
+	}
+	return QString::null;
+}
+
+/******************************************************************************
+*  Check for the existence of the attachment file.
+*  If non-null, '*url' receives the KURL of the attachment.
+*/
+int KAMail::checkAttachment(QString& attachment, KURL* url)
 {
 	attachment.stripWhiteSpace();
 	if (attachment.isEmpty())
-		return 0;
-	if (check)
 	{
-		// Check that the file exists
-		KURL url(attachment);
-		url.cleanPath();
-		KIO::UDSEntry uds;
-		if (!KIO::NetAccess::stat(url, uds))
-			return -1;       // doesn't exist
-		KFileItem fi(uds, url);
-		if (fi.isDir()  ||  !fi.isReadable())
-			return -1;
+		if (url)
+			*url = KURL();
+		return 0;
 	}
+	// Check that the file exists
+	KURL u = KURL::fromPathOrURL(attachment);
+	u.cleanPath();
+	if (url)
+		*url = u;
+	KIO::UDSEntry uds;
+	if (!KIO::NetAccess::stat(u, uds))
+		return -1;       // doesn't exist
+	KFileItem fi(uds, u);
+	if (fi.isDir()  ||  !fi.isReadable())
+		return -1;
 	return 1;
 }
 

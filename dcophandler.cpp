@@ -270,7 +270,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 					kdError(5950) << "DcopHandler::process(): no email address\n";
 					return false;
 				}
-				bad = KAMail::convertAttachments(attachments, mailAttachments, true);
+				bad = KAMail::convertAttachments(attachments, mailAttachments);
 				if (!bad.isEmpty())
 				{
 					kdError(5950) << "DcopHandler::process(): invalid email attachment: " << bad << endl;
