@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kpopupmenu.h>
 
 #include "kalarmapp.h"
 #include "editdlg.h"
