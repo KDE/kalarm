@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef EDITDLGPRIVATE_H
@@ -54,16 +44,20 @@ class LineEdit : public KLineEdit
 		enum Type { Basic, Url, EmailAddresses };
 		explicit LineEdit(Type, QWidget* parent = 0, const char* name = 0);
 		explicit LineEdit(QWidget* parent = 0, const char* name = 0);
-		void setNoSelect()   { mNoSelect = true; }
+		void         setNoSelect()   { mNoSelect = true; }
+		void         setCursorAtEnd(bool y = true)  { mSetCursorAtEnd = y; }
+	public slots:
+		virtual void setText(const QString&);
 	protected:
 		virtual void focusInEvent(QFocusEvent*);
 		virtual void dragEnterEvent(QDragEnterEvent*);
 		virtual void dropEvent(QDropEvent*);
 	private:
-		void  init(Type);
+		void         init(Type);
 
 		bool  mNoSelect;
 		bool  mEmailAddresses;
+		bool  mSetCursorAtEnd;   // setText() should position cursor at end
 };
 
 class TextEdit : public QTextEdit

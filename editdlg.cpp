@@ -729,8 +729,9 @@ void EditAlarmDlg::setReadOnly()
 /******************************************************************************
  * Set the dialog's action and the action's text.
  */
-void EditAlarmDlg::setAction(KAEvent::Action action, const QString& text)
+void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 {
+	QString text = alarmText.text();
 	QRadioButton* radio;
 	switch (action)
 	{
@@ -750,6 +751,13 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const QString& text)
 		default:
 			radio = mMessageRadio;
 			mTextMessageEdit->setText(text);
+			if (alarmText.isEmail())
+			{
+				// Set up email fields also, in case the user wants an email alarm
+				mEmailToEdit->setText(alarmText.to());
+				mEmailSubjectEdit->setText(alarmText.subject());
+				mEmailMessageEdit->setText(alarmText.body());
+			}
 			break;
 	}
 	mActionGroup->setButton(mActionGroup->id(radio));
@@ -1766,14 +1774,16 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 =============================================================================*/
 LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
 	: KLineEdit(parent, name),
-	  mNoSelect(false)
+	  mNoSelect(false),
+	  mSetCursorAtEnd(false)
 {
 	init(type);
 }
 
 LineEdit::LineEdit(QWidget* parent, const char* name)
 	: KLineEdit(parent, name),
-	  mNoSelect(false)
+	  mNoSelect(false),
+	  mSetCursorAtEnd(false)
 {
 	init(Basic);
 }
@@ -1807,6 +1817,12 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 		QFocusEvent::resetReason();
 		mNoSelect = false;
 	}
+}
+
+void LineEdit::setText(const QString& text)
+{
+	KLineEdit::setText(text);
+	setCursorPosition(mSetCursorAtEnd ? text.length() : 0);
 }
 
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)

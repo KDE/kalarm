@@ -27,6 +27,7 @@
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
+#include "alarmtext.h"
 #include "datetime.h"
 
 class QButton;
@@ -64,7 +65,7 @@ class EditAlarmDlg : public KDialogBase
                      const KAEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		bool            getEvent(KAEvent&);
-		void            setAction(KAEvent::Action, const QString& text);
+		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
