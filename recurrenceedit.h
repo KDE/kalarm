@@ -142,8 +142,8 @@ class RecurrenceEdit : public QFrame
 		QRadioButton* yearMonthButton;
 //		QRadioButton* yearDayButton;
 		QRadioButton* yearlyOnNthTypeOfDayButton;
-		QComboBox*    yearMonthDayEntry;
-		QComboBox*    yearMonthComboBox;
+		QLabel*       yearMonthDayLabel;
+		QLabel*       yearMonthLabel;
 //		QSpinBox*     yearDayEntry;
 		QComboBox*    yearlyNthNumberEntry;
 		QComboBox*    yearlyNthTypeOfDayEntry;

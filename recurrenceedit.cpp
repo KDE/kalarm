@@ -344,34 +344,22 @@ void RecurrenceEdit::initYearly()
 	QBoxLayout* topLayout = new QVBoxLayout(yearlyButtonGroup, KDialog::marginHint());
 
 	// Set up the yearly month widgets
-	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	yearMonthButton = new QRadioButton(i18n("On 7th January", "O&n"), yearlyButtonGroup);
+	QHBox* box = new QHBox(yearlyButtonGroup);   // this is to control the QWhatsThis text display area
+	box->setSpacing(KDialog::spacingHint());
+	topLayout->addWidget(box);
+	yearMonthButton = new QRadioButton(i18n("On 7th January", "O&n"), box);
 	yearMonthButton->setFixedSize(yearMonthButton->sizeHint());
-	QWhatsThis::add(yearMonthButton,
+	yearlyButtonGroup->insert(yearMonthButton);
+	yearMonthDayLabel = new QLabel(box);
+	yearMonthLabel = new QLabel(box);
+	QWhatsThis::add(box,
 	      i18n("Repeat the alarm on the selected date in the year"));
-	layout->addWidget(yearMonthButton);
-	yearMonthDayEntry = new QComboBox(false, yearlyButtonGroup);
-	yearMonthDayEntry->setSizeLimit(11);
-	for (i = 0;  i < 31;  ++i)
-		yearMonthDayEntry->insertItem(i18n(ordinal[i]));
-	yearMonthDayEntry->setFixedSize(yearMonthDayEntry->sizeHint());
-	yearMonthDayEntry->setEnabled(false);
-	QWhatsThis::add(yearMonthDayEntry,
-	      i18n("Select the day of the month on which to repeat the alarm"));
-	layout->addWidget(yearMonthDayEntry);
-	yearMonthComboBox = new QComboBox(yearlyButtonGroup);
-	for (i = 1;  i <= 12;  ++i)
-		yearMonthComboBox->insertItem(KGlobal::locale()->monthName(i));
-	yearMonthComboBox->setSizeLimit(12);
-	yearMonthComboBox->setEnabled(false);
-	QWhatsThis::add(yearMonthComboBox,
-	      i18n("Select the month of the year in which to repeat the alarm"));
-	layout->addWidget(yearMonthComboBox);
-	layout->addStretch();
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 
 	// Set up the yearly position widgets
 	QBoxLayout* vlayout = new QVBoxLayout(topLayout, KDialog::spacingHint());
-	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
+	QBoxLayout* layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	yearlyOnNthTypeOfDayButton = new QRadioButton(i18n("On the 1st Tuesday", "On t&he"), yearlyButtonGroup);
 	yearlyOnNthTypeOfDayButton->setFixedSize(yearlyOnNthTypeOfDayButton->sizeHint());
 	QWhatsThis::add(yearlyOnNthTypeOfDayButton,
@@ -646,8 +634,10 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 void RecurrenceEdit::setStartDate(const QDate& start)
 {
-	yearMonthDayEntry->setCurrentItem(start.day() - 1);
-	yearMonthComboBox->setCurrentItem(start.month() - 1);
+	yearMonthDayLabel->setText(i18n(ordinal[start.day() - 1]));
+	yearMonthDayLabel->setFixedSize(yearMonthDayLabel->sizeHint());
+	yearMonthLabel->setText(KGlobal::locale()->monthName(start.month()));
+	yearMonthLabel->setMinimumSize(yearMonthLabel->sizeHint());
 }
 
 void RecurrenceEdit::setEndDate(const QDate& start)
@@ -735,7 +725,8 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 			ruleButtonGroup->setButton(yearlyButtonId);
 			yearlyButtonGroup->setButton(yearMonthButtonId);
 			QPtrList<int> rmd = recurrence->yearNums();
-			yearMonthComboBox->setCurrentItem(*rmd.first() - 1);
+			yearMonthLabel->setText(KGlobal::locale()->monthName(*rmd.first()));
+			yearMonthLabel->setMinimumSize(yearMonthLabel->sizeHint());
 			break;
 		}
 /*			case Recurrence::rYearlyDay:     // on the nth day of the year
