@@ -103,7 +103,7 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint());
 	topLayout->setMargin(KDialog::marginHint());
 
-	QGroupBox* group = new QButtonGroup(i18n("Run mode"), page, "modeGroup");
+	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), page, "modeGroup");
 	topLayout->addWidget(group);
 	QGridLayout* grid = new QGridLayout(group, 6, 2, 2*KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(0, 0);
