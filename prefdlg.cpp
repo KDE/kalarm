@@ -764,6 +764,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	grid->addWidget(box, 5, 2, AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
+	mModalMessages = new QCheckBox(i18n("Modal message &windows"), mPage, "modalMsg");
+	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
+	QWhatsThis::add(mModalMessages,
+	      i18n("Specify whether alarm message windows should be modal. "
+	           "If modal, the window grabs the keyboard focus when it is displayed. "
+	           "If non-modal, the window does not interfere with your typing when "
+	           "it is displayed, but it has no title bar and cannot be moved."));
+
 	mShowExpiredAlarms = new QCheckBox(i18n("&Show expired alarms"), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
 	QWhatsThis::add(mShowExpiredAlarms,
@@ -794,6 +802,7 @@ void ViewPrefTab::restore()
 	           mPreferences->mShowTooltipAlarmTime,
 	           mPreferences->mShowTooltipTimeToAlarm,
 	           mPreferences->mTooltipTimeToPrefix);
+	mModalMessages->setChecked(mPreferences->mModalMessages);
 	mShowExpiredAlarms->setChecked(mPreferences->mShowExpiredAlarms);
 	mDaemonTrayCheckInterval->setValue(mPreferences->mDaemonTrayCheckInterval);
 }
@@ -809,6 +818,7 @@ void ViewPrefTab::apply(bool syncToDisc)
 	mPreferences->mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
 	mPreferences->mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
 	mPreferences->mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
+	mPreferences->mModalMessages           = mModalMessages->isChecked();
 	mPreferences->mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
 	mPreferences->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsTabBase::apply(syncToDisc);
@@ -822,6 +832,7 @@ void ViewPrefTab::setDefaults()
 	           Preferences::default_showTooltipAlarmTime,
 	           Preferences::default_showTooltipTimeToAlarm,
 	           Preferences::default_tooltipTimeToPrefix);
+	mModalMessages->setChecked(Preferences::default_modalMessages);
 	mShowExpiredAlarms->setChecked(Preferences::default_showExpiredAlarms);
 	mDaemonTrayCheckInterval->setValue(Preferences::default_daemonTrayCheckInterval);
 }

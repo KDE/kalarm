@@ -41,6 +41,7 @@ const bool       Preferences::default_runInSystemTray         = true;
 const bool       Preferences::default_disableAlarmsIfStopped  = true;
 const bool       Preferences::default_autostartTrayIcon       = true;
 const bool       Preferences::default_confirmAlarmDeletion    = true;
+const bool       Preferences::default_modalMessages           = true;
 const bool       Preferences::default_showExpiredAlarms       = false;
 const bool       Preferences::default_showAlarmTime           = true;
 const bool       Preferences::default_showTimeToAlarm         = false;
@@ -74,6 +75,7 @@ static const QString RUN_IN_SYSTEM_TRAY       = QString::fromLatin1("RunInSystem
 static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlarmsIfStopped");
 static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
 static const QString CONFIRM_ALARM_DELETION   = QString::fromLatin1("ConfirmAlarmDeletion");
+static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
 static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
 static const QString SHOW_ALARM_TIME          = QString::fromLatin1("ShowAlarmTime");
 static const QString SHOW_TIME_TO_ALARM       = QString::fromLatin1("ShowTimeToAlarm");
@@ -140,6 +142,7 @@ void Preferences::loadPreferences()
 	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
 	mConfirmAlarmDeletion    = config->readBoolEntry(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+	mModalMessages           = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
 	mShowExpiredAlarms       = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
 	mShowTimeToAlarm         = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime           = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
@@ -193,6 +196,7 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(CONFIRM_ALARM_DELETION, mConfirmAlarmDeletion);
+	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
 	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
 	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);

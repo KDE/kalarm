@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -193,6 +193,7 @@ class ViewPrefTab : public PrefsTabBase
 		QCheckBox*     mTooltipShowTimeTo;
 		QLineEdit*     mTooltipTimeToPrefix;
 		QLabel*        mTooltipTimeToPrefixLabel;
+		QCheckBox*     mModalMessages;
 		QCheckBox*     mShowExpiredAlarms;
 		SpinBox*       mDaemonTrayCheckInterval;
 		bool           mIgnoreToggle;    // prevent checkbox toggle processing

@@ -74,7 +74,8 @@ QPtrList<MessageWin> MessageWin::windowList;
 *  displayed.
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event, bool allowDefer)
-	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
+	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
+	                                         | (theApp()->preferences()->modalMessages() ? 0 : Qt::WX11BypassWM)),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
@@ -94,7 +95,8 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
 	  shown(false),
-	  deferClosing(false)
+	  deferClosing(false),
+	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -133,7 +135,8 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
 	  shown(false),
-	  deferClosing(false)
+	  deferClosing(false),
+	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -150,7 +153,8 @@ MessageWin::MessageWin()
 	: MainWindowBase(0, "MessageWin", WFLAGS),
 	  rescheduleEvent(false),
 	  shown(true),
-	  deferClosing(false)
+	  deferClosing(false),
+	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	windowList.append(this);
@@ -383,7 +387,7 @@ QSize MessageWin::initView()
 	setMinimumSize(size);
 
 	WId winid = winId();
-	unsigned long wstate = NET::Modal | NET::Sticky | NET::StaysOnTop;
+	unsigned long wstate = (theApp()->preferences()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
 	return sizeHint();
@@ -486,8 +490,11 @@ void MessageWin::repeat(const KAlarmAlarm& alarm)
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
-		raise();
-		playAudio();
+		if (!mDeferDlgShowing  ||  theApp()->preferences()->modalMessages())
+		{
+				raise();
+				playAudio();
+		}
 		KAlarmEvent event(*kcalEvent);
 		theApp()->alarmShowing(event, mAlarmType, mDateTime);
 	}
@@ -568,6 +575,9 @@ void MessageWin::slotDefer()
 	DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
 	                                            false, this, "deferDlg");
 	deferDlg->setLimit(eventID);
+	mDeferDlgShowing = true;
+	if (!theApp()->preferences()->modalMessages())
+		lower();
 	if (deferDlg->exec() == QDialog::Accepted)
 	{
 		DateTime dateTime = deferDlg->getDateTime();
@@ -613,6 +623,9 @@ void MessageWin::slotDefer()
 		deferClosing = true;   // allow window to close without confirmation prompt
 		close();
 	}
+	else
+		raise();
+	mDeferDlgShowing = false;
 }
 
 /******************************************************************************

@@ -2,7 +2,7 @@
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
  *
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ class Preferences : public QObject
 		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
 		bool           autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		bool           confirmAlarmDeletion() const     { return mConfirmAlarmDeletion; }
+		bool           modalMessages() const            { return mModalMessages; }
 		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
 		bool           showAlarmTime() const            { return mShowAlarmTime; }
 		bool           showTimeToAlarm() const          { return mShowTimeToAlarm; }
@@ -97,6 +98,7 @@ class Preferences : public QObject
 		static const bool        default_disableAlarmsIfStopped;
 		static const bool        default_autostartTrayIcon;
 		static const bool        default_confirmAlarmDeletion;
+		static const bool        default_modalMessages;
 		static const bool        default_showExpiredAlarms;
 		static const bool        default_showAlarmTime;
 		static const bool        default_showTimeToAlarm;
@@ -141,6 +143,7 @@ class Preferences : public QObject
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
 		bool                mConfirmAlarmDeletion;
+		bool                mModalMessages;
 		bool                mShowExpiredAlarms;
 		bool                mShowAlarmTime;
 		bool                mShowTimeToAlarm;
