@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -50,7 +54,9 @@ DaemonGuiHandler::DaemonGuiHandler(const char *name)
 	  mEnableCalPending(false)
 {
 	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler()\n";
-	mDaemonRunning = theApp()->isDaemonRunning();
+	// Check if the alarm daemon is running, but don't start it yet, since
+	// the program is still initialising.
+	mDaemonRunning = theApp()->isDaemonRunning(false);
 
 	mDaemonStatusTimerInterval = theApp()->settings()->daemonTrayCheckInterval();
 	connect(theApp()->settings(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
@@ -155,7 +161,7 @@ void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}
-		kapp->kdeinitExecWait(execStr);
+		KApplication::kdeinitExecWait(execStr);
 		mEnableCalPending = true;
 		setFastDaemonCheck();
 	}
