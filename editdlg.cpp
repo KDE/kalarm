@@ -616,6 +616,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		if (mTemplate)
 		{
+			// Editing a template
 			int afterTime = event->isTemplate() ? event->templateAfterTime() : -1;
 			bool noTime   = !afterTime;
 			bool useTime  = !event->mainDateTime().isDateOnly();
@@ -637,7 +638,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 				QDateTime now = QDateTime::currentDateTime();
 				int afterTime = event->templateAfterTime();
 				if (afterTime >= 0)
-					mTimeWidget->setDateTime(now.addSecs((afterTime + 1) * 60));
+				{
+					mTimeWidget->setDateTime(now.addSecs(afterTime * 60));
+					mTimeWidget->selectTimeFromNow();
+				}
 				else
 				{
 					QDate d = now.date();

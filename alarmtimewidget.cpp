@@ -200,6 +200,15 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 }
 
 /******************************************************************************
+* Select the "Time from now" radio button.
+*/
+void AlarmTimeWidget::selectTimeFromNow()
+{
+	mAfterTimeRadio->setChecked(true);
+	slotButtonSet(1);
+}
+
+/******************************************************************************
 *  Fetch the entered date/time.
 *  If 'checkExpired' is true and the entered value <= current time, an error occurs.
 *  In this case, if 'showErrorMessage' is true, output an error message.

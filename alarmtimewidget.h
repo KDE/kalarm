@@ -51,6 +51,7 @@ class AlarmTimeWidget : public ButtonGroup
 		void             setReadOnly(bool);
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
+		void             selectTimeFromNow();
 		QSize            sizeHint() const              { return minimumSizeHint(); }
 
 		static QString   i18n_w_TimeFromNow();     // text of 'Time from now:' radio button, with 'w' shortcut
