@@ -1,5 +1,5 @@
 # set the include path for X, qt and KDE and calendar library
-INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src -I$(top_srcdir)/libkdepim $(all_includes)
+INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src $(all_includes)
 
 bin_PROGRAMS = kalarm
 kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindow.cpp \
