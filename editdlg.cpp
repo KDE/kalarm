@@ -76,6 +76,8 @@
 #include "timeperiod.h"
 #include "editdlg.moc"
 
+using namespace KCal;
+
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
 	                        const KAlarmEvent* event, bool readOnly)
@@ -162,7 +164,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	bool recurs = event && event->recurs();
 	if (recurs  &&  event->deferred())
 	{
-		// Recurring event's deferred date/time
+		// Deferred date/time for event without a time or recurring event
 		mDeferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
 		topLayout->addWidget(mDeferGroup);
 		QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
@@ -241,8 +243,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mFontColour->setFont(?);
 #endif
 		mBgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
-		mTimeWidget->setDateTime(((recurs && event->mainExpired()) ? QDateTime() : event->mainDateTime()),
-		                         event->anyTime());
+		mTimeWidget->setDateTime((!event->mainExpired() ? event->mainDateTime() : recurs ? QDateTime() : event->deferDateTime()),
+		                         (event->anyTime() && !event->deferred()));
 
 		QRadioButton* radio;
 		switch (event->action())
@@ -603,8 +605,17 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 	{
 		mRecurrenceEdit->updateEvent(event);
 		if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
-			event.defer(mDeferDateTime, true);
-#warning "Check last parameter"
+		{
+			bool deferReminder = false;
+			int reminder = getReminderMinutes();
+			if (reminder)
+			{
+				QDateTime remindTime = mAlarmDateTime.addSecs(-reminder * 60);
+				if (mDeferDateTime > remindTime)
+					deferReminder = true;
+			}
+			event.defer(mDeferDateTime, deferReminder, false);
+		}
 	}
 }
 
@@ -802,6 +813,14 @@ void EditAlarmDlg::slotEditDeferral()
 		bool deferred = mDeferDateTime.isValid();
 		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : QDateTime::currentDateTime().addSecs(60)),
 		                                            deferred, this, "deferDlg");
+		// Don't allow deferral past the next recurrence
+		int reminder = getReminderMinutes();
+		if (reminder)
+		{
+			QDateTime remindTime = start.addSecs(-reminder * 60);
+			if (QDateTime::currentDateTime() < remindTime)
+				start = remindTime;
+		}
 		deferDlg->setLimit(start);
 		if (deferDlg->exec() == QDialog::Accepted)
 		{
@@ -809,6 +828,7 @@ void EditAlarmDlg::slotEditDeferral()
 			mDeferTimeLabel->setText(mDeferDateTime.isValid() ? KGlobal::locale()->formatDateTime(mDeferDateTime) : QString::null);
 		}
 	}
+#warning "If only the deferral time is changed, ensure that event ID is retained"
 }
 
 /******************************************************************************
