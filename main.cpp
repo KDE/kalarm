@@ -60,6 +60,7 @@ static KCmdLineOptions options[] =
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
 	{ "m", 0, 0 },
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
+	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence in RFC2445 format"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
 	{ "r", 0, 0 },
@@ -85,17 +86,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
-		I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " [-abcilLrstu] message\n"
-		"       " PROGRAM_NAME " [-abcilLrstu] -f URL\n"
-		"       " PROGRAM_NAME " [-ilLrtu] -e commandline\n"
-		"       " PROGRAM_NAME " [-ilLrtu] [-m address]+ [-S subject] message\n"
-		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
-		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
-		"       " PROGRAM_NAME " --triggerEvent eventID [--calendarURL url]\n"
-		"       " PROGRAM_NAME " --handleEvent eventID [--calendarURL url]\n"
-		"       " PROGRAM_NAME " [generic_options]\n\n"
-		"KDE personal alarm message, command and email scheduler"),
+		I18N_NOOP("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
 		"(c) 2001 - 2003, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");

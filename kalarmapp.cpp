@@ -47,7 +47,7 @@
 
 #include <kalarmd/clientinfo.h>
 
-#include <libkcal/calformat.h>
+#include <libkcal/icalformat.h>
 
 #include "alarmcalendar.h"
 #include "mainwindow.h"
@@ -450,7 +450,21 @@ int KAlarmApp::newInstance()
 				else
 					alarmTime = QDateTime::currentDateTime();
 
-				if (args->isSet("interval"))
+				if (args->isSet("recurrence"))
+				{
+					if (args->isSet("login"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--recurrence")))
+					if (args->isSet("interval"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--recurrence")))
+					if (args->isSet("repeat"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")))
+					if (args->isSet("until"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
+					QCString rule = args->getOption("recurrence");
+					KCal::ICalFormat format;
+					format.fromString(&recurrence, QString::fromLocal8Bit((const char*)rule));
+				}
+				else if (args->isSet("interval"))
 				{
 					// Repeat count is specified
 					int repeatCount;
@@ -1505,7 +1519,7 @@ void KAlarmApp::modifyEvent(KAlarmEvent& oldEvent, const KAlarmEvent& newEvent, 
 	{
 		// Update the event in the calendar file, and get the new event ID
 		mCalendar->deleteEvent(oldEvent.id());
-		mCalendar->addEvent(newEvent);
+		mCalendar->addEvent(newEvent, true);
 		calendarSave();
 
 		// Update the window lists
