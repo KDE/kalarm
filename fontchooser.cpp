@@ -3,7 +3,7 @@
  *  Program:  kalarm
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
- *  This module is a modification of the FontChooser class in kfontdialog.cpp,
+ *  This module is a modification of the KFontChooser class in kfontdialog.cpp,
  *  with extra parameters for color() and setColor().
  */
 /*
@@ -59,7 +59,9 @@
 #include <kstddirs.h>
 #include <kdebug.h>
 
+#ifdef Q_WS_X11
 #include <X11/Xlib.h>
+#endif
 
 #include "fontchooser.h"
 #include "fontchooser.moc"
@@ -88,12 +90,13 @@ static int minimumListHeight( const QListBox *list, int numVisibleEntry )
   return( w * numVisibleEntry + 2 * list->frameWidth() );
 }
 
-class FontChooser::KFontChooserPrivate
+class FontChooser::FontChooserPrivate
 {
 public:
-    KFontChooserPrivate()
+    FontChooserPrivate()
         { m_palette.setColor(QPalette::Active, QColorGroup::Text, Qt::black);
           m_palette.setColor(QPalette::Active, QColorGroup::Base, Qt::white); }
+    QLabel *charsetLabel;
     QPalette m_palette;
 };
 
@@ -102,7 +105,7 @@ FontChooser::FontChooser(QWidget *parent, const char *name,
 			   bool makeFrame, int visibleListSize )
   : QWidget(parent, name), usingFixed(onlyFixed)
 {
-  d = new KFontChooserPrivate;
+  d = new FontChooserPrivate;
   QVBoxLayout *topLayout = new QVBoxLayout( this, 0, KDialog::spacingHint() );
 
   QWidget *page;
@@ -172,19 +175,19 @@ FontChooser::FontChooser(QWidget *parent, const char *name,
   sizeListBox = new KListBox( page, "sizeListBox");
   gridLayout->addWidget(sizeListBox, row, 2);
 
-  const char *c[] =
+  static const int c[] =
   {
-    "4",  "5",  "6",  "7",
-    "8",  "9",  "10", "11",
-    "12", "13", "14", "15",
-    "16", "17", "18", "19",
-    "20", "22", "24", "26",
-    "28", "32", "48", "64",
+    4,  5,  6,  7,
+    8,  9,  10, 11,
+    12, 13, 14, 15,
+    16, 17, 18, 19,
+    20, 22, 24, 26,
+    28, 32, 48, 64,
     0
   };
   for(int i = 0; c[i] != 0; i++)
   {
-    sizeListBox->insertItem(QString::fromLatin1(c[i]));
+    sizeListBox->insertItem(QString::number(c[i]));
   }
   sizeListBox->setMinimumWidth( minimumListWidth(sizeListBox) +
     sizeListBox->fontMetrics().maxWidth() );
@@ -196,14 +199,19 @@ FontChooser::FontChooser(QWidget *parent, const char *name,
 	   SLOT(size_chosen_slot(const QString&)) );
 
   row ++;
-  charsetLabel = new QLabel( page, "charsetLabel");
-  charsetLabel->setText(i18n("Character set:"));
-  gridLayout->addWidget(charsetLabel, 3, 0, AlignRight);
+#if QT_VERSION < 300
+  d->charsetLabel = new QLabel( page, "charsetLabel");
+  d->charsetLabel->setText(i18n("Character set:"));
+  gridLayout->addWidget(d->charsetLabel, 3, 0, AlignRight);
   charsetsCombo = new QComboBox(true, page, "charsetsCombo");
   gridLayout->addMultiCellWidget(charsetsCombo, 3, 3, 1, 2);
   charsetsCombo->setInsertionPolicy(QComboBox::NoInsertion);
   connect(charsetsCombo, SIGNAL(activated(const QString&)),
 	  SLOT(charset_chosen_slot(const QString&)));
+#else
+  d->charsetLabel = 0;
+  charsetsCombo = 0;
+#endif
 
   row ++;
   sampleEdit = new QLineEdit( page, "sampleEdit");
@@ -287,9 +295,9 @@ void FontChooser::enableColumn( int column, bool state )
     sizeLabel->setEnabled(state);
     sizeListBox->setEnabled(state);
   }
-  if( column & CharsetList )
+  if( column & CharsetList && d->charsetLabel && charsetsCombo )
   {
-    charsetLabel->setEnabled(state);
+    d->charsetLabel->setEnabled(state);
     charsetsCombo->setEnabled(state);
   }
 }
@@ -307,6 +315,7 @@ void FontChooser::setFont( const QFont& aFont, bool onlyFixed )
   displaySample(selFont);
 }
 
+#if QT_VERSION < 300
 void FontChooser::setCharset( const QString & charset )
 {
     for ( int i = 0; i < charsetsCombo->count(); i++ ) {
@@ -316,30 +325,36 @@ void FontChooser::setCharset( const QString & charset )
         }
     }
 }
+#endif
 
 void FontChooser::charset_chosen_slot(const QString& chset)
 {
-#warning QFont::setQFont uncommented, watch charsets
-//  KCharsets *charsets = KGlobal::charsets();
-//  if (chset == i18n("default")) {
-//    charsets->setQFont(selFont, KGlobal::locale()->charset());
-//  } else {
-//    kdDebug() << "FontChooser::charset_chosen_slot chset=" << chset << endl;
-//    charsets->setQFont(selFont, chset);
-//   }
+#if QT_VERSION < 300
+  KCharsets *charsets = KGlobal::charsets();
+  if (chset == i18n("default")) {
+    selFont.setCharSet(charsets->nameToID(KGlobal::locale()->charset()));
+  } else {
+    kdDebug() << "FontChooser::charset_chosen_slot chset=" << chset << endl;
+    selFont.setCharSet(charsets->nameToID(chset));
+  }
 
-//  emit fontSelected(selFont);
+  emit fontSelected(selFont);
+#else
+  Q_UNUSED( chset );
+#endif
 }
 
+#if QT_VERSION < 300
 QString FontChooser::charset() const
 {
   return charsetsCombo->currentText();
 }
 
+#endif
+
 void FontChooser::fillCharsetsCombo()
 {
-#warning FIXME Charsets may lead to crashes, function implementation commented out
-/*
+#if QT_VERSION < 300
   int i;
   KCharsets *charsets=KGlobal::charsets();
 
@@ -358,7 +373,7 @@ void FontChooser::fillCharsetsCombo()
       break;
     }
   }
-*/
+#endif
 }
 
 void FontChooser::family_chosen_slot(const QString& family)
@@ -445,7 +460,7 @@ void FontChooser::setupDisplay()
 void FontChooser::getFontList( QStringList &list, bool fixed )
 {
   QFontDatabase dbase;
-  QStringList lstSys(dbase.families( false ));
+  QStringList lstSys(dbase.families());
 
   // Since QFontDatabase doesn't have any easy way of returning just
   // the fixed width fonts, we'll do it in a very hacky way
@@ -481,6 +496,7 @@ void FontChooser::getFontList( QStringList &list, bool fixed )
 
 void FontChooser::getFontList( QStringList &list, const char *pattern )
 {
+#ifdef Q_WS_X11
   int num;
   char **xFonts = XListFonts( qt_xdisplay(), pattern, 2000, &num );
 
@@ -489,6 +505,11 @@ void FontChooser::getFontList( QStringList &list, const char *pattern )
     addFont( list, xFonts[i] );
   }
   XFreeFontNames( xFonts );
+#else
+  // FIXME(E): Does Qt return font names the same way addFont treats them?
+  QFontDatabase d;
+  list+=d.families();
+#endif
 }
 
 
@@ -540,4 +561,3 @@ void FontChooser::showXLFDArea(bool show)
     xlfdEdit->parentWidget()->hide();
   }
 }
-

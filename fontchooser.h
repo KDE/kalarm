@@ -3,7 +3,7 @@
  *  Program:  kalarm
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
- *  This module is a modification of the FontChooser class in kfontdialog.h,
+ *  This module is a modification of the KFontChooser class in kfontdialog.h,
  *  with extra parameters for color() and setColor().
  */
 /*
@@ -36,17 +36,13 @@
 
 #include <qlineedit.h>
 #include <qpalette.h>
-#include <qstringlist.h>
 
 class QComboBox;
 class QFont;
 class QGroupBox;
 class QLabel;
+class QStringList;
 class KListBox;
-
-// Just a marker for a feature that was added after 2.2-beta2.
-// When KOffice depends on kdelibs-2.2, this can be removed.
-#define KFONTCHOOSER_HAS_SETCOLOR
 
 /**
  * A widget for interactive font selection.
@@ -131,6 +127,7 @@ public:
    */
   QColor color( QPalette::ColorGroup = QPalette::Active, QColorGroup::ColorRole = QColorGroup::Text ) const;
 
+#if QT_VERSION < 300
   /**
    * Set the currently selected charset in the chooser.
    */
@@ -140,6 +137,7 @@ public:
    * @return The currently selected charset in the dialog.
    */
   QString charset() const;
+#endif
 
   /**
    * @return The current text in the sample text input area.
@@ -226,7 +224,6 @@ private:
   QLabel       *familyLabel;
   QLabel       *styleLabel;
   QLabel       *sizeLabel;
-  QLabel       *charsetLabel;
   KListBox     *familyListBox;
   KListBox     *styleListBox;
   KListBox     *sizeListBox;
@@ -236,8 +233,8 @@ private:
 
   bool usingFixed;
 
-  class KFontChooserPrivate;
-  KFontChooserPrivate *d;
+  class FontChooserPrivate;
+  FontChooserPrivate *d;
 };
 
 #endif
