@@ -44,6 +44,7 @@
 
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
+#include "daemon.h"
 #include "daemongui.h"
 #include "traywindow.h"
 #include "birthdaydlg.h"
@@ -311,7 +312,7 @@ void KAlarmMainWindow::initActions()
 
 	submenu = new KPopupMenu(this, "settings");
 	menu->insertItem(i18n("&Settings"), submenu);
-	theApp()->actionDaemonControl()->plug(submenu);
+	Daemon::actionControl()->plug(submenu);
 	theApp()->actionPreferences()->plug(submenu);
 
 	menu->insertItem(KStdGuiItem::help().text(), helpMenu());
@@ -791,7 +792,7 @@ void KAlarmMainWindow::updateActionsMenu()
 */
 void KAlarmMainWindow::slotResetDaemon()
 {
-	theApp()->resetDaemon();
+	Daemon::reset();
 }
 
 /******************************************************************************

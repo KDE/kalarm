@@ -42,10 +42,6 @@ class DaemonGuiHandler;
 class Preferences;
 class ActionAlarmsEnabled;
 
-extern const char* DAEMON_APP_NAME;
-extern const char* DAEMON_DCOP_OBJECT;
-extern const char* GUI_DCOP_OBJECT_NAME;
-
 
 class KAlarmApp : public KUniqueApplication
 {
@@ -75,13 +71,9 @@ class KAlarmApp : public KUniqueApplication
 		DaemonGuiHandler*  daemonGuiHandler() const        { return mDaemonGuiHandler; }
 		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
 		KAction*           actionPreferences() const       { return mActionPrefs; }
-		KAction*           actionDaemonControl() const     { return mActionDaemonControl; }
 		KAction*           actionNewAlarm() const          { return mActionNewAlarm; }
 		static KAction*    createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*);
 		bool               editNewAlarm(KAlarmMainWindow* = 0);
-		void               resetDaemon();
-		bool               isDaemonRunning(bool startDaemon = true);
-		void               readDaemonCheckInterval();
 		QSize              readConfigWindowSize(const char* window, const QSize& defaultSize);
 		void               writeConfigWindowSize(const char* window, const QSize&);
 		virtual void       commitData(QSessionManager&);
@@ -101,7 +93,6 @@ class KAlarmApp : public KUniqueApplication
 		void               alarmShowing(KAEvent&, KAAlarm::Type, const DateTime&);
 		void               deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(KProcess*, QWidget* parent);
-		int                maxLateness();
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QColor& fg, const QFont&,
 		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
@@ -114,7 +105,6 @@ class KAlarmApp : public KUniqueApplication
 		static int         fileType(const QString& mimetype);
 	public slots:
 		void               displayMainWindow()     { displayMainWindowSelected(); }
-		void               slotDaemonControl();
 	signals:
 		void               trayIconToggled();
 	protected:
@@ -127,7 +117,6 @@ class KAlarmApp : public KUniqueApplication
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
 		void               calendarSaved(AlarmCalendar*);
-		void               checkIfDaemonStarted();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData
@@ -148,10 +137,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               checkSystemTray();
 		void               changeStartOfDay();
 		void               setUpDcop();
-		bool               stopDaemon();
-		void               startDaemon();
-		void               reloadDaemon();
-		void               registerWithDaemon(bool reregister);
 		void               handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
@@ -166,8 +151,8 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar*        mExpiredCalendar;     // the calendar containing closed alarms
 		AlarmCalendar*        mDisplayCalendar;     // the calendar containing currently displaying alarms
 		ActionAlarmsEnabled*  mActionAlarmEnable;   // action to enable/disable alarms
+		KActionCollection*    mActionCollection;
 		KAction*              mActionPrefs;         // action to display the preferences dialog
-		KAction*              mActionDaemonControl; // action to display the alarm daemon control dialog
 		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
 		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change

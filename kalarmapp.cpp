@@ -50,6 +50,7 @@
 #include "mainwindow.h"
 #include "editdlg.h"
 #include "messagewin.h"
+#include "daemon.h"
 #include "daemongui.h"
 #include "dcophandler.h"
 #include "traywindow.h"
@@ -62,11 +63,6 @@
 
 extern QCString execArguments;
 
-#define       DAEMON_APP_NAME_DEF    "kalarmd"
-const char*   DCOP_OBJECT_NAME     = "display";
-const char*   GUI_DCOP_OBJECT_NAME = "tray";
-const char*   DAEMON_APP_NAME      = DAEMON_APP_NAME_DEF;
-const char*   DAEMON_DCOP_OBJECT   = "ad";
 const QString ACTIVE_CALENDAR(QString::fromLatin1("calendar.ics"));
 const QString ARCHIVE_CALENDAR(QString::fromLatin1("expired.ics"));
 const QString DISPLAY_CALENDAR(QString::fromLatin1("displaying.ics"));
@@ -75,6 +71,17 @@ int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
 static bool convInterval(QCString timeParam, KAEvent::RecurType&, int& timeInterval);
+
+/******************************************************************************
+* Find the maximum number of seconds late which a late-cancel alarm is allowed
+* to be. This is calculated as the alarm daemon's check interval, plus a few
+* seconds leeway to cater for any timing irregularities.
+*/
+static inline int maxLateness()
+{
+	static const int LATENESS_LEEWAY = 5;
+	return Daemon::maxTimeSinceCheck() + LATENESS_LEEWAY;
+}
 
 static KStaticDeleter<AlarmCalendar> calendarDeleter;           // ensures destructor is called
 static KStaticDeleter<AlarmCalendar> expiredCalendarDeleter;    // ensures destructor is called
@@ -114,7 +121,6 @@ KAlarmApp::KAlarmApp()
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	KAEvent::setFeb29RecurType();
-	readDaemonCheckInterval();
 	KConfig* config = kapp->config();
 	config->setGroup(QString::fromLatin1("General"));
 
@@ -186,17 +192,11 @@ KAlarmApp::KAlarmApp()
 	mOldExpiredKeepDays = preferences->expiredKeepDays();
 
 	// Set up actions used by more than one menu
-	KActionCollection* actions = new KActionCollection(this);
+	mActionCollection = new KActionCollection(this);
 	mActionAlarmEnable   = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()),
-	                                               actions, "alarmenable");
-	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
-#if KDE_VERSION >= 308
-	mActionDaemonControl = new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."), mActionPrefs->iconSet(),
-#else
-	mActionDaemonControl = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
-#endif
-	                                   0, this, SLOT(slotDaemonControl()), actions, "controldaemon");
-	mActionNewAlarm      = createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actions);
+	                                               mActionCollection, "alarmenable");
+	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), mActionCollection);
+	mActionNewAlarm      = createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), mActionCollection);
 }
 
 /******************************************************************************
@@ -215,7 +215,12 @@ KAlarmApp::~KAlarmApp()
 KAlarmApp* KAlarmApp::getInstance()
 {
 	if (!theInstance)
+	{
 		theInstance = new KAlarmApp;
+
+		// This is here instead of in the constructor to avoid recursion
+		Daemon::initialise(theInstance->mActionCollection);    // calendars and actions must be initialised before calling this
+	}
 	return theInstance;
 }
 
@@ -302,7 +307,7 @@ int KAlarmApp::newInstance()
 				// Stop the alarm daemon
 				kdDebug(5950)<<"KAlarmApp::newInstance(): stop\n";
 				args->clear();      // free up memory
-				if (!stopDaemon())
+				if (!Daemon::stop())
 				{
 					exitCode = 1;
 					break;
@@ -315,7 +320,7 @@ int KAlarmApp::newInstance()
 				kdDebug(5950)<<"KAlarmApp::newInstance(): reset\n";
 				args->clear();      // free up memory
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
-				resetDaemon();
+				Daemon::reset();
 			}
 			else
 			if (args->isSet("tray"))
@@ -905,22 +910,6 @@ void KAlarmApp::slotPreferences()
 }
 
 /******************************************************************************
-* Called when a Control Alarm Daemon menu item is selected.
-* Displays the alarm daemon control dialog.
-*/
-void KAlarmApp::slotDaemonControl()
-{
-	KProcess proc;
-	proc << locate("exe", QString::fromLatin1("kcmshell"));
-#if KDE_VERSION >= 308
-	proc << QString::fromLatin1("kcmkded");
-#else
-	proc << QString::fromLatin1("alarmdaemonctrl");
-#endif
-	proc.start(KProcess::DontCare);
-}
-
-/******************************************************************************
 *  Called when the New button is clicked to edit a new alarm to add to the list.
 */
 void KAlarmApp::slotNewAlarm()
@@ -966,9 +955,9 @@ void KAlarmApp::slotPreferencesChanged()
 	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::instance()->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
-		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
+		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by Daemon::reregister()
 		Preferences::setNotify(TrayWindow::QUIT_WARN, true, true);   // since mode has changed, re-allow warning messages on Quit
-		registerWithDaemon(true);           // re-register with the alarm daemon
+		Daemon::reregister();           // re-register with the alarm daemon
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
@@ -1767,7 +1756,7 @@ void KAlarmApp::endCalendarUpdate()
 			mCalendarUpdateSave = false;
 		}
 		if (mCalendarUpdateReload)
-			reloadDaemon();
+			Daemon::reload();
 	}
 }
 
@@ -1785,7 +1774,7 @@ void KAlarmApp::calendarSave(bool reload)
 		mCalendar->save();
 		mCalendarUpdateSave = false;
 		if (mCalendarUpdateReload)
-			reloadDaemon();
+			Daemon::reload();
 	}
 }
 
@@ -1796,7 +1785,7 @@ void KAlarmApp::calendarSave(bool reload)
 void KAlarmApp::calendarSaved(AlarmCalendar* cal)
 {
 	if (cal == mCalendar)
-		reloadDaemon();
+		Daemon::reload();
 }
 
 /******************************************************************************
@@ -1807,7 +1796,7 @@ void KAlarmApp::setUpDcop()
 	if (!mDcopHandler)
 	{
 		mDcopHandler      = new DcopHandler(DCOP_OBJECT_NAME);
-		mDaemonGuiHandler = new DaemonGuiHandler(GUI_DCOP_OBJECT_NAME);
+		mDaemonGuiHandler = new DaemonGuiHandler();
 	}
 }
 
@@ -1846,204 +1835,15 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		startdaemon = true;
 	}
 	else
-		startdaemon = !mDaemonRegistered;
+		startdaemon = !Daemon::isRegistered();
 
 	if (!calendarOnly)
 	{
 		setUpDcop();              // we're now ready to handle DCOP calls, so set up handlers
 		if (startdaemon)
-			startDaemon();          // make sure the alarm daemon is running
+			Daemon::start();  // make sure the alarm daemon is running
 	}
 	return true;
-}
-
-/******************************************************************************
-* Start the alarm daemon if necessary, and register this application with it.
-*/
-void KAlarmApp::startDaemon()
-{
-	kdDebug(5950) << "KAlarmApp::startDaemon()\n";
-	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME)  &&  !mDaemonStartTimer)
-	{
-		// Start the alarm daemon. It is a KUniqueApplication, which means that
-		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
-		kdeinitExec(execStr);
-		kdDebug(5950) << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
-		const int startInterval = 500;   // milliseconds
-		mDaemonStartTimeout = 5000/startInterval + 1;    // check daemon status for 5 seconds before giving up
-		mDaemonStartTimer = new QTimer(this);
-		connect(mDaemonStartTimer, SIGNAL(timeout()), SLOT(checkIfDaemonStarted()));
-		mDaemonStartTimer->start(startInterval);
-		checkIfDaemonStarted();
-		return;
-	}
-
-	// Register this application with the alarm daemon
-	registerWithDaemon(false);
-
-	// Tell alarm daemon to load the calendar
-	{
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(aboutData()->appName()) << mCalendar->urlString();
-		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
-			kdError(5950) << "KAlarmApp::startDaemon(): addMsgCal dcop send failed" << endl;
-	}
-
-	mDaemonRegistered = true;
-	kdDebug(5950) << "KAlarmApp::startDaemon(): daemon startup complete" << endl;
-}
-
-/******************************************************************************
-* Check whether the alarm daemon has started yet, and if so, register with it.
-*/
-void KAlarmApp::checkIfDaemonStarted()
-{
-	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
-	{
-		if (--mDaemonStartTimeout > 0)
-			return;     // wait a bit more to check again
-	}
-	else
-		startDaemon();
-
-	delete mDaemonStartTimer;
-	mDaemonStartTimer = 0;
-}
-
-/******************************************************************************
-* Start the alarm daemon if necessary, and register this application with it.
-*/
-void KAlarmApp::registerWithDaemon(bool reregister)
-{
-	kdDebug(5950) << (reregister ? "KAlarmApp::reregisterWithDaemon(): " : "KAlarmApp::registerWithDaemon(): ") << (mDisableAlarmsIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(aboutData()->appName()) << aboutData()->programName()
-	    << QCString(DCOP_OBJECT_NAME)
-	    << static_cast<int>(mDisableAlarmsIfStopped ? ClientInfo::NO_START_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
-	    << (Q_INT8)0;
-	const char* func = reregister ? "reregisterApp(QCString,QString,QCString,int,bool)" : "registerApp(QCString,QString,QCString,int,bool)";
-	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, func, data))
-		kdError(5950) << "KAlarmApp::registerWithDaemon(): registerApp dcop send failed" << endl;
-}
-
-/******************************************************************************
-* Stop the alarm daemon if it is running.
-*/
-bool KAlarmApp::stopDaemon()
-{
-	kdDebug(5950) << "KAlarmApp::stopDaemon()" << endl;
-	if (dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
-	{
-		QByteArray data;
-		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "quit()", data))
-		{
-			kdError(5950) << "KAlarmApp::stopDaemon(): quit dcop send failed" << endl;
-			return false;
-		}
-	}
-	return true;
-}
-
-/******************************************************************************
-* Reset the alarm daemon and reload the calendar.
-* If the daemon is not already running, start it.
-*/
-void KAlarmApp::resetDaemon()
-{
-	kdDebug(5950) << "KAlarmApp::resetDaemon()" << endl;
-	mCalendar->reload();
-	if (mExpiredCalendar->isOpen())
-		mExpiredCalendar->reload();
-	KAlarmMainWindow::refresh();
-	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
-		startDaemon();
-	else
-	{
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(aboutData()->appName()) << mCalendar->urlString();
-		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "resetMsgCal(QCString,QString)", data))
-			kdError(5950) << "KAlarmApp::resetDaemon(): resetMsgCal dcop send failed" << endl;
-	}
-}
-
-/******************************************************************************
-* Tell the alarm daemon to reread the calendar file.
-*/
-void KAlarmApp::reloadDaemon()
-{
-	kdDebug(5950) << "KAlarmApp::reloadDaemon()\n";
-	QByteArray data;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(aboutData()->appName()) << mCalendar->urlString();
-	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
-		kdError(5950) << "KAlarmApp::reloadDaemon(): reloadMsgCal dcop send failed" << endl;
-	else
-		mCalendarUpdateReload = false;
-}
-
-/******************************************************************************
-* Check whether the alarm daemon is currently running.
-*/
-bool KAlarmApp::isDaemonRunning(bool startdaemon)
-{
-	bool running = dcopClient()->isApplicationRegistered(DAEMON_APP_NAME);
-	if (running != mDaemonRunning)
-	{
-		// Daemon's status has changed
-		mDaemonRunning = running;
-		if (mDaemonRunning  &&  startdaemon)
-			startDaemon();      // re-register with the daemon
-	}
-	return mDaemonRunning;
-}
-
-/******************************************************************************
-* Read the alarm daemon's alarm check interval from its config file. If it has
-* reduced, any late-cancel alarms which are already due could potentially be
-* cancelled erroneously. To avoid this, note the effective last time that it
-* will have checked alarms.
-*/
-void KAlarmApp::readDaemonCheckInterval()
-{
-	KConfig config(locate("config", DAEMON_APP_NAME_DEF"rc"));
-	config.setGroup("General");
-	int checkInterval = 60 * config.readNumEntry("CheckInterval", 1);
-	if (checkInterval < mDaemonCheckInterval)
-	{
-		// The daemon check interval has reduced,
-		// Note the effective last time that the daemon checked alarms.
-		QDateTime now = QDateTime::currentDateTime();
-		mLastDaemonCheck = now.addSecs(-mDaemonCheckInterval);
-		mNextDaemonCheck = now.addSecs(checkInterval);
-	}
-	mDaemonCheckInterval = checkInterval;
-}
-
-/******************************************************************************
-* Find the maximum number of seconds late which a late-cancel alarm is allowed
-* to be. This is calculated as the alarm daemon's check interval, plus a few
-* seconds leeway to cater for any timing irregularities.
-*/
-int KAlarmApp::maxLateness()
-{
-	static const int LATENESS_LEEWAY = 5;
-
-	readDaemonCheckInterval();
-	if (mLastDaemonCheck.isValid())
-	{
-		QDateTime now = QDateTime::currentDateTime();
-		if (mNextDaemonCheck > now)
-		{
-			// Daemon's check interval has just reduced, so allow extra time
-			return mLastDaemonCheck.secsTo(now) + LATENESS_LEEWAY;
-		}
-		mLastDaemonCheck = QDateTime();
-	}
-	return mDaemonCheckInterval + LATENESS_LEEWAY;
 }
 
 /******************************************************************************

@@ -10,7 +10,7 @@ bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
 # that it builds with --enable-final !!!
 kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
-	daemongui.cpp main.cpp kalarmapp.cpp \
+	daemon.cpp daemongui.cpp main.cpp kalarmapp.cpp \
         mainwindowbase.cpp mainwindow.cpp \
 	messagewin.cpp \
 	preferences.cpp prefdlg.cpp \
@@ -31,7 +31,7 @@ noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
 	recurrenceedit.h recurrenceeditprivate.h deferdlg.h birthdaydlg.h \
 	alarmevent.h alarmcalendar.h alarmlistview.h kamail.h \
 	preferences.h prefdlg.h \
-	traywindow.h daemongui.h dcophandler.h \
+	traywindow.h daemon.h daemongui.h dcophandler.h \
 	fontcolour.h fontcolourbutton.h alarmtimewidget.h soundpicker.h \
 	datetime.h reminder.h
 kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h

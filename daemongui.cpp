@@ -1,7 +1,7 @@
 /*
  *  daemongui.cpp  -  handler for the alarm daemon GUI interface
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,13 +34,16 @@
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "alarmcalendar.h"
+#include "daemon.h"
 #include "daemongui.h"
 #include "daemongui.moc"
 
 
+const char* GUI_DCOP_OBJECT_NAME = "tray";
 
-DaemonGuiHandler::DaemonGuiHandler(const char *name)
-	: DCOPObject(name), 
+
+DaemonGuiHandler::DaemonGuiHandler()
+	: DCOPObject(GUI_DCOP_OBJECT_NAME), 
 	  QObject(),
 	  mDaemonStatusTimer(this),
 	  mDaemonStatusTimerCount(0),
@@ -50,7 +53,7 @@ DaemonGuiHandler::DaemonGuiHandler(const char *name)
 	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler()\n";
 	// Check if the alarm daemon is running, but don't start it yet, since
 	// the program is still initialising.
-	mDaemonRunning = theApp()->isDaemonRunning(false);
+	mDaemonRunning = Daemon::isRunning(false);
 
 	mDaemonStatusTimerInterval = Preferences::instance()->daemonTrayCheckInterval();
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
@@ -73,7 +76,7 @@ void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 	switch (changeType)
 	{
 		case CHANGE_STATUS:    // daemon status change
-			theApp()->readDaemonCheckInterval();
+			Daemon::readCheckInterval();
 			return;
 		case CHANGE_CLIENT:    // change to daemon's client application list
 			return;
@@ -135,7 +138,7 @@ void DaemonGuiHandler::registerGuiWithDaemon()
 */
 bool DaemonGuiHandler::monitoringAlarms()
 {
-	bool ok = !mCalendarDisabled  &&  theApp()->isDaemonRunning();
+	bool ok = !mCalendarDisabled  &&  Daemon::isRunning();
 	theApp()->actionAlarmEnable()->setAlarmsEnabled(ok);
 	return ok;
 }
@@ -194,7 +197,7 @@ void DaemonGuiHandler::timerCheckDaemonRunning()
 */
 bool DaemonGuiHandler::checkIfDaemonRunning()
 {
-	bool newstatus = theApp()->isDaemonRunning();
+	bool newstatus = Daemon::isRunning();
 	if (newstatus != mDaemonRunning)
 	{
 		mDaemonRunning = newstatus;
@@ -271,7 +274,7 @@ void ActionAlarmsEnabled::setAlarmsEnabled(bool status)
 	if (status != mAlarmsEnabled)
 	{
 		mAlarmsEnabled = status;
-		setText(mAlarmsEnabled ? i18n("Alarms &Enabled") : i18n("&Enable Alarms"));
+		setText(mAlarmsEnabled ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
 		emit alarmsEnabledChange(mAlarmsEnabled);
 	}
 }
