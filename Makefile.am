@@ -33,6 +33,7 @@ noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
 	traywindow.h daemongui.h dcophandler.h \
 	fontcolour.h fontcolourbutton.h alarmtimewidget.h soundpicker.h \
 	datetime.h reminder.h
+kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h
 
 METASOURCES = AUTO
 
