@@ -1341,10 +1341,10 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 /******************************************************************************
  * Return the recurrence interval as text suitable for display.
  */
-QString KAlarmEvent::recurrenceText() const
+QString KAlarmEvent::recurrenceText(bool brief) const
 {
 	if (mRepeatAtLogin)
-		return i18n("At login");
+		return brief ? i18n("At Login", "Login") : i18n("At login");
 	if (mRecurrence)
 	{
 		int frequency = mRecurrence->frequency();
@@ -1889,7 +1889,6 @@ int KAlarmEvent::recurInterval() const
  */
 bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 {
-#warning "Check"
 	bool changed = false;
 	QTime startOfDay = theApp()->preferences()->startOfDay();
 	for (QPtrListIterator<Event> it(events);  it.current();  ++it)
@@ -1916,14 +1915,13 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 					{
 						// Timed deferral alarm, so adjust the offset
 						deferralOffset = alarm.startOffset().asSeconds();
-						alarm.setStartOffset(deferralOffset + adjustment);
-#warning "Deferred reminder due in an hour: setting start of day 1 hour earlier immediately displays it"
+						alarm.setStartOffset(deferralOffset - adjustment);
 					}
 					else if (data.type == KAlarmAlarm::AUDIO__ALARM
 					&&       alarm.startOffset().asSeconds() == deferralOffset)
 					{
 						// Audio alarm is set for the same time as the deferral alarm
-						alarm.setStartOffset(deferralOffset + adjustment);
+						alarm.setStartOffset(deferralOffset - adjustment);
 					}
 				}
 				changed = true;
