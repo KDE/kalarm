@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -831,7 +821,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedFont           = mFontColourButton->font();
 	mSavedFgColour       = mFontColourButton->fgColour();
 	mSavedBgColour       = mBgColourChoose->color();
-	mSavedReminder       = mReminder->getMinutes();
+	mSavedReminder       = mReminder->minutes();
 	mSavedOnceOnly       = mReminder->isOnceOnly();
 	if (mSpecialActionsButton)
 	{
@@ -881,7 +871,7 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
 		||  mSavedBgColour   != mBgColourChoose->color()
-		||  mSavedReminder   != mReminder->getMinutes()
+		||  mSavedReminder   != mReminder->minutes()
 		||  mSavedOnceOnly   != mReminder->isOnceOnly())
 			return true;
 		if (mSpecialActionsButton)
@@ -953,7 +943,7 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			case KAEvent::MESSAGE:
 			case KAEvent::FILE:
 				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
-				event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
+				event.setReminder(mReminder->minutes(), mReminder->isOnceOnly());
 				if (mSpecialActionsButton)
 					event.setActions(mSpecialActionsButton->preAction(),
 					                 mSpecialActionsButton->postAction());
@@ -973,7 +963,7 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			{
 				bool deferral = true;
 				bool deferReminder = false;
-				int reminder = mReminder->getMinutes();
+				int reminder = mReminder->minutes();
 				if (reminder)
 				{
 					DateTime remindTime = mAlarmDateTime.addMins(-reminder);
@@ -1140,7 +1130,7 @@ void EditAlarmDlg::slotOk()
 	}
 	if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 	{
-		int reminder = mReminder->getMinutes();
+		int reminder = mReminder->minutes();
 		if (reminder)
 		{
 			KAEvent event;
@@ -1240,7 +1230,7 @@ void EditAlarmDlg::slotEditDeferral()
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
 	                       deferred, this, "deferDlg");
 	// Don't allow deferral past the next recurrence
-	int reminder = mReminder->getMinutes();
+	int reminder = mReminder->minutes();
 	if (reminder)
 	{
 		DateTime remindTime = start.addMins(-reminder);
