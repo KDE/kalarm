@@ -1183,7 +1183,7 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			int startday = start.date().day();
 			if (startday != daynum)
 			{
-#warning Feb 29 doesn't work, e.g. if start date is 1/3/05
+#warning "Feb 29 doesn't work, e.g. if start date is 1/3/05"
 				// The day of the month for the recurrence is different from the
 				// event start day, to adjust the event start to be the first
 				// recurrence after the preset event start.
