@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  Based on KOrganizer module koeditorrecurrence.cpp,
     Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -382,18 +382,23 @@ void RecurrenceEdit::initYearly()
 	mYearRuleButtonGroup->setFrameStyle(QFrame::NoFrame);
 	QBoxLayout* topLayout = new QVBoxLayout(mYearRuleButtonGroup, KDialog::marginHint());
 
-	// Set up the yearly month widgets
-	QHBox* box = new QHBox(mYearRuleButtonGroup);   // this is to control the QWhatsThis text display area
-	box->setSpacing(KDialog::spacingHint());
-	topLayout->addWidget(box);
-	mYearRuleDayMonthButton = new RadioButton(i18n("On 7th January", "O&n %1 %2"), box);
+	// Set up the February 29th selection widget
+	mYearRuleFeb29Button = new RadioButton(i18n("On &29th February"), mYearRuleButtonGroup);
+	mYearRuleFeb29Button->setFixedSize(mYearRuleFeb29Button->sizeHint());
+	mYearRuleFeb29Button->setReadOnly(mReadOnly);
+	mYearRuleButtonGroup->insert(mYearRuleFeb29Button);
+	QWhatsThis::add(mYearRuleFeb29Button,
+	      i18n("Repeat the alarm on 29th February in leap years, and on 1st March in non-leap years."));
+	topLayout->addWidget(mYearRuleFeb29Button);
+
+	// Set up the yearly date widget
+	mYearRuleDayMonthButton = new RadioButton(i18n("On 7th January", "O&n %1 %2"), mYearRuleButtonGroup);
 	mYearRuleDayMonthButton->setFixedSize(mYearRuleDayMonthButton->sizeHint());
 	mYearRuleDayMonthButton->setReadOnly(mReadOnly);
 	mYearRuleButtonGroup->insert(mYearRuleDayMonthButton);
 	QWhatsThis::add(mYearRuleDayMonthButton,
 	      i18n("Repeat the alarm on the selected date in the year"));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
+	topLayout->addWidget(mYearRuleDayMonthButton);
 
 	// Set up the yearly position widgets
 	QBoxLayout* vlayout = new QVBoxLayout(topLayout, KDialog::spacingHint());
@@ -408,7 +413,7 @@ void RecurrenceEdit::initYearly()
 	mYearRuleNthNumberEntry = new ComboBox(false, mYearRuleButtonGroup);
 	for (i = 0;  i < 5;  ++i)
 		mYearRuleNthNumberEntry->insertItem(i18n(ordinal[i]));
-	mYearRuleNthNumberEntry->insertItem(i18n("Last"));
+	mYearRuleNthNumberEntry->insertItem(i18n("Last Monday in March", "Last"));
 	mYearRuleNthNumberEntry->setFixedSize(mYearRuleNthNumberEntry->sizeHint());
 	mYearRuleNthNumberEntry->setReadOnly(mReadOnly);
 	QWhatsThis::add(mYearRuleNthNumberEntry,
@@ -457,8 +462,9 @@ void RecurrenceEdit::initYearly()
 	layout->addWidget(mYearRuleDayEntry);
 	layout->addStretch();*/
 
-	mYearRuleDayMonthButtonId = mYearRuleButtonGroup->id(mYearRuleDayMonthButton);
-//	mYearRuleDayButtonId   = mYearRuleButtonGroup->id(mYearRuleDayButton);
+	mYearRuleFeb29ButtonId          = mYearRuleButtonGroup->id(mYearRuleFeb29Button);
+	mYearRuleDayMonthButtonId       = mYearRuleButtonGroup->id(mYearRuleDayMonthButton);
+//	mYearRuleDayButtonId            = mYearRuleButtonGroup->id(mYearRuleDayButton);
 	mYearRuleOnNthTypeOfDayButtonId = mYearRuleButtonGroup->id(mYearRuleOnNthTypeOfDayButton);
 
 	connect(mYearRuleButtonGroup, SIGNAL(buttonSet(int)), SLOT(yearlyClicked(int)));
@@ -597,7 +603,8 @@ void RecurrenceEdit::monthlyClicked(int id)
 void RecurrenceEdit::yearlyClicked(int id)
 {
 	bool date;
-	if (id == mYearRuleDayMonthButtonId)
+	if (id == mYearRuleDayMonthButtonId
+	||  id == mYearRuleFeb29ButtonId)
 		date = true;
 //	else if (id == mYearRuleDayButtonId)
 	else if (id == mYearRuleOnNthTypeOfDayButtonId)
@@ -621,6 +628,7 @@ void RecurrenceEdit::unsetAllCheckboxes()
 {
 	mMonthRuleOnNthDayButton->setChecked(false);
 	mMonthRuleOnNthTypeOfDayButton->setChecked(false);
+	mYearRuleFeb29Button->setChecked(false);
 	mYearRuleDayMonthButton->setChecked(false);
 //	mYearRuleDayButton->setChecked(false);
 	mYearRuleOnNthTypeOfDayButton->setChecked(false);
@@ -679,9 +687,19 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 void RecurrenceEdit::setStartDate(const QDate& start)
 {
+	int day = start.day();
+	int month = start.month();
+	if (month == 3  &&  day == 1  &&  !QDate::leapYear(start.year()))
+	{
+		// For a start date of March 1st in a non-leap year, a recurrence on
+		// either February 29th or March 1st is permissible
+		mYearRuleFeb29Button->show();
+	}
+	else
+		mYearRuleFeb29Button->hide();
 	mYearRuleDayMonthButton->setText(i18n("On 7th January", "O&n %1 %2")
-	                                 .arg(i18n(ordinal[start.day() - 1]))
-	                                 .arg(KGlobal::locale()->monthName(start.month())));
+	                                 .arg(i18n(ordinal[day - 1]))
+	                                 .arg(KGlobal::locale()->monthName(month)));
 	mYearRuleDayMonthButton->setMinimumSize(mYearRuleDayMonthButton->sizeHint());
 }
 
@@ -768,13 +786,11 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 		case Recurrence::rYearlyMonth:   // in the nth month of the year
 		{
 			ruleButtonGroup->setButton(yearlyButtonId);
-			mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
-/*			QPtrList<int> rmd = recurrence->yearNums();
-			mYearRuleDayMonthButton->setText(KGlobal::locale()->monthName(*rmd.first()));
-			mYearRuleDayMonthButton->setMinimumSize(yearMonthLabel->sizeHint());*/
+			bool feb29 = (event.recursFeb29()  &&  !mYearRuleFeb29Button->isHidden());
+			mYearRuleButtonGroup->setButton(feb29 ? mYearRuleFeb29ButtonId : mYearRuleDayMonthButtonId);
 			break;
 		}
-/*			case Recurrence::rYearlyDay:     // on the nth day of the year
+/*		case Recurrence::rYearlyDay:     // on the nth day of the year
 		{
 			ruleButtonGroup->setButton(yearlyButtonId);
 			mYearRuleButtonGroup->setButton(mYearRuleDayButtonId);
@@ -875,6 +891,7 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			QValueList<KAlarmEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
+			event.setFirstRecurrence();
 		}
 		else
 		{
@@ -888,13 +905,7 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 	else if (button == yearlyButton)
 	{
 		int frequency = recurFrequency->value();
-		if (mYearRuleDayMonthButton->isChecked())
-		{
-			QValueList<int> months;
-			months.append(event.mainDate().month());
-			event.setRecurAnnualByDate(frequency, months, repeatCount, endDate);
-		}
-		else
+		if (mYearRuleOnNthTypeOfDayButton->isChecked())
 		{
 			// it's by position
 			KAlarmEvent::MonthPos pos;
@@ -908,8 +919,9 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			QValueList<int> months;
 			months.append(month);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
+			event.setFirstRecurrence();
 		}
-/*		else
+/*		else if (mYearRuleDayButton->isChecked())
 		{
 			// it's by day
 			int daynum = event.mainDate().dayOfYear();
@@ -917,5 +929,12 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 			daynums.append(daynum);
 			event.setRecurAnnualByDay(frequency, daynums, repeatCount, endDate);
 		}*/
+		else
+		{
+			bool feb29 = mYearRuleFeb29Button->isChecked();
+			QValueList<int> months;
+			months.append(feb29 ? 2 : event.mainDate().month());
+			event.setRecurAnnualByDate(frequency, months, feb29, repeatCount, endDate);
+		}
 	}
 }

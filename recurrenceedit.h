@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  Based on KOrganizer module koeditorrecurrence.h,
     Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -144,6 +144,7 @@ class RecurrenceEdit : public QFrame
 		// Yearly rule choices
 		QFrame*        mYearRuleFrame;
 		ButtonGroup*   mYearRuleButtonGroup;
+		RadioButton*   mYearRuleFeb29Button;
 		RadioButton*   mYearRuleDayMonthButton;
 //		RadioButton*   mYearRuleDayButton;
 		RadioButton*   mYearRuleOnNthTypeOfDayButton;
@@ -151,6 +152,7 @@ class RecurrenceEdit : public QFrame
 		ComboBox*      mYearRuleNthNumberEntry;
 		ComboBox*      mYearRuleNthTypeOfDayEntry;
 		ComboBox*      mYearRuleDayMonthComboBox;
+		int            mYearRuleFeb29ButtonId;
 		int            mYearRuleDayMonthButtonId;
 //		int            mYearRuleDayButtonId;
 		int            mYearRuleOnNthTypeOfDayButtonId;

@@ -1,7 +1,7 @@
 /*
  *  msgevent.h  -  the event object for messages
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -255,6 +255,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename)             { mAudioFile = filename; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
+		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id; }
 		void               setDate(const QDate& d)                           { mDateTime = d; mAnyTime = true; }
 		void               setTime(const QDateTime& dt)                      { mDateTime = dt; mAnyTime = false; }
@@ -294,6 +295,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		const QString&     audioFile() const            { return mAudioFile; }
 		RecurType          recurs() const               { return checkRecur(); }
 		KCal::Recurrence*  recurrence() const           { return mRecurrence; }
+		bool               recursFeb29() const          { return mRecursFeb29; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
 		int                remainingRecurrences() const { return mRemainingRecurrences; }
 		OccurType          nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
@@ -311,7 +313,6 @@ class KAlarmEvent : public KAAlarmEventBase
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
-		bool               initRecur(bool endDate, int count = 0);
 		void               setRecurMinutely(int freq, int count)                                            { setRecurMinutely(freq, count, QDateTime()); }
 		void               setRecurMinutely(int freq, const QDateTime& end)                                 { setRecurMinutely(freq, 0, end); }
 		void               setRecurDaily(int freq, int count)                                               { setRecurDaily(freq, count, QDate()); }
@@ -324,8 +325,10 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& mp, const QDate& end) { setRecurMonthlyByPos(freq, mp, 0, end); }
 		void               setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& mp, int count)   { setRecurMonthlyByPos(freq, mp, count, QDate()); }
 		void               setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& mp, const QDate& end) { setRecurMonthlyByPos(freq, mp, 0, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int count)         { setRecurAnnualByDate(freq, months, count, QDate()); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, const QDate& end)  { setRecurAnnualByDate(freq, months, 0, end); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int count)         { setRecurAnnualByDate(freq, months, -1, count, QDate()); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, const QDate& end)  { setRecurAnnualByDate(freq, months, -1, 0, end); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, int count)        { setRecurAnnualByDate(freq, months, feb29, count, QDate()); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, const QDate& end) { setRecurAnnualByDate(freq, months, feb29, 0, end); }
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& mp, const QValueList<int>& months, int count)     { setRecurAnnualByPos(freq, mp, months, count, QDate()); }
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& mp, const QValueList<int>& months, const QDate& end)  { setRecurAnnualByPos(freq, mp, months, 0, end); }
 		void               setRecurAnnualByDay(int freq, const QValueList<int>& days, int count)            { setRecurAnnualByDay(freq, days, count, QDate()); }
@@ -338,8 +341,8 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int count, const QDate& end);
 		void               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>&, int count, const QDate& end);
 		void               setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, int count, const QDate& end);
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int count, const QDate& end);
-		void               setRecurAnnualByDate(int freq, const QPtrList<int>& months, int count, const QDate& end);
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, int count, const QDate& end);
+		void               setRecurAnnualByDate(int freq, const QPtrList<int>& months, bool feb29, int count, const QDate& end);
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>&, const QValueList<int>& months, int count, const QDate& end);
 		void               setRecurAnnualByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, const QPtrList<int>& months, int count, const QDate& end);
 		void               setRecurAnnualByDay(int freq, const QValueList<int>& days, int count, const QDate& end);
@@ -355,6 +358,7 @@ class KAlarmEvent : public KAAlarmEventBase
 	private:
 		void               copy(const KAlarmEvent&);
 		void               addDefer(const QDateTime&);
+		bool               initRecur(bool endDate, int count = 0, bool feb29 = false);
 		RecurType          checkRecur() const;
 		OccurType          nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
@@ -371,6 +375,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		KCal::Recurrence*  mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
 		int                mAlarmCount;       // number of alarms
+		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mAnyTime;          // event has only a date, not a time
 		bool               mExpired;          // main alarm has expired
 		bool               mArchive;          // event has triggered in the past, so archive it when closed
