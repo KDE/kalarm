@@ -55,6 +55,8 @@
 #include "deferdlg.h"
 #include "messagewin.moc"
 
+using namespace KCal;
+
 
 static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display for a file
 
@@ -579,12 +581,19 @@ void MessageWin::slotDefer()
 			}
 			else
 			{
-				// The event doesn't exist any more, so create a new one
+				// The event doesn't exist any more !?!, so create a new one
 				event.set(dateTime, message, colour, (KAlarmEvent::Action)action, flags);
 				event.setAudioFile(audioFile);
 				event.setArchive();
+				event.setEventID(eventID);
 			}
-			theApp()->addEvent(event, 0);
+			// Add the event back into the calendar file, retaining its ID
+			theApp()->addEvent(event, 0, true);
+			if (kcalEvent)
+			{
+				event.setUid(KAlarmEvent::EXPIRED);
+				theApp()->deleteEvent(event, 0, false, false);
+			}
 		}
 		if (theApp()->wantRunInSystemTray())
 		{

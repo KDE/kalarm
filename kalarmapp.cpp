@@ -1364,7 +1364,7 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 		MessageWin* win = MessageWin::findEvent(event.id());
 		if (!win
 		||  !win->hasDefer() && !alarm.repeatAtLogin()
-		||  win->alarmType() == KAlarmAlarm::REMINDER_ALARM && alarm.type() != KAlarmAlarm::REMINDER_ALARM)
+		||  (win->alarmType() & KAlarmAlarm::REMINDER_ALARM) && !(alarm.type() & KAlarmAlarm::REMINDER_ALARM))
 		{
 			// Either there isn't already a message for this event,
 			// or there is a repeat-at-login message with no Defer
@@ -1470,14 +1470,14 @@ const Event* KAlarmApp::getEvent(const QString& eventID)
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
 */
-bool KAlarmApp::addEvent(const KAlarmEvent& event, KAlarmMainWindow* win)
+bool KAlarmApp::addEvent(const KAlarmEvent& event, KAlarmMainWindow* win, bool useEventID)
 {
 	kdDebug(5950) << "KAlarmApp::addEvent(): " << event.id() << endl;
 	if (!initCheck())
 		return false;
 
 	// Save the event details in the calendar file, and get the new event ID
-	mCalendar->addEvent(event);
+	mCalendar->addEvent(event, useEventID);
 	calendarSave();
 
 	// Update the window lists
@@ -1549,10 +1549,7 @@ void KAlarmApp::deleteEvent(KAlarmEvent& event, KAlarmMainWindow* win, bool tell
 	if (KAlarmEvent::uidStatus(event.id()) == KAlarmEvent::EXPIRED)
 	{
 		if (expiredCalendar(false))
-		{
-			mExpiredCalendar->deleteEvent(event.id());
-			mExpiredCalendar->save();
-		}
+			mExpiredCalendar->deleteEvent(event.id(), true);   // save calendar after deleting
 	}
 	else
 	{
@@ -1574,10 +1571,7 @@ void KAlarmApp::deleteDisplayEvent(const QString& eventID) const
 	if (KAlarmEvent::uidStatus(eventID) == KAlarmEvent::DISPLAYING)
 	{
 		if (mDisplayCalendar->open())
-		{
-			mDisplayCalendar->deleteEvent(eventID);
-			mDisplayCalendar->save();
-		}
+			mDisplayCalendar->deleteEvent(eventID, true);   // save calendar after deleting
 	}
 }
 
@@ -1601,10 +1595,7 @@ void KAlarmApp::undeleteEvent(KAlarmEvent& event, KAlarmMainWindow* win)
 		KAlarmMainWindow::undeleteEvent(id, event, win);
 
 		if (expiredCalendar(false))
-		{
-			mExpiredCalendar->deleteEvent(id);
-			mExpiredCalendar->save();
-		}
+			mExpiredCalendar->deleteEvent(id, true);   // save calendar after deleting
 	}
 }
 
@@ -1618,11 +1609,11 @@ void KAlarmApp::archiveEvent(KAlarmEvent& event)
 	if (expiredCalendar(false))
 	{
 		event.setEndTime(QDateTime::currentDateTime());   // time stamp to control purging
-		QString archiveID = mExpiredCalendar->addEvent(event);
+		Event* kcalEvent = mExpiredCalendar->addEvent(event);
 		mExpiredCalendar->save();
 
-		event.setEventID(archiveID);
-		KAlarmMainWindow::addEvent(event, 0);     // update window lists
+		if (kcalEvent)
+			KAlarmMainWindow::modifyEvent(KAlarmEvent(*kcalEvent), 0);   // update window lists
 	}
 }
 
@@ -1827,6 +1818,8 @@ void KAlarmApp::resetDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::resetDaemon()" << endl;
 	mCalendar->reload();
+	if (mExpiredCalendar->isOpen())
+		mExpiredCalendar->reload();
 	KAlarmMainWindow::refresh();
 	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		startDaemon();

@@ -86,7 +86,7 @@ class KAlarmApp : public KUniqueApplication
 		virtual void       commitData(QSessionManager&);
 
 		const KCal::Event* getEvent(const QString& eventID);
-		bool               addEvent(const KAlarmEvent&, KAlarmMainWindow*);
+		bool               addEvent(const KAlarmEvent&, KAlarmMainWindow*, bool useEventID = false);
 		void               modifyEvent(KAlarmEvent& oldEvent, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		void               updateEvent(KAlarmEvent&, KAlarmMainWindow*, bool archiveOnDelete = true);
 		void               deleteEvent(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true, bool archive = true);

@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,8 @@ extern "C" {
 
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
+
+using namespace KCal;
 
 
 AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type)
@@ -290,29 +292,32 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 
 /******************************************************************************
 * Add the specified event to the calendar.
-* Reply = ID of the event as written to the calendar.
+* If it is the active calendar and 'useEventID' is false, a new event ID is
+* created. In all other cases, the event ID is taken from 'event'.
+* Reply = the KCal::Event as written to the calendar.
 */
-QString AlarmCalendar::addEvent(const KAlarmEvent& event)
+Event* AlarmCalendar::addEvent(const KAlarmEvent& event, bool useEventID)
 {
 	if (!mCalendar)
-		return QString::null;
+		return 0;
 	Event* kcalEvent = new Event;
 	switch (mType)
 	{
 		case KAlarmEvent::ACTIVE:
-			const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
+			if (!useEventID)
+				const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
 			break;
 		case KAlarmEvent::EXPIRED:
-			kcalEvent->setUid(KAlarmEvent::uid(event.id(), KAlarmEvent::EXPIRED));
-			break;
 		case KAlarmEvent::DISPLAYING:
-			kcalEvent->setUid(KAlarmEvent::uid(event.id(), KAlarmEvent::DISPLAYING));
+			useEventID = true;
 			break;
 	}
-	event.updateEvent(*kcalEvent, false, mType == KAlarmEvent::EXPIRED);
+	if (useEventID)
+		kcalEvent->setUid(KAlarmEvent::uid(event.id(), mType));
+	event.updateKCalEvent(*kcalEvent, false, mType == KAlarmEvent::EXPIRED);
 	mCalendar->addEvent(kcalEvent);
 	event.clearUpdated();
-	return kcalEvent->uid();
+	return kcalEvent;
 }
 
 /******************************************************************************
@@ -326,7 +331,7 @@ void AlarmCalendar::updateEvent(const KAlarmEvent& evnt)
 		Event* kcalEvent = event(evnt.id());
 		if (kcalEvent)
 		{
-			evnt.updateEvent(*kcalEvent);
+			evnt.updateKCalEvent(*kcalEvent);
 			evnt.clearUpdated();
 		}
 	}
@@ -334,14 +339,19 @@ void AlarmCalendar::updateEvent(const KAlarmEvent& evnt)
 
 /******************************************************************************
 * Delete the specified event from the calendar, if it exists.
+* The calendar is then optionally saved.
 */
-void AlarmCalendar::deleteEvent(const QString& eventID)
+void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
 	if (mCalendar)
 	{
 		Event* kcalEvent = event(eventID);
 		if (kcalEvent)
+		{
 			mCalendar->deleteEvent(kcalEvent);
+			if (saveit)
+				save();
+		}
 	}
 }
 

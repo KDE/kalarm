@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@
 #include "prefsettings.h"
 #include "alarmcalendar.h"
 #include "alarmlistview.moc"
+
+using namespace KCal;
 
 
 class AlarmListWhatsThis : public QWhatsThis
@@ -277,9 +279,9 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 	setText(AlarmListView::MESSAGE_COLUMN, messageText);
 	mMessageWidth = width(parent->fontMetrics(), parent, AlarmListView::MESSAGE_COLUMN);
 
-	QDateTime dateTime = event.nextDateTime();
+	QDateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
-	if (!event.anyTime())
+	if (!event.anyTime()  ||  event.deferred())
 	{
 		dateTimeText += ' ';
 		dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';

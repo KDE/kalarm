@@ -50,6 +50,8 @@
 #include "alarmlistview.h"
 #include "mainwindow.moc"
 
+using namespace KCal;
+
 
 /*=============================================================================
 =  Class: KAlarmMainWindow
@@ -354,12 +356,8 @@ void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent&
 {
 	AlarmListViewItem* item = listView->getEntry(oldEventID);
 	if (item)
-	{
 		listView->deleteEntry(item);
-		listView->addEntry(newEvent, true);
-	}
-	else
-		listView->refresh();
+	listView->addEntry(newEvent, true);
 }
 
 /******************************************************************************
