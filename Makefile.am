@@ -1,6 +1,9 @@
-# set the include path for X, qt and KDE and calendar library
-INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src \
-          -I$(top_builddir)/libkdepim $(all_includes)
+SUBDIRS = libkmime widgets pixmaps
+
+INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
+	-I$(top_srcdir)/kalarm/widgets \
+	-I$(top_builddir)/libical/src \
+	-I$(top_builddir)/libkdepim $(all_includes)
 
 bin_PROGRAMS = kalarm
 kalarm_SOURCES = editdlg.cpp alarmcalendar.cpp daemongui.cpp \
@@ -8,24 +11,24 @@ kalarm_SOURCES = editdlg.cpp alarmcalendar.cpp daemongui.cpp \
         mainwindowbase.cpp mainwindow.cpp \
 	messagewin.cpp msgevent.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
-	traywindow.cpp alarmguiiface.skel \
+	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp \
-	fontcolour.cpp colourcombo.cpp datetime.cpp buttongroup.cpp \
-	alarmlistview.cpp dateedit.cpp spinbox2.cpp
+	fontcolour.cpp datetime.cpp alarmlistview.cpp kamail.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la \
+kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
+	-lkabc $(LIB_KDEUI) \
+	$(top_builddir)/libkcal/libkcal.la \
+	$(top_builddir)/kalarm/libkmime/libkmime.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la
-noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
-	mainwindowbase.h traywindow.h daemongui.h \
-	msgevent.h alarmcalendar.h alarmlistview.h datetime.h buttongroup.h \
-	recurrenceedit.h deferdlg.h \
-	fontcolour.h colourcombo.h \
-	dateedit.h spinbox2.h prefs.h prefsettings.h prefdlg.h
+noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
+	messagewin.h editdlg.h recurrenceedit.h deferdlg.h \
+	msgevent.h alarmcalendar.h alarmlistview.h kamail.h \
+	prefs.h prefsettings.h prefdlg.h \
+	traywindow.h daemongui.h dcophandler.h \
+	fontcolour.h datetime.h
 
 METASOURCES = AUTO
-
-SUBDIRS = pixmaps 
 
 alarmguiiface_DIR = $(top_srcdir)/kalarmd
 
