@@ -43,6 +43,7 @@
 #include "alarmcalendar.h"
 #include "daemongui.h"
 #include "traywindow.h"
+#include "birthdaydlg.h"
 #include "editdlg.h"
 #include "prefdlg.h"
 #include "prefsettings.h"
@@ -200,6 +201,7 @@ void KAlarmMainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
+	KAction* actBirthday = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
 #if KDE_VERSION >= 310
 	actionNew            = new KAction(i18n("&New..."), "filenew2", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
 #else
@@ -218,6 +220,7 @@ void KAlarmMainWindow::initActions()
 
 	KMenuBar* menu = menuBar();
 	KPopupMenu* submenu = new KPopupMenu(this, "file");
+	actBirthday->plug(submenu);
 	menu->insertItem(i18n("&File"), submenu);
 	actionQuit->plug(submenu);
 
@@ -539,6 +542,29 @@ void KAlarmMainWindow::slotShowExpired()
 	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
 	listView->showExpired(mShowExpired);
 	listView->refresh();
+}
+
+/******************************************************************************
+*  Called when the Import Birthdays menu item is selected, to display birthdays
+*  from the address book for selection as alarms.
+*/
+void KAlarmMainWindow::slotBirthdays()
+{
+#if KDE_VERSION >= 290
+	BirthdayDlg* dlg = new BirthdayDlg(this);
+	if (dlg->exec() == QDialog::Accepted)
+	{
+		QValueList<KAlarmEvent> events = dlg->events();
+		for (QValueList<KAlarmEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
+		{
+			// Add the alarm to the displayed lists and to the calendar file
+			theApp()->addEvent(*ev, this);
+			AlarmListViewItem* item = listView->addEntry(*ev, true);
+			listView->setSelected(item, true);
+		}
+	}
+	delete dlg;
+#endif
 }
 
 /******************************************************************************

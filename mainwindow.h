@@ -80,6 +80,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotView();
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
+		void           slotBirthdays();
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection(QListViewItem*);
