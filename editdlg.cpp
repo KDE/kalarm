@@ -689,15 +689,21 @@ bool EditAlarmDlg::checkEmailAddresses()
 {
 	QString addrs = emailToEdit->text();
 	if (addrs.isEmpty())
-	{
 		emailAddresses.clear();
-		return true;
+	else
+	{
+		QString bad = KAMail::convertEmailAddresses(addrs, emailAddresses);
+		if (!bad.isEmpty())
+		{
+			emailToEdit->setFocus();
+			KMessageBox::error(this, i18n("Invalid email address:\n%1").arg(bad));
+			return false;
+		}
 	}
-	QString bad = KAMail::convertEmailAddresses(addrs, emailAddresses);
-	if (!bad.isEmpty())
+	if (emailAddresses.isEmpty())
 	{
 		emailToEdit->setFocus();
-		KMessageBox::error(this, i18n("Invalid email address:\n%1").arg(
+		KMessageBox::error(this, i18n("No email address specified"));
 		return false;
 	}
 	return true;
