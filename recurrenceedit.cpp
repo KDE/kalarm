@@ -87,7 +87,7 @@ RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	layout = new QHBoxLayout(topLayout, 0);
 	recurCheckBox = new QCheckBox(i18n("Recur"), topFrame);
 	recurCheckBox->setFixedSize(recurCheckBox->sizeHint());
-	QWhatsThis::add(recurCheckBox, i18n("Do not regularly repeat the alarm"));
+	QWhatsThis::add(recurCheckBox, i18n("Regularly repeat the alarm"));
 	connect(recurCheckBox, SIGNAL(toggled(bool)), this, SLOT(recurToggled(bool)));
 	layout->addWidget(recurCheckBox);
 	layout->addStretch();
