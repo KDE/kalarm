@@ -28,7 +28,7 @@ class DateEdit : public KDateEdit
 	public:
 		DateEdit(QWidget* parent = 0, const char* name = 0);
 		virtual bool validate(const QDate&);
-		bool         isValid() const              { return inputIsValid(); }
+		bool         isValid() const              { return date().isValid(); }
 		const QDate& minDate() const              { return mMinDate; }
 		const QDate& maxDate() const              { return mMaxDate; }
 		void         setMinDate(const QDate&, const QString& errorDate = QString::null);
@@ -43,7 +43,7 @@ class DateEdit : public KDateEdit
 		virtual void keyReleaseEvent(QKeyEvent*);
 
 	protected slots:
-		void         slotDateChanged(QDate);
+		void         slotDateChanged(const QDate&);
 
 	private:
 		void         pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError);

@@ -28,13 +28,14 @@
 DateEdit::DateEdit(QWidget* parent, const char* name)
 	: KDateEdit(parent, name)
 {
-	connect(this, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
+	connect(this, SIGNAL(dateChanged(const QDate&)),
+	this, SLOT(slotDateChanged(const QDate&)));
 }
 
 void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
 {
 	mMinDate = d;
-	if (mMinDate.isValid()  &&  inputIsValid()  &&  date() < mMinDate)
+	if (mMinDate.isValid()  &&  date().isValid()  &&  date() < mMinDate)
 		setDate(mMinDate);
 	mMinDateErrString = errorDate;
 }
@@ -42,14 +43,13 @@ void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
 void DateEdit::setMaxDate(const QDate& d, const QString& errorDate)
 {
 	mMaxDate = d;
-	if (mMaxDate.isValid()  &&  inputIsValid()  &&  date() > mMaxDate)
+	if (mMaxDate.isValid()  &&  date().isValid()  &&  date() > mMaxDate)
 		setDate(mMaxDate);
 	mMaxDateErrString = errorDate;
 }
 
 void DateEdit::setValid(bool valid)
 {
-	setHandleInvalid(!valid);
 	if (!valid)
 		setDate(QDate());
 }
@@ -88,10 +88,8 @@ void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const 
 	KMessageBox::sorry(this, errString);
 }
 
-void DateEdit::slotDateChanged(QDate date)
+void DateEdit::slotDateChanged(const QDate&)
 {
-	if (handlesInvalid()  &&  date.isValid())
-		setHandleInvalid(false);
 }
 
 void DateEdit::mousePressEvent(QMouseEvent *e)
