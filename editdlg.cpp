@@ -880,9 +880,23 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			dt = mAlarmDateTime.dateTime();
 		else if (mTemplateUseTime->isOn())
 			dt.setTime(mTemplateTime->time());
+		KAEvent::Action type = getAlarmType();
 		event.set(dt, mAlarmMessage, mBgColourChoose->color(),
-		          mFontColourButton->fgColour(), mFontColourButton->font(), getAlarmType(),
-		          getAlarmFlags());
+		          mFontColourButton->fgColour(), mFontColourButton->font(), type, getAlarmFlags());
+		switch (type)
+		{
+			case KAEvent::MESSAGE:
+			case KAEvent::FILE:
+				event.setAudioFile(mSoundPicker->file());
+				event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
+				break;
+			case KAEvent::EMAIL:
+				event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
+				break;
+			case KAEvent::COMMAND:
+			default:
+				break;
+		}
 		event.setAudioFile(mSoundPicker->file());
 		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 		event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
