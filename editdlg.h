@@ -31,6 +31,7 @@
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
+#include "datetime.h"
 
 class QGroupBox;
 class QMultiLineEdit;
@@ -47,6 +48,7 @@ class TimePeriod;
 class AlarmTimeWidget;
 class RecurrenceEdit;
 class SoundPicker;
+class Reminder;
 class LineEdit;
 
 /**
@@ -57,13 +59,12 @@ class EditAlarmDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		enum MessageType { MESSAGE, FILE };
-		enum ReminderUnits { REMIND_HOURS_MINUTES, REMIND_DAYS, REMIND_WEEKS };
 
 		EditAlarmDlg(const QString& caption, QWidget* parent = 0, const char* name = 0,
                              const KAlarmEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		void         getEvent(KAlarmEvent&);
-		QDateTime    getDateTime(bool* anyTime = 0);
+		DateTime     getDateTime();
 
 		static ColourCombo* createBgColourChooser(bool readOnly, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
@@ -88,22 +89,18 @@ class EditAlarmDlg : public KDialogBase
 		void         slotShowMainPage();
 		void         slotShowRecurrenceEdit();
 		void         slotAnyTimeToggled(bool anyTime);
-		void         slotReminderToggled(bool);
-		void         slotReminderUnitsSelected(int index);
 
 	private:
 		KAlarmEvent::Action getAlarmType() const;
 		int                 getAlarmFlags() const;
-		int                 getReminderMinutes() const;
 		bool                checkText(QString& result);
-		void                setReminder(int minutes);
-		ReminderUnits       setReminderAnyTime(int minutes, bool anyTime);
 		void                setSoundPicker();
 		bool                checkEmailData();
 
 		void                initDisplayAlarms(QWidget* parent);
 		void                initCommand(QWidget* parent);
 		void                initEmail(QWidget* parent);
+		void                saveState();
 
 		int               mMainPageIndex;
 		int               mRecurPageIndex;
@@ -125,9 +122,7 @@ class EditAlarmDlg : public KDialogBase
 		CheckBox*         mConfirmAck;
 		FontColourButton* mFontColourButton;
 		ColourCombo*      mBgColourChoose;
-		CheckBox*         mReminder;
-		TimePeriod*       mReminderCount;
-		ComboBox*         mReminderUnits;
+		Reminder*         mReminder;
 		// Text message alarm widgets
 		QMultiLineEdit*   mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
@@ -157,14 +152,32 @@ class EditAlarmDlg : public KDialogBase
 		RecurrenceEdit*   mRecurrenceEdit;
 
 		QString           mAlarmMessage;       // message text/file name/command/email message
-		QDateTime         mAlarmDateTime;
-		QDateTime         mDeferDateTime;
+		DateTime          mAlarmDateTime;
+		DateTime          mDeferDateTime;
 		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
 		QStringList       mEmailAttachments;   // list of email attachment file names
 		QSize             mBasicSize;          // size without deferred time widget
 		int               mDeferGroupHeight;   // height added by deferred time widget
-		bool              mAlarmAnyTime;       // mAlarmDateTime is only a date, not a time
 		bool              mReadOnly;           // the dialog is read only
+
+		// Initial state of all controls
+		RadioButton*      mSavedTypeRadio;      // mMessageRadio, etc
+		bool              mSavedBeep;           // mSoundPicker beep status
+		bool              mSavedSoundFile;      // mSoundPicker sound file
+		bool              mSavedConfirmAck;     // mConfirmAck status
+		QFont             mSavedFont;           // mFontColourButton font
+		QColor            mSavedBgColour;       // mBgColourChoose selection
+		bool              mSavedReminder;       // mReminder status
+		int               mSavedReminderCount;  // mReminderCount value
+		int               mSavedReminderUnits;  // mReminderUnits selection
+		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
+		QString           mSavedEmailTo;        // mEmailToEdit value
+		QString           mSavedEmailSubject;   // mEmailSubjectEdit value
+		QStringList       mSavedEmailAttach;    // mEmailAttachList values
+		bool              mSavedEmailBcc;       // mEmailBcc status
+		DateTime          mSavedDateTime;       // mTimeWidget value
+		bool              mSavedLateCancel;     // mLateCancel status
+		RadioButton*      mSavedRepeatRadio;    // mNoRepeatRadio, etc
 };
 
 

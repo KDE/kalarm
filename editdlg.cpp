@@ -61,8 +61,9 @@
 
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "datetime.h"
+#include "alarmtimewidget.h"
 #include "soundpicker.h"
+#include "reminder.h"
 #include "recurrenceedit.h"
 #include "colourcombo.h"
 #include "fontcolourbutton.h"
@@ -174,7 +175,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		label->setFixedSize(label->sizeHint());
 
 		mDeferDateTime = event->deferDateTime();
-		mDeferTimeLabel = new QLabel(KGlobal::locale()->formatDateTime(mDeferDateTime), mDeferGroup);
+		mDeferTimeLabel = new QLabel(mDeferDateTime.formatLocale(), mDeferGroup);
 
 		if (!mReadOnly)
 		{
@@ -247,8 +248,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
-		mTimeWidget->setDateTime((!event->mainExpired() ? event->mainDateTime() : recurs ? QDateTime() : event->deferDateTime()),
-		                         (event->anyTime() && !event->deferred()));
+		mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
+		                         : recurs ? DateTime() : event->deferDateTime());
 
 		QRadioButton* radio;
 		switch (event->action())
@@ -292,7 +293,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 			reminder = event->reminderDeferral();
 		if (!reminder  &&  event->reminderArchived()  &&  recurs)
 			reminder = event->reminderArchived();
-		setReminder(reminder);
+		mReminder->setMinutes(reminder, mTimeWidget->anyTime());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->setFile(event->audioFile());
 		mSoundPicker->setChecked(event->beep() || !event->audioFile().isEmpty());
@@ -310,12 +311,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mFontColourButton->setBgColour(preferences->defaultBgColour());
 		mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
-		mTimeWidget->setDateTime(defaultTime, false);
+		mTimeWidget->setDateTime(defaultTime);
 		actionGroup->setButton(actionGroup->id(mMessageRadio));
 		repeatGroup->setButton(repeatGroup->id(mNoRepeatRadio));
 		mLateCancel->setChecked(preferences->defaultLateCancel());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
-		setReminder(0);
+		mReminder->setMinutes(0, false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->setChecked(preferences->defaultBeep());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
@@ -329,6 +330,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	mEmailAttachList->setEnabled(enable);
 	if (mEmailRemoveButton)
 		mEmailRemoveButton->setEnabled(enable);
+
+	// Save the initial state of all controls so that we can later tell if they have changed
+	saveState();
 }
 
 EditAlarmDlg::~EditAlarmDlg()
@@ -398,38 +402,13 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	layout->addWidget(mFontColourButton);
 
 	// Reminder
-	layout = new QHBoxLayout(frameLayout, spacingHint());
-	mReminder = new CheckBox(i18n("Rem&inder:"), mDisplayAlarmsFrame);
+	mReminder = new Reminder(i18n("Rem&inder:"),
+	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
+	                         i18n("Enter how long in advance of the main alarm to display a reminder alarm."),
+	                         true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setReadOnly(mReadOnly);
-	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	QWhatsThis::add(mReminder,
-	      i18n("Check to additionally display a reminder in advance of the main alarm time(s)."));
-	layout->addWidget(mReminder);
-
-	QHBox* box = new QHBox(mDisplayAlarmsFrame);    // to group widgets for QWhatsThis text
-	box->setSpacing(spacingHint());
-	layout->addWidget(box);
-	mReminderCount = new TimePeriod(box);
-	mReminderCount->setHourMinRange(1, 100*60-1);    // max 99H59M
-	mReminderCount->setUnitRange(1, 9999);
-	mReminderCount->setUnitSteps(1, 10);
-	mReminderCount->setFixedSize(mReminderCount->sizeHint());
-	mReminderCount->setSelectOnStep(false);
-	mReminderCount->setReadOnly(mReadOnly);
-	mReminder->setFocusWidget(mReminderCount);
-
-	mReminderUnits = new ComboBox(false, box);
-	mReminderUnits->insertItem(i18n("hours/minutes"), REMIND_HOURS_MINUTES);
-	mReminderUnits->insertItem(i18n("days"), REMIND_DAYS);
-	mReminderUnits->insertItem(i18n("weeks"), REMIND_WEEKS);
-	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
-	mReminderUnits->setReadOnly(mReadOnly);
-	connect(mReminderUnits, SIGNAL(activated(int)), SLOT(slotReminderUnitsSelected(int)));
-	new QLabel(i18n("in advance"), box);
-	QWhatsThis::add(box,
-	      i18n("Enter how long in advance of the main alarm to display a reminder alarm."));
-	layout->addWidget(new QWidget(mDisplayAlarmsFrame));   // left adjust the reminder controls
+	frameLayout->addWidget(mReminder);
 
 	// Top-adjust the controls
 	mFilePadding = new QHBox(mDisplayAlarmsFrame);
@@ -591,6 +570,30 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
 	return widget;
 }
 
+/******************************************************************************
+ * Save the state of all controls.
+ */
+void EditAlarmDlg::saveState()
+{
+#if 0
+	mSavedTypeRadio  = actionGroup->selected();
+	mSavedBeep       = mSoundPicker->beep();
+	mSavedSoundFile  = mSoundPicker->file()
+	mSavedConfirmAck = mConfirmAck->isChecked();
+	QFont             mSavedFont;           // mFontColourButton font
+	QColor            mSavedBgColour;       // mBgColourChoose selection
+	mSavedReminder   = mReminder->isReminder();
+	mSavedReminderCount = mReminder->getMinutes();
+	QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
+	mSavedEmailTo      = mEmailToEdit->text()
+	mSavedEmailSubject = mEmailSubjectEdit->text()
+	QStringList       mSavedEmailAttach;    // mEmailAttachList values
+	mSavedEmailBcc    = mEmailBcc->isChecked();
+	DateTime          mSavedDateTime;       // mTimeWidget value
+	mSavedLateCancel  = mLateCancel->isChecked();
+	mSavedRepeatRadio = repeatGroup->selected();
+#endif
+}
 
 /******************************************************************************
  * Get the currently entered message data.
@@ -598,21 +601,21 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
  */
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
-	event.set(mAlarmDateTime, mAlarmMessage, mBgColourChoose->color(), mFontColourButton->font(),
+	event.set(mAlarmDateTime.dateTime(), mAlarmMessage, mBgColourChoose->color(), mFontColourButton->font(),
 	          getAlarmType(), getAlarmFlags());
 	event.setAudioFile(mSoundPicker->file());
 	event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
-	event.setReminder(getReminderMinutes());
+	event.setReminder(mReminder->getMinutes());
 	if (mRecurRadio->isOn())
 	{
 		mRecurrenceEdit->updateEvent(event);
 		if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 		{
 			bool deferReminder = false;
-			int reminder = getReminderMinutes();
+			int reminder = mReminder->getMinutes();
 			if (reminder)
 			{
-				QDateTime remindTime = mAlarmDateTime.addSecs(-reminder * 60);
+				DateTime remindTime = mAlarmDateTime.addMins(-reminder);
 				if (mDeferDateTime > remindTime)
 					deferReminder = true;
 			}
@@ -632,31 +635,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAlarmEvent::EMAIL_BCC : 0)
 	     | (mRepeatAtLoginRadio->isChecked()              ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (mAlarmAnyTime                                 ? KAlarmEvent::ANY_TIME : 0)
+	     | (mAlarmDateTime.isDateOnly()                   ? KAlarmEvent::ANY_TIME : 0)
 	     | (mFontColourButton->defaultFont()              ? KAlarmEvent::DEFAULT_FONT : 0);
-}
-
-/******************************************************************************
- * Get the specified number of minutes in advance of the main alarm the
- * reminder is to be.
- */
-int EditAlarmDlg::getReminderMinutes() const
-{
-	if (!mReminder->isChecked())
-		return 0;
-	int warning = mReminderCount->value();
-	switch (mReminderUnits->currentItem())
-	{
-		case REMIND_HOURS_MINUTES:
-			break;
-		case REMIND_DAYS:
-			warning *= 24*60;
-			break;
-		case REMIND_WEEKS:
-			warning *= 7*24*60;
-			break;
-	}
-	return warning;
 }
 
 /******************************************************************************
@@ -673,11 +653,9 @@ KAlarmEvent::Action EditAlarmDlg::getAlarmType() const
 /******************************************************************************
 *  Return the alarm's start date and time.
 */
-QDateTime EditAlarmDlg::getDateTime(bool* anyTime)
+DateTime EditAlarmDlg::getDateTime()
 {
-	mTimeWidget->getDateTime(mAlarmDateTime, mAlarmAnyTime);
-	if (anyTime)
-		*anyTime = mAlarmAnyTime;
+	mTimeWidget->getDateTime(mAlarmDateTime);
 	return mAlarmDateTime;
 }
 
@@ -703,17 +681,17 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-	QWidget* errWidget = mTimeWidget->getDateTime(mAlarmDateTime, mAlarmAnyTime, false);
+	QWidget* errWidget = mTimeWidget->getDateTime(mAlarmDateTime, false);
 	if (errWidget)
 	{
 		showPage(mMainPageIndex);
 		errWidget->setFocus();
-		mTimeWidget->getDateTime(mAlarmDateTime, mAlarmAnyTime);   // display the error message now
+		mTimeWidget->getDateTime(mAlarmDateTime);   // display the error message now
 	}
 	else if (checkEmailData())
 	{
 		bool noTime;
-		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime, noTime);
+		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), noTime);
 		if (errWidget)
 		{
 			showPage(mRecurPageIndex);
@@ -724,7 +702,7 @@ void EditAlarmDlg::slotOk()
 		}
 		if (mRecurRadio->isOn())
 		{
-			int reminder = getReminderMinutes();
+			int reminder = mReminder->getMinutes();
 			if (reminder)
 			{
 				KAlarmEvent event;
@@ -745,7 +723,7 @@ void EditAlarmDlg::slotOk()
 				if (minutes  &&  reminder >= minutes)
 				{
 					showPage(mMainPageIndex);
-					mReminderCount->setFocus();
+					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than recurrence interval"));
 					return;
 				}
@@ -809,18 +787,17 @@ void EditAlarmDlg::slotCancel()
  */
 void EditAlarmDlg::slotEditDeferral()
 {
-	bool anyTime;
-	QDateTime start;
-	if (!mTimeWidget->getDateTime(start, anyTime))
+	DateTime start;
+	if (!mTimeWidget->getDateTime(start))
 	{
 		bool deferred = mDeferDateTime.isValid();
-		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : QDateTime::currentDateTime().addSecs(60)),
+		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
 		                                            deferred, this, "deferDlg");
 		// Don't allow deferral past the next recurrence
-		int reminder = getReminderMinutes();
+		int reminder = mReminder->getMinutes();
 		if (reminder)
 		{
-			QDateTime remindTime = start.addSecs(-reminder * 60);
+			DateTime remindTime = start.addMins(-reminder);
 			if (QDateTime::currentDateTime() < remindTime)
 				start = remindTime;
 		}
@@ -828,7 +805,7 @@ void EditAlarmDlg::slotEditDeferral()
 		if (deferDlg->exec() == QDialog::Accepted)
 		{
 			mDeferDateTime = deferDlg->getDateTime();
-			mDeferTimeLabel->setText(mDeferDateTime.isValid() ? KGlobal::locale()->formatDateTime(mDeferDateTime) : QString::null);
+			mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString::null);
 		}
 	}
 #warning "If only the deferral time is changed, ensure that event ID is retained"
@@ -851,11 +828,11 @@ void EditAlarmDlg::slotShowMainPage()
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
-	mTimeWidget->getDateTime(mAlarmDateTime, mAlarmAnyTime, false);
+	mTimeWidget->getDateTime(mAlarmDateTime, false);
 	if (mRecurSetEndDate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
-		mRecurrenceEdit->setEndDate(mAlarmDateTime >= now ? mAlarmDateTime.date() : now.date());
+		mRecurrenceEdit->setEndDate(mAlarmDateTime.dateTime() >= now ? mAlarmDateTime.date() : now.date());
 		mRecurSetEndDate = false;
 	}
 	mRecurrenceEdit->setStartDate(mAlarmDateTime.date());
@@ -1015,86 +992,8 @@ void EditAlarmDlg::slotFontColourSelected()
 */
 void EditAlarmDlg::slotAnyTimeToggled(bool anyTime)
 {
-	if (mReminder->isChecked())
-	 	setReminderAnyTime(getReminderMinutes(), anyTime);
-}
-
-/******************************************************************************
-*  Set the advance reminder units to days if "Any time" is checked.
-*/
-EditAlarmDlg::ReminderUnits EditAlarmDlg::setReminderAnyTime(int reminderMinutes, bool anyTime)
-{
-	mReminderUnits->setEnabled(!anyTime);
-	ReminderUnits units = static_cast<ReminderUnits>(mReminderUnits->currentItem());
-	if (anyTime  &&  units == REMIND_HOURS_MINUTES)
-	{
-		// Set units to days and round up the warning period
-		units = REMIND_DAYS;
-		mReminderUnits->setCurrentItem(REMIND_DAYS);
-		mReminderUnits->setEnabled(false);
-		mReminderCount->showUnit();
-		mReminderCount->setUnitValue((reminderMinutes + 1439) / 1440);
-	}
-	return units;
-}
-
-/******************************************************************************
-*  Initialise the "Advance reminder" controls.
-*/
-void EditAlarmDlg::setReminder(int minutes)
-{
-	bool on = !!minutes;
-	mReminder->setChecked(on);
-	mReminderCount->setEnabled(on);
-	mReminderUnits->setEnabled(on);
-	int item;
-	if (minutes)
-	{
-		int count = minutes;
-		if (minutes % (24*60))
-			item = REMIND_HOURS_MINUTES;
-		else if (minutes % (7*24*60))
-		{
-			item = REMIND_DAYS;
-			count = minutes / (24*60);
-		}
-		else
-		{
-			item = REMIND_WEEKS;
-			count = minutes / (7*24*60);
-		}
-		mReminderUnits->setCurrentItem(item);
-		if (item == REMIND_HOURS_MINUTES)
-			mReminderCount->setHourMinValue(count);
-		else
-			mReminderCount->setUnitValue(count);
-		item = setReminderAnyTime(minutes, mTimeWidget->anyTime());
-	}
-	else
-	{
-		item = theApp()->preferences()->defaultReminderUnits();
-		mReminderUnits->setCurrentItem(item);
-	}
-	mReminderCount->showHourMin(item == REMIND_HOURS_MINUTES);
-}
-
-/******************************************************************************
-*  Called when the Reminder checkbox is toggled.
-*/
-void EditAlarmDlg::slotReminderToggled(bool on)
-{
-	mReminderUnits->setEnabled(on);
-	mReminderCount->setEnabled(on);
-	if (on  &&  mTimeWidget->anyTime())
-	 	setReminderAnyTime(getReminderMinutes(), true);
-}
-
-/******************************************************************************
-*  Called when a new item is made current in the reminder units combo box.
-*/
-void EditAlarmDlg::slotReminderUnitsSelected(int index)
-{
-	mReminderCount->showHourMin(index == REMIND_HOURS_MINUTES);
+	if (mReminder->isReminder())
+	 	mReminder->setDateOnly(anyTime);
 }
 
 /******************************************************************************
