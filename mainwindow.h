@@ -49,6 +49,7 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    deleteMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* firstWindow()      { return windowList.first(); }
+		static int               count()            { return windowList.count(); }
 
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);

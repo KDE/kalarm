@@ -374,7 +374,7 @@ int KAlarmApp::newInstance()
 */
 void KAlarmApp::quitIf(int exitCode)
 {
-	if (activeCount <= 0  &&  !KAlarmMainWindow::firstWindow()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
+	if (activeCount <= 0  &&  !KAlarmMainWindow::count()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
 	{
 		// This was the last/only running "instance" of the program, so exit completely.
 		exit(exitCode);
@@ -470,19 +470,21 @@ void KAlarmApp::slotSettingsChanged()
 	if (settings()->runInSystemTray() != mRunInSystemTray)
 	{
 		// The system tray run mode has changed
-		++activeCount;              // prevent the application from quitting
-		displayTrayIcon(false);     // remove the system tray icon if it is currently shown
+		++activeCount;          // prevent the application from quitting
+		KAlarmMainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0L;
+		delete mTrayWindow;     // remove the system tray icon if it is currently shown
 		mRunInSystemTray = !mRunInSystemTray;
 		if (mRunInSystemTray)
 		{
-			if (!KAlarmMainWindow::firstWindow())
+			if (!KAlarmMainWindow::count())
 				new KAlarmMainWindow;
 			displayTrayIcon(true);
 		}
 		else
 		{
-			if (!KAlarmMainWindow::firstWindow())
-				displayTrayIcon(true);
+			if (win->isHidden())
+				delete win;
+			displayTrayIcon(true);
 		}
 		--activeCount;
 	}
