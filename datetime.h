@@ -1,7 +1,7 @@
 /*
- *  datetime.h  -  date and time spinbox widgets
+ *  datetime.h  -  date and time spinboxes, and alarm time entry widget
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,17 +40,18 @@ class AlarmTimeWidget : public QWidget
 		bool           getDateTime(QDateTime&, bool& anyTime) const;
 		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
 		void           setDateTime(const QDateTime&, bool anyTime);
+		void           enableAnyTime(bool enable);
 		QSize          sizeHint() const                             { return minimumSizeHint(); }
 	signals:
-		void deferred();
+		void           deferred();
 	protected slots:
-		void slotDefer();
-		void slotTimer();
-		void slotAtTimeToggled(bool on);
-		void slotAfterTimeToggled(bool on);
-		void slotDateTimeChanged(int);
-		void slotDelayTimeChanged(int);
-		void anyTimeToggled(bool);
+		void           slotDefer();
+		void           slotTimer();
+		void           slotAtTimeToggled(bool on);
+		void           slotAfterTimeToggled(bool on);
+		void           slotDateTimeChanged(int);
+		void           slotDelayTimeChanged(int);
+		void           anyTimeToggled(bool);
 	private:
 		void           init(const QString& groupBoxTitle, bool groupBox, int deferSpacing);
 		QRadioButton*  atTimeRadio;
@@ -61,6 +62,7 @@ class AlarmTimeWidget : public QWidget
 		QCheckBox*     anyTimeCheckBox;
 		QTimer         timer;
 		bool           timerSyncing;            // timer is not yet synchronised to the minute boundary
+		bool           anyTimeAllowed;          // 'anyTimeCheckBox' is enabled
 		bool           enteredDateTimeChanged;  // prevent recursion through slotDelayTimeChanged()
 };
 

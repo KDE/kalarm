@@ -1,5 +1,5 @@
 /*
- *  editdlg.h  -  dialogue to create or modify an alarm message
+ *  editdlg.h  -  dialogue to create or modify an alarm
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -39,7 +39,7 @@ class AlarmTimeWidget;
 class RecurrenceEdit;
 
 /**
- * EditAlarmDlg: A dialog for the input of an alarm message's details.
+ * EditAlarmDlg: A dialog for the input of an alarm's details.
  */
 class EditAlarmDlg : public KDialogBase
 {
@@ -70,6 +70,7 @@ class EditAlarmDlg : public KDialogBase
 		virtual void slotOk();
 		virtual void slotCancel();
 		virtual void slotTry();
+		void         slotRepeatTypeChange(int repeatType);
 		void         slotMessageTypeClicked(int id);
 		void         slotMessageTextChanged();
 

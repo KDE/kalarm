@@ -1,7 +1,7 @@
 /*
- *  datetime.cpp  -  date and time spinbox widgets
+ *  datetime.cpp  -  date and time spinboxes, and alarm time entry widget
  *  Program:  kalarm
- *  (C) 2001 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 
 	if (!deferSpacing)
 	{
+		anyTimeAllowed = true;
 		anyTimeCheckBox = new QCheckBox(i18n("Any time"), page);
 		anyTimeCheckBox->setFixedSize(anyTimeCheckBox->sizeHint());
 		QWhatsThis::add(anyTimeCheckBox, i18n("Schedule the alarm for any time during the day"));
@@ -110,7 +111,8 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 	layout = new QHBoxLayout(topLayout, 0);
 	if (deferSpacing)
 	{
-		anyTimeCheckBox = 0L;
+		anyTimeAllowed = false;
+		anyTimeCheckBox = 0;
 
 		// Defer button
 		// The width of this button is too narrow, so set it to correspond
@@ -180,7 +182,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 	if (atTimeRadio->isOn())
 	{
 		dateTime.setDate(dateEdit->getDate());
-		anyTime = anyTimeCheckBox && anyTimeCheckBox->isChecked();
+		anyTime = anyTimeAllowed && anyTimeCheckBox && anyTimeCheckBox->isChecked();
 		if (anyTime)
 		{
 			dateTime.setTime(QTime());
@@ -220,7 +222,25 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 	QDate now = QDate::currentDate();
 	dateEdit->setMinValue(DateSpinBox::getDateValue(dt.date() < now ? dt.date() : now));
 	if (anyTimeCheckBox)
+	{
+		anyTimeAllowed = anyTime;
 		anyTimeCheckBox->setChecked(anyTime);
+	}
+}
+
+/******************************************************************************
+*  Enable/disable the "any time" checkbox.
+*/
+void AlarmTimeWidget::enableAnyTime(bool enable)
+{
+	if (anyTimeCheckBox)
+	{
+		anyTimeAllowed = enable;
+		bool at = atTimeRadio->isOn();
+		anyTimeCheckBox->setEnabled(enable && at);
+		if (at)
+			timeEdit->setEnabled(!enable || !anyTimeCheckBox->isChecked());
+	}
 }
 
 /******************************************************************************
@@ -257,9 +277,9 @@ void AlarmTimeWidget::slotAtTimeToggled(bool on)
 	||  !on  &&  !afterTimeRadio->isOn())
 		afterTimeRadio->setChecked(!on);
 	dateEdit->setEnabled(on);
-	timeEdit->setEnabled(on && (!anyTimeCheckBox || !anyTimeCheckBox->isChecked()));
+	timeEdit->setEnabled(on && (!anyTimeAllowed || !anyTimeCheckBox || !anyTimeCheckBox->isChecked()));
 	if (anyTimeCheckBox)
-		anyTimeCheckBox->setEnabled(on);
+		anyTimeCheckBox->setEnabled(on && anyTimeAllowed);
 }
 
 /******************************************************************************
@@ -283,7 +303,7 @@ void AlarmTimeWidget::slotAfterTimeToggled(bool on)
 */
 void AlarmTimeWidget::anyTimeToggled(bool on)
 {
-	timeEdit->setEnabled(!on && atTimeRadio->isOn());
+	timeEdit->setEnabled((!anyTimeAllowed || !on) && atTimeRadio->isOn());
 }
 
 /******************************************************************************
