@@ -6,10 +6,10 @@ libwidgets_la_METASOURCES = AUTO
 
 libwidgets_la_SOURCES = \
 	buttongroup.cpp checkbox.cpp colourcombo.cpp combobox.cpp dateedit.cpp \
-	pushbutton.cpp radiobutton.cpp timespinbox.cpp \
+	pushbutton.cpp radiobutton.cpp timespinbox.cpp timeperiod.cpp \
 	spinbox.cpp spinbox2.cpp
 
 noinst_HEADERS = \
 	buttongroup.h checkbox.h colourcombo.h combobox.h dateedit.h \
-	pushbutton.h radiobutton.h timespinbox.h \
+	pushbutton.h radiobutton.h timespinbox.h timeperiod.h \
 	spinbox.h spinbox2.h
