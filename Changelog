@@ -1,5 +1,11 @@
 KAlarm
 
+=== Version 0.5.2 --- 30 Jan 2002 ===
+Fix session restore crash if in 'run continuously in system tray' mode.
+
+=== Version 0.5.1 --- 30 Jan 2002 ===
+Change configuration defaults.
+
 === Version 0.5 --- 29 Jan 2002 ===
 Incorporate system tray icon into KAlarm, add --tray option.
 Add 'run continuously in system tray' operating mode.
