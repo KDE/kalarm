@@ -54,6 +54,7 @@ class TrayWindow : public KSystemTray
 
 	private slots:
 		void         slotNewAlarm();
+		void         slotNewFromTemplate(const KAEvent&);
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
 

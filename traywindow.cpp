@@ -19,6 +19,7 @@
  */
 
 #include "kalarm.h"
+
 #include <stdlib.h>
 
 #include <qtooltip.h>
@@ -37,6 +38,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#include "alarmtext.h"
 #include "daemon.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -44,6 +46,7 @@
 #include "messagewin.h"
 #include "prefdlg.h"
 #include "preferences.h"
+#include "templatemenuaction.h"
 #include "traywindow.moc"
 
 
@@ -86,9 +89,7 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
-#ifdef NEW_FROM_TEMPLATE
-	KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, "tNewFromTempl")->plug(contextMenu());
-#endif
+	KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), this, SLOT(slotNewFromTemplate(const KAEvent&)), actcol, "tNewFromTempl")->plug(contextMenu());
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Replace the default handler for the Quit context menu item
@@ -127,6 +128,14 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 void TrayWindow::slotNewAlarm()
 {
 	MainWindow::executeNew();
+}
+
+/******************************************************************************
+*  Called when the "New Alarm" menu item is selected to edit a new alarm.
+*/
+void TrayWindow::slotNewFromTemplate(const KAEvent& event)
+{
+	MainWindow::executeNew(event);
 }
 
 /******************************************************************************
@@ -265,7 +274,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			}
 			if (space)
 				item.text += ' ';
-			item.text += AlarmListViewItem::alarmText(event, false);
+			item.text += AlarmText::summary(event);
 
 			// Insert the item into the list in time-sorted order
 			for (iit = items.begin();  iit != items.end();  ++iit)
