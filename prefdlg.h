@@ -142,11 +142,11 @@ class EmailPrefTab : public PrefsTabBase
 	private slots:
 		void         slotEmailUseCCToggled(bool);
 		void         slotEmailBccUseCCToggled(bool);
+		void         slotAddressChanged()    { mAddressChanged = true; }
 
 	private:
 		void         setEmailAddress(bool useControlCentre, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
-		void         slotAddressChanged()    { mAddressChanged = true; }
 
 		QButtonGroup*  mEmailClient;
 		QLineEdit*     mEmailAddress;
