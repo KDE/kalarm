@@ -59,6 +59,7 @@ class RecurrenceEdit : public QWidget
 		int           noRecurHeight() const    { return noRepeatSize.height(); }
 		int           heightVariation() const  { return recurrenceHeight; }
 		virtual QSize sizeHint() const;
+		virtual QSize minimumSizeHint() const;
 
 		/** Check if the input is valid. */
 		bool          validateInput();

@@ -103,7 +103,7 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	recurRadio->setFixedSize(recurRadio->sizeHint());
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
 
-	noRepeatSize = QWidget::sizeHint();
+	noRepeatSize = QWidget::minimumSizeHint();
 	int margins = noRepeatSize.width() - repeatButtonGroup->sizeHint().width();
 
 	recurrenceFrame = new QFrame(topFrame, "recurFrame");
@@ -316,10 +316,21 @@ QSize RecurrenceEdit::sizeHint() const
 {
 	if (!noRepeatSize.width())
 		return QWidget::sizeHint();
-	if (!recurrenceFrame || recurrenceFrame->isHidden())
+	if (!recurRadio || !recurRadio->isChecked())
 		return noRepeatSize;
 	return QSize(QMAX(noRepeatSize.width(), recurrenceWidth),
 	             noRepeatSize.height() + recurrenceHeight);
+}
+
+/******************************************************************************
+ * Return the recommended minimum size of the widget.
+ * This is the same as the recommended size.
+ */
+QSize RecurrenceEdit::minimumSizeHint() const
+{
+	if (!noRepeatSize.width())
+		return QWidget::minimumSizeHint();
+	return sizeHint();
 }
 
 /******************************************************************************
