@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -39,34 +39,41 @@ class TrayWindow : public KSystemTray
 	public:
 		TrayWindow(KAlarmMainWindow* parent, const char* name = 0);
 		~TrayWindow();
-		void              removeWindow(KAlarmMainWindow*);
-		KAlarmMainWindow* assocMainWindow() const  { return mAssocMainWindow; }
-		void              setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
-		bool              inSystemTray() const;
-		static bool       quitWarning();
-		static void       setQuitWarning(bool warn);
+		void               removeWindow(KAlarmMainWindow*);
+		KAlarmMainWindow*  assocMainWindow() const  { return mAssocMainWindow; }
+		void               setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
+		bool               inSystemTray() const;
+		QString            tooltipAlarmText() const;
+		static const QString QUIT_WARN;
 
 	public slots:
-		void              slotQuit();
+		void               slotQuit();
 
 	signals:
-		void              deleted();
+		void               deleted();
 
 	protected:
-		virtual void      contextMenuAboutToShow(KPopupMenu*);
-		virtual void      mousePressEvent(QMouseEvent*);
-		virtual void      mouseReleaseEvent(QMouseEvent*);
+		virtual void       contextMenuAboutToShow(KPopupMenu*);
+		virtual void       mousePressEvent(QMouseEvent*);
+		virtual void       mouseReleaseEvent(QMouseEvent*);
+		virtual void       dragEnterEvent(QDragEnterEvent*);
+		virtual void       dropEvent(QDropEvent*);
 
 	private slots:
-		void              setEnabledStatus(bool status);
+		void               setEnabledStatus(bool status);
 
 	private:
+		friend class TrayTooltip;
+
 		KAlarmMainWindow*  mAssocMainWindow;     // main window associated with this, or null
 		QPixmap            mPixmapEnabled, mPixmapDisabled;
 		KAction*           mActionQuit;          // quit action for system tray window
+		TrayTooltip*       mTooltip;
 		int                mAlarmsEnabledId;     // alarms enabled item in menu
-		bool               mQuitReplaced;        // the context menu Quit item has been replaced
+#if KDE_VERSION < 310
 		KActionCollection* mActionCollection;
+		bool               mQuitReplaced;        // the context menu Quit item has been replaced
+#endif
 };
 
 #endif // TRAYWINDOW_H

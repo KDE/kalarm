@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -42,21 +42,36 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagewin.h"
+#include "alarmcalendar.h"
+#include "alarmlistview.h"
 #include "daemongui.h"
 #include "preferences.h"
 #include "traywindow.moc"
+
+
+class TrayTooltip : public QToolTip
+{
+	public:
+		TrayTooltip(QWidget* parent) : QToolTip(parent) { }
+	protected:
+		virtual void maybeTip(const QPoint&);
+};
 
 
 /*=============================================================================
 = Class: TrayWindow
 = The KDE system tray window.
 =============================================================================*/
+const QString TrayWindow::QUIT_WARN = QString::fromLatin1("QuitWarn");
+
 
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
-	  mAssocMainWindow(parent),
-	  mQuitReplaced(false),
-	  mActionCollection(new KActionCollection(this))
+	  mAssocMainWindow(parent)
+#if KDE_VERSION < 310
+	  , mActionCollection(new KActionCollection(this)),
+	  mQuitReplaced(false)
+#endif
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -65,8 +80,16 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
 		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
 		                         i18n("%1 Error").arg(kapp->aboutData()->programName()));
+	setAcceptDrops(true);         // allow drag-and-drop onto this window
 
+#if KDE_VERSION >= 310
+	KAction* quit = actionCollection()->action(KStdAction::stdName(KStdAction::Quit));
+	actionCollection()->remove(quit);
+	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
+	actionCollection()->insert(mActionQuit);
+#else
 	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), mActionCollection);
+#endif
 
 	// Set up the context menu
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -81,12 +104,14 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	daemonGui->checkStatus();
 	setEnabledStatus(daemonGui->monitoringAlarms());
 
-	QToolTip::add(this, kapp->aboutData()->programName());
+	mTooltip = new TrayTooltip(this);
 }
 
 TrayWindow::~TrayWindow()
 {
 	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
+	delete mTooltip;
+	mTooltip = 0;
 	theApp()->removeWindow(this);
 	emit deleted();
 }
@@ -97,6 +122,7 @@ TrayWindow::~TrayWindow()
 */
 void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 {
+#if KDE_VERSION < 310
 	if (!mQuitReplaced)
 	{
 		// Prevent Quit from quitting the program
@@ -113,6 +139,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 		mActionQuit->plug(menu);
 		mQuitReplaced = true;
 	}
+#endif
 
 	// Update the Alarms Enabled item status
 	theApp()->daemonGuiHandler()->checkStatus();
@@ -128,12 +155,12 @@ void TrayWindow::slotQuit()
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->alarmsDisabledIfStopped()
 #if KDE_VERSION < 290
-	&&  quitWarning()
+	&&  Preferences::notifying(QUIT_WARN)
 #endif
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
 	                                         "(once any alarm message windows are closed)."),
 	                              QString::null, mActionQuit->text(), KStdGuiItem::cancel(),
-	                              QString::fromLatin1("QuitWarn")
+	                              QUIT_WARN
 	                             ) != KMessageBox::Yes)
 		return;
 	if (theApp()->wantRunInSystemTray())
@@ -144,27 +171,6 @@ void TrayWindow::slotQuit()
 			KAlarmMainWindow::closeAll();
 	}
 	theApp()->displayTrayIcon(false);
-}
-
-/******************************************************************************
-* Called to allow quit warning messages again.
-*/
-void TrayWindow::setQuitWarning(bool warn)
-{
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
-	config->writeEntry(QString::fromLatin1("QuitWarn"), QString::fromLatin1(warn ? "" : "Yes"));
-	config->sync();
-}
-
-/******************************************************************************
-* Return whether quit warning messages are output.
-*/
-bool TrayWindow::quitWarning()
-{
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
-	return config->readEntry(QString::fromLatin1("QuitWarn")) != QString::fromLatin1("Yes");
 }
 
 /******************************************************************************
@@ -184,7 +190,6 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
-
 	if (e->button() == LeftButton  &&  !theApp()->wantRunInSystemTray())
 	{
 		// Left click: display/hide the first main window
@@ -201,7 +206,6 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 */
 void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
 {
-
 	if (e->button() == LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
 	{
 		mAssocMainWindow->raise();
@@ -209,6 +213,107 @@ void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
 	}
 	else
 		KSystemTray::mouseReleaseEvent(e);
+}
+
+/******************************************************************************
+*  Called when the drag cursor enters the panel icon.
+*/
+void TrayWindow::dragEnterEvent(QDragEnterEvent* e)
+{
+	KAlarmMainWindow::executeDragEnterEvent(e);
+}
+
+/******************************************************************************
+*  Called when an object is dropped on the panel icon.
+*  If the object is recognised, the edit alarm dialog is opened appropriately.
+*/
+void TrayWindow::dropEvent(QDropEvent* e)
+{
+	KAlarmMainWindow::executeDropEvent(0, e);
+}
+
+/******************************************************************************
+*  Return the tooltip text showing alarms due in the next 24 hours.
+*  The limit of 24 hours is because only times, not dates, are displayed.
+*/
+QString TrayWindow::tooltipAlarmText() const
+{
+	QString text = kapp->aboutData()->programName();
+	KAlarmEvent event;
+	Preferences* preferences = theApp()->preferences();
+	const QString& prefix = preferences->tooltipTimeToPrefix();
+	int maxCount = preferences->tooltipAlarmCount();
+	QDateTime now = QDateTime::currentDateTime();
+
+	// Get today's and tomorrow's alarms, sorted in time order
+	QPtrList<KCal::Event> events = theApp()->getCalendar().events(now.date(), true);
+	QPtrList<KCal::Event> events2 = theApp()->getCalendar().events(now.date().addDays(1), true);
+
+	int count = 0;
+	bool todayEvents = true;
+	KCal::Event* kcalEvent = events.first();
+	if (!kcalEvent)
+	{
+		todayEvents = false;
+		kcalEvent = events2.first();
+	}
+	while (kcalEvent  &&  count != maxCount)
+	{
+		event.set(*kcalEvent);
+		if (!event.expired()  &&  event.action() == KAlarmEvent::MESSAGE)
+		{
+			DateTime dateTime = event.nextDateTime();
+			if (dateTime.date() != now.date())
+			{
+				// Ignore tomorrow's alarms after the current time
+				if (dateTime.time() >= now.time())
+					break;
+			}
+
+			// The alarm is due today, or early tomorrow
+			text += "\n";
+			bool space = false;
+			if (preferences->showTooltipAlarmTime())
+			{
+				text += KGlobal::locale()->formatTime(dateTime.time());
+				text += ' ';
+				space = true;
+			}
+			if (preferences->showTooltipTimeToAlarm())
+			{
+				int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
+				if (mins < 0)
+					mins = 0;
+				char minutes[3] = "00";
+				minutes[0] = (mins%60) / 10 + '0';
+				minutes[1] = (mins%60) % 10 + '0';
+				if (preferences->showTooltipAlarmTime())
+					text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
+				else
+					text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
+				text += ' ';
+				space = true;
+			}
+			if (space)
+				text += ' ';
+			text += AlarmListViewItem::alarmText(event);
+			++count;
+		}
+
+		// Get the next event
+		if (todayEvents)
+		{
+			kcalEvent = events.next();
+			if (!kcalEvent)
+			{
+				todayEvents = false;
+				kcalEvent = events2.first();
+			}
+		}
+		else
+			kcalEvent = events2.next();
+	}
+	return text;
 }
 
 /******************************************************************************
@@ -242,7 +347,7 @@ bool TrayWindow::inSystemTray() const
 	Window  root;
 	Window* children = 0;
 	unsigned int nchildren;
-  // Find the X parent window of the widget. This is not the same as the Qt parent widget.
+	// Find the X parent window of the widget. This is not the same as the Qt parent widget.
 	if (!XQueryTree(qt_xdisplay(), winId(), &root, &xParent, &children, &nchildren))
 		return true;    // error determining its parent X window
 	if (children)
@@ -254,4 +359,17 @@ bool TrayWindow::inSystemTray() const
 #else
 	return true;
 #endif // HAVE_X11_HEADERS
+}
+
+
+/******************************************************************************
+*  Displays the appropriate tooltip depending on preference settings.
+*/
+void TrayTooltip::maybeTip(const QPoint&)
+{
+	TrayWindow* parent = (TrayWindow*)parentWidget();
+	if (theApp()->preferences()->tooltipAlarmCount())
+		tip(parent->rect(), parent->tooltipAlarmText());
+	else
+		tip(parent->rect(), kapp->aboutData()->programName());
 }
