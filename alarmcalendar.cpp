@@ -57,7 +57,9 @@ AlarmCalendar::AlarmCalendar(const QString& path, KAlarmEvent::Status type, cons
 	  mConfigKey(icalPath.isNull() ? QString::null : configKey),
 	  mType(type),
 	  mKAlarmVersion(-1),
-	  mKAlarmVersion057_UTC(false)
+	  mKAlarmVersion057_UTC(false),
+	  mOpen(false),
+	  mOpening(false)
 {
 	mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
 	mICalUrl.setPath(icalPath.isNull() ? path : icalPath);
@@ -70,46 +72,50 @@ AlarmCalendar::~AlarmCalendar()
 }
 
 /******************************************************************************
-* Open the calendar file and load it into memory.
+* Open the calendar file if not already open, and load it into memory.
 */
 bool AlarmCalendar::open()
 {
-	if (mCalendar)
+	if (mOpen)
 		return true;
 	if (!mUrl.isValid())
 		return false;
+	if (mOpening)
+	{
+		// Another open() call is already in progress for this calendar file.
+		// To avoid failed updates, wait until it has completed.
+		while (mOpening)
+			sleep(1);   // wait for 1 second
+		return mOpen;
+	}
+	mOpening = true;
+
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	if (!KIO::NetAccess::exists(mUrl))
 	{
-		if (!create())      // create the calendar file
+		// The calendar file doesn't yet exist, so create it
+		if (create())
+			load();
+	}
+	else
+	{
+		// Load the existing calendar file
+		if (load() == 0)
 		{
-			delete mCalendar;
-			mCalendar = 0;
-			return false;
+			if (create())       // zero-length file - create a new one
+				load();
 		}
 	}
-
-	// Load the calendar file
-	switch (load())
+	if (!mOpen)
 	{
-		case 1:         // success
-			break;
-		case 0:         // zero-length file
-			if (!create()  ||  load() <= 0)
-			{
-				delete mCalendar;
-				mCalendar = 0;
-				return false;
-			}
-		case -1:        // failure
-			delete mCalendar;
-			mCalendar = 0;
-			return false;
+		delete mCalendar;
+		mCalendar = 0;
 	}
-	return true;
+	mOpening = false;
+	return mOpen;
 }
 
 /******************************************************************************
@@ -195,6 +201,7 @@ int AlarmCalendar::load()
 	else
 		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version " << mKAlarmVersion << endl;
 	KAlarmEvent::convertKCalEvents(*this);   // convert events to current KAlarm format for when calendar is saved
+	mOpen = true;
 	return 1;
 }
 
@@ -273,6 +280,7 @@ void AlarmCalendar::close()
 		delete mCalendar;
 		mCalendar = 0;
 	}
+	mOpening = mOpen = false;
 }
 
 /******************************************************************************

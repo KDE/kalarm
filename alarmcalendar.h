@@ -53,7 +53,7 @@ class AlarmCalendar : public QObject
 		KCal::Event*          addEvent(const KAlarmEvent&, bool useEventID = false);
 		void                  updateEvent(const KAlarmEvent&);
 		void                  deleteEvent(const QString& eventID, bool save = false);
-		bool                  isOpen() const                      { return !!mCalendar; }
+		bool                  isOpen() const                      { return mOpen; }
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
 		int                   KAlarmVersion() const               { return mKAlarmVersion; }
@@ -79,6 +79,8 @@ class AlarmCalendar : public QObject
 		mutable int          mKAlarmVersion;    // version of KAlarm which created the loaded calendar file
 		mutable bool         mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                 mVCal;             // true if calendar file is in VCal format
+		bool                 mOpen;             // true if the calendar file is open
+		bool                 mOpening;          // true if the calendar file is currently being opened
 };
 
 #endif // ALARMCALENDAR_H
