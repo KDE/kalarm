@@ -61,6 +61,6 @@ rcdir = $(kde_datadir)/kalarm
 rc_DATA = kalarmui.rc
 
 messages: rc.cpp
-	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp -o $(podir)/kalarm.pot
+	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
 
 #include ../admin/Doxyfile.am
