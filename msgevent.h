@@ -125,11 +125,13 @@ class KAlarmEvent
 			LAST_OCCURRENCE       // the last occurrence is due
 		};
 
-		KAlarmEvent()    : mRevision(0), mRecurrence(0), mMainAlarmID(1) { }
+		KAlarmEvent()    : mRevision(0), mRecurrence(0L), mMainAlarmID(1) { }
 		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
-																								: mRecurrence(0L) { set(dt, message, c, type, flags); }
+		                                            : mRecurrence(0L) { set(dt, message, c, type, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0L) { set(e); }
+		KAlarmEvent(const KAlarmEvent& e)           : mRecurrence(0L) { copy(e); }
 		~KAlarmEvent()    { delete mRecurrence; }
+		KAlarmEvent&      operator=(const KAlarmEvent& e)   { if (&e != this) copy(e);  return *this; }
 		void              set(const KCal::Event&);
 		void              set(const QDate& d, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
 		                           { set(d, message, c, type, flags | ANY_TIME); }
@@ -246,6 +248,7 @@ class KAlarmEvent
 		static const int  REPEAT_AT_LOGIN_OFFSET;   // alarm ID offset for repeat-at-login alarm
 		static const int  DEFERRAL_OFFSET;          // alarm ID offset for deferral alarm
 	private:
+		void              copy(const KAlarmEvent&);
 		RecurType         checkRecur() const;
 		OccurType         nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType         previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;

@@ -75,6 +75,35 @@ const int KAlarmEvent::DEFERRAL_OFFSET        = 2;
 const int KAlarmEvent::AUDIO_ALARM_ID         = 100;   // not actually stored in the alarm
 
 
+void KAlarmEvent::copy(const KAlarmEvent& event)
+{
+	mEventID               = event.mEventID;
+	mCleanText             = event.mCleanText;
+	mAudioFile             = event.mAudioFile;
+	mDateTime              = event.mDateTime;
+	mRepeatAtLoginDateTime = event.mRepeatAtLoginDateTime;
+	mDeferralTime          = event.mDeferralTime;
+	mColour                = event.mColour;
+	mType                  = event.mType;
+	mRevision              = event.mRevision;
+	mRepeatDuration        = event.mRepeatDuration;
+	mAlarmCount            = event.mAlarmCount;
+	mMainAlarmID           = event.mMainAlarmID;
+	mRepeatAtLoginAlarmID  = event.mRepeatAtLoginAlarmID;
+	mDeferralAlarmID       = event.mDeferralAlarmID;
+	mAnyTime               = event.mAnyTime;
+	mBeep                  = event.mBeep;
+	mRepeatAtLogin         = event.mRepeatAtLogin;
+	mDeferral              = event.mDeferral;
+	mLateCancel            = event.mLateCancel;
+	mUpdated               = event.mUpdated;
+	delete mRecurrence;
+	if (event.mRecurrence)
+		mRecurrence = new Recurrence(*event.mRecurrence, 0L);
+	else
+		mRecurrence = 0L;
+}
+
 /******************************************************************************
  * Initialise the KAlarmEvent from a KCal::Event.
  */
@@ -194,7 +223,7 @@ void KAlarmEvent::set(const Event& event)
 			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				delete mRecurrence;
-				mRecurrence = new Recurrence(*recur, 0);
+				mRecurrence = new Recurrence(*recur, 0L);
 				mRepeatDuration = recur->duration();
 				if (mRepeatDuration > 0)
 					mRepeatDuration -= recur->durationTo(savedDT) - 1;
@@ -208,7 +237,7 @@ void KAlarmEvent::set(const Event& event)
 	{
 		// Backwards compatibility with KAlarm pre-0.7 calendar files
 		delete mRecurrence;
-		mRecurrence = new Recurrence(0);
+		mRecurrence = new Recurrence(0L);
 		mRepeatDuration = repeatCount + 1;
 		mRecurrence->setMinutely(repeatMinutes, mRepeatDuration);
 	}
@@ -1025,7 +1054,7 @@ bool KAlarmEvent::initRecur(bool endDate, int count)
 	if (endDate || count)
 	{
 		if (!mRecurrence)
-			mRecurrence = new Recurrence(0);
+			mRecurrence = new Recurrence(0L);
 		mRecurrence->setRecurStart(mDateTime);
 		mRepeatDuration = count;
 		return true;
@@ -1048,7 +1077,6 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 {
 	if (mRecurrence)
 	{
-		KAlarmEvent* ev = const_cast<KAlarmEvent*>(this);
 		RecurType type = static_cast<RecurType>(mRecurrence->doesRecur());
 		switch (type)
 		{
@@ -1065,8 +1093,11 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 				return MINUTELY;
 			case Recurrence::rNone:
 			default:
-				delete mRecurrence;
-				ev->mRecurrence = 0;
+				if (mRecurrence)
+				{
+					delete mRecurrence;     // this shouldn't exist!!
+					const_cast<KAlarmEvent*>(this)->mRecurrence = 0L;
+				}
 				break;
 		}
 	}
