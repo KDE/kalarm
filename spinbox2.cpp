@@ -178,7 +178,7 @@ void SpinBox2::updateDisplay()
 	QSpinBox::updateDisplay();
 }
 
-void QSpinBox::styleChange(QStyle& old)
+void SpinBox2::styleChange(QStyle& old)
 {
 	updown2->arrange();
 	QSpinBox::styleChange(old);
