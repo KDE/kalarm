@@ -167,26 +167,20 @@ void KAlarmEvent::set(const Event& event)
 		// Copy the recurrence details.
 		// This will clear any hours/minutes repetition details.
 		QDateTime savedDT = mDateTime;
-		mDateTime = recur->recurStart();
+//		mDateTime = recur->recurStart();
 		switch (recur->doesRecur())
 		{
 			case Recurrence::rDaily:
-				setRecurDaily(recur->frequency(), recur->duration(), recur->endDate());
-					break;
 			case Recurrence::rWeekly:
-				setRecurWeekly(recur->frequency(), recur->days(), recur->duration(), recur->endDate());
-				break;
 			case Recurrence::rMonthlyDay:
-				setRecurMonthlyByDate(recur->frequency(), recur->monthDays(), recur->duration(), recur->endDate());
-				break;
 			case Recurrence::rMonthlyPos:
-				setRecurMonthlyByPos(recur->frequency(), recur->monthPositions(), recur->duration(), recur->endDate());
-				break;
 			case Recurrence::rYearlyMonth:
-				setRecurAnnualByDate(recur->frequency(), recur->yearNums(), recur->duration(), recur->endDate());
-				break;
 			case Recurrence::rYearlyDay:
-				setRecurAnnualByDay(recur->frequency(), recur->yearNums(), recur->duration(), recur->endDate());
+				delete mRecurrence;
+				mRecurrence = new KAlarmRecurrence(*recur, 0);
+				mRepeatDuration = recur->duration();
+				if (mRepeatDuration > 0)
+					mRepeatDuration -= recur->durationTo(savedDT.date()) - 1;
 				break;
 			default:
 				mDateTime = savedDT;
@@ -581,7 +575,10 @@ KAlarmEvent::RecurType KAlarmEvent::recurs() const
 KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
 {
 	if (checkRecur() != NO_RECUR)
-		return nextRecurrence(preDateTime, result);
+	{
+		int remainingCount;
+		return nextRecurrence(preDateTime, result, remainingCount);
+	}
 	if (mRepeatDuration)
 	{
 		int remainingCount;
@@ -622,11 +619,14 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 	OccurType type;
 	if (checkRecur() != NO_RECUR)
 	{
+		int remainingCount;
 		QDateTime newTime;
-		type = nextRecurrence(preDateTime, newTime);
+		type = nextRecurrence(preDateTime, newTime, remainingCount);
 		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE)
 		{
 			mDateTime = newTime;
+			if (mRecurrence->duration() > 0)
+				mRepeatDuration = remainingCount - 1;
 			mUpdated = true;
 		}
 	}
@@ -652,18 +652,21 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
  * Get the date/time of the next recurrence of the event, after the specified
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
+ * 'remainingCount' = number of repetitions due, including the next occurrence.
  */
-KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
 {
 	QDateTime recurStart = mRecurrence->recurStart();
 	QDate preDate = preDateTime.date();
 	if (!mAnyTime  &&  preDateTime.time() < recurStart.time()
 	||  mAnyTime  &&  preDateTime.time() < theApp()->settings()->startOfDay())
 		preDate = preDate.addDays(-1);    // today's recurrence (if today recurs) is still to come
+  remainingCount = 0;
 	bool last;
 	result = mRecurrence->getNextRecurrence(preDate, &last);
 	if (!result.isValid())
 		return NO_OCCURRENCE;
+	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(result.date()) + 1;
 	if (!mAnyTime)
 		result.setTime(recurStart.time());
 	if (result.date() == recurStart.date())
@@ -739,19 +742,19 @@ KAlarmEvent::OccurType KAlarmEvent::previousRepetition(const QDateTime& afterDat
 /******************************************************************************
  * Set the event to recur at an hours/minutes interval.
  * Parameters:
- *    freq        = how many minutes between recurrences.
- *    minuteCount = number of occurrences, including first and last.
- *                = 0 to use 'end' instead.
- *    end         = end date (invalid to use 'minuteCount' instead).
+ *    freq  = how many minutes between recurrences.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurSubDaily(int freq, int minuteCount, const QDateTime& end)
+void KAlarmEvent::setRecurSubDaily(int freq, int count, const QDateTime& end)
 {
 	initRecur(false);
-	if (minuteCount || end.isValid())
+	if (count || end.isValid())
 	{
 		mRepeatMinutes = freq;
-		if (minuteCount)
-			mRepeatDuration = minuteCount - 1;
+		if (count)
+			mRepeatDuration = count - 1;
 		else
 			mRepeatDuration = (mDateTime.secsTo(end) / 60) / freq;
 	}
@@ -760,17 +763,17 @@ void KAlarmEvent::setRecurSubDaily(int freq, int minuteCount, const QDateTime& e
 /******************************************************************************
  * Set the event to recur daily.
  * Parameters:
- *    freq     = how many days between recurrences.
- *    dayCount = number of occurrences, including first and last.
- *             = 0 to use 'end' instead.
- *    end      = end date (invalid to use 'dayCount' instead).
+ *    freq  = how many days between recurrences.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurDaily(int freq, int dayCount, const QDate& end)
+void KAlarmEvent::setRecurDaily(int freq, int count, const QDate& end)
 {
-	if (initRecur(dayCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (dayCount)
-			mRecurrence->setDaily(freq, dayCount);
+		if (count)
+			mRecurrence->setDaily(freq, count);
 		else
 			mRecurrence->setDaily(freq, end);
 	}
@@ -779,18 +782,18 @@ void KAlarmEvent::setRecurDaily(int freq, int dayCount, const QDate& end)
 /******************************************************************************
  * Set the event to recur weekly, on the specified weekdays.
  * Parameters:
- *    freq      = how many weeks between recurrences.
- *    days      = which days of the week alarms should occur on.
- *    weekCount = number of weekly occurrences, including first and last.
- *              = 0 to use 'end' instead.
- *    end       = end date (invalid to use 'weekCount' instead).
+ *    freq  = how many weeks between recurrences.
+ *    days  = which days of the week alarms should occur on.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurWeekly(int freq, const QBitArray& days, int weekCount, const QDate& end)
+void KAlarmEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (initRecur(weekCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (weekCount)
-			mRecurrence->setWeekly(freq, days, weekCount);
+		if (count)
+			mRecurrence->setWeekly(freq, days, count);
 		else
 			mRecurrence->setWeekly(freq, days, end);
 	}
@@ -799,18 +802,18 @@ void KAlarmEvent::setRecurWeekly(int freq, const QBitArray& days, int weekCount,
 /******************************************************************************
  * Set the event to recur monthly, on the specified days within the month.
  * Parameters:
- *    freq       = how many months between recurrences.
- *    days       = which days of the month alarms should occur on.
- *    monthCount = number of monthly occurrences, including first and last.
- *               = 0 to use 'end' instead.
- *    end        = end date (invalid to use 'monthCount' instead).
+ *    freq  = how many months between recurrences.
+ *    days  = which days of the month alarms should occur on.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int monthCount, const QDate& end)
+void KAlarmEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(monthCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (monthCount)
-			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, monthCount);
+		if (count)
+			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, count);
 		else
 			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, end);
 		for (QValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
@@ -818,12 +821,12 @@ void KAlarmEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, i
 	}
 }
 
-void KAlarmEvent::setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int monthCount, const QDate& end)
+void KAlarmEvent::setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(monthCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (monthCount)
-			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, monthCount);
+		if (count)
+			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, count);
 		else
 			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, end);
 		for (QPtrListIterator<int> it(days);  it.current();  ++it)
@@ -835,18 +838,18 @@ void KAlarmEvent::setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int
  * Set the event to recur monthly, on the specified weekdays in the specified
  * weeks of the month.
  * Parameters:
- *    freq       = how many months between recurrences.
- *    posns      = which days of the week/weeks of the month alarms should occur on.
- *    monthCount = number of monthly occurrences, including first and last.
- *               = 0 to use 'end' instead.
- *    end        = end date (invalid to use 'monthCount' instead).
+ *    freq  = how many months between recurrences.
+ *    posns = which days of the week/weeks of the month alarms should occur on.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, int monthCount, const QDate& end)
+void KAlarmEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (initRecur(monthCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (monthCount)
-			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, monthCount);
+		if (count)
+			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, count);
 		else
 			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, end);
 		for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
@@ -854,12 +857,12 @@ void KAlarmEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos
 	}
 }
 
-void KAlarmEvent::setRecurMonthlyByPos(int freq, const QPtrList<Recurrence::rMonthPos>& posns, int monthCount, const QDate& end)
+void KAlarmEvent::setRecurMonthlyByPos(int freq, const QPtrList<Recurrence::rMonthPos>& posns, int count, const QDate& end)
 {
-	if (initRecur(monthCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (monthCount)
-			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, monthCount);
+		if (count)
+			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, count);
 		else
 			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, end);
 		for (QPtrListIterator<Recurrence::rMonthPos> it(posns);  it.current();  ++it)
@@ -876,18 +879,18 @@ void KAlarmEvent::setRecurMonthlyByPos(int freq, const QPtrList<Recurrence::rMon
  * Set the event to recur annually, on the recurrence start date in each of the
  * specified months.
  * Parameters:
- *    freq      = how many years between recurrences.
- *    months    = which months of the year alarms should occur on.
- *    yearCount = number of yearly occurrences, including first and last.
- *              = 0 to use 'end' instead.
- *    end       = end date (invalid to use 'yearCount' instead).
+ *    freq   = how many years between recurrences.
+ *    months = which months of the year alarms should occur on.
+ *    count  = number of occurrences, including first and last.
+ *           = 0 to use 'end' instead.
+ *    end    = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int yearCount, const QDate& end)
+void KAlarmEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(yearCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (yearCount)
-			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, yearCount);
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
 		else
 			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, end);
 		for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
@@ -895,12 +898,12 @@ void KAlarmEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, 
 	}
 }
 
-void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, int yearCount, const QDate& end)
+void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(yearCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (yearCount)
-			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, yearCount);
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
 		else
 			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, end);
 		for (QPtrListIterator<int> it(months);  it.current();  ++it)
@@ -911,18 +914,18 @@ void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, in
 /******************************************************************************
  * Set the event to recur annually, on the specified day numbers.
  * Parameters:
- *    freq      = how many years between recurrences.
- *    days      = which days of the year alarms should occur on.
- *    yearCount = number of yearly occurrences, including first and last.
- *              = 0 to use 'end' instead.
- *    end       = end date (invalid to use 'yearCount' instead).
+ *    freq  = how many years between recurrences.
+ *    days  = which days of the year alarms should occur on.
+ *    count = number of occurrences, including first and last.
+ *          = 0 to use 'end' instead.
+ *    end   = end date (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurAnnualByDay(int freq, const QValueList<int>& days, int yearCount, const QDate& end)
+void KAlarmEvent::setRecurAnnualByDay(int freq, const QValueList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(yearCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (yearCount)
-			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, yearCount);
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, count);
 		else
 			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, end);
 		for (QValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
@@ -930,12 +933,12 @@ void KAlarmEvent::setRecurAnnualByDay(int freq, const QValueList<int>& days, int
 	}
 }
 
-void KAlarmEvent::setRecurAnnualByDay(int freq, const QPtrList<int>& days, int yearCount, const QDate& end)
+void KAlarmEvent::setRecurAnnualByDay(int freq, const QPtrList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(yearCount || end.isValid()))
+	if (initRecur(count || end.isValid()))
 	{
-		if (yearCount)
-			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, yearCount);
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, count);
 		else
 			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, end);
 		for (QPtrListIterator<int> it(days);  it.current();  ++it)
@@ -984,7 +987,7 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 			case Recurrence::rMonthlyPos:      // monthly on multiple nth day of week
 			case Recurrence::rYearlyMonth:     // annually on multiple months (day of month = start date)
 			case Recurrence::rYearlyDay:       // annually on multiple day numbers in year
-				ev->mRepeatDuration = ev->mRepeatMinutes = 0;
+				ev->mRepeatMinutes = 0;
 				return type;
 			case Recurrence::rNone:
 			default:
@@ -1289,7 +1292,7 @@ QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate, bool* last) cons
 	QDate nextDate;
 	QDate endDate;
 	if (rDuration == 0)
-		endDate = rEndDate;
+		endDate = rEndDateTime.date();
 	else if (rDuration > 0)
 		endCount = (rDuration - 1 + recurExDatesCount()) * rFreq;
 
@@ -1298,7 +1301,7 @@ QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate, bool* last) cons
 		case rDaily:
 			nextDate = dStart.addDays((dStart.daysTo(preDate)/rFreq + 1) * rFreq);
 			if (endCount)
-				endDate  = dStart.addDays(endCount);
+				endDate = dStart.addDays(endCount);
 			break;
 
 		case rWeekly:
@@ -1314,7 +1317,7 @@ QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate, bool* last) cons
 				weekday = getFirstDayInWeek(earliestDayOfWeek);
 			// Check for a day in the next scheduled week
 			if (!weekday  &&  earliestDayOfWeek > 1)
-				weekday = getFirstDayInWeek(1) + rFreq*7;
+				weekday = getFirstDayInWeek(weekStart()) + rFreq*7;
 			if (weekday)
 				nextDate = start.addDays(weeksAhead*7 + weekday - 1);
 			if (endCount)
@@ -1398,7 +1401,7 @@ QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate, bool* last
 	QDate prevDate;
 	QDate endDate;
 	if (rDuration == 0)
-		endDate = rEndDate;
+		endDate = rEndDateTime.date();
 	else if (rDuration > 0)
 		endCount = (rDuration - 1 + recurExDatesCount()) * rFreq;
 
@@ -1506,36 +1509,40 @@ QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate, bool* last
  * From the recurrence day of the week list, get the earliest day in the
  * specified week which is >= the startDay.
  * Parameters:  startDay = 1..7
+ *              useWeekStart = true to end search at day before next rWeekStart
+ *                           = false to search for a full 7 days
  * Reply = day of the week (1..7), or 0 if none found.
  */
-int KAlarmRecurrence::getFirstDayInWeek(int startDay, bool wrap) const
+int KAlarmRecurrence::getFirstDayInWeek(int startDay, bool useWeekStart) const
 {
-	for (int i = startDay - 1;  i < 7;  ++i)
+	int last = ((useWeekStart ? weekStart() : startDay) + 5)%7;
+	for (int i = startDay - 1;  ;  i = (i + 1)%7)
+	{
 		if (rDays.testBit(i))
 			return i + 1;
-	if (wrap)
-		for (int i = 0;  i < startDay - 1;  ++i)
-			if (rDays.testBit(i))
-				return i + 1;
-	return 0;
+		if (i == last)
+			return 0;
+	}
 }
 
 /******************************************************************************
  * From the recurrence day of the week list, get the latest day in the
  * specified week which is <= the endDay.
  * Parameters:  endDay = 1..7
+ *              useWeekStart = true to end search at rWeekStart
+ *                           = false to search for a full 7 days
  * Reply = day of the week (1..7), or 0 if none found.
  */
-int KAlarmRecurrence::getLastDayInWeek(int endDay, bool wrap) const
+int KAlarmRecurrence::getLastDayInWeek(int endDay, bool useWeekStart) const
 {
-	for (int i = endDay;  --i >= 0;  )
+	int last = useWeekStart ? weekStart() - 1 : endDay%7;
+	for (int i = endDay - 1;  ;  i = (i + 6)%7)
+	{
 		if (rDays.testBit(i))
 			return i + 1;
-	if (wrap)
-		for (int i = 7;  --i >= endDay;  )
-			if (rDays.testBit(i))
-				return i + 1;
-	return 0;
+		if (i == last)
+			return 0;
+	}
 }
 
 /******************************************************************************
@@ -1590,7 +1597,7 @@ QDate KAlarmRecurrence::getFirstDateInMonth(const QDate& earliestDate) const
 
 			if (weeksDiff >= 0)
 			{
-				int i = getFirstDayInWeek((weeksDiff ? beginDayOfWeek : earliestDayOfWeek), true);
+				int i = getFirstDayInWeek((weeksDiff ? beginDayOfWeek : earliestDayOfWeek), false);
 				if (i  &&  !weeksDiff)
 				{
 					// The week contains the earliest date, so ignore any days which

@@ -33,11 +33,12 @@ class KAlarmRecurrence : public KCal::Recurrence
 {
 	public:
 		KAlarmRecurrence(KCal::Incidence* parent) : KCal::Recurrence(parent) { }
+		KAlarmRecurrence(const KCal::Recurrence& r, KCal::Incidence* parent) : KCal::Recurrence(r, parent) { }
 		QDate getNextRecurrence(const QDate& preDate, bool* last = 0) const;
 		QDate getPreviousRecurrence(const QDate& afterDate, bool* last = 0) const;
 	protected:
-		int   getFirstDayInWeek(int startDay, bool wrap = false) const;
-		int   getLastDayInWeek(int endDay, bool wrap = false) const;
+		int   getFirstDayInWeek(int startDay, bool useWeekStart = true) const;
+		int   getLastDayInWeek(int endDay, bool useWeekStart = true) const;
 		QDate getFirstDateInMonth(const QDate& earliestDate) const;
 		QDate getLastDateInMonth(const QDate& latestDate) const;
 		QDate getFirstDateInYear(const QDate& earliestDate) const;
@@ -103,7 +104,7 @@ class KAlarmAlarm
 		QDateTime        mDateTime;         // next time to display the alarm
 		QColor           mColour;           // background colour of alarm message
 		Type             mType;             // message/file/command
-		int              mAlarmSeq;         // sequence number of main alarm
+		int              mAlarmSeq;         // sequence number of this alarm
 		int              mRepeatCount;      // number of times to repeat the alarm after initial time, -1 to repeat indefinitely
 		int              mRepeatMinutes;    // interval (minutes) between repeated alarms
 		bool             mRecurs;           // there is a recurrence rule for the alarm
@@ -264,7 +265,7 @@ class KAlarmEvent
 		static const int  DEFERRAL_OFFSET;          // alarm ID offset for deferral alarm
 	private:
 		RecurType         checkRecur() const;
-		OccurType         nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const;
+		OccurType         nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType         nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType         previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
 		OccurType         previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const;
@@ -279,7 +280,7 @@ class KAlarmEvent
 		KAlarmAlarm::Type mType;             // message/file/command
 		int               mRevision;         // revision number of the original alarm, or 0
 		KAlarmRecurrence* mRecurrence;       // recurrence specification, or 0 if none
-		int               mRepeatDuration;   // number of intervals to repeat the alarm after initial time, -1 to repeat indefinitely
+		int               mRepeatDuration;   // remaining number of intervals to repeat the alarm after initial time, -1 to repeat indefinitely
 		int               mRepeatMinutes;    // interval (minutes) between repeated alarms
 		int               mAlarmCount;       // number of alarms
 		int               mMainAlarmID;      // sequence number of main alarm

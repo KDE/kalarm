@@ -207,7 +207,7 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	repeatCountButton = new QRadioButton(i18n("End after:"), rangeButtonGroup);
 	QWhatsThis::add(repeatCountButton,
 	      i18n("Repeat the alarm for the number of times specified"));
-	repeatCountEntry  = new QSpinBox(2, 9999, 1, rangeButtonGroup);
+	repeatCountEntry  = new QSpinBox(1, 9999, 1, rangeButtonGroup);
 	repeatCountEntry->setFixedSize(repeatCountEntry->sizeHint());
 	QWhatsThis::add(repeatCountEntry,
 	      i18n("Enter the total number of times to trigger the alarm"));
@@ -433,7 +433,7 @@ void RecurrenceEdit::initWeekly()
 	QGridLayout* layout = new QGridLayout(topLayout, 7, 2, ruleButtonGroup->insideSpacing());
 	layout->setRowStretch(0, 1);
 
-	QLabel* label = new QLabel(i18n("Recur on:"), weeklyFrame);
+	QLabel* label = new QLabel(i18n("On:"), weeklyFrame);
 	label->setFixedSize(label->sizeHint());
 	layout->addWidget(label, 0, 0);
 	for (int i = 0;  i < 7;  ++i)
@@ -459,7 +459,7 @@ void RecurrenceEdit::initMonthly()
 	QBoxLayout* topLayout = new QVBoxLayout(monthlyButtonGroup, KDialog::marginHint());
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	onNthDayButton = new QRadioButton(i18n("Recur on the"), monthlyButtonGroup);
+	onNthDayButton = new QRadioButton(i18n("On the"), monthlyButtonGroup);
 	onNthDayButton->setFixedSize(onNthDayButton->sizeHint());
 	QWhatsThis::add(onNthDayButton,
 	      i18n("Repeat the alarm on the selected day of the month"));
@@ -478,7 +478,7 @@ void RecurrenceEdit::initMonthly()
 	layout->addStretch();
 
 	layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	onNthTypeOfDayButton = new QRadioButton(i18n("Recur on the"), monthlyButtonGroup);
+	onNthTypeOfDayButton = new QRadioButton(i18n("On the"), monthlyButtonGroup);
 	onNthTypeOfDayButton->setFixedSize(onNthTypeOfDayButton->sizeHint());
 	QWhatsThis::add(onNthTypeOfDayButton,
 	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
@@ -486,6 +486,7 @@ void RecurrenceEdit::initMonthly()
 	nthNumberEntry = new QComboBox(false, monthlyButtonGroup);
 	for (i = 1;  i <= 5;  ++i)
 		nthNumberEntry->insertItem(ordinal[i]);
+	nthNumberEntry->insertItem(i18n("Last"));
 	nthNumberEntry->setFixedSize(nthNumberEntry->sizeHint());
 	QWhatsThis::add(nthNumberEntry,
 	      i18n("Select the week of the month in which to repeat the alarm"));
@@ -516,7 +517,7 @@ void RecurrenceEdit::initYearly()
 	QBoxLayout* topLayout = new QVBoxLayout(yearlyButtonGroup, KDialog::marginHint());
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	yearMonthButton = new QRadioButton(i18n("Recur on"), yearlyButtonGroup);
+	yearMonthButton = new QRadioButton(i18n("On"), yearlyButtonGroup);
 	yearMonthButton->setFixedSize(yearMonthButton->sizeHint());
 	QWhatsThis::add(yearMonthButton,
 	      i18n("Repeat the alarm on the selected date in the year"));
@@ -707,7 +708,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 					QPtrList<Recurrence::rMonthPos> rmp = recurrence->monthPositions();
 					int i = rmp.first()->rPos - 1;
 					if (rmp.first()->negative)
-						i = 3 - i;
+						i = 5;
 					nthNumberEntry->setCurrentItem(i);
 					for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
 					nthTypeOfDayEntry->setCurrentItem(i);
@@ -743,14 +744,13 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 			}
 
 			recurFrequency->setValue(recurrence->frequency());
-			repeatDuration = recurrence->duration();
 		}
 		else
 		{
 			ruleButtonGroup->setButton(subdailyButtonId);
 			recurHourMinFrequency->setValue(event.repeatMinutes());
-			repeatDuration = event.repeatCount();
 		}
+		repeatDuration = event.repeatCount();
 
 		// get range information
 		if (repeatDuration == -1)
@@ -824,7 +824,8 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 				KAlarmEvent::MonthPos pos;
 				pos.days.fill(false);
 				pos.days.setBit(nthTypeOfDayEntry->currentItem());
-				pos.weeknum = nthNumberEntry->currentItem() + 1;
+				int i = nthNumberEntry->currentItem() + 1;
+				pos.weeknum = (i <= 5) ? i : 5 - i;
 				QValueList<KAlarmEvent::MonthPos> poses;
 				poses.append(pos);
 				event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
