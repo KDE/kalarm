@@ -1,13 +1,21 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
- *  This program is free software; you can redistribute it and/or modify  *
- *  it under the terms of the GNU General Public License as published by  *
- *  the Free Software Foundation; either version 2 of the License, or     *
- *  (at your option) any later version.                                   *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "kalarm.h"
@@ -25,6 +33,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kaboutdata.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -35,12 +44,12 @@
 #include "mainwindow.moc"
 
 
-KAlarmMainWindow::KAlarmMainWindow(const char* name)
-	: KMainWindow(0L, name, WGroupLeader)
+KAlarmMainWindow::KAlarmMainWindow()
+	: KMainWindow(0L, 0L, WGroupLeader | WStyle_ContextHelp)
 {
 	kdDebug() << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
-	setPlainCaption(name);
+	setPlainCaption(kapp->aboutData()->programName());
 	initActions();
 
 	listView = new AlarmListView(this, "listView");
@@ -501,18 +510,20 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 =============================================================================*/
 QString AlarmListWhatsThis::text(const QPoint& pt)
 {
-	if (listView->header()->frameGeometry().contains(pt))
+	QRect frame = listView->header()->frameGeometry();
+	if (frame.contains(pt)
+	||  listView->itemAt(QPoint(listView->itemMargin(), pt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
 	{
 		switch (listView->header()->sectionAt(pt.x()))
 		{
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background colour of alarm message");
-			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text");
+			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text or URL of text file to display");
 			case AlarmListView::REPEAT_COLUMN:
 				return i18n("Number of scheduled repetitions after the\n"
 				            "next scheduled display of the alarm.\n"
 				            "'%1' indicates that the alarm is repeated\n"
-				            "at every login").arg(repeatAtLoginIndicator);
+				            "at every login.").arg(repeatAtLoginIndicator);
 		}
 	}
 	return i18n("List of scheduled alarm messages");

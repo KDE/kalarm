@@ -1,13 +1,21 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
- *  This program is free software; you can redistribute it and/or modify  *
- *  it under the terms of the GNU General Public License as published by  *
- *  the Free Software Foundation; either version 2 of the License, or     *
- *  (at your option) any later version.                                   *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "kalarm.h"
@@ -21,6 +29,7 @@
 #include <qwhatsthis.h>
 
 #include <kstddirs.h>
+#include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kiconloader.h>
@@ -49,7 +58,7 @@ static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to tr
 *  displayed.
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event)
-	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader),
+	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
 	  event(evnt),
 	  message(alarm.messageIsFileName() ? alarm.fileName() : alarm.message()),
 	  font(theApp()->generalSettings()->messageFont()),
@@ -132,8 +141,7 @@ QSize MessageWin::initView()
 		bool opened = false;
 		bool dir = false;
 		QString tmpFile;
-		KURL url;       // don't use KURL(message) since a UNIX file path may not initialise correctly
-		url.setPath(message);
+		KURL url(message);
 		if (KIO::NetAccess::download(url, tmpFile))
 		{
 			QFile qfile(tmpFile);
@@ -163,6 +171,7 @@ QSize MessageWin::initView()
 				// So there is no need to calculate an accurate size.
 				int h = fm.lineSpacing() * (n <= 20 ? n : 20) + 2*view->frameWidth();
 				view->resize(QSize(h, h).expandedTo(view->sizeHint()));
+				QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
 			}
 			KIO::NetAccess::removeTempFile(tmpFile);
 		}
@@ -186,6 +195,7 @@ QSize MessageWin::initView()
 		label->setFont(font);
 		label->setPalette(QPalette(colour, colour));
 		label->setFixedSize(label->sizeHint());
+		QWhatsThis::add(label, i18n("The alarm message"));
 		int spacing = label->fontMetrics().lineSpacing()/2 - KDialog::spacingHint();
 		topLayout->addSpacing(spacing);
 		topLayout->addWidget(label);
@@ -217,7 +227,7 @@ QSize MessageWin::initView()
 
 	// KAlarm button
 	KIconLoader iconLoader;
-	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(PROGRAM_NAME), KIcon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(kapp->aboutData()->appName()), KIcon::MainToolbar);
 	QPushButton* button = new QPushButton(topWidget);
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
@@ -427,6 +437,6 @@ void MessageWin::slotDefer()
 void MessageWin::slotKAlarm()
 {
 	KProcess proc;
-	proc << QString::fromLatin1(PROGRAM_NAME);
+	proc << QString::fromLatin1(kapp->aboutData()->appName());
 	proc.start(KProcess::DontCare);
 }

@@ -7,6 +7,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "kalarm.h"
@@ -298,12 +307,8 @@ void EditAlarmDlg::slotOk()
 		{
 			// Convert any relative file path to absolute
 			// (using home directory as the default)
-			int i = 0;
 			alarmMessage = messageEdit->text();
-			if (alarmMessage.startsWith(QString::fromLatin1("file:/")))
-				alarmMessage = alarmMessage.mid(5);
-			else
-				i = alarmMessage.find(QString::fromLatin1("/"));
+			int i = alarmMessage.find(QString::fromLatin1("/"));
 			if (i > 0  &&  alarmMessage[i - 1] == ':')
 			{
 				KURL url(alarmMessage);
@@ -327,6 +332,7 @@ void EditAlarmDlg::slotOk()
 					                                       i18n("Continue")) == Cancel)
 						return;
 				}
+				alarmMessage = QString::fromLatin1("file:") + alarmMessage;
 			}
 		}
 		else
@@ -355,8 +361,6 @@ void EditAlarmDlg::slotBrowse()
 	if (!url.isEmpty())
 	{
 		alarmMessage = url.prettyURL();
-		if (alarmMessage.startsWith(QString::fromLatin1("file:/")))
-			alarmMessage = alarmMessage.mid(5);
 		messageEdit->setText(alarmMessage);
 		defaultDir = url.path();
 	}

@@ -1,13 +1,21 @@
 /*
  *  kalarmapp.cpp  -  description
  *  Program:  kalarm
- *
  *  (C) 2001 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #include "kalarm.h"
@@ -20,6 +28,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kconfig.h>
+#include <kaboutdata.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <ktempfile.h>
@@ -38,6 +47,8 @@
 
 const QString DCOP_OBJECT_NAME(QString::fromLatin1("display"));
 const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
+const char* DAEMON_NAME             = "kalarmd";
+const char* DAEMON_DCOP_OBJECT_NAME = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 
@@ -53,7 +64,9 @@ KAlarmApp::KAlarmApp()
 		m_generalSettings(new GeneralSettings(0L))
 {
 	m_generalSettings->loadSettings();
-	CalFormat::setApplication(PROGRAM_TITLE, "-//K Desktop Environment//NONSGML " PROGRAM_TITLE " " VERSION "//EN");
+	CalFormat::setApplication(aboutData()->programName(),
+	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
+	                                       .arg(aboutData()->programName()));
 }
 
 /******************************************************************************
@@ -263,7 +276,7 @@ int KAlarmApp::newInstance()
 			else
 			{
 				// No arguments - run interactively & display the dialogue
-				KAlarmMainWindow* mainWindow = new KAlarmMainWindow(PROGRAM_TITLE);
+				KAlarmMainWindow* mainWindow = new KAlarmMainWindow;
 				mainWindow->show();
 			}
 		}
@@ -661,11 +674,11 @@ void KAlarmApp::startDaemon()
 {
 	kdDebug() << "KAlarmApp::startDaemon()\n";
 	calendar.getURL();    // check that the calendar file name is OK - program exit if not
-	if (!dcopClient()->isApplicationRegistered("kalarmd"))
+	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
 	{
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe",QString::fromLatin1("kalarmd"));
+		QString execStr = locate("exe",QString::fromLatin1(DAEMON_NAME));
 		system(execStr.latin1());
 		kdDebug() << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
 	}
@@ -674,8 +687,8 @@ void KAlarmApp::startDaemon()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(PROGRAM_NAME) << QString(PROGRAM_TITLE) << DCOP_OBJECT_NAME << (Q_INT8)1 << (Q_INT8)0;
-		if (!dcopClient()->send("kalarmd","ad","registerApp(QString,QString,QString,bool,bool)", data))
+		arg << QString(aboutData()->appName()) << aboutData()->programName() << DCOP_OBJECT_NAME << (Q_INT8)1 << (Q_INT8)0;
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "registerApp(QString,QString,QString,bool,bool)", data))
 			kdDebug() << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
 	}
 
@@ -683,8 +696,8 @@ void KAlarmApp::startDaemon()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(PROGRAM_NAME) << calendar.urlString();
-		if (!dcopClient()->send("kalarmd","ad","addMsgCal(QString,QString)", data))
+		arg << QString(aboutData()->appName()) << calendar.urlString();
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "addMsgCal(QString,QString)", data))
 			kdDebug() << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
 	}
 
@@ -698,10 +711,10 @@ void KAlarmApp::startDaemon()
 bool KAlarmApp::stopDaemon()
 {
 	kdDebug() << "KAlarmApp::stopDaemon()" << endl;
-	if (dcopClient()->isApplicationRegistered("kalarmd"))
+	if (dcopClient()->isApplicationRegistered(DAEMON_NAME))
 	{
 		QByteArray data;
-		if (!dcopClient()->send("kalarmd","ad","quit()", data))
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "quit()", data))
 		{
 			kdError() << "KAlarmApp::restartDaemon(): quit dcop send failed" << endl;
 			return false;
@@ -716,14 +729,14 @@ bool KAlarmApp::stopDaemon()
 void KAlarmApp::resetDaemon()
 {
 	kdDebug() << "KAlarmApp::resetDaemon()" << endl;
-	if (!dcopClient()->isApplicationRegistered("kalarmd"))
+	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
 		startDaemon();
 	else
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(PROGRAM_NAME) << calendar.urlString();
-		if (!dcopClient()->send("kalarmd","ad","resetMsgCal(QString,QString)", data))
+		arg << QString(aboutData()->appName()) << calendar.urlString();
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "resetMsgCal(QString,QString)", data))
 			kdDebug() << "KAlarmApp::resetDaemon(): addCal dcop send failed" << endl;
 	}
 }
@@ -735,8 +748,8 @@ void KAlarmApp::reloadDaemon()
 {
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QString(PROGRAM_NAME) << calendar.urlString();
-	if (!kapp->dcopClient()->send("kalarmd","ad","reloadMsgCal(QString,QString)", data))
+	arg << QString(aboutData()->appName()) << calendar.urlString();
+	if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QString,QString)", data))
 		kdDebug() << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
 }
 
@@ -860,7 +873,8 @@ void AlarmCalendar::getURL() const
 		if (!url.isValid())
 		{
 			kdDebug() << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
-			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()), PROGRAM_TITLE);
+			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()),
+			                   kapp->aboutData()->programName());
 			kapp->exit(1);
 		}
 	}
@@ -940,7 +954,7 @@ int AlarmCalendar::load()
 	if (!KIO::NetAccess::download(url, tmpFile))
 	{
 		kdError() << "AlarmCalendar::load(): Load failure" << endl;
-		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(url.prettyURL()), PROGRAM_TITLE);
+		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(url.prettyURL()), kapp->aboutData()->programName());
 		return -1;
 	}
 	kdDebug() << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
@@ -954,7 +968,8 @@ int AlarmCalendar::load()
 		if (!fi.size())
 			return 0;     // file is zero length
 		kdDebug() << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(url.prettyURL()), PROGRAM_TITLE);
+		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(url.prettyURL()),
+		                   kapp->aboutData()->programName());
 		return -1;
 	}
 	if (!localFile.isEmpty())
@@ -983,7 +998,7 @@ bool AlarmCalendar::save(const QString& filename)
 	{
 		if (!KIO::NetAccess::upload(filename, url))
 		{
-			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(url.prettyURL()), PROGRAM_TITLE);
+			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(url.prettyURL()), kapp->aboutData()->programName());
 			return false;
 		}
 	}
@@ -991,8 +1006,8 @@ bool AlarmCalendar::save(const QString& filename)
 	// Tell the alarm daemon to reload the calendar
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QString(PROGRAM_NAME) << url.url();
-	if (!kapp->dcopClient()->send("kalarmd","ad","reloadMsgCal(QString,QString)", data))
+	arg << QString(kapp->aboutData()->appName()) << url.url();
+	if (!kapp->dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QString,QString)", data))
 		kdDebug() << "AlarmCalendar::save(): addCal dcop send failed" << endl;
 	return true;
 }
