@@ -294,7 +294,7 @@ int KAlarmApp::newInstance()
 
 				QDateTime* alarmTime = 0;
 				bool       alarmNoTime = false;
-				QDateTime wakeup;
+				QDateTime  wakeup, endTime;
 				QColor bgColour = mSettings->defaultBgColour();
 				int    repeatCount = 0;
 				int    repeatInterval = 0;
@@ -325,25 +325,47 @@ int KAlarmApp::newInstance()
 					alarmTime = &wakeup;
 				}
 
-				if (args->isSet("repeat"))
+				if (args->isSet("interval"))
 				{
 					// Repeat count is specified
 					if (args->isSet("login"))
 					{
-						usage = i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--repeat"));
+						usage = i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--interval"));
 						break;
 					}
-					if (!args->isSet("interval"))
+					if (!args->isSet("repeat")  &&  !args->isSet("until"))
 					{
-						usage = i18n("%1 requires %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--interval"));
+						usage = i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--until"));
 						break;
+					}
+					if (!alarmTime)
+					{
+						wakeup = QDateTime::currentDateTime();
+						alarmTime = &wakeup;
 					}
 					bool ok;
-					repeatCount = args->getOption("repeat").toInt(&ok);
-					if (!ok || repeatCount < 0)
+					if (args->isSet("repeat"))
 					{
-						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat"));
-						break;
+						repeatCount = args->getOption("repeat").toInt(&ok);
+						if (!ok || !repeatCount || repeatCount < -1)
+						{
+							usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat"));
+							break;
+						}
+					}
+					else
+					{
+						QCString dateTime = args->getOption("until");
+						if (!convWakeTime(dateTime, endTime, alarmNoTime))
+						{
+							usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until"));
+							break;
+						}
+						if (alarmTime && endTime < *alarmTime)
+						{
+							usage = i18n("%1 earlier than %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--time"));
+							break;
+						}
 					}
 
 					// Get the recurrence interval
@@ -382,10 +404,18 @@ int KAlarmApp::newInstance()
 						break;
 					}
 				}
-				else if (args->isSet("interval"))
+				else
 				{
-					usage = i18n("%1 requires %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat"));
-					break;
+					if (args->isSet("repeat"))
+					{
+						usage = i18n("%1 requires %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--interval"));
+						break;
+					}
+					if (args->isSet("until"))
+					{
+						usage = i18n("%1 requires %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--interval"));
+						break;
+					}
 				}
 
 				int flags = 0;
@@ -398,7 +428,8 @@ int KAlarmApp::newInstance()
 				args->clear();               // free up memory
 
 				// Display or schedule the event
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, flags, type, recurType, repeatCount, repeatInterval))
+				if (!scheduleEvent(alMessage, alarmTime, bgColour, flags, type, recurType,
+				                   repeatInterval, repeatCount, endTime))
 				{
 					exitCode = 1;
 					break;
@@ -628,8 +659,8 @@ bool KAlarmApp::runInSystemTray() const
 * Reply = true unless there was an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime, const QColor& bg,
-                                int flags, KAlarmAlarm::Type type, KAlarmEvent::RecurType recurType,
-                                int repeatCount, int repeatInterval)
+                              int flags, KAlarmAlarm::Type type, KAlarmEvent::RecurType recurType,
+                              int repeatInterval, int repeatCount, const QDateTime& endTime)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
 	bool display = true;
@@ -643,6 +674,7 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime,
 		display = (alarmTime <= now);
 	}
 	KAlarmEvent event(alarmTime, message, bg, type, flags);
+//TODO: adjust recurrence if 'display' is true
 	switch (recurType)
 	{
 		case KAlarmEvent::MINUTELY:
@@ -673,13 +705,15 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime,
 			break;
 		}
 		default:
+			recurType = KAlarmEvent::NO_RECUR;
 			break;
 	}
 	if (display)
 	{
 		// Alarm is due for display already
 		execAlarm(event, event.firstAlarm(), false);
-		return true;
+		if (recurType == KAlarmEvent::NO_RECUR)
+			return true;
 	}
 	return addEvent(event, 0L);     // event instance will now belong to the calendar
 }
@@ -1349,13 +1383,18 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	enum
 	{
 		ERR, HANDLE, CANCEL, TRIGGER,
-		REP_FLAG           = 0x01,
-		SCHEDULE           = 0x100,
-		SCHEDULE_n         = SCHEDULE | REP_FLAG,
-		SCHEDULE_FILE      = SCHEDULE | 0x10,
-		SCHEDULE_FILE_n    = SCHEDULE_FILE | REP_FLAG,
-		SCHEDULE_COMMAND   = SCHEDULE | 0x20,
-		SCHEDULE_COMMAND_n = SCHEDULE_COMMAND | REP_FLAG
+		REP_FLAG             = 0x01,
+		END_FLAG             = 0x02,
+		SCHEDULE             = 0x100,
+		SCHEDULE_n           = SCHEDULE | REP_FLAG,
+		SCHEDULE_END         = SCHEDULE | END_FLAG,
+		SCHEDULE_FILE        = SCHEDULE | 0x10,
+		SCHEDULE_FILE_n      = SCHEDULE_FILE | REP_FLAG,
+		SCHEDULE_FILE_END    = SCHEDULE_FILE | END_FLAG,
+		SCHEDULE_COMMAND     = SCHEDULE | 0x20,
+		SCHEDULE_COMMAND_n   = SCHEDULE_COMMAND | REP_FLAG,
+		SCHEDULE_COMMAND_END = SCHEDULE_COMMAND | END_FLAG,
+		OLD                  = 0x200
 	};
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
@@ -1363,32 +1402,55 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		function = HANDLE;
 	else if (func == "cancelEvent(const QString&,const QString&)"
 	||       func == "cancelEvent(QString,QString)"
-	||       func == "cancelMessage(const QString&,const QString&)"    // deprecated
-	||       func == "cancelMessage(QString,QString)")                 // deprecated
+	||       func == "cancelMessage(const QString&,const QString&)"    // deprecated: backwards compatibility with KAlarm pre-0.6
+	||       func == "cancelMessage(QString,QString)")                 // deprecated: backwards compatibility with KAlarm pre-0.6
 		function = CANCEL;
 	else if (func == "triggerEvent(const QString&,const QString&)"
 	||       func == "triggerEvent(QString,QString)"
-	||       func == "displayMessage(const QString&,const QString&)"   // deprecated
-	||       func == "displayMessage(QString,QString)")                // deprecated
+	||       func == "displayMessage(const QString&,const QString&)"   // deprecated: backwards compatibility with KAlarm pre-0.6
+	||       func == "displayMessage(QString,QString)")                // deprecated: backwards compatibility with KAlarm pre-0.6
 		function = TRIGGER;
+
 	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32)"
 	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32)")
 		function = SCHEDULE;
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE_n;
 	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32)"
 	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32)")
 		function = SCHEDULE_FILE;
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE_FILE_n;
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32)"
 	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32)")
 		function = SCHEDULE_COMMAND;
+
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_n;
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_FILE_n;
+	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_COMMAND_n;
+
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32,QDateTime)")
+		function = SCHEDULE_END;
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32,QDateTime)")
+		function = SCHEDULE_FILE_END;
+	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32,QDateTime)")
+		function = SCHEDULE_COMMAND_END;
+
+	// Deprecated methods: backwards compatibility with KAlarm pre-0.7
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_n | OLD;
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_FILE_n | OLD;
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32)"
 	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE_COMMAND_n;
+		function = SCHEDULE_COMMAND_n | OLD;
 	else
 	{
 		kdDebug(5950) << "DcopHandler::process(): unknown DCOP function" << endl;
@@ -1396,7 +1458,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	}
 
 	KAlarmAlarm::Type type;;
-	switch (function)
+	switch (function & ~OLD)
 	{
 		case HANDLE:        // trigger or cancel event with specified ID from calendar file
 		case CANCEL:        // cancel event with specified ID from calendar file
@@ -1423,34 +1485,69 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		}
 		case SCHEDULE:         // schedule a new event
 		case SCHEDULE_n:       // schedule a new repeating event
+		case SCHEDULE_END:     // schedule a new repeating event
 			type = KAlarmAlarm::MESSAGE;
 			break;
-		case SCHEDULE_FILE:    // schedule the display of a file's contents
-		case SCHEDULE_FILE_n:  // schedule the repeating display of a file's contents
+		case SCHEDULE_FILE:      // schedule the display of a file's contents
+		case SCHEDULE_FILE_n:    // schedule the repeating display of a file's contents
+		case SCHEDULE_FILE_END:  // schedule the repeating display of a file's contents
 			type = KAlarmAlarm::FILE;
 			break;
-		case SCHEDULE_COMMAND:    // schedule the execution of a command
-		case SCHEDULE_COMMAND_n:  // schedule the repeating execution of a command
+		case SCHEDULE_COMMAND:      // schedule the execution of a command
+		case SCHEDULE_COMMAND_n:    // schedule the repeating execution of a command
+		case SCHEDULE_COMMAND_END:  // schedule the repeating execution of a command
 			type = KAlarmAlarm::COMMAND;
 			break;
 	}
 	if (function & SCHEDULE)
 	{
 		QDataStream arg(data, IO_ReadOnly);
-		QString text;
-		QDateTime dateTime;
-		QColor bgColour;
-		Q_UINT32 flags;
-		Q_INT32 repeatCount = 0;
-		Q_INT32 repeatInterval = 0;
+		QString   text;
+		QDateTime dateTime, endTime;
+		QColor    bgColour;
+		Q_UINT32  flags;
+		KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
+		Q_INT32   repeatCount = 0;
+		Q_INT32   repeatInterval = 0;
 		arg >> text;
 		arg.readRawBytes((char*)&dateTime, sizeof(dateTime));
 		if (type != KAlarmAlarm::COMMAND)
 			arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
 		arg >> flags;
-		if (function & REP_FLAG)
-			arg >> repeatCount >> repeatInterval;
-		theApp()->scheduleEvent(text, &dateTime, bgColour, flags, type, KAlarmEvent::MINUTELY, repeatCount, repeatInterval);
+		if (function & (REP_FLAG | END_FLAG))
+		{
+			if (function & OLD)
+			{
+				// Backwards compatibility with KAlarm pre-0.7
+				recurType = KAlarmEvent::MINUTELY;
+				arg >> repeatCount >> repeatInterval;
+				++repeatCount;
+			}
+			else
+			{
+				Q_INT32 type;
+				arg >> type >> repeatInterval;
+				recurType = KAlarmEvent::RecurType(type);
+				switch (recurType)
+				{
+					case KAlarmEvent::MINUTELY:
+					case KAlarmEvent::DAILY:
+					case KAlarmEvent::WEEKLY:
+					case KAlarmEvent::MONTHLY_DAY:
+					case KAlarmEvent::ANNUAL_DATE:
+						break;
+					default:
+						kdDebug(5950) << "DcopHandler::process(): invalid simple repetition type: " << type << endl;
+						return false;
+				}
+				if (function & REP_FLAG)
+					arg >> repeatCount;
+				else
+					arg.readRawBytes((char*)&endTime, sizeof(endTime));
+
+			}
+		}
+		theApp()->scheduleEvent(text, &dateTime, bgColour, flags, type, recurType, repeatInterval, repeatCount, endTime);
 		replyType = "void";
 	}
 	return true;

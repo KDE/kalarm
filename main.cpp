@@ -60,6 +60,8 @@ static KCmdLineOptions options[] =
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
 	{ "tray", I18N_NOOP("Display system tray icon"), 0L },
+	{ "u", 0L, 0L },
+	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
 	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0L },
 	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0L },
 	{ "+[message]", I18N_NOOP("Message text to display"), 0L },
@@ -71,9 +73,9 @@ int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"),
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " [-bcilLrt] -f URL\n"
-		"       " PROGRAM_NAME " [-bcilLrt] message\n"
-		"       " PROGRAM_NAME " [-ilLrt] -e commandline\n"
+		"       " PROGRAM_NAME " [-bcilLrtu] -f URL\n"
+		"       " PROGRAM_NAME " [-bcilLrtu] message\n"
+		"       " PROGRAM_NAME " [-ilLrtu] -e commandline\n"
 		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --triggerEvent eventID [--calendarURL url]\n"
