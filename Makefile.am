@@ -63,6 +63,7 @@ rcdir = $(kde_datadir)/kalarm
 rc_DATA = kalarmui.rc
 
 messages: rc.cpp
+	$(EXTRACTRC) *.rc >> rc.cpp
 	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
 
 include $(top_srcdir)/doc/api/Doxyfile.am
