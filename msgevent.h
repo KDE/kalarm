@@ -129,7 +129,7 @@ class KAlarmEvent
 		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
 																								: mRecurrence(0L) { set(dt, message, c, type, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0L) { set(e); }
-		~KAlarmEvent()  { }
+		~KAlarmEvent()    { delete mRecurrence; }
 		void              set(const KCal::Event&);
 		void              set(const QDate& d, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
 		                           { set(d, message, c, type, flags | ANY_TIME); }
