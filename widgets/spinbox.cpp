@@ -127,9 +127,11 @@ void SpinBox::stepDown()
 	emit stepped(step);
 }
 
-// Adds a positive or negative increment to the current value, wrapping as appropriate.
-// If 'current' is true, any temporary 'shift' values for the range are used instead
-// of the real maximum and minimum values.
+/******************************************************************************
+* Adds a positive or negative increment to the current value, wrapping as appropriate.
+* If 'current' is true, any temporary 'shift' values for the range are used instead
+* of the real maximum and minimum values.
+*/
 void SpinBox::addValue(int change, bool current)
 {
 	int newval = value() + change;
@@ -180,7 +182,9 @@ void SpinBox::valueChange()
 	}
 }
 
-// Called whenever the line edit text is changed
+/******************************************************************************
+* Called whenever the line edit text is changed.
+*/
 void SpinBox::textEdited()
 {
 	mEdited = true;
@@ -192,7 +196,9 @@ void SpinBox::updateDisplay()
 	QSpinBox::updateDisplay();
 }
 
-// Receives events destined for the spin widget or for the edit field
+/******************************************************************************
+* Receives events destined for the spin widget or for the edit field.
+*/
 bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 {
 	if (obj == editor())
@@ -316,7 +322,9 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 	return QSpinBox::eventFilter(obj, e);
 }
 
-// Set spin widget stepping to the normal or shift increment.
+/******************************************************************************
+* Set spin widget stepping to the normal or shift increment.
+*/
 bool SpinBox::setShiftStepping(bool shift)
 {
 	if (mCurrentButton == NO_BUTTON)
@@ -328,23 +336,18 @@ bool SpinBox::setShiftStepping(bool shift)
 		 * Then, if the mouse button is held down, the spin widget will continue to
 		 * step by the shift amount.
 		 */
-		int step = 0;
-		int adjust = 0;
 		int val = value();
-		switch (mCurrentButton)
-		{
-			case UP:
-				step = mLineShiftStep;
-				adjust = -(val % mLineShiftStep);
-				break;
-			case DOWN:
-				step = -mLineShiftStep;
-				adjust = mLineShiftStep - ((val + mLineShiftStep - 1) % mLineShiftStep + 1);
-				break;
-		}
+		int step = (mCurrentButton == UP) ? mLineShiftStep : (mCurrentButton == DOWN) ? -mLineShiftStep : 0;
+		int adjust = shiftStepAdjustment(val, step);
 		mShiftMouse = true;
 		if (adjust)
 		{
+			/* The value is to be stepped by other than the shift increment,
+			 * presumably because it is being set to a multiple of the shift
+			 * increment. Achieve this by making the adjustment here, and then
+			 * allowing the normal step processing to complete the job by
+			 * adding/subtracting the normal shift increment.
+			 */
 			if (!wrapping())
 			{
 				// Prevent the step from going past the spinbox's range, or
@@ -359,7 +362,7 @@ bool SpinBox::setShiftStepping(bool shift)
 					if (svt  &&  newval <= mMinValue  &&  val == mMinValue)
 						newval = mMinValue;
 					else
-						newval = (newval < minval) ? minval : mMaxValue;
+						newval = (newval <= minval) ? minval : mMaxValue;
 					QSpinBox::setValue(newval);
 					emit stepped(step);
 					return true;
@@ -402,7 +405,41 @@ bool SpinBox::setShiftStepping(bool shift)
 	return false;
 }
 
-// Find which spin widget button a mouse event is in.
+/******************************************************************************
+* Return the initial adjustment to the value for a shift step up or down.
+* The default is to step up or down to the nearest multiple of the shift
+* increment, so the adjustment returned is for stepping up the decrement
+* required to round down to a multiple of the shift increment <= current value,
+* or for stepping down the increment required to round up to a multiple of the
+* shift increment >= current value.
+* This method's caller then adjusts the resultant value if necessary to cater
+* for the widget's minimum/maximum value, and wrapping.
+* This should really be a static method, but it needs to be virtual...
+*/
+int SpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
+{
+	if (oldValue == 0)
+		return 0;
+	if (shiftStep > 0)
+	{
+		if (oldValue >= 0)
+			return -(oldValue % shiftStep);
+		else
+			return (-oldValue - 1) % shiftStep + 1 - shiftStep;
+	}
+	else
+	{
+		shiftStep = -shiftStep;
+		if (oldValue >= 0)
+			return shiftStep - ((oldValue - 1) % shiftStep + 1);
+		else
+			return (-oldValue) % shiftStep;
+	}
+}
+
+/******************************************************************************
+*  Find which spin widget button a mouse event is in.
+*/
 int SpinBox::whichButton(const QPoint& pos)
 {
 	if (upRect().contains(pos))

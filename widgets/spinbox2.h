@@ -1,5 +1,5 @@
 /*
- *  spinbox2.h  -  spin box with extra pair of spin buttons (for QT3)
+ *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
  *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
@@ -42,6 +42,8 @@ class SpinBox2 : public QFrame
 		void                setReadOnly(bool);
 		bool                isReadOnly() const          { return spinbox->isReadOnly(); }
 		void                setSelectOnStep(bool sel)   { spinbox->setSelectOnStep(sel); }
+		void                setReverseWithLayout(bool);   // reverse buttons if right to left language?
+		bool                reverseButtons() const      { return mReverseLayout  &&  !mReverseWithLayout; }
 
 		QString             text() const                { return spinbox->text(); }
 		virtual QString     prefix() const              { return spinbox->prefix(); }
@@ -67,40 +69,37 @@ class SpinBox2 : public QFrame
 		int                 maxValue() const            { return mMaxValue; }
 		void                setMinValue(int val);
 		void                setMaxValue(int val);
-		int                 lineStep() const            { return spinbox->lineStep(); }
-		int                 lineShiftStep() const       { return spinbox->lineShiftStep(); }
-		void                setLineStep(int step)       { spinbox->setLineStep(step); }
+		void                setRange(int minValue, int maxValue)   { setMinValue(minValue);  setMaxValue(maxValue); }
 		int                 value() const               { return spinbox->value(); }
+		int                 bound(int val) const;
 
 		QRect               upRect() const              { return spinbox->upRect(); }
 		QRect               downRect() const            { return spinbox->downRect(); }
 		QRect               up2Rect() const             { return updown2->upRect(); }
 		QRect               down2Rect() const           { return updown2->downRect(); }
 
-		// QRangeControl methods
-		void                addPage()                   { spinbox->addPage(); }
-		void                subtractPage()              { spinbox->subtractPage(); }
-		void                addLine()                   { spinbox->addLine(); }
-		void                subtractLine()              { spinbox->subtractLine(); }
+		int                 lineStep() const            { return mLineStep; }
+		int                 lineShiftStep() const       { return mLineShiftStep; }
+		int                 pageStep() const            { return mPageStep; }
+		int                 pageShiftStep() const       { return mPageShiftStep; }
+		void                setLineStep(int step);
+		void                setSteps(int line, int page);
+		void                setShiftSteps(int line, int page);
+
+		void                addPage()                   { addValue(mPageStep); }
+		void                subtractPage()              { addValue(-mPageStep); }
+		void                addLine()                   { addValue(mLineStep); }
+		void                subtractLine()              { addValue(-mLineStep); }
 		void                addValue(int change)        { spinbox->addValue(change); }
-
-		void                setRange(int minValue, int maxValue)   { setMinValue(minValue);  setMaxValue(maxValue); }
-
-		int                 pageStep() const            { return updown2->lineStep(); }
-		int                 pageShiftStep() const       { return updown2->lineShiftStep(); }
-		void                setSteps(int line, int page)      { spinbox->setLineStep(line);  updown2->setLineStep(page); }
-		void                setShiftSteps(int line, int page) { spinbox->setLineShiftStep(line);  updown2->setLineShiftStep(page); }
-
-		int                 bound(int val) const;
 
 	public slots:
 		virtual void        setValue(int val)           { spinbox->setValue(val); }
 		virtual void        setPrefix(const QString& text)  { spinbox->setPrefix(text); }
 		virtual void        setSuffix(const QString& text)  { spinbox->setSuffix(text); }
-		virtual void        stepUp()                    { addValue(spinbox->lineStep()); }
-		virtual void        stepDown()                  { addValue(-spinbox->lineStep()); }
-		virtual void        pageUp()                    { addValue(updown2->lineStep()); }
-		virtual void        pageDown()                  { addValue(-updown2->lineStep()); }
+		virtual void        stepUp()                    { addValue(mLineStep); }
+		virtual void        stepDown()                  { addValue(-mLineStep); }
+		virtual void        pageUp()                    { addValue(mPageStep); }
+		virtual void        pageDown()                  { addValue(-mPageStep); }
 		virtual void        selectAll()                 { spinbox->selectAll(); }
 
 	signals:
@@ -141,6 +140,7 @@ class SpinBox2 : public QFrame
 				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
 				QString         mapValToText(int v)       { return SpinBox::mapValueToText(v); }
 				int             mapTextToVal(bool* ok)    { return SpinBox::mapTextToValue(ok); }
+				virtual int     shiftStepAdjustment(int oldValue, int shiftStep);
 			private:
 				SpinBox2* owner;   // owner SpinBox2
 		};
@@ -154,6 +154,11 @@ class SpinBox2 : public QFrame
 		SB2_SpinBox*     spinbox;         // the visible spin box
 		int              mMinValue;
 		int              mMaxValue;
+		int              mLineStep;           // right button increment
+		int              mLineShiftStep;      // right button increment with shift pressed
+		int              mPageStep;           // left button increment
+		int              mPageShiftStep;      // left button increment with shift pressed
+		bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)
 
 	friend class SB2_SpinBox;
 };

@@ -32,19 +32,20 @@
 int SpinBox2::mReverseLayout = -1;
 
 SpinBox2::SpinBox2(QWidget* parent, const char* name)
-	: QFrame(parent, name)
+	: QFrame(parent, name),
+	  mReverseWithLayout(true)
 {
 	updown2Frame = new QFrame(this);
 	spinboxFrame = new QFrame(this);
 	updown2 = new SpinBox(updown2Frame, "updown2");
-	spinbox = new SB2_SpinBox(0, 1, 1, this, spinboxFrame);
+//	spinbox = new SB2_SpinBox(0, 1, 1, this, spinboxFrame);
+	spinbox = new SB2_SpinBox(this, spinboxFrame);
 	init();
 }
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
 	: QFrame(parent, name),
-	  mMinValue(minValue),
-	  mMaxValue(maxValue)
+	  mReverseWithLayout(true)
 {
 	updown2Frame = new QFrame(this);
 	spinboxFrame = new QFrame(this);
@@ -58,6 +59,12 @@ void SpinBox2::init()
 {
 	if (mReverseLayout < 0)
 		mReverseLayout = QApplication::reverseLayout() ? 1 : 0;
+	mMinValue      = spinbox->minValue();
+	mMaxValue      = spinbox->maxValue();
+	mLineStep      = spinbox->lineStep();
+	mLineShiftStep = spinbox->lineShiftStep();
+	mPageStep      = updown2->lineStep();
+	mPageShiftStep = updown2->lineShiftStep();
 	spinbox->setSelectOnStep(false);    // default
 	updown2->setSelectOnStep(false);    // always false
 	setFocusProxy(spinbox);
@@ -74,6 +81,57 @@ void SpinBox2::setReadOnly(bool ro)
 	{
 		spinbox->setReadOnly(ro);
 		updown2->setReadOnly(ro);
+	}
+}
+
+void SpinBox2::setReverseWithLayout(bool reverse)
+{
+	if (reverse != mReverseWithLayout)
+	{
+		mReverseWithLayout = reverse;
+		setSteps(mLineStep, mPageStep);
+		setShiftSteps(mLineShiftStep, mPageShiftStep);
+	}
+}
+
+void SpinBox2::setLineStep(int step)
+{
+	mLineStep = step;
+	if (reverseButtons())
+		updown2->setLineStep(step);   // reverse layout, but still set the right buttons
+	else
+		spinbox->setLineStep(step);
+}
+
+void SpinBox2::setSteps(int line, int page)
+{
+	mLineStep = line;
+	mPageStep = page;
+	if (reverseButtons())
+	{
+		updown2->setLineStep(line);   // reverse layout, but still set the right buttons
+		spinbox->setLineStep(page);
+	}
+	else
+	{
+		spinbox->setLineStep(line);
+		updown2->setLineStep(page);
+	}
+}
+
+void SpinBox2::setShiftSteps(int line, int page)
+{
+	mLineShiftStep = line;
+	mPageShiftStep = page;
+	if (reverseButtons())
+	{
+		updown2->setLineShiftStep(line);   // reverse layout, but still set the right buttons
+		spinbox->setLineShiftStep(page);
+	}
+	else
+	{
+		spinbox->setLineShiftStep(line);
+		updown2->setLineShiftStep(page);
 	}
 }
 
@@ -113,27 +171,11 @@ void SpinBox2::valueChange()
 	updown2->blockSignals(blocked);
 }
 
-void SpinBox2::stepPage(int step)
-{
-	if (abs(step) == updown2->lineStep())
-		spinbox->setValue(updown2->value());
-	else
-	{
-		int val           = spinbox->value();
-		int pageStep      = updown2->lineStep();
-		int pageShiftStep = updown2->lineShiftStep();
-		int adjust = (step > 0) ? -((val - val % pageStep) % pageShiftStep)
-		                        : pageShiftStep - (((val - val % pageStep) + pageShiftStep - 1) % pageShiftStep + 1);
-		spinbox->addValue(adjust + step);
-	}
-	bool focus = spinbox->selectOnStep() && updown2->hasFocus();
-	if (focus)
-		spinbox->selectAll();
-}
-
-// Called when the widget is about to be displayed.
-// (At construction time, the spin button widths cannot be determined correctly,
-//  so we need to wait until now to definitively rearrange the widget.)
+/******************************************************************************
+* Called when the widget is about to be displayed.
+* (At construction time, the spin button widths cannot be determined correctly,
+*  so we need to wait until now to definitively rearrange the widget.)
+*/
 void SpinBox2::showEvent(QShowEvent*)
 {
 	arrange();
@@ -178,6 +220,64 @@ void SpinBox2::getMetrics() const
 		xSpinbox = 0;      // show the edit control left border
 		wGap = 2;          // leave a space to the right of the left-hand pair of spin buttons
 	}
+}
+
+/******************************************************************************
+* Called when the extra pair of spin buttons is clicked to step the value.
+* Normally this is a page step, but with a right-to-left language where the
+* button functions are reversed, this is a line step.
+*/
+void SpinBox2::stepPage(int step)
+{
+	if (abs(step) == updown2->lineStep())
+		spinbox->setValue(updown2->value());
+	else
+	{
+		// It's a shift step
+		int oldValue = spinbox->value();
+		if (!reverseButtons())
+		{
+			// The button pairs have the normal function.
+			// Page shift stepping - step up or down to a multiple of the
+			// shift page increment, leaving unchanged the part of the value
+			// which is the remainder from the page increment.
+			if (oldValue >= 0)
+				oldValue -= oldValue % updown2->lineStep();
+			else
+				oldValue += (-oldValue) % updown2->lineStep();
+		}
+		int adjust = spinbox->shiftStepAdjustment(oldValue, step);
+		if (adjust == -step
+		&&  (step > 0  &&  oldValue + step >= spinbox->maxValue()
+		  || step < 0  &&  oldValue + step <= spinbox->minValue()))
+			adjust = 0;    // allow stepping to the minimum or maximum value
+		spinbox->addValue(adjust + step);
+	}
+	bool focus = spinbox->selectOnStep() && updown2->hasFocus();
+	if (focus)
+		spinbox->selectAll();
+}
+
+/******************************************************************************
+* Return the initial adjustment to the value for a shift step up or down, for
+* the main (visible) spin box.
+* Normally this is a line step, but with a right-to-left language where the
+* button functions are reversed, this is a page step.
+*/
+int SpinBox2::SB2_SpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
+{
+	if (owner->reverseButtons())
+	{
+		// The button pairs have the opposite function from normal.
+		// Page shift stepping - step up or down to a multiple of the
+		// shift page increment, leaving unchanged the part of the value
+		// which is the remainder from the page increment.
+		if (oldValue >= 0)
+			oldValue -= oldValue % lineStep();
+		else
+			oldValue += (-oldValue) % lineStep();
+	}
+	return SpinBox::shiftStepAdjustment(oldValue, shiftStep);
 }
 
 #endif // QT_VERSION >= 300
