@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "functions.h"
 #include "shellprocess.h"
 #include "specialactions.moc"
 
@@ -91,6 +92,9 @@ void SpecialActionsButton::slotButtonPressed()
 = Pre- and post-alarm actions dialogue.
 =============================================================================*/
 
+static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
+
+
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
                                      const QString& caption, QWidget* parent, const char* name)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false)
@@ -103,6 +107,8 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 	mActions->setActions(preAction, postAction);
 	layout->addWidget(mActions);
 	layout->addSpacing(KDialog::spacingHint());
+
+	resize(KAlarm::readConfigWindowSize(SPEC_ACT_DIALOG_NAME, minimumSize()));
 }
 
 /******************************************************************************
@@ -113,6 +119,17 @@ void SpecialActionsDlg::slotOk()
 	if (mActions->isReadOnly())
 		reject();
 	accept();
+}
+
+/******************************************************************************
+*  Called when the dialog's size has changed.
+*  Records the new size in the config file.
+*/
+void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
+{
+	if (isVisible())
+		KAlarm::writeConfigWindowSize(SPEC_ACT_DIALOG_NAME, re->size());
+	KDialog::resizeEvent(re);
 }
 
 

@@ -95,6 +95,9 @@ class SpecialActionsDlg : public KDialogBase
 		void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
 		bool         isReadOnly() const    { return mActions->isReadOnly(); }
 
+	protected:
+		virtual void resizeEvent(QResizeEvent*);
+
 	protected slots:
 		virtual void slotOk();
 
