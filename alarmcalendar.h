@@ -35,8 +35,8 @@ class AlarmCalendar
 		int                   reload();
 		bool                  save()                              { return save(localFile); }
 		void                  close();
-		Event*                getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
-		QPtrList<Event>       getAllEvents()                      { return calendar->getAllEvents(); }
+		Event*                getEvent(const QString& uniqueID)   { return calendar->event(uniqueID); }
+		QPtrList<Event>       getAllEvents()                      { return calendar->events(); }
 		void                  addEvent(const KAlarmEvent&);
 		void                  updateEvent(const KAlarmEvent&);
 		void                  deleteEvent(const QString& eventID);
