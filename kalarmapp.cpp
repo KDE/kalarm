@@ -58,6 +58,7 @@ const char* DAEMON_DCOP_OBJECT      = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 int         KAlarmApp::activeCount = 0;
+const int   KAlarmApp::MAX_LATENESS = 65;
 
 
 /******************************************************************************

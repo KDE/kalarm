@@ -94,7 +94,7 @@ class KAlarmApp : public KUniqueApplication
 		void              handleMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_HANDLE); }
 		void              displayMessage(const QString& calendarFile, const QString& eventID)   { handleMessage(calendarFile, eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }
-		static const int          MAX_LATENESS = 65;   // maximum number of seconds late to display a late-cancel alarm
+		static const int          MAX_LATENESS;   // maximum number of seconds late to display a late-cancel alarm
 	public slots:
 		void              displayMainWindow();
 		void              slotDaemonPreferences();

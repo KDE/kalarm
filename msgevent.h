@@ -146,7 +146,7 @@ class KAlarmEvent
 #else
 		void             dumpDebug() const;
 #endif
-		static const int REPEAT_AT_LOGIN_OFFSET = 1;
+		static const int REPEAT_AT_LOGIN_OFFSET;
 	private:
 
 		QString          mEventID;          // KCal::Event unique ID

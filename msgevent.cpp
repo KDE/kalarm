@@ -45,6 +45,8 @@ static const QString LATE_CANCEL_CODE = QString::fromLatin1("C");
 static const QString AT_LOGIN_CODE    = QString::fromLatin1("L");   // subsidiary alarm at every login
 static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
 
+const int KAlarmEvent::REPEAT_AT_LOGIN_OFFSET = 1;
+
 struct AlarmData
 {
 	AlarmData() : file(false), lateCancel(false), repeatAtLogin(false) { }
