@@ -114,6 +114,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	topLayout->addWidget(group);
 	mAddresseeList = new KListView(group);
 	mAddresseeList->setMultiSelection(true);
+	mAddresseeList->setSelectionMode(QListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);
 #if KDE_VERSION >= 290
 	mAddresseeList->setFullWidth(true);
