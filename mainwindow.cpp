@@ -901,23 +901,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		KPIM::MailSummary& summary = mailList.first();
 		QDateTime dt;
 		dt.setTime_t(summary.date());
-
-		// Get the body of the email from KMail
-		QCString    replyType;
-		QByteArray  replyData;
-		QByteArray  data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << summary.serialNumber();
-		arg << (int)0;
-		QString body;
-		if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(Q_UINT32,int)", data, replyType, replyData)
-		&&  replyType == "QString")
-		{
-			QDataStream reply_stream(replyData, IO_ReadOnly);
-			reply_stream >> body;
-		}
-		else
-			kdDebug(5950) << "MainWindow::executeDropEvent(): kmail getDecodedBodyPart() call failed\n";
+		QString body = KAMail::getMailBody(summary.serialNumber());
 		alarmText.setEmail(summary.to(), summary.from(), KGlobal::locale()->formatDateTime(dt),
 		                   summary.subject(), body);
 	}

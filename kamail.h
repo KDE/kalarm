@@ -43,6 +43,7 @@ class KAMail
 		static KPIM::IdentityManager* identityManager();
 		static bool        identitiesExist();
 		static QString     controlCentreAddress();
+		static QString     getMailBody(Q_UINT32 serialNumber);
 		static QString     i18n_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
