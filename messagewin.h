@@ -78,7 +78,7 @@ class MessageWin : public MainWindowBase
 		void                setRemainingTextMinute();
 
 	private:
-		QSize               initView();
+		void                initView();
 #ifndef WITHOUT_ARTS
 		void                initAudio(bool firstTime);
 #endif

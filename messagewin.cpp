@@ -236,7 +236,7 @@ MessageWin::~MessageWin()
 /******************************************************************************
 *  Construct the message window.
 */
-QSize MessageWin::initView()
+void MessageWin::initView()
 {
 	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
@@ -512,7 +512,6 @@ QSize MessageWin::initView()
 	unsigned long wstate = (Preferences::instance()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
-	return sizeHint();
 }
 
 /******************************************************************************
@@ -845,12 +844,10 @@ void MessageWin::showEvent(QShowEvent* se)
 	MainWindowBase::showEvent(se);
 	if (!mShown  &&  !mErrorWindow)
 	{
+		QSize s = sizeHint();     // fit the window round the message
 		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-		{
-			QSize s;
-			if (KAlarm::readConfigWindowSize("FileMessage", s))
-				resize(s);
-		}
+			KAlarm::readConfigWindowSize("FileMessage", s);
+		resize(s);
 		playAudio();
 		if (mRescheduleEvent)
 			theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
