@@ -35,7 +35,7 @@
 class QWidget;
 
 #include "recurrenceedit.h"
-#include "editdlg.h"
+#include "reminder.h"
 
 
 // Settings configured in the Preferences dialog
@@ -67,8 +67,7 @@ class Preferences : public QObject
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
-		EditAlarmDlg::ReminderUnits
-		               defaultReminderUnits() const     { return mDefaultReminderUnits; }
+		Reminder::Units defaultReminderUnits() const    { return mDefaultReminderUnits; }
 
 		void           setEmailAddress(bool useControlCentre, const QString& address);
 		void           loadPreferences();
@@ -95,7 +94,7 @@ class Preferences : public QObject
 		static const bool       default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                        default_defaultRecurPeriod;
-		static const EditAlarmDlg::ReminderUnits
+		static const Reminder::Units
 		                        default_defaultReminderUnits;
 		bool                mRunInSystemTray;
 		bool                mDisableAlarmsIfStopped;
@@ -115,7 +114,7 @@ class Preferences : public QObject
 		bool                mDefaultBeep;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
-		EditAlarmDlg::ReminderUnits mDefaultReminderUnits;
+		Reminder::Units     mDefaultReminderUnits;
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
 
 	signals:

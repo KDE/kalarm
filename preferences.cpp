@@ -46,9 +46,9 @@ const bool       Preferences::default_defaultConfirmAck       = false;
 const bool       Preferences::default_defaultBeep             = false;
 const bool       Preferences::default_defaultEmailBcc         = false;
 const QString    Preferences::default_emailAddress            = "";
-const Preferences::MailClient     Preferences::default_emailClient          = KMAIL;
-const RecurrenceEdit::RepeatType  Preferences::default_defaultRecurPeriod   = RecurrenceEdit::SUBDAILY;
-const EditAlarmDlg::ReminderUnits Preferences::default_defaultReminderUnits = EditAlarmDlg::REMIND_HOURS_MINUTES;
+const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
+const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::SUBDAILY;
+const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
 
 static const QString    defaultEmailClient = QString::fromLatin1("kmail");
 
@@ -125,8 +125,8 @@ void Preferences::loadPreferences()
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
 	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
-	mDefaultReminderUnits    = (reminderUnits < EditAlarmDlg::REMIND_HOURS_MINUTES || reminderUnits > EditAlarmDlg::REMIND_WEEKS)
-	                         ? default_defaultReminderUnits : (EditAlarmDlg::ReminderUnits)reminderUnits;
+	mDefaultReminderUnits    = (reminderUnits < Reminder::HOURS_MINUTES || reminderUnits > Reminder::WEEKS)
+	                         ? default_defaultReminderUnits : (Reminder::Units)reminderUnits;
 	emit preferencesChanged();
 }
 

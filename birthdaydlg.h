@@ -29,15 +29,13 @@
 
 #include "alarmevent.h"
 
-class QLabel;
 class QCheckBox;
 class KListView;
-class SpinBox;
 class CheckBox;
-class ComboBox;
 class ColourCombo;
 class FontColourButton;
 class SoundPicker;
+class Reminder;
 #if KDE_VERSION >= 290
 namespace KABC { class AddressBook; }
 using KABC::AddressBook;
@@ -59,7 +57,6 @@ class BirthdayDlg : public KDialogBase
 	private slots:
 		void              slotSelectionChanged();
 		void              slotTextLostFocus();
-		void              slotReminderToggled(bool);
 		void              slotFontColourSelected();
 		void              slotBgColourSelected(const QColor&);
 
@@ -70,10 +67,7 @@ class BirthdayDlg : public KDialogBase
 		KListView*        mAddresseeList;
 		BLineEdit*        mPrefix;
 		BLineEdit*        mSuffix;
-		CheckBox*         mReminder;
-		SpinBox*          mReminderCount;
-		ComboBox*         mReminderUnits;
-		QLabel*           mReminderLabel;
+		Reminder*         mReminder;
 		SoundPicker*      mSoundPicker;
 		FontColourButton* mFontColourButton;
 		ColourCombo*      mBgColourChoose;

@@ -49,9 +49,8 @@
 #include "editdlg.h"
 #include "alarmcalendar.h"
 #include "soundpicker.h"
-#include "spinbox.h"
+#include "reminder.h"
 #include "checkbox.h"
-#include "combobox.h"
 #include "colourcombo.h"
 #include "fontcolourbutton.h"
 #include "preferences.h"
@@ -132,34 +131,15 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	// How much to advance warning to give
-	QBoxLayout* layout = new QHBoxLayout(groupLayout);
-	mReminder = new CheckBox(i18n("&Reminder"), group);
+	mReminder = new Reminder(i18n("&Reminder"),
+	                         i18n("Check to display a reminder in advance of the birthday."),
+	                         i18n("Enter the number of days before each birthday to display a reminder. "
+	                              "This is in addition to the alarm which is displayed on the birthday."),
+	                         false, group);
 	mReminder->setFixedSize(mReminder->sizeHint());
-	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	QWhatsThis::add(mReminder,
-	      i18n("Check to display a reminder in advance of the birthday."));
-	layout->addWidget(mReminder);
-
-	mReminderCount = new SpinBox(1, 364, 1, group);
-	mReminderCount->setValue(364);
-	mReminderCount->setFixedSize(mReminderCount->sizeHint());
-	mReminderCount->setValue(1);
-	QWhatsThis::add(mReminderCount,
-	      i18n("Enter the number of days before each birthday to display a reminder."
-	           "This is in addition to the alarm which is displayed on the birthday."));
-	mReminder->setFocusWidget(mReminderCount);
-	layout->addWidget(mReminderCount);
-
-	mReminderUnits = new ComboBox(false, group);
-	mReminderUnits->insertItem(i18n("days"), EditAlarmDlg::REMIND_DAYS - EditAlarmDlg::REMIND_DAYS);
-	mReminderUnits->insertItem(i18n("weeks"), EditAlarmDlg::REMIND_WEEKS - EditAlarmDlg::REMIND_DAYS);
-	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
-	layout->addWidget(mReminderUnits);
-
-	mReminderLabel = new QLabel(i18n("in advance"), group);
-	mReminderLabel->setFixedSize(mReminderLabel->sizeHint());
-	layout->addWidget(mReminderLabel);
-	layout->addStretch();
+	mReminder->setMaximum(0, 364);
+	mReminder->setMinutes(0, true);
+	groupLayout->addWidget(mReminder);
 
 	// Sound checkbox and file selector
 	QGridLayout* grid = new QGridLayout(groupLayout, 3, 2, KDialog::spacingHint());
@@ -197,8 +177,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mLateCancel->setChecked(preferences->defaultLateCancel());
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
 	mSoundPicker->setChecked(preferences->defaultBeep());
-	mReminderUnits->setCurrentItem(theApp()->preferences()->defaultReminderUnits() - EditAlarmDlg::REMIND_DAYS);
-	slotReminderToggled(false);
 
 	// Initialise the birthday selection list and disable the OK button
 	updateSelectionList();
@@ -252,8 +230,11 @@ void BirthdayDlg::updateSelectionList()
 			err = true;
 		else if (errcode != AddressBook::NoEntry)
 		{
+kdDebug()<<"BirthdayDlg: iterating\n";
 			for (std::list<AddressBook::Entry>::iterator it = entries.begin();  it != entries.end();  ++it)
 			{
+kdDebug()<<"BirthdayDlg: name="<<it->firstname<<" "<<it->lastname<<endl;
+kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 				if (it->birthday.isValid())
 				{
 					// Create a list entry for this birthday
@@ -314,20 +295,7 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 	QDate today = QDate::currentDate();
 	QDateTime todayNoon(today, QTime(12, 0, 0));
 	int thisYear = today.year();
-	int reminder = 0;
-	if (mReminder->isChecked())
-	{
-		reminder = mReminderCount->value();
-		switch (mReminderUnits->currentItem())
-		{
-			case EditAlarmDlg::REMIND_DAYS - EditAlarmDlg::REMIND_DAYS:
-				reminder *= 24*60;
-				break;
-			case EditAlarmDlg::REMIND_WEEKS - EditAlarmDlg::REMIND_DAYS:
-				reminder *= 7*24*60;
-				break;
-		}
-	}
+	int reminder = mReminder->getMinutes();
 
 	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 	{
@@ -410,16 +378,6 @@ void BirthdayDlg::slotTextLostFocus()
 		mSuffixText = suffix;
 		updateSelectionList();
 	}
-}
-
-/******************************************************************************
-*  Called when the Reminder checkbox is toggled.
-*/
-void BirthdayDlg::slotReminderToggled(bool on)
-{
-	mReminderCount->setEnabled(on);
-	mReminderUnits->setEnabled(on);
-	mReminderLabel->setEnabled(on);
 }
 
 /******************************************************************************

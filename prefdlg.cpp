@@ -38,7 +38,6 @@
 #include <qwhatsthis.h>
 #include <qstyle.h>
 
-//#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -48,7 +47,7 @@
 #include <kdebug.h>
 
 #include "fontcolour.h"
-#include "datetime.h"
+#include "alarmtimewidget.h"
 #include "timespinbox.h"
 #include "preferences.h"
 #include "alarmcalendar.h"
@@ -523,9 +522,9 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(i18n("Hours/Minutes"), EditAlarmDlg::REMIND_HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(i18n("Days"), EditAlarmDlg::REMIND_DAYS);
-	mDefaultReminderUnits->insertItem(i18n("Weeks"), EditAlarmDlg::REMIND_WEEKS);
+	mDefaultReminderUnits->insertItem(i18n("Hours/Minutes"), Reminder::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(i18n("Days"), Reminder::DAYS);
+	mDefaultReminderUnits->insertItem(i18n("Weeks"), Reminder::WEEKS);
 	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
 	label->setBuddy(mDefaultReminderUnits);
 	QWhatsThis::add(box,
@@ -561,7 +560,7 @@ void DefaultPrefTab::apply(bool syncToDisc)
 		case 0:
 		default: mPreferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
 	}
-	mPreferences->mDefaultReminderUnits = static_cast<EditAlarmDlg::ReminderUnits>(mDefaultReminderUnits->currentItem());
+	mPreferences->mDefaultReminderUnits = static_cast<Reminder::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 
