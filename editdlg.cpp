@@ -362,6 +362,8 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(mDisplayAlarmsFrame);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
+	if (mReadOnly)
+		mFontColourButton->hide();
 	mFontColourButton->setReadOnly(mReadOnly);
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
 	layout->addWidget(mFontColourButton);
@@ -750,14 +752,13 @@ void EditAlarmDlg::slotOk()
 	}
 	else if (checkEmailData())
 	{
-		bool noTime;
-		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), noTime);
+		QString errmsg;
+		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
 		if (errWidget)
 		{
 			showPage(mRecurPageIndex);
 			errWidget->setFocus();
-			KMessageBox::sorry(this, (noTime ? i18n("End date is earlier than start date")
-			                                 : i18n("End date/time is earlier than start date/time")));
+			KMessageBox::sorry(this, errmsg);
 			return;
 		}
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
