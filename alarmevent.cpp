@@ -754,7 +754,7 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 
 	// Add recurrence data
 	ev.setExDates(DateList());
-	ev.setExDates(DateTimeList());
+//	ev.setExDates(DateTimeList());
 	if (mRecurrence)
 	{
 		Recurrence* recur = ev.recurrence();
@@ -796,7 +796,7 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 				break;
 		}
 		ev.setExDates(mExceptionDates);
-		ev.setExDates(mExceptionDateTimes);
+//		ev.setExDates(mExceptionDateTimes);
 	}
 
 	if (mSaveDateTime.isValid())
