@@ -40,7 +40,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
    QWidget* page = this;
    if (makeFrame)
    {
-      page = new QGroupBox(i18n(frameLabel), this);
+      page = new QGroupBox(frameLabel, this);
       topLayout->addWidget(page);
       topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
       topLayout->addSpacing(fontMetrics().lineSpacing()/2);
