@@ -77,7 +77,7 @@ void ButtonGroup::insert(QButton* button, int id)
  */
 void ButtonGroup::slotButtonToggled(bool)
 {
-	emit buttonSet(id(selected()));
+	emit buttonSet(selectedId());
 }
 
 #if QT_VERSION < 300
