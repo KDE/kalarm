@@ -1,6 +1,9 @@
 KAlarm
 
-=== Version 0.8.1 (KDE 3.1) --- 16 Oct 2002 ===
+=== Version 0.8.2 (KDE 3.1) --- 2 Nov 2002 ===
+Fix audio files not playing.
+
+=== Version 0.8.1 --- 1 Nov 2002 ===
 Adhere to KDE single/double click setting when clicking on alarm list.
 Fix possible loss of alarms if KAlarm has previously used another calendar file.
 Fix coordination between "At time" and "After time" values when they change.
