@@ -180,10 +180,10 @@ int AlarmCalendar::load()
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
 		// case it is the KDE 3.0.0 version which needs adjustment of summer times.
 		mKAlarmVersion057_UTC = isUTC();
-		kdDebug(5950) << "AlarmCalendar::load(): version 0.5.7 (" << (mKAlarmVersion057_UTC ? "" : "non-") << "UTC)\n";
+		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version 0.5.7 (" << (mKAlarmVersion057_UTC ? "" : "non-") << "UTC)\n";
 	}
 	else
-		kdDebug(5950) << "AlarmCalendar::load(): version " << mKAlarmVersion << endl;
+		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version " << mKAlarmVersion << endl;
 	KAlarmEvent::convertKCalEvents();    // convert events to current KAlarm format for when calendar is saved
 	return 1;
 }
@@ -293,10 +293,11 @@ void AlarmCalendar::getKAlarmVersion() const
 	if (mCalendar)
 	{
 		const QString& prodid = mCalendar->loadedProductId();
-		int i = prodid.find(theApp()->aboutData()->programName(), 0, false);
+		QString progname = QString(" ") + theApp()->aboutData()->programName() + " ";
+		int i = prodid.find(progname, 0, false);
 		if (i >= 0)
 		{
-			QString ver = prodid.mid(i + theApp()->aboutData()->programName().length()).stripWhiteSpace();
+			QString ver = prodid.mid(i + progname.length()).stripWhiteSpace();
 			i = ver.find('/');
 			int j = ver.find(' ');
 			if (j >= 0  &&  j < i)
