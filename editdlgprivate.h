@@ -60,9 +60,6 @@ class TextEdit : public QTextEdit
 		Q_OBJECT
 	public:
 		TextEdit(QWidget* parent, const char* name = 0);
-	protected:
-		virtual void dragEnterEvent(QDragEnterEvent*);
-		virtual void dropEvent(QDropEvent*);
 };
 
 #endif // EDITDLGPRIVATE_H

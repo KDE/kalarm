@@ -1228,28 +1228,15 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 
 /*=============================================================================
 = Class TextEdit
-= A text edit field which accepts drag-and-drop items and has a minimum height
-= of 3 text lines.
+= A text edit field with a minimum height of 3 text lines.
+= Provides KDE 2 compatibility.
 =============================================================================*/
 TextEdit::TextEdit(QWidget* parent, const char* name)
 	: QTextEdit(parent, name)
 {
-	setAcceptDrops(true);
 	QSize tsize = sizeHint();
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
 	setMinimumSize(tsize);
-}
-
-void TextEdit::dragEnterEvent(QDragEnterEvent* e)
-{
-	e->accept(QTextDrag::canDecode(e));
-}
-
-void TextEdit::dropEvent(QDropEvent* e)
-{
-	QString text;
-	if (QTextDrag::decode(e, text))
-		setText(text);
 }
 
 
