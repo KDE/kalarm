@@ -21,8 +21,10 @@
 #include "kalarm.h"
 
 #include <unistd.h>
-
 #include <ctype.h>
+
+#include <qfile.h>
+
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -679,7 +681,7 @@ void KAlarmApp::startDaemon()
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
 		QString execStr = locate("exe",QString::fromLatin1(DAEMON_NAME));
-		system(execStr.latin1());
+		system(QFile::encodeName(execStr));
 		kdDebug() << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
 	}
 

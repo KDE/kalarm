@@ -314,7 +314,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			QApplication::beep();      // beep through the internal speaker
 		}
 		if (!audioFile.isEmpty())
-			KAudioPlayer::play(audioFile.latin1());
+			KAudioPlayer::play(QFile::encodeName(audioFile));
 		if (rescheduleEvent)
 			theApp()->rescheduleAlarm(event, alarmID);
 		shown = true;
