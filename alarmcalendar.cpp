@@ -271,16 +271,15 @@ int AlarmCalendar::kalarmVersion() const
 				if (i > 0)
 				{
 					ver = ver.left(i);
-					i = ver.find('.');
-					if (i > 0)
+					// ver now contains the KAlarm version string
+					if ((i = ver.find('.')) > 0)
 					{
 						bool ok;
 						int version = ver.left(i).toInt(&ok) * 100;
 						if (ok)
 						{
 							ver = ver.mid(i + 1);
-							i = ver.find('.');
-							if (i > 0)
+							if ((i = ver.find('.')) > 0)
 							{
 								int v = ver.left(i).toInt(&ok);
 								if (ok)
@@ -289,9 +288,10 @@ int AlarmCalendar::kalarmVersion() const
 										v = 9;
 									version += v * 10;
 									ver = ver.mid(i + 1);
-									v = ver.toInt(&ok);
-									if (ok)
+									if (ver.at(0).isDigit())
 									{
+										// Allow other characters to follow last digit
+										v = ver.toInt();
 										if (v > 9)
 											v = 9;
 										kAlarmVersion = version + v;

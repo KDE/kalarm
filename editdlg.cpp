@@ -32,16 +32,19 @@
 #include <qmsgbox.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qdir.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
 #include <kwinmodule.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -117,8 +120,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		topLayout->addWidget(deferGroup);
 		QLabel* label = new QLabel(i18n("Deferred to:"), deferGroup);
 		label->setFixedSize(label->sizeHint());
+
 		deferDateTime = event->deferDateTime();
 		deferTimeLabel = new QLabel(KGlobal::locale()->formatDateTime(deferDateTime), deferGroup);
+
 		QPushButton* button = new QPushButton(i18n("&Change..."), deferGroup);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), this, SLOT(slotEditDeferral()));
@@ -135,36 +140,65 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	recurrenceEdit = new RecurrenceEdit(i18n("Repetition"), page);
 	recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
-	topLayout->addWidget(recurrenceEdit);
 	connect(recurrenceEdit, SIGNAL(typeChanged(int)), this, SLOT(slotRepeatTypeChange(int)));
 	connect(recurrenceEdit, SIGNAL(resized(QSize,QSize)), this, SLOT(slotRecurrenceResized(QSize,QSize)));
+	topLayout->addWidget(recurrenceEdit);
 
 	// Late display checkbox - default = allow late display
 
-	grid = new QGridLayout(1, 3);
-	topLayout->addLayout(grid);
+	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+
+#ifndef SOUND
+	// Beep checkbox - default = no beep
+
+	sound->setText(i18n("Beep"));
+	sound->setFixedSize(sound->sizeHint());
+	sound->setChecked(false);
+	connect(sound, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggled(bool)));
+	QWhatsThis::add(sound,
+	      i18n("If checked, a beep will sound when the message is displayed."));
+	layout->addWidget(sound);
+#else
+	// Sound checkbox & sound picker button - default = no sound
+
+	QFrame* frame = new QFrame(page);
+	frame->setFrameStyle(QFrame::NoFrame);
+	QHBoxLayout* slayout = new QHBoxLayout(frame, 0, 2*spacingHint());
+	sound = new QCheckBox(frame);
+	sound->setText(i18n("Sound"));
+	sound->setFixedSize(sound->sizeHint());
+	sound->setChecked(false);
+	connect(sound, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggled(bool)));
+	QWhatsThis::add(sound,
+	      i18n("If checked, a sound will be played when the message is displayed. Click the "
+	           "button on the right to select the sound."));
+	slayout->addWidget(sound);
+
+	soundPicker = new QPushButton(frame);
+	soundPicker->setPixmap(SmallIcon("playsound"));
+	soundPicker->setFixedSize(soundPicker->sizeHint());
+	soundPicker->setToggleButton(true);
+	connect(soundPicker, SIGNAL(clicked()), SLOT(slotPickSound()));
+	QWhatsThis::add(soundPicker,
+	      i18n("Select a sound file to play when the message is displayed. If no sound file is "
+	           "selected, a beep will sound."));
+	slayout->addWidget(soundPicker);
+	layout->addWidget(frame);
+	layout->addStretch();
+#endif
 
 	lateCancel = new QCheckBox(page);
 	lateCancel->setText(i18n("Cancel if late"));
 	lateCancel->setFixedSize(lateCancel->sizeHint());
 	lateCancel->setChecked(false);
-	grid->addWidget(lateCancel, 0, 0, AlignLeft);
 	QWhatsThis::add(lateCancel,
 	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
 	           "minute of the specified time. Possible reasons for not triggering include your "
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
 	           "If unchecked, the alarm will be triggered at the first opportunity after "
 	           "the specified time, regardless of how late it is."));
-
-	// Beep checkbox - default = no beep
-
-	beep = new QCheckBox(page);
-	beep->setText(i18n("Beep"));
-	beep->setFixedSize(beep->sizeHint());
-	beep->setChecked(false);
-	grid->addWidget(beep, 0, 1, AlignLeft);
-	QWhatsThis::add(beep,
-	      i18n("If checked, a beep will sound when the message is displayed."));
+	layout->addWidget(lateCancel);
+	layout->addStretch();
 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
@@ -172,18 +206,18 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
 	size = fontColour->sizeHint();
 	fontColour->setMinimumHeight(size.height() + 4);
-	topLayout->addWidget(fontColour, 6);
 	QWhatsThis::add(fontColour,
 	      i18n("Choose the font and background color for the alarm message."));
+	layout->addWidget(fontColour);
 #else
 	// Colour choice drop-down list
 
 	bgColourChoose = new ColourCombo(page);
 	size = bgColourChoose->sizeHint();
 	bgColourChoose->setMinimumHeight(size.height() + 4);
-	grid->addWidget(bgColourChoose, 0, 2, AlignRight);
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background color for the alarm message."));
+	layout->addWidget(bgColourChoose);
 #endif
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
@@ -225,8 +259,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		messageEdit->setText(event->cleanText());
 		actionGroup->setButton(actionGroup->id(radio));
 		lateCancel->setChecked(event->lateCancel());
-		beep->setChecked(event->beep());
 		recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
+#ifdef SOUND
+		soundFile = event->audioFile();
+#endif
+		sound->setChecked(event->beep() || !soundFile.isEmpty());
 	}
 	else
 	{
@@ -243,6 +280,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		messageEdit->setText(QString::null);
 		actionGroup->setButton(actionGroup->id(messageRadio));
 		recurrenceEdit->setDefaults(defaultTime);   // must be called after timeWidget is set up, to ensure correct date-only enabling
+		sound->setChecked(false);
 	}
 
 	size = basicSize;
@@ -252,6 +290,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	resize(size);
 
 	slotMessageTypeClicked(-1);    // enable/disable things appropriately
+	slotSoundToggled(sound->isChecked());
 	messageEdit->setFocus();
 }
 
@@ -268,6 +307,7 @@ EditAlarmDlg::~EditAlarmDlg()
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
 	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
+	event.setAudioFile(soundFile);
 	recurrenceEdit->writeEvent(event);
 
 	RecurrenceEdit::RepeatType type = recurrenceEdit->getRepeatType();
@@ -282,10 +322,10 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
  */
 int EditAlarmDlg::getAlarmFlags() const
 {
-	return (beep->isChecked()               ? KAlarmEvent::BEEP : 0)
-	     | (lateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (recurrenceEdit->repeatAtLogin() ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (alarmAnyTime                    ? KAlarmEvent::ANY_TIME : 0);
+	return (sound->isChecked() && soundFile.isEmpty() ? KAlarmEvent::BEEP : 0)
+	     | (lateCancel->isChecked()                   ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (recurrenceEdit->repeatAtLogin()           ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (alarmAnyTime                              ? KAlarmEvent::ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -381,6 +421,60 @@ void EditAlarmDlg::slotEditDeferral()
 			deferTimeLabel->setText(deferDateTime.isValid() ? KGlobal::locale()->formatDateTime(deferDateTime) : QString::null);
 		}
 	}
+}
+
+/******************************************************************************
+ * Called when the sound checkbox is toggled.
+ */
+void EditAlarmDlg::slotSoundToggled(bool on)
+{
+	soundPicker->setEnabled(on);
+	setSoundPicker();
+}
+
+#ifdef SOUND
+/******************************************************************************
+ * Called when the sound picker button is clicked.
+ */
+void EditAlarmDlg::slotPickSound()
+{
+	if (soundPicker->isOn())
+	{
+		QString prefix = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+		QString fileName(KFileDialog::getOpenFileName(prefix, i18n("*.wav|Wav Files"), 0));
+		if (!fileName.isEmpty())
+		{
+			soundFile = fileName;
+			setSoundPicker();
+		}
+		else if (soundFile.isEmpty())
+			soundPicker->setOn(false);
+	}
+	else
+	{
+		soundFile = "";
+		setSoundPicker();
+	}
+}
+#endif
+
+/******************************************************************************
+ * Set the sound picker button according to whether a sound file is selected.
+ */
+void EditAlarmDlg::setSoundPicker()
+{
+#ifdef SOUND
+	QToolTip::remove(soundPicker);
+	if (soundPicker->isEnabled())
+	{
+		bool beep = soundFile.isEmpty();
+		if (beep)
+			QToolTip::add(soundPicker, i18n("Beep"));
+		else
+			QToolTip::add(soundPicker, i18n("Playing '%1'").arg(soundFile));
+		soundPicker->setOn(!beep);
+	}
+#endif
 }
 
 /******************************************************************************
@@ -550,7 +644,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 		bgColourChoose->setEnabled(true);
 #endif
-		beep->setEnabled(true);
+		sound->setEnabled(true);
 	}
 	else
 	{
@@ -564,7 +658,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(true);
 #endif
-			beep->setEnabled(true);
+			sound->setEnabled(true);
 		}
 		else if (commandRadio->isOn())
 		{
@@ -575,7 +669,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(false);
 #endif
-			beep->setEnabled(false);
+			sound->setEnabled(false);
 		}
 		singleLineOnly = true;
 		QString text = messageEdit->text();

@@ -44,7 +44,7 @@ struct AlarmData;
 class KAlarmAlarm
 {
 	public:
-		enum Type  { MESSAGE, FILE, COMMAND };
+		enum Type  { MESSAGE, FILE, COMMAND, AUDIO };
 
 		KAlarmAlarm()    : mAlarmSeq(-1), mBeep(false), mRepeatAtLogin(false), mDeferral(false), mLateCancel(false) { }
 		~KAlarmAlarm()  { }
@@ -61,6 +61,7 @@ class KAlarmAlarm
 		QString          message() const            { return (mType == MESSAGE) ? mCleanText : QString::null; }
 		QString          fileName() const           { return (mType == FILE) ? mCleanText : QString::null; }
 		QString          command() const            { return (mType == COMMAND) ? mCleanText : QString::null; }
+		QString          audioFile() const          { return (mType == AUDIO) ? mCleanText : QString::null; }
 		void             commandArgs(QStringList&) const;
 		const QColor&    colour() const             { return mColour; }
 		bool             lateCancel() const         { return mLateCancel; }
@@ -76,7 +77,7 @@ class KAlarmAlarm
 		static QString   commandFromArgs(const QStringList&);
 
 		QString          mEventID;          // KCal::Event unique ID
-		QString          mCleanText;        // message text, file URL or command
+		QString          mCleanText;        // message text, file URL, command or audio file
 		QDateTime        mDateTime;         // next time to display the alarm
 		QColor           mColour;           // background colour of alarm message
 		Type             mType;             // message/file/command
@@ -145,6 +146,7 @@ class KAlarmEvent
 		                           { set(d, command, QColor(), KAlarmAlarm::COMMAND, flags | ANY_TIME); }
 		void              setCommand(const QDateTime& dt, const QString& command, int flags = 0)
 		                           { set(dt, command, QColor(), KAlarmAlarm::COMMAND, flags); }
+		void              setAudioFile(const QString& filename)             { mAudioFile = filename; }
 		OccurType         setNextOccurrence(const QDateTime& preDateTime);
 		void              setEventID(const QString& id)                     { mEventID = id; }
 		void              setDate(const QDate& d)                           { mDateTime = d; mAnyTime = true; }
@@ -179,6 +181,7 @@ class KAlarmEvent
 		QString           fileName() const             { return (mType == KAlarmAlarm::FILE) ? mCleanText : QString::null; }
 		QString           command() const              { return (mType == KAlarmAlarm::COMMAND) ? mCleanText : QString::null; }
 		QString           messageFileOrCommand() const { return mCleanText; }
+		QString           audioFile() const            { return mAudioFile; }
 		const QColor&     colour() const               { return mColour; }
 		RecurType         recurs() const;
 		KCal::Recurrence* recurrence() const           { return mRecurrence; }
@@ -239,6 +242,7 @@ class KAlarmEvent
 		static bool       adjustStartOfDay(const QPtrList<KCal::Event>&);
 
 		static const int  MAIN_ALARM_ID;            // alarm ID for main alarm
+		static const int  AUDIO_ALARM_ID;           // alarm ID for audio alarm
 		static const int  REPEAT_AT_LOGIN_OFFSET;   // alarm ID offset for repeat-at-login alarm
 		static const int  DEFERRAL_OFFSET;          // alarm ID offset for deferral alarm
 	private:
@@ -249,11 +253,12 @@ class KAlarmEvent
 
 		QString           mEventID;          // KCal::Event unique ID
 		QString           mCleanText;        // message text, file URL or command
-		QDateTime         mDateTime;         // next time to display the alarm
+		QString           mAudioFile;        // audio file to play
+		QDateTime         mDateTime;         // next time to display the alarm (except deferrals)
 		QDateTime         mRepeatAtLoginDateTime;  // repeat at login time
 		QDateTime         mDeferralTime;     // extra time to trigger alarm (if alarm deferred)
 		QColor            mColour;           // background colour of alarm message
-		KAlarmAlarm::Type mType;             // message/file/command
+		KAlarmAlarm::Type mType;             // message/file/command (not audio)
 		int               mRevision;         // revision number of the original alarm, or 0
 		KCal::Recurrence* mRecurrence;       // recurrence specification, or 0 if none
 		int               mRepeatDuration;   // remaining number of alarm repetitions including initial time, -1 to repeat indefinitely

@@ -52,7 +52,7 @@ static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
 
 struct AlarmData
 {
-	QString           cleanText;
+	QString           cleanText;       // text or audio file name
 	QDateTime         dateTime;
 	int               repeatCount;     // backwards compatibility with KAlarm pre-0.7 calendar files
 	int               repeatMinutes;   // backwards compatibility with KAlarm pre-0.7 calendar files
@@ -72,6 +72,7 @@ typedef QMap<int, AlarmData> AlarmMap;
 const int KAlarmEvent::MAIN_ALARM_ID          = 1;
 const int KAlarmEvent::REPEAT_AT_LOGIN_OFFSET = 1;
 const int KAlarmEvent::DEFERRAL_OFFSET        = 2;
+const int KAlarmEvent::AUDIO_ALARM_ID         = 100;   // not actually stored in the alarm
 
 
 /******************************************************************************
@@ -103,6 +104,7 @@ void KAlarmEvent::set(const Event& event)
 	mRepeatAtLogin = false;
 	mDeferral      = false;
 	mCleanText     = "";
+	mAudioFile     = "";
 	mDateTime      = event.dtStart();
 	mAnyTime       = event.doesFloat();
 	if (theApp()->getCalendar().kalarmVersion() < 70)
@@ -112,11 +114,11 @@ void KAlarmEvent::set(const Event& event)
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
 	QPtrList<Alarm> alarms = event.alarms();
-	for (QPtrListIterator<Alarm> it(alarms);  it.current();  ++it)
+	for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		int sequence = readAlarm(*it.current(), data);
+		int sequence = readAlarm(*ia.current(), data);
 		alarmMap.insert(sequence, data);
 	}
 
@@ -131,7 +133,9 @@ void KAlarmEvent::set(const Event& event)
 	{
 		bool main = false;
 		const AlarmData& data = it.data();
-		if (data.repeatAtLogin)
+		if (data.type == KAlarmAlarm::AUDIO)
+			mAudioFile = data.cleanText;
+		else if (data.repeatAtLogin)
 		{
 			mRepeatAtLogin         = true;
 			mRepeatAtLoginDateTime = data.dateTime;
@@ -149,12 +153,15 @@ void KAlarmEvent::set(const Event& event)
 			main = true;
 		}
 
-		// Ensure that the basic fields are set up even if a repeat-at-login or
-		// deferral alarm is the only alarm in the event (which shouldn't happen!)
+		// Ensure that the basic fields are set up even if there is no main
+		// alarm in the event (which shouldn't ever happen!)
 		if (main  ||  !set)
 		{
-			mType      = data.type;
-			mCleanText = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+			if (data.type != KAlarmAlarm::AUDIO)
+			{
+				mType      = data.type;
+				mCleanText = (mType == KAlarmAlarm::COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+			}
 			mDateTime  = data.dateTime;
 			if (data.repeatCount && data.repeatMinutes)
 			{
@@ -216,61 +223,72 @@ void KAlarmEvent::set(const Event& event)
 int KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 {
 	// Parse the next alarm's text
-	int sequence = MAIN_ALARM_ID;      // default main alarm ID
-	data.type          = KAlarmAlarm::MESSAGE;
+	int sequence;
 	data.lateCancel    = false;
 	data.repeatAtLogin = false;
 	data.deferral      = false;
-	const QString& txt = alarm.text();
-	int length = txt.length();
-	int i = 0;
-	if (txt[0].isDigit())
+	if (!alarm.audioFile().isEmpty())
 	{
-		sequence = txt[0].digitValue();
-		for (i = 1;  i < length;  ++i)
-			if (txt[i].isDigit())
-				sequence = sequence * 10 + txt[i].digitValue();
-			else
-			{
-				if (txt[i++] == SEPARATOR)
-				{
-					while (i < length)
-					{
-						QChar ch = txt[i++];
-						if (ch == SEPARATOR)
-							break;
-						if (ch == LATE_CANCEL_CODE)
-							data.lateCancel = true;
-						else if (ch == AT_LOGIN_CODE)
-							data.repeatAtLogin = true;
-						else if (ch == DEFERRAL_CODE)
-							data.deferral = true;
-					}
-				}
-				else
-				{
-					i = 0;
-					sequence = MAIN_ALARM_ID;     // invalid sequence number - use default
-				}
-				break;
-			}
-	}
-	if (txt.find(TEXT_PREFIX, i) == i)
-		i += TEXT_PREFIX.length();
-	else if (txt.find(FILE_PREFIX, i) == i)
-	{
-		data.type = KAlarmAlarm::FILE;
-		i += FILE_PREFIX.length();
-	}
-	else if (txt.find(COMMAND_PREFIX, i) == i)
-	{
-		data.type = KAlarmAlarm::COMMAND;
-		i += COMMAND_PREFIX.length();
+		data.type      = KAlarmAlarm::AUDIO;
+		data.cleanText = alarm.audioFile();
+		sequence = AUDIO_ALARM_ID;
 	}
 	else
-		i = 0;
+	{
+		// It's a text message/file/command
+		data.type = KAlarmAlarm::MESSAGE;
+		sequence = MAIN_ALARM_ID;      // default main alarm ID
+		const QString& txt = alarm.text();
+		int length = txt.length();
+		int i = 0;
+		if (txt[0].isDigit())
+		{
+			sequence = txt[0].digitValue();
+			for (i = 1;  i < length;  ++i)
+				if (txt[i].isDigit())
+					sequence = sequence * 10 + txt[i].digitValue();
+				else
+				{
+					if (txt[i++] == SEPARATOR)
+					{
+						while (i < length)
+						{
+							QChar ch = txt[i++];
+							if (ch == SEPARATOR)
+								break;
+							if (ch == LATE_CANCEL_CODE)
+								data.lateCancel = true;
+							else if (ch == AT_LOGIN_CODE)
+								data.repeatAtLogin = true;
+							else if (ch == DEFERRAL_CODE)
+								data.deferral = true;
+						}
+					}
+					else
+					{
+						i = 0;
+						sequence = MAIN_ALARM_ID;     // invalid sequence number - use default
+					}
+					break;
+				}
+		}
+		if (txt.find(TEXT_PREFIX, i) == i)
+			i += TEXT_PREFIX.length();
+		else if (txt.find(FILE_PREFIX, i) == i)
+		{
+			data.type = KAlarmAlarm::FILE;
+			i += FILE_PREFIX.length();
+		}
+		else if (txt.find(COMMAND_PREFIX, i) == i)
+		{
+			data.type = KAlarmAlarm::COMMAND;
+			i += COMMAND_PREFIX.length();
+		}
+		else
+			i = 0;
 
-	data.cleanText     = txt.mid(i);
+		data.cleanText  = txt.mid(i);
+	}
 	data.dateTime      = alarm.time();
 	data.repeatCount   = alarm.repeatCount();  // backwards compatibility with KAlarm pre-0.7 calendar files
 	data.repeatMinutes = alarm.snoozeTime();   // backwards compatibility with KAlarm pre-0.7 calendar files
@@ -286,6 +304,7 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	mMainAlarmID    = MAIN_ALARM_ID;
 	mDateTime       = dateTime;
 	mCleanText      = (type == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
+	mAudioFile      = "";
 	mType           = type;
 	mColour         = colour;
 	set(flags);
@@ -352,6 +371,7 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		case KAlarmAlarm::MESSAGE:  suffix += TEXT_PREFIX;  break;
 		case KAlarmAlarm::FILE:     suffix += FILE_PREFIX;  break;
 		case KAlarmAlarm::COMMAND:  suffix += COMMAND_PREFIX;  break;
+		case KAlarmAlarm::AUDIO:  break;   // never occurs in this context
 	}
 	suffix += mCleanText;
 	al->setText(QString::number(MAIN_ALARM_ID) + SEPARATOR + suffix);
@@ -383,6 +403,13 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		al->setTime(mDeferralTime);
 		if (mDeferralTime < dt)
 			dt = mDeferralTime;
+	}
+	if (!mAudioFile.isEmpty())
+	{
+		al = ev.newAlarm();
+		al->setEnabled(true);        // enable the alarm
+		al->setAudioFile(mAudioFile);
+		al->setTime(aldt);           // set it for the main alarm time
 	}
 
 	// Add recurrence data
@@ -488,28 +515,38 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 {
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	KAlarmAlarm al;
-	al.mEventID       = mEventID;
-	al.mCleanText     = mCleanText;
-	al.mType          = mType;
-	al.mColour        = mColour;
-	al.mBeep          = mBeep;
-	if (alarmID == mMainAlarmID  &&  mMainAlarmID >= 0)
+	al.mEventID   = mEventID;
+	if (alarmID == AUDIO_ALARM_ID)
 	{
-		al.mAlarmSeq      = mMainAlarmID;
-		al.mDateTime      = mDateTime;
-		al.mLateCancel    = mLateCancel;
+		al.mType      = KAlarmAlarm::AUDIO;
+		al.mAlarmSeq  = AUDIO_ALARM_ID;
+		al.mDateTime  = mDateTime;
+		al.mCleanText = mAudioFile;
 	}
-	else if (alarmID == mRepeatAtLoginAlarmID  &&  mRepeatAtLogin)
+	else
 	{
-		al.mAlarmSeq      = mRepeatAtLoginAlarmID;
-		al.mDateTime      = mRepeatAtLoginDateTime;
-		al.mRepeatAtLogin = true;
-	}
-	else if (alarmID == mDeferralAlarmID  &&  mDeferral)
-	{
-		al.mAlarmSeq = mDeferralAlarmID;
-		al.mDateTime = mDeferralTime;
-		al.mDeferral = true;
+		al.mType      = mType;
+		al.mCleanText = mCleanText;
+		al.mColour    = mColour;
+		al.mBeep      = mBeep;
+		if (alarmID == mMainAlarmID  &&  mMainAlarmID >= 0)
+		{
+			al.mAlarmSeq   = mMainAlarmID;
+			al.mDateTime   = mDateTime;
+			al.mLateCancel = mLateCancel;
+		}
+		else if (alarmID == mRepeatAtLoginAlarmID  &&  mRepeatAtLogin)
+		{
+			al.mAlarmSeq      = mRepeatAtLoginAlarmID;
+			al.mDateTime      = mRepeatAtLoginDateTime;
+			al.mRepeatAtLogin = true;
+		}
+		else if (alarmID == mDeferralAlarmID  &&  mDeferral)
+		{
+			al.mAlarmSeq = mDeferralAlarmID;
+			al.mDateTime = mDeferralTime;
+			al.mDeferral = true;
+		}
 	}
 	return al;
 }
@@ -529,6 +566,8 @@ KAlarmAlarm KAlarmEvent::firstAlarm() const
 		return alarm(mDeferralAlarmID);
 	if (mRepeatAtLogin)
 		return alarm(mRepeatAtLoginAlarmID);
+	if (!mAudioFile.isEmpty())
+		return alarm(AUDIO_ALARM_ID);
 	return KAlarmAlarm();
 }
 
@@ -542,6 +581,7 @@ KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
 	int next;
 	if (alrm.id() == mMainAlarmID)  next = 1;
 	else if (alrm.id() == mDeferralAlarmID)  next = 2;
+	else if (alrm.id() == mRepeatAtLoginAlarmID)  next = 3;
 	else next = -1;
 	switch (next)
 	{
@@ -552,6 +592,10 @@ KAlarmAlarm KAlarmEvent::nextAlarm(const KAlarmAlarm& alrm) const
 		case 2:
 			if (mRepeatAtLogin)
 				return alarm(mRepeatAtLoginAlarmID);
+			// fall through to LOGIN
+		case 3:
+			if (!mAudioFile.isEmpty())
+				return alarm(AUDIO_ALARM_ID);
 			// fall through to default
 		default:
 			break;
@@ -574,6 +618,11 @@ void KAlarmEvent::removeAlarm(int alarmID)
 	else if (alarmID == mDeferralAlarmID)
 	{
 	   mDeferral = false;
+	   --mAlarmCount;
+	}
+	else if (alarmID == AUDIO_ALARM_ID)
+	{
+		mAudioFile = "";
 	   --mAlarmCount;
 	}
 }
@@ -1092,6 +1141,7 @@ void KAlarmEvent::dumpDebug() const
 	kdDebug(5950) << "KAlarmEvent dump:\n";
 	kdDebug(5950) << "-- mEventID:" << mEventID << ":\n";
 	kdDebug(5950) << "-- mCleanText:" << mCleanText << ":\n";
+	kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
 	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLoginDateTime:" << mRepeatAtLoginDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mDeferralTime:" << mDeferralTime.toString() << ":\n";

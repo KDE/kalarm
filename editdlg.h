@@ -21,6 +21,8 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
+#define SOUND
+
 #include <qcheckbox.h>
 #include <qdatetime.h>
 #include <qradiobutton.h>
@@ -62,7 +64,7 @@ class EditAlarmDlg : public KDialogBase
 #endif
 		int               getAlarmFlags() const;
 		bool              getLateCancel() const   { return lateCancel->isChecked(); }
-		bool              getBeep() const         { return beep->isChecked(); }
+		bool              getBeep() const         { return sound->isChecked() && soundFile.isEmpty(); }
 
 	protected:
 		virtual void showEvent(QShowEvent*);
@@ -76,10 +78,15 @@ class EditAlarmDlg : public KDialogBase
 		void         slotMessageTextChanged();
 		void         slotRecurrenceResized(QSize old, QSize New);
 		void         slotEditDeferral();
+		void         slotSoundToggled(bool on);
+#ifdef SOUND
+		void         slotPickSound();
+#endif
 
 	private:
 		bool            checkText(QString& result);
 		QString         getMessageText();
+		void            setSoundPicker();
 
 		QButtonGroup*    actionGroup;
 		QRadioButton*    messageRadio;
@@ -92,7 +99,8 @@ class EditAlarmDlg : public KDialogBase
 		AlarmTimeWidget* timeWidget;
 		RecurrenceEdit*  recurrenceEdit;
 		QCheckBox*       lateCancel;
-		QCheckBox*       beep;
+		QCheckBox*       sound;
+		QPushButton*     soundPicker;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else
@@ -101,6 +109,7 @@ class EditAlarmDlg : public KDialogBase
 		QString          alarmMessage;
 		QDateTime        alarmDateTime;
 		QDateTime        deferDateTime;
+		QString          soundFile;        // sound file to play when alarm is triggered, or null for beep
 		QString          multiLineText;    // message text before single-line mode was selected
 		QSize            basicSize;        // size without recurrence edit or deferred time widgets
 		int              deferGroupHeight; // height added by deferred time widget

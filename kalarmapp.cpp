@@ -966,6 +966,8 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 				{
 					case KAlarmEvent::NO_OCCURRENCE:
 						// All repetitions are finished, so cancel the event
+						if (alarm.id() == KAlarmEvent::MAIN_ALARM_ID  &&  !event.audioFile().isEmpty())
+							event.removeAlarm(KAlarmEvent::AUDIO_ALARM_ID);
 						handleAlarm(event, alarm, ALARM_CANCEL, updateCalAndDisplay);
 						break;
 					case KAlarmEvent::RECURRENCE_DATE:
