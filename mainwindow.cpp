@@ -343,7 +343,7 @@ void KAlarmMainWindow::initActions()
 	Daemon::actionControl()->plug(submenu);
 	theApp()->actionPreferences()->plug(submenu);
 
-	menu->insertItem(KStdGuiItem::help().text(), helpMenu());
+	menu->insertItem(SmallIcon("help"),KStdGuiItem::help().text(), helpMenu());
 
 	// Set up the toolbar
 

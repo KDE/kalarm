@@ -60,6 +60,7 @@
 #include <kprocess.h>
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
+#include <kpushbutton.h>
 #if KDE_VERSION >= 290
 #include <arts/kartsdispatcher.h>
 #include <arts/kartsserver.h>
@@ -436,7 +437,7 @@ QSize MessageWin::initView()
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
 	// Close button
-	QPushButton* okButton = new QPushButton(KStdGuiItem::close().text(), topWidget);
+	KPushButton* okButton = new KPushButton(KStdGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	okButton->clearFocus();
 	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
