@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -28,6 +38,7 @@
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "kamail.h"
+#include "daemon.h"
 #include "dcophandler.moc"
 
 
@@ -35,9 +46,9 @@
 = DcopHandler
 = This class's function is simply to act as a receiver for DCOP requests.
 =============================================================================*/
-DcopHandler::DcopHandler(const char* dcopObject)
+DcopHandler::DcopHandler()
 	: QWidget(),
-	  DCOPObject(dcopObject)
+	  DCOPObject(DCOP_OBJECT_NAME)
 {
 	kdDebug(5950) << "DcopHandler::DcopHandler()\n";
 }
@@ -66,8 +77,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		  REP_END      = 0x0200,
 		  FONT         = 0x0400,
 		PRE_096        = 0x1000,           // old-style pre-0.9.6 deprecated method
-		PRE_091        = 0x2000 | PRE_096, // old-style pre-0.9.1 deprecated method
-		PRE_070        = 0x4000 | PRE_091  // old-style pre-0.7 deprecated method
+		PRE_091        = 0x2000 | PRE_096  // old-style pre-0.9.1 deprecated method
 	};
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
@@ -179,24 +189,22 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,QDateTime)")
 		function = SCHEDULE | FILE | REP_END | PRE_091;
 
-	// Deprecated methods: backwards compatibility with KAlarm pre-0.7
+	// Obsolete methods: backwards compatibility with KAlarm pre-0.7
 	else if (func == "scheduleMessage(const QString&,const QDateTime&,const QColor&,Q_UINT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | MESSAGE | REP_COUNT | PRE_070;
-	else if (func == "scheduleFile(const QString&,const QDateTime&,const QColor&,Q_UINT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | FILE | REP_COUNT | PRE_070;
-	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | COMMAND | REP_COUNT | PRE_070;
-
-	// Deprecated methods: backwards compatibility with KAlarm pre-0.6
-	else if (func == "cancelMessage(const QString&,const QString&)"
-	||       func == "cancelMessage(QString,QString)")
-		function = CANCEL;
-	else if (func == "displayMessage(const QString&,const QString&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(const QString&,const QDateTime&,const QColor&,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32)"
+	// Obsolete methods: backwards compatibility with KAlarm pre-0.6
+	||       func == "cancelMessage(const QString&,const QString&)"
+	||       func == "cancelMessage(QString,QString)"
+	||       func == "displayMessage(const QString&,const QString&)"
 	||       func == "displayMessage(QString,QString)")
-		function = TRIGGER;
+	{
+		kdError(5950) << "DcopHandler::process(): obsolete DCOP function call: '" << func << "'" << endl;
+		return false;
+	}
 	else
 	{
 		kdError(5950) << "DcopHandler::process(): unknown DCOP function" << endl;
@@ -289,7 +297,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				arg >> flags;
 				flags |= KAEvent::DEFAULT_FONT;
 			}
-			if ((action == KAEvent::MESSAGE  ||  action == KAEvent::FILE)  &&  !(function & PRE_070))
+			if (action == KAEvent::MESSAGE  ||  action == KAEvent::FILE)
 				arg >> audioFile;
 			if (!(function & PRE_091))
 				arg >> reminderMinutes;
@@ -298,35 +306,25 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				KAEvent::RecurType recurType;
 				Q_INT32 repeatCount = 0;
 				Q_INT32 repeatInterval;
-				if (function & PRE_070)
+				Q_INT32 type;
+				arg >> type >> repeatInterval;
+				recurType = KAEvent::RecurType(type);
+				switch (recurType)
 				{
-					// Backwards compatibility with KAlarm pre-0.7
-					recurType = KAEvent::MINUTELY;
-					arg >> repeatCount >> repeatInterval;
-					++repeatCount;
+					case KAEvent::MINUTELY:
+					case KAEvent::DAILY:
+					case KAEvent::WEEKLY:
+					case KAEvent::MONTHLY_DAY:
+					case KAEvent::ANNUAL_DATE:
+						break;
+					default:
+						kdError(5950) << "DcopHandler::process(): invalid simple repetition type: " << type << endl;
+						return false;
 				}
+				if (function & REP_COUNT)
+					arg >> repeatCount;
 				else
-				{
-					Q_INT32 type;
-					arg >> type >> repeatInterval;
-					recurType = KAEvent::RecurType(type);
-					switch (recurType)
-					{
-						case KAEvent::MINUTELY:
-						case KAEvent::DAILY:
-						case KAEvent::WEEKLY:
-						case KAEvent::MONTHLY_DAY:
-						case KAEvent::ANNUAL_DATE:
-							break;
-						default:
-							kdError(5950) << "DcopHandler::process(): invalid simple repetition type: " << type << endl;
-							return false;
-					}
-					if (function & REP_COUNT)
-						arg >> repeatCount;
-					else
-						arg.readRawBytes((char*)&endTime, sizeof(endTime));
-				}
+					arg.readRawBytes((char*)&endTime, sizeof(endTime));
 				KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
 			}
 			else if (!(function & PRE_091))

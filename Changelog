@@ -1,11 +1,14 @@
 KAlarm
 
+=== Version 1.1.0 --- 7 Mar 2004 ===
 Rename command line option --sound to --play.
 After creating/editing alarm, prompt to re-enable alarms if currently disabled.
 Middle mouse button over system tray icon displays new alarm dialog.
 Display time-to-alarm in reminder message window.
 Allow time of day to be entered in format HHMM in time spin boxes.
 Allow hour to be omitted when colon format time is entered in time spin boxes..
+Remove obsolete --displayEvent command line option (replaced by --triggerEvent).
+Remove obsolete pre-version 0.7 DCOP calls.
 
 === Version 1.0.5 (KDE 3.2.1)--- 24 Feb 2004 ===
 Fix whatsThis text on bottom row of alarm list.
