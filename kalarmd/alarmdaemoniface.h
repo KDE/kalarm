@@ -1,67 +1,43 @@
 /*
-    This file is part of the KAlarm alarm daemon.
-    Copyright (c) 1997-1999 Preston Brown
-    Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
-    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
+ *  alarmdaemoniface.h  -  DCOP request interface
+ *  Program:  KAlarm's alarm daemon (kalarmd)
+ *  (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
+ *  Copyright (c) 1997-1999 Preston Brown
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
-*/
 #ifndef ALARMDAEMONIFACE_H
 #define ALARMDAEMONIFACE_H
-// $Id$
 
 #include <dcopobject.h>
-#include <qstringlist.h>
+
 
 class AlarmDaemonIface : virtual public DCOPObject
 {
     K_DCOP
   k_dcop:
     virtual ASYNC enableAutoStart(bool enable) = 0;
-    virtual ASYNC enableCal(const QString& urlString, bool enable) = 0;
-    virtual ASYNC addMsgCal(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC reloadMsgCal(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC removeCal(const QString& urlString) = 0;
-    virtual ASYNC resetMsgCal(const QCString& appname, const QString& urlString) = 0;
+    virtual ASYNC enableCalendar(const QString& urlString, bool enable) = 0;
+    virtual ASYNC reloadCalendar(const QCString& appname, const QString& urlString) = 0;
+    virtual ASYNC resetCalendar(const QCString& appname, const QString& urlString) = 0;
     virtual ASYNC registerApp(const QCString& appName, const QString& appTitle,
-                              const QCString& dcopObject, int notificationType,
-                              bool displayCalendarName) = 0;
-    virtual ASYNC reregisterApp(const QCString& appName, const QString& appTitle,
-                              const QCString& dcopObject, int notificationType,
-                              bool displayCalendarName) = 0;
-    virtual ASYNC registerGui(const QCString& appName, const QCString& dcopObject) = 0;
-    virtual ASYNC readConfig() = 0;
+                              const QCString& dcopObject, const QString& calendarUrl, bool startClient) = 0;
+    virtual ASYNC registerChange(const QCString& appName, bool startClient) = 0;
     virtual ASYNC quit() = 0;
-
-    virtual ASYNC forceAlarmCheck() = 0;
-    virtual ASYNC dumpDebug() = 0;
-    virtual QStringList dumpAlarms() = 0;
-};
-
-enum AlarmGuiChangeType    // parameters to GUI client notification
-{
-  CHANGE_STATUS,           // change of alarm daemon or calendar status
-  CHANGE_CLIENT,           // change to client application list
-  CHANGE_GUI,              // change to GUI client list
-  ADD_CALENDAR,            // addition to calendar list (KOrganizer-type calendar)
-  ADD_MSG_CALENDAR,        // addition to calendar list (KAlarm-type calendar)
-  DELETE_CALENDAR,         // deletion from calendar list
-  ENABLE_CALENDAR,         // calendar is now being monitored
-  DISABLE_CALENDAR,        // calendar is available but not being monitored
-  CALENDAR_UNAVAILABLE     // calendar is unavailable for monitoring
 };
 
 #endif

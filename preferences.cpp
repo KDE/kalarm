@@ -22,6 +22,7 @@
 
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -29,6 +30,7 @@
 #include <libkpimidentities/identity.h>
 #include <libkpimidentities/identitymanager.h>
 
+#include "daemon.h"
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
@@ -43,6 +45,7 @@ const QColor     Preferences::default_defaultBgColour(Qt::red);
 const QColor     Preferences::default_defaultFgColour(Qt::black);
 QFont            Preferences::default_messageFont;    // initialised in constructor
 const QTime      Preferences::default_startOfDay(0, 0);
+const bool       Preferences::default_autostartDaemon          = true;
 const bool       Preferences::default_runInSystemTray          = true;
 const bool       Preferences::default_disableAlarmsIfStopped   = true;
 const bool       Preferences::default_quitWarn                 = true;
@@ -227,40 +230,42 @@ Preferences::Preferences()
 	if (mEmailFrom == MAIL_FROM_CONTROL_CENTRE  ||  mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE)
 		mEmailAddress = mEmailBccAddress = KAMail::controlCentreAddress();
 	if (mEmailFrom == MAIL_FROM_ADDR)
-		mEmailAddress = from;
+		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
-		mEmailBccAddress = bccFrom;
+		mEmailBccAddress  = bccFrom;
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
-	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
+	mStartOfDay               = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
 	int sod = config->readNumEntry(START_OF_DAY_CHECK, 0);
 	if (sod)
-		mOldStartOfDay = mOldStartOfDay.addMSecs(sod ^ SODxor);
-	mDisabledColour          = config->readColorEntry(DISABLED_COLOUR, &default_disabledColour);
-	mExpiredColour           = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
-	mExpiredKeepDays         = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
+		mOldStartOfDay    = mOldStartOfDay.addMSecs(sod ^ SODxor);
+	mDisabledColour           = config->readColorEntry(DISABLED_COLOUR, &default_disabledColour);
+	mExpiredColour            = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
+	mExpiredKeepDays          = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
-	mDefaultLateCancel       = config->readNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
-	mDefaultAutoClose        = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
-	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
-	mDefaultSound            = config->readBoolEntry(DEF_SOUND, default_defaultSound);
-	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
-	mDefaultSoundVolume      = static_cast<float>(config->readDoubleNumEntry(DEF_SOUND_VOLUME, default_defaultSoundVolume));
+	mDefaultLateCancel        = config->readNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	mDefaultAutoClose         = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
+	mDefaultConfirmAck        = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
+	mDefaultSound             = config->readBoolEntry(DEF_SOUND, default_defaultSound);
+	mDefaultBeep              = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+	mDefaultSoundVolume       = static_cast<float>(config->readDoubleNumEntry(DEF_SOUND_VOLUME, default_defaultSoundVolume));
 #ifdef WITHOUT_ARTS
-	mDefaultSoundRepeat      = false;
+	mDefaultSoundRepeat       = false;
 #else
-	mDefaultSoundRepeat      = config->readBoolEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
+	mDefaultSoundRepeat       = config->readBoolEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
 #endif
-	mDefaultSoundFile        = config->readPathEntry(DEF_SOUND_FILE);
-	mDefaultEmailBcc         = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
-	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
-	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
-	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
-	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
-	mDefaultReminderUnits    = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
-	                         ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
-	mDefaultPreAction        = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
-	mDefaultPostAction       = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
+	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
+	mDefaultEmailBcc          = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
+	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
+	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
+	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
+	int reminderUnits         = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
+	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
+	                          ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
+	mDefaultPreAction         = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
+	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
+	mAutostartDaemon          = Daemon::autoStart(default_autostartDaemon);
+	mOldAutostartDaemon       = mAutostartDaemon;
 	emit preferencesChanged();
 	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
 	if (mStartOfDayChanged)
@@ -318,6 +323,12 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 	if (syncToDisc)
 		config->sync();
+	if (mAutostartDaemon != mOldAutostartDaemon)
+	{
+		// The alarm daemon autostart setting has changed.
+		Daemon::enableAutoStart(mAutostartDaemon);
+		mOldAutostartDaemon = mAutostartDaemon;
+	}
 	emit preferencesChanged();
 	if (mStartOfDay != mOldStartOfDay)
 	{

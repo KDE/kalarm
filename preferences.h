@@ -52,6 +52,7 @@ class Preferences : public QObject
 		const QFont&   messageFont() const              { return mMessageFont; }
 		const QTime&   startOfDay() const               { return mStartOfDay; }
 		bool           hasStartOfDayChanged() const     { return mStartOfDayChanged; }
+		bool           autostartDaemon() const          { return mAutostartDaemon; }
 		bool           runInSystemTray() const          { return mRunInSystemTray; }
 		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
 		bool           quitWarn() const                 { return notifying(QUIT_WARN); }
@@ -111,6 +112,7 @@ class Preferences : public QObject
 		static const QColor      default_defaultFgColour;
 		static QFont             default_messageFont;
 		static const QTime       default_startOfDay;
+		static const bool        default_autostartDaemon;
 		static const bool        default_runInSystemTray;
 		static const bool        default_disableAlarmsIfStopped;
 		static const bool        default_quitWarn;
@@ -181,6 +183,7 @@ class Preferences : public QObject
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
 		QTime               mStartOfDay;
+		bool                mAutostartDaemon;
 		bool                mRunInSystemTray;
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
@@ -218,6 +221,7 @@ class Preferences : public QObject
 		// Change tracking
 		QTime               mOldStartOfDay;       // previous start-of-day time
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
+		bool                mOldAutostartDaemon;  // previous daemon autostart value
 };
 
 #endif // PREFERENCES_H

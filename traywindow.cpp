@@ -90,7 +90,6 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
-	Daemon::createControlAction(actcol, "tControlDaemon")->plug(contextMenu());
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status

@@ -44,6 +44,8 @@
 #include <kcolorcombo.h>
 #include <kdebug.h>
 
+#include <kalarmd/kalarmd.h>
+
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "editdlg.h"
@@ -192,6 +194,17 @@ void PrefsTabBase::apply(bool syncToDisc)
 MiscPrefTab::MiscPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
+	QString progname = kapp->aboutData()->programName();
+
+	// Autostart alarm daemon
+	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), mPage, "startDaemon");
+	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
+	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
+	QWhatsThis::add(mAutostartDaemon,
+	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
+	           "This option should always be checked unless you intend to discontinue use of %2.")
+	          .arg(QString::fromLatin1(DAEMON_APP_NAME)).arg(progname));
+
 	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
 	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
@@ -209,14 +222,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "Notes:\n"
 	           "1. With this option selected, closing the system tray icon will quit %2.\n"
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
-	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
+	           .arg(progname).arg(progname));
 	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
 	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
 	QWhatsThis::add(mAutostartTrayIcon1,
-	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
+	      i18n("Check to run %1 whenever you start KDE.").arg(progname));
 	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
@@ -224,14 +237,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
 	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	QWhatsThis::add(mDisableAlarmsIfStopped,
-	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
+	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(progname));
 	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
 	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group, "disableAl");
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	QWhatsThis::add(mQuitWarn,
-	      i18n("Check to display a warning prompt before quitting %1.").arg(kapp->aboutData()->programName()));
+	      i18n("Check to display a warning prompt before quitting %1.").arg(progname));
 	grid->addWidget(mQuitWarn, row, 2, Qt::AlignLeft);
 	++row;
 
@@ -244,7 +257,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "Notes:\n"
 	           "1. Alarms are displayed even when %2 is not running, since alarm monitoring is done by the alarm daemon.\n"
 	           "2. With this option selected, the system tray icon can be displayed or hidden independently of %3.")
-	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
+	           .arg(progname).arg(progname).arg(progname));
 	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
@@ -255,6 +268,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
+	// Start-of-day time
 	QHBox* itemBox = new QHBox(mPage);
 	QHBox* box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
@@ -342,6 +356,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 void MiscPrefTab::restore()
 {
 	Preferences* preferences = Preferences::instance();
+	mAutostartDaemon->setChecked(preferences->mAutostartDaemon);
 	bool systray = preferences->mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
@@ -359,6 +374,7 @@ void MiscPrefTab::restore()
 void MiscPrefTab::apply(bool syncToDisc)
 {
 	Preferences* preferences = Preferences::instance();
+	preferences->mAutostartDaemon = mAutostartDaemon->isChecked();
 	bool systray = mRunInSystemTray->isChecked();
 	preferences->mRunInSystemTray        = systray;
 	preferences->mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
@@ -377,6 +393,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 
 void MiscPrefTab::setDefaults()
 {
+	mAutostartDaemon->setChecked(Preferences::default_autostartDaemon);
 	bool systray = Preferences::default_runInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
@@ -389,6 +406,17 @@ void MiscPrefTab::setDefaults()
 	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	slotDisableIfStoppedToggled(true);
+}
+
+void MiscPrefTab::slotAutostartDaemonClicked()
+{
+	if (!mAutostartDaemon->isChecked()
+	&&  KMessageBox::warningYesNo(this,
+		                      i18n("You should not uncheck this option unless you intend to discontinue use of %1")
+		                          .arg(kapp->aboutData()->programName()),
+		                      QString::null, KStdGuiItem::cont(), KStdGuiItem::cancel()
+		                     ) != KMessageBox::Yes)
+		mAutostartDaemon->setChecked(true);	
 }
 
 void MiscPrefTab::slotRunModeToggled(bool)

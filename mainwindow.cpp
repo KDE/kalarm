@@ -304,7 +304,6 @@ void KAlarmMainWindow::initActions()
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
 	KStdAction::preferences(this, SLOT(slotPreferences()), actions);
-	Daemon::createControlAction(actions, "controlDaemon");
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);
 

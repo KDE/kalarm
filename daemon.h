@@ -25,13 +25,13 @@
 #include <qdatetime.h>
 #include <kaction.h>
 
+#include <kalarmd/kalarmd.h>
 #include <kalarmd/alarmguiiface.h>
 
-class KAction;
 class KActionCollection;
 class AlarmCalendar;
 class AlarmEnableAction;
-class DaemonGuiHandler;
+class NotificationHandler;
 
 
 class Daemon : public QObject
@@ -41,18 +41,18 @@ class Daemon : public QObject
 		static void      initialise();
 		static void      createDcopHandler();
 		static bool      isDcopHandlerReady()    { return mDcopHandler; }
-		static KAction*  createControlAction(KActionCollection*, const char* name);
 		static AlarmEnableAction* createAlarmEnableAction(KActionCollection*, const char* name);
 		static bool      start();
 		static bool      reregister()            { return registerWith(true); }
 		static bool      reset();
 		static bool      stop();
+		static bool      autoStart(bool defaultSetting);
+		static void      enableAutoStart(bool enable);
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }
 		static bool      monitoringAlarms();
 		static bool      isRunning(bool startDaemon = true);
 		static int       maxTimeSinceCheck();
-		static void      readCheckInterval();
 		static bool      isRegistered()          { return mStatus == REGISTERED; }
 		static void      allowRegisterFailMsg()  { mRegisterFailMsg = false; }
 
@@ -60,11 +60,10 @@ class Daemon : public QObject
 		void             daemonRunning(bool running);
 
 	private slots:
-		void             slotControl();
 		void             slotCalendarSaved(AlarmCalendar*);
 		void             checkIfStarted();
 		void             slotStarted()           { updateRegisteredStatus(true); }
-		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), AlarmGuiIface::FAILURE); }
+		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), KAlarmd::FAILURE); }
 
 		void             setAlarmsEnabled(bool enable);
 		void             timerCheckIfRunning();
@@ -78,7 +77,7 @@ class Daemon : public QObject
 			READY,       // daemon is ready to accept DCOP calls
 			REGISTERED   // we have registered with the daemon
 		};
-		explicit Daemon() { }
+		Daemon() { }
 		static bool      registerWith(bool reregister);
 		static void      registrationResult(bool reregister, int result);
 		static void      reload();
@@ -89,15 +88,12 @@ class Daemon : public QObject
 		static void      setFastCheck();
 
 		static Daemon*   mInstance;            // only one instance allowed
-		static DaemonGuiHandler* mDcopHandler; // handles DCOP requests from daemon
+		static NotificationHandler* mDcopHandler; // handles DCOP requests from daemon
 		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon
 		static QTimer*   mRegisterTimer;       // timer to check whether daemon has sent registration status
 		static QTimer*   mStatusTimer;         // timer for checking daemon status
 		static int       mStatusTimerCount;    // countdown for fast status checking
 		static int       mStatusTimerInterval; // timer interval (seconds) for checking daemon status
-		static QDateTime mLastCheck;           // last time daemon checked alarms before check interval change
-		static QDateTime mNextCheck;           // next time daemon will check alarms after check interval change
-		static int       mCheckInterval;       // daemon check interval (seconds)
 		static int       mStartTimeout;        // remaining number of times to check if alarm daemon has started
 		static Status    mStatus;              // daemon status
 		static bool      mRunning;             // whether the alarm daemon is currently running
@@ -105,7 +101,7 @@ class Daemon : public QObject
 		static bool      mEnableCalPending;    // waiting to tell daemon to enable calendar
 		static bool      mRegisterFailMsg;     // true if registration failure message has been displayed
 
-		friend class DaemonGuiHandler;
+		friend class NotificationHandler;
 };
 
 /*=============================================================================

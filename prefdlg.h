@@ -104,6 +104,7 @@ class MiscPrefTab : public PrefsTabBase
 		virtual void setDefaults();
 
 	private slots:
+		void         slotAutostartDaemonClicked();
 		void         slotRunModeToggled(bool);
 		void         slotDisableIfStoppedToggled(bool);
 		void         slotExpiredToggled(bool);
@@ -112,6 +113,7 @@ class MiscPrefTab : public PrefsTabBase
 	private:
 		void         setExpiredControls(int purgeDays);
 
+		QCheckBox*     mAutostartDaemon;
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
 		QCheckBox*     mDisableAlarmsIfStopped;
