@@ -50,10 +50,11 @@
 #include <kaudioplayer.h>
 #include <kdebug.h>
 
-#include "kalarmapp.h"
 #include "alarmcalendar.h"
-#include "preferences.h"
 #include "deferdlg.h"
+#include "kalarmapp.h"
+#include "preferences.h"
+#include "synchtimer.h"
 #include "messagewin.moc"
 
 using namespace KCal;
@@ -206,6 +207,7 @@ MessageWin::~MessageWin()
 QSize MessageWin::initView()
 {
 	bool reminder = (!mErrorMsgs.count()  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
+	int leading = fontMetrics().leading();
 	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
@@ -355,35 +357,20 @@ QSize MessageWin::initView()
 	if (reminder)
 	{
 		// Reminder: show remaining time until the actual alarm
-		QLabel* label = new QLabel(topWidget);
-		QString text;
-		int days = QDate::currentDate().daysTo(mDateTime.date());
-		if (days > 0  ||  mDateTime.isDateOnly())
+		mRemainingText = new QLabel(topWidget);
+		mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
+		mRemainingText->setMargin(leading);
+		if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
 		{
-			if (days == 0)
-				text = i18n("today");
-			else if (days % 7)
-				text = i18n("tomorrow", "in %n days' time", days);
-			else
-				text = i18n("in 1 week's time", "in %n weeks' time", days/7);
+			setRemainingTextDay();
+			DailyTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
 		}
 		else
 		{
-			int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
-			if (mins < 60)
-				text = i18n("in 1 minute's time", "in %n minutes' time", mins);
-			else if (mins % 60 == 0)
-				text = i18n("in 1 hour's time", "in %n hours' time", mins/60);
-			else if (mins % 60 == 1)
-				text = i18n("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
-			else
-				text = i18n("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60).arg(mins%60);
+			setRemainingTextMinute();
+			MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
 		}
-		label->setText(text);
-		label->setFrameStyle(QFrame::Box | QFrame::Raised);
-		label->setMargin(label->frameWidth());
-		label->setFixedSize(label->sizeHint());
-		topLayout->addWidget(label, 0, Qt::AlignHCenter);
+		topLayout->addWidget(mRemainingText, 0, Qt::AlignHCenter);
 		topLayout->addSpacing(KDialog::spacingHint());
 		topLayout->addStretch();
 	}
@@ -465,6 +452,52 @@ QSize MessageWin::initView()
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
 	return sizeHint();
+}
+
+/******************************************************************************
+* Set the remaining time text in a reminder window.
+* Called at the start of every day (at the user-defined start-of-day time).
+*/
+void MessageWin::setRemainingTextDay()
+{
+	QString text;
+	int days = QDate::currentDate().daysTo(mDateTime.date());
+	if (days == 0  &&  !mDateTime.isDateOnly())
+	{
+		// The alarm is due today, so start refreshing every minute
+		DailyTimer::disconnect(this);
+		setRemainingTextMinute();
+		MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
+	}
+	else
+	{
+		if (days == 0)
+			text = i18n("Today");
+		else if (days % 7)
+			text = i18n("Tomorrow", "in %n days' time", days);
+		else
+			text = i18n("in 1 week's time", "in %n weeks' time", days/7);
+	}
+	mRemainingText->setText(text);
+}
+
+/******************************************************************************
+* Set the remaining time text in a reminder window.
+* Called on every minute boundary.
+*/
+void MessageWin::setRemainingTextMinute()
+{
+	QString text;
+	int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
+	if (mins < 60)
+		text = i18n("in 1 minute's time", "in %n minutes' time", mins);
+	else if (mins % 60 == 0)
+		text = i18n("in 1 hour's time", "in %n hours' time", mins/60);
+	else if (mins % 60 == 1)
+		text = i18n("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
+	else
+		text = i18n("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60).arg(mins%60);
+	mRemainingText->setText(text);
 }
 
 /******************************************************************************

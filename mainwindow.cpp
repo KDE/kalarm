@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission 
+ *  to link the code of this program with any edition of the Qt library by 
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same 
+ *  license as Qt), and distribute linked combinations including the two.  
+ *  You must obey the GNU General Public License in all respects for all of 
+ *  the code used other than Qt.  If you modify this file, you may extend 
+ *  this exception to your version of the file, but you are not obligated to 
+ *  do so. If you do not wish to do so, delete this exception statement from 
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -42,17 +52,18 @@
 
 #include <maillistdrag.h>
 
-#include "kalarmapp.h"
 #include "alarmcalendar.h"
+#include "alarmlistview.h"
+#include "birthdaydlg.h"
 #include "daemon.h"
 #include "daemongui.h"
-#include "traywindow.h"
-#include "birthdaydlg.h"
 #include "editdlg.h"
+#include "kalarmapp.h"
 #include "kamail.h"
 #include "prefdlg.h"
 #include "preferences.h"
-#include "alarmlistview.h"
+#include "synchtimer.h"
+#include "traywindow.h"
 #include "mainwindow.moc"
 
 using namespace KCal;
@@ -83,8 +94,7 @@ KAlarmMainWindow* KAlarmMainWindow::create(bool restored)
 
 KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
-	  mMinuteTimer(0),
-	  mMinuteTimerSyncing(false),
+	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
 	  mShowTime(Preferences::instance()->showAlarmTime()),
 	  mShowTimeTo(Preferences::instance()->showTimeToAlarm()),
@@ -135,7 +145,8 @@ KAlarmMainWindow::~KAlarmMainWindow()
 		else
 			theApp()->trayWindow()->removeWindow(this);
 	}
-	mMinuteTimer = 0;    // to ensure that setUpdateTimer() works correctly
+	MinuteTimer::disconnect(this);
+	mMinuteTimerActive = false;    // to ensure that setUpdateTimer() works correctly
 	setUpdateTimer();
 	KAlarmMainWindow* main = mainMainWindow();
 	if (main)
@@ -384,32 +395,22 @@ void KAlarmMainWindow::setUpdateTimer()
 	{
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			needTimer = w;
-		if (w->mMinuteTimer)
+		if (w->mMinuteTimerActive)
 			timerWindow = w;
 	}
 
 	// Start or stop the update timer if necessary
-	bool active = timerWindow && timerWindow->mMinuteTimer->isActive();
-	if (needTimer  &&  !active)
+	if (needTimer  &&  !timerWindow)
 	{
 		// Timeout every minute.
-		// But first synchronise to two seconds after the minute boundary.
-		if (!timerWindow)
-		{
-			timerWindow = needTimer;
-			timerWindow->mMinuteTimer = new QTimer(timerWindow);
-		}
-		int firstInterval = 62 - QTime::currentTime().second();
-		timerWindow->mMinuteTimer->start(1000 * firstInterval);
-		timerWindow->mMinuteTimerSyncing = (firstInterval != 60);
-		connect(timerWindow->mMinuteTimer, SIGNAL(timeout()), timerWindow, SLOT(slotUpdateTimeTo()));
-//		timerWindow->mMinuteTimerReceiver = true;
+		needTimer->mMinuteTimerActive = true;
+		MinuteTimer::connect(needTimer, SLOT(slotUpdateTimeTo()));
 		kdDebug(5950) << "KAlarmMainWindow::setUpdateTimer(): started timer" << endl;
 	}
-	else if (!needTimer  &&  active)
+	else if (!needTimer  &&  timerWindow)
 	{
-		timerWindow->mMinuteTimer->disconnect();
-		timerWindow->mMinuteTimer->stop();
+		timerWindow->mMinuteTimerActive = false;
+		MinuteTimer::disconnect(timerWindow);
 		kdDebug(5950) << "KAlarmMainWindow::setUpdateTimer(): stopped timer" << endl;
 	}
 }
@@ -419,13 +420,6 @@ void KAlarmMainWindow::setUpdateTimer()
 void KAlarmMainWindow::slotUpdateTimeTo()
 {
 	kdDebug(5950) << "KAlarmMainWindow::slotUpdateTimeTo()" << endl;
-	if (mMinuteTimerSyncing)
-	{
-		// We've synced to the minute boundary. Now set timer to 1 minute intervals.
-		mMinuteTimer->changeInterval(60 * 1000);
-		mMinuteTimerSyncing = false;
-	}
-
 	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			w->mListView->updateTimeToAlarms();

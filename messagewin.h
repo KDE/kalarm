@@ -25,6 +25,7 @@
 #include "alarmevent.h"
 
 class QPushButton;
+class QLabel;
 class AlarmTimeWidget;
 
 /**
@@ -53,9 +54,11 @@ class MessageWin : public MainWindowBase
 		virtual void        saveProperties(KConfig*);
 		virtual void        readProperties(KConfig*);
 
-	protected slots:
+	private slots:
 		void                slotDefer();
 		void                displayMainWindow();
+		void                setRemainingTextDay();
+		void                setRemainingTextMinute();
 
 	private:
 		QSize               initView();
@@ -78,6 +81,7 @@ class MessageWin : public MainWindowBase
 		QStringList         mErrorMsgs;
 		bool                noDefer;          // don't display a Defer option
 		// Miscellaneous
+		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		QPushButton*        deferButton;
 		int                 restoreHeight;
 		bool                rescheduleEvent;  // true to delete event after message has been displayed
