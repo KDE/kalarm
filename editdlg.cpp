@@ -68,6 +68,7 @@
 #include "checkbox.h"
 #include "combobox.h"
 #include "spinbox.h"
+#include "timespinbox.h"
 #include "timeperiod.h"
 #include "editdlg.moc"
 #include "editdlgprivate.moc"
@@ -367,9 +368,10 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	layout->addWidget(mFontColourButton);
 
 	// Reminder
+	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
 	mReminder = new Reminder(i18n("Rem&inder:"),
 	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
-	                         i18n("Enter how long in advance of the main alarm to display a reminder alarm."),
+	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
 	                         true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setReadOnly(mReadOnly);
