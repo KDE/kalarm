@@ -49,13 +49,12 @@
 #include "alarmcalendar.h"
 #include "prefsettings.h"
 #include "datetime.h"
-#include "messagewin.h"
 #include "messagewin.moc"
 
 
 static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display for a file
 
-int  MessageWin::nInstances = 0;
+QPtrList<MessageWin> MessageWin::windowList;
 
 
 /******************************************************************************
@@ -86,12 +85,12 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  shown(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
-	++nInstances;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
 	if (type == KAlarmAlarm::FILE  &&  errorMsg.isNull())
 		size = theApp()->readConfigWindowSize("FileMessage", size);
 	resize(size);
+	windowList.append(this);
 }
 
 /******************************************************************************
@@ -123,10 +122,10 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 	  shown(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
-	++nInstances;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
 	resize(size);
+	windowList.append(this);
 }
 
 /******************************************************************************
@@ -140,13 +139,18 @@ MessageWin::MessageWin()
 	  shown(true)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
-	++nInstances;
+	windowList.append(this);
 }
 
 MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
-	--nInstances;
+	for (MessageWin* w = windowList.first();  w;  w = windowList.next())
+		if (w == this)
+		{
+			windowList.remove();
+			break;
+		}
 }
 
 /******************************************************************************
@@ -385,9 +389,44 @@ void MessageWin::readProperties(KConfig* config)
 }
 
 /******************************************************************************
+*  Returns the existing message window (if any) which is displaying the event
+*  with the specified ID.
+*/
+MessageWin* MessageWin::findEvent(const QString& eventID)
+{
+	for (MessageWin* w = windowList.first();  w;  w = windowList.next())
+		if (w->eventID == eventID)
+			return w;
+	return 0L;
+}
+
+/******************************************************************************
+*  Re-output any required audio notification, and reschedule the alarm in the
+*  calendar file.
+*/
+void MessageWin::repeat()
+{
+	const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);
+	if (kcalEvent)
+	{
+		raise();
+		if (beep)
+		{
+			// Beep using two methods, in case the sound card/speakers are switched off or not working
+			KNotifyClient::beep();     // beep through the sound card & speakers
+			QApplication::beep();      // beep through the internal speaker
+		}
+		if (!audioFile.isEmpty())
+			KAudioPlayer::play(QFile::encodeName(audioFile));
+		KAlarmEvent event(*kcalEvent);
+		theApp()->rescheduleAlarm(event, alarmID);
+	}
+}
+
+/******************************************************************************
 *  Called when the window is shown.
-*  The first time, output any required audio notification, and delete the event
-*  from the calendar file.
+*  The first time, output any required audio notification, and reschedule or
+*  delete the event from the calendar file.
 */
 void MessageWin::showEvent(QShowEvent* se)
 {

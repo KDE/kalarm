@@ -40,45 +40,48 @@ class MessageWin : public MainWindowBase
 		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true, bool allowDefer = true);
 		MessageWin(const QString& errmsg, const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true);
 		~MessageWin();
-		bool              errorMessage() const   { return !errorMsg.isNull(); }
-		static int        instanceCount()        { return nInstances; }
+		void               repeat();
+		bool               errorMessage() const   { return !errorMsg.isNull(); }
+		static int         instanceCount()        { return windowList.count(); }
+		static MessageWin* findEvent(const QString& eventID);
 
 	protected:
-		virtual void showEvent(QShowEvent*);
-		virtual void resizeEvent(QResizeEvent*);
-		virtual void saveProperties(KConfig*);
-		virtual void readProperties(KConfig*);
+		virtual void       showEvent(QShowEvent*);
+		virtual void       resizeEvent(QResizeEvent*);
+		virtual void       saveProperties(KConfig*);
+		virtual void       readProperties(KConfig*);
 
 	protected slots:
-		void              slotShowDefer();
-		void              slotDefer();
+		void               slotShowDefer();
+		void               slotDefer();
 
 	private:
-		QSize             initView();
+		QSize              initView();
+
+		static QPtrList<MessageWin> windowList;  // list of existing message windows
 		// KAlarmEvent properties
-		KAlarmEvent       event;            // the whole event, for updating the calendar file
-		QString           message;
-		QFont             font;
-		QColor            colour;
-		QDateTime         dateTime;
-		QString           eventID;
-		QString           audioFile;
-		int               alarmID;
-		int               flags;
-		bool              beep;
-		bool              dateOnly;         // ignore event's time
-		KAlarmAlarm::Type type;
-		QString           errorMsg;
-		bool              noDefer;          // don't display a Defer option
+		KAlarmEvent        event;            // the whole event, for updating the calendar file
+		QString            message;
+		QFont              font;
+		QColor             colour;
+		QDateTime          dateTime;
+		QString            eventID;
+		QString            audioFile;
+		int                alarmID;
+		int                flags;
+		bool               beep;
+		bool               dateOnly;         // ignore event's time
+		KAlarmAlarm::Type  type;
+		QString            errorMsg;
+		bool               noDefer;          // don't display a Defer option
 		// Miscellaneous
-		QPushButton*      deferButton;
-		AlarmTimeWidget*  deferTime;
-		int               deferHeight;      // height of defer dialog
-		int               restoreHeight;
-		bool              rescheduleEvent;  // true to delete event after message has been displayed
-		bool              shown;            // true once the window has been displayed
-		bool              deferDlgShown;    // true if defer dialog is visible
-		static int        nInstances;       // number of current instances
+		QPushButton*       deferButton;
+		AlarmTimeWidget*   deferTime;
+		int                deferHeight;      // height of defer dialog
+		int                restoreHeight;
+		bool               rescheduleEvent;  // true to delete event after message has been displayed
+		bool               shown;            // true once the window has been displayed
+		bool               deferDlgShown;    // true if defer dialog is visible
 };
 
 #endif // MESSAGEWIN_H

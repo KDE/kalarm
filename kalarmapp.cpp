@@ -1052,7 +1052,14 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 			rescheduleAlarm(event, alarm.id());
 	}
 	else
-		(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+	{
+		// Display a message or file, provided that the same event isn't already being displayed
+		MessageWin* win = MessageWin::findEvent(event.id());
+		if (win)
+			win->repeat();
+		else
+			(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+	}
 	return result;
 }
 
