@@ -34,3 +34,4 @@ Comment[xx]=xx
 Terminal=false
 X-KDE-autostart-phase=2
 X-KDE-autostart-condition=kalarmrc:General:AutostartTray:false
+X-KDE-StartupNotify=true
