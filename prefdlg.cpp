@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -204,7 +204,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, AlignLeft);
 	++row;
 
-	mQuitWarn = new QCheckBox(i18n("Warn before quitting"), group, "disableAl");
+	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group, "disableAl");
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	QWhatsThis::add(mQuitWarn,
 	      i18n("Check to display a warning prompt before quitting %1.").arg(kapp->aboutData()->programName()));
