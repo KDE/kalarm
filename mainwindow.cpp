@@ -407,9 +407,9 @@ void KAlarmMainWindow::slotDelete()
 		if (theApp()->settings()->confirmAlarmDeletion())
 		{
 			int n = 1;
-			if (KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the selected alarm?", "Are you sure you want to delete the %n selected alarms?", n),
-			                               i18n("Confirm Alarm Deletion"))
-			    != KMessageBox::Yes)
+			if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?", "Do you really want to delete the %n selected alarms?", n),
+			                                       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"))
+			    != KMessageBox::Continue)
 				return;
 		}
 		KAlarmEvent event = listView->getEntry(item);
