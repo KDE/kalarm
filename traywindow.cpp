@@ -50,7 +50,8 @@
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray((theApp()->runInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent),
-	  mQuitReplaced(false)
+	  mQuitReplaced(false),
+	  mActionCollection(this)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -63,7 +64,7 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
 		                         i18n("%1 Error").arg(kapp->aboutData()->programName()));
 
-	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()));
+	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()), &mActionCollection);
 
 	// Set up the context menu
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -96,7 +97,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 	if (!mQuitReplaced)
 	{
 		// Prevent Quit from quitting the program
-		QString quitText = KStdAction::quit()->text();
+		QString quitText = mActionQuit->text();
 		for (unsigned n = 0;  n < menu->count();  ++n)
 		{
 			QString txt = menu->text(menu->idAt(n));

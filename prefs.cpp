@@ -28,6 +28,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qwhatsthis.h>
+#include <qstyle.h>
 
 #include <kdialog.h>
 #include <kglobal.h>
@@ -103,11 +104,8 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	topLayout->setMargin(KDialog::marginHint());
 
 	QGroupBox* group = new QGroupBox(i18n("Run mode"), page, "modeGroup");
+	QGridLayout* grid = new QGridLayout(group, 5, 2, KDialog::spacingHint() + fontMetrics().lineSpacing()/2);
 	topLayout->addWidget(group);
-	QVBoxLayout* layout = new QVBoxLayout(group, KDialog::spacingHint(), 0);
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
-	QGridLayout* grid = new QGridLayout(group, 5, 2, KDialog::spacingHint());
-	layout->addLayout(grid);
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()*2);
 	grid->addRowSpacing(3, fontMetrics().lineSpacing()*2);
 	grid->setColStretch(0, 0);
@@ -127,12 +125,12 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
 	grid->addMultiCellWidget(mRunInSystemTray, 0, 0, 0, 1, AlignLeft);
 
-	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at login"), page, "autoTray");
+	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at login"), group, "autoTray");
 	QWhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
 	grid->addWidget(mAutostartTrayIcon1, 1, 1, AlignLeft);
 
-	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disable alarms while not running"), page, "disableAl");
+	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disable alarms while not running"), group, "disableAl");
 	QWhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
 	grid->addWidget(mDisableAlarmsIfStopped, 2, 1, AlignLeft);
@@ -149,12 +147,12 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
 	grid->addMultiCellWidget(mRunOnDemand, 3, 3, 0, 1, AlignLeft);
 
-	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray icon at login"), page, "autoRun");
+	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray icon at login"), group, "autoRun");
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
 	grid->addWidget(mAutostartTrayIcon2, 4, 1, AlignLeft);
 
-	grid = new QGridLayout(page, 1, 2, KDialog::spacingHint());
+	grid = new QGridLayout(topLayout, 1, 2, KDialog::spacingHint());
 	topLayout->addLayout(grid);
 	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
 	lbl->setFixedSize(lbl->sizeHint());
@@ -226,7 +224,7 @@ AppearancePrefs::AppearancePrefs(QWidget* parent)
 	: PrefsBase(parent)
 {
 	QWidget* page = new QWidget(this );
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint());
+	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint() );
 	layout->setMargin(KDialog::marginHint());
 	mFontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
 	layout->addWidget(mFontChooser);

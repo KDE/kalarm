@@ -37,26 +37,22 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	       bool makeFrame, const QString& frameLabel, bool fg, int visibleListSize)
 	: QWidget(parent, name)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, 0);
 	QWidget* page = this;
 	if (makeFrame)
 	{
 		page = new QGroupBox(i18n(frameLabel), this);
-		topLayout->addWidget(page);
-		topLayout = new QVBoxLayout(page, KDialog::spacingHint(), KDialog::spacingHint());
+		topLayout->addWidget(page, 1);
+		topLayout = new QVBoxLayout(page, KDialog::marginHint());
 	}
-
-	QGridLayout* grid = new QGridLayout(page, (fg ? 3 : 2), 2, KDialog::spacingHint());
+	QGridLayout *grid = new QGridLayout(topLayout, (fg ? 2 : 1), 2, KDialog::spacingHint());
 	topLayout->addLayout(grid);
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
-	int gridRow = 1;
-
+	int gridRow = 0;
 	QLabel* label;
 	if (fg)
 	{
 		label = new QLabel(i18n("Default foreground color:"), page);
-		grid->addWidget(label, gridRow, 0, AlignRight);
-		label->setFixedSize(label->sizeHint());
+		grid->addWidget(label, gridRow, 0);
 		m_fgColourButton = new ColourCombo(page);
 		grid->addWidget(m_fgColourButton, gridRow, 1, AlignRight);
 		connect(m_fgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
@@ -64,13 +60,13 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	}
 
 	label = new QLabel(i18n("Default background color:"), page);
-	grid->addWidget(label, gridRow, 0, AlignRight);
+	grid->addWidget(label, gridRow, 0);
 	m_bgColourButton = new ColourCombo(page);
 	grid->addWidget(m_bgColourButton, gridRow, 1, AlignRight);
 	connect(m_bgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 
 	m_fontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
-	topLayout->addWidget(m_fontChooser);
+	topLayout->addWidget(m_fontChooser, 1);
 }
 
 FontColourChooser::~FontColourChooser()

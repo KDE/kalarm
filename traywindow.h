@@ -56,6 +56,7 @@ class TrayWindow : public KSystemTray
 		KAction*          mActionQuit;          // quit action for system tray window
 		int               mAlarmsEnabledId;     // alarms enabled item in menu
 		bool              mQuitReplaced;        // the context menu Quit item has been replaced
+		KActionCollection mActionCollection;
 };
 
 #endif // TRAYWINDOW_H
