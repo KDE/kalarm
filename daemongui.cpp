@@ -26,8 +26,6 @@
 
 #include <stdlib.h>
 
-#include <qfile.h>
-
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kurl.h>
