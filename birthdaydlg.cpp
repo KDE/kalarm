@@ -316,7 +316,7 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 				event.setAudioFile(mSoundPicker->file());
 				QValueList<int> months;
 				months.append(date.month());
-				event.setRecurAnnualByDate(1, months, -1);
+				event.setRecurAnnualByDate(1, months, 0, -1);
 				event.setNextOccurrence(todayNoon);
 				if (reminder)
 					event.setReminder(reminder);

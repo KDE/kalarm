@@ -376,14 +376,14 @@ class KAlarmEvent : public KAAlarmEventBase
 		                                           { setRecurMonthlyByPos(freq, mp, count, QDate()); }
 		void               setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& mp, const QDate& end)
 		                                           { setRecurMonthlyByPos(freq, mp, 0, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int count)
-		                                           { setRecurAnnualByDate(freq, months, -1, count, QDate()); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, const QDate& end)
-		                                           { setRecurAnnualByDate(freq, months, -1, 0, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, int count)
-		                                           { setRecurAnnualByDate(freq, months, feb29, count, QDate()); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, const QDate& end)
-		                                           { setRecurAnnualByDate(freq, months, feb29, 0, end); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, int count)
+		                                           { setRecurAnnualByDate(freq, months, day, -1, count, QDate()); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, const QDate& end)
+		                                           { setRecurAnnualByDate(freq, months, day, -1, 0, end); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, bool feb29, int count)
+		                                           { setRecurAnnualByDate(freq, months, day, feb29, count, QDate()); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, bool feb29, const QDate& end)
+		                                           { setRecurAnnualByDate(freq, months, day, feb29, 0, end); }
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& mp, const QValueList<int>& months, int count)
 		                                           { setRecurAnnualByPos(freq, mp, months, count, QDate()); }
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& mp, const QValueList<int>& months, const QDate& end)
@@ -407,10 +407,10 @@ class KAlarmEvent : public KAAlarmEventBase
 		                                           { if (initRecur(end, count))  setRecurMonthlyByPos(*mRecurrence, freq, pos, count, end); }
 		void               setRecurMonthlyByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& pos, int count, const QDate& end)
 		                                           { if (initRecur(end, count))  setRecurMonthlyByPos(*mRecurrence, freq, pos, count, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, bool feb29, int count, const QDate& end)
-		                                           { if (initRecur(end, count, feb29))  setRecurAnnualByDate(*mRecurrence, freq, months, count, end); }
-		void               setRecurAnnualByDate(int freq, const QPtrList<int>& months, bool feb29, int count, const QDate& end)
-		                                           { if (initRecur(end, count, feb29))  setRecurAnnualByDate(*mRecurrence, freq, months, count, end); }
+		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, bool feb29, int count, const QDate& end)
+		                                           { if (initRecur(end, count, feb29))  setRecurAnnualByDate(*mRecurrence, freq, months, day, count, end); }
+		void               setRecurAnnualByDate(int freq, const QPtrList<int>& months, int day, bool feb29, int count, const QDate& end)
+		                                           { if (initRecur(end, count, feb29))  setRecurAnnualByDate(*mRecurrence, freq, months, day, count, end); }
 		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& pos, const QValueList<int>& months, int count, const QDate& end)
 		                                           { if (initRecur(end, count))  setRecurAnnualByPos(*mRecurrence, freq, pos, months, count, end); }
 		void               setRecurAnnualByPos(int freq, const QPtrList<KCal::Recurrence::rMonthPos>& pos, const QPtrList<int>& months, int count, const QDate& end)
@@ -427,8 +427,8 @@ class KAlarmEvent : public KAAlarmEventBase
 		static bool        setRecurMonthlyByDate(KCal::Recurrence&, int freq, const QPtrList<int>& days, int count, const QDate& end);
 		static bool        setRecurMonthlyByPos(KCal::Recurrence&, int freq, const QValueList<MonthPos>&, int count, const QDate& end);
 		static bool        setRecurMonthlyByPos(KCal::Recurrence&, int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, int count, const QDate& end);
-		static bool        setRecurAnnualByDate(KCal::Recurrence&, int freq, const QValueList<int>& months, int count, const QDate& end);
-		static bool        setRecurAnnualByDate(KCal::Recurrence&, int freq, const QPtrList<int>& months, int count, const QDate& end);
+		static bool        setRecurAnnualByDate(KCal::Recurrence&, int freq, const QValueList<int>& months, int day, int count, const QDate& end);
+		static bool        setRecurAnnualByDate(KCal::Recurrence&, int freq, const QPtrList<int>& months, int day, int count, const QDate& end);
 		static bool        setRecurAnnualByPos(KCal::Recurrence&, int freq, const QValueList<MonthPos>&, const QValueList<int>& months, int count, const QDate& end);
 		static bool        setRecurAnnualByPos(KCal::Recurrence&, int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, const QPtrList<int>& months, int count, const QDate& end);
 		static bool        setRecurAnnualByDay(KCal::Recurrence&, int freq, const QValueList<int>& days, int count, const QDate& end);

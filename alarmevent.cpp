@@ -784,7 +784,9 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 				setRecurMonthlyByPos(*recur, frequency, mRecurrence->monthPositions(), duration, endDateTime.date());
 				break;
 			case Recurrence::rYearlyMonth:
-				setRecurAnnualByDate(*recur, frequency, mRecurrence->yearNums(), duration, endDateTime.date());
+				setRecurAnnualByDate(*recur, frequency, mRecurrence->yearNums(),
+				                     (mRecurrence->monthDays().count() ? *mRecurrence->monthDays().getFirst() : 0),
+				                     duration, endDateTime.date());
 				break;
 			case Recurrence::rYearlyPos:
 				setRecurAnnualByPos(*recur, frequency, mRecurrence->yearMonthPositions(), mRecurrence->yearNums(), duration, endDateTime.date());
@@ -1644,13 +1646,14 @@ bool KAlarmEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const Q
  * Parameters:
  *    freq   = how many years between recurrences.
  *    months = which months of the year alarms should occur on.
+ *    day    = day of month, or 0 to use start date
  *    feb29  = if start date is March 1st, recur on February 29th; otherwise ignored
  *    count  = number of occurrences, including first and last.
  *           = -1 to recur indefinitely.
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QValueList<int>& months, int count, const QDate& end)
+bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QValueList<int>& months, int day, int count, const QDate& end)
 {
 	if (count < -1)
 		return false;
@@ -1662,10 +1665,12 @@ bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const Q
 		return false;
 	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		recurrence.addYearlyNum(*it);
+	if (day)
+		recurrence.addMonthlyDay(day);
 	return true;
 }
 
-bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QPtrList<int>& months, int count, const QDate& end)
+bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QPtrList<int>& months, int day, int count, const QDate& end)
 {
 	if (count < -1)
 		return false;
@@ -1677,6 +1682,8 @@ bool KAlarmEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const Q
 		return false;
 	for (QPtrListIterator<int> it(months);  it.current();  ++it)
 		recurrence.addYearlyNum(*it.current());
+	if (day)
+		recurrence.addMonthlyDay(day);
 	return true;
 }
 
@@ -1803,7 +1810,7 @@ bool KAlarmEvent::setRecurrence(Recurrence& recurrence, RecurType recurType, int
 		{
 			QValueList<int> months;
 			months.append(QDate::currentDate().month());
-			setRecurAnnualByDate(recurrence, repeatInterval, months, repeatCount, endTime.date());
+			setRecurAnnualByDate(recurrence, repeatInterval, months, 0, repeatCount, endTime.date());
 			break;
 		}
 		case NO_RECUR:
