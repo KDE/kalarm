@@ -165,8 +165,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	// Alarm action
 
-	mActionGroup = new QButtonGroup(i18n("Action"), mainPage, "actionGroup");
-	connect(mActionGroup, SIGNAL(clicked(int)), SLOT(slotAlarmTypeClicked(int)));
+	mActionGroup = new ButtonGroup(i18n("Action"), mainPage, "actionGroup");
+	connect(mActionGroup, SIGNAL(buttonSet(int)), SLOT(slotAlarmTypeChanged(int)));
 	topLayout->addWidget(mActionGroup, 1);
 	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginKDE2 + marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
@@ -1305,7 +1305,7 @@ void EditAlarmDlg::slotEditDeferral()
 */
 void EditAlarmDlg::slotShowMainPage()
 {
-	slotAlarmTypeClicked(-1);
+	slotAlarmTypeChanged(-1);
 	if (!mMainPageShown)
 	{
 		if (mTemplateName)
@@ -1436,7 +1436,7 @@ bool EditAlarmDlg::checkEmailData()
 *  Called when one of the alarm action type radio buttons is clicked,
 *  to display the appropriate set of controls for that action type.
 */
-void EditAlarmDlg::slotAlarmTypeClicked(int)
+void EditAlarmDlg::slotAlarmTypeChanged(int)
 {
 	QWidget* focus = 0;
 	if (mMessageRadio->isOn())

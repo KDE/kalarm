@@ -30,7 +30,6 @@
 #include "datetime.h"
 
 class QButton;
-class QButtonGroup;
 class QGroupBox;
 class QComboBox;
 class QTabWidget;
@@ -89,7 +88,7 @@ class EditAlarmDlg : public KDialogBase
 	private slots:
 		void         slotRecurTypeChange(int repeatType);
 		void         slotRecurFrequencyChange();
-		void         slotAlarmTypeClicked(int id);
+		void         slotAlarmTypeChanged(int id);
 		void         slotEditDeferral();
 		void         slotBrowseFile();
 		void         slotFontColourSelected();
@@ -124,7 +123,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              mRecurPageShown;           // true once the recurrence tab has been displayed
 		bool              mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
 
-		QButtonGroup*     mActionGroup;
+		ButtonGroup*      mActionGroup;
 		RadioButton*      mMessageRadio;
 		RadioButton*      mCommandRadio;
 		RadioButton*      mFileRadio;
