@@ -52,9 +52,11 @@
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
 #include <kabc/addresseedialog.h>
+#include <kabc/vcardconverter.h>
 #include <kdebug.h>
 
 #include <libkdepim/maillistdrag.h>
+#include <libkdepim/kvcarddrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
@@ -464,7 +466,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
-	mEmailToEdit = new LineEdit(LineEdit::EmailAddresses, mEmailFrame);
+	mEmailToEdit = new LineEdit(LineEdit::Emails, mEmailFrame);
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
 	QWhatsThis::add(mEmailToEdit,
 	      i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
@@ -1805,29 +1807,31 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 
 /*=============================================================================
 = Class LineEdit
-= Line edit with option to prevent its contents being selected when it receives
+= Line edit which accepts drag and drop of text, URLs and/or email addresses.
+* It has an option to prevent its contents being selected when it receives
 = focus.
 =============================================================================*/
 LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
 	: KLineEdit(parent, name),
+	  mType(type),
 	  mNoSelect(false),
 	  mSetCursorAtEnd(false)
 {
-	init(type);
+	init();
 }
 
 LineEdit::LineEdit(QWidget* parent, const char* name)
 	: KLineEdit(parent, name),
+	  mType(Text),
 	  mNoSelect(false),
 	  mSetCursorAtEnd(false)
 {
-	init(Basic);
+	init();
 }
 
-void LineEdit::init(Type type)
+void LineEdit::init()
 {
-	mEmailAddresses = (type == EmailAddresses);
-	if (type == Url)
+	if (mType == Url)
 	{
 		setCompletionMode(KGlobalSettings::CompletionShell);
 		KURLCompletion* comp = new KURLCompletion(KURLCompletion::FileCompletion);
@@ -1865,47 +1869,104 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
 	       || KURLDrag::canDecode(e)
-	       || KPIM::MailListDrag::canDecode(e));
+	       || mType != Url && KPIM::MailListDrag::canDecode(e)
+	       || mType == Emails && KVCardDrag::canDecode(e));
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
-	QString text;
+	QString     newText;
+	QStringList newEmails;
+	QString txt;
 	KPIM::MailList mailList;
 	KURL::List files;
-	if (KURLDrag::decode(e, files)  &&  files.count())
-		setText(files.first().prettyURL());
-	else if (e->provides(KPIM::MailListDrag::format())
+
+	if (mType != Url
+	&&  e->provides(KPIM::MailListDrag::format())
 	&&  KPIM::MailListDrag::decode(e, mailList))
 	{
-		// KMail message(s). Ignore all but the first.
+		// KMail message(s) - ignore all but the first
 		if (mailList.count())
 		{
-			if (mEmailAddresses)
-				setText(mailList.first().from());
+			if (mType == Emails)
+				newText = mailList.first().from();
 			else
-				setText(mailList.first().subject());
+				setText(mailList.first().subject());    // replace any existing text
+#warning Set complete message if dragging onto a text alarm edit field
 		}
 	}
-	else if (QTextDrag::decode(e, text))
+	// This must come before KURLDrag
+	else if (mType == Emails
+	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, txt))
 	{
-		if (mEmailAddresses)
+		// KAddressBook entries
+		KABC::VCardConverter converter;
+		KABC::Addressee::List list = converter.parseVCards(txt);
+		for (KABC::Addressee::List::Iterator it = list.begin();  it != list.end();  ++it)
 		{
-#warning "Allow drag of a list of email addresses as follows:"
-			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
-			text.replace(QRegExp("\r?\n"), ", ");
-			if (text.startsWith("mailto:"))
+			QString em((*it).fullEmail());
+			if (!em.isEmpty())
+				newEmails.append(em);
+		}
+	}
+	else if (KURLDrag::decode(e, files)  &&  files.count())
+	{
+		// URL(s)
+		switch (mType)
+		{
+			case Url:
+				// URL entry field - ignore all but the first dropped URL
+				setText(files.first().prettyURL());    // replace any existing text
+				break;
+			case Emails:
 			{
-				KURL url(text);
-				text = url.path();
+				// Email entry field - ignore all but mailto: URLs
+				QString mailto = QString::fromLatin1("mailto");
+				for (KURL::List::Iterator it = files.begin();  it != files.end();  ++it)
+				{
+					if ((*it).protocol() == mailto)
+						newEmails.append((*it).path());
+				}
+				break;
+			}
+			case Text:
+				newText = files.first().prettyURL();
+				break;
+		}
+	}
+	else if (QTextDrag::decode(e, txt))
+	{
+		// Plain text
+		if (mType == Emails)
+		{
+			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
+			QString mailto = QString::fromLatin1("mailto:");
+			newEmails = QStringList::split(QRegExp("[\r\n]+"), txt);
+			for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
+			{
+				if ((*it).startsWith(mailto))
+				{
+					KURL url(*it);
+					*it = url.path();
+				}
 			}
 		}
 		else
 		{
-			int newline = text.find('\n');
-			if (newline >= 0)
-				text = text.left(newline);
+			int newline = txt.find('\n');
+			newText = (newline >= 0) ? txt.left(newline) : txt;
 		}
-		setText(text);
 	}
+
+	if (newEmails.count())
+	{
+		newText = newEmails.join(",");
+		int c = cursorPosition();
+		if (c > 0)
+			newText.prepend(",");
+		if (c < static_cast<int>(text().length()))
+			newText.append(",");
+	}
+	if (!newText.isEmpty())
+		insert(newText);
 }

@@ -41,7 +41,7 @@ class LineEdit : public KLineEdit
 {
 		Q_OBJECT
 	public:
-		enum Type { Basic, Url, EmailAddresses };
+		enum Type { Text, Url, Emails };
 		explicit LineEdit(Type, QWidget* parent = 0, const char* name = 0);
 		explicit LineEdit(QWidget* parent = 0, const char* name = 0);
 		void         setNoSelect()   { mNoSelect = true; }
@@ -53,10 +53,10 @@ class LineEdit : public KLineEdit
 		virtual void dragEnterEvent(QDragEnterEvent*);
 		virtual void dropEvent(QDropEvent*);
 	private:
-		void         init(Type);
+		void         init();
 
+		Type  mType;
 		bool  mNoSelect;
-		bool  mEmailAddresses;
 		bool  mSetCursorAtEnd;   // setText() should position cursor at end
 };
 
