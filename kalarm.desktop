@@ -1,7 +1,8 @@
 # KDE Config File
 [Desktop Entry]
+Encoding=UTF-8
 Name=KAlarm
-Name[fr]=Alarme
+Name[fr]=kAlarm
 Name[ko]=KDE 알람
 Name[sv]=Kalarm
 Name[xx]=xx
@@ -10,5 +11,19 @@ Exec=kalarm -caption "%c" %i
 Icon=kalarm
 DocPath=kalarm/index.html
 Comment=Reminder Message Scheduler
+Comment[da]=Påminder besked-skemalægger
+Comment[de]=Wecker, Erinnerer, Nachrichtenanzeiger
+Comment[es]=Programador de mensaje de recuerdo
+Comment[fi]=Muistutusviestien ajastin
+Comment[fr]=Une alarme programmable
+Comment[he]=מתזמן הודעות תזכורת
+Comment[hu]=Emlékeztető/figyelmeztető szolgáltatás
+Comment[lt]=Žinučių-priminimų planuoklis
+Comment[lv]=Atgādinājumu Ziņojumu Plānotājs
+Comment[pt]=Escalonador de Mensagens de Compromissos
+Comment[pt_BR]=Escalonador de Mensagens de Compromissos
+Comment[sk]=Plánovač alarmov a pripomenutí
+Comment[sv]=Schemaläggare för påminnelsemeddelanden
+Comment[xx]=xx
 Terminal=0
 X-DCOP-ServiceType=Unique

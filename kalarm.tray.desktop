@@ -1,5 +1,6 @@
 # KDE Config File
 [Desktop Entry]
+Encoding=UTF-8
 Name=KAlarm
 Name[fr]=kAlarm
 Name[ko]=KDE 알람
@@ -18,6 +19,7 @@ Comment[fi]=Hälytys/muistutusviestien ajastin: käynnistä paneelikuvake
 Comment[fr]=Une alarme programmable : elle se place dans la boîte à icônes au démarrage
 Comment[he]=מתזמן הודעות תזכורת: הפעלה בתור סמל במגש המערכת
 Comment[hu]=Emlékeztető/figyelmeztető szolgáltatás: indítás a paneltálcában
+Comment[lt]=Žinučių-priminimų planuoklis: paleisti kaip sisteminio dėklo piktogramą
 Comment[lv]=Trauksmes/atgādinājumu ziņojumu plānotājs: sāknēt kā sistēmas teknes ikonu
 Comment[nl]=agenda voor berichtenherinneringen: start op als systeemvakpictogram
 Comment[pt]=Escalonador de mensagens de compromissos: iniciar como ícone da bandeja
@@ -25,6 +27,7 @@ Comment[pt_BR]=Escalonador de mensagens de compromissos: iniciar como ícone da 
 Comment[sk]=Plánovač alarmov a pripomenutí: spustiť v systémovej lište
 Comment[sl]=Razporejevalnik sporočil alarma in opomnika; zažene se kot sistemska ikona
 Comment[sv]=Schemaläggare för alarm- och påminnelsemeddelanden: starta som en i ikon i systembrickan
+Comment[xx]=xx
 Terminal=false
 X-KDE-autostart-phase=2
 X-KDE-autostart-condition=kalarmrc:General:AutostartTray:true
