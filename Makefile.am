@@ -16,7 +16,7 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
-	specialactions.cpp datetime.cpp reminder.cpp synchtimer.cpp \
+	specialactions.cpp reminder.cpp synchtimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp \
 	latecancel.cpp repetition.cpp
@@ -31,7 +31,7 @@ kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
 	-lkabc $(LIB_KDEUI) $(ARTSLIB)
 noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtimewidget.h \
-	birthdaydlg.h daemon.h datetime.h dcophandler.h deferdlg.h \
+	birthdaydlg.h daemon.h dcophandler.h deferdlg.h \
 	editdlg.h editdlgprivate.h eventlistviewbase.h fontcolour.h \
 	fontcolourbutton.h functions.h kalarm.h kalarmapp.h kamail.h \
 	latecancel.h mainwindow.h mainwindowbase.h messagewin.h prefdlg.h \
