@@ -50,6 +50,8 @@
 
 static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display
 
+int  MessageWin::nInstances = 0;
+
 
 /******************************************************************************
 *  Construct the message window for the specified alarm.
@@ -78,6 +80,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  shown(false)
 {
 	kdDebug() << "MessageWin::MessageWin(event)" << endl;
+	++nInstances;
 	setAutoSaveSettings(QString::fromLatin1("MessageWindow"));     // save window sizes etc.
 	QSize size = initView();
 	if (file  &&  !fileError)
@@ -96,10 +99,12 @@ MessageWin::MessageWin()
 	  shown(true)
 {
 	kdDebug() << "MessageWin::MessageWin()" << endl;
+	++nInstances;
 }
 
 MessageWin::~MessageWin()
 {
+	--nInstances;
 }
 
 /******************************************************************************
@@ -150,7 +155,7 @@ QSize MessageWin::initView()
 			{
 				opened = true;
 				QTextView* view = new QTextView(this, "fileContents");
-				topLayout->addWidget(view, 0, Qt::AlignHCenter);
+				topLayout->addWidget(view);
 				QFontMetrics fm = view->fontMetrics();
 				QString line;
 				int n;
