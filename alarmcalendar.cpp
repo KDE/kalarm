@@ -167,6 +167,10 @@ int AlarmCalendar::load()
 		kdError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
 		KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()),
 		                   kapp->aboutData()->programName());
+		// load() could have partially populated the calendar, so clear it out
+		mCalendar->close();
+		delete mCalendar;
+		mCalendar = 0;
 		return -1;
 	}
 	if (!mLocalFile.isEmpty())
