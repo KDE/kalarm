@@ -249,8 +249,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mEndTimeEdit = new TimeSpinBox(mRangeButtonGroup);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
 	mEndTimeEdit->setReadOnly(mReadOnly);
-	QWhatsThis::add(mEndTimeEdit,
-	      i18n("Enter the last time to repeat the alarm.\n%1").arg(TimeSpinBox::shiftWhatsThis()));
+	static const QString lastTimeText = i18n("Enter the last time to repeat the alarm.");
+	QWhatsThis::add(mEndTimeEdit, QString("%1\n\n%2").arg(lastTimeText).arg(TimeSpinBox::shiftWhatsThis()));
 	mEndAnyTimeCheckBox = new CheckBox(i18n("Any time"), mRangeButtonGroup);
 	mEndAnyTimeCheckBox->setFixedSize(mEndAnyTimeCheckBox->sizeHint());
 	mEndAnyTimeCheckBox->setReadOnly(mReadOnly);

@@ -241,9 +241,9 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mStartOfDay = new TimeSpinBox(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
-	QWhatsThis::add(box,
-	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered.\n%1")
-	           .arg(TimeSpinBox::shiftWhatsThis()));
+	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm (i.e. "
+	                                           "an alarm with \"any time\" specified) will be triggered.");
+	QWhatsThis::add(box, QString("%1\n\n%2").arg(startOfDayText).arg(TimeSpinBox::shiftWhatsThis()));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
