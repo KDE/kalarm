@@ -24,7 +24,7 @@ class QListViewItem;
 #include <kaction.h>
 #include <klistview.h>
 
-#include <msgevent.h>
+#include "msgevent.h"
 using namespace KCal;
 
 class AlarmListView;
@@ -35,7 +35,7 @@ class KAlarmMainWindow : public KMainWindow
 		Q_OBJECT
 
 	public:
-		KAlarmMainWindow(const char* name=0L);
+		KAlarmMainWindow(const char* name = 0L);
 		~KAlarmMainWindow();
 
 		void  addMessage(const MessageEvent*);
@@ -73,16 +73,17 @@ class AlarmListViewItem;
 struct AlarmItemData
 {
 		const MessageEvent* event;
-		QString             messageText;
-		QString             dateTimeText;
-		int                 messageWidth;
+		QString             messageText;     // message as displayed
+		QString             dateTimeText;    // date/time as displayed
+		QString             repeatCountText; // repeat count as displayed
+		int                 messageWidth;    // width required to display 'messageText'
 };
 
 
 class AlarmListView : public KListView
 {
 	public:
-		enum { TIME_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
+		enum { TIME_COLUMN, REPEAT_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
 
 		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
 		virtual void         clear();
@@ -90,9 +91,9 @@ class AlarmListView : public KListView
 		AlarmListViewItem*   addEntry(const MessageEvent*, bool setSize = false);
 		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const MessageEvent* newEvent, bool setSize = false);
 		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const MessageEvent*  getEntry(AlarmListViewItem* item) const	{ return getData(item).event; }
+		const MessageEvent*  getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
 		AlarmListViewItem*   getEntry(const MessageEvent*);
-		const AlarmItemData& getData(AlarmListViewItem*) const;
+		const AlarmItemData* getData(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
 		int                  itemHeight();
 		bool                 drawMessageInColour() const		{ return drawMessageInColour_; }

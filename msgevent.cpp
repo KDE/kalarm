@@ -21,40 +21,56 @@ using namespace KCal;
 void MessageEvent::set(const QDateTime& dateTime, int flags,
                        const QColor& colour, const QString& message)
 {
-  alarm()->setEnabled(true);        // enable the alarm
-  setDtStart(dateTime);
-  setDtEnd(dateTime.addDays((flags & LATE_CANCEL) ? 0 : 1));
-  alarm()->setTime(dateTime);
-  alarm()->setText(message);
-  QStringList cats;
-  cats.append(colour.name());
-  if (flags & BEEP)
-    cats.append("BEEP");
-  setCategories(cats);
+	alarm()->setEnabled(true);        // enable the alarm
+	setDtStart(dateTime);
+	setDtEnd(dateTime.addDays((flags & LATE_CANCEL) ? 0 : 1));
+	alarm()->setTime(dateTime);
+	alarm()->setText(message);
+	QStringList cats;
+	cats.append(colour.name());
+	if (flags & BEEP)
+		cats.append("BEEP");
+	setCategories(cats);
+	setRevision(0);
+}
+
+void MessageEvent::setRepetition(int minutes, int initialCount, int remainingCount)
+{
+	if (remainingCount < 0)
+		remainingCount = initialCount;
+	alarm()->setRepeatCount(remainingCount);
+	alarm()->setSnoozeTime(minutes);
+	setRevision(initialCount - remainingCount);
+}
+
+void MessageEvent::updateRepetition(const QDateTime& dateTime, int remainingCount)
+{
+	alarm()->setTime(dateTime);
+	setRevision(alarm()->repeatCount() + revision() - remainingCount);
 }
 
 QColor MessageEvent::colour() const
 {
-  const QStringList& cats = categories();
-  if (cats.count() > 0)
-  {
-    QColor color(cats[0]);
-    if (color.isValid())
-      return color;
-  }
-  return QColor(255, 255, 255);    // missing/invalid colour - return white
+	const QStringList& cats = categories();
+	if (cats.count() > 0)
+	{
+		QColor color(cats[0]);
+		if (color.isValid())
+			return color;
+	}
+	return QColor(255, 255, 255);    // missing/invalid colour - return white
 }
 
 int MessageEvent::flags() const
 {
-  int flags = 0;
-  const QStringList& cats = categories();
-  for (unsigned int i = 1;  i < cats.count();  ++i)
-  {
-    if ( cats[i] == "BEEP")
-      flags |= BEEP;
-  }
-  if (!isMultiDay())
-    flags |= LATE_CANCEL;
-  return flags;
+	int flags = 0;
+	const QStringList& cats = categories();
+	for (unsigned int i = 1;  i < cats.count();  ++i)
+	{
+		if ( cats[i] == "BEEP")
+			flags |= BEEP;
+	}
+	if (!isMultiDay())
+		flags |= LATE_CANCEL;
+	return flags;
 }

@@ -31,11 +31,13 @@ static KCmdLineOptions options[] =
 	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0L },
 	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0L },
 	{ "handleEvent <eventID>", I18N_NOOP("Display or cancel message with the specified event ID"), 0L },
+	{ "i", 0L, 0L },
+	{ "interval <minutes>", I18N_NOOP("Interval between display of repeated alarms"), 0L },
 	{ "l", 0L, 0L },
 	{ "late-cancel", I18N_NOOP("Cancel message if it cannot be displayed on time"), 0L },
 	{ "r", 0L, 0L },
+	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
 	{ "reset", I18N_NOOP("Reset the message scheduling daemon"), 0L },
-	{ "s", 0L, 0L },
 	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0L },
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
@@ -48,14 +50,16 @@ int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP(PROGRAM_TITLE),
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " -rs\n"
-		"       " PROGRAM_NAME " [-bclt] message\n"
+		"       " PROGRAM_NAME " [-bcilrt] message\n"
+		"       " PROGRAM_NAME " --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --displayEvent eventID [--calendarURL url]\n"
+		"       " PROGRAM_NAME " --handleEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE alarm message scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, David Jarvie", 0L, 0L, "software@astrojar.org.uk");
+		"(c) 2001, David Jarvie", 0L, "http://www.astrojar.org.uk/linux",
+		"software@astrojar.org.uk");
 	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);

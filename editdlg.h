@@ -18,10 +18,10 @@
 
 #include <kdialogbase.h>
 
-#include <msgevent.h>
-using namespace KCal;
-
 #include "fontcolour.h"
+#include "spinbox2.h"
+#include "msgevent.h"
+using namespace KCal;
 
 class QMultiLineEdit;
 class TimeSpinBox;
@@ -54,6 +54,7 @@ class EditAlarmDlg : public KDialogBase
 	protected slots:
 		void slotOk();
 		void slotCancel();
+		void slotRepeatCountChanged(int);
 
 	private:
 		QMultiLineEdit* messageEdit;		// alarm message edit box
@@ -61,6 +62,8 @@ class EditAlarmDlg : public KDialogBase
 		DateSpinBox*    dateEdit;
 		QCheckBox*      lateCancel;
 		QCheckBox*      beep;
+		QSpinBox*       repeatCount;
+		TimeSpinBox*    repeatInterval;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else
@@ -73,10 +76,11 @@ class EditAlarmDlg : public KDialogBase
 
 
 
-class TimeSpinBox : public QSpinBox
+class TimeSpinBox : public SpinBox2
 {
 	public:
 		TimeSpinBox(QWidget* parent = 0L, const char* name = 0L);
+		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0L, const char* name = 0L);
 	protected:
 		virtual QString mapValueToText(int v);
 		virtual int     mapTextToValue(bool* ok);

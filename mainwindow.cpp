@@ -22,6 +22,7 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -31,7 +32,6 @@
 #include "prefdlg.h"
 #include "prefsettings.h"
 #include "mainwindow.h"
-#include <kpopupmenu.h>
 #include "mainwindow.moc"
 
 
@@ -47,7 +47,6 @@ KAlarmMainWindow::KAlarmMainWindow(const char* name)
 	listView->refresh();    // populate the message list
 	connect(listView, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotSelection()));
 	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)), this, SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
-	QWhatsThis::add(listView, i18n("List of scheduled alarm messages"));
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
@@ -57,8 +56,8 @@ KAlarmMainWindow::~KAlarmMainWindow()
 
 /******************************************************************************
 *  Called when the window's size has changed (before it is painted).
-*  Sets the last column in the list view to extend at least to the right
-*  hand edge of the list view.
+*  Sets the last column in the list view to extend at least to the right hand
+*  edge of the list view.
 */
 void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 {
@@ -68,8 +67,8 @@ void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 
 /******************************************************************************
 *  Called when the window is first displayed.
-*  Sets the last column in the list view to extend at least to the right
-*  hand edge of the list view.
+*  Sets the last column in the list view to extend at least to the right hand
+*  edge of the list view.
 */
 void KAlarmMainWindow::showEvent(QShowEvent* se)
 {
@@ -279,6 +278,15 @@ void KAlarmMainWindow::slotListRightClick(QListViewItem* item, const QPoint& pt,
 =  Class: AlarmListView
 =
 =============================================================================*/
+class AlarmListWhatsThis : public QWhatsThis
+{
+	public:
+		AlarmListWhatsThis(AlarmListView* lv) : QWhatsThis(lv), listView(lv) { }
+		virtual QString text(const QPoint&);
+	private:
+		AlarmListView* listView;
+};
+
 
 AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	: KListView(parent, name),
@@ -286,16 +294,20 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 {
 	addColumn(i18n("Column 1"));
 	setColumnText(TIME_COLUMN, i18n("Time"));
-	addColumn("");             // colour column
+	addColumn(i18n("Rep"));            // repeat count column
+	addColumn("");                     // colour column
 	addColumn(i18n("Message"));
 	setColumnWidthMode(MESSAGE_COLUMN, QListView::Maximum);
 	setAllColumnsShowFocus(true);
 	setSorting(TIME_COLUMN);           // sort initially by date/time
 	setShowSortIndicator(true);
 	lastColumnHeaderWidth_ = columnWidth(MESSAGE_COLUMN);
+	setColumnAlignment(REPEAT_COLUMN, Qt::AlignRight);
 
 	// Find the height of the list items, and set the width of the colour column accordingly
 	setColumnWidth(COLOUR_COLUMN, itemHeight() * 3/4);
+	setColumnWidthMode(COLOUR_COLUMN, QListView::Manual);
+	new AlarmListWhatsThis(this);
 }
 
 void AlarmListView::clear()
@@ -335,6 +347,7 @@ AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSi
 		data.messageText = data.messageText.left(newline) + "...";
 	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true) + ' '
 	                  + KGlobal::locale()->formatTime(dateTime.time()) + ' ';
+	data.repeatCountText = event->repeatCount() ? QString("%1").arg(event->repeatCount()) : QString();
 	QString dateTimeText;
 	dateTimeText.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                         dateTime.time().hour(), dateTime.time().minute());
@@ -345,6 +358,8 @@ AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSi
 	// Now set the texts so that the columns can be sorted. The visible text is different,
 	// being displayed by paintCell().
 	item->setText(TIME_COLUMN, dateTimeText);
+	item->setText(REPEAT_COLUMN, data.repeatCountText);
+	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", event->colour().rgb()));
 	item->setText(MESSAGE_COLUMN, data.messageText.lower());
 	entries[item] = data;
 	if (setSize)
@@ -367,17 +382,17 @@ kdDebug()<<"List deleting event\n";
 		resizeLastColumn();
 }
 
-const AlarmItemData& AlarmListView::getData(AlarmListViewItem* item) const
+const AlarmItemData* AlarmListView::getData(AlarmListViewItem* item) const
 {
 	map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.find(item);
 	if (it == entries.end())
-		;//throw exception();
-	return it->second;
+		return 0L;
+	return &it->second;
 }
 
 /******************************************************************************
-*  Sets the last column in the list view to extend at least to the right
-*  hand edge of the list view.
+*  Sets the last column in the list view to extend at least to the right hand
+*  edge of the list view.
 */
 void AlarmListView::resizeLastColumn()
 {
@@ -426,8 +441,8 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const QString& dateTime,
 void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int column, int width, int /*align*/)
 {
 	const AlarmListView* listView = alarmListView();
-	const AlarmItemData& data   = listView->getData(this);
-	const MessageEvent*  event  = data.event;
+	const AlarmItemData* data   = listView->getData(this);
+	const MessageEvent*  event  = data->event;
 	int                  margin = listView->itemMargin();
 	QRect box (margin, margin, width - margin*2, height() - margin*2);
 	bool   selected = isSelected();
@@ -435,6 +450,14 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	painter->setPen(selected ? cg.highlightedText() : cg.text());
 	switch (column)
 	{
+		case AlarmListView::TIME_COLUMN:
+			painter->fillRect(box, bgColour);
+			painter->drawText(box, AlignVCenter, data->dateTimeText);
+			break;
+		case AlarmListView::REPEAT_COLUMN:
+			painter->fillRect(box, bgColour);
+			painter->drawText(box, AlignVCenter | AlignRight, data->repeatCountText);
+			break;
 		case AlarmListView::COLOUR_COLUMN:
 			// Paint the cell the colour of the alarm message
 			painter->fillRect(box, event->colour());
@@ -446,17 +469,32 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 				painter->fillRect(box, colour);
 				painter->setBackgroundColor(colour);
 //				painter->setPen(event->fgColour());
-				painter->drawText(box, AlignVCenter, data.messageText);
+				painter->drawText(box, AlignVCenter, data->messageText);
 				break;
 			}
 //			QListViewItem::paintCell(painter, cg, column, width, align);
 			painter->fillRect(box, bgColour);
-			painter->drawText(box, AlignVCenter, data.messageText);
-			break;
-		case AlarmListView::TIME_COLUMN:
-			painter->fillRect(box, bgColour);
-			painter->drawText(box, AlignVCenter, data.dateTimeText);
+			painter->drawText(box, AlignVCenter, data->messageText);
 			break;
 	}
 }
+
+
+/*=============================================================================
+=  Class: AlarmListWhatsThis
+=============================================================================*/
+QString AlarmListWhatsThis::text(const QPoint& pt)
+{
+	if (listView->header()->frameGeometry().contains(pt))
+	{
+		switch (listView->header()->sectionAt(pt.x()))
+		{
+			case AlarmListView::TIME_COLUMN:  return i18n("Next scheduled date and time of the alarm");
+			case AlarmListView::REPEAT_COLUMN:  return i18n("Number of scheduled repetitions after the\nnext scheduled display of the alarm");
+			case AlarmListView::COLOUR_COLUMN:  return i18n("Background colour of alarm message");
+			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text");
+		}
+	}
+	return i18n("List of scheduled alarm messages");
+};
 

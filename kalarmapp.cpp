@@ -89,8 +89,8 @@ int KAlarmApp::newInstance()
 			else
 				(new MessageWin)->restore(i);
 		}
-		initCheck();     // register with the alarm daemon
-		restored = true;     // make sure we restore only once
+		initCheck();           // register with the alarm daemon
+		restored = true;       // make sure we restore only once
 	}
 	else
 	{
@@ -114,9 +114,9 @@ int KAlarmApp::newInstance()
 		{
 			// Display or delete the message with the specified event ID
 			kdDebug()<<"Event ...\n";
-			EventFunc function;
+			EventFunc function = EVENT_HANDLE;
 			int count = 0;
-			const char* option;
+			const char* option = 0;
 			if (args->isSet("handleEvent"))  { function = EVENT_HANDLE;  option = "handleEvent";  ++count; }
 			if (args->isSet("displayEvent"))  { function = EVENT_DISPLAY;  option = "displayEvent";  ++count; }
 			if (args->isSet("cancelEvent"))  { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
@@ -155,7 +155,9 @@ int KAlarmApp::newInstance()
 			long flags = 0;
 			QDateTime* alarmTime = 0L;
 			QDateTime wakeup;
-			QColor bgColour = generalSettings()->defaultBgColour();;
+			QColor bgColour = generalSettings()->defaultBgColour();
+			int    repeatCount = 0;
+			int    repeatInterval = 0;
 			if (args->isSet("colour"))
 			{
 				// Colour is specified
@@ -181,6 +183,29 @@ int KAlarmApp::newInstance()
 				}
 				alarmTime = &wakeup;
 			}
+
+			if (args->isSet("repeat"))
+			{
+				// Repeat count is specified
+				if (!args->isSet("interval"))
+					args->usage(i18n("--repeat requires --interval"));   // exits program
+				bool ok;
+				repeatCount = args->getOption("repeat").toInt(&ok);
+				if (!ok || repeatCount < 0)
+				{
+					kdError() << "Invalid --repeat parameter\n";
+					exitCode = 1;
+				}
+				repeatInterval = args->getOption("interval").toInt(&ok);
+				if (!ok || repeatInterval < 0)
+				{
+					kdError() << "Invalid --interval parameter\n";
+					exitCode = 1;
+				}
+			}
+			else if (args->isSet("interval"))
+				args->usage(i18n("--interval requires --repeat"));      // exits program
+
 			if (args->isSet("beep"))
 				flags |= MessageEvent::BEEP;
 			if (args->isSet("late-cancel"))
@@ -190,7 +215,7 @@ int KAlarmApp::newInstance()
 			if (!exitCode)
 			{
 				// Display or schedule the message
-				if (!scheduleMessage(alMessage, alarmTime, bgColour, flags))
+				if (!scheduleMessage(alMessage, alarmTime, bgColour, flags, repeatCount, repeatInterval))
 					exitCode = 1;
 			}
 		}
@@ -239,7 +264,109 @@ void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 }
 
 /******************************************************************************
-* Add a a new alarm message.
+* Called in response to a DCOP notification by the alarm daemon that a
+* new message should be scheduled.
+* Reply = true unless there was an error opening calendar file.
+*/
+bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg, int flags, int repeatCount, int repeatInterval)
+{
+	kdDebug() << "KAlarmApp::scheduleMessage(): " << message << endl;
+	bool display = true;
+	QDateTime alarmTime;
+	if (dateTime)
+	{
+		alarmTime = *dateTime;
+		QDateTime now = QDateTime::currentDateTime();
+		if ((flags & MessageEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-65))
+			return true;               // alarm time was already expired a minute ago
+		display = (alarmTime <= now);
+	}
+	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message);
+	event->setRepetition(repeatInterval, repeatCount);
+	if (display)
+	{
+		// Alarm is due for display already
+		kdDebug() << "Displaying message: " << message << "\n";
+		(new MessageWin(*event, false))->show();
+		delete event;
+		return true;
+	}
+	if (!initCheck())
+		return false;
+	addMessage(event, 0L);        // event instance will now belong to the calendar
+	return true;
+}
+
+/******************************************************************************
+* Called in response to a DCOP notification by the alarm daemon that a message
+* should be handled, i.e. displayed or cancelled.
+* Optionally display the event. Delete the event from the calendar file and
+* from every main window instance.
+*/
+void KAlarmApp::handleMessage(const QString& urlString, const QString& eventID, EventFunc function)
+{
+	kdDebug() << "KAlarmApp::handleMessage(): " << eventID << endl;
+	if (KURL(urlString).url() != calendar.urlString())
+		kdError() << "KAlarmApp::handleMessage(): wrong calendar file " << urlString << endl;
+	else
+		handleMessage(eventID, function);
+}
+
+/******************************************************************************
+* Either:
+* a) Display the event and then delete it if it has no outstanding repetitions.
+* b) Delete the event.
+* c) Reschedule the event for its next repetition. If none remain, delete it.
+* If the event is deleted, it is removed from the calendar file and from every
+* main window instance.
+*/
+bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
+{
+	MessageEvent* event = calendar.getEvent(eventID);
+	if (!event)
+	{
+		kdError() << "KAlarmApp::handleMessage(): event ID not found: " << eventID << endl;
+		return false;
+	}
+	if (function == EVENT_HANDLE)
+	{
+		function = EVENT_DISPLAY;
+		if (event->lateCancel())
+		{
+			// Alarm is to be cancelled if late.
+			// Allow it to be just over a minute late before cancelling it.
+			QDateTime now = QDateTime::currentDateTime();
+			int secs = event->dateTime().secsTo(now);
+			if (secs > 65)
+			{
+				// It's over a minute late.
+				// Find the latest repetition time before the current time
+				if (event->lastDateTime().secsTo(now) > 65)
+					function = EVENT_CANCEL;      // all repetitions have expired
+				else if (secs % (event->repeatMinutes() * 60) > 65)
+					function = EVENT_RESCHEDULE;  // the latest repetition was over a minute ago
+			}
+		}
+	}
+	switch (function)
+	{
+		case EVENT_DISPLAY:
+			(new MessageWin(*event, true))->show();
+			break;
+		case EVENT_RESCHEDULE:
+			rescheduleMessage(event);
+			break;
+		case EVENT_CANCEL:
+			deleteMessage(event, 0L, false);
+			break;
+		case EVENT_HANDLE:     // filtered out above
+			break;
+	}
+	return true;
+}
+
+/******************************************************************************
+* Add a new alarm message.
 * Save it in the calendar file and add it to every main window instance.
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
@@ -308,89 +435,40 @@ void KAlarmApp::deleteMessage(MessageEvent* event, KAlarmMainWindow* win, bool t
 }
 
 /******************************************************************************
-* Called in response to a DCOP notification by the alarm daemon that a
-* new message should be scheduled.
-* Reply = true unless there was an error opening calendar file.
+* Reschedule the specified event for its next repetition. If no repetitions
+* remain, cancel it.
+* Rescheduling is necessary in order to distinguish between alarms which have
+* been displayed at their last repetition, and those which haven't.
+* Reply = true if event still exists, false if cancelled.
 */
-bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg, int flags)
+bool KAlarmApp::rescheduleMessage(MessageEvent* event)
 {
-	kdDebug() << "KAlarmApp::scheduleMessage(): " << message << endl;
-	bool display = true;
-	QDateTime alarmTime;
-	if (dateTime)
+	int secs = event->dateTime().secsTo(QDateTime::currentDateTime());
+	if (secs >= 0)
 	{
-		alarmTime = *dateTime;
-		QDateTime now = QDateTime::currentDateTime();
-		if ((flags & MessageEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-65))
-			return true;               // alarm time was already expired a minute ago
-		display = (alarmTime <= now);
+		// The event is due by now
+		int repeatSecs = event->repeatMinutes() * 60;
+		int n = secs / repeatSecs + 1;
+		int remainingCount = event->repeatCount() - n;
+		if (remainingCount >= 0)
+		{
+			// Repetitions still remain, so rewrite the event
+			MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
+			newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
+			modifyMessage(event, newEvent, 0L);
+// Should just call calendar update, but it doesn't seem to work
+//			event->updateRepetition(event->dateTime().addSecs(n * repeatSecs), remainingCount);
+//			update MainWindows??
+//			calendar.updateEvent(event);
+//			reloadDaemon();     // tell the daemon to reread the calendar file
+		}
+		else
+		{
+			deleteMessage(event, 0L, false);
+			return false;
+		}
 	}
-	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message);
-	if (display)
-	{
-		// Alarm is due for display already
-		kdDebug() << "Displaying message: " << message << "\n";
-		displayMessageWin(*event, false);
-		delete event;
-		return true;
-	}
-	if (!initCheck())
-		return false;
-	addMessage(event, 0L);        // event instance will now belong to the calendar
 	return true;
-}
-
-/******************************************************************************
-* Called in response to a DCOP notification by the alarm daemon that a message
-* should be handled, i.e. displayed or cancelled.
-* Optionally display the event. Delete the event from the calendar file and
-* from every main window instance.
-*/
-void KAlarmApp::handleMessage(const QString& urlString, const QString& eventID, EventFunc function)
-{
-	kdDebug() << "KAlarmApp::handleMessage(): " << eventID << endl;
-	if (KURL(urlString).url() != calendar.urlString())
-		kdError() << "KAlarmApp::handleMessage(): wrong calendar file " << urlString << endl;
-	else
-		handleMessage(eventID, function);
-}
-
-/******************************************************************************
-* Optionally display the event. Delete the event from the calendar file and
-* from every main window instance.
-*/
-bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
-{
-	MessageEvent* event = calendar.getEvent(eventID);
-	if (!event)
-	{
-		kdError() << "KAlarmApp::handleMessage(): event ID not found: " << eventID << endl;
-		return false;
-	}
-	if (function == EVENT_HANDLE)
-	{
-		// Allow it to be just over a minute late before cancelling an alarm
-		function = EVENT_DISPLAY;
-		if (event->lateCancel()
-		&&  event->dateTime() <= QDateTime::currentDateTime().addSecs(-65))
-			function = EVENT_CANCEL;
-	}
-	if (function == EVENT_DISPLAY)
-		displayMessageWin(*event, true);
-	else
-		deleteMessage(event, 0L, false);
-	return true;
-}
-
-/******************************************************************************
-* Display the specified event, and optionally delete it from the calendar file.
-*/
-void KAlarmApp::displayMessageWin(const MessageEvent& event, bool delete_event)
-{
-	MessageWin* win = new MessageWin(event, delete_event);
-//	KWin::setState(win->winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
-//	KWin::setOnAllDesktops(win->winId(), true);
-	win->show();
 }
 
 /******************************************************************************
@@ -608,7 +686,7 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new CalendarLocal;
+	calendar = new AlarmCalendarLocal;
 	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
@@ -726,53 +804,69 @@ MainWidget::MainWidget(const char* dcopObject)
 bool MainWidget::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
 {
 	kdDebug() << "MainWidget::process(): " << func << endl;
+	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n };
+	int function;
 	if (func == "handleEvent(const QString&,const QString&)")
-	{
-		// Display or cancel the message with the specified ID from the calendar file
-		QDataStream arg(data, IO_ReadOnly);
-		QString urlString, vuid;
-		arg >> urlString >> vuid;
-		theApp()->handleMessage(urlString, vuid);
-		replyType = "void";
-		return true;
-	}
+		function = HANDLE;
 	else if (func == "cancelMessage(const QString&,const QString&)")
-	{
-		// Delete the message with the specified ID from the calendar file
-		QDataStream arg(data, IO_ReadOnly);
-		QString urlString, vuid;
-		arg >> urlString >> vuid;
-		theApp()->deleteMessage(urlString, vuid);
-		replyType = "void";
-		return true;
-	}
+		function = CANCEL;
 	else if (func == "displayMessage(const QString&,const QString&)")
-	{
-		// Display the message with the specified ID
-		QDataStream arg(data, IO_ReadOnly);
-		QString urlString, vuid;
-		arg >> urlString >> vuid;
-		KAlarmApp::getInstance()->displayMessage(urlString, vuid);
-		replyType = "void";
-		return true;
-	}
+		function = DISPLAY;
 	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32)")
-	{
-		// Schedule a new message
-		QDataStream arg(data, IO_ReadOnly);
-		QString message;
-		QDateTime dateTime;
-		QColor bgColour;
-		Q_UINT32 flags;
-		arg >> message;
-		arg.readRawBytes((char*)&dateTime, sizeof(dateTime));
-		arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
-		arg >> flags;
-		KAlarmApp::getInstance()->scheduleMessage(message, &dateTime, bgColour, flags);
-		replyType = "void";
-		return true;
-	}
+		function = SCHEDULE;
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_n;
 	else
+	{
 		kdDebug() << "MainWidget::process(): unknown DCOP function" << endl;
-	return false;
+		return false;
+	}
+
+	switch (function)
+	{
+		case HANDLE:   // display or cancel message with specified ID from calendar file
+		case CANCEL:   // cancel message with specified ID from calendar file
+		case DISPLAY:  // display message with specified ID in calendar file
+		{
+
+			QDataStream arg(data, IO_ReadOnly);
+			QString urlString, vuid;
+			arg >> urlString >> vuid;
+			replyType = "void";
+			switch (function)
+			{
+				case HANDLE:
+					theApp()->handleMessage(urlString, vuid);
+					break;
+				case CANCEL:
+					theApp()->deleteMessage(urlString, vuid);
+					break;
+				case DISPLAY:
+					theApp()->displayMessage(urlString, vuid);
+					break;
+			}
+			break;
+		}
+		case SCHEDULE:    // schedule a new message
+		case SCHEDULE_n:  // schedule a new repeating message
+		{
+			QDataStream arg(data, IO_ReadOnly);
+			QString message;
+			QDateTime dateTime;
+			QColor bgColour;
+			Q_UINT32 flags;
+			Q_INT32 repeatCount = 0;
+			Q_INT32 repeatInterval = 0;
+			arg >> message;
+			arg.readRawBytes((char*)&dateTime, sizeof(dateTime));
+			arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
+			arg >> flags;
+			if (function == SCHEDULE_n)
+				arg >> repeatCount >> repeatInterval;
+			theApp()->scheduleMessage(message, &dateTime, bgColour, flags, repeatCount, repeatInterval);
+			replyType = "void";
+			break;
+		}
+	}
+	return true;
 }

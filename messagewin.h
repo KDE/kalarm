@@ -15,10 +15,11 @@
 
 #include <kmainwindow.h>
 
-#include <msgevent.h>
+#include "msgevent.h"
 using namespace KCal;
 
 class QPushButton;
+
 /**
  * MessageWin: A window to display an alarm message
  */
@@ -27,7 +28,7 @@ class MessageWin : public KMainWindow
 		Q_OBJECT
 	public:
 		MessageWin();     // for session management restoration only
-		explicit MessageWin(const MessageEvent&, bool delete_event = true);
+		explicit MessageWin(const MessageEvent&, bool reschedule_event = true);
 		~MessageWin();
 		virtual void showEvent(QShowEvent*);
 
@@ -46,7 +47,7 @@ class MessageWin : public KMainWindow
 		QString           audioFile;
 		bool              beep;
 		QPushButton*      buttonOK;
-		bool              deleteEvent;  // true to delete event after message has been displayed
+		bool              rescheduleEvent;  // true to delete event after message has been displayed
 		bool              shown;        // true once the window has been displayed
 };
 

@@ -1,9 +1,9 @@
 KAlarm
 
-Version 0.1
+Version 0.2
 
-KAlarm provides a graphical interface for setting up alarm/reminder messages.
-The messages pop up on the screen at the time you specify.
+KAlarm provides a graphical interface for setting up personal alarm/reminder
+messages. The messages pop up on the screen at the time you specify.
 
 KAlarm also provides a command line interface. Other programs can also use
 DCOP calls to execute functions.

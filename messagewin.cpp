@@ -35,7 +35,7 @@
 /******************************************************************************
 *  Construct the message window.
 */
-MessageWin::MessageWin(const MessageEvent& event, bool delete_event)
+MessageWin::MessageWin(const MessageEvent& event, bool reschedule_event)
 	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  message(event.message()),
 	  font(theApp()->generalSettings()->messageFont()),
@@ -44,7 +44,7 @@ MessageWin::MessageWin(const MessageEvent& event, bool delete_event)
 	  eventID(event.VUID()),
 	  audioFile(event.alarm()->audioFile()),
 	  beep(event.beep()),
-	  deleteEvent(delete_event),
+	  rescheduleEvent(reschedule_event),
 	  shown(false)
 {
 	kdDebug() << "MessageWin::MessageWin(event)" << endl;
@@ -104,10 +104,11 @@ QSize MessageWin::initView()
 
 	// OK button
 	QPushButton* button = new QPushButton(i18n("ABCDEF"), topWidget);
-	QSize butsize = button->sizeHint();
+	QSize minbutsize = button->sizeHint();
 	delete button;
 
 	button = new QPushButton(i18n("&OK"), topWidget);
+	QSize butsize = button->sizeHint().expandedTo(minbutsize);
 	button->setFixedSize(butsize);
 	button->setDefault(true);
 	connect(button, SIGNAL(clicked()), SLOT(close()));
@@ -168,8 +169,8 @@ void MessageWin::showEvent(QShowEvent* se)
 		}
 		if (!audioFile.isEmpty())
 			KAudioPlayer::play(audioFile.latin1());
-		if (deleteEvent)
-			KAlarmApp::getInstance()->deleteMessage(eventID);
+		if (rescheduleEvent)
+			KAlarmApp::getInstance()->rescheduleMessage(eventID);
 		shown = true;
 	}
 }

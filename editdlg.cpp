@@ -11,6 +11,8 @@
 
 #include "kalarm.h"
 
+#include <limits.h>
+
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
@@ -50,14 +52,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	messageEdit = new QMultiLineEdit(page);
 	QSize size = messageEdit->sizeHint();
-        size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
-        messageEdit->setMinimumSize(size);
+	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
+	messageEdit->setMinimumSize(size);
 	topLayout->addWidget(messageEdit, 6);
 	QWhatsThis::add(messageEdit,
 	      i18n("Enter the text of the alarm message.\n"
 	           "It may be multi-line."));
 
-	// Date label
+	// Date label + spin box
 
 	QGridLayout* grid = new QGridLayout(1, 4);
 	topLayout->addLayout(grid);
@@ -67,30 +69,52 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->addWidget(lbl, 0, 0, AlignLeft);
 
-	// Date spin box
-
 	dateEdit = new DateSpinBox(page);
 	size = dateEdit->sizeHint();
 	dateEdit->setFixedSize(size);
 	grid->addWidget(dateEdit, 0, 1, AlignLeft);
 	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm message."));
 
-	// Time label
+	// Time label + spin box
 
 	lbl = new QLabel(page);
 	lbl->setText(i18n("Time:"));
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->addWidget(lbl, 0, 2, AlignRight);
 
-	// Time spin box
-
 	timeEdit = new TimeSpinBox(page);
 	timeEdit->setValue(2399);
 	size = timeEdit->sizeHint();
 	timeEdit->setFixedSize(size);
-	timeEdit->setWrapping(true);
 	grid->addWidget(timeEdit, 0, 3, AlignRight);
 	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm message."));
+
+	// Repeating alarm
+
+	QGroupBox* group = new QGroupBox(4, Qt::Horizontal, i18n("Repetition"), page);
+	topLayout->addWidget(group);
+	lbl = new QLabel(group);
+	lbl->setText(i18n("Count:"));
+	lbl->setFixedSize(lbl->sizeHint());
+
+	repeatCount = new QSpinBox(0, 9999, 1, group);
+	repeatCount->setFixedSize(repeatCount->sizeHint());
+	QWhatsThis::add(repeatCount,
+	      i18n("Enter the number of times to repeat the alarm,\n"
+	           "after its initial display."));
+	connect(repeatCount, SIGNAL(valueChanged(int)), this, SLOT(slotRepeatCountChanged(int)));
+
+	lbl = new QLabel(group);
+	lbl->setText(i18n("Interval:"));
+	lbl->setFixedSize(lbl->sizeHint());
+
+	repeatInterval = new TimeSpinBox(1, 99*60+59, group);
+	repeatInterval->setValue(2399);
+	size = repeatInterval->sizeHint();
+	repeatInterval->setFixedSize(size);
+	QWhatsThis::add(repeatInterval,
+	      i18n("Enter the time (in hours and minutes)\n"
+	           "between repetitions of the alarm."));
 
 	// Late display checkbox - default = allow late display
 
@@ -159,11 +183,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Set up initial values
 	if (event)
 	{
-		messageEdit->insertLine(event->message());
+		messageEdit->setText(event->message());
+//		messageEdit->insertLine(event->message());
 		timeEdit->setValue(event->time().hour()*60 + event->time().minute());
 		dateEdit->setDate(event->date());
 		lateCancel->setChecked(event->lateCancel());
 		beep->setChecked(event->beep());
+		repeatCount->setValue(event->repeatCount());
+		repeatInterval->setValue(event->repeatMinutes());
 #ifdef SELECT_FONT
 		fontColour->setColour(event->colour());
 		fontColour->setFont(?);
@@ -173,9 +200,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	}
 	else
 	{
+		messageEdit->setText("");
 		QDateTime now = QDateTime::currentDateTime();
 		timeEdit->setValue(now.time().hour()*60 + now.time().minute());
 		dateEdit->setDate(now.date());
+		repeatCount->setValue(0);
+		repeatInterval->setValue(0);
 #ifdef SELECT_FONT
 		fontColour->setColour(theApp()->generalSettings()->defaultBgColour());
 		fontColour->setFont(theApp()->generalSettings()->messageFont());
@@ -183,6 +213,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		bgColourChoose->setColour(theApp()->generalSettings()->defaultBgColour());
 #endif
 	}
+	repeatInterval->setEnabled(repeatCount->value());
 	messageEdit->setFocus();
 }
 
@@ -201,6 +232,7 @@ void EditAlarmDlg::getEvent(MessageEvent& event)
 	int flags = (lateCancel->isChecked() ? MessageEvent::LATE_CANCEL : 0)
 	          | (beep->isChecked() ? MessageEvent::BEEP : 0);
 	event.set(alarmDateTime, flags, bgColourChoose->color(), alarmMessage);
+	event.setRepetition(repeatInterval->value(), repeatCount->value());
 }
 
 /******************************************************************************
@@ -241,13 +273,24 @@ void EditAlarmDlg::slotCancel()
 	reject();
 }
 
+/******************************************************************************
+*  Called when the repeat count edit box value has changed..
+*/
+void EditAlarmDlg::slotRepeatCountChanged(int count)
+{
+	repeatInterval->setEnabled(count);
+}
 
-//=============================================================================
+/*=============================================================================
+=  class TimeSpinBox
+=============================================================================*/
 class TimeSpinBox::TimeValidator : public QValidator
 {
 	public:
-		TimeValidator(QWidget* parent, const char* name = 0L)  : QValidator(parent, name) { }
+		TimeValidator(int minMin, int maxMin, QWidget* parent, const char* name = 0L)
+			: QValidator(parent, name), minMinute(minMin), maxMinute(maxMin) { }
 		virtual State validate(QString&, int&) const;
+		int  minMinute, maxMinute;
 };
 
 /******************************************************************************
@@ -258,6 +301,8 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 {
 	QValidator::State state = QValidator::Acceptable;
 	QString hour;
+	int hr;
+	int mn = 0;
 	int colon = text.find(':');
 	if (colon >= 0)
 	{
@@ -267,7 +312,7 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 		else
 		{
 			bool ok;
-			if (minute.toUInt(&ok) >= 60  ||  !ok)
+			if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
 				return QValidator::Invalid;
 		}
 
@@ -282,19 +327,34 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 	if (hour.isEmpty())
 		return QValidator::Intermediate;
 	bool ok;
-	if (hour.toUInt(&ok) >= 24  ||  !ok)
+	if ((hr = hour.toUInt(&ok)) > maxMinute/60  ||  !ok)
 		return QValidator::Invalid;
+	if (state == QValidator::Acceptable)
+	{
+		int t = hr * 60 + mn;
+		if (t < minMinute  ||  t > maxMinute)
+			return QValidator::Invalid;
+	}
 	return state;
 }
 
 
+// Construct a wrapping 00:00 - 23:59 time spin box
 TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
-	: QSpinBox(0, 1439, 1, parent, name)
+	: SpinBox2(0, 1439, 1, 60, parent, name)
 {
-	validator = new TimeValidator(this, "TimeSpinBox validator");
+	validator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
 	setValidator(validator);
+	setWrapping(true);
 }
 
+// Construct a non-wrapping time spin box
+TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const char* name)
+	: SpinBox2(minMinute, maxMinute, 1, 60, parent, name)
+{
+	validator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
+	setValidator(validator);
+}
 
 QString TimeSpinBox::mapValueToText(int v)
 {
@@ -319,12 +379,12 @@ int TimeSpinBox::mapTextToValue(bool* ok)
 		if (!hour.isEmpty()  &&  !minute.isEmpty())
 		{
 			bool okhour, okmin;
-			int h = hour.toUInt(&okhour);
 			int m = minute.toUInt(&okmin);
-			if (okhour  &&  okmin  &&  h < 24  &&  m < 60)
+			int t = hour.toUInt(&okhour) * 60 + m;
+			if (okhour  &&  okmin  &&  m < 60  &&  t >= minValue()  &&  t <= maxValue())
 			{
 				*ok = true;
-				return h * 60 + m;
+				return t;
 			}
 		}
 	}
