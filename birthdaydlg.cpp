@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -192,11 +192,10 @@ void BirthdayDlg::updateSelectionList()
 	QStringList messageList;
 	KAlarmEvent event;
 	Event::List events = theApp()->getCalendar().events();
-	Event::List::ConstIterator it;
-        for ( it = events.begin(); it != events.end(); ++it )
+	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
-		Event *kcalEvent = *it;
-                event.set(*kcalEvent);
+		Event* kcalEvent = *it;
+		event.set(*kcalEvent);
 		if (event.action() == KAlarmEvent::MESSAGE
 		&&  event.recurType() == KAlarmEvent::ANNUAL_DATE
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))

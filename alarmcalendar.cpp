@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -311,10 +311,9 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 		bool purged = false;
 		QDate cutoff = QDate::currentDate().addDays(-daysToKeep);
 		Event::List events = mCalendar->events();
-		Event::List::ConstIterator it;
-                for ( it = events.begin(); it != events.end(); ++it )
+                for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
-			Event *kcalEvent = *it;
+			Event* kcalEvent = *it;
                         if (!daysToKeep  ||  kcalEvent->created().date() < cutoff)
 			{
 				mCalendar->deleteEvent(kcalEvent);

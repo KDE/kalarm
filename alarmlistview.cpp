@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,9 +115,9 @@ void AlarmListView::refresh()
 		else
 		{
 			events = calendar->events();
-                        for ( it = events.begin(); it != events.end(); ++it )
+                        for (it = events.begin();  it != events.end();  ++it)
 			{
-                                Event *kcalEvent = *it;
+                                Event* kcalEvent = *it;
 				if (kcalEvent->alarms().count() > 0)
 				{
 					event.set(*kcalEvent);
@@ -127,9 +127,9 @@ void AlarmListView::refresh()
 		}
 	}
 	events = theApp()->getCalendar().events();
-        for ( it = events.begin(); it != events.end(); ++it )
+        for (it = events.begin();  it != events.end();  ++it)
 	{
-                Event *kcalEvent = *it;
+                Event* kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (mShowExpired  ||  !event.expired())
 			addEntry(event, now);
