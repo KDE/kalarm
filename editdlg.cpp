@@ -380,7 +380,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
  */
 void EditAlarmDlg::slotRecurrenceResized(QSize old, QSize New)
 {
-	if (recurrenceEdit)
+	if (recurrenceEdit  &&  old.height() != New.height())
 	{
 		int newheight = basicSize.height() + deferGroupHeight;
 		if (New.height() > recurrenceEdit->noRecurHeight())
