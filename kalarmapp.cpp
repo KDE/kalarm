@@ -606,6 +606,7 @@ void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 
 	// Update the event in the calendar file
 	const_cast<KAlarmEvent&>(event).incrementRevision();
+	calendar.updateEvent(event);
 	calendar.save();
 
 	// Tell the daemon to reread the calendar file
@@ -887,7 +888,7 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new CalendarLocal;
+	calendar = new AlarmCalendarLocal;
 	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
@@ -1041,7 +1042,8 @@ void AlarmCalendar::updateEvent(const KAlarmEvent& event)
 	Event* kcalEvent = getEvent(event.id());
 	if (kcalEvent)
 	{
-		event.updateEvent(*kcalEvent);
+		if (event.updateEvent(*kcalEvent))
+			calendar->updateEvent(kcalEvent);
 	}
 }
 

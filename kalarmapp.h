@@ -60,7 +60,12 @@ class AlarmCalendar
 		void              getURL() const;
 		const QString     urlString() const                   { getURL();  return url.url(); }
 	private:
-		CalendarLocal*    calendar;
+		class AlarmCalendarLocal : public CalendarLocal
+		{
+			public:
+				void updateEvent(Incidence* i)  { CalendarLocal::updateEvent(i); }
+		};
+		AlarmCalendarLocal* calendar;
 		KURL              url;         // URL of calendar file
 		QString           localFile;   // local name of calendar file
 		bool              vCal;        // true if calendar file is in VCal format
