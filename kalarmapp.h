@@ -37,8 +37,6 @@ class QDateTime;
 
 #include <kuniqueapplication.h>
 #include <kurl.h>
-class KAction;
-class KActionCollection;
 class KProcess;
 namespace KCal { class Event; }
 
@@ -52,7 +50,6 @@ class TrayWindow;
 class DaemonGuiHandler;
 class Preferences;
 class ShellProcess;
-class ActionAlarmsEnabled;
 
 
 class KAlarmApp : public KUniqueApplication
@@ -77,9 +74,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
 		bool               trayIconDisplayed() const       { return !!mTrayWindow; }
 		DaemonGuiHandler*  daemonGuiHandler() const        { return mDaemonGuiHandler; }
-		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
-		KAction*           actionPreferences() const       { return mActionPrefs; }
-		KAction*           actionNewAlarm() const          { return mActionNewAlarm; }
 		bool               editNewAlarm(KAlarmMainWindow* = 0);
 		virtual void       commitData(QSessionManager&);
 
@@ -106,10 +100,7 @@ class KAlarmApp : public KUniqueApplication
 	protected:
 		KAlarmApp();
 	private slots:
-		void               slotPreferences();
-		void               toggleAlarmsEnabled();
 		void               slotPreferencesChanged();
-		void               slotNewAlarm();
 		void               slotCommandExited(ShellProcess*);
 		void               slotSystemTrayTimer();
 		void               slotExpiredPurged();
@@ -159,10 +150,6 @@ class KAlarmApp : public KUniqueApplication
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
 		DaemonGuiHandler*     mDaemonGuiHandler;    // the parent of the system tray DCOP receiver object
 		TrayWindow*           mTrayWindow;          // active system tray icon
-		ActionAlarmsEnabled*  mActionAlarmEnable;   // action to enable/disable alarms
-		KActionCollection*    mActionCollection;
-		KAction*              mActionPrefs;         // action to display the preferences dialog
-		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mPrefsExpiredColour;  // expired alarms text colour
 		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept

@@ -35,6 +35,7 @@
 #include <qdatetime.h>
 
 class KAction;
+class KActionCollection;
 class AlarmCalendar;
 
 
@@ -46,8 +47,8 @@ class Daemon : public QObject
 {
 		Q_OBJECT
 	public:
-		static void      initialise(KActionCollection*);
-		static KAction*  actionControl()   { return mActionControl; }
+		static void      initialise();
+		static KAction*  createControlAction(KActionCollection*, const char* name);
 		static void      start();
 		static void      reregister()      { registerWith(true); }
 		static bool      reset();
@@ -68,7 +69,6 @@ class Daemon : public QObject
 		static void      reload();
 
 		static Daemon*   mInstance;         // only one instance allowed
-		static KAction*  mActionControl;    // action to display the alarm daemon control dialog
 		static QTimer*   mStartTimer;       // timer to check daemon status after starting daemon
 		static QDateTime mLastCheck;        // last time daemon checked alarms before check interval change
 		static QDateTime mNextCheck;        // next time daemon will check alarms after check interval change

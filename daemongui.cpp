@@ -121,7 +121,7 @@ void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 				default:
 					return;
 			}
-			theApp()->actionAlarmEnable()->setAlarmsEnabled(!mCalendarDisabled);
+			emit daemonRunning(!mCalendarDisabled);
 			break;
 		}
 	}
@@ -149,7 +149,7 @@ void DaemonGuiHandler::registerGuiWithDaemon()
 bool DaemonGuiHandler::monitoringAlarms()
 {
 	bool ok = !mCalendarDisabled  &&  Daemon::isRunning();
-	theApp()->actionAlarmEnable()->setAlarmsEnabled(ok);
+	emit daemonRunning(ok);
 	return ok;
 }
 
@@ -159,6 +159,7 @@ bool DaemonGuiHandler::monitoringAlarms()
 */
 void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 {
+	kdDebug(5950) << "DaemonGuiHandler::setAlarmsEnabled(" << enable << ")\n";
 	if (enable  &&  !checkIfDaemonRunning())
 	{
 		// The daemon is not running, so start it
@@ -212,7 +213,7 @@ bool DaemonGuiHandler::checkIfDaemonRunning()
 	{
 		mDaemonRunning = newstatus;
 		int status = mDaemonRunning  &&  !mCalendarDisabled;
-		theApp()->actionAlarmEnable()->setAlarmsEnabled(status);
+		emit daemonRunning(status);
 		mDaemonStatusTimer.changeInterval(mDaemonStatusTimerInterval * 1000);   // exit from fast checking
 		mDaemonStatusTimerCount = 0;
 		if (mDaemonRunning)
@@ -252,6 +253,17 @@ void DaemonGuiHandler::slotPreferencesChanged()
 }
 
 /******************************************************************************
+* Create an "Alarms Enabled/Enable Alarms" action.
+*/
+AlarmEnableAction* DaemonGuiHandler::createAlarmEnableAction(KActionCollection* actions, const char* name)
+{
+	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions, name);
+	connect(a, SIGNAL(switched_extra(bool)), SLOT(setAlarmsEnabled(bool)));
+	connect(this, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedQuiet(bool)));
+	return a;
+}
+
+/******************************************************************************
  * Expand a DCOP call parameter URL to a full URL.
  * (We must store full URLs in the calendar data since otherwise later calls to
  *  reload or remove calendars won't necessarily find a match.)
@@ -265,26 +277,43 @@ QString DaemonGuiHandler::expandURL(const QString& urlString)
 
 
 /*=============================================================================
-=  Class: ActionAlarmsEnabled
+=  Class: AlarmEnableAction
 =============================================================================*/
 
-ActionAlarmsEnabled::ActionAlarmsEnabled(int accel, const QObject* receiver, const char* slot, QObject* parent, const char* name)
-	: KAction(QString::null, accel, receiver, slot, parent, name),
-	  mAlarmsEnabled(true)
+AlarmEnableAction::AlarmEnableAction(int accel, QObject* parent, const char* name)
+	: KToggleAction(QString::null, accel, parent, name),
+	  mInitialised(false),
+	  mQuiet(true)
 {
-	setAlarmsEnabled(false);
+	setChecked(false);    // set the correct text
+	mInitialised = true;
+	mQuiet = false;
 }
 
 /******************************************************************************
-*  Set the correct text for the Alarms Enabled action.
+*  Set the action state when the alarm daemon run state changes, but don't
+*  emit a switched_extra() signal.
 */
-void ActionAlarmsEnabled::setAlarmsEnabled(bool status)
+void AlarmEnableAction::setCheckedQuiet(bool running)
 {
-	kdDebug(5950) << "ActionAlarmsEnabled::setAlarmsEnabled(" << status << ")\n";
-	if (status != mAlarmsEnabled)
+	kdDebug(5950) << "AlarmEnableAction::setCheckedQuiet(" << running << ")\n";
+	mQuiet = true;
+	setChecked(running);
+	mQuiet = false;
+}
+
+/******************************************************************************
+*  Set the checked status and the correct text for the Alarms Enabled action.
+*/
+void AlarmEnableAction::setChecked(bool check)
+{
+	kdDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
+	if (check != isChecked()  ||  !mInitialised)
 	{
-		mAlarmsEnabled = status;
-		setText(mAlarmsEnabled ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
-		emit alarmsEnabledChange(mAlarmsEnabled);
+		setText(check ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
+		KToggleAction::setChecked(check);
+		emit switched(check);
+		if (!mQuiet)
+			emit switched_extra(check);
 	}
 }

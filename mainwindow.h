@@ -36,6 +36,8 @@
 
 class QListViewItem;
 class KAction;
+class KToggleAction;
+class ActionAlarmsEnabled;
 class AlarmListView;
 class TemplateDlg;
 
@@ -98,7 +100,9 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotBirthdays();
 		void           slotTemplates();
 		void           slotTemplatesEnd();
+		void           slotPreferences();
 		void           slotConfigureKeys();
+		void           slotConfigureToolbar();
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();
@@ -110,7 +114,6 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotUpdateTimeTo();
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
-		void           setAlarmEnabledStatus(bool status);
 
 	private:
 		KAlarmMainWindow(bool restored);
@@ -133,19 +136,12 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       mActionView;
 		KAction*       mActionDelete;
 		KAction*       mActionUndelete;
-		KAction*       mActionToggleTrayIcon;
-		KAction*       mActionRefreshAlarms;
-		KAction*       mActionShowTime;
-		KAction*       mActionShowTimeTo;
-		KAction*       mActionShowExpired;
-		KAction*       mActionQuit;
-		int            mShowTimeId;
-		int            mShowTimeToId;
-		int            mShowExpiredId;
-		int            mShowTrayId;
+		KToggleAction* mActionToggleTrayIcon;
+		KToggleAction* mActionShowTime;
+		KToggleAction* mActionShowTimeTo;
+		KToggleAction* mActionShowExpired;
 		KPopupMenu*    mActionsMenu;
-		KPopupMenu*    mViewMenu;
-		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
+		KPopupMenu*    mContextMenu;
 		bool           mMinuteTimerActive;   // minute timer is active
 		bool           mHiddenTrayParent;    // on session restoration, hide this window
 		bool           mShowExpired;         // include expired alarms in the displayed list

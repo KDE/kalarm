@@ -37,6 +37,7 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kaction.h>
+#include <kstdaction.h>
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -56,7 +57,6 @@ const char*  DCOP_OBJECT_NAME    = "display";
 
 
 Daemon*   Daemon::mInstance = 0;
-KAction*  Daemon::mActionControl = 0;
 QTimer*   Daemon::mStartTimer = 0;
 QDateTime Daemon::mLastCheck;
 QDateTime Daemon::mNextCheck;
@@ -67,22 +67,14 @@ bool      Daemon::mRegistered = false;
 
 /******************************************************************************
 * Initialise.
-* A Daemon instance only needs to be constructed in order for slots to work.
+* A Daemon instance needs to be constructed only in order for slots to work.
 * All external access is via static methods.
 */
-void Daemon::initialise(KActionCollection* actions)
+void Daemon::initialise()
 {
 	if (!mInstance)
 		mInstance = new Daemon();
-
 	connect(AlarmCalendar::activeCalendar(), SIGNAL(calendarSaved(AlarmCalendar*)), mInstance, SLOT(slotCalendarSaved(AlarmCalendar*)));
-	if (!mActionControl)
-#if KDE_VERSION >= 308
-		mActionControl = new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."),
-#else
-		mActionControl = new KAction(i18n("Configure Alarm &Daemon..."), theApp()->actionPreferences()->iconSet(),
-#endif
-					     0, mInstance, SLOT(slotControl()), actions, "controldaemon");
 	readCheckInterval();
 }
 
@@ -223,6 +215,25 @@ bool Daemon::isRunning(bool startdaemon)
 			start();      // re-register with the daemon
 	}
 	return runState;
+}
+
+/******************************************************************************
+* Create a "Control/Configure Alarm Daemon" action.
+*/
+KAction* Daemon::createControlAction(KActionCollection* actions, const char* name)
+{
+	if (!mInstance)
+		return 0;
+#if KDE_VERSION >= 308
+	return new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."),
+	                   0, mInstance, SLOT(slotControl()), actions, name);
+#else
+	KAction* prefs = KStdAction::preferences(this, "x", actions);
+	KAction* action = new KAction(i18n("Configure Alarm &Daemon..."), prefs->iconSet(),
+	                              0, mInstance, SLOT(slotControl()), actions, name);
+	delete prefs;
+	return action;
+#endif
 }
 
 /******************************************************************************

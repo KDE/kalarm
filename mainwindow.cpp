@@ -46,6 +46,7 @@
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kkeydialog.h>
+#include <kedittoolbar.h>
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -272,102 +273,56 @@ void KAlarmMainWindow::hideEvent(QHideEvent* he)
 void KAlarmMainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
-	mActionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
-	KAction* actBirthday  = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
 	mActionTemplates      = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
-	mActionNew            = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
+	mActionNew            = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions, "new");
 	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
 	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
 	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
 	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_Z, this, SLOT(slotUndelete()), actions, "undelete");
 	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
-	mActionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
-	mActionShowTime       = new KAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "time");
-	mActionShowTimeTo     = new KAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "timeTo");
-	mActionShowExpired    = new KAction(i18n_e_ShowExpiredAlarms(), Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "expired");
-	mActionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "tray");
-
-	// Set up the menu bar
-
-	KMenuBar* menu = menuBar();
-	KPopupMenu* submenu = new KPopupMenu(this, "file");
-	mActionTemplates->plug(submenu);
-	actBirthday->plug(submenu);
-	menu->insertItem(i18n("&File"), submenu);
-	mActionQuit->plug(submenu);
-
-	mViewMenu = new KPopupMenu(this, "view");
-	menu->insertItem(i18n("&View"), mViewMenu);
-	mActionShowTime->plug(mViewMenu);
-	mShowTimeId = mViewMenu->idAt(0);
-	mViewMenu->setItemChecked(mShowTimeId, mShowTime);
-	mActionShowTimeTo->plug(mViewMenu);
-	mShowTimeToId = mViewMenu->idAt(1);
-	mViewMenu->setItemChecked(mShowTimeToId, mShowTimeTo);
-	mViewMenu->insertSeparator(2);
-	mActionShowExpired->plug(mViewMenu);
-	mShowExpiredId = mViewMenu->idAt(3);
-	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
-	mActionToggleTrayIcon->plug(mViewMenu);
-	mShowTrayId = mViewMenu->idAt(4);
-	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
-	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
-	updateTrayIconAction();         // set the correct text for this action
-
-	mActionsMenu = new KPopupMenu(this, "actions");
-	menu->insertItem(i18n("&Actions"), mActionsMenu);
-	mActionNew->plug(mActionsMenu);
-	mActionCopy->plug(mActionsMenu);
-	mActionModify->plug(mActionsMenu);
-	mActionDelete->plug(mActionsMenu);
-	mActionUndelete->plug(mActionsMenu);
-	mActionView->plug(mActionsMenu);
-	mActionCreateTemplate->plug(mActionsMenu);
-	mActionsMenu->insertSeparator(8);
-
-	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
-	mAlarmsEnabledId = a->itemId(a->plug(mActionsMenu));
-	connect(a, SIGNAL(alarmsEnabledChange(bool)), SLOT(setAlarmEnabledStatus(bool)));
+	mActionShowTime       = new KToggleAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "showAlarmTimes");
+	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
+	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
+	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
+	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
+	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
 	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
 	if (daemonGui)
-	{
-		daemonGui->checkStatus();
-		setAlarmEnabledStatus(daemonGui->monitoringAlarms());
-	}
+		daemonGui->createAlarmEnableAction(actions, "alarmEnable");
+	KStdAction::quit(this, SLOT(slotQuit()), actions);
+	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
+	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
+	KStdAction::preferences(this, SLOT(slotPreferences()), actions);
+	Daemon::createControlAction(actions, "controlDaemon");
+	setStandardToolBarMenuEnabled(true);
+	createGUI("kalarmui.rc");
 
-	mActionRefreshAlarms->plug(mActionsMenu);
+	mContextMenu = static_cast<KPopupMenu*>(factory()->container("listContext", this));
+	mActionsMenu = static_cast<KPopupMenu*>(factory()->container("actions", this));
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
+	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
+	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
-	submenu = new KPopupMenu(this, "settings");
-	menu->insertItem(i18n("&Settings"), submenu);
-	Daemon::actionControl()->plug(submenu);
-	submenu->insertSeparator(1);
-	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions)->plug(submenu);
-	theApp()->actionPreferences()->plug(submenu);
+	// Set menu item states
+	mActionShowTime->setChecked(mShowTime);
+	mActionShowTimeTo->setChecked(mShowTimeTo);
+	mActionShowExpired->setChecked(mShowExpired);
+	if (!Preferences::instance()->expiredKeepDays())
+		mActionShowExpired->setEnabled(false);
+	updateTrayIconAction();         // set the correct text for this action
 
-	menu->insertItem(SmallIcon("help"), KStdGuiItem::help().text(), helpMenu());
-
-	// Set up the toolbar
-
-	KToolBar* toolbar = toolBar();
-	mActionNew->plug(toolbar);
-	mActionCopy->plug(toolbar);
-	mActionModify->plug(toolbar);
-	mActionDelete->plug(toolbar);
-	mActionUndelete->plug(toolbar);
-	mActionView->plug(toolbar);
-
-	mActionCreateTemplate->setEnabled(false);
 	mActionCopy->setEnabled(false);
 	mActionModify->setEnabled(false);
 	mActionDelete->setEnabled(false);
 	mActionUndelete->setEnabled(false);
 	mActionView->setEnabled(false);
-	if (!Preferences::instance()->expiredKeepDays())
-		mActionShowExpired->setEnabled(false);
-	if (!theApp()->KDEDesktop())
-		mActionToggleTrayIcon->setEnabled(false);
+	mActionCreateTemplate->setEnabled(false);
+	if (daemonGui)
+	{
+		daemonGui->checkStatus();
+		daemonGui->monitoringAlarms();
+	}
 }
 
 /******************************************************************************
@@ -435,8 +390,8 @@ void KAlarmMainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 			{
 				w->mShowTime   = newTime;
 				w->mShowTimeTo = newTimeTo;
-				w->mViewMenu->setItemChecked(w->mShowTimeId, newTime);
-				w->mViewMenu->setItemChecked(w->mShowTimeToId, newTimeTo);
+				w->mActionShowTime->setChecked(newTime);
+				w->mActionShowTimeTo->setChecked(newTimeTo);
 				w->mListView->selectTimeColumns(newTime, newTimeTo);
 			}
 		}
@@ -674,12 +629,12 @@ void KAlarmMainWindow::slotUndelete()
 void KAlarmMainWindow::slotShowTime()
 {
 	mShowTime = !mShowTime;
-	mViewMenu->setItemChecked(mShowTimeId, mShowTime);
+	mActionShowTime->setChecked(mShowTime);
 	if (!mShowTime  &&  !mShowTimeTo)
 	{
 		// At least one time column must be displayed
 		mShowTimeTo = true;
-		mViewMenu->setItemChecked(mShowTimeToId, mShowTimeTo);
+		mActionShowTimeTo->setChecked(mShowTimeTo);
 	}
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 }
@@ -690,12 +645,12 @@ void KAlarmMainWindow::slotShowTime()
 void KAlarmMainWindow::slotShowTimeTo()
 {
 	mShowTimeTo = !mShowTimeTo;
-	mViewMenu->setItemChecked(mShowTimeToId, mShowTimeTo);
+	mActionShowTimeTo->setChecked(mShowTimeTo);
 	if (!mShowTimeTo  &&  !mShowTime)
 	{
 		// At least one time column must be displayed
 		mShowTime = true;
-		mViewMenu->setItemChecked(mShowTimeId, mShowTime);
+		mActionShowTime->setChecked(mShowTime);
 	}
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	setUpdateTimer();
@@ -707,7 +662,7 @@ void KAlarmMainWindow::slotShowTimeTo()
 void KAlarmMainWindow::slotShowExpired()
 {
 	mShowExpired = !mShowExpired;
-	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
+	mActionShowExpired->setChecked(mShowExpired);
 	mListView->showExpired(mShowExpired);
 	mListView->refresh();
 }
@@ -775,8 +730,8 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 */
 void KAlarmMainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(!theApp()->wantRunInSystemTray());
-	mViewMenu->setItemChecked(mShowTrayId, theApp()->trayIconDisplayed());
+	mActionToggleTrayIcon->setEnabled(theApp()->KDEDesktop() && !theApp()->wantRunInSystemTray());
+	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
 /******************************************************************************
@@ -797,11 +752,30 @@ void KAlarmMainWindow::slotResetDaemon()
 }
 
 /******************************************************************************
+*  Called when the "Configure KAlarm" menu item is selected.
+*/
+void KAlarmMainWindow::slotPreferences()
+{
+	KAlarmPrefDlg prefDlg;
+	prefDlg.exec();
+}
+
+/******************************************************************************
 *  Called when the Configure Keys menu item is selected.
 */
 void KAlarmMainWindow::slotConfigureKeys()
 {
 	KKeyDialog::configure(actionCollection(), this);
+}
+
+/******************************************************************************
+*  Called when the Configure Toolbars menu item is selected.
+*/
+void KAlarmMainWindow::slotConfigureToolbar()
+{
+	saveMainWindowSettings(KGlobal::config(), "MainWindow");
+	KEditToolbar dlg(factory());
+	dlg.exec();
 }
 
 /******************************************************************************
@@ -1005,20 +979,7 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 	if (button == Qt::RightButton)
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
-		QPopupMenu* menu = new QPopupMenu(this, "ListContextMenu");
-		if (item)
-		{
-			mActionCopy->plug(menu);
-			mActionModify->plug(menu);
-			mActionView->plug(menu);
-			mActionDelete->plug(menu);
-			if (mShowExpired)
-				mActionUndelete->plug(menu);
-			mActionCreateTemplate->plug(menu);
-		}
-		else
-			mActionNew->plug(menu);
-		menu->exec(pt);
+		mContextMenu->popup(pt);
 	}
 	else if (!item)
 	{
@@ -1049,16 +1010,6 @@ void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
 	}
 	else
 		slotNew();
-}
-
-/******************************************************************************
-* Called when the Alarms Enabled action status has changed.
-* Updates the alarms enabled menu item check state.
-*/
-void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
-{
-	kdDebug(5950) << "KAlarmMainWindow::setAlarmEnabledStatus(" << (int)status << ")\n";
-	mActionsMenu->setItemChecked(mAlarmsEnabledId, status);
 }
 
 /******************************************************************************

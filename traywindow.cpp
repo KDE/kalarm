@@ -40,17 +40,20 @@
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kstdaction.h>
 #include <kstdguiitem.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include "kalarmapp.h"
-#include "mainwindow.h"
-#include "messagewin.h"
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "daemon.h"
 #include "daemongui.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "mainwindow.h"
+#include "messagewin.h"
+#include "prefdlg.h"
 #include "preferences.h"
 #include "traywindow.moc"
 
@@ -94,15 +97,15 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
 
 	// Set up the context menu
-	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
-	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
-	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setEnabledStatus(bool)));
-	theApp()->actionNewAlarm()->plug(contextMenu());
-	Daemon::actionControl()->plug(contextMenu());
-	theApp()->actionPreferences()->plug(contextMenu());
+	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
+	AlarmEnableAction* a = daemonGui->createAlarmEnableAction(actcol, "tAlarmEnable");
+	a->plug(contextMenu());
+	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
+	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
+	Daemon::createControlAction(actcol, "tControlDaemon")->plug(contextMenu());
+	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
-	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
 	daemonGui->checkStatus();
 	setEnabledStatus(daemonGui->monitoringAlarms());
 
@@ -129,6 +132,23 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 }
 
 /******************************************************************************
+*  Called when the "New Alarm" menu item is selected to edit a new alarm.
+*/
+void TrayWindow::slotNewAlarm()
+{
+	KAlarmMainWindow::executeNew();
+}
+
+/******************************************************************************
+*  Called when the "Configure KAlarm" menu item is selected.
+*/
+void TrayWindow::slotPreferences()
+{
+	KAlarmPrefDlg prefDlg;
+	prefDlg.exec();
+}
+
+/******************************************************************************
 * Called when the Quit context menu item is selected.
 */
 void TrayWindow::slotQuit()
@@ -144,7 +164,6 @@ void TrayWindow::setEnabledStatus(bool status)
 {
 	kdDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")\n";
 	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
-	contextMenu()->setItemChecked(mAlarmsEnabledId, status);
 }
 
 /******************************************************************************

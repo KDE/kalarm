@@ -90,9 +90,9 @@ KAlarmMainWindow* displayMainWindowSelected(const QString& eventID)
 /******************************************************************************
 * Create a New Alarm KAction.
 */
-KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions)
+KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, "new");
+	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, name);
 }
 
 /******************************************************************************

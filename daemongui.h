@@ -34,7 +34,7 @@
 #include <kaction.h>
 
 #include <kalarmd/alarmguiiface.h>
-class ActionAlarmsEnabled;
+class AlarmEnableAction;
 
 extern const char* GUI_DCOP_OBJECT_NAME;
 
@@ -51,49 +51,58 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 	public:
 		explicit DaemonGuiHandler();
 
-		bool                 monitoringAlarms();
-		void                 checkStatus()                 { checkIfDaemonRunning(); }
-		void                 setAlarmsEnabled(bool enable);
+		bool           monitoringAlarms();
+		void           checkStatus()                 { checkIfDaemonRunning(); }
+		AlarmEnableAction* createAlarmEnableAction(KActionCollection*, const char* name);
+
+	public slots:
+		void           setAlarmsEnabled(bool enable);
+
+	signals:
+		void           daemonRunning(bool running);
 
 	private slots:
-		void                 timerCheckDaemonRunning();
-		void                 slotPreferencesChanged();
+		void           timerCheckDaemonRunning();
+		void           slotPreferencesChanged();
 
 	private:
-		static QString       expandURL(const QString& urlString);
-		void                 registerGuiWithDaemon();
-		void                 daemonEnableCalendar(bool enable);
-		bool                 checkIfDaemonRunning();
-		void                 setFastDaemonCheck();
+		static QString expandURL(const QString& urlString);
+		void           registerGuiWithDaemon();
+		void           daemonEnableCalendar(bool enable);
+		bool           checkIfDaemonRunning();
+		void           setFastDaemonCheck();
 		// DCOP interface
-		void                 alarmDaemonUpdate(int alarmGuiChangeType,
-		                                       const QString& calendarURL, const QCString& appName);
-		void                 handleEvent(const QString& calendarURL, const QString& eventID);
-		void                 handleEvent(const QString& iCalendarString) ;
+		void           alarmDaemonUpdate(int alarmGuiChangeType,
+		                                 const QString& calendarURL, const QCString& appName);
+		void           handleEvent(const QString& calendarURL, const QString& eventID);
+		void           handleEvent(const QString& iCalendarString) ;
 
-		QTimer               mDaemonStatusTimer;         // timer for checking daemon status
-		int                  mDaemonStatusTimerCount;    // countdown for fast status checking
-		int                  mDaemonStatusTimerInterval; // timer interval (seconds) for checking daemon status
-		bool                 mDaemonRunning;             // whether the alarm daemon is currently running
-		bool                 mCalendarDisabled;          // monitoring of calendar is currently disabled by daemon
-		bool                 mEnableCalPending;          // waiting to tell daemon to enable calendar
+		QTimer         mDaemonStatusTimer;         // timer for checking daemon status
+		int            mDaemonStatusTimerCount;    // countdown for fast status checking
+		int            mDaemonStatusTimerInterval; // timer interval (seconds) for checking daemon status
+		bool           mDaemonRunning;             // whether the alarm daemon is currently running
+		bool           mCalendarDisabled;          // monitoring of calendar is currently disabled by daemon
+		bool           mEnableCalPending;          // waiting to tell daemon to enable calendar
 };
 
 /*=============================================================================
-=  Class: ActionAlarmsEnabled
+=  Class: AlarmEnableAction
 =============================================================================*/
 
-class ActionAlarmsEnabled : public KAction
+class AlarmEnableAction : public KToggleAction
 {
 		Q_OBJECT
 	public:
-		ActionAlarmsEnabled(int accel, const QObject* receiver, const char* slot, QObject* parent, const char* name = 0);
-		bool    alarmsEnabled() const           { return mAlarmsEnabled; }
-		void    setAlarmsEnabled(bool enable);
+		AlarmEnableAction(int accel, QObject* parent, const char* name = 0);
+	public slots:
+		void         setCheckedQuiet(bool);   // set state without emitting switched_extra() signal
+		virtual void setChecked(bool);        // set state and emit switched() and switched_extra() signals
 	signals:
-		void    alarmsEnabledChange(bool enabled);
+		void         switched(bool);          // state has changed (KToggleAction::toggled() is only emitted when clicked by user)
+		void         switched_extra(bool);
 	private:
-		bool    mAlarmsEnabled;
+		bool         mInitialised;
+		bool         mQuiet;           // true to suppress switched_extra() signal
 };
 
 #endif // DAEMONGUIHANDLER_H

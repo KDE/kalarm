@@ -50,7 +50,7 @@ KAlarmMainWindow*  displayMainWindowSelected(const QString& eventID = QString::n
 QSize              readConfigWindowSize(const char* window, const QSize& defaultSize);
 void               writeConfigWindowSize(const char* window, const QSize&);
 FileType           fileType(const QString& mimetype);
-KAction*           createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*);
+KAction*           createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 void               resetDaemon();
 void               resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 

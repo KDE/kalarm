@@ -47,8 +47,6 @@
 #include <dcopclient.h>
 #include <kprocess.h>
 #include <kfileitem.h>
-#include <kaction.h>
-#include <kstdaction.h>
 #include <kstdguiitem.h>
 #include <kstaticdeleter.h>
 #include <kdebug.h>
@@ -143,13 +141,6 @@ KAlarmApp::KAlarmApp()
 	mPrefsExpiredKeepDays = preferences->expiredKeepDays();
 	mPrefsShowTime        = preferences->showAlarmTime();
 	mPrefsShowTimeTo      = preferences->showTimeToAlarm();
-
-	// Set up actions used by more than one menu
-	mActionCollection  = new KActionCollection(this);
-	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_A, this, SLOT(toggleAlarmsEnabled()),
-	                                             mActionCollection, "alarmenable");
-	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), mActionCollection);
-	mActionNewAlarm    = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), mActionCollection);
 }
 
 /******************************************************************************
@@ -170,7 +161,7 @@ KAlarmApp* KAlarmApp::getInstance()
 		theInstance = new KAlarmApp;
 
 		// This is here instead of in the constructor to avoid recursion
-		Daemon::initialise(theInstance->mActionCollection);    // calendars and actions must be initialised before calling this
+		Daemon::initialise();    // calendars must be initialised before calling this
 	}
 	return theInstance;
 }
@@ -918,34 +909,6 @@ bool KAlarmApp::checkSystemTray()
 KAlarmMainWindow* KAlarmApp::trayMainWindow() const
 {
 	return mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
-}
-
-/******************************************************************************
-* Called when the Alarms Enabled action is selected.
-* The alarm daemon is told to stop or start monitoring the calendar file as
-* appropriate.
-*/
-void KAlarmApp::toggleAlarmsEnabled()
-{
-	if (mDaemonGuiHandler)
-		mDaemonGuiHandler->setAlarmsEnabled(!mActionAlarmEnable->alarmsEnabled());
-}
-
-/******************************************************************************
-*  Called when a Preferences menu item is selected.
-*/
-void KAlarmApp::slotPreferences()
-{
-	KAlarmPrefDlg prefDlg;
-	prefDlg.exec();
-}
-
-/******************************************************************************
-*  Called when the New menu item is clicked to edit a new alarm to add to the list.
-*/
-void KAlarmApp::slotNewAlarm()
-{
-	KAlarmMainWindow::executeNew();
 }
 
 /******************************************************************************
