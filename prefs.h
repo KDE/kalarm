@@ -22,6 +22,7 @@
 #define PREFS_H
 
 #include <qsize.h>
+#include <qdatetime.h>
 #include <ktabctl.h>
 class QCheckBox;
 class QRadioButton;
@@ -85,6 +86,7 @@ class MiscPrefs : public PrefsBase
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QSpinBox*      mDaemonTrayCheckInterval;
+		QTime          mStartOfDay;
 };
 
 #endif // PREFS_H

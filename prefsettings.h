@@ -25,6 +25,7 @@
 #include <qobject.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qdatetime.h>
 class QWidget;
 
 
@@ -41,6 +42,7 @@ class Settings : public QObject
 		bool         disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
 		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
+		const QTime& startOfDay() const               { return mStartOfDay; }
 		void         loadSettings();
 		void         saveSettings(bool syncToDisc = true);
 		void         emitSettingsChanged();
@@ -55,6 +57,7 @@ class Settings : public QObject
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
 		int                 mDaemonTrayCheckInterval;
+		QTime               mStartOfDay;
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
 

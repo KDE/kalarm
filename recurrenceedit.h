@@ -27,6 +27,7 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
+#include <qcheckbox.h>
 #include <libkcal/event.h>
 
 class QWidgetStack;
@@ -49,16 +50,17 @@ class RecurrenceEdit : public QWidget
 
 		/** Set widgets to default values */
 		void         setDefaults(const QDateTime& from, bool allday);
-		/** Read event object and setup widgets accordingly */
-		void         readEvent(const KAlarmEvent&);
+		/** Initialise according to a specified event */
+		void         set(const KAlarmEvent&, bool repeatAtLogin);
 		/** Write event settings to event object */
 		void         writeEvent(KAlarmEvent&);
+		bool         repeatAtLogin() const  { return repeatAtLoginCheckBox->isChecked(); }
+		void         setRepeatAtLogin(bool set)   { repeatAtLoginCheckBox->setChecked(set); }
 
 		/** Check if the input is valid. */
 		bool         validateInput();
 
 	public slots:
-		virtual void setEnabled(bool);
 		void         setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 		void         setDateTimeStr(const QString&);
 
@@ -96,6 +98,7 @@ class RecurrenceEdit : public QWidget
 		QWidgetStack* ruleStack;
 		ButtonGroup*  ruleButtonGroup;
 		QCheckBox*    recurCheckBox;
+		QCheckBox*    repeatAtLoginCheckBox;
 		QRadioButton* subdailyButton;
 		QRadioButton* dailyButton;
 		QRadioButton* weeklyButton;
@@ -151,8 +154,6 @@ class RecurrenceEdit : public QWidget
 
 		// current start date and time
 		QDateTime     currStartDateTime;
-
-		bool          mEnabled;
 };
 
 

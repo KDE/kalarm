@@ -477,8 +477,9 @@ void MessageWin::slotShowDefer()
 */
 void MessageWin::slotDefer()
 {
+	bool anyTime;
 	QDateTime dateTime;
-	if (deferTime->getDateTime(dateTime))
+	if (deferTime->getDateTime(dateTime, anyTime))
 	{
 		// Get the event being deferred. It will only still exist if repetitions are outstanding.
 		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);

@@ -69,8 +69,6 @@ static QString ordinal[] = {
 RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	: QWidget(parent, name, 0)
 {
-	mEnabled = false;
-
 	// Create the recurrence rule Group box which holds the recurrence period
 	// selection buttons, and the weekly, monthly and yearly recurrence rule
 	// frames which specify options individual to each of these distinct
@@ -93,12 +91,12 @@ RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	layout->addStretch();
 
 	// Repeat-at-login radio button
-	QCheckBox* repeatAtLogin = new QCheckBox(i18n("Repeat at login"), topFrame, "repeatAtLoginButton");
-	repeatAtLogin->setFixedSize(repeatAtLogin->sizeHint());
-	QWhatsThis::add(repeatAtLogin,
+	repeatAtLoginCheckBox = new QCheckBox(i18n("Repeat at login"), topFrame, "repeatAtLoginButton");
+	repeatAtLoginCheckBox->setFixedSize(repeatAtLoginCheckBox->sizeHint());
+	QWhatsThis::add(repeatAtLoginCheckBox,
 	      i18n("Repeat the alarm at every login until the specified time.\n"
 	           "Note that it will also be repeated any time the alarm daemon is restarted."));
-	layout->addWidget(repeatAtLogin);
+	layout->addWidget(repeatAtLoginCheckBox);
 
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence rule"), topFrame, "recurGroup");
 	topLayout->addWidget(recurGroup);
@@ -485,39 +483,10 @@ void RecurrenceEdit::yearlyClicked(int id)
 	yearDayEntry->setEnabled(!date);
 }
 
-void RecurrenceEdit::setEnabled(bool enabled)
-{
-//  kdDebug() << "RecurrenceEdit::setEnabled(): " << (enabled ? "on" : "off") << endl;
-
-	mEnabled = enabled;
-
-/*
-	recurFrequency->setEnabled(enabled);
-	recurHourMinFrequency->setEnabled(enabled);
-	for (int i = 0;  i < 7;  ++i)
-		dayBox[i]->setEnabled(enabled);
-	onNthDayButton->setEnabled(enabled);
-	nthDayEntry->setEnabled(enabled);
-	onNthTypeOfDayButton->setEnabled(enabled);
-	nthNumberEntry->setEnabled(enabled);
-	nthTypeOfDayEntry->setEnabled(enabled);
-	yearMonthButton->setEnabled(enabled);
-	yearDayButton->setEnabled(enabled);
-	yearDayEntry->setEnabled(enabled);
-
-	noEndDateButton->setEnabled(enabled);
-	repeatCountButton->setEnabled(enabled);
-	repeatCountEntry->setEnabled(enabled);
-	endDateButton->setEnabled(enabled);
-	endDateEdit->setEnabled(enabled);
-	endTimeEdit->setEnabled(?);
-*/
-}
-
 void RecurrenceEdit::unsetAllCheckboxes()
 {
 	recurCheckBox->setChecked(false);
-//	ruleButtonGroup->setButton(noneButtonId);
+	repeatAtLoginCheckBox->setChecked(false);
 
 	onNthDayButton->setChecked(false);
 	onNthTypeOfDayButton->setChecked(false);
@@ -548,7 +517,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 	recurCheckBox->setChecked(false);
 	recurToggled(false);
-//	ruleButtonGroup->setButton(noneButtonId);
+	repeatAtLoginCheckBox->setChecked(false);
 	ruleButtonGroup->setButton(dailyButtonId);
 	noEndDateButton->setChecked(true);
 
@@ -591,15 +560,17 @@ void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
 /******************************************************************************
  * Set the state of all controls to reflect the data in the specified event.
  */
-void RecurrenceEdit::readEvent(const KAlarmEvent& event)
+void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 {
 	// unset everything
 	unsetAllCheckboxes();
+	repeatAtLoginCheckBox->setChecked(repeatatlogin);
 //	currStartDateTime = event->dtStart();
 	currStartDateTime = event.dateTime();
 
 	if (event.repeats())
 	{
+		recurCheckBox->setChecked(true);
 		int repeatDuration;
 		Recurrence* recurrence = event.recurrence();
 		if (recurrence)
@@ -698,8 +669,7 @@ void RecurrenceEdit::readEvent(const KAlarmEvent& event)
  */
 void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 {
-//	if (mEnabled  &&  !noneButton->isChecked())
-	if (mEnabled  &&  recurCheckBox->isChecked())
+	if (recurCheckBox->isChecked())
 	{
 		// Get end date and repeat count, common to all types of recurring events
 		QDate  endDate;

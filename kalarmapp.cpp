@@ -751,29 +751,24 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 			kdDebug(5950) << "KAlarmApp::handleAlarm(): RESCHEDULE" << endl;
 			if (!alarm.repeatAtLogin())
 			{
-				int secs = alarm.dateTime().secsTo(QDateTime::currentDateTime());
-				if (secs >= 0)
+				switch (event.setNextOccurrence(QDateTime::currentDateTime()))
 				{
-					// The event is due by now
-					int repeatSecs = alarm.repeatMinutes() * 60;
-					if (repeatSecs)
-					{
-						int n = secs / repeatSecs + 1;
-						int remainingCount = alarm.repeatCount() - n;
-						if (remainingCount >= 0)
-						{
-							// Repetitions still remain, so rewrite the event
-							event.updateRepetition(alarm.dateTime().addSecs(n * repeatSecs), remainingCount);
-
-							if (updateCalAndDisplay)
-								updateEvent(event, 0L);     // update the window lists and calendar file
-							else
-								event.setUpdated();    // note that the calendar file needs to be updated
-							break;
-						}
-					}
-					handleAlarm(event, alarm, ALARM_CANCEL, updateCalAndDisplay);
-					break;
+					case KAlarmEvent::NO_OCCURRENCE:
+						// All repetitions are finished, so cancel the event
+						handleAlarm(event, alarm, ALARM_CANCEL, updateCalAndDisplay);
+						break;
+					case KAlarmEvent::RECURRENCE_DATE:
+					case KAlarmEvent::RECURRENCE_DATE_TIME:
+						// The event is due by now and repetitions still remain, so rewrite the event
+						if (updateCalAndDisplay)
+							updateEvent(event, 0L);   // update the window lists and calendar file
+						else
+							event.setUpdated();    // note that the calendar file needs to be updated
+						break;
+					case KAlarmEvent::FIRST_OCCURRENCE:
+						// The first occurrence is still due?!?, so don't do anything
+					default:
+						break;
 				}
 			}
 			else if (updateCalAndDisplay  &&  event.updated())

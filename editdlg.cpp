@@ -46,6 +46,7 @@
 #include "kalarmapp.h"
 #include "prefsettings.h"
 #include "datetime.h"
+#include "recurrenceedit.h"
 #include "editdlg.moc"
 
 
@@ -59,14 +60,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Message label + multi-line editor
 
-	messageTypeGroup = new QButtonGroup(i18n("Action"), page, "messageGroup");
-	connect(messageTypeGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
-	topLayout->addWidget(messageTypeGroup);
-	QGridLayout* grid = new QGridLayout(messageTypeGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
+	actionGroup = new QButtonGroup(i18n("Action"), page, "actionGroup");
+	connect(actionGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
+	topLayout->addWidget(actionGroup);
+	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	// Message radio button has an ID of 0
-	messageRadio = new QRadioButton(i18n("Text"), messageTypeGroup, "messageButton");
+	messageRadio = new QRadioButton(i18n("Text"), actionGroup, "messageButton");
 	messageRadio->setFixedSize(messageRadio->sizeHint());
 	QWhatsThis::add(messageRadio,
 	      i18n("The edit field below contains the alarm message text."));
@@ -74,7 +75,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->setColStretch(0, 1);
 
 	// Command radio button has an ID of 1
-	commandRadio = new QRadioButton(i18n("Command"), messageTypeGroup, "cmdButton");
+	commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
 	commandRadio->setFixedSize(commandRadio->sizeHint());
 	QWhatsThis::add(commandRadio,
 	      i18n("The edit field below contains a shell command to execute."));
@@ -82,7 +83,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->setColStretch(1, 1);
 
 	// File radio button has an ID of 2
-	fileRadio = new QRadioButton(i18n("File"), messageTypeGroup, "fileButton");
+	fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
 	fileRadio->setFixedSize(fileRadio->sizeHint());
 	QWhatsThis::add(fileRadio,
 	      i18n("The edit field below contains the name of a text file whose contents will be "
@@ -90,13 +91,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->addWidget(fileRadio, 1, 2, AlignRight);
 
 	// Browse button
-	browseButton = new QPushButton(i18n("&Browse..."), messageTypeGroup);
+	browseButton = new QPushButton(i18n("&Browse..."), actionGroup);
 	browseButton->setFixedSize(browseButton->sizeHint());
 	QWhatsThis::add(browseButton,
 	      i18n("Select a text file to display."));
 	grid->addWidget(browseButton, 1, 3, AlignLeft);
 
-	messageEdit = new QMultiLineEdit(messageTypeGroup);
+	messageEdit = new QMultiLineEdit(actionGroup);
 	QSize size = messageEdit->sizeHint();
 	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
 	messageEdit->setMinimumSize(size);
@@ -110,42 +111,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Repeating alarm
 
-	QGroupBox* group = new QGroupBox(i18n("Repetition"), page, "repetitionGroup");
-	topLayout->addWidget(group);
-	grid = new QGridLayout(group, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
-
-	QLabel* lbl = new QLabel(i18n("Count:"), group);
-	lbl->setFixedSize(lbl->sizeHint());
-	grid->addWidget(lbl, 1, 0, AlignLeft);
-
-	repeatCount = new QSpinBox(0, 9999, 1, group);
-	repeatCount->setFixedSize(repeatCount->sizeHint());
-	QWhatsThis::add(repeatCount,
-	      i18n("Enter the number of times to repeat the alarm, after its initial display."));
-	connect(repeatCount, SIGNAL(valueChanged(int)), this, SLOT(slotRepeatCountChanged(int)));
-	grid->addWidget(repeatCount, 1, 1, AlignLeft);
-
-	lbl = new QLabel(i18n("Interval:"), group);
-	lbl->setFixedSize(lbl->sizeHint());
-	grid->setColStretch(2, 1);
-	grid->addWidget(lbl, 1, 2, AlignRight);
-
-	repeatInterval = new TimeSpinBox(1, 99*60+59, group);
-	repeatInterval->setValue(2399);
-	size = repeatInterval->sizeHint();
-	repeatInterval->setFixedSize(size);
-	QWhatsThis::add(repeatInterval,
-	      i18n("Enter the time (in hours and minutes) between repetitions of the alarm."));
-	grid->addWidget(repeatInterval, 1, 3, AlignRight);
-
-	// Repeat-at-login radio button has an ID of 1
-	repeatAtLogin = new QCheckBox(i18n("Repeat at login"), group, "repeatAtLoginButton");
-	repeatAtLogin->setFixedSize(repeatAtLogin->sizeHint());
-	QWhatsThis::add(repeatAtLogin,
-	      i18n("Repeat the alarm at every login until the specified time.\n"
-	           "Note that it will also be repeated any time the alarm daemon is restarted."));
-	grid->addMultiCellWidget(repeatAtLogin, 2, 2, 0, 1, AlignLeft);
+	recurrenceEdit = new RecurrenceEdit(page);
+	recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
+	topLayout->addWidget(recurrenceEdit);
 
 	// Late display checkbox - default = allow late display
 
@@ -228,12 +196,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 				break;
 		}
 		messageEdit->setText(event->cleanText());
-		messageTypeGroup->setButton(messageTypeGroup->id(radio));
+		actionGroup->setButton(actionGroup->id(radio));
 		lateCancel->setChecked(event->lateCancel());
 		beep->setChecked(event->beep());
-		repeatCount->setValue(event->repeatCount());
-		repeatInterval->setValue(event->repeatMinutes());
-		repeatAtLogin->setChecked(event->repeatAtLogin());
+		recurrenceEdit->set(*event, event->repeatAtLogin());
 	}
 	else
 	{
@@ -244,16 +210,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #else
 		bgColourChoose->setColour(theApp()->settings()->defaultBgColour());     // set colour before setting alarm type buttons
 #endif
-		timeWidget->setDateTime(QDateTime::currentDateTime().addSecs(60));
+		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
+		timeWidget->setDateTime(defaultTime);
 		messageEdit->setText(QString::null);
-		messageTypeGroup->setButton(messageTypeGroup->id(messageRadio));
-		repeatCount->setValue(0);
-		repeatInterval->setValue(0);
-		repeatAtLogin->setChecked(false);
+		actionGroup->setButton(actionGroup->id(messageRadio));
+		recurrenceEdit->setDefaults(defaultTime, false);
 	}
 
 	slotMessageTypeClicked(-1);    // enable/disable things appropriately
-	repeatInterval->setEnabled(repeatCount->value());
 	messageEdit->setFocus();
 }
 
@@ -269,8 +233,8 @@ EditAlarmDlg::~EditAlarmDlg()
  */
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
-	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags(),
-	          repeatCount->value(), repeatInterval->value());
+	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
+	recurrenceEdit->writeEvent(event);
 }
 
 /******************************************************************************
@@ -278,9 +242,10 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
  */
 int EditAlarmDlg::getAlarmFlags() const
 {
-	return (beep->isChecked()          ? KAlarmEvent::BEEP : 0)
-	     | (lateCancel->isChecked()    ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (repeatAtLogin->isChecked() ? KAlarmEvent::REPEAT_AT_LOGIN : 0);
+	return (beep->isChecked()               ? KAlarmEvent::BEEP : 0)
+	     | (lateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (recurrenceEdit->repeatAtLogin() ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (alarmAnyTime                    ? KAlarmEvent::ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -311,7 +276,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-	if (timeWidget->getDateTime(alarmDateTime))
+	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
 	{
 		if (checkText(alarmMessage))
 			accept();
@@ -406,6 +371,9 @@ bool EditAlarmDlg::checkText(QString& result)
 				case UNREADABLE:   errmsg = i18n("%1\nis not readable");  break;
 				case NOT_TEXT:     errmsg = i18n("%1\nappears not to be a text file");  break;
 				case HTML:         errmsg = i18n("%1\nis an html/xml file");  break;
+				case NONE:
+				default:
+					break;
 			}
 			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null,
 							       i18n("Continue")) == KMessageBox::Cancel)
@@ -425,7 +393,7 @@ bool EditAlarmDlg::checkText(QString& result)
 */
 void EditAlarmDlg::slotMessageTypeClicked(int id)
 {
-	if (id == messageTypeGroup->id(browseButton))
+	if (id == actionGroup->id(browseButton))
 	{
 		// Browse button has been clicked
 		static QString defaultDir;
@@ -531,12 +499,4 @@ QString EditAlarmDlg::getMessageText()
 		return text;
 	}
 	return messageEdit->text();
-}
-
-/******************************************************************************
-*  Called when the repeat count edit box value has changed.
-*/
-void EditAlarmDlg::slotRepeatCountChanged(int count)
-{
-	repeatInterval->setEnabled(count);
 }

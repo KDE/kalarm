@@ -36,6 +36,7 @@ class QMultiLineEdit;
 class QSpinBox;
 class TimeSpinBox;
 class AlarmTimeWidget;
+class RecurrenceEdit;
 
 /**
  * EditAlarmDlg: A dialog for the input of an alarm message's details.
@@ -52,7 +53,7 @@ class EditAlarmDlg : public KDialogBase
 
 		void              getEvent(KAlarmEvent&);
 		KAlarmAlarm::Type getAlarmType() const;
-		QDateTime         getDateTime() const     { return alarmDateTime; }
+		QDateTime         getDateTime(bool& anyTime) const  { anyTime = alarmAnyTime; return alarmDateTime; }
 #ifdef SELECT_FONT
 		const QColor      getBgColour() const     { return fontColour->bgColour(); }
 		const QFont       getFont() const         { return fontColour->font(); }
@@ -71,24 +72,21 @@ class EditAlarmDlg : public KDialogBase
 		virtual void slotTry();
 		void         slotMessageTypeClicked(int id);
 		void         slotMessageTextChanged();
-		void         slotRepeatCountChanged(int);
 
 	private:
 		bool            checkText(QString& result);
 		QString         getMessageText();
 
-		QButtonGroup*    messageTypeGroup;
+		QButtonGroup*    actionGroup;
 		QRadioButton*    messageRadio;
 		QRadioButton*    commandRadio;
 		QRadioButton*    fileRadio;
 		QPushButton*     browseButton;
 		QMultiLineEdit*  messageEdit;     // alarm message edit box
 		AlarmTimeWidget* timeWidget;
+		RecurrenceEdit*  recurrenceEdit;
 		QCheckBox*       lateCancel;
 		QCheckBox*       beep;
-		QSpinBox*        repeatCount;
-		TimeSpinBox*     repeatInterval;
-		QCheckBox*       repeatAtLogin;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else
@@ -97,6 +95,7 @@ class EditAlarmDlg : public KDialogBase
 		QString          alarmMessage;
 		QDateTime        alarmDateTime;
 		QString          multiLineText;   // message text before single-line mode was selected
+		bool             alarmAnyTime;    // alarmDateTime is only a date, not a time
 		bool             singleLineOnly;  // no multi-line text input allowed
 		bool             timeDialog;      // the dialog shows date/time fields only
 };

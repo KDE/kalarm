@@ -26,6 +26,7 @@
 #include "spinbox2.h"
 
 class QRadioButton;
+class QCheckBox;
 class DateSpinBox;
 class TimeSpinBox;
 
@@ -36,7 +37,7 @@ class AlarmTimeWidget : public QWidget
 	public:
 		AlarmTimeWidget(const QString& groupBoxTitle, int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
 		AlarmTimeWidget(int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
-		bool           getDateTime(QDateTime&) const;
+		bool           getDateTime(QDateTime&, bool& anyTime) const;
 		void           setDateTime(const QDateTime&);
 		QSize          sizeHint() const      { return minimumSizeHint(); }
 	signals:
@@ -48,6 +49,7 @@ class AlarmTimeWidget : public QWidget
 		void slotAfterTimeToggled(bool on);
 		void slotDateTimeChanged(int);
 		void slotDelayTimeChanged(int);
+		void anyTimeToggled(bool);
 	private:
 		void           init(const QString& groupBoxTitle, bool groupBox, int deferSpacing);
 		QRadioButton*  atTimeRadio;
@@ -55,6 +57,7 @@ class AlarmTimeWidget : public QWidget
 		DateSpinBox*   dateEdit;
 		TimeSpinBox*   timeEdit;
 		TimeSpinBox*   delayTime;
+		QCheckBox*     anyTimeCheckBox;
 		QTimer         timer;
 		bool           timerSyncing;            // timer is not yet synchronised to the minute boundary
 		bool           enteredDateTimeChanged;  // prevent recursion through slotDelayTimeChanged()

@@ -111,8 +111,12 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 	int newline = data.messageText.find('\n');
 	if (newline >= 0)
 		data.messageText = data.messageText.left(newline) + QString::fromLatin1("...");
-	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true) + ' '
-	                  + KGlobal::locale()->formatTime(dateTime.time()) + ' ';
+	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
+	if (!event.anyTime())
+	{
+		data.dateTimeText += ' ';
+		data.dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';
+	}
 	data.repeatCountText = event.repeatCount() ? QString::number(event.repeatCount()) : QString();
 	if (event.repeatAtLogin())
 		data.repeatCountText += repeatAtLoginIndicator;

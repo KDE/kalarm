@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
@@ -52,56 +53,65 @@ AlarmTimeWidget::AlarmTimeWidget(int deferSpacing, QWidget* parent, const char* 
 
 void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int deferSpacing)
 {
-	QVBoxLayout* layout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QWidget* page = this;
 	if (groupBox)
 	{
 		page = new QGroupBox(groupBoxTitle, this);
-		layout->addWidget(page);
-		layout = new QVBoxLayout(page, KDialog::spacingHint());
+		topLayout->addWidget(page);
+		topLayout = new QVBoxLayout(page, KDialog::spacingHint());
+		topLayout->setMargin(KDialog::marginHint());
 	}
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
-	QGridLayout* grid = new QGridLayout(page, 2, 3, KDialog::spacingHint());
-	layout->addLayout(grid);
+	topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+	QSize radioSize;
+	QBoxLayout* layout = new QHBoxLayout(topLayout, 0);
 
 	// At time radio button/label
 	atTimeRadio = new QRadioButton((deferSpacing ? i18n("Defer to date/time:") : i18n("At date/time:")), page, "atTimeRadio");
-	atTimeRadio->setFixedSize(atTimeRadio->sizeHint());
-	connect(atTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAtTimeToggled(bool)));
+	radioSize = atTimeRadio->sizeHint();
+	if (deferSpacing)
+		atTimeRadio->setFixedSize(radioSize);
 	QWhatsThis::add(atTimeRadio,
 			(deferSpacing ? i18n("Reschedule the alarm to the specified date and time.")
 	                            : i18n("Schedule the alarm at the specified date and time.")));
-	grid->addWidget(atTimeRadio, 0, 0, (deferSpacing ? AlignRight : AlignLeft));
+	connect(atTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAtTimeToggled(bool)));
+	layout->addWidget(atTimeRadio);
+	layout->addSpacing(KDialog::spacingHint());
 
 	// Date spin box
 	dateEdit = new DateSpinBox(page);
 	QSize size = dateEdit->sizeHint();
 	dateEdit->setFixedSize(size);
-	grid->addWidget(dateEdit, 0, 1, AlignHCenter);
-	grid->setColStretch(0, 1);
 	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm."));
 	connect(dateEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
+	layout->addWidget(dateEdit);
+	layout->addStretch();
 
 	// Time spin box
 	timeEdit = new TimeSpinBox(page);
 	timeEdit->setValue(2399);
 	size = timeEdit->sizeHint();
 	timeEdit->setFixedSize(size);
-	grid->addWidget(timeEdit, 0, 2, AlignRight);
 	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm."));
 	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
+	layout->addWidget(timeEdit);
+	layout->addStretch();
 
-	// 'Time from now' radio button/label
-	afterTimeRadio = new QRadioButton((deferSpacing ? i18n("Defer for time interval:") : i18n("Time from now:")), page, "afterTimeRadio");
-	afterTimeRadio->setFixedSize(afterTimeRadio->sizeHint());
-	connect(afterTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAfterTimeToggled(bool)));
-	QWhatsThis::add(afterTimeRadio,
-			(deferSpacing ? i18n("Reschedule the alarm for the specified time interval after now.")
-	                            : i18n("Schedule the alarm after the specified time interval from now.")));
-	grid->addMultiCellWidget(afterTimeRadio, 1, 1, 0, 1, AlignRight);
+	if (!deferSpacing)
+	{
+		anyTimeCheckBox = new QCheckBox(i18n("Any time"), page);
+		anyTimeCheckBox->setFixedSize(anyTimeCheckBox->sizeHint());
+		QWhatsThis::add(anyTimeCheckBox, i18n("Schedule the alarm for any time during the day"));
+		connect(anyTimeCheckBox, SIGNAL(toggled(bool)), this, SLOT(anyTimeToggled(bool)));
+		layout->addWidget(anyTimeCheckBox);
+		layout->addStretch();
+	}
 
+	layout = new QHBoxLayout(topLayout, 0);
 	if (deferSpacing)
 	{
+		anyTimeCheckBox = 0L;
+
 		// Defer button
 		// The width of this button is too narrow, so set it to correspond
 		// with the width of the original "Defer..." button
@@ -111,18 +121,39 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 		deferButton->setFixedSize(QSize(width, height));
 		connect(deferButton, SIGNAL(clicked()), this, SLOT(slotDefer()));
 		QWhatsThis::add(deferButton, i18n("Defer the alarm until the specified time."));
-		grid->addWidget(deferButton, 1, 0, AlignLeft);
+		layout->addWidget(deferButton);
+		layout->addStretch();
 	}
+
+	// 'Time from now' radio button/label
+	afterTimeRadio = new QRadioButton((deferSpacing ? i18n("Defer for time interval:") : i18n("Time from now:")), page, "afterTimeRadio");
+	if (deferSpacing)
+		afterTimeRadio->setFixedSize(afterTimeRadio->sizeHint());
+	else
+	{
+		// Line up data entry fields to the right of the labels
+		radioSize = radioSize.expandedTo(afterTimeRadio->sizeHint());
+		atTimeRadio->setFixedSize(radioSize);
+		afterTimeRadio->setFixedSize(radioSize);
+	}
+	connect(afterTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAfterTimeToggled(bool)));
+	QWhatsThis::add(afterTimeRadio,
+			(deferSpacing ? i18n("Reschedule the alarm for the specified time interval after now.")
+	                            : i18n("Schedule the alarm after the specified time interval from now.")));
+	layout->addWidget(afterTimeRadio);
+	layout->addSpacing(KDialog::spacingHint());
 
 	// Delay time spin box
 	delayTime = new TimeSpinBox(1, 99*60+59, page);
 	delayTime->setValue(2399);
 	size = delayTime->sizeHint();
 	delayTime->setFixedSize(size);
-	grid->addWidget(delayTime, 1, 2, AlignRight);
 	QWhatsThis::add(delayTime,
 	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm."));
 	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
+	layout->addWidget(delayTime);
+	if (!deferSpacing)
+		layout->addStretch();
 
 	// Initialise the radio button statuses
 	atTimeRadio->setChecked(false);    // toggle the button to ensure things are set up correctly
@@ -140,26 +171,41 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 /******************************************************************************
 *  Fetch the entered date/time.
 *  If <= current time, output an error message.
+*  Output: 'anyTime' is set true if no time was entered.
 *  Reply = true if it is after the current time.
 */
-bool AlarmTimeWidget::getDateTime(QDateTime& dateTime) const
+bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 {
 	QDateTime now = QDateTime::currentDateTime();
 	if (atTimeRadio->isOn())
 	{
 		dateTime.setDate(dateEdit->getDate());
-		dateTime.setTime(timeEdit->getTime());
-		int seconds = now.time().second();
-		if (dateTime <= now.addSecs(1 - seconds))
+		anyTime = anyTimeCheckBox->isChecked();
+		if (anyTime)
 		{
-			KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
-			return false;
+			dateTime.setTime(QTime());
+			if (dateTime.date() < now.date())
+			{
+				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
+				return false;
+			}
+		}
+		else
+		{
+			dateTime.setTime(timeEdit->getTime());
+			int seconds = now.time().second();
+			if (dateTime <= now.addSecs(1 - seconds))
+			{
+				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
+				return false;
+			}
 		}
 	}
 	else
 	{
 		dateTime = now.addSecs(delayTime->value() * 60);
 		dateTime = dateTime.addSecs(-dateTime.time().second());
+		anyTime = false;
 	}
 	return true;
 }
@@ -209,7 +255,8 @@ void AlarmTimeWidget::slotAtTimeToggled(bool on)
 	||  !on  &&  !afterTimeRadio->isOn())
 		afterTimeRadio->setChecked(!on);
 	dateEdit->setEnabled(on);
-	timeEdit->setEnabled(on);
+	timeEdit->setEnabled(on && (!anyTimeCheckBox || !anyTimeCheckBox->isChecked()));
+	anyTimeCheckBox->setEnabled(on);
 }
 
 /******************************************************************************
@@ -226,6 +273,14 @@ void AlarmTimeWidget::slotAfterTimeToggled(bool on)
 	if (minutes <= 0)
 		delayTime->setValid(true);
 	delayTime->setEnabled(on);
+}
+
+/******************************************************************************
+*  Called after the anyTimeCheckBox checkbox has been toggled.
+*/
+void AlarmTimeWidget::anyTimeToggled(bool on)
+{
+	timeEdit->setEnabled(!on && atTimeRadio->isOn());
 }
 
 /******************************************************************************
