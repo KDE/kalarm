@@ -37,7 +37,7 @@ static KCmdLineOptions options[] =
 	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
 	{ "c", 0L, 0L },
 	{ "color", 0L, 0L },
-	{ "colour <colour>", I18N_NOOP("Message background colour (name or hex 0xRRGGBB)"), 0L },
+	{ "colour <colour>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0L },
 	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0L },
 	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0L },
 	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0L },

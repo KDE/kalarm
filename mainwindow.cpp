@@ -517,7 +517,7 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 		switch (listView->header()->sectionAt(pt.x()))
 		{
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
-			case AlarmListView::COLOUR_COLUMN:   return i18n("Background colour of alarm message");
+			case AlarmListView::COLOUR_COLUMN:   return i18n("Background color of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text or URL of text file to display");
 			case AlarmListView::REPEAT_COLUMN:
 				return i18n("Number of scheduled repetitions after the next scheduled display of the alarm.\n"

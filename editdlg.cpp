@@ -179,12 +179,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
 
-	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background colour"), false);
+	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
 	size = fontColour->sizeHint();
 	fontColour->setMinimumHeight(size.height() + 4);
 	topLayout->addWidget(fontColour, 6);
 	QWhatsThis::add(fontColour,
-	      i18n("Choose the font and background colour for the alarm message."));
+	      i18n("Choose the font and background color for the alarm message."));
 #else
 	// Colour choice drop-down list
 
@@ -195,7 +195,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 // grid->setColStretch(2, 1);
 // topLayout->addWidget(bgColourChoose, 6);
 	QWhatsThis::add(bgColourChoose,
-	      i18n("Choose the background colour for the alarm message."));
+	      i18n("Choose the background color for the alarm message."));
 #endif
 
 	setButtonText(Ok, i18n("&Set Alarm"));

@@ -90,7 +90,7 @@ GeneralPrefs::GeneralPrefs(QWidget* parent)
 	QWidget* page = new QWidget(this );
 	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint());
 	layout->setMargin(KDialog::marginHint());
-	m_fontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Colour"), false);
+	m_fontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
 	layout->addWidget(m_fontChooser);
 
 	layout->addStretch(1);
