@@ -638,7 +638,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 {
 	if (force)
 	{
-		// Quit regardless
+		// Quit regardless, except for message windows
 		KAlarmMainWindow::closeAll();
 		displayTrayIcon(false);
 	}
@@ -678,6 +678,24 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	kdDebug(5950) << "KAlarmApp::quitIf(" << exitCode << "): quitting" << endl;
 	dcopClient()->registerAs(QCString(aboutData()->appName()) + "-quitting");
 	exit(exitCode);
+}
+
+/******************************************************************************
+* Called when the Quit menu item is selected.
+* Closes the system tray window and all main windows, but does not exit the
+* program if other windows are still open.
+*/
+void KAlarmApp::doQuit(QWidget* parent)
+{
+	kdDebug(5950) << "KAlarmApp::doQuit()\n";
+	if (mDisableAlarmsIfStopped
+	&&  KMessageBox::warningYesNo(parent, i18n("Quitting will disable alarms\n"
+	                                           "(once any alarm message windows are closed)."),
+	                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
+	                              Preferences::QUIT_WARN
+	                             ) != KMessageBox::Yes)
+		return;
+	quitIf(0, true);
 }
 
 /******************************************************************************

@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 1.1.0 --- 23 Mar 2004 ===
+=== Version 1.1.0 --- 26 Mar 2004 ===
 Add facility to define alarm templates.
 Add option to play sound file repeatedly until alarm window is closed.
 Rename command line option --sound to --play, add option --play-repeat.
@@ -11,10 +11,14 @@ Allow time of day to be entered in format HHMM in time spin boxes.
 Allow hour to be omitted when colon format time is entered in time spin boxes..
 Add "Don't ask again" option to alarm deletion confirmation prompt.
 Prevent expired alarm calendar purges clashing with other alarm actions.
-Prevent undeleted recurring alarms being triggered immediately.
-Don't allow alarms to be undeleted if they are completely expired.
 Remove obsolete --displayEvent command line option (replaced by --triggerEvent).
 Remove obsolete pre-version 0.7 DCOP calls.
+
+=== Version 1.0.6 --- 26 Mar 2004 ===
+Make the Quit menu item in main window quit the program.
+Cancel deferral if reminder is set before it, to prevent it becoming stuck.
+Prevent undeleted recurring alarms being triggered immediately.
+Don't allow alarms to be undeleted if they are completely expired.
 
 === Version 1.0.5 (KDE 3.2.1)--- 24 Feb 2004 ===
 Fix whatsThis text on bottom row of alarm list.

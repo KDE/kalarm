@@ -764,13 +764,7 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	if (isTrayParent())
-	{
-		hide();          // closing would also close the system tray icon
-		theApp()->quitIf();
-	}
-	else
-		close();
+	theApp()->doQuit(this);
 }
 
 /******************************************************************************

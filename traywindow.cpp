@@ -130,30 +130,10 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 
 /******************************************************************************
 * Called when the Quit context menu item is selected.
-* Closes the system tray window, and if in 'run in system tray' mode closes all
-* main windows, but does not exit the program if other windows are still open.
 */
 void TrayWindow::slotQuit()
 {
-	kdDebug(5950) << "TrayWindow::slotQuit()\n";
-	if (theApp()->alarmsDisabledIfStopped()
-	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
-	                                         "(once any alarm message windows are closed)."),
-	                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
-	                              Preferences::QUIT_WARN
-	                             ) != KMessageBox::Yes)
-		return;
-	if (theApp()->wantRunInSystemTray())
-	{
-		if (!MessageWin::instanceCount())
-		{
-			kdDebug(5950) << "TrayWindow::slotQuit(): quitting\n";
-			theApp()->quit();
-			return;
-		}
-		KAlarmMainWindow::closeAll();
-	}
-	theApp()->displayTrayIcon(false);
+	theApp()->doQuit(this);
 }
 
 /******************************************************************************
