@@ -78,7 +78,7 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelection(QListViewItem*)));
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
-	connect(listView, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotDoubleClicked(QListViewItem*)));
+	connect(listView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotDoubleClicked(QListViewItem*)));
 	windowList.append(this);
 
 	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler())
