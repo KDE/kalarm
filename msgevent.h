@@ -113,7 +113,7 @@ class KAlarmEvent
 			ANNUAL_DATE = KCal::Recurrence::rYearlyMonth,
 			ANNUAL_POS  = KCal::Recurrence::rYearlyPos,
 			// The following values are not implemented in KAlarm
-			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay,
+			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay
 		};
 		enum OccurType
 		{
