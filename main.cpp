@@ -131,5 +131,6 @@ int main(int argc, char *argv[])
 
 	// This is the child instance
 	KAlarmApp* app = KAlarmApp::getInstance();
+	app->restoreSession();
 	return app->exec();
 }

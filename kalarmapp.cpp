@@ -128,54 +128,66 @@ KAlarmApp* KAlarmApp::getInstance()
 }
 
 /******************************************************************************
+* Restore the saved session if required.
+*/
+bool KAlarmApp::restoreSession()
+{
+	if (!isRestored())
+		return false;
+
+	// Process is being restored by session management.
+	kdDebug(5950) << "KAlarmApp::restoreSession(): Restoring\n";
+	int exitCode = !initCheck(true);     // open the calendar file (needed for main windows)
+	KAlarmMainWindow* trayParent = 0L;
+	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
+	{
+		QString type = KMainWindow::classNameOfToplevel(i);
+		if (type == QString::fromLatin1("KAlarmMainWindow"))
+		{
+			KAlarmMainWindow* win = new KAlarmMainWindow(true);
+			win->restore(i, false);
+			if (win->hiddenTrayParent())
+				trayParent = win;
+			else
+				win->show();
+		}
+		else if (type == QString::fromLatin1("MessageWin"))
+		{
+			MessageWin* win = new MessageWin;
+			win->restore(i, false);
+			if (win->errorMessage())
+				delete win;
+			else
+				win->show();
+		}
+	}
+	initCheck();           // register with the alarm daemon
+
+	// Display the system tray icon if it is configured to be autostarted,
+	// or if we're in run-in-system-tray mode.
+	if (mSettings->autostartTrayIcon()
+	||  KAlarmMainWindow::count()  &&  runInSystemTray())
+		displayTrayIcon(true, trayParent);
+
+	quitIf(exitCode);           // quit if no windows are open
+	return true;
+}
+
+/******************************************************************************
 * Called for a KUniqueApplication when a new instance of the application is
 * started.
 */
 int KAlarmApp::newInstance()
 {
-	kdDebug(5950)<<"KAlarmApp::newInstance(): New instance\n";
+	kdDebug(5950)<<"KAlarmApp::newInstance()\n";
 	++activeCount;
-	static bool restored = false;
 	int exitCode = 0;               // default = success
-	QString usage;
-	if (!restored  &&  isRestored())
+	static bool firstInstance = true;
+	bool skip = (firstInstance && isRestored());
+	firstInstance = false;
+	if (!skip)
 	{
-		// Process is being restored by session management.
-		kdDebug(5950)<<"KAlarmApp::newInstance(): Restoring session\n";
-		exitCode = !initCheck(true);     // open the calendar file (needed for main windows)
-		KAlarmMainWindow* trayParent = 0L;
-		for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
-		{
-			if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("KAlarmMainWindow"))
-			{
-				KAlarmMainWindow* win = new KAlarmMainWindow(true);
-				win->restore(i, false);
-				if (win->hiddenTrayParent())
-					trayParent = win;
-				else
-					win->show();
-			}
-			else if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("MessageWin"))
-			{
-				MessageWin* win = new MessageWin;
-				win->restore(i, false);
-				if (win->errorMessage())
-					delete win;
-				else
-					win->show();
-			}
-		}
-		initCheck();           // register with the alarm daemon
-		restored = true;       // make sure we restore only once
-
-		// Display the system tray icon if it is configured to be autostarted,
-		// or if we're in run-in-system-tray mode.
-		if (mSettings->autostartTrayIcon()
-		||  KAlarmMainWindow::count()  &&  runInSystemTray())
-			displayTrayIcon(true, trayParent);
-	}
-	else
-	{
+		QString usage;
 		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
@@ -186,6 +198,7 @@ int KAlarmApp::newInstance()
 			if (args->isSet("stop"))
 			{
 				// Stop the alarm daemon
+				kdDebug(5950)<<"KAlarmApp::newInstance(): stop\n";
 				args->clear();      // free up memory
 				if (!stopDaemon())
 				{
@@ -197,6 +210,7 @@ int KAlarmApp::newInstance()
 			if (args->isSet("reset"))
 			{
 				// Reset the alarm daemon
+				kdDebug(5950)<<"KAlarmApp::newInstance(): reset\n";
 				args->clear();      // free up memory
 				resetDaemon();
 			}
@@ -480,6 +494,8 @@ int KAlarmApp::newInstance()
 			}
 			else
 			{
+				// No arguments - run interactively & display the main window
+				kdDebug(5950)<<"KAlarmApp::newInstance(): interactive\n";
 				if (args->isSet("ack-confirm"))
 					usage += QString::fromLatin1("--ack-confirm ");
 				if (args->isSet("beep"))
@@ -507,18 +523,17 @@ int KAlarmApp::newInstance()
 					break;
 				}
 
-				// No arguments - run interactively & display the dialogue
 				(new KAlarmMainWindow)->show();
 			}
 		} while (0);    // only execute once
-	}
 
-	if (!usage.isEmpty())
-	{
-		// Note: we can't use args->usage() since that also quits any other
-		// running 'instances' of the program.
-		std::cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
-		exitCode = 1;
+		if (!usage.isEmpty())
+		{
+			// Note: we can't use args->usage() since that also quits any other
+			// running 'instances' of the program.
+			std::cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
+			exitCode = 1;
+		}
 	}
 	--activeCount;
 
@@ -1072,6 +1087,14 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 			(new MessageWin(i18n("Failed to execute command:\n%1").arg(command), event, alarm, reschedule))->show();
 			result = false;
 		}
+#if 0
+		else (!proc.normalExit())
+		{
+			kdDebug(5950) << "KAlarmApp::execAlarm(): killed\n";
+			(new MessageWin(i18n("Command killed:\n%1").arg(command), event, alarm, reschedule))->show();
+			result = false;
+		}
+#endif
 		if (reschedule)
 			rescheduleAlarm(event, alarm.id());
 	}

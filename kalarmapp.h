@@ -63,6 +63,7 @@ class KAlarmApp : public KUniqueApplication
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
 		bool              runInSystemTray() const;
+		bool              restoreSession();
 		bool              sessionClosingDown() const      { return mSessionClosingDown; }
 		void              quitIf()                        { quitIf(0); }
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
