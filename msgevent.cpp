@@ -254,7 +254,6 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 	suffix += SEPARATOR + (mFile ? FILE_PREFIX : TEXT_PREFIX) + mMessageOrFile;
 	al->setText(QString::number(sequence) + SEPARATOR + suffix);
 	al->setTime(mDateTime);
-	al->setAlarmStart(mDateTime);
 	al->setRepeatCount(mRepeatCount);
 	al->setSnoozeTime(mRepeatMinutes);
 	QDateTime dt = mDateTime;
@@ -266,7 +265,6 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 						+ SEPARATOR + AT_LOGIN_CODE + suffix);
 		QDateTime dtl = QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
 		al->setTime(dtl);
-		al->setAlarmStart(dtl);
 		if (dtl < dt)
 			dt = dtl;
 	}
