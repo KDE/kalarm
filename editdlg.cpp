@@ -126,7 +126,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	lateCancel->setChecked(false);
 	grid->addWidget(lateCancel, 0, 0, AlignLeft);
 	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the alarm will be cancelled if it cannot be triggered within 1 "
+	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
 	           "minute of the specified time. Possible reasons for not triggering include your "
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
 	           "If unchecked, the alarm will be triggered at the first opportunity after "
