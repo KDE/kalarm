@@ -257,7 +257,7 @@ QString TrayWindow::tooltipAlarmText() const
 	if (it1 == events.end())
 	{
 		todayEvents = false;
-		kcalEvent = events2.first();
+		kcalEvent = (it2 == events2.end()) ? 0 : *it2;
 	}
 	else
                 kcalEvent = *it1;
