@@ -348,6 +348,7 @@ void MiscPrefTab::restore()
 	mEmailClient->setButton(mPreferences->mEmailClient);
 	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->emailAddress());
 	setExpiredControls(mPreferences->mExpiredKeepDays);
+	slotDisableIfStoppedToggled(true);
 }
 
 void MiscPrefTab::apply(bool syncToDisc)
@@ -385,6 +386,7 @@ void MiscPrefTab::setDefaults()
 	mEmailClient->setButton(Preferences::default_emailClient);
 	setEmailAddress(Preferences::default_emailUseControlCentre, Preferences::default_emailAddress);
 	setExpiredControls(Preferences::default_expiredKeepDays);
+	slotDisableIfStoppedToggled(true);
 }
 
 void MiscPrefTab::slotRunModeToggled(bool)
