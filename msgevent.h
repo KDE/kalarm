@@ -27,25 +27,6 @@
 struct AlarmData;
 
 /*
- * KCal::Recurrence, with some additional methods.
- */
-class KAlarmRecurrence : public KCal::Recurrence
-{
-	public:
-		KAlarmRecurrence(KCal::Incidence* parent) : KCal::Recurrence(parent) { }
-		KAlarmRecurrence(const KCal::Recurrence& r, KCal::Incidence* parent) : KCal::Recurrence(r, parent) { }
-		QDate getNextRecurrence(const QDate& preDate, bool* last = 0) const;
-		QDate getPreviousRecurrence(const QDate& afterDate, bool* last = 0) const;
-	protected:
-		int   getFirstDayInWeek(int startDay, bool useWeekStart = true) const;
-		int   getLastDayInWeek(int endDay, bool useWeekStart = true) const;
-		QDate getFirstDateInMonth(const QDate& earliestDate) const;
-		QDate getLastDateInMonth(const QDate& latestDate) const;
-		QDate getFirstDateInYear(const QDate& earliestDate) const;
-		QDate getLastDateInYear(const QDate& latestDate) const;
-};
-
-/*
  * KAlarm events are stored as alarms in the calendar file, as follows:
  * In the alarm object:
  *   next time/date - stored as the alarm time (alarm TRIGGER field)
@@ -65,7 +46,7 @@ class KAlarmAlarm
 	public:
 		enum Type  { MESSAGE, FILE, COMMAND };
 
-		KAlarmAlarm()    : mAlarmSeq(-1), mRepeatCount(0), mBeep(false), mRepeatAtLogin(false), mDeferral(false), mLateCancel(false) { }
+		KAlarmAlarm()    : mAlarmSeq(-1), mBeep(false), mRepeatAtLogin(false), mDeferral(false), mLateCancel(false) { }
 		~KAlarmAlarm()  { }
 		void             set(int flags);
 		bool             valid() const              { return mAlarmSeq > 0; }
@@ -82,11 +63,6 @@ class KAlarmAlarm
 		QString          command() const            { return (mType == COMMAND) ? mCleanText : QString::null; }
 		void             commandArgs(QStringList&) const;
 		const QColor&    colour() const             { return mColour; }
-		int              repeatCount() const        { return mRepeatCount; }
-		int              repeatMinutes() const      { return mRepeatMinutes; }
-		int              nextRepetition(const QDateTime& preDateTime, QDateTime& result) const;
-		int              previousRepetition(const QDateTime& after, QDateTime& result) const;
-		QDateTime        lastDateTime() const       { return mDateTime.addSecs(mRepeatCount * mRepeatMinutes * 60); }
 		bool             lateCancel() const         { return mLateCancel; }
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
 		bool             deferred() const           { return mDeferral; }
@@ -105,8 +81,6 @@ class KAlarmAlarm
 		QColor           mColour;           // background colour of alarm message
 		Type             mType;             // message/file/command
 		int              mAlarmSeq;         // sequence number of this alarm
-		int              mRepeatCount;      // number of times to repeat the alarm after initial time, -1 to repeat indefinitely
-		int              mRepeatMinutes;    // interval (minutes) between repeated alarms
 		bool             mRecurs;           // there is a recurrence rule for the alarm
 		bool             mBeep;             // whether to beep when the alarm is displayed
 		bool             mRepeatAtLogin;    // whether to repeat the alarm at every login
@@ -131,13 +105,14 @@ class KAlarmEvent
 		enum RecurType
 		{
 			NO_RECUR    = KCal::Recurrence::rNone,
+			MINUTELY    = KCal::Recurrence::rMinutely,
 			DAILY       = KCal::Recurrence::rDaily,
 			WEEKLY      = KCal::Recurrence::rWeekly,
 			MONTHLY_DAY = KCal::Recurrence::rMonthlyDay,
 			MONTHLY_POS = KCal::Recurrence::rMonthlyPos,
 			ANNUAL_DATE = KCal::Recurrence::rYearlyMonth,
+			ANNUAL_POS  = KCal::Recurrence::rYearlyPos,
 			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay,
-			SUB_DAILY   = (DAILY | WEEKLY | MONTHLY_DAY | MONTHLY_POS | ANNUAL_DATE | ANNUAL_DAY) + 1
 		};
 		enum OccurType
 		{
@@ -148,29 +123,27 @@ class KAlarmEvent
 			LAST_OCCURRENCE       // the last occurrence is due
 		};
 
-		KAlarmEvent()    : mRevision(0), mRecurrence(0), mRepeatDuration(0), mMainAlarmID(1) { }
-		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags, int repeatCount = 0, int repeatMinutes = 0)
-																								: mRecurrence(0L) { set(dt, message, c, type, flags, repeatCount, repeatMinutes); }
+		KAlarmEvent()    : mRevision(0), mRecurrence(0), mMainAlarmID(1) { }
+		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
+																								: mRecurrence(0L) { set(dt, message, c, type, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0L) { set(e); }
 		~KAlarmEvent()  { }
 		void              set(const KCal::Event&);
-		void              set(const QDate& d, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(d, message, c, type, flags | ANY_TIME, repeatCount, repeatMinutes); }
-		void              set(const QDateTime&, const QString& message, const QColor&, KAlarmAlarm::Type, int flags, int repeatCount = 0, int repeatMinutes = 0);
-		void              setMessage(const QDate& d, const QString& message, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(d, message, c, KAlarmAlarm::MESSAGE, flags | ANY_TIME, repeatCount, repeatMinutes); }
-		void              setMessage(const QDateTime& dt, const QString& message, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(dt, message, c, KAlarmAlarm::MESSAGE, flags, repeatCount, repeatMinutes); }
-		void              setFileName(const QDate& d, const QString& filename, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(d, filename, c, KAlarmAlarm::FILE, flags | ANY_TIME, repeatCount, repeatMinutes); }
-		void              setFileName(const QDateTime& dt, const QString& filename, const QColor& c, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(dt, filename, c, KAlarmAlarm::FILE, flags, repeatCount, repeatMinutes); }
-		void              setCommand(const QDate& d, const QString& command, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(d, command, QColor(), KAlarmAlarm::COMMAND, flags | ANY_TIME, repeatCount, repeatMinutes); }
-		void              setCommand(const QDateTime& dt, const QString& command, int flags, int repeatCount = 0, int repeatMinutes = 0)
-		                           { set(dt, command, QColor(), KAlarmAlarm::COMMAND, flags, repeatCount, repeatMinutes); }
-		void              setRepetition(int count, int minutes)   { mRepeatDuration = count;  mRepeatMinutes = minutes; }
-		void              updateRepetition(const QDateTime& dt, int count)  { mRepeatDuration = count;  mDateTime = dt; }
+		void              set(const QDate& d, const QString& message, const QColor& c, KAlarmAlarm::Type type, int flags)
+		                           { set(d, message, c, type, flags | ANY_TIME); }
+		void              set(const QDateTime&, const QString& message, const QColor&, KAlarmAlarm::Type, int flags);
+		void              setMessage(const QDate& d, const QString& message, const QColor& c, int flags)
+		                           { set(d, message, c, KAlarmAlarm::MESSAGE, flags | ANY_TIME); }
+		void              setMessage(const QDateTime& dt, const QString& message, const QColor& c, int flags)
+		                           { set(dt, message, c, KAlarmAlarm::MESSAGE, flags); }
+		void              setFileName(const QDate& d, const QString& filename, const QColor& c, int flags)
+		                           { set(d, filename, c, KAlarmAlarm::FILE, flags | ANY_TIME); }
+		void              setFileName(const QDateTime& dt, const QString& filename, const QColor& c, int flags)
+		                           { set(dt, filename, c, KAlarmAlarm::FILE, flags); }
+		void              setCommand(const QDate& d, const QString& command, int flags)
+		                           { set(d, command, QColor(), KAlarmAlarm::COMMAND, flags | ANY_TIME); }
+		void              setCommand(const QDateTime& dt, const QString& command, int flags = 0)
+		                           { set(dt, command, QColor(), KAlarmAlarm::COMMAND, flags); }
 		OccurType         setNextOccurrence(const QDateTime& preDateTime);
 		void              setEventID(const QString& id)                     { mEventID = id; }
 		void              setDate(const QDate& d)                           { mDateTime = d; mAnyTime = true; }
@@ -205,13 +178,11 @@ class KAlarmEvent
 		QString           messageFileOrCommand() const { return mCleanText; }
 		const QColor&     colour() const               { return mColour; }
 		RecurType         recurs() const;
-		KAlarmRecurrence* recurrence() const           { return mRecurrence; }
+		KCal::Recurrence* recurrence() const           { return mRecurrence; }
 		int               recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
 		int               repeatCount() const          { return mRepeatDuration; }
-		int               repeatMinutes() const        { return mRepeatMinutes; }
 		OccurType         nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
 		OccurType         previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const;
-		QDateTime         lastDateTime() const         { return mDateTime.addSecs(mRepeatDuration * mRepeatMinutes * 60); }
 		bool              lateCancel() const           { return mLateCancel; }
 		bool              repeatAtLogin() const        { return mRepeatAtLogin; }
 		bool              deferred() const             { return mDeferral; }
@@ -224,9 +195,9 @@ class KAlarmEvent
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
-		bool              initRecur(bool recurs);
-		void              setRecurSubDaily(int freq, int count)                                            { setRecurSubDaily(freq, count, QDateTime()); }
-		void              setRecurSubDaily(int freq, const QDateTime& end)                                 { setRecurSubDaily(freq, 0, end); }
+		bool              initRecur(bool endDate, int count = 0);
+		void              setRecurMinutely(int freq, int count)                                            { setRecurMinutely(freq, count, QDateTime()); }
+		void              setRecurMinutely(int freq, const QDateTime& end)                                 { setRecurMinutely(freq, 0, end); }
 		void              setRecurDaily(int freq, int count)                                               { setRecurDaily(freq, count, QDate()); }
 		void              setRecurDaily(int freq, const QDate& end)                                        { setRecurDaily(freq, 0, end); }
 		void              setRecurWeekly(int freq, const QBitArray& days, int count)                       { setRecurWeekly(freq, days, count, QDate()); }
@@ -244,7 +215,7 @@ class KAlarmEvent
 		void              setRecurAnnualByDay(int freq, const QValueList<int>& days, int count)            { setRecurAnnualByDay(freq, days, count, QDate()); }
 		void              setRecurAnnualByDay(int freq, const QValueList<int>& days, const QDate& end)     { setRecurAnnualByDay(freq, days, 0, end); }
 
-		void              setRecurSubDaily(int freq, int count, const QDateTime& end);
+		void              setRecurMinutely(int freq, int count, const QDateTime& end);
 		void              setRecurDaily(int freq, int count, const QDate& end);
 		void              setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
 		void              setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end);
@@ -270,9 +241,7 @@ class KAlarmEvent
 	private:
 		RecurType         checkRecur() const;
 		OccurType         nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
-		OccurType         nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType         previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
-		OccurType         previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const;
 		static int        readAlarm(const KCal::Alarm&, AlarmData&);
 
 		QString           mEventID;          // KCal::Event unique ID
@@ -283,9 +252,8 @@ class KAlarmEvent
 		QColor            mColour;           // background colour of alarm message
 		KAlarmAlarm::Type mType;             // message/file/command
 		int               mRevision;         // revision number of the original alarm, or 0
-		KAlarmRecurrence* mRecurrence;       // recurrence specification, or 0 if none
-		int               mRepeatDuration;   // remaining number of intervals to repeat the alarm after initial time, -1 to repeat indefinitely
-		int               mRepeatMinutes;    // interval (minutes) between repeated alarms
+		KCal::Recurrence* mRecurrence;       // recurrence specification, or 0 if none
+		int               mRepeatDuration;   // remaining number of alarm repetitions including initial time, -1 to repeat indefinitely
 		int               mAlarmCount;       // number of alarms
 		int               mMainAlarmID;      // sequence number of main alarm
 		int               mRepeatAtLoginAlarmID; // sequence number of repeat-at-login alarm (only if read from calendar file)

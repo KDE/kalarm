@@ -53,8 +53,8 @@ struct AlarmData
 {
 	QString           cleanText;
 	QDateTime         dateTime;
-	int               repeatCount;
-	int               repeatMinutes;
+	int               repeatCount;     // backwards compatibility with KAlarm pre-0.7 calendar files
+	int               repeatMinutes;   // backwards compatibility with KAlarm pre-0.7 calendar files
 	KAlarmAlarm::Type type;
 	bool              lateCancel;
 	bool              repeatAtLogin;
@@ -121,6 +121,8 @@ void KAlarmEvent::set(const Event& event)
 	AlarmMap::ConstIterator it = alarmMap.begin();
 	mMainAlarmID = -1;    // initialise as invalid
 	mAlarmCount = 0;
+	int repeatCount   = 0;    // backwards compatibility with KAlarm pre-0.7 calendar files
+	int repeatMinutes = 0;    // backwards compatibility with KAlarm pre-0.7 calendar files
 	bool set = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
@@ -153,8 +155,8 @@ void KAlarmEvent::set(const Event& event)
 			mDateTime       = data.dateTime;
 			if (mAnyTime)
 				mDateTime.setTime(QTime());
-			mRepeatDuration = data.repeatCount;
-			mRepeatMinutes  = data.repeatMinutes;
+			repeatCount     = data.repeatCount;     // backwards compatibility with KAlarm pre-0.7 calendar files
+			repeatMinutes   = data.repeatMinutes;   // backwards compatibility with KAlarm pre-0.7 calendar files
 			mLateCancel     = data.lateCancel;
 			set = true;
 		}
@@ -165,11 +167,11 @@ void KAlarmEvent::set(const Event& event)
 	if (recur)
 	{
 		// Copy the recurrence details.
-		// This will clear any hours/minutes repetition details.
 		QDateTime savedDT = mDateTime;
-//		mDateTime = recur->recurStart();
 		switch (recur->doesRecur())
 		{
+			case Recurrence::rMinutely:
+			case Recurrence::rHourly:
 			case Recurrence::rDaily:
 			case Recurrence::rWeekly:
 			case Recurrence::rMonthlyDay:
@@ -178,15 +180,23 @@ void KAlarmEvent::set(const Event& event)
 			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				delete mRecurrence;
-				mRecurrence = new KAlarmRecurrence(*recur, 0);
+				mRecurrence = new Recurrence(*recur, 0);
 				mRepeatDuration = recur->duration();
 				if (mRepeatDuration > 0)
-					mRepeatDuration -= recur->durationTo(savedDT.date()) - 1;
+					mRepeatDuration -= recur->durationTo(savedDT) - 1;
 				break;
 			default:
 				mDateTime = savedDT;
 				break;
 		}
+	}
+	else if (repeatCount > 0 && repeatMinutes > 0)
+	{
+		// Backwards compatibility with KAlarm pre-0.7 calendar files
+		delete mRecurrence;
+		mRecurrence = new Recurrence(0);
+		mRepeatDuration = repeatCount + 1;
+		mRecurrence->setMinutely(repeatMinutes, mRepeatDuration);
 	}
 
 	mUpdated = false;
@@ -255,15 +265,15 @@ int KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 
 	data.cleanText     = txt.mid(i);
 	data.dateTime      = alarm.time();
-	data.repeatCount   = alarm.repeatCount();
-	data.repeatMinutes = alarm.snoozeTime();
+	data.repeatCount   = alarm.repeatCount();  // backwards compatibility with KAlarm pre-0.7 calendar files
+	data.repeatMinutes = alarm.snoozeTime();   // backwards compatibility with KAlarm pre-0.7 calendar files
 	return sequence;
 }
 
 /******************************************************************************
  * Initialise the KAlarmEvent with the specified parameters.
  */
-void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, KAlarmAlarm::Type type, int flags, int repeatCount, int repeatInterval)
+void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, KAlarmAlarm::Type type, int flags)
 {
 	initRecur(false);
 	mMainAlarmID    = MAIN_ALARM_ID;
@@ -271,8 +281,6 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	mCleanText      = (type == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
 	mType           = type;
 	mColour         = colour;
-	mRepeatDuration = repeatCount;
-	mRepeatMinutes  = repeatInterval;
 	set(flags);
 	mDeferral       = false;
 	mUpdated        = false;
@@ -344,8 +352,6 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 	if (mAnyTime)
 		aldt.setTime(theApp()->settings()->startOfDay());
 	al->setTime(aldt);
-	al->setRepeatCount(mRepeatMinutes ? mRepeatDuration : 0);
-	al->setSnoozeTime(mRepeatMinutes);
 	QDateTime dt = mDateTime;
 
 	// Add subsidiary alarms
@@ -378,30 +384,39 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		Recurrence* recur = ev.recurrence();
 		int frequency = mRecurrence->frequency();
 		int duration  = mRecurrence->duration();
-		const QDate& endDate = mRecurrence->endDate();
+		const QDateTime& endDateTime = mRecurrence->endDateTime();
 		dt = mRecurrence->recurStart();
 		recur->setRecurStart(dt);
 		ushort rectype = mRecurrence->doesRecur();
 		switch (rectype)
 		{
+			case Recurrence::rHourly:
+				frequency *= 60;
+				// fall through to Recurrence::rMinutely
+			case Recurrence::rMinutely:
+				if (duration)
+					recur->setMinutely(frequency, duration);
+				else
+					recur->setMinutely(frequency, endDateTime);
+				break;
 			case Recurrence::rDaily:
 				if (duration)
 					recur->setDaily(frequency, duration);
 				else
-					recur->setDaily(frequency, endDate);
+					recur->setDaily(frequency, endDateTime.date());
 				break;
 			case Recurrence::rWeekly:
 				if (duration)
 					recur->setWeekly(frequency, mRecurrence->days(), duration);
 				else
-					recur->setWeekly(frequency, mRecurrence->days(), endDate);
+					recur->setWeekly(frequency, mRecurrence->days(), endDateTime.date());
 				break;
 			case Recurrence::rMonthlyDay:
 			{
 				if (duration)
 					recur->setMonthly(Recurrence::rMonthlyDay, frequency, duration);
 				else
-					recur->setMonthly(Recurrence::rMonthlyDay, frequency, endDate);
+					recur->setMonthly(Recurrence::rMonthlyDay, frequency, endDateTime.date());
 				const QPtrList<int>& mdays = mRecurrence->monthDays();
 				for (QPtrListIterator<int> it(mdays);  it.current();  ++it)
 					recur->addMonthlyDay(*it.current());
@@ -412,7 +427,7 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 				if (duration)
 					recur->setMonthly(Recurrence::rMonthlyPos, frequency, duration);
 				else
-					recur->setMonthly(Recurrence::rMonthlyPos, frequency, endDate);
+					recur->setMonthly(Recurrence::rMonthlyPos, frequency, endDateTime.date());
 				const QPtrList<Recurrence::rMonthPos>& mpos = mRecurrence->monthPositions();
 				for (QPtrListIterator<Recurrence::rMonthPos> it(mpos);  it.current();  ++it)
 				{
@@ -430,7 +445,7 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 				if (duration)
 					recur->setYearly(rectype, frequency, duration);
 				else
-					recur->setYearly(rectype, frequency, endDate);
+					recur->setYearly(rectype, frequency, endDateTime.date());
 				const QPtrList<int>& ynums = mRecurrence->yearNums();
 				for (QPtrListIterator<int> it(ynums);  it.current();  ++it)
 					recur->addYearlyNum(*it.current());
@@ -475,8 +490,6 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 	{
 		al.mAlarmSeq      = mMainAlarmID;
 		al.mDateTime      = mDateTime;
-		al.mRepeatCount   = mRepeatDuration;
-		al.mRepeatMinutes = mRepeatMinutes;
 		al.mLateCancel    = mLateCancel;
 	}
 	else if (alarmID == mRepeatAtLoginAlarmID  &&  mRepeatAtLogin)
@@ -576,7 +589,7 @@ KAlarmEvent::RecurType KAlarmEvent::recurs() const
 {
 	RecurType type = checkRecur();
 	if (type == NO_RECUR  &&  mRepeatDuration)
-		return SUB_DAILY;
+		return MINUTELY;
 	return type;
 }
 
@@ -591,11 +604,6 @@ KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime,
 	{
 		int remainingCount;
 		return nextRecurrence(preDateTime, result, remainingCount);
-	}
-	if (mRepeatDuration)
-	{
-		int remainingCount;
-		return nextRepetition(preDateTime, result, remainingCount);
 	}
 	if (preDateTime < mDateTime)
 	{
@@ -615,8 +623,6 @@ KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDat
 {
 	if (checkRecur() != NO_RECUR)
 		return previousRecurrence(afterDateTime, result);
-	if (mRepeatDuration)
-		return previousRepetition(afterDateTime, result);
 	result = QDateTime();
 	return NO_OCCURRENCE;
 }
@@ -639,20 +645,7 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 		{
 			mDateTime = newTime;
 			if (mRecurrence->duration() > 0)
-				mRepeatDuration = remainingCount - 1;
-			mUpdated = true;
-		}
-	}
-	else if (mRepeatDuration)
-	{
-		int remainingCount;
-		QDateTime newTime;
-		type = nextRepetition(preDateTime, newTime, remainingCount);
-		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE)
-		{
-			mDateTime = newTime;
-			if (mRepeatDuration > 0)
-				mRepeatDuration = remainingCount - 1;
+				mRepeatDuration = remainingCount;
 			mUpdated = true;
 		}
 	}
@@ -670,22 +663,25 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
 {
 	QDateTime recurStart = mRecurrence->recurStart();
-	QDate preDate = preDateTime.date();
-	if (!mAnyTime  &&  preDateTime.time() < recurStart.time()
-	||  mAnyTime  &&  preDateTime.time() < theApp()->settings()->startOfDay())
-		preDate = preDate.addDays(-1);    // today's recurrence (if today recurs) is still to come
-  remainingCount = 0;
+	QDateTime pre = preDateTime;
+	if (mAnyTime  &&  preDateTime.time() < theApp()->settings()->startOfDay())
+		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+	remainingCount = 0;
 	bool last;
-	result = mRecurrence->getNextRecurrence(preDate, &last);
+	result = mRecurrence->getNextDateTime(pre, &last);
 	if (!result.isValid())
 		return NO_OCCURRENCE;
-	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(result.date()) + 1;
-	if (!mAnyTime)
-		result.setTime(recurStart.time());
-	if (result.date() == recurStart.date())
+	if (result == recurStart)
+	{
+		remainingCount = mRecurrence->duration();
 		return FIRST_OCCURRENCE;
+	}
 	if (last)
+	{
+		remainingCount = 1;
 		return LAST_OCCURRENCE;
+	}
+	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(result) + 1;
 	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
@@ -697,17 +693,14 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 KAlarmEvent::OccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const
 {
 	QDateTime recurStart = mRecurrence->recurStart();
-	QDate afterDate = afterDateTime.date();
-	if (!mAnyTime  &&  afterDateTime.time() > recurStart.time()
-	||  mAnyTime  &&  afterDateTime.time() > theApp()->settings()->startOfDay())
-		afterDate = afterDate.addDays(1);    // today's recurrence (if today recurs) has passed
+	QDateTime after = afterDateTime;
+	if (mAnyTime  &&  afterDateTime.time() > theApp()->settings()->startOfDay())
+		after = after.addDays(1);    // today's recurrence (if today recurs) has passed
 	bool last;
-	result = mRecurrence->getPreviousRecurrence(afterDate, &last);
+	result = mRecurrence->getPreviousDateTime(after, &last);
 	if (!result.isValid())
 		return NO_OCCURRENCE;
-	if (!mAnyTime)
-		result.setTime(recurStart.time());
-	if (result.date() == recurStart.date())
+	if (result == recurStart)
 		return FIRST_OCCURRENCE;
 	if (last)
 		return LAST_OCCURRENCE;
@@ -715,61 +708,21 @@ KAlarmEvent::OccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDat
 }
 
 /******************************************************************************
- * Get the date/time of the next repetition of the event, after the specified
- * date/time.
- * Results:
- * 'result' = date/time of next occurrence, or invalid date/time if none.
- * 'remainingCount' = number of repetitions due, including the next occurrence.
- */
-KAlarmEvent::OccurType KAlarmEvent::nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
-{
-	KAlarmAlarm al = alarm(mMainAlarmID);
-	remainingCount = al.nextRepetition(preDateTime, result);
-	if (remainingCount == 0)
-		return NO_OCCURRENCE;
-	if (result == al.dateTime())
-		return FIRST_OCCURRENCE;
-	if (remainingCount == 1)
-		return LAST_OCCURRENCE;
-	return RECURRENCE_DATE_TIME;
-}
-
-/******************************************************************************
- * Get the date/time of the last previous repetition of the event, before the
- * specified date/time.
- * 'result' = date/time of previous occurrence, or invalid date/time if none.
- */
-KAlarmEvent::OccurType KAlarmEvent::previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const
-{
-	KAlarmAlarm al = alarm(mMainAlarmID);
-	int count = al.previousRepetition(afterDateTime, result);
-	if (count < 0)
-		return NO_OCCURRENCE;
-	if (count == 0)
-		return FIRST_OCCURRENCE;
-	if (count > al.repeatCount()  &&  al.repeatCount() >= 0)
-		return LAST_OCCURRENCE;
-	return RECURRENCE_DATE_TIME;
-}
-
-/******************************************************************************
- * Set the event to recur at an hours/minutes interval.
+ * Set the event to recur at a minutes interval.
  * Parameters:
  *    freq  = how many minutes between recurrences.
  *    count = number of occurrences, including first and last.
  *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
+ *    end   = end date/time (invalid to use 'count' instead).
  */
-void KAlarmEvent::setRecurSubDaily(int freq, int count, const QDateTime& end)
+void KAlarmEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
 {
-	initRecur(false);
-	if (count || end.isValid())
+	if (initRecur(end.isValid(), count))
 	{
-		mRepeatMinutes = freq;
 		if (count)
-			mRepeatDuration = count - 1;
+			mRecurrence->setMinutely(freq, count);
 		else
-			mRepeatDuration = (mDateTime.secsTo(end) / 60) / freq;
+			mRecurrence->setMinutely(freq, end);
 	}
 }
 
@@ -783,7 +736,7 @@ void KAlarmEvent::setRecurSubDaily(int freq, int count, const QDateTime& end)
  */
 void KAlarmEvent::setRecurDaily(int freq, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setDaily(freq, count);
@@ -803,7 +756,7 @@ void KAlarmEvent::setRecurDaily(int freq, int count, const QDate& end)
  */
 void KAlarmEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setWeekly(freq, days, count);
@@ -823,7 +776,7 @@ void KAlarmEvent::setRecurWeekly(int freq, const QBitArray& days, int count, con
  */
 void KAlarmEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, count);
@@ -836,7 +789,7 @@ void KAlarmEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, i
 
 void KAlarmEvent::setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setMonthly(Recurrence::rMonthlyDay, freq, count);
@@ -859,7 +812,7 @@ void KAlarmEvent::setRecurMonthlyByDate(int freq, const QPtrList<int>& days, int
  */
 void KAlarmEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, count);
@@ -872,7 +825,7 @@ void KAlarmEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos
 
 void KAlarmEvent::setRecurMonthlyByPos(int freq, const QPtrList<Recurrence::rMonthPos>& posns, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setMonthly(Recurrence::rMonthlyPos, freq, count);
@@ -900,7 +853,7 @@ void KAlarmEvent::setRecurMonthlyByPos(int freq, const QPtrList<Recurrence::rMon
  */
 void KAlarmEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
@@ -913,7 +866,7 @@ void KAlarmEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, 
 
 void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
@@ -937,7 +890,7 @@ void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, in
  */
 void KAlarmEvent::setRecurAnnualByPos(int freq, const QValueList<MonthPos>& posns, const QValueList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyPos, freq, count);
@@ -952,7 +905,7 @@ void KAlarmEvent::setRecurAnnualByPos(int freq, const QValueList<MonthPos>& posn
 
 void KAlarmEvent::setRecurAnnualByPos(int freq, const QPtrList<Recurrence::rMonthPos>& posns, const QPtrList<int>& months, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
@@ -981,7 +934,7 @@ void KAlarmEvent::setRecurAnnualByPos(int freq, const QPtrList<Recurrence::rMont
  */
 void KAlarmEvent::setRecurAnnualByDay(int freq, const QValueList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, count);
@@ -994,7 +947,7 @@ void KAlarmEvent::setRecurAnnualByDay(int freq, const QValueList<int>& days, int
 
 void KAlarmEvent::setRecurAnnualByDay(int freq, const QPtrList<int>& days, int count, const QDate& end)
 {
-	if (initRecur(count || end.isValid()))
+	if (initRecur(end.isValid(), count))
 	{
 		if (count)
 			mRecurrence->setYearly(Recurrence::rYearlyDay, freq, count);
@@ -1007,24 +960,26 @@ void KAlarmEvent::setRecurAnnualByDay(int freq, const QPtrList<int>& days, int c
 
 /******************************************************************************
  * Initialise the event's recurrence and alarm repetition data, and set the
- * recurrence start date if applicable.
+ * recurrence start date and repetition count if applicable.
  */
-bool KAlarmEvent::initRecur(bool recurs)
+bool KAlarmEvent::initRecur(bool endDate, int count)
 {
-	if (recurs)
+	mUpdated = true;
+	if (endDate || count)
 	{
 		if (!mRecurrence)
-			mRecurrence = new KAlarmRecurrence(0L);
+			mRecurrence = new Recurrence(0);
 		mRecurrence->setRecurStart(mDateTime);
+		mRepeatDuration = count;
+		return true;
 	}
 	else
 	{
 		delete mRecurrence;
 		mRecurrence = 0L;
+		mRepeatDuration = 0;
+		return false;
 	}
-	mRepeatDuration = mRepeatMinutes = 0;
-	mUpdated = true;
-	return recurs;
 }
 
 /******************************************************************************
@@ -1040,6 +995,7 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 		RecurType type = static_cast<RecurType>(mRecurrence->doesRecur());
 		switch (type)
 		{
+			case Recurrence::rMinutely:        // minutely
 			case Recurrence::rDaily:           // daily
 			case Recurrence::rWeekly:          // weekly on multiple days of week
 			case Recurrence::rMonthlyDay:      // monthly on multiple dates in month
@@ -1047,8 +1003,9 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 			case Recurrence::rYearlyMonth:     // annually on multiple months (day of month = start date)
 			case Recurrence::rYearlyPos:       // annually on multiple nth day of week in multiple months
 			case Recurrence::rYearlyDay:       // annually on multiple day numbers in year
-				ev->mRepeatMinutes = 0;
 				return type;
+			case Recurrence::rHourly:          // hourly
+				return MINUTELY;
 			case Recurrence::rNone:
 			default:
 				delete mRecurrence;
@@ -1068,6 +1025,7 @@ int KAlarmEvent::recurInterval() const
 	{
 		switch (mRecurrence->doesRecur())
 		{
+			case Recurrence::rMinutely:
 			case Recurrence::rDaily:
 			case Recurrence::rWeekly:
 			case Recurrence::rMonthlyDay:
@@ -1076,12 +1034,14 @@ int KAlarmEvent::recurInterval() const
 			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				return mRecurrence->frequency();
+			case Recurrence::rHourly:
+				return mRecurrence->frequency() * 60;
 			case Recurrence::rNone:
 			default:
 				break;
 		}
 	}
-	return mRepeatMinutes;
+	return 0;
 }
 
 /******************************************************************************
@@ -1133,7 +1093,6 @@ void KAlarmEvent::dumpDebug() const
 	kdDebug(5950) << "-- mRepeatAtLoginAlarmID:" << mRepeatAtLoginAlarmID << ":\n";
 	kdDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mRepeatDuration:" << mRepeatDuration << ":\n";
-	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
@@ -1163,67 +1122,6 @@ int KAlarmAlarm::flags() const
 	     | (mRepeatAtLogin ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (mLateCancel    ? KAlarmEvent::LATE_CANCEL : 0)
 	     | (mDeferral      ? KAlarmEvent::DEFERRAL : 0);
-}
-
-/******************************************************************************
- * Get the date/time of the next sub-daily repetition, after the specified date/time.
- * 'result' = date/time of next repetition, or invalid date/time if none.
- * Reply = number of repetitions still due, including the next occurrence, or
- *       = -1 if indefinite.
- */
-int KAlarmAlarm::nextRepetition(const QDateTime& preDateTime, QDateTime& result) const
-{
-	QDateTime earliestTime = preDateTime.addSecs(1);
-	int secs = mDateTime.secsTo(earliestTime);
-	if (secs <= 0)
-	{
-		// Alarm is not due by the specified time
-		result = mDateTime;
-		return (mRepeatCount >= 0) ? mRepeatCount + 1 : -1;
-	}
-
-	int repeatSecs = mRepeatMinutes * 60;
-	if (repeatSecs)
-	{
-		int nextRepeatCount = (secs + repeatSecs - 1) / repeatSecs;
-		int remainingCount = mRepeatCount - nextRepeatCount;
-		if (remainingCount >= 0  ||  mRepeatCount < 0)
-		{
-			result = mDateTime.addSecs(nextRepeatCount * repeatSecs);
-			return (mRepeatCount >= 0) ? remainingCount + 1 : -1;
-		}
-	}
-	result = QDateTime();
-	return 0;
-}
-
-/******************************************************************************
- * Get the date/time of the last previous sub-daily repetition, before the
- * specified date/time.
- * 'result' = date/time of previous repetition, or invalid date/time if none.
- * Reply = number of the previous repetition (> mRepeatCount if last repetition)
- *       = -1 if none.
- */
-int KAlarmAlarm::previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const
-{
-	QDateTime latestTime = afterDateTime.addSecs(-1);
-	int secs = mDateTime.secsTo(latestTime);
-	if (secs >= 0  &&  mRepeatMinutes)
-	{
-		// Alarm was due by the specified time
-		int repeatSecs = mRepeatMinutes * 60;
-		int repeatCount = secs / repeatSecs;
-		int count = repeatCount;
-		if (mRepeatCount >= 0  &&  repeatCount > mRepeatCount)
-			repeatCount = mRepeatCount;
-		if (repeatCount >= 0)
-		{
-			result = mDateTime.addSecs(repeatCount * repeatSecs);
-			return count;
-		}
-	}
-	result = QDateTime();
-	return -1;
 }
 
 // Convert a string to command arguments
@@ -1321,8 +1219,6 @@ void KAlarmAlarm::dumpDebug() const
 	kdDebug(5950) << "-- mDateTime:" << mDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
 	kdDebug(5950) << "-- mAlarmSeq:" << mAlarmSeq << ":\n";
-	kdDebug(5950) << "-- mRepeatCount:" << mRepeatCount << ":\n";
-	kdDebug(5950) << "-- mRepeatMinutes:" << mRepeatMinutes << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mType:" << mType << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
@@ -1331,525 +1227,3 @@ void KAlarmAlarm::dumpDebug() const
 	kdDebug(5950) << "KAlarmAlarm dump end\n";
 }
 #endif
-
-
-
-
-/******************************************************************************
- * Get the date of the next recurrence, after the specified date.
- * If 'last' is non-null, '*last' is set to true if the next recurrence is the
- * last recurrence, else false.
- * Reply = date of next recurrence, or invalid date if none.
- */
-QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate, bool* last) const
-{
-	if (last)
-		*last = false;
-	QDate dStart = recurStart().date();
-	if (preDate < dStart)
-		return dStart;
-	QDate earliestDate = preDate.addDays(1);
-	int endCount = 0;
-	QDate nextDate;
-	QDate endDate;
-	if (duration() == 0)
-		endDate = endDateTime().date();
-	else if (duration() > 0)
-		endCount = (duration() - 1 + recurExDatesCount()) * frequency();
-
-	switch (doesRecur())
-	{
-		case rDaily:
-			nextDate = dStart.addDays((dStart.daysTo(preDate)/frequency() + 1) * frequency());
-			if (endCount)
-				endDate = dStart.addDays(endCount);
-			break;
-
-		case rWeekly:
-		{
-			QDate start = dStart.addDays(1 - dStart.dayOfWeek());   // start of week for dStart
-			int earliestDayOfWeek = earliestDate.dayOfWeek();
-			int weeksAhead = start.daysTo(earliestDate) / 7;
-			int notThisWeek = weeksAhead % frequency();    // zero if this week is a recurring week
-			weeksAhead -= notThisWeek;               // latest week which recurred
-			int weekday = 0;
-			// First check for any remaining day this week, if this week is a recurring week
-			if (!notThisWeek)
-				weekday = getFirstDayInWeek(earliestDayOfWeek);
-			// Check for a day in the next scheduled week
-			if (!weekday  &&  earliestDayOfWeek > 1)
-				weekday = getFirstDayInWeek(weekStart()) + frequency()*7;
-			if (weekday)
-				nextDate = start.addDays(weeksAhead*7 + weekday - 1);
-			if (endCount)
-				endDate = start.addDays(endCount * 7  + 6);
-			break;
-		}
-		case rMonthlyDay:
-		case rMonthlyPos:
-		{
-			int startYear  = dStart.year();
-			int startMonth = dStart.month();     // 1..12
-			int earliestYear = earliestDate.year();
-			int monthsAhead = (earliestYear - startYear)*12 + earliestDate.month() - startMonth;
-			int notThisMonth = monthsAhead % frequency();    // zero if this month is a recurring month
-			monthsAhead -= notThisMonth;               // latest month which recurred
-			// Check for the first later day in the current month
-			if (!notThisMonth)
-				nextDate = getFirstDateInMonth(earliestDate);
-			if (!nextDate.isValid()  &&  earliestDate.day() > 1)
-			{
-				// Check for a day in the next scheduled month
-				int months = startMonth - 1 + monthsAhead + frequency();
-				nextDate = getFirstDateInMonth(QDate(startYear + months/12, months%12 + 1, 1));
-			}
-			if (endCount)
-			{
-				int months = startMonth + endCount;   // month after end
-				endDate = QDate(startYear + months/12, months%12 + 1, 1).addDays(-1);
-			}
-			break;
-		}
-		case rYearlyMonth:
-		case rYearlyDay:
-		{
-			int startYear  = dStart.year();
-			int yearsAhead = earliestDate.year() - startYear;
-			int notThisYear = yearsAhead % frequency();   // zero if this year is a recurring year
-			yearsAhead -= notThisYear;              // latest year which recurred
-			// Check for the first later date in the current year
-			if (!notThisYear)
-				nextDate = getFirstDateInYear(earliestDate);
-			// Check for a date in the next scheduled year
-			if (!nextDate.isValid()  &&  earliestDate.dayOfYear() > 1)
-				nextDate = getFirstDateInYear(QDate(startYear + yearsAhead + frequency(), 1, 1));
-			if (endCount)
-				endDate = QDate(startYear + endCount, 12, 31);
-			break;
-		}
-		case rNone:
-		default:
-			return QDate();
-	}
-
-	if (nextDate.isValid())
-	{
-		// Check that the date found is within the range of the recurrence
-		if (endDate.isValid())
-		{
-			if (nextDate > endDate)
-				return QDate();
-			if (last  &&  nextDate == endDate)
-				*last = true;
-		}
-	}
-	return nextDate;
-}
-
-/******************************************************************************
- * Get the date of the last previous recurrence, before the specified date.
- * Reply = date of previous recurrence, or invalid date if none.
- */
-QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate, bool* last) const
-{
-	if (last)
-		*last = false;
-	QDate dStart = recurStart().date();
-	QDate latestDate = afterDate.addDays(-1);
-	if (latestDate < dStart)
-		return QDate();
-	int endCount = 0;
-	QDate prevDate;
-	QDate endDate;
-	if (duration() == 0)
-		endDate = endDateTime().date();
-	else if (duration() > 0)
-		endCount = (duration() - 1 + recurExDatesCount()) * frequency();
-
-	switch (doesRecur())
-	{
-		case rDaily:
-			prevDate = dStart.addDays((dStart.daysTo(latestDate) / frequency()) * frequency());
-			if (endCount)
-				endDate  = dStart.addDays(endCount);
-			break;
-
-		case rWeekly:
-		{
-			QDate start = dStart.addDays(1 - dStart.dayOfWeek());   // start of week for dStart
-			int latestDayOfWeek = latestDate.dayOfWeek();
-			int weeksAhead = start.daysTo(latestDate) / 7;
-			int notThisWeek = weeksAhead % frequency();    // zero if this week is a recurring week
-			weeksAhead -= notThisWeek;               // latest week which recurred
-			int weekday = 0;
-			// First check for any previous day this week, if this week is a recurring week
-			if (!notThisWeek)
-				weekday = getLastDayInWeek(latestDayOfWeek);
-			// Check for a day in the previous scheduled week
-			if (!weekday  &&  latestDayOfWeek < 7)
-			{
-				if (!notThisWeek)
-					weeksAhead -= frequency();
-				weekday = getLastDayInWeek(7);
-			}
-			if (weekday)
-				prevDate = start.addDays(weeksAhead*7 + weekday - 1);
-			if (endCount)
-				endDate = start.addDays(endCount * 7  + 6);
-			break;
-		}
-		case rMonthlyDay:
-		case rMonthlyPos:
-		{
-			int startYear  = dStart.year();
-			int startMonth = dStart.month();     // 1..12
-			int latestYear = latestDate.year();
-			int monthsAhead = (latestYear - startYear)*12 + latestDate.month() - startMonth;
-			int notThisMonth = monthsAhead % frequency();    // zero if this month is a recurring month
-			monthsAhead -= notThisMonth;               // latest month which recurred
-			// Check for the last earlier day in the current month
-			if (!notThisMonth)
-				prevDate = getLastDateInMonth(latestDate);
-			if (!prevDate.isValid()  &&  latestDate.day() < latestDate.daysInMonth())
-			{
-				// Check for a day in the previous scheduled month
-				if (!notThisMonth)
-					monthsAhead -= frequency();
-				int months = startMonth + monthsAhead;   // get the month after the one that recurs
-				prevDate = getLastDateInMonth(QDate(startYear + months/12, months%12 + 1, 1).addDays(-1));
-			}
-			if (endCount)
-			{
-				int months = startMonth + endCount;   // month after end
-				endDate = QDate(startYear + months/12, months%12 + 1, 1).addDays(-1);
-			}
-			break;
-		}
-		case rYearlyMonth:
-		case rYearlyDay:
-		{
-			int startYear  = dStart.year();
-			int yearsAhead = latestDate.year() - startYear;
-			int notThisYear = yearsAhead % frequency();   // zero if this year is a recurring year
-			yearsAhead -= notThisYear;              // latest year which recurred
-			// Check for the first later date in the current year
-			if (!notThisYear)
-				prevDate = getLastDateInYear(latestDate);
-			if (!prevDate.isValid()  &&  latestDate.dayOfYear() < latestDate.daysInYear())
-			{
-				// Check for a date in the next scheduled year
-				if (!notThisYear)
-					yearsAhead -= frequency();
-				prevDate = getLastDateInYear(QDate(startYear + yearsAhead, 12, 31));
-			}
-			if (endCount)
-				endDate = QDate(startYear + endCount, 12, 31);
-			break;
-		}
-		case rNone:
-		default:
-			return QDate();
-	}
-
-	if (prevDate.isValid())
-	{
-		// Check that the date found is within the range of the recurrence
-		if (prevDate < dStart)
-			return QDate();
-		if (endDate.isValid()  &&  prevDate >= endDate)
-		{
-			if (last)
-				*last = true;
-			return endDate;
-		}
-	}
-	return prevDate;
-}
-
-/******************************************************************************
- * From the recurrence day of the week list, get the earliest day in the
- * specified week which is >= the startDay.
- * Parameters:  startDay = 1..7
- *              useWeekStart = true to end search at day before next rWeekStart
- *                           = false to search for a full 7 days
- * Reply = day of the week (1..7), or 0 if none found.
- */
-int KAlarmRecurrence::getFirstDayInWeek(int startDay, bool useWeekStart) const
-{
-	int last = ((useWeekStart ? weekStart() : startDay) + 5)%7;
-	for (int i = startDay - 1;  ;  i = (i + 1)%7)
-	{
-		if (days().testBit(i))
-			return i + 1;
-		if (i == last)
-			return 0;
-	}
-}
-
-/******************************************************************************
- * From the recurrence day of the week list, get the latest day in the
- * specified week which is <= the endDay.
- * Parameters:  endDay = 1..7
- *              useWeekStart = true to end search at rWeekStart
- *                           = false to search for a full 7 days
- * Reply = day of the week (1..7), or 0 if none found.
- */
-int KAlarmRecurrence::getLastDayInWeek(int endDay, bool useWeekStart) const
-{
-	int last = useWeekStart ? weekStart() - 1 : endDay%7;
-	for (int i = endDay - 1;  ;  i = (i + 6)%7)
-	{
-		if (days().testBit(i))
-			return i + 1;
-		if (i == last)
-			return 0;
-	}
-}
-
-/******************************************************************************
- * From the recurrence monthly day number list or monthly day of week/week of
- * month list, get the earliest day in the specified month which is >= the
- * earliestDate.
- */
-QDate KAlarmRecurrence::getFirstDateInMonth(const QDate& earliestDate) const
-{
-	int earliestDay = earliestDate.day();
-	int daysInMonth = earliestDate.daysInMonth();
-	int minday = daysInMonth + 1;
-	if (doesRecur() == rMonthlyDay)
-	{
-		QPtrList<int> rMonthDays = monthDays();
-		for (QPtrListIterator<int> it( rMonthDays );  it.current();  ++it)
-		{
-			int day = *it.current();
-			if (day < 0)
-				day = daysInMonth + day + 1;
-			if (day >= earliestDay  &&  day < minday)
-				minday = day;
-		}
-	}
-	else
-	{
-		QDate monthBegin(earliestDate.year(), earliestDate.month(), 1);
-		int monthBeginDayOfWeek = monthBegin.dayOfWeek();
-		int monthEndDayOfWeek   = (monthBeginDayOfWeek + daysInMonth - 2) % 7 + 1;
-		int earliestWeek = (earliestDay + 6)/7;     // 1..5
-		int earliestDayOfWeek = (monthBeginDayOfWeek + earliestDay - 2) % 7 + 1;
-		QPtrList<rMonthPos> rMonthPositions = monthPositions();
-		for (QPtrListIterator<rMonthPos> it(rMonthPositions);  it.current();  ++it)
-		{
-			int weeksDiff;      // how many weeks rPos is after earliestDate
-			int beginDayOfWeek;
-			if (it.current()->negative)
-			{
-				// It's (for example) the nth Tuesday before the end of the month
-				int endWeek = daysInMonth - (it.current()->rPos - 1) * 7;   // end of specified week
-				weeksDiff = endWeek - earliestDay;
-				if (weeksDiff >= 0)
-				{
-					weeksDiff /= 7;
-					beginDayOfWeek = monthEndDayOfWeek % 7 + 1;
-				}
-			}
-			else
-			{
-				// It's (for example) the nth Tuesday of the month
-				weeksDiff = it.current()->rPos - earliestWeek;
-				beginDayOfWeek = monthBeginDayOfWeek;
-			}
-
-			if (weeksDiff >= 0)
-			{
-				int i = getFirstDayInWeek((weeksDiff ? beginDayOfWeek : earliestDayOfWeek), false);
-				if (i  &&  !weeksDiff)
-				{
-					// The week contains the earliest date, so ignore any days which
-					// come after the end of the week.
-					if ((i - earliestDayOfWeek + 7) % 7 >= (beginDayOfWeek - earliestDayOfWeek + 7) % 7)
-						i = 0;
-				}
-				if (i)
-				{
-					int dayno = earliestDay + weeksDiff*7 + i - earliestDayOfWeek;
-					if (dayno < minday)
-						minday = dayno;
-				}
-			}
-		}
-	}
-	if (minday > daysInMonth)
-		return QDate();
-	return QDate(earliestDate.year(), earliestDate.month(), minday);
-}
-
-/******************************************************************************
- * From the recurrence monthly day number list or monthly day of week/week of
- * month list, get the latest day in the specified month which is <= the
- * latestDate.
- */
-QDate KAlarmRecurrence::getLastDateInMonth(const QDate& latestDate) const
-{
-	int latestDay = latestDate.day();
-	int daysInMonth = latestDate.daysInMonth();
-	int maxday = -1;
-	if (doesRecur() == rMonthlyDay)
-	{
-		QPtrList<int> rMonthDays = monthDays();
-		for (QPtrListIterator<int> it(rMonthDays);  it.current();  ++it)
-		{
-			int day = *it.current();
-			if (day < 0)
-				day = daysInMonth + day + 1;
-			if (day <= latestDay  &&  day > maxday)
-				maxday = day;
-		}
-	}
-	else
-	{
-		QDate monthBegin(latestDate.year(), latestDate.month(), 1);
-		int monthBeginDayOfWeek = monthBegin.dayOfWeek();
-		int monthEndDayOfWeek   = (monthBeginDayOfWeek + daysInMonth - 2) % 7 + 1;
-		int latestWeek = (latestDay + 6)/7;     // 1..5
-		int latestDayOfWeek = (monthBeginDayOfWeek + latestDay - 2) % 7 + 1;
-		QPtrList<rMonthPos> rMonthPositions = monthPositions();
-		for (QPtrListIterator<rMonthPos> it(rMonthPositions);  it.current();  ++it)
-		{
-			int weeksDiff;      // how many weeks rPos is before latestDate
-			int endDayOfWeek;
-			if (it.current()->negative)
-			{
-				// It's (for example) the nth Tuesday before the end of the month
-				int startWeek = daysInMonth + 1 - it.current()->rPos * 7;   // start of specified week
-				weeksDiff = startWeek - latestDay;
-				if (weeksDiff <= 0)
-				{
-					weeksDiff /= 7;
-					endDayOfWeek = monthEndDayOfWeek;
-				}
-			}
-			else
-			{
-				// It's (for example) the nth Tuesday of the month
-				weeksDiff = it.current()->rPos - latestWeek;
-				endDayOfWeek = (monthBeginDayOfWeek+5)%7 + 1;
-			}
-
-			if (weeksDiff <= 0)
-			{
-				int i = getLastDayInWeek((weeksDiff ? endDayOfWeek : latestDayOfWeek), true);
-				if (i  &&  !weeksDiff)
-				{
-					// The week contains the latest date, so ignore any days which
-					// come before the first day of the week.
-					if ((latestDayOfWeek - i + 7) % 7 > (latestDayOfWeek - (endDayOfWeek+1) + 7) % 7)
-						i = 0;
-				}
-				if (i)
-				{
-					int dayno = latestDay + weeksDiff*7 + i - latestDayOfWeek;
-					if (dayno > maxday)
-						maxday = dayno;
-				}
-			}
-		}
-	}
-	if (maxday <= 0)
-		return QDate();
-	return QDate(latestDate.year(), latestDate.month(), maxday);
-}
-
-/******************************************************************************
- * From the recurrence yearly month list or yearly day list, get the earliest
- * month or day in the specified year which is >= the earliestDate.
- */
-QDate KAlarmRecurrence::getFirstDateInYear(const QDate& earliestDate) const
-{
-	if (doesRecur() == rYearlyMonth)
-	{
-		int day = recurStart().date().day();
-		int earliestYear  = earliestDate.year();
-		int earliestMonth = earliestDate.month();
-		if (earliestDate.day() > day)
-		{
-			// The earliest date is later in the month than the recurrence date,
-			// so skip to the next month before starting to check
-			if (++earliestMonth > 12)
-				return QDate();
-		}
-		int minmonth = 13;
-		QPtrList<int> rYearNums = yearNums();
-		for (QPtrListIterator<int> it(rYearNums);  it.current();  ++it)
-		{
-			int month = *it.current();
-			if (month >= earliestMonth  &&  month < minmonth
-			&&  (day <= 28  ||  QDate::isValid(earliestYear, month, day)))
-				minmonth = month;
-		}
-		if (minmonth > 12)
-			return QDate();
-		return QDate(earliestYear, minmonth, day);
-	}
-	else
-	{
-		int earliestDay = earliestDate.dayOfYear();
-		int minday = 1000;
-		QPtrList<int> rYearNums = yearNums();
-		for (QPtrListIterator<int> it(rYearNums);  it.current();  ++it)
-		{
-			int day = *it.current();
-			if (day >= earliestDay  &&  day < minday)
-				minday = day;
-		}
-		if (minday > earliestDate.daysInYear())
-			return QDate();
-		return QDate(earliestDate.year(), 1, 1).addDays(minday - 1);
-	}
-}
-
-/******************************************************************************
- * From the recurrence yearly month list or yearly day list, get the latest
- * month or day in the specified year which is <= the latestDate.
- */
-QDate KAlarmRecurrence::getLastDateInYear(const QDate& latestDate) const
-{
-	if (doesRecur() == rYearlyMonth)
-	{
-		int day = recurStart().date().day();
-		int latestYear  = latestDate.year();
-		int latestMonth = latestDate.month();
-		if (latestDate.day() > day)
-		{
-			// The latest date is earlier in the month than the recurrence date,
-			// so skip to the previous month before starting to check
-			if (--latestMonth <= 0)
-				return QDate();
-		}
-		int maxmonth = -1;
-		QPtrList<int> rYearNums = yearNums();
-		for (QPtrListIterator<int> it(rYearNums);  it.current();  ++it)
-		{
-			int month = *it.current();
-			if (month <= latestMonth  &&  month > maxmonth
-			&&  (day <= 28  ||  QDate::isValid(latestYear, month, day)))
-				maxmonth = month;
-		}
-		if (maxmonth <= 0)
-			return QDate();
-		return QDate(latestYear, maxmonth, day);
-	}
-	else
-	{
-		int latestDay = latestDate.dayOfYear();
-		int maxday = -1;
-		QPtrList<int> rYearNums = yearNums();
-		for (QPtrListIterator<int> it(rYearNums);  it.current();  ++it)
-		{
-			int day = *it.current();
-			if (day <= latestDay  &&  day > maxday)
-				maxday = day;
-		}
-		if (maxday <= 0)
-			return QDate();
-		return QDate(latestDate.year(), 1, 1).addDays(maxday - 1);
-	}
-}

@@ -131,7 +131,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 		repeatInterval = event.recurInterval();
 		switch (event.recurs())
 		{
-			case KAlarmEvent::SUB_DAILY:
+			case KAlarmEvent::MINUTELY:
 				repeatOrder = 2;
 				if (repeatInterval < 60)
 				{
@@ -160,6 +160,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 				data.repeatText = i18n("1 Month","%n Months",repeatInterval);
 				break;
 			case KAlarmEvent::ANNUAL_DATE:
+			case KAlarmEvent::ANNUAL_POS:
 			case KAlarmEvent::ANNUAL_DAY:
 				repeatOrder = 6;
 				data.repeatText = i18n("1 Year","%n Years",repeatInterval);

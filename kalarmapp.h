@@ -92,8 +92,8 @@ class KAlarmApp : public KUniqueApplication
 		void              deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
 		int               maxLateness();
 		// DCOP interface methods
-		bool              scheduleEvent(const QString& text, const QDateTime*, const QColor& bg,
-		                                int flags, KAlarmAlarm::Type, int repeatCount, int repeatInterval);
+		bool              scheduleEvent(const QString& text, const QDateTime*, const QColor& bg, int flags,
+		                                KAlarmAlarm::Type, KAlarmEvent::RecurType, int repeatCount, int repeatInterval);
 		void              handleEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_HANDLE); }
 		void              triggerEvent(const QString& calendarFile, const QString& eventID)   { handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
 		void              deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }

@@ -737,89 +737,85 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 		noEmitTypeChanged = false;
 		int repeatDuration;
 		Recurrence* recurrence = event.recurrence();
-		if (recurrence)
+		switch (recurrence->doesRecur())
 		{
-			switch (recurrence->doesRecur())
-			{
-				case Recurrence::rDaily:
-				{
-					ruleButtonGroup->setButton(dailyButtonId);
-					break;
-				}
-				case Recurrence::rWeekly:
-				{
-					ruleButtonGroup->setButton(weeklyButtonId);
-					QBitArray rDays = recurrence->days();
-					setCheckedDays(rDays);
-					break;
-				}
-				case Recurrence::rMonthlyPos:    // on nth (Tuesday) of the month
-				{
-					// we only handle one possibility in the list right now,
-					// so I have hardcoded calls with first().  If we make the GUI
-					// more extended, this can be changed.
-					ruleButtonGroup->setButton(monthlyButtonId);
-					monthlyButtonGroup->setButton(onNthTypeOfDayButtonId);
-					QPtrList<Recurrence::rMonthPos> rmp = recurrence->monthPositions();
-					int i = rmp.first()->rPos - 1;
-					if (rmp.first()->negative)
-						i = 5;
-					nthNumberEntry->setCurrentItem(i);
-					for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-					nthTypeOfDayEntry->setCurrentItem(i);
-					break;
-				}
-				case Recurrence::rMonthlyDay:     // on nth day of the month
-				{
-					ruleButtonGroup->setButton(monthlyButtonId);
-					monthlyButtonGroup->setButton(onNthDayButtonId);
-					QPtrList<int> rmd = recurrence->monthDays();
-					int i = *rmd.first() - 1;
-					nthDayEntry->setCurrentItem(i);
-					break;
-				}
-				case Recurrence::rYearlyMonth:   // in the nth month of the year
-				{
-					ruleButtonGroup->setButton(yearlyButtonId);
-					yearlyButtonGroup->setButton(yearMonthButtonId);
-					QPtrList<int> rmd = recurrence->yearNums();
-					yearMonthComboBox->setCurrentItem(*rmd.first() - 1);
-					break;
-				}
-/*				case Recurrence::rYearlyDay:     // on the nth day of the year
-				{
-					ruleButtonGroup->setButton(yearlyButtonId);
-					yearlyButtonGroup->setButton(yearDayButtonId);
-					break;
-				}*/
-				case Recurrence::rYearlyPos:     // on the nth (Tuesday) of a month in the year
-				{
-					ruleButtonGroup->setButton(yearlyButtonId);
-					yearlyButtonGroup->setButton(yearlyOnNthTypeOfDayButtonId);
-					QPtrList<Recurrence::rMonthPos> rmp = recurrence->yearMonthPositions();
-					int i = rmp.first()->rPos - 1;
-					if (rmp.first()->negative)
-						i = 5;
-					yearlyNthNumberEntry->setCurrentItem(i);
-					for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-						yearlyNthTypeOfDayEntry->setCurrentItem(i);
-					QPtrList<int> rmd = recurrence->yearNums();
-					yeardayMonthComboBox->setCurrentItem(*rmd.first() - 1);
-					break;
-				}
-				case Recurrence::rNone:
-				default:
-					setDefaults(currStartDateTime);
-					return;
-			}
+			case Recurrence::rMinutely:
+				ruleButtonGroup->setButton(subdailyButtonId);
+				recurHourMinFrequency->setValue(recurrence->frequency());
+				break;
 
-			recurFrequency->setValue(recurrence->frequency());
+			case Recurrence::rDaily:
+				ruleButtonGroup->setButton(dailyButtonId);
+				break;
+
+			case Recurrence::rWeekly:
+			{
+				ruleButtonGroup->setButton(weeklyButtonId);
+				QBitArray rDays = recurrence->days();
+				setCheckedDays(rDays);
+				break;
+			}
+			case Recurrence::rMonthlyPos:    // on nth (Tuesday) of the month
+			{
+				// we only handle one possibility in the list right now,
+				// so I have hardcoded calls with first().  If we make the GUI
+				// more extended, this can be changed.
+				ruleButtonGroup->setButton(monthlyButtonId);
+				monthlyButtonGroup->setButton(onNthTypeOfDayButtonId);
+				QPtrList<Recurrence::rMonthPos> rmp = recurrence->monthPositions();
+				int i = rmp.first()->rPos - 1;
+				if (rmp.first()->negative)
+					i = 5;
+				nthNumberEntry->setCurrentItem(i);
+				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
+				nthTypeOfDayEntry->setCurrentItem(i);
+				break;
+			}
+			case Recurrence::rMonthlyDay:     // on nth day of the month
+			{
+				ruleButtonGroup->setButton(monthlyButtonId);
+				monthlyButtonGroup->setButton(onNthDayButtonId);
+				QPtrList<int> rmd = recurrence->monthDays();
+				int i = *rmd.first() - 1;
+				nthDayEntry->setCurrentItem(i);
+				break;
+			}
+				case Recurrence::rYearlyMonth:   // in the nth month of the year
+			{
+				ruleButtonGroup->setButton(yearlyButtonId);
+				yearlyButtonGroup->setButton(yearMonthButtonId);
+				QPtrList<int> rmd = recurrence->yearNums();
+				yearMonthComboBox->setCurrentItem(*rmd.first() - 1);
+				break;
+			}
+/*			case Recurrence::rYearlyDay:     // on the nth day of the year
+			{
+				ruleButtonGroup->setButton(yearlyButtonId);
+				yearlyButtonGroup->setButton(yearDayButtonId);
+				break;
+			}*/
+			case Recurrence::rYearlyPos:     // on the nth (Tuesday) of a month in the year
+			{
+				ruleButtonGroup->setButton(yearlyButtonId);
+				yearlyButtonGroup->setButton(yearlyOnNthTypeOfDayButtonId);
+				QPtrList<Recurrence::rMonthPos> rmp = recurrence->yearMonthPositions();
+				int i = rmp.first()->rPos - 1;
+				if (rmp.first()->negative)
+					i = 5;
+				yearlyNthNumberEntry->setCurrentItem(i);
+				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
+					yearlyNthTypeOfDayEntry->setCurrentItem(i);
+				QPtrList<int> rmd = recurrence->yearNums();
+				yeardayMonthComboBox->setCurrentItem(*rmd.first() - 1);
+				break;
+			}
+			case Recurrence::rNone:
+			default:
+				setDefaults(currStartDateTime);
+				return;
 		}
-		else
-		{
-			ruleButtonGroup->setButton(subdailyButtonId);
-			recurHourMinFrequency->setValue(event.repeatMinutes());
-		}
+
+		recurFrequency->setValue(recurrence->frequency());
 		repeatDuration = event.repeatCount();
 
 		// get range information
@@ -871,7 +867,7 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 		{
 			QDateTime endDateTime(endDate, endTime);
 			int frequency = recurHourMinFrequency->value();
-			event.setRecurSubDaily(frequency, repeatCount, endDateTime);
+			event.setRecurMinutely(frequency, repeatCount, endDateTime);
 		}
 		else if (button == dailyButton)
 		{
