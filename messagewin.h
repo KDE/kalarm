@@ -13,24 +13,35 @@
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
 
-#include <kdialog.h>
+#include <kmainwindow.h>
 
 #include <msgevent.h>
 using namespace KCal;
 
 
 /**
- * MessageWin: A dialog to display an alarm message
+ * MessageWin: A window to display an alarm message
  */
-class MessageWin : public KDialog
+class MessageWin : public KMainWindow
 {
 		Q_OBJECT
 	public:
-		explicit MessageWin(const MessageEvent&, QWidget* parent = 0, bool delete_event = true);
+		MessageWin();     // for session management restoration only
+		explicit MessageWin(const MessageEvent&, bool delete_event = true);
 		~MessageWin();
 		virtual void paintEvent(QPaintEvent*);
 
+	protected:
+		virtual void saveProperties(KConfig*);
+		virtual void readProperties(KConfig*);
+
 	private:
+		QSize             initView();
+
+		QString           message;
+		QFont             font;
+		QColor            colour;
+		QDateTime         dateTime;
 		QString           eventID;
 		QString           audioFile;
 		bool              beep;

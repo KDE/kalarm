@@ -35,24 +35,21 @@
 #include "kalarmapp.moc"
 
 const QString DCOP_OBJECT_NAME("display");
-const QString DEFAULT_CALENDAR_FILE("calendar.vcs");
+const QString DEFAULT_CALENDAR_FILE("calendar.ics");
 
 KAlarmApp*  KAlarmApp::theInstance = 0;
 
 
 /******************************************************************************
 * Construct the application.
-* A hidden main window is created. This is used to avoid the program
-* automatically exiting when the last real (visible) main window is closed,
-* since there may be message windows displayed.
 */
 KAlarmApp::KAlarmApp()
 	:	KUniqueApplication(),
 		mainWidget(new MainWidget(DCOP_OBJECT_NAME)),
-		hiddenMainWindow(0),
 		daemonRegistered(false),
 		m_generalSettings(new GeneralSettings(0))
 {
+	m_generalSettings->loadSettings();
 }
 
 /******************************************************************************
@@ -80,13 +77,22 @@ KAlarmApp* KAlarmApp::getInstance()
 int KAlarmApp::newInstance()
 {
 	kdDebug()<<"KAlarmApp::newInstance(): New instance\n";
+	static bool firstTime = true;
+	bool firstTimeThrough = firstTime;
+	firstTime = false;
 	int exitCode = 0;      // default = success
-	if (isRestored())
+	if (firstTimeThrough  &&  isRestored())
 	{
 		// Process is being restored by session management.
-//		(new KalarmApp)->restore(1);
-		RESTORE(KMainWindow);     // redisplay any open windows
-		return initCheck() ? 0 : 1;     // register with the alarm daemon
+		exitCode = !initCheck(false);       // open the calendar file (needed for main windows)
+		for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
+		{
+			if (KMainWindow::classNameOfToplevel(i) == "KAlarmMainWindow")
+				(new KAlarmMainWindow)->restore(i);
+			else
+				(new MessageWin)->restore(i);
+		}
+		initCheck();     // register with the alarm daemon
 	}
 	else
 	{
@@ -213,80 +219,26 @@ int KAlarmApp::newInstance()
 				KAlarmMainWindow* mainWindow = new KAlarmMainWindow(PROGRAM_TITLE);
 				mainWindowList.push_back(mainWindow);
 				mainWindow->show();
-				if (hiddenMainWindow)
-				{
-					// Don't need the hidden main window any more to keep the program active.
-					// Delete it to prevent more than one hidden window being created.
-					hiddenMainWindow->close();
-					hiddenMainWindow = 0;
-				}
 			}
 		}
 	}
 
-	// If there are no more windows displayed, exit the application
-	exitIfFinished(exitCode);
 	return exitCode;
 }
 
 /******************************************************************************
 * Called when a main window is closed to remove it from the main
-* window list. If it is the last window, the application is exited.
+* window list.
 */
-void KAlarmApp::deleteWindow(KAlarmMainWindow* win, bool deleted)
+void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 {
 	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
 		if (*it == win)
 		{
 			mainWindowList.erase(it);
-			if (mainWindowList.size())
-			{
-				// Other main windows will still remain, so close this one
-				if (!deleted)
-					win->close();
-			}
-			else
-			{
-				// It's the last main window, so hide it to avoid automatically quitting the application
-				exitIfFinished(0);
-				if (!deleted)
-				{
-					win->hide();
-					hiddenMainWindow = win;
-				}
-			}
+//			win->close();
 			break;
 		}
-}
-
-/******************************************************************************
-* Called when a message window is closed to remove it from the message
-* window list. If it is the last window, the application is exited.
-*/
-void KAlarmApp::deleteWindow(MessageWin* win)
-{
-	for (vector<MessageWin*>::iterator it = msgWindowList.begin();  it != msgWindowList.end();  ++it)
-		if (*it == win)
-		{
-			msgWindowList.erase(it);
-			exitIfFinished(0);
-			break;
-		}
-}
-
-/******************************************************************************
-* Exits the application if there are no more main windows or message windows
-* open, and if nothing else is currently active.
-*/
-void KAlarmApp::exitIfFinished(int exitCode)
-{
-	if (!mainWindowList.size()  &&  !msgWindowList.size())
-	{
-		// The last window has been closed, so exit the application
-		kdDebug() << "KAlarmApp::exitIfFinished(): exiting"<<endl;
-		calendar.close();
-		exit(exitCode);
-	}
 }
 
 /******************************************************************************
@@ -366,12 +318,18 @@ void KAlarmApp::deleteMessage(MessageEvent* event, KAlarmMainWindow* win, bool t
 bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg, int flags)
 {
 	kdDebug() << "KAlarmApp::scheduleMessage(): " << message << endl;
-	QDateTime now = QDateTime::currentDateTime();
-	QDateTime alarmTime = dateTime ? *dateTime : now;
-	if (alarmTime < now  &&  (flags & MessageEvent::LATE_CANCEL))
-		return true;               // alarm time has already expired
+	bool display = true;
+	QDateTime alarmTime;
+	if (dateTime)
+	{
+		alarmTime = *dateTime;
+		QDateTime now = QDateTime::currentDateTime();
+		if ((flags & MessageEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-65))
+			return true;               // alarm time was already expired a minute ago
+		display = (alarmTime <= now);
+	}
 	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message);
-	if (alarmTime <= now)
+	if (display)
 	{
 		// Alarm is due for display already
 		kdDebug() << "Displaying message: " << message << "\n";
@@ -432,8 +390,7 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 */
 void KAlarmApp::displayMessageWin(const MessageEvent& event, bool delete_event)
 {
-	MessageWin* win = new MessageWin(event, mainWidget, delete_event);
-	msgWindowList.push_back(win);
+	MessageWin* win = new MessageWin(event, delete_event);
 	KWin::setState(win->winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
 	KWin::setOnAllDesktops(win->winId(), true);
 	win->show();

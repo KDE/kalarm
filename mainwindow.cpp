@@ -37,25 +37,9 @@ KAlarmMainWindow::KAlarmMainWindow(const char* name)
 	: KMainWindow(0, name)
 {
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));     // save window sizes etc.
-	readOptions();      // read config file options
+	setPlainCaption(name);
 	initActions();
-	initView();
 
-  ///////////////////////////////////////////////////////////////////
-  // disable actions at startup
-//  fileSave->setEnabled(false);
-}
-
-KAlarmMainWindow::~KAlarmMainWindow()
-{
-	theApp()->deleteWindow(this, true);
-}
-
-/******************************************************************************
-*  Create the main KAlarm list view.
-*/
-void KAlarmMainWindow::initView()
-{
 	listView = new AlarmListView(this, "listView");
 	setCentralWidget(listView);
 	listView->refresh();    // populate the message list
@@ -64,14 +48,9 @@ void KAlarmMainWindow::initView()
 	QWhatsThis::add(listView, i18n("List of scheduled alarm messages"));
 }
 
-/******************************************************************************
-*  Called before the last main window is closed.
-*  Hides the window instead if there are message windows visible.
-*/
-bool KAlarmMainWindow::queryExit()
+KAlarmMainWindow::~KAlarmMainWindow()
 {
-	theApp()->deleteWindow(this, false);
-	return false;
+	theApp()->deleteWindow(this);
 }
 
 /******************************************************************************
@@ -101,7 +80,7 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 */
 void KAlarmMainWindow::initActions()
 {
-	actionQuit         = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
+	actionQuit        = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
 	actionNew         = new KAction(i18n("&New"), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
 	actionModify      = new KAction(i18n("&Modify"), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
 	actionDelete      = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
@@ -126,40 +105,6 @@ void KAlarmMainWindow::initActions()
 
 	actionModify->setEnabled(false);
 	actionDelete->setEnabled(false);
-}
-
-
-void KAlarmMainWindow::readOptions()
-{
-	theApp()->generalSettings()->loadSettings();
-}
-
-void KAlarmMainWindow::saveOptions()
-{
-//	KConfig* config = kapp->config();
-}
-
-/******************************************************************************
-* Save settings to the session managed config file, for restoration
-* when the program is restored.
-*/
-void KAlarmMainWindow::saveProperties(KConfig*)
-{
-}
-
-/******************************************************************************
-* Read settings from the session managed config file.
-* This function is automatically called whenever the app is being
-* restored. Read in whatever was saved in saveProperties().
-*/
-void KAlarmMainWindow::readProperties(KConfig*)
-{
-/*	QString filename = config->readEntry("Filename", "");
-	KURL url(filename);
-	bool modified = config->readBoolEntry("modified", false);
-	if(modified)
-	{
-	}*/
 }
 
 /******************************************************************************
@@ -292,7 +237,7 @@ void KAlarmMainWindow::slotPreferences()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	theApp()->deleteWindow(this, false);
+	theApp()->deleteWindow(this);
 }
 
 /******************************************************************************

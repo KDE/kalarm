@@ -43,28 +43,10 @@ class KAlarmMainWindow : public KMainWindow
 		void  deleteMessage(const MessageEvent*);
 
 	protected:
-		/** save general Options like status and geometry to the configuration file
-		  */
-		void saveOptions();
-		/** read general Options again and initialize all variables like the recent file list
-		  */
-		void readOptions();
-		/** saves the window properties for each open window during session end to the session config file, including saving the currently
-		  * opened file by a temporary filename provided by KApplication.
-		  * @see KTMainWindow#saveProperties
-		  */
-		virtual void saveProperties(KConfig*);
-		/** reads the session config file and restores the application's state including the last opened files and documents by reading the
-		  * temporary files saved by saveProperties()
-		  * @see KTMainWindow#readProperties
-		  */
-		virtual void readProperties(KConfig*);
-
 		virtual void resizeEvent(QResizeEvent*);
 		virtual void showEvent(QShowEvent*);
-		virtual bool queryExit();
+
 	private:
-		void            initView();
 		void            initActions();
 
 		AlarmListView*  listView;

@@ -69,9 +69,7 @@ class KAlarmApp : public KUniqueApplication
 		static KAlarmApp* getInstance();
 		AlarmCalendar&    getCalendar()       { return calendar; }
 		GeneralSettings*  generalSettings()   { return m_generalSettings; }
-		void              deleteWindow(KAlarmMainWindow*, bool deleted);
-		void              deleteWindow(MessageWin*);
-
+		void              deleteWindow(KAlarmMainWindow*);
 		void              resetDaemon();
 		void              addMessage(const MessageEvent*, KAlarmMainWindow*);
 		void              modifyMessage(MessageEvent* oldEvent, const MessageEvent* newEvent, KAlarmMainWindow*);
@@ -88,7 +86,6 @@ class KAlarmApp : public KUniqueApplication
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		bool              initCheck(bool daemon = true);
-		void              exitIfFinished(int exitCode);
 		bool              stopDaemon();
 		void              startDaemon();
 		void              reloadDaemon();
@@ -98,13 +95,10 @@ class KAlarmApp : public KUniqueApplication
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
 		static KAlarmApp*         theInstance;
-		MainWidget*               mainWidget;          // the parent of all KAlarmMainWindows
+		MainWidget*               mainWidget;          // the parent of the DCOP receiver object
 		vector<KAlarmMainWindow*> mainWindowList;      // active main windows
-		KAlarmMainWindow*         hiddenMainWindow;    // hidden main window, or 0 if none
-		vector<MessageWin*>       msgWindowList;       // active message windows
 		AlarmCalendar             calendar;
 		bool                      daemonRegistered;    // true if we've registered with alarm daemon
-
 		GeneralSettings*          m_generalSettings;   // general program preferences
 };
 
