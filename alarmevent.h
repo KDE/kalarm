@@ -470,7 +470,7 @@ class KAEvent : public KAAlarmEventBase
 		static bool        setRecurAnnualByPos(KCal::Recurrence&, int freq, const QPtrList<KCal::Recurrence::rMonthPos>&, const QPtrList<int>& months, int count, const QDate& end);
 		static bool        setRecurAnnualByDay(KCal::Recurrence&, int freq, const QValueList<int>& days, int count, const QDate& end);
 		static bool        setRecurAnnualByDay(KCal::Recurrence&, int freq, const QPtrList<int>& days, int count, const QDate& end);
-		static bool        setRecurrence(KCal::Recurrence&, RecurType, int repeatInterval, int repeatCount, const QDateTime& end);
+		static bool        setRecurrence(KCal::Recurrence&, RecurType, int repeatInterval, int repeatCount, const DateTime& start, const QDateTime& end);
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
 #else
