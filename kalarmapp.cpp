@@ -1105,6 +1105,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					bool cancel = false;
 					if (event.anyTime())
 					{
+#warning "Cater for timed deferral alarms, etc."
 						// The alarm has no time, so cancel it if its date is past
 						QDateTime limit(alarm.date().addDays(1), mPreferences->startOfDay());
 						if (now >= limit)
@@ -1640,7 +1641,7 @@ void KAlarmApp::archiveEvent(KAlarmEvent& event)
 	kdDebug(5950) << "KAlarmApp::archiveEvent(" << event.id() << ")\n";
 	if (expiredCalendar(false))
 	{
-		event.setEndTime(QDateTime::currentDateTime());   // time stamp to control purging
+		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
 		Event* kcalEvent = mExpiredCalendar->addEvent(event);
 		mExpiredCalendar->save();
 

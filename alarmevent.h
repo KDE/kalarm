@@ -257,7 +257,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
 		void               setDate(const QDate& d)                           { mDateTime = d; mAnyTime = true;  mUpdated = true; }
 		void               setTime(const QDateTime& dt)                      { mDateTime = dt; mAnyTime = false;  mUpdated = true; }
-		void               setEndTime(const QDateTime& dt)                   { mEndDateTime = dt;  mUpdated = true; }
+		void               setSaveDateTime(const QDateTime& dt)              { mSaveDateTime = dt;  mUpdated = true; }
 		void               setLateCancel(bool lc)                            { mLateCancel = lc;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
@@ -284,7 +284,6 @@ class KAlarmEvent : public KAAlarmEventBase
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
 		const QDateTime&   startDateTime() const          { return mStartDateTime; }
-		const QDateTime&   endDateTime() const            { return mEndDateTime; }
 		const QDateTime&   mainDateTime() const           { return mDateTime; }
 		QDate              mainDate() const               { return mDateTime.date(); }
 		QTime              mainTime() const               { return mDateTime.time(); }
@@ -373,8 +372,8 @@ class KAlarmEvent : public KAAlarmEventBase
 		static void        readAlarm(const KCal::Alarm&, AlarmData&);
 
 		QString            mAudioFile;        // ATTACH: audio file to play
-		QDateTime          mStartDateTime;    // DTSTART: start time for event
-		QDateTime          mEndDateTime;      // DTEND: end time for event
+		QDateTime          mStartDateTime;    // DTSTART and DTEND: start and end time for event
+		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in expired calendar
 		QDateTime          mAtLoginDateTime;  // repeat-at-login time
 		QDateTime          mDeferralTime;     // extra time to trigger alarm (if alarm deferred)
 		QDateTime          mDisplayingTime;   // date/time shown in the alarm currently being displayed

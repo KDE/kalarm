@@ -313,7 +313,7 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 		QPtrList<Event> events = mCalendar->events();
 		for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
 		{
-			if (!daysToKeep  ||  kcalEvent->dtEnd().date() < cutoff)
+			if (!daysToKeep  ||  kcalEvent->created().date() < cutoff)
 			{
 				mCalendar->deleteEvent(kcalEvent);
 				purged = true;
