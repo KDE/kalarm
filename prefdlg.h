@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,22 +25,41 @@
 #ifndef PREFDLG_H
 #define PREFDLG_H
 
+#include <qsize.h>
+#include <qdatetime.h>
+#include <ktabctl.h>
 #include <kdialogbase.h>
-class Settings;
+
+#include "recurrenceedit.h"
+
+class QButtonGroup;
+class QCheckBox;
+class QRadioButton;
+class QPushButton;
+class QSpinBox;
+class QComboBox;
+class QLineEdit;
+class KColorCombo;
+class FontColourChooser;
+class Preferences;
+class TimeSpinBox;
+
 class AppearancePrefTab;
 class DefaultPrefTab;
 class MiscPrefTab;
 
+
+// The Preferences dialog
 class KAlarmPrefDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		KAlarmPrefDlg(Settings*);
+		KAlarmPrefDlg(Preferences*);
 		~KAlarmPrefDlg();
 
-		AppearancePrefTab* m_appearancePage;
-		DefaultPrefTab*    m_defaultPage;
-		MiscPrefTab*       m_miscPage;
+		AppearancePrefTab* mAppearancePage;
+		DefaultPrefTab*    mDefaultPage;
+		MiscPrefTab*       mMiscPage;
 
 	protected slots:
 		virtual void slotOk();
@@ -48,6 +67,103 @@ class KAlarmPrefDlg : public KDialogBase
 		virtual void slotHelp();
 		virtual void slotDefault();
 		virtual void slotCancel();
+};
+
+// Base class for each tab in the Preferences dialog
+class PrefsTabBase : public QWidget
+{
+		Q_OBJECT
+	public:
+		PrefsTabBase(QVBox*);
+
+		void         setPreferences(Preferences*);
+		virtual void restore() = 0;
+		virtual void apply(bool syncToDisc) = 0;
+		virtual void setDefaults() = 0;
+
+	protected:
+		QVBox*       mPage;
+		Preferences* mPreferences;
+};
+
+
+// Appearance tab of the Preferences dialog
+class AppearancePrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		AppearancePrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private:
+		FontColourChooser*  mFontChooser;
+		KColorCombo*        mExpiredColour;
+};
+
+
+// Miscellaneous tab of the Preferences dialog
+class MiscPrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		MiscPrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private slots:
+		void         slotRunModeToggled(bool on);
+		void         slotExpiredToggled(bool);
+		void         slotEmailUseCCToggled(bool);
+		void         slotClearExpired();
+
+	private:
+		void         setExpiredControls(int purgeDays);
+		void         setEmailAddress(bool useControlCentre, const QString& address);
+
+		QRadioButton*  mRunInSystemTray;
+		QRadioButton*  mRunOnDemand;
+		QCheckBox*     mDisableAlarmsIfStopped;
+		QCheckBox*     mAutostartTrayIcon1;
+		QCheckBox*     mAutostartTrayIcon2;
+		QCheckBox*     mConfirmAlarmDeletion;
+		QCheckBox*     mKeepExpired;
+		QCheckBox*     mPurgeExpired;
+		QSpinBox*      mPurgeAfter;
+		QLabel*        mPurgeAfterLabel;
+		QPushButton*   mClearExpired;
+		QSpinBox*      mDaemonTrayCheckInterval;
+		TimeSpinBox*   mStartOfDay;
+		QButtonGroup*  mEmailClient;
+		QCheckBox*     mEmailUseControlCentre;
+		QLineEdit*     mEmailAddress;
+};
+
+
+// Edit defaults tab of the Preferences dialog
+class DefaultPrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		DefaultPrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private:
+		QCheckBox*     mDefaultLateCancel;
+		QCheckBox*     mDefaultConfirmAck;
+		QCheckBox*     mDefaultBeep;
+		QCheckBox*     mDefaultEmailBcc;
+		QComboBox*     mDefaultRecurPeriod;
+		QComboBox*     mDefaultReminderUnits;
+
+		static int recurIndex(RecurrenceEdit::RepeatType);
 };
 
 #endif // PREFDLG_H
