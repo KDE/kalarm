@@ -1,5 +1,17 @@
 KAlarm
 
+=== Version 0.9.2 --- 25 Jan 2003 ===
+Option to set font for individual alarm messages.
+Allow multiple alarm selection in the main window.
+KAlarm icon in alarm message window selects the alarm in the main window.
+In Edit Alarm dialog, move all recurrence edit controls into Recurrence tab.
+Add quit warning message option to preferences dialog.
+Disallow command alarms when KDE is running in kiosk mode.
+Revised storage of beep, font, colour and program arguments in calendar file.
+Always save alarms in iCalendar format (but vCalendar may still be read).
+Add reminder, recurrence and font parameters to DCOP calls.
+Fix failure to enable alarms when running in on-demand mode.
+
 === Version 0.9.1 --- 16 Jan 2003 ===
 Add option to set advance reminders for alarms.
 In run-in-system-tray mode, warn that alarms will be disabled before quitting.
@@ -23,6 +35,11 @@ Store alarm data in the calendar file in a more standard way.
 Alarm message defer dialog: update recurrence deferral time limit in real time.
 Weekly recurrence edit: adhere to user preference for start day of week.
 Use standard action icons.
+
+=== Version 0.8.5 (KDE 3.1.1) --- 21 Feb 2003 ===
+Fix monthly and yearly recurrences on nth Monday etc. of the month.
+Fix yearly recurrences on February 29th.
+Fix failure to enable alarms when running in on-demand mode.
 
 === Version 0.8.4 (KDE 3.1) --- 8 Jan 2003 ===
 *Fix monthly and yearly recurrences on nth Monday etc. of the month.
