@@ -618,18 +618,18 @@ void KAlarmMainWindow::slotView()
 void KAlarmMainWindow::slotDelete()
 {
 	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	if (theApp()->preferences()->confirmAlarmDeletion())
+	{
+		int n = items.count();
+		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?", "Do you really want to delete the %n selected alarms?", n),
+						       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"))
+		    != KMessageBox::Continue)
+			return;
+	}
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
 		AlarmListViewItem* item = it.current();
 		KAlarmEvent event = listView->getEvent(item);
-		if (theApp()->preferences()->confirmAlarmDeletion())
-		{
-			int n = 1;
-			if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?", "Do you really want to delete the %n selected alarms?", n),
-							       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"))
-			    != KMessageBox::Continue)
-				return;
-		}
 
 		// Delete the event from the displays
 		theApp()->deleteEvent(event, this);
