@@ -67,6 +67,11 @@ static KCmdLineOptions options[] =
 	{ "interval <period>", I18N_NOOP("Interval between alarm recurrences"), 0 },
 	{ "l", 0, 0 },
 	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be triggered on time"), 0 },
+#if 0
+	{ "auto-close", I18N_NOOP("Auto-close alarm window after --late-cancel period"), 0 },
+	{ "disable", I18N_NOOP("Disable the alarm"), 0 },
+	{ "late-cancel <period>", I18N_NOOP("Cancel alarm if more than 'period' late when triggered"), "1" },
+#endif
 	{ "L", 0, 0 },
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
 	{ "m", 0, 0 },
