@@ -1,0 +1,8 @@
+if test -z "$KMIX"; then
+  echo ""
+  echo "================================================================="
+  echo "kmix (from the kdemultimedia package) is missing."
+  echo "KAlarm will not be able to set the absolute sound volume when"
+  echo "playing audio files until you install kmix."
+  echo "================================================================="
+fi
