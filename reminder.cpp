@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -168,6 +164,8 @@ void Reminder::setMinutes(int minutes, bool dateOnly)
 			item = WEEKS;
 			count = minutes / (7*24*60);
 		}
+		if (item < mDateOnlyOffset)
+			item = mDateOnlyOffset;
 		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
 		if (item == HOURS_MINUTES)
 			mCount->setHourMinValue(count);
@@ -178,6 +176,8 @@ void Reminder::setMinutes(int minutes, bool dateOnly)
 	else
 	{
 		item = theApp()->preferences()->defaultReminderUnits();
+		if (item < mDateOnlyOffset)
+			item = mDateOnlyOffset;
 		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);
 		if (dateOnly && !mDateOnlyOffset  ||  !dateOnly && mDateOnlyOffset)
 			item = setDateOnly(minutes, dateOnly);
