@@ -405,7 +405,8 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
 	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
 	           "a KMail composer window is displayed to enable you to send the email.\n"
-	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
+	           "Sendmail: The email is sent automatically. This option will only work if "
+	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
 
 	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
 	QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
