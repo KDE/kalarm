@@ -58,8 +58,9 @@ class KAlarmApp : public KUniqueApplication
 		~KAlarmApp();
 		virtual int       newInstance();
 		static KAlarmApp* getInstance();
-		AlarmCalendar&    getCalendar()       { return *mCalendar; }
-		Settings*         settings()          { return mSettings; }
+		AlarmCalendar&    getCalendar()                   { return *mCalendar; }
+		Settings*         settings()                      { return mSettings; }
+		bool              KDEDesktop() const              { return mKDEDesktop; }
 		void              addWindow(KAlarmMainWindow*);
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              deleteWindow(KAlarmMainWindow*);
@@ -67,7 +68,6 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
 		bool              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
-		bool              KDEDesktop() const              { return mKDEDesktop; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
@@ -119,7 +119,7 @@ class KAlarmApp : public KUniqueApplication
 		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
 		Settings*                  mSettings;          // program preferences
-		bool                       mKDEDesktop;
+		bool                       mKDEDesktop;        // running on KDE desktop
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }
