@@ -42,8 +42,8 @@ static const char*  DCOP_OLD_OBJECT_NAME = "display";
 = This class's function is to handle DCOP requests by other applications.
 =============================================================================*/
 DcopHandler::DcopHandler()
-	: QWidget(),
-	  DCOPObject(DCOP_OBJECT_NAME)
+	: DCOPObject(DCOP_OBJECT_NAME),
+	  QWidget()
 {
 	kdDebug(5950) << "DcopHandler::DcopHandler()\n";
 }
