@@ -29,6 +29,7 @@ class QRadioButton;
 class QSpinBox;
 class FontColourChooser;
 class Settings;
+class TimeSpinBox;
 
 
 // Base class for each tab in the Preferences dialog
@@ -86,7 +87,7 @@ class MiscPrefs : public PrefsBase
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QSpinBox*      mDaemonTrayCheckInterval;
-		QTime          mStartOfDay;
+		TimeSpinBox*   mStartOfDay;
 };
 
 #endif // PREFS_H
