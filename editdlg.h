@@ -167,7 +167,7 @@ class EditAlarmDlg : public KDialogBase
 		KAlarmEvent*      mSavedEvent;
 		QButton*          mSavedTypeRadio;      // mMessageRadio, etc
 		bool              mSavedBeep;           // mSoundPicker beep status
-		bool              mSavedSoundFile;      // mSoundPicker sound file
+		QString              mSavedSoundFile;      // mSoundPicker sound file
 		bool              mSavedConfirmAck;     // mConfirmAck status
 		QFont             mSavedFont;           // mFontColourButton font
 		QColor            mSavedBgColour;       // mBgColourChoose selection
