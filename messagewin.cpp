@@ -30,6 +30,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -371,7 +372,9 @@ QSize MessageWin::initView()
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(button, 0, 3, AlignHCenter);
-	QWhatsThis::add(button, i18n("Activate %1").arg(kapp->aboutData()->programName()));
+	QString actKAlarm = i18n("Activate %1").arg(kapp->aboutData()->programName());
+	QToolTip::add(button, actKAlarm);
+	QWhatsThis::add(button, actKAlarm);
 
 	// Set the button sizes
 	QSize minbutsize = okButton->sizeHint();
