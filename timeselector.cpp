@@ -121,6 +121,11 @@ bool TimeSelector::isChecked() const
 	return mSelect->isChecked();
 }
 
+void TimeSelector::setChecked(bool on)
+{
+	mSelect->setChecked(on);
+}
+
 void TimeSelector::setMaximum(int hourmin, int days)
 {
 	if (hourmin)
@@ -204,7 +209,8 @@ void TimeSelector::setMinutes(int minutes, bool dateOnly, TimeSelector::Units de
 }
 
 /******************************************************************************
-*  Set the units to days if "Any time" is selected.
+*  Enable/disable hours/minutes units (if hours/minutes were permitted in the
+*  constructor).
 */
 TimeSelector::Units TimeSelector::setDateOnly(int reminderMinutes, bool dateOnly)
 {

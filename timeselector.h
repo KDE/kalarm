@@ -48,6 +48,7 @@ class TimeSelector : public QFrame
 		TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
 		             const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent, const char* name = 0);
 		bool         isChecked() const;
+		void         setChecked(bool on);
 		int          getMinutes() const;
 		void         setMinutes(int minutes, bool dateOnly, Units defaultUnits);
 		void         setReadOnly(bool);
