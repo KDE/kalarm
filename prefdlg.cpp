@@ -754,7 +754,7 @@ QString EmailPrefTab::validateBccAddress()
 	if (!mBccAddressChanged)
 		return QString::null;
 	mBccAddressChanged = false;
-	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
+	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'BCC' email address is specified."));
 }
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
