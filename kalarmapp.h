@@ -63,7 +63,7 @@ class AlarmCalendar
 		class AlarmCalendarLocal : public CalendarLocal
 		{
 			public:
-				void updateEvent(Incidence* i)  { CalendarLocal::updateEvent(i); }
+				void updateEvent(Incidence* i)  { CalendarLocal::update(i); }
 		};
 		AlarmCalendarLocal* calendar;
 		KURL              url;         // URL of calendar file
