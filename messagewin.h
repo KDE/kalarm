@@ -66,6 +66,7 @@ class MessageWin : public MainWindowBase
 		int               alarmID;
 		int               flags;
 		bool              beep;
+		bool              dateOnly;         // ignore event's time
 		KAlarmAlarm::Type type;
 		QString           errorMsg;
 		bool              noDefer;          // don't display a Defer option

@@ -36,6 +36,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 #include <kwin.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
@@ -51,7 +52,7 @@
 #include "messagewin.moc"
 
 
-static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display
+static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display for a file
 
 int  MessageWin::nInstances = 0;
 
@@ -74,6 +75,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  alarmID(alarm.id()),
 	  flags(alarm.flags()),
 	  beep(alarm.beep()),
+	  dateOnly(event.anyTime()),
 	  type(alarm.type()),
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
 	  deferButton(0L),
@@ -108,6 +110,7 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 	  alarmID(alarm.id()),
 	  flags(alarm.flags()),
 	  beep(false),
+	  dateOnly(evnt.anyTime()),
 	  type(alarm.type()),
 	  errorMsg(errmsg),
 	  noDefer(true),
@@ -158,7 +161,8 @@ QSize MessageWin::initView()
 	{
 		// Alarm date/time
 		QLabel* label = new QLabel(topWidget);
-		label->setText(KGlobal::locale()->formatDateTime(dateTime));
+		label->setText(dateOnly ? KGlobal::locale()->formatDate(dateTime.date(), true)
+		                        : KGlobal::locale()->formatDateTime(dateTime));
 		label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
 		topLayout->addWidget(label, 0, Qt::AlignHCenter);
@@ -333,7 +337,10 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("Font"), font);
 		config->writeEntry(QString::fromLatin1("Colour"), colour);
 		if (dateTime.isValid())
+		{
 			config->writeEntry(QString::fromLatin1("Time"), dateTime);
+			config->writeEntry(QString::fromLatin1("DateOnly"), dateOnly);
+		}
 		config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
 		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
 	}
@@ -359,6 +366,7 @@ void MessageWin::readProperties(KConfig* config)
 	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
 	QDateTime invalidDateTime;
 	dateTime      = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
 	if (errorMsg.isNull()  &&  alarmID > 0)
@@ -432,16 +440,6 @@ void MessageWin::slotShowDefer()
 		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60), false);
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
-		Event* event;
-		if (!eventID.isNull()  &&  (event = theApp()->getCalendar().getEvent(eventID)) != 0
-		&&  (!event->recurrence()  ||  event->recurrence()->doesRecur() == Recurrence::rNone))
-		{
-			// The event will only still exist if repetitions are outstanding
-			QLabel* warn = new QLabel(deferDlg);
-			warn->setText(i18n("Note: deferring this alarm will also defer its repetitions"));
-			warn->setFixedSize(warn->sizeHint());
-			grid->addWidget(warn, 1, 0);
-		}
 
 		QSize s(deferDlg->sizeHint());
 		if (s.width() > width())
@@ -487,9 +485,18 @@ void MessageWin::slotDefer()
 		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);
 		if (kcalEvent)
 		{
-			// It's a repeated alarm which may still exist in the calendar file
+			// It's a repeated alarm which may still exist in the calendar file.
+			// Check that it is not being deferred past its next occurrence.
 			KAlarmEvent event(*kcalEvent);
-			event.setTime(dateTime);
+			QDateTime next;
+			event.nextOccurrence(QDateTime::currentDateTime(), next);
+			if (next.isValid()  &&  dateTime >= next)
+			{
+				KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next occurrence (currently %1)")
+				                    .arg(KGlobal::locale()->formatDateTime(next)));
+				return;
+			}
+			event.defer(dateTime);
 			theApp()->updateEvent(event, 0L);
 		}
 		else
