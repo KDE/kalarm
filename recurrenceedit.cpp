@@ -54,22 +54,20 @@
 #include "dateedit.h"
 #include "msgevent.h"
 #include "buttongroup.h"
-using namespace KCal;
 
 #include "recurrenceedit.moc"
 
-static QString ordinal[] = {
-	QString::null,
-	i18n("1st"),  i18n("2nd"),  i18n("3rd"),  i18n("4th"),  i18n("5th"),
-	i18n("6th"),  i18n("7th"),  i18n("8th"),  i18n("9th"),  i18n("10th"),
-	i18n("11th"), i18n("12th"), i18n("13th"), i18n("14th"), i18n("15th"),
-	i18n("16th"), i18n("17th"), i18n("18th"), i18n("19th"), i18n("20th"),
-	i18n("21st"), i18n("22nd"), i18n("23rd"), i18n("24th"), i18n("25th"),
-	i18n("26th"), i18n("27th"), i18n("28th"), i18n("29th"), i18n("30th"),
-	i18n("31st")
+static const char * const ordinal[] = {
+	I18N_NOOP("1st"),  I18N_NOOP("2nd"),  I18N_NOOP("3rd"),  I18N_NOOP("4th"),  I18N_NOOP("5th"),
+	I18N_NOOP("6th"),  I18N_NOOP("7th"),  I18N_NOOP("8th"),  I18N_NOOP("9th"),  I18N_NOOP("10th"),
+	I18N_NOOP("11th"), I18N_NOOP("12th"), I18N_NOOP("13th"), I18N_NOOP("14th"), I18N_NOOP("15th"),
+	I18N_NOOP("16th"), I18N_NOOP("17th"), I18N_NOOP("18th"), I18N_NOOP("19th"), I18N_NOOP("20th"),
+	I18N_NOOP("21st"), I18N_NOOP("22nd"), I18N_NOOP("23rd"), I18N_NOOP("24th"), I18N_NOOP("25th"),
+	I18N_NOOP("26th"), I18N_NOOP("27th"), I18N_NOOP("28th"), I18N_NOOP("29th"), I18N_NOOP("30th"),
+	I18N_NOOP("31st")
 };
 
-
+using namespace KCal;
 RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	: QFrame(parent, name),
 	  noEmitTypeChanged(true)
@@ -293,7 +291,7 @@ void RecurrenceEdit::initMonthly()
 	nthDayEntry = new QComboBox(false, monthlyButtonGroup);
 	nthDayEntry->setSizeLimit(11);
 	for (i = 1;  i <= 31;  ++i)
-		nthDayEntry->insertItem(ordinal[i]);
+		nthDayEntry->insertItem(i18n(ordinal[i]));
 	nthDayEntry->setFixedSize(nthDayEntry->sizeHint());
 	QWhatsThis::add(nthDayEntry,
 	      i18n("Select the day of the month on which to repeat the alarm"));
@@ -311,7 +309,7 @@ void RecurrenceEdit::initMonthly()
 	layout->addWidget(onNthTypeOfDayButton);
 	nthNumberEntry = new QComboBox(false, monthlyButtonGroup);
 	for (i = 1;  i <= 5;  ++i)
-		nthNumberEntry->insertItem(ordinal[i]);
+		nthNumberEntry->insertItem(i18n(ordinal[i]));
 	nthNumberEntry->insertItem(i18n("Last"));
 	nthNumberEntry->setFixedSize(nthNumberEntry->sizeHint());
 	QWhatsThis::add(nthNumberEntry,
@@ -355,7 +353,7 @@ void RecurrenceEdit::initYearly()
 	yearMonthDayEntry = new QComboBox(false, yearlyButtonGroup);
 	yearMonthDayEntry->setSizeLimit(11);
 	for (i = 1;  i <= 31;  ++i)
-		yearMonthDayEntry->insertItem(ordinal[i]);
+		yearMonthDayEntry->insertItem(i18n(ordinal[i]));
 	yearMonthDayEntry->setFixedSize(yearMonthDayEntry->sizeHint());
 	QWhatsThis::add(yearMonthDayEntry,
 	      i18n("Select the day of the month on which to repeat the alarm"));
@@ -380,7 +378,7 @@ void RecurrenceEdit::initYearly()
 
 	yearlyNthNumberEntry = new QComboBox(false, yearlyButtonGroup);
 	for (i = 1;  i <= 5;  ++i)
-		yearlyNthNumberEntry->insertItem(ordinal[i]);
+		yearlyNthNumberEntry->insertItem(i18n(ordinal[i]));
 	yearlyNthNumberEntry->insertItem(i18n("Last"));
 	yearlyNthNumberEntry->setFixedSize(yearlyNthNumberEntry->sizeHint());
 	QWhatsThis::add(yearlyNthNumberEntry,
