@@ -270,14 +270,14 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	topLayout->setStretchFactor(mExceptionGroup, 2);
 	vlayout = new QVBoxLayout(mExceptionGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
-	QGridLayout *grid = new QGridLayout(vlayout, 5, 4, 0);
+	QGridLayout *grid = new QGridLayout(vlayout, 4, 4, 0);
 
 	mExceptionDateList = new QListBox(mExceptionGroup);
 	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	connect(mExceptionDateList, SIGNAL(selectionChanged()), SLOT(enableExceptionButtons()));
 	QWhatsThis::add(mExceptionDateList,
 	      i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
-	grid->addMultiCellWidget(mExceptionDateList, 0, 4, 0, 0);
+	grid->addMultiCellWidget(mExceptionDateList, 0, 3, 0, 0);
 	grid->setColStretch(0, 1);
 	grid->addColSpacing(1, KDialog::spacingHint());
 
@@ -310,6 +310,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		QWhatsThis::add(mChangeExceptionButton,
 		      i18n("Replace the currently highlighted item in the exceptions list with the date entered above"));
 		grid->addWidget(mChangeExceptionButton, 1, 3);
+#if !KDE_IS_VERSION(3,1,90)
+		grid->addRowSpacing(2, KDialog::spacingHint());
+#endif
 
 		mDeleteExceptionButton = new QPushButton(i18n("Delete"), mExceptionGroup);
 		mDeleteExceptionButton->setFixedSize(mDeleteExceptionButton->sizeHint());
