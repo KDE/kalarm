@@ -53,10 +53,10 @@
 
 using namespace KCal;
 
-static QString messageFromPrefix    = i18n("'From' email address", "From:\t");
-static QString messageToPrefix      = i18n("'To' email address", "To:\t");
-static QString messageDatePrefix    = i18n("Date:\t");
-static QString messageSubjectPrefix = i18n("Email subject", "Subject:\t");
+static QString messageFromPrefix    = i18n("'From' email address", "From:");
+static QString messageToPrefix      = i18n("Email addressee", "To:");
+static QString messageDatePrefix    = i18n("Date:");
+static QString messageSubjectPrefix = i18n("Email subject", "Subject:");
 
 
 /*=============================================================================
@@ -874,18 +874,18 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 		if (!mailList.count())
 			return;
 		KPIM::MailSummary& summary = mailList.first();
-		text = messageFromPrefix;
+		text = messageFromPrefix + '\t';
 		text += summary.from();
 		text += '\n';
-		text += messageToPrefix;
+		text += messageToPrefix + '\t';
 		text += summary.to();
 		text += '\n';
-		text += messageDatePrefix;
+		text += messageDatePrefix + '\t';
 		QDateTime dt;
 		dt.setTime_t(summary.date());
 		text += KGlobal::locale()->formatDateTime(dt);
 		text += '\n';
-		text += messageSubjectPrefix;
+		text += messageSubjectPrefix + '\t';
 		text += summary.subject();
 	}
 	else if (QTextDrag::decode(e, text))

@@ -409,7 +409,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	grid->setColStretch(1, 1);
 
 	// Email recipients
-	QLabel* label = new QLabel(i18n("To:"), mEmailFrame);
+	QLabel* label = new QLabel(i18n("Email addressee", "To:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
@@ -433,7 +433,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	}
 
 	// Email subject
-	label = new QLabel(i18n("Sub&ject:"), mEmailFrame);
+	label = new QLabel(i18n("Email subject", "Sub&ject:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
