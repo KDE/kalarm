@@ -442,6 +442,8 @@ int KAlarmApp::newInstance()
 				}
 
 				int flags = 0;
+				if (args->isSet("ack-confirm"))
+					flags |= KAlarmEvent::CONFIRM_ACK;
 				if (args->isSet("beep"))
 					flags |= KAlarmEvent::BEEP;
 				if (args->isSet("late-cancel"))
@@ -460,6 +462,8 @@ int KAlarmApp::newInstance()
 			}
 			else
 			{
+				if (args->isSet("ack-confirm"))
+					usage += QString::fromLatin1("--ack-confirm ");
 				if (args->isSet("beep"))
 					usage += QString::fromLatin1("--beep ");
 				if (args->isSet("color"))
