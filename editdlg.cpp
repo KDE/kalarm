@@ -274,10 +274,6 @@ void EditAlarmDlg::getEvent(MessageEvent& event)
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
 	theApp()->writeConfigWindowSize("EditDialog", re->size());
-#warning "Do the next 3 lines need to be reinstated for session restoration?"
-/* KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("EditDialog");
-	config->writeEntry("Size", re->size());*/
 	KDialog::resizeEvent(re);
 }
 

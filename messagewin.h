@@ -38,6 +38,9 @@ class MessageWin : public KMainWindow
 		virtual void saveProperties(KConfig*);
 		virtual void readProperties(KConfig*);
 
+//	public slots:
+//		virtual void      resize(int w, int h);
+
 	protected slots:
 		void              slotShowDefer();
 		void              slotDefer();
@@ -51,7 +54,6 @@ class MessageWin : public KMainWindow
 		QColor            colour;
 		QDateTime         dateTime;
 		QString           eventID;
-		int               repeats;
 		int               flags;
 		QString           audioFile;
 		bool              beep;
@@ -59,6 +61,8 @@ class MessageWin : public KMainWindow
 		// Miscellaneous
 		QPushButton*      deferButton;
 		AlarmTimeWidget*  deferTime;
+		int               deferHeight;      // height of defer dialog
+		int               restoreHeight;
 		bool              rescheduleEvent;  // true to delete event after message has been displayed
 		bool              shown;            // true once the window has been displayed
 		bool              deferDlgShown;    // true if defer dialog is visible

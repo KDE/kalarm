@@ -626,8 +626,6 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1(window));
-#warning "Should the next line be here? - for session resoration???"
-	config->writeEntry(QString::fromLatin1("Size"), size);
 	QWidget* desktop = KApplication::desktop();
 	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
 	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());

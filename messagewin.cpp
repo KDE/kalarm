@@ -52,14 +52,14 @@ MessageWin::MessageWin(const MessageEvent& event, bool reschedule_event)
 	  colour(event.colour()),
 	  dateTime(event.dateTime()),
 	  eventID(event.VUID()),
-	  repeats(event.repeatCount()),
 	  flags(event.flags()),
 	  audioFile(event.alarm()->audioFile()),
 	  beep(event.beep()),
 	  file(event.messageIsFileName()),
+	  deferHeight(0),
+	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
-	  shown(false),
-	  deferDlgShown(false)
+	  shown(false)
 {
 	kdDebug() << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWindow"));     // save window sizes etc.
@@ -71,9 +71,11 @@ MessageWin::MessageWin(const MessageEvent& event, bool reschedule_event)
 
 /******************************************************************************
 *  Construct the message window for restoration by session management.
+*  The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
 	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
+	  deferHeight(0),
 	  shown(true)
 {
 	kdDebug() << "MessageWin::MessageWin()" << endl;
@@ -221,7 +223,7 @@ QSize MessageWin::initView()
 	QSize size(minbutsize.width()*3, topLayout->sizeHint().height());
 	setMinimumSize(size);
 
-//KWin::setType(winId(), NET::Dialog);     // display Help button in the title bar
+// display Help button in the title bar ????
 	KWin::setState(winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
 	KWin::setOnAllDesktops(winId(), true);
 	return size;
@@ -233,11 +235,14 @@ QSize MessageWin::initView()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
+	config->writeEntry(QString::fromLatin1("ID"), eventID);
 	config->writeEntry(QString::fromLatin1("Message"), message);
+	config->writeEntry(QString::fromLatin1("File"), file);
 	config->writeEntry(QString::fromLatin1("Font"), font);
 	config->writeEntry(QString::fromLatin1("Colour"), colour);
 	if (dateTime.isValid())
 		config->writeEntry(QString::fromLatin1("Time"), dateTime);
+	config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
 }
 
 /******************************************************************************
@@ -247,11 +252,14 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	message  = config->readEntry(QString::fromLatin1("Message"));
-	font     = config->readFontEntry(QString::fromLatin1("Font"));
-	colour   = config->readColorEntry(QString::fromLatin1("Colour"));
+	eventID       = config->readEntry(QString::fromLatin1("ID"));
+	message       = config->readEntry(QString::fromLatin1("Message"));
+	file          = config->readBoolEntry(QString::fromLatin1("File"));
+	font          = config->readFontEntry(QString::fromLatin1("Font"));
+	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
 	QDateTime invalidDateTime;
-	dateTime = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	dateTime      = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	initView();
 }
 
@@ -284,9 +292,23 @@ void MessageWin::showEvent(QShowEvent* se)
 */
 void MessageWin::resizeEvent(QResizeEvent* re)
 {
-	if (file  &&  !fileError  &&  !deferDlgShown)
-		theApp()->writeConfigWindowSize("FileMessage", re->size());
-	KMainWindow::resizeEvent(re);
+	if (restoreHeight)
+	{
+		if (restoreHeight != re->size().height())
+		{
+			QSize size = re->size();
+			size.setHeight(restoreHeight);
+			resize(size);
+		}
+		else if (isVisible())
+			restoreHeight = 0;
+	}
+	else
+	{
+		if (file  &&  !fileError  &&  !deferHeight)
+			theApp()->writeConfigWindowSize("FileMessage", re->size());
+		KMainWindow::resizeEvent(re);
+	}
 }
 
 /******************************************************************************
@@ -295,7 +317,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::slotShowDefer()
 {
-	if (!deferDlgShown)
+	if (!deferHeight)
 	{
 		delete deferButton;
 		QWidget* deferDlg = new QWidget(this);
@@ -306,8 +328,9 @@ void MessageWin::slotShowDefer()
 		deferTime->setDateTime(QDateTime::currentDateTime());
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
-		if (repeats)
+		if (theApp()->getCalendar().getEvent(eventID))
 		{
+			// The event will only still exist if repetitions are outstanding
 			QLabel* warn = new QLabel(deferDlg);
 			warn->setText(i18n("Note: deferring this alarm will also defer its repetitions"));
 			warn->setFixedSize(warn->sizeHint());
@@ -336,7 +359,7 @@ void MessageWin::slotShowDefer()
 			setGeometry(rect);
 		}
 
-		deferDlgShown = true;
+		deferHeight = s.height();
 		if (layout())
 			layout()->setEnabled(false);
 		deferDlg->setGeometry(0, height(), s.width(), s.height());
