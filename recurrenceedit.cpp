@@ -91,18 +91,18 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	topLayout->addWidget(repeatButtonGroup);
 	connect(repeatButtonGroup, SIGNAL(clicked(int)), this, SLOT(repeatTypeClicked(int)));
 
-	noneRadio = new QRadioButton(i18n("No repetition"), repeatButtonGroup);
+	noneRadio = new QRadioButton(i18n("&No repetition"), repeatButtonGroup);
 	noneRadio->setFixedSize(noneRadio->sizeHint());
 	QWhatsThis::add(noneRadio,
 	      i18n("Trigger the alarm once only"));
 
-	repeatAtLoginRadio = new QRadioButton(i18n("Repeat at login"), repeatButtonGroup, "repeatAtLoginButton");
+	repeatAtLoginRadio = new QRadioButton(i18n("Repeat at lo&gin"), repeatButtonGroup, "repeatAtLoginButton");
 	repeatAtLoginRadio->setFixedSize(repeatAtLoginRadio->sizeHint());
 	QWhatsThis::add(repeatAtLoginRadio,
 	      i18n("Repeat the alarm at every login until the specified time.\n"
 	           "Note that it will also be repeated any time the alarm daemon is restarted."));
 
-	recurRadio = new QRadioButton(i18n("Recur"), repeatButtonGroup);
+	recurRadio = new QRadioButton(i18n("Rec&ur"), repeatButtonGroup);
 	recurRadio->setFixedSize(recurRadio->sizeHint());
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
 
@@ -158,27 +158,27 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	recurHourMinFrequency->setFixedSize(size);
 	recurFrequencyStack->setFixedSize(size);
 
-	subdailyButton = new QRadioButton(i18n("Hours/Minutes"), ruleButtonGroup);
+	subdailyButton = new QRadioButton(i18n("Ho&urs/Minutes"), ruleButtonGroup);
 	subdailyButton->setFixedSize(subdailyButton->sizeHint());
 	QWhatsThis::add(subdailyButton,
 	      i18n("Set the alarm repetition interval to the number of hours and minutes entered"));
 
-	dailyButton    = new QRadioButton(i18n("Days"), ruleButtonGroup);
+	dailyButton    = new QRadioButton(i18n("&Days"), ruleButtonGroup);
 	dailyButton->setFixedSize(dailyButton->sizeHint());
 	QWhatsThis::add(dailyButton,
 	      i18n("Set the alarm repetition interval to the number of days entered"));
 
-	weeklyButton   = new QRadioButton(i18n("Weeks"), ruleButtonGroup);
+	weeklyButton   = new QRadioButton(i18n("&Weeks"), ruleButtonGroup);
 	weeklyButton->setFixedSize(weeklyButton->sizeHint());
 	QWhatsThis::add(weeklyButton,
 	      i18n("Set the alarm repetition interval to the number of weeks entered"));
 
-	monthlyButton  = new QRadioButton(i18n("Months"), ruleButtonGroup);
+	monthlyButton  = new QRadioButton(i18n("&Months"), ruleButtonGroup);
 	monthlyButton->setFixedSize(monthlyButton->sizeHint());
 	QWhatsThis::add(monthlyButton,
 	      i18n("Set the alarm repetition interval to the number of months entered"));
 
-	yearlyButton   = new QRadioButton(i18n("Years"), ruleButtonGroup);
+	yearlyButton   = new QRadioButton(i18n("&Years"), ruleButtonGroup);
 	yearlyButton->setFixedSize(yearlyButton->sizeHint());
 	QWhatsThis::add(yearlyButton,
 	      i18n("Set the alarm repetition interval to the number of years entered"));
@@ -230,14 +230,14 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 
 	QVBoxLayout* vlayout = new QVBoxLayout(rangeButtonGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
-	noEndDateButton = new QRadioButton(i18n("No end"), rangeButtonGroup);
+	noEndDateButton = new QRadioButton(i18n("No &end"), rangeButtonGroup);
 	noEndDateButton->setFixedSize(noEndDateButton->sizeHint());
 	QWhatsThis::add(noEndDateButton, i18n("Repeat the alarm indefinitely"));
 	vlayout->addWidget(noEndDateButton, 1, Qt::AlignLeft);
 	size = noEndDateButton->size();
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
-	repeatCountButton = new QRadioButton(i18n("End after:"), rangeButtonGroup);
+	repeatCountButton = new QRadioButton(i18n("End a&fter:"), rangeButtonGroup);
 	QWhatsThis::add(repeatCountButton,
 	      i18n("Repeat the alarm for the number of times specified"));
 	repeatCountEntry  = new QSpinBox(1, 9999, 1, rangeButtonGroup);
@@ -254,7 +254,7 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	size = size.expandedTo(repeatCountButton->sizeHint());
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
-	endDateButton = new QRadioButton(i18n("End by:"), rangeButtonGroup);
+	endDateButton = new QRadioButton(i18n("End &by:"), rangeButtonGroup);
 	QWhatsThis::add(endDateButton,
 	      i18n("Repeat the alarm until the date/time specified"));
 	endDateEdit   = new DateSpinBox(rangeButtonGroup);
@@ -305,7 +305,7 @@ void RecurrenceEdit::initWeekly()
 	layout->setRowStretch(0, 1);
 	layout->setColStretch(0, 1);
 
-	QLabel* label = new QLabel(i18n("On: Tuesday", "On:"), weeklyFrame);
+	QLabel* label = new QLabel(i18n("On: Tuesday", "O&n:"), weeklyFrame);
 	label->setFixedSize(label->sizeHint());
 	layout->addWidget(label, 0, 1, Qt::AlignRight);
 	layout->addColSpacing(2, 2*KDialog::spacingHint());
@@ -317,6 +317,7 @@ void RecurrenceEdit::initWeekly()
 		      i18n("Select the day(s) of the week on which to repeat the alarm"));
 		layout->addWidget(dayBox[i], i, 3, Qt::AlignLeft);
 	}
+	label->setBuddy(dayBox[0]);
 	layout->setColStretch(4, 1);
 }
 
@@ -335,7 +336,7 @@ void RecurrenceEdit::initMonthly()
 	QBoxLayout* topLayout = new QVBoxLayout(monthlyButtonGroup, KDialog::marginHint());
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	onNthDayButton = new QRadioButton(i18n("On the 7th day", "On the"), monthlyButtonGroup);
+	onNthDayButton = new QRadioButton(i18n("On the 7th day", "O&n the"), monthlyButtonGroup);
 	onNthDayButton->setFixedSize(onNthDayButton->sizeHint());
 	QWhatsThis::add(onNthDayButton,
 	      i18n("Repeat the alarm on the selected day of the month"));
@@ -354,7 +355,7 @@ void RecurrenceEdit::initMonthly()
 	layout->addStretch();
 
 	layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	onNthTypeOfDayButton = new QRadioButton(i18n("On the 1st Tuesday", "On the"), monthlyButtonGroup);
+	onNthTypeOfDayButton = new QRadioButton(i18n("On the 1st Tuesday", "On t&he"), monthlyButtonGroup);
 	onNthTypeOfDayButton->setFixedSize(onNthTypeOfDayButton->sizeHint());
 	QWhatsThis::add(onNthTypeOfDayButton,
 	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
@@ -397,7 +398,7 @@ void RecurrenceEdit::initYearly()
 
 	// Set up the yearly month widgets
 	QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
-	yearMonthButton = new QRadioButton(i18n("On 7th January", "On"), yearlyButtonGroup);
+	yearMonthButton = new QRadioButton(i18n("On 7th January", "O&n"), yearlyButtonGroup);
 	yearMonthButton->setFixedSize(yearMonthButton->sizeHint());
 	QWhatsThis::add(yearMonthButton,
 	      i18n("Repeat the alarm on the selected date in the year"));
@@ -422,7 +423,7 @@ void RecurrenceEdit::initYearly()
 	// Set up the yearly position widgets
 	QBoxLayout* vlayout = new QVBoxLayout(topLayout, KDialog::spacingHint());
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
-	yearlyOnNthTypeOfDayButton = new QRadioButton(i18n("On the 1st Tuesday", "On the"), yearlyButtonGroup);
+	yearlyOnNthTypeOfDayButton = new QRadioButton(i18n("On the 1st Tuesday", "On t&he"), yearlyButtonGroup);
 	yearlyOnNthTypeOfDayButton->setFixedSize(yearlyOnNthTypeOfDayButton->sizeHint());
 	QWhatsThis::add(yearlyOnNthTypeOfDayButton,
 	      i18n("Repeat the alarm on one day of the week, in the selected week of a month"));
