@@ -157,6 +157,8 @@ class KAlarmApp : public KUniqueApplication
 		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
 		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
 		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
+		int                   mQueueQuitCode;       // exit code for a queued quit
+		bool                  mQueueQuit;           // quit once the DCOP command queue has been processed
 		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed
 		bool                  mNoShellAccess;       // shell commands are not allowed (kiosk mode)
 		bool                  mKDEDesktop;          // running on KDE desktop

@@ -105,6 +105,7 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
+	  mQueueQuit(false),
 	  mProcessingQueue(false),
 	  mCheckingSystemTray(false),
 	  mSessionClosingDown(false),
@@ -675,6 +676,13 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 			if (checkSystemTray())
 				return;
 		}
+		if (mDcopQueue.count())
+		{
+			// Don't quit yet if there are outstanding actions on the DCOP queue
+			mQueueQuit = true;
+			mQueueQuitCode = exitCode;
+			return;
+		}
 	}
 
 	/* This was the last/only running "instance" of the program, so exit completely.
@@ -759,6 +767,10 @@ void KAlarmApp::processQueue()
 
 		// Purge the expired alarms calendar if it's time to do so
 		AlarmCalendar::expiredCalendar()->purgeIfQueued();
+
+		// Now that the queue has been processed, quit if a quit was queued
+		if (mQueueQuit)
+			quitIf(mQueueQuitCode);
 
 		mProcessingQueue = false;
 	}
