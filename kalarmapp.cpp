@@ -109,7 +109,7 @@ KAlarmApp::KAlarmApp()
 	KActionCollection* actions = new KActionCollection(this);
 	mActionAlarmEnable   = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), actions, "alarmenable");
 	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
-#if 1
+#if KDE_VERSION >= 308
 	mActionDaemonControl = new KAction(i18n("Control Alarm &Daemon..."), mActionPrefs->iconSet(),
 #else
 	mActionDaemonControl = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
@@ -680,7 +680,11 @@ void KAlarmApp::slotDaemonControl()
 {
 	KProcess proc;
 	proc << locate("exe", QString::fromLatin1("kcmshell"));
+#if KDE_VERSION >= 308
 	proc << QString::fromLatin1("kcmkded");
+#else
+	proc << QString::fromLatin1("alarmdaemonctrl");
+#endif
 	proc.start(KProcess::DontCare);
 }
 
