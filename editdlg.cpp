@@ -114,8 +114,8 @@ QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &se
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const char* name,
                            const KAEvent* event, bool readOnly)
 	: KDialogBase(parent, name, true, caption,
-                    (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
-                    (readOnly ? Cancel : Ok)),
+	              (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
+	              (readOnly ? Cancel : Ok)),
 	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
@@ -770,6 +770,24 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
 	return widget;
 }
 
+#ifdef NEW_CANCEL_IF_LATE
+/******************************************************************************
+ * Create a "cancel if late" selector.
+ */
+TimeSelector* EditAlarmDlg::createLateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)
+{
+	QString whatsThis = i18n("If checked, the alarm will be canceled if it cannot be triggered within the "
+	                         "specified period after its scheduled time. Possible reasons for not triggering "
+	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
+	                         "If unchecked, the alarm will be triggered at the first opportunity after "
+	                         "its scheduled time, regardless of how late it is.");
+	TimeSelector* widget = new TimeSelector(i18n("Cancel if 10 minutes late", "Ca&ncel if"),
+	                                        i18n("Cancel if 10 minutes late", "late"),
+	                                        whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
+	                                        allowHourMinute, parent, name);
+	return widget;
+}
+#else
 /******************************************************************************
  * Create a "cancel if late" checkbox.
  */
@@ -784,6 +802,7 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(QWidget* parent, const char* na
 	           "the specified time, regardless of how late it is."));
 	return widget;
 }
+#endif
 
 /******************************************************************************
  * Save the state of all controls.
@@ -1035,7 +1054,7 @@ void EditAlarmDlg::slotOk()
 	if (mTimeWidget
 	&&  activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
-	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();
+	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();    // does it recur other than at login?
 	if (mTemplate)
 	{
 		// Check that the template name is not blank and is unique
