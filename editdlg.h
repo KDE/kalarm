@@ -90,6 +90,9 @@ class EditAlarmDlg : public KDialogBase
 		QRadioButton*    messageRadio;
 		QRadioButton*    commandRadio;
 		QRadioButton*    fileRadio;
+#ifdef KALARM_EMAIL
+		QRadioButton*    emailRadio;
+#endif
 		QPushButton*     browseButton;
 		QMultiLineEdit*  messageEdit;     // alarm message edit box
 		QGroupBox*       deferGroup;
@@ -100,6 +103,9 @@ class EditAlarmDlg : public KDialogBase
 		QCheckBox*       sound;
 		QPushButton*     soundPicker;
 		QCheckBox*       confirmAck;
+#ifdef KALARM_EMAIL
+		QCheckBox*       emailBcc;
+#endif
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else

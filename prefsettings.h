@@ -26,8 +26,9 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qdatetime.h>
-#include "recurrenceedit.h"
 class QWidget;
+
+#include "recurrenceedit.h"
 
 
 // Settings configured in the Preferences dialog
@@ -46,10 +47,10 @@ class Settings : public QObject
 		int            daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		const QTime&   startOfDay() const               { return mStartOfDay; }
 		bool           startOfDayChanged() const        { return mStartOfDayChanged; }
-		const QString& emailAddress() const             { return mEmailAddress; }
 		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
+      bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
 
@@ -69,6 +70,7 @@ class Settings : public QObject
 		static const bool   default_defaultLateCancel;
 		static const bool   default_defaultConfirmAck;
 		static const bool   default_defaultBeep;
+		static const bool   default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                    default_defaultRecurPeriod;
 		bool                mRunInSystemTray;
@@ -79,11 +81,11 @@ class Settings : public QObject
 		QTime               mStartOfDay;
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
-		QString             mEmailAddress;
 		// Default settings for Edit Alarm dialog
 		bool                mDefaultLateCancel;
 		bool                mDefaultConfirmAck;
 		bool                mDefaultBeep;
+      bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
 

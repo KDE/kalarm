@@ -36,6 +36,7 @@ const QTime  Settings::default_startOfDay(0, 0);
 const bool   Settings::default_defaultLateCancel       = false;
 const bool   Settings::default_defaultConfirmAck       = false;
 const bool   Settings::default_defaultBeep             = false;
+const bool   Settings::default_defaultEmailBcc         = false;
 const RecurrenceEdit::RepeatType Settings::default_defaultRecurPeriod = RecurrenceEdit::SUBDAILY;
 
 // Config file entry names
@@ -53,11 +54,12 @@ static const QString DEFAULTS_SECTION       = QString::fromLatin1("Defaults");
 static const QString DEF_LATE_CANCEL        = QString::fromLatin1("DefLateCancel");
 static const QString DEF_CONFIRM_ACK        = QString::fromLatin1("DefConfirmAck");
 static const QString DEF_BEEP               = QString::fromLatin1("DefBeep");
+static const QString DEF_EMAIL_BCC          = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD       = QString::fromLatin1("DefRecurPeriod");
 
 inline int Settings::startOfDayCheck() const
 {
-	// Combine with a "random" constant to prevent 'clever' people fiddling the
+	// Combine with a 'random' constant to prevent 'clever' people fiddling the
 	// value, and thereby screwing things up.
 	return QTime().msecsTo(mStartOfDay) ^ 0x82451630;
 }
@@ -87,6 +89,7 @@ void Settings::loadSettings()
 	mDefaultLateCancel       = config->readBoolEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+	mDefaultEmailBcc         = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
@@ -110,6 +113,9 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
+#ifdef KALARM_EMAIL
+	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
+#endif
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	if (syncToDisc)
 		config->sync();

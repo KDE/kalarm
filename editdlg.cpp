@@ -72,79 +72,85 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	topLayout->addWidget(actionGroup);
 	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, marginKDE2 + marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	int gridRow = 1;
 
-	// Message radio button has an ID of 0
+	// Message radio button
 	messageRadio = new QRadioButton(i18n("Text"), actionGroup, "messageButton");
 	messageRadio->setFixedSize(messageRadio->sizeHint());
 	QWhatsThis::add(messageRadio,
-	      i18n("The edit field below contains the alarm message text."));
-	grid->addWidget(messageRadio, 1, 0, AlignLeft);
+	      i18n("If checked, the alarm will display a text message."));
+	grid->addWidget(messageRadio, gridRow, 0, AlignLeft);
 	grid->setColStretch(0, 1);
 
-	// Command radio button has an ID of 1
-	commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
-	commandRadio->setFixedSize(commandRadio->sizeHint());
-	QWhatsThis::add(commandRadio,
-	      i18n("The edit field below contains a shell command to execute."));
-	grid->addWidget(commandRadio, 1, 1, AlignLeft);
-	grid->setColStretch(1, 1);
-
-#ifdef KALARM_EMAIL
-	// Email radio button has an ID of 2
-	emailRadio = new QRadioButton(i18n("Email"), actionGroup, "emailButton");
-	emailRadio->setFixedSize(emailRadio->sizeHint());
-	QWhatsThis::add(emailRadio,
-	      i18n("The edit fields below contain the contents of an email to send."));
-	grid->addWidget(emailRadio, 1, 2, AlignLeft);
-	grid->setColStretch(1, 1);
-#endif
-
-	// File radio button has an ID of 2
+	// File radio button
+	QBoxLayout* layout = new QHBoxLayout(grid, spacingHint());
 	fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
 	fileRadio->setFixedSize(fileRadio->sizeHint());
 	QWhatsThis::add(fileRadio,
-	      i18n("The edit field below contains the name of a text file whose contents will be "
-	           "displayed as the alarm message text."));
-	grid->addWidget(fileRadio, 1, 2, AlignRight);
+	      i18n("If checked, the alarm will display the contents of a text file."));
+	layout->addWidget(fileRadio);
 
 	// Browse button
 	browseButton = new QPushButton(actionGroup);
 	browseButton->setPixmap(SmallIcon("fileopen"));
 	browseButton->setFixedSize(browseButton->sizeHint());
 	QWhatsThis::add(browseButton, i18n("Select a text file to display."));
-	grid->addWidget(browseButton, 1, 3, AlignLeft);
+	layout->addWidget(browseButton);
+	grid->addLayout(layout, gridRow, 1);
+	grid->setColStretch(1, 1);
+
+	// Command radio button
+	commandRadio = new QRadioButton(i18n("Command"), actionGroup, "cmdButton");
+	commandRadio->setFixedSize(commandRadio->sizeHint());
+	QWhatsThis::add(commandRadio,
+	      i18n("If checked, the alarm will execute a shell command."));
+	grid->addWidget(commandRadio, gridRow, 2, AlignRight);
+	grid->setColStretch(2, 1);
 
 #ifdef KALARM_EMAIL
-	// Email recipients
-	QLabel* label = new QLabel(i18n("To:"), actionGroup);
-	label->setFixedSize(label->sizeHint());
-	grid->addMultiCellWidget(label, 2, 2, 0, 3);
+	// Email radio button
+	emailRadio = new QRadioButton(i18n("Email"), actionGroup, "emailButton");
+	emailRadio->setFixedSize(emailRadio->sizeHint());
+	QWhatsThis::add(emailRadio,
+	      i18n("If checked, the alarm will send an email."));
+	grid->addWidget(emailRadio, gridRow, 3, AlignRight);
 
-	emailToEdit = new QLineEdit(actionGroup);
+	// Email recipients
+	++gridRow;
+	emailFrame = new QFrame(actionGroup);
+	emailFrame->setFrameStyle(QFrame::NoFrame);
+	QGridLayout* subGrid = new QGridLayout(emailFrame, 2, 2, 0, spacingHint());
+	QLabel* label = new QLabel(i18n("To:"), emailFrame);
+	label->setFixedSize(label->sizeHint());
+	subGrid->addWidget(label, 0, 0);
+
+	emailToEdit = new QLineEdit(emailFrame);
 	emailToEdit->setMinimumSize(emailToEdit->sizeHint());
 	QWhatsThis::add(emailToEdit,
-	      i18n("Enter the addresses of the email recipients. Separate multiple addresses with "
+	      i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
 	           "commas or semicolons."));
-	grid->addMultiCellWidget(emailToEdit, 2, 2, 0, 3);
+	subGrid->addWidget(emailToEdit, 0, 1);
 
 	// Email subject
-	label = new QLabel(i18n("Subject:"), actionGroup);
+	label = new QLabel(i18n("Subject:"), emailFrame);
 	label->setFixedSize(label->sizeHint());
-	grid->addMultiCellWidget(label, 2, 2, 0, 3);
+	subGrid->addWidget(label, 1, 0);
 
-	emailSubjectEdit = new QLineEdit(actionGroup);
+	emailSubjectEdit = new QLineEdit(emailFrame);
 	emailSubjectEdit->setMinimumSize(emailSubjectEdit->sizeHint());
 	QWhatsThis::add(emailSubjectEdit, i18n("Enter the email subject."));
-	grid->addMultiCellWidget(emailSubjectEdit, 2, 2, 0, 3);
+	subGrid->addWidget(emailSubjectEdit, 1, 1);
+	grid->addMultiCellWidget(emailFrame, gridRow, gridRow, 0, 3);
 #endif
 
+	++gridRow;
 	messageEdit = new QMultiLineEdit(actionGroup);
 	QSize size = messageEdit->sizeHint();
 	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
 	messageEdit->setMinimumSize(size);
 	messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
 	connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
-	grid->addMultiCellWidget(messageEdit, 2, 2, 0, 3);
+	grid->addMultiCellWidget(messageEdit, gridRow, gridRow, 0, 3);
 
 	if (event  &&  event->recurs() != KAlarmEvent::NO_RECUR  &&  event->deferred())
 	{
@@ -182,10 +188,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Late display checkbox - default = allow late display
 
-	lateCancel = new QCheckBox(page);
-	lateCancel->setText(i18n("Cancel if late"));
+	lateCancel = new QCheckBox(i18n("Cancel if late"), page);
 	lateCancel->setFixedSize(lateCancel->sizeHint());
-	lateCancel->setChecked(false);
 	QWhatsThis::add(lateCancel,
 	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
 	           "minute of the specified time. Possible reasons for not triggering include your "
@@ -200,10 +204,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QFrame* frame = new QFrame(page);
 	frame->setFrameStyle(QFrame::NoFrame);
 	QHBoxLayout* slayout = new QHBoxLayout(frame, 0, spacingHint());
-	sound = new QCheckBox(frame);
-	sound->setText(i18n("Sound"));
+	sound = new QCheckBox(i18n("Sound"), frame);
 	sound->setFixedSize(sound->sizeHint());
-	sound->setChecked(false);
 	connect(sound, SIGNAL(toggled(bool)), this, SLOT(slotSoundToggled(bool)));
 	QWhatsThis::add(sound,
 	      i18n("If checked, a sound will be played when the message is displayed. Click the "
@@ -223,10 +225,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Acknowledgement confirmation required - default = no confirmation
 
-	confirmAck = new QCheckBox(page);
-	confirmAck->setText(i18n("Confirm acknowledgement"));
+	confirmAck = new QCheckBox(i18n("Confirm acknowledgement"), page);
 	confirmAck->setFixedSize(confirmAck->sizeHint());
-	confirmAck->setChecked(false);
 	QWhatsThis::add(confirmAck,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	grid->addWidget(confirmAck, 1, 0, AlignLeft);
@@ -255,13 +255,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	emailBcc = new QCheckBox(page);
-	emailBcc->setText(i18n("Copy email to self"));
+	emailBcc = new QCheckBox(i18n("Copy email to self"), page);
 	emailBcc->setFixedSize(emailBcc->sizeHint());
-	emailBcc->setChecked(false);
 	QWhatsThis::add(emailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
-	grid->addWidget(emailBcc, 1, 0, AlignLeft);
+	grid->addWidget(emailBcc, 2, 0, AlignLeft);
 #endif
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
@@ -312,6 +310,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
 		soundFile = event->audioFile();
 		sound->setChecked(event->beep() || !soundFile.isEmpty());
+#ifdef KALARM_EMAIL
+		emailToEdit->setText(event->emailAddressees());
+		emailSubjectEdit->setText(event->emailSubject());
+		emailBcc->setChecked(event->emailBcc());
+#endif
 	}
 	else
 	{
@@ -332,6 +335,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		confirmAck->setChecked(settings->defaultConfirmAck());
 		recurrenceEdit->setDefaults(defaultTime);   // must be called after timeWidget is set up, to ensure correct date-only enabling
 		sound->setChecked(settings->defaultBeep());
+#ifdef KALARM_EMAIL
+		emailBcc->setChecked(settings->defaultEmailBcc());
+#endif
 	}
 
 	size = basicSize;
@@ -375,6 +381,9 @@ int EditAlarmDlg::getAlarmFlags() const
 	return (sound->isChecked() && soundFile.isEmpty() ? KAlarmEvent::BEEP : 0)
 	     | (lateCancel->isChecked()                   ? KAlarmEvent::LATE_CANCEL : 0)
 	     | (confirmAck->isChecked()                   ? KAlarmEvent::CONFIRM_ACK : 0)
+#ifdef KALARM_EMAIL
+	     | (emailBcc->isChecked()                     ? KAlarmEvent::EMAIL_BCC : 0)
+#endif
 	     | (recurrenceEdit->repeatAtLogin()           ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (alarmAnyTime                              ? KAlarmEvent::ANY_TIME : 0);
 }
@@ -478,18 +487,6 @@ void EditAlarmDlg::slotEditDeferral()
 }
 
 /******************************************************************************
- * Enable/disable the controls appropriate only to displayed alarms.
- * These are the 'Sound' checkbox and sound picker button, and the 'Confirm
- * acknowledgement' checkbox.
- */
-void EditAlarmDlg::enableMessageControls(bool enable)
-{
-	confirmAck->setEnabled(enable);
-	sound->setEnabled(enable);
-	slotSoundToggled(enable && sound->isChecked());
-}
-
-/******************************************************************************
  * Called when the sound checkbox is toggled.
  */
 void EditAlarmDlg::slotSoundToggled(bool on)
@@ -565,7 +562,7 @@ void EditAlarmDlg::slotTry()
 #ifdef KALARM_EMAIL
 		if (emailRadio->isOn())
 		{
-			if (KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to send the email now to the specified recipient(s)?"),
+			if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to send the email now to the specified recipient(s)?"),
 			                                       i18n("Confirm Email"), i18n("Send")) != KMessageBox::Continue)
 				return;
 		}
@@ -731,7 +728,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(false);
 #endif
-			enableMessageControls(false);
+			enableEmailControls(true);
 		}
 #endif
 		singleLineOnly = false;
@@ -769,6 +766,9 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 			bgColourChoose->setEnabled(false);
 #endif
 			enableMessageControls(false);
+#ifdef KALARM_EMAIL
+			enableEmailControls(false);
+#endif
 		}
 		singleLineOnly = true;
 		QString text = messageEdit->text();
@@ -786,6 +786,44 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
 	}
 }
+
+/******************************************************************************
+ * Enable/disable the controls appropriate only to displayed alarms.
+ * These are the 'Sound' checkbox and sound picker button, and the 'Confirm
+ * acknowledgement' checkbox.
+ */
+void EditAlarmDlg::enableMessageControls(bool enable)
+{
+	confirmAck->setEnabled(enable);
+	sound->setEnabled(enable);
+	slotSoundToggled(enable && sound->isChecked());
+#ifdef KALARM_EMAIL
+	if (enable)
+		enableEmailControls(false);
+#endif
+}
+
+#ifdef KALARM_EMAIL
+/******************************************************************************
+ * Enable/disable the controls appropriate only to email alarms.
+ * These are the Addressees and Subject edit fields, and the blind copy checkbox.
+ */
+void EditAlarmDlg::enableEmailControls(bool enable)
+{
+	emailBcc->setEnabled(enable);
+	if (enable)
+	{
+		emailFrame->show();
+		emailFrame->setFixedHeight(emailFrame->sizeHint());
+		enableMessageControls(false);
+	}
+	else
+	{
+		emailFrame->hide();
+		emailFrame->setFixedHeight(0);
+	}
+}
+#endif
 
 /******************************************************************************
 *  Called when the text in the message edit field changes.
