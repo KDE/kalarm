@@ -269,7 +269,12 @@ void RecurrenceEdit::periodClicked(int id)
 	else
 		return;
 	ruleStack->raiseWidget(frame);
-	recurFrequencyStack->raiseWidget(subdaily ? recurHourMinFrequency : recurFrequency);
+
+        if ( subdaily )
+            recurFrequencyStack->raiseWidget(recurHourMinFrequency);
+        else
+            recurFrequencyStack->raiseWidget(recurFrequency);
+
 	endTimeEdit->setEnabled(subdaily && endDateButton->isChecked());
 	if (!subdaily)
 		QWhatsThis::add(recurFrequency, whatsThis);
