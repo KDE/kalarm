@@ -98,7 +98,7 @@ KAlarmApp::KAlarmApp()
 	                                       .arg(aboutData()->programName()));
 	readDaemonCheckInterval();
 	KWinModule wm;
-	mKDEDesktop             = wm.systemTrayWindows().count();
+	mKDEDesktop             = !!wm.systemTrayWindows().count();
 	mOldRunInSystemTray     = mKDEDesktop && mSettings->runInSystemTray();
 	mDisableAlarmsIfStopped = mOldRunInSystemTray && mSettings->disableAlarmsIfStopped();
 	mStartOfDay             = mSettings->startOfDay();
