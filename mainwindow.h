@@ -38,6 +38,8 @@ class KAlarmMainWindow : public MainWindowBase
 	public:
 		KAlarmMainWindow();
 		~KAlarmMainWindow();
+		bool           trayParent() const;
+		bool           hiddenTrayParent() const     { return mHiddenTrayParent; }
 
 		void           modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
 		void           modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
@@ -56,6 +58,8 @@ class KAlarmMainWindow : public MainWindowBase
 		virtual void   resizeEvent(QResizeEvent*);
 		virtual void   showEvent(QShowEvent*);
 		virtual void   closeEvent(QCloseEvent*);
+		virtual void   saveProperties(KConfig*);
+		virtual void   readProperties(KConfig*);
 
 	private slots:
 		void           slotDelete();
@@ -88,6 +92,7 @@ class KAlarmMainWindow : public MainWindowBase
 		KPopupMenu*    mViewMenu;
 		KPopupMenu*    mActionsMenu;
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
+		bool           mHiddenTrayParent;    // on session restoration, hide this window
 };
 
 #endif // MAINWINDOW_H

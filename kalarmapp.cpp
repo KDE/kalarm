@@ -123,19 +123,29 @@ int KAlarmApp::newInstance()
 		// Process is being restored by session management.
 		kdDebug(5950)<<"KAlarmApp::newInstance(): Restoring session\n";
 		exitCode = !initCheck(true);     // open the calendar file (needed for main windows)
+		KAlarmMainWindow* trayParent = 0L;
 		for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 		{
 			if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("KAlarmMainWindow"))
-				(new KAlarmMainWindow)->restore(i);
+			{
+				KAlarmMainWindow* win = new KAlarmMainWindow;
+				win->restore(i, false);
+				if (win->hiddenTrayParent())
+					trayParent = win;
+				else
+					win->show();
+			}
 			else if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("MessageWin"))
 				(new MessageWin)->restore(i);
 		}
 		initCheck();           // register with the alarm daemon
 		restored = true;       // make sure we restore only once
 
-		// Display the system tray icon if it is configured to be autostarted
-		if (settings()->autostartTrayIcon())
-			displayTrayIcon(true);
+		// Display the system tray icon if it is configured to be autostarted,
+		// or if we're in run-in-system-tray mode.
+		if (settings()->autostartTrayIcon()
+		||  KAlarmMainWindow::count()  &&  runInSystemTray())
+			displayTrayIcon(true, trayParent);
 	}
 	else
 	{

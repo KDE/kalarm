@@ -54,7 +54,8 @@ QPtrList<KAlarmMainWindow> KAlarmMainWindow::windowList;
 
 
 KAlarmMainWindow::KAlarmMainWindow()
-	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose)
+	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
+	  mHiddenTrayParent(false)
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
@@ -72,7 +73,9 @@ KAlarmMainWindow::KAlarmMainWindow()
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	windowList.append(this);
 
-	if (windowList.count() == 1  &&  theApp()->runInSystemTray())
+	// If it's the first main window and it's run-in-system-tray mode,
+	// create the system tray icon provided that the DCOP handler is ready.
+	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler()  &&  theApp()->runInSystemTray())
 		theApp()->displayTrayIcon(true, this);
 }
 
@@ -83,12 +86,39 @@ KAlarmMainWindow::~KAlarmMainWindow()
 		windowList.remove();
 	if (theApp()->trayWindow())
 	{
-		if (theApp()->trayMainWindow() == this  &&  theApp()->runInSystemTray())
+		if (trayParent())
 			delete theApp()->trayWindow();
 		else
 			theApp()->trayWindow()->removeWindow(this);
 	}
 	theApp()->quitIf();
+}
+
+/******************************************************************************
+* Save settings to the session managed config file, for restoration
+* when the program is restored.
+*/
+void KAlarmMainWindow::saveProperties(KConfig* config)
+{
+	config->writeEntry(QString::fromLatin1("HiddenTrayParent"), trayParent() && isHidden());
+}
+
+/******************************************************************************
+* Read settings from the session managed config file.
+* This function is automatically called whenever the app is being
+* restored. Read in whatever was saved in saveProperties().
+*/
+void KAlarmMainWindow::readProperties(KConfig* config)
+{
+	mHiddenTrayParent = config->readBoolEntry(QString::fromLatin1("HiddenTrayParent"));
+}
+
+/******************************************************************************
+*
+*/
+bool KAlarmMainWindow::trayParent() const
+{
+	return theApp()->runInSystemTray()  &&  theApp()->trayMainWindow() == this;
 }
 
 /******************************************************************************
@@ -380,7 +410,7 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	if (theApp()->runInSystemTray()  &&  theApp()->trayMainWindow() == this)
+	if (trayParent())
 		hide();          // closing would also close the system tray icon
 	else
 		close();
@@ -391,10 +421,10 @@ void KAlarmMainWindow::slotQuit()
 */
 void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 {
-	if (theApp()->runInSystemTray()  &&  theApp()->trayMainWindow() == this)
+	if (trayParent())
 	{
+		hide();          // closing would also close the system tray icon
 		ce->ignore();
-		hide();
 	}
 	else
 		ce->accept();
