@@ -560,3 +560,6 @@ bool AlarmCalendar::isUTC() const
 	}
 	return result;
 }
+
+#include "alarmcalendar.moc"
+
