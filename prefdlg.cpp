@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -220,13 +220,15 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
 
 	// Autostart alarm daemon
-	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), mPage, "startDaemon");
+	QHBox* itemBox = new QHBox(mPage);   // this is to allow left adjustment
+	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), itemBox, "startDaemon");
 	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
 	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
 	QWhatsThis::add(mAutostartDaemon,
 	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
 	           "This option should always be checked unless you intend to discontinue use of %2.")
 	          .arg(QString::fromLatin1(DAEMON_APP_NAME)).arg(progname));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 
 	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
 	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
@@ -292,7 +294,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Start-of-day time
-	QHBox* itemBox = new QHBox(mPage);
+	itemBox = new QHBox(mPage);
 	QHBox* box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("&Start of day for date-only alarms:"), box);

@@ -156,7 +156,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setMaximum(0, 364);
 	mReminder->setMinutes(0, true);
-	groupLayout->addWidget(mReminder);
+	groupLayout->addWidget(mReminder, 0, Qt::AlignAuto);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
