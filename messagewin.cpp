@@ -216,7 +216,7 @@ QSize MessageWin::initView()
 				if (!(dir = info.isDir()))
 				{
 					opened = true;
-#ifdef KDE_VERSION >= 290
+#if KDE_VERSION >= 290
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
 					view->QTextBrowser::setSource(tmpFile);
 #else
