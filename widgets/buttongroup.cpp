@@ -66,10 +66,11 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& titl
  * Inserts a button in the group.
  * This should really be a virtual method...
  */
-void ButtonGroup::insert(QButton* button, int id)
+int ButtonGroup::insert(QButton* button, int id)
 {
-	QButtonGroup::insert(button, id);
+	id = QButtonGroup::insert(button, id);
 	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
+	return id;
 }
 
 /******************************************************************************
