@@ -34,16 +34,16 @@ KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
 {
 	setIconListAllVisible(true);
 
-	QVBox* frame = addVBoxPage( i18n("Miscellaneous"), i18n("Miscellaneous"), DesktopIcon("misc"));
-	m_miscPage = new MiscPrefs(frame);
+	QVBox* frame = addVBoxPage(i18n("Miscellaneous"), i18n("Miscellaneous"), DesktopIcon("misc"));
+	m_miscPage = new MiscPrefTab(frame);
 	m_miscPage->setSettings(sets);
 
-	frame = addVBoxPage(i18n("Edit Defaults"), i18n("Alarm Edit Defaults"), DesktopIcon("edit"));
-	m_defaultPage = new DefaultPrefs(frame);
+	frame = addVBoxPage(i18n("Edit Defaults"), i18n("Edit Alarm Dialog Defaults"), DesktopIcon("edit"));
+	m_defaultPage = new DefaultPrefTab(frame);
 	m_defaultPage->setSettings(sets);
 
 	frame = addVBoxPage(i18n("Appearance"), i18n("Message Appearance"), DesktopIcon("appearance"));
-	m_appearancePage = new AppearancePrefs(frame);
+	m_appearancePage = new AppearancePrefTab(frame);
 	m_appearancePage->setSettings(sets);
 
 	adjustSize();

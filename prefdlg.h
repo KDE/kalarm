@@ -23,9 +23,9 @@
 
 #include <kdialogbase.h>
 class Settings;
-class AppearancePrefs;
-class DefaultPrefs;
-class MiscPrefs;
+class AppearancePrefTab;
+class DefaultPrefTab;
+class MiscPrefTab;
 
 class KAlarmPrefDlg : public KDialogBase
 {
@@ -34,9 +34,9 @@ class KAlarmPrefDlg : public KDialogBase
 		KAlarmPrefDlg(Settings*);
 		~KAlarmPrefDlg();
 
-		AppearancePrefs* m_appearancePage;
-		DefaultPrefs*    m_defaultPage;
-		MiscPrefs*       m_miscPage;
+		AppearancePrefTab* m_appearancePage;
+		DefaultPrefTab*    m_defaultPage;
+		MiscPrefTab*       m_miscPage;
 
 	protected slots:
 		virtual void slotOk();
