@@ -25,15 +25,19 @@
 #include "prefsettings.moc"
 
 
+// Default config file settings
 const bool   Settings::default_autostartTrayIcon       = true;
+const bool   Settings::default_runInSystemTray         = true;
 const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
 const QColor Settings::default_defaultBgColour(red);
 const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
 
+// Config file entry names
 static const QString GENERAL_SECTION      = QString::fromLatin1("General");
 static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("Message background colour");
 static const QString MESSAGE_FONT         = QString::fromLatin1("Message font");
 static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
+static const QString RUN_IN_SYSTEM_TRAY   = QString::fromLatin1("RunInSystemTray");
 static const QString DAEMON_TRAY_INTERVAL = QString::fromLatin1("DaemonTrayCheckInterval");
 
 Settings::Settings(QWidget* parent)
@@ -49,6 +53,7 @@ void Settings::loadSettings()
 	mDefaultBgColour         = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
 	mMessageFont             = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
 	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, &default_autostartTrayIcon);
+	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, &default_runInSystemTray);
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	emit settingsChanged();
 }
@@ -60,6 +65,7 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
 	config->writeEntry(MESSAGE_FONT, mMessageFont);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
+	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	if (syncToDisc)
 		config->sync();

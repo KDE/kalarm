@@ -24,6 +24,7 @@
 #include <qsize.h>
 #include <ktabctl.h>
 class QCheckBox;
+class QRadioButton;
 class QSpinBox;
 class FontColourChooser;
 class Settings;
@@ -74,9 +75,16 @@ class MiscPrefs : public PrefsBase
 		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
 
+	private slots:
+		void         slotRunInTrayToggled(bool on);
+		void         slotRunOnDemandToggled(bool on);
+
 	private:
-		QCheckBox*  mAutostartTrayIcon;
-		QSpinBox*   mDaemonTrayCheckInterval;
+		QRadioButton*  mRunInSystemTray;
+		QRadioButton*  mRunOnDemand;
+		QCheckBox*     mAutostartTrayIcon1;
+		QCheckBox*     mAutostartTrayIcon2;
+		QSpinBox*      mDaemonTrayCheckInterval;
 };
 
 #endif // PREFS_H

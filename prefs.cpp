@@ -22,14 +22,17 @@
 
 #include <qobjectlist.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qwhatsthis.h>
 
 #include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kaboutdata.h>
 
 #include "fontcolour.h"
 #include "prefsettings.h"
@@ -96,16 +99,53 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	: PrefsBase(parent)
 {
 	QWidget* page = new QWidget(this );
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint());
-	layout->setMargin(KDialog::marginHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint());
+	topLayout->setMargin(KDialog::marginHint());
 
-	mAutostartTrayIcon = new QCheckBox(i18n("Autostart system tray icon at login"), page, "autoTray");
-	layout->addWidget(mAutostartTrayIcon);
-	QWhatsThis::add(mAutostartTrayIcon,
-	      i18n("Check to display the system tray icon whenever you start KDE."));
-
-	QGridLayout* grid = new QGridLayout(page, 1, 2, KDialog::spacingHint());
+	QGroupBox* group = new QGroupBox(i18n("Run mode"), page, "modeGroup");
+	topLayout->addWidget(group);
+	QVBoxLayout* layout = new QVBoxLayout(group, KDialog::spacingHint(), 0);
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	QGridLayout* grid = new QGridLayout(group, 4, 2, KDialog::spacingHint());
 	layout->addLayout(grid);
+	// To have better control over the button layout, don't use a QButtonGroup
+
+	// Run-in-system-tray radio button has an ID of 0
+	mRunInSystemTray = new QRadioButton(i18n("Run continuously in system tray"), group, "runTray");
+	mRunInSystemTray->setFixedSize(mRunInSystemTray->sizeHint());
+	connect(mRunInSystemTray, SIGNAL(toggled(bool)), this, SLOT(slotRunInTrayToggled(bool)));
+	QWhatsThis::add(mRunInSystemTray,
+	      i18n("Check to run %1 continuously in the system tray.\n\n"
+	           "Notes:\n"
+		   "1. With this option selected, closing the system tray icon will quit %2.\n"
+	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
+	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
+	grid->addMultiCellWidget(mRunInSystemTray, 0, 0, 0, 1, AlignLeft);
+
+	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at login"), page, "autoTray");
+	QWhatsThis::add(mAutostartTrayIcon1,
+	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
+	grid->addWidget(mAutostartTrayIcon1, 1, 1, AlignLeft);
+
+	// Run-in-system-tray radio button has an ID of 0
+	mRunOnDemand = new QRadioButton(i18n("Run only on demand"), group, "runDemand");
+	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
+	connect(mRunOnDemand, SIGNAL(toggled(bool)), this, SLOT(slotRunOnDemandToggled(bool)));
+	QWhatsThis::add(mRunOnDemand,
+	      i18n("Check to run %1 only when required.\n\n"
+	           "Notes:\n"
+		   "1. With this option selected, the system tray icon can be displayed or hidden independently of %2.\n"
+	           "2. Alarms are displayed even when %3 is not running, since alarm monitoring is done by the alarm daemon.")
+	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
+	grid->addMultiCellWidget(mRunOnDemand, 2, 2, 0, 1, AlignLeft);
+
+	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray icon at login"), page, "autoRun");
+	QWhatsThis::add(mAutostartTrayIcon2,
+	      i18n("Check to display the system tray icon whenever you start KDE."));
+	grid->addWidget(mAutostartTrayIcon2, 3, 1, AlignLeft);
+
+	grid = new QGridLayout(page, 1, 2, KDialog::spacingHint());
+	topLayout->addLayout(grid);
 	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->addWidget(lbl, 0, 0, AlignLeft);
@@ -114,7 +154,7 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is running."));
 
-	layout->addStretch(1);
+	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
 
 	addTab(page, i18n("&Miscellaneous"));
@@ -122,23 +162,50 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 
 void MiscPrefs::restore()
 {
-	mAutostartTrayIcon->setChecked(mSettings->mAutostartTrayIcon);
+	bool systray = mSettings->mRunInSystemTray;
+	mRunInSystemTray->setChecked(!systray);
+	mRunOnDemand->setChecked(systray);      // toggle to ensure things are enabled/disabled correctly
+	mRunOnDemand->setChecked(!systray);
+	mAutostartTrayIcon1->setChecked(mSettings->mAutostartTrayIcon);
+	mAutostartTrayIcon2->setChecked(mSettings->mAutostartTrayIcon);
 	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
 }
 
 void MiscPrefs::apply(bool syncToDisc)
 {
-	mSettings->mAutostartTrayIcon       = mAutostartTrayIcon->isChecked();
+	bool systray = mRunInSystemTray->isChecked();
+	mSettings->mRunInSystemTray         = systray;
+	mSettings->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
 	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsBase::apply(syncToDisc);
 }
 
 void MiscPrefs::setDefaults()
 {
-	mAutostartTrayIcon->setChecked(Settings::default_autostartTrayIcon);
+	bool systray = Settings::default_runInSystemTray;
+	mRunInSystemTray->setChecked(!systray);
+	mRunOnDemand->setChecked(systray);      // toggle to ensure things are enabled/disabled correctly
+	mRunOnDemand->setChecked(!systray);
+	mAutostartTrayIcon1->setChecked(Settings::default_autostartTrayIcon);
+	mAutostartTrayIcon2->setChecked(Settings::default_autostartTrayIcon);
 	mDaemonTrayCheckInterval->setValue(Settings::default_daemonTrayCheckInterval);
 }
 
+void MiscPrefs::slotRunInTrayToggled(bool on)
+{
+	if (on  &&  mRunOnDemand->isOn()
+	||  !on  &&  !mRunOnDemand->isOn())
+		mRunOnDemand->setChecked(!on);
+	mAutostartTrayIcon1->setEnabled(on);
+}
+
+void MiscPrefs::slotRunOnDemandToggled(bool on)
+{
+	if (on  &&  mRunInSystemTray->isOn()
+	||  !on  &&  !mRunInSystemTray->isOn())
+		mRunInSystemTray->setChecked(!on);
+	mAutostartTrayIcon2->setEnabled(on);
+}
 
 
 AppearancePrefs::AppearancePrefs(QWidget* parent)

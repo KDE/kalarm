@@ -340,8 +340,7 @@ int KAlarmApp::newInstance()
 				}
 
 				// No arguments - run interactively & display the dialogue
-				KAlarmMainWindow* mainWindow = new KAlarmMainWindow;
-				mainWindow->show();
+				(new KAlarmMainWindow)->show();
 			}
 		} while (0);    // only execute once
 	}
@@ -414,11 +413,7 @@ void KAlarmApp::displayMainWindow()
 {
 	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
 	if (!win)
-	{
-		KProcess proc;
-		proc << QString::fromLatin1(aboutData()->appName());
-		proc.start(KProcess::DontCare);
-	}
+		(new KAlarmMainWindow)->show();
 	else
 	{
 		// There is already a main window, so make it the active window
@@ -444,7 +439,23 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
+	bool systray = settings()->runInSystemTray();
 	(new KAlarmPrefDlg(settings()))->exec();
+	if (settings()->runInSystemTray() != systray)
+	{
+		// The system tray run mode has changed
+		displayTrayIcon(false);     // remove the system tray icon if it is currently shown
+		if (systray)
+		{
+			// The system tray icon was displayed continuously
+		}
+		else
+		{
+			// The system tray icon was displayed only on demand
+			displayTrayIcon(false);
+			displayTrayIcon(true);
+		}
+	}
 }
 
 /******************************************************************************

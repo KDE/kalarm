@@ -37,6 +37,7 @@ class Settings : public QObject
 
 		QColor       defaultBgColour() const          { return mDefaultBgColour; }
 		const QFont& messageFont() const              { return mMessageFont; }
+		bool         runInSystemTray() const          { return mRunInSystemTray; }
 		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		void         loadSettings();
@@ -45,8 +46,10 @@ class Settings : public QObject
 
 		static const QColor default_defaultBgColour;
 		static const QFont  default_messageFont;
+		static const bool   default_runInSystemTray;
 		static const bool   default_autostartTrayIcon;
 		static const int    default_daemonTrayCheckInterval;
+		bool                mRunInSystemTray;
 		bool                mAutostartTrayIcon;
 		int                 mDaemonTrayCheckInterval;
 		QColor              mDefaultBgColour;

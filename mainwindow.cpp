@@ -71,6 +71,9 @@ KAlarmMainWindow::KAlarmMainWindow()
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	windowList.append(this);
+
+	if (windowList.count() == 1  &&  theApp()->settings()->runInSystemTray())
+		theApp()->displayTrayIcon(true, this);
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
@@ -249,7 +252,7 @@ void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 */
 void KAlarmMainWindow::slotNew()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Message"), this, "editDlg");
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New message"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;
@@ -272,7 +275,7 @@ void KAlarmMainWindow::slotModify()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEntry(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Message"), this, "editDlg", &event);
+		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit message"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
 			KAlarmEvent newEvent;
@@ -318,6 +321,7 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 */
 void KAlarmMainWindow::updateTrayIconAction()
 {
+	actionToggleTrayIcon->setEnabled(!theApp()->settings()->runInSystemTray());
 	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
 }
 

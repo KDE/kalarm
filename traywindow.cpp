@@ -36,7 +36,7 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "daemongui.h"
-#include "traywindow.h"
+#include "prefsettings.h"
 #include "traywindow.moc"
 
 
@@ -47,9 +47,9 @@
 =============================================================================*/
 
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
-	: KSystemTray(0, name),
+	: KSystemTray((theApp()->settings()->runInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent),
-	  mQuitReplaced(false)
+	  mQuitReplaced(theApp()->settings()->runInSystemTray())
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -140,7 +140,8 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
-	if (e->button() == LeftButton)
+
+	if (e->button() == LeftButton  &&  !theApp()->settings()->runInSystemTray())
 	{
 		// Left click: display/hide the first main window
 		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);
