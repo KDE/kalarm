@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@
 
 #include <qlayout.h>
 #include <qpopupmenu.h>
-#include <qlineedit.h>
-#include <qtextedit.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
 #include <qwidgetstack.h>
@@ -50,6 +48,8 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
+#include <kurldrag.h>
+#include <kurlcompletion.h>
 #include <kwinmodule.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
@@ -324,7 +324,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	// File name edit box
 	mFileBox = new QHBox(mDisplayAlarmsFrame);
 	frameLayout->addWidget(mFileBox);
-	mFileMessageEdit = new LineEdit(mFileBox);
+	mFileMessageEdit = new LineEdit(true, mFileBox);
 	mFileMessageEdit->setReadOnly(mReadOnly);
 	mFileMessageEdit->setAcceptDrops(true);
 	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name of a text file, or a URL, to display."));
@@ -390,7 +390,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	mCommandFrame->setFrameStyle(QFrame::NoFrame);
 	QBoxLayout* layout = new QVBoxLayout(mCommandFrame);
 
-	mCommandMessageEdit = new LineEdit(mCommandFrame);
+	mCommandMessageEdit = new LineEdit(true, mCommandFrame);
 	mCommandMessageEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mCommandMessageEdit, i18n("Enter a shell command to execute."));
 	layout->addWidget(mCommandMessageEdit);
@@ -413,7 +413,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
-	mEmailToEdit = new LineEdit(mEmailFrame);
+	mEmailToEdit = new LineEdit(false, mEmailFrame);
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
 	mEmailToEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailToEdit,
@@ -437,7 +437,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
-	mEmailSubjectEdit = new QLineEdit(mEmailFrame);
+	mEmailSubjectEdit = new LineEdit(false, mEmailFrame);
 	mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
 	mEmailSubjectEdit->setReadOnly(mReadOnly);
 	label->setBuddy(mEmailSubjectEdit);
@@ -1255,12 +1255,34 @@ void TextEdit::dropEvent(QDropEvent* e)
 
 /*=============================================================================
 = Class LineEdit
+= Line edit with option to prevent its contents being selected when it receives
+= focus.
 =============================================================================*/
+LineEdit::LineEdit(bool url, QWidget* parent, const char* name)
+	: KLineEdit(parent, name),
+	  noSelect(false)
+{
+	if (url)
+	{
+		setCompletionMode(KGlobalSettings::CompletionShell);
+		KURLCompletion* comp = new KURLCompletion(KURLCompletion::FileCompletion);
+		comp->setReplaceHome(true);
+		setCompletionObject(comp);
+		setAutoDeleteCompletionObject(true);
+	}
+	else
+		setCompletionMode(KGlobalSettings::CompletionNone);
+}
+
+/******************************************************************************
+*  Called when the line edit receives focus.
+*  If 'noSelect' is true, prevent the contents being selected.
+*/
 void LineEdit::focusInEvent(QFocusEvent* e)
 {
 	if (noSelect)
 		QFocusEvent::setReason(QFocusEvent::Other);
-	QLineEdit::focusInEvent(e);
+	KLineEdit::focusInEvent(e);
 	if (noSelect)
 	{
 		QFocusEvent::resetReason();
@@ -1271,15 +1293,15 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
-	       || QUriDrag::canDecode(e));
+	       || KURLDrag::canDecode(e));
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
 	QString text;
-	QStrList files;
-	if (QUriDrag::decode(e, files)  &&  files.count())
-		setText(files.getFirst());
+	KURL::List files;
+	if (KURLDrag::decode(e, files)  &&  files.count())
+		setText(files.first().prettyURL());
 	else if (QTextDrag::decode(e, text))
 	{
 		int newline = text.find('\n');
