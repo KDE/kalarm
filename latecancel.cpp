@@ -56,7 +56,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, co
 	mStack = new QWidgetStack(this);
 	mCheckboxFrame = new QFrame(mStack);
 	mCheckboxFrame->setFrameStyle(QFrame::NoFrame);
-	mStack->addWidget(mCheckboxFrame);
+	mStack->addWidget(mCheckboxFrame, 1);
 	QBoxLayout* layout = new QVBoxLayout(mCheckboxFrame, 0, 0);
 	mCheckbox = new CheckBox(i18n_n_CancelIfLate(), mCheckboxFrame);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
@@ -66,7 +66,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, co
 
 	mTimeSelectorFrame = new QFrame(mStack);
 	mTimeSelectorFrame->setFrameStyle(QFrame::NoFrame);
-	mStack->addWidget(mTimeSelectorFrame);
+	mStack->addWidget(mTimeSelectorFrame, 2);
 	layout = new QVBoxLayout(mTimeSelectorFrame, 0, 0);
 	mTimeSelector = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                 whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
