@@ -857,7 +857,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	grid->addWidget(box, 5, 2, AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	mModalMessages = new QCheckBox(i18n("Message &windows have title bar and take keyboard focus"), mPage, "modalMsg");
+	mModalMessages = new QCheckBox(i18n("Message &windows have a title bar and take keyboard focus"), mPage, "modalMsg");
 	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
 	QWhatsThis::add(mModalMessages,
 	      i18n("Specify the characteristics of alarm message windows:\n"
