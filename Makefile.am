@@ -1,5 +1,5 @@
 # set the include path for X, qt and KDE and calendar library
-INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src $(all_includes)
+INCLUDES= -I$(top_srcdir) -I$(top_builddir)/libical/src -I$(top_srcdir)/libkdepim $(all_includes)
 
 bin_PROGRAMS = kalarm
 kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindow.cpp \
@@ -9,7 +9,7 @@ kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindo
 	recurrenceedit.cpp deferdlg.cpp \
 	fontcolour.cpp colourcombo.cpp datetime.cpp buttongroup.cpp \
 	alarmlistview.cpp dateedit.cpp spinbox2.cpp
-kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kalarm_LDFLAGS = $(top_builddir)/libkdepim/libkdepim.la $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la $(top_builddir)/kalarmd/libkalarmd.la
 
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
