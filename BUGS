@@ -1,0 +1,17 @@
+KNOWN BUGS
+
+The following known bugs are unlikely to be fixed:
+
+- The KDE 3.0 version of KAlarm 0.5.7 stored a time 1 hour out for some alarms.
+  Alarms scheduled for a time when daylight saving time is in operation were
+  stored one hour ahead of their correct time. The fault only shows up after
+  upgrading to a later version of KAlarm (KDE 3.0.1 or later, or KAlarm 0.6
+  onwards).
+
+
+REPORTING BUGS
+
+Bugs can be reported to the KDE bug tracking system (http://bugs.kde.org).
+There you can also get information about the status of older bugs.
+KAlarm, as most other KDE programs, offers a menu item "Report Bug" in the
+Help menu for convenient reporting of bugs or feature requests.
