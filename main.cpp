@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,6 +60,8 @@ static KCmdLineOptions options[] =
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
 	{ "m", 0, 0 },
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
+	{ "R", 0, 0 },
+	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
 	{ "r", 0, 0 },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0 },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
@@ -95,7 +97,7 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE personal alarm message and command scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, 2002, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
+		"(c) 2001 - 2003, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and concatenate
