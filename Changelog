@@ -1,6 +1,10 @@
 KAlarm
 
-=== Version 0.8.3 (KDE 3.1) --- 9 Nov 2002 ===
+=== Version 0.8.4 (KDE 3.1) --- 17 Nov 2002 ===
+Fix detection of KDE desktop.
+Fix entry of yearly recurrences on a specified date in the year.
+
+=== Version 0.8.3 --- 9 Nov 2002 ===
 Fix no system tray icon being displayed.
 Fix multiple system tray icons being displayed.
 Fix alarms being missed after changing "Disable alarms when not running" status.
