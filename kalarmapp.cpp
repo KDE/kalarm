@@ -533,9 +533,9 @@ int KAlarmApp::newInstance()
 
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, flags, audioFile, alAddresses, alSubject,
-				                   alAttachments, action, recurType, repeatInterval, repeatCount, endTime,
-				                   reminderMinutes))
+				if (!scheduleEvent(alMessage, alarmTime, bgColour, mSettings->messageFont(), flags,
+				                   audioFile, alAddresses, alSubject, alAttachments, action, recurType,
+				                   repeatInterval, repeatCount, endTime, reminderMinutes))
 				{
 					exitCode = 1;
 					break;
@@ -930,11 +930,11 @@ bool KAlarmApp::wantRunInSystemTray() const
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime, const QColor& bg,
-                              int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
-                              const QString& mailSubject, const QStringList& mailAttachments,
-                              KAlarmEvent::Action action, KAlarmEvent::RecurType recurType,
-                              int repeatInterval, int repeatCount, const QDateTime& endTime,
-                              int reminderMinutes)
+                              const QFont& font, int flags, const QString& audioFile,
+                              const EmailAddressList& mailAddresses, const QString& mailSubject,
+                              const QStringList& mailAttachments, KAlarmEvent::Action action,
+                              KAlarmEvent::RecurType recurType, int repeatInterval, int repeatCount,
+                              const QDateTime& endTime, int reminderMinutes)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
 	if (!dateTime.isValid())
@@ -947,7 +947,7 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 	bool display = (alarmTime <= now);
 
-	KAlarmEvent event(alarmTime, message, bg, action, flags);
+	KAlarmEvent event(alarmTime, message, bg, font, action, flags);
 	if (reminderMinutes)
 		event.setReminder(reminderMinutes);
 	if (!audioFile.isEmpty())

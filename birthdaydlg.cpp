@@ -46,14 +46,19 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
+#include "editdlg.h"
 #include "alarmcalendar.h"
 #include "editdlg.h"
 #include "soundpicker.h"
 #include "spinbox.h"
 #include "checkbox.h"
+#include "combobox.h"
 #include "colourcombo.h"
+#include "fontcolourbutton.h"
 #include "prefsettings.h"
 #include "birthdaydlg.moc"
+
+using namespace KCal;
 
 
 class AddresseeItem : public QListViewItem
@@ -130,36 +135,42 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QBoxLayout* layout = new QHBoxLayout(groupLayout);
 	mReminder = new CheckBox(i18n("&Reminder"), group);
 	mReminder->setFixedSize(mReminder->sizeHint());
+	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 	QWhatsThis::add(mReminder,
 	      i18n("Check to display a reminder in advance of the birthday."));
 	layout->addWidget(mReminder);
-	mReminderTime = new SpinBox(1, 364, 1, group);
-	mReminderTime->setValue(364);
-	mReminderTime->setFixedSize(mReminderTime->sizeHint());
-	mReminderTime->setValue(1);
-	QWhatsThis::add(mReminderTime,
+
+	mReminderCount = new SpinBox(1, 364, 1, group);
+	mReminderCount->setValue(364);
+	mReminderCount->setFixedSize(mReminderCount->sizeHint());
+	mReminderCount->setValue(1);
+	QWhatsThis::add(mReminderCount,
 	      i18n("Enter the number of days before each birthday to display a reminder."
 	           "This is in addition to the alarm which is displayed on the birthday."));
-	mReminder->setFocusWidget(mReminderTime);
-	layout->addWidget(mReminderTime);
-	label = new QLabel(i18n("days before"), group);
-	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
+	mReminder->setFocusWidget(mReminderCount);
+	layout->addWidget(mReminderCount);
+
+	mReminderUnits = new ComboBox(false, group);
+	mReminderUnits->insertItem(i18n("days"), EditAlarmDlg::REMIND_DAYS - EditAlarmDlg::REMIND_DAYS);
+	mReminderUnits->insertItem(i18n("weeks"), EditAlarmDlg::REMIND_WEEKS - EditAlarmDlg::REMIND_DAYS);
+	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
+	layout->addWidget(mReminderUnits);
+
+	mReminderLabel = new QLabel(i18n("in advance"), group);
+	mReminderLabel->setFixedSize(mReminderLabel->sizeHint());
+	layout->addWidget(mReminderLabel);
 	layout->addStretch();
 
 	// Sound checkbox and file selector
-	QGridLayout* grid = new QGridLayout(groupLayout, 2, 2, KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(groupLayout, 3, 2, KDialog::spacingHint());
 	grid->setColStretch(1, 1);
 	mSoundPicker = new SoundPicker(false, group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	grid->addWidget(mSoundPicker, 0, 0, Qt::AlignLeft);
 
-#ifdef SELECT_FONT
-	// Font and colour choice drop-down list
-#endif
-
 	// Colour choice drop-down list
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(false, group);
+	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	grid->addWidget(mBgColourChoose, 0, 1, Qt::AlignRight);
 
 	// Acknowledgement confirmation required - default = no confirmation
@@ -167,26 +178,30 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	grid->addWidget(mConfirmAck, 1, 0, Qt::AlignLeft);
 
+	// Font and colour choice drop-down list
+	mFontColourButton = new FontColourButton(group);
+	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
+	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
+	grid->addWidget(mFontColourButton, 1, 1, Qt::AlignRight);
+
 	// Late display checkbox - default = allow late display
 	mLateCancel = EditAlarmDlg::createLateCancelCheckbox(false, group);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	grid->addWidget(mLateCancel, 1, 1, Qt::AlignRight);
+	grid->addWidget(mLateCancel, 2, 0, Qt::AlignLeft);
 
 	// Set the values to their defaults
 	Settings* settings = theApp()->settings();
-#ifdef SELECT_FONT
-#endif
+	mFontColourButton->setDefaultFont();
+	mFontColourButton->setBgColour(settings->defaultBgColour());
 	mBgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 	mLateCancel->setChecked(settings->defaultLateCancel());
 	mConfirmAck->setChecked(settings->defaultConfirmAck());
 	mSoundPicker->setChecked(settings->defaultBeep());
+	mReminderUnits->setCurrentItem(theApp()->settings()->defaultReminderUnits() - EditAlarmDlg::REMIND_DAYS);
+	slotReminderToggled(false);
 
 	// Initialise the birthday selection list and disable the OK button
 	updateSelectionList();
-}
-
-BirthdayDlg::~BirthdayDlg()
-{
 }
 
 /******************************************************************************
@@ -296,8 +311,24 @@ void BirthdayDlg::updateSelectionList()
 QValueList<KAlarmEvent> BirthdayDlg::events() const
 {
 	QValueList<KAlarmEvent> list;
-	QDate today  = QDate::currentDate();
+	QDate today = QDate::currentDate();
+	QDateTime todayNoon(today, QTime(12, 0, 0));
 	int thisYear = today.year();
+	int reminder = 0;
+	if (mReminder->isChecked())
+	{
+		reminder = mReminderCount->value();
+		switch (mReminderUnits->currentItem())
+		{
+			case EditAlarmDlg::REMIND_DAYS - EditAlarmDlg::REMIND_DAYS:
+				reminder *= 24*60;
+				break;
+			case EditAlarmDlg::REMIND_WEEKS - EditAlarmDlg::REMIND_DAYS:
+				reminder *= 7*24*60;
+				break;
+		}
+	}
+
 	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 	{
 		if (mAddresseeList->isSelected(item))
@@ -311,14 +342,15 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 					date.setYMD(thisYear + 1, date.month(), date.day());
 				KAlarmEvent event(date,
 				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
-				                  mBgColourChoose->color(), KAlarmEvent::MESSAGE, mFlags);
+				                  mBgColourChoose->color(), mFontColourButton->font(),
+				                  KAlarmEvent::MESSAGE, mFlags);
 				event.setAudioFile(mSoundPicker->file());
 				QValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, -1);
-				event.setNextOccurrence(QDateTime(today, QTime(12,0,0)));
-				if (mReminder->isChecked())
-					event.setReminder(mReminderTime->value() * 1440);
+				event.setNextOccurrence(todayNoon);
+				if (reminder)
+					event.setReminder(reminder);
 				list.append(event);
 			}
 		}
@@ -338,10 +370,11 @@ void BirthdayDlg::slotOk()
 	config->writeEntry(QString::fromLatin1("BirthdaySuffix"), mSuffix->text());
 	config->sync();
 
-	mFlags = (mSoundPicker->beep()     ? KAlarmEvent::BEEP : 0)
-	       | (mLateCancel->isChecked() ? KAlarmEvent::LATE_CANCEL : 0)
-	       | (mConfirmAck->isChecked() ? KAlarmEvent::CONFIRM_ACK : 0)
-	       |                             KAlarmEvent::ANY_TIME;
+	mFlags = (mSoundPicker->beep()             ? KAlarmEvent::BEEP : 0)
+	       | (mLateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
+	       | (mConfirmAck->isChecked()         ? KAlarmEvent::CONFIRM_ACK : 0)
+	       | (mFontColourButton->defaultFont() ? KAlarmEvent::DEFAULT_FONT : 0)
+	       |                                     KAlarmEvent::ANY_TIME;
 	KDialogBase::slotOk();
 }
 
@@ -377,6 +410,34 @@ void BirthdayDlg::slotTextLostFocus()
 		mSuffixText = suffix;
 		updateSelectionList();
 	}
+}
+
+/******************************************************************************
+*  Called when the Reminder checkbox is toggled.
+*/
+void BirthdayDlg::slotReminderToggled(bool on)
+{
+	mReminderCount->setEnabled(on);
+	mReminderUnits->setEnabled(on);
+	mReminderLabel->setEnabled(on);
+}
+
+/******************************************************************************
+*  Called when the a new background colour has been selected using the colour
+*  combo box.
+*/
+void BirthdayDlg::slotBgColourSelected(const QColor& colour)
+{
+	mFontColourButton->setBgColour(colour);
+}
+
+/******************************************************************************
+*  Called when the a new font and colour have been selected using the font &
+*  colour pushbutton.
+*/
+void BirthdayDlg::slotFontColourSelected()
+{
+	mBgColourChoose->setColour(mFontColourButton->bgColour());
 }
 
 

@@ -29,11 +29,14 @@
 
 #include "msgevent.h"
 
+class QLabel;
 class QCheckBox;
 class KListView;
 class SpinBox;
 class CheckBox;
+class ComboBox;
 class ColourCombo;
+class FontColourButton;
 class SoundPicker;
 #if KDE_VERSION >= 290
 namespace KABC { class AddressBook; }
@@ -41,54 +44,60 @@ using KABC::AddressBook;
 #else
 class AddressBook;
 #endif
+class BLineEdit;
 
-		class BLineEdit : public QLineEdit
-		{
-				Q_OBJECT
-			public:
-				BLineEdit(QWidget* parent = 0, const char* name = 0)
-					     : QLineEdit(parent, name) { }
-				BLineEdit(const QString& text, QWidget* parent = 0, const char* name = 0)
-					     : QLineEdit(text, parent, name) { }
-			signals:
-				void         lostFocus();
-			protected:
-				virtual void focusOutEvent(QFocusEvent*)  { emit lostFocus(); }
-		};
 
 class BirthdayDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
 		BirthdayDlg(QWidget* parent = 0);
-		virtual ~BirthdayDlg();
 		QValueList<KAlarmEvent> events() const;
 
 	protected slots:
-		virtual void   slotOk();
+		virtual void      slotOk();
 	private slots:
-		void           slotSelectionChanged();
-		void           slotTextLostFocus();
+		void              slotSelectionChanged();
+		void              slotTextLostFocus();
+		void              slotReminderToggled(bool);
+		void              slotFontColourSelected();
+		void              slotBgColourSelected(const QColor&);
 
 	private:
 
-		void           updateSelectionList();
+		void              updateSelectionList();
 
-		KListView*     mAddresseeList;
-		BLineEdit*     mPrefix;
-		BLineEdit*     mSuffix;
-		CheckBox*      mReminder;
-		SpinBox*       mReminderTime;
-		SoundPicker*   mSoundPicker;
-		ColourCombo*   mBgColourChoose;
-		CheckBox*      mConfirmAck;
-		CheckBox*      mLateCancel;
-		AddressBook*   mAddressBook;
-		QString        mPrefixText;   // last entered value of prefix text
-		QString        mSuffixText;   // last entered value of suffix text
-		int            mFlags;        // event flag bits
+		KListView*        mAddresseeList;
+		BLineEdit*        mPrefix;
+		BLineEdit*        mSuffix;
+		CheckBox*         mReminder;
+		SpinBox*          mReminderCount;
+		ComboBox*         mReminderUnits;
+		QLabel*           mReminderLabel;
+		SoundPicker*      mSoundPicker;
+		FontColourButton* mFontColourButton;
+		ColourCombo*      mBgColourChoose;
+		CheckBox*         mConfirmAck;
+		CheckBox*         mLateCancel;
+		AddressBook*      mAddressBook;
+		QString           mPrefixText;   // last entered value of prefix text
+		QString           mSuffixText;   // last entered value of suffix text
+		int               mFlags;        // event flag bits
 };
 
 
+class BLineEdit : public QLineEdit
+{
+		Q_OBJECT
+	public:
+		BLineEdit(QWidget* parent = 0, const char* name = 0)
+			     : QLineEdit(parent, name) { }
+		BLineEdit(const QString& text, QWidget* parent = 0, const char* name = 0)
+			     : QLineEdit(text, parent, name) { }
+	signals:
+		void         lostFocus();
+	protected:
+		virtual void focusOutEvent(QFocusEvent*)  { emit lostFocus(); }
+};
 
 #endif // BIRTHDAYDLG_H

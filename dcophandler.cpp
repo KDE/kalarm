@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
+#include "prefsettings.h"
 #include "kamail.h"
 #include "dcophandler.moc"
 
@@ -219,6 +220,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			QStringList mailAttachments;
 			QDateTime   dateTime, endTime;
 			QColor      bgColour;
+			QFont       font = theApp()->settings()->messageFont();
 			Q_UINT32    flags;
 			KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
 			Q_INT32     repeatCount = 0;
@@ -289,7 +291,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 
 				}
 			}
-			theApp()->scheduleEvent(text, dateTime, bgColour, flags, audioFile, mailAddresses, mailSubject,
+			theApp()->scheduleEvent(text, dateTime, bgColour, font, flags, audioFile, mailAddresses, mailSubject,
 			                        mailAttachments, action, recurType, repeatInterval, repeatCount, endTime,
 			                        reminderMinutes);
 			break;

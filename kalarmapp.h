@@ -102,8 +102,8 @@ class KAlarmApp : public KUniqueApplication
 		void               commandMessage(KProcess*, QWidget* parent);
 		int                maxLateness();
 		// Methods called indirectly by the DCOP interface
-		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, int flags,
-		                                 const QString& audioFile, const EmailAddressList& mailAddresses,
+		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QFont&,
+		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
 		                                 const QString& mailSubject, const QStringList& mailAttachments,
 		                                 KAlarmEvent::Action, KAlarmEvent::RecurType,
 		                                 int repeatInterval, int repeatCount, const QDateTime& endTime,

@@ -73,8 +73,8 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
-	  font(theApp()->settings()->messageFont()),
-	  colour(evnt.colour()),
+	  font(evnt.font()),
+	  colour(evnt.bgColour()),
 	  mDateTime((alarm.type() & KAlarmAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
 	  audioFile(evnt.audioFile()),
@@ -112,7 +112,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
-	  font(theApp()->settings()->messageFont()),
+	  font(evnt.font()),
 	  colour(Qt::white),
 	  mDateTime(alarm.dateTime()),
 	  eventID(evnt.id()),
@@ -535,7 +535,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
-		                                    i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel().text())
+		                                    i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel())
 		    != KMessageBox::Yes)
 		{
 			ce->ignore();
@@ -582,7 +582,7 @@ void MessageWin::slotDefer()
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime, message, colour, (KAlarmEvent::Action)action, flags);
+				event.set(dateTime, message, colour, font, (KAlarmEvent::Action)action, flags);
 				event.setAudioFile(audioFile);
 				event.setArchive();
 				event.setEventID(eventID);

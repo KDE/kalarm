@@ -65,6 +65,7 @@
 #include "soundpicker.h"
 #include "recurrenceedit.h"
 #include "colourcombo.h"
+#include "fontcolourbutton.h"
 #include "kamail.h"
 #include "deferdlg.h"
 #include "buttongroup.h"
@@ -72,7 +73,6 @@
 #include "checkbox.h"
 #include "combobox.h"
 #include "spinbox.h"
-#include "pushbutton.h"
 #include "timeperiod.h"
 #include "editdlg.moc"
 
@@ -238,11 +238,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	if (event)
 	{
 		// Set the values to those for the specified event
-#ifdef SELECT_FONT
-		mFontColour->setColour(event->colour());
-		mFontColour->setFont(?);
-#endif
-		mBgColourChoose->setColour(event->colour());     // set colour before setting alarm type buttons
+		if (event->defaultFont())
+			mFontColourButton->setDefaultFont();
+		else
+			mFontColourButton->setFont(event->font());
+		mFontColourButton->setBgColour(event->bgColour());
+		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		mTimeWidget->setDateTime((!event->mainExpired() ? event->mainDateTime() : recurs ? QDateTime() : event->deferDateTime()),
 		                         (event->anyTime() && !event->deferred()));
 
@@ -300,10 +301,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	{
 		// Set the values to their defaults
 		Settings* settings = theApp()->settings();
-#ifdef SELECT_FONT
-		mFontColour->setColour(settings->defaultBgColour());
-		mFontColour->setFont(settings->messageFont());
-#endif
+		mFontColourButton->setFont(settings->messageFont());
+		mFontColourButton->setBgColour(settings->defaultBgColour());
 		mBgColourChoose->setColour(settings->defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		mTimeWidget->setDateTime(defaultTime, false);
@@ -374,27 +373,24 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	layout->addWidget(mSoundPicker);
 	layout->addStretch();
 
-#ifdef SELECT_FONT
-	// Font and colour choice drop-down list
-	fontButton = new QPushButton(i18n("Font && Co&lor..."), mDisplayAlarmsFrame);
-	mFontColour = new FontColourChooser(mDisplayAlarmsFrame, 0, false, QStringList(), true, i18n("Font and background color"), false);
-	size = mFontColour->sizeHint();
-	mFontColour->setMinimumHeight(size.height() + 4);
-	QWhatsThis::add(mFontColour,
-	      i18n("Choose the font and background color for the alarm message."));
-	layout->addWidget(mFontColour);
-	if (mReadOnly)
-		new ReadOnlyCover(fontButton, this);
-#endif
-
 	// Colour choice drop-down list
 	mBgColourChoose = createBgColourChooser(mReadOnly, mDisplayAlarmsFrame);
+	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(mBgColourChoose);
 
 	// Acknowledgement confirmation required - default = no confirmation
+	layout = new QHBoxLayout(frameLayout);
 	mConfirmAck = createConfirmAckCheckbox(mReadOnly, mDisplayAlarmsFrame);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	frameLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
+	layout->addWidget(mConfirmAck);
+	layout->addStretch();
+
+	// Font and colour choice drop-down list
+	mFontColourButton = new FontColourButton(mDisplayAlarmsFrame);
+	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
+	mFontColourButton->setReadOnly(mReadOnly);
+	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
+	layout->addWidget(mFontColourButton);
 
 	// Reminder
 	layout = new QHBoxLayout(frameLayout, spacingHint());
@@ -597,7 +593,8 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
  */
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
-	event.set(mAlarmDateTime, mAlarmMessage, mBgColourChoose->color(), getAlarmType(), getAlarmFlags());
+	event.set(mAlarmDateTime, mAlarmMessage, mBgColourChoose->color(), mFontColourButton->font(),
+	          getAlarmType(), getAlarmFlags());
 	event.setAudioFile(mSoundPicker->file());
 	event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 	event.setReminder(getReminderMinutes());
@@ -630,7 +627,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAlarmEvent::EMAIL_BCC : 0)
 	     | (mRepeatAtLoginRadio->isChecked()              ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (mAlarmAnyTime                                 ? KAlarmEvent::ANY_TIME : 0);
+	     | (mAlarmAnyTime                                 ? KAlarmEvent::ANY_TIME : 0)
+	     | (mFontColourButton->defaultFont()              ? KAlarmEvent::DEFAULT_FONT : 0);
 }
 
 /******************************************************************************
@@ -770,7 +768,7 @@ void EditAlarmDlg::slotTry()
 				return;
 		}
 		KAlarmEvent event;
-		event.set(QDateTime(), text, mBgColourChoose->color(), getAlarmType(), getAlarmFlags());
+		event.set(QDateTime(), text, mBgColourChoose->color(), mFontColourButton->font(), getAlarmType(), getAlarmFlags());
 		event.setAudioFile(mSoundPicker->file());
 		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
@@ -989,6 +987,24 @@ void EditAlarmDlg::slotBrowseFile()
 }
 
 /******************************************************************************
+*  Called when the a new background colour has been selected using the colour
+*  combo box.
+*/
+void EditAlarmDlg::slotBgColourSelected(const QColor& colour)
+{
+	mFontColourButton->setBgColour(colour);
+}
+
+/******************************************************************************
+*  Called when the a new font and colour have been selected using the font &
+*  colour pushbutton.
+*/
+void EditAlarmDlg::slotFontColourSelected()
+{
+	mBgColourChoose->setColour(mFontColourButton->bgColour());
+}
+
+/******************************************************************************
 *  Called when the "Any time" checkbox is toggled in the date/time widget.
 *  Sets the advance reminder units to days if any time is checked.
 */
@@ -1058,7 +1074,7 @@ void EditAlarmDlg::setReminder(int minutes)
 }
 
 /******************************************************************************
-*  Called when the "Advance reminder" checkbox is toggled.
+*  Called when the Reminder checkbox is toggled.
 */
 void EditAlarmDlg::slotReminderToggled(bool on)
 {
@@ -1230,7 +1246,7 @@ bool EditAlarmDlg::checkText(QString& result)
 				default:
 					break;
 			}
-			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null, KStdGuiItem::cont().text())    // explicit button text is for KDE2 compatibility
+			if (KMessageBox::warningContinueCancel(this, errmsg.arg(alarmtext), QString::null, KStdGuiItem::cont())    // explicit button text is for KDE2 compatibility
 			    == KMessageBox::Cancel)
 				return false;
 		}

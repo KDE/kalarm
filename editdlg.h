@@ -31,14 +31,13 @@
 #include <kdialogbase.h>
 
 #include "msgevent.h"
-using namespace KCal;
 
 class QGroupBox;
 class QMultiLineEdit;
 class QComboBox;
 class QHBox;
-class FontColourChooser;
 class ColourCombo;
+class FontColourButton;
 class ComboBox;
 class TimeSpinBox;
 class RadioButton;
@@ -81,6 +80,8 @@ class EditAlarmDlg : public KDialogBase
 		void         slotRepeatClicked(int id);
 		void         slotEditDeferral();
 		void         slotBrowseFile();
+		void         slotFontColourSelected();
+		void         slotBgColourSelected(const QColor&);
 		void         openAddressBook();
 		void         slotAddAttachment();
 		void         slotRemoveAttachment();
@@ -104,69 +105,66 @@ class EditAlarmDlg : public KDialogBase
 		void                initCommand(QWidget* parent);
 		void                initEmail(QWidget* parent);
 
-		int              mMainPageIndex;
-		int              mRecurPageIndex;
-		QWidgetStack*    mRecurTabStack;
-		QLabel*          mRecurDisabled;
-		bool             mRecurSetEndDate;    // adjust end date/time when recurrence tab is displayed
+		int               mMainPageIndex;
+		int               mRecurPageIndex;
+		QWidgetStack*     mRecurTabStack;
+		QLabel*           mRecurDisabled;
+		bool              mRecurSetEndDate;    // adjust end date/time when recurrence tab is displayed
 
-		RadioButton*     mMessageRadio;
-		RadioButton*     mCommandRadio;
-		RadioButton*     mFileRadio;
-		RadioButton*     mEmailRadio;
-		QWidgetStack*    mAlarmTypeStack;
+		RadioButton*      mMessageRadio;
+		RadioButton*      mCommandRadio;
+		RadioButton*      mFileRadio;
+		RadioButton*      mEmailRadio;
+		QWidgetStack*     mAlarmTypeStack;
 
 		// Display alarm options widgets
-		QFrame*          mDisplayAlarmsFrame;
-		QHBox*           mFileBox;
-		QHBox*           mFilePadding;
-		SoundPicker*     mSoundPicker;
-		CheckBox*        mConfirmAck;
-#ifdef SELECT_FONT
-		FontColourChooser* mFontColour;
-#else
-		ColourCombo*     mBgColourChoose;
-#endif
-		CheckBox*        mReminder;
-		TimePeriod*      mReminderCount;
-		ComboBox*        mReminderUnits;
+		QFrame*           mDisplayAlarmsFrame;
+		QHBox*            mFileBox;
+		QHBox*            mFilePadding;
+		SoundPicker*      mSoundPicker;
+		CheckBox*         mConfirmAck;
+		FontColourButton* mFontColourButton;
+		ColourCombo*      mBgColourChoose;
+		CheckBox*         mReminder;
+		TimePeriod*       mReminderCount;
+		ComboBox*         mReminderUnits;
 		// Text message alarm widgets
-		QMultiLineEdit*  mTextMessageEdit;    // text message edit box
+		QMultiLineEdit*   mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
-		LineEdit*        mFileMessageEdit;    // text file edit box
-		QString          mFileDefaultDir;     // default directory for browse button
+		LineEdit*         mFileMessageEdit;    // text file edit box
+		QString           mFileDefaultDir;     // default directory for browse button
 		// Command alarm widgets
-		QFrame*          mCommandFrame;
-		LineEdit*        mCommandMessageEdit; // command edit box
+		QFrame*           mCommandFrame;
+		LineEdit*         mCommandMessageEdit; // command edit box
 		// Email alarm widgets
-		QFrame*          mEmailFrame;
-		LineEdit*        mEmailToEdit;
-		QLineEdit*       mEmailSubjectEdit;
-		QMultiLineEdit*  mEmailMessageEdit;   // email body edit box
-		QComboBox*       mEmailAttachList;
-		QPushButton*     mEmailRemoveButton;
-		CheckBox*        mEmailBcc;
-		QString          mAttachDefaultDir;
+		QFrame*           mEmailFrame;
+		LineEdit*         mEmailToEdit;
+		QLineEdit*        mEmailSubjectEdit;
+		QMultiLineEdit*   mEmailMessageEdit;   // email body edit box
+		QComboBox*        mEmailAttachList;
+		QPushButton*      mEmailRemoveButton;
+		CheckBox*         mEmailBcc;
+		QString           mAttachDefaultDir;
 
-		QGroupBox*       mDeferGroup;
-		QLabel*          mDeferTimeLabel;
-		AlarmTimeWidget* mTimeWidget;
-		CheckBox*        mLateCancel;
+		QGroupBox*        mDeferGroup;
+		QLabel*           mDeferTimeLabel;
+		AlarmTimeWidget*  mTimeWidget;
+		CheckBox*         mLateCancel;
 
-		RadioButton*     mNoRepeatRadio;
-		RadioButton*     mRepeatAtLoginRadio;
-		RadioButton*     mRecurRadio;
-		RecurrenceEdit*  mRecurrenceEdit;
+		RadioButton*      mNoRepeatRadio;
+		RadioButton*      mRepeatAtLoginRadio;
+		RadioButton*      mRecurRadio;
+		RecurrenceEdit*   mRecurrenceEdit;
 
-		QString          mAlarmMessage;       // message text/file name/command/email message
-		QDateTime        mAlarmDateTime;
-		QDateTime        mDeferDateTime;
-		EmailAddressList mEmailAddresses;     // list of addresses to send email to
-		QStringList      mEmailAttachments;   // list of email attachment file names
-		QSize            mBasicSize;          // size without deferred time widget
-		int              mDeferGroupHeight;   // height added by deferred time widget
-		bool             mAlarmAnyTime;       // mAlarmDateTime is only a date, not a time
-		bool             mReadOnly;           // the dialog is read only
+		QString           mAlarmMessage;       // message text/file name/command/email message
+		QDateTime         mAlarmDateTime;
+		QDateTime         mDeferDateTime;
+		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
+		QStringList       mEmailAttachments;   // list of email attachment file names
+		QSize             mBasicSize;          // size without deferred time widget
+		int               mDeferGroupHeight;   // height added by deferred time widget
+		bool              mAlarmAnyTime;       // mAlarmDateTime is only a date, not a time
+		bool              mReadOnly;           // the dialog is read only
 };
 
 

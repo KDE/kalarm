@@ -15,7 +15,7 @@ kalarm_SOURCES = birthdaydlg.cpp msgevent.cpp editdlg.cpp alarmcalendar.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp \
-	fontcolour.cpp datetime.cpp soundpicker.cpp \
+	fontcolour.cpp fontcolourbutton.cpp datetime.cpp soundpicker.cpp \
 	alarmlistview.cpp kamail.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
@@ -29,7 +29,7 @@ noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
 	msgevent.h alarmcalendar.h alarmlistview.h kamail.h \
 	prefs.h prefsettings.h prefdlg.h \
 	traywindow.h daemongui.h dcophandler.h \
-	fontcolour.h datetime.h soundpicker.h
+	fontcolour.h fontcolourbutton.h datetime.h soundpicker.h
 
 METASOURCES = AUTO
 

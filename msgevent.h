@@ -46,21 +46,6 @@ class EmailAddressList : public QValueList<KCal::Person>
 };
 
 
-/*
- * KAlarm events are stored as alarms in the calendar file, as follows:
- * In the alarm object:
- *   next time/date - stored as the alarm time (alarm TRIGGER field)
- *   message text - stored as the alarm description, with prefix TEXT: (alarm DESCRIPTION field)
- *   file name to display text from - stored as the alarm description, with prefix FILE: (alarm DESCRIPTION field)
- *   command to execute - stored as the alarm description, with prefix CMD: (alarm DESCRIPTION field)
- *   late cancel, repeat at login, deferral - stored in prefix to the alarm description (alarm DESCRIPTION field)
- * In the event object:
- *   colour - stored as a hex string prefixed by #, as the first category (event CATEGORIES field)
- *   elapsed repeat count - stored as the revision number (event SEQUENCE field)
- *   beep - stored as a "BEEP" category (event CATEGORIES field)
- *   confirmAck - stored as a "ACKCONF" category (event CATEGORIES field)
- */
-
 // Base class containing data common to KAlarmAlarm and KAlarmEvent
 class KAAlarmEventBase
 {
@@ -76,7 +61,9 @@ class KAAlarmEventBase
 		const QStringList& emailAttachments() const   { return mEmailAttachments; }
 		QString            emailAttachments(const QString& sep) const  { return mEmailAttachments.join(sep); }
 		bool               emailBcc() const           { return mEmailBcc; }
-		const QColor&      colour() const             { return mColour; }
+		const QColor&      bgColour() const           { return mBgColour; }
+		bool               defaultFont() const        { return mDefaultFont; }
+		const QFont&       font() const;
 		bool               confirmAck() const         { return mConfirmAck; }
 		bool               lateCancel() const         { return mLateCancel; }
 		bool               repeatAtLogin() const      { return mRepeatAtLogin; }
@@ -102,7 +89,8 @@ class KAAlarmEventBase
 		QString            mEventID;          // UID: KCal::Event unique ID
 		QString            mText;             // message text, file URL, command, email body [or audio file for KAlarmAlarm]
 		QDateTime          mDateTime;         // next time to display the alarm
-		QColor             mColour;           // background colour of alarm message
+		QColor             mBgColour;         // background colour of alarm message
+		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
@@ -114,6 +102,7 @@ class KAAlarmEventBase
 		bool               mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
 		bool               mEmailBcc;         // blind copy the email to the user
 		bool               mConfirmAck;       // alarm acknowledgement requires confirmation by user
+		bool               mDefaultFont;      // use default message font, not mFont
 
 	friend class AlarmData;
 };
@@ -188,10 +177,12 @@ class KAlarmEvent : public KAAlarmEventBase
 			ANY_TIME        = 0x08,    // only a date is specified for the alarm, not a time
 			CONFIRM_ACK     = 0x10,    // closing the alarm message window requires confirmation prompt
 			EMAIL_BCC       = 0x20,    // blind copy the email to the user
+			DEFAULT_FONT    = 0x40,    // use default alarm message font
 			// The following are read-only internal values, and may be changed
-			REMINDER        = 0x40,
-			DEFERRAL        = 0x80,
-			DISPLAYING_     = 0x100
+			REMINDER        = 0x100,
+			DEFERRAL        = 0x200,
+			DISPLAYING_     = 0x400,
+			READ_ONLY_FLAGS = 0xF00    // mask for all read-only internal values
 		};
 		enum RecurType
 		{
@@ -232,28 +223,28 @@ class KAlarmEvent : public KAAlarmEventBase
 		};
 
 		KAlarmEvent()      : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
-		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, Action action, int flags)
-		                                            : mRecurrence(0) { set(dt, message, c, action, flags); }
+		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, const QFont& f, Action action, int flags)
+		                                            : mRecurrence(0) { set(dt, message, c, f, action, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
 		KAlarmEvent(const KAlarmEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAlarmEvent()     { delete mRecurrence; }
 		KAlarmEvent&       operator=(const KAlarmEvent& e)   { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
-		void               set(const QDate& d, const QString& message, const QColor& c, Action action, int flags)
-		                            { set(d, message, c, action, flags | ANY_TIME); }
-		void               set(const QDateTime&, const QString& message, const QColor&, Action, int flags);
-		void               setMessage(const QDate& d, const QString& message, const QColor& c, int flags)
-		                            { set(d, message, c, MESSAGE, flags | ANY_TIME); }
-		void               setMessage(const QDateTime& dt, const QString& message, const QColor& c, int flags)
-		                            { set(dt, message, c, MESSAGE, flags); }
-		void               setFileName(const QDate& d, const QString& filename, const QColor& c, int flags)
-		                            { set(d, filename, c, FILE, flags | ANY_TIME); }
-		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& c, int flags)
-		                            { set(dt, filename, c, FILE, flags); }
+		void               set(const QDate& d, const QString& message, const QColor& c, const QFont& f, Action action, int flags)
+		                            { set(d, message, c, f, action, flags | ANY_TIME); }
+		void               set(const QDateTime&, const QString& message, const QColor&, const QFont&, Action, int flags);
+		void               setMessage(const QDate& d, const QString& message, const QColor& c, const QFont& f, int flags)
+		                            { set(d, message, c, f, MESSAGE, flags | ANY_TIME); }
+		void               setMessage(const QDateTime& dt, const QString& message, const QColor& c, const QFont& f, int flags)
+		                            { set(dt, message, c, f, MESSAGE, flags); }
+		void               setFileName(const QDate& d, const QString& filename, const QColor& c, const QFont& f, int flags)
+		                            { set(d, filename, c, f, FILE, flags | ANY_TIME); }
+		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& c, const QFont& f, int flags)
+		                            { set(dt, filename, c, f, FILE, flags); }
 		void               setCommand(const QDate& d, const QString& command, int flags)
-		                            { set(d, command, QColor(), COMMAND, flags | ANY_TIME); }
+		                            { set(d, command, QColor(), QFont(), COMMAND, flags | ANY_TIME); }
 		void               setCommand(const QDateTime& dt, const QString& command, int flags)
-		                            { set(dt, command, QColor(), COMMAND, flags); }
+		                            { set(dt, command, QColor(), QFont(), COMMAND, flags); }
 		void               setEmail(const QDate&, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,
@@ -377,6 +368,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		OccurType          nextRecurrence(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
 		KCal::Alarm*       initKcalAlarm(KCal::Event&, const QDateTime&, const QStringList& types) const;
+		static void        readAlarms(const KCal::Event&, void* alarmMap);
 		static void        readAlarm(const KCal::Alarm&, AlarmData&);
 
 		QString            mAudioFile;        // ATTACH: audio file to play
