@@ -1995,22 +1995,14 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 }
 
 /******************************************************************************
-* Check whether a file appears to be a text file by looking at its mime type.
-* Reply = 0 if not a text file
+* Check from its mime type whether a file appears to be a text or image file.
+* Reply = 0 if not a text or image file
 *       = 1 if a plain text file
-*       = 2 if a formatted text file.
+*       = 2 if a formatted text file
+*       = 3 if an application text file
+*       = 4 if an image file.
 */
-int KAlarmApp::isTextFile(const KURL& url)
-{
-#if KDE_VERSION >= 290
-	QString mimetype = KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype();
-#else
-	QString mimetype = KFileItem(~0, ~0, url).mimetype();
-#endif
-	return isTextFile(mimetype);
-}
-
-int KAlarmApp::isTextFile(const QString& mimetype)
+int KAlarmApp::fileType(const QString& mimetype)
 {
 	static const char* applicationTypes[] = {
 		"x-shellscript", "x-nawk", "x-awk", "x-perl", "x-python",
@@ -2018,20 +2010,23 @@ int KAlarmApp::isTextFile(const QString& mimetype)
 	static const char* formattedTextTypes[] = {
 		"html", "xml", 0 };
 
+	if (mimetype.startsWith(QString::fromLatin1("image/")))
+		return 4;
 	int slash = mimetype.find('/');
 	if (slash < 0)
 		return 0;
-	const char* subtype = mimetype.mid(slash + 1).latin1();
+	QString type = mimetype.mid(slash + 1);
+	const char* typel = type.latin1();
 	if (mimetype.startsWith(QString::fromLatin1("application")))
 	{
 		for (int i = 0;  applicationTypes[i];  ++i)
-			if (!strcmp(subtype, applicationTypes[i]))
-				return 1;
+			if (!strcmp(typel, applicationTypes[i]))
+				return 3;
 	}
 	else if (mimetype.startsWith(QString::fromLatin1("text")))
 	{
 		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (!strcmp(subtype, formattedTextTypes[i]))
+			if (!strcmp(typel, formattedTextTypes[i]))
 				return 2;
 		return 1;
 	}

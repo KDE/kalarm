@@ -224,9 +224,7 @@ QSize MessageWin::initView()
 				{
 					opened = true;
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
-					TextMimeSourceFactory msf;
-					view->setMimeSourceFactory(&msf);
-					view->QTextBrowser::setSource(tmpFile);
+					TextMimeSourceFactory msf(tmpFile, view);
 					view->setMinimumSize(view->sizeHint());
 					topLayout->addWidget(view);
 
@@ -652,6 +650,50 @@ QSize MessageText::sizeHint() const
 * QMimeSourceFactory), but also from its contents. This allows the detection
 * of plain text files without file name extensions.
 =============================================================================*/
+TextMimeSourceFactory::TextMimeSourceFactory(const QString& absPath, KTextBrowser* view)
+	: QMimeSourceFactory(),
+	  mMimeType("text/plain"),
+	  mLast(0)
+{
+	view->setMimeSourceFactory(this);
+	QString type = KMimeType::findByURL(absPath)->name();
+	switch (KAlarmApp::fileType(type))
+	{
+		case 1:
+		case 2:
+			mMimeType = type.latin1();
+			// fall through to '3'
+		case 3:
+		default:
+			// It's assumed to be a text file
+			mTextFile = absPath;
+			view->QTextBrowser::setSource(absPath);
+			break;
+
+		case 4:
+			// It's an image file
+			QString text = "<img source=\"";
+			text += absPath;
+			text += "\">";
+			view->setText(text);
+			break;
+	}
+/*	if (mMimeType.startsWith(QString::fromLatin1("image/")))
+	{
+		// It's an image file
+		QString text = "<img source=\"";
+		text += absPath;
+		text += "\">";
+		view->setText(text);
+	}
+	else
+	{
+		// It's assumed to be a text file
+		mTextFile = absPath;
+		view->QTextBrowser::setSource(absPath);
+	}*/
+	setFilePath(QFileInfo(absPath).dirPath(true));
+}
 
 TextMimeSourceFactory::~TextMimeSourceFactory()
 {
@@ -660,26 +702,32 @@ TextMimeSourceFactory::~TextMimeSourceFactory()
 
 const QMimeSource* TextMimeSourceFactory::data(const QString& abs_name) const
 {
-	const QMimeSource* r = 0;
-	QFileInfo fi(abs_name);
-	if (fi.isReadable())
+	if (abs_name == mTextFile)
 	{
-		// Find the mimetype
-		QString mimetype = KMimeType::findByURL(abs_name)->name();
-		QFile f(abs_name);
-		if (f.open(IO_ReadOnly)  &&  f.size())
+		QFileInfo fi(abs_name);
+		if (fi.isReadable())
 		{
-			QByteArray ba(f.size());
-			f.readBlock(ba.data(), ba.size());
-			QStoredDrag* sr = new QStoredDrag(KAlarmApp::isTextFile(mimetype) ? mimetype.latin1() : "text/plain");
-			sr->setEncodedData(ba);
-			r = sr;
+			QFile f(abs_name);
+			if (f.open(IO_ReadOnly)  &&  f.size())
+			{
+				QByteArray ba(f.size());
+				f.readBlock(ba.data(), ba.size());
+/*				const char* mimetype;
+				switch (KAlarmApp::isTextFile(mMimeType))
+				{
+					case 1:
+					case 2:   mimetype = mMimeType.latin1();  break;
+					case 3:
+					default:  mimetype = "text/plain";  break;
+				}
+				QStoredDrag* sr = new QStoredDrag(mimetype);*/
+				QStoredDrag* sr = new QStoredDrag(mMimeType);
+				sr->setEncodedData(ba);
+				delete mLast;
+				mLast = sr;
+				return sr;
+			}
 		}
 	}
-	if (!r)
-		r = QMimeSourceFactory::defaultFactory()->data(abs_name);
-
-	delete mLast;
-	mLast = r;
-	return r;
+	return QMimeSourceFactory::data(abs_name);
 }

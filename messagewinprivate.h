@@ -39,19 +39,21 @@ class MessageText : public QTextEdit
 };
 
 class QMimeSource;
+class KTextBrowser;
 
 class TextMimeSourceFactory : public QMimeSourceFactory
 {
 	public:
-		TextMimeSourceFactory() : QMimeSourceFactory(), mLast(0) { }
+		TextMimeSourceFactory(const QString& absPath, KTextBrowser*);
 		virtual ~TextMimeSourceFactory();
 		virtual const QMimeSource* data(const QString& abs_name) const;
 	private:
 		// Prohibit the following methods
 		virtual void setData(const QString&, QMimeSource*) {}
-		virtual void setFilePath(const QStringList&) {}
 		virtual void setExtensionType(const QString&, const char*) {}
 
+		QString   mTextFile;
+		QCString  mMimeType;
 		mutable const QMimeSource* mLast;
 };
 

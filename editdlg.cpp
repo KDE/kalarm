@@ -133,7 +133,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	mFileRadio->setReadOnly(mReadOnly);
 	QWhatsThis::add(mFileRadio,
-	      i18n("If checked, the alarm will display the contents of a text file."));
+	      i18n("If checked, the alarm will display the contents of a text or image file."));
 	grid->addWidget(mFileRadio, 1, 2);
 	grid->setColStretch(3, 1);
 
@@ -326,7 +326,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mFileMessageEdit = new LineEdit(true, mFileBox);
 	mFileMessageEdit->setReadOnly(mReadOnly);
 	mFileMessageEdit->setAcceptDrops(true);
-	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name of a text file, or a URL, to display."));
+	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name or URL of a text or image file to display."));
 
 	// File browse button
 	if (!mReadOnly)
@@ -335,7 +335,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 		button->setPixmap(SmallIcon("fileopen"));
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotBrowseFile()));
-		QWhatsThis::add(button, i18n("Select a text file to display."));
+		QWhatsThis::add(button, i18n("Select a text or image file to display."));
 	}
 
 	// Sound checkbox and file selector
@@ -999,7 +999,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mFileBox->show();
 		mFilePadding->show();
 		mFontColourButton->hide();
-		setButtonWhatsThis(Try, i18n("Display the text file now"));
+		setButtonWhatsThis(Try, i18n("Display the file now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
 		mFileMessageEdit->setFocus();
@@ -1027,7 +1027,7 @@ void EditAlarmDlg::slotBrowseFile()
 {
 	if (mFileDefaultDir.isEmpty())
 		mFileDefaultDir = QDir::homeDirPath();
-	KURL url = KFileDialog::getOpenURL(mFileDefaultDir, QString::null, this, i18n("Choose Text File to Display"));
+	KURL url = KFileDialog::getOpenURL(mFileDefaultDir, QString::null, this, i18n("Choose Text or Image File to Display"));
 	if (!url.isEmpty())
 	{
 		mAlarmMessage = url.prettyURL();
@@ -1158,7 +1158,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		QString alarmtext = mFileMessageEdit->text();
 		// Convert any relative file path to absolute
 		// (using home directory as the default)
-		enum Err { NONE = 0, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT, HTML };
+		enum Err { NONE = 0, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE, HTML };
 		Err err = NONE;
 		KURL url;
 		int i = alarmtext.find(QString::fromLatin1("/"));
@@ -1196,11 +1196,17 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		}
 		if (!err)
 		{
-			switch (KAlarmApp::isTextFile(url))
+			switch (KAlarmApp::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
 			{
-				case 1:   break;
-				case 2:   err = HTML;  break;
-				default:  err = NOT_TEXT;  break;
+				case 1:
+				case 3:
+				case 4:   break;
+				case 2:
+#if KDE_VERSION < 290
+					err = HTML;
+#endif
+					break;
+				default:  err = NOT_TEXT_IMAGE;  break;
 			}
 		}
 		if (err  &&  showErrorMessage)
@@ -1209,11 +1215,13 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			QString errmsg;
 			switch (err)
 			{
-				case NONEXISTENT:  errmsg = i18n("%1\nnot found");  break;
-				case DIRECTORY:    errmsg = i18n("%1\nis a directory");  break;
-				case UNREADABLE:   errmsg = i18n("%1\nis not readable");  break;
-				case NOT_TEXT:     errmsg = i18n("%1\nappears not to be a text file");  break;
-				case HTML:         errmsg = i18n("%1\nis an html/xml file");  break;
+				case NONEXISTENT:     errmsg = i18n("%1\nnot found");  break;
+				case DIRECTORY:       errmsg = i18n("%1\nis a directory");  break;
+				case UNREADABLE:      errmsg = i18n("%1\nis not readable");  break;
+				case NOT_TEXT_IMAGE:  errmsg = i18n("%1\nappears not to be a text or image file");  break;
+#if KDE_VERSION < 290
+				case HTML:            errmsg = i18n("%1\nHTML/XML files may not display correctly");  break;
+#endif
 				case NONE:
 				default:
 					break;
