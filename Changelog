@@ -1,7 +1,9 @@
 KAlarm
 
-=== Version 1.1.6 --- 19 September 2004 ===
+=== Version 1.1.6 --- 30 September 2004 ===
 Prevent crash if kalarmui.rc is missing.
+Unsuppress Quit warning message box if default answer is Cancel quit.
+Prevent blind copy to self of email alarms via KMail when bcc is deselected.
 
 === Version 1.1.5 --- 1 September 2004 ===
 Show erroneous control in alarm edit dialog when an error message is displayed.

@@ -86,7 +86,7 @@ QString KAMail::send(const KAEvent& event, bool allowNotify)
 		       ? i18n("No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the %1 Preferences dialog.").arg(kapp->aboutData()->programName())
 		       : i18n("No 'From' email address is configured.\nPlease set it in the %1 Preferences dialog.").arg(kapp->aboutData()->programName());
 	}
-	QString bcc  = preferences->emailBccAddress();
+	QString bcc = event.emailBcc() ? preferences->emailBccAddress() : QString::null;
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
@@ -109,7 +109,7 @@ QString KAMail::send(const KAEvent& event, bool allowNotify)
 			command += QString::fromLatin1(" -s ");
 			command += KShellProcess::quote(event.emailSubject());
 
-			if (event.emailBcc()  &&  !bcc.isEmpty())
+			if (!bcc.isEmpty())
 			{
 				command += QString::fromLatin1(" -b ");
 				command += KShellProcess::quote(bcc);
@@ -248,7 +248,7 @@ QString KAMail::sendKMail(const KAEvent& event, const QString& from, const QStri
 		proc << "kmail"
 		     << "--subject" << event.emailSubject().local8Bit()
 		     << "--body" << event.message().local8Bit();
-		if (event.emailBcc()  &&  !bcc.isEmpty())
+		if (!bcc.isEmpty())
 			proc << "--bcc" << bcc.local8Bit();
 		QStringList attachments = event.emailAttachments();
 		if (attachments.count())
@@ -286,7 +286,7 @@ QString KAMail::initHeaders(const KAEvent& event, const QString& from, const QSt
 	}
 	message += QString::fromLatin1("From: ") + from;
 	message += QString::fromLatin1("\nTo: ") + event.emailAddresses(", ");
-	if (event.emailBcc()  &&  !bcc.isEmpty())
+	if (!bcc.isEmpty())
 		message += QString::fromLatin1("\nBcc: ") + bcc;
 	message += QString::fromLatin1("\nSubject: ") + event.emailSubject();
 	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
