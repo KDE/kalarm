@@ -62,6 +62,8 @@
 
 using namespace KCal;
 
+static const char* UI_FILE = "kalarmui.rc";
+
 static QString messageFromPrefix    = i18n("'From' email address", "From:");
 static QString messageToPrefix      = i18n("Email addressee", "To:");
 static QString messageDatePrefix    = i18n("Date:");
@@ -292,10 +294,12 @@ void KAlarmMainWindow::initActions()
 	KStdAction::preferences(this, SLOT(slotPreferences()), actions);
 	Daemon::createControlAction(actions, "controlDaemon");
 	setStandardToolBarMenuEnabled(true);
-	createGUI("kalarmui.rc");
+	createGUI(UI_FILE);
 
 	mContextMenu = static_cast<KPopupMenu*>(factory()->container("listContext", this));
 	mActionsMenu = static_cast<KPopupMenu*>(factory()->container("actions", this));
+	if (!mContextMenu  ||  !mActionsMenu)
+		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)").arg(QString::fromLatin1(UI_FILE)));
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
@@ -1011,7 +1015,8 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 	if (button == Qt::RightButton)
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
-		mContextMenu->popup(pt);
+		if (mContextMenu)
+			mContextMenu->popup(pt);
 	}
 	else if (!item)
 	{
