@@ -59,4 +59,4 @@ GenericName[zu]=Ukukhumbuza Komlayezo Womgcini sikhathi
 Terminal=0
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=true
-Categories=QT;KDE;Utility;X-KDE-More
+Categories=Qt;KDE;Utility;X-KDE-More
