@@ -44,6 +44,7 @@
 #include <kstdguiitem.h>
 
 #include <libkdepim/maillistdrag.h>
+#include <libkmime/kmime_content.h>
 #include <libkcal/calendarlocal.h>
 #include <libkcal/icaldrag.h>
 
@@ -1058,18 +1059,36 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KPIM::MailList mailList;
 	KURL::List     files;
 	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
-
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 
 	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
+		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
 		alarmText.setText(files.first().prettyURL());
 	}
+	else if (e->provides("message/rfc822")
+	&&       KPIM::MailListDrag::canDecode(e))
+	{
+		// Email message(s). Ignore all but the first.
+		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
+		QByteArray bytes = e->encodedData("message/rfc822");
+		QCString mails(bytes.data(), bytes.size());
+		KMime::Content content;
+		content.setContent(mails);
+		QCString headers = content.head();
+		KMime::Content* bodyContent = content.textContent();
+		alarmText.setEmail(KMime::extractHeader(headers, "To"),
+		                   KMime::extractHeader(headers, "From"),
+		                   KMime::extractHeader(headers, "Date"),
+		                   KMime::extractHeader(headers, "Subject"),
+				   (bodyContent ? bodyContent->body() : QString::null));
+	}
 	else if (e->provides(KPIM::MailListDrag::format())
-	&&  KPIM::MailListDrag::decode(e, mailList))
+	&&       KPIM::MailListDrag::decode(e, mailList))
 	{
 		// KMail message(s). Ignore all but the first.
+		kdDebug(5950) << "MainWindow::executeDropEvent(KMail_list)" << endl;
 		if (!mailList.count())
 			return;
 		KPIM::MailSummary& summary = mailList.first();
@@ -1082,6 +1101,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (KCal::ICalDrag::decode(e, &calendar))
 	{
 		// iCalendar - ignore all but the first event
+		kdDebug(5950) << "MainWindow::executeDropEvent(iCalendar)" << endl;
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
@@ -1092,6 +1112,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	}
 	else if (QTextDrag::decode(e, text))
 	{
+		kdDebug(5950) << "MainWindow::executeDropEvent(text)" << endl;
 		alarmText.setText(text);
 	}
 	else
