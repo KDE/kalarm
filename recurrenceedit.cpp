@@ -693,18 +693,12 @@ void RecurrenceEdit::unsetAllCheckboxes()
 	repeatCountButton->setChecked(false);
 }
 
-
-void RecurrenceEdit::setDefaults(const QDateTime& from, bool)
+void RecurrenceEdit::setDefaults(const QDateTime& from)
 {
 	// unset everything
 	unsetAllCheckboxes();
 
 	currStartDateTime = from;
-	setDefaults(from);
-}
-
-void RecurrenceEdit::setDefaults(const QDateTime& from)
-{
 	QDate fromDate = from.date();
 
 	noEmitTypeChanged = true;
@@ -762,9 +756,7 @@ void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
  */
 void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 {
-	// unset everything
-	unsetAllCheckboxes();
-	currStartDateTime = event.mainDateTime();
+	setDefaults(event.mainDateTime());
 	if (event.repeatAtLogin())
 		repeatButtonGroup->setButton(repeatButtonGroup->id(repeatAtLoginRadio));
 	else if (event.recurs() != KAlarmEvent::NO_RECUR)
@@ -848,7 +840,6 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 			}
 			case Recurrence::rNone:
 			default:
-				setDefaults(currStartDateTime);
 				return;
 		}
 
@@ -871,11 +862,6 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 			endTimeEdit->setValue(endtime.time().hour()*60 + endtime.time().minute());
 		}
 		endDateEdit->setDate(endtime.date());
-	}
-	else
-	{
-		// The event doesn't repeat. Set up defaults
-		setDefaults(currStartDateTime);
 	}
 }
 

@@ -51,7 +51,7 @@ class RecurrenceEdit : public QWidget
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */
-		void          setDefaults(const QDateTime& from, bool allday);
+		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
 		void          set(const KAlarmEvent&, bool repeatAtLogin);
 		/** Write event settings to event object */
@@ -86,7 +86,6 @@ class RecurrenceEdit : public QWidget
 
 	protected:
 		void          unsetAllCheckboxes();
-		void          setDefaults(const QDateTime& from);
 		void          checkDay(int day);
 		void          getCheckedDays(QBitArray& rDays);
 		void          setCheckedDays(QBitArray& rDays);

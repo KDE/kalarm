@@ -67,7 +67,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	actionGroup = new QButtonGroup(i18n("Action"), page, "actionGroup");
 	connect(actionGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
 	topLayout->addWidget(actionGroup);
-	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(actionGroup, 3, 4, marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	// Message radio button has an ID of 0
@@ -115,7 +115,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		// Recurring event's deferred date/time
 		deferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), page, "deferGroup");
 		topLayout->addWidget(deferGroup);
-		QLabel* label = new QLabel(i18n("At date/time:"), deferGroup);
+		QLabel* label = new QLabel(i18n("Deferred to:"), deferGroup);
 		label->setFixedSize(label->sizeHint());
 		deferDateTime = event->deferDateTime();
 		deferTimeLabel = new QLabel(KGlobal::locale()->formatDateTime(deferDateTime), deferGroup);
@@ -190,7 +190,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	topLayout->activate();
 
-	deferGroupHeight = deferGroup ? deferGroup->height() : 0;
+	deferGroupHeight = deferGroup ? deferGroup->height() + spacingHint() : 0;
 	size = minimumSize();
 	size.setHeight(size.height() - deferGroupHeight);
 	basicSize = theApp()->readConfigWindowSize("EditDialog", size);
@@ -242,7 +242,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		singleLineOnly = false;
 		messageEdit->setText(QString::null);
 		actionGroup->setButton(actionGroup->id(messageRadio));
-		recurrenceEdit->setDefaults(defaultTime, false);   // must be called after timeWidget is set up, to ensure correct date-only enabling
+		recurrenceEdit->setDefaults(defaultTime);   // must be called after timeWidget is set up, to ensure correct date-only enabling
 	}
 
 	size = basicSize;
