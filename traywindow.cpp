@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -254,13 +254,13 @@ QString TrayWindow::tooltipAlarmText() const
 	KCal::Event::List::ConstIterator it1 = events.begin();
 	KCal::Event::List::ConstIterator it2 = events2.begin();
         KCal::Event *kcalEvent;
-	if ( it1 == events.end() )
+	if (it1 == events.end())
 	{
 		todayEvents = false;
 		kcalEvent = events2.first();
-	} else {
+	}
+	else
                 kcalEvent = *it1;
-        }
 	while (kcalEvent  &&  count != maxCount)
 	{
 		event.set(*kcalEvent);
@@ -307,22 +307,20 @@ QString TrayWindow::tooltipAlarmText() const
 		// Get the next event
 		if (todayEvents)
 		{
-                        ++it1;
-                        if ( it1 == events.end() ) {
-                                kcalEvent = 0;
-                        } else {
-                                kcalEvent = *it1;
-                        }
-			if (!kcalEvent)
-			{
+			++it1;
+			if (it1 == events.end())
 				todayEvents = false;
-				kcalEvent = events2.first();
-			}
+			else
+				kcalEvent = *it1;
 		}
 		else
+			++it2;
+		if (!todayEvents)
                 {
-                        ++it2;
-			kcalEvent = *it2;
+			if (it2 == events2.end())
+				kcalEvent = 0;
+			else
+				kcalEvent = *it2;
 	        }
         }
 	return text;
