@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -54,22 +64,22 @@
 
 #include <maillistdrag.h>
 
-#include "kalarmapp.h"
-#include "preferences.h"
 #include "alarmtimewidget.h"
-#include "soundpicker.h"
-#include "reminder.h"
-#include "recurrenceedit.h"
-#include "colourcombo.h"
-#include "fontcolourbutton.h"
-#include "kamail.h"
-#include "deferdlg.h"
-#include "radiobutton.h"
 #include "checkbox.h"
+#include "colourcombo.h"
 #include "combobox.h"
+#include "deferdlg.h"
+#include "fontcolourbutton.h"
+#include "kalarmapp.h"
+#include "kamail.h"
+#include "preferences.h"
+#include "radiobutton.h"
+#include "recurrenceedit.h"
+#include "reminder.h"
+#include "soundpicker.h"
 #include "spinbox.h"
-#include "timespinbox.h"
 #include "timeperiod.h"
+#include "timespinbox.h"
 #include "editdlg.moc"
 #include "editdlgprivate.moc"
 
@@ -91,6 +101,21 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 {
 	if (event  &&  event->action() == KAEvent::COMMAND  &&  theApp()->noShellAccess())
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
+#if 0
+	setButtonText(Default, i18n("Load Template..."));
+	if (mTemplate)
+	{
+		QHBox* box = new QHBox(mainWidget);
+		box->setSpacing(spacingHint());
+		QLabel* label = new QLabel(i18n("Template name:"), box);
+		label->setFixedSize(label->sizeHint());
+		mTemplateName = new QLineEdit(box);
+		mTemplateName->setReadOnly(mReadOnly);
+		label->setBuddy(mTemplateName);
+		QWhatsThis::add(box, i18n("Enter the name of the alarm template"));
+		box->setFixedHeight(box->sizeHint().height());
+	}
+#endif
 
 	QVBox* mainPageBox = addVBoxPage(i18n("&Alarm"));
 	mMainPageIndex = pageIndex(mainPageBox);
@@ -184,6 +209,51 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
+#if 0
+	if (mTemplate)
+	{
+		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
+		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
+		layout->addWidget(mTemplateTimeGroup);
+		QBoxLayout* vlayout = new QVBoxLayout(mTemplateTimeGroup, marginKDE2 + marginHint(), spacingHint());
+		vlayout->addSpacing(fontMetrics().lineSpacing()/2);
+
+		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), mTemplateTimeGroup, "templateDefTimeButton");
+		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
+		mTemplateDefaultTime->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateDefaultTime,
+		      i18n("Do not specify a start time for alarms based on this template. "
+		           "The normal default start time will be used."));
+		vlayout->addWidget(mTemplateDefaultTime);
+
+		QHBox* box = new QHBox(mTemplateTimeGroup);
+		box->setSpacing(spacingHint());
+		vlayout->addWidget(box);
+		mTemplateUseTime = new RadioButton(i18n("Time:"), box, "templateTimeButton");
+		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
+		mTemplateUseTime->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateUseTime,
+		      i18n("Specify a start time for alarms based on this template."));
+		mTemplateTimeGroup->insert(mTemplateUseTime);
+		mTemplateTime = new TimeSpinBox(box, "templateTimeEdit");
+		mTemplateTime->setValue(1439);
+		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
+		mTemplateTime->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateTime,
+		      QString("%1\n\n%2").arg(i18n("Enter the start time for alarms based on this template."))
+		                         .arg(TimeSpinBox::shiftWhatsThis()));
+		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+		box->setFixedHeight(box->sizeHint().height());
+
+		mTemplateAnyTime = new RadioButton(i18n("An&y time"), mTemplateTimeGroup, "templateAnyTimeButton");
+		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
+		mTemplateAnyTime->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateAnyTime,
+		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
+		vlayout->addWidget(mTemplateAnyTime);
+	}
+	else
+#endif
 	mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
 	                                  mainPage, "timeGroup");
 	mTimeWidget->setReadOnly(mReadOnly);
@@ -671,15 +741,22 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			mAlarmDateTime = event.startDateTime();
 			if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 			{
+				bool deferral = true;
 				bool deferReminder = false;
 				int reminder = mReminder->getMinutes();
 				if (reminder)
 				{
 					DateTime remindTime = mAlarmDateTime.addMins(-reminder);
-					if (mDeferDateTime > remindTime)
-						deferReminder = true;
+					if (mDeferDateTime >= remindTime)
+					{
+						if (remindTime > QDateTime::currentDateTime())
+							deferral = false;    // ignore deferral if it's after next reminder
+						else if (mDeferDateTime > remindTime)
+							deferReminder = true;    // it's the reminder which is being deferred
+					}
 				}
-				event.defer(mDeferDateTime, deferReminder, false);
+				if (deferral)
+					event.defer(mDeferDateTime, deferReminder, false);
 			}
 		}
 	}
@@ -749,6 +826,29 @@ void EditAlarmDlg::slotOk()
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	QWidget* errWidget;
 	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();
+#if 0
+	if (mTemplate)
+	{
+		// Check that the template name is not blank and is unique
+		QString errmsg;
+		QString name = mTemplateName->text();
+		if (name.isEmpty())
+			errmsg = i18n("You must enter a name for the alarm template");
+		else if (name != mSavedTemplateName)
+		{
+			AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+			if (cal  &&  KAEvent::findTemplateName(*cal, name).valid())
+			errmsg = i18n("Template name is already in use");
+		}
+		if (!errmsg.isEmpty())
+		{
+			mTemplateName->setFocus();
+			KMessageBox::sorry(this, errmsg);
+			return;
+		}
+	}
+	else
+#endif
 	mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
 	if (errWidget)
 	{
