@@ -51,14 +51,14 @@ namespace KAlarm
 /******************************************************************************
 *  Display a main window with the specified event selected.
 */
-KAlarmMainWindow* displayMainWindowSelected(const QString& eventID)
+MainWindow* displayMainWindowSelected(const QString& eventID)
 {
-	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
+	MainWindow* win = MainWindow::firstWindow();
 	if (!win)
 	{
 		if (theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
 		{
-			win = KAlarmMainWindow::create();
+			win = MainWindow::create();
 			win->show();
 		}
 	}
@@ -348,7 +348,7 @@ void resetDaemonIfQueued()
 			}
 		}
 
-		KAlarmMainWindow::refresh();
+		MainWindow::refresh();
 		if (!Daemon::reset())
 			Daemon::start();
 		resetDaemonQueued = false;

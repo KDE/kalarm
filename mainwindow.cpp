@@ -67,22 +67,22 @@ static const char* UI_FILE = "kalarmui.rc";
 
 
 /*=============================================================================
-=  Class: KAlarmMainWindow
+=  Class: MainWindow
 =============================================================================*/
 
-QPtrList<KAlarmMainWindow> KAlarmMainWindow::mWindowList;
-TemplateDlg*  KAlarmMainWindow::mTemplateDlg = 0;
+QPtrList<MainWindow> MainWindow::mWindowList;
+TemplateDlg*  MainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString KAlarmMainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
-QString KAlarmMainWindow::i18n_t_ShowAlarmTime()     { return i18n("Show alarm &time"); }
-QString KAlarmMainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me"); }
-QString KAlarmMainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
-QString KAlarmMainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
-QString KAlarmMainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
-QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
-QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
+QString MainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
+QString MainWindow::i18n_t_ShowAlarmTime()     { return i18n("Show alarm &time"); }
+QString MainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me"); }
+QString MainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
+QString MainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
+QString MainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
+QString MainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
+QString MainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
 
 
 /******************************************************************************
@@ -90,13 +90,13 @@ QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expire
 * To avoid resize() events occurring while still opening the calendar (and
 * resultant crashes), the calendar is opened before constructing the instance.
 */
-KAlarmMainWindow* KAlarmMainWindow::create(bool restored)
+MainWindow* MainWindow::create(bool restored)
 {
 	theApp()->checkCalendarDaemon();    // ensure calendar is open and daemon started
-	return new KAlarmMainWindow(restored);
+	return new MainWindow(restored);
 }
 
-KAlarmMainWindow::KAlarmMainWindow(bool restored)
+MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
@@ -104,7 +104,7 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	  mShowTime(Preferences::instance()->showAlarmTime()),
 	  mShowTimeTo(Preferences::instance()->showTimeToAlarm())
 {
-	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
+	kdDebug(5950) << "MainWindow::MainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)
@@ -143,9 +143,9 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	setUpdateTimer();
 }
 
-KAlarmMainWindow::~KAlarmMainWindow()
+MainWindow::~MainWindow()
 {
-	kdDebug(5950) << "KAlarmMainWindow::~KAlarmMainWindow()\n";
+	kdDebug(5950) << "MainWindow::~MainWindow()\n";
 	if (findWindow(this))
 		mWindowList.remove();
 	if (theApp()->trayWindow())
@@ -158,7 +158,7 @@ KAlarmMainWindow::~KAlarmMainWindow()
 	MinuteTimer::disconnect(this);
 	mMinuteTimerActive = false;    // to ensure that setUpdateTimer() works correctly
 	setUpdateTimer();
-	KAlarmMainWindow* main = mainMainWindow();
+	MainWindow* main = mainMainWindow();
 	if (main)
 		KAlarm::writeConfigWindowSize("MainWindow", main->size());
 	KGlobal::config()->sync();    // save any new window size to disc
@@ -169,7 +169,7 @@ KAlarmMainWindow::~KAlarmMainWindow()
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void KAlarmMainWindow::saveProperties(KConfig* config)
+void MainWindow::saveProperties(KConfig* config)
 {
 	config->writeEntry(QString::fromLatin1("HiddenTrayParent"), isTrayParent() && isHidden());
 	config->writeEntry(QString::fromLatin1("ShowExpired"), mShowExpired);
@@ -182,7 +182,7 @@ void KAlarmMainWindow::saveProperties(KConfig* config)
 * This function is automatically called whenever the app is being
 * restored. Read in whatever was saved in saveProperties().
 */
-void KAlarmMainWindow::readProperties(KConfig* config)
+void MainWindow::readProperties(KConfig* config)
 {
 	mHiddenTrayParent = config->readBoolEntry(QString::fromLatin1("HiddenTrayParent"));
 	mShowExpired      = config->readBoolEntry(QString::fromLatin1("ShowExpired"));
@@ -195,12 +195,12 @@ void KAlarmMainWindow::readProperties(KConfig* config)
 * none, the first main window to be created. Visible windows take precedence
 * over hidden ones.
 */
-KAlarmMainWindow* KAlarmMainWindow::mainMainWindow()
+MainWindow* MainWindow::mainMainWindow()
 {
-	KAlarmMainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
+	MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
 	if (tray  &&  tray->isVisible())
 		return tray;
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w->isVisible())
 			return w;
 	if (tray)
@@ -211,7 +211,7 @@ KAlarmMainWindow* KAlarmMainWindow::mainMainWindow()
 /******************************************************************************
 * Check whether this main window is the parent of the system tray icon.
 */
-bool KAlarmMainWindow::isTrayParent() const
+bool MainWindow::isTrayParent() const
 {
 	return theApp()->wantRunInSystemTray()  &&  theApp()->trayMainWindow() == this;
 }
@@ -219,7 +219,7 @@ bool KAlarmMainWindow::isTrayParent() const
 /******************************************************************************
 *  Close all main windows.
 */
-void KAlarmMainWindow::closeAll()
+void MainWindow::closeAll()
 {
 	while (mWindowList.first())
 		delete mWindowList.first();
@@ -231,7 +231,7 @@ void KAlarmMainWindow::closeAll()
 *  edge of the list view.
 *  Records the new size in the config file.
 */
-void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
+void MainWindow::resizeEvent(QResizeEvent* re)
 {
 	// Save the window's new size only if it's the first main window
 	if (mainMainWindow() == this)
@@ -244,7 +244,7 @@ void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 *  Sets the last column in the list view to extend at least to the right hand
 *  edge of the list view.
 */
-void KAlarmMainWindow::showEvent(QShowEvent* se)
+void MainWindow::showEvent(QShowEvent* se)
 {
 	setUpdateTimer();
 	slotUpdateTimeTo();
@@ -254,7 +254,7 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 /******************************************************************************
 *  Display the window.
 */
-void KAlarmMainWindow::show()
+void MainWindow::show()
 {
 	MainWindowBase::show();
 	if (mMenuError)
@@ -270,7 +270,7 @@ void KAlarmMainWindow::show()
 /******************************************************************************
 *  Called after the window is hidden.
 */
-void KAlarmMainWindow::hideEvent(QHideEvent* he)
+void MainWindow::hideEvent(QHideEvent* he)
 {
 	setUpdateTimer();
 	MainWindowBase::hideEvent(he);
@@ -279,7 +279,7 @@ void KAlarmMainWindow::hideEvent(QHideEvent* he)
 /******************************************************************************
 *  Initialise the menu, toolbar and main window actions.
 */
-void KAlarmMainWindow::initActions()
+void MainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 	mActionTemplates      = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
@@ -340,19 +340,19 @@ void KAlarmMainWindow::initActions()
 /******************************************************************************
 * Enable or disable the Templates menu item in every main window instance.
 */
-void KAlarmMainWindow::enableTemplateMenuItem(bool enable)
+void MainWindow::enableTemplateMenuItem(bool enable)
 {
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		w->mActionTemplates->setEnabled(enable);
 }
 
 /******************************************************************************
 * Refresh the alarm list in every main window instance.
 */
-void KAlarmMainWindow::refresh()
+void MainWindow::refresh()
 {
-	kdDebug(5950) << "KAlarmMainWindow::refresh()\n";
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	kdDebug(5950) << "MainWindow::refresh()\n";
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		w->mListView->refresh();
 }
 
@@ -361,11 +361,11 @@ void KAlarmMainWindow::refresh()
 * expired alarms.
 * Called when an expired alarm setting changes in the user preferences.
 */
-void KAlarmMainWindow::updateExpired()
+void MainWindow::updateExpired()
 {
-	kdDebug(5950) << "KAlarmMainWindow::updateExpired()\n";
+	kdDebug(5950) << "MainWindow::updateExpired()\n";
 	bool enableShowExpired = !!Preferences::instance()->expiredKeepDays();
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 	{
 		if (w->mShowExpired)
 		{
@@ -384,9 +384,9 @@ void KAlarmMainWindow::updateExpired()
 * Update the alarm list in every main window instance to show the new default
 * columns. No change is made if a window isn't using the old settings.
 */
-void KAlarmMainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
+void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 {
-	kdDebug(5950) << "KAlarmMainWindow::updateShowAlarmTimes()\n";
+	kdDebug(5950) << "MainWindow::updateShowAlarmTimes()\n";
 	bool newTime   = Preferences::instance()->showAlarmTime();
 	bool newTimeTo = Preferences::instance()->showTimeToAlarm();
 	if (!newTime  &&  !newTimeTo)
@@ -395,7 +395,7 @@ void KAlarmMainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 		oldTime = true;     // at least one time column must have been displayed
 	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
 	{
-		for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+		for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		{
 			if (w->mShowTime   == oldTime
 			&&  w->mShowTimeTo == oldTimeTo)
@@ -416,12 +416,12 @@ void KAlarmMainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 * Should be called whenever a main window is created or destroyed, or shown or
 * hidden.
 */
-void KAlarmMainWindow::setUpdateTimer()
+void MainWindow::setUpdateTimer()
 {
 	// Check whether any windows need to be updated
-	KAlarmMainWindow* needTimer = 0;
-	KAlarmMainWindow* timerWindow = 0;
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	MainWindow* needTimer = 0;
+	MainWindow* timerWindow = 0;
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 	{
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			needTimer = w;
@@ -435,22 +435,22 @@ void KAlarmMainWindow::setUpdateTimer()
 		// Timeout every minute.
 		needTimer->mMinuteTimerActive = true;
 		MinuteTimer::connect(needTimer, SLOT(slotUpdateTimeTo()));
-		kdDebug(5950) << "KAlarmMainWindow::setUpdateTimer(): started timer" << endl;
+		kdDebug(5950) << "MainWindow::setUpdateTimer(): started timer" << endl;
 	}
 	else if (!needTimer  &&  timerWindow)
 	{
 		timerWindow->mMinuteTimerActive = false;
 		MinuteTimer::disconnect(timerWindow);
-		kdDebug(5950) << "KAlarmMainWindow::setUpdateTimer(): stopped timer" << endl;
+		kdDebug(5950) << "MainWindow::setUpdateTimer(): stopped timer" << endl;
 	}
 }
 /******************************************************************************
 * Update the time-to-alarm values for each main window which is displaying them.
 */
-void KAlarmMainWindow::slotUpdateTimeTo()
+void MainWindow::slotUpdateTimeTo()
 {
-	kdDebug(5950) << "KAlarmMainWindow::slotUpdateTimeTo()" << endl;
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	kdDebug(5950) << "MainWindow::slotUpdateTimeTo()" << endl;
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			w->mListView->updateTimeToAlarms();
 }
@@ -458,7 +458,7 @@ void KAlarmMainWindow::slotUpdateTimeTo()
 /******************************************************************************
 * Select an alarm in the displayed list.
 */
-void KAlarmMainWindow::selectEvent(const QString& eventID)
+void MainWindow::selectEvent(const QString& eventID)
 {
 	mListView->clearSelection();
 	AlarmListViewItem* item = mListView->getEntry(eventID);
@@ -473,7 +473,7 @@ void KAlarmMainWindow::selectEvent(const QString& eventID)
 /******************************************************************************
 *  Called when the New button is clicked to edit a new alarm to add to the list.
 */
-void KAlarmMainWindow::slotNew()
+void MainWindow::slotNew()
 {
 	executeNew(this);
 }
@@ -481,7 +481,7 @@ void KAlarmMainWindow::slotNew()
 /******************************************************************************
 *  Execute a New Alarm dialog, optionally setting the action and text.
 */
-void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const AlarmText& text)
+void MainWindow::executeNew(MainWindow* win, KAEvent::Action action, const AlarmText& text)
 {
 	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg");
 	if (!text.isEmpty())
@@ -502,7 +502,7 @@ void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action,
 *  Called when the New Template button is clicked to create a new template
 *  based on the currently selected alarm.
 */
-void KAlarmMainWindow::slotNewTemplate()
+void MainWindow::slotNewTemplate()
 {
 	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
@@ -516,7 +516,7 @@ void KAlarmMainWindow::slotNewTemplate()
 *  Called when the Copy button is clicked to edit a copy of an existing alarm,
 *  to add to the list.
 */
-void KAlarmMainWindow::slotCopy()
+void MainWindow::slotCopy()
 {
 	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
@@ -540,7 +540,7 @@ void KAlarmMainWindow::slotCopy()
 *  Called when the Modify button is clicked to edit the currently highlighted
 *  alarm in the list.
 */
-void KAlarmMainWindow::slotModify()
+void MainWindow::slotModify()
 {
 	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
@@ -567,7 +567,7 @@ void KAlarmMainWindow::slotModify()
 *  Called when the View button is clicked to view the currently highlighted
 *  alarm in the list.
 */
-void KAlarmMainWindow::slotView()
+void MainWindow::slotView()
 {
 	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
@@ -583,7 +583,7 @@ void KAlarmMainWindow::slotView()
 *  Called when the Delete button is clicked to delete the currently highlighted
 *  alarms in the list.
 */
-void KAlarmMainWindow::slotDelete()
+void MainWindow::slotDelete()
 {
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	if (Preferences::instance()->confirmAlarmDeletion())
@@ -615,7 +615,7 @@ void KAlarmMainWindow::slotDelete()
 *  Called when the Undelete button is clicked to reinstate the currently
 *  highlighted expired alarms in the list.
 */
-void KAlarmMainWindow::slotUndelete()
+void MainWindow::slotUndelete()
 {
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	mListView->clearSelection();
@@ -638,7 +638,7 @@ void KAlarmMainWindow::slotUndelete()
 *  Called when the Enable/Disable button is clicked to enable or disable the
 *  currently highlighted alarms in the list.
 */
-void KAlarmMainWindow::slotEnable()
+void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
@@ -657,7 +657,7 @@ void KAlarmMainWindow::slotEnable()
 /******************************************************************************
 *  Called when the Show Alarm Times menu item is selected or deselected.
 */
-void KAlarmMainWindow::slotShowTime()
+void MainWindow::slotShowTime()
 {
 	mShowTime = !mShowTime;
 	mActionShowTime->setChecked(mShowTime);
@@ -670,7 +670,7 @@ void KAlarmMainWindow::slotShowTime()
 /******************************************************************************
 *  Called when the Show Time To Alarms menu item is selected or deselected.
 */
-void KAlarmMainWindow::slotShowTimeTo()
+void MainWindow::slotShowTimeTo()
 {
 	mShowTimeTo = !mShowTimeTo;
 	mActionShowTimeTo->setChecked(mShowTimeTo);
@@ -684,7 +684,7 @@ void KAlarmMainWindow::slotShowTimeTo()
 /******************************************************************************
 *  Called when the Show Expired Alarms menu item is selected or deselected.
 */
-void KAlarmMainWindow::slotShowExpired()
+void MainWindow::slotShowExpired()
 {
 	mShowExpired = !mShowExpired;
 	mActionShowExpired->setChecked(mShowExpired);
@@ -696,7 +696,7 @@ void KAlarmMainWindow::slotShowExpired()
 *  Called when the Import Birthdays menu item is selected, to display birthdays
 *  from the address book for selection as alarms.
 */
-void KAlarmMainWindow::slotBirthdays()
+void MainWindow::slotBirthdays()
 {
 	BirthdayDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
@@ -716,7 +716,7 @@ void KAlarmMainWindow::slotBirthdays()
 *  Called when the Templates menu item is selected, to display the alarm
 *  template editing dialogue.
 */
-void KAlarmMainWindow::slotTemplates()
+void MainWindow::slotTemplates()
 {
 	if (!mTemplateDlg)
 	{
@@ -730,7 +730,7 @@ void KAlarmMainWindow::slotTemplates()
 /******************************************************************************
 *  Called when the alarm template editing dialogue has exited.
 */
-void KAlarmMainWindow::slotTemplatesEnd()
+void MainWindow::slotTemplatesEnd()
 {
 	if (mTemplateDlg)
 	{
@@ -743,7 +743,7 @@ void KAlarmMainWindow::slotTemplatesEnd()
 /******************************************************************************
 *  Called when the Display System Tray Icon menu item is selected.
 */
-void KAlarmMainWindow::slotToggleTrayIcon()
+void MainWindow::slotToggleTrayIcon()
 {
 	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
 }
@@ -753,7 +753,7 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 * Set the system tray icon menu text according to whether or not the system
 * tray icon is currently visible.
 */
-void KAlarmMainWindow::updateTrayIconAction()
+void MainWindow::updateTrayIconAction()
 {
 	mActionToggleTrayIcon->setEnabled(theApp()->KDEDesktop() && !theApp()->wantRunInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
@@ -763,7 +763,7 @@ void KAlarmMainWindow::updateTrayIconAction()
 * Called when the Actions menu is about to be displayed.
 * Update the status of the Alarms Enabled menu item.
 */
-void KAlarmMainWindow::updateActionsMenu()
+void MainWindow::updateActionsMenu()
 {
 	Daemon::checkStatus();   // update the Alarms Enabled item status
 }
@@ -771,7 +771,7 @@ void KAlarmMainWindow::updateActionsMenu()
 /******************************************************************************
 *  Called when the Reset Daemon menu item is selected.
 */
-void KAlarmMainWindow::slotResetDaemon()
+void MainWindow::slotResetDaemon()
 {
 	KAlarm::resetDaemon();
 }
@@ -779,7 +779,7 @@ void KAlarmMainWindow::slotResetDaemon()
 /******************************************************************************
 *  Called when the "Configure KAlarm" menu item is selected.
 */
-void KAlarmMainWindow::slotPreferences()
+void MainWindow::slotPreferences()
 {
 	KAlarmPrefDlg prefDlg;
 	prefDlg.exec();
@@ -788,7 +788,7 @@ void KAlarmMainWindow::slotPreferences()
 /******************************************************************************
 *  Called when the Configure Keys menu item is selected.
 */
-void KAlarmMainWindow::slotConfigureKeys()
+void MainWindow::slotConfigureKeys()
 {
 	KKeyDialog::configure(actionCollection(), this);
 }
@@ -796,7 +796,7 @@ void KAlarmMainWindow::slotConfigureKeys()
 /******************************************************************************
 *  Called when the Configure Toolbars menu item is selected.
 */
-void KAlarmMainWindow::slotConfigureToolbar()
+void MainWindow::slotConfigureToolbar()
 {
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	KEditToolbar dlg(factory());
@@ -806,7 +806,7 @@ void KAlarmMainWindow::slotConfigureToolbar()
 /******************************************************************************
 *  Called when the Quit menu item is selected.
 */
-void KAlarmMainWindow::slotQuit()
+void MainWindow::slotQuit()
 {
 	theApp()->doQuit(this);
 }
@@ -814,7 +814,7 @@ void KAlarmMainWindow::slotQuit()
 /******************************************************************************
 *  Called when the user or the session manager attempts to close the window.
 */
-void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
+void MainWindow::closeEvent(QCloseEvent* ce)
 {
 	if (!theApp()->sessionClosingDown()  &&  isTrayParent())
 	{
@@ -833,11 +833,11 @@ void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 *  Called when an item is deleted from the ListView.
 *  Disables the actions if no item is still selected.
 */
-void KAlarmMainWindow::slotDeletion()
+void MainWindow::slotDeletion()
 {
 	if (!mListView->selectedCount())
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotDeletion(true)\n";
+		kdDebug(5950) << "MainWindow::slotDeletion(true)\n";
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);
 		mActionModify->setEnabled(false);
@@ -851,7 +851,7 @@ void KAlarmMainWindow::slotDeletion()
 /******************************************************************************
 *  Called when the drag cursor enters the window.
 */
-void KAlarmMainWindow::dragEnterEvent(QDragEnterEvent* e)
+void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 {
 	executeDragEnterEvent(e);
 }
@@ -860,7 +860,7 @@ void KAlarmMainWindow::dragEnterEvent(QDragEnterEvent* e)
 *  Called when the drag cursor enters a main or system tray window, to accept
 *  or reject the dragged object.
 */
-void KAlarmMainWindow::executeDragEnterEvent(QDragEnterEvent* e)
+void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
 	       || KURLDrag::canDecode(e)
@@ -871,7 +871,7 @@ void KAlarmMainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 *  Called when an object is dropped on the window.
 *  If the object is recognised, the edit alarm dialog is opened appropriately.
 */
-void KAlarmMainWindow::dropEvent(QDropEvent* e)
+void MainWindow::dropEvent(QDropEvent* e)
 {
 	executeDropEvent(this, e);
 }
@@ -880,7 +880,7 @@ void KAlarmMainWindow::dropEvent(QDropEvent* e)
 *  Called when an object is dropped on a main or system tray window, to
 *  evaluate the action required and extract the text.
 */
-void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
+void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
 	KAEvent::Action action = KAEvent::MESSAGE;
 	QString text;
@@ -917,7 +917,7 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 			reply_stream >> body;
 		}
 		else
-			kdDebug(5950) << "KAlarmMainWindow::executeDropEvent(): kmail getDecodedBodyPart() call failed\n";
+			kdDebug(5950) << "MainWindow::executeDropEvent(): kmail getDecodedBodyPart() call failed\n";
 		alarmText.setEmail(summary.to(), summary.from(), KGlobal::locale()->formatDateTime(dt),
 		                   summary.subject(), body);
 	}
@@ -936,7 +936,7 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 *  Called when the selected items in the ListView changes.
 *  Selects the new current item, and enables the actions appropriately.
 */
-void KAlarmMainWindow::slotSelection()
+void MainWindow::slotSelection()
 {
 	// Find which item has been selected, and whether more than one is selected
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
@@ -967,7 +967,7 @@ void KAlarmMainWindow::slotSelection()
 		}
 	}
 
-	kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";
+	kdDebug(5950) << "MainWindow::slotSelection(true)\n";
 	mActionCreateTemplate->setEnabled(count == 1);
 	mActionCopy->setEnabled(count == 1);
 	mActionModify->setEnabled(item && !mListView->expired(item));
@@ -984,17 +984,17 @@ void KAlarmMainWindow::slotSelection()
 *  Deselects the current item and disables the actions if appropriate, or
 *  displays a context menu to modify or delete the selected item.
 */
-void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
+void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
 {
 	if (button == Qt::RightButton)
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
+		kdDebug(5950) << "MainWindow::slotMouseClicked(right)\n";
 		if (mContextMenu)
 			mContextMenu->popup(pt);
 	}
 	else if (!item)
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(left)\n";
+		kdDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
 		mListView->clearSelection();
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);
@@ -1010,9 +1010,9 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 *  Called when the mouse is double clicked on the ListView.
 *  Displays the Edit Alarm dialog, for the clicked item if applicable.
 */
-void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
+void MainWindow::slotDoubleClicked(QListViewItem* item)
 {
-	kdDebug(5950) << "KAlarmMainWindow::slotDoubleClicked()\n";
+	kdDebug(5950) << "MainWindow::slotDoubleClicked()\n";
 	if (item)
 	{
 		if (mListView->expired((AlarmListViewItem*)item))
@@ -1027,7 +1027,7 @@ void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
 /******************************************************************************
 *  Set the text of the Enable/Disable menu action.
 */
-void KAlarmMainWindow::setEnableText(bool enable)
+void MainWindow::setEnableText(bool enable)
 {
 	mActionEnableEnable = enable;
 	mActionEnable->setText(enable ? i18n("Ena&ble") : i18n("Disa&ble"));
@@ -1037,7 +1037,7 @@ void KAlarmMainWindow::setEnableText(bool enable)
 * Prompt the user to re-enable alarms if they are currently disabled, and if
 * it's an email alarm, warn if no 'From' email address is configured.
 */
-void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAEvent* event)
+void MainWindow::alarmWarnings(QWidget* parent, const KAEvent* event)
 {
 	if (event  &&  event->action() == KAEvent::EMAIL
 	&&  Preferences::instance()->emailAddress().isEmpty())
@@ -1058,7 +1058,7 @@ void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAEvent* event)
 *  Display or hide the specified main window.
 *  This should only be called when the application doesn't run in the system tray.
 */
-KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
+MainWindow* MainWindow::toggleWindow(MainWindow* win)
 {
 	if (win  &&  findWindow(win))
 	{
@@ -1089,9 +1089,9 @@ KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
 /******************************************************************************
 * Find the specified window in the main window list.
 */
-bool KAlarmMainWindow::findWindow(KAlarmMainWindow* win)
+bool MainWindow::findWindow(MainWindow* win)
 {
-	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w == win)
 			return true;
 	return false;

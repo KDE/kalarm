@@ -28,7 +28,7 @@ class KAction;
 class KActionCollection;
 namespace KCal { class Event; }
 class KAEvent;
-class KAlarmMainWindow;
+class MainWindow;
 class AlarmListView;
 
 namespace KAlarm
@@ -36,7 +36,7 @@ namespace KAlarm
 
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 
-KAlarmMainWindow*  displayMainWindowSelected(const QString& eventID = QString::null);
+MainWindow*        displayMainWindowSelected(const QString& eventID = QString::null);
 bool               readConfigWindowSize(const char* window, QSize&);
 void               writeConfigWindowSize(const char* window, const QSize&);
 FileType           fileType(const QString& mimetype);

@@ -292,7 +292,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(Qt::WordBreak | alignment);
+	label->setAlignment(alignment | Qt::WordBreak);
 	box = new QHBox(vbox);
 	box->setSpacing(2*KDialog::spacingHint());
 	mFeb29 = new QButtonGroup(box);
@@ -990,14 +990,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
 
-	mListShowTime = new QCheckBox(KAlarmMainWindow::i18n_t_ShowAlarmTime(), group, "listTime");
+	mListShowTime = new QCheckBox(MainWindow::i18n_t_ShowAlarmTime(), group, "listTime");
 	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
 	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
 	QWhatsThis::add(mListShowTime,
 	      i18n("Specify whether to show in the alarm list, the time at which each alarm is due"));
 	layout->addWidget(mListShowTime, 0, Qt::AlignAuto);
 
-	mListShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_n_ShowTimeToAlarm(), group, "listTimeTo");
+	mListShowTimeTo = new QCheckBox(MainWindow::i18n_n_ShowTimeToAlarm(), group, "listTimeTo");
 	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
 	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
 	QWhatsThis::add(mListShowTimeTo,
@@ -1032,14 +1032,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "Check to enter an upper limit on the number to be displayed."));
 	grid->addMultiCellWidget(box, 2, 2, 1, 2, Qt::AlignAuto);
 
-	mTooltipShowTime = new QCheckBox(KAlarmMainWindow::i18n_m_ShowAlarmTime(), group, "tooltipTime");
+	mTooltipShowTime = new QCheckBox(MainWindow::i18n_m_ShowAlarmTime(), group, "tooltipTime");
 	mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
 	connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
 	QWhatsThis::add(mTooltipShowTime,
 	      i18n("Specify whether to show in the system tray tooltip, the time at which each alarm is due"));
 	grid->addMultiCellWidget(mTooltipShowTime, 3, 3, 1, 2, Qt::AlignAuto);
 
-	mTooltipShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_l_ShowTimeToAlarm(), group, "tooltipTimeTo");
+	mTooltipShowTimeTo = new QCheckBox(MainWindow::i18n_l_ShowTimeToAlarm(), group, "tooltipTimeTo");
 	mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
 	connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
 	QWhatsThis::add(mTooltipShowTimeTo,
@@ -1066,7 +1066,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(KAlarmMainWindow::i18n_s_ShowExpiredAlarms(), mPage, "showExpired");
+	mShowExpiredAlarms = new QCheckBox(MainWindow::i18n_s_ShowExpiredAlarms(), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
 	QWhatsThis::add(mShowExpiredAlarms,
 	      i18n("Specify whether to show expired alarms in the alarm list"));

@@ -67,7 +67,7 @@ struct TipItem
 = The KDE system tray window.
 =============================================================================*/
 
-TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
+TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent)
 {
@@ -123,7 +123,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 */
 void TrayWindow::slotNewAlarm()
 {
-	KAlarmMainWindow::executeNew();
+	MainWindow::executeNew();
 }
 
 /******************************************************************************
@@ -163,10 +163,10 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 	if (e->button() == LeftButton  &&  !theApp()->wantRunInSystemTray())
 	{
 		// Left click: display/hide the first main window
-		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);
+		mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
 	}
 	else if (e->button() == MidButton)
-		KAlarmMainWindow::executeNew();    // display a New Alarm dialog
+		MainWindow::executeNew();    // display a New Alarm dialog
 	else
 		KSystemTray::mousePressEvent(e);
 }
@@ -192,7 +192,7 @@ void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
 */
 void TrayWindow::dragEnterEvent(QDragEnterEvent* e)
 {
-	KAlarmMainWindow::executeDragEnterEvent(e);
+	MainWindow::executeDragEnterEvent(e);
 }
 
 /******************************************************************************
@@ -201,7 +201,7 @@ void TrayWindow::dragEnterEvent(QDragEnterEvent* e)
 */
 void TrayWindow::dropEvent(QDropEvent* e)
 {
-	KAlarmMainWindow::executeDropEvent(0, e);
+	MainWindow::executeDropEvent(0, e);
 }
 
 /******************************************************************************
@@ -288,7 +288,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 /******************************************************************************
 * Called when the associated main window is closed.
 */
-void TrayWindow::removeWindow(KAlarmMainWindow* win)
+void TrayWindow::removeWindow(MainWindow* win)
 {
 	if (win == mAssocMainWindow)
 		mAssocMainWindow = 0;

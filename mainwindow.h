@@ -33,30 +33,30 @@ class AlarmListView;
 class TemplateDlg;
 
 
-class KAlarmMainWindow : public MainWindowBase
+class MainWindow : public MainWindowBase
 {
 		Q_OBJECT
 
 	public:
-		static KAlarmMainWindow* create(bool restored = false);
-		~KAlarmMainWindow();
-		bool           isTrayParent() const;
-		bool           isHiddenTrayParent() const   { return mHiddenTrayParent; }
-		bool           showingExpired() const       { return mShowExpired; }
-		void           selectEvent(const QString& eventID);
+		static MainWindow* create(bool restored = false);
+		~MainWindow();
+		bool               isTrayParent() const;
+		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
+		bool               showingExpired() const       { return mShowExpired; }
+		void               selectEvent(const QString& eventID);
 
-		static void    refresh();
-		static void    updateExpired();
-		static void    updateTimeColumns(bool oldTime, bool oldTimeTo);
-		static void    addEvent(const KAEvent&, KAlarmMainWindow*);
-		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
-		static void    executeDragEnterEvent(QDragEnterEvent*);
-		static void    executeDropEvent(KAlarmMainWindow*, QDropEvent*);
-		static void    closeAll();
-		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
-		static KAlarmMainWindow* mainMainWindow();
-		static KAlarmMainWindow* firstWindow()      { return mWindowList.first(); }
-		static int               count()            { return mWindowList.count(); }
+		static void        refresh();
+		static void        updateExpired();
+		static void        updateTimeColumns(bool oldTime, bool oldTimeTo);
+		static void        addEvent(const KAEvent&, MainWindow*);
+		static void        executeNew(MainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
+		static void        executeDragEnterEvent(QDragEnterEvent*);
+		static void        executeDropEvent(MainWindow*, QDropEvent*);
+		static void        closeAll();
+		static MainWindow* toggleWindow(MainWindow*);
+		static MainWindow* mainMainWindow();
+		static MainWindow* firstWindow()      { return mWindowList.first(); }
+		static int         count()            { return mWindowList.count(); }
 
 		static QString i18n_a_ShowAlarmTimes();     // text of 'Show Alarm Times' checkbox, with 'A' shortcut
 		static QString i18n_t_ShowAlarmTime();      // text of 'Show alarm time' checkbox, with 'T' shortcut
@@ -110,7 +110,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           updateActionsMenu();
 
 	private:
-		KAlarmMainWindow(bool restored);
+		MainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
 		void           setEnableText(bool enable);
@@ -118,9 +118,9 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
-		static bool    findWindow(KAlarmMainWindow*);
+		static bool    findWindow(MainWindow*);
 
-		static QPtrList<KAlarmMainWindow> mWindowList;  // active main windows
+		static QPtrList<MainWindow> mWindowList;  // active main windows
 		static TemplateDlg* mTemplateDlg;      // the one and only template dialogue
 		AlarmListView* mListView;
 		KAction*       mActionTemplates;

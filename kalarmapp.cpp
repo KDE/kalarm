@@ -189,13 +189,13 @@ bool KAlarmApp::restoreSession()
 		quitIf(1, true);    // error opening the main calendar - quit
 		return true;
 	}
-	KAlarmMainWindow* trayParent = 0;
+	MainWindow* trayParent = 0;
 	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 	{
 		QString type = KMainWindow::classNameOfToplevel(i);
-		if (type == QString::fromLatin1("KAlarmMainWindow"))
+		if (type == QString::fromLatin1("MainWindow"))
 		{
-			KAlarmMainWindow* win = KAlarmMainWindow::create(true);
+			MainWindow* win = MainWindow::create(true);
 			win->restore(i, false);
 			if (win->isHiddenTrayParent())
 				trayParent = win;
@@ -217,7 +217,7 @@ bool KAlarmApp::restoreSession()
 	// Try to display the system tray icon if it is configured to be autostarted,
 	// or if we're in run-in-system-tray mode.
 	if (Preferences::instance()->autostartTrayIcon()
-	||  KAlarmMainWindow::count()  &&  wantRunInSystemTray())
+	||  MainWindow::count()  &&  wantRunInSystemTray())
 		displayTrayIcon(true, trayParent);
 
 	--mActiveCount;
@@ -673,7 +673,7 @@ int KAlarmApp::newInstance()
 					break;
 				}
 
-				(KAlarmMainWindow::create())->show();
+				(MainWindow::create())->show();
 			}
 		} while (0);    // only execute once
 
@@ -707,7 +707,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	if (force)
 	{
 		// Quit regardless, except for message windows
-		KAlarmMainWindow::closeAll();
+		MainWindow::closeAll();
 		displayTrayIcon(false);
 		if (MessageWin::instanceCount())
 			return;
@@ -718,8 +718,8 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 		mPendingQuit = false;
 		if (mActiveCount > 0  ||  MessageWin::instanceCount())
 			return;
-		int mwcount = KAlarmMainWindow::count();
-		KAlarmMainWindow* mw = mwcount ? KAlarmMainWindow::firstWindow() : 0;
+		int mwcount = MainWindow::count();
+		MainWindow* mw = mwcount ? MainWindow::firstWindow() : 0;
 		if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->isTrayParent()))
 			return;
 		// There are no windows left except perhaps a main window which is a hidden tray icon parent
@@ -920,7 +920,7 @@ void KAlarmApp::removeWindow(TrayWindow*)
 /******************************************************************************
 *  Display or close the system tray icon.
 */
-bool KAlarmApp::displayTrayIcon(bool show, KAlarmMainWindow* parent)
+bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 {
 	static bool creating = false;
 	if (show)
@@ -929,13 +929,13 @@ bool KAlarmApp::displayTrayIcon(bool show, KAlarmMainWindow* parent)
 		{
 			if (!mKDEDesktop)
 				return false;
-			if (!KAlarmMainWindow::count()  &&  wantRunInSystemTray())
+			if (!MainWindow::count()  &&  wantRunInSystemTray())
 			{
 				creating = true;    // prevent main window constructor from creating an additional tray icon
-				parent = KAlarmMainWindow::create();
+				parent = MainWindow::create();
 				creating = false;
 			}
-			mTrayWindow = new TrayWindow(parent ? parent : KAlarmMainWindow::firstWindow());
+			mTrayWindow = new TrayWindow(parent ? parent : MainWindow::firstWindow());
 			connect(mTrayWindow, SIGNAL(deleted()), SIGNAL(trayIconToggled()));
 			mTrayWindow->show();
 			emit trayIconToggled();
@@ -1008,7 +1008,7 @@ bool KAlarmApp::checkSystemTray()
 /******************************************************************************
 * Return the main window associated with the system tray icon.
 */
-KAlarmMainWindow* KAlarmApp::trayMainWindow() const
+MainWindow* KAlarmApp::trayMainWindow() const
 {
 	return mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
 }
@@ -1024,7 +1024,7 @@ void KAlarmApp::slotPreferencesChanged()
 	{
 		// The system tray run mode has changed
 		++mActiveCount;         // prevent the application from quitting
-		KAlarmMainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
+		MainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
 		mTrayWindow = 0;
 		mOldRunInSystemTray = newRunInSysTray;
@@ -1055,7 +1055,7 @@ void KAlarmApp::slotPreferencesChanged()
 	||  preferences->showTimeToAlarm() != mPrefsShowTimeTo)
 	{
 		// The default alarm list time columns selection has changed
-		KAlarmMainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
+		MainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
 		mPrefsShowTime   = preferences->showAlarmTime();
 		mPrefsShowTimeTo = preferences->showTimeToAlarm();
 	}
@@ -1078,7 +1078,7 @@ void KAlarmApp::slotPreferencesChanged()
 	if (mRefreshExpiredAlarms)
 	{
 		mRefreshExpiredAlarms = false;
-		KAlarmMainWindow::updateExpired();
+		MainWindow::updateExpired();
 	}
 }
 
@@ -1101,7 +1101,7 @@ void KAlarmApp::changeStartOfDay()
 void KAlarmApp::slotExpiredPurged()
 {
 	mRefreshExpiredAlarms = false;
-	KAlarmMainWindow::updateExpired();
+	MainWindow::updateExpired();
 }
 
 /******************************************************************************

@@ -36,7 +36,7 @@ class DcopHandler;
 class DcopHandlerOld;
 #endif
 class AlarmCalendar;
-class KAlarmMainWindow;
+class MainWindow;
 class AlarmListView;
 class MessageWin;
 class TrayWindow;
@@ -63,10 +63,10 @@ class KAlarmApp : public KUniqueApplication
 		void               addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void               removeWindow(TrayWindow*);
 		TrayWindow*        trayWindow() const              { return mTrayWindow; }
-		KAlarmMainWindow*  trayMainWindow() const;
-		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
+		MainWindow*        trayMainWindow() const;
+		bool               displayTrayIcon(bool show, MainWindow* = 0);
 		bool               trayIconDisplayed() const       { return !!mTrayWindow; }
-		bool               editNewAlarm(KAlarmMainWindow* = 0);
+		bool               editNewAlarm(MainWindow* = 0);
 		virtual void       commitData(QSessionManager&);
 
 		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
