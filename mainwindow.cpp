@@ -295,7 +295,7 @@ void MainWindow::initActions()
 	mActionShowTime->setCheckedState(i18n("Hide &Alarm Times"));
 	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
 	mActionShowTimeTo->setCheckedState(i18n("Hide Time t&o Alarms"));
-	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
+	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), "history", Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
 	mActionShowExpired->setCheckedState(i18n("Hide &Expired Alarms"));
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
