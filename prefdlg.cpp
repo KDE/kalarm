@@ -60,6 +60,9 @@
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
+#ifndef WITHOUT_ARTS
+#include "sounddlg.h"
+#endif
 #include "soundpicker.h"
 #include "specialactions.h"
 #include "timeedit.h"
@@ -442,10 +445,13 @@ void MiscPrefTab::restore()
 	setExpiredControls(preferences->mExpiredKeepDays);
 	QString xtermCmd = preferences->cmdXTermCommand();
 	int id = 0;
-	for ( ;  id < mXtermCount;  ++id)
+	if (!xtermCmd.isEmpty())
 	{
-		if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
-			break;
+		for ( ;  id < mXtermCount;  ++id)
+		{
+			if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
+				break;
+		}
 	}
 	mXtermType->setButton(id);
 	mXtermCommand->setEnabled(id == mXtermCount);
@@ -471,6 +477,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 	preferences->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
 	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	int id = mXtermType->selectedId();
+	if (id >= mXtermCount  &&  mXtermCommand->text().isEmpty())
+		id = 0;       // 'Other' is only acceptable if it's non-blank
 	preferences->mCmdXTermCommand = (id < mXtermCount) ? xtermCommands[id] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -950,12 +958,11 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 	grid->addMultiCellWidget(box, 3, 3, 1, 2);
 
+#ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), group, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
-	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat()));
+	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
 	grid->addWidget(mDefaultSoundRepeat, 4, 2, Qt::AlignAuto);
-#ifdef WITHOUT_ARTS
-	mDefaultSoundRepeat->hide();
 #endif
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -1019,7 +1026,9 @@ void EditPrefTab::restore()
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
 	mDefaultBeep->setChecked(preferences->mDefaultBeep);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
+#ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
+#endif
 	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
 	mDefaultCmdScript->setChecked(preferences->mDefaultCmdScript);
 	mDefaultCmdXterm->setChecked(preferences->mDefaultCmdXterm);
@@ -1036,7 +1045,9 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
 	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
+#ifndef WITHOUT_ARTS
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
+#endif
 	preferences->mDefaultCmdScript   = mDefaultCmdScript->isChecked();
 	preferences->mDefaultCmdXterm    = mDefaultCmdXterm->isChecked();
 	preferences->mDefaultEmailBcc    = mDefaultEmailBcc->isChecked();
@@ -1064,7 +1075,9 @@ void EditPrefTab::setDefaults()
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
+#ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
+#endif
 	mDefaultCmdScript->setChecked(Preferences::default_defaultCmdScript);
 	mDefaultCmdXterm->setChecked(Preferences::default_defaultCmdXterm);
 	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
