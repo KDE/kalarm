@@ -319,12 +319,9 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 
 	int repeatOrder = 0;
 	int repeatInterval = 0;
-	QString repeatText;        // text displayed in Repeat column
+	QString repeatText = event.recurrenceText();        // text displayed in Repeat column
 	if (event.repeatAtLogin())
-	{
 		repeatOrder = 1;
-		repeatText = i18n("Login");
-	}
 	else
 	{
 		repeatInterval = event.recurInterval();
@@ -332,34 +329,21 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 		{
 			case KAlarmEvent::MINUTELY:
 				repeatOrder = 2;
-				if (repeatInterval < 60)
-					repeatText = i18n("1 Minute", "%n Minutes", repeatInterval);
-				else if (repeatInterval % 60 == 0)
-					repeatText = i18n("1 Hour", "%n Hours", repeatInterval/60);
-				else
-				{
-					QString mins;
-					repeatText = i18n("Hours and Minutes", "%1H %2M").arg(QString::number(repeatInterval/60)).arg(mins.sprintf("%02d", repeatInterval%60));
-				}
 				break;
 			case KAlarmEvent::DAILY:
 				repeatOrder = 3;
-				repeatText = i18n("1 Day", "%n Days", repeatInterval);
 				break;
 			case KAlarmEvent::WEEKLY:
 				repeatOrder = 4;
-				repeatText = i18n("1 Week", "%n Weeks", repeatInterval);
 				break;
 			case KAlarmEvent::MONTHLY_DAY:
 			case KAlarmEvent::MONTHLY_POS:
 				repeatOrder = 5;
-				repeatText = i18n("1 Month", "%n Months", repeatInterval);
 				break;
 			case KAlarmEvent::ANNUAL_DATE:
 			case KAlarmEvent::ANNUAL_POS:
 			case KAlarmEvent::ANNUAL_DAY:
 				repeatOrder = 6;
-				repeatText = i18n("1 Year", "%n Years", repeatInterval);
 				break;
 			case KAlarmEvent::NO_RECUR:
 			default:
@@ -462,7 +446,7 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background color of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line. The alarm type is indicated by the icon at the left.");
-			case AlarmListView::REPEAT_COLUMN:   return i18n("The alarm's repetition type or recurrence interval.");
+			case AlarmListView::REPEAT_COLUMN:   return i18n("How often the alarm recurs");
 		}
 	}
 	return i18n("List of scheduled alarms");
