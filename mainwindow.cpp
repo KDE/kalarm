@@ -46,7 +46,7 @@
 #include "birthdaydlg.h"
 #include "editdlg.h"
 #include "prefdlg.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "alarmlistview.h"
 #include "mainwindow.moc"
 
@@ -79,7 +79,7 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 
 	initActions();
 	connect(listView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
-	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotSelection(QListViewItem*)));
+	connect(listView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	connect(listView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
@@ -235,7 +235,7 @@ void KAlarmMainWindow::initActions()
 	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
 	actionToggleTrayIcon->plug(mViewMenu);
 	mShowTrayId = mViewMenu->idAt(1);
-	connect(theApp()->settings(), SIGNAL(settingsChanged()), SLOT(updateTrayIconAction()));
+	connect(theApp()->preferences(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 	updateTrayIconAction();         // set the correct text for this action
 
@@ -284,7 +284,7 @@ void KAlarmMainWindow::initActions()
 	actionDelete->setEnabled(false);
 	actionUndelete->setEnabled(false);
 	actionView->setEnabled(false);
-	if (!theApp()->settings()->expiredKeepDays())
+	if (!theApp()->preferences()->expiredKeepDays())
 		actionShowExpired->setEnabled(false);
 	if (!theApp()->KDEDesktop())
 		actionToggleTrayIcon->setEnabled(false);
@@ -308,7 +308,7 @@ void KAlarmMainWindow::refresh()
 void KAlarmMainWindow::updateExpired()
 {
 	kdDebug(5950) << "KAlarmMainWindow::updateExpired()\n";
-	bool enableShowExpired = !!theApp()->settings()->expiredKeepDays();
+	bool enableShowExpired = !!theApp()->preferences()->expiredKeepDays();
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 	{
 		if (w->mShowExpired)
@@ -319,6 +319,21 @@ void KAlarmMainWindow::updateExpired()
 				w->listView->refresh();
 		}
 		w->actionShowExpired->setEnabled(enableShowExpired);
+	}
+}
+
+/******************************************************************************
+* Select an alarm in the displayed list.
+*/
+void KAlarmMainWindow::selectEvent(const QString& eventID)
+{
+	listView->clearSelection();
+	AlarmListViewItem* item = listView->getEntry(eventID);
+	if (item)
+	{
+		listView->setSelected(item, true);
+		listView->setCurrentItem(item);
+		listView->ensureItemVisible(item);
 	}
 }
 
@@ -422,6 +437,7 @@ void KAlarmMainWindow::slotNew()
 		// Add the alarm to the displayed lists and to the calendar file
 		theApp()->addEvent(event, this);
 		AlarmListViewItem* item = listView->addEntry(event, true);
+		listView->clearSelection();
 		listView->setSelected(item, true);
 	}
 }
@@ -432,7 +448,7 @@ void KAlarmMainWindow::slotNew()
 */
 void KAlarmMainWindow::slotCopy()
 {
-	AlarmListViewItem* item = listView->selectedItem();
+	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
@@ -445,6 +461,7 @@ void KAlarmMainWindow::slotCopy()
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(event, this);
 			item = listView->addEntry(event, true);
+			listView->clearSelection();
 			listView->setSelected(item, true);
 		}
 	}
@@ -456,7 +473,7 @@ void KAlarmMainWindow::slotCopy()
 */
 void KAlarmMainWindow::slotModify()
 {
-	AlarmListViewItem* item = listView->selectedItem();
+	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
@@ -470,6 +487,7 @@ void KAlarmMainWindow::slotModify()
 			theApp()->modifyEvent(event, newEvent, this);
 			item = listView->getEntry(event.id());   // in case item deleted since dialog was shown
 			item = listView->updateEntry(item, newEvent, true);
+			listView->clearSelection();
 			listView->setSelected(item, true);
 		}
 	}
@@ -481,7 +499,7 @@ void KAlarmMainWindow::slotModify()
 */
 void KAlarmMainWindow::slotView()
 {
-	AlarmListViewItem* item = listView->selectedItem();
+	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
 		KAlarmEvent event = listView->getEvent(item);
@@ -493,19 +511,20 @@ void KAlarmMainWindow::slotView()
 
 /******************************************************************************
 *  Called when the Delete button is clicked to delete the currently highlighted
-*  alarm in the list.
+*  alarms in the list.
 */
 void KAlarmMainWindow::slotDelete()
 {
-	AlarmListViewItem* item = listView->selectedItem();
-	if (item)
+	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
+		AlarmListViewItem* item = it.current();
 		KAlarmEvent event = listView->getEvent(item);
-		if (theApp()->settings()->confirmAlarmDeletion())
+		if (theApp()->preferences()->confirmAlarmDeletion())
 		{
 			int n = 1;
 			if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?", "Do you really want to delete the %n selected alarms?", n),
-			                                       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"))
+							       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"))
 			    != KMessageBox::Continue)
 				return;
 		}
@@ -519,14 +538,17 @@ void KAlarmMainWindow::slotDelete()
 
 /******************************************************************************
 *  Called when the Undelete button is clicked to reinstate the currently
-*  highlighted expired alarm in the list.
+*  highlighted expired alarms in the list.
 */
 void KAlarmMainWindow::slotUndelete()
 {
-	AlarmListViewItem* item = listView->selectedItem();
-	if (item)
+	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	listView->clearSelection();
+	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
+		AlarmListViewItem* item = it.current();
 		KAlarmEvent event = listView->getEvent(item);
+		event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 		// Add the alarm to the displayed lists and to the calendar file
 		theApp()->undeleteEvent(event, this);
@@ -556,6 +578,7 @@ void KAlarmMainWindow::slotBirthdays()
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		QValueList<KAlarmEvent> events = dlg->events();
+		listView->clearSelection();
 		for (QValueList<KAlarmEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
 		{
 			// Add the alarm to the displayed lists and to the calendar file
@@ -648,7 +671,7 @@ void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 */
 void KAlarmMainWindow::slotDeletion()
 {
-	if (!listView->selectedItem())
+	if (!listView->selectedCount())
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotDeletion(true)\n";
 		actionCopy->setEnabled(false);
@@ -660,21 +683,28 @@ void KAlarmMainWindow::slotDeletion()
 }
 
 /******************************************************************************
-*  Called when the selected item in the ListView changes.
+*  Called when the selected items in the ListView changes.
 *  Selects the new current item, and enables the actions appropriately.
 */
-void KAlarmMainWindow::slotSelection(QListViewItem* item)
+void KAlarmMainWindow::slotSelection()
 {
-	if (item)
+	// Find which item has been selected, and whether more than one is selected
+	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	int count = items.count();
+	AlarmListViewItem* item = (count == 1) ? items.first() : 0;
+	bool allExpired = true;
+	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";
-		listView->setSelected(item, true);
-		actionCopy->setEnabled(true);
-		actionModify->setEnabled(!listView->expired((AlarmListViewItem*)item));
-		actionView->setEnabled(true);
-		actionDelete->setEnabled(true);
-		actionUndelete->setEnabled(listView->expired((AlarmListViewItem*)item));
+		if (!listView->expired(it.current()))
+			allExpired = false;
 	}
+
+	kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";
+	actionCopy->setEnabled(count == 1);
+	actionModify->setEnabled(item && !listView->expired(item));
+	actionView->setEnabled(count == 1);
+	actionDelete->setEnabled(count);
+	actionUndelete->setEnabled(count && allExpired);
 }
 
 /******************************************************************************
@@ -699,11 +729,10 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
 		QPopupMenu* menu = new QPopupMenu(this, "ListContextMenu");
 		actionCopy->plug(menu);
-		if (!listView->expired((AlarmListViewItem*)item))
-			actionModify->plug(menu);
+		actionModify->plug(menu);
 		actionView->plug(menu);
 		actionDelete->plug(menu);
-		if (listView->expired((AlarmListViewItem*)item))
+		if (mShowExpired)
 			actionUndelete->plug(menu);
 		menu->exec(pt);
 	}

@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,9 +25,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "msgevent.h"
-using namespace KCal;
-
+#include "alarmevent.h"
 #include "mainwindowbase.h"
 
 class QListViewItem;
@@ -46,6 +44,7 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           hiddenTrayParent() const     { return mHiddenTrayParent; }
 		bool           showingExpired() const       { return mShowExpired; }
 
+		void           selectEvent(const QString& eventID);
 		void           modifyEvent(const KAlarmEvent& event)    { modifyEvent(event.id(), event); }
 		void           modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent);
 		void           deleteEvent(const QString& eventID);
@@ -83,7 +82,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotBirthdays();
 		void           slotQuit();
 		void           slotDeletion();
-		void           slotSelection(QListViewItem*);
+		void           slotSelection();
 		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
 		void           slotDoubleClicked(QListViewItem*);
 		void           slotShowExpired();

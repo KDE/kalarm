@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.h  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,8 +30,7 @@
 #include <qmap.h>
 #include <klistview.h>
 
-#include "msgevent.h"
-using namespace KCal;
+#include "alarmevent.h"
 
 class AlarmListViewItem;
 
@@ -61,12 +60,40 @@ class AlarmListView : public KListView
 		AlarmListViewItem*   firstChild() const     { return (AlarmListViewItem*)KListView::firstChild(); }
 		virtual void         setSelected(QListViewItem*, bool selected);
 		virtual void         setSelected(AlarmListViewItem*, bool selected);
+		AlarmListViewItem*   singleSelectedItem() const;
+		QPtrList<AlarmListViewItem> selectedItems() const;
+		int                  selectedCount() const;
 	signals:
 		void                 itemDeleted();
 	private:
 		int                  lastColumnHeaderWidth_;
 		bool                 drawMessageInColour_;
 		bool                 mShowExpired;              // true to show expired alarms
+};
+
+
+class AlarmListViewItem : public QListViewItem
+{
+	public:
+		AlarmListViewItem(QListView* parent, const KAlarmEvent&);
+		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
+		AlarmListView*       alarmListView() const     { return (AlarmListView*)listView(); }
+		const KAlarmEvent&   event() const             { return mEvent; }
+		int                  messageWidth() const      { return mMessageWidth; }
+		AlarmListViewItem*   nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
+		virtual QString      key(int column, bool ascending) const;
+	private:
+		static QPixmap*      textIcon;
+		static QPixmap*      fileIcon;
+		static QPixmap*      commandIcon;
+		static QPixmap*      emailIcon;
+		static int           iconWidth;
+
+		KAlarmEvent          mEvent;           // the event for this item
+		QString              mDateTimeOrder;   // controls ordering of date/time column
+		QString              mRepeatOrder;     // controls ordering of repeat column
+		QString              mColourOrder;     // controls ordering of colour column
+		int                  mMessageWidth;    // width required to display message column
 };
 
 #endif // ALARMLISTVIEW_H

@@ -36,7 +36,7 @@
 #include <kdebug.h>
 
 #include "kalarmapp.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "alarmcalendar.h"
 #include "alarmlistview.moc"
 
@@ -53,31 +53,6 @@ class AlarmListWhatsThis : public QWhatsThis
 };
 
 
-class AlarmListViewItem : public QListViewItem
-{
-	public:
-		AlarmListViewItem(QListView* parent, const KAlarmEvent&);
-		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
-		AlarmListView*       alarmListView() const     { return (AlarmListView*)listView(); }
-		const KAlarmEvent&   event() const             { return mEvent; }
-		int                  messageWidth() const      { return mMessageWidth; }
-		AlarmListViewItem*   nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
-		virtual QString      key(int column, bool ascending) const;
-	private:
-		static QPixmap*      textIcon;
-		static QPixmap*      fileIcon;
-		static QPixmap*      commandIcon;
-		static QPixmap*      emailIcon;
-		static int           iconWidth;
-
-		KAlarmEvent          mEvent;           // the event for this item
-		QString              mDateTimeOrder;   // controls ordering of date/time column
-		QString              mRepeatOrder;     // controls ordering of repeat column
-		QString              mColourOrder;     // controls ordering of colour column
-		int                  mMessageWidth;    // width required to display message column
-};
-
-
 /*=============================================================================
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
@@ -88,6 +63,9 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  drawMessageInColour_(false),
 	  mShowExpired(false)
 {
+	setMultiSelection(true);
+	setSelectionMode(QListView::Extended);
+
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Repeat"));         // repeat count column
 	addColumn(QString::null);          // colour column
@@ -240,6 +218,54 @@ void AlarmListView::setSelected(AlarmListViewItem* item, bool selected)
 	KListView::setSelected(item, selected);
 }
 
+/******************************************************************************
+*  Fetches the single selected item.
+*  Reply = null if no items are selected, or if multiple items are selected.
+*/
+AlarmListViewItem* AlarmListView::singleSelectedItem() const
+{
+	QListViewItem* item = 0;
+	for (QListViewItem* it = firstChild();  it;  it = it->nextSibling())
+	{
+		if (isSelected(it))
+		{
+			if (item)
+				return 0;
+			item = it;
+		}
+	}
+	return (AlarmListViewItem*)item;
+}
+
+/******************************************************************************
+*  Fetches all selected items.
+*/
+QPtrList<AlarmListViewItem> AlarmListView::selectedItems() const
+{
+	QPtrList<AlarmListViewItem> items;
+	items.setAutoDelete(false);
+	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	{
+		if (isSelected(item))
+			items.append((AlarmListViewItem*)item);
+	}
+	return items;
+}
+
+/******************************************************************************
+*  Returns how many items are selected.
+*/
+int AlarmListView::selectedCount() const
+{
+	int count = 0;
+	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	{
+		if (isSelected(item))
+			++count;
+	}
+	return count;
+}
+
 
 /*=============================================================================
 =  Class: AlarmListViewItem
@@ -354,7 +380,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
-	                   : mEvent.expired() ? theApp()->settings()->expiredColour() : cg.text();
+	                   : mEvent.expired() ? theApp()->preferences()->expiredColour() : cg.text();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 	switch (column)
