@@ -684,6 +684,7 @@ void MessageWin::playAudio()
 
 /******************************************************************************
 *  Play the audio file.
+*  Called asynchronously to avoid delaying the display of the message.
 */
 void MessageWin::slotPlayAudio()
 {
@@ -707,6 +708,19 @@ void MessageWin::slotPlayAudio()
 		initAudio(true);
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
+#if KDE_VERSION >= 308
+		if (!mUsingKMix)
+		{
+			// Output error message now that everything else has been done.
+			// (Outputting it earlier would delay things until it is acknowledged.)
+			bool kmixRunning = kapp->dcopClient()->isApplicationRegistered(KMIX_APP_NAME);
+			QString reason = kmixRunning ? i18n("Error accessing KMix") : i18n("KMix not running");
+			const char* reasonName = kmixRunning ? "KMixError" : "KMixNotRun";
+			KMessageBox::information(this, i18n("Unable to set master volume\n(%1)").arg(reason),
+			                         QString::null, QString::fromLatin1(reasonName));
+			kdWarning(5950) << "Unable to set master volume (KMix " << (kmixRunning ? "DCOP error" : "not running") << ")\n";
+		}
+#endif
 	}
 #endif
 }
@@ -736,9 +750,6 @@ void MessageWin::initAudio(bool firstTime)
 			// within the current master volume.
 			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
 			mUsingKMix = false;
-#if KDE_VERSION >= 308
-			kdWarning(5950) << "Unable to set volume using KMix\n";
-#endif
 		}
 	}
 	if (!mUsingKMix)
@@ -842,7 +853,7 @@ void MessageWin::stopPlay()
 			int eventVolume = static_cast<int>(mVolume * 100);
 			int currentVolume = getKMixVolume();
 			// Volume returned isn't always exactly equal to volume set
-			if (abs(currentVolume - eventVolume) < 5)
+			if (currentVolume < 0  ||  abs(currentVolume - eventVolume) < 5)
 				setKMixVolume(mOldVolume);
 		}
 	}
