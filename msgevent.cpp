@@ -263,8 +263,9 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		al = ev.newAlarm();
 		al->setEnabled(true);        // enable the alarm
 		al->setText(QString::number(sequence + REPEAT_AT_LOGIN_OFFSET)
-						+ SEPARATOR + AT_LOGIN_CODE + suffix);
-		QDateTime dtl = QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
+		            + SEPARATOR + AT_LOGIN_CODE + suffix);
+		QDateTime dtl = mRepeatAtLoginDateTime.isValid() ? mRepeatAtLoginDateTime
+		                : QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
 		al->setTime(dtl);
 		if (dtl < dt)
 			dt = dtl;
@@ -295,7 +296,6 @@ KAlarmAlarm KAlarmEvent::alarm(int alarmID) const
 	{
 		al.mAlarmSeq      = mRepeatAtLoginAlarmID;
 		al.mDateTime      = mRepeatAtLoginDateTime;
-//		al.mDateTime      = QDateTime::currentDateTime().addSecs(-KAlarmApp::MAX_LATENESS - 1);
 		al.mRepeatAtLogin = true;
 	}
 	return al;
