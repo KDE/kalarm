@@ -25,10 +25,13 @@
 #include <qdatetime.h>
 #include <ktabctl.h>
 #include "recurrenceedit.h"
+class QButtonGroup;
 class QCheckBox;
 class QRadioButton;
+class QPushButton;
 class QSpinBox;
 class QComboBox;
+class KColorCombo;
 class FontColourChooser;
 class Settings;
 class TimeSpinBox;
@@ -65,6 +68,7 @@ class AppearancePrefTab : public PrefsTabBase
 
 	private:
 		FontColourChooser*  mFontChooser;
+		KColorCombo*        mExpiredColour;
 };
 
 
@@ -81,16 +85,26 @@ class MiscPrefTab : public PrefsTabBase
 
 	private slots:
 		void         slotRunModeToggled(bool on);
+		void         slotExpiredToggled(bool);
+		void         slotClearExpired();
 
 	private:
+		void         setExpiredControls(int purgeDays);
+
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
 		QCheckBox*     mDisableAlarmsIfStopped;
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QCheckBox*     mConfirmAlarmDeletion;
+		QCheckBox*     mKeepExpired;
+		QCheckBox*     mPurgeExpired;
+		QSpinBox*      mPurgeAfter;
+		QLabel*        mPurgeAfterLabel;
+		QPushButton*   mClearExpired;
 		QSpinBox*      mDaemonTrayCheckInterval;
 		TimeSpinBox*   mStartOfDay;
+		QButtonGroup*  mEmailClient;
 };
 
 
@@ -109,8 +123,9 @@ class DefaultPrefTab : public PrefsTabBase
 		QCheckBox*     mDefaultLateCancel;
 		QCheckBox*     mDefaultConfirmAck;
 		QCheckBox*     mDefaultBeep;
+		QCheckBox*     mDefaultEmailBcc;
 		QComboBox*     mDefaultRecurPeriod;
-		
+
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };
 

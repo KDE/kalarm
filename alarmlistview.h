@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef ALARMLISTVIEW_H
@@ -33,11 +37,11 @@ using namespace KCal;
 class AlarmListViewItem;
 struct AlarmItemData
 {
-		KAlarmEvent event;
-		QString     messageText;       // message as displayed
-		QString     dateTimeText;      // date/time as displayed
-		QString     repeatText;        // repeat interval/type as displayed
-		int         messageWidth;      // width required to display 'messageText'
+		KAlarmEvent    event;
+		QString        messageText;       // message as displayed
+		QString        dateTimeText;      // date/time as displayed
+		QString        repeatText;        // repeat interval/type as displayed
+		int            messageWidth;      // width required to display 'messageText'
 };
 
 
@@ -47,18 +51,20 @@ class AlarmListView : public KListView
 	public:
 		enum { TIME_COLUMN, REPEAT_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
 
-		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
+		AlarmListView(QWidget* parent = 0, const char* name = 0);
 		virtual void         clear();
 		void                 refresh();
+		void                 showExpired(bool show)      { mShowExpired = show; }
 		AlarmListViewItem*   addEntry(const KAlarmEvent&, bool setSize = false);
 		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
 		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const KAlarmEvent    getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
+		const KAlarmEvent&   getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
 		AlarmListViewItem*   getEntry(const QString& eventID);
 		const AlarmItemData* getData(AlarmListViewItem*) const;
+		bool                 expired(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
 		int                  itemHeight();
-		bool                 drawMessageInColour() const		    { return drawMessageInColour_; }
+		bool                 drawMessageInColour() const		      { return drawMessageInColour_; }
 		void                 setDrawMessageInColour(bool inColour)	{ drawMessageInColour_ = inColour; }
 		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
 		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
@@ -69,6 +75,7 @@ class AlarmListView : public KListView
 		EntryMap             entries;
 		int                  lastColumnHeaderWidth_;
 		bool                 drawMessageInColour_;
+		bool                 mShowExpired;              // true to show expired alarms
 };
 
 
@@ -82,6 +89,8 @@ class AlarmListViewItem : public QListViewItem
 		static QPixmap*      textIcon;
 		static QPixmap*      fileIcon;
 		static QPixmap*      commandIcon;
+		static QPixmap*      emailIcon;
+		static int           iconWidth;
 };
 
 #endif // ALARMLISTVIEW_H
