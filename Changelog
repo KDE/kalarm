@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.1.7 --- 27 October 2004 ===
+Fix KAlarm button on message windows to make it always display main window.
+
 === Version 1.1.6 --- 30 September 2004 ===
 Prevent crash if kalarmui.rc is missing.
 Unsuppress Quit warning message box if default answer is Cancel quit.
