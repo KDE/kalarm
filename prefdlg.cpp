@@ -442,10 +442,13 @@ void MiscPrefTab::restore()
 	setExpiredControls(preferences->mExpiredKeepDays);
 	QString xtermCmd = preferences->cmdXTermCommand();
 	int id = 0;
-	for ( ;  id < mXtermCount;  ++id)
+	if (!xtermCmd.isEmpty())
 	{
-		if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
-			break;
+		for ( ;  id < mXtermCount;  ++id)
+		{
+			if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
+				break;
+		}
 	}
 	mXtermType->setButton(id);
 	mXtermCommand->setEnabled(id == mXtermCount);
