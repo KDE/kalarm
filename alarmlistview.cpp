@@ -282,19 +282,19 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	painter->setPen(selected ? cg.highlightedText() : cg.text());
+	painter->fillRect(0, 0, width, height(), bgColour);
 	switch (column)
 	{
 	case AlarmListView::TIME_COLUMN:
-		painter->fillRect(box, bgColour);
 		painter->drawText(box, AlignVCenter, data->dateTimeText);
 		break;
 	case AlarmListView::REPEAT_COLUMN:
-		painter->fillRect(box, bgColour);
 		painter->drawText(box, AlignVCenter | AlignHCenter, data->repeatText);
 		break;
 	case AlarmListView::COLOUR_COLUMN:
 		// Paint the cell the colour of the alarm message
-		painter->fillRect(box, (data->event.type() == KAlarmAlarm::COMMAND ? bgColour : data->event.colour()));
+		if (data->event.type() == KAlarmAlarm::MESSAGE || data->event.type() == KAlarmAlarm::FILE)
+			painter->fillRect(box, data->event.colour());
 		break;
 	case AlarmListView::MESSAGE_COLUMN:
 	{
@@ -334,11 +334,6 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 			painter->fillRect(box, colour);
 			painter->setBackgroundColor(colour);
 //			painter->setPen(data->event->fgColour());
-		}
-		else
-		{
-//			QListViewItem::paintCell(painter, cg, column, width, align);
-			painter->fillRect(box, bgColour);
 		}
 		painter->drawPixmap(iconRect.topLeft(), *pixmap, pixmapRect);
 		painter->drawText(textRect, AlignVCenter, data->messageText);
