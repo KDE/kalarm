@@ -685,7 +685,7 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 	}
 	else
 	{
-		// Only the deferral time has been changed
+		// Only the deferral time may have changed
 		event = *mSavedEvent;
 		if (mSavedEvent->deferred())
 		{
@@ -770,8 +770,7 @@ void EditAlarmDlg::slotOk()
 				getEvent(event);
 				if (event.nextOccurrence(now, mAlarmDateTime) == KAlarmEvent::NO_OCCURRENCE)
 				{
-#warning "Temporary untranslated string"
-					KMessageBox::sorry(this, QString::fromLatin1("Recurrence has already expired"));
+					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return;
 				}
 			}

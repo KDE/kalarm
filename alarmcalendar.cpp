@@ -46,7 +46,7 @@ extern "C" {
 
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "alarmcalendar.h"
+#include "alarmcalendar.moc"
 
 using namespace KCal;
 
@@ -227,8 +227,7 @@ bool AlarmCalendar::saveCal(const QString& filename)
 	if (!success)
 	{
 		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
-#warning "Temporary untranslated string"
-		KMessageBox::error(0, QString::fromLatin1("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()), kapp->aboutData()->programName());
+		KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()), kapp->aboutData()->programName());
 		return false;
 	}
 
@@ -560,6 +559,3 @@ bool AlarmCalendar::isUTC() const
 	}
 	return result;
 }
-
-#include "alarmcalendar.moc"
-
