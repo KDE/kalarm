@@ -319,15 +319,16 @@ void FontChooser::setCharset( const QString & charset )
 
 void FontChooser::charset_chosen_slot(const QString& chset)
 {
-  KCharsets *charsets = KGlobal::charsets();
-  if (chset == i18n("default")) {
-    charsets->setQFont(selFont, KGlobal::locale()->charset());
-  } else {
-    kdDebug() << "FontChooser::charset_chosen_slot chset=" << chset << endl;
-    charsets->setQFont(selFont, chset);
-  }
+#warning QFont::setQFont uncommented, watch charsets
+//  KCharsets *charsets = KGlobal::charsets();
+//  if (chset == i18n("default")) {
+//    charsets->setQFont(selFont, KGlobal::locale()->charset());
+//  } else {
+//    kdDebug() << "FontChooser::charset_chosen_slot chset=" << chset << endl;
+//    charsets->setQFont(selFont, chset);
+//   }
 
-  emit fontSelected(selFont);
+//  emit fontSelected(selFont);
 }
 
 QString FontChooser::charset() const
@@ -337,6 +338,8 @@ QString FontChooser::charset() const
 
 void FontChooser::fillCharsetsCombo()
 {
+#warning FIXME Charsets may lead to crashes, function implementation commented out
+/*
   int i;
   KCharsets *charsets=KGlobal::charsets();
 
@@ -355,6 +358,7 @@ void FontChooser::fillCharsetsCombo()
       break;
     }
   }
+*/
 }
 
 void FontChooser::family_chosen_slot(const QString& family)

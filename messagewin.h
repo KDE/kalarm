@@ -18,7 +18,7 @@
 #include <msgevent.h>
 using namespace KCal;
 
-
+class QPushButton;
 /**
  * MessageWin: A window to display an alarm message
  */

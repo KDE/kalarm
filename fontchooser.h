@@ -36,12 +36,12 @@
 
 #include <qlineedit.h>
 #include <qpalette.h>
+#include <qstringlist.h>
 
 class QComboBox;
 class QFont;
 class QGroupBox;
 class QLabel;
-class QStringList;
 class KListBox;
 
 // Just a marker for a feature that was added after 2.2-beta2.

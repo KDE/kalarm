@@ -16,6 +16,7 @@
 #include <qwhatsthis.h>
 #include <qiconset.h>
 #include <qheader.h>
+#include <qpainter.h>
 
 #include <kmenubar.h>
 #include <kstdaction.h>
