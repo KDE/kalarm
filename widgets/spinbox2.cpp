@@ -22,11 +22,8 @@
  *  without including the source code for Qt in the source distribution.
  */
 
-
 #include <qglobal.h>
 #if QT_VERSION >= 300
-
-#include <stdlib.h>
 
 #include <qstyle.h>
 #include <qobjectlist.h>
@@ -71,7 +68,7 @@ void SpinBox2::init()
 
 void SpinBox2::setReadOnly(bool ro)
 {
-	if (static_cast<int>(ro) != static_cast<int>(spinbox->readOnly()))
+	if (static_cast<int>(ro) != static_cast<int>(spinbox->isReadOnly()))
 	{
 		spinbox->setReadOnly(ro);
 		updown2->setReadOnly(ro);

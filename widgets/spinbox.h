@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class SpinBox : public QSpinBox
 	public:
 		SpinBox(QWidget* parent = 0, const char* name = 0);
 		SpinBox(int minValue, int maxValue, int step = 1, QWidget* parent = 0, const char* name = 0);
-		bool         readOnly() const                      { return mReadOnly; }
+		bool         isReadOnly() const                    { return mReadOnly; }
 		void         setReadOnly(bool);
 		bool         selectOnStep() const                  { return mSelectOnStep; }
 		void         setSelectOnStep(bool sel)             { mSelectOnStep = sel; }

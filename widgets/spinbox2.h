@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for QT3)
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ class SpinBox2 : public QFrame
 		         QWidget* parent = 0, const char* name = 0);
 
 		void                setReadOnly(bool);
-		bool                readOnly() const            { return spinbox->readOnly(); }
+		bool                isReadOnly() const          { return spinbox->isReadOnly(); }
 		void                setSelectOnStep(bool sel)   { spinbox->setSelectOnStep(sel); }
 
 		QString             text() const                { return spinbox->text(); }
