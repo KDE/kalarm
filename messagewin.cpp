@@ -29,6 +29,8 @@
 #include <qwhatsthis.h>
 
 #include <kstddirs.h>
+#include <kaction.h>
+#include <kstdaction.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -212,8 +214,10 @@ QSize MessageWin::initView()
 	topLayout->addLayout(grid);
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
-	// OK button
-	QPushButton* okButton = new QPushButton(i18n("&Close"), topWidget);
+	// Close button
+	KAction* action = KStdAction::close();
+	QPushButton* okButton = new QPushButton(action->text(), topWidget);
+	delete action;
 	okButton->setDefault(true);
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
@@ -358,12 +362,14 @@ void MessageWin::slotShowDefer()
 {
 	if (!deferHeight)
 	{
+		// Find spacing at the sides of the Defer... button
+		int deferSpacing = deferButton->width() - deferButton->fontMetrics().boundingRect(deferButton->text()).width();
 		delete deferButton;
 		QWidget* deferDlg = new QWidget(this);
 		QVBoxLayout* wlayout = new QVBoxLayout(deferDlg, KDialog::spacingHint());
 		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
 		wlayout->addLayout(grid);
-		deferTime = new AlarmTimeWidget(true, deferDlg, "deferTime");
+		deferTime = new AlarmTimeWidget(deferSpacing, deferDlg, "deferTime");
 		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60));
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
