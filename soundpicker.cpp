@@ -51,6 +51,8 @@
 // translations across different modules.
 QString SoundPicker::i18n_Sound()       { return i18n("An audio sound", "Sound"); }
 QString SoundPicker::i18n_s_Sound()     { return i18n("An audio sound", "&Sound"); }
+QString SoundPicker::i18n_SetVolume()   { return i18n("Set volume"); }
+QString SoundPicker::i18n_v_SetVolume() { return i18n("Set &volume"); }
 QString SoundPicker::i18n_Repeat()      { return i18n("Repeat"); }
 QString SoundPicker::i18n_p_Repeat()    { return i18n("Re&peat"); }
 
@@ -87,13 +89,13 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	QWhatsThis::add(mRepeatCheckbox,
 	      i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	soundLayout->addWidget(mRepeatCheckbox);
-#if KDE_VERSION < 220
+#ifdef WITHOUT_ARTS
 	mRepeatCheckbox->hide();
 #endif
 
 #ifdef SOUNDPICKER_VOLUME
 	// Set volume checkbox
-	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume, this);
+	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume(), this);
 	mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
 	connect(mVolumeCheckbox, SIGNAL(toggled(bool)), SLOT(slotVolumeToggled(bool)));
 	QWhatsThis::add(mVolumeCheckbox,

@@ -496,7 +496,11 @@ int KAlarmApp::newInstance()
 				}
 
 				QCString audioFile;
+#ifdef WITHOUT_ARTS
+				bool     audioRepeat = false;
+#else
 				bool     audioRepeat = args->isSet("play-repeat");
+#endif
 				if (audioRepeat  ||  args->isSet("play"))
 				{
 					// Play a sound with the alarm
@@ -592,8 +596,10 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--login ");
 				if (args->isSet("play"))
 					usage += QString::fromLatin1("--play ");
+#ifndef WITHOUT_ARTS
 				if (args->isSet("play-repeat"))
 					usage += QString::fromLatin1("--play-repeat ");
+#endif
 				if (args->isSet("reminder"))
 					usage += QString::fromLatin1("--reminder ");
 				if (args->isSet("reminder-once"))

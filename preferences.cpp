@@ -219,7 +219,11 @@ Preferences::Preferences()
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound            = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+#ifdef WITHOUT_ARTS
+	mDefaultSoundRepeat      = false;
+#else
 	mDefaultSoundRepeat      = config->readBoolEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
+#endif
 	mDefaultSoundFile        = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultEmailBcc         = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);

@@ -61,13 +61,13 @@
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
 #include <kpushbutton.h>
-#if KDE_VERSION >= 290
+#ifdef WITHOUT_ARTS
+#include <kaudioplayer.h>
+#else
 #include <arts/kartsdispatcher.h>
 #include <arts/kartsserver.h>
 #include <arts/kplayobjectfactory.h>
 #include <arts/kplayobject.h>
-#else
-#include <kaudioplayer.h>
 #endif
 #include <kdebug.h>
 
@@ -219,7 +219,7 @@ MessageWin::MessageWin()
 MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
-#if KDE_VERSION >= 290
+#ifndef WITHOUT_ARTS
 	delete mPlayObject;      mPlayObject = 0;
 	delete mArtsDispatcher;  mArtsDispatcher = 0;
 	if (!mLocalAudioFile.isEmpty())
@@ -616,17 +616,17 @@ void MessageWin::playAudio()
 	}
 	if (!mEvent.audioFile().isEmpty())
 	{
-#if KDE_VERSION >= 290
-		// An audio file is specified. Because loading it may take some time,
-		// call it on a timer to allow the window to display first.
-		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
-#else
+#ifdef WITHOUT_ARTS
 		QString audioFile = mEvent.audioFile();
 		QString play = audioFile;
 		QString file = QString::fromLatin1("file:");
 		if (audioFile.startsWith(file))
 			play = audioFile.mid(file.length());
 		KAudioPlayer::play(QFile::encodeName(play));
+#else
+		// An audio file is specified. Because loading it may take some time,
+		// call it on a timer to allow the window to display first.
+		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
 #endif
 	}
 }
@@ -636,7 +636,7 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotPlayAudio()
 {
-#if KDE_VERSION >= 290
+#ifndef WITHOUT_ARTS
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	KURL url(mEvent.audioFile());
 	if (!url.isValid()  ||  !KIO::NetAccess::exists(url)
@@ -651,18 +651,30 @@ void MessageWin::slotPlayAudio()
 		mPlayTimer = new QTimer(this);
 		connect(mPlayTimer, SIGNAL(timeout()), SLOT(checkAudioPlay()));
 		mArtsDispatcher = new KArtsDispatcher;
-		KArtsServer aserver;
-		KDE::PlayObjectFactory factory(aserver.server());
-		mAudioFileLoadStart = QTime::currentTime();
-		mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
-		mPlayed = false;
 		mPlayedOnce = false;
-		connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
+		mAudioFileLoadStart = QTime::currentTime();
+		initAudio();
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
 	}
 #endif
 }
+
+#ifndef WITHOUT_ARTS
+/******************************************************************************
+*  Set up the audio file for playing.
+*/
+void MessageWin::initAudio()
+{
+	KArtsServer aserver;
+	KDE::PlayObjectFactory factory(aserver.server());
+	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
+	mPlayed = false;
+	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
+	if (!mPlayObject->object().isNull())
+		checkAudioPlay();
+}
+#endif
 
 /******************************************************************************
 *  Called to check whether the audio file playing has completed, and if not to
@@ -670,7 +682,7 @@ void MessageWin::slotPlayAudio()
 */
 void MessageWin::checkAudioPlay()
 {
-#if KDE_VERSION >= 290
+#ifndef WITHOUT_ARTS
 	if (mPlayObject->state() == Arts::posIdle)
 	{
 		if (mPlayedOnce  &&  !mEvent.repeatSound())
@@ -694,11 +706,7 @@ void MessageWin::checkAudioPlay()
 			{
 				// Playing has completed. Start playing again.
 				delete mPlayObject;
-				KArtsServer aserver;
-				KDE::PlayObjectFactory factory(aserver.server());
-				mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
-				mPlayed = false;
-				connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
+				initAudio();
 				if (mPlayObject->object().isNull())
 					return;
 			}

@@ -31,8 +31,6 @@
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
 
-#include <arts/kmedia2.h>
-
 #include "mainwindowbase.h"
 #include "alarmevent.h"
 
@@ -79,6 +77,9 @@ class MessageWin : public MainWindowBase
 
 	private:
 		QSize               initView();
+#ifndef WITHOUT_ARTS
+		void                initAudio();
+#endif
 		void                playAudio();
 
 		static QPtrList<MessageWin> mWindowList;  // list of existing message windows

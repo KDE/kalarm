@@ -720,6 +720,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
 	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat()));
 	grid->addWidget(mDefaultSoundRepeat, 4, 2, AlignLeft);
+#ifdef WITHOUT_ARTS
+	mDefaultSoundRepeat->hide();
+#endif
 	group->setFixedHeight(group->sizeHint().height());
 
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
