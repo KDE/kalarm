@@ -47,9 +47,9 @@
 =============================================================================*/
 
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
-	: KSystemTray((theApp()->settings()->runInSystemTray() ? parent : 0), name),
+	: KSystemTray((theApp()->runInSystemTray() ? parent : 0), name),
 	  mAssocMainWindow(parent),
-	  mQuitReplaced(theApp()->settings()->runInSystemTray())
+	  mQuitReplaced(false)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -120,7 +120,9 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 void TrayWindow::slotQuit()
 {
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
-	delete this;
+	if (theApp()->runInSystemTray())
+		theApp()->quit();
+	theApp()->displayTrayIcon(false);
 }
 
 /******************************************************************************
@@ -141,7 +143,7 @@ void TrayWindow::setEnabledStatus(bool status)
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
 
-	if (e->button() == LeftButton  &&  !theApp()->settings()->runInSystemTray())
+	if (e->button() == LeftButton  &&  !theApp()->runInSystemTray())
 	{
 		// Left click: display/hide the first main window
 		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);

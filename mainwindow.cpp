@@ -72,7 +72,7 @@ KAlarmMainWindow::KAlarmMainWindow()
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	windowList.append(this);
 
-	if (windowList.count() == 1  &&  theApp()->settings()->runInSystemTray())
+	if (windowList.count() == 1  &&  theApp()->runInSystemTray())
 		theApp()->displayTrayIcon(true, this);
 }
 
@@ -126,11 +126,13 @@ void KAlarmMainWindow::initActions()
 	menu->insertItem(i18n("&File"), submenu);
 	actionQuit->plug(submenu);
 
-	submenu = new KPopupMenu(this, "view");
-	menu->insertItem(i18n("&View"), submenu);
-	actionToggleTrayIcon->plug(submenu);
+	mViewMenu = new KPopupMenu(this, "view");
+	mViewMenuId = 0L;
+	connect(theApp()->settings(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
+	actionToggleTrayIcon->plug(mViewMenu);
 	connect(theApp(), SIGNAL(trayIconToggled()), this, SLOT(updateTrayIconAction()));
 	updateTrayIconAction();         // set the correct text for this action
+	slotSettingsChanged();          // display View menu if appropriate
 
 	mActionsMenu = new KPopupMenu(this, "actions");
 	menu->insertItem(i18n("&Actions"), mActionsMenu);
@@ -174,6 +176,30 @@ void KAlarmMainWindow::initActions()
 }
 
 /******************************************************************************
+*  Called when KAlarm settings have changed.
+*  Show or hide the View menu in the menu bar.
+*/
+void KAlarmMainWindow::slotSettingsChanged()
+{
+	bool systray = theApp()->settings()->runInSystemTray();
+	if (systray  &&  mViewMenuId
+	||  !systray  &&  !mViewMenuId)
+	{
+		KMenuBar* menu = menuBar();
+		if (systray)
+		{
+			menu->removeItem(mViewMenuId);
+			mViewMenuId = 0;
+		}
+		else
+		{
+			mViewMenuId = menu->insertItem(i18n("&View"), mViewMenu, -1, 1);
+			updateTrayIconAction();
+		}
+	}
+}
+
+/******************************************************************************
 * Add a new alarm message to every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
@@ -184,14 +210,6 @@ void KAlarmMainWindow::addMessage(const KAlarmEvent& event, KAlarmMainWindow* wi
 		if (w != win)
 			w->listView->addEntry(event, true);
 }
-
-/******************************************************************************
-* Add a message to the displayed list.
-*/
-/*void KAlarmMainWindow::addMessage(const KAlarmEvent& event)
-{
-	listView->addEntry(event, true);
-}*/
 
 /******************************************************************************
 * Modify a message in every main window instance.

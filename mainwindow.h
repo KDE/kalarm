@@ -39,7 +39,6 @@ class KAlarmMainWindow : public MainWindowBase
 		KAlarmMainWindow();
 		~KAlarmMainWindow();
 
-//		void           addMessage(const KAlarmEvent&);
 		void           modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
 		void           modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
 		void           deleteMessage(const KAlarmEvent&);
@@ -65,6 +64,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotDeletion();
 		void           slotSelection(QListViewItem*);
 		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
+		void           slotSettingsChanged();
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
 		void           setAlarmEnabledStatus(bool status);
@@ -81,6 +81,8 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       actionToggleTrayIcon;
 		KAction*       actionResetDaemon;
 		KAction*       actionQuit;
+		int            mViewMenuId;
+		KPopupMenu*    mViewMenu;
 		KPopupMenu*    mActionsMenu;
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 };

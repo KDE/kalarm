@@ -62,6 +62,7 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar&    getCalendar()                   { return *mCalendar; }
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
+		bool              runInSystemTray() const         { return mRunInSystemTray; }
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              removeWindow(TrayWindow*);
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
@@ -99,6 +100,7 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void              slotPreferences();
 		void              toggleAlarmsEnabled();
+		void              slotSettingsChanged();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
@@ -125,6 +127,7 @@ class KAlarmApp : public KUniqueApplication
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
 		Settings*                  mSettings;          // program preferences
 		bool                       mKDEDesktop;        // running on KDE desktop
+		bool                       mRunInSystemTray;   // run continuously in system tray
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

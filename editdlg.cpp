@@ -43,7 +43,6 @@
 #include "kalarmapp.h"
 #include "prefsettings.h"
 #include "datetime.h"
-#include "editdlg.h"
 #include "editdlg.moc"
 
 
@@ -69,8 +68,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
 	layout->addLayout(grid);
 	// To have better control over the button layout, don't use a QButtonGroup
-// QGridLayout* grid = new QGridLayout(1, 4);
-// topLayout->addLayout(grid);
 
 	// Message radio button has an ID of 0
 	messageRadio = new QRadioButton(i18n("Text"), group, "messageButton");
@@ -239,7 +236,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		timeWidget->setDateTime(QDateTime::currentDateTime().addSecs(60));
 		messageRadio->setChecked(false);    // toggle the button to ensure things are set up correctly
 		messageRadio->setChecked(true);
-//		fileRadio->setChecked(false);
 		browseButton->setEnabled(false);
 		messageEdit->setText(QString::null);
 		repeatCount->setValue(0);

@@ -73,6 +73,8 @@ KAlarmApp::KAlarmApp()
 	  mSettings(new Settings(0L))
 {
 	mSettings->loadSettings();
+	mRunInSystemTray = mSettings->runInSystemTray();
+	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
@@ -166,8 +168,14 @@ int KAlarmApp::newInstance()
 				kdDebug(5950)<<"KAlarmApp::newInstance(): tray\n";
 				args->clear();      // free up memory
 				if (!mKDEDesktop
-				||  !initCheck()    // open the calendar, register with daemon
-				||  !displayTrayIcon(true))
+				||  !initCheck())    // open the calendar, register with daemon
+				{
+					exitCode = 1;
+					break;
+				}
+				if (mRunInSystemTray)
+					new KAlarmMainWindow;
+				if (!displayTrayIcon(true))
 				{
 					exitCode = 1;
 					break;
@@ -439,23 +447,7 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	bool systray = settings()->runInSystemTray();
 	(new KAlarmPrefDlg(settings()))->exec();
-	if (settings()->runInSystemTray() != systray)
-	{
-		// The system tray run mode has changed
-		displayTrayIcon(false);     // remove the system tray icon if it is currently shown
-		if (systray)
-		{
-			// The system tray icon was displayed continuously
-		}
-		else
-		{
-			// The system tray icon was displayed only on demand
-			displayTrayIcon(false);
-			displayTrayIcon(true);
-		}
-	}
 }
 
 /******************************************************************************
@@ -468,6 +460,32 @@ void KAlarmApp::slotDaemonPreferences()
 	proc << locate("exe", QString::fromLatin1("kcmshell"));
 	proc << QString::fromLatin1("alarmdaemonctrl");
 	proc.start(KProcess::DontCare);
+}
+
+/******************************************************************************
+*  Called when KAlarm settings have changed.
+*/
+void KAlarmApp::slotSettingsChanged()
+{
+	if (settings()->runInSystemTray() != mRunInSystemTray)
+	{
+		// The system tray run mode has changed
+		++activeCount;              // prevent the application from quitting
+		displayTrayIcon(false);     // remove the system tray icon if it is currently shown
+		mRunInSystemTray = !mRunInSystemTray;
+		if (mRunInSystemTray)
+		{
+			if (!KAlarmMainWindow::firstWindow())
+				new KAlarmMainWindow;
+			displayTrayIcon(true);
+		}
+		else
+		{
+			if (!KAlarmMainWindow::firstWindow())
+				displayTrayIcon(true);
+		}
+		--activeCount;
+	}
 }
 
 /******************************************************************************
