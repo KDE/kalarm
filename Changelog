@@ -21,6 +21,7 @@ Prevent expired alarm calendar purges clashing with other alarm actions.
 Update which time columns are displayed in alarm list when Preferences change.
 Don't store audio/reminder details in email/command alarms.
 Don't store email details in message/file/command alarms.
+Fix "Warn before quitting" configuration option.
 Remove obsolete --displayEvent command line option (replaced by --triggerEvent).
 Remove obsolete pre-version 0.7 DCOP calls.
 
