@@ -253,7 +253,6 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	// Get today's and tomorrow's alarms, sorted in time order
 	QValueList<TipItem> items;
 	QValueList<TipItem>::Iterator iit;
-	int count = 0;
 	KCal::Event::List events = theApp()->getCalendar().eventsWithAlarms(now.date(), now.addDays(1));
 	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
@@ -263,11 +262,12 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 		{
 			TipItem item;
 			DateTime dateTime = event.nextDateTime();
-			if (dateTime.date() != now.date())
+			if (dateTime.date() > now.date())
 			{
-				// Ignore tomorrow's alarms after the current time
-				if (dateTime.time() >= now.time())
-					break;
+				// Ignore alarms after tomorrow at the current clock time
+				if (dateTime.date() != now.date().addDays(1)
+				||  dateTime.time() >= now.time())
+					continue;
 			}
 			item.dateTime = dateTime.dateTime();
 
@@ -305,14 +305,15 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 					break;
 			}
 			items.insert(iit, item);
-			if (++count == maxCount)
-				break;
 		}
         }
+	int count = 0;
 	for (iit = items.begin();  iit != items.end();  ++iit)
 	{
 		text += "\n";
 		text += (*iit).text;
+		if (++count == maxCount)
+			break;
 	}
 }
 
