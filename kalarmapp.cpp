@@ -92,6 +92,7 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
+	  mDaemonStartTimer(0),
 	  mDaemonCheckInterval(0),
 	  mCalendarUpdateCount(0),
 	  mDaemonRegistered(false),
@@ -1853,13 +1854,20 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 void KAlarmApp::startDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::startDaemon()\n";
-	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME)  &&  !mDaemonStartTimer)
 	{
 		// Start the alarm daemon. It is a KUniqueApplication, which means that
 		// there is automatically only one instance of the alarm daemon running.
-		QString execStr = locate("exe",QString::fromLatin1(DAEMON_APP_NAME));
-		kdeinitExecWait(execStr);
+		QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
+		kdeinitExec(execStr);
 		kdDebug(5950) << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
+		const int startInterval = 500;   // milliseconds
+		mDaemonStartTimeout = 5000/startInterval + 1;    // check daemon status for 5 seconds before giving up
+		mDaemonStartTimer = new QTimer(this);
+		connect(mDaemonStartTimer, SIGNAL(timeout()), SLOT(checkIfDaemonStarted()));
+		mDaemonStartTimer->start(startInterval);
+		checkIfDaemonStarted();
+		return;
 	}
 
 	// Register this application with the alarm daemon
@@ -1875,7 +1883,24 @@ void KAlarmApp::startDaemon()
 	}
 
 	mDaemonRegistered = true;
-	kdDebug(5950) << "KAlarmApp::startDaemon(): started daemon" << endl;
+	kdDebug(5950) << "KAlarmApp::startDaemon(): daemon startup complete" << endl;
+}
+
+/******************************************************************************
+* Check whether the alarm daemon has started yet, and if so, register with it.
+*/
+void KAlarmApp::checkIfDaemonStarted()
+{
+	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	{
+		if (--mDaemonStartTimeout > 0)
+			return;     // wait a bit more to check again
+	}
+	else
+		startDaemon();
+
+	delete mDaemonStartTimer;
+	mDaemonStartTimer = 0;
 }
 
 /******************************************************************************

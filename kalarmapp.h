@@ -127,6 +127,7 @@ class KAlarmApp : public KUniqueApplication
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
 		void               calendarSaved(AlarmCalendar*);
+		void               checkIfDaemonStarted();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData
@@ -170,12 +171,14 @@ class KAlarmApp : public KUniqueApplication
 		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
 		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change
+		QTimer*               mDaemonStartTimer;    // timer to check daemon status after starting daemon
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mOldExpiredColour;    // expired alarms text colour
 		int                   mOldExpiredKeepDays;  // how long expired alarms are being kept
 		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
 		int                   mDaemonCheckInterval; // daemon check interval (seconds)
 		int                   mCalendarUpdateCount; // nesting level of calendarUpdate calls
+		int                   mDaemonStartTimeout;  // remaining number of times to check if alarm daemon has started
 		bool                  mCalendarUpdateSave;  // save() was called while mCalendarUpdateCount > 0
 		bool                  mCalendarUpdateReload;// reloadDaemon() was called while mCalendarUpdateCount > 0
 		bool                  mDaemonRegistered;    // true if we've registered with alarm daemon

@@ -157,7 +157,7 @@ void DaemonGuiHandler::setAlarmsEnabled(bool enable)
 			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}
-		KApplication::kdeinitExecWait(execStr);
+		KApplication::kdeinitExec(execStr);
 		mEnableCalPending = true;
 		setFastDaemonCheck();
 	}
