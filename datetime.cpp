@@ -58,6 +58,7 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 	: ButtonGroup(parent, name),
 	  enteredDateTimeChanged(false)
 {
+	setFrameStyle(QFrame::NoFrame);
 	init(mode);
 }
 
