@@ -1,6 +1,10 @@
 KAlarm
 
+=== Version 0.9.6 --- 18 Sep 2003 ===
 Add option to choose foreground colour for alarm messages.
+Set initial recurrence defaults to correspond to alarm start date.
+Eliminate multiple confirmation prompts when deleting multiple alarms.
+Eliminate duplicate alarms in system tray tooltip.
 
 === Version 0.9.5 --- 3 Sep 2003 ===
 Add option for non-modal alarm message windows.
