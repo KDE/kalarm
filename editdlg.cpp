@@ -687,7 +687,13 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 	{
 		// Only the deferral time has been changed
 		event = *mSavedEvent;
-		event.defer(mDeferDateTime, event.reminderDeferral(), false);
+		if (mSavedEvent->deferred())
+		{
+			if (mDeferDateTime.isValid())
+				event.defer(mDeferDateTime, event.reminderDeferral(), false);
+			else
+				event.cancelDefer();
+		}
 	}
 }
 

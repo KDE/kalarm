@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.0.2 --- 11 Jan 2004 ===
+Prevent editing alarm and saving without changes from deleting the alarm.
+
 === Version 1.0.1 --- 4 Jan 2004 ===
 Fix failure to see alarms if KAlarm is reactivated while restoring session.
 
