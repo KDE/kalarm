@@ -89,6 +89,7 @@ class EditAlarmDlg : public KDialogBase
 
 	protected:
 		virtual void resizeEvent(QResizeEvent*);
+		virtual void showEvent(QShowEvent*);
 	protected slots:
 		virtual void slotOk();
 		virtual void slotCancel();
@@ -195,6 +196,7 @@ class EditAlarmDlg : public KDialogBase
 		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
 		QStringList       mEmailAttachments;   // list of email attachment file names
 		QSize             mBasicSize;          // size without deferred time widget
+		QSize             mInitialSize;        // initial size of dialog, calculated in initialise()
 		int               mDeferGroupHeight;   // height added by deferred time widget
 		bool              mTemplate;           // editing an alarm template
 		bool              mDesiredReadOnly;    // the specified read-only status of the dialogue

@@ -642,9 +642,9 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 	QSize size = minimumSize();
 	size.setHeight(size.height() - deferGroupHeight);
 	mBasicSize = KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, size);
-	size = mBasicSize;
-	size.setHeight(size.height() + deferGroupHeight);
-	resize(size);
+	mInitialSize = mBasicSize;
+	mInitialSize.setHeight(mInitialSize.height() + deferGroupHeight);
+	resize(mInitialSize);
 
 	bool enable = !!mEmailAttachList->count();
 	mEmailAttachList->setEnabled(enable);
@@ -1047,6 +1047,20 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, mBasicSize);
 	}
 	KDialog::resizeEvent(re);
+}
+
+/******************************************************************************
+*  Called when the dialog is displayed.
+*  The first time through, restores the size to that calculated in initialise().
+*/
+void EditAlarmDlg::showEvent(QShowEvent* se)
+{
+	if (!mInitialSize.isEmpty())
+	{
+		resize(mInitialSize);
+		mInitialSize = QSize();
+	}
+	KDialog::showEvent(se);
 }
 
 /******************************************************************************
