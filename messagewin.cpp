@@ -146,6 +146,7 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedul
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mDeferButton(0),
+	  mSilenceButton(0),
 	  mRestoreHeight(0),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
@@ -186,6 +187,7 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringL
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mDeferButton(0),
+	  mSilenceButton(0),
 	  mRestoreHeight(0),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
@@ -207,6 +209,7 @@ MessageWin::MessageWin()
 	: MainWindowBase(0, "MessageWin", WFLAGS),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
+	  mSilenceButton(0),
 	  mRescheduleEvent(false),
 	  mShown(true),
 	  mDeferClosing(false),
@@ -219,13 +222,7 @@ MessageWin::MessageWin()
 MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
-#ifndef WITHOUT_ARTS
-	delete mPlayObject;      mPlayObject = 0;
-	delete mArtsDispatcher;  mArtsDispatcher = 0;
-	if (!mLocalAudioFile.isEmpty())
-		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
-#endif
-
+	stopPlay();
 	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w == this)
 		{
@@ -438,14 +435,16 @@ QSize MessageWin::initView()
 	QGridLayout* grid = new QGridLayout(1, 4);
 	topLayout->addLayout(grid);
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
+	int gridIndex = 1;
 
 	// Close button
 	KPushButton* okButton = new KPushButton(KStdGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	okButton->clearFocus();
 	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+	okButton->setFixedSize(okButton->sizeHint());
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
-	grid->addWidget(okButton, 0, 1, AlignHCenter);
+	grid->addWidget(okButton, 0, gridIndex++, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
 
 	if (!noDefer)
@@ -453,12 +452,30 @@ QSize MessageWin::initView()
 		// Defer button
 		mDeferButton = new QPushButton(i18n("&Defer..."), topWidget);
 		mDeferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+		mDeferButton->setFixedSize(mDeferButton->sizeHint());
 		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
-		grid->addWidget(mDeferButton, 0, 2, AlignHCenter);
+		grid->addWidget(mDeferButton, 0, gridIndex++, AlignHCenter);
 		QWhatsThis::add(mDeferButton,
 		      i18n("Defer the alarm until later.\n"
 		           "You will be prompted to specify when the alarm should be redisplayed."));
 	}
+
+#ifndef WITHOUT_ARTS
+	if (!mEvent.audioFile().isEmpty())
+	{
+		// Silence button to stop sound repetition
+		QPixmap pixmap = MainBarIcon("player_stop");
+		mSilenceButton = new QPushButton(topWidget);
+		mSilenceButton->setPixmap(pixmap);
+		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
+		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
+		grid->addWidget(mSilenceButton, 0, gridIndex++, AlignHCenter);
+		QToolTip::add(mSilenceButton, i18n("Stop sound"));
+		QWhatsThis::add(mSilenceButton, i18n("Stop playing the sound"));
+		// To avoid getting in a mess, disable the button until sound playing has been set up
+		mSilenceButton->setEnabled(false);
+	}
+#endif
 
 	// KAlarm button
 	KIconLoader iconLoader;
@@ -467,23 +484,13 @@ QSize MessageWin::initView()
 	button->setPixmap(pixmap);
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(displayMainWindow()));
-	grid->addWidget(button, 0, 3, AlignHCenter);
+	grid->addWidget(button, 0, gridIndex++, AlignHCenter);
 	QString actKAlarm = i18n("Activate %1").arg(kapp->aboutData()->programName());
 	QToolTip::add(button, actKAlarm);
 	QWhatsThis::add(button, actKAlarm);
 
-	// Set the button sizes
-	QSize minbutsize = okButton->sizeHint();
-	if (!noDefer)
-	{
-		minbutsize = minbutsize.expandedTo(mDeferButton->sizeHint());
-		mDeferButton->setFixedSize(minbutsize);
-	}
-	okButton->setFixedSize(minbutsize);
-
 	topLayout->activate();
-	QSize size(minbutsize.width()*3, sizeHint().height());
-	setMinimumSize(size);
+	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
 
 	WId winid = winId();
 	unsigned long wstate = (Preferences::instance()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
@@ -672,6 +679,7 @@ void MessageWin::initAudio()
 	KArtsServer aserver;
 	KDE::PlayObjectFactory factory(aserver.server());
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
+	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
 	if (!mPlayObject->object().isNull())
@@ -686,6 +694,8 @@ void MessageWin::initAudio()
 void MessageWin::checkAudioPlay()
 {
 #ifndef WITHOUT_ARTS
+	if (!mPlayObject)
+		return;
 	if (mPlayObject->state() == Arts::posIdle)
 	{
 		if (mPlayedOnce  &&  !mEvent.repeatSound())
@@ -736,6 +746,22 @@ void MessageWin::checkAudioPlay()
 		time = 0;
 	kdDebug(5950) << "MessageWin::checkAudioPlay(): wait for " << (time+100) << "ms\n";
 	mPlayTimer->start(time + 100, true);
+#endif
+}
+
+/******************************************************************************
+*  Called when the Silence button is clicked.
+*  Stops playing the sound file.
+*/
+void MessageWin::stopPlay()
+{
+#ifndef WITHOUT_ARTS
+	delete mPlayObject;      mPlayObject = 0;
+	delete mArtsDispatcher;  mArtsDispatcher = 0;
+	if (!mLocalAudioFile.isEmpty())
+		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
+	if (mSilenceButton)
+		mSilenceButton->setEnabled(false);
 #endif
 }
 

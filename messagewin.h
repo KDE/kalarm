@@ -72,6 +72,7 @@ class MessageWin : public MainWindowBase
 		void                displayMainWindow();
 		void                slotPlayAudio();
 		void                checkAudioPlay();
+		void                stopPlay();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
 
@@ -107,6 +108,7 @@ class MessageWin : public MainWindowBase
 		// Miscellaneous
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		QPushButton*        mDeferButton;
+		QPushButton*        mSilenceButton;
 		QString             mLocalAudioFile;  // local copy of audio file
 		QTime               mAudioFileLoadStart; // time when audio file loading started
 		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file

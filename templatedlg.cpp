@@ -202,7 +202,7 @@ void TemplateDlg::slotDelete()
 	int n = items.count();
 	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %n selected alarm templates?", n),
-	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem( i18n("&Delete"), "editdelete"))
+	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
 	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished
