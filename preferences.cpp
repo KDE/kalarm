@@ -122,7 +122,7 @@ void Preferences::loadPreferences()
 	mDefaultLateCancel       = config->readBoolEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
-	mDefaultSoundFile        = mDefaultBeep ? QString::null : config->readEntry(DEF_SOUND_FILE);
+	mDefaultSoundFile        = mDefaultBeep ? QString::null : config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultEmailBcc         = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
@@ -155,7 +155,7 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
-	config->writeEntry(DEF_SOUND_FILE, (mDefaultBeep ? QString::null : mDefaultSoundFile));
+	config->writePathEntry(DEF_SOUND_FILE, (mDefaultBeep ? QString::null : mDefaultSoundFile));
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
