@@ -667,7 +667,7 @@ TextMimeSourceFactory::TextMimeSourceFactory(const QString& absPath, KTextBrowse
 	  mLast(0)
 {
 	view->setMimeSourceFactory(this);
-	QString type = KMimeType::findByURL(absPath)->name();
+	QString type = KMimeType::findByPath(absPath)->name();
 	switch (KAlarmApp::fileType(type))
 	{
 		case 1:

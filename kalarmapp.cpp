@@ -123,7 +123,7 @@ KAlarmApp::KAlarmApp()
 	 *  3) A user-specific one which contains details of alarms which are currently
 	 *     being displayed to that user and which have not yet been acknowledged.
 	 */
-	QRegExp vcsRegExp = QString::fromLatin1("\\.vcs$");
+	QRegExp vcsRegExp ( QString::fromLatin1("\\.vcs$") );
 	QString ical      = QString::fromLatin1(".ics");
 	QString displayCal = locateLocal("appdata", DISPLAY_CALENDAR);
 	QString activeKey = QString::fromLatin1("Calendar");
