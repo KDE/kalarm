@@ -43,8 +43,10 @@ class Settings : public QObject
 		bool         autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		int          daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		const QTime& startOfDay() const               { return mStartOfDay; }
+		bool         startOfDayChanged() const        { return mStartOfDayChanged; }
 		void         loadSettings();
 		void         saveSettings(bool syncToDisc = true);
+		void         updateStartOfDayCheck();
 		void         emitSettingsChanged();
 
 		static const QColor default_defaultBgColour;
@@ -61,9 +63,12 @@ class Settings : public QObject
 		QTime               mStartOfDay;
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
+		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
 
 	signals:
 		void settingsChanged();
+	private:
+		int          startOfDayCheck() const;
 };
 
 #endif // PREFSETTINGS_H

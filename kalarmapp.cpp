@@ -53,11 +53,11 @@
 
 extern QCString execArguments;
 
-#define     DAEMON_APP_NAME_DEF       "kalarmd"
-const char* DCOP_OBJECT_NAME        = "display";
-const char* GUI_DCOP_OBJECT_NAME    = "tray";
-const char* DAEMON_APP_NAME         = DAEMON_APP_NAME_DEF;
-const char* DAEMON_DCOP_OBJECT      = "ad";
+#define     DAEMON_APP_NAME_DEF    "kalarmd"
+const char* DCOP_OBJECT_NAME     = "display";
+const char* GUI_DCOP_OBJECT_NAME = "tray";
+const char* DAEMON_APP_NAME      = DAEMON_APP_NAME_DEF;
+const char* DAEMON_DCOP_OBJECT   = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 int         KAlarmApp::activeCount = 0;
@@ -88,6 +88,9 @@ KAlarmApp::KAlarmApp()
 	mKDEDesktop             = wm.systemTrayWindows().count();
 	mOldRunInSystemTray     = mKDEDesktop && mSettings->runInSystemTray();
 	mDisableAlarmsIfStopped = mOldRunInSystemTray && mSettings->disableAlarmsIfStopped();
+	mStartOfDay             = mSettings->startOfDay();
+	if (mSettings->startOfDayChanged())
+		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
@@ -158,7 +161,7 @@ int KAlarmApp::newInstance()
 
 		// Display the system tray icon if it is configured to be autostarted,
 		// or if we're in run-in-system-tray mode.
-		if (settings()->autostartTrayIcon()
+		if (mSettings->autostartTrayIcon()
 		||  KAlarmMainWindow::count()  &&  runInSystemTray())
 			displayTrayIcon(true, trayParent);
 	}
@@ -289,7 +292,7 @@ int KAlarmApp::newInstance()
 
 				QDateTime* alarmTime = 0L;
 				QDateTime wakeup;
-				QColor bgColour = settings()->defaultBgColour();
+				QColor bgColour = mSettings->defaultBgColour();
 				int    repeatCount = 0;
 				int    repeatInterval = 0;
 				if (args->isSet("color"))
@@ -503,7 +506,7 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	(new KAlarmPrefDlg(settings()))->exec();
+	(new KAlarmPrefDlg(mSettings))->exec();
 }
 
 /******************************************************************************
@@ -523,7 +526,7 @@ void KAlarmApp::slotDaemonPreferences()
 */
 void KAlarmApp::slotSettingsChanged()
 {
-	bool newRunInSysTray = settings()->runInSystemTray()  &&  mKDEDesktop;
+	bool newRunInSysTray = mSettings->runInSystemTray()  &&  mKDEDesktop;
 	if (newRunInSysTray != mOldRunInSystemTray)
 	{
 		// The system tray run mode has changed
@@ -553,6 +556,24 @@ void KAlarmApp::slotSettingsChanged()
 		registerWithDaemon();     // re-register with the alarm daemon
 		mDisableAlarmsIfStopped = newDisableIfStopped;
 	}
+
+	// Change alarm times for date-only alarms if the start of day time has changed
+	if (mSettings->startOfDay() != mStartOfDay)
+		changeStartOfDay();
+}
+
+/******************************************************************************
+*  Change alarm times for date-only alarms after the start of day time has changed.
+*/
+void KAlarmApp::changeStartOfDay()
+{
+	if (KAlarmEvent::adjustStartOfDay(mCalendar->getAllEvents()))
+	{
+		mCalendar->save();
+		reloadDaemon();                      // tell the daemon to reread the calendar file
+	}
+	mSettings->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
+	mStartOfDay = mSettings->startOfDay();
 }
 
 /******************************************************************************
@@ -995,14 +1016,17 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		if (!mCalendar->open())
 			return false;
 
+		if (!mStartOfDay.isValid())
+			changeStartOfDay();   // start of day time has changed, so adjust date-only alarms
+
 		if (!calendarOnly)
-			startDaemon();    // Make sure the alarm daemon is running
+			startDaemon();        // make sure the alarm daemon is running
 	}
 	else if (!mDaemonRegistered)
 		startDaemon();
 
 	if (!calendarOnly)
-		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
+		setUpDcop();             // we're now ready to handle DCOP calls, so set up handlers
 	return true;
 }
 

@@ -42,6 +42,13 @@ static const QString DISABLE_IF_STOPPED   = QString::fromLatin1("DisableAlarmsIf
 static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
 static const QString DAEMON_TRAY_INTERVAL = QString::fromLatin1("DaemonTrayCheckInterval");
 static const QString START_OF_DAY         = QString::fromLatin1("StartOfDay");
+static const QString START_OF_DAY_CHECK   = QString::fromLatin1("Sod");
+
+inline int Settings::startOfDayCheck() const
+{
+	return QTime().msecsTo(mStartOfDay) ^ 0x82451630;   // combine with a "random" constant to prevent clever people fiddling things
+}
+
 
 Settings::Settings(QWidget* parent)
 	: QObject(parent)
@@ -61,6 +68,7 @@ void Settings::loadSettings()
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
+	mStartOfDayChanged       = (config->readNumEntry(START_OF_DAY_CHECK, 0) != startOfDayCheck());
 	emit settingsChanged();
 }
 
@@ -75,8 +83,18 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
+	// Start-of-day check value is only written once the start-of-day time has been processed.
 	if (syncToDisc)
 		config->sync();
+}
+
+void Settings::updateStartOfDayCheck()
+{
+	KConfig* config = KGlobal::config();
+	config->setGroup(GENERAL_SECTION);
+	config->writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
+	config->sync();
+	mStartOfDayChanged = false;
 }
 
 void Settings::emitSettingsChanged()

@@ -115,6 +115,7 @@ class KAlarmApp : public KUniqueApplication
 		enum AlarmFunc { ALARM_TRIGGER, ALARM_CANCEL, ALARM_RESCHEDULE };
 		bool              initCheck(bool calendarOnly = false);
 		void              quitIf(int exitCode);
+		void              changeStartOfDay();
 		void              setUpDcop();
 		bool              stopDaemon();
 		void              startDaemon();
@@ -137,6 +138,7 @@ class KAlarmApp : public KUniqueApplication
 		Settings*             mSettings;           // program preferences
 		QDateTime             mLastDaemonCheck;    // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;    // next time daemon will check alarms after check interval change
+		QTime                 mStartOfDay;         // start-of-day time currently in use
 		int                   mDaemonCheckInterval;// daemon check interval (seconds)
 		bool                  mDaemonRegistered;   // true if we've registered with alarm daemon
 		bool                  mKDEDesktop;         // running on KDE desktop
