@@ -1,7 +1,7 @@
 /*
- *  radiobutton.h  -  radio button with read-only option
+ *  radiobutton.h  -  radio button with focus widget and read-only options
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,15 +24,51 @@
 #include <qradiobutton.h>
 
 
+/**
+ *  The RadioButton class is a QRadioButton with the ability to transfer focus to
+ *  another widget when checked, and with a read-only option.
+ *
+ *  Another widget may be specified as the focus widget for the radio button. Whenever
+ *  the user clicks on the radio button so as to set its state to checked, focus is
+ *  automatically transferred to the focus widget.
+ *
+ *  The widget may be set as read-only. This has the same effect as disabling it, except
+ *  that its appearance is unchanged.
+ *
+ *  @short QRadioButton with focus widget and read-only options.
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class RadioButton : public QRadioButton
 {
 		Q_OBJECT
 	public:
+		/** Constructor.
+		 *  @param parent The parent object of this widget.
+		 *  @param name The name of this widget.
+		 */
 		RadioButton(QWidget* parent, const char* name = 0);
+		/** Constructor.
+		 *  @param text Text to display.
+		 *  @param parent The parent object of this widget.
+		 *  @param name The name of this widget.
+		 */
 		RadioButton(const QString& text, QWidget* parent, const char* name = 0);
-		void     setReadOnly(bool);
+		/** Returns true if the widget is read only. */
+		bool     isReadOnly() const          { return mReadOnly; }
+		/** Sets whether the radio button is read-only for the user. If read-only,
+		 *  its state cannot be changed by the user.
+		 *  @param readOnly True to set the widget read-only, false to set it read-write.
+		 */
+		void     setReadOnly(bool readOnly);
+		/** Returns the widget which receives focus when the button is clicked. */
 		QWidget* focusWidget() const         { return mFocusWidget; }
-		void     setFocusWidget(QWidget*, bool enable = true);
+		/** Specifies a widget to receive focus when the button is clicked.
+		 *  @param widget Widget to receive focus.
+		 *  @param enable If true, @p widget will be enabled before receiving focus. If
+		 *                false, the enabled state of @p widget will be left unchanged when
+		 *                the radio button is clicked.
+		 */
+		void     setFocusWidget(QWidget* widget, bool enable = true);
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
