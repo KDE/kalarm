@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.1.8 --- 9 January 2005 ===
+=== Version 1.1.8 --- 21 January 2005 ===
+Prevent multiple "Failed to start Alarm Daemon" error messages at startup.
 Fix random limit on expired alarm discard time if stepping with spinbox buttons.
 Fix dialog layouts for right-to-left languages.
 Fix time spin box layout for right-to-left languages.

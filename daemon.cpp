@@ -212,13 +212,15 @@ void Daemon::registrationResult(bool reregister, bool success)
 void Daemon::checkIfStarted()
 {
 	updateRegisteredStatus();
+	bool err = false;
 	switch (mStatus)
 	{
 		case STOPPED:
 			if (--mStartTimeout > 0)
 				return;     // wait a bit more to check again
-			kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
-			KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+			// Output error message, but delete timer first to prevent
+			// multiple messages.
+			err = true;
 			break;
 		case RUNNING:
 		case READY:
@@ -227,6 +229,11 @@ void Daemon::checkIfStarted()
 	}
 	delete mStartTimer;
 	mStartTimer = 0;
+	if (err)
+	{
+		kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
+		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+	}
 }
 
 /******************************************************************************
