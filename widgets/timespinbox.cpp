@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,8 +82,9 @@ QString TimeSpinBox::mapValueToText(int v)
 
 /******************************************************************************
  * Convert the user-entered text to a value in minutes.
- * The allowed format is [hour]:[minute], where hour and
- * minute must be non-blank.
+ * The allowed formats are:
+ *    [hour]:[minute], where minute must be non-blank, or
+ *    hhmm, 4 digits, where hour < 24.
  */
 int TimeSpinBox::mapTextToValue(bool* ok)
 {
@@ -91,21 +92,46 @@ int TimeSpinBox::mapTextToValue(bool* ok)
 	int colon = text.find(':');
 	if (colon >= 0)
 	{
+		// [h]:m format for any time value
 		QString hour   = text.left(colon).stripWhiteSpace();
 		QString minute = text.mid(colon + 1).stripWhiteSpace();
-		if (!hour.isEmpty()  &&  !minute.isEmpty())
+		if (!minute.isEmpty())
 		{
-			bool okhour, okmin;
+			bool okmin;
+			bool okhour = true;
 			int m = minute.toUInt(&okmin);
-			int t = hour.toUInt(&okhour) * 60 + m;
+			int t = m;
+			if (!hour.isEmpty())
+				t += hour.toUInt(&okhour) * 60;
 			if (okhour  &&  okmin  &&  m < 60  &&  t >= minimumValue  &&  t <= maxValue())
 			{
-				*ok = true;
+				if (ok)
+					*ok = true;
 				return t;
 			}
 		}
 	}
-	*ok = false;
+	else if (text.length() == 4)
+	{
+		// hhmm format for time of day
+		bool okn;
+		int mins = text.toUInt(&okn);
+		if (okn)
+		{
+			int m = mins % 100;
+			int h = mins / 100;
+			int t = h * 60 + m;
+			if (h < 24  &&  m < 60  &&  t >= minimumValue  &&  t <= maxValue())
+			{
+				if (ok)
+					*ok = true;
+				return t;
+			}
+		}
+
+	}
+	if (ok)
+		*ok = false;
 	return 0;
 }
 
@@ -185,39 +211,51 @@ bool TimeSpinBox::isValid() const
 
 /******************************************************************************
  * Validate the time spin box input.
- * The entered time must contain a colon, but hours and/or minutes may be blank.
+ * The entered time must either be 4 digits, or it must contain a colon, but
+ * hours may be blank.
  */
 QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cursorPos*/) const
 {
+	QString cleanText = text.stripWhiteSpace();
+	if (cleanText.isEmpty())
+		return QValidator::Intermediate;
 	QValidator::State state = QValidator::Acceptable;
 	QString hour;
-	int hr;
+	bool ok;
+	int hr = 0;
 	int mn = 0;
-	int colon = text.find(':');
+	int colon = cleanText.find(':');
 	if (colon >= 0)
 	{
-		QString minute = text.mid(colon + 1).stripWhiteSpace();
+		QString minute = cleanText.mid(colon + 1);
 		if (minute.isEmpty())
 			state = QValidator::Intermediate;
-		else
-		{
-			bool ok;
-			if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
-				return QValidator::Invalid;
-		}
+		else if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
+			return QValidator::Invalid;
 
-		hour = text.left(colon).stripWhiteSpace();
+		hour = cleanText.left(colon);
+	}
+	else if (maxMinute >= 1440)
+	{
+		// The hhmm form of entry is only allowed for time-of-day, i.e. <= 2359
+		hour = cleanText;
+		state = QValidator::Intermediate;
 	}
 	else
 	{
-		state = QValidator::Intermediate;
-		hour = text;
+		if (cleanText.length() > 4)
+			return QValidator::Invalid;
+		if (cleanText.length() < 4)
+			state = QValidator::Intermediate;
+		hour = cleanText.left(2);
+		QString minute = cleanText.mid(2);
+		if (!minute.isEmpty()
+		&&  ((mn = minute.toUInt(&ok)) >= 60  ||  !ok))
+			return QValidator::Invalid;
 	}
 
-	if (hour.isEmpty())
-		return QValidator::Intermediate;
-	bool ok;
-	if ((hr = hour.toUInt(&ok)) > maxMinute/60  ||  !ok)
+	if (!hour.isEmpty()
+	&&  ((hr = hour.toUInt(&ok)) > maxMinute/60  ||  !ok))
 		return QValidator::Invalid;
 	if (state == QValidator::Acceptable)
 	{

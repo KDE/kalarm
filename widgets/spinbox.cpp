@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -217,11 +217,12 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 					if (mReadOnly)
 						return true;   // discard the event
 					mCurrentButton = whichButton(me->pos());
-					if (mReadOnly  &&  mCurrentButton != NO_BUTTON)
+					if (mCurrentButton == NO_BUTTON)
 						return true;
 					bool shift = (me->state() & (Qt::ShiftButton | Qt::AltButton)) == Qt::ShiftButton;
 					if (setShiftStepping(shift))
 						return true;     // hide the event from the spin widget
+					return false;    // forward event to the destination widget
 				}
 				break;
 			}
@@ -229,7 +230,10 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 			{
 				QMouseEvent* me = (QMouseEvent*)e;
 				if (me->button() == Qt::LeftButton  &&  mShiftMouse)
+				{
 					setShiftStepping(false);    // cancel shift stepping
+					return false;    // forward event to the destination widget
+				}
 				break;
 			}
 			case QEvent::MouseMove:
@@ -250,6 +254,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 						if (setShiftStepping(shift))
 							return true;     // hide the event from the spin widget
 					}
+					return false;    // forward event to the destination widget
 				}
 				break;
 			}
@@ -280,7 +285,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 			}
 		}
 	}
-	return false;     // forward event to the destination widget
+	return QSpinBox::eventFilter(obj, e);
 }
 
 // Set spin widget stepping to the normal or shift increment.
