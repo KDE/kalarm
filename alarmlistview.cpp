@@ -127,8 +127,11 @@ void AlarmListView::refresh()
 			events = calendar->events();
 			for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
 			{
-				event.set(*kcalEvent);
-				addEntry(event);
+				if (kcalEvent->alarms().count() > 0)
+				{
+					event.set(*kcalEvent);
+					addEntry(event);
+				}
 			}
 		}
 	}
@@ -274,7 +277,7 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 	setText(AlarmListView::MESSAGE_COLUMN, messageText);
 	mMessageWidth = width(parent->fontMetrics(), parent, AlarmListView::MESSAGE_COLUMN);
 
-	QDateTime dateTime = event.dateTime();
+	QDateTime dateTime = event.nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
 	if (!event.anyTime())
 	{
@@ -296,7 +299,7 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 	else
 	{
 		repeatInterval = event.recurInterval();
-		switch (event.recurs())
+		switch (event.recurType())
 		{
 			case KAlarmEvent::MINUTELY:
 				repeatOrder = 2;
