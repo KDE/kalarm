@@ -77,7 +77,8 @@ static QString xtermCommands[] = {
 	QString::fromLatin1("xterm -sb -hold -title %t -e %c"),
 	QString::fromLatin1("konsole --noclose -T %t -e ${SHELL:-sh} -c %c"),
 	QString::fromLatin1("gnome-terminal -t %t -e %W"),
-	QString::fromLatin1("Eterm --pause -T %t -e %C"),
+	QString::fromLatin1("eterm --pause -T %t -e %C"),    // some systems use eterm...
+	QString::fromLatin1("Eterm --pause -T %t -e %C"),    // while some use Eterm
 	QString::fromLatin1("rxvt -title %t -e ${SHELL:-sh} -c %w"),
 	QString::null       // end of list indicator - don't change!
 };
@@ -345,11 +346,11 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addColSpacing(0, indentWidth());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	mKeepExpired = new QCheckBox(i18n("Keep alarms after e&xpiry"), group, "keepExpired");
-	mKeepExpired->setMinimumSize(mKeepExpired->sizeHint());
+	mKeepExpired->setFixedSize(mKeepExpired->sizeHint());
 	connect(mKeepExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
 	QWhatsThis::add(mKeepExpired,
 	      i18n("Check to store alarms after expiry or deletion (except deleted alarms which were never triggered)."));
-	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, Qt::AlignAuto);
+	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, alignment);
 
 	box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
@@ -365,14 +366,14 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mPurgeAfterLabel->setBuddy(mPurgeAfter);
 	QWhatsThis::add(box,
 	      i18n("Uncheck to store expired alarms indefinitely. Check to enter how long expired alarms should be stored."));
-	grid->addWidget(box, 2, 1, Qt::AlignAuto);
+	grid->addWidget(box, 2, 1, alignment);
 
 	mClearExpired = new QPushButton(i18n("Clear Expired Alar&ms"), group);
-	mClearExpired->setMinimumSize(mClearExpired->sizeHint());
+	mClearExpired->setFixedSize(mClearExpired->sizeHint());
 	connect(mClearExpired, SIGNAL(clicked()), SLOT(slotClearExpired()));
 	QWhatsThis::add(mClearExpired,
 	      i18n("Delete all existing expired alarms."));
-	grid->addWidget(mClearExpired, 3, 1, Qt::AlignAuto);
+	grid->addWidget(mClearExpired, 3, 1, alignment);
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Terminal window to use for command alarms
@@ -754,7 +755,7 @@ QString EmailPrefTab::validateBccAddress()
 	if (!mBccAddressChanged)
 		return QString::null;
 	mBccAddressChanged = false;
-	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'BCC' email address is specified."));
+	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
 }
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
