@@ -42,5 +42,7 @@ void MainWindowBase::closeEvent(QCloseEvent* ce)
 */
 bool MainWindowBase::queryExit()
 {
+	if( kapp->sessionSaving())
+	    return true;
 	return disableQuit ? false : KMainWindow::queryExit();
 }
