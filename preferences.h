@@ -91,7 +91,7 @@ class Preferences : public QObject
 
 		static const ColourList  default_messageColours;
 		static const QColor      default_defaultBgColour;
-		static const QFont       default_messageFont;
+		static QFont             default_messageFont;
 		static const QTime       default_startOfDay;
 		static const bool        default_runInSystemTray;
 		static const bool        default_disableAlarmsIfStopped;

@@ -35,7 +35,7 @@
 QColor defaultMessageColours[] = { Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow, Qt::white, Qt::lightGray, Qt::black, QColor() };
 const ColourList Preferences::default_messageColours(defaultMessageColours);
 const QColor     Preferences::default_defaultBgColour(Qt::red);
-const QFont      Preferences::default_messageFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+QFont            Preferences::default_messageFont;    // initialised in constructor
 const QTime      Preferences::default_startOfDay(0, 0);
 const bool       Preferences::default_runInSystemTray         = true;
 const bool       Preferences::default_disableAlarmsIfStopped  = true;
@@ -110,6 +110,10 @@ inline int Preferences::startOfDayCheck() const
 Preferences::Preferences(QWidget* parent)
 	: QObject(parent)
 {
+	// Initialise static variables here to avoid static initialisation
+	// sequencing errors.
+	default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+
 	loadPreferences();
 }
 
