@@ -370,7 +370,7 @@ void KAMail::notifyQueued(const KAlarmEvent& event)
 		QCString email = (*it).email().local8Bit();
 		const char* em = email;
 		if (!email.isEmpty()
-		&&  KMime::HeaderParsing::parseAddress(em, em + email.length(), addr))
+		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
 		{
 			QString domain = addr.mailboxList.first().addrSpec.domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
@@ -618,7 +618,7 @@ QString getHostName()
 
 
 /*=============================================================================
-=  KMime::HeaderParsing :  modified and additional functions.
+=  HeaderParsing :  modified and additional functions.
 =  The following functions are modified from, or additional to, those in
 =  libkdenetwork kmime_header_parsing.cpp.
 =============================================================================*/
