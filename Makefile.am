@@ -4,7 +4,7 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libical/src \
 	-I$(top_srcdir)/libkdepim \
-	-I$(top_srcdir)/libkdenetwork $(all_includes)
+	-I$(top_srcdir)/libkmime $(all_includes)
 
 bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
@@ -26,7 +26,7 @@ ARTSLIB = -lartskde
 endif
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkcal/libkcal.la \
-	$(top_builddir)/libkdenetwork/libkdenetwork.la \
+	$(top_builddir)/libkmime/libkmime.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
 	-lkabc $(LIB_KDEUI) $(ARTSLIB)
