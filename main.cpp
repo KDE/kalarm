@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,14 +63,14 @@ static KCmdLineOptions options[] =
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
 	{ "m", 0, 0 },
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
+	{ "p", 0, 0 },
+	{ "play <url>", I18N_NOOP("Audio file to play once"), 0 },
 	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
 	{ "r", 0, 0 },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0 },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
-	{ "s", 0, 0 },
-	{ "sound <url>", I18N_NOOP("Audio file to play"), 0 },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
 	{ "S", 0, 0 },
 	{ "subject ", I18N_NOOP("Email subject line"), 0 },

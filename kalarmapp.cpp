@@ -538,12 +538,12 @@ int KAlarmApp::newInstance()
 				}
 
 				QCString audioFile;
-				if (args->isSet("sound"))
+				if (args->isSet("play"))
 				{
 					// Play a sound with the alarm
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1("--sound")))
-					audioFile = args->getOption("sound");
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1("--play")))
+					audioFile = args->getOption("play");
 				}
 
 				int reminderMinutes = 0;
@@ -618,10 +618,10 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
 					usage += QString::fromLatin1("--login ");
+				if (args->isSet("play"))
+					usage += QString::fromLatin1("--play ");
 				if (args->isSet("reminder"))
 					usage += QString::fromLatin1("--reminder ");
-				if (args->isSet("sound"))
-					usage += QString::fromLatin1("--sound ");
 				if (args->isSet("subject"))
 					usage += QString::fromLatin1("--subject ");
 				if (args->isSet("time"))
