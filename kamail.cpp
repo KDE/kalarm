@@ -111,7 +111,7 @@ QString KAMail::i18n_NeedFromEmailAddress()
 { return i18n("A 'From' email address must be configured in order to execute email alarms."); }
 
 QString KAMail::i18n_sent_mail()
-{ return i18n("This should be translated the same as in kmail", "sent-mail"); }
+{ return i18n("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
 static QString i18n_Default()
 { return i18n("Default"); }
@@ -592,6 +592,7 @@ QStringList KAMail::kmailIdentities()
 
 /******************************************************************************
 *  Find the position of a specified identity in a list returned by kmailIdentities().
+*  Reply < 0 if not found.
 */
 int KAMail::findIdentity(const QStringList& identities, const QString& identity)
 {
