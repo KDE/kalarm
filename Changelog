@@ -1,6 +1,11 @@
 KAlarm
 
-=== Version 0.8 --- 16 Sep 2002 ===
+=== Version 0.8.1 (KDE 3.1) --- 27 Sep 2002 ===
+Set sensible initial focus when edit alarm dialog pages are displayed.
+Fix display of hour spin buttons in time edit spin boxes.
+Prevent time edit spin box buttons selecting the text.
+
+=== Version 0.8 (KDE 3.1 beta2) --- 16 Sep 2002 ===
 Move recurrence edit to separate tab in alarm dialog (now fits 800x600 display).
 Add accelerator keys in dialogs.
 Provide date picker for entering dates.
