@@ -157,7 +157,7 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
+	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]:"), page);
 	lbl->setFixedSize(lbl->sizeHint());
 	layout->addWidget(lbl);
 	layout->addStretch();
@@ -168,7 +168,7 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
 
 	layout = new QHBoxLayout(topLayout);
-	lbl = new QLabel(i18n("Start of day for date-only alarms"), page);
+	lbl = new QLabel(i18n("Start of day for date-only alarms:"), page);
 	lbl->setFixedSize(lbl->sizeHint());
 	layout->addWidget(lbl);
 	layout->addStretch();

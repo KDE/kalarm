@@ -54,7 +54,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	QLabel* label;
 	if (fg)
 	{
-		label = new QLabel(i18n("Default foreground color"), page);
+		label = new QLabel(i18n("Default foreground color:"), page);
 		grid->addWidget(label, gridRow, 0, AlignRight);
 		label->setFixedSize(label->sizeHint());
 		m_fgColourButton = new ColourCombo(page);
@@ -63,7 +63,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		++gridRow;
 	}
 
-	label = new QLabel(i18n("Default background color"), page);
+	label = new QLabel(i18n("Default background color:"), page);
 	label->setMinimumSize(label->sizeHint());
 	grid->addWidget(label, gridRow, 0);
 	m_bgColourButton = new ColourCombo(page);
