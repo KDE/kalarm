@@ -48,8 +48,8 @@ class AlarmCalendar
 		void                  close();
 		void                  purge(int daysToKeep, bool saveIfPurged);
 		KCal::Event*          event(const QString& uniqueID)      { return mCalendar ? mCalendar->event(uniqueID) : 0; }
-		QPtrList<KCal::Event> events()                            { return mCalendar->events(); }
-		QPtrList<KCal::Event> events(const QDate& d, bool sorted = false) { return mCalendar->events(d, sorted); }
+		KCal::Event::List     events()                            { return mCalendar->events(); }
+		KCal::Event::List     events(const QDate& d, bool sorted = false) { return mCalendar->events(d, sorted); }
 		KCal::Event*          addEvent(const KAlarmEvent&, bool useEventID = false);
 		void                  updateEvent(const KAlarmEvent&);
 		void                  deleteEvent(const QString& eventID, bool save = false);

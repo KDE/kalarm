@@ -246,17 +246,21 @@ QString TrayWindow::tooltipAlarmText() const
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
-	QPtrList<KCal::Event> events = theApp()->getCalendar().events(now.date(), true);
-	QPtrList<KCal::Event> events2 = theApp()->getCalendar().events(now.date().addDays(1), true);
+	KCal::Event::List events = theApp()->getCalendar().events(now.date(), true);
+	KCal::Event::List events2 = theApp()->getCalendar().events(now.date().addDays(1), true);
 
 	int count = 0;
 	bool todayEvents = true;
-	KCal::Event* kcalEvent = events.first();
-	if (!kcalEvent)
+	KCal::Event::List::ConstIterator it1 = events.begin();
+	KCal::Event::List::ConstIterator it2 = events2.begin();
+        KCal::Event *kcalEvent;
+	if ( it1 == events.end() )
 	{
 		todayEvents = false;
 		kcalEvent = events2.first();
-	}
+	} else {
+                kcalEvent = *it1;
+        }
 	while (kcalEvent  &&  count != maxCount)
 	{
 		event.set(*kcalEvent);
@@ -303,7 +307,12 @@ QString TrayWindow::tooltipAlarmText() const
 		// Get the next event
 		if (todayEvents)
 		{
-			kcalEvent = events.next();
+                        ++it1;
+                        if ( it1 == events.end() ) {
+                                kcalEvent = 0;
+                        } else {
+                                kcalEvent = *it1;
+                        }
 			if (!kcalEvent)
 			{
 				todayEvents = false;
@@ -311,8 +320,11 @@ QString TrayWindow::tooltipAlarmText() const
 			}
 		}
 		else
-			kcalEvent = events2.next();
-	}
+                {
+                        ++it2;
+			kcalEvent = *it2;
+	        }
+        }
 	return text;
 }
 

@@ -434,7 +434,7 @@ class KAlarmEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
-		static bool        adjustStartOfDay(const QPtrList<KCal::Event>&);
+		static bool        adjustStartOfDay( const KCal::Event::List & );
 		static void        convertKCalEvents(AlarmCalendar&);
 
 	private:

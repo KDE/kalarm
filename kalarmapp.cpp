@@ -697,9 +697,11 @@ void KAlarmApp::redisplayAlarms()
 {
 	if (mDisplayCalendar->isOpen())
 	{
-		QPtrList<Event> events = mDisplayCalendar->events();
-		for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
+		Event::List events = mDisplayCalendar->events();
+		Event::List::ConstIterator it;
+                for ( it = events.begin(); it != events.end(); ++it )
 		{
+                        Event *kcalEvent = *it;
 			KAlarmEvent event(*kcalEvent);
 			event.setUid(KAlarmEvent::ACTIVE);
 			if (!MessageWin::findEvent(event.id()))

@@ -317,12 +317,13 @@ void KAlarmEvent::set(const Event& event)
 void KAlarmEvent::readAlarms(const Event& event, void* almap)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
-	QPtrList<Alarm> alarms = event.alarms();
-	for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+	Alarm::List alarms = event.alarms();
+        Alarm::List::ConstIterator it;
+	for ( it = alarms.begin(); it != alarms.end(); ++it )
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		readAlarm(*ia.current(), data);
+		readAlarm(**it, data);
 		if (data.type != KAlarmAlarm::INVALID__ALARM)
 			alarmMap->insert(data.type, data);
 	}
@@ -1892,13 +1893,14 @@ int KAlarmEvent::recurInterval() const
  * unchanged.
  * Reply = true if any events have been updated.
  */
-bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
+bool KAlarmEvent::adjustStartOfDay( const Event::List &events )
 {
 	bool changed = false;
 	QTime startOfDay = theApp()->preferences()->startOfDay();
-	for (QPtrListIterator<Event> it(events);  it.current();  ++it)
+        Event::List::ConstIterator it;
+	for ( it = events.begin(); it != events.end(); ++it )
 	{
-		Event* event = it.current();
+		Event* event = *it;
 		const QStringList& cats = event->categories();
 		if (cats.find(DATE_ONLY_CATEGORY) != cats.end())
 		{
@@ -1908,12 +1910,13 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 			if (adjustment)
 			{
 				event->setDtStart(QDateTime(event->dtStart().date(), startOfDay));
-				QPtrList<Alarm> alarms = event->alarms();
+				Alarm::List alarms = event->alarms();
 				int deferralOffset = 0;
-				for (QPtrListIterator<Alarm> it(alarms);  it.current();  ++it)
+                                Alarm::List::ConstIterator it;
+				for ( it = alarms.begin(); it != alarms.end(); ++it )
 				{
 					// Parse the next alarm's text
-					Alarm& alarm = *it.current();
+					Alarm& alarm = **it;
 					AlarmData data;
 					readAlarm(alarm, data);
 					if (data.type & KAlarmAlarm::TIMED_DEFERRAL_FLAG)
@@ -1997,10 +2000,12 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = theApp()->preferences()->startOfDay();
 
-	QPtrList<Event> events = calendar.events();
-	for (Event* event = events.first();  event;  event = events.next())
+	Event::List events = calendar.events();
+	Event::List::ConstIterator it;
+        for ( it = events.begin(); it != events.end(); ++it )
 	{
-		if (pre_0_7  &&  event->doesFloat())
+		Event *event = *it;
+                if (pre_0_7  &&  event->doesFloat())
 		{
 			// It's a KAlarm pre-0.7 calendar file.
 			// Ensure that when the calendar is saved, the alarm time isn't lost.
@@ -2021,10 +2026,11 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 *   TYPE = TEXT or FILE or CMD
 			 *   TEXT = message text, file name/URL or command
 			 */
-			QPtrList<Alarm> alarms = event->alarms();
-			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+			Alarm::List alarms = event->alarms();
+			Alarm::List::ConstIterator it;
+                        for ( it = alarms.begin(); it != alarms.end(); ++it )
 			{
-				Alarm* alarm = ia.current();
+				Alarm* alarm = *it;
 				bool atLogin    = false;
 				bool deferral   = false;
 				bool lateCancel = false;
@@ -2155,19 +2161,20 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			}
 			event->setHasEndDate(false);
 
-			QPtrList<Alarm> alarms = event->alarms();
-			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+			Alarm::List alarms = event->alarms();
+			Alarm::List::ConstIterator it;
+                        for ( it = alarms.begin(); it != alarms.end(); ++it )
 			{
-				Alarm* alarm = ia.current();
+				Alarm* alarm = *it;
 				QDateTime dt = alarm->time();
 				alarm->setStartOffset(start.secsTo(dt));
 			}
 
 			if (cats.count() > 0)
 			{
-				for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+                                for ( it = alarms.begin(); it != alarms.end(); ++it )
 				{
-					Alarm* alarm = ia.current();
+					Alarm* alarm = *it;
 					if (alarm->type() == Alarm::Display)
 						alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						                         QString::fromLatin1("%1;;").arg(cats[0]));

@@ -104,7 +104,8 @@ void AlarmListView::refresh()
 {
 	clear();
 	KAlarmEvent event;
-	QPtrList<Event> events;
+	Event::List events;
+	Event::List::ConstIterator it;
 	QDateTime now = QDateTime::currentDateTime();
 	if (mShowExpired)
 	{
@@ -114,8 +115,9 @@ void AlarmListView::refresh()
 		else
 		{
 			events = calendar->events();
-			for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
+                        for ( it = events.begin(); it != events.end(); ++it )
 			{
+                                Event *kcalEvent = *it;
 				if (kcalEvent->alarms().count() > 0)
 				{
 					event.set(*kcalEvent);
@@ -125,8 +127,9 @@ void AlarmListView::refresh()
 		}
 	}
 	events = theApp()->getCalendar().events();
-	for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
+        for ( it = events.begin(); it != events.end(); ++it )
 	{
+                Event *kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (mShowExpired  ||  !event.expired())
 			addEntry(event, now);

@@ -191,10 +191,12 @@ void BirthdayDlg::updateSelectionList()
 	// Compile a list of all pending alarm messages which look like birthdays
 	QStringList messageList;
 	KAlarmEvent event;
-	QPtrList<Event> events = theApp()->getCalendar().events();
-	for (Event* kcalEvent = events.first();  kcalEvent;  kcalEvent = events.next())
+	Event::List events = theApp()->getCalendar().events();
+	Event::List::ConstIterator it;
+        for ( it = events.begin(); it != events.end(); ++it )
 	{
-		event.set(*kcalEvent);
+		Event *kcalEvent = *it;
+                event.set(*kcalEvent);
 		if (event.action() == KAlarmEvent::MESSAGE
 		&&  event.recurType() == KAlarmEvent::ANNUAL_DATE
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
