@@ -25,6 +25,8 @@
 #include <qglobal.h>
 #if QT_VERSION >= 300
 
+#include <stdlib.h>
+
 #include <qstyle.h>
 #include <qobjectlist.h>
 
