@@ -65,13 +65,13 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 	layout->addWidget(mTemplateList);
 
 	layout = new QVBoxLayout(topLayout);
-	QPushButton* button = new QPushButton(i18n("&New"), topWidget);
+	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(slotNew()));
 	QWhatsThis::add(button, i18n("Create a new alarm template"));
 	layout->addWidget(button);
 
-	mEditButton = new QPushButton(i18n("&Edit"), topWidget);
+	mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
 	mEditButton->setFixedSize(mEditButton->sizeHint());
 	connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
 	QWhatsThis::add(mEditButton, i18n("Edit the currently highlighted alarm template"));
@@ -202,7 +202,7 @@ void TemplateDlg::slotDelete()
 	int n = items.count();
 	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %n selected alarm templates?", n),
-	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), i18n("&Delete"))
+	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem( i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
 	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished

@@ -275,7 +275,7 @@ void KAlarmMainWindow::initActions()
 	KAction* actBirthday  = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
 	mActionTemplates      = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
 	mActionNew            = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
-	mActionCreateTemplate = new KAction(i18n("Create Tem&plate"), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
+	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
 	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
 	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
 	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
@@ -589,7 +589,7 @@ void KAlarmMainWindow::slotDelete()
 		int n = items.count();
 		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?",
 		                                                  "Do you really want to delete the %n selected alarms?", n),
-		                                       i18n("Delete Alarm", "Delete Alarms", n), i18n("&Delete"),
+		                                       i18n("Delete Alarm", "Delete Alarms", n), KGuiItem( i18n("&Delete"), "editdelete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
 			return;
