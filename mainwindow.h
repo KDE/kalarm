@@ -54,6 +54,7 @@ class KAlarmMainWindow : public MainWindowBase
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);
 		virtual void   showEvent(QShowEvent*);
+		virtual void   closeEvent(QCloseEvent*);
 
 	private slots:
 		void           slotDelete();

@@ -181,7 +181,7 @@ void KAlarmMainWindow::initActions()
 */
 void KAlarmMainWindow::slotSettingsChanged()
 {
-	bool systray = theApp()->settings()->runInSystemTray();
+	bool systray = theApp()->runInSystemTray();
 	if (systray  &&  mViewMenuId
 	||  !systray  &&  !mViewMenuId)
 	{
@@ -339,7 +339,7 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 */
 void KAlarmMainWindow::updateTrayIconAction()
 {
-	actionToggleTrayIcon->setEnabled(!theApp()->settings()->runInSystemTray());
+	actionToggleTrayIcon->setEnabled(!theApp()->runInSystemTray());
 	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
 }
 
@@ -365,7 +365,24 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	close();
+	if (theApp()->runInSystemTray())
+		hide();
+	else
+		close();
+}
+
+/******************************************************************************
+*  Called when the user attempts to close the window.
+*/
+void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
+{
+	if (theApp()->runInSystemTray())
+	{
+		ce->ignore();
+		hide();
+	}
+	else
+		ce->accept();
 }
 
 /******************************************************************************

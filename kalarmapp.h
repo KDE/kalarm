@@ -62,7 +62,7 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar&    getCalendar()                   { return *mCalendar; }
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
-		bool              runInSystemTray() const         { return mRunInSystemTray; }
+		bool              runInSystemTray() const;
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              removeWindow(TrayWindow*);
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
@@ -110,24 +110,26 @@ class KAlarmApp : public KUniqueApplication
 		bool              stopDaemon();
 		void              startDaemon();
 		void              reloadDaemon();
+		void              registerWithDaemon();
 		void              handleMessage(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool              handleMessage(const QString& eventID, EventFunc);
 		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
-		static KAlarmApp*          theInstance;        // the one and only KAlarmApp instance
-		static int                 activeCount;        // number of active instances without main windows
-		DcopHandler*               mDcopHandler;       // the parent of the main DCOP receiver object
-		DaemonGuiHandler*          mDaemonGuiHandler;  // the parent of the system tray DCOP receiver object
-		TrayWindow*                mTrayWindow;        // active system tray icon
-		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
-		ActionAlarmsEnabled*       mActionAlarmEnable; // action to enable/disable alarms
-		KAction*                   mActionPrefs;       // action to display the preferences dialog
-		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
-		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
-		Settings*                  mSettings;          // program preferences
-		bool                       mKDEDesktop;        // running on KDE desktop
-		bool                       mRunInSystemTray;   // run continuously in system tray
+		static KAlarmApp*     theInstance;         // the one and only KAlarmApp instance
+		static int            activeCount;         // number of active instances without main windows
+		DcopHandler*          mDcopHandler;        // the parent of the main DCOP receiver object
+		DaemonGuiHandler*     mDaemonGuiHandler;   // the parent of the system tray DCOP receiver object
+		TrayWindow*           mTrayWindow;         // active system tray icon
+		AlarmCalendar*        mCalendar;           // the calendar containing all the alarms
+		ActionAlarmsEnabled*  mActionAlarmEnable;  // action to enable/disable alarms
+		KAction*              mActionPrefs;        // action to display the preferences dialog
+		KAction*              mActionDaemonPrefs;  // action to display the alarm daemon preferences dialog
+		bool                  mDaemonRegistered;   // true if we've registered with alarm daemon
+		Settings*             mSettings;           // program preferences
+		bool                  mKDEDesktop;         // running on KDE desktop
+		bool                  mOldRunInSystemTray; // running continuously in system tray was selected
+		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

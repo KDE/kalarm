@@ -82,6 +82,7 @@ class MiscPrefs : public PrefsBase
 	private:
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
+		QCheckBox*     mDisableAlarmsIfStopped;
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QSpinBox*      mDaemonTrayCheckInterval;

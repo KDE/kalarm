@@ -48,12 +48,12 @@
 #include "traywindow.h"
 #include "prefsettings.h"
 #include "prefdlg.h"
-#include "kalarmapp.h"
 #include "kalarmapp.moc"
 
+#define     DAEMON_APP_NAME_DEF       "kalarmd"
 const char* DCOP_OBJECT_NAME        = "display";
 const char* GUI_DCOP_OBJECT_NAME    = "tray";
-const char* DAEMON_APP_NAME         = "kalarmd";
+const char* DAEMON_APP_NAME         = DAEMON_APP_NAME_DEF;
 const char* DAEMON_DCOP_OBJECT      = "ad";
 
 KAlarmApp*  KAlarmApp::theInstance = 0L;
@@ -73,13 +73,15 @@ KAlarmApp::KAlarmApp()
 	  mSettings(new Settings(0L))
 {
 	mSettings->loadSettings();
-	mRunInSystemTray = mSettings->runInSystemTray();
 	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	KWinModule wm;
-	mKDEDesktop = wm.systemTrayWindows().count();
+	mKDEDesktop             = wm.systemTrayWindows().count();
+	mOldRunInSystemTray     = mKDEDesktop ? mSettings->runInSystemTray() : false;
+	mDisableAlarmsIfStopped = mKDEDesktop ? mSettings->disableAlarmsIfStopped() : false;
+
 	// Set up actions used by more than one menu
 	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
@@ -173,7 +175,7 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (mRunInSystemTray)
+				if (runInSystemTray())
 					new KAlarmMainWindow;
 				if (!displayTrayIcon(true))
 				{
@@ -467,14 +469,15 @@ void KAlarmApp::slotDaemonPreferences()
 */
 void KAlarmApp::slotSettingsChanged()
 {
-	if (settings()->runInSystemTray() != mRunInSystemTray)
+	bool newRunInSysTray = settings()->runInSystemTray()  &&  mKDEDesktop;
+	if (newRunInSysTray != mOldRunInSystemTray)
 	{
 		// The system tray run mode has changed
 		++activeCount;          // prevent the application from quitting
 		KAlarmMainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0L;
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
-		mRunInSystemTray = !mRunInSystemTray;
-		if (mRunInSystemTray)
+		mOldRunInSystemTray = newRunInSysTray;
+		if (newRunInSysTray)
 		{
 			if (!KAlarmMainWindow::count())
 				new KAlarmMainWindow;
@@ -488,6 +491,21 @@ void KAlarmApp::slotSettingsChanged()
 		}
 		--activeCount;
 	}
+
+	bool newDisableIfStopped = settings()->disableAlarmsIfStopped()  &&  mKDEDesktop;
+	if (newDisableIfStopped != mDisableAlarmsIfStopped)
+	{
+		registerWithDaemon();     // re-register with the alarm daemon
+		mDisableAlarmsIfStopped = !mDisableAlarmsIfStopped;
+	}
+}
+
+/******************************************************************************
+*  Return whether the program is configured to be running in the system tray.
+*/
+bool KAlarmApp::runInSystemTray() const
+{
+	return mSettings->runInSystemTray()  &&  mKDEDesktop;
 }
 
 /******************************************************************************
@@ -590,7 +608,9 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 					// Check if the alarm has only just been set up.
 					// (The alarm daemon will immediately notify that it is due
 					//  since it is set up with a time in the past.)
-					if (secs < MAX_LATENESS + 30)
+					KConfig config(locate("config", DAEMON_APP_NAME_DEF"rc"));
+					config.setGroup("General");
+					if (secs < MAX_LATENESS + config.readNumEntry("CheckInterval", 1) * 60)
 						continue;
 
 					// Check if the main alarm is already being displayed.
@@ -864,14 +884,7 @@ void KAlarmApp::startDaemon()
 	}
 
 	// Register this application with the alarm daemon
-	{
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(aboutData()->appName()) << aboutData()->programName()
-		    << QCString(DCOP_OBJECT_NAME) << (int)ClientInfo::COMMAND_LINE_NOTIFY << (Q_INT8)0;
-		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "registerApp(QCString,QString,QCString,int,bool)", data))
-			kdDebug(5950) << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
-	}
+	registerWithDaemon();
 
 	// Tell alarm daemon to load the calendar
 	{
@@ -884,6 +897,22 @@ void KAlarmApp::startDaemon()
 
 	mDaemonRegistered = true;
 	kdDebug(5950) << "KAlarmApp::startDaemon(): started daemon" << endl;
+}
+
+/******************************************************************************
+* Start the alarm daemon if necessary, and register this application with it.
+*/
+void KAlarmApp::registerWithDaemon()
+{
+	kdDebug(5950) << "KAlarmApp::registerWithDaemon()\n";
+	QByteArray data;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << QCString(aboutData()->appName()) << aboutData()->programName()
+	    << QCString(DCOP_OBJECT_NAME)
+	    << (int)(mDisableAlarmsIfStopped ? ClientInfo::NO_START_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
+	    << (Q_INT8)0;
+	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "registerApp(QCString,QString,QCString,int,bool)", data))
+		kdDebug(5950) << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
 }
 
 /******************************************************************************

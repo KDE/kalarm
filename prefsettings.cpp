@@ -21,13 +21,13 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include "prefsettings.h"
 #include "prefsettings.moc"
 
 
 // Default config file settings
-const bool   Settings::default_autostartTrayIcon       = true;
 const bool   Settings::default_runInSystemTray         = true;
+const bool   Settings::default_disableAlarmsIfStopped  = false;
+const bool   Settings::default_autostartTrayIcon       = true;
 const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
 const QColor Settings::default_defaultBgColour(red);
 const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
@@ -36,8 +36,9 @@ const QFont  Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16,
 static const QString GENERAL_SECTION      = QString::fromLatin1("General");
 static const QString MESSAGE_BG_COLOUR    = QString::fromLatin1("Message background colour");
 static const QString MESSAGE_FONT         = QString::fromLatin1("Message font");
-static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
 static const QString RUN_IN_SYSTEM_TRAY   = QString::fromLatin1("RunInSystemTray");
+static const QString DISABLE_IF_STOPPED   = QString::fromLatin1("DisableAlarmsIfStopped");
+static const QString AUTOSTART_TRAY       = QString::fromLatin1("AutostartTray");
 static const QString DAEMON_TRAY_INTERVAL = QString::fromLatin1("DaemonTrayCheckInterval");
 
 Settings::Settings(QWidget* parent)
@@ -52,8 +53,9 @@ void Settings::loadSettings()
 	config->setGroup(GENERAL_SECTION);
 	mDefaultBgColour         = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
 	mMessageFont             = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
-	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, &default_autostartTrayIcon);
-	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, &default_runInSystemTray);
+	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
+	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
+	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	emit settingsChanged();
 }
@@ -64,8 +66,9 @@ void Settings::saveSettings(bool syncToDisc)
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
 	config->writeEntry(MESSAGE_FONT, mMessageFont);
-	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
+	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
+	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	if (syncToDisc)
 		config->sync();
