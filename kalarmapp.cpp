@@ -41,7 +41,6 @@
 #include <kfileitem.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kwinmodule.h>
 #include <kdebug.h>
 
 #include <kalarmd/clientinfo.h>
@@ -56,6 +55,8 @@
 #include "prefsettings.h"
 #include "prefdlg.h"
 #include "kalarmapp.moc"
+
+#include <netwm.h>
 
 extern QCString execArguments;
 
@@ -97,8 +98,12 @@ KAlarmApp::KAlarmApp()
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	readDaemonCheckInterval();
-	KWinModule wm;
-	mKDEDesktop             = true;
+
+	// Check if it's a KDE desktop, i.e. with window manager name "KWin"
+	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
+	const char* wmname = nri.wmName();
+	mKDEDesktop = wmname && !strcmp(wmname, "KWin");
+
 	mOldRunInSystemTray     = mKDEDesktop && mSettings->runInSystemTray();
 	mDisableAlarmsIfStopped = mOldRunInSystemTray && mSettings->disableAlarmsIfStopped();
 	mStartOfDay             = mSettings->startOfDay();
