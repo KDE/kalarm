@@ -32,6 +32,8 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qdragobject.h>
+#define KDE2_QTEXTEDIT_VIEW     // for KDE2 QTextEdit compatibility
+#include <qtextedit.h>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -57,9 +59,40 @@
 #include "preferences.h"
 #include "deferdlg.h"
 #include "messagewin.moc"
-#include "messagewinprivate.moc"
 
 using namespace KCal;
+
+
+// A text label widget which can be scrolled and copied with the mouse
+class MessageText : public QTextEdit
+{
+	public:
+		MessageText(const QString& text, const QString& context = QString::null, QWidget* parent = 0, const char* name = 0)
+		: QTextEdit(text, context, parent, name)
+		{
+			setReadOnly(true);
+			setWordWrap(QTextEdit::NoWrap);
+		}
+		virtual QSize sizeHint() const
+		{ return QSize(contentsWidth(), contentsHeight() + horizontalScrollBar()->height()); }
+};
+
+
+class TextMimeSourceFactory : public QMimeSourceFactory
+{
+	public:
+		TextMimeSourceFactory(const QString& absPath, KTextBrowser*);
+		virtual ~TextMimeSourceFactory();
+		virtual const QMimeSource* data(const QString& abs_name) const;
+	private:
+		// Prohibit the following methods
+		virtual void setData(const QString&, QMimeSource*) {}
+		virtual void setExtensionType(const QString&, const char*) {}
+
+		QString   mTextFile;
+		QCString  mMimeType;
+		mutable const QMimeSource* mLast;
+};
 
 
 // Basic flags for the window
@@ -85,9 +118,6 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  mFgColour(evnt.fgColour()),
 	  mDateTime((alarm.type() & KAlarmAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
-//	  audioFile(evnt.audioFile()),
-//	  emailAddresses(evnt.emailAddresses("\n")),
-//	  emailSubject(evnt.emailSubject()),
 	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(evnt.beep()),
@@ -125,9 +155,6 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  mFgColour(Qt::black),
 	  mDateTime(alarm.dateTime()),
 	  eventID(evnt.id()),
-//	  audioFile(evnt.audioFile()),
-//	  emailAddresses(evnt.emailAddresses("\n")),
-//	  emailSubject(evnt.emailSubject()),
 	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(false),
@@ -629,23 +656,6 @@ void MessageWin::slotDefer()
 void MessageWin::displayMainWindow()
 {
 	theApp()->displayMainWindowSelected(eventID);
-}
-
-
-/*=============================================================================
-= Class MessageText
-=============================================================================*/
-
-MessageText::MessageText(const QString& text, const QString& context, QWidget* parent, const char* name)
-	: QTextEdit(text, context, parent, name)
-{
-	setReadOnly(true);
-	setWordWrap(QTextEdit::NoWrap);
-}
-
-QSize MessageText::sizeHint() const
-{
-	return QSize(contentsWidth(), contentsHeight() + horizontalScrollBar()->height());
 }
 
 
