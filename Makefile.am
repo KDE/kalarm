@@ -30,8 +30,8 @@ kdelnkdir = $(kde_appsdir)/Utilities/More
 kdelnk_DATA = kalarm.desktop
 
 install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Applications
-	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(kde_appsdir)/Applications/kalarm.desktop
+	$(mkinstalldirs) $(DESTDIR)$(kde_appsdir)/Applications
+	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(DESTDIR)$(kde_appsdir)/Applications/kalarm.desktop
 
 KDE_ICON = AUTO
 
