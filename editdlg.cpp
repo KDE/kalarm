@@ -200,7 +200,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	      i18n("Choose the background color for the alarm message."));
 #endif
 
-	setButtonText(Ok, i18n("&Set Alarm"));
 	setButtonWhatsThis(Ok, i18n("Schedule the message for display at the specified time."));
 
 	topLayout->activate();
