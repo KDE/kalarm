@@ -652,13 +652,14 @@ void EditAlarmDlg::slotShowMainPage()
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	recurPageIndex = activePageIndex();
+	timeWidget->getDateTime(alarmDateTime, alarmAnyTime, false);
 	if (recurSetEndDate)
 	{
-		timeWidget->getDateTime(alarmDateTime, alarmAnyTime, false);
 		QDateTime now = QDateTime::currentDateTime();
 		recurrenceEdit->setEndDate(alarmDateTime >= now ? alarmDateTime.date() : now.date());
 		recurSetEndDate = false;
 	}
+	recurrenceEdit->setStartDate(alarmDateTime.date());
 }
 
 #ifdef KALARM_EMAIL

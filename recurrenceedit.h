@@ -61,6 +61,7 @@ class RecurrenceEdit : public QFrame
 		void          updateEvent(KAlarmEvent&);
 		QWidget*      checkData(const QDateTime& startDateTime, bool& noTime) const;
 		RepeatType    repeatType() const                    { return ruleButtonType; }
+		void          setStartDate(const QDate&);
 		void          setEndDate(const QDate&);
 
 	public slots:

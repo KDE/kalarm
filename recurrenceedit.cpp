@@ -57,7 +57,7 @@
 
 #include "recurrenceedit.moc"
 
-static const char * const ordinal[] = {
+static const char* const ordinal[] = {
 	I18N_NOOP("1st"),  I18N_NOOP("2nd"),  I18N_NOOP("3rd"),  I18N_NOOP("4th"),  I18N_NOOP("5th"),
 	I18N_NOOP("6th"),  I18N_NOOP("7th"),  I18N_NOOP("8th"),  I18N_NOOP("9th"),  I18N_NOOP("10th"),
 	I18N_NOOP("11th"), I18N_NOOP("12th"), I18N_NOOP("13th"), I18N_NOOP("14th"), I18N_NOOP("15th"),
@@ -355,6 +355,7 @@ void RecurrenceEdit::initYearly()
 	for (i = 0;  i < 31;  ++i)
 		yearMonthDayEntry->insertItem(i18n(ordinal[i]));
 	yearMonthDayEntry->setFixedSize(yearMonthDayEntry->sizeHint());
+	yearMonthDayEntry->setEnabled(false);
 	QWhatsThis::add(yearMonthDayEntry,
 	      i18n("Select the day of the month on which to repeat the alarm"));
 	layout->addWidget(yearMonthDayEntry);
@@ -362,6 +363,7 @@ void RecurrenceEdit::initYearly()
 	for (i = 1;  i <= 12;  ++i)
 		yearMonthComboBox->insertItem(KGlobal::locale()->monthName(i));
 	yearMonthComboBox->setSizeLimit(12);
+	yearMonthComboBox->setEnabled(false);
 	QWhatsThis::add(yearMonthComboBox,
 	      i18n("Select the month of the year in which to repeat the alarm"));
 	layout->addWidget(yearMonthComboBox);
@@ -570,8 +572,6 @@ void RecurrenceEdit::yearlyClicked(int id)
 	else
 		return;
 
-	yearMonthDayEntry->setEnabled(date);
-	yearMonthComboBox->setEnabled(date);
 //	yearDayEntry->setEnabled(!date);
 	yearlyNthNumberEntry->setEnabled(!date);
 	yearlyNthTypeOfDayEntry->setEnabled(!date);
@@ -635,14 +635,19 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	nthNumberEntry->setCurrentItem(day / 7);
 	nthTypeOfDayEntry->setCurrentItem(dayOfWeek);
 	yearlyButtonGroup->setButton(yearMonthButtonId);     // date in year
-	yearMonthDayEntry->setCurrentItem(day);
-	yearMonthComboBox->setCurrentItem(month);
+	setStartDate(fromDate);
 //	yearDayEntry->setValue(fromDate.dayOfYear());
 	yearlyNthNumberEntry->setCurrentItem(day / 7);
 	yearlyNthTypeOfDayEntry->setCurrentItem(dayOfWeek);
 	yeardayMonthComboBox->setCurrentItem(month);
 
 	endDateEdit->setDate(fromDate);
+}
+
+void RecurrenceEdit::setStartDate(const QDate& start)
+{
+	yearMonthDayEntry->setCurrentItem(start.day() - 1);
+	yearMonthComboBox->setCurrentItem(start.month() - 1);
 }
 
 void RecurrenceEdit::setEndDate(const QDate& start)
@@ -725,7 +730,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 			nthDayEntry->setCurrentItem(i);
 			break;
 		}
-			case Recurrence::rYearlyMonth:   // in the nth month of the year
+		case Recurrence::rYearlyMonth:   // in the nth month of the year
 		{
 			ruleButtonGroup->setButton(yearlyButtonId);
 			yearlyButtonGroup->setButton(yearMonthButtonId);
@@ -849,9 +854,8 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 		int frequency = recurFrequency->value();
 		if (yearMonthButton->isChecked())
 		{
-			int month = yearMonthComboBox->currentItem() + 1;
 			QValueList<int> months;
-			months.append(month);
+			months.append(event.mainDate().month());
 			event.setRecurAnnualByDate(frequency, months, repeatCount, endDate);
 		}
 		else
