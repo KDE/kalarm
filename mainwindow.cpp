@@ -38,6 +38,8 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 
+#include <maillistdrag.h>
+
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
 #include "daemongui.h"
@@ -50,6 +52,11 @@
 #include "mainwindow.moc"
 
 using namespace KCal;
+
+static QString messageFromPrefix    = i18n("'From' email address", "From:\t");
+static QString messageToPrefix      = i18n("'To' email address", "To:\t");
+static QString messageDatePrefix    = i18n("Date:\t");
+static QString messageSubjectPrefix = i18n("Email subject", "Subject:\t");
 
 
 /*=============================================================================
@@ -234,9 +241,9 @@ void KAlarmMainWindow::initActions()
 	actionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	actionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
 	actionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
-	actionShowTime       = new KAction(i18n("Show &Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
-	actionShowTimeTo     = new KAction(i18n("Show Time t&o Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
-	actionShowExpired    = new KAction(i18n("Show &Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
+	actionShowTime       = new KAction(i18n("&Show Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
+	actionShowTimeTo     = new KAction(i18n("&Show Time to Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
+	actionShowExpired    = new KAction(i18n("&Show Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
 	actionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
 	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
 
@@ -832,7 +839,8 @@ void KAlarmMainWindow::dragEnterEvent(QDragEnterEvent* e)
 void KAlarmMainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
-	       || KURLDrag::canDecode(e));
+	       || KURLDrag::canDecode(e)
+	       || KPIM::MailListDrag::canDecode(e));
 }
 
 /******************************************************************************
@@ -852,26 +860,57 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 {
 	KAlarmEvent::Action action = KAlarmEvent::MESSAGE;
 	QString text;
+	KPIM::MailList mailList;
 	KURL::List files;
 	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
 		action = KAlarmEvent::FILE;
 		text = files.first().prettyURL();
 	}
+	else if (e->provides(KPIM::MailListDrag::format())
+	&&  KPIM::MailListDrag::decode(e, mailList))
+	{
+		// KMail message(s). Ignore all but the first.
+		if (!mailList.count())
+			return;
+		KPIM::MailSummary& summary = mailList.first();
+		text = messageFromPrefix;
+		text += summary.from();
+		text += '\n';
+		text += messageToPrefix;
+		text += summary.to();
+		text += '\n';
+		text += messageDatePrefix;
+		QDateTime dt;
+		dt.setTime_t(summary.date());
+		text += KGlobal::locale()->formatDateTime(dt);
+		text += '\n';
+		text += messageSubjectPrefix;
+		text += summary.subject();
+	}
 	else if (QTextDrag::decode(e, text))
 	{
 	}
-#if 0
-// KMail has not yet implemented drag of a message
-	else if (e->provides("x-kmail-drag/message"))
-	{
-//		QByteArray data = e->encodedData("x-kmail-drag/message");
-	}
-#endif
 	else
 		return;
 	if (!text.isEmpty())
 		executeNew(win, action, text);
+}
+
+/******************************************************************************
+*  Check whether a text is an email, and if so return its subject line.
+*  Reply = subject line, or QString::null if not the text of an email.
+*/
+QString KAlarmMainWindow::emailSubject(const QString& text)
+{
+	QStringList lines = QStringList::split('\n', text);
+	if (lines.count() >= 4
+	&&  lines[0].startsWith(messageFromPrefix)
+	&&  lines[1].startsWith(messageToPrefix)
+	&&  lines[2].startsWith(messageDatePrefix)
+	&&  lines[3].startsWith(messageSubjectPrefix))
+		return lines[3].mid(messageSubjectPrefix.length());
+	return QString::null;
 }
 
 /******************************************************************************

@@ -33,6 +33,7 @@
 
 #include "kalarmapp.h"
 #include "preferences.h"
+#include "mainwindow.h"
 #include "alarmcalendar.h"
 #include "alarmlistview.moc"
 
@@ -434,26 +435,17 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAlarmEvent& e
 */
 QString AlarmListViewItem::alarmText(const KAlarmEvent& event)
 {
-	static QString from    = QString::fromLatin1("From:");
-	static QString to      = QString::fromLatin1("To:");
-	static QString subject = QString::fromLatin1("Subject:");
-
 	QString text = (event.action() == KAlarmEvent::EMAIL) ? event.emailSubject() : event.cleanText();
 	int newline = text.find('\n');
 	if (newline < 0)
 		return text;       // it's a single-line text
-#if 0
 	if (event.action() == KAlarmEvent::MESSAGE)
 	{
 		// If the message is the text of an email, return its subject line
-		QStringList lines = QStringList::split('\n', text);
-		if (lines.count() >= 3
-		&&  lines[0].startsWith(from)
-		&&  lines[1].startsWith(to)
-		&&  lines[2].startsWith(subject))
-			return lines[2].mid(subject.length()).stripWhiteSpace();
+		QString subject = KAlarmMainWindow::emailSubject(text);
+		if (!subject.isNull())
+			return subject;
 	}
-#endif
 	return text.left(newline) + QString::fromLatin1("...");
 }
 

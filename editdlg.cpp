@@ -52,6 +52,8 @@
 #include <kabc/addresseedialog.h>
 #include <kdebug.h>
 
+#include <maillistdrag.h>
+
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "alarmtimewidget.h"
@@ -407,7 +409,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	grid->setColStretch(1, 1);
 
 	// Email recipients
-	QLabel* label = new QLabel(i18n("Email addressee", "To:"), mEmailFrame);
+	QLabel* label = new QLabel(i18n("To:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
@@ -431,7 +433,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	}
 
 	// Email subject
-	label = new QLabel(i18n("Email subject", "Sub&ject:"), mEmailFrame);
+	label = new QLabel(i18n("Sub&ject:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
@@ -1276,15 +1278,24 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	e->accept(QTextDrag::canDecode(e)
-	       || KURLDrag::canDecode(e));
+	       || KURLDrag::canDecode(e)
+	       || KPIM::MailListDrag::canDecode(e));
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
 	QString text;
+	KPIM::MailList mailList;
 	KURL::List files;
 	if (KURLDrag::decode(e, files)  &&  files.count())
 		setText(files.first().prettyURL());
+	else if (e->provides(KPIM::MailListDrag::format())
+	&&  KPIM::MailListDrag::decode(e, mailList))
+	{
+		// KMail message(s). Ignore all but the first.
+		if (mailList.count())
+			setText(mailList.first().subject());
+	}
 	else if (QTextDrag::decode(e, text))
 	{
 		int newline = text.find('\n');
