@@ -18,14 +18,33 @@
 using namespace KCal;
 
 
-void MessageEvent::set(const QDateTime& dateTime, int flags,
-                       const QColor& colour, const QString& message)
+MessageEvent::MessageEvent(const MessageEvent& event)
+	: Event()
+{
+	setMessage(event.dateTime(), event.flags(), event.colour(), event.alarm()->text(), -1);
+	setRepetition(event.repeatMinutes(), event.repeatCount());
+}
+
+void MessageEvent::set(const QDateTime& dateTime, bool lateCancel)
+{
+	setDtStart(dateTime);
+	setDtEnd(dateTime.addDays(lateCancel ? 0 : 1));
+	alarm()->setTime(dateTime);
+}
+
+void MessageEvent::setMessage(const QDateTime& dateTime, int flags,
+                              const QColor& colour, const QString& message, int type)
 {
 	alarm()->setEnabled(true);        // enable the alarm
-	setDtStart(dateTime);
-	setDtEnd(dateTime.addDays((flags & LATE_CANCEL) ? 0 : 1));
-	alarm()->setTime(dateTime);
-	alarm()->setText(message);
+	set(dateTime, !!(flags & LATE_CANCEL));
+	if (type >= 0)
+	{
+		QString text(type ? "FILE:" : "TEXT:");
+		text += message;
+		alarm()->setText(text);
+	}
+	else
+		alarm()->setText(message);
 	QStringList cats;
 	cats.append(colour.name());
 	if (flags & BEEP)
@@ -45,8 +64,39 @@ void MessageEvent::setRepetition(int minutes, int initialCount, int remainingCou
 
 void MessageEvent::updateRepetition(const QDateTime& dateTime, int remainingCount)
 {
+	bool readonly = isReadOnly();
+	alarm()->setAlarmReadOnly(false);
 	alarm()->setTime(dateTime);
-	setRevision(alarm()->repeatCount() + revision() - remainingCount);
+	int initialCount = initialRepeatCount();
+	alarm()->setRepeatCount(remainingCount);
+	setReadOnly(false);
+	setRevision(initialCount - remainingCount);
+	setReadOnly(readonly);
+	alarm()->setAlarmReadOnly(readonly);
+}
+
+QString MessageEvent::cleanText() const
+{
+	if (alarm()->text().startsWith("FILE:")
+	||  alarm()->text().startsWith("TEXT:"))
+		return alarm()->text().mid(5);
+	return alarm()->text();
+}
+
+QString MessageEvent::message() const
+{
+	if (alarm()->text().startsWith("FILE:"))
+		return QString::null;
+	if (alarm()->text().startsWith("TEXT:"))
+		return alarm()->text().mid(5);
+	return alarm()->text();
+}
+
+QString MessageEvent::fileName() const
+{
+	if (alarm()->text().startsWith("FILE:"))
+		return alarm()->text().mid(5);
+	return QString::null;
 }
 
 QColor MessageEvent::colour() const

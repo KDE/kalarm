@@ -12,20 +12,20 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qdatetime.h>
+#include <qradiobutton.h>
 
 #include <kdialogbase.h>
 
 #include "fontcolour.h"
-#include "spinbox2.h"
 #include "msgevent.h"
 using namespace KCal;
 
 class QMultiLineEdit;
+class QSpinBox;
 class TimeSpinBox;
-class DateSpinBox;
+class AlarmTimeWidget;
 
 /**
  * EditAlarmDlg: A dialog for the input of an alarm message's details.
@@ -34,17 +34,21 @@ class EditAlarmDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L, const MessageEvent* = 0L);
+		enum MessageType { MESSAGE, FILE };
+
+		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L,
+		             const MessageEvent* = 0L);
 		virtual ~EditAlarmDlg();
 
 		void            getEvent(MessageEvent&);
-		const QCString& getMessage() const      { return alarmMessage; }
+		const QString&  getMessage() const      { return alarmMessage; }
+		MessageType     getMessageType() const  { return fileRadio->isOn() ? FILE : MESSAGE; }
 		QDateTime       getDateTime() const     { return alarmDateTime; }
 #ifdef SELECT_FONT
-		const QColor    getBgColour() const       { return fontColour->bgColour(); }
-		const QFont     getFont() const        { return fontColour->font(); }
+		const QColor    getBgColour() const     { return fontColour->bgColour(); }
+		const QFont     getFont() const         { return fontColour->font(); }
 #else
-		const QColor    getBgColour() const       { return bgColourChoose->color(); }
+		const QColor    getBgColour() const     { return bgColourChoose->color(); }
 #endif
 		bool            getLateCancel() const   { return lateCancel->isChecked(); }
 		bool            getBeep() const         { return beep->isChecked(); }
@@ -54,12 +58,18 @@ class EditAlarmDlg : public KDialogBase
 	protected slots:
 		void slotOk();
 		void slotCancel();
+		void slotMessageToggled(bool on);
+		void slotFileToggled(bool on);
+		void slotBrowse();
+		void slotMessageTextChanged();
 		void slotRepeatCountChanged(int);
 
 	private:
-		QMultiLineEdit* messageEdit;		// alarm message edit box
-		TimeSpinBox*    timeEdit;
-		DateSpinBox*    dateEdit;
+		QRadioButton*   messageRadio;
+		QRadioButton*   fileRadio;
+		QPushButton*    browseButton;
+		QMultiLineEdit* messageEdit;     // alarm message edit box
+		AlarmTimeWidget* timeWidget;
 		QCheckBox*      lateCancel;
 		QCheckBox*      beep;
 		QSpinBox*       repeatCount;
@@ -69,38 +79,10 @@ class EditAlarmDlg : public KDialogBase
 #else
 		ColourCombo*    bgColourChoose;
 #endif
-		QCString        alarmMessage;
+		QString         alarmMessage;
 		QDateTime       alarmDateTime;
 //		QColor          bgColour;
-};
-
-
-
-class TimeSpinBox : public SpinBox2
-{
-	public:
-		TimeSpinBox(QWidget* parent = 0L, const char* name = 0L);
-		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0L, const char* name = 0L);
-	protected:
-		virtual QString mapValueToText(int v);
-		virtual int     mapTextToValue(bool* ok);
-	private:
-		class TimeValidator;
-		TimeValidator*  validator;
-};
-
-
-class DateSpinBox : public QSpinBox
-{
-	public:
-		DateSpinBox(QWidget* parent = 0L, const char* name = 0L);
-		void            setDate(const QDate&);
-		QDate           getDate();
-	protected:
-		virtual QString mapValueToText(int v);
-		virtual int     mapTextToValue(bool* ok);
-	private:
-		static QDate    baseDate;
+		bool            timeDialog;      // the dialog shows date/time fields only
 };
 
 #endif // EDITDLG_H

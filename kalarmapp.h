@@ -85,8 +85,11 @@ class KAlarmApp : public KUniqueApplication
 		void              displayMessage(const QString& eventID)        { handleMessage(eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& eventID)         { handleMessage(eventID, EVENT_CANCEL); }
 		void              rescheduleMessage(const QString& eventID)     { handleMessage(eventID, EVENT_RESCHEDULE); }
+		QSize             readConfigWindowSize(const char* window, const QSize& defaultSize);
+		void              writeConfigWindowSize(const char* window, const QSize&);
 		// DCOP interface methods
-		bool              scheduleMessage(const QString& message, const QDateTime*, const QColor& bg, int flags, int repeatCount, int repeatInterval);
+		bool              scheduleMessage(const QString& message, const QDateTime*, const QColor& bg,
+		                                  int flags, bool file, int repeatCount, int repeatInterval);
 		void              handleMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_HANDLE); }
 		void              displayMessage(const QString& calendarFile, const QString& eventID)   { handleMessage(calendarFile, eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }

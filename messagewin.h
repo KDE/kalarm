@@ -19,6 +19,7 @@
 using namespace KCal;
 
 class QPushButton;
+class AlarmTimeWidget;
 
 /**
  * MessageWin: A window to display an alarm message
@@ -30,25 +31,38 @@ class MessageWin : public KMainWindow
 		MessageWin();     // for session management restoration only
 		explicit MessageWin(const MessageEvent&, bool reschedule_event = true);
 		~MessageWin();
-		virtual void showEvent(QShowEvent*);
 
 	protected:
+		virtual void showEvent(QShowEvent*);
+		virtual void resizeEvent(QResizeEvent*);
 		virtual void saveProperties(KConfig*);
 		virtual void readProperties(KConfig*);
 
+	protected slots:
+		void              slotShowDefer();
+		void              slotDefer();
+		void              slotKAlarm();
+
 	private:
 		QSize             initView();
-
+		// MessageEvent properties
 		QString           message;
 		QFont             font;
 		QColor            colour;
 		QDateTime         dateTime;
 		QString           eventID;
+		int               repeats;
+		int               flags;
 		QString           audioFile;
 		bool              beep;
-		QPushButton*      buttonOK;
+		bool              file;
+		// Miscellaneous
+		QPushButton*      deferButton;
+		AlarmTimeWidget*  deferTime;
 		bool              rescheduleEvent;  // true to delete event after message has been displayed
-		bool              shown;        // true once the window has been displayed
+		bool              shown;            // true once the window has been displayed
+		bool              deferDlgShown;    // true if defer dialog is visible
+		bool              fileError;        // true if initView() couldn't open the file to display
 };
 
 #endif // MESSAGEWIN_H

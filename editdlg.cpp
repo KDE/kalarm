@@ -16,12 +16,14 @@
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
 #include <qmultilinedit.h>
+#include <qfiledialog.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qmsgbox.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
+#include <qdir.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,71 +33,88 @@
 
 #include "kalarmapp.h"
 #include "prefsettings.h"
+#include "datetime.h"
 #include "editdlg.h"
 #include "editdlg.moc"
 
 
-EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name, const MessageEvent* event)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
+EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
+                           const MessageEvent* event)
+   : KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
 {
+	QGroupBox* group;
+	QVBoxLayout* layout;
+	QGridLayout* grid;
+	QLabel* lbl;
+
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* topLayout = new QVBoxLayout(page, marginHint(), spacingHint());
 
 	// Message label + multi-line editor
 
-	QLabel* lbl = new QLabel(page);
-	lbl->setText(i18n("Message:"));
-	lbl->setFixedSize(lbl->sizeHint());
-	topLayout->addWidget(lbl, 0, AlignLeft);
-	topLayout->addSpacing(fontMetrics().lineSpacing()/2 - spacingHint());
+	group = new QGroupBox(i18n("Message"), page, "messageGroup");
+	topLayout->addWidget(group);
+	layout = new QVBoxLayout(group, KDialog::spacingHint(), 0);
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
+	layout->addLayout(grid);
+	// To have better control over the button layout, don't use a QButtonGroup
+//	QGridLayout* grid = new QGridLayout(1, 4);
+//	topLayout->addLayout(grid);
 
-	messageEdit = new QMultiLineEdit(page);
+	// Message radio button has an ID of 0
+	messageRadio = new QRadioButton(i18n("Text"), group, "messageButton");
+	messageRadio->setFixedSize(messageRadio->sizeHint());
+	connect(messageRadio, SIGNAL(toggled(bool)), this, SLOT(slotMessageToggled(bool)));
+	QWhatsThis::add(messageRadio,
+	      i18n("The edit field below contains the alarm message text."));
+	grid->addWidget(messageRadio, 0, 0, AlignLeft);
+	grid->setColStretch(0, 1);
+
+	// File radio button has an ID of 1
+	fileRadio = new QRadioButton(i18n("File"), group, "fileButton");
+	fileRadio->setFixedSize(fileRadio->sizeHint());
+	connect(fileRadio, SIGNAL(toggled(bool)), this, SLOT(slotFileToggled(bool)));
+	QWhatsThis::add(fileRadio,
+	      i18n("The edit field below contains the name of a text\n"
+	           "file whose contents will be displayed as the alarm\n"
+	           "message text."));
+	grid->addWidget(fileRadio, 0, 2, AlignRight);
+
+	// Browse button
+	browseButton = new QPushButton(i18n("&Browse..."), group);
+	browseButton->setFixedSize(browseButton->sizeHint());
+	connect(browseButton, SIGNAL(clicked()), this, SLOT(slotBrowse()));
+	QWhatsThis::add(browseButton,
+	      i18n("Select a text file to display."));
+	grid->addWidget(browseButton, 0, 3, AlignLeft);
+
+	messageEdit = new QMultiLineEdit(group);
 	QSize size = messageEdit->sizeHint();
 	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
 	messageEdit->setMinimumSize(size);
-	topLayout->addWidget(messageEdit, 6);
-	QWhatsThis::add(messageEdit,
-	      i18n("Enter the text of the alarm message.\n"
-	           "It may be multi-line."));
+	messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
+	connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
+	grid->addMultiCellWidget(messageEdit, 1, 1, 0, 3);
 
-	// Date label + spin box
-
-	QGridLayout* grid = new QGridLayout(1, 4);
-	topLayout->addLayout(grid);
-
-	lbl = new QLabel(page);
-	lbl->setText(i18n("Date:"));
-	lbl->setFixedSize(lbl->sizeHint());
-	grid->addWidget(lbl, 0, 0, AlignLeft);
-
-	dateEdit = new DateSpinBox(page);
-	size = dateEdit->sizeHint();
-	dateEdit->setFixedSize(size);
-	grid->addWidget(dateEdit, 0, 1, AlignLeft);
-	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm message."));
-
-	// Time label + spin box
-
-	lbl = new QLabel(page);
-	lbl->setText(i18n("Time:"));
-	lbl->setFixedSize(lbl->sizeHint());
-	grid->addWidget(lbl, 0, 2, AlignRight);
-
-	timeEdit = new TimeSpinBox(page);
-	timeEdit->setValue(2399);
-	size = timeEdit->sizeHint();
-	timeEdit->setFixedSize(size);
-	grid->addWidget(timeEdit, 0, 3, AlignRight);
-	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm message."));
+	// Date and time entry
+	timeWidget = new AlarmTimeWidget(i18n("Time"), false, page, "timeGroup");
+	topLayout->addWidget(timeWidget);
 
 	// Repeating alarm
 
-	QGroupBox* group = new QGroupBox(4, Qt::Horizontal, i18n("Repetition"), page);
+	group = new QGroupBox(i18n("Repetition"), page, "repetitionGroup");
 	topLayout->addWidget(group);
+	layout = new QVBoxLayout(group, KDialog::spacingHint(), KDialog::spacingHint());
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	grid = new QGridLayout(group, 1, 4, KDialog::spacingHint());
+	layout->addLayout(grid);
+
 	lbl = new QLabel(group);
 	lbl->setText(i18n("Count:"));
 	lbl->setFixedSize(lbl->sizeHint());
+	grid->addWidget(lbl, 0, 0, AlignLeft);
 
 	repeatCount = new QSpinBox(0, 9999, 1, group);
 	repeatCount->setFixedSize(repeatCount->sizeHint());
@@ -103,10 +122,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	      i18n("Enter the number of times to repeat the alarm,\n"
 	           "after its initial display."));
 	connect(repeatCount, SIGNAL(valueChanged(int)), this, SLOT(slotRepeatCountChanged(int)));
+	grid->addWidget(repeatCount, 0, 1, AlignLeft);
 
 	lbl = new QLabel(group);
 	lbl->setText(i18n("Interval:"));
 	lbl->setFixedSize(lbl->sizeHint());
+	grid->setColStretch(2, 1);
+	grid->addWidget(lbl, 0, 2, AlignRight);
 
 	repeatInterval = new TimeSpinBox(1, 99*60+59, group);
 	repeatInterval->setValue(2399);
@@ -115,10 +137,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(repeatInterval,
 	      i18n("Enter the time (in hours and minutes)\n"
 	           "between repetitions of the alarm."));
+	grid->addWidget(repeatInterval, 0, 3, AlignRight);
 
 	// Late display checkbox - default = allow late display
 
-	grid = new QGridLayout(1, 2);
+	grid = new QGridLayout(1, 3);
 	topLayout->addLayout(grid);
 
 	lateCancel = new QCheckBox(page);
@@ -162,7 +185,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	bgColourChoose = new ColourCombo(page);
 	size = bgColourChoose->sizeHint();
 	bgColourChoose->setMinimumHeight(size.height() + 4);
-	topLayout->addWidget(bgColourChoose, 6);
+	grid->addWidget(bgColourChoose, 0, 2, AlignRight);
+//	grid->setColStretch(2, 1);
+//	topLayout->addWidget(bgColourChoose, 6);
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background colour for the alarm message."));
 #endif
@@ -172,21 +197,23 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	topLayout->activate();
 
-	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("EditDialog"));
-	size = minimumSize();
-	QWidget* desktop = KApplication::desktop();
-	size.setWidth(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width()));
-	size.setHeight(config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height()));
+	size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
 	resize(size);
 
 	// Set up initial values
 	if (event)
 	{
-		messageEdit->setText(event->message());
-//		messageEdit->insertLine(event->message());
-		timeEdit->setValue(event->time().hour()*60 + event->time().minute());
-		dateEdit->setDate(event->date());
+		// Set the values to those for the specified event
+		timeWidget->setDateTime(event->dateTime());
+		bool fileMessageType = event->messageIsFileName();
+		messageRadio->setChecked(!fileMessageType);
+		fileRadio->setChecked(!fileMessageType);    // toggle the button to ensure things are set up correctly
+		fileRadio->setChecked(fileMessageType);
+		browseButton->setEnabled(fileMessageType);
+		if (fileMessageType)
+			messageEdit->setText(event->fileName());
+		else
+			messageEdit->setText(event->message());
 		lateCancel->setChecked(event->lateCancel());
 		beep->setChecked(event->beep());
 		repeatCount->setValue(event->repeatCount());
@@ -200,10 +227,13 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	}
 	else
 	{
+		// Set the values to their defaults
+		timeWidget->setDateTime(QDateTime::currentDateTime().addSecs(60));
+		messageRadio->setChecked(false);    // toggle the button to ensure things are set up correctly
+		messageRadio->setChecked(true);
+		fileRadio->setChecked(false);
+		browseButton->setEnabled(false);
 		messageEdit->setText("");
-		QDateTime now = QDateTime::currentDateTime();
-		timeEdit->setValue(now.time().hour()*60 + now.time().minute());
-		dateEdit->setDate(now.date());
 		repeatCount->setValue(0);
 		repeatInterval->setValue(0);
 #ifdef SELECT_FONT
@@ -213,6 +243,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		bgColourChoose->setColour(theApp()->generalSettings()->defaultBgColour());
 #endif
 	}
+
 	repeatInterval->setEnabled(repeatCount->value());
 	messageEdit->setFocus();
 }
@@ -231,7 +262,7 @@ void EditAlarmDlg::getEvent(MessageEvent& event)
 {
 	int flags = (lateCancel->isChecked() ? MessageEvent::LATE_CANCEL : 0)
 	          | (beep->isChecked() ? MessageEvent::BEEP : 0);
-	event.set(alarmDateTime, flags, bgColourChoose->color(), alarmMessage);
+	event.setMessage(alarmDateTime, flags, bgColourChoose->color(), alarmMessage, fileRadio->isOn());
 	event.setRepetition(repeatInterval->value(), repeatCount->value());
 }
 
@@ -242,28 +273,62 @@ void EditAlarmDlg::getEvent(MessageEvent& event)
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
-	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("EditDialog"));
-	config->writeEntry("Size", re->size());
-	QWidget* desktop = KApplication::desktop();
-	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), re->size().width());
-	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), re->size().height());
+	theApp()->writeConfigWindowSize("EditDialog", re->size());
+#warning "Do the next 3 lines need to be reinstated for session restoration?"
+/*	KConfig* config = KGlobal::config();
+	config->setGroup(QString::fromLatin1("EditDialog");
+	config->writeEntry("Size", re->size());*/
 	KDialog::resizeEvent(re);
 }
 
 
 void EditAlarmDlg::slotOk()
 {
-	alarmDateTime.setTime(QTime(timeEdit->value()/60, timeEdit->value()%60));
-	alarmDateTime.setDate(dateEdit->getDate());
-	if (alarmDateTime < QDateTime::currentDateTime())
-		KMessageBox::sorry(this, i18n("Message time has already expired"));
-	else
+	if (timeWidget->getDateTime(alarmDateTime))
 	{
-		alarmMessage = messageEdit->text();
-		alarmMessage.stripWhiteSpace();
-		if (alarmMessage.isEmpty())
-			alarmMessage = "Alarm";
+		if (fileRadio->isOn())
+		{
+			// Convert any relative file path to absolute
+			// (using home directory as the default)
+			int i = 0;
+			alarmMessage = messageEdit->text();
+			if (alarmMessage.startsWith("file:/"))
+				alarmMessage = alarmMessage.mid(6);
+			else
+				i = alarmMessage.find('/');
+			if (i > 0  &&  alarmMessage[i - 1] == ':')
+			{
+				KURL url(alarmMessage);
+				url.cleanPath();
+				alarmMessage = url.prettyURL();
+			}
+			else
+			{
+				// It's a local file - convert to absolute path & check validity
+				QFileInfo info(alarmMessage);
+				QDir::setCurrent(QDir::homeDirPath());
+				alarmMessage = info.absFilePath();
+				QString errmsg;
+				if      (info.isDir())        errmsg = i18n("\nis a directory");
+				else if (!info.exists())      errmsg = i18n("\nnot found");
+				else if (!info.isReadable())  errmsg = i18n("\nis not readable");
+				if (!errmsg.isEmpty())
+				{
+					messageEdit->setFocus();
+					if (KMessageBox::warningContinueCancel(this, alarmMessage + errmsg, QString::null,
+					                                       i18n("Continue")) == Cancel)
+						return;
+				}
+			}
+		}
+		else
+			alarmMessage = messageEdit->text();
+		if (messageRadio->isOn())
+		{
+			alarmMessage.stripWhiteSpace();
+			if (alarmMessage.isEmpty())
+				alarmMessage = "Alarm";
+		}
 		accept();
 	}
 }
@@ -273,167 +338,88 @@ void EditAlarmDlg::slotCancel()
 	reject();
 }
 
+
 /******************************************************************************
-*  Called when the repeat count edit box value has changed..
+*  Called when the browse button is pressed to select a file to display.
+*/
+void EditAlarmDlg::slotBrowse()
+{
+	static QString defaultDir;
+	if (defaultDir.isEmpty())
+		defaultDir = QDir::homeDirPath();
+	QFileDialog dlg(defaultDir, QString::null, this, "fileChooser", true);     // create modal dialog
+	dlg.setCaption(i18n("Choose text file to display"));
+	dlg.setMode(QFileDialog::ExistingFile);
+	bool exists = true;
+	const QString& name = messageEdit->text();
+	if (name.isEmpty())
+		exists = false;
+	else
+	{
+		QFileInfo info(name);
+		if (info.isDir())
+			dlg.setDir(name);
+		else if (info.isReadable())
+			dlg.setSelection(info.absFilePath());
+		else if (info.exists())
+			dlg.setDir(info.dirPath(true));
+		else
+			exists = false;
+	}
+	if (dlg.exec() == Accepted)
+	{
+		messageEdit->setText(dlg.selectedFile());
+		defaultDir = dlg.dirPath();
+	}
+}
+
+void EditAlarmDlg::slotMessageToggled(bool on)
+{
+	if (on  &&  fileRadio->isOn()
+	||  !on  &&  !fileRadio->isOn())
+		fileRadio->setChecked(!on);
+	if (on)
+	{
+		QWhatsThis::add(messageEdit,
+		      i18n("Enter the text of the alarm message.\n"
+		           "It may be multi-line."));
+		messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
+	}
+}
+
+void EditAlarmDlg::slotFileToggled(bool on)
+{
+	if (on  &&  messageRadio->isOn()
+	||  !on  &&  !messageRadio->isOn())
+		messageRadio->setChecked(!on);
+	browseButton->setEnabled(on);
+	if (on)
+	{
+		QWhatsThis::add(messageEdit,
+		      i18n("Enter the name of a text file, or a URL, to display."));
+		if (!messageEdit->text().contains('\n'))
+			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+	}
+}
+
+void EditAlarmDlg::slotMessageTextChanged()
+{
+	if (fileRadio->isOn())
+	{
+		QString text = messageEdit->text();
+		int newline = text.find('\n');
+		if (newline >= 0)
+		{
+			messageEdit->setText(text.left(newline));
+			messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+		}
+	}
+}
+
+/******************************************************************************
+*  Called when the repeat count edit box value has changed.
 */
 void EditAlarmDlg::slotRepeatCountChanged(int count)
 {
 	repeatInterval->setEnabled(count);
-}
-
-/*=============================================================================
-=  class TimeSpinBox
-=============================================================================*/
-class TimeSpinBox::TimeValidator : public QValidator
-{
-	public:
-		TimeValidator(int minMin, int maxMin, QWidget* parent, const char* name = 0L)
-			: QValidator(parent, name), minMinute(minMin), maxMinute(maxMin) { }
-		virtual State validate(QString&, int&) const;
-		int  minMinute, maxMinute;
-};
-
-/******************************************************************************
- * Validate the time spin box input.
- * The entered time must contain a colon, but hours and/or minutes may be blank.
- */
-QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cursorPos*/) const
-{
-	QValidator::State state = QValidator::Acceptable;
-	QString hour;
-	int hr;
-	int mn = 0;
-	int colon = text.find(':');
-	if (colon >= 0)
-	{
-		QString minute = text.mid(colon + 1).stripWhiteSpace();
-		if (minute.isEmpty())
-			state = QValidator::Intermediate;
-		else
-		{
-			bool ok;
-			if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
-				return QValidator::Invalid;
-		}
-
-		hour = text.left(colon).stripWhiteSpace();
-	}
-	else
-	{
-		state = QValidator::Intermediate;
-		hour = text;
-	}
-
-	if (hour.isEmpty())
-		return QValidator::Intermediate;
-	bool ok;
-	if ((hr = hour.toUInt(&ok)) > maxMinute/60  ||  !ok)
-		return QValidator::Invalid;
-	if (state == QValidator::Acceptable)
-	{
-		int t = hr * 60 + mn;
-		if (t < minMinute  ||  t > maxMinute)
-			return QValidator::Invalid;
-	}
-	return state;
-}
-
-
-// Construct a wrapping 00:00 - 23:59 time spin box
-TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
-	: SpinBox2(0, 1439, 1, 60, parent, name)
-{
-	validator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
-	setValidator(validator);
-	setWrapping(true);
-}
-
-// Construct a non-wrapping time spin box
-TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const char* name)
-	: SpinBox2(minMinute, maxMinute, 1, 60, parent, name)
-{
-	validator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
-	setValidator(validator);
-}
-
-QString TimeSpinBox::mapValueToText(int v)
-{
-	QString s;
-	s.sprintf("%02d:%02d", v/60, v%60);
-	return s;
-}
-
-/******************************************************************************
- * Convert the user-entered text to a value in minutes.
- * The allowed format is [hour]:[minute], where hour and
- * minute must be non-blank.
- */
-int TimeSpinBox::mapTextToValue(bool* ok)
-{
-	QString text = cleanText();
-	int colon = text.find(':');
-	if (colon >= 0)
-	{
-		QString hour   = text.left(colon).stripWhiteSpace();
-		QString minute = text.mid(colon + 1).stripWhiteSpace();
-		if (!hour.isEmpty()  &&  !minute.isEmpty())
-		{
-			bool okhour, okmin;
-			int m = minute.toUInt(&okmin);
-			int t = hour.toUInt(&okhour) * 60 + m;
-			if (okhour  &&  okmin  &&  m < 60  &&  t >= minValue()  &&  t <= maxValue())
-			{
-				*ok = true;
-				return t;
-			}
-		}
-	}
-	*ok = false;
-	return 0;
-}
-
-
-QDate  DateSpinBox::baseDate(2000, 1, 1);
-
-
-DateSpinBox::DateSpinBox(QWidget* parent, const char* name)
-	: QSpinBox(0, 0, 1, parent, name)
-{
-	QDate now = QDate::currentDate();
-	QDate maxDate(now.year() + 100, 12, 31);
-	setRange(0, baseDate.daysTo(maxDate));
-}
-
-QDate DateSpinBox::getDate()
-{
-	return baseDate.addDays(value());
-}
-
-void DateSpinBox::setDate(const QDate& date)
-{
-	setValue(baseDate.daysTo(date));
-}
-
-QString DateSpinBox::mapValueToText(int v)
-{
-	QDate date = baseDate.addDays(v);
-	return KGlobal::locale()->formatDate(date, true);
-}
-
-/*
- * Convert the user-entered text to a value in days.
- * The date must be in the range
- */
-int DateSpinBox::mapTextToValue(bool* ok)
-{
-	QDate date = KGlobal::locale()->readDate(cleanText());
-	int days = baseDate.daysTo(date);
-	int minval = baseDate.daysTo(QDate::currentDate());
-	if (days >= minval  &&  days <= maxValue())
-	{
-		*ok = true;
-		return days;
-	}
-	*ok = false;
-	return 0;
 }

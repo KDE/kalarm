@@ -39,7 +39,7 @@ class KAlarmMainWindow : public KMainWindow
 		~KAlarmMainWindow();
 
 		void  addMessage(const MessageEvent*);
-		void  modifyMessage(const MessageEvent* oldEvent, const MessageEvent* newEvent);
+		void  modifyMessage(const MessageEvent* oldEvent, const MessageEvent* newEvent = 0);
 		void  deleteMessage(const MessageEvent*);
 
 	protected:

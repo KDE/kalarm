@@ -146,11 +146,24 @@ int KAlarmApp::newInstance()
 			}
 		}
 		else
-		if (args->count())
+		if (args->isSet("file")  ||  args->count())
 		{
-			// Display a message
-			kdDebug()<<"Message ...\n";
-			QCString alMessage = args->arg(0);
+			// Display a message or file
+			bool file = false;
+			QCString alMessage;
+			if (args->isSet("file"))
+			{
+				kdDebug()<<"File ...\n";
+				if (args->count())
+					args->usage(i18n("message incompatible with --file"));      // exits program
+				alMessage = args->getOption("file");
+				file = true;
+			}
+			else
+			{
+				kdDebug()<<"Message ...\n";
+				alMessage = args->arg(0);
+			}
 
 			long flags = 0;
 			QDateTime* alarmTime = 0L;
@@ -215,7 +228,7 @@ int KAlarmApp::newInstance()
 			if (!exitCode)
 			{
 				// Display or schedule the message
-				if (!scheduleMessage(alMessage, alarmTime, bgColour, flags, repeatCount, repeatInterval))
+				if (!scheduleMessage(alMessage, alarmTime, bgColour, flags, file, repeatCount, repeatInterval))
 					exitCode = 1;
 			}
 		}
@@ -268,7 +281,8 @@ void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 * new message should be scheduled.
 * Reply = true unless there was an error opening calendar file.
 */
-bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg, int flags, int repeatCount, int repeatInterval)
+bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg,
+                                int flags, bool file, int repeatCount, int repeatInterval)
 {
 	kdDebug() << "KAlarmApp::scheduleMessage(): " << message << endl;
 	bool display = true;
@@ -281,7 +295,7 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 			return true;               // alarm time was already expired a minute ago
 		display = (alarmTime <= now);
 	}
-	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message);
+	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message, file);
 	event->setRepetition(repeatInterval, repeatCount);
 	if (display)
 	{
@@ -453,14 +467,22 @@ bool KAlarmApp::rescheduleMessage(MessageEvent* event)
 		if (remainingCount >= 0)
 		{
 			// Repetitions still remain, so rewrite the event
-			MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
-			newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
-			modifyMessage(event, newEvent, 0L);
+//			MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
+//			newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
+//			modifyMessage(event, newEvent, 0L);
 // Should just call calendar update, but it doesn't seem to work
-//			event->updateRepetition(event->dateTime().addSecs(n * repeatSecs), remainingCount);
-//			update MainWindows??
-//			calendar.updateEvent(event);
-//			reloadDaemon();     // tell the daemon to reread the calendar file
+			event->updateRepetition(event->dateTime().addSecs(n * repeatSecs), remainingCount);
+
+			// Update the window lists
+			for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
+				(*it)->modifyMessage(event);
+
+			// Update the event in the calendar file
+			calendar.updateEvent(event);
+			calendar.save();
+
+			// Tell the daemon to reread the calendar file
+			reloadDaemon();
 		}
 		else
 		{
@@ -580,6 +602,35 @@ void KAlarmApp::reloadDaemon()
 	arg << QString(PROGRAM_NAME) << calendar.urlString();
 	if (!kapp->dcopClient()->send("kalarmd","ad","reloadMsgCal(QString,QString)", data))
 		kdDebug() << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
+}
+
+/******************************************************************************
+*  Read the size for the specified window from the config file, for the
+*  current screen resolution.
+*  Reply = window size.
+*/
+QSize KAlarmApp::readConfigWindowSize(const char* window, const QSize& defaultSize)
+{
+	KConfig* config = KGlobal::config();
+	config->setGroup(QString::fromLatin1(window));
+	QWidget* desktop = KApplication::desktop();
+	return QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), defaultSize.width()),
+	             config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), defaultSize.height()));
+}
+
+/******************************************************************************
+*  Write the size for the specified window to the config file, for the
+*  current screen resolution.
+*/
+void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
+{
+	KConfig* config = KGlobal::config();
+	config->setGroup(QString::fromLatin1(window));
+#warning "Should the next line be here? - for session resoration???"
+	config->writeEntry("Size", size);
+	QWidget* desktop = KApplication::desktop();
+	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
+	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
 }
 
 /******************************************************************************
@@ -804,7 +855,7 @@ MainWidget::MainWidget(const char* dcopObject)
 bool MainWidget::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
 {
 	kdDebug() << "MainWidget::process(): " << func << endl;
-	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n };
+	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n, SCHEDULE_FILE, SCHEDULE_FILE_n };
 	int function;
 	if (func == "handleEvent(const QString&,const QString&)")
 		function = HANDLE;
@@ -816,17 +867,22 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 		function = SCHEDULE;
 	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE_n;
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32)")
+		function = SCHEDULE_FILE;
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE_FILE_n;
 	else
 	{
 		kdDebug() << "MainWidget::process(): unknown DCOP function" << endl;
 		return false;
 	}
 
+	bool file = false;
 	switch (function)
 	{
-		case HANDLE:   // display or cancel message with specified ID from calendar file
-		case CANCEL:   // cancel message with specified ID from calendar file
-		case DISPLAY:  // display message with specified ID in calendar file
+		case HANDLE:        // display or cancel message with specified ID from calendar file
+		case CANCEL:        // cancel message with specified ID from calendar file
+		case DISPLAY:       // display message with specified ID in calendar file
 		{
 
 			QDataStream arg(data, IO_ReadOnly);
@@ -847,8 +903,12 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 			}
 			break;
 		}
-		case SCHEDULE:    // schedule a new message
-		case SCHEDULE_n:  // schedule a new repeating message
+		case SCHEDULE_FILE:    // schedule the display of a file's contents
+		case SCHEDULE_FILE_n:  // schedule the repeating display of a file's contents
+			file = true;
+			// fall through to 'SCHEDULE'
+		case SCHEDULE:         // schedule a new message
+		case SCHEDULE_n:       // schedule a new repeating message
 		{
 			QDataStream arg(data, IO_ReadOnly);
 			QString message;
@@ -861,9 +921,9 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 			arg.readRawBytes((char*)&dateTime, sizeof(dateTime));
 			arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
 			arg >> flags;
-			if (function == SCHEDULE_n)
+			if (function == SCHEDULE_n  ||  function == SCHEDULE_FILE_n)
 				arg >> repeatCount >> repeatInterval;
-			theApp()->scheduleMessage(message, &dateTime, bgColour, flags, repeatCount, repeatInterval);
+			theApp()->scheduleMessage(message, &dateTime, bgColour, flags, file, repeatCount, repeatInterval);
 			replyType = "void";
 			break;
 		}

@@ -30,6 +30,8 @@ static KCmdLineOptions options[] =
 	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0L },
 	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0L },
 	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0L },
+	{ "f", 0L, 0L },
+	{ "file <url>", I18N_NOOP("File to display"), 0L },
 	{ "handleEvent <eventID>", I18N_NOOP("Display or cancel message with the specified event ID"), 0L },
 	{ "i", 0L, 0L },
 	{ "interval <minutes>", I18N_NOOP("Interval between display of repeated alarms"), 0L },
@@ -50,6 +52,7 @@ int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP(PROGRAM_TITLE),
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
+		"       " PROGRAM_NAME " -f[bcilrt]\n"
 		"       " PROGRAM_NAME " [-bcilrt] message\n"
 		"       " PROGRAM_NAME " --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"

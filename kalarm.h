@@ -20,7 +20,7 @@
 
 #define PROGRAM_NAME "kalarm"
 #define PROGRAM_TITLE "KAlarm"
-#define VERSION "0.2"
+#define VERSION "0.3"
 
 #define KALARM_DCOP_OBJECT "display"
 
