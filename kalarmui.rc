@@ -2,6 +2,7 @@
 <kpartgui name="kalarm" >
  <ToolBar noMerge="1" name="main" >
   <Action name="new" />
+  <Action name="newFromTempl" />
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
@@ -24,6 +25,7 @@
   <Menu name="actions" >
    <text>&amp;Actions</text>
    <Action name="new" />
+   <Action name="newFromTempl" />
    <Action name="copy" />
    <Action name="modify" />
    <Action name="delete" />
@@ -46,6 +48,7 @@
  </MenuBar>
  <Menu name="listContext" >
   <Action name="new" />
+  <Action name="newFromTempl" />
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
