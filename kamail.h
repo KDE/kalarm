@@ -56,7 +56,7 @@ class KAMail
 		static QString     sendKMail(const KAMailData&);
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
-		static QString     addToKMailFolder(const KAMailData&, const char* folder);
+		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
 		static bool        callKMail(const QByteArray& callData, const QCString& iface, const QCString& function, const QCString& funcType);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);

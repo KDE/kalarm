@@ -86,9 +86,6 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18n("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-static QString i18n_id_Default()
-{ return i18n("%1 (Default)"); }     // for backward compatibility, used in identitycombo_31.cpp
-
 KPIM::IdentityManager* KAMail::mIdentityManager = 0;
 KPIM::IdentityManager* KAMail::identityManager()
 {
@@ -199,7 +196,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		if (preferences->emailCopyToKMail())
 		{
 			// Create a copy of the sent email in KMail's 'Sent-mail' folder
-			err = addToKMailFolder(data, "sent-mail");
+			err = addToKMailFolder(data, "sent-mail", true);
 			if (!err.isNull())
 				errmsgs = errors(err, false);    // not a fatal error - continue
 		}
@@ -254,7 +251,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 			// which transmits the message immediately.
 			arg << data.from;
 			arg << data.event.emailAddresses(", ");
-			arg << "";
+			arg << "";    // CC:
 			arg << data.bcc;
 			arg << data.event.emailSubject();
 			arg << data.event.message();
@@ -266,7 +263,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 		{
 			// KMail is an older version, so use dcopAddMessage()
 			// to add the message to the outbox for later transmission.
-			QString err = addToKMailFolder(data, "outbox");
+			QString err = addToKMailFolder(data, "outbox", false);
 			if (!err.isNull())
 				return err;
 		}
@@ -305,40 +302,41 @@ QString KAMail::sendKMail(const KAMailData& data)
 * Reply = reason for failure (which may be the empty string)
 *       = null string if success.
 */
-QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder)
+QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, bool checkKmailRunning)
 {
-	QString message = initHeaders(data, true);
-	QString err = appendBodyAttachments(message, data.event);
-	if (!err.isNull())
-		return err;
+	if (!checkKmailRunning  ||  kapp->dcopClient()->isApplicationRegistered("kmail"))
+	{
+		QString message = initHeaders(data, true);
+		QString err = appendBodyAttachments(message, data.event);
+		if (!err.isNull())
+			return err;
 
-	// Write to a temporary file for feeding to KMail
-	KTempFile tmpFile;
-	tmpFile.setAutoDelete(true);     // delete file when it is destructed
-	QTextStream* stream = tmpFile.textStream();
-	if (!stream)
-	{
-		kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
-		return QString("");
-	}
-	*stream << message;
-	tmpFile.close();
-	if (tmpFile.status())
-	{
-		kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
-		return QString("");
-	}
+		// Write to a temporary file for feeding to KMail
+		KTempFile tmpFile;
+		tmpFile.setAutoDelete(true);     // delete file when it is destructed
+		QTextStream* stream = tmpFile.textStream();
+		if (!stream)
+		{
+			kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
+			return QString("");
+		}
+		*stream << message;
+		tmpFile.close();
+		if (tmpFile.status())
+		{
+			kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
+			return QString("");
+		}
 
-	// Notify KMail of the message in the temporary file
-	QByteArray  callData;
-	QDataStream arg(callData, IO_WriteOnly);
-	arg << QString::fromLatin1(folder) << tmpFile.name();
-	if (!callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
-	{
-		kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error\n";
-		return i18n("Error calling KMail");
+		// Notify KMail of the message in the temporary file
+		QByteArray  callData;
+		QDataStream arg(callData, IO_WriteOnly);
+		arg << QString::fromLatin1(folder) << tmpFile.name();
+		if (callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
+			return QString::null;
 	}
-	return QString::null;
+	kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error\n";
+	return i18n("Error calling KMail");
 }
 
 /******************************************************************************
