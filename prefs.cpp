@@ -155,7 +155,10 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Settings::SENDMAIL);
 	box->setFixedHeight(box->sizeHint().height());
-	QWhatsThis::add(box, i18n("Choose which application should be used to send email."));
+	QWhatsThis::add(box,
+	      i18n("Choose how to send email when an email alarm is triggered.\n"
+	           "KMail: A KMail composer window is displayed to enable you to send the email.\n"
+	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
 #endif
 
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), mPage, "confirmDeletion");
