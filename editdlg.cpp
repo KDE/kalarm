@@ -249,10 +249,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		repeatInterval->setValue(0);
 		repeatAtLogin->setChecked(false);
 #ifdef SELECT_FONT
-		fontColour->setColour(theApp()->generalSettings()->defaultBgColour());
-		fontColour->setFont(theApp()->generalSettings()->messageFont());
+		fontColour->setColour(theApp()->settings()->defaultBgColour());
+		fontColour->setFont(theApp()->settings()->messageFont());
 #else
-		bgColourChoose->setColour(theApp()->generalSettings()->defaultBgColour());
+		bgColourChoose->setColour(theApp()->settings()->defaultBgColour());
 #endif
 	}
 
