@@ -23,7 +23,7 @@
 #include <qtooltip.h>
 #include <qlabel.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstdaction.h>

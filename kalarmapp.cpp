@@ -29,7 +29,7 @@
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <dcopclient.h>

@@ -27,7 +27,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <dcopclient.h>
 #include <kdebug.h>

@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kaboutdata.h>
@@ -215,7 +215,9 @@ QSize MessageWin::initView()
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
 	// Close button
-	QPushButton* okButton = new QPushButton(i18n("&Close"), topWidget);
+	KAction* action = KStdAction::close();
+	QPushButton* okButton = new QPushButton(action->text(), topWidget);
+	delete action;
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
