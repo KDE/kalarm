@@ -229,7 +229,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, Action action, int flags)
 		                                            : mRecurrence(0) { set(dt, message, c, action, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
-		KAlarmEvent(const KAlarmEvent& e)           : KAAlarmEventBase( e ), mRecurrence(0) { copy(e); }
+		KAlarmEvent(const KAlarmEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAlarmEvent()     { delete mRecurrence; }
 		KAlarmEvent&       operator=(const KAlarmEvent& e)   { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
@@ -266,7 +266,6 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               defer(const QDateTime&, bool adjustRecurrence = false);
 		void               cancelDefer();
 		bool               setDisplaying(const KAlarmEvent&, KAlarmAlarm::Type, const QDateTime&);
-//		void               convertFromDisplaying()                           { convertFromDisplaying(0); }
 		void               reinstateFromDisplaying(const KAlarmEvent& dispEvent);
 		void               setArchive()                                      { mArchive = true; }
 		void               setUpdated()                                      { mUpdated = true; }
