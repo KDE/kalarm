@@ -2,7 +2,7 @@ SUBDIRS = widgets pixmaps
 
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
-	-I$(top_srcdir)/libical/src \
+	-I$(top_builddir)/libical/src \
 	-I$(top_srcdir)/libkdepim \
 	-I$(top_srcdir)/libkdenetwork $(all_includes)
 
