@@ -47,6 +47,7 @@ class TrayWindow : public KSystemTray
 	protected:
 		virtual void      contextMenuAboutToShow(KPopupMenu*);
 		void              mousePressEvent(QMouseEvent*);
+		void              mouseReleaseEvent(QMouseEvent*);
 
 	private slots:
 		void              setEnabledStatus(bool status);

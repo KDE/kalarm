@@ -502,6 +502,7 @@ void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
 
 /******************************************************************************
 *  Display or hide the specified main window.
+*  This should only be called when the application doesn't run in the system tray.
 */
 KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
 {
@@ -517,6 +518,7 @@ KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
 		else
 		{
 			// The window is hidden, so display it
+			win->hide();        // in case it's on a different desktop
 			win->showNormal();
 			win->raise();
 			win->setActiveWindow();

@@ -41,7 +41,6 @@
 #include "traywindow.moc"
 
 
-
 /*=============================================================================
 = Class: TrayWindow
 = The KDE system tray window.
@@ -158,6 +157,23 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 	}
 	else
 		KSystemTray::mousePressEvent(e);
+}
+
+/******************************************************************************
+*  Called when the mouse is released over the panel icon.
+*  The main window (if not hidden) is raised and made the active window.
+*  If this is done in mousePressEvent(), it doesn't work.
+*/
+void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
+{
+
+	if (e->button() == LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
+	{
+		mAssocMainWindow->raise();
+		mAssocMainWindow->setActiveWindow();
+	}
+	else
+		KSystemTray::mouseReleaseEvent(e);
 }
 
 /******************************************************************************
