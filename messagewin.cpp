@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,18 +24,10 @@
 
 #include "kalarm.h"
 
-#if KDE_VERSION >= 290
-#define NEW_FILE_VIEW
-#endif
-
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#ifndef NEW_FILE_VIEW
-#define KDE2_QTEXTEDIT_VIEW     // for KDE2 QTextEdit compatibility
-#include <qtextedit.h>
-#endif
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
@@ -47,9 +39,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-#ifdef NEW_FILE_VIEW
 #include <ktextbrowser.h>
-#endif
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <kwinmodule.h>
@@ -64,9 +54,13 @@
 #include "preferences.h"
 #include "deferdlg.h"
 #include "messagewin.moc"
+#include "messagewinprivate.moc"
 
 using namespace KCal;
 
+
+// Basic flags for the window
+static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
 static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display for a file
 
@@ -80,7 +74,7 @@ QPtrList<MessageWin> MessageWin::windowList;
 *  displayed.
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event, bool allowDefer)
-	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
+	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
@@ -118,7 +112,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 *  displayed.
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const QStringList& errmsgs, bool reschedule_event)
-	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
+	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
@@ -153,7 +147,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 *  The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
-	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
+	: MainWindowBase(0, "MessageWin", WFLAGS),
 	  rescheduleEvent(false),
 	  shown(true),
 	  deferClosing(false)
@@ -219,44 +213,35 @@ QSize MessageWin::initView()
 			{
 				QFile qfile(tmpFile);
 				QFileInfo info(qfile);
-#ifdef NEW_FILE_VIEW
 				if (!(dir = info.isDir()))
-#else
-				if (!(dir = info.isDir())
-				&&  qfile.open(IO_ReadOnly|IO_Translate))
-#endif
 				{
 					opened = true;
-#ifdef NEW_FILE_VIEW
+#ifdef KDE_VERSION >= 290
 					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
 					view->QTextBrowser::setSource(tmpFile);
-					topLayout->addWidget(view);
 #else
 					QTextEdit* view = new QTextEdit(topWidget, "fileContents");
-					view->setReadOnly(true);
-					QFontMetrics fm = view->fontMetrics();
-					QString line;
-					int n;
-					for (n = 0;  qfile.readLine(line, 4096) > 0;  ++n)
+					if (qfile.open(IO_ReadOnly|IO_Translate))
 					{
-						int nl = line.find('\n');
-						if (nl >= 0)
-							line = line.left(nl);
-						view->append(line);
+						QString line;
+						while (qfile.readLine(line, 4096) > 0)
+						{
+							int nl = line.find('\n');
+							if (nl >= 0)
+								line = line.left(nl);
+							view->append(line);
+						}
+						qfile.close();
 					}
-					qfile.close();
 #endif
 					view->setMinimumSize(view->sizeHint());
+					topLayout->addWidget(view);
 
-					// Set the default size to square, max 20 lines.
+					// Set the default size to 20 lines square.
 					// Note that after the first file has been displayed, this size
 					// is overridden by the user-set default stored in the config file.
 					// So there is no need to calculate an accurate size.
-#ifdef NEW_FILE_VIEW
 					int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
-#else
-					int h = fm.lineSpacing() * (n <= 20 ? n : 20) + 2*view->frameWidth();
-#endif
 					view->resize(QSize(h, h).expandedTo(view->sizeHint()));
 					QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
 				}
@@ -302,6 +287,7 @@ QSize MessageWin::initView()
 		default:
 		{
 			// Message label
+			// Using MessageText instead of QLabel allows scrolling and mouse copying
 			MessageText* text = new MessageText(message, QString::null, topWidget);
 			text->setFrameStyle(QFrame::NoFrame);
 			text->setPaper(colour);
@@ -396,8 +382,10 @@ QSize MessageWin::initView()
 	QSize size(minbutsize.width()*3, sizeHint().height());
 	setMinimumSize(size);
 
-	KWin::setState(winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
-	KWin::setOnAllDesktops(winId(), true);
+	WId winid = winId();
+	unsigned long wstate = NET::Modal | NET::Sticky | NET::StaysOnTop;
+	KWin::setState(winid, wstate);
+	KWin::setOnAllDesktops(winid, true);
 	return sizeHint();
 }
 

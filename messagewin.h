@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +25,7 @@
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
 
-#include <qtextedit.h>
-
 #include "mainwindowbase.h"
-
 #include "alarmevent.h"
 
 class QPushButton;
@@ -93,15 +90,6 @@ class MessageWin : public MainWindowBase
 		bool                rescheduleEvent;  // true to delete event after message has been displayed
 		bool                shown;            // true once the window has been displayed
 		bool                deferClosing;     // the Defer button is closing the dialog
-};
-
-
-class MessageText : public QTextEdit
-{
-		Q_OBJECT
-	public:
-		MessageText(const QString& text, const QString& context = QString::null, QWidget* parent = 0, const char* name = 0);
-		virtual QSize sizeHint() const;
 };
 
 #endif // MESSAGEWIN_H
