@@ -1,7 +1,7 @@
 /*
  *  dateedit.h  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,9 +30,11 @@ class DateEdit : public KDateEdit
 {
 		Q_OBJECT
 	public:
-		DateEdit(QWidget* parent = 0, const char* name = 0)  : KDateEdit(parent, name) { }
+		DateEdit(QWidget* parent = 0, const char* name = 0);
 		virtual bool validate(const QDate&);
-		void setMinDate(const QDate& d)   { minDate = d; }
+		bool         isValid() const              { return inputIsValid(); }
+		void         setMinDate(const QDate& d)   { minDate = d; }
+		void         setValid(bool);
 
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
@@ -40,6 +42,8 @@ class DateEdit : public KDateEdit
 		virtual void mouseMoveEvent(QMouseEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 		virtual void keyReleaseEvent(QKeyEvent*);
+	protected slots:
+		void         slotDateChanged(QDate);
 	private:
 		QDate  minDate;
 };

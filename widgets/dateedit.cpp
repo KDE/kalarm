@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,9 +27,21 @@
 #include <kmessagebox.h>
 
 #include "dateedit.h"
-
 #include "dateedit.moc"
 
+
+DateEdit::DateEdit(QWidget* parent, const char* name)
+	: KDateEdit(parent, name)
+{
+	connect(this, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
+}
+
+void DateEdit::setValid(bool valid)
+{
+	setHandleInvalid(!valid);
+	if (!valid)
+		setDate(QDate());
+}
 
 // Check a new date against any minimum date.
 bool DateEdit::validate(const QDate& newDate)
@@ -47,6 +59,12 @@ bool DateEdit::validate(const QDate& newDate)
 		return false;
 	}
 	return true;
+}
+
+void DateEdit::slotDateChanged(QDate date)
+{
+	if (handlesInvalid()  &&  date.isValid())
+		setHandleInvalid(false);
 }
 
 void DateEdit::mousePressEvent(QMouseEvent *e)
