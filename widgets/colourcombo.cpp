@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -28,12 +28,12 @@
 
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "colourcombo.h"
+#include "colourcombo.moc"
 
 
 ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaultColour)
 	: QComboBox(parent, name),
-	  mColourList(theApp()->preferences()->messageColours()),
+	  mColourList(Preferences::instance()->messageColours()),
 	  mSelectedColour(defaultColour),
 	  mCustomColour(255, 255, 255),
 	  mReadOnly(false),
@@ -42,7 +42,7 @@ ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaul
 	addColours();
 	connect(this, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 	connect(this, SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
-	connect(theApp()->preferences(), SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
+	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
 }
 
 void ColourCombo::setColour(const QColor& colour)
@@ -72,7 +72,7 @@ void ColourCombo::setColours(const ColourList& colours)
 */
 void ColourCombo::slotPreferencesChanged()
 {
-	const ColourList& prefColours = theApp()->preferences()->messageColours();
+	const ColourList& prefColours = Preferences::instance()->messageColours();
 	if (prefColours != mColourList)
 		setColours(prefColours);      // update the display with the new colours
 }
@@ -238,4 +238,3 @@ void ColourCombo::keyReleaseEvent(QKeyEvent* e)
 	if (!mReadOnly)
 		QComboBox::keyReleaseEvent(e);
 }
-#include "colourcombo.moc"
