@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.cpp  -  base class for main application windows
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 #include "kalarm.h"
 #include "kalarmapp.h"
-#include "mainwindowbase.h"
 #include "mainwindowbase.moc"
 
 
@@ -42,7 +41,9 @@ void MainWindowBase::closeEvent(QCloseEvent* ce)
 */
 bool MainWindowBase::queryExit()
 {
-	if( kapp->sessionSaving())
-	    return true;
+#if KDE_IS_VERSION(3,1,90)
+	if (kapp->sessionSaving())
+		return true;
+#endif
 	return disableQuit ? false : KMainWindow::queryExit();
 }
