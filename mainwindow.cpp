@@ -46,6 +46,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#include "alarmtext.h"
 #include "birthdaydlg.h"
 #include "daemon.h"
 #include "editdlg.h"
@@ -82,10 +83,6 @@ QString KAlarmMainWindow::i18n_n_ShowTimeToAlarms()  { return i18n("Show time u&
 QString KAlarmMainWindow::i18n_l_ShowTimeToAlarms()  { return i18n("Show time unti&l alarm"); }
 QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
 QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
-QString KAlarmMainWindow::mMessageFromPrefix;
-QString KAlarmMainWindow::mMessageToPrefix;
-QString KAlarmMainWindow::mMessageDatePrefix;
-QString KAlarmMainWindow::mMessageSubjectPrefix;
 
 
 /******************************************************************************
@@ -262,7 +259,7 @@ void KAlarmMainWindow::show()
 	{
 		// Show error message now that the main window has been displayed.
 		// Waiting until now lets the user easily associate the message with
-		// the application.
+		// the main window which is faulty.
 		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)").arg(QString::fromLatin1(UI_FILE)));
 		mMenuError = false;
 	}
@@ -483,10 +480,10 @@ void KAlarmMainWindow::slotNew()
 /******************************************************************************
 *  Execute a New Alarm dialog, optionally setting the action and text.
 */
-void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const QString& text)
+void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const AlarmText& text)
 {
 	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg");
-	if (!text.isNull())
+	if (!text.isEmpty())
 		editDlg.setAction(action, text);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
@@ -885,20 +882,6 @@ void KAlarmMainWindow::dropEvent(QDropEvent* e)
 }
 
 /******************************************************************************
-*  Set up messages used by executeDropEvent() and emailHeaders().
-*/
-void KAlarmMainWindow::setUpTranslations()
-{
-	if (mMessageFromPrefix.isNull())
-	{
-		mMessageFromPrefix    = i18n("'From' email address", "From:");
-		mMessageToPrefix      = i18n("Email addressee", "To:");
-		mMessageDatePrefix    = i18n("Date:");
-		mMessageSubjectPrefix = i18n("Email subject", "Subject:");
-	}
-}
-
-/******************************************************************************
 *  Called when an object is dropped on a main or system tray window, to
 *  evaluate the action required and extract the text.
 */
@@ -906,12 +889,13 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 {
 	KAEvent::Action action = KAEvent::MESSAGE;
 	QString text;
+	AlarmText alarmText;
 	KPIM::MailList mailList;
 	KURL::List files;
 	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
 		action = KAEvent::FILE;
-		text = files.first().prettyURL();
+		alarmText.setText(files.first().prettyURL());
 	}
 	else if (e->provides(KPIM::MailListDrag::format())
 	&&  KPIM::MailListDrag::decode(e, mailList))
@@ -919,21 +903,9 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 		// KMail message(s). Ignore all but the first.
 		if (!mailList.count())
 			return;
-		setUpTranslations();
 		KPIM::MailSummary& summary = mailList.first();
-		text = mMessageFromPrefix + '\t';
-		text += summary.from();
-		text += '\n';
-		text += mMessageToPrefix + '\t';
-		text += summary.to();
-		text += '\n';
-		text += mMessageDatePrefix + '\t';
 		QDateTime dt;
 		dt.setTime_t(summary.date());
-		text += KGlobal::locale()->formatDateTime(dt);
-		text += '\n';
-		text += mMessageSubjectPrefix + '\t';
-		text += summary.subject();
 
 		// Get the body of the email from KMail
 		QCString    replyType;
@@ -942,50 +914,27 @@ void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 		QDataStream arg(data, IO_WriteOnly);
 		arg << summary.serialNumber();
 		arg << (int)0;
-		QCString body;
+		QString body;
 		if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(Q_UINT32,int)", data, replyType, replyData)
 		&&  replyType == "QString")
 		{
 			QDataStream reply_stream(replyData, IO_ReadOnly);
 			reply_stream >> body;
-			if (!body.isEmpty())
-			{
-				text += "\n\n";
-				text += body;
-			}
 		}
 		else
 			kdDebug(5950) << "KAlarmMainWindow::executeDropEvent(): kmail getDecodedBodyPart() call failed\n";
+		alarmText.setEmail(summary.to(), summary.from(), KGlobal::locale()->formatDateTime(dt),
+		                   summary.subject(), body);
 	}
 	else if (QTextDrag::decode(e, text))
 	{
+		alarmText.setText(text);
 	}
 	else
 		return;
-	if (!text.isEmpty())
-		executeNew(win, action, text);
-}
 
-/******************************************************************************
-*  Check whether a text is an email, and if so return its headers or optionally
-*  only its subject line.
-*  Reply = headers/subject line, or QString::null if not the text of an email.
-*/
-QString KAlarmMainWindow::emailHeaders(const QString& text, bool subjectOnly)
-{
-	setUpTranslations();
-	QStringList lines = QStringList::split('\n', text);
-	if (lines.count() >= 4
-	&&  lines[0].startsWith(mMessageFromPrefix)
-	&&  lines[1].startsWith(mMessageToPrefix)
-	&&  lines[2].startsWith(mMessageDatePrefix)
-	&&  lines[3].startsWith(mMessageSubjectPrefix))
-	{
-		if (subjectOnly)
-			return lines[3].mid(mMessageSubjectPrefix.length());
-		return lines[0] + '\n' + lines[1] + '\n' + lines[2] + '\n' + lines[3];
-	}
-	return QString::null;
+	if (!alarmText.isEmpty())
+		executeNew(win, action, alarmText);
 }
 
 /******************************************************************************

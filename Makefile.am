@@ -4,7 +4,7 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libical/src \
 	-I$(top_srcdir)/libkdepim \
-	-I$(top_srcdir)/libkmime $(all_includes)
+	-I$(top_srcdir)/libkdenetwork $(all_includes)
 
 bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
@@ -19,19 +19,19 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	specialactions.cpp reminder.cpp synchtimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp \
-	latecancel.cpp repetition.cpp
+	latecancel.cpp repetition.cpp alarmtext.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 if include_ARTS
 ARTSLIB = -lartskde
 endif
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkcal/libkcal.la \
-	$(top_builddir)/libkmime/libkmime.la \
+	$(top_builddir)/libkdenetwork/libkdenetwork.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
 	-lkabc $(LIB_KDEUI) $(ARTSLIB)
-noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtimewidget.h \
-	birthdaydlg.h daemon.h dcophandler.h deferdlg.h \
+noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
+	alarmtimewidget.h birthdaydlg.h daemon.h dcophandler.h deferdlg.h \
 	editdlg.h editdlgprivate.h eventlistviewbase.h fontcolour.h \
 	fontcolourbutton.h functions.h kalarm.h kalarmapp.h kamail.h \
 	latecancel.h mainwindow.h mainwindowbase.h messagewin.h prefdlg.h \

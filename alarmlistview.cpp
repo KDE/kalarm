@@ -29,11 +29,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "alarmcalendar.h"
+#include "alarmtext.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "mainwindow.h"
-#include "alarmcalendar.h"
-#include "functions.h"
 #include "alarmlistview.h"
 
 
@@ -337,7 +337,7 @@ QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfSt
 	if (event.action() == KAEvent::MESSAGE)
 	{
 		// If the message is the text of an email, return its headers or just subject line
-		QString subject = KAlarmMainWindow::emailHeaders(text, !full);
+		QString subject = AlarmText::emailHeaders(text, !full);
 		if (!subject.isNull())
 		{
 			if (lfStripped)

@@ -22,6 +22,7 @@
 #define MAINWINDOW_H
 
 #include "alarmevent.h"
+#include "alarmtext.h"
 #include "mainwindowbase.h"
 
 class QListViewItem;
@@ -48,11 +49,10 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    updateExpired();
 		static void    updateTimeColumns(bool oldTime, bool oldTimeTo);
 		static void    addEvent(const KAEvent&, KAlarmMainWindow*);
-		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const QString& text = QString::null);
+		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
 		static void    executeDragEnterEvent(QDragEnterEvent*);
 		static void    executeDropEvent(KAlarmMainWindow*, QDropEvent*);
 		static void    closeAll();
-		static QString emailHeaders(const QString& text, bool subjectOnly);
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* mainMainWindow();
 		static KAlarmMainWindow* firstWindow()      { return mWindowList.first(); }
@@ -119,14 +119,9 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    enableTemplateMenuItem(bool);
 		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
 		static bool    findWindow(KAlarmMainWindow*);
-		static void    setUpTranslations();
 
 		static QPtrList<KAlarmMainWindow> mWindowList;  // active main windows
 		static TemplateDlg* mTemplateDlg;      // the one and only template dialogue
-		static QString mMessageFromPrefix;
-		static QString mMessageToPrefix;
-		static QString mMessageDatePrefix;
-		static QString mMessageSubjectPrefix;
 		AlarmListView* mListView;
 		KAction*       mActionTemplates;
 		KAction*       mActionNew;
