@@ -79,7 +79,7 @@ static KCmdLineOptions options[] =
 	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0 },
 	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
 	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
-	{ 0, 0, 0 }
+	KCmdLineLastOption
 };
 
 
