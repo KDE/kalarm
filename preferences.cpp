@@ -35,6 +35,7 @@
 QColor defaultMessageColours[] = { Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow, Qt::white, Qt::lightGray, Qt::black, QColor() };
 const ColourList Preferences::default_messageColours(defaultMessageColours);
 const QColor     Preferences::default_defaultBgColour(Qt::red);
+const QColor     Preferences::default_defaultFgColour(Qt::black);
 QFont            Preferences::default_messageFont;    // initialised in constructor
 const QTime      Preferences::default_startOfDay(0, 0);
 const bool       Preferences::default_runInSystemTray          = true;

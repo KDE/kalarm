@@ -142,32 +142,37 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder);
 
 	// Sound checkbox and file selector
-	QGridLayout* grid = new QGridLayout(groupLayout, 3, 2, KDialog::spacingHint());
-	grid->setColStretch(1, 1);
+	QBoxLayout* layout = new QHBoxLayout(groupLayout);
 	mSoundPicker = new SoundPicker(false, group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	grid->addWidget(mSoundPicker, 0, 0, Qt::AlignLeft);
+	layout->addWidget(mSoundPicker);
+	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addStretch();
 
 	// Colour choice drop-down list
-	mBgColourChoose = EditAlarmDlg::createBgColourChooser(false, group);
+	QHBox* box;
+	mBgColourChoose = EditAlarmDlg::createBgColourChooser(false, &box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	grid->addWidget(mBgColourChoose, 0, 1, Qt::AlignRight);
+	layout->addWidget(box);
 
 	// Acknowledgement confirmation required - default = no confirmation
+	layout = new QHBoxLayout(groupLayout);
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(false, group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	grid->addWidget(mConfirmAck, 1, 0, Qt::AlignLeft);
+	layout->addWidget(mConfirmAck);
+	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addStretch();
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(group);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	grid->addWidget(mFontColourButton, 1, 1, Qt::AlignRight);
+	layout->addWidget(mFontColourButton);
 
 	// Late display checkbox - default = allow late display
 	mLateCancel = EditAlarmDlg::createLateCancelCheckbox(false, group);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	grid->addWidget(mLateCancel, 2, 0, Qt::AlignLeft);
+	groupLayout->addWidget(mLateCancel, Qt::AlignLeft);
 
 	// Set the values to their defaults
 	Preferences* preferences = theApp()->preferences();
@@ -311,8 +316,8 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 					date.setYMD(thisYear + 1, date.month(), date.day());
 				KAlarmEvent event(date,
 				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
-				                  mBgColourChoose->color(), mFontColourButton->font(),
-				                  KAlarmEvent::MESSAGE, mFlags);
+				                  mBgColourChoose->color(), mFontColourButton->fgColour(),
+				                  mFontColourButton->font(), KAlarmEvent::MESSAGE, mFlags);
 				event.setAudioFile(mSoundPicker->file());
 				QValueList<int> months;
 				months.append(date.month());

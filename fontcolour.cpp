@@ -174,9 +174,14 @@ QColor FontColourChooser::bgColour() const
 
 QColor FontColourChooser::fgColour() const
 {
-	QColor bg = mBgColourButton->color();
-	QPalette pal(bg, bg);
-	return pal.color(QPalette::Active, QColorGroup::Text);
+	if (mFgColourButton)
+		return mFgColourButton->color();
+	else
+	{
+		QColor bg = mBgColourButton->color();
+		QPalette pal(bg, bg);
+		return pal.color(QPalette::Active, QColorGroup::Text);
+	}
 }
 
 QString FontColourChooser::sampleText() const

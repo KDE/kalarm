@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -318,7 +318,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				KCal::ICalFormat format;
 				format.fromString(&recurrence, rule);
 			}
-			theApp()->scheduleEvent(text, dateTime, bgColour, font, flags, audioFile, mailAddresses, mailSubject,
+			theApp()->scheduleEvent(text, dateTime, bgColour, QColor(0,0,0), font, flags, audioFile, mailAddresses, mailSubject,
 			                        mailAttachments, action, recurrence, reminderMinutes);
 			break;
 		}

@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +49,9 @@ static KCmdLineOptions options[] =
 	{ "colour", 0, 0 },
 	{ "c", 0, 0 },
 	{ "color <color>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0 },
+	{ "colourfg", 0, 0 },
+	{ "C", 0, 0 },
+	{ "colorfg <color>", I18N_NOOP("Message foreground color (name or hex 0xRRGGBB)"), 0 },
 	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0 },
 	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0 },
 	{ "e", 0, 0 },

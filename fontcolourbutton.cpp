@@ -46,7 +46,7 @@ FontColourButton::FontColourButton(QWidget* parent, const char* name)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
 	QWhatsThis::add(this,
-	      i18n("Choose the font and background color for the alarm message."));
+	      i18n("Choose the font, and foreground and background color, for the alarm message."));
 }
 
 /******************************************************************************
@@ -55,14 +55,15 @@ FontColourButton::FontColourButton(QWidget* parent, const char* name)
 */
 void FontColourButton::slotButtonPressed()
 {
-	FontColourDlg* dlg = new FontColourDlg(mBgColour, mFont, mDefaultFont, i18n("Choose Alarm Font & Color"),
-	                                       this, "fontColourDlg");
+	FontColourDlg* dlg = new FontColourDlg(mBgColour, mFgColour, mFont, mDefaultFont,
+	                                       i18n("Choose Alarm Font & Color"), this, "fontColourDlg");
 	dlg->setReadOnly(mReadOnly);
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		mDefaultFont = dlg->defaultFont();
 		mFont        = dlg->font();
 		mBgColour    = dlg->bgColour();
+		mFgColour    = dlg->fgColour();
 		emit selected();
 	}
 }
@@ -73,16 +74,17 @@ void FontColourButton::slotButtonPressed()
 = Font/colour selection dialog.
 =============================================================================*/
 
-FontColourDlg::FontColourDlg(const QColor& colour, const QFont& font, bool defaultFont,
-                             const QString& caption, QWidget* parent, const char* name)
+FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
+                             bool defaultFont, const QString& caption, QWidget* parent, const char* name)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false),
 	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
-	mChooser = new FontColourChooser(page, 0, false, QStringList(), QString::null, false, false, true);
-	mChooser->setBgColour(colour);
+	mChooser = new FontColourChooser(page, 0, false, QStringList(), QString::null, false, true, true);
+	mChooser->setBgColour(bgColour);
+	mChooser->setFgColour(fgColour);
 	if (defaultFont)
 		mChooser->setDefaultFont();
 	else
@@ -101,6 +103,7 @@ void FontColourDlg::slotOk()
 	mDefaultFont = mChooser->defaultFont();
 	mFont        = mChooser->font();
 	mBgColour    = mChooser->bgColour();
+	mFgColour    = mChooser->fgColour();
 	accept();
 }
 

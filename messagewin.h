@@ -70,12 +70,12 @@ class MessageWin : public MainWindowBase
 		KAlarmEvent         mEvent;           // the whole event, for updating the calendar file
 		QString             message;
 		QFont               font;
-		QColor              colour;
+		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
 		QString             eventID;
-		QString             audioFile;
-		QString             emailAddresses;
-		QString             emailSubject;
+//		QString             audioFile;
+//		QString             emailAddresses;
+//		QString             emailSubject;
 		KAlarmAlarm::Type   mAlarmType;
 		int                 flags;
 		bool                beep;

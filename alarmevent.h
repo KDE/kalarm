@@ -64,6 +64,7 @@ class KAAlarmEventBase
 		QString            emailAttachments(const QString& sep) const  { return mEmailAttachments.join(sep); }
 		bool               emailBcc() const           { return mEmailBcc; }
 		const QColor&      bgColour() const           { return mBgColour; }
+		const QColor&      fgColour() const           { return mFgColour; }
 		bool               defaultFont() const        { return mDefaultFont; }
 		const QFont&       font() const;
 		bool               confirmAck() const         { return mConfirmAck; }
@@ -92,6 +93,7 @@ class KAAlarmEventBase
 		QString            mText;             // message text, file URL, command, email body [or audio file for KAlarmAlarm]
 		DateTime           mDateTime;         // next time to display the alarm
 		QColor             mBgColour;         // background colour of alarm message
+		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
@@ -250,28 +252,28 @@ class KAlarmEvent : public KAAlarmEventBase
 		};
 
 		KAlarmEvent()      : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
-		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& c, const QFont& f, Action action, int flags)
-		                                            : mRecurrence(0) { set(dt, message, c, f, action, flags); }
+		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
+		                                            : mRecurrence(0) { set(dt, message, bg, fg, f, action, flags); }
 		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
 		KAlarmEvent(const KAlarmEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAlarmEvent()     { delete mRecurrence; }
 		KAlarmEvent&       operator=(const KAlarmEvent& e)   { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
-		void               set(const QDate& d, const QString& message, const QColor& c, const QFont& f, Action action, int flags)
-		                            { set(d, message, c, f, action, flags | ANY_TIME); }
-		void               set(const QDateTime&, const QString& message, const QColor&, const QFont&, Action, int flags);
-		void               setMessage(const QDate& d, const QString& message, const QColor& c, const QFont& f, int flags)
-		                            { set(d, message, c, f, MESSAGE, flags | ANY_TIME); }
-		void               setMessage(const QDateTime& dt, const QString& message, const QColor& c, const QFont& f, int flags)
-		                            { set(dt, message, c, f, MESSAGE, flags); }
-		void               setFileName(const QDate& d, const QString& filename, const QColor& c, const QFont& f, int flags)
-		                            { set(d, filename, c, f, FILE, flags | ANY_TIME); }
-		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& c, const QFont& f, int flags)
-		                            { set(dt, filename, c, f, FILE, flags); }
+		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
+		                            { set(d, message, bg, fg, f, action, flags | ANY_TIME); }
+		void               set(const QDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int flags);
+		void               setMessage(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int flags)
+		                            { set(d, message, bg, fg, f, MESSAGE, flags | ANY_TIME); }
+		void               setMessage(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int flags)
+		                            { set(dt, message, bg, fg, f, MESSAGE, flags); }
+		void               setFileName(const QDate& d, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int flags)
+		                            { set(d, filename, bg, fg, f, FILE, flags | ANY_TIME); }
+		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int flags)
+		                            { set(dt, filename, bg, fg, f, FILE, flags); }
 		void               setCommand(const QDate& d, const QString& command, int flags)
-		                            { set(d, command, QColor(), QFont(), COMMAND, flags | ANY_TIME); }
+		                            { set(d, command, QColor(), QColor(), QFont(), COMMAND, flags | ANY_TIME); }
 		void               setCommand(const QDateTime& dt, const QString& command, int flags)
-		                            { set(dt, command, QColor(), QFont(), COMMAND, flags); }
+		                            { set(dt, command, QColor(), QColor(), QFont(), COMMAND, flags); }
 		void               setEmail(const QDate&, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,

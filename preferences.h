@@ -51,6 +51,7 @@ class Preferences : public QObject
 
 		const ColourList& messageColours() const        { return mMessageColours; }
 		QColor         defaultBgColour() const          { return mDefaultBgColour; }
+		QColor         defaultFgColour() const          { return default_defaultFgColour; }
 		const QFont&   messageFont() const              { return mMessageFont; }
 		const QTime&   startOfDay() const               { return mStartOfDay; }
 		bool           startOfDayChanged() const        { return mStartOfDayChanged; }
@@ -94,6 +95,7 @@ class Preferences : public QObject
 
 		static const ColourList  default_messageColours;
 		static const QColor      default_defaultBgColour;
+		static const QColor      default_defaultFgColour;
 		static QFont             default_messageFont;
 		static const QTime       default_startOfDay;
 		static const bool        default_runInSystemTray;

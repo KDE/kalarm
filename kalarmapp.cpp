@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -430,10 +430,11 @@ int KAlarmApp::newInstance()
 				bool      alarmNoTime = false;
 				QDateTime alarmTime, endTime;
 				QColor    bgColour = mPreferences->defaultBgColour();
+				QColor    fgColour = mPreferences->defaultFgColour();
 				KCal::Recurrence recurrence(0);
 				if (args->isSet("color"))
 				{
-					// Colour is specified
+					// Background colour is specified
 					QCString colourText = args->getOption("color");
 					if (static_cast<const char*>(colourText)[0] == '0'
 					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
@@ -441,6 +442,17 @@ int KAlarmApp::newInstance()
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--color")))
+				}
+				if (args->isSet("colorfg"))
+				{
+					// Foreground colour is specified
+					QCString colourText = args->getOption("colorfg");
+					if (static_cast<const char*>(colourText)[0] == '0'
+					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
+						colourText.replace(0, 2, "#");
+					fgColour.setNamedColor(colourText);
+					if (!fgColour.isValid())
+						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--colorfg")))
 				}
 
 				if (args->isSet("time"))
@@ -564,7 +576,7 @@ int KAlarmApp::newInstance()
 
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, QFont(), flags, audioFile,
+				if (!scheduleEvent(alMessage, alarmTime, bgColour, fgColour, QFont(), flags, audioFile,
 				                   alAddresses, alSubject, alAttachments, action, recurrence,
 				                   reminderMinutes))
 				{
@@ -586,6 +598,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--beep ");
 				if (args->isSet("color"))
 					usage += QString::fromLatin1("--color ");
+				if (args->isSet("colorfg"))
+					usage += QString::fromLatin1("--colorfg ");
 				if (args->isSet("late-cancel"))
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
@@ -989,7 +1003,7 @@ bool KAlarmApp::wantRunInSystemTray() const
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime, const QColor& bg,
-                              const QFont& font, int flags, const QString& audioFile,
+                              const QColor& fg, const QFont& font, int flags, const QString& audioFile,
                               const EmailAddressList& mailAddresses, const QString& mailSubject,
                               const QStringList& mailAttachments, KAlarmEvent::Action action,
                               const KCal::Recurrence& recurrence, int reminderMinutes)
@@ -1005,7 +1019,7 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 	bool display = (alarmTime <= now);
 
-	KAlarmEvent event(alarmTime, message, bg, font, action, flags);
+	KAlarmEvent event(alarmTime, message, bg, fg, font, action, flags);
 	if (reminderMinutes)
 		event.setReminder(reminderMinutes);
 	if (!audioFile.isEmpty())

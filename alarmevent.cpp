@@ -132,7 +132,8 @@ void KAlarmEvent::set(const Event& event)
 	mArchive                = false;
 	mArchiveRepeatAtLogin   = false;
 	mArchiveReminderMinutes = 0;
-	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white
+	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
+	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
 	bool floats = false;
 	const QStringList& cats = event.categories();
@@ -280,6 +281,7 @@ void KAlarmEvent::set(const Event& event)
 						// fall through to T_FILE
 					case T_FILE:
 						mBgColour    = data.bgColour;
+						mFgColour    = data.fgColour;
 						break;
 					case T_EMAIL:
 						mEmailAddresses   = data.emailAddresses;
@@ -310,7 +312,7 @@ void KAlarmEvent::set(const Event& event)
 	{
 		setRecurrence(*recur);
 		mExceptionDates     = event.exDates();
-//		mExceptionDateTimes = event.exDateTimes();
+		mExceptionDateTimes = event.exDateTimes();
 	}
 
 	mUpdated = false;
@@ -370,10 +372,13 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			int n = list.count();
 			if (n > 0)
 			{
-				QColor c(list[0]);
-				if (c.isValid())
-					data.bgColour = c;
-				if (n > 1)
+				if (!list[0].isEmpty())
+				{
+					QColor c(list[0]);
+					if (c.isValid())
+						data.bgColour = c;
+				}
+				if (n > 1  &&  !list[1].isEmpty())
 				{
 					QColor c(list[1]);
 					if (c.isValid())
@@ -448,7 +453,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 /******************************************************************************
  * Initialise the KAlarmEvent with the specified parameters.
  */
-void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, const QFont& font, Action action, int flags)
+void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg, const QFont& font, Action action, int flags)
 {
 	initRecur();
 	mStartDateTime.set(dateTime, flags & ANY_TIME);
@@ -467,7 +472,8 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	}
 	mText                   = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
 	mAudioFile              = "";
-	mBgColour               = colour;
+	mBgColour               = bg;
+	mFgColour               = fg;
 	mFont                   = font;
 	mAlarmCount             = 1;
 	set(flags);
@@ -488,7 +494,7 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 void KAlarmEvent::setEmail(const QDate& d, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int flags)
 {
-	set(d, message, QColor(), QFont(), EMAIL, flags | ANY_TIME);
+	set(d, message, QColor(), QColor(), QFont(), EMAIL, flags | ANY_TIME);
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
@@ -497,7 +503,7 @@ void KAlarmEvent::setEmail(const QDate& d, const EmailAddressList& addresses, co
 void KAlarmEvent::setEmail(const QDateTime& dt, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int flags)
 {
-	set(dt, message, QColor(), QFont(), EMAIL, flags);
+	set(dt, message, QColor(), QColor(), QFont(), EMAIL, flags);
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
@@ -754,7 +760,7 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 
 	// Add recurrence data
 	ev.setExDates(DateList());
-//	ev.setExDates(DateTimeList());
+	ev.setExDateTimes(DateTimeList());
 	if (mRecurrence)
 	{
 		Recurrence* recur = ev.recurrence();
@@ -798,7 +804,7 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 				break;
 		}
 		ev.setExDates(mExceptionDates);
-//		ev.setExDates(mExceptionDateTimes);
+		ev.setExDateTimes(mExceptionDateTimes);
 	}
 
 	if (mSaveDateTime.isValid())
@@ -831,7 +837,7 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStrin
 			alarm->setDisplayAlarm(mText);
 			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 			              QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
-			                                             .arg(QString::null)
+			                                             .arg(mFgColour.name())
 			                                             .arg(mDefaultFont ? QString::null : mFont.toString()));
 			break;
 		case T_COMMAND:
@@ -863,6 +869,7 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 		al.mActionType    = mActionType;
 		al.mText          = mText;
 		al.mBgColour      = mBgColour;
+		al.mFgColour      = mFgColour;
 		al.mFont          = mFont;
 		al.mDefaultFont   = mDefaultFont;
 		al.mBeep          = mBeep;
@@ -2349,6 +2356,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mText             = rhs.mText;
 	mDateTime         = rhs.mDateTime;
 	mBgColour         = rhs.mBgColour;
+	mFgColour         = rhs.mFgColour;
 	mFont             = rhs.mFont;
 	mEmailAddresses   = rhs.mEmailAddresses;
 	mEmailSubject     = rhs.mEmailSubject;
@@ -2409,6 +2417,7 @@ void KAAlarmEventBase::dumpDebug() const
 		kdDebug(5950) << "--         Bcc:" << (mEmailBcc ? "true" : "false") << ":\n";
 	}
 	kdDebug(5950) << "-- mBgColour:" << mBgColour.name() << ":\n";
+	kdDebug(5950) << "-- mFgColour:" << mFgColour.name() << ":\n";
 	kdDebug(5950) << "-- mDefaultFont:" << (mDefaultFont ? "true" : "false") << ":\n";
 	if (!mDefaultFont)
 		kdDebug(5950) << "-- mFont:" << mFont.toString() << ":\n";

@@ -41,9 +41,11 @@ class FontColourButton : public PushButton
 		void          setDefaultFont()                   { mDefaultFont = true; }
 		void          setFont(const QFont& font)         { mFont = font;  mDefaultFont = false; }
 		void          setBgColour(const QColor& colour)  { mBgColour = colour; }
+		void          setFgColour(const QColor& colour)  { mFgColour = colour; }
 		bool          defaultFont() const                { return mDefaultFont; }
 		QFont         font() const                       { return mFont; }
 		QColor        bgColour() const                   { return mBgColour; }
+		QColor        fgColour() const                   { return mFgColour; }
 		virtual void  setReadOnly(bool ro)               { mReadOnly = ro; }
 		virtual bool  isReadOnly() const                 { return mReadOnly; }
 
@@ -54,7 +56,7 @@ class FontColourButton : public PushButton
 		void          slotButtonPressed();
 
 	private:
-		QColor    mBgColour;
+		QColor    mBgColour, mFgColour;
 		QFont     mFont;
 		bool      mDefaultFont;
 		bool      mReadOnly;
@@ -66,10 +68,12 @@ class FontColourDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		FontColourDlg(const QColor&, const QFont&, bool defaultFont, const QString& caption, QWidget* parent = 0, const char* name = 0);
+		FontColourDlg(const QColor& bg, const QColor& fg, const QFont&, bool defaultFont,
+		              const QString& caption, QWidget* parent = 0, const char* name = 0);
 		bool         defaultFont() const   { return mDefaultFont; }
 		QFont        font() const          { return mFont; }
 		QColor       bgColour() const      { return mBgColour; }
+		QColor       fgColour() const      { return mFgColour; }
 		void         setReadOnly(bool);
 		bool         isReadOnly() const    { return mReadOnly; }
 
@@ -78,7 +82,7 @@ class FontColourDlg : public KDialogBase
 
 	private:
 		FontColourChooser* mChooser;
-		QColor             mBgColour;
+		QColor             mBgColour, mFgColour;
 		QFont              mFont;
 		bool               mDefaultFont;
 		bool               mReadOnly;

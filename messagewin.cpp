@@ -65,7 +65,6 @@ using namespace KCal;
 // Basic flags for the window
 static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
-static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to try to display for a file
 
 QPtrList<MessageWin> MessageWin::windowList;
 
@@ -82,12 +81,13 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
-	  colour(evnt.bgColour()),
+	  mBgColour(evnt.bgColour()),
+	  mFgColour(evnt.fgColour()),
 	  mDateTime((alarm.type() & KAlarmAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
-	  audioFile(evnt.audioFile()),
-	  emailAddresses(evnt.emailAddresses("\n")),
-	  emailSubject(evnt.emailSubject()),
+//	  audioFile(evnt.audioFile()),
+//	  emailAddresses(evnt.emailAddresses("\n")),
+//	  emailSubject(evnt.emailSubject()),
 	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(evnt.beep()),
@@ -121,12 +121,13 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
-	  colour(Qt::white),
+	  mBgColour(Qt::white),
+	  mFgColour(Qt::black),
 	  mDateTime(alarm.dateTime()),
 	  eventID(evnt.id()),
-	  audioFile(evnt.audioFile()),
-	  emailAddresses(evnt.emailAddresses("\n")),
-	  emailSubject(evnt.emailSubject()),
+//	  audioFile(evnt.audioFile()),
+//	  emailAddresses(evnt.emailAddresses("\n")),
+//	  emailSubject(evnt.emailSubject()),
 	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(false),
@@ -259,14 +260,14 @@ QSize MessageWin::initView()
 			QLabel* label = new QLabel(i18n("To:"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 0, 0, Qt::AlignLeft);
-			label = new QLabel(emailAddresses, frame);
+			label = new QLabel(mEvent.emailAddresses("\n"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
 			label = new QLabel(i18n("Subject:"), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 1, 0, Qt::AlignLeft);
-			label = new QLabel(emailSubject, frame);
+			label = new QLabel(mEvent.emailSubject(), frame);
 			label->setFixedSize(label->sizeHint());
 			grid->addWidget(label, 1, 1, Qt::AlignLeft);
 			break;
@@ -281,7 +282,8 @@ QSize MessageWin::initView()
 			// Using MessageText instead of QLabel allows scrolling and mouse copying
 			MessageText* text = new MessageText(message, QString::null, topWidget);
 			text->setFrameStyle(QFrame::NoFrame);
-			text->setPaper(colour);
+			text->setPaper(mBgColour);
+			text->setPaletteForegroundColor(mFgColour);
 			text->setFont(font);
 			QWhatsThis::add(text, i18n("The alarm message"));
 			int lineSpacing = text->fontMetrics().lineSpacing();
@@ -304,7 +306,7 @@ QSize MessageWin::initView()
 		}
 	}
 	if (!mErrorMsgs.count())
-		topWidget->setBackgroundColor(colour);
+		topWidget->setBackgroundColor(mBgColour);
 	else
 	{
 		setCaption(i18n("Error"));
@@ -395,7 +397,8 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("Message"), message);
 		config->writeEntry(QString::fromLatin1("Type"), (mErrorMsgs.count() ? -1 : action));
 		config->writeEntry(QString::fromLatin1("Font"), font);
-		config->writeEntry(QString::fromLatin1("Colour"), colour);
+		config->writeEntry(QString::fromLatin1("BgColour"), mBgColour);
+		config->writeEntry(QString::fromLatin1("FgColour"), mFgColour);
 		config->writeEntry(QString::fromLatin1("ConfirmAck"), confirmAck);
 		if (mDateTime.isValid())
 		{
@@ -424,7 +427,8 @@ void MessageWin::readProperties(KConfig* config)
 		mErrorMsgs += "";       // set non-null
 	action        = KAlarmAlarm::Action(t);
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
-	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
+	mBgColour     = config->readColorEntry(QString::fromLatin1("BgColour"));
+	mFgColour     = config->readColorEntry(QString::fromLatin1("FgColour"));
 	confirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
 	QDateTime dt  = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
@@ -459,6 +463,7 @@ void MessageWin::playAudio()
 		KNotifyClient::beep();     // beep through the sound card & speakers
 		QApplication::beep();      // beep through the internal speaker
 	}
+	const QString& audioFile = mEvent.audioFile();
 	if (!audioFile.isEmpty())
 	{
 		QString play = audioFile;
@@ -590,8 +595,8 @@ void MessageWin::slotDefer()
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime.dateTime(), message, colour, font, (KAlarmEvent::Action)action, flags);
-				event.setAudioFile(audioFile);
+				event.set(dateTime.dateTime(), message, mBgColour, mFgColour, font, (KAlarmEvent::Action)action, flags);
+				event.setAudioFile(mEvent.audioFile());
 				event.setArchive();
 				event.setEventID(eventID);
 			}
@@ -678,20 +683,6 @@ TextMimeSourceFactory::TextMimeSourceFactory(const QString& absPath, KTextBrowse
 			view->setText(text);
 			break;
 	}
-/*	if (mMimeType.startsWith(QString::fromLatin1("image/")))
-	{
-		// It's an image file
-		QString text = "<img source=\"";
-		text += absPath;
-		text += "\">";
-		view->setText(text);
-	}
-	else
-	{
-		// It's assumed to be a text file
-		mTextFile = absPath;
-		view->QTextBrowser::setSource(absPath);
-	}*/
 	setFilePath(QFileInfo(absPath).dirPath(true));
 }
 
@@ -712,15 +703,6 @@ const QMimeSource* TextMimeSourceFactory::data(const QString& abs_name) const
 			{
 				QByteArray ba(f.size());
 				f.readBlock(ba.data(), ba.size());
-/*				const char* mimetype;
-				switch (KAlarmApp::isTextFile(mMimeType))
-				{
-					case 1:
-					case 2:   mimetype = mMimeType.latin1();  break;
-					case 3:
-					default:  mimetype = "text/plain";  break;
-				}
-				QStoredDrag* sr = new QStoredDrag(mimetype);*/
 				QStoredDrag* sr = new QStoredDrag(mMimeType);
 				sr->setEncodedData(ba);
 				delete mLast;

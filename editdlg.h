@@ -69,7 +69,7 @@ class EditAlarmDlg : public KDialogBase
 		DateTime     getDateTime();
 		void         setAction(KAlarmEvent::Action, const QString& text);
 
-		static ColourCombo* createBgColourChooser(bool readOnly, QWidget* parent, const char* name = 0);
+		static ColourCombo* createBgColourChooser(bool readOnly, QHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
 		static CheckBox*    createLateCancelCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
 
@@ -172,6 +172,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              mSavedConfirmAck;     // mConfirmAck status
 		QFont             mSavedFont;           // mFontColourButton font
 		QColor            mSavedBgColour;       // mBgColourChoose selection
+		QColor            mSavedFgColour;       // mFontColourButton foreground colour
 		int               mSavedReminder;       // mReminder value
 		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
 		QString           mSavedEmailTo;        // mEmailToEdit value
