@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include <qvbox.h>
@@ -30,7 +34,7 @@
 
 
 KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
-   : KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0L, 0L, true, true)
+   : KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, 0, true, true)
 {
    setIconListAllVisible(true);
 
@@ -42,7 +46,7 @@ KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
    m_defaultPage = new DefaultPrefTab(frame);
    m_defaultPage->setSettings(sets);
 
-   frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("appearance"));
+   frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("colorize"));
    m_appearancePage = new AppearancePrefTab(frame);
    m_appearancePage->setSettings(sets);
 
