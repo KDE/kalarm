@@ -48,11 +48,11 @@ class MessageWin : public MainWindowBase
 	protected:
 		virtual void       showEvent(QShowEvent*);
 		virtual void       resizeEvent(QResizeEvent*);
+		virtual void       closeEvent(QCloseEvent*);
 		virtual void       saveProperties(KConfig*);
 		virtual void       readProperties(KConfig*);
 
 	protected slots:
-		void               slotClose();
 		void               slotShowDefer();
 		void               slotDefer();
 

@@ -295,7 +295,7 @@ QSize MessageWin::initView()
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	okButton->clearFocus();
 	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
-	connect(okButton, SIGNAL(clicked()), SLOT(slotClose()));
+	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
 
@@ -476,17 +476,24 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 }
 
 /******************************************************************************
-*  Called when the Close button is clicked.
+*  Called when a close event is received.
+*  Only quits the application if there is no system tray icon displayed.
 */
-void MessageWin::slotClose()
+void MessageWin::closeEvent(QCloseEvent* ce)
 {
-	if (confirmAck)
+kdDebug()<<"closeEvent: closing down="<<(int)theApp()->sessionClosingDown()<<", confack="<<(int)confirmAck<<endl;
+	if (confirmAck  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
-		if (KMessageBox::warningYesNo(this, i18n("Are you sure you want to close the message window?"), i18n("Confirm Acknowledgement")) != KMessageBox::Yes)
+		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
+		                                       i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel().text())
+		    != KMessageBox::Yes)
+		{
+			ce->ignore();
 			return;
+		}
 	}
-	close();
+	MainWindowBase::closeEvent(ce);
 }
 
 /******************************************************************************
