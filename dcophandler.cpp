@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,7 +66,8 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		SCH_FLAGS      = 0x0F00,    // mask for SCHEDULE flags
 		  REP_COUNT    = 0x0100,
 		  REP_END      = 0x0200,
-		OLD            = 0x1000     // old-style deprecated method
+		PRE_091        = 0x1000,           // old-style pre-0.9.1 deprecated method
+		PRE_070        = 0x2000 | PRE_091  // old-style pre-0.7 deprecated method
 	};
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
@@ -83,13 +84,13 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "displayMessage(QString,QString)")                // deprecated: backwards compatibility with KAlarm pre-0.6
 		function = TRIGGER;
 
-	//                scheduleMessage(message, dateTime, colour, flags, audioURL)
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString)")
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32)")
 		function = SCHEDULE | MESSAGE;
-	//                scheduleFile(URL, dateTime, colour, flags, audioURL)
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString)")
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, reminder)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32)")
 		function = SCHEDULE | FILE;
 	//                scheduleCommand(commandLine, dateTime, flags)
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32)"
@@ -100,13 +101,13 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "scheduleEmail(QString,QString,QString,QString,QDateTime,Q_UINT32)")
 		function = SCHEDULE | COMMAND;
 
-	//                scheduleMessage(message, dateTime, colour, flags, audioURL, repeatType, interval, repeatCount)
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32)")
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder, repeatType, interval, repeatCount)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE | MESSAGE | REP_COUNT;
-	//                scheduleFile(URL, dateTime, colour, flags, audioURL, repeatType, interval, repeatCount)
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32)")
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, reminder, repeatType, interval, repeatCount)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE | FILE | REP_COUNT;
 	//                scheduleCommand(commandLine, dateTime, flags, repeatType, interval, repeatCount)
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)"
@@ -117,13 +118,13 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "scheduleEmail(QString,QString,QString,QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE | COMMAND | REP_COUNT;
 
-	//                scheduleMessage(message, dateTime, colour, flags, audioURL, repeatType, interval, endTime)
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,const QDateTime&)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,QDateTime)")
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder, repeatType, interval, endTime)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32,QDateTime)")
 		function = SCHEDULE | MESSAGE | REP_END;
-	//                scheduleFile(URL, dateTime, colour, flags, audioURL, repeatType, interval, endTime)
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,const QDateTime&)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,QDateTime)")
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, reminder, repeatType, interval, endTime)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32,QDateTime)")
 		function = SCHEDULE | FILE | REP_END;
 	//                scheduleCommand(commandLine, dateTime, flags, repeatType, interval, endTime)
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32,const QDateTime&)"
@@ -134,16 +135,42 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "scheduleEmail(QString,QString,QString,QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32,QDateTime)")
 		function = SCHEDULE | COMMAND | REP_END;
 
+	// Deprecated methods: backwards compatibility with KAlarm pre-0.9.1
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString)")
+		function = SCHEDULE | MESSAGE | PRE_091;
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString)")
+		function = SCHEDULE | FILE | PRE_091;
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, repeatType, interval, repeatCount)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE | MESSAGE | REP_COUNT | PRE_091;
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, repeatType, interval, repeatCount)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,Q_INT32)")
+		function = SCHEDULE | FILE | REP_COUNT | PRE_091;
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, repeatType, interval, endTime)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,QDateTime)")
+		function = SCHEDULE | MESSAGE | REP_END | PRE_091;
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, repeatType, interval, endTime)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,const QDateTime&)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_INT32,Q_INT32,QDateTime)")
+		function = SCHEDULE | FILE | REP_END | PRE_091;
+
 	// Deprecated methods: backwards compatibility with KAlarm pre-0.7
 	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
 	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | MESSAGE | REP_COUNT | OLD;
+		function = SCHEDULE | MESSAGE | REP_COUNT | PRE_070;
 	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
 	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | FILE | REP_COUNT | OLD;
+		function = SCHEDULE | FILE | REP_COUNT | PRE_070;
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32)"
 	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32)")
-		function = SCHEDULE | COMMAND | REP_COUNT | OLD;
+		function = SCHEDULE | COMMAND | REP_COUNT | PRE_070;
 	else
 	{
 		kdDebug(5950) << "DcopHandler::process(): unknown DCOP function" << endl;
@@ -196,6 +223,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
 			Q_INT32     repeatCount = 0;
 			Q_INT32     repeatInterval = 0;
+			Q_INT32     reminderMinutes = 0;
 			if (action == KAlarmEvent::EMAIL)
 			{
 				QString addresses, attachments;
@@ -224,11 +252,13 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			if (action != KAlarmEvent::COMMAND)
 				arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
 			arg >> flags;
-			if (!(function & OLD))
+			if (!(function & PRE_070))
 				arg >> audioFile;
+			if (!(function & PRE_091))
+				arg >> reminderMinutes;
 			if (function & (REP_COUNT | REP_END))
 			{
-				if (function & OLD)
+				if (function & PRE_070)
 				{
 					// Backwards compatibility with KAlarm pre-0.7
 					recurType = KAlarmEvent::MINUTELY;
@@ -260,7 +290,8 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				}
 			}
 			theApp()->scheduleEvent(text, dateTime, bgColour, flags, audioFile, mailAddresses, mailSubject,
-			                        mailAttachments, action, recurType, repeatInterval, repeatCount, endTime);
+			                        mailAttachments, action, recurType, repeatInterval, repeatCount, endTime,
+			                        reminderMinutes);
 			break;
 		}
 	}
