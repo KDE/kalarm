@@ -1053,6 +1053,21 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 		if (reschedule)
 			rescheduleAlarm(event, alarm.id());
 	}
+#ifdef KALARM_EMAIL
+	else if (alarm.type() == KAlarmAlarm::EMAIL)
+	{
+		QString addresses = event.??();
+		kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL: " << command << endl;
+		if (??)
+		{
+			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
+			(new MessageWin(i18n("Failed to send email to:\n%1").arg(addresses), event, alarm, reschedule))->show();
+			result = false;
+		}
+		if (reschedule)
+			rescheduleAlarm(event, alarm.id());
+	}
+#endif
 	else
 	{
 		// Display a message or file, provided that the same event isn't already being displayed

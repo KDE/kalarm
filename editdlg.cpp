@@ -89,6 +89,16 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->addWidget(commandRadio, 1, 1, AlignLeft);
 	grid->setColStretch(1, 1);
 
+#ifdef KALARM_EMAIL
+	// Email radio button has an ID of 2
+	emailRadio = new QRadioButton(i18n("Email"), actionGroup, "emailButton");
+	emailRadio->setFixedSize(emailRadio->sizeHint());
+	QWhatsThis::add(emailRadio,
+	      i18n("The edit fields below contain the contents of an email to send."));
+	grid->addWidget(emailRadio, 1, 2, AlignLeft);
+	grid->setColStretch(1, 1);
+#endif
+
 	// File radio button has an ID of 2
 	fileRadio = new QRadioButton(i18n("File"), actionGroup, "fileButton");
 	fileRadio->setFixedSize(fileRadio->sizeHint());
@@ -104,6 +114,30 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(browseButton, i18n("Select a text file to display."));
 	grid->addWidget(browseButton, 1, 3, AlignLeft);
 
+#ifdef KALARM_EMAIL
+	// Email recipients
+	QLabel* label = new QLabel(i18n("To:"), actionGroup);
+	label->setFixedSize(label->sizeHint());
+	grid->addMultiCellWidget(label, 2, 2, 0, 3);
+
+	emailToEdit = new QLineEdit(actionGroup);
+	emailToEdit->setMinimumSize(emailToEdit->sizeHint());
+	QWhatsThis::add(emailToEdit,
+	      i18n("Enter the addresses of the email recipients. Multiple addresses may be separated by "
+	           "commas or semicolons."));
+	grid->addMultiCellWidget(emailToEdit, 2, 2, 0, 3);
+
+	// Email subject
+	label = new QLabel(i18n("Subject:"), actionGroup);
+	label->setFixedSize(label->sizeHint());
+	grid->addMultiCellWidget(label, 2, 2, 0, 3);
+
+	emailSubjectEdit = new QLineEdit(actionGroup);
+	emailSubjectEdit->setMinimumSize(emailSubjectEdit->sizeHint());
+	QWhatsThis::add(emailSubjectEdit, i18n("Enter the email subject."));
+	grid->addMultiCellWidget(emailSubjectEdit, 2, 2, 0, 3);
+#endif
+
 	messageEdit = new QMultiLineEdit(actionGroup);
 	QSize size = messageEdit->sizeHint();
 	size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
@@ -111,8 +145,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
 	connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
 	grid->addMultiCellWidget(messageEdit, 2, 2, 0, 3);
-//messageEdit->setMaximumHeight(size.height());
-//actionGroup->setMaximumHeight(actionGroup->sizeHint().height());
 
 	if (event  &&  event->recurs() != KAlarmEvent::NO_RECUR  &&  event->deferred())
 	{
@@ -220,6 +252,17 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->addWidget(bgColourChoose, 1, 1, AlignLeft);
 #endif
 
+#ifdef KALARM_EMAIL
+	// BCC email to sender
+	emailBcc = new QCheckBox(page);
+	emailBcc->setText(i18n("Copy email to self"));
+	emailBcc->setFixedSize(emailBcc->sizeHint());
+	emailBcc->setChecked(false);
+	QWhatsThis::add(emailBcc,
+	      i18n("If checked, the email will be blind copied to you."));
+	grid->addWidget(emailBcc, 1, 0, AlignLeft);
+#endif
+
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
 	topLayout->activate();
@@ -251,6 +294,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 			case KAlarmAlarm::COMMAND:
 				radio = commandRadio;
 				break;
+#ifdef KALARM_EMAIL
+			case KAlarmAlarm::EMAIL:
+				radio = emailRadio;
+				break;
+#endif
 			case KAlarmAlarm::MESSAGE:
 			default:
 				radio = messageRadio;
@@ -337,6 +385,9 @@ KAlarmAlarm::Type EditAlarmDlg::getAlarmType() const
 {
 	return fileRadio->isOn()    ? KAlarmAlarm::FILE
 	     : commandRadio->isOn() ? KAlarmAlarm::COMMAND
+#ifdef KALARM_EMAIL
+	     : emailRadio->isOn()   ? KAlarmAlarm::EMAIL
+#endif
 	     :                        KAlarmAlarm::MESSAGE;
 }
 
@@ -510,6 +561,14 @@ void EditAlarmDlg::slotTry()
 	QString text;
 	if (checkText(text))
 	{
+#ifdef KALARM_EMAIL
+		if (emailRadio->isOn())
+		{
+			if (KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to send the email now to the specified recipient(s)?"),
+			                                       i18n("Confirm Email"), i18n("Send")) != KMessageBox::Continue)
+				return;
+		}
+#endif
 		KAlarmEvent event;
 		event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
 		event.setAudioFile(soundFile);
@@ -517,6 +576,10 @@ void EditAlarmDlg::slotTry()
 		{
 			if (commandRadio->isOn())
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
+#ifdef KALARM_EMAIL
+			else if (emailRadio->isOn())
+				KMessageBox::information(this, i18n("Email sent to:\n%1").arg(text));
+#endif
 		}
 	}
 }
@@ -642,11 +705,34 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 		}
 	}
 	else if (messageRadio->isOn())
+#ifdef KALARM_EMAIL
+	else if (messageRadio->isOn()  ||  emailRadio->isOn())
+#endif
 	{
 		// It's a multi-line edit mode
-		QWhatsThis::add(messageEdit,
-		      i18n("Enter the text of the alarm message. It may be multi-line."));
-		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
+		if (messageRadio->isOn())
+		{
+			QWhatsThis::add(messageEdit,
+			      i18n("Enter the text of the alarm message. It may be multi-line."));
+			setButtonWhatsThis(Try, i18n("Display the alarm message now"));
+#ifndef SELECT_FONT
+			bgColourChoose->setEnabled(true);
+#endif
+			enableMessageControls(true);
+		}
+#ifdef KALARM_EMAIL
+		else if (emailRadio->isOn())
+		{
+			QWhatsThis::add(messageEdit,
+			      i18n("Enter the email message."));
+			setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
+			browseButton->setEnabled(false);
+#ifndef SELECT_FONT
+			bgColourChoose->setEnabled(false);
+#endif
+			enableMessageControls(false);
+		}
+#endif
 		singleLineOnly = false;
 		if (!multiLineText.isEmpty())
 		{
@@ -657,10 +743,6 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 		}
 		messageEdit->setWordWrap(QMultiLineEdit::NoWrap);
 		browseButton->setEnabled(false);
-#ifndef SELECT_FONT
-		bgColourChoose->setEnabled(true);
-#endif
-		enableMessageControls(true);
 	}
 	else
 	{
