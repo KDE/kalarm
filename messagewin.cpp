@@ -20,8 +20,8 @@
 
 #include "kalarm.h"
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -783,8 +783,10 @@ void MessageWin::initAudio(bool firstTime)
 #endif
 
 /******************************************************************************
-*  Called to check whether the audio file playing has completed, and if not to
-*  wait a bit longer.
+*  Called when the audio file has loaded and is ready to play, or on a timer
+*  when play is expected to have completed.
+*  If it is ready to play, start playing it (for the first time or repeated).
+*  If play has not yet completed, wait a bit longer.
 */
 void MessageWin::checkAudioPlay()
 {
@@ -793,8 +795,11 @@ void MessageWin::checkAudioPlay()
 		return;
 	if (mPlayObject->state() == Arts::posIdle)
 	{
+		// The file has loaded and is ready to play, or play has completed
 		if (mPlayedOnce  &&  !mAudioRepeat)
 			return;
+
+		// Start playing the file, either for the first time or again
 		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
 		{
@@ -891,10 +896,12 @@ void MessageWin::stopPlay()
 */
 int MessageWin::getKMixVolume()
 {
+	if (!runKMix())     // start KMix if it isn't already running
+		return -1;
 	QByteArray  data, replyData;
 	QCString    replyType;
 	QDataStream arg(data, IO_WriteOnly);
-	if (!kapp->dcopClient()->call(KMIX_APP_NAME, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
+	if (!kapp->dcopClient()->call(mKMixName, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
 	||  replyType != "int")
 		return -1;
 	int result;
@@ -910,11 +917,30 @@ void MessageWin::setKMixVolume(int percent)
 {
 	if (!mUsingKMix)
 		return;
+	if (!runKMix())     // start KMix if it isn't already running
+		return;
 	QByteArray  data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << percent;
-	if (!kapp->dcopClient()->send(KMIX_APP_NAME, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
+	if (!kapp->dcopClient()->send(mKMixName, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
 		kdError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
+}
+
+/******************************************************************************
+*  Start KMix if it isn't already running.
+*  Reply = true if KMix is now running.
+*/
+bool MessageWin::runKMix()
+{
+	if (mKMixName.isEmpty())
+		mKMixName = KMIX_APP_NAME;
+	if (!kapp->dcopClient()->isApplicationRegistered(mKMixName))
+	{
+		// KMix is not already running, so start it
+		if (KApplication::startServiceByDesktopName(QString::fromLatin1(KMIX_APP_NAME), QString::null, &mKMixError, &mKMixName))
+			return false;
+	}
+	return true;
 }
 #endif
 

@@ -79,6 +79,7 @@ class MessageWin : public MainWindowBase
 		void                initAudio(bool firstTime);
 		int                 getKMixVolume();
 		void                setKMixVolume(int percent);
+		bool                runKMix();
 #endif
 		void                displayComplete();
 		void                playAudio();
@@ -104,12 +105,14 @@ class MessageWin : public MainWindowBase
 		// Sound file playing
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;
+		QCString            mKMixName;        // DCOP name for KMix
+		QString             mKMixError;       // error message starting KMix
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
 		float               mOldVolume;       // volume before volume was set for sound file
 		QString             mLocalAudioFile;  // local copy of audio file
 		QTime               mAudioFileLoadStart; // time when audio file loading started
 		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file
-		bool                mPlayedOnce;      // the sound file has been played at least once
+		bool                mPlayedOnce;      // the sound file has started playing at least once
 		bool                mPlayed;          // the PlayObject->play() has been called
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file

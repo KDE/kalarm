@@ -1,7 +1,8 @@
 KAlarm
 
-=== Version 1.2.6 --- 6 February 2005 ===
+=== Version 1.2.6 --- 18 February 2005 ===
 Pop up message windows far from cursor to avoid accidental acknowledgement.
+Start KMix if not already running, for setting alarm sound level.
 Improve validation when reading configuration file values.
 
 === Version 1.2.5 (KDE 3.4 beta2) --- 21 January 2005 ===
