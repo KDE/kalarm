@@ -194,7 +194,6 @@ bool AlarmCalendar::save(const QString& filename)
 	else
 		format = new ICalFormat;
 	bool success = calendar->save(filename, format);
-	delete format;
 	if (!success)
 	{
 		kdDebug(5950) << "AlarmCalendar::save(): calendar save failed." << endl;
