@@ -79,7 +79,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 	dateEdit->setFixedSize(size);
 	grid->addWidget(dateEdit, 0, 1, AlignHCenter);
 	grid->setColStretch(0, 1);
-	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm message."));
+	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm."));
 	connect(dateEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
 
 	// Time spin box
@@ -88,7 +88,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 	size = timeEdit->sizeHint();
 	timeEdit->setFixedSize(size);
 	grid->addWidget(timeEdit, 0, 2, AlignRight);
-	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm message."));
+	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm."));
 	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
 
 	// 'Time from now' radio button/label
@@ -121,7 +121,7 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int defe
 	delayTime->setFixedSize(size);
 	grid->addWidget(delayTime, 1, 2, AlignRight);
 	QWhatsThis::add(delayTime,
-	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm message."));
+	      i18n("Enter the length of time (in hours and minutes) after the current time to schedule the alarm."));
 	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
 
 	// Initialise the radio button statuses
@@ -152,7 +152,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime) const
 		int seconds = now.time().second();
 		if (dateTime <= now.addSecs(1 - seconds))
 		{
-			KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Message time has already expired"));
+			KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
 			return false;
 		}
 	}

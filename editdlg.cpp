@@ -158,10 +158,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	lateCancel->setChecked(false);
 	grid->addWidget(lateCancel, 0, 0, AlignLeft);
 	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the message will be cancelled if it cannot be displayed within 1 "
-	           "minute of the specified time. Possible reasons for non-display include your "
+	      i18n("If checked, the alarm will be cancelled if it cannot be triggered within 1 "
+	           "minute of the specified time. Possible reasons for not triggering include your "
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
-	           "If unchecked, the message will be displayed at the first opportunity after "
+	           "If unchecked, the alarm will be triggered at the first opportunity after "
 	           "the specified time, regardless of how late it is."));
 
 	// Beep checkbox - default = no beep
@@ -194,7 +194,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	      i18n("Choose the background color for the alarm message."));
 #endif
 
-	setButtonWhatsThis(Ok, i18n("Schedule the message for display at the specified time."));
+	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
 	topLayout->activate();
 

@@ -315,6 +315,6 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 				           .arg(repeatAtLoginIndicator);
 		}
 	}
-	return i18n("List of scheduled alarm messages");
+	return i18n("List of scheduled alarms");
 };
 
