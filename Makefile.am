@@ -1,10 +1,5 @@
 SUBDIRS = widgets pixmaps
 
-if include_ARTS
-else
-AM_CPPFLAGS = -DWITHOUT_ARTS
-endif
-
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libical/src \
