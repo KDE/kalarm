@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, co
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 	QWhatsThis::add(mCheckbox, whatsThis);
-	layout->addWidget(mCheckbox);
+	layout->addWidget(mCheckbox, 0, Qt::AlignAuto);
 
 	mTimeSelectorFrame = new QFrame(mStack);
 	mTimeSelectorFrame->setFrameStyle(QFrame::NoFrame);
@@ -109,7 +109,7 @@ int LateCancelSelector::minutes() const
 
 void LateCancelSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	mCheckbox->setChecked(minutes);
+	slotToggled(minutes);
 	mTimeSelector->setMinutes(minutes, dateOnly, defaultUnits);
 }
 
@@ -144,7 +144,7 @@ void LateCancelSelector::setAutoClose(bool autoClose)
 }
 
 /******************************************************************************
-*  Called either of the checkboxes is toggled.
+*  Called when either of the checkboxes is toggled.
 */
 void LateCancelSelector::slotToggled(bool on)
 {
