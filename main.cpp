@@ -35,6 +35,8 @@ QCString execArguments;    // argument to --exec option
 
 static KCmdLineOptions options[] =
 {
+	{ "a", 0L, 0L },
+	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0L },
 	{ "b", 0L, 0L },
 	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
 	{ "colour", 0L, 0L },
@@ -85,8 +87,7 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE personal alarm message and command scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux",
-		"software@astrojar.org.uk");
+		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux");
 	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
 	// Fetch all command line options/arguments after --exec and concatenate
