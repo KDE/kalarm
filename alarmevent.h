@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -281,6 +281,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
+		void               adjustStartDate(const QDate&);
 		void               setDate(const QDate& d)                           { mDateTime.set(d);  mUpdated = true; }
 		void               setTime(const QDateTime& dt)                      { mDateTime.set(dt);  mUpdated = true; }
 		void               setSaveDateTime(const QDateTime& dt)              { mSaveDateTime = dt;  mUpdated = true; }
@@ -330,6 +331,8 @@ class KAlarmEvent : public KAAlarmEventBase
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
 		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result) const;
+		const KCal::DateList& exceptionDates() const      { return mExceptionDates; }
+		const KCal::DateTimeList& exceptionDateTimes() const { return mExceptionDateTimes; }
 		int                flags() const;
 		bool               toBeArchived() const           { return mArchive; }
 		bool               updated() const                { return mUpdated; }
@@ -345,6 +348,8 @@ class KAlarmEvent : public KAAlarmEventBase
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
+		void               setExceptionDates(const KCal::DateList& d)      { mExceptionDates = d; }
+		void               setExceptionDates(const KCal::DateTimeList& dt) { mExceptionDateTimes = dt; }
 		void               setNoRecur()            { initRecur(); }
 		void               setRecurrence(const KCal::Recurrence&);
 		void               setRecurMinutely(int freq, int count)
@@ -434,7 +439,7 @@ class KAlarmEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
-		static bool        adjustStartOfDay( const KCal::Event::List & );
+		static bool        adjustStartOfDay(const KCal::Event::List&);
 		static void        convertKCalEvents(AlarmCalendar&);
 
 	private:
@@ -459,6 +464,8 @@ class KAlarmEvent : public KAAlarmEventBase
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
 		KCal::Recurrence*  mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
+		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
+		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderDeferral; // deferred alarm is a deferred reminder

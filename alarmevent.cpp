@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -101,6 +101,8 @@ void KAlarmEvent::copy(const KAlarmEvent& event)
 	mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
 	mRevision                = event.mRevision;
 	mRemainingRecurrences    = event.mRemainingRecurrences;
+	mExceptionDates          = event.mExceptionDates;
+	mExceptionDateTimes      = event.mExceptionDateTimes;
 	mAlarmCount              = event.mAlarmCount;
 	mRecursFeb29             = event.mRecursFeb29;
 	mReminderDeferral        = event.mReminderDeferral;
@@ -305,7 +307,11 @@ void KAlarmEvent::set(const Event& event)
 
 	Recurrence* recur = event.recurrence();
 	if (recur  &&  recur->doesRecur() != Recurrence::rNone)
+	{
 		setRecurrence(*recur);
+		mExceptionDates     = event.exDates();
+		mExceptionDateTimes = event.exDateTimes();
+	}
 
 	mUpdated = false;
 }
@@ -318,8 +324,7 @@ void KAlarmEvent::readAlarms(const Event& event, void* almap)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
 	Alarm::List alarms = event.alarms();
-        Alarm::List::ConstIterator it;
-	for ( it = alarms.begin(); it != alarms.end(); ++it )
+        for (Alarm::List::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
@@ -506,7 +511,28 @@ void KAlarmEvent::setEmail(const EmailAddressList& addresses, const QString& sub
 }
 
 /******************************************************************************
- * Returns the time of the next scheduled occurrence of the event.
+ * Reinitialise the start date/time byt adjusting its date part, and setting
+ * the next scheduled alarm to the new start date/time.
+ */
+void KAlarmEvent::adjustStartDate(const QDate& d)
+{
+	if (mStartDateTime.isDateOnly())
+	{
+		mStartDateTime = d;
+		if (mRecurrence)
+			mRecurrence->setRecurStart(d);
+	}
+	else
+	{
+		mStartDateTime.set(d, mStartDateTime.time());
+		if (mRecurrence)
+			mRecurrence->setRecurStart(mStartDateTime.dateTime());
+	}
+	mDateTime = mStartDateTime;
+}
+
+/******************************************************************************
+ * Return the time of the next scheduled occurrence of the event.
  */
 DateTime KAlarmEvent::nextDateTime() const
 {
@@ -727,6 +753,8 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	}
 
 	// Add recurrence data
+	ev.setExDates(DateList());
+//	ev.setExDates(DateTimeList());
 	if (mRecurrence)
 	{
 		Recurrence* recur = ev.recurrence();
@@ -767,6 +795,8 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 			default:
 				break;
 		}
+		ev.setExDates(mExceptionDates);
+//		ev.setExDates(mExceptionDateTimes);
 	}
 
 	if (mSaveDateTime.isValid())
@@ -1792,7 +1822,10 @@ bool KAlarmEvent::setRecurrence(Recurrence& recurrence, RecurType recurType, int
  */
 bool KAlarmEvent::initRecur(const QDate& endDate, int count, bool feb29)
 {
+	mExceptionDates.clear();
+	mExceptionDateTimes.clear();
 	mRecursFeb29 = false;
+	mUpdated = true;
 	if (endDate.isValid() || count > 0 || count == -1)
 	{
 		if (!mRecurrence)
@@ -1818,7 +1851,6 @@ bool KAlarmEvent::initRecur(const QDate& endDate, int count, bool feb29)
 		mRemainingRecurrences = 0;
 		return false;
 	}
-	mUpdated = true;
 }
 
 /******************************************************************************
@@ -1893,14 +1925,13 @@ int KAlarmEvent::recurInterval() const
  * unchanged.
  * Reply = true if any events have been updated.
  */
-bool KAlarmEvent::adjustStartOfDay( const Event::List &events )
+bool KAlarmEvent::adjustStartOfDay(const Event::List& events)
 {
 	bool changed = false;
 	QTime startOfDay = theApp()->preferences()->startOfDay();
-        Event::List::ConstIterator it;
-	for ( it = events.begin(); it != events.end(); ++it )
+        for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
-		Event* event = *it;
+		Event* event = *evit;
 		const QStringList& cats = event->categories();
 		if (cats.find(DATE_ONLY_CATEGORY) != cats.end())
 		{
@@ -1912,11 +1943,10 @@ bool KAlarmEvent::adjustStartOfDay( const Event::List &events )
 				event->setDtStart(QDateTime(event->dtStart().date(), startOfDay));
 				Alarm::List alarms = event->alarms();
 				int deferralOffset = 0;
-                                Alarm::List::ConstIterator it;
-				for ( it = alarms.begin(); it != alarms.end(); ++it )
+                                for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 				{
 					// Parse the next alarm's text
-					Alarm& alarm = **it;
+					Alarm& alarm = **alit;
 					AlarmData data;
 					readAlarm(alarm, data);
 					if (data.type & KAlarmAlarm::TIMED_DEFERRAL_FLAG)
@@ -2001,10 +2031,9 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 	QTime startOfDay = theApp()->preferences()->startOfDay();
 
 	Event::List events = calendar.events();
-	Event::List::ConstIterator it;
-        for ( it = events.begin(); it != events.end(); ++it )
+	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
-		Event *event = *it;
+		Event* event = *evit;
                 if (pre_0_7  &&  event->doesFloat())
 		{
 			// It's a KAlarm pre-0.7 calendar file.
@@ -2027,10 +2056,9 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 *   TEXT = message text, file name/URL or command
 			 */
 			Alarm::List alarms = event->alarms();
-			Alarm::List::ConstIterator it;
-                        for ( it = alarms.begin(); it != alarms.end(); ++it )
+			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
-				Alarm* alarm = *it;
+				Alarm* alarm = *alit;
 				bool atLogin    = false;
 				bool deferral   = false;
 				bool lateCancel = false;
@@ -2162,19 +2190,19 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			event->setHasEndDate(false);
 
 			Alarm::List alarms = event->alarms();
-			Alarm::List::ConstIterator it;
-                        for ( it = alarms.begin(); it != alarms.end(); ++it )
+			Alarm::List::ConstIterator alit;
+                        for (alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
-				Alarm* alarm = *it;
+				Alarm* alarm = *alit;
 				QDateTime dt = alarm->time();
 				alarm->setStartOffset(start.secsTo(dt));
 			}
 
 			if (cats.count() > 0)
 			{
-                                for ( it = alarms.begin(); it != alarms.end(); ++it )
+                                for (alit = alarms.begin();  alit != alarms.end();  ++alit)
 				{
-					Alarm* alarm = *it;
+					Alarm* alarm = *alit;
 					if (alarm->type() == Alarm::Display)
 						alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						                         QString::fromLatin1("%1;;").arg(cats[0]));
