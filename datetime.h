@@ -68,6 +68,7 @@ class TimeSpinBox : public SpinBox2
 		TimeSpinBox(QWidget* parent = 0L, const char* name = 0L);
 		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0L, const char* name = 0L);
 		bool            valid() const        { return !invalid; }
+		QTime           getTime() const;
 		void            setValid(bool);
 	public slots:
 		virtual void    setValue(int value);

@@ -148,7 +148,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime) const
 	if (atTimeRadio->isOn())
 	{
 		dateTime.setDate(dateEdit->getDate());
-		dateTime.setTime(QTime(timeEdit->value()/60, timeEdit->value()%60));
+		dateTime.setTime(timeEdit->getTime());
 		int seconds = now.time().second();
 		if (dateTime <= now.addSecs(1 - seconds))
 		{
@@ -221,7 +221,7 @@ void AlarmTimeWidget::slotAfterTimeToggled(bool on)
 	if (on  &&  atTimeRadio->isOn()
 	||  !on  &&  !atTimeRadio->isOn())
 		atTimeRadio->setChecked(!on);
-	QDateTime dt(dateEdit->getDate(), QTime(timeEdit->value()/60, timeEdit->value()%60));
+	QDateTime dt(dateEdit->getDate(), timeEdit->getTime());
 	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
 	if (minutes <= 0)
 		delayTime->setValid(true);
@@ -237,7 +237,7 @@ void AlarmTimeWidget::slotDateTimeChanged(int)
 	if (!enteredDateTimeChanged)          // prevent infinite recursion !!
 	{
 		enteredDateTimeChanged = true;
-		QDateTime dt(dateEdit->getDate(), QTime(timeEdit->value()/60, timeEdit->value()%60));
+		QDateTime dt(dateEdit->getDate(), timeEdit->getTime());
 		int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
 		if (minutes <= 0  ||  minutes > delayTime->maxValue())
 			delayTime->setValid(false);
@@ -296,6 +296,11 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 {
 	validator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
 	setValidator(validator);
+}
+
+QTime TimeSpinBox::getTime() const
+{
+	return QTime(value() / 60, value() % 60);
 }
 
 QString TimeSpinBox::mapValueToText(int v)
