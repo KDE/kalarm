@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -251,6 +247,30 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
+	vbox->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
+	label->setAlignment(Qt::WordBreak);
+	box = new QHBox(vbox);
+	box->setSpacing(2*KDialog::spacingHint());
+	mFeb29 = new QButtonGroup(box);
+	mFeb29->hide();
+	QWidget* widget = new QWidget(box);
+	widget->setFixedWidth(3*KDialog::spacingHint());
+	QRadioButton* radio = new QRadioButton(i18n("February 2&8th"), box);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, Preferences::FEB29_FEB28);
+	radio = new QRadioButton(i18n("March &1st"), box);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, Preferences::FEB29_MAR1);
+	radio = new QRadioButton(i18n("Do &not repeat"), box);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, Preferences::FEB29_NONE);
+	box->setFixedHeight(box->sizeHint().height());
+	QWhatsThis::add(vbox,
+	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
+	           "Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting."));
+
 	itemBox = new QHBox(mPage);   // this is to allow left adjustment
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
@@ -293,8 +313,10 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	QWhatsThis::add(mClearExpired,
 	      i18n("Delete all existing expired alarms."));
 	grid->addWidget(mClearExpired, 3, 1, AlignLeft);
+	group->setFixedHeight(group->sizeHint().height());
 
 	box = new QHBox(mPage);     // top-adjust all the widgets
+	vbox->setMaximumHeight(vbox->sizeHint().height());
 }
 
 void MiscPrefTab::restore()
@@ -308,6 +330,7 @@ void MiscPrefTab::restore()
 	mAutostartTrayIcon2->setChecked(mPreferences->mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(mPreferences->mConfirmAlarmDeletion);
 	mStartOfDay->setValue(mPreferences->mStartOfDay.hour()*60 + mPreferences->mStartOfDay.minute());
+	mFeb29->setButton(mPreferences->mFeb29RecurType);
 	setExpiredControls(mPreferences->mExpiredKeepDays);
 	slotDisableIfStoppedToggled(true);
 }
@@ -323,6 +346,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 	mPreferences->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
 	int sod = mStartOfDay->value();
 	mPreferences->mStartOfDay.setHMS(sod/60, sod%60, 0);
+	int feb29 = mFeb29->id(mFeb29->selected());
+	mPreferences->mFeb29RecurType = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
 	mPreferences->mExpiredKeepDays         = !mKeepExpired->isChecked() ? 0
 	                                       : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	PrefsTabBase::apply(syncToDisc);
@@ -339,6 +364,7 @@ void MiscPrefTab::setDefaults()
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay.hour()*60 + Preferences::default_startOfDay.minute());
+	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	slotDisableIfStoppedToggled(true);
 }
@@ -473,7 +499,7 @@ void EmailPrefTab::restore()
 void EmailPrefTab::apply(bool syncToDisc)
 {
 	int client = mEmailClient->id(mEmailClient->selected());
-	mPreferences->mEmailClient             = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+	mPreferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
 #if KDE_VERSION >= 210
 	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
 	mPreferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text());

@@ -1,7 +1,6 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *
  *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef PREFERENCES_H
@@ -46,8 +41,9 @@ class Preferences : public QObject
 		Q_OBJECT
 	public:
 		enum MailClient { SENDMAIL, KMAIL };
+		enum Feb29Type  { FEB29_MAR1, FEB29_FEB28, FEB29_NONE };
 
-		Preferences(QWidget* parent);
+		static Preferences* instance();
 
 		const ColourList& messageColours() const        { return mMessageColours; }
 		QColor         defaultBgColour() const          { return mDefaultBgColour; }
@@ -59,6 +55,7 @@ class Preferences : public QObject
 		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
 		bool           autostartTrayIcon() const        { return mAutostartTrayIcon; }
 		bool           confirmAlarmDeletion() const     { return mConfirmAlarmDeletion; }
+		Feb29Type      feb29RecurType() const           { return mFeb29RecurType; }
 		bool           modalMessages() const            { return mModalMessages; }
 		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
 		bool           showAlarmTime() const            { return mShowAlarmTime; }
@@ -102,6 +99,7 @@ class Preferences : public QObject
 		static const bool        default_disableAlarmsIfStopped;
 		static const bool        default_autostartTrayIcon;
 		static const bool        default_confirmAlarmDeletion;
+		static const Feb29Type   default_feb29RecurType;
 		static const bool        default_modalMessages;
 		static const bool        default_showExpiredAlarms;
 		static const bool        default_showAlarmTime;
@@ -132,6 +130,8 @@ class Preferences : public QObject
 	signals:
 		void preferencesChanged();
 	private:
+		Preferences() : QObject(0) { }     // only one instance allowed
+		static Preferences* mInstance;
 		int                 startOfDayCheck() const;
 		QString             mEmailAddress;
 		QString             mEmailBccAddress;
@@ -152,6 +152,7 @@ class Preferences : public QObject
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
 		bool                mConfirmAlarmDeletion;
+		Feb29Type           mFeb29RecurType;
 		bool                mModalMessages;
 		bool                mShowExpiredAlarms;
 		bool                mShowAlarmTime;

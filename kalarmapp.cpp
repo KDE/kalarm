@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -43,6 +39,7 @@
 #include <kfileitem.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kstaticdeleter.h>
 #include <kdebug.h>
 
 #include <kalarmd/clientinfo.h>
@@ -79,6 +76,10 @@ int         marginKDE2 = 0;
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
 static bool convInterval(QCString timeParam, KAlarmEvent::RecurType&, int& timeInterval);
 
+static KStaticDeleter<AlarmCalendar> calendarDeleter;           // ensures destructor is called
+static KStaticDeleter<AlarmCalendar> expiredCalendarDeleter;    // ensures destructor is called
+static KStaticDeleter<AlarmCalendar> displayCalendarDeleter;    // ensures destructor is called
+
 KAlarmApp*  KAlarmApp::theInstance = 0;
 int         KAlarmApp::activeCount = 0;
 
@@ -91,7 +92,6 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
-	  mPreferences(new Preferences(0)),
 	  mDaemonCheckInterval(0),
 	  mCalendarUpdateCount(0),
 	  mDaemonRegistered(false),
@@ -106,11 +106,12 @@ KAlarmApp::KAlarmApp()
 	marginKDE2 = KDialog::marginHint();
 #endif
 	mCommandProcesses.setAutoDelete(true);
-	mPreferences->loadPreferences();
-	connect(mPreferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
+	Preferences* preferences = Preferences::instance();
+	connect(preferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
+	KAlarmEvent::setFeb29RecurType();
 	readDaemonCheckInterval();
 	KConfig* config = kapp->config();
 	config->setGroup(QString::fromLatin1("General"));
@@ -135,7 +136,8 @@ KAlarmApp::KAlarmApp()
 		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(activeKey).arg(activeCal), aboutData()->programName());
 		exit(1);
 	}
-	mCalendar = new AlarmCalendar(activeCal, KAlarmEvent::ACTIVE, activeICal, activeKey);
+	mCalendar = calendarDeleter.setObject(
+	                 new AlarmCalendar(activeCal, KAlarmEvent::ACTIVE, activeICal, activeKey));
 	if (!mCalendar->valid())
 	{
 		QString path = mCalendar->path();
@@ -159,8 +161,10 @@ KAlarmApp::KAlarmApp()
 		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(expiredKey).arg(expiredCal), aboutData()->programName());
 		exit(1);
 	}
-	mExpiredCalendar = new AlarmCalendar(expiredCal, KAlarmEvent::EXPIRED, expiredICal, expiredKey);
-	mDisplayCalendar = new AlarmCalendar(displayCal, KAlarmEvent::DISPLAYING);
+	mExpiredCalendar = expiredCalendarDeleter.setObject(
+	                        new AlarmCalendar(expiredCal, KAlarmEvent::EXPIRED, expiredICal, expiredKey));
+	mDisplayCalendar = displayCalendarDeleter.setObject(
+	                        new AlarmCalendar(displayCal, KAlarmEvent::DISPLAYING));
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
 	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
@@ -170,12 +174,12 @@ KAlarmApp::KAlarmApp()
 	mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
 	mSavedNoSystemTray      = mNoSystemTray;
 	mOldRunInSystemTray     = wantRunInSystemTray();
-	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && mPreferences->disableAlarmsIfStopped();
-	mStartOfDay             = mPreferences->startOfDay();
-	if (mPreferences->startOfDayChanged())
+	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && preferences->disableAlarmsIfStopped();
+	mStartOfDay             = preferences->startOfDay();
+	if (preferences->startOfDayChanged())
 		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-	mOldExpiredColour   = mPreferences->expiredColour();
-	mOldExpiredKeepDays = mPreferences->expiredKeepDays();
+	mOldExpiredColour   = preferences->expiredColour();
+	mOldExpiredKeepDays = preferences->expiredKeepDays();
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
@@ -195,9 +199,9 @@ KAlarmApp::KAlarmApp()
 */
 KAlarmApp::~KAlarmApp()
 {
-	mCalendar->close();
-	mExpiredCalendar->close();
-	mDisplayCalendar->close();
+	delete mCalendar;         mCalendar = 0;
+	delete mExpiredCalendar;  mExpiredCalendar = 0;
+	delete mDisplayCalendar;  mDisplayCalendar = 0;
 }
 
 /******************************************************************************
@@ -250,7 +254,7 @@ bool KAlarmApp::restoreSession()
 
 	// Try to display the system tray icon if it is configured to be autostarted,
 	// or if we're in run-in-system-tray mode.
-	if (mPreferences->autostartTrayIcon()
+	if (Preferences::instance()->autostartTrayIcon()
 	||  KAlarmMainWindow::count()  &&  wantRunInSystemTray())
 		displayTrayIcon(true, trayParent);
 
@@ -429,8 +433,8 @@ int KAlarmApp::newInstance()
 
 				bool      alarmNoTime = false;
 				QDateTime alarmTime, endTime;
-				QColor    bgColour = mPreferences->defaultBgColour();
-				QColor    fgColour = mPreferences->defaultFgColour();
+				QColor    bgColour = Preferences::instance()->defaultBgColour();
+				QColor    fgColour = Preferences::instance()->defaultFgColour();
 				KCal::Recurrence recurrence(0);
 				if (args->isSet("color"))
 				{
@@ -876,7 +880,7 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	(new KAlarmPrefDlg(mPreferences))->exec();
+	(new KAlarmPrefDlg(Preferences::instance()))->exec();
 }
 
 /******************************************************************************
@@ -938,7 +942,7 @@ void KAlarmApp::slotPreferencesChanged()
 		--activeCount;
 	}
 
-	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && mPreferences->disableAlarmsIfStopped();
+	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::instance()->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
@@ -947,31 +951,33 @@ void KAlarmApp::slotPreferencesChanged()
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
-	if (mPreferences->startOfDay() != mStartOfDay)
+	if (Preferences::instance()->startOfDay() != mStartOfDay)
 		changeStartOfDay();
 
+	KAlarmEvent::setFeb29RecurType();    // in case the date for February 29th recurrences has changed
+
 	bool refreshExpired = false;
-	if (mPreferences->expiredColour() != mOldExpiredColour)
+	if (Preferences::instance()->expiredColour() != mOldExpiredColour)
 	{
 		// The expired alarms text colour has changed
 		refreshExpired = true;
-		mOldExpiredColour = mPreferences->expiredColour();
+		mOldExpiredColour = Preferences::instance()->expiredColour();
 	}
 
-	if (mPreferences->expiredKeepDays() != mOldExpiredKeepDays)
+	if (Preferences::instance()->expiredKeepDays() != mOldExpiredKeepDays)
 	{
 		// Whether or not expired alarms are being kept has changed
 		if (mOldExpiredKeepDays < 0
-		||  mPreferences->expiredKeepDays() >= 0  &&  mPreferences->expiredKeepDays() < mOldExpiredKeepDays)
+		||  Preferences::instance()->expiredKeepDays() >= 0  &&  Preferences::instance()->expiredKeepDays() < mOldExpiredKeepDays)
 		{
 			// expired alarms are now being kept for less long
 			if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
-				mExpiredCalendar->purge(mPreferences->expiredKeepDays(), true);
+				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), true);
 			refreshExpired = true;
 		}
 		else if (!mOldExpiredKeepDays)
 			refreshExpired = true;
-		mOldExpiredKeepDays = mPreferences->expiredKeepDays();
+		mOldExpiredKeepDays = Preferences::instance()->expiredKeepDays();
 	}
 
 	if (refreshExpired)
@@ -985,8 +991,8 @@ void KAlarmApp::changeStartOfDay()
 {
 	if (KAlarmEvent::adjustStartOfDay(mCalendar->events()))
 		calendarSave();
-	mPreferences->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
-	mStartOfDay = mPreferences->startOfDay();
+	Preferences::instance()->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
+	mStartOfDay = Preferences::instance()->startOfDay();
 }
 
 /******************************************************************************
@@ -994,7 +1000,7 @@ void KAlarmApp::changeStartOfDay()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return mPreferences->runInSystemTray()  &&  mKDEDesktop;
+	return Preferences::instance()->runInSystemTray()  &&  mKDEDesktop;
 }
 
 /******************************************************************************
@@ -1130,7 +1136,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					if (alarm.dateTime().isDateOnly())
 					{
 						// The alarm has no time, so cancel it if its date is past
-						QDateTime limit(alarm.date().addDays(1), mPreferences->startOfDay());
+						QDateTime limit(alarm.date().addDays(1), Preferences::instance()->startOfDay());
 						if (now >= limit)
 						{
 							// It's too late to display the scheduled occurrence.
@@ -1144,7 +1150,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAlarmEvent::RECURRENCE_DATE_TIME:
 								case KAlarmEvent::LAST_OCCURRENCE:
 									limit.setDate(next.date().addDays(1));
-									limit.setTime(mPreferences->startOfDay());
+									limit.setTime(Preferences::instance()->startOfDay());
 									if (now >= limit)
 									{
 										if (type == KAlarmEvent::LAST_OCCURRENCE)
@@ -1696,13 +1702,13 @@ void KAlarmApp::archiveEvent(KAlarmEvent& event)
 */
 AlarmCalendar* KAlarmApp::expiredCalendar(bool saveIfPurged)
 {
-	if (mPreferences->expiredKeepDays())
+	if (Preferences::instance()->expiredKeepDays())
 	{
 		// Expired events are being kept
 		if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
 		{
-			if (mPreferences->expiredKeepDays() > 0)
-				mExpiredCalendar->purge(mPreferences->expiredKeepDays(), saveIfPurged);
+			if (Preferences::instance()->expiredKeepDays() > 0)
+				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), saveIfPurged);
 			return mExpiredCalendar;
 		}
 		kdError(5950) << "KAlarmApp::expiredCalendar(): open error\n";

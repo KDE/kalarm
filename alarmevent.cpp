@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001, 2002 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include <stdlib.h>
@@ -1298,7 +1294,7 @@ KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDat
 	}
 	QDateTime recurStart = mRecurrence->recurStart();
 	QDateTime after = afterDateTime;
-	if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > theApp()->preferences()->startOfDay())
+	if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > Preferences::instance()->startOfDay())
 		after = after.addDays(1);    // today's recurrence (if today recurs) has passed
 	bool last;
 	QDateTime dt = mRecurrence->getPreviousDateTime(after, &last);
@@ -1361,7 +1357,7 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 {
 	QDateTime recurStart = mRecurrence->recurStart();
 	QDateTime pre = preDateTime;
-	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < theApp()->preferences()->startOfDay())
+	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::instance()->startOfDay())
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 	remainingCount = 0;
 	bool last;
@@ -1942,7 +1938,7 @@ int KAlarmEvent::recurInterval() const
 bool KAlarmEvent::adjustStartOfDay(const Event::List& events)
 {
 	bool changed = false;
-	QTime startOfDay = theApp()->preferences()->startOfDay();
+	QTime startOfDay = Preferences::instance()->startOfDay();
         for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
@@ -2014,6 +2010,34 @@ bool KAlarmEvent::adjustStartOfDay(const Event::List& events)
 }
 
 /******************************************************************************
+ * Set the yearly February 29th recurrence type according to the user's
+ * preferences.
+ */
+void KAlarmEvent::setFeb29RecurType()
+{
+	Preferences::Feb29Type pfeb29 = Preferences::instance()->feb29RecurType();
+	switch (pfeb29)
+	{
+		case Preferences::FEB29_FEB28:
+		case Preferences::FEB29_NONE:
+		case Preferences::FEB29_MAR1:
+			break;
+		default:
+			pfeb29 = Preferences::default_feb29RecurType;
+			break;
+	}
+	Recurrence::Feb29Type feb29;
+	switch (pfeb29)
+	{
+		case Preferences::FEB29_FEB28:  feb29 = Recurrence::rFeb28;  break;
+		case Preferences::FEB29_NONE:   feb29 = Recurrence::rFeb29;  break;
+		case Preferences::FEB29_MAR1:
+		default:                        feb29 = Recurrence::rMar1;   break;
+	}
+	Recurrence::setFeb29YearlyTypeDefault(feb29);
+}
+
+/******************************************************************************
  * If the calendar was written by a previous version of KAlarm, do any
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.
@@ -2042,7 +2066,7 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
-	QTime startOfDay = theApp()->preferences()->startOfDay();
+	QTime startOfDay = Preferences::instance()->startOfDay();
 
 	Event::List events = calendar.events();
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
@@ -2399,7 +2423,7 @@ int KAAlarmEventBase::flags() const
 
 const QFont& KAAlarmEventBase::font() const
 {
-	return mDefaultFont ? theApp()->preferences()->messageFont() : mFont;
+	return mDefaultFont ? Preferences::instance()->messageFont() : mFont;
 }
 
 #ifndef NDEBUG

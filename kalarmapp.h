@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef KALARMAPP_H
@@ -62,7 +58,6 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar*     expiredCalendar(bool saveIfPurged = true);
 		AlarmCalendar&     displayCalendar()               { return *mDisplayCalendar; }
 		void               checkCalendar()                 { initCheck(); }
-		Preferences*       preferences()                   { return mPreferences; }
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
@@ -172,7 +167,6 @@ class KAlarmApp : public KUniqueApplication
 		KAction*              mActionPrefs;         // action to display the preferences dialog
 		KAction*              mActionDaemonControl; // action to display the alarm daemon control dialog
 		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
-		Preferences*          mPreferences;         // program preferences
 		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change
 		QTime                 mStartOfDay;          // start-of-day time currently in use

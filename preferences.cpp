@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include <kglobal.h>
@@ -30,6 +26,7 @@
 
 #include "preferences.moc"
 
+Preferences* Preferences::mInstance = 0;
 
 // Default config file settings
 QColor defaultMessageColours[] = { Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow, Qt::white, Qt::lightGray, Qt::black, QColor() };
@@ -64,10 +61,12 @@ const bool       Preferences::default_defaultEmailBcc          = false;
 const QString    Preferences::default_emailAddress             = QString::null;
 const QString    Preferences::default_emailBccAddress          = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
+const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
 const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
 
-static const QString    defaultEmailClient = QString::fromLatin1("kmail");
+static const QString    defaultFeb29RecurType = QString::fromLatin1("Mar1");
+static const QString    defaultEmailClient    = QString::fromLatin1("kmail");
 
 // Config file entry names
 static const QString GENERAL_SECTION          = QString::fromLatin1("General");
@@ -78,6 +77,7 @@ static const QString RUN_IN_SYSTEM_TRAY       = QString::fromLatin1("RunInSystem
 static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlarmsIfStopped");
 static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
 static const QString CONFIRM_ALARM_DELETION   = QString::fromLatin1("ConfirmAlarmDeletion");
+static const QString FEB29_RECUR_TYPE         = QString::fromLatin1("Feb29Recur");
 static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
 static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
 static const QString SHOW_ALARM_TIME          = QString::fromLatin1("ShowAlarmTime");
@@ -114,14 +114,19 @@ inline int Preferences::startOfDayCheck() const
 }
 
 
-Preferences::Preferences(QWidget* parent)
-	: QObject(parent)
+Preferences* Preferences::instance()
 {
-	// Initialise static variables here to avoid static initialisation
-	// sequencing errors.
-	default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+	if (!mInstance)
+	{
+		mInstance = new Preferences;
 
-	loadPreferences();
+		// Initialise static variables here to avoid static initialisation
+		// sequencing errors.
+		default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+
+		mInstance->loadPreferences();
+	}
+	return mInstance;
 }
 
 void Preferences::loadPreferences()
@@ -147,6 +152,8 @@ void Preferences::loadPreferences()
 	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
 	mConfirmAlarmDeletion    = config->readBoolEntry(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+	QCString feb29           = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
+	mFeb29RecurType          = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
 	mModalMessages           = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
 	mShowExpiredAlarms       = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
 	mShowTimeToAlarm         = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
@@ -156,10 +163,10 @@ void Preferences::loadPreferences()
 	mShowTooltipTimeToAlarm  = config->readBoolEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
 	mTooltipTimeToPrefix     = config->readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
-	QCString client = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
-	mEmailClient = (client == "sendmail" ? SENDMAIL : KMAIL);
+	QCString client          = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
+	mEmailClient             = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailQueuedNotify       = config->readBoolEntry(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
-	bool bccFrom = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
+	bool bccFrom             = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
 	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
 	mEmailBccUseControlCentre = bccFrom ? mEmailUseControlCentre      // compatibility with pre-0.9.5
 	                          : config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre);
@@ -206,6 +213,7 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(CONFIRM_ALARM_DELETION, mConfirmAlarmDeletion);
+	config->writeEntry(FEB29_RECUR_TYPE, (mFeb29RecurType == FEB29_MAR1 ? "Mar1" : mFeb29RecurType == FEB29_FEB28 ? "Feb28" : "None"));
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
 	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
