@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -65,6 +75,10 @@ static KCmdLineOptions options[] =
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
 	{ "p", 0, 0 },
 	{ "play <url>", I18N_NOOP("Audio file to play once"), 0 },
+#if KDE_VERSION >= 290
+	{ "P", 0, 0 },
+	{ "play-repeat <url>", I18N_NOOP("Audio file to play repeatedly"), 0 },
+#endif
 	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
@@ -77,10 +91,9 @@ static KCmdLineOptions options[] =
 	{ "t", 0, 0 },
 	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
 	{ "tray", I18N_NOOP("Display system tray icon"), 0 },
+	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
 	{ "u", 0, 0 },
 	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
-	{ "displayEvent <eventID>", I18N_NOOP("Obsolete: use --triggerEvent instead"), 0 },
-	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
 	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
 	KCmdLineLastOption
 };

@@ -57,12 +57,14 @@
 #include <libkcal/icalformat.h>
 
 #include "alarmcalendar.h"
+#include "alarmlistview.h"
 #include "mainwindow.h"
 #include "editdlg.h"
 #include "messagewin.h"
 #include "daemon.h"
 #include "daemongui.h"
 #include "dcophandler.h"
+#include "functions.h"
 #include "traywindow.h"
 #include "kamail.h"
 #include "preferences.h"
@@ -72,10 +74,6 @@
 #include <netwm.h>
 
 extern QCString execArguments;
-
-const QString ACTIVE_CALENDAR(QString::fromLatin1("calendar.ics"));
-const QString ARCHIVE_CALENDAR(QString::fromLatin1("expired.ics"));
-const QString DISPLAY_CALENDAR(QString::fromLatin1("displaying.ics"));
 
 int         marginKDE2 = 0;
 
@@ -93,12 +91,9 @@ static inline int maxLateness()
 	return Daemon::maxTimeSinceCheck() + LATENESS_LEEWAY;
 }
 
-static KStaticDeleter<AlarmCalendar> calendarDeleter;           // ensures destructor is called
-static KStaticDeleter<AlarmCalendar> expiredCalendarDeleter;    // ensures destructor is called
-static KStaticDeleter<AlarmCalendar> displayCalendarDeleter;    // ensures destructor is called
 
-KAlarmApp*  KAlarmApp::theInstance = 0;
-int         KAlarmApp::activeCount = 0;
+KAlarmApp*  KAlarmApp::theInstance  = 0;
+int         KAlarmApp::mActiveCount = 0;
 
 
 /******************************************************************************
@@ -109,15 +104,11 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
-	  mDaemonStartTimer(0),
-	  mDaemonCheckInterval(0),
-	  mCalendarUpdateCount(0),
-	  mDaemonRegistered(false),
+	  mProcessingQueue(false),
 	  mCheckingSystemTray(false),
-	  mDaemonRunning(false),
-	  mSessionClosingDown(false)
+	  mSessionClosingDown(false),
+	  mRefreshExpiredAlarms(false)
 {
-	kdDebug(5950) << "KAlarmApp::KAlarmApp()\n";
 #if KDE_VERSION >= 290
 	mNoShellAccess = !authorize("shell_access");
 #else
@@ -131,91 +122,41 @@ KAlarmApp::KAlarmApp()
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	KAEvent::setFeb29RecurType();
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("General"));
 
-	/* Initialise the alarm calendars, and ensure that their file names are different.
-	 * There are 3 calendars:
-	 *  1) A user-independent one containing the active alarms;
-	 *  2) A historical one containing expired alarms;
-	 *  3) A user-specific one which contains details of alarms which are currently
-	 *     being displayed to that user and which have not yet been acknowledged.
-	 */
-	QRegExp vcsRegExp(QString::fromLatin1("\\.vcs$"));
-	QString ical = QString::fromLatin1(".ics");
-	QString displayCal = locateLocal("appdata", DISPLAY_CALENDAR);
-	QString activeKey = QString::fromLatin1("Calendar");
-	QString activeCal = config->readPathEntry(activeKey, locateLocal("appdata", ACTIVE_CALENDAR));
-	QString activeICal = activeCal;
-	activeICal.replace(vcsRegExp, ical);
-	if (activeICal == displayCal)
-	{
-		kdError(5950) << "KAlarmApp::KAlarmApp(): active calendar name = display calendar name\n";
-		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(activeKey).arg(activeCal), aboutData()->programName());
-		exit(1);
-	}
-	mCalendar = calendarDeleter.setObject(
-	                 new AlarmCalendar(activeCal, KAEvent::ACTIVE, activeICal, activeKey));
-	if (!mCalendar->valid())
-	{
-		QString path = mCalendar->path();
-		kdError(5950) << "KAlarmApp::KAlarmApp(): invalid name: " << path << endl;
-		KMessageBox::error(0, i18n("Invalid calendar file name: %1").arg(path), aboutData()->programName());
-		exit(1);
-	}
-	connect(mCalendar, SIGNAL(calendarSaved(AlarmCalendar*)), SLOT(calendarSaved(AlarmCalendar*)));
-
-	QString expiredKey = QString::fromLatin1("ExpiredCalendar");
-	QString expiredCal = config->readPathEntry(expiredKey, locateLocal("appdata", ARCHIVE_CALENDAR));
-	QString expiredICal = expiredCal;
-	expiredICal.replace(vcsRegExp, ical);
-	if (expiredICal == activeICal)
-	{
-		kdError(5950) << "KAlarmApp::KAlarmApp(): active calendar name = expired calendar name\n";
-		KMessageBox::error(0, i18n("%1, %2: file names must be different").arg(activeKey).arg(expiredKey), aboutData()->programName());
-		exit(1);
-	}
-	if (expiredICal == displayCal)
-	{
-		kdError(5950) << "KAlarmApp::KAlarmApp(): expired calendar name = display calendar name\n";
-		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(expiredKey).arg(expiredCal), aboutData()->programName());
-		exit(1);
-	}
-	mExpiredCalendar = expiredCalendarDeleter.setObject(
-	                        new AlarmCalendar(expiredCal, KAEvent::EXPIRED, expiredICal, expiredKey));
-	mDisplayCalendar = displayCalendarDeleter.setObject(
-	                        new AlarmCalendar(displayCal, KAEvent::DISPLAYING));
+	if (!AlarmCalendar::initialiseCalendars())
+		exit(1);    // calendar names clash, so give up
+	connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
 	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
 	const char* wmname = nri.wmName();
 	mKDEDesktop = wmname && !strcmp(wmname, "KWin");
 
+	KConfig* config = kapp->config();
+	config->setGroup(QString::fromLatin1("General"));
 	mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
 	mSavedNoSystemTray      = mNoSystemTray;
 	mOldRunInSystemTray     = wantRunInSystemTray();
 	mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && preferences->disableAlarmsIfStopped();
 	mStartOfDay             = preferences->startOfDay();
-	if (preferences->startOfDayChanged())
+	if (preferences->hasStartOfDayChanged())
 		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 	mOldExpiredColour   = preferences->expiredColour();
 	mOldExpiredKeepDays = preferences->expiredKeepDays();
 
 	// Set up actions used by more than one menu
-	mActionCollection = new KActionCollection(this);
-	mActionAlarmEnable   = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()),
-	                                               mActionCollection, "alarmenable");
-	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), mActionCollection);
-	mActionNewAlarm      = createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), mActionCollection);
+	mActionCollection  = new KActionCollection(this);
+	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_A, this, SLOT(toggleAlarmsEnabled()),
+	                                             mActionCollection, "alarmenable");
+	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), mActionCollection);
+	mActionNewAlarm    = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), mActionCollection);
 }
 
 /******************************************************************************
 */
 KAlarmApp::~KAlarmApp()
 {
-	delete mCalendar;         mCalendar = 0;
-	delete mExpiredCalendar;  mExpiredCalendar = 0;
-	delete mDisplayCalendar;  mDisplayCalendar = 0;
+	AlarmCalendar::terminateCalendars();
 }
 
 /******************************************************************************
@@ -244,10 +185,10 @@ bool KAlarmApp::restoreSession()
 
 	// Process is being restored by session management.
 	kdDebug(5950) << "KAlarmApp::restoreSession(): Restoring\n";
-	++activeCount;
+	++mActiveCount;
 	if (!initCheck(true))     // open the calendar file (needed for main windows)
 	{
-		--activeCount;
+		--mActiveCount;
 		quitIf(1, true);    // error opening the main calendar - quit
 		return true;
 	}
@@ -282,7 +223,7 @@ bool KAlarmApp::restoreSession()
 	||  KAlarmMainWindow::count()  &&  wantRunInSystemTray())
 		displayTrayIcon(true, trayParent);
 
-	--activeCount;
+	--mActiveCount;
 	quitIf(0);           // quit if no windows are open
 	return true;
 }
@@ -293,12 +234,12 @@ bool KAlarmApp::restoreSession()
 */
 int KAlarmApp::newInstance()
 {
-	++activeCount;
+	kdDebug(5950)<<"KAlarmApp::newInstance()\n";
+	++mActiveCount;
 	int exitCode = 0;               // default = success
 	static bool firstInstance = true;
-	if (firstInstance  &&  isRestored())
-		kdDebug(5950)<<"KAlarmApp::newInstance(): restoring\n";
-	else
+	bool dontRedisplay = false;
+	if (!firstInstance || !isRestored())
 	{
 		QString usage;
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -316,21 +257,23 @@ int KAlarmApp::newInstance()
 			{
 				// Stop the alarm daemon
 				kdDebug(5950)<<"KAlarmApp::newInstance(): stop\n";
-				args->clear();      // free up memory
+				args->clear();         // free up memory
 				if (!Daemon::stop())
 				{
 					exitCode = 1;
 					break;
 				}
+				dontRedisplay = true;  // exit program if no other instances running
 			}
 			else
 			if (args->isSet("reset"))
 			{
-				// Reset the alarm daemon
+				// Reset the alarm daemon, if it's running.
+				// (If it's not running, it will reset automatically when it eventually starts.)
 				kdDebug(5950)<<"KAlarmApp::newInstance(): reset\n";
-				args->clear();      // free up memory
-				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
+				args->clear();         // free up memory
 				Daemon::reset();
+				dontRedisplay = true;  // exit program if no other instances running
 			}
 			else
 			if (args->isSet("tray"))
@@ -343,7 +286,6 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!initCheck())   // open the calendar, register with daemon
 				{
 					exitCode = 1;
@@ -356,8 +298,7 @@ int KAlarmApp::newInstance()
 				}
 			}
 			else
-			if (args->isSet("handleEvent")  ||  args->isSet("triggerEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL")
-/* superseded */	||  args->isSet("displayEvent"))  // kept for compatibility
+			if (args->isSet("handleEvent")  ||  args->isSet("triggerEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
 			{
 				// Display or delete the event with the specified event ID
 				kdDebug(5950)<<"KAlarmApp::newInstance(): handle event\n";
@@ -365,7 +306,6 @@ int KAlarmApp::newInstance()
 				int count = 0;
 				const char* option = 0;
 				if (args->isSet("handleEvent"))   { function = EVENT_HANDLE;  option = "handleEvent";  ++count; }
-/* superseded */		if (args->isSet("displayEvent"))  { function = EVENT_TRIGGER;  option = "displayEvent";  ++count; }
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
 				if (!count)
@@ -380,7 +320,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("calendarURL"))
 				{
 					QString calendarUrl = args->getOption("calendarURL");
-					if (KURL(calendarUrl).url() != mCalendar->urlString())
+					if (KURL(calendarUrl).url() != AlarmCalendar::activeCalendar()->urlString())
 						USAGE(i18n("%1: wrong calendar file").arg(QString::fromLatin1("--calendarURL")))
 				}
 				QString eventID = args->getOption(option);
@@ -553,12 +493,15 @@ int KAlarmApp::newInstance()
 				}
 
 				QCString audioFile;
-				if (args->isSet("play"))
+				bool     audioRepeat = args->isSet("play-repeat");
+				if (audioRepeat  ||  args->isSet("play"))
 				{
 					// Play a sound with the alarm
+					if (audioRepeat  &&  args->isSet("play"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1("--play")))
-					audioFile = args->getOption("play");
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
+					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
 				}
 
 				int reminderMinutes = 0;
@@ -593,6 +536,8 @@ int KAlarmApp::newInstance()
 					flags |= KAEvent::CONFIRM_ACK;
 				if (args->isSet("beep"))
 					flags |= KAEvent::BEEP;
+				if (audioRepeat)
+					flags |= KAEvent::REPEAT_SOUND;
 				if (args->isSet("late-cancel"))
 					flags |= KAEvent::LATE_CANCEL;
 				if (args->isSet("login"))
@@ -604,7 +549,11 @@ int KAlarmApp::newInstance()
 				args->clear();      // free up memory
 
 				// Display or schedule the event
-				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
 				if (!scheduleEvent(alMessage, alarmTime, bgColour, fgColour, QFont(), flags, audioFile,
 				                   alAddresses, alSubject, alAttachments, action, recurrence,
 				                   reminderMinutes))
@@ -635,6 +584,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--login ");
 				if (args->isSet("play"))
 					usage += QString::fromLatin1("--play ");
+				if (args->isSet("play-repeat"))
+					usage += QString::fromLatin1("--play-repeat ");
 				if (args->isSet("reminder"))
 					usage += QString::fromLatin1("--reminder ");
 				if (args->isSet("subject"))
@@ -648,7 +599,6 @@ int KAlarmApp::newInstance()
 				}
 
 				args->clear();      // free up memory
-				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!initCheck())
 				{
 					exitCode = 1;
@@ -668,10 +618,10 @@ int KAlarmApp::newInstance()
 			exitCode = 1;
 		}
 	}
-	if (firstInstance)
+	if (firstInstance  &&  !dontRedisplay  &&  !exitCode)
 		redisplayAlarms();
 
-	--activeCount;
+	--mActiveCount;
 	firstInstance = false;
 
 	// Quit the application if this was the last/only running "instance" of the program.
@@ -695,7 +645,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	else
 	{
 		// Quit only if there are no more "instances" running
-		if (activeCount > 0  ||  MessageWin::instanceCount())
+		if (mActiveCount > 0  ||  MessageWin::instanceCount())
 			return;
 		int mwcount = KAlarmMainWindow::count();
 		KAlarmMainWindow* mw = mwcount ? KAlarmMainWindow::firstWindow() : 0;
@@ -741,6 +691,46 @@ void KAlarmApp::commitData(QSessionManager& sm)
 }
 
 /******************************************************************************
+* The main processing loop for KAlarm.
+* All KAlarm operations involving opening or updating calendar files are called
+* from this loop to ensure that only one operation is active at any one time.
+* This precaution is necessary because KAlarm's activities are mostly
+* asynchronous, being in response to DCOP calls from the alarm daemon (or other
+* programs) or timer events, any of which can be received in the middle of
+* performing another operation. If a calendar file is opened or updated while
+* another calendar operation is in progress, the program has been observed to
+* hang, or the first calendar call has failed with data loss - clearly
+* unacceptable!!
+*/
+void KAlarmApp::processQueue()
+{
+	if (!mProcessingQueue)
+	{
+		kdDebug(5950) << "KAlarmApp::processQueue()\n";
+		mProcessingQueue = true;
+
+		// Reset the alarm daemon if it's been queued
+		KAlarm::resetDaemonIfQueued();
+
+		// Process DCOP calls
+		while (mDcopQueue.count())
+		{
+			DcopQEntry& entry = mDcopQueue.first();
+			if (entry.eventId.isEmpty())
+				KAlarm::addEvent(entry.event, 0);
+			else
+				handleEvent(entry.eventId, entry.function);
+			mDcopQueue.pop_front();
+		}
+
+		// Purge the expired alarms calendar if it's time to do so
+		AlarmCalendar::expiredCalendar()->purgeIfQueued();
+
+		mProcessingQueue = false;
+	}
+}
+
+/******************************************************************************
 *  Redisplay alarms which were being shown when the program last exited.
 *  Normally, these alarms will have been displayed by session restoration, but
 *  if the program crashed or was killed, we can redisplay them here so that
@@ -748,9 +738,10 @@ void KAlarmApp::commitData(QSessionManager& sm)
 */
 void KAlarmApp::redisplayAlarms()
 {
-	if (mDisplayCalendar->isOpen())
+	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
+	if (cal->isOpen())
 	{
-		Event::List events = mDisplayCalendar->events();
+		Event::List events = cal->events();
 		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
                         Event* kcalEvent = *it;
@@ -865,35 +856,8 @@ bool KAlarmApp::checkSystemTray()
 }
 
 /******************************************************************************
-*  Display a main window with the specified event selected.
+* Return the main window associated with the system tray icon.
 */
-KAlarmMainWindow* KAlarmApp::displayMainWindowSelected(const QString& eventID)
-{
-	KAlarmMainWindow* win = KAlarmMainWindow::firstWindow();
-	if (!win)
-	{
-		if (initCheck())
-		{
-			win = KAlarmMainWindow::create();
-			win->show();
-		}
-	}
-	else
-	{
-		// There is already a main window, so make it the active window
-		if (!win->isVisible())
-		{
-			win->hide();        // in case it's on a different desktop
-			win->showNormal();
-		}
-		win->raise();
-		win->setActiveWindow();
-	}
-	if (win  &&  !eventID.isEmpty())
-		win->selectEvent(eventID);
-	return win;
-}
-
 KAlarmMainWindow* KAlarmApp::trayMainWindow() const
 {
 	return mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
@@ -915,12 +879,12 @@ void KAlarmApp::toggleAlarmsEnabled()
 */
 void KAlarmApp::slotPreferences()
 {
-	KAlarmPrefDlg prefDlg(Preferences::instance());
+	KAlarmPrefDlg prefDlg;
 	prefDlg.exec();
 }
 
 /******************************************************************************
-*  Called when the New button is clicked to edit a new alarm to add to the list.
+*  Called when the New menu item is clicked to edit a new alarm to add to the list.
 */
 void KAlarmApp::slotNewAlarm()
 {
@@ -928,27 +892,16 @@ void KAlarmApp::slotNewAlarm()
 }
 
 /******************************************************************************
-* Create a New Alarm KAction.
-*/
-KAction* KAlarmApp::createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions)
-{
-#if KDE_VERSION >= 310
-	return new KAction(label, "filenew2", Qt::Key_Insert, receiver, slot, actions, "new");
-#else
-	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, "new");
-#endif
-}
-
-/******************************************************************************
 *  Called when KAlarm preferences have changed.
 */
 void KAlarmApp::slotPreferencesChanged()
 {
+	Preferences* preferences = Preferences::instance();
 	bool newRunInSysTray = wantRunInSystemTray();
 	if (newRunInSysTray != mOldRunInSystemTray)
 	{
 		// The system tray run mode has changed
-		++activeCount;          // prevent the application from quitting
+		++mActiveCount;         // prevent the application from quitting
 		KAlarmMainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
 		mTrayWindow = 0;
@@ -959,49 +912,43 @@ void KAlarmApp::slotPreferencesChanged()
 				delete win;
 		}
 		displayTrayIcon(true);
-		--activeCount;
+		--mActiveCount;
 	}
 
 	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::instance()->disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by Daemon::reregister()
-		Preferences::setNotify(TrayWindow::QUIT_WARN, true, true);   // since mode has changed, re-allow warning messages on Quit
+		preferences->setQuitWarn(true);   // since mode has changed, re-allow warning messages on Quit
 		Daemon::reregister();           // re-register with the alarm daemon
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
-	if (Preferences::instance()->startOfDay() != mStartOfDay)
+	if (preferences->startOfDay() != mStartOfDay)
 		changeStartOfDay();
 
 	KAEvent::setFeb29RecurType();    // in case the date for February 29th recurrences has changed
 
-	bool refreshExpired = false;
-	if (Preferences::instance()->expiredColour() != mOldExpiredColour)
+	if (preferences->expiredColour() != mOldExpiredColour)
 	{
 		// The expired alarms text colour has changed
-		refreshExpired = true;
-		mOldExpiredColour = Preferences::instance()->expiredColour();
+		mRefreshExpiredAlarms = true;
+		mOldExpiredColour = preferences->expiredColour();
 	}
 
-	if (Preferences::instance()->expiredKeepDays() != mOldExpiredKeepDays)
+	if (preferences->expiredKeepDays() != mOldExpiredKeepDays)
 	{
-		// Whether or not expired alarms are being kept has changed
-		if (mOldExpiredKeepDays < 0
-		||  Preferences::instance()->expiredKeepDays() >= 0  &&  Preferences::instance()->expiredKeepDays() < mOldExpiredKeepDays)
-		{
-			// expired alarms are now being kept for less long
-			if (mExpiredCalendar->open())
-				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), true);
-			refreshExpired = true;
-		}
-		else if (!mOldExpiredKeepDays)
-			refreshExpired = true;
-		mOldExpiredKeepDays = Preferences::instance()->expiredKeepDays();
+		// How long expired alarms are being kept has changed.
+		// N.B. This also adjusts for any change in start-of-day time.
+		mOldExpiredKeepDays = preferences->expiredKeepDays();
+		AlarmCalendar::expiredCalendar()->setPurgeDays(mOldExpiredKeepDays);
 	}
 
-	if (refreshExpired)
+	if (mRefreshExpiredAlarms)
+	{
+		mRefreshExpiredAlarms = false;
 		KAlarmMainWindow::updateExpired();
+	}
 }
 
 /******************************************************************************
@@ -1009,10 +956,21 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
-	if (KAEvent::adjustStartOfDay(mCalendar->events()))
-		calendarSave();
+	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+	if (KAEvent::adjustStartOfDay(cal->events()))
+		cal->save();
 	Preferences::instance()->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
 	mStartOfDay = Preferences::instance()->startOfDay();
+}
+
+/******************************************************************************
+*  Called when the expired alarms calendar has been purged.
+*  Updates the alarm list in all main windows.
+*/
+void KAlarmApp::slotExpiredPurged()
+{
+	mRefreshExpiredAlarms = false;
+	KAlarmMainWindow::updateExpired();
 }
 
 /******************************************************************************
@@ -1057,11 +1015,13 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 	{
 		// Alarm is due for display already
 		execAlarm(event, event.firstAlarm(), false);
-		if (event.recurType() == KAEvent::NO_RECUR
+		if (!event.recurs()
 		||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
 			return true;
 	}
-	return addEvent(event, 0);     // event instance will now belong to the calendar
+	mDcopQueue.append(DcopQEntry(event));
+	QTimer::singleShot(0, this, SLOT(processQueue()));
+	return true;
 }
 
 /******************************************************************************
@@ -1070,13 +1030,17 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
-void KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, EventFunc function)
+bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, EventFunc function)
 {
 	kdDebug(5950) << "KAlarmApp::handleEvent(DCOP): " << eventID << endl;
-	if (KURL(urlString).url() != mCalendar->urlString())
+	if (KURL(urlString).url() != AlarmCalendar::activeCalendar()->urlString())
+	{
 		kdError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
-	else
-		handleEvent(eventID, function);
+		return false;
+	}
+	mDcopQueue.append(DcopQEntry(function, eventID));
+	QTimer::singleShot(0, this, SLOT(processQueue()));
+	return true;
 }
 
 /******************************************************************************
@@ -1090,7 +1054,7 @@ void KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
 	kdDebug(5950) << "KAlarmApp::handleEvent(): " << eventID << ", " << (function==EVENT_TRIGGER?"TRIGGER":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
-	Event* kcalEvent = mCalendar->event(eventID);
+	Event* kcalEvent = AlarmCalendar::activeCalendar()->event(eventID);
 	if (!kcalEvent)
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
@@ -1109,7 +1073,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			break;
 		}
 		case EVENT_CANCEL:
-			deleteEvent(event, 0, false);
+			KAlarm::deleteEvent(event, true);
 			break;
 
 		case EVENT_HANDLE:
@@ -1249,7 +1213,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			if (displayAlarm.valid())
 				execAlarm(event, displayAlarm, true, !displayAlarm.repeatAtLogin());
 			else if (updateCalAndDisplay)
-				updateEvent(event, 0);     // update the window lists and calendar file
+				KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
 			else
 				kdDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
 			break;
@@ -1259,14 +1223,14 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 }
 
 /******************************************************************************
-* Called when an alarm is currently being displayed, to add a copy of the alarm
-* with on-display status, and to reschedule it for its next repetition.
+* Called when an alarm is currently being displayed, to store a copy of the
+* alarm in the displaying calendar, and to reschedule it for its next repetition.
 * If no repetitions remain, cancel it.
 */
 void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const DateTime& alarmTime)
 {
 	kdDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(alarmType) << ")\n";
-	Event* kcalEvent = mCalendar->event(event.id());
+	Event* kcalEvent = AlarmCalendar::activeCalendar()->event(event.id());
 	if (!kcalEvent)
 		kdError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
 	else
@@ -1279,11 +1243,12 @@ void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const Date
 			// Copy the alarm to the displaying calendar in case of a crash, etc.
 			KAEvent dispEvent;
 			dispEvent.setDisplaying(event, alarmType, alarmTime.dateTime());
-			if (mDisplayCalendar->open())
+			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
+			if (cal)
 			{
-				mDisplayCalendar->deleteEvent(dispEvent.id());   // in case it already exists
-				mDisplayCalendar->addEvent(dispEvent);
-				mDisplayCalendar->save();
+				cal->deleteEvent(dispEvent.id());   // in case it already exists
+				cal->addEvent(dispEvent);
+				cal->save();
 			}
 
 			rescheduleAlarm(event, alarm, true);
@@ -1341,7 +1306,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 		}
 	}
 	if (update)
-		updateEvent(event, 0);     // update the window lists and calendar file
+		KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
 }
 
 /******************************************************************************
@@ -1354,15 +1319,15 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the expired calendar file first.
-		QString id = event.id();    // save event ID since archiveEvent() changes it
-		archiveEvent(event);
+		QString id = event.id();    // save event ID since KAlarm::archiveEvent() changes it
+		KAlarm::archiveEvent(event);
 		event.setEventID(id);       // restore event ID
 	}
 	event.removeExpiredAlarm(alarmType);
 	if (!event.alarmCount())
-		deleteEvent(event, 0, false, false);
+		KAlarm::deleteEvent(event, false);
 	else if (updateCalAndDisplay)
-		updateEvent(event, 0);    // update the window lists and calendar file
+		KAlarm::updateEvent(event, 0);    // update the window lists and calendar file
 }
 
 /******************************************************************************
@@ -1550,255 +1515,6 @@ void KAlarmApp::commandMessage(KProcess* proc, QWidget* parent)
 }
 
 /******************************************************************************
-* Fetch an event with the given ID from the appropriate (active or expired) calendar.
-*/
-const Event* KAlarmApp::getEvent(const QString& eventID)
-{
-	if (!eventID.isEmpty())
-	{
-		if (KAEvent::uidStatus(eventID) == KAEvent::EXPIRED)
-		{
-			if (expiredCalendar())
-				return mExpiredCalendar->event(eventID);
-		}
-		else
-			return mCalendar->event(eventID);
-	}
-	return 0;
-}
-
-/******************************************************************************
-* Add a new active (non-expired) alarm.
-* Save it in the calendar file and add it to every main window instance.
-* Parameters:
-*    win  = initiating main window instance (which has already been updated)
-*/
-bool KAlarmApp::addEvent(const KAEvent& event, KAlarmMainWindow* win, bool useEventID)
-{
-	kdDebug(5950) << "KAlarmApp::addEvent(): " << event.id() << endl;
-	if (!initCheck())
-		return false;
-
-	// Save the event details in the calendar file, and get the new event ID
-	mCalendar->addEvent(event, useEventID);
-	calendarSave();
-
-	// Update the window lists
-	KAlarmMainWindow::addEvent(event, win);
-	return true;
-}
-
-/******************************************************************************
-* Modify an active (non-expired) alarm in every main window instance.
-* The new event will have a different event ID from the old one.
-* Parameters:
-*    win  = initiating main window instance (which has already been updated)
-*/
-void KAlarmApp::modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, KAlarmMainWindow* win)
-{
-	kdDebug(5950) << "KAlarmApp::modifyEvent(): '" << oldEvent.id() << endl;
-
-	if (!newEvent.valid())
-		deleteEvent(oldEvent, win, true);
-	else
-	{
-		// Update the event in the calendar file, and get the new event ID
-		mCalendar->deleteEvent(oldEvent.id());
-		mCalendar->addEvent(newEvent, true);
-		calendarSave();
-
-		// Update the window lists
-		KAlarmMainWindow::modifyEvent(oldEvent.id(), newEvent, win);
-	}
-}
-
-/******************************************************************************
-* Update an active (non-expired) alarm in every main window instance.
-* The new event will have the same event ID as the old one.
-* Parameters:
-*    win  = initiating main window instance (which has already been updated)
-*/
-void KAlarmApp::updateEvent(KAEvent& event, KAlarmMainWindow* win, bool archiveOnDelete)
-{
-	kdDebug(5950) << "KAlarmApp::updateEvent(): " << event.id() << endl;
-
-	if (!event.valid())
-		deleteEvent(event, win, true, archiveOnDelete);
-	else
-	{
-		// Update the event in the calendar file
-		event.incrementRevision();
-		mCalendar->updateEvent(event);
-		calendarSave();
-
-		// Update the window lists
-		KAlarmMainWindow::modifyEvent(event, win);
-	}
-}
-
-/******************************************************************************
-* Delete an alarm from every main window instance.
-* Parameters:
-*    win  = initiating main window instance (which has already been updated)
-*/
-void KAlarmApp::deleteEvent(KAEvent& event, KAlarmMainWindow* win, bool tellDaemon, bool archive)
-{
-	kdDebug(5950) << "KAlarmApp::deleteEvent(): " << event.id() << endl;
-
-	// Update the window lists
-	KAlarmMainWindow::deleteEvent(event.id(), win);
-
-	// Delete the event from the calendar file
-	if (KAEvent::uidStatus(event.id()) == KAEvent::EXPIRED)
-	{
-		if (expiredCalendar(false))
-			mExpiredCalendar->deleteEvent(event.id(), true);   // save calendar after deleting
-	}
-	else
-	{
-		QString id = event.id();
-		if (archive  &&  event.toBeArchived())
-			archiveEvent(event);
-		mCalendar->deleteEvent(id);
-		calendarSave(tellDaemon);
-	}
-}
-
-/******************************************************************************
-* Delete an alarm from the display calendar.
-*/
-void KAlarmApp::deleteDisplayEvent(const QString& eventID) const
-{
-	kdDebug(5950) << "KAlarmApp::deleteDisplayEvent(): " << eventID << endl;
-
-	if (KAEvent::uidStatus(eventID) == KAEvent::DISPLAYING)
-	{
-		if (mDisplayCalendar->open())
-			mDisplayCalendar->deleteEvent(eventID, true);   // save calendar after deleting
-	}
-}
-
-/******************************************************************************
-* Undelete an expired alarm in every main window instance.
-* Parameters:
-*    win  = initiating main window instance (which has already been updated)
-*/
-void KAlarmApp::undeleteEvent(KAEvent& event, KAlarmMainWindow* win)
-{
-	kdDebug(5950) << "KAlarmApp::undeleteEvent(): " << event.id() << endl;
-
-	// Delete the event from the expired calendar file
-	if (KAEvent::uidStatus(event.id()) == KAEvent::EXPIRED)
-	{
-		QString id = event.id();
-		mCalendar->addEvent(event);
-		calendarSave();
-
-		// Update the window lists
-		KAlarmMainWindow::undeleteEvent(id, event, win);
-
-		if (expiredCalendar(false))
-			mExpiredCalendar->deleteEvent(id, true);   // save calendar after deleting
-	}
-}
-
-/******************************************************************************
-* Save the event in the expired calendar file.
-* The event's ID is changed to an expired ID.
-*/
-void KAlarmApp::archiveEvent(KAEvent& event)
-{
-	kdDebug(5950) << "KAlarmApp::archiveEvent(" << event.id() << ")\n";
-	if (expiredCalendar(false))
-	{
-		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
-		Event* kcalEvent = mExpiredCalendar->addEvent(event);
-		mExpiredCalendar->save();
-
-		if (kcalEvent)
-			KAlarmMainWindow::modifyEvent(KAEvent(*kcalEvent), 0);   // update window lists
-	}
-}
-
-/******************************************************************************
-* Open the expired calendar file if necessary, and purge old events from it.
-*/
-AlarmCalendar* KAlarmApp::expiredCalendar(bool saveIfPurged)
-{
-	if (Preferences::instance()->expiredKeepDays())
-	{
-		// Expired events are being kept
-		if (mExpiredCalendar->open())
-		{
-			if (Preferences::instance()->expiredKeepDays() > 0)
-				mExpiredCalendar->purge(Preferences::instance()->expiredKeepDays(), saveIfPurged);
-			return mExpiredCalendar;
-		}
-		kdError(5950) << "KAlarmApp::expiredCalendar(): open error\n";
-	}
-	return 0;
-}
-
-/******************************************************************************
-* Flag the start of a group of calendar update calls.
-*/
-void KAlarmApp::startCalendarUpdate()
-{
-	if (!mCalendarUpdateCount++)
-	{
-		mCalendarUpdateSave   = false;
-		mCalendarUpdateReload = false;
-	}
-}
-
-/******************************************************************************
-* Flag the end of a group of calendar update calls.
-*/
-void KAlarmApp::endCalendarUpdate()
-{
-	if (mCalendarUpdateCount > 0)
-		--mCalendarUpdateCount;
-	if (!mCalendarUpdateCount)
-	{
-		if (mCalendarUpdateSave)
-		{
-			mCalendar->save();
-			mCalendarUpdateSave = false;
-		}
-		if (mCalendarUpdateReload)
-			Daemon::reload();
-	}
-}
-
-/******************************************************************************
-* Save the alarm calendar and optionally reload the alarm daemon.
-*/
-void KAlarmApp::calendarSave(bool reload)
-{
-	if (reload)
-		mCalendarUpdateReload = true;
-	if (mCalendarUpdateCount)
-		mCalendarUpdateSave = true;
-	else
-	{
-		mCalendar->save();
-		mCalendarUpdateSave = false;
-		if (mCalendarUpdateReload)
-			Daemon::reload();
-	}
-}
-
-/******************************************************************************
-* Called when a calendar has been saved.
-* If it's the alarm calendar, notify the alarm daemon.
-*/
-void KAlarmApp::calendarSaved(AlarmCalendar* cal)
-{
-	if (cal == mCalendar)
-		Daemon::reload();
-}
-
-/******************************************************************************
 * Set up the DCOP handlers.
 */
 void KAlarmApp::setUpDcop()
@@ -1817,12 +1533,13 @@ void KAlarmApp::setUpDcop()
 bool KAlarmApp::initCheck(bool calendarOnly)
 {
 	bool startdaemon;
-	if (!mCalendar->isOpen())
+	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+	if (!cal->isOpen())
 	{
-		kdDebug(5950) << "KAlarmApp::initCheck(): opening calendar\n";
+		kdDebug(5950) << "KAlarmApp::initCheck(): opening active calendar\n";
 
 		// First time through. Open the calendar file.
-		if (!mCalendar->open())
+		if (!cal->open())
 			return false;
 
 		if (!mStartOfDay.isValid())
@@ -1833,14 +1550,15 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 * redisplayAlarms() is executing open() (but before open() completes),
 		 * which causes problems!!
 		 */
-		mDisplayCalendar->open();
+		AlarmCalendar::displayCalendar()->open();
 
 		/* Need to open the expired alarm calendar now, since otherwise if the daemon
 		 * immediately notifies multiple alarms, the second alarm is likely to be
 		 * processed while the calendar is executing open() (but before open() completes),
 		 * which causes a hang!!
 		 */
-		mExpiredCalendar->open();
+		AlarmCalendar::expiredCalendar()->open();
+		AlarmCalendar::expiredCalendar()->setPurgeDays(theInstance->mOldExpiredKeepDays);
 
 		startdaemon = true;
 	}
@@ -1854,73 +1572,6 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 			Daemon::start();  // make sure the alarm daemon is running
 	}
 	return true;
-}
-
-/******************************************************************************
-*  Read the size for the specified window from the config file, for the
-*  current screen resolution.
-*  Reply = window size.
-*/
-QSize KAlarmApp::readConfigWindowSize(const char* window, const QSize& defaultSize)
-{
-	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1(window));
-	QWidget* desktop = KApplication::desktop();
-	return QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), defaultSize.width()),
-	             config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), defaultSize.height()));
-}
-
-/******************************************************************************
-*  Write the size for the specified window to the config file, for the
-*  current screen resolution.
-*/
-void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
-{
-	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1(window));
-	QWidget* desktop = KApplication::desktop();
-	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
-	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
-	config->sync();
-}
-
-/******************************************************************************
-* Check from its mime type whether a file appears to be a text or image file.
-* Reply = 0 if not a text or image file
-*       = 1 if a plain text file
-*       = 2 if a formatted text file
-*       = 3 if an application text file
-*       = 4 if an image file.
-*/
-int KAlarmApp::fileType(const QString& mimetype)
-{
-	static const char* applicationTypes[] = {
-		"x-shellscript", "x-nawk", "x-awk", "x-perl", "x-python",
-		"x-desktop", "x-troff", 0 };
-	static const char* formattedTextTypes[] = {
-		"html", "xml", 0 };
-
-	if (mimetype.startsWith(QString::fromLatin1("image/")))
-		return 4;
-	int slash = mimetype.find('/');
-	if (slash < 0)
-		return 0;
-	QString type = mimetype.mid(slash + 1);
-	const char* typel = type.latin1();
-	if (mimetype.startsWith(QString::fromLatin1("application")))
-	{
-		for (int i = 0;  applicationTypes[i];  ++i)
-			if (!strcmp(typel, applicationTypes[i]))
-				return 3;
-	}
-	else if (mimetype.startsWith(QString::fromLatin1("text")))
-	{
-		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (!strcmp(typel, formattedTextTypes[i]))
-				return 2;
-		return 1;
-	}
-	return 0;
 }
 
 /******************************************************************************

@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef KALARMAPP_H
@@ -36,6 +46,7 @@ namespace KCal { class Event; }
 class DcopHandler;
 class AlarmCalendar;
 class KAlarmMainWindow;
+class AlarmListView;
 class MessageWin;
 class TrayWindow;
 class DaemonGuiHandler;
@@ -50,10 +61,7 @@ class KAlarmApp : public KUniqueApplication
 		~KAlarmApp();
 		virtual int        newInstance();
 		static KAlarmApp*  getInstance();
-		AlarmCalendar&     getCalendar()                   { return *mCalendar; }
-		AlarmCalendar*     expiredCalendar(bool saveIfPurged = true);
-		AlarmCalendar&     displayCalendar()               { return *mDisplayCalendar; }
-		void               checkCalendar()                 { initCheck(); }
+		bool               checkCalendarDaemon()           { return initCheck(); }
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
@@ -63,7 +71,6 @@ class KAlarmApp : public KUniqueApplication
 		void               quitIf()                        { quitIf(0); }
 		void               addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void               removeWindow(TrayWindow*);
-		KAlarmMainWindow*  displayMainWindowSelected(const QString& eventID = QString::null);
 		TrayWindow*        trayWindow() const              { return mTrayWindow; }
 		KAlarmMainWindow*  trayMainWindow() const;
 		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
@@ -72,39 +79,23 @@ class KAlarmApp : public KUniqueApplication
 		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
 		KAction*           actionPreferences() const       { return mActionPrefs; }
 		KAction*           actionNewAlarm() const          { return mActionNewAlarm; }
-		static KAction*    createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*);
 		bool               editNewAlarm(KAlarmMainWindow* = 0);
-		QSize              readConfigWindowSize(const char* window, const QSize& defaultSize);
-		void               writeConfigWindowSize(const char* window, const QSize&);
 		virtual void       commitData(QSessionManager&);
 
-		const KCal::Event* getEvent(const QString& eventID);
-		bool               addEvent(const KAEvent&, KAlarmMainWindow*, bool useEventID = false);
-		void               modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, KAlarmMainWindow*);
-		void               updateEvent(KAEvent&, KAlarmMainWindow*, bool archiveOnDelete = true);
-		void               deleteEvent(KAEvent&, KAlarmMainWindow*, bool tellDaemon = true, bool archive = true);
-		void               deleteDisplayEvent(const QString& eventID) const;
-		void               undeleteEvent(KAEvent&, KAlarmMainWindow*);
-		void               archiveEvent(KAEvent&);
-		void               startCalendarUpdate();
-		void               endCalendarUpdate();
-		void               calendarSave(bool reload = true);
 		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true);
 		void               alarmShowing(KAEvent&, KAAlarm::Type, const DateTime&);
-		void               deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
+		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(KProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QColor& fg, const QFont&,
 		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
 		                                 const QString& mailSubject, const QStringList& mailAttachments,
 		                                 KAEvent::Action, const KCal::Recurrence&, int reminderMinutes);
-		void               handleEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_HANDLE); }
-		void               triggerEvent(const QString& calendarFile, const QString& eventID)   { handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
-		void               deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }
-
-		static int         fileType(const QString& mimetype);
+		bool               handleEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_HANDLE); }
+		bool               triggerEvent(const QString& calendarFile, const QString& eventID)   { return handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
+		bool               deleteEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_CANCEL); }
 	public slots:
-		void               displayMainWindow()     { displayMainWindowSelected(); }
+		void               processQueue();
 	signals:
 		void               trayIconToggled();
 	protected:
@@ -116,7 +107,7 @@ class KAlarmApp : public KUniqueApplication
 		void               slotNewAlarm();
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
-		void               calendarSaved(AlarmCalendar*);
+		void               slotExpiredPurged();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData
@@ -130,6 +121,15 @@ class KAlarmApp : public KUniqueApplication
 			QCString             shell;
 			QGuardedPtr<QWidget> messageBoxParent;
 		};
+		struct DcopQEntry
+		{
+			DcopQEntry(EventFunc f, const QString& id) : function(f), eventId(id) { }
+			DcopQEntry(const KAEvent& e) : event(e) { }
+			DcopQEntry() { }
+			EventFunc  function;
+			QString    eventId;
+			KAEvent    event;
+		};
 
 		bool               initCheck(bool calendarOnly = false);
 		void               quitIf(int exitCode, bool force = false);
@@ -137,45 +137,35 @@ class KAlarmApp : public KUniqueApplication
 		bool               checkSystemTray();
 		void               changeStartOfDay();
 		void               setUpDcop();
-		void               handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
+		bool               handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
 		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
 
 		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance
-		static int            activeCount;          // number of active instances without main windows
+		static int            mActiveCount;         // number of active instances without main windows
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
 		DaemonGuiHandler*     mDaemonGuiHandler;    // the parent of the system tray DCOP receiver object
 		TrayWindow*           mTrayWindow;          // active system tray icon
-		AlarmCalendar*        mCalendar;            // the calendar containing the active alarms
-		AlarmCalendar*        mExpiredCalendar;     // the calendar containing closed alarms
-		AlarmCalendar*        mDisplayCalendar;     // the calendar containing currently displaying alarms
 		ActionAlarmsEnabled*  mActionAlarmEnable;   // action to enable/disable alarms
 		KActionCollection*    mActionCollection;
 		KAction*              mActionPrefs;         // action to display the preferences dialog
 		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
-		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
-		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change
-		QTimer*               mDaemonStartTimer;    // timer to check daemon status after starting daemon
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mOldExpiredColour;    // expired alarms text colour
 		int                   mOldExpiredKeepDays;  // how long expired alarms are being kept
 		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
-		int                   mDaemonCheckInterval; // daemon check interval (seconds)
-		int                   mCalendarUpdateCount; // nesting level of calendarUpdate calls
-		int                   mDaemonStartTimeout;  // remaining number of times to check if alarm daemon has started
-		bool                  mCalendarUpdateSave;  // save() was called while mCalendarUpdateCount > 0
-		bool                  mCalendarUpdateReload;// reloadDaemon() was called while mCalendarUpdateCount > 0
-		bool                  mDaemonRegistered;    // true if we've registered with alarm daemon
+		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
+		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed
 		bool                  mNoShellAccess;       // shell commands are not allowed (kiosk mode)
 		bool                  mKDEDesktop;          // running on KDE desktop
 		bool                  mNoSystemTray;        // no KDE system tray exists
 		bool                  mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true
 		bool                  mCheckingSystemTray;  // the existence of the system tray is being checked
-		bool                  mDaemonRunning;       // whether the alarm daemon is currently running
 		bool                  mSessionClosingDown;  // session manager is closing the application
 		bool                  mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
+		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

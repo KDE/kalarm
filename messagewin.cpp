@@ -16,9 +16,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
+
+#include <string.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -30,6 +42,7 @@
 #include <qdragobject.h>
 #define KDE2_QTEXTEDIT_VIEW     // for KDE2 QTextEdit compatibility
 #include <qtextedit.h>
+#include <qtimer.h>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -47,11 +60,19 @@
 #include <kprocess.h>
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
+#if KDE_VERSION >= 290
+#include <arts/kartsdispatcher.h>
+#include <arts/kartsserver.h>
+#include <arts/kplayobjectfactory.h>
+#include <arts/kplayobject.h>
+#else
 #include <kaudioplayer.h>
+#endif
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
 #include "deferdlg.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "synchtimer.h"
@@ -96,7 +117,7 @@ class MWMimeSourceFactory : public QMimeSourceFactory
 static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
 
-QPtrList<MessageWin> MessageWin::windowList;
+QPtrList<MessageWin> MessageWin::mWindowList;
 
 
 /******************************************************************************
@@ -121,20 +142,22 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedul
 	  confirmAck(evnt.confirmAck()),
 	  action(alarm.action()),
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
-	  deferButton(0),
-	  restoreHeight(0),
-	  rescheduleEvent(reschedule_event),
-	  shown(false),
-	  deferClosing(false),
+	  mArtsDispatcher(0),
+	  mPlayObject(0),
+	  mDeferButton(0),
+	  mRestoreHeight(0),
+	  mRescheduleEvent(reschedule_event),
+	  mShown(false),
+	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
 	if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
-		size = theApp()->readConfigWindowSize("FileMessage", size);
+		size = KAlarm::readConfigWindowSize("FileMessage", size);
 	resize(size);
-	windowList.append(this);
+	mWindowList.append(this);
 }
 
 /******************************************************************************
@@ -159,18 +182,20 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringL
 	  action(alarm.action()),
 	  mErrorMsgs(errmsgs),
 	  noDefer(true),
-	  deferButton(0),
-	  restoreHeight(0),
-	  rescheduleEvent(reschedule_event),
-	  shown(false),
-	  deferClosing(false),
+	  mArtsDispatcher(0),
+	  mPlayObject(0),
+	  mDeferButton(0),
+	  mRestoreHeight(0),
+	  mRescheduleEvent(reschedule_event),
+	  mShown(false),
+	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
 	resize(size);
-	windowList.append(this);
+	mWindowList.append(this);
 }
 
 /******************************************************************************
@@ -179,25 +204,34 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringL
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0, "MessageWin", WFLAGS),
-	  rescheduleEvent(false),
-	  shown(true),
-	  deferClosing(false),
+	  mArtsDispatcher(0),
+	  mPlayObject(0),
+	  mRescheduleEvent(false),
+	  mShown(true),
+	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
-	windowList.append(this);
+	mWindowList.append(this);
 }
 
 MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
-	for (MessageWin* w = windowList.first();  w;  w = windowList.next())
+#if KDE_VERSION >= 290
+	delete mPlayObject;      mPlayObject = 0;
+	delete mArtsDispatcher;  mArtsDispatcher = 0;
+	if (!mLocalAudioFile.isEmpty())
+		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
+#endif
+
+	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w == this)
 		{
-			windowList.remove();
+			mWindowList.remove();
 			break;
 		}
-	if (!windowList.count())
+	if (!mWindowList.count())
 		theApp()->quitIf();
 }
 
@@ -223,7 +257,7 @@ QSize MessageWin::initView()
 			frame = new QFrame(topWidget);
 			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-			layout = new QVBoxLayout(frame, 2*frame->frameWidth(), KDialog::spacingHint());
+			layout = new QVBoxLayout(frame, leading + frame->frameWidth(), leading);
 		}
 
 		// Alarm date/time
@@ -413,11 +447,11 @@ QSize MessageWin::initView()
 	if (!noDefer)
 	{
 		// Defer button
-		deferButton = new QPushButton(i18n("&Defer..."), topWidget);
-		deferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
-		connect(deferButton, SIGNAL(clicked()), SLOT(slotDefer()));
-		grid->addWidget(deferButton, 0, 2, AlignHCenter);
-		QWhatsThis::add(deferButton,
+		mDeferButton = new QPushButton(i18n("&Defer..."), topWidget);
+		mDeferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
+		grid->addWidget(mDeferButton, 0, 2, AlignHCenter);
+		QWhatsThis::add(mDeferButton,
 		      i18n("Defer the alarm until later.\n"
 		           "You will be prompted to specify when the alarm should be redisplayed."));
 	}
@@ -438,8 +472,8 @@ QSize MessageWin::initView()
 	QSize minbutsize = okButton->sizeHint();
 	if (!noDefer)
 	{
-		minbutsize = minbutsize.expandedTo(deferButton->sizeHint());
-		deferButton->setFixedSize(minbutsize);
+		minbutsize = minbutsize.expandedTo(mDeferButton->sizeHint());
+		mDeferButton->setFixedSize(minbutsize);
 	}
 	okButton->setFixedSize(minbutsize);
 
@@ -506,7 +540,7 @@ void MessageWin::setRemainingTextMinute()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
-	if (shown)
+	if (mShown)
 	{
 		config->writeEntry(QString::fromLatin1("EventID"), eventID);
 		config->writeEntry(QString::fromLatin1("AlarmType"), mAlarmType);
@@ -535,23 +569,23 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	eventID       = config->readEntry(QString::fromLatin1("EventID"));
-	mAlarmType    = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
-	message       = config->readEntry(QString::fromLatin1("Message"));
-	int t         = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
+	eventID        = config->readEntry(QString::fromLatin1("EventID"));
+	mAlarmType     = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
+	message        = config->readEntry(QString::fromLatin1("Message"));
+	int t          = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
 	if (t < 0)
 		mErrorMsgs += "";       // set non-null
-	action        = KAAlarm::Action(t);
-	font          = config->readFontEntry(QString::fromLatin1("Font"));
-	mBgColour     = config->readColorEntry(QString::fromLatin1("BgColour"));
-	mFgColour     = config->readColorEntry(QString::fromLatin1("FgColour"));
-	confirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
+	action         = KAAlarm::Action(t);
+	font           = config->readFontEntry(QString::fromLatin1("Font"));
+	mBgColour      = config->readColorEntry(QString::fromLatin1("BgColour"));
+	mFgColour      = config->readColorEntry(QString::fromLatin1("FgColour"));
+	confirmAck     = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
-	QDateTime dt  = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
-	bool dateOnly = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	QDateTime dt   = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	bool dateOnly  = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
-	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
-	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	mRestoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
+	noDefer        = config->readBoolEntry(QString::fromLatin1("NoDefer"));
 	if (!mErrorMsgs.count()  &&  mAlarmType != KAAlarm::INVALID_ALARM)
 		initView();
 }
@@ -562,7 +596,7 @@ void MessageWin::readProperties(KConfig* config)
 */
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
-	for (MessageWin* w = windowList.first();  w;  w = windowList.next())
+	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w->eventID == eventID)
 			return w;
 	return 0;
@@ -579,15 +613,118 @@ void MessageWin::playAudio()
 		KNotifyClient::beep();     // beep through the sound card & speakers
 		QApplication::beep();      // beep through the internal speaker
 	}
-	const QString& audioFile = mEvent.audioFile();
-	if (!audioFile.isEmpty())
+	if (!mEvent.audioFile().isEmpty())
 	{
+#if KDE_VERSION >= 290
+		// An audio file is specified. Because loading it may take some time,
+		// call it on a timer to allow the window to display first.
+		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
+#else
+		QString audioFile = mEvent.audioFile();
 		QString play = audioFile;
 		QString file = QString::fromLatin1("file:");
 		if (audioFile.startsWith(file))
 			play = audioFile.mid(file.length());
 		KAudioPlayer::play(QFile::encodeName(play));
+#endif
 	}
+}
+
+/******************************************************************************
+*  Play the audio file.
+*/
+void MessageWin::slotPlayAudio()
+{
+#if KDE_VERSION >= 290
+	// First check that it exists, to avoid possible crashes if the filename is badly specified
+	KURL url(mEvent.audioFile());
+	if (!url.isValid()  ||  !KIO::NetAccess::exists(url)
+	||  !KIO::NetAccess::download(url, mLocalAudioFile))
+	{
+		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mEvent.audioFile() << endl;
+		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mEvent.audioFile()), kapp->aboutData()->programName());
+		return;
+	}
+	if (!mArtsDispatcher)
+	{
+		mPlayTimer = new QTimer(this);
+		connect(mPlayTimer, SIGNAL(timeout()), SLOT(checkAudioPlay()));
+		mArtsDispatcher = new KArtsDispatcher;
+		KArtsServer aserver;
+		KDE::PlayObjectFactory factory(aserver.server());
+		mAudioFileLoadStart = QTime::currentTime();
+		mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
+		mPlayed = false;
+		mPlayedOnce = false;
+		connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
+		if (!mPlayObject->object().isNull())
+			checkAudioPlay();
+	}
+#endif
+}
+
+/******************************************************************************
+*  Called to check whether the audio file playing has completed, and if not to
+*  wait a bit longer.
+*/
+void MessageWin::checkAudioPlay()
+{
+#if KDE_VERSION >= 290
+	if (mPlayObject->state() == Arts::posIdle)
+	{
+		if (mPlayedOnce  &&  !mEvent.repeatSound())
+			return;
+		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
+		if (!mPlayedOnce)
+		{
+			mAudioFileLoadSecs = mAudioFileLoadStart.secsTo(QTime::currentTime());
+			if (mAudioFileLoadSecs < 0)
+				mAudioFileLoadSecs += 86400;
+			mPlayedOnce = true;
+		}
+		if (mAudioFileLoadSecs < 3)
+		{
+			/* The aRts library takes several attempts before a PlayObject can
+			 * be replayed, leaving a gap of perhaps 5 seconds between plays.
+			 * So if loading the file takes a short time, it's better to reload
+			 * the PlayObject rather than try to replay the same PlayObject.
+			 */
+			if (mPlayed)
+			{
+				// Playing has completed. Start playing again.
+				delete mPlayObject;
+				KArtsServer aserver;
+				KDE::PlayObjectFactory factory(aserver.server());
+				mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
+				mPlayed = false;
+				connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
+				if (mPlayObject->object().isNull())
+					return;
+			}
+			mPlayed = true;
+			mPlayObject->play();
+		}
+		else
+		{
+			// The file is slow to load, so attempt to replay the PlayObject
+			static Arts::poTime t0((long)0, (long)0, 0, string());
+			Arts::poTime current = mPlayObject->currentTime();
+			if (current.seconds || current.ms)
+				mPlayObject->seek(t0);
+			else
+				mPlayObject->play();
+		}
+	}
+
+	// The sound file is still playing
+	Arts::poTime overall = mPlayObject->overallTime();
+	Arts::poTime current = mPlayObject->currentTime();
+	int time = 1000*(overall.seconds - current.seconds) + overall.ms - current.ms;
+	if (time < 0)
+		time = 0;
+	kdDebug(5950) << "MessageWin::checkAudioPlay(): wait for " << (time+100) << "ms\n";
+	mPlayTimer->start(time + 100, true);
+#endif
 }
 
 /******************************************************************************
@@ -596,14 +733,14 @@ void MessageWin::playAudio()
 */
 void MessageWin::repeat(const KAAlarm& alarm)
 {
-	const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
+	const Event* kcalEvent = eventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(eventID);
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
 		if (!mDeferDlgShowing  ||  Preferences::instance()->modalMessages())
 		{
-				raise();
-				playAudio();
+			raise();
+			playAudio();
 		}
 		KAEvent event(*kcalEvent);
 		theApp()->alarmShowing(event, mAlarmType, mDateTime);
@@ -618,12 +755,12 @@ void MessageWin::repeat(const KAAlarm& alarm)
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (!shown)
+	if (!mShown)
 	{
 		playAudio();
-		if (rescheduleEvent)
+		if (mRescheduleEvent)
 			theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
-		shown = true;
+		mShown = true;
 	}
 }
 
@@ -632,21 +769,21 @@ void MessageWin::showEvent(QShowEvent* se)
 */
 void MessageWin::resizeEvent(QResizeEvent* re)
 {
-	if (restoreHeight)
+	if (mRestoreHeight)
 	{
-		if (restoreHeight != re->size().height())
+		if (mRestoreHeight != re->size().height())
 		{
 			QSize size = re->size();
-			size.setHeight(restoreHeight);
+			size.setHeight(mRestoreHeight);
 			resize(size);
 		}
 		else if (isVisible())
-			restoreHeight = 0;
+			mRestoreHeight = 0;
 	}
 	else
 	{
 		if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
-			theApp()->writeConfigWindowSize("FileMessage", re->size());
+			KAlarm::writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
 }
@@ -657,7 +794,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-	if (confirmAck  &&  !deferClosing  &&  !theApp()->sessionClosingDown())
+	if (confirmAck  &&  !mDeferClosing  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
@@ -671,7 +808,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 	if (!eventID.isNull())
 	{
 		// Delete from the display calendar
-		theApp()->deleteDisplayEvent(KAEvent::uid(eventID, KAEvent::DISPLAYING));
+		KAlarm::deleteDisplayEvent(KAEvent::uid(eventID, KAEvent::DISPLAYING));
 	}
 	MainWindowBase::closeEvent(ce);
 }
@@ -691,18 +828,18 @@ void MessageWin::slotDefer()
 	if (deferDlg.exec() == QDialog::Accepted)
 	{
 		DateTime dateTime = deferDlg.getDateTime();
-		const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
+		const Event* kcalEvent = eventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(eventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
 			KAEvent event(*kcalEvent);
 			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
-			theApp()->updateEvent(event, 0);
+			KAlarm::updateEvent(event, 0);
 		}
 		else
 		{
 			KAEvent event;
-			kcalEvent = theApp()->displayCalendar().event(KAEvent::uid(eventID, KAEvent::DISPLAYING));
+			kcalEvent = AlarmCalendar::displayCalendar()->event(KAEvent::uid(eventID, KAEvent::DISPLAYING));
 			if (kcalEvent)
 			{
 				event.reinstateFromDisplaying(KAEvent(*kcalEvent));
@@ -717,11 +854,11 @@ void MessageWin::slotDefer()
 				event.setEventID(eventID);
 			}
 			// Add the event back into the calendar file, retaining its ID
-			theApp()->addEvent(event, 0, true);
+			KAlarm::addEvent(event, 0, true);
 			if (kcalEvent)
 			{
 				event.setUid(KAEvent::EXPIRED);
-				theApp()->deleteEvent(event, 0, false, false);
+				KAlarm::deleteEvent(event, false);
 			}
 		}
 		if (theApp()->wantRunInSystemTray())
@@ -730,7 +867,7 @@ void MessageWin::slotDefer()
 			// so start it if necessary so that the deferred alarm will be shown.
 			theApp()->displayTrayIcon(true);
 		}
-		deferClosing = true;   // allow window to close without confirmation prompt
+		mDeferClosing = true;   // allow window to close without confirmation prompt
 		close();
 	}
 	else
@@ -744,7 +881,7 @@ void MessageWin::slotDefer()
 */
 void MessageWin::displayMainWindow()
 {
-	theApp()->displayMainWindowSelected(eventID);
+	KAlarm::displayMainWindowSelected(eventID);
 }
 
 
@@ -761,20 +898,20 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 {
 	view->setMimeSourceFactory(this);
 	QString type = KMimeType::findByPath(absPath)->name();
-	switch (KAlarmApp::fileType(type))
+	switch (KAlarm::fileType(type))
 	{
-		case 1:
-		case 2:
+		case KAlarm::TextPlain:
+		case KAlarm::TextFormatted:
 			mMimeType = type.latin1();
-			// fall through to '3'
-		case 3:
+			// fall through to 'TextApplication'
+		case KAlarm::TextApplication:
 		default:
 			// It's assumed to be a text file
 			mTextFile = absPath;
 			view->QTextBrowser::setSource(absPath);
 			break;
 
-		case 4:
+		case KAlarm::Image:
 			// It's an image file
 			QString text = "<img source=\"";
 			text += absPath;

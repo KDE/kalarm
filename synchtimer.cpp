@@ -88,7 +88,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 					++it;
 			}
 		}
-		if (mConnections.empty())
+		if (!mConnections.count())
 		{
 			mTimer->disconnect();
 			mTimer->stop();

@@ -16,17 +16,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
+
+#include <arts/kmedia2.h>
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
 
 class QPushButton;
 class QLabel;
+class QTimer;
 class AlarmTimeWidget;
+class KArtsDispatcher;
+namespace KDE { class PlayObject; }
 
 /**
  * MessageWin: A window to display an alarm message
@@ -42,9 +57,9 @@ class MessageWin : public MainWindowBase
 		void                repeat(const KAAlarm&);
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
-		bool                hasDefer() const       { return !!deferButton; }
+		bool                hasDefer() const       { return !!mDeferButton; }
 		bool                errorMessage() const   { return mErrorMsgs.count(); }
-		static int          instanceCount()        { return windowList.count(); }
+		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
 	protected:
@@ -57,6 +72,8 @@ class MessageWin : public MainWindowBase
 	private slots:
 		void                slotDefer();
 		void                displayMainWindow();
+		void                slotPlayAudio();
+		void                checkAudioPlay();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
 
@@ -64,7 +81,7 @@ class MessageWin : public MainWindowBase
 		QSize               initView();
 		void                playAudio();
 
-		static QPtrList<MessageWin> windowList;  // list of existing message windows
+		static QPtrList<MessageWin> mWindowList;  // list of existing message windows
 		// KAEvent properties
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QString             message;
@@ -80,13 +97,22 @@ class MessageWin : public MainWindowBase
 		KAAlarm::Action     action;
 		QStringList         mErrorMsgs;
 		bool                noDefer;          // don't display a Defer option
+		// Sound file playing
+		KArtsDispatcher*    mArtsDispatcher;
+		KDE::PlayObject*    mPlayObject;
+		QTimer*             mPlayTimer;       // timer for repeating the sound file
+		bool                mPlayedOnce;      // the sound file has been played at least once
+		bool                mPlayed;          // the PlayObject->play() has been called
 		// Miscellaneous
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
-		QPushButton*        deferButton;
-		int                 restoreHeight;
-		bool                rescheduleEvent;  // true to delete event after message has been displayed
-		bool                shown;            // true once the window has been displayed
-		bool                deferClosing;     // the Defer button is closing the dialog
+		QPushButton*        mDeferButton;
+		QString             mLocalAudioFile;  // local copy of audio file
+		QTime               mAudioFileLoadStart; // time when audio file loading started
+		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file
+		int                 mRestoreHeight;
+		bool                mRescheduleEvent; // true to delete event after message has been displayed
+		bool                mShown;           // true once the window has been displayed
+		bool                mDeferClosing;    // the Defer button is closing the dialog
 		bool                mDeferDlgShowing; // the defer dialog is being displayed
 };
 

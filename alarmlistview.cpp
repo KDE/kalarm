@@ -16,47 +16,45 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
 
-#include <qwhatsthis.h>
-#include <qheader.h>
+//#include <qheader.h>
 #include <qpainter.h>
 #include <qstyle.h>
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <klistview.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "mainwindow.h"
 #include "alarmcalendar.h"
-#include "alarmlistview.moc"
-
-using namespace KCal;
-
-
-class AlarmListWhatsThis : public QWhatsThis
-{
-	public:
-		AlarmListWhatsThis(AlarmListView* lv) : QWhatsThis(lv), listView(lv) { }
-		virtual QString text(const QPoint&);
-	private:
-		AlarmListView* listView;
-};
+#include "functions.h"
+#include "alarmlistview.h"
 
 
 /*=============================================================================
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
 =============================================================================*/
+QValueList<EventListViewBase*>  AlarmListView::mInstanceList;
+
 
 AlarmListView::AlarmListView(QWidget* parent, const char* name)
-	: KListView(parent, name),
+	: EventListViewBase(parent, name),
 	  mTimeColumn(0),
 	  mTimeToColumn(1),
 	  mRepeatColumn(2),
@@ -65,56 +63,49 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  mDrawMessageInColour(false),
 	  mShowExpired(false)
 {
-	setMultiSelection(true);
 	setSelectionMode(QListView::Extended);
 
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Time To"));        // time-to-alarm column
 	addColumn(i18n("Repeat"));         // repeat count column
 	addColumn(QString::null);          // colour column
-	addColumn(i18n("Message, File or Command"));
-	setColumnWidthMode(mMessageColumn, QListView::Maximum);
-	setAllColumnsShowFocus(true);
+	addLastColumn(i18n("Message, File or Command"));
 	setSorting(mTimeColumn);           // sort initially by date/time
-	setShowSortIndicator(true);
 	mTimeColumnHeaderWidth   = columnWidth(mTimeColumn);
 	mTimeToColumnHeaderWidth = columnWidth(mTimeToColumn);
-	mLastColumnHeaderWidth = columnWidth(mMessageColumn);
 	setColumnAlignment(mRepeatColumn, Qt::AlignHCenter);
 	setColumnWidthMode(mRepeatColumn, QListView::Maximum);
 
-	// Find the height of the list items, and set the width of the colour column accordingly
+	// Set the width of the colour column in proportion to height
 	setColumnWidth(mColourColumn, itemHeight() * 3/4);
 	setColumnWidthMode(mColourColumn, QListView::Manual);
-	new AlarmListWhatsThis(this);
+
+	mInstanceList.append(this);
 }
 
-void AlarmListView::clear()
+AlarmListView::~AlarmListView()
 {
-	KListView::clear();
+	mInstanceList.remove(this);
 }
 
 /******************************************************************************
-*  Refresh the list by clearing it and redisplaying all the current alarms.
+*  Add all the current alarms to the list.
 */
-void AlarmListView::refresh()
+void AlarmListView::populate()
 {
-	clear();
 	KAEvent event;
-	Event::List events;
-	Event::List::ConstIterator it;
+	KCal::Event::List events;
+	KCal::Event::List::ConstIterator it;
 	QDateTime now = QDateTime::currentDateTime();
 	if (mShowExpired)
 	{
-		AlarmCalendar* calendar = theApp()->expiredCalendar();
-		if (!calendar)
-			kdError(5950) << "AlarmListView::refresh(): failed to open expired calendar\n";
-		else
+		AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+		if (cal)
 		{
-			events = calendar->events();
+			events = cal->events();
                         for (it = events.begin();  it != events.end();  ++it)
 			{
-                                Event* kcalEvent = *it;
+                                KCal::Event* kcalEvent = *it;
 				if (kcalEvent->alarms().count() > 0)
 				{
 					event.set(*kcalEvent);
@@ -123,15 +114,14 @@ void AlarmListView::refresh()
 			}
 		}
 	}
-	events = theApp()->getCalendar().events();
+	events = AlarmCalendar::activeCalendar()->events();
         for (it = events.begin();  it != events.end();  ++it)
 	{
-                Event* kcalEvent = *it;
+                KCal::Event* kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (mShowExpired  ||  !event.expired())
 			addEntry(event, now);
 	}
-	resizeLastColumn();
 }
 
 /******************************************************************************
@@ -199,146 +189,60 @@ void AlarmListView::updateTimeToAlarms(bool forceDisplay)
 	}
 }
 
-AlarmListViewItem* AlarmListView::getEntry(const QString& eventID)
+/******************************************************************************
+*  Add an event to every list instance.
+*  The selection highlight is moved to the new event in the specified instance only.
+*/
+void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
 {
-	for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
-		if (item->event().id() == eventID)
-			return item;
-	return 0;
+	QDateTime now = QDateTime::currentDateTime();
+	for (InstanceListConstIterator it = mInstanceList.begin();  it != mInstanceList.end();  ++it)
+		static_cast<AlarmListView*>(*it)->addEntry(event, now, true, (*it == view));
 }
 
-AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime& now, bool setSize)
+/******************************************************************************
+*  Add a new item to the list.
+*/
+AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime& now, bool setSize, bool reselect)
 {
 	if (!mShowExpired  &&  event.expired())
 		return 0;
 	AlarmListViewItem* item = new AlarmListViewItem(this, event, now);
-	if (setSize)
-		resizeLastColumn();
-	return item;
+	return static_cast<AlarmListViewItem*>(EventListViewBase::addEntry(item, setSize, reselect));
 }
 
-AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAEvent& newEvent, bool setSize)
+/******************************************************************************
+*  Create a new list item for addEntry().
+*/
+EventListViewItemBase* AlarmListView::createItem(const KAEvent& event)
 {
-	deleteEntry(item);
-	return addEntry(newEvent, setSize);
+	return new AlarmListViewItem(this, event, QDateTime::currentDateTime());
 }
 
-void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
-{
-	if (item)
-	{
-		delete item;
-		if (setSize)
-			resizeLastColumn();
-		emit itemDeleted();
-	}
-}
-
-const KAEvent& AlarmListView::getEvent(AlarmListViewItem* item) const
-{
-	return item->event();
-}
-
+/******************************************************************************
+*  Check whether an item's alarm has expired.
+*/
 bool AlarmListView::expired(AlarmListViewItem* item) const
 {
 	return item->event().expired();
 }
 
 /******************************************************************************
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
+*  Returns the QWhatsThis text for a specified column.
 */
-void AlarmListView::resizeLastColumn()
+QString AlarmListView::whatsThisText(int column) const
 {
-	int messageWidth = mLastColumnHeaderWidth;
-	for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		int mw = item->messageWidth();
-		if (mw > messageWidth)
-			messageWidth = mw;
-	}
-	int x = header()->sectionPos(mMessageColumn);
-	int width = visibleWidth();
-	width -= x;
-	if (width < messageWidth)
-		width = messageWidth;
-	setColumnWidth(mMessageColumn, width);
-	if (contentsWidth() > x + width)
-		resizeContents(x + width, contentsHeight());
-}
-
-int AlarmListView::itemHeight()
-{
-	AlarmListViewItem* item = firstChild();
-	if (!item)
-	{
-		// The list is empty, so create a temporary item to find its height
-		QListViewItem* item = new QListViewItem(this, QString::null);
-		int height = item->height();
-		delete item;
-		return height;
-	}
-	else
-		return item->height();
-}
-
-
-void AlarmListView::setSelected(QListViewItem* item, bool selected)
-{
-	KListView::setSelected(item, selected);
-}
-
-void AlarmListView::setSelected(AlarmListViewItem* item, bool selected)
-{
-	KListView::setSelected(item, selected);
-}
-
-/******************************************************************************
-*  Fetches the single selected item.
-*  Reply = null if no items are selected, or if multiple items are selected.
-*/
-AlarmListViewItem* AlarmListView::singleSelectedItem() const
-{
-	QListViewItem* item = 0;
-	for (QListViewItem* it = firstChild();  it;  it = it->nextSibling())
-	{
-		if (isSelected(it))
-		{
-			if (item)
-				return 0;
-			item = it;
-		}
-	}
-	return (AlarmListViewItem*)item;
-}
-
-/******************************************************************************
-*  Fetches all selected items.
-*/
-QPtrList<AlarmListViewItem> AlarmListView::selectedItems() const
-{
-	QPtrList<AlarmListViewItem> items;
-	items.setAutoDelete(false);
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			items.append((AlarmListViewItem*)item);
-	}
-	return items;
-}
-
-/******************************************************************************
-*  Returns how many items are selected.
-*/
-int AlarmListView::selectedCount() const
-{
-	int count = 0;
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			++count;
-	}
-	return count;
+	if (column == mTimeColumn)
+		return i18n("Next scheduled date and time of the alarm");
+	if (column == mTimeToColumn)
+		return i18n("How long until the next scheduled trigger of the alarm");
+	if (column == mRepeatColumn)
+		return i18n("How often the alarm recurs");
+	if (column == mColourColumn)
+		return i18n("Background color of alarm message");
+	if (column == mMessageColumn)
+		return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line. The alarm type is indicated by the icon at the left.");
+	return i18n("List of scheduled alarms");
 }
 
 
@@ -346,36 +250,12 @@ int AlarmListView::selectedCount() const
 =  Class: AlarmListViewItem
 =  Contains the details of one alarm for display in the AlarmListView.
 =============================================================================*/
-QPixmap* AlarmListViewItem::textIcon;
-QPixmap* AlarmListViewItem::fileIcon;
-QPixmap* AlarmListViewItem::commandIcon;
-QPixmap* AlarmListViewItem::emailIcon;
-int      AlarmListViewItem::iconWidth = 0;
 
 AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
-	: QListViewItem(parent),
-	  mEvent(event),
+	: EventListViewItemBase(parent, event),
 	  mTimeToAlarmShown(false)
 {
-	if (!iconWidth)
-	{
-		// Find the width of the widest icon so that the display can be lined up
-		textIcon    = new QPixmap(SmallIcon("message"));
-		fileIcon    = new QPixmap(SmallIcon("file"));
-		commandIcon = new QPixmap(SmallIcon("exec"));
-		emailIcon   = new QPixmap(SmallIcon("mail_generic"));
-		if (textIcon)
-			iconWidth = textIcon->width();
-		if (fileIcon  &&  fileIcon->width() > iconWidth)
-			iconWidth = fileIcon->width();
-		if (commandIcon  &&  commandIcon->width() > iconWidth)
-			iconWidth = commandIcon->width();
-		if (emailIcon  &&  emailIcon->width() > iconWidth)
-			iconWidth = emailIcon->width();
-	}
-
-	setText(parent->messageColumn(), alarmText(event));
-	mMessageWidth = width(parent->fontMetrics(), parent, parent->messageColumn());
+	setLastColumnText();     // set the message column text
 
 	if (parent->timeColumn() >= 0)
 		setText(parent->timeColumn(), alarmTimeText());
@@ -454,7 +334,7 @@ QString AlarmListViewItem::alarmText(const KAEvent& event)
 */
 QString AlarmListViewItem::alarmTimeText() const
 {
-	DateTime dateTime = mEvent.expired() ? mEvent.startDateTime() : mEvent.nextDateTime();
+	DateTime dateTime = event().expired() ? event().startDateTime() : event().nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
 	if (!dateTime.isDateOnly())
 	{
@@ -469,9 +349,9 @@ QString AlarmListViewItem::alarmTimeText() const
 */
 QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
-	if (mEvent.expired())
+	if (event().expired())
 		return QString::null;
-	DateTime dateTime = mEvent.nextDateTime();
+	DateTime dateTime = event().nextDateTime();
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
@@ -497,7 +377,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 */
 void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDisplay)
 {
-	if (mEvent.expired())
+	if (event().expired())
 	{
 		if (forceDisplay  ||  mTimeToAlarmShown)
 		{
@@ -520,38 +400,29 @@ void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDispla
 void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int column, int width, int /*align*/)
 {
 	const AlarmListView* listView = alarmListView();
-	int                  margin = listView->itemMargin();
-	QRect box(margin, margin, width - margin*2, height() - margin*2);
+	int    margin = listView->itemMargin();
+	QRect  box(margin, margin, width - margin*2, height() - margin*2);
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
-	                   : mEvent.expired() ? Preferences::instance()->expiredColour() : cg.text();
+	                   : event().expired() ? Preferences::instance()->expiredColour() : cg.text();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 
-	if (column == listView->timeColumn())
-		painter->drawText(box, AlignVCenter, text(column));
-	else if (column == listView->timeToColumn())
+	if (column == listView->timeColumn()
+	||  column == listView->timeToColumn())
 		painter->drawText(box, AlignVCenter, text(column));
 	else if (column == listView->repeatColumn())
 		painter->drawText(box, AlignVCenter | AlignHCenter, text(column));
 	else if (column == listView->colourColumn())
 	{
 		// Paint the cell the colour of the alarm message
-		if (mEvent.action() == KAEvent::MESSAGE || mEvent.action() == KAEvent::FILE)
-			painter->fillRect(box, mEvent.bgColour());
+		if (event().action() == KAEvent::MESSAGE || event().action() == KAEvent::FILE)
+			painter->fillRect(box, event().bgColour());
 	}
 	else if (column == listView->messageColumn())
 	{
-		QPixmap* pixmap;
-		switch (mEvent.action())
-		{
-			case KAAlarm::FILE:     pixmap = fileIcon;     break;
-			case KAAlarm::COMMAND:  pixmap = commandIcon;  break;
-			case KAAlarm::EMAIL:    pixmap = emailIcon;    break;
-			case KAAlarm::MESSAGE:
-			default:                    pixmap = textIcon;     break;
-		}
+		QPixmap* pixmap = eventIcon();
 		int frameWidth = listView->style().pixelMetric(QStyle::PM_DefaultFrameWidth);
 		QRect pixmapRect = pixmap->rect();
 		int diff = box.height() - pixmap->height();
@@ -562,12 +433,12 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		}
 		QRect iconRect(box.left(), box.top() + (diff > 0 ? diff / 2 : 0), pixmap->width(), (diff > 0 ? pixmap->height() : box.height()));
 		QRect textRect = box;
-		textRect.setLeft(box.left() + iconWidth + 3*frameWidth);
+		textRect.setLeft(box.left() + iconWidth() + 3*frameWidth);
 		if (!selected  &&  listView->drawMessageInColour())
 		{
-			painter->fillRect(box, mEvent.bgColour());
-			painter->setBackgroundColor(mEvent.bgColour());
-//			painter->setPen(mEvent.fgColour());
+			painter->fillRect(box, event().bgColour());
+			painter->setBackgroundColor(event().bgColour());
+//			painter->setPen(event().fgColour());
 		}
 		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
 		painter->drawText(textRect, AlignVCenter, text(column));
@@ -588,33 +459,5 @@ QString AlarmListViewItem::key(int column, bool) const
 	if (column == listView->colourColumn())
 		return mColourOrder;
 	return text(column).lower();
-}
-
-
-/*=============================================================================
-=  Class: AlarmListWhatsThis
-=  Sets What's This? text depending on where in the list view is clicked.
-=============================================================================*/
-
-QString AlarmListWhatsThis::text(const QPoint& pt)
-{
-	QPoint viewportPt = listView->viewport()->mapFrom(listView, pt);
-	QRect frame = listView->header()->frameGeometry();
-	if (frame.contains(pt)
-	||  listView->itemAt(QPoint(listView->itemMargin(), viewportPt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
-	{
-		int column = listView->header()->sectionAt(pt.x());
-		if (column == listView->timeColumn())
-			return i18n("Next scheduled date and time of the alarm");
-		if (column == listView->timeToColumn())
-			return i18n("How long until the next scheduled trigger of the alarm");
-		if (column == listView->repeatColumn())
-			return i18n("How often the alarm recurs");
-		if (column == listView->colourColumn())
-			return i18n("Background color of alarm message");
-		if (column == listView->messageColumn())
-			return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line. The alarm type is indicated by the icon at the left.");
-	}
-	return i18n("List of scheduled alarms");
 }
 

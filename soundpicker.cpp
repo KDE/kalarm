@@ -79,7 +79,6 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	           "selected, a beep will sound."));
 	soundLayout->addWidget(mFilePicker);
 
-#if 0
 	// Sound repetition checkbox
 	mRepeatCheckbox = new CheckBox(i18n_p_Repeat, this);
 	mRepeatCheckbox->setFixedSize(mRepeatCheckbox->sizeHint());
@@ -87,8 +86,9 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	      i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	soundLayout->addWidget(mRepeatCheckbox);
 	soundLayout->addStretch();
+#if KDE_VERSION < 290
+	mRepeatCheckbox->hide();
 #endif
-
 	// Initialise the file picker button state and tooltip
 	slotSoundToggled(false);
 }
@@ -100,7 +100,7 @@ void SoundPicker::setReadOnly(bool readOnly)
 {
 	mCheckbox->setReadOnly(readOnly);
 	mFilePicker->setReadOnly(readOnly);
-//	mRepeatCheckbox->setReadOnly(readOnly);
+	mRepeatCheckbox->setReadOnly(readOnly);
 }
 
 /******************************************************************************
@@ -126,7 +126,7 @@ QString SoundPicker::file() const
  */
 bool SoundPicker::repeat() const
 {
-	return mCheckbox->isChecked() && mFilePicker->isOn() && !mFile.isEmpty();// && mRepeatCheckbox->isChecked();
+	return mCheckbox->isChecked() && mFilePicker->isOn() && !mFile.isEmpty() && mRepeatCheckbox->isChecked();
 }
 
 /******************************************************************************
@@ -173,7 +173,7 @@ void SoundPicker::setBeep(bool beep)
 void SoundPicker::setFile(const QString& f, bool repeat)
 {
 	mFile = f;
-//	mRepeatCheckbox->setChecked(repeat);
+	mRepeatCheckbox->setChecked(repeat);
 	mFilePicker->setOn(true);
 	setFilePicker();
 }
@@ -241,5 +241,5 @@ void SoundPicker::setFilePicker()
 		else
 			QToolTip::add(mFilePicker, i18n("Beep"));
 	}
-//	mRepeatCheckbox->setEnabled(repeatEnable);
+	mRepeatCheckbox->setEnabled(repeatEnable);
 }
