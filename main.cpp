@@ -66,16 +66,16 @@ int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"),
 		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " -f[bcilLrt]\n"
+		"       " PROGRAM_NAME " [-bcilLrt] -f URL\n"
 		"       " PROGRAM_NAME " [-bcilLrt] message\n"
-		"       " PROGRAM_NAME " --reset | --stop\n"
+		"       " PROGRAM_NAME " --tray | --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --displayEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --handleEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE alarm message scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001,2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux",
+		"(c) 2001, 2002, David Jarvie", 0L, "http://www.astrojar.org.uk/linux",
 		"software@astrojar.org.uk");
 	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
