@@ -207,10 +207,10 @@ void KAlarmMainWindow::initActions()
 #endif
 	actionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
 	actionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
-	actionView           = new KAction(i18n("&View"), "eventview", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
 	actionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	actionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
 	actionShowExpired    = new KAction(i18n("&Show Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
+	actionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
 	actionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
 	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
 
@@ -237,9 +237,9 @@ void KAlarmMainWindow::initActions()
 	actionNew->plug(mActionsMenu);
 	actionCopy->plug(mActionsMenu);
 	actionModify->plug(mActionsMenu);
-	actionView->plug(mActionsMenu);
 	actionDelete->plug(mActionsMenu);
 	actionUndelete->plug(mActionsMenu);
+	actionView->plug(mActionsMenu);
 	mActionsMenu->insertSeparator(6);
 
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -268,15 +268,15 @@ void KAlarmMainWindow::initActions()
 	actionNew->plug(toolbar);
 	actionCopy->plug(toolbar);
 	actionModify->plug(toolbar);
-	actionView->plug(toolbar);
 	actionDelete->plug(toolbar);
 	actionUndelete->plug(toolbar);
+	actionView->plug(toolbar);
 
 	actionCopy->setEnabled(false);
 	actionModify->setEnabled(false);
-	actionView->setEnabled(false);
 	actionDelete->setEnabled(false);
 	actionUndelete->setEnabled(false);
+	actionView->setEnabled(false);
 	if (!theApp()->settings()->expiredKeepDays())
 		actionShowExpired->setEnabled(false);
 	if (!theApp()->KDEDesktop())
@@ -432,7 +432,7 @@ void KAlarmMainWindow::slotCopy()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEntry(item);
+		KAlarmEvent event = listView->getEvent(item);
 		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
@@ -456,7 +456,7 @@ void KAlarmMainWindow::slotModify()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEntry(item);
+		KAlarmEvent event = listView->getEvent(item);
 		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Alarm"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
@@ -480,7 +480,7 @@ void KAlarmMainWindow::slotView()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEntry(item);
+		KAlarmEvent event = listView->getEvent(item);
 		EditAlarmDlg* editDlg = new EditAlarmDlg((event.expired() ? i18n("Expired Alarm") : i18n("View Alarm")),
 		                                         this, "editDlg", &event, true);
 		editDlg->exec();
@@ -504,7 +504,7 @@ void KAlarmMainWindow::slotDelete()
 			    != KMessageBox::Continue)
 				return;
 		}
-		KAlarmEvent event = listView->getEntry(item);
+		KAlarmEvent event = listView->getEvent(item);
 
 		// Delete the event from the displays
 		theApp()->deleteEvent(event, this);
@@ -521,7 +521,7 @@ void KAlarmMainWindow::slotUndelete()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEntry(item);
+		KAlarmEvent event = listView->getEvent(item);
 
 		// Add the alarm to the displayed lists and to the calendar file
 		theApp()->undeleteEvent(event, this);
