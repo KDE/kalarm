@@ -75,7 +75,7 @@ class KAlarmApp : public KUniqueApplication
 		DaemonGuiHandler* daemonGuiHandler() const        { return mDaemonGuiHandler; }
 		ActionAlarmsEnabled* actionAlarmEnable() const    { return mActionAlarmEnable; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
-		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
+		KAction*          actionDaemonControl() const     { return mActionDaemonControl; }
 		void              resetDaemon();
 		bool              isDaemonRunning();
 		void              readDaemonCheckInterval();
@@ -102,7 +102,7 @@ class KAlarmApp : public KUniqueApplication
 		static int        isTextFile(const KURL&);
 	public slots:
 		void              displayMainWindow();
-		void              slotDaemonPreferences();
+		void              slotDaemonControl();
 	signals:
 		void              trayIconToggled();
 	protected:
@@ -134,7 +134,7 @@ class KAlarmApp : public KUniqueApplication
 		AlarmCalendar*        mCalendar;           // the calendar containing all the alarms
 		ActionAlarmsEnabled*  mActionAlarmEnable;  // action to enable/disable alarms
 		KAction*              mActionPrefs;        // action to display the preferences dialog
-		KAction*              mActionDaemonPrefs;  // action to display the alarm daemon preferences dialog
+		KAction*              mActionDaemonControl;// action to display the alarm daemon control dialog
 		Settings*             mSettings;           // program preferences
 		QDateTime             mLastDaemonCheck;    // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;    // next time daemon will check alarms after check interval change

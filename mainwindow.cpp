@@ -241,7 +241,7 @@ void KAlarmMainWindow::initActions()
 	submenu = new KPopupMenu(this, "settings");
 	menu->insertItem(i18n("&Settings"), submenu);
 	theApp()->actionPreferences()->plug(submenu);
-	theApp()->actionDaemonPreferences()->plug(submenu);
+	theApp()->actionDaemonControl()->plug(submenu);
 
 	menu->insertItem(i18n("&Help"), helpMenu());
 

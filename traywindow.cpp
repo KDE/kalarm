@@ -70,7 +70,7 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
 	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setEnabledStatus(bool)));
 	theApp()->actionPreferences()->plug(contextMenu());
-	theApp()->actionDaemonPreferences()->plug(contextMenu());
+	theApp()->actionDaemonControl()->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
 	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
