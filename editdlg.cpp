@@ -576,7 +576,7 @@ void EditAlarmDlg::saveState(const KAlarmEvent* event)
 	for (int i = 0;  i < mEmailAttachList->count();  ++i)
 		mSavedEmailAttach += mEmailAttachList->text(i);
 	mSavedEmailBcc       = mEmailBcc->isChecked();
-	mSavedDateTime       = mTimeWidget->getDateTime();
+	mSavedDateTime       = mTimeWidget->getDateTime(false);
 	mSavedLateCancel     = mLateCancel->isChecked();
 	mSavedRecurrenceType = mRecurrenceEdit->repeatType();
 }
