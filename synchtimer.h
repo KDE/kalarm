@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission 
- *  to link the code of this program with any edition of the Qt library by 
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same 
- *  license as Qt), and distribute linked combinations including the two.  
- *  You must obey the GNU General Public License in all respects for all of 
- *  the code used other than Qt.  If you modify this file, you may extend 
- *  this exception to your version of the file, but you are not obligated to 
- *  do so. If you do not wish to do so, delete this exception statement from 
- *  your version.
  */
 
 #ifndef MINUTETIMER_H
@@ -37,10 +27,11 @@
 #include <qdatetime.h>
 class QTimer;
 
-/*=============================================================================
-=  Class: SynchTimer
-=  Virtual base class for application-wide timer synchronised to a time boundary.
-=============================================================================*/
+/** SynchTimer is a virtual base class for application-wide timers synchronised
+ *  to a time boundary.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class SynchTimer : public QObject
 {
 		Q_OBJECT
@@ -75,17 +66,26 @@ class SynchTimer : public QObject
 };
 
 
-/*=============================================================================
-=  Class: MinuteTimer
-=  Application-wide timer synchronised to the minute boundary.
-=============================================================================*/
+/** MinuteTimer is an application-wide timer synchronised to the minute boundary.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class MinuteTimer : public SynchTimer
 {
 		Q_OBJECT
 	public:
 		virtual ~MinuteTimer()  { mInstance = 0; }
+		/** Connect to the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to activate.
+		 */
 		static void connect(QObject* receiver, const char* member)
 		                   { instance()->connecT(receiver, member); }
+		/** Disconnect from the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to disconnect. If null, all slots belonging to
+		 *                @p receiver will be disconnected.
+		 */
 		static void disconnect(QObject* receiver, const char* member = 0)
 		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
 
@@ -103,17 +103,26 @@ class MinuteTimer : public SynchTimer
 };
 
 
-/*=============================================================================
-=  Class: DailyTimer
-=  Application-wide timer synchronised to midnight.
-=============================================================================*/
+/** DailyTimer is an application-wide timer synchronised to midnight.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class DailyTimer : public SynchTimer
 {
 		Q_OBJECT
 	public:
 		virtual ~DailyTimer()  { mInstance = 0; }
+		/** Connect to the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to activate.
+		 */
 		static void connect(QObject* receiver, const char* member)
 		                   { instance()->connecT(receiver, member); }
+		/** Disconnect from the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to disconnect. If null, all slots belonging to
+		 *                @p receiver will be disconnected.
+		 */
 		static void disconnect(QObject* receiver, const char* member = 0)
 		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
 
@@ -130,18 +139,28 @@ class DailyTimer : public SynchTimer
 };
 
 
-/*=============================================================================
-=  Class: StartOfDayTimer
-=  Application-wide timer synchronised to the user-defined start-of-day time.
-=  It automatically adjusts to any changes in the start-of-day time.
-=============================================================================*/
+/** StartOfDayTimer is an application-wide timer synchronised to the user-defined
+ *  start-of-day time (set in KAlarm's Preferences dialog).
+ *  It automatically adjusts to any changes in the start-of-day time.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class StartOfDayTimer : public SynchTimer
 {
 		Q_OBJECT
 	public:
 		virtual ~StartOfDayTimer()  { mInstance = 0; }
+		/** Connect to the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to activate.
+		 */
 		static void connect(QObject* receiver, const char* member)
 		                   { instance()->connecT(receiver, member); }
+		/** Disconnect from the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to disconnect. If null, all slots belonging to
+		 *                @p receiver will be disconnected.
+		 */
 		static void disconnect(QObject* receiver, const char* member = 0)
 		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
 
