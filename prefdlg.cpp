@@ -709,6 +709,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QWhatsThis::add(mListShowTimeTo,
 	      i18n("Specify whether to show in the alarm list, how long until each alarm is due"));
 	layout->addWidget(mListShowTimeTo, 0, Qt::AlignLeft);
+	group->setMaximumHeight(group->sizeHint().height());
 
 	group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
 	QGridLayout* grid = new QGridLayout(group, 5, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
@@ -761,6 +762,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	      i18n("Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip"));
 	box->setFixedHeight(box->sizeHint().height());
 	grid->addWidget(box, 5, 2, AlignLeft);
+	group->setMaximumHeight(group->sizeHint().height());
 
 	mShowExpiredAlarms = new QCheckBox(i18n("&Show expired alarms"), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
