@@ -53,11 +53,7 @@
 #include <kwinmodule.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
-#if KDE_VERSION >= 290
 #include <kabc/addresseedialog.h>
-#else
-#include <kabapi.h>
-#endif
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -1083,34 +1079,13 @@ void EditAlarmDlg::slotAnyTimeToggled(bool anyTime)
  */
 void EditAlarmDlg::openAddressBook()
 {
-#if KDE_VERSION >= 290
 	KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
 	if (a.isEmpty())
+#if 0
+		KMessageBox::error(this, i18n("Error reading address book"));
+#endif
 		return;
 	Person person(a.realName(), a.preferredEmail());
-#else
-	KabAPI addrDialog(this);
-	if (addrDialog.init() != AddressBook::NoError)
-	{
-		KMessageBox::error(this, i18n("Unable to open address book"));
-		return;
-	}
-	if (!addrDialog.exec())
-		return;
-	KabKey key;
-	AddressBook::Entry entry;
-	if (addrDialog.getEntry(entry, key) != AddressBook::NoError)
-	{
-		KMessageBox::sorry(this, i18n("Error getting entry from address book"));
-		return;
-	}
-	Person person;
-	QString name;
-	addrDialog.addressbook()->literalName(entry, name);
-	person.setName(name);
-	if (!entry.emails.isEmpty())
-		person.setEmail(entry.emails.first());   // use first email address
-#endif
 	QString addrs = mEmailToEdit->text().stripWhiteSpace();
 	if (!addrs.isEmpty())
 		addrs += ", ";
@@ -1212,15 +1187,17 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		{
 			switch (KAlarmApp::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
 			{
-				case 1:
-				case 3:
-				case 4:   break;
 				case 2:
 #if KDE_VERSION < 290
 					err = HTML;
 #endif
+				case 1:
+				case 3:
+				case 4:
 					break;
-				default:  err = NOT_TEXT_IMAGE;  break;
+				default:
+					err = NOT_TEXT_IMAGE;
+					break;
 			}
 		}
 		if (err  &&  showErrorMessage)
