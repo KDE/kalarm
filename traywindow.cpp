@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -48,7 +38,6 @@
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "daemon.h"
-#include "daemongui.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -97,8 +86,7 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
 
 	// Set up the context menu
-	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
-	AlarmEnableAction* a = daemonGui->createAlarmEnableAction(actcol, "tAlarmEnable");
+	AlarmEnableAction* a = Daemon::createAlarmEnableAction(actcol, "tAlarmEnable");
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
@@ -106,8 +94,8 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
-	daemonGui->checkStatus();
-	setEnabledStatus(daemonGui->monitoringAlarms());
+	Daemon::checkStatus();
+	setEnabledStatus(Daemon::monitoringAlarms());
 
 	mTooltip = new TrayTooltip(this);
 }
@@ -128,7 +116,7 @@ TrayWindow::~TrayWindow()
 void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 {
 	KSystemTray::contextMenuAboutToShow(menu);     // needed for KDE <= 3.1 compatibility
-	theApp()->daemonGuiHandler()->checkStatus();
+	Daemon::checkStatus();
 }
 
 /******************************************************************************
@@ -351,7 +339,7 @@ void TrayTooltip::maybeTip(const QPoint&)
 {
 	TrayWindow* parent = (TrayWindow*)parentWidget();
 	QString text;
-	if (theApp()->daemonGuiHandler()->monitoringAlarms())
+	if (Daemon::monitoringAlarms())
 		text = kapp->aboutData()->programName();
 	else
 		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());

@@ -1,5 +1,5 @@
 /*
- *  daemon.h  -  controls the alarm daemon
+ *  daemon.h  -  interface with alarm daemon
  *  Program:  kalarm
  *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef DAEMON_H
@@ -33,32 +23,39 @@
 
 #include <qobject.h>
 #include <qdatetime.h>
+#include <kaction.h>
 
 class KAction;
 class KActionCollection;
 class AlarmCalendar;
+class AlarmEnableAction;
+class DaemonGuiHandler;
 
-
-extern const char* DAEMON_APP_NAME;
-extern const char* DAEMON_DCOP_OBJECT;
-extern const char* DCOP_OBJECT_NAME;
 
 class Daemon : public QObject
 {
 		Q_OBJECT
 	public:
 		static void      initialise();
+		static void      createDcopHandler();
+		static bool      isDcopHandlerReady()    { return mDcopHandler; }
 		static KAction*  createControlAction(KActionCollection*, const char* name);
+		static AlarmEnableAction* createAlarmEnableAction(KActionCollection*, const char* name);
 		static bool      start();
-		static bool      reregister()      { return registerWith(true); }
+		static bool      reregister()            { return registerWith(true); }
 		static bool      reset();
 		static bool      stop();
+		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
+		static void      checkStatus()           { checkIfRunning(); }
+		static bool      monitoringAlarms();
 		static bool      isRunning(bool startDaemon = true);
 		static int       maxTimeSinceCheck();
 		static void      readCheckInterval();
-		static void      registrationResult(bool reregister, bool success);
-		static bool      isRegistered()    { return mStatus == REGISTERED; }
+		static bool      isRegistered()          { return mStatus == REGISTERED; }
 		static void      allowRegisterFailMsg()  { mRegisterFailMsg = false; }
+
+	signals:
+		void             daemonRunning(bool running);
 
 	private slots:
 		void             slotControl();
@@ -66,6 +63,10 @@ class Daemon : public QObject
 		void             checkIfStarted();
 		void             slotStarted()           { updateRegisteredStatus(true); }
 		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), false); }
+
+		void             setAlarmsEnabled(bool enable);
+		void             timerCheckIfRunning();
+		void             slotPreferencesChanged();
 
 	private:
 		enum Status    // daemon status.  KEEP IN THIS ORDER!!
@@ -77,18 +78,51 @@ class Daemon : public QObject
 		};
 		explicit Daemon() { }
 		static bool      registerWith(bool reregister);
+		static void      registrationResult(bool reregister, bool success);
 		static void      reload();
 		static void      updateRegisteredStatus(bool timeout = false);
+		static void      enableCalendar(bool enable);
+		static void      calendarIsEnabled(bool enabled);
+		static bool      checkIfRunning();
+		static void      setFastCheck();
 
-		static Daemon*   mInstance;         // only one instance allowed
-		static QTimer*   mStartTimer;       // timer to check daemon status after starting daemon
-		static QTimer*   mRegisterTimer;    // timer to check whether daemon has sent registration status
-		static QDateTime mLastCheck;        // last time daemon checked alarms before check interval change
-		static QDateTime mNextCheck;        // next time daemon will check alarms after check interval change
-		static int       mCheckInterval;    // daemon check interval (seconds)
-		static int       mStartTimeout;     // remaining number of times to check if alarm daemon has started
-		static Status    mStatus;           // daemon status
-		static bool      mRegisterFailMsg;  // true if registration failure message has been displayed
+		static Daemon*   mInstance;            // only one instance allowed
+		static DaemonGuiHandler* mDcopHandler; // handles DCOP requests from daemon
+		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon
+		static QTimer*   mRegisterTimer;       // timer to check whether daemon has sent registration status
+		static QTimer*   mStatusTimer;         // timer for checking daemon status
+		static int       mStatusTimerCount;    // countdown for fast status checking
+		static int       mStatusTimerInterval; // timer interval (seconds) for checking daemon status
+		static QDateTime mLastCheck;           // last time daemon checked alarms before check interval change
+		static QDateTime mNextCheck;           // next time daemon will check alarms after check interval change
+		static int       mCheckInterval;       // daemon check interval (seconds)
+		static int       mStartTimeout;        // remaining number of times to check if alarm daemon has started
+		static Status    mStatus;              // daemon status
+		static bool      mRunning;             // whether the alarm daemon is currently running
+		static bool      mCalendarDisabled;    // monitoring of calendar is currently disabled by daemon
+		static bool      mEnableCalPending;    // waiting to tell daemon to enable calendar
+		static bool      mRegisterFailMsg;     // true if registration failure message has been displayed
+
+		friend class DaemonGuiHandler;
+};
+
+/*=============================================================================
+=  Class: AlarmEnableAction
+=============================================================================*/
+
+class AlarmEnableAction : public KToggleAction
+{
+		Q_OBJECT
+	public:
+		AlarmEnableAction(int accel, QObject* parent, const char* name = 0);
+	public slots:
+		void         setCheckedActual(bool);  // set state and emit switched() signal
+		virtual void setChecked(bool);        // request state change and emit userClicked() signal
+	signals:
+		void         switched(bool);          // state has changed (KToggleAction::toggled() is only emitted when clicked by user)
+		void         userClicked(bool);       // user has clicked the control (param = desired state)
+	private:
+		bool         mInitialised;
 };
 
 #endif // DAEMON_H

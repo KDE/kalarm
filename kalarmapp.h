@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef KALARMAPP_H
@@ -42,12 +32,14 @@ namespace KCal { class Event; }
 
 #include "alarmevent.h"
 class DcopHandler;
+#ifdef OLD_DCOP
+class DcopHandlerOld;
+#endif
 class AlarmCalendar;
 class KAlarmMainWindow;
 class AlarmListView;
 class MessageWin;
 class TrayWindow;
-class DaemonGuiHandler;
 class Preferences;
 class ShellProcess;
 
@@ -74,7 +66,6 @@ class KAlarmApp : public KUniqueApplication
 		KAlarmMainWindow*  trayMainWindow() const;
 		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
 		bool               trayIconDisplayed() const       { return !!mTrayWindow; }
-		DaemonGuiHandler*  daemonGuiHandler() const        { return mDaemonGuiHandler; }
 		bool               editNewAlarm(KAlarmMainWindow* = 0);
 		virtual void       commitData(QSessionManager&);
 
@@ -85,9 +76,10 @@ class KAlarmApp : public KUniqueApplication
 		void               commandMessage(ShellProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(KAEvent::Action, const QString& text, const QDateTime&,
-		                                 int flags, const QColor& bg, const QColor& fg,
+		                                 int lateCancel, int flags, const QColor& bg, const QColor& fg,
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KCal::Recurrence& recurrence,
+		                                 int repeatInterval, int repeatCount,
 		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
 		                                 const QString& mailSubject = QString::null,
 		                                 const QStringList& mailAttachments = QStringList());
@@ -107,7 +99,12 @@ class KAlarmApp : public KUniqueApplication
 		void               slotSystemTrayTimer();
 		void               slotExpiredPurged();
 	private:
-		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
+		enum EventFunc
+		{
+			EVENT_HANDLE,    // if the alarm is due, execute it and then reschedule it
+			EVENT_TRIGGER,   // execute the alarm regardless, and then reschedule it if it already due
+			EVENT_CANCEL     // delete the alarm
+		};
 		struct ProcData
 		{
 			ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f = 0)
@@ -153,7 +150,9 @@ class KAlarmApp : public KUniqueApplication
 		static QString        mFatalMessage;        // fatal error message to output
 		bool                  mInitialised;         // initialisation complete: ready to handle DCOP calls
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
-		DaemonGuiHandler*     mDaemonGuiHandler;    // the parent of the system tray DCOP receiver object
+#ifdef OLD_DCOP
+		DcopHandlerOld*       mDcopHandlerOld;      // the parent of the old main DCOP receiver object
+#endif
 		TrayWindow*           mTrayWindow;          // active system tray icon
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mPrefsExpiredColour;  // expired alarms text colour

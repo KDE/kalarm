@@ -1,5 +1,5 @@
 /*
- *  daemon.cpp  -  controls the alarm daemon
+ *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
  *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -43,30 +33,60 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 
+#include <kalarmd/alarmdaemoniface_stub.h>
+#include <kalarmd/alarmguiiface.h>
 #include <kalarmd/clientinfo.h>
 
 #include "alarmcalendar.h"
-#include "daemongui.h"
-#include "preferences.h"
 #include "kalarmapp.h"
+#include "preferences.h"
 #include "daemon.moc"
 
 
-#define      DAEMON_APP_NAME_DEF   "kalarmd"    // DCOP name of alarm daemon application
-const char*  DAEMON_APP_NAME     = DAEMON_APP_NAME_DEF;
-const char*  DAEMON_DCOP_OBJECT  = "ad";        // DCOP name of kalarmd's DCOP interface
-const char*  DCOP_OBJECT_NAME = "display";
+#define             DAEMON_APP_NAME_DEF   "kalarmd"    // DCOP name of alarm daemon application
+static const char*  DAEMON_APP_NAME     = DAEMON_APP_NAME_DEF;
+static const char*  DAEMON_DCOP_OBJECT  = "ad";        // DCOP name of kalarmd's DCOP interface
+static const char*  NOTIFY_DCOP_OBJECT  = "notify";    // DCOP name of KAlarm's interface for notification by alarm daemon
+
+static QString expandURL(const QString& urlString);
 
 
-Daemon*        Daemon::mInstance = 0;
-QTimer*        Daemon::mStartTimer = 0;
-QTimer*        Daemon::mRegisterTimer = 0;
-QDateTime      Daemon::mLastCheck;
-QDateTime      Daemon::mNextCheck;
-int            Daemon::mCheckInterval = 0;
-int            Daemon::mStartTimeout = 0;
-Daemon::Status Daemon::mStatus = Daemon::STOPPED;
-bool           Daemon::mRegisterFailMsg = false;
+/*=============================================================================
+=  Class: DaemonGuiHandler
+=  Handles the the alarm daemon's GUI client DCOP interface.
+=============================================================================*/
+
+class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
+{
+	public:
+		explicit DaemonGuiHandler();
+		static void  registerWith();
+	private:
+		// DCOP interface
+		void         alarmDaemonUpdate(int alarmGuiChangeType,
+		                               const QString& calendarURL, const QCString& appName);
+		void         handleEvent(const QString& calendarURL, const QString& eventID);
+		void         handleEvent(const QString& /*iCalendarString*/)  { }   // not used by KAlarm
+		void         registered(bool reregister, bool success);
+};
+
+
+Daemon*           Daemon::mInstance = 0;
+DaemonGuiHandler* Daemon::mDcopHandler = 0;
+QTimer*           Daemon::mStartTimer = 0;
+QTimer*           Daemon::mRegisterTimer = 0;
+QTimer*           Daemon::mStatusTimer = 0;
+int               Daemon::mStatusTimerCount = 0;
+int               Daemon::mStatusTimerInterval;
+QDateTime         Daemon::mLastCheck;
+QDateTime         Daemon::mNextCheck;
+int               Daemon::mCheckInterval = 0;
+int               Daemon::mStartTimeout = 0;
+Daemon::Status    Daemon::mStatus = Daemon::STOPPED;
+bool              Daemon::mRunning = false;
+bool              Daemon::mCalendarDisabled = false;
+bool              Daemon::mEnableCalPending = false;
+bool              Daemon::mRegisterFailMsg = false;
 
 // How frequently to check the daemon's status after starting it.
 // This is equal to the length of time we wait after the daemon is registered with DCOP
@@ -85,6 +105,26 @@ void Daemon::initialise()
 		mInstance = new Daemon();
 	connect(AlarmCalendar::activeCalendar(), SIGNAL(calendarSaved(AlarmCalendar*)), mInstance, SLOT(slotCalendarSaved(AlarmCalendar*)));
 	readCheckInterval();
+}
+
+/******************************************************************************
+* Initialise the daemon status timer.
+*/
+void Daemon::createDcopHandler()
+{
+	if (mDcopHandler)
+		return;
+	mDcopHandler = new DaemonGuiHandler();
+	// Check if the alarm daemon is running, but don't start it yet, since
+	// the program is still initialising.
+	mRunning = isRunning(false);
+
+	mStatusTimerInterval = Preferences::instance()->daemonTrayCheckInterval();
+	connect(Preferences::instance(), SIGNAL(preferencesChanged()), mInstance, SLOT(slotPreferencesChanged()));
+
+	mStatusTimer = new QTimer(mInstance);
+	connect(mStatusTimer, SIGNAL(timeout()), mInstance, SLOT(timerCheckIfRunning()));
+	mStatusTimer->start(mStatusTimerInterval * 1000);  // check regularly if daemon is running
 }
 
 /******************************************************************************
@@ -149,7 +189,7 @@ bool Daemon::registerWith(bool reregister)
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(kapp->aboutData()->appName()) << kapp->aboutData()->programName()
-	    << QCString(DCOP_OBJECT_NAME)
+	    << QCString(NOTIFY_DCOP_OBJECT)
 	    << static_cast<int>(disabledIfStopped ? ClientInfo::NO_START_NOTIFY : ClientInfo::COMMAND_LINE_NOTIFY)
 	    << (Q_INT8)0;
 	const char* func = reregister ? "reregisterApp(QCString,QString,QCString,int,bool)" : "registerApp(QCString,QString,QCString,int,bool)";
@@ -163,7 +203,7 @@ bool Daemon::registerWith(bool reregister)
 	mRegisterTimer->start(10000);     // wait up to 10 seconds for the reply
 
 	// Register as a GUI with the alarm daemon
-	theApp()->daemonGuiHandler()->registerWith();
+	DaemonGuiHandler::registerWith();
 	return true;
 }
 
@@ -315,6 +355,60 @@ void Daemon::reload()
 }
 
 /******************************************************************************
+* Tell the alarm daemon to enable/disable monitoring of the calendar file.
+*/
+void Daemon::enableCalendar(bool enable)
+{
+	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	s.enableCal(AlarmCalendar::activeCalendar()->urlString(), enable);
+	mEnableCalPending = false;
+}
+
+/******************************************************************************
+* Notification that the alarm daemon has enabled/disabled monitoring of the
+* calendar file.
+*/
+void Daemon::calendarIsEnabled(bool enabled)
+{
+	mCalendarDisabled = !enabled;
+	emit mInstance->daemonRunning(enabled);
+}
+
+/******************************************************************************
+* Tell the alarm daemon to stop or start monitoring the calendar file as
+* appropriate.
+*/
+void Daemon::setAlarmsEnabled(bool enable)
+{
+	kdDebug(5950) << "Daemon::setAlarmsEnabled(" << enable << ")\n";
+	if (enable  &&  !checkIfRunning())
+	{
+		// The daemon is not running, so start it
+		if (!start())
+		{
+			emit daemonRunning(false);
+			return;
+		}
+		mEnableCalPending = true;
+		setFastCheck();
+	}
+
+	// If the daemon is now running, tell it to enable/disable the calendar
+	if (checkIfRunning())
+		enableCalendar(enable);
+}
+
+/******************************************************************************
+* Return whether the alarm daemon is monitoring alarms.
+*/
+bool Daemon::monitoringAlarms()
+{
+	bool ok = !mCalendarDisabled  &&  isRunning();
+	emit mInstance->daemonRunning(ok);
+	return ok;
+}
+
+/******************************************************************************
 * Check whether the alarm daemon is currently running and available.
 */
 bool Daemon::isRunning(bool startdaemon)
@@ -330,6 +424,77 @@ bool Daemon::isRunning(bool startdaemon)
 			start();      // re-register with the daemon
 	}
 	return runState  &&  (mStatus == REGISTERED);
+}
+
+/******************************************************************************
+* Called by the timer to check whether the daemon is running.
+*/
+void Daemon::timerCheckIfRunning()
+{
+	checkIfRunning();
+	// Limit how long we check at the fast rate
+	if (mStatusTimerCount > 0  &&  --mStatusTimerCount <= 0)
+		mStatusTimer->changeInterval(mStatusTimerInterval * 1000);
+}
+
+/******************************************************************************
+* Check whether the alarm daemon is currently running.
+* If its status has changed, trigger GUI updates.
+*/
+bool Daemon::checkIfRunning()
+{
+	bool newstatus = isRunning();
+	if (newstatus != mRunning)
+	{
+		mRunning = newstatus;
+		int status = mRunning  &&  !mCalendarDisabled;
+		emit mInstance->daemonRunning(status);
+		mStatusTimer->changeInterval(mStatusTimerInterval * 1000);   // exit from fast checking
+		mStatusTimerCount = 0;
+		if (mRunning)
+		{
+			// The alarm daemon has started up
+			if (mEnableCalPending)
+				enableCalendar(true);  // tell it to monitor the calendar, if appropriate
+		}
+	}
+	return mRunning;
+}
+
+/******************************************************************************
+* Starts checking at a faster rate whether the daemon is running.
+*/
+void Daemon::setFastCheck()
+{
+	mStatusTimer->start(500);    // check new status every half second
+	mStatusTimerCount = 20;      // don't check at this rate for more than 10 seconds
+}
+
+/******************************************************************************
+* Called when a program setting has changed.
+* If the system tray icon update interval has changed, reset the timer.
+*/
+void Daemon::slotPreferencesChanged()
+{
+	int newInterval = Preferences::instance()->daemonTrayCheckInterval();
+	if (newInterval != mStatusTimerInterval)
+	{
+		// Daemon check interval has changed
+		mStatusTimerInterval = newInterval;
+		if (mStatusTimerCount <= 0)   // don't change if on fast rate
+			mStatusTimer->changeInterval(mStatusTimerInterval * 1000);
+	}
+}
+
+/******************************************************************************
+* Create an "Alarms Enabled/Enable Alarms" action.
+*/
+AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions, const char* name)
+{
+	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions, name);
+	connect(a, SIGNAL(userClicked(bool)), mInstance, SLOT(setAlarmsEnabled(bool)));
+	connect(mInstance, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
+	return a;
 }
 
 /******************************************************************************
@@ -417,4 +582,150 @@ int Daemon::maxTimeSinceCheck()
 		mLastCheck = QDateTime();
 	}
 	return mCheckInterval;
+}
+
+
+/*=============================================================================
+=  Class: DaemonGuiHandler
+=============================================================================*/
+
+DaemonGuiHandler::DaemonGuiHandler()
+	: DCOPObject(NOTIFY_DCOP_OBJECT), 
+	  QObject()
+{
+	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler()\n";
+}
+
+/******************************************************************************
+ * DCOP call from the alarm daemon to notify a change.
+ * The daemon notifies calendar statuses when we first register as a GUI, and whenever
+ * a calendar status changes. So we don't need to read its config files.
+ */
+void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
+                                         const QString& calendarURL, const QCString& /*appName*/)
+{
+	kdDebug(5950) << "DaemonGuiHandler::alarmDaemonUpdate(" << alarmGuiChangeType << ")\n";
+	AlarmGuiChangeType changeType = AlarmGuiChangeType(alarmGuiChangeType);
+	switch (changeType)
+	{
+		case CHANGE_STATUS:    // daemon status change
+			Daemon::readCheckInterval();
+			return;
+		case CHANGE_CLIENT:    // change to daemon's client application list
+			return;
+		default:
+		{
+			// It must be a calendar-related change
+			if (expandURL(calendarURL) != AlarmCalendar::activeCalendar()->urlString())
+				return;     // it's not a notification about KAlarm's calendar
+			bool enabled = false;
+			switch (changeType)
+			{
+				case DELETE_CALENDAR:
+					kdDebug(5950) << "DaemonGuiHandler::alarmDaemonUpdate(DELETE_CALENDAR)\n";
+					break;
+				case CALENDAR_UNAVAILABLE:
+					// Calendar is not available for monitoring
+					kdDebug(5950) << "DaemonGuiHandler::alarmDaemonUpdate(CALENDAR_UNAVAILABLE)\n";
+					break;
+				case DISABLE_CALENDAR:
+					// Calendar is available for monitoring but is not currently being monitored
+					kdDebug(5950) << "DaemonGuiHandler::alarmDaemonUpdate(DISABLE_CALENDAR)\n";
+					break;
+				case ENABLE_CALENDAR:
+					// Calendar is currently being monitored
+					kdDebug(5950) << "DaemonGuiHandler::alarmDaemonUpdate(ENABLE_CALENDAR)\n";
+					enabled = true;
+					break;
+				case ADD_CALENDAR:        // add a KOrganizer-type calendar
+				case ADD_MSG_CALENDAR:    // add a KAlarm-type calendar
+				default:
+					return;
+			}
+			Daemon::calendarIsEnabled(enabled);
+			break;
+		}
+	}
+}
+
+/******************************************************************************
+ * DCOP call from the alarm daemon to notify that an alarm is due.
+ */
+void DaemonGuiHandler::handleEvent(const QString& url, const QString& eventId)
+{
+	theApp()->handleEvent(url, eventId);
+}
+
+/******************************************************************************
+ * DCOP call from the alarm daemon to notify the success or failure of a
+ * registration request from KAlarm.
+ */
+void DaemonGuiHandler::registered(bool reregister, bool success)
+{
+	Daemon::registrationResult(reregister, success);
+}
+
+/******************************************************************************
+* Register as a GUI with the alarm daemon.
+*/
+void DaemonGuiHandler::registerWith()
+{
+	kdDebug(5950) << "DaemonGuiHandler::registerWith()\n";
+	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	s.registerGui(kapp->aboutData()->appName(), NOTIFY_DCOP_OBJECT);
+}
+
+
+/*=============================================================================
+=  Class: AlarmEnableAction
+=============================================================================*/
+
+AlarmEnableAction::AlarmEnableAction(int accel, QObject* parent, const char* name)
+	: KToggleAction(QString::null, accel, parent, name),
+	  mInitialised(false)
+{
+	setCheckedActual(false);    // set the correct text
+	mInitialised = true;
+}
+
+/******************************************************************************
+*  Set the checked status and the correct text for the Alarms Enabled action.
+*/
+void AlarmEnableAction::setCheckedActual(bool running)
+{
+	kdDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
+	if (running != isChecked()  ||  !mInitialised)
+	{
+		setText(running ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
+		KToggleAction::setChecked(running);
+		emit switched(running);
+	}
+}
+
+/******************************************************************************
+*  Request a change in the checked status.
+*  The status is only actually changed when the alarm daemon run state changes.
+*/
+void AlarmEnableAction::setChecked(bool check)
+{
+	kdDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
+	if (check != isChecked())
+	{
+		if (check)
+			Daemon::allowRegisterFailMsg();
+		emit userClicked(check);
+	}
+}
+
+
+/******************************************************************************
+ * Expand a DCOP call parameter URL to a full URL.
+ * (We must store full URLs in the calendar data since otherwise later calls to
+ *  reload or remove calendars won't necessarily find a match.)
+ */
+QString expandURL(const QString& urlString)
+{
+	if (urlString.isEmpty())
+		return QString();
+	return KURL(urlString).url();
 }
