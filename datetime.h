@@ -64,14 +64,14 @@ class DateTime
 		DateTime  addSecs(int n) const
 				{
 					if (mDateOnly)
-						return DateTime(mDateTime.date().addDays(n / 3600*24), true);
+						return DateTime(mDateTime.date().addDays(n / (3600*24)), true);
 					else
 						return DateTime(mDateTime.addSecs(n), false);
 				}
 		DateTime  addMins(int n) const
 				{
 					if (mDateOnly)
-						return DateTime(mDateTime.addDays(n / 60*24), true);
+						return DateTime(mDateTime.addDays(n / (60*24)), true);
 					else
 						return DateTime(mDateTime.addSecs(n * 60), false);
 				}
