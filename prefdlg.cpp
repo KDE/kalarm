@@ -762,7 +762,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	mDefaultSpecialActions = new SpecialActions(i18n("Special Display Alarms Actions"), mPage);
+	mDefaultSpecialActions = new SpecialActions(i18n("Special Display Alarm Actions"), mPage);
 	mDefaultSpecialActions->setFixedHeight(mDefaultSpecialActions->sizeHint().height());
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
