@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,16 @@
 #include "alarmtimewidget.moc"
 
 static const QTime time_23_59(23, 59);
-static const int   maxDelayTime = 99*60 + 59;    // < 100 hours
+
+
+const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
+
+QString AlarmTimeWidget::i18n_w_TimeFromNow()     { return i18n("Time from no&w:"); }
+QString AlarmTimeWidget::i18n_TimeAfterPeriod()
+{
+	return i18n("Enter the length of time (in hours and minutes) after "
+	            "the current time to schedule the alarm.");
+}
 
 
 /******************************************************************************
@@ -125,7 +134,7 @@ void AlarmTimeWidget::init(int mode)
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n("Time from no&w:")),
+	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()),
 	                                  this, "afterTimeRadio");
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
 	QWhatsThis::add(mAfterTimeRadio,
@@ -137,11 +146,9 @@ void AlarmTimeWidget::init(int mode)
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-	static const QString lengthText = i18n("Enter the length of time (in hours and minutes) after "
-	                                       "the current time to schedule the alarm.");
 	QWhatsThis::add(mDelayTimeEdit,
-	                ((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(lengthText).arg(TimeSpinBox::shiftWhatsThis())
-	                                     : QString("%1\n%2\n\n%3").arg(lengthText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
+	                ((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
+	                                     : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide

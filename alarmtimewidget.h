@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,6 +52,10 @@ class AlarmTimeWidget : public ButtonGroup
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
 		QSize            sizeHint() const              { return minimumSizeHint(); }
+
+		static QString   i18n_w_TimeFromNow();     // text of 'Time from now:' radio button, with 'w' shortcut
+		static QString   i18n_TimeAfterPeriod();
+		static const int maxDelayTime;    // maximum time from now
 
 	signals:
 		void             anyTimeToggled(bool anyTime);
