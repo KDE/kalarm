@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -64,7 +54,7 @@ static KCmdLineOptions options[] =
 	{ "file <url>", I18N_NOOP("File to display"), 0 },
 	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0 },
 	{ "i", 0, 0 },
-	{ "interval <period>", I18N_NOOP("Interval between alarm recurrences"), 0 },
+	{ "interval <period>", I18N_NOOP("Interval between alarm repetitions"), 0 },
 	{ "l", 0, 0 },
 	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be triggered on time"), 0 },
 #if 0
@@ -87,7 +77,7 @@ static KCmdLineOptions options[] =
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
 	{ "reminder-once <period>", I18N_NOOP("Display reminder once, before first alarm recurrence"), 0 },
 	{ "r", 0, 0 },
-	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0 },
+	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (including initial occasion)"), 0 },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
 	{ "S", 0, 0 },
