@@ -1203,7 +1203,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			switch (err)
 			{
 				case NONEXISTENT:     errmsg = i18n("%1\nnot found");  break;
-				case DIRECTORY:       errmsg = i18n("%1\nis a directory");  break;
+				case DIRECTORY:       errmsg = i18n("%1\nis a folder");  break;
 				case UNREADABLE:      errmsg = i18n("%1\nis not readable");  break;
 				case NOT_TEXT_IMAGE:  errmsg = i18n("%1\nappears not to be a text or image file");  break;
 #if KDE_VERSION < 290

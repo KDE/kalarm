@@ -267,7 +267,7 @@ QSize MessageWin::initView()
 				// File couldn't be opened
 				bool exists = KIO::NetAccess::exists(url);
 				mErrorMsgs.clear();
-				mErrorMsgs += dir ? i18n("File is a directory") : exists ? i18n("Failed to open file") : i18n("File not found");
+				mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
 			}
 			break;
 		}
