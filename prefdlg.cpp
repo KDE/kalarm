@@ -30,23 +30,23 @@
 
 
 KAlarmPrefDlg::KAlarmPrefDlg(Settings* sets)
-	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0L, 0L, true, true)
+   : KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0L, 0L, true, true)
 {
-	setIconListAllVisible(true);
+   setIconListAllVisible(true);
 
-	QVBox* frame = addVBoxPage(i18n("Miscellaneous"), i18n("Miscellaneous"), DesktopIcon("misc"));
-	m_miscPage = new MiscPrefTab(frame);
-	m_miscPage->setSettings(sets);
+   QVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
+   m_miscPage = new MiscPrefTab(frame);
+   m_miscPage->setSettings(sets);
 
-	frame = addVBoxPage(i18n("Edit Defaults"), i18n("Edit Alarm Dialog Defaults"), DesktopIcon("edit"));
-	m_defaultPage = new DefaultPrefTab(frame);
-	m_defaultPage->setSettings(sets);
+   frame = addVBoxPage(i18n("Alarm Defaults"), i18n("Default Alarm Settings"), DesktopIcon("edit"));
+   m_defaultPage = new DefaultPrefTab(frame);
+   m_defaultPage->setSettings(sets);
 
-	frame = addVBoxPage(i18n("Appearance"), i18n("Message Appearance"), DesktopIcon("appearance"));
-	m_appearancePage = new AppearancePrefTab(frame);
-	m_appearancePage->setSettings(sets);
+   frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("appearance"));
+   m_appearancePage = new AppearancePrefTab(frame);
+   m_appearancePage->setSettings(sets);
 
-	adjustSize();
+   adjustSize();
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
@@ -56,41 +56,41 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 // Restore all defaults in the options...
 void KAlarmPrefDlg::slotDefault()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
-	m_appearancePage->setDefaults();
-	m_defaultPage->setDefaults();
-	m_miscPage->setDefaults();
+   kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
+   m_appearancePage->setDefaults();
+   m_defaultPage->setDefaults();
+   m_miscPage->setDefaults();
 }
 
 void KAlarmPrefDlg::slotHelp()
 {
-	kapp->invokeHelp("preferences");
+   kapp->invokeHelp("preferences");
 }
 
 // Apply the settings that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
-	m_appearancePage->apply(false);
-	m_defaultPage->apply(false);
-	m_miscPage->apply(true);
+   kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
+   m_appearancePage->apply(false);
+   m_defaultPage->apply(false);
+   m_miscPage->apply(true);
 }
 
 // Apply the settings that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
-	slotApply();
-	KDialogBase::slotOk();
+   kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
+   slotApply();
+   KDialogBase::slotOk();
 }
 
 // Discard the current settings and use the present ones
 void KAlarmPrefDlg::slotCancel()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
-	m_appearancePage->restore();
-	m_defaultPage->restore();
-	m_miscPage->restore();
+   kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
+   m_appearancePage->restore();
+   m_defaultPage->restore();
+   m_miscPage->restore();
 
-	KDialogBase::slotCancel();
+   KDialogBase::slotCancel();
 }
