@@ -811,7 +811,6 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 			mCmdTypeScript->setChecked(script);
 			if (script)
 				mCmdScriptEdit->setText(text);
-#warning Does command script field get filled in when email is dragged onto KAlarm?
 			else
 				mCmdCommandEdit->setText(text);
 			break;
@@ -829,6 +828,12 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 				mEmailToEdit->setText(alarmText.to());
 				mEmailSubjectEdit->setText(alarmText.subject());
 				mEmailMessageEdit->setText(alarmText.body());
+			}
+			else if (alarmText.isScript())
+			{
+				// Set up command script field also, in case the user wants a command alarm
+				mCmdScriptEdit->setText(text);
+				mCmdTypeScript->setChecked(true);
 			}
 			break;
 	}
