@@ -1,6 +1,6 @@
 KAlarm
 
-Version 0.3.5
+Version 0.5
 
 KAlarm provides a graphical interface for setting up personal alarm/reminder
 messages. The messages pop up on the screen at the time you specify.
@@ -10,12 +10,69 @@ DCOP calls to execute functions.
 
 See the INSTALL file for installation instructions.
 
+
+USE ON NON-KDE DESKTOPS
+
+Although KAlarm is a KDE application and requires KDE to be installed on your
+system, you can still use it while running other desktops or window managers.
+
+In order to have alarms monitored and displayed automatically from one login
+session to the next, the alarm daemon (which monitors the alarm list and tells
+KAlarm to display each alarm when it becomes due) must be run automatically
+when you graphically login or otherwise start X. If you are running the KDE
+desktop, the KAlarm installation process sets this up for you.
+
+If you want to use KAlarm with Gnome or another non-KDE window manager, you
+have two alternatives:
+
+1) If your desktop environment/window manager performs session restoration,
+ensure that the alarm daemon (kalarmd) is included in the session restoration,
+and that after login or restarting X the alarm daemon is running with a
+'-session' command line option, e.g.
+
+    kalarmd -session 117f000002000100176495700000008340018
+
+You can use the 'ps' command to check this.
+
+2) If you cannot use session restoration to start the alarm daemon correctly,
+you must configure the following command to be run whenever you graphically log
+in or start X:
+
+    kalarmd --login
+
+If your desktop environment or window manager has a facility to configure
+programs to be run at login, you can use that facility. Otherwise, you need to
+add the command to an appropriate script which is run after X is started.
+
+If you can specify an order to start the applications, start kalarm first, then
+kalarmd.
+
+
+If you can send me details on how to set up the daemon for any particular
+window manager, I will include these in the next version of KAlarm.
+
+
+PROGRAM STATUS
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+See the COPYING file for more details.
+
+
 BUGS:
 
 Bugs can be reported to the KDE bug tracking system (http://bugs.kde.org).
 There you can also get information about the status of older bugs.
 KAlarm, as most other KDE 2 programs, offers a menu item "Report Bug"
 in the Help menu for convenient reporting of bugs or feature requests.
+
 
 COMMENTS AND SUGGESTIONS:
 
