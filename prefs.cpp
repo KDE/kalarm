@@ -339,7 +339,7 @@ void MiscPrefTab::slotEmailUseCCToggled(bool)
 AppearancePrefTab::AppearancePrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), true, i18n("Font && Color"), false);
+	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Font && Color"), false);
 
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
