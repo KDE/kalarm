@@ -1107,6 +1107,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	if (mailAddresses.count())
 		event.setEmail(mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
+	event.setFirstRecurrence();
 	if (display)
 	{
 		// Alarm is due for display already

@@ -1285,8 +1285,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		QBitArray rDays(7);
 		getCheckedDays(rDays);
 		event.setRecurWeekly(frequency, rDays, repeatCount, endDate);
-		if (adjustStart)
-			event.setFirstRecurrence();
 	}
 	else if (button == mMonthlyButton)
 	{
@@ -1301,12 +1299,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
-			if (adjustStart)
-			{
-				// Set the frequency to 1 to find the first possible occurrence
-				event.setRecurMonthlyByPos(1, poses, repeatCount, endDate);
-				event.setFirstRecurrence();
-			}
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
 		}
 		else
@@ -1317,12 +1309,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 				daynum = 31 - daynum;
 			QValueList<int> daynums;
 			daynums.append(daynum);
-			if (adjustStart)
-			{
-				// Set the frequency to 1 to find the first possible occurrence
-				event.setRecurMonthlyByDate(1, daynums, repeatCount, endDate);
-				event.setFirstRecurrence();
-			}
 			event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
 		}
 	}
@@ -1342,12 +1328,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
-			if (adjustStart  &&  months.count())
-			{
-				// Set the frequency to 1 to find the first possible occurrence
-				event.setRecurAnnualByPos(1, poses, months, repeatCount, endDate);
-				event.setFirstRecurrence();
-			}
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
 		}
 /*		else if (mYearRuleDayButton->isChecked())
@@ -1356,12 +1336,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			int daynum = event.mainDate().dayOfYear();
 			QValueList<int> daynums;
 			daynums.append(daynum);
-			if (adjustStart)
-			{
-				// Set the frequency to 1 to find the first possible occurrence
-				event.setRecurAnnualByDay(1, daynums, repeatCount, endDate);
-				event.setFirstRecurrence();
-			}
 			event.setRecurAnnualByDay(frequency, daynums, repeatCount, endDate);
 		}*/
 		else
@@ -1370,12 +1344,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 			if (daynum > 31)
 				daynum = 31 - daynum;
 			bool feb29 = (daynum == 29) && feb;
-			if (adjustStart  &&  months.count())
-			{
-				// Set the frequency to 1 to find the first possible occurrence
-				event.setRecurAnnualByDate(1, months, daynum, feb29, repeatCount, endDate);
-				event.setFirstRecurrence();
-			}
 			event.setRecurAnnualByDate(frequency, months, daynum, feb29, repeatCount, endDate);
 		}
 	}
@@ -1384,6 +1352,8 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		event.setNoRecur();
 		return;
 	}
+	if (adjustStart)
+		event.setFirstRecurrence();
 
 	// Set up exceptions
 	event.setExceptionDates(mExceptionDates);
