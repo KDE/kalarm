@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 0.8 --- 10 Sep 2002 ===
+Move recurrence edit to separate tab in alarm dialog (now fits 800x600 display).
+Add accelerator keys in dialogs.
+
 === Version 0.7.5 --- 29 Aug 2002 ===
 Add preferences options to choose default settings for the Edit Alarm dialog.
 Fix right-to-left character sets not being displayed in message edit control.
