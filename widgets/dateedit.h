@@ -24,7 +24,7 @@
 #ifndef DATEEDIT_H
 #define DATEEDIT_H
 
-#include "libkdepim/kdateedit.h"
+#include <kdateedit.h>
 
 class DateEdit : public KDateEdit
 {
@@ -33,7 +33,7 @@ class DateEdit : public KDateEdit
 		DateEdit(QWidget* parent = 0, const char* name = 0);
 		virtual bool validate(const QDate&);
 		bool         isValid() const              { return inputIsValid(); }
-		void         setMinDate(const QDate&);
+		void         setMinDate(const QDate&, const QString& errorDate = QString::null);
 		void         setValid(bool);
 
 	protected:
@@ -45,7 +45,8 @@ class DateEdit : public KDateEdit
 	protected slots:
 		void         slotDateChanged(QDate);
 	private:
-		QDate  mMinDate;
+		QDate    mMinDate;
+		QString  mErrorDateString;
 };
 
 #endif // DATEEDIT_H

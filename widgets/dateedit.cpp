@@ -35,11 +35,12 @@ DateEdit::DateEdit(QWidget* parent, const char* name)
 	connect(this, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
 }
 
-void DateEdit::setMinDate(const QDate& d)
+void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
 {
 	mMinDate = d;
 	if (inputIsValid() && date() < mMinDate)
 		setDate(mMinDate);
+	mErrorDateString = errorDate;
 }
 
 void DateEdit::setValid(bool valid)
@@ -56,11 +57,14 @@ bool DateEdit::validate(const QDate& newDate)
 		return false;
 	if (mMinDate.isValid() && newDate < mMinDate)
 	{
-		QString minString;
-		if (mMinDate == QDate::currentDate())
-			minString = i18n("today");
-		else
-			minString = KGlobal::locale()->formatDate(mMinDate, true);
+		QString minString = mErrorDateString;
+		if (mErrorDateString.isNull())
+		{
+			if (mMinDate == QDate::currentDate())
+				minString = i18n("today");
+			else
+				minString = KGlobal::locale()->formatDate(mMinDate, true);
+		}
 		KMessageBox::sorry(this, i18n("Date cannot be earlier than %1").arg(minString));
 		return false;
 	}
