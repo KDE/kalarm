@@ -183,7 +183,6 @@ PrefsTabBase::PrefsTabBase(QVBox* frame)
 	: QWidget(frame),
 	  mPage(frame)
 {
-	mPage->setMargin(KDialog::marginHint());
 }
 
 void PrefsTabBase::apply(bool syncToDisc)
