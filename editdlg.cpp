@@ -324,7 +324,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mReminder->setMinutes(reminder, mTimeWidget->anyTime());
 		mRecurrenceText->setText(event->recurrenceText());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mSoundPicker->setFile(event->audioFile());
+		mSoundPicker->setFile(event->audioFile(), false);
 		mSoundPicker->setChecked(event->beep() || !event->audioFile().isEmpty());
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
@@ -348,7 +348,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mReminder->setMinutes(0, false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
-		mSoundPicker->setFile(preferences->defaultSoundFile());
+		mSoundPicker->setFile(preferences->defaultSoundFile(), false);
 		mSoundPicker->setChecked(preferences->defaultBeep() || !preferences->defaultSoundFile().isEmpty());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
@@ -407,8 +407,9 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 
 	// Sound checkbox and file selector
 	QBoxLayout* layout = new QHBoxLayout(frameLayout);
-	mSoundPicker = new SoundPicker(mReadOnly, mDisplayAlarmsFrame);
+	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
+	mSoundPicker->setReadOnly(mReadOnly);
 	layout->addWidget(mSoundPicker);
 	layout->addSpacing(2*KDialog::spacingHint());
 	layout->addStretch();
