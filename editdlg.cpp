@@ -1158,7 +1158,7 @@ void EditAlarmDlg::slotOk()
 #ifdef SIMPLE_REP
 	if (mSimpleRepetition->count() * mSimpleRepetition->interval() >= longestRecurInterval)
 	{
-		KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval"));
+		KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval minus any reminder period"));
 		mSimpleRepetition->activate();   // display the alarm repetition dialog again
 		return;
 	}
