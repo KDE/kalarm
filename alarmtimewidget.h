@@ -1,5 +1,5 @@
 /*
- *  datetime.h  -  alarm date/time entry widget
+ *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
  *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
@@ -22,8 +22,8 @@
  *  without including the source code for Qt in the source distribution.
  */
 
-#ifndef DATETIME_H
-#define DATETIME_H
+#ifndef ALARMTIMEWIDGET_H
+#define ALARMTIMEWIDGET_H
 
 #include <qtimer.h>
 #include <qdatetime.h>
@@ -33,6 +33,7 @@ class RadioButton;
 class CheckBox;
 class DateEdit;
 class TimeSpinBox;
+class DateTime;
 
 
 class AlarmTimeWidget : public ButtonGroup
@@ -46,9 +47,8 @@ class AlarmTimeWidget : public ButtonGroup
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
-		QWidget*       getDateTime(QDateTime&, bool& anyTime, bool showErrorMessage = true) const;
-		void           setDateTime(const QDate& d)   { setDateTime(d, true); }
-		void           setDateTime(const QDateTime&, bool anyTime = false);
+		QWidget*       getDateTime(DateTime&, bool showErrorMessage = true) const;
+		void           setDateTime(const DateTime&);
 		void           setReadOnly(bool);
 		bool           anyTime() const               { return mAnyTime; }
 		void           enableAnyTime(bool enable);
@@ -79,4 +79,4 @@ class AlarmTimeWidget : public ButtonGroup
 		bool           mAnyTime;          // whether a time is specified, or only a date
 };
 
-#endif // DATETIME_H
+#endif // ALARMTIMEWIDGET_H

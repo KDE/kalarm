@@ -1,5 +1,5 @@
 /*
- *  datetime.cpp  -  alarm date/time entry widget
+ *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
  *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
@@ -34,11 +34,12 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include "datetime.h"
 #include "dateedit.h"
 #include "timespinbox.h"
 #include "checkbox.h"
 #include "radiobutton.h"
-#include "datetime.moc"
+#include "alarmtimewidget.moc"
 
 
 /******************************************************************************
@@ -178,22 +179,20 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 /******************************************************************************
 *  Fetch the entered date/time.
 *  If <= current time, and 'showErrorMessage' is true, output an error message.
-*  Output: 'anyTime' is set true if no time was entered.
 *  Reply = widget with the invalid value, if it is after the current time.
 */
-QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool showErrorMessage) const
+QWidget* AlarmTimeWidget::getDateTime(DateTime& dateTime, bool showErrorMessage) const
 {
 	QTime nowt = QTime::currentTime();
 	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
 	if (mAtTimeRadio->isOn())
 	{
-		anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
+		bool anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
 		if (mDateEdit->isValid()  &&  mTimeEdit->isValid())
 		{
-			dateTime.setDate(mDateEdit->date());
 			if (anyTime)
 			{
-				dateTime.setTime(QTime());
+				dateTime = mDateEdit->date();
 				if (dateTime.date() < now.date())
 				{
 					if (showErrorMessage)
@@ -203,7 +202,7 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 			}
 			else
 			{
-				dateTime.setTime(mTimeEdit->time());
+				dateTime.set(mDateEdit->date(), mTimeEdit->time());
 				if (dateTime <= now.addSecs(1))
 				{
 					if (showErrorMessage)
@@ -238,7 +237,6 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 			return mDelayTimeEdit;
 		}
 		dateTime = now.addSecs(mDelayTimeEdit->value() * 60);
-		anyTime = false;
 	}
 	return 0;
 }
@@ -246,11 +244,12 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 /******************************************************************************
 *  Set the date/time.
 */
-void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
+void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
 	if (dt.date().isValid())
 	{
-		mTimeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
+		QTime t = dt.time();
+		mTimeEdit->setValue(t.hour()*60 + t.minute());
 		mDateEdit->setDate(dt.date());
 		dateTimeChanged();     // update the delay time edit box
 		QDate now = QDate::currentDate();
@@ -264,6 +263,7 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 	}
 	if (mAnyTimeCheckBox)
 	{
+		bool anyTime = dt.isDateOnly();
 		if (anyTime)
 			mAnyTimeAllowed = true;
 		mAnyTimeCheckBox->setChecked(anyTime);

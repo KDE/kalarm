@@ -49,7 +49,7 @@
 #include "kalarmapp.h"
 #include "alarmevent.h"
 #include "preferences.h"
-#include "datetime.h"
+#include "alarmtimewidget.h"
 #include "dateedit.h"
 #include "timespinbox.h"
 #include "timeperiod.h"
@@ -738,7 +738,7 @@ void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
  */
 void RecurrenceEdit::set(const KAlarmEvent& event)
 {
-	setDefaults(event.mainDateTime());
+	setDefaults(event.mainDateTime().dateTime());
 	int repeatDuration;
 	Recurrence* recurrence = event.recurrence();
 	if (!recurrence)
