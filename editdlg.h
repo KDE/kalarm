@@ -74,6 +74,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotBrowseFile();
 		void         slotSoundToggled(bool on);
 		void         slotPickSound();
+		void         slotShowMainPage();
 		void         slotShowRecurrenceEdit();
 
 	private:
@@ -85,9 +86,7 @@ class EditAlarmDlg : public KDialogBase
 		void              initDisplayAlarms(QWidget* parent);
 		void              initCommand(QWidget* parent);
 
-		QFrame*          mainPage;
 		int              mainPageIndex;
-		QFrame*          recurPage;
 		int              recurPageIndex;
 		QWidgetStack*    recurTabStack;
 		QLabel*          recurDisabled;
@@ -139,6 +138,18 @@ class EditAlarmDlg : public KDialogBase
 		int              deferGroupHeight; // height added by deferred time widget
 		bool             alarmAnyTime;     // alarmDateTime is only a date, not a time
 		bool             timeDialog;       // the dialog shows date/time fields only
+};
+
+
+class PageFrame : public QFrame
+{
+		Q_OBJECT
+	public:
+		PageFrame(QWidget* parent = 0L, const char* name = 0L) : QFrame(parent, name) { }
+	protected:
+		virtual void     showEvent(QShowEvent*)    { emit shown(); }
+	signals:
+		void             shown();
 };
 
 #endif // EDITDLG_H

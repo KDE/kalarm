@@ -70,11 +70,14 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	  recurSetEndDate(true),
 	  deferGroup(0L)
 {
-	mainPage = addPage(i18n("&Alarm"));
-	mainPageIndex = 0;
+	QVBox* mainPageBox = addVBoxPage(i18n("&Alarm"));
+	mainPageIndex = pageIndex(mainPageBox);
+	PageFrame* mainPage = new PageFrame(mainPageBox);
+	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
+	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
 	// Recurrence tab
-	recurPage = addVBoxPage(i18n("&Recurrence"));
+	QVBox* recurPage = addVBoxPage(i18n("&Recurrence"));
 	recurPageIndex = pageIndex(recurPage);
 	recurTabStack = new QWidgetStack(recurPage);
 
@@ -86,8 +89,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	recurDisabled = new QLabel(i18n("The alarm does not recur.\nEnable recurrence in the Alarm tab."), recurTabStack);
 	recurDisabled->setAlignment(Qt::AlignCenter);
 	recurTabStack->addWidget(recurDisabled, 1);
-
-	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
 	// Alarm action
 
@@ -277,7 +278,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	size.setHeight(size.height() + deferGroupHeight);
 	resize(size);
 
-	slotAlarmTypeClicked(-1);    // enable/disable things appropriately
 	slotSoundToggled(sound->isChecked());
 }
 
@@ -517,7 +517,6 @@ QDateTime EditAlarmDlg::getDateTime(bool* anyTime)
 	return alarmDateTime;
 }
 
-
 /******************************************************************************
 *  Called when the dialog's size has changed.
 *  Records the new size (adjusted to ignore the optional height of the deferred
@@ -634,6 +633,15 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 	timeWidget->enableAnyTime(!recurs || recurrenceEdit->repeatType() != RecurrenceEdit::SUBDAILY);
 	if (deferGroup)
 		deferGroup->setEnabled(recurs);
+}
+
+/******************************************************************************
+*  Called when the main page is shown.
+*  Sets the focus widget to the first edit field.
+*/
+void EditAlarmDlg::slotShowMainPage()
+{
+	slotAlarmTypeClicked(-1);
 }
 
 /******************************************************************************

@@ -582,6 +582,7 @@ void RecurrenceEdit::yearlyClicked(int id)
 
 void RecurrenceEdit::showEvent(QShowEvent*)
 {
+	recurEveryLabel->buddy()->setFocus();
 	emit shown();
 }
 
