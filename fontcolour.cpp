@@ -69,12 +69,13 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		layout->addWidget(box);
 
 		QLabel* label = new QLabel(i18n("&Foreground color:"), box);
-		label->setFixedSize(label->sizeHint());
+		label->setMinimumSize(label->sizeHint());
 		mFgColourButton = new ColourCombo(box);
+		mFgColourButton->setMinimumSize(mFgColourButton->sizeHint());
 		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
 		QWhatsThis::add(box, i18n("Select the alarm message foreground color"));
-		layout->addWidget(new QWidget(page));    // left adjust the widgets
+		layout->addStretch();
 	}
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
@@ -89,7 +90,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
 	QWhatsThis::add(box, i18n("Select the alarm message background color"));
-	layout->addWidget(new QWidget(page));    // left adjust the widgets
+	layout->addStretch();
 
 	if (editColours)
 	{

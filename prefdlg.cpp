@@ -539,7 +539,8 @@ MessagePrefTab::MessagePrefTab(QVBox* frame)
 {
 	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Font && Color"), true, false);
 
-	QHBox* box = new QHBox(mPage);
+	QHBox* layoutBox = new QHBox(mPage);
+	QHBox* box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("E&xpired alarm color:"), box);
 	label->setMinimumSize(label->sizeHint());
@@ -549,6 +550,8 @@ MessagePrefTab::MessagePrefTab(QVBox* frame)
 	label->setBuddy(mExpiredColour);
 	QWhatsThis::add(box,
 	      i18n("Choose the text color in the alarm list for expired alarms."));
+	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
+	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 }
 
 void MessagePrefTab::restore()
