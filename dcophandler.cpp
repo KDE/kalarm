@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 
+#include <libkcal/icalformat.h>
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "kamail.h"
@@ -75,31 +76,27 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	||       func == "handleEvent(QString,QString)")
 		function = HANDLE;
 	else if (func == "cancelEvent(const QString&,const QString&)"
-	||       func == "cancelEvent(QString,QString)"
-	||       func == "cancelMessage(const QString&,const QString&)"    // deprecated: backwards compatibility with KAlarm pre-0.6
-	||       func == "cancelMessage(QString,QString)")                 // deprecated: backwards compatibility with KAlarm pre-0.6
+	||       func == "cancelEvent(QString,QString)")
 		function = CANCEL;
 	else if (func == "triggerEvent(const QString&,const QString&)"
-	||       func == "triggerEvent(QString,QString)"
-	||       func == "displayMessage(const QString&,const QString&)"   // deprecated: backwards compatibility with KAlarm pre-0.6
-	||       func == "displayMessage(QString,QString)")                // deprecated: backwards compatibility with KAlarm pre-0.6
+	||       func == "triggerEvent(QString,QString)")
 		function = TRIGGER;
 
-	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder)
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32)"
-	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32)")
+	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder, recurrence)
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,const QString&)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32,QString)")
 		function = SCHEDULE | MESSAGE;
-	//                scheduleFile(URL, dateTime, colour, flags, audioURL, reminder)
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32)"
-	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32)")
+	//                scheduleFile(URL, dateTime, colour, flags, audioURL, reminder, recurrence)
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,const QString&,Q_INT32,Q_INT32,const QString&)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,QString,Q_UINT32,QString)")
 		function = SCHEDULE | FILE;
-	//                scheduleCommand(commandLine, dateTime, flags)
-	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32)"
-	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32)")
+	//                scheduleCommand(commandLine, dateTime, flags, recurrence)
+	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,const QString&)"
+	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,QString)")
 		function = SCHEDULE | COMMAND;
-	//                scheduleEmail(addresses, subject, message, attachments, dateTime, flags)
-	else if (func == "scheduleEmail(const QString&,const QString&,const QString&,const QString&,const QDateTime&,Q_UINT32)"
-	||       func == "scheduleEmail(QString,QString,QString,QString,QDateTime,Q_UINT32)")
+	//                scheduleEmail(addresses, subject, message, attachments, dateTime, flags, recurrence)
+	else if (func == "scheduleEmail(const QString&,const QString&,const QString&,const QString&,const QDateTime&,Q_UINT32,Q_INT32,const QString&)"
+	||       func == "scheduleEmail(QString,QString,QString,QString,QDateTime,Q_UINT32,QString)")
 		function = SCHEDULE | COMMAND;
 
 	//                scheduleMessage(message, dateTime, colour, flags, audioURL, reminder, repeatType, interval, repeatCount)
@@ -172,6 +169,14 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	else if (func == "scheduleCommand(const QString&,const QDateTime&,Q_UINT32,Q_INT32,Q_INT32)"
 	||       func == "scheduleCommand(QString,QDateTime,Q_UINT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE | COMMAND | REP_COUNT | PRE_070;
+
+	// Deprecated methods: backwards compatibility with KAlarm pre-0.6
+	else if (func == "cancelMessage(const QString&,const QString&)"
+	||       func == "cancelMessage(QString,QString)")
+		function = CANCEL;
+	else if (func == "displayMessage(const QString&,const QString&)"
+	||       func == "displayMessage(QString,QString)")
+		function = TRIGGER;
 	else
 	{
 		kdDebug(5950) << "DcopHandler::process(): unknown DCOP function" << endl;
@@ -222,9 +227,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			QColor      bgColour;
 			QFont       font = theApp()->preferences()->messageFont();
 			Q_UINT32    flags;
-			KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
-			Q_INT32     repeatCount = 0;
-			Q_INT32     repeatInterval = 0;
+			KCal::Recurrence  recurrence(0);
 			Q_INT32     reminderMinutes = 0;
 			if (action == KAlarmEvent::EMAIL)
 			{
@@ -260,6 +263,9 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				arg >> reminderMinutes;
 			if (function & (REP_COUNT | REP_END))
 			{
+				KAlarmEvent::RecurType recurType;
+				Q_INT32 repeatCount = 0;
+				Q_INT32 repeatInterval;
 				if (function & PRE_070)
 				{
 					// Backwards compatibility with KAlarm pre-0.7
@@ -288,12 +294,18 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 						arg >> repeatCount;
 					else
 						arg.readRawBytes((char*)&endTime, sizeof(endTime));
-
 				}
+				KAlarmEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
+			}
+			else if (!(function & PRE_091))
+			{
+				QString rule;
+				arg >> rule;
+				KCal::ICalFormat format;
+				format.fromString(&recurrence, rule);
 			}
 			theApp()->scheduleEvent(text, dateTime, bgColour, font, flags, audioFile, mailAddresses, mailSubject,
-			                        mailAttachments, action, recurType, repeatInterval, repeatCount, endTime,
-			                        reminderMinutes);
+			                        mailAttachments, action, recurrence, reminderMinutes);
 			break;
 		}
 	}
