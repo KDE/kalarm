@@ -47,7 +47,7 @@ class AlarmTimeWidget : public ButtonGroup
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
-		bool           getDateTime(QDateTime&, bool& anyTime) const;
+		QWidget*       getDateTime(QDateTime&, bool& anyTime, bool showErrorMessage = true) const;
 		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
 		void           setDateTime(const QDateTime&, bool anyTime = false);
 		void           enableAnyTime(bool enable);

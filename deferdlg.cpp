@@ -67,7 +67,7 @@ DeferAlarmDlg::~DeferAlarmDlg()
 void DeferAlarmDlg::slotOk()
 {
 	bool anyTime;
-	if (timeWidget->getDateTime(alarmDateTime, anyTime))
+	if (!timeWidget->getDateTime(alarmDateTime, anyTime))
 	{
 		if (limitDateTime.isValid()  &&  alarmDateTime >= limitDateTime)
 			KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
