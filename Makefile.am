@@ -50,4 +50,4 @@ KDE_ICON = AUTO
 messages: 
 	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp -o $(podir)/kalarm.pot
 
-#include $(top_srcdir)/admin/Doxyfile.am
+#include ../admin/Doxyfile.am
