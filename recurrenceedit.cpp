@@ -64,6 +64,7 @@ static QString ordinal[] = {
 
 RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, const char* name)
 	: QWidget(parent, name, 0),
+	  noRepeatSize(0, 0),
 	  noEmitTypeChanged(true)
 {
 	// Create the recurrence rule Group box which holds the recurrence period
@@ -76,7 +77,7 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	ruleGroupBox = new QGroupBox(1, Qt::Horizontal, groupBoxTitle, this, "recurGroupBox");
 	layout->addWidget(ruleGroupBox);
 
-	QFrame* topFrame = new QFrame(ruleGroupBox,"repeatFrame");
+	QFrame* topFrame = new QFrame(ruleGroupBox, "repeatFrame");
 	QBoxLayout* topLayout = new QVBoxLayout(topFrame, 0, KDialog::spacingHint());
 
 	// Create the repetition type radio buttons
@@ -102,9 +103,16 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	recurRadio->setFixedSize(recurRadio->sizeHint());
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
 
+	noRepeatSize = QWidget::sizeHint();
+	int margins = noRepeatSize.width() - repeatButtonGroup->sizeHint().width();
+
+	recurrenceFrame = new QFrame(topFrame, "recurFrame");
+	topLayout->addWidget(recurrenceFrame);
+	topLayout = new QVBoxLayout(recurrenceFrame, 0, KDialog::spacingHint());
+
 	// Create the Recurrence Rule definitions
 
-	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), topFrame, "recurGroup");
+	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), recurrenceFrame, "recurGroup");
 	topLayout->addWidget(recurGroup);
 	ruleFrame = new QFrame(recurGroup, "ruleFrame");
 	layout = new QVBoxLayout(ruleFrame, 0);
@@ -184,7 +192,7 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	// Create the recurrence range group which contains the controls
 	// which specify how long the recurrence is to last.
 
-	rangeButtonGroup = new QButtonGroup(i18n("Recurrence End"), topFrame, "rangeButtonGroup");
+	rangeButtonGroup = new QButtonGroup(i18n("Recurrence End"), recurrenceFrame, "rangeButtonGroup");
 	topLayout->addWidget(rangeButtonGroup);
 
 	QVBoxLayout* vlayout = new QVBoxLayout(rangeButtonGroup, KDialog::marginHint(), KDialog::spacingHint());
@@ -235,10 +243,14 @@ RecurrenceEdit::RecurrenceEdit(const QString& groupBoxTitle, QWidget* parent, co
 	repeatCountButton->setFixedSize(size);
 	endDateButton->setFixedSize(size);
 
+	recurrenceHeight = recurrenceFrame->sizeHint().height() + KDialog::spacingHint();
+	recurrenceWidth  = recurrenceFrame->sizeHint().width() + margins;
+
 	connect(noEndDateButton, SIGNAL(toggled(bool)), this, SLOT(disableRange(bool)));
 	connect(repeatCountButton, SIGNAL(toggled(bool)), this, SLOT(enableDurationRange(bool)));
 	connect(endDateButton, SIGNAL(toggled(bool)), this, SLOT(enableDateRange(bool)));
 
+//ruleStack->addWidget(rangeButtonGroup, 4);
 	noEmitTypeChanged = false;
 }
 
@@ -262,10 +274,52 @@ void RecurrenceEdit::repeatTypeClicked(int id)
 	else
 		return;
 
+	int ht = noRepeatSize.height();
+	int wd = noRepeatSize.width();
+	if (recur)
+	{
+		recurrenceFrame->show();
+		recurrenceFrame->setMaximumSize(1000, 1000);
+		ht += recurrenceHeight;
+		wd = QMAX(wd, recurrenceWidth);
+	}
+	else
+	{
+		recurrenceFrame->hide();
+		recurrenceFrame->setMaximumSize(0, 0);
+	}
+	setFixedHeight(ht);
+	setMinimumSize(wd, ht);
+	if (width() < wd)
+		resize(wd, ht);
+
 	recurGroup->setEnabled(recur);
 	rangeButtonGroup->setEnabled(recur);
 	if (!noEmitTypeChanged)
 		emit typeChanged(repeatType);
+}
+
+/******************************************************************************
+ * Called after the widget has been resized.
+ */
+void RecurrenceEdit::resizeEvent(QResizeEvent* re)
+{
+	emit resized(re->oldSize(), re->size());
+}
+
+/******************************************************************************
+ * Return the recommended size of the widget.
+ * The recommended size changes depending on whether the recurrence details
+ * are visible or not.
+ */
+QSize RecurrenceEdit::sizeHint() const
+{
+	if (!noRepeatSize.width())
+		return QWidget::sizeHint();
+	if (!recurrenceFrame || recurrenceFrame->isHidden())
+		return noRepeatSize;
+	return QSize(QMAX(noRepeatSize.width(), recurrenceWidth),
+	             noRepeatSize.height() + recurrenceHeight);
 }
 
 /******************************************************************************
@@ -558,7 +612,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	QDate fromDate = from.date();
 
 	noEmitTypeChanged = true;
-	ruleButtonGroup->setButton(dailyButtonId);   // this must come before repeatButtonGroup->setButton()
+	ruleButtonGroup->setButton(subdailyButtonId);   // this must come before repeatButtonGroup->setButton()
 	noEmitTypeChanged = false;
 	repeatButtonGroup->setButton(repeatButtonGroup->id(noneRadio));
 	noEndDateButton->setChecked(true);

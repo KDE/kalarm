@@ -65,6 +65,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              getBeep() const         { return beep->isChecked(); }
 
 	protected:
+		virtual void showEvent(QShowEvent*);
 		virtual void resizeEvent(QResizeEvent*);
 	protected slots:
 		virtual void slotOk();
@@ -73,6 +74,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotRepeatTypeChange(int repeatType);
 		void         slotMessageTypeClicked(int id);
 		void         slotMessageTextChanged();
+		void         slotRecurrenceResized(QSize old, QSize New);
 
 	private:
 		bool            checkText(QString& result);
@@ -96,9 +98,11 @@ class EditAlarmDlg : public KDialogBase
 		QString          alarmMessage;
 		QDateTime        alarmDateTime;
 		QString          multiLineText;   // message text before single-line mode was selected
+		QSize            noRecurSize;     // size without a recurrence edit widget
 		bool             alarmAnyTime;    // alarmDateTime is only a date, not a time
 		bool             singleLineOnly;  // no multi-line text input allowed
 		bool             timeDialog;      // the dialog shows date/time fields only
+		bool             shown;           // the dialog has already been displayed
 };
 
 #endif // EDITDLG_H

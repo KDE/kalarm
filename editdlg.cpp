@@ -41,6 +41,7 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
+#include <kwinmodule.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -52,7 +53,8 @@
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
 	                        const KAlarmEvent* event)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel|Try, Ok, true)
+	: KDialogBase(parent, name, true, caption, Ok|Cancel|Try, Ok, true),
+	  shown(false)
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
@@ -104,6 +106,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	messageEdit->setWrapPolicy(QMultiLineEdit::Anywhere);
 	connect(messageEdit, SIGNAL(textChanged()), this, SLOT(slotMessageTextChanged()));
 	grid->addMultiCellWidget(messageEdit, 2, 2, 0, 3);
+//messageEdit->setMaximumHeight(size.height());
+//actionGroup->setMaximumHeight(actionGroup->sizeHint().height());
 
 	// Date and time entry
 	timeWidget = new AlarmTimeWidget(i18n("Time"), 0, page, "timeGroup");
@@ -113,8 +117,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	recurrenceEdit = new RecurrenceEdit(i18n("Repetition"), page);
 	recurrenceEdit->setMinimumSize(recurrenceEdit->sizeHint());
-	topLayout->addWidget(recurrenceEdit);
+	// Don't add to the layout yet, so that we can see what the minimum widget size is.
 	connect(recurrenceEdit, SIGNAL(typeChanged(int)), this, SLOT(slotRepeatTypeChange(int)));
+	connect(recurrenceEdit, SIGNAL(resized(QSize,QSize)), this, SLOT(slotRecurrenceResized(QSize,QSize)));
 
 	// Late display checkbox - default = allow late display
 
@@ -165,10 +170,15 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
+//	noRecurSize = sizeHint();
+	topLayout->insertWidget(2, recurrenceEdit);
+
 	topLayout->activate();
 
-	size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
-	resize(size);
+noRecurSize = theApp()->readConfigWindowSize("EditDialog", minimumSize());
+resize(noRecurSize);
+//	size = theApp()->readConfigWindowSize("EditDialog", minimumSize());
+//	resize(size);
 
 	// Set up initial values
 	if (event)
@@ -219,6 +229,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		recurrenceEdit->setDefaults(defaultTime, false);   // must be called after timeWidget is set up, to ensure correct date-only enabling
 	}
 
+size = noRecurSize;
+if (recurrenceEdit  &&  !recurrenceEdit->isSmallSize())
+	size.setHeight(size.height() + recurrenceEdit->heightVariation());
+resize(size);
+//resize(sizeHint().width(), sizeHint().height() + recurrenceEdit->heightVariation());
+
 	slotMessageTypeClicked(-1);    // enable/disable things appropriately
 	messageEdit->setFocus();
 }
@@ -260,6 +276,38 @@ KAlarmAlarm::Type EditAlarmDlg::getAlarmType() const
 	     :                        KAlarmAlarm::MESSAGE;
 }
 
+
+/******************************************************************************
+*  Called when the window is about to be displayed.
+*  The first time, it is moved up if necessary so that if the recurrence edit
+*  widget later enlarges, it will all be above the bottom of the screen.
+*/
+void EditAlarmDlg::showEvent(QShowEvent* se)
+{
+	if (!shown  &&  recurrenceEdit  &&  recurrenceEdit->isSmallSize())
+	{
+		// We don't know the window's frame size yet, since it hasn't been drawn.
+		// So use the parent's frame thickness as a guide.
+		QRect workArea = KWinModule().workArea();
+		int highest = workArea.top();
+		int frameHeight = parentWidget()->frameSize().height() - parentWidget()->size().height();
+		int top = mapToGlobal(QPoint(0, 0)).y();
+		int bottom = top + height() + recurrenceEdit->heightVariation() + frameHeight;
+		int shift = bottom - workArea.bottom();
+		if (shift > 0  &&  top > highest)
+		{
+			// Move the window upwards if possible
+			if (shift > top - highest)
+				shift = top - highest;
+			QRect rect = geometry();
+			rect.setTop(rect.top() - shift);
+			rect.setBottom(rect.bottom() - shift);
+			setGeometry(rect);
+		}
+	}
+	shown = true;
+}
+
 /******************************************************************************
 *  Called when the window's size has changed (before it is painted).
 *  Sets the last column in the list view to extend at least to the right
@@ -267,8 +315,29 @@ KAlarmAlarm::Type EditAlarmDlg::getAlarmType() const
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
-	theApp()->writeConfigWindowSize("EditDialog", re->size());
+	if (isVisible())
+	{
+		noRecurSize = re->size();
+		if (recurrenceEdit  &&  !recurrenceEdit->isSmallSize())
+			noRecurSize.setHeight(noRecurSize.height() - recurrenceEdit->heightVariation());
+		theApp()->writeConfigWindowSize("EditDialog", noRecurSize);
+	}
 	KDialog::resizeEvent(re);
+}
+
+/******************************************************************************
+ * Called when the recurrence edit widget has been resized.
+ */
+void EditAlarmDlg::slotRecurrenceResized(QSize old, QSize New)
+{
+	if (recurrenceEdit)
+	{
+		int newheight = noRecurSize.height();
+		if (New.height() > recurrenceEdit->noRecurHeight())
+			newheight += recurrenceEdit->heightVariation();
+		setMinimumHeight(newheight);
+		resize(width(), newheight);
+	}
 }
 
 

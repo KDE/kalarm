@@ -124,7 +124,6 @@ class KAlarmApp : public KUniqueApplication
 		void              handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool              handleEvent(const QString& eventID, EventFunc);
 		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc, bool updateCalAndDisplay);
-		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
 		static KAlarmApp*     theInstance;         // the one and only KAlarmApp instance
 		static int            activeCount;         // number of active instances without main windows

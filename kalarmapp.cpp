@@ -59,6 +59,8 @@ const char* GUI_DCOP_OBJECT_NAME = "tray";
 const char* DAEMON_APP_NAME      = DAEMON_APP_NAME_DEF;
 const char* DAEMON_DCOP_OBJECT   = "ad";
 
+static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
+
 KAlarmApp*  KAlarmApp::theInstance = 0L;
 int         KAlarmApp::activeCount = 0;
 
@@ -226,12 +228,12 @@ int KAlarmApp::newInstance()
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
 				if (!count)
 				{
-					usage = i18n("--calendarURL requires --handleEvent, --triggerEvent or --cancelEvent");
+					usage = i18n("%1 requires %2, %3 or %4").arg(QString::fromLatin1("--calendarURL")).arg(QString::fromLatin1("--handleEvent")).arg(QString::fromLatin1("--triggerEvent")).arg(QString::fromLatin1("--cancelEvent"));
 					break;
 				}
 				if (count > 1)
 				{
-					usage = i18n("--handleEvent, --triggerEvent, --cancelEvent mutually exclusive");
+					usage = i18n("%1, %2, %3 mutually exclusive").arg(QString::fromLatin1("--handleEvent")).arg(QString::fromLatin1("--triggerEvent")).arg(QString::fromLatin1("--cancelEvent"));
 					break;
 				}
 				if (!initCheck())
@@ -244,7 +246,7 @@ int KAlarmApp::newInstance()
 					QString calendarUrl = args->getOption("calendarURL");
 					if (KURL(calendarUrl).url() != mCalendar->urlString())
 					{
-						usage = i18n("--calendarURL: wrong calendar file");
+						usage = i18n("%1: wrong calendar file").arg(QString::fromLatin1("--calendarURL"));
 						break;
 					}
 				}
@@ -267,12 +269,12 @@ int KAlarmApp::newInstance()
 					kdDebug(5950)<<"KAlarmApp::newInstance(): file\n";
 					if (args->isSet("exec"))
 					{
-						usage = i18n("--exec incompatible with --file");
+						usage = i18n("%1 incompatible with %2").arg(QString::fromLatin1("--exec")).arg(QString::fromLatin1("--file"));
 						break;
 					}
 					if (args->count())
 					{
-						usage = i18n("message incompatible with --file");
+						usage = i18n("message incompatible with %1").arg(QString::fromLatin1("--file"));
 						break;
 					}
 					alMessage = args->getOption("file");
@@ -290,11 +292,13 @@ int KAlarmApp::newInstance()
 					alMessage = args->arg(0);
 				}
 
-				QDateTime* alarmTime = 0L;
+				QDateTime* alarmTime = 0;
+				bool       alarmNoTime = false;
 				QDateTime wakeup;
 				QColor bgColour = mSettings->defaultBgColour();
 				int    repeatCount = 0;
 				int    repeatInterval = 0;
+				KAlarmEvent::RecurType recurType;
 				if (args->isSet("color"))
 				{
 					// Colour is specified
@@ -305,7 +309,7 @@ int KAlarmApp::newInstance()
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
 					{
-						usage = i18n("Invalid --color parameter");
+						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--color"));
 						break;
 					}
 				}
@@ -313,9 +317,9 @@ int KAlarmApp::newInstance()
 				if (args->isSet("time"))
 				{
 					QCString dateTime = args->getOption("time");
-					if (!convWakeTime(dateTime, wakeup))
+					if (!convWakeTime(dateTime, wakeup, alarmNoTime))
 					{
-						usage = i18n("Invalid --time parameter");
+						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--time"));
 						break;
 					}
 					alarmTime = &wakeup;
@@ -324,28 +328,63 @@ int KAlarmApp::newInstance()
 				if (args->isSet("repeat"))
 				{
 					// Repeat count is specified
+					if (args->isSet("login"))
+					{
+						usage = i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--repeat"));
+						break;
+					}
 					if (!args->isSet("interval"))
 					{
-						usage = i18n("--repeat requires --interval");
+						usage = i18n("%1 requires %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--interval"));
 						break;
 					}
 					bool ok;
 					repeatCount = args->getOption("repeat").toInt(&ok);
 					if (!ok || repeatCount < 0)
 					{
-						usage = i18n("Invalid --repeat parameter");
+						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat"));
 						break;
 					}
-					repeatInterval = args->getOption("interval").toInt(&ok);
+
+					// Get the recurrence interval
+					ok = true;
+					uint interval = 0;
+					QCString optval = args->getOption("interval");
+					uint length = optval.length();
+					switch (optval[length - 1])
+					{
+						case 'Y':  recurType = KAlarmEvent::ANNUAL_DATE;  break;
+						case 'W':  recurType = KAlarmEvent::WEEKLY;  break;
+						case 'D':  recurType = KAlarmEvent::DAILY;  break;
+						case 'M':
+						{
+							int i = optval.find('H');
+							if (i < 0)
+								recurType = KAlarmEvent::MONTHLY_DAY;
+							else
+							{
+								recurType = KAlarmEvent::SUB_DAILY;
+								interval = optval.left(i).toUInt(&ok) * 60;
+								optval = optval.right(length - i - 1);
+							}
+							break;
+						}
+						default:       // should be a digit
+							recurType = KAlarmEvent::SUB_DAILY;
+							break;
+					}
+					if (ok)
+						interval += optval.toUInt(&ok);
+					repeatInterval = static_cast<int>(interval);
 					if (!ok || repeatInterval < 0)
 					{
-						usage = i18n("Invalid --interval parameter");
+						usage = i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval"));
 						break;
 					}
 				}
 				else if (args->isSet("interval"))
 				{
-					usage = i18n("--interval requires --repeat");
+					usage = i18n("%1 requires %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat"));
 					break;
 				}
 
@@ -379,7 +418,7 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--time ");
 				if (!usage.isEmpty())
 				{
-					usage += i18n(": option(s) only valid with a message/--file/--exec");
+					usage += i18n(": option(s) only valid with a message/%1/%2").arg(QString::fromLatin1("--file")).arg(QString::fromLatin1("--exec"));
 					break;
 				}
 
@@ -674,8 +713,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				int secs = alarm.dateTime().secsTo(now);
 				if (secs < 0)
 				{
-					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": not due for " << (-secs) << "s\n";
-kdDebug(5950) << "Alarm time: " << alarm.dateTime().toString(Qt::ISODate) << ", now: " << now.toString(Qt::ISODate) << endl;
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.id() << ": not due\n";
 					continue;
 				}
 				if (alarm.repeatAtLogin())
@@ -1225,83 +1263,6 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 }
 
 /******************************************************************************
-*  Convert the --time parameter string into a date/time value.
-*  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm
-*  Reply = true if successful.
-*/
-bool KAlarmApp::convWakeTime(const QCString timeParam, QDateTime& dateTime)
-{
-	if (timeParam.length() > 19)
-		return false;
-	char timeStr[20];
-	strcpy(timeStr, timeParam);
-	int dt[5] = { -1, -1, -1, -1, -1 };
-	char* s;
-	char* end;
-	// Get the minute value
-	if ((s = strchr(timeStr, ':')) == 0L)
-		return false;
-	*s++ = 0;
-	dt[4] = strtoul(s, &end, 10);
-	if (end == s  ||  *end  ||  dt[4] >= 60)
-		return false;
-	// Get the hour value
-	if ((s = strrchr(timeStr, '-')) == 0L)
-		s = timeStr;
-	else
-		*s++ = 0;
-	dt[3] = strtoul(s, &end, 10);
-	if (end == s  ||  *end  ||  dt[3] >= 24)
-		return false;
-
-	bool dateSet = false;
-	if (s != timeStr)
-	{
-		dateSet = true;
-		// Get the day value
-		if ((s = strrchr(timeStr, '-')) == 0L)
-			s = timeStr;
-		else
-			*s++ = 0;
-		dt[2] = strtoul(s, &end, 10);
-		if (end == s  ||  *end  ||  dt[2] == 0  ||  dt[2] > 31)
-			return false;
-		if (s != timeStr)
-		{
-			// Get the month value
-			if ((s = strrchr(timeStr, '-')) == 0L)
-				s = timeStr;
-			else
-				*s++ = 0;
-			dt[1] = strtoul(s, &end, 10);
-			if (end == s  ||  *end  ||  dt[1] == 0  ||  dt[1] > 12)
-				return false;
-			if (s != timeStr)
-			{
-				// Get the year value
-				dt[0] = strtoul(timeStr, &end, 10);
-				if (end == timeStr  ||  *end)
-					return false;
-			}
-		}
-	}
-
-	// Compile the values into a date/time structure
-	QDateTime now = QDateTime::currentDateTime();
-	QDate date((dt[0] < 0 ? now.date().year() : dt[0]),
-				  (dt[1] < 0 ? now.date().month() : dt[1]),
-				  (dt[2] < 0 ? now.date().day() : dt[2]));
-	if (!date.isValid())
-		return false;
-	QTime time(dt[3], dt[4], 0);
-	if (!dateSet  &&  time < now.time())
-		date = date.addDays(1);
-	dateTime.setDate(date);
-	dateTime.setTime(time);
-	return true;
-}
-
-/******************************************************************************
 * Check whether a file appears to be a text file by looking at its mime type.
 * Reply = 0 if not a text file
 *       = 1 if a plain text file
@@ -1459,5 +1420,97 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		theApp()->scheduleEvent(text, &dateTime, bgColour, flags, type, repeatCount, repeatInterval);
 		replyType = "void";
 	}
+	return true;
+}
+
+/******************************************************************************
+*  Convert the --time parameter string into a date/time or date value.
+*  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm or yyyy-mm-dd.
+*  Reply = true if successful.
+*/
+static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& noTime)
+{
+	if (timeParam.length() > 19)
+		return false;
+	char timeStr[20];
+	strcpy(timeStr, timeParam);
+	int dt[5] = { -1, -1, -1, -1, -1 };
+	char* s;
+	char* end;
+	// Get the minute value
+	if ((s = strchr(timeStr, ':')) == 0L)
+		noTime = true;
+	else
+	{
+		noTime = false;
+		*s++ = 0;
+		dt[4] = strtoul(s, &end, 10);
+		if (end == s  ||  *end  ||  dt[4] >= 60)
+			return false;
+		// Get the hour value
+		if ((s = strrchr(timeStr, '-')) == 0L)
+			s = timeStr;
+		else
+			*s++ = 0;
+		dt[3] = strtoul(s, &end, 10);
+		if (end == s  ||  *end  ||  dt[3] >= 24)
+			return false;
+	}
+	bool dateSet = false;
+	if (s != timeStr)
+	{
+		dateSet = true;
+		// Get the day value
+		if ((s = strrchr(timeStr, '-')) == 0L)
+			s = timeStr;
+		else
+			*s++ = 0;
+		dt[2] = strtoul(s, &end, 10);
+		if (end == s  ||  *end  ||  dt[2] == 0  ||  dt[2] > 31)
+			return false;
+		if (s != timeStr)
+		{
+			// Get the month value
+			if ((s = strrchr(timeStr, '-')) == 0L)
+				s = timeStr;
+			else
+				*s++ = 0;
+			dt[1] = strtoul(s, &end, 10);
+			if (end == s  ||  *end  ||  dt[1] == 0  ||  dt[1] > 12)
+				return false;
+			if (s != timeStr)
+			{
+				// Get the year value
+				dt[0] = strtoul(timeStr, &end, 10);
+				if (end == timeStr  ||  *end)
+					return false;
+			}
+		}
+	}
+
+	QDate date(dt[0], dt[1], dt[2]);
+	QTime time(0, 0, 0);
+	if (noTime)
+	{
+		// No time was specified, so the full date must have been specified
+		if (dt[0] < 0)
+			return false;
+	}
+	else
+	{
+		// Compile the values into a date/time structure
+		QDateTime now = QDateTime::currentDateTime();
+		if (dt[0] < 0)
+			date.setYMD(now.date().year(),
+			            (dt[1] < 0 ? now.date().month() : dt[1]),
+			            (dt[2] < 0 ? now.date().day() : dt[2]));
+		time.setHMS(dt[3], dt[4], 0);
+		if (!dateSet  &&  time < now.time())
+			date = date.addDays(1);
+	}
+	if (!date.isValid())
+		return false;
+	dateTime.setDate(date);
+	dateTime.setTime(time);
 	return true;
 }

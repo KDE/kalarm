@@ -49,48 +49,59 @@ class RecurrenceEdit : public QWidget
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */
-		void         setDefaults(const QDateTime& from, bool allday);
+		void          setDefaults(const QDateTime& from, bool allday);
 		/** Initialise according to a specified event */
-		void         set(const KAlarmEvent&, bool repeatAtLogin);
+		void          set(const KAlarmEvent&, bool repeatAtLogin);
 		/** Write event settings to event object */
-		void         writeEvent(KAlarmEvent&);
-		bool         repeatAtLogin() const  { return repeatAtLoginRadio->isOn(); }
+		void          writeEvent(KAlarmEvent&);
+		bool          repeatAtLogin() const    { return repeatAtLoginRadio->isOn(); }
+		bool          isSmallSize() const      { return (!recurrenceFrame || recurrenceFrame->isHidden()); }
+		int           noRecurHeight() const    { return noRepeatSize.height(); }
+		int           heightVariation() const  { return recurrenceHeight; }
+		virtual QSize sizeHint() const;
 
 		/** Check if the input is valid. */
-		bool         validateInput();
+		bool          validateInput();
 
 		enum RepeatType { NONE, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
 	public slots:
-		void         setDateTime(const QDateTime& start)   { currStartDateTime = start; }
+		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 
 	signals:
-		void         typeChanged(int recurType);   // returns a RepeatType value
+		void          typeChanged(int recurType);   // returns a RepeatType value
+		void          resized(QSize old, QSize New);
 
 	protected slots:
-		void         repeatTypeClicked(int);
-		void         periodClicked(int);
-		void         monthlyClicked(int);
-		void         yearlyClicked(int);
-		void         disableRange(bool);
-		void         enableDurationRange(bool);
-		void         enableDateRange(bool);
+		void          repeatTypeClicked(int);
+		void          periodClicked(int);
+		void          monthlyClicked(int);
+		void          yearlyClicked(int);
+		void          disableRange(bool);
+		void          enableDurationRange(bool);
+		void          enableDateRange(bool);
 
 	protected:
-		void         unsetAllCheckboxes();
-		void         setDefaults(const QDateTime& from);
-		void         checkDay(int day);
-		void         getCheckedDays(QBitArray& rDays);
-		void         setCheckedDays(QBitArray& rDays);
+		void          unsetAllCheckboxes();
+		void          setDefaults(const QDateTime& from);
+		void          checkDay(int day);
+		void          getCheckedDays(QBitArray& rDays);
+		void          setCheckedDays(QBitArray& rDays);
 
-		void         initNone();
-		void         initSubdaily();
-		void         initDaily();
-		void         initWeekly();
-		void         initMonthly();
-		void         initYearly();
+		void          initNone();
+		void          initSubdaily();
+		void          initDaily();
+		void          initWeekly();
+		void          initMonthly();
+		void          initYearly();
+
+		virtual void  resizeEvent(QResizeEvent*);
 
 	private:
+		QSize         noRepeatSize;
+		int           recurrenceWidth;
+		int           recurrenceHeight;
+		QFrame*       recurrenceFrame;
 		/* main rule box and choices. */
 		QGroupBox*    ruleGroupBox;
 		QGroupBox*    recurGroup;
