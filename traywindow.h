@@ -39,9 +39,6 @@ class TrayWindow : public KSystemTray
 
 	public slots:
 		void         toggleAlarmsEnabled();
-//		void         slotKAlarm();
-//		void         slotConfigKAlarm();
-//		void         slotConfigDaemon();
 		void         slotQuit();
 
 	protected:
@@ -56,7 +53,7 @@ class TrayWindow : public KSystemTray
 		void         registerWithDaemon();
 		void         enableCalendar(bool enable);
 		void         setDaemonStatus(bool running);
-		bool         isDaemonRunning(bool updateDockWindow = true);
+		bool         isDaemonRunning(bool updateTrayIcon = true);
 		void         setFastDaemonCheck();
 		void         setEnabledStatus(bool status);
 

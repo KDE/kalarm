@@ -82,6 +82,7 @@ KAlarmApp::KAlarmApp()
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 	                                 0, this, SLOT(slotDaemonPreferences()), this);
+	mActionAlarmEnable = new KAction(QString::null, 0, this, SLOT(toggleAlarmsEnabled()), this);
 }
 
 /******************************************************************************
@@ -425,6 +426,21 @@ bool KAlarmApp::displayTrayIcon(bool show)
 	else
 		delete mTrayWindow;
 	return true;
+}
+
+/******************************************************************************
+*  Set the correct text for the Alarms Enabled / Enable Alarms menu item.
+*/
+void KAlarmApp::setActionAlarmEnable(bool status)
+{
+	mActionAlarmEnable->setText(status ? i18n("Alarms &Enabled") : i18n("&Enable Alarms"));
+}
+
+/******************************************************************************
+*  Called when an Alarms Enabled / Enable Alarms menu item is selected.
+*/
+void KAlarmApp::toggleAlarmsEnabled()
+{
 }
 
 /******************************************************************************

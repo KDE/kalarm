@@ -72,8 +72,9 @@ TrayWindow::TrayWindow(const char* name)
 	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()));
 
 	// Set up the context menu
-	mAlarmsEnabledId = contextMenu()->insertItem(i18n("Alarms Enabled"),
-	                                             this, SLOT(toggleAlarmsEnabled()));
+	KAction* a = theApp()->actionAlarmEnable();
+	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
+	connect(a, SIGNAL(activated()), this, SLOT(toggleAlarmsEnabled()));
 	theApp()->actionPreferences()->plug(contextMenu());
 	theApp()->actionDaemonPreferences()->plug(contextMenu());
 
@@ -206,6 +207,7 @@ void TrayWindow::setEnabledStatus(bool status)
 {
 	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
 	contextMenu()->setItemChecked(mAlarmsEnabledId, status);
+	theApp()->setActionAlarmEnable(status);
 }
 
 /******************************************************************************
@@ -233,10 +235,10 @@ void TrayWindow::registerWithDaemon()
 /******************************************************************************
 * Check whether the alarm daemon is currently running.
 */
-bool TrayWindow::isDaemonRunning(bool updateDockWindow)
+bool TrayWindow::isDaemonRunning(bool updateTrayIcon)
 {
 	bool newstatus = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(DAEMON_APP_NAME));
-	if (!updateDockWindow)
+	if (!updateTrayIcon)
 		return newstatus;
 	if (newstatus != mDaemonRunning)
 	{

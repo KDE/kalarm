@@ -68,6 +68,8 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
 		bool              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
+		void              setActionAlarmEnable(bool status);
+		KAction*          actionAlarmEnable() const       { return mActionAlarmEnable; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
@@ -93,6 +95,7 @@ class KAlarmApp : public KUniqueApplication
 	protected:
 		KAlarmApp();
 	private slots:
+		void              toggleAlarmsEnabled();
 		void              slotPreferences();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
@@ -115,6 +118,7 @@ class KAlarmApp : public KUniqueApplication
 		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
 		TrayWindow*                mTrayWindow;        // active system tray icon
 		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
+		KAction*                   mActionAlarmEnable; // action to enable/disable alarms
 		KAction*                   mActionPrefs;       // action to display the preferences dialog
 		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon
