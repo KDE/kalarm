@@ -1,6 +1,6 @@
 KNOWN BUGS
 
-The following known bugs are unlikely to be fixed:
+The following bugs are known to exist:
 
 - The KDE 3.0 version of KAlarm 0.5.7 stored a time 1 hour out for some alarms.
   Alarms scheduled for a time when daylight saving time is in operation were
