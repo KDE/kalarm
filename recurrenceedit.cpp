@@ -211,6 +211,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mRepeatCountEntry->setLineShiftStep(10);
 	mRepeatCountEntry->setSelectOnStep(false);
 	mRepeatCountEntry->setReadOnly(mReadOnly);
+	connect(mRepeatCountEntry, SIGNAL(valueChanged(int)), SLOT(repeatCountChanged(int)));
 	QWhatsThis::add(mRepeatCountEntry,
 	      i18n("Enter the total number of times to trigger the alarm"));
 	repeatCountButton->setFocusWidget(mRepeatCountEntry);
