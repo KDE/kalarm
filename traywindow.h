@@ -31,7 +31,7 @@ class KAction;
 class KActionCollection;
 
 class KAlarmMainWindow;
-
+class TrayTooltip;
 
 class TrayWindow : public KSystemTray
 {
