@@ -277,22 +277,30 @@ void Preferences::setEmailBccAddress(bool useControlCentre, const QString& addre
 /******************************************************************************
 * Called to allow output of the specified message dialog again, where the
 * dialog has a checkbox to turn notification off.
+* Set 'yesNoMessage' true if the message is used in a KMessageBox::*YesNo*() call.
 */
-void Preferences::setNotify(const QString& messageID, bool notify)
+void Preferences::setNotify(const QString& messageID, bool yesNoMessage, bool notify)
 {
 	KConfig* config = kapp->config();
 	config->setGroup(QString::fromLatin1("Notification Messages"));
-	config->writeEntry(messageID, QString::fromLatin1(notify ? "" : "Yes"));
+	if (yesNoMessage)
+		config->writeEntry(messageID, QString::fromLatin1(notify ? "" : "Yes"));
+	else
+		config->writeEntry(messageID, notify);
 	config->sync();
 }
 
 /******************************************************************************
 * Return whether the specified message dialog is output, where the dialog has
 * a checkbox to turn notification off.
+* Set 'yesNoMessage' true if the message is used in a KMessageBox::*YesNo*() call.
 */
-bool Preferences::notifying(const QString& messageID)
+bool Preferences::notifying(const QString& messageID, bool yesNoMessage)
 {
 	KConfig* config = kapp->config();
 	config->setGroup(QString::fromLatin1("Notification Messages"));
-	return config->readEntry(messageID) != QString::fromLatin1("Yes");
+	if (yesNoMessage)
+		return config->readEntry(messageID) != QString::fromLatin1("Yes");
+	else
+		return config->readBoolEntry(messageID, true);
 }

@@ -89,8 +89,8 @@ class Preferences : public QObject
 		void           updateStartOfDayCheck();
 		void           emitPreferencesChanged();
 
-		static void    setNotify(const QString& messageID, bool notify);
-		static bool    notifying(const QString& messageID);
+		static void    setNotify(const QString& messageID, bool yesNoMessage, bool notify);
+		static bool    notifying(const QString& messageID, bool yesNoMessage);
 
 		static const ColourList  default_messageColours;
 		static const QColor      default_defaultBgColour;

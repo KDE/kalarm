@@ -159,7 +159,7 @@ void TrayWindow::slotQuit()
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->alarmsDisabledIfStopped()
 #if KDE_VERSION < 290
-	&&  Preferences::notifying(QUIT_WARN)
+	&&  Preferences::notifying(QUIT_WARN, true)
 #endif
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
 	                                         "(once any alarm message windows are closed)."),

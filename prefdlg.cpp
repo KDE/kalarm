@@ -303,7 +303,7 @@ void MiscPrefTab::restore()
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(mPreferences->mDisableAlarmsIfStopped);
-	mQuitWarn->setChecked(Preferences::notifying(TrayWindow::QUIT_WARN));
+	mQuitWarn->setChecked(Preferences::notifying(TrayWindow::QUIT_WARN, true));
 	mAutostartTrayIcon1->setChecked(mPreferences->mAutostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(mPreferences->mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(mPreferences->mConfirmAlarmDeletion);
@@ -318,7 +318,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	mPreferences->mRunInSystemTray         = systray;
 	mPreferences->mDisableAlarmsIfStopped  = mDisableAlarmsIfStopped->isChecked();
 	if (mQuitWarn->isEnabled())
-		Preferences::setNotify(TrayWindow::QUIT_WARN, mQuitWarn->isChecked());
+		Preferences::setNotify(TrayWindow::QUIT_WARN, true, mQuitWarn->isChecked());
 	mPreferences->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
 	mPreferences->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
 	int sod = mStartOfDay->value();
@@ -466,7 +466,7 @@ void EmailPrefTab::restore()
 	mEmailClient->setButton(mPreferences->mEmailClient);
 	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->emailAddress());
 	setEmailBccAddress(mPreferences->mEmailBccUseControlCentre, mPreferences->emailBccAddress());
-	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY));
+	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY, false));
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
@@ -480,7 +480,7 @@ void EmailPrefTab::apply(bool syncToDisc)
 	mPreferences->setEmailAddress(false, mEmailAddress->text());
 	mPreferences->setEmailBccAddress(false, mEmailBccAddress->text());
 #endif
-	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, mEmailQueuedNotify->isChecked());
+	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, false, mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
 

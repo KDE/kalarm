@@ -684,7 +684,7 @@ void KAlarmApp::commitData(QSessionManager& sm)
 {
 	mSessionClosingDown = true;
 	KUniqueApplication::commitData(sm);
-	mSessionClosingDown = false;         // reset in case shutdown is canceled
+	mSessionClosingDown = false;         // reset in case shutdown is cancelled
 }
 
 /******************************************************************************
@@ -698,10 +698,9 @@ void KAlarmApp::redisplayAlarms()
 	if (mDisplayCalendar->isOpen())
 	{
 		Event::List events = mDisplayCalendar->events();
-		Event::List::ConstIterator it;
-                for ( it = events.begin(); it != events.end(); ++it )
+		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
-                        Event *kcalEvent = *it;
+                        Event* kcalEvent = *it;
 			KAlarmEvent event(*kcalEvent);
 			event.setUid(KAlarmEvent::ACTIVE);
 			if (!MessageWin::findEvent(event.id()))
@@ -929,7 +928,7 @@ void KAlarmApp::slotPreferencesChanged()
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
-		Preferences::setNotify(TrayWindow::QUIT_WARN, true);   // since mode has changed, re-allow warning messages on Quit
+		Preferences::setNotify(TrayWindow::QUIT_WARN, true, true);   // since mode has changed, re-allow warning messages on Quit
 		registerWithDaemon(true);           // re-register with the alarm daemon
 	}
 
@@ -1027,7 +1026,7 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 
 /******************************************************************************
 * Called in response to a DCOP notification by the alarm daemon that an event
-* should be handled, i.e. displayed or canceled.
+* should be handled, i.e. displayed or cancelled.
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
@@ -1110,7 +1109,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				}
 				if (alarm.lateCancel())
 				{
-					// Alarm is due, and it is to be canceled if late.
+					// Alarm is due, and it is to be cancelled if late.
 					kdDebug(5950) << "KAlarmApp::handleEvent(): LATE_CANCEL\n";
 					bool late = false;
 					bool cancel = false;
@@ -1925,7 +1924,7 @@ bool KAlarmApp::isDaemonRunning(bool startdaemon)
 /******************************************************************************
 * Read the alarm daemon's alarm check interval from its config file. If it has
 * reduced, any late-cancel alarms which are already due could potentially be
-* canceled erroneously. To avoid this, note the effective last time that it
+* cancelled erroneously. To avoid this, note the effective last time that it
 * will have checked alarms.
 */
 void KAlarmApp::readDaemonCheckInterval()
