@@ -146,7 +146,7 @@ int KAlarmApp::newInstance()
 		{
 			if (KMainWindow::classNameOfToplevel(i) == QString::fromLatin1("KAlarmMainWindow"))
 			{
-				KAlarmMainWindow* win = new KAlarmMainWindow;
+				KAlarmMainWindow* win = new KAlarmMainWindow(true);
 				win->restore(i, false);
 				if (win->hiddenTrayParent())
 					trayParent = win;
@@ -513,6 +513,7 @@ void KAlarmApp::quitIf(int exitCode)
 	if (activeCount <= 0  &&  !KAlarmMainWindow::count()  &&  !MessageWin::instanceCount()  &&  !mTrayWindow)
 	{
 		// This was the last/only running "instance" of the program, so exit completely.
+		kdDebug(5950) << "KAlarmApp::quitIf(): quitting" << endl;
 		exit(exitCode);
 	}
 }
@@ -1251,11 +1252,14 @@ bool KAlarmApp::stopDaemon()
 }
 
 /******************************************************************************
-* Reset the alarm daemon. If it is not already running, start it.
+* Reset the alarm daemon and reload the calendar.
+* If the daemon is not already running, start it.
 */
 void KAlarmApp::resetDaemon()
 {
 	kdDebug(5950) << "KAlarmApp::resetDaemon()" << endl;
+	mCalendar->reload();
+	KAlarmMainWindow::refresh();
 	if (!dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		startDaemon();
 	else
@@ -1366,6 +1370,7 @@ void KAlarmApp::writeConfigWindowSize(const char* window, const QSize& size)
 	QWidget* desktop = KApplication::desktop();
 	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
 	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
+	config->sync();
 }
 
 /******************************************************************************
