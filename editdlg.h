@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ class SoundPicker;
 class Reminder;
 class SpecialActionsButton;
 class RepetitionButton;
+class TimeSpinBox;
 class LineEdit;
 class TextEdit;
 
@@ -146,8 +147,10 @@ class EditAlarmDlg : public KDialogBase
 		QLineEdit*          mTemplateName;
 		ButtonGroup*        mTemplateTimeGroup;
 		RadioButton*        mTemplateDefaultTime; // no alarm time is specified
+		RadioButton*        mTemplateUseTimeAfter;// alarm time is specified as an offset from current
 		RadioButton*        mTemplateAnyTime;     // alarms have date only, no time
 		RadioButton*        mTemplateUseTime;     // an alarm time is specified
+		TimeSpinBox*        mTemplateTimeAfter;   // the specified offset from the current time
 		TimeEdit*           mTemplateTime;        // the alarm time which is specified
 
 		// Display alarm options widgets
@@ -218,11 +221,14 @@ class EditAlarmDlg : public KDialogBase
 		QString             mSavedTemplateName;   // mTemplateName value
 		QButton*            mSavedTemplateTimeType; // selected ID in mTemplateTimeGroup
 		QTime               mSavedTemplateTime;   // mTemplateTime value
+		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
 		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
 		bool                mSavedBeep;           // mSoundPicker beep status
 		bool                mSavedRepeatSound;    // mSoundPicker repeat status
 		QString             mSavedSoundFile;      // mSoundPicker sound file
 		float               mSavedSoundVolume;    // mSoundPicker volume
+		float               mSavedSoundFadeVolume;// mSoundPicker fade volume
+		int                 mSavedSoundFadeSeconds;// mSoundPicker fade time
 		bool                mSavedConfirmAck;     // mConfirmAck status
 		QFont               mSavedFont;           // mFontColourButton font
 		QColor              mSavedBgColour;       // mBgColourChoose selection

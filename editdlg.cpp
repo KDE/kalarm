@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@
 
 #include <libkdepim/maillistdrag.h>
 #include <libkdepim/kvcarddrag.h>
+#include <libkcal/icaldrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
@@ -68,6 +69,7 @@
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
+#include "lineedit.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "radiobutton.h"
@@ -87,6 +89,7 @@
 using namespace KCal;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
+static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
 {
@@ -247,8 +250,10 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
 		layout->addWidget(mTemplateTimeGroup);
-		QBoxLayout* vlayout = new QVBoxLayout(mTemplateTimeGroup, marginKDE2 + marginHint(), spacingHint());
-		vlayout->addSpacing(fontMetrics().lineSpacing()/2);
+		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginKDE2 + marginHint(), spacingHint());
+		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+		// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
+		int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
 
 		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), mTemplateTimeGroup, "templateDefTimeButton");
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
@@ -256,33 +261,10 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QWhatsThis::add(mTemplateDefaultTime,
 		      i18n("Do not specify a start time for alarms based on this template. "
 		           "The normal default start time will be used."));
-		vlayout->addWidget(mTemplateDefaultTime, 0, Qt::AlignAuto);
+		grid->addWidget(mTemplateDefaultTime, 0, 0, alignment);
 
 		QHBox* box = new QHBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
-		vlayout->addWidget(box);
-#ifdef TEMPLATE_TFN
-		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box, "templateFromNowButton");
-		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
-		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
-		QWhatsThis::add(mTemplateUseTimeAfter,
-		      i18n("Set alarms based on this template to start after the specified time "
-		           "interval from when the alarm is created."));
-		mTemplateTimeGroup->insert(mTemplateUseTimeAfter);
-		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, this);
-		mTemplateTimeAfter->setValue(1439);
-		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
-		mTemplateTimeAfter->setReadOnly(mReadOnly);
-		QWhatsThis::add(mTemplateTimeAfter,
-		      QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
-		                         .arg(TimeSpinBox::shiftWhatsThis()));
-		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-		box->setFixedHeight(box->sizeHint().height());
-
-		box = new QHBox(mTemplateTimeGroup);
-		box->setSpacing(spacingHint());
-		vlayout->addWidget(box);
-#endif
 		mTemplateUseTime = new RadioButton(i18n("Time:"), box, "templateTimeButton");
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
@@ -297,13 +279,33 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		                         .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
+		grid->addWidget(box, 0, 1, alignment);
 
 		mTemplateAnyTime = new RadioButton(i18n("An&y time"), mTemplateTimeGroup, "templateAnyTimeButton");
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
 		QWhatsThis::add(mTemplateAnyTime,
 		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
-		vlayout->addWidget(mTemplateAnyTime, 0, Qt::AlignAuto);
+		grid->addWidget(mTemplateAnyTime, 1, 0, alignment);
+
+		box = new QHBox(mTemplateTimeGroup);
+		box->setSpacing(spacingHint());
+		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box, "templateFromNowButton");
+		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
+		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateUseTimeAfter,
+		      i18n("Set alarms based on this template to start after the specified time "
+		           "interval from when the alarm is created."));
+		mTemplateTimeGroup->insert(mTemplateUseTimeAfter);
+		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, box);
+		mTemplateTimeAfter->setValue(1439);
+		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
+		mTemplateTimeAfter->setReadOnly(mReadOnly);
+		QWhatsThis::add(mTemplateTimeAfter,
+		      QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
+		                         .arg(TimeSpinBox::shiftWhatsThis()));
+		box->setFixedHeight(box->sizeHint().height());
+		grid->addWidget(box, 1, 1, alignment);
 
 		layout->addStretch();
 	}
@@ -614,13 +616,18 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		if (mTemplate)
 		{
-			bool noTime = event->isTemplate() && event->usingDefaultTime();
-			bool useTime = !event->mainDateTime().isDateOnly();
-			int button = mTemplateTimeGroup->id(noTime ? mTemplateDefaultTime :
-			                                    useTime ? mTemplateUseTime : mTemplateAnyTime);
+			int afterTime = event->isTemplate() ? event->templateAfterTime() : -1;
+			bool noTime   = !afterTime;
+			bool useTime  = !event->mainDateTime().isDateOnly();
+			int button = mTemplateTimeGroup->id(noTime          ? mTemplateDefaultTime :
+			                                    (afterTime > 0) ? mTemplateUseTimeAfter :
+			                                    useTime         ? mTemplateUseTime : mTemplateAnyTime);
 			mTemplateTimeGroup->setButton(button);
+			mTemplateTimeAfter->setValue(afterTime > 0 ? afterTime : 1);
 			if (!noTime && useTime)
 				mTemplateTime->setValue(event->mainDateTime().time());
+			else
+				mTemplateTime->setValue(0);
 		}
 		else
 		{
@@ -628,8 +635,9 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			{
 				// Initialising from an alarm template: use current date
 				QDateTime now = QDateTime::currentDateTime();
-				if (event->usingDefaultTime())
-					mTimeWidget->setDateTime(now.addSecs(60));
+				int afterTime = event->templateAfterTime();
+				if (afterTime >= 0)
+					mTimeWidget->setDateTime(now.addSecs((afterTime + 1) * 60));
 				else
 				{
 					QDate d = now.date();
@@ -683,7 +691,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
 		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->repeatSound());
+		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
 		mCmdXterm->setChecked(event->commandXterm());
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
@@ -711,6 +719,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		{
 			mTemplateTimeGroup->setButton(mTemplateTimeGroup->id(mTemplateDefaultTime));
 			mTemplateTime->setValue(0);
+			mTemplateTimeAfter->setValue(1);
 		}
 		else
 			mTimeWidget->setDateTime(defaultTime);
@@ -727,7 +736,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
-		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+		                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
 		mCmdTypeScript->setChecked(preferences->defaultCmdScript());
 		mCmdXterm->setChecked(preferences->defaultCmdXterm());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
@@ -900,14 +909,15 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedEvent = new KAEvent(*event);
 	if (mTemplate)
 	{
-		mSavedTemplateName     = mTemplateName->text();
-		mSavedTemplateTimeType = mTemplateTimeGroup->selected();
-		mSavedTemplateTime     = mTemplateTime->time();
+		mSavedTemplateName      = mTemplateName->text();
+		mSavedTemplateTimeType  = mTemplateTimeGroup->selected();
+		mSavedTemplateTime      = mTemplateTime->time();
+		mSavedTemplateAfterTime = mTemplateTimeAfter->value();
 	}
 	mSavedTypeRadio      = mActionGroup->selected();
 	mSavedBeep           = mSoundPicker->beep();
 	mSavedSoundFile      = mSoundPicker->file();
-	mSavedSoundVolume    = mSoundPicker->volume();
+	mSavedSoundVolume    = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
 	mSavedRepeatSound    = mSoundPicker->repeat();
 	mSavedConfirmAck     = mConfirmAck->isChecked();
 	mSavedFont           = mFontColourButton->font();
@@ -959,7 +969,8 @@ bool EditAlarmDlg::stateChanged() const
 	{
 		if (mSavedTemplateName     != mTemplateName->text()
 		||  mSavedTemplateTimeType != mTemplateTimeGroup->selected()
-		||  mSavedTemplateTime     != mTemplateTime->time())
+		||  mTemplateUseTime->isOn()  &&  mSavedTemplateTime != mTemplateTime->time()
+		||  mTemplateUseTimeAfter->isOn()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value())
 			return true;
 	}
 	else
@@ -995,8 +1006,12 @@ bool EditAlarmDlg::stateChanged() const
 				return true;
 			if (!mSavedSoundFile.isEmpty())
 			{
+				float fadeVolume;
+				int   fadeSecs;
 				if (mSavedRepeatSound != mSoundPicker->repeat()
-				||  mSavedSoundVolume != mSoundPicker->volume())
+				||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
+				||  mSavedSoundFadeVolume != fadeVolume
+				||  mSavedSoundFadeSeconds != fadeSecs)
 					return true;
 			}
 		}
@@ -1072,17 +1087,22 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	}
 	KAEvent::Action type = getAlarmType();
 	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),
-			  type, (trial ? 0 : mLateCancel->minutes()), getAlarmFlags());
+	          type, (trial ? 0 : mLateCancel->minutes()), getAlarmFlags());
 	switch (type)
 	{
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:
-			event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
+		{
+			float fadeVolume;
+			int   fadeSecs;
+			float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
+			event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
 			if (!trial)
 				event.setReminder(mReminder->minutes(), mReminder->isOnceOnly());
 			if (mSpecialActionsButton)
 				event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 			break;
+		}
 		case KAEvent::EMAIL:
 		{
 			QString from;
@@ -1124,7 +1144,11 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		if (mSimpleRepetition->count())
 			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mTemplate)
-			event.setTemplate(mTemplateName->text(), mTemplateDefaultTime->isOn());
+		{
+			int afterTime = mTemplateDefaultTime->isOn() ? 0
+			              : mTemplateUseTimeAfter->isOn() ? mTemplateTimeAfter->value() : -1;
+			event.setTemplate(mTemplateName->text(), afterTime);
+		}
 	}
 }
 
@@ -1689,11 +1713,12 @@ void EditAlarmDlg::slotCmdScriptToggled(bool on)
 
 /******************************************************************************
 *  Called when one of the template time radio buttons is clicked,
-*  to enable or disable the template time entry spin box.
+*  to enable or disable the template time entry spin boxes.
 */
 void EditAlarmDlg::slotTemplateTimeType(int)
 {
 	mTemplateTime->setEnabled(mTemplateUseTime->isOn());
+	mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isOn());
 }
 
 /******************************************************************************
@@ -1908,167 +1933,9 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 	setMinimumSize(tsize);
 }
 
-
-/*=============================================================================
-= Class LineEdit
-= Line edit which accepts drag and drop of text, URLs and/or email addresses.
-* It has an option to prevent its contents being selected when it receives
-= focus.
-=============================================================================*/
-LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
-	: KLineEdit(parent, name),
-	  mType(type),
-	  mNoSelect(false),
-	  mSetCursorAtEnd(false)
+void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
-	init();
-}
-
-LineEdit::LineEdit(QWidget* parent, const char* name)
-	: KLineEdit(parent, name),
-	  mType(Text),
-	  mNoSelect(false),
-	  mSetCursorAtEnd(false)
-{
-	init();
-}
-
-void LineEdit::init()
-{
-	if (mType == Url)
-	{
-		setCompletionMode(KGlobalSettings::CompletionShell);
-		KURLCompletion* comp = new KURLCompletion(KURLCompletion::FileCompletion);
-		comp->setReplaceHome(true);
-		setCompletionObject(comp);
-		setAutoDeleteCompletionObject(true);
-	}
-	else
-		setCompletionMode(KGlobalSettings::CompletionNone);
-}
-
-/******************************************************************************
-*  Called when the line edit receives focus.
-*  If 'noSelect' is true, prevent the contents being selected.
-*/
-void LineEdit::focusInEvent(QFocusEvent* e)
-{
-	if (mNoSelect)
-		QFocusEvent::setReason(QFocusEvent::Other);
-	KLineEdit::focusInEvent(e);
-	if (mNoSelect)
-	{
-		QFocusEvent::resetReason();
-		mNoSelect = false;
-	}
-}
-
-void LineEdit::setText(const QString& text)
-{
-	KLineEdit::setText(text);
-	setCursorPosition(mSetCursorAtEnd ? text.length() : 0);
-}
-
-void LineEdit::dragEnterEvent(QDragEnterEvent* e)
-{
-	e->accept(QTextDrag::canDecode(e)
-	       || KURLDrag::canDecode(e)
-	       || mType != Url && KPIM::MailListDrag::canDecode(e)
-	       || mType == Emails && KVCardDrag::canDecode(e));
-}
-
-void LineEdit::dropEvent(QDropEvent* e)
-{
-	QString               newText;
-	QStringList           newEmails;
-	QString               txt;
-	KPIM::MailList        mailList;
-	KURL::List            files;
-	KABC::Addressee::List addrList;
-
-	if (mType != Url
-	&&  e->provides(KPIM::MailListDrag::format())
-	&&  KPIM::MailListDrag::decode(e, mailList))
-	{
-		// KMail message(s) - ignore all but the first
-		if (mailList.count())
-		{
-			if (mType == Emails)
-				newText = mailList.first().from();
-			else
-				setText(mailList.first().subject());    // replace any existing text
-		}
-	}
-	// This must come before KURLDrag
-	else if (mType == Emails
-	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
-	{
-		// KAddressBook entries
-		for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
-		{
-			QString em((*it).fullEmail());
-			if (!em.isEmpty())
-				newEmails.append(em);
-		}
-	}
-	else if (KURLDrag::decode(e, files)  &&  files.count())
-	{
-		// URL(s)
-		switch (mType)
-		{
-			case Url:
-				// URL entry field - ignore all but the first dropped URL
-				setText(files.first().prettyURL());    // replace any existing text
-				break;
-			case Emails:
-			{
-				// Email entry field - ignore all but mailto: URLs
-				QString mailto = QString::fromLatin1("mailto");
-				for (KURL::List::Iterator it = files.begin();  it != files.end();  ++it)
-				{
-					if ((*it).protocol() == mailto)
-						newEmails.append((*it).path());
-				}
-				break;
-			}
-			case Text:
-				newText = files.first().prettyURL();
-				break;
-		}
-	}
-	else if (QTextDrag::decode(e, txt))
-	{
-		// Plain text
-		if (mType == Emails)
-		{
-			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
-			QString mailto = QString::fromLatin1("mailto:");
-			newEmails = QStringList::split(QRegExp("[\r\n]+"), txt);
-			for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
-			{
-				if ((*it).startsWith(mailto))
-				{
-					KURL url(*it);
-					*it = url.path();
-				}
-			}
-		}
-		else
-		{
-			int newline = txt.find('\n');
-			newText = (newline >= 0) ? txt.left(newline) : txt;
-		}
-	}
-
-	if (newEmails.count())
-	{
-		newText = newEmails.join(",");
-		int c = cursorPosition();
-		if (c > 0)
-			newText.prepend(",");
-		if (c < static_cast<int>(text().length()))
-			newText.append(",");
-	}
-	if (!newText.isEmpty())
-		insert(newText);
+	if (KCal::ICalDrag::canDecode(e))
+		e->accept(false);   // don't accept "text/calendar" objects
+	QTextEdit::dragEnterEvent(e);
 }
