@@ -59,7 +59,7 @@ class RecurrenceEdit : public QObject
 		void          set(const KAlarmEvent&);
 		/** Write event settings to event object */
 		void          updateEvent(KAlarmEvent&);
-		bool          checkData(const QDateTime& startDateTime) const;
+		bool          checkData(const QDateTime& startDateTime, bool& noTime) const;
 		RepeatType    repeatType() const                    { return ruleButtonType; }
 
 	public slots:

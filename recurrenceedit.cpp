@@ -88,7 +88,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 #else
 	recurGroup = new QGroupBox(i18n("Recurrence Rule"), page, "recurGroup");
 	layout = new QVBoxLayout(recurGroup, 2*KDialog::marginHint(), KDialog::spacingHint());
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	layout->addSpacing(page->fontMetrics().lineSpacing()/2);
 	QBoxLayout* boxLayout = new QHBoxLayout(layout);
 #endif
 	topLayout->addWidget(recurGroup);
@@ -104,7 +104,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	ruleButtonGroup->setInsideMargin(0);
 	ruleButtonGroup->setFrameStyle(QFrame::NoFrame);
 	layout->addWidget(ruleButtonGroup);
-	connect(ruleButtonGroup, SIGNAL(clicked(int)), SLOT(periodClicked(int)));
+	connect(ruleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
 
 	recurEveryLabel = new QLabel(i18n("Recur e&very:"), ruleButtonGroup);
 	recurEveryLabel->setFixedSize(recurEveryLabel->sizeHint());
@@ -146,7 +146,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	      i18n("Set the alarm repetition interval to the number of years entered"));
 
 #if KDE_VERSION < 290
-	ruleButtonGroup->addWidget(label);
+	ruleButtonGroup->addWidget(recurEveryLabel);
 	ruleButtonGroup->addWidget(recurFrequencyStack);
 	ruleButtonGroup->addWidget(subdailyButton);
 	ruleButtonGroup->addWidget(dailyButton);
@@ -341,7 +341,7 @@ void RecurrenceEdit::initMonthly()
 	onNthDayButtonId       = monthlyButtonGroup->id(onNthDayButton);
 	onNthTypeOfDayButtonId = monthlyButtonGroup->id(onNthTypeOfDayButton);
 
-	connect(monthlyButtonGroup, SIGNAL(clicked(int)), SLOT(monthlyClicked(int)));
+	connect(monthlyButtonGroup, SIGNAL(buttonSet(int)), SLOT(monthlyClicked(int)));
 }
 
 /******************************************************************************
@@ -441,21 +441,21 @@ void RecurrenceEdit::initYearly()
 //	yearDayButtonId   = yearlyButtonGroup->id(yearDayButton);
 	yearlyOnNthTypeOfDayButtonId = yearlyButtonGroup->id(yearlyOnNthTypeOfDayButton);
 
-	connect(yearlyButtonGroup, SIGNAL(clicked(int)), SLOT(yearlyClicked(int)));
+	connect(yearlyButtonGroup, SIGNAL(buttonSet(int)), SLOT(yearlyClicked(int)));
 }
 
 /******************************************************************************
  * Verify the consistency of the entered data.
  */
-bool RecurrenceEdit::checkData(const QDateTime& startDateTime) const
+bool RecurrenceEdit::checkData(const QDateTime& startDateTime, bool& noTime) const
 {
 	const_cast<RecurrenceEdit*>(this)->currStartDateTime = startDateTime;
 	if (endDateButton->isChecked())
 	{
 		QDate endDate = endDateEdit->date();
-		bool time = endTimeEdit->isEnabled();
-		if (time  &&  QDateTime(endDate, endTimeEdit->time()) < startDateTime
-		||  !time  &&  endDate < startDateTime.date())
+		noTime = !endTimeEdit->isEnabled();
+		if (!noTime  &&  QDateTime(endDate, endTimeEdit->time()) < startDateTime
+		||  noTime  &&  endDate < startDateTime.date())
 			return false;
 	}
 	return true;
@@ -691,6 +691,8 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 	setDefaults(event.mainDateTime());
 	int repeatDuration;
 	Recurrence* recurrence = event.recurrence();
+	if (!recurrence)
+		return;
 	switch (recurrence->doesRecur())
 	{
 		case Recurrence::rMinutely:
