@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include <qdeepcopy.h>
 #include <kconfig.h>
 #include <kaction.h>
 #include <kglobal.h>
@@ -32,10 +33,13 @@
 #include "alarmevent.h"
 #include "alarmlistview.h"
 #include "daemon.h"
+#include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagewin.h"
 #include "preferences.h"
-#include "kalarmapp.h"
+#include "shellprocess.h"
+#include "templatelistview.h"
+#include "templatemenuaction.h"
 #include "functions.h"
 
 
@@ -43,6 +47,14 @@ namespace
 {
 bool resetDaemonQueued = false;
 }
+
+/* Define the icons to be used for "New alarm" and "New alarm from template".
+ * The former is plain, while the latter has a yellow star in it.
+ * TODO: These definitions may need to be changed for new versions of KDE.
+ * DON'T CHANGE THESE VARIABLE NAMES. (The KAlarm standalone package depends on them.)
+ */
+const char NEW_ICON[] =               "filenew";
+const char NEW_FROM_TEMPLATE_ICON[] = "file_new_template";
 
 
 namespace KAlarm
@@ -83,26 +95,15 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 */
 KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, name);
+	return new KAction(label, NEW_ICON, Qt::Key_Insert, receiver, slot, actions, name);
 }
 
 /******************************************************************************
-* Fetch an event with the given ID from the appropriate (active or expired) calendar.
+* Create a New From Template KAction.
 */
-const KCal::Event* getEvent(const QString& eventID)
+TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	if (!eventID.isEmpty())
-	{
-		if (KAEvent::uidStatus(eventID) == KAEvent::EXPIRED)
-		{
-			AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
-			if (cal)
-				return cal->event(eventID);
-		}
-		else
-			return AlarmCalendar::activeCalendar()->event(eventID);
-	}
-	return 0;
+	return new TemplateMenuAction(label, NEW_FROM_TEMPLATE_ICON, receiver, slot, actions, name);
 }
 
 /******************************************************************************
@@ -110,8 +111,9 @@ const KCal::Event* getEvent(const QString& eventID)
 * Save it in the calendar file and add it to every main window instance.
 * If 'selectionView' is non-null, the selection highlight is moved to the new
 * event in that listView instance.
+* 'event' is updated with the actual event ID.
 */
-bool addEvent(const KAEvent& event, AlarmListView* selectionView, bool useEventID)
+bool addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID)
 {
 	kdDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
 	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
@@ -124,6 +126,54 @@ bool addEvent(const KAEvent& event, AlarmListView* selectionView, bool useEventI
 
 	// Update the window lists
 	AlarmListView::addEvent(event, selectionView);
+	return true;
+}
+
+/******************************************************************************
+* Save the event in the expired calendar file and adjust every main window instance.
+* The event's ID is changed to an expired ID if necessary.
+*/
+bool addExpiredEvent(KAEvent& event)
+{
+	kdDebug(5950) << "KAlarm::addExpiredEvent(" << event.id() << ")\n";
+	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+	if (!cal)
+		return false;
+	bool archiving = (KAEvent::uidStatus(event.id()) == KAEvent::ACTIVE);
+	if (archiving)
+		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
+	KCal::Event* kcalEvent = cal->addEvent(event);
+	cal->save();
+
+	// Update window lists
+	if (!archiving)
+		AlarmListView::addEvent(event, 0);
+	else if (kcalEvent)
+		AlarmListView::modifyEvent(KAEvent(*kcalEvent), 0);
+	return true;
+}
+
+/******************************************************************************
+* Add a new template.
+* Save it in the calendar file and add it to every template list view.
+* If 'selectionView' is non-null, the selection highlight is moved to the new
+* event in that listView instance.
+* 'event' is updated with the actual event ID.
+*/
+bool addTemplate(KAEvent& event, TemplateListView* selectionView)
+{
+	kdDebug(5950) << "KAlarm::addTemplate(): " << event.id() << endl;
+
+	// Add the template to the calendar file
+	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+	if (!cal)
+		return false;
+	cal->addEvent(event);
+	cal->save();
+	cal->emitEmptyStatus();
+
+	// Update the window lists
+	TemplateListView::addEvent(event, selectionView);
 	return true;
 }
 
@@ -145,7 +195,7 @@ void modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* sele
 		// Update the event in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 		cal->deleteEvent(oldEvent.id());
-		cal->addEvent(newEvent, true);
+		cal->addEvent(const_cast<KAEvent&>(newEvent), true);
 		cal->save();
 
 		// Update the window lists
@@ -181,31 +231,69 @@ void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDel
 }
 
 /******************************************************************************
+* Update a template in the calendar file and in every template list view.
+* If 'selectionView' is non-null, the selection highlight is moved to the
+* updated event in that listView instance.
+*/
+void updateTemplate(const KAEvent& event, TemplateListView* selectionView)
+{
+	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+	if (cal)
+	{
+		cal->updateEvent(event);
+		cal->save();
+
+		TemplateListView::modifyEvent(event.id(), event, selectionView);
+	}
+}
+
+/******************************************************************************
 * Delete an alarm from the calendar file and from every main window instance.
+* If the event is archived, the event's ID is changed to an expired ID if necessary.
 */
 void deleteEvent(KAEvent& event, bool archive)
 {
-	kdDebug(5950) << "KAlarm::deleteEvent(): " << event.id() << endl;
+	QString id = event.id();
+	kdDebug(5950) << "KAlarm::deleteEvent(): " << id << endl;
 
 	// Update the window lists
-	AlarmListView::deleteEvent(event.id());
+	AlarmListView::deleteEvent(id);
 
 	// Delete the event from the calendar file
-	if (KAEvent::uidStatus(event.id()) == KAEvent::EXPIRED)
+	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
 	{
 		AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
 		if (cal)
-			cal->deleteEvent(event.id(), true);   // save calendar after deleting
+			cal->deleteEvent(id, true);   // save calendar after deleting
 	}
 	else
 	{
-		QString id = event.id();
 		if (archive  &&  event.toBeArchived())
-			archiveEvent(event);
+			addExpiredEvent(event);     // this changes the event ID to an expired ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 		cal->deleteEvent(id);
 		cal->save();
 	}
+}
+
+/******************************************************************************
+* Delete a template from the calendar file and from every template list view.
+*/
+void deleteTemplate(const KAEvent& event)
+{
+	QString id = event.id();
+
+	// Delete the template from the calendar file
+	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+	if (cal)
+	{
+		cal->deleteEvent(id);
+		cal->save();
+		cal->emitEmptyStatus();
+	}
+
+	// Update the window lists
+	TemplateListView::deleteEvent(id);
 }
 
 /******************************************************************************
@@ -224,25 +312,29 @@ void deleteDisplayEvent(const QString& eventID)
 }
 
 /******************************************************************************
-* Undelete an expired alarm in every main window instance.
+* Undelete an expired alarm, and update every main window instance.
+* The archive bit is set to ensure that it gets re-archived if it is deleted again.
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * restored event in that listView instance.
 */
-void undeleteEvent(KAEvent& event, AlarmListView* selectionView)
+bool reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID)
 {
-	kdDebug(5950) << "KAlarm::undeleteEvent(): " << event.id() << endl;
+	QString id = event.id();
+	kdDebug(5950) << "KAlarm::reactivateEvent(): " << id << endl;
 
 	// Delete the event from the expired calendar file
-	if (KAEvent::uidStatus(event.id()) == KAEvent::EXPIRED)
+	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
 	{
-		QString id = event.id();
 		QDateTime now = QDateTime::currentDateTime();
 		if (event.occursAfter(now, true))
 		{
 			if (event.recurs())
 				event.setNextOccurrence(now, true);   // skip any recurrences in the past
+			event.setArchive();    // ensure that it gets re-archived if it is deleted
+
+			// Save the event details in the calendar file, and get the new event ID
 			AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-			cal->addEvent(event);
+			cal->addEvent(event, useEventID);
 			cal->save();
 
 			// Update the window lists
@@ -251,8 +343,10 @@ void undeleteEvent(KAEvent& event, AlarmListView* selectionView)
 			cal = AlarmCalendar::expiredCalendarOpen();
 			if (cal)
 				cal->deleteEvent(id, true);   // save calendar after deleting
+			return true;
 		}
 	}
+	return false;
 }
 
 /******************************************************************************
@@ -287,22 +381,27 @@ void enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
 }
 
 /******************************************************************************
-* Save the event in the expired calendar file.
-* The event's ID is changed to an expired ID.
+*  Returns a list of all alarm templates.
+*  If shell commands are disabled, command alarm templates are omitted.
 */
-void archiveEvent(KAEvent& event)
+QPtrList<KAEvent> templateList()
 {
-	kdDebug(5950) << "KAlarm::archiveEvent(" << event.id() << ")\n";
-	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+	QPtrList<KAEvent> templates;
+	templates.setAutoDelete(true);
+	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{
-		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
-		KCal::Event* kcalEvent = cal->addEvent(event);
-		cal->save();
-
-		if (kcalEvent)
-			AlarmListView::modifyEvent(KAEvent(*kcalEvent), 0);   // update window lists
+		bool includeCmdAlarms = ShellProcess::authorised();
+		KCal::Event::List events = cal->events();
+		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+		{
+			KCal::Event* kcalEvent = *it;
+			KAEvent* event = new KAEvent(*kcalEvent);
+			if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
+				templates.append(event);
+		}
 	}
+	return templates;
 }
 
 /******************************************************************************
@@ -434,6 +533,36 @@ int localeFirstDayOfWeek()
 	if (!firstDay)
 		firstDay = KGlobal::locale()->weekStartDay();
 	return firstDay;
+}
+
+/******************************************************************************
+*  Return the supplied string with any accelerator code stripped out.
+*/
+QString stripAccel(const QString& text)
+{
+	unsigned len = text.length();
+	QString out = QDeepCopy<QString>(text);
+	QChar *corig = (QChar*)out.unicode();
+	QChar *cout  = corig;
+	QChar *cin   = cout;
+	while (len)
+	{
+		if ( *cin == '&' )
+		{
+			++cin;
+			--len;
+			if ( !len )
+				break;
+		}
+		*cout = *cin;
+		++cout;
+		++cin;
+		--len;
+	}
+	unsigned newlen = cout - corig;
+	if (newlen != out.length())
+		out.truncate(newlen);
+	return out;
 }
 
 } // namespace KAlarm

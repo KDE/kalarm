@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define FUNCTIONS_H
 
 #include <qsize.h>
+#include <qptrlist.h>
 class QObject;
 class QString;
 class KAction;
@@ -30,43 +31,51 @@ namespace KCal { class Event; }
 class KAEvent;
 class MainWindow;
 class AlarmListView;
+class TemplateListView;
+class TemplateMenuAction;
 
 namespace KAlarm
 {
 
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 
-MainWindow*        displayMainWindowSelected(const QString& eventID = QString::null);
-bool               readConfigWindowSize(const char* window, QSize&);
-void               writeConfigWindowSize(const char* window, const QSize&);
-FileType           fileType(const QString& mimetype);
-KAction*           createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
-void               resetDaemon();
-void               resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
+MainWindow*         displayMainWindowSelected(const QString& eventID = QString::null);
+bool                readConfigWindowSize(const char* window, QSize&);
+void                writeConfigWindowSize(const char* window, const QSize&);
+FileType            fileType(const QString& mimetype);
+KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
+TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
+QPtrList<KAEvent>   templateList();
+void                resetDaemon();
+void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 
-const KCal::Event* getEvent(const QString& eventID);
-bool               addEvent(const KAEvent&, AlarmListView* selectionView, bool useEventID = false);
-void               modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
-void               updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true);
-void               deleteEvent(KAEvent&, bool archive = true);
-void               deleteDisplayEvent(const QString& eventID);
-void               undeleteEvent(KAEvent&, AlarmListView* selectionView);
-void               enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
-void               archiveEvent(KAEvent&);
+bool                addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
+bool                addExpiredEvent(KAEvent&);
+bool                addTemplate(KAEvent&, TemplateListView* selectionView);
+void                modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
+void                updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true);
+void                updateTemplate(const KAEvent&, TemplateListView* selectionView);
+void                deleteEvent(KAEvent&, bool archive = true);
+void                deleteTemplate(const KAEvent&);
+void                deleteDisplayEvent(const QString& eventID);
+bool                reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
+void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
 
-int                localeFirstDayOfWeek();
+QString             stripAccel(const QString&);
+
+int                 localeFirstDayOfWeek();
 
 /* Given a standard KDE day number, return the day number in the week for the user's locale.
  * Standard day number = 1 (Mon) .. 7 (Sun)
  * Locale day number in week = 0 .. 6
  */
-inline int         weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - localeFirstDayOfWeek()) % 7; }
+inline int          weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - localeFirstDayOfWeek()) % 7; }
 
 /* Given a day number in the week for the user's locale, return the standard KDE day number.
  * 'index' = 0 .. 6
  * Standard day number = 1 (Mon) .. 7 (Sun)
  */
-inline int         localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
+inline int          localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
 
 } // namespace KAlarm
 
