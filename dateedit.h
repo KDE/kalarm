@@ -24,18 +24,22 @@
 #ifndef DATEEDIT_H
 #define DATEEDIT_H
 
-#include <libkdepim/kdateedit.h>
+#include <kdateedit.h>
 
 class DateEdit : public KDateEdit
 {
-    Q_OBJECT
-  public:
-    DateEdit(QWidget* parent = 0, const char* name = 0)  : KDateEdit(parent, name) { }
-    virtual bool validate(const QDate&);
-    void setMinDate(const QDate& d)   { minDate = d; }
+		Q_OBJECT
+	public:
+		DateEdit(QWidget* parent = 0, const char* name = 0)  : KDateEdit(parent, name) { }
+		virtual bool validate(const QDate&);
+		void setMinDate(const QDate& d)   { minDate = d; }
 
-  private:
-    QDate  minDate;
+#if QT_VERSION < 300
+	protected:
+		virtual void mousePressEvent(QMouseEvent*);
+#endif
+	private:
+		QDate  minDate;
 };
 
 #endif // DATEEDIT_H

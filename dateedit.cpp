@@ -22,6 +22,7 @@
  *  without including the source code for Qt in the source distribution.
  */
 
+#include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -31,37 +32,32 @@
 // Check a new date against any minimum date.
 bool DateEdit::validate(const QDate& newDate)
 {
-  if (!newDate.isValid())
-    return false;
-  if (minDate.isValid() && newDate < minDate)
-  {
-    QString minString;
-    if (minDate == QDate::currentDate())
-      minString = i18n("today");
-    else
-      minString = KGlobal::locale()->formatDate(minDate, true);
-    KMessageBox::sorry(this, i18n("Date cannot be earlier than %1").arg(minString));
-    return false;
-  }
-  return true;
+	if (!newDate.isValid())
+		return false;
+	if (minDate.isValid() && newDate < minDate)
+	{
+		QString minString;
+		if (minDate == QDate::currentDate())
+			minString = i18n("today");
+		else
+			minString = KGlobal::locale()->formatDate(minDate, true);
+		KMessageBox::sorry(this, i18n("Date cannot be earlier than %1").arg(minString));
+		return false;
+	}
+	return true;
 }
 
 #if QT_VERSION < 300
 void DateEdit::mousePressEvent(QMouseEvent *e)
 {
-    if ( e->button() != LeftButton )
-        return;
-//KDE 2.3.1: area excluding arrow button is:
-    QRect editRect = style().comboButtonRect(0, 0, width(), height());
-    int xborder = editRect.left();
-    int yborder = editRect.top();
-    int left = editRect.width() + 2*xborder;
-    QRect arrowRect(left, yborder, width() - left - xborder, height() - 2*yborder);
-    if (arrowRect.contains(e->pos()))
-        popup();
-    else
-      QComboBox::mousePressEvent(e);
-//KDE 3.0: arrow button area is:
-//        style().querySubControlMetrics(QStyle::CC_ComboBox, this, QStyle::SC_ComboBoxArrow);
+	if ( e->button() != LeftButton )
+		return;
+	QRect editRect = style().comboButtonRect(0, 0, width(), height());
+	int xborder = editRect.left();
+	int yborder = editRect.top();
+	int left = editRect.width() + xborder;
+	QRect arrowRect(left, 0, width() - left, height());
+	if (arrowRect.contains(e->pos()))
+		popup();
 }
 #endif
