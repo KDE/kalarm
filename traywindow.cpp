@@ -240,9 +240,8 @@ void TrayWindow::dropEvent(QDropEvent* e)
 *  Return the tooltip text showing alarms due in the next 24 hours.
 *  The limit of 24 hours is because only times, not dates, are displayed.
 */
-QString TrayWindow::tooltipAlarmText() const
+void TrayWindow::tooltipAlarmText(QString& text) const
 {
-	QString text = kapp->aboutData()->programName();
 	KAlarmEvent event;
 	Preferences* preferences = theApp()->preferences();
 	const QString& prefix = preferences->tooltipTimeToPrefix();
@@ -327,7 +326,6 @@ QString TrayWindow::tooltipAlarmText() const
 				kcalEvent = *it2;
 	        }
         }
-	return text;
 }
 
 /******************************************************************************
@@ -382,8 +380,12 @@ bool TrayWindow::inSystemTray() const
 void TrayTooltip::maybeTip(const QPoint&)
 {
 	TrayWindow* parent = (TrayWindow*)parentWidget();
-	if (theApp()->preferences()->tooltipAlarmCount())
-		tip(parent->rect(), parent->tooltipAlarmText());
+	QString text;
+	if (theApp()->daemonGuiHandler()->monitoringAlarms())
+		text = kapp->aboutData()->programName();
 	else
-		tip(parent->rect(), kapp->aboutData()->programName());
+		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
+	if (theApp()->preferences()->tooltipAlarmCount())
+		parent->tooltipAlarmText(text);
+	tip(parent->rect(), text);
 }

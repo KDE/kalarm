@@ -43,7 +43,7 @@ class TrayWindow : public KSystemTray
 		KAlarmMainWindow*  assocMainWindow() const  { return mAssocMainWindow; }
 		void               setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
 		bool               inSystemTray() const;
-		QString            tooltipAlarmText() const;
+		void               tooltipAlarmText(QString& text) const;
 		static const QString QUIT_WARN;
 
 	public slots:
