@@ -24,6 +24,7 @@
 #include <ksystemtray.h>
 class KPopupMenu;
 
+class KAEvent;
 class MainWindow;
 class TrayTooltip;
 
