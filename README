@@ -1,0 +1,23 @@
+KAlarm
+
+Version 0.1
+
+KAlarm provides a graphical interface for setting up alarm/reminder messages.
+The messages pop up on the screen at the time you specify.
+
+KAlarm also provides a command line interface. Other programs can also use
+DCOP calls to execute functions.
+
+See the INSTALL file for installation instructions.
+
+BUGS:
+
+Bugs can be reported to the KDE bug tracking system (http://bugs.kde.org).
+There you can also get information about the status of older bugs.
+KAlarm, as most other KDE 2 programs, offers a menu item "Report Bug"
+in the Help menu for convenient reporting of bugs or feature requests.
+
+COMMENTS AND SUGGESTIONS:
+
+Please send your comments and suggestions to
+David Jarvie <software@astrojar.org.uk>.
