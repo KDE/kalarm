@@ -290,7 +290,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 	else
 	{
 		mTimeEdit->setValid(false);
-		mDateEdit->setValid(false);
+		mDateEdit->setInvalid();
 		mDelayTimeEdit->setValid(false);
 	}
 	if (mAnyTimeCheckBox)

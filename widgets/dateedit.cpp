@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@
 DateEdit::DateEdit(QWidget* parent, const char* name)
 	: KDateEdit(parent, name)
 {
-	connect(this, SIGNAL(dateChanged(const QDate&)),
-	this, SLOT(slotDateChanged(const QDate&)));
 }
 
 void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
@@ -48,30 +46,30 @@ void DateEdit::setMaxDate(const QDate& d, const QString& errorDate)
 	mMaxDateErrString = errorDate;
 }
 
-void DateEdit::setValid(bool valid)
+void DateEdit::setInvalid()
 {
-	if (!valid)
-		setDate(QDate());
+	setDate(QDate());
 }
 
 // Check a new date against any minimum or maximum date.
-bool DateEdit::validate(const QDate& newDate)
+bool DateEdit::assignDate(const QDate& newDate)
 {
-	if (!newDate.isValid())
-		return false;
-	if (mMinDate.isValid()  &&  newDate < mMinDate)
+	if (newDate.isValid())
 	{
-		pastLimitMessage(mMinDate, mMinDateErrString,
-		                 i18n("Date cannot be earlier than %1"));
-		return false;
+		if (mMinDate.isValid()  &&  newDate < mMinDate)
+		{
+			pastLimitMessage(mMinDate, mMinDateErrString,
+					 i18n("Date cannot be earlier than %1"));
+			return false;
+		}
+		if (mMaxDate.isValid()  &&  newDate > mMaxDate)
+		{
+			pastLimitMessage(mMaxDate, mMaxDateErrString,
+					 i18n("Date cannot be later than %1"));
+			return false;
+		}
 	}
-	if (mMaxDate.isValid()  &&  newDate > mMaxDate)
-	{
-		pastLimitMessage(mMaxDate, mMaxDateErrString,
-		                 i18n("Date cannot be later than %1"));
-		return false;
-	}
-	return true;
+	return KDateEdit::assignDate(newDate);
 }
 
 void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError)
@@ -86,10 +84,6 @@ void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const 
 		errString = defaultError.arg(errString);
 	}
 	KMessageBox::sorry(this, errString);
-}
-
-void DateEdit::slotDateChanged(const QDate&)
-{
 }
 
 void DateEdit::mousePressEvent(QMouseEvent *e)
