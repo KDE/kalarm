@@ -288,7 +288,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
-		void               setReminder(int minutes)                          { mReminderMinutes = minutes;  mUpdated = true; }
+		void               setReminder(int minutes)                          { mReminderMinutes = minutes;  mArchiveReminderMinutes = 0;  mUpdated = true; }
 		void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
 		bool               setDisplaying(const KAlarmEvent&, KAlarmAlarm::Type, const QDateTime&);
