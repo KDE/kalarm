@@ -123,7 +123,7 @@ QString KAMail::send(const KAEvent& event, bool allowNotify)
 		if (!err.isNull())
 			return err;
 
-//kdDebug()<<"Email:"<<command<<"\n-----\n"<<textComplete<<"\n-----\n";
+//kdDebug(5950)<<"Email:"<<command<<"\n-----\n"<<textComplete<<"\n-----\n";
 		FILE* fd = popen(command.local8Bit(), "w");
 		if (!fd)
 		{
