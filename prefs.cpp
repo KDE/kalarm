@@ -229,7 +229,6 @@ AppearancePrefs::AppearancePrefs(QWidget* parent)
 	mFontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
 	layout->addWidget(mFontChooser);
 
-	layout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
 
 	addTab(page, i18n("Message &Appearance"));
