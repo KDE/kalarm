@@ -168,7 +168,7 @@ void KAlarmMainWindow::initActions()
 	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this, "new");
 	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
-	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
+	actionToggleTrayIcon = new KAction(QString(), "kalarm", Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this, "reset");
 
 	// Set up the menu bar
