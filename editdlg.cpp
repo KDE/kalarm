@@ -58,7 +58,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* topLayout = new QVBoxLayout(page, marginHint(), spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, spacingHint());
 
 	// Message label + multi-line editor
 
