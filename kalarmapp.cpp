@@ -404,15 +404,13 @@ bool KAlarmApp::displayTrayIcon(bool show, KAlarmMainWindow* parent)
 			if (!mKDEDesktop)
 				return false;
 			mTrayWindow = new TrayWindow(parent ? parent : KAlarmMainWindow::firstWindow());
+			connect(mTrayWindow, SIGNAL(deleted()), this, SIGNAL(trayIconToggled()));
 			mTrayWindow->show();
 			emit trayIconToggled();
 		}
 	}
 	else if (mTrayWindow)
-	{
 		delete mTrayWindow;
-		emit trayIconToggled();
-	}
 	return true;
 }
 
@@ -431,6 +429,11 @@ void KAlarmApp::displayMainWindow()
 		win->raise();
 		win->setActiveWindow();
 	}
+}
+
+KAlarmMainWindow* KAlarmApp::trayMainWindow() const
+{
+	return mTrayWindow ? mTrayWindow->assocMainWindow() : 0L;
 }
 
 /******************************************************************************

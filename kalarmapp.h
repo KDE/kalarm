@@ -63,9 +63,11 @@ class KAlarmApp : public KUniqueApplication
 		Settings*         settings()                      { return mSettings; }
 		bool              KDEDesktop() const              { return mKDEDesktop; }
 		bool              runInSystemTray() const;
+		void              quitIf()                        { quitIf(0); }
 		void              addWindow(TrayWindow* w)        { mTrayWindow = w; }
 		void              removeWindow(TrayWindow*);
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
+		KAlarmMainWindow* trayMainWindow() const;
 		bool              displayTrayIcon(bool show, KAlarmMainWindow* = 0L);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
 		DaemonGuiHandler* daemonGuiHandler() const        { return mDaemonGuiHandler; }
@@ -105,7 +107,7 @@ class KAlarmApp : public KUniqueApplication
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
 		bool              initCheck(bool calendarOnly = false);
-		void              quitIf(int exitCode = 0);
+		void              quitIf(int exitCode);
 		void              setUpDcop();
 		bool              stopDaemon();
 		void              startDaemon();

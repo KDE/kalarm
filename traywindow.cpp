@@ -35,6 +35,7 @@
 
 #include "kalarmapp.h"
 #include "mainwindow.h"
+#include "messagewin.h"
 #include "daemongui.h"
 #include "prefsettings.h"
 #include "traywindow.moc"
@@ -83,6 +84,7 @@ TrayWindow::~TrayWindow()
 {
 	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
 	theApp()->removeWindow(this);
+	emit deleted();
 }
 
 /******************************************************************************
@@ -114,14 +116,19 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 
 /******************************************************************************
 * Called when the Quit context menu item is selected.
-* Closes the system tray window, but does not exit the program if other windows
-* are still open.
+* Closes the system tray window, and if in 'run in system tray' mode closes all
+* main windows, but does not exit the program if other windows are still open.
 */
 void TrayWindow::slotQuit()
 {
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->runInSystemTray())
-		theApp()->quit();
+	{
+		if (!MessageWin::instanceCount())
+			theApp()->quit();
+		else
+			KAlarmMainWindow::closeAll();
+	}
 	theApp()->displayTrayIcon(false);
 }
 

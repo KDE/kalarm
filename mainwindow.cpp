@@ -82,7 +82,22 @@ KAlarmMainWindow::~KAlarmMainWindow()
 	if (findWindow(this))
 		windowList.remove();
 	if (theApp()->trayWindow())
-		theApp()->trayWindow()->removeWindow(this);
+	{
+		if (theApp()->trayMainWindow() == this  &&  theApp()->runInSystemTray())
+			delete theApp()->trayWindow();
+		else
+			theApp()->trayWindow()->removeWindow(this);
+	}
+	theApp()->quitIf();
+}
+
+/******************************************************************************
+*  Close all main windows.
+*/
+void KAlarmMainWindow::closeAll()
+{
+	while (windowList.first())
+		delete windowList.first();
 }
 
 /******************************************************************************
@@ -365,8 +380,8 @@ void KAlarmMainWindow::slotResetDaemon()
 */
 void KAlarmMainWindow::slotQuit()
 {
-	if (theApp()->runInSystemTray())
-		hide();
+	if (theApp()->runInSystemTray()  &&  theApp()->trayMainWindow() == this)
+		hide();          // closing would also close the system tray icon
 	else
 		close();
 }
@@ -376,7 +391,7 @@ void KAlarmMainWindow::slotQuit()
 */
 void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 {
-	if (theApp()->runInSystemTray())
+	if (theApp()->runInSystemTray()  &&  theApp()->trayMainWindow() == this)
 	{
 		ce->ignore();
 		hide();
@@ -391,7 +406,6 @@ void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 */
 void KAlarmMainWindow::slotDeletion()
 {
-kdDebug(5950) << "KAlarmMainWindow::slotDeletion()\n";
 	if (!listView->selectedItem())
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotDeletion(true)\n";
@@ -406,7 +420,6 @@ kdDebug(5950) << "KAlarmMainWindow::slotDeletion()\n";
 */
 void KAlarmMainWindow::slotSelection(QListViewItem* item)
 {
-kdDebug(5950) << "KAlarmMainWindow::slotSelection()\n";
 	if (item)
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";

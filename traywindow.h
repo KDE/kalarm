@@ -40,6 +40,9 @@ class TrayWindow : public KSystemTray
 	public slots:
 		void              slotQuit();
 
+	signals:
+		void              deleted();
+
 	protected:
 		virtual void      contextMenuAboutToShow(KPopupMenu*);
 		void              mousePressEvent(QMouseEvent*);
