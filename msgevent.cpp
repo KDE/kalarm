@@ -46,31 +46,37 @@ static const QString AT_LOGIN_TYPE    = QString::fromLatin1("LOGIN");
 static const QString REMINDER_TYPE    = QString::fromLatin1("REMINDER");
 static const QString DEFERRAL_TYPE    = QString::fromLatin1("DEFERRAL");
 static const QString DISPLAYING_TYPE  = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
+static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 
 // Event categories
-static const QString BEEP_CATEGORY             = QString::fromLatin1("BEEP");
-static const QString EMAIL_BCC_CATEGORY        = QString::fromLatin1("BCC");
-static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
-static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL");
-static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
-static const QRegExp ARCHIVE_REMINDER_CATEGORY = QRegExp(QString::fromLatin1("^SAVE \\d+[MHD]$"));
-static const QString ARCHIVE_CATEGORY_TEMPLATE = QString::fromLatin1("SAVE %1%2");
+static const QString EMAIL_BCC_CATEGORY            = QString::fromLatin1("BCC");
+static const QString CONFIRM_ACK_CATEGORY          = QString::fromLatin1("ACKCONF");
+static const QString LATE_CANCEL_CATEGORY          = QString::fromLatin1("LATECANCEL");
+static const QString ARCHIVE_CATEGORY              = QString::fromLatin1("SAVE");
+static const QRegExp ARCHIVE_REMINDER_CATEGORY     = QRegExp(QString::fromLatin1("^SAVE \\d+[MHD]$"));
+static const QString ARCHIVE_CATEGORY_TEMPLATE     = QString::fromLatin1("SAVE %1%2");
 
 static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
 
 struct AlarmData
 {
+	const Alarm*           alarm;
 	QString                cleanText;       // text or audio file name
 	EmailAddressList       emailAddresses;
 	QString                emailSubject;
 	QStringList            emailAttachments;
 	QDateTime              dateTime;
+	QFont                  font;
+	QColor                 bgColour, fgColour;
 	KAlarmAlarm::Type      type;
 	KAAlarmEventBase::Type action;
 	int                    displayingFlags;
+	bool                   defaultFont;
 };
 typedef QMap<KAlarmAlarm::Type, AlarmData> AlarmMap;
+
+static void setProcedureAlarm(Alarm*, const QString& commandLine);
 
 
 /*=============================================================================
@@ -115,52 +121,46 @@ void KAlarmEvent::set(const Event& event)
 	mEventID  = event.uid();
 	mRevision = event.revision();
 	const QStringList& cats = event.categories();
-	mBeep       = false;
-	mEmailBcc   = false;
-	mConfirmAck = false;
-	mLateCancel = false;
-	mArchive    = false;
+	mBeep                   = false;
+	mEmailBcc               = false;
+	mConfirmAck             = false;
+	mLateCancel             = false;
+	mArchive                = false;
 	mReminderArchiveMinutes = 0;
-	mColour = QColor(255, 255, 255);    // missing/invalid colour - return white
-	if (cats.count() > 0)
+	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white
+	mDefaultFont            = true;
+	for (unsigned int i = 0;  i < cats.count();  ++i)
 	{
-		QColor colour(cats[0]);
-		if (colour.isValid())
-			 mColour = colour;
-
-		for (unsigned int i = 1;  i < cats.count();  ++i)
-			if (cats[i] == BEEP_CATEGORY)
-				mBeep = true;
-			else if (cats[i] == CONFIRM_ACK_CATEGORY)
-				mConfirmAck = true;
-			else if (cats[i] == EMAIL_BCC_CATEGORY)
-				mEmailBcc = true;
-			else if (cats[i] == LATE_CANCEL_CATEGORY)
-				mLateCancel = true;
-			else if (cats[i] == ARCHIVE_CATEGORY)
-				mArchive = true;
-			else if (cats[i].find(ARCHIVE_REMINDER_CATEGORY) == 0)
+		if (cats[i] == CONFIRM_ACK_CATEGORY)
+			mConfirmAck = true;
+		else if (cats[i] == EMAIL_BCC_CATEGORY)
+			mEmailBcc = true;
+		else if (cats[i] == LATE_CANCEL_CATEGORY)
+			mLateCancel = true;
+		else if (cats[i] == ARCHIVE_CATEGORY)
+			mArchive = true;
+		else if (cats[i].find(ARCHIVE_REMINDER_CATEGORY) == 0)
+		{
+			// It's the archive flag plus a reminder time
+			mArchive = true;
+			char ch;
+			mReminderArchiveMinutes = 0;
+			const char* cat = cats[i].latin1();
+			while ((ch = *cat) != 0  &&  (ch < '0' || ch > '9'))
+				++cat;
+			if (ch)
 			{
-				// It's the archive flag plus a reminder time
-				mArchive = true;
-				char ch;
-				mReminderArchiveMinutes = 0;
-				const char* cat = cats[i].latin1();
-				while ((ch = *cat) != 0  &&  (ch < '0' || ch > '9'))
-					++cat;
-				if (ch)
+				mReminderArchiveMinutes = ch - '0';
+				while ((ch = *++cat) >= '0'  &&  ch <= '9')
+					mReminderArchiveMinutes = mReminderArchiveMinutes * 10 + ch - '0';
+				switch (ch)
 				{
-					mReminderArchiveMinutes = ch - '0';
-					while ((ch = *++cat) >= '0'  &&  ch <= '9')
-						mReminderArchiveMinutes = mReminderArchiveMinutes * 10 + ch - '0';
-					switch (ch)
-					{
-						case 'M':  break;
-						case 'H':  mReminderArchiveMinutes *= 60;    break;
-						case 'D':  mReminderArchiveMinutes *= 1440;  break;
-					}
+					case 'M':  break;
+					case 'H':  mReminderArchiveMinutes *= 60;    break;
+					case 'D':  mReminderArchiveMinutes *= 1440;  break;
 				}
 			}
+		}
 	}
 
 	// Extract status from the event's alarms.
@@ -186,14 +186,7 @@ void KAlarmEvent::set(const Event& event)
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
-	QPtrList<Alarm> alarms = event.alarms();
-	for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
-	{
-		// Parse the next alarm's text
-		AlarmData data;
-		readAlarm(*ia.current(), data);
-		alarmMap.insert(data.type, data);
-	}
+	readAlarms(event, &alarmMap);
 
 	// Incorporate the alarms' details into the overall event
 	AlarmMap::ConstIterator it = alarmMap.begin();
@@ -203,38 +196,37 @@ void KAlarmEvent::set(const Event& event)
 	for (  ;  it != alarmMap.end();  ++it)
 	{
 		const AlarmData& data = it.data();
-		if (data.action == T_AUDIO)
-			mAudioFile = data.cleanText;
-		else
+		switch (data.type)
 		{
-			switch (data.type)
-			{
-				case KAlarmAlarm::MAIN_ALARM:
-					mMainExpired = false;
-					break;
-				case KAlarmAlarm::AT_LOGIN_ALARM:
-					mRepeatAtLogin   = true;
-					mAtLoginDateTime = data.dateTime;
-					break;
-				case KAlarmAlarm::REMINDER_ALARM:
-					reminderTime = data.dateTime;
-					break;
-				case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
-					mDeferral            = true;
-					reminderDeferralTime = data.dateTime;
-					break;
-				case KAlarmAlarm::DEFERRAL_ALARM:
-					mDeferral     = true;
-					mDeferralTime = data.dateTime;
-					break;
-				case KAlarmAlarm::DISPLAYING_ALARM:
-					mDisplaying      = true;
-					mDisplayingTime  = data.dateTime;
-					mDisplayingFlags = data.displayingFlags;
-					break;
-				default:
-					break;
-			}
+			case KAlarmAlarm::MAIN_ALARM:
+				mMainExpired = false;
+				break;
+			case KAlarmAlarm::AT_LOGIN_ALARM:
+				mRepeatAtLogin   = true;
+				mAtLoginDateTime = data.dateTime;
+				break;
+			case KAlarmAlarm::REMINDER_ALARM:
+				reminderTime = data.dateTime;
+				break;
+			case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
+				mDeferral            = true;
+				reminderDeferralTime = data.dateTime;
+				break;
+			case KAlarmAlarm::DEFERRAL_ALARM:
+				mDeferral     = true;
+				mDeferralTime = data.dateTime;
+				break;
+			case KAlarmAlarm::DISPLAYING_ALARM:
+				mDisplaying      = true;
+				mDisplayingTime  = data.dateTime;
+				mDisplayingFlags = data.displayingFlags;
+				break;
+			case KAlarmAlarm::AUDIO_ALARM:
+				mAudioFile = data.cleanText;
+				mBeep      = mAudioFile.isEmpty();
+				break;
+			default:
+				break;
 		}
 
 		// Ensure that the basic fields are set up even if there is no main
@@ -245,7 +237,13 @@ void KAlarmEvent::set(const Event& event)
 			{
 				mActionType = data.action;
 				mText = (mActionType == T_COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
-				if (data.action == T_EMAIL)
+				if (data.action == T_MESSAGE)
+				{
+					mFont        = data.font;
+					mDefaultFont = data.defaultFont;
+					mBgColour    = data.bgColour;
+				}
+				else if (data.action == T_EMAIL)
 				{
 					mEmailAddresses   = data.emailAddresses;
 					mEmailSubject     = data.emailSubject;
@@ -308,89 +306,117 @@ void KAlarmEvent::set(const Event& event)
 }
 
 /******************************************************************************
+ * Parse the alarms for a KCal::Event.
+ * Reply = map of alarm data, indexed by KAlarmAlarm::Type
+ */
+void KAlarmEvent::readAlarms(const Event& event, void* almap)
+{
+	AlarmMap* alarmMap = (AlarmMap*)almap;
+	QPtrList<Alarm> alarms = event.alarms();
+	for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+	{
+		// Parse the next alarm's text
+		AlarmData data;
+		readAlarm(*ia.current(), data);
+		if (data.type != KAlarmAlarm::INVALID_ALARM)
+			alarmMap->insert(data.type, data);
+	}
+}
+
+/******************************************************************************
  * Parse a KCal::Alarm.
  * Reply = alarm ID (sequence number)
  */
 void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 {
 	// Parse the next alarm's text
+	data.alarm    = &alarm;
 	data.dateTime = alarm.time();
 	data.displayingFlags = 0;
-	if (!alarm.audioFile().isEmpty())
+	switch (alarm.type())
 	{
-		data.action    = T_AUDIO;
-		data.cleanText = alarm.audioFile();
-		data.type      = KAlarmAlarm::AUDIO_ALARM;
-	}
-	else
-	{
-		// It's a text message/file/command/email
-		if (!alarm.programFile().isEmpty())
-		{
+		case Alarm::Procedure:
 			data.action    = T_COMMAND;
 			data.cleanText = alarm.programFile();
-		}
-		else if (alarm.mailAddresses().count() > 0)
-		{
-			data.action = T_EMAIL;
+			if (!alarm.programArguments().isEmpty())
+				data.cleanText += " " + alarm.programArguments();
+			break;
+		case Alarm::Email:
+			data.action           = T_EMAIL;
 			data.emailAddresses   = alarm.mailAddresses();
 			data.emailSubject     = alarm.mailSubject();
 			data.emailAttachments = alarm.mailAttachments();
-			data.cleanText        = alarm.text();
-		}
-		else
+			data.cleanText        = alarm.mailText();
+			break;
+		case Alarm::Display:
 		{
 			data.action    = T_MESSAGE;
 			data.cleanText = alarm.text();
+			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
+			QStringList list = QStringList::split(QChar(';'), property, true);
+			data.bgColour = (list.count() > 0) ? list[0] : QColor(255, 255, 255);;
+			data.fgColour = (list.count() > 1) ? list[1] : QColor(0, 0, 0);
+			data.defaultFont = (list.count() <= 2 || list[2].isEmpty());
+			if (!data.defaultFont)
+				data.font.fromString(list[2]);
+			break;
 		}
+		case Alarm::Audio:
+			data.action    = T_AUDIO;
+			data.cleanText = alarm.audioFile();
+			data.type      = KAlarmAlarm::AUDIO_ALARM;
+			return;
+		case Alarm::Invalid:
+			data.type = KAlarmAlarm::INVALID_ALARM;
+			return;
+	}
 
-		bool atLogin = false;
-		bool reminder = false;
-		bool deferral = false;
-		data.type = KAlarmAlarm::MAIN_ALARM;
-		QString typelist = alarm.customProperty(APPNAME, TYPE_PROPERTY);
-		QStringList types = QStringList::split(QChar(','), typelist);
-		for (unsigned int i = 0;  i < types.count();  ++i)
-		{
-			// iCalendar puts a \ character before commas, so remove it if there is one
-			QString type = types[i];
-			int last = type.length() - 1;
-			if (type[last] == QChar('\\'))
-				type.truncate(last);
+	bool atLogin = false;
+	bool reminder = false;
+	bool deferral = false;
+	data.type = KAlarmAlarm::MAIN_ALARM;
+	QString property = alarm.customProperty(APPNAME, TYPE_PROPERTY);
+	QStringList types = QStringList::split(QChar(','), property);
+	for (unsigned int i = 0;  i < types.count();  ++i)
+	{
+		// iCalendar puts a \ character before commas, so remove it if there is one
+		QString type = types[i];
+		int last = type.length() - 1;
+		if (type[last] == QChar('\\'))
+			type.truncate(last);
 
-			if (type == AT_LOGIN_TYPE)
-				atLogin = true;
-			else if (type == FILE_TYPE  &&  data.action == T_MESSAGE)
-				data.action = T_FILE;
-			else if (type == REMINDER_TYPE)
-				reminder = true;
-			else if (type == DEFERRAL_TYPE)
-				deferral = true;
-			else if (type == DISPLAYING_TYPE)
-				data.type = KAlarmAlarm::DISPLAYING_ALARM;
-		}
+		if (type == AT_LOGIN_TYPE)
+			atLogin = true;
+		else if (type == FILE_TYPE  &&  data.action == T_MESSAGE)
+			data.action = T_FILE;
+		else if (type == REMINDER_TYPE)
+			reminder = true;
+		else if (type == DEFERRAL_TYPE)
+			deferral = true;
+		else if (type == DISPLAYING_TYPE)
+			data.type = KAlarmAlarm::DISPLAYING_ALARM;
+	}
 
-		if (reminder)
-		{
-			if (data.type == KAlarmAlarm::MAIN_ALARM)
-				data.type = deferral ? KAlarmAlarm::REMINDER_DEFERRAL_ALARM : KAlarmAlarm::REMINDER_ALARM;
-			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
-				data.displayingFlags = deferral ? REMINDER | DEFERRAL : REMINDER;
-		}
-		else if (deferral)
-		{
-			if (data.type == KAlarmAlarm::MAIN_ALARM)
-				data.type = KAlarmAlarm::DEFERRAL_ALARM;
-			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
-				data.displayingFlags = DEFERRAL;
-		}
-		if (atLogin)
-		{
-			if (data.type == KAlarmAlarm::MAIN_ALARM)
-				data.type = KAlarmAlarm::AT_LOGIN_ALARM;
-			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
-				data.displayingFlags = REPEAT_AT_LOGIN;
-		}
+	if (reminder)
+	{
+		if (data.type == KAlarmAlarm::MAIN_ALARM)
+			data.type = deferral ? KAlarmAlarm::REMINDER_DEFERRAL_ALARM : KAlarmAlarm::REMINDER_ALARM;
+		else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+			data.displayingFlags = deferral ? REMINDER | DEFERRAL : REMINDER;
+	}
+	else if (deferral)
+	{
+		if (data.type == KAlarmAlarm::MAIN_ALARM)
+			data.type = KAlarmAlarm::DEFERRAL_ALARM;
+		else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+			data.displayingFlags = DEFERRAL;
+	}
+	if (atLogin)
+	{
+		if (data.type == KAlarmAlarm::MAIN_ALARM)
+			data.type = KAlarmAlarm::AT_LOGIN_ALARM;
+		else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+			data.displayingFlags = REPEAT_AT_LOGIN;
 	}
 //kdDebug()<<"ReadAlarm(): text="<<alarm.text()<<", time="<<alarm.time().toString()<<", valid time="<<alarm.time().isValid()<<endl;
 }
@@ -398,7 +424,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 /******************************************************************************
  * Initialise the KAlarmEvent with the specified parameters.
  */
-void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, Action action, int flags)
+void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, const QFont& font, Action action, int flags)
 {
 	initRecur(false);
 	mStartDateTime = mEndDateTime = mDateTime = dateTime;
@@ -416,7 +442,8 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	}
 	mText                    = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
 	mAudioFile               = "";
-	mColour                  = colour;
+	mBgColour                = colour;
+	mFont                    = font;
 	mAlarmCount              = 1;
 	set(flags);
 	mReminderMinutes         = 0;
@@ -435,7 +462,7 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 void KAlarmEvent::setEmail(const QDate& d, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int flags)
 {
-	set(d, message, QColor(), EMAIL, flags | ANY_TIME);
+	set(d, message, QColor(), QFont(), EMAIL, flags | ANY_TIME);
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
@@ -444,7 +471,7 @@ void KAlarmEvent::setEmail(const QDate& d, const EmailAddressList& addresses, co
 void KAlarmEvent::setEmail(const QDateTime& dt, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int flags)
 {
-	set(dt, message, QColor(), EMAIL, flags);
+	set(dt, message, QColor(), QFont(), EMAIL, flags);
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
@@ -519,7 +546,7 @@ KAlarmEvent::Status KAlarmEvent::uidStatus(const QString& uid)
 
 void KAlarmEvent::set(int flags)
 {
-	KAAlarmEventBase::set(flags & ~(DEFERRAL | DISPLAYING_));    // DEFERRAL, DISPLAYING_ are read-only
+	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
 	mAnyTime = flags & ANY_TIME;
 	mUpdated = true;
 }
@@ -556,9 +583,6 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 
 	// Set up event-specific data
 	QStringList cats;
-	cats.append(mColour.name());
-	if (mBeep)
-		cats.append(BEEP_CATEGORY);
 	if (mConfirmAck)
 		cats.append(CONFIRM_ACK_CATEGORY);
 	if (mEmailBcc)
@@ -603,7 +627,8 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	if (mRepeatAtLogin)
 	{
 		QDateTime dtl = mAtLoginDateTime.isValid() ? mAtLoginDateTime
-		                : QDateTime::currentDateTime();
+		              : mAnyTime ? QDateTime(QDate::currentDate().addDays(-1), mStartDateTime.time())
+		              : QDateTime::currentDateTime();
 		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
 	}
 	if (mReminderMinutes  ||  mReminderArchiveMinutes && original)
@@ -632,12 +657,12 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 			list += DEFERRAL_TYPE;
 		initKcalAlarm(ev, mDisplayingTime, list);
 	}
-	if (!mAudioFile.isEmpty())
+	if (mBeep  ||  !mAudioFile.isEmpty())
 	{
 		Alarm* al = ev.newAlarm();
-		al->setEnabled(true);        // enable the alarm
-		al->setAudioFile(mAudioFile);
-		al->setTime(dtMain);         // set it for the main alarm time
+		al->setEnabled(true);           // enable the alarm
+		al->setAudioAlarm(mAudioFile);  // empty for a beep
+		al->setTime(dtMain);            // set it for the main alarm time
 	}
 
 	// Add recurrence data
@@ -755,18 +780,17 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const QDateTime& dt, const QStri
 			alltypes += FILE_TYPE;
 			// fall through to T_MESSAGE
 		case T_MESSAGE:
-			alarm->setText(mText);
+			alarm->setDisplayAlarm(mText);
+			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
+			              QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
+			                                             .arg(QString::null)
+			                                             .arg(mDefaultFont ? QString::null : mFont.toString()));
 			break;
 		case T_COMMAND:
-			alarm->setProgramFile(mText);
+			setProcedureAlarm(alarm, mText);
 			break;
 		case T_EMAIL:
-			alarm->setText(mText);
-			if (mEmailAddresses.count() > 0)
-				alarm->setMailAddresses(mEmailAddresses);
-			alarm->setMailSubject(mEmailSubject);
-			if (mEmailAttachments.count() > 0)
-				alarm->setMailAttachments(mEmailAttachments);
+			alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
 			break;
 		case T_AUDIO:     // never occurs in this context
 			break;
@@ -799,7 +823,9 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 			al.mType          = KAlarmAlarm::INVALID_ALARM;
 			al.mActionType    = mActionType;
 			al.mText          = mText;
-			al.mColour        = mColour;
+			al.mBgColour      = mBgColour;
+			al.mFont          = mFont;
+			al.mDefaultFont   = mDefaultFont;
 			al.mBeep          = mBeep;
 			al.mConfirmAck    = mConfirmAck;
 			al.mRepeatAtLogin = false;
@@ -1729,21 +1755,26 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
  */
 void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 {
-	// KAlarm pre-0.9 codes held in the DESCRIPTION property
-	static const QChar   SEPARATOR            = ';';
-	static const QChar   LATE_CANCEL_CODE     = 'C';
-	static const QChar   AT_LOGIN_CODE        = 'L';   // subsidiary alarm at every login
-	static const QChar   DEFERRAL_CODE        = 'D';   // extra deferred alarm
-	static const QString TEXT_PREFIX          = QString::fromLatin1("TEXT:");
-	static const QString FILE_PREFIX          = QString::fromLatin1("FILE:");
-	static const QString COMMAND_PREFIX       = QString::fromLatin1("CMD:");
+	// KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
+	static const QChar   SEPARATOR        = ';';
+	static const QChar   LATE_CANCEL_CODE = 'C';
+	static const QChar   AT_LOGIN_CODE    = 'L';   // subsidiary alarm at every login
+	static const QChar   DEFERRAL_CODE    = 'D';   // extra deferred alarm
+	static const QString TEXT_PREFIX      = QString::fromLatin1("TEXT:");
+	static const QString FILE_PREFIX      = QString::fromLatin1("FILE:");
+	static const QString COMMAND_PREFIX   = QString::fromLatin1("CMD:");
+
+	// KAlarm pre-0.9.2 codes held in the event's CATEGORY property
+	static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
 
 	int version = calendar.KAlarmVersion();
-	if (version >= AlarmCalendar::KAlarmVersion(0,9,0))
+	if (version >= AlarmCalendar::KAlarmVersion(0,9,2))
 		return;
 
 	kdDebug(5950) << "KAlarmEvent::convertKCalEvents(): adjusting\n";
-	bool pre_0_7 = (version < AlarmCalendar::KAlarmVersion(0,7,0));
+	bool pre_0_7   = (version < AlarmCalendar::KAlarmVersion(0,7,0));
+	bool pre_0_9   = (version < AlarmCalendar::KAlarmVersion(0,9,0));
+	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 
@@ -1757,10 +1788,8 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			event->setFloats(false);
 		}
 
-		QPtrList<Alarm> alarms = event->alarms();
-		for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+		if (pre_0_9)
 		{
-			Alarm* alarm = ia.current();
 			/*
 			 * It's a KAlarm pre-0.9 calendar file.
 			 * All alarms were of type DISPLAY. Instead of the X-KDE-KALARM-TYPE
@@ -1773,108 +1802,162 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 *   TYPE = TEXT or FILE or CMD
 			 *   TEXT = message text, file name/URL or command
 			 */
-			bool atLogin    = false;
-			bool deferral   = false;
-			bool lateCancel = false;
-			KAAlarmEventBase::Type action = T_MESSAGE;
-			QString txt = alarm->text();
-			int length = txt.length();
-			int i = 0;
-			if (txt[0].isDigit())
+			QPtrList<Alarm> alarms = event->alarms();
+			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
 			{
-				while (++i < length  &&  txt[i].isDigit()) ;
-				if (i < length  &&  txt[i++] == SEPARATOR)
+				Alarm* alarm = ia.current();
+				bool atLogin    = false;
+				bool deferral   = false;
+				bool lateCancel = false;
+				KAAlarmEventBase::Type action = T_MESSAGE;
+				QString txt = alarm->text();
+				int length = txt.length();
+				int i = 0;
+				if (txt[0].isDigit())
 				{
-					while (i < length)
+					while (++i < length  &&  txt[i].isDigit()) ;
+					if (i < length  &&  txt[i++] == SEPARATOR)
 					{
-						QChar ch = txt[i++];
-						if (ch == SEPARATOR)
-							break;
-						if (ch == LATE_CANCEL_CODE)
-							lateCancel = true;
-						else if (ch == AT_LOGIN_CODE)
-							atLogin = true;
-						else if (ch == DEFERRAL_CODE)
-							deferral = true;
+						while (i < length)
+						{
+							QChar ch = txt[i++];
+							if (ch == SEPARATOR)
+								break;
+							if (ch == LATE_CANCEL_CODE)
+								lateCancel = true;
+							else if (ch == AT_LOGIN_CODE)
+								atLogin = true;
+							else if (ch == DEFERRAL_CODE)
+								deferral = true;
+						}
 					}
+					else
+						i = 0;     // invalid prefix
+				}
+				if (txt.find(TEXT_PREFIX, i) == i)
+					i += TEXT_PREFIX.length();
+				else if (txt.find(FILE_PREFIX, i) == i)
+				{
+					action = T_FILE;
+					i += FILE_PREFIX.length();
+				}
+				else if (txt.find(COMMAND_PREFIX, i) == i)
+				{
+					action = T_COMMAND;
+					i += COMMAND_PREFIX.length();
 				}
 				else
-					i = 0;     // invalid prefix
-			}
-			if (txt.find(TEXT_PREFIX, i) == i)
-				i += TEXT_PREFIX.length();
-			else if (txt.find(FILE_PREFIX, i) == i)
-			{
-				action = T_FILE;
-				i += FILE_PREFIX.length();
-			}
-			else if (txt.find(COMMAND_PREFIX, i) == i)
-			{
-				action = T_COMMAND;
-				i += COMMAND_PREFIX.length();
-			}
-			else
-				i = 0;
-			txt = txt.mid(i);
+					i = 0;
+				txt = txt.mid(i);
 
-			QStringList types;
-			switch (action)
-			{
-				case T_FILE:
-					types += FILE_TYPE;
-					// fall through to T_MESSAGE
-				case T_MESSAGE:
-					alarm->setText(txt);
-					break;
-				case T_COMMAND:
-					alarm->setProgramFile(txt);
-					break;
-				case T_EMAIL:     // email alarms were introduced in KAlarm 0.9
-				case T_AUDIO:     // never occurs in this context
-					break;
-			}
-			if (atLogin)
-			{
-				types += AT_LOGIN_TYPE;
-				lateCancel = false;
-			}
-			else if (deferral)
-				types += DEFERRAL_TYPE;
-			if (lateCancel)
-			{
-				QStringList cats = event->categories();
-				cats.append(LATE_CANCEL_CATEGORY);
-				event->setCategories(cats);
-			}
-			if (types.count() > 0)
-				alarm->setCustomProperty(APPNAME, TYPE_PROPERTY, types.join(","));
-
-			if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
-			{
-				// It's a KAlarm pre-0.7 calendar file.
-				// Minutely recurrences were stored differently.
-				Recurrence* recur = event->recurrence();
-				if (recur  &&  recur->doesRecur() == Recurrence::rNone)
+				QStringList types;
+				switch (action)
 				{
-					recur->setMinutely(alarm->snoozeTime(), alarm->repeatCount() + 1);
-					alarm->setRepeatCount(0);
-					alarm->setSnoozeTime(0);
+					case T_FILE:
+						types += FILE_TYPE;
+						// fall through to T_MESSAGE
+					case T_MESSAGE:
+						alarm->setDisplayAlarm(txt);
+						break;
+					case T_COMMAND:
+						setProcedureAlarm(alarm, txt);
+						break;
+					case T_EMAIL:     // email alarms were introduced in KAlarm 0.9
+					case T_AUDIO:     // never occurs in this context
+						break;
+				}
+				if (atLogin)
+				{
+					types += AT_LOGIN_TYPE;
+					lateCancel = false;
+				}
+				else if (deferral)
+					types += DEFERRAL_TYPE;
+				if (lateCancel)
+				{
+					QStringList cats = event->categories();
+					cats.append(LATE_CANCEL_CATEGORY);
+					event->setCategories(cats);
+				}
+				if (types.count() > 0)
+					alarm->setCustomProperty(APPNAME, TYPE_PROPERTY, types.join(","));
+
+				if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+				{
+					// It's a KAlarm pre-0.7 calendar file.
+					// Minutely recurrences were stored differently.
+					Recurrence* recur = event->recurrence();
+					if (recur  &&  recur->doesRecur() == Recurrence::rNone)
+					{
+						recur->setMinutely(alarm->snoozeTime(), alarm->repeatCount() + 1);
+						alarm->setRepeatCount(0);
+						alarm->setSnoozeTime(0);
+					}
+				}
+
+				if (adjustSummerTime)
+				{
+					// The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
+					// Summer time was ignored when converting to UTC.
+					QDateTime dt = alarm->time();
+					time_t t = dt0.secsTo(dt);
+					struct tm* dtm = localtime(&t);
+					if (dtm->tm_isdst)
+					{
+						dt = dt.addSecs(-3600);
+						alarm->setTime(dt);
+					}
+				}
+			}
+		}
+
+		if (pre_0_9_2)
+		{
+			/*
+			 * It's a KAlarm pre-0.9.2 calendar file.
+			 * For display alarms, convert the first unlabelled category to an
+			 * X-KDE-KALARM-FONTCOLOUR property.
+			 * Convert BEEP category into an audio alarm with no audio file.
+			 */
+			QStringList cats = event->categories();
+			QString colour = (cats.count() > 0) ? cats[0] : QString::null;
+			QPtrList<Alarm> alarms = event->alarms();
+			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+			{
+				Alarm* alarm = ia.current();
+				if (alarm->type() == Alarm::Display)
+					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
+					                         QString::fromLatin1("%1;;").arg(colour));
+			}
+
+			for (QStringList::iterator it = cats.begin();  it != cats.end();  ++it)
+			{
+				if (*it == BEEP_CATEGORY)
+				{
+					cats.remove(it);
+
+					Alarm* alarm = event->newAlarm();
+					alarm->setEnabled(true);
+					alarm->setAudioAlarm();
+					alarm->setTime(event->dtStart());    // default
+
+					// Parse and order the alarms to know which one's date/time to use
+					AlarmMap alarmMap;
+					readAlarms(*event, &alarmMap);
+					AlarmMap::ConstIterator it = alarmMap.begin();
+					if (it != alarmMap.end())
+					{
+						const Alarm* al = it.data().alarm;
+						if (al->hasTime())
+							alarm->setTime(al->time());
+						else
+							alarm->setOffset(al->offset());
+					}
+					break;
 				}
 			}
 
-			if (adjustSummerTime)
-			{
-				// The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
-				// Summer time was ignored when converting to UTC.
-				QDateTime dt = alarm->time();
-				time_t t = dt0.secsTo(dt);
-				struct tm* dtm = localtime(&t);
-				if (dtm->tm_isdst)
-				{
-					dt = dt.addSecs(-3600);
-					alarm->setTime(dt);
-				}
-			}
+			event->setCategories(cats);
 		}
 	}
 }
@@ -1949,7 +2032,8 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mEventID          = rhs.mEventID;
 	mText             = rhs.mText;
 	mDateTime         = rhs.mDateTime;
-	mColour           = rhs.mColour;
+	mBgColour         = rhs.mBgColour;
+	mFont             = rhs.mFont;
 	mEmailAddresses   = rhs.mEmailAddresses;
 	mEmailSubject     = rhs.mEmailSubject;
 	mEmailAttachments = rhs.mEmailAttachments;
@@ -1961,6 +2045,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mLateCancel       = rhs.mLateCancel;
 	mEmailBcc         = rhs.mEmailBcc;
 	mConfirmAck       = rhs.mConfirmAck;
+	mDefaultFont      = rhs.mDefaultFont;
 }
 
 void KAAlarmEventBase::set(int flags)
@@ -1972,6 +2057,7 @@ void KAAlarmEventBase::set(int flags)
 	mConfirmAck    = flags & KAlarmEvent::CONFIRM_ACK;
 	mDeferral      = flags & KAlarmEvent::DEFERRAL;
 	mDisplaying    = flags & KAlarmEvent::DISPLAYING_;
+	mDefaultFont   = flags & KAlarmEvent::DEFAULT_FONT;
 }
 
 int KAAlarmEventBase::flags() const
@@ -1982,8 +2068,14 @@ int KAAlarmEventBase::flags() const
 	     | (mEmailBcc      ? KAlarmEvent::EMAIL_BCC : 0)
 	     | (mConfirmAck    ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (mDeferral      ? KAlarmEvent::DEFERRAL : 0)
-	     | (mDisplaying    ? KAlarmEvent::DISPLAYING_ : 0);
+	     | (mDisplaying    ? KAlarmEvent::DISPLAYING_ : 0)
+	     | (mDefaultFont   ? KAlarmEvent::DEFAULT_FONT : 0);
 
+}
+
+const QFont& KAAlarmEventBase::font() const
+{
+	return mDefaultFont ? theApp()->settings()->messageFont() : mFont;
 }
 
 #ifndef NDEBUG
@@ -2000,7 +2092,10 @@ void KAAlarmEventBase::dumpDebug() const
 		kdDebug(5950) << "--         Attachments:" << mEmailAttachments.join(", ") << ":\n";
 		kdDebug(5950) << "--         Bcc:" << (mEmailBcc ? "true" : "false") << ":\n";
 	}
-	kdDebug(5950) << "-- mColour:" << mColour.name() << ":\n";
+	kdDebug(5950) << "-- mBgColour:" << mBgColour.name() << ":\n";
+	kdDebug(5950) << "-- mDefaultFont:" << (mDefaultFont ? "true" : "false") << ":\n";
+	if (!mDefaultFont)
+		kdDebug(5950) << "-- mFont:" << mFont.toString() << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false") << ":\n";
@@ -2071,4 +2166,75 @@ QString EmailAddressList::join(const QString& separator) const
 			result += ">";
 	}
 	return result;
+}
+
+
+/*=============================================================================
+= Static functions
+=============================================================================*/
+
+/******************************************************************************
+ * Set the specified alarm to be a procedure alarm with the given command line.
+ * The command line is first split into its program file and arguments before
+ * initialising the alarm.
+ */
+static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
+{
+	QString command   = QString::null;
+	QString arguments = QString::null;
+	// This small state machine is used to parse "commandLine" in order
+	// to cut arguments at spaces, but also treat "..." and '...'
+	// as a single argument even if they contain spaces. Those simple
+	// and double quotes are also removed.
+	QChar quoteChar;
+	bool quoted = false;
+	uint posMax = commandLine.length();
+	uint pos;
+	for (pos = 0;  pos < posMax;  ++pos)
+	{
+		QChar ch = commandLine[pos];
+		if (quoted)
+		{
+			if (ch == quoteChar)
+			{
+				++pos;    // omit the quote character
+				break;
+			}
+			command += ch;
+		}
+		else
+		{
+			bool done = false;
+			switch (ch)
+			{
+				case ' ':
+				case ';':
+				case '|':
+				case '<':
+					done = !command.isEmpty();
+					break;
+				case '\'':
+				case '"':
+					if (command.isEmpty())
+					{
+						// Start of a quoted string. Omit the quote character.
+						quoted = true;
+						quoteChar = ch;
+						break;
+					}
+					// fall through to default
+				default:
+					command += ch;
+					break;
+			}
+			if (done)
+				break;
+		}
+	}
+
+	// Skip any spaces after the command
+	for ( ;  pos < posMax  &&  commandLine[pos] == ' ';  ++pos) ;
+	arguments = commandLine.mid(pos);
+
+	alarm->setProcedureAlarm(command, arguments);
 }
