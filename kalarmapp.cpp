@@ -109,7 +109,7 @@ KAlarmApp::KAlarmApp()
 	mCommandProcesses.setAutoDelete(true);
 	Preferences* preferences = Preferences::instance();
 	connect(preferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
-	CalFormat::setApplication(aboutData()->programName(),
+	KCal::CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	KAEvent::setFeb29RecurType();
@@ -377,7 +377,7 @@ int KAlarmApp::newInstance()
 						QString addr = QString::fromLocal8Bit(*i);
 						if (!KAMail::checkAddress(addr))
 							USAGE(i18n("%1: invalid email address").arg(QString::fromLatin1("--mail")))
-						alAddresses += Person(QString::null, addr);
+						alAddresses += KCal::Person(QString::null, addr);
 					}
 					params = args->getOptionList("attach");
 					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
@@ -891,10 +891,10 @@ void KAlarmApp::redisplayAlarms()
 	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
 	if (cal->isOpen())
 	{
-		Event::List events = cal->events();
-		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+		KCal::Event::List events = cal->events();
+		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
-                        Event* kcalEvent = *it;
+                        KCal::Event* kcalEvent = *it;
 			KAEvent event(*kcalEvent);
 			event.setUid(KAEvent::ACTIVE);
 			if (!MessageWin::findEvent(event.id()))
@@ -1201,7 +1201,7 @@ bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
 	kdDebug(5950) << "KAlarmApp::handleEvent(): " << eventID << ", " << (function==EVENT_TRIGGER?"TRIGGER":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
-	Event* kcalEvent = AlarmCalendar::activeCalendar()->event(eventID);
+	KCal::Event* kcalEvent = AlarmCalendar::activeCalendar()->event(eventID);
 	if (!kcalEvent)
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
@@ -1406,7 +1406,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const DateTime& alarmTime)
 {
 	kdDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(alarmType) << ")\n";
-	Event* kcalEvent = AlarmCalendar::activeCalendar()->event(event.id());
+	KCal::Event* kcalEvent = AlarmCalendar::activeCalendar()->event(event.id());
 	if (!kcalEvent)
 		kdError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
 	else
