@@ -92,10 +92,12 @@ void DeferAlarmDlg::slotOk()
 		switch (limitType)
 		{
 			case KAEvent::LIMIT_REPETITION:
-				text = i18n("Cannot defer past the alarm's next repetition (currently %1)");
+				text = i18n("This refers to simple repetitions set up using the Simple Repetition dialog",
+				            "Cannot defer past the alarm's next repetition (currently %1)");
 				break;
 			case KAEvent::LIMIT_RECURRENCE:
-				text = i18n("Cannot defer past the alarm's next recurrence (currently %1)");
+				text = i18n("This refers to recurrences set up using the Recurrence tab",
+				            "Cannot defer past the alarm's next recurrence (currently %1)");
 				break;
 			case KAEvent::LIMIT_REMINDER:
 				text = i18n("Cannot defer past the alarm's next reminder (currently %1)");
