@@ -652,7 +652,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
 			errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
 			break;
 		case Preferences::MAIL_FROM_KMAIL:
-			if (KAMail::kmailIdentities().count())
+			if (KAMail::identitiesExist())
 				return QString::null;
 			errmsg = i18n("No KMail identities currently exist. %1").arg(errmsg);
 			break;

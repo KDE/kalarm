@@ -25,9 +25,8 @@
 #include <qstringlist.h>
 class KAEvent;
 class EmailAddressList;
-namespace KMime { namespace Types {
-  struct Address;
-} }
+namespace KPIM { class IdentityManager; }
+namespace KMime { namespace Types { struct Address; } }
 
 struct KAMailData;
 
@@ -41,15 +40,14 @@ class KAMail
 		static bool        checkAttachment(const KURL&);
 		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
-		static QStringList kmailIdentities();
-		static int         findIdentity(const QStringList& identities, const QString& identity);
-		static QString     kmailAddress(const QString& identity = QString::null);
-		static QString     extractKMailIdentity(const QString& descrip);
+		static KPIM::IdentityManager* identityManager();
+		static bool        identitiesExist();
 		static QString     controlCentreAddress();
 		static QString     i18n_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
 	private:
+		static KPIM::IdentityManager* mIdentityManager;     // KMail identity manager
 #if QT_VERSION >= 300
 		typedef QIODevice::Offset Offset;
 #else
@@ -63,7 +61,6 @@ class KAMail
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, Offset size, Offset& outSize);
-		static QString     defaultIdentityString(const QString& identity);
 		static QStringList errors(const QString& error = QString::null, bool sendfail = true);
 };
 

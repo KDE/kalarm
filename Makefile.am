@@ -3,7 +3,6 @@ SUBDIRS = widgets pixmaps
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libical/src \
-	-I$(top_srcdir)/libkdepim \
 	-I$(top_srcdir)/libkmime $(all_includes)
 
 bin_PROGRAMS = kalarm
@@ -19,7 +18,7 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	specialactions.cpp reminder.cpp synchtimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp \
-	latecancel.cpp repetition.cpp alarmtext.cpp
+	latecancel.cpp repetition.cpp alarmtext.cpp emailidcombo.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 if include_ARTS
 ARTSLIB = -lartskde
@@ -29,14 +28,15 @@ kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkmime/libkmime.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
+	$(top_builddir)/libkpimidentities/libkpimidentities.la \
 	-lkabc $(LIB_KDEUI) $(ARTSLIB)
 noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
 	alarmtimewidget.h birthdaydlg.h daemon.h dcophandler.h deferdlg.h \
-	editdlg.h editdlgprivate.h eventlistviewbase.h fontcolour.h \
-	fontcolourbutton.h functions.h kalarm.h kalarmapp.h kamail.h \
-	latecancel.h mainwindow.h mainwindowbase.h messagewin.h prefdlg.h \
-	preferences.h recurrenceedit.h recurrenceeditprivate.h reminder.h \
-	repetition.h soundpicker.h \
+	editdlg.h editdlgprivate.h emailidcombo.h eventlistviewbase.h \
+	fontcolour.h fontcolourbutton.h functions.h kalarm.h kalarmapp.h \
+	kamail.h latecancel.h mainwindow.h mainwindowbase.h messagewin.h \
+	prefdlg.h preferences.h recurrenceedit.h recurrenceeditprivate.h \
+	reminder.h repetition.h soundpicker.h \
 	specialactions.h synchtimer.h templatedlg.h templatelistview.h \
 	templatepickdlg.h timeselector.h traywindow.h
 kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h

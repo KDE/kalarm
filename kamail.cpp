@@ -43,6 +43,8 @@
 #include <kemailsettings.h>
 #include <kdebug.h>
 
+#include <libkpimidentities/identitymanager.h>
+#include <libkpimidentities/identity.h>
 #include <libkcal/person.h>
 
 #include <kmime_header_parsing.h>
@@ -53,35 +55,6 @@
 #include "mainwindow.h"
 #include "kamail.h"
 
-class KMailIdentities
-{
-	public:
-		KMailIdentities();
-		~KMailIdentities()  { delete mConfig; }
-		bool     nextIdentity();
-		bool     gotoFirst()               { mIndex = -1;  return nextIdentity(); }
-		bool     gotoDefaultIdentity();
-		QString  identity() const          { return mIdentity; }
-		QString  emailAddress() const      { return mEmail; }
-		QString  name() const              { return mName; }
-		bool     defaultIdentity() const   { return mDefault; }
-		int      index() const             { return mIndex; }
-		int      defaultIndex() const      { return mDefaultIndex; }
-
-	private:
-		KConfig*                   mConfig;
-		QStringList                mGroups;
-		QStringList::ConstIterator mIter;
-		QStringList::ConstIterator mIterDefault;  // mGroups iterator for default identity, or end()
-		QString                    mDefaultUOID;
-		QString                    mIdentity;     // current identity
-		QString                    mEmail;        // email address for current identity
-		QString                    mName;         // name for current identity
-		int                        mIndex;        // index in list to current identity, or -1 if none
-		int                        mDefaultIndex; // index in list to default identity, or -1
-		bool                       mDefault;      // true if current identity is the default identity
-		bool                       mOldConfig;
-};
 
 namespace HeaderParsing
 {
@@ -113,8 +86,16 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18n("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-static QString i18n_Default()
-{ return i18n("Default"); }
+static QString i18n_id_Default()
+{ return i18n("%1 (Default)"); }     // for backward compatibility, used in identitycombo_31.cpp
+
+KPIM::IdentityManager* KAMail::mIdentityManager = 0;
+KPIM::IdentityManager* KAMail::identityManager()
+{
+	if (!mIdentityManager)
+		mIdentityManager = new KPIM::IdentityManager(true);   // create a read-only kmail identity manager
+	return mIdentityManager;
+}
 
 
 /******************************************************************************
@@ -131,7 +112,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		from = preferences->emailAddress();
 	else
 	{
-		from = kmailAddress(event.emailFromKMail());
+		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
 		if (from.isEmpty())
 		{
 			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.").arg(event.emailFromKMail()));
@@ -574,87 +555,12 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-*  Fetch KMail's list of configured email identities.
+*  Return whether any KMail identities exist.
 */
-QStringList KAMail::kmailIdentities()
+bool KAMail::identitiesExist()
 {
-	QStringList result;
-	KMailIdentities ids;
-	while (ids.nextIdentity())
-	{
-		if (ids.defaultIdentity())
-			result.push_front(defaultIdentityString(ids.identity()));  // insert default identity at top of list
-		else
-			result += ids.identity();  // append non-default identities to the end of the list
-	}
-	return result;
-}
-
-/******************************************************************************
-*  Find the position of a specified identity in a list returned by kmailIdentities().
-*  Reply < 0 if not found.
-*/
-int KAMail::findIdentity(const QStringList& identities, const QString& identity)
-{
-	QStringList::ConstIterator it = identities.begin();
-	if (it != identities.end())
-	{
-		if (*it == defaultIdentityString(identity))
-			return 0;
-		for (int i = 1;  ++it != identities.end();  ++i)
-		{
-			if (*it == identity)
-				return i;
-		}
-	}
-	return -1;
-}
-
-/******************************************************************************
-*  Get the address configured in KMail for the specified email identity.
-*  Set 'identity' to the empty string to specify the default identity.
-*/
-QString KAMail::kmailAddress(const QString& identity)
-{
-	KMailIdentities ids;
-	if (identity.isEmpty())
-	{
-		if (!ids.gotoDefaultIdentity())
-			return QString::null;
-	}
-	else
-	{
-		bool found = false;
-		while (!found  &&  ids.nextIdentity())
-			found = (ids.identity() == identity);
-		if (!found)
-			return QString::null;
-	}
-	if (ids.name().isEmpty())
-		return ids.emailAddress();
-	return QString::fromLatin1("\"%1\" <%2>").arg(ids.name()).arg(ids.emailAddress());
-}
-
-/******************************************************************************
-*  Get the identity from a string returned by kmailIdentities().
-*/
-QString KAMail::extractKMailIdentity(const QString& descrip)
-{
-	QString def = defaultIdentityString(QString::null);
-	if (descrip.endsWith(def))
-		return descrip.left(descrip.length() - def.length());
-	return descrip;
-}
-
-/******************************************************************************
-*  Get the display string for an identity which is the default identity.
-*/
-QString KAMail::defaultIdentityString(const QString& identity)
-{
-	QString def = i18n_Default();
-	if (identity == def  ||  identity == QString::fromLatin1("Default"))
-		return identity;
-	return QString::fromLatin1("%1 (%2)").arg(identity).arg(def);
+	identityManager();    // create identity manager if not already done
+	return mIdentityManager->begin() != mIdentityManager->end();
 }
 
 /******************************************************************************
@@ -1021,85 +927,6 @@ QString getHostName()
                 return QString::null;
         return QString::fromLocal8Bit(hname);
 }
-}
-
-
-/*=============================================================================
-=  class: KMailIdentities
-=  Accesses KMail's email identities.
-=============================================================================*/
-
-
-/******************************************************************************
-*  Initialise access to KMail's list of configured email identities.
-*/
-KMailIdentities::KMailIdentities()
-	: mIndex(-1),
-	  mDefaultIndex(-1),
-	  mOldConfig(false)
-{
-	QString file = locate("config", QString::fromLatin1("emailidentities"));
-	if (file.isEmpty())
-	{
-		// Older versions of KMail used 'kmailrc' instead of 'emailidentities'
-		file = locate("config", QString::fromLatin1("kmailrc"));
-		mOldConfig = true;
-	}
-	mConfig = new KConfig(file);
-	if (!mOldConfig)
-	{
-		// Find the default identity's UOID
-		mConfig->setGroup(QString::fromLatin1("General"));
-		mDefaultUOID = mConfig->readEntry(QString::fromLatin1("Default Identity"));
-	}
-	mGroups = mConfig->groupList();
-	mIterDefault = mGroups.end();
-	mIndex = -1;
-}
-
-/******************************************************************************
-*  Step on to the next identity.
-*/
-bool KMailIdentities::nextIdentity()
-{
-	if (mIndex < 0)
-		mIter = mGroups.begin();
-	else
-		++mIter;
-	for ( ;  mIter != mGroups.end();  ++mIter)
-	{
-		if ((*mIter).startsWith(QString::fromLatin1("Identity")))
-		{
-			mConfig->setGroup(*mIter);
-			mEmail = mConfig->readEntry(QString::fromLatin1("Email Address"));
-			if (!mEmail.isEmpty())
-			{
-				++mIndex;
-				mIdentity = mConfig->readEntry(QString::fromLatin1("Identity"));
-				mName     = mConfig->readEntry(QString::fromLatin1("Name"));
-				mDefault = mOldConfig  &&  mIdentity == QString::fromLatin1("Default")
-				           ||  !mDefaultUOID.isEmpty()  &&  mConfig->readEntry(QString::fromLatin1("uoid")) == mDefaultUOID;
-				if (mDefault)
-				{
-					mIterDefault = mIter;
-					mDefaultIndex = mIndex;
-				}
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-/******************************************************************************
-*  Step to the default identity.
-*/
-bool KMailIdentities::gotoDefaultIdentity()
-{
-	while (mDefaultIndex < 0  &&  nextIdentity());
-	mIndex = mDefaultIndex;
-	mIter  = mIterDefault;
-	return mIter != mGroups.end();
 }
 
 

@@ -37,9 +37,9 @@ class QComboBox;
 class QTabWidget;
 class QVBox;
 class QHBox;
+class EmailIdCombo;
 class ColourCombo;
 class FontColourButton;
-class ComboBox;
 class ButtonGroup;
 class TimeSpinBox;
 class RadioButton;
@@ -168,7 +168,7 @@ class EditAlarmDlg : public KDialogBase
 		LineEdit*           mCommandMessageEdit; // command edit box
 		// Email alarm widgets
 		QFrame*             mEmailFrame;
-		ComboBox*           mEmailFromList;
+		EmailIdCombo*       mEmailFromList;
 		LineEdit*           mEmailToEdit;
 		QPushButton*        mEmailAddressButton; // email open address book button
 		QLineEdit*          mEmailSubjectEdit;

@@ -54,14 +54,14 @@
 #include <kabc/addresseedialog.h>
 #include <kdebug.h>
 
-#include <maillistdrag.h>
+#include <libkdepim/maillistdrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "colourcombo.h"
-#include "combobox.h"
 #include "deferdlg.h"
+#include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -448,7 +448,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 		label->setFixedSize(label->sizeHint());
 		grid->addWidget(label, 0, 0);
 
-		mEmailFromList = new ComboBox(mEmailFrame);
+		mEmailFromList = new EmailIdCombo(KAMail::identityManager(), mEmailFrame);
 		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
 		label->setBuddy(mEmailFromList);
 		QWhatsThis::add(mEmailFromList,
@@ -633,11 +633,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
 		if (mEmailFromList)
-		{
-			QStringList ids = KAMail::kmailIdentities();
-			mEmailFromList->insertStringList(ids);
-			mEmailFromList->setCurrentItem(KAMail::findIdentity(ids, event->emailFromKMail()));
-		}
+			mEmailFromList->setCurrentIdentity(event->emailFromKMail());
 	}
 	else
 	{
@@ -677,8 +673,6 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
-		if (mEmailFromList)
-			mEmailFromList->insertStringList(KAMail::kmailIdentities());
 	}
 
 	if (!deferGroupVisible)
@@ -855,7 +849,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	}
 	checkText(mSavedTextFileCommandMessage, false);
 	if (mEmailFromList)
-		mSavedEmailFrom  = mEmailFromList->text(mEmailFromList->currentItem());
+		mSavedEmailFrom = mEmailFromList->currentIdentityName();
 	mSavedEmailTo        = mEmailToEdit->text();
 	mSavedEmailSubject   = mEmailSubjectEdit->text();
 	mSavedEmailAttach.clear();
@@ -937,7 +931,7 @@ bool EditAlarmDlg::stateChanged() const
 		QStringList emailAttach;
 		for (int i = 0;  i < mEmailAttachList->count();  ++i)
 			emailAttach += mEmailAttachList->text(i);
-		if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->text(mEmailFromList->currentItem())
+		if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->currentIdentityName()
 		||  mSavedEmailTo      != mEmailToEdit->text()
 		||  mSavedEmailSubject != mEmailSubjectEdit->text()
 		||  mSavedEmailAttach  != emailAttach
@@ -1012,7 +1006,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		{
 			QString from;
 			if (mEmailFromList)
-				from = KAMail::extractKMailIdentity(mEmailFromList->text(mEmailFromList->currentItem()));
+				from = mEmailFromList->currentIdentityName();
 			event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 			break;
 		}

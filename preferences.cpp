@@ -26,6 +26,9 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
+#include <libkpimidentities/identity.h>
+#include <libkpimidentities/identitymanager.h>
+
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
@@ -85,9 +88,9 @@ const QString    Preferences::default_defaultPostAction;
 Preferences::MailFrom Preferences::default_emailFrom()
 {
 #if KDE_VERSION >= 210
-	return KAMail::kmailIdentities().count() ? MAIL_FROM_KMAIL : MAIL_FROM_CONTROL_CENTRE;
+	return KAMail::identitiesExist() ? MAIL_FROM_KMAIL : MAIL_FROM_CONTROL_CENTRE;
 #else
-	return KAMail::kmailIdentities().count() ? MAIL_FROM_KMAIL : MAIL_FROM_ADDR;
+	return KAMail::identitiesExist() ? MAIL_FROM_KMAIL : MAIL_FROM_ADDR;
 #endif
 }
 
@@ -366,15 +369,14 @@ Preferences::MailFrom Preferences::emailFrom(const QString& str)
 }
 
 /******************************************************************************
-* Get user's 'From' email address.
-* Reply = null if using KMail identities.
+* Get user's default 'From' email address.
 */
 QString Preferences::emailAddress() const
 {
 	switch (mEmailFrom)
 	{
 		case MAIL_FROM_KMAIL:
-			return KAMail::kmailAddress();    // use default KMail identity
+			return KAMail::identityManager()->defaultIdentity().fullEmailAddr();
 		case MAIL_FROM_CONTROL_CENTRE:
 			return KAMail::controlCentreAddress();
 		case MAIL_FROM_ADDR:

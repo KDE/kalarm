@@ -24,7 +24,10 @@
 
 #include <kdebug.h>
 
+#include <libkpimidentities/identitymanager.h>
+#include <libkpimidentities/identity.h>
 #include <libkcal/icalformat.h>
+
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "kamail.h"
@@ -270,8 +273,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	if (!fromID.isEmpty())
 	{
-		QStringList ids = KAMail::kmailIdentities();
-		if (KAMail::findIdentity(ids, fromID) < 0)
+		if (KAMail::identityManager()->identityForName(fromID).isNull())
 		{
 			kdError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
 			return false;
