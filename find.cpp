@@ -100,7 +100,7 @@ void Find::display()
 		mExpired = new QCheckBox(i18n("Ex&pired"), group);
 		mExpired->setFixedSize(mExpired->sizeHint());
 		QWhatsThis::add(mExpired,
-		      i18n("Check to include expired alarms in the search."
+		      i18n("Check to include expired alarms in the search. "
 		           "This option is only available if expired alarms are currently being displayed."));
 		grid->addWidget(mExpired, 1, 2, Qt::AlignAuto);
 
