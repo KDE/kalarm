@@ -21,6 +21,7 @@
  *  with any edition of Qt, and distribute the resulting executable,
  *  without including the source code for Qt in the source distribution.
  */
+#include "kalarm.h"
 
 #include <kglobal.h>
 #include <klocale.h>
