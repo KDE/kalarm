@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -110,7 +106,7 @@ QPtrList<MessageWin> MessageWin::windowList;
 */
 MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event, bool allowDefer)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
-	                                         | (theApp()->preferences()->modalMessages() ? 0 : Qt::WX11BypassWM)),
+	                                         | (Preferences::instance()->modalMessages() ? 0 : Qt::WX11BypassWM)),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
 	  font(evnt.font()),
@@ -405,7 +401,7 @@ QSize MessageWin::initView()
 	setMinimumSize(size);
 
 	WId winid = winId();
-	unsigned long wstate = (theApp()->preferences()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
+	unsigned long wstate = (Preferences::instance()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
 	return sizeHint();
@@ -511,7 +507,7 @@ void MessageWin::repeat(const KAlarmAlarm& alarm)
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
-		if (!mDeferDlgShowing  ||  theApp()->preferences()->modalMessages())
+		if (!mDeferDlgShowing  ||  Preferences::instance()->modalMessages())
 		{
 				raise();
 				playAudio();
@@ -597,7 +593,7 @@ void MessageWin::slotDefer()
 	                                            false, this, "deferDlg");
 	deferDlg->setLimit(eventID);
 	mDeferDlgShowing = true;
-	if (!theApp()->preferences()->modalMessages())
+	if (!Preferences::instance()->modalMessages())
 		lower();
 	if (deferDlg->exec() == QDialog::Accepted)
 	{

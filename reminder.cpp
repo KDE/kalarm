@@ -175,7 +175,7 @@ void Reminder::setMinutes(int minutes, bool dateOnly)
 	}
 	else
 	{
-		item = theApp()->preferences()->defaultReminderUnits();
+		item = Preferences::instance()->defaultReminderUnits();
 		if (item < mDateOnlyOffset)
 			item = mDateOnlyOffset;
 		mUnitsCombo->setCurrentItem(item - mDateOnlyOffset);

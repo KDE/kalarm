@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -537,7 +533,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
-	                   : mEvent.expired() ? theApp()->preferences()->expiredColour() : cg.text();
+	                   : mEvent.expired() ? Preferences::instance()->expiredColour() : cg.text();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 

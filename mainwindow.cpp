@@ -64,9 +64,9 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	  mMinuteTimer(0),
 	  mMinuteTimerSyncing(false),
 	  mHiddenTrayParent(false),
-	  mShowTime(theApp()->preferences()->showAlarmTime()),
-	  mShowTimeTo(theApp()->preferences()->showTimeToAlarm()),
-	  mShowExpired(theApp()->preferences()->showExpiredAlarms())
+	  mShowTime(Preferences::instance()->showAlarmTime()),
+	  mShowTimeTo(Preferences::instance()->showTimeToAlarm()),
+	  mShowExpired(Preferences::instance()->showExpiredAlarms())
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
@@ -262,7 +262,7 @@ void KAlarmMainWindow::initActions()
 	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
 	actionToggleTrayIcon->plug(mViewMenu);
 	mShowTrayId = mViewMenu->idAt(4);
-	connect(theApp()->preferences(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
+	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 	updateTrayIconAction();         // set the correct text for this action
 
@@ -311,7 +311,7 @@ void KAlarmMainWindow::initActions()
 	actionDelete->setEnabled(false);
 	actionUndelete->setEnabled(false);
 	actionView->setEnabled(false);
-	if (!theApp()->preferences()->expiredKeepDays())
+	if (!Preferences::instance()->expiredKeepDays())
 		actionShowExpired->setEnabled(false);
 	if (!theApp()->KDEDesktop())
 		actionToggleTrayIcon->setEnabled(false);
@@ -335,7 +335,7 @@ void KAlarmMainWindow::refresh()
 void KAlarmMainWindow::updateExpired()
 {
 	kdDebug(5950) << "KAlarmMainWindow::updateExpired()\n";
-	bool enableShowExpired = !!theApp()->preferences()->expiredKeepDays();
+	bool enableShowExpired = !!Preferences::instance()->expiredKeepDays();
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 	{
 		if (w->mShowExpired)
@@ -618,7 +618,7 @@ void KAlarmMainWindow::slotView()
 void KAlarmMainWindow::slotDelete()
 {
 	QPtrList<AlarmListViewItem> items = listView->selectedItems();
-	if (theApp()->preferences()->confirmAlarmDeletion())
+	if (Preferences::instance()->confirmAlarmDeletion())
 	{
 		int n = items.count();
 		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?", "Do you really want to delete the %n selected alarms?", n),

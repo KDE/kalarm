@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -78,12 +74,12 @@ const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNoti
 */
 QString KAMail::send(const KAlarmEvent& event, bool allowNotify)
 {
-	QString from = theApp()->preferences()->emailAddress();
-	QString bcc  = theApp()->preferences()->emailBccAddress();
+	QString from = Preferences::instance()->emailAddress();
+	QString bcc  = Preferences::instance()->emailBccAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject();
 
-	if (theApp()->preferences()->emailClient() == Preferences::SENDMAIL)
+	if (Preferences::instance()->emailClient() == Preferences::SENDMAIL)
 	{
 		QString textComplete;
 		QString command = KStandardDirs::findExe(QString::fromLatin1("sendmail"),
@@ -377,7 +373,7 @@ void KAMail::notifyQueued(const KAlarmEvent& event)
 			QString domain = addr.mailboxList.first().addrSpec.domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
-				QString text = (theApp()->preferences()->emailClient() == Preferences::KMAIL)
+				QString text = (Preferences::instance()->emailClient() == Preferences::KMAIL)
 				             ? i18n("An email has been queued to be sent by KMail")
 				             : i18n("An email has been queued to be sent");
 				KMessageBox::information(0, text, QString::null, EMAIL_QUEUED_NOTIFY);

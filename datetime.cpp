@@ -1,7 +1,7 @@
 /*
  *  datetime.cpp  -  date/time representation with optional date-only value
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 #include "kalarm.h"
 
@@ -33,12 +29,12 @@
 
 QTime DateTime::time() const
 {
-	return mDateOnly ? theApp()->preferences()->startOfDay() : mDateTime.time();
+	return mDateOnly ? Preferences::instance()->startOfDay() : mDateTime.time();
 }
 
 QDateTime DateTime::dateTime() const
 {
-	return mDateOnly ? QDateTime(mDateTime.date(), theApp()->preferences()->startOfDay()) : mDateTime;
+	return mDateOnly ? QDateTime(mDateTime.date(), Preferences::instance()->startOfDay()) : mDateTime;
 }
 
 QString DateTime::formatLocale(bool shortFormat) const
@@ -57,7 +53,7 @@ bool operator==(const DateTime& dt1, const DateTime& dt2)
 		return true;
 	if (!dt1.mDateOnly && !dt2.mDateOnly)
 		return dt1.mDateTime.time() == dt2.mDateTime.time();
-	return (dt1.mDateOnly ? dt2.mDateTime.time() : dt1.mDateTime.time()) == theApp()->preferences()->startOfDay();
+	return (dt1.mDateOnly ? dt2.mDateTime.time() : dt1.mDateTime.time()) == Preferences::instance()->startOfDay();
 }
 
 bool operator<(const DateTime& dt1, const DateTime& dt2)
@@ -68,7 +64,7 @@ bool operator<(const DateTime& dt1, const DateTime& dt2)
 		return false;
 	if (!dt1.mDateOnly && !dt2.mDateOnly)
 		return dt1.mDateTime.time() < dt2.mDateTime.time();
-	QTime t = theApp()->preferences()->startOfDay();
+	QTime t = Preferences::instance()->startOfDay();
 	if (dt1.mDateOnly)
 		return t < dt2.mDateTime.time();
 	return dt1.mDateTime.time() < t;

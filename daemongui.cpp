@@ -1,7 +1,7 @@
 /*
  *  daemongui.cpp  -  handler for the alarm daemon GUI interface
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,8 +52,8 @@ DaemonGuiHandler::DaemonGuiHandler(const char *name)
 	// the program is still initialising.
 	mDaemonRunning = theApp()->isDaemonRunning(false);
 
-	mDaemonStatusTimerInterval = theApp()->preferences()->daemonTrayCheckInterval();
-	connect(theApp()->preferences(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
+	mDaemonStatusTimerInterval = Preferences::instance()->daemonTrayCheckInterval();
+	connect(Preferences::instance(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	connect(&mDaemonStatusTimer, SIGNAL(timeout()), SLOT(timerCheckDaemonRunning()));
 	mDaemonStatusTimer.start(mDaemonStatusTimerInterval * 1000);  // check regularly if daemon is running
 
@@ -228,7 +228,7 @@ void DaemonGuiHandler::setFastDaemonCheck()
 */
 void DaemonGuiHandler::slotPreferencesChanged()
 {
-	int newInterval = theApp()->preferences()->daemonTrayCheckInterval();
+	int newInterval = Preferences::instance()->daemonTrayCheckInterval();
 	if (newInterval != mDaemonStatusTimerInterval)
 	{
 		// Daemon check interval has changed

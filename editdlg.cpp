@@ -262,7 +262,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		// Set the values to their defaults
 		if (theApp()->noShellAccess())
 			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
-		Preferences* preferences = theApp()->preferences();
+		Preferences* preferences = Preferences::instance();
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(preferences->defaultBgColour());
 		mFontColourButton->setFgColour(preferences->defaultFgColour());
@@ -833,7 +833,7 @@ void EditAlarmDlg::slotTry()
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
-					bcc = i18n("\nBcc: %1").arg(theApp()->preferences()->emailAddress());
+					bcc = i18n("\nBcc: %1").arg(Preferences::instance()->emailAddress());
 				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(mEmailAddresses.join("\n")).arg(bcc));
 			}
 		}

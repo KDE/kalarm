@@ -239,7 +239,7 @@ void TrayWindow::dropEvent(QDropEvent* e)
 void TrayWindow::tooltipAlarmText(QString& text) const
 {
 	KAlarmEvent event;
-	Preferences* preferences = theApp()->preferences();
+	Preferences* preferences = Preferences::instance();
 	const QString& prefix = preferences->tooltipTimeToPrefix();
 	int maxCount = preferences->tooltipAlarmCount();
 	QDateTime now = QDateTime::currentDateTime();
@@ -390,7 +390,7 @@ void TrayTooltip::maybeTip(const QPoint&)
 		text = kapp->aboutData()->programName();
 	else
 		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
-	if (theApp()->preferences()->tooltipAlarmCount())
+	if (Preferences::instance()->tooltipAlarmCount())
 		parent->tooltipAlarmText(text);
 	tip(parent->rect(), text);
 }

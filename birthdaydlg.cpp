@@ -166,7 +166,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mLateCancel, Qt::AlignLeft);
 
 	// Set the values to their defaults
-	Preferences* preferences = theApp()->preferences();
+	Preferences* preferences = Preferences::instance();
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(preferences->defaultBgColour());
 	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
@@ -197,8 +197,6 @@ void BirthdayDlg::updateSelectionList()
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
 			messageList.append(event.message());
 	}
-
-//	mAddresseeList->setUpdatesEnabled(false);
 
 	// Fetch all birthdays from the address book
 	mAddressBook = KABC::StdAddressBook::self();
