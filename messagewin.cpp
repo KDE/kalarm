@@ -51,6 +51,7 @@
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
 #include <kpushbutton.h>
+#include <kglobalsettings.h>
 #ifdef WITHOUT_ARTS
 #include <kaudioplayer.h>
 #else
