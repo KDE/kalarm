@@ -110,7 +110,7 @@ RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
 	ruleButtonGroup->setInsideMargin(0);
 	layout->addWidget(ruleButtonGroup);
 
-	QLabel* label       = new QLabel(i18n("Recur Every"), ruleButtonGroup);
+	QLabel* label       = new QLabel(i18n("Recur every:"), ruleButtonGroup);
 	label->setFixedSize(label->sizeHint());
 	recurFrequencyStack = new QWidgetStack(ruleButtonGroup);
 	recurFrequency      = new QSpinBox(1, 999, 1, ruleButtonGroup);
