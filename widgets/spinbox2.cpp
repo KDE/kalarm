@@ -22,8 +22,11 @@
  *  without including the source code for Qt in the source distribution.
  */
 
+
 #include <qglobal.h>
 #if QT_VERSION >= 300
+
+#include <stdlib.h>
 
 #include <qstyle.h>
 #include <qobjectlist.h>

@@ -26,6 +26,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "dateedit.h"
+
 #include "dateedit.moc"
 
 
