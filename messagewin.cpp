@@ -249,6 +249,32 @@ QSize MessageWin::initView()
 			}
 			break;
 		}
+#ifdef KALARM_EMAIL
+		case KAlarmAlarm::EMAIL:
+		{
+			// Display the email addresses and subject
+			QFrame* frame = new QFrame(topWidget);
+			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
+			QWhatsThis::add(frame, i18n("The email to send"));
+			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
+			QGridLayout* grid = new QGridLayout(frame, 2, 2, 0, KDialog::spacingHint());
+
+			QLabel* label = new QLabel(i18n("To:"), frame);
+			label->setFixedSize(label->sizeHint());
+			grid->addWidget(label, 0, 0, Qt::AlignLeft);
+			label = new QLabel(emailAddresses, frame);
+			label->setFixedSize(label->sizeHint());
+			grid->addWidget(label, 0, 1, Qt::AlignLeft);
+
+			label = new QLabel(i18n("Subject:"), frame);
+			label->setFixedSize(label->sizeHint());
+			grid->addWidget(label, 1, 0, Qt::AlignLeft);
+			label = new QLabel(emailSubject, frame);
+			label->setFixedSize(label->sizeHint());
+			grid->addWidget(label, 1, 1, Qt::AlignLeft);
+			break;
+		}
+#endif
 		case KAlarmAlarm::MESSAGE:
 		default:
 		{

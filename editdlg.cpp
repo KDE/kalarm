@@ -681,6 +681,29 @@ bool EditAlarmDlg::checkText(QString& result)
 	return true;
 }
 
+#ifdef KALARM_EMAIL
+/*****************************************************************************
+*  Convert the email addresses to a list, and validate them.
+*/
+bool EditAlarmDlg::checkEmailAddresses()
+{
+	QString addrs = emailToEdit->text();
+	if (addrs.isEmpty())
+	{
+		emailAddresses.clear();
+		return true;
+	}
+	QString bad = KAMail::convertEmailAddresses(addrs, emailAddresses);
+	if (!bad.isEmpty())
+	{
+		emailToEdit->setFocus();
+		KMessageBox::error(this, i18n("Invalid email address:\n%1").arg(
+		return false;
+	}
+	return true;
+}
+#endif
+
 /******************************************************************************
 *  Called when one of the message type radio buttons is clicked, or
 *  the browse button is pressed to select a file to display.

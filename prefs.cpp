@@ -143,14 +143,17 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 #ifdef KALARM_EMAIL
 	box = new QHBox(mPage);
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(2*KDialog::spacingHint());
 	label = new QLabel(i18n("Email client:"), box);
 	box->setStretchFactor(label, 1);
-	emailKMail = new QRadioButton(i18n("KMail"), box, "kmail");
-	emailKMail->setMinimumSize(emailKMail->sizeHint());
-	box->setStretchFactor(emailKMail, 1);
-	emailSendmail = new QRadioButton(i18n("Sendmail"), box, "sendmail");
-	emailSendmail->setMinimumSize(emailSendmail->sizeHint());
+	mEmailClient = new QButtonGroup(box);
+	mEmailClient->hide();
+	QRadioButton* radio = new QRadioButton(i18n("KMail"), box, "kmail");
+	radio->setMinimumSize(radio->sizeHint());
+	mEmailClient->insert(radio, Settings::KMAIL);
+	radio = new QRadioButton(i18n("Sendmail"), box, "sendmail");
+	radio->setMinimumSize(radio->sizeHint());
+	mEmailClient->insert(radio, Settings::SENDMAIL);
 	box->setFixedHeight(box->sizeHint().height());
 	QWhatsThis::add(box, i18n("Choose which application should be used to send email."));
 #endif
@@ -240,15 +243,17 @@ void AppearancePrefTab::setDefaults()
 DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	mDefaultLateCancel = new QCheckBox(i18n("Cancel if late"), mPage, "defCancelLate");
-	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel,
-	      i18n("The default setting for \"Cancel if late\" in the alarm edit dialog."));
+	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
-	mDefaultConfirmAck = new QCheckBox(i18n("Confirm acknowledgement"), mPage, "defConfAck");
+	QString setting = i18n("Cancel if late");
+	mDefaultLateCancel = new QCheckBox(setting, mPage, "defCancelLate");
+	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(setting));
+
+	setting = i18n("Confirm acknowledgement");
+	mDefaultConfirmAck = new QCheckBox(setting, mPage, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck,
-	      i18n("The default setting for \"Confirm acknowledgement\" in the alarm edit dialog."));
+	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(setting));
 
 	mDefaultBeep = new QCheckBox(i18n("Beep"), mPage, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
@@ -257,10 +262,10 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to self"), mPage, "defEmailBcc");
-	mDefaultEmailBcc->setFixedSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc,
-	      i18n("The default setting for \"%1\" in the alarm edit dialog.").arg(i18n("Copy email to self")));
+	setting = i18n("Copy email to self");
+	mDefaultEmailBcc = new QCheckBox(setting, mPage, "defEmailBcc");
+	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
+	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(setting));
 #endif
 
 	QHBox* box = new QHBox(mPage);

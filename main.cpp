@@ -37,6 +37,9 @@ static KCmdLineOptions options[] =
 {
 	{ "a", 0L, 0L },
 	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0L },
+#ifdef KALARM_EMAIL
+	{ "bcc", I18N_NOOP("Blind copy email to self"), 0L },
+#endif
 	{ "b", 0L, 0L },
 	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
 	{ "colour", 0L, 0L },
@@ -52,15 +55,23 @@ static KCmdLineOptions options[] =
 	{ "i", 0L, 0L },
 	{ "interval <period>", I18N_NOOP("Interval between alarm recurrences"), 0L },
 	{ "l", 0L, 0L },
-	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be displayed on time"), 0L },
+	{ "late-cancel", I18N_NOOP("Cancel alarm if it cannot be triggered on time"), 0L },
 	{ "L", 0L, 0L },
 	{ "login", I18N_NOOP("Repeat alarm at every login"), 0L },
+#ifdef KALARM_EMAIL
+	{ "m", 0L, 0L },
+	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0L },
+#endif
 	{ "r", 0L, 0L },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
 	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0L },
 	{ "s", 0L, 0L },
 	{ "sound <url>", I18N_NOOP("Audio file to play"), 0L },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0L },
+#ifdef KALARM_EMAIL
+	{ "S", 0L, 0L },
+	{ "subject ", I18N_NOOP("Email subject line"), 0L },
+#endif
 	{ "t", 0L, 0L },
 	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0L },
 	{ "tray", I18N_NOOP("Display system tray icon"), 0L },

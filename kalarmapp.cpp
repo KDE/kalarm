@@ -293,6 +293,24 @@ int KAlarmApp::newInstance()
 					alMessage = execArguments;
 					type = KAlarmAlarm::COMMAND;
 				}
+#ifdef KALARM_EMAIL
+				else if (args->isSet("mail"))
+				{
+					kdDebug(5950)<<"KAlarmApp::newInstance(): mail\n";
+					if (args->isSet("subject"))
+						alSubject = args->getOption("subject");
+					alAddrs = args->getOptionList("mail");
+					for (QCStringList::iterator i = alAddrs.begin();  i != alAddrs.end();  ++i)
+					{
+						QString addr = QString::fromLatin1(*i);
+						if (!KAMail::checkEmailAddress(addr))
+							USAGE(i18n("%1: invalid email address").arg(QString::fromLatin1("--mail")))
+						alAddresses += addr;
+					}
+					alMessage = args->arg(0);
+					type = KAlarmAlarm::EMAIL;
+				}
+#endif
 				else
 				{
 					kdDebug(5950)<<"KAlarmApp::newInstance(): message\n";
@@ -1065,7 +1083,7 @@ bool KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool res
 		if (??)
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
-			(new MessageWin(i18n("Failed to send email to:\n%1").arg(addresses), event, alarm, reschedule))->show();
+			(new MessageWin(i18n("Failed to send email"), event, alarm, reschedule))->show();
 			result = false;
 		}
 		if (reschedule)
