@@ -212,7 +212,7 @@ void AlarmCalendar::addEvent(const KAlarmEvent& event)
 	Event* kcalEvent = new Event;
 	event.updateEvent(*kcalEvent);
 	calendar->addEvent(kcalEvent);
-	const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->VUID());
+	const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->uid());
 }
 
 /******************************************************************************

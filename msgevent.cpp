@@ -62,7 +62,7 @@ typedef QMap<int, AlarmData> AlarmMap;
 void KAlarmEvent::set(const Event& event)
 {
 	// Extract status from the event
-	mEventID  = event.VUID();
+	mEventID  = event.uid();
 	mRevision = event.revision();
 	const QStringList& cats = event.categories();
 	mBeep   = false;
@@ -231,7 +231,7 @@ Event* KAlarmEvent::event() const
 // Update an existing Event with the KAlarmEvent data
 bool KAlarmEvent::updateEvent(Event& ev) const
 {
-	if (!mEventID.isEmpty()  &&  mEventID != ev.VUID())
+	if (!mEventID.isEmpty()  &&  mEventID != ev.uid())
 		return false;
 	bool readOnly = ev.isReadOnly();
 	ev.setReadOnly(false);
