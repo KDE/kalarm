@@ -88,11 +88,11 @@ class KAlarmApp : public KUniqueApplication
 		static const int          MAX_LATENESS = 65;   // maximum number of seconds late to display a late-cancel alarm
 	public slots:
 		void              slotKAlarm();
+		void              slotDaemonPreferences();
 	protected:
 		KAlarmApp();
 	private slots:
 		void              slotPreferences();
-		void              slotDaemonPreferences();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };

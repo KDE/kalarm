@@ -432,15 +432,3 @@ void MessageWin::slotDefer()
 		close();
 	}
 }
-
-/******************************************************************************
-*  Called when the KAlarm button is clicked.
-*  Displays the KAlarm main window.
-*/
-#warning "Remove this code"
-/*void MessageWin::slotKAlarm()
-{
-	KProcess proc;
-	proc << QString::fromLatin1(kapp->aboutData()->appName());
-	proc.start(KProcess::DontCare);
-}*/

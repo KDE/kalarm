@@ -29,7 +29,6 @@
 #include <kiconloader.h>
 #include <kaction.h>
 #include <kstdaction.h>
-//#include <kprocess.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -70,11 +69,7 @@ TrayWindow::TrayWindow(const char* name)
 		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
 		                         i18n("%1 Error").arg(kapp->aboutData()->programName()));
 
-#warning "Remove this code"
-//	KAction* preferences = KStdAction::preferences(this, SLOT(slotConfigKAlarm()));
-//	KAction* daemonPreferences = new KAction(i18n("Configure Alarm &Daemon..."), preferences->iconSet(),
-//	                                         0, this, SLOT(slotConfigDaemon()));
-	mActionQuit    = KStdAction::quit(this, SLOT(slotQuit()));
+	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()));
 
 	// Set up the context menu
 	mAlarmsEnabledId = contextMenu()->insertItem(i18n("Alarms Enabled"),
@@ -167,7 +162,8 @@ void TrayWindow::toggleAlarmsEnabled()
 		QString execStr = locate("exe", DAEMON_APP_NAME);
 		if (execStr.isEmpty())
 		{
-			KMessageBox::error(this, i18n("Alarm Daemon not found"), i18n("%1 Error").arg(kapp->aboutData()->programName()));
+			KMessageBox::error(this, i18n("Alarm Daemon not found"),
+			                   i18n("%1 Error").arg(kapp->aboutData()->programName()));
 			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
 			return;
 		}
@@ -178,38 +174,6 @@ void TrayWindow::toggleAlarmsEnabled()
 	if (isDaemonRunning())
 		enableCalendar(newstate);
 }
-
-/******************************************************************************
-* Called when the Configure KAlarm context menu item is selected.
-* Displays the KAlarm configuration dialog.
-*/
-/*void TrayWindow::slotConfigKAlarm()
-{
-	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->settings());
-	pref->exec();
-}*/
-#warning "Remove this code"
-
-/******************************************************************************
-* Called when the Configure Daemon context menu item is selected.
-* Displays the alarm daemon configuration dialog.
-*/
-/*void TrayWindow::slotConfigDaemon()
-{
-	KProcess proc;
-	proc << QString::fromLatin1("kcmshell") << QString::fromLatin1("alarmdaemonctrl");
-	proc.start(KProcess::DontCare);
-}*/
-
-/******************************************************************************
-*  Called when the Activate KAlarm context menu item is selected.
-*/
-/*void TrayWindow::slotKAlarm()
-{
-	KProcess proc;
-	proc << QString::fromLatin1(kapp->aboutData()->appName());
-	proc.start(KProcess::DontCare);
-}*/
 
 /******************************************************************************
 * Called when the Quit context menu item is selected.

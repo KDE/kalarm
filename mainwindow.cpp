@@ -154,7 +154,6 @@ void KAlarmMainWindow::initActions()
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
 	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
-//	KAction* preferences = KStdAction::preferences(this, SLOT(slotPreferences()), actionCollection());
 
 	KMenuBar* menu = menuBar();
 	KPopupMenu* fileMenu = new KPopupMenu(this);
@@ -171,8 +170,6 @@ void KAlarmMainWindow::initActions()
 	connect(actionsMenu, SIGNAL(aboutToShow()), this, SLOT(setTrayIconActionText()));
 	KPopupMenu* settingsMenu = new KPopupMenu(this);
 	menu->insertItem(i18n("&Settings"), settingsMenu);
-#warning "Remove this code"
-//	preferences->plug(settingsMenu);
 	theApp()->actionPreferences()->plug(settingsMenu);
 	theApp()->actionDaemonPreferences()->plug(settingsMenu);
 	menu->insertItem(i18n("&Help"), helpMenu());
@@ -306,16 +303,6 @@ void KAlarmMainWindow::slotResetDaemon()
 }
 
 /******************************************************************************
-*  Called when the Preferences menu item is selected.
-*/
-/*void KAlarmMainWindow::slotPreferences()
-{
-	KAlarmPrefDlg* pref = new KAlarmPrefDlg(theApp()->settings());
-	pref->exec();
-}*/
-#warning "Remove this code"
-
-/******************************************************************************
 *  Called when the Quit menu item is selected.
 */
 void KAlarmMainWindow::slotQuit()
@@ -445,6 +432,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);
 	item->setText(REPEAT_COLUMN, data.repeatCountText);
 	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
+
 	// Now set the texts so that the columns can be sorted. The visible text is different,
 	// being displayed by paintCell().
 	item->setText(TIME_COLUMN, dateTimeText);

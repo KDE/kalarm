@@ -21,17 +21,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <qvariant.h>
-class QListViewItem;
-
-#include <kapp.h>
-class KAction;
-
-#include "mainwindowbase.h"
-
 #include "msgevent.h"
 using namespace KCal;
 
+#include "mainwindowbase.h"
+
+class QListViewItem;
+class KAction;
 class AlarmListView;
 
 
@@ -69,7 +65,6 @@ class KAlarmMainWindow : public MainWindowBase
 		virtual void slotModify();
 		virtual void slotToggleTrayIcon();
 		virtual void slotResetDaemon();
-//		virtual void slotPreferences();
 		virtual void slotQuit();
 		virtual void slotSelection();
 		virtual void slotListRightClick(QListViewItem*, const QPoint&, int);

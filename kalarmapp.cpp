@@ -78,7 +78,7 @@ KAlarmApp::KAlarmApp()
 	// Set up actions used by more than one menu
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
-	                                 0, this, SLOT(slotDaemonPreferences()));
+	                                 0, this, SLOT(slotDaemonPreferences()), this);
 }
 
 /******************************************************************************
@@ -160,6 +160,11 @@ int KAlarmApp::newInstance()
 			{
 				// Display only the system tray icon
 				args->clear();      // free up memory
+				if (!initCheck())     // open the calendar, register with daemon
+				{
+					exitCode = 1;
+					break;
+				}
 				displayTrayIcon(true);
 			}
 			else
@@ -380,8 +385,8 @@ void KAlarmApp::addWindow(KAlarmMainWindow* win)
 */
 void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 {
-	for (QPtrListIterator<KAlarmMainWindow> it(mainWindowList);  it.current();  ++it)
-		if (it.current() == win)
+	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
+		if (w == win)
 		{
 			mainWindowList.remove();
 			break;
@@ -439,7 +444,8 @@ void KAlarmApp::slotPreferences()
 void KAlarmApp::slotDaemonPreferences()
 {
 	KProcess proc;
-	proc << QString::fromLatin1("kcmshell") << QString::fromLatin1("alarmdaemonctrl");
+	proc << locate("exe", QString::fromLatin1("kcmshell"));
+	proc << QString::fromLatin1("alarmdaemonctrl");
 	proc.start(KProcess::DontCare);
 }
 
@@ -782,7 +788,7 @@ void KAlarmApp::setUpDcop()
 
 /******************************************************************************
 * If this is the first time through, open the calendar file, optionally start
-* the alarm daemon, and set up the DCOP handler.
+* the alarm daemon and register with it, and set up the DCOP handler.
 */
 bool KAlarmApp::initCheck(bool calendarOnly)
 {
