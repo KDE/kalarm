@@ -35,6 +35,7 @@
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kstdguiitem.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
@@ -129,10 +130,10 @@ void TrayWindow::slotQuit()
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->alarmsDisabledIfStopped()
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
-		                                     "(once any alarm message windows are closed)."),
-		                          QString::null, mActionQuit->text(), KStdGuiItem::cancel(),
-		                          QString::fromLatin1("QuitWarn")
-		                         ) != KMessageBox::Yes)
+	                                         "(once any alarm message windows are closed)."),
+	                              QString::null, mActionQuit->text(), KStdGuiItem::cancel(),
+	                              QString::fromLatin1("QuitWarn")
+	                             ) != KMessageBox::Yes)
 		return;
 	if (theApp()->wantRunInSystemTray())
 	{
