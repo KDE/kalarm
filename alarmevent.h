@@ -326,7 +326,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		KCal::Recurrence*  recurrence() const             { return mRecurrence; }
 		bool               recursFeb29() const            { return mRecursFeb29; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
-		QString            recurrenceText() const;
+		QString            recurrenceText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
 		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result) const;

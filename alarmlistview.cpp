@@ -319,7 +319,7 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event
 
 	int repeatOrder = 0;
 	int repeatInterval = 0;
-	QString repeatText = event.recurrenceText();        // text displayed in Repeat column
+	QString repeatText = event.recurrenceText(true);     // text displayed in Repeat column
 	if (event.repeatAtLogin())
 		repeatOrder = 1;
 	else
