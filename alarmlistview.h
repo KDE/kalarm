@@ -33,16 +33,7 @@
 #include "msgevent.h"
 using namespace KCal;
 
-
 class AlarmListViewItem;
-struct AlarmItemData
-{
-		KAlarmEvent    event;
-		QString        messageText;       // message as displayed
-		QString        dateTimeText;      // date/time as displayed
-		QString        repeatText;        // repeat interval/type as displayed
-		int            messageWidth;      // width required to display 'messageText'
-};
 
 
 class AlarmListView : public KListView
@@ -58,39 +49,24 @@ class AlarmListView : public KListView
 		AlarmListViewItem*   addEntry(const KAlarmEvent&, bool setSize = false);
 		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
 		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const KAlarmEvent&   getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
+		const KAlarmEvent&   getEvent(AlarmListViewItem*) const;
 		AlarmListViewItem*   getEntry(const QString& eventID);
-		const AlarmItemData* getData(AlarmListViewItem*) const;
 		bool                 expired(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
 		int                  itemHeight();
-		bool                 drawMessageInColour() const		      { return drawMessageInColour_; }
-		void                 setDrawMessageInColour(bool inColour)	{ drawMessageInColour_ = inColour; }
-		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
-		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
+		bool                 drawMessageInColour() const               { return drawMessageInColour_; }
+		void                 setDrawMessageInColour(bool inColour)     { drawMessageInColour_ = inColour; }
+		AlarmListViewItem*   selectedItem() const   { return (AlarmListViewItem*)KListView::selectedItem(); }
+		AlarmListViewItem*   currentItem() const    { return (AlarmListViewItem*)KListView::currentItem(); }
+		AlarmListViewItem*   firstChild() const     { return (AlarmListViewItem*)KListView::firstChild(); }
+		virtual void         setSelected(QListViewItem*, bool selected);
+		virtual void         setSelected(AlarmListViewItem*, bool selected);
 	signals:
 		void                 itemDeleted();
 	private:
-		typedef QMap<AlarmListViewItem*, AlarmItemData> EntryMap;
-		EntryMap             entries;
 		int                  lastColumnHeaderWidth_;
 		bool                 drawMessageInColour_;
 		bool                 mShowExpired;              // true to show expired alarms
-};
-
-
-class AlarmListViewItem : public QListViewItem
-{
-	public:
-		AlarmListViewItem(QListView* parent, const QString&, const QString&);
-		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
-		AlarmListView*       alarmListView() const              { return (AlarmListView*)listView(); }
-	private:
-		static QPixmap*      textIcon;
-		static QPixmap*      fileIcon;
-		static QPixmap*      commandIcon;
-		static QPixmap*      emailIcon;
-		static int           iconWidth;
 };
 
 #endif // ALARMLISTVIEW_H

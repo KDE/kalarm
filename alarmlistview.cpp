@@ -51,6 +51,32 @@ class AlarmListWhatsThis : public QWhatsThis
 };
 
 
+#warning "Does AlarmListViewItem need to be available to other classes?"
+class AlarmListViewItem : public QListViewItem
+{
+	public:
+		AlarmListViewItem(QListView* parent, const KAlarmEvent&);
+		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
+		AlarmListView*       alarmListView() const     { return (AlarmListView*)listView(); }
+		const KAlarmEvent&   event() const             { return mEvent; }
+		int                  messageWidth() const      { return mMessageWidth; }
+		AlarmListViewItem*   nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
+		virtual QString      key(int column, bool ascending) const;
+	private:
+		static QPixmap*      textIcon;
+		static QPixmap*      fileIcon;
+		static QPixmap*      commandIcon;
+		static QPixmap*      emailIcon;
+		static int           iconWidth;
+
+		KAlarmEvent          mEvent;           // the event for this item
+		QString              mDateTimeOrder;   // controls ordering of date/time column
+		QString              mRepeatOrder;     // controls ordering of repeat column
+		QString              mColourOrder;     // controls ordering of colour column
+		int                  mMessageWidth;    // width required to display message column
+};
+
+
 /*=============================================================================
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
@@ -81,7 +107,6 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 
 void AlarmListView::clear()
 {
-	entries.clear();
 	KListView::clear();
 }
 
@@ -120,9 +145,9 @@ void AlarmListView::refresh()
 
 AlarmListViewItem* AlarmListView::getEntry(const QString& eventID)
 {
-	for (EntryMap::ConstIterator it = entries.begin();  it != entries.end();  ++it)
-		if (it.data().event.id() == eventID)
-			return it.key();
+	for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
+		if (item->event().id() == eventID)
+			return item;
 	return 0;
 }
 
@@ -130,88 +155,9 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 {
 	if (!mShowExpired  &&  event.expired())
 		return 0;
-	QDateTime dateTime = event.dateTime();
-	AlarmItemData data;
-	data.event       = event;
-	data.messageText = (event.action() == KAlarmEvent::EMAIL) ? event.emailSubject() : event.cleanText();
-	int newline = data.messageText.find('\n');
-	if (newline >= 0)
-		data.messageText = data.messageText.left(newline) + QString::fromLatin1("...");
-	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
-	if (!event.anyTime())
-	{
-		data.dateTimeText += ' ';
-		data.dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';
-	}
-	QString dateTimeOrder;
-	dateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
-	                                          dateTime.time().hour(), dateTime.time().minute());
-
-	int repeatOrder = 0;
-	int repeatInterval = 0;
-	data.repeatText = QString();    // text displayed in Repeat column
-	if (event.repeatAtLogin())
-	{
-		repeatOrder = 1;
-		data.repeatText = i18n("Login");
-	}
-	else
-	{
-		repeatInterval = event.recurInterval();
-		switch (event.recurs())
-		{
-			case KAlarmEvent::MINUTELY:
-				repeatOrder = 2;
-				if (repeatInterval < 60)
-					data.repeatText = i18n("1 Minute", "%n Minutes", repeatInterval);
-				else if (repeatInterval % 60 == 0)
-					data.repeatText = i18n("1 Hour", "%n Hours", repeatInterval/60);
-				else
-				{
-					QString mins;
-					data.repeatText = i18n("Hours and Minutes", "%1H %2M").arg(QString::number(repeatInterval/60)).arg(mins.sprintf("%02d", repeatInterval%60));
-				}
-				break;
-			case KAlarmEvent::DAILY:
-				repeatOrder = 3;
-				data.repeatText = i18n("1 Day", "%n Days", repeatInterval);
-				break;
-			case KAlarmEvent::WEEKLY:
-				repeatOrder = 4;
-				data.repeatText = i18n("1 Week", "%n Weeks", repeatInterval);
-				break;
-			case KAlarmEvent::MONTHLY_DAY:
-			case KAlarmEvent::MONTHLY_POS:
-				repeatOrder = 5;
-				data.repeatText = i18n("1 Month", "%n Months", repeatInterval);
-				break;
-			case KAlarmEvent::ANNUAL_DATE:
-			case KAlarmEvent::ANNUAL_POS:
-			case KAlarmEvent::ANNUAL_DAY:
-				repeatOrder = 6;
-				data.repeatText = i18n("1 Year", "%n Years", repeatInterval);
-				break;
-			case KAlarmEvent::NO_RECUR:
-			default:
-				break;
-		}
-	}
-
-	// Set the texts to what will be displayed, so as to make the columns the correct width
-	AlarmListViewItem* item = new AlarmListViewItem(this, data.dateTimeText, data.messageText);
-	data.messageWidth = item->width(fontMetrics(), this, MESSAGE_COLUMN);
-	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);
-	item->setText(REPEAT_COLUMN, data.repeatText);
+	AlarmListViewItem* item = new AlarmListViewItem(this, event);
+	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);   // resize the repeat column
 	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
-
-	// Now set the texts so that the columns can be sorted. The visible text is different,
-	// being displayed by paintCell().
-	item->setText(TIME_COLUMN, dateTimeOrder);
-	item->setText(REPEAT_COLUMN, QString().sprintf("%c%08d", '0' + repeatOrder, repeatInterval));
-	bool showColour = (event.action() == KAlarmEvent::MESSAGE || event.action() == KAlarmEvent::FILE);
-	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", (showColour ? event.colour().rgb() : 0)));
-	item->setText(MESSAGE_COLUMN, data.messageText.lower());
-	entries[item] = data;
 	if (setSize)
 		resizeLastColumn();
 	return item;
@@ -225,10 +171,8 @@ AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAl
 
 void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
 {
-	EntryMap::Iterator it = entries.find(item);
-	if (it != entries.end())
+	if (item)
 	{
-		entries.remove(it);
 		delete item;
 		if (setSize)
 			resizeLastColumn();
@@ -236,20 +180,14 @@ void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
 	}
 }
 
-const AlarmItemData* AlarmListView::getData(AlarmListViewItem* item) const
+const KAlarmEvent& AlarmListView::getEvent(AlarmListViewItem* item) const
 {
-	EntryMap::ConstIterator it = entries.find(item);
-	if (it == entries.end())
-		return 0;
-	return &it.data();
+	return item->event();
 }
 
 bool AlarmListView::expired(AlarmListViewItem* item) const
 {
-	EntryMap::ConstIterator it = entries.find(item);
-	if (it == entries.end())
-		return false;
-	return it.data().event.expired();
+	return item->event().expired();
 }
 
 /******************************************************************************
@@ -259,9 +197,9 @@ bool AlarmListView::expired(AlarmListViewItem* item) const
 void AlarmListView::resizeLastColumn()
 {
 	int messageWidth = lastColumnHeaderWidth_;
-	for (EntryMap::ConstIterator it = entries.begin();  it != entries.end();  ++it)
+	for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
 	{
-		int mw = it.data().messageWidth;
+		int mw = item->messageWidth();
 		if (mw > messageWidth)
 			messageWidth = mw;
 	}
@@ -277,8 +215,8 @@ void AlarmListView::resizeLastColumn()
 
 int AlarmListView::itemHeight()
 {
-	EntryMap::ConstIterator it = entries.begin();
-	if (it == entries.end())
+	AlarmListViewItem* item = firstChild();
+	if (!item)
 	{
 		// The list is empty, so create a temporary item to find its height
 		QListViewItem* item = new QListViewItem(this, QString::null);
@@ -287,8 +225,19 @@ int AlarmListView::itemHeight()
 		return height;
 	}
 	else
-		return it.key()->height();
+		return item->height();
 }
+
+void AlarmListView::setSelected(QListViewItem* item, bool selected)
+{
+	KListView::setSelected(item, selected);
+}
+
+void AlarmListView::setSelected(AlarmListViewItem* item, bool selected)
+{
+	KListView::setSelected(item, selected);
+}
+
 
 /*=============================================================================
 =  Class: AlarmListViewItem
@@ -300,8 +249,9 @@ QPixmap* AlarmListViewItem::commandIcon;
 QPixmap* AlarmListViewItem::emailIcon;
 int      AlarmListViewItem::iconWidth = 0;
 
-AlarmListViewItem::AlarmListViewItem(QListView* parent, const QString& dateTime, const QString& message)
-	:  QListViewItem(parent, dateTime, QString(), message)
+AlarmListViewItem::AlarmListViewItem(QListView* parent, const KAlarmEvent& event)
+	: QListViewItem(parent),
+	  mEvent(event)
 {
 	if (!iconWidth)
 	{
@@ -319,38 +269,110 @@ AlarmListViewItem::AlarmListViewItem(QListView* parent, const QString& dateTime,
 		if (emailIcon  &&  emailIcon->width() > iconWidth)
 			iconWidth = emailIcon->width();
 	}
+
+	QString messageText = (event.action() == KAlarmEvent::EMAIL) ? event.emailSubject() : event.cleanText();
+	int newline = messageText.find('\n');
+	if (newline >= 0)
+		messageText = messageText.left(newline) + QString::fromLatin1("...");
+	setText(AlarmListView::MESSAGE_COLUMN, messageText);
+	mMessageWidth = width(parent->fontMetrics(), parent, AlarmListView::MESSAGE_COLUMN);
+
+	QDateTime dateTime = event.dateTime();
+	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
+	if (!event.anyTime())
+	{
+		dateTimeText += ' ';
+		dateTimeText += KGlobal::locale()->formatTime(dateTime.time()) + ' ';
+	}
+	setText(AlarmListView::TIME_COLUMN, dateTimeText);
+	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
+	                                           dateTime.time().hour(), dateTime.time().minute());
+
+	int repeatOrder = 0;
+	int repeatInterval = 0;
+	QString repeatText;        // text displayed in Repeat column
+	if (event.repeatAtLogin())
+	{
+		repeatOrder = 1;
+		repeatText = i18n("Login");
+	}
+	else
+	{
+		repeatInterval = event.recurInterval();
+		switch (event.recurs())
+		{
+			case KAlarmEvent::MINUTELY:
+				repeatOrder = 2;
+				if (repeatInterval < 60)
+					repeatText = i18n("1 Minute", "%n Minutes", repeatInterval);
+				else if (repeatInterval % 60 == 0)
+					repeatText = i18n("1 Hour", "%n Hours", repeatInterval/60);
+				else
+				{
+					QString mins;
+					repeatText = i18n("Hours and Minutes", "%1H %2M").arg(QString::number(repeatInterval/60)).arg(mins.sprintf("%02d", repeatInterval%60));
+				}
+				break;
+			case KAlarmEvent::DAILY:
+				repeatOrder = 3;
+				repeatText = i18n("1 Day", "%n Days", repeatInterval);
+				break;
+			case KAlarmEvent::WEEKLY:
+				repeatOrder = 4;
+				repeatText = i18n("1 Week", "%n Weeks", repeatInterval);
+				break;
+			case KAlarmEvent::MONTHLY_DAY:
+			case KAlarmEvent::MONTHLY_POS:
+				repeatOrder = 5;
+				repeatText = i18n("1 Month", "%n Months", repeatInterval);
+				break;
+			case KAlarmEvent::ANNUAL_DATE:
+			case KAlarmEvent::ANNUAL_POS:
+			case KAlarmEvent::ANNUAL_DAY:
+				repeatOrder = 6;
+				repeatText = i18n("1 Year", "%n Years", repeatInterval);
+				break;
+			case KAlarmEvent::NO_RECUR:
+			default:
+				break;
+		}
+	}
+	setText(AlarmListView::REPEAT_COLUMN, repeatText);
+	mRepeatOrder.sprintf("%c%08d", '0' + repeatOrder, repeatInterval);
+
+	bool showColour = (event.action() == KAlarmEvent::MESSAGE || event.action() == KAlarmEvent::FILE);
+	mColourOrder.sprintf("%06u", (showColour ? event.colour().rgb() : 0));
 }
 
 void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int column, int width, int /*align*/)
 {
 	const AlarmListView* listView = alarmListView();
-	const AlarmItemData* data   = listView->getData(this);
 	int                  margin = listView->itemMargin();
 	QRect box(margin, margin, width - margin*2, height() - margin*2);
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
-	                   : data->event.expired() ? theApp()->settings()->expiredColour() : cg.text();
+	                   : mEvent.expired() ? theApp()->settings()->expiredColour() : cg.text();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 	switch (column)
 	{
 	case AlarmListView::TIME_COLUMN:
-		painter->drawText(box, AlignVCenter, data->dateTimeText);
+		painter->drawText(box, AlignVCenter, text(column));
 		break;
 	case AlarmListView::REPEAT_COLUMN:
-		painter->drawText(box, AlignVCenter | AlignHCenter, data->repeatText);
+		painter->drawText(box, AlignVCenter | AlignHCenter, text(column));
 		break;
 	case AlarmListView::COLOUR_COLUMN: {
 		// Paint the cell the colour of the alarm message
-		if (data->event.action() == KAlarmEvent::MESSAGE || data->event.action() == KAlarmEvent::FILE)
-			painter->fillRect(box, data->event.colour());
+		if (mEvent.action() == KAlarmEvent::MESSAGE || mEvent.action() == KAlarmEvent::FILE)
+			painter->fillRect(box, mEvent.colour());
 		break;
 	}
 	case AlarmListView::MESSAGE_COLUMN:
 	{
 		QPixmap* pixmap;
-		switch (data->event.action())
+		switch (mEvent.action())
 		{
 			case KAlarmAlarm::FILE:     pixmap = fileIcon;     break;
 			case KAlarmAlarm::COMMAND:  pixmap = commandIcon;  break;
@@ -371,15 +393,26 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		textRect.setLeft(box.left() + iconWidth + 3*frameWidth);
 		if (!selected  &&  listView->drawMessageInColour())
 		{
-			QColor colour = data->event.colour();
-			painter->fillRect(box, colour);
-			painter->setBackgroundColor(colour);
-//			painter->setPen(data->event->fgColour());
+			painter->fillRect(box, mEvent.colour());
+			painter->setBackgroundColor(mEvent.colour());
+//			painter->setPen(mEvent->fgColour());
 		}
 		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
-		painter->drawText(textRect, AlignVCenter, data->messageText);
+		painter->drawText(textRect, AlignVCenter, text(column));
 		break;
 	}
+	}
+}
+
+QString AlarmListViewItem::key(int column, bool) const
+{
+	switch (column)
+	{
+		case AlarmListView::TIME_COLUMN:    return mDateTimeOrder;
+		case AlarmListView::REPEAT_COLUMN:  return mRepeatOrder;
+		case AlarmListView::COLOUR_COLUMN:  return mColourOrder;
+		case AlarmListView::MESSAGE_COLUMN:
+		default:                            return text(column).lower();
 	}
 }
 
