@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -42,11 +46,12 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const QDateTime& initialDT,
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
 
-	timeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, 0, page, "timeGroup");
+	timeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page, "timeGroup");
 	timeWidget->setDateTime(initialDT);
 	layout->addWidget(timeWidget);
 	layout->addSpacing(KDialog::spacingHint());
 
+	setButtonWhatsThis(Ok, i18n("Defer the alarm until the specified time."));
 	setButtonWhatsThis(User1, i18n("Cancel the deferred alarm. This does not affect future recurrences."));
 }
 
@@ -64,7 +69,7 @@ void DeferAlarmDlg::slotOk()
 	bool anyTime;
 	if (timeWidget->getDateTime(alarmDateTime, anyTime))
 	{
-		if (alarmDateTime >= limitDateTime)
+		if (limitDateTime.isValid()  &&  alarmDateTime >= limitDateTime)
 			KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
 				                          .arg(KGlobal::locale()->formatDateTime(limitDateTime)));
 		else
