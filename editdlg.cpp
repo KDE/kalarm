@@ -70,14 +70,26 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	  shown(false)
 {
 	mainPage  = addPage(i18n("&Alarm"));
+
+	// Recurrence tab
 	recurPage = addPage(i18n("&Recurrence"));
 	recurPageIndex = pageIndex(recurPage);
-	recurrenceEdit = new RecurrenceEdit(recurPage, "recurPage");
-	connect(recurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRepeatTypeChange(int)));
+	QBoxLayout* layout = new QVBoxLayout(recurPage);
+	recurTabStack = new QWidgetStack(recurPage);
+	layout->addWidget(recurTabStack);
+
+	recurFrame = new QFrame(recurTabStack);
+	recurTabStack->addWidget(recurFrame, 0);
+	recurrenceEdit = new RecurrenceEdit(recurFrame, "recurPage");
+	connect(recurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
+
+	recurDisabled = new QLabel(i18n("The alarm does not recur.\nEnable recurrence in the Alarm tab."), recurTabStack);
+	recurDisabled->setAlignment(Qt::AlignCenter);
+	recurTabStack->addWidget(recurDisabled, 1);
 
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
-	// Message label + multi-line editor
+	// Alarm action
 
 	QButtonGroup* actionGroup = new QButtonGroup(i18n("Action"), mainPage, "actionGroup");
 	connect(actionGroup, SIGNAL(clicked(int)), SLOT(slotAlarmTypeClicked(int)));
@@ -143,7 +155,7 @@ grid->setRowStretch(2, 1);
 		deferGroup->addSpace(0);
 	}
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
+	layout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
 
@@ -634,10 +646,10 @@ void EditAlarmDlg::slotEditDeferral()
 }
 
 /******************************************************************************
-*  Called when the repetition type selection changes.
+*  Called when the recurrence type selection changes.
 *  Enables/disables date-only alarms as appropriate.
 */
-void EditAlarmDlg::slotRepeatTypeChange(int repeatType)
+void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
 	bool recurs = recurRadio->isOn();
 	timeWidget->enableAnyTime(!recurs || recurrenceEdit->repeatType() != RecurrenceEdit::SUBDAILY);
@@ -722,7 +734,12 @@ void EditAlarmDlg::slotAlarmTypeClicked(int id)
 */
 void EditAlarmDlg::slotRepeatClicked(int)
 {
-	recurPage->setEnabled(recurRadio->isOn());
+	bool on = recurRadio->isOn();
+	if (on)
+		recurTabStack->raiseWidget(recurFrame);
+	else
+		recurTabStack->raiseWidget(recurDisabled);
+	recurFrame->setEnabled(on);
 }
 
 /******************************************************************************

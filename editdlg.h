@@ -68,7 +68,7 @@ class EditAlarmDlg : public KDialogBase
 		virtual void slotOk();
 		virtual void slotCancel();
 		virtual void slotTry();
-		void         slotRepeatTypeChange(int repeatType);
+		void         slotRecurTypeChange(int repeatType);
 		void         slotAlarmTypeClicked(int id);
 		void         slotRepeatClicked(int id);
 		void         slotEditDeferral();
@@ -88,6 +88,9 @@ class EditAlarmDlg : public KDialogBase
 		QFrame*          mainPage;
 		QFrame*          recurPage;
 		int              recurPageIndex;
+		QWidgetStack*    recurTabStack;
+		QFrame*          recurFrame;
+		QLabel*          recurDisabled;
 
 		QRadioButton*    messageRadio;
 		QRadioButton*    commandRadio;
