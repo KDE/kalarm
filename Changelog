@@ -1,10 +1,11 @@
 KAlarm
 
-=== Version 1.2.7 (KDE 3.4.1) --- 23 March 2005 ===
+=== Version 1.2.7 (KDE 3.4.1) --- 1 April 2005 ===
 Use a sensible default for terminal window command in Preferences dialog.
 Validate terminal window command entered in Preferences dialog.
 Fix date range no longer being validated in Defer dialog.
 Don't ignore Sound setting in Preferences dialog Edit tab.
+Reset sound volume (if it was set) as soon as audio file playing is complete.
 
 === Version 1.2.6 i(KDE 3.4) --- 22 February 2005 ===
 Pop up message windows far from cursor to avoid accidental acknowledgement.

@@ -769,11 +769,13 @@ void MessageWin::initAudio(bool firstTime)
 			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
 			mUsingKMix = false;
 		}
+
+		// Set the desired sound volume
+		if (!mUsingKMix)
+			sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
+		else if (mVolume >= 0)
+			setKMixVolume(static_cast<int>(mVolume * 100));
 	}
-	if (!mUsingKMix)
-		sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
-	else if (mVolume >= 0)
-		setKMixVolume(static_cast<int>(mVolume * 100));
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -797,12 +799,17 @@ void MessageWin::checkAudioPlay()
 	{
 		// The file has loaded and is ready to play, or play has completed
 		if (mPlayedOnce  &&  !mAudioRepeat)
+		{
+			// Play has completed
+			stopPlay();
 			return;
+		}
 
 		// Start playing the file, either for the first time or again
 		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
 		{
+			// Start playing the file for the first time
 			mAudioFileLoadSecs = mAudioFileLoadStart.secsTo(QTime::currentTime());
 			if (mAudioFileLoadSecs < 0)
 				mAudioFileLoadSecs += 86400;
@@ -850,8 +857,8 @@ void MessageWin::checkAudioPlay()
 }
 
 /******************************************************************************
-*  Called when the Silence button is clicked.
-*  Stops playing the sound file.
+*  Called when play completes, the Silence button is clicked, or the window is
+*  closed, to reset the sound volume and terminate audio access.
 */
 void MessageWin::stopPlay()
 {
@@ -883,7 +890,10 @@ void MessageWin::stopPlay()
 	delete mPlayObject;      mPlayObject = 0;
 	delete mArtsDispatcher;  mArtsDispatcher = 0;
 	if (!mLocalAudioFile.isEmpty())
+	{
 		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
+		mLocalAudioFile = QString::null;
+	}
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);
 #endif
