@@ -72,6 +72,7 @@ KAlarmMainWindow::KAlarmMainWindow()
 	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelection(QListViewItem*)));
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
+	connect(listView, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotDoubleClicked(QListViewItem*)));
 	windowList.append(this);
 
 	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler())
@@ -487,6 +488,19 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 		actionModify->plug(menu);
 		actionDelete->plug(menu);
 		menu->exec(pt);
+	}
+}
+
+/******************************************************************************
+*  Called when the mouse is double clicked on the ListView.
+*  If it is double clicked on an item, the modification dialog is displayed.
+*/
+void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
+{
+	if (item)
+	{
+		kdDebug(5950) << "KAlarmMainWindow::slotDoubleClicked()\n";
+		slotModify();
 	}
 }
 
