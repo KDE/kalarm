@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -36,16 +36,17 @@ class QButtonGroup;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
-class QSpinBox;
 class QComboBox;
 class QLineEdit;
 class KColorCombo;
 class FontColourChooser;
 class Preferences;
 class TimeSpinBox;
+class SpinBox;
 
-class AppearancePrefTab;
+class MessagePrefTab;
 class DefaultPrefTab;
+class ViewPrefTab;
 class MiscPrefTab;
 
 
@@ -57,8 +58,9 @@ class KAlarmPrefDlg : public KDialogBase
 		KAlarmPrefDlg(Preferences*);
 		~KAlarmPrefDlg();
 
-		AppearancePrefTab* mAppearancePage;
+		MessagePrefTab*    mMessagePage;
 		DefaultPrefTab*    mDefaultPage;
+		ViewPrefTab*       mViewPage;
 		MiscPrefTab*       mMiscPage;
 
 	protected slots:
@@ -84,23 +86,6 @@ class PrefsTabBase : public QWidget
 	protected:
 		QVBox*       mPage;
 		Preferences* mPreferences;
-};
-
-
-// Appearance tab of the Preferences dialog
-class AppearancePrefTab : public PrefsTabBase
-{
-		Q_OBJECT
-	public:
-		AppearancePrefTab(QVBox*);
-
-		virtual void restore();
-		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
-
-	private:
-		FontColourChooser*  mFontChooser;
-		KColorCombo*        mExpiredColour;
 };
 
 
@@ -135,13 +120,13 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*     mConfirmAlarmDeletion;
 		QCheckBox*     mKeepExpired;
 		QCheckBox*     mPurgeExpired;
-		QSpinBox*      mPurgeAfter;
+		SpinBox*       mPurgeAfter;
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
-		QSpinBox*      mDaemonTrayCheckInterval;
 		TimeSpinBox*   mStartOfDay;
 		QButtonGroup*  mEmailClient;
 		QCheckBox*     mEmailUseControlCentre;
+		QCheckBox*     mEmailQueuedNotify;
 		QLineEdit*     mEmailAddress;
 };
 
@@ -173,6 +158,61 @@ class DefaultPrefTab : public PrefsTabBase
 		QComboBox*     mDefaultReminderUnits;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
+};
+
+
+// View tab of the Preferences dialog
+class ViewPrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		ViewPrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private slots:
+		void         slotListTimeToggled(bool);
+		void         slotListTimeToToggled(bool);
+		void         slotTooltipAlarmsToggled(bool);
+		void         slotTooltipMaxToggled(bool);
+		void         slotTooltipTimeToggled(bool);
+		void         slotTooltipTimeToToggled(bool);
+
+	private:
+		void         setList(bool time, bool timeTo);
+		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
+
+		QCheckBox*     mListShowTime;
+		QCheckBox*     mListShowTimeTo;
+		QCheckBox*     mTooltipShowAlarms;
+		QCheckBox*     mTooltipMaxAlarms;
+		SpinBox*       mTooltipMaxAlarmCount;
+		QCheckBox*     mTooltipShowTime;
+		QCheckBox*     mTooltipShowTimeTo;
+		QLineEdit*     mTooltipTimeToPrefix;
+		QLabel*        mTooltipTimeToPrefixLabel;
+		QCheckBox*     mShowExpiredAlarms;
+		SpinBox*       mDaemonTrayCheckInterval;
+		bool           mIgnoreToggle;    // prevent checkbox toggle processing
+};
+
+
+// Message appearance tab of the Preferences dialog
+class MessagePrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		MessagePrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private:
+		FontColourChooser*  mFontChooser;
+		KColorCombo*        mExpiredColour;
 };
 
 #endif // PREFDLG_H
