@@ -207,3 +207,5 @@ ADCalendar* ADCalendar::getCalendar(const QString& calendarURL)
 	}
 	return 0;
 }
+
+#include "adcalendar.moc"
