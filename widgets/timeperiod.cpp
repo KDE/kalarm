@@ -114,7 +114,10 @@ int TimePeriod::value(bool hourMinute) const
 
 void TimePeriod::setWhatsThis(bool hourMinute, const QString& text)
 {
-	QWhatsThis::add((hourMinute ? mTimeSpinBox : mSpinBox), text);
+        QWidget *wid;
+        if ( hourMinute ) wid = mTimeSpinBox;
+        else wid = mSpinBox;
+	QWhatsThis::add(wid, text);
 }
 
 QSize TimePeriod::sizeHint() const
