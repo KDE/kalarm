@@ -46,7 +46,7 @@ class KAMail
 		typedef uint Offset;
 #endif
 		static QString    sendKMail(const KAlarmEvent&, const QString& from, const QString& bcc);
-		static QString    initHeaders(const KAlarmEvent&, const QString& from, const QString& bcc);
+		static QString    initHeaders(const KAlarmEvent&, const QString& from, const QString& bcc, bool dateId);
 		static QString    appendBodyAttachments(QString& message, const KAlarmEvent&);
 		static void       notifyQueued(const KAlarmEvent&);
 		static int        checkAttachment(QString& attachment, bool check);

@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <pwd.h>
 
 #include <qfile.h>
@@ -41,6 +42,7 @@
 #include <kaboutdata.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <ktempfile.h>
 #include <kdebug.h>
 
 #include <libkcal/person.h>
@@ -50,12 +52,15 @@
 #include "alarmevent.h"
 #include "preferences.h"
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "kamail.h"
 
 namespace HeaderParsing
 {
+bool parseAddress( const char* & scursor, const char * const send,
+                   KMime::Types::Address & result, bool isCRLF=false );
 bool parseAddressList( const char* & scursor, const char * const send,
-		       QValueList<KMime::Types::Address> & result, bool isCRLF=false );
+                       QValueList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
 namespace
@@ -68,14 +73,15 @@ const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNoti
 
 /******************************************************************************
 * Send the email message specified in an event.
+* Reply = reason for failure (which may be the empty string)
+*       = null string if success.
 */
 QString KAMail::send(const KAlarmEvent& event)
 {
 	QString from = theApp()->preferences()->emailAddress();
 	QString bcc  = theApp()->preferences()->emailBccAddress();
-	kdDebug(5950) << "KAlarmApp::sendEmail():\nFrom: " << from << "\nTo: " << event.emailAddresses(", ")
-	              << "\nSubject: " << event.emailSubject()
-	              << "\nAttachment:\n" << event.emailAttachments(", ") << endl;
+	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
+	              << "\nSubject: " << event.emailSubject();
 
 	if (theApp()->preferences()->emailClient() == Preferences::SENDMAIL)
 	{
@@ -85,7 +91,7 @@ QString KAMail::send(const KAlarmEvent& event)
 		if (!command.isNull())
 		{
 			command += QString::fromLatin1(" -oi -t ");
-			textComplete = initHeaders(event, from, bcc);
+			textComplete = initHeaders(event, from, bcc, false);
 		}
 		else
 		{
@@ -116,7 +122,7 @@ QString KAMail::send(const KAlarmEvent& event)
 		FILE* fd = popen(command.local8Bit(), "w");
 		if (!fd)
 		{
-			kdError(5950) << "Unable to open a pipe to " << command << endl;
+			kdError(5950) << "KAMail::send(): Unable to open a pipe to " << command << endl;
 			return QString("");
 		}
 		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
@@ -138,62 +144,50 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const Q
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
 		// KMail is running - use a DCOP call
+		// Create the message headers, body and attachments
+		QString message = initHeaders(event, from, bcc, true);
+		QString err = appendBodyAttachments(message, event);
+		if (!err.isNull())
+			return err;
+
+		// Write to a temporary file for feeding to KMail
+		KTempFile tmpFile;
+		tmpFile.setAutoDelete(true);     // delete file when it is destructed
+		QTextStream* stream = tmpFile.textStream();
+		if (!stream)
+		{
+			kdError(5950) << "KAMail::send(): Unable to open a temporary mail file" << endl;
+			return QString("");
+		}
+		*stream << message;
+		tmpFile.close();
+		if (tmpFile.status())
+		{
+			kdError(5950) << "KAMail::send(): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
+			return QString("");
+		}
+
+		// Notify KMail of the message in the temporary file
 		QCString    replyType;
 		QByteArray  replyData;
 		QByteArray  data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << event.emailAddresses(", ")
-		    << QString::null
-		    << (event.emailBcc() ? bcc : QString::null)
-		    << event.emailSubject()
-		    << event.message();
-		if (!event.emailAttachments().count())
+		arg << QString::fromLatin1("outbox") << tmpFile.name();
+		int result = 0;
+		if (kapp->dcopClient()->call("kmail", "KMailIface",
+		                             "dcopAddMessage(QString,QString)",
+		                             data, replyType, replyData)
+		&&  replyType == "int")
 		{
-			arg << (int)0 << KURL();
-			int result = 0;
-			if (kapp->dcopClient()->call("kmail", "KMailIface",
-			                                 "openComposer(QString,QString,QString,QString,QString,int,KURL)",
-			                                 data, replyType, replyData)
-			&&  replyType == "int")
-			{
-				QDataStream _reply_stream(replyData, IO_ReadOnly);
-				_reply_stream >> result;
-			}
-			if (!result)
-			{
-				kdDebug(5950) << "sendKMail(): kmail openComposer() call failed." << endl;
-				return i18n("Error calling KMail");
-			}
-		}
-		else
-		{
-			arg << false;
-			if (!kapp->dcopClient()->call("kmail", "KMailIface",
-			                                  "openComposer(QString,QString,QString,QString,QString,bool)",
-			                                   data, replyType, replyData)
-			||  replyType != "DCOPRef")
-			{
-				kdDebug(5950) << "sendKMail(): kmail openComposer() call failed." << endl;
-				return i18n("Error calling KMail");
-			}
-			DCOPRef composer;
 			QDataStream _reply_stream(replyData, IO_ReadOnly);
-			_reply_stream >> composer;
-			QStringList attachments = event.emailAttachments();
-			for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
-			{
-				QString attachment = (*at).local8Bit();
-				QByteArray dataAtt;
-				QDataStream argAtt(dataAtt, IO_WriteOnly);
-				argAtt << KURL(attachment);
-				argAtt << QString::null;
-				if (!kapp->dcopClient()->call(composer.app(), composer.object(), "addAttachment(KURL,QString)", dataAtt, replyType, replyData))
-				{
-					kdDebug(5950) << "sendKMail(): kmail composer:addAttachment() call failed." << endl;
-					return i18n("Error calling KMail");
-				}
-			}
+			_reply_stream >> result;
 		}
+		if (result <= 0)
+		{
+			kdError(5950) << "sendKMail(): kmail dcopAddMessage() call failed (error code = " << result << ")" << endl;
+			return i18n("Error calling KMail");
+		}
+		notifyQueued(event);
 	}
 	else
 	{
@@ -225,9 +219,20 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const Q
 /******************************************************************************
 * Create the headers part of the email.
 */
-QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const QString& bcc)
+QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const QString& bcc, bool dateId)
 {
-	QString message = QString::fromLatin1("From: ") + from;
+	QString message;
+	if (dateId)
+	{
+		struct timeval tod;
+		gettimeofday(&tod, 0);
+		time_t timenow = tod.tv_sec;
+		char buff[64];
+		strftime(buff, sizeof(buff), "Date: %a, %d %b %Y %H:%M:%S %z", localtime(&timenow));
+		message = QString::fromLatin1(buff);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(from);
+	}
+	message += QString::fromLatin1("From: ") + from;
 	message += QString::fromLatin1("\nTo: ") + event.emailAddresses(", ");
 	if (event.emailBcc())
 		message += QString::fromLatin1("\nBcc: ") + bcc;
@@ -238,7 +243,7 @@ QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const
 
 /******************************************************************************
 * Append the body and attachments to the email text.
-* Reply = attachment filename if error reading it
+* Reply = reason for error
 *       = 0 if successful.
 */
 QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event)
