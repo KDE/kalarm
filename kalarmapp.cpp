@@ -227,12 +227,13 @@ bool KAlarmApp::restoreSession()
 
 	// Process is being restored by session management.
 	kdDebug(5950) << "KAlarmApp::restoreSession(): Restoring\n";
+	++activeCount;
 	if (!initCheck(true))     // open the calendar file (needed for main windows)
 	{
+		--activeCount;
 		quitIf(1, true);    // error opening the main calendar - quit
 		return true;
 	}
-	++activeCount;
 	KAlarmMainWindow* trayParent = 0;
 	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 	{
