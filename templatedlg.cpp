@@ -44,7 +44,7 @@
 #include "templatelistview.h"
 #include "templatedlg.moc"
 
-static const char DIALOG_NAME[] = "TemplateDialog";
+static const char TMPL_DIALOG_NAME[] = "TemplateDialog";
 
 
 TemplateDlg* TemplateDlg::mInstance = 0;
@@ -93,7 +93,7 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 	mTemplateList->refresh();
 	slotSelectionChanged();          // enable/disable buttons as appropriate
 
-	resize(KAlarm::readConfigWindowSize(DIALOG_NAME, minimumSize()));
+	resize(KAlarm::readConfigWindowSize(TMPL_DIALOG_NAME, minimumSize()));
 }
 
 /******************************************************************************
@@ -245,6 +245,6 @@ void TemplateDlg::slotSelectionChanged()
 void TemplateDlg::resizeEvent(QResizeEvent* re)
 {
 	if (isVisible())
-		KAlarm::writeConfigWindowSize(DIALOG_NAME, re->size());
+		KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
 	KDialog::resizeEvent(re);
 }

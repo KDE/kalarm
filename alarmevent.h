@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef KALARMEVENT_H
@@ -97,6 +107,7 @@ class KAAlarmEventBase
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
 		Type               mActionType;       // alarm action type
 		bool               mBeep;             // whether to beep when the alarm is displayed
+		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool               mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		bool               mDisplaying;       // whether the alarm is currently being displayed
@@ -155,7 +166,7 @@ class KAAlarm : public KAAlarmEventBase
 			AUDIO__ALARM                  = AUDIO_ALARM
 		};
 
-		KAAlarm()      : mType(INVALID__ALARM) { }
+		KAAlarm()          : mType(INVALID__ALARM) { }
 		KAAlarm(const KAAlarm&);
 		~KAAlarm()  { }
 		Action             action() const               { return (Action)mActionType; }
@@ -166,7 +177,8 @@ class KAAlarm : public KAAlarmEventBase
 		const DateTime&    dateTime() const             { return mDateTime; }
 		QDate              date() const                 { return mDateTime.date(); }
 		QTime              time() const                 { return mDateTime.time(); }
-		QString            audioFile() const            { return (mActionType == T_AUDIO) ? mText : QString::null; }
+		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
+		bool               repeatSound() const          { return (mActionType == T_AUDIO) && mRepeatSound && !mBeep && !mText.isEmpty(); }
 		bool               reminder() const             { return mType == REMINDER__ALARM; }
 		void               setTime(const QDateTime& dt) { mDateTime = dt; }
 #ifdef NDEBUG
@@ -201,6 +213,7 @@ class KAEvent : public KAAlarmEventBase
 			CONFIRM_ACK     = 0x10,    // closing the alarm message window requires confirmation prompt
 			EMAIL_BCC       = 0x20,    // blind copy the email to the user
 			DEFAULT_FONT    = 0x40,    // use default alarm message font
+			REPEAT_SOUND    = 0x80,    // repeat sound file while alarm is displayed
 			// The following are read-only internal values, and may be changed
 			REMINDER        = 0x100,
 			DEFERRAL        = 0x200,
@@ -215,22 +228,23 @@ class KAEvent : public KAAlarmEventBase
 			// *** DON'T CHANGE THESE VALUES ***
 			// because they are part of KAlarm's external DCOP interface.
 			// (But it's alright to add new values.)
-			NO_RECUR    = KCal::Recurrence::rNone,
-			MINUTELY    = KCal::Recurrence::rMinutely,
-			DAILY       = KCal::Recurrence::rDaily,
-			WEEKLY      = KCal::Recurrence::rWeekly,
-			MONTHLY_DAY = KCal::Recurrence::rMonthlyDay,
-			MONTHLY_POS = KCal::Recurrence::rMonthlyPos,
-			ANNUAL_DATE = KCal::Recurrence::rYearlyMonth,
-			ANNUAL_POS  = KCal::Recurrence::rYearlyPos,
+			NO_RECUR    = 0,
+			MINUTELY    = 1,
+			DAILY       = 3,
+			WEEKLY      = 4,
+			MONTHLY_POS = 5,
+			MONTHLY_DAY = 6,
+			ANNUAL_DATE = 7,
+			ANNUAL_POS  = 9,
 			// The following values are not implemented in KAlarm
-			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay
+			ANNUAL_DAY  = 8
 		};
 		enum Status
 		{
 			ACTIVE,      // the event is currently active
 			EXPIRED,     // the event has expired
-			DISPLAYING   // the event is currently being displayed
+			DISPLAYING,  // the event is currently being displayed
+			TEMPLATE     // the event is an alarm template
 		};
 		enum Action
 		{
@@ -252,9 +266,9 @@ class KAEvent : public KAAlarmEventBase
 		KAEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
 		                                            : mRecurrence(0) { set(dt, message, bg, fg, f, action, flags); }
 		explicit KAEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
-		KAEvent(const KAEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
+		KAEvent(const KAEvent& e)               : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAEvent()         { delete mRecurrence; }
-		KAEvent&           operator=(const KAEvent& e)   { if (&e != this) copy(e);  return *this; }
+		KAEvent&           operator=(const KAEvent& e)       { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
 		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
 		                            { set(d, message, bg, fg, f, action, flags | ANY_TIME); }
@@ -277,6 +291,7 @@ class KAEvent : public KAAlarmEventBase
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename)             { mAudioFile = filename;  mUpdated = true; }
+		void               setTemplate(const QString& name, bool defaultTime){ mTemplateName = name; mTemplateDefaultTime = defaultTime; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
@@ -300,9 +315,12 @@ class KAEvent : public KAAlarmEventBase
 		void               incrementRevision()                               { ++mRevision;  mUpdated = true; }
 
 		KCal::Event*       event() const;    // convert to new Event
+		bool               isTemplate() const             { return !mTemplateName.isEmpty(); }
+		const QString&     templateName() const           { return mTemplateName; }
+		bool               usingDefaultTime() const       { return mTemplateDefaultTime; }
 		KAAlarm            alarm(KAAlarm::Type) const;
 		KAAlarm            firstAlarm() const;
-		KAAlarm            nextAlarm(const KAAlarm& al) const            { return nextAlarm(al.type()); }
+		KAAlarm            nextAlarm(const KAAlarm& al) const  { return nextAlarm(al.type()); }
 		KAAlarm            nextAlarm(KAAlarm::Type) const;
 		KAAlarm            convertDisplayingAlarm() const;
 		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false) const;
@@ -321,13 +339,16 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           nextDateTime() const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		const QString&     audioFile() const              { return mAudioFile; }
+		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
 		bool               recurs() const                 { return checkRecur() != NO_RECUR; }
 		RecurType          recurType() const              { return checkRecur(); }
 		KCal::Recurrence*  recurrence() const             { return mRecurrence; }
 		bool               recursFeb29() const            { return mRecursFeb29; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
+		int                longestRecurrenceInterval() const;   // longest interval between any recurrences, in minutes
 		QString            recurrenceText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
+		bool               occursAfter(const QDateTime& preDateTime) const;
 		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result) const;
 		const KCal::DateList& exceptionDates() const      { return mExceptionDates; }
@@ -340,6 +361,7 @@ class KAEvent : public KAAlarmEventBase
 		Status             uidStatus() const              { return uidStatus(mEventID); }
 		static Status      uidStatus(const QString& uid);
 		static QString     uid(const QString& id, Status);
+		static KAEvent     findTemplateName(AlarmCalendar&, const QString& name);
 
 		struct MonthPos
 		{
@@ -452,6 +474,7 @@ class KAEvent : public KAAlarmEventBase
 		static void        readAlarms(const KCal::Event&, void* alarmMap);
 		static void        readAlarm(const KCal::Alarm&, AlarmData&);
 
+		QString            mTemplateName;     // alarm template's name, or null if normal event
 		QString            mAudioFile;        // ATTACH: audio file to play
 		DateTime           mStartDateTime;    // DTSTART and DTEND: start and end time for event
 		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in expired calendar
@@ -467,6 +490,7 @@ class KAEvent : public KAAlarmEventBase
 		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
 		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms
+		bool               mTemplateDefaultTime; // time not specified: use default time (applies to templates only)
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderDeferral; // deferred alarm is a deferred reminder
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)

@@ -1,5 +1,5 @@
 /*
- *  editdlg.cpp  -  dialogue to create or modify an alarm
+ *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
  *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
@@ -40,6 +40,7 @@
 #include <qdragobject.h>
 #include <qlabel.h>
 #include <qmessagebox.h>
+#include <qtabwidget.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
@@ -64,12 +65,14 @@
 
 #include <maillistdrag.h>
 
+#include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "colourcombo.h"
 #include "combobox.h"
 #include "deferdlg.h"
 #include "fontcolourbutton.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "preferences.h"
@@ -78,6 +81,7 @@
 #include "reminder.h"
 #include "soundpicker.h"
 #include "spinbox.h"
+#include "templatepickdlg.h"
 #include "timeperiod.h"
 #include "timespinbox.h"
 #include "editdlg.moc"
@@ -85,24 +89,50 @@
 
 using namespace KCal;
 
+static const char EDIT_DIALOG_NAME[] = "EditDialog";
 
-EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
-	                        const KAEvent* event, bool readOnly)
-	: KDialogBase(KDialogBase::Tabbed, caption, (readOnly ? Cancel|Try : Ok|Cancel|Try),
-	              (readOnly ? Cancel : Ok), parent, name),
+
+// Collect these widget labels together to ensure consistent wording and
+// translations across different modules.
+const QString EditAlarmDlg::i18n_ConfirmAck         = i18n("Confirm acknowledgment");
+const QString EditAlarmDlg::i18n_k_ConfirmAck       = i18n("Confirm ac&knowledgment");
+const QString EditAlarmDlg::i18n_CancelIfLate       = i18n("Cancel if late");
+const QString EditAlarmDlg::i18n_n_CancelIfLate     = i18n("Ca&ncel if late");
+const QString EditAlarmDlg::i18n_CopyEmailToSelf    = i18n("Copy email to self");
+const QString EditAlarmDlg::i18n_e_CopyEmailToSelf  = i18n("Copy &email to self");
+const QString EditAlarmDlg::i18n_s_CopyEmailToSelf  = i18n("Copy email to &self");
+
+
+/******************************************************************************
+ * Constructor.
+ * Parameters:
+ *   Template = true to edit/create an alarm template
+ *            = false to edit/create an alarm.
+ *   event   != to initialise the dialogue to show the specified event's data.
+ */
+EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const char* name,
+	                   const KAEvent* event, bool readOnly)
+	                   : KDialogBase(parent, name, true, caption,
+	                                 (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
+	                                 (readOnly ? Cancel : Ok)),
+	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
+	  mTemplateName(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false),
 	  mEmailRemoveButton(0),
 	  mDeferGroup(0),
+	  mTimeWidget(0),
+	  mTemplate(Template),
+	  mDesiredReadOnly(readOnly),
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-	if (event  &&  event->action() == KAEvent::COMMAND  &&  theApp()->noShellAccess())
-		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
-#if 0
 	setButtonText(Default, i18n("Load Template..."));
+	QVBox* mainWidget = new QVBox(this);
+	mainWidget->setSpacing(spacingHint());
+	setMainWidget(mainWidget);
 	if (mTemplate)
 	{
 		QHBox* box = new QHBox(mainWidget);
@@ -115,17 +145,22 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		QWhatsThis::add(box, i18n("Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
-#endif
+	QTabWidget* tabs = new QTabWidget(mainWidget);
+	tabs->setMargin(marginHint() + marginKDE2);
 
-	QVBox* mainPageBox = addVBoxPage(i18n("&Alarm"));
-	mMainPageIndex = pageIndex(mainPageBox);
+	QVBox* mainPageBox = new QVBox(tabs);
+	mainPageBox->setSpacing(spacingHint());
+	tabs->addTab(mainPageBox, i18n("&Alarm"));
+	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
 
 	// Recurrence tab
-	QVBox* recurPage = addVBoxPage(i18n("&Recurrence"));
-	mRecurPageIndex = pageIndex(recurPage);
+	QVBox* recurPage = new QVBox(tabs);
+	mainPageBox->setSpacing(spacingHint());
+	tabs->addTab(recurPage, i18n("&Recurrence"));
+	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurPage, "recurPage");
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
@@ -142,7 +177,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Message radio button
 	mMessageRadio = new RadioButton(i18n("Te&xt"), mActionGroup, "messageButton");
 	mMessageRadio->setFixedSize(mMessageRadio->sizeHint());
-	mMessageRadio->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMessageRadio,
 	      i18n("If checked, the alarm will display a text message."));
 	grid->addWidget(mMessageRadio, 1, 0);
@@ -151,7 +185,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// File radio button
 	mFileRadio = new RadioButton(i18n("&File"), mActionGroup, "fileButton");
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
-	mFileRadio->setReadOnly(mReadOnly);
 	QWhatsThis::add(mFileRadio,
 	      i18n("If checked, the alarm will display the contents of a text or image file."));
 	grid->addWidget(mFileRadio, 1, 2);
@@ -160,7 +193,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Command radio button
 	mCommandRadio = new RadioButton(i18n("Co&mmand"), mActionGroup, "cmdButton");
 	mCommandRadio->setFixedSize(mCommandRadio->sizeHint());
-	mCommandRadio->setReadOnly(mReadOnly);
 	QWhatsThis::add(mCommandRadio,
 	      i18n("If checked, the alarm will execute a shell command."));
 	grid->addWidget(mCommandRadio, 1, 4);
@@ -169,7 +201,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	// Email radio button
 	mEmailRadio = new RadioButton(i18n("&Email"), mActionGroup, "emailButton");
 	mEmailRadio->setFixedSize(mEmailRadio->sizeHint());
-	mEmailRadio->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailRadio,
 	      i18n("If checked, the alarm will send an email."));
 	grid->addWidget(mEmailRadio, 1, 6);
@@ -184,37 +215,29 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	mAlarmTypeStack->addWidget(mCommandFrame, 1);
 	mAlarmTypeStack->addWidget(mEmailFrame, 1);
 
-	bool recurs = event && event->recurs();
-	if (recurs  &&  event->deferred())
-	{
-		// Deferred date/time for event without a time or recurring event
-		mDeferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
-		topLayout->addWidget(mDeferGroup);
-		QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
-		label->setFixedSize(label->sizeHint());
+	// Deferred date/time: visible only for a deferred recurring event.
+	mDeferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
+	topLayout->addWidget(mDeferGroup);
+	QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
+	label->setFixedSize(label->sizeHint());
+	mDeferTimeLabel = new QLabel(mDeferGroup);
 
-		mDeferDateTime = event->deferDateTime();
-		mDeferTimeLabel = new QLabel(mDeferDateTime.formatLocale(), mDeferGroup);
+	mDeferChangeButton = new QPushButton(i18n("C&hange..."), mDeferGroup);
+	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
+	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
+	QWhatsThis::add(mDeferChangeButton, i18n("Change the alarm's deferred time, or cancel the deferral"));
 
-		if (!mReadOnly)
-		{
-			QPushButton* button = new QPushButton(i18n("C&hange..."), mDeferGroup);
-			button->setFixedSize(button->sizeHint());
-			connect(button, SIGNAL(clicked()), SLOT(slotEditDeferral()));
-			QWhatsThis::add(button, i18n("Change the alarm's deferred time, or cancel the deferral"));
-		}
-		mDeferGroup->addSpace(0);
-	}
+	mDeferGroup->addSpace(0);
+	mDeferGroupHeight = mDeferGroup->height() + spacingHint();
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
-#if 0
 	if (mTemplate)
 	{
 		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
-		layout->addWidget(mTemplateTimeGroup);
+		layout->addWidget(mTemplateTimeGroup, 0, Qt::AlignLeft);
 		QBoxLayout* vlayout = new QVBoxLayout(mTemplateTimeGroup, marginKDE2 + marginHint(), spacingHint());
 		vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 
@@ -224,7 +247,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		QWhatsThis::add(mTemplateDefaultTime,
 		      i18n("Do not specify a start time for alarms based on this template. "
 		           "The normal default start time will be used."));
-		vlayout->addWidget(mTemplateDefaultTime);
+		vlayout->addWidget(mTemplateDefaultTime, 0, Qt::AlignLeft);
 
 		QHBox* box = new QHBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
@@ -250,24 +273,24 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mTemplateAnyTime->setReadOnly(mReadOnly);
 		QWhatsThis::add(mTemplateAnyTime,
 		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
-		vlayout->addWidget(mTemplateAnyTime);
+		vlayout->addWidget(mTemplateAnyTime, 0, Qt::AlignLeft);
 	}
 	else
-#endif
-	mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
-	                                  mainPage, "timeGroup");
-	mTimeWidget->setReadOnly(mReadOnly);
-	connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-	layout->addWidget(mTimeWidget);
+	{
+		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME | AlarmTimeWidget::NARROW,
+		                                  mainPage, "timeGroup");
+		connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
+		layout->addWidget(mTimeWidget);
+	}
 
 	layout->addSpacing(marginHint() - spacingHint());
 	QBoxLayout* vlayout = new QVBoxLayout(layout);
 	layout->addStretch();
 
-	// Repetition type radio buttons
+	// Recurrence type display
 	QHBox* box = new QHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("Recurrence:"), box);
+	label = new QLabel(i18n("Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
 	QWhatsThis::add(box,
@@ -276,91 +299,16 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	vlayout->addWidget(box, 0, Qt::AlignLeft);
 
 	// Late display checkbox - default = allow late display
-	mLateCancel = createLateCancelCheckbox(mReadOnly, mainPage);
+	mLateCancel = createLateCancelCheckbox(mainPage);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
 	vlayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
-	topLayout->activate();
-
-	mDeferGroupHeight = mDeferGroup ? mDeferGroup->height() + spacingHint() : 0;
-	QSize size = minimumSize();
-	size.setHeight(size.height() - mDeferGroupHeight);
-	mBasicSize = theApp()->readConfigWindowSize("EditDialog", size);
-	resize(mBasicSize);
-
-	// Set up initial values
-	if (event)
-	{
-		// Set the values to those for the specified event
-		if (event->defaultFont())
-			mFontColourButton->setDefaultFont();
-		else
-			mFontColourButton->setFont(event->font());
-		mFontColourButton->setBgColour(event->bgColour());
-		mFontColourButton->setFgColour(event->fgColour());
-		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
-		mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
-		                         : recurs ? DateTime() : event->deferDateTime());
-
-		setAction(event->action(), event->cleanText());
-		if (event->action() == KAEvent::EMAIL)
-			mEmailAttachList->insertStringList(event->emailAttachments());
-
-		mLateCancel->setChecked(event->lateCancel());
-		mConfirmAck->setChecked(event->confirmAck());
-		int reminder = event->reminder();
-		if (!reminder  &&  event->reminderDeferral()  &&  !recurs)
-		{
-			reminder = event->reminderDeferral();
-			mReminderDeferral = true;
-		}
-		if (!reminder  &&  event->reminderArchived()  &&  recurs)
-		{
-			reminder = event->reminderArchived();
-			mReminderArchived = true;
-		}
-		mReminder->setMinutes(reminder, mTimeWidget->anyTime());
-		mRecurrenceText->setText(event->recurrenceText());
-		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mSoundPicker->setFile(event->audioFile(), false);
-		mSoundPicker->setChecked(event->beep() || !event->audioFile().isEmpty());
-		mEmailToEdit->setText(event->emailAddresses(", "));
-		mEmailSubjectEdit->setText(event->emailSubject());
-		mEmailBcc->setChecked(event->emailBcc());
-	}
-	else
-	{
-		// Set the values to their defaults
-		if (theApp()->noShellAccess())
-			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
-		Preferences* preferences = Preferences::instance();
-		mFontColourButton->setDefaultFont();
-		mFontColourButton->setBgColour(preferences->defaultBgColour());
-		mFontColourButton->setFgColour(preferences->defaultFgColour());
-		mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
-		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
-		mTimeWidget->setDateTime(defaultTime);
-		mActionGroup->setButton(mActionGroup->id(mMessageRadio));
-		mLateCancel->setChecked(preferences->defaultLateCancel());
-		mConfirmAck->setChecked(preferences->defaultConfirmAck());
-		mReminder->setMinutes(0, false);
-		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		slotRecurFrequencyChange();      // update the Recurrence text
-		mSoundPicker->setFile(preferences->defaultSoundFile(), false);
-		mSoundPicker->setChecked(preferences->defaultBeep() || !preferences->defaultSoundFile().isEmpty());
-		mEmailBcc->setChecked(preferences->defaultEmailBcc());
-	}
-
-	size = mBasicSize;
-	size.setHeight(size.height() + mDeferGroupHeight);
-	resize(size);
-
-	bool enable = !!mEmailAttachList->count();
-	mEmailAttachList->setEnabled(enable);
-	if (mEmailRemoveButton)
-		mEmailRemoveButton->setEnabled(enable);
+	// Initialise the state of all controls according to the specified event, if any
+	initialise(event);
+	if (mTemplateName)
+		mTemplateName->setFocus();
 
 	// Save the initial state of all controls so that we can later tell if they have changed
 	saveState(event);
@@ -383,60 +331,50 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(mDisplayAlarmsFrame);
 	mTextMessageEdit->setWordWrap(QTextEdit::NoWrap);
-	mTextMessageEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mTextMessageEdit, i18n("Enter the text of the alarm message. It may be multi-line."));
 	frameLayout->addWidget(mTextMessageEdit);
 
 	// File name edit box
 	mFileBox = new QHBox(mDisplayAlarmsFrame);
 	frameLayout->addWidget(mFileBox);
-	mFileMessageEdit = new LineEdit(true, mFileBox);
-	mFileMessageEdit->setReadOnly(mReadOnly);
+	mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
 	mFileMessageEdit->setAcceptDrops(true);
 	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name or URL of a text or image file to display."));
 
 	// File browse button
-	if (!mReadOnly)
-	{
-		QPushButton* button = new QPushButton(mFileBox);
-		button->setPixmap(SmallIcon("fileopen"));
-		button->setFixedSize(button->sizeHint());
-		connect(button, SIGNAL(clicked()), SLOT(slotBrowseFile()));
-		QWhatsThis::add(button, i18n("Select a text or image file to display."));
-	}
 
-	// Sound checkbox and file selector
-	QBoxLayout* layout = new QHBoxLayout(frameLayout);
-	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
-	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	mSoundPicker->setReadOnly(mReadOnly);
-	layout->addWidget(mSoundPicker);
-	layout->addSpacing(2*KDialog::spacingHint());
-	layout->addStretch();
+	mFileBrowseButton = new QPushButton(mFileBox);
+	mFileBrowseButton->setPixmap(SmallIcon("fileopen"));
+	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
+	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotBrowseFile()));
+	QToolTip::add(mFileBrowseButton, i18n("Choose a file"));
+	QWhatsThis::add(mFileBrowseButton, i18n("Select a text or image file to display."));
 
 	// Colour choice drop-down list
+	QBoxLayout* layout = new QHBoxLayout(frameLayout);
 	QHBox* box;
-	mBgColourChoose = createBgColourChooser(mReadOnly, &box, mDisplayAlarmsFrame);
+	mBgColourChoose = createBgColourChooser(&box, mDisplayAlarmsFrame);
 	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(box);
-
-	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(frameLayout);
-	mConfirmAck = createConfirmAckCheckbox(mReadOnly, mDisplayAlarmsFrame);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	layout->addWidget(mConfirmAck);
 	layout->addSpacing(2*KDialog::spacingHint());
 	layout->addStretch();
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(mDisplayAlarmsFrame);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
-	if (mReadOnly)
-		mFontColourButton->hide();
-	mFontColourButton->setReadOnly(mReadOnly);
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
 	layout->addWidget(mFontColourButton);
+
+	// Sound checkbox and file selector
+	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
+	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
+	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
+
+	// Acknowledgement confirmation required - default = no confirmation
+	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
+	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
+	frameLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	// Reminder
 	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
@@ -445,7 +383,6 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
 	                         true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
-	mReminder->setReadOnly(mReadOnly);
 	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Top-adjust the controls
@@ -463,8 +400,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	mCommandFrame->setFrameStyle(QFrame::NoFrame);
 	QBoxLayout* layout = new QVBoxLayout(mCommandFrame);
 
-	mCommandMessageEdit = new LineEdit(true, mCommandFrame);
-	mCommandMessageEdit->setReadOnly(mReadOnly);
+	mCommandMessageEdit = new LineEdit(LineEdit::Url, mCommandFrame);
 	QWhatsThis::add(mCommandMessageEdit, i18n("Enter a shell command to execute."));
 	layout->addWidget(mCommandMessageEdit);
 	layout->addStretch();
@@ -486,40 +422,34 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
-	mEmailToEdit = new LineEdit(false, mEmailFrame);
+	mEmailToEdit = new LineEdit(LineEdit::EmailAddresses, mEmailFrame);
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
-	mEmailToEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailToEdit,
 	      i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
 	           "commas or semicolons."));
 	grid->addWidget(mEmailToEdit, 0, 1);
 
-	if (!mReadOnly)
-	{
-		QPushButton* button = new QPushButton(mEmailFrame);
-		button->setPixmap(SmallIcon("contents"));
-		button->setFixedSize(button->sizeHint());
-		connect(button, SIGNAL(clicked()), SLOT(openAddressBook()));
-		QToolTip::add(button, i18n("Open address book"));
-		QWhatsThis::add(button, i18n("Select email addresses from your address book."));
-		grid->addWidget(button, 0, 2);
-	}
+	mEmailAddressButton = new QPushButton(mEmailFrame);
+	mEmailAddressButton->setPixmap(SmallIcon("contents"));
+	mEmailAddressButton->setFixedSize(mEmailAddressButton->sizeHint());
+	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
+	QToolTip::add(mEmailAddressButton, i18n("Open address book"));
+	QWhatsThis::add(mEmailAddressButton, i18n("Select email addresses from your address book."));
+	grid->addWidget(mEmailAddressButton, 0, 2);
 
 	// Email subject
 	label = new QLabel(i18n("Email subject", "Sub&ject:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
-	mEmailSubjectEdit = new LineEdit(false, mEmailFrame);
+	mEmailSubjectEdit = new LineEdit(mEmailFrame);
 	mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
-	mEmailSubjectEdit->setReadOnly(mReadOnly);
 	label->setBuddy(mEmailSubjectEdit);
 	QWhatsThis::add(mEmailSubjectEdit, i18n("Enter the email subject."));
 	grid->addMultiCellWidget(mEmailSubjectEdit, 1, 1, 1, 2);
 
 	// Email body
 	mEmailMessageEdit = new TextEdit(mEmailFrame);
-	mEmailMessageEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailMessageEdit, i18n("Enter the email message."));
 	layout->addWidget(mEmailMessageEdit);
 
@@ -541,26 +471,217 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	grid->addWidget(mEmailAttachList, 0, 1);
 	grid->setColStretch(1, 1);
 
-	if (!mReadOnly)
-	{
-		QPushButton* button = new QPushButton(i18n("Add..."), mEmailFrame);
-		connect(button, SIGNAL(clicked()), SLOT(slotAddAttachment()));
-		QWhatsThis::add(button, i18n("Add an attachment to the email."));
-		grid->addWidget(button, 0, 2);
+	mEmailAddAttachButton = new QPushButton(i18n("Add..."), mEmailFrame);
+	connect(mEmailAddAttachButton, SIGNAL(clicked()), SLOT(slotAddAttachment()));
+	QWhatsThis::add(mEmailAddAttachButton, i18n("Add an attachment to the email."));
+	grid->addWidget(mEmailAddAttachButton, 0, 2);
 
-		mEmailRemoveButton = new QPushButton(i18n("Remo&ve"), mEmailFrame);
-		connect(mEmailRemoveButton, SIGNAL(clicked()), SLOT(slotRemoveAttachment()));
-		QWhatsThis::add(mEmailRemoveButton, i18n("Remove the highlighted attachment from the email."));
-		grid->addWidget(mEmailRemoveButton, 1, 2);
-	}
+	mEmailRemoveButton = new QPushButton(i18n("Remo&ve"), mEmailFrame);
+	connect(mEmailRemoveButton, SIGNAL(clicked()), SLOT(slotRemoveAttachment()));
+	QWhatsThis::add(mEmailRemoveButton, i18n("Remove the highlighted attachment from the email."));
+	grid->addWidget(mEmailRemoveButton, 1, 2);
 
 	// BCC email to sender
-	mEmailBcc = new CheckBox(i18n("Copy email to &self"), mEmailFrame);
+	mEmailBcc = new CheckBox(i18n_s_CopyEmailToSelf, mEmailFrame);
 	mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
-	mEmailBcc->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
 	grid->addMultiCellWidget(mEmailBcc, 1, 1, 0, 1, Qt::AlignLeft);
+}
+
+/******************************************************************************
+ * Initialise the dialogue controls from the specified event.
+ */
+void EditAlarmDlg::initialise(const KAEvent* event)
+{
+	mReadOnly = mDesiredReadOnly;
+	if (!mTemplate  &&  event  &&  event->action() == KAEvent::COMMAND  &&  theApp()->noShellAccess())
+		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
+	setReadOnly();
+
+	bool deferGroupVisible = false;
+	if (event)
+	{
+		// Set the values to those for the specified event
+		if (mTemplate)
+			mTemplateName->setText(event->templateName());
+		bool recurs = event->recurs();
+		deferGroupVisible = (recurs  &&  !mTemplate  &&  event->deferred());
+		if (deferGroupVisible)
+		{
+			mDeferDateTime = event->deferDateTime();
+			mDeferTimeLabel->setText(mDeferDateTime.formatLocale());
+			mDeferGroup->show();
+		}
+		if (event->defaultFont())
+			mFontColourButton->setDefaultFont();
+		else
+			mFontColourButton->setFont(event->font());
+		mFontColourButton->setBgColour(event->bgColour());
+		mFontColourButton->setFgColour(event->fgColour());
+		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
+		if (mTemplate)
+		{
+			bool noTime = event->isTemplate() && event->usingDefaultTime();
+			bool useTime = !event->mainDateTime().isDateOnly();
+			int button = mTemplateTimeGroup->id(noTime ? mTemplateDefaultTime :
+			                                    useTime ? mTemplateUseTime : mTemplateAnyTime);
+			mTemplateTimeGroup->setButton(button);
+			if (!noTime && useTime)
+				mTemplateTime->setTime(event->mainDateTime().time());
+		}
+		else
+		{
+			if (event->isTemplate())
+			{
+				// Initialising from an alarm template: use current date
+				QDateTime now = QDateTime::currentDateTime();
+				if (event->usingDefaultTime())
+					mTimeWidget->setDateTime(now.addSecs(60));
+				else
+				{
+					QDate d = now.date();
+					QTime t = event->startDateTime().time();
+					bool dateOnly = event->startDateTime().isDateOnly();
+					if (!dateOnly  &&  now.time() >= t)
+						d = d.addDays(1);     // alarm time has already passed, so use tomorrow
+					mTimeWidget->setDateTime(DateTime(QDateTime(d, t), dateOnly));
+				}
+			}
+			else
+				mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
+				                         : recurs ? DateTime() : event->deferDateTime());
+		}
+
+		setAction(event->action(), event->cleanText());
+		if (event->action() == KAEvent::EMAIL)
+			mEmailAttachList->insertStringList(event->emailAttachments());
+
+		mLateCancel->setChecked(event->lateCancel());
+		mConfirmAck->setChecked(event->confirmAck());
+		int reminder = event->reminder();
+		if (!reminder  &&  event->reminderDeferral()  &&  !recurs)
+		{
+			reminder = event->reminderDeferral();
+			mReminderDeferral = true;
+		}
+		if (!reminder  &&  event->reminderArchived()  &&  recurs)
+		{
+			reminder = event->reminderArchived();
+			mReminderArchived = true;
+		}
+		mReminder->setMinutes(reminder, (mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isOn()));
+		mRecurrenceText->setText(event->recurrenceText());
+		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		mSoundPicker->set(event->beep(), event->audioFile(), event->repeatSound());
+		mEmailToEdit->setText(event->emailAddresses(", "));
+		mEmailSubjectEdit->setText(event->emailSubject());
+		mEmailBcc->setChecked(event->emailBcc());
+	}
+	else
+	{
+		// Set the values to their defaults
+		if (theApp()->noShellAccess())
+			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
+		Preferences* preferences = Preferences::instance();
+		mFontColourButton->setDefaultFont();
+		mFontColourButton->setBgColour(preferences->defaultBgColour());
+		mFontColourButton->setFgColour(preferences->defaultFgColour());
+		mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
+		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
+		if (mTemplate)
+		{
+			mTemplateTimeGroup->setButton(mTemplateTimeGroup->id(mTemplateDefaultTime));
+			mTemplateTime->setValue(0);
+		}
+		else
+			mTimeWidget->setDateTime(defaultTime);
+		mActionGroup->setButton(mActionGroup->id(mMessageRadio));
+		mLateCancel->setChecked(preferences->defaultLateCancel());
+		mConfirmAck->setChecked(preferences->defaultConfirmAck());
+		mReminder->setMinutes(0, false);
+		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		slotRecurFrequencyChange();      // update the Recurrence text
+		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(), preferences->defaultSoundRepeat());
+		mEmailBcc->setChecked(preferences->defaultEmailBcc());
+	}
+
+	if (!deferGroupVisible)
+		mDeferGroup->hide();
+	int deferGroupHeight = deferGroupVisible ? mDeferGroupHeight : 0;
+	QSize size = minimumSize();
+	size.setHeight(size.height() - deferGroupHeight);
+	mBasicSize = KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, size);
+	size = mBasicSize;
+	size.setHeight(size.height() + deferGroupHeight);
+	resize(size);
+
+	bool enable = !!mEmailAttachList->count();
+	mEmailAttachList->setEnabled(enable);
+	if (mEmailRemoveButton)
+		mEmailRemoveButton->setEnabled(enable);
+	AlarmCalendar* cal = AlarmCalendar::templateCalendar();
+	bool empty = cal->isOpen()  &&  !cal->events().count();
+	enableButton(Default, !empty);
+}
+
+/******************************************************************************
+ * Set the read-only status of all non-template controls.
+ */
+void EditAlarmDlg::setReadOnly()
+{
+	// Common controls
+	mMessageRadio->setReadOnly(mReadOnly);
+	mFileRadio->setReadOnly(mReadOnly);
+	mCommandRadio->setReadOnly(mReadOnly);
+	mEmailRadio->setReadOnly(mReadOnly);
+	if (mTimeWidget)
+		mTimeWidget->setReadOnly(mReadOnly);
+	mLateCancel->setReadOnly(mReadOnly);
+	if (mReadOnly)
+		mDeferChangeButton->hide();
+	else
+		mDeferChangeButton->show();
+
+	// Message alarm controls
+	mTextMessageEdit->setReadOnly(mReadOnly);
+	mFileMessageEdit->setReadOnly(mReadOnly);
+	mBgColourChoose->setReadOnly(mReadOnly);
+	mFontColourButton->setReadOnly(mReadOnly);
+	mSoundPicker->setReadOnly(mReadOnly);
+	mConfirmAck->setReadOnly(mReadOnly);
+	mReminder->setReadOnly(mReadOnly);
+	if (mReadOnly)
+	{
+		mFileBrowseButton->hide();
+		mFontColourButton->hide();
+	}
+	else
+	{
+		mFileBrowseButton->show();
+		mFontColourButton->show();
+	}
+
+	// Command alarm controls
+	mCommandMessageEdit->setReadOnly(mReadOnly);
+
+	// Email alarm controls
+	mEmailToEdit->setReadOnly(mReadOnly);
+	mEmailSubjectEdit->setReadOnly(mReadOnly);
+	mEmailMessageEdit->setReadOnly(mReadOnly);
+	mEmailBcc->setReadOnly(mReadOnly);
+	if (mReadOnly)
+	{
+		mEmailAddressButton->hide();
+		mEmailAddAttachButton->hide();
+		mEmailRemoveButton->hide();
+	}
+	else
+	{
+		mEmailAddressButton->show();
+		mEmailAddAttachButton->show();
+		mEmailRemoveButton->show();
+	}
 }
 
 /******************************************************************************
@@ -595,7 +716,7 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const QString& text)
 /******************************************************************************
  * Create a widget to choose the alarm message background colour.
  */
-ColourCombo* EditAlarmDlg::createBgColourChooser(bool readOnly, QHBox** box, QWidget* parent, const char* name)
+ColourCombo* EditAlarmDlg::createBgColourChooser(QHBox** box, QWidget* parent, const char* name)
 {
 	*box = new QHBox(parent);   // this is to control the QWhatsThis text display area
 	QLabel* label = new QLabel(i18n("&Background color:"), *box);
@@ -603,7 +724,6 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(bool readOnly, QHBox** box, QWi
 	ColourCombo* widget = new ColourCombo(*box, name);
 	QSize size = widget->sizeHint();
 	widget->setMinimumHeight(size.height() + 4);
-	widget->setReadOnly(readOnly);
 	QToolTip::add(widget, i18n("Message color"));
 	label->setBuddy(widget);
 	(*box)->setFixedHeight((*box)->sizeHint().height());
@@ -614,22 +734,20 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(bool readOnly, QHBox** box, QWi
 /******************************************************************************
  * Create an "acknowledgement confirmation required" checkbox.
  */
-CheckBox* EditAlarmDlg::createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name)
+CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* name)
 {
-	CheckBox* widget = new CheckBox(i18n("Confirm ac&knowledgement"), parent, name);
-	widget->setReadOnly(readOnly);
+	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck, parent, name);
 	QWhatsThis::add(widget,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	return widget;
 }
 
 /******************************************************************************
- * Create an "cancel if late" checkbox.
+ * Create a "cancel if late" checkbox.
  */
-CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent, const char* name)
+CheckBox* EditAlarmDlg::createLateCancelCheckbox(QWidget* parent, const char* name)
 {
-	CheckBox* widget = new CheckBox(i18n("Ca&ncel if late"), parent, name);
-	widget->setReadOnly(readOnly);
+	CheckBox* widget = new CheckBox(i18n_n_CancelIfLate, parent, name);
 	QWhatsThis::add(widget,
 	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
 	           "minute of the specified time. Possible reasons for not triggering include your "
@@ -644,12 +762,19 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
  */
 void EditAlarmDlg::saveState(const KAEvent* event)
 {
-	mSavedEvent          = 0;
+	mSavedEvent = 0;
 	if (event)
 		mSavedEvent = new KAEvent(*event);
+	if (mTemplate)
+	{
+		mSavedTemplateName     = mTemplateName->text();
+		mSavedTemplateTimeType = mTemplateTimeGroup->selected();
+		mSavedTemplateTime     = mTemplateTime->time();
+	}
 	mSavedTypeRadio      = mActionGroup->selected();
 	mSavedBeep           = mSoundPicker->beep();
 	mSavedSoundFile      = mSoundPicker->file();
+	mSavedRepeatSound    = mSoundPicker->repeat();
 	mSavedConfirmAck     = mConfirmAck->isChecked();
 	mSavedFont           = mFontColourButton->font();
 	mSavedFgColour       = mFontColourButton->fgColour();
@@ -662,7 +787,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	for (int i = 0;  i < mEmailAttachList->count();  ++i)
 		mSavedEmailAttach += mEmailAttachList->text(i);
 	mSavedEmailBcc       = mEmailBcc->isChecked();
-	mSavedDateTime       = mTimeWidget->getDateTime(false, false);
+	if (mTimeWidget)
+		mSavedDateTime = mTimeWidget->getDateTime(false, false);
 	mSavedLateCancel     = mLateCancel->isChecked();
 	mSavedRecurrenceType = mRecurrenceEdit->repeatType();
 }
@@ -675,8 +801,17 @@ bool EditAlarmDlg::stateChanged() const
 {
 	QString textFileCommandMessage;
 	checkText(textFileCommandMessage, false);
+	if (mTemplate)
+	{
+		if (mSavedTemplateName     != mTemplateName->text()
+		||  mSavedTemplateTimeType != mTemplateTimeGroup->selected()
+		||  mSavedTemplateTime     != mTemplateTime->time())
+			return true;
+	}
+	else
+		if (mSavedDateTime != mTimeWidget->getDateTime(false, false))
+			return true;
 	if (mSavedTypeRadio        != mActionGroup->selected()
-	||  mSavedDateTime         != mTimeWidget->getDateTime(false, false)
 	||  mSavedLateCancel       != mLateCancel->isChecked()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
 	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
@@ -684,13 +819,18 @@ bool EditAlarmDlg::stateChanged() const
 	if (mMessageRadio->isOn()  ||  mFileRadio->isOn())
 	{
 		if (mSavedBeep       != mSoundPicker->beep()
-		||  mSavedSoundFile  != mSoundPicker->file()
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
 		||  mSavedBgColour   != mBgColourChoose->color()
 		||  mSavedReminder   != mReminder->getMinutes())
 			return true;
+		if (!mSavedBeep)
+		{
+			if (mSavedSoundFile != mSoundPicker->file()
+			||  !mSavedSoundFile.isEmpty()  &&  mSavedRepeatSound != mSoundPicker->repeat())
+				return true;
+		}
 	}
 	else if (mEmailRadio->isOn())
 	{
@@ -730,7 +870,12 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 	if (!mSavedEvent  ||  stateChanged())
 	{
 		// It's a new event, or the edit controls have changed
-		event.set(mAlarmDateTime.dateTime(), mAlarmMessage, mBgColourChoose->color(),
+		QDateTime dt;
+		if (!mTemplate)
+			dt = mAlarmDateTime.dateTime();
+		else if (mTemplateUseTime->isOn())
+			dt.setTime(mTemplateTime->time());
+		event.set(dt, mAlarmMessage, mBgColourChoose->color(),
 		          mFontColourButton->fgColour(), mFontColourButton->font(), getAlarmType(),
 		          getAlarmFlags());
 		event.setAudioFile(mSoundPicker->file());
@@ -760,6 +905,8 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 					event.defer(mDeferDateTime, deferReminder, false);
 			}
 		}
+		if (mTemplate)
+			event.setTemplate(mTemplateName->text(), mTemplateDefaultTime->isOn());
 	}
 	else
 	{
@@ -782,11 +929,12 @@ int EditAlarmDlg::getAlarmFlags() const
 {
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
 	return (displayAlarm && mSoundPicker->beep()          ? KAEvent::BEEP : 0)
+	     | (displayAlarm && mSoundPicker->repeat()        ? KAEvent::REPEAT_SOUND : 0)
 	     | (mLateCancel->isChecked()                      ? KAEvent::LATE_CANCEL : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
-	     | (mAlarmDateTime.isDateOnly()                   ? KAEvent::ANY_TIME : 0)
+	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
 	     | (mFontColourButton->defaultFont()              ? KAEvent::DEFAULT_FONT : 0);
 }
 
@@ -811,8 +959,8 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 	if (isVisible())
 	{
 		mBasicSize = re->size();
-		mBasicSize.setHeight(mBasicSize.height() - mDeferGroupHeight);
-		theApp()->writeConfigWindowSize("EditDialog", mBasicSize);
+		mBasicSize.setHeight(mBasicSize.height() - (mDeferGroup->isVisible() ? mDeferGroupHeight : 0));
+		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, mBasicSize);
 	}
 	KDialog::resizeEvent(re);
 }
@@ -823,11 +971,10 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-	if (activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	if (mTimeWidget
+	&&  activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
-	QWidget* errWidget;
 	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();
-#if 0
 	if (mTemplate)
 	{
 		// Check that the template name is not blank and is unique
@@ -839,7 +986,7 @@ void EditAlarmDlg::slotOk()
 		{
 			AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 			if (cal  &&  KAEvent::findTemplateName(*cal, name).valid())
-			errmsg = i18n("Template name is already in use");
+				errmsg = i18n("Template name is already in use");
 		}
 		if (!errmsg.isEmpty())
 		{
@@ -849,15 +996,20 @@ void EditAlarmDlg::slotOk()
 		}
 	}
 	else
-#endif
-	mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
-	if (errWidget)
 	{
-		showPage(mMainPageIndex);
-		errWidget->setFocus();
-		mTimeWidget->getDateTime();   // display the error message now
+		QWidget* errWidget;
+		mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
+		if (errWidget)
+		{
+			showPage(mMainPageIndex);
+			errWidget->setFocus();
+			mTimeWidget->getDateTime();   // display the error message now
+			return;
+		}
 	}
-	else if (checkEmailData())
+	if (!checkEmailData())
+		return;
+	if (!mTemplate)
 	{
 		if (timedRecurrence)
 		{
@@ -877,7 +1029,7 @@ void EditAlarmDlg::slotOk()
 			}
 		}
 		QString errmsg;
-		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
+		QWidget* errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
 		if (errWidget)
 		{
 			showPage(mRecurPageIndex);
@@ -885,43 +1037,31 @@ void EditAlarmDlg::slotOk()
 			KMessageBox::sorry(this, errmsg);
 			return;
 		}
-		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
+	}
+	if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
+	{
+		int reminder = mReminder->getMinutes();
+		if (reminder)
 		{
-			int reminder = mReminder->getMinutes();
-			if (reminder)
+			KAEvent event;
+			mRecurrenceEdit->updateEvent(event);
+			int minutes = event.longestRecurrenceInterval();
+			if (minutes  &&  reminder >= minutes)
 			{
-				KAEvent event;
-				mRecurrenceEdit->updateEvent(event);
-				int minutes = event.recurInterval();
-				switch (event.recurType())
-				{
-					case KAEvent::NO_RECUR:     minutes = 0;  break;
-					case KAEvent::MINUTELY:     break;
-					case KAEvent::DAILY:        minutes *= 1440;  break;
-					case KAEvent::WEEKLY:       minutes *= 7*1440;  break;
-					case KAEvent::MONTHLY_DAY:
-					case KAEvent::MONTHLY_POS:  minutes *= 28*1440;  break;
-					case KAEvent::ANNUAL_DATE:
-					case KAEvent::ANNUAL_POS:
-					case KAEvent::ANNUAL_DAY:   minutes *= 365*1440;  break;
-				}
-				if (minutes  &&  reminder >= minutes)
-				{
-					showPage(mMainPageIndex);
-					mReminder->setFocusOnCount();
-					KMessageBox::sorry(this, i18n("Reminder period must be less than recurrence interval"));
-					return;
-				}
+				showPage(mMainPageIndex);
+				mReminder->setFocusOnCount();
+				KMessageBox::sorry(this, i18n("Reminder period must be less than recurrence interval"));
+				return;
 			}
 		}
-		if (checkText(mAlarmMessage))
-			accept();
 	}
+	if (checkText(mAlarmMessage))
+		accept();
 }
 
 /******************************************************************************
 *  Called when the Try button is clicked.
-*  Display the alarm immediately for the user to check its configuration.
+*  Display/execute the alarm immediately for the user to check its configuration.
 */
 void EditAlarmDlg::slotTry()
 {
@@ -969,30 +1109,43 @@ void EditAlarmDlg::slotCancel()
 }
 
 /******************************************************************************
+*  Called when the Load Template button is clicked.
+*  Prompt to select a template and initialise the dialogue with its contents.
+*/
+void EditAlarmDlg::slotDefault()
+{
+	TemplatePickDlg dlg(this, "templPickDlg");
+	if (dlg.exec() == QDialog::Accepted)
+		initialise(dlg.selectedTemplate());
+}
+
+/******************************************************************************
  * Called when the Change deferral button is clicked.
  */
 void EditAlarmDlg::slotEditDeferral()
 {
+	if (!mTimeWidget)
+		return;
 	DateTime start = mTimeWidget->getDateTime();
-	if (start.isValid())
+	if (!start.isValid())
+		return;
+
+	bool deferred = mDeferDateTime.isValid();
+	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
+	                       deferred, this, "deferDlg");
+	// Don't allow deferral past the next recurrence
+	int reminder = mReminder->getMinutes();
+	if (reminder)
 	{
-		bool deferred = mDeferDateTime.isValid();
-		DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(QDateTime::currentDateTime().addSecs(60))),
-		                       deferred, this, "deferDlg");
-		// Don't allow deferral past the next recurrence
-		int reminder = mReminder->getMinutes();
-		if (reminder)
-		{
-			DateTime remindTime = start.addMins(-reminder);
-			if (QDateTime::currentDateTime() < remindTime)
-				start = remindTime;
-		}
-		deferDlg.setLimit(start);
-		if (deferDlg.exec() == QDialog::Accepted)
-		{
-			mDeferDateTime = deferDlg.getDateTime();
-			mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString::null);
-		}
+		DateTime remindTime = start.addMins(-reminder);
+		if (QDateTime::currentDateTime() < remindTime)
+			start = remindTime;
+	}
+	deferDlg.setLimit(start);
+	if (deferDlg.exec() == QDialog::Accepted)
+	{
+		mDeferDateTime = deferDlg.getDateTime();
+		mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString::null);
 	}
 }
 
@@ -1003,24 +1156,33 @@ void EditAlarmDlg::slotEditDeferral()
 void EditAlarmDlg::slotShowMainPage()
 {
 	slotAlarmTypeClicked(-1);
-	if (!mReadOnly  &&  mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
-		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
-	if (mReadOnly  ||  mRecurrenceEdit->isTimedRepeatType())
-		mTimeWidget->setMinDate(false);
-	else
-		mTimeWidget->setMinDateToday();
+	if (!mMainPageShown)
+	{
+		if (mTemplateName)
+			mTemplateName->setFocus();
+		mMainPageShown = true;
+	}
+	if (mTimeWidget)
+	{
+		if (!mReadOnly  &&  mRecurPageShown  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+			mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
+		if (mReadOnly  ||  mRecurrenceEdit->isTimedRepeatType())
+			mTimeWidget->setMinDate(false);
+		else
+			mTimeWidget->setMinDateToday();
+	}
 }
 
 /******************************************************************************
 *  Called when the recurrence edit page is shown.
+*  The recurrence defaults are set to correspond to the start date.
 *  The first time, for a new alarm, the recurrence end date is set according to
-*  the alarm start time, and the recurrence defaults are set to correspond to
-*  the start date.
+*  the alarm start time.
 */
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
 	mRecurPageIndex = activePageIndex();
-	if (!mReadOnly)
+	if (!mReadOnly  &&  !mTemplate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
 		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
@@ -1043,14 +1205,17 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 */
 void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
-	bool recurs = (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR);
-	mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
-	if (mDeferGroup)
-		mDeferGroup->setEnabled(recurs);
-	if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+	if (!mTemplate)
 	{
-		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
-		mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
+		bool recurs = (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR);
+		if (mDeferGroup)
+			mDeferGroup->setEnabled(recurs);
+		mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
+		if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		{
+			mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
+		}
 	}
 	slotRecurFrequencyChange();
 }
@@ -1116,10 +1281,12 @@ bool EditAlarmDlg::checkEmailData()
 }
 
 /******************************************************************************
-*  Called when one of the message type radio buttons is clicked.
+*  Called when one of the alarm action type radio buttons is clicked,
+*  to display the appropriate set of controls for that action type.
 */
 void EditAlarmDlg::slotAlarmTypeClicked(int)
 {
+	QWidget* focus = 0;
 	if (mMessageRadio->isOn())
 	{
 		mFileBox->hide();
@@ -1128,7 +1295,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mFontColourButton->show();
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
-		mTextMessageEdit->setFocus();
+		focus = mTextMessageEdit;
 	}
 	else if (mFileRadio->isOn())
 	{
@@ -1139,22 +1306,33 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		setButtonWhatsThis(Try, i18n("Display the file now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
-		mFileMessageEdit->setFocus();
+		focus = mFileMessageEdit;
 	}
 	else if (mCommandRadio->isOn())
 	{
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
 		mAlarmTypeStack->raiseWidget(mCommandFrame);
 		mCommandMessageEdit->setNoSelect();
-		mCommandMessageEdit->setFocus();
+		focus = mCommandMessageEdit;
 	}
 	else if (mEmailRadio->isOn())
 	{
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
 		mAlarmTypeStack->raiseWidget(mEmailFrame);
 		mEmailToEdit->setNoSelect();
-		mEmailToEdit->setFocus();
+		focus = mEmailToEdit;
 	}
+	if (focus)
+		focus->setFocus();
+}
+
+/******************************************************************************
+*  Called when one of the template time radio buttons is clicked,
+*  to enable or disable the template time entry spin box.
+*/
+void EditAlarmDlg::slotTemplateTimeType(int)
+{
+	mTemplateTime->setEnabled(mTemplateUseTime->isOn());
 }
 
 /******************************************************************************
@@ -1309,15 +1487,15 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		}
 		if (!err)
 		{
-			switch (KAlarmApp::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
+			switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
 			{
-				case 2:
+				case KAlarm::TextFormatted:
 #if KDE_VERSION < 290
 					err = HTML;
 #endif
-				case 1:
-				case 3:
-				case 4:
+				case KAlarm::TextPlain:
+				case KAlarm::TextApplication:
+				case KAlarm::Image:
 					break;
 				default:
 					err = NOT_TEXT_IMAGE;
@@ -1371,11 +1549,24 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 = Line edit with option to prevent its contents being selected when it receives
 = focus.
 =============================================================================*/
-LineEdit::LineEdit(bool url, QWidget* parent, const char* name)
+LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
 	: KLineEdit(parent, name),
-	  noSelect(false)
+	  mNoSelect(false)
 {
-	if (url)
+	init(type);
+}
+
+LineEdit::LineEdit(QWidget* parent, const char* name)
+	: KLineEdit(parent, name),
+	  mNoSelect(false)
+{
+	init(Basic);
+}
+
+void LineEdit::init(Type type)
+{
+	mEmailAddresses = (type == EmailAddresses);
+	if (type == Url)
 	{
 		setCompletionMode(KGlobalSettings::CompletionShell);
 		KURLCompletion* comp = new KURLCompletion(KURLCompletion::FileCompletion);
@@ -1393,13 +1584,13 @@ LineEdit::LineEdit(bool url, QWidget* parent, const char* name)
 */
 void LineEdit::focusInEvent(QFocusEvent* e)
 {
-	if (noSelect)
+	if (mNoSelect)
 		QFocusEvent::setReason(QFocusEvent::Other);
 	KLineEdit::focusInEvent(e);
-	if (noSelect)
+	if (mNoSelect)
 	{
 		QFocusEvent::resetReason();
-		noSelect = false;
+		mNoSelect = false;
 	}
 }
 
@@ -1422,13 +1613,32 @@ void LineEdit::dropEvent(QDropEvent* e)
 	{
 		// KMail message(s). Ignore all but the first.
 		if (mailList.count())
-			setText(mailList.first().subject());
+		{
+			if (mEmailAddresses)
+				setText(mailList.first().from());
+			else
+				setText(mailList.first().subject());
+		}
 	}
 	else if (QTextDrag::decode(e, text))
 	{
-		int newline = text.find('\n');
-		if (newline >= 0)
-			text = text.left(newline);
+		if (mEmailAddresses)
+		{
+#warning "Allow drag of a list of email addresses as follows:"
+			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
+			text.replace(QRegExp("\r?\n"), ", ");
+			if (text.startsWith("mailto:"))
+			{
+				KURL url(text);
+				text = url.path();
+			}
+		}
+		else
+		{
+			int newline = text.find('\n');
+			if (newline >= 0)
+				text = text.left(newline);
+		}
 		setText(text);
 	}
 }

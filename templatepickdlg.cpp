@@ -41,7 +41,7 @@
 #include "templatelistview.h"
 #include "templatepickdlg.moc"
 
-static const char DIALOG_NAME[] = "TemplatePickDialog";
+static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
 TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
@@ -55,7 +55,6 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 	bool includeCmdAlarms = !theApp()->noShellAccess();
 	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget, "list");
 	mTemplateList->setSelectionMode(QListView::Single);
-//	mTemplateList->setMultiSelection(false);
 	mTemplateList->refresh();      // populate the template list
 	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 	connect(mTemplateList, SIGNAL(executed(QListViewItem*)), SLOT(slotOk()));
@@ -63,7 +62,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 
 	slotSelectionChanged();        // enable or disable the OK button
 
-	resize(KAlarm::readConfigWindowSize(DIALOG_NAME, minimumSize()));
+	resize(KAlarm::readConfigWindowSize(TMPL_PICK_DIALOG_NAME, minimumSize()));
 }
 
 /******************************************************************************
@@ -90,6 +89,6 @@ void TemplatePickDlg::slotSelectionChanged()
 void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 {
 	if (isVisible())
-		KAlarm::writeConfigWindowSize(DIALOG_NAME, re->size());
+		KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
 	KDialog::resizeEvent(re);
 }
