@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -120,34 +124,35 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
-	QHBox* box = new QHBox(mPage);
+	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	QHBox* box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
-	box->setStretchFactor(label, 1);
 	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, box, "daemonCheck");
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
-	QWhatsThis::add(mDaemonTrayCheckInterval,
-	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
 	label->setBuddy(mDaemonTrayCheckInterval);
 	label = new QLabel(i18n("seconds"), box);
-	box->setFixedHeight(box->sizeHint().height());
+	QWhatsThis::add(box,
+	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);
+	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
-	box->setStretchFactor(label, 1);
 	mStartOfDay = new TimeSpinBox(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
-	QWhatsThis::add(mStartOfDay,
-	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
 	label->setBuddy(mStartOfDay);
-	box->setFixedHeight(box->sizeHint().height());
+	QWhatsThis::add(box,
+	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
 
 #ifdef KALARM_EMAIL
 	box = new QHBox(mPage);
 	box->setSpacing(2*KDialog::spacingHint());
 	label = new QLabel(i18n("Email client:"), box);
-	box->setStretchFactor(label, 1);
 	mEmailClient = new QButtonGroup(box);
 	mEmailClient->hide();
 	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
@@ -163,10 +168,13 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
 #endif
 
-	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), mPage, "confirmDeletion");
+	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	QWhatsThis::add(mConfirmAlarmDeletion,
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);   // top-adjust all the widgets
 }
@@ -250,30 +258,40 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 {
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
-	QString setting = i18n("Cancel if &late");
-	mDefaultLateCancel = new QCheckBox(setting, mPage, "defCancelLate");
+	QHBox* box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mDefaultLateCancel = new QCheckBox(i18n("Cancel if &late"), box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(setting));
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(i18n("Cancel if late")));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 
-	setting = i18n("Confirm ac&knowledgement");
-	mDefaultConfirmAck = new QCheckBox(setting, mPage, "defConfAck");
+	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mDefaultConfirmAck = new QCheckBox(i18n("Confirm ac&knowledgement"), box, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(setting));
+	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(i18n("Confirm acknowledgement")));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 
-	mDefaultBeep = new QCheckBox(i18n("&Beep"), mPage, "defBeep");
+	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mDefaultBeep = new QCheckBox(i18n("&Beep"), box, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
 	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	setting = i18n("Copy email to &self");
-	mDefaultEmailBcc = new QCheckBox(setting, mPage, "defEmailBcc");
+	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to &self"), box, "defEmailBcc");
 	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(setting));
+	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(i18n("Copy email to self")));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 #endif
 
-	QHBox* box = new QHBox(mPage);
+	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Recurrence &period:"), box);
 	label->setFixedSize(label->sizeHint());
@@ -284,12 +302,11 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	mDefaultRecurPeriod->insertItem(i18n("Months"));
 	mDefaultRecurPeriod->insertItem(i18n("Years"));
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
-	QWhatsThis::add(mDefaultRecurPeriod,
-	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
 	label->setBuddy(mDefaultRecurPeriod);
-	label = new QLabel(box);   // dummy to left-adjust the controls
-	box->setStretchFactor(label, 1);
-	box->setFixedHeight(box->sizeHint().height());
+	QWhatsThis::add(box,
+	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);
+	itemBox->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);   // top-adjust all the widgets
 }
