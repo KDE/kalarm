@@ -1,12 +1,14 @@
 KAlarm
 
-=== Version 0.7.0 --- 12 June 2002 ===
+=== Version 0.7.0 --- 15 June 2002 ===
 Add option to play audio file when message is displayed.
 Add daily, weekly, monthly, annual recurrences.
 Allow deferring only up to next scheduled repetition time.
 Don't defer repetitions when an alarm is deferred.
 Make regular repetition and repeat-at-login mutually exclusive.
 Double click on alarm in main window opens alarm edit dialog.
+Change Reset Daemon menu option to Refresh Alarms.
+Save and restore window sizes.
 
 === Version 0.6.4 --- 8 May 2002 ===
 Make click on system tray icon always bring KAlarm to top on current desktop.
