@@ -64,7 +64,6 @@ int         KAlarmApp::activeCount = 0;
 KAlarmApp::KAlarmApp()
 	:  KUniqueApplication(),
 		mainWidget(0L),
-//		mainWidget(new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME))),
 		daemonRegistered(false),
 		m_generalSettings(new GeneralSettings(0L))
 {
@@ -326,7 +325,7 @@ int KAlarmApp::newInstance()
 	}
 	if (--activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount())
 	{
-		// This is the last/only running "instance" of the program, so exit completely.
+		// This was the last/only running "instance" of the program, so exit completely.
 		// Executing 'return' doesn't work very well since the program continues to
 		// run if no windows were created.
 		exit(exitCode);
@@ -520,7 +519,6 @@ void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, int alarmID)
 		kdError() << "KAlarmApp::rescheduleAlarm(): event ID not found: " << event.id() << endl;
 	else
 	{
-//		KAlarmEvent event(*kcalEvent);
 		KAlarmAlarm alarm = event.alarm(alarmID);
 		if (!alarm.valid())
 			kdError() << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << event.id() << ":" << alarmID << endl;
