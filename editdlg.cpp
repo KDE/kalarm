@@ -392,7 +392,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	                         true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setReadOnly(mReadOnly);
-	frameLayout->addWidget(mReminder);
+	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Top-adjust the controls
 	mFilePadding = new QHBox(mDisplayAlarmsFrame);
