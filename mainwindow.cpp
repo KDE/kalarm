@@ -166,7 +166,7 @@ void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 */
 void KAlarmMainWindow::slotNew()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New message"), this, "editDlg");
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Message"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;

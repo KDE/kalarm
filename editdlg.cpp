@@ -349,7 +349,7 @@ void EditAlarmDlg::slotBrowse()
 	static QString defaultDir;
 	if (defaultDir.isEmpty())
 		defaultDir = QDir::homeDirPath();
-	KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose text file to display"));
+	KURL url = KFileDialog::getOpenURL(defaultDir, QString::null, this, i18n("Choose Text file to Display"));
 	if (!url.isEmpty())
 	{
 		alarmMessage = url.prettyURL();
