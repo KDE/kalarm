@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -80,7 +90,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	QGroupBox* textGroup = new QGroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
-	QLabel* label = new QLabel(i18n("&Prefix:"), textGroup);
+	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
@@ -136,7 +146,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Sound checkbox and file selector
 	QBoxLayout* layout = new QHBoxLayout(groupLayout);
-	mSoundPicker = new SoundPicker(false, group);
+	mSoundPicker = new SoundPicker(group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	layout->addWidget(mSoundPicker);
 	layout->addSpacing(2*KDialog::spacingHint());

@@ -262,10 +262,10 @@ void KAlarmMainWindow::initActions()
 	KAction* actBirthday = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
 	mActionNew            = KAlarmApp::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
 	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
-	mActionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
+	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
 	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
-	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
-	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
+	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_Z, this, SLOT(slotUndelete()), actions, "undelete");
+	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
 	mActionShowTime       = new KAction(i18n("Show &Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
 	mActionShowTimeTo     = new KAction(i18n("Show Time t&o Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
 	mActionShowExpired    = new KAction(i18n("Show &Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
