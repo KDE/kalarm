@@ -27,7 +27,7 @@ kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
-	messagewin.h editdlg.h editdlgprivate.h \
+	messagewin.h messagewinprivate.h editdlg.h editdlgprivate.h \
 	recurrenceedit.h deferdlg.h birthdaydlg.h \
 	alarmevent.h alarmcalendar.h alarmlistview.h kamail.h \
 	preferences.h prefdlg.h \
