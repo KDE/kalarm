@@ -58,6 +58,7 @@ void SpinBox2::init()
 	spinbox->setSelectOnStep(false);    // default
 	updown2->setSelectOnStep(false);    // always false
 	setFocusProxy(spinbox);
+	updown2->setFocusPolicy(QWidget::NoFocus);
 	connect(spinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
 	connect(spinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
 	connect(spinbox, SIGNAL(valueChanged(const QString&)), SIGNAL(valueChanged(const QString&)));
