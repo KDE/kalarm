@@ -22,7 +22,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include <kalarmd/alarmdaemoniface.h>
+//#include <kalarmd/alarmdaemoniface.h>
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
 #include "traywindow.h"
@@ -89,6 +89,11 @@ void TrayDcopHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 	}
 }
 
+// Dummy handler functions which KAlarm doesn't use
+void TrayDcopHandler::handleEvent(const QString&, const QString&)
+{ }
+void TrayDcopHandler::handleEvent(const QString&)
+{ }
 /*
  * Expand a DCOP call parameter URL to a full URL.
  * (We must store full URLs in the calendar data since otherwise

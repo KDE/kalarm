@@ -20,10 +20,10 @@
 #ifndef TRAYDCOPHANDLER_H
 #define TRAYDCOPHANDLER_H
 
-#include "traydcopiface.h"
+#include <kalarmd/alarmguiiface.h>
 
 
-class TrayDcopHandler : public QObject, virtual public TrayDcopHandlerIface
+class TrayDcopHandler : public QObject, virtual public AlarmGuiIface
 {
 		Q_OBJECT
 	public:
@@ -35,6 +35,8 @@ class TrayDcopHandler : public QObject, virtual public TrayDcopHandlerIface
 		// DCOP interface
 		void            alarmDaemonUpdate(int alarmGuiChangeType,
 		                                  const QString& calendarURL, const QCString& appName);
+		void            handleEvent(const QString& calendarURL, const QString& eventID);
+		void            handleEvent(const QString& iCalendarString) ;
 };
 
 #endif // TRAYDCOPHANDLER_H
