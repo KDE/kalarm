@@ -75,6 +75,7 @@ class KAAlarmEventBase
 		int                repeatInterval() const      { return mRepeatInterval; }
 		bool               displaying() const          { return mDisplaying; }
 		bool               beep() const                { return mBeep; }
+		bool               speak() const               { return (mActionType == T_MESSAGE) && mSpeak; }
 		int                flags() const;
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
@@ -113,6 +114,7 @@ class KAAlarmEventBase
 		bool               mCommandScript;    // the command text is a script, not a shell command line
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mBeep;             // whether to beep when the alarm is displayed
+		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool               mDisplaying;       // whether the alarm is currently being displayed
@@ -242,18 +244,19 @@ class KAEvent : public KAAlarmEventBase
 			AUTO_CLOSE      = 0x200,   // auto-close alarm window after late-cancel period
 			SCRIPT          = 0x400,   // command is a script, not a shell command line
 			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
+			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
 #ifdef OLD_DCOP
 			// The following are read-only internal values, and may be changed
 #else
 			// The following are read-only internal values
 #endif
-			REMINDER        = 0x1000,
-			DEFERRAL        = 0x2000,
-			TIMED_FLAG      = 0x4000,
+			REMINDER        = 0x10000,
+			DEFERRAL        = 0x20000,
+			TIMED_FLAG      = 0x40000,
 			DATE_DEFERRAL   = DEFERRAL,
 			TIME_DEFERRAL   = DEFERRAL | TIMED_FLAG,
-			DISPLAYING_     = 0x8000,
-			READ_ONLY_FLAGS = 0xF000   // mask for all read-only internal values
+			DISPLAYING_     = 0x80000,
+			READ_ONLY_FLAGS = 0xF0000   // mask for all read-only internal values
 		};
 		enum RecurType
 		{

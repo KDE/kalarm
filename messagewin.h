@@ -66,6 +66,7 @@ class MessageWin : public MainWindowBase
 		void                slotDefer();
 		void                checkDeferralLimit();
 		void                displayMainWindow();
+		void                slotSpeak();
 		void                slotPlayAudio();
 		void                checkAudioPlay();
 		void                stopPlay();
@@ -134,6 +135,7 @@ class MessageWin : public MainWindowBase
 		bool                mNoPostAction;    // don't execute any post-alarm action
 		bool                mRecreating;      // window is about to be deleted and immediately recreated
 		bool                mBeep;
+		bool                mSpeak;           // the message should be spoken via kttsd
 		bool                mRescheduleEvent; // true to delete event after message has been displayed
 		bool                mShown;           // true once the window has been displayed
 		bool                mPositioning;     // true when the window is being positioned initially

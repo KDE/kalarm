@@ -55,6 +55,7 @@ static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
 static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 static const QCString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+static const QCString SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event categories
 static const QString DATE_ONLY_CATEGORY        = QString::fromLatin1("DATE");
@@ -88,6 +89,7 @@ struct AlarmData
 	float                  soundVolume;
 	float                  fadeVolume;
 	int                    fadeSeconds;
+	bool                   speak;
 	KAAlarm::SubType       type;
 	KAAlarmEventBase::Type action;
 	int                    displayingFlags;
@@ -186,6 +188,7 @@ void KAEvent::set(const Event& event)
 	mTemplateName           = QString::null;
 	mTemplateAfterTime      = -1;
 	mBeep                   = false;
+	mSpeak                  = false;
 	mEmailBcc               = false;
 	mCommandXterm           = false;
 	mConfirmAck             = false;
@@ -357,11 +360,12 @@ void KAEvent::set(const Event& event)
 			}
 			case KAAlarm::AUDIO__ALARM:
 				mAudioFile   = data.cleanText;
-				mBeep        = mAudioFile.isEmpty();
-				mSoundVolume = !mBeep ? data.soundVolume : -1;
+				mSpeak       = data.speak  &&  mAudioFile.isEmpty();
+				mBeep        = !mSpeak  &&  mAudioFile.isEmpty();
+				mSoundVolume = (!mBeep && !mSpeak) ? data.soundVolume : -1;
 				mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
 				mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
-				mRepeatSound = !mBeep  &&  (data.repeatCount < 0);
+				mRepeatSound = (!mBeep && !mSpeak)  &&  (data.repeatCount < 0);
 				break;
 			case KAAlarm::PRE_ACTION__ALARM:
 				mPreAction = data.cleanText;
@@ -541,6 +545,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			data.soundVolume = -1;
 			data.fadeVolume  = -1;
 			data.fadeSeconds = 0;
+			data.speak       = !alarm.customProperty(APPNAME, SPEAK_PROPERTY).isNull();
 			QString property = alarm.customProperty(APPNAME, VOLUME_PROPERTY);
 			if (!property.isEmpty())
 			{
@@ -1017,7 +1022,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		if (!ancillaryTime.isValid())
 			ancillaryTime = mDisplayingTime;
 	}
-	if (mBeep  ||  !mAudioFile.isEmpty())
+	if (mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())
 	{
 		// A sound is specified
 		initKcalAlarm(ev, ancillaryTime, QStringList(), KAAlarm::AUDIO_ALARM);
@@ -1106,7 +1111,9 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	switch (type)
 	{
 		case KAAlarm::AUDIO_ALARM:
-			alarm->setAudioAlarm(mAudioFile);  // empty for a beep
+			alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
+			if (mSpeak)
+				alarm->setCustomProperty(APPNAME, SPEAK_PROPERTY, QString::fromLatin1("Y"));
 			if (mRepeatSound)
 			{
 				alarm->setRepeatCount(-1);
@@ -1186,6 +1193,7 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mFont          = mFont;
 		al.mDefaultFont   = mDefaultFont;
 		al.mBeep          = mBeep;
+		al.mSpeak         = mSpeak;
 		al.mSoundVolume   = mSoundVolume;
 		al.mFadeVolume    = mFadeVolume;
 		al.mFadeSeconds   = mFadeSeconds;
@@ -3210,6 +3218,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mRepeatCount      = rhs.mRepeatCount;
 	mRepeatInterval   = rhs.mRepeatInterval;
 	mBeep             = rhs.mBeep;
+	mSpeak            = rhs.mSpeak;
 	mRepeatSound      = rhs.mRepeatSound;
 	mRepeatAtLogin    = rhs.mRepeatAtLogin;
 	mDisplaying       = rhs.mDisplaying;
@@ -3222,7 +3231,8 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 
 void KAAlarmEventBase::set(int flags)
 {
-	mBeep          = flags & KAEvent::BEEP;
+	mSpeak         = flags & KAEvent::SPEAK;
+	mBeep          = (flags & KAEvent::BEEP) && !mSpeak;
 	mRepeatSound   = flags & KAEvent::REPEAT_SOUND;
 	mRepeatAtLogin = flags & KAEvent::REPEAT_AT_LOGIN;
 	mAutoClose     = flags & KAEvent::AUTO_CLOSE;
@@ -3236,16 +3246,17 @@ void KAAlarmEventBase::set(int flags)
 
 int KAAlarmEventBase::flags() const
 {
-	return (mBeep          ? KAEvent::BEEP : 0)
-	     | (mRepeatSound   ? KAEvent::REPEAT_SOUND : 0)
-	     | (mRepeatAtLogin ? KAEvent::REPEAT_AT_LOGIN : 0)
-	     | (mAutoClose     ? KAEvent::AUTO_CLOSE : 0)
-	     | (mEmailBcc      ? KAEvent::EMAIL_BCC : 0)
-	     | (mConfirmAck    ? KAEvent::CONFIRM_ACK : 0)
-	     | (mDisplaying    ? KAEvent::DISPLAYING_ : 0)
-	     | (mDefaultFont   ? KAEvent::DEFAULT_FONT : 0)
-	     | (mCommandScript ? KAEvent::SCRIPT : 0)
-	     | (mCommandXterm  ? KAEvent::EXEC_IN_XTERM : 0);
+	return (mBeep && !mSpeak ? KAEvent::BEEP : 0)
+	     | (mSpeak           ? KAEvent::SPEAK : 0)
+	     | (mRepeatSound     ? KAEvent::REPEAT_SOUND : 0)
+	     | (mRepeatAtLogin   ? KAEvent::REPEAT_AT_LOGIN : 0)
+	     | (mAutoClose       ? KAEvent::AUTO_CLOSE : 0)
+	     | (mEmailBcc        ? KAEvent::EMAIL_BCC : 0)
+	     | (mConfirmAck      ? KAEvent::CONFIRM_ACK : 0)
+	     | (mDisplaying      ? KAEvent::DISPLAYING_ : 0)
+	     | (mDefaultFont     ? KAEvent::DEFAULT_FONT : 0)
+	     | (mCommandScript   ? KAEvent::SCRIPT : 0)
+	     | (mCommandXterm    ? KAEvent::EXEC_IN_XTERM : 0);
 
 }
 
@@ -3280,6 +3291,7 @@ void KAAlarmEventBase::dumpDebug() const
 	if (!mDefaultFont)
 		kdDebug(5950) << "-- mFont:" << mFont.toString() << ":\n";
 	kdDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mSpeak:" << (mSpeak ? "true" : "false") << ":\n";
 	if (mActionType == T_AUDIO)
 	{
 		if (mSoundVolume >= 0)

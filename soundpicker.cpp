@@ -23,6 +23,8 @@
 #include <qlayout.h>
 #include <qregexp.h>
 #include <qtooltip.h>
+#include <qtimer.h>
+#include <qhbox.h>
 #include <qwhatsthis.h>
 
 #include <kglobal.h>
@@ -33,9 +35,13 @@
 #ifndef WITHOUT_ARTS
 #include <arts/kplayobjectfactory.h>
 #endif
+#include <kdebug.h>
 
+#include "buttongroup.h"
 #include "checkbox.h"
+#include "kalarmapp.h"
 #include "pushbutton.h"
+#include "radiobutton.h"
 #include "sounddlg.h"
 #include "soundpicker.moc"
 
@@ -47,7 +53,8 @@ QString SoundPicker::i18n_s_Sound()     { return i18n("An audio sound", "&Sound"
 
 
 SoundPicker::SoundPicker(QWidget* parent, const char* name)
-	: QFrame(parent, name)
+	: QFrame(parent, name),
+	  mRevertType(false)
 {
 	// Sound checkbox
 	setFrameStyle(QFrame::NoFrame);
@@ -61,57 +68,136 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	           "button on the right to select the sound."));
 	soundLayout->addWidget(mCheckbox);
 
+	// Sound type
+	mTypeGroup = new ButtonGroup(this);
+	mTypeGroup->hide();
+	connect(mTypeGroup, SIGNAL(buttonSet(int)), SLOT(slotTypeChanged(int)));
+
+	// Beep radio button
+	mBeepRadio = new RadioButton(i18n("Beep"), this, "beepButton");
+	mBeepRadio->setFixedSize(mBeepRadio->sizeHint());
+	QWhatsThis::add(mBeepRadio, i18n("If checked, a beep will sound when the alarm is displayed."));
+	mTypeGroup->insert(mBeepRadio, BEEP);
+	soundLayout->addWidget(mBeepRadio);
+
+	// File radio button
+	QHBox* box = new QHBox(this);
+	mFileRadio = new RadioButton(i18n("File"), box, "audioFileButton");
+	mFileRadio->setFixedSize(mFileRadio->sizeHint());
+	QWhatsThis::add(mFileRadio, i18n("If checked, a sound file will be played when the alarm is displayed."));
+	mTypeGroup->insert(mFileRadio, PLAY_FILE);
+
 	// Sound file picker button
-	mFilePicker = new PushButton(this);
+	mFilePicker = new PushButton(box);
 	mFilePicker->setPixmap(SmallIcon("playsound"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
-	mFilePicker->setToggleButton(true);
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
-	QWhatsThis::add(mFilePicker,
-	      i18n("Configure a sound file to play when the message is displayed. If no sound file is "
-	           "selected, a beep will sound."));
-	soundLayout->addWidget(mFilePicker);
+	QWhatsThis::add(mFilePicker, i18n("Configure a sound file to play when the alarm is displayed."));
+	box->setFixedSize(box->sizeHint());
+	soundLayout->addWidget(box);
+	box->setFocusProxy(mFileRadio);
+
+	// Speak radio button
+	mSpeakRadio = new RadioButton(i18n("S&peak"), this, "speakButton");
+	mSpeakRadio->setFixedSize(mSpeakRadio->sizeHint());
+	QWhatsThis::add(mSpeakRadio, i18n("If checked, the message will be spoken when the alarm is displayed."));
+	mTypeGroup->insert(mSpeakRadio, SPEAK);
+	soundLayout->addWidget(mSpeakRadio);
+
+	if (!theApp()->speechEnabled())
+		mSpeakRadio->hide();     // speech capability is not installed
+
+	setTabOrder(mCheckbox, mBeepRadio);
+	setTabOrder(mBeepRadio, mFileRadio);
+	setTabOrder(mFileRadio, mFilePicker);
+	setTabOrder(mFilePicker, mSpeakRadio);
 
 	// Initialise the file picker button state and tooltip
 	slotSoundToggled(false);
 }
 
 /******************************************************************************
- * Set the read-only status of the widget.
- */
+* Set the read-only status of the widget.
+*/
 void SoundPicker::setReadOnly(bool readOnly)
 {
 	mCheckbox->setReadOnly(readOnly);
+	mBeepRadio->setReadOnly(readOnly);
+	mFileRadio->setReadOnly(readOnly);
 #ifdef WITHOUT_ARTS
 	mFilePicker->setReadOnly(readOnly);
 #endif
+	mSpeakRadio->setReadOnly(readOnly);
 	mReadOnly = readOnly;
 }
 
 /******************************************************************************
- * Return whether beep is selected.
- */
+* Show or hide the Speak option.
+*/
+void SoundPicker::showSpeak(bool show)
+{
+	if (!theApp()->speechEnabled())
+		return;     // speech capability is not installed
+
+	bool shown = !mSpeakRadio->isHidden();
+	if (show  &&  !shown)
+		mSpeakRadio->show();
+	else if (!show  &&  shown)
+	{
+		if (mSpeakRadio->isOn())
+			mCheckbox->setChecked(false);
+		mSpeakRadio->hide();
+	}
+}
+
+/******************************************************************************
+* Return whether sound is selected.
+*/
+bool SoundPicker::sound() const
+{
+	return mCheckbox->isChecked();
+}
+
+/******************************************************************************
+* Return the currently selected option.
+*/
+SoundPicker::Type SoundPicker::type() const
+{
+	return static_cast<SoundPicker::Type>(mTypeGroup->selectedId());
+}
+
+/******************************************************************************
+* Return whether beep is selected.
+*/
 bool SoundPicker::beep() const
 {
-	return mCheckbox->isChecked()  &&  !mFilePicker->isOn();
+	return mCheckbox->isChecked()  &&  mBeepRadio->isOn();
 }
 
 /******************************************************************************
- * Return the selected sound file, if the main checkbox is checked.
- * Returns null string if beep is currently selected.
- */
+* Return whether speech is selected.
+*/
+bool SoundPicker::speak() const
+{
+	return mCheckbox->isChecked()  &&  !mSpeakRadio->isHidden()  &&  mSpeakRadio->isOn();
+}
+
+/******************************************************************************
+* Return the selected sound file, if the main checkbox is checked.
+* Returns null string if beep is currently selected.
+*/
 QString SoundPicker::file() const
 {
-	return mCheckbox->isChecked() && mFilePicker->isOn() ? mFile : QString::null;
+	return mCheckbox->isChecked() && mFileRadio->isOn() ? mFile : QString::null;
 }
 
 /******************************************************************************
- * Return the specified volumes (range 0 - 1).
- * Returns < 0 if beep is currently selected, or if 'set volume' is not selected.
- */
+* Return the specified volumes (range 0 - 1).
+* Returns < 0 if beep is currently selected, or if 'set volume' is not selected.
+*/
 float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 {
-	if (mCheckbox->isChecked() && mFilePicker->isOn() && !mFile.isEmpty())
+	if (mCheckbox->isChecked() && mFileRadio->isOn() && !mFile.isEmpty())
 	{
 		fadeVolume  = mFadeVolume;
 		fadeSeconds = mFadeSeconds;
@@ -126,112 +212,130 @@ float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 }
 
 /******************************************************************************
- * Return whether sound file repetition is selected, if the main checkbox is checked.
- * Returns false if beep is currently selected.
- */
+* Return whether sound file repetition is selected, if the main checkbox is checked.
+* Returns false if beep is currently selected.
+*/
 bool SoundPicker::repeat() const
 {
-	return mCheckbox->isChecked() && mFilePicker->isOn() && !mFile.isEmpty() && mRepeat;
+	return mCheckbox->isChecked() && mFileRadio->isOn() && !mFile.isEmpty() && mRepeat;
 }
 
 /******************************************************************************
- * Initialise the widget's state.
- */
-void SoundPicker::set(bool beep, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+* Initialise the widget's state.
+*/
+void SoundPicker::set(bool sound, SoundPicker::Type defaultType, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
 {
-	mCheckbox->setChecked(beep || !f.isEmpty());
-	setFile(!beep  &&  !f.isEmpty(), f, volume, fadeVolume, fadeSeconds, repeat);
-}
-
-/******************************************************************************
- * Set sound on or off.
- */
-void SoundPicker::setChecked(bool on)
-{
-	mCheckbox->setChecked(on);
-}
-
-/******************************************************************************
- * Set the current beep status.
- */
-void SoundPicker::setBeep(bool beep)
-{
-	mFilePicker->setOn(!beep);
-	setFilePicker();
-}
-
-/******************************************************************************
- * Set the current sound file selection, volume and repetition status.
- */
-void SoundPicker::setFile(bool on, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
-{
+	if (defaultType == PLAY_FILE  &&  f.isEmpty())
+		defaultType = BEEP;
+	mLastType    = static_cast<Type>(0);
 	mFile        = f;
-	mFilePicker->setOn(on);
-	setFilePicker();
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
+	QToolTip::add(mFilePicker, mFile);
+	mCheckbox->setChecked(sound);
+	mTypeGroup->setButton(defaultType);
 }
 
 /******************************************************************************
- * Called when the sound checkbox is toggled.
- */
+* Called when the sound checkbox is toggled.
+*/
 void SoundPicker::slotSoundToggled(bool on)
 {
-	mFilePicker->setEnabled(on);
-	setFilePicker();
+	mBeepRadio->setEnabled(on);
+	mSpeakRadio->setEnabled(on);
+	mFileRadio->setEnabled(on);
+	mFilePicker->setEnabled(on && mFileRadio->isOn());
+	if (on  &&  mSpeakRadio->isHidden()  &&  mSpeakRadio->isOn())
+		mBeepRadio->setChecked(true);
+	if (on)
+		mBeepRadio->setFocus();
 }
 
 /******************************************************************************
- * Called when the file picker button is clicked.
- */
+* Called when the sound option is changed.
+*/
+void SoundPicker::slotTypeChanged(int id)
+{
+	Type newType = static_cast<Type>(id);
+	if (newType == mLastType  ||  mRevertType)
+		return;
+	if (mLastType == PLAY_FILE)
+		mFilePicker->setEnabled(false);
+	else if (newType == PLAY_FILE)
+	{
+		if (mFile.isEmpty())
+		{
+			slotPickFile();
+			if (mFile.isEmpty())
+				return;    // revert to previously selected type
+		}
+		mFilePicker->setEnabled(mCheckbox->isChecked());
+	}
+	mLastType = newType;
+}
+
+/******************************************************************************
+* Called when the file picker button is clicked.
+*/
 void SoundPicker::slotPickFile()
 {
-	if (mFilePicker->isOn())
-	{
 #ifdef WITHOUT_ARTS
-		KURL url = browseFile(mFile, mDefaultDir);
-		if (!url.isEmpty())
-		{
-			mFile = url.prettyURL();
-			mDefaultDir = url.path();
-		}
-#else
-		QString file = mFile;
-		SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat,
-		             i18n("Sound File"), this, "soundDlg");
-		dlg.setReadOnly(mReadOnly);
-		bool accepted = (dlg.exec() == QDialog::Accepted);
-		if (mReadOnly)
-			return;
-		if (accepted)
-		{
-			float volume, fadeVolume;
-			int   fadeTime;
-			file         = dlg.getFile();
-			mRepeat      = dlg.getSettings(volume, fadeVolume, fadeTime);
-			mVolume      = volume;
-			mFadeVolume  = fadeVolume;
-			mFadeSeconds = fadeTime;
-		}
-		if (!file.isEmpty())
-		{
-			mFile       = file;
-			mDefaultDir = dlg.defaultDir();
-		}
-#endif
-		else
-			mFilePicker->setOn(false);
+	KURL url = browseFile(mFile, mDefaultDir);
+	if (!url.isEmpty())
+	{
+		mFile = url.prettyURL();
+		mDefaultDir = url.path();
 	}
-	setFilePicker();
+#else
+	QString file = mFile;
+	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat,
+		     i18n("Sound File"), this, "soundDlg");
+	dlg.setReadOnly(mReadOnly);
+	bool accepted = (dlg.exec() == QDialog::Accepted);
+	if (mReadOnly)
+		return;
+	if (accepted)
+	{
+		float volume, fadeVolume;
+		int   fadeTime;
+		file         = dlg.getFile();
+		mRepeat      = dlg.getSettings(volume, fadeVolume, fadeTime);
+		mVolume      = volume;
+		mFadeVolume  = fadeVolume;
+		mFadeSeconds = fadeTime;
+	}
+	if (!file.isEmpty())
+	{
+		mFile       = file;
+		mDefaultDir = dlg.defaultDir();
+	}
+#endif
+	QToolTip::add(mFilePicker, mFile);
+	if (mFile.isEmpty())
+	{
+		// No audio file is selected, so revert to 'beep'.
+		// But wait a moment until setting the radio button, or it won't work.
+		mRevertType = true;   // prevent sound dialogue popping up twice
+		QTimer::singleShot(0, this, SLOT(setLastType()));
+	}
 }
 
 /******************************************************************************
- * Display a dialogue to choose a sound file, initially highlighting any
- * specified file. 'initialFile' must be a full path name or URL.
- * Reply = URL selected. If none is selected, URL.isEmpty() is true.
- */
+* Select the previously selected sound type.
+*/
+void SoundPicker::setLastType()
+{
+	mTypeGroup->setButton(mLastType);
+	mRevertType = false;
+}
+
+/******************************************************************************
+* Display a dialogue to choose a sound file, initially highlighting any
+* specified file. 'initialFile' must be a full path name or URL.
+* Reply = URL selected. If none is selected, URL.isEmpty() is true.
+*/
 KURL SoundPicker::browseFile(const QString& initialFile, const QString& defaultDir)
 {
 	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
@@ -249,21 +353,4 @@ KURL SoundPicker::browseFile(const QString& initialFile, const QString& defaultD
 	if (fileDlg.exec() == QDialog::Accepted)
 		return fileDlg.selectedURL();
 	return KURL();
-}
-
-/******************************************************************************
- * Set the sound picker button according to whether a sound file is selected.
- */
-void SoundPicker::setFilePicker()
-{
-	bool file = false;
-	QToolTip::remove(mFilePicker);
-	if (mFilePicker->isEnabled())
-	{
-		file = mFilePicker->isOn();
-		if (mFilePicker->isOn())
-			QToolTip::add(mFilePicker, i18n("Play '%1'").arg(mFile));
-		else
-			QToolTip::add(mFilePicker, i18n("Beep"));
-	}
 }

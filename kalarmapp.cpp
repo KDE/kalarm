@@ -39,6 +39,7 @@
 #include <ktempfile.h>
 #include <kfileitem.h>
 #include <kstdguiitem.h>
+#include <ktrader.h>
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
@@ -103,7 +104,8 @@ KAlarmApp::KAlarmApp()
 	  mProcessingQueue(false),
 	  mCheckingSystemTray(false),
 	  mSessionClosingDown(false),
-	  mRefreshExpiredAlarms(false)
+	  mRefreshExpiredAlarms(false),
+	  mSpeechEnabled(false)
 {
 #if KDE_VERSION < 290
 	marginKDE2 = KDialog::marginHint();
@@ -139,6 +141,13 @@ KAlarmApp::KAlarmApp()
 		mPrefsShowTime        = preferences->showAlarmTime();
 		mPrefsShowTimeTo      = preferences->showTimeToAlarm();
 	}
+
+	// Check if the speech synthesis daemon is installed
+#if KDE_IS_VERSION(3,3,90)
+	mSpeechEnabled = (KTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
+	if (!mSpeechEnabled)
+		kdDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
+#endif
 }
 
 /******************************************************************************

@@ -88,6 +88,7 @@ class Preferences : public QObject
 		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
 		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
+		bool           defaultSpeak() const             { return mDefaultSpeak; }
 		int            defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
@@ -150,6 +151,7 @@ class Preferences : public QObject
 		static const bool        default_defaultSound;
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
+		static const bool        default_defaultSpeak;
 		static const bool        default_defaultConfirmAck;
 		static const bool        default_defaultCmdScript;
 		static const bool        default_defaultCmdXterm;
@@ -221,6 +223,7 @@ class Preferences : public QObject
 		bool                mDefaultSound;
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;
+		bool                mDefaultSpeak;
 		bool                mDefaultConfirmAck;
 		bool                mDefaultCmdScript;
 		bool                mDefaultCmdXterm;

@@ -197,7 +197,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
 	mLateCancel->setMinutes(preferences->defaultLateCancel(), true, TimePeriod::DAYS);
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
-	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
+	SoundPicker::Type soundType = preferences->defaultSpeak() ? SoundPicker::SPEAK
+	                            : preferences->defaultBeep()  ? SoundPicker::BEEP
+	                            :                               SoundPicker::PLAY_FILE;
+	mSoundPicker->set(preferences->defaultSound(), soundType, preferences->defaultSoundFile(),
 	                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());

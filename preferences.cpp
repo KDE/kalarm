@@ -73,6 +73,7 @@ const bool       Preferences::default_defaultAutoClose         = false;
 const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
 const bool       Preferences::default_defaultBeep              = false;
+const bool       Preferences::default_defaultSpeak             = false;
 const bool       Preferences::default_defaultConfirmAck        = false;
 const bool       Preferences::default_defaultCmdScript         = false;
 const bool       Preferences::default_defaultCmdXterm          = false;
@@ -141,6 +142,7 @@ static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFil
 static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
 static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
 static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
+static const QString DEF_SPEAK                = QString::fromLatin1("DefSpeak");
 static const QString DEF_CMD_SCRIPT           = QString::fromLatin1("DefCmdScript");
 static const QString DEF_CMD_XTERM            = QString::fromLatin1("DefCmdXterm");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
@@ -261,6 +263,7 @@ Preferences::Preferences()
 	mDefaultConfirmAck        = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound             = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	mDefaultBeep              = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+	mDefaultSpeak             = config->readBoolEntry(DEF_SPEAK, default_defaultSpeak);
 	mDefaultSoundVolume       = static_cast<float>(config->readDoubleNumEntry(DEF_SOUND_VOLUME, default_defaultSoundVolume));
 #ifdef WITHOUT_ARTS
 	mDefaultSoundRepeat       = false;
@@ -329,6 +332,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
+	config->writeEntry(DEF_SPEAK, mDefaultSpeak);
 	config->writeEntry(DEF_SOUND, mDefaultSound);
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));

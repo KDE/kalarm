@@ -30,6 +30,7 @@
 #include "recurrenceedit.h"
 
 class QButtonGroup;
+class QButton;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -196,7 +197,8 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mDefaultCmdScript;
 		QCheckBox*      mDefaultCmdXterm;
 		QCheckBox*      mDefaultEmailBcc;
-		QCheckBox*      mDefaultBeep;
+		QButton*        mDefaultBeep;
+		QRadioButton*   mDefaultSpeak;
 		QCheckBox*      mDefaultSound;
 		QLabel*         mDefaultSoundFileLabel;
 		QLineEdit*      mDefaultSoundFile;

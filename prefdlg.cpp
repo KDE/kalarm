@@ -942,25 +942,48 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	layout->addWidget(mDefaultSpecialActions);
 
 	// SOUND
-	group = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
-	QGridLayout* grid = new QGridLayout(group, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QButtonGroup* bgroup = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
+	QGridLayout* grid = new QGridLayout(bgroup, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, indentWidth());
 	grid->addColSpacing(1, indentWidth());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
-	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), group, "defSound");
+	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bgroup, "defSound");
 	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
 	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound()));
 	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, Qt::AlignAuto);
 
-	mDefaultBeep = new QCheckBox(i18n("&Beep"), group, "defBeep");
+	bool showSpeak = theApp()->speechEnabled();
+	if (showSpeak)
+	{
+		box = new QHBox(bgroup);
+		box->setSpacing(KDialog::spacingHint());
+		grid->addMultiCellWidget(box, 2, 2, 1, 2, Qt::AlignAuto);
+		mDefaultBeep = new QRadioButton(i18n("&Beep"), box, "defBeep");
+		bgroup->insert(mDefaultBeep);
+	}
+	else
+	{
+		mDefaultBeep = new QCheckBox(i18n("&Beep"), bgroup, "defBeep");
+		grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, Qt::AlignAuto);
+	}
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
 	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
-	grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, Qt::AlignAuto);
 
-	box = new QHBox(group);   // this is to control the QWhatsThis text display area
+	if (showSpeak)
+	{
+		mDefaultSpeak = new QRadioButton(i18n("Speak"), box, "defSpeak");
+		mDefaultSpeak->setMinimumSize(mDefaultSpeak->sizeHint());
+		QWhatsThis::add(mDefaultSpeak,
+		      i18n("Check to select Speak as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
+		bgroup->insert(mDefaultSpeak);
+	}
+	else
+		mDefaultSpeak = 0;
+
+	box = new QHBox(bgroup);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	mDefaultSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
 	mDefaultSoundFileLabel->setFixedSize(mDefaultSoundFileLabel->sizeHint());
@@ -977,12 +1000,12 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	grid->addMultiCellWidget(box, 3, 3, 1, 2);
 
 #ifndef WITHOUT_ARTS
-	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), group, "defRepeatSound");
+	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bgroup, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
 	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
 	grid->addWidget(mDefaultSoundRepeat, 4, 2, Qt::AlignAuto);
 #endif
-	group->setFixedHeight(group->sizeHint().height());
+	bgroup->setFixedHeight(bgroup->sizeHint().height());
 
 	// COMMAND ALARMS
 	group = new QGroupBox(i18n("Command Alarms"), mPage);
@@ -1042,7 +1065,13 @@ void EditPrefTab::restore()
 	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
 	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
-	mDefaultBeep->setChecked(preferences->mDefaultBeep);
+	mDefaultSound->setChecked(preferences->mDefaultSound);
+	bool beep = preferences->mDefaultBeep;
+	bool oldBeep = mDefaultBeep->isOn();
+	if (beep && !oldBeep  ||  !beep && oldBeep)
+		mDefaultBeep->toggle();
+	if (mDefaultSpeak)
+		mDefaultSpeak->setChecked(preferences->mDefaultSpeak);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
@@ -1061,7 +1090,9 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked() ? 1 : 0;
 	preferences->mDefaultAutoClose   = mDefaultAutoClose->isChecked();
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
-	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
+	preferences->mDefaultSound       = mDefaultSound->isChecked();
+	preferences->mDefaultBeep        = mDefaultBeep->isOn();
+	preferences->mDefaultSpeak       = mDefaultSpeak && mDefaultSpeak->isOn();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
 #ifndef WITHOUT_ARTS
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
@@ -1091,7 +1122,13 @@ void EditPrefTab::setDefaults()
 	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
 	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
-	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
+	mDefaultSound->setChecked(Preferences::default_defaultSound);
+	bool beep = Preferences::default_defaultBeep;
+	bool oldBeep = mDefaultBeep->isOn();
+	if (beep && !oldBeep  ||  !beep && oldBeep)
+		mDefaultBeep->toggle();
+	if (mDefaultSpeak)
+		mDefaultSpeak->setChecked(Preferences::default_defaultSpeak);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);

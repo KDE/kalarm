@@ -29,6 +29,7 @@
 #include "alarmevent.h"
 #include "alarmtext.h"
 #include "datetime.h"
+#include "soundpicker.h"
 
 class QButton;
 class QGroupBox;
@@ -46,7 +47,6 @@ class CheckBox;
 class LateCancelSelector;
 class AlarmTimeWidget;
 class RecurrenceEdit;
-class SoundPicker;
 class Reminder;
 class SpecialActionsButton;
 class RepetitionButton;
@@ -223,7 +223,8 @@ class EditAlarmDlg : public KDialogBase
 		QTime               mSavedTemplateTime;   // mTemplateTime value
 		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
 		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
-		bool                mSavedBeep;           // mSoundPicker beep status
+		SoundPicker::Type   mSavedSoundType;      // mSoundPicker sound type
+		bool                mSavedSound;          // mSoundPicker sound status
 		bool                mSavedRepeatSound;    // mSoundPicker repeat status
 		QString             mSavedSoundFile;      // mSoundPicker sound file
 		float               mSavedSoundVolume;    // mSoundPicker volume

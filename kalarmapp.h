@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
+		bool               speechEnabled() const           { return mSpeechEnabled; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
@@ -176,6 +177,7 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
+		bool                  mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool                  mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
 		bool                  mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
