@@ -25,6 +25,8 @@
 
 #include <qfile.h>
 
+#include <iostream>
+
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -320,7 +322,7 @@ int KAlarmApp::newInstance()
 	{
 		// Note: we can't use args->usage() since that also quits any other
 		// running 'instances' of the program.
-		cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
+		std::cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
 		exitCode = 1;
 	}
 	if (--activeCount <= 0  &&  mainWindowList.isEmpty()  &&  !MessageWin::instanceCount())

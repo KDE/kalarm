@@ -111,7 +111,7 @@ class AlarmListView : public KListView
 		AlarmListViewItem*   selectedItem() const	{ return (AlarmListViewItem*)KListView::selectedItem(); }
 		AlarmListViewItem*   currentItem() const	{ return (AlarmListViewItem*)KListView::currentItem(); }
 	private:
-		map<AlarmListViewItem*, AlarmItemData> entries;
+		std::map<AlarmListViewItem*, AlarmItemData> entries;
 		int                  lastColumnHeaderWidth_;
 		bool                 drawMessageInColour_;
 };
