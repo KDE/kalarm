@@ -36,7 +36,6 @@
 #include <kprocess.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kwinmodule.h>
 #include <kdebug.h>
 
 #include <kalarmd/clientinfo.h>
@@ -76,8 +75,6 @@ KAlarmApp::KAlarmApp()
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
-	KWinModule wm;
-	mKDEDesktop = wm.systemTrayWindows().count();
 	// Set up actions used by more than one menu
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
@@ -163,13 +160,12 @@ int KAlarmApp::newInstance()
 			{
 				// Display only the system tray icon
 				args->clear();      // free up memory
-				if (!mKDEDesktop
-				||  !initCheck()    // open the calendar, register with daemon
-				||  !displayTrayIcon(true))
+				if (!initCheck())     // open the calendar, register with daemon
 				{
 					exitCode = 1;
 					break;
 				}
+				displayTrayIcon(true);
 			}
 			else
 			if (args->isSet("handleEvent")  ||  args->isSet("displayEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
@@ -409,21 +405,18 @@ void KAlarmApp::deleteWindow(TrayWindow*)
 /******************************************************************************
 *  Display or close the system tray icon.
 */
-bool KAlarmApp::displayTrayIcon(bool show)
+void KAlarmApp::displayTrayIcon(bool show)
 {
 	if (show)
 	{
 		if (!mTrayWindow)
 		{
-			if (!mKDEDesktop)
-				return false;
 			mTrayWindow = new TrayWindow;
 			mTrayWindow->show();
 		}
 	}
 	else
 		delete mTrayWindow;
-	return true;
 }
 
 /******************************************************************************
