@@ -72,7 +72,7 @@ class RecurrenceEdit : public QFrame
 		/** Initialise according to a specified event */
 		void          set(const KAEvent&);
 		/** Write event settings to event object */
-		void          updateEvent(KAEvent&);
+		void          updateEvent(KAEvent&, bool adjustStart);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }

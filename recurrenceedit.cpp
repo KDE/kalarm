@@ -49,9 +49,7 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
-#if 0
 #include <kcalendarsystem.h>
-#endif
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -422,17 +420,11 @@ void RecurrenceEdit::initWeekly()
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
-#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-#endif
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-#if 0
 		mWeekRuleDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
-#else
-		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
-#endif
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
 		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignLeft);
@@ -513,16 +505,10 @@ void RecurrenceEdit::initYearly()
 	// List the months of the year.
 	QWidget* box = new QWidget(mYearRuleButtonGroup);   // this is to control the QWhatsThis text display area
 	QGridLayout* mgrid = new QGridLayout(box, 4, 3, 0, KDialog::spacingHint());
-#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-#endif
 	for (int i = 0;  i < 12;  ++i)
 	{
-#if 0
 		mYearRuleMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
-#else
-		mYearRuleMonthBox[i] = new CheckBox(KGlobal::locale()->monthName(i + 1), box);
-#endif
 		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
 		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
 		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignLeft);
@@ -620,17 +606,11 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 
 	*dayCombo = new ComboBox(false, parent);
 	ComboBox* dc = *dayCombo;
-#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-#endif
 	for (i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-#if 0
 		dc->insertItem(calendar->weekDayName(day));
-#else
-		dc->insertItem(KGlobal::locale()->weekDayName(day));
-#endif
 	}
 	dc->setReadOnly(mReadOnly);
 	QWhatsThis::add(dc,
@@ -1240,8 +1220,10 @@ void RecurrenceEdit::set(const KAEvent& event)
 
 /******************************************************************************
  * Update the specified KAEvent with the entered recurrence data.
+ * If 'adjustStart' is true, the start date/time will be adjusted if necessary
+ * to be the first date/time which recurs on or after the original start.
  */
-void RecurrenceEdit::updateEvent(KAEvent& event)
+void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 {
 	// Get end date and repeat count, common to all types of recurring events
 	QDate  endDate;
@@ -1279,6 +1261,8 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 		QBitArray rDays(7);
 		getCheckedDays(rDays);
 		event.setRecurWeekly(frequency, rDays, repeatCount, endDate);
+		if (adjustStart)
+			event.setFirstRecurrence();
 	}
 	else if (button == mMonthlyButton)
 	{
@@ -1294,7 +1278,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
-			event.setFirstRecurrence();
 		}
 		else
 		{
@@ -1306,6 +1289,8 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			daynums.append(daynum);
 			event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
 		}
+		if (adjustStart)
+			event.setFirstRecurrence();
 	}
 	else if (button == mYearlyButton)
 	{
@@ -1324,7 +1309,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
-			if (months.count())
+			if (adjustStart  &&  months.count())
 				event.setFirstRecurrence();
 		}
 /*		else if (mYearRuleDayButton->isChecked())
@@ -1346,7 +1331,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			int startday = d.day();
 			event.setRecurAnnualByDate(frequency, months, (startday != daynum ? daynum : 0),
 			                           feb29, repeatCount, endDate);
-			if (months.count())
+			if (adjustStart  &&  months.count())
 			{
 				// Some month(s) are specified, i.e. it's not a template, so if
 				// necessary adjust the start date to correspond with the recurrence.

@@ -896,7 +896,8 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 		KAEvent event;
 		event.setTime(mSavedEvent->startDateTime().dateTime());
-		mRecurrenceEdit->updateEvent(event);
+#warning "Should parameter be false ??"
+		mRecurrenceEdit->updateEvent(event, false);
 		if (!event.recurrence())
 			return true;
 		event.recurrence()->setFloats(mSavedEvent->startDateTime().isDateOnly());
@@ -944,7 +945,7 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 		}
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
-			mRecurrenceEdit->updateEvent(event);
+			mRecurrenceEdit->updateEvent(event, !mTemplate);
 			mAlarmDateTime = event.startDateTime();
 			if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 			{
@@ -1105,7 +1106,7 @@ void EditAlarmDlg::slotOk()
 		if (reminder)
 		{
 			KAEvent event;
-			mRecurrenceEdit->updateEvent(event);
+			mRecurrenceEdit->updateEvent(event, false);
 			if (!mReminder->isOnceOnly())
 			{
 				int minutes = event.longestRecurrenceInterval();
@@ -1296,7 +1297,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
 	KAEvent event;
-	mRecurrenceEdit->updateEvent(event);
+	mRecurrenceEdit->updateEvent(event, false);
 	mRecurrenceText->setText(event.recurrenceText());
 }
 
