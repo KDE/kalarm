@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ KAlarmApp::KAlarmApp()
 #endif
 	mCommandProcesses.setAutoDelete(true);
 	mPreferences->loadPreferences();
-	connect(mPreferences, SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
+	connect(mPreferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
@@ -174,8 +174,8 @@ KAlarmApp::KAlarmApp()
 	mStartOfDay             = mPreferences->startOfDay();
 	if (mPreferences->startOfDayChanged())
 		mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-	mOldExpiredColour   = mPreferences->mExpiredColour;
-	mOldExpiredKeepDays = mPreferences->mExpiredKeepDays;
+	mOldExpiredColour   = mPreferences->expiredColour();
+	mOldExpiredKeepDays = mPreferences->expiredKeepDays();
 
 	// Set up actions used by more than one menu
 	KActionCollection* actions = new KActionCollection(this);
@@ -231,7 +231,7 @@ bool KAlarmApp::restoreSession()
 		{
 			KAlarmMainWindow* win = new KAlarmMainWindow(true);
 			win->restore(i, false);
-			if (win->hiddenTrayParent())
+			if (win->isHiddenTrayParent())
 				trayParent = win;
 			else
 				win->show();
@@ -620,7 +620,8 @@ int KAlarmApp::newInstance()
 		{
 			// Note: we can't use args->usage() since that also quits any other
 			// running 'instances' of the program.
-			std::cerr << usage.local8Bit().data() << i18n("\nUse --help to get a list of available command line options.\n").local8Bit().data();
+			std::cerr << usage.local8Bit().data()
+			          << i18n("\nUse --help to get a list of available command line options.\n").local8Bit().data();
 			exitCode = 1;
 		}
 	}
@@ -646,7 +647,7 @@ void KAlarmApp::quitIf(int exitCode)
 		return;
 	int mwcount = KAlarmMainWindow::count();
 	KAlarmMainWindow* mw = mwcount ? KAlarmMainWindow::firstWindow() : 0;
-	if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->trayParent()))
+	if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->isTrayParent()))
 		return;
 	// There are no windows left except perhaps a main window which is a hidden tray icon parent
 	if (mTrayWindow)
@@ -884,15 +885,7 @@ void KAlarmApp::slotDaemonControl()
 */
 void KAlarmApp::slotNewAlarm()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), 0, "editDlg");
-	if (editDlg->exec() == QDialog::Accepted)
-	{
-		KAlarmEvent event;
-		editDlg->getEvent(event);
-
-		// Add the alarm to the displayed lists and to the calendar file
-		theApp()->addEvent(event, 0);
-	}
+	KAlarmMainWindow::executeNew();
 }
 
 /******************************************************************************
@@ -934,7 +927,7 @@ void KAlarmApp::slotPreferencesChanged()
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
-		TrayWindow::setQuitWarning(true);   // since mode has changed, re-allow warning messages on Quit
+		Preferences::setNotify(TrayWindow::QUIT_WARN, true);   // since mode has changed, re-allow warning messages on Quit
 		registerWithDaemon(true);           // re-register with the alarm daemon
 	}
 
@@ -943,18 +936,18 @@ void KAlarmApp::slotPreferencesChanged()
 		changeStartOfDay();
 
 	bool refreshExpired = false;
-	if (mPreferences->mExpiredColour != mOldExpiredColour)
+	if (mPreferences->expiredColour() != mOldExpiredColour)
 	{
 		// The expired alarms text colour has changed
 		refreshExpired = true;
-		mOldExpiredColour = mPreferences->mExpiredColour;
+		mOldExpiredColour = mPreferences->expiredColour();
 	}
 
-	if (mPreferences->mExpiredKeepDays != mOldExpiredKeepDays)
+	if (mPreferences->expiredKeepDays() != mOldExpiredKeepDays)
 	{
 		// Whether or not expired alarms are being kept has changed
 		if (mOldExpiredKeepDays < 0
-		||  mPreferences->mExpiredKeepDays >= 0  &&  mPreferences->mExpiredKeepDays < mOldExpiredKeepDays)
+		||  mPreferences->expiredKeepDays() >= 0  &&  mPreferences->expiredKeepDays() < mOldExpiredKeepDays)
 		{
 			// expired alarms are now being kept for less long
 			if (mExpiredCalendar->isOpen()  ||  mExpiredCalendar->open())
@@ -963,7 +956,7 @@ void KAlarmApp::slotPreferencesChanged()
 		}
 		else if (!mOldExpiredKeepDays)
 			refreshExpired = true;
-		mOldExpiredKeepDays = mPreferences->mExpiredKeepDays;
+		mOldExpiredKeepDays = mPreferences->expiredKeepDays();
 	}
 
 	if (refreshExpired)
@@ -1347,8 +1340,10 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 		if (mNoShellAccess)
 		{
 			kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
-			(new MessageWin(event, alarm, i18n("Failed to execute command (shell access not authorized):"),
-			                command, reschedule))->show();
+			QStringList errmsgs;
+			errmsgs.append(i18n("Failed to execute command (shell access not authorized):"));
+			errmsgs.append(command);
+			(new MessageWin(event, alarm, errmsgs, reschedule))->show();
 			result = 0;
 		}
 		else
@@ -1387,7 +1382,10 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 			if (!proc->start(KProcess::NotifyOnExit))
 			{
 				kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
-				(new MessageWin(event, alarm, i18n("Failed to execute command:"), command, reschedule))->show();
+				QStringList errmsgs;
+				errmsgs += i18n("Failed to execute command:");
+				errmsgs += command;
+				(new MessageWin(event, alarm, errmsgs, reschedule))->show();
 				result = 0;
 			}
 		}
@@ -1397,10 +1395,19 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 	else if (alarm.action() == KAlarmAlarm::EMAIL)
 	{
 		kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to: " << event.emailAddresses(", ") << endl;
-		if (!KAMail::send(event))
+		QString err = KAMail::send(event);
+		if (!err.isNull())
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
-			(new MessageWin(event, alarm, i18n("Failed to send email:"), event.emailSubject(), reschedule))->show();
+			QStringList errmsgs;
+			if (err.isEmpty())
+				errmsgs += i18n("Failed to send email");
+			else
+			{
+				errmsgs += i18n("Failed to send email:");
+				errmsgs += err;
+			}
+			(new MessageWin(event, alarm, errmsgs, reschedule))->show();
 			result = 0;
 		}
 		if (reschedule)
@@ -1473,7 +1480,12 @@ void KAlarmApp::slotCommandExited(KProcess* proc)
 					KMessageBox::error(pd->messageBoxParent, errmsg);
 				}
 				else
-					(new MessageWin(*pd->event, *pd->alarm, errmsg, pd->event->cleanText(), false))->show();
+				{
+					QStringList errmsgs;
+					errmsgs.append(errmsg);
+					errmsgs.append(pd->event->cleanText());
+					(new MessageWin(*pd->event, *pd->alarm, errmsgs, false))->show();
+				}
 			}
 			mCommandProcesses.remove();
 		}
@@ -2003,17 +2015,17 @@ int KAlarmApp::isTextFile(const KURL& url)
 	int slash = mimetype.find('/');
 	if (slash < 0)
 		return 0;
-	QString subtype = mimetype.mid(slash + 1);
+	const char* subtype = mimetype.mid(slash + 1).latin1();
 	if (mimetype.startsWith(QString::fromLatin1("application")))
 	{
 		for (int i = 0;  applicationTypes[i];  ++i)
-			if (subtype == applicationTypes[i])
+			if (!strcmp(subtype, applicationTypes[i]))
 				return 1;
 	}
 	else if (mimetype.startsWith(QString::fromLatin1("text")))
 	{
 		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (subtype == formattedTextTypes[i])
+			if (!strcmp(subtype, formattedTextTypes[i]))
 				return 2;
 		return 1;
 	}
