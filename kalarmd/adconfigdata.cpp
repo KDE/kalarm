@@ -1,229 +1,146 @@
 /*
-    Client data access for KAlarm Alarm Daemon.
+ *  adcalendar.cpp  -  configuration file access
+ *  Program:  KAlarm's alarm daemon (kalarmd)
+ *  (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
-    This file is part of the KAlarm alarm daemon.
-    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
+#include "kalarmd.h"
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+#include <qregexp.h>
+#include <qstringlist.h>
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-    As a special exception, permission is given to link this program
-    with any edition of Qt, and distribute the resulting executable,
-    without including the source code for Qt in the source distribution.
-*/
-
-#include <kdebug.h>
+#include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include "adcalendar.h"
-
 #include "adconfigdatarw.h"
 
-void ADConfigDataRW::readDaemonData(bool sessionStarting)
+// Config file key strings
+const QString CLIENT_GROUP(QString::fromLatin1("Client "));
+const QRegExp CLIENT_GROUP_SEARCH("^Client ");
+// Client data file key strings
+const QString CALENDAR_KEY(QString::fromLatin1("Calendar"));
+const QString TITLE_KEY(QString::fromLatin1("Title"));
+const QString DCOP_OBJECT_KEY(QString::fromLatin1("DCOP object"));
+const QString START_CLIENT_KEY(QString::fromLatin1("Start"));
+
+
+/******************************************************************************
+* Read the configuration file.
+* Create the client list and open all calendar files.
+*/
+void ADConfigData::readConfig()
 {
-  kdDebug(5900) << "ADConfigDataRW::readDaemonData()" << endl;
+	kdDebug(5900) << "ADConfigData::readConfig()" << endl;
+	ClientInfo::clear();
+	KConfig* config = KGlobal::config();
+	QStringList clients = config->groupList().grep(CLIENT_GROUP_SEARCH);
+	for (QStringList::Iterator cl = clients.begin();  cl != clients.end();  ++cl)
+	{
+		// Read this client's configuration
+		config->setGroup(*cl);
+		QString client = *cl;
+		client.remove(CLIENT_GROUP_SEARCH);
+		QString  title       = config->readEntry(TITLE_KEY, client);   // read app title (default = app name)
+		QCString dcopObject  = config->readEntry(DCOP_OBJECT_KEY).local8Bit();
+		bool     startClient = config->readBoolEntry(START_CLIENT_KEY, false);
+		QString  calendar    = config->readPathEntry(CALENDAR_KEY);
 
-  KSimpleConfig clientConfig(clientDataFile());
+		// Verify the configuration
+		bool ok = false;
+		if (client.isEmpty()  ||  KStandardDirs::findExe(client).isNull())
+			kdError(5900) << "ADConfigData::readConfig(): group '" << *cl << "' deleted (client app not found)\n";
+		else if (calendar.isEmpty())
+			kdError(5900) << "ADConfigData::readConfig(): no calendar specified for '" << client << "'\n";
+		else if (dcopObject.isEmpty())
+			kdError(5900) << "ADConfigData::readConfig(): no DCOP object specified for '" << client << "'\n";
+		else
+		{
+			ADCalendar* cal = ADCalendar::getCalendar(calendar);
+			if (cal)
+				kdError(5900) << "ADConfigData::readConfig(): calendar registered by multiple clients: " << calendar << endl;
+			else
+				ok = true;
+		}
+		if (!ok)
+		{
+			config->deleteGroup(*cl, true);
+			continue;
+		}
 
-  ADCalendarFactory calFactory;
-  bool cls, cals;
-  QString newClients = readConfigData(sessionStarting, cls, cals, &calFactory);
-  if (!newClients.isEmpty())
-  {
-    // One or more clients in the Clients config entry was invalid, so rewrite the entry
-    clientConfig.setGroup("General");
-    clientConfig.writeEntry(CLIENTS_KEY, newClients);
-  }
+		// Create the client and calendar objects
+		new ClientInfo(client.local8Bit(), title, dcopObject, calendar, startClient);
+		kdDebug(5900) << "ADConfigData::readConfig(): client " << client << " : calendar " << calendar << endl;
+	}
 
-  // Read the GUI clients
-  QStrList guis;
-  clientConfig.readListEntry(GUIS_KEY, guis);
-  bool writeNewGuis = false;
-  QString newGuis;
-  for (unsigned int i = 0;  i < guis.count();  ++i)
-  {
-    QCString gui = guis.at(i);
-    kdDebug(5900) << "ADConfigDataRW::readDaemonData(): gui: " << gui << endl;
-    if (gui.isEmpty()
-    ||  KStandardDirs::findExe(gui).isNull())
-    {
-      // Null client name, or application doesn't exist
-      if (!gui.isEmpty())
-        clientConfig.deleteGroup(GUI_KEY + gui, true);
-      writeNewGuis = true;
-    }
-    else
-    {
-      // Get this client's details from its own config section
-      QString groupKey = GUI_KEY + gui;
-      clientConfig.setGroup(groupKey);
-      QCString dcopObject = clientConfig.readEntry(CLIENT_DCOP_OBJECT_KEY).local8Bit();
-      mGuis.insert(gui, dcopObject);
-      if (!newGuis.isEmpty())
-        newGuis += ',';
-      newGuis += gui;
-    }
-  }
-  if (writeNewGuis)
-  {
-    // One or more clients in the Guis config entry was invalid, so rewrite the entry
-    clientConfig.setGroup("General");
-    clientConfig.writeEntry(GUIS_KEY, newGuis);
-  }
+	// Remove obsolete CheckInterval entry (if it exists)
+        config->setGroup("General");
+	config->deleteEntry("CheckInterval");
+
+	// Save any updates
+	config->sync();
 }
 
-/*
- * Write a client application's details to the client data file.
- * Any existing entries relating to the application are deleted,
- * including calendar file information.
- */
-void ADConfigDataRW::writeConfigClient(const QCString& appName, const ClientInfo& cinfo)
+/******************************************************************************
+* Write a client application's details to the config file.
+*/
+void ADConfigData::writeClient(const QCString& appName, const ClientInfo* cinfo)
 {
-  KSimpleConfig clientConfig(clientDataFile());
-  addConfigClient(clientConfig, appName, CLIENTS_KEY);
-
-  QString groupKey = CLIENT_KEY + appName;
-  clientConfig.deleteGroup(groupKey, true);
-
-  clientConfig.setGroup(groupKey);
-  clientConfig.writeEntry(CLIENT_TITLE_KEY, cinfo.title);
-  if (!cinfo.dcopObject.isEmpty())
-    clientConfig.writeEntry(CLIENT_DCOP_OBJECT_KEY, QString::fromLocal8Bit(cinfo.dcopObject));
-  clientConfig.writeEntry(CLIENT_NOTIFICATION_KEY, cinfo.notificationType);
-  clientConfig.writeEntry(CLIENT_DISP_CAL_KEY, cinfo.displayCalName);
-  int i = 0;
-  for (ADCalendarBase* cal = mCalendars.first();  cal;  cal = mCalendars.next())
-  {
-    if (cal->appName() == appName)
-    {
-      cal->setRcIndex(++i);
-      writeConfigCalendar(cal, clientConfig);
-    }
-  }
+	KConfig* config = KGlobal::config();
+	config->setGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
+	config->writeEntry(TITLE_KEY, cinfo->title());
+	config->writeEntry(DCOP_OBJECT_KEY, QString::fromLocal8Bit(cinfo->dcopObject()));
+	config->writeEntry(START_CLIENT_KEY, cinfo->startClient());
+	config->writeEntry(CALENDAR_KEY, cinfo->calendar()->urlString());
+	config->sync();
 }
 
-/*
- * Write a GUI client application's details to the client data file.
- */
-void ADConfigDataRW::writeConfigClientGui(const QCString& appName, const QString& dcopObject)
+/******************************************************************************
+* Remove a client application's details from the config file.
+*/
+void ADConfigData::removeClient(const QCString& appName)
 {
-  KSimpleConfig clientConfig(clientDataFile());
-  addConfigClient(clientConfig, appName, GUIS_KEY);
-
-  QString groupKey = GUI_KEY + appName;
-
-  clientConfig.setGroup(groupKey);
-  clientConfig.writeEntry(CLIENT_DCOP_OBJECT_KEY, dcopObject);
+	KConfig* config = KGlobal::config();
+	config->deleteGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
+	config->sync();
 }
 
-/*
- * Add a client application's name to the client data file list.
- */
-void ADConfigDataRW::addConfigClient(KSimpleConfig& clientConfig, const QCString& appName, const QString& key)
+/******************************************************************************
+* Set the calendar file URL for a specified application.
+*/
+void ADConfigData::setCalendar(const QCString& appName, ADCalendar* cal)
 {
-  clientConfig.setGroup("General");
-  QStringList clients = QStringList::split(',', clientConfig.readEntry(key), true);
-  if (clients.find(appName) == clients.end())
-  {
-    // It's a new client, so add it to the Clients config file entry
-    for (QStringList::Iterator i = clients.begin();  i != clients.end();  )
-    {
-      if ((*i).isEmpty())
-        i = clients.remove(i);    // remove null entries
-      else
-        ++i;
-    }
-    clients.append(appName);
-    clientConfig.writeEntry(key, clients.join(","));
-  }
+	KConfig* config = KGlobal::config();
+	config->setGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
+	config->writeEntry(CALENDAR_KEY, cal->urlString());
+        config->sync();
 }
 
-// Add a calendar file URL to the client data file for a specified application.
-void ADConfigDataRW::addConfigCalendar(const QCString& appName, ADCalendarBase* cal)
+/******************************************************************************
+* DCOP call to set autostart at login on or off.
+*/
+void ADConfigData::enableAutoStart(bool on)
 {
-  KSimpleConfig clientConfig(clientDataFile());
-  QString groupKey = CLIENT_KEY + appName;
-  QMap<QString, QString> entries = clientConfig.entryMap(groupKey);
-  // Find an unused CalendarN entry for this calendar
-  for (int i = 1;  ;  ++i)
-  {
-    QString key = CLIENT_CALENDAR_KEY + QString::number(i);
-    if (entries.find(key) == entries.end())
-    {
-      // This calendar index is unused, so use it for the new calendar
-      cal->setRcIndex(i);
-      writeConfigCalendar(cal, clientConfig);
-      return;
-    }
-  }
+        kdDebug(5900) << "ADConfigData::enableAutoStart(" << on << ")\n";
+        KConfig* config = KGlobal::config();
+	config->reparseConfiguration();
+        config->setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
+        config->writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), on);
+        config->sync();
 }
 
-// Update a calendar file entry in the client data file.
-void ADConfigDataRW::writeConfigCalendar(const ADCalendarBase* cal)
-{
-  if (cal->rcIndex() > 0)
-  {
-    KSimpleConfig clientConfig(clientDataFile());
-    writeConfigCalendar(cal, clientConfig);
-  }
-}
-
-// Update a calendar file entry in the client data file.
-void ADConfigDataRW::writeConfigCalendar(const ADCalendarBase* cal, KSimpleConfig& clientConfig)
-{
-  if (cal->rcIndex() > 0)
-  {
-    clientConfig.setGroup(CLIENT_KEY + cal->appName());
-    clientConfig.writeEntry(CLIENT_CALENDAR_KEY + QString::number(cal->rcIndex()),
-                            QString("1,,%1").arg(cal->urlString()));
-  }
-}
-
-/*
- * Delete all entries in the client data file for the specified calendar
- */
-void ADConfigDataRW::deleteConfigCalendar(const ADCalendarBase* cal)
-{
-  KSimpleConfig clientConfig(clientDataFile());
-  QString groupKey = CLIENT_KEY + cal->appName();
-  int len = CLIENT_CALENDAR_KEY.length();
-  QMap<QString, QString> entries = clientConfig.entryMap(groupKey);
-  for (QMap<QString, QString>::ConstIterator it = entries.begin();  it != entries.end();  ++it)
-  {
-    if (it.key().startsWith(CLIENT_CALENDAR_KEY))
-    {
-      bool ok;
-      it.key().mid(len).toInt(&ok);
-      if (ok)
-      {
-        // The config file key is CalendarN
-        QStringList items = QStringList::split(',', it.data());
-        if (items.count() >= 2  &&  items.last() == cal->urlString())
-        {
-          clientConfig.setGroup(groupKey);
-          clientConfig.deleteEntry(it.key(), true);
-        }
-      }
-    }
-  }
-}
-
-/*
- * Flush changes in the client data file to disc.
- */
-void ADConfigDataRW::sync()
-{
-  KSimpleConfig clientConfig(clientDataFile());
-  clientConfig.sync();
-}
