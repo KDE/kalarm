@@ -52,7 +52,11 @@ class AlarmTimeWidget : public QWidget
 };
 
 
-class TimeSpinBox : public SpinBox2
+#ifndef FIXED_SPINBOX2
+class TimeSpinBox : public QSpinBox
+#else
+//class TimeSpinBox : public SpinBox2
+#endif
 {
 		Q_OBJECT
 	public:
