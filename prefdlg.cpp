@@ -835,9 +835,9 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
 	QWhatsThis::add(mModalMessages,
 	      i18n("Specify whether alarm message windows should be modal. "
-	           "If modal, the window grabs the keyboard focus when it is displayed. "
+	           "If modal, the window is a normal window with a title bar, but it grabs keyboard input when it is displayed. "
 	           "If non-modal, the window does not interfere with your typing when "
-	           "it is displayed, but it has no title bar and cannot be moved."));
+	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
 	mShowExpiredAlarms = new QCheckBox(i18n("&Show expired alarms"), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
