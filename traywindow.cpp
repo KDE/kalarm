@@ -78,8 +78,7 @@ TrayWindow::TrayWindow(const char* name)
 	theApp()->actionDaemonPreferences()->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
-	setPixmap(mPixmapEnabled);
-	contextMenu()->setItemChecked(mAlarmsEnabledId, true);
+	setEnabledStatus(true);
 
 	setDaemonStatus(isDaemonRunning(false));
 
@@ -134,8 +133,7 @@ void TrayWindow::updateCalendarStatus(bool monitoring)
 	mCalendarDisabled = !monitoring;
 	if (!isDaemonRunning(false))
 		monitoring = false;
-	KPopupMenu* menu = contextMenu();
-	menu->setItemChecked(mAlarmsEnabledId, monitoring);
+	setEnabledStatus(monitoring);
 }
 
 /******************************************************************************
@@ -198,10 +196,16 @@ void TrayWindow::setDaemonStatus(bool newstatus)
 	if (mCalendarDisabled)
 		newstatus = false;
 	if (newstatus != oldstatus)
-	{
-		setPixmap(newstatus ? mPixmapEnabled : mPixmapDisabled);
-		contextMenu()->setItemChecked(mAlarmsEnabledId, newstatus);
-	}
+		setEnabledStatus(newstatus);
+}
+
+/******************************************************************************
+* Update the alarms enabled menu item, and the icon pixmap.
+*/
+void TrayWindow::setEnabledStatus(bool status)
+{
+	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
+	contextMenu()->setItemChecked(mAlarmsEnabledId, status);
 }
 
 /******************************************************************************

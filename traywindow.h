@@ -58,6 +58,7 @@ class TrayWindow : public KSystemTray
 		void         setDaemonStatus(bool running);
 		bool         isDaemonRunning(bool updateDockWindow = true);
 		void         setFastDaemonCheck();
+		void         setEnabledStatus(bool status);
 
 		QPixmap    mPixmapEnabled, mPixmapDisabled;
 		KAction*   mActionQuit;          // quit action for system tray window
