@@ -100,7 +100,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 		for (unsigned n = 0;  n < menu->count();  ++n)
 		{
 			QString txt = menu->text(menu->idAt(n));
-			if (txt == quitText)
+			if (txt.startsWith(quitText))
 			{
 				menu->removeItemAt(n);
 				break;
