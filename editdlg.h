@@ -27,13 +27,15 @@
 
 #include <kdialogbase.h>
 
-#include "fontcolour.h"
 #include "msgevent.h"
 using namespace KCal;
 
 class QButtonGroup;
+class QGroupBox;
 class QMultiLineEdit;
 class QSpinBox;
+class FontColourChooser;
+class ColourCombo;
 class TimeSpinBox;
 class AlarmTimeWidget;
 class RecurrenceEdit;

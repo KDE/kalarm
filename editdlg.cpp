@@ -51,6 +51,7 @@
 #include "prefsettings.h"
 #include "datetime.h"
 #include "recurrenceedit.h"
+#include "colourcombo.h"
 #include "deferdlg.h"
 #include "editdlg.moc"
 
