@@ -123,10 +123,10 @@ void AlarmTimeWidget::init(int mode)
 	connect(delayTime, SIGNAL(valueChanged(int)), this, SLOT(slotDelayTimeChanged(int)));
 
 	// Set up the layout, either narrow or wide
-	QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
-	grid->addWidget(atTimeRadio, 0, 0);
 	if (mode & NARROW)
 	{
+		QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
+		grid->addWidget(atTimeRadio, 0, 0);
 		grid->addWidget(dateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
 		grid->setColStretch(2, 1);
@@ -138,12 +138,15 @@ void AlarmTimeWidget::init(int mode)
 	}
 	else
 	{
-		QBoxLayout* layout = new QHBoxLayout(this, 0, KDialog::spacingHint());
-		layout->addWidget(dateEdit);
-		layout->addWidget(timeBox);
-		grid->addLayout(layout, 0, 1);
-		grid->addWidget(afterTimeRadio, 1, 0);
-		grid->addWidget(delayTime, 1, 1);
+		QBoxLayout* hlayout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QBoxLayout* layout = new QVBoxLayout(hlayout);
+		layout->addWidget(atTimeRadio);
+		layout->addWidget(afterTimeRadio);
+		layout = new QVBoxLayout(hlayout);
+		hlayout = new QHBoxLayout(layout);
+		hlayout->addWidget(dateEdit);
+		hlayout->addWidget(timeBox);
+		layout->addWidget(delayTime);
 	}
 
 	// Initialise the radio button statuses
