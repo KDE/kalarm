@@ -1,5 +1,21 @@
 KAlarm
 
+=== Version 0.7.3 --- 24 July 2002 ===
+Fix loss of alarm times after saving pre-version 0.7 calendar file.
+Fix main alarm list display of hours or hours/minutes repeat interval.
+Display KAlarm handbook when Help clicked in configuration dialog.
+
+=== Version 0.7.2 --- 2 July 2002 ===
+Fix reading wrong alarm times from pre-version 0.7 calendar file.
+Partially fix loss of alarm times after saving pre-version 0.7 calendar file.
+
+=== Version 0.7.1 --- 29 June 2002 ===
+Prevent duplicate message windows from being displayed.
+Make Close button on message window not the default button to reduce chance
+  of accidental acknowledgement.
+Fix non-ASCII message texts being saved as question marks.
+Fix memory leak with recurrences.
+
 === Version 0.7.0 --- 15 June 2002 ===
 Add option to play audio file when message is displayed.
 Add daily, weekly, monthly, annual recurrences.
@@ -35,6 +51,8 @@ Prevent open main window from cancelling KDE session shutdown.
 Fix failure to display messages after daemon is restarted (run-on-demand mode).
 Fix possible failure to display command line-initiated message.
 Fix crash in some circumstances on changing run mode to run-on-demand.
+Fix crash on clicking KAlarm icon in command line-initiated message window.
+Fix crash on clicking KAlarm icon in command line-initiated message window.
 Fix crash on clicking KAlarm icon in command line-initiated message window.
 Fix crash on deferring alarm in command line-initiated message window.
 Fix duplication of repeat-at-login alarms at login.
@@ -88,8 +106,6 @@ Add defer option to alarm message window.
 Provide button in alarm message window to activate KAlarm.
 Make dialogs modal only for their parent window.
 
-=== Version 0.2 --- 20 Oct 2001 ===
-Implement repeating alarms.
 Add extra pair of arrow buttons to time spinbox to change the hour.
 Fix sorting by colour column.
 Better What's This? texts for the main window.
