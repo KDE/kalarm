@@ -42,6 +42,9 @@ class AlarmCalendar;
 extern const char* DAEMON_APP_NAME;
 extern const char* DAEMON_DCOP_OBJECT;
 extern const char* DCOP_OBJECT_NAME;
+#ifdef OLD_DCOP
+extern const char* DCOP_OLD_OBJECT_NAME;
+#endif
 
 class Daemon : public QObject
 {
@@ -57,6 +60,7 @@ class Daemon : public QObject
 		static int       maxTimeSinceCheck();
 		static void      readCheckInterval();
 		static int       readyState();
+		static void      registrationResult(bool reregister, bool success);
 		static bool      isRegistered()    { return mRegistered; }
 
 	private slots:

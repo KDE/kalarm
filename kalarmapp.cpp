@@ -101,7 +101,8 @@ QString     KAlarmApp::mFatalMessage;
 */
 KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
-	  mDcopHandler(0),
+	  mInitialised(false),
+	  mDcopHandler(new DcopHandler()),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
 	  mPendingQuit(false),
@@ -334,7 +335,7 @@ int KAlarmApp::newInstance()
 				}
 				QString eventID = args->getOption(option);
 				args->clear();      // free up memory
-				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
+				setUpDcop();        // start processing DCOP calls
 				if (!handleEvent(eventID, function))
 				{
 					exitCode = 1;
@@ -806,7 +807,7 @@ void KAlarmApp::quitFatal()
 */
 void KAlarmApp::processQueue()
 {
-	if (!mProcessingQueue)
+	if (mInitialised  &&  !mProcessingQueue)
 	{
 		kdDebug(5950) << "KAlarmApp::processQueue()\n";
 		mProcessingQueue = true;
@@ -819,7 +820,19 @@ void KAlarmApp::processQueue()
 		{
 			DcopQEntry& entry = mDcopQueue.first();
 			if (entry.eventId.isEmpty())
-				KAlarm::addEvent(entry.event, 0);
+			{
+				switch (entry.function)
+				{
+				case EVENT_TRIGGER:
+					execAlarm(entry.event, entry.event.firstAlarm(), false);
+					break;
+				case EVENT_HANDLE:
+					KAlarm::addEvent(entry.event, 0);
+					break;
+				case EVENT_CANCEL:
+					break;
+				}
+			}
 			else
 				handleEvent(entry.eventId, entry.function);
 			mDcopQueue.pop_front();
@@ -1104,13 +1117,17 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	if (display)
 	{
 		// Alarm is due for display already
-		execAlarm(event, event.firstAlarm(), false);
+		if (!mInitialised)
+			mDcopQueue.append(DcopQEntry(event, EVENT_TRIGGER));
+		else
+			execAlarm(event, event.firstAlarm(), false);
 		if (!event.recurs()
 		||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
 			return true;
 	}
 	mDcopQueue.append(DcopQEntry(event));
-	QTimer::singleShot(0, this, SLOT(processQueue()));
+	if (mInitialised)
+		QTimer::singleShot(0, this, SLOT(processQueue()));
 	return true;
 }
 
@@ -1123,13 +1140,15 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, EventFunc function)
 {
 	kdDebug(5950) << "KAlarmApp::handleEvent(DCOP): " << eventID << endl;
-	if (KURL(urlString).url() != AlarmCalendar::activeCalendar()->urlString())
+	AlarmCalendar* cal = AlarmCalendar::activeCalendar();     // this can be called before calendars have been initialised
+	if (cal  &&  KURL(urlString).url() != cal->urlString())
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
 		return false;
 	}
 	mDcopQueue.append(DcopQEntry(function, eventID));
-	QTimer::singleShot(0, this, SLOT(processQueue()));
+	if (mInitialised)
+		QTimer::singleShot(0, this, SLOT(processQueue()));
 	return true;
 }
 
@@ -1613,14 +1632,15 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 }
 
 /******************************************************************************
-* Set up the DCOP handlers.
+* Set up remaining DCOP handlers and start processing DCOP calls.
 */
 void KAlarmApp::setUpDcop()
 {
-	if (!mDcopHandler)
+	if (!mInitialised)
 	{
-		mDcopHandler      = new DcopHandler();
+		mInitialised = true;      // we're now ready to handle DCOP calls
 		mDaemonGuiHandler = new DaemonGuiHandler();
+		QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
 	}
 }
 
@@ -1665,7 +1685,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 
 	if (!calendarOnly)
 	{
-		setUpDcop();              // we're now ready to handle DCOP calls, so set up handlers
+		setUpDcop();      // start processing DCOP calls
 		if (startdaemon)
 			Daemon::start();  // make sure the alarm daemon is running
 	}

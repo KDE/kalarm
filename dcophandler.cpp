@@ -67,6 +67,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		  CANCEL       = 0x0002,
 		  TRIGGER      = 0x0003,
 		  SCHEDULE     = 0x0004,
+                  REGISTERED   = 0x0005,
 		ALARM_TYPE     = 0x00F0,    // mask for SCHEDULE alarm type
 		  MESSAGE      = 0x0010,
 		  FILE         = 0x0020,
@@ -81,7 +82,9 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 	};
 	replyType = "void";
 	int function;
-	if      (func == "handleEvent(const QString&,const QString&)"
+	if      (func == "registered(bool,bool)")
+		function = REGISTERED;
+	else if (func == "handleEvent(const QString&,const QString&)"
 	||       func == "handleEvent(QString,QString)")
 		function = HANDLE;
 	else if (func == "cancelEvent(const QString&,const QString&)"
@@ -214,6 +217,14 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 
 	switch (function & OPERATION)
 	{
+		case REGISTERED:    // whether the DCOP (re)register() succeeded
+		{
+			QDataStream arg(data, IO_ReadOnly);
+			bool rereg, success;
+			arg >> rereg >> success;
+			Daemon::registrationResult(rereg, success);
+			break;
+		}
 		case HANDLE:        // trigger or cancel event with specified ID from calendar file
 		case CANCEL:        // cancel event with specified ID from calendar file
 		case TRIGGER:       // trigger event with specified ID in calendar file

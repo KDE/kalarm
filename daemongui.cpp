@@ -69,8 +69,7 @@ DaemonGuiHandler::DaemonGuiHandler()
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	connect(&mDaemonStatusTimer, SIGNAL(timeout()), SLOT(timerCheckDaemonRunning()));
 	mDaemonStatusTimer.start(mDaemonStatusTimerInterval * 1000);  // check regularly if daemon is running
-
-	registerGuiWithDaemon();
+	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler(): exit\n";
 }
 
 /******************************************************************************
@@ -127,18 +126,21 @@ void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 	}
 }
 
-// Dummy handler functions which KAlarm doesn't use
+// DCOP functions which KAlarm either doesn't use or implements in
+// the DcopHandler class.
 void DaemonGuiHandler::handleEvent(const QString&, const QString&)
 { }
 void DaemonGuiHandler::handleEvent(const QString&)
+{ }
+void DaemonGuiHandler::registered(bool, bool)
 { }
 
 /******************************************************************************
 * Register as a GUI with the alarm daemon.
 */
-void DaemonGuiHandler::registerGuiWithDaemon()
+void DaemonGuiHandler::registerWith()
 {
-	kdDebug(5950) << "KAlarmApp::registerGuiWithDaemon()\n";
+	kdDebug(5950) << "DaemonGuiHandler::registerWith()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.registerGui(kapp->aboutData()->appName(), GUI_DCOP_OBJECT_NAME);
 }
@@ -215,7 +217,6 @@ bool DaemonGuiHandler::checkIfDaemonRunning()
 		if (mDaemonRunning)
 		{
 			// The alarm daemon has started up
-			registerGuiWithDaemon();
 			if (mEnableCalPending)
 				daemonEnableCalendar(true);  // tell it to monitor the calendar, if appropriate
 		}

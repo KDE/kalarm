@@ -53,6 +53,7 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 
 		bool           monitoringAlarms();
 		void           checkStatus()                 { checkIfDaemonRunning(); }
+		void           registerWith();
 		AlarmEnableAction* createAlarmEnableAction(KActionCollection*, const char* name);
 
 	public slots:
@@ -67,7 +68,6 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 
 	private:
 		static QString expandURL(const QString& urlString);
-		void           registerGuiWithDaemon();
 		void           daemonEnableCalendar(bool enable);
 		bool           checkIfDaemonRunning();
 		void           setFastDaemonCheck();
@@ -76,6 +76,7 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 		                                 const QString& calendarURL, const QCString& appName);
 		void           handleEvent(const QString& calendarURL, const QString& eventID);
 		void           handleEvent(const QString& iCalendarString) ;
+		void           registered(bool reregister, bool success);
 
 		QTimer         mDaemonStatusTimer;         // timer for checking daemon status
 		int            mDaemonStatusTimerCount;    // countdown for fast status checking

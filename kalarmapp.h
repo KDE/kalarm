@@ -127,7 +127,7 @@ class KAlarmApp : public KUniqueApplication
 		struct DcopQEntry
 		{
 			DcopQEntry(EventFunc f, const QString& id) : function(f), eventId(id) { }
-			DcopQEntry(const KAEvent& e) : event(e) { }
+			DcopQEntry(const KAEvent& e, EventFunc f = EVENT_HANDLE) : function(f), event(e) { }
 			DcopQEntry() { }
 			EventFunc  function;
 			QString    eventId;
@@ -151,6 +151,7 @@ class KAlarmApp : public KUniqueApplication
 		static int            mActiveCount;         // number of active instances without main windows
 		static int            mFatalError;          // a fatal error has occurred - just wait to exit
 		static QString        mFatalMessage;        // fatal error message to output
+		bool                  mInitialised;         // initialisation complete: ready to handle DCOP calls
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
 		DaemonGuiHandler*     mDaemonGuiHandler;    // the parent of the system tray DCOP receiver object
 		TrayWindow*           mTrayWindow;          // active system tray icon

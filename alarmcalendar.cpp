@@ -75,7 +75,7 @@ static const QString calendarNames[AlarmCalendar::NCALS] = {
 };
 static KStaticDeleter<AlarmCalendar> calendarDeleter[AlarmCalendar::NCALS];    // ensure that the calendar destructors are called
 
-AlarmCalendar* AlarmCalendar::mCalendars[NCALS];
+AlarmCalendar* AlarmCalendar::mCalendars[NCALS] = { 0, 0, 0, 0 };
 
 
 /******************************************************************************
