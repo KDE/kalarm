@@ -79,6 +79,10 @@ class AlarmListViewItem : public QListViewItem
 		AlarmListViewItem(QListView* parent, const QString&, const QString&);
 		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
 		AlarmListView*       alarmListView() const              { return (AlarmListView*)listView(); }
+	private:
+		static QPixmap*      textIcon;
+		static QPixmap*      fileIcon;
+		static QPixmap*      commandIcon;
 };
 
 #endif // ALARMLISTVIEW_H

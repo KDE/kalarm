@@ -23,10 +23,12 @@
 #include <qwhatsthis.h>
 #include <qheader.h>
 #include <qpainter.h>
+#include <qstyle.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <klistview.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -59,7 +61,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Rep"));            // repeat count column
 	addColumn(QString::null);          // colour column
-	addColumn(i18n("Message or File"));
+	addColumn(i18n("Message, File or Command"));
 	setColumnWidthMode(MESSAGE_COLUMN, QListView::Maximum);
 	setAllColumnsShowFocus(true);
 	setSorting(TIME_COLUMN);           // sort initially by date/time
@@ -105,7 +107,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 	QDateTime dateTime = event.dateTime();
 	AlarmItemData data;
 	data.event = event;
-	data.messageText = event.messageOrFile();
+	data.messageText = event.cleanText();
 	int newline = data.messageText.find('\n');
 	if (newline >= 0)
 		data.messageText = data.messageText.left(newline) + QString::fromLatin1("...");
@@ -130,7 +132,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 	// being displayed by paintCell().
 	item->setText(TIME_COLUMN, dateTimeText);
 	item->setText(REPEAT_COLUMN, data.repeatCountOrder);
-	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", event.colour().rgb()));
+	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", (event.type() == KAlarmAlarm::COMMAND ? 0 : event.colour().rgb())));
 	item->setText(MESSAGE_COLUMN, data.messageText.lower());
 	entries[item] = data;
 	if (setSize)
@@ -207,6 +209,9 @@ int AlarmListView::itemHeight()
 =  Class: AlarmListViewItem
 =  Contains the details of one alarm for display in the AlarmListView.
 =============================================================================*/
+QPixmap* AlarmListViewItem::textIcon;
+QPixmap* AlarmListViewItem::fileIcon;
+QPixmap* AlarmListViewItem::commandIcon;
 
 AlarmListViewItem::AlarmListViewItem(QListView* parent, const QString& dateTime, const QString& message)
 	:  QListViewItem(parent, dateTime, QString(), message)
@@ -234,22 +239,56 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		break;
 	case AlarmListView::COLOUR_COLUMN:
 		// Paint the cell the colour of the alarm message
-		painter->fillRect(box, data->event.colour());
+		painter->fillRect(box, (data->event.type() == KAlarmAlarm::COMMAND ? bgColour : data->event.colour()));
 		break;
 	case AlarmListView::MESSAGE_COLUMN:
+	{
+		QPixmap* pixmap;
+		switch (data->event.type())
+		{
+			case KAlarmAlarm::FILE:
+				if (!fileIcon)
+					fileIcon = new QPixmap(SmallIcon("file"));
+				pixmap = fileIcon;
+				break;
+			case KAlarmAlarm::COMMAND:
+				if (!commandIcon)
+					commandIcon = new QPixmap(SmallIcon("exec"));
+				pixmap = commandIcon;
+				break;
+			case KAlarmAlarm::MESSAGE:
+			default:
+				if (!textIcon)
+					textIcon = new QPixmap(SmallIcon("message"));
+				pixmap = textIcon;
+				break;
+		}
+		int diff = box.height() - pixmap->height();
+		QRect pixmapRect = pixmap->rect();
+		if (diff < 0)
+		{
+			pixmapRect.setTop(-diff / 2);
+			pixmapRect.setHeight(box.height());
+		}
+		QRect iconRect(box.left(), box.top() + (diff > 0 ? diff / 2 : 0), pixmap->width(), (diff > 0 ? pixmap->height() : box.height()));
+		QRect textRect = box;
+		textRect.setLeft(box.left() + pixmap->width() + 2*listView->style().defaultFrameWidth());
 		if (!selected  &&  listView->drawMessageInColour())
 		{
 			QColor colour = data->event.colour();
 			painter->fillRect(box, colour);
 			painter->setBackgroundColor(colour);
 //			painter->setPen(data->event->fgColour());
-			painter->drawText(box, AlignVCenter, data->messageText);
-			break;
 		}
-//		QListViewItem::paintCell(painter, cg, column, width, align);
-		painter->fillRect(box, bgColour);
-		painter->drawText(box, AlignVCenter, data->messageText);
+		else
+		{
+//			QListViewItem::paintCell(painter, cg, column, width, align);
+			painter->fillRect(box, bgColour);
+		}
+		painter->drawPixmap(iconRect.topLeft(), *pixmap, pixmapRect);
+		painter->drawText(textRect, AlignVCenter, data->messageText);
 		break;
+	}
 	}
 }
 
@@ -269,7 +308,7 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 		{
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background color of alarm message");
-			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text or URL of text file to display");
+			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text, URL of text file to display, or command to execute. The alarm type is indicated by the icon at the left.");
 			case AlarmListView::REPEAT_COLUMN:
 				return i18n("Number of scheduled repetitions after the next scheduled display of the alarm.\n"
 				            "'%1' indicates that the alarm is repeated at every login.")
