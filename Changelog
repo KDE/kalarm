@@ -1,5 +1,18 @@
 KAlarm
 
+=== Version 0.5 --- 29 Jan 2002 ===
+Incorporate system tray icon into KAlarm, add --tray option.
+Add 'run continuously in system tray' operating mode.
+Don't use alarm daemon GUI application.
+Add enable/disable alarms option to main window menu.
+Add show/hide system tray icon option to main window menu.
+Add toolbar.
+Rename alarm dialog Set Alarm button to OK.
+Rename message window OK button to Close.
+Remove keyboard accelerator for Reset Daemon.
+Fix magnified system tray icon.
+Include README, etc. files in installation.
+
 === Version 0.4 --- 22 Dec 2001 ===
 Modify to use split alarm daemon/alarm daemon GUI.
 Prevent a command line error exiting all open KAlarm windows.
