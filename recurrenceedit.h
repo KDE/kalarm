@@ -152,12 +152,17 @@ class RecurrenceEdit : public QWidget
 		QFrame*       yearlyFrame;
 		ButtonGroup*  yearlyButtonGroup;
 		QRadioButton* yearMonthButton;
-		QRadioButton* yearDayButton;
+//		QRadioButton* yearDayButton;
+		QRadioButton* yearlyOnNthTypeOfDayButton;
 		QComboBox*    yearMonthDayEntry;
 		QComboBox*    yearMonthComboBox;
-		QSpinBox*     yearDayEntry;
+//		QSpinBox*     yearDayEntry;
+		QComboBox*    yearlyNthNumberEntry;
+		QComboBox*    yearlyNthTypeOfDayEntry;
+		QComboBox*    yeardayMonthComboBox;
 		int           yearMonthButtonId;
-		int           yearDayButtonId;
+//		int           yearDayButtonId;
+		int           yearlyOnNthTypeOfDayButtonId;
 
 		/* range stuff */
 		QButtonGroup* rangeButtonGroup;

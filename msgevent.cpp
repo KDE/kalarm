@@ -175,6 +175,7 @@ void KAlarmEvent::set(const Event& event)
 			case Recurrence::rMonthlyDay:
 			case Recurrence::rMonthlyPos:
 			case Recurrence::rYearlyMonth:
+			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				delete mRecurrence;
 				mRecurrence = new KAlarmRecurrence(*recur, 0);
@@ -267,7 +268,7 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 	initRecur(false);
 	mMainAlarmID    = MAIN_ALARM_ID;
 	mDateTime       = dateTime;
-	mCleanText      = (mType == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
+	mCleanText      = (type == KAlarmAlarm::COMMAND) ? text.stripWhiteSpace() : text;
 	mType           = type;
 	mColour         = colour;
 	mRepeatDuration = repeatCount;
@@ -423,6 +424,7 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 				break;
 			}
 			case Recurrence::rYearlyMonth:
+			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 			{
 				if (duration)
@@ -432,6 +434,17 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 				const QPtrList<int>& ynums = mRecurrence->yearNums();
 				for (QPtrListIterator<int> it(ynums);  it.current();  ++it)
 					recur->addYearlyNum(*it.current());
+				if (rectype == Recurrence::rYearlyPos)
+				{
+					const QPtrList<Recurrence::rMonthPos>& mpos = mRecurrence->yearMonthPositions();
+					for (QPtrListIterator<Recurrence::rMonthPos> it(mpos);  it.current();  ++it)
+					{
+						short weekno = it.current()->rPos;
+						if (it.current()->negative)
+							weekno = -weekno;
+						recur->addYearlyMonthPos(weekno, it.current()->rDays);
+					}
+				}
 				break;
 			}
 			default:
@@ -912,6 +925,52 @@ void KAlarmEvent::setRecurAnnualByDate(int freq, const QPtrList<int>& months, in
 }
 
 /******************************************************************************
+ * Set the event to recur annually, on the specified weekdays in the specified
+ * weeks of the specified month.
+ * Parameters:
+ *    freq   = how many years between recurrences.
+ *    posns  = which days of the week/weeks of the month alarms should occur on.
+ *    months = which months of the year alarms should occur on.
+ *    count  = number of occurrences, including first and last.
+ *           = 0 to use 'end' instead.
+ *    end    = end date (invalid to use 'count' instead).
+ */
+void KAlarmEvent::setRecurAnnualByPos(int freq, const QValueList<MonthPos>& posns, const QValueList<int>& months, int count, const QDate& end)
+{
+	if (initRecur(count || end.isValid()))
+	{
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyPos, freq, count);
+		else
+			mRecurrence->setYearly(Recurrence::rYearlyPos, freq, end);
+		for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
+			mRecurrence->addYearlyNum(*it);
+		for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
+			mRecurrence->addYearlyMonthPos((*it).weeknum, (*it).days);
+	}
+}
+
+void KAlarmEvent::setRecurAnnualByPos(int freq, const QPtrList<Recurrence::rMonthPos>& posns, const QPtrList<int>& months, int count, const QDate& end)
+{
+	if (initRecur(count || end.isValid()))
+	{
+		if (count)
+			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, count);
+		else
+			mRecurrence->setYearly(Recurrence::rYearlyMonth, freq, end);
+		for (QPtrListIterator<int> it(months);  it.current();  ++it)
+			mRecurrence->addYearlyNum(*it.current());
+		for (QPtrListIterator<Recurrence::rMonthPos> it(posns);  it.current();  ++it)
+		{
+			short weekno = it.current()->rPos;
+			if (it.current()->negative)
+			weekno = -weekno;
+			mRecurrence->addYearlyMonthPos(weekno, it.current()->rDays);
+		}
+	}
+}
+
+/******************************************************************************
  * Set the event to recur annually, on the specified day numbers.
  * Parameters:
  *    freq  = how many years between recurrences.
@@ -986,6 +1045,7 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 			case Recurrence::rMonthlyDay:      // monthly on multiple dates in month
 			case Recurrence::rMonthlyPos:      // monthly on multiple nth day of week
 			case Recurrence::rYearlyMonth:     // annually on multiple months (day of month = start date)
+			case Recurrence::rYearlyPos:       // annually on multiple nth day of week in multiple months
 			case Recurrence::rYearlyDay:       // annually on multiple day numbers in year
 				ev->mRepeatMinutes = 0;
 				return type;
@@ -1013,6 +1073,7 @@ int KAlarmEvent::recurInterval() const
 			case Recurrence::rMonthlyDay:
 			case Recurrence::rMonthlyPos:
 			case Recurrence::rYearlyMonth:
+			case Recurrence::rYearlyPos:
 			case Recurrence::rYearlyDay:
 				return mRecurrence->frequency();
 			case Recurrence::rNone:
