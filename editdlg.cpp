@@ -50,9 +50,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	messageEdit = new QMultiLineEdit(page);
 	QSize size = messageEdit->sizeHint();
-	messageEdit->setMinimumWidth(size.width());
-	#warning FIXME QMultiLineEdit::setFixedVisibleLines()
-	//messageEdit->setFixedVisibleLines(4);
+        size.setHeight(messageEdit->fontMetrics().lineSpacing()*13/4 + 2*messageEdit->frameWidth());
+        messageEdit->setMinimumSize(size);
 	topLayout->addWidget(messageEdit, 6);
 	QWhatsThis::add(messageEdit,
 	      i18n("Enter the text of the alarm message.\n"
