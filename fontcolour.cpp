@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -26,6 +26,7 @@
 #include <qwidget.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
+#include <qpushbutton.h>
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -33,16 +34,21 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcolordialog.h>
 
+#include "kalarmapp.h"
+#include "preferences.h"
 #include "colourcombo.h"
 #include "fontcolour.moc"
 
 
 FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
           bool onlyFixed, const QStringList &fontList,
-          const QString& frameLabel, bool fg, bool defaultFont,
+          const QString& frameLabel, bool editColours, bool fg, bool defaultFont,
           int visibleListSize)
-	: QWidget(parent, name)
+	: QWidget(parent, name),
+	  mRemoveColourButton(0),
+	  mColourList(theApp()->preferences()->messageColours())
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QWidget* page = this;
@@ -82,6 +88,23 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	label->setBuddy(mBgColourButton);
 	QWhatsThis::add(box, i18n("Select the alarm message background color"));
 	layout->addWidget(new QWidget(page));    // left adjust the widgets
+
+	if (editColours)
+	{
+		layout = new QHBoxLayout(topLayout);
+		QPushButton* button = new QPushButton(i18n("&Add Color..."), page);
+		button->setFixedSize(button->sizeHint());
+		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
+		QWhatsThis::add(button, i18n("Choose a new color to add to the color selection list."));
+		layout->addWidget(button);
+
+		mRemoveColourButton = new QPushButton(i18n("&Remove Color"), page);
+		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
+		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
+		QWhatsThis::add(mRemoveColourButton,
+		      i18n("Remove the color currently shown in the Background Color chooser, from the color selection list."));
+		layout->addWidget(mRemoveColourButton);
+	}
 
 	if (defaultFont)
 	{
@@ -138,6 +161,8 @@ void FontColourChooser::setSampleColour()
 	mFontChooser->setBackgroundColor(bg);
 	QColor fg = fgColour();
 	mFontChooser->setColor(fg);
+	if (mRemoveColourButton)
+		mRemoveColourButton->setEnabled(!mBgColourButton->isCustomColour());   // no deletion of custom colour
 }
 
 QColor FontColourChooser::bgColour() const
@@ -175,3 +200,30 @@ void FontColourChooser::slotDefaultFontToggled(bool on)
 {
 	mFontChooser->setEnabled(!on);
 }
+
+void FontColourChooser::setColours(const ColourList& colours)
+{
+	mColourList = colours;
+	mBgColourButton->setColours(mColourList);
+	mFontChooser->setBackgroundColor(mBgColourButton->color());
+}
+
+void FontColourChooser::slotAddColour()
+{
+	QColor colour;
+	if (KColorDialog::getColor(colour, this) == QDialog::Accepted)
+	{
+		mColourList.insert(colour);
+		mBgColourButton->setColours(mColourList);
+	}
+}
+
+void FontColourChooser::slotRemoveColour()
+{
+	if (!mBgColourButton->isCustomColour())
+	{
+		mColourList.remove(mBgColourButton->color());
+		mBgColourButton->setColours(mColourList);
+	}
+}
+

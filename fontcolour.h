@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -33,9 +33,11 @@
 #else
 #include "fontchooser.h"
 #endif
+#include "colourlist.h"
 
 class QCheckBox;
 class ColourCombo;
+class QPushButton;
 
 
 class FontColourChooser : public QWidget
@@ -46,28 +48,35 @@ public:
 	       bool onlyFixed = false,
 	       const QStringList& fontList = QStringList(),
 	       const QString& frameLabel = i18n("Requested font"),
-	       bool fg = true, bool defaultFont = false, int visibleListSize = 8);
+	       bool editColours = false, bool fg = true, bool defaultFont = false,
+	       int visibleListSize = 8);
 
-	void     setDefaultFont();
-	void     setFont(const QFont&, bool onlyFixed = false);
-	bool     defaultFont() const;
-	QFont    font() const;
-	QColor   fgColour() const;
-	QColor   bgColour() const;
-	void     setFgColour(const QColor&);
-	void     setBgColour(const QColor&);
-	QString  sampleText() const;
-	void     setSampleText(const QString& text);
+	void              setDefaultFont();
+	void              setFont(const QFont&, bool onlyFixed = false);
+	bool              defaultFont() const;
+	QFont             font() const;
+	QColor            fgColour() const;
+	QColor            bgColour() const;
+	const ColourList& colours() const   { return mColourList; }
+	void              setFgColour(const QColor&);
+	void              setBgColour(const QColor&);
+	void              setColours(const ColourList&);
+	QString           sampleText() const;
+	void              setSampleText(const QString& text);
 
 private slots:
-	void     setSampleColour();
-	void     slotDefaultFontToggled(bool);
+	void              setSampleColour();
+	void              slotDefaultFontToggled(bool);
+	void              slotAddColour();
+	void              slotRemoveColour();
 
 private:
 	ColourCombo*     mFgColourButton;       // or null
 	ColourCombo*     mBgColourButton;
+	QPushButton*     mRemoveColourButton;
 	KFontChooser*    mFontChooser;
 	QCheckBox*       mDefaultFont;          // or null
+	ColourList       mColourList;
 };
 
 #endif

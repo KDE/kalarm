@@ -78,7 +78,7 @@ FontColourDlg::FontColourDlg(const QColor& colour, const QFont& font, bool defau
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
-	mChooser = new FontColourChooser(page, 0, false, QStringList(), QString::null, false, true);
+	mChooser = new FontColourChooser(page, 0, false, QStringList(), QString::null, false, false, true);
 	mChooser->setBgColour(colour);
 	if (defaultFont)
 		mChooser->setDefaultFont();
