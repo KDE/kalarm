@@ -250,10 +250,15 @@ QSize MessageWin::initView()
 			label->setPalette(QPalette(colour, colour));
 			label->setFixedSize(label->sizeHint());
 			QWhatsThis::add(label, i18n("The alarm message"));
-			int spacing = label->fontMetrics().lineSpacing()/2 - KDialog::spacingHint();
-			topLayout->addSpacing(spacing);
-			topLayout->addWidget(label, 0, Qt::AlignHCenter);
-			topLayout->addSpacing(spacing);
+			int lineSpacing = label->fontMetrics().lineSpacing();
+			int vspace = lineSpacing/2 - marginKDE2;
+			int hspace = lineSpacing - marginKDE2 - KDialog::marginHint();
+			topLayout->addSpacing(vspace);
+			QBoxLayout* layout = new QHBoxLayout(topLayout);
+			layout->addSpacing(hspace);
+			layout->addWidget(label, 0, Qt::AlignHCenter);
+			layout->addSpacing(hspace);
+			topLayout->addSpacing(vspace);
 			break;
 		}
 	}
