@@ -6,7 +6,7 @@ kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp mainwindowbase.cpp mainwindo
 	messagewin.cpp msgevent.cpp alarmcalendar.cpp \
 	prefsettings.cpp prefs.cpp prefdlg.cpp \
 	traywindow.cpp daemongui.cpp alarmguiiface.skel \
-	fontcolour.cpp fontchooser.cpp colourcombo.cpp datetime.cpp spinbox2.cpp
+	fontcolour.cpp colourcombo.cpp datetime.cpp spinbox2.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD   = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la $(top_builddir)/kalarmd/libkalarmd.la
 
@@ -16,7 +16,7 @@ kalarmautostart_LDADD   = $(LIB_KDECORE)
 
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindow.h messagewin.h editdlg.h \
 	mainwindowbase.h traywindow.h daemongui.h alarmguiiface.h \
-	msgevent.h alarmcalendar.h datetime.h fontcolour.h fontchooser.h colourcombo.h \
+	msgevent.h alarmcalendar.h datetime.h fontcolour.h colourcombo.h \
 	spinbox2.h prefs.h prefsettings.h prefdlg.h
 
 METASOURCES = AUTO

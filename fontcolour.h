@@ -24,7 +24,8 @@
 #include <qwidget.h>
 #include <qsize.h>
 
-#include "fontchooser.h"
+#include <kfontdialog.h>
+
 #include "colourcombo.h"
 
 
@@ -41,22 +42,22 @@ public:
 	~FontColourChooser();
 
 	void setFont(const QFont& font, bool onlyFixed = false)  { m_fontChooser->setFont(font, onlyFixed); }
-	QFont font() const  { return m_fontChooser->font(); }
+	QFont font() const                       { return m_fontChooser->font(); }
 	QColor fgColour() const;
-	QColor bgColour() const    { return m_bgColourButton->color(); }
+	QColor bgColour() const                  { return m_bgColourButton->color(); }
 	void setFgColour(const QColor&);
 	void setBgColour(const QColor&);
 #if QT_VERSION < 300
 	void setCharset(const QString& charset)  { m_fontChooser->setCharset(charset); }
-	QString charset() const  { return m_fontChooser->charset(); }
+	QString charset() const                  { return m_fontChooser->charset(); }
 #endif
-	QString sampleText() const { return m_fontChooser->sampleText(); }
+	QString sampleText() const               { return m_fontChooser->sampleText(); }
 	void setSampleText(const QString& text)  { m_fontChooser->setSampleText(text); }
 
 private:
 	ColourCombo*     m_fgColourButton;       // or null
 	ColourCombo*     m_bgColourButton;
-	FontChooser*     m_fontChooser;
+	KFontChooser*    m_fontChooser;
 
 private slots:
 	void setSampleColour();

@@ -69,7 +69,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	grid->addWidget(m_bgColourButton, gridRow, 1, AlignRight);
 	connect(m_bgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 
-	m_fontChooser = new FontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
+	m_fontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
 	topLayout->addWidget(m_fontChooser);
 }
 
@@ -82,26 +82,22 @@ void FontColourChooser::setFgColour(const QColor& colour)
 	if (m_fgColourButton)
 	{
 		m_fgColourButton->setColour(colour);
-		m_fontChooser->setColor(colour, QPalette::Active, QColorGroup::Text);
-		m_fontChooser->setColor(colour, QPalette::Inactive, QColorGroup::Text);
+		m_fontChooser->setColor(colour);
 	}
 }
 
 void FontColourChooser::setBgColour(const QColor& colour)
 {
 	m_bgColourButton->setColour(colour);
-	m_fontChooser->setColor(colour, QPalette::Active, QColorGroup::Base);
-	m_fontChooser->setColor(colour, QPalette::Inactive, QColorGroup::Base);
+	m_fontChooser->setBackgroundColor(colour);
 }
 
 void FontColourChooser::setSampleColour()
 {
 	QColor bg = m_bgColourButton->color();
-	m_fontChooser->setColor(bg, QPalette::Active, QColorGroup::Base);
-	m_fontChooser->setColor(bg, QPalette::Inactive, QColorGroup::Base);
+	m_fontChooser->setBackgroundColor(bg);
 	QColor fg = fgColour();
-	m_fontChooser->setColor(fg, QPalette::Active, QColorGroup::Text);
-	m_fontChooser->setColor(fg, QPalette::Inactive, QColorGroup::Text);
+	m_fontChooser->setColor(fg);
 }
 
 QColor FontColourChooser::fgColour() const
