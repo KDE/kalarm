@@ -1012,6 +1012,17 @@ void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
 		slotNew();
 }
 
+#if 0
+/******************************************************************************
+*  Set the text of the Enable/Disable menu action.
+*/
+void KAlarmMainWindow::setEnableText(bool enable)
+{
+	mActionEnableEnable = enable;
+	mActionEnable->setText(enable ? i18n("Ena&ble") : i18n("Disa&ble"));
+}
+#endif
+
 /******************************************************************************
 * Prompt the user to re-enable alarms if they are currently disabled, and if
 * it's an email alarm, warn if no 'From' email address is configured.
