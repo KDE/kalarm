@@ -62,6 +62,7 @@ class MessageWin : public MainWindowBase
 
 	private:
 		QSize              initView();
+		void               playAudio();
 
 		static QPtrList<MessageWin> windowList;  // list of existing message windows
 		// KAlarmEvent properties

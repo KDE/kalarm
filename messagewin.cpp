@@ -433,6 +433,27 @@ MessageWin* MessageWin::findEvent(const QString& eventID)
 }
 
 /******************************************************************************
+*  Beep and play the audio file, as appropriate.
+*/
+void MessageWin::playAudio()
+{
+	if (beep)
+	{
+		// Beep using two methods, in case the sound card/speakers are switched off or not working
+		KNotifyClient::beep();     // beep through the sound card & speakers
+		QApplication::beep();      // beep through the internal speaker
+	}
+	if (!audioFile.isEmpty())
+	{
+		QString play = audioFile;
+		QString file = QString::fromLatin1("file:");
+		if (audioFile.startsWith(file))
+			play = audioFile.mid(file.length());
+		KAudioPlayer::play(QFile::encodeName(play));
+	}
+}
+
+/******************************************************************************
 *  Re-output any required audio notification, and reschedule the alarm in the
 *  calendar file.
 */
@@ -442,14 +463,7 @@ void MessageWin::repeat()
 	if (kcalEvent)
 	{
 		raise();
-		if (beep)
-		{
-			// Beep using two methods, in case the sound card/speakers are switched off or not working
-			KNotifyClient::beep();     // beep through the sound card & speakers
-			QApplication::beep();      // beep through the internal speaker
-		}
-		if (!audioFile.isEmpty())
-			KAudioPlayer::play(QFile::encodeName(audioFile));
+		playAudio();
 		KAlarmEvent event(*kcalEvent);
 		theApp()->rescheduleAlarm(event, alarmID);
 	}
@@ -465,14 +479,7 @@ void MessageWin::showEvent(QShowEvent* se)
 	MainWindowBase::showEvent(se);
 	if (!shown)
 	{
-		if (beep)
-		{
-			// Beep using two methods, in case the sound card/speakers are switched off or not working
-			KNotifyClient::beep();     // beep through the sound card & speakers
-			QApplication::beep();      // beep through the internal speaker
-		}
-		if (!audioFile.isEmpty())
-			KAudioPlayer::play(QFile::encodeName(audioFile));
+		playAudio();
 		if (rescheduleEvent)
 			theApp()->rescheduleAlarm(event, alarmID);
 		shown = true;
