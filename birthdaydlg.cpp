@@ -225,7 +225,7 @@ void BirthdayDlg::updateSelectionList()
 	}
 
 	// Fetch all birthdays from the address book
-	mAddressBook = KABC::StdAddressBook::self();
+	mAddressBook = KABC::StdAddressBook::self( true );
 	if (!mAddressBook)
 		KMessageBox::error(this, i18n("Error reading address book"));
 	else
