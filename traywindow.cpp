@@ -128,8 +128,8 @@ void TrayWindow::slotQuit()
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
 	if (theApp()->wantRunInSystemTray())
 	{
-		if (KMessageBox::warningContinueCancel(this, i18n("Quitting will disable alarms, once any alarm message windows are closed."),
-		                                       QString::null, mActionQuit->text(), QString::fromLatin1("QuitWarn"))
+		if (KMessageBox::warningContinueCancel(this, i18n("Quitting will disable alarms,\nonce any alarm message windows are closed."),
+		                                       QString::null, mActionQuit->text())
 		    != KMessageBox::Continue)
 		    return;
 		if (!MessageWin::instanceCount())
