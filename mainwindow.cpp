@@ -76,11 +76,11 @@ TemplateDlg*  KAlarmMainWindow::mTemplateDlg = 0;
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString KAlarmMainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
-QString KAlarmMainWindow::i18n_t_ShowAlarmTimes()    { return i18n("Show alarm &time"); }
-QString KAlarmMainWindow::i18n_m_ShowAlarmTimes()    { return i18n("Show alarm ti&me"); }
+QString KAlarmMainWindow::i18n_t_ShowAlarmTime()     { return i18n("Show alarm &time"); }
+QString KAlarmMainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me"); }
 QString KAlarmMainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
-QString KAlarmMainWindow::i18n_n_ShowTimeToAlarms()  { return i18n("Show time u&ntil alarm"); }
-QString KAlarmMainWindow::i18n_l_ShowTimeToAlarms()  { return i18n("Show time unti&l alarm"); }
+QString KAlarmMainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
+QString KAlarmMainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
 QString KAlarmMainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
 QString KAlarmMainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
 
@@ -115,6 +115,8 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	}
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
+	if (!mShowTimeTo)
+		mShowTime = true;     // ensure at least one time column is visible
 	mListView = new AlarmListView(this, "listView");
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->showExpired(mShowExpired);
@@ -660,12 +662,9 @@ void KAlarmMainWindow::slotShowTime()
 	mShowTime = !mShowTime;
 	mActionShowTime->setChecked(mShowTime);
 	if (!mShowTime  &&  !mShowTimeTo)
-	{
-		// At least one time column must be displayed
-		mShowTimeTo = true;
-		mActionShowTimeTo->setChecked(mShowTimeTo);
-	}
-	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		slotShowTimeTo();    // at least one time column must be displayed
+	else
+		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 }
 
 /******************************************************************************
@@ -676,12 +675,9 @@ void KAlarmMainWindow::slotShowTimeTo()
 	mShowTimeTo = !mShowTimeTo;
 	mActionShowTimeTo->setChecked(mShowTimeTo);
 	if (!mShowTimeTo  &&  !mShowTime)
-	{
-		// At least one time column must be displayed
-		mShowTime = true;
-		mActionShowTime->setChecked(mShowTime);
-	}
-	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		slotShowTime();    // at least one time column must be displayed
+	else
+		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	setUpdateTimer();
 }
 
