@@ -21,8 +21,6 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#define SOUND
-
 #include <qcheckbox.h>
 #include <qdatetime.h>
 #include <qradiobutton.h>
@@ -79,9 +77,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotRecurrenceResized(QSize old, QSize New);
 		void         slotEditDeferral();
 		void         slotSoundToggled(bool on);
-#ifdef SOUND
 		void         slotPickSound();
-#endif
 
 	private:
 		bool            checkText(QString& result);
