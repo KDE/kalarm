@@ -72,9 +72,9 @@ class EventListViewBase : public KListView
 		virtual InstanceList   instances() = 0; // return all instances
 
 	public slots:
-		void                   slotFind();
-		void                   slotFindNext()         { findNext(true); }
-		void                   slotFindPrev()         { findNext(false); }
+		virtual void           slotFind();
+		virtual void           slotFindNext()         { findNext(true); }
+		virtual void           slotFindPrev()         { findNext(false); }
 
 	signals:
 		void                   itemDeleted();
