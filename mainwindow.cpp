@@ -38,6 +38,7 @@
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
+#include <kstdguiitem.h>
 
 #include <maillistdrag.h>
 
@@ -312,7 +313,7 @@ void KAlarmMainWindow::initActions()
 	theApp()->actionDaemonControl()->plug(submenu);
 	theApp()->actionPreferences()->plug(submenu);
 
-	menu->insertItem(i18n("&Help"), helpMenu());
+	menu->insertItem(KStdGuiItem::help().text(), helpMenu());
 
 	// Set up the toolbar
 
