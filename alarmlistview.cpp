@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -272,15 +262,15 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 {
 	setLastColumnText();     // set the message column text
 
+	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime(false);
 	if (parent->timeColumn() >= 0)
-		setText(parent->timeColumn(), alarmTimeText());
+		setText(parent->timeColumn(), alarmTimeText(dateTime));
 	if (parent->timeToColumn() >= 0)
 	{
 		QString tta = timeToAlarmText(now);
 		setText(parent->timeToColumn(), tta);
 		mTimeToAlarmShown = !tta.isNull();
 	}
-	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime();
 	QTime t = dateTime.time();
 	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                           t.hour(), t.minute());
@@ -368,9 +358,8 @@ QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfSt
 /******************************************************************************
 *  Return the alarm time text in the form "date time".
 */
-QString AlarmListViewItem::alarmTimeText() const
+QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 {
-	DateTime dateTime = event().expired() ? event().startDateTime() : event().nextDateTime();
 	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
 	if (!dateTime.isDateOnly())
 	{
@@ -387,7 +376,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
 	if (event().expired())
 		return QString::null;
-	DateTime dateTime = event().nextDateTime();
+	DateTime dateTime = event().nextDateTime(false);
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());

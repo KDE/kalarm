@@ -339,7 +339,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               reminderDeferral() const       { return mReminderDeferral; }
 		int                reminderArchived() const       { return mArchiveReminderMinutes; }
 		DateTime           deferDateTime() const          { return mDeferralTime; }
-		DateTime           nextDateTime() const;
+		DateTime           nextDateTime(bool includeReminders = true) const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return mSoundVolume >= 0  &&  !mAudioFile.isEmpty() ? mSoundVolume : -1; }
