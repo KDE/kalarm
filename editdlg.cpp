@@ -16,10 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  As a special exception, permission is given to link this program
- *  with any edition of Qt, and distribute the resulting executable,
- *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -1081,9 +1077,6 @@ void EditAlarmDlg::openAddressBook()
 {
 	KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
 	if (a.isEmpty())
-#if 0
-		KMessageBox::error(this, i18n("Error reading address book"));
-#endif
 		return;
 	Person person(a.realName(), a.preferredEmail());
 	QString addrs = mEmailToEdit->text().stripWhiteSpace();
