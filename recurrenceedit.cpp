@@ -678,10 +678,10 @@ void RecurrenceEdit::periodClicked(int id)
 		{
 			mNoEndDateButton->setEnabled(!atLogin);
 			mRepeatCountButton->setEnabled(!atLogin);
-			mRepeatCountEntry->setEnabled(!atLogin);
-			mRepeatCountLabel->setEnabled(!atLogin);
-			mEndTimeEdit->setEnabled(atLogin && !mEndAnyTimeCheckBox->isChecked()
-			                         ||  subdaily && mEndDateButton->isChecked());
+			mRepeatCountEntry->setEnabled(!atLogin && mRepeatCountButton->isOn());
+			mRepeatCountLabel->setEnabled(!atLogin && mRepeatCountButton->isOn());
+			mEndTimeEdit->setEnabled(mEndDateButton->isOn()
+			                         &&  (atLogin && !mEndAnyTimeCheckBox->isChecked() || subdaily));
 		}
 		if (!noEmitTypeChanged)
 			emit typeChanged(mRuleButtonType);
