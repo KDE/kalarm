@@ -37,6 +37,7 @@ TimeEdit::TimeEdit(QWidget* parent, const char* name)
 {
 	bool use12hour = KGlobal::locale()->use12Clock();
 	mSpinBox = new TimeSpinBox(!use12hour, this);
+	mSpinBox->setFixedSize(mSpinBox->sizeHint());
 	connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
 	if (use12hour)
 	{
