@@ -118,6 +118,7 @@ KAlarmMainWindow::KAlarmMainWindow()
 
 KAlarmMainWindow::~KAlarmMainWindow()
 {
+	kdDebug(5950) << "KAlarmMainWindow::~KAlarmMainWindow()\n";
 	theApp()->deleteWindow(this);
 }
 
@@ -176,6 +177,8 @@ void KAlarmMainWindow::initActions()
 
 	actionModify->setEnabled(false);
 	actionDelete->setEnabled(false);
+	if (!theApp()->KDEDesktop())
+		actionToggleTrayIcon->setEnabled(false);
 }
 
 /******************************************************************************
