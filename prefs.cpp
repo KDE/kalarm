@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
 
 #include "fontcolour.h"
 #include "prefsettings.h"
