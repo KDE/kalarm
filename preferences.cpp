@@ -25,6 +25,7 @@
 #include <kemailsettings.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
+#include <kmessagebox.h>
 
 #include "preferences.moc"
 
@@ -306,8 +307,7 @@ void Preferences::save(bool syncToDisc)
 
 void Preferences::syncToDisc()
 {
-	KConfig* config = KGlobal::config();
-	config->sync();
+	KGlobal::config()->sync();
 }
 
 void Preferences::updateStartOfDayCheck()
@@ -392,7 +392,7 @@ void Preferences::setEmailBccAddress(bool useControlCentre, const QString& addre
 */
 void Preferences::setNotify(const QString& messageID, bool yesNoMessage, bool notify)
 {
-	KConfig* config = kapp->config();
+	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("Notification Messages"));
 	if (yesNoMessage)
 		config->writeEntry(messageID, QString::fromLatin1(notify ? "" : "yes"));
@@ -411,10 +411,11 @@ void Preferences::setNotify(const QString& messageID, bool yesNoMessage, bool no
 */
 bool Preferences::notifying(const QString& messageID, bool yesNoMessage)
 {
-	KConfig* config = kapp->config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
 	if (yesNoMessage)
-		return config->readEntry(messageID).lower() != QString::fromLatin1("yes");
+	{
+		KMessageBox::ButtonCode b;
+		return KMessageBox::shouldBeShownYesNo(messageID, b);
+	}
 	else
-		return config->readBoolEntry(messageID, true);
+		return KMessageBox::shouldBeShownContinue(messageID);
 }
