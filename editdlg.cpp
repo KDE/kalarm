@@ -1886,7 +1886,6 @@ TextEdit::TextEdit(QWidget* parent, const char* name)
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
 	setMinimumSize(tsize);
 }
-#warning Set complete message if dragging onto a text alarm edit field
 
 
 /*=============================================================================
