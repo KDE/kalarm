@@ -545,7 +545,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--reminder")))
 				}
 
-				int flags = 0;
+				int flags = KAlarmEvent::DEFAULT_FONT;
 				if (args->isSet("ack-confirm"))
 					flags |= KAlarmEvent::CONFIRM_ACK;
 				if (args->isSet("beep"))
@@ -562,8 +562,8 @@ int KAlarmApp::newInstance()
 
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, mPreferences->messageFont(), flags,
-				                   audioFile, alAddresses, alSubject, alAttachments, action, recurrence,
+				if (!scheduleEvent(alMessage, alarmTime, bgColour, QFont(), flags, audioFile,
+				                   alAddresses, alSubject, alAttachments, action, recurrence,
 				                   reminderMinutes))
 				{
 					exitCode = 1;
