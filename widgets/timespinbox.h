@@ -1,7 +1,7 @@
 /*
  *  timespinbox.h  -  time spinbox widget
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class TimeSpinBox : public SpinBox2
 	public:
 		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
 		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
-		bool            valid() const;
+		bool            isValid() const;
 		QTime           time() const;
 		void            setValid(bool);
 		static QString  shiftWhatsThis();
