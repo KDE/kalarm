@@ -596,7 +596,7 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	mDefaultConfirmAck = new QCheckBox(i18n("Confirm ac&knowledgement"), box, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(i18n("Confirm acknowledgement")));
+	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(i18n("Confirm acknowledgment")));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
