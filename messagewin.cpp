@@ -38,6 +38,7 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <kwin.h>
+#include <kwinmodule.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
@@ -448,15 +449,17 @@ void MessageWin::slotShowDefer()
 			s.setWidth(width());
 
 		// Ensure that the defer dialog doesn't disappear past the bottom of the screen
-		int maxHeight = KApplication::desktop()->height() - s.height();
+		QRect workArea = KWinModule().workArea();
+		int highest = workArea.top();
+		int maxHeight = workArea.height() - s.height();
 		QRect rect = frameGeometry();
-		if (rect.bottom() > maxHeight)
+		if (rect.bottom() - highest > maxHeight)
 		{
 			// Move the window upwards if possible, and resize if necessary
-			int bottomShift = rect.bottom() - maxHeight;
+			int bottomShift = rect.bottom() - highest - maxHeight;
 			int topShift    = bottomShift;
-			if (topShift > rect.top())
-				topShift = rect.top();
+			if (topShift > rect.top() - highest)
+				topShift = rect.top() - highest;
 			rect = geometry();
 			rect.setTop(rect.top() - topShift);
 			rect.setBottom(rect.bottom() - bottomShift);
