@@ -20,6 +20,7 @@
 
 #include <qvbox.h>
 
+#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -58,9 +59,7 @@ void KAlarmPrefDlg::slotDefault()
 
 void KAlarmPrefDlg::slotHelp()
 {
-	// show some help...
-	// figure out the current active page
-	// and give help for that page
+	kapp->invokeHelp("preferences");
 }
 
 // Apply the settings that are currently selected
