@@ -1,11 +1,12 @@
 KAlarm
 
-=== Version 0.7.4 --- 8 August 2002 ===
+=== Version 0.7.4 --- 18 August 2002 ===
 Add option to prompt for confirmation on alarm deletion.
 Add option to prompt for confirmation on alarm acknowedgement.
 Add preferences options to choose default settings for the Edit Alarm dialog.
 Display KAlarm handbook Preferences section when Help clicked in config dialog.
 Correctly adjust wrong summer times stored by version 0.5.7 (KDE 3.0.0).
+Fix right-to-left character sets not being displayed in message edit control.
 Make "Help -> Report Bug" use the KDE bug system (bug #43250).
 
 === Version 0.7.3 --- 24 July 2002 ===
