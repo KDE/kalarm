@@ -200,11 +200,15 @@ void KAlarmMainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
-	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
-	actionCopy           = new KAction(i18n("&Copy..."), "eventcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
-	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
+#if KDE_VERSION >= 310
+	actionNew            = new KAction(i18n("&New..."), "filenew2", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
+#else
+	actionNew            = new KAction(i18n("&New..."), "filenew", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
+#endif
+	actionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
+	actionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
 	actionView           = new KAction(i18n("&View"), "eventview", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
-	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
+	actionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	actionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
 	actionShowExpired    = new KAction(i18n("&Show Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
 	actionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
