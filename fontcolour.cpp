@@ -65,8 +65,8 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mFgColourButton = new ColourCombo(box);
 		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
-		QWhatsThis::add(box, i18n("Select the foreground color for the alarm message"));
-		layout->addWidget(new QWidget(box));    // left adjust the widgets
+		QWhatsThis::add(box, i18n("Select the alarm message foreground color"));
+		layout->addWidget(new QWidget(page));    // left adjust the widgets
 	}
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
@@ -80,8 +80,8 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
 	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
-	QWhatsThis::add(box, i18n("Select the foreground color for the alarm message"));
-	layout->addWidget(new QWidget(box));    // left adjust the widgets
+	QWhatsThis::add(box, i18n("Select the alarm message background color"));
+	layout->addWidget(new QWidget(page));    // left adjust the widgets
 
 	if (defaultFont)
 	{
@@ -92,6 +92,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		QWhatsThis::add(mDefaultFont,
 		      i18n("Check to use the default font current at the time the alarm is displayed."));
 		layout->addWidget(mDefaultFont);
+		layout->addWidget(new QWidget(page));    // left adjust the widget
 	}
 
 	mFontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
