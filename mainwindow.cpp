@@ -53,13 +53,15 @@
 QPtrList<KAlarmMainWindow> KAlarmMainWindow::windowList;
 
 
-KAlarmMainWindow::KAlarmMainWindow()
+KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mHiddenTrayParent(false)
 {
 	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
+	if (!restored)
+		resize(theApp()->readConfigWindowSize("MainWindow", size()));
 
 	theApp()->checkCalendar();    // ensure calendar is open
 	listView = new AlarmListView(this, "listView");
@@ -97,6 +99,10 @@ KAlarmMainWindow::~KAlarmMainWindow()
 		else
 			theApp()->trayWindow()->removeWindow(this);
 	}
+	KAlarmMainWindow* main = mainMainWindow();
+	if (main)
+		theApp()->writeConfigWindowSize("MainWindow", main->size());
+	KGlobal::config()->sync();    // save any new window size to disc
 	theApp()->quitIf();
 }
 
@@ -120,7 +126,25 @@ void KAlarmMainWindow::readProperties(KConfig* config)
 }
 
 /******************************************************************************
-*
+* Get the main main window, i.e. the parent of the system tray icon, or if
+* none, the first main window to be created. Visible windows take precedence
+* over hidden ones.
+*/
+KAlarmMainWindow* KAlarmMainWindow::mainMainWindow()
+{
+	KAlarmMainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0L;
+	if (tray  &&  tray->isVisible())
+		return tray;
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		if (w->isVisible())
+				return w;
+	if (tray)
+		return tray;
+	return windowList.first();
+}
+
+/******************************************************************************
+* Check whether this main window is the parent of the system tray icon.
 */
 bool KAlarmMainWindow::trayParent() const
 {
@@ -140,10 +164,14 @@ void KAlarmMainWindow::closeAll()
 *  Called when the window's size has changed (before it is painted).
 *  Sets the last column in the list view to extend at least to the right hand
 *  edge of the list view.
+*  Records the new size in the config file.
 */
 void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 {
 	listView->resizeLastColumn();
+	// Save the window's new size only if it's the first main window
+	if (mainMainWindow() == this)
+		theApp()->writeConfigWindowSize("MainWindow", re->size());
 	MainWindowBase::resizeEvent(re);
 }
 
@@ -168,7 +196,7 @@ void KAlarmMainWindow::initActions()
 	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
 	actionToggleTrayIcon = new KAction(QString(), "kalarm", Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
-	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", 0, this, SLOT(slotResetDaemon()), this, "reset");
+	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), this, "refresh");
 
 	// Set up the menu bar
 
@@ -202,7 +230,7 @@ void KAlarmMainWindow::initActions()
 		setAlarmEnabledStatus(daemonGui->monitoringAlarms());
 	}
 
-	actionResetDaemon->plug(mActionsMenu);
+	actionRefreshAlarms->plug(mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), this, SLOT(updateActionsMenu()));
 
 	submenu = new KPopupMenu(this, "settings");
@@ -248,6 +276,16 @@ void KAlarmMainWindow::slotSettingsChanged()
 			updateTrayIconAction();
 		}
 	}
+}
+
+/******************************************************************************
+* Refresh the alarm list in every main window instance.
+*/
+void KAlarmMainWindow::refresh()
+{
+	kdDebug(5950) << "KAlarmMainWindow::refresh()\n";
+	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+		w->listView->refresh();
 }
 
 /******************************************************************************

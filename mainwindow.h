@@ -36,7 +36,7 @@ class KAlarmMainWindow : public MainWindowBase
 		Q_OBJECT
 
 	public:
-		KAlarmMainWindow();
+		KAlarmMainWindow(bool restored = false);
 		~KAlarmMainWindow();
 		bool           trayParent() const;
 		bool           hiddenTrayParent() const     { return mHiddenTrayParent; }
@@ -45,12 +45,14 @@ class KAlarmMainWindow : public MainWindowBase
 		void           modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent);
 		void           deleteEvent(const KAlarmEvent&);
 
+		static void    refresh();
 		static void    addEvent(const KAlarmEvent&, KAlarmMainWindow*);
 		static void    modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		static void    modifyEvent(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
 		static void    deleteEvent(const KAlarmEvent&, KAlarmMainWindow*);
 		static void              closeAll();
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
+		static KAlarmMainWindow* mainMainWindow();
 		static KAlarmMainWindow* firstWindow()      { return windowList.first(); }
 		static int               count()            { return windowList.count(); }
 
@@ -87,7 +89,7 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       actionModify;
 		KAction*       actionDelete;
 		KAction*       actionToggleTrayIcon;
-		KAction*       actionResetDaemon;
+		KAction*       actionRefreshAlarms;
 		KAction*       actionQuit;
 		int            mViewMenuId;
 		KPopupMenu*    mViewMenu;
