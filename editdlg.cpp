@@ -59,10 +59,10 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Message label + multi-line editor
 
-	messageTypeGroup = new QButtonGroup(i18n("Message"), page, "messageGroup");
+	messageTypeGroup = new QButtonGroup(i18n("Alarm"), page, "messageGroup");
 	connect(messageTypeGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
 	topLayout->addWidget(messageTypeGroup);
-	QGridLayout* grid = new QGridLayout(messageTypeGroup, 3, 4, 2*KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(messageTypeGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	// Message radio button has an ID of 0
@@ -112,7 +112,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	QGroupBox* group = new QGroupBox(i18n("Repetition"), page, "repetitionGroup");
 	topLayout->addWidget(group);
-	grid = new QGridLayout(group, 3, 4, 2*KDialog::marginHint(), KDialog::spacingHint());
+	grid = new QGridLayout(group, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	QLabel* lbl = new QLabel(i18n("Count:"), group);
@@ -145,7 +145,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(repeatAtLogin,
 	      i18n("Repeat the alarm at every login until the specified time.\n"
 	           "Note that it will also be repeated any time the alarm daemon is restarted."));
-	grid->addWidget(repeatAtLogin, 2, 0, AlignLeft);
+	grid->addMultiCellWidget(repeatAtLogin, 2, 2, 0, 1, AlignLeft);
 
 	// Late display checkbox - default = allow late display
 
