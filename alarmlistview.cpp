@@ -267,9 +267,8 @@ QString AlarmListView::whatsThisText(int column) const
 
 AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
 	: EventListViewItemBase(parent, event),
-	  mTimeToAlarmShown(false),
 	  mMessageLfStripped(false),
-	  mMessageNoRoom(false)
+	  mTimeToAlarmShown(false)
 {
 	setLastColumnText();     // set the message column text
 
@@ -479,7 +478,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
 		QString txt = text(column);
 		painter->drawText(textRect, AlignVCenter, txt);
-		mMessageNoRoom = (listView->fontMetrics().boundingRect(txt).width() > width);
+		mMessageColWidth = textRect.left() + listView->fontMetrics().boundingRect(txt).width();
 	}
 }
 
@@ -506,19 +505,30 @@ QString AlarmListViewItem::key(int column, bool) const
 =============================================================================*/
 
 /******************************************************************************
-*  Displays the full alarm text in a tooltip, if it is not already displayed.
+*  Displays the full alarm text in a tooltip, if not all the text is displayed.
 */
 void AlarmListTooltip::maybeTip(const QPoint& pt)
 {
 	AlarmListView* listView = (AlarmListView*)parentWidget()->parentWidget();
-	if (listView->header()->sectionAt(pt.x()) == listView->messageColumn())
+	int column = listView->messageColumn();
+	int xOffset = listView->contentsX();
+	if (listView->header()->sectionAt(pt.x() + xOffset) == column)
 	{
 		AlarmListViewItem* item = (AlarmListViewItem*)listView->itemAt(pt);
-		if (item  &&  item->messageTruncated())
+		if (item)
 		{
-			kdDebug(5950) << "AlarmListTooltip::maybeTip(): display\n";
+			int columnX = listView->header()->sectionPos(column) - xOffset;
+			int columnWidth = listView->columnWidth(column);
+			int widthNeeded = item->messageColWidthNeeded();
+			if (!item->messageLfStripped()  &&  columnWidth >= widthNeeded)
+			{
+				if (columnX + widthNeeded <= listView->viewport()->width())
+					return;
+			}
 			QRect rect = listView->itemRect(item);
-			rect.setLeft(rect.right() + 1 - listView->columnWidth(listView->messageColumn()));
+			rect.setLeft(columnX);
+			rect.setWidth(columnWidth);
+			kdDebug(5950) << "AlarmListTooltip::maybeTip(): display\n";
 			tip(rect, item->alarmText(item->event(), true));
 		}
 	}

@@ -45,14 +45,15 @@ class AlarmListViewItem : public EventListViewItemBase
 		QTime               showTimeToAlarm(bool show);
 		void                updateTimeToAlarm(const QDateTime& now, bool forceDisplay = false);
 		virtual void        paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
-		AlarmListView*      alarmListView() const     { return (AlarmListView*)listView(); }
-		bool                messageTruncated() const  { return mMessageLfStripped || mMessageNoRoom; }
+		AlarmListView*      alarmListView() const         { return (AlarmListView*)listView(); }
+		bool                messageLfStripped() const     { return mMessageLfStripped; }
+		int                 messageColWidthNeeded() const { return mMessageColWidth; }
 		static QString      alarmText(const KAEvent& e, bool full, bool* lfStripped = 0);
 		// Overridden base class methods
-		AlarmListViewItem*  nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
+		AlarmListViewItem*  nextSibling() const           { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
 		virtual QString     key(int column, bool ascending) const;
 	protected:
-		virtual QString     lastColumnText() const    { return alarmText(event()); }
+		virtual QString     lastColumnText() const        { return alarmText(event()); }
 	private:
 		QString             alarmText(const KAEvent&) const;
 		QString             alarmTimeText() const;
@@ -61,9 +62,9 @@ class AlarmListViewItem : public EventListViewItemBase
 		QString             mDateTimeOrder;     // controls ordering of date/time column
 		QString             mRepeatOrder;       // controls ordering of repeat column
 		QString             mColourOrder;       // controls ordering of colour column
-		bool                mTimeToAlarmShown;  // relative alarm time is displayed
+		mutable int         mMessageColWidth;   // width needed to display complete message text
 		mutable bool        mMessageLfStripped; // multi-line message text has been truncated for the display
-		mutable bool        mMessageNoRoom;     // display is too narrow for message text
+		bool                mTimeToAlarmShown;  // relative alarm time is displayed
 };
 
 
