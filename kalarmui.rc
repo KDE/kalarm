@@ -29,6 +29,7 @@
    <Action name="delete" />
    <Action name="undelete" />
    <Action name="view" />
+   <Action name="disable" />
    <Action name="createTemplate" />
    <Separator/>
    <Action name="alarmEnable" />
@@ -51,6 +52,7 @@
   <Action name="delete" />
   <Action name="undelete" />
   <Action name="view" />
+  <Action name="disable" />
   <Action name="createTemplate" />
  </Menu>
  <ActionProperties/>

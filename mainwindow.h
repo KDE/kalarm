@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef MAINWINDOW_H
@@ -95,6 +85,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotDelete();
 		void           slotUndelete();
 		void           slotView();
+		void           slotEnable();
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
 		void           slotBirthdays();
@@ -119,6 +110,7 @@ class KAlarmMainWindow : public MainWindowBase
 		KAlarmMainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
+		void           setEnableText(bool enable);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
@@ -136,6 +128,7 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       mActionView;
 		KAction*       mActionDelete;
 		KAction*       mActionUndelete;
+		KAction*       mActionEnable;
 		KToggleAction* mActionToggleTrayIcon;
 		KToggleAction* mActionShowTime;
 		KToggleAction* mActionShowTimeTo;
@@ -147,6 +140,7 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           mShowExpired;         // include expired alarms in the displayed list
 		bool           mShowTime;            // show alarm times
 		bool           mShowTimeTo;          // show time-to-alarms
+		bool           mActionEnableEnable;  // Enable/Disable action is set to "Enable"
 };
 
 #endif // MAINWINDOW_H
