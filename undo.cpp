@@ -593,7 +593,7 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 =============================================================================*/
 
 template <class T>
-UndoMulti<T>::UndoMulti<T>(Undo::Type type, const QValueList<KAEvent>& events)
+UndoMulti<T>::UndoMulti(Undo::Type type, const QValueList<KAEvent>& events)
 	: UndoMultiBase(type)    // UNDO only
 {
 	for (QValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
