@@ -9,11 +9,11 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
 # that it builds with --enable-final !!!
-kalarm_SOURCES = birthdaydlg.cpp msgevent.cpp editdlg.cpp alarmcalendar.cpp \
+kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	daemongui.cpp main.cpp kalarmapp.cpp \
         mainwindowbase.cpp mainwindow.cpp \
 	messagewin.cpp \
-	prefsettings.cpp prefs.cpp prefdlg.cpp \
+	preferences.cpp prefdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp \
 	fontcolour.cpp fontcolourbutton.cpp datetime.cpp soundpicker.cpp \
@@ -27,8 +27,8 @@ kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkdepim/libkdepim.la
 noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
 	messagewin.h editdlg.h recurrenceedit.h deferdlg.h birthdaydlg.h \
-	msgevent.h alarmcalendar.h alarmlistview.h kamail.h \
-	prefs.h prefsettings.h prefdlg.h \
+	alarmevent.h alarmcalendar.h alarmlistview.h kamail.h \
+	preferences.h prefdlg.h \
 	traywindow.h daemongui.h dcophandler.h \
 	fontcolour.h fontcolourbutton.h datetime.h soundpicker.h
 

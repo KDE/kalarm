@@ -1,5 +1,5 @@
 /*
- *  msgevent.h  -  the event object for messages
+ *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
  *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *

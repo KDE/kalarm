@@ -30,7 +30,7 @@
 
 #include <kdialogbase.h>
 
-#include "msgevent.h"
+#include "alarmevent.h"
 
 class QGroupBox;
 class QMultiLineEdit;

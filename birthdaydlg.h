@@ -27,7 +27,7 @@
 #include <qlineedit.h>
 #include <kdialogbase.h>
 
-#include "msgevent.h"
+#include "alarmevent.h"
 
 class QLabel;
 class QCheckBox;

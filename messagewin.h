@@ -29,8 +29,7 @@
 
 #include "mainwindowbase.h"
 
-#include "msgevent.h"
-using namespace KCal;
+#include "alarmevent.h"
 
 class QPushButton;
 class AlarmTimeWidget;
@@ -64,6 +63,7 @@ class MessageWin : public MainWindowBase
 
 	protected slots:
 		void                slotDefer();
+		void                displayMainWindow();
 
 	private:
 		QSize               initView();

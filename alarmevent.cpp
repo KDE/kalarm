@@ -1,5 +1,5 @@
 /*
- *  msgevent.cpp  -  the event object for messages
+ *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
  *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
@@ -31,9 +31,9 @@
 
 #include "kalarm.h"
 #include "kalarmapp.h"
-#include "prefsettings.h"
+#include "preferences.h"
 #include "alarmcalendar.h"
-#include "msgevent.h"
+#include "alarmevent.h"
 using namespace KCal;
 
 
@@ -631,7 +631,7 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	{
 		// Add the main alarm
 		if (mAnyTime)
-			dtMain.setTime(theApp()->settings()->startOfDay());
+			dtMain.setTime(theApp()->preferences()->startOfDay());
 		initKcalAlarm(ev, dtMain, QStringList());
 	}
 
@@ -1237,7 +1237,7 @@ KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDat
 	}
 	QDateTime recurStart = mRecurrence->recurStart();
 	QDateTime after = afterDateTime;
-	if (mAnyTime  &&  afterDateTime.time() > theApp()->settings()->startOfDay())
+	if (mAnyTime  &&  afterDateTime.time() > theApp()->preferences()->startOfDay())
 		after = after.addDays(1);    // today's recurrence (if today recurs) has passed
 	bool last;
 	result = mRecurrence->getPreviousDateTime(after, &last);
@@ -1299,7 +1299,7 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 {
 	QDateTime recurStart = mRecurrence->recurStart();
 	QDateTime pre = preDateTime;
-	if (mAnyTime  &&  preDateTime.time() < theApp()->settings()->startOfDay())
+	if (mAnyTime  &&  preDateTime.time() < theApp()->preferences()->startOfDay())
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 	remainingCount = 0;
 	bool last;
@@ -1708,7 +1708,7 @@ int KAlarmEvent::recurInterval() const
 bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 {
 	bool changed = false;
-	QTime startOfDay = theApp()->settings()->startOfDay();
+	QTime startOfDay = theApp()->preferences()->startOfDay();
 	for (QPtrListIterator<Event> it(events);  it.current();  ++it)
 	{
 		Event* event = it.current();
@@ -2082,7 +2082,7 @@ int KAAlarmEventBase::flags() const
 
 const QFont& KAAlarmEventBase::font() const
 {
-	return mDefaultFont ? theApp()->settings()->messageFont() : mFont;
+	return mDefaultFont ? theApp()->preferences()->messageFont() : mFont;
 }
 
 #ifndef NDEBUG
