@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -220,11 +220,15 @@ Preferences::Preferences()
 	mShowExpiredAlarms        = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
 	mShowTimeToAlarm          = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
-	mTooltipAlarmCount        = config->readNumEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
+	mTooltipAlarmCount        = static_cast<int>(config->readUnsignedNumEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount));
+	if (mTooltipAlarmCount < 1)
+		mTooltipAlarmCount = 1;
 	mShowTooltipAlarmTime     = config->readBoolEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
 	mShowTooltipTimeToAlarm   = config->readBoolEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
 	mTooltipTimeToPrefix      = config->readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
-	mDaemonTrayCheckInterval  = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
+	mDaemonTrayCheckInterval  = static_cast<int>(config->readUnsignedNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval));
+	if (mDaemonTrayCheckInterval < 1)
+		mDaemonTrayCheckInterval = 1;
 	QCString client           = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
@@ -249,7 +253,7 @@ Preferences::Preferences()
 	mExpiredColour            = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
 	mExpiredKeepDays          = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
-	mDefaultLateCancel        = config->readNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	mDefaultLateCancel        = static_cast<int>(config->readUnsignedNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel));
 	mDefaultAutoClose         = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
 	mDefaultConfirmAck        = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound             = config->readBoolEntry(DEF_SOUND, default_defaultSound);
