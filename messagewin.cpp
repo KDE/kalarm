@@ -66,6 +66,7 @@
 #include "deferdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "messagewin.moc"
@@ -306,7 +307,7 @@ void MessageWin::initView()
 				bool dir = false;
 				QString tmpFile;
 				KURL url(mMessage);
-				if (KIO::NetAccess::download(url, tmpFile))
+				if (KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
 				{
 					QFile qfile(tmpFile);
 					QFileInfo info(qfile);
@@ -331,7 +332,7 @@ void MessageWin::initView()
 				if (!opened)
 				{
 					// File couldn't be opened
-					bool exists = KIO::NetAccess::exists(url);
+					bool exists = KIO::NetAccess::exists(url, true, MainWindow::mainMainWindow());
 					mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
 				}
 				break;
@@ -690,9 +691,10 @@ void MessageWin::slotPlayAudio()
 {
 #ifndef WITHOUT_ARTS
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
+	MainWindow* mmw = MainWindow::mainMainWindow();
 	KURL url(mAudioFile);
-	if (!url.isValid()  ||  !KIO::NetAccess::exists(url)
-	||  !KIO::NetAccess::download(url, mLocalAudioFile))
+	if (!url.isValid()  ||  !KIO::NetAccess::exists(url, true, mmw)
+	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{
 		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
 		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile), kapp->aboutData()->programName());

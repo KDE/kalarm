@@ -450,7 +450,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			KURL url(attachment);
 			url.cleanPath();
 			KIO::UDSEntry uds;
-			if (!KIO::NetAccess::stat(url, uds)) {
+			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
 				kdError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
 				return i18n("Attachment not found:\n%1").arg(attachment);
 			}
@@ -476,7 +476,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 
 			// Read the file contents
 			QString tmpFile;
-			if (!KIO::NetAccess::download(url, tmpFile)) {
+			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
 				kdError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
 				return attachError.arg(attachment);
 			}
@@ -815,7 +815,7 @@ int KAMail::checkAttachment(QString& attachment, KURL* url)
 bool KAMail::checkAttachment(const KURL& url)
 {
 	KIO::UDSEntry uds;
-	if (!KIO::NetAccess::stat(url, uds))
+	if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
 		return false;       // doesn't exist
 	KFileItem fi(uds, url);
 	if (fi.isDir()  ||  !fi.isReadable())

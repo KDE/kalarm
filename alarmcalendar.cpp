@@ -48,6 +48,7 @@ extern "C" {
 #include <libkcal/icalformat.h>
 
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "alarmcalendar.moc"
@@ -86,10 +87,10 @@ bool AlarmCalendar::initialiseCalendars()
 	QString expiredKey  = QString::fromLatin1("ExpiredCalendar");
 	QString templateKey = QString::fromLatin1("TemplateCalendar");
 	QString displayCal, activeCal, expiredCal, templateCal;
-	mCalendars[ACTIVE]   = calendarDeleter[ACTIVE].setObject(createCalendar(ACTIVE, config, activeCal, activeKey));
-	mCalendars[EXPIRED]  = calendarDeleter[EXPIRED].setObject(createCalendar(EXPIRED, config, expiredCal, expiredKey));
-	mCalendars[DISPLAY]  = calendarDeleter[DISPLAY].setObject(createCalendar(DISPLAY, config, displayCal));
-	mCalendars[TEMPLATE] = calendarDeleter[TEMPLATE].setObject(createCalendar(TEMPLATE, config, templateCal, templateKey));
+	calendarDeleter[ACTIVE].setObject(mCalendars[ACTIVE], createCalendar(ACTIVE, config, activeCal, activeKey));
+	calendarDeleter[EXPIRED].setObject(mCalendars[EXPIRED], createCalendar(EXPIRED, config, expiredCal, expiredKey));
+	calendarDeleter[DISPLAY].setObject(mCalendars[DISPLAY], createCalendar(DISPLAY, config, displayCal));
+	calendarDeleter[TEMPLATE].setObject(mCalendars[TEMPLATE], createCalendar(TEMPLATE, config, templateCal, templateKey));
 
 	QString errorKey1, errorKey2;
 	if (activeCal == displayCal)
@@ -233,7 +234,9 @@ bool AlarmCalendar::open()
 		mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
-	if (!KIO::NetAccess::exists(mUrl))
+	// Check for file's existence, assuming that it does exist when uncertain,
+	// to avoid overwriting it.
+	if (!KIO::NetAccess::exists(mUrl, true, MainWindow::mainMainWindow()))
 	{
 		// The calendar file doesn't yet exist, so create it
 		if (create())
@@ -285,7 +288,7 @@ int AlarmCalendar::load()
 
 	kdDebug(5950) << "AlarmCalendar::load(): " << mUrl.prettyURL() << endl;
 	QString tmpFile;
-	if (!KIO::NetAccess::download(mUrl, tmpFile))
+	if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
 	{
 		kdError(5950) << "AlarmCalendar::load(): Load failure" << endl;
 		KMessageBox::error(0, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()));
@@ -302,7 +305,7 @@ int AlarmCalendar::load()
 		// Check if the file is zero length
 		KIO::NetAccess::removeTempFile(tmpFile);
 		KIO::UDSEntry uds;
-		KIO::NetAccess::stat(mUrl, uds);
+		KIO::NetAccess::stat(mUrl, uds, MainWindow::mainMainWindow());
 		KFileItem fi(uds, mUrl);
 		if (!fi.size())
 			return 0;     // file is zero length
@@ -370,7 +373,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 
 	if (!mICalUrl.isLocalFile())
 	{
-		if (!KIO::NetAccess::upload(saveFilename, mICalUrl))
+		if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
 		{
 			kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
 			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mICalUrl.prettyURL()));
