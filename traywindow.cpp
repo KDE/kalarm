@@ -115,8 +115,8 @@ TrayWindow::~TrayWindow()
 */
 void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 {
-	theApp()->daemonGuiHandler()->checkStatus();
 	KSystemTray::contextMenuAboutToShow(menu);     // needed for KDE <= 3.1 compatibility
+	theApp()->daemonGuiHandler()->checkStatus();
 }
 
 /******************************************************************************
@@ -126,7 +126,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 */
 void TrayWindow::slotQuit()
 {
-	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
+	kdDebug(5950) << "TrayWindow::slotQuit()\n";
 	if (theApp()->alarmsDisabledIfStopped()
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
 	                                         "(once any alarm message windows are closed)."),
@@ -136,9 +136,12 @@ void TrayWindow::slotQuit()
 	if (theApp()->wantRunInSystemTray())
 	{
 		if (!MessageWin::instanceCount())
+		{
+			kdDebug(5950) << "TrayWindow::slotQuit(): quitting\n";
 			theApp()->quit();
-		else
-			KAlarmMainWindow::closeAll();
+			return;
+		}
+		KAlarmMainWindow::closeAll();
 	}
 	theApp()->displayTrayIcon(false);
 }
