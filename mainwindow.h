@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,19 +41,19 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           showingExpired() const       { return mShowExpired; }
 
 		void           selectEvent(const QString& eventID);
-		void           modifyEvent(const KAlarmEvent& event)    { modifyEvent(event.id(), event); }
-		void           modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent);
+		void           modifyEvent(const KAEvent& event)    { modifyEvent(event.id(), event); }
+		void           modifyEvent(const QString& oldEventID, const KAEvent& newEvent);
 		void           deleteEvent(const QString& eventID);
-		void           undeleteEvent(const QString& oldEventID, const KAlarmEvent& event);
+		void           undeleteEvent(const QString& oldEventID, const KAEvent& event);
 
 		static void    refresh();
 		static void    updateExpired();
-		static void    addEvent(const KAlarmEvent&, KAlarmMainWindow*);
-		static void    modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
-		static void    modifyEvent(const KAlarmEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
+		static void    addEvent(const KAEvent&, KAlarmMainWindow*);
+		static void    modifyEvent(const QString& oldEventID, const KAEvent& newEvent, KAlarmMainWindow*);
+		static void    modifyEvent(const KAEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
 		static void    deleteEvent(const QString& eventID, KAlarmMainWindow*);
-		static void    undeleteEvent(const QString& oldEventID, const KAlarmEvent& event, KAlarmMainWindow*);
-		static void    executeNew(KAlarmMainWindow* = 0, KAlarmEvent::Action = KAlarmEvent::MESSAGE, const QString& text = QString::null);
+		static void    undeleteEvent(const QString& oldEventID, const KAEvent& event, KAlarmMainWindow*);
+		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const QString& text = QString::null);
 		static void    executeDragEnterEvent(QDragEnterEvent*);
 		static void    executeDropEvent(KAlarmMainWindow*, QDropEvent*);
 		static void              closeAll();
@@ -100,9 +100,9 @@ class KAlarmMainWindow : public MainWindowBase
 		KAlarmMainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
-		static KAlarmEvent::Action  getDropAction(QDropEvent*, QString& text);
+		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
-		static void    alarmWarnings(QWidget* parent, const KAlarmEvent&);
+		static void    alarmWarnings(QWidget* parent, const KAEvent&);
 		static bool    findWindow(KAlarmMainWindow*);
 
 		static QPtrList<KAlarmMainWindow> windowList;  // active main windows

@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -230,13 +230,13 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		}
 		case SCHEDULE:      // schedule a new event
 		{
-			KAlarmEvent::Action action;
+			KAEvent::Action action;
 			switch (function & ALARM_TYPE)
 			{
-				case MESSAGE:  action = KAlarmEvent::MESSAGE;  break;
-				case FILE:     action = KAlarmEvent::FILE;     break;
-				case COMMAND:  action = KAlarmEvent::COMMAND;  break;
-				case EMAIL:    action = KAlarmEvent::EMAIL;    break;
+				case MESSAGE:  action = KAEvent::MESSAGE;  break;
+				case FILE:     action = KAEvent::FILE;     break;
+				case COMMAND:  action = KAEvent::COMMAND;  break;
+				case EMAIL:    action = KAEvent::EMAIL;    break;
 				default:  return false;
 			}
 			QDataStream arg(data, IO_ReadOnly);
@@ -250,7 +250,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			Q_UINT32    flags;
 			KCal::Recurrence  recurrence(0);
 			Q_INT32     reminderMinutes = 0;
-			if (action == KAlarmEvent::EMAIL)
+			if (action == KAEvent::EMAIL)
 			{
 				QString addresses, attachments;
 				arg >> addresses >> mailSubject >> text >> attachments;
@@ -275,9 +275,9 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			else
 				arg >> text;
 			arg.readRawBytes((char*)&dateTime, sizeof(dateTime));
-			if (action != KAlarmEvent::COMMAND)
+			if (action != KAEvent::COMMAND)
 				arg.readRawBytes((char*)&bgColour, sizeof(bgColour));
-			if (action == KAlarmEvent::MESSAGE  &&  !(function & PRE_096))
+			if (action == KAEvent::MESSAGE  &&  !(function & PRE_096))
 				arg.readRawBytes((char*)&fgColour, sizeof(fgColour));
 			if (function & FONT)
 			{
@@ -287,21 +287,21 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			else
 			{
 				arg >> flags;
-				flags |= KAlarmEvent::DEFAULT_FONT;
+				flags |= KAEvent::DEFAULT_FONT;
 			}
-			if ((action == KAlarmEvent::MESSAGE  ||  action == KAlarmEvent::FILE)  &&  !(function & PRE_070))
+			if ((action == KAEvent::MESSAGE  ||  action == KAEvent::FILE)  &&  !(function & PRE_070))
 				arg >> audioFile;
 			if (!(function & PRE_091))
 				arg >> reminderMinutes;
 			if (function & (REP_COUNT | REP_END))
 			{
-				KAlarmEvent::RecurType recurType;
+				KAEvent::RecurType recurType;
 				Q_INT32 repeatCount = 0;
 				Q_INT32 repeatInterval;
 				if (function & PRE_070)
 				{
 					// Backwards compatibility with KAlarm pre-0.7
-					recurType = KAlarmEvent::MINUTELY;
+					recurType = KAEvent::MINUTELY;
 					arg >> repeatCount >> repeatInterval;
 					++repeatCount;
 				}
@@ -309,14 +309,14 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				{
 					Q_INT32 type;
 					arg >> type >> repeatInterval;
-					recurType = KAlarmEvent::RecurType(type);
+					recurType = KAEvent::RecurType(type);
 					switch (recurType)
 					{
-						case KAlarmEvent::MINUTELY:
-						case KAlarmEvent::DAILY:
-						case KAlarmEvent::WEEKLY:
-						case KAlarmEvent::MONTHLY_DAY:
-						case KAlarmEvent::ANNUAL_DATE:
+						case KAEvent::MINUTELY:
+						case KAEvent::DAILY:
+						case KAEvent::WEEKLY:
+						case KAEvent::MONTHLY_DAY:
+						case KAEvent::ANNUAL_DATE:
 							break;
 						default:
 							kdError(5950) << "DcopHandler::process(): invalid simple repetition type: " << type << endl;
@@ -327,7 +327,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 					else
 						arg.readRawBytes((char*)&endTime, sizeof(endTime));
 				}
-				KAlarmEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
+				KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
 			}
 			else if (!(function & PRE_091))
 			{

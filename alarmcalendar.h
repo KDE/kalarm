@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ class AlarmCalendar : public QObject
 {
 		Q_OBJECT
 	public:
-		AlarmCalendar(const QString& file, KAlarmEvent::Status, const QString& icalFile = QString::null,
+		AlarmCalendar(const QString& file, KAEvent::Status, const QString& icalFile = QString::null,
 		              const QString& configKey = QString::null);
 		virtual ~AlarmCalendar();
 		bool                  valid() const                       { return mUrl.isValid(); }
-		KAlarmEvent::Status   type() const                        { return mType; }
+		KAEvent::Status       type() const                        { return mType; }
 		bool                  open();
 		int                   load();
 		int                   reload();
@@ -50,8 +50,8 @@ class AlarmCalendar : public QObject
 		KCal::Event::List     events()                            { return mCalendar->events(); }
 		KCal::Event::List     events(const QDate& d, bool sorted = false) { return mCalendar->events(d, sorted); }
 		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to) const;
-		KCal::Event*          addEvent(const KAlarmEvent&, bool useEventID = false);
-		void                  updateEvent(const KAlarmEvent&);
+		KCal::Event*          addEvent(const KAEvent&, bool useEventID = false);
+		void                  updateEvent(const KAEvent&);
 		void                  deleteEvent(const QString& eventID, bool save = false);
 		bool                  isOpen() const                      { return mOpen; }
 		QString               path() const                        { return mUrl.prettyURL(); }
@@ -75,7 +75,7 @@ class AlarmCalendar : public QObject
 		KURL                 mICalUrl;          // URL of iCalendar file
 		QString              mLocalFile;        // local name of calendar file
 		QString              mConfigKey;        // config file key for this calendar's URL
-		KAlarmEvent::Status  mType;             // what type of events the calendar file is for
+		KAEvent::Status      mType;             // what type of events the calendar file is for
 		mutable int          mKAlarmVersion;    // version of KAlarm which created the loaded calendar file
 		mutable bool         mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                 mVCal;             // true if calendar file is in VCal format

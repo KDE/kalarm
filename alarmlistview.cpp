@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ void AlarmListView::clear()
 void AlarmListView::refresh()
 {
 	clear();
-	KAlarmEvent event;
+	KAEvent event;
 	Event::List events;
 	Event::List::ConstIterator it;
 	QDateTime now = QDateTime::currentDateTime();
@@ -207,7 +207,7 @@ AlarmListViewItem* AlarmListView::getEntry(const QString& eventID)
 	return 0;
 }
 
-AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, const QDateTime& now, bool setSize)
+AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime& now, bool setSize)
 {
 	if (!mShowExpired  &&  event.expired())
 		return 0;
@@ -217,7 +217,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, const QDate
 	return item;
 }
 
-AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAlarmEvent& newEvent, bool setSize)
+AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAEvent& newEvent, bool setSize)
 {
 	deleteEntry(item);
 	return addEntry(newEvent, setSize);
@@ -234,7 +234,7 @@ void AlarmListView::deleteEntry(AlarmListViewItem* item, bool setSize)
 	}
 }
 
-const KAlarmEvent& AlarmListView::getEvent(AlarmListViewItem* item) const
+const KAEvent& AlarmListView::getEvent(AlarmListViewItem* item) const
 {
 	return item->event();
 }
@@ -352,7 +352,7 @@ QPixmap* AlarmListViewItem::commandIcon;
 QPixmap* AlarmListViewItem::emailIcon;
 int      AlarmListViewItem::iconWidth = 0;
 
-AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAlarmEvent& event, const QDateTime& now)
+AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
 	: QListViewItem(parent),
 	  mEvent(event),
 	  mTimeToAlarmShown(false)
@@ -400,25 +400,25 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAlarmEvent& e
 		repeatInterval = event.recurInterval();
 		switch (event.recurType())
 		{
-			case KAlarmEvent::MINUTELY:
+			case KAEvent::MINUTELY:
 				repeatOrder = 2;
 				break;
-			case KAlarmEvent::DAILY:
+			case KAEvent::DAILY:
 				repeatOrder = 3;
 				break;
-			case KAlarmEvent::WEEKLY:
+			case KAEvent::WEEKLY:
 				repeatOrder = 4;
 				break;
-			case KAlarmEvent::MONTHLY_DAY:
-			case KAlarmEvent::MONTHLY_POS:
+			case KAEvent::MONTHLY_DAY:
+			case KAEvent::MONTHLY_POS:
 				repeatOrder = 5;
 				break;
-			case KAlarmEvent::ANNUAL_DATE:
-			case KAlarmEvent::ANNUAL_POS:
-			case KAlarmEvent::ANNUAL_DAY:
+			case KAEvent::ANNUAL_DATE:
+			case KAEvent::ANNUAL_POS:
+			case KAEvent::ANNUAL_DAY:
 				repeatOrder = 6;
 				break;
-			case KAlarmEvent::NO_RECUR:
+			case KAEvent::NO_RECUR:
 			default:
 				break;
 		}
@@ -426,20 +426,20 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAlarmEvent& e
 	setText(parent->repeatColumn(), repeatText);
 	mRepeatOrder.sprintf("%c%08d", '0' + repeatOrder, repeatInterval);
 
-	bool showColour = (event.action() == KAlarmEvent::MESSAGE || event.action() == KAlarmEvent::FILE);
+	bool showColour = (event.action() == KAEvent::MESSAGE || event.action() == KAEvent::FILE);
 	mColourOrder.sprintf("%06u", (showColour ? event.bgColour().rgb() : 0));
 }
 
 /******************************************************************************
 *  Return the alarm summary text.
 */
-QString AlarmListViewItem::alarmText(const KAlarmEvent& event)
+QString AlarmListViewItem::alarmText(const KAEvent& event)
 {
-	QString text = (event.action() == KAlarmEvent::EMAIL) ? event.emailSubject() : event.cleanText();
+	QString text = (event.action() == KAEvent::EMAIL) ? event.emailSubject() : event.cleanText();
 	int newline = text.find('\n');
 	if (newline < 0)
 		return text;       // it's a single-line text
-	if (event.action() == KAlarmEvent::MESSAGE)
+	if (event.action() == KAEvent::MESSAGE)
 	{
 		// If the message is the text of an email, return its subject line
 		QString subject = KAlarmMainWindow::emailSubject(text);
@@ -538,7 +538,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	else if (column == listView->colourColumn())
 	{
 		// Paint the cell the colour of the alarm message
-		if (mEvent.action() == KAlarmEvent::MESSAGE || mEvent.action() == KAlarmEvent::FILE)
+		if (mEvent.action() == KAEvent::MESSAGE || mEvent.action() == KAEvent::FILE)
 			painter->fillRect(box, mEvent.bgColour());
 	}
 	else if (column == listView->messageColumn())
@@ -546,10 +546,10 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		QPixmap* pixmap;
 		switch (mEvent.action())
 		{
-			case KAlarmAlarm::FILE:     pixmap = fileIcon;     break;
-			case KAlarmAlarm::COMMAND:  pixmap = commandIcon;  break;
-			case KAlarmAlarm::EMAIL:    pixmap = emailIcon;    break;
-			case KAlarmAlarm::MESSAGE:
+			case KAAlarm::FILE:     pixmap = fileIcon;     break;
+			case KAAlarm::COMMAND:  pixmap = commandIcon;  break;
+			case KAAlarm::EMAIL:    pixmap = emailIcon;    break;
+			case KAAlarm::MESSAGE:
 			default:                    pixmap = textIcon;     break;
 		}
 		int frameWidth = listView->style().pixelMetric(QStyle::PM_DefaultFrameWidth);

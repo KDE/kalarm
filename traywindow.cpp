@@ -210,7 +210,7 @@ void TrayWindow::dropEvent(QDropEvent* e)
 */
 void TrayWindow::tooltipAlarmText(QString& text) const
 {
-	KAlarmEvent event;
+	KAEvent event;
 	Preferences* preferences = Preferences::instance();
 	const QString& prefix = preferences->tooltipTimeToPrefix();
 	int maxCount = preferences->tooltipAlarmCount();
@@ -224,7 +224,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	{
 		KCal::Event* kcalEvent = *it;
 		event.set(*kcalEvent);
-		if (!event.expired()  &&  event.action() == KAlarmEvent::MESSAGE)
+		if (!event.expired()  &&  event.action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
 			DateTime dateTime = event.nextDateTime();

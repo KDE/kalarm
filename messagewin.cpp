@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ QPtrList<MessageWin> MessageWin::windowList;
 *  the whole event needs to be stored for updating the calendar file when it is
 *  displayed.
 */
-MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool reschedule_event, bool allowDefer)
+MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
 	                                         | (Preferences::instance()->modalMessages() ? 0 : Qt::WX11BypassWM)),
 	  mEvent(evnt),
@@ -112,7 +112,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  font(evnt.font()),
 	  mBgColour(evnt.bgColour()),
 	  mFgColour(evnt.fgColour()),
-	  mDateTime((alarm.type() & KAlarmAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
+	  mDateTime((alarm.type() & KAAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
 	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
@@ -130,7 +130,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
-	if (action == KAlarmAlarm::FILE  &&  !mErrorMsgs.count())
+	if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
 		size = theApp()->readConfigWindowSize("FileMessage", size);
 	resize(size);
 	windowList.append(this);
@@ -142,7 +142,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 *  the whole event needs to be stored for updating the calendar file when it is
 *  displayed.
 */
-MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const QStringList& errmsgs, bool reschedule_event)
+MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringList& errmsgs, bool reschedule_event)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
@@ -205,7 +205,7 @@ MessageWin::~MessageWin()
 */
 QSize MessageWin::initView()
 {
-	setCaption((mAlarmType & KAlarmAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
+	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, KDialog::marginHint(), KDialog::spacingHint());
@@ -226,7 +226,7 @@ QSize MessageWin::initView()
 
 	switch (action)
 	{
-		case KAlarmAlarm::FILE:
+		case KAAlarm::FILE:
 		{
 			// Display the file name
 			QLabel* label = new QLabel(message, topWidget);
@@ -271,7 +271,7 @@ QSize MessageWin::initView()
 			}
 			break;
 		}
-		case KAlarmAlarm::EMAIL:
+		case KAAlarm::EMAIL:
 		{
 			// Display the email addresses and subject
 			QFrame* frame = new QFrame(topWidget);
@@ -295,10 +295,10 @@ QSize MessageWin::initView()
 			grid->addWidget(label, 1, 1, Qt::AlignLeft);
 			break;
 		}
-		case KAlarmAlarm::COMMAND:
+		case KAAlarm::COMMAND:
 			break;
 
-		case KAlarmAlarm::MESSAGE:
+		case KAAlarm::MESSAGE:
 		default:
 		{
 			// Message label
@@ -432,7 +432,7 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
 	}
 	else
-		config->writeEntry(QString::fromLatin1("AlarmType"), KAlarmAlarm::INVALID_ALARM);
+		config->writeEntry(QString::fromLatin1("AlarmType"), KAAlarm::INVALID_ALARM);
 }
 
 /******************************************************************************
@@ -443,12 +443,12 @@ void MessageWin::saveProperties(KConfig* config)
 void MessageWin::readProperties(KConfig* config)
 {
 	eventID       = config->readEntry(QString::fromLatin1("EventID"));
-	mAlarmType    = KAlarmAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
+	mAlarmType    = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
 	message       = config->readEntry(QString::fromLatin1("Message"));
 	int t         = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
 	if (t < 0)
 		mErrorMsgs += "";       // set non-null
-	action        = KAlarmAlarm::Action(t);
+	action        = KAAlarm::Action(t);
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
 	mBgColour     = config->readColorEntry(QString::fromLatin1("BgColour"));
 	mFgColour     = config->readColorEntry(QString::fromLatin1("FgColour"));
@@ -459,7 +459,7 @@ void MessageWin::readProperties(KConfig* config)
 	mDateTime.set(dt, dateOnly);
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	if (!mErrorMsgs.count()  &&  mAlarmType != KAlarmAlarm::INVALID_ALARM)
+	if (!mErrorMsgs.count()  &&  mAlarmType != KAAlarm::INVALID_ALARM)
 		initView();
 }
 
@@ -501,7 +501,7 @@ void MessageWin::playAudio()
 *  Re-output any required audio notification, and reschedule the alarm in the
 *  calendar file.
 */
-void MessageWin::repeat(const KAlarmAlarm& alarm)
+void MessageWin::repeat(const KAAlarm& alarm)
 {
 	const Event* kcalEvent = eventID.isNull() ? 0 : theApp()->getCalendar().event(eventID);
 	if (kcalEvent)
@@ -512,7 +512,7 @@ void MessageWin::repeat(const KAlarmAlarm& alarm)
 				raise();
 				playAudio();
 		}
-		KAlarmEvent event(*kcalEvent);
+		KAEvent event(*kcalEvent);
 		theApp()->alarmShowing(event, mAlarmType, mDateTime);
 	}
 }
@@ -552,7 +552,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (action == KAlarmAlarm::FILE  &&  !mErrorMsgs.count())
+		if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
 			theApp()->writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
@@ -578,7 +578,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 	if (!eventID.isNull())
 	{
 		// Delete from the display calendar
-		theApp()->deleteDisplayEvent(KAlarmEvent::uid(eventID, KAlarmEvent::DISPLAYING));
+		theApp()->deleteDisplayEvent(KAEvent::uid(eventID, KAEvent::DISPLAYING));
 	}
 	MainWindowBase::closeEvent(ce);
 }
@@ -602,23 +602,23 @@ void MessageWin::slotDefer()
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
-			KAlarmEvent event(*kcalEvent);
-			event.defer(dateTime, (mAlarmType & KAlarmAlarm::REMINDER_ALARM), true);
+			KAEvent event(*kcalEvent);
+			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			theApp()->updateEvent(event, 0);
 		}
 		else
 		{
-			KAlarmEvent event;
-			kcalEvent = theApp()->displayCalendar().event(KAlarmEvent::uid(eventID, KAlarmEvent::DISPLAYING));
+			KAEvent event;
+			kcalEvent = theApp()->displayCalendar().event(KAEvent::uid(eventID, KAEvent::DISPLAYING));
 			if (kcalEvent)
 			{
-				event.reinstateFromDisplaying(KAlarmEvent(*kcalEvent));
-				event.defer(dateTime, (mAlarmType & KAlarmAlarm::REMINDER_ALARM), true);
+				event.reinstateFromDisplaying(KAEvent(*kcalEvent));
+				event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			}
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime.dateTime(), message, mBgColour, mFgColour, font, (KAlarmEvent::Action)action, flags);
+				event.set(dateTime.dateTime(), message, mBgColour, mFgColour, font, (KAEvent::Action)action, flags);
 				event.setAudioFile(mEvent.audioFile());
 				event.setArchive();
 				event.setEventID(eventID);
@@ -627,7 +627,7 @@ void MessageWin::slotDefer()
 			theApp()->addEvent(event, 0, true);
 			if (kcalEvent)
 			{
-				event.setUid(KAlarmEvent::EXPIRED);
+				event.setUid(KAEvent::EXPIRED);
 				theApp()->deleteEvent(event, 0, false, false);
 			}
 		}

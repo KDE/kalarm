@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,12 +35,12 @@ class MessageWin : public MainWindowBase
 		Q_OBJECT
 	public:
 		MessageWin();     // for session management restoration only
-		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true, bool allowDefer = true);
-		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, const QStringList& errmsgs, bool reschedule_event = true);
+		MessageWin(const KAEvent&, const KAAlarm&, bool reschedule_event = true, bool allowDefer = true);
+		MessageWin(const KAEvent&, const KAAlarm&, const QStringList& errmsgs, bool reschedule_event = true);
 		~MessageWin();
-		void                repeat(const KAlarmAlarm&);
+		void                repeat(const KAAlarm&);
 		const DateTime&     dateTime()             { return mDateTime; }
-		KAlarmAlarm::Type   alarmType() const      { return mAlarmType; }
+		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!deferButton; }
 		bool                errorMessage() const   { return mErrorMsgs.count(); }
 		static int          instanceCount()        { return windowList.count(); }
@@ -62,19 +62,19 @@ class MessageWin : public MainWindowBase
 		void                playAudio();
 
 		static QPtrList<MessageWin> windowList;  // list of existing message windows
-		// KAlarmEvent properties
-		KAlarmEvent         mEvent;           // the whole event, for updating the calendar file
+		// KAEvent properties
+		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QString             message;
 		QFont               font;
 		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
 		QString             eventID;
-		KAlarmAlarm::Type   mAlarmType;
+		KAAlarm::Type       mAlarmType;
 		int                 flags;
 		bool                beep;
 		bool                confirmAck;
 		bool                dateOnly;         // ignore event's time
-		KAlarmAlarm::Action action;
+		KAAlarm::Action     action;
 		QStringList         mErrorMsgs;
 		bool                noDefer;          // don't display a Defer option
 		// Miscellaneous

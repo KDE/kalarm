@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class EmailAddressList : public QValueList<KCal::Person>
 };
 
 
-// Base class containing data common to KAlarmAlarm and KAlarmEvent
+// Base class containing data common to KAAlarm and KAEvent
 class KAAlarmEventBase
 {
 	public:
@@ -87,7 +87,7 @@ class KAAlarmEventBase
 		void               set(int flags);
 
 		QString            mEventID;          // UID: KCal::Event unique ID
-		QString            mText;             // message text, file URL, command, email body [or audio file for KAlarmAlarm]
+		QString            mText;             // message text, file URL, command, email body [or audio file for KAAlarm]
 		DateTime           mDateTime;         // next time to display the alarm
 		QColor             mBgColour;         // background colour of alarm message
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
@@ -109,8 +109,8 @@ class KAAlarmEventBase
 };
 
 
-// KAlarmAlarm corresponds to a single KCal::Alarm instance
-class KAlarmAlarm : public KAAlarmEventBase
+// KAAlarm corresponds to a single KCal::Alarm instance
+class KAAlarm : public KAAlarmEventBase
 {
 	public:
 		enum Action
@@ -133,7 +133,7 @@ class KAlarmAlarm : public KAAlarmEventBase
 			// ensure that in ordered processing they are processed afterwards.
 			AT_LOGIN_ALARM      = 0x10,  // additional repeat-at-login trigger
 			DISPLAYING_ALARM    = 0x20,  // copy of the alarm currently being displayed
-			// The following values are for internal KAlarmEvent use only
+			// The following values are for internal KAEvent use only
 			AUDIO_ALARM         = 0x30   // sound to play when displaying the alarm.
 		};
 		enum SubType
@@ -151,13 +151,13 @@ class KAlarmAlarm : public KAAlarmEventBase
 			// ensure that in ordered processing they are processed afterwards.
 			AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
 			DISPLAYING__ALARM             = DISPLAYING_ALARM,
-			// The following values are for internal KAlarmEvent use only
+			// The following values are for internal KAEvent use only
 			AUDIO__ALARM                  = AUDIO_ALARM
 		};
 
-		KAlarmAlarm()      : mType(INVALID__ALARM) { }
-		KAlarmAlarm(const KAlarmAlarm&);
-		~KAlarmAlarm()  { }
+		KAAlarm()      : mType(INVALID__ALARM) { }
+		KAAlarm(const KAAlarm&);
+		~KAAlarm()  { }
 		Action             action() const               { return (Action)mActionType; }
 		bool               valid() const                { return mType != INVALID__ALARM; }
 		Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
@@ -181,12 +181,12 @@ class KAlarmAlarm : public KAAlarmEventBase
 		SubType            mType;             // alarm type
 		bool               mRecurs;           // there is a recurrence rule for the alarm
 
-	friend class KAlarmEvent;
+	friend class KAEvent;
 };
 
 
-// KAlarmEvent corresponds to a KCal::Event instance
-class KAlarmEvent : public KAAlarmEventBase
+// KAEvent corresponds to a KCal::Event instance
+class KAEvent : public KAAlarmEventBase
 {
 	public:
 		enum            // flags for use in DCOP calls, etc.
@@ -248,13 +248,13 @@ class KAlarmEvent : public KAAlarmEventBase
 			LAST_OCCURRENCE       // the last occurrence is due
 		};
 
-		KAlarmEvent()      : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
-		KAlarmEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
+		KAEvent()          : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
+		KAEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
 		                                            : mRecurrence(0) { set(dt, message, bg, fg, f, action, flags); }
-		explicit KAlarmEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
-		KAlarmEvent(const KAlarmEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
-		~KAlarmEvent()     { delete mRecurrence; }
-		KAlarmEvent&       operator=(const KAlarmEvent& e)   { if (&e != this) copy(e);  return *this; }
+		explicit KAEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
+		KAEvent(const KAEvent& e)           : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
+		~KAEvent()         { delete mRecurrence; }
+		KAEvent&           operator=(const KAEvent& e)   { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
 		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int flags)
 		                            { set(d, message, bg, fg, f, action, flags | ANY_TIME); }
@@ -291,20 +291,20 @@ class KAlarmEvent : public KAAlarmEventBase
 		void               setReminder(int minutes)                          { mReminderMinutes = minutes;  mArchiveReminderMinutes = 0;  mUpdated = true; }
 		void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
-		bool               setDisplaying(const KAlarmEvent&, KAlarmAlarm::Type, const QDateTime&);
-		void               reinstateFromDisplaying(const KAlarmEvent& dispEvent);
+		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QDateTime&);
+		void               reinstateFromDisplaying(const KAEvent& dispEvent);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
 		void               setUpdated()                                      { mUpdated = true; }
 		void               clearUpdated() const                              { mUpdated = false; }
-		void               removeExpiredAlarm(KAlarmAlarm::Type);
+		void               removeExpiredAlarm(KAAlarm::Type);
 		void               incrementRevision()                               { ++mRevision;  mUpdated = true; }
 
 		KCal::Event*       event() const;    // convert to new Event
-		KAlarmAlarm        alarm(KAlarmAlarm::Type) const;
-		KAlarmAlarm        firstAlarm() const;
-		KAlarmAlarm        nextAlarm(const KAlarmAlarm& al) const            { return nextAlarm(al.type()); }
-		KAlarmAlarm        nextAlarm(KAlarmAlarm::Type) const;
-		KAlarmAlarm        convertDisplayingAlarm() const;
+		KAAlarm            alarm(KAAlarm::Type) const;
+		KAAlarm            firstAlarm() const;
+		KAAlarm            nextAlarm(const KAAlarm& al) const            { return nextAlarm(al.type()); }
+		KAAlarm            nextAlarm(KAAlarm::Type) const;
+		KAAlarm            convertDisplayingAlarm() const;
 		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false) const;
 		Action             action() const                 { return (Action)mActionType; }
 		const QString&     id() const                     { return mEventID; }
@@ -443,7 +443,7 @@ class KAlarmEvent : public KAAlarmEventBase
 		static void        convertKCalEvents(AlarmCalendar&);
 
 	private:
-		void               copy(const KAlarmEvent&);
+		void               copy(const KAEvent&);
 		bool               initRecur(const QDate& end = QDate(), int count = 0, bool feb29 = false);
 		RecurType          checkRecur() const;
 		OccurType          nextRecurrence(const QDateTime& preDateTime, DateTime& result, int& remainingCount) const;

@@ -449,7 +449,7 @@ void KAlarmMainWindow::selectEvent(const QString& eventID)
 * Add a new alarm to every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
-void KAlarmMainWindow::addEvent(const KAlarmEvent& event, KAlarmMainWindow* win)
+void KAlarmMainWindow::addEvent(const KAEvent& event, KAlarmMainWindow* win)
 {
 	kdDebug(5950) << "KAlarmMainWindow::addEvent(): " << event.id() << endl;
 	bool expired = event.expired();
@@ -465,7 +465,7 @@ void KAlarmMainWindow::addEvent(const KAlarmEvent& event, KAlarmMainWindow* win)
 * Modify an alarm in every main window instance.
 * 'win' = initiating main window instance (which has already been updated)
 */
-void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
+void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& newEvent, KAlarmMainWindow* win)
 {
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 		if (w != win)
@@ -475,7 +475,7 @@ void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent&
 /******************************************************************************
 * Modify an alarm in the displayed list.
 */
-void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAlarmEvent& newEvent)
+void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& newEvent)
 {
 	AlarmListViewItem* item = listView->getEntry(oldEventID);
 	if (item)
@@ -509,7 +509,7 @@ void KAlarmMainWindow::deleteEvent(const QString& eventID)
 /******************************************************************************
 * Undelete an alarm in the displayed list.
 */
-void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAlarmEvent& event, KAlarmMainWindow* win)
+void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAEvent& event, KAlarmMainWindow* win)
 {
 	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
 		if (w != win)
@@ -519,7 +519,7 @@ void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAlarmEven
 /******************************************************************************
 * Undelete an alarm in the displayed list.
 */
-void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAlarmEvent& event)
+void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAEvent& event)
 {
 	AlarmListViewItem* item = listView->getEntry(oldEventID);
 	if (item)
@@ -542,14 +542,14 @@ void KAlarmMainWindow::slotNew()
 /******************************************************************************
 *  Execute a New Alarm dialog, optionally setting the action and text.
 */
-void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAlarmEvent::Action action, const QString& text)
+void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action, const QString& text)
 {
 	EditAlarmDlg editDlg(i18n("New Alarm"), win, "editDlg");
 	if (!text.isNull())
 		editDlg.setAction(action, text);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
-		KAlarmEvent event;
+		KAEvent event;
 		editDlg.getEvent(event);
 
 		// Add the alarm to the displayed lists and to the calendar file
@@ -575,11 +575,11 @@ void KAlarmMainWindow::slotCopy()
 	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEvent(item);
+		KAEvent event = listView->getEvent(item);
 		EditAlarmDlg editDlg(i18n("New Alarm"), this, "editDlg", &event);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
-			KAlarmEvent event;
+			KAEvent event;
 			editDlg.getEvent(event);
 
 			// Add the alarm to the displayed lists and to the calendar file
@@ -602,11 +602,11 @@ void KAlarmMainWindow::slotModify()
 	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEvent(item);
+		KAEvent event = listView->getEvent(item);
 		EditAlarmDlg editDlg(i18n("Edit Alarm"), this, "editDlg", &event);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
-			KAlarmEvent newEvent;
+			KAEvent newEvent;
 			editDlg.getEvent(newEvent);
 
 			// Update the event in the displays and in the calendar file
@@ -630,7 +630,7 @@ void KAlarmMainWindow::slotView()
 	AlarmListViewItem* item = listView->singleSelectedItem();
 	if (item)
 	{
-		KAlarmEvent event = listView->getEvent(item);
+		KAEvent event = listView->getEvent(item);
 		EditAlarmDlg editDlg((event.expired() ? i18n("Expired Alarm") : i18n("View Alarm")),
 		                     this, "editDlg", &event, true);
 		editDlg.exec();
@@ -655,7 +655,7 @@ void KAlarmMainWindow::slotDelete()
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
 		AlarmListViewItem* item = it.current();
-		KAlarmEvent event = listView->getEvent(item);
+		KAEvent event = listView->getEvent(item);
 
 		// Delete the event from the displays
 		theApp()->deleteEvent(event, this);
@@ -675,7 +675,7 @@ void KAlarmMainWindow::slotUndelete()
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
 		AlarmListViewItem* item = it.current();
-		KAlarmEvent event = listView->getEvent(item);
+		KAEvent event = listView->getEvent(item);
 		event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 		// Add the alarm to the displayed lists and to the calendar file
@@ -738,9 +738,9 @@ void KAlarmMainWindow::slotBirthdays()
 	BirthdayDlg* dlg = new BirthdayDlg(this);
 	if (dlg->exec() == QDialog::Accepted)
 	{
-		QValueList<KAlarmEvent> events = dlg->events();
+		QValueList<KAEvent> events = dlg->events();
 		listView->clearSelection();
-		for (QValueList<KAlarmEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
+		for (QValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
 		{
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(*ev, this);
@@ -877,13 +877,13 @@ void KAlarmMainWindow::dropEvent(QDropEvent* e)
 */
 void KAlarmMainWindow::executeDropEvent(KAlarmMainWindow* win, QDropEvent* e)
 {
-	KAlarmEvent::Action action = KAlarmEvent::MESSAGE;
+	KAEvent::Action action = KAEvent::MESSAGE;
 	QString text;
 	KPIM::MailList mailList;
 	KURL::List files;
 	if (KURLDrag::decode(e, files)  &&  files.count())
 	{
-		action = KAlarmEvent::FILE;
+		action = KAEvent::FILE;
 		text = files.first().prettyURL();
 	}
 	else if (e->provides(KPIM::MailListDrag::format())
@@ -1047,9 +1047,9 @@ void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
 * Prompt the user to re-enable alarms if they are currently disabled, and if
 * it's an email alarm, warn if no 'From' email address is configured.
 */
-void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAlarmEvent& event)
+void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAEvent& event)
 {
-        if (event.action() == KAlarmEvent::EMAIL  &&  Preferences::instance()->emailAddress().isEmpty())
+        if (event.action() == KAEvent::EMAIL  &&  Preferences::instance()->emailAddress().isEmpty())
                 KMessageBox::information(parent, i18n("Please set the 'From' email address...",
 		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
 

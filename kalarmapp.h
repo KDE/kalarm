@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -87,18 +87,18 @@ class KAlarmApp : public KUniqueApplication
 		virtual void       commitData(QSessionManager&);
 
 		const KCal::Event* getEvent(const QString& eventID);
-		bool               addEvent(const KAlarmEvent&, KAlarmMainWindow*, bool useEventID = false);
-		void               modifyEvent(KAlarmEvent& oldEvent, const KAlarmEvent& newEvent, KAlarmMainWindow*);
-		void               updateEvent(KAlarmEvent&, KAlarmMainWindow*, bool archiveOnDelete = true);
-		void               deleteEvent(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true, bool archive = true);
+		bool               addEvent(const KAEvent&, KAlarmMainWindow*, bool useEventID = false);
+		void               modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, KAlarmMainWindow*);
+		void               updateEvent(KAEvent&, KAlarmMainWindow*, bool archiveOnDelete = true);
+		void               deleteEvent(KAEvent&, KAlarmMainWindow*, bool tellDaemon = true, bool archive = true);
 		void               deleteDisplayEvent(const QString& eventID) const;
-		void               undeleteEvent(KAlarmEvent&, KAlarmMainWindow*);
-		void               archiveEvent(KAlarmEvent&);
+		void               undeleteEvent(KAEvent&, KAlarmMainWindow*);
+		void               archiveEvent(KAEvent&);
 		void               startCalendarUpdate();
 		void               endCalendarUpdate();
 		void               calendarSave(bool reload = true);
-		void*              execAlarm(KAlarmEvent&, const KAlarmAlarm&, bool reschedule, bool allowDefer = true);
-		void               alarmShowing(KAlarmEvent&, KAlarmAlarm::Type, const DateTime&);
+		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true);
+		void               alarmShowing(KAEvent&, KAAlarm::Type, const DateTime&);
 		void               deleteEvent(const QString& eventID)         { handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(KProcess*, QWidget* parent);
 		int                maxLateness();
@@ -106,7 +106,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QColor& fg, const QFont&,
 		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
 		                                 const QString& mailSubject, const QStringList& mailAttachments,
-		                                 KAlarmEvent::Action, const KCal::Recurrence&, int reminderMinutes);
+		                                 KAEvent::Action, const KCal::Recurrence&, int reminderMinutes);
 		void               handleEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_HANDLE); }
 		void               triggerEvent(const QString& calendarFile, const QString& eventID)   { handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
 		void               deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }
@@ -132,12 +132,12 @@ class KAlarmApp : public KUniqueApplication
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData
 		{
-			ProcData(KProcess* p, KAlarmEvent* e, KAlarmAlarm* a, QCString sh)
+			ProcData(KProcess* p, KAEvent* e, KAAlarm* a, QCString sh)
 			          : process(p), event(e), alarm(a), shell(sh), messageBoxParent(0) { }
 			~ProcData();
 			KProcess*            process;
-			KAlarmEvent*         event;
-			KAlarmAlarm*         alarm;
+			KAEvent*             event;
+			KAAlarm*             alarm;
 			QCString             shell;
 			QGuardedPtr<QWidget> messageBoxParent;
 		};
@@ -154,8 +154,8 @@ class KAlarmApp : public KUniqueApplication
 		void               registerWithDaemon(bool reregister);
 		void               handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool               handleEvent(const QString& eventID, EventFunc);
-		void               rescheduleAlarm(KAlarmEvent&, const KAlarmAlarm&, bool updateCalAndDisplay);
-		void               cancelAlarm(KAlarmEvent&, KAlarmAlarm::Type, bool updateCalAndDisplay);
+		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
+		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
 
 		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance
 		static int            activeCount;          // number of active instances without main windows

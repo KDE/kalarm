@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -45,7 +45,7 @@ class TimeSpinBox;
 class TimePeriod;
 class ButtonGroup;
 class RecurFrequency;
-class KAlarmEvent;
+class KAEvent;
 
 
 class RecurrenceEdit : public QFrame
@@ -61,9 +61,9 @@ class RecurrenceEdit : public QFrame
 		/** Set widgets to default values */
 		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
-		void          set(const KAlarmEvent&);
+		void          set(const KAEvent&);
 		/** Write event settings to event object */
-		void          updateEvent(KAlarmEvent&);
+		void          updateEvent(KAEvent&);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }

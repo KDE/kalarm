@@ -22,14 +22,14 @@
 #define KAMAIL_H
 
 #include <qstring.h>
-class KAlarmEvent;
+class KAEvent;
 class EmailAddressList;
 
 
 class KAMail
 {
 	public:
-		static QString    send(const KAlarmEvent&, bool allowNotify = true);
+		static QString    send(const KAEvent&, bool allowNotify = true);
 		static int        checkAddress(QString& address);
 		static int        checkAttachment(QString& attachment)  { return checkAttachment(attachment, true); }
 		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
@@ -42,10 +42,10 @@ class KAMail
 #else
 		typedef uint Offset;
 #endif
-		static QString    sendKMail(const KAlarmEvent&, const QString& from, const QString& bcc, bool allowNotify);
-		static QString    initHeaders(const KAlarmEvent&, const QString& from, const QString& bcc, bool dateId);
-		static QString    appendBodyAttachments(QString& message, const KAlarmEvent&);
-		static void       notifyQueued(const KAlarmEvent&);
+		static QString    sendKMail(const KAEvent&, const QString& from, const QString& bcc, bool allowNotify);
+		static QString    initHeaders(const KAEvent&, const QString& from, const QString& bcc, bool dateId);
+		static QString    appendBodyAttachments(QString& message, const KAEvent&);
+		static void       notifyQueued(const KAEvent&);
 		static int        checkAttachment(QString& attachment, bool check);
 		static char*      base64Encode(const char* in, Offset size, Offset& outSize);
 };

@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ using namespace KCal;
 
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
-	                        const KAlarmEvent* event, bool readOnly)
+	                        const KAEvent* event, bool readOnly)
 	: KDialogBase(KDialogBase::Tabbed, caption, (readOnly ? Cancel|Try : Ok|Cancel|Try),
 	              (readOnly ? Cancel : Ok), parent, name),
 	  mRecurPageShown(false),
@@ -89,7 +89,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-	if (event  &&  event->action() == KAlarmEvent::COMMAND  &&  theApp()->noShellAccess())
+	if (event  &&  event->action() == KAEvent::COMMAND  &&  theApp()->noShellAccess())
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
 
 	QVBox* mainPageBox = addVBoxPage(i18n("&Alarm"));
@@ -235,7 +235,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		                         : recurs ? DateTime() : event->deferDateTime());
 
 		setAction(event->action(), event->cleanText());
-		if (event->action() == KAlarmEvent::EMAIL)
+		if (event->action() == KAEvent::EMAIL)
 			mEmailAttachList->insertStringList(event->emailAttachments());
 
 		mLateCancel->setChecked(event->lateCancel());
@@ -495,24 +495,24 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 /******************************************************************************
  * Set the dialog's action and the action's text.
  */
-void EditAlarmDlg::setAction(KAlarmEvent::Action action, const QString& text)
+void EditAlarmDlg::setAction(KAEvent::Action action, const QString& text)
 {
 	QRadioButton* radio;
 	switch (action)
 	{
-		case KAlarmEvent::FILE:
+		case KAEvent::FILE:
 			radio = mFileRadio;
 			mFileMessageEdit->setText(text);
 			break;
-		case KAlarmEvent::COMMAND:
+		case KAEvent::COMMAND:
 			radio = mCommandRadio;
 			mCommandMessageEdit->setText(text);
 			break;
-		case KAlarmEvent::EMAIL:
+		case KAEvent::EMAIL:
 			radio = mEmailRadio;
 			mEmailMessageEdit->setText(text);
 			break;
-		case KAlarmEvent::MESSAGE:
+		case KAEvent::MESSAGE:
 		default:
 			radio = mMessageRadio;
 			mTextMessageEdit->setText(text);
@@ -571,11 +571,11 @@ CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent,
 /******************************************************************************
  * Save the state of all controls.
  */
-void EditAlarmDlg::saveState(const KAlarmEvent* event)
+void EditAlarmDlg::saveState(const KAEvent* event)
 {
 	mSavedEvent          = 0;
 	if (event)
-		mSavedEvent = new KAlarmEvent(*event);
+		mSavedEvent = new KAEvent(*event);
 	mSavedTypeRadio      = mActionGroup->selected();
 	mSavedBeep           = mSoundPicker->beep();
 	mSavedSoundFile      = mSoundPicker->file();
@@ -632,11 +632,11 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedEmailBcc     != mEmailBcc->isChecked())
 			return true;
 	}
-	if (mSavedEvent->recurType() != KAlarmEvent::NO_RECUR)
+	if (mSavedEvent->recurType() != KAEvent::NO_RECUR)
 	{
 		if (!mSavedEvent->recurrence())
 			return true;
-		KAlarmEvent event;
+		KAEvent event;
 		event.setTime(mSavedEvent->startDateTime().dateTime());
 		mRecurrenceEdit->updateEvent(event);
 		if (!event.recurrence())
@@ -654,7 +654,7 @@ bool EditAlarmDlg::stateChanged() const
  * Get the currently entered message data.
  * The data is returned in the supplied Event instance.
  */
-void EditAlarmDlg::getEvent(KAlarmEvent& event)
+void EditAlarmDlg::getEvent(KAEvent& event)
 {
 	if (!mSavedEvent  ||  stateChanged())
 	{
@@ -703,24 +703,24 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 int EditAlarmDlg::getAlarmFlags() const
 {
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
-	return (displayAlarm && mSoundPicker->beep()          ? KAlarmEvent::BEEP : 0)
-	     | (mLateCancel->isChecked()                      ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (displayAlarm && mConfirmAck->isChecked()      ? KAlarmEvent::CONFIRM_ACK : 0)
-	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAlarmEvent::EMAIL_BCC : 0)
-	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (mAlarmDateTime.isDateOnly()                   ? KAlarmEvent::ANY_TIME : 0)
-	     | (mFontColourButton->defaultFont()              ? KAlarmEvent::DEFAULT_FONT : 0);
+	return (displayAlarm && mSoundPicker->beep()          ? KAEvent::BEEP : 0)
+	     | (mLateCancel->isChecked()                      ? KAEvent::LATE_CANCEL : 0)
+	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
+	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
+	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
+	     | (mAlarmDateTime.isDateOnly()                   ? KAEvent::ANY_TIME : 0)
+	     | (mFontColourButton->defaultFont()              ? KAEvent::DEFAULT_FONT : 0);
 }
 
 /******************************************************************************
  * Get the currently selected alarm type.
  */
-KAlarmEvent::Action EditAlarmDlg::getAlarmType() const
+KAEvent::Action EditAlarmDlg::getAlarmType() const
 {
-	return mFileRadio->isOn()    ? KAlarmEvent::FILE
-	     : mCommandRadio->isOn() ? KAlarmEvent::COMMAND
-	     : mEmailRadio->isOn()   ? KAlarmEvent::EMAIL
-	     :                         KAlarmEvent::MESSAGE;
+	return mFileRadio->isOn()    ? KAEvent::FILE
+	     : mCommandRadio->isOn() ? KAEvent::COMMAND
+	     : mEmailRadio->isOn()   ? KAEvent::EMAIL
+	     :                         KAEvent::MESSAGE;
 }
 
 /******************************************************************************
@@ -766,9 +766,9 @@ void EditAlarmDlg::slotOk()
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
-				KAlarmEvent event;
+				KAEvent event;
 				getEvent(event);
-				if (event.nextOccurrence(now, mAlarmDateTime) == KAlarmEvent::NO_OCCURRENCE)
+				if (event.nextOccurrence(now, mAlarmDateTime) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return;
@@ -789,20 +789,20 @@ void EditAlarmDlg::slotOk()
 			int reminder = mReminder->getMinutes();
 			if (reminder)
 			{
-				KAlarmEvent event;
+				KAEvent event;
 				mRecurrenceEdit->updateEvent(event);
 				int minutes = event.recurInterval();
 				switch (event.recurType())
 				{
-					case KAlarmEvent::NO_RECUR:     minutes = 0;  break;
-					case KAlarmEvent::MINUTELY:     break;
-					case KAlarmEvent::DAILY:        minutes *= 1440;  break;
-					case KAlarmEvent::WEEKLY:       minutes *= 7*1440;  break;
-					case KAlarmEvent::MONTHLY_DAY:
-					case KAlarmEvent::MONTHLY_POS:  minutes *= 28*1440;  break;
-					case KAlarmEvent::ANNUAL_DATE:
-					case KAlarmEvent::ANNUAL_POS:
-					case KAlarmEvent::ANNUAL_DAY:   minutes *= 365*1440;  break;
+					case KAEvent::NO_RECUR:     minutes = 0;  break;
+					case KAEvent::MINUTELY:     break;
+					case KAEvent::DAILY:        minutes *= 1440;  break;
+					case KAEvent::WEEKLY:       minutes *= 7*1440;  break;
+					case KAEvent::MONTHLY_DAY:
+					case KAEvent::MONTHLY_POS:  minutes *= 28*1440;  break;
+					case KAEvent::ANNUAL_DATE:
+					case KAEvent::ANNUAL_POS:
+					case KAEvent::ANNUAL_DAY:   minutes *= 365*1440;  break;
 				}
 				if (minutes  &&  reminder >= minutes)
 				{
@@ -834,7 +834,7 @@ void EditAlarmDlg::slotTry()
 			                                       i18n("Confirm Email"), i18n("&Send")) != KMessageBox::Continue)
 				return;
 		}
-		KAlarmEvent event;
+		KAEvent event;
 		event.set(QDateTime(), text, mBgColourChoose->color(), mFontColourButton->fgColour(),
 		          mFontColourButton->font(), getAlarmType(), getAlarmFlags());
 		event.setAudioFile(mSoundPicker->file());
@@ -960,7 +960,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 */
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
-	KAlarmEvent event;
+	KAEvent event;
 	mRecurrenceEdit->updateEvent(event);
 	mRecurrenceText->setText(event.recurrenceText());
 }

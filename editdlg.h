@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,10 +59,10 @@ class EditAlarmDlg : public KDialogBase
 		enum MessageType { MESSAGE, FILE };
 
 		EditAlarmDlg(const QString& caption, QWidget* parent = 0, const char* name = 0,
-                             const KAlarmEvent* = 0, bool readOnly = false);
+                             const KAEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
-		void         getEvent(KAlarmEvent&);
-		void         setAction(KAlarmEvent::Action, const QString& text);
+		void         getEvent(KAEvent&);
+		void         setAction(KAEvent::Action, const QString& text);
 
 		static ColourCombo* createBgColourChooser(bool readOnly, QHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
@@ -89,7 +89,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotAnyTimeToggled(bool anyTime);
 
 	private:
-		KAlarmEvent::Action getAlarmType() const;
+		KAEvent::Action getAlarmType() const;
 		int                 getAlarmFlags() const;
 		bool                checkText(QString& result, bool showErrorMessage = true) const;
 		void                setSoundPicker();
@@ -98,7 +98,7 @@ class EditAlarmDlg : public KDialogBase
 		void                initDisplayAlarms(QWidget* parent);
 		void                initCommand(QWidget* parent);
 		void                initEmail(QWidget* parent);
-		void                saveState(const KAlarmEvent*);
+		void                saveState(const KAEvent*);
 		bool                stateChanged() const;
 
 		int               mMainPageIndex;
@@ -160,7 +160,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              mReadOnly;           // the dialog is read only
 
 		// Initial state of all controls
-		KAlarmEvent*      mSavedEvent;
+		KAEvent*          mSavedEvent;
 		QButton*          mSavedTypeRadio;      // mMessageRadio, etc
 		bool              mSavedBeep;           // mSoundPicker beep status
 		QString           mSavedSoundFile;      // mSoundPicker sound file

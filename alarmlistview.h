@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.h  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2004 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ class AlarmListView : public KListView
 		bool                 showingTimeTo() const	 { return columnWidth(mTimeToColumn); }
 		void                 selectTimeColumns(bool time, bool timeTo);
 		void                 updateTimeToAlarms(bool forceDisplay = false);
-		AlarmListViewItem*   addEntry(const KAlarmEvent& e, bool setSize = false)
+		AlarmListViewItem*   addEntry(const KAEvent& e, bool setSize = false)
 		                             { return addEntry(e, QDateTime::currentDateTime(), setSize); }
-		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
+		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAEvent& newEvent, bool setSize = false);
 		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const KAlarmEvent&   getEvent(AlarmListViewItem*) const;
+		const KAEvent&       getEvent(AlarmListViewItem*) const;
 		AlarmListViewItem*   getEntry(const QString& eventID);
 		bool                 expired(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
@@ -69,7 +69,7 @@ class AlarmListView : public KListView
 	signals:
 		void                 itemDeleted();
 	private:
-		AlarmListViewItem*   addEntry(const KAlarmEvent&, const QDateTime& now, bool setSize = false);
+		AlarmListViewItem*   addEntry(const KAEvent&, const QDateTime& now, bool setSize = false);
 
 		int                  mTimeColumn;           // index to alarm time column
 		int                  mTimeToColumn;         // index to time-to-alarm column
@@ -87,16 +87,16 @@ class AlarmListView : public KListView
 class AlarmListViewItem : public QListViewItem
 {
 	public:
-		AlarmListViewItem(AlarmListView* parent, const KAlarmEvent&, const QDateTime& now);
+		AlarmListViewItem(AlarmListView* parent, const KAEvent&, const QDateTime& now);
 		QTime                showTimeToAlarm(bool show);
 		void                 updateTimeToAlarm(const QDateTime& now, bool forceDisplay = false);
 		virtual void         paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
 		AlarmListView*       alarmListView() const     { return (AlarmListView*)listView(); }
-		const KAlarmEvent&   event() const             { return mEvent; }
+		const KAEvent&       event() const             { return mEvent; }
 		int                  messageWidth() const      { return mMessageWidth; }
 		AlarmListViewItem*   nextSibling() const       { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
 		virtual QString      key(int column, bool ascending) const;
-		static QString       alarmText(const KAlarmEvent&);
+		static QString       alarmText(const KAEvent&);
 	private:
 		static QPixmap*      textIcon;
 		static QPixmap*      fileIcon;
@@ -107,7 +107,7 @@ class AlarmListViewItem : public QListViewItem
 		QString              alarmTimeText() const;
 		QString              timeToAlarmText(const QDateTime& now) const;
 
-		KAlarmEvent          mEvent;            // the event for this item
+		KAEvent              mEvent;            // the event for this item
 		QString              mDateTimeOrder;    // controls ordering of date/time column
 		QString              mRepeatOrder;      // controls ordering of repeat column
 		QString              mColourOrder;      // controls ordering of colour column

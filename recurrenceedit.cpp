@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -1055,7 +1055,7 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 /******************************************************************************
  * Set the state of all controls to reflect the data in the specified event.
  */
-void RecurrenceEdit::set(const KAlarmEvent& event)
+void RecurrenceEdit::set(const KAEvent& event)
 {
 	setDefaults(event.mainDateTime().dateTime());
 	if (event.repeatAtLogin())
@@ -1200,9 +1200,9 @@ void RecurrenceEdit::set(const KAlarmEvent& event)
 }
 
 /******************************************************************************
- * Update the specified KAlarmEvent with the entered recurrence data.
+ * Update the specified KAEvent with the entered recurrence data.
  */
-void RecurrenceEdit::updateEvent(KAlarmEvent& event)
+void RecurrenceEdit::updateEvent(KAEvent& event)
 {
 	// Get end date and repeat count, common to all types of recurring events
 	QDate  endDate;
@@ -1247,12 +1247,12 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 		if (mMonthRuleOnNthTypeOfDayButton->isChecked())
 		{
 			// it's by position
-			KAlarmEvent::MonthPos pos;
+			KAEvent::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(offset_to_dayOfWeek(mMonthRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mMonthRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
-			QValueList<KAlarmEvent::MonthPos> poses;
+			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
 			event.setFirstRecurrence();
@@ -1277,12 +1277,12 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 		if (mYearRuleOnNthTypeOfDayButton->isChecked())
 		{
 			// it's by position
-			KAlarmEvent::MonthPos pos;
+			KAEvent::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(offset_to_dayOfWeek(mYearRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mYearRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
-			QValueList<KAlarmEvent::MonthPos> poses;
+			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
 			event.setFirstRecurrence();
@@ -1342,8 +1342,8 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 				if (adjust)
 				{
 					DateTime newTime;
-					KAlarmEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
-					if (type != KAlarmEvent::FIRST_OCCURRENCE  &&  type != KAlarmEvent::NO_OCCURRENCE)
+					KAEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
+					if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
 						event.adjustStartDate(newTime.date());
 				}
 			}
@@ -1365,8 +1365,8 @@ void RecurrenceEdit::updateEvent(KAlarmEvent& event)
 				if (adjust)
 				{
 					DateTime newTime;
-					KAlarmEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
-					if (type != KAlarmEvent::FIRST_OCCURRENCE  &&  type != KAlarmEvent::NO_OCCURRENCE)
+					KAEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
+					if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
 						event.adjustStartDate(newTime.date());
 					d = start.date();
 					startday = d.day();

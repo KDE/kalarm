@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -188,14 +188,14 @@ void BirthdayDlg::updateSelectionList()
 {
 	// Compile a list of all pending alarm messages which look like birthdays
 	QStringList messageList;
-	KAlarmEvent event;
+	KAEvent event;
 	Event::List events = theApp()->getCalendar().events();
 	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
 		Event* kcalEvent = *it;
 		event.set(*kcalEvent);
-		if (event.action() == KAlarmEvent::MESSAGE
-		&&  event.recurType() == KAlarmEvent::ANNUAL_DATE
+		if (event.action() == KAEvent::MESSAGE
+		&&  event.recurType() == KAEvent::ANNUAL_DATE
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
 			messageList.append(event.message());
 	}
@@ -255,9 +255,9 @@ void BirthdayDlg::updateSelectionList()
 /******************************************************************************
 * Return a list of events for birthdays chosen.
 */
-QValueList<KAlarmEvent> BirthdayDlg::events() const
+QValueList<KAEvent> BirthdayDlg::events() const
 {
-	QValueList<KAlarmEvent> list;
+	QValueList<KAEvent> list;
 	QDate today = QDate::currentDate();
 	QDateTime todayNoon(today, QTime(12, 0, 0));
 	int thisYear = today.year();
@@ -274,10 +274,10 @@ QValueList<KAlarmEvent> BirthdayDlg::events() const
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
-				KAlarmEvent event(date,
+				KAEvent event(date,
 				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				                  mBgColourChoose->color(), mFontColourButton->fgColour(),
-				                  mFontColourButton->font(), KAlarmEvent::MESSAGE, mFlags);
+				                  mFontColourButton->font(), KAEvent::MESSAGE, mFlags);
 				event.setAudioFile(mSoundPicker->file());
 				QValueList<int> months;
 				months.append(date.month());
@@ -304,11 +304,11 @@ void BirthdayDlg::slotOk()
 	config->writeEntry(QString::fromLatin1("BirthdaySuffix"), mSuffix->text());
 	config->sync();
 
-	mFlags = (mSoundPicker->beep()             ? KAlarmEvent::BEEP : 0)
-	       | (mLateCancel->isChecked()         ? KAlarmEvent::LATE_CANCEL : 0)
-	       | (mConfirmAck->isChecked()         ? KAlarmEvent::CONFIRM_ACK : 0)
-	       | (mFontColourButton->defaultFont() ? KAlarmEvent::DEFAULT_FONT : 0)
-	       |                                     KAlarmEvent::ANY_TIME;
+	mFlags = (mSoundPicker->beep()             ? KAEvent::BEEP : 0)
+	       | (mLateCancel->isChecked()         ? KAEvent::LATE_CANCEL : 0)
+	       | (mConfirmAck->isChecked()         ? KAEvent::CONFIRM_ACK : 0)
+	       | (mFontColourButton->defaultFont() ? KAEvent::DEFAULT_FONT : 0)
+	       |                                     KAEvent::ANY_TIME;
 	KDialogBase::slotOk();
 }
 

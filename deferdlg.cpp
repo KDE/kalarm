@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002 - 2004 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ void DeferAlarmDlg::slotOk()
 		const Event* kcalEvent = theApp()->getEvent(mLimitEventID);
 		if (kcalEvent)
 		{
-			KAlarmEvent event(*kcalEvent);
+			KAEvent event(*kcalEvent);
 			Recurrence* recurrence = kcalEvent->recurrence();
 			if (recurrence  &&  recurrence->doesRecur() != Recurrence::rNone)
 			{

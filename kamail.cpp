@@ -74,7 +74,7 @@ QString KAMail::i18n_NeedFromEmailAddress()
 * Reply = reason for failure (which may be the empty string)
 *       = null string if success.
 */
-QString KAMail::send(const KAlarmEvent& event, bool allowNotify)
+QString KAMail::send(const KAEvent& event, bool allowNotify)
 {
 	Preferences* preferences = Preferences::instance();
 	QString from = preferences->emailAddress();
@@ -145,7 +145,7 @@ QString KAMail::send(const KAlarmEvent& event, bool allowNotify)
 /******************************************************************************
 * Send the email message via KMail.
 */
-QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const QString& bcc, bool allowNotify)
+QString KAMail::sendKMail(const KAEvent& event, const QString& from, const QString& bcc, bool allowNotify)
 {
 	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
@@ -226,7 +226,7 @@ QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from, const Q
 /******************************************************************************
 * Create the headers part of the email.
 */
-QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const QString& bcc, bool dateId)
+QString KAMail::initHeaders(const KAEvent& event, const QString& from, const QString& bcc, bool dateId)
 {
 	QString message;
 	if (dateId)
@@ -253,7 +253,7 @@ QString KAMail::initHeaders(const KAlarmEvent& event, const QString& from, const
 * Reply = reason for error
 *       = 0 if successful.
 */
-QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event)
+QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 {
 	static const char* textMimeTypes[] = {
 		"application/x-shellscript", "application/x-nawk", "application/x-gawk", "application/x-awk",
@@ -372,7 +372,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 * If any of the destination email addresses are non-local, display a
 * notification message saying that an email has been queued for sending.
 */
-void KAMail::notifyQueued(const KAlarmEvent& event)
+void KAMail::notifyQueued(const KAEvent& event)
 {
 	KMime::Types::Address addr;
 	QString localhost = QString::fromLatin1("localhost");
