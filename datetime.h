@@ -27,6 +27,7 @@
 
 #include <qtimer.h>
 #include <qdatetime.h>
+#include "buttongroup.h"
 #include "spinbox2.h"
 
 class QRadioButton;
@@ -35,7 +36,7 @@ class DateSpinBox;
 class TimeSpinBox;
 
 
-class AlarmTimeWidget : public QWidget
+class AlarmTimeWidget : public ButtonGroup
 {
 		Q_OBJECT
 	public:
@@ -57,13 +58,15 @@ class AlarmTimeWidget : public QWidget
 	protected slots:
 		void           slotDefer();
 		void           slotTimer();
-		void           slotAtTimeToggled(bool on);
-		void           slotAfterTimeToggled(bool on);
+		void           slotButtonSet(int id);
+//??//		void           slotAtTimeToggled(bool on);
+//??//		void           slotAfterTimeToggled(bool on);
 		void           slotDateTimeChanged(int);
 		void           slotDelayTimeChanged(int);
 		void           anyTimeToggled(bool);
 	private:
-		void           init(const QString& groupBoxTitle, bool groupBox, int mode, int deferSpacing);
+		void           init(int mode, int deferSpacing);
+
 		QRadioButton*  atTimeRadio;
 		QRadioButton*  afterTimeRadio;
 		DateSpinBox*   dateEdit;
