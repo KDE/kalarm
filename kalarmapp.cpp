@@ -90,7 +90,7 @@ KAlarmApp::KAlarmApp()
 	mSettings->loadSettings();
 	connect(mSettings, SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 	CalFormat::setApplication(aboutData()->programName(),
-	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " VERSION "//EN")
+	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
 	                                       .arg(aboutData()->programName()));
 	readDaemonCheckInterval();
 	KWinModule wm;

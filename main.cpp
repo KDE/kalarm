@@ -74,7 +74,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"),
-		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
+		KALARM_VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
 		"       " PROGRAM_NAME " [-bcilLrstu] -f URL\n"
 		"       " PROGRAM_NAME " [-bcilLrstu] message\n"
 		"       " PROGRAM_NAME " [-ilLrtu] -e commandline\n"
