@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " --triggerEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --handleEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " [generic_options]\n\n"
-		"KDE personal alarm message and command scheduler"),
+		"KDE personal alarm message, command and email scheduler"),
 		KAboutData::License_GPL,
 		"(c) 2001 - 2003, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
