@@ -30,6 +30,7 @@
 #include <kseparator.h>
 #include <kwin.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "alarmlistview.h"
@@ -55,6 +56,14 @@ Find::Find(EventListViewBase* parent)
 	  mFind(0),
 	  mOptions(0)
 {
+}
+
+Find::~Find()
+{
+	delete mDialog;
+	mDialog = 0;
+	delete mFind;
+	mFind = 0;
 }
 
 /******************************************************************************
@@ -152,7 +161,35 @@ void Find::display()
 		mExpired->show();
 		mActiveExpiredSep->show();
 	}
-	mExpired->setEnabled(showExpired);
+
+	// Disable options where no displayed alarms match them
+	bool live    = false;
+	bool expired = false;
+	bool text    = false;
+	bool file    = false;
+	bool command = false;
+	bool email   = false;
+	for (EventListViewItemBase* item = mListView->firstChild();  item;  item = item->nextSibling())
+	{
+		const KAEvent& event = item->event();
+		if (event.expired())
+			expired = true;
+		else
+			live = true;
+		switch (event.action())
+		{
+			case KAEvent::MESSAGE:  text    = true;  break;
+			case KAEvent::FILE:     file    = true;  break;
+			case KAEvent::COMMAND:  command = true;  break;
+			case KAEvent::EMAIL:    email   = true;  break;
+		}
+	}
+	mLive->setEnabled(live);
+	mExpired->setEnabled(expired);
+	mMessageType->setEnabled(text);
+	mFileType->setEnabled(file);
+	mCommandType->setEnabled(command);
+	mEmailType->setEnabled(email);
 
 	mDialog->setHasCursor(mListView->currentItem());
 	mDialog->show();
@@ -163,10 +200,6 @@ void Find::display()
 */
 void Find::slotDlgDestroyed()
 {
-kdDebug()<<"slotDlgDestroyed()\n";
-//#warning Should mFind be deleted here, or does it happen automatically?
-//	delete mFind;
-//	mFind   = 0;
 	mDialog = 0;
 }
 
@@ -179,17 +212,25 @@ void Find::slotFind()
 		return;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
 	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
-	mOptions |= (mLive->isChecked()    ? FIND_LIVE : 0)
-	         |  (mExpired->isChecked() ? FIND_EXPIRED : 0)
-	         |  (mMessageType->isChecked() ? FIND_MESSAGE : 0)
-	         |  (mFileType->isChecked() ? FIND_FILE : 0)
-	         |  (mCommandType->isChecked() ? FIND_COMMAND : 0)
-	         |  (mEmailType->isChecked() ? FIND_EMAIL : 0);
+	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
+	         |  (mExpired->isEnabled()     && mExpired->isChecked()     ? FIND_EXPIRED : 0)
+	         |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
+	         |  (mFileType->isEnabled()    && mFileType->isChecked()    ? FIND_FILE : 0)
+	         |  (mCommandType->isEnabled() && mCommandType->isChecked() ? FIND_COMMAND : 0)
+	         |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0);
+	if (!(mOptions & (FIND_LIVE | FIND_EXPIRED))
+	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL)))
+	{
+		KMessageBox::sorry(mDialog, i18n("No alarm types are selected to search"));
+		return;
+	}
 
 	// Supply KFind with only those options which relate to the text within alarms
 	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
 	if (mFind)
 	{
+		delete mDialog;
+		mDialog = 0;
 		mFind->setOptions(options);
 		findNext(true, true, false);
 	}
@@ -197,12 +238,13 @@ void Find::slotFind()
 	{
 		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
-		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing in addition to the Find dialog
+		delete mDialog;                  // close the Find dialogue
+		mDialog = 0;
+		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
 
 		// Set the starting point for the search
 		mListView->sort();     // ensure the whole list is sorted, not just the visible items
 		mStartID       = QString::null;
-		mFromMiddle    = false;
 		mNoCurrentItem = true;
 		bool fromCurrent = false;
 		EventListViewItemBase* item = 0;
@@ -212,14 +254,13 @@ void Find::slotFind()
 			if (item)
 			{
 				mStartID       = item->event().id();
-				mFromMiddle    = (mOptions & KFindDialog::FindBackwards) ? item->itemBelow() : item->itemAbove();
 				mNoCurrentItem = false;
 				fromCurrent    = true;
 			}
 		}
-if (item) kdDebug()<<"slotFind(): event="<<item->event().id()<<endl;
 
 		// Execute the search
+		mFound = false;
 		findNext(true, false, fromCurrent);
 		if (mFind)
 			emit active(true);
@@ -239,17 +280,15 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 	EventListViewItemBase* item = mNoCurrentItem ? 0 : mListView->currentItem();
 	if (!fromCurrent)
 		item = nextItem(item, forward);
-if (item) kdDebug()<<"findNext(): event="<<item->event().id()<<endl; else kdDebug()<<"findNext(): event=null\n";
 
 	// Search successive alarms until a match is found or the end is reached
 	bool found = false;
 	for ( ;  item;  item = nextItem(item, forward))
 	{
-if (item) kdDebug()<<"findNext() 2: event="<<item->event().id()<<endl; else kdDebug()<<"findNext() 2: event=null\n";
 		const KAEvent& event = item->event();
-		if (!mStartID.isNull()  &&  mStartID == event.id())
+		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event.id())
 			break;    // we've wrapped round and reached the starting alarm again
-kdDebug()<<"findNext() 3\n";
+		fromCurrent = false;
 		bool live = !event.expired();
 		if (live  &&  !(mOptions & FIND_LIVE)
 		||  !live  &&  !(mOptions & FIND_EXPIRED))
@@ -259,7 +298,6 @@ kdDebug()<<"findNext() 3\n";
 			case KAEvent::MESSAGE:
 				if (!(mOptions & FIND_MESSAGE))
 					break;
-kdDebug()<<"findNext() 4: message="<<event.cleanText()<<endl;
 				mFind->setData(event.cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
@@ -302,11 +340,11 @@ kdDebug()<<"findNext() 4: message="<<event.cleanText()<<endl;
 	}
 
 	// Process the search result
-if (item) kdDebug()<<"findNext() end: item="<<item->event().id()<<endl; else kdDebug()<<"findNext(): end: event=null\n";
 	mNoCurrentItem = !item;
 	if (found)
 	{
 		// A matching alarm was found - highlight it and make it current
+		mFound = true;
 		mListView->clearSelection();
 		mListView->setSelected(item, true);
 		mListView->setCurrentItem(item);
@@ -315,20 +353,19 @@ if (item) kdDebug()<<"findNext() end: item="<<item->event().id()<<endl; else kdD
 	else
 	{
 		// No match was found
-		if (mFromMiddle)
+		if (mFound)
 		{
-			// We haven't yet searched all alarms, so ask user whether to wrap round
-			if (mFind->shouldRestart(false, false))
+			QString msg = forward ? i18n("End of alarm list reached.\nContinue from the beginning?")
+			                      : i18n("Beginning of alarm list reached.\nContinue from the end?");
+			if (KMessageBox::questionYesNo(mListView, msg) == KMessageBox::Yes)
 			{
-				mFromMiddle = false;
 				findNext(forward, false);
 				return;
 			}
 		}
 		else
 			mFind->displayFinalDialog();     // display "no match was found"
-		delete mFind;
-		mFind = 0;
+		mNoCurrentItem = false;    // restart from the currently highlighted alarm if Find Next etc selected
 	}
 }
 

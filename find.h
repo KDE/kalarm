@@ -37,6 +37,7 @@ class Find : public QObject
 		Q_OBJECT
 	public:
 		Find(EventListViewBase* parent);
+		~Find();
 		void         display();
 		void         findNext(bool forward)     { findNext(forward, true); }
 
@@ -65,8 +66,8 @@ class Find : public QObject
 		QStringList        mHistory;         // list of history items for Find dialog
 		QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
 		long               mOptions;         // OR of find dialog options
-		bool               mFromMiddle;      // current search started in middle, not beginning or end
 		bool               mNoCurrentItem;   // there is no current item for the purposes of searching
+		bool               mFound;           // true if any matches have been found
 };
 
 #endif // FIND_H
