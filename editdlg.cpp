@@ -59,7 +59,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 
 	// Message label + multi-line editor
 
-	messageTypeGroup = new QButtonGroup(i18n("Alarm"), page, "messageGroup");
+	messageTypeGroup = new QButtonGroup(i18n("Action"), page, "messageGroup");
 	connect(messageTypeGroup, SIGNAL(clicked(int)), this, SLOT(slotMessageTypeClicked(int)));
 	topLayout->addWidget(messageTypeGroup);
 	QGridLayout* grid = new QGridLayout(messageTypeGroup, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
