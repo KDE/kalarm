@@ -249,7 +249,7 @@ void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 */
 void KAlarmMainWindow::slotNew()
 {
-	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New message"), this, "editDlg");
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Message"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAlarmEvent event;
@@ -272,7 +272,7 @@ void KAlarmMainWindow::slotModify()
 	if (item)
 	{
 		KAlarmEvent event = listView->getEntry(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit message"), this, "editDlg", &event);
+		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit Message"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
 			KAlarmEvent newEvent;
