@@ -1,5 +1,15 @@
 KAlarm
 
+=== Version 0.9.4 --- 3 Jul 2003 ===
+Add time-to-alarm display option to main alarm list.
+Add option to list next 24 hours' alarms in system tray tooltip.
+Create new alarm by dragging text or URL onto main window or system tray icon.
+Display reasons for failure to send an email.
+Allow editing of the list of message colours.
+Edit new alarm by context menu or double click on white space in alarm list.
+Add show expired alarms option to preferences dialog.
+Display HTML files correctly in file display alarms.
+
 === Version 0.9.3 --- 2 Mar 2003 ===
 Add preferences option to set default sound file for the Edit Alarm dialog.
 Fix display of "Invalid date" message before Edit Alarm dialog displays.
