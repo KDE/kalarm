@@ -857,12 +857,12 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	grid->addWidget(box, 5, 2, AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	mModalMessages = new QCheckBox(i18n("Modal message &windows"), mPage, "modalMsg");
+	mModalMessages = new QCheckBox(i18n("Message &windows have title bar and take keyboard focus"), mPage, "modalMsg");
 	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
 	QWhatsThis::add(mModalMessages,
-	      i18n("Specify whether alarm message windows should be modal. "
-	           "If modal, the window is a normal window with a title bar, but it grabs keyboard input when it is displayed. "
-	           "If non-modal, the window does not interfere with your typing when "
+	      i18n("Specify the characteristics of alarm message windows:\n"
+	           "- If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.\n"
+	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
 	mShowExpiredAlarms = new QCheckBox(i18n("&Show expired alarms"), mPage, "showExpired");
