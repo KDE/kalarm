@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef FONTCOLOUR_H
@@ -34,11 +38,11 @@ class FontColourChooser : public QWidget
 {
 	Q_OBJECT
 public:
-	FontColourChooser(QWidget* parent = 0L, const char* name = 0L,
+	FontColourChooser(QWidget* parent = 0, const char* name = 0,
 	       bool onlyFixed = false,
 	       const QStringList& fontList = QStringList(),
 	       bool makeFrame = true, const QString& frameLabel = i18n("Requested font"),
-	       bool fg = true, int visibleListSize=8);
+	       bool fg = true, int visibleListSize = 8);
 	~FontColourChooser();
 
 	void setFont(const QFont& font, bool onlyFixed = false)  { m_fontChooser->setFont(font, onlyFixed); }
