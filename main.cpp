@@ -129,7 +129,8 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
-	// This is the child instance
+	// This is the first time through
+	kdDebug(5950) << "main(): initialising\n";
 	KAlarmApp* app = KAlarmApp::getInstance();
 	app->restoreSession();
 	return app->exec();
