@@ -224,7 +224,7 @@ int KAlarmApp::newInstance()
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
 					{
-						usage = i18n("Invalid --colour parameter");
+						usage = i18n("Invalid --color parameter");
 						break;
 					}
 				}
