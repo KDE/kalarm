@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include <ctype.h>
 #include <iostream>
 
-#include <qfile.h>
 #include <qobjectlist.h>
 #include <qtimer.h>
 
@@ -872,6 +871,7 @@ void KAlarmApp::slotSettingsChanged()
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
+		TrayWindow::allowQuitWarning();   // since mode has changed, re-allow warning messages on Quit
 		registerWithDaemon(true);     // re-register with the alarm daemon
 	}
 

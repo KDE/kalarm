@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 #include "kalarmapp.h"
@@ -126,18 +127,32 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 void TrayWindow::slotQuit()
 {
 	kdDebug(5950)<<"TrayWindow::slotQuit()\n";
+	if (theApp()->alarmsDisabledIfStopped()
+	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
+		                                     "(once any alarm message windows are closed)."),
+		                          QString::null, mActionQuit->text(), KStdGuiItem::cancel(),
+		                          QString::fromLatin1("QuitWarn")
+		                         ) != KMessageBox::Yes)
+		return;
 	if (theApp()->wantRunInSystemTray())
 	{
-		if (KMessageBox::warningContinueCancel(this, i18n("Quitting will disable alarms,\nonce any alarm message windows are closed."),
-		                                       QString::null, mActionQuit->text())
-		    != KMessageBox::Continue)
-		    return;
 		if (!MessageWin::instanceCount())
 			theApp()->quit();
 		else
 			KAlarmMainWindow::closeAll();
 	}
 	theApp()->displayTrayIcon(false);
+}
+
+/******************************************************************************
+* Called to allow quit warning messages again.
+*/
+void TrayWindow::allowQuitWarning()
+{
+	KConfig* config = kapp->config();
+	config->setGroup(QString::fromLatin1("Notification Messages"));
+	config->writeEntry(QString::fromLatin1("QuitWarn"), false);
+	config->sync();
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ class KAlarmApp : public KUniqueApplication
 		Settings*          settings()                      { return mSettings; }
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
+		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
@@ -74,7 +75,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               displayTrayIcon(bool show, KAlarmMainWindow* = 0);
 		bool               trayIconDisplayed() const       { return !!mTrayWindow; }
 		DaemonGuiHandler*  daemonGuiHandler() const        { return mDaemonGuiHandler; }
-		ActionAlarmsEnabled* actionAlarmEnable() const    { return mActionAlarmEnable; }
+		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
 		KAction*           actionPreferences() const       { return mActionPrefs; }
 		KAction*           actionDaemonControl() const     { return mActionDaemonControl; }
 		void               resetDaemon();
