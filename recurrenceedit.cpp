@@ -608,10 +608,10 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 	for (i = 0;  i < 5;  ++i)
 		wc->insertItem(i18n(ordinal[i]));
 	wc->insertItem(i18n("Last Monday in March", "Last"));
-	wc->insertItem(i18n("2nd last"));
-	wc->insertItem(i18n("3rd last"));
-	wc->insertItem(i18n("4th last"));
-	wc->insertItem(i18n("5th last"));
+	wc->insertItem(i18n("2nd Last"));
+	wc->insertItem(i18n("3rd Last"));
+	wc->insertItem(i18n("4th Last"));
+	wc->insertItem(i18n("5th Last"));
 	QWhatsThis::add(wc, i18n("Select the week of the month in which to repeat the alarm"));
 	wc->setFixedSize(wc->sizeHint());
 	wc->setReadOnly(mReadOnly);
