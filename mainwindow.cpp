@@ -286,6 +286,9 @@ void MainWindow::initActions()
 	KActionCollection* actions = actionCollection();
 	mActionTemplates      = new KAction(i18n("&Templates..."), 0, this, SLOT(slotTemplates()), actions, "templates");
 	mActionNew            = KAlarm::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions, "new");
+#ifdef NEW_FROM_TEMPLATE
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &from Template"), actions, "newFromTempl");
+#endif
 	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), 0, this, SLOT(slotNewTemplate()), actions, "createTemplate");
 	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
 	mActionModify         = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
