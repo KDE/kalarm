@@ -121,8 +121,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mAtLoginButton,
-	      i18n("Repeat the alarm at every login until the specified date/time.\n"
-	           "Note that it will also be repeated any time the alarm daemon is restarted."));
+	      i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
+	           "Note that it will also be triggered any time the alarm daemon is restarted."));
 
 	mSubDailyButton = new RadioButton(i18n("Ho&urly/Minutely"), ruleButtonGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
