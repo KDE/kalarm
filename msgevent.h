@@ -131,7 +131,8 @@ class KAlarmAlarm : public KAAlarmEventBase
 			// ensure that in ordered processing they are processed afterwards.
 			AT_LOGIN_ALARM   = 0x10,  // additional repeat-at-login trigger
 			DISPLAYING_ALARM = 0x20,  // copy of the alarm currently being displayed
-			AUDIO_ALARM      = 0x30   // sound to play when displaying the alarm
+			// The following values are for internal KAlarmEvent use only
+			AUDIO_ALARM      = 0x30   // sound to play when displaying the alarm.
 		};
 
 		KAlarmAlarm()      : mType(INVALID_ALARM) { }
