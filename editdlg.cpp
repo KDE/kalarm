@@ -474,7 +474,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
 	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-	event.setAudioFile(soundFile);
+	event.setAudioFile(sound->isChecked() ? soundFile : QString());
 	if (recurRadio->isOn())
 	{
 		recurrenceEdit->updateEvent(event);
@@ -582,7 +582,7 @@ void EditAlarmDlg::slotTry()
 #endif
 		KAlarmEvent event;
 		event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-		event.setAudioFile(soundFile);
+		event.setAudioFile(sound->isChecked() ? soundFile : QString());
 		if (theApp()->execAlarm(event, event.firstAlarm(), false, false))
 		{
 			if (commandRadio->isOn())
