@@ -120,6 +120,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mEmailRemoveButton(0),
 	  mDeferGroup(0),
 	  mTimeWidget(0),
+	  mDeferGroupHeight(0),
 	  mTemplate(Template),
 	  mDesiredReadOnly(readOnly),
 	  mReadOnly(readOnly),
@@ -222,9 +223,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
 	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
 	QWhatsThis::add(mDeferChangeButton, i18n("Change the alarm's deferred time, or cancel the deferral"));
-
 	mDeferGroup->addSpace(0);
-	mDeferGroupHeight = mDeferGroup->height() + spacingHint();
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
 
@@ -513,9 +512,9 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		if (mTemplate)
 			mTemplateName->setText(event->templateName());
 		bool recurs = event->recurs();
-		deferGroupVisible = (recurs  &&  !mTemplate  &&  event->deferred());
-		if (deferGroupVisible)
+		if (recurs  &&  !mTemplate  &&  event->deferred())
 		{
+			deferGroupVisible = true;
 			mDeferDateTime = event->deferDateTime();
 			mDeferTimeLabel->setText(mDeferDateTime.formatLocale());
 			mDeferGroup->show();
@@ -628,13 +627,6 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 
 	if (!deferGroupVisible)
 		mDeferGroup->hide();
-	int deferGroupHeight = deferGroupVisible ? mDeferGroupHeight : 0;
-	QSize size = minimumSize();
-	size.setHeight(size.height() - deferGroupHeight);
-	mBasicSize = KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, size);
-	mInitialSize = mBasicSize;
-	mInitialSize.setHeight(mInitialSize.height() + deferGroupHeight);
-	resize(mInitialSize);
 
 	bool enable = !!mEmailAttachList->count();
 	mEmailAttachList->setEnabled(enable);
@@ -771,10 +763,10 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
 TimeSelector* EditAlarmDlg::createLateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)
 {
 	QString whatsThis = i18n("If checked, the alarm will be canceled if it cannot be triggered within the "
-                                 "specified period after its scheduled time. Possible reasons for not triggering "
-                                 "include your being logged off, X not running, or the alarm daemon not running.\n\n"
-                                 "If unchecked, the alarm will be triggered at the first opportunity after "
-                                 "its scheduled time, regardless of how late it is.");
+	                         "specified period after its scheduled time. Possible reasons for not triggering "
+	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
+	                         "If unchecked, the alarm will be triggered at the first opportunity after "
+	                         "its scheduled time, regardless of how late it is.");
 	TimeSelector* widget = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                        whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                        allowHourMinute, parent, name);
@@ -1024,6 +1016,26 @@ KAEvent::Action EditAlarmDlg::getAlarmType() const
 }
 
 /******************************************************************************
+*  Called when the dialog is displayed.
+*  The first time through, sets the size to the same as the last time it was
+*  displayed.
+*/
+void EditAlarmDlg::showEvent(QShowEvent* se)
+{
+	if (!mDeferGroupHeight)
+	{
+		mDeferGroupHeight = mDeferGroup->height() + spacingHint();
+		QSize s;
+		if (KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, s))
+			s.setHeight(s.height() + (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
+		else
+			s = minimumSize();
+		resize(s);
+	}
+	KDialog::showEvent(se);
+}
+
+/******************************************************************************
 *  Called when the dialog's size has changed.
 *  Records the new size (adjusted to ignore the optional height of the deferred
 *  time edit widget) in the config file.
@@ -1032,25 +1044,11 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
 	if (isVisible())
 	{
-		mBasicSize = re->size();
-		mBasicSize.setHeight(mBasicSize.height() - (mDeferGroup->isVisible() ? mDeferGroupHeight : 0));
-		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, mBasicSize);
+		QSize s = re->size();
+		s.setHeight(s.height() - (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
+		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, s);
 	}
 	KDialog::resizeEvent(re);
-}
-
-/******************************************************************************
-*  Called when the dialog is displayed.
-*  The first time through, restores the size to that calculated in initialise().
-*/
-void EditAlarmDlg::showEvent(QShowEvent* se)
-{
-	if (!mInitialSize.isEmpty())
-	{
-		resize(mInitialSize);
-		mInitialSize = QSize();
-	}
-	KDialog::showEvent(se);
 }
 
 /******************************************************************************

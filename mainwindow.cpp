@@ -111,7 +111,11 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)
-		resize(KAlarm::readConfigWindowSize("MainWindow", size()));
+	{
+		QSize s;
+		if (KAlarm::readConfigWindowSize("MainWindow", s))
+			resize(s);
+	}
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	mListView = new AlarmListView(this, "listView");

@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -163,10 +153,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
-	QSize size = initView();
-	if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-		size = KAlarm::readConfigWindowSize("FileMessage", size);
-	resize(size);
+	initView();
 	mWindowList.append(this);
 }
 
@@ -199,7 +186,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
-	resize(initView());
+	initView();
 	mWindowList.append(this);
 }
 
@@ -858,6 +845,12 @@ void MessageWin::showEvent(QShowEvent* se)
 	MainWindowBase::showEvent(se);
 	if (!mShown  &&  !mErrorWindow)
 	{
+		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
+		{
+			QSize s;
+			if (KAlarm::readConfigWindowSize("FileMessage", s))
+				resize(s);
+		}
 		playAudio();
 		if (mRescheduleEvent)
 			theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
@@ -883,7 +876,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
+		if (mShown  &&  mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 			KAlarm::writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}

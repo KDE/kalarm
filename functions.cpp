@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -318,15 +308,20 @@ void resetDaemonIfQueued()
 /******************************************************************************
 *  Read the size for the specified window from the config file, for the
 *  current screen resolution.
-*  Reply = window size.
+*  Reply = true if size set in the config file, in which case 'result' is set
+*        = false if no size is set, in which case 'result' is unchanged.
 */
-QSize readConfigWindowSize(const char* window, const QSize& defaultSize)
+bool readConfigWindowSize(const char* window, QSize& result)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1(window));
 	QWidget* desktop = KApplication::desktop();
-	return QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), defaultSize.width()),
-	             config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), defaultSize.height()));
+	QSize s = QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), 0),
+	                config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), 0));
+	if (s.isEmpty())
+		return false;
+	result = s;
+	return true;
 }
 
 /******************************************************************************

@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #ifndef EDITDLG_H
@@ -195,8 +185,6 @@ class EditAlarmDlg : public KDialogBase
 		DateTime          mDeferDateTime;
 		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
 		QStringList       mEmailAttachments;   // list of email attachment file names
-		QSize             mBasicSize;          // size without deferred time widget
-		QSize             mInitialSize;        // initial size of dialog, calculated in initialise()
 		int               mDeferGroupHeight;   // height added by deferred time widget
 		bool              mTemplate;           // editing an alarm template
 		bool              mDesiredReadOnly;    // the specified read-only status of the dialogue
