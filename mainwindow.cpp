@@ -220,7 +220,9 @@ void KAlarmMainWindow::initActions()
 
 	KMenuBar* menu = menuBar();
 	KPopupMenu* submenu = new KPopupMenu(this, "file");
+#if KDE_VERSION >= 290
 	actBirthday->plug(submenu);
+#endif
 	menu->insertItem(i18n("&File"), submenu);
 	actionQuit->plug(submenu);
 
@@ -550,7 +552,6 @@ void KAlarmMainWindow::slotShowExpired()
 */
 void KAlarmMainWindow::slotBirthdays()
 {
-#if KDE_VERSION >= 290
 	BirthdayDlg* dlg = new BirthdayDlg(this);
 	if (dlg->exec() == QDialog::Accepted)
 	{
@@ -564,7 +565,6 @@ void KAlarmMainWindow::slotBirthdays()
 		}
 	}
 	delete dlg;
-#endif
 }
 
 /******************************************************************************
