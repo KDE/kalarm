@@ -247,7 +247,7 @@ kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 			bool alarmExists = (messageList.find(text) != messageList.end());
 			// Check if the birthday is already in the selection list
 			bool inSelectionList = false;
-			AddresseeItem* item;
+			AddresseeItem* item = 0;
 			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
 			{
 				item = dynamic_cast<AddresseeItem*>(qitem);
