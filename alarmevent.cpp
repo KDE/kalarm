@@ -1385,7 +1385,7 @@ KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime,
 QString KAlarmEvent::recurrenceText(bool brief) const
 {
 	if (mRepeatAtLogin)
-		return brief ? i18n("At Login", "Login") : i18n("At login");
+		return brief ? i18n("Brief form of 'At Login'", "Login") : i18n("At login");
 	if (mRecurrence)
 	{
 		int frequency = mRecurrence->frequency();
@@ -1420,7 +1420,7 @@ QString KAlarmEvent::recurrenceText(bool brief) const
 				break;
 		}
 	}
-	return QString::null;
+	return brief ? QString::null : i18n("None");
 }
 
 /******************************************************************************

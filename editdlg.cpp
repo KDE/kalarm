@@ -934,8 +934,7 @@ void EditAlarmDlg::slotRecurFrequencyChange()
 {
 	KAlarmEvent event;
 	mRecurrenceEdit->updateEvent(event);
-	QString text = event.recurrenceText();
-	mRecurrenceText->setText(text.isNull() ? i18n("None") : text);
+	mRecurrenceText->setText(event.recurrenceText());
 }
 
 /******************************************************************************
