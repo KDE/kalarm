@@ -86,9 +86,13 @@ class PrefsTabBase : public QWidget
 		virtual void restore() = 0;
 		virtual void apply(bool syncToDisc) = 0;
 		virtual void setDefaults() = 0;
+		static int   indentWidth()    { return mIndentWidth; }
 
 	protected:
 		QVBox*       mPage;
+
+	private:
+		static int   mIndentWidth;       // indent width for checkboxes etc.
 };
 
 
@@ -235,7 +239,6 @@ class ViewPrefTab : public PrefsTabBase
 		QCheckBox*     mModalMessages;
 		QCheckBox*     mShowExpiredAlarms;
 		SpinBox*       mDaemonTrayCheckInterval;
-		bool           mIgnoreToggle;    // prevent checkbox toggle processing
 };
 
 

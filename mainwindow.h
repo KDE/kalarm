@@ -59,11 +59,11 @@ class KAlarmMainWindow : public MainWindowBase
 		static int               count()            { return mWindowList.count(); }
 
 		static QString i18n_a_ShowAlarmTimes();     // text of 'Show Alarm Times' checkbox, with 'A' shortcut
-		static QString i18n_t_ShowAlarmTimes();     // text of 'Show alarm time' checkbox, with 'T' shortcut
-		static QString i18n_m_ShowAlarmTimes();     // text of 'Show alarm time' checkbox, with 'M' shortcut
+		static QString i18n_t_ShowAlarmTime();      // text of 'Show alarm time' checkbox, with 'T' shortcut
+		static QString i18n_m_ShowAlarmTime();      // text of 'Show alarm time' checkbox, with 'M' shortcut
 		static QString i18n_o_ShowTimeToAlarms();   // text of 'Show Time to Alarms' checkbox, with 'O' shortcut
-		static QString i18n_n_ShowTimeToAlarms();   // text of 'Show time until alarm' checkbox, with 'N' shortcut
-		static QString i18n_l_ShowTimeToAlarms();   // text of 'Show time until alarm' checkbox, with 'L' shortcut
+		static QString i18n_n_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'N' shortcut
+		static QString i18n_l_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'L' shortcut
 		static QString i18n_e_ShowExpiredAlarms();  // text of 'Show Expired Alarms' checkbox, with 'E' shortcut
 		static QString i18n_s_ShowExpiredAlarms();  // text of 'Show expired alarms' checkbox, with 'S' shortcut
 
