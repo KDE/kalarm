@@ -272,55 +272,51 @@ int AlarmCalendar::kalarmVersion() const
 		return kAlarmVersion;
 	if (calendar)
 	{
-		CalFormat* calFormat = calendar->calFormat();
-		if (calFormat)
+		const QString& prodid = calendar->loadedProductId();
+		int i = prodid.find(theApp()->aboutData()->programName(), 0, false);
+		if (i >= 0)
 		{
-			const QString& prodid = calFormat->loadedProductId();
-			int i = prodid.find(theApp()->aboutData()->programName(), 0, false);
-			if (i >= 0)
+			QString ver = prodid.mid(i + theApp()->aboutData()->programName().length()).stripWhiteSpace();
+			i = ver.find('/');
+			int j = ver.find(' ');
+			if (j >= 0  &&  j < i)
+				i = j;
+			if (i > 0)
 			{
-				QString ver = prodid.mid(i + theApp()->aboutData()->programName().length()).stripWhiteSpace();
-				i = ver.find('/');
-				int j = ver.find(' ');
-				if (j >= 0  &&  j < i)
-					i = j;
-				if (i > 0)
+				ver = ver.left(i);
+				// ver now contains the KAlarm version string
+				if ((i = ver.find('.')) > 0)
 				{
-					ver = ver.left(i);
-					// ver now contains the KAlarm version string
-					if ((i = ver.find('.')) > 0)
+					bool ok;
+					int version = ver.left(i).toInt(&ok) * 10000;   // major version
+					if (ok)
 					{
-						bool ok;
-						int version = ver.left(i).toInt(&ok) * 10000;   // major version
-						if (ok)
+						ver = ver.mid(i + 1);
+						if ((i = ver.find('.')) > 0)
 						{
-							ver = ver.mid(i + 1);
-							if ((i = ver.find('.')) > 0)
+							int v = ver.left(i).toInt(&ok);   // minor version
+							if (ok)
 							{
-								int v = ver.left(i).toInt(&ok);   // minor version
-								if (ok)
-								{
-									version += (v < 9 ? v : 9) * 100;
-									ver = ver.mid(i + 1);
-									if (ver.at(0).isDigit())
-									{
-										// Allow other characters to follow last digit
-										v = ver.toInt();   // issue number
-										kAlarmVersion = version + (v < 9 ? v : 9);
-										return kAlarmVersion;
-									}
-								}
-							}
-							else
-							{
-								// There is no issue number
+								version += (v < 9 ? v : 9) * 100;
+								ver = ver.mid(i + 1);
 								if (ver.at(0).isDigit())
 								{
 									// Allow other characters to follow last digit
-									int v = ver.toInt();   // minor number
-									kAlarmVersion = version + (v < 9 ? v : 9) * 100;
+									v = ver.toInt();   // issue number
+									kAlarmVersion = version + (v < 9 ? v : 9);
 									return kAlarmVersion;
 								}
+							}
+						}
+						else
+						{
+							// There is no issue number
+							if (ver.at(0).isDigit())
+							{
+								// Allow other characters to follow last digit
+								int v = ver.toInt();   // minor number
+								kAlarmVersion = version + (v < 9 ? v : 9) * 100;
+								return kAlarmVersion;
 							}
 						}
 					}

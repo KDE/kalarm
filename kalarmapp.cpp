@@ -42,6 +42,8 @@
 
 #include <kalarmd/clientinfo.h>
 
+#include <libkcal/calformat.h>
+
 #include "alarmcalendar.h"
 #include "mainwindow.h"
 #include "messagewin.h"
