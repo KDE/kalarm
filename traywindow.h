@@ -36,6 +36,7 @@ class TrayWindow : public KSystemTray
 		~TrayWindow();
 		void              removeWindow(KAlarmMainWindow*);
 		KAlarmMainWindow* assocMainWindow() const  { return mAssocMainWindow; }
+		void              setAssocMainWindow(KAlarmMainWindow* win)   { mAssocMainWindow = win; }
 
 	public slots:
 		void              slotQuit();

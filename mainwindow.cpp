@@ -74,10 +74,14 @@ KAlarmMainWindow::KAlarmMainWindow()
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	windowList.append(this);
 
-	// If it's the first main window and it's run-in-system-tray mode,
-	// create the system tray icon provided that the DCOP handler is ready.
-	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler()  &&  theApp()->runInSystemTray())
-		theApp()->displayTrayIcon(true, this);
+	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler())
+	{
+		// It's the first main window, and the DCOP handler is ready
+		if (theApp()->runInSystemTray())
+			theApp()->displayTrayIcon(true, this);     // create system tray icon for run-in-system-tray mode
+		else if (theApp()->trayWindow())
+			theApp()->trayWindow()->setAssocMainWindow(this);    // associate this window with the system tray icon
+	}
 }
 
 KAlarmMainWindow::~KAlarmMainWindow()
