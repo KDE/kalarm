@@ -37,6 +37,7 @@
 #include <kapplication.h>
 
 #include "fontcolour.h"
+#include "datetime.h"
 #include "prefsettings.h"
 #include "prefs.moc"
 
@@ -155,16 +156,27 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	      i18n("Check to display the system tray icon whenever you start KDE."));
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 
-	grid = new QGridLayout(page, 1, 2);
-	topLayout->addLayout(grid);
+	QBoxLayout* layout = new QHBoxLayout(topLayout);
 	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
 	lbl->setFixedSize(lbl->sizeHint());
-	grid->addWidget(lbl, 0, 0, AlignLeft);
+	layout->addWidget(lbl);
+	layout->addStretch();
 	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, page, "daemonCheck");
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
-	grid->addWidget(mDaemonTrayCheckInterval, 0, 1, AlignRight);
+	layout->addWidget(mDaemonTrayCheckInterval);
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
+
+	layout = new QHBoxLayout(topLayout);
+	lbl = new QLabel(i18n("Start of day for date-only alarms"), page);
+	lbl->setFixedSize(lbl->sizeHint());
+	layout->addWidget(lbl);
+	layout->addStretch();
+	mStartOfDay = new TimeSpinBox(page);
+	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
+	layout->addWidget(mStartOfDay);
+	QWhatsThis::add(mStartOfDay,
+	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
 
 	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
@@ -181,6 +193,7 @@ void MiscPrefs::restore()
 	mAutostartTrayIcon1->setChecked(mSettings->mAutostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(mSettings->mAutostartTrayIcon);
 	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
+	mStartOfDay->setValue(mSettings->mStartOfDay.hour()*60 + mSettings->mStartOfDay.minute());
 }
 
 void MiscPrefs::apply(bool syncToDisc)
@@ -190,6 +203,8 @@ void MiscPrefs::apply(bool syncToDisc)
 	mSettings->mDisableAlarmsIfStopped  = mDisableAlarmsIfStopped->isChecked();
 	mSettings->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
 	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
+	int sod = mStartOfDay->value();
+	mSettings->mStartOfDay.setHMS(sod/60, sod%60, 0);
 	PrefsBase::apply(syncToDisc);
 }
 
@@ -202,6 +217,7 @@ void MiscPrefs::setDefaults()
 	mAutostartTrayIcon1->setChecked(Settings::default_autostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(Settings::default_autostartTrayIcon);
 	mDaemonTrayCheckInterval->setValue(Settings::default_daemonTrayCheckInterval);
+	mStartOfDay->setValue(Settings::default_startOfDay.hour()*60 + Settings::default_startOfDay.minute());
 }
 
 void MiscPrefs::slotRunModeToggled(bool)
