@@ -188,6 +188,7 @@ class EditAlarmDlg : public KDialogBase
 		EmailAddressList  mEmailAddresses;     // list of addresses to send email to
 		QStringList       mEmailAttachments;   // list of email attachment file names
 		int               mDeferGroupHeight;   // height added by deferred time widget
+		int               mDesktop;            // desktop to display the dialog in
 		bool              mTemplate;           // editing an alarm template
 		bool              mExpiredRecurrence;  // initially a recurrence which has expired
 		mutable bool      mChanged;            // controls other than deferral have changed since dialog was displayed

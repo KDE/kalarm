@@ -47,6 +47,7 @@
 #include <kmessagebox.h>
 #include <kurldrag.h>
 #include <kurlcompletion.h>
+#include <kwin.h>
 #include <kwinmodule.h>
 #include <kstandarddirs.h>
 #include <kstdguiitem.h>
@@ -310,6 +311,12 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	// Save the initial state of all controls so that we can later tell if they have changed
 	saveState(event);
+
+	// Note the current desktop so that the dialog can be shown on it.
+	// If a main window is visible, the dialog will by KDE default always appear on its
+	// desktop. If the user invokes the dialog via the system tray on a different desktop,
+	// that can cause confusion.
+	mDesktop = KWin::currentDesktop();
 }
 
 EditAlarmDlg::~EditAlarmDlg()
@@ -1045,6 +1052,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			s = minimumSize();
 		resize(s);
 	}
+	KWin::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
 	KDialog::showEvent(se);
 }
 
