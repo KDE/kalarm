@@ -21,8 +21,7 @@ METASOURCES = AUTO
 
 SUBDIRS = pixmaps 
 
-alarmguiiface.h: $(top_srcdir)/kalarmd/alarmguiiface.h
-	cp $(top_srcdir)/kalarmd/alarmguiiface.h .
+alarmguiiface_DIR = $(top_srcdir)/kalarmd
 
 autostart_DATA = kalarm.tray.desktop
 autostartdir = $(prefix)/share/autostart
