@@ -51,7 +51,6 @@ class AlarmListWhatsThis : public QWhatsThis
 };
 
 
-#warning "Does AlarmListViewItem need to be available to other classes?"
 class AlarmListViewItem : public QListViewItem
 {
 	public:
@@ -97,7 +96,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	setShowSortIndicator(true);
 	lastColumnHeaderWidth_ = columnWidth(MESSAGE_COLUMN);
 	setColumnAlignment(REPEAT_COLUMN, Qt::AlignHCenter);
-	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
+	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);
 
 	// Find the height of the list items, and set the width of the colour column accordingly
 	setColumnWidth(COLOUR_COLUMN, itemHeight() * 3/4);
@@ -156,8 +155,6 @@ AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSiz
 	if (!mShowExpired  &&  event.expired())
 		return 0;
 	AlarmListViewItem* item = new AlarmListViewItem(this, event);
-	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);   // resize the repeat column
-	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
 	if (setSize)
 		resizeLastColumn();
 	return item;
