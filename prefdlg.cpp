@@ -1180,7 +1180,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(MainWindow::i18n_s_ShowExpiredAlarms(), mPage, "showExpired");
+	mShowExpiredAlarms = new QCheckBox(MainWindow::i18n_e_ShowExpiredAlarms(), mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
 	QWhatsThis::add(mShowExpiredAlarms,
 	      i18n("Specify whether to show expired alarms in the alarm list"));

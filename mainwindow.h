@@ -64,8 +64,10 @@ class MainWindow : public MainWindowBase
 		static QString i18n_o_ShowTimeToAlarms();   // text of 'Show Time to Alarms' checkbox, with 'O' shortcut
 		static QString i18n_n_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'N' shortcut
 		static QString i18n_l_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'L' shortcut
+		static QString i18n_ShowExpiredAlarms();    // plain text of 'Show Expired Alarms' action
 		static QString i18n_e_ShowExpiredAlarms();  // text of 'Show Expired Alarms' checkbox, with 'E' shortcut
-		static QString i18n_s_ShowExpiredAlarms();  // text of 'Show expired alarms' checkbox, with 'S' shortcut
+		static QString i18n_HideExpiredAlarms();    // plain text of 'Hide Expired Alarms' action
+		static QString i18n_e_HideExpiredAlarms();  // text of 'Hide Expired Alarms' action, with 'E' shortcut
 
 	public slots:
 		virtual void   show();

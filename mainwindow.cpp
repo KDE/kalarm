@@ -81,8 +81,10 @@ QString MainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me")
 QString MainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
 QString MainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
 QString MainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
+QString MainWindow::i18n_ShowExpiredAlarms()   { return i18n("Show Expired Alarms"); }
 QString MainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
-QString MainWindow::i18n_s_ShowExpiredAlarms() { return i18n("&Show expired alarms"); }
+QString MainWindow::i18n_HideExpiredAlarms()   { return i18n("Hide Expired Alarms"); }
+QString MainWindow::i18n_e_HideExpiredAlarms() { return i18n("Hide &Expired Alarms"); }
 
 
 /******************************************************************************
@@ -296,7 +298,7 @@ void MainWindow::initActions()
 	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
 	mActionShowTimeTo->setCheckedState(i18n("Hide Time t&o Alarms"));
 	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), "history", Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
-	mActionShowExpired->setCheckedState(i18n("Hide &Expired Alarms"));
+	mActionShowExpired->setCheckedState(i18n_e_HideExpiredAlarms());
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
@@ -688,6 +690,7 @@ void MainWindow::slotShowExpired()
 {
 	mShowExpired = !mShowExpired;
 	mActionShowExpired->setChecked(mShowExpired);
+	mActionShowExpired->setToolTip(mShowExpired ? i18n_HideExpiredAlarms() : i18n_ShowExpiredAlarms());
 	mListView->showExpired(mShowExpired);
 	mListView->refresh();
 }
