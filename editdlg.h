@@ -38,6 +38,8 @@ class QButtonGroup;
 class QGroupBox;
 class QMultiLineEdit;
 class QSpinBox;
+class QHBox;
+class ButtonGroup;
 class FontColourChooser;
 class ColourCombo;
 class TimeSpinBox;
@@ -56,8 +58,8 @@ class EditAlarmDlg : public KDialogBase
 		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L,
                              const KAlarmEvent* = 0L);
 		virtual ~EditAlarmDlg();
-
-		void              getEvent(KAlarmEvent&);
+		void         getEvent(KAlarmEvent&);
+		QDateTime    getDateTime(bool* anyTime = 0L);
 
 	protected:
 		virtual void showEvent(QShowEvent*);
@@ -67,10 +69,10 @@ class EditAlarmDlg : public KDialogBase
 		virtual void slotCancel();
 		virtual void slotTry();
 		void         slotRepeatTypeChange(int repeatType);
-		void         slotMessageTypeClicked(int id);
-		void         slotMessageTextChanged();
-		void         slotRecurrenceResized(QSize old, QSize New);
+		void         slotAlarmTypeClicked(int id);
+		void         slotRepeatClicked(int id);
 		void         slotEditDeferral();
+		void         slotBrowseFile();
 		void         slotSoundToggled(bool on);
 		void         slotPickSound();
 
@@ -78,44 +80,59 @@ class EditAlarmDlg : public KDialogBase
 		KAlarmAlarm::Type getAlarmType() const;
 		int               getAlarmFlags() const;
 		bool              checkText(QString& result);
-		QString           getMessageText();
-		void              enableMessageControls(bool);
 		void              setSoundPicker();
 
-		QButtonGroup*    actionGroup;
+		void              initDisplayAlarms(QWidget* parent);
+		void              initCommand(QWidget* parent);
+
+		QFrame*          mainPage;
+		QFrame*          recurPage;
+		int              recurPageIndex;
+
 		QRadioButton*    messageRadio;
 		QRadioButton*    commandRadio;
 		QRadioButton*    fileRadio;
-#ifdef KALARM_EMAIL
-		QRadioButton*    emailRadio;
-#endif
-		QPushButton*     browseButton;
-		QMultiLineEdit*  messageEdit;     // alarm message edit box
-		QGroupBox*       deferGroup;
-		QLabel*          deferTimeLabel;
-		AlarmTimeWidget* timeWidget;
-		RecurrenceEdit*  recurrenceEdit;
-		QCheckBox*       lateCancel;
+		QWidgetStack*    alarmTypeStack;
+
+		// Display alarm options widgets
+		QFrame*          displayAlarmsFrame;
+		QHBox*           fileBox;
+		QHBox*           filePadding;
 		QCheckBox*       sound;
 		QPushButton*     soundPicker;
 		QCheckBox*       confirmAck;
-#ifdef KALARM_EMAIL
-		QCheckBox*       emailBcc;
-#endif
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else
 		ColourCombo*     bgColourChoose;
 #endif
-		QString          alarmMessage;
+		// Text message alarm widgets
+		QMultiLineEdit*  textMessageEdit;     // text message edit box
+		// Text file alarm widgets
+		QLineEdit*       fileMessageEdit;     // text file edit box
+		QPushButton*     fileBrowseButton;
+		QString          fileDefaultDir;      // default directory for browse button
+		// Command alarm widgets
+		QFrame*          commandFrame;
+		QLineEdit*       commandMessageEdit;  // command edit box
+
+		QGroupBox*       deferGroup;
+		QLabel*          deferTimeLabel;
+		AlarmTimeWidget* timeWidget;
+		QCheckBox*       lateCancel;
+
+		QRadioButton*    noRepeatRadio;
+		QRadioButton*    repeatAtLoginRadio;
+		QRadioButton*    recurRadio;
+		RecurrenceEdit*  recurrenceEdit;
+
+		QString          alarmMessage;     // message text/file name/command/email message
 		QDateTime        alarmDateTime;
 		QDateTime        deferDateTime;
 		QString          soundFile;        // sound file to play when alarm is triggered, or null for beep
-		QString          multiLineText;    // message text before single-line mode was selected
-		QSize            basicSize;        // size without recurrence edit or deferred time widgets
+		QSize            basicSize;        // size without deferred time widget
 		int              deferGroupHeight; // height added by deferred time widget
 		bool             alarmAnyTime;     // alarmDateTime is only a date, not a time
-		bool             singleLineOnly;   // no multi-line text input allowed
 		bool             timeDialog;       // the dialog shows date/time fields only
 		bool             shown;            // the dialog has already been displayed
 };
