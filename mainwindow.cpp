@@ -520,8 +520,7 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background colour of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text or URL of text file to display");
 			case AlarmListView::REPEAT_COLUMN:
-				return i18n("Number of scheduled repetitions after the "
-				            "next scheduled display of the alarm.\n"
+				return i18n("Number of scheduled repetitions after the next scheduled display of the alarm.\n"
 				            "'%1' indicates that the alarm is repeated at every login.")
 				           .arg(repeatAtLoginIndicator);
 		}

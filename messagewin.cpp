@@ -123,8 +123,7 @@ QSize MessageWin::initView()
 		label->setFixedSize(label->sizeHint());
 		topLayout->addWidget(label);
 		QWhatsThis::add(label,
-		      i18n("The scheduled date/time for the message "
-		           "(as opposed to the actual time of display)."));
+		      i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
 	}
 
 	if (file)
