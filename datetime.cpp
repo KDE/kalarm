@@ -183,7 +183,8 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 */
 QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool showErrorMessage) const
 {
-	QDateTime now = QDateTime::currentDateTime();
+	QTime nowt = QTime::currentTime();
+	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
 	if (mAtTimeRadio->isOn())
 	{
 		dateTime.setDate(mDateEdit->date());
@@ -201,8 +202,7 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 		else
 		{
 			dateTime.setTime(mTimeEdit->time());
-			int seconds = now.time().second();
-			if (dateTime <= now.addSecs(1 - seconds))
+			if (dateTime <= now.addSecs(1))
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
@@ -213,7 +213,6 @@ QWidget* AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime, bool s
 	else
 	{
 		dateTime = now.addSecs(mDelayTimeEdit->value() * 60);
-		dateTime = dateTime.addSecs(-dateTime.time().second());
 		anyTime = false;
 	}
 	return 0;
