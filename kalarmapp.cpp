@@ -924,12 +924,6 @@ void KAlarmApp::startDaemon()
 		if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
 			kdDebug(5950) << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
 	}
-	if (mDisableAlarmsIfStopped)
-	{
-		// The daemon will ignore any alarms which have already passed
-		// unless we tell it to reset.
-		resetDaemon();
-	}
 
 	mDaemonRegistered = true;
 	kdDebug(5950) << "KAlarmApp::startDaemon(): started daemon" << endl;
