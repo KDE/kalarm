@@ -671,22 +671,38 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (alarm.lateCancel())
 				{
 					// Alarm is due, and it is to be cancelled if late.
+					bool late = false;
+					bool cancel = false;
 					if (event.anyTime())
 					{
 						// The alarm has no time, so cancel it if its date is past
 						QDateTime limit(alarm.date().addDays(1), mSettings->startOfDay());
 						if (now >= limit)
 						{
-							// Find the next occurrence of the alarm
+							// It's too late to display the scheduled occurrence.
+							// Find the last previous occurrence of the alarm.
 							QDateTime next;
-							if (event.nextOccurrence(limit, next) == KAlarmEvent::NO_OCCURRENCE)
+							KAlarmEvent::OccurType type = event.previousOccurrence(now, next);
+							switch (type)
 							{
-								handleAlarm(event, alarm, ALARM_CANCEL, false);      // all recurrences have expired
-								updateCalAndDisplay = true;
-								continue;
-							}
-							else
-							{
+								case KAlarmEvent::FIRST_OCCURRENCE:
+								case KAlarmEvent::RECURRENCE_DATE:
+								case KAlarmEvent::RECURRENCE_DATE_TIME:
+								case KAlarmEvent::LAST_OCCURRENCE:
+									limit.setDate(next.date().addDays(1));
+									limit.setTime(mSettings->startOfDay());
+									if (now >= limit)
+									{
+										if (type == KAlarmEvent::LAST_OCCURRENCE)
+											cancel = true;
+										else
+											late = true;
+									}
+									break;
+								case KAlarmEvent::NO_OCCURRENCE:
+								default:
+									late = true;
+									break;
 							}
 						}
 					}
@@ -697,25 +713,49 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						if (secs > maxlate)
 						{
 							// It's over the maximum interval late.
-							// Find the latest repetition time before the current time
-							if (alarm.lastDateTime().secsTo(now) > maxlate)
+							// Find the last previous occurrence of the alarm.
+							QDateTime next;
+							KAlarmEvent::OccurType type = event.previousOccurrence(now, next);
+							switch (type)
 							{
-								handleAlarm(event, alarm, ALARM_CANCEL, false);      // all repetitions have expired
-								updateCalAndDisplay = true;
-								continue;
-							}
-							if (alarm.repeatMinutes()  &&  secs % (alarm.repeatMinutes() * 60) > maxlate)
-							{
-								handleAlarm(event, alarm, ALARM_RESCHEDULE, false);  // the latest repetition was too long ago
-								updateCalAndDisplay = true;
-								continue;
+								case KAlarmEvent::FIRST_OCCURRENCE:
+								case KAlarmEvent::RECURRENCE_DATE:
+								case KAlarmEvent::RECURRENCE_DATE_TIME:
+								case KAlarmEvent::LAST_OCCURRENCE:
+									if (next.secsTo(now) > maxlate)
+									{
+										if (type == KAlarmEvent::LAST_OCCURRENCE)
+											cancel = true;
+										else
+											late = true;
+									}
+									break;
+								case KAlarmEvent::NO_OCCURRENCE:
+								default:
+									late = true;
+									break;
 							}
 						}
+					}
+
+					if (cancel)
+					{
+						// All repetitions are finished, so cancel the event
+						handleAlarm(event, alarm, ALARM_CANCEL, false);
+						updateCalAndDisplay = true;
+						continue;
+					}
+					if (late)
+					{
+						// The latest repetition was too long ago, so schedule the next one
+						handleAlarm(event, alarm, ALARM_RESCHEDULE, false);
+						updateCalAndDisplay = true;
+						continue;
 					}
 				}
 				if (alfunction == ALARM_TRIGGER)
 				{
-					displayAlarm = alarm;     // note the alarm to be displayed
+					displayAlarm = alarm;             // note the alarm to be displayed
 					alfunction = ALARM_RESCHEDULE;    // only trigger one alarm for the event
 				}
 			}
@@ -781,6 +821,7 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 						break;
 					case KAlarmEvent::RECURRENCE_DATE:
 					case KAlarmEvent::RECURRENCE_DATE_TIME:
+					case KAlarmEvent::LAST_OCCURRENCE:
 						// The event is due by now and repetitions still remain, so rewrite the event
 						if (updateCalAndDisplay)
 							updateEvent(event, 0L);   // update the window lists and calendar file
