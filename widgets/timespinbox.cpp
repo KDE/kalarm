@@ -65,6 +65,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent, const char* name)
 	mValidator->m12Hour = m12Hour;
 	setValidator(mValidator);
 	setWrapping(true);
+	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
 	connect(this, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
@@ -82,6 +83,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 {
 	mValidator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
 	setValidator(mValidator);
+	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
 }
