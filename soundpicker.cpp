@@ -47,10 +47,12 @@
 #include "soundpicker.moc"
 
 
-const QString SoundPicker::i18n_Sound    = i18n("An audio sound", "Sound");
-const QString SoundPicker::i18n_s_Sound  = i18n("An audio sound", "&Sound");
-const QString SoundPicker::i18n_Repeat   = i18n("Repeat");
-const QString SoundPicker::i18n_p_Repeat = i18n("Re&peat");
+const QString SoundPicker::i18n_Sound       = i18n("An audio sound", "Sound");
+const QString SoundPicker::i18n_s_Sound     = i18n("An audio sound", "&Sound");
+const QString SoundPicker::i18n_SetVolume   = i18n("Set volume");
+const QString SoundPicker::i18n_v_SetVolume = i18n("Set &volume");
+const QString SoundPicker::i18n_Repeat      = i18n("Repeat");
+const QString SoundPicker::i18n_p_Repeat    = i18n("Re&peat");
 
 
 SoundPicker::SoundPicker(QWidget* parent, const char* name)
@@ -85,10 +87,29 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	QWhatsThis::add(mRepeatCheckbox,
 	      i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	soundLayout->addWidget(mRepeatCheckbox);
-	soundLayout->addStretch();
 #if KDE_VERSION < 290
 	mRepeatCheckbox->hide();
 #endif
+
+#ifdef SOUNDPICKER_VOLUME
+	// Set volume checkbox
+	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume, this);
+	mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
+	connect(mVolumeCheckbox, SIGNAL(toggled(bool)), SLOT(slotVolumeToggled(bool)));
+	QWhatsThis::add(mVolumeCheckbox,
+	      i18n("Select to choose the volume for playing the sound file."));
+	soundLayout->addWidget(mVolumeCheckbox);
+
+	// Volume slider
+	mVolumeSlider = new Slider(0, 100, 10, 0, Qt::Horizontal, this);
+	mVolumeSlider->setFixedSize(mVolumeSlider->sizeHint());
+	QWhatsThis::add(mVolumeSlider,
+	      i18n("Choose the volume for playing the sound file."));
+	mVolumeCheckbox->setFocusWidget(mVolumeSlider);
+	soundLayout->addWidget(mVolumeSlider);
+#endif
+	soundLayout->addStretch();
+
 	// Initialise the file picker button state and tooltip
 	slotSoundToggled(false);
 }

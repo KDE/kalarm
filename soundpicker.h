@@ -58,6 +58,8 @@ class SoundPicker : public QFrame
 
 		static const QString i18n_Sound;     // plain text of Sound checkbox
 		static const QString i18n_s_Sound;   // text of Sound checkbox, with 'S' shortcut
+		static const QString i18n_SetVolume;   // plain text of Set volume checkbox
+		static const QString i18n_v_SetVolume; // text of Set volume checkbox, with 'V' shortcut
 		static const QString i18n_Repeat;    // plain text of Repeat checkbox
 		static const QString i18n_p_Repeat;  // text of Repeat checkbox, with 'P' shortcut
 
