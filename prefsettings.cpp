@@ -26,7 +26,7 @@
 
 // Default config file settings
 const bool   Settings::default_runInSystemTray         = true;
-const bool   Settings::default_disableAlarmsIfStopped  = false;
+const bool   Settings::default_disableAlarmsIfStopped  = true;
 const bool   Settings::default_autostartTrayIcon       = true;
 const int    Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
 const QColor Settings::default_defaultBgColour(red);
