@@ -242,6 +242,7 @@ class KAlarmEvent
 		void              dumpDebug() const;
 #endif
 		static bool       adjustStartOfDay(const QPtrList<KCal::Event>&);
+		static void       convertKCalEvents();
 
 		static const int  MAIN_ALARM_ID;            // alarm ID for main alarm
 		static const int  AUDIO_ALARM_ID;           // alarm ID for audio alarm

@@ -164,6 +164,8 @@ int AlarmCalendar::load()
 	if (!localFile.isEmpty())
 		KIO::NetAccess::removeTempFile(localFile);
 	localFile = tmpFile;
+
+	KAlarmEvent::convertKCalEvents();    // convert events to current KAlarm format for when calendar is saved
 	return 1;
 }
 
@@ -244,11 +246,11 @@ void AlarmCalendar::addEvent(const KAlarmEvent& event)
 * Update the specified event in the calendar with its new contents.
 * The event retains the same ID.
 */
-void AlarmCalendar::updateEvent(const KAlarmEvent& event)
+void AlarmCalendar::updateEvent(const KAlarmEvent& evnt)
 {
-	Event* kcalEvent = getEvent(event.id());
+	Event* kcalEvent = event(evnt.id());
 	if (kcalEvent)
-		event.updateEvent(*kcalEvent);
+		evnt.updateEvent(*kcalEvent);
 }
 
 /******************************************************************************
@@ -256,14 +258,14 @@ void AlarmCalendar::updateEvent(const KAlarmEvent& event)
 */
 void AlarmCalendar::deleteEvent(const QString& eventID)
 {
-	Event* kcalEvent = getEvent(eventID);
+	Event* kcalEvent = event(eventID);
 	if (kcalEvent)
 		calendar->deleteEvent(kcalEvent);
 }
 
 /******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
-* Reply = e.g. 057 for 0.5.7, or 0 if unknown.
+* Reply = e.g. 000507 for 0.5.7, or 0 if unknown.
 */
 int AlarmCalendar::kalarmVersion() const
 {
@@ -290,7 +292,7 @@ int AlarmCalendar::kalarmVersion() const
 					if ((i = ver.find('.')) > 0)
 					{
 						bool ok;
-						int version = ver.left(i).toInt(&ok) * 100;   // major version
+						int version = ver.left(i).toInt(&ok) * 10000;   // major version
 						if (ok)
 						{
 							ver = ver.mid(i + 1);
@@ -299,7 +301,7 @@ int AlarmCalendar::kalarmVersion() const
 								int v = ver.left(i).toInt(&ok);   // minor version
 								if (ok)
 								{
-									version += (v < 9 ? v : 9) * 10;
+									version += (v < 9 ? v : 9) * 100;
 									ver = ver.mid(i + 1);
 									if (ver.at(0).isDigit())
 									{
@@ -317,7 +319,7 @@ int AlarmCalendar::kalarmVersion() const
 								{
 									// Allow other characters to follow last digit
 									int v = ver.toInt();   // minor number
-									kAlarmVersion = version + (v < 9 ? v : 9) * 10;
+									kAlarmVersion = version + (v < 9 ? v : 9) * 100;
 									return kAlarmVersion;
 								}
 							}
