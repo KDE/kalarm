@@ -37,6 +37,7 @@
 
 class PushButton;
 class CheckBox;
+class Slider;
 
 
 class SoundPicker : public QFrame
@@ -44,33 +45,38 @@ class SoundPicker : public QFrame
 		Q_OBJECT
 	public:
 		SoundPicker(QWidget* parent, const char* name = 0);
-		void           set(bool beep, const QString& filename, bool repeat);
+		void           set(bool beep, const QString& filename, float volume, bool repeat);
 		void           setChecked(bool);
 		void           setBeep(bool beep = true);
-		void           setFile(const QString&, bool repeat);
+		void           setFile(const QString& f, float volume, bool repeat)  { setFile(true, f, volume, repeat); }
 		void           setReadOnly(bool readOnly);
 		bool           beep() const;
-		QString        file() const;          // returns empty string if beep is selected
-		bool           repeat() const;        // returns false if beep is selected
+		QString        file() const;           // returns empty string if beep is selected
+		float          volume() const;         // returns < 0 if beep is selected or set-volume is not selected
+		bool           repeat() const;         // returns false if beep is selected
 		QString        fileSetting() const  { return mFile; }   // returns current file name regardless of beep setting
-		bool           repeatSetting() const; // returns current repeat status regardless of beep setting
+		bool           repeatSetting() const;  // returns current repeat status regardless of beep setting
 		static KURL    browseFile(const QString& initialFile = QString::null, const QString& initialDir = QString::null);
 
-		static QString i18n_Sound();     // plain text of Sound checkbox
-		static QString i18n_s_Sound();   // text of Sound checkbox, with 'S' shortcut
+		static QString i18n_Sound();       // plain text of Sound checkbox
+		static QString i18n_s_Sound();     // text of Sound checkbox, with 'S' shortcut
 		static QString i18n_SetVolume();   // plain text of Set volume checkbox
 		static QString i18n_v_SetVolume(); // text of Set volume checkbox, with 'V' shortcut
-		static QString i18n_Repeat();    // plain text of Repeat checkbox
-		static QString i18n_p_Repeat();  // text of Repeat checkbox, with 'P' shortcut
+		static QString i18n_Repeat();      // plain text of Repeat checkbox
+		static QString i18n_p_Repeat();    // text of Repeat checkbox, with 'P' shortcut
 
 	protected slots:
 		void           slotSoundToggled(bool on);
+		void           slotVolumeToggled(bool on);
 		void           slotPickFile();
 
 	private:
+		void           setFile(bool on, const QString&, float volume, bool repeat);
 		void           setFilePicker();
 
 		CheckBox*      mCheckbox;
+		CheckBox*      mVolumeCheckbox;
+		Slider*        mVolumeSlider;
 		CheckBox*      mRepeatCheckbox;
 		PushButton*    mFilePicker;
 		QString        mDefaultDir;

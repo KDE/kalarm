@@ -79,7 +79,7 @@ class MessageWin : public MainWindowBase
 	private:
 		QSize               initView();
 #ifndef WITHOUT_ARTS
-		void                initAudio();
+		void                initAudio(bool firstTime);
 #endif
 		void                playAudio();
 
@@ -103,6 +103,7 @@ class MessageWin : public MainWindowBase
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
+		float               mOldVolume;       // volume before volume was set for sound file
 		bool                mPlayedOnce;      // the sound file has been played at least once
 		bool                mPlayed;          // the PlayObject->play() has been called
 		// Miscellaneous

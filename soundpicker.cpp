@@ -44,6 +44,7 @@
 #include <arts/kplayobjectfactory.h>
 #endif
 
+#include "slider.h"
 #include "checkbox.h"
 #include "pushbutton.h"
 #include "soundpicker.moc"
@@ -91,11 +92,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	QWhatsThis::add(mRepeatCheckbox,
 	      i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	soundLayout->addWidget(mRepeatCheckbox);
-#ifdef WITHOUT_ARTS
-	mRepeatCheckbox->hide();
-#endif
 
-#ifdef SOUNDPICKER_VOLUME
 	// Set volume checkbox
 	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume(), this);
 	mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
@@ -111,8 +108,13 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	      i18n("Choose the volume for playing the sound file."));
 	mVolumeCheckbox->setFocusWidget(mVolumeSlider);
 	soundLayout->addWidget(mVolumeSlider);
-#endif
 	soundLayout->addStretch();
+
+#ifdef WITHOUT_ARTS
+	mRepeatCheckbox->hide();
+	mVolumeCheckbox->hide();
+	mVolumeSlider->hide();
+#endif
 
 	// Initialise the file picker button state and tooltip
 	slotSoundToggled(false);
@@ -125,7 +127,9 @@ void SoundPicker::setReadOnly(bool readOnly)
 {
 	mCheckbox->setReadOnly(readOnly);
 	mFilePicker->setReadOnly(readOnly);
+	mVolumeCheckbox->setReadOnly(readOnly);
 	mRepeatCheckbox->setReadOnly(readOnly);
+	mVolumeSlider->setReadOnly(readOnly);
 }
 
 /******************************************************************************
@@ -143,6 +147,15 @@ bool SoundPicker::beep() const
 QString SoundPicker::file() const
 {
 	return mCheckbox->isChecked() && mFilePicker->isOn() ? mFile : QString::null;
+}
+
+/******************************************************************************
+ * Return the specified volume (range 0 - 1).
+ * Returns < 0 if beep is currently selected, or if 'set volume' is not selected.
+ */
+float SoundPicker::volume() const
+{
+	return mVolumeSlider->isEnabled() ? (float)mVolumeSlider->value() / 100 : -1;
 }
 
 /******************************************************************************
@@ -166,13 +179,10 @@ bool SoundPicker::repeatSetting() const
 /******************************************************************************
  * Initialise the widget's state.
  */
-void SoundPicker::set(bool beep, const QString& f, bool repeat)
+void SoundPicker::set(bool beep, const QString& f, float volume, bool repeat)
 {
 	mCheckbox->setChecked(beep || !f.isEmpty());
-	mFile = f;
-	mRepeatCheckbox->setChecked(repeat);
-	mFilePicker->setOn(!beep  &&  !f.isEmpty());
-	setFilePicker();
+	setFile(!beep  &&  !f.isEmpty(), f, volume, repeat);
 }
 
 /******************************************************************************
@@ -193,15 +203,18 @@ void SoundPicker::setBeep(bool beep)
 }
 
 /******************************************************************************
- * Set the current sound file selection and repetition status.
+ * Set the current sound file selection, volume and repetition status.
  */
-void SoundPicker::setFile(const QString& f, bool repeat)
+void SoundPicker::setFile(bool on, const QString& f, float volume, bool repeat)
 {
 	mFile = f;
+	mVolumeCheckbox->setChecked(volume >= 0);
+	mVolumeSlider->setValue(volume >= 0 ? volume*100 : 100);
 	mRepeatCheckbox->setChecked(repeat);
-	mFilePicker->setOn(true);
+	mFilePicker->setOn(on);
 	setFilePicker();
 }
+
 /******************************************************************************
  * Called when the sound checkbox is toggled.
  */
@@ -209,6 +222,14 @@ void SoundPicker::slotSoundToggled(bool on)
 {
 	mFilePicker->setEnabled(on);
 	setFilePicker();
+}
+
+/******************************************************************************
+ * Called when the Set Volume checkbox is toggled.
+ */
+void SoundPicker::slotVolumeToggled(bool on)
+{
+	mVolumeSlider->setEnabled(on && mVolumeCheckbox->isEnabled());
 }
 
 /******************************************************************************
@@ -260,15 +281,17 @@ KURL SoundPicker::browseFile(const QString& initialFile, const QString& defaultD
  */
 void SoundPicker::setFilePicker()
 {
-	bool repeatEnable = false;
+	bool file = false;
 	QToolTip::remove(mFilePicker);
 	if (mFilePicker->isEnabled())
 	{
-		repeatEnable = mFilePicker->isOn();
+		file = mFilePicker->isOn();
 		if (mFilePicker->isOn())
 			QToolTip::add(mFilePicker, i18n("Play '%1'").arg(mFile));
 		else
 			QToolTip::add(mFilePicker, i18n("Beep"));
 	}
-	mRepeatCheckbox->setEnabled(repeatEnable);
+	mVolumeCheckbox->setEnabled(file);
+	mRepeatCheckbox->setEnabled(file);
+	mVolumeSlider->setEnabled(file && mVolumeCheckbox->isChecked());
 }

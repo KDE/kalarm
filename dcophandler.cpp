@@ -246,6 +246,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			}
 			QDataStream arg(data, IO_ReadOnly);
 			QString     text, audioFile, mailSubject;
+			float       audioVolume = -1;
 			EmailAddressList mailAddresses;
 			QStringList mailAttachments;
 			QDateTime   dateTime, endTime;
@@ -333,8 +334,8 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				KCal::ICalFormat format;
 				format.fromString(&recurrence, rule);
 			}
-			return theApp()->scheduleEvent(text, dateTime, bgColour, fgColour, font, flags, audioFile, mailAddresses,
-			                               mailSubject, mailAttachments, action, recurrence, reminderMinutes);
+			return theApp()->scheduleEvent(action, text, dateTime, flags, bgColour, fgColour, font, audioFile, audioVolume,
+			                               reminderMinutes, recurrence, mailAddresses, mailSubject, mailAttachments);
 		}
 	}
 	return false;

@@ -9,10 +9,10 @@ libwidgets_la_SOURCES = \
 	buttongroup.cpp checkbox.cpp colourcombo.cpp colourlist.cpp \
 	combobox.cpp dateedit.cpp \
 	pushbutton.cpp radiobutton.cpp timespinbox.cpp timeperiod.cpp \
-	spinbox.cpp spinbox2.cpp
+	slider.cpp spinbox.cpp spinbox2.cpp
 
 noinst_HEADERS = \
 	buttongroup.h checkbox.h colourcombo.h colourlist.h \
 	combobox.h dateedit.h \
 	pushbutton.h radiobutton.h timespinbox.h timeperiod.h \
-	spinbox.h spinbox2.h
+	slider.h spinbox.h spinbox2.h

@@ -88,6 +88,7 @@ class Preferences : public QObject
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
 		bool           defaultSound() const             { return mDefaultSound; }
 		const QString& defaultSoundFile() const         { return mDefaultSoundFile; }
+		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
 		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
 		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
@@ -138,6 +139,7 @@ class Preferences : public QObject
 		static const QColor      default_expiredColour;
 		static const int         default_expiredKeepDays;
 		static const QString     default_defaultSoundFile;
+		static const float       default_defaultSoundVolume;
 		static const bool        default_defaultSound;
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
@@ -194,6 +196,7 @@ class Preferences : public QObject
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog
 		QString             mDefaultSoundFile;
+		float               mDefaultSoundVolume;
 		bool                mDefaultSound;
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;

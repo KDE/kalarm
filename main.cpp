@@ -93,6 +93,10 @@ static KCmdLineOptions options[] =
 	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
 	{ "u", 0, 0 },
 	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
+#ifndef WITHOUT_ARTS
+	{ "v", 0, 0 },
+	{ "volume <percent>", I18N_NOOP("Volume to play audio file"), 0 },
+#endif
 	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
 	KCmdLineLastOption
 };

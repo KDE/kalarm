@@ -10,13 +10,13 @@ bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
 # that it builds with --enable-final !!!
 kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
-	daemon.cpp daemongui.cpp main.cpp kalarmapp.cpp \
+	soundpicker.cpp daemon.cpp daemongui.cpp main.cpp kalarmapp.cpp \
         mainwindowbase.cpp mainwindow.cpp messagewin.cpp \
 	preferences.cpp prefdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
-	soundpicker.cpp datetime.cpp reminder.cpp synchtimer.cpp \
+	datetime.cpp reminder.cpp synchtimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)

@@ -145,6 +145,7 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedul
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
+	  mOldVolume(-1),
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mRestoreHeight(0),
@@ -186,6 +187,7 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringL
 	  noDefer(true),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
+	  mOldVolume(-1),
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mRestoreHeight(0),
@@ -568,6 +570,7 @@ void MessageWin::saveProperties(KConfig* config)
 		}
 		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
+#warning "Save sound on/off, volume, sound file??"
 	}
 	else
 		config->writeEntry(QString::fromLatin1("AlarmType"), KAAlarm::INVALID_ALARM);
@@ -663,7 +666,7 @@ void MessageWin::slotPlayAudio()
 		mArtsDispatcher = new KArtsDispatcher;
 		mPlayedOnce = false;
 		mAudioFileLoadStart = QTime::currentTime();
-		initAudio();
+		initAudio(true);
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
 	}
@@ -674,11 +677,16 @@ void MessageWin::slotPlayAudio()
 /******************************************************************************
 *  Set up the audio file for playing.
 */
-void MessageWin::initAudio()
+void MessageWin::initAudio(bool firstTime)
 {
 	KArtsServer aserver;
-	KDE::PlayObjectFactory factory(aserver.server());
+	Arts::SoundServerV2 sserver = aserver.server();
+	KDE::PlayObjectFactory factory(sserver);
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
+	if (firstTime)
+		mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
+	float volume = mEvent.soundVolume();
+	sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -719,7 +727,7 @@ void MessageWin::checkAudioPlay()
 			{
 				// Playing has completed. Start playing again.
 				delete mPlayObject;
-				initAudio();
+				initAudio(false);
 				if (mPlayObject->object().isNull())
 					return;
 			}
@@ -756,6 +764,19 @@ void MessageWin::checkAudioPlay()
 void MessageWin::stopPlay()
 {
 #ifndef WITHOUT_ARTS
+	if (mArtsDispatcher)
+	{
+		// Restore the sound volume to what it was before the sound file
+		// was played, provided that nothing else has modified it since.
+		KArtsServer aserver;
+		Arts::StereoVolumeControl svc = aserver.server().outVolume();
+		float currentVolume = svc.scaleFactor();
+		float eventVolume = mEvent.soundVolume();
+		if (eventVolume < 0)
+			eventVolume = 1;
+		if (currentVolume == eventVolume)
+			svc.scaleFactor(mOldVolume);
+	}
 	delete mPlayObject;      mPlayObject = 0;
 	delete mArtsDispatcher;  mArtsDispatcher = 0;
 	if (!mLocalAudioFile.isEmpty())
@@ -887,7 +908,7 @@ void MessageWin::slotDefer()
 			{
 				// The event doesn't exist any more !?!, so create a new one
 				event.set(dateTime.dateTime(), message, mBgColour, mFgColour, font, (KAEvent::Action)action, flags);
-				event.setAudioFile(mEvent.audioFile());
+				event.setAudioFile(mEvent.audioFile(), mEvent.soundVolume());
 				event.setArchive();
 				event.setEventID(eventID);
 			}

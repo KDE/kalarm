@@ -292,7 +292,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
-		void               setAudioFile(const QString& filename, float volume = -1) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
+		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
 		void               setTemplate(const QString& name, bool defaultTime){ mTemplateName = name; mTemplateDefaultTime = defaultTime; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();

@@ -88,10 +88,13 @@ class KAlarmApp : public KUniqueApplication
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(KProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
-		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QColor& fg, const QFont&,
-		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
-		                                 const QString& mailSubject, const QStringList& mailAttachments,
-		                                 KAEvent::Action, const KCal::Recurrence&, int reminderMinutes);
+		bool               scheduleEvent(KAEvent::Action, const QString& text, const QDateTime&,
+		                                 int flags, const QColor& bg, const QColor& fg,
+		                                 const QFont&, const QString& audioFile, float audioVolume,
+		                                 int reminderMinutes, const KCal::Recurrence& recurrence,
+		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
+		                                 const QString& mailSubject = QString::null,
+		                                 const QStringList& mailAttachments = QStringList());
 		bool               handleEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_HANDLE); }
 		bool               triggerEvent(const QString& calendarFile, const QString& eventID)   { return handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
 		bool               deleteEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_CANCEL); }

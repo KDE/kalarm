@@ -1,9 +1,12 @@
 KAlarm
 
-=== Version 1.1.0 --- 27 Mar 2004 ===
+=== Version 1.1.0 --- 6 May 2004 ===
 Add facility to define alarm templates.
 Add option to play sound file repeatedly until alarm window is closed.
+Add volume control for playing sound file.
+Add 'stop sound' button to alarm message window when sound file is played.
 Rename command line option --sound to --play, add option --play-repeat.
+Add command line option --volume.
 After creating/editing alarm, prompt to re-enable alarms if currently disabled.
 Middle mouse button over system tray icon displays new alarm dialog.
 Add option to display a reminder once only before the first alarm recurrence.
@@ -13,8 +16,18 @@ Allow time of day to be entered in format HHMM in time spin boxes.
 Allow hour to be omitted when colon format time is entered in time spin boxes.
 Add "Don't ask again" option to alarm deletion confirmation prompt.
 Prevent expired alarm calendar purges clashing with other alarm actions.
+Update which time columns are displayed in alarm list when Preferences change.
+Don't store audio/reminder details in email/command alarms.
+Don't store email details in message/file/command alarms.
 Remove obsolete --displayEvent command line option (replaced by --triggerEvent).
 Remove obsolete pre-version 0.7 DCOP calls.
+
+=== Version 1.0.7 --- 2 May 2004 ===
+Fix scheduleCommand() and scheduleEmail() DCOP handling.
+Make KAlarm build for "./configure --without-arts".
+Fix email body text not being saved in email alarms.
+Fix loss of --exec command line arguments.
+Remove wasted vertical space from message windows.
 
 === Version 1.0.6 --- 26 Mar 2004 ===
 Make the Quit menu item in main window quit the program.

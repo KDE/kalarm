@@ -575,7 +575,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->enableOnceOnly(event->recurs());
 		mRecurrenceText->setText(event->recurrenceText());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mSoundPicker->set(event->beep(), event->audioFile(), event->repeatSound());
+		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->repeatSound());
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
@@ -605,7 +605,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->enableOnceOnly(false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
-		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(), preferences->defaultSoundRepeat());
+		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
+		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
 
@@ -777,6 +778,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedTypeRadio      = mActionGroup->selected();
 	mSavedBeep           = mSoundPicker->beep();
 	mSavedSoundFile      = mSoundPicker->file();
+	mSavedSoundVolume    = mSoundPicker->volume();
 	mSavedRepeatSound    = mSoundPicker->repeat();
 	mSavedConfirmAck     = mConfirmAck->isChecked();
 	mSavedFont           = mFontColourButton->font();
@@ -832,9 +834,14 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 		if (!mSavedBeep)
 		{
-			if (mSavedSoundFile != mSoundPicker->file()
-			||  !mSavedSoundFile.isEmpty()  &&  mSavedRepeatSound != mSoundPicker->repeat())
+			if (mSavedSoundFile != mSoundPicker->file())
 				return true;
+			if (!mSavedSoundFile.isEmpty())
+			{
+				if (mSavedRepeatSound != mSoundPicker->repeat()
+				||  mSavedSoundVolume != mSoundPicker->volume())
+					return true;
+			}
 		}
 	}
 	else if (mEmailRadio->isOn())
@@ -887,7 +894,7 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 		{
 			case KAEvent::MESSAGE:
 			case KAEvent::FILE:
-				event.setAudioFile(mSoundPicker->file());
+				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 				event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
 				break;
 			case KAEvent::EMAIL:
@@ -1098,7 +1105,7 @@ void EditAlarmDlg::slotTry()
 		KAEvent event;
 		event.set(QDateTime(), text, mBgColourChoose->color(), mFontColourButton->fgColour(),
 		          mFontColourButton->font(), getAlarmType(), getAlarmFlags());
-		event.setAudioFile(mSoundPicker->file());
+		event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)

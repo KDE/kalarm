@@ -495,6 +495,7 @@ int KAlarmApp::newInstance()
 				}
 
 				QCString audioFile;
+				float    audioVolume = -1;
 #ifdef WITHOUT_ARTS
 				bool     audioRepeat = false;
 #else
@@ -508,7 +509,17 @@ int KAlarmApp::newInstance()
 					if (args->isSet("beep"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
+					if (args->isSet("volume"))
+					{
+						bool ok;
+						int volumepc = args->getOption("volume").toInt(&ok);
+						if (!ok  ||  volumepc < 0  ||  volumepc > 100)
+							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--volume")))
+						audioVolume = static_cast<float>(volumepc) / 100;
+					}
 				}
+				else if (args->isSet("volume"))
+					USAGE(i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--volume")).arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 
 				int reminderMinutes = 0;
 				bool onceOnly = args->isSet("reminder-once");
@@ -565,9 +576,8 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (!scheduleEvent(alMessage, alarmTime, bgColour, fgColour, QFont(), flags, audioFile,
-				                   alAddresses, alSubject, alAttachments, action, recurrence,
-				                   reminderMinutes))
+				if (!scheduleEvent(action, alMessage, alarmTime, flags, bgColour, fgColour, QFont(), audioFile,
+				                   audioVolume, reminderMinutes, recurrence, alAddresses, alSubject, alAttachments))
 				{
 					exitCode = 1;
 					break;
@@ -607,6 +617,10 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--subject ");
 				if (args->isSet("time"))
 					usage += QString::fromLatin1("--time ");
+#ifndef WITHOUT_ARTS
+				if (args->isSet("volume"))
+					usage += QString::fromLatin1("--volume ");
+#endif
 				if (!usage.isEmpty())
 				{
 					usage += i18n(": option(s) only valid with a message/%1/%2").arg(QString::fromLatin1("--file")).arg(QString::fromLatin1("--exec"));
@@ -1042,13 +1056,13 @@ bool KAlarmApp::wantRunInSystemTray() const
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime, const QColor& bg,
-                              const QColor& fg, const QFont& font, int flags, const QString& audioFile,
-                              const EmailAddressList& mailAddresses, const QString& mailSubject,
-                              const QStringList& mailAttachments, KAEvent::Action action,
-                              const KCal::Recurrence& recurrence, int reminderMinutes)
+bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const QDateTime& dateTime,
+                              int flags, const QColor& bg, const QColor& fg, const QFont& font,
+                              const QString& audioFile, float audioVolume, int reminderMinutes,
+                              const KCal::Recurrence& recurrence, const EmailAddressList& mailAddresses,
+                              const QString& mailSubject, const QStringList& mailAttachments)
 	{
-	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
+	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;
 	if (!dateTime.isValid())
 		return false;
 	QDateTime now = QDateTime::currentDateTime();
@@ -1059,14 +1073,14 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 	bool display = (alarmTime <= now);
 
-	KAEvent event(alarmTime, message, bg, fg, font, action, flags);
+	KAEvent event(alarmTime, text, bg, fg, font, action, flags);
 	if (reminderMinutes)
 	{
 		bool onceOnly = (reminderMinutes < 0);
 		event.setReminder((onceOnly ? -reminderMinutes : reminderMinutes), onceOnly);
 	}
 	if (!audioFile.isEmpty())
-		event.setAudioFile(audioFile);
+		event.setAudioFile(audioFile, audioVolume);
 	if (mailAddresses.count())
 		event.setEmail(mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);

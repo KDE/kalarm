@@ -176,7 +176,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mLateCancel->setChecked(preferences->defaultLateCancel());
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
 	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
-	                  preferences->defaultSoundRepeat());
+	                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
 
 	// How much to advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
@@ -291,7 +291,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				                  mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				                  mBgColourChoose->color(), mFontColourButton->fgColour(),
 				                  mFontColourButton->font(), KAEvent::MESSAGE, mFlags);
-				event.setAudioFile(mSoundPicker->file());
+				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 				QValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, -1);

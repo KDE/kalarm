@@ -72,6 +72,7 @@ const bool       Preferences::default_emailBccUseControlCentre = false;
 const QColor     Preferences::default_expiredColour(darkRed);
 const int        Preferences::default_expiredKeepDays          = 7;
 const QString    Preferences::default_defaultSoundFile         = QString::null;
+const float      Preferences::default_defaultSoundVolume       = -1;
 const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
 const bool       Preferences::default_defaultBeep              = false;
@@ -121,6 +122,7 @@ static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCanc
 static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
 static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
 static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
+static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
 static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
 static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
@@ -219,6 +221,7 @@ Preferences::Preferences()
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound            = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
+	mDefaultSoundVolume      = static_cast<float>(config->readDoubleNumEntry(DEF_SOUND_VOLUME, default_defaultSoundVolume));
 #ifdef WITHOUT_ARTS
 	mDefaultSoundRepeat      = false;
 #else
@@ -280,6 +283,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
 	config->writeEntry(DEF_SOUND, mDefaultSound);
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
+	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
 	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
