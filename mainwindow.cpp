@@ -43,6 +43,7 @@
 #include "mainwindow.h"
 #include "mainwindow.moc"
 
+using namespace std;
 
 KAlarmMainWindow::KAlarmMainWindow()
 	: KMainWindow(0L, 0L, WGroupLeader | WStyle_ContextHelp)
