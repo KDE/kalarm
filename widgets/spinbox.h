@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002 - 2004 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission 
+ *  to link the code of this program with any edition of the Qt library by 
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same 
+ *  license as Qt), and distribute linked combinations including the two.  
+ *  You must obey the GNU General Public License in all respects for all of 
+ *  the code used other than Qt.  If you modify this file, you may extend 
+ *  this exception to your version of the file, but you are not obligated to 
+ *  do so. If you do not wish to do so, delete this exception statement from 
+ *  your version.
  */
 
 #ifndef SPINBOX_H
@@ -53,6 +63,9 @@ class SpinBox : public QSpinBox
 	protected:
 		virtual void valueChange();
 		virtual bool eventFilter(QObject*, QEvent*);
+		virtual void updateDisplay();
+	private slots:
+		void         textEdited();
 	private:
 		void         init();
 		void         addValue(int change, bool current);
@@ -72,6 +85,7 @@ class SpinBox : public QSpinBox
 		bool         mSelectOnStep;     // select the editor text whenever spin buttons are clicked (default)
 		bool         mReadOnly;         // value cannot be changed
 		bool         mSuppressSignals;
+		bool         mEdited;           // text field has been edited
 };
 
 #endif // SPINBOX_H
