@@ -31,7 +31,7 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qmultilinedit.h>
-#include <qhbox.h>
+#include <qvbox.h>
 #include <qgroupbox.h>
 #include <qwidgetstack.h>
 #include <qlabel.h>
@@ -67,21 +67,20 @@
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
 	                        const KAlarmEvent* event)
 	: KDialogBase(KDialogBase::Tabbed, caption, Ok|Cancel|Try, Ok, parent, name),
-	  deferGroup(0L),
-	  shown(false)
+	  recurSetEndDate(true),
+	  deferGroup(0L)
 {
-	mainPage  = addPage(i18n("&Alarm"));
+	mainPage = addPage(i18n("&Alarm"));
+	mainPageIndex = 0;
 
 	// Recurrence tab
-	recurPage = addPage(i18n("&Recurrence"));
+	recurPage = addVBoxPage(i18n("&Recurrence"));
 	recurPageIndex = pageIndex(recurPage);
-	QBoxLayout* layout = new QVBoxLayout(recurPage);
 	recurTabStack = new QWidgetStack(recurPage);
-	layout->addWidget(recurTabStack);
 
-	recurFrame = new QFrame(recurTabStack);
-	recurTabStack->addWidget(recurFrame, 0);
-	recurrenceEdit = new RecurrenceEdit(recurFrame, "recurPage");
+	recurrenceEdit = new RecurrenceEdit(recurTabStack, "recurPage");
+	recurTabStack->addWidget(recurrenceEdit, 0);
+	connect(recurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(recurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
 
 	recurDisabled = new QLabel(i18n("The alarm does not recur.\nEnable recurrence in the Alarm tab."), recurTabStack);
@@ -241,7 +240,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		if (event->recurs() != KAlarmEvent::NO_RECUR)
 		{
 			radio = recurRadio;
-			recurrenceEdit->set(*event);
+			recurSetEndDate = false;
 		}
 		else if (event->repeatAtLogin())
 			radio = repeatAtLoginRadio;
@@ -355,6 +354,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	      i18n("Choose the font and background color for the alarm message."));
 	layout->addWidget(fontColour);
 #endif
+
 	// Colour choice drop-down list
 	bgColourChoose = new ColourCombo(displayAlarmsFrame);
 	QSize size = bgColourChoose->sizeHint();
@@ -369,7 +369,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	confirmAck->setFixedSize(confirmAck->sizeHint());
 	QWhatsThis::add(confirmAck,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
-	frameLayout->addWidget(confirmAck);
+	frameLayout->addWidget(confirmAck, 0, Qt::AlignLeft);
 
 	filePadding = new QHBox(displayAlarmsFrame);
 	frameLayout->addWidget(filePadding);
@@ -519,38 +519,6 @@ QDateTime EditAlarmDlg::getDateTime(bool* anyTime)
 
 
 /******************************************************************************
-*  Called when the window is about to be displayed.
-*  The first time, it is moved up if necessary so that if the recurrence edit
-*  widget later enlarges, it will all be above the bottom of the screen.
-*/
-void EditAlarmDlg::showEvent(QShowEvent* se)
-{
-/*	if (!shown  &&  recurrenceEdit  &&  recurrenceEdit->isSmallSize())
-	{
-		// We don't know the window's frame size yet, since it hasn't been drawn.
-		// So use the parent's frame thickness as a guide.
-		QRect workArea = KWinModule().workArea();
-		int highest = workArea.top();
-		int frameHeight = parentWidget()->frameSize().height() - parentWidget()->size().height();
-		int top = mapToGlobal(QPoint(0, 0)).y();
-		int bottom = top + height() + recurrenceEdit->heightVariation() + frameHeight;
-		int shift = bottom - workArea.bottom();
-		if (shift > 0  &&  top > highest)
-		{
-			// Move the window upwards if possible
-			if (shift > top - highest)
-				shift = top - highest;
-			QRect rect = geometry();
-			rect.setTop(rect.top() - shift);
-			rect.setBottom(rect.bottom() - shift);
-			setGeometry(rect);
-		}
-	}*/
-//?????what about deferred time height?
-	shown = true;
-}
-
-/******************************************************************************
 *  Called when the dialog's size has changed.
 *  Records the new size (adjusted to ignore the optional height of the deferred
 *  time edit widget) in the config file.
@@ -572,12 +540,21 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotOk()
 {
-	if (timeWidget->getDateTime(alarmDateTime, alarmAnyTime))
+	QWidget* errWidget = timeWidget->getDateTime(alarmDateTime, alarmAnyTime, false);
+	if (errWidget)
+	{
+		showPage(mainPageIndex);
+		errWidget->setFocus();
+		timeWidget->getDateTime(alarmDateTime, alarmAnyTime);   // display the error message now
+	}
+	else
 	{
 		bool noTime;
-		if (!recurrenceEdit->checkData(alarmDateTime, noTime))
+		errWidget = recurrenceEdit->checkData(alarmDateTime, noTime);
+		if (errWidget)
 		{
 			showPage(recurPageIndex);
+			errWidget->setFocus();
 			KMessageBox::sorry(this, (noTime ? i18n("End date is earlier than start date")
 			                                 : i18n("End date/time is earlier than start date/time")));
 		}
@@ -634,7 +611,7 @@ void EditAlarmDlg::slotEditDeferral()
 {
 	bool anyTime;
 	QDateTime start;
-	if (timeWidget->getDateTime(start, anyTime))
+	if (!timeWidget->getDateTime(start, anyTime))
 	{
 		bool deferred = deferDateTime.isValid();
 		DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), (deferred ? deferDateTime : QDateTime::currentDateTime().addSecs(60)),
@@ -657,6 +634,23 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 	timeWidget->enableAnyTime(!recurs || recurrenceEdit->repeatType() != RecurrenceEdit::SUBDAILY);
 	if (deferGroup)
 		deferGroup->setEnabled(recurs);
+}
+
+/******************************************************************************
+*  Called when the recurrence edit page is shown.
+*  The first time, for a new alarm, the recurrence end date is set according to
+*  the alarm start time.
+*/
+void EditAlarmDlg::slotShowRecurrenceEdit()
+{
+	recurPageIndex = activePageIndex();
+	if (recurSetEndDate)
+	{
+		timeWidget->getDateTime(alarmDateTime, alarmAnyTime, false);
+		QDateTime now = QDateTime::currentDateTime();
+		recurrenceEdit->setEndDate(alarmDateTime >= now ? alarmDateTime.date() : now.date());
+		recurSetEndDate = false;
+	}
 }
 
 #ifdef KALARM_EMAIL
@@ -737,10 +731,10 @@ void EditAlarmDlg::slotRepeatClicked(int)
 {
 	bool on = recurRadio->isOn();
 	if (on)
-		recurTabStack->raiseWidget(recurFrame);
+		recurTabStack->raiseWidget(recurrenceEdit);
 	else
 		recurTabStack->raiseWidget(recurDisabled);
-	recurFrame->setEnabled(on);
+	recurrenceEdit->setEnabled(on);
 }
 
 /******************************************************************************

@@ -62,7 +62,6 @@ class EditAlarmDlg : public KDialogBase
 		QDateTime    getDateTime(bool* anyTime = 0L);
 
 	protected:
-		virtual void showEvent(QShowEvent*);
 		virtual void resizeEvent(QResizeEvent*);
 	protected slots:
 		virtual void slotOk();
@@ -75,6 +74,7 @@ class EditAlarmDlg : public KDialogBase
 		void         slotBrowseFile();
 		void         slotSoundToggled(bool on);
 		void         slotPickSound();
+		void         slotShowRecurrenceEdit();
 
 	private:
 		KAlarmAlarm::Type getAlarmType() const;
@@ -86,11 +86,12 @@ class EditAlarmDlg : public KDialogBase
 		void              initCommand(QWidget* parent);
 
 		QFrame*          mainPage;
+		int              mainPageIndex;
 		QFrame*          recurPage;
 		int              recurPageIndex;
 		QWidgetStack*    recurTabStack;
-		QFrame*          recurFrame;
 		QLabel*          recurDisabled;
+		bool             recurSetEndDate;    // adjust end date/time when recurrence tab is displayed
 
 		QRadioButton*    messageRadio;
 		QRadioButton*    commandRadio;
@@ -138,7 +139,6 @@ class EditAlarmDlg : public KDialogBase
 		int              deferGroupHeight; // height added by deferred time widget
 		bool             alarmAnyTime;     // alarmDateTime is only a date, not a time
 		bool             timeDialog;       // the dialog shows date/time fields only
-		bool             shown;            // the dialog has already been displayed
 };
 
 #endif // EDITDLG_H

@@ -70,12 +70,12 @@ static QString ordinal[] = {
 };
 
 
-RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
-	: QObject(page, name),
+RecurrenceEdit::RecurrenceEdit(QWidget* parent, const char* name)
+	: QFrame(parent, name),
 	  noEmitTypeChanged(true)
 {
 	QBoxLayout* layout;
-	QVBoxLayout* topLayout = new QVBoxLayout(page, marginKDE2, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this, marginKDE2, KDialog::spacingHint());
 
 	// Create the recurrence rule Group box which holds the recurrence period
 	// selection buttons, and the weekly, monthly and yearly recurrence rule
@@ -84,11 +84,11 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	// selection of its corresponding radio button.
 
 #if KDE_VERSION >= 290
-	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), page, "recurGroup");
+	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), this, "recurGroup");
 #else
-	recurGroup = new QGroupBox(i18n("Recurrence Rule"), page, "recurGroup");
+	recurGroup = new QGroupBox(i18n("Recurrence Rule"), this, "recurGroup");
 	layout = new QVBoxLayout(recurGroup, KDialog::marginHint(), KDialog::spacingHint());
-	layout->addSpacing(page->fontMetrics().lineSpacing()/2);
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
 	QBoxLayout* boxLayout = new QHBoxLayout(layout);
 #endif
 	topLayout->addWidget(recurGroup);
@@ -177,20 +177,21 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	// Create the recurrence range group which contains the controls
 	// which specify how long the recurrence is to last.
 
-	rangeButtonGroup = new QButtonGroup(i18n("Recurrence End"), page, "rangeButtonGroup");
+	rangeButtonGroup = new QButtonGroup(i18n("Recurrence End"), this, "rangeButtonGroup");
 	topLayout->addWidget(rangeButtonGroup);
 
 	QVBoxLayout* vlayout = new QVBoxLayout(rangeButtonGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
-	vlayout->addSpacing(page->fontMetrics().lineSpacing()/2);
+	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 	noEndDateButton = new QRadioButton(i18n("No &end"), rangeButtonGroup);
 	noEndDateButton->setFixedSize(noEndDateButton->sizeHint());
+	connect(noEndDateButton, SIGNAL(toggled(bool)), SLOT(disableRange(bool)));
 	QWhatsThis::add(noEndDateButton, i18n("Repeat the alarm indefinitely"));
 	vlayout->addWidget(noEndDateButton, 1, Qt::AlignLeft);
 	size = noEndDateButton->size();
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	repeatCountButton = new QRadioButton(i18n("End a&fter:"), rangeButtonGroup);
-	connect(repeatCountButton, SIGNAL(toggled(bool)), SLOT(rangeToggled(bool)));
+	connect(repeatCountButton, SIGNAL(toggled(bool)), SLOT(enableDurationRange(bool)));
 	QWhatsThis::add(repeatCountButton,
 	      i18n("Repeat the alarm for the number of times specified"));
 	repeatCountEntry = new QSpinBox(1, 9999, 1, rangeButtonGroup);
@@ -208,7 +209,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	endDateButton = new QRadioButton(i18n("End &by:"), rangeButtonGroup);
-	connect(endDateButton, SIGNAL(toggled(bool)), SLOT(rangeToggled(bool)));
+	connect(endDateButton, SIGNAL(toggled(bool)), SLOT(enableDateRange(bool)));
 	QWhatsThis::add(endDateButton,
 	      i18n("Repeat the alarm until the date/time specified"));
 	endDateEdit = new DateEdit(rangeButtonGroup);
@@ -229,10 +230,6 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	// Line up the widgets to the right of the radio buttons
 	repeatCountButton->setFixedSize(size);
 	endDateButton->setFixedSize(size);
-
-	connect(noEndDateButton, SIGNAL(toggled(bool)), SLOT(disableRange(bool)));
-	connect(repeatCountButton, SIGNAL(toggled(bool)), SLOT(enableDurationRange(bool)));
-	connect(endDateButton, SIGNAL(toggled(bool)), SLOT(enableDateRange(bool)));
 
 	topLayout->addStretch();
 	noEmitTypeChanged = false;
@@ -437,18 +434,19 @@ void RecurrenceEdit::initYearly()
 /******************************************************************************
  * Verify the consistency of the entered data.
  */
-bool RecurrenceEdit::checkData(const QDateTime& startDateTime, bool& noTime) const
+QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, bool& noTime) const
 {
 	const_cast<RecurrenceEdit*>(this)->currStartDateTime = startDateTime;
 	if (endDateButton->isChecked())
 	{
-		QDate endDate = endDateEdit->date();
 		noTime = !endTimeEdit->isEnabled();
-		if (!noTime  &&  QDateTime(endDate, endTimeEdit->time()) < startDateTime
-		||  noTime  &&  endDate < startDateTime.date())
-			return false;
+		QDate endDate = endDateEdit->date();
+		if (endDate < startDateTime.date())
+			return endDateEdit;
+		if (!noTime  &&  QDateTime(endDate, endTimeEdit->time()) < startDateTime)
+			return endTimeEdit;
 	}
-	return true;
+	return 0;
 }
 
 /******************************************************************************
@@ -582,12 +580,9 @@ void RecurrenceEdit::yearlyClicked(int id)
 	yeardayMonthComboBox->setEnabled(!date);
 }
 
-void RecurrenceEdit::rangeToggled(bool)
+void RecurrenceEdit::showEvent(QShowEvent*)
 {
-//	if (repeatCountButton->isOn())
-//		repeatCountEntry->setFocus();
-//	else if (endDateButton->isOn())
-//		endDateEdit->setFocus();
+	emit shown();
 }
 
 void RecurrenceEdit::unsetAllCheckboxes()
@@ -649,6 +644,11 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	yeardayMonthComboBox->setCurrentItem(month);
 
 	endDateEdit->setDate(fromDate);
+}
+
+void RecurrenceEdit::setEndDate(const QDate& start)
+{
+	endDateEdit->setDate(start);
 }
 
 

@@ -44,13 +44,13 @@ class KAlarmEvent;
 using namespace KCal;
 
 
-class RecurrenceEdit : public QObject
+class RecurrenceEdit : public QFrame
 {
 		Q_OBJECT
 	public:
 		enum RepeatType { SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
-		RecurrenceEdit(QFrame* parent, const char* name = 0L);
+		RecurrenceEdit(QWidget* parent, const char* name = 0L);
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */
@@ -59,13 +59,15 @@ class RecurrenceEdit : public QObject
 		void          set(const KAlarmEvent&);
 		/** Write event settings to event object */
 		void          updateEvent(KAlarmEvent&);
-		bool          checkData(const QDateTime& startDateTime, bool& noTime) const;
+		QWidget*      checkData(const QDateTime& startDateTime, bool& noTime) const;
 		RepeatType    repeatType() const                    { return ruleButtonType; }
+		void          setEndDate(const QDate&);
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }
 
 	signals:
+		void          shown();
 		void          typeChanged(int recurType);   // returns a RepeatType value
 
 	protected slots:
@@ -73,9 +75,11 @@ class RecurrenceEdit : public QObject
 		void          monthlyClicked(int);
 		void          yearlyClicked(int);
 		void          disableRange(bool);
-		void          rangeToggled(bool);
 		void          enableDurationRange(bool);
 		void          enableDateRange(bool);
+
+	protected:
+		virtual void  showEvent(QShowEvent*);
 
 	private:
 		void          unsetAllCheckboxes();
