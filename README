@@ -12,7 +12,7 @@ When setting up or modifying an alarm, the options available let you:
  * choose a colour for displaying the alarm message.
  * specify an audible beep or a sound file to play when the message is
    displayed.
- * choose whether or not the alarm should be cancelled if it can't be triggered
+ * choose whether or not the alarm should be canceled if it can't be triggered
    at its scheduled time. An alarm can only be triggered while you are logged
    in and running a graphical environment. If you choose not to cancel the
    alarm if it can't be triggered at the correct time, it will be triggered
