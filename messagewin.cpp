@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -24,11 +24,18 @@
 
 #include "kalarm.h"
 
+#if KDE_VERSION >= 290
+#define NEW_FILE_VIEW
+#endif
+
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+#ifndef NEW_FILE_VIEW
+#define KDE2_QTEXTEDIT_VIEW     // for KDE2 QTextEdit compatibility
 #include <qtextedit.h>
+#endif
 #include <qlabel.h>
 #include <qwhatsthis.h>
 
@@ -40,6 +47,9 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>
+#ifdef NEW_FILE_VIEW
+#include <ktextbrowser.h>
+#endif
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <kwinmodule.h>
@@ -95,7 +105,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
-	if (action == KAlarmAlarm::FILE  &&  errorMsg.isNull())
+	if (action == KAlarmAlarm::FILE  &&  !mErrorMsgs.count())
 		size = theApp()->readConfigWindowSize("FileMessage", size);
 	resize(size);
 	windowList.append(this);
@@ -107,7 +117,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 *  the whole event needs to be stored for updating the calendar file when it is
 *  displayed.
 */
-MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const QString& errmsg, const QString& errmsg2, bool reschedule_event)
+MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const QStringList& errmsgs, bool reschedule_event)
 	: MainWindowBase(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader | WStyle_ContextHelp),
 	  mEvent(evnt),
 	  message(alarm.cleanText()),
@@ -123,8 +133,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  beep(false),
 	  confirmAck(evnt.confirmAck()),
 	  action(alarm.action()),
-	  errorMsg(errmsg),
-	  errorMsg2(errmsg2),
+	  mErrorMsgs(errmsgs),
 	  noDefer(true),
 	  deferButton(0),
 	  restoreHeight(0),
@@ -210,13 +219,21 @@ QSize MessageWin::initView()
 			{
 				QFile qfile(tmpFile);
 				QFileInfo info(qfile);
+#ifdef NEW_FILE_VIEW
+				if (!(dir = info.isDir()))
+#else
 				if (!(dir = info.isDir())
 				&&  qfile.open(IO_ReadOnly|IO_Translate))
+#endif
 				{
 					opened = true;
+#ifdef NEW_FILE_VIEW
+					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
+					view->QTextBrowser::setSource(tmpFile);
+					topLayout->addWidget(view);
+#else
 					QTextEdit* view = new QTextEdit(topWidget, "fileContents");
 					view->setReadOnly(true);
-					topLayout->addWidget(view);
 					QFontMetrics fm = view->fontMetrics();
 					QString line;
 					int n;
@@ -228,13 +245,18 @@ QSize MessageWin::initView()
 						view->append(line);
 					}
 					qfile.close();
+#endif
 					view->setMinimumSize(view->sizeHint());
 
 					// Set the default size to square, max 20 lines.
 					// Note that after the first file has been displayed, this size
 					// is overridden by the user-set default stored in the config file.
 					// So there is no need to calculate an accurate size.
+#ifdef NEW_FILE_VIEW
+					int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
+#else
 					int h = fm.lineSpacing() * (n <= 20 ? n : 20) + 2*view->frameWidth();
+#endif
 					view->resize(QSize(h, h).expandedTo(view->sizeHint()));
 					QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
 				}
@@ -244,7 +266,8 @@ QSize MessageWin::initView()
 			{
 				// File couldn't be opened
 				bool exists = KIO::NetAccess::exists(url);
-				errorMsg = dir ? i18n("File is a directory") : exists ? i18n("Failed to open file") : i18n("File not found");
+				mErrorMsgs.clear();
+				mErrorMsgs += dir ? i18n("File is a directory") : exists ? i18n("Failed to open file") : i18n("File not found");
 			}
 			break;
 		}
@@ -303,7 +326,7 @@ QSize MessageWin::initView()
 			break;
 		}
 	}
-	if (errorMsg.isNull())
+	if (!mErrorMsgs.count())
 		topWidget->setBackgroundColor(colour);
 	else
 	{
@@ -316,12 +339,9 @@ QSize MessageWin::initView()
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignRight);
 		QBoxLayout* vlayout = new QVBoxLayout(layout);
-		label = new QLabel(errorMsg, topWidget);
-		label->setFixedSize(label->sizeHint());
-		vlayout->addWidget(label, 0, Qt::AlignLeft);
-		if (!errorMsg2.isEmpty())
+		for (QStringList::Iterator it = mErrorMsgs.begin();  it != mErrorMsgs.end();  ++it)
 		{
-			label = new QLabel(errorMsg2, topWidget);
+			label = new QLabel(*it, topWidget);
 			label->setFixedSize(label->sizeHint());
 			vlayout->addWidget(label, 0, Qt::AlignLeft);
 		}
@@ -392,7 +412,7 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("EventID"), eventID);
 		config->writeEntry(QString::fromLatin1("AlarmType"), mAlarmType);
 		config->writeEntry(QString::fromLatin1("Message"), message);
-		config->writeEntry(QString::fromLatin1("Type"), (errorMsg.isNull() ? action : -1));
+		config->writeEntry(QString::fromLatin1("Type"), (mErrorMsgs.count() ? -1 : action));
 		config->writeEntry(QString::fromLatin1("Font"), font);
 		config->writeEntry(QString::fromLatin1("Colour"), colour);
 		config->writeEntry(QString::fromLatin1("ConfirmAck"), confirmAck);
@@ -420,7 +440,7 @@ void MessageWin::readProperties(KConfig* config)
 	message       = config->readEntry(QString::fromLatin1("Message"));
 	int t         = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
 	if (t < 0)
-		errorMsg = "";       // set non-null
+		mErrorMsgs += "";       // set non-null
 	action        = KAlarmAlarm::Action(t);
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
 	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
@@ -431,7 +451,7 @@ void MessageWin::readProperties(KConfig* config)
 	mDateTime.set(dt, dateOnly);
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	if (errorMsg.isNull()  &&  mAlarmType != KAlarmAlarm::INVALID_ALARM)
+	if (!mErrorMsgs.count()  &&  mAlarmType != KAlarmAlarm::INVALID_ALARM)
 		initView();
 }
 
@@ -520,7 +540,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (action == KAlarmAlarm::FILE  &&  errorMsg.isNull())
+		if (action == KAlarmAlarm::FILE  &&  !mErrorMsgs.count())
 			theApp()->writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
