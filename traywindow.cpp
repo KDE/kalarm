@@ -193,6 +193,7 @@ void TrayWindow::setEnabledStatus(bool status)
 /******************************************************************************
 *  Called when the mouse is clicked over the panel icon.
 *  A left click displays the KAlarm main window.
+*  A middle button click displays the New Alarm window.
 */
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
@@ -201,6 +202,8 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 		// Left click: display/hide the first main window
 		mAssocMainWindow = KAlarmMainWindow::toggleWindow(mAssocMainWindow);
 	}
+	else if (e->button() == MidButton)
+		KAlarmMainWindow::executeNew();    // display a New Alarm dialog
 	else
 		KSystemTray::mousePressEvent(e);
 }
