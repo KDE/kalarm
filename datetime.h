@@ -1,5 +1,5 @@
 /*
- *  datetime.h  -  date and time spinboxes, and alarm time entry widget
+ *  datetime.h  -  alarm date/time entry widget
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -28,10 +28,9 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 #include "buttongroup.h"
-#include "spinbox2.h"
 
-class QRadioButton;
-class QCheckBox;
+class RadioButton;
+class CheckBox;
 class DateEdit;
 class TimeSpinBox;
 
@@ -50,6 +49,7 @@ class AlarmTimeWidget : public ButtonGroup
 		QWidget*       getDateTime(QDateTime&, bool& anyTime, bool showErrorMessage = true) const;
 		void           setDateTime(const QDate& d)                  { setDateTime(d, true); }
 		void           setDateTime(const QDateTime&, bool anyTime = false);
+		void           setReadOnly(bool);
 		void           enableAnyTime(bool enable);
 		QSize          sizeHint() const                             { return minimumSizeHint(); }
 	protected slots:
@@ -64,41 +64,15 @@ class AlarmTimeWidget : public ButtonGroup
 		void           init(int mode);
 		void           dateTimeChanged();
 
-		QRadioButton*  atTimeRadio;
-		QRadioButton*  afterTimeRadio;
-		DateEdit*      dateEdit;
-		TimeSpinBox*   timeEdit;
-		TimeSpinBox*   delayTime;
-		QCheckBox*     anyTimeCheckBox;
-		QTimer         timer;
-		bool           timerSyncing;            // timer is not yet synchronised to the minute boundary
-		bool           anyTimeAllowed;          // 'anyTimeCheckBox' is enabled
-};
-
-
-class TimeSpinBox : public SpinBox2
-{
-		Q_OBJECT
-	public:
-		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
-		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
-		bool            valid() const;
-		QTime           time() const;
-		void            setValid(bool);
-		static QString  shiftWhatsThis();
-	public slots:
-		virtual void    setValue(int value);
-		virtual void    stepUp();
-		virtual void    stepDown();
-	protected:
-		virtual QString mapValueToText(int v);
-		virtual int     mapTextToValue(bool* ok);
-	private:
-		class TimeValidator;
-		TimeValidator*  validator;
-		int             minimumValue;
-		bool            invalid;            // value is currently invalid (asterisks)
-		bool            enteredSetValue;    // to prevent infinite recursion in setValue()
+		RadioButton*   mAtTimeRadio;
+		RadioButton*   mAfterTimeRadio;
+		DateEdit*      mDateEdit;
+		TimeSpinBox*   mTimeEdit;
+		TimeSpinBox*   mDelayTimeEdit;
+		CheckBox*      mAnyTimeCheckBox;
+		QTimer         mTimer;
+		bool           mTimerSyncing;            // mTimer is not yet synchronised to the minute boundary
+		bool           mAnyTimeAllowed;          // 'mAnyTimeCheckBox' is enabled
 };
 
 #endif // DATETIME_H
