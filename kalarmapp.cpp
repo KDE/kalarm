@@ -620,7 +620,7 @@ int KAlarmApp::newInstance()
 		{
 			// Note: we can't use args->usage() since that also quits any other
 			// running 'instances' of the program.
-			std::cerr << usage << i18n("\nUse --help to get a list of available command line options.\n");
+			std::cerr << usage.local8Bit().data() << i18n("\nUse --help to get a list of available command line options.\n").local8Bit().data();
 			exitCode = 1;
 		}
 	}
@@ -1459,7 +1459,7 @@ void KAlarmApp::slotCommandExited(KProcess* proc)
 					errmsg = i18n("Failed to execute command:");
 				}
 			}
-			if (errmsg)
+			if (!errmsg.isNull())
 			{
 				if (pd->messageBoxParent)
 				{
@@ -1748,8 +1748,8 @@ void KAlarmApp::setUpDcop()
 {
 	if (!mDcopHandler)
 	{
-		mDcopHandler      = new DcopHandler(QString::fromLatin1(DCOP_OBJECT_NAME));
-		mDaemonGuiHandler = new DaemonGuiHandler(QString::fromLatin1(GUI_DCOP_OBJECT_NAME));
+		mDcopHandler      = new DcopHandler(DCOP_OBJECT_NAME);
+		mDaemonGuiHandler = new DaemonGuiHandler(GUI_DCOP_OBJECT_NAME);
 	}
 }
 
@@ -2008,13 +2008,13 @@ int KAlarmApp::isTextFile(const KURL& url)
 	if (mimetype.startsWith(QString::fromLatin1("application")))
 	{
 		for (int i = 0;  applicationTypes[i];  ++i)
-			if (!strcmp(subtype, applicationTypes[i]))
+			if (subtype == applicationTypes[i])
 				return 1;
 	}
 	else if (mimetype.startsWith(QString::fromLatin1("text")))
 	{
 		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (!strcmp(subtype, formattedTextTypes[i]))
+			if (subtype == formattedTextTypes[i])
 				return 2;
 		return 1;
 	}

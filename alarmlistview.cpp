@@ -393,7 +393,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 			case KAlarmAlarm::MESSAGE:
 			default:                    pixmap = textIcon;     break;
 		}
-		int frameWidth = listView->style().defaultFrameWidth();
+		int frameWidth = listView->style().pixelMetric(  QStyle::PM_DefaultFrameWidth );
 		QRect pixmapRect = pixmap->rect();
 		int diff = box.height() - pixmap->height();
 		if (diff < 0)
