@@ -70,7 +70,9 @@ class Preferences : public QObject
 		MailClient     emailClient() const              { return mEmailClient; }
 		bool           emailQueuedNotify() const        { return mEmailQueuedNotify; }
 		bool           emailUseControlCentre() const    { return mEmailUseControlCentre; }
+		bool           emailBccUseControlCentre() const { return mEmailBccUseControlCentre; }
 		const QString& emailAddress() const             { return mEmailAddress; }
+		const QString& emailBccAddress() const          { return mEmailBccAddress; }
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
 		const QString& defaultSoundFile() const         { return mDefaultBeep ? QString::null : mDefaultSoundFile; }
@@ -110,7 +112,9 @@ class Preferences : public QObject
 		static const MailClient  default_emailClient;
 		static const bool        default_emailQueuedNotify;
 		static const bool        default_emailUseControlCentre;
+		static const bool        default_emailBccUseControlCentre;
 		static const QString     default_emailAddress;
+		static const QString     default_emailBccAddress;
 		static const QColor      default_expiredColour;
 		static const int         default_expiredKeepDays;
 		static const QString     default_defaultSoundFile;
@@ -128,13 +132,16 @@ class Preferences : public QObject
 	private:
 		int                 startOfDayCheck() const;
 		QString             mEmailAddress;
+		QString             mEmailBccAddress;
 
 		// All the following members are accessed by the Preferences dialog classes
 		friend class MiscPrefTab;
 		friend class DefaultPrefTab;
 		friend class ViewPrefTab;
 		friend class MessagePrefTab;
+		friend class EmailPrefTab;
 		void                setEmailAddress(bool useControlCentre, const QString& address);
+		void                setEmailBccAddress(bool useControlCentre, const QString& address);
 		ColourList          mMessageColours;
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
@@ -155,6 +162,7 @@ class Preferences : public QObject
 		MailClient          mEmailClient;
 		bool                mEmailQueuedNotify;
 		bool                mEmailUseControlCentre;
+		bool                mEmailBccUseControlCentre;
 		QColor              mExpiredColour;
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog

@@ -46,6 +46,7 @@ class SpinBox;
 
 class MessagePrefTab;
 class DefaultPrefTab;
+class EmailPrefTab;
 class ViewPrefTab;
 class MiscPrefTab;
 
@@ -60,6 +61,7 @@ class KAlarmPrefDlg : public KDialogBase
 
 		MessagePrefTab*    mMessagePage;
 		DefaultPrefTab*    mDefaultPage;
+		EmailPrefTab*      mEmailPage;
 		ViewPrefTab*       mViewPage;
 		MiscPrefTab*       mMiscPage;
 
@@ -104,12 +106,10 @@ class MiscPrefTab : public PrefsTabBase
 		void         slotRunModeToggled(bool);
 		void         slotDisableIfStoppedToggled(bool);
 		void         slotExpiredToggled(bool);
-		void         slotEmailUseCCToggled(bool);
 		void         slotClearExpired();
 
 	private:
 		void         setExpiredControls(int purgeDays);
-		void         setEmailAddress(bool useControlCentre, const QString& address);
 
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
@@ -124,10 +124,34 @@ class MiscPrefTab : public PrefsTabBase
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
 		TimeSpinBox*   mStartOfDay;
+};
+
+
+// Email tab of the Preferences dialog
+class EmailPrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		EmailPrefTab(QVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private slots:
+		void         slotEmailUseCCToggled(bool);
+		void         slotEmailBccUseCCToggled(bool);
+
+	private:
+		void         setEmailAddress(bool useControlCentre, const QString& address);
+		void         setEmailBccAddress(bool useControlCentre, const QString& address);
+
 		QButtonGroup*  mEmailClient;
-		QCheckBox*     mEmailUseControlCentre;
-		QCheckBox*     mEmailQueuedNotify;
 		QLineEdit*     mEmailAddress;
+		QCheckBox*     mEmailUseControlCentre;
+		QLineEdit*     mEmailBccAddress;
+		QCheckBox*     mEmailBccUseControlCentre;
+		QCheckBox*     mEmailQueuedNotify;
 };
 
 

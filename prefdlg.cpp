@@ -72,17 +72,21 @@ KAlarmPrefDlg::KAlarmPrefDlg(Preferences* sets)
 	mMiscPage = new MiscPrefTab(frame);
 	mMiscPage->setPreferences(sets);
 
+	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
+	mEmailPage = new EmailPrefTab(frame);
+	mEmailPage->setPreferences(sets);
+
 	frame = addVBoxPage(i18n("View"), i18n("View Settings"), DesktopIcon("view_choose"));
 	mViewPage = new ViewPrefTab(frame);
 	mViewPage->setPreferences(sets);
 
-	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
-	mDefaultPage = new DefaultPrefTab(frame);
-	mDefaultPage->setPreferences(sets);
-
 	frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("colorize"));
 	mMessagePage = new MessagePrefTab(frame);
 	mMessagePage->setPreferences(sets);
+
+	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
+	mDefaultPage = new DefaultPrefTab(frame);
+	mDefaultPage->setPreferences(sets);
 
 	adjustSize();
 }
@@ -96,6 +100,7 @@ void KAlarmPrefDlg::slotDefault()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
 	mMessagePage->setDefaults();
+	mEmailPage->setDefaults();
 	mViewPage->setDefaults();
 	mDefaultPage->setDefaults();
 	mMiscPage->setDefaults();
@@ -111,6 +116,7 @@ void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
 	mMessagePage->apply(false);
+	mEmailPage->apply(false);
 	mViewPage->apply(false);
 	mDefaultPage->apply(false);
 	mMiscPage->apply(true);
@@ -129,6 +135,7 @@ void KAlarmPrefDlg::slotCancel()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
 	mMessagePage->restore();
+	mEmailPage->restore();
 	mViewPage->restore();
 	mDefaultPage->restore();
 	mMiscPage->restore();
@@ -244,66 +251,13 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	itemBox = new QHBox(mPage);   // this is to allow left adjustment
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	QWhatsThis::add(mConfirmAlarmDeletion,
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
-
-	// Email preferences
-	group = new QGroupBox(i18n("Email Alarms"), mPage);
-	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
-
-	box = new QHBox(group);
-	box->setSpacing(2*KDialog::spacingHint());
-	label = new QLabel(i18n("Email client:"), box);
-	mEmailClient = new QButtonGroup(box);
-	mEmailClient->hide();
-	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
-	radio->setMinimumSize(radio->sizeHint());
-	mEmailClient->insert(radio, Preferences::KMAIL);
-	radio = new QRadioButton(i18n("S&endmail"), box, "sendmail");
-	radio->setMinimumSize(radio->sizeHint());
-	mEmailClient->insert(radio, Preferences::SENDMAIL);
-	box->setFixedHeight(box->sizeHint().height());
-	QWhatsThis::add(box,
-	      i18n("Choose how to send email when an email alarm is triggered.\n"
-	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
-	           "a KMail composer window is displayed to enable you to send the email.\n"
-	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
-	layout->addWidget(box, 0, AlignLeft);
-
-#if KDE_VERSION >= 210
-	mEmailUseControlCentre = new QCheckBox(i18n("Use email address from Co&ntrol Center"), group);
-	mEmailUseControlCentre->setFixedSize(mEmailUseControlCentre->sizeHint());
-	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
-	QWhatsThis::add(mEmailUseControlCentre,
-	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
-	layout->addWidget(mEmailUseControlCentre, 0, AlignLeft);
-#endif
-
-	box = new QHBox(group);   // this is to control the QWhatsThis text display area
-	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("Emai&l address:"), box);
-	label->setFixedSize(label->sizeHint());
-	mEmailAddress = new QLineEdit(box);
-	label->setBuddy(mEmailAddress);
-	QWhatsThis::add(box,
-	      i18n("Your email address, used for blind copying email alarms to yourself."));
-	box->setFixedHeight(box->sizeHint().height());
-	layout->addWidget(box);
-
-#if 0
-	mEmailQueuedNotify = new QCheckBox(i18n("Notify when remote emails are que&ued"), group);
-	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
-	QWhatsThis::add(mEmailQueuedNotify,
-	      i18n("Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
-	           "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
-	layout->addWidget(mEmailQueuedNotify, 0, AlignLeft);
-#endif
 
 	group = new QGroupBox(i18n("Expired Alarms"), mPage);
 	grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
@@ -354,11 +308,6 @@ void MiscPrefTab::restore()
 	mAutostartTrayIcon2->setChecked(mPreferences->mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(mPreferences->mConfirmAlarmDeletion);
 	mStartOfDay->setValue(mPreferences->mStartOfDay.hour()*60 + mPreferences->mStartOfDay.minute());
-	mEmailClient->setButton(mPreferences->mEmailClient);
-	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->emailAddress());
-#if 0
-	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY));
-#endif
 	setExpiredControls(mPreferences->mExpiredKeepDays);
 	slotDisableIfStoppedToggled(true);
 }
@@ -374,16 +323,6 @@ void MiscPrefTab::apply(bool syncToDisc)
 	mPreferences->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
 	int sod = mStartOfDay->value();
 	mPreferences->mStartOfDay.setHMS(sod/60, sod%60, 0);
-	int client = mEmailClient->id(mEmailClient->selected());
-	mPreferences->mEmailClient             = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
-#if KDE_VERSION >= 210
-	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
-#else
-	mPreferences->setEmailAddress(false, mEmailAddress->text());
-#endif
-#if 0
-	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, mEmailQueuedNotify->isChecked());
-#endif
 	mPreferences->mExpiredKeepDays         = !mKeepExpired->isChecked() ? 0
 	                                       : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	PrefsTabBase::apply(syncToDisc);
@@ -400,11 +339,6 @@ void MiscPrefTab::setDefaults()
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay.hour()*60 + Preferences::default_startOfDay.minute());
-	mEmailClient->setButton(Preferences::default_emailClient);
-	setEmailAddress(Preferences::default_emailUseControlCentre, Preferences::default_emailAddress);
-#if 0
-	mEmailQueuedNotify->setChecked(Preferences::default_emailQueuedNotify);
-#endif
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	slotDisableIfStoppedToggled(true);
 }
@@ -447,7 +381,118 @@ void MiscPrefTab::slotClearExpired()
 	calendar->purge(0, true);
 }
 
-void MiscPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
+
+/*=============================================================================
+= Class EmailPrefTab
+=============================================================================*/
+
+EmailPrefTab::EmailPrefTab(QVBox* frame)
+	: PrefsTabBase(frame)
+{
+	QHBox* box = new QHBox(mPage);
+	box->setSpacing(2*KDialog::spacingHint());
+	QLabel* label = new QLabel(i18n("Email client:"), box);
+	mEmailClient = new QButtonGroup(box);
+	mEmailClient->hide();
+	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
+	radio->setMinimumSize(radio->sizeHint());
+	mEmailClient->insert(radio, Preferences::KMAIL);
+	radio = new QRadioButton(i18n("&Sendmail"), box, "sendmail");
+	radio->setMinimumSize(radio->sizeHint());
+	mEmailClient->insert(radio, Preferences::SENDMAIL);
+	box->setFixedHeight(box->sizeHint().height());
+	QWhatsThis::add(box,
+	      i18n("Choose how to send email when an email alarm is triggered.\n"
+	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
+	           "a KMail composer window is displayed to enable you to send the email.\n"
+	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
+
+	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
+	QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	grid->setColStretch(1, 1);
+	label = new QLabel(i18n("&From:"), group);
+	label->setFixedSize(label->sizeHint());
+	grid->addWidget(label, 1, 0);
+	mEmailAddress = new QLineEdit(group);
+	label->setBuddy(mEmailAddress);
+	QWhatsThis::add(mEmailAddress,
+	      i18n("Your email address, used to identify you as the sender when sending email alarms."));
+	grid->addWidget(mEmailAddress, 1, 1);
+
+#if KDE_VERSION >= 210
+	mEmailUseControlCentre = new QCheckBox(i18n("&Use address from Control Center"), group);
+	mEmailUseControlCentre->setFixedSize(mEmailUseControlCentre->sizeHint());
+	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
+	QWhatsThis::add(mEmailUseControlCentre,
+	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
+	grid->addWidget(mEmailUseControlCentre, 2, 1, AlignLeft);
+#endif
+
+	label = new QLabel(i18n("&Bcc:"), group);
+	label->setFixedSize(label->sizeHint());
+	grid->addWidget(label, 3, 0);
+	mEmailBccAddress = new QLineEdit(group);
+	label->setBuddy(mEmailBccAddress);
+	QWhatsThis::add(mEmailBccAddress,
+	      i18n("Your email address, used for blind copying email alarms to yourself. "
+	           "If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name."));
+	grid->addWidget(mEmailBccAddress, 3, 1);
+
+#if KDE_VERSION >= 210
+	mEmailBccUseControlCentre = new QCheckBox(i18n("Us&e address from Control Center"), group);
+	mEmailBccUseControlCentre->setFixedSize(mEmailBccUseControlCentre->sizeHint());
+	connect(mEmailBccUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailBccUseCCToggled(bool)));
+	QWhatsThis::add(mEmailBccUseControlCentre,
+	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
+	grid->addWidget(mEmailBccUseControlCentre, 4, 1, AlignLeft);
+#endif
+	group->setFixedHeight(group->sizeHint().height());
+
+	box = new QHBox(mPage);   // this is to allow left adjustment
+	mEmailQueuedNotify = new QCheckBox(i18n("&Notify when remote emails are queued"), box);
+	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
+	QWhatsThis::add(mEmailQueuedNotify,
+	      i18n("Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
+	           "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
+	box = new QHBox(mPage);     // top-adjust all the widgets
+}
+
+void EmailPrefTab::restore()
+{
+	mEmailClient->setButton(mPreferences->mEmailClient);
+	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->emailAddress());
+	setEmailBccAddress(mPreferences->mEmailBccUseControlCentre, mPreferences->emailBccAddress());
+	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY));
+}
+
+void EmailPrefTab::apply(bool syncToDisc)
+{
+	int client = mEmailClient->id(mEmailClient->selected());
+	mPreferences->mEmailClient             = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+#if KDE_VERSION >= 210
+	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
+	mPreferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text());
+#else
+	mPreferences->setEmailAddress(false, mEmailAddress->text());
+	mPreferences->setEmailBccAddress(false, mEmailBccAddress->text());
+#endif
+	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, mEmailQueuedNotify->isChecked());
+	PrefsTabBase::apply(syncToDisc);
+}
+
+void EmailPrefTab::setDefaults()
+{
+	mEmailClient->setButton(Preferences::default_emailClient);
+	setEmailAddress(Preferences::default_emailUseControlCentre, Preferences::default_emailAddress);
+	setEmailBccAddress(Preferences::default_emailBccUseControlCentre, Preferences::default_emailBccAddress);
+	mEmailQueuedNotify->setChecked(Preferences::default_emailQueuedNotify);
+}
+
+void EmailPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
 {
 #if KDE_VERSION >= 210
 	mEmailUseControlCentre->setChecked(useControlCentre);
@@ -458,10 +503,28 @@ void MiscPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
 #endif
 }
 
-void MiscPrefTab::slotEmailUseCCToggled(bool)
+void EmailPrefTab::slotEmailUseCCToggled(bool)
 {
 #if KDE_VERSION >= 210
 	mEmailAddress->setEnabled(!mEmailUseControlCentre->isChecked());
+#endif
+}
+
+void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
+{
+#if KDE_VERSION >= 210
+	mEmailBccUseControlCentre->setChecked(useControlCentre);
+	mEmailBccAddress->setText(useControlCentre ? QString() : address);
+	slotEmailBccUseCCToggled(true);
+#else
+	mEmailBccAddress->setText(address);
+#endif
+}
+
+void EmailPrefTab::slotEmailBccUseCCToggled(bool)
+{
+#if KDE_VERSION >= 210
+	mEmailBccAddress->setEnabled(!mEmailBccUseControlCentre->isChecked());
 #endif
 }
 

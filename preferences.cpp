@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,29 +37,31 @@ const ColourList Preferences::default_messageColours(defaultMessageColours);
 const QColor     Preferences::default_defaultBgColour(Qt::red);
 QFont            Preferences::default_messageFont;    // initialised in constructor
 const QTime      Preferences::default_startOfDay(0, 0);
-const bool       Preferences::default_runInSystemTray         = true;
-const bool       Preferences::default_disableAlarmsIfStopped  = true;
-const bool       Preferences::default_autostartTrayIcon       = true;
-const bool       Preferences::default_confirmAlarmDeletion    = true;
-const bool       Preferences::default_modalMessages           = true;
-const bool       Preferences::default_showExpiredAlarms       = false;
-const bool       Preferences::default_showAlarmTime           = true;
-const bool       Preferences::default_showTimeToAlarm         = false;
-const int        Preferences::default_tooltipAlarmCount       = 5;
-const bool       Preferences::default_showTooltipAlarmTime    = true;
-const bool       Preferences::default_showTooltipTimeToAlarm  = true;
-const QString    Preferences::default_tooltipTimeToPrefix     = QString::fromLatin1("+");
-const int        Preferences::default_daemonTrayCheckInterval = 10;     // (seconds)
-const bool       Preferences::default_emailQueuedNotify       = false;
-const bool       Preferences::default_emailUseControlCentre   = true;
+const bool       Preferences::default_runInSystemTray          = true;
+const bool       Preferences::default_disableAlarmsIfStopped   = true;
+const bool       Preferences::default_autostartTrayIcon        = true;
+const bool       Preferences::default_confirmAlarmDeletion     = true;
+const bool       Preferences::default_modalMessages            = true;
+const bool       Preferences::default_showExpiredAlarms        = false;
+const bool       Preferences::default_showAlarmTime            = true;
+const bool       Preferences::default_showTimeToAlarm          = false;
+const int        Preferences::default_tooltipAlarmCount        = 5;
+const bool       Preferences::default_showTooltipAlarmTime     = true;
+const bool       Preferences::default_showTooltipTimeToAlarm   = true;
+const QString    Preferences::default_tooltipTimeToPrefix      = QString::fromLatin1("+");
+const int        Preferences::default_daemonTrayCheckInterval  = 10;     // (seconds)
+const bool       Preferences::default_emailQueuedNotify        = false;
+const bool       Preferences::default_emailUseControlCentre    = true;
+const bool       Preferences::default_emailBccUseControlCentre = true;
 const QColor     Preferences::default_expiredColour(darkRed);
-const int        Preferences::default_expiredKeepDays         = 7;
-const QString    Preferences::default_defaultSoundFile        = QString::null;
-const bool       Preferences::default_defaultBeep             = false;
-const bool       Preferences::default_defaultLateCancel       = false;
-const bool       Preferences::default_defaultConfirmAck       = false;
-const bool       Preferences::default_defaultEmailBcc         = false;
-const QString    Preferences::default_emailAddress            = QString::null;
+const int        Preferences::default_expiredKeepDays          = 7;
+const QString    Preferences::default_defaultSoundFile         = QString::null;
+const bool       Preferences::default_defaultBeep              = false;
+const bool       Preferences::default_defaultLateCancel        = false;
+const bool       Preferences::default_defaultConfirmAck        = false;
+const bool       Preferences::default_defaultEmailBcc          = false;
+const QString    Preferences::default_emailAddress             = QString::null;
+const QString    Preferences::default_emailBccAddress          = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
 const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
@@ -87,7 +89,9 @@ static const QString DAEMON_TRAY_INTERVAL     = QString::fromLatin1("DaemonTrayC
 static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient");
 static const QString EMAIL_QUEUED_NOTIFY      = QString::fromLatin1("EmailQueuedNotify");
 static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
+static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QString::fromLatin1("EmailBccUseControlCenter");
 static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
+static const QString EMAIL_BCC_ADDRESS        = QString::fromLatin1("EmailBccAddress");
 static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
 static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
 static const QString EXPIRED_COLOUR           = QString::fromLatin1("ExpiredColour");
@@ -154,14 +158,19 @@ void Preferences::loadPreferences()
 	QCString client = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
 	mEmailClient = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailQueuedNotify       = config->readBoolEntry(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+	bool bccFrom = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
 	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
-	if (mEmailUseControlCentre)
+	mEmailBccUseControlCentre = bccFrom ? mEmailUseControlCentre      // compatibility with pre-0.9.5
+	                          : config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre);
+	if (mEmailUseControlCentre || mEmailBccUseControlCentre)
 	{
 		KEMailSettings e;
-		mEmailAddress = e.getSetting(KEMailSettings::EmailAddress);
+		mEmailAddress = mEmailBccAddress = e.getSetting(KEMailSettings::EmailAddress);
 	}
-	else
+	if (!mEmailUseControlCentre)
 		mEmailAddress = config->readEntry(EMAIL_ADDRESS);
+	if (!mEmailBccUseControlCentre)
+		mEmailBccAddress = config->readEntry(EMAIL_BCC_ADDRESS);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mStartOfDayChanged       = (config->readNumEntry(START_OF_DAY_CHECK, 0) != startOfDayCheck());
@@ -208,7 +217,9 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
 	config->writeEntry(EMAIL_QUEUED_NOTIFY, mEmailQueuedNotify);
 	config->writeEntry(EMAIL_USE_CONTROL_CENTRE, mEmailUseControlCentre);
+	config->writeEntry(EMAIL_BCC_USE_CONTROL_CENTRE, mEmailBccUseControlCentre);
 	config->writeEntry(EMAIL_ADDRESS, (mEmailUseControlCentre ? QString() : mEmailAddress));
+	config->writeEntry(EMAIL_BCC_ADDRESS, (mEmailBccUseControlCentre ? QString() : mEmailBccAddress));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
@@ -249,6 +260,18 @@ void Preferences::setEmailAddress(bool useControlCentre, const QString& address)
 	}
 	else
 		mEmailAddress = address;
+}
+
+void Preferences::setEmailBccAddress(bool useControlCentre, const QString& address)
+{
+	mEmailBccUseControlCentre = useControlCentre;
+	if (useControlCentre)
+	{
+		KEMailSettings e;
+		mEmailBccAddress = e.getSetting(KEMailSettings::EmailAddress);
+	}
+	else
+		mEmailBccAddress = address;
 }
 
 /******************************************************************************
