@@ -236,7 +236,7 @@ QSize MessageWin::initView()
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(slotKAlarm()));
 	grid->addWidget(button, 0, 3, AlignHCenter);
-	QWhatsThis::add(button, i18n("Activate KAlarm"));
+	QWhatsThis::add(button, i18n("Activate %1").arg(kapp->aboutData()->programName()));
 
 	// Set the button sizes
 	QSize minbutsize = okButton->sizeHint();
