@@ -6,6 +6,7 @@ Add option to play sound file repeatedly until alarm window is closed.
 Rename command line option --sound to --play, add option --play-repeat.
 After creating/editing alarm, prompt to re-enable alarms if currently disabled.
 Middle mouse button over system tray icon displays new alarm dialog.
+Add option to display a reminder once only before the first alarm recurrence.
 Display time-to-alarm in reminder message window.
 For message texts which are truncated in main window, show full text in tooltip.
 Allow time of day to be entered in format HHMM in time spin boxes.

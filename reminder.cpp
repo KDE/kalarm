@@ -51,6 +51,8 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
+const QString Reminder::i18n_first_recurrence_only   = i18n("Reminder for first recurrence only");
+const QString Reminder::i18n_u_first_recurrence_only = i18n("Reminder for first rec&urrence only");
 const QString Reminder::i18n_hours_mins = i18n("hours/minutes");
 const QString Reminder::i18n_Hours_Mins = i18n("Hours/Minutes");
 const QString Reminder::i18n_days       = i18n("days");
@@ -60,23 +62,30 @@ const QString Reminder::i18n_Weeks      = i18n("Weeks");
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
-                   bool allowHourMinute, QWidget* parent, const char* name)
+                   bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name)
 	: QFrame(parent, name),
 	  mMaxDays(9999),
 	  mNoHourMinute(!allowHourMinute),
-	  mReadOnly(false)
+	  mReadOnly(false),
+	  mOnceOnlyEnabled(showOnceOnly)
 {
 	setFrameStyle(QFrame::NoFrame);
-	QHBoxLayout* layout = new QHBoxLayout(this, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+//	QGridLayout* grid = new QGridLayout(this, 2, 3, 0, KDialog::spacingHint());
+//	grid->addColSpacing(0, KDialog::spacingHint());
+//	grid->setColStretch(2, 1);
 	mReminder = new CheckBox(caption, this);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	connect(mReminder, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 	QWhatsThis::add(mReminder, reminderWhatsThis);
 	layout->addWidget(mReminder);
+//	grid->addMultiCellWidget(mReminder, 0, 0, 0, 1, Qt::AlignLeft);
 
 	QHBox* box = new QHBox(this);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
+//	grid->addWidget(box, 0, 2, Qt::AlignLeft);
 	mCount = new TimePeriod(box);
 	mCount->setHourMinRange(1, 100*60-1);    // max 99H59M
 	mCount->setUnitRange(1, mMaxDays);
@@ -104,6 +113,20 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	mLabel = new QLabel(i18n("in advance"), box);
 	QWhatsThis::add(box, valueWhatsThis);
 	layout->addStretch();
+
+	if (showOnceOnly)
+	{
+		layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		layout->addSpacing(3*KDialog::spacingHint());
+		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only, this);
+		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
+		QWhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
+		layout->addWidget(mOnceOnly);
+//		grid->addMultiCellWidget(mOnceOnly, 1, 1, 1, 2, Qt::AlignLeft);
+		layout->addStretch();
+	}
+	else
+		mOnceOnly = 0;
 }
 
 /******************************************************************************
@@ -117,12 +140,37 @@ void Reminder::setReadOnly(bool ro)
 		mReminder->setReadOnly(mReadOnly);
 		mCount->setReadOnly(mReadOnly);
 		mUnitsCombo->setReadOnly(mReadOnly);
+		if (mOnceOnly)
+			mOnceOnly->setReadOnly(mReadOnly);
 	}
 }
 
 bool Reminder::isReminder() const
 {
 	return mReminder->isChecked();
+}
+
+bool Reminder::isOnceOnly() const
+{
+	return mOnceOnly  &&  mOnceOnly->isEnabled()  &&  mOnceOnly->isChecked();
+}
+
+void Reminder::setOnceOnly(bool onceOnly)
+{
+	if (mOnceOnly)
+		mOnceOnly->setChecked(onceOnly);
+}
+
+/******************************************************************************
+*  Specify whether the once-only checkbox is allowed to be enabled.
+*/
+void Reminder::enableOnceOnly(bool enable)
+{
+	if (mOnceOnly)
+	{
+		mOnceOnlyEnabled = enable;
+		mOnceOnly->setEnabled(enable && mReminder->isChecked());
+	}
 }
 
 void Reminder::setMaximum(int hourmin, int days)
@@ -278,6 +326,8 @@ void Reminder::slotReminderToggled(bool on)
 	mLabel->setEnabled(on);
 	if (on  &&  mDateOnlyOffset)
 	 	setDateOnly(getMinutes(), true);
+	if (mOnceOnly)
+		mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
 }
 
 /******************************************************************************

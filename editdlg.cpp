@@ -381,7 +381,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mReminder = new Reminder(i18n("Rem&inder:"),
 	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
 	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
-	                         true, mDisplayAlarmsFrame);
+	                         true, true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
@@ -571,6 +571,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			mReminderArchived = true;
 		}
 		mReminder->setMinutes(reminder, (mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isOn()));
+		mReminder->setOnceOnly(event->reminderOnceOnly());
+		mReminder->enableOnceOnly(event->recurs());
 		mRecurrenceText->setText(event->recurrenceText());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->set(event->beep(), event->audioFile(), event->repeatSound());
@@ -600,6 +602,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mLateCancel->setChecked(preferences->defaultLateCancel());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		mReminder->setMinutes(0, false);
+		mReminder->enableOnceOnly(false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(), preferences->defaultSoundRepeat());
@@ -780,6 +783,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedFgColour       = mFontColourButton->fgColour();
 	mSavedBgColour       = mBgColourChoose->color();
 	mSavedReminder       = mReminder->getMinutes();
+	mSavedOnceOnly       = mReminder->isOnceOnly();
 	checkText(mSavedTextFileCommandMessage, false);
 	mSavedEmailTo        = mEmailToEdit->text();
 	mSavedEmailSubject   = mEmailSubjectEdit->text();
@@ -823,7 +827,8 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
 		||  mSavedBgColour   != mBgColourChoose->color()
-		||  mSavedReminder   != mReminder->getMinutes())
+		||  mSavedReminder   != mReminder->getMinutes()
+		||  mSavedOnceOnly   != mReminder->isOnceOnly())
 			return true;
 		if (!mSavedBeep)
 		{
@@ -880,7 +885,7 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 		          getAlarmFlags());
 		event.setAudioFile(mSoundPicker->file());
 		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
-		event.setReminder(mReminder->getMinutes());
+		event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event);
@@ -1045,13 +1050,17 @@ void EditAlarmDlg::slotOk()
 		{
 			KAEvent event;
 			mRecurrenceEdit->updateEvent(event);
-			int minutes = event.longestRecurrenceInterval();
-			if (minutes  &&  reminder >= minutes)
+			if (!mReminder->isOnceOnly())
 			{
-				showPage(mMainPageIndex);
-				mReminder->setFocusOnCount();
-				KMessageBox::sorry(this, i18n("Reminder period must be less than recurrence interval"));
-				return;
+				int minutes = event.longestRecurrenceInterval();
+				if (minutes  &&  reminder >= minutes)
+				{
+					showPage(mMainPageIndex);
+					mReminder->setFocusOnCount();
+					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
+					                             ).arg(Reminder::i18n_first_recurrence_only));
+					return;
+				}
 			}
 		}
 	}
@@ -1211,11 +1220,13 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		if (mDeferGroup)
 			mDeferGroup->setEnabled(recurs);
 		mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
-		if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+		bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
+		if (atLogin)
 		{
 			mAlarmDateTime = mTimeWidget->getDateTime(false, false);
 			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
 		}
+		mReminder->enableOnceOnly(recurs && !atLogin);
 	}
 	slotRecurFrequencyChange();
 }

@@ -46,15 +46,20 @@ class Reminder : public QFrame
 		enum Units { HOURS_MINUTES, DAYS, WEEKS };
 
 		Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
-		         bool allowHourMinute, QWidget* parent, const char* name = 0);
+		         bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name = 0);
 		bool         isReminder() const;
+		bool         isOnceOnly() const;
 		int          getMinutes() const;
 		void         setMinutes(int minutes, bool dateOnly);
 		void         setReadOnly(bool);
 		Units        setDateOnly(bool dateOnly)   { return setDateOnly(getMinutes(), dateOnly); }
 		void         setMaximum(int hourmin, int days);
 		void         setFocusOnCount();
+		void         setOnceOnly(bool);
+		void         enableOnceOnly(bool enable);
 
+		static const QString i18n_first_recurrence_only;    // plain text of 'Reminder for first recurrence only' checkbox
+		static const QString i18n_u_first_recurrence_only;  // text of 'Reminder for first recurrence only' checkbox, with 'u' shortcut
 		static const QString i18n_hours_mins;  // text of 'hours/minutes' units, lower case
 		static const QString i18n_Hours_Mins;  // text of 'Hours/Minutes' units, initial capitals
 		static const QString i18n_days;        // text of 'days' units, lower case
@@ -74,9 +79,11 @@ class Reminder : public QFrame
 		TimePeriod*  mCount;
 		ComboBox*    mUnitsCombo;
 		QLabel*      mLabel;
+		CheckBox*    mOnceOnly;
 		int          mMaxDays;            // maximum day count
 		bool         mNoHourMinute;       // hours/minutes cannot be displayed, ever
 		bool         mReadOnly;           // the widget is read only
+		bool         mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 		int          mDateOnlyOffset;     // 1 if hours/minutes is disabled, else 0
 };
 

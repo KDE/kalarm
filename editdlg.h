@@ -213,6 +213,7 @@ class EditAlarmDlg : public KDialogBase
 		QColor            mSavedBgColour;       // mBgColourChoose selection
 		QColor            mSavedFgColour;       // mFontColourButton foreground colour
 		int               mSavedReminder;       // mReminder value
+		bool              mSavedOnceOnly;       // mReminder once-only status
 		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value
 		QString           mSavedEmailTo;        // mEmailToEdit value
 		QString           mSavedEmailSubject;   // mEmailSubjectEdit value

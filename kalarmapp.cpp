@@ -505,22 +505,27 @@ int KAlarmApp::newInstance()
 				}
 
 				int reminderMinutes = 0;
-				if (args->isSet("reminder"))
+				bool onceOnly = args->isSet("reminder-once");
+				if (args->isSet("reminder")  ||  onceOnly)
 				{
 					// Issue a reminder alarm in advance of the main alarm
+					if (onceOnly  &&  args->isSet("reminder"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--reminder-once")))
+					QString opt = onceOnly ? QString::fromLatin1("--reminder-once") : QString::fromLatin1("--reminder");
 					if (args->isSet("exec"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--exec")))
+						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--exec")))
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--mail")))
 					KAEvent::RecurType recur;
-					bool ok = convInterval(args->getOption("reminder"), recur, reminderMinutes);
+					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
+					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recur, reminderMinutes);
 					if (ok)
 					{
 						switch (recur)
 						{
 							case KAEvent::MINUTELY:
 								if (alarmNoTime)
-									USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--reminder")))
+									USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(opt))
 								break;
 							case KAEvent::DAILY:     reminderMinutes *= 1440;  break;
 							case KAEvent::WEEKLY:    reminderMinutes *= 7*1440;  break;
@@ -528,7 +533,7 @@ int KAlarmApp::newInstance()
 						}
 					}
 					if (!ok)
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--reminder")))
+						USAGE(i18n("Invalid %1 parameter").arg(opt))
 				}
 
 				int flags = KAEvent::DEFAULT_FONT;
@@ -588,6 +593,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--play-repeat ");
 				if (args->isSet("reminder"))
 					usage += QString::fromLatin1("--reminder ");
+				if (args->isSet("reminder-once"))
+					usage += QString::fromLatin1("--reminder-once ");
 				if (args->isSet("subject"))
 					usage += QString::fromLatin1("--subject ");
 				if (args->isSet("time"))
@@ -1023,7 +1030,10 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 
 	KAEvent event(alarmTime, message, bg, fg, font, action, flags);
 	if (reminderMinutes)
-		event.setReminder(reminderMinutes);
+	{
+		bool onceOnly = (reminderMinutes < 0);
+		event.setReminder((onceOnly ? -reminderMinutes : reminderMinutes), onceOnly);
+	}
 	if (!audioFile.isEmpty())
 		event.setAudioFile(audioFile);
 	if (mailAddresses.count())
@@ -1693,6 +1703,9 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 	// Get the recurrence interval
 	bool ok = true;
 	uint interval = 0;
+	bool negative = (timeParam[0] == '-');
+	if (negative)
+		timeParam = timeParam.right(1);
 	uint length = timeParam.length();
 	switch (timeParam[length - 1])
 	{
@@ -1728,6 +1741,8 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 	if (ok)
 		interval += timeParam.toUInt(&ok);
 	timeInterval = static_cast<int>(interval);
+	if (negative)
+		timeInterval = -timeInterval;
 	return ok;
 }
 

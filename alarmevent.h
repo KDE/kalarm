@@ -303,7 +303,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
-		void               setReminder(int minutes)                          { mReminderMinutes = minutes;  mArchiveReminderMinutes = 0;  mUpdated = true; }
+		void               setReminder(int minutes, bool onceOnly)           { mReminderMinutes = minutes;  mArchiveReminderMinutes = 0;  mReminderOnceOnly = onceOnly;  mUpdated = true; }
 		void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QDateTime&);
@@ -333,6 +333,7 @@ class KAEvent : public KAAlarmEventBase
 		QDate              mainDate() const               { return mDateTime.date(); }
 		QTime              mainTime() const               { return mDateTime.time(); }
 		int                reminder() const               { return mReminderMinutes; }
+		bool               reminderOnceOnly() const       { return mReminderOnceOnly; }
 		bool               reminderDeferral() const       { return mReminderDeferral; }
 		int                reminderArchived() const       { return mArchiveReminderMinutes; }
 		DateTime           deferDateTime() const          { return mDeferralTime; }
@@ -489,9 +490,10 @@ class KAEvent : public KAAlarmEventBase
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
 		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
 		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
-		int                mAlarmCount;       // number of alarms
+		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		bool               mTemplateDefaultTime; // time not specified: use default time (applies to templates only)
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
+		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mReminderDeferral; // deferred alarm is a deferred reminder
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
 		bool               mArchiveRepeatAtLogin; // if now expired, original event was repeat-at-login

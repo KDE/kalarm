@@ -182,7 +182,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	                         i18n("Check to display a reminder in advance of the birthday."),
 	                         i18n("Enter the number of days before each birthday to display a reminder. "
 	                              "This is in addition to the alarm which is displayed on the birthday."),
-	                         false, group);
+	                         false, false, group);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setMaximum(0, 364);
 	mReminder->setMinutes(0, true);
@@ -296,7 +296,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				event.setRecurAnnualByDate(1, months, 0, -1);
 				event.setNextOccurrence(todayNoon);
 				if (reminder)
-					event.setReminder(reminder);
+					event.setReminder(reminder, false);
 				list.append(event);
 			}
 		}
