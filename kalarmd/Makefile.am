@@ -1,4 +1,4 @@
-INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm $(all_includes)
+INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm -I$(top_builddir)/libkdepim $(all_includes)
 
 noinst_LTLIBRARIES = libkalarmd.la
 

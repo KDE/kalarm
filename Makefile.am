@@ -4,6 +4,7 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/widgets \
 	-I$(top_builddir)/libkcal/libical/src \
 	-I$(top_srcdir)/libkmime \
+	-I$(top_builddir)/libkdepim \
 	-I$(top_srcdir)/certmanager/lib $(all_includes)
 
 bin_PROGRAMS = kalarm
