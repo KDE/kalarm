@@ -1840,9 +1840,9 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 
 	if (!calendarOnly)
 	{
+		setUpDcop();              // we're now ready to handle DCOP calls, so set up handlers
 		if (startdaemon)
 			startDaemon();          // make sure the alarm daemon is running
-		setUpDcop();              // we're now ready to handle DCOP calls, so set up handlers
 	}
 	return true;
 }
