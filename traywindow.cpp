@@ -75,8 +75,8 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
-	mPixmapEnabled  = BarIcon("kalarm");
-	mPixmapDisabled = BarIcon("kalarm_disabled");
+	mPixmapEnabled  = loadIcon("kalarm");
+	mPixmapDisabled = loadIcon("kalarm_disabled");
 	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
 		KMessageBox::sorry(this, i18n("Can't load system tray icon!"),
 		                         i18n("%1 Error").arg(kapp->aboutData()->programName()));
