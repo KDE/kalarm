@@ -285,6 +285,12 @@ void KAlarmMainWindow::initActions()
 	mActionShowTimeTo     = new KToggleAction(i18n_o_ShowTimeToAlarms(), Qt::CTRL+Qt::Key_I, this, SLOT(slotShowTimeTo()), actions, "showTimeToAlarms");
 	mActionShowExpired    = new KToggleAction(i18n_e_ShowExpiredAlarms(), Qt::CTRL+Qt::Key_P, this, SLOT(slotShowExpired()), actions, "showExpiredAlarms");
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_Y, this, SLOT(slotToggleTrayIcon()), actions, "showInSystemTray");
+#if KDE_IS_VERSION(3,2,90)
+        mActionShowTime->setCheckedState( i18n("Hide &Alarm Times") );
+        mActionShowTimeTo->setCheckedState( i18n("Hide Time t&o Alarms") );
+        mActionShowExpired->setCheckedState( i18n("Hide &Expired Alarms") );
+        mActionToggleTrayIcon->setCheckedState( i18n("Hide in System &Tray") );
+#endif
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
 	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
 	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
