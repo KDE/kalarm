@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "alarmtext.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
@@ -53,6 +54,7 @@ static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
 static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
 static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
+static const QCString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
 
 // Event categories
 static const QString DATE_ONLY_CATEGORY      = QString::fromLatin1("DATE");
@@ -75,6 +77,7 @@ struct AlarmData
 {
 	const Alarm*           alarm;
 	QString                cleanText;       // text or audio file name
+	QString                emailFromKMail;
 	EmailAddressList       emailAddresses;
 	QString                emailSubject;
 	QStringList            emailAttachments;
@@ -278,6 +281,7 @@ void KAEvent::set(const Event& event)
 	mAudioFile        = "";
 	mPreAction        = "";
 	mPostAction       = "";
+	mEmailFromKMail   = "";
 	mEmailSubject     = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
@@ -387,6 +391,7 @@ void KAEvent::set(const Event& event)
 							mFgColour    = data.fgColour;
 							break;
 						case T_EMAIL:
+							mEmailFromKMail   = data.emailFromKMail;
 							mEmailAddresses   = data.emailAddresses;
 							mEmailSubject     = data.emailSubject;
 							mEmailAttachments = data.emailAttachments;
@@ -468,6 +473,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			break;
 		case Alarm::Email:
 			data.action           = T_EMAIL;
+			data.emailFromKMail   = alarm.customProperty(APPNAME, KMAIL_ID_PROPERTY);
 			data.emailAddresses   = alarm.mailAddresses();
 			data.emailSubject     = alarm.mailSubject();
 			data.emailAttachments = alarm.mailAttachments();
@@ -476,7 +482,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 		case Alarm::Display:
 		{
 			data.action    = T_MESSAGE;
-			data.cleanText = alarm.text();
+			data.cleanText = AlarmText::fromCalendarText(alarm.text());
 			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
 			QStringList list = QStringList::split(QChar(';'), property, true);
 			data.bgColour = QColor(255, 255, 255);   // white
@@ -628,26 +634,29 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 /******************************************************************************
  * Initialise an email KAEvent.
  */
-void KAEvent::setEmail(const QDate& d, const EmailAddressList& addresses, const QString& subject,
+void KAEvent::setEmail(const QDate& d, const QString& from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
 	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME);
+	mEmailFromKMail   = from;
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
 }
 
-void KAEvent::setEmail(const QDateTime& dt, const EmailAddressList& addresses, const QString& subject,
+void KAEvent::setEmail(const QDateTime& dt, const QString& from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
 	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags);
+	mEmailFromKMail   = from;
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
 }
 
-void KAEvent::setEmail(const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
+void KAEvent::setEmail(const QString& from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
 {
+	mEmailFromKMail   = from;
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
@@ -1056,7 +1065,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 					alltypes += FILE_TYPE;
 					// fall through to T_MESSAGE
 				case T_MESSAGE:
-					alarm->setDisplayAlarm(mText);
+					alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
 					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						      QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
 										     .arg(mFgColour.name())
@@ -1067,6 +1076,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 					break;
 				case T_EMAIL:
 					alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
+					if (!mEmailFromKMail.isEmpty())
+						alarm->setCustomProperty(APPNAME, KMAIL_ID_PROPERTY, mEmailFromKMail);
 					break;
 				case T_AUDIO:
 					break;
@@ -1112,6 +1123,7 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mEmailBcc      = mEmailBcc;
 		if (mActionType == T_EMAIL)
 		{
+			al.mEmailFromKMail   = mEmailFromKMail;
 			al.mEmailAddresses   = mEmailAddresses;
 			al.mEmailSubject     = mEmailSubject;
 			al.mEmailAttachments = mEmailAttachments;
@@ -2696,7 +2708,7 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	static const QString LATE_CANCEL_CAT = QString::fromLatin1("LATECANCEL");
 
 	int version = calendar.KAlarmVersion();
-	if (version >= AlarmCalendar::KAlarmVersion(1,1,1))
+	if (version >= AlarmCalendar::KAlarmVersion(1,2,1))
 		return;
 
 	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting\n";
@@ -2704,6 +2716,7 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	bool pre_0_9   = (version < AlarmCalendar::KAlarmVersion(0,9,0));
 	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool pre_1_1_1 = (version < AlarmCalendar::KAlarmVersion(1,1,1));
+	bool pre_1_2_1 = (version < AlarmCalendar::KAlarmVersion(1,2,1));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::instance()->startOfDay();
@@ -2926,6 +2939,26 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			}
 		}
 
+		if (pre_1_2_1)
+		{
+			/*
+			 * It's a KAlarm pre-1.2.1 calendar file.
+			 * Convert email display alarms from translated to untranslated header prefixes.
+			 */
+			Alarm::List alarms = event->alarms();
+			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+			{
+				Alarm* alarm = *alit;
+				if (alarm->type() == Alarm::Display)
+				{
+					QString oldtext = alarm->text();
+					QString newtext = AlarmText::toCalendarText(oldtext);
+					if (oldtext != newtext)
+						alarm->setDisplayAlarm(newtext);
+				}
+			}
+		}
+
 		if (addLateCancel)
 			cats.append(QString("%1%2").arg(LATE_CANCEL_CATEGORY).arg(1));
 
@@ -3069,6 +3102,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mBgColour         = rhs.mBgColour;
 	mFgColour         = rhs.mFgColour;
 	mFont             = rhs.mFont;
+	mEmailFromKMail   = rhs.mEmailFromKMail;
 	mEmailAddresses   = rhs.mEmailAddresses;
 	mEmailSubject     = rhs.mEmailSubject;
 	mEmailAttachments = rhs.mEmailAttachments;
@@ -3126,7 +3160,8 @@ void KAAlarmEventBase::dumpDebug() const
 	kdDebug(5950) << "-- mNextMainDateTime:" << mNextMainDateTime.toString() << ":\n";
 	if (mActionType == T_EMAIL)
 	{
-		kdDebug(5950) << "-- mEmail: Addresses:" << mEmailAddresses.join(", ") << ":\n";
+		kdDebug(5950) << "-- mEmail: FromKMail:" << mEmailFromKMail << ":\n";
+		kdDebug(5950) << "--         Addresses:" << mEmailAddresses.join(", ") << ":\n";
 		kdDebug(5950) << "--         Subject:" << mEmailSubject << ":\n";
 		kdDebug(5950) << "--         Attachments:" << mEmailAttachments.join(", ") << ":\n";
 		kdDebug(5950) << "--         Bcc:" << (mEmailBcc ? "true" : "false") << ":\n";

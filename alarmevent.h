@@ -50,28 +50,29 @@ class KAAlarmEventBase
 {
 	public:
 		~KAAlarmEventBase()  { }
-		const QString&     cleanText() const          { return mText; }
-		QString            message() const            { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString::null; }
-		QString            fileName() const           { return (mActionType == T_FILE) ? mText : QString::null; }
-		QString            command() const            { return (mActionType == T_COMMAND) ? mText : QString::null; }
+		const QString&     cleanText() const           { return mText; }
+		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString::null; }
+		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString::null; }
+		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString::null; }
+		QString            emailFromKMail() const      { return mEmailFromKMail; }
 		const EmailAddressList& emailAddresses() const { return mEmailAddresses; }
 		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
-		const QString&     emailSubject() const       { return mEmailSubject; }
-		const QStringList& emailAttachments() const   { return mEmailAttachments; }
+		const QString&     emailSubject() const        { return mEmailSubject; }
+		const QStringList& emailAttachments() const    { return mEmailAttachments; }
 		QString            emailAttachments(const QString& sep) const  { return mEmailAttachments.join(sep); }
-		bool               emailBcc() const           { return mEmailBcc; }
-		const QColor&      bgColour() const           { return mBgColour; }
-		const QColor&      fgColour() const           { return mFgColour; }
-		bool               defaultFont() const        { return mDefaultFont; }
+		bool               emailBcc() const            { return mEmailBcc; }
+		const QColor&      bgColour() const            { return mBgColour; }
+		const QColor&      fgColour() const            { return mFgColour; }
+		bool               defaultFont() const         { return mDefaultFont; }
 		const QFont&       font() const;
-		int                lateCancel() const         { return mLateCancel; }
-		bool               autoClose() const          { return mAutoClose; }
-		bool               confirmAck() const         { return mConfirmAck; }
-		bool               repeatAtLogin() const      { return mRepeatAtLogin; }
-		int                repeatCount() const        { return mRepeatCount; }
-		int                repeatInterval() const     { return mRepeatInterval; }
-		bool               displaying() const         { return mDisplaying; }
-		bool               beep() const               { return mBeep; }
+		int                lateCancel() const          { return mLateCancel; }
+		bool               autoClose() const           { return mAutoClose; }
+		bool               confirmAck() const          { return mConfirmAck; }
+		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
+		int                repeatCount() const         { return mRepeatCount; }
+		int                repeatInterval() const      { return mRepeatInterval; }
+		bool               displaying() const          { return mDisplaying; }
+		bool               beep() const                { return mBeep; }
 		int                flags() const;
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
@@ -95,6 +96,7 @@ class KAAlarmEventBase
 		QColor             mBgColour;         // background colour of alarm message
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
+		QString            mEmailFromKMail;   // KMail identity for email 'From' field, or empty
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
@@ -326,11 +328,11 @@ class KAEvent : public KAAlarmEventBase
 		                            { set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME); }
 		void               setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags)
 		                            { set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags); }
-		void               setEmail(const QDate&, const EmailAddressList&, const QString& subject,
+		void               setEmail(const QDate&, const QString& from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const QDateTime&, const EmailAddressList&, const QString& subject,
+		void               setEmail(const QDateTime&, const QString& from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
+		void               setEmail(const QString& from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
 		void               setTemplate(const QString& name, bool defaultTime)  { mTemplateName = name; mTemplateDefaultTime = defaultTime;  mUpdated = true; }
 		void               setActions(const QString& pre, const QString& post) { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
