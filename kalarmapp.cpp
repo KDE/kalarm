@@ -109,7 +109,11 @@ KAlarmApp::KAlarmApp()
 	KActionCollection* actions = new KActionCollection(this);
 	mActionAlarmEnable   = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), actions, "alarmenable");
 	mActionPrefs         = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
+#if 1
 	mActionDaemonControl = new KAction(i18n("Control Alarm &Daemon..."), mActionPrefs->iconSet(),
+#else
+	mActionDaemonControl = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
+#endif
 	                                   0, this, SLOT(slotDaemonControl()), actions, "controldaemon");
 }
 
