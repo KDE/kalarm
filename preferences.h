@@ -97,6 +97,8 @@ class Preferences : public QObject
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
 		Reminder::Units defaultReminderUnits() const    { return mDefaultReminderUnits; }
+		const QString& defaultPreAction() const         { return mDefaultPreAction; }
+		const QString& defaultPostAction() const        { return mDefaultPostAction; }
 
 		void           save(bool syncToDisc = true);
 		void           syncToDisc();
@@ -150,6 +152,8 @@ class Preferences : public QObject
 		                         default_defaultRecurPeriod;
 		static const Reminder::Units
 		                         default_defaultReminderUnits;
+		static const QString     default_defaultPreAction;
+		static const QString     default_defaultPostAction;
 
 	signals:
 		void preferencesChanged();
@@ -205,6 +209,8 @@ class Preferences : public QObject
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
 		Reminder::Units     mDefaultReminderUnits;
+		QString             mDefaultPreAction;
+		QString             mDefaultPostAction;
 		// Change tracking
 		QTime               mOldStartOfDay;       // previous start-of-day time
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay

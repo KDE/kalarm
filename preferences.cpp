@@ -85,6 +85,8 @@ const Preferences::MailClient    Preferences::default_emailClient          = KMA
 const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
 const Reminder::Units            Preferences::default_defaultReminderUnits = Reminder::HOURS_MINUTES;
+const QString    Preferences::default_defaultPreAction;
+const QString    Preferences::default_defaultPostAction;
 
 static const QString    defaultFeb29RecurType = QString::fromLatin1("Mar1");
 static const QString    defaultEmailClient    = QString::fromLatin1("kmail");
@@ -128,6 +130,8 @@ static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
 static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
+static const QString DEF_PRE_ACTION           = QString::fromLatin1("DefPreAction");
+static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostAction");
 
 // Config file entry names for notification messages
 const QString Preferences::QUIT_WARN              = QString::fromLatin1("QuitWarn");
@@ -235,6 +239,8 @@ Preferences::Preferences()
 	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
 	mDefaultReminderUnits    = (reminderUnits < Reminder::HOURS_MINUTES || reminderUnits > Reminder::WEEKS)
 	                         ? default_defaultReminderUnits : (Reminder::Units)reminderUnits;
+	mDefaultPreAction        = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
+	mDefaultPostAction       = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	emit preferencesChanged();
 	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
 	if (mStartOfDayChanged)
@@ -288,6 +294,8 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
+	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
+	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 	if (syncToDisc)
 		config->sync();
 	emit preferencesChanged();

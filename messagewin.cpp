@@ -127,28 +127,34 @@ QPtrList<MessageWin> MessageWin::mWindowList;
 *  the whole event needs to be stored for updating the calendar file when it is
 *  displayed.
 */
-MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
+MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
 	                                         | (Preferences::instance()->modalMessages() ? 0 : Qt::WX11BypassWM)),
-	  mEvent(evnt),
-	  message(alarm.cleanText()),
-	  font(evnt.font()),
-	  mBgColour(evnt.bgColour()),
-	  mFgColour(evnt.fgColour()),
-	  mDateTime((alarm.type() & KAAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
-	  eventID(evnt.id()),
+	  mMessage(event.cleanText()),
+	  mFont(event.font()),
+	  mBgColour(event.bgColour()),
+	  mFgColour(event.fgColour()),
+	  mDateTime((alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime() : alarm.dateTime()),
+	  mEventID(event.id()),
+	  mAudioFile(event.audioFile()),
+	  mVolume(event.soundVolume()),
 	  mAlarmType(alarm.type()),
-	  flags(alarm.flags()),
-	  beep(evnt.beep()),
-	  confirmAck(evnt.confirmAck()),
-	  action(alarm.action()),
-	  noDefer(!allowDefer || alarm.repeatAtLogin()),
+	  mAction(event.action()),
+	  mRestoreHeight(0),
+	  mAudioRepeat(event.repeatSound()),
+	  mConfirmAck(event.confirmAck()),
+	  mNoDefer(!allowDefer || alarm.repeatAtLogin()),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mOldVolume(-1),
+	  mEvent(event),
 	  mDeferButton(0),
 	  mSilenceButton(0),
-	  mRestoreHeight(0),
+	  mFlags(event.flags()),
+	  mErrorWindow(false),
+	  mNoPostAction(false),
+	  mRecreating(false),
+	  mBeep(event.beep()),
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
 	  mDeferClosing(false),
@@ -157,7 +163,7 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedul
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
 	QSize size = initView();
-	if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
+	if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 		size = KAlarm::readConfigWindowSize("FileMessage", size);
 	resize(size);
 	mWindowList.append(this);
@@ -165,41 +171,34 @@ MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, bool reschedul
 
 /******************************************************************************
 *  Construct the message window for a specified error message.
-*  Other alarms in the supplied event may have been updated by the caller, so
-*  the whole event needs to be stored for updating the calendar file when it is
-*  displayed.
 */
-MessageWin::MessageWin(const KAEvent& evnt, const KAAlarm& alarm, const QStringList& errmsgs, bool reschedule_event)
+#warning "MessageWin shouldn't be saved at logoff??"
+MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, const QStringList& errmsgs)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
-	  mEvent(evnt),
-	  message(alarm.cleanText()),
-	  font(evnt.font()),
-	  mBgColour(Qt::white),
-	  mFgColour(Qt::black),
-	  mDateTime(alarm.dateTime()),
-	  eventID(evnt.id()),
-	  mAlarmType(alarm.type()),
-	  flags(alarm.flags()),
-	  beep(false),
-	  confirmAck(evnt.confirmAck()),
-	  action(alarm.action()),
+	  mMessage(event.cleanText()),
+	  mDateTime(alarmDateTime),
+	  mEventID(event.id()),
+	  mAlarmType(KAAlarm::MAIN_ALARM),
+	  mAction(event.action()),
 	  mErrorMsgs(errmsgs),
-	  noDefer(true),
+	  mRestoreHeight(0),
+	  mConfirmAck(false),
+	  mNoDefer(true),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
-	  mOldVolume(-1),
+	  mEvent(event),
 	  mDeferButton(0),
 	  mSilenceButton(0),
-	  mRestoreHeight(0),
-	  mRescheduleEvent(reschedule_event),
+	  mErrorWindow(true),
+	  mNoPostAction(true),
+	  mRecreating(false),
+	  mRescheduleEvent(false),
 	  mShown(false),
 	  mDeferClosing(false),
 	  mDeferDlgShowing(false)
 {
-	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
-	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
-	QSize size = initView();
-	resize(size);
+	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
+	resize(initView());
 	mWindowList.append(this);
 }
 
@@ -212,6 +211,9 @@ MessageWin::MessageWin()
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mSilenceButton(0),
+	  mErrorWindow(false),
+	  mNoPostAction(true),
+	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(true),
 	  mDeferClosing(false),
@@ -221,6 +223,9 @@ MessageWin::MessageWin()
 	mWindowList.append(this);
 }
 
+/******************************************************************************
+* Destructor. Perform any post-alarm actions before tidying up.
+*/
 MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
@@ -231,8 +236,13 @@ MessageWin::~MessageWin()
 			mWindowList.remove();
 			break;
 		}
-	if (!mWindowList.count())
-		theApp()->quitIf();
+	if (!mRecreating)
+	{
+		if (!mNoPostAction  &&  !mEvent.postAction().isEmpty())
+			theApp()->alarmCompleted(mEvent);
+		if (!mWindowList.count())
+			theApp()->quitIf();
+	}
 }
 
 /******************************************************************************
@@ -240,7 +250,7 @@ MessageWin::~MessageWin()
 */
 QSize MessageWin::initView()
 {
-	bool reminder = (!mErrorMsgs.count()  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
+	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
 	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
@@ -282,134 +292,150 @@ QSize MessageWin::initView()
 		}
 	}
 
-	switch (action)
+	if (!mErrorWindow)
 	{
-		case KAAlarm::FILE:
+		// It's a normal alarm message window
+		switch (mAction)
 		{
-			// Display the file name
-			QLabel* label = new QLabel(message, topWidget);
-			label->setFrameStyle(QFrame::Box | QFrame::Raised);
-			label->setFixedSize(label->sizeHint());
-			QWhatsThis::add(label, i18n("The file whose contents are displayed below"));
-			topLayout->addWidget(label, 0, Qt::AlignHCenter);
-
-			// Display contents of file
-			bool opened = false;
-			bool dir = false;
-			QString tmpFile;
-			KURL url(message);
-			if (KIO::NetAccess::download(url, tmpFile))
+			case KAEvent::FILE:
 			{
-				QFile qfile(tmpFile);
-				QFileInfo info(qfile);
-				if (!(dir = info.isDir()))
+				// Display the file name
+				QLabel* label = new QLabel(mMessage, topWidget);
+				label->setFrameStyle(QFrame::Box | QFrame::Raised);
+				label->setFixedSize(label->sizeHint());
+				QWhatsThis::add(label, i18n("The file whose contents are displayed below"));
+				topLayout->addWidget(label, 0, Qt::AlignHCenter);
+
+				// Display contents of file
+				bool opened = false;
+				bool dir = false;
+				QString tmpFile;
+				KURL url(mMessage);
+				if (KIO::NetAccess::download(url, tmpFile))
 				{
-					opened = true;
-					KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
-					MWMimeSourceFactory msf(tmpFile, view);
-					view->setMinimumSize(view->sizeHint());
-					topLayout->addWidget(view);
+					QFile qfile(tmpFile);
+					QFileInfo info(qfile);
+					if (!(dir = info.isDir()))
+					{
+						opened = true;
+						KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
+						MWMimeSourceFactory msf(tmpFile, view);
+						view->setMinimumSize(view->sizeHint());
+						topLayout->addWidget(view);
 
-					// Set the default size to 20 lines square.
-					// Note that after the first file has been displayed, this size
-					// is overridden by the user-set default stored in the config file.
-					// So there is no need to calculate an accurate size.
-					int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
-					view->resize(QSize(h, h).expandedTo(view->sizeHint()));
-					QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
+						// Set the default size to 20 lines square.
+						// Note that after the first file has been displayed, this size
+						// is overridden by the user-set default stored in the config file.
+						// So there is no need to calculate an accurate size.
+						int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
+						view->resize(QSize(h, h).expandedTo(view->sizeHint()));
+						QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
+					}
+					KIO::NetAccess::removeTempFile(tmpFile);
 				}
-				KIO::NetAccess::removeTempFile(tmpFile);
+				if (!opened)
+				{
+					// File couldn't be opened
+					bool exists = KIO::NetAccess::exists(url);
+					mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
+				}
+				break;
 			}
-			if (!opened)
+			case KAEvent::MESSAGE:
 			{
-				// File couldn't be opened
-				bool exists = KIO::NetAccess::exists(url);
-				mErrorMsgs.clear();
-				mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
+				// Message label
+				// Using MessageText instead of QLabel allows scrolling and mouse copying
+				MessageText* text = new MessageText(mMessage, QString::null, topWidget);
+				text->setFrameStyle(QFrame::NoFrame);
+				text->setPaper(mBgColour);
+				text->setPaletteForegroundColor(mFgColour);
+				text->setFont(mFont);
+				int h = text->sizeHint().height();
+				text->setMinimumHeight(h - text->scrollBarHeight());
+				text->setMaximumHeight(h);
+				QWhatsThis::add(text, i18n("The alarm message"));
+				int lineSpacing = text->fontMetrics().lineSpacing();
+				int vspace = lineSpacing/2 - marginKDE2;
+				int hspace = lineSpacing - marginKDE2 - KDialog::marginHint();
+				topLayout->addSpacing(vspace);
+				topLayout->addStretch();
+				// Don't include any horizontal margins if message is 2/3 screen width
+				if (text->sizeHint().width() >= KWinModule(0, KWinModule::INFO_DESKTOP).workArea().width()*2/3)
+					topLayout->addWidget(text, 1, Qt::AlignHCenter);
+				else
+				{
+					QBoxLayout* layout = new QHBoxLayout(topLayout);
+					layout->addSpacing(hspace);
+					layout->addWidget(text, 1, Qt::AlignHCenter);
+					layout->addSpacing(hspace);
+				}
+				if (!reminder)
+					topLayout->addStretch();
+				break;
 			}
-			break;
+			case KAEvent::COMMAND:
+			case KAEvent::EMAIL:
+			default:
+				break;
 		}
-		case KAAlarm::EMAIL:
+
+		if (reminder)
 		{
-			// Display the email addresses and subject
-			QFrame* frame = new QFrame(topWidget);
-			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
-			QWhatsThis::add(frame, i18n("The email to send"));
-			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-			QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
-
-			QLabel* label = new QLabel(i18n("Email addressee", "To:"), frame);
-			label->setFixedSize(label->sizeHint());
-			grid->addWidget(label, 0, 0, Qt::AlignLeft);
-			label = new QLabel(mEvent.emailAddresses("\n"), frame);
-			label->setFixedSize(label->sizeHint());
-			grid->addWidget(label, 0, 1, Qt::AlignLeft);
-
-			label = new QLabel(i18n("Email subject", "Subject:"), frame);
-			label->setFixedSize(label->sizeHint());
-			grid->addWidget(label, 1, 0, Qt::AlignLeft);
-			label = new QLabel(mEvent.emailSubject(), frame);
-			label->setFixedSize(label->sizeHint());
-			grid->addWidget(label, 1, 1, Qt::AlignLeft);
-			break;
-		}
-		case KAAlarm::COMMAND:
-			break;
-
-		case KAAlarm::MESSAGE:
-		default:
-		{
-			// Message label
-			// Using MessageText instead of QLabel allows scrolling and mouse copying
-			MessageText* text = new MessageText(message, QString::null, topWidget);
-			text->setFrameStyle(QFrame::NoFrame);
-			text->setPaper(mBgColour);
-			text->setPaletteForegroundColor(mFgColour);
-			text->setFont(font);
-			int h = text->sizeHint().height();
-			text->setMinimumHeight(h - text->scrollBarHeight());
-			text->setMaximumHeight(h);
-			QWhatsThis::add(text, i18n("The alarm message"));
-			int lineSpacing = text->fontMetrics().lineSpacing();
-			int vspace = lineSpacing/2 - marginKDE2;
-			int hspace = lineSpacing - marginKDE2 - KDialog::marginHint();
-			topLayout->addSpacing(vspace);
-			topLayout->addStretch();
-			// Don't include any horizontal margins if message is 2/3 screen width
-			if (text->sizeHint().width() >= KWinModule(0, KWinModule::INFO_DESKTOP).workArea().width()*2/3)
-				topLayout->addWidget(text, 1, Qt::AlignHCenter);
+			// Reminder: show remaining time until the actual alarm
+			mRemainingText = new QLabel(topWidget);
+			mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
+			mRemainingText->setMargin(leading);
+			if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
+			{
+				setRemainingTextDay();
+				DailyTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
+			}
 			else
 			{
-				QBoxLayout* layout = new QHBoxLayout(topLayout);
-				layout->addSpacing(hspace);
-				layout->addWidget(text, 1, Qt::AlignHCenter);
-				layout->addSpacing(hspace);
+				setRemainingTextMinute();
+				MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
 			}
-			if (!reminder)
-				topLayout->addStretch();
-			break;
+			topLayout->addWidget(mRemainingText, 0, Qt::AlignHCenter);
+			topLayout->addSpacing(KDialog::spacingHint());
+			topLayout->addStretch();
 		}
 	}
-
-	if (reminder)
+	else
 	{
-		// Reminder: show remaining time until the actual alarm
-		mRemainingText = new QLabel(topWidget);
-		mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
-		mRemainingText->setMargin(leading);
-		if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
+		// It's an error message
+		switch (mAction)
 		{
-			setRemainingTextDay();
-			DailyTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
+			case KAEvent::EMAIL:
+			{
+				// Display the email addresses and subject.
+				QFrame* frame = new QFrame(topWidget);
+				frame->setFrameStyle(QFrame::Box | QFrame::Raised);
+				QWhatsThis::add(frame, i18n("The email to send"));
+				topLayout->addWidget(frame, 0, Qt::AlignHCenter);
+				QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+
+				QLabel* label = new QLabel(i18n("Email addressee", "To:"), frame);
+				label->setFixedSize(label->sizeHint());
+				grid->addWidget(label, 0, 0, Qt::AlignLeft);
+				label = new QLabel(mEvent.emailAddresses("\n"), frame);
+				label->setFixedSize(label->sizeHint());
+				grid->addWidget(label, 0, 1, Qt::AlignLeft);
+
+				label = new QLabel(i18n("Email subject", "Subject:"), frame);
+				label->setFixedSize(label->sizeHint());
+				grid->addWidget(label, 1, 0, Qt::AlignLeft);
+				label = new QLabel(mEvent.emailSubject(), frame);
+				label->setFixedSize(label->sizeHint());
+				grid->addWidget(label, 1, 1, Qt::AlignLeft);
+				break;
+			}
+			case KAEvent::COMMAND:
+			case KAEvent::FILE:
+			case KAEvent::MESSAGE:
+			default:
+				// Just display the error message strings
+				break;
 		}
-		else
-		{
-			setRemainingTextMinute();
-			MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
-		}
-		topLayout->addWidget(mRemainingText, 0, Qt::AlignHCenter);
-		topLayout->addSpacing(KDialog::spacingHint());
-		topLayout->addStretch();
 	}
 
 	if (!mErrorMsgs.count())
@@ -449,7 +475,7 @@ QSize MessageWin::initView()
 	grid->addWidget(okButton, 0, gridIndex++, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
 
-	if (!noDefer)
+	if (!mNoDefer)
 	{
 		// Defer button
 		mDeferButton = new QPushButton(i18n("&Defer..."), topWidget);
@@ -463,7 +489,7 @@ QSize MessageWin::initView()
 	}
 
 #ifndef WITHOUT_ARTS
-	if (!mEvent.audioFile().isEmpty())
+	if (!mAudioFile.isEmpty())
 	{
 		// Silence button to stop sound repetition
 		QPixmap pixmap = MainBarIcon("player_stop");
@@ -553,24 +579,31 @@ void MessageWin::setRemainingTextMinute()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
-	if (mShown)
+	if (mShown  &&  !mErrorWindow)
 	{
-		config->writeEntry(QString::fromLatin1("EventID"), eventID);
+		config->writeEntry(QString::fromLatin1("EventID"), mEventID);
 		config->writeEntry(QString::fromLatin1("AlarmType"), mAlarmType);
-		config->writeEntry(QString::fromLatin1("Message"), message);
-		config->writeEntry(QString::fromLatin1("Type"), (mErrorMsgs.count() ? -1 : action));
-		config->writeEntry(QString::fromLatin1("Font"), font);
+		config->writeEntry(QString::fromLatin1("Message"), mMessage);
+		config->writeEntry(QString::fromLatin1("Type"), mAction);
+		config->writeEntry(QString::fromLatin1("Font"), mFont);
 		config->writeEntry(QString::fromLatin1("BgColour"), mBgColour);
 		config->writeEntry(QString::fromLatin1("FgColour"), mFgColour);
-		config->writeEntry(QString::fromLatin1("ConfirmAck"), confirmAck);
+		config->writeEntry(QString::fromLatin1("ConfirmAck"), mConfirmAck);
 		if (mDateTime.isValid())
 		{
 			config->writeEntry(QString::fromLatin1("Time"), mDateTime.dateTime());
 			config->writeEntry(QString::fromLatin1("DateOnly"), mDateTime.isDateOnly());
 		}
+#ifndef WITHOUT_ARTS
+		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
+		{
+			// Only need to restart sound file playing if it's being repeated
+			config->writeEntry(QString::fromLatin1("AudioFile"), mAudioFile);
+			config->writeEntry(QString::fromLatin1("Volume"), static_cast<int>(mVolume * 100));
+		}
+#endif
 		config->writeEntry(QString::fromLatin1("Height"), height());
-		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
-#warning "Save sound on/off, volume, sound file??"
+		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
 	}
 	else
 		config->writeEntry(QString::fromLatin1("AlarmType"), KAAlarm::INVALID_ALARM);
@@ -583,25 +616,35 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	eventID        = config->readEntry(QString::fromLatin1("EventID"));
+	mEventID       = config->readEntry(QString::fromLatin1("EventID"));
 	mAlarmType     = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
-	message        = config->readEntry(QString::fromLatin1("Message"));
-	int t          = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
-	if (t < 0)
-		mErrorMsgs += "";       // set non-null
-	action         = KAAlarm::Action(t);
-	font           = config->readFontEntry(QString::fromLatin1("Font"));
+	mMessage       = config->readEntry(QString::fromLatin1("Message"));
+	mAction        = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
+	mFont          = config->readFontEntry(QString::fromLatin1("Font"));
 	mBgColour      = config->readColorEntry(QString::fromLatin1("BgColour"));
 	mFgColour      = config->readColorEntry(QString::fromLatin1("FgColour"));
-	confirmAck     = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
+	mConfirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
 	QDateTime dt   = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	bool dateOnly  = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
+#ifndef WITHOUT_ARTS
+	mAudioFile     = config->readEntry(QString::fromLatin1("AudioFile"));
+	mVolume        = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
+	if (!mAudioFile.isEmpty())
+		mAudioRepeat = true;
+#endif
 	mRestoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
-	noDefer        = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	if (!mErrorMsgs.count()  &&  mAlarmType != KAAlarm::INVALID_ALARM)
+	mNoDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	if (mAlarmType != KAAlarm::INVALID_ALARM)
+	{
+		// Recreate the event from the calendar file (if possible)
+		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
+		if (kcalEvent)
+			mEvent.set(*kcalEvent);
+#warning "Check reinstatement of mEvent"
 		initView();
+	}
 }
 
 /******************************************************************************
@@ -611,7 +654,7 @@ void MessageWin::readProperties(KConfig* config)
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
 	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
-		if (w->eventID == eventID)
+		if (w->mEventID == eventID  &&  !w->mErrorWindow)
 			return w;
 	return 0;
 }
@@ -621,20 +664,19 @@ MessageWin* MessageWin::findEvent(const QString& eventID)
 */
 void MessageWin::playAudio()
 {
-	if (beep)
+	if (mBeep)
 	{
 		// Beep using two methods, in case the sound card/speakers are switched off or not working
 		KNotifyClient::beep();     // beep through the sound card & speakers
 		QApplication::beep();      // beep through the internal speaker
 	}
-	if (!mEvent.audioFile().isEmpty())
+	if (!mAudioFile.isEmpty())
 	{
 #ifdef WITHOUT_ARTS
-		QString audioFile = mEvent.audioFile();
-		QString play = audioFile;
+		QString play = mAudioFile;
 		QString file = QString::fromLatin1("file:");
-		if (audioFile.startsWith(file))
-			play = audioFile.mid(file.length());
+		if (mAudioFile.startsWith(file))
+			play = mAudioFile.mid(file.length());
 		KAudioPlayer::play(QFile::encodeName(play));
 #else
 		// An audio file is specified. Because loading it may take some time,
@@ -651,12 +693,12 @@ void MessageWin::slotPlayAudio()
 {
 #ifndef WITHOUT_ARTS
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
-	KURL url(mEvent.audioFile());
+	KURL url(mAudioFile);
 	if (!url.isValid()  ||  !KIO::NetAccess::exists(url)
 	||  !KIO::NetAccess::download(url, mLocalAudioFile))
 	{
-		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mEvent.audioFile() << endl;
-		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mEvent.audioFile()), kapp->aboutData()->programName());
+		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
+		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile), kapp->aboutData()->programName());
 		return;
 	}
 	if (!mArtsDispatcher)
@@ -685,8 +727,7 @@ void MessageWin::initAudio(bool firstTime)
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
 	if (firstTime)
 		mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-	float volume = mEvent.soundVolume();
-	sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
+	sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -706,7 +747,7 @@ void MessageWin::checkAudioPlay()
 		return;
 	if (mPlayObject->state() == Arts::posIdle)
 	{
-		if (mPlayedOnce  &&  !mEvent.repeatSound())
+		if (mPlayedOnce  &&  !mAudioRepeat)
 			return;
 		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
@@ -771,7 +812,7 @@ void MessageWin::stopPlay()
 		KArtsServer aserver;
 		Arts::StereoVolumeControl svc = aserver.server().outVolume();
 		float currentVolume = svc.scaleFactor();
-		float eventVolume = mEvent.soundVolume();
+		float eventVolume = mVolume;
 		if (eventVolume < 0)
 			eventVolume = 1;
 		if (currentVolume == eventVolume)
@@ -792,7 +833,7 @@ void MessageWin::stopPlay()
 */
 void MessageWin::repeat(const KAAlarm& alarm)
 {
-	const Event* kcalEvent = eventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(eventID);
+	const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
@@ -814,7 +855,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (!mShown)
+	if (!mShown  &&  !mErrorWindow)
 	{
 		playAudio();
 		if (mRescheduleEvent)
@@ -841,7 +882,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (action == KAAlarm::FILE  &&  !mErrorMsgs.count())
+		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 			KAlarm::writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
@@ -853,7 +894,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-	if (confirmAck  &&  !mDeferClosing  &&  !theApp()->sessionClosingDown())
+	if (mConfirmAck  &&  !mDeferClosing  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
@@ -864,10 +905,10 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 			return;
 		}
 	}
-	if (!eventID.isNull())
+	if (!mEventID.isNull())
 	{
 		// Delete from the display calendar
-		KAlarm::deleteDisplayEvent(KAEvent::uid(eventID, KAEvent::DISPLAYING));
+		KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
 	}
 	MainWindowBase::closeEvent(ce);
 }
@@ -880,14 +921,14 @@ void MessageWin::slotDefer()
 {
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
 	                       false, this, "deferDlg");
-	deferDlg.setLimit(eventID);
+	deferDlg.setLimit(mEventID);
 	mDeferDlgShowing = true;
 	if (!Preferences::instance()->modalMessages())
 		lower();
 	if (deferDlg.exec() == QDialog::Accepted)
 	{
 		DateTime dateTime = deferDlg.getDateTime();
-		const Event* kcalEvent = eventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(eventID);
+		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
@@ -898,7 +939,7 @@ void MessageWin::slotDefer()
 		else
 		{
 			KAEvent event;
-			kcalEvent = AlarmCalendar::displayCalendar()->event(KAEvent::uid(eventID, KAEvent::DISPLAYING));
+			kcalEvent = AlarmCalendar::displayCalendar()->event(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
 			if (kcalEvent)
 			{
 				event.reinstateFromDisplaying(KAEvent(*kcalEvent));
@@ -907,10 +948,10 @@ void MessageWin::slotDefer()
 			else
 			{
 				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime.dateTime(), message, mBgColour, mFgColour, font, (KAEvent::Action)action, flags);
-				event.setAudioFile(mEvent.audioFile(), mEvent.soundVolume());
+				event.set(dateTime.dateTime(), mMessage, mBgColour, mFgColour, mFont, mAction, mFlags);
+				event.setAudioFile(mAudioFile, mVolume);
 				event.setArchive();
-				event.setEventID(eventID);
+				event.setEventID(mEventID);
 			}
 			// Add the event back into the calendar file, retaining its ID
 			KAlarm::addEvent(event, 0, true);
@@ -940,7 +981,7 @@ void MessageWin::slotDefer()
 */
 void MessageWin::displayMainWindow()
 {
-	KAlarm::displayMainWindowSelected(eventID);
+	KAlarm::displayMainWindowSelected(mEventID);
 }
 
 

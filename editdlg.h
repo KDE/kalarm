@@ -57,6 +57,7 @@ class AlarmTimeWidget;
 class RecurrenceEdit;
 class SoundPicker;
 class Reminder;
+class SpecialActionsButton;
 class LineEdit;
 class TextEdit;
 
@@ -154,6 +155,7 @@ class EditAlarmDlg : public KDialogBase
 		CheckBox*         mConfirmAck;
 		FontColourButton* mFontColourButton;
 		ColourCombo*      mBgColourChoose;
+		SpecialActionsButton* mSpecialActionsButton;
 		Reminder*         mReminder;
 		bool              mReminderDeferral;
 		bool              mReminderArchived;
@@ -213,6 +215,8 @@ class EditAlarmDlg : public KDialogBase
 		QFont             mSavedFont;           // mFontColourButton font
 		QColor            mSavedBgColour;       // mBgColourChoose selection
 		QColor            mSavedFgColour;       // mFontColourButton foreground colour
+		QString           mSavedPreAction;      // mSpecialActionsButton pre-alarm action
+		QString           mSavedPostAction;     // mSpecialActionsButton post-alarm action
 		int               mSavedReminder;       // mReminder value
 		bool              mSavedOnceOnly;       // mReminder once-only status
 		QString           mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCommandMessageEdit/mEmailMessageEdit value

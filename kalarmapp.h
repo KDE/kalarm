@@ -51,6 +51,7 @@ class MessageWin;
 class TrayWindow;
 class DaemonGuiHandler;
 class Preferences;
+class ShellProcess;
 class ActionAlarmsEnabled;
 
 
@@ -65,7 +66,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               KDEDesktop() const              { return mKDEDesktop; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
-		bool               noShellAccess() const           { return mNoShellAccess; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
@@ -83,10 +83,11 @@ class KAlarmApp : public KUniqueApplication
 		bool               editNewAlarm(KAlarmMainWindow* = 0);
 		virtual void       commitData(QSessionManager&);
 
-		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true);
+		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
 		void               alarmShowing(KAEvent&, KAAlarm::Type, const DateTime&);
+		void               alarmCompleted(const KAEvent&);
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
-		void               commandMessage(KProcess*, QWidget* parent);
+		void               commandMessage(ShellProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(KAEvent::Action, const QString& text, const QDateTime&,
 		                                 int flags, const QColor& bg, const QColor& fg,
@@ -109,21 +110,26 @@ class KAlarmApp : public KUniqueApplication
 		void               toggleAlarmsEnabled();
 		void               slotPreferencesChanged();
 		void               slotNewAlarm();
-		void               slotCommandExited(KProcess*);
+		void               slotCommandExited(ShellProcess*);
 		void               slotSystemTrayTimer();
 		void               slotExpiredPurged();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData
 		{
-			ProcData(KProcess* p, KAEvent* e, KAAlarm* a, QCString sh)
-			          : process(p), event(e), alarm(a), shell(sh), messageBoxParent(0) { }
+			ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f = 0)
+			          : process(p), event(e), alarm(a), messageBoxParent(0), flags(f) { }
 			~ProcData();
-			KProcess*            process;
+			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08 };
+			bool                 preAction() const   { return flags & PRE_ACTION; }
+			bool                 postAction() const  { return flags & POST_ACTION; }
+			bool                 reschedule() const  { return flags & RESCHEDULE; }
+			bool                 allowDefer() const  { return flags & ALLOW_DEFER; }
+			ShellProcess*        process;
 			KAEvent*             event;
 			KAAlarm*             alarm;
-			QCString             shell;
 			QGuardedPtr<QWidget> messageBoxParent;
+			int                  flags;
 		};
 		struct DcopQEntry
 		{
@@ -145,6 +151,8 @@ class KAlarmApp : public KUniqueApplication
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
 		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
+		ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0);
+		void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
 
 		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance
 		static int            mActiveCount;         // number of active instances without main windows
@@ -160,10 +168,9 @@ class KAlarmApp : public KUniqueApplication
 		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
 		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
 		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
-		int                   mQueueQuitCode;       // exit code for a queued quit
-		bool                  mQueueQuit;           // quit once the DCOP command queue has been processed
+		int                   mPendingQuitCode;     // exit code for a pending quit
+		bool                  mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
 		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed
-		bool                  mNoShellAccess;       // shell commands are not allowed (kiosk mode)
 		bool                  mKDEDesktop;          // running on KDE desktop
 		bool                  mNoSystemTray;        // no KDE system tray exists
 		bool                  mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true

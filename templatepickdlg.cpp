@@ -36,8 +36,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "kalarmapp.h"
 #include "functions.h"
+#include "shellprocess.h"
 #include "templatelistview.h"
 #include "templatepickdlg.moc"
 
@@ -52,7 +52,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 	topLayout->setSpacing(spacingHint());
 
 	// Display the list of templates, but exclude command alarms if in kiosk mode.
-	bool includeCmdAlarms = !theApp()->noShellAccess();
+	bool includeCmdAlarms = ShellProcess::authorised();
 	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget, "list");
 	mTemplateList->setSelectionMode(QListView::Single);
 	mTemplateList->refresh();      // populate the template list

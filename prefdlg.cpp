@@ -67,6 +67,7 @@
 #include "preferences.h"
 #include "recurrenceedit.h"
 #include "soundpicker.h"
+#include "specialactions.h"
 #include "timespinbox.h"
 #include "traywindow.h"
 #include "prefdlg.moc"
@@ -761,6 +762,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	mDefaultSpecialActions = new SpecialActions(i18n("Special Display Alarms Actions"), mPage);
+	mDefaultSpecialActions->setFixedHeight(mDefaultSpecialActions->sizeHint().height());
+
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
@@ -775,6 +779,7 @@ void EditPrefTab::restore()
 	mDefaultEmailBcc->setChecked(preferences->mDefaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(preferences->mDefaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(preferences->mDefaultReminderUnits);
+	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
 }
 
 void EditPrefTab::apply(bool syncToDisc)
@@ -786,6 +791,8 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
 	preferences->mDefaultEmailBcc    = mDefaultEmailBcc->isChecked();
+	preferences->mDefaultPreAction   = mDefaultSpecialActions->preAction();
+	preferences->mDefaultPostAction  = mDefaultSpecialActions->postAction();
 	switch (mDefaultRecurPeriod->currentItem())
 	{
 		case 6:  preferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
@@ -811,6 +818,7 @@ void EditPrefTab::setDefaults()
 	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
+	mDefaultSpecialActions->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
 }
 
 void EditPrefTab::slotBrowseSoundFile()

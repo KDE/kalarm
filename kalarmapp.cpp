@@ -59,17 +59,18 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
-#include "mainwindow.h"
 #include "editdlg.h"
-#include "messagewin.h"
 #include "daemon.h"
 #include "daemongui.h"
 #include "dcophandler.h"
 #include "functions.h"
-#include "traywindow.h"
 #include "kamail.h"
+#include "mainwindow.h"
+#include "messagewin.h"
 #include "preferences.h"
 #include "prefdlg.h"
+#include "shellprocess.h"
+#include "traywindow.h"
 #include "kalarmapp.moc"
 
 #include <netwm.h>
@@ -103,16 +104,13 @@ KAlarmApp::KAlarmApp()
 	  mDcopHandler(0),
 	  mDaemonGuiHandler(0),
 	  mTrayWindow(0),
-	  mQueueQuit(false),
+	  mPendingQuit(false),
 	  mProcessingQueue(false),
 	  mCheckingSystemTray(false),
 	  mSessionClosingDown(false),
 	  mRefreshExpiredAlarms(false)
 {
-#if KDE_VERSION >= 290
-	mNoShellAccess = !authorize("shell_access");
-#else
-	mNoShellAccess = false;
+#if KDE_VERSION < 290
 	marginKDE2 = KDialog::marginHint();
 #endif
 	mCommandProcesses.setAutoDelete(true);
@@ -674,6 +672,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	else
 	{
 		// Quit only if there are no more "instances" running
+		mPendingQuit = false;
 		if (mActiveCount > 0  ||  MessageWin::instanceCount())
 			return;
 		int mwcount = KAlarmMainWindow::count();
@@ -688,11 +687,11 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 			if (checkSystemTray())
 				return;
 		}
-		if (mDcopQueue.count())
+		if (mDcopQueue.count()  ||  mCommandProcesses.count())
 		{
 			// Don't quit yet if there are outstanding actions on the DCOP queue
-			mQueueQuit = true;
-			mQueueQuitCode = exitCode;
+			mPendingQuit = true;
+			mPendingQuitCode = exitCode;
 			return;
 		}
 	}
@@ -781,11 +780,8 @@ void KAlarmApp::processQueue()
 		AlarmCalendar::expiredCalendar()->purgeIfQueued();
 
 		// Now that the queue has been processed, quit if a quit was queued
-		if (mQueueQuit)
-		{
-			mQueueQuit = false;
-			quitIf(mQueueQuitCode);
-		}
+		if (mPendingQuit)
+			quitIf(mPendingQuitCode);
 
 		mProcessingQueue = false;
 	}
@@ -1330,6 +1326,19 @@ void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const Date
 }
 
 /******************************************************************************
+* Called when an alarm action has completed, to perform any post-alarm actions.
+*/
+void KAlarmApp::alarmCompleted(const KAEvent& event)
+{
+	if (!event.postAction().isEmpty()  &&  ShellProcess::authorised())
+	{
+		QString command = event.postAction();
+		kdDebug(5950) << "KAlarmApp::alarmCompleted(" << event.id() << "): " << command << endl;
+		doShellCommand(command, event, 0, ProcData::POST_ACTION);
+	}
+}
+
+/******************************************************************************
 * Reschedule the alarm for its next repetition. If none remain, delete it.
 * If the alarm is deleted and it is the last alarm for its event, the event is
 * removed from the calendar file and from every main window instance.
@@ -1405,124 +1414,118 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 
 /******************************************************************************
 * Execute an alarm by displaying its message or file, or executing its command.
-* Reply = KProcess if command alarm
+* Reply = ShellProcess instance if a command alarm
+*       != 0 if successful
 *       = 0 if an error message was output.
 */
-void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer)
+void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
 {
 	void* result = (void*)1;
 	event.setArchive();
-	if (alarm.action() == KAAlarm::COMMAND)
+	switch (alarm.action())
 	{
-		QString command = event.cleanText();
-		kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: " << command << endl;
-		if (mNoShellAccess)
+		case KAAlarm::MESSAGE:
+		case KAAlarm::FILE:
 		{
-			kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
-			QStringList errmsgs;
-			errmsgs.append(i18n("Failed to execute command (shell access not authorized):"));
-			errmsgs.append(command);
-			(new MessageWin(event, alarm, errmsgs, reschedule))->show();
-			result = 0;
-		}
-		else
-		{
-			// Find which shell to use.
-			// This is a duplication of what KShellProcess does, but we need to know
-			// which shell is used in order to decide what its exit code means.
-			QCString shell = "/bin/sh";
-			QCString envshell = QCString(getenv("SHELL")).stripWhiteSpace();
-			if (!envshell.isEmpty())
+			// Display a message or file, provided that the same event isn't already being displayed
+			MessageWin* win = MessageWin::findEvent(event.id());
+			if (!win  &&  !noPreAction  &&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
 			{
-				struct stat fileinfo;
-				if (stat(envshell.data(), &fileinfo) != -1  // ensure file exists
-				&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
-				&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
-				&&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
-#ifdef S_ISSOCK
-				&&  !S_ISSOCK(fileinfo.st_mode)             // and it's not a socket
-#endif
-				&&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
-				&&  !access(envshell.data(), X_OK))         // and it's executable
-					shell = envshell;
+				// There is no message window currently displayed for this alarm,
+				// and we need to execute a command before displaying the new window.
+				QString command = event.preAction();
+				kdDebug(5950) << "KAlarmApp::execAlarm(): pre-DISPLAY command: " << command << endl;
+				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
+				if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+					return result;     // display the message after the command completes
+				// Error executing command - display the message even though it failed
 			}
-			// Get the shell filename with the path stripped
-			QCString shellName = shell;
-			int i = shellName.findRev('/');
-			if (i >= 0)
-				shellName = shellName.mid(i + 1);
-
-			// Execute the command
-			KShellProcess* proc = new KShellProcess(shell);
-			*proc << command;
-			connect(proc, SIGNAL(processExited(KProcess*)), SLOT(slotCommandExited(KProcess*)));
-			mCommandProcesses.append(new ProcData(proc, new KAEvent(event), new KAAlarm(alarm), shellName));
-			result = proc;
-			if (!proc->start(KProcess::NotifyOnExit))
+			if (!win
+			||  !win->hasDefer() && !alarm.repeatAtLogin()
+			||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
 			{
-				kdError(5950) << "KAlarmApp::execAlarm(): failed\n";
-				QStringList errmsgs;
-				errmsgs += i18n("Failed to execute command:");
-				errmsgs += command;
-				(new MessageWin(event, alarm, errmsgs, reschedule))->show();
-				result = 0;
-			}
-		}
-		if (reschedule)
-			rescheduleAlarm(event, alarm, true);
-	}
-	else if (alarm.action() == KAAlarm::EMAIL)
-	{
-		kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to: " << event.emailAddresses(", ") << endl;
-		QString err = KAMail::send(event, (reschedule || allowDefer));
-		if (!err.isNull())
-		{
-			QStringList errmsgs;
-			if (err.isEmpty())
-			{
-				errmsgs += i18n("Failed to send email");
-				kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
+				// Either there isn't already a message for this event,
+				// or there is a repeat-at-login message with no Defer
+				// button, which needs to be replaced with a new message,
+				// or the caption needs to be changed from "Reminder" to "Message".
+				if (win)
+					win->setRecreating();    // prevent post-alarm actions
+				delete win;
+				(new MessageWin(event, alarm, reschedule, allowDefer))->show();
 			}
 			else
 			{
-				errmsgs += i18n("Failed to send email:");
-				errmsgs += err;
-				kdDebug(5950) << "KAlarmApp::execAlarm(): failed: " << err << endl;
+				// Raise the existing message window and replay any sound
+				win->repeat(alarm);    // N.B. this reschedules the alarm
 			}
-			(new MessageWin(event, alarm, errmsgs, reschedule))->show();
-			result = 0;
+			break;
 		}
-		if (reschedule)
-			rescheduleAlarm(event, alarm, true);
-	}
-	else
-	{
-		// Display a message or file, provided that the same event isn't already being displayed
-		MessageWin* win = MessageWin::findEvent(event.id());
-		if (!win
-		||  !win->hasDefer() && !alarm.repeatAtLogin()
-		||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
+		case KAAlarm::COMMAND:
 		{
-			// Either there isn't already a message for this event,
-			// or there is a repeat-at-login message with no Defer
-			// button, which needs to be replaced with a new message,
-			// or the caption needs to be changed from "Reminder" to "Message".
-			delete win;
-			(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+			QString command = event.cleanText();
+			kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: " << command << endl;
+			result = doShellCommand(command, event, &alarm);
+			if (reschedule)
+				rescheduleAlarm(event, alarm, true);
+			break;
 		}
-		else
+		case KAAlarm::EMAIL:
 		{
-			// Update the existing message window
-			win->repeat(alarm);    // N.B. this reschedules the alarm
+			kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to: " << event.emailAddresses(", ") << endl;
+			QString err = KAMail::send(event, (reschedule || allowDefer));
+			if (!err.isNull())
+			{
+				QStringList errmsgs;
+				if (err.isEmpty())
+				{
+					errmsgs += i18n("Failed to send email");
+					kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
+				}
+				else
+				{
+					errmsgs += i18n("Failed to send email:");
+					errmsgs += err;
+					kdDebug(5950) << "KAlarmApp::execAlarm(): failed: " << err << endl;
+				}
+				(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+				result = 0;
+			}
+			if (reschedule)
+				rescheduleAlarm(event, alarm, true);
+			break;
 		}
+		default:
+			return 0;
 	}
 	return result;
 }
 
 /******************************************************************************
+* Execute a shell command specified by an alarm.
+* If the PRE_ACTION bit of 'flags' is set, the alarm will be executed via
+* execAlarm() once the command completes, the execAlarm() parameters being
+* derived from the remaining bits in 'flags'.
+*/
+ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
+{
+	ShellProcess* proc = new ShellProcess(command);
+	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
+	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
+	mCommandProcesses.append(pd);
+	if (proc->start())
+		return proc;
+
+	// Error executing command - report it
+	kdError(5950) << "KAlarmApp::doShellCommand(): command failed to start\n";
+	commandErrorMsg(proc, event, alarm, flags);
+	mCommandProcesses.removeRef(pd);
+	return 0;
+}
+
+/******************************************************************************
 * Called when a command alarm execution completes.
 */
-void KAlarmApp::slotCommandExited(KProcess* proc)
+void KAlarmApp::slotCommandExited(ShellProcess* proc)
 {
 	kdDebug(5950) << "KAlarmApp::slotCommandExited()\n";
 	// Find this command in the command list
@@ -1531,25 +1534,10 @@ void KAlarmApp::slotCommandExited(KProcess* proc)
 		if (pd->process == proc)
 		{
 			// Found the command. Check its exit status.
-			QString errmsg;
 			if (!proc->normalExit())
 			{
-				kdWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "): killed\n";
-				errmsg = i18n("Command execution error:");
-			}
-			else
-			{
-				// Some shells report if the command couldn't be found, or is not executable
-				int status = proc->exitStatus();
-				if (pd->shell == "bash"  && (status == 126 || status == 127)
-				||  pd->shell == "ksh"  &&  status == 127)
-				{
-					kdWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << ") " << pd->shell << ": not found or not executable\n";
-					errmsg = i18n("Failed to execute command:");
-				}
-			}
-			if (!errmsg.isNull())
-			{
+				QString errmsg = proc->errorMessage();
+				kdWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "): " << errmsg << endl;
 				if (pd->messageBoxParent)
 				{
 					// Close the existing informational message box for this process
@@ -1558,26 +1546,42 @@ void KAlarmApp::slotCommandExited(KProcess* proc)
 					delete dialog;
 					delete dialogs;
 					errmsg += "\n";
-					errmsg += pd->event->cleanText();
+					errmsg += proc->command();
 					KMessageBox::error(pd->messageBoxParent, errmsg);
 				}
 				else
-				{
-					QStringList errmsgs;
-					errmsgs.append(errmsg);
-					errmsgs.append(pd->event->cleanText());
-					(new MessageWin(*pd->event, *pd->alarm, errmsgs, false))->show();
-				}
+					commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);
 			}
+			if (pd->preAction())
+				execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
 			mCommandProcesses.remove();
 		}
 	}
+
+	// Now that there are no executing shell commands, quit if a quit was queued
+	if (mPendingQuit  &&  !mCommandProcesses.count())
+		quitIf(mPendingQuitCode);
+}
+
+/******************************************************************************
+* Output an error message for a shell command.
+*/
+void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags)
+{
+	QStringList errmsgs;
+	if (flags & ProcData::PRE_ACTION)
+		errmsgs += i18n("Pre-alarm action:");
+	else if (flags & ProcData::POST_ACTION)
+		errmsgs += i18n("Post-alarm action:");
+	errmsgs += proc->errorMessage();
+	errmsgs += proc->command();
+	(new MessageWin(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs))->show();
 }
 
 /******************************************************************************
 * Notes that a informational KMessageBox is displayed for this process.
 */
-void KAlarmApp::commandMessage(KProcess* proc, QWidget* parent)
+void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 {
 	// Find this command in the command list
 	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())

@@ -34,8 +34,8 @@
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
-#include "templatelistview.h"
 #include "templatelistview.moc"
+
 
 /*=============================================================================
 =  Class: TemplateListView

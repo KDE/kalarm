@@ -79,7 +79,9 @@
 #include "radiobutton.h"
 #include "recurrenceedit.h"
 #include "reminder.h"
+#include "shellprocess.h"
 #include "soundpicker.h"
+#include "specialactions.h"
 #include "spinbox.h"
 #include "templatepickdlg.h"
 #include "timeperiod.h"
@@ -111,14 +113,15 @@ QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &se
  *   event   != to initialise the dialogue to show the specified event's data.
  */
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const char* name,
-	                   const KAEvent* event, bool readOnly)
-	                   : KDialogBase(parent, name, true, caption,
-	                                 (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
-	                                 (readOnly ? Cancel : Ok)),
+                           const KAEvent* event, bool readOnly)
+	: KDialogBase(parent, name, true, caption,
+                    (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
+                    (readOnly ? Cancel : Ok)),
 	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
 	  mTemplateName(0),
+	  mSpecialActionsButton(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false),
 	  mEmailRemoveButton(0),
@@ -371,11 +374,6 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
-	// Acknowledgement confirmation required - default = no confirmation
-	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	frameLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
-
 	// Reminder
 	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
 	mReminder = new Reminder(i18n("Rem&inder:"),
@@ -384,6 +382,22 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	                         true, true, mDisplayAlarmsFrame);
 	mReminder->setFixedSize(mReminder->sizeHint());
 	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
+
+	// Acknowledgement confirmation required - default = no confirmation
+	layout = new QHBoxLayout(frameLayout);
+	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
+	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
+	layout->addWidget(mConfirmAck);
+	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addStretch();
+
+	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
+	{
+		// Special actions button
+		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), mDisplayAlarmsFrame);
+		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
+		layout->addWidget(mSpecialActionsButton);
+	}
 
 	// Top-adjust the controls
 	mFilePadding = new QHBox(mDisplayAlarmsFrame);
@@ -495,7 +509,7 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 void EditAlarmDlg::initialise(const KAEvent* event)
 {
 	mReadOnly = mDesiredReadOnly;
-	if (!mTemplate  &&  event  &&  event->action() == KAEvent::COMMAND  &&  theApp()->noShellAccess())
+	if (!mTemplate  &&  event  &&  event->action() == KAEvent::COMMAND  &&  !ShellProcess::authorised())
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
 	setReadOnly();
 
@@ -573,6 +587,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->setMinutes(reminder, (mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isOn()));
 		mReminder->setOnceOnly(event->reminderOnceOnly());
 		mReminder->enableOnceOnly(event->recurs());
+		if (mSpecialActionsButton)
+			mSpecialActionsButton->setActions(event->preAction(), event->postAction());
 		mRecurrenceText->setText(event->recurrenceText());
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mSoundPicker->set(event->beep(), event->audioFile(), event->soundVolume(), event->repeatSound());
@@ -583,8 +599,13 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 	else
 	{
 		// Set the values to their defaults
-		if (theApp()->noShellAccess())
-			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
+		if (!ShellProcess::authorised())
+		{
+			// Don't allow shell commands in kiosk mode
+			mCommandRadio->setEnabled(false);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->setEnabled(false);
+		}
 		Preferences* preferences = Preferences::instance();
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(preferences->defaultBgColour());
@@ -603,6 +624,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		mReminder->setMinutes(0, false);
 		mReminder->enableOnceOnly(false);
+		if (mSpecialActionsButton)
+			mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
@@ -655,6 +678,8 @@ void EditAlarmDlg::setReadOnly()
 	mSoundPicker->setReadOnly(mReadOnly);
 	mConfirmAck->setReadOnly(mReadOnly);
 	mReminder->setReadOnly(mReadOnly);
+	if (mSpecialActionsButton)
+		mSpecialActionsButton->setReadOnly(mReadOnly);
 	if (mReadOnly)
 	{
 		mFileBrowseButton->hide();
@@ -786,6 +811,11 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedBgColour       = mBgColourChoose->color();
 	mSavedReminder       = mReminder->getMinutes();
 	mSavedOnceOnly       = mReminder->isOnceOnly();
+	if (mSpecialActionsButton)
+	{
+		mSavedPreAction      = mSpecialActionsButton->preAction();
+		mSavedPostAction     = mSpecialActionsButton->postAction();
+	}
 	checkText(mSavedTextFileCommandMessage, false);
 	mSavedEmailTo        = mEmailToEdit->text();
 	mSavedEmailSubject   = mEmailSubjectEdit->text();
@@ -832,6 +862,12 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedReminder   != mReminder->getMinutes()
 		||  mSavedOnceOnly   != mReminder->isOnceOnly())
 			return true;
+		if (mSpecialActionsButton)
+		{
+			if (mSavedPreAction  != mSpecialActionsButton->preAction()
+			||  mSavedPostAction != mSpecialActionsButton->postAction())
+				return true;
+		}
 		if (!mSavedBeep)
 		{
 			if (mSavedSoundFile != mSoundPicker->file())
@@ -896,6 +932,9 @@ void EditAlarmDlg::getEvent(KAEvent& event)
 			case KAEvent::FILE:
 				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 				event.setReminder(mReminder->getMinutes(), mReminder->isOnceOnly());
+				if (mSpecialActionsButton)
+					event.setActions(mSpecialActionsButton->preAction(),
+					                 mSpecialActionsButton->postAction());
 				break;
 			case KAEvent::EMAIL:
 				event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
@@ -990,7 +1029,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 
 /******************************************************************************
 *  Called when the OK button is clicked.
-*  Set up the new alarm.
+*  Validate the input data.
 */
 void EditAlarmDlg::slotOk()
 {
@@ -1106,15 +1145,17 @@ void EditAlarmDlg::slotTry()
 		event.set(QDateTime(), text, mBgColourChoose->color(), mFontColourButton->fgColour(),
 		          mFontColourButton->font(), getAlarmType(), getAlarmFlags());
 		event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
+		if (mSpecialActionsButton)
+			event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 		event.setEmail(mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
 			if (mCommandRadio->isOn())
 			{
-				theApp()->commandMessage((KProcess*)proc, this);
+				theApp()->commandMessage((ShellProcess*)proc, this);
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
-				theApp()->commandMessage((KProcess*)proc, 0);
+				theApp()->commandMessage((ShellProcess*)proc, 0);
 			}
 			else if (mEmailRadio->isOn())
 			{

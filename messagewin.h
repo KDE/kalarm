@@ -50,9 +50,10 @@ class MessageWin : public MainWindowBase
 	public:
 		MessageWin();     // for session management restoration only
 		MessageWin(const KAEvent&, const KAAlarm&, bool reschedule_event = true, bool allowDefer = true);
-		MessageWin(const KAEvent&, const KAAlarm&, const QStringList& errmsgs, bool reschedule_event = true);
+		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs);
 		~MessageWin();
 		void                repeat(const KAAlarm&);
+		void                setRecreating()        { mRecreating = true; }
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!mDeferButton; }
@@ -84,36 +85,41 @@ class MessageWin : public MainWindowBase
 		void                playAudio();
 
 		static QPtrList<MessageWin> mWindowList;  // list of existing message windows
-		// KAEvent properties
-		KAEvent             mEvent;           // the whole event, for updating the calendar file
-		QString             message;
-		QFont               font;
+		// Properties needed by readProperties()
+		QString             mMessage;
+		QFont               mFont;
 		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
-		QString             eventID;
+		QString             mEventID;
+		QString             mAudioFile;
+		float               mVolume;
 		KAAlarm::Type       mAlarmType;
-		int                 flags;
-		bool                beep;
-		bool                confirmAck;
-		bool                dateOnly;         // ignore event's time
-		KAAlarm::Action     action;
+		KAEvent::Action     mAction;
 		QStringList         mErrorMsgs;
-		bool                noDefer;          // don't display a Defer option
+		int                 mRestoreHeight;
+		bool                mAudioRepeat;
+		bool                mConfirmAck;
+		bool                mNoDefer;         // don't display a Defer option
 		// Sound file playing
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
 		float               mOldVolume;       // volume before volume was set for sound file
-		bool                mPlayedOnce;      // the sound file has been played at least once
-		bool                mPlayed;          // the PlayObject->play() has been called
-		// Miscellaneous
-		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
-		QPushButton*        mDeferButton;
-		QPushButton*        mSilenceButton;
 		QString             mLocalAudioFile;  // local copy of audio file
 		QTime               mAudioFileLoadStart; // time when audio file loading started
 		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file
-		int                 mRestoreHeight;
+		bool                mPlayedOnce;      // the sound file has been played at least once
+		bool                mPlayed;          // the PlayObject->play() has been called
+		// Miscellaneous
+		KAEvent             mEvent;           // the whole event, for updating the calendar file
+		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
+		QPushButton*        mDeferButton;
+		QPushButton*        mSilenceButton;
+		int                 mFlags;
+		bool                mErrorWindow;     // the window is simply an error message
+		bool                mNoPostAction;    // don't execute any post-alarm action
+		bool                mRecreating;      // window is about to be deleted and immediately recreated
+		bool                mBeep;
 		bool                mRescheduleEvent; // true to delete event after message has been displayed
 		bool                mShown;           // true once the window has been displayed
 		bool                mDeferClosing;    // the Defer button is closing the dialog

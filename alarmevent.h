@@ -121,18 +121,23 @@ class KAAlarmEventBase
 };
 
 
-// KAAlarm corresponds to a single KCal::Alarm instance
+// KAAlarm corresponds to a single KCal::Alarm instance.
+// A KAEvent may contain multiple KAAlarm's.
 class KAAlarm : public KAAlarmEventBase
 {
 	public:
+		// Define the basic KAAlaem action types
 		enum Action
 		{
-			MESSAGE = T_MESSAGE,
-			FILE    = T_FILE,
-			COMMAND = T_COMMAND,
-			EMAIL   = T_EMAIL,
-			AUDIO   = T_AUDIO
+			MESSAGE = T_MESSAGE,   // KCal::Alarm::Display type: display a text message
+			FILE    = T_FILE,      // KCal::Alarm::Display type: display a file (URL given by the alarm text)
+			COMMAND = T_COMMAND,   // KCal::Alarm::Procedure type: execute a shell command
+			EMAIL   = T_EMAIL,     // KCal::Alarm::Email type: send an email
+			AUDIO   = T_AUDIO      // KCal::Alarm::Audio type: play a sound file
 		};
+		// Define the KAAlarm types.
+		// KAAlarm's of different types may be contained in a KAEvent,
+		// each defining a different component of the overall alarm.
 		enum Type
 		{
 			INVALID_ALARM       = 0,     // not an alarm
@@ -146,7 +151,9 @@ class KAAlarm : public KAAlarmEventBase
 			AT_LOGIN_ALARM      = 0x10,  // additional repeat-at-login trigger
 			DISPLAYING_ALARM    = 0x20,  // copy of the alarm currently being displayed
 			// The following values are for internal KAEvent use only
-			AUDIO_ALARM         = 0x30   // sound to play when displaying the alarm.
+			AUDIO_ALARM         = 0x30,  // sound to play when displaying the alarm
+			PRE_ACTION_ALARM    = 0x40,  // command to execute before displaying the alarm
+			POST_ACTION_ALARM   = 0x50   // command to execute after the alarm window is closed
 		};
 		enum SubType
 		{
@@ -164,7 +171,9 @@ class KAAlarm : public KAAlarmEventBase
 			AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
 			DISPLAYING__ALARM             = DISPLAYING_ALARM,
 			// The following values are for internal KAEvent use only
-			AUDIO__ALARM                  = AUDIO_ALARM
+			AUDIO__ALARM                  = AUDIO_ALARM,
+			PRE_ACTION__ALARM             = PRE_ACTION_ALARM,
+			POST_ACTION__ALARM            = POST_ACTION_ALARM
 		};
 
 		KAAlarm()          : mType(INVALID__ALARM) { }
@@ -294,6 +303,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
 		void               setTemplate(const QString& name, bool defaultTime){ mTemplateName = name; mTemplateDefaultTime = defaultTime; }
+		void               setActions(const QString& pre, const QString& post)  { mPreAction = pre;  mPostAction = post; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
@@ -344,6 +354,8 @@ class KAEvent : public KAAlarmEventBase
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return mSoundVolume >= 0  &&  !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
+		const QString&     preAction() const              { return mPreAction; }
+		const QString&     postAction() const             { return mPostAction; }
 		bool               recurs() const                 { return checkRecur() != NO_RECUR; }
 		RecurType          recurType() const              { return checkRecur(); }
 		KCal::Recurrence*  recurrence() const             { return mRecurrence; }
@@ -474,12 +486,14 @@ class KAEvent : public KAAlarmEventBase
 		RecurType          checkRecur() const;
 		OccurType          nextRecurrence(const QDateTime& preDateTime, DateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const QDateTime& afterDateTime, DateTime& result) const;
-		KCal::Alarm*       initKcalAlarm(KCal::Event&, const DateTime&, const QStringList& types) const;
+		KCal::Alarm*       initKcalAlarm(KCal::Event&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		static void        readAlarms(const KCal::Event&, void* alarmMap);
 		static void        readAlarm(const KCal::Alarm&, AlarmData&);
 
 		QString            mTemplateName;     // alarm template's name, or null if normal event
 		QString            mAudioFile;        // ATTACH: audio file to play
+		QString            mPreAction;        // command to execute before alarm is displayed
+		QString            mPostAction;       // command to execute after alarm window is closed
 		DateTime           mStartDateTime;    // DTSTART and DTEND: start and end time for event
 		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in expired calendar
 		QDateTime          mAtLoginDateTime;  // repeat-at-login time

@@ -16,7 +16,7 @@ kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
-	datetime.cpp reminder.cpp synchtimer.cpp \
+	specialactions.cpp datetime.cpp reminder.cpp synchtimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -32,8 +32,8 @@ noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtimewidget.h 
 	fontcolourbutton.h functions.h kalarm.h kalarmapp.h kamail.h \
 	mainwindow.h mainwindowbase.h messagewin.h prefdlg.h preferences.h \
 	recurrenceedit.h recurrenceeditprivate.h reminder.h soundpicker.h \
-	synchtimer.h templatedlg.h templatelistview.h templatepickdlg.h \
-	traywindow.h
+	specialactions.h synchtimer.h templatedlg.h templatelistview.h \
+	templatepickdlg.h traywindow.h
 kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h
 
 METASOURCES = AUTO

@@ -48,6 +48,7 @@ class KColorCombo;
 class FontColourChooser;
 class TimeSpinBox;
 class SpinBox;
+class SpecialActions;
 
 class MessagePrefTab;
 class EditPrefTab;
@@ -193,6 +194,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*     mDefaultSoundRepeat;
 		QComboBox*     mDefaultRecurPeriod;
 		QComboBox*     mDefaultReminderUnits;
+		SpecialActions* mDefaultSpecialActions;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };

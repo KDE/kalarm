@@ -75,8 +75,10 @@ void AlarmTimeWidget::init(int mode)
 	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
+	{
 		topLayout->setMargin(marginKDE2 + KDialog::marginHint());
-	topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+	}
 
 	// At time radio button/label
 	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), this, "atTimeRadio");

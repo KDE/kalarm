@@ -59,6 +59,8 @@ static const QString ARCHIVE_REMINDER_ONCE_TYPE = QString::fromLatin1("ONCE");
 static const QString TIME_DEFERRAL_TYPE         = QString::fromLatin1("DEFERRAL");
 static const QString DATE_DEFERRAL_TYPE         = QString::fromLatin1("DATE_DEFERRAL");
 static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
+static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
+static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
 static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 
@@ -108,6 +110,8 @@ void KAEvent::copy(const KAEvent& event)
 	KAAlarmEventBase::copy(event);
 	mTemplateName            = event.mTemplateName;
 	mAudioFile               = event.mAudioFile;
+	mPreAction               = event.mPreAction;
+	mPostAction              = event.mPostAction;
 	mStartDateTime           = event.mStartDateTime;
 	mSaveDateTime            = event.mSaveDateTime;
 	mAtLoginDateTime         = event.mAtLoginDateTime;
@@ -145,10 +149,8 @@ void KAEvent::set(const Event& event)
 	mEventID                = event.uid();
 	mRevision               = event.revision();
 	mTemplateName           = QString::null;
-	mSoundVolume            = -1;
 	mTemplateDefaultTime    = false;
 	mBeep                   = false;
-	mRepeatSound            = false;
 	mEmailBcc               = false;
 	mConfirmAck             = false;
 	mLateCancel             = false;
@@ -217,15 +219,19 @@ void KAEvent::set(const Event& event)
 	// Extract status from the event's alarms.
 	// First set up defaults.
 	mActionType       = T_MESSAGE;
+	mMainExpired      = true;
 	mRecursFeb29      = false;
 	mRepeatAtLogin    = false;
 	mDeferral         = false;
 	mReminderDeferral = false;
 	mDisplaying       = false;
-	mMainExpired      = true;
+	mRepeatSound      = false;
+	mSoundVolume      = -1;
 	mReminderMinutes  = 0;
 	mText             = "";
 	mAudioFile        = "";
+	mPreAction        = "";
+	mPostAction       = "";
 	mEmailSubject     = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
@@ -291,6 +297,12 @@ void KAEvent::set(const Event& event)
 				mSoundVolume = !mBeep ? data.soundVolume : -1;
 				mRepeatSound = !mBeep  &&  (data.repeatCount < 0);
 				break;
+			case KAAlarm::PRE_ACTION__ALARM:
+				mPreAction = data.cleanText;
+				break;
+			case KAAlarm::POST_ACTION__ALARM:
+				mPostAction = data.cleanText;
+				break;
 			case KAAlarm::INVALID__ALARM:
 			default:
 				break;
@@ -298,7 +310,9 @@ void KAEvent::set(const Event& event)
 
 		if (data.reminderOnceOnly)
 			mReminderOnceOnly = true;
-		if (data.action != T_AUDIO)
+		if (data.type != KAAlarm::AUDIO__ALARM
+		&&  data.type != KAAlarm::PRE_ACTION__ALARM
+		&&  data.type != KAAlarm::POST_ACTION__ALARM)
 		{
 			// Ensure that the basic fields are set up even if there is no main
 			// alarm in the event (if it has expired and then been deferred)
@@ -468,6 +482,10 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			dateDeferral = deferral = true;
 		else if (type == DISPLAYING_TYPE)
 			data.type = KAAlarm::DISPLAYING__ALARM;
+		else if (type == PRE_ACTION_TYPE  &&  data.action == T_COMMAND)
+			data.type = KAAlarm::PRE_ACTION__ALARM;
+		else if (type == POST_ACTION_TYPE  &&  data.action == T_COMMAND)
+			data.type = KAAlarm::POST_ACTION__ALARM;
 	}
 
 	if (reminder)
@@ -518,6 +536,8 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	}
 	mText                   = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
 	mTemplateName           = QString::null;
+	mPreAction              = QString::null;
+	mPostAction             = QString::null;
 	mAudioFile              = "";
 	mSoundVolume            = -1;
 	mBgColour               = bg;
@@ -753,12 +773,12 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	ev.setHasEndDate(false);
 
 	DateTime dtMain = original ? mStartDateTime : mDateTime;
-	DateTime audioTime;
+	DateTime ancillaryTime;       // time for ancillary alarms (audio, pre-action, etc)
 	if (!mMainExpired  ||  original)
 	{
 		// Add the main alarm
 		initKcalAlarm(ev, dtMain, QStringList());
-		audioTime = dtMain;
+		ancillaryTime = dtMain;
 	}
 
 	// Add subsidiary alarms
@@ -774,16 +794,16 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 		else
 			dtl = QDateTime::currentDateTime();
 		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
-		if (!audioTime.isValid())
-			audioTime = dtl;
+		if (!ancillaryTime.isValid())
+			ancillaryTime = dtl;
 	}
 	if (mReminderMinutes  ||  mArchiveReminderMinutes && original)
 	{
 		int minutes = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
 		DateTime reminderTime = dtMain.addSecs(-minutes * 60);
 		initKcalAlarm(ev, reminderTime, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
-		if (!audioTime.isValid())
-			audioTime = reminderTime;
+		if (!ancillaryTime.isValid())
+			ancillaryTime = reminderTime;
 	}
 	if (mDeferral)
 	{
@@ -795,8 +815,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 		if (mReminderDeferral)
 			list += mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE;
 		initKcalAlarm(ev, mDeferralTime, list);
-		if (!audioTime.isValid())
-			audioTime = mDeferralTime;
+		if (!ancillaryTime.isValid())
+			ancillaryTime = mDeferralTime;
 	}
 	if (!mTemplateName.isEmpty())
 		ev.setSummary(mTemplateName);
@@ -815,16 +835,23 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 		if (mDisplayingFlags & REMINDER)
 			list += mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE;
 		initKcalAlarm(ev, mDisplayingTime, list);
-		if (!audioTime.isValid())
-			audioTime = mDisplayingTime;
+		if (!ancillaryTime.isValid())
+			ancillaryTime = mDisplayingTime;
 	}
 	if (mBeep  ||  !mAudioFile.isEmpty())
 	{
 		// A sound is specified
-		KAAlarmEventBase::Type actType = mActionType;
-		const_cast<KAEvent*>(this)->mActionType = T_AUDIO;
-		initKcalAlarm(ev, audioTime, QStringList());
-		const_cast<KAEvent*>(this)->mActionType = actType;
+		initKcalAlarm(ev, ancillaryTime, QStringList(), KAAlarm::AUDIO_ALARM);
+	}
+	if (!mPreAction.isEmpty())
+	{
+		// A pre-display action is specified
+		initKcalAlarm(ev, ancillaryTime, QStringList(PRE_ACTION_TYPE), KAAlarm::PRE_ACTION_ALARM);
+	}
+	if (!mPostAction.isEmpty())
+	{
+		// A post-display action is specified
+		initKcalAlarm(ev, ancillaryTime, QStringList(POST_ACTION_TYPE), KAAlarm::POST_ACTION_ALARM);
 	}
 
 	// Add recurrence data
@@ -884,10 +911,10 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 
 /******************************************************************************
  * Create a new alarm for a libkcal event, and initialise it according to the
- * alarm action. If 'type' is non-null, it is appended to the X-KDE-KALARM-TYPE
+ * alarm action. If 'types' is non-null, it is appended to the X-KDE-KALARM-TYPE
  * property value list.
  */
-Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringList& types) const
+ Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
 {
 	QStringList alltypes;
 	Alarm* alarm = event.newAlarm();
@@ -897,25 +924,9 @@ Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringLis
 	alarm->setStartOffset(dt.isDateOnly() ? mStartDateTime.secsTo(dt)
 	                                      : mStartDateTime.dateTime().secsTo(dt.dateTime()));
 
-	switch (mActionType)
+	switch (type)
 	{
-		case T_FILE:
-			alltypes += FILE_TYPE;
-			// fall through to T_MESSAGE
-		case T_MESSAGE:
-			alarm->setDisplayAlarm(mText);
-			alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
-			              QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
-			                                             .arg(mFgColour.name())
-			                                             .arg(mDefaultFont ? QString::null : mFont.toString()));
-			break;
-		case T_COMMAND:
-			setProcedureAlarm(alarm, mText);
-			break;
-		case T_EMAIL:
-			alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
-			break;
-		case T_AUDIO:
+		case KAAlarm::AUDIO_ALARM:
 			alarm->setAudioAlarm(mAudioFile);  // empty for a beep
 			if (mRepeatSound)
 			{
@@ -924,6 +935,42 @@ Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringLis
 			}
 			if (!mAudioFile.isEmpty()  &&  mSoundVolume >= 0)
 				alarm->setCustomProperty(APPNAME, VOLUME_PROPERTY, QString::number(mSoundVolume, 'f', 2));
+			break;
+		case KAAlarm::PRE_ACTION_ALARM:
+			setProcedureAlarm(alarm, mPreAction);
+			break;
+		case KAAlarm::POST_ACTION_ALARM:
+			setProcedureAlarm(alarm, mPostAction);
+			break;
+		case KAAlarm::INVALID_ALARM:
+			switch (mActionType)
+			{
+				case T_FILE:
+					alltypes += FILE_TYPE;
+					// fall through to T_MESSAGE
+				case T_MESSAGE:
+					alarm->setDisplayAlarm(mText);
+					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
+						      QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
+										     .arg(mFgColour.name())
+										     .arg(mDefaultFont ? QString::null : mFont.toString()));
+					break;
+				case T_COMMAND:
+					setProcedureAlarm(alarm, mText);
+					break;
+				case T_EMAIL:
+					alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
+					break;
+				case T_AUDIO:
+					break;
+			}
+			break;
+		case KAAlarm::MAIN_ALARM:
+		case KAAlarm::REMINDER_ALARM:
+		case KAAlarm::DEFERRED_ALARM:
+		case KAAlarm::DEFERRED_REMINDER_ALARM:
+		case KAAlarm::AT_LOGIN_ALARM:
+		case KAAlarm::DISPLAYING_ALARM:
 			break;
 	}
 	alltypes += types;
@@ -1012,6 +1059,8 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 				}
 				break;
 			case KAAlarm::AUDIO_ALARM:
+			case KAAlarm::PRE_ACTION_ALARM:
+			case KAAlarm::POST_ACTION_ALARM:
 			case KAAlarm::INVALID_ALARM:
 			default:
 				break;
@@ -1070,6 +1119,8 @@ KAAlarm KAEvent::nextAlarm(KAAlarm::Type prevType) const
 		case KAAlarm::DISPLAYING_ALARM:
 			// fall through to default
 		case KAAlarm::AUDIO_ALARM:
+		case KAAlarm::PRE_ACTION_ALARM:
+		case KAAlarm::POST_ACTION_ALARM:
 		case KAAlarm::INVALID_ALARM:
 		default:
 			break;
@@ -1125,6 +1176,8 @@ void KAEvent::removeExpiredAlarm(KAAlarm::Type type)
 			}
 			break;
 		case KAAlarm::AUDIO_ALARM:
+		case KAAlarm::PRE_ACTION_ALARM:
+		case KAAlarm::POST_ACTION_ALARM:
 		case KAAlarm::INVALID_ALARM:
 		default:
 			break;
@@ -2522,7 +2575,12 @@ void KAEvent::dumpDebug() const
 		kdDebug(5950) << "-- mTemplateName:" << mTemplateName << ":\n";
 		kdDebug(5950) << "-- mTemplateDefaultTime:" << (mTemplateDefaultTime ? "true" : "false") << ":\n";
 	}
-	kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
+	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
+	{
+		kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
+		kdDebug(5950) << "-- mPreAction:" << mPreAction << ":\n";
+		kdDebug(5950) << "-- mPostAction:" << mPostAction << ":\n";
+	}
 	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
 	if (mRepeatAtLogin)
@@ -2587,6 +2645,8 @@ void KAAlarm::dumpDebug() const
 		case AT_LOGIN__ALARM:                altype = "LOGIN";  break;
 		case DISPLAYING__ALARM:              altype = "DISPLAYING";  break;
 		case AUDIO__ALARM:                   altype = "AUDIO";  break;
+		case PRE_ACTION__ALARM:              altype = "PRE_ACTION";  break;
+		case POST_ACTION__ALARM:             altype = "POST_ACTION";  break;
 		default:                             altype = "INVALID";  break;
 	}
 	kdDebug(5950) << "-- mType:" << altype << ":\n";
@@ -2605,6 +2665,8 @@ const char* KAAlarm::debugType(Type type)
 		case AT_LOGIN_ALARM:           return "LOGIN";
 		case DISPLAYING_ALARM:         return "DISPLAYING";
 		case AUDIO_ALARM:              return "AUDIO";
+		case PRE_ACTION_ALARM:         return "PRE_ACTION";
+		case POST_ACTION_ALARM:        return "POST_ACTION";
 		default:                       return "INVALID";
 	}
 }
