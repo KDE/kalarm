@@ -196,7 +196,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mLateCancel->setMinutes(preferences->defaultLateCancel(), true, TimePeriod::DAYS);
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
 	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
-	                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
+	                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
 
@@ -303,7 +303,10 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
 				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
 				              mFlags);
-				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
+				float fadeVolume;
+				int   fadeSecs;
+				float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
+				event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
 				QValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, -1);

@@ -69,6 +69,7 @@ class MessageWin : public MainWindowBase
 		void                slotPlayAudio();
 		void                checkAudioPlay();
 		void                stopPlay();
+		void                slotFade();
 		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
@@ -94,6 +95,8 @@ class MessageWin : public MainWindowBase
 		QString             mEventID;
 		QString             mAudioFile;
 		float               mVolume;
+		float               mFadeVolume;
+		int                 mFadeSeconds;
 		KAAlarm::Type       mAlarmType;
 		KAEvent::Action     mAction;
 		QStringList         mErrorMsgs;
@@ -108,9 +111,10 @@ class MessageWin : public MainWindowBase
 		QCString            mKMixName;        // DCOP name for KMix
 		QString             mKMixError;       // error message starting KMix
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
+		QTimer*             mFadeTimer;       // timer for fading the sound volume
 		float               mOldVolume;       // volume before volume was set for sound file
 		QString             mLocalAudioFile;  // local copy of audio file
-		QTime               mAudioFileLoadStart; // time when audio file loading started
+		QTime               mAudioFileStart;  // time when audio file loading first started, or when play first started
 		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file
 		bool                mPlayedOnce;      // the sound file has started playing at least once
 		bool                mPlayed;          // the PlayObject->play() has been called

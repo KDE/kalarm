@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1143,7 +1143,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 		event.setReminder((onceOnly ? -reminderMinutes : reminderMinutes), onceOnly);
 	}
 	if (!audioFile.isEmpty())
-		event.setAudioFile(audioFile, audioVolume);
+		event.setAudioFile(audioFile, audioVolume, -1, 0);
 	if (mailAddresses.count())
 		event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
@@ -1529,8 +1529,8 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the expired calendar file first.
-		QString id = event.id();    // save event ID since KAlarm::archiveEvent() changes it
-		KAlarm::archiveEvent(event);
+		QString id = event.id();    // save event ID since KAlarm::addExpiredEvent() changes it
+		KAlarm::addExpiredEvent(event);
 		event.setEventID(id);       // restore event ID
 	}
 	event.removeExpiredAlarm(alarmType);

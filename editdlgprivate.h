@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 #define KDE2_QTEXTEDIT_EDIT     // for KDE2 QTextEdit compatibility
 #include <qtextedit.h>
-#include <klineedit.h>
 
 
 class PageFrame : public QFrame
@@ -37,34 +36,13 @@ class PageFrame : public QFrame
 		void             shown();
 };
 
-class LineEdit : public KLineEdit
-{
-		Q_OBJECT
-	public:
-		enum Type { Text, Url, Emails };
-		explicit LineEdit(Type, QWidget* parent = 0, const char* name = 0);
-		explicit LineEdit(QWidget* parent = 0, const char* name = 0);
-		void         setNoSelect()   { mNoSelect = true; }
-		void         setCursorAtEnd(bool y = true)  { mSetCursorAtEnd = y; }
-	public slots:
-		virtual void setText(const QString&);
-	protected:
-		virtual void focusInEvent(QFocusEvent*);
-		virtual void dragEnterEvent(QDragEnterEvent*);
-		virtual void dropEvent(QDropEvent*);
-	private:
-		void         init();
-
-		Type  mType;
-		bool  mNoSelect;
-		bool  mSetCursorAtEnd;   // setText() should position cursor at end
-};
-
 class TextEdit : public QTextEdit
 {
 		Q_OBJECT
 	public:
 		TextEdit(QWidget* parent, const char* name = 0);
+	protected:
+		virtual void dragEnterEvent(QDragEnterEvent*);
 };
 
 #endif // EDITDLGPRIVATE_H

@@ -141,6 +141,8 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mEventID(event.id()),
 	  mAudioFile(event.audioFile()),
 	  mVolume(event.soundVolume()),
+	  mFadeVolume(event.fadeVolume()),
+	  mFadeSeconds(event.fadeSeconds()),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
 	  mRestoreHeight(0),
@@ -645,6 +647,8 @@ void MessageWin::readProperties(KConfig* config)
 #ifndef WITHOUT_ARTS
 	mAudioFile     = config->readPathEntry(QString::fromLatin1("AudioFile"));
 	mVolume        = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
+	mFadeVolume    = -1;
+	mFadeSeconds   = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
@@ -718,11 +722,12 @@ void MessageWin::slotPlayAudio()
 	}
 	if (!mArtsDispatcher)
 	{
+		mFadeTimer = 0;
 		mPlayTimer = new QTimer(this);
 		connect(mPlayTimer, SIGNAL(timeout()), SLOT(checkAudioPlay()));
 		mArtsDispatcher = new KArtsDispatcher;
 		mPlayedOnce = false;
-		mAudioFileLoadStart = QTime::currentTime();
+		mAudioFileStart = QTime::currentTime();
 		initAudio(true);
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
@@ -731,12 +736,9 @@ void MessageWin::slotPlayAudio()
 		{
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
-			bool kmixRunning = kapp->dcopClient()->isApplicationRegistered(KMIX_APP_NAME);
-			QString reason = kmixRunning ? i18n("Error accessing KMix") : i18n("KMix not running");
-			const char* reasonName = kmixRunning ? "KMixError" : "KMixNotRun";
-			KMessageBox::information(this, i18n("Unable to set master volume\n(%1)").arg(reason),
-			                         QString::null, QString::fromLatin1(reasonName));
-			kdWarning(5950) << "Unable to set master volume (KMix " << (kmixRunning ? "DCOP error" : "not running") << ")\n";
+			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
+			                         QString::null, QString::fromLatin1("KMixError"));
+			kdWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
 		}
 #endif
 	}
@@ -759,6 +761,7 @@ void MessageWin::initAudio(bool firstTime)
 		int vol = getKMixVolume();
 		if (vol >= 0)
 		{
+kdDebug(5950)<<"initAudio(): old KMix volume = "<<vol<<endl;
 			mOldVolume = vol;    // success
 			mUsingKMix = true;
 		}
@@ -767,6 +770,7 @@ void MessageWin::initAudio(bool firstTime)
 			// Can't use KMix to set the master volume, so just adjust
 			// within the current master volume.
 			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
+kdDebug(5950)<<"initAudio(): old volume = "<<mOldVolume<<endl;
 			mUsingKMix = false;
 		}
 	}
@@ -774,6 +778,7 @@ void MessageWin::initAudio(bool firstTime)
 		sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
 	else if (mVolume >= 0)
 		setKMixVolume(static_cast<int>(mVolume * 100));
+kdDebug(5950)<<"initAudio(): new vol="<<mVolume<<endl;
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -803,9 +808,18 @@ void MessageWin::checkAudioPlay()
 		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
 		{
-			mAudioFileLoadSecs = mAudioFileLoadStart.secsTo(QTime::currentTime());
+			QTime now = QTime::currentTime();
+			mAudioFileLoadSecs = mAudioFileStart.secsTo(now);
 			if (mAudioFileLoadSecs < 0)
 				mAudioFileLoadSecs += 86400;
+			if (mVolume >= 0  &&  mFadeVolume >= 0  &&  mFadeSeconds > 0)
+			{
+				// Set up volume fade
+				mAudioFileStart = now;
+				mFadeTimer = new QTimer(this);
+				connect(mFadeTimer, SIGNAL(timeout()), SLOT(slotFade()));
+				mFadeTimer->start(1000);     // adjust volume every second
+			}
 			mPlayedOnce = true;
 		}
 		if (mAudioFileLoadSecs < 3)
@@ -886,6 +900,39 @@ void MessageWin::stopPlay()
 		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);
+#endif
+}
+
+/******************************************************************************
+*  Called every second to fade the volume when the audio file starts playing.
+*/
+void MessageWin::slotFade()
+{
+#ifndef WITHOUT_ARTS
+	QTime now = QTime::currentTime();
+	int elapsed = mAudioFileStart.secsTo(now);
+	if (elapsed < 0)
+		elapsed += 86400;
+	float volume;
+	if (elapsed >= mFadeSeconds)
+	{
+		// The fade has finished. Set to normal volume.
+		volume = mVolume;
+		delete mFadeTimer;
+		mFadeTimer = 0;
+	}
+	else
+		volume = mFadeVolume  +  (mVolume - mFadeVolume) * (elapsed / mFadeSeconds);
+	if (mArtsDispatcher)
+	{
+		if (mUsingKMix)
+			setKMixVolume(static_cast<int>(volume));
+		else if (mArtsDispatcher)
+		{
+			KArtsServer aserver;
+			aserver.server().outVolume().scaleFactor(volume);
+		}
+	}
 #endif
 }
 
@@ -1228,7 +1275,7 @@ void MessageWin::slotDefer()
 			{
 				// The event doesn't exist any more !?!, so create a new one
 				event.set(dateTime.dateTime(), mMessage, mBgColour, mFgColour, mFont, mAction, mLateCancel, mFlags);
-				event.setAudioFile(mAudioFile, mVolume);
+				event.setAudioFile(mAudioFile, mVolume, mFadeVolume, mFadeSeconds);
 				event.setArchive();
 				event.setEventID(mEventID);
 			}
