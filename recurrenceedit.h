@@ -30,7 +30,7 @@
 
 #include <qframe.h>
 #include <qdatetime.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <libkcal/event.h>
 
 #include "datetime.h"
