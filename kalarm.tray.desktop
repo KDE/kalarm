@@ -10,6 +10,7 @@ Exec=kalarm --tray
 Icon=kalarm
 Type=Application
 DocPath=kalarm/index.html
+Comment=Alarm/reminder message scheduler: start as system tray icon
 Terminal=false
 X-DCOP-ServiceType=Unique
 X-KDE-autostart-after=panel
