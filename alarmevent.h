@@ -302,8 +302,8 @@ class KAEvent : public KAAlarmEventBase
 		                            const QString& message, const QStringList& attachments, int flags);
 		void               setEmail(const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume) { mAudioFile = filename;  mSoundVolume = volume;  mUpdated = true; }
-		void               setTemplate(const QString& name, bool defaultTime){ mTemplateName = name; mTemplateDefaultTime = defaultTime; }
-		void               setActions(const QString& pre, const QString& post)  { mPreAction = pre;  mPostAction = post; }
+		void               setTemplate(const QString& name, bool defaultTime)  { mTemplateName = name;  mTemplateDefaultTime = defaultTime;  mUpdated = true; }
+		void               setActions(const QString& pre, const QString& post) { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
