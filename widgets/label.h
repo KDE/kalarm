@@ -23,7 +23,7 @@
 
 #include <qlabel.h>
 class QRadioButton;
-
+class LabelFocusWidget;
 
 /**
  *  The Label class provides a text display, with special behaviour when a radio
