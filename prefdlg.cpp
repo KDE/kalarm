@@ -473,7 +473,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 			if (KStandardDirs::findExe(cmd).isEmpty())
 			{
 				mXtermCommand->setFocus();
-#warning This string should be translated, but there is a message freeze...
+// This string should be translated, but there is a message freeze...
 				if (KMessageBox::warningContinueCancel(this, QString("Command to invoke terminal window not found:\n%1").arg(cmd))
 					        != KMessageBox::Continue)
 					return;
