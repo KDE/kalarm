@@ -20,7 +20,7 @@
 #ifndef DATEEDIT_H
 #define DATEEDIT_H
 
-#include <kdateedit.h>
+#include <libkdepim/kdateedit.h>
 
 class DateEdit : public KDateEdit
 {

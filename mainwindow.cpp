@@ -42,7 +42,7 @@
 #include <kdebug.h>
 #include <kstdguiitem.h>
 
-#include <maillistdrag.h>
+#include <libkdepim/maillistdrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
