@@ -94,6 +94,8 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		layout->addWidget(mDefaultFont);
 		layout->addWidget(new QWidget(page));    // left adjust the widget
 	}
+	else
+		mDefaultFont = 0;
 
 	mFontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
 	topLayout->addWidget(mFontChooser);
