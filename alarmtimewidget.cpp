@@ -100,6 +100,7 @@ void AlarmTimeWidget::init(int mode)
 	                ((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
 	                   : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
 
+	mAnyTime = -1;    // current status is uninitialised
 	if (mode & DEFER_TIME)
 	{
 		mAnyTimeAllowed = false;
@@ -297,8 +298,8 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 */
 void AlarmTimeWidget::setAnyTime()
 {
-	bool old = mAnyTime;
-	mAnyTime = mAtTimeRadio->isOn() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
+	int old = mAnyTime;
+	mAnyTime = (mAtTimeRadio->isOn() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked()) ? 1 : 0;
 	if (mAnyTime != old)
 		emit anyTimeToggled(mAnyTime);
 }
