@@ -30,7 +30,7 @@ autostartdir = $(prefix)/share/autostart
 kdelnkdir = $(kde_appsdir)/Utilities/More
 kdelnk_DATA = kalarm.desktop
 
-install-data-local: uninstall.desktop
+install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications
 	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(kde_appsdir)/Applications/kalarm.desktop
 
