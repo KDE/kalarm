@@ -472,7 +472,7 @@ bool KAlarmEvent::repeats() const
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
 {
 	if (checkRecur())
 		return nextRecurrence(preDateTime, result);
@@ -495,7 +495,7 @@ KAlarmEvent::NextOccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateT
  * specified date/time.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const
 {
 	if (checkRecur())
 		return previousRecurrence(afterDateTime, result);
@@ -509,17 +509,20 @@ KAlarmEvent::NextOccurType KAlarmEvent::previousOccurrence(const QDateTime& afte
  * Set the date/time of the event to the next scheduled occurrence after the
  * specified date/time.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTime)
+KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTime)
 {
 	if (preDateTime < mDateTime)
 		return FIRST_OCCURRENCE;
-	NextOccurType type;
+	OccurType type;
 	if (checkRecur())
 	{
 		QDateTime newTime;
 		type = nextRecurrence(preDateTime, newTime);
 		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE)
+		{
 			mDateTime = newTime;
+			mUpdated = true;
+		}
 	}
 	else if (mRepeatDuration)
 	{
@@ -529,7 +532,9 @@ KAlarmEvent::NextOccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDa
 		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE)
 		{
 			mDateTime = newTime;
-			mRepeatDuration = remainingCount;
+			if (mRepeatDuration > 0)
+				mRepeatDuration = remainingCount;
+			mUpdated = true;
 		}
 	}
 	else
@@ -542,9 +547,10 @@ KAlarmEvent::NextOccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDa
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const
 {
-	result = mRecurrence->getNextRecurrence(preDateTime.date());
+	bool last;
+	result = mRecurrence->getNextRecurrence(preDateTime.date(), &last);
 	if (!result.isValid())
 		return NO_OCCURRENCE;
 	QDateTime recurStart = mRecurrence->recurStart();
@@ -552,6 +558,8 @@ KAlarmEvent::NextOccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateT
 		result.setTime(recurStart.time());
 	if (result.date() == recurStart.date())
 		return FIRST_OCCURRENCE;
+	if (last)
+		return LAST_OCCURRENCE;
 	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
@@ -560,9 +568,10 @@ KAlarmEvent::NextOccurType KAlarmEvent::nextRecurrence(const QDateTime& preDateT
  * specified date/time.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const
 {
-	result = mRecurrence->getPreviousRecurrence(afterDateTime.date());
+	bool last;
+	result = mRecurrence->getPreviousRecurrence(afterDateTime.date(), &last);
 	if (!result.isValid())
 		return NO_OCCURRENCE;
 	QDateTime recurStart = mRecurrence->recurStart();
@@ -570,6 +579,8 @@ KAlarmEvent::NextOccurType KAlarmEvent::previousRecurrence(const QDateTime& afte
 		result.setTime(recurStart.time());
 	if (result.date() == recurStart.date())
 		return FIRST_OCCURRENCE;
+	if (last)
+		return LAST_OCCURRENCE;
 	return mAnyTime ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
@@ -578,14 +589,16 @@ KAlarmEvent::NextOccurType KAlarmEvent::previousRecurrence(const QDateTime& afte
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
+KAlarmEvent::OccurType KAlarmEvent::nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const
 {
 	KAlarmAlarm al = alarm(mMainAlarmID);
 	remainingCount = al.nextRepetition(preDateTime, result);
 	if (remainingCount == 0)
 		return NO_OCCURRENCE;
-	if (remainingCount > al.repeatCount())
+	if (result == al.dateTime())
 		return FIRST_OCCURRENCE;
+	if (remainingCount == 1)
+		return LAST_OCCURRENCE;
 	return RECURRENCE_DATE_TIME;
 }
 
@@ -594,7 +607,7 @@ KAlarmEvent::NextOccurType KAlarmEvent::nextRepetition(const QDateTime& preDateT
  * specified date/time.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
-KAlarmEvent::NextOccurType KAlarmEvent::previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const
+KAlarmEvent::OccurType KAlarmEvent::previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const
 {
 	KAlarmAlarm al = alarm(mMainAlarmID);
 	int count = al.previousRepetition(afterDateTime, result);
@@ -602,6 +615,8 @@ KAlarmEvent::NextOccurType KAlarmEvent::previousRepetition(const QDateTime& afte
 		return NO_OCCURRENCE;
 	if (count == 0)
 		return FIRST_OCCURRENCE;
+	if (count > al.repeatCount()  &&  al.repeatCount() >= 0)
+		return LAST_OCCURRENCE;
 	return RECURRENCE_DATE_TIME;
 }
 
@@ -790,6 +805,7 @@ bool KAlarmEvent::initRecur(bool recurs)
 		mRecurrence = 0L;
 	}
 	mRepeatDuration = mRepeatMinutes = 0;
+	mUpdated = true;
 	return recurs;
 }
 
@@ -868,7 +884,8 @@ int KAlarmAlarm::flags() const
 /******************************************************************************
  * Get the date/time of the next repetition, after the specified date/time.
  * 'result' = date/time of next repetition, or invalid date/time if none.
- * Reply = number of repetitions still due, including the first occurrence
+ * Reply = number of repetitions still due, including the next occurrence, or
+ *       = -1 if indefinite.
  */
 int KAlarmAlarm::nextRepetition(const QDateTime& preDateTime, QDateTime& result) const
 {
@@ -878,7 +895,7 @@ int KAlarmAlarm::nextRepetition(const QDateTime& preDateTime, QDateTime& result)
 	{
 		// Alarm is not due by the specified time
 		result = mDateTime;
-		return mRepeatCount + 1;
+		return (mRepeatCount >= 0) ? mRepeatCount + 1 : -1;
 	}
 
 	int repeatSecs = mRepeatMinutes * 60;
@@ -886,10 +903,10 @@ int KAlarmAlarm::nextRepetition(const QDateTime& preDateTime, QDateTime& result)
 	{
 		int nextRepeatCount = (secs + repeatSecs - 1) / repeatSecs;
 		int remainingCount = mRepeatCount - nextRepeatCount;
-		if (remainingCount >= 0)
+		if (remainingCount >= 0  ||  mRepeatCount < 0)
 		{
 			result = mDateTime.addSecs(nextRepeatCount * repeatSecs);
-			return remainingCount + 1;
+			return (mRepeatCount >= 0) ? remainingCount + 1 : -1;
 		}
 	}
 	result = QDateTime();
@@ -900,7 +917,8 @@ int KAlarmAlarm::nextRepetition(const QDateTime& preDateTime, QDateTime& result)
  * Get the date/time of the last previous repetition, before the specified
  * date/time.
  * 'result' = date/time of previous repetition, or invalid date/time if none.
- * Reply = number of the previous repetition, or -1 if none.
+ * Reply = number of the previous repetition (> mRepeatCount if last repetition)
+ *       = -1 if none.
  */
 int KAlarmAlarm::previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const
 {
@@ -911,12 +929,13 @@ int KAlarmAlarm::previousRepetition(const QDateTime& afterDateTime, QDateTime& r
 		// Alarm was due by the specified time
 		int repeatSecs = mRepeatMinutes * 60;
 		int repeatCount = secs / repeatSecs;
-		if (repeatCount > mRepeatCount)
+		int count = repeatCount;
+		if (mRepeatCount >= 0  &&  repeatCount > mRepeatCount)
 			repeatCount = mRepeatCount;
 		if (repeatCount >= 0)
 		{
 			result = mDateTime.addSecs(repeatCount * repeatSecs);
-			return repeatCount;
+			return count;
 		}
 	}
 	result = QDateTime();
@@ -1031,13 +1050,16 @@ void KAlarmAlarm::dumpDebug() const
 
 
 
-
 /******************************************************************************
  * Get the date of the next recurrence, after the specified date.
+ * If 'last' is non-null, '*last' is set to true if the next recurrence is the
+ * last recurrence, else false.
  * Reply = date of next recurrence, or invalid date if none.
  */
-QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate) const
+QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate, bool* last) const
 {
+	if (last)
+		*last = false;
 	QDate dStart = recurStart().date();
 	if (preDate < dStart)
 		return dStart;
@@ -1128,8 +1150,13 @@ QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate) const
 	if (nextDate.isValid())
 	{
 		// Check that the date found is within the range of the recurrence
-		if (endDate.isValid()  &&  nextDate > endDate)
-			return QDate();
+		if (endDate.isValid())
+		{
+			if (nextDate > endDate)
+				return QDate();
+			if (last  &&  nextDate == endDate)
+				*last = true;
+		}
 	}
 	return nextDate;
 }
@@ -1138,8 +1165,10 @@ QDate KAlarmRecurrence::getNextRecurrence(const QDate& preDate) const
  * Get the date of the last previous recurrence, before the specified date.
  * Reply = date of previous recurrence, or invalid date if none.
  */
-QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate) const
+QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate, bool* last) const
 {
+	if (last)
+		*last = false;
 	QDate dStart = recurStart().date();
 	QDate latestDate = afterDate.addDays(-1);
 	if (latestDate < dStart)
@@ -1242,8 +1271,12 @@ QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate) const
 		// Check that the date found is within the range of the recurrence
 		if (prevDate < dStart)
 			return QDate();
-		if (endDate.isValid()  &&  prevDate > endDate)
+		if (endDate.isValid()  &&  prevDate >= endDate)
+		{
+			if (last)
+				*last = true;
 			return endDate;
+		}
 	}
 	return prevDate;
 }
@@ -1254,11 +1287,15 @@ QDate KAlarmRecurrence::getPreviousRecurrence(const QDate& afterDate) const
  * Parameters:  startDay = 1..7
  * Reply = day of the week (1..7), or 0 if none found.
  */
-int KAlarmRecurrence::getFirstDayInWeek(int startDay) const
+int KAlarmRecurrence::getFirstDayInWeek(int startDay, bool wrap) const
 {
 	for (int i = startDay - 1;  i < 7;  ++i)
 		if (rDays.testBit(i))
 			return i + 1;
+	if (wrap)
+		for (int i = 0;  i < startDay - 1;  ++i)
+			if (rDays.testBit(i))
+				return i + 1;
 	return 0;
 }
 
@@ -1268,11 +1305,15 @@ int KAlarmRecurrence::getFirstDayInWeek(int startDay) const
  * Parameters:  endDay = 1..7
  * Reply = day of the week (1..7), or 0 if none found.
  */
-int KAlarmRecurrence::getLastDayInWeek(int endDay) const
+int KAlarmRecurrence::getLastDayInWeek(int endDay, bool wrap) const
 {
 	for (int i = endDay;  --i >= 0;  )
 		if (rDays.testBit(i))
 			return i + 1;
+	if (wrap)
+		for (int i = 7;  --i >= endDay;  )
+			if (rDays.testBit(i))
+				return i + 1;
 	return 0;
 }
 
@@ -1300,39 +1341,47 @@ QDate KAlarmRecurrence::getFirstDateInMonth(const QDate& earliestDate) const
 	else
 	{
 		QDate monthBegin(earliestDate.year(), earliestDate.month(), 1);
-		QDate monthEnd(monthBegin.addDays(daysInMonth - 1));
-		int monthEndDayOfWeek = monthEnd.dayOfWeek();
+		int monthBeginDayOfWeek = monthBegin.dayOfWeek();
+		int monthEndDayOfWeek   = (monthBeginDayOfWeek + daysInMonth - 2) % 7 + 1;
 		int earliestWeek = (earliestDay + 6)/7;     // 1..5
-		int earliestDayOfWeek = monthBegin.addDays(earliestDay - 1).dayOfWeek();
+		int earliestDayOfWeek = (monthBeginDayOfWeek + earliestDay - 2) % 7 + 1;
 		for (QPtrListIterator<rMonthPos> it(rMonthPositions);  it.current();  ++it)
 		{
+			int weeksDiff;      // how many weeks rPos is after earliestDate
+			int beginDayOfWeek;
 			if (it.current()->negative)
 			{
-				int latestDay = daysInMonth - (it.current()->rPos - 1) * 7;
-				if (latestDay >= earliestDay)
+				// It's (for example) the nth Tuesday before the end of the month
+				int endWeek = daysInMonth - (it.current()->rPos - 1) * 7;   // end of specified week
+				weeksDiff = endWeek - earliestDay;
+				if (weeksDiff >= 0)
 				{
-					for (int i = 0;  i < 7;  ++i)
-						if (rDays.testBit(i))
-						{
-							int dayno = latestDay - (monthEndDayOfWeek - i + 7) % 7;
-							if (dayno < minday)
-								minday = dayno;
-						}
+					weeksDiff /= 7;
+					beginDayOfWeek = monthEndDayOfWeek % 7 + 1;
 				}
 			}
 			else
 			{
-				int diff = it.current()->rPos - earliestWeek;
-				if (diff >= 0)
+				// It's (for example) the nth Tuesday of the month
+				weeksDiff = it.current()->rPos - earliestWeek;
+				beginDayOfWeek = monthBeginDayOfWeek;
+			}
+
+			if (weeksDiff >= 0)
+			{
+				int i = getFirstDayInWeek((weeksDiff ? beginDayOfWeek : earliestDayOfWeek), true);
+				if (i  &&  !weeksDiff)
 				{
-					for (int i = (diff ? 0 : earliestDayOfWeek - 1);  i < 7;  ++i)
-						if (rDays.testBit(i))
-						{
-							int dayno = earliestDay + diff*7 + i - (earliestDayOfWeek - 1);
-							if (dayno < minday)
-								minday = dayno;
-							break;
-						}
+					// The week contains the earliest date, so ignore any days which
+					// come after the end of the week.
+					if ((i - earliestDayOfWeek + 7) % 7 >= (beginDayOfWeek - earliestDayOfWeek + 7) % 7)
+						i = 0;
+				}
+				if (i)
+				{
+					int dayno = earliestDay + weeksDiff*7 + i - earliestDayOfWeek;
+					if (dayno < minday)
+						minday = dayno;
 				}
 			}
 		}
@@ -1365,41 +1414,48 @@ QDate KAlarmRecurrence::getLastDateInMonth(const QDate& latestDate) const
 	}
 	else
 	{
-// check logic of this section
 		QDate monthBegin(latestDate.year(), latestDate.month(), 1);
-		QDate monthEnd(monthBegin.addDays(daysInMonth - 1));
-		int monthEndDayOfWeek = monthEnd.dayOfWeek();
+		int monthBeginDayOfWeek = monthBegin.dayOfWeek();
+		int monthEndDayOfWeek   = (monthBeginDayOfWeek + daysInMonth - 2) % 7 + 1;
 		int latestWeek = (latestDay + 6)/7;     // 1..5
-		int latestDayOfWeek = monthBegin.addDays(latestDay - 1).dayOfWeek();
+		int latestDayOfWeek = (monthBeginDayOfWeek + latestDay - 2) % 7 + 1;
 		for (QPtrListIterator<rMonthPos> it(rMonthPositions);  it.current();  ++it)
 		{
+			int weeksDiff;      // how many weeks rPos is before latestDate
+			int endDayOfWeek;
 			if (it.current()->negative)
 			{
-				int lastDay = daysInMonth - (it.current()->rPos - 1) * 7;
-				if (lastDay <= latestDay)
+				// It's (for example) the nth Tuesday before the end of the month
+				int startWeek = daysInMonth + 1 - it.current()->rPos * 7;   // start of specified week
+				weeksDiff = startWeek - latestDay;
+				if (weeksDiff <= 0)
 				{
-					for (int i = 0;  i < 7;  ++i)
-						if (rDays.testBit(i))
-						{
-							int dayno = lastDay - (monthEndDayOfWeek - i + 7) % 7;
-							if (dayno > maxday)
-								maxday = dayno;
-						}
+					weeksDiff /= 7;
+					endDayOfWeek = monthEndDayOfWeek;
 				}
 			}
 			else
 			{
-				int diff = it.current()->rPos - latestWeek;
-				if (diff >= 0)
+				// It's (for example) the nth Tuesday of the month
+				weeksDiff = it.current()->rPos - latestWeek;
+				endDayOfWeek = (monthBeginDayOfWeek+5)%7 + 1;
+			}
+
+			if (weeksDiff <= 0)
+			{
+				int i = getLastDayInWeek((weeksDiff ? endDayOfWeek : latestDayOfWeek), true);
+				if (i  &&  !weeksDiff)
 				{
-					for (int i = (diff ? 0 : latestDayOfWeek - 1);  i < 7;  ++i)
-						if (rDays.testBit(i))
-						{
-							int dayno = latestDay + diff*7 + i - (latestDayOfWeek - 1);
-							if (dayno > maxday)
-								maxday = dayno;
-							break;
-						}
+					// The week contains the latest date, so ignore any days which
+					// come before the first day of the week.
+					if ((latestDayOfWeek - i + 7) % 7 > (latestDayOfWeek - (endDayOfWeek+1) + 7) % 7)
+						i = 0;
+				}
+				if (i)
+				{
+					int dayno = latestDay + weeksDiff*7 + i - latestDayOfWeek;
+					if (dayno > maxday)
+						maxday = dayno;
 				}
 			}
 		}

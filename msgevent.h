@@ -28,11 +28,11 @@ class KAlarmRecurrence : public KCal::Recurrence
 {
 	public:
 		KAlarmRecurrence(KCal::Incidence* parent) : KCal::Recurrence(parent) { }
-		QDate getNextRecurrence(const QDate& preDate) const;
-		QDate getPreviousRecurrence(const QDate& afterDate) const;
+		QDate getNextRecurrence(const QDate& preDate, bool* last = 0) const;
+		QDate getPreviousRecurrence(const QDate& afterDate, bool* last = 0) const;
 	protected:
-		int   getFirstDayInWeek(int startDay) const;
-		int   getLastDayInWeek(int endDay) const;
+		int   getFirstDayInWeek(int startDay, bool wrap = false) const;
+		int   getLastDayInWeek(int endDay, bool wrap = false) const;
 		QDate getFirstDateInMonth(const QDate& earliestDate) const;
 		QDate getLastDateInMonth(const QDate& latestDate) const;
 		QDate getFirstDateInYear(const QDate& earliestDate) const;
@@ -128,12 +128,13 @@ class KAlarmEvent
 			ANNUAL_DAY  = KCal::Recurrence::rYearlyDay,
 			SUB_DAILY   = (DAILY | WEEKLY | MONTHLY_DAY | MONTHLY_POS | ANNUAL_DATE | ANNUAL_DAY) + 1
 		};
-		enum NextOccurType
+		enum OccurType
 		{
 			NO_OCCURRENCE,        // no occurrence is due
-			FIRST_OCCURRENCE,     // the first occurrence is due
+			FIRST_OCCURRENCE,     // the first occurrence is due (takes precedence over LAST_OCCURRENCE)
 			RECURRENCE_DATE,      // a recurrence is due with only a date, not a time
-			RECURRENCE_DATE_TIME  // a recurrence is due with a date and time
+			RECURRENCE_DATE_TIME, // a recurrence is due with a date and time
+			LAST_OCCURRENCE       // the last occurrence is due
 		};
 
 		KAlarmEvent()    : mRevision(0), mRecurrence(0L), mMainAlarmID(1), mRepeatDuration(0) { }
@@ -159,7 +160,7 @@ class KAlarmEvent
 											{ set(dt, command, QColor(), KAlarmAlarm::COMMAND, flags, repeatCount, repeatMinutes); }
 		void             setRepetition(int count, int minutes)   { mRepeatDuration = count;  mRepeatMinutes = minutes; }
 		void             updateRepetition(const QDateTime& dt, int count)  { mRepeatDuration = count;  mDateTime = dt; }
-		NextOccurType    setNextOccurrence(const QDateTime& preDateTime);
+		OccurType        setNextOccurrence(const QDateTime& preDateTime);
 		void             setEventID(const QString& id)                     { mEventID = id; }
 		void             setDate(const QDate& d)                           { mDateTime = d; mAnyTime = true; }
 		void             setTime(const QDateTime& dt)                      { mDateTime = dt; mAnyTime = false; }
@@ -194,8 +195,8 @@ class KAlarmEvent
 		KAlarmRecurrence* recurrence() const          { return mRecurrence; }
 		int              repeatCount() const          { return mRepeatDuration; }
 		int              repeatMinutes() const        { return mRepeatMinutes; }
-		NextOccurType    nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
-		NextOccurType    previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const;
+		OccurType        nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
+		OccurType        previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const;
 		QDateTime        lastDateTime() const         { return mDateTime.addSecs(mRepeatDuration * mRepeatMinutes * 60); }
 		bool             lateCancel() const           { return mLateCancel; }
 		bool             repeatAtLogin() const        { return mRepeatAtLogin; }
@@ -248,10 +249,10 @@ class KAlarmEvent
 		static const int REPEAT_AT_LOGIN_OFFSET;
 	private:
 		bool             checkRecur() const;
-		NextOccurType    nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const;
-		NextOccurType    nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
-		NextOccurType    previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
-		NextOccurType    previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const;
+		OccurType        nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const;
+		OccurType        nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
+		OccurType        previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
+		OccurType        previousRepetition(const QDateTime& afterDateTime, QDateTime& result) const;
 
 		QString           mEventID;          // KCal::Event unique ID
 		QString           mCleanText;        // message text, file URL or command
