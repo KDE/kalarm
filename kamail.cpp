@@ -58,11 +58,13 @@ bool parseAddressList( const char* & scursor, const char * const send,
 		       QValueList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
+const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNotify");
+
 
 /******************************************************************************
 * Send the email message specified in an event.
 */
-bool KAMail::send(const KAlarmEvent& event)
+QString KAMail::send(const KAlarmEvent& event)
 {
 	QString from = theApp()->preferences()->emailAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail():\nFrom: " << from << "\nTo: " << event.emailAddresses(", ")
@@ -89,7 +91,7 @@ bool KAMail::send(const KAlarmEvent& event)
 		{
 			command = KStandardDirs::findExe(QString::fromLatin1("mail"));
 			if (command.isNull())
-				return false; // give up
+				return i18n("%1 not found").arg(QString::fromLatin1("sendmail")); // give up
 
 			command += QString::fromLatin1(" -s ");
 			command += KShellProcess::quote(event.emailSubject());
@@ -106,18 +108,20 @@ bool KAMail::send(const KAlarmEvent& event)
 
 		// Add the body and attachments to the message.
 		// (Sendmail requires attachments to have already been included in the message.)
-		appendBodyAttachments(textComplete, event);
+		QString err = appendBodyAttachments(textComplete, event);
+		if (!err.isNull())
+			return err;
 
 //kdDebug()<<"Email:"<<command<<"\n-----\n"<<textComplete<<"\n-----\n";
 		FILE* fd = popen(command.local8Bit(), "w");
 		if (!fd)
 		{
 			kdError(5950) << "Unable to open a pipe to " << command << endl;
-			return false;
+			return QString("");
 		}
 		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
-		return true;
+		return QString::null;
 	}
 	else
 	{
@@ -128,9 +132,9 @@ bool KAMail::send(const KAlarmEvent& event)
 /******************************************************************************
 * Send the email message via KMail.
 */
-bool KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
+QString KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 {
-	if (theApp()->dcopClient()->isApplicationRegistered("kmail"))
+	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
 	{
 		// KMail is running - use a DCOP call
 		QCString    replyType;
@@ -146,7 +150,7 @@ bool KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 		{
 			arg << (int)0 << KURL();
 			int result = 0;
-			if (theApp()->dcopClient()->call("kmail", "KMailIface",
+			if (kapp->dcopClient()->call("kmail", "KMailIface",
 			                                 "openComposer(QString,QString,QString,QString,QString,int,KURL)",
 			                                 data, replyType, replyData)
 			&&  replyType == "int")
@@ -157,19 +161,19 @@ bool KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 			if (!result)
 			{
 				kdDebug(5950) << "sendKMail(): kmail openComposer() call failed." << endl;
-				return false;
+				return i18n("Error calling KMail");
 			}
 		}
 		else
 		{
 			arg << false;
-			if (!theApp()->dcopClient()->call("kmail", "KMailIface",
+			if (!kapp->dcopClient()->call("kmail", "KMailIface",
 			                                  "openComposer(QString,QString,QString,QString,QString,bool)",
 			                                   data, replyType, replyData)
 			||  replyType != "DCOPRef")
 			{
 				kdDebug(5950) << "sendKMail(): kmail openComposer() call failed." << endl;
-				return false;
+				return i18n("Error calling KMail");
 			}
 			DCOPRef composer;
 			QDataStream _reply_stream(replyData, IO_ReadOnly);
@@ -182,10 +186,10 @@ bool KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 				QDataStream argAtt(dataAtt, IO_WriteOnly);
 				argAtt << KURL(attachment);
 				argAtt << QString::null;
-				if (!theApp()->dcopClient()->call(composer.app(), composer.object(), "addAttachment(KURL,QString)", dataAtt, replyType, replyData))
+				if (!kapp->dcopClient()->call(composer.app(), composer.object(), "addAttachment(KURL,QString)", dataAtt, replyType, replyData))
 				{
 					kdDebug(5950) << "sendKMail(): kmail composer:addAttachment() call failed." << endl;
-					return false;
+					return i18n("Error calling KMail");
 				}
 			}
 		}
@@ -211,10 +215,10 @@ bool KAMail::sendKMail(const KAlarmEvent& event, const QString& from)
 		if (!proc.start(KProcess::DontCare))
 		{
 			kdDebug(5950) << "sendKMail(): kmail start failed" << endl;
-			return false;
+			return i18n("Error starting KMail");
 		}
 	}
-	return true;
+	return QString::null;
 }
 
 /******************************************************************************
@@ -255,6 +259,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 		}
 
 		// Append each attachment in turn
+		QString attachError = i18n("Error attaching file:\n%1");
 		for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
 		{
 			QString attachment = (*at).local8Bit();
@@ -263,12 +268,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds)) {
 				kdError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
-				return attachment;
+				return i18n("Attachment not found:\n%1").arg(attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
 				kdError(5950) << "KAMail::appendBodyAttachments(): not file/not readable: " << attachment << endl;
-				return attachment;
+				return attachError.arg(attachment);
 			}
 
 			// Check if the attachment is a text file
@@ -289,12 +294,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile)) {
 				kdError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
-				return attachment;
+				return attachError.arg(attachment);
 			}
 			QFile file(tmpFile);
 			if (!file.open(IO_ReadOnly) ) {
 				kdDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
-				return attachment;
+				return attachError.arg(attachment);
 			}
 			Offset size = file.size();
 			char* contents = new char [size + 1];
@@ -306,7 +311,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 			contents[size] = 0;
 			if (bytes == -1  ||  (Offset)bytes < size) {
 				kdDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
-				return attachment;
+				return attachError.arg(attachment);
 			}
 
 			if (text)
@@ -320,7 +325,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 				size = base64Encode(contents, base64, size);
 				if (size == (Offset)-1) {
 					kdDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
-					return attachment;
+					return attachError.arg(attachment);
 				}
 				message += QString::fromLatin1(base64, size);
 			}
@@ -329,6 +334,37 @@ QString KAMail::appendBodyAttachments(QString& message, const KAlarmEvent& event
 	}
 	return QString::null;
 }
+
+#ifdef NEW_KMAIL
+/******************************************************************************
+* If any of the destination email addresses are non-local, display a
+* notification message saying that an email has been queued for sending.
+*/
+void KAMail::notifyQueued(const KAlarmEvent& event)
+{
+	KMime::Types::Address addr;
+	QString localhost = QString::fromLatin1("localhost");
+	const EmailAddressList& addresses = event.emailAddresses();
+	for (QValueList<KCal::Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
+	{
+		QCString email = (*it).email().local8Bit();
+		const char* em = static_cast<const char*>(email);
+		if (!email.isEmpty()
+		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
+		{
+			QString domain = addr.mailboxList.first().addrSpec.domain;
+			if (!domain.isEmpty()  &&  domain != localhost)
+			{
+				QString text = (theApp()->preferences()->emailClient() == Preferences::KMAIL)
+				             ? i18n("An email has been queued to be sent by KMail")
+				             : i18n("An email has been queued to send");
+				KMessageBox::information(0, text, QString::null, EMAIL_QUEUED_NOTIFY);
+				return;
+			}
+		}
+	}
+}
+#endif
 
 /******************************************************************************
 *  Parse a list of email addresses, optionally containing display names,

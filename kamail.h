@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,18 +33,19 @@ class EmailAddressList;
 class KAMail
 {
 	public:
-		static bool       send(const KAlarmEvent&);
+		static QString    send(const KAlarmEvent&);
 		static int        checkAddress(QString& address);
 		static int        checkAttachment(QString& attachment)  { return checkAttachment(attachment, true); }
 		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString    convertAttachments(const QString& attachments, QStringList& list, bool check);
+		static const QString EMAIL_QUEUED_NOTIFY;
 	private:
 #if QT_VERSION >= 300
 		typedef QIODevice::Offset Offset;
 #else
 		typedef uint Offset;
 #endif
-		static bool       sendKMail(const KAlarmEvent&, const QString& from);
+		static QString    sendKMail(const KAlarmEvent&, const QString& from);
 		static QString    appendBodyAttachments(QString& message, const KAlarmEvent&);
 		static int        checkAttachment(QString& attachment, bool check);
 		static Offset     base64Encode(char* in, char* out, Offset size);
