@@ -162,6 +162,7 @@ void DailyTimer::start()
 =============================================================================*/
 
 StartOfDayTimer* StartOfDayTimer::mInstance = 0;
+QTime            StartOfDayTimer::mStartOfDay;
 
 StartOfDayTimer::StartOfDayTimer()
 {

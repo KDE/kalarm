@@ -1,7 +1,7 @@
 /*
  *  minutetimer.h  -  timer which triggers on each minute boudary
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -175,7 +175,7 @@ class StartOfDayTimer : public SynchTimer
 
 	private:
 		static StartOfDayTimer*  mInstance;     // the one and only instance
-		QTime               mStartOfDay;   // the current start-of-day time
+		static QTime             mStartOfDay;   // the current start-of-day time
 };
 
 #endif // MINUTETIMER_H
