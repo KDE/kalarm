@@ -23,7 +23,7 @@
 #include <qobjectlist.h>
 #include <qlayout.h>
 #include <qbuttongroup.h>
-#include <qhbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 #include "fontcolour.h"
 #include "datetime.h"
@@ -44,46 +45,10 @@
 #include "prefs.moc"
 
 
-PrefsTabBase::PrefsTabBase(QFrame* frame)
-	: page(frame)
+PrefsTabBase::PrefsTabBase(QVBox* frame)
+	: mPage(frame)
 {
-	page->setMargin(KDialog::marginHint());
-}
-
-QSize PrefsTabBase::sizeHintForWidget(QWidget* widget)
-{
-	// The size is computed by adding the sizeHint().height() of all
-	// widget children and taking the width of the widest child and adding
-	// layout()->margin() and layout()->spacing()
-
-	QSize size;
-	int numChild = 0;
-	QObjectList* list = (QObjectList*)(widget->children());
-
-	for (uint i = 0;  i < list->count();  ++i)
-	{
-		QObject* obj = list->at(i);
-		if (obj->isWidgetType())
-		{
-			++numChild;
-			QSize s = static_cast<QWidget*>(obj)->sizeHint();
-			if (s.isEmpty())
-				s = QSize(50, 100); // Default size
-			size.setHeight(size.height() + s.height());
-			if (s.width() > size.width())
-				size.setWidth(s.width());
-		}
-	}
-
-	if (numChild > 0)
-	{
-		size.setHeight(size.height() + widget->layout()->spacing()*(numChild-1));
-		size += QSize(widget->layout()->margin()*2, widget->layout()->margin()*2 + 1);
-	}
-	else
-		size = QSize(1, 1);
-
-	return size;
+	mPage->setMargin(KDialog::marginHint());
 }
 
 void PrefsTabBase::setSettings(Settings* setts)
@@ -100,15 +65,11 @@ void PrefsTabBase::apply(bool syncToDisc)
 
 
 
-MiscPrefTab::MiscPrefTab(QFrame* frame)
+MiscPrefTab::MiscPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
-
-	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), page, "modeGroup");
-	topLayout->addWidget(group);
-	QGridLayout* grid = new QGridLayout(group, 6, 2, 2*KDialog::marginHint(), KDialog::spacingHint());
+	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
+	QGridLayout* grid = new QGridLayout(group, 6, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(0, 0);
 	grid->setColStretch(1, 2);
 	grid->addColSpacing(0, 3*KDialog::spacingHint());
@@ -157,8 +118,9 @@ MiscPrefTab::MiscPrefTab(QFrame* frame)
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
+	group->setFixedHeight(group->sizeHint().height());
 
-	QHBox* box = new QHBox(page);
+	QHBox* box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon update interval:"), box);
 	box->setStretchFactor(label, 1);
@@ -168,9 +130,8 @@ MiscPrefTab::MiscPrefTab(QFrame* frame)
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
 	label = new QLabel(i18n("seconds"), box);
 	box->setFixedHeight(box->sizeHint().height());
-	topLayout->addWidget(box);
 
-	box = new QHBox(page);
+	box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Start of day for date-only alarms:"), box);
 	box->setStretchFactor(label, 1);
@@ -179,10 +140,9 @@ MiscPrefTab::MiscPrefTab(QFrame* frame)
 	QWhatsThis::add(mStartOfDay,
 	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
 	box->setFixedHeight(box->sizeHint().height());
-	topLayout->addWidget(box);
 
 #ifdef KALARM_EMAIL
-	box = new QHBox(page);
+	box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Email client:"), box);
 	box->setStretchFactor(label, 1);
@@ -193,19 +153,14 @@ MiscPrefTab::MiscPrefTab(QFrame* frame)
 	emailSendmail->setMinimumSize(emailSendmail->sizeHint());
 	box->setFixedHeight(box->sizeHint().height());
 	QWhatsThis::add(box, i18n("Choose which application should be used to send email."));
-	topLayout->addWidget(box);
 #endif
 
-	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), page, "confirmDeletion");
-	mConfirmAlarmDeletion->setFixedSize(mConfirmAlarmDeletion->sizeHint());
+	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), mPage, "confirmDeletion");
+	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	QWhatsThis::add(mConfirmAlarmDeletion,
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
-	topLayout->addWidget(mConfirmAlarmDeletion);
 
-	box = new QHBox(page);
-	topLayout->addWidget(box);
-	topLayout->addStretch(1);
-	page->setMinimumSize(sizeHintForWidget(page));
+	box = new QHBox(mPage);   // top-adjust all the widgets
 }
 
 void MiscPrefTab::restore()
@@ -256,16 +211,10 @@ void MiscPrefTab::slotRunModeToggled(bool)
 }
 
 
-AppearancePrefTab::AppearancePrefTab(QFrame* frame)
+AppearancePrefTab::AppearancePrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint() );
-//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
-
-	mFontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
-	topLayout->addWidget(mFontChooser);
-
-	page->setMinimumSize(sizeHintForWidget(page));
+	mFontChooser = new FontColourChooser(mPage, 0L, false, QStringList(), true, i18n("Font and Color"), false);
 }
 
 void AppearancePrefTab::restore()
@@ -288,40 +237,33 @@ void AppearancePrefTab::setDefaults()
 }
 
 
-DefaultPrefTab::DefaultPrefTab(QFrame* frame)
+DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint() );
-//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
-
-	mDefaultLateCancel = new QCheckBox(i18n("Cancel if late"), page, "defCancelLate");
-	mDefaultLateCancel->setFixedSize(mDefaultLateCancel->sizeHint());
+	mDefaultLateCancel = new QCheckBox(i18n("Cancel if late"), mPage, "defCancelLate");
+	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
 	QWhatsThis::add(mDefaultLateCancel,
-	      i18n("The default setting for \"%1\" in the alarm edit dialog.").arg(i18n("Cancel if late")));
-	topLayout->addWidget(mDefaultLateCancel);
+	      i18n("The default setting for \"Cancel if late\" in the alarm edit dialog."));
 
-	mDefaultConfirmAck = new QCheckBox(i18n("Confirm acknowledgement"), page, "defConfAck");
-	mDefaultConfirmAck->setFixedSize(mDefaultConfirmAck->sizeHint());
+	mDefaultConfirmAck = new QCheckBox(i18n("Confirm acknowledgement"), mPage, "defConfAck");
+	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
 	QWhatsThis::add(mDefaultConfirmAck,
-	      i18n("The default setting for \"%1\" in the alarm edit dialog.").arg(i18n("Confirm acknowledgement")));
-	topLayout->addWidget(mDefaultConfirmAck);
+	      i18n("The default setting for \"Confirm acknowledgement\" in the alarm edit dialog."));
 
-	mDefaultBeep = new QCheckBox(i18n("Beep"), page, "defBeep");
-	mDefaultBeep->setFixedSize(mDefaultBeep->sizeHint());
+	mDefaultBeep = new QCheckBox(i18n("Beep"), mPage, "defBeep");
+	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
 	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
-	topLayout->addWidget(mDefaultBeep);
 
 #ifdef KALARM_EMAIL
 	// BCC email to sender
-	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to self"), page, "defEmailBcc");
+	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to self"), mPage, "defEmailBcc");
 	mDefaultEmailBcc->setFixedSize(mDefaultEmailBcc->sizeHint());
 	QWhatsThis::add(mDefaultEmailBcc,
 	      i18n("The default setting for \"%1\" in the alarm edit dialog.").arg(i18n("Copy email to self")));
-	topLayout->addWidget(mDefaultEmailBcc);
 #endif
 
-	QHBox* box = new QHBox(page);
+	QHBox* box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Recurrence period:"), box);
 	label->setFixedSize(label->sizeHint());
@@ -334,13 +276,11 @@ DefaultPrefTab::DefaultPrefTab(QFrame* frame)
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	QWhatsThis::add(mDefaultRecurPeriod,
 	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
-	box->setFixedSize(box->sizeHint());
-	topLayout->addWidget(box);
+	label = new QLabel(box);   // dummy to left-adjust the controls
+	box->setStretchFactor(label, 1);
+	box->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(page);
-	topLayout->addWidget(box);
-	topLayout->addStretch(1);
-	page->setMinimumSize(sizeHintForWidget(page));
+	box = new QHBox(mPage);   // top-adjust all the widgets
 }
 
 void DefaultPrefTab::restore()
