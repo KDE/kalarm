@@ -100,17 +100,17 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	: PrefsBase(parent)
 {
 	QWidget* page = new QWidget(this );
-	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, 0);
 	topLayout->setMargin(KDialog::marginHint());
 
 	QGroupBox* group = new QGroupBox(i18n("Run mode"), page, "modeGroup");
-	QGridLayout* grid = new QGridLayout(group, 5, 2, KDialog::spacingHint() + fontMetrics().lineSpacing()/2);
 	topLayout->addWidget(group);
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()*2);
-	grid->addRowSpacing(3, fontMetrics().lineSpacing()*2);
+	QGridLayout* grid = new QGridLayout(group, 6, 2, KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(0, 0);
 	grid->setColStretch(1, 2);
 	grid->addColSpacing(0, 3*KDialog::spacingHint());
+	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	int row = 1;
 	// To have better control over the button layout, don't use a QButtonGroup
 
 	// Run-in-system-tray radio button has an ID of 0
@@ -123,17 +123,17 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	           "1. With this option selected, closing the system tray icon will quit %2.\n"
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mRunInSystemTray, 0, 0, 0, 1, AlignLeft);
+	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 1, AlignLeft);
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at login"), group, "autoTray");
 	QWhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run %1 whenever you start KDE.").arg(kapp->aboutData()->programName()));
-	grid->addWidget(mAutostartTrayIcon1, 1, 1, AlignLeft);
+	grid->addWidget(mAutostartTrayIcon1, ++row, 1, AlignLeft);
 
 	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disable alarms while not running"), group, "disableAl");
 	QWhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(kapp->aboutData()->programName()));
-	grid->addWidget(mDisableAlarmsIfStopped, 2, 1, AlignLeft);
+	grid->addWidget(mDisableAlarmsIfStopped, ++row, 1, AlignLeft);
 
 	// Run-in-system-tray radio button has an ID of 0
 	mRunOnDemand = new QRadioButton(i18n("Run only on demand"), group, "runDemand");
@@ -145,20 +145,21 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	           "1. Alarms are displayed even when %2 is not running, since alarm monitoring is done by the alarm daemon.\n"
 	           "2. With this option selected, the system tray icon can be displayed or hidden independently of %3.")
 	           .arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()).arg(kapp->aboutData()->programName()));
-	grid->addMultiCellWidget(mRunOnDemand, 3, 3, 0, 1, AlignLeft);
+	++row;
+	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 1, AlignLeft);
 
 	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray icon at login"), group, "autoRun");
 	QWhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
-	grid->addWidget(mAutostartTrayIcon2, 4, 1, AlignLeft);
+	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 
-	grid = new QGridLayout(topLayout, 1, 2, KDialog::spacingHint());
+	grid = new QGridLayout(topLayout, 1, 2);
 	topLayout->addLayout(grid);
 	QLabel* lbl = new QLabel(i18n("System tray icon update interval [seconds]"), page);
 	lbl->setFixedSize(lbl->sizeHint());
 	grid->addWidget(lbl, 0, 0, AlignLeft);
 	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, page, "daemonCheck");
-	grid->addWidget(mDaemonTrayCheckInterval, 0, 1, AlignLeft);
+	grid->addWidget(mDaemonTrayCheckInterval, 0, 1, AlignRight);
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is running."));
 
