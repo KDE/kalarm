@@ -34,7 +34,7 @@ class EditAlarmDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		EditAlarmDlg(const QString& caption, QWidget* parent=0, const char* name = 0, const MessageEvent* = 0);
+		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L, const MessageEvent* = 0L);
 		virtual ~EditAlarmDlg();
 
 		void            getEvent(MessageEvent&);
@@ -76,7 +76,7 @@ class EditAlarmDlg : public KDialogBase
 class TimeSpinBox : public QSpinBox
 {
 	public:
-		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
+		TimeSpinBox(QWidget* parent = 0L, const char* name = 0L);
 	protected:
 		virtual QString mapValueToText(int v);
 		virtual int     mapTextToValue(bool* ok);
@@ -89,7 +89,7 @@ class TimeSpinBox : public QSpinBox
 class DateSpinBox : public QSpinBox
 {
 	public:
-		DateSpinBox(QWidget* parent = 0, const char* name = 0);
+		DateSpinBox(QWidget* parent = 0L, const char* name = 0L);
 		void            setDate(const QDate&);
 		QDate           getDate();
 	protected:

@@ -34,7 +34,7 @@
 
 
 KAlarmMainWindow::KAlarmMainWindow(const char* name)
-	: KMainWindow(0, name)
+	: KMainWindow(0L, name)
 {
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));     // save window sizes etc.
 	setPlainCaption(name);
@@ -319,7 +319,7 @@ AlarmListViewItem* AlarmListView::getEntry(const MessageEvent* event)
 	for (map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.begin();  it != entries.end();  ++it)
 		if (it->second.event == event)
 			return it->first;
-	return 0;
+	return 0L;
 }
 
 AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSize)

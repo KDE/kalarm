@@ -36,7 +36,7 @@
 *  Construct the message window.
 */
 MessageWin::MessageWin(const MessageEvent& event, bool delete_event)
-	: KMainWindow(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
+	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  message(event.message()),
 	  font(theApp()->generalSettings()->messageFont()),
 	  colour(event.colour()),
@@ -57,7 +57,7 @@ MessageWin::MessageWin(const MessageEvent& event, bool delete_event)
 *  Construct the message window for restoration by session management.
 */
 MessageWin::MessageWin()
-	: KMainWindow(0, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
+	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
 	  shown(true)
 {
 	kdDebug() << "MessageWin::MessageWin()" << endl;

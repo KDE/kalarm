@@ -24,23 +24,23 @@ class FontColourChooser : public QWidget
 {
 	Q_OBJECT
 public:
-	FontColourChooser(QWidget *parent = 0L, const char *name = 0L,
+	FontColourChooser(QWidget* parent = 0L, const char* name = 0L,
 	       bool onlyFixed = false,
-	       const QStringList &fontList = QStringList(),
+	       const QStringList& fontList = QStringList(),
 	       bool makeFrame = true, const QString& frameLabel = "Requested font",
-	       bool fg = true, int visibleListSize=8 );
+	       bool fg = true, int visibleListSize=8);
 	~FontColourChooser();
 
-	void setFont( const QFont& font, bool onlyFixed = false )  { m_fontChooser->setFont(font, onlyFixed); }
+	void setFont(const QFont& font, bool onlyFixed = false)  { m_fontChooser->setFont(font, onlyFixed); }
 	QFont font() const  { return m_fontChooser->font(); }
 	QColor fgColour() const;
 	QColor bgColour() const    { return m_bgColourButton->color(); }
 	void setFgColour(const QColor&);
 	void setBgColour(const QColor&);
-	void setCharset( const QString & charset )  { m_fontChooser->setCharset(charset); }
+	void setCharset(const QString& charset)  { m_fontChooser->setCharset(charset); }
 	QString charset() const  { return m_fontChooser->charset(); }
 	QString sampleText() const { return m_fontChooser->sampleText(); }
-	void setSampleText( const QString &text )  { m_fontChooser->setSampleText(text); }
+	void setSampleText(const QString& text)  { m_fontChooser->setSampleText(text); }
 
 private:
 	ColourCombo*     m_fgColourButton;       // or null

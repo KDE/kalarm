@@ -36,7 +36,7 @@
 const QString DCOP_OBJECT_NAME("display");
 const QString DEFAULT_CALENDAR_FILE("calendar.ics");
 
-KAlarmApp*  KAlarmApp::theInstance = 0;
+KAlarmApp*  KAlarmApp::theInstance = 0L;
 
 
 /******************************************************************************
@@ -46,7 +46,7 @@ KAlarmApp::KAlarmApp()
 	:	KUniqueApplication(),
 		mainWidget(new MainWidget(DCOP_OBJECT_NAME)),
 		daemonRegistered(false),
-		m_generalSettings(new GeneralSettings(0))
+		m_generalSettings(new GeneralSettings(0L))
 {
 	m_generalSettings->loadSettings();
 }
@@ -153,7 +153,7 @@ int KAlarmApp::newInstance()
 			QCString alMessage = args->arg(0);
 
 			long flags = 0;
-			QDateTime* alarmTime = 0;
+			QDateTime* alarmTime = 0L;
 			QDateTime wakeup;
 			QColor bgColour = generalSettings()->defaultBgColour();;
 			if (args->isSet("colour"))
@@ -336,7 +336,7 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 	}
 	if (!initCheck())
 		return false;
-	addMessage(event, 0);        // event instance will now belong to the calendar
+	addMessage(event, 0L);        // event instance will now belong to the calendar
 	return true;
 }
 
@@ -378,7 +378,7 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 	if (function == EVENT_DISPLAY)
 		displayMessageWin(*event, true);
 	else
-		deleteMessage(event, 0, false);
+		deleteMessage(event, 0L, false);
 	return true;
 }
 
@@ -519,14 +519,14 @@ bool KAlarmApp::convWakeTime(const QCString timeParam, QDateTime& dateTime)
 	char* s;
 	char* end;
 	// Get the minute value
-	if ((s = strchr(timeStr, ':')) == 0)
+	if ((s = strchr(timeStr, ':')) == 0L)
 		return false;
 	*s++ = 0;
 	dt[4] = strtoul(s, &end, 10);
 	if (end == s  ||  *end  ||  dt[4] >= 60)
 		return false;
 	// Get the hour value
-	if ((s = strrchr(timeStr, '-')) == 0)
+	if ((s = strrchr(timeStr, '-')) == 0L)
 		s = timeStr;
 	else
 		*s++ = 0;
@@ -539,7 +539,7 @@ bool KAlarmApp::convWakeTime(const QCString timeParam, QDateTime& dateTime)
 	{
 		dateSet = true;
 		// Get the day value
-		if ((s = strrchr(timeStr, '-')) == 0)
+		if ((s = strrchr(timeStr, '-')) == 0L)
 			s = timeStr;
 		else
 			*s++ = 0;
@@ -549,7 +549,7 @@ bool KAlarmApp::convWakeTime(const QCString timeParam, QDateTime& dateTime)
 		if (s != timeStr)
 		{
 			// Get the month value
-			if ((s = strrchr(timeStr, '-')) == 0)
+			if ((s = strrchr(timeStr, '-')) == 0L)
 				s = timeStr;
 			else
 				*s++ = 0;
@@ -596,7 +596,7 @@ void AlarmCalendar::getURL() const
 		if (!url.isValid())
 		{
 			kdDebug() << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
-			KMessageBox::error(0, i18n("Invalid calendar file name: %1").arg(url.prettyURL()));
+			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()));
 			kapp->exit(1);
 		}
 	}
@@ -618,7 +618,7 @@ bool AlarmCalendar::open()
 	if (!KIO::NetAccess::exists(url))
 	{
 		// Create the calendar file
-		KTempFile* tmpFile = 0;
+		KTempFile* tmpFile = 0L;
 		QString filename;
 		if (url.isLocalFile())
 			filename = url.path();
@@ -650,7 +650,7 @@ bool AlarmCalendar::load()
 	if (!KIO::NetAccess::download(url, tmpFile))
 	{
 		kdDebug() << "Load failure" << endl;
-		KMessageBox::error(0, i18n("Cannot open calendar %1").arg(url.prettyURL()));
+		KMessageBox::error(0L, i18n("Cannot open calendar %1").arg(url.prettyURL()));
 		return false;
 	}
 	kdDebug() << "--- Downloaded to " << tmpFile << endl;
@@ -658,7 +658,7 @@ bool AlarmCalendar::load()
 	{
 		KIO::NetAccess::removeTempFile(tmpFile);
 		kdDebug() << "Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0, i18n("Error loading calendar %1").arg(url.prettyURL()));
+		KMessageBox::error(0L, i18n("Error loading calendar %1").arg(url.prettyURL()));
 		return false;
 	}
 	if (!localFile.isEmpty())
@@ -687,7 +687,7 @@ bool AlarmCalendar::save(const QString& filename)
 	{
 		if (!KIO::NetAccess::upload(filename, url))
 		{
-			KMessageBox::error(0, i18n("Cannot upload calendar to '%1'").arg(url.prettyURL()));
+			KMessageBox::error(0L, i18n("Cannot upload calendar to '%1'").arg(url.prettyURL()));
 			return false;
 		}
 	}

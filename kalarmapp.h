@@ -39,7 +39,7 @@ class MainWidget : public QWidget, DCOPObject
 class AlarmCalendar
 {
 	public:
-		AlarmCalendar() : calendar(0) { }
+		AlarmCalendar() : calendar(0L) { }
 		bool              open();
 		bool              load();
 		bool              save()                            { return save(localFile); }

@@ -18,7 +18,7 @@
 class ColourCombo : public KColorCombo
 {
 	public:
-		ColourCombo(QWidget* parent = 0, const char* name = 0, const QColor& = 0xFFFFFF);
+		ColourCombo(QWidget* parent = 0L, const char* name = 0L, const QColor& = 0xFFFFFF);
 		void    setColour(const QColor&);
 	protected:
 		/**

@@ -35,7 +35,7 @@ class KAlarmMainWindow : public KMainWindow
 		Q_OBJECT
 
 	public:
-		KAlarmMainWindow(const char* name=0);
+		KAlarmMainWindow(const char* name=0L);
 		~KAlarmMainWindow();
 
 		void  addMessage(const MessageEvent*);
@@ -84,7 +84,7 @@ class AlarmListView : public KListView
 	public:
 		enum { TIME_COLUMN, COLOUR_COLUMN, MESSAGE_COLUMN };
 
-		AlarmListView(QWidget* parent = 0, const char* name = 0);
+		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
 		virtual void         clear();
 		void                 refresh();
 		AlarmListViewItem*   addEntry(const MessageEvent*, bool setSize = false);

@@ -22,25 +22,25 @@
 
 static KCmdLineOptions options[] =
 {
-	{ "b", 0, 0 },
-	{ "beep", I18N_NOOP("Beep when message is displayed"), 0 },
-	{ "c", 0, 0 },
-	{ "color", 0, 0 },
-	{ "colour <colour>", I18N_NOOP("Message background colour (name or hex 0xRRGGBB)"), 0 },
-	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0 },
-	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0 },
-	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0 },
-	{ "handleEvent <eventID>", I18N_NOOP("Display or cancel message with the specified event ID"), 0 },
-	{ "l", 0, 0 },
-	{ "late-cancel", I18N_NOOP("Cancel message if it cannot be displayed on time"), 0 },
-	{ "r", 0, 0 },
-	{ "reset", I18N_NOOP("Reset the message scheduling daemon"), 0 },
-	{ "s", 0, 0 },
-	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0 },
-	{ "t", 0, 0 },
-	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0 },
+	{ "b", 0L, 0L },
+	{ "beep", I18N_NOOP("Beep when message is displayed"), 0L },
+	{ "c", 0L, 0L },
+	{ "color", 0L, 0L },
+	{ "colour <colour>", I18N_NOOP("Message background colour (name or hex 0xRRGGBB)"), 0L },
+	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0L },
+	{ "cancelEvent <eventID>", I18N_NOOP("Cancel message with the specified event ID"), 0L },
+	{ "displayEvent <eventID>", I18N_NOOP("Display message with the specified event ID"), 0L },
+	{ "handleEvent <eventID>", I18N_NOOP("Display or cancel message with the specified event ID"), 0L },
+	{ "l", 0L, 0L },
+	{ "late-cancel", I18N_NOOP("Cancel message if it cannot be displayed on time"), 0L },
+	{ "r", 0L, 0L },
+	{ "reset", I18N_NOOP("Reset the message scheduling daemon"), 0L },
+	{ "s", 0L, 0L },
+	{ "stop", I18N_NOOP("Stop the message scheduling daemon"), 0L },
+	{ "t", 0L, 0L },
+	{ "time <time>", I18N_NOOP("Display message at 'time' [[[yyyy-]mm-]dd-]hh:mm"), 0L },
 	{ "+[message]", I18N_NOOP("Message text to display"), "Alarm" },
-	{ 0, 0, 0 }
+	{ 0L, 0L, 0L }
 };
 
 
@@ -55,8 +55,8 @@ int main(int argc, char *argv[])
 		"       " PROGRAM_NAME " [generic_options]\n\n"
 		"KDE alarm message scheduler"),
 		KAboutData::License_GPL,
-		"(c) 2001, David Jarvie", 0, 0, "software@astrojar.org.uk");
-	aboutData.addAuthor("David Jarvie",0, "software@astrojar.org.uk");
+		"(c) 2001, David Jarvie", 0L, 0L, "software@astrojar.org.uk");
+	aboutData.addAuthor("David Jarvie", 0L, "software@astrojar.org.uk");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);

@@ -126,7 +126,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
 
-	fontColour = new FontColourChooser(page, 0, false, QStringList(), true, i18n("Font and background colour"), false);
+	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background colour"), false);
 	size = fontColour->sizeHint();
 	fontColour->setMinimumHeight(size.height() + 4);
 	topLayout->addWidget(fontColour, 6);
@@ -246,7 +246,7 @@ void EditAlarmDlg::slotCancel()
 class TimeSpinBox::TimeValidator : public QValidator
 {
 	public:
-		TimeValidator(QWidget* parent, const char* name = 0)  : QValidator(parent, name) { }
+		TimeValidator(QWidget* parent, const char* name = 0L)  : QValidator(parent, name) { }
 		virtual State validate(QString&, int&) const;
 };
 

@@ -24,7 +24,7 @@ KAlarmPrefDlg::KAlarmPrefDlg(GeneralSettings* genSets, MiscSettings* miscSets)
 #else
 KAlarmPrefDlg::KAlarmPrefDlg(GeneralSettings* genSets)
 #endif
-	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, 0, true, true)
+	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0L, 0L, true, true)
 {
 	setIconListAllVisible(true);
 
