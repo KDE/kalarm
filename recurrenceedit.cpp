@@ -645,7 +645,7 @@ void RecurrenceEdit::set(const KAlarmEvent& event, bool repeatatlogin)
 		else if (repeatDuration)
 		{
 			repeatCountButton->setChecked(true);
-			repeatCountEntry->setValue(repeatDuration);
+			repeatCountEntry->setValue(repeatDuration - 1);
 		}
 		else
 		{
@@ -674,7 +674,7 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 		if (noEndDateButton->isChecked())
 			repeatCount = -1;
 		else if (repeatCountButton->isChecked())
-			repeatCount = repeatCountEntry->value();
+			repeatCount = repeatCountEntry->value() + 1;
 		else
 		{
 			repeatCount = 0;
