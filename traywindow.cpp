@@ -16,7 +16,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
+
 #include "kalarm.h"
 #include <stdlib.h>
 
@@ -63,8 +74,6 @@ struct TipItem
 = Class: TrayWindow
 = The KDE system tray window.
 =============================================================================*/
-const QString TrayWindow::QUIT_WARN = QString::fromLatin1("QuitWarn");
-
 
 TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
@@ -130,7 +139,8 @@ void TrayWindow::slotQuit()
 	if (theApp()->alarmsDisabledIfStopped()
 	&&  KMessageBox::warningYesNo(this, i18n("Quitting will disable alarms\n"
 	                                         "(once any alarm message windows are closed)."),
-				      QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(), QUIT_WARN
+	                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
+	                              Preferences::QUIT_WARN
 	                             ) != KMessageBox::Yes)
 		return;
 	if (theApp()->wantRunInSystemTray())
@@ -223,7 +233,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	// Get today's and tomorrow's alarms, sorted in time order
 	QValueList<TipItem> items;
 	QValueList<TipItem>::Iterator iit;
-	KCal::Event::List events = theApp()->getCalendar().eventsWithAlarms(now.date(), now.addDays(1));
+	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(now.date(), now.addDays(1));
 	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
 		KCal::Event* kcalEvent = *it;

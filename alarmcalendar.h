@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef ALARMCALENDAR_H
@@ -35,24 +45,27 @@ class AlarmCalendar : public QObject
 {
 		Q_OBJECT
 	public:
-		AlarmCalendar(const QString& file, KAEvent::Status, const QString& icalFile = QString::null,
-		              const QString& configKey = QString::null);
 		virtual ~AlarmCalendar();
 		bool                  valid() const                       { return mUrl.isValid(); }
 		KAEvent::Status       type() const                        { return mType; }
 		bool                  open();
 		int                   load();
-		int                   reload();
-		bool                  save()                              { return saveCal(); }
+		bool                  reload();
+		void                  save();
 		void                  close();
-		void                  purge(int daysToKeep, bool saveIfPurged);
+		void                  startUpdate();
+		void                  endUpdate();
 		KCal::Event*          event(const QString& uniqueID)      { return mCalendar ? mCalendar->event(uniqueID) : 0; }
 		KCal::Event::List     events()                            { return mCalendar->events(); }
 		KCal::Event::List     events(const QDate& d, bool sorted = false) { return mCalendar->events(d, sorted); }
-		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to) const;
+		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to);
 		KCal::Event*          addEvent(const KAEvent&, bool useEventID = false);
 		void                  updateEvent(const KAEvent&);
 		void                  deleteEvent(const QString& eventID, bool save = false);
+		void                  emitEmptyStatus();
+		void                  purgeAll()                          { purge(0); }
+		void                  setPurgeDays(int days);
+		void                  purgeIfQueued();    // must only be called from KAlarmApp::processQueue()
 		bool                  isOpen() const                      { return mOpen; }
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
@@ -60,26 +73,56 @@ class AlarmCalendar : public QObject
 		bool                  KAlarmVersion057_UTC() const        { return mKAlarmVersion057_UTC; }
 		static int            KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
 
+		static bool           initialiseCalendars();
+		static void           terminateCalendars();
+		static AlarmCalendar* activeCalendar()        { return mCalendars[ACTIVE]; }
+		static AlarmCalendar* expiredCalendar()       { return mCalendars[EXPIRED]; }
+		static AlarmCalendar* displayCalendar()       { return mCalendars[DISPLAY]; }
+		static AlarmCalendar* templateCalendar()      { return mCalendars[TEMPLATE]; }
+		static AlarmCalendar* activeCalendarOpen()    { return calendarOpen(ACTIVE); }
+		static AlarmCalendar* expiredCalendarOpen()   { return calendarOpen(EXPIRED); }
+		static AlarmCalendar* displayCalendarOpen()   { return calendarOpen(DISPLAY); }
+		static AlarmCalendar* templateCalendarOpen()  { return calendarOpen(TEMPLATE); }
+
+		enum CalID { ACTIVE, EXPIRED, DISPLAY, TEMPLATE, NCALS };
+
 	signals:
 		void                  calendarSaved(AlarmCalendar*);
+		void                  purged();
+		void                  emptyStatus(bool empty);
+
+	private slots:
+		void                  slotPurge();
 
 	private:
+		AlarmCalendar(const QString& file, CalID, const QString& icalFile = QString::null,
+		              const QString& configKey = QString::null);
 		bool                  create();
-		bool                  saveCal(const QString& tempFile = QString::null);
+		bool                  saveCal(const QString& newFile = QString::null);
 		void                  convertToICal();
+		void                  purge(int daysToKeep);
+		void                  startPurgeTimer();
 		void                  getKAlarmVersion() const;
 		bool                  isUTC() const;
+		static AlarmCalendar* createCalendar(CalID, KConfig*, QString& writePath, const QString& configKey = QString::null);
+		static AlarmCalendar* calendarOpen(CalID);
 
-		KCal::CalendarLocal* mCalendar;
-		KURL                 mUrl;              // URL of current calendar file
-		KURL                 mICalUrl;          // URL of iCalendar file
-		QString              mLocalFile;        // local name of calendar file
-		QString              mConfigKey;        // config file key for this calendar's URL
-		KAEvent::Status      mType;             // what type of events the calendar file is for
-		mutable int          mKAlarmVersion;    // version of KAlarm which created the loaded calendar file
-		mutable bool         mKAlarmVersion057_UTC;  // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
-		bool                 mVCal;             // true if calendar file is in VCal format
-		bool                 mOpen;             // true if the calendar file is open
+		static AlarmCalendar* mCalendars[NCALS];   // the calendars
+
+		KCal::CalendarLocal*  mCalendar;
+		KURL                  mUrl;                // URL of current calendar file
+		KURL                  mICalUrl;            // URL of iCalendar file
+		QString               mLocalFile;          // calendar file, or local copy if it's a remote file
+		QString               mConfigKey;          // config file key for this calendar's URL
+		KAEvent::Status       mType;               // what type of events the calendar file is for
+		int                   mPurgeDays;          // how long to keep alarms, 0 = don't keep, -1 = keep indefinitely
+		mutable int           mKAlarmVersion;      // version of KAlarm which created the loaded calendar file
+		mutable bool          mKAlarmVersion057_UTC; // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
+		bool                  mOpen;               // true if the calendar file is open
+		int                   mPurgeDaysQueued;    // >= 0 to purge the calendar when called from KAlarmApp::processLoop()
+		int                   mUpdateCount;        // nesting level of group of calendar update calls
+		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
+		bool                  mVCal;               // true if calendar file is in VCal format
 };
 
 #endif // ALARMCALENDAR_H

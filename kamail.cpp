@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -65,6 +75,7 @@ QString getHostName();
 }
 
 const QString KAMail::EMAIL_QUEUED_NOTIFY = QString::fromLatin1("EmailQueuedNotify");
+
 QString KAMail::i18n_NeedFromEmailAddress()
 { return i18n("A 'From' email address must be configured in order to execute email alarms."); }
 
@@ -244,7 +255,7 @@ QString KAMail::initHeaders(const KAEvent& event, const QString& from, const QSt
 	if (event.emailBcc()  &&  !bcc.isEmpty())
 		message += QString::fromLatin1("\nBcc: ") + bcc;
 	message += QString::fromLatin1("\nSubject: ") + event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(theApp()->aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
 	return message;
 }
 

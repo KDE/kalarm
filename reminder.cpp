@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  (C) 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -37,6 +47,16 @@
 #include "combobox.h"
 #include "timeperiod.h"
 #include "reminder.moc"
+
+
+// Collect these widget labels together to ensure consistent wording and
+// translations across different modules.
+const QString Reminder::i18n_hours_mins = i18n("hours/minutes");
+const QString Reminder::i18n_Hours_Mins = i18n("Hours/Minutes");
+const QString Reminder::i18n_days       = i18n("days");
+const QString Reminder::i18n_Days       = i18n("Days");
+const QString Reminder::i18n_weeks      = i18n("weeks");
+const QString Reminder::i18n_Weeks      = i18n("Weeks");
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
@@ -74,10 +94,10 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	else
 	{
 		mDateOnlyOffset = 0;
-		mUnitsCombo->insertItem(i18n("hours/minutes"));
+		mUnitsCombo->insertItem(i18n_hours_mins);
 	}
-	mUnitsCombo->insertItem(i18n("days"));
-	mUnitsCombo->insertItem(i18n("weeks"));
+	mUnitsCombo->insertItem(i18n_days);
+	mUnitsCombo->insertItem(i18n_weeks);
 	mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
 	connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
 
@@ -197,7 +217,7 @@ Reminder::Units Reminder::setDateOnly(int reminderMinutes, bool dateOnly)
 		if (!dateOnly  &&  mDateOnlyOffset)
 		{
 			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(i18n("hours/minutes"), 0);
+			mUnitsCombo->insertItem(i18n_hours_mins, 0);
 			mDateOnlyOffset = 0;
 			mUnitsCombo->setCurrentItem(++index);
 		}

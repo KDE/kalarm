@@ -11,14 +11,14 @@ bin_PROGRAMS = kalarm
 # that it builds with --enable-final !!!
 kalarm_SOURCES = birthdaydlg.cpp alarmevent.cpp editdlg.cpp alarmcalendar.cpp \
 	daemon.cpp daemongui.cpp main.cpp kalarmapp.cpp \
-        mainwindowbase.cpp mainwindow.cpp \
-	messagewin.cpp \
+        mainwindowbase.cpp mainwindow.cpp messagewin.cpp \
 	preferences.cpp prefdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
-	recurrenceedit.cpp deferdlg.cpp \
+	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
 	soundpicker.cpp datetime.cpp reminder.cpp synchtimer.cpp \
-	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp
+	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp \
+	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/libkcal/libkcal.la \
@@ -26,14 +26,14 @@ kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
 	$(top_builddir)/kalarmd/libkalarmd.la \
 	$(top_builddir)/libkdepim/libkdepim.la \
 	-lkabc $(LIB_KDEUI) -lartskde
-noinst_HEADERS = kalarm.h kalarmapp.h mainwindowbase.h mainwindow.h \
-	messagewin.h editdlg.h editdlgprivate.h \
-	recurrenceedit.h recurrenceeditprivate.h deferdlg.h birthdaydlg.h \
-	alarmevent.h alarmcalendar.h eventlistviewbase.h alarmlistview.h kamail.h \
-	preferences.h prefdlg.h templatedlg.h templatepickdlg.h \
-	traywindow.h daemon.h daemongui.h dcophandler.h \
-	fontcolour.h fontcolourbutton.h alarmtimewidget.h soundpicker.h \
-	datetime.h reminder.h synchtimer.h
+noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtimewidget.h \
+	birthdaydlg.h daemon.h daemongui.h datetime.h dcophandler.h deferdlg.h \
+	editdlg.h editdlgprivate.h eventlistviewbase.h fontcolour.h \
+	fontcolourbutton.h functions.h kalarm.h kalarmapp.h kamail.h \
+	mainwindow.h mainwindowbase.h messagewin.h prefdlg.h preferences.h \
+	recurrenceedit.h recurrenceeditprivate.h reminder.h soundpicker.h \
+	synchtimer.h templatedlg.h templatelistview.h templatepickdlg.h \
+	traywindow.h
 kalarm_COMPILE_FIRST = ../kalarmd/alarmdaemoniface_stub.h
 
 METASOURCES = AUTO

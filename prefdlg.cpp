@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -46,14 +56,19 @@
 #include <kcolorcombo.h>
 #include <kdebug.h>
 
-#include "fontcolour.h"
-#include "alarmtimewidget.h"
-#include "timespinbox.h"
-#include "preferences.h"
 #include "alarmcalendar.h"
-#include "traywindow.h"
-#include "kamail.h"
+#include "alarmtimewidget.h"
+#include "editdlg.h"
+#include "fontcolour.h"
+#include "functions.h"
 #include "kalarmapp.h"
+#include "kamail.h"
+#include "mainwindow.h"
+#include "preferences.h"
+#include "recurrenceedit.h"
+#include "soundpicker.h"
+#include "timespinbox.h"
+#include "traywindow.h"
 #include "prefdlg.moc"
 
 
@@ -61,31 +76,27 @@
 = Class KAlarmPrefDlg
 =============================================================================*/
 
-KAlarmPrefDlg::KAlarmPrefDlg(Preferences* sets)
+KAlarmPrefDlg::KAlarmPrefDlg()
 	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, 0, true, true)
 {
 	setIconListAllVisible(true);
 
 	QVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
 	mMiscPage = new MiscPrefTab(frame);
-	mMiscPage->setPreferences(sets);
 
 	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
 	mEmailPage = new EmailPrefTab(frame);
-	mEmailPage->setPreferences(sets);
 
 	frame = addVBoxPage(i18n("View"), i18n("View Settings"), DesktopIcon("view_choose"));
 	mViewPage = new ViewPrefTab(frame);
-	mViewPage->setPreferences(sets);
 
 	frame = addVBoxPage(i18n("Appearance"), i18n("Default Message Appearance"), DesktopIcon("colorize"));
 	mMessagePage = new MessagePrefTab(frame);
-	mMessagePage->setPreferences(sets);
 
 	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
-	mDefaultPage = new DefaultPrefTab(frame);
-	mDefaultPage->setPreferences(sets);
+	mEditPage = new EditPrefTab(frame);
 
+	restore();
 	adjustSize();
 }
 
@@ -100,7 +111,7 @@ void KAlarmPrefDlg::slotDefault()
 	mMessagePage->setDefaults();
 	mEmailPage->setDefaults();
 	mViewPage->setDefaults();
-	mDefaultPage->setDefaults();
+	mEditPage->setDefaults();
 	mMiscPage->setDefaults();
 }
 
@@ -116,6 +127,7 @@ void KAlarmPrefDlg::slotApply()
 	QString errmsg = mEmailPage->validateAddress();
 	if (!errmsg.isEmpty())
 	{
+	
 		showPage(pageIndex(mEmailPage->parentWidget()));
 		if (KMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
 		{
@@ -127,8 +139,9 @@ void KAlarmPrefDlg::slotApply()
 	mMessagePage->apply(false);
 	mEmailPage->apply(false);
 	mViewPage->apply(false);
-	mDefaultPage->apply(false);
-	mMiscPage->apply(true);
+	mEditPage->apply(false);
+	mMiscPage->apply(false);
+	Preferences::instance()->syncToDisc();
 }
 
 // Apply the preferences that are currently selected
@@ -141,17 +154,23 @@ void KAlarmPrefDlg::slotOk()
 		KDialogBase::slotOk();
 }
 
-// Discard the current preferences and use the present ones
+// Discard the current preferences and close the dialogue
 void KAlarmPrefDlg::slotCancel()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
+	restore();
+	KDialogBase::slotCancel();
+}
+
+// Discard the current preferences and use the present ones
+void KAlarmPrefDlg::restore()
+{
+	kdDebug(5950) << "KAlarmPrefDlg::restore()" << endl;
 	mMessagePage->restore();
 	mEmailPage->restore();
 	mViewPage->restore();
-	mDefaultPage->restore();
+	mEditPage->restore();
 	mMiscPage->restore();
-
-	KDialogBase::slotCancel();
 }
 
 
@@ -160,21 +179,15 @@ void KAlarmPrefDlg::slotCancel()
 =============================================================================*/
 
 PrefsTabBase::PrefsTabBase(QVBox* frame)
-	: mPage(frame)
+	: QWidget(frame),
+	  mPage(frame)
 {
 	mPage->setMargin(KDialog::marginHint());
 }
 
-void PrefsTabBase::setPreferences(Preferences* setts)
-{
-	mPreferences = setts;
-	restore();
-}
-
 void PrefsTabBase::apply(bool syncToDisc)
 {
-	mPreferences->savePreferences(syncToDisc);
-	mPreferences->emitPreferencesChanged();
+	Preferences::instance()->save(syncToDisc);
 }
 
 
@@ -249,8 +262,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
-	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	QHBox* box = new QHBox(itemBox);
+	QHBox* itemBox = new QHBox(mPage);
+	QHBox* box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
 	mStartOfDay = new TimeSpinBox(box);
@@ -330,41 +343,42 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	grid->addWidget(mClearExpired, 3, 1, AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
-	box = new QHBox(mPage);     // top-adjust all the widgets
-	vbox->setMaximumHeight(vbox->sizeHint().height());
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void MiscPrefTab::restore()
 {
-	bool systray = mPreferences->mRunInSystemTray;
+	Preferences* preferences = Preferences::instance();
+	bool systray = preferences->mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
-	mDisableAlarmsIfStopped->setChecked(mPreferences->mDisableAlarmsIfStopped);
-	mQuitWarn->setChecked(Preferences::notifying(TrayWindow::QUIT_WARN, true));
-	mAutostartTrayIcon1->setChecked(mPreferences->mAutostartTrayIcon);
-	mAutostartTrayIcon2->setChecked(mPreferences->mAutostartTrayIcon);
-	mConfirmAlarmDeletion->setChecked(mPreferences->mConfirmAlarmDeletion);
-	mStartOfDay->setValue(mPreferences->mStartOfDay.hour()*60 + mPreferences->mStartOfDay.minute());
-	mFeb29->setButton(mPreferences->mFeb29RecurType);
-	setExpiredControls(mPreferences->mExpiredKeepDays);
+	mDisableAlarmsIfStopped->setChecked(preferences->mDisableAlarmsIfStopped);
+	mQuitWarn->setChecked(preferences->quitWarn());
+	mAutostartTrayIcon1->setChecked(preferences->mAutostartTrayIcon);
+	mAutostartTrayIcon2->setChecked(preferences->mAutostartTrayIcon);
+	mConfirmAlarmDeletion->setChecked(preferences->confirmAlarmDeletion());
+	mStartOfDay->setTime(preferences->mStartOfDay);
+	mFeb29->setButton(preferences->mFeb29RecurType);
+	setExpiredControls(preferences->mExpiredKeepDays);
 	slotDisableIfStoppedToggled(true);
 }
 
 void MiscPrefTab::apply(bool syncToDisc)
 {
+	Preferences* preferences = Preferences::instance();
 	bool systray = mRunInSystemTray->isChecked();
-	mPreferences->mRunInSystemTray         = systray;
-	mPreferences->mDisableAlarmsIfStopped  = mDisableAlarmsIfStopped->isChecked();
+	preferences->mRunInSystemTray        = systray;
+	preferences->mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
 	if (mQuitWarn->isEnabled())
-		Preferences::setNotify(TrayWindow::QUIT_WARN, true, mQuitWarn->isChecked());
-	mPreferences->mAutostartTrayIcon       = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
-	mPreferences->mConfirmAlarmDeletion    = mConfirmAlarmDeletion->isChecked();
+		preferences->setQuitWarn(mQuitWarn->isChecked());
+	preferences->mAutostartTrayIcon = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+	preferences->setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
-	mPreferences->mStartOfDay.setHMS(sod/60, sod%60, 0);
+	preferences->mStartOfDay.setHMS(sod/60, sod%60, 0);
 	int feb29 = mFeb29->id(mFeb29->selected());
-	mPreferences->mFeb29RecurType = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
-	mPreferences->mExpiredKeepDays         = !mKeepExpired->isChecked() ? 0
-	                                       : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
+	preferences->mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
+	preferences->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
+	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -374,11 +388,11 @@ void MiscPrefTab::setDefaults()
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(Preferences::default_disableAlarmsIfStopped);
-	mQuitWarn->setChecked(true);
+	mQuitWarn->setChecked(Preferences::default_quitWarn);
 	mAutostartTrayIcon1->setChecked(Preferences::default_autostartTrayIcon);
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
-	mStartOfDay->setValue(Preferences::default_startOfDay.hour()*60 + Preferences::default_startOfDay.minute());
+	mStartOfDay->setTime(Preferences::default_startOfDay);
 	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	slotDisableIfStoppedToggled(true);
@@ -418,8 +432,9 @@ void MiscPrefTab::slotExpiredToggled(bool)
 
 void MiscPrefTab::slotClearExpired()
 {
-	AlarmCalendar* calendar = theApp()->expiredCalendar(false);
-	calendar->purge(0, true);
+	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+	if (cal)
+		cal->purgeAll();
 }
 
 
@@ -464,14 +479,15 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	      i18n("Your email address, used to identify you as the sender when sending email alarms."));
 	grid->addWidget(mEmailAddress, 1, 1);
 
-#if KDE_VERSION >= 210
 	mEmailUseControlCentre = new QCheckBox(i18n("&Use address from Control Center"), group);
 	mEmailUseControlCentre->setFixedSize(mEmailUseControlCentre->sizeHint());
+#if KDE_VERSION < 210
+	mEmailUseControlCentre->hide();
+#endif
 	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
 	QWhatsThis::add(mEmailUseControlCentre,
 	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
 	grid->addWidget(mEmailUseControlCentre, 2, 1, AlignLeft);
-#endif
 
 	label = new QLabel(i18n("'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
@@ -483,14 +499,16 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	           "If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name."));
 	grid->addWidget(mEmailBccAddress, 3, 1);
 
-#if KDE_VERSION >= 210
 	mEmailBccUseControlCentre = new QCheckBox(i18n("Us&e address from Control Center"), group);
 	mEmailBccUseControlCentre->setFixedSize(mEmailBccUseControlCentre->sizeHint());
+#if KDE_VERSION < 210
+	mEmailBccUseControlCentre->hide();
+#endif
 	connect(mEmailBccUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailBccUseCCToggled(bool)));
 	QWhatsThis::add(mEmailBccUseControlCentre,
 	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
 	grid->addWidget(mEmailBccUseControlCentre, 4, 1, AlignLeft);
-#endif
+
 	group->setFixedHeight(group->sizeHint().height());
 
 	box = new QHBox(mPage);   // this is to allow left adjustment
@@ -502,29 +520,26 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);     // top-adjust all the widgets
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void EmailPrefTab::restore()
 {
-	mEmailClient->setButton(mPreferences->mEmailClient);
-	setEmailAddress(mPreferences->mEmailUseControlCentre, mPreferences->mEmailAddress);
-	setEmailBccAddress(mPreferences->mEmailBccUseControlCentre, mPreferences->mEmailBccAddress);
+	Preferences* preferences = Preferences::instance();
+	mEmailClient->setButton(preferences->mEmailClient);
+	setEmailAddress(preferences->mEmailUseControlCentre, preferences->mEmailAddress);
+	setEmailBccAddress(preferences->mEmailBccUseControlCentre, preferences->mEmailBccAddress);
 	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY, false));
 	mAddressChanged = false;
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
 {
+	Preferences* preferences = Preferences::instance();
 	int client = mEmailClient->id(mEmailClient->selected());
-	mPreferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
-#if KDE_VERSION >= 210
-	mPreferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text().stripWhiteSpace());
-	mPreferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text().stripWhiteSpace());
-#else
-	mPreferences->setEmailAddress(false, mEmailAddress->text().stripWhiteSpace());
-	mPreferences->setEmailBccAddress(false, mEmailBccAddress->text().stripWhiteSpace());
-#endif
+	preferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+	preferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text().stripWhiteSpace());
+	preferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text().stripWhiteSpace());
 	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, false, mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -539,47 +554,35 @@ void EmailPrefTab::setDefaults()
 
 void EmailPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
 {
-#if KDE_VERSION >= 210
 	mEmailUseControlCentre->setChecked(useControlCentre);
 	mEmailAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 	slotEmailUseCCToggled(true);
-#else
-	mEmailAddress->setText(address.stripWhiteSpace());
-#endif
 }
 
 void EmailPrefTab::slotEmailUseCCToggled(bool)
 {
-#if KDE_VERSION >= 210
 	mEmailAddress->setEnabled(!mEmailUseControlCentre->isChecked());
 	mAddressChanged = true;
-#endif
 }
 
 void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
 {
-#if KDE_VERSION >= 210
 	mEmailBccUseControlCentre->setChecked(useControlCentre);
 	mEmailBccAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 	slotEmailBccUseCCToggled(true);
-#else
-	mEmailBccAddress->setText(address.stripWhiteSpace());
-#endif
 }
 
 void EmailPrefTab::slotEmailBccUseCCToggled(bool)
 {
-#if KDE_VERSION >= 210
 	mEmailBccAddress->setEnabled(!mEmailBccUseControlCentre->isChecked());
-#endif
 }
 
 QString EmailPrefTab::validateAddress()
 {
 	if (!mAddressChanged)
 		return QString::null;
+	mAddressChanged = false;
 	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(KAMail::i18n_NeedFromEmailAddress());
-#if KDE_VERSION >= 210
 	if (mEmailUseControlCentre->isChecked())
 	{
 		KEMailSettings e;
@@ -588,7 +591,6 @@ QString EmailPrefTab::validateAddress()
 		errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
 	}
 	else
-#endif
 	if (!mEmailAddress->text().stripWhiteSpace().isEmpty())
 		return QString::null;
 	return errmsg;
@@ -617,75 +619,88 @@ MessagePrefTab::MessagePrefTab(QVBox* frame)
 	      i18n("Choose the text color in the alarm list for expired alarms."));
 	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
 	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
+
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void MessagePrefTab::restore()
 {
-	mFontChooser->setBgColour(mPreferences->mDefaultBgColour);
-	mFontChooser->setColours(mPreferences->mMessageColours);
-	mFontChooser->setFont(mPreferences->mMessageFont);
-	mExpiredColour->setColor(mPreferences->mExpiredColour);
+	Preferences* preferences = Preferences::instance();
+	mFontChooser->setBgColour(preferences->mDefaultBgColour);
+	mFontChooser->setColours(preferences->mMessageColours);
+	mFontChooser->setFont(preferences->mMessageFont);
+	mExpiredColour->setColor(preferences->mExpiredColour);
 }
 
 void MessagePrefTab::apply(bool syncToDisc)
 {
-	mPreferences->mDefaultBgColour = mFontChooser->bgColour();
-	mPreferences->mMessageColours  = mFontChooser->colours();
-	mPreferences->mMessageFont     = mFontChooser->font();
-	mPreferences->mExpiredColour   = mExpiredColour->color();
+	Preferences* preferences = Preferences::instance();
+	preferences->mDefaultBgColour = mFontChooser->bgColour();
+	preferences->mMessageColours  = mFontChooser->colours();
+	preferences->mMessageFont     = mFontChooser->font();
+	preferences->mExpiredColour   = mExpiredColour->color();
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void MessagePrefTab::setDefaults()
 {
 	mFontChooser->setBgColour(Preferences::default_defaultBgColour);
-	mFontChooser->setColours(mPreferences->default_messageColours);
+	mFontChooser->setColours(Preferences::instance()->default_messageColours);
 	mFontChooser->setFont(Preferences::default_messageFont);
 	mExpiredColour->setColor(Preferences::default_expiredColour);
 }
 
 
 /*=============================================================================
-= Class DefaultPrefTab
+= Class EditPrefTab
 =============================================================================*/
 
-DefaultPrefTab::DefaultPrefTab(QVBox* frame)
+EditPrefTab::EditPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
 	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 
 	QHBox* box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultLateCancel = new QCheckBox(i18n("Cancel if &late"), box, "defCancelLate");
+	mDefaultLateCancel = new QCheckBox(EditAlarmDlg::i18n_n_CancelIfLate, box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(i18n("Cancel if late")));
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(EditAlarmDlg::i18n_CancelIfLate));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultConfirmAck = new QCheckBox(i18n("Confirm ac&knowledgement"), box, "defConfAck");
+	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck, box, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(i18n("Confirm acknowledgment")));
+	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
 	// BCC email to sender
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to &self"), box, "defEmailBcc");
+	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf, box, "defEmailBcc");
 	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(i18n("Copy email to self")));
+	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultBeep = new QCheckBox(i18n("&Beep"), box, "defBeep");
+	QGroupBox* group = new QButtonGroup(SoundPicker::i18n_Sound, mPage, "soundGroup");
+	QGridLayout* grid = new QGridLayout(group, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid->setColStretch(2, 1);
+	grid->addColSpacing(0, 3*KDialog::spacingHint());
+	grid->addColSpacing(1, 3*KDialog::spacingHint());
+	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+
+	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound, group, "defSound");
+	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
+	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound));
+	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, AlignLeft);
+
+	mDefaultBeep = new QCheckBox(i18n("&Beep"), group, "defBeep");
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
-	connect(mDefaultBeep, SIGNAL(toggled(bool)), SLOT(slotBeepToggled(bool)));
 	QWhatsThis::add(mDefaultBeep,
-	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
+	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound));
+	grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, AlignLeft);
 
-	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	box = new QHBox(group);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	mDefaultSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
 	mDefaultSoundFileLabel->setFixedSize(mDefaultSoundFileLabel->sizeHint());
@@ -697,8 +712,15 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	connect(mDefaultSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
 	QToolTip::add(mDefaultSoundFileBrowse, i18n("Choose a sound file"));
 	QWhatsThis::add(box,
-	      i18n("Enter the sound file to use as the default setting for \"Sound\" in the alarm edit dialog."));
+	      i18n("Enter the default sound file to use in the alarm edit dialog."));
 	box->setFixedHeight(box->sizeHint().height());
+	grid->addMultiCellWidget(box, 3, 3, 1, 2);
+
+	mDefaultSoundRepeat = new QCheckBox(i18n("Re&peat sound file"), group, "defRepeatSound");
+	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
+	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Repeat));
+	grid->addWidget(mDefaultSoundRepeat, 4, 2, AlignLeft);
+	group->setFixedHeight(group->sizeHint().height());
 
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	box = new QHBox(itemBox);
@@ -706,13 +728,13 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	QLabel* label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
-	mDefaultRecurPeriod->insertItem(i18n("No Recurrence"));
-	mDefaultRecurPeriod->insertItem(i18n("At Login"));
-	mDefaultRecurPeriod->insertItem(i18n("Hourly/Minutely"));
-	mDefaultRecurPeriod->insertItem(i18n("Daily"));
-	mDefaultRecurPeriod->insertItem(i18n("Weekly"));
-	mDefaultRecurPeriod->insertItem(i18n("Monthly"));
-	mDefaultRecurPeriod->insertItem(i18n("Yearly"));
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Daily);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Weekly);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Monthly);
+	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly);
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	label->setBuddy(mDefaultRecurPeriod);
 	QWhatsThis::add(box,
@@ -726,9 +748,9 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(i18n("Hours/Minutes"), Reminder::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(i18n("Days"), Reminder::DAYS);
-	mDefaultReminderUnits->insertItem(i18n("Weeks"), Reminder::WEEKS);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Hours_Mins, Reminder::HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Days, Reminder::DAYS);
+	mDefaultReminderUnits->insertItem(Reminder::i18n_Weeks, Reminder::WEEKS);
 	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
 	label->setBuddy(mDefaultReminderUnits);
 	QWhatsThis::add(box,
@@ -736,72 +758,66 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);   // top-adjust all the widgets
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
-void DefaultPrefTab::restore()
+void EditPrefTab::restore()
 {
-	mDefaultLateCancel->setChecked(mPreferences->mDefaultLateCancel);
-	mDefaultConfirmAck->setChecked(mPreferences->mDefaultConfirmAck);
-	mDefaultBeep->setChecked(mPreferences->mDefaultBeep);
-	mDefaultSoundFile->setText(mPreferences->mDefaultSoundFile);
-	mDefaultEmailBcc->setChecked(mPreferences->mDefaultEmailBcc);
-	mDefaultRecurPeriod->setCurrentItem(recurIndex(mPreferences->mDefaultRecurPeriod));
-	mDefaultReminderUnits->setCurrentItem(mPreferences->mDefaultReminderUnits);
-	slotBeepToggled(true);
+	Preferences* preferences = Preferences::instance();
+	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
+	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
+	mDefaultBeep->setChecked(preferences->mDefaultBeep);
+	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
+	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
+	mDefaultEmailBcc->setChecked(preferences->mDefaultEmailBcc);
+	mDefaultRecurPeriod->setCurrentItem(recurIndex(preferences->mDefaultRecurPeriod));
+	mDefaultReminderUnits->setCurrentItem(preferences->mDefaultReminderUnits);
 }
 
-void DefaultPrefTab::apply(bool syncToDisc)
+void EditPrefTab::apply(bool syncToDisc)
 {
-	mPreferences->mDefaultLateCancel = mDefaultLateCancel->isChecked();
-	mPreferences->mDefaultConfirmAck = mDefaultConfirmAck->isChecked();
-	mPreferences->mDefaultBeep       = mDefaultBeep->isChecked();
-	mPreferences->mDefaultSoundFile  = mPreferences->mDefaultBeep ? QString::null : mDefaultSoundFile->text();
-	mPreferences->mDefaultEmailBcc   = mDefaultEmailBcc->isChecked();
+	Preferences* preferences = Preferences::instance();
+	preferences->mDefaultLateCancel  = mDefaultLateCancel->isChecked();
+	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
+	preferences->mDefaultBeep        = mDefaultBeep->isChecked();
+	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
+	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
+	preferences->mDefaultEmailBcc    = mDefaultEmailBcc->isChecked();
 	switch (mDefaultRecurPeriod->currentItem())
 	{
-		case 6:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
-		case 5:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
-		case 4:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
-		case 3:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
-		case 2:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
-		case 1:  mPreferences->mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
+		case 6:  preferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
+		case 5:  preferences->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
+		case 4:  preferences->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
+		case 3:  preferences->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
+		case 2:  preferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
+		case 1:  preferences->mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
 		case 0:
-		default: mPreferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
+		default: preferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
-	mPreferences->mDefaultReminderUnits = static_cast<Reminder::Units>(mDefaultReminderUnits->currentItem());
+	preferences->mDefaultReminderUnits = static_cast<Reminder::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 
-void DefaultPrefTab::setDefaults()
+void EditPrefTab::setDefaults()
 {
 	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mDefaultBeep->setChecked(Preferences::default_defaultBeep);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
+	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
 	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
-	slotBeepToggled(true);
 }
 
-void DefaultPrefTab::slotBeepToggled(bool)
+void EditPrefTab::slotBrowseSoundFile()
 {
-	bool beep = mDefaultBeep->isChecked();
-	mDefaultSoundFileLabel->setEnabled(!beep);
-	mDefaultSoundFile->setEnabled(!beep);
-	mDefaultSoundFileBrowse->setEnabled(!beep);
-}
-
-void DefaultPrefTab::slotBrowseSoundFile()
-{
-	QString	defaultDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
-	KURL url = KFileDialog::getOpenURL(defaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose Sound File"));
+	KURL url = SoundPicker::browseFile(mDefaultSoundFile->text());
 	if (!url.isEmpty())
 		mDefaultSoundFile->setText(url.prettyURL());
 }
 
-int DefaultPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
+int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 {
 	switch (type)
 	{
@@ -828,14 +844,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
 
-	mListShowTime = new QCheckBox(i18n("Show alarm &time"), group, "listTime");
+	mListShowTime = new QCheckBox(KAlarmMainWindow::i18n_t_ShowAlarmTimes, group, "listTime");
 	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
 	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
 	QWhatsThis::add(mListShowTime,
 	      i18n("Specify whether to show in the alarm list, the time at which each alarm is due"));
 	layout->addWidget(mListShowTime, 0, Qt::AlignLeft);
 
-	mListShowTimeTo = new QCheckBox(i18n("Show time u&ntil alarm"), group, "listTimeTo");
+	mListShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_n_ShowTimeToAlarms, group, "listTimeTo");
 	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
 	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
 	QWhatsThis::add(mListShowTimeTo,
@@ -870,14 +886,14 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "Check to enter an upper limit on the number to be displayed."));
 	grid->addMultiCellWidget(box, 2, 2, 1, 2, AlignLeft);
 
-	mTooltipShowTime = new QCheckBox(i18n("Show alarm ti&me"), group, "tooltipTime");
+	mTooltipShowTime = new QCheckBox(KAlarmMainWindow::i18n_m_ShowAlarmTimes, group, "tooltipTime");
 	mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
 	connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
 	QWhatsThis::add(mTooltipShowTime,
 	      i18n("Specify whether to show in the system tray tooltip, the time at which each alarm is due"));
 	grid->addMultiCellWidget(mTooltipShowTime, 3, 3, 1, 2, AlignLeft);
 
-	mTooltipShowTimeTo = new QCheckBox(i18n("Show time unti&l alarm"), group, "tooltipTimeTo");
+	mTooltipShowTimeTo = new QCheckBox(KAlarmMainWindow::i18n_l_ShowTimeToAlarms, group, "tooltipTimeTo");
 	mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
 	connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
 	QWhatsThis::add(mTooltipShowTimeTo,
@@ -904,7 +920,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(i18n("&Show expired alarms"), mPage, "showExpired");
+	mShowExpiredAlarms = new QCheckBox(KAlarmMainWindow::i18n_s_ShowExpiredAlarms, mPage, "showExpired");
 	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
 	QWhatsThis::add(mShowExpiredAlarms,
 	      i18n("Specify whether to show expired alarms in the alarm list"));
@@ -923,36 +939,38 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);   // top-adjust all the widgets
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void ViewPrefTab::restore()
 {
-	setList(mPreferences->mShowAlarmTime,
-	        mPreferences->mShowTimeToAlarm);
-	setTooltip(mPreferences->mTooltipAlarmCount,
-	           mPreferences->mShowTooltipAlarmTime,
-	           mPreferences->mShowTooltipTimeToAlarm,
-	           mPreferences->mTooltipTimeToPrefix);
-	mModalMessages->setChecked(mPreferences->mModalMessages);
-	mShowExpiredAlarms->setChecked(mPreferences->mShowExpiredAlarms);
-	mDaemonTrayCheckInterval->setValue(mPreferences->mDaemonTrayCheckInterval);
+	Preferences* preferences = Preferences::instance();
+	setList(preferences->mShowAlarmTime,
+	        preferences->mShowTimeToAlarm);
+	setTooltip(preferences->mTooltipAlarmCount,
+	           preferences->mShowTooltipAlarmTime,
+	           preferences->mShowTooltipTimeToAlarm,
+	           preferences->mTooltipTimeToPrefix);
+	mModalMessages->setChecked(preferences->mModalMessages);
+	mShowExpiredAlarms->setChecked(preferences->mShowExpiredAlarms);
+	mDaemonTrayCheckInterval->setValue(preferences->mDaemonTrayCheckInterval);
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
-	mPreferences->mShowAlarmTime           = mListShowTime->isChecked();
-	mPreferences->mShowTimeToAlarm         = mListShowTimeTo->isChecked();
+	Preferences* preferences = Preferences::instance();
+	preferences->mShowAlarmTime           = mListShowTime->isChecked();
+	preferences->mShowTimeToAlarm         = mListShowTimeTo->isChecked();
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
-	mPreferences->mTooltipAlarmCount       = n;
-	mPreferences->mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
-	mPreferences->mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
-	mPreferences->mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
-	mPreferences->mModalMessages           = mModalMessages->isChecked();
-	mPreferences->mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
-	mPreferences->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
+	preferences->mTooltipAlarmCount       = n;
+	preferences->mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
+	preferences->mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
+	preferences->mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
+	preferences->mModalMessages           = mModalMessages->isChecked();
+	preferences->mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
+	preferences->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsTabBase::apply(syncToDisc);
 }
 

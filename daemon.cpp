@@ -16,11 +16,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
 
 #include <qtimer.h>
+#include <qiconset.h>
 
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -64,15 +75,14 @@ void Daemon::initialise(KActionCollection* actions)
 	if (!mInstance)
 		mInstance = new Daemon();
 
-	connect(&theApp()->getCalendar(), SIGNAL(calendarSaved(AlarmCalendar*)), mInstance, SLOT(slotCalendarSaved(AlarmCalendar*)));
+	connect(AlarmCalendar::activeCalendar(), SIGNAL(calendarSaved(AlarmCalendar*)), mInstance, SLOT(slotCalendarSaved(AlarmCalendar*)));
 	if (!mActionControl)
 #if KDE_VERSION >= 308
 		mActionControl = new KAction(i18n("Control the Alarm Daemon", "Control Alarm &Daemon..."),
 #else
-		mActionControl = new KAction(i18n("Configure Alarm &Daemon..."),
+		mActionControl = new KAction(i18n("Configure Alarm &Daemon..."), theApp()->actionPreferences()->iconSet(),
 #endif
-		                             theApp()->actionPreferences()->iconSet(), 0,
-					     mInstance, SLOT(slotControl()), actions, "controldaemon");
+					     0, mInstance, SLOT(slotControl()), actions, "controldaemon");
 	readCheckInterval();
 }
 
@@ -105,7 +115,7 @@ void Daemon::start()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(kapp->aboutData()->appName()) << theApp()->getCalendar().urlString();
+		arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
 		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "addMsgCal(QCString,QString)", data))
 			kdError(5950) << "Daemon::start(): addMsgCal dcop send failed" << endl;
 	}
@@ -168,21 +178,21 @@ bool Daemon::stop()
 }
 
 /******************************************************************************
-* Reset the alarm daemon. If the daemon is not already running, start it.
+* Reset the alarm daemon.
+* Reply = true if daemon was told to reset
+*       = false if daemon is not running.
 */
-void Daemon::reset()
+bool Daemon::reset()
 {
 	kdDebug(5950) << "Daemon::reset()" << endl;
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
-		start();
-	else
-	{
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(kapp->aboutData()->appName()) << theApp()->getCalendar().urlString();
-		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "resetMsgCal(QCString,QString)", data))
-			kdError(5950) << "Daemon::reset(): resetMsgCal dcop send failed" << endl;
-	}
+		return false;
+	QByteArray data;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
+	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "resetMsgCal(QCString,QString)", data))
+		kdError(5950) << "Daemon::reset(): resetMsgCal dcop send failed" << endl;
+	return true;
 }
 
 /******************************************************************************
@@ -193,7 +203,7 @@ void Daemon::reload()
 	kdDebug(5950) << "Daemon::reload()\n";
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QCString(kapp->aboutData()->appName()) << theApp()->getCalendar().urlString();
+	arg << QCString(kapp->aboutData()->appName()) << AlarmCalendar::activeCalendar()->urlString();
 	if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdError(5950) << "Daemon::reload(): reloadMsgCal dcop send failed" << endl;
 }
@@ -237,7 +247,7 @@ void Daemon::slotControl()
 */
 void Daemon::slotCalendarSaved(AlarmCalendar* cal)
 {
-	if (cal == &theApp()->getCalendar())
+	if (cal == AlarmCalendar::activeCalendar())
 		reload();
 }
 

@@ -19,6 +19,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef RECURRENCEEDIT_H
@@ -71,6 +81,21 @@ class RecurrenceEdit : public QFrame
 		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
+
+		static const QString i18n_Norecur;           // text of 'No recurrence' selection, lower case
+		static const QString i18n_NoRecur;           // text of 'No Recurrence' selection, initial capitals
+		static const QString i18n_AtLogin;           // text of 'At Login' selection
+		static const QString i18n_l_Atlogin;         // text of 'At &login' selection, with 'L' shortcut
+		static const QString i18n_HourlyMinutely;    // text of 'Hourly/Minutely'
+		static const QString i18n_u_HourlyMinutely;  // text of 'Ho&urly/Minutely' selection, with 'U' shortcut
+		static const QString i18n_Daily;             // text of 'Daily' selection
+		static const QString i18n_d_Daily;           // text of '&Daily' selection, with 'D' shortcut
+		static const QString i18n_Weekly;            // text of 'Weekly' selection
+		static const QString i18n_w_Weekly;          // text of '&Weekly' selection, with 'W' shortcut
+		static const QString i18n_Monthly;           // text of 'Monthly' selection
+		static const QString i18n_m_Monthly;         // text of '&Monthly' selection, with 'M' shortcut
+		static const QString i18n_Yearly;            // text of 'Yearly' selection
+		static const QString i18n_y_Yearly;          // text of '&Yearly' selection, with 'Y' shortcut
 
 	public slots:
 		void          setDateTime(const QDateTime& start)   { currStartDateTime = start; }

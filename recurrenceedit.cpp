@@ -19,6 +19,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -36,10 +46,12 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#if 0
+#include <kcalendarsystem.h>
+#endif
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -54,6 +66,7 @@
 #include "spinbox.h"
 #include "checkbox.h"
 #include "combobox.h"
+#include "functions.h"
 #include "radiobutton.h"
 #include "buttongroup.h"
 using namespace KCal;
@@ -75,11 +88,24 @@ const char* const ordinal[] = {
 	I18N_NOOP("29th"), I18N_NOOP("30th"), I18N_NOOP("31st")
 };
 
-int firstDayOfWeek = 1;
-inline int dayOfWeek_to_offset(int dayOfWeek)  { return (dayOfWeek + 7 - firstDayOfWeek) % 7; }
-inline int offset_to_dayOfWeek(int offset)     { return (offset + firstDayOfWeek - 1) % 7 + 1; }
-
 }
+
+// Collect these widget labels together to ensure consistent wording and
+// translations across different modules.
+const QString RecurrenceEdit::i18n_Norecur           = i18n("No recurrence");
+const QString RecurrenceEdit::i18n_NoRecur           = i18n("No Recurrence");
+const QString RecurrenceEdit::i18n_AtLogin           = i18n("At Login");
+const QString RecurrenceEdit::i18n_l_Atlogin         = i18n("At &login");
+const QString RecurrenceEdit::i18n_HourlyMinutely    = i18n("Hourly/Minutely");
+const QString RecurrenceEdit::i18n_u_HourlyMinutely  = i18n("Ho&urly/Minutely");
+const QString RecurrenceEdit::i18n_Daily             = i18n("Daily");
+const QString RecurrenceEdit::i18n_d_Daily           = i18n("&Daily");
+const QString RecurrenceEdit::i18n_Weekly            = i18n("Weekly");
+const QString RecurrenceEdit::i18n_w_Weekly          = i18n("&Weekly");
+const QString RecurrenceEdit::i18n_Monthly           = i18n("Monthly");
+const QString RecurrenceEdit::i18n_m_Monthly         = i18n("&Monthly");
+const QString RecurrenceEdit::i18n_Yearly            = i18n("Yearly");
+const QString RecurrenceEdit::i18n_y_Yearly          = i18n("&Yearly");
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
@@ -91,8 +117,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	  noEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
-	firstDayOfWeek = KGlobal::locale()->weekStartDay();
-
 	QBoxLayout* layout;
 	QVBoxLayout* topLayout = new QVBoxLayout(this, marginKDE2, KDialog::spacingHint());
 
@@ -118,43 +142,43 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	lay->addStretch();    // top-adjust the interval radio buttons
 	connect(ruleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
 
-	mNoneButton = new RadioButton(i18n("No recurrence"), ruleButtonGroup);
+	mNoneButton = new RadioButton(i18n_Norecur, ruleButtonGroup);
 	mNoneButton->setFixedSize(mNoneButton->sizeHint());
 	mNoneButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mNoneButton, i18n("Do not repeat the alarm"));
 
-	mAtLoginButton = new RadioButton(i18n("At &login"), ruleButtonGroup);
+	mAtLoginButton = new RadioButton(i18n_l_Atlogin, ruleButtonGroup);
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mAtLoginButton,
 	      i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
 	           "Note that it will also be triggered any time the alarm daemon is restarted."));
 
-	mSubDailyButton = new RadioButton(i18n("Ho&urly/Minutely"), ruleButtonGroup);
+	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely, ruleButtonGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
 	mSubDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mSubDailyButton,
 	      i18n("Repeat the alarm at hourly/minutely intervals"));
 
-	mDailyButton = new RadioButton(i18n("&Daily"), ruleButtonGroup);
+	mDailyButton = new RadioButton(i18n_d_Daily, ruleButtonGroup);
 	mDailyButton->setFixedSize(mDailyButton->sizeHint());
 	mDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mDailyButton,
 	      i18n("Repeat the alarm at daily intervals"));
 
-	mWeeklyButton = new RadioButton(i18n("&Weekly"), ruleButtonGroup);
+	mWeeklyButton = new RadioButton(i18n_w_Weekly, ruleButtonGroup);
 	mWeeklyButton->setFixedSize(mWeeklyButton->sizeHint());
 	mWeeklyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mWeeklyButton,
 	      i18n("Repeat the alarm at weekly intervals"));
 
-	mMonthlyButton = new RadioButton(i18n("&Monthly"), ruleButtonGroup);
+	mMonthlyButton = new RadioButton(i18n_m_Monthly, ruleButtonGroup);
 	mMonthlyButton->setFixedSize(mMonthlyButton->sizeHint());
 	mMonthlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMonthlyButton,
 	      i18n("Repeat the alarm at monthly intervals"));
 
-	mYearlyButton = new RadioButton(i18n("&Yearly"), ruleButtonGroup);
+	mYearlyButton = new RadioButton(i18n_y_Yearly, ruleButtonGroup);
 	mYearlyButton->setFixedSize(mYearlyButton->sizeHint());
 	mYearlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mYearlyButton,
@@ -399,11 +423,17 @@ void RecurrenceEdit::initWeekly()
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
+#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+#endif
 	for (int i = 0;  i < 7;  ++i)
 	{
-		int day = offset_to_dayOfWeek(i);
+		int day = KAlarm::localeDayInWeek_to_weekDay(i);
+#if 0
 		mWeekRuleDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
+#else
+		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
+#endif
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
 		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignLeft);
@@ -484,10 +514,16 @@ void RecurrenceEdit::initYearly()
 	// List the months of the year.
 	QWidget* box = new QWidget(mYearRuleButtonGroup);   // this is to control the QWhatsThis text display area
 	QGridLayout* mgrid = new QGridLayout(box, 4, 3, 0, KDialog::spacingHint());
+#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+#endif
 	for (int i = 0;  i < 12;  ++i)
 	{
+#if 0
 		mYearRuleMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
+#else
+		mYearRuleMonthBox[i] = new CheckBox(KGlobal::locale()->monthName(i + 1), box);
+#endif
 		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
 		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
 		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignLeft);
@@ -585,11 +621,17 @@ void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, 
 
 	*dayCombo = new ComboBox(false, parent);
 	ComboBox* dc = *dayCombo;
+#if 0
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+#endif
 	for (i = 0;  i < 7;  ++i)
 	{
-		int day = offset_to_dayOfWeek(i);
+		int day = KAlarm::localeDayInWeek_to_weekDay(i);
+#if 0
 		dc->insertItem(calendar->weekDayName(day));
+#else
+		dc->insertItem(KGlobal::locale()->weekDayName(day));
+#endif
 	}
 	dc->setReadOnly(mReadOnly);
 	QWhatsThis::add(dc,
@@ -929,7 +971,7 @@ void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 void RecurrenceEdit::setEndDateTime(const DateTime& end)
 {
 	mEndDateEdit->setDate(end.date());
-	mEndTimeEdit->setValue(end.time().hour()*60 + end.time().minute());
+	mEndTimeEdit->setTime(end.time());
 	mEndTimeEdit->setEnabled(!end.isDateOnly());
 	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
 }
@@ -948,7 +990,7 @@ bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 	for (int i = 0;  i < 7;  ++i)
 		if (mWeekRuleDayBox[i]->isChecked())
 		{
-			rDays.setBit(offset_to_dayOfWeek(i) - 1, 1);
+			rDays.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
 			found = true;
 		}
 	return found;
@@ -957,8 +999,10 @@ bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
 {
 	for (int i = 0;  i < 7;  ++i)
-		if (rDays.testBit(offset_to_dayOfWeek(i) - 1))
-			mWeekRuleDayBox[i]->setChecked(true);
+	{
+		bool x = rDays.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+		mWeekRuleDayBox[i]->setChecked(x);
+	}
 }
 
 /******************************************************************************
@@ -1033,20 +1077,20 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 		for (int i = 0;  i < 7;  ++i)
 			mWeekRuleDayBox[i]->setChecked(false);
 		if (dayOfWeek > 0  &&  dayOfWeek <= 7)
-			mWeekRuleDayBox[dayOfWeek_to_offset(dayOfWeek)]->setChecked(true);
+			mWeekRuleDayBox[KAlarm::weekDay_to_localeDayInWeek(dayOfWeek)]->setChecked(true);
 	}
 	if (!mMonthlyShown)
 	{
 		mMonthRuleNthDayEntry->setCurrentItem(day);
 		mMonthRuleNthNumberEntry->setCurrentItem(day / 7);
-		mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(dayOfWeek));
+		mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
 	}
 	if (!mYearlyShown)
 	{
 //		mYearRuleDayEntry->setValue(fromDate.dayOfYear());
 		mYearRuleNthDayEntry->setCurrentItem(day);
 		mYearRuleNthNumberEntry->setCurrentItem(day / 7);
-		mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(dayOfWeek));
+		mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
 		for (int i = 0;  i < 12;  ++i)
 			mYearRuleMonthBox[i]->setChecked(i == month);
 	}
@@ -1101,7 +1145,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 				i += 5;
 			mMonthRuleNthNumberEntry->setCurrentItem(i);
 			for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-			mMonthRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(i + 1));
+			mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(i + 1));
 			break;
 		}
 		case Recurrence::rMonthlyDay:     // on nth day of the month
@@ -1110,12 +1154,8 @@ void RecurrenceEdit::set(const KAEvent& event)
 			mMonthRecurFrequency->setValue(recurrence->frequency());
 			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);
 			QPtrList<int> rmd = recurrence->monthDays();
-			int i = rmd.first() ? *rmd.first() : 1;
-			if (i > 0)
-				--i;
-			else
-				i = 30 - i;
-			mMonthRuleNthDayEntry->setCurrentItem(i);
+			int day = rmd.first() ? *rmd.first() : event.mainDate().day();
+			mMonthRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
 			break;
 		}
 		case Recurrence::rYearlyMonth:   // in the nth month of the year
@@ -1126,11 +1166,11 @@ void RecurrenceEdit::set(const KAEvent& event)
 				ruleButtonGroup->setButton(mYearlyButtonId);
 				mYearRecurFrequency->setValue(recurrence->frequency());
 				mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
-				int day = event.mainDate().day();
 				QPtrList<int> rmd = recurrence->monthDays();
-				if (rmd.first())
-					day = *rmd.first();
-				mYearRuleNthDayEntry->setCurrentItem(day < 0 ? 30 - day : day == 1 && event.recursFeb29() ? 29-1 : day-1);
+				int day = rmd.first() ? *rmd.first() : event.mainDate().day();
+				if (day == 1 && event.recursFeb29())
+					day = 29;
+				mYearRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
 			}
 			else if (rtype == Recurrence::rYearlyPos)
 			{
@@ -1143,7 +1183,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 					i += 5;
 				mYearRuleNthNumberEntry->setCurrentItem(i);
 				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-					mYearRuleNthTypeOfDayEntry->setCurrentItem(dayOfWeek_to_offset(i + 1));
+					mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(i + 1));
 			}
 			for (int i = 0;  i < 12;  ++i)
 				mYearRuleMonthBox[i]->setChecked(false);
@@ -1184,7 +1224,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	{
 		mEndDateButton->setChecked(true);
 		endtime = recurrence->endDateTime();
-		mEndTimeEdit->setValue(endtime.time().hour()*60 + endtime.time().minute());
+		mEndTimeEdit->setTime(endtime.time());
 	}
 	mEndDateEdit->setDate(endtime.date());
 
@@ -1249,7 +1289,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			// it's by position
 			KAEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(offset_to_dayOfWeek(mMonthRuleNthTypeOfDayEntry->currentItem()) - 1);
+			pos.days.setBit(KAlarm::localeDayInWeek_to_weekDay(mMonthRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mMonthRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAEvent::MonthPos> poses;
@@ -1279,13 +1319,14 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			// it's by position
 			KAEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(offset_to_dayOfWeek(mYearRuleNthTypeOfDayEntry->currentItem()) - 1);
+			pos.days.setBit(KAlarm::localeDayInWeek_to_weekDay(mYearRuleNthTypeOfDayEntry->currentItem()) - 1);
 			int i = mYearRuleNthNumberEntry->currentItem() + 1;
 			pos.weeknum = (i <= 5) ? i : 5 - i;
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
-			event.setFirstRecurrence();
+			if (months.count())
+				event.setFirstRecurrence();
 		}
 /*		else if (mYearRuleDayButton->isChecked())
 		{
@@ -1306,29 +1347,57 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 			int startday = d.day();
 			event.setRecurAnnualByDate(frequency, months, (startday != daynum ? daynum : 0),
 			                           feb29, repeatCount, endDate);
-			if (daynum > 0)
+			if (months.count())
 			{
-				bool adjust = false;
-				if (startday != daynum)
+				// Some month(s) are specified, i.e. it's not a template, so if
+				// necessary adjust the start date to correspond with the recurrence.
+				if (daynum > 0)
 				{
-					// The day of the month for the recurrence is different from the
-					// event start day, so adjust the event start to be the first
-					// recurrence after the preset event start.
-					if (daynum > startday)
-						do
+					bool adjust = false;
+					if (startday != daynum)
+					{
+						// The day of the month for the recurrence is different from the
+						// event start day, so adjust the event start to be the first
+						// recurrence after the preset event start.
+						if (daynum > startday)
+							do
+							{
+								d = d.addDays(-startday);    // last day of previous month
+							} while (d.day() < daynum);
+						d = d.addDays(daynum - d.day());
+						event.adjustStartDate(d);
+						adjust = true;
+					}
+					else
+					{
+						// The day of the month of the recurrence is the same as the event
+						// start day, so check that the start month is one of the selected
+						// recurrence months.
+						adjust = true;
+						int month = d.month();
+						for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
 						{
-							d = d.addDays(-startday);    // last day of previous month
-						} while (d.day() < daynum);
-					d = d.addDays(daynum - d.day());
-					event.adjustStartDate(d);
-					adjust = true;
+							if (*it == month)
+							{
+								adjust = false;
+								break;
+							}
+						}
+					}
+					if (adjust)
+					{
+						DateTime newTime;
+						KAEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
+						if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
+							event.adjustStartDate(newTime.date());
+					}
 				}
 				else
 				{
-					// The day of the month of the recurrence is the same as the event
-					// start day, so check that the start month is one of the selected
-					// recurrence months.
-					adjust = true;
+					// The recurrence is on the last day of the month, so adjust the
+					// event start to the first recurrence date.
+					// First adjust to a month which is supposed to recur.
+					bool adjust = true;
 					int month = d.month();
 					for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
 					{
@@ -1338,42 +1407,19 @@ void RecurrenceEdit::updateEvent(KAEvent& event)
 							break;
 						}
 					}
-				}
-				if (adjust)
-				{
-					DateTime newTime;
-					KAEvent::OccurType type = event.nextOccurrence(QDateTime(d, QTime(23,59,59)), newTime);
-					if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
-						event.adjustStartDate(newTime.date());
-				}
-			}
-			else
-			{
-				// The recurrence is on the last day of the month, so adjust the
-				// event start to the first recurrence date.
-				// First adjust to a month which is supposed to recur.
-				bool adjust = true;
-				int month = d.month();
-				for (QValueList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
-				{
-					if (*it == month)
+					if (adjust)
 					{
-						adjust = false;
-						break;
+						DateTime newTime;
+						KAEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
+						if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
+							event.adjustStartDate(newTime.date());
+						d = start.date();
+						startday = d.day();
 					}
+					int lastDay = d.daysInMonth();
+					if (startday != lastDay)
+						event.adjustStartDate(d.addDays(lastDay - startday));
 				}
-				if (adjust)
-				{
-					DateTime newTime;
-					KAEvent::OccurType type = event.nextOccurrence(QDateTime(d), newTime);
-					if (type != KAEvent::FIRST_OCCURRENCE  &&  type != KAEvent::NO_OCCURRENCE)
-						event.adjustStartDate(newTime.date());
-					d = start.date();
-					startday = d.day();
-				}
-				int lastDay = d.daysInMonth();
-				if (startday != lastDay)
-					event.adjustStartDate(d.addDays(lastDay - startday));
 			}
 		}
 	}

@@ -79,6 +79,7 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 		PRE_096        = 0x1000,           // old-style pre-0.9.6 deprecated method
 		PRE_091        = 0x2000 | PRE_096  // old-style pre-0.9.1 deprecated method
 	};
+	replyType = "void";
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
 	||       func == "handleEvent(QString,QString)")
@@ -221,18 +222,14 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 			QDataStream arg(data, IO_ReadOnly);
 			QString urlString, vuid;
 			arg >> urlString >> vuid;
-			replyType = "void";
 			switch (function)
 			{
 				case HANDLE:
-					theApp()->handleEvent(urlString, vuid);
-					break;
+					return theApp()->handleEvent(urlString, vuid);
 				case CANCEL:
-					theApp()->deleteEvent(urlString, vuid);
-					break;
+					return theApp()->deleteEvent(urlString, vuid);
 				case TRIGGER:
-					theApp()->triggerEvent(urlString, vuid);
-					break;
+					return theApp()->triggerEvent(urlString, vuid);
 			}
 			break;
 		}
@@ -334,11 +331,9 @@ bool DcopHandler::process(const QCString& func, const QByteArray& data, QCString
 				KCal::ICalFormat format;
 				format.fromString(&recurrence, rule);
 			}
-			theApp()->scheduleEvent(text, dateTime, bgColour, fgColour, font, flags, audioFile, mailAddresses,
-			                        mailSubject, mailAttachments, action, recurrence, reminderMinutes);
-			break;
+			return theApp()->scheduleEvent(text, dateTime, bgColour, fgColour, font, flags, audioFile, mailAddresses,
+			                               mailSubject, mailAttachments, action, recurrence, reminderMinutes);
 		}
 	}
-	replyType = "void";
-	return true;
+	return false;
 }

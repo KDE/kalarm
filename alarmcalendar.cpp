@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #include "kalarm.h"
@@ -24,10 +34,13 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qregexp.h>
+#include <qtimer.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kstaticdeleter.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
@@ -46,19 +59,164 @@ extern "C" {
 
 #include "kalarmapp.h"
 #include "preferences.h"
+#include "synchtimer.h"
 #include "alarmcalendar.moc"
 
 using namespace KCal;
 
+static const KAEvent::Status eventTypes[AlarmCalendar::NCALS] = {
+	KAEvent::ACTIVE, KAEvent::EXPIRED, KAEvent::DISPLAYING, KAEvent::TEMPLATE
+};
+static const QString calendarNames[AlarmCalendar::NCALS] = {
+	QString::fromLatin1("calendar.ics"),
+	QString::fromLatin1("expired.ics"),
+	QString::fromLatin1("displaying.ics"),
+	QString::fromLatin1("template.ics")
+};
+static KStaticDeleter<AlarmCalendar> calendarDeleter[AlarmCalendar::NCALS];    // ensure that the calendar destructors are called
 
-AlarmCalendar::AlarmCalendar(const QString& path, KAEvent::Status type, const QString& icalPath,
+AlarmCalendar* AlarmCalendar::mCalendars[NCALS];
+
+
+/******************************************************************************
+* Initialise the alarm calendars, and ensure that their file names are different.
+* There are 4 calendars:
+*  1) A user-independent one containing the active alarms;
+*  2) A historical one containing expired alarms;
+*  3) A user-specific one which contains details of alarms which are currently
+*     being displayed to that user and which have not yet been acknowledged;
+*  4) One containing alarm templates.
+* Reply = true if success, false if calendar name error.
+*/
+bool AlarmCalendar::initialiseCalendars()
+{
+	KConfig* config = kapp->config();
+	config->setGroup(QString::fromLatin1("General"));
+	QString activeKey   = QString::fromLatin1("Calendar");
+	QString expiredKey  = QString::fromLatin1("ExpiredCalendar");
+	QString templateKey = QString::fromLatin1("TemplateCalendar");
+	QString displayCal, activeCal, expiredCal, templateCal;
+	mCalendars[ACTIVE]   = calendarDeleter[ACTIVE].setObject(createCalendar(ACTIVE, config, activeCal, activeKey));
+	mCalendars[EXPIRED]  = calendarDeleter[EXPIRED].setObject(createCalendar(EXPIRED, config, expiredCal, expiredKey));
+	mCalendars[DISPLAY]  = calendarDeleter[DISPLAY].setObject(createCalendar(DISPLAY, config, displayCal));
+	mCalendars[TEMPLATE] = calendarDeleter[TEMPLATE].setObject(createCalendar(TEMPLATE, config, templateCal, templateKey));
+
+	QString errorKey1, errorKey2;
+	if (activeCal == displayCal)
+		errorKey1 = activeKey;
+	else if (expiredCal == displayCal)
+		errorKey1 = expiredKey;
+	else if (templateCal == displayCal)
+		errorKey1 = templateKey;
+	if (!errorKey1.isNull())
+	{
+		kdError(5950) << "AlarmCalendar::initialiseCalendars(): '" << errorKey1 << "' calendar name = display calendar name\n";
+		QString file = config->readEntry(errorKey1);
+		KMessageBox::error(0, i18n("%1: file name not permitted: %2").arg(errorKey1).arg(file), kapp->aboutData()->programName());
+		return false;
+	}
+	if (activeCal == expiredCal)
+	{
+		errorKey1 = activeKey;
+		errorKey2 = expiredKey;
+	}
+	else if (activeCal == templateCal)
+	{
+		errorKey1 = activeKey;
+		errorKey2 = templateKey;
+	}
+	else if (expiredCal == templateCal)
+	{
+		errorKey1 = expiredKey;
+		errorKey2 = templateKey;
+	}
+	if (!errorKey1.isNull())
+	{
+		kdError(5950) << "AlarmCalendar::initialiseCalendars(): calendar names clash: " << errorKey1 << ", " << errorKey2 << endl;
+		KMessageBox::error(0, i18n("%1, %2: file names must be different").arg(errorKey1).arg(errorKey2), kapp->aboutData()->programName());
+		return false;
+	}
+	if (!mCalendars[ACTIVE]->valid())
+	{
+		QString path = mCalendars[ACTIVE]->path();
+		kdError(5950) << "AlarmCalendar::initialiseCalendars(): invalid name: " << path << endl;
+		KMessageBox::error(0, i18n("Invalid calendar file name: %1").arg(path), kapp->aboutData()->programName());
+		return false;
+	}
+	return true;
+}
+
+/******************************************************************************
+* Create an alarm calendar instance.
+* If 'configKey' is non-null, the calendar will be converted to ICal format.
+*/
+AlarmCalendar* AlarmCalendar::createCalendar(CalID type, KConfig* config, QString& writePath, const QString& configKey)
+{
+	static QRegExp vcsRegExp(QString::fromLatin1("\\.vcs$"));
+	static QString ical = QString::fromLatin1(".ics");
+
+	if (configKey.isNull())
+	{
+		writePath = locateLocal("appdata", calendarNames[type]);
+		return new AlarmCalendar(writePath, type);
+	}
+	else
+	{
+		QString readPath = config->readPathEntry(configKey, locateLocal("appdata", calendarNames[type]));
+		writePath = readPath;
+		writePath.replace(vcsRegExp, ical);
+		return new AlarmCalendar(readPath, type, writePath, configKey);
+	}
+}
+
+/******************************************************************************
+* Terminate access to all calendars.
+*/
+void AlarmCalendar::terminateCalendars()
+{
+	for (int i = 0;  i < NCALS;  ++i)
+	{
+		calendarDeleter[i].destructObject();
+		mCalendars[i] = 0;
+	}
+}
+
+/******************************************************************************
+* Return a calendar, opening it first if not already open.
+* Reply = calendar instance
+*       = 0 if calendar could not be opened.
+*/
+AlarmCalendar* AlarmCalendar::calendarOpen(CalID id)
+{
+	AlarmCalendar* cal = mCalendars[id];
+	if (!cal->mPurgeDays)
+		return 0;     // all events are automatically purged from the calendar
+	if (cal->open())
+		return cal;
+	kdError(5950) << "AlarmCalendar::calendarOpen(" << calendarNames[id] << "): open error\n";
+	return 0;
+}
+
+
+
+/******************************************************************************
+* Constructor.
+* If 'icalPath' is non-null, the file will be always be saved in ICal format.
+* If 'configKey' is also non-null, that config file entry will be updated when
+* the file is saved in ICal format.
+*/
+AlarmCalendar::AlarmCalendar(const QString& path, CalID type, const QString& icalPath,
                              const QString& configKey)
 	: mCalendar(0),
 	  mConfigKey(icalPath.isNull() ? QString::null : configKey),
-	  mType(type),
+	  mType(eventTypes[type]),
+	  mPurgeDays(-1),      // default to not purging
 	  mKAlarmVersion(-1),
 	  mKAlarmVersion057_UTC(false),
-	  mOpen(false)
+	  mOpen(false),
+	  mPurgeDaysQueued(-1),
+	  mUpdateCount(0),
+	  mUpdateSave(false)
 {
 	mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
 	mICalUrl.setPath(icalPath.isNull() ? path : icalPath);
@@ -79,8 +237,10 @@ bool AlarmCalendar::open()
 		return true;
 	if (!mUrl.isValid())
 		return false;
+
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
-	mCalendar = new CalendarLocal();
+	if (!mCalendar)
+		mCalendar = new CalendarLocal();
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	if (!KIO::NetAccess::exists(mUrl))
@@ -112,28 +272,21 @@ bool AlarmCalendar::open()
 */
 bool AlarmCalendar::create()
 {
-	// Create the calendar file
-	KTempFile* tmpFile = 0;
-	QString filename;
 	if (mICalUrl.isLocalFile())
-		filename = mICalUrl.path();
+		return saveCal(mICalUrl.path());
 	else
 	{
-		tmpFile = new KTempFile;
-		filename = tmpFile->name();
+		KTempFile tmpFile;
+		return saveCal(tmpFile.name());
 	}
-	if (!saveCal(filename))
-	{
-		delete tmpFile;
-		return false;
-	}
-	delete tmpFile;
-	return true;
 }
 
 /******************************************************************************
 * Load the calendar file into memory.
-* Reply = 1 if success, -2 if failure, 0 if zero-length file exists.
+* Reply = 1 if success
+*       = 0 if zero-length file exists.
+*       = -1 if failure to load calendar file
+*       = -2 if instance uninitialised.
 */
 int AlarmCalendar::load()
 {
@@ -195,31 +348,31 @@ int AlarmCalendar::load()
 
 /******************************************************************************
 * Reload the calendar file into memory.
-* Reply = 1 if success, -2 if failure, 0 if zero-length file exists.
 */
-int AlarmCalendar::reload()
+bool AlarmCalendar::reload()
 {
 	if (!mCalendar)
-		return -2;
+		return false;
 	kdDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyURL() << endl;
 	close();
-	return open();
+	bool result = open();
+	return result;
 }
 
 /******************************************************************************
 * Save the calendar from memory to file.
+* If a filename is specified, create a new calendar file.
 */
-bool AlarmCalendar::saveCal(const QString& filename)
+bool AlarmCalendar::saveCal(const QString& newFile)
 {
-	if (!mCalendar)
+	if (!mCalendar  ||  !mOpen && newFile.isNull())
 		return false;
 
-	kdDebug(5950) << "AlarmCalendar::saveCal(" << filename << ")\n";
-	QString saveFilename = filename.isNull() ? mLocalFile : filename;
-	if (mVCal  &&  filename.isNull()  &&  mUrl.isLocalFile())
+	kdDebug(5950) << "AlarmCalendar::saveCal(\"" << newFile << "\", " << mType << ")\n";
+	QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
+	if (mVCal  &&  newFile.isNull()  &&  mUrl.isLocalFile())
 		saveFilename = mICalUrl.path();
-	bool success = mCalendar->save(saveFilename, new ICalFormat);
-	if (!success)
+	if (!mCalendar->save(saveFilename, new ICalFormat))
 	{
 		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
 		KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()), kapp->aboutData()->programName());
@@ -251,6 +404,7 @@ bool AlarmCalendar::saveCal(const QString& filename)
 		mVCal = false;
 	}
 
+	mUpdateSave = false;
 	emit calendarSaved(this);
 	return true;
 }
@@ -261,7 +415,10 @@ bool AlarmCalendar::saveCal(const QString& filename)
 void AlarmCalendar::close()
 {
 	if (!mLocalFile.isEmpty())
+	{
 		KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
+		mLocalFile = "";
+	}
 	if (mCalendar)
 	{
 		mCalendar->close();
@@ -269,6 +426,41 @@ void AlarmCalendar::close()
 		mCalendar = 0;
 	}
 	mOpen = false;
+}
+
+/******************************************************************************
+* Flag the start of a group of calendar update calls.
+* The purpose is to avoid multiple calendar saves during a group of operations.
+*/
+void AlarmCalendar::startUpdate()
+{
+	++mUpdateCount;
+}
+
+/******************************************************************************
+* Flag the end of a group of calendar update calls.
+* The calendar is saved if appropriate.
+*/
+void AlarmCalendar::endUpdate()
+{
+	if (mUpdateCount > 0)
+		--mUpdateCount;
+	if (!mUpdateCount)
+	{
+		if (mUpdateSave)
+			saveCal();
+	}
+}
+
+/******************************************************************************
+* Save the calendar, or flag it for saving if in a group of calendar update calls.
+*/
+void AlarmCalendar::save()
+{
+	if (mUpdateCount)
+		mUpdateSave = true;
+	else
+		saveCal();
 }
 
 /******************************************************************************
@@ -292,29 +484,97 @@ void AlarmCalendar::convertToICal()
 }
 
 /******************************************************************************
+* Set the number of days to keep alarms.
+* Alarms which are older are purged immediately, and at the start of each day.
+*/
+void AlarmCalendar::setPurgeDays(int days)
+{
+	if (days != mPurgeDays)
+	{
+		int oldDays = mPurgeDays;
+		mPurgeDays = days;
+		if (mPurgeDays <= 0)
+			StartOfDayTimer::disconnect(this);
+		if (oldDays < 0  ||  days >= 0 && days < oldDays)
+		{
+			// Alarms are now being kept for less long, so purge them
+			if (open())
+				slotPurge();
+		}
+		else if (mPurgeDays > 0)
+			startPurgeTimer();
+	}
+}
+
+/******************************************************************************
+* Called at the start of each day by the purge timer.
+* Purge all events from the calendar whose end time is longer ago than 'mPurgeDays'.
+*/
+void AlarmCalendar::slotPurge()
+{
+	purge(mPurgeDays);
+	startPurgeTimer();
+}
+
+/******************************************************************************
+* Purge all events from the calendar whose end time is longer ago than
+* 'daysToKeep'. All events are deleted if 'daysToKeep' is zero.
+*/
+void AlarmCalendar::purge(int daysToKeep)
+{
+	if (mPurgeDaysQueued < 0  ||  daysToKeep < mPurgeDaysQueued)
+		mPurgeDaysQueued = daysToKeep;
+
+	// Do the purge once any other current operations are completed
+	theApp()->processQueue();
+}
+	
+/******************************************************************************
+* This method must only be called from the main KAlarm queue processing loop,
+* to prevent asynchronous calendar operations interfering with one another.
+*
 * Purge all events from the calendar whose end time is longer ago than 'daysToKeep'.
 * All events are deleted if 'daysToKeep' is zero.
+* The calendar must already be open.
 */
-void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
+void AlarmCalendar::purgeIfQueued()
 {
-	kdDebug(5950) << "AlarmCalendar::purge(" << daysToKeep << ")\n";
-	if (daysToKeep >= 0)
+	if (mPurgeDaysQueued >= 0)
 	{
-		bool purged = false;
-		QDate cutoff = QDate::currentDate().addDays(-daysToKeep);
-		Event::List events = mCalendar->events();
-                for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+		if (open())
 		{
-			Event* kcalEvent = *it;
-                        if (!daysToKeep  ||  kcalEvent->created().date() < cutoff)
+			kdDebug(5950) << "AlarmCalendar::purgeIfQueued(" << mPurgeDaysQueued << ")\n";
+			bool changed = false;
+			QDate cutoff = QDate::currentDate().addDays(-mPurgeDaysQueued);
+			Event::List events = mCalendar->events();
+			for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 			{
-				mCalendar->deleteEvent(kcalEvent);
-				purged = true;
+				Event* kcalEvent = *it;
+				if (!mPurgeDaysQueued  ||  kcalEvent->created().date() < cutoff)
+				{
+					mCalendar->deleteEvent(kcalEvent);
+					changed = true;
+				}
 			}
+			if (changed)
+			{
+				saveCal();
+				emit purged();
+			}
+			mPurgeDaysQueued = -1;
 		}
-		if (purged  &&  saveIfPurged)
-			saveCal();
 	}
+}
+
+
+/******************************************************************************
+* Start the purge timer to expire at the start of the next day (using the user-
+* defined start-of-day time).
+*/
+void AlarmCalendar::startPurgeTimer()
+{
+	if (mPurgeDays > 0)
+		StartOfDayTimer::connect(this, SLOT(slotPurge()));
 }
 
 /******************************************************************************
@@ -325,25 +585,25 @@ void AlarmCalendar::purge(int daysToKeep, bool saveIfPurged)
 */
 Event* AlarmCalendar::addEvent(const KAEvent& event, bool useEventID)
 {
-	kdDebug(5950) << "AlarmCalendar::addEvent(" << event.id() << ")\n";
-	if (!mCalendar)
+	if (!mOpen)
 		return 0;
-	if (useEventID  &&  event.id().isEmpty())
-		useEventID = false;
+	QString id = event.id();
 	Event* kcalEvent = new Event;
-	switch (mType)
+	if (mType == KAEvent::ACTIVE)
 	{
-		case KAEvent::ACTIVE:
-			if (!useEventID)
-				const_cast<KAEvent&>(event).setEventID(kcalEvent->uid());
-			break;
-		case KAEvent::EXPIRED:
-		case KAEvent::DISPLAYING:
-			useEventID = true;
-			break;
+		if (id.isEmpty())
+			useEventID = false;
+		if (!useEventID)
+			const_cast<KAEvent&>(event).setEventID(kcalEvent->uid());
+	}
+	else
+	{
+		if (id.isEmpty())
+			id = kcalEvent->uid();
+		useEventID = true;
 	}
 	if (useEventID)
-		kcalEvent->setUid(KAEvent::uid(event.id(), mType));
+		kcalEvent->setUid(KAEvent::uid(id, mType));
 	event.updateKCalEvent(*kcalEvent, false, mType == KAEvent::EXPIRED);
 	mCalendar->addEvent(kcalEvent);
 	event.clearUpdated();
@@ -356,7 +616,7 @@ Event* AlarmCalendar::addEvent(const KAEvent& event, bool useEventID)
 */
 void AlarmCalendar::updateEvent(const KAEvent& evnt)
 {
-	if (mCalendar)
+	if (mOpen)
 	{
 		Event* kcalEvent = event(evnt.id());
 		if (kcalEvent)
@@ -373,24 +633,32 @@ void AlarmCalendar::updateEvent(const KAEvent& evnt)
 */
 void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
-	if (mCalendar)
+	if (mOpen)
 	{
 		Event* kcalEvent = event(eventID);
 		if (kcalEvent)
 		{
 			mCalendar->deleteEvent(kcalEvent);
 			if (saveit)
-				saveCal();
+				save();
 		}
 	}
 }
 
 /******************************************************************************
+* Emit a signal to indicate whether the calendar is empty.
+*/
+void AlarmCalendar::emitEmptyStatus()
+{
+	emit emptyStatus(mCalendar ? !mCalendar->events().count() : true);
+}
+
+/******************************************************************************
 * Return all events which have alarms falling within the specified time range.
 */
-Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTime& to) const
+Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTime& to)
 {
-	kdDebug(5950) << "AlarmCalendar::events(" << from.toString() << " - " << to.toString() << ")\n";
+	kdDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from.toString() << " - " << to.toString() << ")\n";
 	Event::List evnts;
 	if (!mCalendar)
 		return evnts;
@@ -465,7 +733,7 @@ void AlarmCalendar::getKAlarmVersion() const
 	if (mCalendar)
 	{
 		const QString& prodid = mCalendar->loadedProductId();
-		QString progname = QString(" ") + theApp()->aboutData()->programName() + " ";
+		QString progname = QString(" ") + kapp->aboutData()->programName() + " ";
 		int i = prodid.find(progname, 0, false);
 		if (i >= 0)
 		{

@@ -37,6 +37,7 @@
 class QListViewItem;
 class KAction;
 class AlarmListView;
+class TemplateDlg;
 
 
 class KAlarmMainWindow : public MainWindowBase
@@ -49,29 +50,29 @@ class KAlarmMainWindow : public MainWindowBase
 		bool           isTrayParent() const;
 		bool           isHiddenTrayParent() const   { return mHiddenTrayParent; }
 		bool           showingExpired() const       { return mShowExpired; }
-
 		void           selectEvent(const QString& eventID);
-		void           modifyEvent(const KAEvent& event)    { modifyEvent(event.id(), event); }
-		void           modifyEvent(const QString& oldEventID, const KAEvent& newEvent);
-		void           deleteEvent(const QString& eventID);
-		void           undeleteEvent(const QString& oldEventID, const KAEvent& event);
 
 		static void    refresh();
 		static void    updateExpired();
 		static void    addEvent(const KAEvent&, KAlarmMainWindow*);
-		static void    modifyEvent(const QString& oldEventID, const KAEvent& newEvent, KAlarmMainWindow*);
-		static void    modifyEvent(const KAEvent& event, KAlarmMainWindow* w)   { modifyEvent(event.id(), event, w); }
-		static void    deleteEvent(const QString& eventID, KAlarmMainWindow*);
-		static void    undeleteEvent(const QString& oldEventID, const KAEvent& event, KAlarmMainWindow*);
 		static void    executeNew(KAlarmMainWindow* = 0, KAEvent::Action = KAEvent::MESSAGE, const QString& text = QString::null);
 		static void    executeDragEnterEvent(QDragEnterEvent*);
 		static void    executeDropEvent(KAlarmMainWindow*, QDropEvent*);
-		static void              closeAll();
+		static void    closeAll();
 		static QString emailSubject(const QString&);
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* mainMainWindow();
 		static KAlarmMainWindow* firstWindow()      { return mWindowList.first(); }
 		static int               count()            { return mWindowList.count(); }
+
+		static const QString i18n_a_ShowAlarmTimes;     // text of 'Show Alarm Times' checkbox, with 'A' shortcut
+		static const QString i18n_t_ShowAlarmTimes;     // text of 'Show alarm time' checkbox, with 'T' shortcut
+		static const QString i18n_m_ShowAlarmTimes;     // text of 'Show alarm time' checkbox, with 'M' shortcut
+		static const QString i18n_o_ShowTimeToAlarms;   // text of 'Show Time to Alarms' checkbox, with 'O' shortcut
+		static const QString i18n_n_ShowTimeToAlarms;   // text of 'Show time until alarm' checkbox, with 'N' shortcut
+		static const QString i18n_l_ShowTimeToAlarms;   // text of 'Show time until alarm' checkbox, with 'L' shortcut
+		static const QString i18n_e_ShowExpiredAlarms;  // text of 'Show Expired Alarms' checkbox, with 'E' shortcut
+		static const QString i18n_s_ShowExpiredAlarms;  // text of 'Show expired alarms' checkbox, with 'S' shortcut
 
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);
@@ -85,6 +86,7 @@ class KAlarmMainWindow : public MainWindowBase
 
 	private slots:
 		void           slotNew();
+		void           slotNewTemplate();
 		void           slotCopy();
 		void           slotModify();
 		void           slotDelete();
@@ -93,6 +95,8 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
 		void           slotBirthdays();
+		void           slotTemplates();
+		void           slotTemplatesEnd();
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();
@@ -112,12 +116,16 @@ class KAlarmMainWindow : public MainWindowBase
 		void           initActions();
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
-		static void    alarmWarnings(QWidget* parent, const KAEvent&);
+		static void    enableTemplateMenuItem(bool);
+		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
 		static bool    findWindow(KAlarmMainWindow*);
 
 		static QPtrList<KAlarmMainWindow> mWindowList;  // active main windows
+		static TemplateDlg* mTemplateDlg;      // the one and only template dialogue
 		AlarmListView* mListView;
+		KAction*       mActionTemplates;
 		KAction*       mActionNew;
+		KAction*       mActionCreateTemplate;
 		KAction*       mActionCopy;
 		KAction*       mActionModify;
 		KAction*       mActionView;

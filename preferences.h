@@ -16,6 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
 
 #ifndef PREFERENCES_H
@@ -50,11 +60,14 @@ class Preferences : public QObject
 		QColor         defaultFgColour() const          { return default_defaultFgColour; }
 		const QFont&   messageFont() const              { return mMessageFont; }
 		const QTime&   startOfDay() const               { return mStartOfDay; }
-		bool           startOfDayChanged() const        { return mStartOfDayChanged; }
+		bool           hasStartOfDayChanged() const     { return mStartOfDayChanged; }
 		bool           runInSystemTray() const          { return mRunInSystemTray; }
 		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
+		bool           quitWarn() const;
+		void           setQuitWarn(bool);
 		bool           autostartTrayIcon() const        { return mAutostartTrayIcon; }
-		bool           confirmAlarmDeletion() const     { return mConfirmAlarmDeletion; }
+		bool           confirmAlarmDeletion() const;
+		void           setConfirmAlarmDeletion(bool);
 		Feb29Type      feb29RecurType() const           { return mFeb29RecurType; }
 		bool           modalMessages() const            { return mModalMessages; }
 		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
@@ -73,7 +86,9 @@ class Preferences : public QObject
 		QString        emailBccAddress() const;
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
-		const QString& defaultSoundFile() const         { return mDefaultBeep ? QString::null : mDefaultSoundFile; }
+		bool           defaultSound() const             { return mDefaultSound; }
+		const QString& defaultSoundFile() const         { return mDefaultSoundFile; }
+		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
 		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
@@ -82,14 +97,18 @@ class Preferences : public QObject
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
 		Reminder::Units defaultReminderUnits() const    { return mDefaultReminderUnits; }
 
-		void           loadPreferences();
-		void           savePreferences(bool syncToDisc = true);
+		void           save(bool syncToDisc = true);
+		void           syncToDisc();
 		void           updateStartOfDayCheck();
-		void           emitPreferencesChanged();
 
 		static void    setNotify(const QString& messageID, bool yesNoMessage, bool notify);
 		static bool    notifying(const QString& messageID, bool yesNoMessage);
 
+		// Config file entry names for notification messages
+		static const QString     QUIT_WARN;
+		static const QString     CONFIRM_ALARM_DELETION;
+
+		// Default values for settings
 		static const ColourList  default_messageColours;
 		static const QColor      default_defaultBgColour;
 		static const QColor      default_defaultFgColour;
@@ -97,6 +116,7 @@ class Preferences : public QObject
 		static const QTime       default_startOfDay;
 		static const bool        default_runInSystemTray;
 		static const bool        default_disableAlarmsIfStopped;
+		static const bool        default_quitWarn;
 		static const bool        default_autostartTrayIcon;
 		static const bool        default_confirmAlarmDeletion;
 		static const Feb29Type   default_feb29RecurType;
@@ -118,6 +138,8 @@ class Preferences : public QObject
 		static const QColor      default_expiredColour;
 		static const int         default_expiredKeepDays;
 		static const QString     default_defaultSoundFile;
+		static const bool        default_defaultSound;
+		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultBeep;
 		static const bool        default_defaultLateCancel;
 		static const bool        default_defaultConfirmAck;
@@ -129,8 +151,11 @@ class Preferences : public QObject
 
 	signals:
 		void preferencesChanged();
+		void startOfDayChanged(const QTime& oldStartOfDay);
+
 	private:
-		Preferences() : QObject(0) { }     // only one instance allowed
+		Preferences();     // only one instance allowed
+
 		static Preferences* mInstance;
 		int                 startOfDayCheck() const;
 		QString             mEmailAddress;
@@ -138,7 +163,7 @@ class Preferences : public QObject
 
 		// All the following members are accessed by the Preferences dialog classes
 		friend class MiscPrefTab;
-		friend class DefaultPrefTab;
+		friend class EditPrefTab;
 		friend class ViewPrefTab;
 		friend class MessagePrefTab;
 		friend class EmailPrefTab;
@@ -151,7 +176,6 @@ class Preferences : public QObject
 		bool                mRunInSystemTray;
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
-		bool                mConfirmAlarmDeletion;
 		Feb29Type           mFeb29RecurType;
 		bool                mModalMessages;
 		bool                mShowExpiredAlarms;
@@ -170,12 +194,16 @@ class Preferences : public QObject
 		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog
 		QString             mDefaultSoundFile;
+		bool                mDefaultSound;
+		bool                mDefaultSoundRepeat;
 		bool                mDefaultBeep;
 		bool                mDefaultLateCancel;
 		bool                mDefaultConfirmAck;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
 		Reminder::Units     mDefaultReminderUnits;
+		// Change tracking
+		QTime               mOldStartOfDay;       // previous start-of-day time
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
 };
 

@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ *  In addition, as a special exception, the copyright holders give permission
+ *  to link the code of this program with any edition of the Qt library by
+ *  Trolltech AS, Norway (or with modified versions of Qt that use the same
+ *  license as Qt), and distribute linked combinations including the two.
+ *  You must obey the GNU General Public License in all respects for all of
+ *  the code used other than Qt.  If you modify this file, you may extend
+ *  this exception to your version of the file, but you are not obligated to
+ *  do so. If you do not wish to do so, delete this exception statement from
+ *  your version.
  */
+
+#include "kalarm.h"
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -37,6 +49,7 @@ QFont            Preferences::default_messageFont;    // initialised in construc
 const QTime      Preferences::default_startOfDay(0, 0);
 const bool       Preferences::default_runInSystemTray          = true;
 const bool       Preferences::default_disableAlarmsIfStopped   = true;
+const bool       Preferences::default_quitWarn                 = true;
 const bool       Preferences::default_autostartTrayIcon        = true;
 const bool       Preferences::default_confirmAlarmDeletion     = true;
 const bool       Preferences::default_modalMessages            = true;
@@ -49,11 +62,18 @@ const bool       Preferences::default_showTooltipTimeToAlarm   = true;
 const QString    Preferences::default_tooltipTimeToPrefix      = QString::fromLatin1("+");
 const int        Preferences::default_daemonTrayCheckInterval  = 10;     // (seconds)
 const bool       Preferences::default_emailQueuedNotify        = false;
+#if KDE_VERSION >= 210
 const bool       Preferences::default_emailUseControlCentre    = true;
 const bool       Preferences::default_emailBccUseControlCentre = true;
+#else
+const bool       Preferences::default_emailUseControlCentre    = false;
+const bool       Preferences::default_emailBccUseControlCentre = false;
+#endif
 const QColor     Preferences::default_expiredColour(darkRed);
 const int        Preferences::default_expiredKeepDays          = 7;
 const QString    Preferences::default_defaultSoundFile         = QString::null;
+const bool       Preferences::default_defaultSound             = false;
+const bool       Preferences::default_defaultSoundRepeat       = false;
 const bool       Preferences::default_defaultBeep              = false;
 const bool       Preferences::default_defaultLateCancel        = false;
 const bool       Preferences::default_defaultConfirmAck        = false;
@@ -76,7 +96,6 @@ static const QString MESSAGE_FONT             = QString::fromLatin1("MessageFont
 static const QString RUN_IN_SYSTEM_TRAY       = QString::fromLatin1("RunInSystemTray");
 static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlarmsIfStopped");
 static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
-static const QString CONFIRM_ALARM_DELETION   = QString::fromLatin1("ConfirmAlarmDeletion");
 static const QString FEB29_RECUR_TYPE         = QString::fromLatin1("Feb29Recur");
 static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
 static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
@@ -100,37 +119,42 @@ static const QString EXPIRED_KEEP_DAYS        = QString::fromLatin1("ExpiredKeep
 static const QString DEFAULTS_SECTION         = QString::fromLatin1("Defaults");
 static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCancel");
 static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
+static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
 static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
+static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
 static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
 static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
 
+// Config file entry names for notification messages
+const QString Preferences::QUIT_WARN              = QString::fromLatin1("QuitWarn");
+const QString Preferences::CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmDeletion");
+
+static const int SODxor = 0x82451630;
 inline int Preferences::startOfDayCheck() const
 {
 	// Combine with a 'random' constant to prevent 'clever' people fiddling the
 	// value, and thereby screwing things up.
-	return QTime().msecsTo(mStartOfDay) ^ 0x82451630;
+	return QTime().msecsTo(mStartOfDay) ^ SODxor;
 }
 
 
 Preferences* Preferences::instance()
 {
 	if (!mInstance)
-	{
 		mInstance = new Preferences;
-
-		// Initialise static variables here to avoid static initialisation
-		// sequencing errors.
-		default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
-
-		mInstance->loadPreferences();
-	}
 	return mInstance;
 }
 
-void Preferences::loadPreferences()
+Preferences::Preferences()
+	: QObject(0)
 {
+	// Initialise static variables here to avoid static initialisation
+	// sequencing errors.
+	default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+
+	// Read preference values from the config file
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	QStringList cols = config->readListEntry(MESSAGE_COLOURS);
@@ -151,7 +175,6 @@ void Preferences::loadPreferences()
 	mRunInSystemTray         = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
 	mDisableAlarmsIfStopped  = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon       = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
-	mConfirmAlarmDeletion    = config->readBoolEntry(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 	QCString feb29           = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
 	mFeb29RecurType          = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
 	mModalMessages           = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
@@ -167,6 +190,7 @@ void Preferences::loadPreferences()
 	mEmailClient             = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailQueuedNotify       = config->readBoolEntry(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
 	bool bccFrom             = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
+#if KDE_VERSION >= 210
 	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
 	mEmailBccUseControlCentre = bccFrom ? mEmailUseControlCentre      // compatibility with pre-0.9.5
 	                          : config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre);
@@ -175,20 +199,28 @@ void Preferences::loadPreferences()
 		KEMailSettings e;
 		mEmailAddress = mEmailBccAddress = e.getSetting(KEMailSettings::EmailAddress);
 	}
+#else
+	mEmailUseControlCentre = mEmailBccUseControlCentre = false;
+#endif
 	if (!mEmailUseControlCentre)
 		mEmailAddress = config->readEntry(EMAIL_ADDRESS);
 	if (!mEmailBccUseControlCentre)
 		mEmailBccAddress = config->readEntry(EMAIL_BCC_ADDRESS);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
-	mStartOfDayChanged       = (config->readNumEntry(START_OF_DAY_CHECK, 0) != startOfDayCheck());
+	mOldStartOfDay.setHMS(0,0,0);
+	int sod = config->readNumEntry(START_OF_DAY_CHECK, 0);
+	if (sod)
+		mOldStartOfDay = mOldStartOfDay.addMSecs(sod ^ SODxor);
 	mExpiredColour           = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
 	mExpiredKeepDays         = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
 	mDefaultLateCancel       = config->readBoolEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
 	mDefaultConfirmAck       = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
+	mDefaultSound            = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	mDefaultBeep             = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
-	mDefaultSoundFile        = mDefaultBeep ? QString::null : config->readPathEntry(DEF_SOUND_FILE);
+	mDefaultSoundRepeat      = config->readBoolEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
+	mDefaultSoundFile        = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultEmailBcc         = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
@@ -197,9 +229,15 @@ void Preferences::loadPreferences()
 	mDefaultReminderUnits    = (reminderUnits < Reminder::HOURS_MINUTES || reminderUnits > Reminder::WEEKS)
 	                         ? default_defaultReminderUnits : (Reminder::Units)reminderUnits;
 	emit preferencesChanged();
+	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
+	if (mStartOfDayChanged)
+	{
+		emit startOfDayChanged(mOldStartOfDay);
+		mOldStartOfDay = mStartOfDay;
+	}
 }
 
-void Preferences::savePreferences(bool syncToDisc)
+void Preferences::save(bool syncToDisc)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
@@ -212,7 +250,6 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
-	config->writeEntry(CONFIRM_ALARM_DELETION, mConfirmAlarmDeletion);
 	config->writeEntry(FEB29_RECUR_TYPE, (mFeb29RecurType == FEB29_MAR1 ? "Mar1" : mFeb29RecurType == FEB29_FEB28 ? "Feb28" : "None"));
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
@@ -237,12 +274,26 @@ void Preferences::savePreferences(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
-	config->writePathEntry(DEF_SOUND_FILE, (mDefaultBeep ? QString::null : mDefaultSoundFile));
+	config->writeEntry(DEF_SOUND, mDefaultSound);
+	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
+	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
 	if (syncToDisc)
 		config->sync();
+	emit preferencesChanged();
+	if (mStartOfDay != mOldStartOfDay)
+	{
+		emit startOfDayChanged(mOldStartOfDay);
+		mOldStartOfDay = mStartOfDay;
+	}
+}
+
+void Preferences::syncToDisc()
+{
+	KConfig* config = KGlobal::config();
+	config->sync();
 }
 
 void Preferences::updateStartOfDayCheck()
@@ -254,9 +305,24 @@ void Preferences::updateStartOfDayCheck()
 	mStartOfDayChanged = false;
 }
 
-void Preferences::emitPreferencesChanged()
+bool Preferences::quitWarn() const
 {
-	emit preferencesChanged();
+	return notifying(QUIT_WARN, true);
+}
+
+void Preferences::setQuitWarn(bool yes)
+{
+	return setNotify(QUIT_WARN, true, yes);
+}
+
+bool Preferences::confirmAlarmDeletion() const
+{
+	return notifying(CONFIRM_ALARM_DELETION, false);
+}
+
+void Preferences::setConfirmAlarmDeletion(bool yes)
+{
+	return setNotify(CONFIRM_ALARM_DELETION, false, yes);
 }
 
 QString Preferences::emailAddress() const
@@ -325,6 +391,9 @@ void Preferences::setNotify(const QString& messageID, bool yesNoMessage, bool no
 * Return whether the specified message dialog is output, where the dialog has
 * a checkbox to turn notification off.
 * Set 'yesNoMessage' true if the message is used in a KMessageBox::*YesNo*() call.
+* Reply = false if message has been suppressed (by preferences or by selecting
+*                  "don't ask again")
+*       = true in all other cases.
 */
 bool Preferences::notifying(const QString& messageID, bool yesNoMessage)
 {
