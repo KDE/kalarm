@@ -66,7 +66,7 @@ static QString messageSubjectPrefix = i18n("Email subject", "Subject:");
 =  Class: KAlarmMainWindow
 =============================================================================*/
 
-QPtrList<KAlarmMainWindow> KAlarmMainWindow::windowList;
+QPtrList<KAlarmMainWindow> KAlarmMainWindow::mWindowList;
 
 
 /******************************************************************************
@@ -96,22 +96,22 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 		resize(theApp()->readConfigWindowSize("MainWindow", size()));
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
-	listView = new AlarmListView(this, "listView");
-	listView->selectTimeColumns(mShowTime, mShowTimeTo);
-	listView->showExpired(mShowExpired);
-	setCentralWidget(listView);
-	listView->refresh();          // populate the alarm list
-	listView->clearSelection();
+	mListView = new AlarmListView(this, "mListView");
+	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+	mListView->showExpired(mShowExpired);
+	setCentralWidget(mListView);
+	mListView->refresh();          // populate the alarm list
+	mListView->clearSelection();
 
-	connect(listView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
-	connect(listView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
-	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
+	connect(mListView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
+	connect(mListView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
+	connect(mListView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
-	connect(listView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
+	connect(mListView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
 	initActions();
 
-	windowList.append(this);
-	if (windowList.count() == 1  &&  theApp()->daemonGuiHandler())
+	mWindowList.append(this);
+	if (mWindowList.count() == 1  &&  theApp()->daemonGuiHandler())
 	{
 		// It's the first main window, and the DCOP handler is ready
 		if (theApp()->wantRunInSystemTray())
@@ -126,7 +126,7 @@ KAlarmMainWindow::~KAlarmMainWindow()
 {
 	kdDebug(5950) << "KAlarmMainWindow::~KAlarmMainWindow()\n";
 	if (findWindow(this))
-		windowList.remove();
+		mWindowList.remove();
 	if (theApp()->trayWindow())
 	{
 		if (isTrayParent())
@@ -178,12 +178,12 @@ KAlarmMainWindow* KAlarmMainWindow::mainMainWindow()
 	KAlarmMainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
 	if (tray  &&  tray->isVisible())
 		return tray;
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w->isVisible())
 			return w;
 	if (tray)
 		return tray;
-	return windowList.first();
+	return mWindowList.first();
 }
 
 /******************************************************************************
@@ -199,8 +199,8 @@ bool KAlarmMainWindow::isTrayParent() const
 */
 void KAlarmMainWindow::closeAll()
 {
-	while (windowList.first())
-		delete windowList.first();
+	while (mWindowList.first())
+		delete mWindowList.first();
 }
 
 /******************************************************************************
@@ -211,7 +211,7 @@ void KAlarmMainWindow::closeAll()
 */
 void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 {
-	listView->resizeLastColumn();
+	mListView->resizeLastColumn();
 	// Save the window's new size only if it's the first main window
 	if (mainMainWindow() == this)
 		theApp()->writeConfigWindowSize("MainWindow", re->size());
@@ -225,7 +225,7 @@ void KAlarmMainWindow::resizeEvent(QResizeEvent* re)
 */
 void KAlarmMainWindow::showEvent(QShowEvent* se)
 {
-	listView->resizeLastColumn();
+	mListView->resizeLastColumn();
 	setUpdateTimer();
 	slotUpdateTimeTo();
 	MainWindowBase::showEvent(se);
@@ -246,19 +246,19 @@ void KAlarmMainWindow::hideEvent(QHideEvent* he)
 void KAlarmMainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
-	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
+	mActionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KAction* actBirthday = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
-	actionNew            = KAlarmApp::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
-	actionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
-	actionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
-	actionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
-	actionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
-	actionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
-	actionShowTime       = new KAction(i18n("Show &Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
-	actionShowTimeTo     = new KAction(i18n("Show Time t&o Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
-	actionShowExpired    = new KAction(i18n("Show &Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
-	actionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
-	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
+	mActionNew            = KAlarmApp::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
+	mActionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
+	mActionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
+	mActionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
+	mActionUndelete       = new KAction(i18n("&Undelete"), "undo", Qt::CTRL+Qt::Key_U, this, SLOT(slotUndelete()), actions, "undelete");
+	mActionView           = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_V, this, SLOT(slotView()), actions, "view");
+	mActionShowTime       = new KAction(i18n("Show &Alarm Times"), 0, this, SLOT(slotShowTime()), actions, "time");
+	mActionShowTimeTo     = new KAction(i18n("Show Time t&o Alarms"), 0, this, SLOT(slotShowTimeTo()), actions, "timeTo");
+	mActionShowExpired    = new KAction(i18n("Show &Expired Alarms"), Qt::CTRL+Qt::Key_S, this, SLOT(slotShowExpired()), actions, "expired");
+	mActionToggleTrayIcon = new KAction(i18n("Show in System &Tray"), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
+	mActionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
 
 	// Set up the menu bar
 
@@ -266,21 +266,21 @@ void KAlarmMainWindow::initActions()
 	KPopupMenu* submenu = new KPopupMenu(this, "file");
 	actBirthday->plug(submenu);
 	menu->insertItem(i18n("&File"), submenu);
-	actionQuit->plug(submenu);
+	mActionQuit->plug(submenu);
 
 	mViewMenu = new KPopupMenu(this, "view");
 	menu->insertItem(i18n("&View"), mViewMenu);
-	actionShowTime->plug(mViewMenu);
+	mActionShowTime->plug(mViewMenu);
 	mShowTimeId = mViewMenu->idAt(0);
 	mViewMenu->setItemChecked(mShowTimeId, mShowTime);
-	actionShowTimeTo->plug(mViewMenu);
+	mActionShowTimeTo->plug(mViewMenu);
 	mShowTimeToId = mViewMenu->idAt(1);
 	mViewMenu->setItemChecked(mShowTimeToId, mShowTimeTo);
 	mViewMenu->insertSeparator(2);
-	actionShowExpired->plug(mViewMenu);
+	mActionShowExpired->plug(mViewMenu);
 	mShowExpiredId = mViewMenu->idAt(3);
 	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
-	actionToggleTrayIcon->plug(mViewMenu);
+	mActionToggleTrayIcon->plug(mViewMenu);
 	mShowTrayId = mViewMenu->idAt(4);
 	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
@@ -288,12 +288,12 @@ void KAlarmMainWindow::initActions()
 
 	mActionsMenu = new KPopupMenu(this, "actions");
 	menu->insertItem(i18n("&Actions"), mActionsMenu);
-	actionNew->plug(mActionsMenu);
-	actionCopy->plug(mActionsMenu);
-	actionModify->plug(mActionsMenu);
-	actionDelete->plug(mActionsMenu);
-	actionUndelete->plug(mActionsMenu);
-	actionView->plug(mActionsMenu);
+	mActionNew->plug(mActionsMenu);
+	mActionCopy->plug(mActionsMenu);
+	mActionModify->plug(mActionsMenu);
+	mActionDelete->plug(mActionsMenu);
+	mActionUndelete->plug(mActionsMenu);
+	mActionView->plug(mActionsMenu);
 	mActionsMenu->insertSeparator(6);
 
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
@@ -306,7 +306,7 @@ void KAlarmMainWindow::initActions()
 		setAlarmEnabledStatus(daemonGui->monitoringAlarms());
 	}
 
-	actionRefreshAlarms->plug(mActionsMenu);
+	mActionRefreshAlarms->plug(mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 
 	submenu = new KPopupMenu(this, "settings");
@@ -319,22 +319,22 @@ void KAlarmMainWindow::initActions()
 	// Set up the toolbar
 
 	KToolBar* toolbar = toolBar();
-	actionNew->plug(toolbar);
-	actionCopy->plug(toolbar);
-	actionModify->plug(toolbar);
-	actionDelete->plug(toolbar);
-	actionUndelete->plug(toolbar);
-	actionView->plug(toolbar);
+	mActionNew->plug(toolbar);
+	mActionCopy->plug(toolbar);
+	mActionModify->plug(toolbar);
+	mActionDelete->plug(toolbar);
+	mActionUndelete->plug(toolbar);
+	mActionView->plug(toolbar);
 
-	actionCopy->setEnabled(false);
-	actionModify->setEnabled(false);
-	actionDelete->setEnabled(false);
-	actionUndelete->setEnabled(false);
-	actionView->setEnabled(false);
+	mActionCopy->setEnabled(false);
+	mActionModify->setEnabled(false);
+	mActionDelete->setEnabled(false);
+	mActionUndelete->setEnabled(false);
+	mActionView->setEnabled(false);
 	if (!Preferences::instance()->expiredKeepDays())
-		actionShowExpired->setEnabled(false);
+		mActionShowExpired->setEnabled(false);
 	if (!theApp()->KDEDesktop())
-		actionToggleTrayIcon->setEnabled(false);
+		mActionToggleTrayIcon->setEnabled(false);
 }
 
 /******************************************************************************
@@ -343,8 +343,8 @@ void KAlarmMainWindow::initActions()
 void KAlarmMainWindow::refresh()
 {
 	kdDebug(5950) << "KAlarmMainWindow::refresh()\n";
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
-		w->listView->refresh();
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+		w->mListView->refresh();
 }
 
 /******************************************************************************
@@ -356,16 +356,16 @@ void KAlarmMainWindow::updateExpired()
 {
 	kdDebug(5950) << "KAlarmMainWindow::updateExpired()\n";
 	bool enableShowExpired = !!Preferences::instance()->expiredKeepDays();
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 	{
 		if (w->mShowExpired)
 		{
 			if (!enableShowExpired)
 				w->slotShowExpired();
 			else
-				w->listView->refresh();
+				w->mListView->refresh();
 		}
-		w->actionShowExpired->setEnabled(enableShowExpired);
+		w->mActionShowExpired->setEnabled(enableShowExpired);
 	}
 }
 
@@ -379,9 +379,9 @@ void KAlarmMainWindow::setUpdateTimer()
 	// Check whether any windows need to be updated
 	KAlarmMainWindow* needTimer = 0;
 	KAlarmMainWindow* timerWindow = 0;
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 	{
-		if (w->isVisible()  &&  w->listView->showingTimeTo())
+		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			needTimer = w;
 		if (w->mMinuteTimer)
 			timerWindow = w;
@@ -425,9 +425,9 @@ void KAlarmMainWindow::slotUpdateTimeTo()
 		mMinuteTimerSyncing = false;
 	}
 
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
-		if (w->isVisible()  &&  w->listView->showingTimeTo())
-			w->listView->updateTimeToAlarms();
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+		if (w->isVisible()  &&  w->mListView->showingTimeTo())
+			w->mListView->updateTimeToAlarms();
 }
 
 /******************************************************************************
@@ -435,13 +435,13 @@ void KAlarmMainWindow::slotUpdateTimeTo()
 */
 void KAlarmMainWindow::selectEvent(const QString& eventID)
 {
-	listView->clearSelection();
-	AlarmListViewItem* item = listView->getEntry(eventID);
+	mListView->clearSelection();
+	AlarmListViewItem* item = mListView->getEntry(eventID);
 	if (item)
 	{
-		listView->setSelected(item, true);
-		listView->setCurrentItem(item);
-		listView->ensureItemVisible(item);
+		mListView->setSelected(item, true);
+		mListView->setCurrentItem(item);
+		mListView->ensureItemVisible(item);
 	}
 }
 
@@ -453,11 +453,11 @@ void KAlarmMainWindow::addEvent(const KAEvent& event, KAlarmMainWindow* win)
 {
 	kdDebug(5950) << "KAlarmMainWindow::addEvent(): " << event.id() << endl;
 	bool expired = event.expired();
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w != win)
 		{
 			if (!expired  ||  w->mShowExpired)
-				w->listView->addEntry(event, true);
+				w->mListView->addEntry(event, true);
 		}
 }
 
@@ -467,7 +467,7 @@ void KAlarmMainWindow::addEvent(const KAEvent& event, KAlarmMainWindow* win)
 */
 void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& newEvent, KAlarmMainWindow* win)
 {
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w != win)
 			w->modifyEvent(oldEventID, newEvent);
 }
@@ -477,10 +477,10 @@ void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& new
 */
 void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& newEvent)
 {
-	AlarmListViewItem* item = listView->getEntry(oldEventID);
+	AlarmListViewItem* item = mListView->getEntry(oldEventID);
 	if (item)
-		listView->deleteEntry(item);
-	listView->addEntry(newEvent, true);
+		mListView->deleteEntry(item);
+	mListView->addEntry(newEvent, true);
 }
 
 /******************************************************************************
@@ -489,7 +489,7 @@ void KAlarmMainWindow::modifyEvent(const QString& oldEventID, const KAEvent& new
 */
 void KAlarmMainWindow::deleteEvent(const QString& eventID, KAlarmMainWindow* win)
 {
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w != win)
 			w->deleteEvent(eventID);
 }
@@ -499,11 +499,11 @@ void KAlarmMainWindow::deleteEvent(const QString& eventID, KAlarmMainWindow* win
 */
 void KAlarmMainWindow::deleteEvent(const QString& eventID)
 {
-	AlarmListViewItem* item = listView->getEntry(eventID);
+	AlarmListViewItem* item = mListView->getEntry(eventID);
 	if (item)
-		listView->deleteEntry(item, true);
+		mListView->deleteEntry(item, true);
 	else
-		listView->refresh();
+		mListView->refresh();
 }
 
 /******************************************************************************
@@ -511,7 +511,7 @@ void KAlarmMainWindow::deleteEvent(const QString& eventID)
 */
 void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAEvent& event, KAlarmMainWindow* win)
 {
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w != win)
 			w->undeleteEvent(oldEventID, event);
 }
@@ -521,10 +521,10 @@ void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAEvent& e
 */
 void KAlarmMainWindow::undeleteEvent(const QString& oldEventID, const KAEvent& event)
 {
-	AlarmListViewItem* item = listView->getEntry(oldEventID);
+	AlarmListViewItem* item = mListView->getEntry(oldEventID);
 	if (item)
-		listView->deleteEntry(item, true);
-	listView->addEntry(event, true);
+		mListView->deleteEntry(item, true);
+	mListView->addEntry(event, true);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -556,10 +556,10 @@ void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action,
 		theApp()->addEvent(event, win);
 		if (win)
 		{
-			AlarmListView* listView = win->listView;
-			AlarmListViewItem* item = listView->addEntry(event, true);
-			listView->clearSelection();
-			listView->setSelected(item, true);
+			AlarmListView* mListView = win->mListView;
+			AlarmListViewItem* item = mListView->addEntry(event, true);
+			mListView->clearSelection();
+			mListView->setSelected(item, true);
 		}
 
 		alarmWarnings(&editDlg, event);
@@ -572,10 +572,10 @@ void KAlarmMainWindow::executeNew(KAlarmMainWindow* win, KAEvent::Action action,
 */
 void KAlarmMainWindow::slotCopy()
 {
-	AlarmListViewItem* item = listView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
 	{
-		KAEvent event = listView->getEvent(item);
+		KAEvent event = mListView->getEvent(item);
 		EditAlarmDlg editDlg(i18n("New Alarm"), this, "editDlg", &event);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
@@ -584,9 +584,9 @@ void KAlarmMainWindow::slotCopy()
 
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(event, this);
-			item = listView->addEntry(event, true);
-			listView->clearSelection();
-			listView->setSelected(item, true);
+			item = mListView->addEntry(event, true);
+			mListView->clearSelection();
+			mListView->setSelected(item, true);
 
 			alarmWarnings(&editDlg, event);
 		}
@@ -599,10 +599,10 @@ void KAlarmMainWindow::slotCopy()
 */
 void KAlarmMainWindow::slotModify()
 {
-	AlarmListViewItem* item = listView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
 	{
-		KAEvent event = listView->getEvent(item);
+		KAEvent event = mListView->getEvent(item);
 		EditAlarmDlg editDlg(i18n("Edit Alarm"), this, "editDlg", &event);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
@@ -611,10 +611,10 @@ void KAlarmMainWindow::slotModify()
 
 			// Update the event in the displays and in the calendar file
 			theApp()->modifyEvent(event, newEvent, this);
-			item = listView->getEntry(event.id());   // in case item deleted since dialog was shown
-			item = listView->updateEntry(item, newEvent, true);
-			listView->clearSelection();
-			listView->setSelected(item, true);
+			item = mListView->getEntry(event.id());   // in case item deleted since dialog was shown
+			item = mListView->updateEntry(item, newEvent, true);
+			mListView->clearSelection();
+			mListView->setSelected(item, true);
 
 			alarmWarnings(&editDlg, newEvent);
 		}
@@ -627,10 +627,10 @@ void KAlarmMainWindow::slotModify()
 */
 void KAlarmMainWindow::slotView()
 {
-	AlarmListViewItem* item = listView->singleSelectedItem();
+	AlarmListViewItem* item = mListView->singleSelectedItem();
 	if (item)
 	{
-		KAEvent event = listView->getEvent(item);
+		KAEvent event = mListView->getEvent(item);
 		EditAlarmDlg editDlg((event.expired() ? i18n("Expired Alarm") : i18n("View Alarm")),
 		                     this, "editDlg", &event, true);
 		editDlg.exec();
@@ -643,7 +643,7 @@ void KAlarmMainWindow::slotView()
 */
 void KAlarmMainWindow::slotDelete()
 {
-	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	QPtrList<AlarmListViewItem> items = mListView->selectedItems();
 	if (Preferences::instance()->confirmAlarmDeletion())
 	{
 		int n = items.count();
@@ -655,12 +655,12 @@ void KAlarmMainWindow::slotDelete()
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
 		AlarmListViewItem* item = it.current();
-		KAEvent event = listView->getEvent(item);
+		KAEvent event = mListView->getEvent(item);
 
 		// Delete the event from the displays
 		theApp()->deleteEvent(event, this);
-		item = listView->getEntry(event.id());   // in case item deleted since dialog was shown
-		listView->deleteEntry(item, true);
+		item = mListView->getEntry(event.id());   // in case item deleted since dialog was shown
+		mListView->deleteEntry(item, true);
 	}
 }
 
@@ -670,18 +670,18 @@ void KAlarmMainWindow::slotDelete()
 */
 void KAlarmMainWindow::slotUndelete()
 {
-	QPtrList<AlarmListViewItem> items = listView->selectedItems();
-	listView->clearSelection();
+	QPtrList<AlarmListViewItem> items = mListView->selectedItems();
+	mListView->clearSelection();
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
 		AlarmListViewItem* item = it.current();
-		KAEvent event = listView->getEvent(item);
+		KAEvent event = mListView->getEvent(item);
 		event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 		// Add the alarm to the displayed lists and to the calendar file
 		theApp()->undeleteEvent(event, this);
-		item = listView->updateEntry(item, event, true);
-		listView->setSelected(item, true);
+		item = mListView->updateEntry(item, event, true);
+		mListView->setSelected(item, true);
 	}
 }
 
@@ -698,7 +698,7 @@ void KAlarmMainWindow::slotShowTime()
 		mShowTimeTo = true;
 		mViewMenu->setItemChecked(mShowTimeToId, mShowTimeTo);
 	}
-	listView->selectTimeColumns(mShowTime, mShowTimeTo);
+	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 }
 
 /******************************************************************************
@@ -714,7 +714,7 @@ void KAlarmMainWindow::slotShowTimeTo()
 		mShowTime = true;
 		mViewMenu->setItemChecked(mShowTimeId, mShowTime);
 	}
-	listView->selectTimeColumns(mShowTime, mShowTimeTo);
+	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	setUpdateTimer();
 }
 
@@ -725,8 +725,8 @@ void KAlarmMainWindow::slotShowExpired()
 {
 	mShowExpired = !mShowExpired;
 	mViewMenu->setItemChecked(mShowExpiredId, mShowExpired);
-	listView->showExpired(mShowExpired);
-	listView->refresh();
+	mListView->showExpired(mShowExpired);
+	mListView->refresh();
 }
 
 /******************************************************************************
@@ -739,13 +739,13 @@ void KAlarmMainWindow::slotBirthdays()
 	if (dlg->exec() == QDialog::Accepted)
 	{
 		QValueList<KAEvent> events = dlg->events();
-		listView->clearSelection();
+		mListView->clearSelection();
 		for (QValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
 		{
 			// Add the alarm to the displayed lists and to the calendar file
 			theApp()->addEvent(*ev, this);
-			AlarmListViewItem* item = listView->addEntry(*ev, true);
-			listView->setSelected(item, true);
+			AlarmListViewItem* item = mListView->addEntry(*ev, true);
+			mListView->setSelected(item, true);
 		}
 	}
 	delete dlg;
@@ -767,13 +767,13 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 void KAlarmMainWindow::updateTrayIconAction()
 {
 	if (theApp()->wantRunInSystemTray())
-;//		actionToggleTrayIcon->unplug(mViewMenu);
+;//		mActionToggleTrayIcon->unplug(mViewMenu);
 	else
 	{
-//		actionToggleTrayIcon->plug(mViewMenu);
+//		mActionToggleTrayIcon->plug(mViewMenu);
 //		mShowTrayId = mViewMenu->idAt(1);
 	}
-	actionToggleTrayIcon->setEnabled(!theApp()->wantRunInSystemTray());
+	mActionToggleTrayIcon->setEnabled(!theApp()->wantRunInSystemTray());
 	mViewMenu->setItemChecked(mShowTrayId, theApp()->trayIconDisplayed());
 }
 
@@ -832,14 +832,14 @@ void KAlarmMainWindow::closeEvent(QCloseEvent* ce)
 */
 void KAlarmMainWindow::slotDeletion()
 {
-	if (!listView->selectedCount())
+	if (!mListView->selectedCount())
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotDeletion(true)\n";
-		actionCopy->setEnabled(false);
-		actionModify->setEnabled(false);
-		actionView->setEnabled(false);
-		actionDelete->setEnabled(false);
-		actionUndelete->setEnabled(false);
+		mActionCopy->setEnabled(false);
+		mActionModify->setEnabled(false);
+		mActionView->setEnabled(false);
+		mActionDelete->setEnabled(false);
+		mActionUndelete->setEnabled(false);
 	}
 }
 
@@ -961,22 +961,22 @@ QString KAlarmMainWindow::emailSubject(const QString& text)
 void KAlarmMainWindow::slotSelection()
 {
 	// Find which item has been selected, and whether more than one is selected
-	QPtrList<AlarmListViewItem> items = listView->selectedItems();
+	QPtrList<AlarmListViewItem> items = mListView->selectedItems();
 	int count = items.count();
 	AlarmListViewItem* item = (count == 1) ? items.first() : 0;
 	bool allExpired = true;
 	for (QPtrListIterator<AlarmListViewItem> it(items);  it.current();  ++it)
 	{
-		if (!listView->expired(it.current()))
+		if (!mListView->expired(it.current()))
 			allExpired = false;
 	}
 
 	kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";
-	actionCopy->setEnabled(count == 1);
-	actionModify->setEnabled(item && !listView->expired(item));
-	actionView->setEnabled(count == 1);
-	actionDelete->setEnabled(count);
-	actionUndelete->setEnabled(count && allExpired);
+	mActionCopy->setEnabled(count == 1);
+	mActionModify->setEnabled(item && !mListView->expired(item));
+	mActionView->setEnabled(count == 1);
+	mActionDelete->setEnabled(count);
+	mActionUndelete->setEnabled(count && allExpired);
 }
 
 /******************************************************************************
@@ -992,26 +992,26 @@ void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const Q
 		QPopupMenu* menu = new QPopupMenu(this, "ListContextMenu");
 		if (item)
 		{
-			actionCopy->plug(menu);
-			actionModify->plug(menu);
-			actionView->plug(menu);
-			actionDelete->plug(menu);
+			mActionCopy->plug(menu);
+			mActionModify->plug(menu);
+			mActionView->plug(menu);
+			mActionDelete->plug(menu);
 			if (mShowExpired)
-				actionUndelete->plug(menu);
+				mActionUndelete->plug(menu);
 		}
 		else
-			actionNew->plug(menu);
+			mActionNew->plug(menu);
 		menu->exec(pt);
 	}
 	else if (!item)
 	{
 		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(left)\n";
-		listView->clearSelection();
-		actionCopy->setEnabled(false);
-		actionModify->setEnabled(false);
-		actionView->setEnabled(false);
-		actionDelete->setEnabled(false);
-		actionUndelete->setEnabled(false);
+		mListView->clearSelection();
+		mActionCopy->setEnabled(false);
+		mActionModify->setEnabled(false);
+		mActionView->setEnabled(false);
+		mActionDelete->setEnabled(false);
+		mActionUndelete->setEnabled(false);
 	}
 }
 
@@ -1024,7 +1024,7 @@ void KAlarmMainWindow::slotDoubleClicked(QListViewItem* item)
 	kdDebug(5950) << "KAlarmMainWindow::slotDoubleClicked()\n";
 	if (item)
 	{
-		if (listView->expired((AlarmListViewItem*)item))
+		if (mListView->expired((AlarmListViewItem*)item))
 			slotView();
 		else
 			slotModify();
@@ -1104,7 +1104,7 @@ KAlarmMainWindow* KAlarmMainWindow::toggleWindow(KAlarmMainWindow* win)
 */
 bool KAlarmMainWindow::findWindow(KAlarmMainWindow* win)
 {
-	for (KAlarmMainWindow* w = windowList.first();  w;  w = windowList.next())
+	for (KAlarmMainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w == win)
 			return true;
 	return false;

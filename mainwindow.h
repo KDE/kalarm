@@ -60,8 +60,8 @@ class KAlarmMainWindow : public MainWindowBase
 		static QString emailSubject(const QString&);
 		static KAlarmMainWindow* toggleWindow(KAlarmMainWindow*);
 		static KAlarmMainWindow* mainMainWindow();
-		static KAlarmMainWindow* firstWindow()      { return windowList.first(); }
-		static int               count()            { return windowList.count(); }
+		static KAlarmMainWindow* firstWindow()      { return mWindowList.first(); }
+		static int               count()            { return mWindowList.count(); }
 
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);
@@ -105,20 +105,20 @@ class KAlarmMainWindow : public MainWindowBase
 		static void    alarmWarnings(QWidget* parent, const KAEvent&);
 		static bool    findWindow(KAlarmMainWindow*);
 
-		static QPtrList<KAlarmMainWindow> windowList;  // active main windows
-		AlarmListView* listView;
-		KAction*       actionNew;
-		KAction*       actionCopy;
-		KAction*       actionModify;
-		KAction*       actionView;
-		KAction*       actionDelete;
-		KAction*       actionUndelete;
-		KAction*       actionToggleTrayIcon;
-		KAction*       actionRefreshAlarms;
-		KAction*       actionShowTime;
-		KAction*       actionShowTimeTo;
-		KAction*       actionShowExpired;
-		KAction*       actionQuit;
+		static QPtrList<KAlarmMainWindow> mWindowList;  // active main windows
+		AlarmListView* mListView;
+		KAction*       mActionNew;
+		KAction*       mActionCopy;
+		KAction*       mActionModify;
+		KAction*       mActionView;
+		KAction*       mActionDelete;
+		KAction*       mActionUndelete;
+		KAction*       mActionToggleTrayIcon;
+		KAction*       mActionRefreshAlarms;
+		KAction*       mActionShowTime;
+		KAction*       mActionShowTimeTo;
+		KAction*       mActionShowExpired;
+		KAction*       mActionQuit;
 		int            mShowTimeId;
 		int            mShowTimeToId;
 		int            mShowExpiredId;
