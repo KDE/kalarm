@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ class AlarmCalendar : public QObject
 		KCal::Event::List     events()                            { return mCalendar->events(); }
 		KCal::Event::List     events(const QDate& d, bool sorted = false) { return mCalendar->events(d, sorted); }
 		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to);
-		KCal::Event*          addEvent(const KAEvent&, bool useEventID = false);
+		KCal::Event*          addEvent(KAEvent&, bool useEventID = false);
 		void                  updateEvent(const KAEvent&);
 		void                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
@@ -74,6 +74,7 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* expiredCalendarOpen()   { return calendarOpen(EXPIRED); }
 		static AlarmCalendar* displayCalendarOpen()   { return calendarOpen(DISPLAY); }
 		static AlarmCalendar* templateCalendarOpen()  { return calendarOpen(TEMPLATE); }
+		static const KCal::Event* getEvent(const QString& uniqueID);
 
 		enum CalID { ACTIVE, EXPIRED, DISPLAY, TEMPLATE, NCALS };
 

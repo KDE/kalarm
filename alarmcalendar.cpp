@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -188,6 +188,29 @@ AlarmCalendar* AlarmCalendar::calendarOpen(CalID id)
 	return 0;
 }
 
+/******************************************************************************
+* Find and return the event with the specified ID.
+* The calendar searched is determined by the calendar identifier in the ID.
+*/
+const KCal::Event* AlarmCalendar::getEvent(const QString& uniqueID)
+{
+	if (uniqueID.isEmpty())
+		return 0;
+	CalID calID;
+	switch (KAEvent::uidStatus(uniqueID))
+	{
+		case KAEvent::ACTIVE:      calID = ACTIVE;  break;
+		case KAEvent::TEMPLATE:    calID = TEMPLATE;  break;
+		case KAEvent::EXPIRED:     calID = EXPIRED;  break;
+		case KAEvent::DISPLAYING:  calID = DISPLAY;  break;
+		default:
+			return 0;
+	}
+	AlarmCalendar* cal = calendarOpen(calID);
+	if (!cal)
+		return 0;
+	return cal->event(uniqueID);
+}
 
 
 /******************************************************************************
@@ -573,9 +596,10 @@ void AlarmCalendar::startPurgeTimer()
 * Add the specified event to the calendar.
 * If it is the active calendar and 'useEventID' is false, a new event ID is
 * created. In all other cases, the event ID is taken from 'event'.
+* 'event' is updated with the actual event ID.
 * Reply = the KCal::Event as written to the calendar.
 */
-Event* AlarmCalendar::addEvent(const KAEvent& event, bool useEventID)
+Event* AlarmCalendar::addEvent(KAEvent& event, bool useEventID)
 {
 	if (!mOpen)
 		return 0;
@@ -586,7 +610,7 @@ Event* AlarmCalendar::addEvent(const KAEvent& event, bool useEventID)
 		if (id.isEmpty())
 			useEventID = false;
 		if (!useEventID)
-			const_cast<KAEvent&>(event).setEventID(kcalEvent->uid());
+			event.setEventID(kcalEvent->uid());
 	}
 	else
 	{
@@ -595,7 +619,11 @@ Event* AlarmCalendar::addEvent(const KAEvent& event, bool useEventID)
 		useEventID = true;
 	}
 	if (useEventID)
-		kcalEvent->setUid(KAEvent::uid(id, mType));
+	{
+		id = KAEvent::uid(id, mType);
+		event.setEventID(id);
+		kcalEvent->setUid(id);
+	}
 	event.updateKCalEvent(*kcalEvent, false, (mType == KAEvent::EXPIRED), true);
 	mCalendar->addEvent(kcalEvent);
 	event.clearUpdated();

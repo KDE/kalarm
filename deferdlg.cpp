@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include <libkcal/event.h>
 #include <libkcal/recurrence.h>
 
+#include "alarmcalendar.h"
 #include "alarmevent.h"
 #include "alarmtimewidget.h"
 #include "datetime.h"
@@ -74,7 +75,7 @@ void DeferAlarmDlg::slotOk()
 	if (!mLimitEventID.isEmpty())
 	{
 		// Get the event being deferred
-		const KCal::Event* kcalEvent = KAlarm::getEvent(mLimitEventID);
+		const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mLimitEventID);
 		if (kcalEvent)
 		{
 			KAEvent event(*kcalEvent);
@@ -140,7 +141,7 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 {
 	mLimitEventID = eventID;
-	const KCal::Event* kcalEvent = KAlarm::getEvent(mLimitEventID);
+	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mLimitEventID);
 	if (kcalEvent)
 	{
 		KAEvent event(*kcalEvent);
