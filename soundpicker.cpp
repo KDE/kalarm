@@ -122,7 +122,7 @@ void SoundPicker::slotPickFile()
 	{
 		if (mDefaultDir.isEmpty())
 			mDefaultDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
-		KURL url = KFileDialog::getOpenURL(mDefaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose a Sound File"));
+		KURL url = KFileDialog::getOpenURL(mDefaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose Sound File"));
 		if (!url.isEmpty())
 		{
 			mFile = url.prettyURL();
