@@ -356,6 +356,11 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 }
 
+QString TimeSpinBox::shiftWhatsThis()
+{
+        return i18n("\nPress the Shift key while clicking the spin buttons to adjust the time by a larger step (6 hours / 5 minutes).");
+}
+
 QTime TimeSpinBox::time() const
 {
 	return QTime(value() / 60, value() % 60);

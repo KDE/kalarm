@@ -84,6 +84,7 @@ class TimeSpinBox : public SpinBox2
 		bool            valid() const        { return !invalid; }
 		QTime           time() const;
 		void            setValid(bool);
+		static QString  shiftWhatsThis();
 	public slots:
 		virtual void    setValue(int value);
 		virtual void    stepUp();
