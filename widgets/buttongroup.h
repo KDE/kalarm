@@ -1,7 +1,7 @@
 /*
  *  buttongroup.h  -  QButtonGroup with an extra signal and KDE 2 compatibility
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,11 @@
 
 #include <qbuttongroup.h>
 
+/*=============================================================================
+= Class ButtonGroup
+= Emits the signal buttonSet(int) whenever any of its buttons changes state,
+= for whatever reason.
+=============================================================================*/
 
 class ButtonGroup : public QButtonGroup
 {
@@ -31,16 +36,19 @@ class ButtonGroup : public QButtonGroup
 		ButtonGroup(const QString& title, QWidget* parent, const char* name = 0);
 		ButtonGroup(int strips, Qt::Orientation, QWidget* parent, const char* name = 0);
 		ButtonGroup(int strips, Qt::Orientation, const QString& title, QWidget* parent, const char* name = 0);
+		void         insert(QButton*, int id = -1);
 		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit buttonSet(id); }
 #if QT_VERSION < 300
-		void setInsideMargin(int) { }
+		void         setInsideMargin(int) { }
 	protected:
 		virtual void childEvent(QChildEvent*);
 	private:
-		int  defaultAlignment;
+		int          defaultAlignment;
 #endif
+	private slots:
+		void         slotButtonToggled(bool);
 	signals:
-		void buttonSet(int id);
+		void         buttonSet(int id);
 };
 
 #endif // BUTTONGROUP_H

@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal and KDE 2 compatibility
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
+#include <qbutton.h>
 #include <kdialog.h>
 
 #include "buttongroup.moc"
@@ -59,6 +60,24 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& titl
 #endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+}
+
+/******************************************************************************
+ * Inserts a button in the group.
+ * This should really be a virtual method...
+ */
+void ButtonGroup::insert(QButton* button, int id)
+{
+	QButtonGroup::insert(button, id);
+	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
+}
+
+/******************************************************************************
+ * Called when one of the member buttons is toggled.
+ */
+void ButtonGroup::slotButtonToggled(bool)
+{
+	emit buttonSet(id(selected()));
 }
 
 #if QT_VERSION < 300
