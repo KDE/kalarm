@@ -49,7 +49,6 @@
 #include "alarmlistview.h"
 #include "editdlg.h"
 #include "daemon.h"
-#include "daemongui.h"
 #include "dcophandler.h"
 #include "functions.h"
 #include "kamail.h"
@@ -66,17 +65,18 @@
 int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
-static bool convInterval(QCString timeParam, KAEvent::RecurType&, int& timeInterval);
+static bool convInterval(QCString timeParam, KAEvent::RecurType&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
 * to be. This is calculated as the alarm daemon's check interval, plus a few
 * seconds leeway to cater for any timing irregularities.
 */
-static inline int maxLateness()
+static inline int maxLateness(int lateCancel)
 {
 	static const int LATENESS_LEEWAY = 5;
-	return Daemon::maxTimeSinceCheck() + LATENESS_LEEWAY;
+	int lc = (lateCancel >= 1) ? (lateCancel - 1)*60 : 0;
+	return Daemon::maxTimeSinceCheck() + LATENESS_LEEWAY + lc;
 }
 
 
@@ -93,7 +93,9 @@ KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mInitialised(false),
 	  mDcopHandler(new DcopHandler()),
-	  mDaemonGuiHandler(0),
+#ifdef OLD_DCOP
+	  mDcopHandlerOld(new DcopHandlerOld()),
+#endif
 	  mTrayWindow(0),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
@@ -401,6 +403,8 @@ int KAlarmApp::newInstance()
 				QColor    bgColour = Preferences::instance()->defaultBgColour();
 				QColor    fgColour = Preferences::instance()->defaultFgColour();
 				KCal::Recurrence recurrence(0);
+				int       repeatCount    = 0;
+				int       repeatInterval = 0;
 				if (args->isSet("color"))
 				{
 					// Background colour is specified
@@ -433,36 +437,35 @@ int KAlarmApp::newInstance()
 				else
 					alarmTime = QDateTime::currentDateTime();
 
-				if (args->isSet("recurrence"))
+				bool haveRecurrence = args->isSet("recurrence");
+				if (haveRecurrence)
 				{
 					if (args->isSet("login"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--recurrence")))
-					if (args->isSet("interval"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--recurrence")))
-					if (args->isSet("repeat"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")))
 					if (args->isSet("until"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
 					QCString rule = args->getOption("recurrence");
 					KCal::ICalFormat format;
 					format.fromString(&recurrence, QString::fromLocal8Bit((const char*)rule));
 				}
-				else if (args->isSet("interval"))
+				if (args->isSet("interval"))
 				{
 					// Repeat count is specified
-					int repeatCount;
+					int count;
 					if (args->isSet("login"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--interval")))
 					bool ok;
 					if (args->isSet("repeat"))
 					{
-						repeatCount = args->getOption("repeat").toInt(&ok);
-						if (!ok || !repeatCount || repeatCount < -1)
+						count = args->getOption("repeat").toInt(&ok);
+						if (!ok || !count || count < -1 || (count < 0 && haveRecurrence))
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat")))
 					}
+					else if (haveRecurrence)
+						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")))
 					else if (args->isSet("until"))
 					{
-						repeatCount = 0;
+						count = 0;
 						QCString dateTime = args->getOption("until");
 						if (!convWakeTime(dateTime, endTime, alarmNoTime))
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until")))
@@ -470,22 +473,32 @@ int KAlarmApp::newInstance()
 							USAGE(i18n("%1 earlier than %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--time")))
 					}
 					else
-						repeatCount = -1;
+						count = -1;
 
 					// Get the recurrence interval
-					int repeatInterval;
+					int interval;
 					KAEvent::RecurType recurType;
-					if (!convInterval(args->getOption("interval"), recurType, repeatInterval)
-					||  repeatInterval < 0)
+					if (!convInterval(args->getOption("interval"), recurType, interval, !haveRecurrence)
+					||  interval < 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
 					if (alarmNoTime  &&  recurType == KAEvent::MINUTELY)
 						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
-#ifdef SIMPLE_REP
-						USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));
-#endif
 
-					// Convert the recurrence parameters into a KCal::Recurrence
-					KAEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, DateTime(alarmTime, alarmNoTime), endTime);
+					if (haveRecurrence)
+					{
+						// There is a also a recurrence specified, so set up a simple repetition
+						int longestInterval = KAEvent::longestRecurrenceInterval(recurrence);
+						if (count * interval > longestInterval)
+							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));
+						repeatCount    = count;
+						repeatInterval = interval;
+					}
+					else
+					{
+						// There is no other recurrence specified, so convert the repetition
+						// parameters into a KCal::Recurrence
+						KAEvent::setRecurrence(recurrence, recurType, interval, count, DateTime(alarmTime, alarmNoTime), endTime);
+					}
 				}
 				else
 				{
@@ -554,15 +567,28 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("Invalid %1 parameter").arg(opt))
 				}
 
+				int lateCancel = 0;
+				if (args->isSet("late-cancel"))
+				{
+					KAEvent::RecurType recur;
+					bool ok = convInterval(args->getOption("late-cancel"), recur, lateCancel, false);
+					if (!ok  ||  lateCancel <= 0)
+						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("late-cancel")))
+				}
+				else if (args->isSet("auto-close"))
+					USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--auto-close")).arg(QString::fromLatin1("--late-cancel")))
+
 				int flags = KAEvent::DEFAULT_FONT;
 				if (args->isSet("ack-confirm"))
 					flags |= KAEvent::CONFIRM_ACK;
+				if (args->isSet("auto-close"))
+					flags |= KAEvent::AUTO_CLOSE;
 				if (args->isSet("beep"))
 					flags |= KAEvent::BEEP;
+				if (args->isSet("disable"))
+					flags |= KAEvent::DISABLED;
 				if (audioRepeat)
 					flags |= KAEvent::REPEAT_SOUND;
-				if (args->isSet("late-cancel"))
-					flags |= KAEvent::LATE_CANCEL;
 				if (args->isSet("login"))
 					flags |= KAEvent::REPEAT_AT_LOGIN;
 				if (args->isSet("bcc"))
@@ -577,8 +603,9 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (!scheduleEvent(action, alMessage, alarmTime, flags, bgColour, fgColour, QFont(), audioFile,
-				                   audioVolume, reminderMinutes, recurrence, alAddresses, alSubject, alAttachments))
+				if (!scheduleEvent(action, alMessage, alarmTime, lateCancel, flags, bgColour, fgColour, QFont(), audioFile,
+				                   audioVolume, reminderMinutes, recurrence, repeatInterval, repeatCount,
+				                   alAddresses, alSubject, alAttachments))
 				{
 					exitCode = 1;
 					break;
@@ -592,6 +619,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--ack-confirm ");
 				if (args->isSet("attach"))
 					usage += QString::fromLatin1("--attach ");
+				if (args->isSet("auto-close"))
+					usage += QString::fromLatin1("--auto-close ");
 				if (args->isSet("bcc"))
 					usage += QString::fromLatin1("--bcc ");
 				if (args->isSet("beep"))
@@ -600,6 +629,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--color ");
 				if (args->isSet("colorfg"))
 					usage += QString::fromLatin1("--colorfg ");
+				if (args->isSet("disable"))
+					usage += QString::fromLatin1("--disable ");
 				if (args->isSet("late-cancel"))
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
@@ -814,6 +845,7 @@ void KAlarmApp::processQueue()
 			DcopQEntry& entry = mDcopQueue.first();
 			if (entry.eventId.isEmpty())
 			{
+				// It's a new alarm
 				switch (entry.function)
 				{
 				case EVENT_TRIGGER:
@@ -1080,23 +1112,23 @@ bool KAlarmApp::wantRunInSystemTray() const
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const QDateTime& dateTime,
-                              int flags, const QColor& bg, const QColor& fg, const QFont& font,
+                              int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
-                              const KCal::Recurrence& recurrence, const EmailAddressList& mailAddresses,
-                              const QString& mailSubject, const QStringList& mailAttachments)
+                              const KCal::Recurrence& recurrence, int repeatInterval, int repeatCount,
+                              const EmailAddressList& mailAddresses, const QString& mailSubject,
+                              const QStringList& mailAttachments)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;
 	if (!dateTime.isValid())
 		return false;
 	QDateTime now = QDateTime::currentDateTime();
-	if ((flags & KAEvent::LATE_CANCEL)  &&  dateTime < now.addSecs(-maxLateness()))
+	if (lateCancel  &&  dateTime < now.addSecs(-maxLateness(lateCancel)))
 		return true;               // alarm time was already expired too long ago
 	QDateTime alarmTime = dateTime;
 	// Round down to the nearest minute to avoid scheduling being messed up
 	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
-	bool display = (alarmTime <= now);
 
-	KAEvent event(alarmTime, text, bg, fg, font, action, flags);
+	KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags);
 	if (reminderMinutes)
 	{
 		bool onceOnly = (reminderMinutes < 0);
@@ -1108,17 +1140,23 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 		event.setEmail(mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
-	if (display)
+	event.setRepetition(repeatInterval, repeatCount - 1);
+	if (alarmTime <= now)
 	{
-		// Alarm is due for display already
+		// Alarm is due for display already.
+		// First execute it once without adding it to the calendar file.
 		if (!mInitialised)
 			mDcopQueue.append(DcopQEntry(event, EVENT_TRIGGER));
 		else
 			execAlarm(event, event.firstAlarm(), false);
+		// If it's a recurring alarm, reschedule it for its next occurrence
 		if (!event.recurs()
-		||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
+		||  event.setNextOccurrence(now, true) == KAEvent::NO_OCCURRENCE)
 			return true;
+		// It has recurrences in the future
 	}
+
+	// Queue the alarm for insertion into the calendar file
 	mDcopQueue.append(DcopQEntry(event));
 	if (mInitialised)
 		QTimer::singleShot(0, this, SLOT(processQueue()));
@@ -1174,6 +1212,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_HANDLE:     // handle it if it's due
 		{
 			QDateTime now = QDateTime::currentDateTime();
+			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;
 			bool displayAlarmValid = false;
 			KAAlarm displayAlarm;
@@ -1181,10 +1220,22 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			// Note that the main alarm is fetched before any other alarms.
 			for (KAAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
 			{
-				// Check whether this alarm is due yet
+				if (alarm.deferred()  &&  event.repeatCount()
+				&&  repeatDT.isValid()  &&  alarm.dateTime() > repeatDT)
+				{
+					// This deferral of a repeated alarm is later than the last occurrence
+					// of the main alarm, so use the deferral alarm instead.
+					// If the deferral is not yet due, this prevents the main alarm being
+					// triggered repeatedly. If the deferral is due, this triggers it
+					// in preference to the main alarm.
+					displayAlarm        = KAAlarm();
+					displayAlarmValid   = false;
+					updateCalAndDisplay = false;
+				}
 				int secs = alarm.dateTime().secsTo(now);
 				if (secs < 0)
 				{
+					// This alarm is not due yet
 					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": not due\n";
 					continue;
 				}
@@ -1195,7 +1246,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// (The alarm daemon will immediately notify that it is due
 					//  since it is set up with a time in the past.)
 					kdDebug(5950) << "KAlarmApp::handleEvent(): REPEAT_AT_LOGIN\n";
-					if (secs < maxLateness())
+					if (secs < maxLateness(1))
 						continue;
 
 					// Check if the main alarm is already being displayed.
@@ -1206,33 +1257,45 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// Set the time to be shown if it's a display alarm
 					alarm.setTime(now);
 				}
+				if (event.repeatCount()  &&  alarm.type() == KAAlarm::MAIN_ALARM)
+				{
+					// Alarm has a simple repetition. Since its time in the calendr remains the same
+					// until its repetitions are finished, adjust its time to the correct repetition
+					KAEvent::OccurType type = event.previousOccurrence(now.addSecs(1), repeatDT, true);
+					if (type & KAEvent::OCCURRENCE_REPEAT)
+					{
+						alarm.setTime(repeatDT);
+						secs = repeatDT.secsTo(now);
+					}
+				}
 				if (alarm.lateCancel())
 				{
-					// Alarm is due, and it is to be cancelled if late.
+					// Alarm is due, and it is to be cancelled if too late.
 					kdDebug(5950) << "KAlarmApp::handleEvent(): LATE_CANCEL\n";
 					bool late = false;
 					bool cancel = false;
 					if (alarm.dateTime().isDateOnly())
 					{
-						// The alarm has no time, so cancel it if its date is past
-						QDateTime limit(alarm.date().addDays(1), Preferences::instance()->startOfDay());
+						// The alarm has no time, so cancel it if its date is too far past
+						int maxlate = alarm.lateCancel() / 1440;    // maximum lateness in days
+						QDateTime limit(alarm.date().addDays(maxlate + 1), Preferences::instance()->startOfDay());
 						if (now >= limit)
 						{
 							// It's too late to display the scheduled occurrence.
 							// Find the last previous occurrence of the alarm.
 							DateTime next;
-							KAEvent::OccurType type = event.previousOccurrence(now, next);
-							switch (type)
+							KAEvent::OccurType type = event.previousOccurrence(now, next, true);
+							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
 								case KAEvent::FIRST_OCCURRENCE:
 								case KAEvent::RECURRENCE_DATE:
 								case KAEvent::RECURRENCE_DATE_TIME:
-								case KAEvent::LAST_OCCURRENCE:
-									limit.setDate(next.date().addDays(1));
+								case KAEvent::LAST_RECURRENCE:
+									limit.setDate(next.date().addDays(maxlate + 1));
 									limit.setTime(Preferences::instance()->startOfDay());
 									if (now >= limit)
 									{
-										if (type == KAEvent::LAST_OCCURRENCE)
+										if (type == KAEvent::LAST_RECURRENCE)
 											cancel = true;
 										else
 											late = true;
@@ -1248,22 +1311,22 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					else
 					{
 						// The alarm is timed. Allow it to be just over a minute late before cancelling it.
-						int maxlate = maxLateness();
+						int maxlate = maxLateness(alarm.lateCancel());
 						if (secs > maxlate)
 						{
 							// It's over the maximum interval late.
-							// Find the last previous occurrence of the alarm.
+							// Find the most recent occurrence of the alarm.
 							DateTime next;
-							KAEvent::OccurType type = event.previousOccurrence(now, next);
-							switch (type)
+							KAEvent::OccurType type = event.previousOccurrence(now, next, true);
+							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
 								case KAEvent::FIRST_OCCURRENCE:
 								case KAEvent::RECURRENCE_DATE:
 								case KAEvent::RECURRENCE_DATE_TIME:
-								case KAEvent::LAST_OCCURRENCE:
+								case KAEvent::LAST_RECURRENCE:
 									if (next.dateTime().secsTo(now) > maxlate)
 									{
-										if (type == KAEvent::LAST_OCCURRENCE)
+										if (type == KAEvent::LAST_RECURRENCE)
 											cancel = true;
 										else
 											late = true;
@@ -1377,14 +1440,15 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 }
 
 /******************************************************************************
-* Reschedule the alarm for its next repetition. If none remain, delete it.
+* Reschedule the alarm for its next recurrence. If none remain, delete it.
 * If the alarm is deleted and it is the last alarm for its event, the event is
 * removed from the calendar file and from every main window instance.
 */
 void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay)
 {
 	kdDebug(5950) << "KAlarmApp::rescheduleAlarm()" << endl;
-	bool update = false;
+	bool update        = false;
+	bool updateDisplay = false;
 	if (alarm.reminder()  ||  alarm.deferred())
 	{
 		// It's an advance warning alarm or an extra deferred alarm, so delete it
@@ -1399,34 +1463,51 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	else
 	{
-		switch (event.setNextOccurrence(QDateTime::currentDateTime()))
+		QDateTime now = QDateTime::currentDateTime();
+		if (event.repeatCount()  &&  event.mainEndRepeatTime() > now)
+			updateDisplay = true;    // there are more repetitions to come, so just update time in alarm list
+		else
 		{
-			case KAEvent::NO_OCCURRENCE:
-				// All repetitions are finished, so cancel the event
-				cancelAlarm(event, alarm.type(), updateCalAndDisplay);
-				break;
-			case KAEvent::RECURRENCE_DATE:
-			case KAEvent::RECURRENCE_DATE_TIME:
-			case KAEvent::LAST_OCCURRENCE:
-				// The event is due by now and repetitions still remain, so rewrite the event
-				if (updateCalAndDisplay)
-					update = true;
-				else
-					event.setUpdated();    // note that the calendar file needs to be updated
-				break;
-			case KAEvent::FIRST_OCCURRENCE:
-				// The first occurrence is still due?!?, so don't do anything
-			default:
-				break;
+			// The alarm's repetitions (if any) are finished.
+			// Reschedule it for its next recurrence.
+			switch (event.setNextOccurrence(now))
+			{
+				case KAEvent::NO_OCCURRENCE:
+					// All repetitions are finished, so cancel the event
+					cancelAlarm(event, alarm.type(), updateCalAndDisplay);
+					break;
+				case KAEvent::RECURRENCE_DATE:
+				case KAEvent::RECURRENCE_DATE_TIME:
+				case KAEvent::LAST_RECURRENCE:
+					// The event is due by now and repetitions still remain, so rewrite the event
+					if (updateCalAndDisplay)
+						update = true;
+					else
+					{
+						event.cancelCancelledDeferral();
+						event.setUpdated();    // note that the calendar file needs to be updated
+					}
+					break;
+				case KAEvent::FIRST_OCCURRENCE:
+					// The first occurrence is still due?!?, so don't do anything
+				default:
+					break;
+			}
 		}
 		if (event.deferred())
 		{
+			// Just in case there's also a deferred alarm, ensure it's removed
 			event.removeExpiredAlarm(KAAlarm::DEFERRED_ALARM);
 			update = true;
 		}
 	}
 	if (update)
+	{
+		event.cancelCancelledDeferral();
 		KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
+	}
+	else if (updateDisplay)
+		AlarmListView::modifyEvent(event, 0);
 }
 
 /******************************************************************************
@@ -1436,6 +1517,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
 {
 	kdDebug(5950) << "KAlarmApp::cancelAlarm()" << endl;
+	event.cancelCancelledDeferral();
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the expired calendar file first.
@@ -1454,10 +1536,18 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
 *       != 0 if successful
-*       = 0 if an error message was output.
+*       = 0 if the alarm is disabled, or if an error message was output.
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
 {
+	if (!event.enabled())
+	{
+		// The event is disabled.
+		if (reschedule)
+			rescheduleAlarm(event, alarm, true);
+		return 0;
+	}
+
 	void* result = (void*)1;
 	event.setArchive();
 	switch (alarm.action())
@@ -1478,9 +1568,11 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 					return result;     // display the message after the command completes
 				// Error executing command - display the message even though it failed
 			}
-			if (!win
-			||  !win->hasDefer() && !alarm.repeatAtLogin()
-			||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
+			if (!event.enabled())
+				delete win;        // event is disabled - close its window
+			else if (!win
+			     ||  !win->hasDefer() && !alarm.repeatAtLogin()
+			     ||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
 			{
 				// Either there isn't already a message for this event,
 				// or there is a repeat-at-login message with no Defer
@@ -1637,7 +1729,7 @@ void KAlarmApp::setUpDcop()
 	if (!mInitialised)
 	{
 		mInitialised = true;      // we're now ready to handle DCOP calls
-		mDaemonGuiHandler = new DaemonGuiHandler();
+		Daemon::createDcopHandler();
 		QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
 	}
 }
@@ -1786,7 +1878,7 @@ static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& no
 *  Convert a time interval command line parameter.
 *  Reply = true if successful.
 */
-static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int& timeInterval)
+static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int& timeInterval, bool allowMonthYear)
 {
 	// Get the recurrence interval
 	bool ok = true;
@@ -1798,6 +1890,8 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 	switch (timeParam[length - 1])
 	{
 		case 'Y':
+			if (!allowMonthYear)
+				ok = false;
 			recurType = KAEvent::ANNUAL_DATE;
 			timeParam = timeParam.left(length - 1);
 			break;
@@ -1813,7 +1907,12 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 		{
 			int i = timeParam.find('H');
 			if (i < 0)
+			{
+				if (!allowMonthYear)
+					ok = false;
 				recurType = KAEvent::MONTHLY_DAY;
+				timeParam = timeParam.left(length - 1);
+			}
 			else
 			{
 				recurType = KAEvent::MINUTELY;
