@@ -52,7 +52,6 @@ class ComboBox;
 class RadioButton;
 class DateEdit;
 class TimeSpinBox;
-class TimePeriod;
 class ButtonGroup;
 class RecurFrequency;
 class KAEvent;

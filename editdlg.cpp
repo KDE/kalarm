@@ -84,7 +84,6 @@
 #include "specialactions.h"
 #include "spinbox.h"
 #include "templatepickdlg.h"
-#include "timeperiod.h"
 #include "timespinbox.h"
 #include "editdlg.moc"
 #include "editdlgprivate.moc"

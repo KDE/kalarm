@@ -52,7 +52,6 @@ class TimeSpinBox;
 class RadioButton;
 class PushButton;
 class CheckBox;
-class TimePeriod;
 class AlarmTimeWidget;
 class RecurrenceEdit;
 class SoundPicker;

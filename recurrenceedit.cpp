@@ -62,7 +62,6 @@
 #include "alarmtimewidget.h"
 #include "dateedit.h"
 #include "timespinbox.h"
-#include "timeperiod.h"
 #include "spinbox.h"
 #include "checkbox.h"
 #include "combobox.h"
