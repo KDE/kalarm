@@ -37,27 +37,39 @@ class TimePeriod : public QWidgetStack
 {
 		Q_OBJECT
 	public:
-		TimePeriod(bool readOnly, QWidget* parent, const char* name = 0);
+		explicit TimePeriod(QWidget* parent, const char* name = 0);
 		virtual ~TimePeriod()  { }
-		void          setRange(bool hourMinute, int minValue, int maxValue);
-		void          setCountSteps(int step, int shiftStep);
-		void          setHourMinuteSteps(int minuteStep, int minuteShiftStep, int hourStep, int hourShiftStep);
+		bool          isReadOnly() const             { return mReadOnly; }
+		void          setReadOnly(bool);
+		void          setUnitRange(int minValue, int maxValue);
+		void          setHourMinRange(int minValue, int maxValue);
+		void          setUnitSteps(int step, int shiftStep);
+		void          setHourMinSteps(int minuteStep, int minuteShiftStep, int hourStep, int hourShiftStep);
 		void          setSelectOnStep(bool sel);
-		void          setCurrent(bool hourMinute);
-		bool          current() const              { return mHourMinute; }
-		void          setValue(int count)          { setValue(mHourMinute, count); }
-		void          setValue(bool hourMinute, int count);
-		int           value() const                { return value(mHourMinute); }
-		int           value(bool hourMinute) const;
-		void          setWhatsThis(bool hourMinute, const QString& text);
+		void          showUnit(bool show = true)     { setShowing(!show); }
+		void          showHourMin(bool show = true)  { setShowing(show); }
+		bool          showingUnit() const            { return !mHourMinute; }
+		void          setValue(int count)            { setValue(mHourMinute, count); }
+		void          setUnitValue(int count)        { setValue(false, count); }
+		void          setHourMinValue(int minutes)   { setValue(true, minutes); }
+		int           value() const                  { return value(mHourMinute); }
+		int           unitValue() const              { return value(mHourMinute); }
+		int           hourMinValue() const           { return value(mHourMinute); }
+		void          setWhatsThis(const QString& unitText, const QString& hourMinText = QString::null);
+		void          setUnitWhatsThis(const QString&);
+		void          setHourMinWhatsThis(const QString&);
 		virtual QSize minimumSizeHint() const;
 		virtual QSize sizeHint() const;
 
 	private:
-		SpinBox*       mSpinBox;
-		TimeSpinBox*   mTimeSpinBox;
-		bool           mReadOnly;
-		bool           mHourMinute;
+		void          setShowing(bool hourMin);
+		void          setValue(bool hourMin, int count);
+		int           value(bool hourMin) const;
+
+		SpinBox*      mSpinBox;
+		TimeSpinBox*  mTimeSpinBox;
+		bool          mReadOnly;
+		bool          mHourMinute;
 };
 
 #endif // TIMEPERIOD_H

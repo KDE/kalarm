@@ -32,39 +32,49 @@
 #include "timeperiod.moc"
 
 
-TimePeriod::TimePeriod(bool readOnly, QWidget* parent, const char* name)
+TimePeriod::TimePeriod(QWidget* parent, const char* name)
 	: QWidgetStack(parent, name),
-	  mReadOnly(readOnly),
+	  mReadOnly(false),
 	  mHourMinute(true)
 {
 	mSpinBox = new SpinBox(this);
 	mSpinBox->setLineShiftStep(10);
 	mSpinBox->setSelectOnStep(false);
-	mSpinBox->setReadOnly(mReadOnly);
 	addWidget(mSpinBox, 0);
 
 	mTimeSpinBox = new TimeSpinBox(0, 99999, this);
-	mTimeSpinBox->setReadOnly(mReadOnly);
 	addWidget(mTimeSpinBox, 1);
 
-	setCurrent(false);   // initialise to show mSpinBox
+	showUnit();   // initialise to show mSpinBox
 }
 
-void TimePeriod::setRange(bool hourMinute, int minValue, int maxValue)
+void TimePeriod::setReadOnly(bool ro)
 {
-	if (hourMinute)
-		mTimeSpinBox->setRange(minValue, maxValue);
-	else
-		mSpinBox->setRange(minValue, maxValue);
+	if ((int)ro != (int)mReadOnly)
+	{
+		mReadOnly = ro;
+		mSpinBox->setReadOnly(ro);
+		mTimeSpinBox->setReadOnly(ro);
+	}
 }
 
-void TimePeriod::setCountSteps(int step, int shiftStep)
+void TimePeriod::setUnitRange(int minValue, int maxValue)
+{
+	mSpinBox->setRange(minValue, maxValue);
+}
+
+void TimePeriod::setHourMinRange(int minValue, int maxValue)
+{
+	mTimeSpinBox->setRange(minValue, maxValue);
+}
+
+void TimePeriod::setUnitSteps(int step, int shiftStep)
 {
 	mSpinBox->setLineStep(step);
 	mSpinBox->setLineShiftStep(shiftStep);
 }
 
-void TimePeriod::setHourMinuteSteps(int minuteStep, int minuteShiftStep, int hourStep, int hourShiftStep)
+void TimePeriod::setHourMinSteps(int minuteStep, int minuteShiftStep, int hourStep, int hourShiftStep)
 {
 	mTimeSpinBox->setSteps(minuteStep, hourStep);
 	mTimeSpinBox->setShiftSteps(minuteShiftStep, hourShiftStep);
@@ -73,12 +83,13 @@ void TimePeriod::setHourMinuteSteps(int minuteStep, int minuteShiftStep, int hou
 void TimePeriod::setSelectOnStep(bool sel)
 {
 	mSpinBox->setSelectOnStep(sel);
+	mTimeSpinBox->setSelectOnStep(sel);
 }
 
 /******************************************************************************
  * Set the currently displayed widget.
  */
-void TimePeriod::setCurrent(bool hourMinute)
+void TimePeriod::setShowing(bool hourMinute)
 {
 	if (hourMinute != mHourMinute)
 	{
@@ -112,12 +123,20 @@ int TimePeriod::value(bool hourMinute) const
 		return mSpinBox->value();
 }
 
-void TimePeriod::setWhatsThis(bool hourMinute, const QString& text)
+void TimePeriod::setWhatsThis(const QString& unitText, const QString& hourMinText)
 {
-        QWidget *wid;
-        if ( hourMinute ) wid = mTimeSpinBox;
-        else wid = mSpinBox;
-	QWhatsThis::add(wid, text);
+	QWhatsThis::add(mSpinBox, unitText);
+	QWhatsThis::add(mTimeSpinBox, (hourMinText.isNull() ? unitText : hourMinText));
+}
+
+void TimePeriod::setUnitWhatsThis(const QString& text)
+{
+	QWhatsThis::add(mSpinBox, text);
+}
+
+void TimePeriod::setHourMinWhatsThis(const QString& text)
+{
+	QWhatsThis::add(mTimeSpinBox, text);
 }
 
 QSize TimePeriod::sizeHint() const
