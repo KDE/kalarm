@@ -90,7 +90,7 @@ void KAlarmEvent::copy(const KAlarmEvent& event)
 	KAAlarmEventBase::copy(event);
 	mAudioFile               = event.mAudioFile;
 	mStartDateTime           = event.mStartDateTime;
-	mEndDateTime             = event.mEndDateTime;
+	mSaveDateTime            = event.mSaveDateTime;
 	mAtLoginDateTime         = event.mAtLoginDateTime;
 	mDeferralTime            = event.mDeferralTime;
 	mDisplayingTime          = event.mDisplayingTime;
@@ -119,9 +119,8 @@ void KAlarmEvent::copy(const KAlarmEvent& event)
 void KAlarmEvent::set(const Event& event)
 {
 	// Extract status from the event
-	mEventID  = event.uid();
-	mRevision = event.revision();
-	const QStringList& cats = event.categories();
+	mEventID                = event.uid();
+	mRevision               = event.revision();
 	mBeep                   = false;
 	mEmailBcc               = false;
 	mConfirmAck             = false;
@@ -130,6 +129,7 @@ void KAlarmEvent::set(const Event& event)
 	mReminderArchiveMinutes = 0;
 	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white
 	mDefaultFont            = true;
+	const QStringList& cats = event.categories();
 	for (unsigned int i = 0;  i < cats.count();  ++i)
 	{
 		if (cats[i] == CONFIRM_ACK_CATEGORY)
@@ -179,10 +179,10 @@ void KAlarmEvent::set(const Event& event)
 	mEmailSubject            = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
+	mAnyTime                 = event.doesFloat();
 	mStartDateTime           = event.dtStart();
 	mDateTime                = mStartDateTime;
-	mEndDateTime             = event.dtEnd();
-	mAnyTime                 = event.doesFloat();
+	mSaveDateTime            = event.created();
 	initRecur(false);
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
@@ -439,7 +439,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, const QFont& font, Action action, int flags)
 {
 	initRecur(false);
-	mStartDateTime = mEndDateTime = mDateTime = dateTime;
+	mStartDateTime = mDateTime = dateTime;
 	switch (action)
 	{
 		case MESSAGE:
@@ -626,6 +626,11 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	ev.setRevision(mRevision);
 	ev.clearAlarms();
 
+	// Ensure that the start date/time is suitable for use as the reference
+	// date/time for alarm time offsets.
+	if (mAnyTime)
+		const_cast<KAlarmEvent*>(this)->mStartDateTime.setTime(theApp()->preferences()->startOfDay());
+
 	QDateTime dtMain = original ? mStartDateTime : mDateTime;
 	if (!mMainExpired  ||  original)
 	{
@@ -766,7 +771,9 @@ bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 	}
 
 	ev.setDtStart(mStartDateTime);
-	ev.setDtEnd(mEndDateTime);
+	ev.setDtEnd(mStartDateTime);
+	if (mSaveDateTime.isValid())
+		ev.setCreated(mSaveDateTime);
 	ev.setFloats(mAnyTime);
 	ev.setReadOnly(readOnly);
 	return true;
@@ -782,10 +789,11 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const QDateTime& dt, const QStri
 	QStringList alltypes;
 	Alarm* alarm = event.newAlarm();
 	alarm->setEnabled(true);
-	if (dt.isValid()  &&  dt < mStartDateTime)
-		alarm->setOffset(mStartDateTime.secsTo(dt));
-	else
-		alarm->setTime(dt);
+	// Due to the RFC2445 specification:
+	// 1) Set the alarm time as an offset, because absolute alarm times must be stored as UTC.
+	// 2) Use an offset to DTEND because if the start time is date-only, an offset to DTSTART
+	//    would then be taken as an offset to 00:00:00 UTC.
+	alarm->setEndOffset(mStartDateTime.secsTo(dt));
 	switch (mActionType)
 	{
 		case T_FILE:
@@ -1716,8 +1724,7 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 		{
 			// It's an untimed event, so fix it
 			QPtrList<Alarm> alarms = event->alarms();
-			Alarm* reminderAlarm         = 0;
-			Alarm* reminderDeferralAlarm = 0;
+			Alarm* deferralAlarm = 0;
 			int adjustment = 0;
 			for (QPtrListIterator<Alarm> it(alarms);  it.current();  ++it)
 			{
@@ -1733,19 +1740,17 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 					changed = true;
 					break;
 				}
-				else if (data.type == KAlarmAlarm::REMINDER_ALARM)
-					reminderAlarm = &alarm;
-				else if (data.type == KAlarmAlarm::REMINDER_DEFERRAL_ALARM)
-					reminderDeferralAlarm = &alarm;
+				else if (data.type & KAlarmAlarm::DEFERRAL_ALARM)
+					deferralAlarm = &alarm;
 			}
-			if (adjustment)
+			if (adjustment  &&  deferralAlarm)
 			{
-				// Reminder alarms for untimed events are always
+				// Reminder alarms for untimed events are always untimed also.
+				// But deferred alarms may be timed.
 #warning "Check"
-				if (reminderAlarm  &&  reminderAlarm->hasTime())
-					reminderAlarm->setTime(reminderAlarm->time().addSecs(adjustment));
-				if (reminderDeferralAlarm  &&  !reminderDeferralAlarm->hasTime())
-					reminderDeferralAlarm->setOffset(reminderDeferralAlarm->offset().asSeconds() + adjustment);
+				int offset = deferralAlarm->endOffset().asSeconds();
+				if (offset % 3600*24 != 0)                              // check if it's timed
+					deferralAlarm->setEndOffset(offset + adjustment);   // yes, so adjust it
 			}
 		}
 	}
@@ -1781,6 +1786,7 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
+	QTime startOfDay = theApp()->preferences()->startOfDay();
 
 	QPtrList<Event> events = calendar.events();
 	for (Event* event = events.first();  event;  event = events.next())
@@ -1919,14 +1925,31 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 		{
 			/*
 			 * It's a KAlarm pre-0.9.2 calendar file.
+			 * For the expired calendar, set the CREATED time to the DTEND value.
+			 * Set the DTEND time to the DTSTART time.
+			 * Convert all alarm times to DTEND offsets.
 			 * For display alarms, convert the first unlabelled category to an
 			 * X-KDE-KALARM-FONTCOLOUR property.
 			 * Convert BEEP category into an audio alarm with no audio file.
 			 */
+			if (calendar.type() == EXPIRED)
+				event->setCreated(event->dtEnd());
+			QDateTime start = event->dtStart();
+			if (event->doesFloat())
+				start.setTime(startOfDay);
+			event->setDtEnd(start);
+
+			QPtrList<Alarm> alarms = event->alarms();
+			for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
+			{
+				Alarm* alarm = ia.current();
+				QDateTime dt = alarm->time();
+				alarm->setEndOffset(event->dtEnd().secsTo(dt));
+			}
+
 			QStringList cats = event->categories();
 			if (cats.count() > 0)
 			{
-				QPtrList<Alarm> alarms = event->alarms();
 				for (QPtrListIterator<Alarm> ia(alarms);  ia.current();  ++ia)
 				{
 					Alarm* alarm = ia.current();
@@ -1946,7 +1969,7 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 					Alarm* alarm = event->newAlarm();
 					alarm->setEnabled(true);
 					alarm->setAudioAlarm();
-					alarm->setTime(event->dtStart());    // default
+					QDateTime dt = event->dtStart();    // default
 
 					// Parse and order the alarms to know which one's date/time to use
 					AlarmMap alarmMap;
@@ -1954,12 +1977,10 @@ void KAlarmEvent::convertKCalEvents(AlarmCalendar& calendar)
 					AlarmMap::ConstIterator it = alarmMap.begin();
 					if (it != alarmMap.end())
 					{
-						const Alarm* al = it.data().alarm;
-						if (al->hasTime())
-							alarm->setTime(al->time());
-						else
-							alarm->setOffset(al->offset());
+						dt = it.data().alarm->time();
+						break;
 					}
+					alarm->setEndOffset(event->dtEnd().secsTo(dt));
 					break;
 				}
 			}
@@ -1976,7 +1997,7 @@ void KAlarmEvent::dumpDebug() const
 	KAAlarmEventBase::dumpDebug();
 	kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
 	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
-	kdDebug(5950) << "-- mEndDateTime:" << mEndDateTime.toString() << ":\n";
+	kdDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
 	if (mRepeatAtLogin)
 		kdDebug(5950) << "-- mAtLoginDateTime:" << mAtLoginDateTime.toString() << ":\n";
 	if (mReminderMinutes)
@@ -2189,10 +2210,6 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 {
 	QString command   = QString::null;
 	QString arguments = QString::null;
-	// This small state machine is used to parse "commandLine" in order
-	// to cut arguments at spaces, but also treat "..." and '...'
-	// as a single argument even if they contain spaces. Those simple
-	// and double quotes are also removed.
 	QChar quoteChar;
 	bool quoted = false;
 	uint posMax = commandLine.length();
@@ -2218,6 +2235,7 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 				case ';':
 				case '|':
 				case '<':
+				case '>':
 					done = !command.isEmpty();
 					break;
 				case '\'':
