@@ -286,7 +286,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	else
 	{
 		// Set the values to their defaults
-		if (!theApp()->noShellAccess())
+		if (theApp()->noShellAccess())
 			mCommandRadio->setEnabled(false);    // don't allow shell commands in kiosk mode
 		Preferences* preferences = theApp()->preferences();
 		mFontColourButton->setDefaultFont();
@@ -367,6 +367,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 
 	// Colour choice drop-down list
 	mBgColourChoose = createBgColourChooser(mReadOnly, mDisplayAlarmsFrame);
+	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(mBgColourChoose);
 
@@ -977,6 +978,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mFileBox->hide();
 		mFilePadding->hide();
 		mTextMessageEdit->show();
+		mFontColourButton->show();
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mTextMessageEdit->setFocus();
@@ -986,6 +988,7 @@ void EditAlarmDlg::slotAlarmTypeClicked(int)
 		mTextMessageEdit->hide();
 		mFileBox->show();
 		mFilePadding->show();
+		mFontColourButton->hide();
 		setButtonWhatsThis(Try, i18n("Display the text file now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
