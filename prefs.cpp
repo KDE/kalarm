@@ -222,7 +222,7 @@ void MiscPrefTab::slotRunModeToggled(bool)
 AppearancePrefTab::AppearancePrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	mFontChooser = new FontColourChooser(mPage, 0L, false, QStringList(), true, i18n("Font and Color"), false);
+	mFontChooser = new FontColourChooser(mPage, 0L, false, QStringList(), true, i18n("Font && Color"), false);
 }
 
 void AppearancePrefTab::restore()
