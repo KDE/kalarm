@@ -60,8 +60,8 @@
 #include <arts/kartsserver.h>
 #include <arts/kplayobjectfactory.h>
 #include <arts/kplayobject.h>
-#include <dcopclient.h>
 #endif
+#include <dcopclient.h>
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
