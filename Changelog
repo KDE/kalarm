@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 0.9.2 --- 25 Jan 2003 ===
+=== Version 0.9.2 --- 25 Feb 2003 ===
 Option to set font for individual alarm messages.
 Allow multiple alarm selection in the main window.
 KAlarm icon in alarm message window selects the alarm in the main window.
