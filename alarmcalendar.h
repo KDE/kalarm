@@ -29,7 +29,7 @@ using namespace KCal;
 class AlarmCalendar
 {
 	public:
-		AlarmCalendar() :     calendar(0L) { }
+		AlarmCalendar() :     calendar(0L), kAlarmVersion(-1) { }
 		bool                  open();
 		int                   load();
 		bool                  save()                              { return save(localFile); }
@@ -42,12 +42,14 @@ class AlarmCalendar
 		bool                  isOpen() const                      { return !!calendar; }
 		void                  getURL() const;
 		const QString         urlString() const                   { getURL();  return url.url(); }
+		int                   kalarmVersion() const;
 		static const QString& getDefaultTimeZoneID();
 	private:
 		CalendarLocal*        calendar;
-		KURL                  url;         // URL of calendar file
-		QString               localFile;   // local name of calendar file
-		bool                  vCal;        // true if calendar file is in VCal format
+		KURL                  url;           // URL of calendar file
+		QString               localFile;     // local name of calendar file
+		mutable int           kAlarmVersion; // version of KAlarm which created the loaded calendar file
+		bool                  vCal;          // true if calendar file is in VCal format
 
 		bool                  create();
 		bool                  save(const QString& tempFile);

@@ -144,6 +144,7 @@ int AlarmCalendar::load()
 		return -1;
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
+	kAlarmVersion = -1;
 	if (!calendar->load(tmpFile))
 	{
 		// Check if the file is zero length
@@ -243,6 +244,70 @@ void AlarmCalendar::deleteEvent(const QString& eventID)
 	Event* kcalEvent = getEvent(eventID);
 	if (kcalEvent)
 		calendar->deleteEvent(kcalEvent);
+}
+
+/******************************************************************************
+* Return the KAlarm version which wrote the calendar which has been loaded.
+* Reply = e.g. 057 for 0.5.7, or 0 if unknown.
+*/
+int AlarmCalendar::kalarmVersion() const
+{
+	if (kAlarmVersion >= 0)
+		return kAlarmVersion;
+	if (calendar)
+	{
+		CalFormat* calFormat = calendar->calFormat();
+		if (calFormat)
+		{
+			const QString& prodid = calFormat->loadedProductId();
+			int i = prodid.find(theApp()->aboutData()->programName(), 0, false);
+			if (i >= 0)
+			{
+				QString ver = prodid.mid(i + theApp()->aboutData()->programName().length()).stripWhiteSpace();
+				i = ver.find('/');
+				int j = ver.find(' ');
+				if (j >= 0  &&  j < i)
+					i = j;
+				if (i > 0)
+				{
+					ver = ver.left(i);
+					i = ver.find('.');
+					if (i > 0)
+					{
+						bool ok;
+						int version = ver.left(i).toInt(&ok) * 100;
+						if (ok)
+						{
+							ver = ver.mid(i + 1);
+							i = ver.find('.');
+							if (i > 0)
+							{
+								int v = ver.left(i).toInt(&ok);
+								if (ok)
+								{
+									if (v > 9)
+										v = 9;
+									version += v * 10;
+									ver = ver.mid(i + 1);
+									v = ver.toInt(&ok);
+									if (ok)
+									{
+										if (v > 9)
+											v = 9;
+										kAlarmVersion = version + v;
+										return kAlarmVersion;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	// It was saved either by KAlarm pre-0.3.5, or another program
+	kAlarmVersion = 0;
+	return 0;
 }
 
 /******************************************************************************
