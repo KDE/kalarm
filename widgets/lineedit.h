@@ -36,7 +36,7 @@
  *  The class also provides an option to prevent its contents being selected when the
  *  widget receives focus.
  *
- *  @short Line edit widget with extra drag and drop options.
+ *  @brief Line edit widget with extra drag and drop options.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class LineEdit : public KLineEdit
@@ -72,7 +72,8 @@ class LineEdit : public KLineEdit
 		/** Prevents the line edit's contents being selected when the widget receives focus. */
 		void         setNoSelect()   { mNoSelect = true; }
 		/** Sets whether the cursor should be set at the beginning or end of the text when
-		 *  @see setText() is called. */
+		 *  setText() is called.
+		 */
 		void         setCursorAtEnd(bool end = true)  { mSetCursorAtEnd = end; }
 	public slots:
 		/** Sets the contents of the line edit to be @p str. */
