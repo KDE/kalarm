@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 #include <qglobal.h>
 #if QT_VERSION >= 300
+class SpinMirror;
+class ExtraSpinBox;
 
 #include "spinbox.h"
 
@@ -40,27 +42,27 @@ class SpinBox2 : public QFrame
 		         QWidget* parent = 0, const char* name = 0);
 
 		void                setReadOnly(bool);
-		bool                isReadOnly() const          { return spinbox->isReadOnly(); }
-		void                setSelectOnStep(bool sel)   { spinbox->setSelectOnStep(sel); }
+		bool                isReadOnly() const          { return mSpinbox->isReadOnly(); }
+		void                setSelectOnStep(bool sel)   { mSpinbox->setSelectOnStep(sel); }
 		void                setReverseWithLayout(bool);   // reverse buttons if right to left language?
 		bool                reverseButtons() const      { return mReverseLayout  &&  !mReverseWithLayout; }
 
-		QString             text() const                { return spinbox->text(); }
-		virtual QString     prefix() const              { return spinbox->prefix(); }
-		virtual QString     suffix() const              { return spinbox->suffix(); }
-		virtual QString     cleanText() const           { return spinbox->cleanText(); }
+		QString             text() const                { return mSpinbox->text(); }
+		virtual QString     prefix() const              { return mSpinbox->prefix(); }
+		virtual QString     suffix() const              { return mSpinbox->suffix(); }
+		virtual QString     cleanText() const           { return mSpinbox->cleanText(); }
 
-		virtual void        setSpecialValueText(const QString& text)  { spinbox->setSpecialValueText(text); }
-		QString             specialValueText() const    { return spinbox->specialValueText(); }
+		virtual void        setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
+		QString             specialValueText() const    { return mSpinbox->specialValueText(); }
 
-		virtual void        setWrapping(bool on)        { spinbox->setWrapping(on);  updown2->setWrapping(on); }
-		bool                wrapping() const            { return spinbox->wrapping(); }
+		virtual void        setWrapping(bool on);
+		bool                wrapping() const            { return mSpinbox->wrapping(); }
 
 		virtual void        setButtonSymbols(QSpinBox::ButtonSymbols);
-		QSpinBox::ButtonSymbols buttonSymbols() const   { return spinbox->buttonSymbols(); }
+		QSpinBox::ButtonSymbols buttonSymbols() const   { return mSpinbox->buttonSymbols(); }
 
-		virtual void        setValidator(const QValidator* v)  { spinbox->setValidator(v); }
-		const QValidator*   validator() const           { return spinbox->validator(); }
+		virtual void        setValidator(const QValidator* v)  { mSpinbox->setValidator(v); }
+		const QValidator*   validator() const           { return mSpinbox->validator(); }
 
 		virtual QSize       sizeHint() const;
 		virtual QSize       minimumSizeHint() const;
@@ -70,13 +72,13 @@ class SpinBox2 : public QFrame
 		void                setMinValue(int val);
 		void                setMaxValue(int val);
 		void                setRange(int minValue, int maxValue)   { setMinValue(minValue);  setMaxValue(maxValue); }
-		int                 value() const               { return spinbox->value(); }
+		int                 value() const               { return mSpinbox->value(); }
 		int                 bound(int val) const;
 
-		QRect               upRect() const              { return spinbox->upRect(); }
-		QRect               downRect() const            { return spinbox->downRect(); }
-		QRect               up2Rect() const             { return updown2->upRect(); }
-		QRect               down2Rect() const           { return updown2->downRect(); }
+		QRect               upRect() const              { return mSpinbox->upRect(); }
+		QRect               downRect() const            { return mSpinbox->downRect(); }
+		QRect               up2Rect() const;
+		QRect               down2Rect() const;
 
 		int                 lineStep() const            { return mLineStep; }
 		int                 lineShiftStep() const       { return mLineShiftStep; }
@@ -90,38 +92,41 @@ class SpinBox2 : public QFrame
 		void                subtractPage()              { addValue(-mPageStep); }
 		void                addLine()                   { addValue(mLineStep); }
 		void                subtractLine()              { addValue(-mLineStep); }
-		void                addValue(int change)        { spinbox->addValue(change); }
+		void                addValue(int change)        { mSpinbox->addValue(change); }
 
 	public slots:
-		virtual void        setValue(int val)           { spinbox->setValue(val); }
-		virtual void        setPrefix(const QString& text)  { spinbox->setPrefix(text); }
-		virtual void        setSuffix(const QString& text)  { spinbox->setSuffix(text); }
+		virtual void        setValue(int val)           { mSpinbox->setValue(val); }
+		virtual void        setPrefix(const QString& text)  { mSpinbox->setPrefix(text); }
+		virtual void        setSuffix(const QString& text)  { mSpinbox->setSuffix(text); }
 		virtual void        stepUp()                    { addValue(mLineStep); }
 		virtual void        stepDown()                  { addValue(-mLineStep); }
 		virtual void        pageUp()                    { addValue(mPageStep); }
 		virtual void        pageDown()                  { addValue(-mPageStep); }
-		virtual void        selectAll()                 { spinbox->selectAll(); }
+		virtual void        selectAll()                 { mSpinbox->selectAll(); }
 
 	signals:
 		void                valueChanged(int value);
 		void                valueChanged(const QString& valueText);
 
 	protected:
-		virtual QString     mapValueToText(int v)         { return spinbox->mapValToText(v); }
-		virtual int         mapTextToValue(bool* ok)      { return spinbox->mapTextToVal(ok); }
+		virtual QString     mapValueToText(int v)         { return mSpinbox->mapValToText(v); }
+		virtual int         mapTextToValue(bool* ok)      { return mSpinbox->mapTextToVal(ok); }
 		virtual void        resizeEvent(QResizeEvent*)    { arrange(); }
 		virtual void        showEvent(QShowEvent*);
-		virtual void        styleChange(QStyle&)          { arrange(); }
+		virtual void        styleChange(QStyle&);
 		virtual void        getMetrics() const;
 
 		mutable int      wUpdown2;        // width of second spin widget
-		mutable int      xUpdown2;        // x offset of visible area in 'updown2'
-		mutable int      xSpinbox;        // x offset of visible area in 'spinbox'
-		mutable int      wGap;            // gap between updown2Frame and spinboxFrame
+		mutable int      xUpdown2;        // x offset of visible area in 'mUpdown2'
+		mutable int      xSpinbox;        // x offset of visible area in 'mSpinbox'
+		mutable int      wGap;            // gap between mUpdown2Frame and mSpinboxFrame
 
 	protected slots:
 		virtual void        valueChange();
 		virtual void        stepPage(int);
+
+	private slots:
+		void                updateMirror();
 
 	private:
 		void                init();
@@ -129,13 +134,15 @@ class SpinBox2 : public QFrame
 		int                 whichButton(QObject* spinWidget, const QPoint&);
 		void                setShiftStepping(bool on);
 
-		// Visible spin box class
-		class SB2_SpinBox : public SpinBox
+		// Visible spin box class.
+		// Declared here to allow use of mSpinBox in inline methods.
+		class MainSpinBox : public SpinBox
 		{
 			public:
-				SB2_SpinBox(SpinBox2* sb2, QWidget* parent, const char* name = 0)   : SpinBox(parent, name), owner(sb2) { }
-				SB2_SpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
-				                  : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
+				MainSpinBox(SpinBox2* sb2, QWidget* parent, const char* name = 0)
+				                : SpinBox(parent, name), owner(sb2) { }
+				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
+				                : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
 				virtual QString mapValueToText(int v)     { return owner->mapValueToText(v); }
 				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
 				QString         mapValToText(int v)       { return SpinBox::mapValueToText(v); }
@@ -148,10 +155,11 @@ class SpinBox2 : public QFrame
 		enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
 		static int       mReverseLayout;  // widgets are mirrored right to left
-		QFrame*          updown2Frame;
-		QFrame*          spinboxFrame;
-		SpinBox*         updown2;         // the extra pair of spin buttons
-		SB2_SpinBox*     spinbox;         // the visible spin box
+		QFrame*          mUpdown2Frame;   // contains visible part of the extra pair of spin buttons
+		QFrame*          mSpinboxFrame;   // contains the main spin box
+		ExtraSpinBox*    mUpdown2;        // the extra pair of spin buttons
+		MainSpinBox*     mSpinbox;        // the visible spin box
+		SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons
 		int              mMinValue;
 		int              mMaxValue;
 		int              mLineStep;           // right button increment
@@ -160,7 +168,7 @@ class SpinBox2 : public QFrame
 		int              mPageShiftStep;      // left button increment with shift pressed
 		bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)
 
-	friend class SB2_SpinBox;
+	friend class MainSpinBox;
 };
 
 #endif // QT_VERSION >= 300

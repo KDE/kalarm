@@ -14,4 +14,5 @@ noinst_HEADERS = \
 	buttongroup.h checkbox.h colourcombo.h colourlist.h \
 	combobox.h dateedit.h datetime.h label.h messagebox.h \
 	pushbutton.h radiobutton.h timeedit.h timespinbox.h \
-	timeperiod.h shellprocess.h slider.h spinbox.h spinbox2.h
+	timeperiod.h shellprocess.h slider.h spinbox.h spinbox2.h \
+	spinbox2private.h
