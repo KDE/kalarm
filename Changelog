@@ -18,6 +18,7 @@ Remove obsolete pre-version 0.7 DCOP calls.
 
 === Version 1.0.6 --- 26 Mar 2004 ===
 Make the Quit menu item in main window quit the program.
+Update time entry field after editing as soon as mouse cursor leaves it.
 Cancel deferral if reminder is set before it, to prevent it becoming stuck.
 Prevent undeleted recurring alarms being triggered immediately.
 Don't allow alarms to be undeleted if they are completely expired.
