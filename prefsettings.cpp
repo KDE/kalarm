@@ -24,6 +24,7 @@
 
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kemailsettings.h>
 
 #include "prefsettings.moc"
 
@@ -34,6 +35,7 @@ const bool       Settings::default_disableAlarmsIfStopped  = true;
 const bool       Settings::default_autostartTrayIcon       = true;
 const bool       Settings::default_confirmAlarmDeletion    = true;
 const int        Settings::default_daemonTrayCheckInterval = 10;     // (seconds)
+const bool       Settings::default_emailUseControlCentre   = true;
 const QColor     Settings::default_defaultBgColour(red);
 const QFont      Settings::default_messageFont(QString::fromLatin1("Helvetica"), 16, QFont::Bold);
 const QTime      Settings::default_startOfDay(0, 0);
@@ -43,31 +45,34 @@ const bool       Settings::default_defaultLateCancel       = false;
 const bool       Settings::default_defaultConfirmAck       = false;
 const bool       Settings::default_defaultBeep             = false;
 const bool       Settings::default_defaultEmailBcc         = false;
+const QString    Settings::default_emailAddress            = "";
 const Settings::MailClient       Settings::default_emailClient        = KMAIL;
 const RecurrenceEdit::RepeatType Settings::default_defaultRecurPeriod = RecurrenceEdit::SUBDAILY;
 
 static const QString    defaultEmailClient = QString::fromLatin1("kmail");
 
 // Config file entry names
-static const QString GENERAL_SECTION        = QString::fromLatin1("General");
-static const QString MESSAGE_BG_COLOUR      = QString::fromLatin1("MessageBackgroundColour");
-static const QString MESSAGE_FONT           = QString::fromLatin1("MessageFont");
-static const QString RUN_IN_SYSTEM_TRAY     = QString::fromLatin1("RunInSystemTray");
-static const QString DISABLE_IF_STOPPED     = QString::fromLatin1("DisableAlarmsIfStopped");
-static const QString AUTOSTART_TRAY         = QString::fromLatin1("AutostartTray");
-static const QString CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmDeletion");
-static const QString DAEMON_TRAY_INTERVAL   = QString::fromLatin1("DaemonTrayCheckInterval");
-static const QString EMAIL_CLIENT           = QString::fromLatin1("EmailClient");
-static const QString START_OF_DAY           = QString::fromLatin1("StartOfDay");
-static const QString START_OF_DAY_CHECK     = QString::fromLatin1("Sod");
-static const QString EXPIRED_COLOUR         = QString::fromLatin1("ExpiredColour");
-static const QString EXPIRED_KEEP_DAYS      = QString::fromLatin1("ExpiredKeepDays");
-static const QString DEFAULTS_SECTION       = QString::fromLatin1("Defaults");
-static const QString DEF_LATE_CANCEL        = QString::fromLatin1("DefLateCancel");
-static const QString DEF_CONFIRM_ACK        = QString::fromLatin1("DefConfirmAck");
-static const QString DEF_BEEP               = QString::fromLatin1("DefBeep");
-static const QString DEF_EMAIL_BCC          = QString::fromLatin1("DefEmailBcc");
-static const QString DEF_RECUR_PERIOD       = QString::fromLatin1("DefRecurPeriod");
+static const QString GENERAL_SECTION          = QString::fromLatin1("General");
+static const QString MESSAGE_BG_COLOUR        = QString::fromLatin1("MessageBackgroundColour");
+static const QString MESSAGE_FONT             = QString::fromLatin1("MessageFont");
+static const QString RUN_IN_SYSTEM_TRAY       = QString::fromLatin1("RunInSystemTray");
+static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlarmsIfStopped");
+static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
+static const QString CONFIRM_ALARM_DELETION   = QString::fromLatin1("ConfirmAlarmDeletion");
+static const QString DAEMON_TRAY_INTERVAL     = QString::fromLatin1("DaemonTrayCheckInterval");
+static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient");
+static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
+static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
+static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
+static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
+static const QString EXPIRED_COLOUR           = QString::fromLatin1("ExpiredColour");
+static const QString EXPIRED_KEEP_DAYS        = QString::fromLatin1("ExpiredKeepDays");
+static const QString DEFAULTS_SECTION         = QString::fromLatin1("Defaults");
+static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCancel");
+static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
+static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
+static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
+static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
 
 inline int Settings::startOfDayCheck() const
 {
@@ -96,6 +101,14 @@ void Settings::loadSettings()
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	QCString client = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
 	mEmailClient = (client == "sendmail" ? SENDMAIL : KMAIL);
+	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
+	if (mEmailUseControlCentre)
+	{
+		KEMailSettings e;
+		mEmailAddress = e.getSetting(KEMailSettings::EmailAddress);
+	}
+	else
+		mEmailAddress = config->readEntry(EMAIL_ADDRESS);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay              = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mStartOfDayChanged       = (config->readNumEntry(START_OF_DAY_CHECK, 0) != startOfDayCheck());
@@ -124,6 +137,8 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(CONFIRM_ALARM_DELETION, mConfirmAlarmDeletion);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
+	config->writeEntry(EMAIL_USE_CONTROL_CENTRE, mEmailUseControlCentre);
+	config->writeEntry(EMAIL_ADDRESS, (mEmailUseControlCentre ? QString() : mEmailAddress));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
@@ -150,4 +165,16 @@ void Settings::updateStartOfDayCheck()
 void Settings::emitSettingsChanged()
 {
 	emit settingsChanged();
+}
+
+void Settings::setEmailAddress(bool useControlCentre, const QString& address)
+{
+	mEmailUseControlCentre = useControlCentre;
+	if (useControlCentre)
+	{
+		KEMailSettings e;
+		mEmailAddress = e.getSetting(KEMailSettings::EmailAddress);
+	}
+	else
+		mEmailAddress = address;
 }

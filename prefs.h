@@ -31,6 +31,7 @@ class QRadioButton;
 class QPushButton;
 class QSpinBox;
 class QComboBox;
+class QLineEdit;
 class KColorCombo;
 class FontColourChooser;
 class Settings;
@@ -86,10 +87,12 @@ class MiscPrefTab : public PrefsTabBase
 	private slots:
 		void         slotRunModeToggled(bool on);
 		void         slotExpiredToggled(bool);
+		void         slotEmailUseCCToggled(bool);
 		void         slotClearExpired();
 
 	private:
 		void         setExpiredControls(int purgeDays);
+		void         setEmailAddress(bool useControlCentre, const QString& address);
 
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
@@ -105,6 +108,8 @@ class MiscPrefTab : public PrefsTabBase
 		QSpinBox*      mDaemonTrayCheckInterval;
 		TimeSpinBox*   mStartOfDay;
 		QButtonGroup*  mEmailClient;
+		QCheckBox*     mEmailUseControlCentre;
+		QLineEdit*     mEmailAddress;
 };
 
 

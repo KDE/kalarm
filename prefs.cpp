@@ -29,6 +29,7 @@
 #include <qbuttongroup.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
@@ -154,7 +155,20 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);
+	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
+	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
+	QWhatsThis::add(mConfirmAlarmDeletion,
+	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
+
+	// Email settings
+	group = new QGroupBox(i18n("Email Alarms"), mPage);
+	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+
+	box = new QHBox(group);
 	box->setSpacing(2*KDialog::spacingHint());
 	label = new QLabel(i18n("Email client:"), box);
 	mEmailClient = new QButtonGroup(box);
@@ -170,14 +184,25 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
 	           "KMail: A KMail composer window is displayed to enable you to send the email.\n"
 	           "Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or 'mail'."));
+	layout->addWidget(box, 0, AlignLeft);
 
-	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
-	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
-	QWhatsThis::add(mConfirmAlarmDeletion,
-	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
+	mEmailUseControlCentre = new QCheckBox(i18n("Use email address from Co&ntrol Center"), group);
+	mEmailUseControlCentre->setFixedSize(mEmailUseControlCentre->sizeHint());
+	connect(mEmailUseControlCentre, SIGNAL(toggled(bool)), SLOT(slotEmailUseCCToggled(bool)));
+	QWhatsThis::add(mEmailUseControlCentre,
+	      i18n("Check to use the email address set in the KDE Control Center."));
+	layout->addWidget(mEmailUseControlCentre, 0, AlignLeft);
+
+	box = new QHBox(group);   // this is to control the QWhatsThis text display area
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("Emai&l address:"), box);
+	label->setFixedSize(label->sizeHint());
+	mEmailAddress = new QLineEdit(box);
+	label->setBuddy(mEmailAddress);
+	QWhatsThis::add(box,
+	      i18n("Your email address, used for blind copying email alarms to self."));
+	box->setFixedHeight(box->sizeHint().height());
+	layout->addWidget(box);
 
 	group = new QGroupBox(i18n("Expired Alarms"), mPage);
 	grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
@@ -228,6 +253,7 @@ void MiscPrefTab::restore()
 	mDaemonTrayCheckInterval->setValue(mSettings->mDaemonTrayCheckInterval);
 	mStartOfDay->setValue(mSettings->mStartOfDay.hour()*60 + mSettings->mStartOfDay.minute());
 	mEmailClient->setButton(mSettings->mEmailClient);
+	setEmailAddress(mSettings->mEmailUseControlCentre, mSettings->emailAddress());
 	setExpiredControls(mSettings->mExpiredKeepDays);
 }
 
@@ -242,9 +268,10 @@ void MiscPrefTab::apply(bool syncToDisc)
 	int sod = mStartOfDay->value();
 	mSettings->mStartOfDay.setHMS(sod/60, sod%60, 0);
 	int client = mEmailClient->id(mEmailClient->selected());
-	mSettings->mEmailClient = (client >= 0) ? Settings::MailClient(client) : Settings::default_emailClient;
-	mSettings->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
-	                            : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
+	mSettings->mEmailClient             = (client >= 0) ? Settings::MailClient(client) : Settings::default_emailClient;
+	mSettings->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text());
+	mSettings->mExpiredKeepDays         = !mKeepExpired->isChecked() ? 0
+	                                    : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -260,15 +287,8 @@ void MiscPrefTab::setDefaults()
 	mDaemonTrayCheckInterval->setValue(Settings::default_daemonTrayCheckInterval);
 	mStartOfDay->setValue(Settings::default_startOfDay.hour()*60 + Settings::default_startOfDay.minute());
 	mEmailClient->setButton(Settings::default_emailClient);
+	setEmailAddress(Settings::default_emailUseControlCentre, Settings::default_emailAddress);
 	setExpiredControls(Settings::default_expiredKeepDays);
-}
-
-void MiscPrefTab::setExpiredControls(int purgeDays)
-{
-	mKeepExpired->setChecked(purgeDays);
-	mPurgeExpired->setChecked(purgeDays > 0);
-	mPurgeAfter->setValue(purgeDays > 0 ? purgeDays : 0);
-	slotExpiredToggled(true);
 }
 
 void MiscPrefTab::slotRunModeToggled(bool)
@@ -277,6 +297,14 @@ void MiscPrefTab::slotRunModeToggled(bool)
 	mAutostartTrayIcon2->setEnabled(!systray);
 	mAutostartTrayIcon1->setEnabled(systray);
 	mDisableAlarmsIfStopped->setEnabled(systray);
+}
+
+void MiscPrefTab::setExpiredControls(int purgeDays)
+{
+	mKeepExpired->setChecked(purgeDays);
+	mPurgeExpired->setChecked(purgeDays > 0);
+	mPurgeAfter->setValue(purgeDays > 0 ? purgeDays : 0);
+	slotExpiredToggled(true);
 }
 
 void MiscPrefTab::slotExpiredToggled(bool)
@@ -293,6 +321,18 @@ void MiscPrefTab::slotClearExpired()
 {
 	AlarmCalendar* calendar = theApp()->expiredCalendar(false);
 	calendar->purge(0, true);
+}
+
+void MiscPrefTab::setEmailAddress(bool useControlCentre, const QString& address)
+{
+	mEmailUseControlCentre->setChecked(useControlCentre);
+	mEmailAddress->setText(useControlCentre ? QString() : address);
+	slotEmailUseCCToggled(true);
+}
+
+void MiscPrefTab::slotEmailUseCCToggled(bool)
+{
+	mEmailAddress->setEnabled(!mEmailUseControlCentre->isChecked());
 }
 
 

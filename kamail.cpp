@@ -57,11 +57,7 @@
 */
 bool KAMail::send(const KAlarmEvent& event)
 {
-	const char* user = getenv("LOGNAME");
-	if (!user)
-		user = getlogin();
-	QString from = QString::fromLatin1(user);
-
+	QString from = theApp()->settings()->emailAddress();
 	kdDebug(5950) << "KAlarmApp::sendEmail():\nFrom: " << from << "\nTo: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject()
 	              << "\nAttachment:\n" << event.emailAttachments(", ") << endl;
