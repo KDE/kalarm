@@ -117,6 +117,8 @@ KAlarmMainWindow::KAlarmMainWindow(bool restored)
 	}
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
+	if (!mShowTimeTo)
+		mShowTime = true;     // ensure at least one time column is visible
 	mListView = new AlarmListView(this, "listView");
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->showExpired(mShowExpired);
@@ -630,12 +632,9 @@ void KAlarmMainWindow::slotShowTime()
 	mShowTime = !mShowTime;
 	mActionShowTime->setChecked(mShowTime);
 	if (!mShowTime  &&  !mShowTimeTo)
-	{
-		// At least one time column must be displayed
-		mShowTimeTo = true;
-		mActionShowTimeTo->setChecked(mShowTimeTo);
-	}
-	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		slotShowTimeTo();    // at least one time column must be displayed
+	else
+		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 }
 
 /******************************************************************************
@@ -646,12 +645,9 @@ void KAlarmMainWindow::slotShowTimeTo()
 	mShowTimeTo = !mShowTimeTo;
 	mActionShowTimeTo->setChecked(mShowTimeTo);
 	if (!mShowTimeTo  &&  !mShowTime)
-	{
-		// At least one time column must be displayed
-		mShowTime = true;
-		mActionShowTime->setChecked(mShowTime);
-	}
-	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		slotShowTime();    // at least one time column must be displayed
+	else
+		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	setUpdateTimer();
 }
 
