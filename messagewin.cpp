@@ -58,6 +58,7 @@
 #include <arts/kartsserver.h>
 #include <arts/kplayobjectfactory.h>
 #include <arts/kplayobject.h>
+#include <dcopclient.h>
 #endif
 #include <kdebug.h>
 
@@ -70,6 +71,11 @@
 #include "messagewin.moc"
 
 using namespace KCal;
+
+#ifndef WITHOUT_ARTS
+static const char* KMIX_APP_NAME    = "kmix";
+static const char* KMIX_DCOP_OBJECT = "Mixer0";
+#endif
 
 
 // A text label widget which can be scrolled and copied with the mouse
@@ -716,8 +722,29 @@ void MessageWin::initAudio(bool firstTime)
 	KDE::PlayObjectFactory factory(sserver);
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
 	if (firstTime)
-		mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-	sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
+	{
+		// Get the current master volume from KMix
+		int vol = getKMixVolume();
+		if (vol >= 0)
+		{
+			mOldVolume = vol;    // success
+			mUsingKMix = true;
+		}
+		else
+		{
+			// Can't use KMix to set the master volume, so just adjust
+			// within the current master volume.
+			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
+			mUsingKMix = false;
+#if KDE_VERSION >= 308
+			kdWarning(5950) << "Unable to set volume using KMix\n";
+#endif
+		}
+	}
+	if (!mUsingKMix)
+		sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
+	else if (mVolume >= 0)
+		setKMixVolume(static_cast<int>(mVolume * 100));
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -799,14 +826,25 @@ void MessageWin::stopPlay()
 	{
 		// Restore the sound volume to what it was before the sound file
 		// was played, provided that nothing else has modified it since.
-		KArtsServer aserver;
-		Arts::StereoVolumeControl svc = aserver.server().outVolume();
-		float currentVolume = svc.scaleFactor();
-		float eventVolume = mVolume;
-		if (eventVolume < 0)
-			eventVolume = 1;
-		if (currentVolume == eventVolume)
-			svc.scaleFactor(mOldVolume);
+		if (!mUsingKMix)
+		{
+			KArtsServer aserver;
+			Arts::StereoVolumeControl svc = aserver.server().outVolume();
+			float currentVolume = svc.scaleFactor();
+			float eventVolume = mVolume;
+			if (eventVolume < 0)
+				eventVolume = 1;
+			if (currentVolume == eventVolume)
+				svc.scaleFactor(mOldVolume);
+		}
+		else if (mVolume >= 0)
+		{
+			int eventVolume = static_cast<int>(mVolume * 100);
+			int currentVolume = getKMixVolume();
+			// Volume returned isn't always exactly equal to volume set
+			if (abs(currentVolume - eventVolume) < 5)
+				setKMixVolume(mOldVolume);
+		}
 	}
 	delete mPlayObject;      mPlayObject = 0;
 	delete mArtsDispatcher;  mArtsDispatcher = 0;
@@ -816,6 +854,40 @@ void MessageWin::stopPlay()
 		mSilenceButton->setEnabled(false);
 #endif
 }
+
+#ifndef WITHOUT_ARTS
+/******************************************************************************
+*  Get the master volume from KMix.
+*  Reply < 0 if failure.
+*/
+int MessageWin::getKMixVolume()
+{
+	QByteArray  data, replyData;
+	QCString    replyType;
+	QDataStream arg(data, IO_WriteOnly);
+	if (!kapp->dcopClient()->call(KMIX_APP_NAME, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
+	||  replyType != "int")
+		return -1;
+	int result;
+	QDataStream reply(replyData, IO_ReadOnly);
+	reply >> result;
+	return (result >= 0) ? result : 0;
+}
+
+/******************************************************************************
+*  Set the master volume using KMix.
+*/
+void MessageWin::setKMixVolume(int percent)
+{
+	if (!mUsingKMix)
+		return;
+	QByteArray  data;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << percent;
+	if (!kapp->dcopClient()->send(KMIX_APP_NAME, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
+		kdError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
+}
+#endif
 
 /******************************************************************************
 *  Raise the alarm window, re-output any required audio notification, and

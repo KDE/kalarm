@@ -73,6 +73,8 @@ class MessageWin : public MainWindowBase
 		void                initView();
 #ifndef WITHOUT_ARTS
 		void                initAudio(bool firstTime);
+		int                 getKMixVolume();
+		void                setKMixVolume(int percent);
 #endif
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
@@ -121,6 +123,7 @@ class MessageWin : public MainWindowBase
 		bool                mShown;           // true once the window has been displayed
 		bool                mDeferClosing;    // the Defer button is closing the dialog
 		bool                mDeferDlgShowing; // the defer dialog is being displayed
+		bool                mUsingKMix;       // master volume is being set using kmix
 };
 
 #endif // MESSAGEWIN_H
