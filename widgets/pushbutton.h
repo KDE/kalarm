@@ -1,7 +1,7 @@
 /*
  *  pushbutton.h  -  push button with read-only option
  *  Program:  kalarm
- *  (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,11 +31,13 @@
 class PushButton : public QPushButton
 {
 		Q_OBJECT
+		Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 	public:
 		PushButton(QWidget* parent, const char* name = 0);
 		PushButton(const QString& text, QWidget* parent, const char* name = 0);
 		PushButton(const QIconSet& icon, const QString& text, QWidget* parent, const char* name = 0);
-		void  setReadOnly(bool);
+		virtual void  setReadOnly(bool);
+		virtual bool  isReadOnly() const  { return mReadOnly; }
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
