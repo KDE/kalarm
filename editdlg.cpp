@@ -742,7 +742,8 @@ void EditAlarmDlg::slotOk()
 	if (activePageIndex() == mRecurPageIndex  &&  mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	QWidget* errWidget;
-	mAlarmDateTime = mTimeWidget->getDateTime(!mRecurrenceEdit->isTimedRepeatType(), false, &errWidget);
+	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();
+	mAlarmDateTime = mTimeWidget->getDateTime(!timedRecurrence, false, &errWidget);
 	if (errWidget)
 	{
 		showPage(mMainPageIndex);
@@ -751,6 +752,28 @@ void EditAlarmDlg::slotOk()
 	}
 	else if (checkEmailData())
 	{
+		if (timedRecurrence)
+		{
+			QDateTime now = QDateTime::currentDateTime();
+			if (mAlarmDateTime.date() < now.date()
+			||  !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+			{
+				// A timed recurrence has an entered start date which
+				// has already expired, so we must adjust it.
+// Temporary during i18n string freeze
+DateTime savedDT = mAlarmDateTime;
+				KAlarmEvent event;
+				getEvent(event);
+				if (event.nextOccurrence(now, mAlarmDateTime) == KAlarmEvent::NO_OCCURRENCE)
+				{
+// Commented out due to i18n string freeze
+//					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
+//					return;
+// Temporary during i18n string freeze
+mAlarmDateTime = savedDT;
+				}
+			}
+		}
 		QString errmsg;
 		errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
 		if (errWidget)
