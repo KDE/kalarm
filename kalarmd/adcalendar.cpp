@@ -28,7 +28,7 @@
 #include <kio/jobclasses.h>
 #include <kdebug.h>
 
-#include "adcalendar.h"
+#include "adcalendar.moc"
 
 QValueList<ADCalendar*> ADCalendar::mCalendars;
 ADCalendar::EventsMap   ADCalendar::mEventsHandled;
@@ -207,5 +207,3 @@ ADCalendar* ADCalendar::getCalendar(const QString& calendarURL)
 	}
 	return 0;
 }
-
-#include "adcalendar.moc"

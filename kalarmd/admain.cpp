@@ -29,7 +29,7 @@
 #include <kaboutdata.h>
 #include <kstartupinfo.h>
 
-#include "alarmapp.h"
+#include "adapp.h"
 
 static const KCmdLineOptions options[] =
 {

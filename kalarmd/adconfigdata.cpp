@@ -28,7 +28,7 @@
 #include <kdebug.h>
 
 #include "adcalendar.h"
-#include "adconfigdatarw.h"
+#include "adconfigdata.h"
 
 // Config file key strings
 const QString CLIENT_GROUP(QString::fromLatin1("Client "));

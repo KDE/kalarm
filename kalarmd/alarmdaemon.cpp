@@ -39,7 +39,7 @@
 #include <libkcal/icalformat.h>
 
 #include "adcalendar.h"
-#include "adconfigdatarw.h"
+#include "adconfigdata.h"
 #include "alarmguiiface.h"
 #include "alarmguiiface_stub.h"
 #include "alarmdaemon.moc"

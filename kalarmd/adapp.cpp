@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include "alarmdaemon.h"
-#include "alarmapp.moc"
+#include "adapp.moc"
 
 
 AlarmDaemonApp::AlarmDaemonApp()

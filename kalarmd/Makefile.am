@@ -10,13 +10,13 @@ bin_PROGRAMS = kalarmd
 
 kalarmd_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kalarmd_LDADD = $(LIB_KDEUI) $(top_builddir)/libkcal/libkcal.la libkalarmd.la
-kalarmd_SOURCES = alarmdaemon.cpp main.cpp alarmapp.cpp \
-        adcalendar.cpp adconfigdatarw.cpp clientinfo.cpp \
+kalarmd_SOURCES = alarmdaemon.cpp admain.cpp adapp.cpp \
+        adcalendar.cpp adconfigdata.cpp clientinfo.cpp \
         alarmdaemoniface.skel
 kalarmd_COMPILE_FIRST = alarmguiiface_stub.h
 
-noinst_HEADERS = alarmapp.h alarmdaemon.h alarmdaemoniface.h \
-	alarmguiiface.h adcalendar.h adconfigdatarw.h clientinfo.h
+noinst_HEADERS = adapp.h alarmdaemon.h alarmdaemoniface.h \
+	alarmguiiface.h adcalendar.h adconfigdata.h clientinfo.h
 
 METASOURCES = AUTO
  
