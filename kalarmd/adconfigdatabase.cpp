@@ -1,8 +1,8 @@
 /*
     Alarm Daemon client data file access.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -157,24 +157,10 @@ QString ADConfigDataBase::readConfigData(bool sessionStarting, bool& deletedClie
           if (ok)
           {
             // The config file key is CalendarN, so open the calendar file
-            int comma1 = it.data().find(',');
-            if (comma1 >= 0)
+            QStringList items = QStringList::split(',', it.data());
+            if (items.count() >= 2)
             {
-              QDateTime dateTime;    // default to invalid
-              int comma2 = it.data().find(',', comma1 + 1);
-              if (comma2 < 0)
-              {
-                // It's in the old format:  CalendarN=type,calendar
-                comma2 = comma1;
-              }
-              else
-              {
-                // It's in the format:  calendarN=type,[datetime],calendar
-                int secs = it.data().mid(comma1 + 1, comma2 - comma1 - 1).toInt(&ok);
-                if (ok)
-                  dateTime = baseDateTime().addSecs(secs);
-              }
-              QString calname = it.data().mid(comma2 + 1);
+              QString calname = items.last();
               if ( !calname.isEmpty() ) {
                 ADCalendarBase* cal = getCalendar(calname);
                 if (cal)
@@ -187,10 +173,8 @@ QString ADConfigDataBase::readConfigData(bool sessionStarting, bool& deletedClie
                 else
                 {
                   // Add the calendar to the client's list
-                  cal = calFactory->create(calname, client,
-                               static_cast<ADCalendarBase::Type>(it.data().left(comma1).toInt()));
+                  cal = calFactory->create(calname, client);
                   cal->setRcIndex(rcIndex);
-                  cal->setLastCheck(dateTime);
                   mCalendars.append(cal);
                   kdDebug(5900) << "ADConfigDataBase::readConfigData(): calendar " << cal->urlString() << endl;
                 }

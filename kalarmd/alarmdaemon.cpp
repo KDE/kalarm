@@ -1,8 +1,8 @@
 /*
-    KDE Alarm Daemon.
+    KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
     Based on the original, (c) 1998, 1999 Preston Brown
 
     This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-    As a special exception, permission is given to link this program
-    with any edition of Qt, and distribute the resulting executable,
-    without including the source code for Qt in the source distribution.
 */
 
 #include <unistd.h>
@@ -111,9 +107,9 @@ void AlarmDaemon::enableCal_(const QString& urlString, bool enable)
  * DCOP call to add a new calendar file to the list of monitored calendars.
  * If the calendar file is already in the list, the request is ignored.
  */
-void AlarmDaemon::addCal_(const QCString& appname, const QString& urlString, bool msgCal)
+void AlarmDaemon::addCal_(const QCString& appname, const QString& urlString)
 {
-  kdDebug(5900) << "AlarmDaemon::addCal_(" << urlString << "): " << (msgCal ? "KALARM" : "KORGANIZER") << endl;
+  kdDebug(5900) << "AlarmDaemon::addCal_(" << urlString << ")" << endl;
 
   ADCalendarBase* cal = getCalendar(urlString);
   if (cal)
@@ -132,13 +128,13 @@ void AlarmDaemon::addCal_(const QCString& appname, const QString& urlString, boo
   }
 
   // Load the calendar
-  cal = new ADCalendar(urlString, appname, (msgCal ? ADCalendar::KALARM : ADCalendar::KORGANIZER));
+  cal = new ADCalendar(urlString, appname);
   mCalendars.append(cal);
 
   addConfigCalendar(appname, cal);
 
   if (cal->loaded())
-    notifyGui((msgCal ? ADD_MSG_CALENDAR : ADD_CALENDAR), cal->urlString(), appname);
+    notifyGui(ADD_MSG_CALENDAR, cal->urlString(), appname);
   kdDebug(5900) << "AlarmDaemon::addCal_(): calendar added" << endl;
 
   setTimerStatus();
@@ -149,9 +145,9 @@ void AlarmDaemon::addCal_(const QCString& appname, const QString& urlString, boo
  * DCOP call to reload the specified calendar.
  * The calendar is first added to the list of monitored calendars if necessary.
  */
-void AlarmDaemon::reloadCal_(const QCString& appname, const QString& urlString, bool msgCal)
+void AlarmDaemon::reloadCal_(const QCString& appname, const QString& urlString)
 {
-  kdDebug(5900) << "AlarmDaemon::reloadCal_(" << urlString << "): " << (msgCal ? "KALARM" : "KORGANIZER") << endl;
+  kdDebug(5900) << "AlarmDaemon::reloadCal_(" << urlString << ")" << endl;
 
   if (!urlString.isEmpty())
   {
@@ -162,7 +158,7 @@ void AlarmDaemon::reloadCal_(const QCString& appname, const QString& urlString, 
     {
       // Calendar wasn't in the list, so add it
       if (!appname.isEmpty())
-        addCal_(appname, urlString, msgCal);
+        addCal_(appname, urlString);
     }
   }
 }
@@ -204,7 +200,7 @@ void AlarmDaemon::resetMsgCal_(const QCString& appname, const QString& urlString
 
   if (!urlString.isEmpty())
   {
-    reloadCal_(appname, urlString, true);
+    reloadCal_(appname, urlString);
     ADCalendar::clearEventsHandled(urlString);
     ADCalendarBase* cal = getCalendar(urlString);
     if (cal)
@@ -391,49 +387,25 @@ bool AlarmDaemon::checkAlarms( ADCalendarBase* cal )
   QPtrList<Event> alarmEvents;
   QValueList<Alarm*> alarms;
   QValueList<Alarm*>::ConstIterator it;
-  switch ( cal->actionType() ) {
-    case ADCalendar::KORGANIZER: {
-      QDateTime from = cal->lastCheck().addSecs(1);
-      kdDebug(5901) << "  From: " << from.toString() << "  To: " << to.toString() << endl;
-
-      bool pending = false;
-      alarms = cal->alarms( from, to );
-      for ( it = alarms.begin();  it != alarms.end();  ++it ) {
-        kdDebug(5901) << "AlarmDaemon::checkAlarms(): KORGANIZER event "
-                      << (*it)->parent()->uid() << endl;
-        if (!notifyEvent(cal, (*it)->parent()->uid()))
-          pending = true;
-      }
-
-      if (!pending) {
-        cal->setLastCheck(to);
-        writeConfigCalendar(cal);
-        return true;
-      }
-      break;
-    }
-    case ADCalendar::KALARM:
-      kdDebug(5901) << "  To: " << to.toString() << endl;
-      alarms = cal->alarmsTo( to );
-      if (alarms.count()) {
-        kdDebug(5901) << "Kalarm alarms=" << alarms.count() << endl;
-        for ( it = alarms.begin(); it != alarms.end(); ++it ) {
-          Event *event = dynamic_cast<Event *>( (*it)->parent() );
-          if ( event ) {
-            const QString& eventID = event->uid();
-            kdDebug(5901) << "AlarmDaemon::checkAlarms(): KALARM event " << eventID  << endl;
-            QValueList<QDateTime> alarmtimes;
-            checkEventAlarms(*event, alarmtimes);
-            if (!cal->eventHandled(event, alarmtimes)) {
-              if (notifyEvent(cal, eventID))
-                cal->setEventHandled(event, alarmtimes);
-              else
-                ;  // don't need to store last check time for this calendar type
-            }
-          }
+  kdDebug(5901) << "  To: " << to.toString() << endl;
+  alarms = cal->alarmsTo( to );
+  if (alarms.count()) {
+    kdDebug(5901) << "Kalarm alarms=" << alarms.count() << endl;
+    for ( it = alarms.begin(); it != alarms.end(); ++it ) {
+      Event *event = dynamic_cast<Event *>( (*it)->parent() );
+      if ( event ) {
+        const QString& eventID = event->uid();
+        kdDebug(5901) << "AlarmDaemon::checkAlarms(): KALARM event " << eventID  << endl;
+        QValueList<QDateTime> alarmtimes;
+        checkEventAlarms(*event, alarmtimes);
+        if (!cal->eventHandled(event, alarmtimes)) {
+          if (notifyEvent(cal, eventID))
+            cal->setEventHandled(event, alarmtimes);
+          else
+            ;  // don't need to store last check time for this calendar type
         }
       }
-      break;
+    }
   }
 
   return false;

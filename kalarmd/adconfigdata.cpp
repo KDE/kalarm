@@ -1,8 +1,8 @@
 /*
-    Client data access for KDE Alarm Daemon.
+    Client data access for KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -185,11 +185,8 @@ void ADConfigDataRW::writeConfigCalendar(const ADCalendarBase* cal, KSimpleConfi
   if (cal->rcIndex() > 0)
   {
     clientConfig.setGroup(CLIENT_KEY + cal->appName());
-    QString dt;
-    if (cal->lastCheck().isValid())
-      dt = QString::number(baseDateTime().secsTo(cal->lastCheck()));
     clientConfig.writeEntry(CLIENT_CALENDAR_KEY + QString::number(cal->rcIndex()),
-                            QString("%1,%2,%3").arg(cal->actionType()).arg(dt).arg(cal->urlString()));
+                            QString("1,,%1").arg(cal->urlString()));
   }
 }
 
@@ -211,8 +208,8 @@ void ADConfigDataRW::deleteConfigCalendar(const ADCalendarBase* cal)
       if (ok)
       {
         // The config file key is CalendarN
-        int comma = it.data().find(',');
-        if (comma >= 0  &&  it.data().mid(comma + 1) == cal->urlString())
+        QStringList items = QStringList::split(',', it.data());
+        if (items.count() >= 2  &&  items.last() == cal->urlString())
         {
           clientConfig.setGroup(groupKey);
           clientConfig.deleteEntry(it.key(), true);

@@ -1,8 +1,8 @@
 /*
-    This file is part of the KDE alarm daemon.
+    This file is part of the KAlarm alarm daemon.
     Copyright (c) 1997-1999 Preston Brown
     Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,10 +18,6 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
-
-    As a special exception, permission is given to link this program
-    with any edition of Qt, and distribute the resulting executable,
-    without including the source code for Qt in the source distribution.
 */
 #ifndef ALARMDAEMONIFACE_H
 #define ALARMDAEMONIFACE_H
@@ -36,9 +32,7 @@ class AlarmDaemonIface : virtual public DCOPObject
   k_dcop:
     virtual ASYNC enableAutoStart(bool enable) = 0;
     virtual ASYNC enableCal(const QString& urlString, bool enable) = 0;
-    virtual ASYNC addCal(const QCString& appname, const QString& urlString) = 0;
     virtual ASYNC addMsgCal(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC reloadCal(const QCString& appname, const QString& urlString) = 0;
     virtual ASYNC reloadMsgCal(const QCString& appname, const QString& urlString) = 0;
     virtual ASYNC removeCal(const QString& urlString) = 0;
     virtual ASYNC resetMsgCal(const QCString& appname, const QString& urlString) = 0;

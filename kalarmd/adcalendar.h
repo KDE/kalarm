@@ -1,7 +1,7 @@
 /*
-    Calendar access for KDE Alarm Daemon.
+    Calendar access for KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
+    This file is part of the KAlarm alarm daemon.
     Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
@@ -31,9 +31,9 @@
 class ADCalendar : public ADCalendarBase
 {
   public:
-    ADCalendar(const QString& url, const QCString& appname, Type);
+    ADCalendar(const QString& url, const QCString& appname);
     ~ADCalendar()  { }
-    ADCalendar *create(const QString& url, const QString& appname, Type);
+    ADCalendar *create(const QString& url, const QString& appname);
 
     void           setEnabled( bool enabled ) { enabled_ = enabled; }
     bool           enabled() const     { return enabled_ && !unregistered(); }
@@ -56,7 +56,7 @@ class ADCalendar : public ADCalendarBase
 class ADCalendarFactory : public ADCalendarBaseFactory
 {
   public:
-    ADCalendar *create(const QString& url, const QCString& appname, ADCalendarBase::Type);
+    ADCalendar *create(const QString& url, const QCString& appname);
 };
 
 #endif

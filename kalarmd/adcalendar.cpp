@@ -1,8 +1,8 @@
 /*
-    KDE Alarm Daemon.
+    Calendar access for KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,17 +27,17 @@
 
 #include "adcalendar.h"
 
-ADCalendar::ADCalendar(const QString& url, const QCString& appname, Type type)
-  : ADCalendarBase(url, appname, type),
+ADCalendar::ADCalendar(const QString& url, const QCString& appname)
+  : ADCalendarBase(url, appname),
     available_( false ),
     enabled_(true)
 {
   loadFile();
 }
 
-ADCalendar *ADCalendarFactory::create(const QString& url, const QCString& appname, ADCalendarBase::Type type)
+ADCalendar *ADCalendarFactory::create(const QString& url, const QCString& appname)
 {
-  return new ADCalendar(url, appname, type);
+  return new ADCalendar(url, appname);
 }
 
 /*

@@ -1,8 +1,8 @@
 /*
-    Calendar access for KDE Alarm Daemon and KDE Alarm Daemon GUI.
+    Calendar access for KAlarm Alarm Daemon and KAlarm Alarm Daemon GUI.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,16 +39,13 @@ class ADCalendarBase : public CalendarLocal
 {
     Q_OBJECT
   public:
-    enum Type { KORGANIZER = 0, KALARM = 1 };
-    ADCalendarBase(const QString& url, const QCString& appname, Type);
+    ADCalendarBase(const QString& url, const QCString& appname);
     ~ADCalendarBase()  { }
 
     const QString&   urlString() const   { return mUrlString; }
     const QCString&  appName() const     { return mAppName; }
     int              rcIndex() const     { return mRcIndex; }
-    const QDateTime& lastCheck() const   { return mLastCheck; }
     bool             loaded() const      { return mLoaded; }
-    Type             actionType() const  { return mActionType; }
 
     virtual void setEnabled( bool ) = 0;
     virtual bool enabled() const = 0;
@@ -66,7 +63,6 @@ class ADCalendarBase : public CalendarLocal
     bool         downloading() const  { return !mTempFileName.isNull(); }
 
     void         setRcIndex(int i)                  { mRcIndex = i; }
-    void         setLastCheck(const QDateTime& dt)  { mLastCheck = dt; }
 
     virtual void setEventHandled(const Event*, const QValueList<QDateTime> &) = 0;
     virtual bool eventHandled(const Event*, const QValueList<QDateTime> &) = 0;
@@ -108,8 +104,6 @@ class ADCalendarBase : public CalendarLocal
   private:
     QString           mUrlString;     // calendar file URL
     QCString          mAppName;       // name of application owning this calendar
-    Type              mActionType;    // action to take on event
-    QDateTime         mLastCheck;     // time at which calendar was last checked for alarms
     QString           mTempFileName;  // temporary file used if currently downloading, else null
     int               mRcIndex;       // index within 'clients' RC file for this calendar's entry
     bool              mLoaded;        // true if calendar file is currently loaded
@@ -122,7 +116,7 @@ typedef QPtrList<ADCalendarBase> CalendarList;
 class ADCalendarBaseFactory
 {
   public:
-    virtual ADCalendarBase *create(const QString& url, const QCString& appname, ADCalendarBase::Type) = 0;
+    virtual ADCalendarBase *create(const QString& url, const QCString& appname) = 0;
 };
 
 

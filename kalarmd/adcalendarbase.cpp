@@ -1,8 +1,8 @@
 /*
-    Calendar access for KDE Alarm Daemon.
+    Calendar access for KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,40 +40,14 @@
 
 ADCalendarBase::EventsMap ADCalendarBase::eventsHandled_;
 
-ADCalendarBase::ADCalendarBase(const QString& url, const QCString& appname, Type type)
+ADCalendarBase::ADCalendarBase(const QString& url, const QCString& appname)
   : mUrlString(url),
     mAppName(appname),
-    mActionType(type),
     mRcIndex(-1),
     mLoaded(false),
     mLoadedConnected(false),
     mUnregistered(false)
 {
-  if (mAppName == "korgac")
-  {
-    KConfig cfg( locate( "config", "korganizerrc" ) );
-    cfg.setGroup( "Time & Date" );
-    QString tz = cfg.readEntry( "TimeZoneId" );
-    kdDebug(5900) << "ADCalendarBase(): tz: " << tz << endl;
-    if( tz.isEmpty() ) {
-      // Set a reasonable default timezone is none
-      // was found in the config file
-      // see koprefs.cpp in korganizer
-      QString zone;
-      char zonefilebuf[100];
-      int len = readlink("/etc/localtime",zonefilebuf,100);
-      if (len > 0 && len < 100) {
-	zonefilebuf[len] = '\0';
-	zone = zonefilebuf;
-	zone = zone.mid(zone.find("zoneinfo/") + 9);
-      } else {
-	tzset();
-	zone = tzname[0];
-      }
-      tz = zone;
-    }
-    setTimeZoneId( tz );
-  }
 }
 
 /*
@@ -157,7 +131,6 @@ void ADCalendarBase::dump() const
   kdDebug(5900) << "    <url>" << urlString() << "</url>" << endl;
   kdDebug(5900) << "    <appname>" << appName() << "</appname>" << endl;
   if ( loaded() ) kdDebug(5900) << "    <loaded/>" << endl;
-  kdDebug(5900) << "    <actiontype>" << int(actionType()) << "</actiontype>" << endl;
   if (enabled() ) kdDebug(5900) << "    <enabled/>" << endl;
   else kdDebug(5900) << "    <disabled/>" << endl;
   if (available()) kdDebug(5900) << "    <available/>" << endl;

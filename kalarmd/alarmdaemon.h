@@ -1,8 +1,8 @@
 /*
-    KDE Alarm Daemon.
+    KAlarm Alarm Daemon.
 
-    This file is part of the KDE alarm daemon.
-    Copyright (c) 2001 David Jarvie <software@astrojar.org.uk>
+    This file is part of the KAlarm alarm daemon.
+    Copyright (c) 2001, 2004 David Jarvie <software@astrojar.org.uk>
     Based on the original, (c) 1998, 1999 Preston Brown
 
     This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-    As a special exception, permission is given to link this program
-    with any edition of Qt, and distribute the resulting executable,
-    without including the source code for Qt in the source distribution.
 */
 
 #ifndef _ALARMDAEMON_H
@@ -53,14 +49,10 @@ class AlarmDaemon : public QObject, public ADConfigDataRW, virtual public AlarmD
     void    enableAutoStart(bool enable);
     void    enableCal(const QString& urlString, bool enable)
                        { enableCal_(expandURL(urlString), enable); }
-    void    reloadCal(const QCString& appname, const QString& urlString)
-                       { reloadCal_(appname, expandURL(urlString), false); }
     void    reloadMsgCal(const QCString& appname, const QString& urlString)
-                       { reloadCal_(appname, expandURL(urlString), true); }
-    void    addCal(const QCString& appname, const QString& urlString)
-                       { addCal_(appname, expandURL(urlString), false); }
+                       { reloadCal_(appname, expandURL(urlString)); }
     void    addMsgCal(const QCString& appname, const QString& urlString)
-                       { addCal_(appname, expandURL(urlString), true); }
+                       { addCal_(appname, expandURL(urlString)); }
     void    removeCal(const QString& urlString)
                        { removeCal_(expandURL(urlString)); }
     void    resetMsgCal(const QCString& appname, const QString& urlString)
@@ -96,8 +88,8 @@ class AlarmDaemon : public QObject, public ADConfigDataRW, virtual public AlarmD
                         const QCString& dcopObject, int notificationType,
                         bool displayCalendarName, bool reregister);
     void        enableCal_(const QString& urlString, bool enable);
-    void        addCal_(const QCString& appname, const QString& urlString, bool msgCal);
-    void        reloadCal_(const QCString& appname, const QString& urlString, bool msgCal);
+    void        addCal_(const QCString& appname, const QString& urlString);
+    void        reloadCal_(const QCString& appname, const QString& urlString);
     void        reloadCal_(ADCalendarBase*);
     void        resetMsgCal_(const QCString& appname, const QString& urlString);
     void        removeCal_(const QString& urlString);
