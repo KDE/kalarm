@@ -278,7 +278,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	QGridLayout *grid = new QGridLayout(vlayout, 5, 4, 0);
 
 	mExceptionDateList = new QListBox(mExceptionGroup);
-	mExceptionDateList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	connect(mExceptionDateList, SIGNAL(selectionChanged()), SLOT(enableExceptionButtons()));
 	QWhatsThis::add(mExceptionDateList,
 	      i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
@@ -844,11 +844,8 @@ void RecurrenceEdit::changeException()
 {
 	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
 		return;
-	QListBoxItem* item = mExceptionDateList->selectedItem();
-	if (!item)
-		return;
-	int index = mExceptionDateList->index(item);
-	if (index >= 0)
+	int index = mExceptionDateList->currentItem();
+	if (index >= 0  &&  mExceptionDateList->isSelected(index))
 	{
 		QDate olddate = mExceptionDates[index];
 		QDate newdate = mExceptionDateEdit->date();
@@ -866,11 +863,8 @@ void RecurrenceEdit::changeException()
  */
 void RecurrenceEdit::deleteException()
 {
-	QListBoxItem* item = mExceptionDateList->selectedItem();
-	if (!item)
-		return;
-	int index = mExceptionDateList->index(item);
-	if (index >= 0)
+	int index = mExceptionDateList->currentItem();
+	if (index >= 0  &&  mExceptionDateList->isSelected(index))
 	{
 		mExceptionDates.remove(mExceptionDates.at(index));
 		mExceptionDateList->removeItem(index);
@@ -883,7 +877,8 @@ void RecurrenceEdit::deleteException()
  */
 void RecurrenceEdit::enableExceptionButtons()
 {
-	bool enable = mExceptionDateList->selectedItem();
+	int index = mExceptionDateList->currentItem();
+	bool enable = (index >= 0  &&  mExceptionDateList->isSelected(index));
 	if (mDeleteExceptionButton)
 		mDeleteExceptionButton->setEnabled(enable);
 	if (mChangeExceptionButton)
