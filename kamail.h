@@ -28,30 +28,36 @@ namespace KMime { namespace Types {
   struct Address;
 } }
 
+struct KAMailData;
+
 
 class KAMail
 {
 	public:
-		static QString    send(const KAEvent&, bool allowNotify = true);
-		static int        checkAddress(QString& address);
-		static int        checkAttachment(QString& attachment, KURL* = 0);
-		static bool       checkAttachment(const KURL&);
-		static QString    convertAddresses(const QString& addresses, EmailAddressList&);
-		static QString    convertAttachments(const QString& attachments, QStringList& list);
-		static const QString EMAIL_QUEUED_NOTIFY;
-		static QString    i18n_NeedFromEmailAddress();
+		static bool        send(const KAEvent&, QStringList& errmsgs, bool allowNotify = true);
+		static int         checkAddress(QString& address);
+		static int         checkAttachment(QString& attachment, KURL* = 0);
+		static bool        checkAttachment(const KURL&);
+		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
+		static QString     convertAttachments(const QString& attachments, QStringList& list);
+		static QString     i18n_NeedFromEmailAddress();
+		static QString     i18n_sent_mail();
+
 	private:
 #if QT_VERSION >= 300
 		typedef QIODevice::Offset Offset;
 #else
 		typedef uint Offset;
 #endif
-		static QString    sendKMail(const KAEvent&, const QString& from, const QString& bcc, bool allowNotify);
-		static QString    initHeaders(const KAEvent&, const QString& from, const QString& bcc, bool dateId);
-		static QString    appendBodyAttachments(QString& message, const KAEvent&);
-		static QString    convertAddress(KMime::Types::Address, EmailAddressList&);
-		static void       notifyQueued(const KAEvent&);
-		static char*      base64Encode(const char* in, Offset size, Offset& outSize);
+		static QString     sendKMail(const KAMailData&);
+		static QString     initHeaders(const KAMailData&, bool dateId);
+		static QString     appendBodyAttachments(QString& message, const KAEvent&);
+		static QString     addToKMailFolder(const KAMailData&, const char* folder);
+		static bool        callKMail(const QByteArray& callData, const QCString& iface, const QCString& function);
+		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
+		static void        notifyQueued(const KAEvent&);
+		static char*       base64Encode(const char* in, Offset size, Offset& outSize);
+		static QStringList errors(const QString& error = QString::null, bool sendfail = true);
 };
 
 #endif // KAMAIL_H

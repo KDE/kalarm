@@ -53,11 +53,11 @@ class Preferences : public QObject
 		bool           hasStartOfDayChanged() const     { return mStartOfDayChanged; }
 		bool           runInSystemTray() const          { return mRunInSystemTray; }
 		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
-		bool           quitWarn() const;
-		void           setQuitWarn(bool);
+		bool           quitWarn() const                 { return notifying(QUIT_WARN); }
+		void           setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
 		bool           autostartTrayIcon() const        { return mAutostartTrayIcon; }
-		bool           confirmAlarmDeletion() const;
-		void           setConfirmAlarmDeletion(bool);
+		bool           confirmAlarmDeletion() const     { return notifying(CONFIRM_ALARM_DELETION); }
+		void           setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
 		Feb29Type      feb29RecurType() const           { return mFeb29RecurType; }
 		bool           modalMessages() const            { return mModalMessages; }
 		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
@@ -69,7 +69,9 @@ class Preferences : public QObject
 		const QString& tooltipTimeToPrefix() const      { return mTooltipTimeToPrefix; }
 		int            daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
 		MailClient     emailClient() const              { return mEmailClient; }
-		bool           emailQueuedNotify() const        { return mEmailQueuedNotify; }
+		bool           emailCopyToKMail() const         { return mEmailCopyToKMail  &&  mEmailClient == SENDMAIL; }
+		bool           emailQueuedNotify() const        { return notifying(EMAIL_QUEUED_NOTIFY); }
+		void           setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
 		bool           emailUseControlCentre() const    { return mEmailUseControlCentre; }
 		bool           emailBccUseControlCentre() const { return mEmailBccUseControlCentre; }
 		QString        emailAddress() const;
@@ -97,12 +99,10 @@ class Preferences : public QObject
 		void           syncToDisc();
 		void           updateStartOfDayCheck();
 
-		static void    setNotify(const QString& messageID, bool yesNoMessage, bool notify);
-		static bool    notifying(const QString& messageID, bool yesNoMessage);
-
 		// Config file entry names for notification messages
 		static const QString     QUIT_WARN;
 		static const QString     CONFIRM_ALARM_DELETION;
+		static const QString     EMAIL_QUEUED_NOTIFY;
 
 		// Default values for settings
 		static const ColourList  default_messageColours;
@@ -126,6 +126,7 @@ class Preferences : public QObject
 		static const QString     default_tooltipTimeToPrefix;
 		static const int         default_daemonTrayCheckInterval;
 		static const MailClient  default_emailClient;
+		static const bool        default_emailCopyToKMail;
 		static const bool        default_emailQueuedNotify;
 		static const bool        default_emailUseControlCentre;
 		static const bool        default_emailBccUseControlCentre;
@@ -156,9 +157,11 @@ class Preferences : public QObject
 
 	private:
 		Preferences();     // only one instance allowed
+		int                 startOfDayCheck() const;
+		static void         setNotify(const QString& messageID, bool notify);
+		static bool         notifying(const QString& messageID);
 
 		static Preferences* mInstance;
-		int                 startOfDayCheck() const;
 		QString             mEmailAddress;
 		QString             mEmailBccAddress;
 
@@ -188,7 +191,7 @@ class Preferences : public QObject
 		QString             mTooltipTimeToPrefix;
 		int                 mDaemonTrayCheckInterval;
 		MailClient          mEmailClient;
-		bool                mEmailQueuedNotify;
+		bool                mEmailCopyToKMail;
 		bool                mEmailUseControlCentre;
 		bool                mEmailBccUseControlCentre;
 		QColor              mDisabledColour;

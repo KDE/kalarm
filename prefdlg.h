@@ -36,6 +36,7 @@ class QComboBox;
 class QLineEdit;
 class KColorCombo;
 class FontColourChooser;
+class ButtonGroup;
 class TimeSpinBox;
 class SpinBox;
 class SpecialActions;
@@ -140,6 +141,7 @@ class EmailPrefTab : public PrefsTabBase
 		virtual void setDefaults();
 
 	private slots:
+		void         slotEmailClientChanged(int);
 		void         slotEmailUseCCToggled(bool);
 		void         slotEmailBccUseCCToggled(bool);
 		void         slotAddressChanged()    { mAddressChanged = true; }
@@ -148,12 +150,13 @@ class EmailPrefTab : public PrefsTabBase
 		void         setEmailAddress(bool useControlCentre, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
 
-		QButtonGroup*  mEmailClient;
+		ButtonGroup*   mEmailClient;
 		QLineEdit*     mEmailAddress;
 		QCheckBox*     mEmailUseControlCentre;
 		QLineEdit*     mEmailBccAddress;
 		QCheckBox*     mEmailBccUseControlCentre;
 		QCheckBox*     mEmailQueuedNotify;
+		QCheckBox*     mEmailCopyToKMail;
 		bool           mAddressChanged;
 };
 

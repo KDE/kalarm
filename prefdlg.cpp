@@ -440,7 +440,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	QHBox* box = new QHBox(mPage);
 	box->setSpacing(2*KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Email client:"), box);
-	mEmailClient = new QButtonGroup(box);
+	mEmailClient = new ButtonGroup(box);
 	mEmailClient->hide();
 	QRadioButton* radio = new QRadioButton(i18n("&KMail"), box, "kmail");
 	radio->setMinimumSize(radio->sizeHint());
@@ -448,6 +448,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	radio = new QRadioButton(i18n("&Sendmail"), box, "sendmail");
 	radio->setMinimumSize(radio->sizeHint());
 	mEmailClient->insert(radio, Preferences::SENDMAIL);
+	connect(mEmailClient, SIGNAL(buttonSet(int)), SLOT(slotEmailClientChanged(int)));
 	box->setFixedHeight(box->sizeHint().height());
 	QWhatsThis::add(box,
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
@@ -455,6 +456,14 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	           "a KMail composer window is displayed to enable you to send the email.\n"
 	           "Sendmail: The email is sent automatically. This option will only work if "
 	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
+
+	box = new QHBox(mPage);   // this is to allow left adjustment
+	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder").arg(KAMail::i18n_sent_mail()), box);
+	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
+	QWhatsThis::add(mEmailCopyToKMail,
+	      i18n("After sending an email, store a copy in KMail's %1 folder").arg(KAMail::i18n_sent_mail()));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
 
 	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
 	QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
@@ -518,9 +527,10 @@ void EmailPrefTab::restore()
 {
 	Preferences* preferences = Preferences::instance();
 	mEmailClient->setButton(preferences->mEmailClient);
+	mEmailCopyToKMail->setChecked(preferences->emailCopyToKMail());
 	setEmailAddress(preferences->mEmailUseControlCentre, preferences->mEmailAddress);
 	setEmailBccAddress(preferences->mEmailBccUseControlCentre, preferences->mEmailBccAddress);
-	mEmailQueuedNotify->setChecked(Preferences::notifying(KAMail::EMAIL_QUEUED_NOTIFY, false));
+	mEmailQueuedNotify->setChecked(preferences->emailQueuedNotify());
 	mAddressChanged = false;
 }
 
@@ -529,9 +539,10 @@ void EmailPrefTab::apply(bool syncToDisc)
 	Preferences* preferences = Preferences::instance();
 	int client = mEmailClient->id(mEmailClient->selected());
 	preferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+	preferences->mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
 	preferences->setEmailAddress(mEmailUseControlCentre->isChecked(), mEmailAddress->text().stripWhiteSpace());
 	preferences->setEmailBccAddress(mEmailBccUseControlCentre->isChecked(), mEmailBccAddress->text().stripWhiteSpace());
-	Preferences::setNotify(KAMail::EMAIL_QUEUED_NOTIFY, false, mEmailQueuedNotify->isChecked());
+	preferences->setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -548,6 +559,11 @@ void EmailPrefTab::setEmailAddress(bool useControlCentre, const QString& address
 	mEmailUseControlCentre->setChecked(useControlCentre);
 	mEmailAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 	slotEmailUseCCToggled(true);
+}
+
+void EmailPrefTab::slotEmailClientChanged(int id)
+{
+	mEmailCopyToKMail->setEnabled(id == Preferences::SENDMAIL);
 }
 
 void EmailPrefTab::slotEmailUseCCToggled(bool)

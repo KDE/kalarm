@@ -27,6 +27,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
+#include "messagebox.h"
 #include "preferences.moc"
 
 Preferences* Preferences::mInstance = 0;
@@ -52,6 +53,7 @@ const bool       Preferences::default_showTooltipAlarmTime     = true;
 const bool       Preferences::default_showTooltipTimeToAlarm   = true;
 const QString    Preferences::default_tooltipTimeToPrefix      = QString::fromLatin1("+");
 const int        Preferences::default_daemonTrayCheckInterval  = 10;     // (seconds)
+const bool       Preferences::default_emailCopyToKMail         = false;
 const bool       Preferences::default_emailQueuedNotify        = false;
 #if KDE_VERSION >= 210
 const bool       Preferences::default_emailUseControlCentre    = true;
@@ -103,7 +105,7 @@ static const QString TOOLTIP_TIME_TO_ALARM    = QString::fromLatin1("ShowTooltip
 static const QString TOOLTIP_TIME_TO_PREFIX   = QString::fromLatin1("TooltipTimeToPrefix");
 static const QString DAEMON_TRAY_INTERVAL     = QString::fromLatin1("DaemonTrayCheckInterval");
 static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient");
-static const QString EMAIL_QUEUED_NOTIFY      = QString::fromLatin1("EmailQueuedNotify");
+static const QString EMAIL_COPY_TO_KMAIL      = QString::fromLatin1("EmailCopyToKMail");
 static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
 static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QString::fromLatin1("EmailBccUseControlCenter");
 static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
@@ -131,6 +133,7 @@ static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostActi
 // Config file entry names for notification messages
 const QString Preferences::QUIT_WARN              = QString::fromLatin1("QuitWarn");
 const QString Preferences::CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmDeletion");
+const QString Preferences::EMAIL_QUEUED_NOTIFY    = QString::fromLatin1("EmailQueuedNotify");
 
 static const int SODxor = 0x82451630;
 inline int Preferences::startOfDayCheck() const
@@ -144,7 +147,15 @@ inline int Preferences::startOfDayCheck() const
 Preferences* Preferences::instance()
 {
 	if (!mInstance)
+	{
 		mInstance = new Preferences;
+
+		// Set the default button for the Quit warning message box to Cancel
+		MessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
+		MessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
+		MessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+		MessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+	}
 	return mInstance;
 }
 
@@ -189,7 +200,7 @@ Preferences::Preferences()
 	mDaemonTrayCheckInterval = config->readNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	QCString client          = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();
 	mEmailClient             = (client == "sendmail" ? SENDMAIL : KMAIL);
-	mEmailQueuedNotify       = config->readBoolEntry(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+	mEmailCopyToKMail        = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
 	bool bccFrom             = config->hasKey(EMAIL_USE_CONTROL_CENTRE) && !config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE);
 #if KDE_VERSION >= 210
 	mEmailUseControlCentre   = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
@@ -271,7 +282,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(TOOLTIP_TIME_TO_PREFIX, mTooltipTimeToPrefix);
 	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
 	config->writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
-	config->writeEntry(EMAIL_QUEUED_NOTIFY, mEmailQueuedNotify);
+	config->writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
 	config->writeEntry(EMAIL_USE_CONTROL_CENTRE, mEmailUseControlCentre);
 	config->writeEntry(EMAIL_BCC_USE_CONTROL_CENTRE, mEmailBccUseControlCentre);
 	config->writeEntry(EMAIL_ADDRESS, (mEmailUseControlCentre ? QString() : mEmailAddress));
@@ -317,26 +328,6 @@ void Preferences::updateStartOfDayCheck()
 	config->writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
 	config->sync();
 	mStartOfDayChanged = false;
-}
-
-bool Preferences::quitWarn() const
-{
-	return notifying(QUIT_WARN, true);
-}
-
-void Preferences::setQuitWarn(bool yes)
-{
-	return setNotify(QUIT_WARN, true, yes);
-}
-
-bool Preferences::confirmAlarmDeletion() const
-{
-	return notifying(CONFIRM_ALARM_DELETION, false);
-}
-
-void Preferences::setConfirmAlarmDeletion(bool yes)
-{
-	return setNotify(CONFIRM_ALARM_DELETION, false, yes);
 }
 
 QString Preferences::emailAddress() const
@@ -386,36 +377,22 @@ void Preferences::setEmailBccAddress(bool useControlCentre, const QString& addre
 }
 
 /******************************************************************************
-* Called to allow output of the specified message dialog again, where the
+* Called to allow or suppress output of the specified message dialog, where the
 * dialog has a checkbox to turn notification off.
-* Set 'yesNoMessage' true if the message is used in a KMessageBox::*YesNo*() call.
 */
-void Preferences::setNotify(const QString& messageID, bool yesNoMessage, bool notify)
+void Preferences::setNotify(const QString& messageID, bool notify)
 {
-	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
-	if (yesNoMessage)
-		config->writeEntry(messageID, QString::fromLatin1(notify ? "" : "yes"));
-	else
-		config->writeEntry(messageID, notify);
-	config->sync();
+	MessageBox::saveDontShowAgainContinue(messageID, !notify);
 }
 
 /******************************************************************************
 * Return whether the specified message dialog is output, where the dialog has
 * a checkbox to turn notification off.
-* Set 'yesNoMessage' true if the message is used in a KMessageBox::*YesNo*() call.
 * Reply = false if message has been suppressed (by preferences or by selecting
-*                  "don't ask again")
+*               "don't ask again")
 *       = true in all other cases.
 */
-bool Preferences::notifying(const QString& messageID, bool yesNoMessage)
+bool Preferences::notifying(const QString& messageID)
 {
-	if (yesNoMessage)
-	{
-		KMessageBox::ButtonCode b;
-		return KMessageBox::shouldBeShownYesNo(messageID, b);
-	}
-	else
-		return KMessageBox::shouldBeShownContinue(messageID);
+	return MessageBox::shouldBeShownContinue(messageID);
 }

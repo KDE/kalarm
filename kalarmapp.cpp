@@ -29,7 +29,6 @@
 #include <qregexp.h>
 
 #include <kcmdlineargs.h>
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -53,6 +52,7 @@
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "messagewin.h"
 #include "preferences.h"
 #include "prefdlg.h"
@@ -760,11 +760,10 @@ void KAlarmApp::doQuit(QWidget* parent)
 {
 	kdDebug(5950) << "KAlarmApp::doQuit()\n";
 	if (mDisableAlarmsIfStopped
-	&&  KMessageBox::warningYesNo(parent, i18n("Quitting will disable alarms\n"
-	                                           "(once any alarm message windows are closed)."),
-	                              QString::null, KStdGuiItem::quit(), KStdGuiItem::cancel(),
-	                              Preferences::QUIT_WARN
-	                             ) != KMessageBox::Yes)
+	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
+	                                      i18n("Quitting will disable alarms\n(once any alarm message windows are closed)."),
+	                                      QString::null, KStdGuiItem::quit(), Preferences::QUIT_WARN
+	                                     ) != KMessageBox::Yes)
 		return;
 	quitIf(0, true);
 }
@@ -1602,23 +1601,17 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		case KAAlarm::EMAIL:
 		{
 			kdDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to: " << event.emailAddresses(", ") << endl;
-			QString err = KAMail::send(event, (reschedule || allowDefer));
-			if (!err.isNull())
-			{
-				QStringList errmsgs;
-				if (err.isEmpty())
-				{
-					errmsgs += i18n("Failed to send email");
-					kdDebug(5950) << "KAlarmApp::execAlarm(): failed\n";
-				}
-				else
-				{
-					errmsgs += i18n("Failed to send email:");
-					errmsgs += err;
-					kdDebug(5950) << "KAlarmApp::execAlarm(): failed: " << err << endl;
-				}
-				(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+			QStringList errmsgs;
+			if (!KAMail::send(event, errmsgs, (reschedule || allowDefer)))
 				result = 0;
+			if (errmsgs.count())
+			{
+				// Some error occurred, although the email may have been sent successfully
+				if (result)
+					kdDebug(5950) << "KAlarmApp::execAlarm(): copy error: " << errmsgs[1] << endl;
+				else
+					kdDebug(5950) << "KAlarmApp::execAlarm(): failed: " << errmsgs[1] << endl;
+				(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
 			}
 			if (reschedule)
 				rescheduleAlarm(event, alarm, true);
