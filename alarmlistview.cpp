@@ -24,6 +24,7 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qheader.h>
+#include <qregexp.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -59,7 +60,8 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  mTimeToColumn(1),
 	  mRepeatColumn(2),
 	  mColourColumn(3),
-	  mMessageColumn(4),
+	  mTypeColumn(4),
+	  mMessageColumn(5),
 	  mDrawMessageInColour(false),
 	  mShowExpired(false)
 {
@@ -69,6 +71,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	addColumn(i18n("Time To"));        // time-to-alarm column
 	addColumn(i18n("Repeat"));         // repeat count column
 	addColumn(QString::null);          // colour column
+	addColumn(QString::null);          // alarm type column
 	addLastColumn(i18n("Message, File or Command"));
 	setSorting(mTimeColumn);           // sort initially by date/time
 	mTimeColumnHeaderWidth   = columnWidth(mTimeColumn);
@@ -79,6 +82,10 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	// Set the width of the colour column in proportion to height
 	setColumnWidth(mColourColumn, itemHeight() * 3/4);
 	setColumnWidthMode(mColourColumn, QListView::Manual);
+
+	// Set the width of the alarm type column to exactly accommodate the icons
+	setColumnWidth(mTypeColumn, AlarmListViewItem::typeIconWidth(this));
+	setColumnWidthMode(mTypeColumn, QListView::Manual);
 
 	mInstanceList.append(this);
 
@@ -244,8 +251,10 @@ QString AlarmListView::whatsThisText(int column) const
 		return i18n("How often the alarm recurs");
 	if (column == mColourColumn)
 		return i18n("Background color of alarm message");
+	if (column == mTypeColumn)
+		return i18n("Alarm type (message, file, command or email)");
 	if (column == mMessageColumn)
-		return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line. The alarm type is indicated by the icon at the left.");
+		return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line");
 	return i18n("List of scheduled alarms");
 }
 
@@ -254,6 +263,8 @@ QString AlarmListView::whatsThisText(int column) const
 =  Class: AlarmListViewItem
 =  Contains the details of one alarm for display in the AlarmListView.
 =============================================================================*/
+int AlarmListViewItem::mTimeHourPos = -2;
+int AlarmListViewItem::mDigitWidth  = -1;
 
 AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
 	: EventListViewItemBase(parent, event),
@@ -315,6 +326,8 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 
 	bool showColour = (event.action() == KAEvent::MESSAGE || event.action() == KAEvent::FILE);
 	mColourOrder.sprintf("%06u", (showColour ? event.bgColour().rgb() : 0));
+
+	mTypeOrder.sprintf("%02d", event.action());
 }
 
 /******************************************************************************
@@ -362,11 +375,29 @@ QString AlarmListViewItem::alarmText(const KAEvent& event, bool full, bool* lfSt
 */
 QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 {
-	QString dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true);
+	KLocale* locale = KGlobal::locale();
+	QString dateTimeText = locale->formatDate(dateTime.date(), true);
 	if (!dateTime.isDateOnly())
 	{
 		dateTimeText += ' ';
-		dateTimeText += KGlobal::locale()->formatTime(dateTime.time());
+		QString time = locale->formatTime(dateTime.time());
+		if (mTimeHourPos == -2)
+		{
+			// Initialise the position of the hour within the time string, if leading
+			// zeroes are omitted, so that displayed times can be aligned with each other.
+			mTimeHourPos = -1;     // default = alignment isn't possible/sensible
+			if (!QApplication::reverseLayout())    // don't try to align right-to-left languages
+			{
+				QString fmt = locale->timeFormat();
+				int i = fmt.find(QRegExp("%[kl]"));   // check if leading zeroes are omitted
+				if (i >= 0  &&  i == fmt.find('%'))   // and whether the hour is first
+					mTimeHourPos = i;             // yes, so need to align
+			}
+		}
+		if (mTimeHourPos >= 0  &&  (int)time.length() > mTimeHourPos + 1
+		&&  time[mTimeHourPos].isDigit()  &&  !time[mTimeHourPos + 1].isDigit())
+			dateTimeText += '~';     // improve alignment of times with no leading zeroes
+		dateTimeText += time;
 	}
 	return dateTimeText + ' ';
 }
@@ -377,9 +408,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
 	if (event().expired())
-{kdDebug(5950)<<" --- timeToAlarmText(): expired\n";
 		return QString::null;
-}
 	DateTime dateTime = event().nextDateTime(false);
 	if (dateTime.isDateOnly())
 	{
@@ -388,9 +417,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	}
 	int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
 	if (mins < 0)
-{kdDebug(5950)<<" --- timeToAlarmText(): past\n";
 		return QString::null;
-}
 	char minutes[3] = "00";
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
@@ -419,7 +446,6 @@ void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDispla
 	else
 	{
 		QString tta = timeToAlarmText(now);
-kdDebug(5950)<<"---updateTimeToAlarm(): "<<tta<<endl;
 		if (forceDisplay  ||  tta != text(alarmListView()->timeToColumn()))
 			setText(alarmListView()->timeToColumn(), tta);
 		mTimeToAlarmShown = !tta.isNull();
@@ -433,7 +459,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 {
 	const AlarmListView* listView = alarmListView();
 	int    margin = listView->itemMargin();
-	QRect  box(margin, margin, width - margin*2, height() - margin*2);
+	QRect  box(margin, margin, width - margin*2, height() - margin*2);   // area within which to draw
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
@@ -442,9 +468,30 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 
-	if (column == listView->timeColumn()
-	||  column == listView->timeToColumn())
-		painter->drawText(box, AlignVCenter, text(column));
+	if (column == listView->timeColumn())
+	{
+		int i = -1;
+		QString str = text(column);
+		if (mTimeHourPos >= 0)
+		{
+			// Need to pad out spacing to align times without leading zeroes
+			i = str.find(" ~");
+			if (i >= 0)
+			{
+				if (mDigitWidth < 0)
+					mDigitWidth = painter->fontMetrics().width("0");
+				QString date = str.left(i + 1);
+				int w = painter->fontMetrics().width(date) + mDigitWidth;
+				painter->drawText(box, AlignVCenter, date);
+				box.setLeft(box.left() + w);
+				painter->drawText(box, AlignVCenter, str.mid(i + 2));
+			}
+		}
+		if (i < 0)
+			painter->drawText(box, AlignVCenter, str);
+	}
+	else if (column == listView->timeToColumn())
+		painter->drawText(box, AlignVCenter | AlignRight, text(column));
 	else if (column == listView->repeatColumn())
 		painter->drawText(box, AlignVCenter | AlignHCenter, text(column));
 	else if (column == listView->colourColumn())
@@ -453,10 +500,10 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		if (event().action() == KAEvent::MESSAGE || event().action() == KAEvent::FILE)
 			painter->fillRect(box, event().bgColour());
 	}
-	else if (column == listView->messageColumn())
+	else if (column == listView->typeColumn())
 	{
+		// Display the alarm type icon, horizontally and vertically centred in the cell
 		QPixmap* pixmap = eventIcon();
-		int frameWidth = listView->style().pixelMetric(QStyle::PM_DefaultFrameWidth);
 		QRect pixmapRect = pixmap->rect();
 		int diff = box.height() - pixmap->height();
 		if (diff < 0)
@@ -464,20 +511,30 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 			pixmapRect.setTop(-diff / 2);
 			pixmapRect.setHeight(box.height());
 		}
-		QRect iconRect(box.left(), box.top() + (diff > 0 ? diff / 2 : 0), pixmap->width(), (diff > 0 ? pixmap->height() : box.height()));
-		QRect textRect = box;
-		textRect.setLeft(box.left() + iconWidth() + 3*frameWidth);
+		QPoint iconTopLeft(box.left() + (box.width() - pixmapRect.width()) / 2,
+		                   box.top() + (diff > 0 ? diff / 2 : 0));
+		painter->drawPixmap(iconTopLeft, *pixmap, pixmapRect);
+	}
+	else if (column == listView->messageColumn())
+	{
 		if (!selected  &&  listView->drawMessageInColour())
 		{
 			painter->fillRect(box, event().bgColour());
 			painter->setBackgroundColor(event().bgColour());
 //			painter->setPen(event().fgColour());
 		}
-		painter->drawPixmap(QPoint(iconRect.left() + frameWidth, iconRect.top()), *pixmap, pixmapRect);
 		QString txt = text(column);
-		painter->drawText(textRect, AlignVCenter, txt);
-		mMessageColWidth = textRect.left() + listView->fontMetrics().boundingRect(txt).width();
+		painter->drawText(box, AlignVCenter, txt);
+		mMessageColWidth = listView->fontMetrics().boundingRect(txt).width();
 	}
+}
+
+/******************************************************************************
+*  Return the width needed for the icons in the alarm type column.
+*/
+int AlarmListViewItem::typeIconWidth(AlarmListView* v)
+{
+	return iconWidth() +  2 * v->style().pixelMetric(QStyle::PM_DefaultFrameWidth);
 }
 
 /******************************************************************************
@@ -493,6 +550,8 @@ QString AlarmListViewItem::key(int column, bool) const
 		return mRepeatOrder;
 	if (column == listView->colourColumn())
 		return mColourOrder;
+	if (column == listView->typeColumn())
+		return mTypeOrder;
 	return text(column).lower();
 }
 

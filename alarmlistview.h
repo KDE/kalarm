@@ -38,6 +38,7 @@ class AlarmListViewItem : public EventListViewItemBase
 		AlarmListView*      alarmListView() const         { return (AlarmListView*)listView(); }
 		bool                messageLfStripped() const     { return mMessageLfStripped; }
 		int                 messageColWidthNeeded() const { return mMessageColWidth; }
+		static int          typeIconWidth(AlarmListView*);
 		static QString      alarmText(const KAEvent& e, bool full, bool* lfStripped = 0);
 		// Overridden base class methods
 		AlarmListViewItem*  nextSibling() const           { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
@@ -49,9 +50,12 @@ class AlarmListViewItem : public EventListViewItemBase
 		QString             alarmTimeText(const DateTime&) const;
 		QString             timeToAlarmText(const QDateTime& now) const;
 
+		static int          mTimeHourPos;       // position of hour within time string, or -1 if leading zeroes included
+		static int          mDigitWidth;        // display width of a digit
 		QString             mDateTimeOrder;     // controls ordering of date/time column
 		QString             mRepeatOrder;       // controls ordering of repeat column
 		QString             mColourOrder;       // controls ordering of colour column
+		QString             mTypeOrder;         // controls ordering of alarm type column
 		mutable int         mMessageColWidth;   // width needed to display complete message text
 		mutable bool        mMessageLfStripped; // multi-line message text has been truncated for the display
 		bool                mTimeToAlarmShown;  // relative alarm time is displayed
@@ -74,6 +78,7 @@ class AlarmListView : public EventListViewBase
 		int                    timeToColumn() const   { return mTimeToColumn; }
 		int                    repeatColumn() const   { return mRepeatColumn; }
 		int                    colourColumn() const   { return mColourColumn; }
+		int                    typeColumn() const     { return mTypeColumn; }
 		int                    messageColumn() const  { return mMessageColumn; }
 		// Overridden base class methods
 		static void            addEvent(const KAEvent&, EventListViewBase*);
@@ -112,6 +117,7 @@ class AlarmListView : public EventListViewBase
 		int                    mTimeToColumn;         // index to time-to-alarm column
 		int                    mRepeatColumn;         // index to repetition type column
 		int                    mColourColumn;         // index to colour column
+		int                    mTypeColumn;           // index to alarm type column
 		int                    mMessageColumn;        // index to message column
 		int                    mTimeColumnHeaderWidth;
 		int                    mTimeToColumnHeaderWidth;
