@@ -80,12 +80,8 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 		                         i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 
-	// Replace the default handler for the Quit context menu item
-	KActionCollection* actcol = actionCollection();
-	actcol->remove(actcol->action(KStdAction::stdName(KStdAction::Quit)));
-	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
-
 	// Set up the context menu
+	KActionCollection* actcol = actionCollection();
 	AlarmEnableAction* a = Daemon::createAlarmEnableAction(actcol, "tAlarmEnable");
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
@@ -94,6 +90,10 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, "tNewFromTempl")->plug(contextMenu());
 #endif
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
+
+	// Replace the default handler for the Quit context menu item
+	actcol->remove(actcol->action(KStdAction::stdName(KStdAction::Quit)));
+	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
 
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();
