@@ -1,7 +1,7 @@
 /*
  *  prefs.cpp  -  program preferences
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -345,6 +345,7 @@ AppearancePrefTab::AppearancePrefTab(QVBox* frame)
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("E&xpired alarm color:"), box);
 	label->setMinimumSize(label->sizeHint());
+	box->setStretchFactor(new QWidget(box), 1);
 	mExpiredColour = new KColorCombo(box);
 	mExpiredColour->setMinimumSize(mExpiredColour->sizeHint());
 	label->setBuddy(mExpiredColour);
@@ -428,6 +429,22 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	box = new QHBox(itemBox);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("Reminder &units:"), box);
+	label->setFixedSize(label->sizeHint());
+	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
+	mDefaultReminderUnits->insertItem(i18n("Hours/Minutes"), EditAlarmDlg::REMIND_HOURS_MINUTES);
+	mDefaultReminderUnits->insertItem(i18n("Days"), EditAlarmDlg::REMIND_DAYS);
+	mDefaultReminderUnits->insertItem(i18n("Weeks"), EditAlarmDlg::REMIND_WEEKS);
+	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
+	label->setBuddy(mDefaultReminderUnits);
+	QWhatsThis::add(box,
+	      i18n("The default units for the reminder in the alarm edit dialog."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);
+	itemBox->setFixedHeight(box->sizeHint().height());
+
 	box = new QHBox(mPage);   // top-adjust all the widgets
 }
 
@@ -438,6 +455,7 @@ void DefaultPrefTab::restore()
 	mDefaultBeep->setChecked(mSettings->mDefaultBeep);
 	mDefaultEmailBcc->setChecked(mSettings->mDefaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->mDefaultRecurPeriod));
+	mDefaultReminderUnits->setCurrentItem(mSettings->mDefaultReminderUnits);
 }
 
 void DefaultPrefTab::apply(bool syncToDisc)
@@ -455,6 +473,7 @@ void DefaultPrefTab::apply(bool syncToDisc)
 		case 0:
 		default: mSettings->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
 	}
+	mSettings->mDefaultReminderUnits = static_cast<EditAlarmDlg::ReminderUnits>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -465,6 +484,7 @@ void DefaultPrefTab::setDefaults()
 	mDefaultBeep->setChecked(mSettings->default_defaultBeep);
 	mDefaultEmailBcc->setChecked(mSettings->default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->default_defaultRecurPeriod));
+	mDefaultReminderUnits->setCurrentItem(mSettings->default_defaultReminderUnits);
 }
 
 int DefaultPrefTab::recurIndex(RecurrenceEdit::RepeatType type)

@@ -43,18 +43,21 @@ const QCString APPNAME("KALARM");
 static const QCString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
 static const QString FILE_TYPE        = QString::fromLatin1("FILE");
 static const QString AT_LOGIN_TYPE    = QString::fromLatin1("LOGIN");
+static const QString REMINDER_TYPE    = QString::fromLatin1("REMINDER");
 static const QString DEFERRAL_TYPE    = QString::fromLatin1("DEFERRAL");
 static const QString DISPLAYING_TYPE  = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
 
 // Event categories
-static const QString BEEP_CATEGORY        = QString::fromLatin1("BEEP");
-static const QString EMAIL_BCC_CATEGORY   = QString::fromLatin1("BCC");
-static const QString CONFIRM_ACK_CATEGORY = QString::fromLatin1("ACKCONF");
-static const QString LATE_CANCEL_CATEGORY = QString::fromLatin1("LATECANCEL");
-static const QString ARCHIVE_CATEGORY     = QString::fromLatin1("SAVE");
+static const QString BEEP_CATEGORY             = QString::fromLatin1("BEEP");
+static const QString EMAIL_BCC_CATEGORY        = QString::fromLatin1("BCC");
+static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
+static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL");
+static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
+static const QRegExp ARCHIVE_REMINDER_CATEGORY = QRegExp(QString::fromLatin1("^SAVE \\d+[MHD]$"));
+static const QString ARCHIVE_CATEGORY_TEMPLATE = QString::fromLatin1("SAVE %1%2");
 
-static const QString EXPIRED_UID          = QString::fromLatin1("-exp-");
-static const QString DISPLAYING_UID       = QString::fromLatin1("-disp-");
+static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
+static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
 
 struct AlarmData
 {
@@ -78,20 +81,24 @@ typedef QMap<KAlarmAlarm::Type, AlarmData> AlarmMap;
 void KAlarmEvent::copy(const KAlarmEvent& event)
 {
 	KAAlarmEventBase::copy(event);
-	mAudioFile            = event.mAudioFile;
-	mEndDateTime          = event.mEndDateTime;
-	mAtLoginDateTime      = event.mAtLoginDateTime;
-	mDeferralTime         = event.mDeferralTime;
-	mDisplayingTime       = event.mDisplayingTime;
-	mDisplayingFlags      = event.mDisplayingFlags;
-	mRevision             = event.mRevision;
-	mRemainingRecurrences = event.mRemainingRecurrences;
-	mAlarmCount           = event.mAlarmCount;
-	mRecursFeb29          = event.mRecursFeb29;
-	mAnyTime              = event.mAnyTime;
-	mExpired              = event.mExpired;
-	mArchive              = event.mArchive;
-	mUpdated              = event.mUpdated;
+	mAudioFile               = event.mAudioFile;
+	mStartDateTime           = event.mStartDateTime;
+	mEndDateTime             = event.mEndDateTime;
+	mAtLoginDateTime         = event.mAtLoginDateTime;
+	mDeferralTime            = event.mDeferralTime;
+	mDisplayingTime          = event.mDisplayingTime;
+	mDisplayingFlags         = event.mDisplayingFlags;
+	mReminderMinutes         = event.mReminderMinutes;
+	mReminderDeferralMinutes = event.mReminderDeferralMinutes;
+	mReminderArchiveMinutes  = event.mReminderArchiveMinutes;
+	mRevision                = event.mRevision;
+	mRemainingRecurrences    = event.mRemainingRecurrences;
+	mAlarmCount              = event.mAlarmCount;
+	mRecursFeb29             = event.mRecursFeb29;
+	mAnyTime                 = event.mAnyTime;
+	mMainExpired             = event.mMainExpired;
+	mArchive                 = event.mArchive;
+	mUpdated                 = event.mUpdated;
 	delete mRecurrence;
 	if (event.mRecurrence)
 		mRecurrence = new Recurrence(*event.mRecurrence, 0);
@@ -113,6 +120,7 @@ void KAlarmEvent::set(const Event& event)
 	mConfirmAck = false;
 	mLateCancel = false;
 	mArchive    = false;
+	mReminderArchiveMinutes = 0;
 	mColour = QColor(255, 255, 255);    // missing/invalid colour - return white
 	if (cats.count() > 0)
 	{
@@ -131,24 +139,49 @@ void KAlarmEvent::set(const Event& event)
 				mLateCancel = true;
 			else if (cats[i] == ARCHIVE_CATEGORY)
 				mArchive = true;
+			else if (cats[i].find(ARCHIVE_REMINDER_CATEGORY) == 0)
+			{
+				// It's the archive flag plus a reminder time
+				mArchive = true;
+				char ch;
+				mReminderArchiveMinutes = 0;
+				const char* cat = cats[i].latin1();
+				while ((ch = *cat) != 0  &&  (ch < '0' || ch > '9'))
+					++cat;
+				if (ch)
+				{
+					mReminderArchiveMinutes = ch - '0';
+					while ((ch = *++cat) >= '0'  &&  ch <= '9')
+						mReminderArchiveMinutes = mReminderArchiveMinutes * 10 + ch - '0';
+					switch (ch)
+					{
+						case 'M':  break;
+						case 'H':  mReminderArchiveMinutes *= 60;    break;
+						case 'D':  mReminderArchiveMinutes *= 1440;  break;
+					}
+				}
+			}
 	}
 
 	// Extract status from the event's alarms.
 	// First set up defaults.
-	mActionType     = T_MESSAGE;
-	mRecursFeb29    = false;
-	mRepeatAtLogin  = false;
-	mDeferral       = false;
-	mDisplaying     = false;
-	mExpired        = true;
-	mText           = "";
-	mAudioFile      = "";
-	mEmailSubject   = "";
+	mActionType              = T_MESSAGE;
+	mRecursFeb29             = false;
+	mRepeatAtLogin           = false;
+	mDeferral                = false;
+	mDisplaying              = false;
+	mMainExpired             = true;
+	mReminderMinutes         = 0;
+	mReminderDeferralMinutes = 0;
+	mText                    = "";
+	mAudioFile               = "";
+	mEmailSubject            = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
-	mDateTime       = event.dtStart();
-	mEndDateTime    = event.dtEnd();
-	mAnyTime        = event.doesFloat();
+	mStartDateTime           = event.dtStart();
+	mDateTime                = mStartDateTime;
+	mEndDateTime             = event.dtEnd();
+	mAnyTime                 = event.doesFloat();
 	initRecur(false);
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
@@ -165,6 +198,7 @@ void KAlarmEvent::set(const Event& event)
 	// Incorporate the alarms' details into the overall event
 	AlarmMap::ConstIterator it = alarmMap.begin();
 	mAlarmCount = 0;       // initialise as invalid
+	QDateTime reminderTime, reminderDeferralTime;
 	bool set = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
@@ -176,11 +210,18 @@ void KAlarmEvent::set(const Event& event)
 			switch (data.type)
 			{
 				case KAlarmAlarm::MAIN_ALARM:
-					mExpired = false;
+					mMainExpired = false;
 					break;
 				case KAlarmAlarm::AT_LOGIN_ALARM:
 					mRepeatAtLogin   = true;
 					mAtLoginDateTime = data.dateTime;
+					break;
+				case KAlarmAlarm::REMINDER_ALARM:
+					reminderTime = data.dateTime;
+					break;
+				case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
+					mDeferral            = true;
+					reminderDeferralTime = data.dateTime;
 					break;
 				case KAlarmAlarm::DEFERRAL_ALARM:
 					mDeferral     = true;
@@ -197,7 +238,7 @@ void KAlarmEvent::set(const Event& event)
 		}
 
 		// Ensure that the basic fields are set up even if there is no main
-		// alarm in the event (which shouldn't ever happen!)
+		// alarm in the event (if it has expired and then been deferred)
 		if (!set)
 		{
 			if (data.action != T_AUDIO)
@@ -212,7 +253,10 @@ void KAlarmEvent::set(const Event& event)
 				}
 			}
 			mDateTime = data.dateTime;
-			if (mAnyTime)
+			if (mAnyTime
+			&&  ( data.type == KAlarmAlarm::MAIN_ALARM
+			   || data.type == KAlarmAlarm::DISPLAYING_ALARM  && !(data.displayingFlags & DEFERRAL)))
+#warning "Check whether time is shown in deferred any-time alarm message window"
 				mDateTime.setTime(QTime());
 			set = true;
 		}
@@ -220,12 +264,19 @@ void KAlarmEvent::set(const Event& event)
 			mActionType = T_FILE;
 		++mAlarmCount;
 	}
+	if (reminderTime.isValid())
+	{
+		mReminderMinutes = reminderTime.secsTo(mDateTime) / 60;
+		if (mReminderMinutes)
+			mReminderArchiveMinutes = 0;
+	}
+	if (reminderDeferralTime.isValid())
+		mReminderDeferralMinutes = reminderDeferralTime.secsTo(mDateTime) / 60;
 
 	Recurrence* recur = event.recurrence();
 	if (recur  &&  recur->doesRecur() != Recurrence::rNone)
 	{
 		// Copy the recurrence details.
-		QDateTime savedDT = mDateTime;
 		switch (recur->doesRecur())
 		{
 			case Recurrence::rYearlyMonth:
@@ -246,10 +297,9 @@ void KAlarmEvent::set(const Event& event)
 				mRecurrence = new Recurrence(*recur, 0);
 				mRemainingRecurrences = recur->duration();
 				if (mRemainingRecurrences > 0)
-					mRemainingRecurrences -= recur->durationTo(savedDT) - 1;
+					mRemainingRecurrences -= recur->durationTo(mDateTime) - 1;
 				break;
 			default:
-				mDateTime = savedDT;
 				break;
 		}
 	}
@@ -295,6 +345,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 		}
 
 		bool atLogin = false;
+		bool reminder = false;
 		bool deferral = false;
 		data.type = KAlarmAlarm::MAIN_ALARM;
 		QString typelist = alarm.customProperty(APPNAME, TYPE_PROPERTY);
@@ -311,13 +362,22 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 				atLogin = true;
 			else if (type == FILE_TYPE  &&  data.action == T_MESSAGE)
 				data.action = T_FILE;
+			else if (type == REMINDER_TYPE)
+				reminder = true;
 			else if (type == DEFERRAL_TYPE)
 				deferral = true;
 			else if (type == DISPLAYING_TYPE)
 				data.type = KAlarmAlarm::DISPLAYING_ALARM;
 		}
 
-		if (deferral)
+		if (reminder)
+		{
+			if (data.type == KAlarmAlarm::MAIN_ALARM)
+				data.type = deferral ? KAlarmAlarm::REMINDER_DEFERRAL_ALARM : KAlarmAlarm::REMINDER_ALARM;
+			else if (data.type == KAlarmAlarm::DISPLAYING_ALARM)
+				data.displayingFlags = deferral ? REMINDER | DEFERRAL : REMINDER;
+		}
+		else if (deferral)
 		{
 			if (data.type == KAlarmAlarm::MAIN_ALARM)
 				data.type = KAlarmAlarm::DEFERRAL_ALARM;
@@ -341,7 +401,7 @@ void KAlarmEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QColor& colour, Action action, int flags)
 {
 	initRecur(false);
-	mDateTime = mEndDateTime = dateTime;
+	mStartDateTime = mEndDateTime = mDateTime = dateTime;
 	switch (action)
 	{
 		case MESSAGE:
@@ -354,16 +414,19 @@ void KAlarmEvent::set(const QDateTime& dateTime, const QString& text, const QCol
 			mActionType = T_MESSAGE;
 			break;
 	}
-	mText       = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
-	mAudioFile  = "";
-	mColour     = colour;
-	mAlarmCount = 1;
+	mText                    = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
+	mAudioFile               = "";
+	mColour                  = colour;
+	mAlarmCount              = 1;
 	set(flags);
-	mDeferral   = false;
-	mDisplaying = false;
-	mExpired    = false;
-	mArchive    = false;
-	mUpdated    = false;
+	mReminderMinutes         = 0;
+	mReminderDeferralMinutes = 0;
+	mReminderArchiveMinutes  = 0;
+	mDeferral                = false;
+	mDisplaying              = false;
+	mMainExpired             = false;
+	mArchive                 = false;
+	mUpdated                 = false;
 }
 
 /******************************************************************************
@@ -392,6 +455,16 @@ void KAlarmEvent::setEmail(const EmailAddressList& addresses, const QString& sub
 	mEmailAddresses   = addresses;
 	mEmailSubject     = subject;
 	mEmailAttachments = attachments;
+}
+
+/******************************************************************************
+ * Returns the time of the next scheduled occurrence of the event.
+ */
+QDateTime KAlarmEvent::nextDateTime() const
+{
+	int reminder = mReminderMinutes ? mReminderMinutes : mReminderDeferralMinutes;
+	return reminder ? mDateTime.addSecs(-reminder * 60)
+	     : mDeferral ? QMIN(mDeferralTime, mDateTime) : mDateTime;
 }
 
 /******************************************************************************
@@ -448,6 +521,7 @@ void KAlarmEvent::set(int flags)
 {
 	KAAlarmEventBase::set(flags & ~(DEFERRAL | DISPLAYING_));    // DEFERRAL, DISPLAYING_ are read-only
 	mAnyTime = flags & ANY_TIME;
+	mUpdated = true;
 }
 
 int KAlarmEvent::flags() const
@@ -467,8 +541,10 @@ Event* KAlarmEvent::event() const
 
 /******************************************************************************
  * Update an existing KCal::Event with the KAlarmEvent data.
+ * If 'original' is true, the event start date/time is adjusted to its original
+ * value instead of its next occurrence.
  */
-bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
+bool KAlarmEvent::updateEvent(Event& ev, bool checkUid, bool original) const
 {
 	if (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev.uid()
 	||  !mAlarmCount)
@@ -488,15 +564,33 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 		cats.append(EMAIL_BCC_CATEGORY);
 	if (mLateCancel)
 		cats.append(LATE_CANCEL_CATEGORY);
-	if (mArchive)
-		cats.append(ARCHIVE_CATEGORY);
+	if (mArchive  &&  !original)
+	{
+		if (mReminderArchiveMinutes)
+		{
+			char unit = 'M';
+			int count = mReminderArchiveMinutes;
+			if (count % 1440 == 0)
+			{
+				unit = 'D';
+				count /= 1440;
+			}
+			else if (count % 60 == 0)
+			{
+				unit = 'H';
+				count /= 60;
+			}
+			cats.append(ARCHIVE_CATEGORY_TEMPLATE.arg(count).arg(unit));
+		}
+		else
+			cats.append(ARCHIVE_CATEGORY);
+	}
 	ev.setCategories(cats);
 	ev.setRevision(mRevision);
 	ev.clearAlarms();
 
-	QDateTime dtStart = mDateTime;
-	QDateTime dtMain  = mDateTime;
-	if (!mExpired)
+	QDateTime dtMain = original ? mStartDateTime : mDateTime;
+	if (!mMainExpired)
 	{
 		// Add the main alarm
 		if (mAnyTime)
@@ -505,19 +599,28 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 	}
 
 	// Add subsidiary alarms
-	if (mRepeatAtLogin  &&  !mExpired)
+	if (mRepeatAtLogin  &&  !mMainExpired)
 	{
 		QDateTime dtl = mAtLoginDateTime.isValid() ? mAtLoginDateTime
 		                : QDateTime::currentDateTime();
 		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
-		if (dtl < dtStart)
-			dtStart = dtl;
 	}
-	if (mDeferral)
+	if (mReminderMinutes  ||  mReminderArchiveMinutes && original)
+	{
+		int minutes = mReminderMinutes ? mReminderMinutes : mReminderArchiveMinutes;
+		QDateTime reminderTime = dtMain.addSecs(-minutes * 60);
+		initKcalAlarm(ev, reminderTime, QStringList(REMINDER_TYPE));
+	}
+	if (mReminderDeferralMinutes)
+	{
+		QStringList list(REMINDER_TYPE);
+		list += DEFERRAL_TYPE;
+		QDateTime reminderTime = dtMain.addSecs(-mReminderDeferralMinutes * 60);
+		initKcalAlarm(ev, reminderTime, list);
+	}
+	else if (mDeferral)
 	{
 		initKcalAlarm(ev, mDeferralTime, QStringList(DEFERRAL_TYPE));
-		if (mDeferralTime < dtStart)
-			dtStart = mDeferralTime;
 	}
 	if (mDisplaying)
 	{
@@ -527,8 +630,6 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 		else if (mDisplayingFlags & DEFERRAL)
 			list += DEFERRAL_TYPE;
 		initKcalAlarm(ev, mDisplayingTime, list);
-		if (mDisplayingTime.isValid()  &&  mDisplayingTime < dtStart)
-			dtStart = mDisplayingTime;
 	}
 	if (!mAudioFile.isEmpty())
 	{
@@ -545,8 +646,7 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 		int frequency = mRecurrence->frequency();
 		int duration  = mRecurrence->duration();
 		const QDateTime& endDateTime = mRecurrence->endDateTime();
-		dtStart = mRecurrence->recurStart();
-		recur->setRecurStart(dtStart);
+		recur->setRecurStart(mStartDateTime);
 		ushort rectype = mRecurrence->doesRecur();
 		switch (rectype)
 		{
@@ -627,7 +727,7 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 		}
 	}
 
-	ev.setDtStart(dtStart);
+	ev.setDtStart(mStartDateTime);
 	ev.setDtEnd(mEndDateTime);
 	ev.setFloats(mAnyTime);
 	ev.setReadOnly(readOnly);
@@ -644,7 +744,10 @@ Alarm* KAlarmEvent::initKcalAlarm(Event& event, const QDateTime& dt, const QStri
 	QStringList alltypes;
 	Alarm* alarm = event.newAlarm();
 	alarm->setEnabled(true);
-	alarm->setTime(dt);
+	if (dt.isValid()  &&  dt < mStartDateTime)
+		alarm->setOffset(mStartDateTime.secsTo(dt));
+	else
+		alarm->setTime(dt);
 	switch (mActionType)
 	{
 		case T_FILE:
@@ -711,7 +814,7 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 			switch (type)
 			{
 				case KAlarmAlarm::MAIN_ALARM:
-					if (!mExpired)
+					if (!mMainExpired)
 					{
 						al.mType     = KAlarmAlarm::MAIN_ALARM;
 						al.mDateTime = mDateTime;
@@ -726,11 +829,30 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 						al.mLateCancel    = false;
 					}
 					break;
-				case KAlarmAlarm::DEFERRAL_ALARM:
-					if (mDeferral)
+				case KAlarmAlarm::REMINDER_ALARM:
+					if (mReminderMinutes)
 					{
-						al.mType     = KAlarmAlarm::DEFERRAL_ALARM;
-						al.mDateTime = mDeferralTime;
+						al.mType     = KAlarmAlarm::REMINDER_ALARM;
+						al.mDateTime = mDateTime.addSecs(-mReminderMinutes * 60);
+					}
+					break;
+				case KAlarmAlarm::DEFERRAL_ALARM:
+					if (!mReminderDeferralMinutes)
+					{
+						if (mDeferral)
+						{
+							al.mType     = KAlarmAlarm::DEFERRAL_ALARM;
+							al.mDateTime = mDeferralTime;
+							al.mDeferral = true;
+						}
+						break;
+					}
+					// fall through to REMINDER_DEFERRAL_ALARM
+				case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
+					if (mReminderDeferralMinutes)
+					{
+						al.mType     = KAlarmAlarm::REMINDER_DEFERRAL_ALARM;
+						al.mDateTime = mDateTime.addSecs(-mReminderDeferralMinutes * 60);
 						al.mDeferral = true;
 					}
 					break;
@@ -761,7 +883,7 @@ KAlarmAlarm KAlarmEvent::firstAlarm() const
 {
 	if (mAlarmCount)
 	{
-		if (!mExpired)
+		if (!mMainExpired)
 			return alarm(KAlarmAlarm::MAIN_ALARM);
 		return nextAlarm(KAlarmAlarm::MAIN_ALARM);
 	}
@@ -778,9 +900,17 @@ KAlarmAlarm KAlarmEvent::nextAlarm(KAlarmAlarm::Type prevType) const
 	switch (prevType)
 	{
 		case KAlarmAlarm::MAIN_ALARM:
+			if (mReminderMinutes)
+				return alarm(KAlarmAlarm::REMINDER_ALARM);
+			// fall through to REMINDER_ALARM
+		case KAlarmAlarm::REMINDER_ALARM:
+			// There can only be one deferral alarm
+			if (mReminderDeferralMinutes)
+				return alarm(KAlarmAlarm::REMINDER_DEFERRAL_ALARM);
 			if (mDeferral)
 				return alarm(KAlarmAlarm::DEFERRAL_ALARM);
 			// fall through to DEFERRAL_ALARM
+		case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
 		case KAlarmAlarm::DEFERRAL_ALARM:
 			if (mRepeatAtLogin)
 				return alarm(KAlarmAlarm::AT_LOGIN_ALARM);
@@ -801,9 +931,12 @@ KAlarmAlarm KAlarmEvent::nextAlarm(KAlarmAlarm::Type prevType) const
 
 /******************************************************************************
  * Remove the alarm of the specified type from the event.
+ * This should only be called to remove an alarm which has expired, not to
+ * reconfigure the event.
  */
-void KAlarmEvent::removeAlarm(KAlarmAlarm::Type type)
+void KAlarmEvent::removeExpiredAlarm(KAlarmAlarm::Type type)
 {
+	int count = mAlarmCount;
 	switch (type)
 	{
 		case KAlarmAlarm::MAIN_ALARM:
@@ -816,9 +949,20 @@ void KAlarmEvent::removeAlarm(KAlarmAlarm::Type type)
 				--mAlarmCount;
 			}
 			break;
+		case KAlarmAlarm::REMINDER_ALARM:
+			if (mReminderMinutes)
+			{
+				// Remove the reminder alarm, but keep a note of it for archiving purposes
+				mReminderArchiveMinutes = mReminderMinutes;
+				mReminderMinutes = 0;
+				--mAlarmCount;
+			}
+			break;
+		case KAlarmAlarm::REMINDER_DEFERRAL_ALARM:
 		case KAlarmAlarm::DEFERRAL_ALARM:
 			if (mDeferral)
 			{
+				mReminderDeferralMinutes = 0;
 				mDeferral = false;
 				--mAlarmCount;
 			}
@@ -837,39 +981,90 @@ void KAlarmEvent::removeAlarm(KAlarmAlarm::Type type)
 		default:
 			break;
 	}
+	if (mAlarmCount != count)
+		mUpdated = true;
 }
 
 /******************************************************************************
  * Defer the event to the specified time.
+ * If the main alarm time has passed, the main alarm is marked as expired.
  * Optionally ensure that the next scheduled recurrence is after the current time.
  */
-void KAlarmEvent::defer(const QDateTime& dateTime, bool adjustRecurrence)
+void KAlarmEvent::defer(const QDateTime& dateTime, bool reminder, bool adjustRecurrence)
 {
 	if (checkRecur() == NO_RECUR)
-		mDateTime = dateTime;
+	{
+		if (mReminderMinutes)
+		{
+			// Remove the reminder alarm, but keep a note of it for archiving purposes
+			mReminderArchiveMinutes = mReminderMinutes;
+		}
+		if (mReminderMinutes  ||  mReminderDeferralMinutes  ||  mReminderArchiveMinutes)
+		{
+			if (dateTime < mDateTime)
+			{
+				if (!mReminderMinutes  &&  !mReminderDeferralMinutes)
+					++mAlarmCount;
+				mReminderDeferralMinutes = dateTime.secsTo(mDateTime) / 60;   // defer reminder alarm
+				mDeferral = true;
+			}
+			else
+			{
+				// Deferring past the main alarm time, so it no longer counts as a deferral
+				if (mReminderMinutes  ||  mReminderDeferralMinutes)
+				{
+					mReminderDeferralMinutes = 0;
+					mDeferral = false;
+					--mAlarmCount;
+				}
+			}
+			mReminderMinutes = 0;
+		}
+		if (!mReminderDeferralMinutes)
+		{
+			// Main alarm has now expired
+			mDeferralTime = dateTime;
+			if (!mDeferral)
+			{
+				mDeferral = true;
+				++mAlarmCount;
+			}
+			mMainExpired = true;
+			--mAlarmCount;
+		}
+	}
+	else if (reminder)
+	{
+		// Deferring a reminder alarm
+		mReminderDeferralMinutes = dateTime.secsTo(mDateTime) / 60;
+		if (!mDeferral)
+		{
+			mDeferral = true;
+			++mAlarmCount;
+		}
+	}
 	else
 	{
-		addDefer(dateTime);
+		mDeferralTime = dateTime;
+		if (!mDeferral)
+		{
+			mDeferral = true;
+			++mAlarmCount;
+		}
 		if (adjustRecurrence)
 		{
 			QDateTime now = QDateTime::currentDateTime();
 			if (mDateTime < now)
-				setNextOccurrence(now);
+			{
+				if (setNextOccurrence(now) == NO_OCCURRENCE)
+				{
+					mMainExpired = true;
+					--mAlarmCount;
+				}
+			}
 		}
 	}
-}
-
-/******************************************************************************
- * Add a deferral alarm with the specified trigger time.
- */
-void KAlarmEvent::addDefer(const QDateTime& dateTime)
-{
-	mDeferralTime = dateTime;
-	if (!mDeferral)
-	{
-		mDeferral = true;
-		++mAlarmCount;
-	}
+	mUpdated = true;
 }
 
 /******************************************************************************
@@ -882,7 +1077,16 @@ void KAlarmEvent::cancelDefer()
 		mDeferralTime = QDateTime();
 		mDeferral     = false;
 		--mAlarmCount;
+		mUpdated = true;
 	}
+}
+
+/******************************************************************************
+ * Find the time of the deferred alarm.
+ */
+QDateTime KAlarmEvent::deferDateTime() const
+{
+	return mReminderDeferralMinutes ? mDateTime.addSecs(-mReminderDeferralMinutes * 60) : mDeferralTime;
 }
 
 /******************************************************************************
@@ -898,10 +1102,12 @@ bool KAlarmEvent::setDisplaying(const KAlarmEvent& event, KAlarmAlarm::Type alar
 {
 	if (!mDisplaying
 	&&  (alarmType == KAlarmAlarm::MAIN_ALARM
+	  || alarmType == KAlarmAlarm::REMINDER_ALARM
+	  || alarmType == KAlarmAlarm::REMINDER_DEFERRAL_ALARM
 	  || alarmType == KAlarmAlarm::DEFERRAL_ALARM
 	  || alarmType == KAlarmAlarm::AT_LOGIN_ALARM))
 	{
-kdDebug()<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAlarm::MAIN_ALARM?"MAIN":alarmType==KAlarmAlarm::DEFERRAL_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString()<<endl;
+kdDebug()<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAlarm::MAIN_ALARM?"MAIN":alarmType==KAlarmAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAlarmAlarm::REMINDER_DEFERRAL_ALARM?"REMINDER_DEFERRAL":alarmType==KAlarmAlarm::DEFERRAL_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString()<<endl;
 		KAlarmAlarm al = event.alarm(alarmType);
 		if (al.valid())
 		{
@@ -910,8 +1116,11 @@ kdDebug()<<"KAlarmEvent::setDisplaying("<<event.id()<<", "<<(alarmType==KAlarmAl
 			mDisplaying      = true;
 			mDisplayingTime  = (alarmType == KAlarmAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime();
 			mDisplayingFlags = (alarmType == KAlarmAlarm::AT_LOGIN_ALARM) ? REPEAT_AT_LOGIN
+			                 : (alarmType == KAlarmAlarm::REMINDER_ALARM) ? REMINDER
+			                 : (alarmType == KAlarmAlarm::REMINDER_DEFERRAL_ALARM) ? REMINDER | DEFERRAL
 			                 : (alarmType == KAlarmAlarm::DEFERRAL_ALARM) ? DEFERRAL : 0;
 			++mAlarmCount;
+			mUpdated = true;
 			return true;
 		}
 	}
@@ -935,8 +1144,10 @@ KAlarmAlarm KAlarmEvent::convertDisplayingAlarm() const
 		else if (mDisplayingFlags & DEFERRAL)
 		{
 			al.mDeferral = true;
-			al.mType = KAlarmAlarm::DEFERRAL_ALARM;
+			al.mType = (mDisplayingFlags & REMINDER) ? KAlarmAlarm::REMINDER_DEFERRAL_ALARM : KAlarmAlarm::DEFERRAL_ALARM;
 		}
+		else if (mDisplayingFlags & REMINDER)
+			al.mType = KAlarmAlarm::REMINDER_ALARM;
 		else
 			al.mType = KAlarmAlarm::MAIN_ALARM;
 	}
@@ -1008,7 +1219,7 @@ KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDat
 
 /******************************************************************************
  * Set the date/time of the event to the next scheduled occurrence after the
- * specified date/time.
+ * specified date/time. Any reminder alarm is adjusted accordingly.
  */
 KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTime)
 {
@@ -1020,11 +1231,23 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 		int remainingCount;
 		QDateTime newTime;
 		type = nextRecurrence(preDateTime, newTime, remainingCount);
-		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE)
+		if (type != FIRST_OCCURRENCE  &&  type != NO_OCCURRENCE  &&  newTime != mDateTime)
 		{
 			mDateTime = newTime;
 			if (mRecurrence->duration() > 0)
 				mRemainingRecurrences = remainingCount;
+			if (mReminderDeferralMinutes  ||  mReminderArchiveMinutes)
+			{
+				if (!mReminderMinutes)
+					++mAlarmCount;
+				mReminderMinutes = mReminderArchiveMinutes;
+			}
+			if (mReminderDeferralMinutes)
+			{
+				mReminderDeferralMinutes = 0;
+				mDeferral = false;
+				--mAlarmCount;
+			}
 			mUpdated = true;
 		}
 	}
@@ -1075,13 +1298,17 @@ void KAlarmEvent::setFirstRecurrence()
 	{
 		int remainingCount;
 		QDateTime next;
+		QDateTime recurStart = mRecurrence->recurStart();
 		QDateTime pre = mDateTime.addDays(-1);
 		mRecurrence->setRecurStart(pre);
 		nextRecurrence(pre, next, remainingCount);
-		if (next.isValid())
+		if (!next.isValid())
+			mRecurrence->setRecurStart(recurStart);   // reinstate the old value
+		else
 		{
 			mRecurrence->setRecurStart(next);
-			mDateTime = next;
+			mStartDateTime = mDateTime = next;
+			mUpdated = true;
 		}
 	}
 }
@@ -1344,7 +1571,6 @@ void KAlarmEvent::setRecurAnnualByDay(int freq, const QPtrList<int>& days, int c
  */
 bool KAlarmEvent::initRecur(bool endDate, int count, bool feb29)
 {
-	mUpdated     = true;
 	mRecursFeb29 = false;
 	if (endDate || count)
 	{
@@ -1371,6 +1597,7 @@ bool KAlarmEvent::initRecur(bool endDate, int count, bool feb29)
 		mRemainingRecurrences = 0;
 		return false;
 	}
+	mUpdated     = true;
 }
 
 /******************************************************************************
@@ -1405,6 +1632,8 @@ KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 				}
 				break;
 		}
+		if (mRecurrence)
+			const_cast<KAlarmEvent*>(this)->mStartDateTime = mRecurrence->recurStart();   // shouldn't be necessary, but just in case...
 	}
 	return NO_RECUR;
 }
@@ -1454,6 +1683,9 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 		{
 			// It's an untimed event, so fix it
 			QPtrList<Alarm> alarms = event->alarms();
+			Alarm* reminderAlarm         = 0;
+			Alarm* reminderDeferralAlarm = 0;
+			int adjustment = 0;
 			for (QPtrListIterator<Alarm> it(alarms);  it.current();  ++it)
 			{
 				// Parse the next alarm's text
@@ -1462,10 +1694,25 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
 				readAlarm(alarm, data);
 				if (data.type == KAlarmAlarm::MAIN_ALARM)
 				{
+					QDateTime oldTime = alarm.time();
 					alarm.setTime(QDateTime(alarm.time().date(), startOfDay));
+					adjustment = oldTime.secsTo(alarm.time());
 					changed = true;
 					break;
 				}
+				else if (data.type == KAlarmAlarm::REMINDER_ALARM)
+					reminderAlarm = &alarm;
+				else if (data.type == KAlarmAlarm::REMINDER_DEFERRAL_ALARM)
+					reminderDeferralAlarm = &alarm;
+			}
+			if (adjustment)
+			{
+				// Reminder alarms for untimed events are always
+#warning "Check"
+				if (reminderAlarm  &&  reminderAlarm->hasTime())
+					reminderAlarm->setTime(reminderAlarm->time().addSecs(adjustment));
+				if (reminderDeferralAlarm  &&  !reminderDeferralAlarm->hasTime())
+					reminderDeferralAlarm->setOffset(reminderDeferralAlarm->offset().asSeconds() + adjustment);
 			}
 		}
 	}
@@ -1635,10 +1882,17 @@ void KAlarmEvent::dumpDebug() const
 	kdDebug(5950) << "KAlarmEvent dump:\n";
 	KAAlarmEventBase::dumpDebug();
 	kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
+	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mEndDateTime:" << mEndDateTime.toString() << ":\n";
 	if (mRepeatAtLogin)
 		kdDebug(5950) << "-- mAtLoginDateTime:" << mAtLoginDateTime.toString() << ":\n";
-	if (mDeferral)
+	if (mReminderMinutes)
+		kdDebug(5950) << "-- mReminderMinutes:" << mReminderMinutes << ":\n";
+	if (mReminderDeferralMinutes)
+		kdDebug(5950) << "-- mReminderDeferralMinutes:" << mReminderDeferralMinutes << ":\n";
+	if (mReminderArchiveMinutes)
+		kdDebug(5950) << "-- mReminderArchiveMinutes:" << mReminderArchiveMinutes << ":\n";
+	else if (mDeferral)
 		kdDebug(5950) << "-- mDeferralTime:" << mDeferralTime.toString() << ":\n";
 	if (mDisplaying)
 	{
@@ -1654,7 +1908,7 @@ void KAlarmEvent::dumpDebug() const
 	}
 	kdDebug(5950) << "-- mAlarmCount:" << mAlarmCount << ":\n";
 	kdDebug(5950) << "-- mAnyTime:" << (mAnyTime ? "true" : "false") << ":\n";
-	kdDebug(5950) << "-- mExpired:" << (mExpired ? "true" : "false") << ":\n";
+	kdDebug(5950) << "-- mMainExpired:" << (mMainExpired ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmEvent dump end\n";
 }
 #endif
@@ -1676,7 +1930,7 @@ void KAlarmAlarm::dumpDebug() const
 {
 	kdDebug(5950) << "KAlarmAlarm dump:\n";
 	KAAlarmEventBase::dumpDebug();
-	kdDebug(5950) << "-- mType:" << (mType == MAIN_ALARM ? "MAIN" : mType == DEFERRAL_ALARM ? "DEFERAL" : mType == AT_LOGIN_ALARM ? "LOGIN" : mType == DISPLAYING_ALARM ? "DISPLAYING" : mType == AUDIO_ALARM ? "AUDIO" : "INVALID") << ":\n";
+	kdDebug(5950) << "-- mType:" << (mType == MAIN_ALARM ? "MAIN" : mType == REMINDER_ALARM ? "REMINDER" : mType == REMINDER_DEFERRAL_ALARM ? "REMINDER_DEFERRAL" : mType == DEFERRAL_ALARM ? "DEFERRAL" : mType == AT_LOGIN_ALARM ? "LOGIN" : mType == DISPLAYING_ALARM ? "DISPLAYING" : mType == AUDIO_ALARM ? "AUDIO" : "INVALID") << ":\n";
 	kdDebug(5950) << "-- mRecurs:" << (mRecurs ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAlarmAlarm dump end\n";
 }

@@ -75,6 +75,7 @@ const QString DISPLAY_CALENDAR(QString::fromLatin1("displaying.ics"));
 int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
+static bool convInterval(QCString timeParam, KAlarmEvent::RecurType& recurType, int& timeInterval);
 
 KAlarmApp*  KAlarmApp::theInstance = 0;
 int         KAlarmApp::activeCount = 0;
@@ -465,45 +466,8 @@ int KAlarmApp::newInstance()
 					}
 
 					// Get the recurrence interval
-					ok = true;
-					uint interval = 0;
-					QCString optval = args->getOption("interval");
-					uint length = optval.length();
-					switch (optval[length - 1])
-					{
-						case 'Y':
-							recurType = KAlarmEvent::ANNUAL_DATE;
-							optval = optval.left(length - 1);
-							break;
-						case 'W':
-							recurType = KAlarmEvent::WEEKLY;
-							optval = optval.left(length - 1);
-							break;
-						case 'D':
-							recurType = KAlarmEvent::DAILY;
-							optval = optval.left(length - 1);
-							break;
-						case 'M':
-						{
-							int i = optval.find('H');
-							if (i < 0)
-								recurType = KAlarmEvent::MONTHLY_DAY;
-							else
-							{
-								recurType = KAlarmEvent::MINUTELY;
-								interval = optval.left(i).toUInt(&ok) * 60;
-								optval = optval.right(length - i - 1);
-							}
-							break;
-						}
-						default:       // should be a digit
-							recurType = KAlarmEvent::MINUTELY;
-							break;
-					}
-					if (ok)
-						interval += optval.toUInt(&ok);
-					repeatInterval = static_cast<int>(interval);
-					if (!ok || repeatInterval < 0)
+					if (!convInterval(args->getOption("interval"), recurType, repeatInterval)
+					||  repeatInterval < 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
 				}
 				else
@@ -523,6 +487,30 @@ int KAlarmApp::newInstance()
 					audioFile = args->getOption("sound");
 				}
 
+				int reminderMinutes = 0;
+				if (args->isSet("reminder"))
+				{
+					// Issue a reminder alarm in advance of the main alarm
+					if (args->isSet("exec"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--exec")))
+					if (args->isSet("mail"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--mail")))
+					KAlarmEvent::RecurType recur;
+					bool ok = convInterval(args->getOption("reminder"), recur, reminderMinutes);
+					if (ok)
+					{
+						switch (recur)
+						{
+							case KAlarmEvent::MINUTELY:  break;
+							case KAlarmEvent::DAILY:     reminderMinutes *= 1440;  break;
+							case KAlarmEvent::WEEKLY:    reminderMinutes *= 7*1440;  break;
+							default:   ok = false;  break;
+						}
+					}
+					if (!ok)
+						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--reminder")))
+				}
+
 				int flags = 0;
 				if (args->isSet("ack-confirm"))
 					flags |= KAlarmEvent::CONFIRM_ACK;
@@ -539,7 +527,8 @@ int KAlarmApp::newInstance()
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!scheduleEvent(alMessage, alarmTime, bgColour, flags, audioFile, alAddresses, alSubject,
-				                   alAttachments, action, recurType, repeatInterval, repeatCount, endTime))
+				                   alAttachments, action, recurType, repeatInterval, repeatCount, endTime,
+				                   reminderMinutes))
 				{
 					exitCode = 1;
 					break;
@@ -563,6 +552,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
 					usage += QString::fromLatin1("--login ");
+				if (args->isSet("reminder"))
+					usage += QString::fromLatin1("--reminder ");
 				if (args->isSet("sound"))
 					usage += QString::fromLatin1("--sound ");
 				if (args->isSet("subject"))
@@ -935,7 +926,8 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
                               int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments,
                               KAlarmEvent::Action action, KAlarmEvent::RecurType recurType,
-                              int repeatInterval, int repeatCount, const QDateTime& endTime)
+                              int repeatInterval, int repeatCount, const QDateTime& endTime,
+                              int reminderMinutes)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
 	if (!dateTime.isValid())
@@ -949,6 +941,8 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 	bool display = (alarmTime <= now);
 
 	KAlarmEvent event(alarmTime, message, bg, action, flags);
+	if (reminderMinutes)
+		event.setReminder(reminderMinutes);
 	if (!audioFile.isEmpty())
 		event.setAudioFile(audioFile);
 	if (mailAddresses.count())
@@ -1233,10 +1227,10 @@ void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bo
 {
 	kdDebug(5950) << "KAlarmApp::rescheduleAlarm()" << endl;
 	bool update = false;
-	if (alarm.deferred())
+	if (alarm.reminder()  ||  alarm.deferred())
 	{
-		// It's an extra deferred alarm, so delete it
-		event.removeAlarm(alarm.type());
+		// It's an advance warning alarm or an extra deferred alarm, so delete it
+		event.removeExpiredAlarm(alarm.type());
 		update = true;
 	}
 	else if (alarm.repeatAtLogin())
@@ -1269,7 +1263,7 @@ void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bo
 		}
 		if (event.deferred())
 		{
-			event.removeAlarm(KAlarmAlarm::DEFERRAL_ALARM);
+			event.removeExpiredAlarm(KAlarmAlarm::DEFERRAL_ALARM);
 			update = true;
 		}
 	}
@@ -1291,9 +1285,9 @@ void KAlarmApp::cancelAlarm(KAlarmEvent& event, KAlarmAlarm::Type alarmType, boo
 		archiveEvent(event);
 		event.setEventID(id);       // restore event ID
 	}
-	event.removeAlarm(alarmType);
+	event.removeExpiredAlarm(alarmType);
 	if (!event.alarmCount())
-		deleteEvent(event, 0, false);
+		deleteEvent(event, 0, false, false);
 	else if (updateCalAndDisplay)
 		updateEvent(event, 0);    // update the window lists and calendar file
 }
@@ -1368,20 +1362,21 @@ void* KAlarmApp::execAlarm(KAlarmEvent& event, const KAlarmAlarm& alarm, bool re
 	{
 		// Display a message or file, provided that the same event isn't already being displayed
 		MessageWin* win = MessageWin::findEvent(event.id());
-		if (win  &&  (win->hasDefer() || alarm.repeatAtLogin()))
-		{
-			// Don't re-display an alarm which has just been shown - when a
-			// DISPLAYING_ALARM is created, the alarm daemon will immediately notify us.
-			if (alarm.type() != KAlarmAlarm::DISPLAYING_ALARM  ||  win->dateTime() != alarm.dateTime())
-				win->repeat();
-		}
-		else
+		if (!win
+		||  !win->hasDefer() && !alarm.repeatAtLogin()
+		||  win->alarmType() == KAlarmAlarm::REMINDER_ALARM && alarm.type() != KAlarmAlarm::REMINDER_ALARM)
 		{
 			// Either there isn't already a message for this event,
 			// or there is a repeat-at-login message with no Defer
-			// button, which needs to be replaced with a new message.
+			// button, which needs to be replaced with a new message,
+			// or the caption needs to be changed from "Reminder" to "Message".
 			delete win;
 			(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+		}
+		else
+		{
+			// Update the existing message window
+			win->repeat();    // N.B. this reschedules the alarm
 		}
 	}
 	return result;
@@ -2075,6 +2070,53 @@ static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& no
 	dateTime.setDate(date);
 	dateTime.setTime(time);
 	return true;
+}
+
+/******************************************************************************
+*  Convert a time interval command line parameter.
+*  Reply = true if successful.
+*/
+static bool convInterval(QCString timeParam, KAlarmEvent::RecurType& recurType, int& timeInterval)
+{
+	// Get the recurrence interval
+	bool ok = true;
+	uint interval = 0;
+	uint length = timeParam.length();
+	switch (timeParam[length - 1])
+	{
+		case 'Y':
+			recurType = KAlarmEvent::ANNUAL_DATE;
+			timeParam = timeParam.left(length - 1);
+			break;
+		case 'W':
+			recurType = KAlarmEvent::WEEKLY;
+			timeParam = timeParam.left(length - 1);
+			break;
+		case 'D':
+			recurType = KAlarmEvent::DAILY;
+			timeParam = timeParam.left(length - 1);
+			break;
+		case 'M':
+		{
+			int i = timeParam.find('H');
+			if (i < 0)
+				recurType = KAlarmEvent::MONTHLY_DAY;
+			else
+			{
+				recurType = KAlarmEvent::MINUTELY;
+				interval = timeParam.left(i).toUInt(&ok) * 60;
+				timeParam = timeParam.right(length - i - 1);
+			}
+			break;
+		}
+		default:       // should be a digit
+			recurType = KAlarmEvent::MINUTELY;
+			break;
+	}
+	if (ok)
+		interval += timeParam.toUInt(&ok);
+	timeInterval = static_cast<int>(interval);
+	return ok;
 }
 
 

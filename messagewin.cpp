@@ -73,12 +73,12 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  message(alarm.cleanText()),
 	  font(theApp()->settings()->messageFont()),
 	  colour(evnt.colour()),
-	  mDateTime(alarm.dateTime()),
+	  mDateTime((alarm.type() & KAlarmAlarm::REMINDER_ALARM) ? evnt.mainDateTime() : alarm.dateTime()),
 	  eventID(evnt.id()),
 	  audioFile(evnt.audioFile()),
 	  emailAddresses(evnt.emailAddresses("\n")),
 	  emailSubject(evnt.emailSubject()),
-	  alarmType(alarm.type()),
+	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(evnt.beep()),
 	  confirmAck(evnt.confirmAck()),
@@ -117,7 +117,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, const 
 	  audioFile(evnt.audioFile()),
 	  emailAddresses(evnt.emailAddresses("\n")),
 	  emailSubject(evnt.emailSubject()),
-	  alarmType(alarm.type()),
+	  mAlarmType(alarm.type()),
 	  flags(alarm.flags()),
 	  beep(false),
 	  confirmAck(evnt.confirmAck()),
@@ -171,7 +171,7 @@ MessageWin::~MessageWin()
 */
 QSize MessageWin::initView()
 {
-	setCaption(i18n("Message"));
+	setCaption((mAlarmType & KAlarmAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, KDialog::marginHint(), KDialog::spacingHint());
@@ -389,7 +389,7 @@ void MessageWin::saveProperties(KConfig* config)
 	if (shown)
 	{
 		config->writeEntry(QString::fromLatin1("EventID"), eventID);
-		config->writeEntry(QString::fromLatin1("AlarmType"), alarmType);
+		config->writeEntry(QString::fromLatin1("AlarmType"), mAlarmType);
 		config->writeEntry(QString::fromLatin1("Message"), message);
 		config->writeEntry(QString::fromLatin1("Type"), (errorMsg.isNull() ? action : -1));
 		config->writeEntry(QString::fromLatin1("Font"), font);
@@ -415,7 +415,7 @@ void MessageWin::saveProperties(KConfig* config)
 void MessageWin::readProperties(KConfig* config)
 {
 	eventID       = config->readEntry(QString::fromLatin1("EventID"));
-	alarmType     = KAlarmAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
+	mAlarmType    = KAlarmAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
 	message       = config->readEntry(QString::fromLatin1("Message"));
 	int t         = config->readNumEntry(QString::fromLatin1("Type"));    // don't copy straight into an enum value in case -1 gets truncated
 	if (t < 0)
@@ -429,7 +429,7 @@ void MessageWin::readProperties(KConfig* config)
 	dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	if (errorMsg.isNull()  &&  alarmType != KAlarmAlarm::INVALID_ALARM)
+	if (errorMsg.isNull()  &&  mAlarmType != KAlarmAlarm::INVALID_ALARM)
 		initView();
 }
 
@@ -478,7 +478,7 @@ void MessageWin::repeat()
 		raise();
 		playAudio();
 		KAlarmEvent event(*kcalEvent);
-		theApp()->alarmShowing(event, alarmType, mDateTime);
+		theApp()->alarmShowing(event, mAlarmType, mDateTime);
 	}
 }
 
@@ -494,7 +494,7 @@ void MessageWin::showEvent(QShowEvent* se)
 	{
 		playAudio();
 		if (rescheduleEvent)
-			theApp()->alarmShowing(mEvent, alarmType, mDateTime);
+			theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
 		shown = true;
 	}
 }
@@ -565,7 +565,7 @@ void MessageWin::slotDefer()
 		{
 			// The event still exists in the calendar file.
 			KAlarmEvent event(*kcalEvent);
-			event.defer(dateTime, true);
+			event.defer(dateTime, (mAlarmType & KAlarmAlarm::REMINDER_ALARM), true);
 			theApp()->updateEvent(event, 0);
 		}
 		else
@@ -575,7 +575,7 @@ void MessageWin::slotDefer()
 			if (kcalEvent)
 			{
 				event.reinstateFromDisplaying(KAlarmEvent(*kcalEvent));
-				event.defer(dateTime, true);
+				event.defer(dateTime, (mAlarmType & KAlarmAlarm::REMINDER_ALARM), true);
 			}
 			else
 			{

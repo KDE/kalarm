@@ -1,7 +1,7 @@
 /*
  *  prefsettings.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,8 +46,9 @@ const bool       Settings::default_defaultConfirmAck       = false;
 const bool       Settings::default_defaultBeep             = false;
 const bool       Settings::default_defaultEmailBcc         = false;
 const QString    Settings::default_emailAddress            = "";
-const Settings::MailClient       Settings::default_emailClient        = KMAIL;
-const RecurrenceEdit::RepeatType Settings::default_defaultRecurPeriod = RecurrenceEdit::SUBDAILY;
+const Settings::MailClient        Settings::default_emailClient          = KMAIL;
+const RecurrenceEdit::RepeatType  Settings::default_defaultRecurPeriod   = RecurrenceEdit::SUBDAILY;
+const EditAlarmDlg::ReminderUnits Settings::default_defaultReminderUnits = EditAlarmDlg::REMIND_HOURS_MINUTES;
 
 static const QString    defaultEmailClient = QString::fromLatin1("kmail");
 
@@ -73,6 +74,7 @@ static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmA
 static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
+static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
 
 inline int Settings::startOfDayCheck() const
 {
@@ -122,6 +124,9 @@ void Settings::loadSettings()
 	int recurPeriod          = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod      = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                         ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
+	int reminderUnits        = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
+	mDefaultReminderUnits    = (reminderUnits < EditAlarmDlg::REMIND_HOURS_MINUTES || reminderUnits > EditAlarmDlg::REMIND_WEEKS)
+	                         ? default_defaultReminderUnits : (EditAlarmDlg::ReminderUnits)reminderUnits;
 	emit settingsChanged();
 }
 
@@ -149,6 +154,7 @@ void Settings::saveSettings(bool syncToDisc)
 	config->writeEntry(DEF_BEEP, mDefaultBeep);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
+	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
 	if (syncToDisc)
 		config->sync();
 }

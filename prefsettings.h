@@ -2,7 +2,7 @@
  *  prefsettings.h  -  program preference settings
  *  Program:  kalarm
  *
- *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 class QWidget;
 
 #include "recurrenceedit.h"
+#include "editdlg.h"
 
 
 // Settings configured in the Preferences dialog
@@ -66,6 +67,8 @@ class Settings : public QObject
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
+		EditAlarmDlg::ReminderUnits
+		               defaultReminderUnits() const     { return mDefaultReminderUnits; }
 
 		void           setEmailAddress(bool useControlCentre, const QString& address);
 		void           loadSettings();
@@ -92,6 +95,8 @@ class Settings : public QObject
 		static const bool       default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                        default_defaultRecurPeriod;
+		static const EditAlarmDlg::ReminderUnits
+		                        default_defaultReminderUnits;
 		bool                mRunInSystemTray;
 		bool                mDisableAlarmsIfStopped;
 		bool                mAutostartTrayIcon;
@@ -110,6 +115,7 @@ class Settings : public QObject
 		bool                mDefaultBeep;
 		bool                mDefaultEmailBcc;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
+		EditAlarmDlg::ReminderUnits mDefaultReminderUnits;
 		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
 
 	signals:

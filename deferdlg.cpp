@@ -75,6 +75,8 @@ void DeferAlarmDlg::slotOk()
 	bool anyTime;
 	if (!timeWidget->getDateTime(alarmDateTime, anyTime))
 	{
+		bool recurs = false;
+		bool reminder = false;
 		QDateTime endTime;
 		if (!limitEventID.isEmpty())
 		{
@@ -82,20 +84,42 @@ void DeferAlarmDlg::slotOk()
 			const Event* kcalEvent = theApp()->getEvent(limitEventID);
 			if (kcalEvent)
 			{
+				KAlarmEvent event(*kcalEvent);
 				Recurrence* recurrence = kcalEvent->recurrence();
 				if (recurrence  &&  recurrence->doesRecur() != Recurrence::rNone)
 				{
 					// It's a repeated alarm. Don't allow it to be deferred past its next occurrence.
-					KAlarmEvent event(*kcalEvent);
-					event.nextOccurrence(QDateTime::currentDateTime(), endTime);
+					QDateTime now = QDateTime::currentDateTime();
+					event.nextOccurrence(now, endTime);
+					recurs = true;
+					if (event.reminder())
+					{
+						QDateTime reminderTime = endTime.addSecs(-event.reminder() * 60);
+						if (now < reminderTime)
+						{
+							endTime = reminderTime;
+							reminder = true;
+						}
+					}
+				}
+				else if ((event.reminder() || event.reminderDeferral() || event.reminderArchived())
+				     &&  QDateTime::currentDateTime() < event.mainDateTime())
+				{
+					// It's an advance warning alarm. Don't allow it to be deferred past its main alarm time.
+					endTime = event.mainDateTime();
+					reminder = true;
 				}
 			}
 		}
 		else
 			endTime = limitDateTime;
 		if (endTime.isValid()  &&  alarmDateTime >= endTime)
-			KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
-				                          .arg(KGlobal::locale()->formatDateTime(endTime)));
+		{
+			QString text = !reminder ? i18n("Cannot defer past the alarm's next recurrence (currently %1)")
+			             : recurs    ? i18n("Cannot defer past the alarm's next reminder (currently %1)")
+			             :             i18n("Cannot defer reminder past the main alarm time (%1)");
+			KMessageBox::sorry(this, text.arg(KGlobal::locale()->formatDateTime(endTime)));
+		}
 		else
 			accept();
 	}
