@@ -42,8 +42,10 @@
 #include "editdlg.h"
 #include "fontcolourbutton.h"
 #include "kalarmapp.h"
+#include "latecancel.h"
 #include "preferences.h"
 #include "reminder.h"
+#include "repetition.h"
 #include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
@@ -157,15 +159,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder);
 
 	// Acknowledgement confirmation required - default = no confirmation
+	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	groupLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
-
-	// Late display checkbox - default = allow late display
-	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
-	mLateCancel = EditAlarmDlg::createLateCancelCheckbox(group);
-	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	layout->addWidget(mLateCancel);
+	layout->addWidget(mConfirmAck);
 	layout->addSpacing(2*KDialog::spacingHint());
 	layout->addStretch();
 
@@ -177,12 +174,26 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 		layout->addWidget(mSpecialActionsButton);
 	}
 
+	// Late display checkbox - default = allow late display
+	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	mLateCancel = new LateCancelSelector(false, group);
+	mLateCancel->setFixedSize(mLateCancel->sizeHint());
+	layout->addWidget(mLateCancel);
+	layout->addStretch();
+
+	// Simple repetition button
+	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), false, group);
+	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
+	mSimpleRepetition->set(0, 0, true, 364*24*60);
+	QWhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
+	layout->addWidget(mSimpleRepetition);
+
 	// Set the values to their defaults
 	Preferences* preferences = Preferences::instance();
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(preferences->defaultBgColour());
 	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
-	mLateCancel->setChecked(preferences->defaultLateCancel());
+	mLateCancel->setMinutes(preferences->defaultLateCancel(), true, TimePeriod::DAYS);
 	mConfirmAck->setChecked(preferences->defaultConfirmAck());
 	mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 	                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
@@ -290,12 +301,14 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				KAEvent event(date,
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
-				              mFontColourButton->font(), KAEvent::MESSAGE, mFlags);
+				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
+				              mFlags);
 				event.setAudioFile(mSoundPicker->file(), mSoundPicker->volume());
 				QValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, -1);
-				event.setNextOccurrence(todayNoon);
+				event.setNextOccurrence(todayNoon, true);
+				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 				if (reminder)
 					event.setReminder(reminder, false);
 				if (mSpecialActionsButton)
@@ -322,7 +335,6 @@ void BirthdayDlg::slotOk()
 
 	mFlags = (mSoundPicker->beep()             ? KAEvent::BEEP : 0)
 	       | (mSoundPicker->repeat()           ? KAEvent::REPEAT_SOUND : 0)
-	       | (mLateCancel->isChecked()         ? KAEvent::LATE_CANCEL : 0)
 	       | (mConfirmAck->isChecked()         ? KAEvent::CONFIRM_ACK : 0)
 	       | (mFontColourButton->defaultFont() ? KAEvent::DEFAULT_FONT : 0)
 	       |                                     KAEvent::ANY_TIME;
