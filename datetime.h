@@ -79,7 +79,7 @@ class TimeSpinBox : public SpinBox2
 		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
 		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
 		bool            valid() const        { return !invalid; }
-		QTime           getTime() const;
+		QTime           time() const;
 		void            setValid(bool);
 	public slots:
 		virtual void    setValue(int value);
@@ -101,9 +101,9 @@ class DateSpinBox : public QSpinBox
 {
 	public:
 		DateSpinBox(QWidget* parent = 0, const char* name = 0);
-		void            setDate(const QDate& d)       { setValue(getDateValue(d)); }
-		QDate           getDate();
-		static int      getDateValue(const QDate&);
+		void            setDate(const QDate& d)       { setValue(dateValue(d)); }
+		QDate           date();
+		static int      dateValue(const QDate&);
 	protected:
 		virtual QString mapValueToText(int v);
 		virtual int     mapTextToValue(bool* ok);

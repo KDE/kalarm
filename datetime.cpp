@@ -192,7 +192,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 	QDateTime now = QDateTime::currentDateTime();
 	if (atTimeRadio->isOn())
 	{
-		dateTime.setDate(dateEdit->getDate());
+		dateTime.setDate(dateEdit->date());
 		anyTime = anyTimeAllowed && anyTimeCheckBox && anyTimeCheckBox->isChecked();
 		if (anyTime)
 		{
@@ -205,7 +205,7 @@ bool AlarmTimeWidget::getDateTime(QDateTime& dateTime, bool& anyTime) const
 		}
 		else
 		{
-			dateTime.setTime(timeEdit->getTime());
+			dateTime.setTime(timeEdit->time());
 			int seconds = now.time().second();
 			if (dateTime <= now.addSecs(1 - seconds))
 			{
@@ -231,7 +231,7 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 	timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 	dateEdit->setDate(dt.date());
 	QDate now = QDate::currentDate();
-	dateEdit->setMinValue(DateSpinBox::getDateValue(dt.date() < now ? dt.date() : now));
+	dateEdit->setMinValue(DateSpinBox::dateValue(dt.date() < now ? dt.date() : now));
 	if (anyTimeCheckBox)
 	{
 		anyTimeAllowed = anyTime;
@@ -302,7 +302,7 @@ void AlarmTimeWidget::slotAfterTimeToggled(bool on)
 	if (on  &&  atTimeRadio->isOn()
 	||  !on  &&  !atTimeRadio->isOn())
 		atTimeRadio->setChecked(!on);
-	QDateTime dt(dateEdit->getDate(), timeEdit->getTime());
+	QDateTime dt(dateEdit->date(), timeEdit->time());
 	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
 	if (minutes <= 0)
 		delayTime->setValid(true);
@@ -326,7 +326,7 @@ void AlarmTimeWidget::slotDateTimeChanged(int)
 	if (!enteredDateTimeChanged)          // prevent infinite recursion !!
 	{
 		enteredDateTimeChanged = true;
-		QDateTime dt(dateEdit->getDate(), timeEdit->getTime());
+		QDateTime dt(dateEdit->date(), timeEdit->time());
 		int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
 		if (minutes <= 0  ||  minutes > delayTime->maxValue())
 			delayTime->setValid(false);
@@ -387,7 +387,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const ch
 	setValidator(validator);
 }
 
-QTime TimeSpinBox::getTime() const
+QTime TimeSpinBox::time() const
 {
 	return QTime(value() / 60, value() % 60);
 }
@@ -554,12 +554,12 @@ DateSpinBox::DateSpinBox(QWidget* parent, const char* name)
 	setRange(0, baseDate.daysTo(maxDate));
 }
 
-QDate DateSpinBox::getDate()
+QDate DateSpinBox::date()
 {
 	return baseDate.addDays(value());
 }
 
-int DateSpinBox::getDateValue(const QDate& date)
+int DateSpinBox::dateValue(const QDate& date)
 {
 	return baseDate.daysTo(date);
 }

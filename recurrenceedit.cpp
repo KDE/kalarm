@@ -489,10 +489,10 @@ bool RecurrenceEdit::checkData(const QDateTime& startDateTime) const
 	if (endDateButton->isChecked())
 	{
 		bool err;
-		QDate endDate = endDateEdit->getDate();
+		QDate endDate = endDateEdit->date();
 		bool time = endTimeEdit->isEnabled();
 		if (time)
-			err = QDateTime(endDate, endTimeEdit->getTime()) < startDateTime;
+			err = QDateTime(endDate, endTimeEdit->time()) < startDateTime;
 		else
 			err = endDate < startDateTime.date();
 		if (err)
@@ -935,8 +935,8 @@ void RecurrenceEdit::writeEvent(KAlarmEvent& event)
 		else
 		{
 			repeatCount = 0;
-			endDate = endDateEdit->getDate();
-			endTime = endTimeEdit->getTime();
+			endDate = endDateEdit->date();
+			endTime = endTimeEdit->time();
 		}
 
 		// Set up the recurrence according to the type selected
