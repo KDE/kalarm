@@ -1044,13 +1044,27 @@ void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
 }
 
 /******************************************************************************
-* If it's an email alarm, warn if no 'From' email address is configured.
+* Prompt the user to re-enable alarms if they are currently disabled, and if
+* it's an email alarm, warn if no 'From' email address is configured.
 */
 void KAlarmMainWindow::alarmWarnings(QWidget* parent, const KAlarmEvent& event)
 {
         if (event.action() == KAlarmEvent::EMAIL  &&  Preferences::instance()->emailAddress().isEmpty())
                 KMessageBox::information(parent, i18n("Please set the 'From' email address...",
 		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
+
+	if (!theApp()->daemonGuiHandler()->monitoringAlarms())
+	{
+		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
+		                              QString::null, KStdGuiItem::yes(), KStdGuiItem::no(),
+		                              QString::fromLatin1("EditEnableAlarms"))
+		                == KMessageBox::Yes)
+		{
+			DaemonGuiHandler* dgh = theApp()->daemonGuiHandler();
+			if (dgh)
+				dgh->setAlarmsEnabled(true);
+		}
+	}
 }
 
 /******************************************************************************
