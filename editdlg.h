@@ -25,26 +25,28 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include <qcheckbox.h>
 #include <qdatetime.h>
-#include <qradiobutton.h>
+#include <qlineedit.h>
 
 #include <kdialogbase.h>
 
 #include "msgevent.h"
 using namespace KCal;
 
-class QButtonGroup;
 class QGroupBox;
 class QMultiLineEdit;
-class QSpinBox;
+class QComboBox;
+class QRadioButton;
 class QHBox;
-class ButtonGroup;
 class FontColourChooser;
 class ColourCombo;
 class TimeSpinBox;
+class RadioButton;
+class PushButton;
+class CheckBox;
 class AlarmTimeWidget;
 class RecurrenceEdit;
+class LineEdit;
 
 /**
  * EditAlarmDlg: A dialog for the input of an alarm's details.
@@ -55,11 +57,11 @@ class EditAlarmDlg : public KDialogBase
 	public:
 		enum MessageType { MESSAGE, FILE };
 
-		EditAlarmDlg(const QString& caption, QWidget* parent = 0L, const char* name = 0L,
-                             const KAlarmEvent* = 0L);
+		EditAlarmDlg(const QString& caption, QWidget* parent = 0, const char* name = 0,
+                             const KAlarmEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		void         getEvent(KAlarmEvent&);
-		QDateTime    getDateTime(bool* anyTime = 0L);
+		QDateTime    getDateTime(bool* anyTime = 0);
 
 	protected:
 		virtual void resizeEvent(QResizeEvent*);
@@ -74,17 +76,22 @@ class EditAlarmDlg : public KDialogBase
 		void         slotBrowseFile();
 		void         slotSoundToggled(bool on);
 		void         slotPickSound();
+		void         openAddressBook();
+		void         slotAddAttachment();
+		void         slotRemoveAttachment();
 		void         slotShowMainPage();
 		void         slotShowRecurrenceEdit();
 
 	private:
-		KAlarmAlarm::Type getAlarmType() const;
-		int               getAlarmFlags() const;
-		bool              checkText(QString& result);
-		void              setSoundPicker();
+		KAlarmEvent::Action getAlarmType() const;
+		int                 getAlarmFlags() const;
+		bool                checkText(QString& result);
+		void                setSoundPicker();
+		bool                checkEmailData();
 
-		void              initDisplayAlarms(QWidget* parent);
-		void              initCommand(QWidget* parent);
+		void                initDisplayAlarms(QWidget* parent);
+		void                initCommand(QWidget* parent);
+		void                initEmail(QWidget* parent);
 
 		int              mainPageIndex;
 		int              recurPageIndex;
@@ -92,19 +99,20 @@ class EditAlarmDlg : public KDialogBase
 		QLabel*          recurDisabled;
 		bool             recurSetEndDate;    // adjust end date/time when recurrence tab is displayed
 
-		QRadioButton*    messageRadio;
-		QRadioButton*    commandRadio;
-		QRadioButton*    fileRadio;
+		RadioButton*     messageRadio;
+		RadioButton*     commandRadio;
+		RadioButton*     fileRadio;
+		RadioButton*     emailRadio;
 		QWidgetStack*    alarmTypeStack;
 
 		// Display alarm options widgets
 		QFrame*          displayAlarmsFrame;
 		QHBox*           fileBox;
 		QHBox*           filePadding;
-		QCheckBox*       sound;
-		QPushButton*     soundPicker;
+		CheckBox*        sound;
+		PushButton*      soundPicker;
 		QString          soundDefaultDir;
-		QCheckBox*       confirmAck;
+		CheckBox*        confirmAck;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else
@@ -113,31 +121,42 @@ class EditAlarmDlg : public KDialogBase
 		// Text message alarm widgets
 		QMultiLineEdit*  textMessageEdit;     // text message edit box
 		// Text file alarm widgets
-		QLineEdit*       fileMessageEdit;     // text file edit box
-		QPushButton*     fileBrowseButton;
+		LineEdit*        fileMessageEdit;     // text file edit box
 		QString          fileDefaultDir;      // default directory for browse button
 		// Command alarm widgets
 		QFrame*          commandFrame;
-		QLineEdit*       commandMessageEdit;  // command edit box
+		LineEdit*        commandMessageEdit;  // command edit box
+		// Email alarm widgets
+		QFrame*          emailFrame;
+		LineEdit*        emailToEdit;
+		QLineEdit*       emailSubjectEdit;
+		QMultiLineEdit*  emailMessageEdit;    // email body edit box
+		QComboBox*       emailAttachList;
+		QPushButton*     emailRemoveButton;
+		CheckBox*        emailBcc;
+		QString          attachDefaultDir;
 
 		QGroupBox*       deferGroup;
 		QLabel*          deferTimeLabel;
 		AlarmTimeWidget* timeWidget;
-		QCheckBox*       lateCancel;
+		CheckBox*        lateCancel;
 
-		QRadioButton*    noRepeatRadio;
-		QRadioButton*    repeatAtLoginRadio;
-		QRadioButton*    recurRadio;
+		RadioButton*     noRepeatRadio;
+		RadioButton*     repeatAtLoginRadio;
+		RadioButton*     recurRadio;
 		RecurrenceEdit*  recurrenceEdit;
 
 		QString          alarmMessage;     // message text/file name/command/email message
 		QDateTime        alarmDateTime;
 		QDateTime        deferDateTime;
 		QString          soundFile;        // sound file to play when alarm is triggered, or null for beep
+		EmailAddressList emailAddresses;   // list of addresses to send email to
+		QStringList      emailAttachments; // list of email attachment file names
 		QSize            basicSize;        // size without deferred time widget
 		int              deferGroupHeight; // height added by deferred time widget
 		bool             alarmAnyTime;     // alarmDateTime is only a date, not a time
 		bool             timeDialog;       // the dialog shows date/time fields only
+		bool             mReadOnly;        // the dialog is read only
 };
 
 
@@ -145,11 +164,24 @@ class PageFrame : public QFrame
 {
 		Q_OBJECT
 	public:
-		PageFrame(QWidget* parent = 0L, const char* name = 0L) : QFrame(parent, name) { }
+		PageFrame(QWidget* parent = 0, const char* name = 0) : QFrame(parent, name) { }
 	protected:
 		virtual void     showEvent(QShowEvent*)    { emit shown(); }
 	signals:
 		void             shown();
+};
+
+class LineEdit : public QLineEdit
+{
+		Q_OBJECT
+	public:
+		LineEdit(QWidget* parent = 0, const char* name = 0)
+		          : QLineEdit(parent, name), noSelect(false) { }
+		void setNoSelect()   { noSelect = true; }
+	protected:
+		virtual void focusInEvent(QFocusEvent*);
+	private:
+		bool  noSelect;
 };
 
 #endif // EDITDLG_H
