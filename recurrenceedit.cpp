@@ -92,27 +92,19 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	 * selection of its corresponding radio button.
 	 */
 
-#if KDE_VERSION >= 290
 	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), this, "recurGroup");
-#else
-	recurGroup = new QGroupBox(i18n("Recurrence Rule"), this, "recurGroup");
-	layout = new QVBoxLayout(recurGroup, KDialog::marginHint(), KDialog::spacingHint());
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
-	QBoxLayout* boxLayout = new QHBoxLayout(layout);
-#endif
 	topLayout->addWidget(recurGroup);
 	ruleFrame = new QFrame(recurGroup, "ruleFrame");
-#if KDE_VERSION < 290
-	boxLayout->addWidget(ruleFrame);
-#endif
 	layout = new QVBoxLayout(ruleFrame, 0);
 	layout->addSpacing(KDialog::spacingHint()/2);
 
 	layout = new QHBoxLayout(layout, 0);
+	QBoxLayout* lay = new QVBoxLayout(layout, 0);
 	ruleButtonGroup = new ButtonGroup(1, Qt::Horizontal, ruleFrame);
 	ruleButtonGroup->setInsideMargin(0);
 	ruleButtonGroup->setFrameStyle(QFrame::NoFrame);
-	layout->addWidget(ruleButtonGroup);
+	lay->addWidget(ruleButtonGroup);
+	lay->addStretch();    // top-adjust the interval radio buttons
 	connect(ruleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
 
 	mNoneButton = new RadioButton(i18n("No recurrence"), ruleButtonGroup);
@@ -165,7 +157,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mMonthlyButtonId  = ruleButtonGroup->id(mMonthlyButton);
 	mYearlyButtonId   = ruleButtonGroup->id(mYearlyButton);
 
-	QBoxLayout* lay = new QVBoxLayout(layout);
+	lay = new QVBoxLayout(layout);
 
 	lay->addStretch();
 	layout = new QHBoxLayout(lay);
@@ -404,7 +396,7 @@ void RecurrenceEdit::initWeekly()
 		mWeekRuleDayBox[i] = new CheckBox(KGlobal::locale()->weekDayName(day), box);
 		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
 		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
-		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4);
+		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignLeft);
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
@@ -487,7 +479,7 @@ void RecurrenceEdit::initYearly()
 		mYearRuleMonthBox[i] = new CheckBox(KGlobal::locale()->monthName(i + 1), box);
 		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
 		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
-		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4);
+		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignLeft);
 	}
 	box->setFixedSize(box->sizeHint());
 	QWhatsThis::add(box,
