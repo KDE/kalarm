@@ -83,8 +83,9 @@ KAlarmApp::KAlarmApp()
 	mDisableAlarmsIfStopped = mKDEDesktop ? mSettings->disableAlarmsIfStopped() : false;
 
 	// Set up actions used by more than one menu
+        KActionCollection* actions = new KActionCollection(this);
 	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
-	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
+	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()), actions);
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 	                                 0, this, SLOT(slotDaemonPreferences()), this);
 }

@@ -215,10 +215,7 @@ QSize MessageWin::initView()
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 
 	// Close button
-	KAction* action = KStdAction::close();
-	QPushButton* okButton = new QPushButton(action->text(), topWidget);
-	delete action;
-	okButton->setDefault(true);
+	QPushButton* okButton = new QPushButton(i18n("&Close"), topWidget);
 	connect(okButton, SIGNAL(clicked()), SLOT(close()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));

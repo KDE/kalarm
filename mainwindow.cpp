@@ -157,7 +157,7 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 */
 void KAlarmMainWindow::initActions()
 {
-	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), this);
+	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this, "new");
 	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
