@@ -35,6 +35,7 @@ class MessageWin;
 class TrayWindow;
 class DaemonGuiHandler;
 class Settings;
+class ActionAlarmsEnabled;
 
 extern const char* DAEMON_APP_NAME;
 extern const char* DAEMON_DCOP_OBJECT;
@@ -69,6 +70,7 @@ class KAlarmApp : public KUniqueApplication
 		bool              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
 		DaemonGuiHandler* daemonGuiHandler() const        { return mDaemonGuiHandler; }
+		ActionAlarmsEnabled* actionAlarmEnable() const    { return mActionAlarmEnable; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
@@ -96,6 +98,7 @@ class KAlarmApp : public KUniqueApplication
 		KAlarmApp();
 	private slots:
 		void              slotPreferences();
+		void              toggleAlarmsEnabled();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
 		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
@@ -117,6 +120,7 @@ class KAlarmApp : public KUniqueApplication
 		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
 		TrayWindow*                mTrayWindow;        // active system tray icon
 		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
+		ActionAlarmsEnabled*       mActionAlarmEnable; // action to enable/disable alarms
 		KAction*                   mActionPrefs;       // action to display the preferences dialog
 		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon

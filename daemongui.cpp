@@ -50,8 +50,6 @@ DaemonGuiHandler::DaemonGuiHandler(const char *name)
 	  mEnableCalPending(false)
 {
 	kdDebug(5950) << "DaemonGuiHandler::DaemonGuiHandler()\n";
-	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
-
 	mDaemonRunning = theApp()->isDaemonRunning();
 
 	mDaemonStatusTimerInterval = theApp()->settings()->daemonTrayCheckInterval();
@@ -108,7 +106,7 @@ void DaemonGuiHandler::alarmDaemonUpdate(int alarmGuiChangeType,
 				default:
 					return;
 			}
-			mActionAlarmEnable->setAlarmsEnabled(!mCalendarDisabled);
+			theApp()->actionAlarmEnable()->setAlarmsEnabled(!mCalendarDisabled);
 			break;
 		}
 	}
@@ -128,16 +126,6 @@ void DaemonGuiHandler::registerGuiWithDaemon()
 	kdDebug(5950) << "KAlarmApp::registerGuiWithDaemon()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.registerGui(kapp->aboutData()->appName(), GUI_DCOP_OBJECT_NAME);
-}
-
-/******************************************************************************
-* Called when the Alarms Enabled action is selected.
-* The alarm daemon is told to stop or start monitoring the calendar file as
-* appropriate.
-*/
-void DaemonGuiHandler::toggleAlarmsEnabled()
-{
-	setAlarmsEnabled(!mActionAlarmEnable->alarmsEnabled());
 }
 
 /******************************************************************************
@@ -207,7 +195,7 @@ bool DaemonGuiHandler::checkIfDaemonRunning()
 	{
 		mDaemonRunning = newstatus;
 		int status = mDaemonRunning  &&  !mCalendarDisabled;
-		mActionAlarmEnable->setAlarmsEnabled(status);
+		theApp()->actionAlarmEnable()->setAlarmsEnabled(status);
 		mDaemonStatusTimer.changeInterval(mDaemonStatusTimerInterval * 1000);   // exit from fast checking
 		mDaemonStatusTimerCount = 0;
 		if (mDaemonRunning)

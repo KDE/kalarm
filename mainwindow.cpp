@@ -165,20 +165,26 @@ void KAlarmMainWindow::initActions()
 	KPopupMenu* fileMenu = new KPopupMenu(this, "file");
 	menu->insertItem(i18n("&File"), fileMenu);
 	actionQuit->plug(fileMenu);
+	mViewMenu = new KPopupMenu(this, "view");
+	menu->insertItem(i18n("&View"), mViewMenu);
+	actionToggleTrayIcon->plug(mViewMenu);
+	connect(mViewMenu, SIGNAL(aboutToShow()), this, SLOT(updateViewMenu()));
 	mActionsMenu = new KPopupMenu(this, "actions");
 	menu->insertItem(i18n("&Actions"), mActionsMenu);
 	actionNew->plug(mActionsMenu);
 	actionModify->plug(mActionsMenu);
 	actionDelete->plug(mActionsMenu);
 	mActionsMenu->insertSeparator(3);
-	actionToggleTrayIcon->plug(mActionsMenu);
 
-	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
-	ActionAlarmsEnabled* a = daemonGui->actionAlarmEnable();
+	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
 	mAlarmsEnabledId = a->itemId(a->plug(mActionsMenu));
 	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setAlarmEnabledStatus(bool)));
-	daemonGui->checkStatus();
-	setAlarmEnabledStatus(daemonGui->monitoringAlarms());
+	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
+	if (daemonGui)
+	{
+		daemonGui->checkStatus();
+		setAlarmEnabledStatus(daemonGui->monitoringAlarms());
+	}
 
 	actionResetDaemon->plug(mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), this, SLOT(updateActionsMenu()));
@@ -302,14 +308,21 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 }
 
 /******************************************************************************
-* Called when the Actions menu is about to be displayed.
+* Called when the View menu is about to be displayed.
 * Set the system tray icon menu text according to whether or not the system
 * tray icon is currently visible.
+*/
+void KAlarmMainWindow::updateViewMenu()
+{
+	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
+}
+
+/******************************************************************************
+* Called when the Actions menu is about to be displayed.
 * Update the status of the Alarms Enabled menu item.
 */
 void KAlarmMainWindow::updateActionsMenu()
 {
-	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
 	theApp()->daemonGuiHandler()->checkStatus();   // update the Alarms Enabled item status
 }
 

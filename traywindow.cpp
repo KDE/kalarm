@@ -63,14 +63,14 @@ TrayWindow::TrayWindow(const char* name)
 	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()));
 
 	// Set up the context menu
-	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
-	ActionAlarmsEnabled* a = daemonGui->actionAlarmEnable();
+	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
 	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
 	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setEnabledStatus(bool)));
 	theApp()->actionPreferences()->plug(contextMenu());
 	theApp()->actionDaemonPreferences()->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
+	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
 	daemonGui->checkStatus();
 	setEnabledStatus(daemonGui->monitoringAlarms());
 

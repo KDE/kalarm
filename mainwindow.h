@@ -57,6 +57,7 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotQuit();
 		void           slotSelection();
 		void           slotListRightClick(QListViewItem*, const QPoint&, int);
+		void           updateViewMenu();
 		void           updateActionsMenu();
 		void           setAlarmEnabledStatus(bool status);
 
@@ -70,6 +71,7 @@ class KAlarmMainWindow : public MainWindowBase
 		KAction*       actionToggleTrayIcon;
 		KAction*       actionResetDaemon;
 		KAction*       actionQuit;
+		KPopupMenu*    mViewMenu;
 		KPopupMenu*    mActionsMenu;
 		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 };

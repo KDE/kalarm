@@ -41,12 +41,11 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 
 		bool                 monitoringAlarms();
 		void                 checkStatus()                 { checkIfDaemonRunning(); }
-		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
+		void                 setAlarmsEnabled(bool enable);
 
 	private slots:
 		void                 timerCheckDaemonRunning();
 		void                 slotSettingsChanged();
-		void                 toggleAlarmsEnabled();
 
 	private:
 		static QString       expandURL(const QString& urlString);
@@ -54,14 +53,12 @@ class DaemonGuiHandler : public QObject, virtual public AlarmGuiIface
 		void                 daemonEnableCalendar(bool enable);
 		bool                 checkIfDaemonRunning();
 		void                 setFastDaemonCheck();
-		void                 setAlarmsEnabled(bool enable);
 		// DCOP interface
 		void                 alarmDaemonUpdate(int alarmGuiChangeType,
 		                                       const QString& calendarURL, const QCString& appName);
 		void                 handleEvent(const QString& calendarURL, const QString& eventID);
 		void                 handleEvent(const QString& iCalendarString) ;
 
-		ActionAlarmsEnabled* mActionAlarmEnable;         // action to enable/disable alarms
 		QTimer               mDaemonStatusTimer;         // timer for checking daemon status
 		int                  mDaemonStatusTimerCount;    // countdown for fast status checking
 		int                  mDaemonStatusTimerInterval; // timer interval (seconds) for checking daemon status

@@ -79,6 +79,7 @@ KAlarmApp::KAlarmApp()
 	KWinModule wm;
 	mKDEDesktop = wm.systemTrayWindows().count();
 	// Set up actions used by more than one menu
+	mActionAlarmEnable = new ActionAlarmsEnabled(Qt::CTRL+Qt::Key_E, this, SLOT(toggleAlarmsEnabled()), this);
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 	                                 0, this, SLOT(slotDaemonPreferences()), this);
@@ -435,6 +436,17 @@ void KAlarmApp::slotKAlarm()
 	KProcess proc;
 	proc << QString::fromLatin1(aboutData()->appName());
 	proc.start(KProcess::DontCare);
+}
+
+/******************************************************************************
+* Called when the Alarms Enabled action is selected.
+* The alarm daemon is told to stop or start monitoring the calendar file as
+* appropriate.
+*/
+void KAlarmApp::toggleAlarmsEnabled()
+{
+	if (mDaemonGuiHandler)
+		mDaemonGuiHandler->setAlarmsEnabled(!mActionAlarmEnable->alarmsEnabled());
 }
 
 /******************************************************************************
