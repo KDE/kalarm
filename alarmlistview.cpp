@@ -86,8 +86,12 @@ void AlarmListView::refresh()
 {
 	QPtrList<Event> messages = theApp()->getCalendar().getAllEvents();
 	clear();
+	KAlarmEvent event;
 	for (Event* msg = messages.first();  msg;  msg = messages.next())
-		addEntry(KAlarmEvent(*msg));
+	{
+		event.set(*msg);
+		addEntry(event);
+	}
 	resizeLastColumn();
 }
 
