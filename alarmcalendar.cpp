@@ -543,7 +543,7 @@ void AlarmCalendar::purge(int daysToKeep)
 	// Do the purge once any other current operations are completed
 	theApp()->processQueue();
 }
-	
+
 /******************************************************************************
 * This method must only be called from the main KAlarm queue processing loop,
 * to prevent asynchronous calendar operations interfering with one another.
@@ -753,7 +753,7 @@ void AlarmCalendar::getKAlarmVersion() const
 	mKAlarmSubVersion = QString::null;
 	if (mCalendar)
 	{
-		const QString& prodid = mCalendar->loadedProductId();
+		const QString& prodid = mCalendar->productId();
 		QString progname = QString(" ") + kapp->aboutData()->programName() + " ";
 		int i = prodid.find(progname, 0, false);
 		if (i >= 0)
