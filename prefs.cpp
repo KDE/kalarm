@@ -23,6 +23,7 @@
 #include <qobjectlist.h>
 #include <qlayout.h>
 #include <qbuttongroup.h>
+#include <qhbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -43,12 +44,13 @@
 #include "prefs.moc"
 
 
-PrefsBase::PrefsBase(QWidget* parent)
-	: KTabCtl(parent)
+PrefsTabBase::PrefsTabBase(QFrame* frame)
+	: page(frame)
 {
+	page->setMargin(KDialog::marginHint());
 }
 
-QSize PrefsBase::sizeHintForWidget(QWidget* widget)
+QSize PrefsTabBase::sizeHintForWidget(QWidget* widget)
 {
 	// The size is computed by adding the sizeHint().height() of all
 	// widget children and taking the width of the widest child and adding
@@ -84,13 +86,13 @@ QSize PrefsBase::sizeHintForWidget(QWidget* widget)
 	return size;
 }
 
-void PrefsBase::setSettings(Settings* setts)
+void PrefsTabBase::setSettings(Settings* setts)
 {
 	mSettings = setts;
 	restore();
 }
 
-void PrefsBase::apply(bool syncToDisc)
+void PrefsTabBase::apply(bool syncToDisc)
 {
 	mSettings->saveSettings(syncToDisc);
 	mSettings->emitSettingsChanged();
@@ -98,12 +100,11 @@ void PrefsBase::apply(bool syncToDisc)
 
 
 
-MiscPrefs::MiscPrefs(QWidget* parent)
-	: PrefsBase(parent)
+MiscPrefTab::MiscPrefTab(QFrame* frame)
+	: PrefsTabBase(frame)
 {
-	QWidget* page = new QWidget(this );
-	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint());
-	topLayout->setMargin(KDialog::marginHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
+//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
 
 	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), page, "modeGroup");
 	topLayout->addWidget(group);
@@ -157,27 +158,28 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	      i18n("Check to display the system tray icon whenever you start KDE."));
 	grid->addWidget(mAutostartTrayIcon2, ++row, 1, AlignLeft);
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	QLabel* label = new QLabel(i18n("System tray icon update interval [seconds]:"), page);
-	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
-	layout->addStretch();
-	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, page, "daemonCheck");
+	QHBox* box = new QHBox(page);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18n("System tray icon update interval:"), box);
+	box->setStretchFactor(label, 1);
+	mDaemonTrayCheckInterval = new QSpinBox(1, 9999, 1, box, "daemonCheck");
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
 	QWhatsThis::add(mDaemonTrayCheckInterval,
 	      i18n("How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
-	layout->addWidget(mDaemonTrayCheckInterval);
+	label = new QLabel(i18n("seconds"), box);
+	box->setFixedHeight(box->sizeHint().height());
+	topLayout->addWidget(box);
 
-	layout = new QHBoxLayout(topLayout);
-	label = new QLabel(i18n("Start of day for date-only alarms:"), page);
-	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
-	layout->addStretch();
-	mStartOfDay = new TimeSpinBox(page);
+	box = new QHBox(page);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("Start of day for date-only alarms:"), box);
+	box->setStretchFactor(label, 1);
+	mStartOfDay = new TimeSpinBox(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	QWhatsThis::add(mStartOfDay,
 	      i18n("The earliest time of day at which a date-only alarm (i.e. an alarm with \"any time\" specified) will be triggered."));
-	layout->addWidget(mStartOfDay);
+	box->setFixedHeight(box->sizeHint().height());
+	topLayout->addWidget(box);
 
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Confirm alarm deletions"), page, "confirmDeletion");
 	mConfirmAlarmDeletion->setFixedSize(mConfirmAlarmDeletion->sizeHint());
@@ -185,13 +187,13 @@ MiscPrefs::MiscPrefs(QWidget* parent)
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
 	topLayout->addWidget(mConfirmAlarmDeletion);
 
+	box = new QHBox(page);
+	topLayout->addWidget(box);
 	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
-
-	addTab(page, i18n("Miscellaneous"));
 }
 
-void MiscPrefs::restore()
+void MiscPrefTab::restore()
 {
 	bool systray = mSettings->mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
@@ -204,7 +206,7 @@ void MiscPrefs::restore()
 	mStartOfDay->setValue(mSettings->mStartOfDay.hour()*60 + mSettings->mStartOfDay.minute());
 }
 
-void MiscPrefs::apply(bool syncToDisc)
+void MiscPrefTab::apply(bool syncToDisc)
 {
 	bool systray = mRunInSystemTray->isChecked();
 	mSettings->mRunInSystemTray         = systray;
@@ -214,10 +216,10 @@ void MiscPrefs::apply(bool syncToDisc)
 	mSettings->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	int sod = mStartOfDay->value();
 	mSettings->mStartOfDay.setHMS(sod/60, sod%60, 0);
-	PrefsBase::apply(syncToDisc);
+	PrefsTabBase::apply(syncToDisc);
 }
 
-void MiscPrefs::setDefaults()
+void MiscPrefTab::setDefaults()
 {
 	bool systray = Settings::default_runInSystemTray;
 	mRunInSystemTray->setChecked(systray);
@@ -230,7 +232,7 @@ void MiscPrefs::setDefaults()
 	mStartOfDay->setValue(Settings::default_startOfDay.hour()*60 + Settings::default_startOfDay.minute());
 }
 
-void MiscPrefs::slotRunModeToggled(bool)
+void MiscPrefTab::slotRunModeToggled(bool)
 {
 	bool systray = (mRunInSystemTray->isOn());
 	mAutostartTrayIcon2->setEnabled(!systray);
@@ -239,47 +241,44 @@ void MiscPrefs::slotRunModeToggled(bool)
 }
 
 
-AppearancePrefs::AppearancePrefs(QWidget* parent)
-	: PrefsBase(parent)
+AppearancePrefTab::AppearancePrefTab(QFrame* frame)
+	: PrefsTabBase(frame)
 {
-	QWidget* page = new QWidget(this );
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, KDialog::spacingHint() );
-	layout->setMargin(KDialog::marginHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint() );
+//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
+
 	mFontChooser = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and Color"), false);
-	layout->addWidget(mFontChooser);
+	topLayout->addWidget(mFontChooser);
 
 	page->setMinimumSize(sizeHintForWidget(page));
-
-	addTab(page, i18n("Message Appearance"));
 }
 
-void AppearancePrefs::restore()
+void AppearancePrefTab::restore()
 {
 	mFontChooser->setBgColour(mSettings->mDefaultBgColour);
 	mFontChooser->setFont(mSettings->mMessageFont);
 }
 
-void AppearancePrefs::apply(bool syncToDisc)
+void AppearancePrefTab::apply(bool syncToDisc)
 {
 	mSettings->mDefaultBgColour = mFontChooser->bgColour();
 	mSettings->mMessageFont     = mFontChooser->font();
-	PrefsBase::apply(syncToDisc);
+	PrefsTabBase::apply(syncToDisc);
 }
 
-void AppearancePrefs::setDefaults()
+void AppearancePrefTab::setDefaults()
 {
 	mFontChooser->setBgColour(Settings::default_defaultBgColour);
 	mFontChooser->setFont(Settings::default_messageFont);
 }
 
 
-DefaultPrefs::DefaultPrefs(QWidget* parent)
-	: PrefsBase(parent)
+DefaultPrefTab::DefaultPrefTab(QFrame* frame)
+	: PrefsTabBase(frame)
 {
-	QWidget* page = new QWidget(this );
-	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, KDialog::spacingHint() );
-	topLayout->setMargin(KDialog::marginHint());
-
+	QVBoxLayout* topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint() );
+//	QBoxLayout* topLayout = (QBoxLayout*)page->layout();
+	
 	mDefaultLateCancel = new QCheckBox(i18n("Cancel if late"), page, "defCancelLate");
 	mDefaultLateCancel->setFixedSize(mDefaultLateCancel->sizeHint());
 	QWhatsThis::add(mDefaultLateCancel,
@@ -298,11 +297,11 @@ DefaultPrefs::DefaultPrefs(QWidget* parent)
 	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
 	topLayout->addWidget(mDefaultBeep);
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	QLabel* label = new QLabel(i18n("Recurrence period:"), page);
+	QHBox* box = new QHBox(page);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18n("Recurrence period:"), box);
 	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
-	mDefaultRecurPeriod = new QComboBox(page, "defRecur");
+	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
 	mDefaultRecurPeriod->insertItem(i18n("Hours/Minutes"));
 	mDefaultRecurPeriod->insertItem(i18n("Days"));
 	mDefaultRecurPeriod->insertItem(i18n("Weeks"));
@@ -311,16 +310,16 @@ DefaultPrefs::DefaultPrefs(QWidget* parent)
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	QWhatsThis::add(mDefaultRecurPeriod,
 	      i18n("The default setting for the recurrence period in the alarm edit dialog."));
-	layout->addWidget(mDefaultRecurPeriod);
-	layout->addStretch();
+	box->setFixedSize(box->sizeHint());
+	topLayout->addWidget(box);
 
+	box = new QHBox(page);
+	topLayout->addWidget(box);
 	topLayout->addStretch(1);
 	page->setMinimumSize(sizeHintForWidget(page));
-
-	addTab(page, i18n("Alarm Edit Defaults"));
 }
 
-void DefaultPrefs::restore()
+void DefaultPrefTab::restore()
 {
 	mDefaultLateCancel->setChecked(mSettings->mDefaultLateCancel);
 	mDefaultConfirmAck->setChecked(mSettings->mDefaultConfirmAck);
@@ -328,7 +327,7 @@ void DefaultPrefs::restore()
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->mDefaultRecurPeriod));
 }
 
-void DefaultPrefs::apply(bool syncToDisc)
+void DefaultPrefTab::apply(bool syncToDisc)
 {
 	mSettings->mDefaultLateCancel = mDefaultLateCancel->isChecked();
 	mSettings->mDefaultConfirmAck = mDefaultConfirmAck->isChecked();
@@ -342,10 +341,10 @@ void DefaultPrefs::apply(bool syncToDisc)
 		case 0:
 		default: mSettings->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
 	}
-	PrefsBase::apply(syncToDisc);
+	PrefsTabBase::apply(syncToDisc);
 }
 
-void DefaultPrefs::setDefaults()
+void DefaultPrefTab::setDefaults()
 {
 	mDefaultLateCancel->setChecked(mSettings->default_defaultLateCancel);
 	mDefaultConfirmAck->setChecked(mSettings->default_defaultConfirmAck);
@@ -353,7 +352,7 @@ void DefaultPrefs::setDefaults()
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mSettings->default_defaultRecurPeriod));
 }
 
-int DefaultPrefs::recurIndex(RecurrenceEdit::RepeatType type)
+int DefaultPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 {
 	switch (type)
 	{

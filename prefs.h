@@ -35,11 +35,11 @@ class TimeSpinBox;
 
 
 // Base class for each tab in the Preferences dialog
-class PrefsBase : public KTabCtl
+class PrefsTabBase : public QFrame
 {
 		Q_OBJECT
 	public:
-		PrefsBase(QWidget* parent);
+		PrefsTabBase(QFrame*);
 
 		QSize        sizeHintForWidget(QWidget*);
 		void         setSettings(Settings*);
@@ -48,16 +48,17 @@ class PrefsBase : public KTabCtl
 		virtual void setDefaults() = 0;
 
 	protected:
+		QFrame*      page;
 		Settings*    mSettings;
 };
 
 
 // Appearance tab of the Preferences dialog
-class AppearancePrefs : public PrefsBase
+class AppearancePrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		AppearancePrefs(QWidget* parent);
+		AppearancePrefTab(QFrame*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -69,11 +70,11 @@ class AppearancePrefs : public PrefsBase
 
 
 // Miscellaneous tab of the Preferences dialog
-class MiscPrefs : public PrefsBase
+class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MiscPrefs(QWidget* parent);
+		MiscPrefTab(QFrame*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -95,11 +96,11 @@ class MiscPrefs : public PrefsBase
 
 
 // Defaults tab of the Preferences dialog
-class DefaultPrefs : public PrefsBase
+class DefaultPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		DefaultPrefs(QWidget* parent);
+		DefaultPrefTab(QFrame*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
