@@ -1182,7 +1182,7 @@ bool KAlarmEvent::adjustStartOfDay(const QPtrList<Event>& events)
  */
 void KAlarmEvent::convertKCalEvents()
 {
-	if (theApp()->getCalendar().KAlarmVersion() < AlarmCalendar::KAlarmVersion(7,0,0))
+	if (theApp()->getCalendar().KAlarmVersion() < AlarmCalendar::KAlarmVersion(0,7,0))
 	{
 		bool adjustSummerTime = theApp()->getCalendar().KAlarmVersion057_UTC();
 		QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
