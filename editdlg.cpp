@@ -300,7 +300,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mReminder->setMinutes(0, false);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
-		mSoundPicker->setChecked(preferences->defaultBeep());
+		mSoundPicker->setFile(preferences->defaultSoundFile());
+		mSoundPicker->setChecked(preferences->defaultBeep() || !preferences->defaultSoundFile().isEmpty());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
 

@@ -1,6 +1,7 @@
 KAlarm
 
 === Version 0.9.3 --- 2 Mar 2003 ===
+Add preferences option to set default sound file for the Edit Alarm dialog.
 Fix display of "Invalid date" message before Edit Alarm dialog displays.
 
 === Version 0.9.2 --- 28 Feb 2003 ===

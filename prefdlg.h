@@ -116,8 +116,8 @@ class MiscPrefTab : public PrefsTabBase
 		virtual void setDefaults();
 
 	private slots:
-		void         slotRunModeToggled(bool on);
-		void         slotDisableIfStoppedToggled(bool on);
+		void         slotRunModeToggled(bool);
+		void         slotDisableIfStoppedToggled(bool);
 		void         slotExpiredToggled(bool);
 		void         slotEmailUseCCToggled(bool);
 		void         slotClearExpired();
@@ -157,11 +157,18 @@ class DefaultPrefTab : public PrefsTabBase
 		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
 
+	private slots:
+		void         slotBeepToggled(bool);
+		void         slotBrowseSoundFile();
+
 	private:
 		QCheckBox*     mDefaultLateCancel;
 		QCheckBox*     mDefaultConfirmAck;
-		QCheckBox*     mDefaultBeep;
 		QCheckBox*     mDefaultEmailBcc;
+		QCheckBox*     mDefaultBeep;
+		QLabel*        mDefaultSoundFileLabel;
+		QLineEdit*     mDefaultSoundFile;
+		QPushButton*   mDefaultSoundFileBrowse;
 		QComboBox*     mDefaultRecurPeriod;
 		QComboBox*     mDefaultReminderUnits;
 

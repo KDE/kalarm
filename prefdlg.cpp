@@ -36,10 +36,13 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qstyle.h>
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -507,20 +510,36 @@ DefaultPrefTab::DefaultPrefTab(QVBox* frame)
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	mDefaultBeep = new QCheckBox(i18n("&Beep"), box, "defBeep");
-	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
-	QWhatsThis::add(mDefaultBeep,
-	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
-
 	// BCC email to sender
 	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	mDefaultEmailBcc = new QCheckBox(i18n("Copy email to &self"), box, "defEmailBcc");
 	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
 	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(i18n("Copy email to self")));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
+	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	mDefaultBeep = new QCheckBox(i18n("&Beep"), box, "defBeep");
+	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
+	connect(mDefaultBeep, SIGNAL(toggled(bool)), SLOT(slotBeepToggled(bool)));
+	QWhatsThis::add(mDefaultBeep,
+	      i18n("Check to select Beep as the default setting for \"Sound\" in the alarm edit dialog."));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
+	box = new QHBox(mPage);   // this is to control the QWhatsThis text display area
+	box->setSpacing(KDialog::spacingHint());
+	mDefaultSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
+	mDefaultSoundFileLabel->setFixedSize(mDefaultSoundFileLabel->sizeHint());
+	mDefaultSoundFile = new QLineEdit(box);
+	mDefaultSoundFileLabel->setBuddy(mDefaultSoundFile);
+	mDefaultSoundFileBrowse = new QPushButton(box);
+	mDefaultSoundFileBrowse->setPixmap(SmallIcon("fileopen"));
+	mDefaultSoundFileBrowse->setFixedSize(mDefaultSoundFileBrowse->sizeHint());
+	connect(mDefaultSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
+	QToolTip::add(mDefaultSoundFileBrowse, i18n("Choose a sound file"));
+	QWhatsThis::add(box,
+	      i18n("Enter the sound file to use as the default setting for \"Sound\" in the alarm edit dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
@@ -567,9 +586,11 @@ void DefaultPrefTab::restore()
 	mDefaultLateCancel->setChecked(mPreferences->mDefaultLateCancel);
 	mDefaultConfirmAck->setChecked(mPreferences->mDefaultConfirmAck);
 	mDefaultBeep->setChecked(mPreferences->mDefaultBeep);
+	mDefaultSoundFile->setText(mPreferences->mDefaultSoundFile);
 	mDefaultEmailBcc->setChecked(mPreferences->mDefaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mPreferences->mDefaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(mPreferences->mDefaultReminderUnits);
+	slotBeepToggled(true);
 }
 
 void DefaultPrefTab::apply(bool syncToDisc)
@@ -577,6 +598,7 @@ void DefaultPrefTab::apply(bool syncToDisc)
 	mPreferences->mDefaultLateCancel = mDefaultLateCancel->isChecked();
 	mPreferences->mDefaultConfirmAck = mDefaultConfirmAck->isChecked();
 	mPreferences->mDefaultBeep       = mDefaultBeep->isChecked();
+	mPreferences->mDefaultSoundFile  = mPreferences->mDefaultBeep ? QString::null : mDefaultSoundFile->text();
 	mPreferences->mDefaultEmailBcc   = mDefaultEmailBcc->isChecked();
 	switch (mDefaultRecurPeriod->currentItem())
 	{
@@ -598,9 +620,27 @@ void DefaultPrefTab::setDefaults()
 	mDefaultLateCancel->setChecked(mPreferences->default_defaultLateCancel);
 	mDefaultConfirmAck->setChecked(mPreferences->default_defaultConfirmAck);
 	mDefaultBeep->setChecked(mPreferences->default_defaultBeep);
+	mDefaultSoundFile->setText(mPreferences->default_defaultSoundFile);
 	mDefaultEmailBcc->setChecked(mPreferences->default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(mPreferences->default_defaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(mPreferences->default_defaultReminderUnits);
+	slotBeepToggled(true);
+}
+
+void DefaultPrefTab::slotBeepToggled(bool)
+{
+	bool beep = mDefaultBeep->isChecked();
+	mDefaultSoundFileLabel->setEnabled(!beep);
+	mDefaultSoundFile->setEnabled(!beep);
+	mDefaultSoundFileBrowse->setEnabled(!beep);
+}
+
+void DefaultPrefTab::slotBrowseSoundFile()
+{
+	QString	defaultDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+	KURL url = KFileDialog::getOpenURL(defaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose a Sound File"));
+	if (!url.isEmpty())
+		mDefaultSoundFile->setText(url.prettyURL());
 }
 
 int DefaultPrefTab::recurIndex(RecurrenceEdit::RepeatType type)

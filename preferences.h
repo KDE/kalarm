@@ -64,6 +64,7 @@ class Preferences : public QObject
 		bool           defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
 		bool           defaultBeep() const              { return mDefaultBeep; }
+		const QString& defaultSoundFile() const         { return mDefaultBeep ? QString::null : mDefaultSoundFile; }
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
@@ -91,6 +92,7 @@ class Preferences : public QObject
 		static const bool       default_defaultLateCancel;
 		static const bool       default_defaultConfirmAck;
 		static const bool       default_defaultBeep;
+		static const QString    default_defaultSoundFile;
 		static const bool       default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                        default_defaultRecurPeriod;
@@ -106,6 +108,7 @@ class Preferences : public QObject
 		QTime               mStartOfDay;
 		QColor              mDefaultBgColour;
 		QFont               mMessageFont;
+		QString             mDefaultSoundFile;
 		QColor              mExpiredColour;
 		int                 mExpiredKeepDays;
 		// Default settings for Edit Alarm dialog
