@@ -1,10 +1,11 @@
 KAlarm
 
-=== Version 0.8.1 (KDE 3.1) --- 4 Oct 2002 ===
+=== Version 0.8.1 (KDE 3.1) --- 8 Oct 2002 ===
 Fix possible loss of alarms if KAlarm has previously used another calendar file.
 Fix coordination between "At time" and "After time" values when they change.
 Fix display of hour spin buttons in time edit spin boxes.
 Prevent time edit spin box buttons selecting the text.
+Clean up previous alarm list highlight properly when a new alarm is selected.
 Set sensible initial focus when edit alarm dialog pages are displayed.
 
 === Version 0.8 (KDE 3.1 beta2) --- 16 Sep 2002 ===
