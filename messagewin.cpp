@@ -121,7 +121,7 @@ QSize MessageWin::initView()
 		label->setText(KGlobal::locale()->formatDateTime(dateTime));
 		label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
-		topLayout->addWidget(label);
+		topLayout->addWidget(label, 0, Qt::AlignHCenter);
 		QWhatsThis::add(label,
 		      i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
 	}
@@ -133,7 +133,7 @@ QSize MessageWin::initView()
 		label->setText(message);
 		label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
-		topLayout->addWidget(label);
+		topLayout->addWidget(label, 0, Qt::AlignHCenter);
 		QWhatsThis::add(label, i18n("The file whose contents are displayed below"));
 
 		// Display contents of file
@@ -150,7 +150,7 @@ QSize MessageWin::initView()
 			{
 				opened = true;
 				QTextView* view = new QTextView(this, "fileContents");
-				topLayout->addWidget(view);
+				topLayout->addWidget(view, 0, Qt::AlignHCenter);
 				QFontMetrics fm = view->fontMetrics();
 				QString line;
 				int n;
@@ -182,7 +182,7 @@ QSize MessageWin::initView()
 			label->setText(dir ? i18n("Error: File is a directory") : exists ? i18n("Error opening file !!") : i18n("Error: File not found !!"));
 			label->setPalette(QPalette(colour, colour));
 			label->setFixedSize(label->sizeHint());
-			topLayout->addWidget(label);
+			topLayout->addWidget(label, 0, Qt::AlignHCenter);
 			fileError = true;
 		}
 	}
@@ -197,7 +197,7 @@ QSize MessageWin::initView()
 		QWhatsThis::add(label, i18n("The alarm message"));
 		int spacing = label->fontMetrics().lineSpacing()/2 - KDialog::spacingHint();
 		topLayout->addSpacing(spacing);
-		topLayout->addWidget(label);
+		topLayout->addWidget(label, 0, Qt::AlignHCenter);
 		topLayout->addSpacing(spacing);
 	}
 
@@ -246,7 +246,6 @@ QSize MessageWin::initView()
 	QSize size(minbutsize.width()*3, topLayout->sizeHint().height());
 	setMinimumSize(size);
 
-// display Help button in the title bar ????
 	KWin::setState(winId(), NET::Modal | NET::Sticky | NET::StaysOnTop);
 	KWin::setOnAllDesktops(winId(), true);
 	return size;
