@@ -1,25 +1,27 @@
 KAlarm
 
-KAlarm lets you set up personal alarm messages, emails and commands via a
-graphical interface. The messages pop up on the screen, or the emails or
-commands execute, at the time you specify.
+KAlarm is a personal alarm message, command and email scheduler. It lets you
+set up personal alarm messages which pop up on the screen at the chosen time,
+or you can schedule commands to be executed or emails to be sent.
 
 When setting up or modifying an alarm, the options available let you:
  * choose whether the alarm should display a text message, display a text file,
    execute a command, or send an email.
  * configure the alarm to recur on an hours/minutes, daily, weekly, monthly or
    annual basis, or set it to trigger every time you log in.
- * choose a colour for displaying the alarm message.
+ * specify that a reminder should be displayed in advance of the main alarm
+   time(s).
+ * choose a colour and font for displaying the alarm message.
  * specify an audible beep or a sound file to play when the message is
    displayed.
- * choose whether or not the alarm should be canceled if it can't be triggered
+ * choose whether or not the alarm should be cancelled if it can't be triggered
    at its scheduled time. An alarm can only be triggered while you are logged
    in and running a graphical environment. If you choose not to cancel the
    alarm if it can't be triggered at the correct time, it will be triggered
    when you eventually log in.
 
-Alarms may also be scheduled from the command line, or via DCOP calls from
-other programs.
+In addition to its graphical mode, alarms may also be scheduled from the
+command line, or via DCOP calls from other programs.
 
 See the INSTALL file for installation instructions.
 
