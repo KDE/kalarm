@@ -494,9 +494,7 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid) const
 	ev.setRevision(mRevision);
 	ev.clearAlarms();
 
-	QDateTime dtStart = ev.dtStart();
-	if (mDateTime < dtStart)
-		dtStart = mDateTime;
+	QDateTime dtStart = mDateTime;
 	QDateTime dtMain  = mDateTime;
 	if (!mExpired)
 	{
