@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "dateedit.h"
 #include "dateedit.moc"
 
 
@@ -34,6 +33,13 @@ DateEdit::DateEdit(QWidget* parent, const char* name)
 	: KDateEdit(parent, name)
 {
 	connect(this, SIGNAL(dateChanged(QDate)), SLOT(slotDateChanged(QDate)));
+}
+
+void DateEdit::setMinDate(const QDate& d)
+{
+	mMinDate = d;
+	if (inputIsValid() && date() < mMinDate)
+		setDate(mMinDate);
 }
 
 void DateEdit::setValid(bool valid)
@@ -48,13 +54,13 @@ bool DateEdit::validate(const QDate& newDate)
 {
 	if (!newDate.isValid())
 		return false;
-	if (minDate.isValid() && newDate < minDate)
+	if (mMinDate.isValid() && newDate < mMinDate)
 	{
 		QString minString;
-		if (minDate == QDate::currentDate())
+		if (mMinDate == QDate::currentDate())
 			minString = i18n("today");
 		else
-			minString = KGlobal::locale()->formatDate(minDate, true);
+			minString = KGlobal::locale()->formatDate(mMinDate, true);
 		KMessageBox::sorry(this, i18n("Date cannot be earlier than %1").arg(minString));
 		return false;
 	}
