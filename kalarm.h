@@ -26,10 +26,12 @@
 #include <config.h>
 #endif
 
-#define KALARM_VERSION "1.1.4"
+#define KALARM_VERSION "1.2.0"
 
 #include <kdeversion.h>
 extern int  marginKDE2;   // KDE2 compatibility
+
+#define OLD_DCOP    // retain DCOP pre-1.2 compatibility
 
 #endif // KALARM_H
 
