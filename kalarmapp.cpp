@@ -74,8 +74,6 @@
 
 #include <netwm.h>
 
-extern QCString execArguments;
-
 int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
@@ -362,7 +360,7 @@ int KAlarmApp::newInstance()
 					kdDebug(5950)<<"KAlarmApp::newInstance(): exec\n";
 					if (args->isSet("mail"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--mail")).arg(QString::fromLatin1("--exec")))
-					alMessage = execArguments;
+					alMessage = args->getOption("exec");
 					action = KAEvent::COMMAND;
 				}
 				else if (args->isSet("mail"))
