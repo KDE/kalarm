@@ -234,6 +234,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
 
+	fontButton = new QPushButton(i18n("Font and Color..."), page);
 	fontColour = new FontColourChooser(page, 0L, false, QStringList(), true, i18n("Font and background color"), false);
 	size = fontColour->sizeHint();
 	fontColour->setMinimumHeight(size.height() + 4);
