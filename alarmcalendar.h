@@ -21,6 +21,7 @@
 #ifndef ALARMCALENDAR_H
 #define ALARMCALENDAR_H
 
+#include <qobject.h>
 #include <kurl.h>
 #include <libkcal/calendarlocal.h>
 #include "alarmevent.h"
@@ -30,12 +31,13 @@
  *  Either vCalendar or iCalendar files may be read, but the calendar is saved
  *  only in iCalendar format to avoid information loss.
  */
-class AlarmCalendar
+class AlarmCalendar : public QObject
 {
+		Q_OBJECT
 	public:
 		AlarmCalendar(const QString& file, KAlarmEvent::Status, const QString& icalFile = QString::null,
 		              const QString& configKey = QString::null);
-		~AlarmCalendar();
+		virtual ~AlarmCalendar();
 		bool                  valid() const                       { return mUrl.isValid(); }
 		KAlarmEvent::Status   type() const                        { return mType; }
 		bool                  open();
@@ -57,6 +59,10 @@ class AlarmCalendar
 		int                   KAlarmVersion() const               { return mKAlarmVersion; }
 		bool                  KAlarmVersion057_UTC() const        { return mKAlarmVersion057_UTC; }
 		static int            KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
+
+	signals:
+		void                  calendarSaved(AlarmCalendar*);
+
 	private:
 		bool                  create();
 		bool                  saveCal(const QString& tempFile = QString::null);

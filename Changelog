@@ -3,6 +3,7 @@ KAlarm
 === Version 0.9.7 --- 21 Nov 2003 ===
 Fix memory leak when sending emails with attachments.
 Fix error sending emails with very small attachments.
+Eliminate duplicate reload-calendar calls to alarm daemon.
 
 === Version 0.9.6 --- 2 Nov 2003 ===
 Add option to choose foreground colour for alarm messages.

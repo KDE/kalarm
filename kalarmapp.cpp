@@ -145,6 +145,8 @@ KAlarmApp::KAlarmApp()
 		KMessageBox::error(0, i18n("Invalid calendar file name: %1").arg(path), aboutData()->programName());
 		exit(1);
 	}
+	connect(mCalendar, SIGNAL(calendarSaved(AlarmCalendar*)), SLOT(calendarSaved(AlarmCalendar*)));
+
 	QString expiredKey = QString::fromLatin1("ExpiredCalendar");
 	QString expiredCal = config->readPathEntry(expiredKey, locateLocal("appdata", ARCHIVE_CALENDAR));
 	QString expiredICal = expiredCal;
@@ -1757,10 +1759,7 @@ void KAlarmApp::endCalendarUpdate()
 			mCalendarUpdateSave = false;
 		}
 		if (mCalendarUpdateReload)
-		{
 			reloadDaemon();
-			mCalendarUpdateReload = false;
-		}
 	}
 }
 
@@ -1769,22 +1768,27 @@ void KAlarmApp::endCalendarUpdate()
 */
 void KAlarmApp::calendarSave(bool reload)
 {
+	if (reload)
+		mCalendarUpdateReload = true;
 	if (mCalendarUpdateCount)
-	{
 		mCalendarUpdateSave = true;
-		if (reload)
-			mCalendarUpdateReload = true;
-	}
 	else
 	{
 		mCalendar->save();
 		mCalendarUpdateSave = false;
-		if (reload)
-		{
+		if (mCalendarUpdateReload)
 			reloadDaemon();
-			mCalendarUpdateReload = false;
-		}
 	}
+}
+
+/******************************************************************************
+* Called when a calendar has been saved.
+* If it's the alarm calendar, notify the alarm daemon.
+*/
+void KAlarmApp::calendarSaved(AlarmCalendar* cal)
+{
+	if (cal == mCalendar)
+		reloadDaemon();
 }
 
 /******************************************************************************
@@ -1932,11 +1936,14 @@ void KAlarmApp::resetDaemon()
 */
 void KAlarmApp::reloadDaemon()
 {
+	kdDebug(5950) << "KAlarmApp::reloadDaemon()\n";
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(aboutData()->appName()) << mCalendar->urlString();
 	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdError(5950) << "KAlarmApp::reloadDaemon(): reloadMsgCal dcop send failed" << endl;
+	else
+		mCalendarUpdateReload = false;
 }
 
 /******************************************************************************

@@ -126,6 +126,7 @@ class KAlarmApp : public KUniqueApplication
 		void               slotNewAlarm();
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
+		void               calendarSaved(AlarmCalendar*);
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_TRIGGER, EVENT_CANCEL };
 		struct ProcData

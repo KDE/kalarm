@@ -256,15 +256,7 @@ bool AlarmCalendar::saveCal(const QString& filename)
 		mVCal = false;
 	}
 
-	if (mType == KAlarmEvent::ACTIVE)
-	{
-		// Tell the alarm daemon to reload the calendar
-		QByteArray data;
-		QDataStream arg(data, IO_WriteOnly);
-		arg << QCString(kapp->aboutData()->appName()) << mUrl.url();
-		if (!kapp->dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
-			kdError(5950) << "AlarmCalendar::saveCal(): reloadMsgCal dcop send failed" << endl;
-	}
+	emit calendarSaved(this);
 	return true;
 }
 

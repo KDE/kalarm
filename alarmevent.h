@@ -22,6 +22,7 @@
 #define KALARMEVENT_H
 
 #include <qcolor.h>
+#include <qfont.h>
 
 #include <libkcal/person.h>
 #include <libkcal/event.h>
