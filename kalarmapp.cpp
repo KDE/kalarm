@@ -200,10 +200,10 @@ bool KAlarmApp::restoreSession()
 		{
 			MessageWin* win = new MessageWin;
 			win->restore(i, false);
-			if (win->isInvalid())
-				delete win;
-			else
+			if (win->isValid())
 				win->show();
+			else
+				delete win;
 		}
 	}
 	initCheck();           // register with the alarm daemon

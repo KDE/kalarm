@@ -57,7 +57,7 @@ class MessageWin : public MainWindowBase
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
 		bool                hasDefer() const       { return !!mDeferButton; }
-		bool                isInvalid() const      { return mInvalid; }
+		bool                isValid() const        { return !mInvalid; }
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
