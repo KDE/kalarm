@@ -507,6 +507,7 @@ void MessageWin::slotDefer()
 		{
 			// The event doesn't exist any more, so create a new one
 			KAlarmEvent event(dateTime, message, colour, type, flags);
+			event.setAudioFile(audioFile);
 			theApp()->addEvent(event, 0L);
 		}
 		if (theApp()->runInSystemTray())
