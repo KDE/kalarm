@@ -289,7 +289,7 @@ void KAlarmMainWindow::initActions()
         mActionShowTime->setCheckedState( i18n("Hide &Alarm Times") );
         mActionShowTimeTo->setCheckedState( i18n("Hide Time t&o Alarms") );
         mActionShowExpired->setCheckedState( i18n("Hide &Expired Alarms") );
-        mActionToggleTrayIcon->setCheckedState( i18n("Hide in System &Tray") );
+        mActionToggleTrayIcon->setCheckedState( i18n("Hide from System &Tray") );
 #endif
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
 	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
