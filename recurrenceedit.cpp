@@ -785,11 +785,18 @@ void RecurrenceEdit::monthlyClicked(int id)
 void RecurrenceEdit::yearlyClicked(int id)
 {
 	bool date;
+	int  day;
 	if (id == mYearRuleDayMonthButtonId)
+	{
 		date = true;
+		day  = mYearRuleNthDayEntry->currentItem();    // enable/disable month checkboxes as appropriate
+	}
 //	else if (id == mYearRuleDayButtonId)
 	else if (id == mYearRuleOnNthTypeOfDayButtonId)
+	{
 		date = false;
+		day  = 1;     // enable all month checkboxes
+	}
 	else
 		return;
 
@@ -797,6 +804,7 @@ void RecurrenceEdit::yearlyClicked(int id)
 //	mYearRuleDayEntry->setEnabled(!date);
 	mYearRuleNthNumberEntry->setEnabled(!date);
 	mYearRuleNthTypeOfDayEntry->setEnabled(!date);
+	yearDayOfMonthSelected(day);
 }
 
 /******************************************************************************
@@ -805,7 +813,7 @@ void RecurrenceEdit::yearlyClicked(int id)
  */
 void RecurrenceEdit::yearDayOfMonthSelected(int index)
 {
-	mYearRuleMonthBox[1]->setEnabled(index < 29  ||  index > 30);     // February
+	mYearRuleMonthBox[1]->setEnabled(index < 29  ||  index >= 31);     // February
 	bool enable = (index != 30);
 	mYearRuleMonthBox[3]->setEnabled(enable);     // April
 	mYearRuleMonthBox[5]->setEnabled(enable);     // June
@@ -962,6 +970,10 @@ DateTime RecurrenceEdit::endDateTime() const
 	return DateTime(mEndDateEdit->date(), mEndTimeEdit->time());
 }
 
+/******************************************************************************
+ * Fetch which days of the week have been checked.
+ * Reply = true if at least one day has been checked.
+ */
 bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 {
 	bool found = false;
@@ -975,6 +987,9 @@ bool RecurrenceEdit::getCheckedDays(QBitArray& rDays) const
 	return found;
 }
 
+/******************************************************************************
+ * Check/uncheck each day of the week according to the specified bits.
+ */
 void RecurrenceEdit::setCheckedDays(QBitArray& rDays)
 {
 	for (int i = 0;  i < 7;  ++i)
@@ -1072,6 +1087,7 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 		mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
 		for (int i = 0;  i < 12;  ++i)
 			mYearRuleMonthBox[i]->setChecked(i == month);
+		yearDayOfMonthSelected(day);     // enable/disable month checkboxes as appropriate
 	}
 }
 
