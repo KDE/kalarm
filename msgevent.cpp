@@ -566,12 +566,15 @@ void KAlarmEvent::defer(const QDateTime& dateTime)
 }
 
 /******************************************************************************
- * Check whether the event repeats - with a recurrence specification and/or an
- * alarm repetition.
+ * Check whether the event regularly repeats - with a recurrence specification
+ * and/or an alarm repetition.
  */
-bool KAlarmEvent::repeats() const
+KAlarmEvent::RecurType KAlarmEvent::recurs() const
 {
-	return (checkRecur() || mRepeatDuration);
+	RecurType type = checkRecur();
+	if (type == NO_RECUR  &&  mRepeatDuration)
+		return SUB_DAILY;
+	return type;
 }
 
 /******************************************************************************
@@ -581,7 +584,7 @@ bool KAlarmEvent::repeats() const
  */
 KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const
 {
-	if (checkRecur())
+	if (checkRecur() != NO_RECUR)
 		return nextRecurrence(preDateTime, result);
 	if (mRepeatDuration)
 	{
@@ -604,7 +607,7 @@ KAlarmEvent::OccurType KAlarmEvent::nextOccurrence(const QDateTime& preDateTime,
  */
 KAlarmEvent::OccurType KAlarmEvent::previousOccurrence(const QDateTime& afterDateTime, QDateTime& result) const
 {
-	if (checkRecur())
+	if (checkRecur() != NO_RECUR)
 		return previousRecurrence(afterDateTime, result);
 	if (mRepeatDuration)
 		return previousRepetition(afterDateTime, result);
@@ -621,7 +624,7 @@ KAlarmEvent::OccurType KAlarmEvent::setNextOccurrence(const QDateTime& preDateTi
 	if (preDateTime < mDateTime)
 		return FIRST_OCCURRENCE;
 	OccurType type;
-	if (checkRecur())
+	if (checkRecur() != NO_RECUR)
 	{
 		QDateTime newTime;
 		type = nextRecurrence(preDateTime, newTime);
@@ -971,12 +974,13 @@ bool KAlarmEvent::initRecur(bool recurs)
  * inconsistencies (which should never occur!).
  * Reply = true if a recurrence (as opposed to a repetition) exists.
  */
-bool KAlarmEvent::checkRecur() const
+KAlarmEvent::RecurType KAlarmEvent::checkRecur() const
 {
 	if (mRecurrence)
 	{
 		KAlarmEvent* ev = const_cast<KAlarmEvent*>(this);
-		switch (mRecurrence->doesRecur())
+		RecurType type = static_cast<RecurType>(mRecurrence->doesRecur());
+		switch (type)
 		{
 			case Recurrence::rDaily:           // daily
 			case Recurrence::rWeekly:          // weekly on multiple days of week
@@ -985,15 +989,39 @@ bool KAlarmEvent::checkRecur() const
 			case Recurrence::rYearlyMonth:     // annually on multiple months (day of month = start date)
 			case Recurrence::rYearlyDay:       // annually on multiple day numbers in year
 				ev->mRepeatDuration = ev->mRepeatMinutes = 0;
-				return true;
+				return type;
 			case Recurrence::rNone:
 			default:
 				delete mRecurrence;
-				ev->mRecurrence = 0L;
+				ev->mRecurrence = 0;
 				break;
 		}
 	}
-	return false;
+	return NO_RECUR;
+}
+
+/******************************************************************************
+ * Return the recurrence interval in units of the recurrence period type.
+ */
+int KAlarmEvent::recurInterval() const
+{
+	if (mRecurrence)
+	{
+		switch (mRecurrence->doesRecur())
+		{
+			case Recurrence::rDaily:
+			case Recurrence::rWeekly:
+			case Recurrence::rMonthlyDay:
+			case Recurrence::rMonthlyPos:
+			case Recurrence::rYearlyMonth:
+			case Recurrence::rYearlyDay:
+				return mRecurrence->frequency();
+			case Recurrence::rNone:
+			default:
+				break;
+		}
+	}
+	return mRepeatMinutes;
 }
 
 /******************************************************************************

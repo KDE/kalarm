@@ -129,6 +129,7 @@ class KAlarmEvent
 		};
 		enum RecurType
 		{
+			NO_RECUR    = KCal::Recurrence::rNone,
 			DAILY       = KCal::Recurrence::rDaily,
 			WEEKLY      = KCal::Recurrence::rWeekly,
 			MONTHLY_DAY = KCal::Recurrence::rMonthlyDay,
@@ -202,8 +203,9 @@ class KAlarmEvent
 		QString           command() const              { return (mType == KAlarmAlarm::COMMAND) ? mCleanText : QString::null; }
 		QString           messageFileOrCommand() const { return mCleanText; }
 		const QColor&     colour() const               { return mColour; }
-		bool              repeats() const;
+		RecurType         recurs() const;
 		KAlarmRecurrence* recurrence() const           { return mRecurrence; }
+		int               recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
 		int               repeatCount() const          { return mRepeatDuration; }
 		int               repeatMinutes() const        { return mRepeatMinutes; }
 		OccurType         nextOccurrence(const QDateTime& preDateTime, QDateTime& result) const;
@@ -261,7 +263,7 @@ class KAlarmEvent
 		static const int  REPEAT_AT_LOGIN_OFFSET;   // alarm ID offset for repeat-at-login alarm
 		static const int  DEFERRAL_OFFSET;          // alarm ID offset for deferral alarm
 	private:
-		bool              checkRecur() const;
+		RecurType         checkRecur() const;
 		OccurType         nextRecurrence(const QDateTime& preDateTime, QDateTime& result) const;
 		OccurType         nextRepetition(const QDateTime& preDateTime, QDateTime& result, int& remainingCount) const;
 		OccurType         previousRecurrence(const QDateTime& afterDateTime, QDateTime& result) const;
