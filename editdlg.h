@@ -63,6 +63,7 @@ class EditAlarmDlg : public KDialogBase
 		int               getAlarmFlags() const;
 		bool              getLateCancel() const   { return lateCancel->isChecked(); }
 		bool              getBeep() const         { return sound->isChecked() && soundFile.isEmpty(); }
+		bool              getConfirmAck() const   { return confirmAck->isChecked(); }
 
 	protected:
 		virtual void showEvent(QShowEvent*);
@@ -82,7 +83,7 @@ class EditAlarmDlg : public KDialogBase
 	private:
 		bool            checkText(QString& result);
 		QString         getMessageText();
-		void            enableSound(bool);
+		void            enableMessageControls(bool);
 		void            setSoundPicker();
 
 		QButtonGroup*    actionGroup;
@@ -98,6 +99,7 @@ class EditAlarmDlg : public KDialogBase
 		QCheckBox*       lateCancel;
 		QCheckBox*       sound;
 		QPushButton*     soundPicker;
+		QCheckBox*       confirmAck;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
 #else

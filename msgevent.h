@@ -38,6 +38,7 @@ struct AlarmData;
  *   colour - stored as a hex string prefixed by #, as the first category (event CATEGORIES field)
  *   elapsed repeat count - stored as the revision number (event SEQUENCE field)
  *   beep - stored as a "BEEP" category (event CATEGORIES field)
+ *   confirmAck - stored as a "ACKCONF" category (event CATEGORIES field)
  */
 
 // KAlarmAlarm corresponds to a single KCal::Alarm instance
@@ -46,7 +47,7 @@ class KAlarmAlarm
 	public:
 		enum Type  { MESSAGE, FILE, COMMAND, AUDIO };
 
-		KAlarmAlarm()    : mAlarmSeq(-1), mBeep(false), mRepeatAtLogin(false), mDeferral(false), mLateCancel(false) { }
+		KAlarmAlarm()    : mAlarmSeq(-1), mBeep(false), mRepeatAtLogin(false), mDeferral(false), mLateCancel(false), mConfirmAck(false) { }
 		~KAlarmAlarm()  { }
 		void             set(int flags);
 		bool             valid() const              { return mAlarmSeq > 0; }
@@ -64,6 +65,7 @@ class KAlarmAlarm
 		QString          audioFile() const          { return (mType == AUDIO) ? mCleanText : QString::null; }
 		void             commandArgs(QStringList&) const;
 		const QColor&    colour() const             { return mColour; }
+		bool             confirmAck() const         { return mConfirmAck; }
 		bool             lateCancel() const         { return mLateCancel; }
 		bool             repeatAtLogin() const      { return mRepeatAtLogin; }
 		bool             deferred() const           { return mDeferral; }
@@ -87,6 +89,7 @@ class KAlarmAlarm
 		bool             mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool             mDeferral;         // whether the alarm is an extra deferred alarm
 		bool             mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
+		bool             mConfirmAck;       // alarm acknowledgement requires confirmation by user
 };
 
 
@@ -99,7 +102,8 @@ class KAlarmEvent
 			LATE_CANCEL     = 0x01,
 			BEEP            = 0x02,
 			REPEAT_AT_LOGIN = 0x04,
-			ANY_TIME        = 0x08,    // only a date is specified, not a time
+			CONFIRM_ACK     = 0x08,
+			ANY_TIME        = 0x10,    // only a date is specified, not a time
 			// The following values are read-only
 			DEFERRAL        = 0x80
 		};
@@ -185,6 +189,7 @@ class KAlarmEvent
 		QString           messageFileOrCommand() const { return mCleanText; }
 		QString           audioFile() const            { return mAudioFile; }
 		const QColor&     colour() const               { return mColour; }
+		bool              confirmAck() const           { return mConfirmAck; }
 		RecurType         recurs() const;
 		KCal::Recurrence* recurrence() const           { return mRecurrence; }
 		int               recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
@@ -275,6 +280,7 @@ class KAlarmEvent
 		bool              mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool              mDeferral;         // whether the alarm has an extra deferred time
 		bool              mLateCancel;       // whether to cancel the alarm if it can't be displayed on time
+		bool              mConfirmAck;       // alarm acknowledgement requires confirmation by user
 		bool              mUpdated;          // event has been updated but not written to calendar file
 };
 

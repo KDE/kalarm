@@ -75,6 +75,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  alarmID(alarm.id()),
 	  flags(alarm.flags()),
 	  beep(alarm.beep()),
+	  confirmAck(event.confirmAck()),
 	  dateOnly(event.anyTime()),
 	  type(alarm.type()),
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
@@ -111,6 +112,7 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 	  alarmID(alarm.id()),
 	  flags(alarm.flags()),
 	  beep(false),
+	  confirmAck(evnt.confirmAck()),
 	  dateOnly(evnt.anyTime()),
 	  type(alarm.type()),
 	  errorMsg(errmsg),
@@ -293,7 +295,7 @@ QSize MessageWin::initView()
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	okButton->clearFocus();
 	okButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
-	connect(okButton, SIGNAL(clicked()), SLOT(close()));
+	connect(okButton, SIGNAL(clicked()), SLOT(slotClose()));
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
 
@@ -351,6 +353,7 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("Type"), (errorMsg.isNull() ? type : -1));
 		config->writeEntry(QString::fromLatin1("Font"), font);
 		config->writeEntry(QString::fromLatin1("Colour"), colour);
+		config->writeEntry(QString::fromLatin1("ConfirmAck"), confirmAck);
 		if (dateTime.isValid())
 		{
 			config->writeEntry(QString::fromLatin1("Time"), dateTime);
@@ -379,6 +382,7 @@ void MessageWin::readProperties(KConfig* config)
 	type          = KAlarmAlarm::Type(t);
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
 	colour        = config->readColorEntry(QString::fromLatin1("Colour"));
+	confirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
 	dateTime      = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
@@ -469,6 +473,20 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 			theApp()->writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
+}
+
+/******************************************************************************
+*  Called when the Close button is clicked.
+*/
+void MessageWin::slotClose()
+{
+	if (confirmAck)
+	{
+		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
+		if (KMessageBox::warningYesNo(this, i18n("Are you sure you want to close the message window?"), i18n("Confirm Acknowledgement")) != KMessageBox::Yes)
+			return;
+	}
+	close();
 }
 
 /******************************************************************************

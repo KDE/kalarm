@@ -52,6 +52,7 @@ class MessageWin : public MainWindowBase
 		virtual void       readProperties(KConfig*);
 
 	protected slots:
+		void               slotClose();
 		void               slotShowDefer();
 		void               slotDefer();
 
@@ -70,6 +71,7 @@ class MessageWin : public MainWindowBase
 		int                alarmID;
 		int                flags;
 		bool               beep;
+		bool               confirmAck;
 		bool               dateOnly;         // ignore event's time
 		KAlarmAlarm::Type  type;
 		QString            errorMsg;

@@ -145,7 +145,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	connect(recurrenceEdit, SIGNAL(resized(QSize,QSize)), this, SLOT(slotRecurrenceResized(QSize,QSize)));
 	topLayout->addWidget(recurrenceEdit);
 
-	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+//	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	grid = new QGridLayout(topLayout, 2, 2, spacingHint());
 
 	// Late display checkbox - default = allow late display
 
@@ -159,8 +160,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	           "being logged off, X not running, or the alarm daemon not running.\n\n"
 	           "If unchecked, the alarm will be triggered at the first opportunity after "
 	           "the specified time, regardless of how late it is."));
-	layout->addWidget(lateCancel);
-	layout->addStretch();
+	grid->addWidget(lateCancel, 0, 0, AlignLeft);
+	grid->setColStretch(0, 1);
 
 	// Sound checkbox & sound picker button - default = no sound
 
@@ -186,8 +187,17 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	      i18n("Select a sound file to play when the message is displayed. If no sound file is "
 	           "selected, a beep will sound."));
 	slayout->addWidget(soundPicker);
-	layout->addWidget(frame);
-	layout->addStretch();
+	grid->addWidget(frame, 0, 1, AlignRight);
+
+	// Acknowledgement confirmation required - default = no confirmation
+
+	confirmAck = new QCheckBox(page);
+	confirmAck->setText(i18n("Confirm acknowledgement"));
+	confirmAck->setFixedSize(confirmAck->sizeHint());
+	confirmAck->setChecked(false);
+	QWhatsThis::add(confirmAck,
+	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
+	grid->addWidget(confirmAck, 1, 0, AlignLeft);
 
 #ifdef SELECT_FONT
 	// Font and colour choice drop-down list
@@ -197,7 +207,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	fontColour->setMinimumHeight(size.height() + 4);
 	QWhatsThis::add(fontColour,
 	      i18n("Choose the font and background color for the alarm message."));
-	layout->addWidget(fontColour);
+	grid->addWidget(fontColour, 1, 1, AlignLeft);
 #else
 	// Colour choice drop-down list
 
@@ -207,7 +217,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QToolTip::add(bgColourChoose, i18n("Message color"));
 	QWhatsThis::add(bgColourChoose,
 	      i18n("Choose the background color for the alarm message."));
-	layout->addWidget(bgColourChoose);
+	grid->addWidget(bgColourChoose, 1, 1, AlignLeft);
 #endif
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
@@ -249,6 +259,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		messageEdit->setText(event->cleanText());
 		actionGroup->setButton(actionGroup->id(radio));
 		lateCancel->setChecked(event->lateCancel());
+		confirmAck->setChecked(event->confirmAck());
 		recurrenceEdit->set(*event, event->repeatAtLogin());   // must be called after timeWidget is set up, to ensure correct date-only enabling
 		soundFile = event->audioFile();
 		sound->setChecked(event->beep() || !soundFile.isEmpty());
@@ -311,6 +322,7 @@ int EditAlarmDlg::getAlarmFlags() const
 {
 	return (sound->isChecked() && soundFile.isEmpty() ? KAlarmEvent::BEEP : 0)
 	     | (lateCancel->isChecked()                   ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (confirmAck->isChecked()                   ? KAlarmEvent::CONFIRM_ACK : 0)
 	     | (recurrenceEdit->repeatAtLogin()           ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
 	     | (alarmAnyTime                              ? KAlarmEvent::ANY_TIME : 0);
 }
@@ -411,10 +423,13 @@ void EditAlarmDlg::slotEditDeferral()
 }
 
 /******************************************************************************
- * Enable/disable the Sound checkbox and sound picker button.
+ * Enable/disable the controls appropriate only to displayed alarms.
+ * These are the 'Sound' checkbox and sound picker button, and the 'Confirm
+ * acknowledgement' checkbox.
  */
-void EditAlarmDlg::enableSound(bool enable)
+void EditAlarmDlg::enableMessageControls(bool enable)
 {
+	confirmAck->setEnabled(enable);
 	sound->setEnabled(enable);
 	slotSoundToggled(enable && sound->isChecked());
 }
@@ -642,7 +657,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 		bgColourChoose->setEnabled(true);
 #endif
-		enableSound(true);
+		enableMessageControls(true);
 	}
 	else
 	{
@@ -656,7 +671,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(true);
 #endif
-			enableSound(true);
+			enableMessageControls(true);
 		}
 		else if (commandRadio->isOn())
 		{
@@ -667,7 +682,7 @@ void EditAlarmDlg::slotMessageTypeClicked(int id)
 #ifndef SELECT_FONT
 			bgColourChoose->setEnabled(false);
 #endif
-			enableSound(false);
+			enableMessageControls(false);
 		}
 		singleLineOnly = true;
 		QString text = messageEdit->text();
