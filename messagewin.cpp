@@ -406,7 +406,7 @@ MessageWin* MessageWin::findEvent(const QString& eventID)
 */
 void MessageWin::repeat()
 {
-	const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);
+	const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().event(eventID);
 	if (kcalEvent)
 	{
 		raise();
@@ -534,7 +534,7 @@ void MessageWin::slotDefer()
 	if (deferTime->getDateTime(dateTime, anyTime))
 	{
 		// Get the event being deferred. It will only still exist if repetitions are outstanding.
-		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().getEvent(eventID);
+		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().event(eventID);
 		if (kcalEvent)
 		{
 			// It's a repeated alarm which may still exist in the calendar file.

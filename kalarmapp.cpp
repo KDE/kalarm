@@ -661,7 +661,7 @@ void KAlarmApp::slotSettingsChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
-	if (KAlarmEvent::adjustStartOfDay(mCalendar->getAllEvents()))
+	if (KAlarmEvent::adjustStartOfDay(mCalendar->events()))
 	{
 		mCalendar->save();
 		reloadDaemon();                      // tell the daemon to reread the calendar file
@@ -772,7 +772,7 @@ void KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
 	kdDebug(5950) << "KAlarmApp::handleEvent(): " << eventID << ", " << (function==EVENT_TRIGGER?"TRIGGER":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
-	Event* kcalEvent = mCalendar->getEvent(eventID);
+	Event* kcalEvent = mCalendar->event(eventID);
 	if (!kcalEvent)
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
@@ -943,7 +943,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, int alarmID)
 {
 	kdDebug(5950) << "KAlarmApp::rescheduleAlarm(): " << event.id() << ":" << alarmID << endl;
-	Event* kcalEvent = mCalendar->getEvent(event.id());
+	Event* kcalEvent = mCalendar->event(event.id());
 	if (!kcalEvent)
 		kdError(5950) << "KAlarmApp::rescheduleAlarm(): event ID not found: " << event.id() << endl;
 	else
