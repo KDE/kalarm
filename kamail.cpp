@@ -85,12 +85,12 @@ bool KAMail::send(const KAlarmEvent& event)
 				return false; // give up
 
 			command += QString::fromLatin1(" -s ");
-			command += KProcess::quote(event.emailSubject());
+			command += KShellProcess::quote(event.emailSubject());
 
 			if (event.emailBcc())
 			{
 				command += QString::fromLatin1(" -b ");
-				command += KProcess::quote(from);
+				command += KShellProcess::quote(from);
 			}
 
 			command += " ";
