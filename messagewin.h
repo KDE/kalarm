@@ -37,9 +37,11 @@ class MessageWin : public MainWindowBase
 		Q_OBJECT
 	public:
 		MessageWin();     // for session management restoration only
-		explicit MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true);
+		MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true, bool allowDefer = true);
+		MessageWin(const QString& errmsg, const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true);
 		~MessageWin();
-		static int        instanceCount()  { return nInstances; }
+		bool              errorMessage() const   { return !errorMsg.isNull(); }
+		static int        instanceCount()        { return nInstances; }
 
 	protected:
 		virtual void showEvent(QShowEvent*);
@@ -64,7 +66,8 @@ class MessageWin : public MainWindowBase
 		int               alarmID;
 		int               flags;
 		bool              beep;
-		bool              file;
+		KAlarmAlarm::Type type;
+		QString           errorMsg;
 		bool              noDefer;          // don't display a Defer option
 		// Miscellaneous
 		QPushButton*      deferButton;
@@ -74,7 +77,6 @@ class MessageWin : public MainWindowBase
 		bool              rescheduleEvent;  // true to delete event after message has been displayed
 		bool              shown;            // true once the window has been displayed
 		bool              deferDlgShown;    // true if defer dialog is visible
-		bool              fileError;        // true if initView() couldn't open the file to display
 		static int        nInstances;       // number of current instances
 };
 
