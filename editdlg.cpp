@@ -62,6 +62,7 @@
 #include "kalarmapp.h"
 #include "prefsettings.h"
 #include "datetime.h"
+#include "soundpicker.h"
 #include "recurrenceedit.h"
 #include "colourcombo.h"
 #include "kamail.h"
@@ -211,15 +212,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	QWhatsThis::add(recurRadio, i18n("Regularly repeat the alarm"));
 
 	// Late display checkbox - default = allow late display
-	lateCancel = new CheckBox(i18n("Cancel &if late"), mainPage);
+	lateCancel = createLateCancelCheckbox(mReadOnly, mainPage);
 	lateCancel->setFixedSize(lateCancel->sizeHint());
-	lateCancel->setReadOnly(mReadOnly);
-	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
-	           "minute of the specified time. Possible reasons for not triggering include your "
-	           "being logged off, X not running, or the alarm daemon not running.\n\n"
-	           "If unchecked, the alarm will be triggered at the first opportunity after "
-	           "the specified time, regardless of how late it is."));
 	grid->addWidget(lateCancel, 1, 1, Qt::AlignLeft);
 	grid->setColStretch(1, 1);
 
@@ -282,8 +276,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		lateCancel->setChecked(event->lateCancel());
 		confirmAck->setChecked(event->confirmAck());
 		recurrenceEdit->set(*event);   // must be called after timeWidget is set up, to ensure correct date-only enabling
-		soundFile = event->audioFile();
-		sound->setChecked(event->beep() || !soundFile.isEmpty());
+		soundPicker->setFile(event->audioFile());
+		soundPicker->setChecked(event->beep() || !event->audioFile().isEmpty());
 		emailToEdit->setText(event->emailAddresses(", "));
 		emailSubjectEdit->setText(event->emailSubject());
 		emailBcc->setChecked(event->emailBcc());
@@ -304,7 +298,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		lateCancel->setChecked(settings->defaultLateCancel());
 		confirmAck->setChecked(settings->defaultConfirmAck());
 		recurrenceEdit->setDefaults(defaultTime);   // must be called after timeWidget is set up, to ensure correct date-only enabling
-		sound->setChecked(settings->defaultBeep());
+		soundPicker->setChecked(settings->defaultBeep());
 		emailBcc->setChecked(settings->defaultEmailBcc());
 	}
 
@@ -312,7 +306,6 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	size.setHeight(size.height() + deferGroupHeight);
 	resize(size);
 
-	slotSoundToggled(sound->isChecked());
 	bool enable = !!emailAttachList->count();
 	emailAttachList->setEnabled(enable);
 	if (emailRemoveButton)
@@ -359,33 +352,11 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 		QWhatsThis::add(button, i18n("Select a text file to display."));
 	}
 
-	// Sound checkbox
+	// Sound checkbox and file selector
 	QBoxLayout* layout = new QHBoxLayout(frameLayout);
-	QFrame* frame = new QFrame(displayAlarmsFrame);
-	frame->setFrameStyle(QFrame::NoFrame);
-	QHBoxLayout* soundLayout = new QHBoxLayout(frame, 0, spacingHint());
-	sound = new CheckBox(i18n("&Sound"), frame);
-	sound->setFixedSize(sound->sizeHint());
-	sound->setReadOnly(mReadOnly);
-	connect(sound, SIGNAL(toggled(bool)), SLOT(slotSoundToggled(bool)));
-	QWhatsThis::add(sound,
-	      i18n("If checked, a sound will be played when the message is displayed. Click the "
-	           "button on the right to select the sound."));
-	soundLayout->addWidget(sound);
-
-	// Sound picker button
-	soundPicker = new PushButton(frame);
-	soundPicker->setPixmap(SmallIcon("playsound"));
+	soundPicker = new SoundPicker(mReadOnly, displayAlarmsFrame);
 	soundPicker->setFixedSize(soundPicker->sizeHint());
-	soundPicker->setToggleButton(true);
-	soundPicker->setReadOnly(mReadOnly);
-	connect(soundPicker, SIGNAL(clicked()), SLOT(slotPickSound()));
-	QWhatsThis::add(soundPicker,
-	      i18n("Select a sound file to play when the message is displayed. If no sound file is "
-	           "selected, a beep will sound."));
-	soundLayout->addWidget(soundPicker);
-	soundLayout->addStretch();
-	layout->addWidget(frame);
+	layout->addWidget(soundPicker);
 	layout->addStretch();
 
 #ifdef SELECT_FONT
@@ -402,21 +373,12 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 #endif
 
 	// Colour choice drop-down list
-	bgColourChoose = new ColourCombo(displayAlarmsFrame);
-	QSize size = bgColourChoose->sizeHint();
-	bgColourChoose->setMinimumHeight(size.height() + 4);
-	bgColourChoose->setReadOnly(mReadOnly);
-	QToolTip::add(bgColourChoose, i18n("Message color"));
-	QWhatsThis::add(bgColourChoose,
-	      i18n("Choose the background color for the alarm message."));
+	bgColourChoose = createBgColourChooser(mReadOnly, displayAlarmsFrame);
 	layout->addWidget(bgColourChoose);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	confirmAck = new CheckBox(i18n("Confirm ac&knowledgement"), displayAlarmsFrame);
+	confirmAck = createConfirmAckCheckbox(mReadOnly, displayAlarmsFrame);
 	confirmAck->setFixedSize(confirmAck->sizeHint());
-	confirmAck->setReadOnly(mReadOnly);
-	QWhatsThis::add(confirmAck,
-	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	frameLayout->addWidget(confirmAck, 0, Qt::AlignLeft);
 
 	filePadding = new QHBox(displayAlarmsFrame);
@@ -536,6 +498,48 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	grid->addMultiCellWidget(emailBcc, 1, 1, 0, 1, Qt::AlignLeft);
 }
 
+/******************************************************************************
+ * Create a widget to choose the alarm message background colour.
+ */
+ColourCombo* EditAlarmDlg::createBgColourChooser(bool readOnly, QWidget* parent, const char* name)
+{
+	ColourCombo* widget = new ColourCombo(parent, name);
+	QSize size = widget->sizeHint();
+	widget->setMinimumHeight(size.height() + 4);
+	widget->setReadOnly(readOnly);
+	QToolTip::add(widget, i18n("Message color"));
+	QWhatsThis::add(widget, i18n("Choose the background color for the alarm message."));
+	return widget;
+}
+
+/******************************************************************************
+ * Create an "acknowledgement confirmation required" checkbox.
+ */
+CheckBox* EditAlarmDlg::createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name)
+{
+	CheckBox* widget = new CheckBox(i18n("Confirm ac&knowledgement"), parent, name);
+	widget->setReadOnly(readOnly);
+	QWhatsThis::add(widget,
+	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
+	return widget;
+}
+
+/******************************************************************************
+ * Create an "cancel if late" checkbox.
+ */
+CheckBox* EditAlarmDlg::createLateCancelCheckbox(bool readOnly, QWidget* parent, const char* name)
+{
+	CheckBox* widget = new CheckBox(i18n("Cancel &if late"), parent, name);
+	widget->setReadOnly(readOnly);
+	QWhatsThis::add(widget,
+	      i18n("If checked, the alarm will be canceled if it cannot be triggered within 1 "
+	           "minute of the specified time. Possible reasons for not triggering include your "
+	           "being logged off, X not running, or the alarm daemon not running.\n\n"
+	           "If unchecked, the alarm will be triggered at the first opportunity after "
+	           "the specified time, regardless of how late it is."));
+	return widget;
+}
+
 
 /******************************************************************************
  * Get the currently entered message data.
@@ -544,7 +548,7 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
 	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-	event.setAudioFile(sound->isChecked() ? soundFile : QString());
+	event.setAudioFile(soundPicker->file());
 	event.setEmail(emailAddresses, emailSubjectEdit->text(), emailAttachments);
 	if (recurRadio->isOn())
 	{
@@ -560,12 +564,12 @@ void EditAlarmDlg::getEvent(KAlarmEvent& event)
 int EditAlarmDlg::getAlarmFlags() const
 {
 	bool displayAlarm = messageRadio->isOn() || fileRadio->isOn();
-	return (displayAlarm && sound->isChecked() && soundFile.isEmpty() ? KAlarmEvent::BEEP : 0)
-	     | (lateCancel->isChecked()                                   ? KAlarmEvent::LATE_CANCEL : 0)
-	     | (displayAlarm && confirmAck->isChecked()                   ? KAlarmEvent::CONFIRM_ACK : 0)
-	     | (emailRadio->isOn() && emailBcc->isChecked()               ? KAlarmEvent::EMAIL_BCC : 0)
-	     | (repeatAtLoginRadio->isChecked()                           ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
-	     | (alarmAnyTime                                              ? KAlarmEvent::ANY_TIME : 0);
+	return (displayAlarm && soundPicker->beep()         ? KAlarmEvent::BEEP : 0)
+	     | (lateCancel->isChecked()                     ? KAlarmEvent::LATE_CANCEL : 0)
+	     | (displayAlarm && confirmAck->isChecked()     ? KAlarmEvent::CONFIRM_ACK : 0)
+	     | (emailRadio->isOn() && emailBcc->isChecked() ? KAlarmEvent::EMAIL_BCC : 0)
+	     | (repeatAtLoginRadio->isChecked()             ? KAlarmEvent::REPEAT_AT_LOGIN : 0)
+	     | (alarmAnyTime                                ? KAlarmEvent::ANY_TIME : 0);
 }
 
 /******************************************************************************
@@ -653,7 +657,7 @@ void EditAlarmDlg::slotTry()
 		}
 		KAlarmEvent event;
 		event.set(QDateTime(), text, bgColourChoose->color(), getAlarmType(), getAlarmFlags());
-		event.setAudioFile(sound->isChecked() ? soundFile : QString());
+		event.setAudioFile(soundPicker->file());
 		event.setEmail(emailAddresses, emailSubjectEdit->text(), emailAttachments);
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
@@ -665,7 +669,12 @@ void EditAlarmDlg::slotTry()
 				theApp()->commandMessage((KProcess*)proc, 0);
 			}
 			else if (emailRadio->isOn())
-				KMessageBox::information(this, i18n("Email sent to:\n%1").arg(emailAddresses.join("\n")));
+			{
+				QString bcc;
+				if (emailBcc->isChecked())
+					bcc = i18n("\nBcc: %1").arg(theApp()->settings()->emailAddress());
+				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(emailAddresses.join("\n")).arg(bcc));
+			}
 		}
 	}
 }
@@ -853,58 +862,6 @@ void EditAlarmDlg::slotBrowseFile()
 		alarmMessage = url.prettyURL();
 		fileMessageEdit->setText(alarmMessage);
 		fileDefaultDir = url.path();
-	}
-}
-
-/******************************************************************************
- * Called when the sound checkbox is toggled.
- */
-void EditAlarmDlg::slotSoundToggled(bool on)
-{
-	soundPicker->setEnabled(on);
-	setSoundPicker();
-}
-
-/******************************************************************************
- * Called when the sound picker button is clicked.
- */
-void EditAlarmDlg::slotPickSound()
-{
-	if (soundPicker->isOn())
-	{
-		if (soundDefaultDir.isEmpty())
-			soundDefaultDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
-		KURL url = KFileDialog::getOpenURL(soundDefaultDir, i18n("*.wav|Wav Files"), 0, i18n("Choose a Sound File"));
-		if (!url.isEmpty())
-		{
-			soundFile = url.prettyURL();
-			soundDefaultDir = url.path();
-			setSoundPicker();
-		}
-		else if (soundFile.isEmpty())
-			soundPicker->setOn(false);
-	}
-	else
-	{
-		soundFile = "";
-		setSoundPicker();
-	}
-}
-
-/******************************************************************************
- * Set the sound picker button according to whether a sound file is selected.
- */
-void EditAlarmDlg::setSoundPicker()
-{
-	QToolTip::remove(soundPicker);
-	if (soundPicker->isEnabled())
-	{
-		bool beep = soundFile.isEmpty();
-		if (beep)
-			QToolTip::add(soundPicker, i18n("Beep"));
-		else
-			QToolTip::add(soundPicker, i18n("Play '%1'").arg(soundFile));
-		soundPicker->setOn(!beep);
 	}
 }
 

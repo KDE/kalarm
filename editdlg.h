@@ -46,6 +46,7 @@ class PushButton;
 class CheckBox;
 class AlarmTimeWidget;
 class RecurrenceEdit;
+class SoundPicker;
 class LineEdit;
 
 /**
@@ -63,6 +64,10 @@ class EditAlarmDlg : public KDialogBase
 		void         getEvent(KAlarmEvent&);
 		QDateTime    getDateTime(bool* anyTime = 0);
 
+		static ColourCombo* createBgColourChooser(bool readOnly, QWidget* parent, const char* name = 0);
+		static CheckBox*    createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
+		static CheckBox*    createLateCancelCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
+
 	protected:
 		virtual void resizeEvent(QResizeEvent*);
 	protected slots:
@@ -74,8 +79,6 @@ class EditAlarmDlg : public KDialogBase
 		void         slotRepeatClicked(int id);
 		void         slotEditDeferral();
 		void         slotBrowseFile();
-		void         slotSoundToggled(bool on);
-		void         slotPickSound();
 		void         openAddressBook();
 		void         slotAddAttachment();
 		void         slotRemoveAttachment();
@@ -109,9 +112,7 @@ class EditAlarmDlg : public KDialogBase
 		QFrame*          displayAlarmsFrame;
 		QHBox*           fileBox;
 		QHBox*           filePadding;
-		CheckBox*        sound;
-		PushButton*      soundPicker;
-		QString          soundDefaultDir;
+		SoundPicker*     soundPicker;
 		CheckBox*        confirmAck;
 #ifdef SELECT_FONT
 		FontColourChooser* fontColour;
@@ -149,7 +150,6 @@ class EditAlarmDlg : public KDialogBase
 		QString          alarmMessage;     // message text/file name/command/email message
 		QDateTime        alarmDateTime;
 		QDateTime        deferDateTime;
-		QString          soundFile;        // sound file to play when alarm is triggered, or null for beep
 		EmailAddressList emailAddresses;   // list of addresses to send email to
 		QStringList      emailAttachments; // list of email attachment file names
 		QSize            basicSize;        // size without deferred time widget
