@@ -86,7 +86,8 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	fileRadio->setFixedSize(fileRadio->sizeHint());
 	connect(fileRadio, SIGNAL(toggled(bool)), this, SLOT(slotFileToggled(bool)));
 	QWhatsThis::add(fileRadio,
-	      i18n("The edit field below contains the name of a text file whose contents will be displayed as the alarm message text."));
+	      i18n("The edit field below contains the name of a text file whose contents will be "
+	           "displayed as the alarm message text."));
 	grid->addWidget(fileRadio, 0, 2, AlignRight);
 
 	// Browse button
@@ -163,8 +164,11 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	lateCancel->setChecked(false);
 	grid->addWidget(lateCancel, 0, 0, AlignLeft);
 	QWhatsThis::add(lateCancel,
-	      i18n("If checked, the message will be cancelled if it cannot be displayed within 1 minute of the specified time. Possible reasons for non-display include your being logged off, X not running, or the alarm daemon not running.\n\n"
-	           "If unchecked, the message will be displayed at the first opportunity after the specified time, regardless of how late it is."));
+	      i18n("If checked, the message will be cancelled if it cannot be displayed within 1 "
+	           "minute of the specified time. Possible reasons for non-display include your "
+	           "being logged off, X not running, or the alarm daemon not running.\n\n"
+	           "If unchecked, the message will be displayed at the first opportunity after "
+	           "the specified time, regardless of how late it is."));
 
 	// Beep checkbox - default = no beep
 

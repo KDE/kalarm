@@ -21,7 +21,7 @@
 #ifndef KALARMEVENT_H
 #define KALARMEVENT_H
 
-#include <event.h>
+#include <libkcal/event.h>
 
 #include <kapp.h>
 #if KDE_VERSION < 290

@@ -1,5 +1,5 @@
 # set the include path for X, qt and KDE and calendar library
-INCLUDES= -I$(top_srcdir)/libkcal $(all_includes)
+INCLUDES= -I$(top_srcdir) $(all_includes)
 
 bin_PROGRAMS = kalarm
 kalarm_SOURCES = main.cpp kalarmapp.cpp editdlg.cpp msgevent.cpp messagewin.cpp fontcolour.cpp fontchooser.cpp colourcombo.cpp prefsettings.cpp prefs.cpp prefdlg.cpp mainwindow.cpp datetime.cpp spinbox2.cpp

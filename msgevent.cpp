@@ -88,7 +88,8 @@ void KAlarmEvent::set(const Event& event)
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
-	for (QPtrListIterator<Alarm> it(event.alarms());  it.current();  ++it)
+	QPtrList<Alarm> alarms = event.alarms();
+	for (QPtrListIterator<Alarm> it(alarms);  it.current();  ++it)
 	{
 		// Parse the next alarm's text
 		Alarm* alarm = it.current();

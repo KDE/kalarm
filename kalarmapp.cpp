@@ -37,9 +37,11 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 
-#include <vcaldrag.h>
-#include <vcalformat.h>
-#include <icalformat.h>
+#include <libkcal/vcaldrag.h>
+#include <libkcal/vcalformat.h>
+#include <libkcal/icalformat.h>
+
+#include <kalarmd/calclient.h>
 
 #include "mainwindow.h"
 #include "messagewin.h"
@@ -47,8 +49,8 @@
 #include "kalarmapp.h"
 #include "kalarmapp.moc"
 
-const QString DCOP_OBJECT_NAME(QString::fromLatin1("display"));
 const QString DEFAULT_CALENDAR_FILE(QString::fromLatin1("calendar.ics"));
+const char* DCOP_OBJECT_NAME        = "display";
 const char* DAEMON_NAME             = "kalarmd";
 const char* DAEMON_DCOP_OBJECT_NAME = "ad";
 
@@ -61,7 +63,7 @@ KAlarmApp*  KAlarmApp::theInstance = 0L;
 KAlarmApp::KAlarmApp()
 	:  KUniqueApplication(),
 		mainWidget(0L),
-//		mainWidget(new MainWidget(DCOP_OBJECT_NAME)),
+//		mainWidget(new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME))),
 		daemonRegistered(false),
 		m_generalSettings(new GeneralSettings(0L))
 {
@@ -115,7 +117,7 @@ int KAlarmApp::newInstance()
 	}
 	else
 	{
-		mainWidget = new MainWidget(DCOP_OBJECT_NAME);
+		mainWidget = new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME));
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 		if (args->isSet("stop"))
 		{
@@ -664,7 +666,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 	if (!calendarOnly  &&  !mainWidget)
 	{
 		// We're now ready to handle DCOP calls, so set up the handler
-		mainWidget = new MainWidget(DCOP_OBJECT_NAME);
+		mainWidget = new MainWidget(QString::fromLatin1(DCOP_OBJECT_NAME));
 	}
 	return true;
 }
@@ -689,8 +691,9 @@ void KAlarmApp::startDaemon()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(aboutData()->appName()) << aboutData()->programName() << DCOP_OBJECT_NAME << (Q_INT8)1 << (Q_INT8)0;
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "registerApp(QString,QString,QString,bool,bool)", data))
+		arg << QCString(aboutData()->appName()) << aboutData()->programName()
+		    << QCString(DCOP_OBJECT_NAME) << (int)ClientInfo::COMMAND_LINE_NOTIFY << (Q_INT8)0;
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "registerApp(QCString,QString,QCString,int,bool)", data))
 			kdDebug() << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
 	}
 
@@ -698,8 +701,8 @@ void KAlarmApp::startDaemon()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(aboutData()->appName()) << calendar.urlString();
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "addMsgCal(QString,QString)", data))
+		arg << QCString(aboutData()->appName()) << calendar.urlString();
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "addMsgCal(QCString,QString)", data))
 			kdDebug() << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
 	}
 
@@ -737,8 +740,8 @@ void KAlarmApp::resetDaemon()
 	{
 		QByteArray data;
 		QDataStream arg(data, IO_WriteOnly);
-		arg << QString(aboutData()->appName()) << calendar.urlString();
-		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "resetMsgCal(QString,QString)", data))
+		arg << QCString(aboutData()->appName()) << calendar.urlString();
+		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "resetMsgCal(QCString,QString)", data))
 			kdDebug() << "KAlarmApp::resetDaemon(): addCal dcop send failed" << endl;
 	}
 }
@@ -750,8 +753,8 @@ void KAlarmApp::reloadDaemon()
 {
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QString(aboutData()->appName()) << calendar.urlString();
-	if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QString,QString)", data))
+	arg << QCString(aboutData()->appName()) << calendar.urlString();
+	if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
 		kdDebug() << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
 }
 
@@ -888,7 +891,7 @@ void AlarmCalendar::getURL() const
 bool AlarmCalendar::open()
 {
 	getURL();
-	calendar = new AlarmCalendarLocal;
+	calendar = new CalendarLocal;
 	calendar->showDialogs(FALSE);
 
 	// Find out whether the calendar is ICal or VCal format
@@ -1008,8 +1011,8 @@ bool AlarmCalendar::save(const QString& filename)
 	// Tell the alarm daemon to reload the calendar
 	QByteArray data;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << QString(kapp->aboutData()->appName()) << url.url();
-	if (!kapp->dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QString,QString)", data))
+	arg << QCString(kapp->aboutData()->appName()) << url.url();
+	if (!kapp->dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
 		kdDebug() << "AlarmCalendar::save(): addCal dcop send failed" << endl;
 	return true;
 }
@@ -1036,15 +1039,13 @@ void AlarmCalendar::addEvent(const KAlarmEvent& event)
 
 /******************************************************************************
 * Update the specified event in the calendar with its new contents.
+* The event retains the same ID.
 */
 void AlarmCalendar::updateEvent(const KAlarmEvent& event)
 {
 	Event* kcalEvent = getEvent(event.id());
 	if (kcalEvent)
-	{
-		if (event.updateEvent(*kcalEvent))
-			calendar->updateEvent(kcalEvent);
-	}
+		event.updateEvent(*kcalEvent);
 }
 
 /******************************************************************************
@@ -1076,19 +1077,26 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 	kdDebug() << "MainWidget::process(): " << func << endl;
 	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n, SCHEDULE_FILE, SCHEDULE_FILE_n };
 	int function;
-	if      (func == "handleEvent(const QString&,const QString&)")
+	if      (func == "handleEvent(const QString&,const QString&)"
+	||       func == "handleEvent(QString,QString)")
 		function = HANDLE;
-	else if (func == "cancelMessage(const QString&,const QString&)")
+	else if (func == "cancelMessage(const QString&,const QString&)"
+	||       func == "cancelMessage(QString,QString)")
 		function = CANCEL;
-	else if (func == "displayMessage(const QString&,const QString&)")
+	else if (func == "displayMessage(const QString&,const QString&)"
+	||       func == "displayMessage(QString,QString)")
 		function = DISPLAY;
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32)")
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32)")
 		function = SCHEDULE;
-	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+	else if (func == "scheduleMessage(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleMessage(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE_n;
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32)")
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32)")
 		function = SCHEDULE_FILE;
-	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)")
+	else if (func == "scheduleFile(const QString&,const QDateTime&,QColor,Q_UINT32,Q_INT32,Q_INT32)"
+	||       func == "scheduleFile(QString,QDateTime,QColor,Q_UINT32,Q_INT32,Q_INT32)")
 		function = SCHEDULE_FILE_n;
 	else
 	{
