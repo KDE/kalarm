@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -191,12 +195,13 @@ void KAlarmMainWindow::showEvent(QShowEvent* se)
 */
 void KAlarmMainWindow::initActions()
 {
-	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
-	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this, "new");
-	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
-	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
-	actionToggleTrayIcon = new KAction(QString(), "kalarm", Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
-	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), this, "refresh");
+	KActionCollection* actions = actionCollection();
+	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
+	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
+	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
+	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
+	actionToggleTrayIcon = new KAction(QString(), "kalarm", Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), actions, "tray");
+	actionRefreshAlarms  = new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refresh");
 
 	// Set up the menu bar
 
