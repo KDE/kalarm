@@ -18,13 +18,11 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef DOCKWINDOW_H
-#define DOCKWINDOW_H
-
-#include <qtimer.h>
+#ifndef TRAYWINDOW_H
+#define TRAYWINDOW_H
 
 #include <ksystemtray.h>
-#include <kpopupmenu.h>
+class KPopupMenu;
 class KAction;
 
 
@@ -35,10 +33,7 @@ class TrayWindow : public KSystemTray
 		TrayWindow(const char* name = 0L);
 		~TrayWindow();
 
-		void         updateCalendarStatus(bool monitoring);
-
 	public slots:
-		void         toggleAlarmsEnabled();
 		void         slotQuit();
 
 	protected:
@@ -46,28 +41,13 @@ class TrayWindow : public KSystemTray
 		void         mousePressEvent(QMouseEvent*);
 
 	private slots:
-		void         checkDaemonRunning();
-		void         slotSettingsChanged();
-
-	private:
-		void         registerWithDaemon();
-		void         enableCalendar(bool enable);
-		void         setDaemonStatus(bool running);
-		bool         isDaemonRunning(bool updateTrayIcon = true);
-		void         setFastDaemonCheck();
 		void         setEnabledStatus(bool status);
 
-		QPixmap    mPixmapEnabled, mPixmapDisabled;
-		KAction*   mActionQuit;          // quit action for system tray window
-		int        mAlarmsEnabledId;     // alarms enabled item in menu
-		QTimer     mDaemonStatusTimer;   // timer for checking daemon status
-		int        mDaemonStatusTimerCount; // countdown for fast status checking
-		bool       mDaemonRunning;       // whether the alarm daemon is currently running
-		int        mDaemonStatusTimerInterval;  // timer interval (seconds) for checking daemon status
-		bool       mQuitReplaced;        // the context menu Quit item has been replaced
-		bool       mCalendarDisabled;    // monitoring of calendar is currently disabled
-		bool       mEnableCalPending;    // waiting to tell daemon to enable calendar
-
+	private:
+		QPixmap      mPixmapEnabled, mPixmapDisabled;
+		KAction*     mActionQuit;          // quit action for system tray window
+		int          mAlarmsEnabledId;     // alarms enabled item in menu
+		bool         mQuitReplaced;        // the context menu Quit item has been replaced
 };
 
-#endif // DOCKWINDOW_H
+#endif // TRAYWINDOW_H

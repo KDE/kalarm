@@ -33,12 +33,12 @@ class KAlarmAlarm;
 class KAlarmMainWindow;
 class MessageWin;
 class TrayWindow;
-class TrayDcopHandler;
+class DaemonGuiHandler;
 class Settings;
 
 extern const char* DAEMON_APP_NAME;
 extern const char* DAEMON_DCOP_OBJECT;
-extern const char* TRAY_DCOP_OBJECT_NAME;
+extern const char* GUI_DCOP_OBJECT_NAME;
 
 
 class DcopHandler : public QWidget, DCOPObject
@@ -68,11 +68,11 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*       trayWindow() const              { return mTrayWindow; }
 		bool              displayTrayIcon(bool show);
 		bool              trayIconDisplayed() const       { return !!mTrayWindow; }
-		void              setActionAlarmEnable(bool status);
-		KAction*          actionAlarmEnable() const       { return mActionAlarmEnable; }
+		DaemonGuiHandler* daemonGuiHandler() const        { return mDaemonGuiHandler; }
 		KAction*          actionPreferences() const       { return mActionPrefs; }
 		KAction*          actionDaemonPreferences() const { return mActionDaemonPrefs; }
 		void              resetDaemon();
+		bool              isDaemonRunning();
 		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
 		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
 		void              updateMessage(const KAlarmEvent&, KAlarmMainWindow*);
@@ -95,7 +95,6 @@ class KAlarmApp : public KUniqueApplication
 	protected:
 		KAlarmApp();
 	private slots:
-		void              toggleAlarmsEnabled();
 		void              slotPreferences();
 	private:
 		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
@@ -114,11 +113,10 @@ class KAlarmApp : public KUniqueApplication
 		static KAlarmApp*          theInstance;        // the one and only KAlarmApp instance
 		static int                 activeCount;        // number of active instances without main windows
 		DcopHandler*               mDcopHandler;       // the parent of the main DCOP receiver object
-		TrayDcopHandler*           mTrayDcopHandler;   // the parent of the system tray DCOP receiver object
+		DaemonGuiHandler*          mDaemonGuiHandler;  // the parent of the system tray DCOP receiver object
 		QPtrList<KAlarmMainWindow> mainWindowList;     // active main windows
 		TrayWindow*                mTrayWindow;        // active system tray icon
 		AlarmCalendar*             mCalendar;          // the calendar containing all the alarms
-		KAction*                   mActionAlarmEnable; // action to enable/disable alarms
 		KAction*                   mActionPrefs;       // action to display the preferences dialog
 		KAction*                   mActionDaemonPrefs; // action to display the alarm daemon preferences dialog
 		bool                       mDaemonRegistered;  // true if we've registered with alarm daemon

@@ -41,6 +41,8 @@
 
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
+#include "daemongui.h"
+#include "traywindow.h"
 #include "editdlg.h"
 #include "prefdlg.h"
 #include "prefsettings.h"
@@ -98,6 +100,9 @@ class AlarmListViewItem : public QListViewItem
 
 
 
+/*=============================================================================
+=  Class: KAlarmMainWindow
+=============================================================================*/
 
 KAlarmMainWindow::KAlarmMainWindow()
 	: MainWindowBase(0L, 0L, WGroupLeader | WStyle_ContextHelp | WDestructiveClose)
@@ -157,19 +162,27 @@ void KAlarmMainWindow::initActions()
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
 
 	KMenuBar* menu = menuBar();
-	KPopupMenu* fileMenu = new KPopupMenu(this);
+	KPopupMenu* fileMenu = new KPopupMenu(this, "file");
 	menu->insertItem(i18n("&File"), fileMenu);
 	actionQuit->plug(fileMenu);
-	KPopupMenu* actionsMenu = new KPopupMenu(this);
-	menu->insertItem(i18n("&Actions"), actionsMenu);
-	actionNew->plug(actionsMenu);
-	actionModify->plug(actionsMenu);
-	actionDelete->plug(actionsMenu);
-	actionsMenu->insertSeparator(3);
-	actionToggleTrayIcon->plug(actionsMenu);
-	actionResetDaemon->plug(actionsMenu);
-	connect(actionsMenu, SIGNAL(aboutToShow()), this, SLOT(setTrayIconActionText()));
-	KPopupMenu* settingsMenu = new KPopupMenu(this);
+	mActionsMenu = new KPopupMenu(this, "actions");
+	menu->insertItem(i18n("&Actions"), mActionsMenu);
+	actionNew->plug(mActionsMenu);
+	actionModify->plug(mActionsMenu);
+	actionDelete->plug(mActionsMenu);
+	mActionsMenu->insertSeparator(3);
+	actionToggleTrayIcon->plug(mActionsMenu);
+
+	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
+	ActionAlarmsEnabled* a = daemonGui->actionAlarmEnable();
+	mAlarmsEnabledId = a->itemId(a->plug(mActionsMenu));
+	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setAlarmEnabledStatus(bool)));
+	daemonGui->checkStatus();
+	setAlarmEnabledStatus(daemonGui->monitoringAlarms());
+
+	actionResetDaemon->plug(mActionsMenu);
+	connect(mActionsMenu, SIGNAL(aboutToShow()), this, SLOT(updateActionsMenu()));
+	KPopupMenu* settingsMenu = new KPopupMenu(this, "settings");
 	menu->insertItem(i18n("&Settings"), settingsMenu);
 	theApp()->actionPreferences()->plug(settingsMenu);
 	theApp()->actionDaemonPreferences()->plug(settingsMenu);
@@ -289,12 +302,15 @@ void KAlarmMainWindow::slotToggleTrayIcon()
 }
 
 /******************************************************************************
+* Called when the Actions menu is about to be displayed.
 * Set the system tray icon menu text according to whether or not the system
 * tray icon is currently visible.
+* Update the status of the Alarms Enabled menu item.
 */
-void KAlarmMainWindow::setTrayIconActionText()
+void KAlarmMainWindow::updateActionsMenu()
 {
 	actionToggleTrayIcon->setText(theApp()->trayIconDisplayed() ? i18n("Hide System &Tray Icon") : i18n("Show System &Tray Icon"));
+	theApp()->daemonGuiHandler()->checkStatus();   // update the Alarms Enabled item status
 }
 
 /******************************************************************************
@@ -343,6 +359,16 @@ void KAlarmMainWindow::slotListRightClick(QListViewItem* item, const QPoint& pt,
 		actionDelete->plug(menu);
 		menu->exec(pt);
 	}
+}
+
+/******************************************************************************
+* Called when the Alarms Enabled action status has changed.
+* Updates the alarms enabled menu item check state.
+*/
+void KAlarmMainWindow::setAlarmEnabledStatus(bool status)
+{
+	kdDebug(5950) << "KAlarmMainWindow::setAlarmEnabledStatus(" << (int)status << ")\n";
+	mActionsMenu->setItemChecked(mAlarmsEnabledId, status);
 }
 
 

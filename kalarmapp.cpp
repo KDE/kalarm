@@ -44,7 +44,7 @@
 #include "alarmcalendar.h"
 #include "mainwindow.h"
 #include "messagewin.h"
-#include "traydcop.h"
+#include "daemongui.h"
 #include "traywindow.h"
 #include "prefsettings.h"
 #include "prefdlg.h"
@@ -52,7 +52,7 @@
 #include "kalarmapp.moc"
 
 const char* DCOP_OBJECT_NAME        = "display";
-const char* TRAY_DCOP_OBJECT_NAME   = "tray";
+const char* GUI_DCOP_OBJECT_NAME    = "tray";
 const char* DAEMON_APP_NAME         = "kalarmd";
 const char* DAEMON_DCOP_OBJECT      = "ad";
 
@@ -66,7 +66,7 @@ int         KAlarmApp::activeCount = 0;
 KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mDcopHandler(0L),
-	  mTrayDcopHandler(0L),
+	  mDaemonGuiHandler(0L),
 	  mTrayWindow(0L),
 	  mCalendar(new AlarmCalendar),
 	  mDaemonRegistered(false),
@@ -82,7 +82,6 @@ KAlarmApp::KAlarmApp()
 	mActionPrefs       = KStdAction::preferences(this, SLOT(slotPreferences()));
 	mActionDaemonPrefs = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 	                                 0, this, SLOT(slotDaemonPreferences()), this);
-	mActionAlarmEnable = new KAction(QString::null, 0, this, SLOT(toggleAlarmsEnabled()), this);
 }
 
 /******************************************************************************
@@ -426,21 +425,6 @@ bool KAlarmApp::displayTrayIcon(bool show)
 	else
 		delete mTrayWindow;
 	return true;
-}
-
-/******************************************************************************
-*  Set the correct text for the Alarms Enabled / Enable Alarms menu item.
-*/
-void KAlarmApp::setActionAlarmEnable(bool status)
-{
-	mActionAlarmEnable->setText(status ? i18n("Alarms &Enabled") : i18n("&Enable Alarms"));
-}
-
-/******************************************************************************
-*  Called when an Alarms Enabled / Enable Alarms menu item is selected.
-*/
-void KAlarmApp::toggleAlarmsEnabled()
-{
 }
 
 /******************************************************************************
@@ -806,8 +790,11 @@ void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool te
 */
 void KAlarmApp::setUpDcop()
 {
-	mDcopHandler     = new DcopHandler(QString::fromLatin1(DCOP_OBJECT_NAME));
-	mTrayDcopHandler = new TrayDcopHandler(QString::fromLatin1(TRAY_DCOP_OBJECT_NAME));
+	if (!mDcopHandler)
+	{
+		mDcopHandler      = new DcopHandler(QString::fromLatin1(DCOP_OBJECT_NAME));
+		mDaemonGuiHandler = new DaemonGuiHandler(QString::fromLatin1(GUI_DCOP_OBJECT_NAME));
+	}
 }
 
 /******************************************************************************
@@ -830,7 +817,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 	else if (!mDaemonRegistered)
 		startDaemon();
 
-	if (!calendarOnly  &&  !mDcopHandler)
+	if (!calendarOnly)
 		setUpDcop();     // we're now ready to handle DCOP calls, so set up handlers
 	return true;
 }
@@ -920,6 +907,14 @@ void KAlarmApp::reloadDaemon()
 	arg << QCString(aboutData()->appName()) << mCalendar->urlString();
 	if (!dcopClient()->send(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT, "reloadMsgCal(QCString,QString)", data))
 		kdDebug(5950) << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
+}
+
+/******************************************************************************
+* Check whether the alarm daemon is currently running.
+*/
+bool KAlarmApp::isDaemonRunning()
+{
+	return dcopClient()->isApplicationRegistered(DAEMON_APP_NAME);
 }
 
 /******************************************************************************

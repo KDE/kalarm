@@ -39,36 +39,39 @@ class KAlarmMainWindow : public MainWindowBase
 		KAlarmMainWindow();
 		~KAlarmMainWindow();
 
-		void  addMessage(const KAlarmEvent&);
-		void  modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
-		void  modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
-		void  deleteMessage(const KAlarmEvent&);
+		void           addMessage(const KAlarmEvent&);
+		void           modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
+		void           modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
+		void           deleteMessage(const KAlarmEvent&);
 
 	protected:
-		virtual void resizeEvent(QResizeEvent*);
-		virtual void showEvent(QShowEvent*);
+		virtual void   resizeEvent(QResizeEvent*);
+		virtual void   showEvent(QShowEvent*);
+
+	private slots:
+		void           slotDelete();
+		void           slotNew();
+		void           slotModify();
+		void           slotToggleTrayIcon();
+		void           slotResetDaemon();
+		void           slotQuit();
+		void           slotSelection();
+		void           slotListRightClick(QListViewItem*, const QPoint&, int);
+		void           updateActionsMenu();
+		void           setAlarmEnabledStatus(bool status);
 
 	private:
-		void         initActions();
+		void           initActions();
 
-		AlarmListView*  listView;
-		KAction*        actionNew;
-		KAction*        actionModify;
-		KAction*        actionDelete;
-		KAction*        actionToggleTrayIcon;
-		KAction*        actionResetDaemon;
-		KAction*        actionQuit;
-
-	protected slots:
-		virtual void slotDelete();
-		virtual void slotNew();
-		virtual void slotModify();
-		virtual void slotToggleTrayIcon();
-		virtual void slotResetDaemon();
-		virtual void slotQuit();
-		virtual void slotSelection();
-		virtual void slotListRightClick(QListViewItem*, const QPoint&, int);
-		virtual void setTrayIconActionText();
+		AlarmListView* listView;
+		KAction*       actionNew;
+		KAction*       actionModify;
+		KAction*       actionDelete;
+		KAction*       actionToggleTrayIcon;
+		KAction*       actionResetDaemon;
+		KAction*       actionQuit;
+		KPopupMenu*    mActionsMenu;
+		int            mAlarmsEnabledId;     // alarms enabled item in Actions menu
 };
 
 #endif // MAINWINDOW_H

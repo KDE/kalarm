@@ -21,25 +21,20 @@
 #include <stdlib.h>
 
 #include <qtooltip.h>
-#include <qfile.h>
 #include <qlabel.h>
 
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kaction.h>
 #include <kstdaction.h>
 #include <kaboutdata.h>
+#include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <dcopclient.h>
 #include <kdebug.h>
 
-#include <kalarmd/alarmdaemoniface_stub.h>
 #include "kalarmapp.h"
-#include "alarmcalendar.h"
-#include "prefdlg.h"
-#include "prefsettings.h"
+#include "daemongui.h"
 #include "traywindow.h"
 #include "traywindow.moc"
 
@@ -52,11 +47,7 @@
 
 TrayWindow::TrayWindow(const char* name)
 	: KSystemTray(0, name),
-	  mDaemonStatusTimer(this),
-	  mDaemonStatusTimerCount(0),
-	  mQuitReplaced(false),
-	  mCalendarDisabled(false),
-	  mEnableCalPending(false)
+	  mQuitReplaced(false)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
@@ -72,23 +63,16 @@ TrayWindow::TrayWindow(const char* name)
 	mActionQuit = KStdAction::quit(this, SLOT(slotQuit()));
 
 	// Set up the context menu
-	KAction* a = theApp()->actionAlarmEnable();
+	DaemonGuiHandler* daemonGui = theApp()->daemonGuiHandler();
+	ActionAlarmsEnabled* a = daemonGui->actionAlarmEnable();
 	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
-	connect(a, SIGNAL(activated()), this, SLOT(toggleAlarmsEnabled()));
+	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setEnabledStatus(bool)));
 	theApp()->actionPreferences()->plug(contextMenu());
 	theApp()->actionDaemonPreferences()->plug(contextMenu());
 
 	// Set icon to correspond with the alarms enabled menu status
-	setEnabledStatus(true);
-
-	setDaemonStatus(isDaemonRunning(false));
-
-	mDaemonStatusTimerInterval = theApp()->settings()->daemonTrayCheckInterval();
-	connect(theApp()->settings(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
-	connect(&mDaemonStatusTimer, SIGNAL(timeout()), SLOT(checkDaemonRunning()));
-	mDaemonStatusTimer.start(mDaemonStatusTimerInterval * 1000);  // check regularly if daemon is running
-
-	registerWithDaemon();
+	daemonGui->checkStatus();
+	setEnabledStatus(daemonGui->monitoringAlarms());
 
 	QToolTip::add(this, kapp->aboutData()->programName());
 }
@@ -123,55 +107,7 @@ void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
 	}
 
 	// Update the Alarms Enabled item status
-	setDaemonStatus(isDaemonRunning(false));
-}
-
-/******************************************************************************
-* Update the context menu to display the alarm monitoring status.
-*/
-void TrayWindow::updateCalendarStatus(bool monitoring)
-{
-	mCalendarDisabled = !monitoring;
-	if (!isDaemonRunning(false))
-		monitoring = false;
-	setEnabledStatus(monitoring);
-}
-
-/******************************************************************************
-* Tell the alarm daemon to enable/disable monitoring of the calendar file.
-*/
-void TrayWindow::enableCalendar(bool enable)
-{
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.enableCal(theApp()->getCalendar().urlString(), enable);
-	mEnableCalPending = false;
-}
-
-/******************************************************************************
-* Called when the Alarms Enabled context menu item is selected.
-* The alarm daemon is told to stop or start monitoring the calendar
-* file as appropriate.
-*/
-void TrayWindow::toggleAlarmsEnabled()
-{
-	bool newstate = !contextMenu()->isItemChecked(mAlarmsEnabledId);
-	if (newstate  &&  !isDaemonRunning())
-	{
-		// The daemon is not running, so start it
-		QString execStr = locate("exe", DAEMON_APP_NAME);
-		if (execStr.isEmpty())
-		{
-			KMessageBox::error(this, i18n("Alarm Daemon not found"),
-			                   i18n("%1 Error").arg(kapp->aboutData()->programName()));
-			kdError() << "TrayWindow::toggleAlarmsEnabled(): kalarmd not found" << endl;
-			return;
-		}
-		system(QFile::encodeName(execStr));
-		mEnableCalPending = true;
-		setFastDaemonCheck();
-	}
-	if (isDaemonRunning())
-		enableCalendar(newstate);
+	theApp()->daemonGuiHandler()->checkStatus();
 }
 
 /******************************************************************************
@@ -186,28 +122,14 @@ void TrayWindow::slotQuit()
 }
 
 /******************************************************************************
-* Called by the timer after the Alarms Enabled context menu item is selected,
-* to update the GUI status once the daemon has responded to the command.
-* 'newstatus' is true of the daemon is running.
-*/
-void TrayWindow::setDaemonStatus(bool newstatus)
-{
-	bool oldstatus = contextMenu()->isItemChecked(mAlarmsEnabledId);
-	kdDebug(5950) << "TrayWindow::setDaemonStatus(): "<<(int)oldstatus<<"->"<<(int)newstatus<<endl;
-	if (mCalendarDisabled)
-		newstatus = false;
-	if (newstatus != oldstatus)
-		setEnabledStatus(newstatus);
-}
-
-/******************************************************************************
-* Update the alarms enabled menu item, and the icon pixmap.
+* Called when the Alarms Enabled action status has changed.
+* Updates the alarms enabled menu item check state, and the icon pixmap.
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
+	kdDebug(5950)<<"TrayWindow::setEnabledStatus(" << (int)status << ")\n";
 	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
 	contextMenu()->setItemChecked(mAlarmsEnabledId, status);
-	theApp()->setActionAlarmEnable(status);
 }
 
 /******************************************************************************
@@ -220,73 +142,4 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 		theApp()->slotKAlarm();      // left click: display the main window
 	else
 		KSystemTray::mousePressEvent(e);
-}
-
-/******************************************************************************
-* Register as a GUI with the alarm daemon.
-*/
-void TrayWindow::registerWithDaemon()
-{
-	kdDebug(5950) << "TrayWindow::registerWithDaemon()\n";
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.registerGui(kapp->aboutData()->appName(), TRAY_DCOP_OBJECT_NAME);
-}
-
-/******************************************************************************
-* Check whether the alarm daemon is currently running.
-*/
-bool TrayWindow::isDaemonRunning(bool updateTrayIcon)
-{
-	bool newstatus = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(DAEMON_APP_NAME));
-	if (!updateTrayIcon)
-		return newstatus;
-	if (newstatus != mDaemonRunning)
-	{
-		mDaemonRunning = newstatus;
-		setDaemonStatus(newstatus);
-		mDaemonStatusTimer.changeInterval(mDaemonStatusTimerInterval * 1000);   // exit from fast checking
-		mDaemonStatusTimerCount = 0;
-		if (newstatus)
-		{
-			registerWithDaemon();       // the alarm daemon has started up, so register with it
-			if (mEnableCalPending)
-				enableCalendar(true);   // and tell it to monitor the calendar, if appropriate
-		}
-	  }
-	  return mDaemonRunning;
-}
-
-/******************************************************************************
-* Called by the timer to check whether the daemon is running.
-*/
-void TrayWindow::checkDaemonRunning()
-{
-	isDaemonRunning();
-	if (mDaemonStatusTimerCount > 0  &&  --mDaemonStatusTimerCount <= 0)   // limit how long we check at fast rate
-		mDaemonStatusTimer.changeInterval(mDaemonStatusTimerInterval * 1000);
-}
-
-/******************************************************************************
-* Starts checking at a faster rate whether the daemon is running.
-*/
-void TrayWindow::setFastDaemonCheck()
-{
-	mDaemonStatusTimer.start(500);     // check new status every half second
-	mDaemonStatusTimerCount = 20;      // don't check at this rate for more than 10 seconds
-}
-
-/******************************************************************************
-* Called when a program setting has changed.
-* If the system tray icon update interval has changed, reset the timer.
-*/
-void TrayWindow::slotSettingsChanged()
-{
-	int newInterval = theApp()->settings()->daemonTrayCheckInterval();
-	if (newInterval != mDaemonStatusTimerInterval)
-	{
-		// Daemon check interval has changed
-		mDaemonStatusTimerInterval = newInterval;
-		if (mDaemonStatusTimerCount <= 0)   // don't change if on fast rate
-			mDaemonStatusTimer.changeInterval(mDaemonStatusTimerInterval * 1000);
-	}
 }
