@@ -112,7 +112,7 @@ void KAlarmMainWindow::initActions()
 /******************************************************************************
 * Add a message to the displayed list.
 */
-void KAlarmMainWindow::addMessage(const MessageEvent* event)
+void KAlarmMainWindow::addMessage(const KAlarmEvent& event)
 {
 	listView->addEntry(event, true);
 }
@@ -120,13 +120,13 @@ void KAlarmMainWindow::addMessage(const MessageEvent* event)
 /******************************************************************************
 * Modify a message in the displayed list.
 */
-void KAlarmMainWindow::modifyMessage(const MessageEvent* oldEvent, const MessageEvent* newEvent)
+void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent)
 {
-	AlarmListViewItem* item = listView->getEntry(oldEvent);
+	AlarmListViewItem* item = listView->getEntry(oldEventID);
 	if (item)
 	{
 		listView->deleteEntry(item);
-		listView->addEntry((newEvent ? newEvent : oldEvent), true);
+		listView->addEntry(newEvent, true);
 	}
 	else
 		listView->refresh();
@@ -135,9 +135,9 @@ void KAlarmMainWindow::modifyMessage(const MessageEvent* oldEvent, const Message
 /******************************************************************************
 * Delete a message from the displayed list.
 */
-void KAlarmMainWindow::deleteMessage(const MessageEvent* event)
+void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 {
-	AlarmListViewItem* item = listView->getEntry(event);
+	AlarmListViewItem* item = listView->getEntry(event.id());
 	if (item)
 		listView->deleteEntry(item, true);
 	else
@@ -157,14 +157,14 @@ void KAlarmMainWindow::slotNew()
 	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New message"), this, "editDlg");
 	if (editDlg->exec() == QDialog::Accepted)
 	{
-		MessageEvent* event = new MessageEvent;     // event instance will belong to the calendar
-		editDlg->getEvent(*event);
+		KAlarmEvent event;
+		editDlg->getEvent(event);
 //event->setOrganizer("KAlarm");
 
 		// Add the message to the displayed lists and to the calendar file
+		theApp()->addMessage(event, this);
 		AlarmListViewItem* item = listView->addEntry(event, true);
 		listView->setSelected(item, true);
-		theApp()->addMessage(event, this);
 	}
 }
 
@@ -177,17 +177,17 @@ void KAlarmMainWindow::slotModify()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		const MessageEvent* event = listView->getEntry(item);
-		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit message"), this, "editDlg", event);
+		KAlarmEvent event = listView->getEntry(item);
+		EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("Edit message"), this, "editDlg", &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
-			MessageEvent* newEvent = new MessageEvent;     // event instance will belong to the calendar
-			editDlg->getEvent(*newEvent);
+			KAlarmEvent newEvent;
+			editDlg->getEvent(newEvent);
 
 			// Update the event in the displays and in the calendar file
+			theApp()->modifyMessage(event.id(), newEvent, this);
 			item = listView->updateEntry(item, newEvent, true);
 			listView->setSelected(item, true);
-			theApp()->modifyMessage(const_cast<MessageEvent*>(event), newEvent, this);
 		}
 	}
 }
@@ -201,11 +201,11 @@ void KAlarmMainWindow::slotDelete()
 	AlarmListViewItem* item = listView->selectedItem();
 	if (item)
 	{
-		MessageEvent* event = const_cast<MessageEvent*>(listView->getEntry(item));
+		KAlarmEvent event = listView->getEntry(item);
 
 		// Delete the event from the displays
-		listView->deleteEntry(item, true);
 		theApp()->deleteMessage(event, this);
+		listView->deleteEntry(item, true);
 	}
 }
 
@@ -288,6 +288,8 @@ class AlarmListWhatsThis : public QWhatsThis
 		AlarmListView* listView;
 };
 
+const QString repeatAtLoginIndicator = QString::fromLatin1("L");
+
 
 AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	: KListView(parent, name),
@@ -303,7 +305,8 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	setSorting(TIME_COLUMN);           // sort initially by date/time
 	setShowSortIndicator(true);
 	lastColumnHeaderWidth_ = columnWidth(MESSAGE_COLUMN);
-	setColumnAlignment(REPEAT_COLUMN, Qt::AlignRight);
+	setColumnAlignment(REPEAT_COLUMN, Qt::AlignHCenter);
+	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
 
 	// Find the height of the list items, and set the width of the colour column accordingly
 	setColumnWidth(COLOUR_COLUMN, itemHeight() * 3/4);
@@ -325,30 +328,33 @@ void AlarmListView::refresh()
 	QPtrList<Event> messages = theApp()->getCalendar().getAllEvents();
 	clear();
 	for (Event* msg = messages.first();  msg;  msg = messages.next())
-		addEntry(static_cast<const MessageEvent*>(msg));
+		addEntry(KAlarmEvent(*msg));
 	resizeLastColumn();
 }
 
-AlarmListViewItem* AlarmListView::getEntry(const MessageEvent* event)
+AlarmListViewItem* AlarmListView::getEntry(const QString& eventID)
 {
 	for (map<AlarmListViewItem*, AlarmItemData>::const_iterator it = entries.begin();  it != entries.end();  ++it)
-		if (it->second.event == event)
+		if (it->second.event.id() == eventID)
 			return it->first;
 	return 0L;
 }
 
-AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSize)
+AlarmListViewItem* AlarmListView::addEntry(const KAlarmEvent& event, bool setSize)
 {
-	QDateTime dateTime = event->dateTime();
+	QDateTime dateTime = event.dateTime();
 	AlarmItemData data;
 	data.event = event;
-	data.messageText = event->cleanText();
+	data.messageText = event.messageOrFile();
 	int newline = data.messageText.find('\n');
 	if (newline >= 0)
 		data.messageText = data.messageText.left(newline) + QString::fromLatin1("...");
 	data.dateTimeText = KGlobal::locale()->formatDate(dateTime.date(), true) + ' '
 	                  + KGlobal::locale()->formatTime(dateTime.time()) + ' ';
-	data.repeatCountText = event->repeatCount() ? QString::fromLatin1("%1").arg(event->repeatCount()) : QString();
+	data.repeatCountText = event.repeatCount() ? QString::number(event.repeatCount()) : QString();
+	if (event.repeatAtLogin())
+		data.repeatCountText += repeatAtLoginIndicator;
+	data.repeatCountOrder.sprintf("%010d%1d", event.repeatCount(), (event.repeatAtLogin() ? 1 : 0));
 	QString dateTimeText;
 	dateTimeText.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                         dateTime.time().hour(), dateTime.time().minute());
@@ -356,11 +362,14 @@ AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSi
 	// Set the texts to what will be displayed, so as to make the columns the correct width
 	AlarmListViewItem* item = new AlarmListViewItem(this, data.dateTimeText, data.messageText);
 	data.messageWidth = item->width(fontMetrics(), this, MESSAGE_COLUMN);
+	setColumnWidthMode(REPEAT_COLUMN, QListView::Maximum);
+	item->setText(REPEAT_COLUMN, data.repeatCountText);
+	setColumnWidthMode(REPEAT_COLUMN, QListView::Manual);
 	// Now set the texts so that the columns can be sorted. The visible text is different,
 	// being displayed by paintCell().
 	item->setText(TIME_COLUMN, dateTimeText);
-	item->setText(REPEAT_COLUMN, data.repeatCountText);
-	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", event->colour().rgb()));
+	item->setText(REPEAT_COLUMN, data.repeatCountOrder);
+	item->setText(COLOUR_COLUMN, QString().sprintf("%06u", event.colour().rgb()));
 	item->setText(MESSAGE_COLUMN, data.messageText.lower());
 	entries[item] = data;
 	if (setSize)
@@ -368,7 +377,7 @@ AlarmListViewItem* AlarmListView::addEntry(const MessageEvent* event, bool setSi
 	return item;
 }
 
-AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const MessageEvent* newEvent, bool setSize)
+AlarmListViewItem* AlarmListView::updateEntry(AlarmListViewItem* item, const KAlarmEvent& newEvent, bool setSize)
 {
 	deleteEntry(item);
 	return addEntry(newEvent, setSize);
@@ -446,7 +455,6 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 {
 	const AlarmListView* listView = alarmListView();
 	const AlarmItemData* data   = listView->getData(this);
-	const MessageEvent*  event  = data->event;
 	int                  margin = listView->itemMargin();
 	QRect box (margin, margin, width - margin*2, height() - margin*2);
 	bool   selected = isSelected();
@@ -460,19 +468,19 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		break;
 	case AlarmListView::REPEAT_COLUMN:
 		painter->fillRect(box, bgColour);
-		painter->drawText(box, AlignVCenter | AlignRight, data->repeatCountText);
+		painter->drawText(box, AlignVCenter | AlignHCenter, data->repeatCountText);
 		break;
 	case AlarmListView::COLOUR_COLUMN:
 		// Paint the cell the colour of the alarm message
-		painter->fillRect(box, event->colour());
+		painter->fillRect(box, data->event.colour());
 		break;
 	case AlarmListView::MESSAGE_COLUMN:
 		if (!selected  &&  listView->drawMessageInColour())
 		{
-			QColor colour = event->colour();
+			QColor colour = data->event.colour();
 			painter->fillRect(box, colour);
 			painter->setBackgroundColor(colour);
-//			painter->setPen(event->fgColour());
+//			painter->setPen(data->event->fgColour());
 			painter->drawText(box, AlignVCenter, data->messageText);
 			break;
 		}
@@ -494,9 +502,13 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 		switch (listView->header()->sectionAt(pt.x()))
 		{
 			case AlarmListView::TIME_COLUMN:     return i18n("Next scheduled date and time of the alarm");
-			case AlarmListView::REPEAT_COLUMN:   return i18n("Number of scheduled repetitions after the\nnext scheduled display of the alarm");
 			case AlarmListView::COLOUR_COLUMN:   return i18n("Background colour of alarm message");
 			case AlarmListView::MESSAGE_COLUMN:  return i18n("Alarm message text");
+			case AlarmListView::REPEAT_COLUMN:
+				return i18n("Number of scheduled repetitions after the\n"
+				            "next scheduled display of the alarm.\n"
+				            "'%1' indicates that the alarm is repeated\n"
+				            "at every login").arg(repeatAtLoginIndicator);
 		}
 	}
 	return i18n("List of scheduled alarm messages");

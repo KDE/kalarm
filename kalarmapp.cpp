@@ -19,6 +19,7 @@
 #include <kstddirs.h>
 #include <kconfig.h>
 #include <kio/netaccess.h>
+#include <kfileitem.h>
 #include <ktempfile.h>
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -49,6 +50,7 @@ KAlarmApp::KAlarmApp()
 		m_generalSettings(new GeneralSettings(0L))
 {
 	m_generalSettings->loadSettings();
+	CalFormat::setApplication(PROGRAM_TITLE, "-//K Desktop Environment//NONSGML " PROGRAM_TITLE " " VERSION "//EN");
 }
 
 /******************************************************************************
@@ -165,7 +167,6 @@ int KAlarmApp::newInstance()
 				alMessage = args->arg(0);
 			}
 
-			long flags = 0;
 			QDateTime* alarmTime = 0L;
 			QDateTime wakeup;
 			QColor bgColour = generalSettings()->defaultBgColour();
@@ -219,10 +220,13 @@ int KAlarmApp::newInstance()
 			else if (args->isSet("interval"))
 				args->usage(i18n("--interval requires --repeat"));      // exits program
 
+			int flags = 0;
 			if (args->isSet("beep"))
-				flags |= MessageEvent::BEEP;
+				flags |= KAlarmEvent::BEEP;
 			if (args->isSet("late-cancel"))
-				flags |= MessageEvent::LATE_CANCEL;
+				flags |= KAlarmEvent::LATE_CANCEL;
+			if (args->isSet("login"))
+				flags |= KAlarmEvent::REPEAT_AT_LOGIN;
 			args->clear();               // free up memory
 
 			if (!exitCode)
@@ -241,10 +245,12 @@ int KAlarmApp::newInstance()
 				invalidOptions += "--colour ";
 			if (args->isSet("late-cancel"))
 				invalidOptions += "--late-cancel ";
+			if (args->isSet("login"))
+				invalidOptions += "--login ";
 			if (args->isSet("time"))
 				invalidOptions += "--time ";
 			if (invalidOptions.length())
-				args->usage(invalidOptions + i18n(": option(s) only valid with a message"));    // exits program
+				args->usage(invalidOptions + i18n(": option(s) only valid with a message/file"));    // exits program
 
 			args->clear();               // free up memory
 			if (!initCheck())
@@ -291,18 +297,16 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 	{
 		alarmTime = *dateTime;
 		QDateTime now = QDateTime::currentDateTime();
-		if ((flags & MessageEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-65))
+		if ((flags & KAlarmEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-MAX_LATENESS))
 			return true;               // alarm time was already expired a minute ago
 		display = (alarmTime <= now);
 	}
-	MessageEvent* event = new MessageEvent(alarmTime, flags, bg, message, file);
-	event->setRepetition(repeatInterval, repeatCount);
+	KAlarmEvent event(alarmTime, message, bg, file, flags, repeatCount, repeatInterval);
 	if (display)
 	{
 		// Alarm is due for display already
 		kdDebug() << "Displaying message: " << message << "\n";
-		(new MessageWin(*event, false))->show();
-		delete event;
+		(new MessageWin(event, event.firstAlarm(), false))->show();
 		return true;
 	}
 	if (!initCheck())
@@ -336,47 +340,148 @@ void KAlarmApp::handleMessage(const QString& urlString, const QString& eventID, 
 */
 bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 {
-	MessageEvent* event = calendar.getEvent(eventID);
-	if (!event)
+	Event* kcalEvent = calendar.getEvent(eventID);
+	if (!kcalEvent)
 	{
 		kdError() << "KAlarmApp::handleMessage(): event ID not found: " << eventID << endl;
 		return false;
 	}
-	if (function == EVENT_HANDLE)
-	{
-		function = EVENT_DISPLAY;
-		if (event->lateCancel())
-		{
-			// Alarm is to be cancelled if late.
-			// Allow it to be just over a minute late before cancelling it.
-			QDateTime now = QDateTime::currentDateTime();
-			int secs = event->dateTime().secsTo(now);
-			if (secs > 65)
-			{
-				// It's over a minute late.
-				// Find the latest repetition time before the current time
-				if (event->lastDateTime().secsTo(now) > 65)
-					function = EVENT_CANCEL;      // all repetitions have expired
-				else if (secs % (event->repeatMinutes() * 60) > 65)
-					function = EVENT_RESCHEDULE;  // the latest repetition was over a minute ago
-			}
-		}
-	}
+	KAlarmEvent event(*kcalEvent);
+	AlarmFunc alfunction = ALARM_DISPLAY;
 	switch (function)
 	{
 		case EVENT_DISPLAY:
-			(new MessageWin(*event, true))->show();
+		{
+			// Only display one message from the event
+			KAlarmAlarm alarm = event.firstAlarm();
+			if (alarm.valid())
+				handleAlarm(event, alarm, ALARM_DISPLAY);
 			break;
-		case EVENT_RESCHEDULE:
-			rescheduleMessage(event);
-			break;
+		}
 		case EVENT_CANCEL:
 			deleteMessage(event, 0L, false);
 			break;
+
 		case EVENT_HANDLE:     // filtered out above
+		{
+			QDateTime now = QDateTime::currentDateTime();
+			for (KAlarmAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
+			{
+				// Check whether this alarm is due yet
+				int secs = alarm.dateTime().secsTo(now);
+				if (secs < 0)
+					continue;
+				if (alarm.repeatAtLogin())
+				{
+					// Alarm is to be displayed at every login.
+					// Check if the alarm has only just been set up.
+					// (The alarm daemon will immediately notify that it is due
+					//  since it is set up with a time in the past.)
+					if (secs < MAX_LATENESS + 30)
+						continue;
+
+					// Check if the main alarm is due yet; if so, display it instead.
+					// (We don't want to display both at the same time.)
+					KAlarmAlarm al = event.alarm(alarm.sequence() - KAlarmEvent::REPEAT_AT_LOGIN_OFFSET);
+					if (al.valid()  &&  al.dateTime().secsTo(now) >= 0)
+						continue;
+				}
+				if (alarm.lateCancel())
+				{
+					// Alarm is due, and it is to be cancelled if late.
+					// Allow it to be just over a minute late before cancelling it.
+					if (secs > MAX_LATENESS)
+					{
+						// It's over a minute late.
+						// Find the latest repetition time before the current time
+						if (alarm.lastDateTime().secsTo(now) > MAX_LATENESS)
+							alfunction = ALARM_CANCEL;      // all repetitions have expired
+						else if (secs % (alarm.repeatMinutes() * 60) > MAX_LATENESS)
+							alfunction = ALARM_RESCHEDULE;  // the latest repetition was over a minute ago
+					}
+				}
+				handleAlarm(event, alarm, alfunction);
+				alfunction = ALARM_RESCHEDULE;    // only display one message for the event
+			}
 			break;
+		}
 	}
 	return true;
+}
+
+/******************************************************************************
+* Reschedule the specified alarm for its next repetition. If no repetitions
+* remain, cancel it.
+*/
+void KAlarmApp::rescheduleAlarm(const QString& eventID, int alarmID)
+{
+	Event* kcalEvent = calendar.getEvent(eventID);
+	if (!kcalEvent)
+		kdError() << "KAlarmApp::rescheduleAlarm(): event ID not found: " << eventID << endl;
+	else
+	{
+		KAlarmEvent event(*kcalEvent);
+		KAlarmAlarm alarm = event.alarm(alarmID);
+		if (!alarm.valid())
+			kdError() << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << eventID << ":" << alarmID << endl;
+		handleAlarm(event, alarm, ALARM_RESCHEDULE);
+	}
+}
+
+/******************************************************************************
+* Either:
+* a) Display the alarm and then delete it if it has no outstanding repetitions.
+* b) Delete the alarm.
+* c) Reschedule the alarm for its next repetition. If none remain, delete it.
+* If the alarm is deleted and it is the last alarm for its event, the event is
+* removed from the calendar file and from every main window instance.
+*/
+void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc function)
+{
+	switch (function)
+	{
+		case ALARM_DISPLAY:
+			(new MessageWin(event, alarm, true))->show();
+			break;
+
+		case ALARM_RESCHEDULE:
+			// Leave an alarm which repeats at every login until its main alarm is deleted
+			if (!alarm.repeatAtLogin())
+			{
+				int secs = alarm.dateTime().secsTo(QDateTime::currentDateTime());
+				if (secs >= 0)
+				{
+					// The event is due by now
+					int repeatSecs = alarm.repeatMinutes() * 60;
+					int n = secs / repeatSecs + 1;
+					int remainingCount = alarm.repeatCount() - n;
+					if (remainingCount >= 0)
+					{
+						// Repetitions still remain, so rewrite the event
+						event.updateRepetition(alarm.dateTime().addSecs(n * repeatSecs), remainingCount);
+
+						// Update the window lists and calendar file
+						updateMessage(event, 0L);
+					}
+					else
+					{
+						handleAlarm(event, alarm, ALARM_CANCEL);
+						break;
+					}
+				}
+			}
+			break;
+
+		case ALARM_CANCEL:
+		{
+			event.removeAlarm(alarm.id());
+			if (event.alarmCount())
+				updateMessage(event, 0L);    // update the window lists and calendar file
+			else
+				deleteMessage(event, 0L, false);
+			break;
+		}
+	}
 }
 
 /******************************************************************************
@@ -385,44 +490,69 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
 */
-void KAlarmApp::addMessage(const MessageEvent* event, KAlarmMainWindow* win)
+void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
-	kdDebug() << "KAlarmApp::addMessage(): " << event->message() << endl;
+	kdDebug() << "KAlarmApp::addMessage(): " << event.id() << endl;
+
+	// Save the message details in the calendar file, and get the new event ID
+	calendar.addEvent(event);
+	calendar.save();
+
+	// Tell the daemon to reread the calendar file
+	reloadDaemon();
 
 	// Update the window lists
 	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
 		if (*it != win)
 			(*it)->addMessage(event);
-
-	// Save the message details in the calendar file.
-	calendar.addEvent(event);      // the event instance now belongs to the calendar
-	calendar.save();
-
-	// Tell the daemon to reread the calendar file
-	reloadDaemon();
 }
 
 /******************************************************************************
 * Modify a message in every main window instance.
+* The new message will have a different event ID from the old one.
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
 */
-void KAlarmApp::modifyMessage(MessageEvent* oldEvent, const MessageEvent* newEvent, KAlarmMainWindow* win)
+void KAlarmApp::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
 {
-	kdDebug() << "KAlarmApp::modifyMessage(): '" << oldEvent->message() << "' to: '" << newEvent->message() << "'" << endl;
+	kdDebug() << "KAlarmApp::modifyMessage(): '" << oldEventID << endl;
 
-	// Update the window lists
-	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-		if (*it != win)
-			(*it)->modifyMessage(oldEvent, newEvent);
-
-	// Update the event in the calendar file
-	calendar.deleteEvent(oldEvent);
-	calendar.addEvent(newEvent);      // the event instance now belongs to the calendar
+	// Update the event in the calendar file, and get the new event ID
+	calendar.deleteEvent(oldEventID);
+	calendar.addEvent(newEvent);
 	calendar.save();
 
 	// Tell the daemon to reread the calendar file
 	reloadDaemon();
+
+	// Update the window lists
+	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
+		if (*it != win)
+			(*it)->modifyMessage(oldEventID, newEvent);
+}
+
+/******************************************************************************
+* Update a message in every main window instance.
+* The new message will have the same event ID as the old one.
+* Parameters:
+*    win  = initiating main window instance (which has already been updated)
+*/
+void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
+{
+	kdDebug() << "KAlarmApp::updateMessage(): " << event.id() << endl;
+
+	// Update the event in the calendar file
+	const_cast<KAlarmEvent&>(event).incrementRevision();
+	calendar.updateEvent(event);
+	calendar.save();
+
+	// Tell the daemon to reread the calendar file
+	reloadDaemon();
+
+	// Update the window lists
+	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
+		if (*it != win)
+			(*it)->modifyMessage(event);
 }
 
 /******************************************************************************
@@ -430,9 +560,9 @@ void KAlarmApp::modifyMessage(MessageEvent* oldEvent, const MessageEvent* newEve
 * Parameters:
 *    win  = initiating main window instance (which has already been updated)
 */
-void KAlarmApp::deleteMessage(MessageEvent* event, KAlarmMainWindow* win, bool tellDaemon)
+void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool tellDaemon)
 {
-	kdDebug() << "KAlarmApp::deleteMessage(): " << event->message() << endl;
+	kdDebug() << "KAlarmApp::deleteMessage(): " << event.id() << endl;
 
 	// Update the window lists
 	for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
@@ -440,57 +570,12 @@ void KAlarmApp::deleteMessage(MessageEvent* event, KAlarmMainWindow* win, bool t
 			(*it)->deleteMessage(event);
 
 	// Delete the event from the calendar file
-	calendar.deleteEvent(event);
+	calendar.deleteEvent(event.id());
 	calendar.save();
 
 	// Tell the daemon to reread the calendar file
 	if (tellDaemon)
 		reloadDaemon();
-}
-
-/******************************************************************************
-* Reschedule the specified event for its next repetition. If no repetitions
-* remain, cancel it.
-* Rescheduling is necessary in order to distinguish between alarms which have
-* been displayed at their last repetition, and those which haven't.
-* Reply = true if event still exists, false if cancelled.
-*/
-bool KAlarmApp::rescheduleMessage(MessageEvent* event)
-{
-	int secs = event->dateTime().secsTo(QDateTime::currentDateTime());
-	if (secs >= 0)
-	{
-		// The event is due by now
-		int repeatSecs = event->repeatMinutes() * 60;
-		int n = secs / repeatSecs + 1;
-		int remainingCount = event->repeatCount() - n;
-		if (remainingCount >= 0)
-		{
-			// Repetitions still remain, so rewrite the event
-//       MessageEvent* newEvent = new MessageEvent(event->dateTime().addSecs(n * repeatSecs), event->flags(), event->colour(), event->message());
-//       newEvent->setRepetition(event->repeatMinutes(), event->initialRepeatCount(), remainingCount);
-//       modifyMessage(event, newEvent, 0L);
-// Should just call calendar update, but it doesn't seem to work
-			event->updateRepetition(event->dateTime().addSecs(n * repeatSecs), remainingCount);
-
-			// Update the window lists
-			for (vector<KAlarmMainWindow*>::iterator it = mainWindowList.begin();  it != mainWindowList.end();  ++it)
-				(*it)->modifyMessage(event);
-
-			// Update the event in the calendar file
-			calendar.updateEvent(event);
-			calendar.save();
-
-			// Tell the daemon to reread the calendar file
-			reloadDaemon();
-		}
-		else
-		{
-			deleteMessage(event, 0L, false);
-			return false;
-		}
-	}
-	return true;
 }
 
 /******************************************************************************
@@ -724,7 +809,7 @@ void AlarmCalendar::getURL() const
 		if (!url.isValid())
 		{
 			kdDebug() << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
-			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()));
+			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()), PROGRAM_TITLE);
 			kapp->exit(1);
 		}
 	}
@@ -743,34 +828,60 @@ bool AlarmCalendar::open()
 	QString ext = url.filename().right(4);
 	vCal = (ext == QString::fromLatin1(".vcs"));
 
-	if (!KIO::NetAccess::exists(url))
+/*	if (!KIO::NetAccess::exists(url))
 	{
-		// Create the calendar file
-		KTempFile* tmpFile = 0L;
-		QString filename;
-		if (url.isLocalFile())
-			filename = url.path();
-		else
-		{
-			tmpFile = new KTempFile;
-			filename = tmpFile->name();
-		}
-		if (!save(filename))
-		{
-			delete tmpFile;
+		if (!create())      // create the calendar file
 			return false;
-		}
-		delete tmpFile;
-	}
+	}*/
 
 	// Load the calendar file
-	return load();
+	switch (load())
+	{
+		case 1:
+			break;
+		case 0:
+			if (!create()  ||  load() <= 0)
+				return false;
+		case -1:
+	if (!KIO::NetAccess::exists(url))
+	{
+		if (!create())      // create the calendar file
+			return false;
+	}
+			return false;
+	}
+	return true;
+}
+
+/******************************************************************************
+* Create a new calendar file.
+*/
+bool AlarmCalendar::create()
+{
+	// Create the calendar file
+	KTempFile* tmpFile = 0L;
+	QString filename;
+	if (url.isLocalFile())
+		filename = url.path();
+	else
+	{
+		tmpFile = new KTempFile;
+		filename = tmpFile->name();
+	}
+	if (!save(filename))
+	{
+		delete tmpFile;
+		return false;
+	}
+	delete tmpFile;
+	return true;
 }
 
 /******************************************************************************
 * Load the calendar file into memory.
+* Reply = 1 if success, -2 if failure, 0 if zero-length file exists.
 */
-bool AlarmCalendar::load()
+int AlarmCalendar::load()
 {
 	getURL();
 	kdDebug() << "AlarmCalendar::load(): " << url.prettyURL() << endl;
@@ -778,21 +889,27 @@ bool AlarmCalendar::load()
 	if (!KIO::NetAccess::download(url, tmpFile))
 	{
 		kdDebug() << "Load failure" << endl;
-		KMessageBox::error(0L, i18n("Cannot open calendar %1").arg(url.prettyURL()));
-		return false;
+		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(url.prettyURL()), PROGRAM_TITLE);
+		return -1;
 	}
 	kdDebug() << "--- Downloaded to " << tmpFile << endl;
 	if (!calendar->load(tmpFile))
 	{
+		// Check if the file is zero length
 		KIO::NetAccess::removeTempFile(tmpFile);
+		KIO::UDSEntry uds;
+		KIO::NetAccess::stat(url, uds);
+		KFileItem fi(uds, url);
+		if (!fi.size())
+			return 0;     // file is zero length
 		kdDebug() << "Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0L, i18n("Error loading calendar %1").arg(url.prettyURL()));
-		return false;
+		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(url.prettyURL()), PROGRAM_TITLE);
+		return -1;
 	}
 	if (!localFile.isEmpty())
 		KIO::NetAccess::removeTempFile(localFile);
 	localFile = tmpFile;
-	return true;
+	return 1;
 }
 
 /******************************************************************************
@@ -815,7 +932,7 @@ bool AlarmCalendar::save(const QString& filename)
 	{
 		if (!KIO::NetAccess::upload(filename, url))
 		{
-			KMessageBox::error(0L, i18n("Cannot upload calendar to '%1'").arg(url.prettyURL()));
+			KMessageBox::error(0L, i18n("Cannot upload calendar to\n'%1'").arg(url.prettyURL()), PROGRAM_TITLE);
 			return false;
 		}
 	}
@@ -836,6 +953,40 @@ void AlarmCalendar::close()
 {
 	if (!localFile.isEmpty())
 		KIO::NetAccess::removeTempFile(localFile);
+}
+
+/******************************************************************************
+* Add the specified event to the calendar.
+*/
+void AlarmCalendar::addEvent(const KAlarmEvent& event)
+{
+	Event* kcalEvent = new Event;
+	event.updateEvent(*kcalEvent);
+	calendar->addEvent(kcalEvent);
+	const_cast<KAlarmEvent&>(event).setEventID(kcalEvent->VUID());
+}
+
+/******************************************************************************
+* Update the specified event in the calendar with its new contents.
+*/
+void AlarmCalendar::updateEvent(const KAlarmEvent& event)
+{
+	Event* kcalEvent = getEvent(event.id());
+	if (kcalEvent)
+	{
+		if (event.updateEvent(*kcalEvent))
+			calendar->updateEvent(kcalEvent);
+	}
+}
+
+/******************************************************************************
+* Delete the specified event from the calendar.
+*/
+void AlarmCalendar::deleteEvent(const QString& eventID)
+{
+	Event* kcalEvent = getEvent(eventID);
+	if (kcalEvent)
+		calendar->deleteEvent(kcalEvent);
 }
 
 

@@ -38,16 +38,17 @@ class KAlarmMainWindow : public KMainWindow
 		KAlarmMainWindow(const char* name = 0L);
 		~KAlarmMainWindow();
 
-		void  addMessage(const MessageEvent*);
-		void  modifyMessage(const MessageEvent* oldEvent, const MessageEvent* newEvent = 0);
-		void  deleteMessage(const MessageEvent*);
+		void  addMessage(const KAlarmEvent&);
+		void  modifyMessage(const KAlarmEvent& event)    { modifyMessage(event.id(), event); }
+		void  modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent);
+		void  deleteMessage(const KAlarmEvent&);
 
 	protected:
 		virtual void resizeEvent(QResizeEvent*);
 		virtual void showEvent(QShowEvent*);
 
 	private:
-		void            initActions();
+		void         initActions();
 
 		AlarmListView*  listView;
 		KAction*        actionNew;
@@ -72,11 +73,12 @@ class KAlarmMainWindow : public KMainWindow
 class AlarmListViewItem;
 struct AlarmItemData
 {
-		const MessageEvent* event;
-		QString             messageText;     // message as displayed
-		QString             dateTimeText;    // date/time as displayed
-		QString             repeatCountText; // repeat count as displayed
-		int                 messageWidth;    // width required to display 'messageText'
+		KAlarmEvent event;
+		QString     messageText;     // message as displayed
+		QString     dateTimeText;    // date/time as displayed
+		QString     repeatCountText; // repeat count as displayed
+		QString     repeatCountOrder;  // repeat count item ordering text
+		int         messageWidth;    // width required to display 'messageText'
 };
 
 
@@ -88,11 +90,11 @@ class AlarmListView : public KListView
 		AlarmListView(QWidget* parent = 0L, const char* name = 0L);
 		virtual void         clear();
 		void                 refresh();
-		AlarmListViewItem*   addEntry(const MessageEvent*, bool setSize = false);
-		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const MessageEvent* newEvent, bool setSize = false);
+		AlarmListViewItem*   addEntry(const KAlarmEvent&, bool setSize = false);
+		AlarmListViewItem*   updateEntry(AlarmListViewItem*, const KAlarmEvent& newEvent, bool setSize = false);
 		void                 deleteEntry(AlarmListViewItem*, bool setSize = false);
-		const MessageEvent*  getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
-		AlarmListViewItem*   getEntry(const MessageEvent*);
+		const KAlarmEvent    getEntry(AlarmListViewItem* item) const	{ return getData(item)->event; }
+		AlarmListViewItem*   getEntry(const QString& eventID);
 		const AlarmItemData* getData(AlarmListViewItem*) const;
 		void                 resizeLastColumn();
 		int                  itemHeight();

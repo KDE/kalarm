@@ -45,17 +45,20 @@ static const int MAX_LINE_LENGTH = 80;    // maximum width (in characters) to tr
 /******************************************************************************
 *  Construct the message window.
 */
-MessageWin::MessageWin(const MessageEvent& event, bool reschedule_event)
+MessageWin::MessageWin(const KAlarmEvent& event, const KAlarmAlarm& alarm, bool reschedule_event)
 	: KMainWindow(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose | WGroupLeader),
-	  message(event.messageIsFileName() ? event.fileName() : event.message()),
+	  message(alarm.messageIsFileName() ? alarm.fileName() : alarm.message()),
 	  font(theApp()->generalSettings()->messageFont()),
-	  colour(event.colour()),
-	  dateTime(event.dateTime()),
-	  eventID(event.VUID()),
-	  flags(event.flags()),
-//	  audioFile(event.alarm()->audioFile()),
-	  beep(event.beep()),
-	  file(event.messageIsFileName()),
+	  colour(alarm.colour()),
+	  dateTime(alarm.repeatAtLogin() ? event.firstAlarm().dateTime() : alarm.dateTime()),
+	  eventID(event.id()),
+//	  audioFile(alarm.audioFile()),
+	  alarmSeq(alarm.id()),
+	  flags(alarm.flags()),
+	  beep(alarm.beep()),
+	  file(alarm.messageIsFileName()),
+	  noDefer(alarm.repeatAtLogin()),
+	  deferButton(0L),
 	  deferHeight(0),
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
@@ -195,14 +198,17 @@ QSize MessageWin::initView()
 	grid->addWidget(okButton, 0, 1, AlignHCenter);
 	QWhatsThis::add(okButton, i18n("Acknowledge the alarm"));
 
-	// Defer button
-	deferButton = new QPushButton(i18n("&Defer..."), topWidget);
-	connect(deferButton, SIGNAL(clicked()), SLOT(slotShowDefer()));
-	grid->addWidget(deferButton, 0, 2, AlignHCenter);
-	QWhatsThis::add(deferButton,
-	      i18n("Defer the alarm until later.\n"
-	           "You will be prompted to specify when\n"
-	           "the alarm should be redisplayed"));
+	if (!noDefer)
+	{
+		// Defer button
+		deferButton = new QPushButton(i18n("&Defer..."), topWidget);
+		connect(deferButton, SIGNAL(clicked()), SLOT(slotShowDefer()));
+		grid->addWidget(deferButton, 0, 2, AlignHCenter);
+		QWhatsThis::add(deferButton,
+		      i18n("Defer the alarm until later.\n"
+		           "You will be prompted to specify when\n"
+		           "the alarm should be redisplayed"));
+	}
 
 	// KAlarm button
 	KIconLoader iconLoader;
@@ -215,9 +221,13 @@ QSize MessageWin::initView()
 	QWhatsThis::add(button, i18n("Activate KAlarm"));
 
 	// Set the button sizes
-	QSize minbutsize = okButton->sizeHint().expandedTo(deferButton->sizeHint());
+	QSize minbutsize = okButton->sizeHint();
+	if (!noDefer)
+	{
+		minbutsize = minbutsize.expandedTo(deferButton->sizeHint());
+		deferButton->setFixedSize(minbutsize);
+	}
 	okButton->setFixedSize(minbutsize);
-	deferButton->setFixedSize(minbutsize);
 
 	topLayout->activate();
 	QSize size(minbutsize.width()*3, topLayout->sizeHint().height());
@@ -235,7 +245,8 @@ QSize MessageWin::initView()
 */
 void MessageWin::saveProperties(KConfig* config)
 {
-	config->writeEntry(QString::fromLatin1("ID"), eventID);
+	config->writeEntry(QString::fromLatin1("EventID"), eventID);
+	config->writeEntry(QString::fromLatin1("AlarmID"), alarmSeq);
 	config->writeEntry(QString::fromLatin1("Message"), message);
 	config->writeEntry(QString::fromLatin1("File"), file);
 	config->writeEntry(QString::fromLatin1("Font"), font);
@@ -243,6 +254,7 @@ void MessageWin::saveProperties(KConfig* config)
 	if (dateTime.isValid())
 		config->writeEntry(QString::fromLatin1("Time"), dateTime);
 	config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
+	config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
 }
 
 /******************************************************************************
@@ -252,7 +264,8 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	eventID       = config->readEntry(QString::fromLatin1("ID"));
+	eventID       = config->readEntry(QString::fromLatin1("EventID"));
+	alarmSeq      = config->readNumEntry(QString::fromLatin1("AlarmID"));
 	message       = config->readEntry(QString::fromLatin1("Message"));
 	file          = config->readBoolEntry(QString::fromLatin1("File"));
 	font          = config->readFontEntry(QString::fromLatin1("Font"));
@@ -260,6 +273,7 @@ void MessageWin::readProperties(KConfig* config)
 	QDateTime invalidDateTime;
 	dateTime      = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	restoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
+	noDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
 	initView();
 }
 
@@ -282,7 +296,7 @@ void MessageWin::showEvent(QShowEvent* se)
 		if (!audioFile.isEmpty())
 			KAudioPlayer::play(audioFile.latin1());
 		if (rescheduleEvent)
-			theApp()->rescheduleMessage(eventID);
+			theApp()->rescheduleAlarm(eventID, alarmSeq);
 		shown = true;
 	}
 }
@@ -325,7 +339,7 @@ void MessageWin::slotShowDefer()
 		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
 		wlayout->addLayout(grid);
 		deferTime = new AlarmTimeWidget(true, deferDlg, "deferTime");
-		deferTime->setDateTime(QDateTime::currentDateTime());
+		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60));
 		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
 		grid->addWidget(deferTime, 0, 0);
 		if (theApp()->getCalendar().getEvent(eventID))
@@ -377,18 +391,18 @@ void MessageWin::slotDefer()
 	if (deferTime->getDateTime(dateTime))
 	{
 		// Get the event being deferred. It will only still exist if repetitions are outstanding.
-		const MessageEvent* event = theApp()->getCalendar().getEvent(eventID);
-		if (event)
+		const Event* kcalEvent = theApp()->getCalendar().getEvent(eventID);
+		if (kcalEvent)
 		{
 			// It's a repeated alarm which may still exist in the calendar file
-			MessageEvent* newEvent = new MessageEvent(*event);   // event instance will belong to the calendar
-			newEvent->set(dateTime, (flags & MessageEvent::LATE_CANCEL));
-			theApp()->modifyMessage(const_cast<MessageEvent*>(event), newEvent, 0L);
+			KAlarmEvent event(*kcalEvent);
+			event.setTime(dateTime);
+			theApp()->updateMessage(event, 0L);
 		}
 		else
 		{
 			// The event doesn't exist any more, so create a new one
-			MessageEvent* event = new MessageEvent(dateTime, flags, colour, message, file);
+			KAlarmEvent event(dateTime, message, colour, file, flags);
 			theApp()->addMessage(event, 0L);
 		}
 		close();

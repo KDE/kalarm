@@ -42,14 +42,14 @@ class AlarmCalendar
 	public:
 		AlarmCalendar() : calendar(0L) { }
 		bool              open();
-		bool              load();
+		int               load();
 		bool              save()                              { return save(localFile); }
 		void              close();
-		MessageEvent*     getEvent(const QString& uniqueID)   { return static_cast<MessageEvent*>(calendar->getEvent(uniqueID)); }
+		Event*            getEvent(const QString& uniqueID)   { return calendar->getEvent(uniqueID); }
 		QPtrList<Event>   getAllEvents()                      { return calendar->getAllEvents(); }
-		void              addEvent(const MessageEvent* e)     { calendar->addEvent(const_cast<MessageEvent*>(e)); }
-		void              updateEvent(const MessageEvent* e)  { calendar->updateEvent(const_cast<MessageEvent*>(e)); }
-		void              deleteEvent(MessageEvent* e)        { calendar->deleteEvent(e); }
+		void              addEvent(const KAlarmEvent&);
+		void              updateEvent(const KAlarmEvent&);
+		void              deleteEvent(const QString& eventID);
 		bool              isOpen() const                      { return !!calendar; }
 		void              getURL() const;
 		const QString     urlString() const                   { getURL();  return url.url(); }
@@ -64,6 +64,7 @@ class AlarmCalendar
 		QString           localFile;   // local name of calendar file
 		bool              vCal;        // true if calendar file is in VCal format
 
+		bool              create();
 		bool              save(const QString& tempFile);
 };
 
@@ -78,13 +79,13 @@ class KAlarmApp : public KUniqueApplication
 		GeneralSettings*  generalSettings()   { return m_generalSettings; }
 		void              deleteWindow(KAlarmMainWindow*);
 		void              resetDaemon();
-		void              addMessage(const MessageEvent*, KAlarmMainWindow*);
-		void              modifyMessage(MessageEvent* oldEvent, const MessageEvent* newEvent, KAlarmMainWindow*);
-		void              deleteMessage(MessageEvent*, KAlarmMainWindow*, bool tellDaemon = true);
-		bool              rescheduleMessage(MessageEvent*);
+		void              addMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		void              modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow*);
+		void              updateMessage(const KAlarmEvent&, KAlarmMainWindow*);
+		void              deleteMessage(KAlarmEvent&, KAlarmMainWindow*, bool tellDaemon = true);
+		void              rescheduleAlarm(const QString& eventID, int alarmID);
 		void              displayMessage(const QString& eventID)        { handleMessage(eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& eventID)         { handleMessage(eventID, EVENT_CANCEL); }
-		void              rescheduleMessage(const QString& eventID)     { handleMessage(eventID, EVENT_RESCHEDULE); }
 		QSize             readConfigWindowSize(const char* window, const QSize& defaultSize);
 		void              writeConfigWindowSize(const char* window, const QSize&);
 		// DCOP interface methods
@@ -93,16 +94,19 @@ class KAlarmApp : public KUniqueApplication
 		void              handleMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_HANDLE); }
 		void              displayMessage(const QString& calendarFile, const QString& eventID)   { handleMessage(calendarFile, eventID, EVENT_DISPLAY); }
 		void              deleteMessage(const QString& calendarFile, const QString& eventID)    { handleMessage(calendarFile, eventID, EVENT_CANCEL); }
+		static const int          MAX_LATENESS = 65;   // maximum number of seconds late to display a late-cancel alarm
 	protected:
 		KAlarmApp();
 	private:
-		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL, EVENT_RESCHEDULE };
+		enum EventFunc { EVENT_HANDLE, EVENT_DISPLAY, EVENT_CANCEL };
+		enum AlarmFunc { ALARM_DISPLAY, ALARM_CANCEL, ALARM_RESCHEDULE };
 		bool              initCheck(bool daemon = true);
 		bool              stopDaemon();
 		void              startDaemon();
 		void              reloadDaemon();
 		void              handleMessage(const QString& calendarFile, const QString& eventID, EventFunc);
 		bool              handleMessage(const QString& eventID, EventFunc);
+		void              handleAlarm(KAlarmEvent&, KAlarmAlarm&, AlarmFunc);
 		static bool       convWakeTime(const QCString timeParam, QDateTime&);
 
 		static KAlarmApp*         theInstance;

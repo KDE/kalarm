@@ -37,6 +37,8 @@ static KCmdLineOptions options[] =
 	{ "interval <minutes>", I18N_NOOP("Interval between display of repeated alarms"), 0L },
 	{ "l", 0L, 0L },
 	{ "late-cancel", I18N_NOOP("Cancel message if it cannot be displayed on time"), 0L },
+	{ "L", 0L, 0L },
+	{ "login", I18N_NOOP("Repeat message at every login"), 0L },
 	{ "r", 0L, 0L },
 	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (after the initial occasion)"), 0L },
 	{ "reset", I18N_NOOP("Reset the message scheduling daemon"), 0L },
@@ -51,9 +53,9 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP(PROGRAM_TITLE),
-		PROGRAM_VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
-		"       " PROGRAM_NAME " -f[bcilrt]\n"
-		"       " PROGRAM_NAME " [-bcilrt] message\n"
+		VERSION, I18N_NOOP("       " PROGRAM_NAME "\n"
+		"       " PROGRAM_NAME " -f[bcilLrt]\n"
+		"       " PROGRAM_NAME " [-bcilLrt] message\n"
 		"       " PROGRAM_NAME " --reset | --stop\n"
 		"       " PROGRAM_NAME " --cancelEvent eventID [--calendarURL url]\n"
 		"       " PROGRAM_NAME " --displayEvent eventID [--calendarURL url]\n"

@@ -39,7 +39,7 @@
 
 
 EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* name,
-	                        const MessageEvent* event)
+	                        const KAlarmEvent* event)
 	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, true)
 {
 	QGroupBox* group;
@@ -108,7 +108,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	topLayout->addWidget(group);
 	layout = new QVBoxLayout(group, KDialog::spacingHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
-	grid = new QGridLayout(group, 1, 4, KDialog::spacingHint());
+	grid = new QGridLayout(group, 2, 4, KDialog::spacingHint());
 	layout->addLayout(grid);
 
 	lbl = new QLabel(group);
@@ -138,6 +138,15 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	      i18n("Enter the time (in hours and minutes)\n"
 	           "between repetitions of the alarm."));
 	grid->addWidget(repeatInterval, 0, 3, AlignRight);
+
+	// Repeat-at-login radio button has an ID of 1
+	repeatAtLogin = new QCheckBox(i18n("Repeat at login"), group, "repeatAtLoginButton");
+	repeatAtLogin->setFixedSize(repeatAtLogin->sizeHint());
+	QWhatsThis::add(repeatAtLogin,
+	      i18n("Repeat the alarm at every login until the specified time.\n"
+	           "Note that it will also be repeated any time the alarm\n"
+	           "daemon is restarted."));
+	grid->addWidget(repeatAtLogin, 1, 0, AlignLeft);
 
 	// Late display checkbox - default = allow late display
 
@@ -218,6 +227,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		beep->setChecked(event->beep());
 		repeatCount->setValue(event->repeatCount());
 		repeatInterval->setValue(event->repeatMinutes());
+		repeatAtLogin->setChecked(event->repeatAtLogin());
 #ifdef SELECT_FONT
 		fontColour->setColour(event->colour());
 		fontColour->setFont(?);
@@ -231,11 +241,12 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		timeWidget->setDateTime(QDateTime::currentDateTime().addSecs(60));
 		messageRadio->setChecked(false);    // toggle the button to ensure things are set up correctly
 		messageRadio->setChecked(true);
-		fileRadio->setChecked(false);
+//		fileRadio->setChecked(false);
 		browseButton->setEnabled(false);
 		messageEdit->setText(QString::null);
 		repeatCount->setValue(0);
 		repeatInterval->setValue(0);
+		repeatAtLogin->setChecked(false);
 #ifdef SELECT_FONT
 		fontColour->setColour(theApp()->generalSettings()->defaultBgColour());
 		fontColour->setFont(theApp()->generalSettings()->messageFont());
@@ -258,12 +269,13 @@ EditAlarmDlg::~EditAlarmDlg()
  * Get the currently entered message data.
  * The data is returned in the supplied Event instance.
  */
-void EditAlarmDlg::getEvent(MessageEvent& event)
+void EditAlarmDlg::getEvent(KAlarmEvent& event)
 {
-	int flags = (lateCancel->isChecked() ? MessageEvent::LATE_CANCEL : 0)
-	          | (beep->isChecked() ? MessageEvent::BEEP : 0);
-	event.setMessage(alarmDateTime, flags, bgColourChoose->color(), alarmMessage, fileRadio->isOn());
-	event.setRepetition(repeatInterval->value(), repeatCount->value());
+	int flags = (beep->isChecked()          ? KAlarmEvent::BEEP : 0)
+	          | (lateCancel->isChecked()    ? KAlarmEvent::LATE_CANCEL : 0)
+	          | (repeatAtLogin->isChecked() ? KAlarmEvent::REPEAT_AT_LOGIN : 0);
+	event.set(alarmDateTime, alarmMessage, bgColourChoose->color(), fileRadio->isOn(),
+	          flags, repeatCount->value(), repeatInterval->value());
 }
 
 /******************************************************************************
@@ -348,30 +360,6 @@ void EditAlarmDlg::slotBrowse()
 		messageEdit->setText(alarmMessage);
 		defaultDir = url.path();
 	}
-/*	QFileDialog dlg(defaultDir, QString::null, this, "fileChooser", true);   // create modal dialog
-	dlg.setCaption(i18n("Choose text file to display"));
-	dlg.setMode(QFileDialog::ExistingFile);
-	bool exists = true;
-	const QString& name = messageEdit->text();
-	if (name.isEmpty())
-		exists = false;
-	else
-	{
-		QFileInfo info(name);
-		if (info.isDir())
-			dlg.setDir(name);
-		else if (info.isReadable())
-			dlg.setSelection(info.absFilePath());
-		else if (info.exists())
-			dlg.setDir(info.dirPath(true));
-		else
-			exists = false;
-	}
-	if (dlg.exec() == Accepted)
-	{
-		messageEdit->setText(dlg.selectedFile());
-		defaultDir = dlg.dirPath();
-	}*/
 }
 
 void EditAlarmDlg::slotMessageToggled(bool on)

@@ -29,7 +29,7 @@ class MessageWin : public KMainWindow
 		Q_OBJECT
 	public:
 		MessageWin();     // for session management restoration only
-		explicit MessageWin(const MessageEvent&, bool reschedule_event = true);
+		explicit MessageWin(const KAlarmEvent&, const KAlarmAlarm&, bool reschedule_event = true);
 		~MessageWin();
 
 	protected:
@@ -38,9 +38,6 @@ class MessageWin : public KMainWindow
 		virtual void saveProperties(KConfig*);
 		virtual void readProperties(KConfig*);
 
-//	public slots:
-//		virtual void      resize(int w, int h);
-
 	protected slots:
 		void              slotShowDefer();
 		void              slotDefer();
@@ -48,16 +45,18 @@ class MessageWin : public KMainWindow
 
 	private:
 		QSize             initView();
-		// MessageEvent properties
+		// KAlarmEvent properties
 		QString           message;
 		QFont             font;
 		QColor            colour;
 		QDateTime         dateTime;
 		QString           eventID;
-		int               flags;
 		QString           audioFile;
+		int               alarmSeq;
+		int               flags;
 		bool              beep;
 		bool              file;
+		bool              noDefer;          // don't display a Defer option
 		// Miscellaneous
 		QPushButton*      deferButton;
 		AlarmTimeWidget*  deferTime;
