@@ -1,11 +1,12 @@
 KAlarm
 
-=== Version 0.9.2 --- 25 Feb 2003 ===
+=== Version 0.9.2 --- 28 Feb 2003 ===
 Option to set font for individual alarm messages.
 Allow multiple alarm selection in the main window.
 KAlarm icon in alarm message window selects the alarm in the main window.
 In Edit Alarm dialog, move all recurrence edit controls into Recurrence tab.
 Add quit warning message option to preferences dialog.
+Add "New Alarm" option to system tray context menu.
 Disallow command alarms when KDE is running in kiosk mode.
 Revised storage of beep, font, colour and program arguments in calendar file.
 Always save alarms in iCalendar format (but vCalendar may still be read).

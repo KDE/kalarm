@@ -72,6 +72,7 @@ TrayWindow::TrayWindow(KAlarmMainWindow* parent, const char* name)
 	ActionAlarmsEnabled* a = theApp()->actionAlarmEnable();
 	mAlarmsEnabledId = a->itemId(a->plug(contextMenu()));
 	connect(a, SIGNAL(alarmsEnabledChange(bool)), this, SLOT(setEnabledStatus(bool)));
+	theApp()->actionNewAlarm()->plug(contextMenu());
 	theApp()->actionPreferences()->plug(contextMenu());
 	theApp()->actionDaemonControl()->plug(contextMenu());
 

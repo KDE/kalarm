@@ -32,6 +32,7 @@ class QDateTime;
 #include <kuniqueapplication.h>
 #include <kurl.h>
 class KAction;
+class KActionCollection;
 class KProcess;
 namespace KCal { class Event; }
 
@@ -80,6 +81,9 @@ class KAlarmApp : public KUniqueApplication
 		ActionAlarmsEnabled* actionAlarmEnable() const     { return mActionAlarmEnable; }
 		KAction*           actionPreferences() const       { return mActionPrefs; }
 		KAction*           actionDaemonControl() const     { return mActionDaemonControl; }
+		KAction*           actionNewAlarm() const          { return mActionNewAlarm; }
+		static KAction*    createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*);
+		bool               editNewAlarm(KAlarmMainWindow* = 0);
 		void               resetDaemon();
 		bool               isDaemonRunning(bool startDaemon = true);
 		void               readDaemonCheckInterval();
@@ -124,6 +128,7 @@ class KAlarmApp : public KUniqueApplication
 		void               slotPreferences();
 		void               toggleAlarmsEnabled();
 		void               slotPreferencesChanged();
+		void               slotNewAlarm();
 		void               slotCommandExited(KProcess*);
 		void               slotSystemTrayTimer();
 	private:
@@ -166,6 +171,7 @@ class KAlarmApp : public KUniqueApplication
 		ActionAlarmsEnabled*  mActionAlarmEnable;   // action to enable/disable alarms
 		KAction*              mActionPrefs;         // action to display the preferences dialog
 		KAction*              mActionDaemonControl; // action to display the alarm daemon control dialog
+		KAction*              mActionNewAlarm;      // action to display the alarm edit dialog to create a new alarm
 		Preferences*          mPreferences;         // program preferences
 		QDateTime             mLastDaemonCheck;     // last time daemon checked alarms before check interval change
 		QDateTime             mNextDaemonCheck;     // next time daemon will check alarms after check interval change

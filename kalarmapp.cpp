@@ -51,6 +51,7 @@
 
 #include "alarmcalendar.h"
 #include "mainwindow.h"
+#include "editdlg.h"
 #include "messagewin.h"
 #include "daemongui.h"
 #include "dcophandler.h"
@@ -187,6 +188,7 @@ KAlarmApp::KAlarmApp()
 	mActionDaemonControl = new KAction(i18n("Configure Alarm &Daemon..."), mActionPrefs->iconSet(),
 #endif
 	                                   0, this, SLOT(slotDaemonControl()), actions, "controldaemon");
+	mActionNewAlarm      = createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actions);
 }
 
 /******************************************************************************
@@ -875,6 +877,34 @@ void KAlarmApp::slotDaemonControl()
 	proc << QString::fromLatin1("alarmdaemonctrl");
 #endif
 	proc.start(KProcess::DontCare);
+}
+
+/******************************************************************************
+*  Called when the New button is clicked to edit a new alarm to add to the list.
+*/
+void KAlarmApp::slotNewAlarm()
+{
+	EditAlarmDlg* editDlg = new EditAlarmDlg(i18n("New Alarm"), 0, "editDlg");
+	if (editDlg->exec() == QDialog::Accepted)
+	{
+		KAlarmEvent event;
+		editDlg->getEvent(event);
+
+		// Add the alarm to the displayed lists and to the calendar file
+		theApp()->addEvent(event, 0);
+	}
+}
+
+/******************************************************************************
+* Create a New Alarm KAction.
+*/
+KAction* KAlarmApp::createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions)
+{
+#if KDE_VERSION >= 310
+	return new KAction(label, "filenew2", Qt::Key_Insert, receiver, slot, actions, "new");
+#else
+	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, "new");
+#endif
 }
 
 /******************************************************************************

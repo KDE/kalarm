@@ -204,11 +204,7 @@ void KAlarmMainWindow::initActions()
 	KActionCollection* actions = actionCollection();
 	actionQuit           = KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KAction* actBirthday = new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "birthdays");
-#if KDE_VERSION >= 310
-	actionNew            = new KAction(i18n("&New..."), "filenew2", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
-#else
-	actionNew            = new KAction(i18n("&New..."), "filenew", Qt::Key_Insert, this, SLOT(slotNew()), actions, "new");
-#endif
+	actionNew            = KAlarmApp::createNewAlarmAction(i18n("&New..."), this, SLOT(slotNew()), actions);
 	actionCopy           = new KAction(i18n("&Copy..."), "editcopy", Qt::SHIFT+Qt::Key_Insert, this, SLOT(slotCopy()), actions, "copy");
 	actionModify         = new KAction(i18n("&Modify..."), "edit", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), actions, "modify");
 	actionDelete         = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
