@@ -107,9 +107,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               scheduleEvent(const QString& text, const QDateTime&, const QColor& bg, const QFont&,
 		                                 int flags, const QString& audioFile, const EmailAddressList& mailAddresses,
 		                                 const QString& mailSubject, const QStringList& mailAttachments,
-		                                 KAlarmEvent::Action, KAlarmEvent::RecurType,
-		                                 int repeatInterval, int repeatCount, const QDateTime& endTime,
-		                                 int reminderMinutes);
+		                                 KAlarmEvent::Action, const KCal::Recurrence&, int reminderMinutes);
 		void               handleEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_HANDLE); }
 		void               triggerEvent(const QString& calendarFile, const QString& eventID)   { handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
 		void               deleteEvent(const QString& calendarFile, const QString& eventID)    { handleEvent(calendarFile, eventID, EVENT_CANCEL); }

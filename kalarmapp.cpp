@@ -76,7 +76,7 @@ const QString DISPLAY_CALENDAR(QString::fromLatin1("displaying.ics"));
 int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
-static bool convInterval(QCString timeParam, KAlarmEvent::RecurType& recurType, int& timeInterval);
+static bool convInterval(QCString timeParam, KAlarmEvent::RecurType&, int& timeInterval);
 
 KAlarmApp*  KAlarmApp::theInstance = 0;
 int         KAlarmApp::activeCount = 0;
@@ -428,9 +428,7 @@ int KAlarmApp::newInstance()
 				bool      alarmNoTime = false;
 				QDateTime alarmTime, endTime;
 				QColor    bgColour = mPreferences->defaultBgColour();
-				int       repeatCount = 0;
-				int       repeatInterval = 0;
-				KAlarmEvent::RecurType recurType = KAlarmEvent::NO_RECUR;
+				KCal::Recurrence recurrence(0);
 				if (args->isSet("color"))
 				{
 					// Colour is specified
@@ -455,6 +453,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("interval"))
 				{
 					// Repeat count is specified
+					int repeatCount;
 					if (args->isSet("login"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--interval")))
 					bool ok;
@@ -466,6 +465,7 @@ int KAlarmApp::newInstance()
 					}
 					else if (args->isSet("until"))
 					{
+						repeatCount = 0;
 						QCString dateTime = args->getOption("until");
 						if (!convWakeTime(dateTime, endTime, alarmNoTime))
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until")))
@@ -476,11 +476,16 @@ int KAlarmApp::newInstance()
 						repeatCount = -1;
 
 					// Get the recurrence interval
+					int repeatInterval;
+					KAlarmEvent::RecurType recurType;
 					if (!convInterval(args->getOption("interval"), recurType, repeatInterval)
 					||  repeatInterval < 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
 					if (alarmNoTime  &&  recurType == KAlarmEvent::MINUTELY)
 						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
+
+					// Convert the recurrence parameters into a KCal::Recurrence
+					KAlarmEvent::setRecurrence(recurrence, recurType, repeatInterval, repeatCount, endTime);
 				}
 				else
 				{
@@ -544,8 +549,8 @@ int KAlarmApp::newInstance()
 				// Display or schedule the event
 				setUpDcop();        // we're now ready to handle DCOP calls, so set up handlers
 				if (!scheduleEvent(alMessage, alarmTime, bgColour, mPreferences->messageFont(), flags,
-				                   audioFile, alAddresses, alSubject, alAttachments, action, recurType,
-				                   repeatInterval, repeatCount, endTime, reminderMinutes))
+				                   audioFile, alAddresses, alSubject, alAttachments, action, recurrence,
+				                   reminderMinutes))
 				{
 					exitCode = 1;
 					break;
@@ -885,8 +890,8 @@ void KAlarmApp::slotPreferencesChanged()
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by registerWithDaemon()
-		TrayWindow::allowQuitWarning();   // since mode has changed, re-allow warning messages on Quit
-		registerWithDaemon(true);     // re-register with the alarm daemon
+		TrayWindow::setQuitWarning(true);   // since mode has changed, re-allow warning messages on Quit
+		registerWithDaemon(true);           // re-register with the alarm daemon
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
@@ -949,8 +954,7 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
                               const QFont& font, int flags, const QString& audioFile,
                               const EmailAddressList& mailAddresses, const QString& mailSubject,
                               const QStringList& mailAttachments, KAlarmEvent::Action action,
-                              KAlarmEvent::RecurType recurType, int repeatInterval, int repeatCount,
-                              const QDateTime& endTime, int reminderMinutes)
+                              const KCal::Recurrence& recurrence, int reminderMinutes)
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
 	if (!dateTime.isValid())
@@ -970,44 +974,12 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime& dateTime,
 		event.setAudioFile(audioFile);
 	if (mailAddresses.count())
 		event.setEmail(mailAddresses, mailSubject, mailAttachments);
-	switch (recurType)
-	{
-		case KAlarmEvent::MINUTELY:
-			event.setRecurMinutely(repeatInterval, repeatCount, endTime);
-			break;
-		case KAlarmEvent::DAILY:
-			event.setRecurDaily(repeatInterval, repeatCount, endTime.date());
-			break;
-		case KAlarmEvent::WEEKLY:
-		{
-			QBitArray days(7);
-			days.setBit(QDate::currentDate().dayOfWeek() - 1);
-			event.setRecurWeekly(repeatInterval, days, repeatCount, endTime.date());
-			break;
-		}
-		case KAlarmEvent::MONTHLY_DAY:
-		{
-			QValueList<int> days;
-			days.append(QDate::currentDate().day());
-			event.setRecurMonthlyByDate(repeatInterval, days, repeatCount, endTime.date());
-			break;
-		}
-		case KAlarmEvent::ANNUAL_DATE:
-		{
-			QValueList<int> months;
-			months.append(QDate::currentDate().month());
-			event.setRecurAnnualByDate(repeatInterval, months, repeatCount, endTime.date());
-			break;
-		}
-		default:
-			recurType = KAlarmEvent::NO_RECUR;
-			break;
-	}
+	event.setRecurrence(recurrence);
 	if (display)
 	{
 		// Alarm is due for display already
 		execAlarm(event, event.firstAlarm(), false);
-		if (recurType == KAlarmEvent::NO_RECUR
+		if (event.recurType() == KAlarmEvent::NO_RECUR
 		||  event.setNextOccurrence(now) == KAlarmEvent::NO_OCCURRENCE)
 			return true;
 	}
@@ -1105,7 +1077,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					bool cancel = false;
 					if (alarm.dateTime().isDateOnly())
 					{
-#warning "Cater for timed deferral alarms, etc."
 						// The alarm has no time, so cancel it if its date is past
 						QDateTime limit(alarm.date().addDays(1), mPreferences->startOfDay());
 						if (now >= limit)
