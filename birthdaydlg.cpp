@@ -101,7 +101,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
-	connect(mSuffix, SIGNAL(textChanged()), SLOT(slotTextChanged()));
+	connect(mSuffix, SIGNAL(lostFocus()), SLOT(slotTextLostFocus()));
 	QWhatsThis::add(mSuffix,
 	      i18n("Enter text to appear after the person's name in the alarm message, "
 	           "including any necessary leading spaces."));
@@ -208,7 +208,7 @@ void BirthdayDlg::updateSelectionList()
 			messageList.append(event.message());
 	}
 
-	mAddresseeList->setUpdatesEnabled(false);
+//	mAddresseeList->setUpdatesEnabled(false);
 
 	// Fetch all birthdays from the address book
 #if KDE_VERSION >= 290
@@ -237,11 +237,8 @@ void BirthdayDlg::updateSelectionList()
 			err = true;
 		else if (errcode != AddressBook::NoEntry)
 		{
-kdDebug()<<"BirthdayDlg: iterating\n";
 			for (std::list<AddressBook::Entry>::iterator it = entries.begin();  it != entries.end();  ++it)
 			{
-kdDebug()<<"BirthdayDlg: name="<<it->firstname<<" "<<it->lastname<<endl;
-kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 				if (it->birthday.isValid())
 				{
 					// Create a list entry for this birthday
@@ -258,7 +255,11 @@ kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
 			{
 				item = dynamic_cast<AddresseeItem*>(qitem);
-				inSelectionList = (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday);
+				if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
+				{
+					inSelectionList = true;
+					break;
+				}
 			}
 
 			if (alarmExists  &&  inSelectionList)
@@ -276,7 +277,7 @@ kdDebug()<<"BirthdayDlg: birthday="<<it->birthday.toString()<<endl;
 	if (err)
 		KMessageBox::error(this, i18n("Unable to open address book"));
 #endif
-	mAddresseeList->setUpdatesEnabled(true);
+//	mAddresseeList->setUpdatesEnabled(true);
 
 	// Enable/disable OK button according to whether anything is currently selected
 	bool selection = false;
