@@ -51,6 +51,7 @@
 #include "kalarmapp.h"
 #include "prefsettings.h"
 #include "datetime.h"
+#include "dateedit.h"
 #include "msgevent.h"
 #include "buttongroup.h"
 using namespace KCal;
@@ -210,7 +211,7 @@ RecurrenceEdit::RecurrenceEdit(QFrame* page, const char* name)
 	connect(endDateButton, SIGNAL(toggled(bool)), SLOT(rangeToggled(bool)));
 	QWhatsThis::add(endDateButton,
 	      i18n("Repeat the alarm until the date/time specified"));
-	endDateEdit = new DateSpinBox(rangeButtonGroup);
+	endDateEdit = new DateEdit(rangeButtonGroup);
 	endDateEdit->setFixedSize(endDateEdit->sizeHint());
 	QWhatsThis::add(endDateEdit,
 	      i18n("Enter the last date to repeat the alarm"));

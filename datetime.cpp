@@ -1,5 +1,5 @@
 /*
- *  datetime.cpp  -  date and time spinboxes, and alarm time entry widget
+ *  datetime.cpp  -  time spinbox, and alarm time entry widget
  *  Program:  kalarm
  *  (C) 2001, 2002 by David Jarvie  software@astrojar.org.uk
  *
@@ -33,11 +33,11 @@
 #include <qvalidator.h>
 #include <qwhatsthis.h>
 
-#include <kglobal.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include "dateedit.h"
 #include "datetime.moc"
 
 
@@ -77,10 +77,10 @@ void AlarmTimeWidget::init(int mode)
 	                                     : i18n("Schedule the alarm at the specified date and time.")));
 
 	// Date edit box
-	dateEdit = new DateSpinBox(this);
+	dateEdit = new DateEdit(this);
 	dateEdit->setFixedSize(dateEdit->sizeHint());
 	QWhatsThis::add(dateEdit, i18n("Enter the date to schedule the alarm."));
-	connect(dateEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
+	connect(dateEdit, SIGNAL(dateChanged(QDate)), this, SLOT(slotDateChanged(QDate)));
 
 	// Time edit box and Any time checkbox
 	QHBox* timeBox = new QHBox(this);
@@ -89,7 +89,7 @@ void AlarmTimeWidget::init(int mode)
 	timeEdit->setValue(2399);
 	timeEdit->setFixedSize(timeEdit->sizeHint());
 	QWhatsThis::add(timeEdit, i18n("Enter the time to schedule the alarm."));
-	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
+	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotTimeChanged(int)));
 
 	if (mode & DEFER_TIME)
 	{
@@ -206,7 +206,7 @@ void AlarmTimeWidget::setDateTime(const QDateTime& dt, bool anyTime)
 	timeEdit->setValue(dt.time().hour()*60 + dt.time().minute());
 	dateEdit->setDate(dt.date());
 	QDate now = QDate::currentDate();
-	dateEdit->setMinValue(DateSpinBox::dateValue(dt.date() < now ? dt.date() : now));
+	dateEdit->setMinDate(dt.date() < now ? dt.date() : now);
 	if (anyTimeCheckBox)
 	{
 		anyTimeAllowed = anyTime;
@@ -241,7 +241,7 @@ void AlarmTimeWidget::slotTimer()
 		timerSyncing = false;
 	}
 	if (atTimeRadio->isOn())
-		slotDateTimeChanged(0);
+		dateTimeChanged();
 	else
 		slotDelayTimeChanged(delayTime->value());
 }
@@ -279,7 +279,7 @@ void AlarmTimeWidget::anyTimeToggled(bool on)
 *  Called when the date or time edit box values have changed.
 *  Updates the time delay edit box accordingly.
 */
-void AlarmTimeWidget::slotDateTimeChanged(int)
+void AlarmTimeWidget::dateTimeChanged()
 {
 	if (!enteredDateTimeChanged)          // prevent infinite recursion !!
 	{
@@ -495,53 +495,4 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 			return QValidator::Invalid;
 	}
 	return state;
-}
-
-
-/*=============================================================================
-=  class DateSpinBox
-=============================================================================*/
-QDate  DateSpinBox::baseDate(2000, 1, 1);
-
-
-DateSpinBox::DateSpinBox(QWidget* parent, const char* name)
-	: QSpinBox(0, 0, 1, parent, name)
-{
-	QDate now = QDate::currentDate();
-	QDate maxDate(now.year() + 100, 12, 31);
-	setRange(0, baseDate.daysTo(maxDate));
-}
-
-QDate DateSpinBox::date()
-{
-	return baseDate.addDays(value());
-}
-
-int DateSpinBox::dateValue(const QDate& date)
-{
-	return baseDate.daysTo(date);
-}
-
-QString DateSpinBox::mapValueToText(int v)
-{
-	QDate date = baseDate.addDays(v);
-	return KGlobal::locale()->formatDate(date, true);
-}
-
-/*
- * Convert the user-entered text to a value in days.
- * The date must be in the range
- */
-int DateSpinBox::mapTextToValue(bool* ok)
-{
-	QDate date = KGlobal::locale()->readDate(cleanText());
-	int days = baseDate.daysTo(date);
-	int minval = baseDate.daysTo(QDate::currentDate());
-	if (days >= minval  &&  days <= maxValue())
-	{
-		*ok = true;
-		return days;
-	}
-	*ok = false;
-	return 0;
 }

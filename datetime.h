@@ -32,7 +32,7 @@
 
 class QRadioButton;
 class QCheckBox;
-class DateSpinBox;
+class DateEdit;
 class TimeSpinBox;
 
 
@@ -55,15 +55,17 @@ class AlarmTimeWidget : public ButtonGroup
 	protected slots:
 		void           slotTimer();
 		void           slotButtonSet(int id);
-		void           slotDateTimeChanged(int);
+		void           slotDateChanged(QDate)     { dateTimeChanged(); }
+		void           slotTimeChanged(int)       { dateTimeChanged(); }
 		void           slotDelayTimeChanged(int);
 		void           anyTimeToggled(bool);
 	private:
 		void           init(int mode);
+		void           dateTimeChanged();
 
 		QRadioButton*  atTimeRadio;
 		QRadioButton*  afterTimeRadio;
-		DateSpinBox*   dateEdit;
+		DateEdit*      dateEdit;
 		TimeSpinBox*   timeEdit;
 		TimeSpinBox*   delayTime;
 		QCheckBox*     anyTimeCheckBox;
@@ -96,21 +98,6 @@ class TimeSpinBox : public SpinBox2
 		int             minimumValue;
 		bool            invalid;
 		bool            enteredSetValue;    // to prevent infinite recursion in setValue()
-};
-
-
-class DateSpinBox : public QSpinBox
-{
-	public:
-		DateSpinBox(QWidget* parent = 0, const char* name = 0);
-		void            setDate(const QDate& d)       { setValue(dateValue(d)); }
-		QDate           date();
-		static int      dateValue(const QDate&);
-	protected:
-		virtual QString mapValueToText(int v);
-		virtual int     mapTextToValue(bool* ok);
-	private:
-		static QDate    baseDate;
 };
 
 #endif // DATETIME_H

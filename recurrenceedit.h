@@ -36,7 +36,7 @@ class QLabel;
 class QSpinBox;
 class QComboBox;
 class QCheckBox;
-class DateSpinBox;
+class DateEdit;
 class TimeSpinBox;
 class ButtonGroup;
 class KAlarmEvent;
@@ -154,7 +154,7 @@ class RecurrenceEdit : public QObject
 		QSpinBox*     repeatCountEntry;
 		QLabel*       repeatCountLabel;
 		QRadioButton* endDateButton;
-		DateSpinBox*  endDateEdit;
+		DateEdit*     endDateEdit;
 		TimeSpinBox*  endTimeEdit;
 
 		// Current start date and time
