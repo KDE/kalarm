@@ -854,7 +854,7 @@ void MessageWin::stopPlay()
 			int currentVolume = getKMixVolume();
 			// Volume returned isn't always exactly equal to volume set
 			if (currentVolume < 0  ||  abs(currentVolume - eventVolume) < 5)
-				setKMixVolume(mOldVolume);
+				setKMixVolume(static_cast<int>(mOldVolume));
 		}
 	}
 	delete mPlayObject;      mPlayObject = 0;
