@@ -81,8 +81,6 @@ void Find::display()
 
 	if (mDialog)
 	{
-//#warning Does the desktop need to be set - presumably it is automatically on same as main window?
-//		KWin::setOnDesktop(mDialog->winId(), KWin::currentDesktop());
 		KWin::activateWindow(mDialog->winId());
 	}
 	else
