@@ -34,8 +34,8 @@ class AlarmTimeWidget : public QWidget
 {
 		Q_OBJECT
 	public:
-		AlarmTimeWidget(const QString& groupBoxTitle, bool defer, QWidget* parent = 0L, const char* name = 0L);
-		AlarmTimeWidget(bool defer, QWidget* parent = 0L, const char* name = 0L);
+		AlarmTimeWidget(const QString& groupBoxTitle, int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
+		AlarmTimeWidget(int deferSpacing, QWidget* parent = 0L, const char* name = 0L);
 		bool           getDateTime(QDateTime&) const;
 		void           setDateTime(const QDateTime&);
 		QSize          sizeHint() const      { return minimumSizeHint(); }
@@ -49,7 +49,7 @@ class AlarmTimeWidget : public QWidget
 		void slotDateTimeChanged(int);
 		void slotDelayTimeChanged(int);
 	private:
-		void           init(const QString& groupBoxTitle, bool groupBox, bool defer);
+		void           init(const QString& groupBoxTitle, bool groupBox, int deferSpacing);
 		QRadioButton*  atTimeRadio;
 		QRadioButton*  afterTimeRadio;
 		DateSpinBox*   dateEdit;

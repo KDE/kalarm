@@ -36,21 +36,21 @@
 #include "datetime.moc"
 
 
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, bool defer, QWidget* parent, const char* name)
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int deferSpacing, QWidget* parent, const char* name)
 	: QWidget(parent, name),
 	  enteredDateTimeChanged(false)
 {
-	init(groupBoxTitle, true, defer);
+	init(groupBoxTitle, true, deferSpacing);
 }
 
-AlarmTimeWidget::AlarmTimeWidget(bool defer, QWidget* parent, const char* name)
+AlarmTimeWidget::AlarmTimeWidget(int deferSpacing, QWidget* parent, const char* name)
 	: QWidget(parent, name),
 	  enteredDateTimeChanged(false)
 {
-	init(QString(), false, defer);
+	init(QString(), false, deferSpacing);
 }
 
-void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, bool defer)
+void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, int deferSpacing)
 {
 	QVBoxLayout* layout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QWidget* page = this;
@@ -65,12 +65,13 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, bool def
 	layout->addLayout(grid);
 
 	// At time radio button/label
-	atTimeRadio = new QRadioButton((defer ? i18n("Defer to date/time:") : i18n("At date/time:")), page, "atTimeRadio");
+	atTimeRadio = new QRadioButton((deferSpacing ? i18n("Defer to date/time:") : i18n("At date/time:")), page, "atTimeRadio");
 	atTimeRadio->setFixedSize(atTimeRadio->sizeHint());
 	connect(atTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAtTimeToggled(bool)));
 	QWhatsThis::add(atTimeRadio,
-			(defer ? i18n("Reschedule the alarm to the specified date and time.") : i18n("Schedule the alarm at the specified date and time.")));
-	grid->addWidget(atTimeRadio, 0, 0, (defer ? AlignRight : AlignLeft));
+			(deferSpacing ? i18n("Reschedule the alarm to the specified date and time.")
+	                            : i18n("Schedule the alarm at the specified date and time.")));
+	grid->addWidget(atTimeRadio, 0, 0, (deferSpacing ? AlignRight : AlignLeft));
 
 	// Date spin box
 	dateEdit = new DateSpinBox(page);
@@ -91,18 +92,23 @@ void AlarmTimeWidget::init(const QString& groupBoxTitle, bool groupBox, bool def
 	connect(timeEdit, SIGNAL(valueChanged(int)), this, SLOT(slotDateTimeChanged(int)));
 
 	// 'Time from now' radio button/label
-	afterTimeRadio = new QRadioButton((defer? i18n("Defer for time interval:") : i18n("Time from now:")), page, "afterTimeRadio");
+	afterTimeRadio = new QRadioButton((deferSpacing ? i18n("Defer for time interval:") : i18n("Time from now:")), page, "afterTimeRadio");
 	afterTimeRadio->setFixedSize(afterTimeRadio->sizeHint());
 	connect(afterTimeRadio, SIGNAL(toggled(bool)), this, SLOT(slotAfterTimeToggled(bool)));
 	QWhatsThis::add(afterTimeRadio,
-			(defer ? i18n("Reschedule the alarm for the specified time interval after now.") : i18n("Schedule the alarm after the specified time interval from now.")));
+			(deferSpacing ? i18n("Reschedule the alarm for the specified time interval after now.")
+	                            : i18n("Schedule the alarm after the specified time interval from now.")));
 	grid->addMultiCellWidget(afterTimeRadio, 1, 1, 0, 1, AlignRight);
 
-	if (defer)
+	if (deferSpacing)
 	{
 		// Defer button
+		// The width of this button is too narrow, so set it to correspond
+		// with the width of the original "Defer..." button
 		QPushButton* deferButton = new QPushButton(i18n("&Defer"), page);
-		deferButton->setFixedSize(deferButton->sizeHint());
+		int width  = deferButton->fontMetrics().boundingRect(deferButton->text()).width() + deferSpacing;
+		int height = deferButton->sizeHint().height();
+		deferButton->setFixedSize(QSize(width, height));
 		connect(deferButton, SIGNAL(clicked()), this, SLOT(slotDefer()));
 		QWhatsThis::add(deferButton, i18n("Defer the alarm until the specified time."));
 		grid->addWidget(deferButton, 1, 0, AlignLeft);

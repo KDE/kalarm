@@ -107,7 +107,7 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 	grid->addMultiCellWidget(messageEdit, 1, 1, 0, 3);
 
 	// Date and time entry
-	timeWidget = new AlarmTimeWidget(i18n("Time"), false, page, "timeGroup");
+	timeWidget = new AlarmTimeWidget(i18n("Time"), 0, page, "timeGroup");
 	topLayout->addWidget(timeWidget);
 
 	// Repeating alarm
