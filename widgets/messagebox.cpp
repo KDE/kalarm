@@ -61,11 +61,10 @@ KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAga
 *      has set a default button, Continue is the default.
 */
 int MessageBox::warningContinueCancel(QWidget* parent, const QString& text, const QString& caption,
-		                              const KGuiItem& buttonContinue, const QString& dontAskAgainName,
-		                              int options)
+                                      const KGuiItem& buttonContinue, const QString& dontAskAgainName)
 {
 	ButtonCode defaultButton = getContinueDefault(dontAskAgainName);
-	return warningContinueCancel(parent, defaultButton, text, caption, buttonContinue, dontAskAgainName, options);
+	return warningContinueCancel(parent, defaultButton, text, caption, buttonContinue, dontAskAgainName);
 }
 
 /******************************************************************************
@@ -74,12 +73,12 @@ int MessageBox::warningContinueCancel(QWidget* parent, const QString& text, cons
 * if the user chose Continue last time.
 */
 int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
-		                              const QString& caption, const KGuiItem& buttonContinue,
-		                              const QString& dontAskAgainName, int options)
+                                      const QString& caption, const KGuiItem& buttonContinue,
+                                      const QString& dontAskAgainName)
 {
 	setContinueDefault(dontAskAgainName, defaultButton);
 	if (defaultButton != Cancel)
-		return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, dontAskAgainName, options);
+		return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, dontAskAgainName);
 
 	// Cancel is the default button, so we have to use KMessageBox::warningYesNo()
 	if (!dontAskAgainName.isEmpty())
@@ -93,7 +92,7 @@ int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton,
 			saveDontShowAgain(dontAskAgainName, true, false);
 		}
 	}
-	return warningYesNo(parent, text, caption, buttonContinue, KStdGuiItem::cancel(), dontAskAgainName, options);
+	return warningYesNo(parent, text, caption, buttonContinue, KStdGuiItem::cancel(), dontAskAgainName);
 }
 
 /******************************************************************************

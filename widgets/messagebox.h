@@ -21,6 +21,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
+#include <kstdguiitem.h>
 #include <kmessagebox.h>
 
 /*=============================================================================
@@ -42,10 +43,10 @@ class MessageBox : public KMessageBox
 		static int  warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
 		                                  const QString& caption = QString::null,
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
-		                                  const QString& dontAskAgainName = QString::null, int options = Notify);
+		                                  const QString& dontAskAgainName = QString::null);
 		static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString::null,
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
-		                                  const QString& dontAskAgainName = QString::null, int options = Notify);
+		                                  const QString& dontAskAgainName = QString::null);
 		static bool setDefaultShouldBeShownContinue(const QString& dontShowAgainName, bool defaultShow);
 		static bool shouldBeShownContinue(const QString& dontShowAgainName);
 		static void saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow = true, ButtonCode result = No);
