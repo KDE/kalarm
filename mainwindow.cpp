@@ -47,7 +47,7 @@
 KAlarmMainWindow::KAlarmMainWindow()
 	: KMainWindow(0L, 0L, WGroupLeader | WStyle_ContextHelp)
 {
-	kdDebug() << "KAlarmMainWindow::KAlarmMainWindow()\n";
+	kdDebug(5950) << "KAlarmMainWindow::KAlarmMainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	initActions();
@@ -148,9 +148,7 @@ void KAlarmMainWindow::modifyMessage(const QString& oldEventID, const KAlarmEven
 */
 void KAlarmMainWindow::deleteMessage(const KAlarmEvent& event)
 {
-kdDebug() << "KAlarmMainWindow::deleteMessage(): "<<event.id()<<endl;
 	AlarmListViewItem* item = listView->getEntry(event.id());
-kdDebug() << "KAlarmMainWindow::deleteMessage(): " << (item?"Found":"Not found")<<endl;
 	if (item)
 		listView->deleteEntry(item, true);
 	else

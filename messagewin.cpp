@@ -79,7 +79,7 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  rescheduleEvent(reschedule_event),
 	  shown(false)
 {
-	kdDebug() << "MessageWin::MessageWin(event)" << endl;
+	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	++nInstances;
 	setAutoSaveSettings(QString::fromLatin1("MessageWindow"));     // save window sizes etc.
 	QSize size = initView();
@@ -98,7 +98,7 @@ MessageWin::MessageWin()
 	  rescheduleEvent(false),
 	  shown(true)
 {
-	kdDebug() << "MessageWin::MessageWin()" << endl;
+	kdDebug(5950) << "MessageWin::MessageWin()" << endl;
 	++nInstances;
 }
 

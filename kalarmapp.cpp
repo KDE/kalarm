@@ -97,7 +97,7 @@ KAlarmApp* KAlarmApp::getInstance()
 */
 int KAlarmApp::newInstance()
 {
-	kdDebug()<<"KAlarmApp::newInstance(): New instance\n";
+	kdDebug(5950)<<"KAlarmApp::newInstance(): New instance\n";
 	++activeCount;
 	static bool restored = false;
 	int exitCode = 0;      // default = success
@@ -105,7 +105,7 @@ int KAlarmApp::newInstance()
 	if (!restored  &&  isRestored())
 	{
 		// Process is being restored by session management.
-		kdDebug()<<"KAlarmApp::newInstance(): Restoring session\n";
+		kdDebug(5950)<<"KAlarmApp::newInstance(): Restoring session\n";
 		exitCode = !initCheck(true);     // open the calendar file (needed for main windows)
 		for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 		{
@@ -147,7 +147,7 @@ int KAlarmApp::newInstance()
 			if (args->isSet("handleEvent")  ||  args->isSet("displayEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
 			{
 				// Display or delete the message with the specified event ID
-				kdDebug()<<"KAlarmApp::newInstance(): handle event\n";
+				kdDebug(5950)<<"KAlarmApp::newInstance(): handle event\n";
 				EventFunc function = EVENT_HANDLE;
 				int count = 0;
 				const char* option = 0;
@@ -194,7 +194,7 @@ int KAlarmApp::newInstance()
 				QCString alMessage;
 				if (args->isSet("file"))
 				{
-					kdDebug()<<"KAlarmApp::newInstance(): file\n";
+					kdDebug(5950)<<"KAlarmApp::newInstance(): file\n";
 					if (args->count())
 					{
 						usage = i18n("message incompatible with --file");
@@ -205,7 +205,7 @@ int KAlarmApp::newInstance()
 				}
 				else
 				{
-					kdDebug()<<"KAlarmApp::newInstance(): message\n";
+					kdDebug(5950)<<"KAlarmApp::newInstance(): message\n";
 					alMessage = args->arg(0);
 				}
 
@@ -366,7 +366,7 @@ void KAlarmApp::deleteWindow(KAlarmMainWindow* win)
 bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTime, const QColor& bg,
                                 int flags, bool file, int repeatCount, int repeatInterval)
 {
-	kdDebug() << "KAlarmApp::scheduleMessage(): " << message << endl;
+	kdDebug(5950) << "KAlarmApp::scheduleMessage(): " << message << endl;
 	bool display = true;
 	QDateTime alarmTime;
 	if (dateTime)
@@ -381,7 +381,7 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 	if (display)
 	{
 		// Alarm is due for display already
-		kdDebug() << "Displaying message: " << message << "\n";
+		kdDebug(5950) << "Displaying message: " << message << "\n";
 		(new MessageWin(event, event.firstAlarm(), false))->show();
 		return true;
 	}
@@ -399,9 +399,9 @@ bool KAlarmApp::scheduleMessage(const QString& message, const QDateTime* dateTim
 */
 void KAlarmApp::handleMessage(const QString& urlString, const QString& eventID, EventFunc function)
 {
-	kdDebug() << "KAlarmApp::handleMessage(DCOP): " << eventID << endl;
+	kdDebug(5950) << "KAlarmApp::handleMessage(DCOP): " << eventID << endl;
 	if (KURL(urlString).url() != calendar.urlString())
-		kdError() << "KAlarmApp::handleMessage(DCOP): wrong calendar file " << urlString << endl;
+		kdError(5950) << "KAlarmApp::handleMessage(DCOP): wrong calendar file " << urlString << endl;
 	else
 		handleMessage(eventID, function);
 }
@@ -416,11 +416,11 @@ void KAlarmApp::handleMessage(const QString& urlString, const QString& eventID, 
 */
 bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 {
-	kdDebug() << "KAlarmApp::handleMessage(): " << eventID << ", " << (function==EVENT_DISPLAY?"DISPLAY":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
+	kdDebug(5950) << "KAlarmApp::handleMessage(): " << eventID << ", " << (function==EVENT_DISPLAY?"DISPLAY":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
 	Event* kcalEvent = calendar.getEvent(eventID);
 	if (!kcalEvent)
 	{
-		kdError() << "KAlarmApp::handleMessage(): event ID not found: " << eventID << endl;
+		kdError(5950) << "KAlarmApp::handleMessage(): event ID not found: " << eventID << endl;
 		return false;
 	}
 	KAlarmEvent event(*kcalEvent);
@@ -513,15 +513,15 @@ bool KAlarmApp::handleMessage(const QString& eventID, EventFunc function)
 */
 void KAlarmApp::rescheduleAlarm(KAlarmEvent& event, int alarmID)
 {
-	kdDebug() << "KAlarmApp::rescheduleAlarm(): " << event.id() << ":" << alarmID << endl;
+	kdDebug(5950) << "KAlarmApp::rescheduleAlarm(): " << event.id() << ":" << alarmID << endl;
 	Event* kcalEvent = calendar.getEvent(event.id());
 	if (!kcalEvent)
-		kdError() << "KAlarmApp::rescheduleAlarm(): event ID not found: " << event.id() << endl;
+		kdError(5950) << "KAlarmApp::rescheduleAlarm(): event ID not found: " << event.id() << endl;
 	else
 	{
 		KAlarmAlarm alarm = event.alarm(alarmID);
 		if (!alarm.valid())
-			kdError() << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << event.id() << ":" << alarmID << endl;
+			kdError(5950) << "KAlarmApp::rescheduleAlarm(): alarm sequence not found: " << event.id() << ":" << alarmID << endl;
 		handleAlarm(event, alarm, ALARM_RESCHEDULE, true);
 	}
 }
@@ -539,13 +539,13 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 	switch (function)
 	{
 		case ALARM_DISPLAY:
-			kdDebug() << "KAlarmApp::handleAlarm(): DISPLAY" << endl;
+			kdDebug(5950) << "KAlarmApp::handleAlarm(): DISPLAY" << endl;
 			(new MessageWin(event, alarm, true))->show();
 			break;
 
 		case ALARM_RESCHEDULE:
 			// Leave an alarm which repeats at every login until its main alarm is deleted
-			kdDebug() << "KAlarmApp::handleAlarm(): RESCHEDULE" << endl;
+			kdDebug(5950) << "KAlarmApp::handleAlarm(): RESCHEDULE" << endl;
 			if (!alarm.repeatAtLogin())
 			{
 				int secs = alarm.dateTime().secsTo(QDateTime::currentDateTime());
@@ -579,7 +579,7 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 
 		case ALARM_CANCEL:
 		{
-			kdDebug() << "KAlarmApp::handleAlarm(): CANCEL" << endl;
+			kdDebug(5950) << "KAlarmApp::handleAlarm(): CANCEL" << endl;
 			event.removeAlarm(alarm.id());
 			if (!event.alarmCount())
 				deleteMessage(event, 0L, false);
@@ -588,7 +588,7 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 			break;
 		}
 		default:
-			kdError() << "KAlarmApp::handleAlarm(): unknown function" << endl;
+			kdError(5950) << "KAlarmApp::handleAlarm(): unknown function" << endl;
 	}
 }
 
@@ -600,7 +600,7 @@ void KAlarmApp::handleAlarm(KAlarmEvent& event, KAlarmAlarm& alarm, AlarmFunc fu
 */
 void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
-	kdDebug() << "KAlarmApp::addMessage(): " << event.id() << endl;
+	kdDebug(5950) << "KAlarmApp::addMessage(): " << event.id() << endl;
 
 	// Save the message details in the calendar file, and get the new event ID
 	calendar.addEvent(event);
@@ -623,7 +623,7 @@ void KAlarmApp::addMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 */
 void KAlarmApp::modifyMessage(const QString& oldEventID, const KAlarmEvent& newEvent, KAlarmMainWindow* win)
 {
-	kdDebug() << "KAlarmApp::modifyMessage(): '" << oldEventID << endl;
+	kdDebug(5950) << "KAlarmApp::modifyMessage(): '" << oldEventID << endl;
 
 	// Update the event in the calendar file, and get the new event ID
 	calendar.deleteEvent(oldEventID);
@@ -647,7 +647,7 @@ void KAlarmApp::modifyMessage(const QString& oldEventID, const KAlarmEvent& newE
 */
 void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 {
-	kdDebug() << "KAlarmApp::updateMessage(): " << event.id() << endl;
+	kdDebug(5950) << "KAlarmApp::updateMessage(): " << event.id() << endl;
 
 	// Update the event in the calendar file
 	const_cast<KAlarmEvent&>(event).incrementRevision();
@@ -670,7 +670,7 @@ void KAlarmApp::updateMessage(const KAlarmEvent& event, KAlarmMainWindow* win)
 */
 void KAlarmApp::deleteMessage(KAlarmEvent& event, KAlarmMainWindow* win, bool tellDaemon)
 {
-	kdDebug() << "KAlarmApp::deleteMessage(): " << event.id() << endl;
+	kdDebug(5950) << "KAlarmApp::deleteMessage(): " << event.id() << endl;
 
 	// Update the window lists
 	for (KAlarmMainWindow* w = mainWindowList.first();  w;  w = mainWindowList.next())
@@ -694,7 +694,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 {
 	if (!calendar.isOpen())
 	{
-		kdDebug() << "KAlarmApp::initCheck(): opening calendar\n";
+		kdDebug(5950) << "KAlarmApp::initCheck(): opening calendar\n";
 
 		// First time through. Open the calendar file.
 		if (!calendar.open())
@@ -719,7 +719,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 */
 void KAlarmApp::startDaemon()
 {
-	kdDebug() << "KAlarmApp::startDaemon()\n";
+	kdDebug(5950) << "KAlarmApp::startDaemon()\n";
 	calendar.getURL();    // check that the calendar file name is OK - program exit if not
 	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
 	{
@@ -727,7 +727,7 @@ void KAlarmApp::startDaemon()
 		// there is automatically only one instance of the alarm daemon running.
 		QString execStr = locate("exe",QString::fromLatin1(DAEMON_NAME));
 		system(QFile::encodeName(execStr));
-		kdDebug() << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
+		kdDebug(5950) << "KAlarmApp::startDaemon(): Alarm daemon started" << endl;
 	}
 
 	// Register this application with the alarm daemon
@@ -737,7 +737,7 @@ void KAlarmApp::startDaemon()
 		arg << QCString(aboutData()->appName()) << aboutData()->programName()
 		    << QCString(DCOP_OBJECT_NAME) << (int)ClientInfo::COMMAND_LINE_NOTIFY << (Q_INT8)0;
 		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "registerApp(QCString,QString,QCString,int,bool)", data))
-			kdDebug() << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
+			kdDebug(5950) << "KAlarmApp::startDaemon(): registerApp dcop send failed" << endl;
 	}
 
 	// Tell alarm daemon to load the calendar
@@ -746,11 +746,11 @@ void KAlarmApp::startDaemon()
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(aboutData()->appName()) << calendar.urlString();
 		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "addMsgCal(QCString,QString)", data))
-			kdDebug() << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
+			kdDebug(5950) << "KAlarmApp::startDaemon(): addCal dcop send failed" << endl;
 	}
 
 	daemonRegistered = true;
-	kdDebug() << "KAlarmApp::startDaemon(): started daemon" << endl;
+	kdDebug(5950) << "KAlarmApp::startDaemon(): started daemon" << endl;
 }
 
 /******************************************************************************
@@ -758,13 +758,13 @@ void KAlarmApp::startDaemon()
 */
 bool KAlarmApp::stopDaemon()
 {
-	kdDebug() << "KAlarmApp::stopDaemon()" << endl;
+	kdDebug(5950) << "KAlarmApp::stopDaemon()" << endl;
 	if (dcopClient()->isApplicationRegistered(DAEMON_NAME))
 	{
 		QByteArray data;
 		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "quit()", data))
 		{
-			kdError() << "KAlarmApp::restartDaemon(): quit dcop send failed" << endl;
+			kdError(5950) << "KAlarmApp::restartDaemon(): quit dcop send failed" << endl;
 			return false;
 		}
 	}
@@ -776,7 +776,7 @@ bool KAlarmApp::stopDaemon()
 */
 void KAlarmApp::resetDaemon()
 {
-	kdDebug() << "KAlarmApp::resetDaemon()" << endl;
+	kdDebug(5950) << "KAlarmApp::resetDaemon()" << endl;
 	if (!dcopClient()->isApplicationRegistered(DAEMON_NAME))
 		startDaemon();
 	else
@@ -785,7 +785,7 @@ void KAlarmApp::resetDaemon()
 		QDataStream arg(data, IO_WriteOnly);
 		arg << QCString(aboutData()->appName()) << calendar.urlString();
 		if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "resetMsgCal(QCString,QString)", data))
-			kdDebug() << "KAlarmApp::resetDaemon(): addCal dcop send failed" << endl;
+			kdDebug(5950) << "KAlarmApp::resetDaemon(): addCal dcop send failed" << endl;
 	}
 }
 
@@ -798,7 +798,7 @@ void KAlarmApp::reloadDaemon()
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(aboutData()->appName()) << calendar.urlString();
 	if (!dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
-		kdDebug() << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
+		kdDebug(5950) << "KAlarmApp::reloadDaemon(): dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -920,7 +920,7 @@ void AlarmCalendar::getURL() const
 		                                             locateLocal("appdata", DEFAULT_CALENDAR_FILE));
 		if (!url.isValid())
 		{
-			kdDebug() << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
+			kdDebug(5950) << "AlarmCalendar::getURL(): invalid name: " << url.prettyURL() << endl;
 			KMessageBox::error(0L, i18n("Invalid calendar file name: %1").arg(url.prettyURL()),
 			                   kapp->aboutData()->programName());
 			kapp->exit(1);
@@ -997,15 +997,15 @@ bool AlarmCalendar::create()
 int AlarmCalendar::load()
 {
 	getURL();
-	kdDebug() << "AlarmCalendar::load(): " << url.prettyURL() << endl;
+	kdDebug(5950) << "AlarmCalendar::load(): " << url.prettyURL() << endl;
 	QString tmpFile;
 	if (!KIO::NetAccess::download(url, tmpFile))
 	{
-		kdError() << "AlarmCalendar::load(): Load failure" << endl;
+		kdError(5950) << "AlarmCalendar::load(): Load failure" << endl;
 		KMessageBox::error(0L, i18n("Cannot open calendar:\n%1").arg(url.prettyURL()), kapp->aboutData()->programName());
 		return -1;
 	}
-	kdDebug() << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
+	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
 	if (!calendar->load(tmpFile))
 	{
 		// Check if the file is zero length
@@ -1015,7 +1015,7 @@ int AlarmCalendar::load()
 		KFileItem fi(uds, url);
 		if (!fi.size())
 			return 0;     // file is zero length
-		kdDebug() << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
+		kdDebug(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
 		KMessageBox::error(0L, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(url.prettyURL()),
 		                   kapp->aboutData()->programName());
 		return -1;
@@ -1031,13 +1031,13 @@ int AlarmCalendar::load()
 */
 bool AlarmCalendar::save(const QString& filename)
 {
-	kdDebug() << "AlarmCalendar::save(): " << filename << endl;
+	kdDebug(5950) << "AlarmCalendar::save(): " << filename << endl;
 	CalFormat* format = (vCal ? static_cast<CalFormat*>(new VCalFormat(calendar)) : static_cast<CalFormat*>(new ICalFormat(calendar)));
 	bool success = calendar->save(filename, format);
 	delete format;
 	if (!success)
 	{
-		kdDebug() << "AlarmCalendar::save(): calendar save failed." << endl;
+		kdDebug(5950) << "AlarmCalendar::save(): calendar save failed." << endl;
 		return false;
 	}
 
@@ -1056,7 +1056,7 @@ bool AlarmCalendar::save(const QString& filename)
 	QDataStream arg(data, IO_WriteOnly);
 	arg << QCString(kapp->aboutData()->appName()) << url.url();
 	if (!kapp->dcopClient()->send(DAEMON_NAME, DAEMON_DCOP_OBJECT_NAME, "reloadMsgCal(QCString,QString)", data))
-		kdDebug() << "AlarmCalendar::save(): addCal dcop send failed" << endl;
+		kdDebug(5950) << "AlarmCalendar::save(): addCal dcop send failed" << endl;
 	return true;
 }
 
@@ -1109,7 +1109,7 @@ MainWidget::MainWidget(const char* dcopObject)
 	: QWidget(),
 	  DCOPObject(dcopObject)
 {
-	kdDebug() << "MainWidget::MainWidget()\n";
+	kdDebug(5950) << "MainWidget::MainWidget()\n";
 }
 
 /******************************************************************************
@@ -1117,7 +1117,7 @@ MainWidget::MainWidget(const char* dcopObject)
 */
 bool MainWidget::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
 {
-	kdDebug() << "MainWidget::process(): " << func << endl;
+	kdDebug(5950) << "MainWidget::process(): " << func << endl;
 	enum { ERR, HANDLE, CANCEL, DISPLAY, SCHEDULE, SCHEDULE_n, SCHEDULE_FILE, SCHEDULE_FILE_n };
 	int function;
 	if      (func == "handleEvent(const QString&,const QString&)"
@@ -1143,7 +1143,7 @@ bool MainWidget::process(const QCString& func, const QByteArray& data, QCString&
 		function = SCHEDULE_FILE_n;
 	else
 	{
-		kdDebug() << "MainWidget::process(): unknown DCOP function" << endl;
+		kdDebug(5950) << "MainWidget::process(): unknown DCOP function" << endl;
 		return false;
 	}
 

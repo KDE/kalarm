@@ -56,7 +56,7 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 
 void KAlarmPrefDlg::slotDefault()
 {
-	kdDebug() << "KAlarmPrefDlg::slotDefault()" << endl;
+	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
 	// restore all defaults in the options...
 	m_generalPage->setDefaults();
 #ifdef MISC_PREFS
@@ -73,7 +73,7 @@ void KAlarmPrefDlg::slotHelp()
 
 void KAlarmPrefDlg::slotApply()
 {
-	kdDebug() << "KAlarmPrefDlg::slotApply()" << endl;
+	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
 	// Apply the settings that are currently selected
 	m_generalPage->apply();
 #ifdef MISC_PREFS
@@ -83,7 +83,7 @@ void KAlarmPrefDlg::slotApply()
 
 void KAlarmPrefDlg::slotOk()
 {
-	kdDebug() << "KAlarmPrefDlg::slotOk()" << endl;
+	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
 	// Apply the settings that are currently selected
 	m_generalPage->apply();
 #ifdef MISC_PREFS
@@ -95,7 +95,7 @@ void KAlarmPrefDlg::slotOk()
 
 void KAlarmPrefDlg::slotCancel()
 {
-	kdDebug() << "KAlarmPrefDlg::slotCancel()" << endl;
+	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
 	// discard the current settings and use the present ones
 	m_generalPage->restore();
 #ifdef MISC_PREFS
