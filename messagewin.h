@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #ifndef MESSAGEWIN_H
@@ -53,7 +57,6 @@ class MessageWin : public MainWindowBase
 		virtual void       readProperties(KConfig*);
 
 	protected slots:
-		void               slotShowDefer();
 		void               slotDefer();
 
 	private:
@@ -78,12 +81,9 @@ class MessageWin : public MainWindowBase
 		bool               noDefer;          // don't display a Defer option
 		// Miscellaneous
 		QPushButton*       deferButton;
-		AlarmTimeWidget*   deferTime;
-		int                deferHeight;      // height of defer dialog
 		int                restoreHeight;
 		bool               rescheduleEvent;  // true to delete event after message has been displayed
 		bool               shown;            // true once the window has been displayed
-		bool               deferDlgShown;    // true if defer dialog is visible
 		bool               deferClosing;     // the Defer button is closing the dialog
 };
 

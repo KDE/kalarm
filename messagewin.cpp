@@ -16,6 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  As a special exception, permission is given to link this program
+ *  with any edition of Qt, and distribute the resulting executable,
+ *  without including the source code for Qt in the source distribution.
  */
 
 #include "kalarm.h"
@@ -48,6 +52,7 @@
 #include "kalarmapp.h"
 #include "alarmcalendar.h"
 #include "prefsettings.h"
+#include "deferdlg.h"
 #include "datetime.h"
 #include "messagewin.moc"
 
@@ -80,7 +85,6 @@ MessageWin::MessageWin(const KAlarmEvent& evnt, const KAlarmAlarm& alarm, bool r
 	  type(alarm.type()),
 	  noDefer(!allowDefer || alarm.repeatAtLogin()),
 	  deferButton(0L),
-	  deferHeight(0),
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
 	  shown(false),
@@ -119,7 +123,6 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 	  errorMsg(errmsg),
 	  noDefer(true),
 	  deferButton(0L),
-	  deferHeight(0),
 	  restoreHeight(0),
 	  rescheduleEvent(reschedule_event),
 	  shown(false),
@@ -138,7 +141,6 @@ MessageWin::MessageWin(const QString& errmsg, const KAlarmEvent& evnt, const KAl
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0L, "MessageWin", WStyle_StaysOnTop | WDestructiveClose),
-	  deferHeight(0),
 	  rescheduleEvent(false),
 	  shown(true),
 	  deferClosing(false)
@@ -185,8 +187,7 @@ QSize MessageWin::initView()
 	if (type == KAlarmAlarm::FILE  ||  type == KAlarmAlarm::COMMAND)
 	{
 		// Display the file name or command
-		label = new QLabel(topWidget);
-		label->setText(message);
+		label = new QLabel(message, topWidget);
 		label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
 		topLayout->addWidget(label, 0, Qt::AlignHCenter);
@@ -257,7 +258,7 @@ QSize MessageWin::initView()
 			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
 			QWhatsThis::add(frame, i18n("The email to send"));
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-			QGridLayout* grid = new QGridLayout(frame, 2, 2, 0, KDialog::spacingHint());
+			QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
 			QLabel* label = new QLabel(i18n("To:"), frame);
 			label->setFixedSize(label->sizeHint());
@@ -279,8 +280,7 @@ QSize MessageWin::initView()
 		default:
 		{
 			// Message label
-			QLabel* label = new QLabel(topWidget);
-			label->setText(message);
+			QLabel* label = new QLabel(message, topWidget);
 			label->setFont(font);
 			label->setPalette(QPalette(colour, colour));
 			label->setFixedSize(label->sizeHint());
@@ -333,7 +333,7 @@ QSize MessageWin::initView()
 		// Defer button
 		deferButton = new QPushButton(i18n("&Defer..."), topWidget);
 		deferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
-		connect(deferButton, SIGNAL(clicked()), SLOT(slotShowDefer()));
+		connect(deferButton, SIGNAL(clicked()), SLOT(slotDefer()));
 		grid->addWidget(deferButton, 0, 2, AlignHCenter);
 		QWhatsThis::add(deferButton,
 		      i18n("Defer the alarm until later.\n"
@@ -388,7 +388,7 @@ void MessageWin::saveProperties(KConfig* config)
 			config->writeEntry(QString::fromLatin1("Time"), dateTime);
 			config->writeEntry(QString::fromLatin1("DateOnly"), dateOnly);
 		}
-		config->writeEntry(QString::fromLatin1("Height"), height() - deferHeight);
+		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("NoDefer"), noDefer);
 	}
 	else
@@ -498,7 +498,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (type == KAlarmAlarm::FILE  &&  errorMsg.isNull()  &&  !deferHeight)
+		if (type == KAlarmAlarm::FILE  &&  errorMsg.isNull())
 			theApp()->writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
@@ -510,7 +510,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-kdDebug()<<"closeEvent: defer closing="<<(int)deferClosing<<", confack="<<(int)confirmAck<<endl;
+//kdDebug()<<"closeEvent: defer closing="<<(int)deferClosing<<", confack="<<(int)confirmAck<<endl;
 	if (confirmAck  &&  !deferClosing  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
@@ -529,79 +529,27 @@ kdDebug()<<"closeEvent: defer closing="<<(int)deferClosing<<", confack="<<(int)c
 *  Called when the Defer... button is clicked.
 *  Displays the defer message dialog.
 */
-void MessageWin::slotShowDefer()
-{
-	if (!deferHeight)
-	{
-		// Find spacing at the sides of the Defer... button
-		int deferSpacing = deferButton->width() - deferButton->fontMetrics().boundingRect(deferButton->text()).width();
-		delete deferButton;
-		QWidget* deferDlg = new QWidget(this);
-		QVBoxLayout* wlayout = new QVBoxLayout(deferDlg, KDialog::spacingHint());
-		QGridLayout* grid = new QGridLayout(2, 1, KDialog::spacingHint());
-		wlayout->addLayout(grid);
-		deferTime = new AlarmTimeWidget(AlarmTimeWidget::DEFER_BUTTON, deferSpacing, deferDlg, "deferTime");
-		deferTime->setDateTime(QDateTime::currentDateTime().addSecs(60), false);
-		connect(deferTime, SIGNAL(deferred()), SLOT(slotDefer()));
-		grid->addWidget(deferTime, 0, 0);
-
-		QSize s(deferDlg->sizeHint());
-		if (s.width() > width())
-			resize(s.width(), height());     // this ensures that the background colour extends to edge
-		else if (width() > s.width())
-			s.setWidth(width());
-
-		// Ensure that the defer dialog doesn't disappear past the bottom of the screen
-		QRect workArea = KWinModule().workArea();
-		int highest = workArea.top();
-		int maxHeight = workArea.height() - s.height();
-		QRect rect = frameGeometry();
-		if (rect.bottom() - highest > maxHeight)
-		{
-			// Move the window upwards if possible, and resize if necessary
-			int bottomShift = rect.bottom() - highest - maxHeight;
-			int topShift    = bottomShift;
-			if (topShift > rect.top() - highest)
-				topShift = rect.top() - highest;
-			rect = geometry();
-			rect.setTop(rect.top() - topShift);
-			rect.setBottom(rect.bottom() - bottomShift);
-			setGeometry(rect);
-		}
-
-		deferHeight = s.height();
-		if (layout())
-			layout()->setEnabled(false);
-		deferDlg->setGeometry(0, height(), s.width(), s.height());
-		setFixedSize(s.width(), height() + s.height());
-		deferDlg->show();
-	}
-}
-
-/******************************************************************************
-*  Called when the Defer button is clicked to defer the alarm.
-*/
 void MessageWin::slotDefer()
 {
-	bool anyTime;
-	QDateTime dateTime;
-	if (deferTime->getDateTime(dateTime, anyTime))
+	KAlarmEvent event;
+	QDateTime endTime;
+	// Get the event being deferred. It will only still exist if repetitions are outstanding.
+	const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().event(eventID);
+	if (kcalEvent)
 	{
-		// Get the event being deferred. It will only still exist if repetitions are outstanding.
-		const Event* kcalEvent = eventID.isNull() ? 0L : theApp()->getCalendar().event(eventID);
+		// It's a repeated alarm which may still exist in the calendar file.
+		// Don't allow it to be deferred past its next occurrence.
+		event.set(*kcalEvent);
+		event.nextOccurrence(QDateTime::currentDateTime(), endTime);
+	}
+	DeferAlarmDlg* deferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
+						    endTime, false, this, "deferDlg");
+	if (deferDlg->exec() == QDialog::Accepted)
+	{
+		QDateTime dateTime = deferDlg->getDateTime();
 		if (kcalEvent)
 		{
 			// It's a repeated alarm which may still exist in the calendar file.
-			// Check that it is not being deferred past its next occurrence.
-			KAlarmEvent event(*kcalEvent);
-			QDateTime next;
-			event.nextOccurrence(QDateTime::currentDateTime(), next);
-			if (next.isValid()  &&  dateTime >= next)
-			{
-				KMessageBox::sorry(this, i18n("Cannot defer past the alarm's next recurrence (currently %1)")
-				                    .arg(KGlobal::locale()->formatDateTime(next)));
-				return;
-			}
 			event.defer(dateTime);
 			theApp()->updateEvent(event, 0L);
 		}
