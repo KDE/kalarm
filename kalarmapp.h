@@ -23,7 +23,7 @@
 
 class QDateTime;
 
-#include <kuniqueapp.h>
+#include <kuniqueapplication.h>
 #include <kurl.h>
 class KAction;
 

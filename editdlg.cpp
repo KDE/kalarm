@@ -30,12 +30,12 @@
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qmultilinedit.h>
+#include <qmultilineedit.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
 #include <qwidgetstack.h>
 #include <qlabel.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
