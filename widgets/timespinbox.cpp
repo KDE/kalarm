@@ -16,16 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *  In addition, as a special exception, the copyright holders give permission
- *  to link the code of this program with any edition of the Qt library by
- *  Trolltech AS, Norway (or with modified versions of Qt that use the same
- *  license as Qt), and distribute linked combinations including the two.
- *  You must obey the GNU General Public License in all respects for all of
- *  the code used other than Qt.  If you modify this file, you may extend
- *  this exception to your version of the file, but you are not obligated to
- *  do so. If you do not wish to do so, delete this exception statement from
- *  your version.
  */
 
 #include "kalarm.h"
@@ -40,35 +30,58 @@ class TimeSpinBox::TimeValidator : public QValidator
 {
 	public:
 		TimeValidator(int minMin, int maxMin, QWidget* parent, const char* name = 0)
-			: QValidator(parent, name), minMinute(minMin), maxMinute(maxMin) { }
+			: QValidator(parent, name),
+		          minMinute(minMin), maxMinute(maxMin), m12Hour(false), mPm(false) { }
 		virtual State validate(QString&, int&) const;
 		int  minMinute, maxMinute;
+		bool m12Hour;
+		bool mPm;
 };
 
 
-// Construct a wrapping 00:00 - 23:59 time spin box
-TimeSpinBox::TimeSpinBox(QWidget* parent, const char* name)
+/*=============================================================================
+= Class TimeSpinBox
+= This is a spin box displaying a time in the format hh:mm, with a pair of
+= spin buttons for each of the hour and minute values.
+= It can operate in 3 modes:
+=  1) a time of day using the 24-hour clock.
+=  2) a time of day using the 12-hour clock. The value is held as 0:00 - 23:59,
+=     but is displayed as 12:00 - 11:59. This is for use in a TimeEdit widget.
+=  3) a length of time, not restricted to the length of a day.
+=============================================================================*/
+
+/******************************************************************************
+ * Construct a wrapping 00:00 - 23:59, or 12:00 - 11:59 time spin box.
+ */
+TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent, const char* name)
 	: SpinBox2(0, 1439, 1, 60, parent, name),
-	  minimumValue(0),
-	  invalid(false),
-	  enteredSetValue(false)
+	  mMinimumValue(0),
+	  m12Hour(!use24hour),
+	  mPm(false),
+	  mInvalid(false),
+	  mEnteredSetValue(false)
 {
-	validator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
-	setValidator(validator);
+	mValidator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
+	mValidator->m12Hour = m12Hour;
+	setValidator(mValidator);
 	setWrapping(true);
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
+	connect(this, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
 }
 
-// Construct a non-wrapping time spin box
+/******************************************************************************
+ * Construct a non-wrapping time spin box.
+ */
 TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent, const char* name)
 	: SpinBox2(minMinute, maxMinute, 1, 60, parent, name),
-	  minimumValue(minMinute),
-	  invalid(false),
-	  enteredSetValue(false)
+	  mMinimumValue(minMinute),
+	  m12Hour(false),
+	  mInvalid(false),
+	  mEnteredSetValue(false)
 {
-	validator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
-	setValidator(validator);
+	mValidator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
+	setValidator(mValidator);
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
 }
@@ -85,6 +98,13 @@ QTime TimeSpinBox::time() const
 
 QString TimeSpinBox::mapValueToText(int v)
 {
+	if (m12Hour)
+	{
+		if (v < 60)
+			v += 720;      // convert 0:nn to 12:nn
+		else if (v >= 780)
+			v -= 720;      // convert 13 - 23 hours to 1 - 11
+	}
 	QString s;
 	s.sprintf("%02d:%02d", v/60, v%60);
 	return s;
@@ -110,14 +130,27 @@ int TimeSpinBox::mapTextToValue(bool* ok)
 			bool okmin;
 			bool okhour = true;
 			int m = minute.toUInt(&okmin);
-			int t = m;
+			int h = 0;
 			if (!hour.isEmpty())
-				t += hour.toUInt(&okhour) * 60;
-			if (okhour  &&  okmin  &&  m < 60  &&  t >= minimumValue  &&  t <= maxValue())
+				h = hour.toUInt(&okhour);
+			if (okhour  &&  okmin  &&  m < 60)
 			{
-				if (ok)
-					*ok = true;
-				return t;
+				if (m12Hour)
+				{
+					if (h == 0  ||  h > 12)
+						h = 100;     // error
+					else if (h == 12)
+						h = 0;       // convert 12:nn to 0:nn
+					if (mPm)
+						h += 12;     // convert to PM
+				}
+				int t = h * 60 + m;
+				if (t >= mMinimumValue  &&  t <= maxValue())
+				{
+					if (ok)
+						*ok = true;
+					return t;
+				}
 			}
 		}
 	}
@@ -130,8 +163,17 @@ int TimeSpinBox::mapTextToValue(bool* ok)
 		{
 			int m = mins % 100;
 			int h = mins / 100;
+			if (m12Hour)
+			{
+				if (h == 0  ||  h > 12)
+					h = 100;    // error
+				else if (h == 12)
+					h = 0;      // convert 12:nn to 0:nn
+				if (mPm)
+					h += 12;    // convert to PM
+			}
 			int t = h * 60 + m;
-			if (h < 24  &&  m < 60  &&  t >= minimumValue  &&  t <= maxValue())
+			if (h < 24  &&  m < 60  &&  t >= mMinimumValue  &&  t <= maxValue())
 			{
 				if (ok)
 					*ok = true;
@@ -152,20 +194,20 @@ int TimeSpinBox::mapTextToValue(bool* ok)
  */
 void TimeSpinBox::setValid(bool valid)
 {
-	if (valid  &&  invalid)
+	if (valid  &&  mInvalid)
 	{
-		invalid = false;
-		if (value() < minimumValue)
-			SpinBox2::setValue(minimumValue);
+		mInvalid = false;
+		if (value() < mMinimumValue)
+			SpinBox2::setValue(mMinimumValue);
 		setSpecialValueText(QString());
-		setMinValue(minimumValue);
+		setMinValue(mMinimumValue);
 	}
-	else if (!valid  &&  !invalid)
+	else if (!valid  &&  !mInvalid)
 	{
-		invalid = true;
-		setMinValue(minimumValue - 1);
+		mInvalid = true;
+		setMinValue(mMinimumValue - 1);
 		setSpecialValueText(QString::fromLatin1("**:**"));
-		SpinBox2::setValue(minimumValue - 1);
+		SpinBox2::setValue(mMinimumValue - 1);
 	}
 }
 
@@ -174,21 +216,22 @@ void TimeSpinBox::setValid(bool valid)
  */
 void TimeSpinBox::setValue(int minutes)
 {
-	if (!enteredSetValue)
+	if (!mEnteredSetValue)
 	{
-		enteredSetValue = true;
+		mEnteredSetValue = true;
+		mPm = (minutes >= 720);
 		if (minutes > maxValue())
 			setValid(false);
 		else
 		{
-			if (invalid)
+			if (mInvalid)
 			{
-				invalid = false;
+				mInvalid = false;
 				setSpecialValueText(QString());
-				setMinValue(minimumValue);
+				setMinValue(mMinimumValue);
 			}
 			SpinBox2::setValue(minutes);
-			enteredSetValue = false;
+			mEnteredSetValue = false;
 		}
 	}
 }
@@ -199,7 +242,7 @@ void TimeSpinBox::setValue(int minutes)
  */
 void TimeSpinBox::stepUp()
 {
-	if (invalid)
+	if (mInvalid)
 		setValid(true);
 	else
 		SpinBox2::stepUp();
@@ -207,7 +250,7 @@ void TimeSpinBox::stepUp()
 
 void TimeSpinBox::stepDown()
 {
-	if (invalid)
+	if (mInvalid)
 		setValid(true);
 	else
 		SpinBox2::stepDown();
@@ -215,9 +258,13 @@ void TimeSpinBox::stepDown()
 
 bool TimeSpinBox::isValid() const
 {
-	return value() >= minimumValue;
+	return value() >= mMinimumValue;
 }
 
+void TimeSpinBox::slotValueChanged(int value)
+{
+	mPm = mValidator->mPm = (value >= 720);
+}
 
 /******************************************************************************
  * Validate the time spin box input.
@@ -264,9 +311,21 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 			return QValidator::Invalid;
 	}
 
-	if (!hour.isEmpty()
-	&&  ((hr = hour.toUInt(&ok)) > maxMinute/60  ||  !ok))
-		return QValidator::Invalid;
+	if (!hour.isEmpty())
+	{
+		hr = hour.toUInt(&ok);
+		if (m12Hour)
+		{
+			if (hr == 0  ||  hr > 12)
+				hr = 100;    // error;
+			else if (hr == 12)
+				hr = 0;      // convert 12:nn to 0:nn
+			if (mPm)
+				hr += 12;    // convert to PM
+		}
+		if (!ok  ||  hr > maxMinute/60)
+			return QValidator::Invalid;
+	}
 	if (state == QValidator::Acceptable)
 	{
 		int t = hr * 60 + mn;

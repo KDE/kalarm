@@ -44,17 +44,18 @@
 
 #include <libkcal/event.h>
 
-#include "kalarmapp.h"
 #include "alarmevent.h"
-#include "preferences.h"
 #include "alarmtimewidget.h"
-#include "dateedit.h"
-#include "timespinbox.h"
-#include "spinbox.h"
 #include "checkbox.h"
 #include "combobox.h"
+#include "dateedit.h"
 #include "functions.h"
+#include "kalarmapp.h"
+#include "preferences.h"
 #include "radiobutton.h"
+#include "spinbox.h"
+#include "timeedit.h"
+#include "timespinbox.h"
 #include "buttongroup.h"
 using namespace KCal;
 
@@ -260,7 +261,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	QWhatsThis::add(mEndDateEdit,
 	      i18n("Enter the last date to repeat the alarm"));
 	mEndDateButton->setFocusWidget(mEndDateEdit);
-	mEndTimeEdit = new TimeSpinBox(mRangeButtonGroup);
+	mEndTimeEdit = new TimeEdit(mRangeButtonGroup);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
 	mEndTimeEdit->setReadOnly(mReadOnly);
 	static const QString lastTimeText = i18n("Enter the last time to repeat the alarm.");

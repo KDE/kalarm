@@ -112,9 +112,6 @@ void SpinBox2::valueChange()
 
 void SpinBox2::stepPage(int step)
 {
-//	bool focus = spinbox->selectOnStep() && updown2->hasFocus();
-//	if (focus)
-//		spinbox->setFocus();    // make displayed text be selected, as for stepping with the spinbox buttons
 	if (abs(step) == updown2->lineStep())
 		spinbox->setValue(updown2->value());
 	else
@@ -129,8 +126,6 @@ void SpinBox2::stepPage(int step)
 	bool focus = spinbox->selectOnStep() && updown2->hasFocus();
 	if (focus)
 		spinbox->selectAll();
-//	if (focus)
-//		updown2->setFocus();
 }
 
 // Called when the widget is about to be displayed.

@@ -38,7 +38,7 @@ class QLineEdit;
 class KColorCombo;
 class FontColourChooser;
 class ButtonGroup;
-class TimeSpinBox;
+class TimeEdit;
 class SpinBox;
 class SpecialActions;
 
@@ -127,7 +127,7 @@ class MiscPrefTab : public PrefsTabBase
 		SpinBox*       mPurgeAfter;
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
-		TimeSpinBox*   mStartOfDay;
+		TimeEdit*      mStartOfDay;
 };
 
 

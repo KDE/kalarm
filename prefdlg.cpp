@@ -61,6 +61,7 @@
 #include "recurrenceedit.h"
 #include "soundpicker.h"
 #include "specialactions.h"
+#include "timeedit.h"
 #include "timespinbox.h"
 #include "traywindow.h"
 #include "prefdlg.moc"
@@ -273,7 +274,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	QHBox* box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
-	mStartOfDay = new TimeSpinBox(box);
+	mStartOfDay = new TimeEdit(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
 	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm (i.e. "

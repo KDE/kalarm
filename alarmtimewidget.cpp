@@ -35,6 +35,7 @@
 #include "datetime.h"
 #include "radiobutton.h"
 #include "synchtimer.h"
+#include "timeedit.h"
 #include "timespinbox.h"
 #include "alarmtimewidget.moc"
 
@@ -100,8 +101,7 @@ void AlarmTimeWidget::init(int mode)
 	// Time edit box and Any time checkbox
 	QHBox* timeBox = new QHBox(this);
 	timeBox->setSpacing(2*KDialog::spacingHint());
-	mTimeEdit = new TimeSpinBox(timeBox);
-	mTimeEdit->setValue(1439);
+	mTimeEdit = new TimeEdit(timeBox);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");

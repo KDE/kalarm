@@ -77,6 +77,7 @@
 #include "specialactions.h"
 #include "spinbox.h"
 #include "templatepickdlg.h"
+#include "timeedit.h"
 #include "timespinbox.h"
 #include "editdlg.moc"
 #include "editdlgprivate.moc"
@@ -259,8 +260,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QWhatsThis::add(mTemplateUseTime,
 		      i18n("Specify a start time for alarms based on this template."));
 		mTemplateTimeGroup->insert(mTemplateUseTime);
-		mTemplateTime = new TimeSpinBox(box, "templateTimeEdit");
-		mTemplateTime->setValue(1439);
+		mTemplateTime = new TimeEdit(box, "templateTimeEdit");
 		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
 		mTemplateTime->setReadOnly(mReadOnly);
 		QWhatsThis::add(mTemplateTime,

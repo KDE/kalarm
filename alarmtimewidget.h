@@ -27,6 +27,7 @@
 class RadioButton;
 class CheckBox;
 class DateEdit;
+class TimeEdit;
 class TimeSpinBox;
 
 
@@ -72,7 +73,7 @@ class AlarmTimeWidget : public ButtonGroup
 		RadioButton*     mAtTimeRadio;
 		RadioButton*     mAfterTimeRadio;
 		DateEdit*        mDateEdit;
-		TimeSpinBox*     mTimeEdit;
+		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;
 		CheckBox*        mAnyTimeCheckBox;
 		QDateTime        mMinDateTime;      // earliest allowed date/time

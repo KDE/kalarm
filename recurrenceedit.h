@@ -42,7 +42,7 @@ class CheckBox;
 class ComboBox;
 class RadioButton;
 class DateEdit;
-class TimeSpinBox;
+class TimeEdit;
 class ButtonGroup;
 class RecurFrequency;
 class KAEvent;
@@ -206,7 +206,7 @@ class RecurrenceEdit : public QFrame
 		QLabel*         mRepeatCountLabel;
 		RadioButton*    mEndDateButton;
 		DateEdit*       mEndDateEdit;
-		TimeSpinBox*    mEndTimeEdit;
+		TimeEdit*    mEndTimeEdit;
 		CheckBox*       mEndAnyTimeCheckBox;
 
 		// Exceptions

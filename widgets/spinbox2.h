@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for QT3)
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,8 +108,8 @@ class SpinBox2 : public QFrame
 		void                valueChanged(const QString& valueText);
 
 	protected:
-		virtual QString     mapValueToText(int v)         { return spinbox->mapValueToText(v); }
-		virtual int         mapTextToValue(bool* ok)      { return spinbox->mapTextToValue(ok); }
+		virtual QString     mapValueToText(int v)         { return spinbox->mapValToText(v); }
+		virtual int         mapTextToValue(bool* ok)      { return spinbox->mapTextToVal(ok); }
 		virtual void        resizeEvent(QResizeEvent*)    { arrange(); }
 		virtual void        showEvent(QShowEvent*);
 		virtual void        styleChange(QStyle&)          { arrange(); }
@@ -130,24 +130,27 @@ class SpinBox2 : public QFrame
 		int                 whichButton(QObject* spinWidget, const QPoint&);
 		void                setShiftStepping(bool on);
 
+		// Visible spin box class
 		class SB2_SpinBox : public SpinBox
 		{
 			public:
-				SB2_SpinBox(SpinBox2* sb2, QWidget* parent, const char* name = 0)   : SpinBox(parent, name), spinBox2(sb2) { }
+				SB2_SpinBox(SpinBox2* sb2, QWidget* parent, const char* name = 0)   : SpinBox(parent, name), owner(sb2) { }
 				SB2_SpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
-				                  : SpinBox(minValue, maxValue, step, parent, name), spinBox2(sb2) { }
-				virtual QString mapValueToText(int v)     { return spinBox2->mapValueToText(v); }
-				virtual int     mapTextToValue(bool* ok)  { return spinBox2->mapTextToValue(ok); }
+				                  : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
+				virtual QString mapValueToText(int v)     { return owner->mapValueToText(v); }
+				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
+				QString         mapValToText(int v)       { return SpinBox::mapValueToText(v); }
+				int             mapTextToVal(bool* ok)    { return SpinBox::mapTextToValue(ok); }
 			private:
-				SpinBox2*    spinBox2;
+				SpinBox2* owner;   // owner SpinBox2
 		};
 
 		enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
 		QFrame*          updown2Frame;
 		QFrame*          spinboxFrame;
-		SpinBox*         updown2;
-		SB2_SpinBox*     spinbox;
+		SpinBox*         updown2;      // the extra pair of spin buttons
+		SB2_SpinBox*     spinbox;      // the visible spin box
 		int              mMinValue;
 		int              mMaxValue;
 

@@ -29,7 +29,7 @@ class TimeSpinBox : public SpinBox2
 {
 		Q_OBJECT
 	public:
-		TimeSpinBox(QWidget* parent = 0, const char* name = 0);
+		TimeSpinBox(bool use24hour, QWidget* parent = 0, const char* name = 0);
 		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
 		bool            isValid() const;
 		QTime           time() const;
@@ -46,12 +46,16 @@ class TimeSpinBox : public SpinBox2
 	protected:
 		virtual QString mapValueToText(int v);
 		virtual int     mapTextToValue(bool* ok);
+	private slots:
+		void            slotValueChanged(int value);
 	private:
 		class TimeValidator;
-		TimeValidator*  validator;
-		int             minimumValue;
-		bool            invalid;            // value is currently invalid (asterisks)
-		bool            enteredSetValue;    // to prevent infinite recursion in setValue()
+		TimeValidator*  mValidator;
+		int             mMinimumValue;
+		bool            m12Hour;             // use 12-hour clock
+		bool            mPm;                 // use PM for manually entered values (with 12-hour clock)
+		bool            mInvalid;            // value is currently invalid (asterisks)
+		bool            mEnteredSetValue;    // to prevent infinite recursion in setValue()
 };
 
 #endif // TIMESPINBOX_H

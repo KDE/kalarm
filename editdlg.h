@@ -41,7 +41,7 @@ class EmailIdCombo;
 class ColourCombo;
 class FontColourButton;
 class ButtonGroup;
-class TimeSpinBox;
+class TimeEdit;
 class RadioButton;
 class CheckBox;
 class LateCancelSelector;
@@ -143,7 +143,7 @@ class EditAlarmDlg : public KDialogBase
 		RadioButton*        mTemplateDefaultTime; // no alarm time is specified
 		RadioButton*        mTemplateAnyTime;     // alarms have date only, no time
 		RadioButton*        mTemplateUseTime;     // an alarm time is specified
-		TimeSpinBox*        mTemplateTime;        // the alarm time which is specified
+		TimeEdit*           mTemplateTime;        // the alarm time which is specified
 
 		// Display alarm options widgets
 		QFrame*             mDisplayAlarmsFrame;
