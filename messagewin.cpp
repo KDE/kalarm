@@ -761,7 +761,6 @@ void MessageWin::initAudio(bool firstTime)
 		int vol = getKMixVolume();
 		if (vol >= 0)
 		{
-kdDebug(5950)<<"initAudio(): old KMix volume = "<<vol<<endl;
 			mOldVolume = vol;    // success
 			mUsingKMix = true;
 		}
@@ -770,15 +769,16 @@ kdDebug(5950)<<"initAudio(): old KMix volume = "<<vol<<endl;
 			// Can't use KMix to set the master volume, so just adjust
 			// within the current master volume.
 			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-kdDebug(5950)<<"initAudio(): old volume = "<<mOldVolume<<endl;
 			mUsingKMix = false;
 		}
 	}
+	float volume = mVolume;
+	if (mFadeVolume >= 0)
+		volume = mFadeVolume;
 	if (!mUsingKMix)
-		sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
-	else if (mVolume >= 0)
-		setKMixVolume(static_cast<int>(mVolume * 100));
-kdDebug(5950)<<"initAudio(): new vol="<<mVolume<<endl;
+		sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
+	else if (volume >= 0)
+		setKMixVolume(static_cast<int>(volume * 100));
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
 	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
@@ -922,11 +922,12 @@ void MessageWin::slotFade()
 		mFadeTimer = 0;
 	}
 	else
-		volume = mFadeVolume  +  (mVolume - mFadeVolume) * (elapsed / mFadeSeconds);
+		volume = mFadeVolume  +  ((mVolume - mFadeVolume) * elapsed) / mFadeSeconds;
+	kdDebug(5950) << "MessageWin::slotFade(" << volume << ")\n";
 	if (mArtsDispatcher)
 	{
 		if (mUsingKMix)
-			setKMixVolume(static_cast<int>(volume));
+			setKMixVolume(static_cast<int>(volume * 100));
 		else if (mArtsDispatcher)
 		{
 			KArtsServer aserver;

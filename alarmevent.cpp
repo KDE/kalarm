@@ -556,7 +556,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 					fadeVolume = list[1].toFloat(&ok);
 					if (ok)
 						fadeSecs = static_cast<int>(list[2].toUInt(&ok));
-					if (ok  &&  fadeVolume >= 0  &&  data.fadeSeconds > 0)
+					if (ok  &&  fadeVolume >= 0  &&  fadeSecs > 0)
 					{
 						data.fadeVolume  = fadeVolume;
 						data.fadeSeconds = fadeSecs;
