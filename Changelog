@@ -1,8 +1,10 @@
 KAlarm
 
-=== Version 0.9.6 --- 23 Sep 2003 ===
+=== Version 0.9.6 --- 1 Oct 2003 ===
 Add option to choose foreground colour for alarm messages.
 Set initial recurrence defaults to correspond to alarm start date.
+Add option for how February 29th recurrences are handled in non-leap years.
+Monthly/yearly recurrence edit: adhere to user preference for start day of week.
 Eliminate multiple confirmation prompts when deleting multiple alarms.
 Eliminate duplicate alarms in system tray tooltip.
 Fix wrong status in system tray icon if KAlarm starts up with alarms disabled.
