@@ -535,19 +535,20 @@ int KAlarmEvent::flags() const
 Event* KAlarmEvent::event() const
 {
 	Event* ev = new KCal::Event;
-	updateEvent(*ev);
+	updateKCalEvent(*ev);
 	return ev;
 }
 
 /******************************************************************************
  * Update an existing KCal::Event with the KAlarmEvent data.
  * If 'original' is true, the event start date/time is adjusted to its original
- * value instead of its next occurrence.
+ * value instead of its next occurrence, and the expired main alarm is
+ * reinstated.
  */
-bool KAlarmEvent::updateEvent(Event& ev, bool checkUid, bool original) const
+bool KAlarmEvent::updateKCalEvent(Event& ev, bool checkUid, bool original) const
 {
 	if (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev.uid()
-	||  !mAlarmCount)
+	||  !mAlarmCount  &&  (!original || !mMainExpired))
 		return false;
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	bool readOnly = ev.isReadOnly();
@@ -590,7 +591,7 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid, bool original) const
 	ev.clearAlarms();
 
 	QDateTime dtMain = original ? mStartDateTime : mDateTime;
-	if (!mMainExpired)
+	if (!mMainExpired  ||  original)
 	{
 		// Add the main alarm
 		if (mAnyTime)
@@ -599,7 +600,7 @@ bool KAlarmEvent::updateEvent(Event& ev, bool checkUid, bool original) const
 	}
 
 	// Add subsidiary alarms
-	if (mRepeatAtLogin  &&  !mMainExpired)
+	if (mRepeatAtLogin)
 	{
 		QDateTime dtl = mAtLoginDateTime.isValid() ? mAtLoginDateTime
 		                : QDateTime::currentDateTime();
@@ -820,15 +821,6 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 						al.mDateTime = mDateTime;
 					}
 					break;
-				case KAlarmAlarm::AT_LOGIN_ALARM:
-					if (mRepeatAtLogin)
-					{
-						al.mType          = KAlarmAlarm::AT_LOGIN_ALARM;
-						al.mDateTime      = mAtLoginDateTime;
-						al.mRepeatAtLogin = true;
-						al.mLateCancel    = false;
-					}
-					break;
 				case KAlarmAlarm::REMINDER_ALARM:
 					if (mReminderMinutes)
 					{
@@ -854,6 +846,15 @@ KAlarmAlarm KAlarmEvent::alarm(KAlarmAlarm::Type type) const
 						al.mType     = KAlarmAlarm::REMINDER_DEFERRAL_ALARM;
 						al.mDateTime = mDateTime.addSecs(-mReminderDeferralMinutes * 60);
 						al.mDeferral = true;
+					}
+					break;
+				case KAlarmAlarm::AT_LOGIN_ALARM:
+					if (mRepeatAtLogin)
+					{
+						al.mType          = KAlarmAlarm::AT_LOGIN_ALARM;
+						al.mDateTime      = mAtLoginDateTime;
+						al.mRepeatAtLogin = true;
+						al.mLateCancel    = false;
 					}
 					break;
 				case KAlarmAlarm::DISPLAYING_ALARM:
@@ -1023,7 +1024,7 @@ void KAlarmEvent::defer(const QDateTime& dateTime, bool reminder, bool adjustRec
 		if (!mReminderDeferralMinutes)
 		{
 			// Main alarm has now expired
-			mDeferralTime = dateTime;
+			mDeferralTime = mDateTime = dateTime;
 			if (!mDeferral)
 			{
 				mDeferral = true;
@@ -1035,9 +1036,11 @@ void KAlarmEvent::defer(const QDateTime& dateTime, bool reminder, bool adjustRec
 	}
 	else if (reminder)
 	{
-		// Deferring a reminder alarm
+		// Deferring a reminder for a recurring alarm
 		mReminderDeferralMinutes = dateTime.secsTo(mDateTime) / 60;
-		if (!mDeferral)
+		if (mReminderDeferralMinutes <= 0)
+			mReminderDeferralMinutes = 0;    // (error)
+		else if (!mDeferral)
 		{
 			mDeferral = true;
 			++mAlarmCount;

@@ -133,14 +133,16 @@ class KAlarmAlarm : public KAAlarmEventBase
 		};
 		enum Type
 		{
-			INVALID_ALARM    = 0,    // not an alarm
-			MAIN_ALARM       = 1,    // THE real alarm. Must be the first in the enumeration.
-			AT_LOGIN_ALARM   = 2,    // additional repeat-at-login trigger
-			DISPLAYING_ALARM = 3,    // copy of the alarm currently being displayed
-			AUDIO_ALARM      = 4,    // sound to play when displaying the alarm
-			REMINDER_ALARM   = 0x10, // reminder in advance of main alarm
-			DEFERRAL_ALARM   = 0x20, // deferred alarm
-			REMINDER_DEFERRAL_ALARM = REMINDER_ALARM | DEFERRAL_ALARM  // deferred early warning
+			INVALID_ALARM    = 0,     // not an alarm
+			MAIN_ALARM       = 1,     // THE real alarm. Must be the first in the enumeration.
+			REMINDER_ALARM   = 0x02,  // reminder in advance of main alarm
+			DEFERRAL_ALARM   = 0x04,  // deferred alarm
+			REMINDER_DEFERRAL_ALARM = REMINDER_ALARM | DEFERRAL_ALARM,  // deferred early warning
+			// The following values must be greater than the preceding ones, to
+			// ensure that in ordered processing they are processed afterwards.
+			AT_LOGIN_ALARM   = 0x10,  // additional repeat-at-login trigger
+			DISPLAYING_ALARM = 0x20,  // copy of the alarm currently being displayed
+			AUDIO_ALARM      = 0x30   // sound to play when displaying the alarm
 		};
 
 		KAlarmAlarm()      : mType(INVALID_ALARM) { }
@@ -284,10 +286,10 @@ class KAlarmEvent : public KAAlarmEventBase
 		KAlarmAlarm        nextAlarm(const KAlarmAlarm& al) const            { return nextAlarm(al.type()); }
 		KAlarmAlarm        nextAlarm(KAlarmAlarm::Type) const;
 		KAlarmAlarm        convertDisplayingAlarm() const;
-		bool               updateEvent(KCal::Event&, bool checkUid = true, bool original = false) const;
+		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false) const;
 		Action             action() const                 { return (Action)mActionType; }
 		const QString&     id() const                     { return mEventID; }
-		bool               valid() const                  { return !!mAlarmCount; }
+		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
 		const QDateTime&   startDateTime() const          { return mStartDateTime; }
 		const QDateTime&   endDateTime() const            { return mEndDateTime; }
