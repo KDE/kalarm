@@ -50,33 +50,36 @@ class EditAlarmDlg : public KDialogBase
                              const KAlarmEvent* = 0L);
 		virtual ~EditAlarmDlg();
 
-		void            getEvent(KAlarmEvent&);
-		const QString&  getMessage() const      { return alarmMessage; }
-		MessageType     getMessageType() const  { return fileRadio->isOn() ? FILE : MESSAGE; }
-		QDateTime       getDateTime() const     { return alarmDateTime; }
+		void              getEvent(KAlarmEvent&);
+		KAlarmAlarm::Type getAlarmType() const;
+		QDateTime         getDateTime() const     { return alarmDateTime; }
 #ifdef SELECT_FONT
-		const QColor    getBgColour() const     { return fontColour->bgColour(); }
-		const QFont     getFont() const         { return fontColour->font(); }
+		const QColor      getBgColour() const     { return fontColour->bgColour(); }
+		const QFont       getFont() const         { return fontColour->font(); }
 #else
-		const QColor    getBgColour() const     { return bgColourChoose->color(); }
+		const QColor      getBgColour() const     { return bgColourChoose->color(); }
 #endif
-		bool            getLateCancel() const   { return lateCancel->isChecked(); }
-		bool            getBeep() const         { return beep->isChecked(); }
+		int               getAlarmFlags() const;
+		bool              getLateCancel() const   { return lateCancel->isChecked(); }
+		bool              getBeep() const         { return beep->isChecked(); }
 
 	protected:
 		virtual void resizeEvent(QResizeEvent*);
 	protected slots:
-		void slotOk();
-		void slotCancel();
-		void slotMessageTypeClicked(int id);
-		void slotMessageTextChanged();
-		void slotRepeatCountChanged(int);
+		virtual void slotOk();
+		virtual void slotCancel();
+		virtual void slotTry();
+		void         slotMessageTypeClicked(int id);
+		void         slotMessageTextChanged();
+		void         slotRepeatCountChanged(int);
 
 	private:
+		bool            checkText(QString& result);
 		QString         getMessageText();
 
 		QButtonGroup*    messageTypeGroup;
 		QRadioButton*    messageRadio;
+		QRadioButton*    commandRadio;
 		QRadioButton*    fileRadio;
 		QPushButton*     browseButton;
 		QMultiLineEdit*  messageEdit;     // alarm message edit box
@@ -93,10 +96,9 @@ class EditAlarmDlg : public KDialogBase
 #endif
 		QString          alarmMessage;
 		QDateTime        alarmDateTime;
-//		QColor           bgColour;
-		bool             timeDialog;      // the dialog shows date/time fields only
+		QString          multiLineText;   // message text before single-line mode was selected
 		bool             singleLineOnly;  // no multi-line text input allowed
-		bool             multiLine;       // multi-line text when file/command selected
+		bool             timeDialog;      // the dialog shows date/time fields only
 };
 
 #endif // EDITDLG_H
