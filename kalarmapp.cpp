@@ -341,6 +341,8 @@ int KAlarmApp::newInstance()
 					if (!alarmTime)
 					{
 						wakeup = QDateTime::currentDateTime();
+						QTime t = wakeup.time();
+						wakeup.setTime(QTime(t.hour(), t.minute(), 0));   // round down to whole number of minutes
 						alarmTime = &wakeup;
 					}
 					bool ok;
@@ -664,17 +666,16 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime,
 	{
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << message << endl;
 	bool display = true;
-	QDateTime alarmTime;
+	QDateTime alarmTime, now;
 	if (dateTime)
 	{
 		alarmTime = *dateTime;
-		QDateTime now = QDateTime::currentDateTime();
+		now = QDateTime::currentDateTime();
 		if ((flags & KAlarmEvent::LATE_CANCEL)  &&  *dateTime < now.addSecs(-maxLateness()))
 			return true;               // alarm time was already expired too long ago
 		display = (alarmTime <= now);
 	}
 	KAlarmEvent event(alarmTime, message, bg, type, flags);
-//TODO: adjust recurrence if 'display' is true
 	switch (recurType)
 	{
 		case KAlarmEvent::MINUTELY:
@@ -712,7 +713,9 @@ bool KAlarmApp::scheduleEvent(const QString& message, const QDateTime* dateTime,
 	{
 		// Alarm is due for display already
 		execAlarm(event, event.firstAlarm(), false);
-		if (recurType == KAlarmEvent::NO_RECUR)
+//TODO: adjust recurrence correctly
+		if (recurType == KAlarmEvent::NO_RECUR
+		||  event.setNextOccurrence(now) == KAlarmEvent::NO_OCCURRENCE)
 			return true;
 	}
 	return addEvent(event, 0L);     // event instance will now belong to the calendar
