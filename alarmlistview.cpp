@@ -627,5 +627,5 @@ QString AlarmListWhatsThis::text(const QPoint& pt)
 			return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line. The alarm type is indicated by the icon at the left.");
 	}
 	return i18n("List of scheduled alarms");
-};
+}
 
