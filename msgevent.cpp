@@ -386,7 +386,8 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 		const QDate& endDate = mRecurrence->endDate();
 		dt = mRecurrence->recurStart();
 		recur->setRecurStart(dt);
-		switch (mRecurrence->doesRecur())
+		ushort rectype = mRecurrence->doesRecur();
+		switch (rectype)
 		{
 			case Recurrence::rDaily:
 				if (duration)
@@ -428,17 +429,12 @@ bool KAlarmEvent::updateEvent(Event& ev) const
 				break;
 			}
 			case Recurrence::rYearlyMonth:
-				if (duration)
-					recur->setYearly(Recurrence::rYearlyMonth, frequency, duration);
-				else
-					recur->setYearly(Recurrence::rYearlyMonth, frequency, endDate);
-				break;
 			case Recurrence::rYearlyDay:
 			{
 				if (duration)
-					recur->setYearly(Recurrence::rYearlyDay, frequency, duration);
+					recur->setYearly(rectype, frequency, duration);
 				else
-					recur->setYearly(Recurrence::rYearlyDay, frequency, endDate);
+					recur->setYearly(rectype, frequency, endDate);
 				const QPtrList<int>& ynums = mRecurrence->yearNums();
 				for (QPtrListIterator<int> it(ynums);  it.current();  ++it)
 					recur->addYearlyNum(*it.current());
