@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  As a special exception, permission is given to link this program
  *  with any edition of Qt, and distribute the resulting executable,
@@ -29,10 +29,11 @@
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qlineedit.h>
-#include <qmultilineedit.h>
+#include <qtextedit.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
 #include <qwidgetstack.h>
+#include <qdragobject.h>
 #include <qlabel.h>
 #include <qmessagebox.h>
 #include <qvalidator.h>
@@ -76,6 +77,7 @@
 #include "spinbox.h"
 #include "timeperiod.h"
 #include "editdlg.moc"
+#include "editdlgprivate.moc"
 
 using namespace KCal;
 
@@ -237,29 +239,9 @@ EditAlarmDlg::EditAlarmDlg(const QString& caption, QWidget* parent, const char* 
 		mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
 		                         : recurs ? DateTime() : event->deferDateTime());
 
-		QRadioButton* radio;
-		switch (event->action())
-		{
-			case KAlarmEvent::FILE:
-				radio = mFileRadio;
-				mFileMessageEdit->setText(event->cleanText());
-				break;
-			case KAlarmEvent::COMMAND:
-				radio = mCommandRadio;
-				mCommandMessageEdit->setText(event->cleanText());
-				break;
-			case KAlarmEvent::EMAIL:
-				radio = mEmailRadio;
-				mEmailMessageEdit->setText(event->cleanText());
-				mEmailAttachList->insertStringList(event->emailAttachments());
-				break;
-			case KAlarmEvent::MESSAGE:
-			default:
-				radio = mMessageRadio;
-				mTextMessageEdit->setText(event->cleanText());
-				break;
-		}
-		mActionGroup->setButton(mActionGroup->id(radio));
+		setAction(event->action(), event->cleanText());
+		if (event->action() == KAlarmEvent::EMAIL)
+			mEmailAttachList->insertStringList(event->emailAttachments());
 
 		mLateCancel->setChecked(event->lateCancel());
 		mConfirmAck->setChecked(event->confirmAck());
@@ -333,11 +315,8 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	QBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame, 0, spacingHint());
 
 	// Text message edit box
-	mTextMessageEdit = new QMultiLineEdit(mDisplayAlarmsFrame);
-	QSize tsize = mTextMessageEdit->sizeHint();
-	tsize.setHeight(mTextMessageEdit->fontMetrics().lineSpacing()*13/4 + 2*mTextMessageEdit->frameWidth());
-	mTextMessageEdit->setMinimumSize(tsize);
-	mTextMessageEdit->setWordWrap(QMultiLineEdit::NoWrap);
+	mTextMessageEdit = new TextEdit(mDisplayAlarmsFrame);
+	mTextMessageEdit->setWordWrap(QTextEdit::NoWrap);
 	mTextMessageEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mTextMessageEdit, i18n("Enter the text of the alarm message. It may be multi-line."));
 	frameLayout->addWidget(mTextMessageEdit);
@@ -347,6 +326,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	frameLayout->addWidget(mFileBox);
 	mFileMessageEdit = new LineEdit(mFileBox);
 	mFileMessageEdit->setReadOnly(mReadOnly);
+	mFileMessageEdit->setAcceptDrops(true);
 	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name of a text file, or a URL, to display."));
 
 	// File browse button
@@ -465,10 +445,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	grid->addMultiCellWidget(mEmailSubjectEdit, 1, 1, 1, 2);
 
 	// Email body
-	mEmailMessageEdit = new QMultiLineEdit(mEmailFrame);
-	QSize size = mEmailMessageEdit->sizeHint();
-	size.setHeight(mEmailMessageEdit->fontMetrics().lineSpacing()*13/4 + 2*mEmailMessageEdit->frameWidth());
-	mEmailMessageEdit->setMinimumSize(size);
+	mEmailMessageEdit = new TextEdit(mEmailFrame);
 	mEmailMessageEdit->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEmailMessageEdit, i18n("Enter the email message."));
 	layout->addWidget(mEmailMessageEdit);
@@ -511,6 +488,35 @@ list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	QWhatsThis::add(mEmailBcc,
 	      i18n("If checked, the email will be blind copied to you."));
 	grid->addMultiCellWidget(mEmailBcc, 1, 1, 0, 1, Qt::AlignLeft);
+}
+
+/******************************************************************************
+ * Set the dialog's action and the action's text.
+ */
+void EditAlarmDlg::setAction(KAlarmEvent::Action action, const QString& text)
+{
+	QRadioButton* radio;
+	switch (action)
+	{
+		case KAlarmEvent::FILE:
+			radio = mFileRadio;
+			mFileMessageEdit->setText(text);
+			break;
+		case KAlarmEvent::COMMAND:
+			radio = mCommandRadio;
+			mCommandMessageEdit->setText(text);
+			break;
+		case KAlarmEvent::EMAIL:
+			radio = mEmailRadio;
+			mEmailMessageEdit->setText(text);
+			break;
+		case KAlarmEvent::MESSAGE:
+		default:
+			radio = mMessageRadio;
+			mTextMessageEdit->setText(text);
+			break;
+	}
+	mActionGroup->setButton(mActionGroup->id(radio));
 }
 
 /******************************************************************************
@@ -1220,6 +1226,36 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 }
 
 
+/*=============================================================================
+= Class TextEdit
+= A text edit field which accepts drag-and-drop items and has a minimum height
+= of 3 text lines.
+=============================================================================*/
+TextEdit::TextEdit(QWidget* parent, const char* name)
+	: QTextEdit(parent, name)
+{
+	setAcceptDrops(true);
+	QSize tsize = sizeHint();
+	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
+	setMinimumSize(tsize);
+}
+
+void TextEdit::dragEnterEvent(QDragEnterEvent* e)
+{
+	e->accept(QTextDrag::canDecode(e));
+}
+
+void TextEdit::dropEvent(QDropEvent* e)
+{
+	QString text;
+	if (QTextDrag::decode(e, text))
+		setText(text);
+}
+
+
+/*=============================================================================
+= Class LineEdit
+=============================================================================*/
 void LineEdit::focusInEvent(QFocusEvent* e)
 {
 	if (noSelect)
@@ -1229,5 +1265,26 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 	{
 		QFocusEvent::resetReason();
 		noSelect = false;
+	}
+}
+
+void LineEdit::dragEnterEvent(QDragEnterEvent* e)
+{
+	e->accept(QTextDrag::canDecode(e)
+	       || QUriDrag::canDecode(e));
+}
+
+void LineEdit::dropEvent(QDropEvent* e)
+{
+	QString text;
+	QStrList files;
+	if (QUriDrag::decode(e, files)  &&  files.count())
+		setText(files.getFirst());
+	else if (QTextDrag::decode(e, text))
+	{
+		int newline = text.find('\n');
+		if (newline >= 0)
+			text = text.left(newline);
+		setText(text);
 	}
 }

@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm
  *  Program:  kalarm
- *  (C) 2001 - 2003 by David Jarvie  software@astrojar.org.uk
+ *  (C) 2001, 2002, 2003 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@
 class QButton;
 class QButtonGroup;
 class QGroupBox;
-class QMultiLineEdit;
 class QComboBox;
 class QHBox;
 class ColourCombo;
@@ -52,6 +51,7 @@ class RecurrenceEdit;
 class SoundPicker;
 class Reminder;
 class LineEdit;
+class TextEdit;
 
 /**
  * EditAlarmDlg: A dialog for the input of an alarm's details.
@@ -67,6 +67,7 @@ class EditAlarmDlg : public KDialogBase
 		virtual ~EditAlarmDlg();
 		void         getEvent(KAlarmEvent&);
 		DateTime     getDateTime();
+		void         setAction(KAlarmEvent::Action, const QString& text);
 
 		static ColourCombo* createBgColourChooser(bool readOnly, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(bool readOnly, QWidget* parent, const char* name = 0);
@@ -129,7 +130,7 @@ class EditAlarmDlg : public KDialogBase
 		bool              mReminderDeferral;
 		bool              mReminderArchived;
 		// Text message alarm widgets
-		QMultiLineEdit*   mTextMessageEdit;    // text message edit box
+		TextEdit*         mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
 		LineEdit*         mFileMessageEdit;    // text file edit box
 		QString           mFileDefaultDir;     // default directory for browse button
@@ -140,7 +141,7 @@ class EditAlarmDlg : public KDialogBase
 		QFrame*           mEmailFrame;
 		LineEdit*         mEmailToEdit;
 		QLineEdit*        mEmailSubjectEdit;
-		QMultiLineEdit*   mEmailMessageEdit;   // email body edit box
+		TextEdit*         mEmailMessageEdit;   // email body edit box
 		QComboBox*        mEmailAttachList;
 		QPushButton*      mEmailRemoveButton;
 		CheckBox*         mEmailBcc;
@@ -167,7 +168,7 @@ class EditAlarmDlg : public KDialogBase
 		KAlarmEvent*      mSavedEvent;
 		QButton*          mSavedTypeRadio;      // mMessageRadio, etc
 		bool              mSavedBeep;           // mSoundPicker beep status
-		QString              mSavedSoundFile;      // mSoundPicker sound file
+		QString           mSavedSoundFile;      // mSoundPicker sound file
 		bool              mSavedConfirmAck;     // mConfirmAck status
 		QFont             mSavedFont;           // mFontColourButton font
 		QColor            mSavedBgColour;       // mBgColourChoose selection
@@ -180,31 +181,6 @@ class EditAlarmDlg : public KDialogBase
 		DateTime          mSavedDateTime;       // mTimeWidget value
 		bool              mSavedLateCancel;     // mLateCancel status
 		int               mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
-};
-
-
-class PageFrame : public QFrame
-{
-		Q_OBJECT
-	public:
-		PageFrame(QWidget* parent = 0, const char* name = 0) : QFrame(parent, name) { }
-	protected:
-		virtual void     showEvent(QShowEvent*)    { emit shown(); }
-	signals:
-		void             shown();
-};
-
-class LineEdit : public QLineEdit
-{
-		Q_OBJECT
-	public:
-		LineEdit(QWidget* parent = 0, const char* name = 0)
-		          : QLineEdit(parent, name), noSelect(false) { }
-		void setNoSelect()   { noSelect = true; }
-	protected:
-		virtual void focusInEvent(QFocusEvent*);
-	private:
-		bool  noSelect;
 };
 
 #endif // EDITDLG_H
