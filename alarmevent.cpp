@@ -310,7 +310,7 @@ void KAlarmEvent::set(const Event& event)
 	{
 		setRecurrence(*recur);
 		mExceptionDates     = event.exDates();
-		mExceptionDateTimes = event.exDateTimes();
+//		mExceptionDateTimes = event.exDateTimes();
 	}
 
 	mUpdated = false;
