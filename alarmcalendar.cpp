@@ -45,6 +45,7 @@ extern "C" {
 #include <libkcal/icalformat.h>
 
 #include "kalarmapp.h"
+#include "preferences.h"
 #include "alarmcalendar.h"
 
 using namespace KCal;
@@ -226,6 +227,7 @@ bool AlarmCalendar::saveCal(const QString& filename)
 	if (!success)
 	{
 		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
+#warning "Need user error message here"
 		return false;
 	}
 
@@ -408,22 +410,46 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 	{
 		Event* e = *it;
 		bool recurs = e->doesRecur();
+		int  endOffset = 0;
+		bool endOffsetValid = false;
 		for (Alarm::List::ConstIterator ait = e->alarms().begin();  ait != e->alarms().end();  ++ait)
 		{
-			if ((*ait)->enabled())
+			Alarm* alarm = *ait;
+			if (alarm->enabled())
 			{
 				if (recurs)
 				{
-					if (e->recursOn(from.date()))
-					{
-						dt.setTime((*ait)->time().time());
-						dt.setDate(from.date());
-					}
+					if (alarm->hasTime())
+						dt = alarm->time();
 					else
-						dt = (*ait)->time();
+					{
+						// The alarm time is defined by an offset from the event start or end time.
+						// Find the offset from the event start time, which is also used as the
+						// offset from the recurrence time.
+						int offset = 0;
+						if (alarm->hasStartOffset())
+							offset = alarm->startOffset().asSeconds();
+						else if (alarm->hasEndOffset())
+						{
+							if (!endOffsetValid)
+							{
+								endOffset = e->hasDuration() ? e->duration() : e->hasEndDate() ? e->dtStart().secsTo(e->dtEnd()) : 0;
+								endOffsetValid = true;
+							}
+							offset = alarm->endOffset().asSeconds() + endOffset;
+						}
+						// Adjust the 'from' date/time and find the next recurrence at or after it
+						QDateTime pre = from.addSecs(-offset - 1);
+						if (e->doesFloat()  &&  pre.time() < Preferences::instance()->startOfDay())
+							pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+						dt = e->recurrence()->getNextDateTime(pre);
+						if (!dt.isValid())
+							continue;
+						dt = dt.addSecs(offset);
+					}
 				}
 				else
-					dt = (*ait)->time();
+					dt = alarm->time();
 				if (dt >= from  &&  dt <= to)
 				{
 					kdDebug(5950) << "AlarmCalendar::events() '" << e->summary()
