@@ -27,6 +27,7 @@
 #include <qpainter.h>
 
 #include <kmenubar.h>
+#include <ktoolbar.h>
 #include <kpopupmenu.h>
 #include <kaccel.h>
 #include <kaction.h>
@@ -115,9 +116,12 @@ KAlarmMainWindow::KAlarmMainWindow()
 	listView = new AlarmListView(this, "listView");
 	setCentralWidget(listView);
 	listView->refresh();          // populate the message list
-	connect(listView, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotSelection()));
-	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)), this,
-	        SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
+	listView->clearSelection();
+	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelection(QListViewItem*)));
+	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
+	        this, SLOT(slotMouse(int, QListViewItem*, const QPoint&, int)));
+	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+	        this, SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
 	theApp()->addWindow(this);
 }
 
@@ -156,11 +160,12 @@ void KAlarmMainWindow::initActions()
 {
 	actionQuit           = new KAction(i18n("&Quit"), QIconSet(SmallIcon("exit")), KStdAccel::key(KStdAccel::Quit), this, SLOT(slotQuit()), this);
 	actionNew            = new KAction(i18n("&New..."), "eventnew", Qt::Key_Insert, this, SLOT(slotNew()), this);
-	actionModify         = new KAction(i18n("&Modify..."), "eventmodify", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
+	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this);
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this);
 	actionToggleTrayIcon = new KAction(QString(), QIconSet(SmallIcon("kalarm")), Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this);
 	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this);
 
+	// Set up the menu bar
 	KMenuBar* menu = menuBar();
 	KPopupMenu* fileMenu = new KPopupMenu(this, "file");
 	menu->insertItem(i18n("&File"), fileMenu);
@@ -194,6 +199,14 @@ void KAlarmMainWindow::initActions()
 	theApp()->actionDaemonPreferences()->plug(settingsMenu);
 	menu->insertItem(i18n("&Help"), helpMenu());
 
+	// Set up the toolbar
+/*	KToolBar* toolbar = toolBar();
+	actionNew->plug(toolbar);
+	actionModify->plug(toolbar);
+	actionDelete->plug(toolbar);
+	actionToggleTrayIcon->plug(toolbar);
+*/
+	
 	actionModify->setEnabled(false);
 	actionDelete->setEnabled(false);
 	if (!theApp()->KDEDesktop())
@@ -343,20 +356,33 @@ void KAlarmMainWindow::slotQuit()
 }
 
 /******************************************************************************
-*  Called when the current item in the ListView changes.
-*  Selects the new current item, and enables/disables the actions appropriately.
+*  Called when the selected item in the ListView changes.
+*  Selects the new current item, and enables the actions appropriately.
 */
-void KAlarmMainWindow::slotSelection()
+void KAlarmMainWindow::slotSelection(QListViewItem* item)
 {
-	bool enable = !!listView->selectedItem();
-	AlarmListViewItem* item = listView->currentItem();
-	if (item  &&  !listView->selectedItem())
+	if (item)
 	{
+		kdDebug(5950) << "KAlarmMainWindow::slotSelection(true)\n";
 		listView->setSelected(item, true);
-		enable = true;
+		actionModify->setEnabled(true);
+		actionDelete->setEnabled(true);
 	}
-	actionModify->setEnabled(enable);
-	actionDelete->setEnabled(enable);
+}
+
+/******************************************************************************
+*  Called when the mouse is clicked on the ListView.
+*  Deselects the current item and disables the actions if appropriate.
+*/
+void KAlarmMainWindow::slotMouse(int, QListViewItem* item, const QPoint&, int)
+{
+	if (!item)
+	{
+		kdDebug(5950) << "KAlarmMainWindow::slotMouse(false)\n";
+		listView->clearSelection();
+		actionModify->setEnabled(false);
+		actionDelete->setEnabled(false);
+	}
 }
 
 /******************************************************************************

@@ -55,7 +55,8 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
 		void           slotQuit();
-		void           slotSelection();
+		void           slotSelection(QListViewItem*);
+		void           slotMouse(int button, QListViewItem* item, const QPoint&, int);
 		void           slotListRightClick(QListViewItem*, const QPoint&, int);
 		void           updateViewMenu();
 		void           updateActionsMenu();
