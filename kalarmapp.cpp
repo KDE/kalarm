@@ -41,7 +41,7 @@
 #include <libkcal/vcalformat.h>
 #include <libkcal/icalformat.h>
 
-#include <kalarmd/calclient.h>
+#include <kalarmd/clientinfo.h>
 
 #include "mainwindow.h"
 #include "messagewin.h"
