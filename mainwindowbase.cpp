@@ -19,6 +19,7 @@
  */
 
 #include "kalarm.h"
+#include <kdeversion.h>
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
 
