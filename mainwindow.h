@@ -64,7 +64,6 @@ class KAlarmMainWindow : public MainWindowBase
 		void           slotQuit();
 		void           slotSelection(QListViewItem*);
 		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
-		void           slotListRightClick(QListViewItem*, const QPoint&, int);
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
 		void           setAlarmEnabledStatus(bool status);

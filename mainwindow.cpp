@@ -123,8 +123,6 @@ KAlarmMainWindow::KAlarmMainWindow()
 	connect(listView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelection(QListViewItem*)));
 	connect(listView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        this, SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
-	connect(listView, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
-	        this, SLOT(slotListRightClick(QListViewItem*, const QPoint&, int)));
 	windowList.append(this);
 }
 
@@ -169,7 +167,7 @@ void KAlarmMainWindow::initActions()
 	actionModify         = new KAction(i18n("&Modify..."), "pencil", Qt::CTRL+Qt::Key_M, this, SLOT(slotModify()), this, "modify");
 	actionDelete         = new KAction(i18n("&Delete"), "eventdelete", Qt::Key_Delete, this, SLOT(slotDelete()), this, "delete");
 	actionToggleTrayIcon = new KAction(QString(), "kalarm", Qt::CTRL+Qt::Key_T, this, SLOT(slotToggleTrayIcon()), this, "tray");
-	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", Qt::CTRL+Qt::Key_R, this, SLOT(slotResetDaemon()), this, "reset");
+	actionResetDaemon    = new KAction(i18n("&Reset Daemon"), "reload", 0, this, SLOT(slotResetDaemon()), this, "reset");
 
 	// Set up the menu bar
 
@@ -419,28 +417,21 @@ void KAlarmMainWindow::slotSelection(QListViewItem* item)
 
 /******************************************************************************
 *  Called when the mouse is clicked on the ListView.
-*  Deselects the current item and disables the actions if appropriate.
+*  Deselects the current item and disables the actions if appropriate, or
+*  displays a context menu to modify or delete the selected item.
 */
-void KAlarmMainWindow::slotMouseClicked(int, QListViewItem* item, const QPoint&, int)
+void KAlarmMainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
 {
 	if (!item)
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotMouse(false)\n";
+		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(left)\n";
 		listView->clearSelection();
 		actionModify->setEnabled(false);
 		actionDelete->setEnabled(false);
 	}
-}
-
-/******************************************************************************
-*  Called when the right button is clicked over the list view.
-*  Displays a context menu to modify or delete the selected item.
-*/
-void KAlarmMainWindow::slotListRightClick(QListViewItem* item, const QPoint& pt, int)
-{
-	if (item)
+	else if (button == Qt::RightButton)
 	{
-		kdDebug(5950) << "KAlarmMainWindow::slotListRightClick(true)\n";
+		kdDebug(5950) << "KAlarmMainWindow::slotMouseClicked(right)\n";
 		QPopupMenu* menu = new QPopupMenu(this, "ListContextMenu");
 		actionModify->plug(menu);
 		actionDelete->plug(menu);
