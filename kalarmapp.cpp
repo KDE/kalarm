@@ -768,7 +768,10 @@ void KAlarmApp::processQueue()
 
 		// Now that the queue has been processed, quit if a quit was queued
 		if (mQueueQuit)
+		{
+			mQueueQuit = false;
 			quitIf(mQueueQuitCode);
+		}
 
 		mProcessingQueue = false;
 	}
