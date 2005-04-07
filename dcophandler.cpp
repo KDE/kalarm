@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -348,10 +348,13 @@ unsigned DcopHandler::convertStartFlags(const DateTime& start, unsigned flags)
 	unsigned kaEventFlags = 0;
 	if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::REPEAT_AT_LOGIN;
 	if (flags & BEEP)            kaEventFlags |= KAEvent::BEEP;
+	if (flags & SPEAK)           kaEventFlags |= KAEvent::SPEAK;
 	if (flags & CONFIRM_ACK)     kaEventFlags |= KAEvent::CONFIRM_ACK;
 	if (flags & REPEAT_SOUND)    kaEventFlags |= KAEvent::REPEAT_SOUND;
 	if (flags & AUTO_CLOSE)      kaEventFlags |= KAEvent::AUTO_CLOSE;
 	if (flags & EMAIL_BCC)       kaEventFlags |= KAEvent::EMAIL_BCC;
+	if (flags & SCRIPT)          kaEventFlags |= KAEvent::SCRIPT;
+	if (flags & EXEC_IN_XTERM)   kaEventFlags |= KAEvent::EXEC_IN_XTERM;
 	if (flags & DISABLED)        kaEventFlags |= KAEvent::DISABLED;
 	if (start.isDateOnly())      kaEventFlags |= KAEvent::ANY_TIME;
 	return kaEventFlags;
