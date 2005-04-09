@@ -769,7 +769,7 @@ void MessageWin::slotPlayAudio()
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
 #if KDE_VERSION >= 308
-		if (!mUsingKMix)
+		if (!mUsingKMix  &&  mVolume >= 0)
 		{
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
@@ -794,29 +794,35 @@ void MessageWin::initAudio(bool firstTime)
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
 	if (firstTime)
 	{
-		// Get the current master volume from KMix
-		int vol = getKMixVolume();
-		if (vol >= 0)
+		// Save the existing sound volume setting for restoration afterwards,
+		// and set the desired volume for the alarm.
+		mUsingKMix = false;
+		float volume = mVolume;    // initial volume
+		if (volume >= 0)
 		{
-			mOldVolume = vol;    // success
-			mUsingKMix = true;
-		}
-		else
-		{
-			// Can't use KMix to set the master volume, so just adjust
-			// within the current master volume.
-			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-			mUsingKMix = false;
-		}
+			// The volume has been specified
+			if (mFadeVolume >= 0)
+				volume = mFadeVolume;    // fading, so adjust the initial volume
 
-		// Set the desired sound volume
-		float volume = mVolume;
-		if (mFadeVolume >= 0)
-			volume = mFadeVolume;
+			// Get the current master volume from KMix
+			int vol = getKMixVolume();
+			if (vol >= 0)
+			{
+				mOldVolume = vol;    // success
+				mUsingKMix = true;
+				setKMixVolume(static_cast<int>(volume * 100));
+			}
+		}
 		if (!mUsingKMix)
+		{
+			/* Adjust within the current master volume, because either
+			 * a) the volume is not specified, in which case we want to play
+			 *    at 100% of the current master volume setting, or
+			 * b) KMix is not available to set the master volume.
+			 */
+			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
 			sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
-		else if (volume >= 0)
-			setKMixVolume(static_cast<int>(volume * 100));
+		}
 	}
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
@@ -959,7 +965,7 @@ void MessageWin::slotFade()
 	QTime now = QTime::currentTime();
 	int elapsed = mAudioFileStart.secsTo(now);
 	if (elapsed < 0)
-		elapsed += 86400;
+		elapsed += 86400;    // it's the next day
 	float volume;
 	if (elapsed >= mFadeSeconds)
 	{
