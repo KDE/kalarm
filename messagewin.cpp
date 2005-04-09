@@ -727,7 +727,7 @@ void MessageWin::slotPlayAudio()
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
 #if KDE_VERSION >= 308
-		if (!mUsingKMix)
+		if (!mUsingKMix  &&  mVolume >= 0)
 		{
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
@@ -755,26 +755,30 @@ void MessageWin::initAudio(bool firstTime)
 	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
 	if (firstTime)
 	{
-		// Get the current master volume from KMix
-		int vol = getKMixVolume();
-		if (vol >= 0)
+		// Save the existing sound volume setting for restoration afterwards,
+		// and set the desired volume for the alarm.
+		mUsingKMix = false;
+		if (mVolume >= 0)
 		{
-			mOldVolume = vol;    // success
-			mUsingKMix = true;
+			// Get the current master volume from KMix
+			int vol = getKMixVolume();
+			if (vol >= 0)
+			{
+				mOldVolume = vol;    // success
+				mUsingKMix = true;
+				setKMixVolume(static_cast<int>(mVolume * 100));
+			}
 		}
-		else
-		{
-			// Can't use KMix to set the master volume, so just adjust
-			// within the current master volume.
-			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-			mUsingKMix = false;
-		}
-
-		// Set the desired sound volume
 		if (!mUsingKMix)
+		{
+			/* Adjust within the current master volume, because either
+			 * a) volume is not specified, in which case we want to play at
+			 *    100% of the current master volume setting, or
+			 * b) KMix is not available to set the master volume.
+			 */
+			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
 			sserver.outVolume().scaleFactor(mVolume >= 0 ? mVolume : 1);
-		else if (mVolume >= 0)
-			setKMixVolume(static_cast<int>(mVolume * 100));
+		}
 	}
 	mSilenceButton->setEnabled(true);
 	mPlayed = false;
@@ -867,7 +871,15 @@ void MessageWin::stopPlay()
 	{
 		// Restore the sound volume to what it was before the sound file
 		// was played, provided that nothing else has modified it since.
-		if (!mUsingKMix)
+		if (mUsingKMix)
+		{
+			int eventVolume = static_cast<int>(mVolume * 100);
+			int currentVolume = getKMixVolume();
+			// Volume returned isn't always exactly equal to volume set
+			if (currentVolume < 0  ||  abs(currentVolume - eventVolume) < 5)
+				setKMixVolume(static_cast<int>(mOldVolume));
+		}
+		else
 		{
 			KArtsServer aserver;
 			Arts::StereoVolumeControl svc = aserver.server().outVolume();
@@ -877,14 +889,6 @@ void MessageWin::stopPlay()
 				eventVolume = 1;
 			if (currentVolume == eventVolume)
 				svc.scaleFactor(mOldVolume);
-		}
-		else if (mVolume >= 0)
-		{
-			int eventVolume = static_cast<int>(mVolume * 100);
-			int currentVolume = getKMixVolume();
-			// Volume returned isn't always exactly equal to volume set
-			if (currentVolume < 0  ||  abs(currentVolume - eventVolume) < 5)
-				setKMixVolume(static_cast<int>(mOldVolume));
 		}
 	}
 	delete mPlayObject;      mPlayObject = 0;
