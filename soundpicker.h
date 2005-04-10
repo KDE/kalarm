@@ -113,6 +113,12 @@ class SoundPicker : public QFrame
 
 		static QString i18n_Sound();       // plain text of Sound checkbox
 		static QString i18n_s_Sound();     // text of Sound checkbox, with 'S' shortcut
+		static QString i18n_Beep();        // plain text of Beep radio button
+		static QString i18n_b_Beep();      // text of Beep radio button, with 'B' shortcut
+		static QString i18n_Speak();       // plain text of Speak radio button
+		static QString i18n_p_Speak();     // text of Speak radio button, with 'P' shortcut
+		static QString i18n_File();        // plain text of File radio button
+
 
 	private slots:
 		void           slotSoundToggled(bool on);

@@ -30,7 +30,6 @@
 #include "recurrenceedit.h"
 
 class QButtonGroup;
-class QButton;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -147,8 +146,7 @@ class EmailPrefTab : public PrefsTabBase
 	public:
 		EmailPrefTab(QVBox*);
 
-		QString      validateAddress();
-		QString      validateBccAddress();
+		QString      validate();
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
@@ -183,6 +181,7 @@ class EditPrefTab : public PrefsTabBase
 	public:
 		EditPrefTab(QVBox*);
 
+		QString      validate();
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
 		virtual void setDefaults();
@@ -191,14 +190,17 @@ class EditPrefTab : public PrefsTabBase
 		void         slotBrowseSoundFile();
 
 	private:
+		void         setDefaultSoundType(SoundPicker::Type);
+
 		QCheckBox*      mDefaultLateCancel;
 		QCheckBox*      mDefaultAutoClose;
 		QCheckBox*      mDefaultConfirmAck;
 		QCheckBox*      mDefaultCmdScript;
 		QCheckBox*      mDefaultCmdXterm;
 		QCheckBox*      mDefaultEmailBcc;
-		QButton*        mDefaultBeep;
+		QRadioButton*   mDefaultBeep;
 		QRadioButton*   mDefaultSpeak;
+		QRadioButton*   mDefaultFile;
 		QCheckBox*      mDefaultSound;
 		QLabel*         mDefaultSoundFileLabel;
 		QLineEdit*      mDefaultSoundFile;

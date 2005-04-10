@@ -32,6 +32,7 @@ class QWidget;
 
 #include "colourlist.h"
 #include "recurrenceedit.h"
+#include "soundpicker.h"
 #include "timeperiod.h"
 
 
@@ -84,11 +85,11 @@ class Preferences : public QObject
 		QColor         expiredColour() const            { return mExpiredColour; }
 		int            expiredKeepDays() const          { return mExpiredKeepDays; }
 		bool           defaultSound() const             { return mDefaultSound; }
+		SoundPicker::Type
+		               defaultSoundType() const         { return mDefaultSoundType; }
 		const QString& defaultSoundFile() const         { return mDefaultSoundFile; }
 		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
 		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
-		bool           defaultBeep() const              { return mDefaultBeep; }
-		bool           defaultSpeak() const             { return mDefaultSpeak; }
 		int            defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
@@ -149,9 +150,9 @@ class Preferences : public QObject
 		static const int         default_defaultLateCancel;
 		static const bool        default_defaultAutoClose;
 		static const bool        default_defaultSound;
+		static const SoundPicker::Type
+		                         default_defaultSoundType;
 		static const bool        default_defaultSoundRepeat;
-		static const bool        default_defaultBeep;
-		static const bool        default_defaultSpeak;
 		static const bool        default_defaultConfirmAck;
 		static const bool        default_defaultCmdScript;
 		static const bool        default_defaultCmdXterm;
@@ -221,9 +222,8 @@ class Preferences : public QObject
 		int                 mDefaultLateCancel;
 		bool                mDefaultAutoClose;
 		bool                mDefaultSound;
+		SoundPicker::Type   mDefaultSoundType;
 		bool                mDefaultSoundRepeat;
-		bool                mDefaultBeep;
-		bool                mDefaultSpeak;
 		bool                mDefaultConfirmAck;
 		bool                mDefaultCmdScript;
 		bool                mDefaultCmdXterm;

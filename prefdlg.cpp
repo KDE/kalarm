@@ -139,18 +139,23 @@ void KAlarmPrefDlg::slotHelp()
 void KAlarmPrefDlg::slotApply()
 {
 	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
-	QString errmsg = mEmailPage->validateAddress();
-	if (errmsg.isEmpty())
-		errmsg = mEmailPage->validateBccAddress();
+	QString errmsg = mEmailPage->validate();
 	if (!errmsg.isEmpty())
 	{
-	
 		showPage(pageIndex(mEmailPage->parentWidget()));
 		if (KMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
 		{
 			mValid = false;
 			return;
 		}
+	}
+	errmsg = mEditPage->validate();
+	if (!errmsg.isEmpty())
+	{
+		showPage(pageIndex(mEditPage->parentWidget()));
+		KMessageBox::sorry(this, errmsg);
+		mValid = false;
+		return;
 	}
 	mValid = true;
 	mFontColourPage->apply(false);
@@ -770,20 +775,21 @@ void EmailPrefTab::slotBccAddrChanged(int id)
 	mBccAddressChanged = true;
 }
 
-QString EmailPrefTab::validateAddress()
+QString EmailPrefTab::validate()
 {
-	if (!mAddressChanged)
-		return QString::null;
-	mAddressChanged = false;
-	return validateAddr(mFromAddressGroup, mEmailAddress, KAMail::i18n_NeedFromEmailAddress());
-}
-
-QString EmailPrefTab::validateBccAddress()
-{
-	if (!mBccAddressChanged)
-		return QString::null;
-	mBccAddressChanged = false;
-	return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
+	if (mAddressChanged)
+	{
+		mAddressChanged = false;
+		QString errmsg = validateAddr(mFromAddressGroup, mEmailAddress, KAMail::i18n_NeedFromEmailAddress());
+		if (!errmsg.isEmpty())
+			return errmsg;
+	}
+	if (mBccAddressChanged)
+	{
+		mBccAddressChanged = false;
+		return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
+	}
+	return QString::null;
 }
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
@@ -897,7 +903,8 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
 	int groupTopMargin = fontMetrics().lineSpacing()/2;
-	QString defsetting = i18n("The default setting for \"%1\" in the alarm edit dialog.");
+	QString defsetting   = i18n("The default setting for \"%1\" in the alarm edit dialog.");
+	QString soundSetting = i18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
 
 	// DISPLAY ALARMS
 	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), mPage);
@@ -943,45 +950,39 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	// SOUND
 	QButtonGroup* bgroup = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
-	QGridLayout* grid = new QGridLayout(bgroup, 4, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
-	grid->setColStretch(2, 1);
-	grid->addColSpacing(0, indentWidth());
-	grid->addColSpacing(1, indentWidth());
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	layout = new QVBoxLayout(bgroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout->addSpacing(groupTopMargin);
 
 	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bgroup, "defSound");
 	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
 	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound()));
-	grid->addMultiCellWidget(mDefaultSound, 1, 1, 0, 2, Qt::AlignAuto);
+	layout->addWidget(mDefaultSound, 0, Qt::AlignAuto);
 
-	bool showSpeak = theApp()->speechEnabled();
-	if (showSpeak)
-	{
-		box = new QHBox(bgroup);
-		box->setSpacing(KDialog::spacingHint());
-		grid->addMultiCellWidget(box, 2, 2, 1, 2, Qt::AlignAuto);
-		mDefaultBeep = new QRadioButton(i18n("&Beep"), box, "defBeep");
-		bgroup->insert(mDefaultBeep);
-	}
-	else
-	{
-		mDefaultBeep = new QCheckBox(i18n("&Beep"), bgroup, "defBeep");
-		grid->addMultiCellWidget(mDefaultBeep, 2, 2, 1, 2, Qt::AlignAuto);
-	}
+	box = new QHBox(bgroup);
+	box->setSpacing(KDialog::spacingHint());
+	layout->addWidget(box, 0, Qt::AlignAuto);
+
+	mDefaultBeep = new QRadioButton(SoundPicker::i18n_b_Beep(), box, "defBeep");
+	bgroup->insert(mDefaultBeep);
 	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
 	QWhatsThis::add(mDefaultBeep,
-	      i18n("Check to select Beep as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
-
-	if (showSpeak)
+	      soundSetting.arg(SoundPicker::i18n_Beep()).arg(SoundPicker::i18n_Sound()));
+	mDefaultFile = new QRadioButton(SoundPicker::i18n_File(), box, "defFile");
+	bgroup->insert(mDefaultFile);
+	mDefaultFile->setMinimumSize(mDefaultFile->sizeHint());
+	QWhatsThis::add(mDefaultFile,
+	      soundSetting.arg(SoundPicker::i18n_File()).arg(SoundPicker::i18n_Sound()));
+	if (theApp()->speechEnabled())
 	{
-		mDefaultSpeak = new QRadioButton(i18n("Speak"), box, "defSpeak");
+		mDefaultSpeak = new QRadioButton(SoundPicker::i18n_Speak(), box, "defSpeak");
 		mDefaultSpeak->setMinimumSize(mDefaultSpeak->sizeHint());
 		QWhatsThis::add(mDefaultSpeak,
-		      i18n("Check to select Speak as the default setting for \"%1\" in the alarm edit dialog.").arg(SoundPicker::i18n_Sound()));
+		      soundSetting.arg(SoundPicker::i18n_Speak()).arg(SoundPicker::i18n_Sound()));
 		bgroup->insert(mDefaultSpeak);
 	}
 	else
 		mDefaultSpeak = 0;
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 
 	box = new QHBox(bgroup);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
@@ -997,13 +998,13 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QWhatsThis::add(box,
 	      i18n("Enter the default sound file to use in the alarm edit dialog."));
 	box->setFixedHeight(box->sizeHint().height());
-	grid->addMultiCellWidget(box, 3, 3, 1, 2);
+	layout->addWidget(box);
 
 #ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bgroup, "defRepeatSound");
 	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
 	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
-	grid->addWidget(mDefaultSoundRepeat, 4, 2, Qt::AlignAuto);
+	layout->addWidget(mDefaultSoundRepeat, 0, Qt::AlignAuto);
 #endif
 	bgroup->setFixedHeight(bgroup->sizeHint().height());
 
@@ -1066,12 +1067,7 @@ void EditPrefTab::restore()
 	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
 	mDefaultSound->setChecked(preferences->mDefaultSound);
-	bool beep = preferences->mDefaultBeep;
-	bool oldBeep = mDefaultBeep->isOn();
-	if (beep && !oldBeep  ||  !beep && oldBeep)
-		mDefaultBeep->toggle();
-	if (mDefaultSpeak)
-		mDefaultSpeak->setChecked(preferences->mDefaultSpeak);
+	setDefaultSoundType(preferences->mDefaultSoundType);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
@@ -1091,9 +1087,10 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultAutoClose   = mDefaultAutoClose->isChecked();
 	preferences->mDefaultConfirmAck  = mDefaultConfirmAck->isChecked();
 	preferences->mDefaultSound       = mDefaultSound->isChecked();
-	preferences->mDefaultBeep        = mDefaultBeep->isOn();
-	preferences->mDefaultSpeak       = mDefaultSpeak && mDefaultSpeak->isOn();
 	preferences->mDefaultSoundFile   = mDefaultSoundFile->text();
+	preferences->mDefaultSoundType   = mDefaultSpeak && mDefaultSpeak->isOn() ? SoundPicker::SPEAK
+	                                 : mDefaultFile->isOn()                   ? SoundPicker::PLAY_FILE
+					 :                                          SoundPicker::BEEP;
 #ifndef WITHOUT_ARTS
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
 #endif
@@ -1123,12 +1120,7 @@ void EditPrefTab::setDefaults()
 	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mDefaultSound->setChecked(Preferences::default_defaultSound);
-	bool beep = Preferences::default_defaultBeep;
-	bool oldBeep = mDefaultBeep->isOn();
-	if (beep && !oldBeep  ||  !beep && oldBeep)
-		mDefaultBeep->toggle();
-	if (mDefaultSpeak)
-		mDefaultSpeak->setChecked(Preferences::default_defaultSpeak);
+	setDefaultSoundType(Preferences::default_defaultSoundType);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
@@ -1161,6 +1153,37 @@ int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 		case RecurrenceEdit::NO_RECUR:
 		default:                       return 0;
 	}
+}
+
+void EditPrefTab::setDefaultSoundType(SoundPicker::Type type)
+{
+	switch (type)
+	{
+		case SoundPicker::PLAY_FILE:
+			mDefaultFile->setChecked(true);
+			break;
+		case SoundPicker::SPEAK:
+			if (mDefaultSpeak)
+			{
+				mDefaultSpeak->setChecked(true);
+				break;
+			}
+			// fall through to BEEP
+		case SoundPicker::BEEP:
+		default:
+			mDefaultBeep->setChecked(true);
+			break;
+	}
+}
+
+QString EditPrefTab::validate()
+{
+	if (mDefaultFile->isOn()  &&  mDefaultSoundFile->text().isEmpty())
+	{
+		mDefaultSoundFile->setFocus();
+		return i18n("You must enter a sound file when %1 is selected as the default sound type").arg(SoundPicker::i18n_File());;
+	}
+	return QString::null;
 }
 
 

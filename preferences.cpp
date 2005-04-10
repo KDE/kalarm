@@ -72,8 +72,7 @@ const int        Preferences::default_defaultLateCancel        = 0;
 const bool       Preferences::default_defaultAutoClose         = false;
 const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
-const bool       Preferences::default_defaultBeep              = false;
-const bool       Preferences::default_defaultSpeak             = false;
+const SoundPicker::Type Preferences::default_defaultSoundType  = SoundPicker::BEEP;
 const bool       Preferences::default_defaultConfirmAck        = false;
 const bool       Preferences::default_defaultCmdScript         = false;
 const bool       Preferences::default_defaultCmdXterm          = false;
@@ -138,11 +137,10 @@ static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCanc
 static const QString DEF_AUTO_CLOSE           = QString::fromLatin1("DefAutoClose");
 static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
 static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
+static const QString DEF_SOUND_TYPE           = QString::fromLatin1("DefSoundType");
 static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
 static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
 static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
-static const QString DEF_BEEP                 = QString::fromLatin1("DefBeep");
-static const QString DEF_SPEAK                = QString::fromLatin1("DefSpeak");
 static const QString DEF_CMD_SCRIPT           = QString::fromLatin1("DefCmdScript");
 static const QString DEF_CMD_XTERM            = QString::fromLatin1("DefCmdXterm");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
@@ -262,8 +260,9 @@ Preferences::Preferences()
 	mDefaultAutoClose         = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
 	mDefaultConfirmAck        = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultSound             = config->readBoolEntry(DEF_SOUND, default_defaultSound);
-	mDefaultBeep              = config->readBoolEntry(DEF_BEEP, default_defaultBeep);
-	mDefaultSpeak             = config->readBoolEntry(DEF_SPEAK, default_defaultSpeak);
+	int soundType             = config->readNumEntry(DEF_SOUND_TYPE, default_defaultSoundType);
+	mDefaultSoundType         = (soundType < SoundPicker::BEEP || soundType > SoundPicker::PLAY_FILE)
+	                          ? default_defaultSoundType : (SoundPicker::Type)soundType;
 	mDefaultSoundVolume       = static_cast<float>(config->readDoubleNumEntry(DEF_SOUND_VOLUME, default_defaultSoundVolume));
 #ifdef WITHOUT_ARTS
 	mDefaultSoundRepeat       = false;
@@ -331,9 +330,8 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
-	config->writeEntry(DEF_BEEP, mDefaultBeep);
-	config->writeEntry(DEF_SPEAK, mDefaultSpeak);
 	config->writeEntry(DEF_SOUND, mDefaultSound);
+	config->writeEntry(DEF_SOUND_TYPE, mDefaultSoundType);
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
 	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);

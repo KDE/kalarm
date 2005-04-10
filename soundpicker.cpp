@@ -50,6 +50,11 @@
 // translations across different modules.
 QString SoundPicker::i18n_Sound()       { return i18n("An audio sound", "Sound"); }
 QString SoundPicker::i18n_s_Sound()     { return i18n("An audio sound", "&Sound"); }
+QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
+QString SoundPicker::i18n_b_Beep()      { return i18n("&Beep"); }
+QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }
+QString SoundPicker::i18n_p_Speak()     { return i18n("S&peak"); }
+QString SoundPicker::i18n_File()        { return i18n("File"); }
 
 
 SoundPicker::SoundPicker(QWidget* parent, const char* name)
@@ -74,7 +79,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	connect(mTypeGroup, SIGNAL(buttonSet(int)), SLOT(slotTypeChanged(int)));
 
 	// Beep radio button
-	mBeepRadio = new RadioButton(i18n("Beep"), this, "beepButton");
+	mBeepRadio = new RadioButton(i18n_Beep(), this, "beepButton");
 	mBeepRadio->setFixedSize(mBeepRadio->sizeHint());
 	QWhatsThis::add(mBeepRadio, i18n("If checked, a beep will sound when the alarm is displayed."));
 	mTypeGroup->insert(mBeepRadio, BEEP);
@@ -82,7 +87,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 
 	// File radio button
 	QHBox* box = new QHBox(this);
-	mFileRadio = new RadioButton(i18n("File"), box, "audioFileButton");
+	mFileRadio = new RadioButton(i18n_File(), box, "audioFileButton");
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	QWhatsThis::add(mFileRadio, i18n("If checked, a sound file will be played when the alarm is displayed."));
 	mTypeGroup->insert(mFileRadio, PLAY_FILE);
@@ -98,7 +103,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	box->setFocusProxy(mFileRadio);
 
 	// Speak radio button
-	mSpeakRadio = new RadioButton(i18n("S&peak"), this, "speakButton");
+	mSpeakRadio = new RadioButton(i18n_p_Speak(), this, "speakButton");
 	mSpeakRadio->setFixedSize(mSpeakRadio->sizeHint());
 	QWhatsThis::add(mSpeakRadio, i18n("If checked, the message will be spoken when the alarm is displayed."));
 	mTypeGroup->insert(mSpeakRadio, SPEAK);
