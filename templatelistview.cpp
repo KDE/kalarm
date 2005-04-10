@@ -62,8 +62,8 @@ TemplateListView::~TemplateListView()
 void TemplateListView::populate()
 {
 	QPtrList<KAEvent> templates = KAlarm::templateList();
-	for (QPtrList<KAEvent>::ConstIterator it = templates.begin();  it != templates.end();  ++it)
-		addEntry(**it);
+	for (KAEvent* e = templates.first();  e;  e = templates.next())
+		addEntry(*e);
 }
 
 /******************************************************************************
