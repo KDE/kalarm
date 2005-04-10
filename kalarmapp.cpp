@@ -143,11 +143,9 @@ KAlarmApp::KAlarmApp()
 	}
 
 	// Check if the speech synthesis daemon is installed
-#if KDE_IS_VERSION(3,3,90)
 	mSpeechEnabled = (KTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
 	if (!mSpeechEnabled)
 		kdDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
-#endif
 }
 
 /******************************************************************************

@@ -716,7 +716,6 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotSpeak()
 {
-#if KDE_IS_VERSION(3,3,90)
 	DCOPClient* client = kapp->dcopClient();
 	if (!client->isApplicationRegistered("kttsd"))
 	{
@@ -737,7 +736,6 @@ void MessageWin::slotSpeak()
 		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
 		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP call sayMessage failed"));
 	}
-#endif
 }
 
 /******************************************************************************
