@@ -753,7 +753,7 @@ void AlarmCalendar::getKAlarmVersion() const
 	mKAlarmSubVersion = QString::null;
 	if (mCalendar)
 	{
-		const QString& prodid = mCalendar->productId();
+		const QString& prodid = mCalendar->loadedProductId();
 		QString progname = QString(" ") + kapp->aboutData()->programName() + " ";
 		int i = prodid.find(progname, 0, false);
 		if (i >= 0)
