@@ -109,7 +109,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mVolumeSlider = new Slider(0, 100, 10, 0, Qt::Horizontal, box);
 	mVolumeSlider->setTickmarks(QSlider::Below);
 	mVolumeSlider->setTickInterval(10);
-	mVolumeSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	mVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 	QWhatsThis::add(mVolumeSlider, i18n("Choose the volume for playing the sound file."));
 	mVolumeCheckbox->setFocusWidget(mVolumeSlider);
 
@@ -144,7 +144,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFadeSlider = new Slider(0, 100, 10, 0, Qt::Horizontal, mFadeVolumeBox);
 	mFadeSlider->setTickmarks(QSlider::Below);
 	mFadeSlider->setTickInterval(10);
-	mFadeSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 	label->setBuddy(mFadeSlider);
 	QWhatsThis::add(box, i18n("Choose the initial volume for playing the sound file."));
 

@@ -49,8 +49,8 @@ void TemplateMenuAction::slotInitMenu()
 	KPopupMenu* menu = popupMenu();
 	menu->clear();
 	QPtrList<KAEvent> templates = KAlarm::templateList();
-	for (QPtrList<KAEvent>::ConstIterator it = templates.begin();  it != templates.end();  ++it)
-		menu->insertItem((*it)->templateName());
+	for (KAEvent* e = templates.first();  e;  e = templates.next())
+		menu->insertItem(e->templateName());
 }
 
 /******************************************************************************
