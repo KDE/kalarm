@@ -96,7 +96,7 @@ class TimePeriod : public QHBox
 		/** Sets the input focus to the count field. */
 		void          setFocusOnCount();
 		/** Sets separate WhatsThis texts for the count spin boxes and the units combo box.
-		 *  If @hourMin is omitted, both spin boxes are set to the same WhatsThis text.
+		 *  If @p hourMin is omitted, both spin boxes are set to the same WhatsThis text.
 		 */
 		void          setWhatsThis(const QString& units, const QString& dayWeek, const QString& hourMin = QString::null);
 
