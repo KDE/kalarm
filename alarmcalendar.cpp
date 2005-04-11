@@ -43,6 +43,7 @@ extern "C" {
 #include <libical/ical.h>
 }
 
+#include <libkcal/kcalversion.h>
 #include <libkcal/vcaldrag.h>
 #include <libkcal/vcalformat.h>
 #include <libkcal/icalformat.h>
@@ -753,7 +754,16 @@ void AlarmCalendar::getKAlarmVersion() const
 	mKAlarmSubVersion = QString::null;
 	if (mCalendar)
 	{
+#if defined(LIBKCAL_IS_VERSION)
+#if LIBKCAL_IS_VERSION(1,2,0)
+		const QString& prodid = mCalendar->productId();
+#else
 		const QString& prodid = mCalendar->loadedProductId();
+#endif
+#else
+		// Stone age?
+		const QString& prodid = mCalendar->loadedProductId();
+#endif
 		QString progname = QString(" ") + kapp->aboutData()->programName() + " ";
 		int i = prodid.find(progname, 0, false);
 		if (i >= 0)
