@@ -41,7 +41,6 @@
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
-#include <kstdguiitem.h>
 
 #include <libkdepim/maillistdrag.h>
 #include <libkmime/kmime_content.h>
@@ -544,7 +543,7 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 		KAlarm::addEvent(event, (win ? win->mListView : 0));
 		Undo::saveAdd(event);
 
-		alarmWarnings(&editDlg, &event);
+		KAlarm::outputAlarmWarnings(&editDlg, &event);
 	}
 }
 
@@ -605,7 +604,7 @@ void MainWindow::slotModify()
 				KAlarm::modifyEvent(event, newEvent, mListView);
 			Undo::saveEdit(event, newEvent);
 
-			alarmWarnings(&editDlg, &newEvent);
+			KAlarm::outputAlarmWarnings(&editDlg, &newEvent);
 		}
 	}
 }
@@ -760,7 +759,7 @@ void MainWindow::slotBirthdays()
 			mListView->clearSelection();
 			for (QValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
 				KAlarm::addEvent(*ev, mListView);    // add alarm to the displayed lists and to the calendar file
-			alarmWarnings(&dlg);
+			KAlarm::outputAlarmWarnings(&dlg);
 		}
 	}
 }
@@ -1229,27 +1228,6 @@ void MainWindow::setEnableText(bool enable)
 {
 	mActionEnableEnable = enable;
 	mActionEnable->setText(enable ? i18n("Ena&ble") : i18n("Disa&ble"));
-}
-
-/******************************************************************************
-* Prompt the user to re-enable alarms if they are currently disabled, and if
-* it's an email alarm, warn if no 'From' email address is configured.
-*/
-void MainWindow::alarmWarnings(QWidget* parent, const KAEvent* event)
-{
-	if (event  &&  event->action() == KAEvent::EMAIL
-	&&  Preferences::instance()->emailAddress().isEmpty())
-		KMessageBox::information(parent, i18n("Please set the 'From' email address...",
-		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
-
-	if (!Daemon::monitoringAlarms())
-	{
-		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
-		                              QString::null, KStdGuiItem::yes(), KStdGuiItem::no(),
-		                              QString::fromLatin1("EditEnableAlarms"))
-		                == KMessageBox::Yes)
-			Daemon::setAlarmsEnabled();
-	}
 }
 
 /******************************************************************************

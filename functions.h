@@ -24,6 +24,7 @@
 #include <qsize.h>
 #include <qptrlist.h>
 class QObject;
+class QWidget;
 class QString;
 class KAction;
 class KActionCollection;
@@ -46,6 +47,7 @@ FileType            fileType(const QString& mimetype);
 KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 QPtrList<KAEvent>   templateList();
+void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 

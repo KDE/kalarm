@@ -137,7 +137,6 @@ class MainWindow : public MainWindowBase
 		static void    initUndoMenu(KPopupMenu*, Undo::Type);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
-		static void    alarmWarnings(QWidget* parent, const KAEvent* = 0);
 		static bool    findWindow(MainWindow*);
 
 		static QPtrList<MainWindow> mWindowList;   // active main windows

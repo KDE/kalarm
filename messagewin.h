@@ -63,6 +63,7 @@ class MessageWin : public MainWindowBase
 		virtual void        readProperties(KConfig*);
 
 	private slots:
+		void                slotEdit();
 		void                slotDefer();
 		void                checkDeferralLimit();
 		void                displayMainWindow();
@@ -104,6 +105,7 @@ class MessageWin : public MainWindowBase
 		int                 mRestoreHeight;
 		bool                mAudioRepeat;
 		bool                mConfirmAck;
+		bool                mShowEdit;        // display the Edit button
 		bool                mNoDefer;         // don't display a Defer option
 		bool                mInvalid;         // restored window is invalid
 		// Sound file playing
@@ -123,6 +125,7 @@ class MessageWin : public MainWindowBase
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		KPushButton*        mOkButton;
+		QPushButton*        mEditButton;
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
 		QPushButton*        mKAlarmButton;
@@ -139,8 +142,7 @@ class MessageWin : public MainWindowBase
 		bool                mRescheduleEvent; // true to delete event after message has been displayed
 		bool                mShown;           // true once the window has been displayed
 		bool                mPositioning;     // true when the window is being positioned initially
-		bool                mDeferClosing;    // the Defer button is closing the dialog
-		bool                mDeferDlgShowing; // the defer dialog is being displayed
+		bool                mNoCloseConfirm;  // the Defer or Edit button is closing the dialog
 		bool                mUsingKMix;       // master volume is being set using kmix
 };
 

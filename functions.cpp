@@ -25,6 +25,8 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -34,6 +36,7 @@
 #include "alarmlistview.h"
 #include "daemon.h"
 #include "kalarmapp.h"
+#include "kamail.h"
 #include "mainwindow.h"
 #include "messagewin.h"
 #include "preferences.h"
@@ -402,6 +405,28 @@ QPtrList<KAEvent> templateList()
 		}
 	}
 	return templates;
+}
+
+/******************************************************************************
+* To be called after an alarm has been edited.
+* Prompt the user to re-enable alarms if they are currently disabled, and if
+* it's an email alarm, warn if no 'From' email address is configured.
+*/
+void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
+{
+	if (event  &&  event->action() == KAEvent::EMAIL
+	&&  Preferences::instance()->emailAddress().isEmpty())
+		KMessageBox::information(parent, i18n("Please set the 'From' email address...",
+		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
+
+	if (!Daemon::monitoringAlarms())
+	{
+		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
+		                              QString::null, KStdGuiItem::yes(), KStdGuiItem::no(),
+		                              QString::fromLatin1("EditEnableAlarms"))
+		                == KMessageBox::Yes)
+			Daemon::setAlarmsEnabled();
+	}
 }
 
 /******************************************************************************

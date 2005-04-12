@@ -66,6 +66,7 @@
 
 #include "alarmcalendar.h"
 #include "deferdlg.h"
+#include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -148,12 +149,14 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mRestoreHeight(0),
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
+	  mShowEdit(!mEventID.isEmpty()),
 	  mNoDefer(!allowDefer || alarm.repeatAtLogin()),
 	  mInvalid(false),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mOldVolume(-1),
 	  mEvent(event),
+	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
@@ -167,7 +170,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
 	  mPositioning(false),
-	  mDeferClosing(false)
+	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
@@ -188,11 +191,13 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mErrorMsgs(errmsgs),
 	  mRestoreHeight(0),
 	  mConfirmAck(false),
+	  mShowEdit(false),
 	  mNoDefer(true),
 	  mInvalid(false),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mEvent(event),
+	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
@@ -202,7 +207,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mDeferClosing(false)
+	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	initView();
@@ -225,7 +230,7 @@ MessageWin::MessageWin()
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mDeferClosing(false)
+	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	mWindowList.append(this);
@@ -483,6 +488,17 @@ void MessageWin::initView()
 	grid->addWidget(mOkButton, 0, gridIndex++, AlignHCenter);
 	QWhatsThis::add(mOkButton, i18n("Acknowledge the alarm"));
 
+	if (mShowEdit)
+	{
+		// Edit button
+		mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
+		mEditButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+		mEditButton->setFixedSize(mEditButton->sizeHint());
+		connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
+		grid->addWidget(mEditButton, 0, gridIndex++, AlignHCenter);
+		QWhatsThis::add(mEditButton, i18n("Edit the alarm."));
+	}
+
 	if (!mNoDefer)
 	{
 		// Defer button
@@ -655,12 +671,27 @@ void MessageWin::readProperties(KConfig* config)
 #endif
 	mRestoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
 	mNoDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	mShowEdit      = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
-		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
-		if (kcalEvent)
-			mEvent.set(*kcalEvent);
+		if (!mEventID.isEmpty())
+		{
+			const Event* kcalEvent = AlarmCalendar::activeCalendar()->event(mEventID);
+			if (!kcalEvent)
+			{
+				// It's not in the active calendar, so try the displaying calendar
+				AlarmCalendar* cal = AlarmCalendar::displayCalendar();
+				if (cal->isOpen())
+					kcalEvent = cal->event(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+			}
+			if (kcalEvent)
+			{
+				mEvent.set(*kcalEvent);
+				mEvent.setUid(KAEvent::ACTIVE);    // in case it came from the display calendar
+				mShowEdit = true;
+			}
+		}
 		initView();
 	}
 }
@@ -1229,7 +1260,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-	if (mConfirmAck  &&  !mDeferClosing  &&  !theApp()->sessionClosingDown())
+	if (mConfirmAck  &&  !mNoCloseConfirm  &&  !theApp()->sessionClosingDown())
 	{
 		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
@@ -1246,6 +1277,40 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
 	}
 	MainWindowBase::closeEvent(ce);
+}
+
+/******************************************************************************
+*  Called when the Edit... button is clicked.
+*  Displays the alarm edit dialog.
+*/
+void MessageWin::slotEdit()
+{
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, "editDlg", &mEvent);
+	if (editDlg.exec() == QDialog::Accepted)
+	{
+		KAEvent event;
+		editDlg.getEvent(event);
+
+		// Update the displayed lists and the calendar file
+		if (AlarmCalendar::activeCalendar()->event(mEventID))
+		{
+			// The old alarm hasn't expired yet, so replace it
+			KAlarm::modifyEvent(mEvent, event, 0);
+			Undo::saveEdit(mEvent, event);
+		}
+		else
+		{
+			// The old event has expired, so simply create a new one
+			KAlarm::addEvent(event, 0);
+			Undo::saveAdd(event);
+		}
+
+		KAlarm::outputAlarmWarnings(&editDlg, &event);
+
+		// Close the alarm window
+		mNoCloseConfirm = true;   // allow window to close without confirmation prompt
+		close();
+	}
 }
 
 /******************************************************************************
@@ -1345,7 +1410,7 @@ void MessageWin::slotDefer()
 			// so start it if necessary so that the deferred alarm will be shown.
 			theApp()->displayTrayIcon(true);
 		}
-		mDeferClosing = true;   // allow window to close without confirmation prompt
+		mNoCloseConfirm = true;   // allow window to close without confirmation prompt
 		close();
 	}
 	else
