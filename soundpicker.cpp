@@ -69,8 +69,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotSoundToggled(bool)));
 	QWhatsThis::add(mCheckbox,
-	      i18n("If checked, a sound will be played when the message is displayed. Click the "
-	           "button on the right to select the sound."));
+	      i18n("Check to enable sound when the message is displayed. Select the type of sound from the displayed options."));
 	soundLayout->addWidget(mCheckbox);
 
 	// Sound type
