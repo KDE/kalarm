@@ -60,8 +60,7 @@ Find::Find(EventListViewBase* parent)
 
 Find::~Find()
 {
-	delete mDialog;
-	mDialog = 0;
+	delete mDialog;    // automatically set to 0
 	delete mFind;
 	mFind = 0;
 }
@@ -85,7 +84,11 @@ void Find::display()
 	}
 	else
 	{
+#ifdef MODAL_FIND
+		mDialog = new KFindDialog(mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+#else
 		mDialog = new KFindDialog(false, mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+#endif
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
 
@@ -142,8 +145,10 @@ void Find::display()
 		mCommandType->setChecked(mOptions & FIND_COMMAND);
 		mEmailType->setChecked(mOptions & FIND_EMAIL);
 
-		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()) );
-		connect(mDialog, SIGNAL(destroyed()), this, SLOT(slotDlgDestroyed()) );
+#ifndef MODAL_FIND
+		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
+#endif
+		connect(mDialog, SIGNAL(destroyed()), this, SLOT(slotDlgDestroyed()));
 	}
 
 	// Only display active/expired options if expired alarms are being kept
@@ -190,15 +195,14 @@ void Find::display()
 	mEmailType->setEnabled(email);
 
 	mDialog->setHasCursor(mListView->currentItem());
+#ifdef MODAL_FIND
+	if (mDialog->exec() == QDialog::Accepted)
+		slotFind();
+	else
+		delete mDialog;
+#else
 	mDialog->show();
-}
-
-/******************************************************************************
-*  Called when the find dialog is being destroyed.
-*/
-void Find::slotDlgDestroyed()
-{
-	mDialog = 0;
+#endif
 }
 
 /******************************************************************************
@@ -227,17 +231,19 @@ void Find::slotFind()
 	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
 	if (mFind)
 	{
-		delete mDialog;
-		mDialog = 0;
+		delete mDialog;    // automatically set to 0
 		mFind->setOptions(options);
 		findNext(true, true, false);
 	}
 	else
 	{
+#ifdef MODAL_FIND
+		mFind = new KFind(mDialog->pattern(), options, mListView);
+#else
 		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
+#endif
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
-		delete mDialog;                  // close the Find dialogue
-		mDialog = 0;
+		delete mDialog;                  // close the Find dialogue. Automatically set to 0.
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
 
 		// Set the starting point for the search

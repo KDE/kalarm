@@ -22,6 +22,7 @@
 #define FIND_H
 
 #include <qobject.h>
+#include <qguardedptr.h>
 #include <qstringlist.h>
 
 class QCheckBox;
@@ -46,7 +47,6 @@ class Find : public QObject
 
 	private slots:
 		void         slotFind();
-		void         slotDlgDestroyed();
 		void         slotKFindDestroyed()       { emit active(false); }
 
 	private:
@@ -54,7 +54,7 @@ class Find : public QObject
 		EventListViewItemBase* nextItem(EventListViewItemBase*, bool forward) const;
 
 		EventListViewBase* mListView;        // parent list view
-		KFindDialog*       mDialog;
+		QGuardedPtr<KFindDialog> mDialog;
 		QCheckBox*         mExpired;
 		QCheckBox*         mLive;
 		KSeparator*        mActiveExpiredSep;
