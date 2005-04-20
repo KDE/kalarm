@@ -496,7 +496,7 @@ void MessageWin::initView()
 	}
 
 #ifndef WITHOUT_ARTS
-	if (!mAudioFile.isEmpty())
+	if (!mAudioFile.isEmpty()  &&  mVolume)
 	{
 		// Silence button to stop sound repetition
 		QPixmap pixmap = MainBarIcon("player_stop");
@@ -685,6 +685,8 @@ void MessageWin::playAudio()
 	}
 	if (!mAudioFile.isEmpty())
 	{
+		if (!mVolume)
+			return;    // ensure zero volume doesn't play anything
 #ifdef WITHOUT_ARTS
 		QString play = mAudioFile;
 		QString file = QString::fromLatin1("file:");
