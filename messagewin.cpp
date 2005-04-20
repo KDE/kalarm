@@ -515,7 +515,7 @@ void MessageWin::initView()
 	}
 
 #ifndef WITHOUT_ARTS
-	if (!mAudioFile.isEmpty())
+	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
 		// Silence button to stop sound repetition
 		QPixmap pixmap = MainBarIcon("player_stop");
@@ -721,6 +721,8 @@ void MessageWin::playAudio()
 	}
 	if (!mAudioFile.isEmpty())
 	{
+		if (!mVolume  &&  mFadeVolume <= 0)
+			return;    // ensure zero volume doesn't play anything
 #ifdef WITHOUT_ARTS
 		QString play = mAudioFile;
 		QString file = QString::fromLatin1("file:");
@@ -1002,6 +1004,12 @@ void MessageWin::slotFade()
 		volume = mVolume;
 		delete mFadeTimer;
 		mFadeTimer = 0;
+		if (!mVolume)
+		{
+			kdDebug(5950) << "MessageWin::slotFade(0)\n";
+			stopPlay();
+			return;
+		}
 	}
 	else
 		volume = mFadeVolume  +  ((mVolume - mFadeVolume) * elapsed) / mFadeSeconds;
