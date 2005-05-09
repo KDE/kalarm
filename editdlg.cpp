@@ -720,12 +720,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mLateCancel->setAutoClose(preferences->defaultAutoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
-		mReminder->setMinutes(0, false);
-		mReminder->enableOnceOnly(false);
 		if (mSpecialActionsButton)
 			mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
+		mReminder->setMinutes(0, false);
+		mReminder->enableOnceOnly(mRecurrenceEdit->isTimedRepeatType());   // must be called after mRecurrenceEdit is set up
 		mSoundPicker->set(preferences->defaultBeep(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), preferences->defaultSoundRepeat());
 		mSoundPicker->setChecked(preferences->defaultSound());
