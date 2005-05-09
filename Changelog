@@ -1,8 +1,10 @@
 KAlarm
 
-=== Version 1.1.8 --- 6 February 2005 ===
+=== Version 1.1.8 --- 9 May 2005 ===
 Prevent multiple "Failed to start Alarm Daemon" error messages at startup.
+Fix alarms not triggering if IDs are duplicated in different calendar files.
 Fix random limit on expired alarm discard time if stepping with spinbox buttons.
+Fix failure to enable "Reminder for first recurrence only" checkbox.
 Fix dialog layouts for right-to-left languages.
 Fix time spin box layout for right-to-left languages.
 Pop up message windows far from cursor to avoid accidental acknowledgement.
