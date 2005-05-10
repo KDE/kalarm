@@ -1066,15 +1066,22 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KURL::List     files;
 	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
-
-	if (KURLDrag::decode(e, files)  &&  files.count())
+#ifndef NDEBUG
+	QCString fmts;
+	for (int idbg = 0;  e->format(idbg);  ++idbg)
 	{
-		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
-		action = KAEvent::FILE;
-		alarmText.setText(files.first().prettyURL());
+		if (idbg) fmts += ", ";
+		fmts += e->format(idbg);
 	}
-	else if (e->provides("message/rfc822")
-	&&       !(bytes = e->encodedData("message/rfc822")).isEmpty())
+	kdDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
+#endif
+
+	/* The order of the tests below matters, since some dropped objects
+	 * provide more than one mime type.
+	 * Don't change them without careful thought !!
+	 */
+	if (e->provides("message/rfc822")
+	&&  !(bytes = e->encodedData("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
@@ -1090,6 +1097,12 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Date", content),
 		                   getMailHeader("Subject", content),
 				   body);
+	}
+	else if (KURLDrag::decode(e, files)  &&  files.count())
+	{
+		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
+		action = KAEvent::FILE;
+		alarmText.setText(files.first().prettyURL());
 	}
 	else if (e->provides(KPIM::MailListDrag::format())
 	&&       KPIM::MailListDrag::decode(e, mailList))
