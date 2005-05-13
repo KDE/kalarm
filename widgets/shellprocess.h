@@ -26,7 +26,12 @@
 
 /**
  *  The ShellProcess class runs a shell command and interprets the shell exit status
- *  as far as possible.
+ *  as far as possible. It blocks execution if shell access is prohibited.
+ *
+ *  Before executing any command, ShellProcess checks whether shell commands are
+ *  allowed at all. If not (e.g. if the user is running in kiosk mode), it blocks
+ *  execution.
+ *
  *  Derived from KShellProcess, this class additionally tries to interpret the shell
  *  exit status. Different shells use different exit codes. Currently, if bash or ksh
  *  report that the command could not be found or could not be executed, the NOT_FOUND
