@@ -633,3 +633,5 @@ void AlarmListTooltip::maybeTip(const QPoint& pt)
 	}
 }
 
+
+#include "alarmlistview.moc"
