@@ -249,12 +249,9 @@ void SoundDlg::slotOk()
  */
 void SoundDlg::slotPickFile()
 {
-	KURL url = SoundPicker::browseFile(mFileEdit->text(), mDefaultDir);
+	QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
 	if (!url.isEmpty())
-	{
-		mFileEdit->setText(url.prettyURL());
-		mDefaultDir = url.path();
-	}
+		mFileEdit->setText(url);
 }
 
 /******************************************************************************

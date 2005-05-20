@@ -104,12 +104,13 @@ class SoundPicker : public QFrame
 		bool           repeatSetting() const { return mRepeat; }
 		/** Display a dialogue to choose a sound file, initially highlighting
 		 *  @p initialFile if non-null.
+		 *  @param initialDir  Initial directory to display if @p initialFile is null. If a file is
+		 *                     chosen, this is updated to the directory containing the chosen file.
 		 *  @param initialFile Full path name or URL of file to be highlighted initially.
 		 *                     If null, no file will be highlighted.
-		 *  @param initialDir  Initial directory to display if @p initialFile is null.
-		 *  @return URL selected. If none is selected, URL.isEmpty() is true.
+		 *  @return URL selected, in human readable format. If none is selected, URL.isEmpty() is true.
 		 */
-		static KURL    browseFile(const QString& initialFile = QString::null, const QString& initialDir = QString::null);
+		static QString browseFile(QString& initialDir, const QString& initialFile = QString::null);
 
 		static QString i18n_Sound();       // plain text of Sound checkbox
 		static QString i18n_s_Sound();     // text of Sound checkbox, with 'S' shortcut

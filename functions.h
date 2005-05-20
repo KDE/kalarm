@@ -23,6 +23,7 @@
 
 #include <qsize.h>
 #include <qptrlist.h>
+#include <qstring.h>
 class QObject;
 class QWidget;
 class QString;
@@ -44,6 +45,8 @@ MainWindow*         displayMainWindowSelected(const QString& eventID = QString::
 bool                readConfigWindowSize(const char* window, QSize&);
 void                writeConfigWindowSize(const char* window, const QSize&);
 FileType            fileType(const QString& mimetype);
+QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString::null,
+                               const QString& filter = QString::null, int mode = 0, QWidget* parent = 0, const char* name = 0);
 KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 QPtrList<KAEvent>   templateList();

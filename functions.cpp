@@ -21,12 +21,16 @@
 #include "kalarm.h"
 
 #include <qdeepcopy.h>
+#include <qdir.h>
+#include <qregexp.h>
+
 #include <kconfig.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -546,6 +550,36 @@ FileType fileType(const QString& mimetype)
 		return TextPlain;
 	}
 	return Unknown;
+}
+
+/******************************************************************************
+* Display a modal dialogue to choose an existing file, initially highlighting
+* any specified file.
+* @param initialFile The file to initially highlight - must be a full path name or URL.
+* @param defaultDir The directory to start in if @p initialFile is empty. If empty,
+*                   the user's home directory will be used. Updated to the
+*                   directory containing the selected file, if a file is chosen.
+* @param mode OR of KFile::Mode values, e.g. ExistingOnly, LocalOnly.
+* Reply = URL selected. If none is selected, URL.isEmpty() is true.
+*/
+QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
+                   const QString& filter, int mode, QWidget* parent, const char* name)
+{
+	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
+	                   : !defaultDir.isEmpty()  ? defaultDir
+	                   :                          QDir::homeDirPath();
+	KFileDialog fileDlg(initialDir, filter, parent, name, true);
+//#warning Does existing-only work?
+	fileDlg.setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
+	fileDlg.setMode(KFile::File | mode);
+	fileDlg.setCaption(caption);
+	if (!initialFile.isEmpty())
+		fileDlg.setSelection(initialFile);
+	if (fileDlg.exec() != QDialog::Accepted)
+		return QString::null;
+	KURL url = fileDlg.selectedURL();
+	defaultDir = url.path();
+	return url.prettyURL();
 }
 
 /******************************************************************************

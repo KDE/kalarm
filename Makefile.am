@@ -20,7 +20,7 @@ kalarm_SOURCES = birthdaydlg.cpp main.cpp alarmevent.cpp editdlg.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp \
 	templatemenuaction.cpp latecancel.cpp repetition.cpp alarmtext.cpp \
-	emailidcombo.cpp find.cpp
+	emailidcombo.cpp find.cpp pickfileradio.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 if include_ARTS
 ARTSLIB = -lartskde
@@ -37,8 +37,8 @@ noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
 	editdlg.h editdlgprivate.h emailidcombo.h eventlistviewbase.h find.h \
 	fontcolour.h fontcolourbutton.h functions.h kalarm.h kalarmapp.h \
 	kamail.h latecancel.h mainwindow.h mainwindowbase.h messagewin.h \
-	prefdlg.h preferences.h recurrenceedit.h recurrenceeditprivate.h \
-	reminder.h repetition.h sounddlg.h soundpicker.h \
+	pickfileradio.h prefdlg.h preferences.h recurrenceedit.h \
+	recurrenceeditprivate.h reminder.h repetition.h sounddlg.h soundpicker.h \
 	specialactions.h synchtimer.h templatedlg.h templatelistview.h \
 	templatemenuaction.h templatepickdlg.h timeselector.h traywindow.h \
 	undo.h

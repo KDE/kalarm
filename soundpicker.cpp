@@ -39,6 +39,7 @@
 
 #include "buttongroup.h"
 #include "checkbox.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "pushbutton.h"
 #include "radiobutton.h"
@@ -286,16 +287,12 @@ void SoundPicker::slotTypeChanged(int id)
 void SoundPicker::slotPickFile()
 {
 #ifdef WITHOUT_ARTS
-	KURL url = browseFile(mFile, mDefaultDir);
+	QString url = browseFile(mDefaultDir, mFile);
 	if (!url.isEmpty())
-	{
-		mFile = url.prettyURL();
-		mDefaultDir = url.path();
-	}
+		mFile = url;
 #else
 	QString file = mFile;
-	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat,
-		     i18n("Sound File"), this, "soundDlg");
+	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this, "soundDlg");
 	dlg.setReadOnly(mReadOnly);
 	bool accepted = (dlg.exec() == QDialog::Accepted);
 	if (mReadOnly)
@@ -338,23 +335,22 @@ void SoundPicker::setLastType()
 /******************************************************************************
 * Display a dialogue to choose a sound file, initially highlighting any
 * specified file. 'initialFile' must be a full path name or URL.
+* 'defaultDir' is updated to the directory containing the chosen file.
 * Reply = URL selected. If none is selected, URL.isEmpty() is true.
 */
-KURL SoundPicker::browseFile(const QString& initialFile, const QString& defaultDir)
+QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 {
-	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
-	                   : !defaultDir.isEmpty()  ? defaultDir
-	                   : KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+	static QString kdeSoundDir;     // directory containing KDE sound files
+	if (defaultDir.isEmpty())
+	{
+		if (kdeSoundDir.isNull())
+			kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+		defaultDir = kdeSoundDir;
+	}
 #ifdef WITHOUT_ARTS
-	KFileDialog fileDlg(initialDir, QString::fromLatin1("*.wav *.mp3 *.ogg|%1\n*|%2").arg(i18n("Sound Files")).arg(i18n("All Files")), 0, "soundFileDlg", true);
+	QString filter = QString::fromLatin1("*.wav *.mp3 *.ogg|%1\n*|%2").arg(i18n("Sound Files")).arg(i18n("All Files"));
 #else
-	KFileDialog fileDlg(initialDir, KDE::PlayObjectFactory::mimeTypes().join(" "), 0, "soundFileDlg", true);
+	QString filter = KDE::PlayObjectFactory::mimeTypes().join(" ");
 #endif
-	fileDlg.setCaption(i18n("Choose Sound File"));
-	fileDlg.setMode(KFile::File | KFile::ExistingOnly);
-	if (!initialFile.isEmpty())
-		fileDlg.setSelection(initialFile);
-	if (fileDlg.exec() == QDialog::Accepted)
-		return fileDlg.selectedURL();
-	return KURL();
+	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0, "pickSoundFile");
 }
