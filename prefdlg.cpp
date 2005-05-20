@@ -36,7 +36,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -1074,7 +1073,7 @@ void EditPrefTab::restore()
 #endif
 	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
 	mDefaultCmdScript->setChecked(preferences->mDefaultCmdScript);
-	mDefaultCmdXterm->setChecked(preferences->mDefaultCmdXterm);
+	mDefaultCmdXterm->setChecked(preferences->mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
 	mDefaultEmailBcc->setChecked(preferences->mDefaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(preferences->mDefaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(preferences->mDefaultReminderUnits);
@@ -1095,7 +1094,7 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultSoundRepeat = mDefaultSoundRepeat->isChecked();
 #endif
 	preferences->mDefaultCmdScript   = mDefaultCmdScript->isChecked();
-	preferences->mDefaultCmdXterm    = mDefaultCmdXterm->isChecked();
+	preferences->mDefaultCmdLogFile  = (mDefaultCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
 	preferences->mDefaultEmailBcc    = mDefaultEmailBcc->isChecked();
 	preferences->mDefaultPreAction   = mDefaultSpecialActions->preAction();
 	preferences->mDefaultPostAction  = mDefaultSpecialActions->postAction();
@@ -1126,7 +1125,7 @@ void EditPrefTab::setDefaults()
 	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
 #endif
 	mDefaultCmdScript->setChecked(Preferences::default_defaultCmdScript);
-	mDefaultCmdXterm->setChecked(Preferences::default_defaultCmdXterm);
+	mDefaultCmdXterm->setChecked(Preferences::default_defaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
 	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
 	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
 	mDefaultReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
@@ -1135,9 +1134,10 @@ void EditPrefTab::setDefaults()
 
 void EditPrefTab::slotBrowseSoundFile()
 {
-	KURL url = SoundPicker::browseFile(mDefaultSoundFile->text());
+	QString defaultDir;
+	QString url = SoundPicker::browseFile(defaultDir, mDefaultSoundFile->text());
 	if (!url.isEmpty())
-		mDefaultSoundFile->setText(url.prettyURL());
+		mDefaultSoundFile->setText(url);
 }
 
 int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)

@@ -40,7 +40,9 @@ using namespace KCal;
 
 const QCString APPNAME("KALARM");
 
-// Custom calendar properties
+// Custom calendar properties.
+// Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
+// - General alarm properties
 static const QCString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
 static const QString FILE_TYPE                  = QString::fromLatin1("FILE");
 static const QString AT_LOGIN_TYPE              = QString::fromLatin1("LOGIN");
@@ -52,9 +54,12 @@ static const QString DATE_DEFERRAL_TYPE         = QString::fromLatin1("DATE_DEFE
 static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
 static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
 static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
+// - Display alarm properties
 static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
-static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
+// - Email alarm properties
 static const QCString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+// - Audio alarm properties
+static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 static const QCString SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event categories
@@ -63,10 +68,11 @@ static const QString EMAIL_BCC_CATEGORY        = QString::fromLatin1("BCC");
 static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
 static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL;");
 static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;");
-static const QString EXEC_IN_XTERM_CATEGORY    = QString::fromLatin1("XTERM");
 static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
 static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
 static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
+static const QString LOG_CATEGORY              = QString::fromLatin1("LOG:");
+static const QString xtermURL = QString::fromLatin1("xterm:");
 
 // Event status strings
 static const QString DISABLED_STATUS           = QString::fromLatin1("DISABLED");
@@ -162,6 +168,8 @@ void KAEvent::copy(const KAEvent& event)
 	mExceptionDateTimes      = event.mExceptionDateTimes;
 	mAlarmCount              = event.mAlarmCount;
 	mDeferral                = event.mDeferral;
+	mLogFile                 = event.mLogFile;
+	mCommandXterm            = event.mCommandXterm;
 	mRecursFeb29             = event.mRecursFeb29;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
 	mMainExpired             = event.mMainExpired;
@@ -186,6 +194,7 @@ void KAEvent::set(const Event& event)
 	mEventID                = event.uid();
 	mRevision               = event.revision();
 	mTemplateName           = QString::null;
+	mLogFile                = QString::null;
 	mTemplateAfterTime      = -1;
 	mBeep                   = false;
 	mSpeak                  = false;
@@ -212,10 +221,16 @@ void KAEvent::set(const Event& event)
 			mConfirmAck = true;
 		else if (cats[i] == EMAIL_BCC_CATEGORY)
 			mEmailBcc = true;
-		else if (cats[i] == EXEC_IN_XTERM_CATEGORY)
-			mCommandXterm = true;
 		else if (cats[i] == ARCHIVE_CATEGORY)
 			mArchive = true;
+		else if (cats[i].startsWith(LOG_CATEGORY))
+		{
+			QString logUrl = cats[i].mid(LOG_CATEGORY.length());
+			if (logUrl == xtermURL)
+				mCommandXterm = true;
+			else
+				mLogFile = logUrl;
+		}
 		else if (cats[i].startsWith(ARCHIVE_CATEGORIES))
 		{
 			// It's the archive flag plus a reminder time and/or repeat-at-login flag
@@ -683,6 +698,32 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 }
 
 /******************************************************************************
+ * Initialise a command KAEvent.
+ */
+void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile)
+{
+	if (!logfile.isEmpty())
+		flags &= ~EXEC_IN_XTERM;
+	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME);
+	mLogFile = logfile;
+}
+
+void KAEvent::setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
+{
+	if (!logfile.isEmpty())
+		flags &= ~EXEC_IN_XTERM;
+	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags);
+	mLogFile = logfile;
+}
+
+void KAEvent::setLogFile(const QString& logfile)
+{
+	mLogFile = logfile;
+	if (!logfile.isEmpty())
+		mCommandXterm = false;
+}
+
+/******************************************************************************
  * Initialise an email KAEvent.
  */
 void KAEvent::setEmail(const QDate& d, const QString& from, const EmailAddressList& addresses, const QString& subject,
@@ -858,16 +899,18 @@ void KAEvent::set(int flags)
 {
 	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
 	mStartDateTime.setDateOnly(flags & ANY_TIME);
-	set_deferral((flags & KAEvent::DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
-	mEnabled  = !(flags & DISABLED);
-	mUpdated = true;
+	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+	mCommandXterm = flags & EXEC_IN_XTERM;
+	mEnabled      = !(flags & DISABLED);
+	mUpdated      = true;
 }
 
 int KAEvent::flags() const
 {
 	return KAAlarmEventBase::flags()
 	     | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
-	     | (mDeferral > 0               ? KAEvent::DEFERRAL : 0)
+	     | (mDeferral > 0               ? DEFERRAL : 0)
+	     | (mCommandXterm               ? EXEC_IN_XTERM : 0)
 	     | (mEnabled                    ? 0 : DISABLED);
 }
 
@@ -906,7 +949,9 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	if (mEmailBcc)
 		cats.append(EMAIL_BCC_CATEGORY);
 	if (mCommandXterm)
-		cats.append(EXEC_IN_XTERM_CATEGORY);
+		cats.append(LOG_CATEGORY + xtermURL);
+	else if (!mLogFile.isEmpty())
+		cats.append(LOG_CATEGORY + mLogFile);
 	if (mLateCancel)
 		cats.append(QString("%1%2").arg(mAutoClose ? AUTO_CLOSE_CATEGORY : LATE_CANCEL_CATEGORY).arg(mLateCancel));
 	if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
@@ -1205,7 +1250,6 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mAutoClose     = mAutoClose;
 		al.mEmailBcc      = mEmailBcc;
 		al.mCommandScript = mCommandScript;
-		al.mCommandXterm  = mCommandXterm;
 		if (mActionType == T_EMAIL)
 		{
 			al.mEmailFromKMail   = mEmailFromKMail;
@@ -2795,17 +2839,21 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	// KAlarm pre-1.3.0 TMPLDEFTIME category with no parameter
 	static const QString TEMPL_DEF_TIME_CAT = QString::fromLatin1("TMPLDEFTIME");
 
+	// KAlarm pre-1.3.1 XTERM category
+	static const QString EXEC_IN_XTERM_CAT  = QString::fromLatin1("XTERM");
+
 	int version = calendar.KAlarmVersion();
-	if (version >= AlarmCalendar::KAlarmVersion(1,3,0))
+	if (version >= AlarmCalendar::KAlarmVersion(1,3,1))
 		return;
 
-	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting\n";
+	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version " << version << endl;
 	bool pre_0_7   = (version < AlarmCalendar::KAlarmVersion(0,7,0));
 	bool pre_0_9   = (version < AlarmCalendar::KAlarmVersion(0,9,0));
 	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
 	bool pre_1_1_1 = (version < AlarmCalendar::KAlarmVersion(1,1,1));
 	bool pre_1_2_1 = (version < AlarmCalendar::KAlarmVersion(1,2,1));
 	bool pre_1_3_0 = (version < AlarmCalendar::KAlarmVersion(1,3,0));
+	bool pre_1_3_1 = (version < AlarmCalendar::KAlarmVersion(1,3,1));
 	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::instance()->startOfDay();
@@ -3062,6 +3110,20 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			}
 		}
 
+		if (pre_1_3_1)
+		{
+			/*
+			 * It's a KAlarm pre-1.3.1 calendar file.
+			 * Convert simple XTERM category to LOG:xterm:
+			 */
+			QStringList::Iterator it;
+			while ((it = cats.find(EXEC_IN_XTERM_CAT)) != cats.end())
+			{
+				cats.remove(it);
+				cats.append(LOG_CATEGORY + xtermURL);
+			}
+		}
+
 		if (addLateCancel)
 			cats.append(QString("%1%2").arg(LATE_CANCEL_CATEGORY).arg(1));
 
@@ -3084,6 +3146,11 @@ void KAEvent::dumpDebug() const
 		kdDebug(5950) << "-- mAudioFile:" << mAudioFile << ":\n";
 		kdDebug(5950) << "-- mPreAction:" << mPreAction << ":\n";
 		kdDebug(5950) << "-- mPostAction:" << mPostAction << ":\n";
+	}
+	else if (mActionType == T_COMMAND)
+	{
+		kdDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false") << ":\n";
+		kdDebug(5950) << "-- mLogFile:" << mLogFile << ":\n";
 	}
 	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
@@ -3214,7 +3281,6 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mFadeSeconds      = rhs.mFadeSeconds;
 	mActionType       = rhs.mActionType;
 	mCommandScript    = rhs.mCommandScript;
-	mCommandXterm     = rhs.mCommandXterm;
 	mRepeatCount      = rhs.mRepeatCount;
 	mRepeatInterval   = rhs.mRepeatInterval;
 	mBeep             = rhs.mBeep;
@@ -3241,7 +3307,6 @@ void KAAlarmEventBase::set(int flags)
 	mDisplaying    = flags & KAEvent::DISPLAYING_;
 	mDefaultFont   = flags & KAEvent::DEFAULT_FONT;
 	mCommandScript = flags & KAEvent::SCRIPT;
-	mCommandXterm  = flags & KAEvent::EXEC_IN_XTERM;
 }
 
 int KAAlarmEventBase::flags() const
@@ -3255,9 +3320,7 @@ int KAAlarmEventBase::flags() const
 	     | (mConfirmAck      ? KAEvent::CONFIRM_ACK : 0)
 	     | (mDisplaying      ? KAEvent::DISPLAYING_ : 0)
 	     | (mDefaultFont     ? KAEvent::DEFAULT_FONT : 0)
-	     | (mCommandScript   ? KAEvent::SCRIPT : 0)
-	     | (mCommandXterm    ? KAEvent::EXEC_IN_XTERM : 0);
-
+	     | (mCommandScript   ? KAEvent::SCRIPT : 0);
 }
 
 const QFont& KAAlarmEventBase::font() const
@@ -3272,10 +3335,7 @@ void KAAlarmEventBase::dumpDebug() const
 	kdDebug(5950) << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??") << ":\n";
 	kdDebug(5950) << "-- mText:" << mText << ":\n";
 	if (mActionType == T_COMMAND)
-	{
 		kdDebug(5950) << "-- mCommandScript:" << (mCommandScript ? "true" : "false") << ":\n";
-		kdDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false") << ":\n";
-	}
 	kdDebug(5950) << "-- mNextMainDateTime:" << mNextMainDateTime.toString() << ":\n";
 	if (mActionType == T_EMAIL)
 	{

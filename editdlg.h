@@ -53,6 +53,7 @@ class RepetitionButton;
 class TimeSpinBox;
 class LineEdit;
 class TextEdit;
+class PickAlarmFileRadio;
 
 
 class EditAlarmDlg : public KDialogBase
@@ -60,6 +61,7 @@ class EditAlarmDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		enum MessageType { MESSAGE, FILE };
+		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0, const char* name = 0,
                      const KAEvent* = 0, bool readOnly = false);
@@ -75,8 +77,9 @@ class EditAlarmDlg : public KDialogBase
 		static QString  i18n_EnterScript();        // plain text of 'Enter a script' checkbox
 		static QString  i18n_p_EnterScript();      // text of 'Enter a script' checkbox, with 'P' shortcut
 		static QString  i18n_ExecInTermWindow();   // plain text of 'Execute in terminal window' checkbox
-		static QString  i18n_w_ExecInTermWindow(); // text of 'Execute in terminal window' checkbox, with 'W' shortcut
-		static QString  i18n_u_ExecInTermWindow(); // text of 'Execute in terminal window' checkbox, with 'U' shortcut
+		static QString  i18n_w_ExecInTermWindow(); // text of 'Execute in terminal window' radio button, with 'W' shortcut
+		static QString  i18n_u_ExecInTermWindow(); // text of 'Execute in terminal window' radio button, with 'U' shortcut
+		static QString  i18n_g_LogToFile();        // text of 'Log to file' radio button, with 'G' shortcut
 		static QString  i18n_CopyEmailToSelf();    // plain text of 'Copy email to self' checkbox
 		static QString  i18n_e_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'E' shortcut
 		static QString  i18n_s_CopyEmailToSelf();  // text of 'Copy email to self' checkbox, with 'S' shortcut
@@ -99,7 +102,6 @@ class EditAlarmDlg : public KDialogBase
 		void            slotRecurFrequencyChange();
 		void            slotAlarmTypeChanged(int id);
 		void            slotEditDeferral();
-		void            slotBrowseFile();
 		void            slotFontColourSelected();
 		void            slotBgColourSelected(const QColor&);
 		void            openAddressBook();
@@ -121,6 +123,7 @@ class EditAlarmDlg : public KDialogBase
 		bool            checkText(QString& result, bool showErrorMessage = true) const;
 		void            setSoundPicker();
 		void            setRecurTabTitle(const KAEvent* = 0);
+		bool            checkCommandData();
 		bool            checkEmailData();
 
 		void            initDisplayAlarms(QWidget* parent);
@@ -139,7 +142,7 @@ class EditAlarmDlg : public KDialogBase
 		ButtonGroup*        mActionGroup;
 		RadioButton*        mMessageRadio;
 		RadioButton*        mCommandRadio;
-		RadioButton*        mFileRadio;
+		PickAlarmFileRadio* mFileRadio;
 		RadioButton*        mEmailRadio;
 		QWidgetStack*       mAlarmTypeStack;
 
@@ -176,7 +179,8 @@ class EditAlarmDlg : public KDialogBase
 		CheckBox*           mCmdTypeScript;      // entering a script
 		LineEdit*           mCmdCommandEdit;     // command line edit box
 		TextEdit*           mCmdScriptEdit;      // script edit box
-		CheckBox*           mCmdXterm;           // whether to execute command in terminal window
+		ButtonGroup*        mCmdOutputGroup;     // what to do with command output
+		LineEdit*           mCmdLogFileEdit;     // log file URL edit box
 		QWidget*            mCmdPadding;
 		// Email alarm widgets
 		QFrame*             mEmailFrame;
@@ -219,7 +223,7 @@ class EditAlarmDlg : public KDialogBase
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;
 		QString             mSavedTemplateName;   // mTemplateName value
-		QButton*            mSavedTemplateTimeType; // selected ID in mTemplateTimeGroup
+		QButton*            mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
 		QTime               mSavedTemplateTime;   // mTemplateTime value
 		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
 		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
@@ -245,7 +249,8 @@ class EditAlarmDlg : public KDialogBase
 		QStringList         mSavedEmailAttach;    // mEmailAttachList values
 		bool                mSavedEmailBcc;       // mEmailBcc status
 		bool                mSavedCmdScript;      // mCmdTypeScript status
-		bool                mSavedCmdXterm;       // mCmdXterm status
+		QButton*            mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
+		QString             mSavedCmdLogFile;     // mCmdLogFileEdit value
 		DateTime            mSavedDateTime;       // mTimeWidget value
 		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
 		int                 mSavedRepeatInterval; // alarm repetition interval (via mSimpleRepetition button)

@@ -1108,11 +1108,13 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
+	QTime sod = Preferences::instance()->startOfDay();
+	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 	if (KAEvent::adjustStartOfDay(cal->events()))
 		cal->save();
 	Preferences::instance()->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
-	mStartOfDay = Preferences::instance()->startOfDay();
+	mStartOfDay = sod;
 }
 
 /******************************************************************************
@@ -1677,6 +1679,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
+	KProcess::Communication comms = KProcess::NoCommunication;
 	QString cmd;
 	QString tmpXtermFile;
 	if (flags & ProcData::EXEC_IN_XTERM)
@@ -1725,15 +1728,41 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		}
 	}
 	else
+	{
 		cmd = command;
+		comms = KProcess::AllOutput;
+	}
 	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
-	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
+	QGuardedPtr<ShellProcess> logproc = 0;
+	if (comms == KProcess::AllOutput)
+	{
+		// Output is to be appended to a log file.
+		// Set up a logging process to write the command's output to.
+		connect(proc, SIGNAL(receivedStdout(KProcess*,char*,int)), SLOT(slotCommandOutput(KProcess*,char*,int)));
+		connect(proc, SIGNAL(receivedStderr(KProcess*,char*,int)), SLOT(slotCommandOutput(KProcess*,char*,int)));
+		logproc = new ShellProcess(QString::fromLatin1("cat >>%1").arg(event.logFile()));
+		connect(logproc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotLogProcExited(ShellProcess*)));
+		logproc->start(KProcess::Stdin);
+		QCString heading;
+		if (alarm  &&  alarm->dateTime().isValid())
+		{
+			QString dateTime = alarm->dateTime().isDateOnly()
+			                 ? KGlobal::locale()->formatDate(alarm->dateTime().date(), true)
+			                 : KGlobal::locale()->formatDateTime(alarm->dateTime().dateTime());
+			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.latin1());
+		}
+		else
+			heading = "\n******* KAlarm *******\n";
+		logproc->writeStdin(heading, heading.length()+1);
+	}
+	ProcData* pd = new ProcData(proc, logproc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
 	if (flags & ProcData::TEMP_FILE)
 		pd->tempFiles += command;
-	pd->tempFiles += tmpXtermFile;
+	if (!tmpXtermFile.isEmpty())
+		pd->tempFiles += tmpXtermFile;
 	mCommandProcesses.append(pd);
-	if (proc->start())
+	if (proc->start(comms))
 		return proc;
 
 	// Error executing command - report it
@@ -1756,8 +1785,8 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 		kdError(5950) << "KAlarmApp::createTempScript(): Unable to create a temporary script file" << endl;
 	else
 	{
-		if (insertShell)
-			;
+//		if (insertShell)
+//			;
 		*stream << command;
 		tmpFile.close();
 		if (tmpFile.status())
@@ -1772,7 +1801,34 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 }
 
 /******************************************************************************
-* Called when a command alarm execution completes.
+* Called when an executing command alarm sends output to stdout or stderr.
+*/
+void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
+{
+kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QCString(buffer, bufflen+1) << "'\n";
+	// Find this command in the command list
+	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())
+	{
+		if (pd->process == proc  &&  pd->logProcess)
+		{
+			pd->logProcess->writeStdin(buffer, bufflen);
+			break;
+		}
+	}
+}
+
+/******************************************************************************
+* Called when a logging process completes.
+*/
+void KAlarmApp::slotLogProcExited(ShellProcess* proc)
+{
+	// Because it's held as a guarded pointer in the ProcData structure,
+	// we don't need to set any pointers to zero.
+	delete proc;
+}
+
+/******************************************************************************
+* Called when a command alarm's execution completes.
 */
 void KAlarmApp::slotCommandExited(ShellProcess* proc)
 {
@@ -1782,7 +1838,11 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 	{
 		if (pd->process == proc)
 		{
-			// Found the command. Check its exit status.
+			// Found the command
+			if (pd->logProcess)
+				pd->logProcess->stdinExit();   // terminate the logging process
+
+			// Check its exit status
 			if (!proc->normalExit())
 			{
 				QString errmsg = proc->errorMessage();
@@ -1840,7 +1900,10 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())
 	{
 		if (pd->process == proc)
+		{
 			pd->messageBoxParent = parent;
+			break;
+		}
 	}
 }
 
@@ -2063,6 +2126,7 @@ KAlarmApp::ProcData::~ProcData()
 	{
 		// Delete the temporary file called by the XTerm command
 		QFile f(tempFiles.first());
+kdDebug(5950)<<"Deleting "<<f.name()<<endl;
 		f.remove();
 		tempFiles.remove(tempFiles.begin());
 	}

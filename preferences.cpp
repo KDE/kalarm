@@ -75,7 +75,7 @@ const bool       Preferences::default_defaultSoundRepeat       = false;
 const SoundPicker::Type Preferences::default_defaultSoundType  = SoundPicker::BEEP;
 const bool       Preferences::default_defaultConfirmAck        = false;
 const bool       Preferences::default_defaultCmdScript         = false;
-const bool       Preferences::default_defaultCmdXterm          = false;
+const EditAlarmDlg::CmdLogType Preferences::default_defaultCmdLogType = EditAlarmDlg::DISCARD_OUTPUT;
 const bool       Preferences::default_defaultEmailBcc          = false;
 const QString    Preferences::default_emailAddress             = QString::null;
 const QString    Preferences::default_emailBccAddress          = QString::null;
@@ -142,7 +142,8 @@ static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFil
 static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
 static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
 static const QString DEF_CMD_SCRIPT           = QString::fromLatin1("DefCmdScript");
-static const QString DEF_CMD_XTERM            = QString::fromLatin1("DefCmdXterm");
+static const QString DEF_CMD_LOG_TYPE         = QString::fromLatin1("DefCmdLogType");
+static const QString DEF_LOG_FILE             = QString::fromLatin1("DefLogFile");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
 static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
@@ -271,7 +272,10 @@ Preferences::Preferences()
 #endif
 	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultCmdScript         = config->readBoolEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
-	mDefaultCmdXterm          = config->readBoolEntry(DEF_CMD_XTERM, default_defaultCmdXterm);
+	int logType               = config->readNumEntry(DEF_CMD_LOG_TYPE, default_defaultCmdLogType);
+	mDefaultCmdLogType        = (logType < EditAlarmDlg::DISCARD_OUTPUT || logType > EditAlarmDlg::EXEC_IN_TERMINAL)
+	                          ? default_defaultCmdLogType : (EditAlarmDlg::CmdLogType)logType;
+	mDefaultCmdLogFile        = config->readPathEntry(DEF_LOG_FILE);
 	mDefaultEmailBcc          = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
@@ -336,7 +340,8 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
 	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
 	config->writeEntry(DEF_CMD_SCRIPT, mDefaultCmdScript);
-	config->writeEntry(DEF_CMD_XTERM, mDefaultCmdXterm);
+	config->writeEntry(DEF_CMD_LOG_TYPE, mDefaultCmdLogType);
+	config->writePathEntry(DEF_LOG_FILE, mDefaultCmdLogFile);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
@@ -491,6 +496,7 @@ bool Preferences::notifying(const QString& messageID)
 */
 void Preferences::convertOldPrefs()
 {
+	bool sync = false;
 	KConfig* config = KGlobal::config();
 	QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
 	if (entries.find(EMAIL_FROM) == entries.end()
@@ -514,6 +520,18 @@ void Preferences::convertOldPrefs()
 		config->deleteEntry(EMAIL_ADDRESS);
 		config->deleteEntry(EMAIL_BCC_USE_CONTROL_CENTRE);
 		config->deleteEntry(EMAIL_USE_CONTROL_CENTRE);
-		config->sync();
+		sync = true;
 	}
+	// Convert KAlarm 1.2 preferences
+	static const QString DEF_CMD_XTERM = QString::fromLatin1("DefCmdXterm");
+	config->setGroup(DEFAULTS_SECTION);
+	if (config->hasKey(DEF_CMD_XTERM))
+	{
+		config->writeEntry(DEF_CMD_LOG_TYPE,
+			(config->readBoolEntry(DEF_CMD_XTERM, false) ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT));
+		config->deleteEntry(DEF_CMD_XTERM);
+		sync = true;
+	}
+	if (sync)
+		config->sync();
 }

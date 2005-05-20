@@ -97,6 +97,8 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void               quitFatal();
 		void               slotPreferencesChanged();
+		void               slotCommandOutput(KProcess*, char* buffer, int bufflen);
+		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
 		void               slotSystemTrayTimer();
 		void               slotExpiredPurged();
@@ -109,8 +111,8 @@ class KAlarmApp : public KUniqueApplication
 		};
 		struct ProcData
 		{
-			ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f = 0)
-			          : process(p), event(e), alarm(a), messageBoxParent(0), flags(f) { }
+			ProcData(ShellProcess* p, ShellProcess* logp, KAEvent* e, KAAlarm* a, int f = 0)
+			          : process(p), logProcess(logp), event(e), alarm(a), messageBoxParent(0), flags(f) { }
 			~ProcData();
 			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
 			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20 };
@@ -120,12 +122,13 @@ class KAlarmApp : public KUniqueApplication
 			bool                 allowDefer() const  { return flags & ALLOW_DEFER; }
 			bool                 tempFile() const    { return flags & TEMP_FILE; }
 			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
-			ShellProcess*        process;
-			KAEvent*             event;
-			KAAlarm*             alarm;
-			QGuardedPtr<QWidget> messageBoxParent;
-			QStringList          tempFiles;
-			int                  flags;
+			ShellProcess*             process;
+			QGuardedPtr<ShellProcess> logProcess;
+			KAEvent*                  event;
+			KAAlarm*                  alarm;
+			QGuardedPtr<QWidget>      messageBoxParent;
+			QStringList               tempFiles;
+			int                       flags;
 		};
 		struct DcopQEntry
 		{

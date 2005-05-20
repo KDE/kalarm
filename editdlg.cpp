@@ -71,6 +71,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
+#include "pickfileradio.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
@@ -91,6 +92,40 @@ using namespace KCal;
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
 static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
+/*=============================================================================
+= Class PickAlarmFileRadio
+=============================================================================*/
+class PickAlarmFileRadio : public PickFileRadio
+{
+    public:
+	PickAlarmFileRadio(const QString& text, QButtonGroup* parent, const char* name = 0)
+		: PickFileRadio(text, parent, name) { }
+	virtual QString pickFile()    // called when browse button is pressed to select a file to display
+	{
+		return KAlarm::browseFile(i18n("Choose Text or Image File to Display"), mDefaultDir, fileEdit()->text(),
+		                          QString::null, KFile::ExistingOnly, parentWidget(), "pickAlarmFile");
+	}
+    private:
+	QString mDefaultDir;   // default directory for file browse button
+};
+
+/*=============================================================================
+= Class PickLogFileRadio
+=============================================================================*/
+class PickLogFileRadio : public PickFileRadio
+{
+    public:
+	PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, QButtonGroup* parent, const char* name = 0)
+		: PickFileRadio(b, e, text, parent, name) { }
+	virtual QString pickFile()    // called when browse button is pressed to select a log file
+	{
+		return KAlarm::browseFile(i18n("Choose Log File"), mDefaultDir, fileEdit()->text(), QString::null,
+		                          KFile::LocalOnly, parentWidget(), "pickLogFile");
+	}
+    private:
+	QString mDefaultDir;   // default directory for log file browse button
+};
+
 inline QString recurText(const KAEvent& event)
 {
 	return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
@@ -105,6 +140,7 @@ QString EditAlarmDlg::i18n_p_EnterScript()      { return i18n("Enter a scri&pt")
 QString EditAlarmDlg::i18n_ExecInTermWindow()   { return i18n("Execute in terminal window"); }
 QString EditAlarmDlg::i18n_w_ExecInTermWindow() { return i18n("Execute in terminal &window"); }
 QString EditAlarmDlg::i18n_u_ExecInTermWindow() { return i18n("Exec&ute in terminal window"); }
+QString EditAlarmDlg::i18n_g_LogToFile()        { return i18n("Lo&g to file"); }
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
@@ -197,7 +233,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	grid->setColStretch(1, 1);
 
 	// File radio button
-	mFileRadio = new RadioButton(i18n("&File"), mActionGroup, "fileButton");
+	mFileRadio = new PickAlarmFileRadio(i18n("&File"), mActionGroup, "fileButton");
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	QWhatsThis::add(mFileRadio,
 	      i18n("If checked, the alarm will display the contents of a text or image file."));
@@ -387,13 +423,12 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	QWhatsThis::add(mFileMessageEdit, i18n("Enter the name or URL of a text or image file to display."));
 
 	// File browse button
-
 	mFileBrowseButton = new QPushButton(mFileBox);
 	mFileBrowseButton->setPixmap(SmallIcon("fileopen"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
-	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotBrowseFile()));
 	QToolTip::add(mFileBrowseButton, i18n("Choose a file"));
 	QWhatsThis::add(mFileBrowseButton, i18n("Select a text or image file to display."));
+	mFileRadio->init(mFileBrowseButton, mFileMessageEdit);
 
 	// Colour choice drop-down list
 	QBoxLayout* layout = new QHBoxLayout(frameLayout);
@@ -470,10 +505,51 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	QWhatsThis::add(mCmdScriptEdit, i18n("Enter the contents of a script to execute"));
 	frameLayout->addWidget(mCmdScriptEdit);
 
-	mCmdXterm = new CheckBox(i18n_u_ExecInTermWindow(), mCommandFrame);
-	mCmdXterm->setFixedSize(mCmdXterm->sizeHint());
-	QWhatsThis::add(mCmdXterm, i18n("Check to execute the command in a terminal window"));
-	frameLayout->addWidget(mCmdXterm, 0, Qt::AlignAuto);
+	// What to do with command output
+
+	mCmdOutputGroup = new ButtonGroup(i18n("Command Output"), mCommandFrame);
+	frameLayout->addWidget(mCmdOutputGroup);
+	QBoxLayout* layout = new QVBoxLayout(mCmdOutputGroup, marginKDE2 + marginHint(), spacingHint());
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+
+	// Execute in terminal window
+	RadioButton* button = new RadioButton(i18n_u_ExecInTermWindow(), mCmdOutputGroup, "execInTerm");
+	button->setFixedSize(button->sizeHint());
+	QWhatsThis::add(button, i18n("Check to execute the command in a terminal window"));
+	mCmdOutputGroup->insert(button, EXEC_IN_TERMINAL);
+	layout->addWidget(button, 0, Qt::AlignAuto);
+
+	// Log file name edit box
+	QHBox* box = new QHBox(mCmdOutputGroup);
+	(new QWidget(box))->setFixedWidth(button->style().subRect(QStyle::SR_RadioButtonIndicator, button).width());   // indent the edit box
+//	(new QWidget(box))->setFixedWidth(button->style().pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
+	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
+	mCmdLogFileEdit->setAcceptDrops(true);
+	QWhatsThis::add(mCmdLogFileEdit, i18n("Enter the name or path of the log file."));
+
+	// Log file browse button.
+	// The file browser dialogue is activated by the PickLogFileRadio class.
+	QPushButton* browseButton = new QPushButton(box);
+	browseButton->setPixmap(SmallIcon("fileopen"));
+	browseButton->setFixedSize(browseButton->sizeHint());
+	QToolTip::add(browseButton, i18n("Choose a file"));
+	QWhatsThis::add(browseButton, i18n("Select a log file."));
+
+	// Log output to file
+	button = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18n_g_LogToFile(), mCmdOutputGroup, "cmdLog");
+	button->setFixedSize(button->sizeHint());
+	QWhatsThis::add(button,
+	      i18n("Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
+	mCmdOutputGroup->insert(button, LOG_TO_FILE);
+	layout->addWidget(button, 0, Qt::AlignAuto);
+	layout->addWidget(box);
+
+	// Discard output
+	button = new RadioButton(i18n("Discard"), mCmdOutputGroup, "cmdDiscard");
+	button->setFixedSize(button->sizeHint());
+	QWhatsThis::add(button, i18n("Check to discard command output."));
+	mCmdOutputGroup->insert(button, DISCARD_OUTPUT);
+	layout->addWidget(button, 0, Qt::AlignAuto);
 
 	// Top-adjust the controls
 	mCmdPadding = new QHBox(mCommandFrame);
@@ -504,7 +580,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
 		label->setBuddy(mEmailFromList);
 		QWhatsThis::add(mEmailFromList,
-			  i18n("Your email identity, used to identify you as the sender when sending email alarms."));
+		      i18n("Your email identity, used to identify you as the sender when sending email alarms."));
 		grid->addMultiCellWidget(mEmailFromList, 0, 0, 1, 2);
 	}
 
@@ -700,7 +776,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		                            :                                                 SoundPicker::PLAY_FILE;
 		mSoundPicker->set((soundType != SoundPicker::BEEP || event->beep()), soundType, event->audioFile(),
 		                  event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
-		mCmdXterm->setChecked(event->commandXterm());
+		CmdLogType logType = event->commandXterm()       ? EXEC_IN_TERMINAL
+		                   : !event->logFile().isEmpty() ? LOG_TO_FILE
+		                   :                               DISCARD_OUTPUT;
+		if (logType == LOG_TO_FILE)
+			mCmdLogFileEdit->setText(event->logFile());    // set file name before setting radio button
+		mCmdOutputGroup->setButton(logType);
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
@@ -746,7 +827,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSoundPicker->set(preferences->defaultSound(), preferences->defaultSoundType(), preferences->defaultSoundFile(),
 		                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
 		mCmdTypeScript->setChecked(preferences->defaultCmdScript());
-		mCmdXterm->setChecked(preferences->defaultCmdXterm());
+		mCmdLogFileEdit->setText(preferences->defaultCmdLogFile());    // set file name before setting radio button
+		mCmdOutputGroup->setButton(preferences->defaultCmdLogType());
 		mEmailBcc->setChecked(preferences->defaultEmailBcc());
 	}
 	slotCmdScriptToggled(mCmdTypeScript->isChecked());
@@ -807,6 +889,8 @@ void EditAlarmDlg::setReadOnly()
 	mCmdTypeScript->setReadOnly(mReadOnly);
 	mCmdCommandEdit->setReadOnly(mReadOnly);
 	mCmdScriptEdit->setReadOnly(mReadOnly);
+	for (int id = DISCARD_OUTPUT;  id < EXEC_IN_TERMINAL;  ++id)
+		((RadioButton*)mCmdOutputGroup->find(id))->setReadOnly(mReadOnly);
 
 	// Email alarm controls
 	mEmailToEdit->setReadOnly(mReadOnly);
@@ -941,7 +1025,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	}
 	checkText(mSavedTextFileCommandMessage, false);
 	mSavedCmdScript      = mCmdTypeScript->isChecked();
-	mSavedCmdXterm       = mCmdXterm->isChecked();
+	mSavedCmdOutputRadio = mCmdOutputGroup->selected();
+	mSavedCmdLogFile     = mCmdLogFileEdit->text();
 	if (mEmailFromList)
 		mSavedEmailFrom = mEmailFromList->currentIdentityName();
 	mSavedEmailTo        = mEmailToEdit->text();
@@ -1032,9 +1117,14 @@ bool EditAlarmDlg::stateChanged() const
 	}
 	else if (mCommandRadio->isOn())
 	{
-		if (mSavedCmdScript != mCmdTypeScript->isChecked()
-		||  mSavedCmdXterm  != mCmdXterm->isChecked())
+		if (mSavedCmdScript      != mCmdTypeScript->isChecked()
+		||  mSavedCmdOutputRadio != mCmdOutputGroup->selected())
 			return true;
+		if (mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+		{
+			if (mSavedCmdLogFile != mCmdLogFileEdit->text())
+				return true;
+		}
 	}
 	else if (mEmailRadio->isOn())
 	{
@@ -1126,6 +1216,9 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			break;
 		}
 		case KAEvent::COMMAND:
+			if (mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+				event.setLogFile(mCmdLogFileEdit->text());
+			break;
 		default:
 			break;
 	}
@@ -1178,8 +1271,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (displayAlarm && mSoundPicker->repeat()        ? KAEvent::REPEAT_SOUND : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()    ? KAEvent::AUTO_CLOSE : 0)
-	     | (cmdAlarm && mCmdTypeScript->isChecked()       ? KAEvent::SCRIPT : 0)
-	     | (cmdAlarm && mCmdXterm->isChecked()            ? KAEvent::EXEC_IN_XTERM : 0)
+	     | (cmdAlarm && mCmdTypeScript->isChecked()                       ? KAEvent::SCRIPT : 0)
+	     | (cmdAlarm && mCmdOutputGroup->selectedId() == EXEC_IN_TERMINAL ? KAEvent::EXEC_IN_XTERM : 0)
 	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
@@ -1288,7 +1381,8 @@ void EditAlarmDlg::slotOk()
 			return;
 		}
 	}
-	if (!checkEmailData())
+	if (!checkCommandData()
+	||  !checkEmailData())
 		return;
 	if (!mTemplate)
 	{
@@ -1400,7 +1494,7 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
-			if (mCommandRadio->isOn()  &&  !mCmdXterm->isChecked())
+			if (mCommandRadio->isOn()  &&  mCmdOutputGroup->selectedId() != EXEC_IN_TERMINAL)
 			{
 				theApp()->commandMessage((ShellProcess*)proc, this);
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
@@ -1605,6 +1699,43 @@ void EditAlarmDlg::slotSetSimpleRepetition()
 }
 
 /******************************************************************************
+*  Validate and convert command alarm data.
+*/
+bool EditAlarmDlg::checkCommandData()
+{
+	if (mCommandRadio->isOn()  &&  mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+	{
+		// Validate the log file name
+		QString file = mCmdLogFileEdit->text();
+		QFileInfo info(file);
+		QDir::setCurrent(QDir::homeDirPath());
+		bool err = file.isEmpty()  ||  info.isDir();
+		if (!err)
+		{
+			if (info.exists())
+			{
+				err = !info.isWritable();
+			}
+			else
+			{
+				QFileInfo dirinfo(info.dirPath(true));    // get absolute directory path
+				err = (!dirinfo.isDir()  ||  !dirinfo.isWritable());
+			}
+		}
+		if (err)
+		{
+			mTabs->setCurrentPage(mMainPageIndex);
+			mCmdLogFileEdit->setFocus();
+			KMessageBox::sorry(this, i18n("Log file must be the name or path of a local file, with write permission."));
+			return false;
+		}
+		// Convert the log file to an absolute path
+		mCmdLogFileEdit->setText(info.absFilePath());
+	}
+	return true;
+}
+
+/******************************************************************************
 *  Convert the email addresses to a list, and validate them. Convert the email
 *  attachments to a list.
 */
@@ -1739,22 +1870,6 @@ void EditAlarmDlg::slotTemplateTimeType(int)
 }
 
 /******************************************************************************
-*  Called when the browse button is pressed to select a file to display.
-*/
-void EditAlarmDlg::slotBrowseFile()
-{
-	if (mFileDefaultDir.isEmpty())
-		mFileDefaultDir = QDir::homeDirPath();
-	KURL url = KFileDialog::getOpenURL(mFileDefaultDir, QString::null, this, i18n("Choose Text or Image File to Display"));
-	if (!url.isEmpty())
-	{
-		mAlarmMessage = url.prettyURL();
-		mFileMessageEdit->setText(mAlarmMessage);
-		mFileDefaultDir = url.path();
-	}
-}
-
-/******************************************************************************
 *  Called when the a new background colour has been selected using the colour
 *  combo box.
 */
@@ -1804,14 +1919,12 @@ void EditAlarmDlg::openAddressBook()
  */
 void EditAlarmDlg::slotAddAttachment()
 {
-	if (mAttachDefaultDir.isEmpty())
-		mAttachDefaultDir = QDir::homeDirPath();
-	KURL url = KFileDialog::getOpenURL(mAttachDefaultDir, QString::null, this, i18n("Choose File to Attach"));
+	QString url = KAlarm::browseFile(i18n("Choose File to Attach"), mAttachDefaultDir, QString::null,
+	                                 QString::null, KFile::ExistingOnly, this, "pickAttachFile");
 	if (!url.isEmpty())
 	{
-		mEmailAttachList->insertItem(url.prettyURL());
+		mEmailAttachList->insertItem(url);
 		mEmailAttachList->setCurrentItem(mEmailAttachList->count() - 1);   // select the new item
-		mAttachDefaultDir = url.path();
 		mEmailRemoveButton->setEnabled(true);
 		mEmailAttachList->setEnabled(true);
 	}
@@ -1853,10 +1966,10 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 	}
 	else if (mFileRadio->isOn())
 	{
-		QString alarmtext = mFileMessageEdit->text();
+		QString alarmtext = mFileMessageEdit->text().stripWhiteSpace();
 		// Convert any relative file path to absolute
 		// (using home directory as the default)
-		enum Err { NONE = 0, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE, HTML };
+		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE, HTML };
 		Err err = NONE;
 		KURL url;
 		int i = alarmtext.find(QString::fromLatin1("/"));
@@ -1875,11 +1988,11 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 				else if (!fi.isReadable())  err = UNREADABLE;
 			}
 		}
+		else if (alarmtext.isEmpty())
+			err = BLANK;    // blank file name
 		else
 		{
 			// It's a local file - convert to absolute path & check validity
-			if (alarmtext.isEmpty())
-				err = DIRECTORY;    // blank file name - need to get its path, for the error message
 			QFileInfo info(alarmtext);
 			QDir::setCurrent(QDir::homeDirPath());
 			alarmtext = info.absFilePath();
@@ -1915,6 +2028,9 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			QString errmsg;
 			switch (err)
 			{
+				case BLANK:
+					KMessageBox::sorry(const_cast<EditAlarmDlg*>(this), i18n("Please select a file to display"));
+					return false;
 				case NONEXISTENT:     errmsg = i18n("%1\nnot found");  break;
 				case DIRECTORY:       errmsg = i18n("%1\nis a folder");  break;
 				case UNREADABLE:      errmsg = i18n("%1\nis not readable");  break;

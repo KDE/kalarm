@@ -31,6 +31,7 @@
 class QWidget;
 
 #include "colourlist.h"
+#include "editdlg.h"
 #include "recurrenceedit.h"
 #include "soundpicker.h"
 #include "timeperiod.h"
@@ -44,6 +45,7 @@ class Preferences : public QObject
 		enum MailClient { SENDMAIL, KMAIL };
 		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_CONTROL_CENTRE, MAIL_FROM_ADDR };
 		enum Feb29Type  { FEB29_MAR1, FEB29_FEB28, FEB29_NONE };
+		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
 		static Preferences* instance();
 
@@ -94,7 +96,9 @@ class Preferences : public QObject
 		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
 		bool           defaultCmdScript() const         { return mDefaultCmdScript; }
-		bool           defaultCmdXterm() const          { return mDefaultCmdXterm; }
+		EditAlarmDlg::CmdLogType  
+		               defaultCmdLogType() const        { return mDefaultCmdLogType; }
+		QString        defaultCmdLogFile() const        { return mDefaultCmdLogFile; }
 		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
 		RecurrenceEdit::RepeatType
 		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
@@ -155,7 +159,8 @@ class Preferences : public QObject
 		static const bool        default_defaultSoundRepeat;
 		static const bool        default_defaultConfirmAck;
 		static const bool        default_defaultCmdScript;
-		static const bool        default_defaultCmdXterm;
+		static const EditAlarmDlg::CmdLogType
+		                         default_defaultCmdLogType;
 		static const bool        default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType
 		                         default_defaultRecurPeriod;
@@ -225,9 +230,10 @@ class Preferences : public QObject
 		SoundPicker::Type   mDefaultSoundType;
 		bool                mDefaultSoundRepeat;
 		bool                mDefaultConfirmAck;
-		bool                mDefaultCmdScript;
-		bool                mDefaultCmdXterm;
 		bool                mDefaultEmailBcc;
+		bool                mDefaultCmdScript;
+		EditAlarmDlg::CmdLogType mDefaultCmdLogType;
+		QString             mDefaultCmdLogFile;
 		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
 		TimePeriod::Units   mDefaultReminderUnits;
 		QString             mDefaultPreAction;

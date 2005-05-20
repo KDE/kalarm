@@ -68,7 +68,6 @@ class KAAlarmEventBase
 		int                lateCancel() const          { return mLateCancel; }
 		bool               autoClose() const           { return mAutoClose; }
 		bool               commandScript() const       { return mCommandScript; }
-		bool               commandXterm() const        { return mCommandXterm; }
 		bool               confirmAck() const          { return mConfirmAck; }
 		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
 		int                repeatCount() const         { return mRepeatCount; }
@@ -112,7 +111,6 @@ class KAAlarmEventBase
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
 		bool               mCommandScript;    // the command text is a script, not a shell command line
-		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mBeep;             // whether to beep when the alarm is displayed
 		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
@@ -337,10 +335,8 @@ class KAEvent : public KAAlarmEventBase
 		                            { set(d, filename, bg, fg, f, FILE, lateCancel, flags | ANY_TIME); }
 		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
 		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
-		void               setCommand(const QDate& d, const QString& command, int lateCancel, int flags)
-		                            { set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME); }
-		void               setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags)
-		                            { set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags); }
+		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
+		void               setCommand(const QDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
 		void               setEmail(const QDate&, const QString& from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const QDateTime&, const QString& from, const EmailAddressList&, const QString& subject,
@@ -361,6 +357,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
+		void               setLogFile(const QString& logfile);
 		void               setReminder(int minutes, bool onceOnly);
 		bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
@@ -403,6 +400,8 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           deferralLimit(DeferLimitType* = 0) const;
 		DateTime           nextDateTime(bool includeReminders = true) const;
 		const QString&     messageFileOrCommand() const   { return mText; }
+		QString            logFile() const                { return mLogFile; }
+		bool               commandXterm() const           { return mCommandXterm; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
@@ -579,6 +578,8 @@ class KAEvent : public KAAlarmEventBase
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		int                mTemplateAfterTime;// time not specified: use n minutes after default time, or -1 (applies to templates only)
+		QString            mLogFile;          // alarm output is to be logged to this URL
+		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
