@@ -37,6 +37,7 @@ Type=Application
 Comment=KAlarm alarm daemon autostart at login
 Comment[bg]=Автоматично стартиране на процеса на алармата KAlarm при влизане в системата
 Comment[ca]=Dimoni d'inici automàtic de l'alarma KAlarm en l'entrar
+Comment[cs]=Automatické spouštění alarmovacího démona při startu
 Comment[da]=KAlarm-alarmdæmon autostart ved login
 Comment[de]=Autostart des KAlarm Erinnerungsprogramms von KOrganizer bei der Anmeldung
 Comment[es]=Inicio automático al ingresar del daemon de alarma de KAlarm
