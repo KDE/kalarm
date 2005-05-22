@@ -1951,8 +1951,7 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::instance()->startOfDay())
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 	remainingCount = 0;
-	bool last;
-	QDateTime dt = mRecurrence->getNextDateTime(pre, &last);
+	QDateTime dt = mRecurrence->getNextDateTime(pre);
 	result.set(dt, mStartDateTime.isDateOnly());
 	if (!dt.isValid())
 		return NO_OCCURRENCE;
@@ -1961,12 +1960,9 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 		remainingCount = mRecurrence->duration();
 		return FIRST_OCCURRENCE;
 	}
-	if (last)
-	{
-		remainingCount = 1;
-		return LAST_RECURRENCE;
-	}
 	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(dt) + 1;
+	if (remainingCount == 1)
+		return LAST_RECURRENCE;
 	return result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
