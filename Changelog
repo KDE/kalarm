@@ -1,6 +1,9 @@
 KAlarm
 
-=== Version 1.2.7 (KDE 3.4.1) --- 20 April 2005 ===
+=== Version 1.2.8 (KDE 3.4.1) --- 9 May 2005 ===
+Fix failure to enable "Reminder for first recurrence only" checkbox.
+
+=== Version 1.2.7 --- 20 April 2005 ===
 Use a sensible default for terminal window command in Preferences dialog.
 Validate terminal window command entered in Preferences dialog.
 Fix date range no longer being validated in Defer dialog.
