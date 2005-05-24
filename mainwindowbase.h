@@ -24,6 +24,13 @@
 #include <kmainwindow.h>
 
 
+/**
+ *  The MainWindowBase class is a base class for KAlarm's main window and message window.
+ *  When the window is closed, it only allows the application to quit if there is no
+ *  system tray icon displayed.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
 class MainWindowBase : public KMainWindow
 {
 		Q_OBJECT
