@@ -939,6 +939,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	checkRecur();     // ensure recurrence/repetition data is consistent
 	bool readOnly = ev.isReadOnly();
 	ev.setReadOnly(false);
+	ev.setTransparency(Event::Transparent);
 
 	// Set up event-specific data
 	QStringList cats;
