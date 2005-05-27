@@ -79,6 +79,7 @@ using namespace KCal;
 #ifndef WITHOUT_ARTS
 static const char* KMIX_APP_NAME    = "kmix";
 static const char* KMIX_DCOP_OBJECT = "Mixer0";
+static const char* KMIX_DCOP_WINDOW = "kmix-mainwindow#1";
 #endif
 
 // The delay for enabling message window buttons if a zero delay is
@@ -1077,6 +1078,10 @@ bool MessageWin::runKMix()
 		// KMix is not already running, so start it
 		if (KApplication::startServiceByDesktopName(QString::fromLatin1(KMIX_APP_NAME), QString::null, &mKMixError, &mKMixName))
 			return false;
+		// Minimise its window - don't use hide() since this would remove all
+		// trace of it from the panel if it is not configured to be docked in
+		// the system tray.
+		kapp->dcopClient()->send(mKMixName, KMIX_DCOP_WINDOW, "minimize()", QString::null);
 	}
 	return true;
 }
