@@ -41,6 +41,7 @@
 #include "daemon.moc"
 
 
+static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DCOP_OBJECT  = "notify";    // DCOP name of KAlarm's interface for notification by alarm daemon
 
 static QString expandURL(const QString& urlString);
@@ -190,7 +191,7 @@ bool Daemon::registerWith(bool reregister)
 	}
 	mRegisterTimer = new QTimer(mInstance);
 	connect(mRegisterTimer, SIGNAL(timeout()), mInstance, SLOT(registerTimerExpired()));
-	mRegisterTimer->start(10000);     // wait up to 10 seconds for the reply
+	mRegisterTimer->start(REGISTER_TIMEOUT * 1000);     // wait for the reply
 	return true;
 }
 
