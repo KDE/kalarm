@@ -73,7 +73,8 @@ QString AlarmText::displayText() const
 		text += mToPrefix + '\t' + mTo + '\n';
 		if (!mCc.isEmpty())
 			text += mCcPrefix + '\t' + mCc + '\n';
-		text += mDatePrefix + '\t' + mTime + '\n';
+		if (!mTime.isEmpty())
+			text += mDatePrefix + '\t' + mTime + '\n';
 		text += mSubjectPrefix + '\t' + mSubject;
 		if (!mBody.isEmpty())
 		{
