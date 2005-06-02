@@ -1,5 +1,5 @@
 /*
- *  kalarmIface.h  -  DCOP interface for KAlarm
+ *  kalarmiface.h  -  DCOP interface for KAlarm
  *  Program:  kalarm
  *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *

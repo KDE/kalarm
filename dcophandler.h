@@ -25,7 +25,7 @@
 #include <dcopobject.h>
 
 #include "datetime.h"
-#include "kalarmIface.h"
+#include "kalarmiface.h"
 
 
 class DcopHandler : public QWidget, virtual public KAlarmIface

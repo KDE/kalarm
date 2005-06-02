@@ -12,7 +12,7 @@ bin_PROGRAMS = kalarm
 kalarm_SOURCES = birthdaydlg.cpp main.cpp alarmevent.cpp editdlg.cpp \
 	soundpicker.cpp sounddlg.cpp alarmcalendar.cpp daemon.cpp undo.cpp \
 	kalarmapp.cpp mainwindowbase.cpp mainwindow.cpp messagewin.cpp \
-	preferences.cpp prefdlg.cpp kalarmIface.skel \
+	preferences.cpp prefdlg.cpp kalarmiface.skel \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
