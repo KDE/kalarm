@@ -68,7 +68,7 @@ class CheckBox : public QCheckBox
 		 *                false, the enabled state of @p widget will be left unchanged when
 		 *                the check box is clicked.
 		 */
-		void         setFocusWidget(QWidget*, bool enable = true);
+		void         setFocusWidget(QWidget* widget, bool enable = true);
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);

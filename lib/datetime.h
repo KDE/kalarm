@@ -48,6 +48,7 @@ class DateTime
 		DateTime(const QDate& d, const QTime& t)
 		                               : mDateTime(d, t), mDateOnly(false), mTimeValid(true) { }
 		/** Constructor for a date-time or date-only value.
+		 *  @param dt the date and time to use.
 		 *  @param dateOnly True to construct a date-only value; false to construct a date-time value.
 		 */
 		DateTime(const QDateTime& dt, bool dateOnly = false)
@@ -93,6 +94,7 @@ class DateTime
 		 */
 		QDateTime dateTime() const;
 		/** Sets a date-time or date-only value.
+		 *  @param dt the date-time to use.
 		 *  @param dateOnly True to set a date-only value; false to set a date-time value.
 		 */
 		void      set(const QDateTime& dt, bool dateOnly = false)

@@ -60,7 +60,7 @@ class SpinBox : public QSpinBox
 		/** Sets whether the spin box can be changed by the user.
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
-		virtual void setReadOnly(bool);
+		virtual void setReadOnly(bool readOnly);
 		/** Returns whether the spin box value text is selected when its value is stepped. */
 		bool         selectOnStep() const                  { return mSelectOnStep; }
 		/** Sets whether the spin box value text should be selected when its value is stepped. */
