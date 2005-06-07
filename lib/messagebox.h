@@ -57,28 +57,28 @@ class MessageBox : public KMessageBox
 		 */
 		static void setContinueDefault(const QString& dontAskAgainName, ButtonCode defaultButton);
 		/** Displays a Continue/Cancel message box with the option as to which button is the default.
+		 *  @param parent Parent widget
 		 *  @param defaultButton The default button for the message box. Valid values are Continue or Cancel.
+		 *  @param text Message string
+		 *  @param caption Caption (window title) of the message box
+		 *  @param buttonContinue The text for the first button (default = i18n("Continue"))
 		 *  @param dontAskAgainName If specified, the message box will only be suppressed
 		 *    if the user chose Continue last time.
-		 *  @param parent Parent widget
-		 *  @param text Text message to display
-		 *  @param caption Caption (window title) of the message box
-		 *  @param buttonContinue A GUI item for the continue button
 		 */
 		static int  warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
 		                                  const QString& caption = QString::null,
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
 		                                  const QString& dontAskAgainName = QString::null);
 		/** Displays a Continue/Cancel message box.
+		 *  @param parent Parent widget
+		 *  @param text Message string
+		 *  @param caption Caption (window title) of the message box
+		 *  @param buttonContinue The text for the first button (default = i18n("Continue"))
 		 *  @param dontAskAgainName If specified, (1) The message box will only be suppressed
 		 *    if the user chose Continue last time, and (2) The default button is that last set
 		 *    with either setContinueDefault() or warningContinueCancel() for the same
 		 *    @p dontAskAgainName value. If neither method has been used to set a default button,
 		 *    Continue is the default.
-		 *  @param parent Parent widget
-		 *  @param text Text message to display
-		 *  @param caption Caption (window title) of the message box
-		 *  @param buttonContinue A GUI item for the continue button
 		 */
 		static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString::null,
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
