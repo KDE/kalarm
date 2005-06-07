@@ -243,6 +243,7 @@ class KAEvent : public KAAlarmEventBase
 			SCRIPT          = 0x400,   // command is a script, not a shell command line
 			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
 			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
+		        COPY_KORGANIZER = 0x2000,  // KOrganizer should hold a copy of the event
 #ifdef OLD_DCOP
 			// The following are read-only internal values, and may be changed
 #else
@@ -279,7 +280,8 @@ class KAEvent : public KAAlarmEventBase
 			ACTIVE,      // the event is currently active
 			EXPIRED,     // the event has expired
 			DISPLAYING,  // the event is currently being displayed
-			TEMPLATE     // the event is an alarm template
+			TEMPLATE,    // the event is an alarm template
+			KORGANIZER   // the event is a copy of a KAlarm event, held by KOrganizer
 		};
 		enum Action
 		{
@@ -402,6 +404,7 @@ class KAEvent : public KAAlarmEventBase
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
+		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
@@ -580,6 +583,7 @@ class KAEvent : public KAAlarmEventBase
 		int                mTemplateAfterTime;// time not specified: use n minutes after default time, or -1 (applies to templates only)
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
+		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
 		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)

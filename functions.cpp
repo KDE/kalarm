@@ -31,9 +31,22 @@
 #include <kstdguiitem.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#ifdef SHOW_IN_KORGANISER
+#include <dcopclient.h>
+#endif
 #include <kdebug.h>
 
 #include <libkcal/event.h>
+#ifdef SHOW_IN_KORGANISER
+#include <libkcal/icalformat.h>
+#include <libkcal/scheduler.h>
+#include <libkpimidentities/identitymanager.h>
+#define NEEDED
+#ifdef NEEDED
+#include <libkcal/person.h>
+#include <libkcal/attendee.h>
+#endif
+#endif
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
@@ -52,7 +65,14 @@
 
 namespace
 {
-bool resetDaemonQueued = false;
+bool        resetDaemonQueued = false;
+QCString    korganizerName;
+QString     korgStartError;
+const char* KORG_DCOP_OBJECT = "KOrganizerIface";
+
+bool sendToKOrganizer(const KAEvent&);
+bool deleteFromKOrganizer(const QString& eventID);
+bool runKOrganizer();
 }
 
 /* Define the icons to be used for "New alarm" and "New alarm from template".
@@ -131,6 +151,9 @@ bool addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID)
 	cal->addEvent(event, useEventID);
 	cal->save();
 
+	if (event.copyToKOrganizer())
+		sendToKOrganizer(event);    // tell KOrganizer to show the event
+
 	// Update the window lists
 	AlarmListView::addEvent(event, selectionView);
 	return true;
@@ -199,11 +222,17 @@ void modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* sele
 		deleteEvent(oldEvent, true);
 	else
 	{
+		if (oldEvent.copyToKOrganizer())
+			deleteFromKOrganizer(oldEvent.id());    // tell KOrganizer to delete the old event
+
 		// Update the event in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 		cal->deleteEvent(oldEvent.id());
 		cal->addEvent(const_cast<KAEvent&>(newEvent), true);
 		cal->save();
+
+		if (newEvent.copyToKOrganizer())
+			sendToKOrganizer(newEvent);    // tell KOrganizer to show the new event
 
 		// Update the window lists
 		AlarmListView::modifyEvent(oldEvent.id(), newEvent, selectionView);
@@ -225,6 +254,9 @@ void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDel
 		deleteEvent(event, archiveOnDelete);
 	else
 	{
+#ifdef SHOW_IN_KORGANISER
+#warning Update KOrganizer
+#endif
 		// Update the event in the calendar file
 		if (incRevision)
 			event.incrementRevision();    // ensure alarm daemon sees the event has changed
@@ -265,6 +297,9 @@ void deleteEvent(KAEvent& event, bool archive)
 
 	// Update the window lists
 	AlarmListView::deleteEvent(id);
+
+	if (event.copyToKOrganizer())
+		deleteFromKOrganizer(event.id());    // tell KOrganizer to delete the event
 
 	// Delete the event from the calendar file
 	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
@@ -343,6 +378,9 @@ bool reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool useEvent
 			AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 			cal->addEvent(event, useEventID);
 			cal->save();
+
+			if (event.copyToKOrganizer())
+				sendToKOrganizer(event);    // tell KOrganizer to show the event
 
 			// Update the window lists
 			AlarmListView::undeleteEvent(id, event, selectionView);
@@ -569,7 +607,6 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 	                   : !defaultDir.isEmpty()  ? defaultDir
 	                   :                          QDir::homeDirPath();
 	KFileDialog fileDlg(initialDir, filter, parent, name, true);
-//#warning Does existing-only work?
 	fileDlg.setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
 	fileDlg.setMode(KFile::File | mode);
 	fileDlg.setCaption(caption);
@@ -625,3 +662,134 @@ QString stripAccel(const QString& text)
 }
 
 } // namespace KAlarm
+
+
+namespace {
+
+#ifdef SHOW_IN_KORGANISER
+/******************************************************************************
+*  Tell KOrganizer to put an alarm in its calendar.
+*  It will be held by KOrganizer as a simple event, without alarms - KAlarm
+*  is still responsible for alarming.
+*/
+bool sendToKOrganizer(const KAEvent& event)
+{
+#warning Display message if error
+	KCal::Event* kcalEvent = event.event();
+	QString uid = KAEvent::uid(event.id(), KAEvent::KORGANIZER);
+	kcalEvent->setUid(uid);
+	kcalEvent->clearAlarms();
+#ifdef NEEDED
+	QString userName = "David";
+	QString userEmail = "djarvie@astrojar.org.uk";
+#endif
+	switch (event.action())
+	{
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:
+		case KAEvent::COMMAND:
+			kcalEvent->setSummary(event.cleanText());
+#ifdef NEEDED
+	userEmail = Preferences::instance()->emailAddress();
+#endif
+			break;
+		case KAEvent::EMAIL:
+		{
+			QString from = event.emailFromKMail().isEmpty()
+			             ? Preferences::instance()->emailAddress()
+			             : KAMail::identityManager()->identityForName(event.emailFromKMail()).fullEmailAddr();
+			AlarmText atext;
+			atext.setEmail(event.emailAddresses(", "), from, QString::null, QString::null, event.emailSubject(), QString::null);
+			kcalEvent->setSummary(atext.displayText());
+#ifdef NEEDED
+	userEmail = from;
+#endif
+			break;
+		}
+	}
+#ifdef NEEDED
+	kcalEvent->setOrganizer(KCal::Person(userName, userEmail));
+		kcalEvent->addAttendee(new KCal::Attendee(userName, userEmail, false, KCal::Attendee::Accepted));
+#endif
+	// Translate the event into string format
+	KCal::ICalFormat format;
+	QString iCal = format.createScheduleMessage(kcalEvent, KCal::Scheduler::Add);
+kdDebug(5950)<<"Korg->"<<iCal<<endl;
+	delete kcalEvent;
+
+	// Send the event to KOrganizer
+	if (!runKOrganizer())     // start KOrganizer if it isn't already running
+		return false;
+	QByteArray  data, replyData;
+	QCString    replyType;
+	QDataStream arg(data, IO_WriteOnly);
+#ifdef NEEDED
+	arg << QString::fromLatin1("accept") << userEmail << iCal;
+#else
+	arg << QString::fromLatin1("accept") << QString::null << iCal;
+#endif
+	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "eventRequest(QString,QString,QString)", data, replyType, replyData)
+	&&  replyType == "bool")
+	{
+		bool result;
+		QDataStream reply(replyData, IO_ReadOnly);
+		reply >> result;
+		if (result)
+		{
+			kdDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
+			return true;
+		}
+	}
+	kdError(5950) << "sendToKOrganizer(): KOrganizer eventRequest(" << uid << ") dcop call failed\n";
+	return false;
+}
+
+/******************************************************************************
+*  Tell KOrganizer to delete an alarm from its calendar.
+*/
+bool deleteFromKOrganizer(const QString& eventID)
+{
+#warning Display message if error
+	if (!runKOrganizer())     // start KOrganizer if it isn't already running
+		return false;
+	QByteArray  data, replyData;
+	QCString    replyType;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << KAEvent::uid(eventID, KAEvent::KORGANIZER);
+	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteEvent(QString)", data, replyType, replyData)
+	&&  replyType == "bool")
+	{
+		bool result;
+		QDataStream reply(replyData, IO_ReadOnly);
+		reply >> result;
+		if (result)
+		{
+			kdDebug(5950) << "deleteFromKOrganizer(" << eventID << "): success\n";
+			return true;
+		}
+	}
+	kdError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << eventID << ") dcop call failed\n";
+	return false;
+}
+
+/******************************************************************************
+*  Start KOrganizer if it isn't already running.
+*  Reply = true if KOrganizer is now running.
+*/
+bool runKOrganizer()
+{
+	if (!kapp->dcopClient()->isApplicationRegistered("korganizer")
+	&&  KApplication::startServiceByDesktopName(QString::fromLatin1("korganizer"), QString::null, &korgStartError, &korganizerName))
+	{
+		kdError(5950) << "runKOrganizer(): couldn't start KOrganizer (" << korgStartError << ")\n";
+		return false;
+	}
+	korgStartError = QString::null;
+	return true;
+}
+#else
+bool sendToKOrganizer(const KAEvent&) { return false; }
+bool deleteFromKOrganizer(const QString&) { return false; }
+#endif
+
+} // namespace

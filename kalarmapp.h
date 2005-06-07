@@ -56,6 +56,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
 		bool               speechEnabled() const           { return mSpeechEnabled; }
+		bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
 		void               quitIf()                        { quitIf(0); }
@@ -181,6 +182,7 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
 		bool                  mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
+		bool                  mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
 		bool                  mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
 		bool                  mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };

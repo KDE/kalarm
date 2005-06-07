@@ -195,6 +195,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mDefaultLateCancel;
 		QCheckBox*      mDefaultAutoClose;
 		QCheckBox*      mDefaultConfirmAck;
+		QCheckBox*      mDefaultCopyToKOrganizer;
 		QCheckBox*      mDefaultCmdScript;
 		QCheckBox*      mDefaultCmdXterm;
 		QCheckBox*      mDefaultEmailBcc;

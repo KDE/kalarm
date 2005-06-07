@@ -70,6 +70,7 @@ const QString    Preferences::default_defaultSoundFile         = QString::null;
 const float      Preferences::default_defaultSoundVolume       = -1;
 const int        Preferences::default_defaultLateCancel        = 0;
 const bool       Preferences::default_defaultAutoClose         = false;
+const bool       Preferences::default_defaultCopyToKOrganizer  = false;
 const bool       Preferences::default_defaultSound             = false;
 const bool       Preferences::default_defaultSoundRepeat       = false;
 const SoundPicker::Type Preferences::default_defaultSoundType  = SoundPicker::BEEP;
@@ -136,6 +137,7 @@ static const QString DEFAULTS_SECTION         = QString::fromLatin1("Defaults");
 static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCancel");
 static const QString DEF_AUTO_CLOSE           = QString::fromLatin1("DefAutoClose");
 static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
+static const QString DEF_COPY_TO_KORG         = QString::fromLatin1("DefCopyKOrg");
 static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
 static const QString DEF_SOUND_TYPE           = QString::fromLatin1("DefSoundType");
 static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
@@ -260,6 +262,7 @@ Preferences::Preferences()
 	mDefaultLateCancel        = static_cast<int>(config->readUnsignedNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel));
 	mDefaultAutoClose         = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
 	mDefaultConfirmAck        = config->readBoolEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
+	mDefaultCopyToKOrganizer  = config->readBoolEntry(DEF_COPY_TO_KORG, default_defaultCopyToKOrganizer);
 	mDefaultSound             = config->readBoolEntry(DEF_SOUND, default_defaultSound);
 	int soundType             = config->readNumEntry(DEF_SOUND_TYPE, default_defaultSoundType);
 	mDefaultSoundType         = (soundType < SoundPicker::BEEP || soundType > SoundPicker::PLAY_FILE)
@@ -334,6 +337,9 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
+#ifdef SHOW_IN_KORGANISER
+	config->writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
+#endif
 	config->writeEntry(DEF_SOUND, mDefaultSound);
 	config->writeEntry(DEF_SOUND_TYPE, mDefaultSoundType);
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);

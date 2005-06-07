@@ -69,6 +69,7 @@ static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
 static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL;");
 static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;");
 static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
+static const QString KORGANIZER_CATEGORY       = QString::fromLatin1("KORG");
 static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
 static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
 static const QString LOG_CATEGORY              = QString::fromLatin1("LOG:");
@@ -80,6 +81,7 @@ static const QString DISABLED_STATUS           = QString::fromLatin1("DISABLED")
 static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
 static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
+static const QString KORGANIZER_UID = QString::fromLatin1("-korg-");
 
 struct AlarmData
 {
@@ -170,6 +172,7 @@ void KAEvent::copy(const KAEvent& event)
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
 	mCommandXterm            = event.mCommandXterm;
+	mCopyToKOrganizer        = event.mCopyToKOrganizer;
 	mRecursFeb29             = event.mRecursFeb29;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
 	mMainExpired             = event.mMainExpired;
@@ -200,6 +203,7 @@ void KAEvent::set(const Event& event)
 	mSpeak                  = false;
 	mEmailBcc               = false;
 	mCommandXterm           = false;
+	mCopyToKOrganizer       = false;
 	mConfirmAck             = false;
 	mArchive                = false;
 	mReminderOnceOnly       = false;
@@ -223,6 +227,8 @@ void KAEvent::set(const Event& event)
 			mEmailBcc = true;
 		else if (cats[i] == ARCHIVE_CATEGORY)
 			mArchive = true;
+		else if (cats[i] == KORGANIZER_CATEGORY)
+			mCopyToKOrganizer = true;
 		else if (cats[i].startsWith(LOG_CATEGORY))
 		{
 			QString logUrl = cats[i].mid(LOG_CATEGORY.length());
@@ -860,6 +866,11 @@ QString KAEvent::uid(const QString& id, Status status)
 		oldStatus = TEMPLATE;
 		len = TEMPLATE_UID.length();
 	}
+	else if ((i = result.find(KORGANIZER_UID)) > 0)
+	{
+		oldStatus = KORGANIZER;
+		len = KORGANIZER_UID.length();
+	}
 	else
 	{
 		oldStatus = ACTIVE;
@@ -875,6 +886,7 @@ QString KAEvent::uid(const QString& id, Status status)
 			case EXPIRED:     part = EXPIRED_UID;  break;
 			case DISPLAYING:  part = DISPLAYING_UID;  break;
 			case TEMPLATE:    part = TEMPLATE_UID;  break;
+			case KORGANIZER:  part = KORGANIZER_UID;  break;
 		}
 		result.replace(i, len, part);
 	}
@@ -892,6 +904,8 @@ KAEvent::Status KAEvent::uidStatus(const QString& uid)
 		return DISPLAYING;
 	if (uid.find(TEMPLATE_UID) > 0)
 		return TEMPLATE;
+	if (uid.find(KORGANIZER_UID) > 0)
+		return KORGANIZER;
 	return ACTIVE;
 }
 
@@ -900,9 +914,10 @@ void KAEvent::set(int flags)
 	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
 	mStartDateTime.setDateOnly(flags & ANY_TIME);
 	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
-	mCommandXterm = flags & EXEC_IN_XTERM;
-	mEnabled      = !(flags & DISABLED);
-	mUpdated      = true;
+	mCommandXterm     = flags & EXEC_IN_XTERM;
+	mCopyToKOrganizer = flags & COPY_KORGANIZER;
+	mEnabled          = !(flags & DISABLED);
+	mUpdated          = true;
 }
 
 int KAEvent::flags() const
@@ -911,6 +926,7 @@ int KAEvent::flags() const
 	     | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
 	     | (mDeferral > 0               ? DEFERRAL : 0)
 	     | (mCommandXterm               ? EXEC_IN_XTERM : 0)
+	     | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
 	     | (mEnabled                    ? 0 : DISABLED);
 }
 
@@ -919,8 +935,9 @@ int KAEvent::flags() const
  */
 Event* KAEvent::event() const
 {
-	Event* ev = new KCal::Event;
-	updateKCalEvent(*ev);
+	KCal::Event* ev = new KCal::Event;
+	ev->setUid(mEventID);
+	updateKCalEvent(*ev, false);
 	return ev;
 }
 
@@ -949,6 +966,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		cats.append(CONFIRM_ACK_CATEGORY);
 	if (mEmailBcc)
 		cats.append(EMAIL_BCC_CATEGORY);
+	if (mCopyToKOrganizer)
+		cats.append(KORGANIZER_CATEGORY);
 	if (mCommandXterm)
 		cats.append(LOG_CATEGORY + xtermURL);
 	else if (!mLogFile.isEmpty())
@@ -3149,6 +3168,7 @@ void KAEvent::dumpDebug() const
 		kdDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false") << ":\n";
 		kdDebug(5950) << "-- mLogFile:" << mLogFile << ":\n";
 	}
+	kdDebug(5950) << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
 	if (mRepeatAtLogin)

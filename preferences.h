@@ -95,6 +95,7 @@ class Preferences : public QObject
 		int            defaultLateCancel() const        { return mDefaultLateCancel; }
 		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
 		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
+		bool           defaultCopyToKOrganizer() const  { return mDefaultCopyToKOrganizer; }
 		bool           defaultCmdScript() const         { return mDefaultCmdScript; }
 		EditAlarmDlg::CmdLogType  
 		               defaultCmdLogType() const        { return mDefaultCmdLogType; }
@@ -153,6 +154,7 @@ class Preferences : public QObject
 		static const float       default_defaultSoundVolume;
 		static const int         default_defaultLateCancel;
 		static const bool        default_defaultAutoClose;
+		static const bool        default_defaultCopyToKOrganizer;
 		static const bool        default_defaultSound;
 		static const SoundPicker::Type
 		                         default_defaultSoundType;
@@ -226,6 +228,7 @@ class Preferences : public QObject
 		float               mDefaultSoundVolume;
 		int                 mDefaultLateCancel;
 		bool                mDefaultAutoClose;
+		bool                mDefaultCopyToKOrganizer;
 		bool                mDefaultSound;
 		SoundPicker::Type   mDefaultSoundType;
 		bool                mDefaultSoundRepeat;

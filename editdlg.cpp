@@ -135,6 +135,7 @@ inline QString recurText(const KAEvent& event)
 // translations across different modules.
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
 QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
+QString EditAlarmDlg::i18n_ShowInKOrganizer()   { return i18n("Show in KOrganizer"); }
 QString EditAlarmDlg::i18n_EnterScript()        { return i18n("Enter a script"); }
 QString EditAlarmDlg::i18n_p_EnterScript()      { return i18n("Enter a scri&pt"); }
 QString EditAlarmDlg::i18n_ExecInTermWindow()   { return i18n("Execute in terminal window"); }
@@ -173,6 +174,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mEmailRemoveButton(0),
 	  mDeferGroup(0),
 	  mTimeWidget(0),
+	  mShowInKorganizer(0),
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
 	  mDesiredReadOnly(readOnly),
@@ -353,7 +355,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	}
 
 	// Recurrence type display
-	layout = new QHBoxLayout(topLayout);
+	layout = new QHBoxLayout(topLayout, 2*spacingHint());
 	QHBox* box = new QHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Recurrence:"), box);
@@ -363,7 +365,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	layout->addWidget(box);
-	layout->addSpacing(2*KDialog::spacingHint());
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
@@ -372,6 +373,17 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	connect(mSimpleRepetition, SIGNAL(changed()), SLOT(slotRecurFrequencyChange()));
 	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
 	layout->addWidget(mSimpleRepetition);
+
+#ifdef SHOW_IN_KORGANISER
+	if (theApp()->korganizerEnabled())
+	{
+		// Show in KOrganizer checkbox
+		mShowInKorganizer = new CheckBox(i18n_ShowInKOrganizer(), mainPage);
+		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
+		QWhatsThis::add(mShowInKorganizer, i18n("Check to copy the alarm into KOrganizer's calendar"));
+		layout->addWidget(mShowInKorganizer);
+	}
+#endif
 	layout->addStretch();
 
 	// Late cancel selector - default = allow late display
@@ -751,6 +763,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mLateCancel->showAutoClose(action == KAEvent::MESSAGE || action == KAEvent::FILE);
 		mLateCancel->setAutoClose(event->autoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
+		if (mShowInKorganizer)
+			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		mConfirmAck->setChecked(event->confirmAck());
 		int reminder = event->reminder();
 		if (!reminder  &&  event->reminderDeferral()  &&  !recurs)
@@ -817,6 +831,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mLateCancel->showAutoClose(true);
 		mLateCancel->setAutoClose(preferences->defaultAutoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
+		if (mShowInKorganizer)
+			mShowInKorganizer->setChecked(preferences->defaultCopyToKOrganizer());
 		mConfirmAck->setChecked(preferences->defaultConfirmAck());
 		if (mSpecialActionsButton)
 			mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
@@ -863,6 +879,8 @@ void EditAlarmDlg::setReadOnly()
 	else
 		mDeferChangeButton->show();
 	mSimpleRepetition->setReadOnly(mReadOnly);
+	if (mShowInKorganizer)
+		mShowInKorganizer->setReadOnly(mReadOnly);
 
 	// Message alarm controls
 	mTextMessageEdit->setReadOnly(mReadOnly);
@@ -1006,42 +1024,44 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedTemplateTime      = mTemplateTime->time();
 		mSavedTemplateAfterTime = mTemplateTimeAfter->value();
 	}
-	mSavedTypeRadio      = mActionGroup->selected();
-	mSavedSound          = mSoundPicker->sound();
-	mSavedSoundType      = mSoundPicker->type();
-	mSavedSoundFile      = mSoundPicker->file();
-	mSavedSoundVolume    = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
-	mSavedRepeatSound    = mSoundPicker->repeat();
-	mSavedConfirmAck     = mConfirmAck->isChecked();
-	mSavedFont           = mFontColourButton->font();
-	mSavedFgColour       = mFontColourButton->fgColour();
-	mSavedBgColour       = mBgColourChoose->color();
-	mSavedReminder       = mReminder->minutes();
-	mSavedOnceOnly       = mReminder->isOnceOnly();
+	mSavedTypeRadio        = mActionGroup->selected();
+	mSavedSound            = mSoundPicker->sound();
+	mSavedSoundType        = mSoundPicker->type();
+	mSavedSoundFile        = mSoundPicker->file();
+	mSavedSoundVolume      = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
+	mSavedRepeatSound      = mSoundPicker->repeat();
+	mSavedConfirmAck       = mConfirmAck->isChecked();
+	mSavedFont             = mFontColourButton->font();
+	mSavedFgColour         = mFontColourButton->fgColour();
+	mSavedBgColour         = mBgColourChoose->color();
+	mSavedReminder         = mReminder->minutes();
+	mSavedOnceOnly         = mReminder->isOnceOnly();
 	if (mSpecialActionsButton)
 	{
 		mSavedPreAction  = mSpecialActionsButton->preAction();
 		mSavedPostAction = mSpecialActionsButton->postAction();
 	}
 	checkText(mSavedTextFileCommandMessage, false);
-	mSavedCmdScript      = mCmdTypeScript->isChecked();
-	mSavedCmdOutputRadio = mCmdOutputGroup->selected();
-	mSavedCmdLogFile     = mCmdLogFileEdit->text();
+	mSavedCmdScript        = mCmdTypeScript->isChecked();
+	mSavedCmdOutputRadio   = mCmdOutputGroup->selected();
+	mSavedCmdLogFile       = mCmdLogFileEdit->text();
 	if (mEmailFromList)
 		mSavedEmailFrom = mEmailFromList->currentIdentityName();
-	mSavedEmailTo        = mEmailToEdit->text();
-	mSavedEmailSubject   = mEmailSubjectEdit->text();
+	mSavedEmailTo          = mEmailToEdit->text();
+	mSavedEmailSubject     = mEmailSubjectEdit->text();
 	mSavedEmailAttach.clear();
 	for (int i = 0;  i < mEmailAttachList->count();  ++i)
 		mSavedEmailAttach += mEmailAttachList->text(i);
-	mSavedEmailBcc       = mEmailBcc->isChecked();
+	mSavedEmailBcc         = mEmailBcc->isChecked();
 	if (mTimeWidget)
 		mSavedDateTime = mTimeWidget->getDateTime(false, false);
-	mSavedLateCancel     = mLateCancel->minutes();
-	mSavedAutoClose      = mLateCancel->isAutoClose();
-	mSavedRecurrenceType = mRecurrenceEdit->repeatType();
-	mSavedRepeatInterval = mSimpleRepetition->interval();
-	mSavedRepeatCount    = mSimpleRepetition->count();
+	mSavedLateCancel       = mLateCancel->minutes();
+	mSavedAutoClose        = mLateCancel->isAutoClose();
+	if (mShowInKorganizer)
+		mSavedShowInKorganizer = mShowInKorganizer->isChecked();
+	mSavedRecurrenceType   = mRecurrenceEdit->repeatType();
+	mSavedRepeatInterval   = mSimpleRepetition->interval();
+	mSavedRepeatCount      = mSimpleRepetition->count();
 }
 
 /******************************************************************************
@@ -1072,6 +1092,7 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 	if (mSavedTypeRadio        != mActionGroup->selected()
 	||  mSavedLateCancel       != mLateCancel->minutes()
+	||  mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
 	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType()
 	||  mSavedRepeatInterval   != mSimpleRepetition->interval()
@@ -1266,17 +1287,19 @@ int EditAlarmDlg::getAlarmFlags() const
 {
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
 	bool cmdAlarm     = mCommandRadio->isOn();
-	return (displayAlarm && mSoundPicker->beep()          ? KAEvent::BEEP : 0)
-	     | (displayAlarm && mSoundPicker->speak()         ? KAEvent::SPEAK : 0)
-	     | (displayAlarm && mSoundPicker->repeat()        ? KAEvent::REPEAT_SOUND : 0)
-	     | (displayAlarm && mConfirmAck->isChecked()      ? KAEvent::CONFIRM_ACK : 0)
-	     | (displayAlarm && mLateCancel->isAutoClose()    ? KAEvent::AUTO_CLOSE : 0)
-	     | (cmdAlarm && mCmdTypeScript->isChecked()                       ? KAEvent::SCRIPT : 0)
-	     | (cmdAlarm && mCmdOutputGroup->selectedId() == EXEC_IN_TERMINAL ? KAEvent::EXEC_IN_XTERM : 0)
-	     | (mEmailRadio->isOn() && mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0)
-	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN ? KAEvent::REPEAT_AT_LOGIN : 0)
+	bool emailAlarm   = mEmailRadio->isOn();
+	return (displayAlarm && mSoundPicker->beep()                                 ? KAEvent::BEEP : 0)
+	     | (displayAlarm && mSoundPicker->speak()                                ? KAEvent::SPEAK : 0)
+	     | (displayAlarm && mSoundPicker->repeat()                               ? KAEvent::REPEAT_SOUND : 0)
+	     | (displayAlarm && mConfirmAck->isChecked()                             ? KAEvent::CONFIRM_ACK : 0)
+	     | (displayAlarm && mLateCancel->isAutoClose()                           ? KAEvent::AUTO_CLOSE : 0)
+	     | (cmdAlarm     && mCmdTypeScript->isChecked()                          ? KAEvent::SCRIPT : 0)
+	     | (cmdAlarm     && mCmdOutputGroup->selectedId() == EXEC_IN_TERMINAL    ? KAEvent::EXEC_IN_XTERM : 0)
+	     | (emailAlarm   && mEmailBcc->isChecked()                               ? KAEvent::EMAIL_BCC : 0)
+	     | (mShowInKorganizer && mShowInKorganizer->isChecked()                  ? KAEvent::COPY_KORGANIZER : 0)
+	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN            ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
-	     | (mFontColourButton->defaultFont()              ? KAEvent::DEFAULT_FONT : 0);
+	     | (mFontColourButton->defaultFont()                                     ? KAEvent::DEFAULT_FONT : 0);
 }
 
 /******************************************************************************
