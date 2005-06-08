@@ -910,26 +910,17 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
-	QHBox* box = new QHBox(group);
-	box->setSpacing(KDialog::spacingHint());
-	layout->addWidget(box);
-//#warning Late Cancel applies to all types of alarm
-	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
-	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
-
-	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), box, "defAutoClose");
-	mDefaultAutoClose->setMinimumSize(mDefaultAutoClose->sizeHint());
-	QWhatsThis::add(mDefaultAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
-	box->setFixedHeight(box->sizeHint().height());
-
 	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group, "defConfAck");
 	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
 	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
 	layout->addWidget(mDefaultConfirmAck, 0, Qt::AlignAuto);
 
-	box = new QHBox(group);
+	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), group, "defAutoClose");
+	mDefaultAutoClose->setMinimumSize(mDefaultAutoClose->sizeHint());
+	QWhatsThis::add(mDefaultAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
+	layout->addWidget(mDefaultAutoClose, 0, Qt::AlignAuto);
+
+	QHBox* box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
@@ -1043,9 +1034,16 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QWhatsThis::add(mDefaultCopyToKOrganizer, defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
 #endif
 
-	// RECURRENCE
+	// Late cancellation
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	box = new QHBox(itemBox);
+	itemBox->setSpacing(KDialog::spacingHint());
+	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), itemBox, "defCancelLate");
+	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
+	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);
+
+	// RECURRENCE
+	box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("&Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
@@ -1061,7 +1059,6 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	label->setBuddy(mDefaultRecurPeriod);
 	QWhatsThis::add(box,
 	      i18n("The default setting for the recurrence rule in the alarm edit dialog."));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);
 	itemBox->setFixedHeight(box->sizeHint().height());
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
