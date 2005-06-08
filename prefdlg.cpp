@@ -1035,19 +1035,19 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 #endif
 
 	// Late cancellation
-	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
-	itemBox->setSpacing(KDialog::spacingHint());
-	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), itemBox, "defCancelLate");
+	box = new QHBox(mPage);
+	box->setSpacing(KDialog::spacingHint());
+	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
 	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
 	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
 	// RECURRENCE
-	box = new QHBox(itemBox);   // this is to control the QWhatsThis text display area
-	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("&Recurrence:"), box);
+	QHBox* itemBox = new QHBox(box);   // this is to control the QWhatsThis text display area
+	itemBox->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("&Recurrence:"), itemBox);
 	label->setFixedSize(label->sizeHint());
-	mDefaultRecurPeriod = new QComboBox(box, "defRecur");
+	mDefaultRecurPeriod = new QComboBox(itemBox, "defRecur");
 	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur());
 	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin());
 	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely());
@@ -1057,9 +1057,9 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly());
 	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
 	label->setBuddy(mDefaultRecurPeriod);
-	QWhatsThis::add(box,
+	QWhatsThis::add(itemBox,
 	      i18n("The default setting for the recurrence rule in the alarm edit dialog."));
-	itemBox->setFixedHeight(box->sizeHint().height());
+	box->setFixedHeight(itemBox->sizeHint().height());
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
