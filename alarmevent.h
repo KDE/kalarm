@@ -21,6 +21,8 @@
 #ifndef KALARMEVENT_H
 #define KALARMEVENT_H
 
+/**  @file alarmevent.h  -  represents calendar alarms and events */
+
 #include <qcolor.h>
 #include <qfont.h>
 
@@ -219,7 +221,7 @@ class KAAlarm : public KAAlarmEventBase
 };
 
 
-// KAEvent corresponds to a KCal::Event instance
+/** KAEvent corresponds to a KCal::Event instance */
 class KAEvent : public KAAlarmEventBase
 {
 	public:
@@ -275,6 +277,7 @@ class KAEvent : public KAAlarmEventBase
 			// The following values are not implemented in KAlarm
 			ANNUAL_DAY  = 8
 		};
+		/** Status of the event (what its alarm status is). */
 		enum Status
 		{
 			ACTIVE,      // the event is currently active

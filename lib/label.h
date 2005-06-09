@@ -45,14 +45,14 @@ class Label : public QLabel
 		/** Constructs an empty label.
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
-		 *  @param f    @see QWidget constructor for details.
+		 *  @param f    Flags. @see QWidget constructor for details.
 		 */
 		Label(QWidget* parent, const char* name = 0, WFlags f = 0);
 		/** Constructs a label that displays @p text.
 		 *  @param text   Text string to display.
 		 *  @param parent The parent object of this widget.
 		 *  @param name   The name of this widget.
-		 *  @param f      @see QWidget constructor for details.
+		 *  @param f      Flags. @see QWidget constructor for details.
 		 */
 		Label(const QString& text, QWidget* parent, const char* name = 0, WFlags f = 0);
 		/** Constructs a label, with a buddy widget, that displays @p text.
@@ -63,7 +63,7 @@ class Label : public QLabel
 		 *  @param text   Text string to display.
 		 *  @param parent The parent object of this widget.
 		 *  @param name   The name of this widget.
-		 *  @param f      @see QWidget constructor for details.
+		 *  @param f      Flags. @see QWidget constructor for details.
 		 */
 		Label(QWidget* buddy, const QString& text, QWidget* parent, const char* name = 0, WFlags f = 0);
 		/** Sets the label's buddy widget which receives the keyboard focus when the

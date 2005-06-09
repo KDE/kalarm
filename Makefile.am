@@ -66,4 +66,5 @@ messages: rc.cpp
 	$(EXTRACTRC) *.rc >> rc.cpp
 	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
 
+DOXYGEN_REFERENCES = libkcal
 include $(top_srcdir)/doc/api/Doxyfile.am
