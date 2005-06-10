@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -238,6 +238,8 @@ class SpinBox2 : public QFrame
 		virtual void        pageDown()                  { addValue(-mPageStep); }
 		/** Selects all the text in the spin box's editor. */
 		virtual void        selectAll()                 { mSpinbox->selectAll(); }
+		/** Sets whether the widget is enabled. */
+		virtual void        setEnabled(bool enabled);
 
 	signals:
 		/** Signal which is emitted whenever the value of the spin box changes. */
