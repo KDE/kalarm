@@ -154,7 +154,9 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mDeferDlgShowing(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
-	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
+	// Set to save settings automatically, but don't save window size.
+	// File alarm window size is saved elsewhere.
+	setAutoSaveSettings(QString::fromLatin1("MessageWin"), false);
 	initView();
 	mWindowList.append(this);
 }
