@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -174,7 +174,9 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
-	setAutoSaveSettings(QString::fromLatin1("MessageWin"));     // save window sizes etc.
+	// Set to save settings automatically, but don't save window size.
+	// File alarm window size is saved elsewhere.
+	setAutoSaveSettings(QString::fromLatin1("MessageWin"), false);
 	initView();
 	mWindowList.append(this);
 }
@@ -549,6 +551,8 @@ void MessageWin::initView()
 	mOkButton->setEnabled(false);
 	if (mDeferButton)
 		mDeferButton->setEnabled(false);
+	if (mEditButton)
+		mEditButton->setEnabled(false);
 	mKAlarmButton->setEnabled(false);
 
 	topLayout->activate();
@@ -1241,6 +1245,8 @@ void MessageWin::enableButtons()
 	mKAlarmButton->setEnabled(true);
 	if (mDeferButton)
 		mDeferButton->setEnabled(true);
+	if (mEditButton)
+		mEditButton->setEnabled(true);
 }
 
 /******************************************************************************
