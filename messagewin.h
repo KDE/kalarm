@@ -38,6 +38,7 @@ class QPushButton;
 class KPushButton;
 class QLabel;
 class QTimer;
+class KWinModule;
 class AlarmTimeWidget;
 class KArtsDispatcher;
 namespace KDE { class PlayObject; }
@@ -60,6 +61,7 @@ class MessageWin : public MainWindowBase
 		bool                hasDefer() const       { return !!mDeferButton; }
 		bool                isValid() const        { return !mInvalid; }
 		virtual void        show();
+		virtual QSize       sizeHint() const;
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 
@@ -80,6 +82,7 @@ class MessageWin : public MainWindowBase
 		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
+		void                setMaxSize();
 
 	private:
 		void                initView();
@@ -123,6 +126,7 @@ class MessageWin : public MainWindowBase
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
 		QPushButton*        mKAlarmButton;
+		mutable KWinModule* mWinModule;
 		int                 mFlags;
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action

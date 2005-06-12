@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 1.1.8 --- 10 June 2005 ===
+=== Version 1.1.8 --- 12 June 2005 ===
 Prevent multiple "Failed to start Alarm Daemon" error messages at startup.
 Fix alarms not triggering if IDs are duplicated in different calendar files.
 Fix random limit on expired alarm discard time if stepping with spinbox buttons.
@@ -11,6 +11,8 @@ Pop up message windows far from cursor to avoid accidental acknowledgement.
 Display correct controls after loading a template in alarm edit dialog.
 Fix missing left border for time spinboxes in Plastik style.
 Prevent message windows always being full screen after a big message is shown.
+Prevent message windows being initially larger than the desktop.
+Prevent message windows initially overlapping the KDE panel.
 
 === Version 1.1.7 (KDE 3.3.2) --- 27 November 2004 ===
 Fix KAlarm button on message windows to make it always display main window.
