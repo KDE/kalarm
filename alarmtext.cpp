@@ -1,7 +1,7 @@
 /*
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,18 +45,21 @@ void AlarmText::setText(const QString& text)
 	mIsScript = text.startsWith(QString::fromLatin1("#!"));
 	mIsEmail  = false;
 	mTo = mFrom = mCc = mTime = mSubject = QString::null;
+	mKMailSerialNum = 0;
 }
 
-void AlarmText::setEmail(const QString& to, const QString& from, const QString& cc, const QString& time, const QString& subject, const QString& body)
+void AlarmText::setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
+                         const QString& subject, const QString& body, unsigned long kmailSerialNumber)
 {
-	mIsScript = false;
-	mIsEmail  = true;
-	mTo       = to;
-	mFrom     = from;
-	mCc       = cc;
-	mTime     = time;
-	mSubject  = subject;
-	mBody     = body;
+	mIsScript       = false;
+	mIsEmail        = true;
+	mTo             = to;
+	mFrom           = from;
+	mCc             = cc;
+	mTime           = time;
+	mSubject        = subject;
+	mBody           = body;
+	mKMailSerialNum = kmailSerialNumber;
 }
 
 /******************************************************************************
@@ -99,14 +102,21 @@ bool AlarmText::isEmpty() const
 }
 
 /******************************************************************************
-*  Check whether a text is an email, and if so return its headers or optionally
-*  only its subject line.
-*  Reply = headers/subject line, or QString::null if not the text of an email.
+*  Check whether a text is an email.
 */
-QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
+bool AlarmText::checkIfEmail(const QString& text)
+{
+	QStringList lines = QStringList::split('\n', text);
+	return emailHeaderCount(lines);
+}
+
+/******************************************************************************
+*  Check whether a text is an email.
+*  Reply = number of email header lines, or 0 if not an email.
+*/
+int AlarmText::emailHeaderCount(const QStringList& lines)
 {
 	setUpTranslations();
-	QStringList lines = QStringList::split('\n', text);
 	int maxn = lines.count();
 	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefix)
@@ -118,27 +128,40 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 		if (maxn > n + 1
 		&&  lines[n].startsWith(mDatePrefix)
 		&&  lines[n+1].startsWith(mSubjectPrefix))
-		{
-			if (subjectOnly)
-				return lines[n+1].mid(mSubjectPrefix.length()).stripWhiteSpace();
-			QString h = lines[0];
-			for (int i = 1;  i <= n + 1;  ++i)
-			{
-				h += '\n';
-				h += lines[i];
-			}
-			return h;
-		}
+			return n+2;
 	}
-	return QString::null;
+	return 0;
+}
+
+/******************************************************************************
+*  Check whether a text is an email, and if so return its headers or optionally
+*  only its subject line.
+*  Reply = headers/subject line, or QString::null if not the text of an email.
+*/
+QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
+{
+	QStringList lines = QStringList::split('\n', text);
+	int n = emailHeaderCount(lines);
+	if (!n)
+		return QString::null;
+	if (subjectOnly)
+		return lines[n-1].mid(mSubjectPrefix.length()).stripWhiteSpace();
+	QString h = lines[0];
+	for (int i = 1;  i < n;  ++i)
+	{
+		h += '\n';
+		h += lines[i];
+	}
+	return h;
 }
 
 /******************************************************************************
 *  Translate an alarm calendar text to a display text.
 *  Translation is needed for email texts, since the alarm calendar stores
 *  untranslated email prefixes.
+*  'email' is set to indicate whether it is an email text.
 */
-QString AlarmText::fromCalendarText(const QString& text)
+QString AlarmText::fromCalendarText(const QString& text, bool& email)
 {
 	QStringList lines = QStringList::split('\n', text);
 	int maxn = lines.count();
@@ -165,9 +188,11 @@ QString AlarmText::fromCalendarText(const QString& text)
 			i = text.find('\n', i);
 			if (i > 0)
 				dispText += text.mid(i);
+			email = true;
 			return dispText;
 		}
 	}
+	email = false;
 	return text;
 }
 

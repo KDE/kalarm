@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -681,6 +681,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 	mChanged           = false;
 	mOnlyDeferred      = false;
 	mExpiredRecurrence = false;
+	mKMailSerialNumber = 0;
 	bool deferGroupVisible = false;
 	if (event)
 	{
@@ -755,6 +756,9 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		else
 			altext.setText(event->cleanText());
 		setAction(action, altext);
+		if (action == KAEvent::MESSAGE  &&  event->kmailSerialNumber()
+		&&  AlarmText::checkIfEmail(event->cleanText()))
+			mKMailSerialNumber = event->kmailSerialNumber();
 		if (action == KAEvent::EMAIL)
 			mEmailAttachList->insertStringList(event->emailAttachments());
 
@@ -962,8 +966,11 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 		default:
 			radio = mMessageRadio;
 			mTextMessageEdit->setText(text);
+			mKMailSerialNumber = 0;
 			if (alarmText.isEmail())
 			{
+				mKMailSerialNumber = alarmText.kmailSerialNumber();
+
 				// Set up email fields also, in case the user wants an email alarm
 				mEmailToEdit->setText(alarmText.to());
 				mEmailSubjectEdit->setText(alarmText.subject());
@@ -1216,6 +1223,9 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	switch (type)
 	{
 		case KAEvent::MESSAGE:
+			if (AlarmText::checkIfEmail(text))
+				event.setKMailSerialNumber(mKMailSerialNumber);
+			// fall through to FILE
 		case KAEvent::FILE:
 		{
 			float fadeVolume;

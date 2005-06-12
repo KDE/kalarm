@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -213,6 +213,7 @@ class EditAlarmDlg : public KDialogBase
 		DateTime            mDeferDateTime;
 		EmailAddressList    mEmailAddresses;     // list of addresses to send email to
 		QStringList         mEmailAttachments;   // list of email attachment file names
+		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		int                 mDeferGroupHeight;   // height added by deferred time widget
 		int                 mDesktop;            // desktop to display the dialog in
 		bool                mTemplate;           // editing an alarm template

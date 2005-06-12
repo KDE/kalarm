@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1091,12 +1091,21 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		content.parse();
 		QString body;
 		content.textContent()->decodedText(body, true, true);    // strip trailing newlines & spaces
+		unsigned long sernum = 0;
+		if (e->provides(KPIM::MailListDrag::format())
+		&&  KPIM::MailListDrag::decode(e, mailList)
+		&&  mailList.count())
+		{
+			// Get its KMail serial number to allow the KMail message
+			// to be called up from the alarm message window.
+			sernum = mailList.first().serialNumber();
+		}
 		alarmText.setEmail(getMailHeader("To", content),
 		                   getMailHeader("From", content),
 		                   getMailHeader("Cc", content),
 		                   getMailHeader("Date", content),
 		                   getMailHeader("Subject", content),
-				   body);
+				   body, sernum);
 	}
 	else if (KURLDrag::decode(e, files)  &&  files.count())
 	{
@@ -1116,7 +1125,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		dt.setTime_t(summary.date());
 		QString body = KAMail::getMailBody(summary.serialNumber());
 		alarmText.setEmail(summary.to(), summary.from(), QString::null,
-		                   KGlobal::locale()->formatDateTime(dt), summary.subject(), body);
+		                   KGlobal::locale()->formatDateTime(dt), summary.subject(),
+		                   body, summary.serialNumber());
 	}
 	else if (KCal::ICalDrag::decode(e, &calendar))
 	{

@@ -1,7 +1,7 @@
 /*
  *  alarmtext.h  -  text/email alarm text conversion
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define ALARMTEXT_H
 
 #include <qstring.h>
+class QStringList;
 class KAEvent;
 
 
@@ -31,25 +32,30 @@ class AlarmText
 		AlarmText(const QString& text = QString::null)  { setText(text); }
 		void           setText(const QString&);
 		void           setScript(const QString& text)   { setText(text);  mIsScript = true; }
-		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time, const QString& subject, const QString& body);
+		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
+		                        const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 		QString        displayText() const;
 		QString        calendarText() const;
-		QString        to() const        { return mTo; }
-		QString        from() const      { return mFrom; }
-		QString        cc() const        { return mCc; }
-		QString        time() const      { return mTime; }
-		QString        subject() const   { return mSubject; }
-		QString        body() const      { return mIsEmail ? mBody : QString::null; }
+		QString        to() const                 { return mTo; }
+		QString        from() const               { return mFrom; }
+		QString        cc() const                 { return mCc; }
+		QString        time() const               { return mTime; }
+		QString        subject() const            { return mSubject; }
+		QString        body() const               { return mIsEmail ? mBody : QString::null; }
 		bool           isEmpty() const;
-		bool           isEmail() const   { return mIsEmail; }
-		bool           isScript() const  { return mIsScript; }
+		bool           isEmail() const            { return mIsEmail; }
+		bool           isScript() const           { return mIsScript; }
+		unsigned long  kmailSerialNumber() const  { return mKMailSerialNum; }
 		static QString summary(const KAEvent&, int maxLines = 1, bool* truncated = 0);
+		static bool    checkIfEmail(const QString&);
 		static QString emailHeaders(const QString&, bool subjectOnly);
-		static QString fromCalendarText(const QString&);
+		static QString fromCalendarText(const QString&, bool& email);
 		static QString toCalendarText(const QString&);
 
 	private:
 		static void    setUpTranslations();
+		static int     emailHeaderCount(const QStringList&);
+
 		static QString mFromPrefix;       // translated header prefixes
 		static QString mToPrefix;
 		static QString mCcPrefix;
@@ -61,6 +67,7 @@ class AlarmText
 		static QString mDatePrefixEn;
 		static QString mSubjectPrefixEn;
 		QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
+		unsigned long  mKMailSerialNum;   // if email, message's KMail serial number, else 0
 		bool           mIsEmail;
 		bool           mIsScript;
 };

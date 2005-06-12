@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef KALARMEVENT_H
 #define KALARMEVENT_H
 
-/**  @file alarmevent.h  -  represents calendar alarms and events */
+/**  @file alarmevent.h - represents calendar alarms and events */
 
 #include <qcolor.h>
 #include <qfont.h>
@@ -362,6 +362,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
 		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
+		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
 		void               setLogFile(const QString& logfile);
 		void               setReminder(int minutes, bool onceOnly);
 		bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
@@ -407,6 +408,7 @@ class KAEvent : public KAAlarmEventBase
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
+		unsigned long      kmailSerialNumber() const      { return mKMailSerialNumber; }
 		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
@@ -583,6 +585,7 @@ class KAEvent : public KAAlarmEventBase
 		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
+		unsigned long      mKMailSerialNumber;// if email text, message's KMail serial number
 		int                mTemplateAfterTime;// time not specified: use n minutes after default time, or -1 (applies to templates only)
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window

@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
 static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL;");
 static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;");
 static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
+static const QString KMAIL_SERNUM_CATEGORY     = QString::fromLatin1("KMAIL:");
 static const QString KORGANIZER_CATEGORY       = QString::fromLatin1("KORG");
 static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
 static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
@@ -103,6 +104,7 @@ struct AlarmData
 	int                    displayingFlags;
 	bool                   defaultFont;
 	bool                   reminderOnceOnly;
+	bool                   isEmailText;
 	bool                   commandScript;
 	int                    repeatCount;
 	int                    repeatInterval;
@@ -172,6 +174,7 @@ void KAEvent::copy(const KAEvent& event)
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
 	mCommandXterm            = event.mCommandXterm;
+	mKMailSerialNumber       = event.mKMailSerialNumber;
 	mCopyToKOrganizer        = event.mCopyToKOrganizer;
 	mRecursFeb29             = event.mRecursFeb29;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
@@ -211,6 +214,7 @@ void KAEvent::set(const Event& event)
 	mArchiveRepeatAtLogin   = false;
 	mArchiveReminderMinutes = 0;
 	mLateCancel             = 0;
+	mKMailSerialNumber      = 0;
 	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
@@ -229,6 +233,8 @@ void KAEvent::set(const Event& event)
 			mArchive = true;
 		else if (cats[i] == KORGANIZER_CATEGORY)
 			mCopyToKOrganizer = true;
+		else if (cats[i].startsWith(KMAIL_SERNUM_CATEGORY))
+			mKMailSerialNumber = cats[i].mid(KMAIL_SERNUM_CATEGORY.length()).toULong();
 		else if (cats[i].startsWith(LOG_CATEGORY))
 		{
 			QString logUrl = cats[i].mid(LOG_CATEGORY.length());
@@ -336,6 +342,7 @@ void KAEvent::set(const Event& event)
 	DateTime reminderTime;
 	DateTime alTime;
 	bool set = false;
+	bool isEmailText = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
 		const AlarmData& data = it.data();
@@ -427,6 +434,8 @@ void KAEvent::set(const Event& event)
 						case T_MESSAGE:
 							mFont        = data.font;
 							mDefaultFont = data.defaultFont;
+							if (data.isEmailText)
+								isEmailText = true;
 							// fall through to T_FILE
 						case T_FILE:
 							mBgColour    = data.bgColour;
@@ -458,6 +467,8 @@ void KAEvent::set(const Event& event)
 				break;
 		}
 	}
+	if (!isEmailText)
+		mKMailSerialNumber = 0;
 	if (reminderTime.isValid())
 	{
 		mReminderMinutes = reminderTime.secsTo(mNextMainDateTime) / 60;
@@ -506,6 +517,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	data.alarm           = &alarm;
 	data.dateTime        = alarm.time();
 	data.displayingFlags = 0;
+	data.isEmailText     = false;
 	data.repeatCount     = alarm.repeatCount();
 	data.repeatInterval  = alarm.snoozeTime();
 	switch (alarm.type())
@@ -532,7 +544,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 		case Alarm::Display:
 		{
 			data.action    = T_MESSAGE;
-			data.cleanText = AlarmText::fromCalendarText(alarm.text());
+			data.cleanText = AlarmText::fromCalendarText(alarm.text(), data.isEmailText);
 			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
 			QStringList list = QStringList::split(QChar(';'), property, true);
 			data.bgColour = QColor(255, 255, 255);   // white
@@ -691,6 +703,7 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mLateCancel             = lateCancel;
 	mDeferral               = NO_DEFERRAL;    // do this before set(flags)
 	set(flags);
+	mKMailSerialNumber      = 0;
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
 	mRepeatInterval         = 0;
@@ -966,6 +979,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		cats.append(CONFIRM_ACK_CATEGORY);
 	if (mEmailBcc)
 		cats.append(EMAIL_BCC_CATEGORY);
+	if (mKMailSerialNumber)
+		cats.append(QString("%1%2").arg(KMAIL_SERNUM_CATEGORY).arg(mKMailSerialNumber));
 	if (mCopyToKOrganizer)
 		cats.append(KORGANIZER_CATEGORY);
 	if (mCommandXterm)
@@ -3168,6 +3183,7 @@ void KAEvent::dumpDebug() const
 		kdDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false") << ":\n";
 		kdDebug(5950) << "-- mLogFile:" << mLogFile << ":\n";
 	}
+	kdDebug(5950) << "-- mKMailSerialNumber:" << mKMailSerialNumber << ":\n";
 	kdDebug(5950) << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ? "true" : "false") << ":\n";
 	kdDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kdDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
