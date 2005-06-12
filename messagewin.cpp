@@ -100,7 +100,8 @@ class MessageText : public QTextEdit
 			setWordWrap(QTextEdit::NoWrap);
 		}
 		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
-		virtual QSize sizeHint() const  { return QSize(contentsWidth(), contentsHeight() + scrollBarHeight()); }
+		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
+		virtual QSize sizeHint() const  { return QSize(contentsWidth() + scrollBarWidth(), contentsHeight() + scrollBarHeight()); }
 };
 
 
@@ -164,6 +165,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
+	  mWinModule(0),
 	  mFlags(event.flags()),
 	  mLateCancel(event.lateCancel()),
 	  mErrorWindow(false),
@@ -208,6 +210,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
+	  mWinModule(0),
 	  mErrorWindow(true),
 	  mNoPostAction(true),
 	  mRecreating(false),
@@ -231,6 +234,7 @@ MessageWin::MessageWin()
 	  mPlayObject(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
+	  mWinModule(0),
 	  mErrorWindow(false),
 	  mNoPostAction(true),
 	  mRecreating(false),
@@ -250,6 +254,8 @@ MessageWin::~MessageWin()
 {
 	kdDebug(5950) << "MessageWin::~MessageWin()\n";
 	stopPlay();
+	delete mWinModule;
+	mWinModule = 0;
 	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
 		if (w == this)
 		{
@@ -370,17 +376,21 @@ void MessageWin::initView()
 				text->setPaper(mBgColour);
 				text->setPaletteForegroundColor(mFgColour);
 				text->setFont(mFont);
-				int h = text->sizeHint().height();
-				text->setMinimumHeight(h - text->scrollBarHeight());
-				text->setMaximumHeight(h);
-				QWhatsThis::add(text, i18n("The alarm message"));
 				int lineSpacing = text->fontMetrics().lineSpacing();
+				QSize s = text->sizeHint();
+				int h = s.height();
+				text->setMaximumHeight(h + text->scrollBarHeight());
+				text->setMinimumHeight(QMIN(h, lineSpacing*4));
+				text->setMaximumWidth(s.width() + text->scrollBarWidth());
+				QWhatsThis::add(text, i18n("The alarm message"));
 				int vspace = lineSpacing/2 - marginKDE2;
 				int hspace = lineSpacing - marginKDE2 - KDialog::marginHint();
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
-				if (text->sizeHint().width() >= KWinModule(0, KWinModule::INFO_DESKTOP).workArea().width()*2/3)
+				if (!mWinModule)
+					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
+				if (text->sizeHint().width() >= mWinModule->workArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
@@ -1157,6 +1167,25 @@ void MessageWin::show()
 }
 
 /******************************************************************************
+*  Returns the window's recommended size exclusive of its frame.
+*  For message windows, the size if limited to fit inside the working area of
+*  the desktop.
+*/
+QSize MessageWin::sizeHint() const
+{
+	if (mAction != KAEvent::MESSAGE)
+		return MainWindowBase::sizeHint();
+	if (!mWinModule)
+		mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
+	QSize frame = frameGeometry().size();
+	QSize contents = geometry().size();
+	QSize desktop  = mWinModule->workArea().size();
+	QSize maxSize(desktop.width() - (frame.width() - contents.width()),
+	              desktop.height() - (frame.height() - contents.height()));
+	return MainWindowBase::sizeHint().boundedTo(maxSize);
+}
+
+/******************************************************************************
 *  Called when the window is shown.
 *  The first time, output any required audio notification, and reschedule or
 *  delete the event from the calendar file.
@@ -1170,6 +1199,11 @@ void MessageWin::showEvent(QShowEvent* se)
 			enableButtons();    // don't bother repositioning error messages
 		else
 		{
+			/* Set the window size.
+			 * Note that the frame thickness is not yet known when this
+			 * method is called, so for large windows the size needs to be
+			 * set again later.
+			 */
 			QSize s = sizeHint();     // fit the window round the message
 			if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 				KAlarm::readConfigWindowSize("FileMessage", s);
@@ -1188,7 +1222,10 @@ void MessageWin::showEvent(QShowEvent* se)
 				 *      window in showEvent(), a flicker is unavoidable.
 				 *      See the Qt documentation on window geometry for more details.
 				 */
-				QRect desk = KGlobalSettings::desktopGeometry(this);
+				// PROBLEM: The frame size is not known yet!
+				if (!mWinModule)
+					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
+				QRect desk = mWinModule->workArea();
 				QPoint cursor = QCursor::pos();
 				QRect frame = frameGeometry();
 				QRect rect  = geometry();
@@ -1223,6 +1260,11 @@ void MessageWin::showEvent(QShowEvent* se)
 			}
 			if (!mPositioning)
 				displayComplete();    // play audio, etc.
+			if (mAction == KAEvent::MESSAGE)
+			{
+				// Set the window size once the frame size is known
+				QTimer::singleShot(0, this, SLOT(setMaxSize()));
+			}
 		}
 		mShown = true;
 	}
@@ -1240,6 +1282,16 @@ void MessageWin::moveEvent(QMoveEvent* e)
 		mPositioning = false;
 		displayComplete();    // play audio, etc.
 	}
+}
+
+/******************************************************************************
+*  Reset the iniital window size if it exceeds the working area of the desktop.
+*/
+void MessageWin::setMaxSize()
+{
+	QSize s = sizeHint();
+	if (width() > s.width()  ||  height() > s.height())
+		resize(s);
 }
 
 /******************************************************************************
@@ -1281,6 +1333,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 {
 	if (mRestoreHeight)
 	{
+		// Restore the window height on session restoration
 		if (mRestoreHeight != re->size().height())
 		{
 			QSize size = re->size();
@@ -1343,10 +1396,6 @@ void MessageWin::slotShowKMailMessage()
 			KMessageBox::sorry(this, i18n("Unable to start KMail\n(%1)").arg(kmailError));
 			return;
 		}
-		// Minimise its window - don't use hide() since this would remove all
-		// trace of it from the panel if it is not configured to be docked in
-		// the system tray.
-//		kapp->dcopClient()->send(kmailName, KMAIL_DCOP_WINDOW, "minimize()", QString::null);
 	}
 	QCString    replyType;
 	QByteArray  data, replyData;
