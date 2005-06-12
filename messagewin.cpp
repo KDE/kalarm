@@ -81,6 +81,8 @@ static const char* KMIX_APP_NAME    = "kmix";
 static const char* KMIX_DCOP_OBJECT = "Mixer0";
 static const char* KMIX_DCOP_WINDOW = "kmix-mainwindow#1";
 #endif
+static const char* KMAIL_APP_NAME    = "kmail";
+static const char* KMAIL_DCOP_OBJECT = "KMailIface";
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -147,6 +149,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mFadeSeconds(QMIN(event.fadeSeconds(), 86400)),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
+	  mKMailSerialNumber(event.kmailSerialNumber()),
 	  mRestoreHeight(0),
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
@@ -191,6 +194,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mEventID(event.id()),
 	  mAlarmType(KAAlarm::MAIN_ALARM),
 	  mAction(event.action()),
+	  mKMailSerialNumber(0),
 	  mErrorMsgs(errmsgs),
 	  mRestoreHeight(0),
 	  mConfirmAck(false),
@@ -534,8 +538,23 @@ void MessageWin::initView()
 	}
 #endif
 
-	// KAlarm button
 	KIconLoader iconLoader;
+	if (mKMailSerialNumber)
+	{
+		// KMail button
+		QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1("kmail"), KIcon::MainToolbar);
+		mKMailButton = new QPushButton(topWidget);
+		mKMailButton->setPixmap(pixmap);
+		mKMailButton->setFixedSize(mKMailButton->sizeHint());
+		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
+		grid->addWidget(mKMailButton, 0, gridIndex++, AlignHCenter);
+		QToolTip::add(mKMailButton, i18n("Locate this email in KMail", "Locate in KMail"));
+		QWhatsThis::add(mKMailButton, i18n("Locate and highlight this email in KMail"));
+	}
+	else
+		mKMailButton = 0;
+
+	// KAlarm button
 	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(kapp->aboutData()->appName()), KIcon::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setPixmap(pixmap);
@@ -553,6 +572,8 @@ void MessageWin::initView()
 		mDeferButton->setEnabled(false);
 	if (mEditButton)
 		mEditButton->setEnabled(false);
+	if (mKMailButton)
+		mKMailButton->setEnabled(false);
 	mKAlarmButton->setEnabled(false);
 
 	topLayout->activate();
@@ -641,6 +662,7 @@ void MessageWin::saveProperties(KConfig* config)
 #endif
 		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
+		config->writeEntry(QString::fromLatin1("KMailSerial"), mKMailSerialNumber);
 	}
 	else
 		config->writeEntry(QString::fromLatin1("Invalid"), true);
@@ -653,30 +675,31 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	mInvalid       = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
-	mEventID       = config->readEntry(QString::fromLatin1("EventID"));
-	mAlarmType     = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
-	mMessage       = config->readEntry(QString::fromLatin1("Message"));
-	mAction        = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
-	mFont          = config->readFontEntry(QString::fromLatin1("Font"));
-	mBgColour      = config->readColorEntry(QString::fromLatin1("BgColour"));
-	mFgColour      = config->readColorEntry(QString::fromLatin1("FgColour"));
-	mConfirmAck    = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
+	mInvalid           = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
+	mEventID           = config->readEntry(QString::fromLatin1("EventID"));
+	mAlarmType         = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
+	mMessage           = config->readEntry(QString::fromLatin1("Message"));
+	mAction            = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
+	mFont              = config->readFontEntry(QString::fromLatin1("Font"));
+	mBgColour          = config->readColorEntry(QString::fromLatin1("BgColour"));
+	mFgColour          = config->readColorEntry(QString::fromLatin1("FgColour"));
+	mConfirmAck        = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
-	QDateTime dt   = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
-	bool dateOnly  = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	QDateTime dt       = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	bool dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
 #ifndef WITHOUT_ARTS
-	mAudioFile     = config->readPathEntry(QString::fromLatin1("AudioFile"));
-	mVolume        = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
-	mFadeVolume    = -1;
-	mFadeSeconds   = 0;
+	mAudioFile         = config->readPathEntry(QString::fromLatin1("AudioFile"));
+	mVolume            = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
+	mFadeVolume        = -1;
+	mFadeSeconds       = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
-	mRestoreHeight = config->readNumEntry(QString::fromLatin1("Height"));
-	mNoDefer       = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	mShowEdit      = false;
+	mRestoreHeight     = config->readNumEntry(QString::fromLatin1("Height"));
+	mNoDefer           = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	mKMailSerialNumber = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
+	mShowEdit          = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
@@ -1247,6 +1270,8 @@ void MessageWin::enableButtons()
 		mDeferButton->setEnabled(true);
 	if (mEditButton)
 		mEditButton->setEnabled(true);
+	if (mKMailButton)
+		mKMailButton->setEnabled(true);
 }
 
 /******************************************************************************
@@ -1296,6 +1321,48 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
 	}
 	MainWindowBase::closeEvent(ce);
+}
+
+/******************************************************************************
+*  Called when the KMail button is clicked.
+*  Tells KMail to display the email message displayed in this message window.
+*/
+void MessageWin::slotShowKMailMessage()
+{
+	kdDebug(5950) << "MessageWin::slotShowKMailMessage()\n";
+	if (!mKMailSerialNumber)
+		return;
+	QCString kmailName = KMAIL_APP_NAME;
+	if (!kapp->dcopClient()->isApplicationRegistered(kmailName))
+	{
+		// KMail is not already running, so start it
+		QString kmailError;
+		if (KApplication::startServiceByDesktopName(QString::fromLatin1(KMAIL_APP_NAME), QString::null, &kmailError, &kmailName))
+		{
+			kdWarning(5950) << "MessageWin::slotShowKMailMessage(): Unable to start KMail (" << kmailError << ")\n";
+			KMessageBox::sorry(this, i18n("Unable to start KMail\n(%1)").arg(kmailError));
+			return;
+		}
+		// Minimise its window - don't use hide() since this would remove all
+		// trace of it from the panel if it is not configured to be docked in
+		// the system tray.
+//		kapp->dcopClient()->send(kmailName, KMAIL_DCOP_WINDOW, "minimize()", QString::null);
+	}
+	QCString    replyType;
+	QByteArray  data, replyData;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << (Q_UINT32)mKMailSerialNumber << QString::null;
+	if (kapp->dcopClient()->call(kmailName, KMAIL_DCOP_OBJECT, "showMail(Q_UINT32,QString)", data, replyType, replyData)
+	&&  replyType == "bool")
+	{
+		bool result;
+		QDataStream replyStream(replyData, IO_ReadOnly);
+		replyStream >> result;
+		if (result)
+			return;    // success
+	}
+	kdError(5950) << "MessageWin::slotShowKMailMessage(): kmail dcop call failed\n";
+	KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
 }
 
 /******************************************************************************

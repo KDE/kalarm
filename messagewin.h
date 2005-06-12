@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ class MessageWin : public MainWindowBase
 		void                slotDefer();
 		void                checkDeferralLimit();
 		void                displayMainWindow();
+		void                slotShowKMailMessage();
 		void                slotSpeak();
 		void                slotPlayAudio();
 		void                checkAudioPlay();
@@ -101,6 +102,7 @@ class MessageWin : public MainWindowBase
 		int                 mFadeSeconds;
 		KAAlarm::Type       mAlarmType;
 		KAEvent::Action     mAction;
+		unsigned long       mKMailSerialNumber; // if email text, message's KMail serial number, else 0
 		QStringList         mErrorMsgs;
 		int                 mRestoreHeight;
 		bool                mAudioRepeat;
@@ -129,6 +131,7 @@ class MessageWin : public MainWindowBase
 		QPushButton*        mDeferButton;
 		QPushButton*        mSilenceButton;
 		QPushButton*        mKAlarmButton;
+		QPushButton*        mKMailButton;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
 		int                 mFlags;
