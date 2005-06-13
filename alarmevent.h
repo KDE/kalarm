@@ -277,7 +277,7 @@ class KAEvent : public KAAlarmEventBase
 			// The following values are not implemented in KAlarm
 			ANNUAL_DAY  = 8
 		};
-		/** Status of the event (what its alarm status is). */
+		/** The category of an event, indicated by the middle part of its UID. */
 		enum Status
 		{
 			ACTIVE,      // the event is currently active
