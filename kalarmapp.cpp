@@ -236,7 +236,13 @@ bool KAlarmApp::restoreSession()
 	// or if we're in run-in-system-tray mode.
 	if (Preferences::instance()->autostartTrayIcon()
 	||  MainWindow::count()  &&  wantRunInSystemTray())
+	{
 		displayTrayIcon(true, trayParent);
+		// Occasionally for no obvious reason, the main main window is
+		// shown when it should be hidden, so hide it just to be sure.
+		if (trayParent)
+			trayParent->hide();
+	}
 
 	--mActiveCount;
 	quitIf(0);           // quit if no windows are open
