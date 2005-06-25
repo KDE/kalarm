@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.h  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@ class EventListViewBase : public KListView
 
 		EventListViewBase(QWidget* parent = 0, const char* name = 0);
 		virtual ~EventListViewBase()  { }
-		void                   refresh();
 		EventListViewItemBase* getEntry(const QString& eventID) const;
 		void                   addEvent(const KAEvent& e)  { addEvent(e, instances(), this); }
 		void                   modifyEvent(const KAEvent& e)
@@ -72,6 +71,7 @@ class EventListViewBase : public KListView
 		virtual InstanceList   instances() = 0; // return all instances
 
 	public slots:
+		void                   refresh();
 		virtual void           slotFind();
 		virtual void           slotFindNext()         { findNext(true); }
 		virtual void           slotFindPrev()         { findNext(false); }
