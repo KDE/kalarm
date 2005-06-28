@@ -599,7 +599,10 @@ void MainWindow::slotModify()
 
 			// Update the event in the displays and in the calendar file
 			if (changeDeferral)
+			{
+				// The only change has been to an existing deferral
 				KAlarm::updateEvent(newEvent, mListView, true, false);   // keep the same event ID
+			}
 			else
 				KAlarm::modifyEvent(event, newEvent, mListView);
 			Undo::saveEdit(event, newEvent);
