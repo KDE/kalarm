@@ -37,6 +37,7 @@
 #include <libkcal/event.h>
 #include <libkcal/icalformat.h>
 #include <libkpimidentities/identitymanager.h>
+#include <libkpimidentities/identity.h>
 #include <libkcal/person.h>
 
 #include "alarmcalendar.h"
