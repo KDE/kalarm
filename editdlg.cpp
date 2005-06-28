@@ -374,7 +374,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
 	layout->addWidget(mSimpleRepetition);
 
-#ifdef SHOW_IN_KORGANISER
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
@@ -383,7 +382,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		QWhatsThis::add(mShowInKorganizer, i18n("Check to copy the alarm into KOrganizer's calendar"));
 		layout->addWidget(mShowInKorganizer);
 	}
-#endif
 	layout->addStretch();
 
 	// Late cancel selector - default = allow late display

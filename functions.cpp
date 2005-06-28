@@ -31,22 +31,13 @@
 #include <kstdguiitem.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#ifdef SHOW_IN_KORGANISER
 #include <dcopclient.h>
-#endif
 #include <kdebug.h>
 
 #include <libkcal/event.h>
-#ifdef SHOW_IN_KORGANISER
 #include <libkcal/icalformat.h>
-#include <libkcal/scheduler.h>
 #include <libkpimidentities/identitymanager.h>
-#define NEEDED
-#ifdef NEEDED
 #include <libkcal/person.h>
-#include <libkcal/attendee.h>
-#endif
-#endif
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
@@ -66,7 +57,7 @@
 namespace
 {
 bool        resetDaemonQueued = false;
-QCString    korganizerName;
+QCString    korganizerName = "korganizer";
 QString     korgStartError;
 const char* KORG_DCOP_OBJECT = "KOrganizerIface";
 
@@ -254,9 +245,7 @@ void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDel
 		deleteEvent(event, archiveOnDelete);
 	else
 	{
-#ifdef SHOW_IN_KORGANISER
-#warning Update KOrganizer
-#endif
+//#warning Update KOrganizer
 		// Update the event in the calendar file
 		if (incRevision)
 			event.incrementRevision();    // ensure alarm daemon sees the event has changed
@@ -666,7 +655,6 @@ QString stripAccel(const QString& text)
 
 namespace {
 
-#ifdef SHOW_IN_KORGANISER
 /******************************************************************************
 *  Tell KOrganizer to put an alarm in its calendar.
 *  It will be held by KOrganizer as a simple event, without alarms - KAlarm
@@ -674,24 +662,20 @@ namespace {
 */
 bool sendToKOrganizer(const KAEvent& event)
 {
-#warning Display message if error
+//#warning Display message if error
 	KCal::Event* kcalEvent = event.event();
 	QString uid = KAEvent::uid(event.id(), KAEvent::KORGANIZER);
 	kcalEvent->setUid(uid);
 	kcalEvent->clearAlarms();
-#ifdef NEEDED
-	QString userName = "David";
-	QString userEmail = "djarvie@astrojar.org.uk";
-#endif
+	QString userName;
+	QString userEmail;
 	switch (event.action())
 	{
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:
 		case KAEvent::COMMAND:
 			kcalEvent->setSummary(event.cleanText());
-#ifdef NEEDED
-	userEmail = Preferences::instance()->emailAddress();
-#endif
+			userEmail = Preferences::instance()->emailAddress();
 			break;
 		case KAEvent::EMAIL:
 		{
@@ -701,19 +685,16 @@ bool sendToKOrganizer(const KAEvent& event)
 			AlarmText atext;
 			atext.setEmail(event.emailAddresses(", "), from, QString::null, QString::null, event.emailSubject(), QString::null);
 			kcalEvent->setSummary(atext.displayText());
-#ifdef NEEDED
-	userEmail = from;
-#endif
+			userEmail = from;
 			break;
 		}
 	}
-#ifdef NEEDED
 	kcalEvent->setOrganizer(KCal::Person(userName, userEmail));
-		kcalEvent->addAttendee(new KCal::Attendee(userName, userEmail, false, KCal::Attendee::Accepted));
-#endif
+
 	// Translate the event into string format
 	KCal::ICalFormat format;
-	QString iCal = format.createScheduleMessage(kcalEvent, KCal::Scheduler::Add);
+	format.setTimeZone(QString::null, false);
+	QString iCal = format.toICalString(kcalEvent);
 kdDebug(5950)<<"Korg->"<<iCal<<endl;
 	delete kcalEvent;
 
@@ -723,12 +704,8 @@ kdDebug(5950)<<"Korg->"<<iCal<<endl;
 	QByteArray  data, replyData;
 	QCString    replyType;
 	QDataStream arg(data, IO_WriteOnly);
-#ifdef NEEDED
-	arg << QString::fromLatin1("accept") << userEmail << iCal;
-#else
-	arg << QString::fromLatin1("accept") << QString::null << iCal;
-#endif
-	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "eventRequest(QString,QString,QString)", data, replyType, replyData)
+	arg << iCal;
+	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "addIncidence(QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
@@ -740,7 +717,7 @@ kdDebug(5950)<<"Korg->"<<iCal<<endl;
 			return true;
 		}
 	}
-	kdError(5950) << "sendToKOrganizer(): KOrganizer eventRequest(" << uid << ") dcop call failed\n";
+	kdError(5950) << "sendToKOrganizer(): KOrganizer addEvent(" << uid << ") dcop call failed\n";
 	return false;
 }
 
@@ -749,7 +726,7 @@ kdDebug(5950)<<"Korg->"<<iCal<<endl;
 */
 bool deleteFromKOrganizer(const QString& eventID)
 {
-#warning Display message if error
+//#warning Display message if error
 	if (!runKOrganizer())     // start KOrganizer if it isn't already running
 		return false;
 	QByteArray  data, replyData;
@@ -787,9 +764,5 @@ bool runKOrganizer()
 	korgStartError = QString::null;
 	return true;
 }
-#else
-bool sendToKOrganizer(const KAEvent&) { return false; }
-bool deleteFromKOrganizer(const QString&) { return false; }
-#endif
 
 } // namespace

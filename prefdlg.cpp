@@ -1027,12 +1027,10 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
 	layout->addWidget(mDefaultEmailBcc, 0, Qt::AlignAuto);
 
-#ifdef SHOW_IN_KORGANISER
 	// Show in KOrganizer
 	mDefaultCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_ShowInKOrganizer(), mPage, "defShowKorg");
 	mDefaultCopyToKOrganizer->setMinimumSize(mDefaultCopyToKOrganizer->sizeHint());
 	QWhatsThis::add(mDefaultCopyToKOrganizer, defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
-#endif
 
 	// Late cancellation
 	box = new QHBox(mPage);
@@ -1070,9 +1068,7 @@ void EditPrefTab::restore()
 	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
 	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
 	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
-#ifdef SHOW_IN_KORGANISER
 	mDefaultCopyToKOrganizer->setChecked(preferences->mDefaultCopyToKOrganizer);
-#endif
 	mDefaultSound->setChecked(preferences->mDefaultSound);
 	setDefaultSoundType(preferences->mDefaultSoundType);
 	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
@@ -1093,9 +1089,7 @@ void EditPrefTab::apply(bool syncToDisc)
 	preferences->mDefaultLateCancel       = mDefaultLateCancel->isChecked() ? 1 : 0;
 	preferences->mDefaultAutoClose        = mDefaultAutoClose->isChecked();
 	preferences->mDefaultConfirmAck       = mDefaultConfirmAck->isChecked();
-#ifdef SHOW_IN_KORGANISER
 	preferences->mDefaultCopyToKOrganizer = mDefaultCopyToKOrganizer->isChecked();
-#endif
 	preferences->mDefaultSound            = mDefaultSound->isChecked();
 	preferences->mDefaultSoundFile        = mDefaultSoundFile->text();
 	preferences->mDefaultSoundType        = mDefaultSpeak && mDefaultSpeak->isOn() ? SoundPicker::SPEAK
@@ -1129,9 +1123,7 @@ void EditPrefTab::setDefaults()
 	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
 	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
-#ifdef SHOW_IN_KORGANISER
 	mDefaultCopyToKOrganizer->setChecked(Preferences::default_defaultCopyToKOrganizer);
-#endif
 	mDefaultSound->setChecked(Preferences::default_defaultSound);
 	setDefaultSoundType(Preferences::default_defaultSoundType);
 	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);

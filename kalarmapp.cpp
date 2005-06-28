@@ -146,15 +146,11 @@ KAlarmApp::KAlarmApp()
 	mSpeechEnabled = (KTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
 	if (!mSpeechEnabled)
 		kdDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
-#ifdef SHOW_IN_KORGANISER
 	// Check if KOrganizer is installed
 	QString korg = QString::fromLatin1("korganizer");
 	mKOrganizerEnabled = !locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
 	if (!mKOrganizerEnabled)
 		kdDebug(5950) << "KAlarmApp::KAlarmApp(): KOrganizer options disabled (KOrganizer not found)" << endl;
-#else
-	mKOrganizerEnabled = false;
-#endif
 }
 
 /******************************************************************************

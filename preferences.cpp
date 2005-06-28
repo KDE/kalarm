@@ -337,9 +337,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
-#ifdef SHOW_IN_KORGANISER
 	config->writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
-#endif
 	config->writeEntry(DEF_SOUND, mDefaultSound);
 	config->writeEntry(DEF_SOUND_TYPE, mDefaultSoundType);
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
