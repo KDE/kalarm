@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
+
+/**  @file functions.h - miscellaneous functions */
 
 #include <qsize.h>
 #include <qptrlist.h>
@@ -40,6 +42,15 @@ namespace KAlarm
 {
 
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
+/** Return codes from calendar update functions */
+enum UpdateStatus {
+	UPDATE_OK,          // update succeeded
+	UPDATE_ERROR,       // update failed completely
+	UPDATE_KORG_ERR     // update succeeded, but KOrganizer update failed
+};
+/** Error codes supplied as parameter to displayUpdateError() */
+enum UpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
+
 
 MainWindow*         displayMainWindowSelected(const QString& eventID = QString::null);
 bool                readConfigWindowSize(const char* window, QSize&);
@@ -54,17 +65,18 @@ void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 
-bool                addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
+UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true);
 bool                addExpiredEvent(KAEvent&);
 bool                addTemplate(KAEvent&, TemplateListView* selectionView);
-void                modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
+UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
 void                updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true);
 void                updateTemplate(const KAEvent&, TemplateListView* selectionView);
-void                deleteEvent(KAEvent&, bool archive = true);
+UpdateStatus        deleteEvent(KAEvent&, bool archive = true);
 void                deleteTemplate(const KAEvent&);
 void                deleteDisplayEvent(const QString& eventID);
-bool                reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
+UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
 void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
+void                displayUpdateError(QWidget* parent, UpdateError, bool multipleAlarms = false);
 
 QString             stripAccel(const QString&);
 

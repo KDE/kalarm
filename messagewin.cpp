@@ -823,7 +823,7 @@ void MessageWin::slotPlayAudio()
 	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{
 		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
-		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile), kapp->aboutData()->programName());
+		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile));
 		return;
 	}
 	if (!mArtsDispatcher)
@@ -1427,19 +1427,22 @@ void MessageWin::slotEdit()
 		editDlg.getEvent(event);
 
 		// Update the displayed lists and the calendar file
+		KAlarm::UpdateStatus status;
 		if (AlarmCalendar::activeCalendar()->event(mEventID))
 		{
 			// The old alarm hasn't expired yet, so replace it
-			KAlarm::modifyEvent(mEvent, event, 0);
+			status = KAlarm::modifyEvent(mEvent, event, 0);
 			Undo::saveEdit(mEvent, event);
 		}
 		else
 		{
 			// The old event has expired, so simply create a new one
-			KAlarm::addEvent(event, 0);
+			status = KAlarm::addEvent(event, 0);
 			Undo::saveAdd(event);
 		}
 
+		if (status == KAlarm::UPDATE_KORG_ERR)
+			KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_MODIFY);
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
 
 		// Close the alarm window
@@ -1532,7 +1535,8 @@ void MessageWin::slotDefer()
 				event.setEventID(mEventID);
 			}
 			// Add the event back into the calendar file, retaining its ID
-			KAlarm::addEvent(event, 0, true);
+			// and not updating KOrganizer
+			KAlarm::addEvent(event, 0, true, false);
 			if (kcalEvent)
 			{
 				event.setUid(KAEvent::EXPIRED);

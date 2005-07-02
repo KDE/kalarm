@@ -1,7 +1,7 @@
 /*
- *  undo.cpp  -  edit undo facility
+ *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
@@ -56,9 +57,11 @@ class UndoItem
 		virtual UndoItem* restore() = 0;
 		virtual bool      deleteID(const QString& /*id*/)  { return false; }
 
-		enum Error { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_EXPIRED };
+		enum Error   { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_EXPIRED };
+		enum Warning { WARN_NONE, WARN_KORG_ADD, WARN_KORG_MODIFY, WARN_KORG_DELETE, WARN_MULTI = 0x100 };
 		static int        mLastId;
-		static Error      mRestoreError;   // error code valid only if restore() returns 0
+		static Error      mRestoreError;     // error code valid only if restore() returns 0
+		static Warning    mRestoreWarning;   // warning code set by restore()
 
 	protected:
 		UndoItem(Undo::Type);
@@ -289,7 +292,7 @@ void Undo::removeRedos(const QString& eventID)
 	for (Iterator it = mRedoList.begin();  it != mRedoList.end();  )
 	{
 		UndoItem* item = *it;
-kdDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<endl;
+//kdDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<endl;
 		if (item->operation() == UndoItem::MULTI)
 		{
 			if (item->deleteID(id))
@@ -314,30 +317,45 @@ kdDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<en
 
 /******************************************************************************
 *  Undo or redo a specified item.
-*  Reply = error message
-*        = QString::null if success, or it the item no longer exists.
+*  Reply = true if success, or if the item no longer exists.
 */
-QString Undo::undo(Undo::Iterator it, Undo::Type type)
+bool Undo::undo(Undo::Iterator it, Undo::Type type, QWidget* parent, const QString& action)
 {
-	QString err;
+	UndoItem::mRestoreError   = UndoItem::ERR_NONE;
+	UndoItem::mRestoreWarning = UndoItem::WARN_NONE;
 	if (it != mUndoList.end()  &&  it != mRedoList.end()  &&  (*it)->type() == type)
 	{
-		if (!(*it)->restore())
-		{
-			switch (UndoItem::mRestoreError)
-			{
-				case UndoItem::ERR_NONE:       break;
-				case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
-				case UndoItem::ERR_CREATE:     err = i18n("Error recreating alarm");  break;
-				case UndoItem::ERR_EXPIRED:    err = i18n("Cannot reactivate expired alarm");  break;
-				case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
-				default:                       err = i18n("Unknown error");  break;
-			}
-		}
+		(*it)->restore();
 		delete *it;    // N.B. 'delete' removes the object from its list
 		emitChanged();
 	}
-	return err;
+
+	QString err;
+	switch (UndoItem::mRestoreError)
+	{
+		case UndoItem::ERR_NONE:
+		{
+			KAlarm::UpdateError errcode;
+			switch (UndoItem::mRestoreWarning & ~UndoItem::WARN_MULTI)
+			{
+				case UndoItem::WARN_KORG_ADD:     errcode = KAlarm::KORG_ERR_ADD;  break;
+				case UndoItem::WARN_KORG_MODIFY:  errcode = KAlarm::KORG_ERR_MODIFY;  break;
+				case UndoItem::WARN_KORG_DELETE:  errcode = KAlarm::KORG_ERR_DELETE;  break;
+				case UndoItem::WARN_NONE:
+				default:
+					return true;
+			}
+			KAlarm::displayUpdateError(parent, errcode, (UndoItem::mRestoreWarning & UndoItem::WARN_MULTI));
+			return true;
+		}
+		case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
+		case UndoItem::ERR_CREATE:     err = i18n("Error recreating alarm");  break;
+		case UndoItem::ERR_EXPIRED:    err = i18n("Cannot reactivate expired alarm");  break;
+		case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
+		default:                       err = i18n("Unknown error");  break;
+	}
+	KMessageBox::sorry(parent, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	return false;
 }
 
 /******************************************************************************
@@ -429,7 +447,7 @@ QValueList<int> Undo::ids(Undo::Type type)
 {
 	QValueList<int> ids;
 	QStringList ignoreIDs;
-int n=0;
+//int n=0;
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
 	if (!list)
 		return ids;
@@ -470,9 +488,9 @@ int n=0;
 		}
 		if (!omit)
 			ids.append(item->id());
-else kdDebug(5950)<<"Undo::ids(): omit "<<item->actionText()<<": "<<item->description()<<endl;
+//else kdDebug(5950)<<"Undo::ids(): omit "<<item->actionText()<<": "<<item->description()<<endl;
 	}
-kdDebug(5950)<<"Undo::ids(): "<<n<<" -> "<<ids.count()<<endl;
+//kdDebug(5950)<<"Undo::ids(): "<<n<<" -> "<<ids.count()<<endl;
 	return ids;
 }
 
@@ -522,8 +540,9 @@ Undo::Iterator Undo::findItem(int id, Undo::Type type)
 =  Class: UndoItem
 =  A single undo action.
 =============================================================================*/
-int             UndoItem::mLastId = 0;
-UndoItem::Error UndoItem::mRestoreError;
+int               UndoItem::mLastId = 0;
+UndoItem::Error   UndoItem::mRestoreError;
+UndoItem::Warning UndoItem::mRestoreWarning;
 
 /******************************************************************************
 *  Constructor.
@@ -692,7 +711,7 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, KAEvent::Status cal)
 UndoItem* UndoAdd::doRestore(bool setArchive)
 {
 	// Retrieve the current state of the alarm
-kdDebug(5950)<<"UndoAdd::doRestore(): "<<mEventID<<endl;
+	kdDebug(5950) << "UndoAdd::doRestore(" << mEventID << ")\n";
 	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mEventID);
 	if (!kcalEvent)
 	{
@@ -710,7 +729,11 @@ kdDebug(5950)<<"UndoAdd::doRestore(): "<<mEventID<<endl;
 		case KAEvent::ACTIVE:
 			if (setArchive)
 				event.setArchive();
-			KAlarm::deleteEvent(event, true);   // archive it if it has already triggered
+			// Archive it if it has already triggered
+			if (KAlarm::deleteEvent(event, true) == KAlarm::UPDATE_KORG_ERR)
+				mRestoreWarning = (mRestoreWarning == WARN_KORG_DELETE)
+				                ? static_cast<UndoItem::Warning>(WARN_KORG_DELETE | WARN_MULTI)
+				                : WARN_KORG_DELETE;
 			break;
 		case KAEvent::TEMPLATE:
 			KAlarm::deleteTemplate(event);
@@ -770,7 +793,7 @@ UndoEdit::~UndoEdit()
 */
 UndoItem* UndoEdit::restore()
 {
-kdDebug(5950)<<"UndoEdit::restore(): "<<mNewEventID<<endl;
+	kdDebug(5950) << "UndoEdit::restore(" << mNewEventID << ")\n";
 	// Retrieve the current state of the alarm
 	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mNewEventID);
 	if (!kcalEvent)
@@ -787,7 +810,10 @@ kdDebug(5950)<<"UndoEdit::restore(): "<<mNewEventID<<endl;
 	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
-			KAlarm::modifyEvent(newEvent, *mOldEvent, 0);
+			if (KAlarm::modifyEvent(newEvent, *mOldEvent, 0) == KAlarm::UPDATE_KORG_ERR)
+				mRestoreWarning = (mRestoreWarning == WARN_KORG_MODIFY)
+				                ? static_cast<UndoItem::Warning>(WARN_KORG_MODIFY | WARN_MULTI)
+				                : WARN_KORG_MODIFY;
 			break;
 		case KAEvent::TEMPLATE:
 			KAlarm::updateTemplate(*mOldEvent, 0);
@@ -843,7 +869,7 @@ UndoDelete::~UndoDelete()
 */
 UndoItem* UndoDelete::restore()
 {
-kdDebug(5950)<<"UndoDelete::restore(): "<<mEvent->id()<<endl;
+	kdDebug(5950) << "UndoDelete::restore(" << mEvent->id() << ")\n";
 	// Restore the original event
 	switch (calendar())
 	{
@@ -852,18 +878,34 @@ kdDebug(5950)<<"UndoDelete::restore(): "<<mEvent->id()<<endl;
 			{
 				// It was archived when it was deleted
 				mEvent->setUid(KAEvent::EXPIRED);
-				if (!KAlarm::reactivateEvent(*mEvent, 0, true))
+				switch (KAlarm::reactivateEvent(*mEvent, 0, true))
 				{
-					mRestoreError = ERR_EXPIRED;
-					return 0;
+					case KAlarm::UPDATE_KORG_ERR:
+						mRestoreWarning = (mRestoreWarning == WARN_KORG_ADD)
+						                ? static_cast<UndoItem::Warning>(WARN_KORG_ADD | WARN_MULTI)
+				                                : WARN_KORG_ADD;
+						break;
+					case KAlarm::UPDATE_ERROR:
+						mRestoreError = ERR_EXPIRED;
+						return 0;
+					case KAlarm::UPDATE_OK:
+						break;
 				}
 			}
 			else
 			{
-				if (!KAlarm::addEvent(*mEvent, 0, true))
+				switch (KAlarm::addEvent(*mEvent, 0, true))
 				{
-					mRestoreError = ERR_CREATE;
-					return 0;
+					case KAlarm::UPDATE_KORG_ERR:
+						mRestoreWarning = (mRestoreWarning == WARN_KORG_ADD)
+						                ? static_cast<UndoItem::Warning>(WARN_KORG_ADD | WARN_MULTI)
+						                : WARN_KORG_ADD;
+						break;
+					case KAlarm::UPDATE_ERROR:
+						mRestoreError = ERR_CREATE;
+						return 0;
+					case KAlarm::UPDATE_OK:
+						break;
 				}
 			}
 			break;
@@ -959,7 +1001,7 @@ QString UndoDeletes::actionText() const
 */
 UndoItem* UndoReactivate::restore()
 {
-kdDebug(5950)<<"UndoReactivate::restore()...\n";
+	kdDebug(5950) << "UndoReactivate::restore()\n";
 	// Validate the alarm's calendar
 	switch (calendar())
 	{
@@ -1002,7 +1044,7 @@ QString UndoReactivate::actionText() const
 */
 UndoItem* UndoDeactivate::restore()
 {
-kdDebug(5950)<<"UndoDeactivate::restore()...\n";
+	kdDebug(5950) << "UndoDeactivate::restore()\n";
 	// Validate the alarm's calendar
 	switch (calendar())
 	{

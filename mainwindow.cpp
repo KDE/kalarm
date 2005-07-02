@@ -540,7 +540,8 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 		editDlg.getEvent(event);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		KAlarm::addEvent(event, (win ? win->mListView : 0));
+		if (KAlarm::addEvent(event, (win ? win->mListView : 0)) == KAlarm::UPDATE_KORG_ERR)
+			KAlarm::displayUpdateError(win, KAlarm::KORG_ERR_ADD);
 		Undo::saveAdd(event);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
@@ -604,7 +605,10 @@ void MainWindow::slotModify()
 				KAlarm::updateEvent(newEvent, mListView, true, false);   // keep the same event ID
 			}
 			else
-				KAlarm::modifyEvent(event, newEvent, mListView);
+			{
+				if (KAlarm::modifyEvent(event, newEvent, mListView) == KAlarm::UPDATE_KORG_ERR)
+					KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_MODIFY);
+			}
 			Undo::saveEdit(event, newEvent);
 
 			KAlarm::outputAlarmWarnings(&editDlg, &newEvent);
@@ -647,6 +651,7 @@ void MainWindow::slotDelete()
 			return;
 	}
 
+	int warnKOrg = 0;
 	QValueList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
@@ -657,11 +662,15 @@ void MainWindow::slotDelete()
 
 		// Delete the event from the calendar and displays
 		events.append(event);
-		KAlarm::deleteEvent(event);
+		if (KAlarm::deleteEvent(event) == KAlarm::UPDATE_KORG_ERR)
+			++warnKOrg;
 	}
 	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 	AlarmCalendar::expiredCalendar()->endUpdate();
 	Undo::saveDeletes(events);
+
+	if (warnKOrg)
+		KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_DELETE, (warnKOrg > 1));
 }
 
 /******************************************************************************
@@ -670,6 +679,7 @@ void MainWindow::slotDelete()
 */
 void MainWindow::slotReactivate()
 {
+	int warnKOrg = 0;
 	QValueList<KAEvent> events;
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	mListView->clearSelection();
@@ -681,11 +691,15 @@ void MainWindow::slotReactivate()
 		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
 		KAEvent event = item->event();
 		events.append(event);
-		KAlarm::reactivateEvent(event, mListView, true);
+		if (KAlarm::reactivateEvent(event, mListView, true) == KAlarm::UPDATE_KORG_ERR)
+			++warnKOrg;
 	}
 	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
 	AlarmCalendar::expiredCalendar()->endUpdate();
 	Undo::saveReactivates(events);
+
+	if (warnKOrg)
+		KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
 }
 
 /******************************************************************************
@@ -760,8 +774,15 @@ void MainWindow::slotBirthdays()
 		if (events.count())
 		{
 			mListView->clearSelection();
+			int warnKOrg = 0;
 			for (QValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
-				KAlarm::addEvent(*ev, mListView);    // add alarm to the displayed lists and to the calendar file
+			{
+				// Add alarm to the displayed lists and to the calendar file
+				if (KAlarm::addEvent(*ev, mListView) == KAlarm::UPDATE_KORG_ERR)
+					++warnKOrg;
+			}
+			if (warnKOrg)
+				KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
 			KAlarm::outputAlarmWarnings(&dlg);
 		}
 	}
@@ -837,10 +858,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-	QString action = KAlarm::stripAccel(mActionUndo->text());    // save menu text - it will change before undo() returns
-	QString err = Undo::undo();
-	if (!err.isNull())
-		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	Undo::undo(this, KAlarm::stripAccel(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -848,10 +866,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-	QString action = KAlarm::stripAccel(mActionRedo->text());    // save menu text - it will change before redo() returns
-	QString err = Undo::redo();
-	if (!err.isNull())
-		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	Undo::redo(this, KAlarm::stripAccel(mActionRedo->text()));
 }
 
 /******************************************************************************
@@ -859,10 +874,7 @@ void MainWindow::slotRedo()
 */
 void MainWindow::slotUndoItem(int id)
 {
-	QString action = Undo::actionText(Undo::UNDO, id);    // save menu text - it will change before undo() returns
-	QString err = Undo::undo(id);
-	if (!err.isNull())
-		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	Undo::undo(id, this, Undo::actionText(Undo::UNDO, id));
 }
 
 /******************************************************************************
@@ -870,10 +882,7 @@ void MainWindow::slotUndoItem(int id)
 */
 void MainWindow::slotRedoItem(int id)
 {
-	QString action = Undo::actionText(Undo::REDO, id);    // save menu text - it will change before redo() returns
-	QString err = Undo::redo(id);
-	if (!err.isNull())
-		KMessageBox::sorry(this, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	Undo::redo(id, this, Undo::actionText(Undo::REDO, id));
 }
 
 /******************************************************************************

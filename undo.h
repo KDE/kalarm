@@ -1,7 +1,7 @@
 /*
- *  undo.h  -  edit undo facility
+ *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef UNDO_H
 #define UNDO_H
+
+/**  @file undo.h - undo/redo facility */
 
 #include <qvaluelist.h>
 #include <qstringlist.h>
@@ -41,10 +43,14 @@ class Undo : public QObject
 		static void        saveDeletes(const QValueList<KAEvent>&);
 		static void        saveReactivate(const KAEvent&);
 		static void        saveReactivates(const QValueList<KAEvent>&);
-		static QString     undo()             { return undo(mUndoList.begin(), UNDO); }
-		static QString     undo(int id)       { return undo(findItem(id, UNDO), UNDO); }
-		static QString     redo()             { return undo(mRedoList.begin(), REDO); }
-		static QString     redo(int id)       { return undo(findItem(id, REDO), REDO); }
+		static bool        undo(QWidget* parent, const QString& action)
+		                                      { return undo(mUndoList.begin(), UNDO, parent, action); }
+		static bool        undo(int id, QWidget* parent, const QString& action)
+		                                      { return undo(findItem(id, UNDO), UNDO, parent, action); }
+		static bool        redo(QWidget* parent, const QString& action)
+		                                      { return undo(mRedoList.begin(), REDO, parent, action); }
+		static bool        redo(int id, QWidget* parent, const QString& action)
+		                                      { return undo(findItem(id, REDO), REDO, parent, action); }
 		static void        clear();
 		static bool        haveUndo()         { return !mUndoList.isEmpty(); }
 		static bool        haveRedo()         { return !mRedoList.isEmpty(); }
@@ -71,7 +77,7 @@ class Undo : public QObject
 
 		Undo(QObject* parent)  : QObject(parent) { }
 		static void        removeRedos(const QString& eventID);
-		static QString     undo(Iterator, Type);
+		static bool        undo(Iterator, Type, QWidget* parent, const QString& action);
 		static UndoItem*   getItem(int id, Type);
 		static Iterator    findItem(int id, Type);
 		void               emitChanged(const QString& undo, const QString& redo)
