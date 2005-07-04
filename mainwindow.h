@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
+/** @file mainwindow.h - main application window */
 
 #include "alarmevent.h"
 #include "alarmtext.h"
@@ -128,6 +130,8 @@ class MainWindow : public MainWindowBase
 		void           updateActionsMenu();
 
 	private:
+		typedef QValueList<MainWindow*> WindowList;
+
 		MainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
@@ -137,10 +141,9 @@ class MainWindow : public MainWindowBase
 		static void    initUndoMenu(KPopupMenu*, Undo::Type);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
-		static bool    findWindow(MainWindow*);
 
-		static QPtrList<MainWindow> mWindowList;   // active main windows
-		static TemplateDlg*         mTemplateDlg;  // the one and only template dialogue
+		static WindowList    mWindowList;   // active main windows
+		static TemplateDlg*  mTemplateDlg;  // the one and only template dialogue
 
 		AlarmListView*       mListView;
 		KAction*             mActionTemplates;

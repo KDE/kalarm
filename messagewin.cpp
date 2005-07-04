@@ -126,7 +126,7 @@ class MWMimeSourceFactory : public QMimeSourceFactory
 static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
 
-QPtrList<MessageWin> MessageWin::mWindowList;
+QValueList<MessageWin*> MessageWin::mWindowList;
 
 
 /******************************************************************************
@@ -256,12 +256,7 @@ MessageWin::~MessageWin()
 	stopPlay();
 	delete mWinModule;
 	mWinModule = 0;
-	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
-		if (w == this)
-		{
-			mWindowList.remove();
-			break;
-		}
+	mWindowList.remove(this);
 	if (!mRecreating)
 	{
 		if (!mNoPostAction  &&  !mEvent.postAction().isEmpty())
@@ -740,9 +735,12 @@ void MessageWin::readProperties(KConfig* config)
 */
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
-	for (MessageWin* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (QValueList<MessageWin*>::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	{
+		MessageWin* w = *it;
 		if (w->mEventID == eventID  &&  !w->mErrorWindow)
 			return w;
+	}
 	return 0;
 }
 

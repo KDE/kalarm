@@ -60,7 +60,7 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
                                const QString& filter = QString::null, int mode = 0, QWidget* parent = 0, const char* name = 0);
 KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
-QPtrList<KAEvent>   templateList();
+QValueList<KAEvent> templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()

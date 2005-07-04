@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,9 +48,9 @@ void TemplateMenuAction::slotInitMenu()
 {
 	KPopupMenu* menu = popupMenu();
 	menu->clear();
-	QPtrList<KAEvent> templates = KAlarm::templateList();
-	for (KAEvent* e = templates.first();  e;  e = templates.next())
-		menu->insertItem(e->templateName());
+	QValueList<KAEvent> templates = KAlarm::templateList();
+	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+		menu->insertItem((*it).templateName());
 }
 
 /******************************************************************************

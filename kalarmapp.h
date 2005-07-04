@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef KALARMAPP_H
 #define KALARMAPP_H
+
+/** @file kalarmapp.h - the KAlarm application object */
 
 #include <qguardedptr.h>
 class QTimer;
@@ -168,7 +170,7 @@ class KAlarmApp : public KUniqueApplication
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mPrefsExpiredColour;  // expired alarms text colour
 		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
-		QPtrList<ProcData>    mCommandProcesses;    // currently active command alarm processes
+		QValueList<ProcData*> mCommandProcesses;    // currently active command alarm processes
 		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
 		int                   mPendingQuitCode;     // exit code for a pending quit
 		bool                  mPendingQuit;         // quit once the DCOP command and shell command queues have been processed

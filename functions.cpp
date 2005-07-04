@@ -468,10 +468,9 @@ void displayUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
 *  Returns a list of all alarm templates.
 *  If shell commands are disabled, command alarm templates are omitted.
 */
-QPtrList<KAEvent> templateList()
+QValueList<KAEvent> templateList()
 {
-	QPtrList<KAEvent> templates;
-	templates.setAutoDelete(true);
+	QValueList<KAEvent> templates;
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{
@@ -480,8 +479,8 @@ QPtrList<KAEvent> templateList()
 		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
 			KCal::Event* kcalEvent = *it;
-			KAEvent* event = new KAEvent(*kcalEvent);
-			if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
+			KAEvent event(*kcalEvent);
+			if (includeCmdAlarms  ||  event.action() != KAEvent::COMMAND)
 				templates.append(event);
 		}
 	}

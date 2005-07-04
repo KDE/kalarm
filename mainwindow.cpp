@@ -63,7 +63,6 @@
 #include "templatepickdlg.h"
 #include "templatedlg.h"
 #include "traywindow.h"
-#include "mainwindow.h"
 #include "mainwindow.moc"
 
 using namespace KCal;
@@ -83,8 +82,8 @@ KShortcut redoShortcut;
 =  Class: MainWindow
 =============================================================================*/
 
-QPtrList<MainWindow> MainWindow::mWindowList;
-TemplateDlg*         MainWindow::mTemplateDlg = 0;
+MainWindow::WindowList   MainWindow::mWindowList;
+TemplateDlg*             MainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -161,8 +160,7 @@ MainWindow::MainWindow(bool restored)
 MainWindow::~MainWindow()
 {
 	kdDebug(5950) << "MainWindow::~MainWindow()\n";
-	if (findWindow(this))
-		mWindowList.remove();
+	mWindowList.remove(this);
 	if (theApp()->trayWindow())
 	{
 		if (isTrayParent())
@@ -215,9 +213,9 @@ MainWindow* MainWindow::mainMainWindow()
 	MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
 	if (tray  &&  tray->isVisible())
 		return tray;
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
-		if (w->isVisible())
-			return w;
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+		if ((*it)->isVisible())
+			return *it;
 	if (tray)
 		return tray;
 	return mWindowList.first();
@@ -237,7 +235,7 @@ bool MainWindow::isTrayParent() const
 void MainWindow::closeAll()
 {
 	while (mWindowList.first())
-		delete mWindowList.first();
+		delete mWindowList.first();    // N.B. the destructor removes the window from the list
 }
 
 /******************************************************************************
@@ -390,8 +388,8 @@ void MainWindow::initActions()
 */
 void MainWindow::enableTemplateMenuItem(bool enable)
 {
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
-		w->mActionTemplates->setEnabled(enable);
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+		(*it)->mActionTemplates->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -400,8 +398,8 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 void MainWindow::refresh()
 {
 	kdDebug(5950) << "MainWindow::refresh()\n";
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
-		w->mListView->refresh();
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+		(*it)->mListView->refresh();
 }
 
 /******************************************************************************
@@ -413,8 +411,9 @@ void MainWindow::updateExpired()
 {
 	kdDebug(5950) << "MainWindow::updateExpired()\n";
 	bool enableShowExpired = Preferences::instance()->expiredKeepDays();
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
 	{
+		MainWindow* w = *it;
 		if (w->mShowExpired)
 		{
 			if (!enableShowExpired)
@@ -443,8 +442,9 @@ void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 		oldTime = true;     // at least one time column must have been displayed
 	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
 	{
-		for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+		for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
 		{
+			MainWindow* w = *it;
 			if (w->mShowTime   == oldTime
 			&&  w->mShowTimeTo == oldTimeTo)
 			{
@@ -469,8 +469,9 @@ void MainWindow::setUpdateTimer()
 	// Check whether any windows need to be updated
 	MainWindow* needTimer = 0;
 	MainWindow* timerWindow = 0;
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
 	{
+		MainWindow* w = *it;
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			needTimer = w;
 		if (w->mMinuteTimerActive)
@@ -498,9 +499,12 @@ void MainWindow::setUpdateTimer()
 void MainWindow::slotUpdateTimeTo()
 {
 	kdDebug(5950) << "MainWindow::slotUpdateTimeTo()" << endl;
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
+	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	{
+		MainWindow* w = *it;
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			w->mListView->updateTimeToAlarms();
+	}
 }
 
 /******************************************************************************
@@ -1272,7 +1276,7 @@ void MainWindow::setEnableText(bool enable)
 */
 MainWindow* MainWindow::toggleWindow(MainWindow* win)
 {
-	if (win  &&  findWindow(win))
+	if (win  &&  mWindowList.find(win) != mWindowList.end())
 	{
 		// A window is specified (and it exists)
 		if (win->isVisible())
@@ -1296,15 +1300,4 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 	win = create();
 	win->show();
 	return win;
-}
-
-/******************************************************************************
-* Find the specified window in the main window list.
-*/
-bool MainWindow::findWindow(MainWindow* win)
-{
-	for (MainWindow* w = mWindowList.first();  w;  w = mWindowList.next())
-		if (w == win)
-			return true;
-	return false;
 }

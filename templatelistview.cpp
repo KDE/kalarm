@@ -1,7 +1,7 @@
 /*
  *  templatelistview.cpp  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,9 +61,9 @@ TemplateListView::~TemplateListView()
 */
 void TemplateListView::populate()
 {
-	QPtrList<KAEvent> templates = KAlarm::templateList();
-	for (KAEvent* e = templates.first();  e;  e = templates.next())
-		addEntry(*e);
+	QValueList<KAEvent> templates = KAlarm::templateList();
+	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+		addEntry(*it);
 }
 
 /******************************************************************************

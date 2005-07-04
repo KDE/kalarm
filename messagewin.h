@@ -21,6 +21,8 @@
 #ifndef MESSAGEWIN_H
 #define MESSAGEWIN_H
 
+/** @file messagewin.h - displays an alarm message */
+
 #include "mainwindowbase.h"
 #include "alarmevent.h"
 
@@ -92,7 +94,7 @@ class MessageWin : public MainWindowBase
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
 
-		static QPtrList<MessageWin> mWindowList;  // list of existing message windows
+		static QValueList<MessageWin*> mWindowList;  // list of existing message windows
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;

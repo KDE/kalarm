@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -110,7 +110,6 @@ KAlarmApp::KAlarmApp()
 #if KDE_VERSION < 290
 	marginKDE2 = KDialog::marginHint();
 #endif
-	mCommandProcesses.setAutoDelete(true);
 	Preferences* preferences = Preferences::instance();
 	connect(preferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
@@ -157,6 +156,12 @@ KAlarmApp::KAlarmApp()
 */
 KAlarmApp::~KAlarmApp()
 {
+	while (!mCommandProcesses.isEmpty())
+	{
+		ProcData* pd = mCommandProcesses.first();
+		mCommandProcesses.pop_front();
+		delete pd;
+	}
 	AlarmCalendar::terminateCalendars();
 }
 
@@ -762,7 +767,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 			if (checkSystemTray())
 				return;
 		}
-		if (mDcopQueue.count()  ||  mCommandProcesses.count())
+		if (!mDcopQueue.isEmpty()  ||  !mCommandProcesses.isEmpty())
 		{
 			// Don't quit yet if there are outstanding actions on the DCOP queue
 			mPendingQuit = true;
@@ -878,7 +883,7 @@ void KAlarmApp::processQueue()
 		KAlarm::resetDaemonIfQueued();
 
 		// Process DCOP calls
-		while (mDcopQueue.count())
+		while (!mDcopQueue.isEmpty())
 		{
 			DcopQEntry& entry = mDcopQueue.first();
 			if (entry.eventId.isEmpty())
@@ -1176,7 +1181,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	}
 	if (!audioFile.isEmpty())
 		event.setAudioFile(audioFile, audioVolume, -1, 0);
-	if (mailAddresses.count())
+	if (!mailAddresses.isEmpty())
 		event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
@@ -1663,7 +1668,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			QStringList errmsgs;
 			if (!KAMail::send(event, errmsgs, (reschedule || allowDefer)))
 				result = 0;
-			if (errmsgs.count())
+			if (!errmsgs.isEmpty())
 			{
 				// Some error occurred, although the email may have been sent successfully
 				if (result)
@@ -1779,7 +1784,8 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	// Error executing command - report it
 	kdError(5950) << "KAlarmApp::doShellCommand(): command failed to start\n";
 	commandErrorMsg(proc, event, alarm, flags);
-	mCommandProcesses.removeRef(pd);
+	mCommandProcesses.remove(pd);
+	delete pd;
 	return 0;
 }
 
@@ -1818,8 +1824,9 @@ void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
 {
 kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QCString(buffer, bufflen+1) << "'\n";
 	// Find this command in the command list
-	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())
+	for (QValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
 	{
+		ProcData* pd = *it;
 		if (pd->process == proc  &&  pd->logProcess)
 		{
 			pd->logProcess->writeStdin(buffer, bufflen);
@@ -1845,8 +1852,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 {
 	kdDebug(5950) << "KAlarmApp::slotCommandExited()\n";
 	// Find this command in the command list
-	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())
+	for (QValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
 	{
+		ProcData* pd = *it;
 		if (pd->process == proc)
 		{
 			// Found the command
@@ -1877,12 +1885,14 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 			}
 			if (pd->preAction())
 				execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
-			mCommandProcesses.remove();
+			mCommandProcesses.remove(it);
+			delete pd;
+			break;
 		}
 	}
 
-	// Now that there are no executing shell commands, quit if a quit was queued
-	if (mPendingQuit  &&  !mCommandProcesses.count())
+	// If there are now no executing shell commands, quit if a quit was queued
+	if (mPendingQuit  &&  mCommandProcesses.isEmpty())
 		quitIf(mPendingQuitCode);
 }
 
@@ -1908,8 +1918,9 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 {
 	// Find this command in the command list
-	for (ProcData* pd = mCommandProcesses.first();  pd;  pd = mCommandProcesses.next())
+	for (QValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
 	{
+		ProcData* pd = *it;
 		if (pd->process == proc)
 		{
 			pd->messageBoxParent = parent;
@@ -2133,7 +2144,7 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 
 KAlarmApp::ProcData::~ProcData()
 {
-	while (tempFiles.count())
+	while (!tempFiles.isEmpty())
 	{
 		// Delete the temporary file called by the XTerm command
 		QFile f(tempFiles.first());
