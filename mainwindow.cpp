@@ -63,6 +63,7 @@
 #include "templatepickdlg.h"
 #include "templatedlg.h"
 #include "traywindow.h"
+#include "mainwindow.h"
 #include "mainwindow.moc"
 
 using namespace KCal;
