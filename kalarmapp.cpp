@@ -1688,7 +1688,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 }
 
 /******************************************************************************
-* Execute a shell command specified by an alarm.
+* Execute a shell command line specified by an alarm.
 * If the PRE_ACTION bit of 'flags' is set, the alarm will be executed via
 * execAlarm() once the command completes, the execAlarm() parameters being
 * derived from the remaining bits in 'flags'.
@@ -1802,8 +1802,8 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 		kdError(5950) << "KAlarmApp::createTempScript(): Unable to create a temporary script file" << endl;
 	else
 	{
-//		if (insertShell)
-//			;
+		if (insertShell)
+			*stream << "#!" << ShellProcess::shellPath() << "\n";
 		*stream << command;
 		tmpFile.close();
 		if (tmpFile.status())
@@ -2148,7 +2148,6 @@ KAlarmApp::ProcData::~ProcData()
 	{
 		// Delete the temporary file called by the XTerm command
 		QFile f(tempFiles.first());
-kdDebug(5950)<<"Deleting "<<f.name()<<endl;
 		f.remove();
 		tempFiles.remove(tempFiles.begin());
 	}

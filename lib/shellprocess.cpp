@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 
 QCString  ShellProcess::mShellName;
+QCString  ShellProcess::mShellPath;
 bool      ShellProcess::mInitialised = false;
 bool      ShellProcess::mAuthorised  = false;
 
@@ -157,15 +158,16 @@ QString ShellProcess::errorMessage() const
 }
 
 /******************************************************************************
-* Find which shell to use.
+* Determine which shell to use.
 * This is a duplication of what KShellProcess does, but we need to know
 * which shell is used in order to decide what its exit code means.
 */
-const QCString& ShellProcess::shellName()
+const QCString& ShellProcess::shellPath()
 {
-	if (mShellName.isEmpty())
+	if (mShellPath.isEmpty())
 	{
-		QCString shell = "/bin/sh";
+		// Get the path to the shell
+		mShellPath = "/bin/sh";
 		QCString envshell = QCString(getenv("SHELL")).stripWhiteSpace();
 		if (!envshell.isEmpty())
 		{
@@ -179,15 +181,17 @@ const QCString& ShellProcess::shellName()
 #endif
 			&&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
 			&&  !access(envshell.data(), X_OK))         // and it's executable
-				shell = envshell;
+				mShellPath = envshell;
 		}
-		// Get the shell filename with the path stripped
-		mShellName = shell;
-		int i = mShellName.findRev('/');
+
+		// Get the shell filename with the path stripped off
+		int i = mShellPath.findRev('/');
 		if (i >= 0)
-			mShellName = mShellName.mid(i + 1);
+			mShellName = mShellPath.mid(i + 1);
+		else
+			mShellName = mShellPath;
 	}
-	return mShellName;
+	return mShellPath;
 }
 
 /******************************************************************************

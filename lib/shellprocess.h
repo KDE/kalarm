@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a shell process
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef SHELLPROCESS_H
 #define SHELLPROCESS_H
+
+/** @file shellprocess.h - execute a shell process */
 
 #include <kprocess.h>
 
@@ -92,8 +94,14 @@ class ShellProcess : public KShellProcess
 		 *  be prohibited in kiosk mode, for example.
 		 */
 		static bool     authorised();
-		/** Finds which shell to use. */
-		static const QCString& shellName();
+		/** Determines which shell to use.
+		 *  @return file name of shell, excluding path.
+		 */
+		static const QCString& shellName()   { shellPath();  return mShellName; }
+		/** Determines which shell to use.
+		 *  @return path name of shell.
+		 */
+		static const QCString& shellPath();
 
 	signals:
 		/** Signal emitted when the shell process execution completes. It is not emitted
@@ -113,6 +121,7 @@ class ShellProcess : public KShellProcess
 		ShellProcess&  operator<<(const char*);
 
 		static QCString      mShellName;    // name of shell to be used
+		static QCString      mShellPath;    // path of shell to be used
 		static bool          mInitialised;  // true once static data has been initialised
 		static bool          mAuthorised;   // true if shell commands are authorised
 		QString              mCommand;      // copy of command to be executed
