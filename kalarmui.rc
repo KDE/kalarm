@@ -1,12 +1,19 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kalarm" >
- <ToolBar noMerge="1" name="main" >
+ <ToolBar noMerge="1" name="mainToolBar" >
   <Action name="new" />
   <Action name="newFromTempl" />
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
   <Action name="view" />
+  <Separator />
+  <Action name="edit_undo" />
+  <Action name="edit_redo" />
+  <Separator />
+  <Action name="edit_find"/>
+  <Action name="edit_find_next"/>
+  <Action name="edit_find_last"/>
  </ToolBar>
  <MenuBar>
   <Menu name="file" >
