@@ -136,6 +136,7 @@ inline QString recurText(const KAEvent& event)
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
 QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
 QString EditAlarmDlg::i18n_ShowInKOrganizer()   { return i18n("Show in KOrganizer"); }
+QString EditAlarmDlg::i18n_g_ShowInKOrganizer() { return i18n("Show in KOr&ganizer"); }
 QString EditAlarmDlg::i18n_EnterScript()        { return i18n("Enter a script"); }
 QString EditAlarmDlg::i18n_p_EnterScript()      { return i18n("Enter a scri&pt"); }
 QString EditAlarmDlg::i18n_ExecInTermWindow()   { return i18n("Execute in terminal window"); }

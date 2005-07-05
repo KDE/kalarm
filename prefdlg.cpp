@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1028,7 +1028,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	layout->addWidget(mDefaultEmailBcc, 0, Qt::AlignAuto);
 
 	// Show in KOrganizer
-	mDefaultCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_ShowInKOrganizer(), mPage, "defShowKorg");
+	mDefaultCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), mPage, "defShowKorg");
 	mDefaultCopyToKOrganizer->setMinimumSize(mDefaultCopyToKOrganizer->sizeHint());
 	QWhatsThis::add(mDefaultCopyToKOrganizer, defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
 

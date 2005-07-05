@@ -75,6 +75,7 @@ class EditAlarmDlg : public KDialogBase
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
 		static QString  i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
 		static QString  i18n_ShowInKOrganizer();   // plain text of 'Show in KOrganizer' checkbox
+		static QString  i18n_g_ShowInKOrganizer(); // text of 'Show in KOrganizer' checkbox, with 'G' shortcut
 		static QString  i18n_EnterScript();        // plain text of 'Enter a script' checkbox
 		static QString  i18n_p_EnterScript();      // text of 'Enter a script' checkbox, with 'P' shortcut
 		static QString  i18n_ExecInTermWindow();   // plain text of 'Execute in terminal window' checkbox
