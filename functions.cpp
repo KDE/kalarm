@@ -73,7 +73,7 @@ bool runKOrganizer();
  * DON'T CHANGE THESE VARIABLE NAMES. (The KAlarm standalone package depends on them.)
  */
 const char NEW_ICON[] =               "filenew";
-const char NEW_FROM_TEMPLATE_ICON[] = "file_new_template";
+const char NEW_FROM_TEMPLATE_ICON[] = "new_from_template";
 
 
 namespace KAlarm
@@ -781,7 +781,7 @@ bool deleteFromKOrganizer(const QString& eventID)
 	QCString    replyType;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << newID;
-	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidence(QString)", data, replyType, replyData)
+	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidenceForce(QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
