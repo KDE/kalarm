@@ -1,5 +1,5 @@
 /*
- *  shellprocess.h  -  execute a shell process
+ *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
  *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -21,14 +21,15 @@
 #ifndef SHELLPROCESS_H
 #define SHELLPROCESS_H
 
-/** @file shellprocess.h - execute a shell process */
+/** @file shellprocess.h - execute a process through the shell */
 
 #include <kprocess.h>
 
 
 /**
  *  The ShellProcess class runs a shell command and interprets the shell exit status
- *  as far as possible. It blocks execution if shell access is prohibited.
+ *  as far as possible. It blocks execution if shell access is prohibited. It buffers
+ *  data written to the process's stdin.
  *
  *  Before executing any command, ShellProcess checks whether shell commands are
  *  allowed at all. If not (e.g. if the user is running in kiosk mode), it blocks
@@ -39,7 +40,10 @@
  *  report that the command could not be found or could not be executed, the NOT_FOUND
  *  status is returned.
  *
- *  @short KShellProcess with interpretation of shell exit status.
+ *  Writes to the process's stdin are buffered, so that unlike with KShellProcess, there
+ *  is not need to wait for the write to complete before writing again.
+ *
+ *  @short Enhanced KShellProcess which interprets shell exit status and buffers writes to stdin.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class ShellProcess : public KShellProcess
