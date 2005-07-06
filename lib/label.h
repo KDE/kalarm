@@ -26,6 +26,8 @@ class QRadioButton;
 class LabelFocusWidget;
 
 /**
+ *  @short A QLabel with option for a buddy radio button.
+ *
  *  The Label class provides a text display, with special behaviour when a radio
  *  button is set as a buddy.
  *
@@ -34,7 +36,6 @@ class LabelFocusWidget;
  *  focus and is switched on. When a non-radio button is specified as a buddy, the
  *  behaviour is the same as for QLabel.
  *
- *  @short QLabel with option for a buddy radio button.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class Label : public QLabel

@@ -26,10 +26,11 @@
 
 
 /**
+ *  @short Enhanced KMessageBox.
+ *
  *  The MessageBox class provides an extension to KMessageBox, including the option for
  *  Continue/Cancel message boxes to have a default button of Cancel.
  *
- *  @short Enhanced KMessageBox.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class MessageBox : public KMessageBox

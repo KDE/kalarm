@@ -27,6 +27,8 @@
 
 
 /**
+ *  @short Enhanced KShellProcess.
+ *
  *  The ShellProcess class runs a shell command and interprets the shell exit status
  *  as far as possible. It blocks execution if shell access is prohibited. It buffers
  *  data written to the process's stdin.
@@ -43,7 +45,6 @@
  *  Writes to the process's stdin are buffered, so that unlike with KShellProcess, there
  *  is not need to wait for the write to complete before writing again.
  *
- *  @short Enhanced KShellProcess which interprets shell exit status and buffers writes to stdin.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class ShellProcess : public KShellProcess

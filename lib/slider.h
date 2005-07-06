@@ -25,12 +25,13 @@
 
 
 /**
+ *  @short A QSlider with read-only option.
+ *
  *  The Slider class is a QSlider with a read-only option.
  *
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short QSlider with read-only option.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class Slider : public QSlider

@@ -21,12 +21,16 @@
 #ifndef PICKFILERADIO_H
 #define PICKFILERADIO_H
 
+/** @file pickfileradio.h - radio button with an associated file picker */
+
 #include "radiobutton.h"
 
 class QPushButton;
 class LineEdit;
 
 /**
+ *  @short Radio button with associated file picker controls.
+ *
  *  The PickFileRadio class is a radio button with an associated button to choose
  *  a file, and an optional file name edit box. Its purpose is to ensure that while
  *  the radio button is selected, the chosen file name is never blank.
@@ -41,7 +45,6 @@ class LineEdit;
  *  enabling and disabling of the browse button and edit box when the enable state of
  *  the radio button is changed, and when the radio button selection changes.
  *
- *  @short Radio button with associated file picker controls.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class PickFileRadio : public RadioButton

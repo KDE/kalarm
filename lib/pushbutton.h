@@ -25,12 +25,13 @@
 
 
 /**
+ *  @short A QPushButton with read-only option.
+ *
  *  The PushButton class is a QPushButton with a read-only option.
  *
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short QPushButton with read-only option.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class PushButton : public QPushButton

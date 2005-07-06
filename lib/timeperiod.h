@@ -31,6 +31,8 @@ class TimeSpinBox;
 
 
 /**
+ *  @short Time period entry widget.
+ *
  *  The TimePeriod class provides a widget for entering a time period as a number of
  *  weeks, days, or hours and minutes.
  *
@@ -43,7 +45,6 @@ class TimeSpinBox;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short Time period entry widget.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class TimePeriod : public QHBox

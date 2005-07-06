@@ -25,6 +25,8 @@
 
 
 /**
+ *  @short A QRadioButton with focus widget and read-only options.
+ *
  *  The RadioButton class is a QRadioButton with the ability to transfer focus to
  *  another widget when checked, and with a read-only option.
  *
@@ -35,7 +37,6 @@
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short QRadioButton with focus widget and read-only options.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class RadioButton : public QRadioButton

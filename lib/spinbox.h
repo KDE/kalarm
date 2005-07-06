@@ -25,6 +25,8 @@
 
 
 /**
+ *  @short Spin box with accelerated shift key stepping and read-only option.
+ *
  *  The SpinBox class provides a QSpinBox with accelerated stepping using the shift key.
  *
  *  A separate step increment may optionally be specified for use when the shift key is
@@ -35,7 +37,6 @@
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short Spin box with accelerated shift key stepping and read-only option.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class SpinBox : public QSpinBox

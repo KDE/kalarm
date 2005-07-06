@@ -29,6 +29,8 @@ class TimeSpinBox;
 
 
 /**
+ *  @short Widget to enter a time of day.
+ *
  *  The TimeEdit class provides a widget to enter a time of day in hours and minutes,
  *  using a 12- or 24-hour clock according to the user's locale settings.
  *
@@ -43,7 +45,6 @@ class TimeSpinBox;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short Widget to enter a time of day.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class TimeEdit : public QHBox

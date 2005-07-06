@@ -30,6 +30,8 @@ class ExtraSpinBox;
 
 
 /**
+ *  @short Spin box with a pair of spin buttons on either side.
+ *
  *  The SpinBox2 class provides a spin box with two pairs of spin buttons, one on either side.
  *
  *  It is designed as a base class for implementing such facilities as time spin boxes, where
@@ -49,7 +51,6 @@ class ExtraSpinBox;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short Spin box with a pair of spin buttons on either side.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class SpinBox2 : public QFrame

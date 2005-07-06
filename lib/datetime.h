@@ -24,6 +24,8 @@
 
 
 /**
+ *  @short A QDateTime with date-only option.
+ *
  *  The DateTime class holds a date, with or without a time.
  *
  *  DateTime is very similar to the QDateTime class, with the additional option to
@@ -32,7 +34,6 @@
  *
  *  The time assumed for date-only values is the start-of-day time set by setStartOfDay().
  *
- *  @short QDateTime with date-only option.
  *  @author David Jarvie <software@astrojar.org.uk>
 */
 class DateTime

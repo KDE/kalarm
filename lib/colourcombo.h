@@ -26,6 +26,8 @@
 
 
 /**
+ *  @short A colour selection combo box whose colour list can be specified.
+ *
  *  The ColourCombo class is a combo box allowing the user to select a colour.
  *
  *  It is similar to KColorCombo but allows the list of colours to be restricted to those
@@ -36,7 +38,6 @@
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @short Colour combo box with read-only option.
  *  @author David Jarvie <software@astrojar.org.uk>
  */
 class ColourCombo : public QComboBox
