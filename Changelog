@@ -1,6 +1,17 @@
 KAlarm
 
-=== Version 1.3 --- 12 April 2005 ===
+=== Version 1.3.2 --- 6 July 2005 ===
+Add option for email text alarms to locate the email in KMail (KDE >= 3.5).
+Add option to show alarms in KOrganizer's active calendar (KDE >= 3.5).
+Wait longer (20 seconds) before reporting alarm daemon registration failed.
+Minimise KMix window if KMix is started by KAlarm when displaying a message.
+Fix Plastik style 'enabled' indication for time spinbox left-hand buttons.
+Prevent message windows always being full screen after a big message is shown.
+Prevent message windows being initially larger than the desktop.
+Prevent message windows initially overlapping the KDE panel.
+Prevent session restoration displaying main windows which should be hidden.
+
+=== Version 1.3.1 --- 30 May 2005 ===
 Add Undo/Redo facility for alarm edit/creation/deletion/reactivation.
 Add search facility.
 Add option to speak alarm messages (if speech synthesis is installed).
@@ -8,6 +19,7 @@ Add command line option --speak.
 Add 'New alarm from template' menu option and toolbar button.
 Add 'Time from now' option in alarm templates.
 Add fade option for playing sound files.
+Add option to log command alarm output to a file.
 Add Edit button to alarm message window to allow alarm to be edited.
 Enable drag and drop of alarms to other applications.
 Email drag-and-drop from KMail (KDE >= 3.5) now presets alarm edit dialog with
