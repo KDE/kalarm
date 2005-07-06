@@ -61,6 +61,7 @@ bool        resetDaemonQueued = false;
 QCString    korganizerName = "korganizer";
 QString     korgStartError;
 const char* KORG_DCOP_OBJECT = "KOrganizerIface";
+const char* KORG_DCOP_WINDOW = "KOrganizer MainWindow";
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
@@ -803,11 +804,18 @@ bool deleteFromKOrganizer(const QString& eventID)
 */
 bool runKOrganizer()
 {
-	if (!kapp->dcopClient()->isApplicationRegistered("korganizer")
-	&&  KApplication::startServiceByDesktopName(QString::fromLatin1("korganizer"), QString::null, &korgStartError, &korganizerName))
+	if (!kapp->dcopClient()->isApplicationRegistered("korganizer"))
 	{
-		kdError(5950) << "runKOrganizer(): couldn't start KOrganizer (" << korgStartError << ")\n";
-		return false;
+		// KOrganizer is not already running, so start it
+		if (KApplication::startServiceByDesktopName(QString::fromLatin1("korganizer"), QString::null, &korgStartError, &korganizerName))
+		{
+			kdError(5950) << "runKOrganizer(): couldn't start KOrganizer (" << korgStartError << ")\n";
+			return false;
+		}
+		// Minimise its window - don't use hide() since this would remove all
+		// trace of it from the panel if it is not configured to be docked in
+		// the system tray.
+		kapp->dcopClient()->send(korganizerName, KORG_DCOP_WINDOW, "minimize()", QString::null);
 	}
 	korgStartError = QString::null;
 	return true;

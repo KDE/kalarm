@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,6 +60,8 @@ static KCmdLineOptions options[] =
 	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0 },
 	{ "i", 0, 0 },
 	{ "interval <period>", I18N_NOOP("Interval between alarm repetitions"), 0 },
+	{ "k", 0, 0 },
+	{ "korganizer", I18N_NOOP("Show alarm as an event in KOrganizer"), 0 },
 	{ "l", 0, 0 },
 	{ "late-cancel <period>", I18N_NOOP("Cancel alarm if more than 'period' late when triggered"), "1" },
 	{ "L", 0, 0 },

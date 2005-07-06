@@ -1,7 +1,7 @@
 /*
- *  kalarmiface.h  -  DCOP interface for KAlarm
+ *  kalarmiface.h  -  DCOP interface to KAlarm
  *  Program:  kalarm
- *  (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,11 +21,17 @@
 #ifndef KALARMIFACE_H
 #define KALARMIFACE_H
 
+/** @file kalarmiface.h - DCOP interface to KAlarm */
+
 // No forward declarations - dcopidl2cpp won't work
 #include <dcopobject.h>
 #include <kurl.h>
 #include <qstringlist.h>
 class QString;
+
+/** KAlarmIface provides a DCOP interface for other applications to request
+ *  KAlarm actions.
+ */
 
 class KAlarmIface : virtual public DCOPObject
 {
@@ -42,6 +48,7 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @li SCRIPT          - the command to execute is a script, not a shell command line.
 	 *  @li EXEC_IN_XTERM   - execute the command alarm in a terminal window.
 	 *  @li EMAIL_BCC       - send a blind copy the email to the user.
+	 *  @li SHOW_IN_KORG    - show the alarm as an event in KOrganizer
 	 *  @li DISABLED        - set the alarm status to disabled.
 	 */
 	enum Flags
@@ -55,7 +62,8 @@ class KAlarmIface : virtual public DCOPObject
 		DISABLED        = 0x40,    // alarm is currently disabled
 		SCRIPT          = 0x80,    // command is a script, not a shell command line
 		EXEC_IN_XTERM   = 0x100,   // execute command alarm in terminal window
-		SPEAK           = 0x200    // speak the alarm message when it is displayed
+		SPEAK           = 0x200,   // speak the alarm message when it is displayed
+		SHOW_IN_KORG    = 0x400    // show the alarm as an event in KOrganizer
 	};
 	/** Values for the @p repeatType parameter of "scheduleXxxx()" DCOP calls.
 	 *  @li MINUTELY - the repeat interval is measured in minutes.

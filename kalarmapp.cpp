@@ -625,6 +625,8 @@ int KAlarmApp::newInstance()
 					flags |= KAEvent::BEEP;
 				if (args->isSet("speak"))
 					flags |= KAEvent::SPEAK;
+				if (args->isSet("korganizer"))
+					flags |= KAEvent::COPY_KORGANIZER;
 				if (args->isSet("disable"))
 					flags |= KAEvent::DISABLED;
 				if (audioRepeat)
@@ -673,6 +675,8 @@ int KAlarmApp::newInstance()
 					usage += QString::fromLatin1("--disable ");
 				if (args->isSet("from-id"))
 					usage += QString::fromLatin1("--from-id ");
+				if (args->isSet("korganizer"))
+					usage += QString::fromLatin1("--korganizer ");
 				if (args->isSet("late-cancel"))
 					usage += QString::fromLatin1("--late-cancel ");
 				if (args->isSet("login"))
