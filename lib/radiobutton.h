@@ -1,7 +1,7 @@
 /*
  *  radiobutton.h  -  radio button with focus widget and read-only options
  *  Program:  kalarm
- *  (C) 2002, 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002, 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

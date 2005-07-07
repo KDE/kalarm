@@ -1,7 +1,7 @@
 /*
  *  timeedit.h  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
