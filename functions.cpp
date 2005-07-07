@@ -716,7 +716,6 @@ bool sendToKOrganizer(const KAEvent& event)
 	QString uid = KAEvent::uid(event.id(), KAEvent::KORGANIZER);
 	kcalEvent->setUid(uid);
 	kcalEvent->clearAlarms();
-	QString userName;
 	QString userEmail;
 	switch (event.action())
 	{
@@ -738,7 +737,7 @@ bool sendToKOrganizer(const KAEvent& event)
 			break;
 		}
 	}
-	kcalEvent->setOrganizer(KCal::Person(userName, userEmail));
+	kcalEvent->setOrganizer(KCal::Person(QString::null, userEmail));
 
 	// Translate the event into string format
 	KCal::ICalFormat format;
