@@ -48,9 +48,14 @@ void TemplateMenuAction::slotInitMenu()
 {
 	KPopupMenu* menu = popupMenu();
 	menu->clear();
+	mOriginalTexts.clear();
 	QValueList<KAEvent> templates = KAlarm::templateList();
 	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
-		menu->insertItem((*it).templateName());
+	{
+		QString name = (*it).templateName();
+		menu->insertItem(name);
+		mOriginalTexts += name;
+	}
 }
 
 /******************************************************************************
@@ -60,13 +65,13 @@ void TemplateMenuAction::slotInitMenu()
 void TemplateMenuAction::slotSelected(int id)
 {
 	KPopupMenu* menu = popupMenu();
-	QString item = menu->text(id);
+	QString item = mOriginalTexts[menu->indexOf(id)];
 	if (!item.isEmpty())
 	{
 		AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 		if (cal)
 		{
-			KAEvent templ = KAEvent::findTemplateName(*cal, menu->text(id));
+			KAEvent templ = KAEvent::findTemplateName(*cal, item);
 			emit selected(templ);
 		}
 	}
