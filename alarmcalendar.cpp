@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -561,7 +561,7 @@ void AlarmCalendar::purgeIfQueued()
 			kdDebug(5950) << "AlarmCalendar::purgeIfQueued(" << mPurgeDaysQueued << ")\n";
 			bool changed = false;
 			QDate cutoff = QDate::currentDate().addDays(-mPurgeDaysQueued);
-			Event::List events = mCalendar->events();
+			Event::List events = mCalendar->rawEvents();
 			for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 			{
 				Event* kcalEvent = *it;
@@ -670,7 +670,34 @@ void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 */
 void AlarmCalendar::emitEmptyStatus()
 {
-	emit emptyStatus(mCalendar ? !mCalendar->events().count() : true);
+	emit emptyStatus(events().isEmpty());
+}
+
+/******************************************************************************
+* Return the event with the specified ID.
+*/
+KCal::Event* AlarmCalendar::event(const QString& uniqueID)
+{
+	return mCalendar ?  mCalendar->event(uniqueID) : 0;
+}
+
+/******************************************************************************
+* Return all events in the calendar which contain alarms.
+*/
+KCal::Event::List AlarmCalendar::events()
+{
+	if (!mCalendar)
+		return KCal::Event::List();
+	KCal::Event::List list = mCalendar->rawEvents();
+	KCal::Event::List::Iterator it = list.begin();
+	while (it != list.end())
+	{
+		if ((*it)->alarms().isEmpty())
+			it = list.remove(it);
+		else
+			++it;
+	}
+	return list;
 }
 
 /******************************************************************************
@@ -690,7 +717,8 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 		bool recurs = e->doesRecur();
 		int  endOffset = 0;
 		bool endOffsetValid = false;
-		for (Alarm::List::ConstIterator ait = e->alarms().begin();  ait != e->alarms().end();  ++ait)
+		const Alarm::List& alarms = e->alarms();
+		for (Alarm::List::ConstIterator ait = alarms.begin();  ait != alarms.end();  ++ait)
 		{
 			Alarm* alarm = *ait;
 			if (alarm->enabled())
