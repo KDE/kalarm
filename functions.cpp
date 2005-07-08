@@ -780,8 +780,8 @@ bool deleteFromKOrganizer(const QString& eventID)
 	QByteArray  data, replyData;
 	QCString    replyType;
 	QDataStream arg(data, IO_WriteOnly);
-	arg << newID;
-	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidenceForce(QString)", data, replyType, replyData)
+	arg << newID << true;
+	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidence(QString,bool)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
