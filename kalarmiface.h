@@ -206,7 +206,8 @@ class KAlarmIface : virtual public DCOPObject
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
 	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
-	 *  @param reminderMins   Number of minutes before the event that the reminder should be displayed.
+	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
+	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
 	 *                        @p repeatType multiplied by @p repeatInterval.
 	 *                        The value of @p repeatType must a value defined in the RecurType enum.
@@ -225,7 +226,8 @@ class KAlarmIface : virtual public DCOPObject
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
 	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
-	 *  @param reminderMins   Number of minutes before the event that the reminder should be displayed.
+	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
+	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
 	 *                        @p repeatType multiplied by @p repeatInterval.
 	 *                        The value of @p repeatType must a value defined in the RecurType enum.
