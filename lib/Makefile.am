@@ -18,5 +18,5 @@ noinst_HEADERS = \
 	timeperiod.h shellprocess.h slider.h spinbox.h spinbox2.h \
 	spinbox2private.h
 
-DOXYGEN_REFERENCES=kdecore kdeui
+DOXYGEN_REFERENCES=kdecore kdeui libkdepim
 include $(top_srcdir)/admin/Doxyfile.am
