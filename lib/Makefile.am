@@ -1,10 +1,10 @@
 INCLUDES = -I$(top_srcdir)/kalarm -I$(top_srcdir) $(all_includes)
 
-noinst_LTLIBRARIES = libwidgets.la
+noinst_LTLIBRARIES = libkalarm.la
 
-libwidgets_la_METASOURCES = AUTO
+libkalarm_la_METASOURCES = AUTO
 
-libwidgets_la_SOURCES = \
+libkalarm_la_SOURCES = \
 	buttongroup.cpp checkbox.cpp colourcombo.cpp colourlist.cpp \
 	combobox.cpp dateedit.cpp datetime.cpp label.cpp messagebox.cpp \
 	pushbutton.cpp radiobutton.cpp timeedit.cpp timespinbox.cpp \

@@ -1,7 +1,7 @@
-SUBDIRS = kalarmd widgets pixmaps
+SUBDIRS = kalarmd lib pixmaps
 
 INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
-	-I$(top_srcdir)/kalarm/widgets \
+	-I$(top_srcdir)/kalarm/lib \
 	-I$(top_builddir)/libkcal/libical/src \
 	-I$(top_srcdir)/libkmime \
 	-I$(top_srcdir)/certmanager/lib $(all_includes)
@@ -25,7 +25,7 @@ kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 if include_ARTS
 ARTSLIB = -lartskde
 endif
-kalarm_LDADD = $(top_builddir)/kalarm/widgets/libwidgets.la \
+kalarm_LDADD = $(top_builddir)/kalarm/lib/libkalarm.la \
 	$(top_builddir)/libkcal/libkcal.la \
 	$(top_builddir)/libkmime/libkmime.la \
 	$(top_builddir)/kalarm/kalarmd/libkalarmd.la \
@@ -64,7 +64,7 @@ rc_DATA = kalarmui.rc
 
 messages: rc.cpp
 	$(EXTRACTRC) *.rc >> rc.cpp
-	$(XGETTEXT) *.h *.cpp widgets/*.h widgets/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
+	$(XGETTEXT) *.h *.cpp lib/*.h lib/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
 
 DOXYGEN_REFERENCES = libkcal
 include $(top_srcdir)/admin/Doxyfile.am
