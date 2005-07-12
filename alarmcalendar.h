@@ -90,7 +90,6 @@ class AlarmCalendar : public QObject
 		              const QString& configKey = QString::null);
 		bool                  create();
 		bool                  saveCal(const QString& newFile = QString::null);
-		void                  convertToICal();
 		void                  purge(int daysToKeep);
 		void                  startPurgeTimer();
 		void                  getKAlarmVersion() const;

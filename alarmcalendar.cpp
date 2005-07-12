@@ -478,6 +478,7 @@ void AlarmCalendar::save()
 		saveCal();
 }
 
+#if 0
 /******************************************************************************
 * If it is VCal format, convert the calendar URL to ICal and save the new URL
 * in the config file.
@@ -497,6 +498,7 @@ void AlarmCalendar::convertToICal()
 		mVCal = false;
 	}
 }
+#endif
 
 /******************************************************************************
 * Set the number of days to keep alarms.
