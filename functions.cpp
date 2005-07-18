@@ -68,14 +68,6 @@ bool deleteFromKOrganizer(const QString& eventID);
 bool runKOrganizer();
 }
 
-/* Define the icons to be used for "New alarm" and "New alarm from template".
- * The former is plain, while the latter has a yellow star in it.
- * TODO: These definitions may need to be changed for new versions of KDE.
- * DON'T CHANGE THESE VARIABLE NAMES. (The KAlarm standalone package depends on them.)
- */
-const char NEW_ICON[] =               "filenew";
-const char NEW_FROM_TEMPLATE_ICON[] = "new_from_template";
-
 
 namespace KAlarm
 {
@@ -115,7 +107,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 */
 KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	return new KAction(label, NEW_ICON, Qt::Key_Insert, receiver, slot, actions, name);
+	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, name);
 }
 
 /******************************************************************************
@@ -123,7 +115,7 @@ KAction* createNewAlarmAction(const QString& label, QObject* receiver, const cha
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	return new TemplateMenuAction(label, NEW_FROM_TEMPLATE_ICON, receiver, slot, actions, name);
+	return new TemplateMenuAction(label, "new_from_template", receiver, slot, actions, name);
 }
 
 /******************************************************************************
