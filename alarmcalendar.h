@@ -58,10 +58,6 @@ class AlarmCalendar : public QObject
 		bool                  isOpen() const                      { return mOpen; }
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
-		int                   KAlarmVersion() const               { return mKAlarmVersion; }
-		const QString&        KAlarmSubVersion() const            { return mKAlarmSubVersion; }
-		bool                  KAlarmVersion057_UTC() const        { return mKAlarmVersion057_UTC; }
-		static int            KAlarmVersion(int major, int minor, int rev)  { return major*10000 + minor*100 + rev; }
 
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
@@ -92,8 +88,6 @@ class AlarmCalendar : public QObject
 		bool                  saveCal(const QString& newFile = QString::null);
 		void                  purge(int daysToKeep);
 		void                  startPurgeTimer();
-		void                  getKAlarmVersion() const;
-		bool                  isUTC() const;
 		static AlarmCalendar* createCalendar(CalID, KConfig*, QString& writePath, const QString& configKey = QString::null);
 		static AlarmCalendar* calendarOpen(CalID);
 
@@ -106,9 +100,6 @@ class AlarmCalendar : public QObject
 		QString               mConfigKey;          // config file key for this calendar's URL
 		KAEvent::Status       mType;               // what type of events the calendar file is for
 		int                   mPurgeDays;          // how long to keep alarms, 0 = don't keep, -1 = keep indefinitely
-		mutable int           mKAlarmVersion;      // version of KAlarm which created the loaded calendar file
-		mutable QString       mKAlarmSubVersion;   // sub-version of KAlarm which created the loaded calendar file
-		mutable bool          mKAlarmVersion057_UTC; // calendar file was created by KDE 3.0.0 KAlarm 0.5.7
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mPurgeDaysQueued;    // >= 0 to purge the calendar when called from KAlarmApp::processLoop()
 		int                   mUpdateCount;        // nesting level of group of calendar update calls

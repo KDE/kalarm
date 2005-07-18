@@ -47,10 +47,11 @@ extern "C" {
 #include <libkcal/vcalformat.h>
 #include <libkcal/icalformat.h>
 
+#include "calendarcompat.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
-#include "synchtimer.h"
+#include "startdaytimer.h"
 #include "alarmcalendar.moc"
 
 using namespace KCal;
@@ -225,8 +226,6 @@ AlarmCalendar::AlarmCalendar(const QString& path, CalID type, const QString& ica
 	  mConfigKey(icalPath.isNull() ? QString::null : configKey),
 	  mType(eventTypes[type]),
 	  mPurgeDays(-1),      // default to not purging
-	  mKAlarmVersion(-1),
-	  mKAlarmVersion057_UTC(false),
 	  mOpen(false),
 	  mPurgeDaysQueued(-1),
 	  mUpdateCount(0),
@@ -318,8 +317,6 @@ int AlarmCalendar::load()
 		return -1;
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-	mKAlarmVersion        = -1;
-	mKAlarmVersion057_UTC = false;
 	mCalendar->setTimeZoneId(QString::null);   // default to the local time zone for reading
 	bool loaded = mCalendar->load(tmpFile);
 	mCalendar->setLocalTime();                 // write using local time (i.e. no time zone)
@@ -344,19 +341,7 @@ int AlarmCalendar::load()
 		KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
 	mLocalFile = tmpFile;
 
-	// Find the version of KAlarm which wrote the calendar file, and do
-	// any necessary conversions to the current format
-	getKAlarmVersion();
-	if (mKAlarmVersion == KAlarmVersion(0,5,7))
-	{
-		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-		mKAlarmVersion057_UTC = isUTC();
-		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version 0.5.7 (" << (mKAlarmVersion057_UTC ? "" : "non-") << "UTC)\n";
-	}
-	else
-		kdDebug(5950) << "AlarmCalendar::load(): KAlarm version " << mKAlarmVersion << endl;
-	KAEvent::convertKCalEvents(*this);   // convert events to current KAlarm format for when calendar is saved
+	CalendarCompat::fix(*mCalendar, mLocalFile);   // convert events to current KAlarm format for when calendar is saved
 	mOpen = true;
 	return 1;
 }
@@ -769,112 +754,4 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 		}
 	}
 	return evnts;
-}
-
-/******************************************************************************
-* Return the KAlarm version which wrote the calendar which has been loaded.
-* The format is, for example, 000507 for 0.5.7, or 0 if unknown.
-*/
-void AlarmCalendar::getKAlarmVersion() const
-{
-	// N.B. Remember to change  KAlarmVersion(int major, int minor, int rev)
-	//      if the representation returned by this method changes.
-	mKAlarmVersion = 0;   // set default to KAlarm pre-0.3.5, or another program
-	mKAlarmSubVersion = QString::null;
-	if (mCalendar)
-	{
-		const QString& prodid = mCalendar->productId();
-		QString progname = QString(" ") + kapp->aboutData()->programName() + " ";
-		int i = prodid.find(progname, 0, false);
-		if (i >= 0)
-		{
-			QString ver = prodid.mid(i + progname.length()).stripWhiteSpace();
-			i = ver.find('/');
-			int j = ver.find(' ');
-			if (j >= 0  &&  j < i)
-				i = j;
-			if (i > 0)
-			{
-				ver = ver.left(i);
-				// ver now contains the KAlarm version string
-				if ((i = ver.find('.')) > 0)
-				{
-					bool ok;
-					int version = ver.left(i).toInt(&ok) * 10000;   // major version
-					if (ok)
-					{
-						ver = ver.mid(i + 1);
-						if ((i = ver.find('.')) > 0)
-						{
-							int v = ver.left(i).toInt(&ok);   // minor version
-							if (ok)
-							{
-								version += (v < 99 ? v : 99) * 100;
-								ver = ver.mid(i + 1);
-								if (ver.at(0).isDigit())
-								{
-									// Allow other characters to follow last digit
-									v = ver.toInt();   // issue number
-									mKAlarmVersion = version + (v < 99 ? v : 99);
-									for (i = 1;  const_cast<const QString&>(ver).at(i).isDigit();  ++i) ;
-									mKAlarmSubVersion = ver.mid(i);
-								}
-							}
-						}
-						else
-						{
-							// There is no issue number
-							if (ver.at(0).isDigit())
-							{
-								// Allow other characters to follow last digit
-								int v = ver.toInt();   // minor number
-								mKAlarmVersion = version + (v < 99 ? v : 99) * 100;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-/******************************************************************************
- * Check whether the calendar file has its times stored as UTC times,
- * indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
- * Reply = true if times are stored in UTC
- *       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
- */
-bool AlarmCalendar::isUTC() const
-{
-	// Read the calendar file into a QString
-	QFile file(mLocalFile);
-	if (!file.open(IO_ReadOnly))
-		return false;
-	QTextStream ts(&file);
-	ts.setEncoding(QTextStream::UnicodeUTF8);
-	QString text = ts.read();
-	file.close();
-
-	// Extract the CREATED property for the first VEVENT from the calendar
-	bool result = false;
-	icalcomponent* calendar = icalcomponent_new_from_string(text.local8Bit().data());
-	if (calendar)
-	{
-		if (icalcomponent_isa(calendar) == ICAL_VCALENDAR_COMPONENT)
-		{
-			icalcomponent* c = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
-			if (c)
-			{
-				icalproperty* p = icalcomponent_get_first_property(c, ICAL_CREATED_PROPERTY);
-				if (p)
-				{
-					struct icaltimetype datetime = icalproperty_get_created(p);
-					if (datetime.is_utc)
-						result = true;
-				}
-			}
-		}
-		icalcomponent_free(calendar);
-	}
-	return result;
 }
