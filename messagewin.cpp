@@ -413,7 +413,7 @@ void MessageWin::initView()
 			if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
 			{
 				setRemainingTextDay();
-				DailyTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
+				MidnightTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
 			}
 			else
 			{
@@ -601,7 +601,7 @@ void MessageWin::setRemainingTextDay()
 	if (days == 0  &&  !mDateTime.isDateOnly())
 	{
 		// The alarm is due today, so start refreshing every minute
-		DailyTimer::disconnect(this, SLOT(setRemainingTextDay()));
+		MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
 		setRemainingTextMinute();
 		MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
 	}
@@ -1456,9 +1456,8 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 {
 	if (mDeferButton)
 	{
-		// Ensure that defer button is disabled when the deferral limit is reached
 		mDeferLimit = event.deferralLimit().dateTime();
-		DailyTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
 		checkDeferralLimit();
 	}
 }
@@ -1479,7 +1478,7 @@ void MessageWin::checkDeferralLimit()
 	int n = QDate::currentDate().daysTo(mDeferLimit.date());
 	if (n > 0)
 		return;
-	DailyTimer::disconnect(this, SLOT(checkDeferralLimit()));
+	MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
 	if (n == 0)
 	{
 		// The deferral limit will be reached today

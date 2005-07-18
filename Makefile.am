@@ -16,11 +16,11 @@ kalarm_SOURCES = birthdaydlg.cpp main.cpp alarmevent.cpp editdlg.cpp \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
 	recurrenceedit.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
-	specialactions.cpp reminder.cpp synchtimer.cpp \
+	specialactions.cpp reminder.cpp startdaytimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
 	templatelistview.cpp templatepickdlg.cpp templatedlg.cpp \
 	templatemenuaction.cpp latecancel.cpp repetition.cpp alarmtext.cpp \
-	emailidcombo.cpp find.cpp pickfileradio.cpp
+	emailidcombo.cpp find.cpp pickfileradio.cpp calendarcompat.cpp
 kalarm_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 if include_ARTS
 ARTSLIB = -lartskde
@@ -38,10 +38,10 @@ noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
 	fontcolour.h fontcolourbutton.h functions.h kalarm.h kalarmapp.h \
 	kamail.h latecancel.h mainwindow.h mainwindowbase.h messagewin.h \
 	pickfileradio.h prefdlg.h preferences.h recurrenceedit.h \
-	recurrenceeditprivate.h reminder.h repetition.h sounddlg.h soundpicker.h \
-	specialactions.h synchtimer.h templatedlg.h templatelistview.h \
-	templatemenuaction.h templatepickdlg.h timeselector.h traywindow.h \
-	undo.h
+	recurrenceeditprivate.h reminder.h repetition.h sounddlg.h \
+	soundpicker.h specialactions.h startdaytimer.h templatedlg.h \
+	templatelistview.h templatemenuaction.h templatepickdlg.h timeselector.h \
+	traywindow.h undo.h calendarcompat.h
 
 METASOURCES = AUTO
 
