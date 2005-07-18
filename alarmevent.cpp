@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include "alarmtext.h"
+#include "calendarcompat.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
@@ -2850,7 +2851,7 @@ void KAEvent::setFeb29RecurType()
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.
  */
-void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
+void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adjustSummerTime)
 {
 	// KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
 	static const QChar   SEPARATOR        = ';';
@@ -2873,19 +2874,17 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	// KAlarm pre-1.3.1 XTERM category
 	static const QString EXEC_IN_XTERM_CAT  = QString::fromLatin1("XTERM");
 
-	int version = calendar.KAlarmVersion();
-	if (version >= AlarmCalendar::KAlarmVersion(1,3,1))
+	if (version >= CalendarCompat::Version(1,3,1))
 		return;
 
 	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version " << version << endl;
-	bool pre_0_7   = (version < AlarmCalendar::KAlarmVersion(0,7,0));
-	bool pre_0_9   = (version < AlarmCalendar::KAlarmVersion(0,9,0));
-	bool pre_0_9_2 = (version < AlarmCalendar::KAlarmVersion(0,9,2));
-	bool pre_1_1_1 = (version < AlarmCalendar::KAlarmVersion(1,1,1));
-	bool pre_1_2_1 = (version < AlarmCalendar::KAlarmVersion(1,2,1));
-	bool pre_1_3_0 = (version < AlarmCalendar::KAlarmVersion(1,3,0));
-	bool pre_1_3_1 = (version < AlarmCalendar::KAlarmVersion(1,3,1));
-	bool adjustSummerTime = calendar.KAlarmVersion057_UTC();
+	bool pre_0_7   = (version < CalendarCompat::Version(0,7,0));
+	bool pre_0_9   = (version < CalendarCompat::Version(0,9,0));
+	bool pre_0_9_2 = (version < CalendarCompat::Version(0,9,2));
+	bool pre_1_1_1 = (version < CalendarCompat::Version(1,1,1));
+	bool pre_1_2_1 = (version < CalendarCompat::Version(1,2,1));
+	bool pre_1_3_0 = (version < CalendarCompat::Version(1,3,0));
+	bool pre_1_3_1 = (version < CalendarCompat::Version(1,3,1));
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::instance()->startOfDay();
 
@@ -2893,6 +2892,9 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
+		Alarm::List alarms = event->alarms();
+		if (alarms.isEmpty())
+			continue;    // KAlarm isn't interested in events without alarms
 		QStringList cats = event->categories();
 		bool addLateCancel = false;
 
@@ -2917,7 +2919,6 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 *   TYPE = TEXT or FILE or CMD
 			 *   TEXT = message text, file name/URL or command
 			 */
-			Alarm::List alarms = event->alarms();
 			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
 				Alarm* alarm = *alit;
@@ -3034,7 +3035,7 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 * X-KDE-KALARM-FONTCOLOUR property.
 			 * Convert BEEP category into an audio alarm with no audio file.
 			 */
-			if (calendar.type() == EXPIRED)
+			if (uidStatus(event->uid()) == EXPIRED)
 				event->setCreated(event->dtEnd());
 			QDateTime start = event->dtStart();
 			if (event->doesFloat())
@@ -3045,7 +3046,6 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			}
 			event->setHasEndDate(false);
 
-			Alarm::List alarms = event->alarms();
 			Alarm::List::ConstIterator alit;
 			for (alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
@@ -3113,7 +3113,6 @@ void KAEvent::convertKCalEvents(AlarmCalendar& calendar)
 			 * It's a KAlarm pre-1.2.1 calendar file.
 			 * Convert email display alarms from translated to untranslated header prefixes.
 			 */
-			Alarm::List alarms = event->alarms();
 			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
 				Alarm* alarm = *alit;

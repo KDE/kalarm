@@ -113,8 +113,7 @@ KAlarmApp::KAlarmApp()
 	Preferences* preferences = Preferences::instance();
 	connect(preferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
-	                          QString::fromLatin1("-//K Desktop Environment//NONSGML %1 " KALARM_VERSION "//EN")
-	                                       .arg(aboutData()->programName()));
+	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KAEvent::setFeb29RecurType();
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"

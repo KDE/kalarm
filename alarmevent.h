@@ -29,6 +29,7 @@
 #include <libkcal/person.h>
 #include <libkcal/event.h>
 #include <libkcal/recurrence.h>
+namespace KCal { class Calendar; }
 
 #include "datetime.h"
 
@@ -544,7 +545,7 @@ class KAEvent : public KAAlarmEventBase
 #endif
 		static void        setFeb29RecurType();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
-		static void        convertKCalEvents(AlarmCalendar&);
+		static void        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
 
 	private:
 		enum DeferType {
