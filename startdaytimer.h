@@ -1,0 +1,66 @@
+/*
+ *  startdaytimer.h  -  timer triggered at the user-defined start-of-day time
+ *  Program:  kalarm
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef STARTOFDAYTIMER_H
+#define STARTOFDAYTIMER_H
+
+/* @file startdaytimer.h - timer triggered at the user-defined start-of-day time */
+
+#include "synchtimer.h"
+
+
+/** StartOfDayTimer is an application-wide timer synchronised to the user-defined
+ *  start-of-day time (set in KAlarm's Preferences dialog).
+ *  It automatically adjusts to any changes in the start-of-day time.
+ *
+ *  @author David Jarvie <software@astrojar.org.uk>
+ */
+class StartOfDayTimer : public DailyTimer
+{
+		Q_OBJECT
+	public:
+		virtual ~StartOfDayTimer()  { }
+		/** Connect to the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to activate.
+		 */
+		static void connect(QObject* receiver, const char* member)
+		                   { instance()->connecT(receiver, member); }
+		/** Disconnect from the timer signal.
+		 *  @param receiver Receiving object.
+		 *  @param member Slot to disconnect. If null, all slots belonging to
+		 *                @p receiver will be disconnected.
+		 */
+		static void disconnect(QObject* receiver, const char* member = 0)
+		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
+
+	protected:
+		StartOfDayTimer();
+		static StartOfDayTimer* instance();
+
+	private slots:
+		void        startOfDayChanged(const QTime& oldTime);
+
+	private:
+		static StartOfDayTimer* mInstance;    // exists solely to receive signals
+};
+
+#endif // STARTOFDAYTIMER_H
+
