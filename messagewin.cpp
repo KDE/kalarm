@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -81,7 +81,6 @@ static const char* KMIX_APP_NAME    = "kmix";
 static const char* KMIX_DCOP_OBJECT = "Mixer0";
 static const char* KMIX_DCOP_WINDOW = "kmix-mainwindow#1";
 #endif
-static const char* KMAIL_APP_NAME    = "kmail";
 static const char* KMAIL_DCOP_OBJECT = "KMailIface";
 
 // The delay for enabling message window buttons if a zero delay is
@@ -1070,7 +1069,7 @@ void MessageWin::slotFade()
 */
 int MessageWin::getKMixVolume()
 {
-	if (!runKMix())     // start KMix if it isn't already running
+	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
 		return -1;
 	QByteArray  data, replyData;
 	QCString    replyType;
@@ -1091,34 +1090,13 @@ void MessageWin::setKMixVolume(int percent)
 {
 	if (!mUsingKMix)
 		return;
-	if (!runKMix())     // start KMix if it isn't already running
+	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
 		return;
 	QByteArray  data;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << percent;
 	if (!kapp->dcopClient()->send(mKMixName, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
 		kdError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
-}
-
-/******************************************************************************
-*  Start KMix if it isn't already running.
-*  Reply = true if KMix is now running.
-*/
-bool MessageWin::runKMix()
-{
-	if (mKMixName.isEmpty())
-		mKMixName = KMIX_APP_NAME;
-	if (!kapp->dcopClient()->isApplicationRegistered(mKMixName))
-	{
-		// KMix is not already running, so start it
-		if (KApplication::startServiceByDesktopName(QString::fromLatin1(KMIX_APP_NAME), QString::null, &mKMixError, &mKMixName))
-			return false;
-		// Minimise its window - don't use hide() since this would remove all
-		// trace of it from the panel if it is not configured to be docked in
-		// the system tray.
-		kapp->dcopClient()->send(mKMixName, KMIX_DCOP_WINDOW, "minimize()", QString::null);
-	}
-	return true;
 }
 #endif
 
@@ -1383,23 +1361,17 @@ void MessageWin::slotShowKMailMessage()
 	kdDebug(5950) << "MessageWin::slotShowKMailMessage()\n";
 	if (!mKMailSerialNumber)
 		return;
-	QCString kmailName = KMAIL_APP_NAME;
-	if (!kapp->dcopClient()->isApplicationRegistered(kmailName))
+	QString err = KAlarm::runKMail(false);
+	if (!err.isNull())
 	{
-		// KMail is not already running, so start it
-		QString kmailError;
-		if (KApplication::startServiceByDesktopName(QString::fromLatin1(KMAIL_APP_NAME), QString::null, &kmailError, &kmailName))
-		{
-			kdWarning(5950) << "MessageWin::slotShowKMailMessage(): Unable to start KMail (" << kmailError << ")\n";
-			KMessageBox::sorry(this, i18n("Unable to start KMail\n(%1)").arg(kmailError));
-			return;
-		}
+		KMessageBox::sorry(this, err);
+		return;
 	}
 	QCString    replyType;
 	QByteArray  data, replyData;
 	QDataStream arg(data, IO_WriteOnly);
 	arg << (Q_UINT32)mKMailSerialNumber << QString::null;
-	if (kapp->dcopClient()->call(kmailName, KMAIL_DCOP_OBJECT, "showMail(Q_UINT32,QString)", data, replyType, replyData)
+	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(Q_UINT32,QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;

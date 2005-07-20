@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -60,12 +60,13 @@ namespace
 bool        resetDaemonQueued = false;
 QCString    korganizerName = "korganizer";
 QString     korgStartError;
-const char* KORG_DCOP_OBJECT = "KOrganizerIface";
-const char* KORG_DCOP_WINDOW = "KOrganizer MainWindow";
+const char* KORG_DCOP_OBJECT  = "KOrganizerIface";
+const char* KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
+const char* KMAIL_DCOP_WINDOW = "kmail-mainwindow#1";
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
-bool runKOrganizer();
+inline bool runKOrganizer()   { return KAlarm::runProgram("korganizer", KORG_DCOP_WINDOW, korganizerName, korgStartError); }
 }
 
 
@@ -553,6 +554,48 @@ void resetDaemonIfQueued()
 }
 
 /******************************************************************************
+*  Start KMail if it isn't already running, and optionally iconise it.
+*  Reply = reason for failure to run KMail (which may be the empty string)
+*        = null string if success.
+*/
+QString runKMail(bool minimise)
+{
+	QCString dcopName;
+	QString errmsg;
+	if (!runProgram("kmail", (minimise ? KMAIL_DCOP_WINDOW : ""), dcopName, errmsg))
+		return i18n("Unable to start KMail\n(%1)").arg(errmsg);
+	return QString::null;
+}
+
+/******************************************************************************
+*  Start another program for DCOP access if it isn't already running.
+*  If 'windowName' is not empty, the program's window of that name is iconised.
+*  On exit, 'dcopName' contains the DCOP name to access the application, and
+*  'errorMessage' contains an error message if failure.
+*  Reply = true if the program is now running.
+*/
+bool runProgram(const QCString& program, const QCString& windowName, QCString& dcopName, QString& errorMessage)
+{
+	if (!kapp->dcopClient()->isApplicationRegistered(program))
+	{
+		// KOrganizer is not already running, so start it
+		if (KApplication::startServiceByDesktopName(QString::fromLatin1(program), QString::null, &errorMessage, &dcopName))
+		{
+			kdError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
+			return false;
+		}
+		// Minimise its window - don't use hide() since this would remove all
+		// trace of it from the panel if it is not configured to be docked in
+		// the system tray.
+		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString::null);
+	}
+	else if (dcopName.isEmpty())
+		dcopName = program;
+	errorMessage = QString::null;
+	return true;
+}
+
+/******************************************************************************
 *  Read the size for the specified window from the config file, for the
 *  current screen resolution.
 *  Reply = true if size set in the config file, in which case 'result' is set
@@ -787,29 +830,6 @@ bool deleteFromKOrganizer(const QString& eventID)
 	}
 	kdError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
 	return false;
-}
-
-/******************************************************************************
-*  Start KOrganizer if it isn't already running.
-*  Reply = true if KOrganizer is now running.
-*/
-bool runKOrganizer()
-{
-	if (!kapp->dcopClient()->isApplicationRegistered("korganizer"))
-	{
-		// KOrganizer is not already running, so start it
-		if (KApplication::startServiceByDesktopName(QString::fromLatin1("korganizer"), QString::null, &korgStartError, &korganizerName))
-		{
-			kdError(5950) << "runKOrganizer(): couldn't start KOrganizer (" << korgStartError << ")\n";
-			return false;
-		}
-		// Minimise its window - don't use hide() since this would remove all
-		// trace of it from the panel if it is not configured to be docked in
-		// the system tray.
-		kapp->dcopClient()->send(korganizerName, KORG_DCOP_WINDOW, "minimize()", QString::null);
-	}
-	korgStartError = QString::null;
-	return true;
 }
 
 } // namespace

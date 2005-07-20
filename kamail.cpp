@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -50,9 +50,10 @@
 #include <kmime_header_parsing.h>
 
 #include "alarmevent.h"
-#include "preferences.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
+#include "preferences.h"
 #include "kamail.h"
 
 
@@ -224,7 +225,8 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 */
 QString KAMail::sendKMail(const KAMailData& data)
 {
-	if (kapp->dcopClient()->isApplicationRegistered("kmail"))
+	QString err = KAlarm::runKMail(true);
+	if (err.isNull())
 	{
 		// KMail is running - use a DCOP call.
 		// First, determine which DCOP call to use.
@@ -263,7 +265,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 		{
 			// KMail is an older version, so use dcopAddMessage()
 			// to add the message to the outbox for later transmission.
-			QString err = addToKMailFolder(data, "outbox", false);
+			err = addToKMailFolder(data, "outbox", false);
 			if (!err.isNull())
 				return err;
 		}
@@ -272,7 +274,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 	}
 	else
 	{
-		// KMail isn't running - start it
+		// KMail isn't running - try to start it via the command line
 		KProcess proc;
 		proc << "kmail"
 		     << "--subject" << data.event.emailSubject().local8Bit()
@@ -304,10 +306,13 @@ QString KAMail::sendKMail(const KAMailData& data)
 */
 QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, bool checkKmailRunning)
 {
-	if (!checkKmailRunning  ||  kapp->dcopClient()->isApplicationRegistered("kmail"))
+	QString err;
+	if (checkKmailRunning)
+		err = KAlarm::runKMail(true);
+	if (err.isNull())
 	{
 		QString message = initHeaders(data, true);
-		QString err = appendBodyAttachments(message, data.event);
+		err = appendBodyAttachments(message, data.event);
 		if (!err.isNull())
 			return err;
 
@@ -334,9 +339,10 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		arg << QString::fromLatin1(folder) << tmpFile.name();
 		if (callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
 			return QString::null;
+		err = i18n("Error calling KMail");
 	}
-	kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error\n";
-	return i18n("Error calling KMail");
+	kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): " << err << endl;
+	return err;
 }
 
 /******************************************************************************
