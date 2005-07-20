@@ -1,7 +1,7 @@
 /*
- *  minutetimer.cpp  -  timer which triggers on each minute boudary
+ *  synchtimer.cpp  -  timers which synchronise to time boundaries
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "kalarm.h"
 #include <qtimer.h>
 #include <kdebug.h>
-#include "preferences.h"
 #include "synchtimer.moc"
 
 
@@ -53,7 +52,7 @@ void SynchTimer::connecT(QObject* receiver, const char* member)
 	mConnections.append(connection);
 	if (!mTimer->isActive())
 	{
-		connect(mTimer, SIGNAL(timeout()), this, SLOT(slotSynchronise()));
+		connect(mTimer, SIGNAL(timeout()), this, SLOT(slotTimer()));
 		start();
 	}
 }
@@ -78,7 +77,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 					++it;
 			}
 		}
-		if (!mConnections.count())
+		if (mConnections.isEmpty())
 		{
 			mTimer->disconnect();
 			mTimer->stop();
@@ -102,29 +101,16 @@ MinuteTimer* MinuteTimer::instance()
 }
 
 /******************************************************************************
-* Start the timer.
+* Called when the timer triggers, or to start the timer.
+* Timers can under some circumstances wander off from the correct trigger time,
+* so rather than setting a 1 minute interval, calculate the correct next
+* interval each time it triggers.
 */
-void MinuteTimer::start()
+void MinuteTimer::slotTimer()
 {
+	kdDebug(5950) << "MinuteTimer::slotTimer()" << endl;
 	int interval = 62 - QTime::currentTime().second();
-	mTimer->start(1000 * interval);
-	mSynching = (interval != 60);
-	kdDebug(5950) << "MinuteTimer::start()\n";
-}
-
-/******************************************************************************
-* Called when the timer triggers.
-* If synchronised to the minute boundary, set the timer interval to 1 minute.
-* If not yet synchronised, try again to synchronise.
-*/
-void MinuteTimer::slotSynchronise()
-{
-	kdDebug(5950) << "MinuteTimer::slotSynchronise()" << endl;
-	int firstInterval = 62 - QTime::currentTime().second();
-	mTimer->changeInterval(firstInterval * 1000);
-	mSynching = (firstInterval != 60);
-	if (!mSynching)
-		mTimer->disconnect(this, SLOT(slotSynchronise()));
+	mTimer->start(interval * 1000, true);     // execute a single shot
 }
 
 
@@ -133,76 +119,115 @@ void MinuteTimer::slotSynchronise()
 =  Application-wide timer synchronised to midnight.
 =============================================================================*/
 
-DailyTimer* DailyTimer::mInstance = 0;
+QValueList<DailyTimer*> DailyTimer::mFixedTimers;
 
-DailyTimer* DailyTimer::instance()
+DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
+	: mTime(timeOfDay),
+	  mFixed(fixed)
 {
-	if (!mInstance)
-		mInstance = new DailyTimer;
-	return mInstance;
+	if (fixed)
+		mFixedTimers.append(this);
+}
+
+DailyTimer::~DailyTimer()
+{
+	if (mFixed)
+		mFixedTimers.remove(this);
+}
+
+DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
+{
+	for (QValueList<DailyTimer*>::Iterator it = mFixedTimers.begin();  it != mFixedTimers.end();  ++it)
+		if ((*it)->mTime == timeOfDay)
+			return *it;
+	return create ? new DailyTimer(timeOfDay, true) : 0;
 }
 
 /******************************************************************************
-* Start the timer to expire at midnight.
+* Disconnect from the timer signal which triggers at the given fixed time of day.
+* If there are no remaining connections to that timer, it is destroyed.
+*/
+void DailyTimer::disconnect(const QTime& timeOfDay, QObject* receiver, const char* member)
+{
+	DailyTimer* timer = fixedInstance(timeOfDay, false);
+	if (!timer)
+		return;
+	timer->disconnecT(receiver, member);
+	if (!timer->hasConnections())
+		delete timer;
+}
+
+/******************************************************************************
+* Change the time at which the variable timer triggers.
+*/
+void DailyTimer::changeTime(const QTime& newTimeOfDay, bool triggerMissed)
+{
+	if (mFixed)
+		return;
+	if (mTimer->isActive())
+	{
+		mTimer->stop();
+		bool triggerNow = false;
+		if (triggerMissed)
+		{
+			QTime now = QTime::currentTime();
+			if (now >= newTimeOfDay  &&  now < mTime)
+			{
+				// The trigger time is now earlier and it has already arrived today.
+				// Trigger a timer event immediately.
+				triggerNow = true;
+			}
+		}
+		mTime = newTimeOfDay;
+		if (triggerNow)
+			mTimer->start(0, true);    // trigger immediately
+		else
+			start();
+	}
+	else
+		mTime = newTimeOfDay;
+}
+
+/******************************************************************************
+* Initialise the timer to trigger at the specified time.
+* This will either be today or tomorrow, depending on whether the trigger time
+* has already passed.
 */
 void DailyTimer::start()
 {
-	int interval = QTime::currentTime().secsTo(QTime());
-	if (interval <= 0)
-		interval += 86400;
-	mTimer->start(interval * 1000, true);
-	kdDebug(5950) << "DailyTimer::start()\n";
-}
-
-
-/*=============================================================================
-=  Class: StartOfDayTimer
-=  Application-wide timer synchronised to the user-defined start-of-day time.
-=  It automatically adjusts to any changes in the start-of-day time.
-=============================================================================*/
-
-StartOfDayTimer* StartOfDayTimer::mInstance = 0;
-QTime            StartOfDayTimer::mStartOfDay;
-
-StartOfDayTimer::StartOfDayTimer()
-{
-	QObject::connect(Preferences::instance(), SIGNAL(startOfDayChanged(const QTime&)), SLOT(startOfDayChanged(const QTime&)));
-}
-
-StartOfDayTimer* StartOfDayTimer::instance()
-{
-	if (!mInstance)
-		mInstance = new StartOfDayTimer;
-	return mInstance;
-}
-
-/******************************************************************************
-* Start the timer to expire at the start of the next day (using the user-
-* defined start-of-day time).
-*/
-void StartOfDayTimer::start()
-{
-	mStartOfDay = Preferences::instance()->startOfDay();
-	int interval = QTime::currentTime().secsTo(mStartOfDay);
-	if (interval <= 0)
-		interval += 86400;
-	mTimer->start(interval * 1000, true);
-	kdDebug(5950) << "StartOfDayTimer::start(" << interval << "s)\n";
-}
-
-/******************************************************************************
-* Called when the start-of-day time has changed.
-* The timer is adjusted and if appropriate timer events are triggered now.
-*/
-void StartOfDayTimer::startOfDayChanged(const QTime&)
-{
-	QTime now = QTime::currentTime();
-	if (now < mStartOfDay  &&  Preferences::instance()->startOfDay() <= now)
-	{
-		// The start-of-day time is now earlier and it has arrived already.
-		// Trigger a timer event immediately.
-		mTimer->start(0, true);
-	}
+	// TIMEZONE = local time
+	QDateTime now = QDateTime::currentDateTime();
+	// Find out whether to trigger today or tomorrow.
+	// In preference, use the last trigger date to determine this, since
+	// that will avoid possible errors due to daylight savings time changes.
+	bool today;
+	if (mLastDate.isValid())
+		today = (mLastDate < now.date());
 	else
-		start();
+		today = (now.time() < mTime);
+	QDateTime next;
+	if (today)
+		next = QDateTime(now.date(), mTime);
+	else
+		next = QDateTime(now.date().addDays(1), mTime);
+	uint interval = next.toTime_t() - now.toTime_t();
+	mTimer->start(interval * 1000, true);    // execute a single shot
+	kdDebug(5950) << "DailyTimer::start(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
+}
+
+/******************************************************************************
+* Called when the timer triggers.
+* Set the timer to trigger again tomorrow at the specified time.
+* Note that if daylight savings time changes occur, this will not be 24 hours
+* from now.
+*/
+void DailyTimer::slotTimer()
+{
+	// TIMEZONE = local time
+	QDateTime now = QDateTime::currentDateTime();
+	mLastDate = now.date();
+	QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
+	uint interval = next.toTime_t() - now.toTime_t();
+	mTimer->start(interval * 1000, true);    // execute a single shot
+	kdDebug(5950) << "DailyTimer::slotTimer(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
 }
