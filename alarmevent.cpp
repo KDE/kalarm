@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -2888,7 +2888,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::instance()->startOfDay();
 
-	Event::List events = calendar.events();
+	Event::List events = calendar.rawEvents();
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
