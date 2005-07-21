@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -49,6 +49,12 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 	bool version057_UTC = false;
 	QString subVersion;
 	int version = readKAlarmVersion(calendar, subVersion);
+	if (!version)
+	{
+		// The calendar was created either by the current version of KAlarm,
+		// or another program, so don't do any conversions
+		return;
+	}
 	if (version == Version(0,5,7)  &&  !localFile.isEmpty())
 	{
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
@@ -65,70 +71,76 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 
 /******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
-* The format is, for example, 000507 for 0.5.7, or 0 if unknown.
+* The format is, for example, 000507 for 0.5.7.
+* Reply = 0 if the calendar was created by the current version of KAlarm,
+*           KAlarm pre-0.3.5, or another program.
 */
 int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVersion)
 {
 	// N.B. Remember to change  Version(int major, int minor, int rev)
 	//      if the representation returned by this method changes.
-	int version = 0;   // set default to KAlarm pre-0.3.5, or another program
 	subVersion = QString::null;
 	const QString& prodid = calendar.productId();
+
+	// Find the KAlarm identifier
 	QString progname = QString::fromLatin1(" KAlarm ");
 	int i = prodid.find(progname, 0, false);
 	if (i < 0)
 	{
-		// Older versions used KAlarm's translated name in the product ID
+		// Older versions used KAlarm's translated name in the product ID, which
+		// could have created problems using a calendar in different locales.
 		progname = QString(" ") + kapp->aboutData()->programName() + " ";
 		i = prodid.find(progname, 0, false);
+		if (i < 0)
+			return 0;    // calendar wasn't created by KAlarm
 	}
-	if (i >= 0)
+
+	// Extract the KAlarm version string
+	QString ver = prodid.mid(i + progname.length()).stripWhiteSpace();
+	i = ver.find('/');
+	int j = ver.find(' ');
+	if (j >= 0  &&  j < i)
+		i = j;
+	if (i <= 0)
+		return 0;
+	ver = ver.left(i);     // ver now contains the KAlarm version string
+	if (ver == KALARM_VERSION)
+		return 0;      // the calendar was created by the current KAlarm version
+
+	// Convert the version string to a numeric version
+	int version = 0;
+	if ((i = ver.find('.')) <= 0)
+		return 0;      // missing major or minor version
+	bool ok;
+	version = ver.left(i).toInt(&ok) * 10000;   // major version
+	if (!ok)
+		return 0;      // invalid major version
+	ver = ver.mid(i + 1);
+	if ((i = ver.find('.')) > 0)
 	{
-		QString ver = prodid.mid(i + progname.length()).stripWhiteSpace();
-		i = ver.find('/');
-		int j = ver.find(' ');
-		if (j >= 0  &&  j < i)
-			i = j;
-		if (i > 0)
+		int v = ver.left(i).toInt(&ok);   // minor version
+		if (ok)
 		{
-			ver = ver.left(i);
-			// ver now contains the KAlarm version string
-			if ((i = ver.find('.')) > 0)
+			version += (v < 99 ? v : 99) * 100;
+			ver = ver.mid(i + 1);
+			if (ver.at(0).isDigit())
 			{
-				bool ok;
-				version = ver.left(i).toInt(&ok) * 10000;   // major version
-				if (ok)
-				{
-					ver = ver.mid(i + 1);
-					if ((i = ver.find('.')) > 0)
-					{
-						int v = ver.left(i).toInt(&ok);   // minor version
-						if (ok)
-						{
-							version += (v < 99 ? v : 99) * 100;
-							ver = ver.mid(i + 1);
-							if (ver.at(0).isDigit())
-							{
-								// Allow other characters to follow last digit
-								v = ver.toInt();   // issue number
-								version += (v < 99 ? v : 99);
-								for (i = 1;  const_cast<const QString&>(ver).at(i).isDigit();  ++i) ;
-								subVersion = ver.mid(i);
-							}
-						}
-					}
-					else
-					{
-						// There is no issue number
-						if (ver.at(0).isDigit())
-						{
-							// Allow other characters to follow last digit
-							int v = ver.toInt();   // minor number
-							version += (v < 99 ? v : 99) * 100;
-						}
-					}
-				}
+				// Allow other characters to follow last digit
+				v = ver.toInt();   // issue number
+				version += (v < 99 ? v : 99);
+				for (i = 1;  const_cast<const QString&>(ver).at(i).isDigit();  ++i) ;
+				subVersion = ver.mid(i);
 			}
+		}
+	}
+	else
+	{
+		// There is no issue number
+		if (ver.at(0).isDigit())
+		{
+			// Allow other characters to follow last digit
+			int v = ver.toInt();   // minor number
+			version += (v < 99 ? v : 99) * 100;
 		}
 	}
 	return version;
