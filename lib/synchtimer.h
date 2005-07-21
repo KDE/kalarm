@@ -134,7 +134,6 @@ class DailyTimer : public SynchTimer
 		 */
 		static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = 0);
 		/** Change the time at which this variable timer triggers.
-		 *  @param oldTimeOfDay Old time at which the timer triggered.
 		 *  @param newTimeOfDay New time at which the timer should trigger.
 		 *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
 		 *                       time is between @p newTimeOfDay and @p oldTimeOfDay, the timer will be
@@ -152,8 +151,9 @@ class DailyTimer : public SynchTimer
 		 */
 		DailyTimer(const QTime&, bool fixed);
 		/** Return the instance which triggers at the specified fixed time of day,
-		 *  creating a new instance if necessary.
+		 *  creating a new instance if necessary (and @p create is true).
 		 *  @param timeOfDay Time at which the timer triggers.
+		 *  @param create    Create new instances if needed and @p create is true.
 		 */
 		static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
 		virtual void start();
