@@ -440,7 +440,7 @@ void RecurrenceEdit::initMonthly()
 	                                 i18n("Enter the number of months between repetitions of the alarm"),
 	                                 mReadOnly, mMonthRuleFrame);
 	connect(mMonthRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mMonthRecurFrequency );
+	topLayout->addWidget(mMonthRecurFrequency);
 
 	mMonthRuleButtonGroup = new ButtonGroup(mMonthRuleFrame);
 	mMonthRuleButtonGroup->setFrameStyle(QFrame::NoFrame);
@@ -1115,7 +1115,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	Recurrence* recurrence = event.recurrence();
 	if (!recurrence)
 		return;
-	short rtype = recurrence->doesRecur();
+	short rtype = recurrence->recurrenceType();
 	switch (rtype)
 	{
 		case Recurrence::rMinutely:
@@ -1141,13 +1141,15 @@ void RecurrenceEdit::set(const KAEvent& event)
 			ruleButtonGroup->setButton(mMonthlyButtonId);
 			mMonthRecurFrequency->setValue(recurrence->frequency());
 			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthTypeOfDayButtonId);
-			QPtrList<Recurrence::rMonthPos> rmp = recurrence->monthPositions();
-			int i = rmp.first()->rPos - 1;
-			if (rmp.first()->negative)
-				i += 5;
+			QValueList<RecurrenceRule::WDayPos> rmp = recurrence->monthPositions();
+
+			// TODO: This doesn't handle the case "on every (Tuesday) of the month"
+			int i = rmp.first().pos() - 1;
+			if (i < 0)
+				i = -i + 5;
+			
 			mMonthRuleNthNumberEntry->setCurrentItem(i);
-			for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-			mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(i + 1));
+			mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(rmp.first().day()));
 			break;
 		}
 		case Recurrence::rMonthlyDay:     // on nth day of the month
@@ -1155,8 +1157,8 @@ void RecurrenceEdit::set(const KAEvent& event)
 			ruleButtonGroup->setButton(mMonthlyButtonId);
 			mMonthRecurFrequency->setValue(recurrence->frequency());
 			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);
-			QPtrList<int> rmd = recurrence->monthDays();
-			int day = rmd.first() ? *rmd.first() : event.mainDate().day();
+			QValueList<int> rmd = recurrence->monthDays();
+			int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 			mMonthRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
 			break;
 		}
@@ -1168,8 +1170,9 @@ void RecurrenceEdit::set(const KAEvent& event)
 				ruleButtonGroup->setButton(mYearlyButtonId);
 				mYearRecurFrequency->setValue(recurrence->frequency());
 				mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
-				QPtrList<int> rmd = recurrence->monthDays();
-				int day = rmd.first() ? *rmd.first() : event.mainDate().day();
+				const QValueList<int> rmd = recurrence->monthDays();
+				int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
+// TODO_Recurrence: Get rid of the Feb 29 setting!
 				if (day == 1 && event.recursFeb29())
 					day = 29;
 				mYearRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
@@ -1179,19 +1182,18 @@ void RecurrenceEdit::set(const KAEvent& event)
 				ruleButtonGroup->setButton(mYearlyButtonId);
 				mYearRecurFrequency->setValue(recurrence->frequency());
 				mYearRuleButtonGroup->setButton(mYearRuleOnNthTypeOfDayButtonId);
-				QPtrList<Recurrence::rMonthPos> rmp = recurrence->yearMonthPositions();
-				int i = rmp.first()->rPos - 1;
-				if (rmp.first()->negative)
-					i += 5;
+				QValueList<RecurrenceRule::WDayPos> rmp = recurrence->yearPositions();
+				int i = rmp.first().pos() - 1;
+				if (i < 0)
+					i = -i + 5;
 				mYearRuleNthNumberEntry->setCurrentItem(i);
-				for (i = 0;  !rmp.first()->rDays.testBit(i);  ++i) ;
-					mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(i + 1));
+					mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek( rmp.first().day()));
 			}
 			for (int i = 0;  i < 12;  ++i)
 				mYearRuleMonthBox[i]->setChecked(false);
-			QPtrList<int> rmd = recurrence->yearNums();
-			for (int* ii = rmd.first();  ii;  ii = rmd.next())
-				mYearRuleMonthBox[*ii - 1]->setChecked(true);
+			const QValueList<int> rmd = recurrence->yearMonths();
+			for (QValueListConstIterator<int> it = rmd.begin(); it != rmd.end(); ++it)
+				mYearRuleMonthBox[(*it) - 1]->setChecked(true);
 			break;
 		}
 /*		case Recurrence::rYearlyDay:     // on the nth day of the year

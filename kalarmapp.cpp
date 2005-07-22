@@ -475,7 +475,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
 					QCString rule = args->getOption("recurrence");
 					KCal::ICalFormat format;
-					format.fromString(&recurrence, QString::fromLocal8Bit((const char*)rule));
+					format.fromString(recurrence.defaultRRule(true), QString::fromLocal8Bit((const char*)rule));
 				}
 				if (args->isSet("interval"))
 				{

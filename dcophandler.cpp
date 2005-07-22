@@ -387,7 +387,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KCal::Recurrence& recurrenc
 	if (icalr.startsWith(rrule))
 		icalr = icalr.mid(rrule.length());
 	KCal::ICalFormat format;
-	return format.fromString(&recurrence, icalr);
+	return format.fromString(recurrence.defaultRRule(true), icalr);
 }
 
 bool DcopHandler::convertRecurrence(DateTime& start, KCal::Recurrence& recurrence, const QString& startDateTime,
@@ -748,7 +748,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 				QString rule;
 				arg >> rule;
 				KCal::ICalFormat format;
-				format.fromString(&recurrence, rule);
+				format.fromString(recurrence.defaultRRule(true), rule);
 			}
 			return theApp()->scheduleEvent(action, text, dateTime, lateCancel, flags, bgColour, fgColour, font, audioFile,
 			                               audioVolume, reminderMinutes, recurrence, 0, 0, QString::null, mailAddresses, mailSubject, mailAttachments);
