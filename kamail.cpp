@@ -226,76 +226,51 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 QString KAMail::sendKMail(const KAMailData& data)
 {
 	QString err = KAlarm::runKMail(true);
-	if (err.isNull())
-	{
-		// KMail is running - use a DCOP call.
-		// First, determine which DCOP call to use.
-		bool useSend = false;
-		QCString sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
-		QCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
-		for (QCStringList::Iterator it=funcs.begin();  it != funcs.end() && !useSend;  ++it)
-		{
-			QCString func = DCOPClient::normalizeFunctionSignature(*it);
-			if (func.left(5) == "bool ")
-			{
-				func = func.mid(5);
-				func.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
-				useSend = (func == sendFunction);
-			}
-		}
+	if (!err.isNull())
+		return err;
 
-		QByteArray  callData;
-		QDataStream arg(callData, IO_WriteOnly);
-		kdDebug(5950) << "KAMail::sendKMail(): using " << (useSend ? "sendMessage()" : "dcopAddMessage()") << endl;
-		if (useSend)
+	// KMail is now running. Determine which DCOP call to use.
+	bool useSend = false;
+	QCString sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
+	QCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
+	for (QCStringList::Iterator it=funcs.begin();  it != funcs.end() && !useSend;  ++it)
+	{
+		QCString func = DCOPClient::normalizeFunctionSignature(*it);
+		if (func.left(5) == "bool ")
 		{
-			// This version of KMail has the sendMessage() function,
-			// which transmits the message immediately.
-			arg << data.from;
-			arg << data.event.emailAddresses(", ");
-			arg << "";    // CC:
-			arg << data.bcc;
-			arg << data.event.emailSubject();
-			arg << data.event.message();
-			arg << KURL::List(data.event.emailAttachments());
-			if (!callKMail(callData, "MailTransportServiceIface", sendFunction, "bool"))
-				return i18n("Error calling KMail");
+			func = func.mid(5);
+			func.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
+			useSend = (func == sendFunction);
 		}
-		else
-		{
-			// KMail is an older version, so use dcopAddMessage()
-			// to add the message to the outbox for later transmission.
-			err = addToKMailFolder(data, "outbox", false);
-			if (!err.isNull())
-				return err;
-		}
-		if (data.allowNotify)
-			notifyQueued(data.event);
+	}
+
+	QByteArray  callData;
+	QDataStream arg(callData, IO_WriteOnly);
+	kdDebug(5950) << "KAMail::sendKMail(): using " << (useSend ? "sendMessage()" : "dcopAddMessage()") << endl;
+	if (useSend)
+	{
+		// This version of KMail has the sendMessage() function,
+		// which transmits the message immediately.
+		arg << data.from;
+		arg << data.event.emailAddresses(", ");
+		arg << "";    // CC:
+		arg << data.bcc;
+		arg << data.event.emailSubject();
+		arg << data.event.message();
+		arg << KURL::List(data.event.emailAttachments());
+		if (!callKMail(callData, "MailTransportServiceIface", sendFunction, "bool"))
+			return i18n("Error calling KMail");
 	}
 	else
 	{
-		// KMail isn't running - try to start it via the command line
-		KProcess proc;
-		proc << "kmail"
-		     << "--subject" << data.event.emailSubject().local8Bit()
-		     << "--body" << data.event.message().local8Bit();
-		if (!data.bcc.isEmpty())
-			proc << "--bcc" << data.bcc.local8Bit();
-		QStringList attachments = data.event.emailAttachments();
-		if (attachments.count())
-		{
-			for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
-				proc << "--attach" << (*at).local8Bit();
-		}
-		EmailAddressList addresses = data.event.emailAddresses();
-		for (EmailAddressList::Iterator ad = addresses.begin();  ad != addresses.end();  ++ad)
-			proc << (*ad).fullName().local8Bit();
-		if (!proc.start(KProcess::DontCare))
-		{
-			kdDebug(5950) << "sendKMail(): kmail start failed" << endl;
-			return i18n("Error starting KMail");
-		}
+		// KMail is an older version, so use dcopAddMessage()
+		// to add the message to the outbox for later transmission.
+		err = addToKMailFolder(data, "outbox", false);
+		if (!err.isNull())
+			return err;
 	}
+	if (data.allowNotify)
+		notifyQueued(data.event);
 	return QString::null;
 }
 
