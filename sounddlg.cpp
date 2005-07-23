@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef WITHOUT_ARTS
@@ -59,7 +59,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* layout = new QVBoxLayout(page, marginKDE2, spacingHint());
+	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
 
 	// File name edit box
 	QHBox* box = new QHBox(page);
@@ -86,7 +86,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	// Volume
 	QGroupBox* group = new QGroupBox(i18n("Volume"), page);
 	layout->addWidget(group);
-	QGridLayout* grid = new QGridLayout(group, 4, 3, marginKDE2 + marginHint(), spacingHint());
+	QGridLayout* grid = new QGridLayout(group, 4, 3, marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	grid->setColStretch(2, 1);
 	int indentWidth = 3 * KDialog::spacingHint();

@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -143,7 +143,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	int spacing = spacingHint();
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* topLayout = new QVBoxLayout(page, marginKDE2, spacing);
+	QVBoxLayout* topLayout = new QVBoxLayout(page, 0, spacing);
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout, 0);
 	int hintMargin = 2*marginHint();
@@ -182,7 +182,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	connect(mButtonGroup, SIGNAL(buttonSet(int)), SLOT(typeClicked()));
 	topLayout->addWidget(mButtonGroup);
 
-	QBoxLayout* vlayout = new QVBoxLayout(mButtonGroup, marginKDE2 + marginHint(), spacing);
+	QBoxLayout* vlayout = new QVBoxLayout(mButtonGroup, marginHint(), spacing);
 	layout = new QHBoxLayout(vlayout, spacing);
 	mCountButton = new RadioButton(i18n("&Number of repetitions:"), mButtonGroup);
 	mCountButton->setFixedSize(mCountButton->sizeHint());
