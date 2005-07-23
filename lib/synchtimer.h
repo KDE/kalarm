@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef SYNCHTIMER_H
@@ -151,9 +151,11 @@ class DailyTimer : public SynchTimer
 		 */
 		DailyTimer(const QTime&, bool fixed);
 		/** Return the instance which triggers at the specified fixed time of day,
-		 *  creating a new instance if necessary (and @p create is true).
+		 *  optionally creating a new instance if necessary.
 		 *  @param timeOfDay Time at which the timer triggers.
-		 *  @param create    Create new instances if needed and @p create is true.
+		 *  @param create    If true, create a new instance if none already exists
+		 *                   for @p timeOfDay.
+		 *  @return The instance for @p timeOfDay, or 0 if it does not exist.
 		 */
 		static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
 		virtual void start();
