@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -162,7 +162,7 @@ void KAlarmPrefDlg::slotApply()
 	mViewPage->apply(false);
 	mEditPage->apply(false);
 	mMiscPage->apply(false);
-	Preferences::instance()->syncToDisc();
+	Preferences::syncToDisc();
 }
 
 // Apply the preferences that are currently selected
@@ -210,7 +210,7 @@ PrefsTabBase::PrefsTabBase(QVBox* frame)
 
 void PrefsTabBase::apply(bool syncToDisc)
 {
-	Preferences::instance()->save(syncToDisc);
+	Preferences::save(syncToDisc);
 }
 
 
@@ -238,7 +238,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 
 	QGroupBox* group = new QButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
-	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(group, 6, 3, KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, indentWidth());
 	grid->addColSpacing(1, indentWidth());
@@ -350,7 +350,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 	// Expired alarms
 	group = new QGroupBox(i18n("Expired Alarms"), mPage);
-	grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid = new QGridLayout(group, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(1, 1);
 	grid->addColSpacing(0, indentWidth());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
@@ -389,7 +389,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	group = new QGroupBox(i18n("Terminal for Command Alarms"), mPage);
 	QWhatsThis::add(group,
 	      i18n("Choose which application to use when a command alarm is executed in a terminal window"));
-	grid = new QGridLayout(group, 1, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	grid = new QGridLayout(group, 1, 3, KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	row = 0;
 
@@ -434,20 +434,19 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 void MiscPrefTab::restore()
 {
-	Preferences* preferences = Preferences::instance();
-	mAutostartDaemon->setChecked(preferences->mAutostartDaemon);
-	bool systray = preferences->mRunInSystemTray;
+	mAutostartDaemon->setChecked(Preferences::mAutostartDaemon);
+	bool systray = Preferences::mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
-	mDisableAlarmsIfStopped->setChecked(preferences->mDisableAlarmsIfStopped);
-	mQuitWarn->setChecked(preferences->quitWarn());
-	mAutostartTrayIcon1->setChecked(preferences->mAutostartTrayIcon);
-	mAutostartTrayIcon2->setChecked(preferences->mAutostartTrayIcon);
-	mConfirmAlarmDeletion->setChecked(preferences->confirmAlarmDeletion());
-	mStartOfDay->setValue(preferences->mStartOfDay);
-	mFeb29->setButton(preferences->mFeb29RecurType);
-	setExpiredControls(preferences->mExpiredKeepDays);
-	QString xtermCmd = preferences->cmdXTermCommand();
+	mDisableAlarmsIfStopped->setChecked(Preferences::mDisableAlarmsIfStopped);
+	mQuitWarn->setChecked(Preferences::quitWarn());
+	mAutostartTrayIcon1->setChecked(Preferences::mAutostartTrayIcon);
+	mAutostartTrayIcon2->setChecked(Preferences::mAutostartTrayIcon);
+	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
+	mStartOfDay->setValue(Preferences::mStartOfDay);
+	mFeb29->setButton(Preferences::mFeb29RecurType);
+	setExpiredControls(Preferences::mExpiredKeepDays);
+	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
 	if (!xtermCmd.isEmpty())
 	{
@@ -486,22 +485,21 @@ void MiscPrefTab::apply(bool syncToDisc)
 			}
 		}
 	}
-	Preferences* preferences = Preferences::instance();
-	preferences->mAutostartDaemon = mAutostartDaemon->isChecked();
+	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
 	bool systray = mRunInSystemTray->isChecked();
-	preferences->mRunInSystemTray        = systray;
-	preferences->mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
+	Preferences::mRunInSystemTray        = systray;
+	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
 	if (mQuitWarn->isEnabled())
-		preferences->setQuitWarn(mQuitWarn->isChecked());
-	preferences->mAutostartTrayIcon = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
-	preferences->setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
+		Preferences::setQuitWarn(mQuitWarn->isChecked());
+	Preferences::mAutostartTrayIcon = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
-	preferences->mStartOfDay.setHMS(sod/60, sod%60, 0);
+	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
 	int feb29 = mFeb29->id(mFeb29->selected());
-	preferences->mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
-	preferences->mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
+	Preferences::mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
+	Preferences::mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
 	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
-	preferences->mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
+	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -619,7 +617,7 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 
 	// Your Email Address group box
 	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
-	QGridLayout* grid = new QGridLayout(group, 6, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(group, 6, 3, KDialog::marginHint(), KDialog::spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	grid->setColStretch(1, 1);
 
@@ -648,9 +646,6 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	// 'From' email address to be taken from Control Centre
 	radio = new RadioButton(i18n("&Use address from Control Center"), group);
 	radio->setFixedSize(radio->sizeHint());
-#if KDE_VERSION < 210
-	radio->hide();
-#endif
 	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	QWhatsThis::add(radio,
 	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
@@ -692,9 +687,6 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	// 'Bcc' email address to be taken from Control Centre
 	radio = new RadioButton(i18n("Us&e address from Control Center"), group);
 	radio->setFixedSize(radio->sizeHint());
-#if KDE_VERSION < 210
-	radio->hide();
-#endif
 	mBccAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	QWhatsThis::add(radio,
 	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
@@ -716,24 +708,22 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 
 void EmailPrefTab::restore()
 {
-	Preferences* preferences = Preferences::instance();
-	mEmailClient->setButton(preferences->mEmailClient);
-	mEmailCopyToKMail->setChecked(preferences->emailCopyToKMail());
-	setEmailAddress(preferences->mEmailFrom, preferences->mEmailAddress);
-	setEmailBccAddress((preferences->mEmailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), preferences->mEmailBccAddress);
-	mEmailQueuedNotify->setChecked(preferences->emailQueuedNotify());
+	mEmailClient->setButton(Preferences::mEmailClient);
+	mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
+	setEmailAddress(Preferences::mEmailFrom, Preferences::mEmailAddress);
+	setEmailBccAddress((Preferences::mEmailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::mEmailBccAddress);
+	mEmailQueuedNotify->setChecked(Preferences::emailQueuedNotify());
 	mAddressChanged = mBccAddressChanged = false;
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
 {
-	Preferences* preferences = Preferences::instance();
 	int client = mEmailClient->id(mEmailClient->selected());
-	preferences->mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
-	preferences->mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
-	preferences->setEmailAddress(static_cast<Preferences::MailFrom>(mFromAddressGroup->selectedId()), mEmailAddress->text().stripWhiteSpace());
-	preferences->setEmailBccAddress((mBccAddressGroup->selectedId() == Preferences::MAIL_FROM_CONTROL_CENTRE), mEmailBccAddress->text().stripWhiteSpace());
-	preferences->setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
+	Preferences::mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+	Preferences::mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
+	Preferences::setEmailAddress(static_cast<Preferences::MailFrom>(mFromAddressGroup->selectedId()), mEmailAddress->text().stripWhiteSpace());
+	Preferences::setEmailBccAddress((mBccAddressGroup->selectedId() == Preferences::MAIL_FROM_CONTROL_CENTRE), mEmailBccAddress->text().stripWhiteSpace());
+	Preferences::setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -865,30 +855,28 @@ FontColourPrefTab::FontColourPrefTab(QVBox* frame)
 
 void FontColourPrefTab::restore()
 {
-	Preferences* preferences = Preferences::instance();
-	mFontChooser->setBgColour(preferences->mDefaultBgColour);
-	mFontChooser->setColours(preferences->mMessageColours);
-	mFontChooser->setFont(preferences->mMessageFont);
-	mDisabledColour->setColor(preferences->mDisabledColour);
-	mExpiredColour->setColor(preferences->mExpiredColour);
+	mFontChooser->setBgColour(Preferences::mDefaultBgColour);
+	mFontChooser->setColours(Preferences::mMessageColours);
+	mFontChooser->setFont(Preferences::mMessageFont);
+	mDisabledColour->setColor(Preferences::mDisabledColour);
+	mExpiredColour->setColor(Preferences::mExpiredColour);
 }
 
 void FontColourPrefTab::apply(bool syncToDisc)
 {
-	Preferences* preferences = Preferences::instance();
-	preferences->mDefaultBgColour = mFontChooser->bgColour();
-	preferences->mMessageColours  = mFontChooser->colours();
-	preferences->mMessageFont     = mFontChooser->font();
-	preferences->mDisabledColour  = mDisabledColour->color();
-	preferences->mExpiredColour   = mExpiredColour->color();
+	Preferences::mDefaultBgColour = mFontChooser->bgColour();
+	Preferences::mMessageColours  = mFontChooser->colours();
+	Preferences::mMessageFont     = mFontChooser->font();
+	Preferences::mDisabledColour  = mDisabledColour->color();
+	Preferences::mExpiredColour   = mExpiredColour->color();
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void FontColourPrefTab::setDefaults()
 {
 	mFontChooser->setBgColour(Preferences::default_defaultBgColour);
-	mFontChooser->setColours(Preferences::instance()->default_messageColours);
-	mFontChooser->setFont(Preferences::default_messageFont);
+	mFontChooser->setColours(Preferences::default_messageColours);
+	mFontChooser->setFont(Preferences::default_messageFont());
 	mDisabledColour->setColor(Preferences::default_disabledColour);
 	mExpiredColour->setColor(Preferences::default_expiredColour);
 }
@@ -907,7 +895,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	// DISPLAY ALARMS
 	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), mPage);
-	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QBoxLayout* layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
 	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group, "defConfAck");
@@ -941,7 +929,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	// SOUND
 	QButtonGroup* bgroup = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
-	layout = new QVBoxLayout(bgroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout = new QVBoxLayout(bgroup, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
 	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bgroup, "defSound");
@@ -1001,7 +989,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	// COMMAND ALARMS
 	group = new QGroupBox(i18n("Command Alarms"), mPage);
-	layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 	layout = new QHBoxLayout(layout, KDialog::spacingHint());
 
@@ -1018,7 +1006,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 	// EMAIL ALARMS
 	group = new QGroupBox(i18n("Email Alarms"), mPage);
-	layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
 	// BCC email to sender
@@ -1064,57 +1052,55 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 
 void EditPrefTab::restore()
 {
-	Preferences* preferences = Preferences::instance();
-	mDefaultLateCancel->setChecked(preferences->mDefaultLateCancel);
-	mDefaultAutoClose->setChecked(preferences->mDefaultAutoClose);
-	mDefaultConfirmAck->setChecked(preferences->mDefaultConfirmAck);
-	mDefaultCopyToKOrganizer->setChecked(preferences->mDefaultCopyToKOrganizer);
-	mDefaultSound->setChecked(preferences->mDefaultSound);
-	setDefaultSoundType(preferences->mDefaultSoundType);
-	mDefaultSoundFile->setText(preferences->mDefaultSoundFile);
+	mDefaultLateCancel->setChecked(Preferences::mDefaultLateCancel);
+	mDefaultAutoClose->setChecked(Preferences::mDefaultAutoClose);
+	mDefaultConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
+	mDefaultCopyToKOrganizer->setChecked(Preferences::mDefaultCopyToKOrganizer);
+	mDefaultSound->setChecked(Preferences::mDefaultSound);
+	setDefaultSoundType(Preferences::mDefaultSoundType);
+	mDefaultSoundFile->setText(Preferences::mDefaultSoundFile);
 #ifndef WITHOUT_ARTS
-	mDefaultSoundRepeat->setChecked(preferences->mDefaultSoundRepeat);
+	mDefaultSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
 #endif
-	mDefaultSpecialActions->setActions(preferences->mDefaultPreAction, preferences->mDefaultPostAction);
-	mDefaultCmdScript->setChecked(preferences->mDefaultCmdScript);
-	mDefaultCmdXterm->setChecked(preferences->mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
-	mDefaultEmailBcc->setChecked(preferences->mDefaultEmailBcc);
-	mDefaultRecurPeriod->setCurrentItem(recurIndex(preferences->mDefaultRecurPeriod));
-	mDefaultReminderUnits->setCurrentItem(preferences->mDefaultReminderUnits);
+	mDefaultSpecialActions->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
+	mDefaultCmdScript->setChecked(Preferences::mDefaultCmdScript);
+	mDefaultCmdXterm->setChecked(Preferences::mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
+	mDefaultEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
+	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::mDefaultRecurPeriod));
+	mDefaultReminderUnits->setCurrentItem(Preferences::mDefaultReminderUnits);
 }
 
 void EditPrefTab::apply(bool syncToDisc)
 {
-	Preferences* preferences = Preferences::instance();
-	preferences->mDefaultLateCancel       = mDefaultLateCancel->isChecked() ? 1 : 0;
-	preferences->mDefaultAutoClose        = mDefaultAutoClose->isChecked();
-	preferences->mDefaultConfirmAck       = mDefaultConfirmAck->isChecked();
-	preferences->mDefaultCopyToKOrganizer = mDefaultCopyToKOrganizer->isChecked();
-	preferences->mDefaultSound            = mDefaultSound->isChecked();
-	preferences->mDefaultSoundFile        = mDefaultSoundFile->text();
-	preferences->mDefaultSoundType        = mDefaultSpeak && mDefaultSpeak->isOn() ? SoundPicker::SPEAK
+	Preferences::mDefaultLateCancel       = mDefaultLateCancel->isChecked() ? 1 : 0;
+	Preferences::mDefaultAutoClose        = mDefaultAutoClose->isChecked();
+	Preferences::mDefaultConfirmAck       = mDefaultConfirmAck->isChecked();
+	Preferences::mDefaultCopyToKOrganizer = mDefaultCopyToKOrganizer->isChecked();
+	Preferences::mDefaultSound            = mDefaultSound->isChecked();
+	Preferences::mDefaultSoundFile        = mDefaultSoundFile->text();
+	Preferences::mDefaultSoundType        = mDefaultSpeak && mDefaultSpeak->isOn() ? SoundPicker::SPEAK
 	                                      : mDefaultFile->isOn()                   ? SoundPicker::PLAY_FILE
 	                                      :                                          SoundPicker::BEEP;
 #ifndef WITHOUT_ARTS
-	preferences->mDefaultSoundRepeat      = mDefaultSoundRepeat->isChecked();
+	Preferences::mDefaultSoundRepeat      = mDefaultSoundRepeat->isChecked();
 #endif
-	preferences->mDefaultCmdScript        = mDefaultCmdScript->isChecked();
-	preferences->mDefaultCmdLogFile       = (mDefaultCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
-	preferences->mDefaultEmailBcc         = mDefaultEmailBcc->isChecked();
-	preferences->mDefaultPreAction        = mDefaultSpecialActions->preAction();
-	preferences->mDefaultPostAction       = mDefaultSpecialActions->postAction();
+	Preferences::mDefaultCmdScript        = mDefaultCmdScript->isChecked();
+	Preferences::mDefaultCmdLogFile       = (mDefaultCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
+	Preferences::mDefaultEmailBcc         = mDefaultEmailBcc->isChecked();
+	Preferences::mDefaultPreAction        = mDefaultSpecialActions->preAction();
+	Preferences::mDefaultPostAction       = mDefaultSpecialActions->postAction();
 	switch (mDefaultRecurPeriod->currentItem())
 	{
-		case 6:  preferences->mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
-		case 5:  preferences->mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
-		case 4:  preferences->mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
-		case 3:  preferences->mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
-		case 2:  preferences->mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
-		case 1:  preferences->mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
+		case 6:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
+		case 5:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
+		case 4:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
+		case 3:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
+		case 2:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
+		case 1:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
 		case 0:
-		default: preferences->mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
+		default: Preferences::mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
-	preferences->mDefaultReminderUnits = static_cast<TimePeriod::Units>(mDefaultReminderUnits->currentItem());
+	Preferences::mDefaultReminderUnits = static_cast<TimePeriod::Units>(mDefaultReminderUnits->currentItem());
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -1201,7 +1187,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
 	QGroupBox* group = new QGroupBox(i18n("Alarm List"), mPage);
-	QBoxLayout* layout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QBoxLayout* layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	mListShowTime = new QCheckBox(MainWindow::i18n_t_ShowAlarmTime(), group, "listTime");
@@ -1220,7 +1206,7 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	group->setMaximumHeight(group->sizeHint().height());
 
 	group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
-	QGridLayout* grid = new QGridLayout(group, 5, 3, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout* grid = new QGridLayout(group, 5, 3, KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, indentWidth());
 	grid->addColSpacing(1, indentWidth());
@@ -1304,33 +1290,31 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 
 void ViewPrefTab::restore()
 {
-	Preferences* preferences = Preferences::instance();
-	setList(preferences->mShowAlarmTime,
-	        preferences->mShowTimeToAlarm);
-	setTooltip(preferences->mTooltipAlarmCount,
-	           preferences->mShowTooltipAlarmTime,
-	           preferences->mShowTooltipTimeToAlarm,
-	           preferences->mTooltipTimeToPrefix);
-	mModalMessages->setChecked(preferences->mModalMessages);
-	mShowExpiredAlarms->setChecked(preferences->mShowExpiredAlarms);
-	mDaemonTrayCheckInterval->setValue(preferences->mDaemonTrayCheckInterval);
+	setList(Preferences::mShowAlarmTime,
+	        Preferences::mShowTimeToAlarm);
+	setTooltip(Preferences::mTooltipAlarmCount,
+	           Preferences::mShowTooltipAlarmTime,
+	           Preferences::mShowTooltipTimeToAlarm,
+	           Preferences::mTooltipTimeToPrefix);
+	mModalMessages->setChecked(Preferences::mModalMessages);
+	mShowExpiredAlarms->setChecked(Preferences::mShowExpiredAlarms);
+	mDaemonTrayCheckInterval->setValue(Preferences::mDaemonTrayCheckInterval);
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
-	Preferences* preferences = Preferences::instance();
-	preferences->mShowAlarmTime           = mListShowTime->isChecked();
-	preferences->mShowTimeToAlarm         = mListShowTimeTo->isChecked();
+	Preferences::mShowAlarmTime           = mListShowTime->isChecked();
+	Preferences::mShowTimeToAlarm         = mListShowTimeTo->isChecked();
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
-	preferences->mTooltipAlarmCount       = n;
-	preferences->mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
-	preferences->mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
-	preferences->mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
-	preferences->mModalMessages           = mModalMessages->isChecked();
-	preferences->mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
-	preferences->mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
+	Preferences::mTooltipAlarmCount       = n;
+	Preferences::mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
+	Preferences::mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
+	Preferences::mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
+	Preferences::mModalMessages           = mModalMessages->isChecked();
+	Preferences::mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
+	Preferences::mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsTabBase::apply(syncToDisc);
 }
 

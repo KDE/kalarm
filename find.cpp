@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility 
  *  Program:  kalarm
- *  (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -73,7 +73,7 @@ void Find::display()
 	if (!mOptions)
 		// Set defaults the first time the Find dialog is activated
 		mOptions = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
-	bool noExpired = !Preferences::instance()->expiredKeepDays();
+	bool noExpired = !Preferences::expiredKeepDays();
 	bool showExpired = mListView->isA("AlarmListView") && ((AlarmListView*)mListView)->showingExpired();
 	if (noExpired  ||  !showExpired)      // these settings could change between activations
 		mOptions &= ~FIND_EXPIRED;
@@ -96,7 +96,7 @@ void Find::display()
 		QBoxLayout* layout = new QVBoxLayout(kalarmWidgets, 0, KDialog::spacingHint());
 		QGroupBox* group = new QGroupBox(i18n("Alarm Type"), kalarmWidgets);
 		layout->addWidget(group);
-		QGridLayout* grid = new QGridLayout(group, 2, 2, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+		QGridLayout* grid = new QGridLayout(group, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 		grid->addRowSpacing(0, mDialog->fontMetrics().lineSpacing()/2);
 		grid->setColStretch(1, 1);
 

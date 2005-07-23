@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -113,9 +113,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(QListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);
-#if KDE_VERSION >= 290
 	mAddresseeList->setFullWidth(true);
-#endif
 	mAddresseeList->addColumn(i18n("Name"));
 	mAddresseeList->addColumn(i18n("Birthday"));
 	connect(mAddresseeList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
@@ -127,7 +125,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
-	QBoxLayout* groupLayout = new QVBoxLayout(group, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
 	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	// Colour choice drop-down list
@@ -165,7 +163,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	layout->addWidget(mConfirmAck);
-	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addSpacing(2*spacingHint());
 	layout->addStretch();
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
@@ -191,16 +189,15 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	layout->addWidget(mSimpleRepetition);
 
 	// Set the values to their defaults
-	Preferences* preferences = Preferences::instance();
 	mFontColourButton->setDefaultFont();
-	mFontColourButton->setBgColour(preferences->defaultBgColour());
-	mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
-	mLateCancel->setMinutes(preferences->defaultLateCancel(), true, TimePeriod::DAYS);
-	mConfirmAck->setChecked(preferences->defaultConfirmAck());
-	mSoundPicker->set(preferences->defaultSound(), preferences->defaultSoundType(), preferences->defaultSoundFile(),
-	                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
+	mFontColourButton->setBgColour(Preferences::defaultBgColour());
+	mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
+	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::DAYS);
+	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
+	mSoundPicker->set(Preferences::defaultSound(), Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
+	                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	if (mSpecialActionsButton)
-		mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
+		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
 
 	// Initialise the birthday selection list and disable the OK button
 	loadAddressBook();

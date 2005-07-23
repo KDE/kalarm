@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -65,7 +65,6 @@
 
 #include <netwm.h>
 
-int         marginKDE2 = 0;
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
 static bool convInterval(QCString timeParam, KAEvent::RecurType&, int& timeInterval, bool allowMonthYear = true);
@@ -107,11 +106,8 @@ KAlarmApp::KAlarmApp()
 	  mRefreshExpiredAlarms(false),
 	  mSpeechEnabled(false)
 {
-#if KDE_VERSION < 290
-	marginKDE2 = KDialog::marginHint();
-#endif
-	Preferences* preferences = Preferences::instance();
-	connect(preferences, SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
+	Preferences::initialise();
+	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KAEvent::setFeb29RecurType();
@@ -130,14 +126,14 @@ KAlarmApp::KAlarmApp()
 		mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
 		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
-		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && preferences->disableAlarmsIfStopped();
-		mStartOfDay             = preferences->startOfDay();
-		if (preferences->hasStartOfDayChanged())
+		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
+		mStartOfDay             = Preferences::startOfDay();
+		if (Preferences::hasStartOfDayChanged())
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-		mPrefsExpiredColour   = preferences->expiredColour();
-		mPrefsExpiredKeepDays = preferences->expiredKeepDays();
-		mPrefsShowTime        = preferences->showAlarmTime();
-		mPrefsShowTimeTo      = preferences->showTimeToAlarm();
+		mPrefsExpiredColour   = Preferences::expiredColour();
+		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
+		mPrefsShowTime        = Preferences::showAlarmTime();
+		mPrefsShowTimeTo      = Preferences::showTimeToAlarm();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -234,7 +230,7 @@ bool KAlarmApp::restoreSession()
 
 	// Try to display the system tray icon if it is configured to be autostarted,
 	// or if we're in run-in-system-tray mode.
-	if (Preferences::instance()->autostartTrayIcon()
+	if (Preferences::autostartTrayIcon()
 	||  MainWindow::count()  &&  wantRunInSystemTray())
 	{
 		displayTrayIcon(true, trayParent);
@@ -429,8 +425,8 @@ int KAlarmApp::newInstance()
 
 				bool      alarmNoTime = false;
 				QDateTime alarmTime, endTime;
-				QColor    bgColour = Preferences::instance()->defaultBgColour();
-				QColor    fgColour = Preferences::instance()->defaultFgColour();
+				QColor    bgColour = Preferences::defaultBgColour();
+				QColor    fgColour = Preferences::defaultFgColour();
 				KCal::Recurrence recurrence(0);
 				int       repeatCount    = 0;
 				int       repeatInterval = 0;
@@ -1058,7 +1054,6 @@ MainWindow* KAlarmApp::trayMainWindow() const
 */
 void KAlarmApp::slotPreferencesChanged()
 {
-	Preferences* preferences = Preferences::instance();
 	bool newRunInSysTray = wantRunInSystemTray();
 	if (newRunInSysTray != mOldRunInSystemTray)
 	{
@@ -1077,41 +1072,41 @@ void KAlarmApp::slotPreferencesChanged()
 		--mActiveCount;
 	}
 
-	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::instance()->disableAlarmsIfStopped();
+	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
 	if (newDisableIfStopped != mDisableAlarmsIfStopped)
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by Daemon::reregister()
-		preferences->setQuitWarn(true);   // since mode has changed, re-allow warning messages on Quit
+		Preferences::setQuitWarn(true);   // since mode has changed, re-allow warning messages on Quit
 		Daemon::reregister();           // re-register with the alarm daemon
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
-	if (preferences->startOfDay() != mStartOfDay)
+	if (Preferences::startOfDay() != mStartOfDay)
 		changeStartOfDay();
 
 	KAEvent::setFeb29RecurType();    // in case the date for February 29th recurrences has changed
 
-	if (preferences->showAlarmTime()   != mPrefsShowTime
-	||  preferences->showTimeToAlarm() != mPrefsShowTimeTo)
+	if (Preferences::showAlarmTime()   != mPrefsShowTime
+	||  Preferences::showTimeToAlarm() != mPrefsShowTimeTo)
 	{
 		// The default alarm list time columns selection has changed
 		MainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
-		mPrefsShowTime   = preferences->showAlarmTime();
-		mPrefsShowTimeTo = preferences->showTimeToAlarm();
+		mPrefsShowTime   = Preferences::showAlarmTime();
+		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
 	}
 
-	if (preferences->expiredColour() != mPrefsExpiredColour)
+	if (Preferences::expiredColour() != mPrefsExpiredColour)
 	{
 		// The expired alarms text colour has changed
 		mRefreshExpiredAlarms = true;
-		mPrefsExpiredColour = preferences->expiredColour();
+		mPrefsExpiredColour = Preferences::expiredColour();
 	}
 
-	if (preferences->expiredKeepDays() != mPrefsExpiredKeepDays)
+	if (Preferences::expiredKeepDays() != mPrefsExpiredKeepDays)
 	{
 		// How long expired alarms are being kept has changed.
 		// N.B. This also adjusts for any change in start-of-day time.
-		mPrefsExpiredKeepDays = preferences->expiredKeepDays();
+		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
 		AlarmCalendar::expiredCalendar()->setPurgeDays(mPrefsExpiredKeepDays);
 	}
 
@@ -1127,12 +1122,12 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
-	QTime sod = Preferences::instance()->startOfDay();
+	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 	if (KAEvent::adjustStartOfDay(cal->events()))
 		cal->save();
-	Preferences::instance()->updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
+	Preferences::updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
 	mStartOfDay = sod;
 }
 
@@ -1151,7 +1146,7 @@ void KAlarmApp::slotExpiredPurged()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return Preferences::instance()->runInSystemTray()  &&  mKDEDesktop;
+	return Preferences::runInSystemTray()  &&  mKDEDesktop;
 }
 
 /******************************************************************************
@@ -1326,7 +1321,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					{
 						// The alarm has no time, so cancel it if its date is too far past
 						int maxlate = alarm.lateCancel() / 1440;    // maximum lateness in days
-						QDateTime limit(alarm.date().addDays(maxlate + 1), Preferences::instance()->startOfDay());
+						QDateTime limit(alarm.date().addDays(maxlate + 1), Preferences::startOfDay());
 						if (now >= limit)
 						{
 							// It's too late to display the scheduled occurrence.
@@ -1340,7 +1335,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAEvent::RECURRENCE_DATE_TIME:
 								case KAEvent::LAST_RECURRENCE:
 									limit.setDate(next.date().addDays(maxlate + 1));
-									limit.setTime(Preferences::instance()->startOfDay());
+									limit.setTime(Preferences::startOfDay());
 									if (now >= limit)
 									{
 										if (type == KAEvent::LAST_RECURRENCE)
@@ -1704,7 +1699,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	if (flags & ProcData::EXEC_IN_XTERM)
 	{
 		// Execute the command in a terminal window.
-		cmd = Preferences::instance()->cmdXTermCommand();
+		cmd = Preferences::cmdXTermCommand();
 		cmd.replace("%t", aboutData()->programName());     // set the terminal window title
 		if (cmd.find("%C") >= 0)
 		{

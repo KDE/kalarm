@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -16,9 +16,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -108,7 +108,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	  mSavedMonths(12)
 {
 	QBoxLayout* layout;
-	QVBoxLayout* topLayout = new QVBoxLayout(this, marginKDE2, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
 	/* Create the recurrence rule Group box which holds the recurrence period
 	 * selection buttons, and the weekly, monthly and yearly recurrence rule
@@ -218,7 +218,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	connect(mRangeButtonGroup, SIGNAL(buttonSet(int)), SLOT(rangeTypeClicked()));
 	topLayout->addWidget(mRangeButtonGroup);
 
-	QVBoxLayout* vlayout = new QVBoxLayout(mRangeButtonGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	QVBoxLayout* vlayout = new QVBoxLayout(mRangeButtonGroup, KDialog::marginHint(), KDialog::spacingHint());
 	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 	mNoEndDateButton = new RadioButton(i18n("No &end"), mRangeButtonGroup);
 	mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
@@ -290,7 +290,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mExceptionGroup = new QGroupBox(i18n("E&xceptions"), this, "mExceptionGroup");
 	topLayout->addWidget(mExceptionGroup);
 	topLayout->setStretchFactor(mExceptionGroup, 2);
-	vlayout = new QVBoxLayout(mExceptionGroup, marginKDE2 + KDialog::marginHint(), KDialog::spacingHint());
+	vlayout = new QVBoxLayout(mExceptionGroup, KDialog::marginHint(), KDialog::spacingHint());
 	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 	layout = new QHBoxLayout(vlayout, KDialog::spacingHint());
 	vlayout = new QVBoxLayout(layout);
@@ -1045,7 +1045,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 	noEmitTypeChanged = true;
 	int button;
-	switch (Preferences::instance()->defaultRecurPeriod())
+	switch (Preferences::defaultRecurPeriod())
 	{
 		case AT_LOGIN: button = mAtLoginButtonId;  break;
 		case ANNUAL:   button = mYearlyButtonId;   break;

@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -199,7 +199,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		box->setFixedHeight(box->sizeHint().height());
 	}
 	mTabs = new QTabWidget(mainWidget);
-	mTabs->setMargin(marginHint() + marginKDE2);
+	mTabs->setMargin(marginHint());
 
 	QVBox* mainPageBox = new QVBox(mTabs);
 	mainPageBox->setSpacing(spacingHint());
@@ -207,7 +207,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
-	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, marginKDE2, spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, 0, spacingHint());
 
 	// Recurrence tab
 	QVBox* recurTab = new QVBox(mTabs);
@@ -224,7 +224,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mActionGroup = new ButtonGroup(i18n("Action"), mainPage, "actionGroup");
 	connect(mActionGroup, SIGNAL(buttonSet(int)), SLOT(slotAlarmTypeChanged(int)));
 	topLayout->addWidget(mActionGroup, 1);
-	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginKDE2 + marginHint(), spacingHint());
+	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 
 	// Message radio button
@@ -289,7 +289,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
 		layout->addWidget(mTemplateTimeGroup);
-		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginKDE2 + marginHint(), spacingHint());
+		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginHint(), spacingHint());
 		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 		// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
 		int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
@@ -520,7 +520,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 
 	mCmdOutputGroup = new ButtonGroup(i18n("Command Output"), mCommandFrame);
 	frameLayout->addWidget(mCmdOutputGroup);
-	QBoxLayout* layout = new QVBoxLayout(mCmdOutputGroup, marginKDE2 + marginHint(), spacingHint());
+	QBoxLayout* layout = new QVBoxLayout(mCmdOutputGroup, marginHint(), spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	// Execute in terminal window
@@ -580,7 +580,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	grid->setColStretch(1, 1);
 
 	mEmailFromList = 0;
-	if (Preferences::instance()->emailFrom() == Preferences::MAIL_FROM_KMAIL)
+	if (Preferences::emailFrom() == Preferences::MAIL_FROM_KMAIL)
 	{
 		// Email sender identity
 		QLabel* label = new QLabel(i18n_EmailFrom(), mEmailFrame);
@@ -815,11 +815,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			if (mSpecialActionsButton)
 				mSpecialActionsButton->setEnabled(false);
 		}
-		Preferences* preferences = Preferences::instance();
 		mFontColourButton->setDefaultFont();
-		mFontColourButton->setBgColour(preferences->defaultBgColour());
-		mFontColourButton->setFgColour(preferences->defaultFgColour());
-		mBgColourChoose->setColour(preferences->defaultBgColour());     // set colour before setting alarm type buttons
+		mFontColourButton->setBgColour(Preferences::defaultBgColour());
+		mFontColourButton->setFgColour(Preferences::defaultFgColour());
+		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		if (mTemplate)
 		{
@@ -830,25 +829,25 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		else
 			mTimeWidget->setDateTime(defaultTime);
 		mActionGroup->setButton(mActionGroup->id(mMessageRadio));
-		mLateCancel->setMinutes((preferences->defaultLateCancel() ? 1 : 0), false, TimePeriod::HOURS_MINUTES);
+		mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HOURS_MINUTES);
 		mLateCancel->showAutoClose(true);
-		mLateCancel->setAutoClose(preferences->defaultAutoClose());
+		mLateCancel->setAutoClose(Preferences::defaultAutoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		if (mShowInKorganizer)
-			mShowInKorganizer->setChecked(preferences->defaultCopyToKOrganizer());
-		mConfirmAck->setChecked(preferences->defaultConfirmAck());
+			mShowInKorganizer->setChecked(Preferences::defaultCopyToKOrganizer());
+		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		if (mSpecialActionsButton)
-			mSpecialActionsButton->setActions(preferences->defaultPreAction(), preferences->defaultPostAction());
+			mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mReminder->setMinutes(0, false);
 		mReminder->enableOnceOnly(mRecurrenceEdit->isTimedRepeatType());   // must be called after mRecurrenceEdit is set up
-		mSoundPicker->set(preferences->defaultSound(), preferences->defaultSoundType(), preferences->defaultSoundFile(),
-		                  preferences->defaultSoundVolume(), -1, 0, preferences->defaultSoundRepeat());
-		mCmdTypeScript->setChecked(preferences->defaultCmdScript());
-		mCmdLogFileEdit->setText(preferences->defaultCmdLogFile());    // set file name before setting radio button
-		mCmdOutputGroup->setButton(preferences->defaultCmdLogType());
-		mEmailBcc->setChecked(preferences->defaultEmailBcc());
+		mSoundPicker->set(Preferences::defaultSound(), Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
+		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
+		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
+		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
+		mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
+		mEmailBcc->setChecked(Preferences::defaultEmailBcc());
 	}
 	slotCmdScriptToggled(mCmdTypeScript->isChecked());
 
@@ -1536,7 +1535,7 @@ void EditAlarmDlg::slotTry()
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
-					bcc = i18n("\nBcc: %1").arg(Preferences::instance()->emailBccAddress());
+					bcc = i18n("\nBcc: %1").arg(Preferences::emailBccAddress());
 				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(mEmailAddresses.join("\n")).arg(bcc));
 			}
 		}
@@ -2001,7 +2000,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		QString alarmtext = mFileMessageEdit->text().stripWhiteSpace();
 		// Convert any relative file path to absolute
 		// (using home directory as the default)
-		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE, HTML };
+		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
 		Err err = NONE;
 		KURL url;
 		int i = alarmtext.find(QString::fromLatin1("/"));
@@ -2042,9 +2041,6 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
 			{
 				case KAlarm::TextFormatted:
-#if KDE_VERSION < 290
-					err = HTML;
-#endif
 				case KAlarm::TextPlain:
 				case KAlarm::TextApplication:
 				case KAlarm::Image:
@@ -2067,15 +2063,11 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 				case DIRECTORY:       errmsg = i18n("%1\nis a folder");  break;
 				case UNREADABLE:      errmsg = i18n("%1\nis not readable");  break;
 				case NOT_TEXT_IMAGE:  errmsg = i18n("%1\nappears not to be a text or image file");  break;
-#if KDE_VERSION < 290
-				case HTML:            errmsg = i18n("%1\nHTML/XML files may not display correctly");  break;
-#endif
 				case NONE:
 				default:
 					break;
 			}
-			if (KMessageBox::warningContinueCancel(const_cast<EditAlarmDlg*>(this), errmsg.arg(alarmtext),
-			                                       QString::null, KStdGuiItem::cont())    // explicit button text is for KDE2 compatibility
+			if (KMessageBox::warningContinueCancel(const_cast<EditAlarmDlg*>(this), errmsg.arg(alarmtext))
 			    == KMessageBox::Cancel)
 				return false;
 		}

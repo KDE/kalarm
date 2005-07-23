@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -31,6 +31,7 @@
 #include <libkpimidentities/identitymanager.h>
 
 #include "daemon.h"
+#include "functions.h"
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
@@ -40,72 +41,119 @@ Preferences* Preferences::mInstance = 0;
 
 // Default config file settings
 QColor defaultMessageColours[] = { Qt::red, Qt::green, Qt::blue, Qt::cyan, Qt::magenta, Qt::yellow, Qt::white, Qt::lightGray, Qt::black, QColor() };
-const ColourList Preferences::default_messageColours(defaultMessageColours);
-const QColor     Preferences::default_defaultBgColour(Qt::red);
-const QColor     Preferences::default_defaultFgColour(Qt::black);
-QFont            Preferences::default_messageFont;    // initialised in constructor
-const QTime      Preferences::default_startOfDay(0, 0);
-const bool       Preferences::default_autostartDaemon          = true;
-const bool       Preferences::default_runInSystemTray          = true;
-const bool       Preferences::default_disableAlarmsIfStopped   = true;
-const bool       Preferences::default_quitWarn                 = true;
-const bool       Preferences::default_autostartTrayIcon        = true;
-const bool       Preferences::default_confirmAlarmDeletion     = true;
-const bool       Preferences::default_modalMessages            = true;
-const int        Preferences::default_messageButtonDelay       = 0;     // (seconds)
-const bool       Preferences::default_showExpiredAlarms        = false;
-const bool       Preferences::default_showAlarmTime            = true;
-const bool       Preferences::default_showTimeToAlarm          = false;
-const int        Preferences::default_tooltipAlarmCount        = 5;
-const bool       Preferences::default_showTooltipAlarmTime     = true;
-const bool       Preferences::default_showTooltipTimeToAlarm   = true;
-const QString    Preferences::default_tooltipTimeToPrefix      = QString::fromLatin1("+");
-const int        Preferences::default_daemonTrayCheckInterval  = 10;     // (seconds)
-const bool       Preferences::default_emailCopyToKMail         = false;
-const bool       Preferences::default_emailQueuedNotify        = false;
-const QColor     Preferences::default_disabledColour(Qt::lightGray);
-const QColor     Preferences::default_expiredColour(Qt::darkRed);
-const int        Preferences::default_expiredKeepDays          = 7;
-const QString    Preferences::default_defaultSoundFile         = QString::null;
-const float      Preferences::default_defaultSoundVolume       = -1;
-const int        Preferences::default_defaultLateCancel        = 0;
-const bool       Preferences::default_defaultAutoClose         = false;
-const bool       Preferences::default_defaultCopyToKOrganizer  = false;
-const bool       Preferences::default_defaultSound             = false;
-const bool       Preferences::default_defaultSoundRepeat       = false;
-const SoundPicker::Type Preferences::default_defaultSoundType  = SoundPicker::BEEP;
-const bool       Preferences::default_defaultConfirmAck        = false;
-const bool       Preferences::default_defaultCmdScript         = false;
-const EditAlarmDlg::CmdLogType Preferences::default_defaultCmdLogType = EditAlarmDlg::DISCARD_OUTPUT;
-const bool       Preferences::default_defaultEmailBcc          = false;
-const QString    Preferences::default_emailAddress             = QString::null;
-const QString    Preferences::default_emailBccAddress          = QString::null;
-const Preferences::MailClient    Preferences::default_emailClient          = KMAIL;
-#if KDE_VERSION >= 210
-const Preferences::MailFrom      Preferences::default_emailBccFrom         = MAIL_FROM_CONTROL_CENTRE;
-#else
-const Preferences::MailFrom      Preferences::default_emailBccFrom         = MAIL_FROM_ADDR;
-#endif
-const Preferences::Feb29Type     Preferences::default_feb29RecurType       = FEB29_MAR1;
-const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod   = RecurrenceEdit::NO_RECUR;
-const TimePeriod::Units          Preferences::default_defaultReminderUnits = TimePeriod::HOURS_MINUTES;
-const QString    Preferences::default_defaultPreAction;
-const QString    Preferences::default_defaultPostAction;
+const ColourList                 Preferences::default_messageColours(defaultMessageColours);
+const QColor                     Preferences::default_defaultBgColour(Qt::red);
+const QColor                     Preferences::default_defaultFgColour(Qt::black);
+QFont                            Preferences::mDefault_messageFont;    // initialised in constructor
+const QTime                      Preferences::default_startOfDay(0, 0);
+const bool                       Preferences::default_autostartDaemon         = true;
+const bool                       Preferences::default_runInSystemTray         = true;
+const bool                       Preferences::default_disableAlarmsIfStopped  = true;
+const bool                       Preferences::default_quitWarn                = true;
+const bool                       Preferences::default_autostartTrayIcon       = true;
+const bool                       Preferences::default_confirmAlarmDeletion    = true;
+const bool                       Preferences::default_modalMessages           = true;
+const int                        Preferences::default_messageButtonDelay      = 0;     // (seconds)
+const bool                       Preferences::default_showExpiredAlarms       = false;
+const bool                       Preferences::default_showAlarmTime           = true;
+const bool                       Preferences::default_showTimeToAlarm         = false;
+const int                        Preferences::default_tooltipAlarmCount       = 5;
+const bool                       Preferences::default_showTooltipAlarmTime    = true;
+const bool                       Preferences::default_showTooltipTimeToAlarm  = true;
+const QString                    Preferences::default_tooltipTimeToPrefix     = QString::fromLatin1("+");
+const int                        Preferences::default_daemonTrayCheckInterval = 10;     // (seconds)
+const bool                       Preferences::default_emailCopyToKMail        = false;
+const bool                       Preferences::default_emailQueuedNotify       = false;
+const QColor                     Preferences::default_disabledColour(Qt::lightGray);
+const QColor                     Preferences::default_expiredColour(Qt::darkRed);
+const int                        Preferences::default_expiredKeepDays         = 7;
+const QString                    Preferences::default_defaultSoundFile        = QString::null;
+const float                      Preferences::default_defaultSoundVolume      = -1;
+const int                        Preferences::default_defaultLateCancel       = 0;
+const bool                       Preferences::default_defaultAutoClose        = false;
+const bool                       Preferences::default_defaultCopyToKOrganizer = false;
+const bool                       Preferences::default_defaultSound            = false;
+const bool                       Preferences::default_defaultSoundRepeat      = false;
+const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::BEEP;
+const bool                       Preferences::default_defaultConfirmAck       = false;
+const bool                       Preferences::default_defaultCmdScript        = false;
+const EditAlarmDlg::CmdLogType   Preferences::default_defaultCmdLogType       = EditAlarmDlg::DISCARD_OUTPUT;
+const bool                       Preferences::default_defaultEmailBcc         = false;
+const QString                    Preferences::default_emailAddress            = QString::null;
+const QString                    Preferences::default_emailBccAddress         = QString::null;
+const Preferences::MailClient    Preferences::default_emailClient             = KMAIL;
+const Preferences::MailFrom      Preferences::default_emailBccFrom            = MAIL_FROM_CONTROL_CENTRE;
+const Preferences::Feb29Type     Preferences::default_feb29RecurType          = FEB29_MAR1;
+const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod      = RecurrenceEdit::NO_RECUR;
+const TimePeriod::Units          Preferences::default_defaultReminderUnits    = TimePeriod::HOURS_MINUTES;
+const QString                    Preferences::default_defaultPreAction;
+const QString                    Preferences::default_defaultPostAction;
 
 Preferences::MailFrom Preferences::default_emailFrom()
 {
-#if KDE_VERSION >= 210
 	return KAMail::identitiesExist() ? MAIL_FROM_KMAIL : MAIL_FROM_CONTROL_CENTRE;
-#else
-	return KAMail::identitiesExist() ? MAIL_FROM_KMAIL : MAIL_FROM_ADDR;
-#endif
 }
+
+// Active config file settings
+ColourList                 Preferences::mMessageColours;
+QColor                     Preferences::mDefaultBgColour;
+QFont                      Preferences::mMessageFont;
+QTime                      Preferences::mStartOfDay;
+bool                       Preferences::mAutostartDaemon;
+bool                       Preferences::mRunInSystemTray;
+bool                       Preferences::mDisableAlarmsIfStopped;
+bool                       Preferences::mAutostartTrayIcon;
+Preferences::Feb29Type     Preferences::mFeb29RecurType;
+bool                       Preferences::mModalMessages;
+int                        Preferences::mMessageButtonDelay;
+bool                       Preferences::mShowExpiredAlarms;
+bool                       Preferences::mShowAlarmTime;
+bool                       Preferences::mShowTimeToAlarm;
+int                        Preferences::mTooltipAlarmCount;
+bool                       Preferences::mShowTooltipAlarmTime;
+bool                       Preferences::mShowTooltipTimeToAlarm;
+QString                    Preferences::mTooltipTimeToPrefix;
+int                        Preferences::mDaemonTrayCheckInterval;
+QString                    Preferences::mEmailAddress;
+QString                    Preferences::mEmailBccAddress;
+Preferences::MailClient    Preferences::mEmailClient;
+Preferences::MailFrom      Preferences::mEmailFrom;
+Preferences::MailFrom      Preferences::mEmailBccFrom;
+bool                       Preferences::mEmailCopyToKMail;
+QString                    Preferences::mCmdXTermCommand;
+QColor                     Preferences::mDisabledColour;
+QColor                     Preferences::mExpiredColour;
+int                        Preferences::mExpiredKeepDays;
+// Default settings for Edit Alarm dialog
+QString                    Preferences::mDefaultSoundFile;
+float                      Preferences::mDefaultSoundVolume;
+int                        Preferences::mDefaultLateCancel;
+bool                       Preferences::mDefaultAutoClose;
+bool                       Preferences::mDefaultCopyToKOrganizer;
+bool                       Preferences::mDefaultSound;
+SoundPicker::Type          Preferences::mDefaultSoundType;
+bool                       Preferences::mDefaultSoundRepeat;
+bool                       Preferences::mDefaultConfirmAck;
+bool                       Preferences::mDefaultEmailBcc;
+bool                       Preferences::mDefaultCmdScript;
+EditAlarmDlg::CmdLogType   Preferences::mDefaultCmdLogType;
+QString                    Preferences::mDefaultCmdLogFile;
+RecurrenceEdit::RepeatType Preferences::mDefaultRecurPeriod;
+TimePeriod::Units          Preferences::mDefaultReminderUnits;
+QString                    Preferences::mDefaultPreAction;
+QString                    Preferences::mDefaultPostAction;
+// Change tracking
+QTime                      Preferences::mOldStartOfDay;
+bool                       Preferences::mStartOfDayChanged;
+bool                       Preferences::mOldAutostartDaemon;
+
 
 static const QString defaultFeb29RecurType    = QString::fromLatin1("Mar1");
 static const QString defaultEmailClient       = QString::fromLatin1("kmail");
 
 // Config file entry names
 static const QString GENERAL_SECTION          = QString::fromLatin1("General");
+static const QString VERSION_NUM              = QString::fromLatin1("Version");
 static const QString MESSAGE_COLOURS          = QString::fromLatin1("MessageColours");
 static const QString MESSAGE_BG_COLOUR        = QString::fromLatin1("MessageBackgroundColour");
 static const QString MESSAGE_FONT             = QString::fromLatin1("MessageFont");
@@ -166,7 +214,7 @@ const QString Preferences::CONFIRM_ALARM_DELETION = QString::fromLatin1("Confirm
 const QString Preferences::EMAIL_QUEUED_NOTIFY    = QString::fromLatin1("EmailQueuedNotify");
 
 static const int SODxor = 0x82451630;
-inline int Preferences::startOfDayCheck() const
+inline int Preferences::startOfDayCheck()
 {
 	// Combine with a 'random' constant to prevent 'clever' people fiddling the
 	// value, and thereby screwing things up.
@@ -174,13 +222,18 @@ inline int Preferences::startOfDayCheck() const
 }
 
 
-Preferences* Preferences::instance()
+void Preferences::initialise()
 {
 	if (!mInstance)
 	{
-		convertOldPrefs();    // convert preferences written by previous KAlarm versions
+		// Initialise static variables here to avoid static initialisation
+		// sequencing errors.
+		mDefault_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
 
 		mInstance = new Preferences;
+
+		convertOldPrefs();    // convert preferences written by previous KAlarm versions
+		read();
 
 		// Set the default button for the Quit warning message box to Cancel
 		MessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
@@ -188,17 +241,31 @@ Preferences* Preferences::instance()
 		MessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
 		MessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 	}
-	return mInstance;
 }
 
-Preferences::Preferences()
-	: QObject(0)
+void Preferences::connect(const char* signal, const QObject* receiver, const char* member)
 {
-	// Initialise static variables here to avoid static initialisation
-	// sequencing errors.
-	default_messageFont = QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold);
+	initialise();
+	QObject::connect(mInstance, signal, receiver, member);
+}
 
-	// Read preference values from the config file
+void Preferences::emitStartOfDayChanged()
+{
+	emit startOfDayChanged(mOldStartOfDay);
+}
+
+void Preferences::emitPreferencesChanged()
+{
+	emit preferencesChanged();
+}
+
+/******************************************************************************
+* Read preference values from the config file.
+*/
+void Preferences::read()
+{
+	initialise();
+
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	QStringList cols = config->readListEntry(MESSAGE_COLOURS);
@@ -215,7 +282,7 @@ Preferences::Preferences()
 		}
 	}
 	mDefaultBgColour          = config->readColorEntry(MESSAGE_BG_COLOUR, &default_defaultBgColour);
-	mMessageFont              = config->readFontEntry(MESSAGE_FONT, &default_messageFont);
+	mMessageFont              = config->readFontEntry(MESSAGE_FONT, &mDefault_messageFont);
 	mRunInSystemTray          = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
 	mDisableAlarmsIfStopped   = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon        = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
@@ -258,6 +325,7 @@ Preferences::Preferences()
 	mDisabledColour           = config->readColorEntry(DISABLED_COLOUR, &default_disabledColour);
 	mExpiredColour            = config->readColorEntry(EXPIRED_COLOUR, &default_expiredColour);
 	mExpiredKeepDays          = config->readNumEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
+
 	config->setGroup(DEFAULTS_SECTION);
 	mDefaultLateCancel        = static_cast<int>(config->readUnsignedNumEntry(DEF_LATE_CANCEL, default_defaultLateCancel));
 	mDefaultAutoClose         = config->readBoolEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
@@ -290,19 +358,23 @@ Preferences::Preferences()
 	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	mAutostartDaemon          = Daemon::autoStart(default_autostartDaemon);
 	mOldAutostartDaemon       = mAutostartDaemon;
-	emit preferencesChanged();
+	mInstance->emitPreferencesChanged();
 	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
 	if (mStartOfDayChanged)
 	{
-		emit startOfDayChanged(mOldStartOfDay);
+		mInstance->emitStartOfDayChanged();
 		mOldStartOfDay = mStartOfDay;
 	}
 }
 
+/******************************************************************************
+* Save preference values to the config file.
+*/
 void Preferences::save(bool syncToDisc)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
+	config->writeEntry(VERSION_NUM, KALARM_VERSION);
 	QStringList colours;
 	for (ColourList::const_iterator it = mMessageColours.begin();  it != mMessageColours.end();  ++it)
 		colours.append(QColor(*it).name());
@@ -359,10 +431,10 @@ void Preferences::save(bool syncToDisc)
 		Daemon::enableAutoStart(mAutostartDaemon);
 		mOldAutostartDaemon = mAutostartDaemon;
 	}
-	emit preferencesChanged();
+	mInstance->emitPreferencesChanged();
 	if (mStartOfDay != mOldStartOfDay)
 	{
-		emit startOfDayChanged(mOldStartOfDay);
+		mInstance->emitStartOfDayChanged();
 		mOldStartOfDay = mStartOfDay;
 	}
 }
@@ -381,16 +453,14 @@ void Preferences::updateStartOfDayCheck()
 	mStartOfDayChanged = false;
 }
 
-QString Preferences::emailFrom(Preferences::MailFrom from, bool useAddress, bool bcc) const
+QString Preferences::emailFrom(Preferences::MailFrom from, bool useAddress, bool bcc)
 {
 	switch (from)
 	{
 		case MAIL_FROM_KMAIL:
 			return FROM_KMAIL;
-#if KDE_VERSION >= 210
 		case MAIL_FROM_CONTROL_CENTRE:
 			return FROM_CONTROL_CENTRE;
-#endif
 		case MAIL_FROM_ADDR:
 			return useAddress ? (bcc ? mEmailBccAddress : mEmailAddress) : QString::null;
 		default:
@@ -402,17 +472,15 @@ Preferences::MailFrom Preferences::emailFrom(const QString& str)
 {
 	if (str == FROM_KMAIL)
 		return MAIL_FROM_KMAIL;
-#if KDE_VERSION >= 210
 	if (str == FROM_CONTROL_CENTRE)
 		return MAIL_FROM_CONTROL_CENTRE;
-#endif
 	return MAIL_FROM_ADDR;
 }
 
 /******************************************************************************
 * Get user's default 'From' email address.
 */
-QString Preferences::emailAddress() const
+QString Preferences::emailAddress()
 {
 	switch (mEmailFrom)
 	{
@@ -427,7 +495,7 @@ QString Preferences::emailAddress() const
 	}
 }
 
-QString Preferences::emailBccAddress() const
+QString Preferences::emailBccAddress()
 {
 	switch (mEmailBccFrom)
 	{
@@ -446,11 +514,9 @@ void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& add
 	{
 		case MAIL_FROM_KMAIL:
 			break;
-#if KDE_VERSION >= 210
 		case MAIL_FROM_CONTROL_CENTRE:
 			mEmailAddress = KAMail::controlCentreAddress();
 			break;
-#endif
 		case MAIL_FROM_ADDR:
 			mEmailAddress = address;
 			break;
@@ -462,10 +528,6 @@ void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& add
 
 void Preferences::setEmailBccAddress(bool useControlCentre, const QString& address)
 {
-#if KDE_VERSION < 210
-	if (useControlCentre)
-		return;
-#endif
 	if (useControlCentre)
 		mEmailBccAddress = KAMail::controlCentreAddress();
 	else
@@ -500,8 +562,13 @@ bool Preferences::notifying(const QString& messageID)
 */
 void Preferences::convertOldPrefs()
 {
-	bool sync = false;
 	KConfig* config = KGlobal::config();
+	config->setGroup(GENERAL_SECTION);
+	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM));
+	if (version >= KAlarm::Version(1,3,0))
+		return;     // config format is up to date
+
+	bool sync = false;
 	QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
 	if (entries.find(EMAIL_FROM) == entries.end()
 	&&  entries.find(EMAIL_USE_CONTROL_CENTRE) != entries.end())
@@ -510,7 +577,6 @@ void Preferences::convertOldPrefs()
 		config->setGroup(GENERAL_SECTION);
 		bool useCC = false;
 		bool bccUseCC = false;
-#if KDE_VERSION >= 210
 		const bool default_emailUseControlCentre    = true;
 		const bool default_emailBccUseControlCentre = true;
 		useCC = config->readBoolEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
@@ -518,7 +584,6 @@ void Preferences::convertOldPrefs()
 		bccUseCC = config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE)
 		         ? config->readBoolEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre)
 			 : useCC;
-#endif
 		config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS)));
 		config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS)));
 		config->deleteEntry(EMAIL_ADDRESS);

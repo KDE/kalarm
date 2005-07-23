@@ -31,7 +31,6 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qdragobject.h>
-#define KDE2_QTEXTEDIT_VIEW     // for KDE2 QTextEdit compatibility
 #include <qtextedit.h>
 #include <qtimer.h>
 
@@ -136,7 +135,7 @@ QValueList<MessageWin*> MessageWin::mWindowList;
 */
 MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
-	                                         | (Preferences::instance()->modalMessages() ? 0 : Qt::WX11BypassWM)),
+	                                         | (Preferences::modalMessages() ? 0 : Qt::WX11BypassWM)),
 	  mMessage(event.cleanText()),
 	  mFont(event.font()),
 	  mBgColour(event.bgColour()),
@@ -377,8 +376,8 @@ void MessageWin::initView()
 				text->setMinimumHeight(QMIN(h, lineSpacing*4));
 				text->setMaximumWidth(s.width() + text->scrollBarWidth());
 				QWhatsThis::add(text, i18n("The alarm message"));
-				int vspace = lineSpacing/2 - marginKDE2;
-				int hspace = lineSpacing - marginKDE2 - KDialog::marginHint();
+				int vspace = lineSpacing/2;
+				int hspace = lineSpacing - KDialog::marginHint();
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
@@ -584,7 +583,7 @@ void MessageWin::initView()
 	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
 
 	WId winid = winId();
-	unsigned long wstate = (Preferences::instance()->modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
+	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
 }
@@ -1117,7 +1116,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
-		if (!mDeferDlg  ||  Preferences::instance()->modalMessages())
+		if (!mDeferDlg  ||  Preferences::modalMessages())
 		{
 			raise();
 			playAudio();
@@ -1137,7 +1136,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 */
 void MessageWin::show()
 {
-	if (Preferences::instance()->messageButtonDelay() == 0)
+	if (Preferences::messageButtonDelay() == 0)
 		move(0, 0);
 	MainWindowBase::show();
 }
@@ -1185,7 +1184,7 @@ void MessageWin::showEvent(QShowEvent* se)
 				KAlarm::readConfigWindowSize("FileMessage", s);
 			resize(s);
 
-			mButtonDelay = Preferences::instance()->messageButtonDelay() * 1000;
+			mButtonDelay = Preferences::messageButtonDelay() * 1000;
 			if (!mButtonDelay)
 			{
 				/* Try to ensure that the window can't accidentally be acknowledged
@@ -1473,7 +1472,7 @@ void MessageWin::slotDefer()
 	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
 	                              false, this, "deferDlg");
 	mDeferDlg->setLimit(mEventID);
-	if (!Preferences::instance()->modalMessages())
+	if (!Preferences::modalMessages())
 		lower();
 	if (mDeferDlg->exec() == QDialog::Accepted)
 	{
