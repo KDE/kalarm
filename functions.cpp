@@ -489,7 +489,7 @@ QValueList<KAEvent> templateList()
 void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
 	if (event  &&  event->action() == KAEvent::EMAIL
-	&&  Preferences::instance()->emailAddress().isEmpty())
+	&&  Preferences::emailAddress().isEmpty())
 		KMessageBox::information(parent, i18n("Please set the 'From' email address...",
 		                                      "%1\nPlease set it in the Preferences dialog.").arg(KAMail::i18n_NeedFromEmailAddress()));
 
@@ -629,6 +629,48 @@ void writeConfigWindowSize(const char* window, const QSize& size)
 }
 
 /******************************************************************************
+* Convert the supplied KAlarm version string to a version number.
+* Reply = version number (double digit for each of major, minor & issue number,
+*         e.g. 010203 for 1.2.3
+*       = 0 if invalid version string.
+*/
+int getVersionNumber(const QString& version, QString* subVersion)
+{
+	// N.B. Remember to change  Version(int major, int minor, int rev)
+	//      if the representation returned by this method changes.
+	if (subVersion)
+		*subVersion = QString::null;
+	QStringList nums = QStringList::split(QChar('.'), version, true);
+	int count = nums.count();
+	if (count < 2  ||  count > 3)
+		return 0;
+	bool ok;
+	int vernum = nums[0].toInt(&ok) * 10000;    // major version
+	if (!ok)
+		return 0;
+	int v = nums[1].toInt(&ok);                 // minor version
+	if (!ok)
+		return 0;
+	vernum += (v < 99 ? v : 99) * 100;
+	if (count == 3)
+	{
+		// Issue number: allow other characters to follow the last digit
+		QString issue = nums[2];
+		if (!issue.at(0).isDigit())
+			return 0;
+		v = issue.toInt();   // issue number
+		vernum += (v < 99 ? v : 99);
+		if (subVersion)
+		{
+			int i;
+			for (i = 1;  const_cast<const QString&>(issue).at(i).isDigit();  ++i) ;
+			*subVersion = issue.mid(i);
+		}
+	}
+	return vernum;
+}
+
+/******************************************************************************
 * Check from its mime type whether a file appears to be a text or image file.
 * If a text file, its type is distinguished.
 * Reply = file type.
@@ -758,12 +800,12 @@ bool sendToKOrganizer(const KAEvent& event)
 		case KAEvent::FILE:
 		case KAEvent::COMMAND:
 			kcalEvent->setSummary(event.cleanText());
-			userEmail = Preferences::instance()->emailAddress();
+			userEmail = Preferences::emailAddress();
 			break;
 		case KAEvent::EMAIL:
 		{
 			QString from = event.emailFromKMail().isEmpty()
-			             ? Preferences::instance()->emailAddress()
+			             ? Preferences::emailAddress()
 			             : KAMail::identityManager()->identityForName(event.emailFromKMail()).fullEmailAddr();
 			AlarmText atext;
 			atext.setEmail(event.emailAddresses(", "), from, QString::null, QString::null, event.emailSubject(), QString::null);

@@ -30,7 +30,6 @@
 #include <kdebug.h>
 
 #include "alarmtext.h"
-#include "calendarcompat.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
@@ -344,7 +343,7 @@ void KAEvent::set(const Event& event)
 	DateTime alTime;
 	bool set = false;
 	bool isEmailText = false;
-	for ( ; it != alarmMap.end(); ++it)
+	for (  ;  it != alarmMap.end();  ++it)
 	{
 		const AlarmData& data = it.data();
 		switch (data.type)
@@ -1745,7 +1744,7 @@ bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions)
 	if (mStartDateTime.isDateOnly())
 	{
 		QDate pre = preDateTime.date();
-		if (preDateTime.time() < Preferences::instance()->startOfDay())
+		if (preDateTime.time() < Preferences::startOfDay())
 			pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 		if (pre < dt.date())
 			return true;
@@ -1864,21 +1863,18 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 	{
 		QDateTime recurStart = mRecurrence->startDateTime();
 		QDateTime after = afterDateTime;
-		if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > Preferences::instance()->startOfDay())
+		if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > Preferences::startOfDay())
 			after = after.addDays(1);    // today's recurrence (if today recurs) has passed
-		QDateTime dt = mRecurrence->getPreviousDateTime(after/*, &last*/);
+		QDateTime dt = mRecurrence->getPreviousDateTime(after);
 		result.set(dt, mStartDateTime.isDateOnly());
 		if (!dt.isValid())
 			return NO_OCCURRENCE;
 		if (dt == recurStart)
 			type = FIRST_OCCURRENCE;
-		else {
-			QDateTime tmpdt = mRecurrence->getNextDateTime(dt);
-			if (tmpdt.isValid())
-				type = result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
-			else
-				type = LAST_RECURRENCE;
-		}
+		else if (mRecurrence->getNextDateTime(dt).isValid())
+			type = result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
+		else
+			type = LAST_RECURRENCE;
 	}
 
 	if (includeRepetitions  &&  mRepeatCount)
@@ -1986,7 +1982,7 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 {
 	QDateTime recurStart = mRecurrence->startDateTime();
 	QDateTime pre = preDateTime;
-	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::instance()->startOfDay())
+	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::startOfDay())
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 	remainingCount = 0;
 	QDateTime dt = mRecurrence->getNextDateTime(pre);
@@ -2086,7 +2082,7 @@ void KAEvent::setFirstRecurrence()
 			return;
 		case ANNUAL_DATE:
 		case ANNUAL_POS:
-			if (!mRecurrence->yearMonths().count())
+			if (mRecurrence->yearMonths().isEmpty())
 				return;    // (presumably it's a template)
 			break;
 		case WEEKLY:
@@ -2321,7 +2317,7 @@ bool KAEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const QValu
 		recurrence.setEndDate(end);
 	else
 		return false;
-	for (QValueListConstIterator<RecurrenceRule::WDayPos> it = posns.begin(); it != posns.end(); ++it)
+	for (QValueListConstIterator<RecurrenceRule::WDayPos> it = posns.begin();  it != posns.end();  ++it)
 	{
 		recurrence.addMonthlyPos((*it).pos(), (*it).day());
 	}
@@ -2376,7 +2372,6 @@ bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValue
 {
 	if (count < -1)
 		return false;
-	
 	recurrence.setYearly(freq);
 	if (count)
 		recurrence.setDuration(count);
@@ -2385,7 +2380,7 @@ bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValue
 	else
 		return false;
 	
-	for (QValueListConstIterator<int> it = months.begin(); it != months.end(); ++it)
+	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		recurrence.addYearlyMonth(*it);
 	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
 		recurrence.addYearlyPos((*it).weeknum, (*it).days);
@@ -2404,7 +2399,7 @@ bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValue
 	else
 		return false;
 	
-	for (QValueListConstIterator<int> it = months.begin(); it != months.end(); ++it)
+	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		recurrence.addYearlyMonth(*it);
 	for (QValueListConstIterator<RecurrenceRule::WDayPos> it = posns.begin();  it != posns.end();  ++it)
 	{
@@ -2650,7 +2645,7 @@ int KAEvent::longestRecurrenceInterval(const Recurrence& recurrence)
 				int first = -1;
 				int last  = -1;
 				int maxgap = 0;
-				for (QValueListConstIterator<int> it = months.begin(); it != months.end();  ++it)
+				for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 				{
 					if (first < 0)
 						first = *it;
@@ -2711,7 +2706,7 @@ KAEvent KAEvent::findTemplateName(AlarmCalendar& calendar, const QString& name)
 bool KAEvent::adjustStartOfDay(const Event::List& events)
 {
 	bool changed = false;
-	QTime startOfDay = Preferences::instance()->startOfDay();
+	QTime startOfDay = Preferences::startOfDay();
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
@@ -2788,7 +2783,7 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
  */
 void KAEvent::setFeb29RecurType()
 {
-	Preferences::Feb29Type pfeb29 = Preferences::instance()->feb29RecurType();
+	Preferences::Feb29Type pfeb29 = Preferences::feb29RecurType();
 	switch (pfeb29)
 	{
 		case Preferences::FEB29_FEB28:
@@ -2799,7 +2794,7 @@ void KAEvent::setFeb29RecurType()
 			pfeb29 = Preferences::default_feb29RecurType;
 			break;
 	}
-	/// TODO_Recurrence: Get rid of the Feb 29 setting
+//#warning Reinstate Feb 29th
 /*	Recurrence::Feb29Type feb29;
 	switch (pfeb29)
 	{
@@ -2839,19 +2834,19 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	// KAlarm pre-1.3.1 XTERM category
 	static const QString EXEC_IN_XTERM_CAT  = QString::fromLatin1("XTERM");
 
-	if (version >= CalendarCompat::Version(1,3,1))
+	if (version >= KAlarm::Version(1,3,1))
 		return;
 
 	kdDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version " << version << endl;
-	bool pre_0_7   = (version < CalendarCompat::Version(0,7,0));
-	bool pre_0_9   = (version < CalendarCompat::Version(0,9,0));
-	bool pre_0_9_2 = (version < CalendarCompat::Version(0,9,2));
-	bool pre_1_1_1 = (version < CalendarCompat::Version(1,1,1));
-	bool pre_1_2_1 = (version < CalendarCompat::Version(1,2,1));
-	bool pre_1_3_0 = (version < CalendarCompat::Version(1,3,0));
-	bool pre_1_3_1 = (version < CalendarCompat::Version(1,3,1));
+	bool pre_0_7   = (version < KAlarm::Version(0,7,0));
+	bool pre_0_9   = (version < KAlarm::Version(0,9,0));
+	bool pre_0_9_2 = (version < KAlarm::Version(0,9,2));
+	bool pre_1_1_1 = (version < KAlarm::Version(1,1,1));
+	bool pre_1_2_1 = (version < KAlarm::Version(1,2,1));
+	bool pre_1_3_0 = (version < KAlarm::Version(1,3,0));
+	bool pre_1_3_1 = (version < KAlarm::Version(1,3,1));
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
-	QTime startOfDay = Preferences::instance()->startOfDay();
+	QTime startOfDay = Preferences::startOfDay();
 
 	Event::List events = calendar.rawEvents();
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
@@ -3323,7 +3318,7 @@ int KAAlarmEventBase::flags() const
 
 const QFont& KAAlarmEventBase::font() const
 {
-	return mDefaultFont ? Preferences::instance()->messageFont() : mFont;
+	return mDefaultFont ? Preferences::messageFont() : mFont;
 }
 
 #ifndef NDEBUG
