@@ -41,6 +41,7 @@ class TemplateMenuAction;
 namespace KAlarm
 {
 
+/** Return codes from fileType() */
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 /** Return codes from calendar update functions */
 enum UpdateStatus {
@@ -52,14 +53,25 @@ enum UpdateStatus {
 enum UpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
 
 
+/** Display a main window with the specified event selected */
 MainWindow*         displayMainWindowSelected(const QString& eventID = QString::null);
 bool                readConfigWindowSize(const char* window, QSize&);
 void                writeConfigWindowSize(const char* window, const QSize&);
+/** Check from its mime type whether a file appears to be a text or image file.
+ *  If a text file, its type is distinguished.
+ */
 FileType            fileType(const QString& mimetype);
+inline int          Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
+int                 getVersionNumber(const QString& version, QString* subVersion = 0);
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString::null,
                                const QString& filter = QString::null, int mode = 0, QWidget* parent = 0, const char* name = 0);
+/** Create a "New Alarm" KAction */
 KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
+/** Create a "New From Template" KAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
+/** Returns a list of all alarm templates.
+ *  If shell commands are disabled, command alarm templates are omitted.
+ */
 QValueList<KAEvent> templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();

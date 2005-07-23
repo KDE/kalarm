@@ -33,6 +33,7 @@ extern "C" {
 #include <libkcal/calendar.h>
 
 #include "alarmevent.h"
+#include "functions.h"
 #include "preferences.h"
 #include "calendarcompat.h"
 
@@ -55,7 +56,7 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 		// or another program, so don't do any conversions
 		return;
 	}
-	if (version == Version(0,5,7)  &&  !localFile.isEmpty())
+	if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
 	{
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
 		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
@@ -77,8 +78,6 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 */
 int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVersion)
 {
-	// N.B. Remember to change  Version(int major, int minor, int rev)
-	//      if the representation returned by this method changes.
 	subVersion = QString::null;
 	const QString& prodid = calendar.productId();
 
@@ -102,48 +101,11 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 	if (j >= 0  &&  j < i)
 		i = j;
 	if (i <= 0)
-		return 0;
+		return 0;    // missing version string
 	ver = ver.left(i);     // ver now contains the KAlarm version string
 	if (ver == KALARM_VERSION)
 		return 0;      // the calendar was created by the current KAlarm version
-
-	// Convert the version string to a numeric version
-	int version = 0;
-	if ((i = ver.find('.')) <= 0)
-		return 0;      // missing major or minor version
-	bool ok;
-	version = ver.left(i).toInt(&ok) * 10000;   // major version
-	if (!ok)
-		return 0;      // invalid major version
-	ver = ver.mid(i + 1);
-	if ((i = ver.find('.')) > 0)
-	{
-		int v = ver.left(i).toInt(&ok);   // minor version
-		if (ok)
-		{
-			version += (v < 99 ? v : 99) * 100;
-			ver = ver.mid(i + 1);
-			if (ver.at(0).isDigit())
-			{
-				// Allow other characters to follow last digit
-				v = ver.toInt();   // issue number
-				version += (v < 99 ? v : 99);
-				for (i = 1;  const_cast<const QString&>(ver).at(i).isDigit();  ++i) ;
-				subVersion = ver.mid(i);
-			}
-		}
-	}
-	else
-	{
-		// There is no issue number
-		if (ver.at(0).isDigit())
-		{
-			// Allow other characters to follow last digit
-			int v = ver.toInt();   // minor number
-			version += (v < 99 ? v : 99) * 100;
-		}
-	}
-	return version;
+	return KAlarm::getVersionNumber(ver, &subVersion);
 }
 
 /******************************************************************************
