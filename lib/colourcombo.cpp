@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -16,9 +16,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include <qpainter.h>
@@ -33,7 +33,7 @@
 
 ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaultColour)
 	: QComboBox(parent, name),
-	  mColourList(Preferences::instance()->messageColours()),
+	  mColourList(Preferences::messageColours()),
 	  mSelectedColour(defaultColour),
 	  mCustomColour(255, 255, 255),
 	  mReadOnly(false),
@@ -42,7 +42,7 @@ ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaul
 	addColours();
 	connect(this, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 	connect(this, SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
-	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(slotPreferencesChanged()));
+	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 }
 
 void ColourCombo::setColour(const QColor& colour)
@@ -72,7 +72,7 @@ void ColourCombo::setColours(const ColourList& colours)
 */
 void ColourCombo::slotPreferencesChanged()
 {
-	const ColourList& prefColours = Preferences::instance()->messageColours();
+	const ColourList& prefColours = Preferences::messageColours();
 	if (prefColours != mColourList)
 		setColours(prefColours);      // update the display with the new colours
 }

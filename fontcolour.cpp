@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  (C) 2001, 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include <qobjectlist.h>
@@ -45,7 +45,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	: QWidget(parent, name),
 	  mFgColourButton(0),
 	  mRemoveColourButton(0),
-	  mColourList(Preferences::instance()->messageColours()),
+	  mColourList(Preferences::messageColours()),
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());

@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -130,7 +130,7 @@ int Reminder::minutes() const
 */
 void Reminder::setMinutes(int minutes, bool dateOnly)
 {
-	mTime->setMinutes(minutes, dateOnly, Preferences::instance()->defaultReminderUnits());
+	mTime->setMinutes(minutes, dateOnly, Preferences::defaultReminderUnits());
 }
 
 /******************************************************************************

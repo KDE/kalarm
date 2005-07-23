@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef PREFERENCES_H
@@ -47,70 +47,69 @@ class Preferences : public QObject
 		enum Feb29Type  { FEB29_MAR1, FEB29_FEB28, FEB29_NONE };
 		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
-		static Preferences* instance();
+		static void              initialise();
+		static void              save(bool syncToDisc = true);
+		static void              syncToDisc();
+		static void              updateStartOfDayCheck();
+		static void              connect(const char* signal, const QObject* receiver, const char* member);
 
-		const ColourList& messageColours() const        { return mMessageColours; }
-		QColor         defaultBgColour() const          { return mDefaultBgColour; }
-		QColor         defaultFgColour() const          { return default_defaultFgColour; }
-		const QFont&   messageFont() const              { return mMessageFont; }
-		const QTime&   startOfDay() const               { return mStartOfDay; }
-		bool           hasStartOfDayChanged() const     { return mStartOfDayChanged; }
-		bool           autostartDaemon() const          { return mAutostartDaemon; }
-		bool           runInSystemTray() const          { return mRunInSystemTray; }
-		bool           disableAlarmsIfStopped() const   { return mDisableAlarmsIfStopped; }
-		bool           quitWarn() const                 { return notifying(QUIT_WARN); }
-		void           setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
-		bool           autostartTrayIcon() const        { return mAutostartTrayIcon; }
-		bool           confirmAlarmDeletion() const     { return notifying(CONFIRM_ALARM_DELETION); }
-		void           setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
-		Feb29Type      feb29RecurType() const           { return mFeb29RecurType; }
-		bool           modalMessages() const            { return mModalMessages; }
-		int            messageButtonDelay() const       { return mMessageButtonDelay; }
-		bool           showExpiredAlarms() const        { return mShowExpiredAlarms; }
-		bool           showAlarmTime() const            { return mShowAlarmTime; }
-		bool           showTimeToAlarm() const          { return mShowTimeToAlarm; }
-		int            tooltipAlarmCount() const        { return mTooltipAlarmCount; }
-		bool           showTooltipAlarmTime() const     { return mShowTooltipAlarmTime; }
-		bool           showTooltipTimeToAlarm() const   { return mShowTooltipTimeToAlarm; }
-		const QString& tooltipTimeToPrefix() const      { return mTooltipTimeToPrefix; }
-		int            daemonTrayCheckInterval() const  { return mDaemonTrayCheckInterval; }
-		MailClient     emailClient() const              { return mEmailClient; }
-		bool           emailCopyToKMail() const         { return mEmailCopyToKMail  &&  mEmailClient == SENDMAIL; }
-		bool           emailQueuedNotify() const        { return notifying(EMAIL_QUEUED_NOTIFY); }
-		void           setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
-		MailFrom       emailFrom() const                { return mEmailFrom; }
-		bool           emailBccUseControlCentre() const { return mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE; }
-		QString        emailAddress() const;
-		QString        emailBccAddress() const;
-		QString        cmdXTermCommand() const          { return mCmdXTermCommand; }
-		QColor         disabledColour() const           { return mDisabledColour; }
-		QColor         expiredColour() const            { return mExpiredColour; }
-		int            expiredKeepDays() const          { return mExpiredKeepDays; }
-		bool           defaultSound() const             { return mDefaultSound; }
-		SoundPicker::Type
-		               defaultSoundType() const         { return mDefaultSoundType; }
-		const QString& defaultSoundFile() const         { return mDefaultSoundFile; }
-		float          defaultSoundVolume() const       { return mDefaultSoundVolume; }
-		bool           defaultSoundRepeat() const       { return mDefaultSoundRepeat; }
-		int            defaultLateCancel() const        { return mDefaultLateCancel; }
-		bool           defaultAutoClose() const         { return mDefaultAutoClose; }
-		bool           defaultConfirmAck() const        { return mDefaultConfirmAck; }
-		bool           defaultCopyToKOrganizer() const  { return mDefaultCopyToKOrganizer; }
-		bool           defaultCmdScript() const         { return mDefaultCmdScript; }
-		EditAlarmDlg::CmdLogType  
-		               defaultCmdLogType() const        { return mDefaultCmdLogType; }
-		QString        defaultCmdLogFile() const        { return mDefaultCmdLogFile; }
-		bool           defaultEmailBcc() const          { return mDefaultEmailBcc; }
-		RecurrenceEdit::RepeatType
-		               defaultRecurPeriod() const       { return mDefaultRecurPeriod; }
-		TimePeriod::Units
-		               defaultReminderUnits() const     { return mDefaultReminderUnits; }
-		const QString& defaultPreAction() const         { return mDefaultPreAction; }
-		const QString& defaultPostAction() const        { return mDefaultPostAction; }
-
-		void           save(bool syncToDisc = true);
-		void           syncToDisc();
-		void           updateStartOfDayCheck();
+		// Access to settings
+		static const ColourList& messageColours()                 { return mMessageColours; }
+		static QColor            defaultBgColour()                { return mDefaultBgColour; }
+		static QColor            defaultFgColour()                { return default_defaultFgColour; }
+		static const QFont&      messageFont()                    { return mMessageFont; }
+		static const QTime&      startOfDay()                     { return mStartOfDay; }
+		static bool              hasStartOfDayChanged()           { return mStartOfDayChanged; }
+		static bool              autostartDaemon()                { return mAutostartDaemon; }
+		static bool              runInSystemTray()                { return mRunInSystemTray; }
+		static bool              disableAlarmsIfStopped()         { return mDisableAlarmsIfStopped; }
+		static bool              quitWarn()                       { return notifying(QUIT_WARN); }
+		static void              setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
+		static bool              autostartTrayIcon()              { return mAutostartTrayIcon; }
+		static bool              confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
+		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
+		static Feb29Type         feb29RecurType()                 { return mFeb29RecurType; }
+		static bool              modalMessages()                  { return mModalMessages; }
+		static int               messageButtonDelay()             { return mMessageButtonDelay; }
+		static bool              showExpiredAlarms()              { return mShowExpiredAlarms; }
+		static bool              showAlarmTime()                  { return mShowAlarmTime; }
+		static bool              showTimeToAlarm()                { return mShowTimeToAlarm; }
+		static int               tooltipAlarmCount()              { return mTooltipAlarmCount; }
+		static bool              showTooltipAlarmTime()           { return mShowTooltipAlarmTime; }
+		static bool              showTooltipTimeToAlarm()         { return mShowTooltipTimeToAlarm; }
+		static const QString&    tooltipTimeToPrefix()            { return mTooltipTimeToPrefix; }
+		static int               daemonTrayCheckInterval()        { return mDaemonTrayCheckInterval; }
+		static MailClient        emailClient()                    { return mEmailClient; }
+		static bool              emailCopyToKMail()               { return mEmailCopyToKMail  &&  mEmailClient == SENDMAIL; }
+		static bool              emailQueuedNotify()              { return notifying(EMAIL_QUEUED_NOTIFY); }
+		static void              setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
+		static MailFrom          emailFrom()                      { return mEmailFrom; }
+		static bool              emailBccUseControlCentre()       { return mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE; }
+		static QString           emailAddress();
+		static QString           emailBccAddress();
+		static QString           cmdXTermCommand()                { return mCmdXTermCommand; }
+		static QColor            disabledColour()                 { return mDisabledColour; }
+		static QColor            expiredColour()                  { return mExpiredColour; }
+		static int               expiredKeepDays()                { return mExpiredKeepDays; }
+		static bool              defaultSound()                   { return mDefaultSound; }
+		static SoundPicker::Type defaultSoundType()               { return mDefaultSoundType; }
+		static const QString&    defaultSoundFile()               { return mDefaultSoundFile; }
+		static float             defaultSoundVolume()             { return mDefaultSoundVolume; }
+		static bool              defaultSoundRepeat()             { return mDefaultSoundRepeat; }
+		static int               defaultLateCancel()              { return mDefaultLateCancel; }
+		static bool              defaultAutoClose()               { return mDefaultAutoClose; }
+		static bool              defaultConfirmAck()              { return mDefaultConfirmAck; }
+		static bool              defaultCopyToKOrganizer()        { return mDefaultCopyToKOrganizer; }
+		static bool              defaultCmdScript()               { return mDefaultCmdScript; }
+		static EditAlarmDlg::CmdLogType  
+		                         defaultCmdLogType()              { return mDefaultCmdLogType; }
+		static QString           defaultCmdLogFile()              { return mDefaultCmdLogFile; }
+		static bool              defaultEmailBcc()                { return mDefaultEmailBcc; }
+		static RecurrenceEdit::RepeatType
+		                         defaultRecurPeriod()             { return mDefaultRecurPeriod; }
+		static TimePeriod::Units defaultReminderUnits()           { return mDefaultReminderUnits; }
+		static const QString&    defaultPreAction()               { return mDefaultPreAction; }
+		static const QString&    defaultPostAction()              { return mDefaultPostAction; }
 
 		// Config file entry names for notification messages
 		static const QString     QUIT_WARN;
@@ -121,7 +120,7 @@ class Preferences : public QObject
 		static const ColourList  default_messageColours;
 		static const QColor      default_defaultBgColour;
 		static const QColor      default_defaultFgColour;
-		static QFont             default_messageFont;
+		static const QFont&      default_messageFont()  { return mDefault_messageFont; };
 		static const QTime       default_startOfDay;
 		static const bool        default_autostartDaemon;
 		static const bool        default_runInSystemTray;
@@ -172,21 +171,26 @@ class Preferences : public QObject
 		static const QString     default_defaultPostAction;
 
 	signals:
-		void preferencesChanged();
-		void startOfDayChanged(const QTime& oldStartOfDay);
+		void  preferencesChanged();
+		void  startOfDayChanged(const QTime& oldStartOfDay);
 
 	private:
-		Preferences();     // only one instance allowed
-		static void         convertOldPrefs();
-		int                 startOfDayCheck() const;
-		QString	            emailFrom(MailFrom, bool useAddress, bool bcc) const;
-		static MailFrom     emailFrom(const QString&);
-		static void         setNotify(const QString& messageID, bool notify);
-		static bool         notifying(const QString& messageID);
+		Preferences()  { }     // only one instance allowed
+		void  emitPreferencesChanged();
+		void  emitStartOfDayChanged();
 
-		static Preferences* mInstance;
-		QString             mEmailAddress;
-		QString             mEmailBccAddress;
+		static void                read();
+		static void                convertOldPrefs();
+		static int                 startOfDayCheck();
+		static QString	           emailFrom(MailFrom, bool useAddress, bool bcc);
+		static MailFrom            emailFrom(const QString&);
+		static void                setNotify(const QString& messageID, bool notify);
+		static bool                notifying(const QString& messageID);
+
+		static Preferences*        mInstance;
+		static QFont               mDefault_messageFont;
+		static QString             mEmailAddress;
+		static QString             mEmailBccAddress;
 
 		// All the following members are accessed by the Preferences dialog classes
 		friend class MiscPrefTab;
@@ -194,57 +198,57 @@ class Preferences : public QObject
 		friend class ViewPrefTab;
 		friend class FontColourPrefTab;
 		friend class EmailPrefTab;
-		void                setEmailAddress(MailFrom, const QString& address);
-		void                setEmailBccAddress(bool useControlCentre, const QString& address);
-		ColourList          mMessageColours;
-		QColor              mDefaultBgColour;
-		QFont               mMessageFont;
-		QTime               mStartOfDay;
-		bool                mAutostartDaemon;
-		bool                mRunInSystemTray;
-		bool                mDisableAlarmsIfStopped;
-		bool                mAutostartTrayIcon;
-		Feb29Type           mFeb29RecurType;
-		bool                mModalMessages;
-		int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-		bool                mShowExpiredAlarms;
-		bool                mShowAlarmTime;
-		bool                mShowTimeToAlarm;
-		int                 mTooltipAlarmCount;
-		bool                mShowTooltipAlarmTime;
-		bool                mShowTooltipTimeToAlarm;
-		QString             mTooltipTimeToPrefix;
-		int                 mDaemonTrayCheckInterval;
-		MailClient          mEmailClient;
-		MailFrom            mEmailFrom;
-		MailFrom            mEmailBccFrom;
-		bool                mEmailCopyToKMail;
-		QString             mCmdXTermCommand;
-		QColor              mDisabledColour;
-		QColor              mExpiredColour;
-		int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
+		static void                setEmailAddress(MailFrom, const QString& address);
+		static void                setEmailBccAddress(bool useControlCentre, const QString& address);
+		static ColourList          mMessageColours;
+		static QColor              mDefaultBgColour;
+		static QFont               mMessageFont;
+		static QTime               mStartOfDay;
+		static bool                mAutostartDaemon;
+		static bool                mRunInSystemTray;
+		static bool                mDisableAlarmsIfStopped;
+		static bool                mAutostartTrayIcon;
+		static Feb29Type           mFeb29RecurType;
+		static bool                mModalMessages;
+		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
+		static bool                mShowExpiredAlarms;
+		static bool                mShowAlarmTime;
+		static bool                mShowTimeToAlarm;
+		static int                 mTooltipAlarmCount;
+		static bool                mShowTooltipAlarmTime;
+		static bool                mShowTooltipTimeToAlarm;
+		static QString             mTooltipTimeToPrefix;
+		static int                 mDaemonTrayCheckInterval;
+		static MailClient          mEmailClient;
+		static MailFrom            mEmailFrom;
+		static MailFrom            mEmailBccFrom;
+		static bool                mEmailCopyToKMail;
+		static QString             mCmdXTermCommand;
+		static QColor              mDisabledColour;
+		static QColor              mExpiredColour;
+		static int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog
-		QString             mDefaultSoundFile;
-		float               mDefaultSoundVolume;
-		int                 mDefaultLateCancel;
-		bool                mDefaultAutoClose;
-		bool                mDefaultCopyToKOrganizer;
-		bool                mDefaultSound;
-		SoundPicker::Type   mDefaultSoundType;
-		bool                mDefaultSoundRepeat;
-		bool                mDefaultConfirmAck;
-		bool                mDefaultEmailBcc;
-		bool                mDefaultCmdScript;
-		EditAlarmDlg::CmdLogType mDefaultCmdLogType;
-		QString             mDefaultCmdLogFile;
-		RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
-		TimePeriod::Units   mDefaultReminderUnits;
-		QString             mDefaultPreAction;
-		QString             mDefaultPostAction;
+		static QString             mDefaultSoundFile;
+		static float               mDefaultSoundVolume;
+		static int                 mDefaultLateCancel;
+		static bool                mDefaultAutoClose;
+		static bool                mDefaultCopyToKOrganizer;
+		static bool                mDefaultSound;
+		static SoundPicker::Type   mDefaultSoundType;
+		static bool                mDefaultSoundRepeat;
+		static bool                mDefaultConfirmAck;
+		static bool                mDefaultEmailBcc;
+		static bool                mDefaultCmdScript;
+		static EditAlarmDlg::CmdLogType mDefaultCmdLogType;
+		static QString             mDefaultCmdLogFile;
+		static RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
+		static TimePeriod::Units   mDefaultReminderUnits;
+		static QString             mDefaultPreAction;
+		static QString             mDefaultPostAction;
 		// Change tracking
-		QTime               mOldStartOfDay;       // previous start-of-day time
-		bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
-		bool                mOldAutostartDaemon;  // previous daemon autostart value
+		static QTime               mOldStartOfDay;       // previous start-of-day time
+		static bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
+		static bool                mOldAutostartDaemon;  // previous daemon autostart value
 };
 
 #endif // PREFERENCES_H

@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -114,9 +114,9 @@ MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
-	  mShowExpired(Preferences::instance()->showExpiredAlarms()),
-	  mShowTime(Preferences::instance()->showAlarmTime()),
-	  mShowTimeTo(Preferences::instance()->showTimeToAlarm())
+	  mShowExpired(Preferences::showExpiredAlarms()),
+	  mShowTime(Preferences::showAlarmTime()),
+	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
 	kdDebug(5950) << "MainWindow::MainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
@@ -354,7 +354,7 @@ void MainWindow::initActions()
 	connect(mActionRedo->popupMenu(), SIGNAL(activated(int)), SLOT(slotRedoItem(int)));
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
-	connect(Preferences::instance(), SIGNAL(preferencesChanged()), SLOT(updateTrayIconAction()));
+	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
 	// Set menu item states
@@ -362,7 +362,7 @@ void MainWindow::initActions()
 	mActionShowTime->setChecked(mShowTime);
 	mActionShowTimeTo->setChecked(mShowTimeTo);
 	mActionShowExpired->setChecked(mShowExpired);
-	if (!Preferences::instance()->expiredKeepDays())
+	if (!Preferences::expiredKeepDays())
 		mActionShowExpired->setEnabled(false);
 	updateTrayIconAction();         // set the correct text for this action
 	mActionUndo->setEnabled(Undo::haveUndo());
@@ -410,7 +410,7 @@ void MainWindow::refresh()
 void MainWindow::updateExpired()
 {
 	kdDebug(5950) << "MainWindow::updateExpired()\n";
-	bool enableShowExpired = Preferences::instance()->expiredKeepDays();
+	bool enableShowExpired = Preferences::expiredKeepDays();
 	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
 	{
 		MainWindow* w = *it;
@@ -434,8 +434,8 @@ void MainWindow::updateExpired()
 void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 {
 	kdDebug(5950) << "MainWindow::updateShowAlarmTimes()\n";
-	bool newTime   = Preferences::instance()->showAlarmTime();
-	bool newTimeTo = Preferences::instance()->showTimeToAlarm();
+	bool newTime   = Preferences::showAlarmTime();
+	bool newTimeTo = Preferences::showTimeToAlarm();
 	if (!newTime  &&  !newTimeTo)
 		newTime = true;     // at least one time column must be displayed
 	if (!oldTime  &&  !oldTimeTo)
@@ -645,7 +645,7 @@ void MainWindow::slotView()
 void MainWindow::slotDelete()
 {
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
-	if (Preferences::instance()->confirmAlarmDeletion())
+	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = items.count();
 		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?",

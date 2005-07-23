@@ -505,8 +505,8 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	bool   selected = isSelected();
 	QColor bgColour = selected ? cg.highlight() : cg.base();
 	QColor fgColour = selected ? cg.highlightedText()
-	                : !event().enabled() ? Preferences::instance()->disabledColour()
-	                : event().expired() ? Preferences::instance()->expiredColour() : cg.text();
+	                : !event().enabled() ? Preferences::disabledColour()
+	                : event().expired() ? Preferences::expiredColour() : cg.text();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 

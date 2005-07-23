@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -733,7 +733,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 						}
 						// Adjust the 'from' date/time and find the next recurrence at or after it
 						QDateTime pre = from.addSecs(-offset - 1);
-						if (e->doesFloat()  &&  pre.time() < Preferences::instance()->startOfDay())
+						if (e->doesFloat()  &&  pre.time() < Preferences::startOfDay())
 							pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 						dt = e->recurrence()->getNextDateTime(pre);
 						if (!dt.isValid())

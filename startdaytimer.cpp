@@ -27,9 +27,9 @@
 StartOfDayTimer* StartOfDayTimer::mInstance = 0;
 
 StartOfDayTimer::StartOfDayTimer()
-	: DailyTimer(Preferences::instance()->startOfDay(), false)
+	: DailyTimer(Preferences::startOfDay(), false)
 {
-	QObject::connect(Preferences::instance(), SIGNAL(startOfDayChanged(const QTime&)), SLOT(startOfDayChanged(const QTime&)));
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged(const QTime&)));
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()
@@ -45,5 +45,5 @@ StartOfDayTimer* StartOfDayTimer::instance()
 */
 void StartOfDayTimer::startOfDayChanged(const QTime&)
 {
-	changeTime(Preferences::instance()->startOfDay(), true);
+	changeTime(Preferences::startOfDay(), true);
 }

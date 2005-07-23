@@ -104,10 +104,9 @@ KPIM::IdentityManager* KAMail::identityManager()
 bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 {
 	QString err;
-	Preferences* preferences = Preferences::instance();
 	QString from;
 	if (event.emailFromKMail().isEmpty())
-		from = preferences->emailAddress();
+		from = Preferences::emailAddress();
 	else
 	{
 		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
@@ -120,7 +119,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	if (from.isEmpty())
 	{
 		QString progname = kapp->aboutData()->programName();
-		switch (preferences->emailFrom())
+		switch (Preferences::emailFrom())
 		{
 			case Preferences::MAIL_FROM_KMAIL:
 				errmsgs = errors(i18n("No 'From' email address is configured (no default KMail identity found)\nPlease set it in KMail or in the %1 Preferences dialog.").arg(progname));
@@ -136,12 +135,12 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		return false;
 	}
 	KAMailData data(event, from,
-	                (event.emailBcc() ? preferences->emailBccAddress() : QString::null),
+	                (event.emailBcc() ? Preferences::emailBccAddress() : QString::null),
 	                allowNotify);
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
-	if (preferences->emailClient() == Preferences::SENDMAIL)
+	if (Preferences::emailClient() == Preferences::SENDMAIL)
 	{
 		// Use sendmail to send the message
 		QString textComplete;
@@ -194,7 +193,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
 
-		if (preferences->emailCopyToKMail())
+		if (Preferences::emailCopyToKMail())
 		{
 			// Create a copy of the sent email in KMail's 'Sent-mail' folder
 			err = addToKMailFolder(data, "sent-mail", true);
@@ -523,7 +522,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 			QString domain = addr.mailboxList.first().addrSpec.domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
-				QString text = (Preferences::instance()->emailClient() == Preferences::KMAIL)
+				QString text = (Preferences::emailClient() == Preferences::KMAIL)
 				             ? i18n("An email has been queued to be sent by KMail")
 				             : i18n("An email has been queued to be sent");
 				KMessageBox::information(0, text, QString::null, Preferences::EMAIL_QUEUED_NOTIFY);

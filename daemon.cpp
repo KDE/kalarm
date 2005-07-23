@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -108,8 +108,8 @@ void Daemon::createDcopHandler()
 	// the program is still initialising.
 	mRunning = isRunning(false);
 
-	mStatusTimerInterval = Preferences::instance()->daemonTrayCheckInterval();
-	connect(Preferences::instance(), SIGNAL(preferencesChanged()), mInstance, SLOT(slotPreferencesChanged()));
+	mStatusTimerInterval = Preferences::daemonTrayCheckInterval();
+	Preferences::connect(SIGNAL(preferencesChanged()), mInstance, SLOT(slotPreferencesChanged()));
 
 	mStatusTimer = new QTimer(mInstance);
 	connect(mStatusTimer, SIGNAL(timeout()), mInstance, SLOT(timerCheckIfRunning()));
@@ -505,7 +505,7 @@ void Daemon::setFastCheck()
 */
 void Daemon::slotPreferencesChanged()
 {
-	int newInterval = Preferences::instance()->daemonTrayCheckInterval();
+	int newInterval = Preferences::daemonTrayCheckInterval();
 	if (newInterval != mStatusTimerInterval)
 	{
 		// Daemon check interval has changed

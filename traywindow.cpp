@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kalarm.h"
@@ -223,9 +223,8 @@ void TrayWindow::dropEvent(QDropEvent* e)
 void TrayWindow::tooltipAlarmText(QString& text) const
 {
 	KAEvent event;
-	Preferences* preferences = Preferences::instance();
-	const QString& prefix = preferences->tooltipTimeToPrefix();
-	int maxCount = preferences->tooltipAlarmCount();
+	const QString& prefix = Preferences::tooltipTimeToPrefix();
+	int maxCount = Preferences::tooltipAlarmCount();
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
@@ -251,13 +250,13 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 
 			// The alarm is due today, or early tomorrow
 			bool space = false;
-			if (preferences->showTooltipAlarmTime())
+			if (Preferences::showTooltipAlarmTime())
 			{
 				item.text += KGlobal::locale()->formatTime(item.dateTime.time());
 				item.text += ' ';
 				space = true;
 			}
-			if (preferences->showTooltipTimeToAlarm())
+			if (Preferences::showTooltipTimeToAlarm())
 			{
 				int mins = (now.secsTo(item.dateTime) + 59) / 60;
 				if (mins < 0)
@@ -265,7 +264,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				char minutes[3] = "00";
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
-				if (preferences->showTooltipAlarmTime())
+				if (Preferences::showTooltipAlarmTime())
 					item.text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
 				else
 					item.text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
@@ -355,7 +354,7 @@ void TrayTooltip::maybeTip(const QPoint&)
 	else
 		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
 	kdDebug(5950) << "TrayTooltip::maybeTip(): " << text << endl;
-	if (Preferences::instance()->tooltipAlarmCount())
+	if (Preferences::tooltipAlarmCount())
 		parent->tooltipAlarmText(text);
 	tip(parent->rect(), text);
 }
