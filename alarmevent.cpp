@@ -1147,7 +1147,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 				setRecurMonthlyByDate(*recur, frequency, mRecurrence->monthDays(), duration, endDateTime.date());
 				break;
 			case Recurrence::rMonthlyPos:
-				setRecurMonthlyByPos(*recur, frequency, mRecurrence->monthPositions(), duration, endDateTime.date());
+				setRecurMonthlyByPos(*recur, frequency, convRecurPos(mRecurrence->monthPositions()), duration, endDateTime.date());
 				break;
 			case Recurrence::rYearlyMonth:
 				setRecurAnnualByDate(*recur, frequency, mRecurrence->yearMonths(),
@@ -1155,7 +1155,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 				                     duration, endDateTime.date());
 				break;
 			case Recurrence::rYearlyPos:
-				setRecurAnnualByPos(*recur, frequency, mRecurrence->yearPositions(), mRecurrence->yearMonths(), duration, endDateTime.date());
+				setRecurAnnualByPos(*recur, frequency, convRecurPos(mRecurrence->yearPositions()), mRecurrence->yearMonths(), duration, endDateTime.date());
 				break;
 			case Recurrence::rYearlyDay:
 				setRecurAnnualByDay(*recur, frequency, mRecurrence->yearMonths(), duration, endDateTime.date());
@@ -2306,24 +2306,6 @@ bool KAEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const QValu
 	return true;
 }
 
-bool KAEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const QValueList<KCal::RecurrenceRule::WDayPos>& posns, int count, const QDate& end)
-{
-	if (count < -1)
-		return false;
-	recurrence.setMonthly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	for (QValueListConstIterator<RecurrenceRule::WDayPos> it = posns.begin();  it != posns.end();  ++it)
-	{
-		recurrence.addMonthlyPos((*it).pos(), (*it).day());
-	}
-	return true;
-}
-
 /******************************************************************************
  * Set the recurrence to recur annually, on the specified start date in each
  * of the specified months.
@@ -2384,27 +2366,6 @@ bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValue
 		recurrence.addYearlyMonth(*it);
 	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
 		recurrence.addYearlyPos((*it).weeknum, (*it).days);
-	return true;
-}
-
-bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValueList<RecurrenceRule::WDayPos>& posns, const QValueList<int>& months, int count, const QDate& end)
-{
-	if (count < -1)
-		return false;
-	recurrence.setYearly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	
-	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-		recurrence.addYearlyMonth(*it);
-	for (QValueListConstIterator<RecurrenceRule::WDayPos> it = posns.begin();  it != posns.end();  ++it)
-	{
-		recurrence.addYearlyPos((*it).pos(), (*it).day());
-	}
 	return true;
 }
 
@@ -2673,6 +2634,38 @@ int KAEvent::longestRecurrenceInterval(const Recurrence& recurrence)
 			break;
 	}
 	return 0;
+}
+
+/******************************************************************************
+ * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
+ */
+QValueList<KAEvent::MonthPos> KAEvent::convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>& wdaypos)
+{
+	QValueList<MonthPos> mposns;
+	for (QValueList<KCal::RecurrenceRule::WDayPos>::ConstIterator it = wdaypos.begin();  it != wdaypos.end();  ++it)
+	{
+		int daybit  = (*it).day() - 1;
+		int weeknum = (*it).pos();
+		bool found = false;
+		for (QValueList<MonthPos>::Iterator mit = mposns.begin();  mit != mposns.end();  ++mit)
+		{
+			if ((*mit).weeknum == weeknum)
+			{
+				(*mit).days.setBit(daybit);
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			MonthPos mpos;
+			mpos.days.fill(false);
+			mpos.days.setBit(daybit);
+			mpos.weeknum = weeknum;
+			mposns.append(mpos);
+		}
+	}
+	return mposns;
 }
 
 /******************************************************************************

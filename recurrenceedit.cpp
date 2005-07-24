@@ -1138,16 +1138,27 @@ void RecurrenceEdit::set(const KAEvent& event)
 		}
 		case Recurrence::rMonthlyPos:    // on nth (Tuesday) of the month
 		{
+			QValueList<RecurrenceRule::WDayPos> rmp = recurrence->monthPositions();
+			int i = rmp.first().pos();
+			if (!i)
+			{
+				// It's every (Tuesday) of the month. Convert to a weekly recurrence
+				// (but ignoring any non-every xxxDay positions).
+				ruleButtonGroup->setButton(mWeeklyButtonId);
+				mWeekRecurFrequency->setValue(recurrence->frequency());
+				QBitArray rDays(7);
+				for (QValueList<RecurrenceRule::WDayPos>::ConstIterator it = rmp.begin();  it != rmp.end();  ++it)
+				{
+					if (!(*it).pos())
+						rDays.setBit((*it).day() - 1, 1);
+				}
+				setCheckedDays(rDays);
+				break;
+			}
 			ruleButtonGroup->setButton(mMonthlyButtonId);
 			mMonthRecurFrequency->setValue(recurrence->frequency());
 			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthTypeOfDayButtonId);
-			QValueList<RecurrenceRule::WDayPos> rmp = recurrence->monthPositions();
-
-			// TODO: This doesn't handle the case "on every (Tuesday) of the month"
-			int i = rmp.first().pos() - 1;
-			if (i < 0)
-				i = -i + 5;
-			
+			i = (i > 0) ? i - 1 : -i + 4;    // get combo box index
 			mMonthRuleNthNumberEntry->setCurrentItem(i);
 			mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(rmp.first().day()));
 			break;
@@ -1172,7 +1183,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 				mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
 				const QValueList<int> rmd = recurrence->monthDays();
 				int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
-// TODO_Recurrence: Get rid of the Feb 29 setting!
+//FIXME: Fix the Feb 29 setting!
 				if (day == 1 && event.recursFeb29())
 					day = 29;
 				mYearRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
@@ -1183,9 +1194,10 @@ void RecurrenceEdit::set(const KAEvent& event)
 				mYearRecurFrequency->setValue(recurrence->frequency());
 				mYearRuleButtonGroup->setButton(mYearRuleOnNthTypeOfDayButtonId);
 				QValueList<RecurrenceRule::WDayPos> rmp = recurrence->yearPositions();
+				// TODO: This doesn't handle the case "on every (Tuesday) of the month"
 				int i = rmp.first().pos() - 1;
 				if (i < 0)
-					i = -i + 5;
+					i = -i + 3;
 				mYearRuleNthNumberEntry->setCurrentItem(i);
 					mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek( rmp.first().day()));
 			}
