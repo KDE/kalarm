@@ -193,22 +193,22 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	layout->addWidget(divider);
 	layout->addSpacing(KDialog::marginHint());
 
-	initNone();
-	initSubDaily();
-	initDaily();
-	initWeekly();
-	initMonthly();
-	initYearly();
+	mNoRule       = new NoRule(ruleFrame, "noFrame");
+	mSubDailyRule = new SubDailyRule(mReadOnly, ruleFrame, "subdayFrame");
+	mDailyRule    = new DailyRule(mReadOnly, ruleFrame, "dayFrame");
+	mWeeklyRule   = new WeeklyRule(mReadOnly, ruleFrame, "weekFrame");
+	mMonthlyRule  = new MonthlyRule(mReadOnly, ruleFrame, "monthFrame");
+	mYearlyRule   = new YearlyRule(mReadOnly, ruleFrame, "yearFrame");
 
 	ruleStack = new QWidgetStack(ruleFrame);
 	layout->addWidget(ruleStack);
 	layout->addStretch(1);
-	ruleStack->addWidget(mNoneRuleFrame, 0);
-	ruleStack->addWidget(mSubDayRuleFrame, 1);
-	ruleStack->addWidget(mDayRuleFrame, 2);
-	ruleStack->addWidget(mWeekRuleFrame, 3);
-	ruleStack->addWidget(mMonthRuleFrame, 4);
-	ruleStack->addWidget(mYearRuleFrame, 5);
+	ruleStack->addWidget(mNoRule, 0);
+	ruleStack->addWidget(mSubDailyRule, 1);
+	ruleStack->addWidget(mDailyRule, 2);
+	ruleStack->addWidget(mWeeklyRule, 3);
+	ruleStack->addWidget(mMonthlyRule, 4);
+	ruleStack->addWidget(mYearlyRule, 5);
 	layout->addSpacing(KDialog::marginHint());
 
 	// Create the recurrence range group which contains the controls
@@ -345,272 +345,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	noEmitTypeChanged = false;
 }
 
-void RecurrenceEdit::initNone()
-{
-	mNoneRuleFrame = new QFrame(ruleFrame);
-	mNoneRuleFrame->setFrameStyle(QFrame::NoFrame);
-}
-
-/******************************************************************************
- * Set up the daily recurrence dialog controls.
- */
-void RecurrenceEdit::initSubDaily()
-{
-	mSubDayRuleFrame = new QFrame(ruleFrame, "subdayFrame");
-	mSubDayRuleFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* topLayout = new QVBoxLayout(mSubDayRuleFrame, 0, KDialog::spacingHint());
-
-	mSubDayRecurFrequency = new RecurFrequency(true, i18n("hours:minutes"),
-	                                 i18n("Enter the number of hours and minutes between repetitions of the alarm"),
-	                                 mReadOnly, mSubDayRuleFrame);
-	connect(mSubDayRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mSubDayRecurFrequency);
-}
-
-/******************************************************************************
- * Set up the daily recurrence dialog controls.
- */
-void RecurrenceEdit::initDaily()
-{
-	mDayRuleFrame = new QFrame(ruleFrame, "dayFrame");
-	mDayRuleFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* topLayout = new QVBoxLayout(mDayRuleFrame, 0, KDialog::spacingHint());
-
-	mDayRecurFrequency = new RecurFrequency(false, i18n("day(s)"),
-	                                 i18n("Enter the number of days between repetitions of the alarm"),
-	                                 mReadOnly, mDayRuleFrame);
-	connect(mDayRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mDayRecurFrequency);
-}
-
-/******************************************************************************
- * Set up the weekly recurrence dialog controls.
- */
-void RecurrenceEdit::initWeekly()
-{
-	mWeekRuleFrame = new QFrame(ruleFrame, "weekFrame");
-	mWeekRuleFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* topLayout = new QVBoxLayout(mWeekRuleFrame, 0, KDialog::spacingHint());
-
-	mWeekRecurFrequency = new RecurFrequency(false, i18n("week(s)"),
-	                                 i18n("Enter the number of weeks between repetitions of the alarm"),
-	                                 mReadOnly, mWeekRuleFrame);
-	connect(mWeekRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mWeekRecurFrequency);
-
-	QGridLayout* grid = new QGridLayout(topLayout, 1, 4, KDialog::spacingHint());
-	grid->setRowStretch(0, 1);
-
-	QLabel* label = new QLabel(i18n("On: Tuesday", "O&n:"), mWeekRuleFrame);
-	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
-	grid->addColSpacing(1, KDialog::spacingHint());
-
-	// List the days of the week starting at the user's start day of the week.
-	// Save the first day of the week, just in case it changes while the dialog is open.
-	QWidget* box = new QWidget(mWeekRuleFrame);   // this is to control the QWhatsThis text display area
-	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
-	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-	for (int i = 0;  i < 7;  ++i)
-	{
-		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mWeekRuleDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
-		mWeekRuleDayBox[i]->setFixedSize(mWeekRuleDayBox[i]->sizeHint());
-		mWeekRuleDayBox[i]->setReadOnly(mReadOnly);
-		dgrid->addWidget(mWeekRuleDayBox[i], i%4, i/4, Qt::AlignAuto);
-	}
-	box->setFixedSize(box->sizeHint());
-	QWhatsThis::add(box,
-	      i18n("Select the days of the week on which to repeat the alarm"));
-	grid->addWidget(box, 0, 2, Qt::AlignAuto);
-	label->setBuddy(mWeekRuleDayBox[0]);
-	grid->setColStretch(3, 1);
-}
-
-/******************************************************************************
- * Set up the monthly recurrence dialog controls.
- */
-void RecurrenceEdit::initMonthly()
-{
-	mMonthRuleFrame = new QFrame(ruleFrame, "monthFrame");
-	mMonthRuleFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* topLayout = new QVBoxLayout(mMonthRuleFrame, 0, KDialog::spacingHint());
-
-	mMonthRecurFrequency = new RecurFrequency(false, i18n("month(s)"),
-	                                 i18n("Enter the number of months between repetitions of the alarm"),
-	                                 mReadOnly, mMonthRuleFrame);
-	connect(mMonthRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mMonthRecurFrequency);
-
-	mMonthRuleButtonGroup = new ButtonGroup(mMonthRuleFrame);
-	mMonthRuleButtonGroup->setFrameStyle(QFrame::NoFrame);
-	topLayout->addWidget(mMonthRuleButtonGroup);
-	QBoxLayout* groupLayout = new QVBoxLayout(mMonthRuleButtonGroup);
-
-	initDayOfMonth(&mMonthRuleOnNthDayButton, &mMonthRuleNthDayEntry, mMonthRuleButtonGroup, groupLayout);
-
-	initWeekOfMonth(&mMonthRuleOnNthTypeOfDayButton, &mMonthRuleNthNumberEntry, &mMonthRuleNthTypeOfDayEntry, mMonthRuleButtonGroup, groupLayout);
-
-	mMonthRuleOnNthDayButtonId       = mMonthRuleButtonGroup->id(mMonthRuleOnNthDayButton);
-	mMonthRuleOnNthTypeOfDayButtonId = mMonthRuleButtonGroup->id(mMonthRuleOnNthTypeOfDayButton);
-
-	connect(mMonthRuleButtonGroup, SIGNAL(buttonSet(int)), SLOT(monthlyClicked(int)));
-}
-
-/******************************************************************************
- * Set up the yearly recurrence dialog controls.
- */
-void RecurrenceEdit::initYearly()
-{
-	mYearRuleFrame = new QFrame(ruleFrame, "yearFrame");
-	mYearRuleFrame->setFrameStyle(QFrame::NoFrame);
-	QBoxLayout* topLayout = new QVBoxLayout(mYearRuleFrame, 0, KDialog::spacingHint());
-
-	mYearRecurFrequency = new RecurFrequency(false, i18n("year(s)"),
-	                                 i18n("Enter the number of years between repetitions of the alarm"),
-	                                 mReadOnly, mYearRuleFrame);
-	connect(mYearRecurFrequency, SIGNAL(valueChanged()), SIGNAL(frequencyChanged()));
-	topLayout->addWidget(mYearRecurFrequency);
-
-	mYearRuleButtonGroup = new ButtonGroup(mYearRuleFrame);
-	mYearRuleButtonGroup->setFrameStyle(QFrame::NoFrame);
-	topLayout->addWidget(mYearRuleButtonGroup);
-	QBoxLayout* groupLayout = new QVBoxLayout(mYearRuleButtonGroup);
-
-	// Set up the yearly date widgets
-	initDayOfMonth(&mYearRuleDayMonthButton, &mYearRuleNthDayEntry, mYearRuleButtonGroup, groupLayout);
-	connect(mYearRuleNthDayEntry, SIGNAL(activated(int)), SLOT(yearDayOfMonthSelected(int)));
-
-	// Set up the yearly position widgets
-	initWeekOfMonth(&mYearRuleOnNthTypeOfDayButton, &mYearRuleNthNumberEntry, &mYearRuleNthTypeOfDayEntry, mYearRuleButtonGroup, groupLayout);
-
-	// Set up the month selection widgets
-	QGridLayout* grid = new QGridLayout(groupLayout, KDialog::spacingHint());
-	grid->addRowSpacing(0, KDialog::marginHint());
-	QLabel* label = new QLabel(i18n("first week of January", "of:"), mYearRuleButtonGroup);
-	label->setFixedSize(label->sizeHint());
-	grid->addWidget(label, 1, 0, Qt::AlignAuto | Qt::AlignTop);
-	grid->addColSpacing(1, KDialog::spacingHint());
-
-	// List the months of the year.
-	QWidget* box = new QWidget(mYearRuleButtonGroup);   // this is to control the QWhatsThis text display area
-	QGridLayout* mgrid = new QGridLayout(box, 4, 3, 0, KDialog::spacingHint());
-	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-	for (int i = 0;  i < 12;  ++i)
-	{
-		mYearRuleMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
-		mYearRuleMonthBox[i]->setFixedSize(mYearRuleMonthBox[i]->sizeHint());
-		mYearRuleMonthBox[i]->setReadOnly(mReadOnly);
-		mgrid->addWidget(mYearRuleMonthBox[i], i%4, i/4, Qt::AlignAuto);
-	}
-	box->setFixedSize(box->sizeHint());
-	QWhatsThis::add(box,
-	      i18n("Select the months of the year in which to repeat the alarm"));
-	grid->addWidget(box, 1, 2, Qt::AlignAuto);
-	grid->setColStretch(2, 1);
-
-/*	layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
-	mYearRuleDayButton = new RadioButton(i18n("Recur on day"), mYearRuleButtonGroup);
-	mYearRuleDayButton->setFixedSize(mYearRuleDayButton->sizeHint());
-	mYearRuleDayButton->setReadOnly(mReadOnly);
-	QWhatsThis::add(mYearRuleDayButton,
-	      i18n("Repeat the alarm on the selected day number in the year"));
-	layout->addWidget(mYearRuleDayButton);
-	mYearRuleDayEntry = new SpinBox(1, 366, 1, mYearRuleButtonGroup);
-	mYearRuleDayEntry->setFixedSize(mYearRuleDayEntry->sizeHint());
-	mYearRuleDayEntry->setLineShiftStep(10);
-	mYearRuleDayEntry->setSelectOnStep(false);
-	QWhatsThis::add(mYearRuleDayEntry,
-	      i18n("Select the day number in the year on which to repeat the alarm"));
-	layout->addWidget(mYearRuleDayEntry);
-	layout->addStretch();*/
-
-	mYearRuleDayMonthButtonId       = mYearRuleButtonGroup->id(mYearRuleDayMonthButton);
-//	mYearRuleDayButtonId            = mYearRuleButtonGroup->id(mYearRuleDayButton);
-	mYearRuleOnNthTypeOfDayButtonId = mYearRuleButtonGroup->id(mYearRuleOnNthTypeOfDayButton);
-
-	connect(mYearRuleButtonGroup, SIGNAL(buttonSet(int)), SLOT(yearlyClicked(int)));
-}
-
-/******************************************************************************
- * Initialise a day-of-the-month selection combo box.
- */
-void RecurrenceEdit::initDayOfMonth(RadioButton** radio, ComboBox** combo, QWidget* parent, QBoxLayout* groupLayout)
-{
-	QBoxLayout* layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
-	*radio = new RadioButton(i18n("On the 7th day", "O&n the"), parent);
-	RadioButton* r = *radio;
-	r->setFixedSize(r->sizeHint());
-	r->setReadOnly(mReadOnly);
-	QWhatsThis::add(r, i18n("Repeat the alarm on the selected day of the month"));
-	layout->addWidget(r);
-
-	*combo = new ComboBox(false, parent);
-	ComboBox* c = *combo;
-	c->setSizeLimit(11);
-	for (int i = 0;  i < 31;  ++i)
-		c->insertItem(i18n(ordinal[i]));
-	c->insertItem(i18n("Last day of month", "Last"));
-	c->setFixedSize(c->sizeHint());
-	c->setReadOnly(mReadOnly);
-	QWhatsThis::add(c, i18n("Select the day of the month on which to repeat the alarm"));
-	r->setFocusWidget(c);
-	layout->addWidget(c);
-
-	QLabel* label = new QLabel(i18n("day"), parent);
-	label->setFixedSize(label->sizeHint());
-	layout->addWidget(label);
-	layout->addStretch();
-}
-
-/******************************************************************************
- * Initialise a day in the week-of-the-month selection combo box.
- */
-void RecurrenceEdit::initWeekOfMonth(RadioButton** radio, ComboBox** weekCombo, ComboBox** dayCombo, QWidget* parent, QBoxLayout* groupLayout)
-{
-	int i;
-
-	QBoxLayout* layout = new QHBoxLayout(groupLayout, KDialog::spacingHint());
-	*radio = new RadioButton(i18n("On the 1st Tuesday", "On t&he"), parent);
-	RadioButton* r = *radio;
-	r->setFixedSize(r->sizeHint());
-	r->setReadOnly(mReadOnly);
-	QWhatsThis::add(r,
-	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
-	layout->addWidget(r);
-
-	*weekCombo = new ComboBox(false, parent);
-	ComboBox* wc = *weekCombo;
-	for (i = 0;  i < 5;  ++i)
-		wc->insertItem(i18n(ordinal[i]));
-	wc->insertItem(i18n("Last Monday in March", "Last"));
-	wc->insertItem(i18n("2nd Last"));
-	wc->insertItem(i18n("3rd Last"));
-	wc->insertItem(i18n("4th Last"));
-	wc->insertItem(i18n("5th Last"));
-	QWhatsThis::add(wc, i18n("Select the week of the month in which to repeat the alarm"));
-	wc->setFixedSize(wc->sizeHint());
-	wc->setReadOnly(mReadOnly);
-	r->setFocusWidget(wc);
-	layout->addWidget(wc);
-
-	*dayCombo = new ComboBox(false, parent);
-	ComboBox* dc = *dayCombo;
-	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-	for (i = 0;  i < 7;  ++i)
-	{
-		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		dc->insertItem(calendar->weekDayName(day));
-	}
-	dc->setReadOnly(mReadOnly);
-	QWhatsThis::add(dc,
-	      i18n("Select the day of the week on which to repeat the alarm"));
-	layout->addWidget(dc);
-	layout->addStretch();
-}
-
 /******************************************************************************
  * Verify the consistency of the entered data.
+ * Reply = widget to receive focus on error, or 0 if no error.
  */
 QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& errorMessage) const
 {
@@ -634,29 +371,9 @@ QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& erro
 			return errWidget;
 		}
 	}
-	QButton* button = ruleButtonGroup->selected();
-	if (button == mWeeklyButton)
-	{
-		// Weekly recurrence: check that at least one day is selected
-		QBitArray days(7);
-		if (!getCheckedDays(days))
-		{
-			errorMessage = i18n("No day selected");
-			return mWeekRuleDayBox[0];
-		}
-	}
-	else if (button == mYearlyButton)
-	{
-		// Yearly recurrence: check that at least one month is selected
-		QValueList<int> months;
-		getCheckedMonths(months);
-		if (!months.count())
-		{
-			errorMessage = i18n("No month selected");
-			return mYearRuleMonthBox[0];
-		}
-	}
-	return 0;
+	if (!mRule)
+		return 0;
+	return mRule->validate(errorMessage);
 }
 
 /******************************************************************************
@@ -664,47 +381,46 @@ QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& erro
  */
 void RecurrenceEdit::periodClicked(int id)
 {
-	QFrame* frame;
 	RepeatType oldType = mRuleButtonType;
 	bool none     = (id == mNoneButtonId);
 	bool atLogin  = (id == mAtLoginButtonId);
 	bool subdaily = (id == mSubDailyButtonId);
 	if (none)
 	{
-		frame = mNoneRuleFrame;
+		mRule = 0;
 		mRuleButtonType = NO_RECUR;
 	}
 	else if (atLogin)
 	{
-		frame = mNoneRuleFrame;
+		mRule = 0;
 		mRuleButtonType = AT_LOGIN;
 		mRangeButtonGroup->setButton(mRangeButtonGroup->id(mEndDateButton));
 	}
 	else if (subdaily)
 	{
-		frame = mSubDayRuleFrame;
+		mRule = mSubDailyRule;
 		mRuleButtonType = SUBDAILY;
 	}
 	else if (id == mDailyButtonId)
 	{
-		frame = mDayRuleFrame;
+		mRule = mDailyRule;
 		mRuleButtonType = DAILY;
 	}
 	else if (id == mWeeklyButtonId)
 	{
-		frame = mWeekRuleFrame;
+		mRule = mWeeklyRule;
 		mRuleButtonType = WEEKLY;
 		mWeeklyShown = true;
 	}
 	else if (id == mMonthlyButtonId)
 	{
-		frame = mMonthRuleFrame;
+		mRule = mMonthlyRule;
 		mRuleButtonType = MONTHLY;
 		mMonthlyShown = true;
 	}
 	else if (id == mYearlyButtonId)
 	{
-		frame = mYearRuleFrame;
+		mRule = mYearlyRule;
 		mRuleButtonType = ANNUAL;
 		mYearlyShown = true;
 	}
@@ -713,7 +429,7 @@ void RecurrenceEdit::periodClicked(int id)
 
 	if (mRuleButtonType != oldType)
 	{
-		ruleStack->raiseWidget(frame);
+		ruleStack->raiseWidget(mRule ? mRule : mNoRule);
 		if (oldType == NO_RECUR  ||  none)
 			mRangeButtonGroup->setEnabled(!none);
 		mExceptionGroup->setEnabled(!(none || atLogin));
@@ -751,76 +467,12 @@ void RecurrenceEdit::rangeTypeClicked()
 	mRepeatCountLabel->setEnabled(repeatCount);
 }
 
-/******************************************************************************
- * Called when a monthly recurrence type radio button is clicked.
- */
-void RecurrenceEdit::monthlyClicked(int id)
-{
-	bool nthDay;
-	if (id == mMonthRuleOnNthDayButtonId)
-		nthDay = true;
-	else if (id == mMonthRuleOnNthTypeOfDayButtonId)
-		nthDay = false;
-	else
-		return;
-
-	mMonthRuleNthDayEntry->setEnabled(nthDay);
-	mMonthRuleNthNumberEntry->setEnabled(!nthDay);
-	mMonthRuleNthTypeOfDayEntry->setEnabled(!nthDay);
-}
-
-/******************************************************************************
- * Called when a yearly recurrence type radio button is clicked.
- */
-void RecurrenceEdit::yearlyClicked(int id)
-{
-	bool date;
-	int  day;
-	if (id == mYearRuleDayMonthButtonId)
-	{
-		date = true;
-		day  = mYearRuleNthDayEntry->currentItem();    // enable/disable month checkboxes as appropriate
-	}
-//	else if (id == mYearRuleDayButtonId)
-	else if (id == mYearRuleOnNthTypeOfDayButtonId)
-	{
-		date = false;
-		day  = 1;     // enable all month checkboxes
-	}
-	else
-		return;
-
-	mYearRuleNthDayEntry->setEnabled(date);
-//	mYearRuleDayEntry->setEnabled(!date);
-	mYearRuleNthNumberEntry->setEnabled(!date);
-	mYearRuleNthTypeOfDayEntry->setEnabled(!date);
-	yearDayOfMonthSelected(day);
-}
-
-/******************************************************************************
- * Called when a day of the month is selected in a yearly recurrence, to
- * disable months for which the day is out of range.
- */
-void RecurrenceEdit::yearDayOfMonthSelected(int index)
-{
-	mYearRuleMonthBox[1]->setEnabled(index < 29  ||  index >= 31);     // February
-	bool enable = (index != 30);
-	mYearRuleMonthBox[3]->setEnabled(enable);     // April
-	mYearRuleMonthBox[5]->setEnabled(enable);     // June
-	mYearRuleMonthBox[8]->setEnabled(enable);     // September
-	mYearRuleMonthBox[10]->setEnabled(enable);    // November
-}
-
 void RecurrenceEdit::showEvent(QShowEvent*)
 {
-	QButton* button = ruleButtonGroup->selected();
-	QWidget* w = (button == mSubDailyButton) ? mSubDayRecurFrequency
-	           : (button == mDailyButton)    ? mDayRecurFrequency
-	           : (button == mWeeklyButton)   ? mWeekRecurFrequency
-	           : (button == mMonthlyButton)  ? mMonthRecurFrequency
-	           : (button == mYearlyButton)   ? mYearRecurFrequency
-	           : (QWidget*)button;
-	w->setFocus();
+	if (mRule)
+		mRule->setFrequencyFocus();
+	else
+		ruleButtonGroup->selected()->setFocus();
 	emit shown();
 }
 
@@ -965,64 +617,6 @@ DateTime RecurrenceEdit::endDateTime() const
 }
 
 /******************************************************************************
- * Fetch which days of the week have been checked.
- * Reply = true if at least one day has been checked.
- */
-bool RecurrenceEdit::getCheckedDays(QBitArray& days) const
-{
-	bool found = false;
-	days.fill(false);
-	for (int i = 0;  i < 7;  ++i)
-		if (mWeekRuleDayBox[i]->isChecked())
-		{
-			days.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
-			found = true;
-		}
-	return found;
-}
-
-/******************************************************************************
- * Check/uncheck each day of the week according to the specified bits.
- */
-void RecurrenceEdit::setCheckedDays(QBitArray& days)
-{
-	for (int i = 0;  i < 7;  ++i)
-	{
-		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
-		mWeekRuleDayBox[i]->setChecked(x);
-	}
-}
-
-/******************************************************************************
- * Fetch which months have been checked (1 - 12).
- * Reply = true if February has been checked.
- */
-bool RecurrenceEdit::getCheckedMonths(QValueList<int>& months) const
-{
-	bool feb = false;
-	months.clear();
-	for (int i = 0;  i < 12;  ++i)
-		if (mYearRuleMonthBox[i]->isChecked()  &&  mYearRuleMonthBox[i]->isEnabled())
-		{
-			months.append(i + 1);
-			if (i == 1)
-				feb = true;
-		}
-	return feb;
-}
-
-/******************************************************************************
- * Check/uncheck each month of the year according to the specified bits.
- */
-void RecurrenceEdit::getCheckedMonths(QBitArray& months) const
-{
-	months.fill(false);
-	for (int i = 0;  i < 12;  ++i)
-		if (mYearRuleMonthBox[i]->isChecked()  &&  mYearRuleMonthBox[i]->isEnabled())
-			months.setBit(i, 1);
-}
-
-/******************************************************************************
  * Set all controls to their default values.
  */
 void RecurrenceEdit::setDefaults(const QDateTime& from)
@@ -1031,15 +625,15 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 	QDate fromDate = from.date();
 	mNoEndDateButton->setChecked(true);
 
-	mSubDayRecurFrequency->setValue(1);
-	mDayRecurFrequency->setValue(1);
-	mWeekRecurFrequency->setValue(1);
-	mMonthRecurFrequency->setValue(1);
-	mYearRecurFrequency->setValue(1);
+	mSubDailyRule->setFrequency(1);
+	mDailyRule->setFrequency(1);
+	mWeeklyRule->setFrequency(1);
+	mMonthlyRule->setFrequency(1);
+	mYearlyRule->setFrequency(1);
 
 	setRuleDefaults(fromDate);
-	mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);   // date in month
-	mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);     // date in year
+	mMonthlyRule->setType(MonthYearRule::DATE);   // date in month
+	mYearlyRule->setType(MonthYearRule::DATE);    // date in year
 
 	mEndDateEdit->setDate(fromDate);
 
@@ -1070,32 +664,15 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
  */
 void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 {
-	int day       = fromDate.day() - 1;
+	int day       = fromDate.day();
 	int dayOfWeek = fromDate.dayOfWeek();
-	int month     = fromDate.month() - 1;
+	int month     = fromDate.month();
 	if (!mWeeklyShown)
-	{
-		for (int i = 0;  i < 7;  ++i)
-			mWeekRuleDayBox[i]->setChecked(false);
-		if (dayOfWeek > 0  &&  dayOfWeek <= 7)
-			mWeekRuleDayBox[KAlarm::weekDay_to_localeDayInWeek(dayOfWeek)]->setChecked(true);
-	}
+		mWeeklyRule->setDay(dayOfWeek);
 	if (!mMonthlyShown)
-	{
-		mMonthRuleNthDayEntry->setCurrentItem(day);
-		mMonthRuleNthNumberEntry->setCurrentItem(day / 7);
-		mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
-	}
+		mMonthlyRule->setDefaultValues(day, dayOfWeek);
 	if (!mYearlyShown)
-	{
-//		mYearRuleDayEntry->setValue(fromDate.dayOfYear());
-		mYearRuleNthDayEntry->setCurrentItem(day);
-		mYearRuleNthNumberEntry->setCurrentItem(day / 7);
-		mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
-		for (int i = 0;  i < 12;  ++i)
-			mYearRuleMonthBox[i]->setChecked(i == month);
-		yearDayOfMonthSelected(day);     // enable/disable month checkboxes as appropriate
-	}
+		mYearlyRule->setDefaultValues(day, dayOfWeek, month);
 }
 
 /******************************************************************************
@@ -1120,20 +697,17 @@ void RecurrenceEdit::set(const KAEvent& event)
 	{
 		case Recurrence::rMinutely:
 			ruleButtonGroup->setButton(mSubDailyButtonId);
-			mSubDayRecurFrequency->setValue(recurrence->frequency());
 			break;
 
 		case Recurrence::rDaily:
 			ruleButtonGroup->setButton(mDailyButtonId);
-			mDayRecurFrequency->setValue(recurrence->frequency());
 			break;
 
 		case Recurrence::rWeekly:
 		{
 			ruleButtonGroup->setButton(mWeeklyButtonId);
-			mWeekRecurFrequency->setValue(recurrence->frequency());
 			QBitArray rDays = recurrence->days();
-			setCheckedDays(rDays);
+			mWeeklyRule->setDays(rDays);
 			break;
 		}
 		case Recurrence::rMonthlyPos:    // on nth (Tuesday) of the month
@@ -1145,81 +719,87 @@ void RecurrenceEdit::set(const KAEvent& event)
 				// It's every (Tuesday) of the month. Convert to a weekly recurrence
 				// (but ignoring any non-every xxxDay positions).
 				ruleButtonGroup->setButton(mWeeklyButtonId);
-				mWeekRecurFrequency->setValue(recurrence->frequency());
+				mWeeklyRule->setFrequency(recurrence->frequency());
 				QBitArray rDays(7);
 				for (QValueList<RecurrenceRule::WDayPos>::ConstIterator it = rmp.begin();  it != rmp.end();  ++it)
 				{
 					if (!(*it).pos())
 						rDays.setBit((*it).day() - 1, 1);
 				}
-				setCheckedDays(rDays);
+				mWeeklyRule->setDays(rDays);
 				break;
 			}
 			ruleButtonGroup->setButton(mMonthlyButtonId);
-			mMonthRecurFrequency->setValue(recurrence->frequency());
-			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthTypeOfDayButtonId);
-			i = (i > 0) ? i - 1 : -i + 4;    // get combo box index
-			mMonthRuleNthNumberEntry->setCurrentItem(i);
-			mMonthRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(rmp.first().day()));
+			mMonthlyRule->setPosition(i, rmp.first().day());
 			break;
 		}
 		case Recurrence::rMonthlyDay:     // on nth day of the month
 		{
 			ruleButtonGroup->setButton(mMonthlyButtonId);
-			mMonthRecurFrequency->setValue(recurrence->frequency());
-			mMonthRuleButtonGroup->setButton(mMonthRuleOnNthDayButtonId);
 			QValueList<int> rmd = recurrence->monthDays();
 			int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
-			mMonthRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
+			mMonthlyRule->setDate(day);
 			break;
 		}
-		case Recurrence::rYearlyMonth:   // in the nth month of the year
-		case Recurrence::rYearlyPos:     // on the nth (Tuesday) of a month in the year
+		case Recurrence::rYearlyMonth:   // on the nth day of (months...) in the year
+		case Recurrence::rYearlyPos:     // on the nth (Tuesday) of (months...) in the year
 		{
 			if (rtype == Recurrence::rYearlyMonth)
 			{
 				ruleButtonGroup->setButton(mYearlyButtonId);
-				mYearRecurFrequency->setValue(recurrence->frequency());
-				mYearRuleButtonGroup->setButton(mYearRuleDayMonthButtonId);
 				const QValueList<int> rmd = recurrence->monthDays();
 				int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 //FIXME: Fix the Feb 29 setting!
 				if (day == 1 && event.recursFeb29())
 					day = 29;
-				mYearRuleNthDayEntry->setCurrentItem(day > 0 ? day-1 : day < 0 ? 30 - day : 0);   // day 0 shouldn't ever occur
+				mYearlyRule->setDate(day);
 			}
 			else if (rtype == Recurrence::rYearlyPos)
 			{
 				ruleButtonGroup->setButton(mYearlyButtonId);
-				mYearRecurFrequency->setValue(recurrence->frequency());
-				mYearRuleButtonGroup->setButton(mYearRuleOnNthTypeOfDayButtonId);
 				QValueList<RecurrenceRule::WDayPos> rmp = recurrence->yearPositions();
 				// TODO: This doesn't handle the case "on every (Tuesday) of the month"
-				int i = rmp.first().pos() - 1;
-				if (i < 0)
-					i = -i + 3;
-				mYearRuleNthNumberEntry->setCurrentItem(i);
-					mYearRuleNthTypeOfDayEntry->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek( rmp.first().day()));
+				mYearlyRule->setPosition(rmp.first().pos(), rmp.first().day());
 			}
-			for (int i = 0;  i < 12;  ++i)
-				mYearRuleMonthBox[i]->setChecked(false);
-			const QValueList<int> rmd = recurrence->yearMonths();
-			for (QValueListConstIterator<int> it = rmd.begin(); it != rmd.end(); ++it)
-				mYearRuleMonthBox[(*it) - 1]->setChecked(true);
+			mYearlyRule->setMonths(recurrence->yearMonths());
 			break;
 		}
-/*		case Recurrence::rYearlyDay:     // on the nth day of the year
+		case Recurrence::rYearlyDay:     // on the nth day of the year
 		{
+			// Check for a recurrence on Feb 29th (leap years) / March 1st (non-leap years).
+			// Other day numbers are ignored.
+			QValueList<int> days = recurrence->yearDays();
+			if (days.first() != 60)
+				break;
+			// It's February 29th (leap year) / March 1st (non-leap year)
 			ruleButtonGroup->setButton(mYearlyButtonId);
-			mYearRecurFrequency->setValue(recurrence->frequency());
-			mYearRuleButtonGroup->setButton(mYearRuleDayButtonId);
+			mYearlyRule->setDate(29);
+			QValueList<int> months;
+			RecurrenceRule::List rrules = recurrence->rRules();
+			RecurrenceRule::List::ConstIterator it = rrules.begin();    // this is the default RRULE
+			if (++it != rrules.end())
+			{
+				// There is another RRULE.
+				// Use it if it's a yearly recurrence on the 29th of other months.
+				RecurrenceRule* rrule = *it;
+				if (Recurrence::recurrenceType(rrule) == Recurrence::rYearlyMonth)
+				{
+					const QValueList<int> rmd = recurrence->monthDays();
+					if (!rmd.isEmpty()  &&  rmd.first() == 29)
+						months = rrule->byMonths();
+				}
+			}
+			months.append(2);     // February
+			mYearlyRule->setMonths(recurrence->yearMonths());
+//			mYearlyRule->setFeb29(Preferences::FEB29_MAR1);
 			break;
-		}*/
+		}
 		case Recurrence::rNone:
 		default:
 			return;
 	}
 
+	mRule->setFrequency(recurrence->frequency());
 	repeatDuration = event.remainingRecurrences();
 
 	// Get range information
@@ -1280,48 +860,41 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	}
 
 	// Set up the recurrence according to the type selected
-	int frequency = 0;
 	QButton* button = ruleButtonGroup->selected();
 	event.setRepeatAtLogin(button == mAtLoginButton);
+	int frequency = mRule ? mRule->frequency() : 0;
 	if (button == mSubDailyButton)
 	{
-		frequency = mSubDayRecurFrequency->value();
 		QDateTime endDateTime(endDate, endTime);
 		event.setRecurMinutely(frequency, repeatCount, endDateTime);
 	}
 	else if (button == mDailyButton)
 	{
-		frequency = mDayRecurFrequency->value();
 		event.setRecurDaily(frequency, repeatCount, endDate);
 	}
 	else if (button == mWeeklyButton)
 	{
-		frequency = mWeekRecurFrequency->value();
 		QBitArray rDays(7);
-		getCheckedDays(rDays);
+		mWeeklyRule->days(rDays);
 		event.setRecurWeekly(frequency, rDays, repeatCount, endDate);
 	}
 	else if (button == mMonthlyButton)
 	{
-		frequency = mMonthRecurFrequency->value();
-		if (mMonthRuleOnNthTypeOfDayButton->isChecked())
+		if (mMonthlyRule->type() == MonthlyRule::POS)
 		{
-			// it's by position
+			// It's by position
 			KAEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(KAlarm::localeDayInWeek_to_weekDay(mMonthRuleNthTypeOfDayEntry->currentItem()) - 1);
-			int i = mMonthRuleNthNumberEntry->currentItem() + 1;
-			pos.weeknum = (i <= 5) ? i : 5 - i;
+			pos.days.setBit(mMonthlyRule->dayOfWeek() - 1);
+			pos.weeknum = mMonthlyRule->week();
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
 		}
 		else
 		{
-			// it's by day
-			short daynum  = mMonthRuleNthDayEntry->currentItem() + 1;
-			if (daynum > 31)
-				daynum = 31 - daynum;
+			// It's by day
+			int daynum = mMonthlyRule->date();
 			QValueList<int> daynums;
 			daynums.append(daynum);
 			event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
@@ -1329,35 +902,24 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	}
 	else if (button == mYearlyButton)
 	{
-		frequency = mYearRecurFrequency->value();
 		QValueList<int> months;
-		bool feb = getCheckedMonths(months);
+		bool feb = mYearlyRule->months(months);
 
-		if (mYearRuleOnNthTypeOfDayButton->isChecked())
+		if (mYearlyRule->type() == YearlyRule::POS)
 		{
-			// it's by position
+			// It's by position
 			KAEvent::MonthPos pos;
 			pos.days.fill(false);
-			pos.days.setBit(KAlarm::localeDayInWeek_to_weekDay(mYearRuleNthTypeOfDayEntry->currentItem()) - 1);
-			int i = mYearRuleNthNumberEntry->currentItem() + 1;
-			pos.weeknum = (i <= 5) ? i : 5 - i;
+			pos.days.setBit(mYearlyRule->dayOfWeek() - 1);
+			pos.weeknum = mYearlyRule->week();
 			QValueList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
 		}
-/*		else if (mYearRuleDayButton->isChecked())
-		{
-			// it's by day
-			int daynum = event.mainDate().dayOfYear();
-			QValueList<int> daynums;
-			daynums.append(daynum);
-			event.setRecurAnnualByDay(frequency, daynums, repeatCount, endDate);
-		}*/
 		else
 		{
-			short daynum  = mYearRuleNthDayEntry->currentItem() + 1;
-			if (daynum > 31)
-				daynum = 31 - daynum;
+			// It's by date in month
+			int daynum = mYearlyRule->date();
 			bool feb29 = (daynum == 29) && feb;
 			event.setRecurAnnualByDate(frequency, months, daynum, feb29, repeatCount, endDate);
 		}
@@ -1380,43 +942,27 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 void RecurrenceEdit::saveState()
 {
 	mSavedRuleButton = ruleButtonGroup->selected();
-	if (mSavedRuleButton == mSubDailyButton)
+	mSavedFrequency  = mRule ? mRule->frequency() : 0;
+	if (mSavedRuleButton == mWeeklyButton)
+		mWeeklyRule->days(mSavedDays);
+	else if (mSavedRuleButton == mMonthlyButton  ||  mSavedRuleButton == mYearlyButton)
 	{
-		mSavedFrequency = mSubDayRecurFrequency->value();
-	}
-	else if (mSavedRuleButton == mDailyButton)
-	{
-		mSavedFrequency = mDayRecurFrequency->value();
-	}
-	else if (mSavedRuleButton == mWeeklyButton)
-	{
-		mSavedFrequency = mWeekRecurFrequency->value();
-		getCheckedDays(mSavedDays);
-	}
-	else if (mSavedRuleButton == mMonthlyButton)
-	{
-		mSavedFrequency = mMonthRecurFrequency->value();
-		mSavedDayOfMonthSelected = mMonthRuleOnNthDayButton->isChecked();
-		if (mSavedDayOfMonthSelected)
-			mSavedDayOfMonth = mMonthRuleNthDayEntry->currentItem();
+		MonthYearRule* rule;
+		if (mSavedRuleButton == mYearlyButton)
+		{
+			mYearlyRule->months(mSavedMonths);
+			rule = mYearlyRule;
+		}
+		else
+			rule = mMonthlyRule;
+		mSavedMonthlyType = rule->type();
+		if (mSavedMonthlyType == MonthYearRule::DATE)
+			mSavedDayOfMonth = rule->date();
 		else
 		{
-			mSavedWeekOfMonth    = mMonthRuleNthNumberEntry->currentItem();
-			mSavedWeekDayOfMonth = mMonthRuleNthTypeOfDayEntry->currentItem();
+			mSavedWeekOfMonth    = rule->week();
+			mSavedWeekDayOfMonth = rule->dayOfWeek();
 		}
-	}
-	else if (mSavedRuleButton == mYearlyButton)
-	{
-		mSavedFrequency = mYearRecurFrequency->value();
-		mSavedDayOfMonthSelected = mYearRuleDayMonthButton->isChecked();
-		if (mSavedDayOfMonthSelected)
-			mSavedDayOfMonth = mYearRuleNthDayEntry->currentItem();
-		else
-		{
-			mSavedWeekOfMonth    = mYearRuleNthNumberEntry->currentItem();
-			mSavedWeekDayOfMonth = mYearRuleNthTypeOfDayEntry->currentItem();
-		}
-		getCheckedMonths(mSavedMonths);
 	}
 	mSavedRangeButton = mRangeButtonGroup->selected();
 	if (mSavedRangeButton == mRepeatCountButton)
@@ -1431,61 +977,42 @@ void RecurrenceEdit::saveState()
  */
 bool RecurrenceEdit::stateChanged() const
 {
-	if (mSavedRuleButton != ruleButtonGroup->selected()
-	||  mSavedRangeButton != mRangeButtonGroup->selected())
+	if (mSavedRuleButton  != ruleButtonGroup->selected()
+	||  mSavedRangeButton != mRangeButtonGroup->selected()
+	||  mRule  &&  mSavedFrequency != mRule->frequency())
 		return true;
-	if (mSavedRuleButton == mSubDailyButton)
-	{
-		if (mSavedFrequency != mSubDayRecurFrequency->value())
-			return true;
-	}
-	else if (mSavedRuleButton == mDailyButton)
-	{
-		if (mSavedFrequency != mDayRecurFrequency->value())
-			return true;
-	}
-	else if (mSavedRuleButton == mWeeklyButton)
+	if (mSavedRuleButton == mWeeklyButton)
 	{
 		QBitArray days(7);
-		getCheckedDays(days);
-		if (mSavedFrequency != mWeekRecurFrequency->value()
-		||  mSavedDays != days)
+		mWeeklyRule->days(days);
+		if (mSavedDays != days)
 			return true;
 	}
-	else if (mSavedRuleButton == mMonthlyButton)
+	else if (mSavedRuleButton == mMonthlyButton  ||  mSavedRuleButton == mYearlyButton)
 	{
-		if (mSavedFrequency != mMonthRecurFrequency->value()
-		||  mSavedDayOfMonthSelected != mMonthRuleOnNthDayButton->isChecked())
-			return true;
-		if (mSavedDayOfMonthSelected)
+		MonthYearRule* rule;
+		if (mSavedRuleButton == mYearlyButton)
 		{
-			if (mSavedDayOfMonth != mMonthRuleNthDayEntry->currentItem())
+			QBitArray months(12);
+			mYearlyRule->months(months);
+			if (mSavedMonths != months)
+				return true;
+			rule = mYearlyRule;
+		}
+		else
+			rule = mMonthlyRule;
+
+		if (mSavedMonthlyType != rule->type())
+			return true;
+		if (mSavedMonthlyType == MonthYearRule::DATE)
+		{
+			if (mSavedDayOfMonth != rule->date())
 				return true;
 		}
 		else
 		{
-			if (mSavedWeekOfMonth    != mMonthRuleNthNumberEntry->currentItem()
-			||  mSavedWeekDayOfMonth != mMonthRuleNthTypeOfDayEntry->currentItem())
-				return true;
-		}
-	}
-	else if (mSavedRuleButton == mYearlyButton)
-	{
-		QBitArray months(12);
-		getCheckedMonths(months);
-		if (mSavedFrequency != mYearRecurFrequency->value()
-		||  mSavedDayOfMonthSelected != mYearRuleDayMonthButton->isChecked()
-		||  mSavedMonths != months)
-			return true;
-		if (mSavedDayOfMonthSelected)
-		{
-			if (mSavedDayOfMonth != mYearRuleNthDayEntry->currentItem())
-				return true;
-		}
-		else
-		{
-			if (mSavedWeekOfMonth    != mYearRuleNthNumberEntry->currentItem()
-			||  mSavedWeekDayOfMonth != mYearRuleNthTypeOfDayEntry->currentItem())
+			if (mSavedWeekOfMonth    != rule->week()
+			||  mSavedWeekDayOfMonth != rule->dayOfWeek())
 				return true;
 		}
 	}
@@ -1500,16 +1027,20 @@ bool RecurrenceEdit::stateChanged() const
 	return false;
 }
 
+
+
 /*=============================================================================
-= Class RecurFrequency
-= Recurrence frequency widget.
+= Class Rule
+= Base class for rule widgets, including recurrence frequency.
 =============================================================================*/
 
-RecurFrequency::RecurFrequency(bool time, const QString& text, const QString& whatsThis,
-                               bool readOnly, QWidget* parent, const char* name)
-	: QHBox(parent, name)
+Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, bool readOnly, QWidget* parent, const char* name)
+	: NoRule(parent, name)
 {
-	QHBox* box = new QHBox(this);    // this is to control the QWhatsThis text display area
+	mLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QHBox* freqBox = new QHBox(this);
+	mLayout->addWidget(freqBox);
+	QHBox* box = new QHBox(freqBox);    // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 
 	QLabel* label = new QLabel(i18n("Recur e&very"), box);
@@ -1528,19 +1059,19 @@ RecurFrequency::RecurFrequency(bool time, const QString& text, const QString& wh
 		mIntSpinBox->setFixedSize(mIntSpinBox->sizeHint());
 		mIntSpinBox->setReadOnly(readOnly);
 	}
-	connect(mSpinBox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged()));
+	connect(mSpinBox, SIGNAL(valueChanged(int)), SIGNAL(frequencyChanged()));
 	label->setBuddy(mSpinBox);
-	label = new QLabel(text, box);
+	label = new QLabel(freqText, box);
 	label->setFixedSize(label->sizeHint());
-	QWhatsThis::add(this, whatsThis);
-
 	box->setFixedSize(sizeHint());
-	new QWidget(this);     // left adjust the visible widgets
-	setFixedHeight(sizeHint().height());
-	setFocusProxy(mSpinBox);
+	QWhatsThis::add(box, freqWhatsThis);
+
+	new QWidget(freqBox);     // left adjust the visible widgets
+	freqBox->setFixedHeight(freqBox->sizeHint().height());
+	freqBox->setFocusProxy(mSpinBox);
 }
 
-int RecurFrequency::value() const
+int Rule::frequency() const
 {
 	if (mIntSpinBox)
 		return mIntSpinBox->value();
@@ -1549,10 +1080,416 @@ int RecurFrequency::value() const
 	return 0;
 }
 
-void RecurFrequency::setValue(int n)
+void Rule::setFrequency(int n)
 {
 	if (mIntSpinBox)
 		mIntSpinBox->setValue(n);
 	if (mTimeSpinBox)
 		mTimeSpinBox->setValue(n);
+}
+
+
+/*=============================================================================
+= Class SubDailyRule
+= Sub-daily rule widget.
+=============================================================================*/
+
+SubDailyRule::SubDailyRule(bool readOnly, QWidget* parent, const char* name)
+	: Rule(i18n("hours:minutes"),
+	       i18n("Enter the number of hours and minutes between repetitions of the alarm"),
+	       true, readOnly, parent, name)
+{ }
+
+
+/*=============================================================================
+= Class DailyRule
+= Daily rule widget.
+=============================================================================*/
+
+DailyRule::DailyRule(bool readOnly, QWidget* parent, const char* name)
+	: Rule(i18n("day(s)"),
+	       i18n("Enter the number of days between repetitions of the alarm"),
+	       false, readOnly, parent, name)
+{ }
+
+
+/*=============================================================================
+= Class WeeklyRule
+= Weekly rule widget.
+=============================================================================*/
+
+WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent, const char* name)
+	: Rule(i18n("week(s)"),
+	       i18n("Enter the number of weeks between repetitions of the alarm"),
+	       false, readOnly, parent, name)
+{
+	QGridLayout* grid = new QGridLayout(layout(), 1, 4, KDialog::spacingHint());
+	grid->setRowStretch(0, 1);
+
+	QLabel* label = new QLabel(i18n("On: Tuesday", "O&n:"), this);
+	label->setFixedSize(label->sizeHint());
+	grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
+	grid->addColSpacing(1, KDialog::spacingHint());
+
+	// List the days of the week starting at the user's start day of the week.
+	// Save the first day of the week, just in case it changes while the dialog is open.
+	QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
+	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	for (int i = 0;  i < 7;  ++i)
+	{
+		int day = KAlarm::localeDayInWeek_to_weekDay(i);
+		mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
+		mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
+		mDayBox[i]->setReadOnly(readOnly);
+		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignAuto);
+	}
+	box->setFixedSize(box->sizeHint());
+	QWhatsThis::add(box,
+	      i18n("Select the days of the week on which to repeat the alarm"));
+	grid->addWidget(box, 0, 2, Qt::AlignAuto);
+	label->setBuddy(mDayBox[0]);
+	grid->setColStretch(3, 1);
+}
+
+/******************************************************************************
+ * Fetch which days of the week have been checked.
+ * Reply = true if at least one day has been checked.
+ */
+bool WeeklyRule::days(QBitArray& days) const
+{
+	bool found = false;
+	days.fill(false);
+	for (int i = 0;  i < 7;  ++i)
+		if (mDayBox[i]->isChecked())
+		{
+			days.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
+			found = true;
+		}
+	return found;
+}
+
+/******************************************************************************
+ * Check/uncheck each day of the week according to the specified bits.
+ */
+void WeeklyRule::setDays(QBitArray& days)
+{
+	for (int i = 0;  i < 7;  ++i)
+	{
+		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+		mDayBox[i]->setChecked(x);
+	}
+}
+
+/******************************************************************************
+ * Check the specified day of the week, and uncheck all other days.
+ */
+void WeeklyRule::setDay(int dayOfWeek)
+{
+	for (int i = 0;  i < 7;  ++i)
+		mDayBox[i]->setChecked(false);
+	if (dayOfWeek > 0  &&  dayOfWeek <= 7)
+		mDayBox[KAlarm::weekDay_to_localeDayInWeek(dayOfWeek)]->setChecked(true);
+}
+
+/******************************************************************************
+ * Validate: check that at least one day is selected.
+ */
+QWidget* WeeklyRule::validate(QString& errorMessage)
+{
+	for (int i = 0;  i < 7;  ++i)
+		if (mDayBox[i]->isChecked())
+			return 0;
+	errorMessage = i18n("No day selected");
+	return mDayBox[0];
+}
+
+
+/*=============================================================================
+= Class MonthYearRule
+= Monthly/yearly rule widget base class.
+=============================================================================*/
+
+MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsThis, bool readOnly,
+                             QWidget* parent, const char* name)
+	: Rule(freqText, freqWhatsThis, false, readOnly, parent, name)
+{
+	mButtonGroup = new ButtonGroup(this);
+	mButtonGroup->hide();
+
+	// Month day selector
+	QHBox* box = new QHBox(this);
+	box->setSpacing(KDialog::spacingHint());
+	layout()->addWidget(box);
+
+	mDayButton = new RadioButton(i18n("On the 7th day", "O&n the"), box);
+	mDayButton->setFixedSize(mDayButton->sizeHint());
+	mDayButton->setReadOnly(readOnly);
+	mDayButtonId = mButtonGroup->insert(mDayButton);
+	QWhatsThis::add(mDayButton, i18n("Repeat the alarm on the selected day of the month"));
+
+	mDayCombo = new ComboBox(false, box);
+	mDayCombo->setSizeLimit(11);
+	for (int i = 0;  i < 31;  ++i)
+		mDayCombo->insertItem(i18n(ordinal[i]));
+	mDayCombo->insertItem(i18n("Last day of month", "Last"));
+	mDayCombo->setFixedSize(mDayCombo->sizeHint());
+	mDayCombo->setReadOnly(readOnly);
+	QWhatsThis::add(mDayCombo, i18n("Select the day of the month on which to repeat the alarm"));
+	mDayButton->setFocusWidget(mDayCombo);
+	connect(mDayCombo, SIGNAL(activated(int)), SLOT(slotDaySelected(int)));
+
+	QLabel* label = new QLabel(i18n("day"), box);
+	label->setFixedSize(label->sizeHint());
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
+	// Month position selector
+	box = new QHBox(this);
+	box->setSpacing(KDialog::spacingHint());
+	layout()->addWidget(box);
+
+	mPosButton = new RadioButton(i18n("On the 1st Tuesday", "On t&he"), box);
+	mPosButton->setFixedSize(mPosButton->sizeHint());
+	mPosButton->setReadOnly(readOnly);
+	mPosButtonId = mButtonGroup->insert(mPosButton);
+	QWhatsThis::add(mPosButton,
+	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
+
+	mWeekCombo = new ComboBox(false, box);
+	int i;
+	for (i = 0;  i < 5;  ++i)
+		mWeekCombo->insertItem(i18n(ordinal[i]));
+	mWeekCombo->insertItem(i18n("Last Monday in March", "Last"));
+	mWeekCombo->insertItem(i18n("2nd Last"));
+	mWeekCombo->insertItem(i18n("3rd Last"));
+	mWeekCombo->insertItem(i18n("4th Last"));
+	mWeekCombo->insertItem(i18n("5th Last"));
+	QWhatsThis::add(mWeekCombo, i18n("Select the week of the month in which to repeat the alarm"));
+	mWeekCombo->setFixedSize(mWeekCombo->sizeHint());
+	mWeekCombo->setReadOnly(readOnly);
+	mPosButton->setFocusWidget(mWeekCombo);
+
+	mDayOfWeekCombo = new ComboBox(false, box);
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	for (i = 0;  i < 7;  ++i)
+	{
+		int day = KAlarm::localeDayInWeek_to_weekDay(i);
+		mDayOfWeekCombo->insertItem(calendar->weekDayName(day));
+	}
+	mDayOfWeekCombo->setReadOnly(readOnly);
+	QWhatsThis::add(mDayOfWeekCombo, i18n("Select the day of the week on which to repeat the alarm"));
+
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+	connect(mButtonGroup, SIGNAL(buttonSet(int)), SLOT(clicked(int)));
+}
+
+MonthYearRule::DayPosType MonthYearRule::type() const
+{
+	return (mButtonGroup->selectedId() == mDayButtonId) ? DATE : POS;
+}
+
+void MonthYearRule::setType(MonthYearRule::DayPosType type)
+{
+	mButtonGroup->setButton(type == DATE ? mDayButtonId : mPosButtonId);
+}
+
+void MonthYearRule::setDefaultValues(int dayOfMonth, int dayOfWeek)
+{
+	--dayOfMonth;
+	mDayCombo->setCurrentItem(dayOfMonth);
+	mWeekCombo->setCurrentItem(dayOfMonth / 7);
+	mDayOfWeekCombo->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
+}
+
+int MonthYearRule::date() const
+{
+	int daynum  = mDayCombo->currentItem() + 1;
+	return (daynum <= 31) ? daynum : 31 - daynum;
+}
+
+int MonthYearRule::week() const
+{
+	int weeknum = mWeekCombo->currentItem() + 1;
+	return (weeknum <= 5) ? weeknum : 5 - weeknum;
+}
+
+int MonthYearRule::dayOfWeek() const
+{
+	return KAlarm::localeDayInWeek_to_weekDay(mDayOfWeekCombo->currentItem());
+}
+
+void MonthYearRule::setDate(int dayOfMonth)
+{
+	mButtonGroup->setButton(mDayButtonId);
+	mDayCombo->setCurrentItem(dayOfMonth > 0 ? dayOfMonth - 1 : dayOfMonth < 0 ? 30 - dayOfMonth : 0);   // day 0 shouldn't ever occur
+}
+
+void MonthYearRule::setPosition(int week, int dayOfWeek)
+{
+	mButtonGroup->setButton(mPosButtonId);
+	mWeekCombo->setCurrentItem(week > 0 ? week - 1 : 4 - week);
+	mDayOfWeekCombo->setCurrentItem(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
+}
+
+void MonthYearRule::enableSelection(DayPosType type)
+{
+	bool date = (type == DATE);
+	mDayCombo->setEnabled(date);
+	mWeekCombo->setEnabled(!date);
+	mDayOfWeekCombo->setEnabled(!date);
+}
+
+void MonthYearRule::clicked(int id)
+{
+	enableSelection(id == mDayButtonId ? DATE : POS);
+}
+
+void MonthYearRule::slotDaySelected(int index)
+{
+	daySelected(index <= 30 ? index + 1 : 30 - index);
+}
+
+
+/*=============================================================================
+= Class MonthlyRule
+= Monthly rule widget.
+=============================================================================*/
+
+MonthlyRule::MonthlyRule(bool readOnly, QWidget* parent, const char* name)
+	: MonthYearRule(i18n("month(s)"),
+	       i18n("Enter the number of months between repetitions of the alarm"),
+	       readOnly, parent, name)
+{ }
+
+
+/*=============================================================================
+= Class YearlyRule
+= Yearly rule widget.
+=============================================================================*/
+
+YearlyRule::YearlyRule(bool readOnly, QWidget* parent, const char* name)
+	: MonthYearRule(i18n("year(s)"),
+	       i18n("Enter the number of years between repetitions of the alarm"),
+	       readOnly, parent, name)
+{
+	// Set up the month selection widgets
+	QGridLayout* grid = new QGridLayout(layout(), KDialog::spacingHint());
+	grid->addRowSpacing(0, KDialog::marginHint());
+//	QLabel* label = new QLabel(i18n("Months:"), this);
+//	label->setFixedSize(label->sizeHint());
+//	grid->addWidget(label, 1, 0, Qt::AlignAuto | Qt::AlignTop);
+//	grid->addColSpacing(1, KDialog::spacingHint());
+
+	// List the months of the year.
+	QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
+	QGridLayout* mgrid = new QGridLayout(box, 4, 3, 0, KDialog::spacingHint());
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	for (int i = 0;  i < 12;  ++i)
+	{
+		mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, 2000), box);
+		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
+		mMonthBox[i]->setReadOnly(readOnly);
+		mgrid->addWidget(mMonthBox[i], i%4, i/4, Qt::AlignAuto);
+	}
+	box->setFixedSize(box->sizeHint());
+	QWhatsThis::add(box, i18n("Select the months of the year in which to repeat the alarm"));
+	grid->addWidget(box, 1, 2, Qt::AlignAuto);
+	grid->setColStretch(2, 1);
+#if 0
+	// February 29th handling option
+	CheckBox* checkbox = new QLabel(i18n("In non-leap years, repeat February 29th alarm on March 1st"), this);
+	checkbox->setFixedSize(checkbox->sizeHint());
+	checkbox->setReadOnly(mReadOnly);
+	QWhatsThis::add(checkbox,
+	      i18n("If checked, the February 29th alarm will trigger on March 1st in non-leap years.\n"
+	           "If unchecked, the February 29th alarm will not trigger at all in non-leap years.\n"
+	           "Hint: If you want a February 29th alarm to trigger on February 28th in non-leap years, "));
+#endif
+}
+
+void YearlyRule::setDefaultValues(int dayOfMonth, int dayOfWeek, int month)
+{
+	MonthYearRule::setDefaultValues(dayOfMonth, dayOfWeek);
+	--month;
+	for (int i = 0;  i < 12;  ++i)
+		mMonthBox[i]->setChecked(i == month);
+	daySelected(dayOfMonth);     // enable/disable month checkboxes as appropriate
+}
+
+/******************************************************************************
+ * Fetch which months have been checked (1 - 12).
+ * Reply = true if February has been checked.
+ */
+bool YearlyRule::months(QValueList<int>& mnths) const
+{
+	bool feb = false;
+	mnths.clear();
+	for (int i = 0;  i < 12;  ++i)
+		if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
+		{
+			mnths.append(i + 1);
+			if (i == 1)
+				feb = true;
+		}
+	return feb;
+}
+
+/******************************************************************************
+ * Fetch which months have been checked (bits 0 - 11).
+ */
+void YearlyRule::months(QBitArray& mnths) const
+{
+	mnths.fill(false);
+	for (int i = 0;  i < 12;  ++i)
+		if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
+			mnths.setBit(i, 1);
+}
+
+/******************************************************************************
+ * Check/uncheck each month of the year according to the specified list.
+ */
+void YearlyRule::setMonths(const QValueList<int>& mnths)
+{
+	for (int i = 0;  i < 12;  ++i)
+		mMonthBox[i]->setChecked(false);
+	for (QValueListConstIterator<int> it = mnths.begin();  it != mnths.end();  ++it)
+		mMonthBox[(*it) - 1]->setChecked(true);
+}
+
+/******************************************************************************
+ * Validate: check that at least one month is selected.
+ */
+QWidget* YearlyRule::validate(QString& errorMessage)
+{
+	for (int i = 0;  i < 12;  ++i)
+		if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
+			return 0;
+	errorMessage = i18n("No month selected");
+	return mMonthBox[0];
+}
+
+/******************************************************************************
+ * Called when a yearly recurrence type radio button is clicked,
+ * to enable/disable month checkboxes as appropriate for the date selected.
+ */
+void YearlyRule::clicked(int id)
+{
+	MonthYearRule::clicked(id);
+	daySelected(buttonType(id) == DATE ? date() : 1);
+}
+
+/******************************************************************************
+ * Called when a day of the month is selected in a yearly recurrence, to
+ * disable months for which the day is out of range.
+ */
+void YearlyRule::daySelected(int day)
+{
+	mMonthBox[1]->setEnabled(day <= 29);     // February
+	bool enable = (day != 31);
+	mMonthBox[3]->setEnabled(enable);     // April
+	mMonthBox[5]->setEnabled(enable);     // June
+	mMonthBox[8]->setEnabled(enable);     // September
+	mMonthBox[10]->setEnabled(enable);    // November
 }

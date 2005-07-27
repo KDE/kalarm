@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -16,9 +16,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef RECURRENCEEDIT_H
@@ -26,8 +26,6 @@
 
 #include <qframe.h>
 #include <qdatetime.h>
-#include <qptrlist.h>
-#include <libkcal/event.h>
 
 #include "datetime.h"
 class QWidgetStack;
@@ -39,13 +37,18 @@ class QPushButton;
 class QBoxLayout;
 class SpinBox;
 class CheckBox;
-class ComboBox;
 class RadioButton;
 class DateEdit;
 class TimeEdit;
 class ButtonGroup;
-class RecurFrequency;
 class KAEvent;
+class Rule;
+class NoRule;
+class SubDailyRule;
+class DailyRule;
+class WeeklyRule;
+class MonthlyRule;
+class YearlyRule;
 
 
 class RecurrenceEdit : public QFrame
@@ -101,8 +104,6 @@ class RecurrenceEdit : public QFrame
 
 	private slots:
 		void          periodClicked(int);
-		void          monthlyClicked(int);
-		void          yearlyClicked(int);
 		void          rangeTypeClicked();
 		void          repeatCountChanged(int value);
 		void          slotAnyTimeToggled(bool);
@@ -110,131 +111,80 @@ class RecurrenceEdit : public QFrame
 		void          changeException();
 		void          deleteException();
 		void          enableExceptionButtons();
-		void          yearDayOfMonthSelected(int);
 
 	private:
 		void          setRuleDefaults(const QDate& start);
-		bool          getCheckedDays(QBitArray& days) const;
-		void          setCheckedDays(QBitArray& days);
-		bool          getCheckedMonths(QValueList<int>& months) const;
-		void          getCheckedMonths(QBitArray& months) const;
 		void          saveState();
-		void          initDayOfMonth(RadioButton**, ComboBox**, QWidget* parent, QBoxLayout*);
-		void          initWeekOfMonth(RadioButton**, ComboBox** weekCombo, ComboBox** dayCombo, QWidget* parent, QBoxLayout*);
-
-		void          initNone();
-		void          initSubDaily();
-		void          initDaily();
-		void          initWeekly();
-		void          initMonthly();
-		void          initYearly();
 
 		// Main rule box and choices
-		QGroupBox*      recurGroup;
-		QFrame*         ruleFrame;
-		QWidgetStack*   ruleStack;
+		QGroupBox*        recurGroup;
+		QFrame*           ruleFrame;
+		QWidgetStack*     ruleStack;
+		Rule*             mRule;         // current rule widget, or 0 if NoRule
+		NoRule*           mNoRule;
+		SubDailyRule*     mSubDailyRule;
+		DailyRule*        mDailyRule;
+		WeeklyRule*       mWeeklyRule;
+		MonthlyRule*      mMonthlyRule;
+		YearlyRule*       mYearlyRule;
 
-		ButtonGroup*    ruleButtonGroup;
-		RadioButton*    mNoneButton;
-		RadioButton*    mAtLoginButton;
-		RadioButton*    mSubDailyButton;
-		RadioButton*    mDailyButton;
-		RadioButton*    mWeeklyButton;
-		RadioButton*    mMonthlyButton;
-		RadioButton*    mYearlyButton;
-		int             mNoneButtonId;
-		int             mAtLoginButtonId;
-		int             mSubDailyButtonId;
-		int             mDailyButtonId;
-		int             mWeeklyButtonId;
-		int             mMonthlyButtonId;
-		int             mYearlyButtonId;
-		RepeatType      mRuleButtonType;
-		bool            mWeeklyShown;
-		bool            mMonthlyShown;
-		bool            mYearlyShown;
-
-		// Rules without choices
-		QFrame*         mNoneRuleFrame;
-
-		// Subdaily rule choices
-		QFrame*         mSubDayRuleFrame;
-		RecurFrequency* mSubDayRecurFrequency;
-
-		// Daily rule choices
-		QFrame*         mDayRuleFrame;
-		RecurFrequency* mDayRecurFrequency;
-
-		// Weekly rule choices
-		QFrame*         mWeekRuleFrame;
-		RecurFrequency* mWeekRecurFrequency;
-		CheckBox*       mWeekRuleDayBox[7];
-
-		// Monthly rule choices
-		QFrame*         mMonthRuleFrame;
-		RecurFrequency* mMonthRecurFrequency;
-		ButtonGroup*    mMonthRuleButtonGroup;
-		RadioButton*    mMonthRuleOnNthDayButton;
-		ComboBox*       mMonthRuleNthDayEntry;
-		RadioButton*    mMonthRuleOnNthTypeOfDayButton;
-		ComboBox*       mMonthRuleNthNumberEntry;
-		ComboBox*       mMonthRuleNthTypeOfDayEntry;
-		int             mMonthRuleOnNthDayButtonId;
-		int             mMonthRuleOnNthTypeOfDayButtonId;
-
-		// Yearly rule choices
-		QFrame*         mYearRuleFrame;
-		RecurFrequency* mYearRecurFrequency;
-		ButtonGroup*    mYearRuleButtonGroup;
-		RadioButton*    mYearRuleDayMonthButton;
-		ComboBox*       mYearRuleNthDayEntry;
-//		RadioButton*    mYearRuleDayButton;
-		RadioButton*    mYearRuleOnNthTypeOfDayButton;
-//		QSpinBox*       mYearRuleDayEntry;
-		ComboBox*       mYearRuleNthNumberEntry;
-		ComboBox*       mYearRuleNthTypeOfDayEntry;
-		CheckBox*       mYearRuleMonthBox[12];
-		int             mYearRuleDayMonthButtonId;
-//		int             mYearRuleDayButtonId;
-		int             mYearRuleOnNthTypeOfDayButtonId;
+		ButtonGroup*      ruleButtonGroup;
+		RadioButton*      mNoneButton;
+		RadioButton*      mAtLoginButton;
+		RadioButton*      mSubDailyButton;
+		RadioButton*      mDailyButton;
+		RadioButton*      mWeeklyButton;
+		RadioButton*      mMonthlyButton;
+		RadioButton*      mYearlyButton;
+		int               mNoneButtonId;
+		int               mAtLoginButtonId;
+		int               mSubDailyButtonId;
+		int               mDailyButtonId;
+		int               mWeeklyButtonId;
+		int               mMonthlyButtonId;
+		int               mYearlyButtonId;
+		RepeatType        mRuleButtonType;
+		bool              mWeeklyShown;
+		bool              mMonthlyShown;
+		bool              mYearlyShown;
 
 		// Range
-		ButtonGroup*    mRangeButtonGroup;
-		RadioButton*    mNoEndDateButton;
-		RadioButton*    mRepeatCountButton;
-		SpinBox*        mRepeatCountEntry;
-		QLabel*         mRepeatCountLabel;
-		RadioButton*    mEndDateButton;
-		DateEdit*       mEndDateEdit;
-		TimeEdit*    mEndTimeEdit;
-		CheckBox*       mEndAnyTimeCheckBox;
+		ButtonGroup*      mRangeButtonGroup;
+		RadioButton*      mNoEndDateButton;
+		RadioButton*      mRepeatCountButton;
+		SpinBox*          mRepeatCountEntry;
+		QLabel*           mRepeatCountLabel;
+		RadioButton*      mEndDateButton;
+		DateEdit*         mEndDateEdit;
+		TimeEdit*         mEndTimeEdit;
+		CheckBox*         mEndAnyTimeCheckBox;
 
 		// Exceptions
-		QGroupBox*      mExceptionGroup;
-		QListBox*       mExceptionDateList;
-		DateEdit*       mExceptionDateEdit;
-		QPushButton*    mChangeExceptionButton;
-		QPushButton*    mDeleteExceptionButton;
+		QGroupBox*        mExceptionGroup;
+		QListBox*         mExceptionDateList;
+		DateEdit*         mExceptionDateEdit;
+		QPushButton*      mChangeExceptionButton;
+		QPushButton*      mDeleteExceptionButton;
 		QValueList<QDate> mExceptionDates;
 
 		// Current start date and time
-		QDateTime       mCurrStartDateTime;
-		bool            noEmitTypeChanged;    // suppress typeChanged() signal
-		bool            mReadOnly;
+		QDateTime         mCurrStartDateTime;
+		bool              noEmitTypeChanged;         // suppress typeChanged() signal
+		bool              mReadOnly;
 
 		// Initial state of all controls
-		QButton*        mSavedRuleButton;          // which rule button was selected
-		int             mSavedFrequency;           // frequency for the selected rule
-		QBitArray       mSavedDays;                // ticked days for weekly rule
-		bool            mSavedDayOfMonthSelected;  // day-of-month radio button was selected, false if month position
-		int             mSavedDayOfMonth;          // chosen day of month selected item
-		int             mSavedWeekOfMonth;         // chosen month position: selected week item
-		int             mSavedWeekDayOfMonth;      // chosen month position: selected day of week
-		QBitArray       mSavedMonths;              // ticked months for yearly rule
-		QButton*        mSavedRangeButton;         // which range button was selected
-		int             mSavedRepeatCount;         // repeat count
-		DateTime        mSavedEndDateTime;         // end date/time
-		QValueList<QDate> mSavedExceptionDates;    // exception dates
+		QButton*          mSavedRuleButton;          // which rule button was selected
+		int               mSavedFrequency;           // frequency for the selected rule
+		QBitArray         mSavedDays;                // ticked days for weekly rule
+		int               mSavedMonthlyType;         // whether day-of-month or month position radio button was selected
+		int               mSavedDayOfMonth;          // chosen day of month selected item
+		int               mSavedWeekOfMonth;         // chosen month position: selected week item
+		int               mSavedWeekDayOfMonth;      // chosen month position: selected day of week
+		QBitArray         mSavedMonths;              // ticked months for yearly rule
+		QButton*          mSavedRangeButton;         // which range button was selected
+		int               mSavedRepeatCount;         // repeat count
+		DateTime          mSavedEndDateTime;         // end date/time
+		QValueList<QDate> mSavedExceptionDates;      // exception dates
 };
 
 #endif // RECURRENCEEDIT_H
