@@ -801,7 +801,7 @@ void MessageWin::slotSpeak()
 	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
 	{
 		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
-		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP call sayMessage failed"));
+		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP Call sayMessage failed"));
 	}
 }
 
