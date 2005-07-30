@@ -186,7 +186,7 @@ void KAEvent::copy(const KAEvent& event)
 	mUpdated                 = event.mUpdated;
 	delete mRecurrence;
 	if (event.mRecurrence)
-		mRecurrence = new Recurrence(*event.mRecurrence, 0);
+		mRecurrence = new Recurrence(*event.mRecurrence);
 	else
 		mRecurrence = 0;
 }
@@ -2138,7 +2138,7 @@ void KAEvent::setRecurrence(const Recurrence& recurrence)
 		case Recurrence::rMonthlyPos:
 		case Recurrence::rYearlyPos:
 		case Recurrence::rYearlyDay:
-			mRecurrence = new Recurrence(recurrence, 0);
+			mRecurrence = new Recurrence(recurrence);
 			mRecurrence->setStartDateTime(mStartDateTime.dateTime());
 			mRecurrence->setFloats(mStartDateTime.isDateOnly());
 			mRemainingRecurrences = mRecurrence->duration();
@@ -2459,7 +2459,7 @@ bool KAEvent::initRecur(const QDate& endDate, int count, bool feb29)
 	if (endDate.isValid() || count > 0 || count == -1)
 	{
 		if (!mRecurrence)
-			mRecurrence = new Recurrence(0);
+			mRecurrence = new Recurrence();
 		mRecurrence->setStartDateTime(mNextMainDateTime.dateTime());
 		mRemainingRecurrences = count;
 		int year = mNextMainDateTime.date().year();
