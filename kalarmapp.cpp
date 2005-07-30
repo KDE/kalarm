@@ -427,7 +427,7 @@ int KAlarmApp::newInstance()
 				QDateTime alarmTime, endTime;
 				QColor    bgColour = Preferences::defaultBgColour();
 				QColor    fgColour = Preferences::defaultFgColour();
-				KCal::Recurrence recurrence(0);
+				KCal::Recurrence recurrence;
 				int       repeatCount    = 0;
 				int       repeatInterval = 0;
 				if (args->isSet("color"))

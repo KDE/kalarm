@@ -68,7 +68,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
                                   int repeatInterval, int repeatCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur, repeatInterval, repeatCount);
@@ -80,7 +80,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
                                   int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur);
@@ -92,7 +92,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur);
@@ -103,7 +103,7 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
                                int repeatInterval, int repeatCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur, repeatInterval, repeatCount);
@@ -113,7 +113,7 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
                                const KURL& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur);
@@ -123,7 +123,7 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
                                const KURL& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur);
@@ -133,7 +133,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
                                   const QString& recurrence, int repeatInterval, int repeatCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur, repeatInterval, repeatCount);
@@ -145,7 +145,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 	DateTime start = convertStartDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur);
@@ -155,7 +155,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur);
@@ -166,7 +166,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const QString& recurrence, int repeatInterval, int repeatCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
@@ -177,7 +177,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
@@ -188,7 +188,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
-	KCal::Recurrence recur(0);
+	KCal::Recurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
@@ -667,7 +667,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 			QFont       font;
 			Q_UINT32    flags;
 			int         lateCancel = 0;
-			KCal::Recurrence  recurrence(0);
+			KCal::Recurrence  recurrence;
 			Q_INT32     reminderMinutes = 0;
 			if (action == KAEvent::EMAIL)
 			{
