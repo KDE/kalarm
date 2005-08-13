@@ -26,7 +26,6 @@ Name[sr@Latn]=Demon KAlarm-a
 Name[sv]=Alarmdemon
 Name[ta]=கேஅலாரம் டெமான்
 Name[tr]=KAlarm Servis Programı
-Name[uk]=Даемон KAlarm
 Name[xx]=xxKAlarm Daemonxx
 Name[zh_CN]=KAlarm 进程
 Exec=kalarmd
