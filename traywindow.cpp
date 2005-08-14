@@ -54,6 +54,7 @@ class TrayTooltip : public QToolTip
 {
 	public:
 		TrayTooltip(QWidget* parent) : QToolTip(parent) { }
+		virtual ~TrayTooltip() {}
 	protected:
 		virtual void maybeTip(const QPoint&);
 };
