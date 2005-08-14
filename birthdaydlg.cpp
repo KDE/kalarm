@@ -241,7 +241,7 @@ void BirthdayDlg::updateSelectionList()
 		Event* kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (event.action() == KAEvent::MESSAGE
-		&&  event.recurType() == KAEvent::ANNUAL_DATE
+		&&  event.recurType() == KARecurrence::ANNUAL_DATE
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
 			messageList.append(event.message());
 	}
@@ -325,7 +325,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
 				QValueList<int> months;
 				months.append(date.month());
-				event.setRecurAnnualByDate(1, months, 0, -1, QDate());
+				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
 				event.setNextOccurrence(todayNoon, true);
 				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 				if (reminder)

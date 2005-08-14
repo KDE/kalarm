@@ -32,6 +32,7 @@ class QWidget;
 
 #include "colourlist.h"
 #include "editdlg.h"
+#include "karecurrence.h"
 #include "recurrenceedit.h"
 #include "soundpicker.h"
 #include "timeperiod.h"
@@ -44,7 +45,6 @@ class Preferences : public QObject
 	public:
 		enum MailClient { SENDMAIL, KMAIL };
 		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_CONTROL_CENTRE, MAIL_FROM_ADDR };
-		enum Feb29Type  { FEB29_MAR1, FEB29_FEB28, FEB29_NONE };
 		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
 		static void              initialise();
@@ -68,7 +68,6 @@ class Preferences : public QObject
 		static bool              autostartTrayIcon()              { return mAutostartTrayIcon; }
 		static bool              confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
 		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
-		static Feb29Type         feb29RecurType()                 { return mFeb29RecurType; }
 		static bool              modalMessages()                  { return mModalMessages; }
 		static int               messageButtonDelay()             { return mMessageButtonDelay; }
 		static bool              showExpiredAlarms()              { return mShowExpiredAlarms; }
@@ -107,6 +106,8 @@ class Preferences : public QObject
 		static bool              defaultEmailBcc()                { return mDefaultEmailBcc; }
 		static RecurrenceEdit::RepeatType
 		                         defaultRecurPeriod()             { return mDefaultRecurPeriod; }
+		static KARecurrence::Feb29Type
+		                         defaultFeb29Type()               { return mDefaultFeb29Type; }
 		static TimePeriod::Units defaultReminderUnits()           { return mDefaultReminderUnits; }
 		static const QString&    defaultPreAction()               { return mDefaultPreAction; }
 		static const QString&    defaultPostAction()              { return mDefaultPostAction; }
@@ -117,58 +118,54 @@ class Preferences : public QObject
 		static const QString     EMAIL_QUEUED_NOTIFY;
 
 		// Default values for settings
-		static const ColourList  default_messageColours;
-		static const QColor      default_defaultBgColour;
-		static const QColor      default_defaultFgColour;
-		static const QFont&      default_messageFont()  { return mDefault_messageFont; };
-		static const QTime       default_startOfDay;
-		static const bool        default_autostartDaemon;
-		static const bool        default_runInSystemTray;
-		static const bool        default_disableAlarmsIfStopped;
-		static const bool        default_quitWarn;
-		static const bool        default_autostartTrayIcon;
-		static const bool        default_confirmAlarmDeletion;
-		static const Feb29Type   default_feb29RecurType;
-		static const bool        default_modalMessages;
-		static const int         default_messageButtonDelay;
-		static const bool        default_showExpiredAlarms;
-		static const bool        default_showAlarmTime;
-		static const bool        default_showTimeToAlarm;
-		static const int         default_tooltipAlarmCount;
-		static const bool        default_showTooltipAlarmTime;
-		static const bool        default_showTooltipTimeToAlarm;
-		static const QString     default_tooltipTimeToPrefix;
-		static const int         default_daemonTrayCheckInterval;
-		static const MailClient  default_emailClient;
-		static const bool        default_emailCopyToKMail;
-		static MailFrom          default_emailFrom();
-		static const bool        default_emailQueuedNotify;
-		static const MailFrom    default_emailBccFrom;
-		static const QString     default_emailAddress;
-		static const QString     default_emailBccAddress;
-		static const QColor      default_disabledColour;
-		static const QColor      default_expiredColour;
-		static const int         default_expiredKeepDays;
-		static const QString     default_defaultSoundFile;
-		static const float       default_defaultSoundVolume;
-		static const int         default_defaultLateCancel;
-		static const bool        default_defaultAutoClose;
-		static const bool        default_defaultCopyToKOrganizer;
-		static const bool        default_defaultSound;
-		static const SoundPicker::Type
-		                         default_defaultSoundType;
-		static const bool        default_defaultSoundRepeat;
-		static const bool        default_defaultConfirmAck;
-		static const bool        default_defaultCmdScript;
-		static const EditAlarmDlg::CmdLogType
-		                         default_defaultCmdLogType;
-		static const bool        default_defaultEmailBcc;
-		static const RecurrenceEdit::RepeatType
-		                         default_defaultRecurPeriod;
-		static const TimePeriod::Units
-		                         default_defaultReminderUnits;
-		static const QString     default_defaultPreAction;
-		static const QString     default_defaultPostAction;
+		static const ColourList                 default_messageColours;
+		static const QColor                     default_defaultBgColour;
+		static const QColor                     default_defaultFgColour;
+		static const QFont&                     default_messageFont()  { return mDefault_messageFont; };
+		static const QTime                      default_startOfDay;
+		static const bool                       default_autostartDaemon;
+		static const bool                       default_runInSystemTray;
+		static const bool                       default_disableAlarmsIfStopped;
+		static const bool                       default_quitWarn;
+		static const bool                       default_autostartTrayIcon;
+		static const bool                       default_confirmAlarmDeletion;
+		static const bool                       default_modalMessages;
+		static const int                        default_messageButtonDelay;
+		static const bool                       default_showExpiredAlarms;
+		static const bool                       default_showAlarmTime;
+		static const bool                       default_showTimeToAlarm;
+		static const int                        default_tooltipAlarmCount;
+		static const bool                       default_showTooltipAlarmTime;
+		static const bool                       default_showTooltipTimeToAlarm;
+		static const QString                    default_tooltipTimeToPrefix;
+		static const int                        default_daemonTrayCheckInterval;
+		static const MailClient                 default_emailClient;
+		static const bool                       default_emailCopyToKMail;
+		static MailFrom                         default_emailFrom();
+		static const bool                       default_emailQueuedNotify;
+		static const MailFrom                   default_emailBccFrom;
+		static const QString                    default_emailAddress;
+		static const QString                    default_emailBccAddress;
+		static const QColor                     default_disabledColour;
+		static const QColor                     default_expiredColour;
+		static const int                        default_expiredKeepDays;
+		static const QString                    default_defaultSoundFile;
+		static const float                      default_defaultSoundVolume;
+		static const int                        default_defaultLateCancel;
+		static const bool                       default_defaultAutoClose;
+		static const bool                       default_defaultCopyToKOrganizer;
+		static const bool                       default_defaultSound;
+		static const SoundPicker::Type          default_defaultSoundType;
+		static const bool                       default_defaultSoundRepeat;
+		static const bool                       default_defaultConfirmAck;
+		static const bool                       default_defaultCmdScript;
+		static const EditAlarmDlg::CmdLogType   default_defaultCmdLogType;
+		static const bool                       default_defaultEmailBcc;
+		static const RecurrenceEdit::RepeatType default_defaultRecurPeriod;
+		static const KARecurrence::Feb29Type    default_defaultFeb29Type;
+		static const TimePeriod::Units          default_defaultReminderUnits;
+		static const QString                    default_defaultPreAction;
+		static const QString                    default_defaultPostAction;
 
 	signals:
 		void  preferencesChanged();
@@ -208,7 +205,6 @@ class Preferences : public QObject
 		static bool                mRunInSystemTray;
 		static bool                mDisableAlarmsIfStopped;
 		static bool                mAutostartTrayIcon;
-		static Feb29Type           mFeb29RecurType;
 		static bool                mModalMessages;
 		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		static bool                mShowExpiredAlarms;
@@ -239,9 +235,10 @@ class Preferences : public QObject
 		static bool                mDefaultConfirmAck;
 		static bool                mDefaultEmailBcc;
 		static bool                mDefaultCmdScript;
-		static EditAlarmDlg::CmdLogType mDefaultCmdLogType;
-		static QString             mDefaultCmdLogFile;
-		static RecurrenceEdit::RepeatType  mDefaultRecurPeriod;
+		static EditAlarmDlg::CmdLogType   mDefaultCmdLogType;
+		static QString                    mDefaultCmdLogFile;
+		static RecurrenceEdit::RepeatType mDefaultRecurPeriod;
+		static KARecurrence::Feb29Type    mDefaultFeb29Type;
 		static TimePeriod::Units   mDefaultReminderUnits;
 		static QString             mDefaultPreAction;
 		static QString             mDefaultPostAction;

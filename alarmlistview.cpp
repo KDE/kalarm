@@ -45,6 +45,7 @@ class AlarmListTooltip : public QToolTip
 {
 	public:
 		AlarmListTooltip(QWidget* parent) : QToolTip(parent) { }
+		virtual ~AlarmListTooltip() {}
 	protected:
 		virtual void maybeTip(const QPoint&);
 };
@@ -369,25 +370,24 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 		repeatInterval = event.recurInterval();
 		switch (event.recurType())
 		{
-			case KAEvent::MINUTELY:
+			case KARecurrence::MINUTELY:
 				repeatOrder = 2;
 				break;
-			case KAEvent::DAILY:
+			case KARecurrence::DAILY:
 				repeatOrder = 3;
 				break;
-			case KAEvent::WEEKLY:
+			case KARecurrence::WEEKLY:
 				repeatOrder = 4;
 				break;
-			case KAEvent::MONTHLY_DAY:
-			case KAEvent::MONTHLY_POS:
+			case KARecurrence::MONTHLY_DAY:
+			case KARecurrence::MONTHLY_POS:
 				repeatOrder = 5;
 				break;
-			case KAEvent::ANNUAL_DATE:
-			case KAEvent::ANNUAL_POS:
-			case KAEvent::ANNUAL_DAY:
+			case KARecurrence::ANNUAL_DATE:
+			case KARecurrence::ANNUAL_POS:
 				repeatOrder = 6;
 				break;
-			case KAEvent::NO_RECUR:
+			case KARecurrence::NO_RECUR:
 			default:
 				break;
 		}

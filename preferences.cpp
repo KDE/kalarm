@@ -83,8 +83,8 @@ const QString                    Preferences::default_emailAddress            = 
 const QString                    Preferences::default_emailBccAddress         = QString::null;
 const Preferences::MailClient    Preferences::default_emailClient             = KMAIL;
 const Preferences::MailFrom      Preferences::default_emailBccFrom            = MAIL_FROM_CONTROL_CENTRE;
-const Preferences::Feb29Type     Preferences::default_feb29RecurType          = FEB29_MAR1;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod      = RecurrenceEdit::NO_RECUR;
+const KARecurrence::Feb29Type    Preferences::default_defaultFeb29Type        = KARecurrence::FEB29_MAR1;
 const TimePeriod::Units          Preferences::default_defaultReminderUnits    = TimePeriod::HOURS_MINUTES;
 const QString                    Preferences::default_defaultPreAction;
 const QString                    Preferences::default_defaultPostAction;
@@ -103,7 +103,7 @@ bool                       Preferences::mAutostartDaemon;
 bool                       Preferences::mRunInSystemTray;
 bool                       Preferences::mDisableAlarmsIfStopped;
 bool                       Preferences::mAutostartTrayIcon;
-Preferences::Feb29Type     Preferences::mFeb29RecurType;
+KARecurrence::Feb29Type    Preferences::mDefaultFeb29Type;
 bool                       Preferences::mModalMessages;
 int                        Preferences::mMessageButtonDelay;
 bool                       Preferences::mShowExpiredAlarms;
@@ -286,8 +286,6 @@ void Preferences::read()
 	mRunInSystemTray          = config->readBoolEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
 	mDisableAlarmsIfStopped   = config->readBoolEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon        = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
-	QCString feb29            = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
-	mFeb29RecurType           = (feb29 == "Mar1") ? FEB29_MAR1 : (feb29 == "Feb28") ? FEB29_FEB28 : FEB29_NONE;
 	mModalMessages            = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
 	mMessageButtonDelay       = config->readNumEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
 	mShowExpiredAlarms        = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
@@ -351,6 +349,8 @@ void Preferences::read()
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
+	QCString feb29            = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
+	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
 	int reminderUnits         = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
 	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
 	                          ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
@@ -384,7 +384,6 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
-	config->writeEntry(FEB29_RECUR_TYPE, (mFeb29RecurType == FEB29_MAR1 ? "Mar1" : mFeb29RecurType == FEB29_FEB28 ? "Feb28" : "None"));
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
 	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
@@ -420,6 +419,7 @@ void Preferences::save(bool syncToDisc)
 	config->writePathEntry(DEF_LOG_FILE, mDefaultCmdLogFile);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
+	config->writeEntry(FEB29_RECUR_TYPE, (mDefaultFeb29Type == KARecurrence::FEB29_MAR1 ? "Mar1" : mDefaultFeb29Type == KARecurrence::FEB29_FEB28 ? "Feb28" : "None"));
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
 	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);

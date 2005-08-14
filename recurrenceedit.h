@@ -26,6 +26,7 @@
 
 #include <qframe.h>
 #include <qdatetime.h>
+#include <qvaluelist.h>
 
 #include "datetime.h"
 class QWidgetStack;
@@ -172,15 +173,8 @@ class RecurrenceEdit : public QFrame
 		bool              noEmitTypeChanged;         // suppress typeChanged() signal
 		bool              mReadOnly;
 
-		// Initial state of all controls
+		// Initial state of non-rule controls
 		QButton*          mSavedRuleButton;          // which rule button was selected
-		int               mSavedFrequency;           // frequency for the selected rule
-		QBitArray         mSavedDays;                // ticked days for weekly rule
-		int               mSavedMonthlyType;         // whether day-of-month or month position radio button was selected
-		int               mSavedDayOfMonth;          // chosen day of month selected item
-		int               mSavedWeekOfMonth;         // chosen month position: selected week item
-		int               mSavedWeekDayOfMonth;      // chosen month position: selected day of week
-		QBitArray         mSavedMonths;              // ticked months for yearly rule
 		QButton*          mSavedRangeButton;         // which range button was selected
 		int               mSavedRepeatCount;         // repeat count
 		DateTime          mSavedEndDateTime;         // end date/time

@@ -168,15 +168,12 @@ void KAEvent::copy(const KAEvent& event)
 	mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
 	mRevision                = event.mRevision;
 	mRemainingRecurrences    = event.mRemainingRecurrences;
-	mExceptionDates          = event.mExceptionDates;
-	mExceptionDateTimes      = event.mExceptionDateTimes;
 	mAlarmCount              = event.mAlarmCount;
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
 	mCommandXterm            = event.mCommandXterm;
 	mKMailSerialNumber       = event.mKMailSerialNumber;
 	mCopyToKOrganizer        = event.mCopyToKOrganizer;
-	mRecursFeb29             = event.mRecursFeb29;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
 	mMainExpired             = event.mMainExpired;
 	mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
@@ -186,7 +183,7 @@ void KAEvent::copy(const KAEvent& event)
 	mUpdated                 = event.mUpdated;
 	delete mRecurrence;
 	if (event.mRecurrence)
-		mRecurrence = new Recurrence(*event.mRecurrence);
+		mRecurrence = new KARecurrence(*event.mRecurrence);
 	else
 		mRecurrence = 0;
 }
@@ -310,7 +307,6 @@ void KAEvent::set(const Event& event)
 	// First set up defaults.
 	mActionType       = T_MESSAGE;
 	mMainExpired      = true;
-	mRecursFeb29      = false;
 	mRepeatAtLogin    = false;
 	mDisplaying       = false;
 	mRepeatSound      = false;
@@ -330,7 +326,7 @@ void KAEvent::set(const Event& event)
 	mEmailSubject     = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
-	initRecur();
+	clearRecur();
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
@@ -480,11 +476,7 @@ void KAEvent::set(const Event& event)
 
 	Recurrence* recur = event.recurrence();
 	if (recur  &&  recur->doesRecur())
-	{
 		setRecurrence(*recur);
-		mExceptionDates     = recur->exDates();
-		mExceptionDateTimes = recur->exDateTimes();
-	}
 
 	mUpdated = false;
 }
@@ -584,7 +576,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			{
 				bool ok;
 				float fadeVolume;
-				int   fadeSecs;
+				int   fadeSecs = 0;
 				QStringList list = QStringList::split(QChar(';'), property, true);
 				data.soundVolume = list[0].toFloat(&ok);
 				if (!ok)
@@ -671,7 +663,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
                   const QFont& font, Action action, int lateCancel, int flags)
 {
-	initRecur();
+	clearRecur();
 	mStartDateTime.set(dateTime, flags & ANY_TIME);
 	mNextMainDateTime = mStartDateTime;
 	switch (action)
@@ -1118,55 +1110,10 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		initKcalAlarm(ev, ancillaryTime, QStringList(POST_ACTION_TYPE), KAAlarm::POST_ACTION_ALARM);
 	}
 
-	// Add recurrence data
-	Recurrence* recur = ev.recurrence();
-	if (mRecurrence && recur)
-	{
-		recur->setExDates(DateList());
-		recur->setExDateTimes(DateTimeList());
-		int frequency = mRecurrence->frequency();
-		int duration  = mRecurrence->duration();
-		const QDateTime& endDateTime = mRecurrence->endDateTime();
-		recur->setStartDateTime(mStartDateTime.dateTime());
-		ushort rectype = mRecurrence->recurrenceType();
-		switch (rectype)
-		{
-			case Recurrence::rHourly:
-				frequency *= 60;
-				// fall through to Recurrence::rMinutely
-			case Recurrence::rMinutely:
-				setRecurMinutely(*recur, frequency, duration, endDateTime);
-				break;
-			case Recurrence::rDaily:
-				setRecurDaily(*recur, frequency, duration, endDateTime.date());
-				break;
-			case Recurrence::rWeekly:
-				setRecurWeekly(*recur, frequency, mRecurrence->days(), duration, endDateTime.date());
-				break;
-			case Recurrence::rMonthlyDay:
-				setRecurMonthlyByDate(*recur, frequency, mRecurrence->monthDays(), duration, endDateTime.date());
-				break;
-			case Recurrence::rMonthlyPos:
-				setRecurMonthlyByPos(*recur, frequency, convRecurPos(mRecurrence->monthPositions()), duration, endDateTime.date());
-				break;
-			case Recurrence::rYearlyMonth:
-				setRecurAnnualByDate(*recur, frequency, mRecurrence->yearMonths(),
-				                     (mRecurrence->monthDays().isEmpty() ? 0 : mRecurrence->monthDays().first()),
-				                     duration, endDateTime.date());
-				break;
-			case Recurrence::rYearlyPos:
-				setRecurAnnualByPos(*recur, frequency, convRecurPos(mRecurrence->yearPositions()), mRecurrence->yearMonths(), duration, endDateTime.date());
-				break;
-			case Recurrence::rYearlyDay:
-				setRecurAnnualByDay(*recur, frequency, mRecurrence->yearMonths(), duration, endDateTime.date());
-				break;
-			default:
-				break;
-		}
-		recur->setExDates(mExceptionDates);
-		recur->setExDateTimes(mExceptionDateTimes);
-	}
-
+	if (mRecurrence)
+		mRecurrence->writeRecurrence(*ev.recurrence());
+	else
+		ev.clearRecurrence();
 	if (mSaveDateTime.isValid())
 		ev.setCreated(mSaveDateTime);
 	ev.setReadOnly(readOnly);
@@ -1473,7 +1420,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 {
 	bool result = false;
 	cancelCancelledDeferral();
-	if (checkRecur() == NO_RECUR)
+	if (checkRecur() == KARecurrence::NO_RECUR)
 	{
 		if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
 		{
@@ -1598,7 +1545,7 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 {
 	DeferLimitType ltype;
 	DateTime endTime;
-	bool recurs = (checkRecur() != NO_RECUR);
+	bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
 	if (recurs  ||  mRepeatCount)
 	{
 		// It's a repeated alarm. Don't allow it to be deferred past its
@@ -1733,7 +1680,7 @@ void KAEvent::reinstateFromDisplaying(const KAEvent& dispEvent)
 bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions) const
 {
 	QDateTime dt;
-	if (checkRecur() != NO_RECUR)
+	if (checkRecur() != KARecurrence::NO_RECUR)
 	{
 		if (mRecurrence->duration() < 0)
 			return true;    // infinite recurrence
@@ -1783,7 +1730,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 	}
 
 	OccurType type;
-	bool recurs = (checkRecur() != NO_RECUR);
+	bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
 	if (recurs)
 	{
 		int remainingCount;
@@ -1854,7 +1801,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 
 	// Find the latest recurrence of the event
 	OccurType type;
-	if (checkRecur() == NO_RECUR)
+	if (checkRecur() == KARecurrence::NO_RECUR)
 	{
 		result = mStartDateTime;
 		type = FIRST_OCCURRENCE;
@@ -1927,7 +1874,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
 		dt = mNextMainDateTime;
 		type = FIRST_OCCURRENCE;   // may not actually be the first occurrence
 	}
-	else if (checkRecur() != NO_RECUR)
+	else if (checkRecur() != KARecurrence::NO_RECUR)
 	{
 		int remainingCount;
 		type = nextRecurrence(pre, dt, remainingCount);
@@ -2012,9 +1959,6 @@ QString KAEvent::recurrenceText(bool brief) const
 		int frequency = mRecurrence->frequency();
 		switch (mRecurrence->recurrenceType())
 		{
-			case Recurrence::rHourly:
-				frequency *= 60;
-				// fall through to rMinutely
 			case Recurrence::rMinutely:
 				if (frequency < 60)
 					return i18n("1 Minute", "%n Minutes", frequency);
@@ -2076,19 +2020,18 @@ void KAEvent::setFirstRecurrence()
 {
 	switch (checkRecur())
 	{
-		case NO_RECUR:
-		case MINUTELY:
-		case DAILY:
+		case KARecurrence::NO_RECUR:
+		case KARecurrence::MINUTELY:
+		case KARecurrence::DAILY:
 			return;
-		case ANNUAL_DATE:
-		case ANNUAL_POS:
+		case KARecurrence::ANNUAL_DATE:
+		case KARecurrence::ANNUAL_POS:
 			if (mRecurrence->yearMonths().isEmpty())
 				return;    // (presumably it's a template)
 			break;
-		case WEEKLY:
-		case MONTHLY_POS:
-		case MONTHLY_DAY:
-		case ANNUAL_DAY:
+		case KARecurrence::WEEKLY:
+		case KARecurrence::MONTHLY_POS:
+		case KARecurrence::MONTHLY_DAY:
 			break;
 	}
 	QDateTime recurStart = mRecurrence->startDateTime();
@@ -2116,40 +2059,23 @@ void KAEvent::setFirstRecurrence()
 *  Initialise the event's recurrence from a KCal::Recurrence.
 *  The event's start date/time is not changed.
 */
-void KAEvent::setRecurrence(const Recurrence& recurrence)
+void KAEvent::setRecurrence(const KARecurrence& recurrence)
 {
-	mUpdated     = true;
-	mRecursFeb29 = false;
+	mUpdated = true;
 	delete mRecurrence;
-	// Copy the recurrence details.
-	switch (recurrence.recurrenceType())
+	if (recurrence.doesRecur())
 	{
-		case Recurrence::rYearlyMonth:
-		{
-			QDate start = recurrence.startDate();
-			mRecursFeb29 = (start.day() == 29  &&  start.month() == 2);
-			// fall through to rMinutely
-		}
-		case Recurrence::rMinutely:
-		case Recurrence::rHourly:
-		case Recurrence::rDaily:
-		case Recurrence::rWeekly:
-		case Recurrence::rMonthlyDay:
-		case Recurrence::rMonthlyPos:
-		case Recurrence::rYearlyPos:
-		case Recurrence::rYearlyDay:
-			mRecurrence = new Recurrence(recurrence);
-			mRecurrence->setStartDateTime(mStartDateTime.dateTime());
-			mRecurrence->setFloats(mStartDateTime.isDateOnly());
-			mRemainingRecurrences = mRecurrence->duration();
-			if (mRemainingRecurrences > 0  &&  !isTemplate())
-				mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.dateTime()) - 1;
-			break;
-
-		default:
-			mRecurrence = 0;
-			mRemainingRecurrences = 0;
-			break;
+		mRecurrence = new KARecurrence(recurrence);
+		mRecurrence->setStartDateTime(mStartDateTime.dateTime());
+		mRecurrence->setFloats(mStartDateTime.isDateOnly());
+		mRemainingRecurrences = mRecurrence->duration();
+		if (mRemainingRecurrences > 0  &&  !isTemplate())
+			mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.dateTime()) - 1;
+	}
+	else
+	{
+		mRecurrence = 0;
+		mRemainingRecurrences = 0;
 	}
 
 	// Adjust simple repetition values to fit the recurrence
@@ -2170,9 +2096,9 @@ bool KAEvent::setRepetition(int interval, int count)
 	{
 		if (interval % 1440  &&  mStartDateTime.isDateOnly())
 			return false;    // interval must be in units of days for date-only alarms
-		if (checkRecur() != NO_RECUR)
+		if (checkRecur() != KARecurrence::NO_RECUR)
 		{
-			int longestInterval = longestRecurrenceInterval() - 1;
+			int longestInterval = mRecurrence->longestInterval() - 1;
 			if (interval * count > longestInterval)
 				count = longestInterval / interval;
 		}
@@ -2191,18 +2117,9 @@ bool KAEvent::setRepetition(int interval, int count)
  *          = 0 to use 'end' instead.
  *    end   = end date/time (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMinutely(Recurrence& recurrence, int freq, int count, const QDateTime& end)
+bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
 {
-	if (count < -1)
-		return false;
-	recurrence.setMinutely(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDateTime(end);
-	else
-		return false;
-	return true;
+	return setRecur(RecurrenceRule::rMinutely, freq, count, end);
 }
 
 /******************************************************************************
@@ -2214,18 +2131,9 @@ bool KAEvent::setRecurMinutely(Recurrence& recurrence, int freq, int count, cons
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurDaily(Recurrence& recurrence, int freq, int count, const QDate& end)
+bool KAEvent::setRecurDaily(int freq, int count, const QDate& end)
 {
-	if (count < -1)
-		return false;
-	recurrence.setDaily(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	return true;
+	return setRecur(RecurrenceRule::rDaily, freq, count, end);
 }
 
 /******************************************************************************
@@ -2238,17 +2146,11 @@ bool KAEvent::setRecurDaily(Recurrence& recurrence, int freq, int count, const Q
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurWeekly(Recurrence& recurrence, int freq, const QBitArray& days, int count, const QDate& end)
+bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (count < -1)
+	if (!setRecur(RecurrenceRule::rWeekly, freq, count, end))
 		return false;
-	recurrence.setWeekly(freq, days);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
+	mRecurrence->addWeeklyDays(days);
 	return true;
 }
 
@@ -2262,20 +2164,12 @@ bool KAEvent::setRecurWeekly(Recurrence& recurrence, int freq, const QBitArray& 
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByDate(Recurrence& recurrence, int freq, const QValueList<int>& days, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end)
 {
-	if (count < -1)
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
-	recurrence.setMonthly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	
 	for (QValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
-		recurrence.addMonthlyDate(*it);
+		mRecurrence->addMonthlyDate(*it);
 	return true;
 }
 
@@ -2290,19 +2184,12 @@ bool KAEvent::setRecurMonthlyByDate(Recurrence& recurrence, int freq, const QVal
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const QValueList<MonthPos>& posns, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (count < -1)
-		return false;
-	recurrence.setMonthly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
 	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
-		recurrence.addMonthlyPos((*it).weeknum, (*it).days);
+		mRecurrence->addMonthlyPos((*it).weeknum, (*it).days);
 	return true;
 }
 
@@ -2313,34 +2200,26 @@ bool KAEvent::setRecurMonthlyByPos(Recurrence& recurrence, int freq, const QValu
  *    freq   = how many years between recurrences.
  *    months = which months of the year alarms should occur on.
  *    day    = day of month, or 0 to use start date
- *    feb29  = if start date is March 1st, recur on February 29th; otherwise ignored
+ *    feb29  = when February 29th should recur in non-leap years.
  *    count  = number of occurrences, including first and last.
  *           = -1 to recur indefinitely.
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QValueList<int>& months, int day, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
-	if (count < -1)
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
 		return false;
-	recurrence.setYearly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	
 	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-		recurrence.addYearlyMonth(*it);
+		mRecurrence->addYearlyMonth(*it);
 	if (day)
-		recurrence.addMonthlyDate(day);
+		mRecurrence->addMonthlyDate(day);
 	return true;
 }
 
 /******************************************************************************
  * Set the recurrence to recur annually, on the specified weekdays in the
- * specified weeks of the specified month.
+ * specified weeks of the specified months.
  * Parameters:
  *    freq   = how many years between recurrences.
  *    posns  = which days of the week/weeks of the month alarms should occur on.
@@ -2350,137 +2229,52 @@ bool KAEvent::setRecurAnnualByDate(Recurrence& recurrence, int freq, const QValu
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByPos(Recurrence& recurrence, int freq, const QValueList<MonthPos>& posns, const QValueList<int>& months, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByPos(int freq, const QValueList<MonthPos>& posns, const QValueList<int>& months, int count, const QDate& end)
 {
-	if (count < -1)
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, end))
 		return false;
-	recurrence.setYearly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	
 	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-		recurrence.addYearlyMonth(*it);
+		mRecurrence->addYearlyMonth(*it);
 	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
-		recurrence.addYearlyPos((*it).weeknum, (*it).days);
+		mRecurrence->addYearlyPos((*it).weeknum, (*it).days);
 	return true;
 }
 
 /******************************************************************************
- * Set the recurrence to recur annually, on the specified day numbers.
+ * Initialise the event's recurrence data.
  * Parameters:
- *    freq  = how many years between recurrences.
- *    days  = which days of the year alarms should occur on.
+ *    freq  = how many intervals between recurrences.
  *    count = number of occurrences, including first and last.
+ *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
+ *    end   = end date/time (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByDay(Recurrence& recurrence, int freq, const QValueList<int>& days, int count, const QDate& end)
+bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDateTime& end, KARecurrence::Feb29Type feb29)
 {
-	if (count < -1)
-		return false;
-	recurrence.setYearly(freq);
-	if (count)
-		recurrence.setDuration(count);
-	else if (end.isValid())
-		recurrence.setEndDate(end);
-	else
-		return false;
-	for (QValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
-		recurrence.addYearlyDay(*it);
-	return true;
-}
-
-/******************************************************************************
-*  Initialise a KCal::Recurrence from recurrence parameters.
-*  Reply = true if successful.
-*/
-bool KAEvent::setRecurrence(Recurrence& recurrence, RecurType recurType, int repeatInterval,
-                            int repeatCount, const DateTime& start, const QDateTime& end)
-{
-	if (start.isDateOnly())
-		recurrence.setStartDate(start.date());
-	else
-		recurrence.setStartDateTime(start.dateTime());
-	switch (recurType)
-	{
-		case MINUTELY:
-			setRecurMinutely(recurrence, repeatInterval, repeatCount, end);
-			break;
-		case DAILY:
-			setRecurDaily(recurrence, repeatInterval, repeatCount, end.date());
-			break;
-		case WEEKLY:
-		{
-			QBitArray days(7);
-			days.setBit(start.date().dayOfWeek() - 1);
-			setRecurWeekly(recurrence, repeatInterval, days, repeatCount, end.date());
-			break;
-		}
-		case MONTHLY_DAY:
-		{
-			QValueList<int> days;
-			days.append(start.date().day());
-			setRecurMonthlyByDate(recurrence, repeatInterval, days, repeatCount, end.date());
-			break;
-		}
-		case ANNUAL_DATE:
-		{
-			QValueList<int> months;
-			months.append(start.date().month());
-			setRecurAnnualByDate(recurrence, repeatInterval, months, 0, repeatCount, end.date());
-			break;
-		}
-		case NO_RECUR:
-			recurrence.unsetRecurs();
-			break;
-		default:
-			recurrence.unsetRecurs();
-			return false;
-	}
-
-	// Adjust simple repetition values to fit the recurrence
-	return true;
-}
-
-/******************************************************************************
- * Initialise the event's recurrence and alarm repetition data, and set the
- * recurrence start date and repetition count if applicable.
- */
-bool KAEvent::initRecur(const QDate& endDate, int count, bool feb29)
-{
-	mExceptionDates.clear();
-	mExceptionDateTimes.clear();
-	mRecursFeb29 = false;
-	mUpdated = true;
-	if (endDate.isValid() || count > 0 || count == -1)
+	if (count >= -1  &&  (count || end.date().isValid()))
 	{
 		if (!mRecurrence)
-			mRecurrence = new Recurrence();
-		mRecurrence->setStartDateTime(mNextMainDateTime.dateTime());
-		mRemainingRecurrences = count;
-		int year = mNextMainDateTime.date().year();
-		if (feb29  &&  !QDate::leapYear(year)
-		&&  mNextMainDateTime.date().month() == 3  &&  mNextMainDateTime.date().day() == 1)
+			mRecurrence = new KARecurrence;
+		if (mRecurrence->init(recurType, freq, count, mNextMainDateTime, end, feb29))
 		{
-			// The event start date is March 1st, but it is a recurrence
-			// on February 29th (recurring on March 1st in non-leap years)
-			while (!QDate::leapYear(--year)) ;
-			mRecurrence->setStartDateTime(QDateTime(QDate(year, 2, 29), mNextMainDateTime.time()));
-			mRecursFeb29 = true;
+			mUpdated = true;
+			mRemainingRecurrences = count;
+			return true;
 		}
-		return true;
 	}
-	else
-	{
-		delete mRecurrence;
-		mRecurrence = 0;
-		mRemainingRecurrences = 0;
-		return false;
-	}
+	clearRecur();
+	return false;
+}
+
+/******************************************************************************
+ * Clear the event's recurrence and alarm repetition data.
+ */
+void KAEvent::clearRecur()
+{
+	mUpdated = true;
+	delete mRecurrence;
+	mRecurrence = 0;
+	mRemainingRecurrences = 0;
 }
 
 /******************************************************************************
@@ -2488,23 +2282,21 @@ bool KAEvent::initRecur(const QDate& endDate, int count, bool feb29)
  * inconsistencies (which should never occur!).
  * Reply = true if a recurrence (as opposed to a login repetition) exists.
  */
-KAEvent::RecurType KAEvent::checkRecur() const
+KARecurrence::Type KAEvent::checkRecur() const
 {
 	if (mRecurrence)
 	{
-		RecurType type = static_cast<RecurType>(mRecurrence->recurrenceType());
+		KARecurrence::Type type = mRecurrence->type();
 		switch (type)
 		{
-			case Recurrence::rMinutely:                          // minutely
-			case Recurrence::rHourly:       return MINUTELY;     // hourly		
-			case Recurrence::rDaily:        return DAILY;        // daily
-			case Recurrence::rWeekly:       return WEEKLY;       // weekly on multiple days of week
-			case Recurrence::rMonthlyDay:   return MONTHLY_DAY;  // monthly on multiple dates in month
-			case Recurrence::rMonthlyPos:   return MONTHLY_POS;  // monthly on multiple nth day of week
-			case Recurrence::rYearlyMonth:  return ANNUAL_DATE;  // annually on multiple months (day of month = start date)
-			case Recurrence::rYearlyPos:    return ANNUAL_POS;   // annually on multiple nth day of week in multiple months
-			case Recurrence::rYearlyDay:    return ANNUAL_DAY;   // annually on multiple day numbers in year
-			case Recurrence::rNone:
+			case KARecurrence::MINUTELY:     // hourly		
+			case KARecurrence::DAILY:        // daily
+			case KARecurrence::WEEKLY:       // weekly on multiple days of week
+			case KARecurrence::MONTHLY_DAY:  // monthly on multiple dates in month
+			case KARecurrence::MONTHLY_POS:  // monthly on multiple nth day of week
+			case KARecurrence::ANNUAL_DATE:  // annually on multiple months (day of month = start date)
+			case KARecurrence::ANNUAL_POS:   // annually on multiple nth day of week in multiple months
+				return type;
 			default:
 				if (mRecurrence)
 				{
@@ -2513,10 +2305,8 @@ KAEvent::RecurType KAEvent::checkRecur() const
 				}
 				break;
 		}
-		if (mRecurrence)
-			const_cast<KAEvent*>(this)->mStartDateTime.set(mRecurrence->startDateTime(), mStartDateTime.isDateOnly());   // shouldn't be necessary, but just in case...
 	}
-	return NO_RECUR;
+	return KARecurrence::NO_RECUR;
 }
 
 
@@ -2527,20 +2317,16 @@ int KAEvent::recurInterval() const
 {
 	if (mRecurrence)
 	{
-		switch (mRecurrence->recurrenceType())
+		switch (mRecurrence->type())
 		{
-			case Recurrence::rMinutely:
-			case Recurrence::rDaily:
-			case Recurrence::rWeekly:
-			case Recurrence::rMonthlyDay:
-			case Recurrence::rMonthlyPos:
-			case Recurrence::rYearlyMonth:
-			case Recurrence::rYearlyPos:
-			case Recurrence::rYearlyDay:
+			case KARecurrence::MINUTELY:
+			case KARecurrence::DAILY:
+			case KARecurrence::WEEKLY:
+			case KARecurrence::MONTHLY_DAY:
+			case KARecurrence::MONTHLY_POS:
+			case KARecurrence::ANNUAL_DATE:
+			case KARecurrence::ANNUAL_POS:
 				return mRecurrence->frequency();
-			case Recurrence::rHourly:
-				return mRecurrence->frequency() * 60;
-			case Recurrence::rNone:
 			default:
 				break;
 		}
@@ -2548,94 +2334,7 @@ int KAEvent::recurInterval() const
 	return 0;
 }
 
-/******************************************************************************
- * Return the longest interval (in minutes) between recurrences.
- */
-int KAEvent::longestRecurrenceInterval(const Recurrence& recurrence)
-{
-	int freq = recurrence.frequency();
-	switch (recurrence.recurrenceType())
-	{
-		case Recurrence::rMinutely:
-			return freq;
-		case Recurrence::rHourly:
-			return freq * 60;
-		case Recurrence::rDaily:
-			return freq * 1440;
-		case Recurrence::rWeekly:
-		{
-			// Find which days of the week it recurs on, and if on more than
-			// one, reduce the maximum interval accordingly.
-			QBitArray days = recurrence.days();
-			int first = -1;
-			int last  = -1;
-			int maxgap = 1;
-			for (int i = 0;  i < 7;  ++i)
-			{
-				if (days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1))
-				{
-					if (first < 0)
-						first = i;
-					else if (i - last > maxgap)
-						maxgap = i - last;
-					last = i;
-				}
-			}
-			if (first < 0)
-				break;    // no days recur
-			int span = last - first;
-			if (freq > 1)
-				return (freq*7 - span) * 1440;
-			if (7 - span > maxgap)
-				return (7 - span) * 1440;
-			return maxgap * 1440;
-		}
-		case Recurrence::rMonthlyDay:
-		case Recurrence::rMonthlyPos:
-			return freq * 1440 * 31;
-		case Recurrence::rYearlyMonth:
-		case Recurrence::rYearlyPos:
-		{
-			// Find which months of the year it recurs on, and if on more than
-			// one, reduce the maximum interval accordingly.
-			const QValueList<int> months = recurrence.yearMonths();  // month list is sorted
-			if (months.isEmpty())
-				break;    // no months recur
-			if (months.count() > 1)
-			{
-				int first = -1;
-				int last  = -1;
-				int maxgap = 0;
-				for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-				{
-					if (first < 0)
-						first = *it;
-					else
-					{
-						int span = QDate(2001, last, 1).daysTo(QDate(2001, *it, 1));
-						if (span > maxgap)
-							maxgap = span;
-					}
-					last = *it;
-				}
-				int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
-				if (freq > 1)
-					return (freq*365 - span) * 1440;
-				if (365 - span > maxgap)
-					return (365 - span) * 1440;
-				return maxgap * 1440;
-			}
-			// fall through to rYearlyDay
-		}
-		case Recurrence::rYearlyDay:
-			return freq * 1440 * 365;
-		case Recurrence::rNone:
-		default:
-			break;
-	}
-	return 0;
-}
-
+#if 0
 /******************************************************************************
  * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
  */
@@ -2667,6 +2366,7 @@ QValueList<KAEvent::MonthPos> KAEvent::convRecurPos(const QValueList<KCal::Recur
 	}
 	return mposns;
 }
+#endif
 
 /******************************************************************************
  * Find the alarm template with the specified name.
@@ -2768,35 +2468,6 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 		}
 	}
 	return changed;
-}
-
-/******************************************************************************
- * Set the yearly February 29th recurrence type according to the user's
- * preferences.
- */
-void KAEvent::setFeb29RecurType()
-{
-	Preferences::Feb29Type pfeb29 = Preferences::feb29RecurType();
-	switch (pfeb29)
-	{
-		case Preferences::FEB29_FEB28:
-		case Preferences::FEB29_NONE:
-		case Preferences::FEB29_MAR1:
-			break;
-		default:
-			pfeb29 = Preferences::default_feb29RecurType;
-			break;
-	}
-//#warning Reinstate Feb 29th
-/*	Recurrence::Feb29Type feb29;
-	switch (pfeb29)
-	{
-		case Preferences::FEB29_FEB28:  feb29 = Recurrence::rFeb28;  break;
-		case Preferences::FEB29_NONE:   feb29 = Recurrence::rFeb29;  break;
-		case Preferences::FEB29_MAR1:
-		default:                        feb29 = Recurrence::rMar1;   break;
-	}
-	Recurrence::setFeb29YearlyTypeDefault(feb29);*/
 }
 
 /******************************************************************************
@@ -3165,10 +2836,7 @@ void KAEvent::dumpDebug() const
 	kdDebug(5950) << "-- mRevision:" << mRevision << ":\n";
 	kdDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false") << ":\n";
 	if (mRecurrence)
-	{
-		kdDebug(5950) << "-- mRecursFeb29:" << (mRecursFeb29 ? "true" : "false") << ":\n";
 		kdDebug(5950) << "-- mRemainingRecurrences:" << mRemainingRecurrences << ":\n";
-	}
 	kdDebug(5950) << "-- mAlarmCount:" << mAlarmCount << ":\n";
 	kdDebug(5950) << "-- mMainExpired:" << (mMainExpired ? "true" : "false") << ":\n";
 	kdDebug(5950) << "KAEvent dump end\n";

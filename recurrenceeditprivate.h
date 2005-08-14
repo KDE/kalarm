@@ -22,6 +22,8 @@
 #define RECURRENCEEDITPRIVATE_H
 
 #include <qframe.h>
+#include <qvaluelist.h>
+#include <qbitarray.h>
 
 class QWidget;
 class QVBoxLayout;
@@ -39,7 +41,7 @@ class NoRule : public QFrame
 	public:
 		NoRule(QWidget* parent, const char* name = 0) : QFrame(parent, name)
 		                                                 { setFrameStyle(QFrame::NoFrame); }
-		virtual int   frequency() const      { return 0; }
+		virtual int      frequency() const       { return 0; }
 };
 
 class Rule : public NoRule
@@ -53,13 +55,17 @@ class Rule : public NoRule
 		virtual void     setFrequencyFocus()     { mSpinBox->setFocus(); }
 		QVBoxLayout*     layout() const          { return mLayout; }
 		virtual QWidget* validate(QString&)      { return 0; }
+		virtual void     saveState();
+		virtual bool     stateChanged() const;
 	signals:
-		void         frequencyChanged();
+		void             frequencyChanged();
 	private:
-		QWidget*     mSpinBox;
-		SpinBox*     mIntSpinBox;
-		TimeSpinBox* mTimeSpinBox;
-		QVBoxLayout* mLayout;
+		QWidget*         mSpinBox;
+		SpinBox*         mIntSpinBox;
+		TimeSpinBox*     mTimeSpinBox;
+		QVBoxLayout*     mLayout;
+		// Saved state of all controls
+		int              mSavedFrequency;    // frequency for the selected rule
 };
 
 // Subdaily rule choices
@@ -84,12 +90,16 @@ class WeeklyRule : public Rule
 		Q_OBJECT
 	public:
 		WeeklyRule(bool readOnly, QWidget* parent, const char* name = 0);
-		bool         days(QBitArray& days) const;
-		void         setDays(QBitArray& days);
-		void         setDay(int dayOfWeek);
+		QBitArray        days() const;
+		void             setDays(QBitArray& days);
+		void             setDay(int dayOfWeek);
 		virtual QWidget* validate(QString& errorMessage);
+		virtual void     saveState();
+		virtual bool     stateChanged() const;
 	private:
-		CheckBox*    mDayBox[7];
+		CheckBox*        mDayBox[7];
+		// Saved state of all controls
+		QBitArray        mSavedDays;         // ticked days for weekly rule
 };
 
 // Monthly/yearly rule choices base class
@@ -99,36 +109,44 @@ class MonthYearRule : public Rule
 	public:
 		enum DayPosType { DATE, POS };
 
-		MonthYearRule(const QString& freqText, const QString& freqWhatsThis, bool readOnly,
-		              QWidget* parent, const char* name = 0);
-		DayPosType   type() const;
-		int          date() const;       // if date in month is selected
-		int          week() const;       // if position is selected
-		int          dayOfWeek() const;  // if position is selected
-		void         setType(DayPosType);
-		void         setDate(int dayOfMonth);
-		void         setPosition(int week, int dayOfWeek);
-		void         setDefaultValues(int dayOfMonth, int dayOfWeek);
+		MonthYearRule(const QString& freqText, const QString& freqWhatsThis, bool allowEveryWeek,
+		              bool readOnly, QWidget* parent, const char* name = 0);
+		DayPosType       type() const;
+		int              date() const;       // if date in month is selected
+		int              week() const;       // if position is selected
+		int              dayOfWeek() const;  // if position is selected
+		void             setType(DayPosType);
+		void             setDate(int dayOfMonth);
+		void             setPosition(int week, int dayOfWeek);
+		void             setDefaultValues(int dayOfMonth, int dayOfWeek);
+		virtual void     saveState();
+		virtual bool     stateChanged() const;
 	signals:
-		void         typeChanged(DayPosType);
+		void             typeChanged(DayPosType);
 	protected:
-		DayPosType   buttonType(int id) const  { return id == mDayButtonId ? DATE : POS; }
-		virtual void daySelected(int /*day*/)  { }
+		DayPosType       buttonType(int id) const  { return id == mDayButtonId ? DATE : POS; }
+		virtual void     daySelected(int /*day*/)  { }
 	protected slots:
-		virtual void clicked(int id);
+		virtual void     clicked(int id);
 	private slots:
-		virtual void slotDaySelected(int index);
+		virtual void     slotDaySelected(int index);
 	private:
-		void         enableSelection(DayPosType);
+		void             enableSelection(DayPosType);
 
-		ButtonGroup* mButtonGroup;
-		RadioButton* mDayButton;
-		RadioButton* mPosButton;
-		ComboBox*    mDayCombo;
-		ComboBox*    mWeekCombo;
-		ComboBox*    mDayOfWeekCombo;
-		int          mDayButtonId;
-		int          mPosButtonId;
+		ButtonGroup*     mButtonGroup;
+		RadioButton*     mDayButton;
+		RadioButton*     mPosButton;
+		ComboBox*        mDayCombo;
+		ComboBox*        mWeekCombo;
+		ComboBox*        mDayOfWeekCombo;
+		int              mDayButtonId;
+		int              mPosButtonId;
+		bool             mEveryWeek;         // "Every" week is allowed
+		// Saved state of all controls
+		int              mSavedType;         // whether day-of-month or month position radio button was selected
+		int              mSavedDay;          // chosen day of month selected item
+		int              mSavedWeek;         // chosen month position: selected week item
+		int              mSavedWeekDay;      // chosen month position: selected day of week
 };
 
 // Monthly rule choices
@@ -144,16 +162,27 @@ class YearlyRule : public MonthYearRule
 		Q_OBJECT
 	public:
 		YearlyRule(bool readOnly, QWidget* parent, const char* name = 0);
-		bool         months(QValueList<int>& mnths) const;
-		void         months(QBitArray& mnths) const;
-		void         setMonths(const QValueList<int>& months);
-		void         setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
+		QValueList<int>  months() const;
+		void             setMonths(const QValueList<int>& months);
+		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
+		KARecurrence::Feb29Type feb29Type() const;
+		void             setFeb29Type(KARecurrence::Feb29Type);
 		virtual QWidget* validate(QString& errorMessage);
+		virtual void     saveState();
+		virtual bool     stateChanged() const;
+	protected:
+		virtual void     daySelected(int day);
 	protected slots:
-		virtual void clicked(int id);
-		virtual void daySelected(int day);
+		virtual void     clicked(int id);
+	private slots:
+		void             enableFeb29();
 	private:
-		CheckBox*    mMonthBox[12];
+		CheckBox*        mMonthBox[12];
+		QLabel*          mFeb29Label;
+		ComboBox*        mFeb29Combo;
+		// Saved state of all controls
+		QValueList<int>  mSavedMonths;       // ticked months for yearly rule
+		int              mSavedFeb29Type;    // February 29th recurrence type
 };
 
 #endif // RECURRENCEEDITPRIVATE_H

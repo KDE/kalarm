@@ -314,31 +314,6 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	// How to handle February 29th in yearly recurrences
-	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
-	vbox->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(alignment | Qt::WordBreak);
-	box = new QHBox(vbox);
-	box->setSpacing(2*KDialog::spacingHint());
-	mFeb29 = new QButtonGroup(box);
-	mFeb29->hide();
-	QWidget* widget = new QWidget(box);
-	widget->setFixedWidth(3*KDialog::spacingHint());
-	QRadioButton* radio = new QRadioButton(i18n("February 2&8th"), box);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->insert(radio, Preferences::FEB29_FEB28);
-	radio = new QRadioButton(i18n("March &1st"), box);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->insert(radio, Preferences::FEB29_MAR1);
-	radio = new QRadioButton(i18n("Do &not repeat"), box);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->insert(radio, Preferences::FEB29_NONE);
-	box->setFixedHeight(box->sizeHint().height());
-	QWhatsThis::add(vbox,
-	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
-	           "Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting."));
-
 	// Confirm alarm deletion?
 	itemBox = new QHBox(mPage);   // this is to allow left adjustment
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
@@ -404,7 +379,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 		QString term = cmd.left(i > 0 ? i : 1000);
 		if (KStandardDirs::findExe(term).isEmpty())
 			continue;
-		radio = new QRadioButton(term, group);
+		QRadioButton* radio = new QRadioButton(term, group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
 		cmd.replace("%t", progname);
@@ -419,7 +394,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 	box = new QHBox(group);
 	grid->addMultiCellWidget(box, row + 1, row + 1, 0, 2, Qt::AlignAuto);
-	radio = new QRadioButton(i18n("Other:"), box);
+	QRadioButton* radio = new QRadioButton(i18n("Other:"), box);
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->insert(radio, mXtermCount);
@@ -444,7 +419,6 @@ void MiscPrefTab::restore()
 	mAutostartTrayIcon2->setChecked(Preferences::mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	mStartOfDay->setValue(Preferences::mStartOfDay);
-	mFeb29->setButton(Preferences::mFeb29RecurType);
 	setExpiredControls(Preferences::mExpiredKeepDays);
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
@@ -495,8 +469,6 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
-	int feb29 = mFeb29->id(mFeb29->selected());
-	Preferences::mFeb29RecurType  = (feb29 >= 0) ? Preferences::Feb29Type(feb29) : Preferences::default_feb29RecurType;
 	Preferences::mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
 	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
 	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
@@ -515,7 +487,6 @@ void MiscPrefTab::setDefaults()
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay);
-	mFeb29->setButton(Preferences::default_feb29RecurType);
 	setExpiredControls(Preferences::default_expiredKeepDays);
 	mXtermType->setButton(0);
 	mXtermCommand->setEnabled(false);
@@ -898,92 +869,92 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QBoxLayout* layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
-	mDefaultConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group, "defConfAck");
-	mDefaultConfirmAck->setMinimumSize(mDefaultConfirmAck->sizeHint());
-	QWhatsThis::add(mDefaultConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
-	layout->addWidget(mDefaultConfirmAck, 0, Qt::AlignAuto);
+	mConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group, "defConfAck");
+	mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
+	QWhatsThis::add(mConfirmAck, defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
+	layout->addWidget(mConfirmAck, 0, Qt::AlignAuto);
 
-	mDefaultAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), group, "defAutoClose");
-	mDefaultAutoClose->setMinimumSize(mDefaultAutoClose->sizeHint());
-	QWhatsThis::add(mDefaultAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
-	layout->addWidget(mDefaultAutoClose, 0, Qt::AlignAuto);
+	mAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), group, "defAutoClose");
+	mAutoClose->setMinimumSize(mAutoClose->sizeHint());
+	QWhatsThis::add(mAutoClose, defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
+	layout->addWidget(mAutoClose, 0, Qt::AlignAuto);
 
 	QHBox* box = new QHBox(group);
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
-	mDefaultReminderUnits = new QComboBox(box, "defWarnUnits");
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
-	mDefaultReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
-	mDefaultReminderUnits->setFixedSize(mDefaultReminderUnits->sizeHint());
-	label->setBuddy(mDefaultReminderUnits);
+	mReminderUnits = new QComboBox(box, "defWarnUnits");
+	mReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
+	mReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
+	mReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
+	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
+	label->setBuddy(mReminderUnits);
 	QWhatsThis::add(box,
 	      i18n("The default units for the reminder in the alarm edit dialog."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	mDefaultSpecialActions = new SpecialActions(group);
-	mDefaultSpecialActions->setFixedHeight(mDefaultSpecialActions->sizeHint().height());
-	layout->addWidget(mDefaultSpecialActions);
+	mSpecialActions = new SpecialActions(group);
+	mSpecialActions->setFixedHeight(mSpecialActions->sizeHint().height());
+	layout->addWidget(mSpecialActions);
 
 	// SOUND
 	QButtonGroup* bgroup = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
 	layout = new QVBoxLayout(bgroup, KDialog::marginHint(), KDialog::spacingHint());
 	layout->addSpacing(groupTopMargin);
 
-	mDefaultSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bgroup, "defSound");
-	mDefaultSound->setMinimumSize(mDefaultSound->sizeHint());
-	QWhatsThis::add(mDefaultSound, defsetting.arg(SoundPicker::i18n_Sound()));
-	layout->addWidget(mDefaultSound, 0, Qt::AlignAuto);
+	mSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bgroup, "defSound");
+	mSound->setMinimumSize(mSound->sizeHint());
+	QWhatsThis::add(mSound, defsetting.arg(SoundPicker::i18n_Sound()));
+	layout->addWidget(mSound, 0, Qt::AlignAuto);
 
 	box = new QHBox(bgroup);
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box, 0, Qt::AlignAuto);
 
-	mDefaultBeep = new QRadioButton(SoundPicker::i18n_b_Beep(), box, "defBeep");
-	bgroup->insert(mDefaultBeep);
-	mDefaultBeep->setMinimumSize(mDefaultBeep->sizeHint());
-	QWhatsThis::add(mDefaultBeep,
+	mBeep = new QRadioButton(SoundPicker::i18n_b_Beep(), box, "defBeep");
+	bgroup->insert(mBeep);
+	mBeep->setMinimumSize(mBeep->sizeHint());
+	QWhatsThis::add(mBeep,
 	      soundSetting.arg(SoundPicker::i18n_Beep()).arg(SoundPicker::i18n_Sound()));
-	mDefaultFile = new QRadioButton(SoundPicker::i18n_File(), box, "defFile");
-	bgroup->insert(mDefaultFile);
-	mDefaultFile->setMinimumSize(mDefaultFile->sizeHint());
-	QWhatsThis::add(mDefaultFile,
+	mFile = new QRadioButton(SoundPicker::i18n_File(), box, "defFile");
+	bgroup->insert(mFile);
+	mFile->setMinimumSize(mFile->sizeHint());
+	QWhatsThis::add(mFile,
 	      soundSetting.arg(SoundPicker::i18n_File()).arg(SoundPicker::i18n_Sound()));
 	if (theApp()->speechEnabled())
 	{
-		mDefaultSpeak = new QRadioButton(SoundPicker::i18n_Speak(), box, "defSpeak");
-		mDefaultSpeak->setMinimumSize(mDefaultSpeak->sizeHint());
-		QWhatsThis::add(mDefaultSpeak,
+		mSpeak = new QRadioButton(SoundPicker::i18n_Speak(), box, "defSpeak");
+		mSpeak->setMinimumSize(mSpeak->sizeHint());
+		QWhatsThis::add(mSpeak,
 		      soundSetting.arg(SoundPicker::i18n_Speak()).arg(SoundPicker::i18n_Sound()));
-		bgroup->insert(mDefaultSpeak);
+		bgroup->insert(mSpeak);
 	}
 	else
-		mDefaultSpeak = 0;
+		mSpeak = 0;
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 
 	box = new QHBox(bgroup);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
-	mDefaultSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
-	mDefaultSoundFileLabel->setFixedSize(mDefaultSoundFileLabel->sizeHint());
-	mDefaultSoundFile = new QLineEdit(box);
-	mDefaultSoundFileLabel->setBuddy(mDefaultSoundFile);
-	mDefaultSoundFileBrowse = new QPushButton(box);
-	mDefaultSoundFileBrowse->setPixmap(SmallIcon("fileopen"));
-	mDefaultSoundFileBrowse->setFixedSize(mDefaultSoundFileBrowse->sizeHint());
-	connect(mDefaultSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
-	QToolTip::add(mDefaultSoundFileBrowse, i18n("Choose a sound file"));
+	mSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
+	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
+	mSoundFile = new QLineEdit(box);
+	mSoundFileLabel->setBuddy(mSoundFile);
+	mSoundFileBrowse = new QPushButton(box);
+	mSoundFileBrowse->setPixmap(SmallIcon("fileopen"));
+	mSoundFileBrowse->setFixedSize(mSoundFileBrowse->sizeHint());
+	connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
+	QToolTip::add(mSoundFileBrowse, i18n("Choose a sound file"));
 	QWhatsThis::add(box,
 	      i18n("Enter the default sound file to use in the alarm edit dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	layout->addWidget(box);
 
 #ifndef WITHOUT_ARTS
-	mDefaultSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bgroup, "defRepeatSound");
-	mDefaultSoundRepeat->setMinimumSize(mDefaultSoundRepeat->sizeHint());
-	QWhatsThis::add(mDefaultSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
-	layout->addWidget(mDefaultSoundRepeat, 0, Qt::AlignAuto);
+	mSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bgroup, "defRepeatSound");
+	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
+	QWhatsThis::add(mSoundRepeat, i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
+	layout->addWidget(mSoundRepeat, 0, Qt::AlignAuto);
 #endif
 	bgroup->setFixedHeight(bgroup->sizeHint().height());
 
@@ -993,16 +964,16 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	layout->addSpacing(groupTopMargin);
 	layout = new QHBoxLayout(layout, KDialog::spacingHint());
 
-	mDefaultCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group, "defCmdScript");
-	mDefaultCmdScript->setMinimumSize(mDefaultCmdScript->sizeHint());
-	QWhatsThis::add(mDefaultCmdScript, defsetting.arg(EditAlarmDlg::i18n_EnterScript()));
-	layout->addWidget(mDefaultCmdScript);
+	mCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group, "defCmdScript");
+	mCmdScript->setMinimumSize(mCmdScript->sizeHint());
+	QWhatsThis::add(mCmdScript, defsetting.arg(EditAlarmDlg::i18n_EnterScript()));
+	layout->addWidget(mCmdScript);
 	layout->addStretch();
 
-	mDefaultCmdXterm = new QCheckBox(EditAlarmDlg::i18n_w_ExecInTermWindow(), group, "defCmdXterm");
-	mDefaultCmdXterm->setMinimumSize(mDefaultCmdXterm->sizeHint());
-	QWhatsThis::add(mDefaultCmdXterm, defsetting.arg(EditAlarmDlg::i18n_ExecInTermWindow()));
-	layout->addWidget(mDefaultCmdXterm);
+	mCmdXterm = new QCheckBox(EditAlarmDlg::i18n_w_ExecInTermWindow(), group, "defCmdXterm");
+	mCmdXterm->setMinimumSize(mCmdXterm->sizeHint());
+	QWhatsThis::add(mCmdXterm, defsetting.arg(EditAlarmDlg::i18n_ExecInTermWindow()));
+	layout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
 	group = new QGroupBox(i18n("Email Alarms"), mPage);
@@ -1010,86 +981,114 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	layout->addSpacing(groupTopMargin);
 
 	// BCC email to sender
-	mDefaultEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), group, "defEmailBcc");
-	mDefaultEmailBcc->setMinimumSize(mDefaultEmailBcc->sizeHint());
-	QWhatsThis::add(mDefaultEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
-	layout->addWidget(mDefaultEmailBcc, 0, Qt::AlignAuto);
+	mEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), group, "defEmailBcc");
+	mEmailBcc->setMinimumSize(mEmailBcc->sizeHint());
+	QWhatsThis::add(mEmailBcc, defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
+	layout->addWidget(mEmailBcc, 0, Qt::AlignAuto);
 
+	// MISCELLANEOUS
 	// Show in KOrganizer
-	mDefaultCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), mPage, "defShowKorg");
-	mDefaultCopyToKOrganizer->setMinimumSize(mDefaultCopyToKOrganizer->sizeHint());
-	QWhatsThis::add(mDefaultCopyToKOrganizer, defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
+	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), mPage, "defShowKorg");
+	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
+	QWhatsThis::add(mCopyToKOrganizer, defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
 
 	// Late cancellation
 	box = new QHBox(mPage);
 	box->setSpacing(KDialog::spacingHint());
-	mDefaultLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
-	mDefaultLateCancel->setMinimumSize(mDefaultLateCancel->sizeHint());
-	QWhatsThis::add(mDefaultLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
+	mLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
+	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
+	QWhatsThis::add(mLateCancel, defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	// RECURRENCE
+	// Recurrence
 	QHBox* itemBox = new QHBox(box);   // this is to control the QWhatsThis text display area
 	itemBox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("&Recurrence:"), itemBox);
 	label->setFixedSize(label->sizeHint());
-	mDefaultRecurPeriod = new QComboBox(itemBox, "defRecur");
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Daily());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Weekly());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Monthly());
-	mDefaultRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly());
-	mDefaultRecurPeriod->setFixedSize(mDefaultRecurPeriod->sizeHint());
-	label->setBuddy(mDefaultRecurPeriod);
+	mRecurPeriod = new QComboBox(itemBox, "defRecur");
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_NoRecur());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_AtLogin());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_HourlyMinutely());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_Daily());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_Weekly());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_Monthly());
+	mRecurPeriod->insertItem(RecurrenceEdit::i18n_Yearly());
+	mRecurPeriod->setFixedSize(mRecurPeriod->sizeHint());
+	label->setBuddy(mRecurPeriod);
 	QWhatsThis::add(itemBox,
 	      i18n("The default setting for the recurrence rule in the alarm edit dialog."));
 	box->setFixedHeight(itemBox->sizeHint().height());
+
+	// How to handle February 29th in yearly recurrences
+	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
+	vbox->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
+	label->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+	itemBox = new QHBox(vbox);
+	itemBox->setSpacing(2*KDialog::spacingHint());
+	mFeb29 = new QButtonGroup(itemBox);
+	mFeb29->hide();
+	QWidget* widget = new QWidget(itemBox);
+	widget->setFixedWidth(3*KDialog::spacingHint());
+	QRadioButton* radio = new QRadioButton(i18n("February 2&8th"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, KARecurrence::FEB29_FEB28);
+	radio = new QRadioButton(i18n("March &1st"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, KARecurrence::FEB29_MAR1);
+	radio = new QRadioButton(i18n("Do &not repeat"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->insert(radio, KARecurrence::FEB29_FEB29);
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
+	QWhatsThis::add(vbox,
+	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
+	           "Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting."));
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void EditPrefTab::restore()
 {
-	mDefaultLateCancel->setChecked(Preferences::mDefaultLateCancel);
-	mDefaultAutoClose->setChecked(Preferences::mDefaultAutoClose);
-	mDefaultConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
-	mDefaultCopyToKOrganizer->setChecked(Preferences::mDefaultCopyToKOrganizer);
-	mDefaultSound->setChecked(Preferences::mDefaultSound);
-	setDefaultSoundType(Preferences::mDefaultSoundType);
-	mDefaultSoundFile->setText(Preferences::mDefaultSoundFile);
+	mAutoClose->setChecked(Preferences::mDefaultAutoClose);
+	mConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
+	mReminderUnits->setCurrentItem(Preferences::mDefaultReminderUnits);
+	mSpecialActions->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
+	mSound->setChecked(Preferences::mDefaultSound);
+	setSoundType(Preferences::mDefaultSoundType);
+	mSoundFile->setText(Preferences::mDefaultSoundFile);
 #ifndef WITHOUT_ARTS
-	mDefaultSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
+	mSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
 #endif
-	mDefaultSpecialActions->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
-	mDefaultCmdScript->setChecked(Preferences::mDefaultCmdScript);
-	mDefaultCmdXterm->setChecked(Preferences::mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
-	mDefaultEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
-	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::mDefaultRecurPeriod));
-	mDefaultReminderUnits->setCurrentItem(Preferences::mDefaultReminderUnits);
+	mCmdScript->setChecked(Preferences::mDefaultCmdScript);
+	mCmdXterm->setChecked(Preferences::mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
+	mEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
+	mCopyToKOrganizer->setChecked(Preferences::mDefaultCopyToKOrganizer);
+	mLateCancel->setChecked(Preferences::mDefaultLateCancel);
+	mRecurPeriod->setCurrentItem(recurIndex(Preferences::mDefaultRecurPeriod));
+	mFeb29->setButton(Preferences::mDefaultFeb29Type);
 }
 
 void EditPrefTab::apply(bool syncToDisc)
 {
-	Preferences::mDefaultLateCancel       = mDefaultLateCancel->isChecked() ? 1 : 0;
-	Preferences::mDefaultAutoClose        = mDefaultAutoClose->isChecked();
-	Preferences::mDefaultConfirmAck       = mDefaultConfirmAck->isChecked();
-	Preferences::mDefaultCopyToKOrganizer = mDefaultCopyToKOrganizer->isChecked();
-	Preferences::mDefaultSound            = mDefaultSound->isChecked();
-	Preferences::mDefaultSoundFile        = mDefaultSoundFile->text();
-	Preferences::mDefaultSoundType        = mDefaultSpeak && mDefaultSpeak->isOn() ? SoundPicker::SPEAK
-	                                      : mDefaultFile->isOn()                   ? SoundPicker::PLAY_FILE
-	                                      :                                          SoundPicker::BEEP;
+	Preferences::mDefaultAutoClose        = mAutoClose->isChecked();
+	Preferences::mDefaultConfirmAck       = mConfirmAck->isChecked();
+	Preferences::mDefaultReminderUnits    = static_cast<TimePeriod::Units>(mReminderUnits->currentItem());
+	Preferences::mDefaultPreAction        = mSpecialActions->preAction();
+	Preferences::mDefaultPostAction       = mSpecialActions->postAction();
+	Preferences::mDefaultSound            = mSound->isChecked();
+	Preferences::mDefaultSoundFile        = mSoundFile->text();
+	Preferences::mDefaultSoundType        = mSpeak && mSpeak->isOn() ? SoundPicker::SPEAK
+	                                      : mFile->isOn()            ? SoundPicker::PLAY_FILE
+	                                      :                            SoundPicker::BEEP;
 #ifndef WITHOUT_ARTS
-	Preferences::mDefaultSoundRepeat      = mDefaultSoundRepeat->isChecked();
+	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
 #endif
-	Preferences::mDefaultCmdScript        = mDefaultCmdScript->isChecked();
-	Preferences::mDefaultCmdLogFile       = (mDefaultCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
-	Preferences::mDefaultEmailBcc         = mDefaultEmailBcc->isChecked();
-	Preferences::mDefaultPreAction        = mDefaultSpecialActions->preAction();
-	Preferences::mDefaultPostAction       = mDefaultSpecialActions->postAction();
-	switch (mDefaultRecurPeriod->currentItem())
+	Preferences::mDefaultCmdScript        = mCmdScript->isChecked();
+	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
+	Preferences::mDefaultEmailBcc         = mEmailBcc->isChecked();
+	Preferences::mDefaultCopyToKOrganizer = mCopyToKOrganizer->isChecked();
+	Preferences::mDefaultLateCancel       = mLateCancel->isChecked() ? 1 : 0;
+	switch (mRecurPeriod->currentItem())
 	{
 		case 6:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
 		case 5:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
@@ -1100,36 +1099,38 @@ void EditPrefTab::apply(bool syncToDisc)
 		case 0:
 		default: Preferences::mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
 	}
-	Preferences::mDefaultReminderUnits = static_cast<TimePeriod::Units>(mDefaultReminderUnits->currentItem());
+	int feb29 = mFeb29->selectedId();
+	Preferences::mDefaultFeb29Type  = (feb29 >= 0) ? static_cast<KARecurrence::Feb29Type>(feb29) : Preferences::default_defaultFeb29Type;
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void EditPrefTab::setDefaults()
 {
-	mDefaultLateCancel->setChecked(Preferences::default_defaultLateCancel);
-	mDefaultAutoClose->setChecked(Preferences::default_defaultAutoClose);
-	mDefaultConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
-	mDefaultCopyToKOrganizer->setChecked(Preferences::default_defaultCopyToKOrganizer);
-	mDefaultSound->setChecked(Preferences::default_defaultSound);
-	setDefaultSoundType(Preferences::default_defaultSoundType);
-	mDefaultSoundFile->setText(Preferences::default_defaultSoundFile);
+	mAutoClose->setChecked(Preferences::default_defaultAutoClose);
+	mConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
+	mReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
+	mSpecialActions->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
+	mSound->setChecked(Preferences::default_defaultSound);
+	setSoundType(Preferences::default_defaultSoundType);
+	mSoundFile->setText(Preferences::default_defaultSoundFile);
 #ifndef WITHOUT_ARTS
-	mDefaultSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
+	mSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
 #endif
-	mDefaultCmdScript->setChecked(Preferences::default_defaultCmdScript);
-	mDefaultCmdXterm->setChecked(Preferences::default_defaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
-	mDefaultEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
-	mDefaultRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
-	mDefaultReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
-	mDefaultSpecialActions->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
+	mCmdScript->setChecked(Preferences::default_defaultCmdScript);
+	mCmdXterm->setChecked(Preferences::default_defaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
+	mEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
+	mCopyToKOrganizer->setChecked(Preferences::default_defaultCopyToKOrganizer);
+	mLateCancel->setChecked(Preferences::default_defaultLateCancel);
+	mRecurPeriod->setCurrentItem(recurIndex(Preferences::default_defaultRecurPeriod));
+	mFeb29->setButton(Preferences::default_defaultFeb29Type);
 }
 
 void EditPrefTab::slotBrowseSoundFile()
 {
 	QString defaultDir;
-	QString url = SoundPicker::browseFile(defaultDir, mDefaultSoundFile->text());
+	QString url = SoundPicker::browseFile(defaultDir, mSoundFile->text());
 	if (!url.isEmpty())
-		mDefaultSoundFile->setText(url);
+		mSoundFile->setText(url);
 }
 
 int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
@@ -1147,32 +1148,32 @@ int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 	}
 }
 
-void EditPrefTab::setDefaultSoundType(SoundPicker::Type type)
+void EditPrefTab::setSoundType(SoundPicker::Type type)
 {
 	switch (type)
 	{
 		case SoundPicker::PLAY_FILE:
-			mDefaultFile->setChecked(true);
+			mFile->setChecked(true);
 			break;
 		case SoundPicker::SPEAK:
-			if (mDefaultSpeak)
+			if (mSpeak)
 			{
-				mDefaultSpeak->setChecked(true);
+				mSpeak->setChecked(true);
 				break;
 			}
 			// fall through to BEEP
 		case SoundPicker::BEEP:
 		default:
-			mDefaultBeep->setChecked(true);
+			mBeep->setChecked(true);
 			break;
 	}
 }
 
 QString EditPrefTab::validate()
 {
-	if (mDefaultFile->isOn()  &&  mDefaultSoundFile->text().isEmpty())
+	if (mFile->isOn()  &&  mSoundFile->text().isEmpty())
 	{
-		mDefaultSoundFile->setFocus();
+		mSoundFile->setFocus();
 		return i18n("You must enter a sound file when %1 is selected as the default sound type").arg(SoundPicker::i18n_File());;
 	}
 	return QString::null;

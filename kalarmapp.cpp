@@ -43,9 +43,9 @@
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
-#include <kalarmd/clientinfo.h>
+#include <libkcal/calformat.h>
 
-#include <libkcal/icalformat.h>
+#include <kalarmd/clientinfo.h>
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
@@ -54,6 +54,7 @@
 #include "dcophandler.h"
 #include "functions.h"
 #include "kamail.h"
+#include "karecurrence.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "messagewin.h"
@@ -67,7 +68,7 @@
 
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
-static bool convInterval(QCString timeParam, KAEvent::RecurType&, int& timeInterval, bool allowMonthYear = true);
+static bool convInterval(QCString timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -110,7 +111,7 @@ KAlarmApp::KAlarmApp()
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
-	KAEvent::setFeb29RecurType();
+	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
 	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
@@ -427,7 +428,7 @@ int KAlarmApp::newInstance()
 				QDateTime alarmTime, endTime;
 				QColor    bgColour = Preferences::defaultBgColour();
 				QColor    fgColour = Preferences::defaultFgColour();
-				KCal::Recurrence recurrence;
+				KARecurrence recurrence;
 				int       repeatCount    = 0;
 				int       repeatInterval = 0;
 				if (args->isSet("color"))
@@ -470,8 +471,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("until"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
 					QCString rule = args->getOption("recurrence");
-					KCal::ICalFormat format;
-					format.fromString(recurrence.defaultRRule(true), QString::fromLocal8Bit((const char*)rule));
+					recurrence.set(QString::fromLocal8Bit(static_cast<const char*>(rule)));
 				}
 				if (args->isSet("interval"))
 				{
@@ -502,17 +502,17 @@ int KAlarmApp::newInstance()
 
 					// Get the recurrence interval
 					int interval;
-					KAEvent::RecurType recurType;
+					KARecurrence::Type recurType;
 					if (!convInterval(args->getOption("interval"), recurType, interval, !haveRecurrence)
 					||  interval < 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
-					if (alarmNoTime  &&  recurType == KAEvent::MINUTELY)
+					if (alarmNoTime  &&  recurType == KARecurrence::MINUTELY)
 						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
 
 					if (haveRecurrence)
 					{
 						// There is a also a recurrence specified, so set up a simple repetition
-						int longestInterval = KAEvent::longestRecurrenceInterval(recurrence);
+						int longestInterval = recurrence.longestInterval();
 						if (count * interval > longestInterval)
 							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));
 						repeatCount    = count;
@@ -522,7 +522,7 @@ int KAlarmApp::newInstance()
 					{
 						// There is no other recurrence specified, so convert the repetition
 						// parameters into a KCal::Recurrence
-						KAEvent::setRecurrence(recurrence, recurType, interval, count, DateTime(alarmTime, alarmNoTime), endTime);
+						recurrence.set(recurType, interval, count, DateTime(alarmTime, alarmNoTime), endTime);
 					}
 				}
 				else
@@ -580,19 +580,19 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--exec")))
 					if (args->isSet("mail"))
 						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--mail")))
-					KAEvent::RecurType recur;
+					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
-					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recur, reminderMinutes);
+					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recurType, reminderMinutes);
 					if (ok)
 					{
-						switch (recur)
+						switch (recurType)
 						{
-							case KAEvent::MINUTELY:
+							case KARecurrence::MINUTELY:
 								if (alarmNoTime)
 									USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(opt))
 								break;
-							case KAEvent::DAILY:     reminderMinutes *= 1440;  break;
-							case KAEvent::WEEKLY:    reminderMinutes *= 7*1440;  break;
+							case KARecurrence::DAILY:     reminderMinutes *= 1440;  break;
+							case KARecurrence::WEEKLY:    reminderMinutes *= 7*1440;  break;
 							default:   ok = false;  break;
 						}
 					}
@@ -603,8 +603,8 @@ int KAlarmApp::newInstance()
 				int lateCancel = 0;
 				if (args->isSet("late-cancel"))
 				{
-					KAEvent::RecurType recur;
-					bool ok = convInterval(args->getOption("late-cancel"), recur, lateCancel, false);
+					KARecurrence::Type recurType;
+					bool ok = convInterval(args->getOption("late-cancel"), recurType, lateCancel, false);
 					if (!ok  ||  lateCancel <= 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("late-cancel")))
 				}
@@ -1084,7 +1084,8 @@ void KAlarmApp::slotPreferencesChanged()
 	if (Preferences::startOfDay() != mStartOfDay)
 		changeStartOfDay();
 
-	KAEvent::setFeb29RecurType();    // in case the date for February 29th recurrences has changed
+	// In case the date for February 29th recurrences has changed
+	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	if (Preferences::showAlarmTime()   != mPrefsShowTime
 	||  Preferences::showTimeToAlarm() != mPrefsShowTimeTo)
@@ -1157,7 +1158,7 @@ bool KAlarmApp::wantRunInSystemTray() const
 bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const QDateTime& dateTime,
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
-                              const KCal::Recurrence& recurrence, int repeatInterval, int repeatCount,
+                              const KARecurrence& recurrence, int repeatInterval, int repeatCount,
                               const QString& mailFromID, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
@@ -2084,7 +2085,7 @@ static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& no
 *  Convert a time interval command line parameter.
 *  Reply = true if successful.
 */
-static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int& timeInterval, bool allowMonthYear)
+static bool convInterval(QCString timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
 	// Get the recurrence interval
 	bool ok = true;
@@ -2098,15 +2099,15 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 		case 'Y':
 			if (!allowMonthYear)
 				ok = false;
-			recurType = KAEvent::ANNUAL_DATE;
+			recurType = KARecurrence::ANNUAL_DATE;
 			timeParam = timeParam.left(length - 1);
 			break;
 		case 'W':
-			recurType = KAEvent::WEEKLY;
+			recurType = KARecurrence::WEEKLY;
 			timeParam = timeParam.left(length - 1);
 			break;
 		case 'D':
-			recurType = KAEvent::DAILY;
+			recurType = KARecurrence::DAILY;
 			timeParam = timeParam.left(length - 1);
 			break;
 		case 'M':
@@ -2116,19 +2117,19 @@ static bool convInterval(QCString timeParam, KAEvent::RecurType& recurType, int&
 			{
 				if (!allowMonthYear)
 					ok = false;
-				recurType = KAEvent::MONTHLY_DAY;
+				recurType = KARecurrence::MONTHLY_DAY;
 				timeParam = timeParam.left(length - 1);
 			}
 			else
 			{
-				recurType = KAEvent::MINUTELY;
+				recurType = KARecurrence::MINUTELY;
 				interval = timeParam.left(i).toUInt(&ok) * 60;
 				timeParam = timeParam.mid(i + 1, length - i - 2);
 			}
 			break;
 		}
 		default:       // should be a digit
-			recurType = KAEvent::MINUTELY;
+			recurType = KARecurrence::MINUTELY;
 			break;
 	}
 	if (ok)

@@ -81,7 +81,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               scheduleEvent(KAEvent::Action, const QString& text, const QDateTime&,
 		                                 int lateCancel, int flags, const QColor& bg, const QColor& fg,
 		                                 const QFont&, const QString& audioFile, float audioVolume,
-		                                 int reminderMinutes, const KCal::Recurrence& recurrence,
+		                                 int reminderMinutes, const KARecurrence& recurrence,
 						 int repeatInterval, int repeatCount,
 		                                 const QString& mailFromID = QString::null,
 		                                 const EmailAddressList& mailAddresses = EmailAddressList(),

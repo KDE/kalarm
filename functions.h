@@ -26,6 +26,9 @@
 #include <qsize.h>
 #include <qptrlist.h>
 #include <qstring.h>
+
+#include "alarmevent.h"
+
 class QObject;
 class QWidget;
 class QString;

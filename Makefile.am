@@ -14,7 +14,7 @@ kalarm_SOURCES = birthdaydlg.cpp main.cpp alarmevent.cpp editdlg.cpp \
 	kalarmapp.cpp mainwindowbase.cpp mainwindow.cpp messagewin.cpp \
 	preferences.cpp prefdlg.cpp kalarmiface.skel \
 	traywindow.cpp dcophandler.cpp alarmguiiface.skel \
-	recurrenceedit.cpp deferdlg.cpp functions.cpp \
+	recurrenceedit.cpp karecurrence.cpp deferdlg.cpp functions.cpp \
 	fontcolour.cpp fontcolourbutton.cpp alarmtimewidget.cpp \
 	specialactions.cpp reminder.cpp startdaytimer.cpp \
 	eventlistviewbase.cpp alarmlistview.cpp kamail.cpp timeselector.cpp \
@@ -36,8 +36,8 @@ noinst_HEADERS = alarmcalendar.h alarmevent.h alarmlistview.h alarmtext.h \
 	alarmtimewidget.h birthdaydlg.h daemon.h dcophandler.h deferdlg.h \
 	editdlg.h editdlgprivate.h emailidcombo.h eventlistviewbase.h find.h \
 	fontcolour.h fontcolourbutton.h functions.h kalarm.h kalarmapp.h \
-	kamail.h latecancel.h mainwindow.h mainwindowbase.h messagewin.h \
-	pickfileradio.h prefdlg.h preferences.h recurrenceedit.h \
+	kamail.h karecurrence.h latecancel.h mainwindow.h mainwindowbase.h \
+	messagewin.h pickfileradio.h prefdlg.h preferences.h recurrenceedit.h \
 	recurrenceeditprivate.h reminder.h repetition.h sounddlg.h \
 	soundpicker.h specialactions.h startdaytimer.h templatedlg.h \
 	templatelistview.h templatemenuaction.h templatepickdlg.h timeselector.h \

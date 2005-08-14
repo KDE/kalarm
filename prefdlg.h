@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef PREFDLG_H
@@ -126,7 +126,6 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QCheckBox*     mConfirmAlarmDeletion;
-		QButtonGroup*  mFeb29;
 		QCheckBox*     mKeepExpired;
 		QCheckBox*     mPurgeExpired;
 		SpinBox*       mPurgeAfter;
@@ -190,26 +189,27 @@ class EditPrefTab : public PrefsTabBase
 		void         slotBrowseSoundFile();
 
 	private:
-		void         setDefaultSoundType(SoundPicker::Type);
+		void         setSoundType(SoundPicker::Type);
 
-		QCheckBox*      mDefaultLateCancel;
-		QCheckBox*      mDefaultAutoClose;
-		QCheckBox*      mDefaultConfirmAck;
-		QCheckBox*      mDefaultCopyToKOrganizer;
-		QCheckBox*      mDefaultCmdScript;
-		QCheckBox*      mDefaultCmdXterm;
-		QCheckBox*      mDefaultEmailBcc;
-		QRadioButton*   mDefaultBeep;
-		QRadioButton*   mDefaultSpeak;
-		QRadioButton*   mDefaultFile;
-		QCheckBox*      mDefaultSound;
-		QLabel*         mDefaultSoundFileLabel;
-		QLineEdit*      mDefaultSoundFile;
-		QPushButton*    mDefaultSoundFileBrowse;
-		QCheckBox*      mDefaultSoundRepeat;
-		QComboBox*      mDefaultRecurPeriod;
-		QComboBox*      mDefaultReminderUnits;
-		SpecialActions* mDefaultSpecialActions;
+		QCheckBox*      mAutoClose;
+		QCheckBox*      mConfirmAck;
+		QComboBox*      mReminderUnits;
+		SpecialActions* mSpecialActions;
+		QCheckBox*      mCmdScript;
+		QCheckBox*      mCmdXterm;
+		QCheckBox*      mEmailBcc;
+		QRadioButton*   mBeep;
+		QRadioButton*   mSpeak;
+		QRadioButton*   mFile;
+		QCheckBox*      mSound;
+		QLabel*         mSoundFileLabel;
+		QLineEdit*      mSoundFile;
+		QPushButton*    mSoundFileBrowse;
+		QCheckBox*      mSoundRepeat;
+		QCheckBox*      mCopyToKOrganizer;
+		QCheckBox*      mLateCancel;
+		QComboBox*      mRecurPeriod;
+		QButtonGroup*   mFeb29;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };

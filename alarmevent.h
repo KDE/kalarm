@@ -28,12 +28,16 @@
 
 #include <libkcal/person.h>
 #include <libkcal/event.h>
-#include <libkcal/recurrence.h>
-namespace KCal { class Calendar; }
+namespace KCal {
+	class Calendar;
+	class Recurrence;
+}
 
 #include "datetime.h"
+#include "karecurrence.h"
 
 class AlarmCalendar;
+class KARecurrence;
 struct AlarmData;
 
 
@@ -260,24 +264,6 @@ class KAEvent : public KAAlarmEventBase
 			DISPLAYING_     = 0x80000,
 			READ_ONLY_FLAGS = 0xF0000   // mask for all read-only internal values
 		};
-		enum RecurType
-		{
-#ifdef OLD_DCOP
-			// *** DON'T CHANGE THESE VALUES ***
-			// because they are part of KAlarm's external DCOP interface.
-			// (But it's alright to add new values.)
-#endif
-			NO_RECUR    = 0,
-			MINUTELY    = 1,
-			DAILY       = 3,
-			WEEKLY      = 4,
-			MONTHLY_POS = 5,
-			MONTHLY_DAY = 6,
-			ANNUAL_DATE = 7,
-			ANNUAL_POS  = 9,
-			// The following values are not implemented in KAlarm
-			ANNUAL_DAY  = 8
-		};
 		/** The category of an event, indicated by the middle part of its UID. */
 		enum Status
 		{
@@ -418,21 +404,17 @@ class KAEvent : public KAAlarmEventBase
 		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
 		const QString&     preAction() const              { return mPreAction; }
 		const QString&     postAction() const             { return mPostAction; }
-		bool               recurs() const                 { return checkRecur() != NO_RECUR; }
-		RecurType          recurType() const              { return checkRecur(); }
-		KCal::Recurrence*  recurrence() const             { return mRecurrence; }
-		bool               recursFeb29() const            { return mRecursFeb29; }
+		bool               recurs() const                 { return checkRecur() != KARecurrence::NO_RECUR; }
+		KARecurrence::Type recurType() const              { return checkRecur(); }
+		KARecurrence*      recurrence() const             { return mRecurrence; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
-		int                longestRecurrenceInterval() const    { return mRecurrence ? longestRecurrenceInterval(*mRecurrence) : 0; }
-		static int         longestRecurrenceInterval(const KCal::Recurrence&);   // longest interval between any recurrences, in minutes
+		int                longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : 0; }
 		QString            recurrenceText(bool brief = false) const;
 		QString            repetitionText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
 		bool               occursAfter(const QDateTime& preDateTime, bool includeRepetitions) const;
 		OccurType          nextOccurrence(const QDateTime& preDateTime, DateTime& result, OccurOption = IGNORE_REPETITION) const;
 		OccurType          previousOccurrence(const QDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
-		const KCal::DateList& exceptionDates() const      { return mExceptionDates; }
-		const KCal::DateTimeList& exceptionDateTimes() const { return mExceptionDateTimes; }
 		int                flags() const;
 		bool               deferred() const               { return mDeferral > 0; }
 		bool               toBeArchived() const           { return mArchive; }
@@ -452,45 +434,21 @@ class KAEvent : public KAAlarmEventBase
 			QBitArray  days;        // days in week
 		};
 		bool               setRepetition(int interval, int count);
-		void               setExceptionDates(const KCal::DateList& d)      { mExceptionDates = d;  mUpdated = true; }
-		void               setExceptionDates(const KCal::DateTimeList& dt) { mExceptionDateTimes = dt;  mUpdated = true; }
-		void               setNoRecur()            { initRecur(); }
-		void               setRecurrence(const KCal::Recurrence&);
-		void               setRecurMinutely(int freq, int count, const QDateTime& end)
-		                                           { if (initRecur(end.date(), count))  setRecurMinutely(*mRecurrence, freq, count, end); }
-		void               setRecurDaily(int freq, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurDaily(*mRecurrence, freq, count, end); }
-		void               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurWeekly(*mRecurrence, freq, days, count, end); }
-		void               setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurMonthlyByDate(*mRecurrence, freq, days, count, end); }
-		void               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurMonthlyByPos(*mRecurrence, freq, pos, count, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, int count, const QDate& end)
-		                                           { setRecurAnnualByDate(freq, months, day, -1, count, end); }
-		void               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, bool feb29, int count, const QDate& end)
-		                                           { if (initRecur(end, count, feb29))  setRecurAnnualByDate(*mRecurrence, freq, months, day, count, end); }
-		void               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& pos, const QValueList<int>& months, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurAnnualByPos(*mRecurrence, freq, pos, months, count, end); }
-		void               setRecurAnnualByDay(int freq, const QValueList<int>& days, int count, const QDate& end)
-		                                           { if (initRecur(end, count))  setRecurAnnualByDay(*mRecurrence, freq, days, count, end); }
-
-		static bool        setRecurMinutely(KCal::Recurrence&, int freq, int count, const QDateTime& end);
-		static bool        setRecurDaily(KCal::Recurrence&, int freq, int count, const QDate& end);
-		static bool        setRecurWeekly(KCal::Recurrence&, int freq, const QBitArray& days, int count, const QDate& end);
-		static bool        setRecurMonthlyByDate(KCal::Recurrence&, int freq, const QValueList<int>& days, int count, const QDate& end);
-		static bool        setRecurMonthlyByPos(KCal::Recurrence&, int freq, const QValueList<MonthPos>&, int count, const QDate& end);
-		static bool        setRecurAnnualByDate(KCal::Recurrence&, int freq, const QValueList<int>& months, int day, int count, const QDate& end);
-		static bool        setRecurAnnualByPos(KCal::Recurrence&, int freq, const QValueList<MonthPos>&, const QValueList<int>& months, int count, const QDate& end);
-		static bool        setRecurAnnualByDay(KCal::Recurrence&, int freq, const QValueList<int>& days, int count, const QDate& end);
-		static bool        setRecurrence(KCal::Recurrence&, RecurType, int repeatInterval, int repeatCount, const DateTime& start, const QDateTime& end);
-		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
+		void               setNoRecur()                   { clearRecur(); }
+		void               setRecurrence(const KARecurrence&);
+		bool               setRecurMinutely(int freq, int count, const QDateTime& end);
+		bool               setRecurDaily(int freq, int count, const QDate& end);
+		bool               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
+		bool               setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end);
+		bool               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos, int count, const QDate& end);
+		bool               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
+		bool               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& pos, const QValueList<int>& months, int count, const QDate& end);
+//		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
 #else
 		void               dumpDebug() const;
 #endif
-		static void        setFeb29RecurType();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
 		static void        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
 
@@ -503,8 +461,9 @@ class KAEvent : public KAAlarmEventBase
 		};
 
 		void               copy(const KAEvent&);
-		bool               initRecur(const QDate& end = QDate(), int count = 0, bool feb29 = false);
-		RecurType          checkRecur() const;
+		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDateTime& end, KARecurrence::Feb29Type = KARecurrence::FEB29_FEB29);
+		void               clearRecur();
+		KARecurrence::Type checkRecur() const;
 		OccurType          nextRecurrence(const QDateTime& preDateTime, DateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const QDateTime& afterDateTime, DateTime& result) const;
 		KCal::Alarm*       initKcalAlarm(KCal::Event&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
@@ -527,10 +486,8 @@ class KAEvent : public KAAlarmEventBase
 		int                mReminderMinutes;  // how long in advance reminder is to be, or 0 if none
 		int                mArchiveReminderMinutes;  // original reminder period if now expired, or 0 if none
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
-		KCal::Recurrence*  mRecurrence;       // RECUR: recurrence specification, or 0 if none
+		KARecurrence*      mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
-		KCal::DateList     mExceptionDates;   // list of dates to exclude from the recurrence
-		KCal::DateTimeList mExceptionDateTimes; // list of date/times to exclude from the recurrence
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		unsigned long      mKMailSerialNumber;// if email text, message's KMail serial number
@@ -538,7 +495,6 @@ class KAEvent : public KAAlarmEventBase
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
-		bool               mRecursFeb29;      // the recurrence is yearly on February 29th
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
 		bool               mArchiveRepeatAtLogin; // if now expired, original event was repeat-at-login
