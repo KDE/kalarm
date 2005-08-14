@@ -57,4 +57,4 @@ GenericName[zh_CN]=个人日程提醒
 Terminal=false
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=true
-Categories=Qt;KDE;Utility;X-KDE-More;
+Categories=Qt;KDE;Utility;X-KDE-Utilities-PIM;
