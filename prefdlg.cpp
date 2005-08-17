@@ -860,6 +860,10 @@ void FontColourPrefTab::setDefaults()
 EditPrefTab::EditPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
+	// Get alignment to use in QLabel::setAlignment(alignment | Qt::WordBreak)
+	// (AlignAuto doesn't work correctly there)
+	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
+
 	int groupTopMargin = fontMetrics().lineSpacing()/2;
 	QString defsetting   = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 	QString soundSetting = i18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
@@ -1023,7 +1027,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QVBox* vbox = new QVBox(mPage);   // this is to control the QWhatsThis text display area
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+	label->setAlignment(alignment | Qt::WordBreak);
 	itemBox = new QHBox(vbox);
 	itemBox->setSpacing(2*KDialog::spacingHint());
 	mFeb29 = new QButtonGroup(itemBox);
