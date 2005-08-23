@@ -63,21 +63,6 @@ using namespace KCal;
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
 
-namespace
-{
-
-const char* const ordinal[] = {
-	I18N_NOOP("1st"),  I18N_NOOP("2nd"),  I18N_NOOP("3rd"),  I18N_NOOP("4th"),
-	I18N_NOOP("5th"),  I18N_NOOP("6th"),  I18N_NOOP("7th"),  I18N_NOOP("8th"),
-	I18N_NOOP("9th"),  I18N_NOOP("10th"), I18N_NOOP("11th"), I18N_NOOP("12th"),
-	I18N_NOOP("13th"), I18N_NOOP("14th"), I18N_NOOP("15th"), I18N_NOOP("16th"),
-	I18N_NOOP("17th"), I18N_NOOP("18th"), I18N_NOOP("19th"), I18N_NOOP("20th"),
-	I18N_NOOP("21st"), I18N_NOOP("22nd"), I18N_NOOP("23rd"), I18N_NOOP("24th"),
-	I18N_NOOP("25th"), I18N_NOOP("26th"), I18N_NOOP("27th"), I18N_NOOP("28th"),
-	I18N_NOOP("29th"), I18N_NOOP("30th"), I18N_NOOP("31st")
-};
-
-}
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -1077,20 +1062,15 @@ WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent, const char* name)
 
 /******************************************************************************
  * Fetch which days of the week have been checked.
- * Reply = true if at least one day has been checked.
  */
 QBitArray WeeklyRule::days() const
 {
-	bool found = false;
-	QBitArray days(7);
-	days.fill(false);
+	QBitArray ds(7);
+	ds.fill(false);
 	for (int i = 0;  i < 7;  ++i)
 		if (mDayBox[i]->isChecked())
-		{
-			days.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
-			found = true;
-		}
-	return found;
+			ds.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
+	return ds;
 }
 
 /******************************************************************************
@@ -1165,7 +1145,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mDayButton = new RadioButton(i18n("On the 7th day", "O&n the"), box);
+	mDayButton = new RadioButton(i18n("On day number in the month", "O&n day"), box);
 	mDayButton->setFixedSize(mDayButton->sizeHint());
 	mDayButton->setReadOnly(readOnly);
 	mDayButtonId = mButtonGroup->insert(mDayButton);
@@ -1174,7 +1154,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mDayCombo = new ComboBox(false, box);
 	mDayCombo->setSizeLimit(11);
 	for (int i = 0;  i < 31;  ++i)
-		mDayCombo->insertItem(i18n(ordinal[i]));
+		mDayCombo->insertItem(QString::number(i + 1));
 	mDayCombo->insertItem(i18n("Last day of month", "Last"));
 	mDayCombo->setFixedSize(mDayCombo->sizeHint());
 	mDayCombo->setReadOnly(readOnly);
@@ -1182,8 +1162,6 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mDayButton->setFocusWidget(mDayCombo);
 	connect(mDayCombo, SIGNAL(activated(int)), SLOT(slotDaySelected(int)));
 
-	QLabel* label = new QLabel(i18n("day"), box);
-	label->setFixedSize(label->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
@@ -1200,9 +1178,11 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	      i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
 
 	mWeekCombo = new ComboBox(false, box);
-	int i;
-	for (i = 0;  i < 5;  ++i)
-		mWeekCombo->insertItem(i18n(ordinal[i]));
+	mWeekCombo->insertItem(i18n("1st"));
+	mWeekCombo->insertItem(i18n("2nd"));
+	mWeekCombo->insertItem(i18n("3rd"));
+	mWeekCombo->insertItem(i18n("4th"));
+	mWeekCombo->insertItem(i18n("5th"));
 	mWeekCombo->insertItem(i18n("Last Monday in March", "Last"));
 	mWeekCombo->insertItem(i18n("2nd Last"));
 	mWeekCombo->insertItem(i18n("3rd Last"));
@@ -1220,7 +1200,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
 	mDayOfWeekCombo = new ComboBox(false, box);
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-	for (i = 0;  i < 7;  ++i)
+	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
 		mDayOfWeekCombo->insertItem(calendar->weekDayName(day));

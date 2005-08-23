@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include <qbitarray.h>
+#include <kdebug.h>
 
 #include <libkcal/icalformat.h>
 
@@ -148,7 +149,7 @@ bool KARecurrence::set(const QString& icalRRULE)
 	clear();
 	if (icalRRULE.isEmpty())
 		return true;
-	KCal::ICalFormat format;
+	ICalFormat format;
 	if (!format.fromString(defaultRRule(true),
 	                       (icalRRULE.startsWith(RRULE) ? icalRRULE.mid(RRULE.length()) : icalRRULE)))
 		return false;
@@ -203,7 +204,8 @@ void KARecurrence::fix()
 					// This is the second rule.
 					// Ensure that it can be combined with the first one.
 					if (days[0] != 29
-					||  rrule->frequency() != rrules[0]->frequency())
+					||  rrule->frequency() != rrules[0]->frequency()
+					||  rrule->startDt()   != rrules[0]->startDt())
 						break;
 				}
 				QValueList<int> ds = rrule->byYearDays();
@@ -227,7 +229,8 @@ void KARecurrence::fix()
 						// This is the second rule.
 						// Ensure that it can be combined with the first one.
 						if (day == days[0]  ||  day == -1 && days[0] == 60
-						||  rrule->frequency() != rrules[0]->frequency())
+						||  rrule->frequency() != rrules[0]->frequency()
+						||  rrule->startDt()   != rrules[0]->startDt())
 							break;
 					}
 					if (ds.count() > 1)
@@ -274,13 +277,22 @@ void KARecurrence::fix()
 		// There are two yearly recurrence rules to combine into a February 29th recurrence.
 		// Combine the two recurrence rules into a single rYearlyMonth rule falling on Feb 29th.
 		// Find the duration of the two RRULEs combined, using the shorter of the two if they differ.
-		count = combineDurations(rrules[0], rrules[1], end);
 		if (days[0] != 29)
 		{
+			// Swap the two rules so that the 29th rule is the first
+			RecurrenceRule* rr = rrules[0];
 			rrules[0] = rrules[1];    // the 29th rule
-			days[1] = days[0];        // the non-29th day
+			rrules[1] = rr;
+			int d = days[0];
+			days[0] = days[1];
+			days[1] = d;        // the non-29th day
 		}
+		// If February is included in the 29th rule, remove it to avoid duplication
 		months = rrules[0]->byMonths();
+		if (months.remove(2))
+			rrules[0]->setByMonths(months);
+
+		count = combineDurations(rrules[0], rrules[1], end);
 		mFeb29Type = (days[1] == 60) ? FEB29_MAR1 : FEB29_FEB28;
 	}
 	else if (convert == 1  &&  days[0] == 60)
@@ -325,6 +337,10 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 	int freq  = frequency();
 	int count = duration();
 	static_cast<KARecurrence*>(&recur)->setNewRecurrenceType(rrule->recurrenceType(), freq);
+	if (count)
+		recur.setDuration(count);
+	else
+		recur.setEndDateTime(endDateTime());
 	switch (recurrenceType())
 	{
 		case rWeekly:
@@ -336,67 +352,172 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 			break;
 		case rYearlyPos:
 			recur.defaultRRule(true)->setByMonths(rrule->byMonths());
-			recur.defaultRRule(true)->setByDays(rrule->byDays());
+			recur.defaultRRule()->setByDays(rrule->byDays());
 			break;
 		case rYearlyMonth:
 		{
 			QValueList<int> months = rrule->byMonths();
 			QValueList<int> days   = monthDays();
-			if (mFeb29Type != FEB29_FEB29  &&  !days.isEmpty()
-			&&  days.first() == 29  &&  months.remove(2))
-			{
-				// It recurs on the 29th February.
-				// Create an additional 60th day of the year, or
-				// last day of February, rule.
-				RecurrenceRule* rrule2 = new RecurrenceRule();
-				rrule2->setRecurrenceType(RecurrenceRule::rYearly);
-				rrule2->setFrequency(freq);
-				if (count == -1)
-					rrule2->setDuration(count);
-				else
-					rrule2->setEndDt(endDateTime());
-				if (mFeb29Type == FEB29_MAR1)
-				{
-					QValueList<int> ds;
-					ds.append(60);
-					rrule2->setByYearDays(ds);
-				}
-				else
-				{
-					QValueList<int> ds;
-					ds.append(-1);
-					rrule2->setByMonthDays(ds);
-					QValueList<int> ms;
-					ms.append(2);
-					rrule2->setByMonths(ms);
-				}
+			bool special = (mFeb29Type != FEB29_FEB29  &&  !days.isEmpty()
+			                &&  days.first() == 29  &&  months.remove(2));
+			RecurrenceRule* rrule1 = recur.defaultRRule();
+			rrule1->setByMonths(months);
+			rrule1->setByMonthDays(days);
+			if (!special)
+				break;
 
-				if (months.isEmpty())
+			// It recurs on the 29th February.
+			// Create an additional 60th day of the year, or last day of February, rule.
+			RecurrenceRule* rrule2 = new RecurrenceRule();
+			rrule2->setRecurrenceType(RecurrenceRule::rYearly);
+			rrule2->setFrequency(freq);
+			rrule2->setStartDt(startDateTime());
+			rrule2->setFloats(doesFloat());
+			if (!count)
+				rrule2->setEndDt(endDateTime());
+			if (mFeb29Type == FEB29_MAR1)
+			{
+				QValueList<int> ds;
+				ds.append(60);
+				rrule2->setByYearDays(ds);
+			}
+			else
+			{
+				QValueList<int> ds;
+				ds.append(-1);
+				rrule2->setByMonthDays(ds);
+				QValueList<int> ms;
+				ms.append(2);
+				rrule2->setByMonths(ms);
+			}
+
+			if (months.isEmpty())
+			{
+				// Only February recurs.
+				// Replace the RRULE and keep the recurrence count the same.
+				if (count)
+					rrule2->setDuration(count);
+				recur.unsetRecurs();
+			}
+			else
+			{
+				// Months other than February also recur on the 29th.
+				// Remove February from the list and add a separate RRULE for February.
+				if (count)
 				{
-					// Only February recurs. Replace the RRULE.
-					recur.unsetRecurs();
-					recur.addRRule(rrule2);
-					return;
-				}
-				else
-				{
-					// Months other than February also recur on the 29th.
-					// Remove February from the list.
-					recur.addRRule(rrule2);
+					rrule1->setDuration(-1);
+					rrule2->setDuration(-1);
+					if (count > 0)
+					{
+						/* Adjust counts in the two rules to keep the correct occurrence total.
+						 * Note that durationTo() always includes the start date. Since for an
+						 * individual RRULE the start date may not actually be included, we need
+						 * to decrement the count if the start date doesn't actually recur in
+						 * this RRULE.
+						 * Note that if the count is small, one of the rules may not recur at
+						 * all. In that case, retain it so that the February 29th characteristic
+						 * is not lost should the user later change the recurrence count.
+						 */
+						QDateTime end = endDateTime();
+kdDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString()<<endl;
+						int count1 = rrule1->durationTo(end)
+						             - (rrule1->recursOn(startDate()) ? 0 : 1);
+						if (count1 > 0)
+							rrule1->setDuration(count1);
+						else
+							rrule1->setEndDt(startDateTime());
+						int count2 = rrule2->durationTo(end)
+						             - (rrule2->recursOn(startDate()) ? 0 : 1);
+						if (count2 > 0)
+							rrule2->setDuration(count2);
+						else
+							rrule2->setEndDt(startDateTime());
+					}
 				}
 			}
-			recur.defaultRRule(true)->setByMonths(months);
-			if (!days.isEmpty())
-				recur.defaultRRule()->setByMonthDays(days);
+			recur.addRRule(rrule2);
 			break;
 		}
 		default:
-			return;
+			break;
 	}
-	if (count)
-		recur.setDuration(count);
-	else
-		recur.setEndDateTime(endDateTime());
+}
+
+/******************************************************************************
+* Return the date/time of the last recurrence.
+*/
+QDateTime KARecurrence::endDateTime() const
+{
+	if (mFeb29Type == FEB29_FEB29  ||  duration() <= 1)
+	{
+		/* Either it doesn't have any special February 29th treatment,
+		 * it's infinite (count = -1), the end date is specified
+		 * (count = 0), or it ends on the start date (count = 1).
+		 * So just use the normal KCal end date calculation.
+		 */
+		return Recurrence::endDateTime();
+	}
+
+	/* Create a temporary recurrence rule to find the end date.
+	 * In a standard KCal recurrence, the 29th February only occurs once every
+	 * 4 years. So shift the temporary recurrence date to the 28th to ensure
+	 * that it occurs every year, thus giving the correct occurrence count.
+	 */
+	RecurrenceRule* rrule = new RecurrenceRule();
+	rrule->setRecurrenceType(RecurrenceRule::rYearly);
+	QDateTime dt = startDateTime();
+	QDate d = dt.date();
+	switch (d.day())
+	{
+		case 29:
+			// The start date is definitely a recurrence date, so shift
+			// start date to the temporary recurrence date of the 28th
+			d.setYMD(d.year(), d.month(), 28);
+			break;
+		case 28:
+			if (d.month() != 2  ||  mFeb29Type != FEB29_FEB28  ||  QDate::leapYear(d.year()))
+			{
+				// Start date is not a recurrence date, so shift it to 27th
+				d.setYMD(d.year(), d.month(), 27);
+			}
+			break;
+		case 1:
+			if (d.month() == 3  &&  mFeb29Type == FEB29_MAR1  &&  !QDate::leapYear(d.year()))
+			{
+				// Start date is a March 1st recurrence date, so shift
+				// start date to the temporary recurrence date of the 28th
+				d.setYMD(d.year(), 2, 28);
+			}
+			break;
+		default:
+			break;
+	}
+	dt.setDate(d);
+	rrule->setStartDt(dt);
+	rrule->setFloats(doesFloat());
+	rrule->setFrequency(frequency());
+	rrule->setDuration(duration());
+	QValueList<int> ds;
+	ds.append(28);
+	rrule->setByMonthDays(ds);
+	rrule->setByMonths(defaultRRuleConst()->byMonths());
+	dt = rrule->endDt();
+	delete rrule;
+
+	// We've found the end date for a recurrence on the 28th. Unless that date
+	// is a real February 28th recurrence, adjust to the actual recurrence date.
+	if (mFeb29Type == FEB29_FEB28  &&  dt.date().month() == 2  &&  !QDate::leapYear(dt.date().year()))
+		return dt;
+	return dt.addDays(1);
+}
+
+/******************************************************************************
+* Return the date/time of the last recurrence.
+*/
+QDate KARecurrence::endDate() const
+{
+	QDateTime end = endDateTime();
+	return end.isValid() ? end.date() : QDate();
 }
 
 /******************************************************************************
@@ -405,68 +526,73 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 */
 int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const RecurrenceRule* rrule2, QDate& end) const
 {
-//#warning Check for correct frequency and duration when combining rules
 	int count1 = rrule1->duration();
 	int count2 = rrule2->duration();
 	if (count1 == -1  &&  count2 == -1)
 		return -1;
-	// The duration counts will be different even for recurrences of the same length,
-	// because the first recurrence only actually occurs every 4 years.
-	// So we need to compare the end dates.
-	end = rrule1->endDt().date();
-	QDate end2 = rrule2->endDt().date();
-	if (!end.isValid()  ||  !end2.isValid())
+
+	// One of the RRULEs may not recur at all if the recurrence count is small.
+	// In this case, its end date will have been set to the start date.
+	if (count1  &&  !count2  &&  rrule2->endDt().date() == startDateTime().date())
 		return count1;
-	if (end2 > end)
-		return 0;
-	if (end2 < end)
-		end = end2;
-	return count2;
+	if (count2  &&  !count1  &&  rrule1->endDt().date() == startDateTime().date())
+		return count2;
+
+	/* The duration counts will be different even for RRULEs of the same length,
+	 * because the first RRULE only actually occurs every 4 years. So we need to
+	 * compare the end dates.
+	 */
+	if (!count1  ||  !count2)
+		count1 = count2 = 0;
+	// Get the two rules sorted by end date.
+	QDateTime end1 = rrule1->endDt();
+	QDateTime end2 = rrule2->endDt();
+	if (end1.date() == end2.date())
+	{
+		end = end1.date();
+		return count1 + count2;
+	}
+	const RecurrenceRule* rr1;    // earlier end date
+	const RecurrenceRule* rr2;    // later end date
+	if (end2.isValid()
+	&&  (!end1.isValid()  ||  end1.date() > end2.date()))
+	{
+		// Swap the two rules to make rr1 have the earlier end date
+		rr1 = rrule2;
+		rr2 = rrule1;
+		QDateTime e = end1;
+		end1 = end2;
+		end2 = e;
+	}
+	else
+	{
+		rr1 = rrule1;
+		rr2 = rrule2;
+	}
+
+	// Get the date of the next occurrence after the end of the earlier ending rule
+	RecurrenceRule rr(*rr1);
+	rr.setDuration(-1);
+	QDateTime next1 = rr.getNextDate(end1).date();
+	if (!next1.isValid())
+		end = end1.date();
+	else
+	{
+		if (end2.isValid()  &&  next1 > end2)
+		{
+			// The next occurrence after the end of the earlier ending rule
+			// is later than the end of the later ending rule. So simply use
+			// the end date of the later rule.
+			end = end2.date();
+			return count1 + count2;
+		}
+		QDate prev2 = rr2->getPreviousDate(next1).date();
+		end = (prev2 > end1.date()) ? prev2 : end1.date();
+	}
+	if (count2)
+		count2 = rr2->durationTo(end);
+	return count1 + count2;
 }
-#if 0
-	if (!count)
-		end = rrule1->endDt();
-	int count2 = rrule2->duration();
-	if (count2 != count)
-	{
-		if (count2 > 0)
-		{
-			if (count < 0  ||  count2 < count)
-				count = count2;
-			else if (!count)
-			{
-				QDateTime dt = rrule2->endDt();
-				if (end.isValid()  &&  dt.isValid()  &&  dt < end)
-					end = dt;
-			}
-		}
-		else if (count2 == 0)
-		{
-			QDateTime dt = rrule2->endDt();
-			if (count < 0)
-			{
-				end = dt;
-				count = 0;
-			}
-			else
-			{
-				end = rrule1->endDt();
-				if (end.isValid()  &&  dt.isValid()  &&  dt < end)
-				{
-					end = dt;
-					count = 0;
-				}
-			}
-		}
-	}
-	else if (!count  &&  end.isValid())
-	{
-		QDateTime dt = rrule2->endDt();
-		if (dt.isValid()  &&  dt < end)
-			end = dt;
-	}
-	return count;
-#endif
 
 /******************************************************************************
  * Return the longest interval (in minutes) between recurrences.

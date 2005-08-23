@@ -62,6 +62,8 @@ class KARecurrence : public KCal::Recurrence
 		                        { return init(t, freq, count, f29, start, end); }
 		void        fix();
 		void        writeRecurrence(KCal::Recurrence&) const;
+		QDateTime   endDateTime() const;
+		QDate       endDate() const;
 		int         longestInterval() const;
 		Type        type() const;
 		Feb29Type   feb29Type() const                 { return mFeb29Type; }
