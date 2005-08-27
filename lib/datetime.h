@@ -15,7 +15,7 @@
  *
  *  You should have received a copy of the GNU General Public License along
  *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Steet, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #ifndef DATETIME_H
 #define DATETIME_H
@@ -42,7 +42,7 @@ class DateTime
 		/** Default constructor.
 		 *  Constructs an invalid date-time.
 		 */
-		DateTime()                     : mTimeValid(false) { }
+		DateTime()                     : mDateOnly(false), mTimeValid(false) { }
 		/** Constructor for a date-only value. */
 		DateTime(const QDate& d)       : mDateTime(d), mDateOnly(true) { }
 		/** Constructor for a date-time value. */
