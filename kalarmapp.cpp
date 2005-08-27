@@ -383,6 +383,12 @@ int KAlarmApp::newInstance()
 					if (args->isSet("mail"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--mail")).arg(QString::fromLatin1("--exec")))
 					alMessage = args->getOption("exec");
+					int n = args->count();
+					for (int i = 0;  i < n;  ++i)
+					{
+						alMessage += ' ';
+						alMessage += args->arg(i);
+					}
 					action = KAEvent::COMMAND;
 				}
 				else if (args->isSet("mail"))
@@ -1750,7 +1756,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 	QGuardedPtr<ShellProcess> logproc = 0;
-	if (comms == KProcess::AllOutput)
+	if (comms == KProcess::AllOutput  &&  !event.logFile().isEmpty())
 	{
 		// Output is to be appended to a log file.
 		// Set up a logging process to write the command's output to.
