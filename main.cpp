@@ -52,7 +52,7 @@ static KCmdLineOptions options[] =
 	{ "d", 0, 0 },
 	{ "disable", I18N_NOOP("Disable the alarm"), 0 },
 	{ "e", 0, 0 },
-	{ "exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
+	{ "!exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
 	{ "f", 0, 0 },
 	{ "file <url>", I18N_NOOP("File to display"), 0 },
 	{ "F", 0, 0 },
@@ -109,38 +109,7 @@ int main(int argc, char *argv[])
 		"(c) 2001 - 2005, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
-	// Fetch all command line options/arguments after --exec and
-	// concatenate them into a single argument.
-	// This is necessary because the "!" indicator in the 'options'
-	// array above doesn't work (on KDE2, at least)
-	int    newargc = argc;
-	char** newargv = argv;
-	for (int i = 0;  i < argc;  ++i)
-	{
-		if (!strcmp(argv[i], "-e") || !strcmp(argv[i], "--exec"))
-		{
-			// --exec has been found. Create a new args list.
-			newargc = i + 1;
-			newargv = (char**)malloc(newargc * sizeof(char*));
-			for (int j = 0;  j < newargc;  ++j)
-				newargv[j] = argv[j];
-			// Concatenate the --exec arguments into one
-			QCString execArguments;
-			while (++i < argc)
-			{
-				execArguments += argv[i];
-				if (i < argc - 1)
-					execArguments += ' ';
-			}
-			i = execArguments.length();
-			newargv[newargc] = (char*)malloc(i + 1);
-			memcpy(newargv[newargc], static_cast<const char*>(execArguments), i);
-			newargv[newargc][i] = 0;
-			++newargc;
-			break;
-		}
-	}
-	KCmdLineArgs::init(newargc, newargv, &aboutData);
+	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();
 
