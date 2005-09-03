@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -118,18 +118,17 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	}
 	if (from.isEmpty())
 	{
-		QString progname = kapp->aboutData()->programName();
 		switch (Preferences::emailFrom())
 		{
 			case Preferences::MAIL_FROM_KMAIL:
-				errmsgs = errors(i18n("No 'From' email address is configured (no default KMail identity found)\nPlease set it in KMail or in the %1 Preferences dialog.").arg(progname));
+				errmsgs = errors(i18n("No 'From' email address is configured (no default KMail identity found)\nPlease set it in KMail or in the KAlarm Preferences dialog."));
 				break;
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
-				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the %1 Preferences dialog.").arg(progname));
+				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the KAlarm Preferences dialog."));
 				break;
 			case Preferences::MAIL_FROM_ADDR:
 			default:
-				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the %1 Preferences dialog.").arg(progname));
+				errmsgs = errors(i18n("No 'From' email address is configured.\nPlease set it in the KAlarm Preferences dialog."));
 				break;
 		}
 		return false;

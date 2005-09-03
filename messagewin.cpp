@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -564,7 +564,7 @@ void MessageWin::initView()
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, AlignHCenter);
-	QString actKAlarm = i18n("Activate %1").arg(kapp->aboutData()->programName());
+	QString actKAlarm = i18n("Activate KAlarm");
 	QToolTip::add(mKAlarmButton, actKAlarm);
 	QWhatsThis::add(mKAlarmButton, actKAlarm);
 

@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -163,8 +163,7 @@ void SpecialActions::init(const QString& frameLabel)
 	label->setBuddy(mPreAction);
 	QWhatsThis::add(mPreAction,
 	      i18n("Enter a shell command to execute before the alarm is displayed. "
-	           "N.B. %1 will wait for the command to complete before displaying the alarm.")
-	           .arg(kapp->aboutData()->programName()));
+	           "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
 	topLayout->addWidget(mPreAction);
 	topLayout->addSpacing(KDialog::spacingHint());
 
