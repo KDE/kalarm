@@ -19,6 +19,9 @@
  */
 
 #include "radiobutton.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 RadioButton::RadioButton(QWidget* parent, const char* name)

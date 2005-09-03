@@ -33,6 +33,8 @@
 #include "karecurrence.h"
 #include "preferences.h"
 #include "dcophandler.moc"
+//Added by qt3to4:
+#include <Q3CString>
 
 static const char*  DCOP_OBJECT_NAME = "request";   // DCOP name of KAlarm's request interface
 #ifdef OLD_DCOP
@@ -461,14 +463,14 @@ DcopHandlerOld::DcopHandlerOld()
 /******************************************************************************
 * Process a DCOP request.
 */
-bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray&)
+bool DcopHandlerOld::process(const Q3CString& func, const QByteArray& data, Q3CString& replyType, QByteArray&)
 {
 	kdDebug(5950) << "DcopHandlerOld::process(): " << func << endl;
 	enum
 	{
 		ERR            = 0,
 		OPERATION      = 0x0007,    // mask for main operation
-		  HANDLE       = 0x0001,
+		  Qt::HANDLE       = 0x0001,
 		  CANCEL       = 0x0002,
 		  TRIGGER      = 0x0003,
 		  SCHEDULE     = 0x0004,
@@ -488,7 +490,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 	int function;
 	if (func == "handleEvent(const QString&,const QString&)"
 	||       func == "handleEvent(QString,QString)")
-		function = HANDLE;
+		function = Qt::HANDLE;
 	else if (func == "cancelEvent(const QString&,const QString&)"
 	||       func == "cancelEvent(QString,QString)")
 		function = CANCEL;
@@ -619,17 +621,17 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 
 	switch (function & OPERATION)
 	{
-		case HANDLE:        // trigger or cancel event with specified ID from calendar file
+		case Qt::HANDLE:        // trigger or cancel event with specified ID from calendar file
 		case CANCEL:        // cancel event with specified ID from calendar file
 		case TRIGGER:       // trigger event with specified ID in calendar file
 		{
 
-			QDataStream arg(data, IO_ReadOnly);
+			QDataStream arg(data, QIODevice::ReadOnly);
 			QString urlString, vuid;
 			arg >> urlString >> vuid;
 			switch (function)
 			{
-				case HANDLE:
+				case Qt::HANDLE:
 					return theApp()->handleEvent(urlString, vuid);
 				case CANCEL:
 					return theApp()->deleteEvent(urlString, vuid);
@@ -649,7 +651,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 				case EMAIL:    action = KAEvent::EMAIL;    break;
 				default:  return false;
 			}
-			QDataStream  arg(data, IO_ReadOnly);
+			QDataStream  arg(data, QIODevice::ReadOnly);
 			QString      text, audioFile, mailSubject;
 			float        audioVolume = -1;
 			EmailAddressList mailAddresses;

@@ -22,6 +22,10 @@
 #define LINEEDIT_H
 
 #include <klineedit.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QFocusEvent>
+#include <QDropEvent>
 
 
 /**

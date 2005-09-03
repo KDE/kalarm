@@ -22,6 +22,9 @@
 #define CHECKBOX_H
 
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 /**
@@ -79,7 +82,7 @@ class CheckBox : public QCheckBox
 	protected slots:
 		void         slotClicked();
 	private:
-		QWidget::FocusPolicy mFocusPolicy;       // default focus policy for the QCheckBox
+		Qt::FocusPolicy mFocusPolicy;       // default focus policy for the QCheckBox
 		QWidget*             mFocusWidget;       // widget to receive focus when button is clicked on
 		bool                 mFocusWidgetEnable; // enable focus widget before setting focus
 		bool                 mReadOnly;          // value cannot be changed

@@ -23,6 +23,8 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 class KAEvent;
 class EmailAddressList;
 namespace KPIM { class IdentityManager; }
@@ -50,7 +52,7 @@ class KAMail
 	private:
 		static KPIM::IdentityManager* mIdentityManager;     // KMail identity manager
 #if QT_VERSION >= 300
-		typedef QIODevice::Offset Offset;
+		typedef qlonglong Offset;
 #else
 		typedef uint Offset;
 #endif
@@ -58,7 +60,7 @@ class KAMail
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
 		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
-		static bool        callKMail(const QByteArray& callData, const QCString& iface, const QCString& function, const QCString& funcType);
+		static bool        callKMail(const QByteArray& callData, const Q3CString& iface, const Q3CString& function, const Q3CString& funcType);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, Offset size, Offset& outSize);

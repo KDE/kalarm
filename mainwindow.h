@@ -27,8 +27,16 @@
 #include "alarmtext.h"
 #include "mainwindowbase.h"
 #include "undo.h"
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QHideEvent>
+#include <QShowEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QDropEvent>
+#include <QCloseEvent>
 
-class QListViewItem;
+class Q3ListViewItem;
 class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
@@ -112,8 +120,8 @@ class MainWindow : public MainWindowBase
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();
-		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
-		void           slotDoubleClicked(QListViewItem*);
+		void           slotMouseClicked(int button, Q3ListViewItem* item, const QPoint&, int);
+		void           slotDoubleClicked(Q3ListViewItem*);
 		void           slotShowTime();
 		void           slotShowTimeTo();
 		void           slotShowExpired();
@@ -130,7 +138,7 @@ class MainWindow : public MainWindowBase
 		void           updateActionsMenu();
 
 	private:
-		typedef QValueList<MainWindow*> WindowList;
+		typedef Q3ValueList<MainWindow*> WindowList;
 
 		MainWindow(bool restored);
 		void           createListView(bool recreate);

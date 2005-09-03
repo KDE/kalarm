@@ -22,7 +22,12 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QBoxLayout>
 
 #include <klineedit.h>
 #include <kapplication.h>
@@ -45,7 +50,7 @@ SpecialActionsButton::SpecialActionsButton(const QString& caption, QWidget* pare
 	  mReadOnly(false)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	QWhatsThis::add(this,
+	Q3WhatsThis::add(this,
 	      i18n("Specify actions to execute before and after the alarm is displayed."));
 }
 
@@ -131,14 +136,14 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 =============================================================================*/
 
 SpecialActions::SpecialActions(QWidget* parent, const char* name)
-	: QGroupBox(parent, name)
+	: Q3GroupBox(parent, name)
 {
-	setFrameStyle(QFrame::NoFrame);
+	setFrameStyle(Q3Frame::NoFrame);
 	init(QString::null);
 }
 
 SpecialActions::SpecialActions(const QString& frameLabel, QWidget* parent, const char* name)
-	: QGroupBox(frameLabel, parent, name)
+	: Q3GroupBox(frameLabel, parent, name)
 {
 	init(frameLabel);
 }
@@ -157,11 +162,11 @@ void SpecialActions::init(const QString& frameLabel)
 	// Pre-alarm action
 	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);
 	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignAuto);
+	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
-	QWhatsThis::add(mPreAction,
+	Q3WhatsThis::add(mPreAction,
 	      i18n("Enter a shell command to execute before the alarm is displayed. "
 	           "N.B. %1 will wait for the command to complete before displaying the alarm.")
 	           .arg(kapp->aboutData()->programName()));
@@ -171,11 +176,11 @@ void SpecialActions::init(const QString& frameLabel)
 	// Post-alarm action
 	label = new QLabel(i18n("Post-alar&m action:"), this);
 	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignAuto);
+	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);
-	QWhatsThis::add(mPostAction, i18n("Enter a shell command to execute after the alarm window is closed."));
+	Q3WhatsThis::add(mPostAction, i18n("Enter a shell command to execute after the alarm window is closed."));
 	topLayout->addWidget(mPostAction);
 }
 

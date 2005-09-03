@@ -18,14 +18,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qwidget.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -52,7 +56,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	QWidget* page = this;
 	if (!frameLabel.isNull())
 	{
-		page = new QGroupBox(frameLabel, this);
+		page = new Q3GroupBox(frameLabel, this);
 		topLayout->addWidget(page);
 		topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
 		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
@@ -60,7 +64,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (fg)
 	{
 		QBoxLayout* layout = new QHBoxLayout(topLayout);
-		QHBox* box = new QHBox(page);    // to group widgets for QWhatsThis text
+		Q3HBox* box = new Q3HBox(page);    // to group widgets for QWhatsThis text
 		box->setSpacing(KDialog::spacingHint());
 		layout->addWidget(box);
 
@@ -70,12 +74,12 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mFgColourButton->setMinimumSize(mFgColourButton->sizeHint());
 		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
-		QWhatsThis::add(box, i18n("Select the alarm message foreground color"));
+		Q3WhatsThis::add(box, i18n("Select the alarm message foreground color"));
 		layout->addStretch();
 	}
 
 	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	QHBox* box = new QHBox(page);    // to group widgets for QWhatsThis text
+	Q3HBox* box = new Q3HBox(page);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 
@@ -85,7 +89,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
 	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
-	QWhatsThis::add(box, i18n("Select the alarm message background color"));
+	Q3WhatsThis::add(box, i18n("Select the alarm message background color"));
 	layout->addStretch();
 
 	if (editColours)
@@ -94,13 +98,13 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		QPushButton* button = new QPushButton(i18n("Add Co&lor..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
-		QWhatsThis::add(button, i18n("Choose a new color to add to the color selection list."));
+		Q3WhatsThis::add(button, i18n("Choose a new color to add to the color selection list."));
 		layout->addWidget(button);
 
 		mRemoveColourButton = new QPushButton(i18n("&Remove Color"), page);
 		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
 		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
-		QWhatsThis::add(mRemoveColourButton,
+		Q3WhatsThis::add(mRemoveColourButton,
 		      i18n("Remove the color currently shown in the background color chooser, from the color selection list."));
 		layout->addWidget(mRemoveColourButton);
 	}
@@ -111,7 +115,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mDefaultFont = new CheckBox(i18n("Use &default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
-		QWhatsThis::add(mDefaultFont,
+		Q3WhatsThis::add(mDefaultFont,
 		      i18n("Check to use the default font current at the time the alarm is displayed."));
 		layout->addWidget(mDefaultFont);
 		layout->addWidget(new QWidget(page));    // left adjust the widget

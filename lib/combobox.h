@@ -22,6 +22,9 @@
 #define COMBOBOX_H
 
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 /**

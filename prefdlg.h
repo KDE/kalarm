@@ -23,13 +23,15 @@
 
 #include <qsize.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QLabel>
 #include <ktabctl.h>
 #include <kdialogbase.h>
 
 #include "preferences.h"
 #include "recurrenceedit.h"
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -80,7 +82,7 @@ class PrefsTabBase : public QWidget
 {
 		Q_OBJECT
 	public:
-		PrefsTabBase(QVBox*);
+		PrefsTabBase(Q3VBox*);
 
 		void         setPreferences();
 		virtual void restore() = 0;
@@ -89,7 +91,7 @@ class PrefsTabBase : public QWidget
 		static int   indentWidth()    { return mIndentWidth; }
 
 	protected:
-		QVBox*       mPage;
+		Q3VBox*       mPage;
 
 	private:
 		static int   mIndentWidth;       // indent width for checkboxes etc.
@@ -101,7 +103,7 @@ class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MiscPrefTab(QVBox*);
+		MiscPrefTab(Q3VBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -132,7 +134,7 @@ class MiscPrefTab : public PrefsTabBase
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
 		TimeEdit*      mStartOfDay;
-		QButtonGroup*  mXtermType;
+		Q3ButtonGroup*  mXtermType;
 		QLineEdit*     mXtermCommand;
 		int            mXtermCount;              // number of terminal window types
 };
@@ -143,7 +145,7 @@ class EmailPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EmailPrefTab(QVBox*);
+		EmailPrefTab(Q3VBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -178,7 +180,7 @@ class EditPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EditPrefTab(QVBox*);
+		EditPrefTab(Q3VBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -209,7 +211,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mCopyToKOrganizer;
 		QCheckBox*      mLateCancel;
 		QComboBox*      mRecurPeriod;
-		QButtonGroup*   mFeb29;
+		Q3ButtonGroup*   mFeb29;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };
@@ -220,7 +222,7 @@ class ViewPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		ViewPrefTab(QVBox*);
+		ViewPrefTab(Q3VBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -258,7 +260,7 @@ class FontColourPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		FontColourPrefTab(QVBox*);
+		FontColourPrefTab(Q3VBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);

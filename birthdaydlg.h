@@ -21,6 +21,9 @@
 #define BIRTHDAYDLG_H
 
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QFocusEvent>
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
@@ -44,7 +47,7 @@ class BirthdayDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		BirthdayDlg(QWidget* parent = 0);
-		QValueList<KAEvent> events() const;
+		Q3ValueList<KAEvent> events() const;
 
 	protected slots:
 		virtual void      slotOk();

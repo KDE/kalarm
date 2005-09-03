@@ -23,6 +23,11 @@
 #include <stdlib.h>
 
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <Q3ValueList>
+#include <QDropEvent>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -173,12 +178,12 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::mousePressEvent(QMouseEvent* e)
 {
-	if (e->button() == LeftButton  &&  !theApp()->wantRunInSystemTray())
+	if (e->button() == Qt::LeftButton  &&  !theApp()->wantRunInSystemTray())
 	{
 		// Left click: display/hide the first main window
 		mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
 	}
-	else if (e->button() == MidButton)
+	else if (e->button() == Qt::MidButton)
 		MainWindow::executeNew();    // display a New Alarm dialog
 	else
 		KSystemTray::mousePressEvent(e);
@@ -191,7 +196,7 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 */
 void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (e->button() == LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
+	if (e->button() == Qt::LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
 	{
 		mAssocMainWindow->raise();
 		mAssocMainWindow->setActiveWindow();
@@ -229,8 +234,8 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
-	QValueList<TipItem> items;
-	QValueList<TipItem>::Iterator iit;
+	Q3ValueList<TipItem> items;
+	Q3ValueList<TipItem>::Iterator iit;
 	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(now.date(), now.addDays(1));
 	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{

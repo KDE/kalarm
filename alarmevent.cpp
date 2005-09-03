@@ -25,6 +25,9 @@
 #include <ctype.h>
 #include <qcolor.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -38,12 +41,12 @@
 using namespace KCal;
 
 
-const QCString APPNAME("KALARM");
+const Q3CString APPNAME("KALARM");
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
 // - General alarm properties
-static const QCString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
+static const Q3CString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
 static const QString FILE_TYPE                  = QString::fromLatin1("FILE");
 static const QString AT_LOGIN_TYPE              = QString::fromLatin1("LOGIN");
 static const QString REMINDER_TYPE              = QString::fromLatin1("REMINDER");
@@ -55,12 +58,12 @@ static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYIN
 static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
 static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
 // - Display alarm properties
-static const QCString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
+static const Q3CString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-static const QCString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+static const Q3CString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
 // - Audio alarm properties
-static const QCString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
-static const QCString SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
+static const Q3CString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
+static const Q3CString SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event categories
 static const QString DATE_ONLY_CATEGORY        = QString::fromLatin1("DATE");
@@ -2164,11 +2167,11 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
-	for (QValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
+	for (Q3ValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
 		mRecurrence->addMonthlyDate(*it);
 	return true;
 }
@@ -2184,11 +2187,11 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QValueList<int>& days, int c
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& posns, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
-	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
+	for (Q3ValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
 		mRecurrence->addMonthlyPos((*it).weeknum, (*it).days);
 	return true;
 }
@@ -2206,11 +2209,11 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& posns, 
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
 		return false;
-	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
+	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		mRecurrence->addYearlyMonth(*it);
 	if (day)
 		mRecurrence->addMonthlyDate(day);
@@ -2229,13 +2232,13 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QValueList<int>& months, int 
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByPos(int freq, const QValueList<MonthPos>& posns, const QValueList<int>& months, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByPos(int freq, const Q3ValueList<MonthPos>& posns, const Q3ValueList<int>& months, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rYearly, freq, count, end))
 		return false;
-	for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
+	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		mRecurrence->addYearlyMonth(*it);
-	for (QValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
+	for (Q3ValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
 		mRecurrence->addYearlyPos((*it).weeknum, (*it).days);
 	return true;
 }
@@ -2338,15 +2341,15 @@ int KAEvent::recurInterval() const
 /******************************************************************************
  * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
  */
-QValueList<KAEvent::MonthPos> KAEvent::convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>& wdaypos)
+Q3ValueList<KAEvent::MonthPos> KAEvent::convRecurPos(const Q3ValueList<KCal::RecurrenceRule::WDayPos>& wdaypos)
 {
-	QValueList<MonthPos> mposns;
-	for (QValueList<KCal::RecurrenceRule::WDayPos>::ConstIterator it = wdaypos.begin();  it != wdaypos.end();  ++it)
+	Q3ValueList<MonthPos> mposns;
+	for (Q3ValueList<KCal::RecurrenceRule::WDayPos>::ConstIterator it = wdaypos.begin();  it != wdaypos.end();  ++it)
 	{
 		int daybit  = (*it).day() - 1;
 		int weeknum = (*it).pos();
 		bool found = false;
-		for (QValueList<MonthPos>::Iterator mit = mposns.begin();  mit != mposns.end();  ++mit)
+		for (Q3ValueList<MonthPos>::Iterator mit = mposns.begin();  mit != mposns.end();  ++mit)
 		{
 			if ((*mit).weeknum == weeknum)
 			{
@@ -3042,10 +3045,10 @@ void KAAlarmEventBase::dumpDebug() const
  * Sets the list of email addresses, removing any empty addresses.
  * Reply = false if empty addresses were found.
  */
-EmailAddressList& EmailAddressList::operator=(const QValueList<Person>& addresses)
+EmailAddressList& EmailAddressList::operator=(const Q3ValueList<Person>& addresses)
 {
 	clear();
-	for (QValueList<Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
+	for (Q3ValueList<Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
 	{
 		if (!(*it).email().isEmpty())
 			append(*it);
@@ -3061,7 +3064,7 @@ QString EmailAddressList::join(const QString& separator) const
 {
 	QString result;
 	bool first = true;
-	for (QValueList<Person>::ConstIterator it = begin();  it != end();  ++it)
+	for (Q3ValueList<Person>::ConstIterator it = begin();  it != end();  ++it)
 	{
 		if (first)
 			first = false;

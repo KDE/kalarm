@@ -19,6 +19,9 @@
  */
 
 #include "pushbutton.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 PushButton::PushButton(QWidget* parent, const char* name)
@@ -33,7 +36,7 @@ PushButton::PushButton(const QString& text, QWidget* parent, const char* name)
 	  mReadOnly(false)
 { }
 
-PushButton::PushButton(const QIconSet& icon, const QString& text, QWidget* parent, const char* name)
+PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent, const char* name)
 	: QPushButton(icon, text, parent, name),
 	  mFocusPolicy(focusPolicy()),
 	  mReadOnly(false)

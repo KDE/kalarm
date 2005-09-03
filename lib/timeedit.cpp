@@ -29,7 +29,7 @@
 
 
 TimeEdit::TimeEdit(QWidget* parent, const char* name)
-	: QHBox(parent, name),
+	: Q3HBox(parent, name),
 	  mAmPm(0),
 	  mAmIndex(-1),
 	  mPmIndex(-1),

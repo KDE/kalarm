@@ -25,6 +25,8 @@
 
 #include <qcolor.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <libkcal/person.h>
 #include <libkcal/event.h>
@@ -42,12 +44,12 @@ struct AlarmData;
 
 
 typedef KCal::Person  EmailAddress;
-class EmailAddressList : public QValueList<KCal::Person>
+class EmailAddressList : public Q3ValueList<KCal::Person>
 {
 	public:
-		EmailAddressList() : QValueList<KCal::Person>() { }
-		EmailAddressList(const QValueList<KCal::Person>& list)  { operator=(list); }
-		EmailAddressList& operator=(const QValueList<KCal::Person>&);
+		EmailAddressList() : Q3ValueList<KCal::Person>() { }
+		EmailAddressList(const Q3ValueList<KCal::Person>& list)  { operator=(list); }
+		EmailAddressList& operator=(const Q3ValueList<KCal::Person>&);
 		QString join(const QString& separator) const;
 };
 
@@ -439,10 +441,10 @@ class KAEvent : public KAAlarmEventBase
 		bool               setRecurMinutely(int freq, int count, const QDateTime& end);
 		bool               setRecurDaily(int freq, int count, const QDate& end);
 		bool               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
-		bool               setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end);
-		bool               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos, int count, const QDate& end);
-		bool               setRecurAnnualByDate(int freq, const QValueList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
-		bool               setRecurAnnualByPos(int freq, const QValueList<MonthPos>& pos, const QValueList<int>& months, int count, const QDate& end);
+		bool               setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int count, const QDate& end);
+		bool               setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& pos, int count, const QDate& end);
+		bool               setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
+		bool               setRecurAnnualByPos(int freq, const Q3ValueList<MonthPos>& pos, const Q3ValueList<int>& months, int count, const QDate& end);
 //		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
 #ifdef NDEBUG
 		void               dumpDebug() const  { }

@@ -22,6 +22,9 @@
 #define PUSHBUTTON_H
 
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 /**
@@ -56,7 +59,7 @@ class PushButton : public QPushButton
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		PushButton(const QIconSet& icon, const QString& text, QWidget* parent, const char* name = 0);
+		PushButton(const QIcon& icon, const QString& text, QWidget* parent, const char* name = 0);
 		/** Sets whether the push button is read-only for the user.
 		 *  @param readOnly True to set the widget read-only, false to enable its action.
 		 */

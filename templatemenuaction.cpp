@@ -28,6 +28,8 @@
 #include "alarmevent.h"
 #include "functions.h"
 #include "templatemenuaction.moc"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
@@ -49,8 +51,8 @@ void TemplateMenuAction::slotInitMenu()
 	KPopupMenu* menu = popupMenu();
 	menu->clear();
 	mOriginalTexts.clear();
-	QValueList<KAEvent> templates = KAlarm::templateList();
-	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+	Q3ValueList<KAEvent> templates = KAlarm::templateList();
+	for (Q3ValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
 	{
 		QString name = (*it).templateName();
 		menu->insertItem(name);

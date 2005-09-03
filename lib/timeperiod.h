@@ -21,10 +21,10 @@
 #ifndef TIMEPERIOD_H
 #define TIMEPERIOD_H
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qstring.h>
 
-class QWidgetStack;
+class Q3WidgetStack;
 class ComboBox;
 class SpinBox;
 class TimeSpinBox;
@@ -47,7 +47,7 @@ class TimeSpinBox;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class TimePeriod : public QHBox
+class TimePeriod : public Q3HBox
 {
 		Q_OBJECT
 	public:
@@ -125,7 +125,7 @@ class TimePeriod : public QHBox
 		void          showHourMin(bool hourMin);
 		void          adjustDayWeekShown();
 
-		QWidgetStack* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
+		Q3WidgetStack* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
 		SpinBox*      mSpinBox;            // the days/weeks value spinbox
 		TimeSpinBox*  mTimeSpinBox;        // the hours:minutes value spinbox
 		ComboBox*     mUnitsCombo;

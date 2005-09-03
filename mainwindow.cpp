@@ -20,8 +20,17 @@
 
 #include "kalarm.h"
 
-#include <qiconset.h>
-#include <qdragobject.h>
+#include <qicon.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QHideEvent>
+#include <QCloseEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <QShowEvent>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -111,7 +120,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-	: MainWindowBase(0, 0, WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
+	: MainWindowBase(0, 0, Qt::WGroupLeader | Qt::WStyle_ContextHelp | Qt::WDestructiveClose),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
 	  mShowExpired(Preferences::showExpiredAlarms()),
@@ -140,9 +149,9 @@ MainWindow::MainWindow(bool restored)
 
 	connect(mListView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
 	connect(mListView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
-	connect(mListView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
-	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
-	connect(mListView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
+	connect(mListView, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint&, int)),
+	        SLOT(slotMouseClicked(int, Q3ListViewItem*, const QPoint&, int)));
+	connect(mListView, SIGNAL(executed(Q3ListViewItem*)), SLOT(slotDoubleClicked(Q3ListViewItem*)));
 	initActions();
 
 	mWindowList.append(this);
@@ -644,7 +653,7 @@ void MainWindow::slotView()
 */
 void MainWindow::slotDelete()
 {
-	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = items.count();
@@ -658,10 +667,10 @@ void MainWindow::slotDelete()
 	}
 
 	int warnKOrg = 0;
-	QValueList<KAEvent> events;
+	Q3ValueList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
 		KAEvent event = item->event();
@@ -686,12 +695,12 @@ void MainWindow::slotDelete()
 void MainWindow::slotReactivate()
 {
 	int warnKOrg = 0;
-	QValueList<KAEvent> events;
-	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	Q3ValueList<KAEvent> events;
+	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	mListView->clearSelection();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		// Add the alarm to the displayed lists and to the calendar file
 		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
@@ -715,9 +724,9 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
-	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
 		KAEvent event = item->event();
@@ -776,12 +785,12 @@ void MainWindow::slotBirthdays()
 	BirthdayDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		QValueList<KAEvent> events = dlg.events();
+		Q3ValueList<KAEvent> events = dlg.events();
 		if (events.count())
 		{
 			mListView->clearSelection();
 			int warnKOrg = 0;
-			for (QValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
+			for (Q3ValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
 			{
 				// Add alarm to the displayed lists and to the calendar file
 				if (KAlarm::addEvent(*ev, mListView) == KAlarm::UPDATE_KORG_ERR)
@@ -916,8 +925,8 @@ void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
 {
 	menu->clear();
 	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-	QValueList<int> ids = Undo::ids(type);
-	for (QValueList<int>::ConstIterator it = ids.begin();  it != ids.end();  ++it)
+	Q3ValueList<int> ids = Undo::ids(type);
+	for (Q3ValueList<int>::ConstIterator it = ids.begin();  it != ids.end();  ++it)
 	{
 		int id = *it;
 		menu->insertItem(i18n("Undo [action]: message", "%1 %2: %3")
@@ -1050,7 +1059,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
 	else
-		e->accept(QTextDrag::canDecode(e)
+		e->accept(Q3TextDrag::canDecode(e)
 		       || KURLDrag::canDecode(e)
 		       || KPIM::MailListDrag::canDecode(e));
 }
@@ -1085,7 +1094,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
-	QCString fmts;
+	Q3CString fmts;
 	for (int idbg = 0;  e->format(idbg);  ++idbg)
 	{
 		if (idbg) fmts += ", ";
@@ -1103,7 +1112,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
-		QCString mails(bytes.data(), bytes.size());
+		Q3CString mails(bytes.data(), bytes.size());
 		KMime::Content content;
 		content.setContent(mails);
 		content.parse();
@@ -1158,7 +1167,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		}
 		return;
 	}
-	else if (QTextDrag::decode(e, text))
+	else if (Q3TextDrag::decode(e, text))
 	{
 		kdDebug(5950) << "MainWindow::executeDropEvent(text)" << endl;
 		alarmText.setText(text);
@@ -1177,7 +1186,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 void MainWindow::slotSelection()
 {
 	// Find which item has been selected, and whether more than one is selected
-	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
 	int count = items.count();
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
 	bool enableReactivate = true;
@@ -1185,7 +1194,7 @@ void MainWindow::slotSelection()
 	bool enableEnable = false;
 	bool enableDisable = false;
 	QDateTime now = QDateTime::currentDateTime();
-	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)(*it))->event();
 		if (enableReactivate
@@ -1222,7 +1231,7 @@ void MainWindow::slotSelection()
 *  Deselects the current item and disables the actions if appropriate, or
 *  displays a context menu to modify or delete the selected item.
 */
-void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
+void MainWindow::slotMouseClicked(int button, Q3ListViewItem* item, const QPoint& pt, int)
 {
 	if (button == Qt::RightButton)
 	{
@@ -1248,7 +1257,7 @@ void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint&
 *  Called when the mouse is double clicked on the ListView.
 *  Displays the Edit Alarm dialog, for the clicked item if applicable.
 */
-void MainWindow::slotDoubleClicked(QListViewItem* item)
+void MainWindow::slotDoubleClicked(Q3ListViewItem* item)
 {
 	kdDebug(5950) << "MainWindow::slotDoubleClicked()\n";
 	if (item)

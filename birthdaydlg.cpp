@@ -21,11 +21,16 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
+#include <q3groupbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <Q3ValueList>
+#include <QVBoxLayout>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -54,11 +59,11 @@
 using namespace KCal;
 
 
-class AddresseeItem : public QListViewItem
+class AddresseeItem : public Q3ListViewItem
 {
 	public:
 		enum columns { NAME = 0, BIRTHDAY = 1 };
-		AddresseeItem(QListView* parent, const QString& name, const QDate& birthday);
+		AddresseeItem(Q3ListView* parent, const QString& name, const QDate& birthday);
 		QDate birthday() const   { return mBirthday; }
 		virtual QString key(int column, bool ascending) const;
 	private:
@@ -85,7 +90,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mPrefixText = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
 	mSuffixText = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
 
-	QGroupBox* textGroup = new QGroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
+	Q3GroupBox* textGroup = new Q3GroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
 	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
@@ -93,7 +98,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
 	connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	QWhatsThis::add(mPrefix,
+	Q3WhatsThis::add(mPrefix,
 	      i18n("Enter text to appear before the person's name in the alarm message, "
 	           "including any necessary trailing spaces."));
 
@@ -103,34 +108,34 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
 	connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	QWhatsThis::add(mSuffix,
+	Q3WhatsThis::add(mSuffix,
 	      i18n("Enter text to appear after the person's name in the alarm message, "
 	           "including any necessary leading spaces."));
 
-	QGroupBox* group = new QGroupBox(1, Qt::Horizontal, i18n("Select Birthdays"), topWidget);
+	Q3GroupBox* group = new Q3GroupBox(1, Qt::Horizontal, i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
 	mAddresseeList = new KListView(group);
 	mAddresseeList->setMultiSelection(true);
-	mAddresseeList->setSelectionMode(QListView::Extended);
+	mAddresseeList->setSelectionMode(Q3ListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);
 	mAddresseeList->setFullWidth(true);
 	mAddresseeList->addColumn(i18n("Name"));
 	mAddresseeList->addColumn(i18n("Birthday"));
 	connect(mAddresseeList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	QWhatsThis::add(mAddresseeList,
+	Q3WhatsThis::add(mAddresseeList,
 	      i18n("Select birthdays to set alarms for.\n"
 	           "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
 	           "You can select multiple birthdays at one time by dragging the mouse over the list, "
 	           "or by clicking the mouse while pressing Ctrl or Shift."));
 
-	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
+	group = new Q3GroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
 	QBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
 	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	// Colour choice drop-down list
 	QBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
-	QHBox* box;
+	Q3HBox* box;
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(box);
@@ -145,7 +150,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignAuto);
+	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
 	// How much to advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
@@ -156,7 +161,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mReminder->setFixedSize(mReminder->sizeHint());
 	mReminder->setMaximum(0, 364);
 	mReminder->setMinutes(0, true);
-	groupLayout->addWidget(mReminder, 0, Qt::AlignAuto);
+	groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
@@ -185,7 +190,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), false, group);
 	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
 	mSimpleRepetition->set(0, 0, true, 364*24*60);
-	QWhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
+	Q3WhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
 	layout->addWidget(mSimpleRepetition);
 
 	// Set the values to their defaults
@@ -263,7 +268,7 @@ void BirthdayDlg::updateSelectionList()
 			// Check if the birthday is already in the selection list
 			bool inSelectionList = false;
 			AddresseeItem* item = 0;
-			for (QListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
+			for (Q3ListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
 			{
 				item = dynamic_cast<AddresseeItem*>(qitem);
 				if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
@@ -283,7 +288,7 @@ void BirthdayDlg::updateSelectionList()
 
 	// Enable/disable OK button according to whether anything is currently selected
 	bool selection = false;
-	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 		if (mAddresseeList->isSelected(item))
 		{
 			selection = true;
@@ -295,15 +300,15 @@ void BirthdayDlg::updateSelectionList()
 /******************************************************************************
 * Return a list of events for birthdays chosen.
 */
-QValueList<KAEvent> BirthdayDlg::events() const
+Q3ValueList<KAEvent> BirthdayDlg::events() const
 {
-	QValueList<KAEvent> list;
+	Q3ValueList<KAEvent> list;
 	QDate today = QDate::currentDate();
 	QDateTime todayNoon(today, QTime(12, 0, 0));
 	int thisYear = today.year();
 	int reminder = mReminder->minutes();
 
-	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 	{
 		if (mAddresseeList->isSelected(item))
 		{
@@ -323,7 +328,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				int   fadeSecs;
 				float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
 				event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
-				QValueList<int> months;
+				Q3ValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
 				event.setNextOccurrence(todayNoon, true);
@@ -366,7 +371,7 @@ void BirthdayDlg::slotOk()
 */
 void BirthdayDlg::slotSelectionChanged()
 {
-	for (QListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 		if (mAddresseeList->isSelected(item))
 		{
 			enableButtonOK(true);
@@ -417,8 +422,8 @@ void BirthdayDlg::slotFontColourSelected()
 = Class: AddresseeItem
 =============================================================================*/
 
-AddresseeItem::AddresseeItem(QListView* parent, const QString& name, const QDate& birthday)
-	: QListViewItem(parent),
+AddresseeItem::AddresseeItem(Q3ListView* parent, const QString& name, const QDate& birthday)
+	: Q3ListViewItem(parent),
 	  mBirthday(birthday)
 {
 	setText(NAME, name);

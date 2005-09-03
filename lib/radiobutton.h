@@ -22,6 +22,9 @@
 #define RADIOBUTTON_H
 
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 /**

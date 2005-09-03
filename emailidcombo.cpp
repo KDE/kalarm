@@ -19,6 +19,9 @@
  */
 
 #include "emailidcombo.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 EmailIdCombo::EmailIdCombo(KPIM::IdentityManager* manager, QWidget* parent, const char* name)
@@ -31,7 +34,7 @@ void EmailIdCombo::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	KPIM::IdentityCombo::mousePressEvent(e);

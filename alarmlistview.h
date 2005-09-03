@@ -23,6 +23,8 @@
 
 #include "kalarm.h"
 #include "eventlistviewbase.h"
+//Added by qt3to4:
+#include <QMouseEvent>
 
 class AlarmListView;
 class AlarmListTooltip;
@@ -40,7 +42,7 @@ class AlarmListViewItem : public EventListViewItemBase
 		int                 messageColWidthNeeded() const { return mMessageColWidth; }
 		static int          typeIconWidth(AlarmListView*);
 		// Overridden base class methods
-		AlarmListViewItem*  nextSibling() const           { return (AlarmListViewItem*)QListViewItem::nextSibling(); }
+		AlarmListViewItem*  nextSibling() const           { return (AlarmListViewItem*)Q3ListViewItem::nextSibling(); }
 		virtual QString     key(int column, bool ascending) const;
 	protected:
 		virtual QString     lastColumnText() const        { return alarmText(event()); }
@@ -96,7 +98,7 @@ class AlarmListView : public EventListViewBase
 		AlarmListViewItem*     currentItem() const    { return (AlarmListViewItem*)EventListViewBase::currentItem(); }
 		AlarmListViewItem*     firstChild() const     { return (AlarmListViewItem*)EventListViewBase::firstChild(); }
 		AlarmListViewItem*     selectedItem() const   { return (AlarmListViewItem*)EventListViewBase::selectedItem(); }
-		virtual void           setSelected(QListViewItem* item, bool selected)      { EventListViewBase::setSelected(item, selected); }
+		virtual void           setSelected(Q3ListViewItem* item, bool selected)      { EventListViewBase::setSelected(item, selected); }
 		virtual void           setSelected(AlarmListViewItem* item, bool selected)  { EventListViewBase::setSelected(item, selected); }
 		virtual InstanceList   instances()            { return mInstanceList; }
 

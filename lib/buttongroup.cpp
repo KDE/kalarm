@@ -20,14 +20,18 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qbutton.h>
+#include <q3button.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QChildEvent>
+#include <QBoxLayout>
 #include <kdialog.h>
 
 #include "buttongroup.moc"
 
 
 ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
-	: QButtonGroup(parent, name)
+	: Q3ButtonGroup(parent, name)
 #if QT_VERSION < 300
 	, defaultAlignment(-1)
 #endif
@@ -36,7 +40,7 @@ ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
 }
 
 ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name)
-	: QButtonGroup(title, parent, name)
+	: Q3ButtonGroup(title, parent, name)
 #if QT_VERSION < 300
 	, defaultAlignment(-1)
 #endif
@@ -45,7 +49,7 @@ ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name
 }
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name)
-	: QButtonGroup(strips, orient, parent, name)
+	: Q3ButtonGroup(strips, orient, parent, name)
 #if QT_VERSION < 300
 	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
 #endif
@@ -54,7 +58,7 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, co
 }
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name)
-	: QButtonGroup(strips, orient, title, parent, name)
+	: Q3ButtonGroup(strips, orient, title, parent, name)
 #if QT_VERSION < 300
 	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
 #endif
@@ -66,9 +70,9 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& titl
  * Inserts a button in the group.
  * This should really be a virtual method...
  */
-int ButtonGroup::insert(QButton* button, int id)
+int ButtonGroup::insert(Q3Button* button, int id)
 {
-	id = QButtonGroup::insert(button, id);
+	id = Q3ButtonGroup::insert(button, id);
 	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
 	return id;
 }

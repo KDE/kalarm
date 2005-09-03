@@ -22,8 +22,12 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qhbox.h>
-#include <qwhatsthis.h>
+#include <q3hbox.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -35,20 +39,20 @@
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent, const char* name)
-	: QFrame(parent, name),
+	: Q3Frame(parent, name),
 	  mLabel(0),
 	  mReadOnly(false)
 {
-	setFrameStyle(QFrame::NoFrame);
+	setFrameStyle(Q3Frame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 	mSelect = new CheckBox(selectText, this);
 	mSelect->setFixedSize(mSelect->sizeHint());
 	connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
-	QWhatsThis::add(mSelect, selectWhatsThis);
+	Q3WhatsThis::add(mSelect, selectWhatsThis);
 	layout->addWidget(mSelect);
 
-	QHBox* box = new QHBox(this);    // to group widgets for QWhatsThis text
+	Q3HBox* box = new Q3HBox(this);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 	mPeriod = new TimePeriod(allowHourMinute, box);
@@ -61,7 +65,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	if (!postfix.isEmpty())
 	{
 		mLabel = new QLabel(postfix, box);
-		QWhatsThis::add(box, valueWhatsThis);
+		Q3WhatsThis::add(box, valueWhatsThis);
 		mLabel->setEnabled(false);
 	}
 }

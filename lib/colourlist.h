@@ -21,9 +21,9 @@
 #ifndef COLOURLIST_H
 #define COLOURLIST_H
 
-#include <qtl.h>
+#include <q3tl.h>
 #include <qcolor.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 
 /**
@@ -40,14 +40,14 @@ class ColourList
 {
 	public:
 		typedef size_t  size_type;
-		typedef QValueListConstIterator<QRgb>  const_iterator;
+		typedef Q3ValueListConstIterator<QRgb>  const_iterator;
 
 		/** Constructs an empty list. */
 		ColourList()  { }
 		/** Copy constructor. */
 		ColourList(const ColourList& l)       : mList(l.mList) { }
 		/** Constructs a list whose values are preset to the colours in @p list. */
-		ColourList(const QValueList<QRgb>& list) : mList(list) { qHeapSort(mList); }
+		ColourList(const Q3ValueList<QRgb>& list) : mList(list) { qHeapSort(mList); }
 		/** Constructs a list whose values are preset to the colours in the @p list.
 		 *  Terminate @p list by an invalid colour.
 		 */
@@ -55,7 +55,7 @@ class ColourList
 		/** Assignment operator. */
 		ColourList&    operator=(const ColourList& l)        { mList = l.mList;  return *this; }
 		/** Sets the list to comprise the colours in @p list. */
-		ColourList&    operator=(const QValueList<QRgb>& list) { mList = list;  qHeapSort(mList);  return *this; }
+		ColourList&    operator=(const Q3ValueList<QRgb>& list) { mList = list;  qHeapSort(mList);  return *this; }
 		/** Removes all values from the list. */
 		void           clear()                               { mList.clear(); }
 		/** Adds the specified colour @p c to the list. */
@@ -104,7 +104,7 @@ class ColourList
 		QColor         operator[](size_type i) const         { return QColor(mList[i]); }
 	private:
 		void              sort();
-		QValueList<QRgb>  mList;
+		Q3ValueList<QRgb>  mList;
 };
 
 #endif // COLOURLIST_H

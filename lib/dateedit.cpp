@@ -23,6 +23,9 @@
 #include <kmessagebox.h>
 
 #include "dateedit.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 DateEdit::DateEdit(QWidget* parent, const char* name)

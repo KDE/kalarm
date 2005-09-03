@@ -21,13 +21,13 @@
 #ifndef REMINDER_H
 #define REMINDER_H
 
-#include <qframe.h>
+#include <q3frame.h>
 
 class TimeSelector;
 class CheckBox;
 
 
-class Reminder : public QFrame
+class Reminder : public Q3Frame
 {
 		Q_OBJECT
 	public:

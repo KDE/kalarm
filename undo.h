@@ -23,7 +23,7 @@
 
 /**  @file undo.h - undo/redo facility */
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 
 class KAEvent;
@@ -40,9 +40,9 @@ class Undo : public QObject
 		static void        saveAdd(const KAEvent&);
 		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent);
 		static void        saveDelete(const KAEvent&);
-		static void        saveDeletes(const QValueList<KAEvent>&);
+		static void        saveDeletes(const Q3ValueList<KAEvent>&);
 		static void        saveReactivate(const KAEvent&);
-		static void        saveReactivates(const QValueList<KAEvent>&);
+		static void        saveReactivates(const Q3ValueList<KAEvent>&);
 		static bool        undo(QWidget* parent, const QString& action)
 		                                      { return undo(mUndoList.begin(), UNDO, parent, action); }
 		static bool        undo(int id, QWidget* parent, const QString& action)
@@ -57,11 +57,11 @@ class Undo : public QObject
 		static QString     actionText(Type);
 		static QString     actionText(Type, int id);
 		static QString     description(Type, int id);
-		static QValueList<int> ids(Type);
+		static Q3ValueList<int> ids(Type);
 		static void        emitChanged();
 
 		// Types for use by UndoItem class and its descendants
-		typedef QValueList<UndoItem*>  List;
+		typedef Q3ValueList<UndoItem*>  List;
 
 	signals:
 		void               changed(const QString& undo, const QString& redo);
@@ -73,7 +73,7 @@ class Undo : public QObject
 		static void        replace(UndoItem* old, UndoItem* New);
 
 	private:
-		typedef QValueList<UndoItem*>::Iterator Iterator;
+		typedef Q3ValueList<UndoItem*>::Iterator Iterator;
 
 		Undo(QObject* parent)  : QObject(parent) { }
 		static void        removeRedos(const QString& eventID);

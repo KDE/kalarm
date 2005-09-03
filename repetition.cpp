@@ -23,7 +23,12 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtimer.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 #include <kdialog.h>
 #include <kseparator.h>
@@ -153,10 +158,10 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	          "- instead of the Recurrence tab, or\n"
 	          "- after using the Recurrence tab, to set up a repetition within a repetition."),
 	     page);
-	hintLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+	hintLabel->setFrameStyle(Q3Frame::Panel | Q3Frame::Sunken);
 	hintLabel->setLineWidth(2);
 	hintLabel->setMargin(marginHint());
-	hintLabel->setAlignment(Qt::WordBreak);
+	hintLabel->setAlignment(Qt::TextWordWrap);
 //	hintLabel->setTextFormat(Qt::RichText);
 	layout->addWidget(hintLabel);
 	layout->addSpacing(hintMargin);
@@ -176,7 +181,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
 	connect(mTimeSelector, SIGNAL(valueChanged(int)), SLOT(intervalChanged(int)));
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
-	topLayout->addWidget(mTimeSelector, 0, Qt::AlignAuto);
+	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
 	mButtonGroup = new ButtonGroup(controls, "buttonGroup");
 	connect(mButtonGroup, SIGNAL(buttonSet(int)), SLOT(typeClicked()));
@@ -186,7 +191,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout = new QHBoxLayout(vlayout, spacing);
 	mCountButton = new RadioButton(i18n("&Number of repetitions:"), mButtonGroup);
 	mCountButton->setFixedSize(mCountButton->sizeHint());
-	QWhatsThis::add(mCountButton,
+	Q3WhatsThis::add(mCountButton,
 	      i18n("Check to specify the number of times the alarm should repeat after each recurrence"));
 	layout->addWidget(mCountButton);
 	mCount = new SpinBox(1, MAX_COUNT, 1, mButtonGroup);
@@ -194,7 +199,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mCount->setLineShiftStep(10);
 	mCount->setSelectOnStep(false);
 	connect(mCount, SIGNAL(valueChanged(int)), SLOT(countChanged(int)));
-	QWhatsThis::add(mCount,
+	Q3WhatsThis::add(mCount,
 	      i18n("Enter the number of times to trigger the alarm after its initial occurrence"));
 	layout->addWidget(mCount);
 	mCountButton->setFocusWidget(mCount);
@@ -203,13 +208,13 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout = new QHBoxLayout(vlayout, spacing);
 	mDurationButton = new RadioButton(i18n("&Duration:"), mButtonGroup);
 	mDurationButton->setFixedSize(mDurationButton->sizeHint());
-	QWhatsThis::add(mDurationButton,
+	Q3WhatsThis::add(mDurationButton,
 	      i18n("Check to specify how long the alarm is to be repeated"));
 	layout->addWidget(mDurationButton);
 	mDuration = new TimePeriod(true, mButtonGroup);
 	mDuration->setFixedSize(mDuration->sizeHint());
 	connect(mDuration, SIGNAL(valueChanged(int)), SLOT(durationChanged(int)));
-	QWhatsThis::add(mDuration,
+	Q3WhatsThis::add(mDuration,
 	      i18n("Enter the length of time to repeat the alarm"));
 	layout->addWidget(mDuration);
 	mDurationButton->setFocusWidget(mDuration);

@@ -25,6 +25,14 @@
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <QShowEvent>
+#include <Q3ValueList>
+#include <QMoveEvent>
+#include <QResizeEvent>
+#include <Q3CString>
+#include <QCloseEvent>
 
 class QPushButton;
 class KPushButton;
@@ -93,7 +101,7 @@ class MessageWin : public MainWindowBase
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
 
-		static QValueList<MessageWin*> mWindowList;  // list of existing message windows
+		static Q3ValueList<MessageWin*> mWindowList;  // list of existing message windows
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;
@@ -117,7 +125,7 @@ class MessageWin : public MainWindowBase
 		// Sound file playing
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;
-		QCString            mKMixName;        // DCOP name for KMix
+		Q3CString            mKMixName;        // DCOP name for KMix
 		QString             mKMixError;       // error message starting KMix
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
 		QTimer*             mFadeTimer;       // timer for fading the sound volume

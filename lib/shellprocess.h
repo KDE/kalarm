@@ -24,6 +24,9 @@
 /** @file shellprocess.h - execute a process through the shell */
 
 #include <kprocess.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 
 /**
@@ -102,11 +105,11 @@ class ShellProcess : public KShellProcess
 		/** Determines which shell to use.
 		 *  @return file name of shell, excluding path.
 		 */
-		static const QCString& shellName()   { shellPath();  return mShellName; }
+		static const Q3CString& shellName()   { shellPath();  return mShellName; }
 		/** Determines which shell to use.
 		 *  @return path name of shell.
 		 */
-		static const QCString& shellPath();
+		static const Q3CString& shellPath();
 
 	signals:
 		/** Signal emitted when the shell process execution completes. It is not emitted
@@ -121,16 +124,16 @@ class ShellProcess : public KShellProcess
 	private:
 		// Prohibit the following inherited methods
 		ShellProcess&  operator<<(const QString&);
-		ShellProcess&  operator<<(const QCString&);
+		ShellProcess&  operator<<(const Q3CString&);
 		ShellProcess&  operator<<(const QStringList&);
 		ShellProcess&  operator<<(const char*);
 
-		static QCString      mShellName;    // name of shell to be used
-		static QCString      mShellPath;    // path of shell to be used
+		static Q3CString      mShellName;    // name of shell to be used
+		static Q3CString      mShellPath;    // path of shell to be used
 		static bool          mInitialised;  // true once static data has been initialised
 		static bool          mAuthorised;   // true if shell commands are authorised
 		QString              mCommand;      // copy of command to be executed
-		QValueList<QCString> mStdinQueue;   // queued strings to send to STDIN
+		Q3ValueList<Q3CString> mStdinQueue;   // queued strings to send to STDIN
 		Status               mStatus;       // current execution status
 		bool                 mStdinExit;    // exit once STDIN queue has been written
 };

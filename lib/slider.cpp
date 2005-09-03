@@ -19,6 +19,9 @@
  */
 
 #include "slider.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 Slider::Slider(QWidget* parent, const char* name)
@@ -26,12 +29,12 @@ Slider::Slider(QWidget* parent, const char* name)
 	  mReadOnly(false)
 { }
 
-Slider::Slider(Orientation o, QWidget* parent, const char* name)
+Slider::Slider(Qt::Orientation o, QWidget* parent, const char* name)
 	: QSlider(o, parent, name),
 	  mReadOnly(false)
 { }
 
-Slider::Slider(int minval, int maxval, int pageStep, int value, Orientation o, QWidget* parent, const char* name)
+Slider::Slider(int minval, int maxval, int pageStep, int value, Qt::Orientation o, QWidget* parent, const char* name)
 	: QSlider(minval, maxval, pageStep, value, o, parent, name),
 	  mReadOnly(false)
 { }

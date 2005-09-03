@@ -22,6 +22,11 @@
 #define TRAYWINDOW_H
 
 #include <ksystemtray.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QPixmap>
+#include <QDropEvent>
 class KPopupMenu;
 
 class KAEvent;

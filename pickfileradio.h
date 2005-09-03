@@ -58,14 +58,14 @@ class PickFileRadio : public RadioButton
 		 *  @param parent Button group which is to be the parent object for the radio button.
 		 *  @param name The name of this widget.
 		 */
-		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, QButtonGroup* parent, const char* name = 0);
+		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent, const char* name = 0);
 		/** Constructor.
 		 *  The init() method must be called before the widget can be used.
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
 		 *  @param name The name of this widget.
 		 */
-		PickFileRadio(const QString& text, QButtonGroup* parent, const char* name = 0);
+		PickFileRadio(const QString& text, Q3ButtonGroup* parent, const char* name = 0);
 		/** Initialises the widget.
 		 *  @param button Push button to invoke the file picker dialogue.
 		 *  @param edit File name edit widget, or null if there is none.
@@ -109,7 +109,7 @@ class PickFileRadio : public RadioButton
 	private:
 		bool          pickFileIfNone();
 
-		QButtonGroup* mGroup;     // button group which radio button is in
+		Q3ButtonGroup* mGroup;     // button group which radio button is in
 		LineEdit*     mEdit;      // file name edit box, or null if none
 		QPushButton*  mButton;    // push button to pick a file
 		QString       mFile;      // saved file name (if mEdit is null)

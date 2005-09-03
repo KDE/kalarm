@@ -21,11 +21,14 @@
 #ifndef SOUNDDLG_H
 #define SOUNDDLG_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QResizeEvent>
 #include <kdialogbase.h>
 
-class QHBox;
+class Q3HBox;
 class PushButton;
 class CheckBox;
 class SpinBox;
@@ -69,9 +72,9 @@ class SoundDlg : public KDialogBase
 		CheckBox*      mVolumeCheckbox;
 		Slider*        mVolumeSlider;
 		CheckBox*      mFadeCheckbox;
-		QHBox*         mFadeBox;
+		Q3HBox*         mFadeBox;
 		SpinBox*       mFadeTime;
-		QHBox*         mFadeVolumeBox;
+		Q3HBox*         mFadeVolumeBox;
 		Slider*        mFadeSlider;
 		QString        mDefaultDir;     // current default directory for mFileEdit
 		bool           mReadOnly;

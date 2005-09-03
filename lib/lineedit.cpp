@@ -21,7 +21,11 @@
 #include "kalarm.h"
 
 #include <qregexp.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QFocusEvent>
+#include <QDropEvent>
 
 #include <kurldrag.h>
 #include <kurlcompletion.h>
@@ -97,7 +101,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(false);   // don't accept "text/calendar" objects
-	e->accept(QTextDrag::canDecode(e)
+	e->accept(Q3TextDrag::canDecode(e)
 	       || KURLDrag::canDecode(e)
 	       || mType != Url && KPIM::MailListDrag::canDecode(e)
 	       || mType == Emails && KVCardDrag::canDecode(e));
@@ -162,7 +166,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				break;
 		}
 	}
-	else if (QTextDrag::decode(e, txt))
+	else if (Q3TextDrag::decode(e, txt))
 	{
 		// Plain text
 		if (mType == Emails)

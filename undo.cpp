@@ -22,6 +22,8 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -88,7 +90,7 @@ class UndoMultiBase : public UndoItem
 template <class T> class UndoMulti : public UndoMultiBase
 {
 	public:
-		UndoMulti(Undo::Type, const QValueList<KAEvent>&);
+		UndoMulti(Undo::Type, const Q3ValueList<KAEvent>&);
 		UndoMulti(Undo::Type t, Undo::List& undos)  : UndoMultiBase(t, undos) { }
 		virtual Operation operation() const     { return MULTI; }
 		virtual UndoItem* restore();
@@ -176,7 +178,7 @@ class UndoDeactivate : public UndoDelete
 class UndoDeletes : public UndoMulti<UndoDelete>
 {
 	public:
-		UndoDeletes(Undo::Type t, const QValueList<KAEvent>& events)
+		UndoDeletes(Undo::Type t, const Q3ValueList<KAEvent>& events)
 		                  : UndoMulti<UndoDelete>(t, events) { }   // UNDO only
 		UndoDeletes(Undo::Type t, Undo::List& undos)
 		                  : UndoMulti<UndoDelete>(t, undos) { }
@@ -187,7 +189,7 @@ class UndoDeletes : public UndoMulti<UndoDelete>
 class UndoReactivates : public UndoMulti<UndoReactivate>
 {
 	public:
-		UndoReactivates(Undo::Type t, const QValueList<KAEvent>& events)
+		UndoReactivates(Undo::Type t, const Q3ValueList<KAEvent>& events)
 		                  : UndoMulti<UndoReactivate>(t, events) { }   // UNDO only
 		UndoReactivates(Undo::Type t, Undo::List& undos)
 		                  : UndoMulti<UndoReactivate>(t, undos) { }
@@ -251,7 +253,7 @@ void Undo::saveDelete(const KAEvent& event)
 	emitChanged();
 }
 
-void Undo::saveDeletes(const QValueList<KAEvent>& events)
+void Undo::saveDeletes(const Q3ValueList<KAEvent>& events)
 {
 	int count = events.count();
 	if (count == 1)
@@ -259,7 +261,7 @@ void Undo::saveDeletes(const QValueList<KAEvent>& events)
 	else if (count > 1)
 	{
 		new UndoDeletes(UNDO, events);
-		for (QValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
+		for (Q3ValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
 			removeRedos((*it).id());    // remove any redos which are made invalid by these deletions
 		emitChanged();
 	}
@@ -271,7 +273,7 @@ void Undo::saveReactivate(const KAEvent& event)
 	emitChanged();
 }
 
-void Undo::saveReactivates(const QValueList<KAEvent>& events)
+void Undo::saveReactivates(const Q3ValueList<KAEvent>& events)
 {
 	int count = events.count();
 	if (count == 1)
@@ -443,9 +445,9 @@ QString Undo::description(Undo::Type type, int id)
 *  listed, to force dependent undos to be executed in their correct order.
 *  If 'ids' is non-null, also returns a list of their corresponding IDs.
 */
-QValueList<int> Undo::ids(Undo::Type type)
+Q3ValueList<int> Undo::ids(Undo::Type type)
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	QStringList ignoreIDs;
 //int n=0;
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
@@ -611,10 +613,10 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 =============================================================================*/
 
 template <class T>
-UndoMulti<T>::UndoMulti(Undo::Type type, const QValueList<KAEvent>& events)
+UndoMulti<T>::UndoMulti(Undo::Type type, const Q3ValueList<KAEvent>& events)
 	: UndoMultiBase(type)    // UNDO only
 {
-	for (QValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
+	for (Q3ValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
 		mUndos.append(new T(Undo::NONE, *it));
 }
 

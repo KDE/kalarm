@@ -20,7 +20,9 @@
 #ifndef BUTTONGROUP_H
 #define BUTTONGROUP_H
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <QChildEvent>
 
 
 /**
@@ -35,7 +37,7 @@
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ButtonGroup : public QButtonGroup
+class ButtonGroup : public Q3ButtonGroup
 {
 		Q_OBJECT
 	public:
@@ -71,12 +73,12 @@ class ButtonGroup : public QButtonGroup
 		 *  @param id The identifier for the button.
 		 *  @return The identifier of the inserted button.
 		 */
-		int          insert(QButton* button, int id = -1);
+		int          insert(Q3Button* button, int id = -1);
 		/** Sets the button with the specified identifier to be on. If this is an exclusive group,
 		 *  all other buttons in the group will be set off. The buttonSet() signal is emitted.
 		 *  @param id The identifier of the button to set on.
 		 */
-		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit buttonSet(id); }
+		virtual void setButton(int id)  { Q3ButtonGroup::setButton(id);  emit buttonSet(id); }
 #if QT_VERSION < 300
 		void         setInsideMargin(int) { }
 	protected:

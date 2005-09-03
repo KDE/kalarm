@@ -24,16 +24,20 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qdatetime.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QShowEvent>
+#include <QBoxLayout>
 
 #include "datetime.h"
-class QWidgetStack;
-class QGroupBox;
+class Q3WidgetStack;
+class Q3GroupBox;
 class QLabel;
-class QListBox;
-class QButton;
+class Q3ListBox;
+class Q3Button;
 class QPushButton;
 class QBoxLayout;
 class SpinBox;
@@ -52,7 +56,7 @@ class MonthlyRule;
 class YearlyRule;
 
 
-class RecurrenceEdit : public QFrame
+class RecurrenceEdit : public Q3Frame
 {
 		Q_OBJECT
 	public:
@@ -118,9 +122,9 @@ class RecurrenceEdit : public QFrame
 		void          saveState();
 
 		// Main rule box and choices
-		QGroupBox*        recurGroup;
-		QFrame*           ruleFrame;
-		QWidgetStack*     ruleStack;
+		Q3GroupBox*        recurGroup;
+		Q3Frame*           ruleFrame;
+		Q3WidgetStack*     ruleStack;
 		Rule*             mRule;         // current rule widget, or 0 if NoRule
 		NoRule*           mNoRule;
 		SubDailyRule*     mSubDailyRule;
@@ -161,12 +165,12 @@ class RecurrenceEdit : public QFrame
 		CheckBox*         mEndAnyTimeCheckBox;
 
 		// Exceptions
-		QGroupBox*        mExceptionGroup;
-		QListBox*         mExceptionDateList;
+		Q3GroupBox*        mExceptionGroup;
+		Q3ListBox*         mExceptionDateList;
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
-		QValueList<QDate> mExceptionDates;
+		Q3ValueList<QDate> mExceptionDates;
 
 		// Current start date and time
 		QDateTime         mCurrStartDateTime;
@@ -174,11 +178,11 @@ class RecurrenceEdit : public QFrame
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
-		QButton*          mSavedRuleButton;          // which rule button was selected
-		QButton*          mSavedRangeButton;         // which range button was selected
+		Q3Button*          mSavedRuleButton;          // which rule button was selected
+		Q3Button*          mSavedRangeButton;         // which range button was selected
 		int               mSavedRepeatCount;         // repeat count
 		DateTime          mSavedEndDateTime;         // end date/time
-		QValueList<QDate> mSavedExceptionDates;      // exception dates
+		Q3ValueList<QDate> mSavedExceptionDates;      // exception dates
 };
 
 #endif // RECURRENCEEDIT_H

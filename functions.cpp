@@ -20,9 +20,12 @@
 
 #include "kalarm.h"
 
-#include <qdeepcopy.h>
+#include <q3deepcopy.h>
 #include <qdir.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kaction.h>
@@ -58,7 +61,7 @@
 namespace
 {
 bool        resetDaemonQueued = false;
-QCString    korganizerName = "korganizer";
+Q3CString    korganizerName = "korganizer";
 QString     korgStartError;
 const char* KORG_DCOP_OBJECT  = "KOrganizerIface";
 const char* KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
@@ -462,9 +465,9 @@ void displayUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
 *  Returns a list of all alarm templates.
 *  If shell commands are disabled, command alarm templates are omitted.
 */
-QValueList<KAEvent> templateList()
+Q3ValueList<KAEvent> templateList()
 {
-	QValueList<KAEvent> templates;
+	Q3ValueList<KAEvent> templates;
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{
@@ -560,7 +563,7 @@ void resetDaemonIfQueued()
 */
 QString runKMail(bool minimise)
 {
-	QCString dcopName;
+	Q3CString dcopName;
 	QString errmsg;
 	if (!runProgram("kmail", (minimise ? KMAIL_DCOP_WINDOW : ""), dcopName, errmsg))
 		return i18n("Unable to start KMail\n(%1)").arg(errmsg);
@@ -574,7 +577,7 @@ QString runKMail(bool minimise)
 *  'errorMessage' contains an error message if failure.
 *  Reply = true if the program is now running.
 */
-bool runProgram(const QCString& program, const QCString& windowName, QCString& dcopName, QString& errorMessage)
+bool runProgram(const Q3CString& program, const Q3CString& windowName, Q3CString& dcopName, QString& errorMessage)
 {
 	if (!kapp->dcopClient()->isApplicationRegistered(program))
 	{
@@ -827,14 +830,14 @@ kdDebug(5950)<<"Korg->"<<iCal<<endl;
 	if (!runKOrganizer())     // start KOrganizer if it isn't already running
 		return false;
 	QByteArray  data, replyData;
-	QCString    replyType;
-	QDataStream arg(data, IO_WriteOnly);
+	Q3CString    replyType;
+	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << iCal;
 	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "addIncidence(QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
-		QDataStream reply(replyData, IO_ReadOnly);
+		QDataStream reply(replyData, QIODevice::ReadOnly);
 		reply >> result;
 		if (result)
 		{
@@ -855,14 +858,14 @@ bool deleteFromKOrganizer(const QString& eventID)
 		return false;
 	QString newID = KAEvent::uid(eventID, KAEvent::KORGANIZER);
 	QByteArray  data, replyData;
-	QCString    replyType;
-	QDataStream arg(data, IO_WriteOnly);
+	Q3CString    replyType;
+	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << newID << true;
 	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidence(QString,bool)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
-		QDataStream reply(replyData, IO_ReadOnly);
+		QDataStream reply(replyData, QIODevice::ReadOnly);
 		reply >> result;
 		if (result)
 		{

@@ -21,21 +21,25 @@
 #ifndef EDITDLGPRIVATE_H
 #define EDITDLGPRIVATE_H
 
-#include <qtextedit.h>
+#include <q3textedit.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QShowEvent>
+#include <Q3Frame>
 
 
-class PageFrame : public QFrame
+class PageFrame : public Q3Frame
 {
 		Q_OBJECT
 	public:
-		PageFrame(QWidget* parent = 0, const char* name = 0) : QFrame(parent, name) { }
+		PageFrame(QWidget* parent = 0, const char* name = 0) : Q3Frame(parent, name) { }
 	protected:
 		virtual void     showEvent(QShowEvent*)    { emit shown(); }
 	signals:
 		void             shown();
 };
 
-class TextEdit : public QTextEdit
+class TextEdit : public Q3TextEdit
 {
 		Q_OBJECT
 	public:

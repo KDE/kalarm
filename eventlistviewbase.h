@@ -23,7 +23,11 @@
 
 #include "kalarm.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QShowEvent>
+#include <QResizeEvent>
 #include <klistview.h>
 
 #include "alarmevent.h"
@@ -37,9 +41,9 @@ class EventListViewBase : public KListView
 {
 		Q_OBJECT
 	public:
-		typedef QValueList<EventListViewBase*>              InstanceList;
-		typedef QValueListIterator<EventListViewBase*>      InstanceListIterator;
-		typedef QValueListConstIterator<EventListViewBase*> InstanceListConstIterator;
+		typedef Q3ValueList<EventListViewBase*>              InstanceList;
+		typedef Q3ValueListIterator<EventListViewBase*>      InstanceListIterator;
+		typedef Q3ValueListConstIterator<EventListViewBase*> InstanceListConstIterator;
 
 		EventListViewBase(QWidget* parent = 0, const char* name = 0);
 		virtual ~EventListViewBase()  { }
@@ -64,7 +68,7 @@ class EventListViewBase : public KListView
 		bool                   anySelected() const;    // are any items selected?
 		const KAEvent*         selectedEvent() const;
 		EventListViewItemBase* selectedItem() const;
-		QValueList<EventListViewItemBase*> selectedItems() const;
+		Q3ValueList<EventListViewItemBase*> selectedItems() const;
 		int                    selectedCount() const;
 		int                    lastColumn() const     { return mLastColumn; }
 		virtual QString        whatsThisText(int column) const = 0;
@@ -101,14 +105,14 @@ class EventListViewBase : public KListView
 };
 
 
-class EventListViewItemBase : public QListViewItem
+class EventListViewItemBase : public Q3ListViewItem
 {
 	public:
 		EventListViewItemBase(EventListViewBase* parent, const KAEvent&);
 		const KAEvent&         event() const             { return mEvent; }
 		QPixmap*               eventIcon() const;
 		int                    lastColumnWidth() const   { return mLastColumnWidth; }
-		EventListViewItemBase* nextSibling() const       { return (EventListViewItemBase*)QListViewItem::nextSibling(); }
+		EventListViewItemBase* nextSibling() const       { return (EventListViewItemBase*)Q3ListViewItem::nextSibling(); }
 		static int             iconWidth();
 
 	protected:

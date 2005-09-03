@@ -21,9 +21,12 @@
 #ifndef RECURRENCEEDITPRIVATE_H
 #define RECURRENCEEDITPRIVATE_H
 
-#include <qframe.h>
-#include <qvaluelist.h>
+#include <q3frame.h>
+#include <q3valuelist.h>
 #include <qbitarray.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QVBoxLayout>
 
 class QWidget;
 class QVBoxLayout;
@@ -36,11 +39,11 @@ class TimeSpinBox;
 class QString;
 
 
-class NoRule : public QFrame
+class NoRule : public Q3Frame
 {
 	public:
-		NoRule(QWidget* parent, const char* name = 0) : QFrame(parent, name)
-		                                                 { setFrameStyle(QFrame::NoFrame); }
+		NoRule(QWidget* parent, const char* name = 0) : Q3Frame(parent, name)
+		                                                 { setFrameStyle(Q3Frame::NoFrame); }
 		virtual int      frequency() const       { return 0; }
 };
 
@@ -162,8 +165,8 @@ class YearlyRule : public MonthYearRule
 		Q_OBJECT
 	public:
 		YearlyRule(bool readOnly, QWidget* parent, const char* name = 0);
-		QValueList<int>  months() const;
-		void             setMonths(const QValueList<int>& months);
+		Q3ValueList<int>  months() const;
+		void             setMonths(const Q3ValueList<int>& months);
 		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
 		KARecurrence::Feb29Type feb29Type() const;
 		void             setFeb29Type(KARecurrence::Feb29Type);
@@ -181,7 +184,7 @@ class YearlyRule : public MonthYearRule
 		QLabel*          mFeb29Label;
 		ComboBox*        mFeb29Combo;
 		// Saved state of all controls
-		QValueList<int>  mSavedMonths;       // ticked months for yearly rule
+		Q3ValueList<int>  mSavedMonths;       // ticked months for yearly rule
 		int              mSavedFeb29Type;    // February 29th recurrence type
 };
 

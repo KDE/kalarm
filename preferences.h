@@ -27,7 +27,7 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qdatetime.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 class QWidget;
 
 #include "colourlist.h"

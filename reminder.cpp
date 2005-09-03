@@ -21,7 +21,12 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QBoxLayout>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -42,11 +47,11 @@ QString Reminder::i18n_u_first_recurrence_only() { return i18n("Reminder for fir
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name)
-	: QFrame(parent, name),
+	: Q3Frame(parent, name),
 	  mReadOnly(false),
 	  mOnceOnlyEnabled(showOnceOnly)
 {
-	setFrameStyle(QFrame::NoFrame);
+	setFrameStyle(Q3Frame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
 	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
@@ -61,7 +66,7 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 		layout->addSpacing(3*KDialog::spacingHint());
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
-		QWhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
+		Q3WhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);
 		layout->addStretch();
 	}

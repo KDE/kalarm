@@ -20,22 +20,25 @@
 
 #include "kalarm.h"
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QFocusEvent>
 #include "label.moc"
 
 
-Label::Label(QWidget* parent, const char* name, WFlags f)
+Label::Label(QWidget* parent, const char* name, Qt::WFlags f)
 	: QLabel(parent, name, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
 { }
 
-Label::Label(const QString& text, QWidget* parent, const char* name, WFlags f)
+Label::Label(const QString& text, QWidget* parent, const char* name, Qt::WFlags f)
 	: QLabel(text, parent, name, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
 { }
 
-Label::Label(QWidget* buddy, const QString& text, QWidget* parent, const char* name, WFlags f)
+Label::Label(QWidget* buddy, const QString& text, QWidget* parent, const char* name, Qt::WFlags f)
 	: QLabel(buddy, text, parent, name, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
@@ -106,7 +109,7 @@ void Label::activated()
 LabelFocusWidget::LabelFocusWidget(QWidget* parent, const char* name)
 	: QWidget(parent, name)
 {
-	setFocusPolicy(ClickFocus);
+	setFocusPolicy(Qt::ClickFocus);
 	setFixedSize(QSize(1,1));
 }
 

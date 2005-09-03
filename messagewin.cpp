@@ -28,11 +28,24 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
-#include <qdragobject.h>
-#include <qtextedit.h>
+#include <q3dragobject.h>
+#include <q3textedit.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QBoxLayout>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <Q3Frame>
+#include <QGridLayout>
+#include <QMoveEvent>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QCloseEvent>
+#include <QPixmap>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -88,14 +101,14 @@ static const int proximityButtonDelay = 1000;    // (milliseconds)
 static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
 // A text label widget which can be scrolled and copied with the mouse
-class MessageText : public QTextEdit
+class MessageText : public Q3TextEdit
 {
 	public:
 		MessageText(const QString& text, const QString& context = QString::null, QWidget* parent = 0, const char* name = 0)
-		: QTextEdit(text, context, parent, name)
+		: Q3TextEdit(text, context, parent, name)
 		{
 			setReadOnly(true);
-			setWordWrap(QTextEdit::NoWrap);
+			setWordWrap(Q3TextEdit::NoWrap);
 		}
 		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
 		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
@@ -103,7 +116,7 @@ class MessageText : public QTextEdit
 };
 
 
-class MWMimeSourceFactory : public QMimeSourceFactory
+class MWMimeSourceFactory : public Q3MimeSourceFactory
 {
 	public:
 		MWMimeSourceFactory(const QString& absPath, KTextBrowser*);
@@ -115,7 +128,7 @@ class MWMimeSourceFactory : public QMimeSourceFactory
 		virtual void setExtensionType(const QString&, const char*) {}
 
 		QString   mTextFile;
-		QCString  mMimeType;
+		Q3CString  mMimeType;
 		mutable const QMimeSource* mLast;
 };
 
@@ -124,7 +137,7 @@ class MWMimeSourceFactory : public QMimeSourceFactory
 static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
 
-QValueList<MessageWin*> MessageWin::mWindowList;
+Q3ValueList<MessageWin*> MessageWin::mWindowList;
 
 
 /******************************************************************************
@@ -279,12 +292,12 @@ void MessageWin::initView()
 	if (mDateTime.isValid())
 	{
 		// Show the alarm date/time, together with an "Advance reminder" text where appropriate
-		QFrame* frame = 0;
+		Q3Frame* frame = 0;
 		QVBoxLayout* layout = topLayout;
 		if (reminder)
 		{
-			frame = new QFrame(topWidget);
-			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
+			frame = new Q3Frame(topWidget);
+			frame->setFrameStyle(Q3Frame::Box | Q3Frame::Raised);
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
 			layout = new QVBoxLayout(frame, leading + frame->frameWidth(), leading);
 		}
@@ -295,10 +308,10 @@ void MessageWin::initView()
 		               ? KGlobal::locale()->formatDate(mDateTime.date(), true)
 		               : KGlobal::locale()->formatDateTime(mDateTime.dateTime()));
 		if (!frame)
-			label->setFrameStyle(QFrame::Box | QFrame::Raised);
+			label->setFrameStyle(Q3Frame::Box | Q3Frame::Raised);
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignHCenter);
-		QWhatsThis::add(label,
+		Q3WhatsThis::add(label,
 		      i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
 
 		if (frame)
@@ -320,9 +333,9 @@ void MessageWin::initView()
 			{
 				// Display the file name
 				QLabel* label = new QLabel(mMessage, topWidget);
-				label->setFrameStyle(QFrame::Box | QFrame::Raised);
+				label->setFrameStyle(Q3Frame::Box | Q3Frame::Raised);
 				label->setFixedSize(label->sizeHint());
-				QWhatsThis::add(label, i18n("The file whose contents are displayed below"));
+				Q3WhatsThis::add(label, i18n("The file whose contents are displayed below"));
 				topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
 				// Display contents of file
@@ -348,7 +361,7 @@ void MessageWin::initView()
 						// So there is no need to calculate an accurate size.
 						int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
 						view->resize(QSize(h, h).expandedTo(view->sizeHint()));
-						QWhatsThis::add(view, i18n("The contents of the file to be displayed"));
+						Q3WhatsThis::add(view, i18n("The contents of the file to be displayed"));
 					}
 					KIO::NetAccess::removeTempFile(tmpFile);
 				}
@@ -365,7 +378,7 @@ void MessageWin::initView()
 				// Message label
 				// Using MessageText instead of QLabel allows scrolling and mouse copying
 				MessageText* text = new MessageText(mMessage, QString::null, topWidget);
-				text->setFrameStyle(QFrame::NoFrame);
+				text->setFrameStyle(Q3Frame::NoFrame);
 				text->setPaper(mBgColour);
 				text->setPaletteForegroundColor(mFgColour);
 				text->setFont(mFont);
@@ -375,7 +388,7 @@ void MessageWin::initView()
 				text->setMaximumHeight(h + text->scrollBarHeight());
 				text->setMinimumHeight(QMIN(h, lineSpacing*4));
 				text->setMaximumWidth(s.width() + text->scrollBarWidth());
-				QWhatsThis::add(text, i18n("The alarm message"));
+				Q3WhatsThis::add(text, i18n("The alarm message"));
 				int vspace = lineSpacing/2;
 				int hspace = lineSpacing - KDialog::marginHint();
 				topLayout->addSpacing(vspace);
@@ -406,7 +419,7 @@ void MessageWin::initView()
 		{
 			// Reminder: show remaining time until the actual alarm
 			mRemainingText = new QLabel(topWidget);
-			mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
+			mRemainingText->setFrameStyle(Q3Frame::Box | Q3Frame::Raised);
 			mRemainingText->setMargin(leading);
 			if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
 			{
@@ -431,9 +444,9 @@ void MessageWin::initView()
 			case KAEvent::EMAIL:
 			{
 				// Display the email addresses and subject.
-				QFrame* frame = new QFrame(topWidget);
-				frame->setFrameStyle(QFrame::Box | QFrame::Raised);
-				QWhatsThis::add(frame, i18n("The email to send"));
+				Q3Frame* frame = new Q3Frame(topWidget);
+				frame->setFrameStyle(Q3Frame::Box | Q3Frame::Raised);
+				Q3WhatsThis::add(frame, i18n("The email to send"));
 				topLayout->addWidget(frame, 0, Qt::AlignHCenter);
 				QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -492,32 +505,32 @@ void MessageWin::initView()
 	mOkButton = new KPushButton(KStdGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	mOkButton->clearFocus();
-	mOkButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+	mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 	mOkButton->setFixedSize(mOkButton->sizeHint());
 	connect(mOkButton, SIGNAL(clicked()), SLOT(close()));
-	grid->addWidget(mOkButton, 0, gridIndex++, AlignHCenter);
-	QWhatsThis::add(mOkButton, i18n("Acknowledge the alarm"));
+	grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
+	Q3WhatsThis::add(mOkButton, i18n("Acknowledge the alarm"));
 
 	if (mShowEdit)
 	{
 		// Edit button
 		mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
-		mEditButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+		mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 		mEditButton->setFixedSize(mEditButton->sizeHint());
 		connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
-		grid->addWidget(mEditButton, 0, gridIndex++, AlignHCenter);
-		QWhatsThis::add(mEditButton, i18n("Edit the alarm."));
+		grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
+		Q3WhatsThis::add(mEditButton, i18n("Edit the alarm."));
 	}
 
 	if (!mNoDefer)
 	{
 		// Defer button
 		mDeferButton = new QPushButton(i18n("&Defer..."), topWidget);
-		mDeferButton->setFocusPolicy(QWidget::ClickFocus);    // don't allow keyboard selection
+		mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 		mDeferButton->setFixedSize(mDeferButton->sizeHint());
 		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
-		grid->addWidget(mDeferButton, 0, gridIndex++, AlignHCenter);
-		QWhatsThis::add(mDeferButton,
+		grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
+		Q3WhatsThis::add(mDeferButton,
 		      i18n("Defer the alarm until later.\n"
 		           "You will be prompted to specify when the alarm should be redisplayed."));
 
@@ -533,9 +546,9 @@ void MessageWin::initView()
 		mSilenceButton->setPixmap(pixmap);
 		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
 		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
-		grid->addWidget(mSilenceButton, 0, gridIndex++, AlignHCenter);
+		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
 		QToolTip::add(mSilenceButton, i18n("Stop sound"));
-		QWhatsThis::add(mSilenceButton, i18n("Stop playing the sound"));
+		Q3WhatsThis::add(mSilenceButton, i18n("Stop playing the sound"));
 		// To avoid getting in a mess, disable the button until sound playing has been set up
 		mSilenceButton->setEnabled(false);
 	}
@@ -550,9 +563,9 @@ void MessageWin::initView()
 		mKMailButton->setPixmap(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
-		grid->addWidget(mKMailButton, 0, gridIndex++, AlignHCenter);
+		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
 		QToolTip::add(mKMailButton, i18n("Locate this email in KMail", "Locate in KMail"));
-		QWhatsThis::add(mKMailButton, i18n("Locate and highlight this email in KMail"));
+		Q3WhatsThis::add(mKMailButton, i18n("Locate and highlight this email in KMail"));
 	}
 	else
 		mKMailButton = 0;
@@ -563,10 +576,10 @@ void MessageWin::initView()
 	mKAlarmButton->setPixmap(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
-	grid->addWidget(mKAlarmButton, 0, gridIndex++, AlignHCenter);
+	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
 	QString actKAlarm = i18n("Activate %1").arg(kapp->aboutData()->programName());
 	QToolTip::add(mKAlarmButton, actKAlarm);
-	QWhatsThis::add(mKAlarmButton, actKAlarm);
+	Q3WhatsThis::add(mKAlarmButton, actKAlarm);
 
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be
 	// under the mouse just as the window appears.
@@ -733,7 +746,7 @@ void MessageWin::readProperties(KConfig* config)
 */
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
-	for (QValueList<MessageWin*>::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	for (Q3ValueList<MessageWin*>::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
 	{
 		MessageWin* w = *it;
 		if (w->mEventID == eventID  &&  !w->mErrorWindow)
@@ -796,7 +809,7 @@ void MessageWin::slotSpeak()
 		}
 	}
 	QByteArray  data;
-	QDataStream arg(data, IO_WriteOnly);
+	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << mMessage << "";
 	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
 	{
@@ -1071,13 +1084,13 @@ int MessageWin::getKMixVolume()
 	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
 		return -1;
 	QByteArray  data, replyData;
-	QCString    replyType;
-	QDataStream arg(data, IO_WriteOnly);
+	Q3CString    replyType;
+	QDataStream arg(data, QIODevice::WriteOnly);
 	if (!kapp->dcopClient()->call(mKMixName, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
 	||  replyType != "int")
 		return -1;
 	int result;
-	QDataStream reply(replyData, IO_ReadOnly);
+	QDataStream reply(replyData, QIODevice::ReadOnly);
 	reply >> result;
 	return (result >= 0) ? result : 0;
 }
@@ -1092,7 +1105,7 @@ void MessageWin::setKMixVolume(int percent)
 	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
 		return;
 	QByteArray  data;
-	QDataStream arg(data, IO_WriteOnly);
+	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << percent;
 	if (!kapp->dcopClient()->send(mKMixName, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
 		kdError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
@@ -1366,15 +1379,15 @@ void MessageWin::slotShowKMailMessage()
 		KMessageBox::sorry(this, err);
 		return;
 	}
-	QCString    replyType;
+	Q3CString    replyType;
 	QByteArray  data, replyData;
-	QDataStream arg(data, IO_WriteOnly);
+	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << (Q_UINT32)mKMailSerialNumber << QString::null;
 	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(Q_UINT32,QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
-		QDataStream replyStream(replyData, IO_ReadOnly);
+		QDataStream replyStream(replyData, QIODevice::ReadOnly);
 		replyStream >> result;
 		if (result)
 			return;    // success
@@ -1543,7 +1556,7 @@ void MessageWin::displayMainWindow()
 * of plain text files without file name extensions.
 =============================================================================*/
 MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* view)
-	: QMimeSourceFactory(),
+	: Q3MimeSourceFactory(),
 	  mMimeType("text/plain"),
 	  mLast(0)
 {
@@ -1559,7 +1572,7 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 		default:
 			// It's assumed to be a text file
 			mTextFile = absPath;
-			view->QTextBrowser::setSource(absPath);
+			view->Q3TextBrowser::setSource(absPath);
 			break;
 
 		case KAlarm::Image:
@@ -1586,11 +1599,11 @@ const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 		if (fi.isReadable())
 		{
 			QFile f(abs_name);
-			if (f.open(IO_ReadOnly)  &&  f.size())
+			if (f.open(QIODevice::ReadOnly)  &&  f.size())
 			{
 				QByteArray ba(f.size());
 				f.readBlock(ba.data(), ba.size());
-				QStoredDrag* sr = new QStoredDrag(mMimeType);
+				Q3StoredDrag* sr = new Q3StoredDrag(mMimeType);
 				sr->setEncodedData(ba);
 				delete mLast;
 				mLast = sr;
@@ -1598,5 +1611,5 @@ const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 			}
 		}
 	}
-	return QMimeSourceFactory::data(abs_name);
+	return Q3MimeSourceFactory::data(abs_name);
 }

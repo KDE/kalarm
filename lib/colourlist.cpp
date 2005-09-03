@@ -30,7 +30,7 @@ ColourList::ColourList(const QColor* colours)
 void ColourList::insert(const QColor& colour)
 {
 	QRgb rgb = colour.rgb();
-	for (QValueListIterator<QRgb> it = mList.begin();  it != mList.end();  ++it)
+	for (Q3ValueListIterator<QRgb> it = mList.begin();  it != mList.end();  ++it)
 	{
 		if (rgb <= *it)
 		{

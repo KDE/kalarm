@@ -24,6 +24,8 @@
 #include "kalarm.h"
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <klistview.h>
 
 #include "eventlistviewbase.h"
@@ -37,7 +39,7 @@ class TemplateListViewItem : public EventListViewItemBase
 		TemplateListViewItem(TemplateListView* parent, const KAEvent&);
 		TemplateListView*      templateListView() const  { return (TemplateListView*)listView(); }
 		// Overridden base class methods
-		TemplateListViewItem*  nextSibling() const       { return (TemplateListViewItem*)QListViewItem::nextSibling(); }
+		TemplateListViewItem*  nextSibling() const       { return (TemplateListViewItem*)Q3ListViewItem::nextSibling(); }
 		virtual QString        key(int column, bool ascending) const;
 	protected:
 		virtual QString        lastColumnText() const;
@@ -67,9 +69,9 @@ class TemplateListView : public EventListViewBase
 		TemplateListViewItem*  selectedItem() const   { return (TemplateListViewItem*)EventListViewBase::selectedItem(); }
 		TemplateListViewItem*  currentItem() const    { return (TemplateListViewItem*)EventListViewBase::currentItem(); }
 		TemplateListViewItem*  firstChild() const     { return (TemplateListViewItem*)EventListViewBase::firstChild(); }
-		virtual void           setSelected(QListViewItem* item, bool selected)         { EventListViewBase::setSelected(item, selected); }
+		virtual void           setSelected(Q3ListViewItem* item, bool selected)         { EventListViewBase::setSelected(item, selected); }
 		virtual void           setSelected(TemplateListViewItem* item, bool selected)  { EventListViewBase::setSelected(item, selected); }
-		virtual QValueList<EventListViewBase*> instances()   { return mInstanceList; }
+		virtual Q3ValueList<EventListViewBase*> instances()   { return mInstanceList; }
 
 	protected:
 		virtual void           populate();
@@ -77,7 +79,7 @@ class TemplateListView : public EventListViewBase
 		virtual QString        whatsThisText(int column) const;
 
 	private:
-		static QValueList<EventListViewBase*> mInstanceList;
+		static Q3ValueList<EventListViewBase*> mInstanceList;
 		QString                mWhatsThisText;    // default QWhatsThis text
 		int                    mIconColumn;       // index to icon column
 		int                    mNameColumn;       // index to template name column

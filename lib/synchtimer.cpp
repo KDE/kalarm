@@ -20,6 +20,8 @@
 
 #include "kalarm.h"
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 #include "synchtimer.moc"
 
@@ -69,7 +71,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 			mConnections.remove(Connection(receiver, member));
 		else
 		{
-			for (QValueList<Connection>::Iterator it = mConnections.begin();  it != mConnections.end();  )
+			for (Q3ValueList<Connection>::Iterator it = mConnections.begin();  it != mConnections.end();  )
 			{
 				if ((*it).receiver == receiver)
 					it = mConnections.remove(it);
@@ -119,7 +121,7 @@ void MinuteTimer::slotTimer()
 =  Application-wide timer synchronised to midnight.
 =============================================================================*/
 
-QValueList<DailyTimer*> DailyTimer::mFixedTimers;
+Q3ValueList<DailyTimer*> DailyTimer::mFixedTimers;
 
 DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
 	: mTime(timeOfDay),
@@ -137,7 +139,7 @@ DailyTimer::~DailyTimer()
 
 DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
 {
-	for (QValueList<DailyTimer*>::Iterator it = mFixedTimers.begin();  it != mFixedTimers.end();  ++it)
+	for (Q3ValueList<DailyTimer*>::Iterator it = mFixedTimers.begin();  it != mFixedTimers.end();  ++it)
 		if ((*it)->mTime == timeOfDay)
 			return *it;
 	return create ? new DailyTimer(timeOfDay, true) : 0;

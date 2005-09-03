@@ -19,15 +19,21 @@
  */
 
 #include <qglobal.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QEvent>
+#include <Q3Frame>
+#include <QShowEvent>
+#include <QMouseEvent>
 #if QT_VERSION >= 300
 
 #include <stdlib.h>
 
 #include <qstyle.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qapplication.h>
 #include <qpixmap.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 #include "spinbox2.moc"
 #include "spinbox2private.moc"
@@ -48,11 +54,11 @@ static bool mirrorStyle(const QStyle&);
 int SpinBox2::mReverseLayout = -1;
 
 SpinBox2::SpinBox2(QWidget* parent, const char* name)
-	: QFrame(parent, name),
+	: Q3Frame(parent, name),
 	  mReverseWithLayout(true)
 {
-	mUpdown2Frame = new QFrame(this);
-	mSpinboxFrame = new QFrame(this);
+	mUpdown2Frame = new Q3Frame(this);
+	mSpinboxFrame = new Q3Frame(this);
 	mUpdown2 = new ExtraSpinBox(mUpdown2Frame, "updown2");
 //	mSpinbox = new MainSpinBox(0, 1, 1, this, mSpinboxFrame);
 	mSpinbox = new MainSpinBox(this, mSpinboxFrame);
@@ -60,11 +66,11 @@ SpinBox2::SpinBox2(QWidget* parent, const char* name)
 }
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
-	: QFrame(parent, name),
+	: Q3Frame(parent, name),
 	  mReverseWithLayout(true)
 {
-	mUpdown2Frame = new QFrame(this);
-	mSpinboxFrame = new QFrame(this);
+	mUpdown2Frame = new Q3Frame(this);
+	mSpinboxFrame = new Q3Frame(this);
 	mUpdown2 = new ExtraSpinBox(minValue, maxValue, step2, mUpdown2Frame, "updown2");
 	mSpinbox = new MainSpinBox(minValue, maxValue, step, this, mSpinboxFrame);
 	setSteps(step, step2);
@@ -84,7 +90,7 @@ void SpinBox2::init()
 	mSpinbox->setSelectOnStep(false);    // default
 	mUpdown2->setSelectOnStep(false);    // always false
 	setFocusProxy(mSpinbox);
-	mUpdown2->setFocusPolicy(QWidget::NoFocus);
+	mUpdown2->setFocusPolicy(Qt::NoFocus);
 	mSpinMirror = new SpinMirror(mUpdown2, this);
 	if (!mirrorStyle(style()))
 		mSpinMirror->hide();    // hide mirrored spin buttons when they are inappropriate
@@ -117,7 +123,7 @@ void SpinBox2::setReverseWithLayout(bool reverse)
 
 void SpinBox2::setEnabled(bool enabled)
 {
-	QFrame::setEnabled(enabled);
+	Q3Frame::setEnabled(enabled);
 	updateMirror();
 }
 
@@ -391,13 +397,13 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 =============================================================================*/
 
 SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent, const char* name)
-	: QCanvasView(new QCanvas, parent, name),
+	: Q3CanvasView(new Q3Canvas, parent, name),
 	  mSpinbox(spinbox),
 	  mReadOnly(false)
 {
-	setVScrollBarMode(QScrollView::AlwaysOff);
-	setHScrollBarMode(QScrollView::AlwaysOff);
-	setFrameStyle(QFrame::NoFrame);
+	setVScrollBarMode(Q3ScrollView::AlwaysOff);
+	setHScrollBarMode(Q3ScrollView::AlwaysOff);
+	setFrameStyle(Q3Frame::NoFrame);
 
 	// Find the spin widget which is part of the spin box, in order to
 	// pass on its shift-button presses.
@@ -414,7 +420,7 @@ void SpinMirror::setNormalButtons(const QPixmap& px)
 
 void SpinMirror::redraw(const QPixmap& px)
 {
-	QCanvas* c = canvas();
+	Q3Canvas* c = canvas();
 	c->setBackgroundPixmap(px);
 	c->setAllChanged();
 	c->update();
@@ -423,9 +429,9 @@ void SpinMirror::redraw(const QPixmap& px)
 void SpinMirror::resize(int w, int h)
 {
 	canvas()->resize(w, h);
-	QCanvasView::resize(w, h);
+	Q3CanvasView::resize(w, h);
 	resizeContents(w, h);
-	setWorldMatrix(QWMatrix(-1, 0, 0, 1, w - 1, 0));  // mirror left to right
+	setWorldMatrix(QMatrix(-1, 0, 0, 1, w - 1, 0));  // mirror left to right
 }
 
 /******************************************************************************

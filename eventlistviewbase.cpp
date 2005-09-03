@@ -20,8 +20,13 @@
 
 #include "kalarm.h"
 
-#include <qwhatsthis.h>
-#include <qheader.h>
+#include <q3whatsthis.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QShowEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -30,10 +35,10 @@
 #include "eventlistviewbase.moc"
 
 
-class EventListWhatsThisBase : public QWhatsThis
+class EventListWhatsThisBase : public Q3WhatsThis
 {
 	public:
-		EventListWhatsThisBase(EventListViewBase* lv) : QWhatsThis(lv), mListView(lv) { }
+		EventListWhatsThisBase(EventListViewBase* lv) : Q3WhatsThis(lv), mListView(lv) { }
 		virtual QString text(const QPoint&);
 	private:
 		EventListViewBase* mListView;
@@ -62,7 +67,7 @@ void EventListViewBase::addLastColumn(const QString& title)
 	addColumn(title);
 	mLastColumn = columns() - 1;
 	mLastColumnHeaderWidth = columnWidth(mLastColumn);
-	setColumnWidthMode(mLastColumn, QListView::Maximum);
+	setColumnWidthMode(mLastColumn, Q3ListView::Maximum);
 }
 
 /******************************************************************************
@@ -218,7 +223,7 @@ void EventListViewBase::findNext(bool forward)
 */
 bool EventListViewBase::anySelected() const
 {
-	for (QListViewItem* item = KListView::firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = KListView::firstChild();  item;  item = item->nextSibling())
 		if (isSelected(item))
 			return true;
 	return false;
@@ -243,11 +248,11 @@ const KAEvent* EventListViewBase::selectedEvent() const
 */
 EventListViewItemBase* EventListViewBase::selectedItem() const
 {
-	if (selectionMode() == QListView::Single)
+	if (selectionMode() == Q3ListView::Single)
 		return (EventListViewItemBase*)KListView::selectedItem();
 
-	QListViewItem* item = 0;
-	for (QListViewItem* it = firstChild();  it;  it = it->nextSibling())
+	Q3ListViewItem* item = 0;
+	for (Q3ListViewItem* it = firstChild();  it;  it = it->nextSibling())
 	{
 		if (isSelected(it))
 		{
@@ -262,10 +267,10 @@ EventListViewItemBase* EventListViewBase::selectedItem() const
 /******************************************************************************
 *  Fetch all selected items.
 */
-QValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
+Q3ValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
 {
-	QValueList<EventListViewItemBase*> items;
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	Q3ValueList<EventListViewItemBase*> items;
+	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
 	{
 		if (isSelected(item))
 			items.append((EventListViewItemBase*)item);
@@ -279,7 +284,7 @@ QValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
 int EventListViewBase::selectedCount() const
 {
 	int count = 0;
-	for (QListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
 	{
 		if (isSelected(item))
 			++count;
@@ -340,7 +345,7 @@ int EventListViewBase::itemHeight()
 	if (!item)
 	{
 		// The list is empty, so create a temporary item to find its height
-		QListViewItem* item = new QListViewItem(this, QString::null);
+		Q3ListViewItem* item = new Q3ListViewItem(this, QString::null);
 		int height = item->height();
 		delete item;
 		return height;
@@ -363,7 +368,7 @@ int      EventListViewItemBase::mIconWidth = 0;
 
 
 EventListViewItemBase::EventListViewItemBase(EventListViewBase* parent, const KAEvent& event)
-	: QListViewItem(parent),
+	: Q3ListViewItem(parent),
 	  mEvent(event)
 {
 	iconWidth();    // load the icons

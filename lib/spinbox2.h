@@ -22,6 +22,10 @@
 #define SPINBOX2_H
 
 #include <qglobal.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
 #if QT_VERSION >= 300
 class SpinMirror;
 class ExtraSpinBox;
@@ -53,7 +57,7 @@ class ExtraSpinBox;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class SpinBox2 : public QFrame
+class SpinBox2 : public Q3Frame
 {
 		Q_OBJECT
 	public:
@@ -295,8 +299,8 @@ class SpinBox2 : public QFrame
 		enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
 		static int       mReverseLayout;  // widgets are mirrored right to left
-		QFrame*          mUpdown2Frame;   // contains visible part of the extra pair of spin buttons
-		QFrame*          mSpinboxFrame;   // contains the main spin box
+		Q3Frame*          mUpdown2Frame;   // contains visible part of the extra pair of spin buttons
+		Q3Frame*          mSpinboxFrame;   // contains the main spin box
 		ExtraSpinBox*    mUpdown2;        // the extra pair of spin buttons
 		MainSpinBox*     mSpinbox;        // the visible spin box
 		SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons

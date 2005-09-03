@@ -23,6 +23,11 @@
 
 #include <qdatetime.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QLabel>
+#include <QShowEvent>
+#include <QResizeEvent>
 
 #include <kdialogbase.h>
 
@@ -31,12 +36,12 @@
 #include "datetime.h"
 #include "soundpicker.h"
 
-class QButton;
-class QGroupBox;
+class Q3Button;
+class Q3GroupBox;
 class QComboBox;
 class QTabWidget;
-class QVBox;
-class QHBox;
+class Q3VBox;
+class Q3HBox;
 class EmailIdCombo;
 class ColourCombo;
 class FontColourButton;
@@ -69,7 +74,7 @@ class EditAlarmDlg : public KDialogBase
 		bool            getEvent(KAEvent&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
+		static ColourCombo* createBgColourChooser(Q3HBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
@@ -146,7 +151,7 @@ class EditAlarmDlg : public KDialogBase
 		RadioButton*        mCommandRadio;
 		PickAlarmFileRadio* mFileRadio;
 		RadioButton*        mEmailRadio;
-		QWidgetStack*       mAlarmTypeStack;
+		Q3WidgetStack*       mAlarmTypeStack;
 
 		// Templates
 		QLineEdit*          mTemplateName;
@@ -159,9 +164,9 @@ class EditAlarmDlg : public KDialogBase
 		TimeEdit*           mTemplateTime;        // the alarm time which is specified
 
 		// Display alarm options widgets
-		QFrame*             mDisplayAlarmsFrame;
-		QHBox*              mFileBox;
-		QHBox*              mFilePadding;
+		Q3Frame*             mDisplayAlarmsFrame;
+		Q3HBox*              mFileBox;
+		Q3HBox*              mFilePadding;
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
@@ -177,7 +182,7 @@ class EditAlarmDlg : public KDialogBase
 		QPushButton*        mFileBrowseButton;   // text file browse button
 		QString             mFileDefaultDir;     // default directory for browse button
 		// Command alarm widgets
-		QFrame*             mCommandFrame;
+		Q3Frame*             mCommandFrame;
 		CheckBox*           mCmdTypeScript;      // entering a script
 		LineEdit*           mCmdCommandEdit;     // command line edit box
 		TextEdit*           mCmdScriptEdit;      // script edit box
@@ -185,7 +190,7 @@ class EditAlarmDlg : public KDialogBase
 		LineEdit*           mCmdLogFileEdit;     // log file URL edit box
 		QWidget*            mCmdPadding;
 		// Email alarm widgets
-		QFrame*             mEmailFrame;
+		Q3Frame*             mEmailFrame;
 		EmailIdCombo*       mEmailFromList;
 		LineEdit*           mEmailToEdit;
 		QPushButton*        mEmailAddressButton; // email open address book button
@@ -197,7 +202,7 @@ class EditAlarmDlg : public KDialogBase
 		CheckBox*           mEmailBcc;
 		QString             mAttachDefaultDir;
 
-		QGroupBox*          mDeferGroup;
+		Q3GroupBox*          mDeferGroup;
 		QLabel*             mDeferTimeLabel;
 		QPushButton*        mDeferChangeButton;
 
@@ -227,10 +232,10 @@ class EditAlarmDlg : public KDialogBase
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;
 		QString             mSavedTemplateName;   // mTemplateName value
-		QButton*            mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
+		Q3Button*            mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
 		QTime               mSavedTemplateTime;   // mTemplateTime value
 		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
-		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
+		Q3Button*            mSavedTypeRadio;      // mMessageRadio, etc
 		SoundPicker::Type   mSavedSoundType;      // mSoundPicker sound type
 		bool                mSavedSound;          // mSoundPicker sound status
 		bool                mSavedRepeatSound;    // mSoundPicker repeat status
@@ -253,7 +258,7 @@ class EditAlarmDlg : public KDialogBase
 		QStringList         mSavedEmailAttach;    // mEmailAttachList values
 		bool                mSavedEmailBcc;       // mEmailBcc status
 		bool                mSavedCmdScript;      // mCmdTypeScript status
-		QButton*            mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
+		Q3Button*            mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
 		QString             mSavedCmdLogFile;     // mCmdLogFileEdit value
 		DateTime            mSavedDateTime;       // mTimeWidget value
 		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value

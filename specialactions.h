@@ -22,8 +22,10 @@
 #define SPECIALACTIONS_H
 
 #include <kdialogbase.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class KLineEdit;
 
@@ -53,7 +55,7 @@ class SpecialActionsButton : public QPushButton
 
 
 // Pre- and post-alarm actions widget
-class SpecialActions : public QGroupBox
+class SpecialActions : public Q3GroupBox
 {
 		Q_OBJECT
 	public:

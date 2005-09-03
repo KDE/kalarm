@@ -22,6 +22,10 @@
 #define COLOURCOMBO_H
 
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QKeyEvent>
 #include "colourlist.h"
 
 

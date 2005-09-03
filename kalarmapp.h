@@ -23,7 +23,9 @@
 
 /** @file kalarmapp.h - the KAlarm application object */
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 class QTimer;
 class QDateTime;
 
@@ -125,10 +127,10 @@ class KAlarmApp : public KUniqueApplication
 			bool                 tempFile() const    { return flags & TEMP_FILE; }
 			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
 			ShellProcess*             process;
-			QGuardedPtr<ShellProcess> logProcess;
+			QPointer<ShellProcess> logProcess;
 			KAEvent*                  event;
 			KAAlarm*                  alarm;
-			QGuardedPtr<QWidget>      messageBoxParent;
+			QPointer<QWidget>      messageBoxParent;
 			QStringList               tempFiles;
 			int                       flags;
 		};
@@ -169,8 +171,8 @@ class KAlarmApp : public KUniqueApplication
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mPrefsExpiredColour;  // expired alarms text colour
 		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
-		QValueList<ProcData*> mCommandProcesses;    // currently active command alarm processes
-		QValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
+		Q3ValueList<ProcData*> mCommandProcesses;    // currently active command alarm processes
+		Q3ValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
 		int                   mPendingQuitCode;     // exit code for a pending quit
 		bool                  mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
 		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed

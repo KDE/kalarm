@@ -20,8 +20,8 @@
 
 #include "kalarm.h"
 
-#include <qwidgetstack.h>
-#include <qwhatsthis.h>
+#include <q3widgetstack.h>
+#include <q3whatsthis.h>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -49,14 +49,14 @@ static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:mi
 =============================================================================*/
 
 TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent, const char* name)
-	: QHBox(parent, name),
+	: Q3HBox(parent, name),
 	  mMaxDays(9999),
 	  mNoHourMinute(!allowHourMinute),
 	  mReadOnly(false)
 {
 	setSpacing(KDialog::spacingHint());
 
-	mSpinStack = new QWidgetStack(this);
+	mSpinStack = new Q3WidgetStack(this);
 	mSpinBox = new SpinBox(mSpinStack);
 	mSpinBox->setLineStep(1);
 	mSpinBox->setLineShiftStep(10);
@@ -368,7 +368,7 @@ void TimePeriod::showHourMin(bool hourMinute)
  */
 void TimePeriod::setWhatsThis(const QString& units, const QString& dayWeek, const QString& hourMin)
 {
-	QWhatsThis::add(mUnitsCombo, units);
-	QWhatsThis::add(mSpinBox, dayWeek);
-	QWhatsThis::add(mTimeSpinBox, (hourMin.isNull() ? dayWeek : hourMin));
+	Q3WhatsThis::add(mUnitsCombo, units);
+	Q3WhatsThis::add(mSpinBox, dayWeek);
+	Q3WhatsThis::add(mTimeSpinBox, (hourMin.isNull() ? dayWeek : hourMin));
 }

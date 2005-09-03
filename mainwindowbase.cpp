@@ -22,6 +22,8 @@
 #include <kdeversion.h>
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
+//Added by qt3to4:
+#include <QCloseEvent>
 
 
 /******************************************************************************

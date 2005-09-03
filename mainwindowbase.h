@@ -22,6 +22,8 @@
 #define MAINWINDOWBASE_H
 
 #include <kmainwindow.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 
 
 /**
@@ -36,7 +38,7 @@ class MainWindowBase : public KMainWindow
 		Q_OBJECT
 
 	public:
-		MainWindowBase(QWidget* parent = 0, const char* name = 0, WFlags f = WType_TopLevel | WDestructiveClose)
+		MainWindowBase(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel | Qt::WDestructiveClose)
 		                    : KMainWindow(parent, name, f), disableQuit(false) { }
 
 	protected:

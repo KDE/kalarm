@@ -22,7 +22,9 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,7 +43,7 @@ FontColourButton::FontColourButton(QWidget* parent, const char* name)
 	  mReadOnly(false)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	QWhatsThis::add(this,
+	Q3WhatsThis::add(this,
 	      i18n("Choose the font, and foreground and background color, for the alarm message."));
 }
 

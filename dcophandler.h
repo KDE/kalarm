@@ -22,6 +22,8 @@
 #define DCOPHANDLER_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <dcopobject.h>
 
 #include "datetime.h"
@@ -98,7 +100,7 @@ class DcopHandlerOld : public QWidget, public DCOPObject
 	public:
 		DcopHandlerOld();
 		~DcopHandlerOld()  { }
-		virtual bool process(const QCString& func, const QByteArray& data, QCString& replyType, QByteArray& replyData);
+		virtual bool process(const Q3CString& func, const QByteArray& data, Q3CString& replyType, QByteArray& replyData);
 };
 #endif
 

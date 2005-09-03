@@ -21,9 +21,13 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qwhatsthis.h>
-#include <qgroupbox.h>
+#include <q3whatsthis.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QBoxLayout>
 
 #include <kfinddialog.h>
 #include <kfind.h>
@@ -94,7 +98,7 @@ void Find::display()
 
 		// Alarm types
 		QBoxLayout* layout = new QVBoxLayout(kalarmWidgets, 0, KDialog::spacingHint());
-		QGroupBox* group = new QGroupBox(i18n("Alarm Type"), kalarmWidgets);
+		Q3GroupBox* group = new Q3GroupBox(i18n("Alarm Type"), kalarmWidgets);
 		layout->addWidget(group);
 		QGridLayout* grid = new QGridLayout(group, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 		grid->addRowSpacing(0, mDialog->fontMetrics().lineSpacing()/2);
@@ -103,15 +107,15 @@ void Find::display()
 		// Live & expired alarm selection
 		mLive = new QCheckBox(i18n("Acti&ve"), group);
 		mLive->setFixedSize(mLive->sizeHint());
-		QWhatsThis::add(mLive, i18n("Check to include active alarms in the search."));
-		grid->addWidget(mLive, 1, 0, Qt::AlignAuto);
+		Q3WhatsThis::add(mLive, i18n("Check to include active alarms in the search."));
+		grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
 
 		mExpired = new QCheckBox(i18n("Ex&pired"), group);
 		mExpired->setFixedSize(mExpired->sizeHint());
-		QWhatsThis::add(mExpired,
+		Q3WhatsThis::add(mExpired,
 		      i18n("Check to include expired alarms in the search. "
 		           "This option is only available if expired alarms are currently being displayed."));
-		grid->addWidget(mExpired, 1, 2, Qt::AlignAuto);
+		grid->addWidget(mExpired, 1, 2, Qt::AlignLeft);
 
 		mActiveExpiredSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
 		grid->addMultiCellWidget(mActiveExpiredSep, 2, 2, 0, 2);
@@ -119,22 +123,22 @@ void Find::display()
 		// Alarm actions
 		mMessageType = new QCheckBox(i18n("Text"), group, "message");
 		mMessageType->setFixedSize(mMessageType->sizeHint());
-		QWhatsThis::add(mMessageType, i18n("Check to include text message alarms in the search."));
+		Q3WhatsThis::add(mMessageType, i18n("Check to include text message alarms in the search."));
 		grid->addWidget(mMessageType, 3, 0);
 
 		mFileType = new QCheckBox(i18n("Fi&le"), group, "file");
 		mFileType->setFixedSize(mFileType->sizeHint());
-		QWhatsThis::add(mFileType, i18n("Check to include file alarms in the search."));
+		Q3WhatsThis::add(mFileType, i18n("Check to include file alarms in the search."));
 		grid->addWidget(mFileType, 3, 2);
 
 		mCommandType = new QCheckBox(i18n("Co&mmand"), group, "command");
 		mCommandType->setFixedSize(mCommandType->sizeHint());
-		QWhatsThis::add(mCommandType, i18n("Check to include command alarms in the search."));
+		Q3WhatsThis::add(mCommandType, i18n("Check to include command alarms in the search."));
 		grid->addWidget(mCommandType, 4, 0);
 
 		mEmailType = new QCheckBox(i18n("&Email"), group, "email");
 		mEmailType->setFixedSize(mEmailType->sizeHint());
-		QWhatsThis::add(mEmailType, i18n("Check to include email alarms in the search."));
+		Q3WhatsThis::add(mEmailType, i18n("Check to include email alarms in the search."));
 		grid->addWidget(mEmailType, 4, 2);
 
 		// Set defaults
@@ -378,7 +382,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 */
 EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward) const
 {
-	QListViewItem* it;
+	Q3ListViewItem* it;
 	if (mOptions & KFindDialog::FindBackwards)
 		forward = !forward;
 	if (forward)

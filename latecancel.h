@@ -21,16 +21,18 @@
 #ifndef LATECANCEL_H
 #define LATECANCEL_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QBoxLayout>
 
 #include "timeperiod.h"
 #include "timeselector.h"
 class QBoxLayout;
-class QWidgetStack;
+class Q3WidgetStack;
 class CheckBox;
 
 
-class LateCancelSelector : public QFrame
+class LateCancelSelector : public Q3Frame
 {
 		Q_OBJECT
 	public:
@@ -55,10 +57,10 @@ class LateCancelSelector : public QFrame
 
 	private:
 		QBoxLayout*    mLayout;            // overall layout for the widget
-		QWidgetStack*  mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
-		QFrame*        mCheckboxFrame;
+		Q3WidgetStack*  mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
+		Q3Frame*        mCheckboxFrame;
 		CheckBox*      mCheckbox;          // displayed when late cancellation is not selected
-		QFrame*        mTimeSelectorFrame;
+		Q3Frame*        mTimeSelectorFrame;
 		TimeSelector*  mTimeSelector;      // displayed when late cancellation is selected
 		CheckBox*      mAutoClose;
 		bool           mDateOnly;          // hours/minutes units not allowed

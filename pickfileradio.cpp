@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 
@@ -30,7 +30,7 @@
 #include "pickfileradio.moc"
 
 
-PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, QButtonGroup* parent, const char* name)
+PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent, const char* name)
 	: RadioButton(text, parent, name),
 	  mGroup(parent),
 	  mEdit(edit),
@@ -47,7 +47,7 @@ PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString&
 	connect(mGroup, SIGNAL(buttonSet(int)), SLOT(slotSelectionChanged(int)));
 }
 
-PickFileRadio::PickFileRadio(const QString& text, QButtonGroup* parent, const char* name)
+PickFileRadio::PickFileRadio(const QString& text, Q3ButtonGroup* parent, const char* name)
 	: RadioButton(text, parent, name),
 	  mGroup(parent),
 	  mEdit(0),

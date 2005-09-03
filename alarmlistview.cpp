@@ -23,8 +23,12 @@
 #include <qtooltip.h>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -55,7 +59,7 @@ class AlarmListTooltip : public QToolTip
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
 =============================================================================*/
-QValueList<EventListViewBase*>  AlarmListView::mInstanceList;
+Q3ValueList<EventListViewBase*>  AlarmListView::mInstanceList;
 bool                            AlarmListView::mDragging = false;
 
 
@@ -71,7 +75,7 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	  mDrawMessageInColour(false),
 	  mShowExpired(false)
 {
-	setSelectionMode(QListView::Extended);
+	setSelectionMode(Q3ListView::Extended);
 
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Time To"));        // time-to-alarm column
@@ -83,15 +87,15 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	mTimeColumnHeaderWidth   = columnWidth(mTimeColumn);
 	mTimeToColumnHeaderWidth = columnWidth(mTimeToColumn);
 	setColumnAlignment(mRepeatColumn, Qt::AlignHCenter);
-	setColumnWidthMode(mRepeatColumn, QListView::Maximum);
+	setColumnWidthMode(mRepeatColumn, Q3ListView::Maximum);
 
 	// Set the width of the colour column in proportion to height
 	setColumnWidth(mColourColumn, itemHeight() * 3/4);
-	setColumnWidthMode(mColourColumn, QListView::Manual);
+	setColumnWidthMode(mColourColumn, Q3ListView::Manual);
 
 	// Set the width of the alarm type column to exactly accommodate the icons
 	setColumnWidth(mTypeColumn, AlarmListViewItem::typeIconWidth(this));
-	setColumnWidthMode(mTypeColumn, QListView::Manual);
+	setColumnWidthMode(mTypeColumn, Q3ListView::Manual);
 
 	mInstanceList.append(this);
 
@@ -162,13 +166,13 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 				colWidth = w;
 		}
 		setColumnWidth(mTimeColumn, colWidth);
-		setColumnWidthMode(mTimeColumn, QListView::Maximum);
+		setColumnWidthMode(mTimeColumn, Q3ListView::Maximum);
 		changed = true;
 	}
 	else if (!time  &&  w)
 	{
 		// Hide the time column
-		setColumnWidthMode(mTimeColumn, QListView::Manual);
+		setColumnWidthMode(mTimeColumn, Q3ListView::Manual);
 		setColumnWidth(mTimeColumn, 0);
 		changed = true;
 	}
@@ -176,7 +180,7 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 	if (timeTo  &&  !w)
 	{
 		// Unhide the time-to-alarm column
-		setColumnWidthMode(mTimeToColumn, QListView::Maximum);
+		setColumnWidthMode(mTimeToColumn, Q3ListView::Maximum);
 		updateTimeToAlarms(true);
 		if (columnWidth(mTimeToColumn) < mTimeToColumnHeaderWidth)
 			setColumnWidth(mTimeToColumn, mTimeToColumnHeaderWidth);
@@ -185,7 +189,7 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 	else if (!timeTo  &&  w)
 	{
 		// Hide the time-to-alarm column
-		setColumnWidthMode(mTimeToColumn, QListView::Manual);
+		setColumnWidthMode(mTimeToColumn, Q3ListView::Manual);
 		setColumnWidth(mTimeToColumn, 0);
 		changed = true;
 	}
@@ -271,7 +275,7 @@ QString AlarmListView::whatsThisText(int column) const
 */
 void AlarmListView::contentsMousePressEvent(QMouseEvent* e)
 {
-	QListView::contentsMousePressEvent(e);
+	Q3ListView::contentsMousePressEvent(e);
 	if (e->button() == Qt::LeftButton)
 	{
 		QPoint p(contentsToViewport(e->pos()));
@@ -290,7 +294,7 @@ void AlarmListView::contentsMousePressEvent(QMouseEvent* e)
 */
 void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-	QListView::contentsMouseMoveEvent(e);
+	Q3ListView::contentsMouseMoveEvent(e);
 	if (mMousePressed
 	&&  (mMousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
 	{
@@ -299,10 +303,10 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		mMousePressed = false;
 		KCal::CalendarLocal cal(QString::fromLatin1("UTC"));
 		cal.setLocalTime();    // write out using local time (i.e. no time zone)
-		QValueList<EventListViewItemBase*> items = selectedItems();
+		Q3ValueList<EventListViewItemBase*> items = selectedItems();
 		if (!items.count())
 			return;
-		for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+		for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
 		{
 			const KAEvent& event = (*it)->event();
 			KCal::Event* kcalEvent = new KCal::Event;
@@ -325,7 +329,7 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 */
 void AlarmListView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-	QListView::contentsMouseReleaseEvent(e);
+	Q3ListView::contentsMouseReleaseEvent(e);
 	mMousePressed = false;
 	mDragging     = false;
 }
@@ -524,18 +528,18 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 					mDigitWidth = painter->fontMetrics().width("0");
 				QString date = str.left(i + 1);
 				int w = painter->fontMetrics().width(date) + mDigitWidth;
-				painter->drawText(box, AlignVCenter, date);
+				painter->drawText(box, Qt::AlignVCenter, date);
 				box.setLeft(box.left() + w);
-				painter->drawText(box, AlignVCenter, str.mid(i + 2));
+				painter->drawText(box, Qt::AlignVCenter, str.mid(i + 2));
 			}
 		}
 		if (i < 0)
-			painter->drawText(box, AlignVCenter, str);
+			painter->drawText(box, Qt::AlignVCenter, str);
 	}
 	else if (column == listView->timeToColumn())
-		painter->drawText(box, AlignVCenter | AlignRight, text(column));
+		painter->drawText(box, Qt::AlignVCenter | Qt::AlignRight, text(column));
 	else if (column == listView->repeatColumn())
-		painter->drawText(box, AlignVCenter | AlignHCenter, text(column));
+		painter->drawText(box, Qt::AlignVCenter | Qt::AlignHCenter, text(column));
 	else if (column == listView->colourColumn())
 	{
 		// Paint the cell the colour of the alarm message
@@ -566,7 +570,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 //			painter->setPen(event().fgColour());
 		}
 		QString txt = text(column);
-		painter->drawText(box, AlignVCenter, txt);
+		painter->drawText(box, Qt::AlignVCenter, txt);
 		mMessageColWidth = listView->fontMetrics().boundingRect(txt).width();
 	}
 }

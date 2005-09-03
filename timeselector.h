@@ -21,14 +21,16 @@
 #ifndef TIMESELECTOR_H
 #define TIMESELECTOR_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
 #include "timeperiod.h"
 
 class QLabel;
 class CheckBox;
 
 
-class TimeSelector : public QFrame
+class TimeSelector : public Q3Frame
 {
 		Q_OBJECT
 	public:

@@ -21,7 +21,11 @@
 #include "kalarm.h"
 
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QResizeEvent>
+#include <QBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -44,10 +48,10 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 	// Display the list of templates, but exclude command alarms if in kiosk mode.
 	bool includeCmdAlarms = ShellProcess::authorised();
 	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget, "list");
-	mTemplateList->setSelectionMode(QListView::Single);
+	mTemplateList->setSelectionMode(Q3ListView::Single);
 	mTemplateList->refresh();      // populate the template list
 	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	connect(mTemplateList, SIGNAL(executed(QListViewItem*)), SLOT(slotOk()));
+	connect(mTemplateList, SIGNAL(executed(Q3ListViewItem*)), SLOT(slotOk()));
 	topLayout->addWidget(mTemplateList);
 
 	slotSelectionChanged();        // enable or disable the OK button

@@ -22,6 +22,9 @@
 #define SLIDER_H
 
 #include <qslider.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 /**
@@ -49,7 +52,7 @@ class Slider : public QSlider
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		Slider(Orientation orient, QWidget* parent = 0, const char* name = 0);
+		Slider(Qt::Orientation orient, QWidget* parent = 0, const char* name = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the slider can have.
 		 *  @param maxValue The maximum value which the slider can have.
@@ -59,7 +62,7 @@ class Slider : public QSlider
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		Slider(int minValue, int maxValue, int pageStep, int value, Orientation orient,
+		Slider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orient,
 		       QWidget* parent = 0, const char* name = 0);
 		/** Returns true if the slider is read only. */
 		bool         isReadOnly() const  { return mReadOnly; }

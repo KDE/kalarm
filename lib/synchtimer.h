@@ -24,8 +24,8 @@
 /* @file synchtimer.h - timers which synchronise to time boundaries */
 
 #include <qobject.h>
-#include <qvaluelist.h>
-#include <qcstring.h>
+#include <q3valuelist.h>
+#include <q3cstring.h>
 #include <qdatetime.h>
 class QTimer;
 
@@ -46,7 +46,7 @@ class SynchTimer : public QObject
 			Connection(QObject* r, const char* s) : receiver(r), slot(s) { }
 			bool operator==(const Connection& c) const  { return receiver == c.receiver && slot == c.slot; }
 			QObject*       receiver;
-			const QCString slot;
+			const Q3CString slot;
 		};
 	protected:
 		SynchTimer();
@@ -65,7 +65,7 @@ class SynchTimer : public QObject
 
 	private:
 		SynchTimer(const SynchTimer&);   // prohibit copying
-		QValueList<Connection> mConnections;  // list of current clients
+		Q3ValueList<Connection> mConnections;  // list of current clients
 };
 
 
@@ -164,7 +164,7 @@ class DailyTimer : public SynchTimer
 		virtual void slotTimer();
 
 	private:
-		static QValueList<DailyTimer*>  mFixedTimers;   // list of timers whose trigger time is fixed
+		static Q3ValueList<DailyTimer*>  mFixedTimers;   // list of timers whose trigger time is fixed
 		QTime  mTime;
 		QDate  mLastDate;  // the date on which the timer was last triggered
 		bool   mFixed;     // the time at which the timer triggers cannot be changed

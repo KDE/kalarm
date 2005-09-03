@@ -24,8 +24,11 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include <qsize.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include "alarmevent.h"
 
@@ -75,12 +78,12 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* r
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-QValueList<KAEvent> templateList();
+Q3ValueList<KAEvent> templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
-bool                runProgram(const QCString& program, const QCString& windowName, QCString& dcopName, QString& errorMessage);
+bool                runProgram(const Q3CString& program, const Q3CString& windowName, Q3CString& dcopName, QString& errorMessage);
 
 UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true);
 bool                addExpiredEvent(KAEvent&);

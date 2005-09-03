@@ -21,7 +21,9 @@
 #include "kalarm.h"
 
 #include <qtimer.h>
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -178,12 +180,12 @@ bool Daemon::registerWith(bool reregister)
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
-	QCString appname  = kapp->aboutData()->appName();
+	Q3CString appname  = kapp->aboutData()->appName();
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	if (reregister)
 		s.registerChange(appname, !disabledIfStopped);
 	else
-		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
+		s.registerApp(appname, kapp->aboutData()->programName(), Q3CString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
 	if (!s.ok())
 	{
 		registrationResult(reregister, KAlarmd::FAILURE);
@@ -337,7 +339,7 @@ bool Daemon::reset()
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		return false;
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.resetCalendar(QCString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
+	s.resetCalendar(Q3CString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
 		kdError(5950) << "Daemon::reset(): resetCalendar dcop send failed" << endl;
 	return true;
@@ -350,7 +352,7 @@ void Daemon::reload()
 {
 	kdDebug(5950) << "Daemon::reload()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.reloadCalendar(QCString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
+	s.reloadCalendar(Q3CString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
 		kdError(5950) << "Daemon::reload(): reloadCalendar dcop send failed" << endl;
 }

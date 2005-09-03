@@ -26,13 +26,15 @@
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "templatelistview.moc"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 /*=============================================================================
 =  Class: TemplateListView
 =  Displays the list of outstanding alarms.
 =============================================================================*/
-QValueList<EventListViewBase*>  TemplateListView::mInstanceList;
+Q3ValueList<EventListViewBase*>  TemplateListView::mInstanceList;
 
 
 TemplateListView::TemplateListView(bool includeCmdAlarms, const QString& whatsThisText, QWidget* parent, const char* name)
@@ -46,7 +48,7 @@ TemplateListView::TemplateListView(bool includeCmdAlarms, const QString& whatsTh
 	addLastColumn(i18n("Name"));
 	setSorting(mNameColumn);           // sort initially by name
 	setColumnAlignment(mIconColumn, Qt::AlignHCenter);
-	setColumnWidthMode(mIconColumn, QListView::Maximum);
+	setColumnWidthMode(mIconColumn, Q3ListView::Maximum);
 
 	mInstanceList.append(this);
 }
@@ -61,8 +63,8 @@ TemplateListView::~TemplateListView()
 */
 void TemplateListView::populate()
 {
-	QValueList<KAEvent> templates = KAlarm::templateList();
-	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+	Q3ValueList<KAEvent> templates = KAlarm::templateList();
+	for (Q3ValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
 		addEntry(*it);
 }
 

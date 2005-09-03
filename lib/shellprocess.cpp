@@ -29,10 +29,12 @@
 #include <kdebug.h>
 
 #include "shellprocess.moc"
+//Added by qt3to4:
+#include <Q3CString>
 
 
-QCString  ShellProcess::mShellName;
-QCString  ShellProcess::mShellPath;
+Q3CString  ShellProcess::mShellName;
+Q3CString  ShellProcess::mShellPath;
 bool      ShellProcess::mInitialised = false;
 bool      ShellProcess::mAuthorised  = false;
 
@@ -101,7 +103,7 @@ void ShellProcess::slotExited(KProcess* proc)
 */
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
-	QCString scopy(buffer, bufflen+1);    // construct a deep copy
+	Q3CString scopy(buffer, bufflen+1);    // construct a deep copy
 	bool write = !mStdinQueue.count();
 	mStdinQueue.append(scopy);
 	if (write)
@@ -162,13 +164,13 @@ QString ShellProcess::errorMessage() const
 * This is a duplication of what KShellProcess does, but we need to know
 * which shell is used in order to decide what its exit code means.
 */
-const QCString& ShellProcess::shellPath()
+const Q3CString& ShellProcess::shellPath()
 {
 	if (mShellPath.isEmpty())
 	{
 		// Get the path to the shell
 		mShellPath = "/bin/sh";
-		QCString envshell = QCString(getenv("SHELL")).stripWhiteSpace();
+		Q3CString envshell = Q3CString(getenv("SHELL")).stripWhiteSpace();
 		if (!envshell.isEmpty())
 		{
 			struct stat fileinfo;

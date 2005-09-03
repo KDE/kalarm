@@ -20,7 +20,11 @@
 
 #include <kdeversion.h>
 #include <qlineedit.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 #include "spinbox.moc"
 
 
@@ -57,7 +61,7 @@ void SpinBox::init()
 	// Find the spin widgets which are part of the spin boxes, in order to
 	// handle their shift-button presses.
 	QObjectList* spinwidgets = queryList("QSpinWidget", 0, false, true);
-	QSpinWidget* spin = (QSpinWidget*)spinwidgets->getFirst();
+	Q3SpinWidget* spin = (Q3SpinWidget*)spinwidgets->getFirst();
 	if (spin)
 		spin->installEventFilter(this);   // handle shift-button presses
 	delete spinwidgets;
@@ -213,7 +217,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 				if (mReadOnly)
 					return true;    // discard up/down arrow keys
 				int step;
-				if ((ke->state() & (Qt::ShiftButton | Qt::AltButton)) == Qt::ShiftButton)
+				if ((ke->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
 				{
 					// Shift stepping
 					int val = value();
@@ -253,7 +257,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 					mCurrentButton = whichButton(me->pos());
 					if (mCurrentButton == NO_BUTTON)
 						return true;
-					bool shift = (me->state() & (Qt::ShiftButton | Qt::AltButton)) == Qt::ShiftButton;
+					bool shift = (me->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 					if (setShiftStepping(shift))
 						return true;     // hide the event from the spin widget
 					return false;    // forward event to the destination widget
@@ -284,7 +288,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 						// The mouse has moved to a new spin button.
 						// Set normal or shift stepping as appropriate.
 						mCurrentButton = newButton;
-						bool shift = (me->state() & (Qt::ShiftButton | Qt::AltButton)) == Qt::ShiftButton;
+						bool shift = (me->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 						if (setShiftStepping(shift))
 							return true;     // hide the event from the spin widget
 					}
@@ -294,7 +298,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 			}
 			case QEvent::KeyPress:
 			case QEvent::KeyRelease:
-			case QEvent::AccelOverride:      // this is needed to receive Shift presses!
+			case QEvent::ShortcutOverride:      // this is needed to receive Shift presses!
 			{
 				QKeyEvent* ke = (QKeyEvent*)e;
 				int key   = ke->key();
@@ -305,8 +309,8 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 					// The left mouse button is down, and the Shift or Alt key has changed
 					if (mReadOnly)
 						return true;   // discard the event
-					state ^= (key == Qt::Key_Shift) ? Qt::ShiftButton : Qt::AltButton;    // new state
-					bool shift = (state & (Qt::ShiftButton | Qt::AltButton)) == Qt::ShiftButton;
+					state ^= (key == Qt::Key_Shift) ? Qt::ShiftModifier : Qt::AltModifier;    // new state
+					bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 					if (!shift && mShiftMouse  ||  shift && !mShiftMouse)
 					{
 						// The effective shift state has changed.

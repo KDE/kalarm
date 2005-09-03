@@ -21,6 +21,9 @@
 #define DATEEDIT_H
 
 #include <libkdepim/kdateedit.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 /**
  *  @short Date edit widget with range limits.

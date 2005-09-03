@@ -21,7 +21,7 @@
 #ifndef SOUNDPICKER_H
 #define SOUNDPICKER_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
 #include <kurl.h>
 
@@ -31,7 +31,7 @@ class PushButton;
 class RadioButton;
 
 
-class SoundPicker : public QFrame
+class SoundPicker : public Q3Frame
 {
 		Q_OBJECT
 	public:

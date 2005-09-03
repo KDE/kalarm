@@ -21,6 +21,8 @@
 #include "kalarm.h"
 
 #include <qbitarray.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 
 #include <libkcal/icalformat.h>
@@ -208,7 +210,7 @@ void KARecurrence::fix()
 					||  rrule->startDt()   != rrules[0]->startDt())
 						break;
 				}
-				QValueList<int> ds = rrule->byYearDays();
+				Q3ValueList<int> ds = rrule->byYearDays();
 				if (!ds.isEmpty()  &&  ds.first() == 60)
 				{
 					++convert;    // this rule needs to be converted
@@ -220,7 +222,7 @@ void KARecurrence::fix()
 			}
 			case rYearlyMonth:
 			{
-				QValueList<int> ds = rrule->byMonthDays();
+				Q3ValueList<int> ds = rrule->byMonthDays();
 				if (!ds.isEmpty())
 				{
 					int day = ds.first();
@@ -242,7 +244,7 @@ void KARecurrence::fix()
 					if (day == -1)
 					{
 						// Last day of the month - only combine if it's February
-						QValueList<int> months = rrule->byMonths();
+						Q3ValueList<int> months = rrule->byMonths();
 						if (months.count() != 1  ||  months.first() != 2)
 							day = 0;
 					}
@@ -271,7 +273,7 @@ void KARecurrence::fix()
 
 	QDate end;
 	int count;
-	QValueList<int> months;
+	Q3ValueList<int> months;
 	if (convert == 2)
 	{
 		// There are two yearly recurrence rules to combine into a February 29th recurrence.
@@ -312,7 +314,7 @@ void KARecurrence::fix()
 	RecurrenceRule* rrule = defaultRRule();
 	months.append(2);
 	rrule->setByMonths(months);
-	QValueList<int> ds;
+	Q3ValueList<int> ds;
 	ds.append(29);
 	rrule->setByMonthDays(ds);
 	if (count)
@@ -356,8 +358,8 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 			break;
 		case rYearlyMonth:
 		{
-			QValueList<int> months = rrule->byMonths();
-			QValueList<int> days   = monthDays();
+			Q3ValueList<int> months = rrule->byMonths();
+			Q3ValueList<int> days   = monthDays();
 			bool special = (mFeb29Type != FEB29_FEB29  &&  !days.isEmpty()
 			                &&  days.first() == 29  &&  months.remove(2));
 			RecurrenceRule* rrule1 = recur.defaultRRule();
@@ -377,16 +379,16 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 				rrule2->setEndDt(endDateTime());
 			if (mFeb29Type == FEB29_MAR1)
 			{
-				QValueList<int> ds;
+				Q3ValueList<int> ds;
 				ds.append(60);
 				rrule2->setByYearDays(ds);
 			}
 			else
 			{
-				QValueList<int> ds;
+				Q3ValueList<int> ds;
 				ds.append(-1);
 				rrule2->setByMonthDays(ds);
-				QValueList<int> ms;
+				Q3ValueList<int> ms;
 				ms.append(2);
 				rrule2->setByMonths(ms);
 			}
@@ -497,7 +499,7 @@ QDateTime KARecurrence::endDateTime() const
 	rrule->setFloats(doesFloat());
 	rrule->setFrequency(frequency());
 	rrule->setDuration(duration());
-	QValueList<int> ds;
+	Q3ValueList<int> ds;
 	ds.append(28);
 	rrule->setByMonthDays(ds);
 	rrule->setByMonths(defaultRRuleConst()->byMonths());
@@ -642,7 +644,7 @@ int KARecurrence::longestInterval() const
 		{
 			// Find which months of the year it recurs on, and if on more than
 			// one, reduce the maximum interval accordingly.
-			const QValueList<int> months = yearMonths();  // month list is sorted
+			const Q3ValueList<int> months = yearMonths();  // month list is sorted
 			if (months.isEmpty())
 				break;    // no months recur
 			if (months.count() > 1)
@@ -650,7 +652,7 @@ int KARecurrence::longestInterval() const
 				int first = -1;
 				int last  = -1;
 				int maxgap = 0;
-				for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
+				for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 				{
 					if (first < 0)
 						first = *it;

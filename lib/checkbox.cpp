@@ -19,6 +19,9 @@
  */
 
 #include "checkbox.moc"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 
 CheckBox::CheckBox(QWidget* parent, const char* name)
@@ -44,7 +47,7 @@ void CheckBox::setReadOnly(bool ro)
 	if ((int)ro != (int)mReadOnly)
 	{
 		mReadOnly = ro;
-		setFocusPolicy(ro ? QWidget::NoFocus : mFocusPolicy);
+		setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);
 		if (ro)
 			clearFocus();
 	}
@@ -86,7 +89,7 @@ void CheckBox::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QCheckBox::mousePressEvent(e);
@@ -97,7 +100,7 @@ void CheckBox::mouseReleaseEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QCheckBox::mouseReleaseEvent(e);
@@ -114,10 +117,10 @@ void CheckBox::keyPressEvent(QKeyEvent* e)
 	if (mReadOnly)
 		switch (e->key())
 		{
-			case Key_Up:
-			case Key_Left:
-			case Key_Right:
-			case Key_Down:
+			case Qt::Key_Up:
+			case Qt::Key_Left:
+			case Qt::Key_Right:
+			case Qt::Key_Down:
 				// Process keys which shift the focus
 				break;
 			default:

@@ -1,3 +1,7 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QPaintEvent>
 /*
  *  spinbox2private.h  -  private classes for SpinBox2 (for Qt 3)
  *  Program:  kalarm
@@ -23,7 +27,7 @@
 
 #if QT_VERSION >= 300
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include "spinbox.h"
 
 
@@ -59,7 +63,7 @@ class ExtraSpinBox : public SpinBox
 * Mirroring in this way allows styles with rounded corners to display correctly.
 =============================================================================*/
 
-class SpinMirror : public QCanvasView
+class SpinMirror : public Q3CanvasView
 {
 		Q_OBJECT
 	public:
