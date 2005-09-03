@@ -65,6 +65,7 @@
 #include "kalarmapp.moc"
 
 #include <netwm.h>
+#include <QX11Info>
 
 
 static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
@@ -114,7 +115,7 @@ KAlarmApp::KAlarmApp()
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
-	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
+	NETRootInfo nri(QX11Info::display(), NET::SupportingWMCheck);
 	const char* wmname = nri.wmName();
 	mKDEDesktop = wmname && !strcmp(wmname, "KWin");
 

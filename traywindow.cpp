@@ -311,6 +311,7 @@ void TrayWindow::removeWindow(MainWindow* win)
 	#include <X11/X.h>
 	#include <X11/Xlib.h>
 	#include <X11/Xutil.h>
+#include <QX11Info>
 #endif
 
 /******************************************************************************
@@ -329,7 +330,7 @@ bool TrayWindow::inSystemTray() const
 	Window* children = 0;
 	unsigned int nchildren;
 	// Find the X parent window of the widget. This is not the same as the Qt parent widget.
-	if (!XQueryTree(qt_xdisplay(), winId(), &root, &xParent, &children, &nchildren))
+	if (!XQueryTree(QX11Info::display(), winId(), &root, &xParent, &children, &nchildren))
 		return true;    // error determining its parent X window
 	if (children)
 		XFree(children);
