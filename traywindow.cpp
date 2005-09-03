@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include <kstandarddirs.h>
 #include <kstdaction.h>
 #include <kstdguiitem.h>
+#include <kaccel.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
@@ -93,8 +94,10 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Replace the default handler for the Quit context menu item
-	actcol->remove(actcol->action(KStdAction::stdName(KStdAction::Quit)));
-	actcol->insert(KStdAction::quit(this, SLOT(slotQuit()), actcol));
+	const char* quitName = KStdAction::name(KStdAction::Quit);
+	actcol->remove(actcol->action(quitName));
+	actcol->accel()->remove(quitName);
+	KStdAction::quit(this, SLOT(slotQuit()), actcol);
 
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();
