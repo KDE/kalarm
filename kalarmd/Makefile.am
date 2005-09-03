@@ -15,8 +15,8 @@ kalarmd_SOURCES = alarmdaemon.cpp admain.cpp adapp.cpp \
         alarmdaemoniface.skel
 kalarmd_COMPILE_FIRST = alarmguiiface_stub.h
 
-noinst_HEADERS = adapp.h alarmdaemon.h alarmdaemoniface.h \
-	alarmguiiface.h adcalendar.h adconfigdata.h clientinfo.h
+noinst_HEADERS = adapp.h alarmdaemon.h alarmdaemoniface.h alarmguiiface.h \
+	adcalendar.h adconfigdata.h clientinfo.h kalarmd.h
 
 METASOURCES = AUTO
  
