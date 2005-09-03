@@ -22,6 +22,8 @@
 
 #include <qregexp.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -57,7 +59,7 @@ void ADConfigData::readConfig()
 		QString client = *cl;
 		client.remove(CLIENT_GROUP_SEARCH);
 		QString  title       = config->readEntry(TITLE_KEY, client);   // read app title (default = app name)
-		QCString dcopObject  = config->readEntry(DCOP_OBJECT_KEY).local8Bit();
+		Q3CString dcopObject  = config->readEntry(DCOP_OBJECT_KEY).local8Bit();
 		bool     startClient = config->readBoolEntry(START_CLIENT_KEY, false);
 		QString  calendar    = config->readPathEntry(CALENDAR_KEY);
 
@@ -99,7 +101,7 @@ void ADConfigData::readConfig()
 /******************************************************************************
 * Write a client application's details to the config file.
 */
-void ADConfigData::writeClient(const QCString& appName, const ClientInfo* cinfo)
+void ADConfigData::writeClient(const Q3CString& appName, const ClientInfo* cinfo)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
@@ -113,7 +115,7 @@ void ADConfigData::writeClient(const QCString& appName, const ClientInfo* cinfo)
 /******************************************************************************
 * Remove a client application's details from the config file.
 */
-void ADConfigData::removeClient(const QCString& appName)
+void ADConfigData::removeClient(const Q3CString& appName)
 {
 	KConfig* config = KGlobal::config();
 	config->deleteGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));
@@ -123,7 +125,7 @@ void ADConfigData::removeClient(const QCString& appName)
 /******************************************************************************
 * Set the calendar file URL for a specified application.
 */
-void ADConfigData::setCalendar(const QCString& appName, ADCalendar* cal)
+void ADConfigData::setCalendar(const Q3CString& appName, ADCalendar* cal)
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP + QString::fromLocal8Bit(appName));

@@ -24,6 +24,8 @@
 #define ALARMDAEMONIFACE_H
 
 #include <dcopobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class AlarmDaemonIface : virtual public DCOPObject
@@ -32,11 +34,11 @@ class AlarmDaemonIface : virtual public DCOPObject
   k_dcop:
     virtual ASYNC enableAutoStart(bool enable) = 0;
     virtual ASYNC enableCalendar(const QString& urlString, bool enable) = 0;
-    virtual ASYNC reloadCalendar(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC resetCalendar(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC registerApp(const QCString& appName, const QString& appTitle,
-                              const QCString& dcopObject, const QString& calendarUrl, bool startClient) = 0;
-    virtual ASYNC registerChange(const QCString& appName, bool startClient) = 0;
+    virtual ASYNC reloadCalendar(const Q3CString& appname, const QString& urlString) = 0;
+    virtual ASYNC resetCalendar(const Q3CString& appname, const QString& urlString) = 0;
+    virtual ASYNC registerApp(const Q3CString& appName, const QString& appTitle,
+                              const Q3CString& dcopObject, const QString& calendarUrl, bool startClient) = 0;
+    virtual ASYNC registerChange(const Q3CString& appName, bool startClient) = 0;
     virtual ASYNC quit() = 0;
 };
 

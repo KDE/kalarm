@@ -23,6 +23,8 @@
 #define ADCONFIGDATA_H
 
 #include "clientinfo.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class ADCalendar;
 class ClientInfo;
@@ -32,9 +34,9 @@ class ADConfigData
 {
 	public:
 		static void readConfig();
-		static void writeClient(const QCString& appName, const ClientInfo*);
-		static void removeClient(const QCString& appName);
-		static void setCalendar(const QCString& appName, ADCalendar*);
+		static void writeClient(const Q3CString& appName, const ClientInfo*);
+		static void removeClient(const Q3CString& appName);
+		static void setCalendar(const Q3CString& appName, ADCalendar*);
 		static void enableAutoStart(bool);
 };
 

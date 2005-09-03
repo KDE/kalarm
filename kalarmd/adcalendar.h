@@ -22,6 +22,9 @@
 #define ADCALENDAR_H
 
 #include <libkcal/calendarlocal.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 namespace KIO { class Job; }
 class ADCalendar;
 
@@ -31,12 +34,12 @@ class ADCalendar : public KCal::CalendarLocal
 {
 		Q_OBJECT
 	public:
-		typedef QValueList<ADCalendar*>::ConstIterator ConstIterator;
+		typedef Q3ValueList<ADCalendar*>::ConstIterator ConstIterator;
 
 		~ADCalendar();
 
 		const QString&  urlString() const       { return mUrlString; }
-		const QCString& appName() const         { return mAppName; }
+		const Q3CString& appName() const         { return mAppName; }
 
 		void            setEnabled(bool enabled) { mEnabled = enabled; }
 		bool            enabled() const         { return mEnabled && !unregistered(); }
@@ -47,8 +50,8 @@ class ADCalendar : public KCal::CalendarLocal
 		void            setUnregistered(bool u) { mUnregistered = u; }
 		bool            unregistered() const    { return mUnregistered; }
   
-		bool            eventHandled(const KCal::Event*, const QValueList<QDateTime>&);
-		void            setEventHandled(const KCal::Event*, const QValueList<QDateTime>&);
+		bool            eventHandled(const KCal::Event*, const Q3ValueList<QDateTime>&);
+		void            setEventHandled(const KCal::Event*, const Q3ValueList<QDateTime>&);
 		void            clearEventsHandled(bool nonexistentOnly = false);
 
 		bool            loadFile(bool reset);
@@ -67,7 +70,7 @@ class ADCalendar : public KCal::CalendarLocal
 	protected:
 		// Only ClientInfo can construct ADCalendar objects
 		friend class ClientInfo;
-		ADCalendar(const QString& url, const QCString& appname);
+		ADCalendar(const QString& url, const Q3CString& appname);
 
 	private slots:
 		void            slotDownloadJobResult(KIO::Job*);
@@ -87,16 +90,16 @@ class ADCalendar : public KCal::CalendarLocal
 		struct EventItem
 		{
 			EventItem() : eventSequence(0) { }
-			EventItem(int seqno, const QValueList<QDateTime>& alarmtimes)
+			EventItem(int seqno, const Q3ValueList<QDateTime>& alarmtimes)
 			        : eventSequence(seqno), alarmTimes(alarmtimes) {}
 			int                   eventSequence;
-			QValueList<QDateTime> alarmTimes;
+			Q3ValueList<QDateTime> alarmTimes;
 		};
 
 		typedef QMap<EventKey, EventItem>  EventsMap;   // calendar/event ID, event sequence num
 		static EventsMap               mEventsHandled;  // IDs of already triggered events
 		static QStringList             mCalendarUrls;   // URLs of all calendars ever opened
-		static QValueList<ADCalendar*> mCalendars;      // list of all constructed calendars
+		static Q3ValueList<ADCalendar*> mCalendars;      // list of all constructed calendars
 
 		ADCalendar(const ADCalendar&);             // prohibit copying
 		ADCalendar& operator=(const ADCalendar&);  // prohibit copying
@@ -104,7 +107,7 @@ class ADCalendar : public KCal::CalendarLocal
 		void            loadLocalFile(const QString& filename);
 
 		QString           mUrlString;       // calendar file URL
-		QCString          mAppName;         // name of application owning this calendar
+		Q3CString          mAppName;         // name of application owning this calendar
 		QString           mTempFileName;    // temporary file used if currently downloading, else null
 		int               mUrlIndex;        // unique index to URL in mCalendarUrls
 		bool              mLoaded;          // true if calendar file is currently loaded

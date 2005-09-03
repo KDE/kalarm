@@ -22,6 +22,9 @@
 #include <assert.h>
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <ktempfile.h>
 #include <kio/job.h>
@@ -30,12 +33,12 @@
 
 #include "adcalendar.moc"
 
-QValueList<ADCalendar*> ADCalendar::mCalendars;
+Q3ValueList<ADCalendar*> ADCalendar::mCalendars;
 ADCalendar::EventsMap   ADCalendar::mEventsHandled;
 QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder anything in this list!
 
 
-ADCalendar::ADCalendar(const QString& url, const QCString& appname)
+ADCalendar::ADCalendar(const QString& url, const Q3CString& appname)
         : KCal::CalendarLocal(QString::fromLatin1("UTC")),
 	  mUrlString(url),
 	  mAppName(appname),
@@ -139,7 +142,7 @@ bool ADCalendar::setLoadedConnected()
 * Check whether all the alarms for the event with the given ID have already
 * been handled.
 */
-bool ADCalendar::eventHandled(const KCal::Event* event, const QValueList<QDateTime>& alarmtimes)
+bool ADCalendar::eventHandled(const KCal::Event* event, const Q3ValueList<QDateTime>& alarmtimes)
 {
 	EventsMap::ConstIterator it = mEventsHandled.find(EventKey(event->uid(), mUrlIndex));
 	if (it == mEventsHandled.end())
@@ -163,7 +166,7 @@ bool ADCalendar::eventHandled(const KCal::Event* event, const QValueList<QDateTi
 * Remember that the specified alarms for the event with the given ID have been
 * handled.
 */
-void ADCalendar::setEventHandled(const KCal::Event* event, const QValueList<QDateTime>& alarmtimes)
+void ADCalendar::setEventHandled(const KCal::Event* event, const Q3ValueList<QDateTime>& alarmtimes)
 {
 	if (event)
 	{

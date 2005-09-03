@@ -25,7 +25,9 @@
 #include <libkcal/calendarlocal.h>
 
 #include "alarmdaemoniface.h"
-
+//Added by qt3to4:
+#include <Q3CString>
+#include <QTimer>
 class ADCalendar;
 
 
@@ -45,17 +47,17 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    enableAutoStart(bool enable);
 		void    enableCalendar(const QString& urlString, bool enable)
 		               { enableCal(expandURL(urlString), enable); }
-		void    reloadCalendar(const QCString& appname, const QString& urlString)
+		void    reloadCalendar(const Q3CString& appname, const QString& urlString)
 		               { reloadCal(appname, expandURL(urlString), false); }
-		void    resetCalendar(const QCString& appname, const QString& urlString)
+		void    resetCalendar(const Q3CString& appname, const QString& urlString)
 		               { reloadCal(appname, expandURL(urlString), true); }
-		void    registerApp(const QCString& appName, const QString& appTitle,
-		                    const QCString& dcopObject, const QString& calendarUrl, bool startClient);
-		void    registerChange(const QCString& appName, bool startClient);
+		void    registerApp(const Q3CString& appName, const QString& appTitle,
+		                    const Q3CString& dcopObject, const QString& calendarUrl, bool startClient);
+		void    registerChange(const Q3CString& appName, bool startClient);
 		void    quit();
 		// Other methods
 		void    enableCal(const QString& urlString, bool enable);
-		void    reloadCal(const QCString& appname, const QString& urlString, bool reset);
+		void    reloadCal(const Q3CString& appname, const QString& urlString, bool reset);
 		void    reloadCal(ADCalendar*, bool reset);
 		void    checkAlarms(ADCalendar*);
 		bool    notifyEvent(ADCalendar*, const QString& eventID);

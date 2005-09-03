@@ -27,7 +27,9 @@
 #include <qtimer.h>
 #include <qfile.h>
 #include <qdatetime.h>
-
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
@@ -91,7 +93,7 @@ void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 /******************************************************************************
 * DCOP call to reload, and optionally reset, the specified calendar.
 */
-void AlarmDaemon::reloadCal(const QCString& appname, const QString& urlString, bool reset)
+void AlarmDaemon::reloadCal(const Q3CString& appname, const QString& urlString, bool reset)
 {
 	kdDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
 	ADCalendar* cal = ADCalendar::getCalendar(urlString);
@@ -136,8 +138,8 @@ void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
-                              const QCString& dcopObject, const QString& calendarUrl,
+void AlarmDaemon::registerApp(const Q3CString& appName, const QString& appTitle,
+                              const Q3CString& dcopObject, const QString& calendarUrl,
 			      bool startClient)
 {
 	kdDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
@@ -192,7 +194,7 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerChange(const QCString& appName, bool startClient)
+void AlarmDaemon::registerChange(const Q3CString& appName, bool startClient)
 {
 	kdDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result;
@@ -280,10 +282,10 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 	QDateTime now  = QDateTime::currentDateTime();
 	QDateTime now1 = now.addSecs(1);
 	kdDebug(5901) << "  To: " << now.toString() << endl;
-	QValueList<KCal::Alarm*> alarms = cal->alarmsTo(now);
+	Q3ValueList<KCal::Alarm*> alarms = cal->alarmsTo(now);
 	if (!alarms.count())
 		return;
-	for (QValueList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
+	for (Q3ValueList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
 	{
 		KCal::Event* event = dynamic_cast<KCal::Event*>((*it)->parent());
 		if (!event)
@@ -294,7 +296,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
-		QValueList<QDateTime> alarmtimes;
+		Q3ValueList<QDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
 		{
@@ -320,7 +322,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 {
 	if (!calendar)
 		return true;
-	QCString appname = calendar->appName();
+	Q3CString appname = calendar->appName();
 	const ClientInfo* client = ClientInfo::get(appname);
 	if (!client)
 	{
@@ -333,7 +335,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 	bool ready = registered;
 	if (registered)
 	{
-		QCStringList objects = kapp->dcopClient()->remoteObjects(appname);
+		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(appname);
 		if (objects.find(client->dcopObject()) == objects.end())
 			ready = false;
 	}
@@ -412,7 +414,7 @@ void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
 	ClientInfo* client = ClientInfo::get(cal);
 	if (!client)
 		return;
-	QCString appname = client->appName();
+	Q3CString appname = client->appName();
 	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname)))
 	{
 		KAlarmd::CalendarStatus change = cal->available() ? (cal->enabled() ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED)

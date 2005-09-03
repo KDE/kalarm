@@ -20,12 +20,14 @@
 
 #include "adcalendar.h"
 #include "clientinfo.h"
+//Added by qt3to4:
+#include <Q3CString>
 
-QMap<QCString, ClientInfo*> ClientInfo::mClients;
+QMap<Q3CString, ClientInfo*> ClientInfo::mClients;
 
 
-ClientInfo::ClientInfo(const QCString& appName, const QString& title,
-                       const QCString& dcopObj, const QString& calendar, bool startClient)
+ClientInfo::ClientInfo(const Q3CString& appName, const QString& title,
+                       const Q3CString& dcopObj, const QString& calendar, bool startClient)
 	: mAppName(appName),
 	  mTitle(title),
 	  mDcopObject(dcopObj),
@@ -35,8 +37,8 @@ ClientInfo::ClientInfo(const QCString& appName, const QString& title,
 	mClients[mAppName] = this;
 }
 
-ClientInfo::ClientInfo(const QCString& appName, const QString& title,
-                       const QCString& dcopObj, ADCalendar* calendar, bool startClient)
+ClientInfo::ClientInfo(const Q3CString& appName, const QString& title,
+                       const Q3CString& dcopObj, ADCalendar* calendar, bool startClient)
 	: mAppName(appName),
 	  mTitle(title),
 	  mDcopObject(dcopObj),
@@ -68,11 +70,11 @@ ADCalendar* ClientInfo::setCalendar(const QString& url)
 /******************************************************************************
 * Return the ClientInfo object for the specified client application.
 */
-ClientInfo* ClientInfo::get(const QCString& appName)
+ClientInfo* ClientInfo::get(const Q3CString& appName)
 {
 	if (appName.isEmpty())
 		return 0;
-	QMap<QCString, ClientInfo*>::ConstIterator it = mClients.find(appName);
+	QMap<Q3CString, ClientInfo*>::ConstIterator it = mClients.find(appName);
 	if (it == mClients.end())
 		return 0;
 	return it.data();
@@ -94,7 +96,7 @@ ClientInfo* ClientInfo::get(const ADCalendar* cal)
 */
 void ClientInfo::clear()
 {
-	QMap<QCString, ClientInfo*>::Iterator it;
+	QMap<Q3CString, ClientInfo*>::Iterator it;
 	while ((it = mClients.begin()) != mClients.end())
 		delete it.data();
 }
@@ -102,9 +104,9 @@ void ClientInfo::clear()
 /******************************************************************************
 * Delete the client with the specified name.
 */
-void ClientInfo::remove(const QCString& appName)
+void ClientInfo::remove(const Q3CString& appName)
 {
-	QMap<QCString, ClientInfo*>::Iterator it = mClients.find(appName);
+	QMap<Q3CString, ClientInfo*>::Iterator it = mClients.find(appName);
 	if (it != mClients.end())
 		delete it.data();
 }
