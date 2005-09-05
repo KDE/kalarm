@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -114,6 +114,9 @@ class MiscPrefTab : public PrefsTabBase
 		void         slotExpiredToggled(bool);
 		void         slotClearExpired();
 		void         slotOtherTerminalToggled(bool);
+//#ifdef AUTOSTART_BY_KALARMD
+		void         slotAutostartToggled(bool);
+//#endif
 
 	private:
 		void         setExpiredControls(int purgeDays);

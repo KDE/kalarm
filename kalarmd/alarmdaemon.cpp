@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 #include <kprocess.h>
 #include <kio/netaccess.h>
 #include <dcopclient.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 #include <libkcal/calendarlocal.h>
@@ -45,24 +46,40 @@
 #include "alarmdaemon.moc"
 
 
+#ifdef AUTOSTART_KALARM
+// Number of seconds to wait before autostarting KAlarm.
+// Allow plenty of time for session restoration to happen first.
+static const int KALARM_AUTOSTART_TIMEOUT = 30;
+#endif
+
+
 AlarmDaemon::AlarmDaemon(QObject *parent, const char *name)
 	: DCOPObject(name),
-	  QObject(parent, name)
+	  QObject(parent, name),
+	  mAlarmTimer(0)
 {
 	kdDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
 	ADConfigData::readConfig();
 
 	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
 
-	// set up the alarm timer
-	mAlarmTimer = new QTimer(this);
-	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkAlarmsSlot()));
-	setTimerStatus();
-
-	// Start monitoring calendar files.
-	// They are monitored until their client application registers, upon which
-	// monitoring ceases until KAlarm tells the daemon to monitor it.
-	checkAlarms();
+#ifdef AUTOSTART_KALARM
+	/* Check if KAlarm needs to be autostarted in the system tray.
+	 * This should ideally be handled internally by KAlarm, but is done by kalarmd
+	 * for the following reason:
+	 * KAlarm needs to be both session restored and autostarted, but KDE doesn't
+	 * currently cater properly for this - there is no guarantee that the session
+	 * restoration activation will come before the autostart activation. If they
+	 * come in the wrong order, KAlarm won't know that it is supposed to restore
+	 * itself and instead will simply open a new window.
+	 */
+	KConfig kaconfig(locate("config", "kalarmrc"));
+	kaconfig.setGroup(QString::fromLatin1("General"));
+	if (kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false))
+		QTimer::singleShot(KALARM_AUTOSTART_TIMEOUT * 1000, this, SLOT(autostartKAlarm()));
+	else
+#endif
+		startMonitoring();    // otherwise, start monitoring alarms now
 }
 
 /******************************************************************************
@@ -72,6 +89,38 @@ void AlarmDaemon::quit()
 {
 	kdDebug(5900) << "AlarmDaemon::quit()" << endl;
 	exit(0);
+}
+
+/******************************************************************************
+* Called after a timer delay to autostart KAlarm in the system tray.
+*/
+void AlarmDaemon::autostartKAlarm()
+{
+#ifdef AUTOSTART_KALARM
+	if (mAlarmTimer)
+		return;    // KAlarm has already registered with us
+	QStringList args;
+	args << QString::fromLatin1("--tray");
+	KApplication::kdeinitExec(QString::fromLatin1("kalarm"), args);
+
+	startMonitoring();
+#endif
+}
+
+/******************************************************************************
+* Start monitoring alarms.
+*/
+void AlarmDaemon::startMonitoring()
+{
+	// Set up the alarm timer
+	mAlarmTimer = new QTimer(this);
+	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkAlarmsSlot()));
+	setTimerStatus();
+
+	// Start monitoring calendar files.
+	// They are monitored until their client application registers, upon which
+	// monitoring ceases until KAlarm tells the daemon to monitor it.
+	checkAlarms();
 }
 
 /******************************************************************************
@@ -329,10 +378,12 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 	}
 	kdDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << ", " << eventID << "): notification type=" << client->startClient() << endl;
 
+	// Check if the client application is running and ready to receive notification
 	bool registered = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname));
 	bool ready = registered;
 	if (registered)
 	{
+		// It's running, but check if it has created our DCOP interface yet
 		QCStringList objects = kapp->dcopClient()->remoteObjects(appname);
 		if (objects.find(client->dcopObject()) == objects.end())
 			ready = false;
@@ -380,6 +431,15 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 */
 void AlarmDaemon::setTimerStatus()
 {
+#ifdef AUTOSTART_KALARM
+	if (!mAlarmTimer)
+	{
+		// KAlarm is now running, so start monitoring alarms
+		startMonitoring();
+		return;    // startMonitoring() calls this method
+	}
+
+#endif
 	// Count the number of currently loaded calendars whose names should be displayed
 	int nLoaded = 0;
 	for (ADCalendar::ConstIterator it = ADCalendar::begin();  it != ADCalendar::end();  ++it)

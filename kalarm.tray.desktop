@@ -59,4 +59,4 @@ Comment[xx]=xxPersonal Alarm Scheduler: start as system tray iconxx
 Comment[zh_CN]=个人日程提醒程序：以系统托盘图标启动
 Terminal=false
 X-KDE-autostart-phase=2
-X-KDE-autostart-condition=kalarmrc:General:AutostartTray:false
+X-KDE-autostart-condition=kalarmrc:General:AutostartTrayDummy:false
