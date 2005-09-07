@@ -1,0 +1,9 @@
+Known bugs in KAlarm
+====================
+
+The following bugs are known to exist in KAlarm. They are being investigated and
+will be fixed as soon as possible.
+
+-- Summer/winter time changes (daylight savings time changes), are not handled
+   well. KAlarm needs to use time zones in scheduling alarms instead of a simple
+   local time which it currently uses.
