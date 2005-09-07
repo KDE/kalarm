@@ -1,7 +1,7 @@
 /*
  *  kalarm.h  -  global header file
  *  Program:  kalarm
- *  (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,9 +13,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef KALARM_H
@@ -29,7 +29,8 @@
 #define KALARM_VERSION "1.3.2"
 
 #include <kdeversion.h>
-extern int  marginKDE2;   // KDE2 compatibility
+
+#define AUTOSTART_BY_KALARMD    // temporary fix for autostart before session restoration
 
 #define OLD_DCOP    // retain DCOP pre-1.2 compatibility
 

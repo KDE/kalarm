@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.h  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,6 @@
 #include "alarmdaemoniface.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTimer>
 class ADCalendar;
 
 
@@ -38,6 +37,9 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		AlarmDaemon(QObject* parent = 0, const char* name = 0);
 
 	private slots:
+//#ifdef AUTOSTART_KALARM
+		void    autostartKAlarm();
+//+//#endif
 		void    calendarLoaded(ADCalendar*, bool success);
 		void    checkAlarmsSlot();
 		void    checkAlarms();
@@ -56,6 +58,7 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    registerChange(const Q3CString& appName, bool startClient);
 		void    quit();
 		// Other methods
+		void    startMonitoring();
 		void    enableCal(const QString& urlString, bool enable);
 		void    reloadCal(const Q3CString& appname, const QString& urlString, bool reset);
 		void    reloadCal(ADCalendar*, bool reset);

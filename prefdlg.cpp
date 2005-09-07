@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -228,7 +228,6 @@ void PrefsTabBase::apply(bool syncToDisc)
 MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	: PrefsTabBase(frame)
 {
-	QString progname = kapp->aboutData()->programName();
 	// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
 	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
 
@@ -239,8 +238,8 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
 	Q3WhatsThis::add(mAutostartDaemon,
 	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
-	           "This option should always be checked unless you intend to discontinue use of %2.")
-	          .arg(QString::fromLatin1(DAEMON_APP_NAME)).arg(progname));
+	           "This option should always be checked unless you intend to discontinue use of KAlarm.")
+	          .arg(QString::fromLatin1(DAEMON_APP_NAME)));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 
 	Q3GroupBox* group = new Q3ButtonGroup(i18n("Run Mode"), mPage, "modeGroup");
@@ -256,18 +255,21 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	mRunInSystemTray->setFixedSize(mRunInSystemTray->sizeHint());
 	connect(mRunInSystemTray, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
 	Q3WhatsThis::add(mRunInSystemTray,
-	      i18n("Check to run %1 continuously in the KDE system tray.\n\n"
+	      i18n("Check to run KAlarm continuously in the KDE system tray.\n\n"
 	           "Notes:\n"
-	           "1. With this option selected, closing the system tray icon will quit %2.\n"
-	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.")
-	           .arg(progname).arg(progname));
+	           "1. With this option selected, closing the system tray icon will quit KAlarm.\n"
+	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon."
+	           " Running in the system tray simply provides easy access and a status indication."));
 	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, alignment);
 	++row;
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
 	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
+#ifdef AUTOSTART_BY_KALARMD
+	connect(mAutostartTrayIcon1, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
+#endif
 	Q3WhatsThis::add(mAutostartTrayIcon1,
-	      i18n("Check to run %1 whenever you start KDE.").arg(progname));
+	      i18n("Check to run KAlarm whenever you start KDE."));
 	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, alignment);
 	++row;
 
@@ -275,14 +277,14 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
 	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	Q3WhatsThis::add(mDisableAlarmsIfStopped,
-	      i18n("Check to disable alarms whenever %1 is not running. Alarms will only appear while the system tray icon is visible.").arg(progname));
+	      i18n("Check to disable alarms whenever KAlarm is not running. Alarms will only appear while the system tray icon is visible."));
 	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, alignment);
 	++row;
 
 	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group, "disableAl");
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	Q3WhatsThis::add(mQuitWarn,
-	      i18n("Check to display a warning prompt before quitting %1.").arg(progname));
+	      i18n("Check to display a warning prompt before quitting KAlarm."));
 	grid->addWidget(mQuitWarn, row, 2, alignment);
 	++row;
 
@@ -291,16 +293,18 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
 	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
 	Q3WhatsThis::add(mRunOnDemand,
-	      i18n("Check to run %1 only when required.\n\n"
+	      i18n("Check to run KAlarm only when required.\n\n"
 	           "Notes:\n"
-	           "1. Alarms are displayed even when %2 is not running, since alarm monitoring is done by the alarm daemon.\n"
-	           "2. With this option selected, the system tray icon can be displayed or hidden independently of %3.")
-	           .arg(progname).arg(progname).arg(progname));
+	           "1. Alarms are displayed even when KAlarm is not running, since alarm monitoring is done by the alarm daemon.\n"
+	           "2. With this option selected, the system tray icon can be displayed or hidden independently of KAlarm."));
 	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, alignment);
 	++row;
 
 	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group, "autoRun");
 	mAutostartTrayIcon2->setFixedSize(mAutostartTrayIcon2->sizeHint());
+#ifdef AUTOSTART_BY_KALARMD
+	connect(mAutostartTrayIcon2, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
+#endif
 	Q3WhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
 	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, alignment);
@@ -388,7 +392,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 		QRadioButton* radio = new QRadioButton(term, group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
-		cmd.replace("%t", progname);
+		cmd.replace("%t", kapp->aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
 		cmd.replace("%C", "[command]");
@@ -408,7 +412,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	Q3WhatsThis::add(box,
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
 	           "By default the alarm's command string will be appended to what you enter here. "
-	           "See the %1 Handbook for details of special codes to tailor the command line.").arg(progname));
+	           "See the KAlarm Handbook for details of special codes to tailor the command line."));
 
 	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
@@ -465,13 +469,17 @@ void MiscPrefTab::apply(bool syncToDisc)
 			}
 		}
 	}
-	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
 	bool systray = mRunInSystemTray->isChecked();
 	Preferences::mRunInSystemTray        = systray;
 	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
 	if (mQuitWarn->isEnabled())
 		Preferences::setQuitWarn(mQuitWarn->isChecked());
 	Preferences::mAutostartTrayIcon = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+#ifdef AUTOSTART_BY_KALARMD
+	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
+#else
+	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
+#endif
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
@@ -503,8 +511,7 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 {
 	if (!mAutostartDaemon->isChecked()
 	&&  KMessageBox::warningYesNo(this,
-		                      i18n("You should not uncheck this option unless you intend to discontinue use of %1")
-		                          .arg(kapp->aboutData()->programName()),
+		                      i18n("You should not uncheck this option unless you intend to discontinue use of KAlarm"),
 		                      QString::null, KStdGuiItem::cont(), KStdGuiItem::cancel()
 		                     ) != KMessageBox::Yes)
 		mAutostartDaemon->setChecked(true);	
@@ -516,6 +523,18 @@ void MiscPrefTab::slotRunModeToggled(bool)
 	mAutostartTrayIcon2->setEnabled(!systray);
 	mAutostartTrayIcon1->setEnabled(systray);
 	mDisableAlarmsIfStopped->setEnabled(systray);
+}
+
+/******************************************************************************
+* If autostart at login is selected, the daemon must be autostarted so that it
+* can autostart KAlarm, in which case disable the daemon autostart option.
+*/
+void MiscPrefTab::slotAutostartToggled(bool)
+{
+#ifdef AUTOSTART_BY_KALARMD
+	bool autostart = mRunInSystemTray->isChecked() ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+	mAutostartDaemon->setEnabled(!autostart);
+#endif
 }
 
 void MiscPrefTab::slotDisableIfStoppedToggled(bool)
