@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,8 +85,7 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	mPixmapEnabled  = loadIcon("kalarm");
 	mPixmapDisabled = loadIcon("kalarm_disabled");
 	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
-		KMessageBox::sorry(this, i18n("Cannot load system tray icon."),
-		                         i18n("KAlarm Error", "%1 Error").arg(kapp->aboutData()->programName()));
+		KMessageBox::sorry(this, i18n("Cannot load system tray icon."));
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 
 	// Set up the context menu

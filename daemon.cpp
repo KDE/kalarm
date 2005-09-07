@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -211,9 +211,8 @@ void Daemon::registrationResult(bool reregister, int result)
 			break;
 		case KAlarmd::NOT_FOUND:
 			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
-			KMessageBox::error(0, i18n("Alarms will be disabled if you stop %1.\n"
-			                           "(Installation or configuration error: %2 cannot locate %3 executable.)")
-					           .arg(kapp->aboutData()->programName())
+			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
+			                           "(Installation or configuration error: %1 cannot locate %2 executable.)")
 			                           .arg(QString::fromLatin1(DAEMON_APP_NAME))
 			                           .arg(kapp->aboutData()->appName()));
 			break;
