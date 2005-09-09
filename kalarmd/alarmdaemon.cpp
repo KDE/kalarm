@@ -53,7 +53,7 @@ static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
 
 
-AlarmDaemon::AlarmDaemon(QObject *parent, const char *name)
+AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 	: DCOPObject(name),
 	  QObject(parent, name),
 	  mAlarmTimer(0)
@@ -64,20 +64,28 @@ AlarmDaemon::AlarmDaemon(QObject *parent, const char *name)
 	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
 
 #ifdef AUTOSTART_KALARM
-	/* Check if KAlarm needs to be autostarted in the system tray.
-	 * This should ideally be handled internally by KAlarm, but is done by kalarmd
-	 * for the following reason:
-	 * KAlarm needs to be both session restored and autostarted, but KDE doesn't
-	 * currently cater properly for this - there is no guarantee that the session
-	 * restoration activation will come before the autostart activation. If they
-	 * come in the wrong order, KAlarm won't know that it is supposed to restore
-	 * itself and instead will simply open a new window.
-	 */
-	KConfig kaconfig(locate("config", "kalarmrc"));
-	kaconfig.setGroup(QString::fromLatin1("General"));
-	if (kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false))
-		QTimer::singleShot(KALARM_AUTOSTART_TIMEOUT * 1000, this, SLOT(autostartKAlarm()));
-	else
+	if (autostart)
+	{
+		/* The alarm daemon is being autostarted.
+		 * Check if KAlarm needs to be autostarted in the system tray.
+		 * This should ideally be handled internally by KAlarm, but is done by kalarmd
+		 * for the following reason:
+		 * KAlarm needs to be both session restored and autostarted, but KDE doesn't
+		 * currently cater properly for this - there is no guarantee that the session
+		 * restoration activation will come before the autostart activation. If they
+		 * come in the wrong order, KAlarm won't know that it is supposed to restore
+		 * itself and instead will simply open a new window.
+		 */
+		KConfig kaconfig(locate("config", "kalarmrc"));
+		kaconfig.setGroup(QString::fromLatin1("General"));
+		autostart = kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false);
+		if (autostart)
+		{
+			kdDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
+			QTimer::singleShot(KALARM_AUTOSTART_TIMEOUT * 1000, this, SLOT(autostartKAlarm()));
+		}
+	}
+	if (!autostart)
 #endif
 		startMonitoring();    // otherwise, start monitoring alarms now
 }
@@ -98,7 +106,11 @@ void AlarmDaemon::autostartKAlarm()
 {
 #ifdef AUTOSTART_KALARM
 	if (mAlarmTimer)
+	{
+		kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): KAlarm already registered\n";
 		return;    // KAlarm has already registered with us
+	}
+	kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
 	args << QString::fromLatin1("--tray");
 	KApplication::kdeinitExec(QString::fromLatin1("kalarm"), args);

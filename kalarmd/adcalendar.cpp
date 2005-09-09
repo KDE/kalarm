@@ -36,7 +36,7 @@ QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder
 
 
 ADCalendar::ADCalendar(const QString& url, const QCString& appname)
-        : KCal::CalendarLocal(QString::fromLatin1("UTC")),
+	: KCal::CalendarLocal(QString::fromLatin1("UTC")),
 	  mUrlString(url),
 	  mAppName(appname),
 	  mLoaded(false),

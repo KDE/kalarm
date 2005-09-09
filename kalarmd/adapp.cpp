@@ -1,7 +1,7 @@
 /*
  *  adapp.cpp  -  kalarmd application
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -38,7 +38,7 @@ AlarmDaemonApp::AlarmDaemonApp()
 
 int AlarmDaemonApp::newInstance()
 {
-	kdDebug(5900) << "kalarmd:AlarmDaemonApp::newInstance()" << endl;
+	kdDebug(5900) << "AlarmDaemonApp::newInstance()" << endl;
 
 	/* Prevent the application being restored automatically by the session manager
 	 * at session startup. Instead, the KDE autostart facility is used to start
@@ -55,15 +55,17 @@ int AlarmDaemonApp::newInstance()
 
 	// Check if we are starting up at session startup
 	static bool restored = false;
+	bool autostart = false;
 	if (!restored  &&  isRestored())
 		restored = true;       // make sure we restore only once
 	else
 	{
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+		autostart = args->isSet("autostart");
 		args->clear();      // free up memory
 	}
 
-	mAd = new AlarmDaemon(0, DAEMON_DCOP_OBJECT);
+	mAd = new AlarmDaemon(autostart, 0, DAEMON_DCOP_OBJECT);
 
 	return 0;
 }
