@@ -29,6 +29,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
+#include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <dcopclient.h>
@@ -108,7 +109,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 */
 KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
 {
-	return new KAction(label, "filenew", Qt::Key_Insert, receiver, slot, actions, name);
+	return new KAction(label, "filenew", KStdAccel::openNew(), receiver, slot, actions, name);
 }
 
 /******************************************************************************
