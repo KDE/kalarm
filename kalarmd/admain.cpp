@@ -1,7 +1,7 @@
 /*
  *  admain.cpp  -  kalarmd main program
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -33,7 +33,8 @@
 
 static const KCmdLineOptions options[] =
 {
-	{ 0, 0, 0 }
+	{ "autostart", I18N_NOOP("kalarmd is being autostarted"), 0 },
+	KCmdLineLastOption
 };
 
 int main(int argc, char** argv)

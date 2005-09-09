@@ -35,12 +35,12 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 {
 		Q_OBJECT
 	public:
-		AlarmDaemon(QObject* parent = 0, const char* name = 0);
+		AlarmDaemon(bool autostart, QObject* parent = 0, const char* name = 0);
 
 	private slots:
 //#ifdef AUTOSTART_KALARM
 		void    autostartKAlarm();
-//+//#endif
+//#endif
 		void    calendarLoaded(ADCalendar*, bool success);
 		void    checkAlarmsSlot();
 		void    checkAlarms();
