@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 1.3.2 --- 27 August 2005 ===
+=== Version 1.3.2 --- 10 September 2005 ===
 Add option to show alarms in KOrganizer's active calendar.
 Add option for email text alarms to locate the email in KMail.
 When email alarm triggers and KMail isn't running, start KMail and send mail
@@ -13,6 +13,7 @@ Prevent message windows always being full screen after a big message is shown.
 Prevent message windows being initially larger than the desktop.
 Prevent message windows initially overlapping the KDE panel.
 Prevent session restoration displaying main windows which should be hidden.
+Fix alarms getting stuck if due during a daylight savings clock change.
 Change --volume command line option short form to -V (-v is used by --version).
 Fix reported shell errors when output from command alarm is discarded.
 Use 'KAlarm' untranslated in calendar product ID, to cater for locale changes.
