@@ -78,13 +78,7 @@ class ButtonGroup : public Q3ButtonGroup
 		 *  @param id The identifier of the button to set on.
 		 */
 		virtual void setButton(int id)  { Q3ButtonGroup::setButton(id);  emit buttonSet(id); }
-#if QT_VERSION < 300
-		void         setInsideMargin(int) { }
-	protected:
-		virtual void childEvent(QChildEvent*);
-	private:
-		int          defaultAlignment;
-#endif
+
 	private slots:
 		void         slotButtonToggled(bool);
 	signals:

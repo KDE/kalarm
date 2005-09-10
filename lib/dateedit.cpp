@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -97,19 +97,7 @@ void DateEdit::mousePressEvent(QMouseEvent *e)
 		if (e->button() == LeftButton)
 			return;
 	}
-#if QT_VERSION < 300
-	if ( e->button() != LeftButton )
-		return;
-	QRect editRect = style().comboButtonRect(0, 0, width(), height());
-	int xborder = editRect.left();
-	int yborder = editRect.top();
-	int left = editRect.width() + xborder;
-	QRect arrowRect(left, 0, width() - left, height());
-	if (arrowRect.contains(e->pos()))
-		popup();
-#else
 	KDateEdit::mousePressEvent(e);
-#endif
 }
 
 void DateEdit::mouseReleaseEvent(QMouseEvent* e)

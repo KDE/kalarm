@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal and KDE 2 compatibility
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,36 +32,24 @@
 
 ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
 	: Q3ButtonGroup(parent, name)
-#if QT_VERSION < 300
-	, defaultAlignment(-1)
-#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name)
 	: Q3ButtonGroup(title, parent, name)
-#if QT_VERSION < 300
-	, defaultAlignment(-1)
-#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name)
 	: Q3ButtonGroup(strips, orient, parent, name)
-#if QT_VERSION < 300
-	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
-#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
 
 ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name)
 	: Q3ButtonGroup(strips, orient, title, parent, name)
-#if QT_VERSION < 300
-	, defaultAlignment(orient == Qt::Horizontal ? Qt::AlignLeft : 0)
-#endif
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
@@ -84,22 +72,3 @@ void ButtonGroup::slotButtonToggled(bool)
 {
 	emit buttonSet(selectedId());
 }
-
-#if QT_VERSION < 300
-/******************************************************************************
- * In a vertical layout, this adds widgets left aligned instead of QT 2's
- * centre aligned default.
- */
-void ButtonGroup::childEvent(QChildEvent *ce)
-{
-	if (defaultAlignment != -1  &&  ce->inserted()  &&  ce->child()->isWidgetType())
-	{
-		QWidget* child = (QWidget*)ce->child();
-		if (!child->isTopLevel())    //ignore dialogs etc.
-		{
-			((QBoxLayout*)layout())->addWidget(child, 0, defaultAlignment);
-			QApplication::postEvent(this, new QEvent(QEvent::LayoutHint));
-		}
-	}
-}
-#endif
