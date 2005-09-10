@@ -1,7 +1,7 @@
 /*
  *  buttongroup.h  -  QButtonGroup with an extra signal and Qt 2 compatibility
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,13 +77,6 @@ class ButtonGroup : public QButtonGroup
 		 *  @param id The identifier of the button to set on.
 		 */
 		virtual void setButton(int id)  { QButtonGroup::setButton(id);  emit buttonSet(id); }
-#if QT_VERSION < 300
-		void         setInsideMargin(int) { }
-	protected:
-		virtual void childEvent(QChildEvent*);
-	private:
-		int          defaultAlignment;
-#endif
 	private slots:
 		void         slotButtonToggled(bool);
 	signals:
