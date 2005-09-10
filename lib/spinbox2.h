@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,10 +22,9 @@
 #define SPINBOX2_H
 
 #include <qglobal.h>
-#if QT_VERSION >= 300
+
 class SpinMirror;
 class ExtraSpinBox;
-
 #include "spinbox.h"
 
 
@@ -311,5 +310,4 @@ class SpinBox2 : public QFrame
 	friend class MainSpinBox;
 };
 
-#endif // QT_VERSION >= 300
 #endif // SPINBOX2_H
