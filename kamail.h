@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,11 +49,7 @@ class KAMail
 
 	private:
 		static KPIM::IdentityManager* mIdentityManager;     // KMail identity manager
-#if QT_VERSION >= 300
 		typedef QIODevice::Offset Offset;
-#else
-		typedef uint Offset;
-#endif
 		static QString     sendKMail(const KAMailData&);
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
