@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <Q3Frame>
 #include <QShowEvent>
 #include <QMouseEvent>
-#if QT_VERSION >= 300
 
 #include <stdlib.h>
 
@@ -467,5 +466,3 @@ static bool mirrorStyle(const QStyle& style)
 			return true;
 	return false;
 }
-
-#endif // QT_VERSION >= 300
