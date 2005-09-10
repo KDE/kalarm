@@ -1,7 +1,7 @@
 /*
  *  label.h  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@
 #define LABEL_H
 
 #include <qlabel.h>
-//Added by qt3to4:
-#include <QFocusEvent>
+class QFocusEvent;
 class QRadioButton;
 class LabelFocusWidget;
 

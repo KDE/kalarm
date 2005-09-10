@@ -1,7 +1,7 @@
 /*
  *  lineedit.h  -  line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,10 +22,9 @@
 #define LINEEDIT_H
 
 #include <klineedit.h>
-//Added by qt3to4:
-#include <QDragEnterEvent>
-#include <QFocusEvent>
-#include <QDropEvent>
+class QDragEnterEvent;
+class QFocusEvent;
+class QDropEvent;
 
 
 /**

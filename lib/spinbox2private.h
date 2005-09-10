@@ -1,11 +1,7 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QPaintEvent>
 /*
  *  spinbox2private.h  -  private classes for SpinBox2 (for Qt 3)
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +21,13 @@
 #ifndef SPINBOX2PRIVATE_H
 #define SPINBOX2PRIVATE_H
 
-#if QT_VERSION >= 300
-
 #include <q3canvas.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include "spinbox.h"
+
+class QMouseEvent;
+class QPaintEvent;
 
 
 /*=============================================================================
@@ -91,5 +90,4 @@ class SpinMirror : public Q3CanvasView
 		bool         mReadOnly;       // value cannot be changed
 };
 
-#endif // QT_VERSION >= 300
 #endif // SPINBOX2PRIVATE_H

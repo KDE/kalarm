@@ -1,7 +1,7 @@
 /*
  *  buttongroup.h  -  QButtonGroup with an extra signal and Qt 2 compatibility
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,8 +21,7 @@
 #define BUTTONGROUP_H
 
 #include <q3buttongroup.h>
-//Added by qt3to4:
-#include <QChildEvent>
+class QChildEvent;
 
 
 /**

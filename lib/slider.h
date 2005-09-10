@@ -1,7 +1,7 @@
 /*
  *  slider.h  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,8 @@
 #define SLIDER_H
 
 #include <qslider.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
+class QMouseEvent;
+class QKeyEvent;
 
 
 /**

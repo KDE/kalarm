@@ -1,7 +1,7 @@
 /*
  *  colourcombo.h  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2003, 2005 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2001 - 2003, 2005 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@
 #define COLOURCOMBO_H
 
 #include <qcombobox.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QResizeEvent>
-#include <QKeyEvent>
 #include "colourlist.h"
+
+class QMouseEvent;
+class QResizeEvent;
+class QKeyEvent;
 
 
 /**

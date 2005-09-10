@@ -1,7 +1,7 @@
 /*
  *  dateedit.h  -  date entry widget
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,10 @@
 #define DATEEDIT_H
 
 #include <libkdepim/kdateedit.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
+
+class QMouseEvent;
+class QKeyEvent;
+
 
 /**
  *  @short Date edit widget with range limits.
