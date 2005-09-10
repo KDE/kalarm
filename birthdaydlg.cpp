@@ -215,15 +215,9 @@ void BirthdayDlg::loadAddressBook()
 {
 	if (!mAddressBook)
 	{
-#if KDE_IS_VERSION(3,1,90)
         	mAddressBook = KABC::StdAddressBook::self(true);
 		if (mAddressBook)
                 	connect(mAddressBook, SIGNAL(addressBookChanged(AddressBook*)), SLOT(updateSelectionList()));
-#else
-		mAddressBook = KABC::StdAddressBook::self();
-		if (mAddressBook)
-			updateSelectionList();
-#endif
 	}
 	else
 		updateSelectionList();

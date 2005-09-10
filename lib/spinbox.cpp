@@ -67,10 +67,8 @@ void SpinBox::init()
 	delete spinwidgets;
 	editor()->installEventFilter(this);   // handle shift-up/down arrow presses
 
-#if KDE_IS_VERSION(3,1,90)
 	// Detect when the text field is edited
 	connect(editor(), SIGNAL(textChanged(const QString&)), SLOT(textEdited()));
-#endif
 }
 
 void SpinBox::setReadOnly(bool ro)
@@ -232,13 +230,11 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 				return true;
 			}
 		}
-#if KDE_IS_VERSION(3,1,90)
 		else if (e->type() == QEvent::Leave)
 		{
 			if (mEdited)
 				interpretText();
 		}
-#endif
 	}
 	else
 	{

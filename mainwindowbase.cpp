@@ -44,9 +44,7 @@ void MainWindowBase::closeEvent(QCloseEvent* ce)
 */
 bool MainWindowBase::queryExit()
 {
-#if KDE_IS_VERSION(3,1,90)
 	if (kapp->sessionSaving())
 		return true;
-#endif
 	return disableQuit ? false : KMainWindow::queryExit();
 }
