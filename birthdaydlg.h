@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +23,11 @@
 #include <qlineedit.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <QFocusEvent>
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
 
+class QFocusEvent;
 class QCheckBox;
 class KListView;
 class CheckBox;

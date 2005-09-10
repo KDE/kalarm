@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,19 +23,20 @@
 
 /** @file mainwindow.h - main application window */
 
+//Added by qt3to4:
+#include <Q3ValueList>
+
 #include "alarmevent.h"
 #include "alarmtext.h"
 #include "mainwindowbase.h"
 #include "undo.h"
-//Added by qt3to4:
-#include <QDragEnterEvent>
-#include <QHideEvent>
-#include <QShowEvent>
-#include <Q3ValueList>
-#include <QResizeEvent>
-#include <QDropEvent>
-#include <QCloseEvent>
 
+class QDragEnterEvent;
+class QHideEvent;
+class QShowEvent;
+class QResizeEvent;
+class QDropEvent;
+class QCloseEvent;
 class Q3ListViewItem;
 class KAction;
 class KToggleAction;

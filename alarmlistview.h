@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.h  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +23,8 @@
 
 #include "kalarm.h"
 #include "eventlistviewbase.h"
-//Added by qt3to4:
-#include <QMouseEvent>
 
+class QMouseEvent;
 class AlarmListView;
 class AlarmListTooltip;
 

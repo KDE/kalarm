@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,9 +24,8 @@
 #include <kdialogbase.h>
 #include <q3groupbox.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <QResizeEvent>
 
+class QResizeEvent;
 class KLineEdit;
 
 

@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.h  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,14 +24,12 @@
 #include "kalarm.h"
 
 #include <q3valuelist.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QShowEvent>
-#include <QResizeEvent>
 #include <klistview.h>
 
 #include "alarmevent.h"
 
+class QShowEvent;
+class QResizeEvent;
 class QPixmap;
 class EventListViewItemBase;
 class Find;

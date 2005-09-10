@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -27,19 +27,16 @@
 #include <q3frame.h>
 #include <qdatetime.h>
 #include <q3valuelist.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QShowEvent>
-#include <QBoxLayout>
 
 #include "datetime.h"
+
+class QShowEvent;
 class Q3WidgetStack;
 class Q3GroupBox;
 class QLabel;
 class Q3ListBox;
 class Q3Button;
 class QPushButton;
-class QBoxLayout;
 class SpinBox;
 class CheckBox;
 class RadioButton;

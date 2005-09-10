@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,17 +23,17 @@
 
 /** @file messagewin.h - displays an alarm message */
 
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+
 #include "mainwindowbase.h"
 #include "alarmevent.h"
-//Added by qt3to4:
-#include <QLabel>
-#include <QShowEvent>
-#include <Q3ValueList>
-#include <QMoveEvent>
-#include <QResizeEvent>
-#include <Q3CString>
-#include <QCloseEvent>
 
+class QShowEvent;
+class QMoveEvent;
+class QResizeEvent;
+class QCloseEvent;
 class QPushButton;
 class KPushButton;
 class QLabel;

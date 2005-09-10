@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +23,10 @@
 
 #include <q3frame.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QShowEvent>
-#include <QResizeEvent>
 #include <kdialogbase.h>
 
+class QShowEvent;
+class QResizeEvent;
 class Q3HBox;
 class PushButton;
 class CheckBox;

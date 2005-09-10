@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +23,6 @@
 
 #include <qdatetime.h>
 #include <qlineedit.h>
-//Added by qt3to4:
-#include <Q3Frame>
-#include <QLabel>
-#include <QShowEvent>
-#include <QResizeEvent>
 
 #include <kdialogbase.h>
 
@@ -36,6 +31,10 @@
 #include "datetime.h"
 #include "soundpicker.h"
 
+class Q3Frame;
+class QLabel;
+class QShowEvent;
+class QResizeEvent;
 class Q3Button;
 class Q3GroupBox;
 class QComboBox;

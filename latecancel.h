@@ -1,7 +1,7 @@
 /*
  *  latecancel.h  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@
 #define LATECANCEL_H
 
 #include <q3frame.h>
-//Added by qt3to4:
-#include <QBoxLayout>
 
 #include "timeperiod.h"
 #include "timeselector.h"

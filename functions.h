@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,10 +28,10 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 #include "alarmevent.h"
 
+class Q3CString;
 class QObject;
 class QWidget;
 class QString;

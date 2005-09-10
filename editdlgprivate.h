@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@
 
 #include <q3textedit.h>
 //Added by qt3to4:
-#include <QDragEnterEvent>
-#include <QShowEvent>
 #include <Q3Frame>
+class QDragEnterEvent;
+class QShowEvent;
 
 
 class PageFrame : public Q3Frame

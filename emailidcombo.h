@@ -1,7 +1,7 @@
 /*
  *  emailidcombo.h  -  email identity combo box with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +23,8 @@
 
 #include <libkpimidentities/identitycombo.h>
 #include "combobox.h"
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
+class QMouseEvent;
+class QKeyEvent;
 
 
 class EmailIdCombo : public KPIM::IdentityCombo

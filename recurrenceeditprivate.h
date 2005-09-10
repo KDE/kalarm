@@ -1,7 +1,7 @@
 /*
  *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright (C) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
 #include <q3frame.h>
 #include <q3valuelist.h>
 #include <qbitarray.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QVBoxLayout>
 
+class QLabel;
 class QWidget;
 class QVBoxLayout;
 class ButtonGroup;

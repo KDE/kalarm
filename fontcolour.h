@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (C) 2001, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,11 +24,7 @@
 #include <kdeversion.h>
 #include <qwidget.h>
 #include <qstringlist.h>
-#if KDE_VERSION >= 290
 #include <kfontdialog.h>
-#else
-#include "fontchooser.h"
-#endif
 #include "colourlist.h"
 
 class ColourCombo;

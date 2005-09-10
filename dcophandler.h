@@ -1,7 +1,7 @@
 /*
  *  dcophandler.h  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright (C) 2001, 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2002, 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,8 @@
 #define DCOPHANDLER_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <dcopobject.h>
+class Q3CString;
 
 #include "datetime.h"
 #include "kalarmiface.h"

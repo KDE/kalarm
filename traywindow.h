@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,14 +21,14 @@
 #ifndef TRAYWINDOW_H
 #define TRAYWINDOW_H
 
-#include <ksystemtray.h>
 //Added by qt3to4:
-#include <QMouseEvent>
-#include <QDragEnterEvent>
 #include <QPixmap>
-#include <QDropEvent>
-class KPopupMenu;
+#include <ksystemtray.h>
 
+class QMouseEvent;
+class QDragEnterEvent;
+class QDropEvent;
+class KPopupMenu;
 class KAEvent;
 class MainWindow;
 class TrayTooltip;
