@@ -50,11 +50,7 @@ class KAMail
 
 	private:
 		static KPIM::IdentityManager* mIdentityManager;     // KMail identity manager
-#if QT_VERSION >= 300
 		typedef qlonglong Offset;
-#else
-		typedef uint Offset;
-#endif
 		static QString     sendKMail(const KAMailData&);
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
