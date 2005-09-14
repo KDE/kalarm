@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <kurl.h>
 #include <libkcal/calendarlocal.h>
 #include "alarmevent.h"
+
+class KConfig;
 
 
 /** Provides read and write access to calendar files.
