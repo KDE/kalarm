@@ -464,13 +464,13 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 				kdDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
 				return attachError.arg(attachment);
 			}
-			Offset size = file.size();
+			QIODevice::Offset size = file.size();
 			char* contents = new char [size + 1];
 			Q_LONG bytes = file.readBlock(contents, size);
 			file.close();
 			contents[size] = 0;
 			bool atterror = false;
-			if (bytes == -1  ||  (Offset)bytes < size) {
+			if (bytes == -1  ||  (QIODevice::Offset)bytes < size) {
 				kdDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
 				atterror = true;
 			}
@@ -482,9 +482,9 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			else
 			{
 				// Convert the attachment to BASE64 encoding
-				Offset base64Size;
+				QIODevice::Offset base64Size;
 				char* base64 = base64Encode(contents, size, base64Size);
-				if (base64Size == (Offset)-1) {
+				if (base64Size == (QIODevice::Offset)-1) {
 					kdDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
 					atterror = true;
 				}
@@ -809,7 +809,7 @@ bool KAMail::checkAttachment(const KURL& url)
 *            -1 if overflow.
 *  Reply = BASE64 buffer, which the caller must delete[] afterwards.
 */
-char* KAMail::base64Encode(const char* in, KAMail::Offset size, KAMail::Offset& outSize)
+char* KAMail::base64Encode(const char* in, QIODevice::Offset size, QIODevice::Offset& outSize)
 {
 	const int MAX_LINELEN = 72;
 	static unsigned char dtable[65] =
@@ -818,10 +818,10 @@ char* KAMail::base64Encode(const char* in, KAMail::Offset size, KAMail::Offset& 
 		"0123456789+/";
 
 	char* out = new char [2*size + 5];
-	outSize = (Offset)-1;
-	Offset outIndex = 0;
+	outSize = (QIODevice::Offset)-1;
+	QIODevice::Offset outIndex = 0;
 	int lineLength = 0;
-	for (Offset inIndex = 0;  inIndex < size;  )
+	for (QIODevice::Offset inIndex = 0;  inIndex < size;  )
 	{
 		unsigned char igroup[3];
 		int n;
