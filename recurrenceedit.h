@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -66,7 +66,7 @@ class RecurrenceEdit : public QFrame
 		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
 		void          set(const KAEvent&);
-		/** Write event settings to event object */
+		/** Write recurrence settings into an event */
 		void          updateEvent(KAEvent&, bool adjustStart);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
@@ -145,9 +145,10 @@ class RecurrenceEdit : public QFrame
 		int               mMonthlyButtonId;
 		int               mYearlyButtonId;
 		RepeatType        mRuleButtonType;
-		bool              mWeeklyShown;
-		bool              mMonthlyShown;
-		bool              mYearlyShown;
+		bool              mDailyShown;       // daily rule has been displayed at some time or other
+		bool              mWeeklyShown;      // weekly rule has been displayed at some time or other
+		bool              mMonthlyShown;     // monthly rule has been displayed at some time or other
+		bool              mYearlyShown;      // yearly rule has been displayed at some time or other
 
 		// Range
 		ButtonGroup*      mRangeButtonGroup;

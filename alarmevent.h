@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -437,7 +437,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setNoRecur()                   { clearRecur(); }
 		void               setRecurrence(const KARecurrence&);
 		bool               setRecurMinutely(int freq, int count, const QDateTime& end);
-		bool               setRecurDaily(int freq, int count, const QDate& end);
+		bool               setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end);
 		bool               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
 		bool               setRecurMonthlyByDate(int freq, const QValueList<int>& days, int count, const QDate& end);
 		bool               setRecurMonthlyByPos(int freq, const QValueList<MonthPos>& pos, int count, const QDate& end);

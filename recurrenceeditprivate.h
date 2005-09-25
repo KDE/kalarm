@@ -1,7 +1,7 @@
 /*
  *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright (C) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,21 +76,15 @@ class SubDailyRule : public Rule
 		SubDailyRule(bool readOnly, QWidget* parent, const char* name = 0);
 };
 
-// Daily rule choices
-class DailyRule : public Rule
+// Daily/weekly rule choices base class
+class DayWeekRule : public Rule
 {
 		Q_OBJECT
 	public:
-		DailyRule(bool readOnly, QWidget* parent, const char* name = 0);
-};
-
-// Weekly rule choices
-class WeeklyRule : public Rule
-{
-		Q_OBJECT
-	public:
-		WeeklyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		DayWeekRule(const QString& freqText, const QString& freqWhatsThis, const QString& daysWhatsThis,
+		            bool readOnly, QWidget* parent, const char* name = 0);
 		QBitArray        days() const;
+		void             setDays(bool);
 		void             setDays(QBitArray& days);
 		void             setDay(int dayOfWeek);
 		virtual QWidget* validate(QString& errorMessage);
@@ -100,6 +94,20 @@ class WeeklyRule : public Rule
 		CheckBox*        mDayBox[7];
 		// Saved state of all controls
 		QBitArray        mSavedDays;         // ticked days for weekly rule
+};
+
+// Daily rule choices
+class DailyRule : public DayWeekRule
+{
+	public:
+		DailyRule(bool readOnly, QWidget* parent, const char* name = 0);
+};
+
+// Weekly rule choices
+class WeeklyRule : public DayWeekRule
+{
+	public:
+		WeeklyRule(bool readOnly, QWidget* parent, const char* name = 0);
 };
 
 // Monthly/yearly rule choices base class
