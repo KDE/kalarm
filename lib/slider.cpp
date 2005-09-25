@@ -57,7 +57,7 @@ void Slider::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QSlider::mousePressEvent(e);
