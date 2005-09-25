@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -2025,13 +2025,13 @@ void KAEvent::setFirstRecurrence()
 	{
 		case KARecurrence::NO_RECUR:
 		case KARecurrence::MINUTELY:
-		case KARecurrence::DAILY:
 			return;
 		case KARecurrence::ANNUAL_DATE:
 		case KARecurrence::ANNUAL_POS:
 			if (mRecurrence->yearMonths().isEmpty())
 				return;    // (presumably it's a template)
 			break;
+		case KARecurrence::DAILY:
 		case KARecurrence::WEEKLY:
 		case KARecurrence::MONTHLY_POS:
 		case KARecurrence::MONTHLY_DAY:
@@ -2129,14 +2129,25 @@ bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
  * Set the recurrence to recur daily.
  * Parameters:
  *    freq  = how many days between recurrences.
+ *    days  = which days of the week alarms are allowed to occur on.
  *    count = number of occurrences, including first and last.
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurDaily(int freq, int count, const QDate& end)
+bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	return setRecur(RecurrenceRule::rDaily, freq, count, end);
+	if (!setRecur(RecurrenceRule::rDaily, freq, count, end))
+		return false;
+	int n = 0;
+	for (int i = 0;  i < 7;  ++i)
+	{
+		if (days.testBit(i))
+			++n;
+	}
+	if (n < 7)
+		mRecurrence->addWeeklyDays(days);
+	return true;
 }
 
 /******************************************************************************

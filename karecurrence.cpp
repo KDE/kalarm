@@ -1,7 +1,7 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <qbitarray.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+//#include <Q3ValueList>
 #include <kdebug.h>
 
 #include <libkcal/icalformat.h>
@@ -45,6 +45,7 @@ KARecurrence::Feb29Type KARecurrence::mDefaultFeb29 = KARecurrence::FEB29_FEB29;
 */
 bool KARecurrence::set(Type recurType, int freq, int count, int f29, const DateTime& start, const QDateTime& end)
 {
+	mCachedType = -1;
 	RecurrenceRule::PeriodType rrtype;
 	switch (recurType)
 	{
@@ -88,6 +89,7 @@ bool KARecurrence::set(Type recurType, int freq, int count, int f29, const DateT
 bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int count, int f29, const DateTime& start,
                         const QDateTime& end)
 {
+	mCachedType = -1;
 	Feb29Type feb29Type = (f29 == -1) ? mDefaultFeb29 : static_cast<Feb29Type>(f29);
 	mFeb29Type = FEB29_FEB29;
 	clear();
@@ -148,6 +150,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 bool KARecurrence::set(const QString& icalRRULE)
 {
 	static QString RRULE = QString::fromLatin1("RRULE:");
+	mCachedType = -1;
 	clear();
 	if (icalRRULE.isEmpty())
 		return true;
@@ -170,6 +173,7 @@ bool KARecurrence::set(const QString& icalRRULE)
 */
 void KARecurrence::fix()
 {
+	mCachedType = -1;
 	mFeb29Type = FEB29_FEB29;
 	int convert = 0;
 	int days[2] = { 0, 0 };
@@ -197,6 +201,13 @@ void KARecurrence::fix()
 			case rYearlyPos:
 				if (!convert)
 					++rr;    // remove all rules except the first
+				break;
+			case rOther:
+				if (dailyType(rrule))
+				{                        // it's a daily rule with BYDAYS
+					if (!convert)
+						++rr;    // remove all rules except the first
+				}
 				break;
 			case rYearlyDay:
 			{
@@ -343,20 +354,24 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 		recur.setDuration(count);
 	else
 		recur.setEndDateTime(endDateTime());
-	switch (recurrenceType())
+	switch (type())
 	{
-		case rWeekly:
-		case rMonthlyPos:
+		case DAILY:
+			if (rrule->byDays().isEmpty())
+				break;
+			// fall through to rWeekly
+		case WEEKLY:
+		case MONTHLY_POS:
 			recur.defaultRRule(true)->setByDays(rrule->byDays());
 			break;
-		case rMonthlyDay:
+		case MONTHLY_DAY:
 			recur.defaultRRule(true)->setByMonthDays(rrule->byMonthDays());
 			break;
-		case rYearlyPos:
+		case ANNUAL_POS:
 			recur.defaultRRule(true)->setByMonths(rrule->byMonths());
 			recur.defaultRRule()->setByDays(rrule->byDays());
 			break;
-		case rYearlyMonth:
+		case ANNUAL_DATE:
 		{
 			Q3ValueList<int> months = rrule->byMonths();
 			Q3ValueList<int> days   = monthDays();
@@ -523,6 +538,31 @@ QDate KARecurrence::endDate() const
 }
 
 /******************************************************************************
+* Return whether the event will recur on the specified date.
+* The start date only returns true if it matches the recurrence rules.
+*/
+bool KARecurrence::recursOn(const QDate& dt) const
+{
+	if (!Recurrence::recursOn(dt))
+		return false;
+	if (dt != startDate())
+		return true;
+	// We know now that it isn't in EXDATES or EXRULES,
+	// so we just need to check if it's in RDATES or RRULES
+	if (rDates().contains(dt))
+		return true;
+	RecurrenceRule::List rulelist = rRules();
+	for (RecurrenceRule::List::ConstIterator rr = rulelist.begin();  rr != rulelist.end();  ++rr)
+		if ((*rr)->recursOn(dt))
+			return true;
+	DateTimeList dtlist = rDateTimes();
+	for (DateTimeList::ConstIterator rdt = dtlist.begin();  rdt != dtlist.end();  ++rdt)
+		if ((*rdt).date() == dt)
+			return true;
+	return false;
+}
+
+/******************************************************************************
 * Find the duration of two RRULEs combined.
 * Use the shorter of the two if they differ.
 */
@@ -598,17 +638,59 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 
 /******************************************************************************
  * Return the longest interval (in minutes) between recurrences.
+ * Reply = 0 if it never recurs.
  */
 int KARecurrence::longestInterval() const
 {
 	int freq = frequency();
-	switch (recurrenceType())
+	switch (type())
 	{
-		case rMinutely:
+		case MINUTELY:
 			return freq;
-		case rDaily:
-			return freq * 1440;
-		case rWeekly:
+
+		case DAILY:
+		{
+			Q3ValueList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+			if (days.isEmpty())
+				return freq * 1440;
+
+			// It recurs only on certain days of the week, so the maximum interval
+			// will be greater than the frequency.
+			bool ds[7] = { false, false, false, false, false, false, false };
+			for (Q3ValueList<RecurrenceRule::WDayPos>::ConstIterator it = days.begin();  it != days.end();  ++it)
+				if ((*it).pos() == 0)
+					ds[(*it).day() - 1] = true;
+			if (freq % 7)
+			{
+				// It will recur on every day of the week in some week or other
+				// (except for those days which are excluded).
+				int first = -1;
+				int last  = -1;
+				int maxgap = 1;
+				for (int i = 0;  i < freq*7;  i += freq)
+				{
+					if (ds[i % 7])
+					{
+						if (first < 0)
+							first = i;
+						else if (i - last > maxgap)
+							maxgap = i - last;
+						last = i;
+					}
+				}
+				int wrap = freq*7 - last + first;
+				if (wrap > maxgap)
+					maxgap = wrap;
+				return maxgap * 1440;
+			}
+			else
+			{
+				// It will recur on the same day of the week every time.
+				// Ensure that the day is a day which is not excluded.
+				return ds[startDate().dayOfWeek() - 1] ? freq * 1440 : 0;
+			}
+		}
+		case WEEKLY:
 		{
 			// Find which days of the week it recurs on, and if on more than
 			// one, reduce the maximum interval accordingly.
@@ -636,11 +718,12 @@ int KARecurrence::longestInterval() const
 				return (7 - span) * 1440;
 			return maxgap * 1440;
 		}
-		case rMonthlyDay:
-		case rMonthlyPos:
+		case MONTHLY_DAY:
+		case MONTHLY_POS:
 			return freq * 1440 * 31;
-		case rYearlyMonth:
-		case rYearlyPos:
+
+		case ANNUAL_DATE:
+		case ANNUAL_POS:
 		{
 			// Find which months of the year it recurs on, and if on more than
 			// one, reduce the maximum interval accordingly.
@@ -684,7 +767,14 @@ int KARecurrence::longestInterval() const
  */
 KARecurrence::Type KARecurrence::type() const
 {
-	switch (recurrenceType())
+	if (mCachedType == -1)
+		mCachedType = type(defaultRRuleConst());
+	return static_cast<Type>(mCachedType);
+}
+
+KARecurrence::Type KARecurrence::type(const RecurrenceRule* rrule)
+{
+	switch (recurrenceType(rrule))
 	{
 		case rMinutely:     return MINUTELY;
 		case rDaily:        return DAILY;
@@ -693,6 +783,39 @@ KARecurrence::Type KARecurrence::type() const
 		case rMonthlyPos:   return MONTHLY_POS;
 		case rYearlyMonth:  return ANNUAL_DATE;
 		case rYearlyPos:    return ANNUAL_POS;
-		default:            return NO_RECUR;
+		default:
+			if (dailyType(rrule))
+				return DAILY;
+			return NO_RECUR;
 	}
+}
+
+/******************************************************************************
+ * Check if the rule is a daily rule with or without BYDAYS specified.
+ */
+bool KARecurrence::dailyType(const RecurrenceRule* rrule)
+{
+	if (rrule->recurrenceType() != RecurrenceRule::rDaily
+	||  !rrule->bySeconds().isEmpty()
+	||  !rrule->byMinutes().isEmpty()
+	||  !rrule->byHours().isEmpty()
+	||  !rrule->byWeekNumbers().isEmpty()
+	||  !rrule->byMonthDays().isEmpty()
+	||  !rrule->byMonths().isEmpty()
+	||  !rrule->bySetPos().isEmpty()
+	||  !rrule->byYearDays().isEmpty())
+		return false;
+	Q3ValueList<RecurrenceRule::WDayPos> days = rrule->byDays();
+	if (days.isEmpty())
+		return true;
+	// Check that all the positions are zero (i.e. every time)
+	bool found = false;
+	for (Q3ValueList<RecurrenceRule::WDayPos>::ConstIterator it = days.begin();  it != days.end();  ++it)
+	{
+		if ((*it).pos() != 0)
+			return false;
+		found = true;
+	}
+	return found;
+
 }

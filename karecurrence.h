@@ -1,7 +1,7 @@
 /*
  *  karecurrence.h  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,9 +48,9 @@ class KARecurrence : public KCal::Recurrence
 			FEB29_FEB28     // February 29th recurrences are on February 28th in non-leap years
 		};
 
-		KARecurrence() : KCal::Recurrence(), mFeb29Type(FEB29_FEB29) { }
+		KARecurrence() : KCal::Recurrence(), mFeb29Type(FEB29_FEB29), mCachedType(-1) { }
 		KARecurrence(const KCal::Recurrence& r) : KCal::Recurrence(r) { fix(); }
-		KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type) { }
+		KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
 		bool        set(const QString& icalRRULE);
 		bool        set(Type t, int freq, int count, const DateTime& start, const QDateTime& end)
 		                        { return set(t, freq, count, -1, start, end); }
@@ -64,8 +64,11 @@ class KARecurrence : public KCal::Recurrence
 		void        writeRecurrence(KCal::Recurrence&) const;
 		QDateTime   endDateTime() const;
 		QDate       endDate() const;
+		bool        recursOn(const QDate&) const;
 		int         longestInterval() const;
 		Type        type() const;
+		static Type type(const KCal::RecurrenceRule*);
+		static bool dailyType(const KCal::RecurrenceRule*);
 		Feb29Type   feb29Type() const                 { return mFeb29Type; }
 		static Feb29Type defaultFeb29Type()           { return mDefaultFeb29; }
 		static void setDefaultFeb29Type(Feb29Type t)  { mDefaultFeb29 = t; }
@@ -74,9 +77,11 @@ class KARecurrence : public KCal::Recurrence
 		bool        set(Type, int freq, int count, int feb29Type, const DateTime& start, const QDateTime& end);
 		bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const DateTime& start, const QDateTime& end);
 		int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;
+		int         longestWeeklyInterval(const QBitArray& days, int frequency);
 
 		static Feb29Type mDefaultFeb29;
 		Feb29Type   mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
+		mutable int mCachedType;
 };
 
 #endif // KARECURRENCE_H

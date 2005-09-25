@@ -67,7 +67,7 @@ class RecurrenceEdit : public Q3Frame
 		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
 		void          set(const KAEvent&);
-		/** Write event settings to event object */
+		/** Write recurrence settings into an event */
 		void          updateEvent(KAEvent&, bool adjustStart);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
@@ -146,9 +146,10 @@ class RecurrenceEdit : public Q3Frame
 		int               mMonthlyButtonId;
 		int               mYearlyButtonId;
 		RepeatType        mRuleButtonType;
-		bool              mWeeklyShown;
-		bool              mMonthlyShown;
-		bool              mYearlyShown;
+		bool              mDailyShown;       // daily rule has been displayed at some time or other
+		bool              mWeeklyShown;      // weekly rule has been displayed at some time or other
+		bool              mMonthlyShown;     // monthly rule has been displayed at some time or other
+		bool              mYearlyShown;      // yearly rule has been displayed at some time or other
 
 		// Range
 		ButtonGroup*      mRangeButtonGroup;

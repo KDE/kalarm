@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -92,6 +92,7 @@ QString RecurrenceEdit::i18n_y_Yearly()          { return i18n("&Yearly"); }
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	: Q3Frame(parent, name),
 	  mRuleButtonType(INVALID_RECUR),
+	  mDailyShown(false),
 	  mWeeklyShown(false),
 	  mMonthlyShown(false),
 	  mYearlyShown(false),
@@ -396,6 +397,7 @@ void RecurrenceEdit::periodClicked(int id)
 	{
 		mRule = mDailyRule;
 		mRuleButtonType = DAILY;
+		mDailyShown = true;
 	}
 	else if (id == mWeeklyButtonId)
 	{
@@ -658,6 +660,8 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 	int day       = fromDate.day();
 	int dayOfWeek = fromDate.dayOfWeek();
 	int month     = fromDate.month();
+	if (!mDailyShown)
+		mDailyRule->setDays(true);
 	if (!mWeeklyShown)
 		mWeeklyRule->setDay(dayOfWeek);
 	if (!mMonthlyShown)
@@ -691,9 +695,18 @@ void RecurrenceEdit::set(const KAEvent& event)
 			break;
 
 		case KARecurrence::DAILY:
+		{
 			ruleButtonGroup->setButton(mDailyButtonId);
+			QBitArray rDays = recurrence->days();
+			bool set = false;
+			for (int i = 0;  i < 7 && !set;  ++i)
+				set = rDays.testBit(i);
+			if (set)
+				mDailyRule->setDays(rDays);
+			else
+				mDailyRule->setDays(true);
 			break;
-
+		}
 		case KARecurrence::WEEKLY:
 		{
 			ruleButtonGroup->setButton(mWeeklyButtonId);
@@ -827,7 +840,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	}
 	else if (button == mDailyButton)
 	{
-		event.setRecurDaily(frequency, repeatCount, endDate);
+		event.setRecurDaily(frequency, mDailyRule->days(), repeatCount, endDate);
 	}
 	else if (button == mWeeklyButton)
 	{
@@ -1016,26 +1029,13 @@ SubDailyRule::SubDailyRule(bool readOnly, QWidget* parent, const char* name)
 
 
 /*=============================================================================
-= Class DailyRule
-= Daily rule widget.
+= Class DayWeekRule
+= Daily/weekly rule widget base class.
 =============================================================================*/
 
-DailyRule::DailyRule(bool readOnly, QWidget* parent, const char* name)
-	: Rule(i18n("day(s)"),
-	       i18n("Enter the number of days between repetitions of the alarm"),
-	       false, readOnly, parent, name)
-{ }
-
-
-/*=============================================================================
-= Class WeeklyRule
-= Weekly rule widget.
-=============================================================================*/
-
-WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent, const char* name)
-	: Rule(i18n("week(s)"),
-	       i18n("Enter the number of weeks between repetitions of the alarm"),
-	       false, readOnly, parent, name),
+DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, const QString& daysWhatsThis,
+                         bool readOnly, QWidget* parent, const char* name)
+	: Rule(freqText, freqWhatsThis, false, readOnly, parent, name),
 	  mSavedDays(7)
 {
 	QGridLayout* grid = new QGridLayout(layout(), 1, 4, KDialog::spacingHint());
@@ -1060,17 +1060,16 @@ WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent, const char* name)
 		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignLeft);
 	}
 	box->setFixedSize(box->sizeHint());
-	Q3WhatsThis::add(box,
-	      i18n("Select the days of the week on which to repeat the alarm"));
+	Q3WhatsThis::add(box, daysWhatsThis);
 	grid->addWidget(box, 0, 2, Qt::AlignLeft);
 	label->setBuddy(mDayBox[0]);
 	grid->setColStretch(3, 1);
 }
 
 /******************************************************************************
- * Fetch which days of the week have been checked.
+ * Fetch which days of the week have been ticked.
  */
-QBitArray WeeklyRule::days() const
+QBitArray DayWeekRule::days() const
 {
 	QBitArray ds(7);
 	ds.fill(false);
@@ -1081,9 +1080,18 @@ QBitArray WeeklyRule::days() const
 }
 
 /******************************************************************************
- * Check/uncheck each day of the week according to the specified bits.
+ * Tick/untick every day of the week.
  */
-void WeeklyRule::setDays(QBitArray& days)
+void DayWeekRule::setDays(bool tick)
+{
+	for (int i = 0;  i < 7;  ++i)
+		mDayBox[i]->setChecked(tick);
+}
+
+/******************************************************************************
+ * Tick/untick each day of the week according to the specified bits.
+ */
+void DayWeekRule::setDays(QBitArray& days)
 {
 	for (int i = 0;  i < 7;  ++i)
 	{
@@ -1093,9 +1101,9 @@ void WeeklyRule::setDays(QBitArray& days)
 }
 
 /******************************************************************************
- * Check the specified day of the week, and uncheck all other days.
+ * Tick the specified day of the week, and untick all other days.
  */
-void WeeklyRule::setDay(int dayOfWeek)
+void DayWeekRule::setDay(int dayOfWeek)
 {
 	for (int i = 0;  i < 7;  ++i)
 		mDayBox[i]->setChecked(false);
@@ -1106,7 +1114,7 @@ void WeeklyRule::setDay(int dayOfWeek)
 /******************************************************************************
  * Validate: check that at least one day is selected.
  */
-QWidget* WeeklyRule::validate(QString& errorMessage)
+QWidget* DayWeekRule::validate(QString& errorMessage)
 {
 	for (int i = 0;  i < 7;  ++i)
 		if (mDayBox[i]->isChecked())
@@ -1118,7 +1126,7 @@ QWidget* WeeklyRule::validate(QString& errorMessage)
 /******************************************************************************
  * Save the state of all controls.
  */
-void WeeklyRule::saveState()
+void DayWeekRule::saveState()
 {
 	Rule::saveState();
 	mSavedDays = days();
@@ -1127,11 +1135,37 @@ void WeeklyRule::saveState()
 /******************************************************************************
  * Check whether any of the controls have changed state since initialisation.
  */
-bool WeeklyRule::stateChanged() const
+bool DayWeekRule::stateChanged() const
 {
 	return (Rule::stateChanged()
 	    ||  mSavedDays != days());
 }
+
+
+/*=============================================================================
+= Class DailyRule
+= Daily rule widget.
+=============================================================================*/
+
+DailyRule::DailyRule(bool readOnly, QWidget* parent, const char* name)
+	: DayWeekRule(i18n("day(s)"),
+	              i18n("Enter the number of days between repetitions of the alarm"),
+	              i18n("Select the days of the week on which the alarm is allowed to occur"),
+	              readOnly, parent, name)
+{ }
+
+
+/*=============================================================================
+= Class WeeklyRule
+= Weekly rule widget.
+=============================================================================*/
+
+WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent, const char* name)
+	: DayWeekRule(i18n("week(s)"),
+	              i18n("Enter the number of weeks between repetitions of the alarm"),
+	              i18n("Select the days of the week on which to repeat the alarm"),
+	              readOnly, parent, name)
+{ }
 
 
 /*=============================================================================
