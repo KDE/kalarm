@@ -56,6 +56,7 @@ Comment[pl]=Demon alarmu KOrganizera uruchamiany przy zalogowaniu
 Comment[pt]=Servidor de alarme do KAlarm auto-iniciado no arranque
 Comment[pt_BR]=Servidor de alarmes do KAlarm inicia automaticamente no login
 Comment[ru]=Служба уведомлений KDE
+Comment[sl]=Samodejni zagon alarmskega strežnika KAlarma ob zagonu
 Comment[sr]=Аутоматско покретање алармног демона KAlarm-а по пријављивању
 Comment[sr@Latn]=Automatsko pokretanje alarmnog demona KAlarm-a po prijavljivanju
 Comment[sv]=Kalarm-alarmdemon, automatisk start vid inloggning
