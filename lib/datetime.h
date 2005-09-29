@@ -1,7 +1,7 @@
 /*
  *  datetime.h  -  date/time representation with optional date-only value
  *  Program:  kalarm
- *  Copyright (C) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,6 +109,9 @@ class DateTime
 		/** Sets a date-time value. */
 		void      set(const QDate& d, const QTime& t)
 		                               { mDateTime.setDate(d);  mDateTime.setTime(t);  mDateOnly = false;  mTimeValid = true; }
+		/** Sets a date-only value. */
+		void      set(const QDate& d)
+		                               { mDateTime.setDate(d);  mDateTime.setTime(QTime());  mDateOnly = true; }
 		/** Sets the time component of the value.
 		 *  The value is converted if necessary to be a date-time value.
 		 */
@@ -125,7 +128,7 @@ class DateTime
 		DateTime  addSecs(int n) const
 				{
 					if (mDateOnly)
-						return DateTime(mDateTime.date().addDays(n / (3600*24)), true);
+						return DateTime(mDateTime.date().addDays(n / (3600*24)));
 					else
 						return DateTime(mDateTime.addSecs(n), false);
 				}
