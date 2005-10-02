@@ -1957,9 +1957,9 @@ QString KAEvent::recurrenceText(bool brief) const
 	if (mRecurrence)
 	{
 		int frequency = mRecurrence->frequency();
-		switch (mRecurrence->recurrenceType())
+		switch (mRecurrence->defaultRRuleConst()->recurrenceType())
 		{
-			case Recurrence::rMinutely:
+			case RecurrenceRule::rMinutely:
 				if (frequency < 60)
 					return i18n("1 Minute", "%n Minutes", frequency);
 				else if (frequency % 60 == 0)
@@ -1969,18 +1969,15 @@ QString KAEvent::recurrenceText(bool brief) const
 					QString mins;
 					return i18n("Hours and Minutes", "%1H %2M").arg(QString::number(frequency/60)).arg(mins.sprintf("%02d", frequency%60));
 				}
-			case Recurrence::rDaily:
+			case RecurrenceRule::rDaily:
 				return i18n("1 Day", "%n Days", frequency);
-			case Recurrence::rWeekly:
+			case RecurrenceRule::rWeekly:
 				return i18n("1 Week", "%n Weeks", frequency);
-			case Recurrence::rMonthlyDay:
-			case Recurrence::rMonthlyPos:
+			case RecurrenceRule::rMonthly:
 				return i18n("1 Month", "%n Months", frequency);
-			case Recurrence::rYearlyMonth:
-			case Recurrence::rYearlyPos:
-			case Recurrence::rYearlyDay:
+			case RecurrenceRule::rYearly:
 				return i18n("1 Year", "%n Years", frequency);
-			case Recurrence::rNone:
+			case RecurrenceRule::rNone:
 			default:
 				break;
 		}
