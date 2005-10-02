@@ -192,6 +192,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mMonthlyRule  = new MonthlyRule(mReadOnly, ruleFrame, "monthFrame");
 	mYearlyRule   = new YearlyRule(mReadOnly, ruleFrame, "yearFrame");
 
+	connect(mSubDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
+	connect(mDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
+	connect(mWeeklyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
+	connect(mMonthlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
+	connect(mYearlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
+
 	ruleStack = new Q3WidgetStack(ruleFrame);
 	layout->addWidget(ruleStack);
 	layout->addStretch(1);
