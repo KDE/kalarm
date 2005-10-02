@@ -2156,6 +2156,15 @@ static bool convInterval(Q3CString timeParam, KARecurrence::Type& recurType, int
 }
 
 
+KAlarmApp::ProcData::ProcData(ShellProcess* p, ShellProcess* logp, KAEvent* e, KAAlarm* a, int f)
+	: process(p),
+	  logProcess(logp),
+	  event(e),
+	  alarm(a),
+	  messageBoxParent(0),
+	  flags(f)
+{ }
+
 KAlarmApp::ProcData::~ProcData()
 {
 	while (!tempFiles.isEmpty())
