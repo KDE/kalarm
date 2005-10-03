@@ -22,6 +22,7 @@
 
 #include <q3buttongroup.h>
 class QChildEvent;
+class Q3Button;
 
 
 /**
