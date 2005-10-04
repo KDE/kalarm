@@ -1,7 +1,7 @@
 /*
  *  pushbutton.cpp  -  push button with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2002, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ void PushButton::setReadOnly(bool ro)
 	if ((int)ro != (int)mReadOnly)
 	{
 		mReadOnly = ro;
-		setFocusPolicy(ro ? QWidget::NoFocus : mFocusPolicy);
+		setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);
 		if (ro)
 			clearFocus();
 	}
@@ -58,7 +58,7 @@ void PushButton::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QPushButton::mousePressEvent(e);
@@ -69,7 +69,7 @@ void PushButton::mouseReleaseEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QPushButton::mouseReleaseEvent(e);
@@ -86,10 +86,10 @@ void PushButton::keyPressEvent(QKeyEvent* e)
 	if (mReadOnly)
 		switch (e->key())
 		{
-			case Key_Up:
-			case Key_Left:
-			case Key_Right:
-			case Key_Down:
+			case Qt::Key_Up:
+			case Qt::Key_Left:
+			case Qt::Key_Right:
+			case Qt::Key_Down:
 				// Process keys which shift the focus
 				break;
 			default:

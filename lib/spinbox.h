@@ -84,19 +84,19 @@ class SpinBox : public QSpinBox
 		/** Returns the unshifted step increment, i.e. the amount by which the spin box value
 		 *  changes when a spin button is clicked without the shift key being pressed.
 		 */
-		int          lineStep() const                      { return mLineStep; }
+		int          singleStep() const                    { return mLineStep; }
 		/** Sets the unshifted step increment, i.e. the amount by which the spin box value
 		 *  changes when a spin button is clicked without the shift key being pressed.
 		 */
-		void         setLineStep(int step);
+		void         setSingleStep(int step);
 		/** Returns the shifted step increment, i.e. the amount by which the spin box value
 		 *  changes when a spin button is clicked while the shift key is pressed.
 		 */
-		int          lineShiftStep() const                 { return mLineShiftStep; }
+		int          singleShiftStep() const               { return mLineShiftStep; }
 		/** Sets the shifted step increment, i.e. the amount by which the spin box value
 		 *  changes when a spin button is clicked while the shift key is pressed.
 		 */
-		void         setLineShiftStep(int step);
+		void         setSingleShiftStep(int step);
 	public slots:
 		/** Increments the value of the spin box by the unshifted step increment. */
 		virtual void stepUp();
@@ -126,7 +126,7 @@ class SpinBox : public QSpinBox
 		/** Receives events destined for the spin widget or for the edit field. */
 		virtual bool eventFilter(QObject*, QEvent*);
 		/** Updates the contents of the embedded QLineEdit to reflect the current value
-		 *  using mapValueToText(). Also enables/disables the up/down push buttons accordingly.
+		 *  using textFromValue(). Also enables/disables the up/down push buttons accordingly.
 		 */
 		virtual void updateDisplay();
 

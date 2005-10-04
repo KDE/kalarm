@@ -1,7 +1,7 @@
 /*
  *  combobox.cpp  -  combo box with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (C) 2002, 2005 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ void ComboBox::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QComboBox::mousePressEvent(e);

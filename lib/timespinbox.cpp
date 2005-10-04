@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ QTime TimeSpinBox::time() const
 	return QTime(value() / 60, value() % 60);
 }
 
-QString TimeSpinBox::mapValueToText(int v)
+QString TimeSpinBox::textFromValue(int v)
 {
 	if (m12Hour)
 	{

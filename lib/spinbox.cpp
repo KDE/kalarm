@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <qlineedit.h>
 #include <qobject.h>
 //Added by qt3to4:
+#include <q3spinwidget.h>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
@@ -46,7 +47,7 @@ SpinBox::SpinBox(int minValue, int maxValue, int step, QWidget* parent, const ch
 
 void SpinBox::init()
 {
-	int step = QSpinBox::lineStep();
+	int step = QSpinBox::singleStep();
 	mLineStep        = step;
 	mLineShiftStep   = step;
 	mCurrentButton   = NO_BUTTON;
@@ -60,15 +61,14 @@ void SpinBox::init()
 
 	// Find the spin widgets which are part of the spin boxes, in order to
 	// handle their shift-button presses.
-	QObjectList* spinwidgets = queryList("QSpinWidget", 0, false, true);
-	Q3SpinWidget* spin = (Q3SpinWidget*)spinwidgets->getFirst();
+	QObjectList spinwidgets = queryList("QSpinWidget", 0, false, true);
+	Q3SpinWidget* spin = (Q3SpinWidget*)spinwidgets.getFirst();
 	if (spin)
 		spin->installEventFilter(this);   // handle shift-button presses
-	delete spinwidgets;
-	editor()->installEventFilter(this);   // handle shift-up/down arrow presses
+	lineEdit()->installEventFilter(this);   // handle shift-up/down arrow presses
 
 	// Detect when the text field is edited
-	connect(editor(), SIGNAL(textChanged(const QString&)), SLOT(textEdited()));
+	connect(lineEdit(), SIGNAL(textChanged(const QString&)), SLOT(textEdited()));
 }
 
 void SpinBox::setReadOnly(bool ro)
@@ -76,7 +76,7 @@ void SpinBox::setReadOnly(bool ro)
 	if ((int)ro != (int)mReadOnly)
 	{
 		mReadOnly = ro;
-		editor()->setReadOnly(ro);
+		lineEdit()->setReadOnly(ro);
 		if (ro)
 			setShiftStepping(false);
 	}
@@ -101,30 +101,30 @@ void SpinBox::setMaxValue(int val)
 	mShiftMaxBound = false;
 }
 
-void SpinBox::setLineStep(int step)
+void SpinBox::setSingleStep(int step)
 {
 	mLineStep = step;
 	if (!mShiftMouse)
-		QSpinBox::setLineStep(step);
+		QSpinBox::setSingleStep(step);
 }
 
-void SpinBox::setLineShiftStep(int step)
+void SpinBox::setSingleShiftStep(int step)
 {
 	mLineShiftStep = step;
 	if (mShiftMouse)
-		QSpinBox::setLineStep(step);
+		QSpinBox::setSingleStep(step);
 }
 
 void SpinBox::stepUp()
 {
-	int step = QSpinBox::lineStep();
+	int step = QSpinBox::singleStep();
 	addValue(step);
 	emit stepped(step);
 }
 
 void SpinBox::stepDown()
 {
-	int step = -QSpinBox::lineStep();
+	int step = -QSpinBox::singleStep();
 	addValue(step);
 	emit stepped(step);
 }
@@ -203,7 +203,7 @@ void SpinBox::updateDisplay()
 */
 bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 {
-	if (obj == editor())
+	if (obj == lineEdit())
 	{
 		if (e->type() == QEvent::KeyPress)
 		{
@@ -391,12 +391,12 @@ bool SpinBox::setShiftStepping(bool shift)
 			blockSignals(blocked);
 			mSuppressSignals = false;
 		}
-		QSpinBox::setLineStep(mLineShiftStep);
+		QSpinBox::setSingleStep(mLineShiftStep);
 	}
 	else if (!shift  &&  mShiftMouse)
 	{
 		// Reinstate to normal (non-shift) stepping
-		QSpinBox::setLineStep(mLineStep);
+		QSpinBox::setSingleStep(mLineStep);
 		QSpinBox::setMinValue(mMinValue);
 		QSpinBox::setMaxValue(mMaxValue);
 		mShiftMinBound = mShiftMaxBound = false;

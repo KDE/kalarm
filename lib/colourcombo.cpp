@@ -100,7 +100,11 @@ void ColourCombo::setEnabled(bool enable)
 		if (end > 1)
 		{
 			// Add a dialog background colour item
-			QPixmap pm = *pixmap(1);
+			QPainter painter;
+			QFontMetrics fm = QFontMetrics(painter.font());
+			QRect rect;
+			rect.setRect(0, 0, width(), fm.height() + 4);
+			QPixmap pm(rect.width(), rect.height());
 			pm.fill(paletteBackgroundColor());
 			insertItem(pm);
 			setCurrentItem(end);

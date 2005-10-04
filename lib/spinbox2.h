@@ -252,7 +252,7 @@ class SpinBox2 : public Q3Frame
 		void                valueChanged(const QString& valueText);
 
 	protected:
-		virtual QString     mapValueToText(int v)         { return mSpinbox->mapValToText(v); }
+		virtual QString     textFromValue(int v)          { return mSpinbox->textFromVal(v); }
 		virtual int         mapTextToValue(bool* ok)      { return mSpinbox->mapTextToVal(ok); }
 		virtual void        resizeEvent(QResizeEvent*)    { arrange(); }
 		virtual void        showEvent(QShowEvent*);
@@ -286,9 +286,9 @@ class SpinBox2 : public Q3Frame
 				                : SpinBox(parent, name), owner(sb2) { }
 				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
 				                : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
-				virtual QString mapValueToText(int v)     { return owner->mapValueToText(v); }
+				virtual QString textFromValue(int v)      { return owner->textFromValue(v); }
 				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
-				QString         mapValToText(int v)       { return SpinBox::mapValueToText(v); }
+				QString         textFromVal(int v)        { return SpinBox::textFromValue(v); }
 				int             mapTextToVal(bool* ok)    { return SpinBox::mapTextToValue(ok); }
 				virtual int     shiftStepAdjustment(int oldValue, int shiftStep);
 			private:

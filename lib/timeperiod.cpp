@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,8 +58,8 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent, const char* name)
 
 	mSpinStack = new Q3WidgetStack(this);
 	mSpinBox = new SpinBox(mSpinStack);
-	mSpinBox->setLineStep(1);
-	mSpinBox->setLineShiftStep(10);
+	mSpinBox->setSingleStep(1);
+	mSpinBox->setSingleShiftStep(10);
 	mSpinBox->setRange(1, mMaxDays);
 	connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotDaysChanged(int)));
 	mSpinStack->addWidget(mSpinBox, 0);

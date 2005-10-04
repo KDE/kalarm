@@ -1,7 +1,7 @@
 /*
  *  timespinbox.h  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ class TimeSpinBox : public SpinBox2
 		virtual void    stepDown();
 
 	protected:
-		virtual QString mapValueToText(int v);
+		virtual QString textFromValue(int v);
 		virtual int     mapTextToValue(bool* ok);
 	private slots:
 		void            slotValueChanged(int value);
