@@ -118,7 +118,8 @@ QString TimeSpinBox::textFromValue(int v)
  *    [hour]:[minute], where minute must be non-blank, or
  *    hhmm, 4 digits, where hour < 24.
  */
-int TimeSpinBox::mapTextToValue(bool* ok)
+#warning use t, not cleanText()??
+int TimeSpinBox::valueFromText(const QString& t) const
 {
 	QString text = cleanText();
 	int colon = text.find(':');

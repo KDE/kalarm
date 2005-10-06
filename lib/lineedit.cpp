@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,14 +81,9 @@ void LineEdit::init()
 */
 void LineEdit::focusInEvent(QFocusEvent* e)
 {
-	if (mNoSelect)
-		QFocusEvent::setReason(QFocusEvent::Other);
-	KLineEdit::focusInEvent(e);
-	if (mNoSelect)
-	{
-		QFocusEvent::resetReason();
-		mNoSelect = false;
-	}
+	QFocusEvent newe(QEvent::FocusIn, (mNoSelect ? Qt::OtherFocusReason : e->reason()));
+	KLineEdit::focusInEvent(&newe);
+	mNoSelect = false;
 }
 
 void LineEdit::setText(const QString& text)

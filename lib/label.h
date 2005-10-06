@@ -1,7 +1,7 @@
 /*
  *  label.h  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,8 +73,6 @@ class Label : public QLabel
 		 *  @p buddy is in addition selected when the accelerator key is pressed.
 		 */
 		virtual void      setBuddy(QWidget* buddy);
-	protected:
-		virtual void      drawContents(QPainter* p)  { QLabel::drawContents(p); }
 	private slots:
 		void              buddyDead();
 	private:

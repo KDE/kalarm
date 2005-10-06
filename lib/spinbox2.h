@@ -122,14 +122,8 @@ class SpinBox2 : public Q3Frame
 		/** Returns the button symbols currently in use (arrows or plus/minus). */
 		QSpinBox::ButtonSymbols buttonSymbols() const   { return mSpinbox->buttonSymbols(); }
 
-		/** Sets the validator to @p v. The validator controls what keyboard input is accepted
-		 *  when the user is editing the value field.
-		 */
-		virtual void        setValidator(const QValidator* v)  { mSpinbox->setValidator(v); }
-		/** Returns the current validator. The validator controls what keyboard input is accepted
-		 *  when the user is editing the value field.
-		 */
-		const QValidator*   validator() const           { return mSpinbox->validator(); }
+		/** Determine whether the current input is valid. */
+		virtual QValidator::State validate(QString&, int& pos) const;
 
 		virtual QSize       sizeHint() const;
 		virtual QSize       minimumSizeHint() const;
@@ -252,8 +246,8 @@ class SpinBox2 : public Q3Frame
 		void                valueChanged(const QString& valueText);
 
 	protected:
-		virtual QString     textFromValue(int v)          { return mSpinbox->textFromVal(v); }
-		virtual int         mapTextToValue(bool* ok)      { return mSpinbox->mapTextToVal(ok); }
+		virtual QString     textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
+		virtual int         valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
 		virtual void        resizeEvent(QResizeEvent*)    { arrange(); }
 		virtual void        showEvent(QShowEvent*);
 		virtual void        styleChange(QStyle&);
@@ -286,11 +280,15 @@ class SpinBox2 : public Q3Frame
 				                : SpinBox(parent, name), owner(sb2) { }
 				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
 				                : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
-				virtual QString textFromValue(int v)      { return owner->textFromValue(v); }
-				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
-				QString         textFromVal(int v)        { return SpinBox::textFromValue(v); }
-				int             mapTextToVal(bool* ok)    { return SpinBox::mapTextToValue(ok); }
+				virtual QString textFromValue(int v) const  { return owner->textFromValue(v); }
+				virtual int     valueFromText(const QString& t) const
+				                                            { return owner->valueFromText(t); }
+				QString         textFromVal(int v) const    { return SpinBox::textFromValue(v); }
+				int             valFromText(const QString& t) const
+				                                            { return SpinBox::valueFromText(t); }
 				virtual int     shiftStepAdjustment(int oldValue, int shiftStep);
+				virtual QValidator::State validate(QString& text, int& pos) const
+				                                            { return owner->validate(text, pos); }
 			private:
 				SpinBox2* owner;   // owner SpinBox2
 		};

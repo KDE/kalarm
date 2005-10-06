@@ -103,8 +103,8 @@ class TimeSpinBox : public SpinBox2
 		virtual void    stepDown();
 
 	protected:
-		virtual QString textFromValue(int v);
-		virtual int     mapTextToValue(bool* ok);
+		virtual QString textFromValue(int v) const;
+		virtual int     valueFromText(const QString&) const;
 	private slots:
 		void            slotValueChanged(int value);
 	private:
