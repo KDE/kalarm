@@ -20,12 +20,12 @@
 
 #include "kalarm.h"
 
-#include <q3deepcopy.h>
 #include <qdir.h>
 #include <qregexp.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
+#include <QDesktopWidget>
 
 #include <kconfig.h>
 #include <kaction.h>
@@ -756,8 +756,8 @@ int localeFirstDayOfWeek()
 */
 QString stripAccel(const QString& text)
 {
-	unsigned len = text.length();
-	QString out = QDeepCopy<QString>(text);
+	int len = text.length();
+	QString out = text;
 	QChar *corig = (QChar*)out.unicode();
 	QChar *cout  = corig;
 	QChar *cin   = cout;
@@ -775,7 +775,7 @@ QString stripAccel(const QString& text)
 		++cin;
 		--len;
 	}
-	unsigned newlen = cout - corig;
+	int newlen = cout - corig;
 	if (newlen != out.length())
 		out.truncate(newlen);
 	return out;

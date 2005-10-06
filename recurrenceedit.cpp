@@ -232,7 +232,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	      i18n("Repeat the alarm for the number of times specified"));
 	mRepeatCountEntry = new SpinBox(1, 9999, 1, mRangeButtonGroup);
 	mRepeatCountEntry->setFixedSize(mRepeatCountEntry->sizeHint());
-	mRepeatCountEntry->setLineShiftStep(10);
+	mRepeatCountEntry->setSingleShiftStep(10);
 	mRepeatCountEntry->setSelectOnStep(false);
 	mRepeatCountEntry->setReadOnly(mReadOnly);
 	connect(mRepeatCountEntry, SIGNAL(valueChanged(int)), SLOT(repeatCountChanged(int)));

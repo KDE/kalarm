@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -432,7 +432,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 			// Initialise the position of the hour within the time string, if leading
 			// zeroes are omitted, so that displayed times can be aligned with each other.
 			mTimeHourPos = -1;     // default = alignment isn't possible/sensible
-			if (!QApplication::reverseLayout())    // don't try to align right-to-left languages
+			if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
 			{
 				QString fmt = locale->timeFormat();
 				int i = fmt.find(QRegExp("%[kl]"));   // check if leading zeroes are omitted

@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <qlayout.h>
 #include <q3whatsthis.h>
 #include <qtooltip.h>
+#include <QApplication>
 //Added by qt3to4:
 #include <QShowEvent>
 #include <QVBoxLayout>
@@ -99,7 +100,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	grid->addColSpacing(0, indentWidth);
 	grid->addColSpacing(1, indentWidth);
 	// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
+	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 	// 'Set volume' checkbox
 	box = new Q3HBox(group);
@@ -134,7 +135,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	QLabel* label = new QLabel(i18n("Time period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeTime = new SpinBox(1, 999, 1, mFadeBox);
-	mFadeTime->setLineShiftStep(10);
+	mFadeTime->setSingleShiftStep(10);
 	mFadeTime->setFixedSize(mFadeTime->sizeHint());
 	label->setBuddy(mFadeTime);
 	label = new QLabel(i18n("seconds"), mFadeBox);

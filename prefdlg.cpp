@@ -229,7 +229,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	: PrefsTabBase(frame)
 {
 	// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
+	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 	// Autostart alarm daemon
 	Q3HBox* itemBox = new Q3HBox(mPage);   // this is to allow left adjustment
@@ -353,7 +353,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	connect(mPurgeExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
 	mPurgeAfter = new SpinBox(box);
 	mPurgeAfter->setMinValue(1);
-	mPurgeAfter->setLineShiftStep(10);
+	mPurgeAfter->setSingleShiftStep(10);
 	mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());
 	mPurgeAfterLabel = new QLabel(i18n("da&ys"), box);
 	mPurgeAfterLabel->setMinimumSize(mPurgeAfterLabel->sizeHint());
@@ -887,7 +887,7 @@ EditPrefTab::EditPrefTab(Q3VBox* frame)
 {
 	// Get alignment to use in QLabel::setAlignment(alignment | Qt::WordBreak)
 	// (AlignAuto doesn't work correctly there)
-	int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
+	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 	int groupTopMargin = fontMetrics().lineSpacing()/2;
 	QString defsetting   = i18n("The default setting for \"%1\" in the alarm edit dialog.");
@@ -1255,7 +1255,7 @@ ViewPrefTab::ViewPrefTab(Q3VBox* frame)
 	mTooltipMaxAlarms->setMinimumSize(mTooltipMaxAlarms->sizeHint());
 	connect(mTooltipMaxAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipMaxToggled(bool)));
 	mTooltipMaxAlarmCount = new SpinBox(1, 99, 1, box);
-	mTooltipMaxAlarmCount->setLineShiftStep(5);
+	mTooltipMaxAlarmCount->setSingleShiftStep(5);
 	mTooltipMaxAlarmCount->setMinimumSize(mTooltipMaxAlarmCount->sizeHint());
 	Q3WhatsThis::add(box,
 	      i18n("Uncheck to display all of the next 24 hours' alarms in the system tray tooltip. "
@@ -1306,7 +1306,7 @@ ViewPrefTab::ViewPrefTab(Q3VBox* frame)
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
 	mDaemonTrayCheckInterval = new SpinBox(1, 9999, 1, box, "daemonCheck");
-	mDaemonTrayCheckInterval->setLineShiftStep(10);
+	mDaemonTrayCheckInterval->setSingleShiftStep(10);
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
 	label->setBuddy(mDaemonTrayCheckInterval);
 	label = new QLabel(i18n("seconds"), box);

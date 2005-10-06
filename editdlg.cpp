@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -301,7 +301,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginHint(), spacingHint());
 		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 		// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-		int alignment = QApplication::reverseLayout() ? Qt::AlignRight : Qt::AlignLeft;
+		Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), mTemplateTimeGroup, "templateDefTimeButton");
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());

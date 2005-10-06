@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -196,7 +196,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout->addWidget(mCountButton);
 	mCount = new SpinBox(1, MAX_COUNT, 1, mButtonGroup);
 	mCount->setFixedSize(mCount->sizeHint());
-	mCount->setLineShiftStep(10);
+	mCount->setSingleShiftStep(10);
 	mCount->setSelectOnStep(false);
 	connect(mCount, SIGNAL(valueChanged(int)), SLOT(countChanged(int)));
 	Q3WhatsThis::add(mCount,

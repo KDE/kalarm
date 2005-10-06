@@ -1883,10 +1883,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 				if (pd->messageBoxParent)
 				{
 					// Close the existing informational KMessageBox for this process
-					QObjectList* dialogs = pd->messageBoxParent->queryList("KDialogBase", 0, false, true);
-					KDialogBase* dialog = (KDialogBase*)dialogs->getFirst();
+					QObjectList dialogs = pd->messageBoxParent->queryList("KDialogBase", 0, false, true);
+					KDialogBase* dialog = static_cast<KDialogBase*>(dialogs.first());
 					delete dialog;
-					delete dialogs;
 					if (!pd->tempFile())
 					{
 						errmsg += "\n";

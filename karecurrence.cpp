@@ -615,7 +615,7 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 	// Get the date of the next occurrence after the end of the earlier ending rule
 	RecurrenceRule rr(*rr1);
 	rr.setDuration(-1);
-	QDateTime next1 = rr.getNextDate(end1).date();
+	QDateTime next1(rr.getNextDate(end1).date());
 	if (!next1.isValid())
 		end = end1.date();
 	else
