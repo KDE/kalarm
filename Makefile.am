@@ -70,3 +70,7 @@ messages: rc.cpp
 
 DOXYGEN_REFERENCES = libkcal
 include $(top_srcdir)/admin/Doxyfile.am
+
+calendarcompat.o alarmcalendar.o: ../libkcal/libical/src/libical/ical.h
+daemon.o: kalarmd/alarmdaemoniface_stub.h
+
