@@ -899,7 +899,7 @@ QStringList KAMail::errors(const QString& err, bool sendfail)
 /******************************************************************************
 *  Get the body of an email, given its serial number.
 */
-QString KAMail::getMailBody(Q_UINT32 serialNumber)
+QString KAMail::getMailBody(quint32 serialNumber)
 {
 	// Get the body of the email from KMail
 	Q3CString    replyType;
@@ -909,7 +909,7 @@ QString KAMail::getMailBody(Q_UINT32 serialNumber)
 	arg << serialNumber;
 	arg << (int)0;
 	QString body;
-	if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(Q_UINT32,int)", data, replyType, replyData)
+	if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(quint32,int)", data, replyType, replyData)
 	&&  replyType == "QString")
 	{
 		QDataStream reply_stream(replyData, QIODevice::ReadOnly);

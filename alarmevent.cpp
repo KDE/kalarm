@@ -846,7 +846,7 @@ DateTime KAEvent::nextDateTime(bool includeReminders) const
 	{
 		if (mMainExpired)
 			return mDeferralTime;
-		return QMIN(mDeferralTime, dt);
+		return qMin(mDeferralTime, dt);
 	}
 	return dt;
 }

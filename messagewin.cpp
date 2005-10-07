@@ -158,7 +158,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mAudioFile(event.audioFile()),
 	  mVolume(event.soundVolume()),
 	  mFadeVolume(event.fadeVolume()),
-	  mFadeSeconds(QMIN(event.fadeSeconds(), 86400)),
+	  mFadeSeconds(qMin(event.fadeSeconds(), 86400)),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
 	  mKMailSerialNumber(event.kmailSerialNumber()),
@@ -386,7 +386,7 @@ void MessageWin::initView()
 				QSize s = text->sizeHint();
 				int h = s.height();
 				text->setMaximumHeight(h + text->scrollBarHeight());
-				text->setMinimumHeight(QMIN(h, lineSpacing*4));
+				text->setMinimumHeight(qMin(h, lineSpacing*4));
 				text->setMaximumWidth(s.width() + text->scrollBarWidth());
 				Q3WhatsThis::add(text, i18n("The alarm message"));
 				int vspace = lineSpacing/2;
@@ -1382,8 +1382,8 @@ void MessageWin::slotShowKMailMessage()
 	Q3CString    replyType;
 	QByteArray  data, replyData;
 	QDataStream arg(data, QIODevice::WriteOnly);
-	arg << (Q_UINT32)mKMailSerialNumber << QString::null;
-	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(Q_UINT32,QString)", data, replyType, replyData)
+	arg << (quint32)mKMailSerialNumber << QString::null;
+	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(quint32,QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
