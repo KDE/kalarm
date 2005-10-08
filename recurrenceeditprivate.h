@@ -133,10 +133,10 @@ class MonthYearRule : public Rule
 	signals:
 		void             typeChanged(DayPosType);
 	protected:
-		DayPosType       buttonType(int id) const  { return id == mDayButtonId ? DATE : POS; }
+		DayPosType       buttonType(QAbstractButton* b) const  { return b == mDayButton ? DATE : POS; }
 		virtual void     daySelected(int /*day*/)  { }
 	protected slots:
-		virtual void     clicked(int id);
+		virtual void     clicked(QAbstractButton*);
 	private slots:
 		virtual void     slotDaySelected(int index);
 	private:
@@ -148,8 +148,6 @@ class MonthYearRule : public Rule
 		ComboBox*        mDayCombo;
 		ComboBox*        mWeekCombo;
 		ComboBox*        mDayOfWeekCombo;
-		int              mDayButtonId;
-		int              mPosButtonId;
 		bool             mEveryWeek;         // "Every" week is allowed
 		// Saved state of all controls
 		int              mSavedType;         // whether day-of-month or month position radio button was selected
@@ -182,7 +180,7 @@ class YearlyRule : public MonthYearRule
 	protected:
 		virtual void     daySelected(int day);
 	protected slots:
-		virtual void     clicked(int id);
+		virtual void     clicked(QAbstractButton*);
 	private slots:
 		void             enableFeb29();
 	private:

@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include "buttongroup.h"
 #include "checkbox.h"
 #include "dateedit.h"
 #include "datetime.h"
@@ -61,8 +62,8 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 /******************************************************************************
 *  Construct a widget with a group box and title.
 */
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, const char* name)
-	: ButtonGroup(groupBoxTitle, parent, name),
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent)
+	: QGroupBox(groupBoxTitle, parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
@@ -73,8 +74,8 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 /******************************************************************************
 *  Construct a widget without a group box or title.
 */
-AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
-	: ButtonGroup(parent, name),
+AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
+	: QGroupBox(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
@@ -89,7 +90,8 @@ void AlarmTimeWidget::init(int mode)
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 
-	connect(this, SIGNAL(buttonSet(int)), SLOT(slotButtonSet(int)));
+	mButtonGroup = new ButtonGroup(this);
+	connect(this, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	if (!title().isEmpty())
 	{
@@ -98,7 +100,7 @@ void AlarmTimeWidget::init(int mode)
 	}
 
 	// At time radio button/label
-	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), this, "atTimeRadio");
+	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), this);
 	mAtTimeRadio->setFixedSize(mAtTimeRadio->sizeHint());
 	Q3WhatsThis::add(mAtTimeRadio,
 	                ((mode & DEFER_TIME) ? i18n("Reschedule the alarm to the specified date and time.")
@@ -140,8 +142,7 @@ void AlarmTimeWidget::init(int mode)
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()),
-	                                  this, "afterTimeRadio");
+	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), this);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
 	Q3WhatsThis::add(mAfterTimeRadio,
 	                ((mode & DEFER_TIME) ? i18n("Reschedule the alarm for the specified time interval after now.")
@@ -185,7 +186,7 @@ void AlarmTimeWidget::init(int mode)
 	}
 
 	// Initialise the radio button statuses
-	setButton(id(mAtTimeRadio));
+	mAtTimeRadio->setChecked(true);
 
 	// Timeout every minute to update alarm time fields.
 	MinuteTimer::connect(this, SLOT(slotTimer()));
@@ -211,7 +212,8 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 void AlarmTimeWidget::selectTimeFromNow()
 {
 	mAfterTimeRadio->setChecked(true);
-	slotButtonSet(1);
+#warning Is the next line needed?
+//	slotButtonSet(mAfterTimeRadio);
 }
 
 /******************************************************************************
@@ -489,7 +491,7 @@ void AlarmTimeWidget::slotTimer()
 *  Called when the At or After time radio button states have been set.
 *  Updates the appropriate edit box.
 */
-void AlarmTimeWidget::slotButtonSet(int)
+void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 {
 	bool at = mAtTimeRadio->isOn();
 	mDateEdit->setEnabled(at);

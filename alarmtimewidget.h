@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,10 @@
 #ifndef ALARMTIMEWIDGET_H
 #define ALARMTIMEWIDGET_H
 
-#include "buttongroup.h"
+#include <QGroupBox>
 #include "datetime.h"
 
+class ButtonGroup;
 class RadioButton;
 class CheckBox;
 class DateEdit;
@@ -31,7 +32,7 @@ class TimeEdit;
 class TimeSpinBox;
 
 
-class AlarmTimeWidget : public ButtonGroup
+class AlarmTimeWidget : public QGroupBox
 {
 		Q_OBJECT
 	public:
@@ -40,8 +41,8 @@ class AlarmTimeWidget : public ButtonGroup
 			DEFER_TIME   = 0x01,   // "Defer to ..."
 			NARROW       = 0x02    // make a narrow widget
 		};
-		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, const char* name = 0);
-		AlarmTimeWidget(int mode, QWidget* parent = 0, const char* name = 0);
+		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
+		AlarmTimeWidget(int mode, QWidget* parent = 0);
 		DateTime         getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
@@ -64,7 +65,7 @@ class AlarmTimeWidget : public ButtonGroup
 
 	protected slots:
 		void             slotTimer();
-		void             slotButtonSet(int id);
+		void             slotButtonSet(QAbstractButton*);
 		void             dateTimeChanged();
 		void             delayTimeChanged(int);
 		void             slotAnyTimeToggled(bool);
@@ -75,6 +76,7 @@ class AlarmTimeWidget : public ButtonGroup
 		void             setMaxDelayTime(const QDateTime& now);
 		void             setMaxMinTimeIf(const QDateTime& now);
 
+		ButtonGroup*     mButtonGroup;
 		RadioButton*     mAtTimeRadio;
 		RadioButton*     mAfterTimeRadio;
 		DateEdit*        mDateEdit;

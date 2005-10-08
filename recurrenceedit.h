@@ -105,7 +105,7 @@ class RecurrenceEdit : public Q3Frame
 		virtual void  showEvent(QShowEvent*);
 
 	private slots:
-		void          periodClicked(int);
+		void          periodClicked(QAbstractButton*);
 		void          rangeTypeClicked();
 		void          repeatCountChanged(int value);
 		void          slotAnyTimeToggled(bool);
@@ -138,13 +138,6 @@ class RecurrenceEdit : public Q3Frame
 		RadioButton*      mWeeklyButton;
 		RadioButton*      mMonthlyButton;
 		RadioButton*      mYearlyButton;
-		int               mNoneButtonId;
-		int               mAtLoginButtonId;
-		int               mSubDailyButtonId;
-		int               mDailyButtonId;
-		int               mWeeklyButtonId;
-		int               mMonthlyButtonId;
-		int               mYearlyButtonId;
 		RepeatType        mRuleButtonType;
 		bool              mDailyShown;       // daily rule has been displayed at some time or other
 		bool              mWeeklyShown;      // weekly rule has been displayed at some time or other
@@ -152,6 +145,7 @@ class RecurrenceEdit : public Q3Frame
 		bool              mYearlyShown;      // yearly rule has been displayed at some time or other
 
 		// Range
+		Q3GroupBox*      mRangeButtonBox;
 		ButtonGroup*      mRangeButtonGroup;
 		RadioButton*      mNoEndDateButton;
 		RadioButton*      mRepeatCountButton;
@@ -168,7 +162,7 @@ class RecurrenceEdit : public Q3Frame
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
-		Q3ValueList<QDate> mExceptionDates;
+		QList<QDate>      mExceptionDates;
 
 		// Current start date and time
 		QDateTime         mCurrStartDateTime;
@@ -176,8 +170,8 @@ class RecurrenceEdit : public Q3Frame
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
-		Q3Button*          mSavedRuleButton;          // which rule button was selected
-		Q3Button*          mSavedRangeButton;         // which range button was selected
+		QAbstractButton*  mSavedRuleButton;          // which rule button was selected
+		QAbstractButton*  mSavedRangeButton;         // which range button was selected
 		int               mSavedRepeatCount;         // repeat count
 		DateTime          mSavedEndDateTime;         // end date/time
 		Q3ValueList<QDate> mSavedExceptionDates;      // exception dates
