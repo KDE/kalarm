@@ -97,6 +97,10 @@ class SpinBox : public QSpinBox
 		 *  changes when a spin button is clicked while the shift key is pressed.
 		 */
 		void         setSingleShiftStep(int step);
+		/** Returns the rectangle containing the up arrow. */
+		QRect        upRect() const;
+		/** Returns the rectangle containing the down arrow. */
+		QRect        downRect() const;
 	public slots:
 		/** Increments the value of the spin box by the unshifted step increment. */
 		virtual void stepUp();
@@ -110,8 +114,6 @@ class SpinBox : public QSpinBox
 		void         stepped(int step);
 
 	protected:
-		/** A virtual method called whenever the value of the spin box has changed. */
-		virtual void valueChange();
 		/** Returns the initial adjustment to the value for a shift step up or down.
 		 * The default is to step up or down to the nearest multiple of the shift
 		 * increment, so the adjustment returned is for stepping up the decrement
@@ -130,13 +132,23 @@ class SpinBox : public QSpinBox
 		 */
 		virtual void updateDisplay();
 
+		virtual void mousePressEvent(QMouseEvent*);
+		virtual void mouseDoubleClickEvent(QMouseEvent*);
+		virtual void mouseReleaseEvent(QMouseEvent*);
+		virtual void mouseMoveEvent(QMouseEvent*);
+		virtual void keyPressEvent(QKeyEvent*); 
+		virtual void keyReleaseEvent(QKeyEvent*);
+
 	private slots:
 		void         textEdited();
+		void         valueChange();
 	private:
 		void         init();
 		void         addValue(int change, bool current);
 		int          whichButton(const QPoint&);
 		bool         setShiftStepping(bool);
+		bool         clickEvent(QMouseEvent*);
+		bool         keyEvent(QKeyEvent*);
 
 		enum { NO_BUTTON, UP, DOWN };
 

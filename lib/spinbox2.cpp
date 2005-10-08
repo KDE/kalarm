@@ -47,7 +47,7 @@ static const char* mirrorStyles[] = {
 	"PlastikStyle",
 	0     // list terminator
 };
-static bool mirrorStyle(const QStyle&);
+static bool mirrorStyle(const QStyle*);
 
 
 int SpinBox2::mReverseLayout = -1;
@@ -80,12 +80,12 @@ void SpinBox2::init()
 {
 	if (mReverseLayout < 0)
 		mReverseLayout = QApplication::reverseLayout() ? 1 : 0;
-	mMinValue      = mSpinbox->minValue();
-	mMaxValue      = mSpinbox->maxValue();
-	mLineStep      = mSpinbox->lineStep();
-	mLineShiftStep = mSpinbox->lineShiftStep();
-	mPageStep      = mUpdown2->lineStep();
-	mPageShiftStep = mUpdown2->lineShiftStep();
+	mMinValue        = mSpinbox->minValue();
+	mMaxValue        = mSpinbox->maxValue();
+	mSingleStep      = mSpinbox->singleStep();
+	mSingleShiftStep = mSpinbox->singleShiftStep();
+	mPageStep        = mUpdown2->singleStep();
+	mPageShiftStep   = mUpdown2->singleShiftStep();
 	mSpinbox->setSelectOnStep(false);    // default
 	mUpdown2->setSelectOnStep(false);    // always false
 	setFocusProxy(mSpinbox);
@@ -115,8 +115,8 @@ void SpinBox2::setReverseWithLayout(bool reverse)
 	if (reverse != mReverseWithLayout)
 	{
 		mReverseWithLayout = reverse;
-		setSteps(mLineStep, mPageStep);
-		setShiftSteps(mLineShiftStep, mPageShiftStep);
+		setSteps(mSingleStep, mPageStep);
+		setShiftSteps(mSingleShiftStep, mPageShiftStep);
 	}
 }
 
@@ -144,42 +144,42 @@ QRect SpinBox2::down2Rect() const
 
 void SpinBox2::setLineStep(int step)
 {
-	mLineStep = step;
+	mSingleStep = step;
 	if (reverseButtons())
-		mUpdown2->setLineStep(step);   // reverse layout, but still set the right buttons
+		mUpdown2->setSingleStep(step);   // reverse layout, but still set the right buttons
 	else
-		mSpinbox->setLineStep(step);
+		mSpinbox->setSingleStep(step);
 }
 
-void SpinBox2::setSteps(int line, int page)
+void SpinBox2::setSteps(int single, int page)
 {
-	mLineStep = line;
-	mPageStep = page;
+	mSingleStep = single;
+	mPageStep   = page;
 	if (reverseButtons())
 	{
-		mUpdown2->setLineStep(line);   // reverse layout, but still set the right buttons
-		mSpinbox->setLineStep(page);
+		mUpdown2->setSingleStep(single);   // reverse layout, but still set the right buttons
+		mSpinbox->setSingleStep(page);
 	}
 	else
 	{
-		mSpinbox->setLineStep(line);
-		mUpdown2->setLineStep(page);
+		mSpinbox->setSingleStep(single);
+		mUpdown2->setSingleStep(page);
 	}
 }
 
-void SpinBox2::setShiftSteps(int line, int page)
+void SpinBox2::setShiftSteps(int single, int page)
 {
-	mLineShiftStep = line;
-	mPageShiftStep = page;
+	mSingleShiftStep = single;
+	mPageShiftStep   = page;
 	if (reverseButtons())
 	{
-		mUpdown2->setLineShiftStep(line);   // reverse layout, but still set the right buttons
-		mSpinbox->setLineShiftStep(page);
+		mUpdown2->setSingleShiftStep(single);   // reverse layout, but still set the right buttons
+		mSpinbox->setSingleShiftStep(page);
 	}
 	else
 	{
-		mSpinbox->setLineShiftStep(line);
-		mUpdown2->setLineShiftStep(page);
+		mSpinbox->setSingleShiftStep(single);
+		mUpdown2->setSingleShiftStep(page);
 	}
 }
 
@@ -286,16 +286,16 @@ void SpinBox2::arrange()
 */
 void SpinBox2::getMetrics() const
 {
-	QRect rect = mUpdown2->style().querySubControlMetrics(QStyle::CC_SpinWidget, mUpdown2, QStyle::SC_SpinWidgetButtonField);
-	if (style().inherits("PlastikStyle"))
+	QRect rect = mUpdown2->style()->querySubControlMetrics(QStyle::CC_SpinWidget, mUpdown2, QStyle::SC_SpinWidgetButtonField);
+	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	xUpdown2 = mReverseLayout ? 0 : rect.left();
 	wUpdown2 = mUpdown2->width() - rect.left();
-	xSpinbox = mSpinbox->style().querySubControlMetrics(QStyle::CC_SpinWidget, mSpinbox, QStyle::SC_SpinWidgetEditField).left();
+	xSpinbox = mSpinbox->style()->querySubControlMetrics(QStyle::CC_SpinWidget, mSpinbox, QStyle::SC_SpinWidgetEditField).left();
 	wGap = 0;
 
 	// Make style-specific adjustments for a better appearance
-	if (style().inherits("QMotifPlusStyle"))
+	if (style()->inherits("QMotifPlusStyle"))
 	{
 		xSpinbox = 0;      // show the edit control left border
 		wGap = 2;          // leave a space to the right of the left-hand pair of spin buttons
@@ -309,7 +309,7 @@ void SpinBox2::getMetrics() const
 */
 void SpinBox2::stepPage(int step)
 {
-	if (abs(step) == mUpdown2->lineStep())
+	if (abs(step) == mUpdown2->singleStep())
 		mSpinbox->setValue(mUpdown2->value());
 	else
 	{
@@ -322,9 +322,9 @@ void SpinBox2::stepPage(int step)
 			// shift page increment, leaving unchanged the part of the value
 			// which is the remainder from the page increment.
 			if (oldValue >= 0)
-				oldValue -= oldValue % mUpdown2->lineStep();
+				oldValue -= oldValue % mUpdown2->singleStep();
 			else
-				oldValue += (-oldValue) % mUpdown2->lineStep();
+				oldValue += (-oldValue) % mUpdown2->singleStep();
 		}
 		int adjust = mSpinbox->shiftStepAdjustment(oldValue, step);
 		if (adjust == -step
@@ -361,9 +361,9 @@ int SpinBox2::MainSpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 		// shift page increment, leaving unchanged the part of the value
 		// which is the remainder from the page increment.
 		if (oldValue >= 0)
-			oldValue -= oldValue % lineStep();
+			oldValue -= oldValue % singleStep();
 		else
-			oldValue += (-oldValue) % lineStep();
+			oldValue += (-oldValue) % singleStep();
 	}
 	return SpinBox::shiftStepAdjustment(oldValue, shiftStep);
 }
@@ -406,9 +406,9 @@ SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent, const char* name)
 
 	// Find the spin widget which is part of the spin box, in order to
 	// pass on its shift-button presses.
-	QObjectList* spinwidgets = spinbox->queryList("QSpinWidget", 0, false, true);
-	mSpinWidget = (SpinBox*)spinwidgets->getFirst();
-	delete spinwidgets;
+#warning Fix this
+	QObjectList spinwidgets = spinbox->queryList("QSpinWidget", 0, false, true);
+	mSpinWidget = (SpinBox*)spinwidgets.first();
 }
 
 void SpinMirror::setNormalButtons(const QPixmap& px)
@@ -459,10 +459,10 @@ void SpinMirror::contentsMouseEvent(QMouseEvent* e)
 * Determine whether the extra pair of spin buttons needs to be mirrored
 * left-to-right in the specified style.
 */
-static bool mirrorStyle(const QStyle& style)
+static bool mirrorStyle(const QStyle* style)
 {
 	for (const char** s = mirrorStyles;  *s;  ++s)
-		if (style.inherits(*s))
+		if (style->inherits(*s))
 			return true;
 	return false;
 }

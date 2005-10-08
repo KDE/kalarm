@@ -18,10 +18,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "pushbutton.moc"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
+
+#include "pushbutton.moc"
 
 
 PushButton::PushButton(QWidget* parent, const char* name)

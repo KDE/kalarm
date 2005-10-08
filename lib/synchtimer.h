@@ -1,7 +1,7 @@
 /*
  *  synchtimer.h  -  timers which synchronise to time boundaries
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 #include <qobject.h>
 #include <q3valuelist.h>
-#include <q3cstring.h>
+#include <QByteArray>
 #include <qdatetime.h>
 class QTimer;
 
@@ -45,8 +45,8 @@ class SynchTimer : public QObject
 			Connection() { }
 			Connection(QObject* r, const char* s) : receiver(r), slot(s) { }
 			bool operator==(const Connection& c) const  { return receiver == c.receiver && slot == c.slot; }
-			QObject*       receiver;
-			const Q3CString slot;
+			QObject*         receiver;
+			const QByteArray slot;
 		};
 	protected:
 		SynchTimer();

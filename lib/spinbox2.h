@@ -156,12 +156,12 @@ class SpinBox2 : public Q3Frame
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked without the shift key being pressed.
 		 */
-		int                 lineStep() const            { return mLineStep; }
+		int                 singleStep() const          { return mSingleStep; }
 		/** Returns the shifted step increment for the right-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked while the shift key is pressed.
 		 */
-		int                 lineShiftStep() const       { return mLineShiftStep; }
+		int                 singleShiftStep() const     { return mSingleShiftStep; }
 		/** Returns the unshifted step increment for the left-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a left-hand
 		 *  spin button is clicked without the shift key being pressed.
@@ -203,11 +203,11 @@ class SpinBox2 : public Q3Frame
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		void                addLine()                   { addValue(mLineStep); }
+		void                addSingle()                 { addValue(mSingleStep); }
 		/** Decrements the current value by subtracting the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		void                subtractLine()              { addValue(-mLineStep); }
+		void                subtractSingle()            { addValue(-mSingleStep); }
 		/** Adjusts the current value by adding @p change. */
 		void                addValue(int change)        { mSpinbox->addValue(change); }
 
@@ -221,11 +221,11 @@ class SpinBox2 : public Q3Frame
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		virtual void        stepUp()                    { addValue(mLineStep); }
+		virtual void        stepUp()                    { addValue(mSingleStep); }
 		/** Decrements the current value by subtracting the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		virtual void        stepDown()                  { addValue(-mLineStep); }
+		virtual void        stepDown()                  { addValue(-mSingleStep); }
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
@@ -303,8 +303,8 @@ class SpinBox2 : public Q3Frame
 		SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons
 		int              mMinValue;
 		int              mMaxValue;
-		int              mLineStep;           // right button increment
-		int              mLineShiftStep;      // right button increment with shift pressed
+		int              mSingleStep;         // right button increment
+		int              mSingleShiftStep;    // right button increment with shift pressed
 		int              mPageStep;           // left button increment
 		int              mPageShiftStep;      // left button increment with shift pressed
 		bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)

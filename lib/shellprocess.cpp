@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,14 +29,12 @@
 #include <kdebug.h>
 
 #include "shellprocess.moc"
-//Added by qt3to4:
-#include <Q3CString>
 
 
-Q3CString  ShellProcess::mShellName;
-Q3CString  ShellProcess::mShellPath;
-bool      ShellProcess::mInitialised = false;
-bool      ShellProcess::mAuthorised  = false;
+QByteArray ShellProcess::mShellName;
+QByteArray ShellProcess::mShellPath;
+bool       ShellProcess::mInitialised = false;
+bool       ShellProcess::mAuthorised  = false;
 
 
 ShellProcess::ShellProcess(const QString& command)
@@ -103,11 +101,11 @@ void ShellProcess::slotExited(KProcess* proc)
 */
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
-	Q3CString scopy(buffer, bufflen+1);    // construct a deep copy
+	QByteArray scopy(buffer, bufflen);    // construct a deep copy
 	bool write = !mStdinQueue.count();
-	mStdinQueue.append(scopy);
+	mStdinQueue.enqueue(scopy);
 	if (write)
-		KProcess::writeStdin(mStdinQueue.first(), mStdinQueue.first().length());
+		KProcess::writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
 }
 
 /******************************************************************************
@@ -118,9 +116,10 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 */
 void ShellProcess::writtenStdin(KProcess* proc)
 {
-	mStdinQueue.pop_front();   // free the buffer which has now been written
 	if (mStdinQueue.count())
-		proc->writeStdin(mStdinQueue.first(), mStdinQueue.first().length());
+		mStdinQueue.dequeue();   // free the buffer which has now been written
+	if (mStdinQueue.count())
+		proc->writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
 	else if (mStdinExit)
 		kill();
 }
@@ -164,13 +163,13 @@ QString ShellProcess::errorMessage() const
 * This is a duplication of what KShellProcess does, but we need to know
 * which shell is used in order to decide what its exit code means.
 */
-const Q3CString& ShellProcess::shellPath()
+const QByteArray& ShellProcess::shellPath()
 {
 	if (mShellPath.isEmpty())
 	{
 		// Get the path to the shell
 		mShellPath = "/bin/sh";
-		Q3CString envshell = Q3CString(getenv("SHELL")).stripWhiteSpace();
+		QByteArray envshell = QByteArray(getenv("SHELL")).trimmed();
 		if (!envshell.isEmpty())
 		{
 			struct stat fileinfo;
@@ -187,7 +186,7 @@ const Q3CString& ShellProcess::shellPath()
 		}
 
 		// Get the shell filename with the path stripped off
-		int i = mShellPath.findRev('/');
+		int i = mShellPath.lastIndexOf('/');
 		if (i >= 0)
 			mShellName = mShellPath.mid(i + 1);
 		else
