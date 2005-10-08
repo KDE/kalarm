@@ -27,9 +27,10 @@
 #include <qtimer.h>
 #include <qfile.h>
 #include <qdatetime.h>
+#include <QByteArray>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
@@ -154,11 +155,11 @@ void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 /******************************************************************************
 * DCOP call to reload, and optionally reset, the specified calendar.
 */
-void AlarmDaemon::reloadCal(const Q3CString& appname, const QString& urlString, bool reset)
+void AlarmDaemon::reloadCal(const QByteArray& appname, const QString& urlString, bool reset)
 {
 	kdDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
 	ADCalendar* cal = ADCalendar::getCalendar(urlString);
-	if (!cal  ||  cal->appName() != appname)
+	if (!cal  ||  appname != cal->appName())
 		return;
 	reloadCal(cal, reset);
 }
@@ -199,8 +200,8 @@ void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerApp(const Q3CString& appName, const QString& appTitle,
-                              const Q3CString& dcopObject, const QString& calendarUrl,
+void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle,
+                              const QByteArray& dcopObject, const QString& calendarUrl,
 			      bool startClient)
 {
 	kdDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
@@ -255,7 +256,7 @@ void AlarmDaemon::registerApp(const Q3CString& appName, const QString& appTitle,
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerChange(const Q3CString& appName, bool startClient)
+void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 {
 	kdDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result;
@@ -383,7 +384,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 {
 	if (!calendar)
 		return true;
-	Q3CString appname = calendar->appName();
+	QByteArray appname = calendar->appName();
 	const ClientInfo* client = ClientInfo::get(appname);
 	if (!client)
 	{
@@ -486,7 +487,7 @@ void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
 	ClientInfo* client = ClientInfo::get(cal);
 	if (!client)
 		return;
-	Q3CString appname = client->appName();
+	QByteArray appname = client->appName();
 	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname)))
 	{
 		KAlarmd::CalendarStatus change = cal->available() ? (cal->enabled() ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED)

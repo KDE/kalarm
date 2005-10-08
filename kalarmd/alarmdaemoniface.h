@@ -1,7 +1,7 @@
 /*
  *  alarmdaemoniface.h  -  DCOP request interface
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -23,9 +23,8 @@
 #ifndef ALARMDAEMONIFACE_H
 #define ALARMDAEMONIFACE_H
 
+class QByteArray;
 #include <dcopobject.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 
 class AlarmDaemonIface : virtual public DCOPObject
@@ -34,11 +33,11 @@ class AlarmDaemonIface : virtual public DCOPObject
   k_dcop:
     virtual ASYNC enableAutoStart(bool enable) = 0;
     virtual ASYNC enableCalendar(const QString& urlString, bool enable) = 0;
-    virtual ASYNC reloadCalendar(const Q3CString& appname, const QString& urlString) = 0;
-    virtual ASYNC resetCalendar(const Q3CString& appname, const QString& urlString) = 0;
-    virtual ASYNC registerApp(const Q3CString& appName, const QString& appTitle,
-                              const Q3CString& dcopObject, const QString& calendarUrl, bool startClient) = 0;
-    virtual ASYNC registerChange(const Q3CString& appName, bool startClient) = 0;
+    virtual ASYNC reloadCalendar(const QByteArray& appname, const QString& urlString) = 0;
+    virtual ASYNC resetCalendar(const QByteArray& appname, const QString& urlString) = 0;
+    virtual ASYNC registerApp(const QByteArray& appName, const QString& appTitle,
+                              const QByteArray& dcopObject, const QString& calendarUrl, bool startClient) = 0;
+    virtual ASYNC registerChange(const QByteArray& appName, bool startClient) = 0;
     virtual ASYNC quit() = 0;
 };
 

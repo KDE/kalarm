@@ -1,7 +1,7 @@
 /*
  *  adcalendar.cpp  -  calendar file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 #include <ktempfile.h>
 #include <kio/job.h>
@@ -38,7 +37,7 @@ ADCalendar::EventsMap   ADCalendar::mEventsHandled;
 QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder anything in this list!
 
 
-ADCalendar::ADCalendar(const QString& url, const Q3CString& appname)
+ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
         : KCal::CalendarLocal(QString::fromLatin1("UTC")),
 	  mUrlString(url),
 	  mAppName(appname),
