@@ -20,23 +20,23 @@
 
 #include "kalarm.h"
 
-#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 
 #include <kdebug.h>
 
+#include "buttongroup.h"
 #include "lineedit.h"
 #include "pickfileradio.moc"
 
 
-PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent)
+PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
 	: RadioButton(text, parent),
-	  mGroup(parent),
+	  mGroup(group),
 	  mEdit(edit),
 	  mButton(button),
-	  mLastId(-1),     // set to an invalid value
-	  mRevertId(false)
+	  mLastButton(0),
+	  mRevertButton(false)
 {
 	Q_ASSERT(parent);
 	Q_ASSERT(button);
@@ -44,16 +44,16 @@ PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString&
 	connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 	if (mEdit)
 		mEdit->setEnabled(false);
-	connect(mGroup, SIGNAL(buttonSet(int)), SLOT(slotSelectionChanged(int)));
+	connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
 }
 
-PickFileRadio::PickFileRadio(const QString& text, Q3ButtonGroup* parent)
+PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
 	: RadioButton(text, parent),
-	  mGroup(parent),
+	  mGroup(group),
 	  mEdit(0),
 	  mButton(0),
-	  mLastId(-1),     // set to an invalid value
-	  mRevertId(false)
+	  mLastButton(0),
+	  mRevertButton(false)
 {
 	Q_ASSERT(parent);
 }
@@ -67,7 +67,7 @@ void PickFileRadio::init(QPushButton* button, LineEdit* edit)
 	connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 	if (mEdit)
 		mEdit->setEnabled(false);
-	connect(mGroup, SIGNAL(buttonSet(int)), SLOT(slotSelectionChanged(int)));
+	connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
 	setReadOnly(RadioButton::isReadOnly());
 }
 
@@ -103,7 +103,7 @@ void PickFileRadio::setEnabled(bool enable)
 {
 	Q_ASSERT(mButton);
 	RadioButton::setEnabled(enable);
-	enable = enable  &&  mGroup->selected() == this;
+	enable = enable  &&  mGroup->checkedButton() == this;
 	if (enable)
 	{
 		if (!pickFileIfNone())
@@ -117,18 +117,17 @@ void PickFileRadio::setEnabled(bool enable)
 /******************************************************************************
 * Called when the selected radio button changes.
 */
-void PickFileRadio::slotSelectionChanged(int id)
+void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
 {
-	if (id == mLastId  ||  mRevertId)
+	if (button == mLastButton  ||  mRevertButton)
 		return;
-	int radioId = mGroup->id(this);
-	if (mLastId == radioId)
+	if (mLastButton == this)
 	{
 		mButton->setEnabled(false);
 		if (mEdit)
 			mEdit->setEnabled(false);
 	}
-	else if (id == radioId)
+	else if (button == this)
 	{
 		if (!pickFileIfNone())
 			return;    // revert to previously selected type
@@ -136,7 +135,7 @@ void PickFileRadio::slotSelectionChanged(int id)
 		if (mEdit)
 			mEdit->setEnabled(true);
 	}
-	mLastId = id;
+	mLastButton = button;
 }
 
 /******************************************************************************
@@ -164,19 +163,19 @@ void PickFileRadio::slotPickFile()
 	{
 		// No file is selected, so revert to the previous radio button selection.
 		// But wait a moment before setting the radio button, or it won't work.
-		mRevertId = true;   // prevent picker dialogue popping up twice
-		QTimer::singleShot(0, this, SLOT(setLastId()));
+		mRevertButton = true;   // prevent picker dialogue popping up twice
+		QTimer::singleShot(0, this, SLOT(setLastButton()));
 	}
 }
 
 /******************************************************************************
 * Select the previously selected radio button in the group.
 */
-void PickFileRadio::setLastId()
+void PickFileRadio::setLastButton()
 {
-	if (mLastId == -1)
+	if (!mLastButton)
 		setOn(false);    // we don't know the previous selection, so just turn this button off
 	else
-		mGroup->setButton(mLastId);
-	mRevertId = false;
+		mLastButton->setChecked(true);
+	mRevertButton = false;
 }

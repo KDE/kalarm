@@ -26,6 +26,7 @@
 #include "radiobutton.h"
 
 class QPushButton;
+class ButtonGroup;
 class LineEdit;
 
 /**
@@ -57,13 +58,13 @@ class PickFileRadio : public RadioButton
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
 		 */
-		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent);
+		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent);
 		/** Constructor.
 		 *  The init() method must be called before the widget can be used.
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
 		 */
-		PickFileRadio(const QString& text, Q3ButtonGroup* parent);
+		PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent);
 		/** Initialises the widget.
 		 *  @param button Push button to invoke the file picker dialogue.
 		 *  @param edit File name edit widget, or null if there is none.
@@ -100,19 +101,19 @@ class PickFileRadio : public RadioButton
 		virtual void    setEnabled(bool);
 
 	private slots:
-		void          slotSelectionChanged(int id);
+		void          slotSelectionChanged(QAbstractButton*);
 		void          slotPickFile();
-		void          setLastId();
+		void          setLastButton();
 
 	private:
 		bool          pickFileIfNone();
 
-		Q3ButtonGroup* mGroup;     // button group which radio button is in
-		LineEdit*     mEdit;      // file name edit box, or null if none
-		QPushButton*  mButton;    // push button to pick a file
-		QString       mFile;      // saved file name (if mEdit is null)
-		int           mLastId;    // previous radio button selected
-		bool          mRevertId;  // true to revert to the previous radio button selection
+		ButtonGroup*     mGroup;         // button group which radio button is in
+		LineEdit*        mEdit;          // file name edit box, or null if none
+		QPushButton*     mButton;        // push button to pick a file
+		QString          mFile;          // saved file name (if mEdit is null)
+		QAbstractButton* mLastButton;    // previous radio button selected
+		bool             mRevertButton;  // true to revert to the previous radio button selection
 };
 
 #endif // PICKFILERADIO_H
