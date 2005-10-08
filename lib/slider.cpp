@@ -1,7 +1,7 @@
 /*
  *  slider.cpp  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2004, 2005 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,24 +18,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "slider.moc"
-//Added by qt3to4:
 #include <QMouseEvent>
-#include <QKeyEvent>
+#include "slider.moc"
 
 
-Slider::Slider(QWidget* parent, const char* name)
-	: QSlider(parent, name),
+Slider::Slider(QWidget* parent)
+	: QSlider(parent),
 	  mReadOnly(false)
 { }
 
-Slider::Slider(Qt::Orientation o, QWidget* parent, const char* name)
-	: QSlider(o, parent, name),
+Slider::Slider(Qt::Orientation o, QWidget* parent)
+	: QSlider(o, parent),
 	  mReadOnly(false)
 { }
 
-Slider::Slider(int minval, int maxval, int pageStep, int value, Qt::Orientation o, QWidget* parent, const char* name)
-	: QSlider(minval, maxval, pageStep, value, o, parent, name),
+Slider::Slider(int minval, int maxval, int pageStep, int value, Qt::Orientation o, QWidget* parent)
+	: QSlider(minval, maxval, pageStep, value, o, parent),
 	  mReadOnly(false)
 { }
 

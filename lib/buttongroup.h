@@ -1,7 +1,7 @@
 /*
- *  buttongroup.h  -  QButtonGroup with an extra signal and Qt 2 compatibility
+ *  buttongroup.h  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,74 +20,44 @@
 #ifndef BUTTONGROUP_H
 #define BUTTONGROUP_H
 
-#include <q3buttongroup.h>
+#include <QButtonGroup>
 class QChildEvent;
-class Q3Button;
+class QAbstractButton;
 
 
 /**
- *  @short A QButtonGroup with signal on new selection, plus Qt 2 compatibility.
+ *  @short A QButtonGroup with signal on new selection.
  *
  *  The ButtonGroup class provides an enhanced version of the QButtonGroup class.
  *
- *  It emits an additional signal, buttonSet(int), whenever any of its buttons
- *  changes state, for whatever reason, including programmatic control. (The
+ *  It emits an additional signal, buttonSet(QAbstractButton*), whenever any of its
+ *  buttons changes state, for whatever reason, including programmatic control. (The
  *  QButtonGroup class only emits signals when buttons are clicked on by the user.)
- *  The class also provides Qt 2 compatibility.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ButtonGroup : public Q3ButtonGroup
+class ButtonGroup : public QButtonGroup
 {
 		Q_OBJECT
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		ButtonGroup(QWidget* parent, const char* name = 0);
-		/** Constructor.
-		 *  @param title The title displayed for this button group.
-		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
-		 */
-		ButtonGroup(const QString& title, QWidget* parent, const char* name = 0);
-		/** Constructor.
-		 *  @param strips The number of rows or columns of buttons.
-		 *  @param orient The orientation (Qt::Horizontal or Qt::Vertical) of the button group.
-		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
-		 */
-		ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name = 0);
-		/** Constructor.
-		 *  @param strips The number of rows or columns of buttons.
-		 *  @param orient The orientation (Qt::Horizontal or Qt::Vertical) of the button group.
-		 *  @param title The title displayed for this button group.
-		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
-		 */
-		ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name = 0);
-		/** Inserts a button in the group.
-		 *  This overrides the insert() method of QButtonGroup, which should really be a virtual method...
+		ButtonGroup(QObject* parent);
+		/** Adds a button to the group.
+		 *  This overrides the add() method of QButtonGroup, which should really be a virtual method...
 		 *  @param button The button to insert.
-		 *  @param id The identifier for the button.
-		 *  @return The identifier of the inserted button.
 		 */
-		int          insert(Q3Button* button, int id = -1);
-		/** Sets the button with the specified identifier to be on. If this is an exclusive group,
-		 *  all other buttons in the group will be set off. The buttonSet() signal is emitted.
-		 *  @param id The identifier of the button to set on.
-		 */
-		virtual void setButton(int id)  { Q3ButtonGroup::setButton(id);  emit buttonSet(id); }
+		void         add(QAbstractButton* button);
 
 	private slots:
 		void         slotButtonToggled(bool);
 	signals:
 		/** Signal emitted whenever whenever any button in the group changes state,
 		 *  for whatever reason.
-		 *  @param id The identifier of the button which is now selected.
+		 *  @param button The button which is now selected.
 		 */
-		void         buttonSet(int id);
+		void         buttonSet(QAbstractButton* button);
 };
 
 #endif // BUTTONGROUP_H

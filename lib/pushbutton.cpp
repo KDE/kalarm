@@ -24,20 +24,20 @@
 #include "pushbutton.moc"
 
 
-PushButton::PushButton(QWidget* parent, const char* name)
-	: QPushButton(parent, name),
+PushButton::PushButton(QWidget* parent)
+	: QPushButton(parent),
 	  mFocusPolicy(focusPolicy()),
 	  mReadOnly(false)
 { }
 
-PushButton::PushButton(const QString& text, QWidget* parent, const char* name)
-	: QPushButton(text, parent, name),
+PushButton::PushButton(const QString& text, QWidget* parent)
+	: QPushButton(text, parent),
 	  mFocusPolicy(focusPolicy()),
 	  mReadOnly(false)
 { }
 
-PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent, const char* name)
-	: QPushButton(icon, text, parent, name),
+PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent)
+	: QPushButton(icon, text, parent),
 	  mFocusPolicy(focusPolicy()),
 	  mReadOnly(false)
 { }

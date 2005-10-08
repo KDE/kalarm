@@ -1,7 +1,7 @@
 /*
  *  timeedit.h  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef TIMEEDIT_H
 #define TIMEEDIT_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <q3hbox.h>
 
 class ComboBox;
@@ -53,9 +53,8 @@ class TimeEdit : public Q3HBox
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		explicit TimeEdit(QWidget* parent = 0, const char* name = 0);
+		explicit TimeEdit(QWidget* parent = 0);
 		/** Returns true if the widget is read only. */
 		bool          isReadOnly() const           { return mReadOnly; }
 		/** Sets whether the widget is read-only for the user. If read-only,

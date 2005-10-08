@@ -20,11 +20,11 @@
 
 #include "kalarm.h"
 
-#include <qregexp.h>
-#include <q3dragobject.h>
-//Added by qt3to4:
-#include <QDragEnterEvent>
+#include <QRegExp>
 #include <QFocusEvent>
+//Added by qt3to4:
+#include <q3dragobject.h>
+#include <QDragEnterEvent>
 #include <QDropEvent>
 
 #include <kurldrag.h>
@@ -43,8 +43,8 @@
 * It has an option to prevent its contents being selected when it receives
 = focus.
 =============================================================================*/
-LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
-	: KLineEdit(parent, name),
+LineEdit::LineEdit(Type type, QWidget* parent)
+	: KLineEdit(parent),
 	  mType(type),
 	  mNoSelect(false),
 	  mSetCursorAtEnd(false)
@@ -52,8 +52,8 @@ LineEdit::LineEdit(Type type, QWidget* parent, const char* name)
 	init();
 }
 
-LineEdit::LineEdit(QWidget* parent, const char* name)
-	: KLineEdit(parent, name),
+LineEdit::LineEdit(QWidget* parent)
+	: KLineEdit(parent),
 	  mType(Text),
 	  mNoSelect(false),
 	  mSetCursorAtEnd(false)

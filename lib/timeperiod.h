@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,9 +63,8 @@ class TimePeriod : public Q3HBox
 		 *         as units; only days and weeks can ever be used, regardless of other
 		 *         method calls. Set true to allow hours/minutes, days or weeks as units.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		TimePeriod(bool allowHourMinute, QWidget* parent, const char* name = 0);
+		TimePeriod(bool allowHourMinute, QWidget* parent);
 		/** Returns true if the widget is read only. */
 		bool          isReadOnly() const             { return mReadOnly; }
 		/** Sets whether the widget is read-only for the user. If read-only,

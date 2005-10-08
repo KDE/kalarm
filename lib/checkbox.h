@@ -47,15 +47,13 @@ class CheckBox : public QCheckBox
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		CheckBox(QWidget* parent, const char* name = 0);
+		CheckBox(QWidget* parent);
 		/** Constructor.
 		 *  @param text Text to display.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		CheckBox(const QString& text, QWidget* parent, const char* name = 0);
+		CheckBox(const QString& text, QWidget* parent);
 		/** Returns true if the widget is read only. */
 		bool         isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the check box is read-only for the user. If read-only,

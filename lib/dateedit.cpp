@@ -18,18 +18,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QMouseEvent>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
 #include "dateedit.moc"
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
 
 
-DateEdit::DateEdit(QWidget* parent, const char* name)
-	: KDateEdit(parent, name)
+DateEdit::DateEdit(QWidget* parent)
+	: KDateEdit(parent)
 {
 }
 

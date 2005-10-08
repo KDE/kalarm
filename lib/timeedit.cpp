@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@
 #include "timeedit.moc"
 
 
-TimeEdit::TimeEdit(QWidget* parent, const char* name)
-	: Q3HBox(parent, name),
+TimeEdit::TimeEdit(QWidget* parent)
+	: Q3HBox(parent),
 	  mAmPm(0),
 	  mAmIndex(-1),
 	  mPmIndex(-1),

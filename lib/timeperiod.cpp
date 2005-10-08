@@ -48,8 +48,8 @@ static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:mi
 = Contains a time unit combo box, plus a time spinbox, to select a time period.
 =============================================================================*/
 
-TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent, const char* name)
-	: Q3HBox(parent, name),
+TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
+	: Q3HBox(parent),
 	  mMaxDays(9999),
 	  mNoHourMinute(!allowHourMinute),
 	  mReadOnly(false)

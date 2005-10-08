@@ -18,20 +18,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qlineedit.h>
-//Added by qt3to4:
+#include <QLineEdit>
 #include <QMouseEvent>
 #include <QKeyEvent>
+
 #include "combobox.moc"
 
 
-ComboBox::ComboBox(QWidget* parent, const char* name)
-	: QComboBox(parent, name),
+ComboBox::ComboBox(QWidget* parent)
+	: QComboBox(parent),
 	  mReadOnly(false)
 { }
 
-ComboBox::ComboBox(bool rw, QWidget* parent, const char* name)
-	: QComboBox(rw, parent, name),
+ComboBox::ComboBox(bool rw, QWidget* parent)
+	: QComboBox(rw, parent),
 	  mReadOnly(false)
 { }
 

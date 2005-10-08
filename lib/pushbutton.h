@@ -21,7 +21,7 @@
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
-#include <qpushbutton.h>
+#include <QPushButton>
 class QMouseEvent;
 class QKeyEvent;
 
@@ -43,22 +43,19 @@ class PushButton : public QPushButton
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		PushButton(QWidget* parent, const char* name = 0);
+		PushButton(QWidget* parent);
 		/** Constructor for a push button which displays a text.
 		 *  @param text The text to show on the button.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		PushButton(const QString& text, QWidget* parent, const char* name = 0);
+		PushButton(const QString& text, QWidget* parent);
 		/** Constructor for a push button which displays an icon and a text.
 		 *  @param icon The icon to show on the button.
 		 *  @param text The text to show on the button.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		PushButton(const QIcon& icon, const QString& text, QWidget* parent, const char* name = 0);
+		PushButton(const QIcon& icon, const QString& text, QWidget* parent);
 		/** Sets whether the push button is read-only for the user.
 		 *  @param readOnly True to set the widget read-only, false to enable its action.
 		 */

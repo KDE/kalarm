@@ -1,5 +1,5 @@
 /*
- *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
+ *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
  *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -62,19 +62,16 @@ class SpinBox2 : public Q3Frame
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		SpinBox2(QWidget* parent = 0, const char* name = 0);
+		SpinBox2(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the spin box can have.
 		 *  @param maxValue The maximum value which the spin box can have.
 		 *  @param step The (unshifted) step interval for the right-hand spin buttons.
 		 *  @param step2 The (unshifted) step interval for the left-hand spin buttons.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		SpinBox2(int minValue, int maxValue, int step = 1, int step2 = 1,
-		         QWidget* parent = 0, const char* name = 0);
+		SpinBox2(int minValue, int maxValue, int step = 1, int step2 = 1, QWidget* parent = 0);
 		/** Sets whether the spin box can be changed by the user.
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
@@ -276,10 +273,10 @@ class SpinBox2 : public Q3Frame
 		class MainSpinBox : public SpinBox
 		{
 			public:
-				MainSpinBox(SpinBox2* sb2, QWidget* parent, const char* name = 0)
-				                : SpinBox(parent, name), owner(sb2) { }
-				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
-				                : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
+				MainSpinBox(SpinBox2* sb2, QWidget* parent)
+				                : SpinBox(parent), owner(sb2) { }
+				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent)
+				                : SpinBox(minValue, maxValue, step, parent), owner(sb2) { }
 				virtual QString textFromValue(int v) const  { return owner->textFromValue(v); }
 				virtual int     valueFromText(const QString& t) const
 				                                            { return owner->valueFromText(t); }

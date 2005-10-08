@@ -1,7 +1,7 @@
 /*
- *  buttongroup.cpp  -  QButtonGroup with an extra signal and KDE 2 compatibility
+ *  buttongroup.cpp  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,37 +19,12 @@
  */
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <q3button.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <QChildEvent>
-#include <QBoxLayout>
-#include <kdialog.h>
-
+#include <QAbstractButton>
 #include "buttongroup.moc"
 
 
-ButtonGroup::ButtonGroup(QWidget* parent, const char* name)
-	: Q3ButtonGroup(parent, name)
-{
-	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
-}
-
-ButtonGroup::ButtonGroup(const QString& title, QWidget* parent, const char* name)
-	: Q3ButtonGroup(title, parent, name)
-{
-	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
-}
-
-ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, QWidget* parent, const char* name)
-	: Q3ButtonGroup(strips, orient, parent, name)
-{
-	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
-}
-
-ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& title, QWidget* parent, const char* name)
-	: Q3ButtonGroup(strips, orient, title, parent, name)
+ButtonGroup::ButtonGroup(QObject* parent)
+	: QButtonGroup(parent)
 {
 	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
 }
@@ -58,11 +33,10 @@ ButtonGroup::ButtonGroup(int strips, Qt::Orientation orient, const QString& titl
  * Inserts a button in the group.
  * This should really be a virtual method...
  */
-int ButtonGroup::insert(Q3Button* button, int id)
+void ButtonGroup::add(QAbstractButton* button)
 {
-	id = Q3ButtonGroup::insert(button, id);
+	QButtonGroup::addButton(button);
 	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
-	return id;
 }
 
 /******************************************************************************
@@ -70,5 +44,5 @@ int ButtonGroup::insert(Q3Button* button, int id)
  */
 void ButtonGroup::slotButtonToggled(bool)
 {
-	emit buttonSet(selectedId());
+	emit buttonSet(checkedButton());
 }

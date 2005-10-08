@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -21,11 +21,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qpainter.h>
-//Added by qt3to4:
+#include <QPainter>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <QResizeEvent>
 #include <QKeyEvent>
 
 #include <klocale.h>
@@ -36,8 +34,8 @@
 #include "colourcombo.moc"
 
 
-ColourCombo::ColourCombo(QWidget* parent, const char* name, const QColor& defaultColour)
-	: QComboBox(parent, name),
+ColourCombo::ColourCombo(QWidget* parent, const QColor& defaultColour)
+	: QComboBox(parent),
 	  mColourList(Preferences::messageColours()),
 	  mSelectedColour(defaultColour),
 	  mCustomColour(255, 255, 255),

@@ -1,5 +1,5 @@
 /*
- *  spinbox2private.h  -  private classes for SpinBox2 (for Qt 3)
+ *  spinbox2private.h  -  private classes for SpinBox2
  *  Program:  kalarm
  *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -21,9 +21,9 @@
 #ifndef SPINBOX2PRIVATE_H
 #define SPINBOX2PRIVATE_H
 
-#include <q3canvas.h>
-//Added by qt3to4:
 #include <QPixmap>
+//Added by qt3to4:
+#include <q3canvas.h>
 #include "spinbox.h"
 
 class QMouseEvent;
@@ -40,10 +40,10 @@ class ExtraSpinBox : public SpinBox
 {
 		Q_OBJECT
 	public:
-		ExtraSpinBox(QWidget* parent, const char* name = 0)
-		             : SpinBox(parent, name), mNewStylePending(false) { }
-		ExtraSpinBox(int minValue, int maxValue, int step, QWidget* parent, const char* name = 0)
-		             : SpinBox(minValue, maxValue, step, parent, name), mNewStylePending(false) { }
+		ExtraSpinBox(QWidget* parent)
+		             : SpinBox(parent), mNewStylePending(false) { }
+		ExtraSpinBox(int minValue, int maxValue, int step, QWidget* parent)
+		             : SpinBox(minValue, maxValue, step, parent), mNewStylePending(false) { }
 	signals:
 		void         styleUpdated();
 	protected:
@@ -66,7 +66,7 @@ class SpinMirror : public Q3CanvasView
 {
 		Q_OBJECT
 	public:
-		SpinMirror(SpinBox*, QWidget* parent = 0, const char* name = 0);
+		SpinMirror(SpinBox*, QWidget* parent = 0);
 		void         setReadOnly(bool ro)        { mReadOnly = ro; }
 		bool         isReadOnly() const          { return mReadOnly; }
 		void         setNormalButtons(const QPixmap&);

@@ -30,16 +30,16 @@
 #include "spinbox.moc"
 
 
-SpinBox::SpinBox(QWidget* parent, const char* name)
-	: QSpinBox(0, 99999, 1, parent, name),
+SpinBox::SpinBox(QWidget* parent)
+	: QSpinBox(0, 99999, 1, parent),
 	  mMinValue(QSpinBox::minValue()),
 	  mMaxValue(QSpinBox::maxValue())
 {
 	init();
 }
 
-SpinBox::SpinBox(int minValue, int maxValue, int step, QWidget* parent, const char* name)
-	: QSpinBox(minValue, maxValue, step, parent, name),
+SpinBox::SpinBox(int minValue, int maxValue, int step, QWidget* parent)
+	: QSpinBox(minValue, maxValue, step, parent),
 	  mMinValue(minValue),
 	  mMaxValue(maxValue)
 {

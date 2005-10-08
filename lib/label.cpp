@@ -1,7 +1,7 @@
 /*
  *  label.cpp  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,30 +19,29 @@
  */
 
 #include "kalarm.h"
-#include <qradiobutton.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QFocusEvent>
+#include <QRadioButton>
 #include "label.moc"
 
 
-Label::Label(QWidget* parent, const char* name, Qt::WFlags f)
-	: QLabel(parent, name, f),
+Label::Label(QWidget* parent, Qt::WFlags f)
+	: QLabel(parent, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
 { }
 
-Label::Label(const QString& text, QWidget* parent, const char* name, Qt::WFlags f)
-	: QLabel(text, parent, name, f),
+Label::Label(const QString& text, QWidget* parent, Qt::WFlags f)
+	: QLabel(text, parent, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
 { }
 
-Label::Label(QWidget* buddy, const QString& text, QWidget* parent, const char* name, Qt::WFlags f)
-	: QLabel(buddy, text, parent, name, f),
+Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WFlags f)
+	: QLabel(text, parent, f),
 	  mRadioButton(0),
 	  mFocusWidget(0)
-{ }
+{
+	setBuddy(buddy);
+}
 
 /******************************************************************************
 * Set a buddy widget.
@@ -106,8 +105,8 @@ void Label::activated()
 * Class: LabelFocusWidget
 =============================================================================*/
 
-LabelFocusWidget::LabelFocusWidget(QWidget* parent, const char* name)
-	: QWidget(parent, name)
+LabelFocusWidget::LabelFocusWidget(QWidget* parent)
+	: QWidget(parent)
 {
 	setFocusPolicy(Qt::ClickFocus);
 	setFixedSize(QSize(1,1));

@@ -21,7 +21,7 @@
 #ifndef COLOURCOMBO_H
 #define COLOURCOMBO_H
 
-#include <qcombobox.h>
+#include <QComboBox>
 #include "colourlist.h"
 
 class QMouseEvent;
@@ -51,10 +51,9 @@ class ColourCombo : public QComboBox
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 *  @param defaultColour The colour which is selected by default.
 		 */
-		ColourCombo(QWidget* parent = 0, const char* name = 0, const QColor& defaultColour = 0xFFFFFF);
+		ColourCombo(QWidget* parent = 0, const QColor& defaultColour = 0xFFFFFF);
 		/** Returns the selected colour. */
 		QColor       color() const               { return mSelectedColour; }
 		/** Returns the selected colour. */

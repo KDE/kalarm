@@ -1,7 +1,7 @@
 /*
  *  slider.h  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef SLIDER_H
 #define SLIDER_H
 
-#include <qslider.h>
+#include <QSlider>
 class QMouseEvent;
 class QKeyEvent;
 
@@ -43,15 +43,13 @@ class Slider : public QSlider
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		Slider(QWidget* parent = 0, const char* name = 0);
+		Slider(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		Slider(Qt::Orientation orient, QWidget* parent = 0, const char* name = 0);
+		Slider(Qt::Orientation orient, QWidget* parent = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the slider can have.
 		 *  @param maxValue The maximum value which the slider can have.
@@ -59,10 +57,9 @@ class Slider : public QSlider
 		 *  @param value The initial value for the slider.
 		 *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
 		Slider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orient,
-		       QWidget* parent = 0, const char* name = 0);
+		       QWidget* parent = 0);
 		/** Returns true if the slider is read only. */
 		bool         isReadOnly() const  { return mReadOnly; }
 		/** Sets whether the slider is read-only for the user.

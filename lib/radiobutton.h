@@ -21,7 +21,7 @@
 #ifndef RADIOBUTTON_H
 #define RADIOBUTTON_H
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 class QMouseEvent;
 class QKeyEvent;
 
@@ -47,15 +47,13 @@ class RadioButton : public QRadioButton
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		RadioButton(QWidget* parent, const char* name = 0);
+		RadioButton(QWidget* parent);
 		/** Constructor.
 		 *  @param text Text to display.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		RadioButton(const QString& text, QWidget* parent, const char* name = 0);
+		RadioButton(const QString& text, QWidget* parent);
 		/** Returns true if the widget is read only. */
 		bool     isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the radio button is read-only for the user. If read-only,

@@ -18,21 +18,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "radiobutton.moc"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include "radiobutton.moc"
 
 
-RadioButton::RadioButton(QWidget* parent, const char* name)
-	: QRadioButton(parent, name),
+RadioButton::RadioButton(QWidget* parent)
+	: QRadioButton(parent),
 	  mFocusPolicy(focusPolicy()),
 	  mFocusWidget(0),
 	  mReadOnly(false)
 { }
 
-RadioButton::RadioButton(const QString& text, QWidget* parent, const char* name)
-	: QRadioButton(text, parent, name),
+RadioButton::RadioButton(const QString& text, QWidget* parent)
+	: QRadioButton(text, parent),
 	  mFocusPolicy(focusPolicy()),
 	  mFocusWidget(0),
 	  mReadOnly(false)

@@ -65,14 +65,12 @@ class LineEdit : public KLineEdit
 		/** Constructor.
 		 *  @param type The content type for the line edit.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		explicit LineEdit(Type type, QWidget* parent = 0, const char* name = 0);
+		explicit LineEdit(Type type, QWidget* parent = 0);
 		/** Constructs a line edit whose content type is Text.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		explicit LineEdit(QWidget* parent = 0, const char* name = 0);
+		explicit LineEdit(QWidget* parent = 0);
 		/** Prevents the line edit's contents being selected when the widget receives focus. */
 		void         setNoSelect()   { mNoSelect = true; }
 		/** Sets whether the cursor should be set at the beginning or end of the text when

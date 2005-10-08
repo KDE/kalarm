@@ -52,8 +52,8 @@ static bool mirrorStyle(const QStyle*);
 
 int SpinBox2::mReverseLayout = -1;
 
-SpinBox2::SpinBox2(QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+SpinBox2::SpinBox2(QWidget* parent)
+	: Q3Frame(parent),
 	  mReverseWithLayout(true)
 {
 	mUpdown2Frame = new Q3Frame(this);
@@ -64,8 +64,8 @@ SpinBox2::SpinBox2(QWidget* parent, const char* name)
 	init();
 }
 
-SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent)
+	: Q3Frame(parent),
 	  mReverseWithLayout(true)
 {
 	mUpdown2Frame = new Q3Frame(this);
@@ -395,8 +395,8 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 = Class SpinMirror
 =============================================================================*/
 
-SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent, const char* name)
-	: Q3CanvasView(new Q3Canvas, parent, name),
+SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent)
+	: Q3CanvasView(new Q3Canvas, parent),
 	  mSpinbox(spinbox),
 	  mReadOnly(false)
 {

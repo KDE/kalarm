@@ -21,7 +21,7 @@
 #ifndef TIMESPINBOX_H
 #define TIMESPINBOX_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include "spinbox2.h"
 
 
@@ -50,16 +50,14 @@ class TimeSpinBox : public SpinBox2
 		 *  @param use24hour True for entry of 24-hour clock times (range 00:00 to 23:59).
 		 *                   False for entry of 12-hour clock times (range 12:00 to 11:59).
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		TimeSpinBox(bool use24hour, QWidget* parent = 0, const char* name = 0);
+		TimeSpinBox(bool use24hour, QWidget* parent = 0);
 		/** Constructor for a non-wrapping time spin box which can be used to enter a length of time.
 		 *  @param minMinute The minimum value which the spin box can hold, in minutes.
 		 *  @param maxMinute  The maximum value which the spin box can hold, in minutes.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0, const char* name = 0);
+		TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0);
 		/** Returns true if the spin box holds a valid value.
 		 *  An invalid value is displayed as asterisks.
 		 */

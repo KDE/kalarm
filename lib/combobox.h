@@ -42,15 +42,13 @@ class ComboBox : public QComboBox
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		ComboBox(QWidget* parent = 0, const char* name = 0);
+		ComboBox(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param rw True for a read-write combo box, false for a read-only combo box.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		ComboBox(bool rw, QWidget* parent = 0, const char* name = 0);
+		ComboBox(bool rw, QWidget* parent = 0);
 		/** Returns true if the widget is read only. */
 		bool         isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the combo box is read-only for the user. If read-only,
