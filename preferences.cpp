@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #include "kalarm.h"
 
+#include <QByteArray>
+
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -35,8 +37,6 @@
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
-//Added by qt3to4:
-#include <Q3CString>
 
 
 Preferences* Preferences::mInstance = 0;
@@ -302,7 +302,7 @@ void Preferences::read()
 	mDaemonTrayCheckInterval  = static_cast<int>(config->readUnsignedNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval));
 	if (mDaemonTrayCheckInterval < 1)
 		mDaemonTrayCheckInterval = 1;
-	Q3CString client           = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();  // don't use readPathEntry() here (values are hard-coded)
+	QByteArray client         = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();  // don't use readPathEntry() here (values are hard-coded)
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
 	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
@@ -351,7 +351,7 @@ void Preferences::read()
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
-	Q3CString feb29            = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
+	QByteArray feb29          = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
 	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
 	int reminderUnits         = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
 	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)

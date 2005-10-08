@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.cpp  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright (C) 2002, 2003 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,11 +19,10 @@
  */
 
 #include "kalarm.h"
+#include <QCloseEvent>
 #include <kdeversion.h>
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
-//Added by qt3to4:
-#include <QCloseEvent>
 
 
 /******************************************************************************

@@ -300,8 +300,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		layout->addWidget(mTemplateTimeGroup);
 		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginHint(), spacingHint());
 		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
-		// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-		Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), mTemplateTimeGroup, "templateDefTimeButton");
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
@@ -309,7 +307,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		Q3WhatsThis::add(mTemplateDefaultTime,
 		      i18n("Do not specify a start time for alarms based on this template. "
 		           "The normal default start time will be used."));
-		grid->addWidget(mTemplateDefaultTime, 0, 0, alignment);
+		grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
 		Q3HBox* box = new Q3HBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
@@ -327,14 +325,14 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		                         .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
-		grid->addWidget(box, 0, 1, alignment);
+		grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
 		mTemplateAnyTime = new RadioButton(i18n("An&y time"), mTemplateTimeGroup, "templateAnyTimeButton");
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateAnyTime,
 		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
-		grid->addWidget(mTemplateAnyTime, 1, 0, alignment);
+		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
 		box = new Q3HBox(mTemplateTimeGroup);
 		box->setSpacing(spacingHint());
@@ -353,7 +351,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		      QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
 		                         .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setFixedHeight(box->sizeHint().height());
-		grid->addWidget(box, 1, 1, alignment);
+		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
 		layout->addStretch();
 	}

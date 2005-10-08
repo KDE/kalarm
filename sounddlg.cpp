@@ -99,8 +99,6 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	int indentWidth = 3 * KDialog::spacingHint();
 	grid->addColSpacing(0, indentWidth);
 	grid->addColSpacing(1, indentWidth);
-	// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
 
 	// 'Set volume' checkbox
 	box = new Q3HBox(group);
@@ -126,12 +124,12 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	connect(mFadeCheckbox, SIGNAL(toggled(bool)), SLOT(slotFadeToggled(bool)));
 	Q3WhatsThis::add(mFadeCheckbox,
 	      i18n("Select to fade the volume when the sound file first starts to play."));
-	grid->addMultiCellWidget(mFadeCheckbox, 2, 2, 1, 2, alignment);
+	grid->addMultiCellWidget(mFadeCheckbox, 2, 2, 1, 2, Qt::AlignLeft);
 
 	// Fade time
 	mFadeBox = new Q3HBox(group);
 	mFadeBox->setSpacing(spacingHint());
-	grid->addWidget(mFadeBox, 3, 2, alignment);
+	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
 	QLabel* label = new QLabel(i18n("Time period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeTime = new SpinBox(1, 999, 1, mFadeBox);

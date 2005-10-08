@@ -28,9 +28,9 @@
 #include <qtimer.h>
 #include <qregexp.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QTextStream>
+//Added by qt3to4:
 #include <Q3ValueList>
 
 #include <kcmdlineargs.h>
@@ -72,8 +72,8 @@
 #include <QX11Info>
 
 
-static bool convWakeTime(const Q3CString timeParam, QDateTime&, bool& noTime);
-static bool convInterval(Q3CString timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convWakeTime(const QByteArray& timeParam, QDateTime&, bool& noTime);
+static bool convInterval(QByteArray timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -101,9 +101,6 @@ KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mInitialised(false),
 	  mDcopHandler(new DcopHandler()),
-#ifdef OLD_DCOP
-	  mDcopHandlerOld(new DcopHandlerOld()),
-#endif
 	  mTrayWindow(0),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
@@ -365,11 +362,11 @@ int KAlarmApp::newInstance()
 			{
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
-				Q3CString         alMessage;
-				Q3CString         alFromID;
+				QByteArray       alMessage;
+				QByteArray       alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
-				Q3CString         alSubject;
+				QByteArray       alSubject;
 				if (args->isSet("file"))
 				{
 					kdDebug(5950)<<"KAlarmApp::newInstance(): file\n";
@@ -403,8 +400,8 @@ int KAlarmApp::newInstance()
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
 						alFromID = args->getOption("from-id");
-					QCStringList params = args->getOptionList("mail");
-					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
+					QByteArrayList params = args->getOptionList("mail");
+					for (QByteArrayList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
 						QString addr = QString::fromLocal8Bit(*i);
 						if (!KAMail::checkAddress(addr))
@@ -412,7 +409,7 @@ int KAlarmApp::newInstance()
 						alAddresses += KCal::Person(QString::null, addr);
 					}
 					params = args->getOptionList("attach");
-					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
+					for (QByteArrayList::Iterator i = params.begin();  i != params.end();  ++i)
 						alAttachments += QString::fromLocal8Bit(*i);
 					alMessage = args->arg(0);
 					action = KAEvent::EMAIL;
@@ -445,7 +442,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("color"))
 				{
 					// Background colour is specified
-					Q3CString colourText = args->getOption("color");
+					QByteArray colourText = args->getOption("color");
 					if (static_cast<const char*>(colourText)[0] == '0'
 					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
 						colourText.replace(0, 2, "#");
@@ -456,7 +453,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("colorfg"))
 				{
 					// Foreground colour is specified
-					Q3CString colourText = args->getOption("colorfg");
+					QByteArray colourText = args->getOption("colorfg");
 					if (static_cast<const char*>(colourText)[0] == '0'
 					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
 						colourText.replace(0, 2, "#");
@@ -467,7 +464,7 @@ int KAlarmApp::newInstance()
 
 				if (args->isSet("time"))
 				{
-					Q3CString dateTime = args->getOption("time");
+					QByteArray dateTime = args->getOption("time");
 					if (!convWakeTime(dateTime, alarmTime, alarmNoTime))
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--time")))
 				}
@@ -481,7 +478,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--recurrence")))
 					if (args->isSet("until"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
-					Q3CString rule = args->getOption("recurrence");
+					QByteArray rule = args->getOption("recurrence");
 					recurrence.set(QString::fromLocal8Bit(static_cast<const char*>(rule)));
 				}
 				if (args->isSet("interval"))
@@ -502,7 +499,7 @@ int KAlarmApp::newInstance()
 					else if (args->isSet("until"))
 					{
 						count = 0;
-						Q3CString dateTime = args->getOption("until");
+						QByteArray dateTime = args->getOption("until");
 						if (!convWakeTime(dateTime, endTime, alarmNoTime))
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until")))
 						if (endTime < alarmTime)
@@ -544,12 +541,12 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--interval")))
 				}
 
-				Q3CString audioFile;
-				float    audioVolume = -1;
+				QByteArray audioFile;
+				float      audioVolume = -1;
 #ifdef WITHOUT_ARTS
-				bool     audioRepeat = false;
+				bool       audioRepeat = false;
 #else
-				bool     audioRepeat = args->isSet("play-repeat");
+				bool       audioRepeat = args->isSet("play-repeat");
 #endif
 				if (audioRepeat  ||  args->isSet("play"))
 				{
@@ -801,7 +798,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	 * successful. The result is that the alarm is never seen.
 	 */
 	kdDebug(5950) << "KAlarmApp::quitIf(" << exitCode << "): quitting" << endl;
-	dcopClient()->registerAs(Q3CString(aboutData()->appName()) + "-quitting");
+	dcopClient()->registerAs(QByteArray(aboutData()->appName()) + "-quitting");
 	exit(exitCode);
 }
 
@@ -1774,7 +1771,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		logproc = new ShellProcess(QString::fromLatin1("cat >>%1").arg(event.logFile()));
 		connect(logproc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotLogProcExited(ShellProcess*)));
 		logproc->start(KProcess::Stdin);
-		Q3CString heading;
+		QString heading;
 		if (alarm  &&  alarm->dateTime().isValid())
 		{
 			QString dateTime = alarm->dateTime().isDateOnly()
@@ -1783,8 +1780,9 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.latin1());
 		}
 		else
-			heading = "\n******* KAlarm *******\n";
-		logproc->writeStdin(heading, heading.length()+1);
+			heading = QString::fromLatin1("\n******* KAlarm *******\n");
+		QByteArray hdg = heading.toLatin1();
+		logproc->writeStdin(hdg, hdg.length());
 	}
 	ProcData* pd = new ProcData(proc, logproc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
 	if (flags & ProcData::TEMP_FILE)
@@ -1836,7 +1834,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 */
 void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
 {
-kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << Q3CString(buffer, bufflen+1) << "'\n";
+kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'\n";
 	// Find this command in the command list
 	for (Q3ValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
 	{
@@ -2008,7 +2006,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 *  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm or yyyy-mm-dd.
 *  Reply = true if successful.
 */
-static bool convWakeTime(const Q3CString timeParam, QDateTime& dateTime, bool& noTime)
+static bool convWakeTime(const QByteArray& timeParam, QDateTime& dateTime, bool& noTime)
 {
 	if (timeParam.length() > 19)
 		return false;
@@ -2099,7 +2097,7 @@ static bool convWakeTime(const Q3CString timeParam, QDateTime& dateTime, bool& n
 *  Convert a time interval command line parameter.
 *  Reply = true if successful.
 */
-static bool convInterval(Q3CString timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
+static bool convInterval(QByteArray timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
 	// Get the recurrence interval
 	bool ok = true;

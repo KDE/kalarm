@@ -1,7 +1,7 @@
 /*
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -271,7 +271,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 	}
 	if (truncated)
 		*truncated = false;
-	if (text.contains('\n') < maxLines)
+	if (text.count('\n') < maxLines)
 		return text;
 	int newline = -1;
 	for (int i = 0;  i < maxLines;  ++i)

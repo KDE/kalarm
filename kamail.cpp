@@ -28,11 +28,11 @@
 #include <pwd.h>
 
 #include <qfile.h>
-#include <qregexp.h>
+#include <QRegExp>
+#include <QByteArray>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <QTextStream>
-#include <Q3CString>
 
 #include <kstandarddirs.h>
 #include <dcopclient.h>
@@ -233,21 +233,21 @@ QString KAMail::sendKMail(const KAMailData& data)
 
 	// KMail is now running. Determine which DCOP call to use.
 	bool useSend = false;
-	Q3CString sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
-	QCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
-	for (QCStringList::Iterator it=funcs.begin();  it != funcs.end() && !useSend;  ++it)
+	QByteArray sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
+	DCOPCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
+	for (DCOPCStringList::Iterator it = funcs.begin();  it != funcs.end() && !useSend;  ++it)
 	{
-		Q3CString func = DCOPClient::normalizeFunctionSignature(*it);
+		DCOPCString func = DCOPClient::normalizeFunctionSignature(*it);
 		if (func.left(5) == "bool ")
 		{
-			func = func.mid(5);
-			func.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
-			useSend = (func == sendFunction);
+			QString fn = QString::fromLatin1(func.mid(5));
+			fn.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
+			useSend = (fn.toLatin1() == sendFunction);
 		}
 	}
 
 	QByteArray  callData;
-	QDataStream arg(callData, QIODevice::WriteOnly);
+	QDataStream arg(&callData, QIODevice::WriteOnly);
 	kdDebug(5950) << "KAMail::sendKMail(): using " << (useSend ? "sendMessage()" : "dcopAddMessage()") << endl;
 	if (useSend)
 	{
@@ -312,7 +312,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 
 		// Notify KMail of the message in the temporary file
 		QByteArray  callData;
-		QDataStream arg(callData, QIODevice::WriteOnly);
+		QDataStream arg(&callData, QIODevice::WriteOnly);
 		arg << QString::fromLatin1(folder) << tmpFile.name();
 		if (callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
 			return QString::null;
@@ -325,21 +325,19 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 /******************************************************************************
 * Call KMail via DCOP. The DCOP function must return an 'int'.
 */
-bool KAMail::callKMail(const QByteArray& callData, const Q3CString& iface, const Q3CString& function, const Q3CString& funcType)
+bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, const DCOPCString& function, const DCOPCString& funcType)
 {
-	Q3CString   replyType;
-	QByteArray replyData;
+	QString funcname = QString::fromLatin1(function);
+	funcname.replace(QRegExp("(.+$"), "()");
+	DCOPCString replyType;
+	QByteArray  replyData;
 	if (!kapp->dcopClient()->call("kmail", iface, function, callData, replyType, replyData)
 	||  replyType != funcType)
 	{
-		Q3CString funcname = function;
-		funcname.replace(QRegExp("(.+$"), "()");
 		kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call failed\n";;
 		return false;
 	}
-	QDataStream replyStream(replyData, QIODevice::ReadOnly);
-	Q3CString funcname = function;
-	funcname.replace(QRegExp("(.+$"), "()");
+	QDataStream replyStream(&replyData, QIODevice::ReadOnly);
 	if (replyType == "int")
 	{
 		int result;
@@ -413,7 +411,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		// Create a boundary string
 		time_t timenow;
 		time(&timenow);
-		Q3CString boundary;
+		QString boundary;
 		boundary.sprintf("------------_%lu_-%lx=", 2*timenow, timenow);
 		message += QString::fromLatin1("\nMIME-Version: 1.0");
 		message += QString::fromLatin1("\nContent-Type: multipart/mixed;\n  boundary=\"%1\"\n").arg(boundary);
@@ -517,7 +515,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (Q3ValueList<KCal::Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
 	{
-		Q3CString email = (*it).email().local8Bit();
+		QByteArray email = (*it).email().local8Bit();
 		const char* em = email;
 		if (!email.isEmpty()
 		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
@@ -561,7 +559,7 @@ QString KAMail::controlCentreAddress()
 QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 {
 	list.clear();
-	Q3CString addrs = items.local8Bit();
+	QByteArray addrs = items.local8Bit();
 	const char* ad = static_cast<const char*>(addrs);
 
 	// parse an address-list
@@ -588,7 +586,7 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 */
 QString KAMail::convertAddress(const QString& item, EmailAddressList& list)
 {
-	Q3CString addr = item.local8Bit();
+	QByteArray addr = item.local8Bit();
 	const char* ad = static_cast<const char*>(addr);
 	KMime::Types::Address maybeAddress;
 	if (!HeaderParsing::parseAddress(ad, ad + addr.length(), maybeAddress))
@@ -741,7 +739,7 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 {
 	KURL url;
 	list.clear();
-	Q3CString addrs = items.local8Bit();
+	QByteArray addrs = items.local8Bit();
 	int length = items.length();
 	for (int next = 0;  next < length;  )
 	{
@@ -902,17 +900,17 @@ QStringList KAMail::errors(const QString& err, bool sendfail)
 QString KAMail::getMailBody(quint32 serialNumber)
 {
 	// Get the body of the email from KMail
-	Q3CString    replyType;
+	DCOPCString replyType;
 	QByteArray  replyData;
 	QByteArray  data;
-	QDataStream arg(data, QIODevice::WriteOnly);
+	QDataStream arg(&data, QIODevice::WriteOnly);
 	arg << serialNumber;
 	arg << (int)0;
 	QString body;
 	if (kapp->dcopClient()->call("kmail", "KMailIface", "getDecodedBodyPart(quint32,int)", data, replyType, replyData)
 	&&  replyType == "QString")
 	{
-		QDataStream reply_stream(replyData, QIODevice::ReadOnly);
+		QDataStream reply_stream(&replyData, QIODevice::ReadOnly);
 		reply_stream >> body;
 	}
 	else

@@ -234,12 +234,6 @@ class KAEvent : public KAAlarmEventBase
 	public:
 		enum            // flags for use in DCOP calls, etc.
 		{
-#ifdef OLD_DCOP
-			// *** DON'T CHANGE THESE VALUES ***
-			// because they are part of KAlarm's external DCOP interface.
-			// (But it's alright to add new values.)
-			LATE_CANCEL     = 0x01,    // cancel alarm if not triggered within a minute of its scheduled time
-#endif
 			BEEP            = 0x02,    // sound audible beep when alarm is displayed
 			REPEAT_AT_LOGIN = 0x04,    // repeat alarm at every login
 			ANY_TIME        = 0x08,    // only a date is specified for the alarm, not a time
@@ -253,11 +247,7 @@ class KAEvent : public KAAlarmEventBase
 			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
 			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
 		        COPY_KORGANIZER = 0x2000,  // KOrganizer should hold a copy of the event
-#ifdef OLD_DCOP
-			// The following are read-only internal values, and may be changed
-#else
 			// The following are read-only internal values
-#endif
 			REMINDER        = 0x10000,
 			DEFERRAL        = 0x20000,
 			TIMED_FLAG      = 0x40000,

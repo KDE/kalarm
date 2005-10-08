@@ -1,7 +1,7 @@
 /*
  *  dcophandler.h  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright (c) 2001, 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,7 @@
 #ifndef DCOPHANDLER_H
 #define DCOPHANDLER_H
 
-#include <qwidget.h>
-#include <dcopobject.h>
-class Q3CString;
+#include <QWidget>
 
 #include "datetime.h"
 #include "kalarmiface.h"
@@ -31,6 +29,7 @@ class Q3CString;
 
 class DcopHandler : public QWidget, virtual public KAlarmIface
 {
+	Q_OBJECT
     public:
 	DcopHandler();
 	virtual bool cancelEvent(const QString& url,const QString& eventId);
@@ -90,17 +89,5 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 	static bool      convertRecurrence(DateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
 	static bool      convertRecurrence(KARecurrence&, const DateTime& start, int recurType, int recurInterval, int recurCount, const QDateTime& end);
 };
-
-
-#ifdef OLD_DCOP
-class DcopHandlerOld : public QWidget, public DCOPObject
-{
-		Q_OBJECT
-	public:
-		DcopHandlerOld();
-		~DcopHandlerOld()  { }
-		virtual bool process(const Q3CString& func, const QByteArray& data, Q3CString& replyType, QByteArray& replyData);
-};
-#endif
 
 #endif // DCOPHANDLER_H

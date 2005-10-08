@@ -32,7 +32,5 @@
 
 #define AUTOSTART_BY_KALARMD    // temporary fix for autostart before session restoration
 
-#define OLD_DCOP    // retain DCOP pre-1.2 compatibility
-
 #endif // KALARM_H
 

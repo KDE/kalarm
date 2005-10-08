@@ -228,9 +228,6 @@ void PrefsTabBase::apply(bool syncToDisc)
 MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	: PrefsTabBase(frame)
 {
-	// Get alignment to use in QGridLayout (AlignAuto doesn't work correctly there)
-	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
-
 	// Autostart alarm daemon
 	Q3HBox* itemBox = new Q3HBox(mPage);   // this is to allow left adjustment
 	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), itemBox, "startDaemon");
@@ -260,7 +257,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	           "1. With this option selected, closing the system tray icon will quit KAlarm.\n"
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon."
 	           " Running in the system tray simply provides easy access and a status indication."));
-	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, alignment);
+	grid->addMultiCellWidget(mRunInSystemTray, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
 	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group, "autoTray");
@@ -270,7 +267,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 #endif
 	Q3WhatsThis::add(mAutostartTrayIcon1,
 	      i18n("Check to run KAlarm whenever you start KDE."));
-	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, alignment);
+	grid->addMultiCellWidget(mAutostartTrayIcon1, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
 	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disa&ble alarms while not running"), group, "disableAl");
@@ -278,14 +275,14 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	Q3WhatsThis::add(mDisableAlarmsIfStopped,
 	      i18n("Check to disable alarms whenever KAlarm is not running. Alarms will only appear while the system tray icon is visible."));
-	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, alignment);
+	grid->addMultiCellWidget(mDisableAlarmsIfStopped, row, row, 1, 2, Qt::AlignLeft);
 	++row;
 
 	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group, "disableAl");
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	Q3WhatsThis::add(mQuitWarn,
 	      i18n("Check to display a warning prompt before quitting KAlarm."));
-	grid->addWidget(mQuitWarn, row, 2, alignment);
+	grid->addWidget(mQuitWarn, row, 2, Qt::AlignLeft);
 	++row;
 
 	// Run-on-demand radio button has an ID of 3
@@ -297,7 +294,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	           "Notes:\n"
 	           "1. Alarms are displayed even when KAlarm is not running, since alarm monitoring is done by the alarm daemon.\n"
 	           "2. With this option selected, the system tray icon can be displayed or hidden independently of KAlarm."));
-	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, alignment);
+	grid->addMultiCellWidget(mRunOnDemand, row, row, 0, 2, Qt::AlignLeft);
 	++row;
 
 	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group, "autoRun");
@@ -307,7 +304,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 #endif
 	Q3WhatsThis::add(mAutostartTrayIcon2,
 	      i18n("Check to display the system tray icon whenever you start KDE."));
-	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, alignment);
+	grid->addMultiCellWidget(mAutostartTrayIcon2, row, row, 1, 2, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Start-of-day time
@@ -344,7 +341,7 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	connect(mKeepExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
 	Q3WhatsThis::add(mKeepExpired,
 	      i18n("Check to store alarms after expiry or deletion (except deleted alarms which were never triggered)."));
-	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, alignment);
+	grid->addMultiCellWidget(mKeepExpired, 1, 1, 0, 1, Qt::AlignLeft);
 
 	box = new Q3HBox(group);
 	box->setSpacing(KDialog::spacingHint());
@@ -360,14 +357,14 @@ MiscPrefTab::MiscPrefTab(Q3VBox* frame)
 	mPurgeAfterLabel->setBuddy(mPurgeAfter);
 	Q3WhatsThis::add(box,
 	      i18n("Uncheck to store expired alarms indefinitely. Check to enter how long expired alarms should be stored."));
-	grid->addWidget(box, 2, 1, alignment);
+	grid->addWidget(box, 2, 1, Qt::AlignLeft);
 
 	mClearExpired = new QPushButton(i18n("Clear Expired Alar&ms"), group);
 	mClearExpired->setFixedSize(mClearExpired->sizeHint());
 	connect(mClearExpired, SIGNAL(clicked()), SLOT(slotClearExpired()));
 	Q3WhatsThis::add(mClearExpired,
 	      i18n("Delete all existing expired alarms."));
-	grid->addWidget(mClearExpired, 3, 1, alignment);
+	grid->addWidget(mClearExpired, 3, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Terminal window to use for command alarms
@@ -885,10 +882,6 @@ void FontColourPrefTab::setDefaults()
 EditPrefTab::EditPrefTab(Q3VBox* frame)
 	: PrefsTabBase(frame)
 {
-	// Get alignment to use in QLabel::setAlignment(alignment | Qt::WordBreak)
-	// (AlignAuto doesn't work correctly there)
-	Qt::Alignment alignment = QApplication::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
-
 	int groupTopMargin = fontMetrics().lineSpacing()/2;
 	QString defsetting   = i18n("The default setting for \"%1\" in the alarm edit dialog.");
 	QString soundSetting = i18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
@@ -1052,7 +1045,7 @@ EditPrefTab::EditPrefTab(Q3VBox* frame)
 	Q3VBox* vbox = new Q3VBox(mPage);   // this is to control the QWhatsThis text display area
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(alignment | Qt::TextWordWrap);
+	label->setAlignment(Qt::AlignLeft | Qt::TextWordWrap);
 	itemBox = new Q3HBox(vbox);
 	itemBox->setSpacing(2*KDialog::spacingHint());
 	mFeb29 = new Q3ButtonGroup(itemBox);

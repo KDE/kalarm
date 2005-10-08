@@ -20,14 +20,11 @@
 
 #include "kalarm.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QLabel>
 #include <QVBoxLayout>
-#include <Q3Frame>
 #include <QResizeEvent>
-#include <QBoxLayout>
+//Added by qt3to4:
+#include <q3whatsthis.h>
 
 #include <klineedit.h>
 #include <kapplication.h>
@@ -136,28 +133,10 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 =============================================================================*/
 
 SpecialActions::SpecialActions(QWidget* parent, const char* name)
-	: Q3GroupBox(parent, name)
+	: QWidget(parent, name),
+	  mReadOnly(false)
 {
-	setFrameStyle(Q3Frame::NoFrame);
-	init(QString::null);
-}
-
-SpecialActions::SpecialActions(const QString& frameLabel, QWidget* parent, const char* name)
-	: Q3GroupBox(frameLabel, parent, name)
-{
-	init(frameLabel);
-}
-
-void SpecialActions::init(const QString& frameLabel)
-{
-	mReadOnly = false;
-
-	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-	if (!frameLabel.isEmpty())
-	{
-		topLayout->setMargin(KDialog::marginHint());
-		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
-	}
+	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
 	// Pre-alarm action
 	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);

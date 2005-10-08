@@ -31,12 +31,12 @@
 
 #include "alarmevent.h"
 
-class Q3CString;
 class QObject;
 class QWidget;
 class QString;
 class KAction;
 class KActionCollection;
+class DCOPCString;
 namespace KCal { class Event; }
 class KAEvent;
 class MainWindow;
@@ -83,7 +83,7 @@ void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
-bool                runProgram(const Q3CString& program, const Q3CString& windowName, Q3CString& dcopName, QString& errorMessage);
+bool                runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPCString& dcopName, QString& errorMessage);
 
 UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true);
 bool                addExpiredEvent(KAEvent&);

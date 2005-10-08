@@ -26,26 +26,23 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <q3whatsthis.h>
+#include <QPushButton>
+#include <QLabel>
 #include <qtooltip.h>
-#include <q3dragobject.h>
-#include <q3textedit.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <QBoxLayout>
-#include <QResizeEvent>
-#include <QShowEvent>
-#include <Q3Frame>
+#include <QPixmap>
+#include <QByteArray>
 #include <QGridLayout>
-#include <QMoveEvent>
-#include <Q3CString>
-#include <Q3ValueList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QResizeEvent>
 #include <QCloseEvent>
-#include <QPixmap>
+//Added by qt3to4:
+#include <q3whatsthis.h>
+#include <q3dragobject.h>
+#include <q3textedit.h>
+#include <Q3Frame>
+#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -127,8 +124,8 @@ class MWMimeSourceFactory : public Q3MimeSourceFactory
 		virtual void setData(const QString&, QMimeSource*) {}
 		virtual void setExtensionType(const QString&, const char*) {}
 
-		QString   mTextFile;
-		Q3CString  mMimeType;
+		QString    mTextFile;
+		QByteArray mMimeType;
 		mutable const QMimeSource* mLast;
 };
 
@@ -400,7 +397,7 @@ void MessageWin::initView()
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
-					QBoxLayout* layout = new QHBoxLayout(topLayout);
+					QHBoxLayout* layout = new QHBoxLayout(topLayout);
 					layout->addSpacing(hspace);
 					layout->addWidget(text, 1, Qt::AlignHCenter);
 					layout->addSpacing(hspace);
@@ -479,14 +476,14 @@ void MessageWin::initView()
 	else
 	{
 		setCaption(i18n("Error"));
-		QBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBoxLayout* layout = new QHBoxLayout(topLayout);
 		layout->setMargin(2*KDialog::marginHint());
 		layout->addStretch();
 		QLabel* label = new QLabel(topWidget);
 		label->setPixmap(DesktopIcon("error"));
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignRight);
-		QBoxLayout* vlayout = new QVBoxLayout(layout);
+		QVBoxLayout* vlayout = new QVBoxLayout(layout);
 		for (QStringList::Iterator it = mErrorMsgs.begin();  it != mErrorMsgs.end();  ++it)
 		{
 			label = new QLabel(*it, topWidget);
@@ -809,8 +806,8 @@ void MessageWin::slotSpeak()
 		}
 	}
 	QByteArray  data;
-	QDataStream arg(data, QIODevice::WriteOnly);
-	arg << mMessage << "";
+	QDataStream arg(&data, QIODevice::WriteOnly);
+	arg << mMessage << QString();
 	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
 	{
 		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
@@ -1084,13 +1081,13 @@ int MessageWin::getKMixVolume()
 	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
 		return -1;
 	QByteArray  data, replyData;
-	Q3CString    replyType;
-	QDataStream arg(data, QIODevice::WriteOnly);
+	DCOPCString replyType;
+	QDataStream arg(&data, QIODevice::WriteOnly);
 	if (!kapp->dcopClient()->call(mKMixName, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
 	||  replyType != "int")
 		return -1;
 	int result;
-	QDataStream reply(replyData, QIODevice::ReadOnly);
+	QDataStream reply(&replyData, QIODevice::ReadOnly);
 	reply >> result;
 	return (result >= 0) ? result : 0;
 }
@@ -1379,15 +1376,15 @@ void MessageWin::slotShowKMailMessage()
 		KMessageBox::sorry(this, err);
 		return;
 	}
-	Q3CString    replyType;
+	DCOPCString replyType;
 	QByteArray  data, replyData;
-	QDataStream arg(data, QIODevice::WriteOnly);
-	arg << (quint32)mKMailSerialNumber << QString::null;
+	QDataStream arg(&data, QIODevice::WriteOnly);
+	arg << (quint32)mKMailSerialNumber << QString();
 	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(quint32,QString)", data, replyType, replyData)
 	&&  replyType == "bool")
 	{
 		bool result;
-		QDataStream replyStream(replyData, QIODevice::ReadOnly);
+		QDataStream replyStream(&replyData, QIODevice::ReadOnly);
 		replyStream >> result;
 		if (result)
 			return;    // success

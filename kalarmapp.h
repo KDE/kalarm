@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,9 +36,6 @@ namespace KCal { class Event; }
 
 #include "alarmevent.h"
 class DcopHandler;
-#ifdef OLD_DCOP
-class DcopHandlerOld;
-#endif
 class AlarmCalendar;
 class MainWindow;
 class AlarmListView;
@@ -163,9 +160,6 @@ class KAlarmApp : public KUniqueApplication
 		static QString        mFatalMessage;        // fatal error message to output
 		bool                  mInitialised;         // initialisation complete: ready to handle DCOP calls
 		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
-#ifdef OLD_DCOP
-		DcopHandlerOld*       mDcopHandlerOld;      // the parent of the old main DCOP receiver object
-#endif
 		TrayWindow*           mTrayWindow;          // active system tray icon
 		QTime                 mStartOfDay;          // start-of-day time currently in use
 		QColor                mPrefsExpiredColour;  // expired alarms text colour

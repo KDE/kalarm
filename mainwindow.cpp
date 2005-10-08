@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,14 +21,12 @@
 #include "kalarm.h"
 
 #include <qicon.h>
-#include <q3dragobject.h>
 //Added by qt3to4:
-#include <Q3CString>
-#include <QHideEvent>
+#include <q3dragobject.h>
+#include <Q3ValueList>
+#include <QByteArray>
 #include <QCloseEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
-#include <QShowEvent>
 #include <QResizeEvent>
 #include <QDragEnterEvent>
 
@@ -1094,7 +1092,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
-	Q3CString fmts;
+	QByteArray fmts;
 	for (int idbg = 0;  e->format(idbg);  ++idbg)
 	{
 		if (idbg) fmts += ", ";
@@ -1112,9 +1110,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
-		Q3CString mails(bytes.data(), bytes.size());
 		KMime::Content content;
-		content.setContent(mails);
+		content.setContent(bytes);
 		content.parse();
 		QString body;
 		content.textContent()->decodedText(body, true, true);    // strip trailing newlines & spaces

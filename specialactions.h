@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 #ifndef SPECIALACTIONS_H
 #define SPECIALACTIONS_H
 
+#include <QWidget>
+#include <QPushButton>
 #include <kdialogbase.h>
-#include <q3groupbox.h>
-#include <qpushbutton.h>
 
 class QResizeEvent;
 class KLineEdit;
@@ -54,12 +54,11 @@ class SpecialActionsButton : public QPushButton
 
 
 // Pre- and post-alarm actions widget
-class SpecialActions : public Q3GroupBox
+class SpecialActions : public QWidget
 {
 		Q_OBJECT
 	public:
 		SpecialActions(QWidget* parent = 0, const char* name = 0);
-		SpecialActions(const QString& frameLabel, QWidget* parent = 0, const char* name = 0);
 		void         setActions(const QString& pre, const QString& post);
 		QString      preAction() const;
 		QString      postAction() const;
@@ -67,7 +66,6 @@ class SpecialActions : public Q3GroupBox
 		bool         isReadOnly() const    { return mReadOnly; }
 
 	private:
-		void         init(const QString& frameLabel);
 		KLineEdit*   mPreAction;
 		KLineEdit*   mPostAction;
 		bool         mReadOnly;

@@ -25,9 +25,9 @@
 #include <ctype.h>
 #include <qcolor.h>
 #include <qregexp.h>
+#include <QByteArray>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,12 +41,12 @@
 using namespace KCal;
 
 
-const Q3CString APPNAME("KALARM");
+const QByteArray APPNAME("KALARM");
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
 // - General alarm properties
-static const Q3CString TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
+static const QByteArray TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
 static const QString FILE_TYPE                  = QString::fromLatin1("FILE");
 static const QString AT_LOGIN_TYPE              = QString::fromLatin1("LOGIN");
 static const QString REMINDER_TYPE              = QString::fromLatin1("REMINDER");
@@ -58,12 +58,12 @@ static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYIN
 static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
 static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
 // - Display alarm properties
-static const Q3CString FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
+static const QByteArray FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-static const Q3CString KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+static const QByteArray KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
 // - Audio alarm properties
-static const Q3CString VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
-static const Q3CString SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
+static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
+static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event categories
 static const QString DATE_ONLY_CATEGORY        = QString::fromLatin1("DATE");
@@ -221,7 +221,7 @@ void KAEvent::set(const Event& event)
 	mEnabled                = true;
 	bool floats = false;
 	const QStringList& cats = event.categories();
-	for (unsigned int i = 0;  i < cats.count();  ++i)
+	for (int i = 0;  i < cats.count();  ++i)
 	{
 		if (cats[i] == DATE_ONLY_CATEGORY)
 			floats = true;
@@ -248,7 +248,7 @@ void KAEvent::set(const Event& event)
 			// It's the archive flag plus a reminder time and/or repeat-at-login flag
 			mArchive = true;
 			QStringList list = QStringList::split(';', cats[i].mid(ARCHIVE_CATEGORIES.length()));
-			for (unsigned int j = 0;  j < list.count();  ++j)
+			for (int j = 0;  j < list.count();  ++j)
 			{
 				if (list[j] == AT_LOGIN_TYPE)
 					mArchiveRepeatAtLogin = true;
@@ -611,7 +611,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	data.type = KAAlarm::MAIN__ALARM;
 	QString property = alarm.customProperty(APPNAME, TYPE_PROPERTY);
 	QStringList types = QStringList::split(QChar(','), property);
-	for (unsigned int i = 0;  i < types.count();  ++i)
+	for (int i = 0;  i < types.count();  ++i)
 	{
 		QString type = types[i];
 		if (type == AT_LOGIN_TYPE)
@@ -1052,7 +1052,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 			dtl = QDate::currentDate().addDays(-1);
 		else
 			dtl = QDateTime::currentDateTime();
-		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
+		initKcalAlarm(ev, dtl, QStringList(AT_LOGIN_TYPE));
 		if (!ancillaryTime.isValid())
 			ancillaryTime = dtl;
 	}
@@ -2134,7 +2134,7 @@ bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
  */
 bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rDaily, freq, count, end))
+	if (!setRecur(RecurrenceRule::rDaily, freq, count, QDateTime(end)))
 		return false;
 	int n = 0;
 	for (int i = 0;  i < 7;  ++i)
@@ -2159,7 +2159,7 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QD
  */
 bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rWeekly, freq, count, end))
+	if (!setRecur(RecurrenceRule::rWeekly, freq, count, QDateTime(end)))
 		return false;
 	mRecurrence->addWeeklyDays(days);
 	return true;
@@ -2177,7 +2177,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  */
 bool KAEvent::setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
 		return false;
 	for (Q3ValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
 		mRecurrence->addMonthlyDate(*it);
@@ -2197,7 +2197,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int 
  */
 bool KAEvent::setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
 		return false;
 	for (Q3ValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
 		mRecurrence->addMonthlyPos((*it).weeknum, (*it).days);
@@ -2219,7 +2219,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& posns,
  */
 bool KAEvent::setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end), feb29))
 		return false;
 	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		mRecurrence->addYearlyMonth(*it);
@@ -2242,7 +2242,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int
  */
 bool KAEvent::setRecurAnnualByPos(int freq, const Q3ValueList<MonthPos>& posns, const Q3ValueList<int>& months, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, end))
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end)))
 		return false;
 	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 		mRecurrence->addYearlyMonth(*it);
@@ -3140,7 +3140,7 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 		else
 		{
 			bool done = false;
-			switch (ch)
+			switch (ch.toAscii())
 			{
 				case ' ':
 				case ';':

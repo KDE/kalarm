@@ -25,7 +25,7 @@
 
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <kdatastream.h>
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
@@ -125,7 +125,7 @@ class MessageWin : public MainWindowBase
 		// Sound file playing
 		KArtsDispatcher*    mArtsDispatcher;
 		KDE::PlayObject*    mPlayObject;
-		Q3CString            mKMixName;        // DCOP name for KMix
+		DCOPCString         mKMixName;        // DCOP name for KMix
 		QString             mKMixError;       // error message starting KMix
 		QTimer*             mPlayTimer;       // timer for repeating the sound file
 		QTimer*             mFadeTimer;       // timer for fading the sound volume

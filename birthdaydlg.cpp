@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -313,7 +313,7 @@ Q3ValueList<KAEvent> BirthdayDlg::events() const
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
-				KAEvent event(date,
+				KAEvent event(QDateTime(date),
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
 				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
