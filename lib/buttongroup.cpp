@@ -33,7 +33,7 @@ ButtonGroup::ButtonGroup(QObject* parent)
  * Inserts a button in the group.
  * This should really be a virtual method...
  */
-void ButtonGroup::add(QAbstractButton* button)
+void ButtonGroup::addButton(QAbstractButton* button)
 {
 	QButtonGroup::addButton(button);
 	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));

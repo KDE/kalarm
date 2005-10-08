@@ -48,16 +48,17 @@ class ButtonGroup : public QButtonGroup
 		 *  This overrides the add() method of QButtonGroup, which should really be a virtual method...
 		 *  @param button The button to insert.
 		 */
-		void         add(QAbstractButton* button);
+		void         addButton(QAbstractButton* button);
 
-	private slots:
-		void         slotButtonToggled(bool);
 	signals:
 		/** Signal emitted whenever whenever any button in the group changes state,
 		 *  for whatever reason.
 		 *  @param button The button which is now selected.
 		 */
 		void         buttonSet(QAbstractButton* button);
+
+	private slots:
+		void         slotButtonToggled(bool);
 };
 
 #endif // BUTTONGROUP_H

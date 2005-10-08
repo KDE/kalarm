@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (C) 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class FontColourButton : public PushButton
 {
 		Q_OBJECT
 	public:
-		FontColourButton(QWidget* parent = 0, const char* name = 0);
+		FontColourButton(QWidget* parent = 0);
 		void          setDefaultFont()                   { mDefaultFont = true; }
 		void          setFont(const QFont& font)         { mFont = font;  mDefaultFont = false; }
 		void          setBgColour(const QColor& colour)  { mBgColour = colour; }

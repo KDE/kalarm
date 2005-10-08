@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.h  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,16 +56,14 @@ class PickFileRadio : public RadioButton
 		 *  @param edit File name edit widget, or null if there is none.
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
-		 *  @param name The name of this widget.
 		 */
-		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent, const char* name = 0);
+		PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent);
 		/** Constructor.
 		 *  The init() method must be called before the widget can be used.
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
-		 *  @param name The name of this widget.
 		 */
-		PickFileRadio(const QString& text, Q3ButtonGroup* parent, const char* name = 0);
+		PickFileRadio(const QString& text, Q3ButtonGroup* parent);
 		/** Initialises the widget.
 		 *  @param button Push button to invoke the file picker dialogue.
 		 *  @param edit File name edit widget, or null if there is none.

@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@
 = Font/colour selection buttong.
 =============================================================================*/
 
-FontColourButton::FontColourButton(QWidget* parent, const char* name)
-	: PushButton(i18n("Font && Co&lor..."), parent, name),
+FontColourButton::FontColourButton(QWidget* parent)
+	: PushButton(i18n("Font && Co&lor..."), parent),
 	  mReadOnly(false)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));

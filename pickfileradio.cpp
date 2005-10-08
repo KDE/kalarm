@@ -30,8 +30,8 @@
 #include "pickfileradio.moc"
 
 
-PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent, const char* name)
-	: RadioButton(text, parent, name),
+PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, Q3ButtonGroup* parent)
+	: RadioButton(text, parent),
 	  mGroup(parent),
 	  mEdit(edit),
 	  mButton(button),
@@ -47,8 +47,8 @@ PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString&
 	connect(mGroup, SIGNAL(buttonSet(int)), SLOT(slotSelectionChanged(int)));
 }
 
-PickFileRadio::PickFileRadio(const QString& text, Q3ButtonGroup* parent, const char* name)
-	: RadioButton(text, parent, name),
+PickFileRadio::PickFileRadio(const QString& text, Q3ButtonGroup* parent)
+	: RadioButton(text, parent),
 	  mGroup(parent),
 	  mEdit(0),
 	  mButton(0),
