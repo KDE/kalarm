@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@
 class QWidget;
 
 #include "colourlist.h"
-#include "editdlg.h"
 #include "karecurrence.h"
 #include "recurrenceedit.h"
 #include "soundpicker.h"
@@ -100,8 +99,7 @@ class Preferences : public QObject
 		static bool              defaultConfirmAck()              { return mDefaultConfirmAck; }
 		static bool              defaultCopyToKOrganizer()        { return mDefaultCopyToKOrganizer; }
 		static bool              defaultCmdScript()               { return mDefaultCmdScript; }
-		static EditAlarmDlg::CmdLogType  
-		                         defaultCmdLogType()              { return mDefaultCmdLogType; }
+		static CmdLogType        defaultCmdLogType()              { return mDefaultCmdLogType; }
 		static QString           defaultCmdLogFile()              { return mDefaultCmdLogFile; }
 		static bool              defaultEmailBcc()                { return mDefaultEmailBcc; }
 		static RecurrenceEdit::RepeatType
@@ -159,7 +157,7 @@ class Preferences : public QObject
 		static const bool                       default_defaultSoundRepeat;
 		static const bool                       default_defaultConfirmAck;
 		static const bool                       default_defaultCmdScript;
-		static const EditAlarmDlg::CmdLogType   default_defaultCmdLogType;
+		static const CmdLogType                 default_defaultCmdLogType;
 		static const bool                       default_defaultEmailBcc;
 		static const RecurrenceEdit::RepeatType default_defaultRecurPeriod;
 		static const KARecurrence::Feb29Type    default_defaultFeb29Type;
@@ -235,8 +233,8 @@ class Preferences : public QObject
 		static bool                mDefaultConfirmAck;
 		static bool                mDefaultEmailBcc;
 		static bool                mDefaultCmdScript;
-		static EditAlarmDlg::CmdLogType   mDefaultCmdLogType;
-		static QString                    mDefaultCmdLogFile;
+		static CmdLogType          mDefaultCmdLogType;
+		static QString             mDefaultCmdLogFile;
 		static RecurrenceEdit::RepeatType mDefaultRecurPeriod;
 		static KARecurrence::Feb29Type    mDefaultFeb29Type;
 		static TimePeriod::Units   mDefaultReminderUnits;

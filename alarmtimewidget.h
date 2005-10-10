@@ -24,6 +24,7 @@
 #include <QGroupBox>
 #include "datetime.h"
 
+class QAbstractButton;
 class ButtonGroup;
 class RadioButton;
 class CheckBox;

@@ -65,7 +65,6 @@ class EditAlarmDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		enum MessageType { MESSAGE, FILE };
-		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0, const char* name = 0,
                      const KAEvent* = 0, bool readOnly = false);
@@ -74,7 +73,7 @@ class EditAlarmDlg : public KDialogBase
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static ColourCombo* createBgColourChooser(Q3HBox** box, QWidget* parent, const char* name = 0);
-		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
+		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
 		static QString  i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
@@ -106,7 +105,7 @@ class EditAlarmDlg : public KDialogBase
 	private slots:
 		void            slotRecurTypeChange(int repeatType);
 		void            slotRecurFrequencyChange();
-		void            slotAlarmTypeChanged(int id);
+		void            slotAlarmTypeChanged(QAbstractButton*);
 		void            slotEditDeferral();
 		void            slotFontColourSelected();
 		void            slotBgColourSelected(const QColor&);
@@ -116,7 +115,7 @@ class EditAlarmDlg : public KDialogBase
 		void            slotShowMainPage();
 		void            slotShowRecurrenceEdit();
 		void            slotAnyTimeToggled(bool anyTime);
-		void            slotTemplateTimeType(int id);
+		void            slotTemplateTimeType(QAbstractButton*);
 		void            slotSetSimpleRepetition();
 		void            slotCmdScriptToggled(bool);
 
@@ -186,6 +185,9 @@ class EditAlarmDlg : public KDialogBase
 		LineEdit*           mCmdCommandEdit;     // command line edit box
 		TextEdit*           mCmdScriptEdit;      // script edit box
 		ButtonGroup*        mCmdOutputGroup;     // what to do with command output
+		RadioButton*        mCmdExecInTerm;
+		RadioButton*        mCmdLogToFile;
+		RadioButton*        mCmdDiscardOutput;
 		LineEdit*           mCmdLogFileEdit;     // log file URL edit box
 		QWidget*            mCmdPadding;
 		// Email alarm widgets
@@ -231,10 +233,10 @@ class EditAlarmDlg : public KDialogBase
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;
 		QString             mSavedTemplateName;   // mTemplateName value
-		Q3Button*            mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
+		QAbstractButton*    mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
 		QTime               mSavedTemplateTime;   // mTemplateTime value
 		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
-		Q3Button*            mSavedTypeRadio;      // mMessageRadio, etc
+		QAbstractButton*    mSavedTypeRadio;      // mMessageRadio, etc
 		SoundPicker::Type   mSavedSoundType;      // mSoundPicker sound type
 		bool                mSavedSound;          // mSoundPicker sound status
 		bool                mSavedRepeatSound;    // mSoundPicker repeat status
@@ -257,7 +259,7 @@ class EditAlarmDlg : public KDialogBase
 		QStringList         mSavedEmailAttach;    // mEmailAttachList values
 		bool                mSavedEmailBcc;       // mEmailBcc status
 		bool                mSavedCmdScript;      // mCmdTypeScript status
-		Q3Button*            mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
+		QAbstractButton*    mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
 		QString             mSavedCmdLogFile;     // mCmdLogFileEdit value
 		DateTime            mSavedDateTime;       // mTimeWidget value
 		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value

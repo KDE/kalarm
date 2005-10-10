@@ -69,6 +69,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
+#include "buttongroup.h"
 #include "checkbox.h"
 #include "colourcombo.h"
 #include "deferdlg.h"
@@ -107,8 +108,8 @@ static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 class PickAlarmFileRadio : public PickFileRadio
 {
     public:
-	PickAlarmFileRadio(const QString& text, Q3ButtonGroup* parent, const char* name = 0)
-		: PickFileRadio(text, parent, name) { }
+	PickAlarmFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
+		: PickFileRadio(text, group, parent) { }
 	virtual QString pickFile()    // called when browse button is pressed to select a file to display
 	{
 		return KAlarm::browseFile(i18n("Choose Text or Image File to Display"), mDefaultDir, fileEdit()->text(),
@@ -124,8 +125,8 @@ class PickAlarmFileRadio : public PickFileRadio
 class PickLogFileRadio : public PickFileRadio
 {
     public:
-	PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, Q3ButtonGroup* parent, const char* name = 0)
-		: PickFileRadio(b, e, text, parent, name) { }
+	PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, ButtonGroup* group, QWidget* parent)
+		: PickFileRadio(b, e, text, group, parent) { }
 	virtual QString pickFile()    // called when browse button is pressed to select a log file
 	{
 		return KAlarm::browseFile(i18n("Choose Log File"), mDefaultDir, fileEdit()->text(), QString::null,
@@ -230,47 +231,52 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	// Alarm action
 
-	mActionGroup = new ButtonGroup(i18n("Action"), mainPage, "actionGroup");
-	connect(mActionGroup, SIGNAL(buttonSet(int)), SLOT(slotAlarmTypeChanged(int)));
-	topLayout->addWidget(mActionGroup, 1);
-	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginHint(), spacingHint());
+	Q3GroupBox* actionBox = new Q3GroupBox(i18n("Action"), mainPage, "actionGroup");
+	topLayout->addWidget(actionBox, 1);
+	QGridLayout* grid = new QGridLayout(actionBox, 3, 5, marginHint(), spacingHint());
 	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	mActionGroup = new ButtonGroup(actionBox);
+	connect(mActionGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAlarmTypeChanged(QAbstractButton*)));
 
 	// Message radio button
-	mMessageRadio = new RadioButton(i18n("Te&xt"), mActionGroup, "messageButton");
+	mMessageRadio = new RadioButton(i18n("Te&xt"), actionBox);
 	mMessageRadio->setFixedSize(mMessageRadio->sizeHint());
 	Q3WhatsThis::add(mMessageRadio,
 	      i18n("If checked, the alarm will display a text message."));
+	mActionGroup->addButton(mMessageRadio);
 	grid->addWidget(mMessageRadio, 1, 0);
 	grid->setColStretch(1, 1);
 
 	// File radio button
-	mFileRadio = new PickAlarmFileRadio(i18n("&File"), mActionGroup, "fileButton");
+	mFileRadio = new PickAlarmFileRadio(i18n("&File"), mActionGroup, actionBox);
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	Q3WhatsThis::add(mFileRadio,
 	      i18n("If checked, the alarm will display the contents of a text or image file."));
+	mActionGroup->addButton(mFileRadio);
 	grid->addWidget(mFileRadio, 1, 2);
 	grid->setColStretch(3, 1);
 
 	// Command radio button
-	mCommandRadio = new RadioButton(i18n("Co&mmand"), mActionGroup, "cmdButton");
+	mCommandRadio = new RadioButton(i18n("Co&mmand"), actionBox);
 	mCommandRadio->setFixedSize(mCommandRadio->sizeHint());
 	Q3WhatsThis::add(mCommandRadio,
 	      i18n("If checked, the alarm will execute a shell command."));
+	mActionGroup->addButton(mCommandRadio);
 	grid->addWidget(mCommandRadio, 1, 4);
 	grid->setColStretch(5, 1);
 
 	// Email radio button
-	mEmailRadio = new RadioButton(i18n("&Email"), mActionGroup, "emailButton");
+	mEmailRadio = new RadioButton(i18n("&Email"), actionBox);
 	mEmailRadio->setFixedSize(mEmailRadio->sizeHint());
 	Q3WhatsThis::add(mEmailRadio,
 	      i18n("If checked, the alarm will send an email."));
+	mActionGroup->addButton(mEmailRadio);
 	grid->addWidget(mEmailRadio, 1, 6);
 
-	initDisplayAlarms(mActionGroup);
-	initCommand(mActionGroup);
-	initEmail(mActionGroup);
-	mAlarmTypeStack = new Q3WidgetStack(mActionGroup);
+	initDisplayAlarms(actionBox);
+	initCommand(actionBox);
+	initEmail(actionBox);
+	mAlarmTypeStack = new Q3WidgetStack(actionBox);
 	grid->addMultiCellWidget(mAlarmTypeStack, 2, 2, 0, 6);
 	grid->setRowStretch(2, 1);
 	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame, 0);
@@ -295,29 +301,31 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// Date and time entry
 	if (mTemplate)
 	{
-		mTemplateTimeGroup = new ButtonGroup(i18n("Time"), mainPage, "templateGroup");
-		connect(mTemplateTimeGroup, SIGNAL(buttonSet(int)), SLOT(slotTemplateTimeType(int)));
-		layout->addWidget(mTemplateTimeGroup);
-		grid = new QGridLayout(mTemplateTimeGroup, 2, 2, marginHint(), spacingHint());
+		Q3GroupBox* templateTimeBox = new Q3GroupBox(i18n("Time"), mainPage);
+		layout->addWidget(templateTimeBox);
+		grid = new QGridLayout(templateTimeBox, 2, 2, marginHint(), spacingHint());
 		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
+		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
 
-		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), mTemplateTimeGroup, "templateDefTimeButton");
+		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), templateTimeBox);
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
 		mTemplateDefaultTime->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateDefaultTime,
 		      i18n("Do not specify a start time for alarms based on this template. "
 		           "The normal default start time will be used."));
+		mTemplateTimeGroup->addButton(mTemplateDefaultTime);
 		grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
-		Q3HBox* box = new Q3HBox(mTemplateTimeGroup);
+		Q3HBox* box = new Q3HBox(templateTimeBox);
 		box->setSpacing(spacingHint());
-		mTemplateUseTime = new RadioButton(i18n("Time:"), box, "templateTimeButton");
+		mTemplateUseTime = new RadioButton(i18n("Time:"), box);
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateUseTime,
 		      i18n("Specify a start time for alarms based on this template."));
-		mTemplateTimeGroup->insert(mTemplateUseTime);
-		mTemplateTime = new TimeEdit(box, "templateTimeEdit");
+		mTemplateTimeGroup->addButton(mTemplateUseTime);
+		mTemplateTime = new TimeEdit(box);
 		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
 		mTemplateTime->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateTime,
@@ -327,22 +335,23 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
-		mTemplateAnyTime = new RadioButton(i18n("An&y time"), mTemplateTimeGroup, "templateAnyTimeButton");
+		mTemplateAnyTime = new RadioButton(i18n("An&y time"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateAnyTime,
 		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
+		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
-		box = new Q3HBox(mTemplateTimeGroup);
+		box = new Q3HBox(templateTimeBox);
 		box->setSpacing(spacingHint());
-		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box, "templateFromNowButton");
+		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
 		Q3WhatsThis::add(mTemplateUseTimeAfter,
 		      i18n("Set alarms based on this template to start after the specified time "
 		           "interval from when the alarm is created."));
-		mTemplateTimeGroup->insert(mTemplateUseTimeAfter);
+		mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
 		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, box);
 		mTemplateTimeAfter->setValue(1439);
 		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
@@ -357,7 +366,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, mainPage, "timeGroup");
+		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, mainPage);
 		connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
@@ -525,22 +534,23 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 
 	// What to do with command output
 
-	mCmdOutputGroup = new ButtonGroup(i18n("Command Output"), mCommandFrame);
-	frameLayout->addWidget(mCmdOutputGroup);
-	QBoxLayout* layout = new QVBoxLayout(mCmdOutputGroup, marginHint(), spacingHint());
+	Q3GroupBox* cmdOutputBox = new Q3GroupBox(i18n("Command Output"), mCommandFrame);
+	frameLayout->addWidget(cmdOutputBox);
+	QBoxLayout* layout = new QVBoxLayout(cmdOutputBox, marginHint(), spacingHint());
 	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	mCmdOutputGroup = new ButtonGroup(cmdOutputBox);
 
 	// Execute in terminal window
-	RadioButton* button = new RadioButton(i18n_u_ExecInTermWindow(), mCmdOutputGroup, "execInTerm");
-	button->setFixedSize(button->sizeHint());
-	Q3WhatsThis::add(button, i18n("Check to execute the command in a terminal window"));
-	mCmdOutputGroup->insert(button, EXEC_IN_TERMINAL);
-	layout->addWidget(button, 0, Qt::AlignAuto);
+	mCmdExecInTerm = new RadioButton(i18n_u_ExecInTermWindow(), cmdOutputBox);
+	mCmdExecInTerm->setFixedSize(mCmdExecInTerm->sizeHint());
+	Q3WhatsThis::add(mCmdExecInTerm, i18n("Check to execute the command in a terminal window"));
+	mCmdOutputGroup->addButton(mCmdExecInTerm);
+	layout->addWidget(mCmdExecInTerm, 0, Qt::AlignAuto);
 
 	// Log file name edit box
-	Q3HBox* box = new Q3HBox(mCmdOutputGroup);
-	(new QWidget(box))->setFixedWidth(button->style().subRect(QStyle::SR_RadioButtonIndicator, button).width());   // indent the edit box
-//	(new QWidget(box))->setFixedWidth(button->style().pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
+	Q3HBox* box = new Q3HBox(cmdOutputBox);
+	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
+//	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style().pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
 	Q3WhatsThis::add(mCmdLogFileEdit, i18n("Enter the name or path of the log file."));
@@ -554,20 +564,20 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	Q3WhatsThis::add(browseButton, i18n("Select a log file."));
 
 	// Log output to file
-	button = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18n_g_LogToFile(), mCmdOutputGroup, "cmdLog");
-	button->setFixedSize(button->sizeHint());
-	Q3WhatsThis::add(button,
+	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18n_g_LogToFile(), mCmdOutputGroup, cmdOutputBox);
+	mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
+	Q3WhatsThis::add(mCmdLogToFile,
 	      i18n("Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
-	mCmdOutputGroup->insert(button, LOG_TO_FILE);
-	layout->addWidget(button, 0, Qt::AlignAuto);
+	mCmdOutputGroup->addButton(mCmdLogToFile);
+	layout->addWidget(mCmdLogToFile, 0, Qt::AlignAuto);
 	layout->addWidget(box);
 
 	// Discard output
-	button = new RadioButton(i18n("Discard"), mCmdOutputGroup, "cmdDiscard");
-	button->setFixedSize(button->sizeHint());
-	Q3WhatsThis::add(button, i18n("Check to discard command output."));
-	mCmdOutputGroup->insert(button, DISCARD_OUTPUT);
-	layout->addWidget(button, 0, Qt::AlignAuto);
+	mCmdDiscardOutput = new RadioButton(i18n("Discard"), cmdOutputBox);
+	mCmdDiscardOutput->setFixedSize(mCmdDiscardOutput->sizeHint());
+	Q3WhatsThis::add(mCmdDiscardOutput, i18n("Check to discard command output."));
+	mCmdOutputGroup->addButton(mCmdDiscardOutput);
+	layout->addWidget(mCmdDiscardOutput, 0, Qt::AlignAuto);
 
 	// Top-adjust the controls
 	mCmdPadding = new Q3HBox(mCommandFrame);
@@ -647,9 +657,9 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	mEmailAttachList = new QComboBox(true, mEmailFrame);
 	mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
 	mEmailAttachList->lineEdit()->setReadOnly(true);
-Q3ListBox* list = mEmailAttachList->listBox();
-QRect rect = list->geometry();
-list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
+//Q3ListBox* list = mEmailAttachList->listBox();
+//QRect rect = list->geometry();
+//list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	label->setBuddy(mEmailAttachList);
 	Q3WhatsThis::add(mEmailAttachList,
 	      i18n("Files to send as attachments to the email."));
@@ -715,10 +725,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			int afterTime = event->isTemplate() ? event->templateAfterTime() : -1;
 			bool noTime   = !afterTime;
 			bool useTime  = !event->mainDateTime().isDateOnly();
-			int button = mTemplateTimeGroup->id(noTime          ? mTemplateDefaultTime :
-			                                    (afterTime > 0) ? mTemplateUseTimeAfter :
-			                                    useTime         ? mTemplateUseTime : mTemplateAnyTime);
-			mTemplateTimeGroup->setButton(button);
+			RadioButton* button = noTime          ? mTemplateDefaultTime :
+			                      (afterTime > 0) ? mTemplateUseTimeAfter :
+			                      useTime         ? mTemplateUseTime : mTemplateAnyTime;
+			button->setChecked(true);
 			mTemplateTimeAfter->setValue(afterTime > 0 ? afterTime : 1);
 			if (!noTime && useTime)
 				mTemplateTime->setValue(event->mainDateTime().time());
@@ -800,12 +810,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		                            :                                                 SoundPicker::PLAY_FILE;
 		mSoundPicker->set((soundType != SoundPicker::BEEP || event->beep()), soundType, event->audioFile(),
 		                  event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
-		CmdLogType logType = event->commandXterm()       ? EXEC_IN_TERMINAL
-		                   : !event->logFile().isEmpty() ? LOG_TO_FILE
-		                   :                               DISCARD_OUTPUT;
-		if (logType == LOG_TO_FILE)
+		RadioButton* logType = event->commandXterm()       ? mCmdExecInTerm
+		                     : !event->logFile().isEmpty() ? mCmdLogToFile
+		                     :                               mCmdDiscardOutput;
+		if (logType == mCmdLogToFile)
 			mCmdLogFileEdit->setText(event->logFile());    // set file name before setting radio button
-		mCmdOutputGroup->setButton(logType);
+		logType->setChecked(true);
 		mEmailToEdit->setText(event->emailAddresses(", "));
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
@@ -829,13 +839,13 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		if (mTemplate)
 		{
-			mTemplateTimeGroup->setButton(mTemplateTimeGroup->id(mTemplateDefaultTime));
+			mTemplateDefaultTime->setChecked(true);
 			mTemplateTime->setValue(0);
 			mTemplateTimeAfter->setValue(1);
 		}
 		else
 			mTimeWidget->setDateTime(defaultTime);
-		mActionGroup->setButton(mActionGroup->id(mMessageRadio));
+		mMessageRadio->setChecked(true);
 		mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HOURS_MINUTES);
 		mLateCancel->showAutoClose(true);
 		mLateCancel->setAutoClose(Preferences::defaultAutoClose());
@@ -853,7 +863,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
 		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
-		mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
+		RadioButton* logType = Preferences::defaultCmdLogType() == Preferences::EXEC_IN_TERMINAL ? mCmdExecInTerm
+		                     : Preferences::defaultCmdLogType() == Preferences::LOG_TO_FILE      ? mCmdLogToFile
+		                     :                                                                     mCmdDiscardOutput;
+		logType->setChecked(true);
 		mEmailBcc->setChecked(Preferences::defaultEmailBcc());
 	}
 	slotCmdScriptToggled(mCmdTypeScript->isChecked());
@@ -916,8 +929,9 @@ void EditAlarmDlg::setReadOnly()
 	mCmdTypeScript->setReadOnly(mReadOnly);
 	mCmdCommandEdit->setReadOnly(mReadOnly);
 	mCmdScriptEdit->setReadOnly(mReadOnly);
-	for (int id = DISCARD_OUTPUT;  id < EXEC_IN_TERMINAL;  ++id)
-		((RadioButton*)mCmdOutputGroup->find(id))->setReadOnly(mReadOnly);
+	mCmdExecInTerm->setReadOnly(mReadOnly);
+	mCmdLogToFile->setReadOnly(mReadOnly);
+	mCmdDiscardOutput->setReadOnly(mReadOnly);
 
 	// Email alarm controls
 	mEmailToEdit->setReadOnly(mReadOnly);
@@ -989,7 +1003,7 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 			}
 			break;
 	}
-	mActionGroup->setButton(mActionGroup->id(radio));
+	radio->setChecked(true);
 }
 
 /******************************************************************************
@@ -1013,9 +1027,9 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(Q3HBox** box, QWidget* parent, 
 /******************************************************************************
  * Create an "acknowledgement confirmation required" checkbox.
  */
-CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* name)
+CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 {
-	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck(), parent, name);
+	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck(), parent);
 	Q3WhatsThis::add(widget,
 	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	return widget;
@@ -1032,11 +1046,11 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	if (mTemplate)
 	{
 		mSavedTemplateName      = mTemplateName->text();
-		mSavedTemplateTimeType  = mTemplateTimeGroup->selected();
+		mSavedTemplateTimeType  = mTemplateTimeGroup->checkedButton();
 		mSavedTemplateTime      = mTemplateTime->time();
 		mSavedTemplateAfterTime = mTemplateTimeAfter->value();
 	}
-	mSavedTypeRadio        = mActionGroup->selected();
+	mSavedTypeRadio        = mActionGroup->checkedButton();
 	mSavedSound            = mSoundPicker->sound();
 	mSavedSoundType        = mSoundPicker->type();
 	mSavedSoundFile        = mSoundPicker->file();
@@ -1055,7 +1069,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	}
 	checkText(mSavedTextFileCommandMessage, false);
 	mSavedCmdScript        = mCmdTypeScript->isChecked();
-	mSavedCmdOutputRadio   = mCmdOutputGroup->selected();
+	mSavedCmdOutputRadio   = mCmdOutputGroup->checkedButton();
 	mSavedCmdLogFile       = mCmdLogFileEdit->text();
 	if (mEmailFromList)
 		mSavedEmailFrom = mEmailFromList->currentIdentityName();
@@ -1094,7 +1108,7 @@ bool EditAlarmDlg::stateChanged() const
 	if (mTemplate)
 	{
 		if (mSavedTemplateName     != mTemplateName->text()
-		||  mSavedTemplateTimeType != mTemplateTimeGroup->selected()
+		||  mSavedTemplateTimeType != mTemplateTimeGroup->checkedButton()
 		||  mTemplateUseTime->isOn()  &&  mSavedTemplateTime != mTemplateTime->time()
 		||  mTemplateUseTimeAfter->isOn()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value())
 			return true;
@@ -1102,7 +1116,7 @@ bool EditAlarmDlg::stateChanged() const
 	else
 		if (mSavedDateTime != mTimeWidget->getDateTime(false, false))
 			return true;
-	if (mSavedTypeRadio        != mActionGroup->selected()
+	if (mSavedTypeRadio        != mActionGroup->checkedButton()
 	||  mSavedLateCancel       != mLateCancel->minutes()
 	||  mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
@@ -1151,9 +1165,9 @@ bool EditAlarmDlg::stateChanged() const
 	else if (mCommandRadio->isOn())
 	{
 		if (mSavedCmdScript      != mCmdTypeScript->isChecked()
-		||  mSavedCmdOutputRadio != mCmdOutputGroup->selected())
+		||  mSavedCmdOutputRadio != mCmdOutputGroup->checkedButton())
 			return true;
-		if (mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+		if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
 		{
 			if (mSavedCmdLogFile != mCmdLogFileEdit->text())
 				return true;
@@ -1252,7 +1266,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			break;
 		}
 		case KAEvent::COMMAND:
-			if (mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+			if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
 				event.setLogFile(mCmdLogFileEdit->text());
 			break;
 		default:
@@ -1309,7 +1323,7 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (displayAlarm && mConfirmAck->isChecked()                             ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()                           ? KAEvent::AUTO_CLOSE : 0)
 	     | (cmdAlarm     && mCmdTypeScript->isChecked()                          ? KAEvent::SCRIPT : 0)
-	     | (cmdAlarm     && mCmdOutputGroup->selectedId() == EXEC_IN_TERMINAL    ? KAEvent::EXEC_IN_XTERM : 0)
+	     | (cmdAlarm     && mCmdOutputGroup->checkedButton() == mCmdExecInTerm   ? KAEvent::EXEC_IN_XTERM : 0)
 	     | (emailAlarm   && mEmailBcc->isChecked()                               ? KAEvent::EMAIL_BCC : 0)
 	     | (mShowInKorganizer && mShowInKorganizer->isChecked()                  ? KAEvent::COPY_KORGANIZER : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN            ? KAEvent::REPEAT_AT_LOGIN : 0)
@@ -1532,7 +1546,7 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
-			if (mCommandRadio->isOn()  &&  mCmdOutputGroup->selectedId() != EXEC_IN_TERMINAL)
+			if (mCommandRadio->isOn()  &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
 			{
 				theApp()->commandMessage((ShellProcess*)proc, this);
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
@@ -1629,7 +1643,7 @@ void EditAlarmDlg::slotEditDeferral()
 */
 void EditAlarmDlg::slotShowMainPage()
 {
-	slotAlarmTypeChanged(-1);
+	slotAlarmTypeChanged(0);
 	if (!mMainPageShown)
 	{
 		if (mTemplateName)
@@ -1741,7 +1755,7 @@ void EditAlarmDlg::slotSetSimpleRepetition()
 */
 bool EditAlarmDlg::checkCommandData()
 {
-	if (mCommandRadio->isOn()  &&  mCmdOutputGroup->selectedId() == LOG_TO_FILE)
+	if (mCommandRadio->isOn()  &&  mCmdOutputGroup->checkedButton() == mCmdLogToFile)
 	{
 		// Validate the log file name
 		QString file = mCmdLogFileEdit->text();
@@ -1826,7 +1840,7 @@ bool EditAlarmDlg::checkEmailData()
 *  Called when one of the alarm action type radio buttons is clicked,
 *  to display the appropriate set of controls for that action type.
 */
-void EditAlarmDlg::slotAlarmTypeChanged(int)
+void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 {
 	bool displayAlarm = false;
 	QWidget* focus = 0;
@@ -1901,7 +1915,7 @@ void EditAlarmDlg::slotCmdScriptToggled(bool on)
 *  Called when one of the template time radio buttons is clicked,
 *  to enable or disable the template time entry spin boxes.
 */
-void EditAlarmDlg::slotTemplateTimeType(int)
+void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 {
 	mTemplateTime->setEnabled(mTemplateUseTime->isOn());
 	mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isOn());

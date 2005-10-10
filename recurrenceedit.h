@@ -36,6 +36,7 @@ class Q3GroupBox;
 class QLabel;
 class Q3ListBox;
 class Q3Button;
+class QAbstractButton;
 class QPushButton;
 class SpinBox;
 class CheckBox;

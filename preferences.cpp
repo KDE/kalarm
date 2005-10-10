@@ -79,7 +79,7 @@ const bool                       Preferences::default_defaultSoundRepeat      = 
 const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::BEEP;
 const bool                       Preferences::default_defaultConfirmAck       = false;
 const bool                       Preferences::default_defaultCmdScript        = false;
-const EditAlarmDlg::CmdLogType   Preferences::default_defaultCmdLogType       = EditAlarmDlg::DISCARD_OUTPUT;
+const Preferences::CmdLogType    Preferences::default_defaultCmdLogType       = Preferences::DISCARD_OUTPUT;
 const bool                       Preferences::default_defaultEmailBcc         = false;
 const QString                    Preferences::default_emailAddress            = QString::null;
 const QString                    Preferences::default_emailBccAddress         = QString::null;
@@ -138,7 +138,7 @@ bool                       Preferences::mDefaultSoundRepeat;
 bool                       Preferences::mDefaultConfirmAck;
 bool                       Preferences::mDefaultEmailBcc;
 bool                       Preferences::mDefaultCmdScript;
-EditAlarmDlg::CmdLogType   Preferences::mDefaultCmdLogType;
+Preferences::CmdLogType    Preferences::mDefaultCmdLogType;
 QString                    Preferences::mDefaultCmdLogFile;
 RecurrenceEdit::RepeatType Preferences::mDefaultRecurPeriod;
 TimePeriod::Units          Preferences::mDefaultReminderUnits;
@@ -344,8 +344,8 @@ void Preferences::read()
 	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultCmdScript         = config->readBoolEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
 	int logType               = config->readNumEntry(DEF_CMD_LOG_TYPE, default_defaultCmdLogType);
-	mDefaultCmdLogType        = (logType < EditAlarmDlg::DISCARD_OUTPUT || logType > EditAlarmDlg::EXEC_IN_TERMINAL)
-	                          ? default_defaultCmdLogType : (EditAlarmDlg::CmdLogType)logType;
+	mDefaultCmdLogType        = (logType < DISCARD_OUTPUT || logType > EXEC_IN_TERMINAL)
+	                          ? default_defaultCmdLogType : (CmdLogType)logType;
 	mDefaultCmdLogFile        = config->readPathEntry(DEF_LOG_FILE);
 	mDefaultEmailBcc          = config->readBoolEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
@@ -599,7 +599,7 @@ void Preferences::convertOldPrefs()
 	if (config->hasKey(DEF_CMD_XTERM))
 	{
 		config->writeEntry(DEF_CMD_LOG_TYPE,
-			(config->readBoolEntry(DEF_CMD_XTERM, false) ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT));
+			(config->readBoolEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
 		config->deleteEntry(DEF_CMD_XTERM);
 		sync = true;
 	}
