@@ -25,13 +25,13 @@
 #include <QPixmap>
 #include <ksystemtray.h>
 
+class QEvent;
 class QMouseEvent;
 class QDragEnterEvent;
 class QDropEvent;
 class KPopupMenu;
 class KAEvent;
 class MainWindow;
-class TrayTooltip;
 
 class TrayWindow : public KSystemTray
 {
@@ -57,6 +57,7 @@ class TrayWindow : public KSystemTray
 		virtual void mouseReleaseEvent(QMouseEvent*);
 		virtual void dragEnterEvent(QDragEnterEvent*);
 		virtual void dropEvent(QDropEvent*);
+		virtual bool event(QEvent*);
 
 	private slots:
 		void         slotNewAlarm();
@@ -65,11 +66,9 @@ class TrayWindow : public KSystemTray
 		void         setEnabledStatus(bool status);
 
 	private:
-		friend class TrayTooltip;
 
 		MainWindow*  mAssocMainWindow;     // main window associated with this, or null
 		QPixmap      mPixmapEnabled, mPixmapDisabled;
-		TrayTooltip* mTooltip;
 };
 
 #endif // TRAYWINDOW_H

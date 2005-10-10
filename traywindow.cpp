@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -54,16 +54,6 @@
 #include "preferences.h"
 #include "templatemenuaction.h"
 #include "traywindow.moc"
-
-
-class TrayTooltip : public QToolTip
-{
-	public:
-		TrayTooltip(QWidget* parent) : QToolTip(parent) { }
-		virtual ~TrayTooltip() {}
-	protected:
-		virtual void maybeTip(const QPoint&);
-};
 
 struct TipItem
 {
@@ -107,15 +97,11 @@ TrayWindow::TrayWindow(MainWindow* parent, const char* name)
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();
 	setEnabledStatus(Daemon::monitoringAlarms());
-
-	mTooltip = new TrayTooltip(this);
 }
 
 TrayWindow::~TrayWindow()
 {
 	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
-	delete mTooltip;
-	mTooltip = 0;
 	theApp()->removeWindow(this);
 	emit deleted();
 }
@@ -225,6 +211,29 @@ void TrayWindow::dropEvent(QDropEvent* e)
 }
 
 /******************************************************************************
+*  Called when any event occurs.
+*  If it's a tooltip event, display the tooltip text showing alarms due in the
+*  next 24 hours. The limit of 24 hours is because only times, not dates, are
+*  displayed.
+*/
+bool TrayWindow::event(QEvent* e)
+{
+	if (e->type() != QEvent::ToolTip)
+		return false;
+	QHelpEvent* he = (QHelpEvent*)e;
+	QString text;
+	if (Daemon::monitoringAlarms())
+		text = kapp->aboutData()->programName();
+	else
+		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
+	kdDebug(5950) << "TrayWindow::event(): " << text << endl;
+	if (Preferences::tooltipAlarmCount())
+		tooltipAlarmText(text);
+	QToolTip::showText(he->pos(), text);
+	return true;
+}
+
+/******************************************************************************
 *  Return the tooltip text showing alarms due in the next 24 hours.
 *  The limit of 24 hours is because only times, not dates, are displayed.
 */
@@ -238,7 +247,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	// Get today's and tomorrow's alarms, sorted in time order
 	Q3ValueList<TipItem> items;
 	Q3ValueList<TipItem>::Iterator iit;
-	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(now.date(), now.addDays(1));
+	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(QDateTime(now.date()), now.addDays(1));
 	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
 		KCal::Event* kcalEvent = *it;
@@ -348,22 +357,4 @@ bool TrayWindow::inSystemTray() const
 #else
 	return true;
 #endif // HAVE_X11_HEADERS
-}
-
-
-/******************************************************************************
-*  Displays the appropriate tooltip depending on preference settings.
-*/
-void TrayTooltip::maybeTip(const QPoint&)
-{
-	TrayWindow* parent = (TrayWindow*)parentWidget();
-	QString text;
-	if (Daemon::monitoringAlarms())
-		text = kapp->aboutData()->programName();
-	else
-		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
-	kdDebug(5950) << "TrayTooltip::maybeTip(): " << text << endl;
-	if (Preferences::tooltipAlarmCount())
-		parent->tooltipAlarmText(text);
-	tip(parent->rect(), text);
 }
