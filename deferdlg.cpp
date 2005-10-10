@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
 
-	mTimeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page, "timeGroup");
+	mTimeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page);
 	mTimeWidget->setDateTime(initialDT);
 	mTimeWidget->setMinDateTimeIsCurrent();
 	connect(mTimeWidget, SIGNAL(pastMax()), SLOT(slotPastLimit()));

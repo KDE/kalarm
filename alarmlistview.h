@@ -24,9 +24,9 @@
 #include "kalarm.h"
 #include "eventlistviewbase.h"
 
+class Event;
 class QMouseEvent;
 class AlarmListView;
-class AlarmListTooltip;
 
 
 class AlarmListViewItem : public EventListViewItemBase
@@ -110,6 +110,7 @@ class AlarmListView : public EventListViewBase
 		                               { return addEntry(e, QDateTime::currentDateTime(), setSize); }
 		AlarmListViewItem*     updateEntry(AlarmListViewItem* item, const KAEvent& newEvent, bool setSize = false)
 		                               { return (AlarmListViewItem*)EventListViewBase::updateEntry(item, newEvent, setSize); }
+		virtual bool           event(QEvent*);
 		virtual void           contentsMousePressEvent(QMouseEvent*);
 		virtual void           contentsMouseMoveEvent(QMouseEvent*);
 		virtual void           contentsMouseReleaseEvent(QMouseEvent*);
@@ -127,7 +128,6 @@ class AlarmListView : public EventListViewBase
 		int                    mMessageColumn;        // index to message column
 		int                    mTimeColumnHeaderWidth;
 		int                    mTimeToColumnHeaderWidth;
-		AlarmListTooltip*      mTooltip;              // tooltip for showing full text of alarm messages
 		QPoint                 mMousePressPos;        // where the mouse left button was last pressed
 		bool                   mMousePressed;         // true while the mouse left button is pressed
 		bool                   mDrawMessageInColour;

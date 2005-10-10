@@ -549,8 +549,9 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 
 	// Log file name edit box
 	Q3HBox* box = new Q3HBox(cmdOutputBox);
-	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
-//	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style().pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
+#warning Check pixelMetric() / subRect()
+//	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
+	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
 	Q3WhatsThis::add(mCmdLogFileEdit, i18n("Enter the name or path of the log file."));

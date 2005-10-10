@@ -80,7 +80,8 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	setFrameStyle(Q3Frame::NoFrame);
+#warning setFrameStyle() ??
+//	setFrameStyle(Q3Frame::NoFrame);
 	init(mode);
 }
 

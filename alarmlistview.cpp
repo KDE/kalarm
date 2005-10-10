@@ -45,16 +45,6 @@
 #include "alarmlistview.moc"
 
 
-class AlarmListTooltip : public QToolTip
-{
-	public:
-		AlarmListTooltip(QWidget* parent) : QToolTip(parent) { }
-		virtual ~AlarmListTooltip() {}
-	protected:
-		virtual void maybeTip(const QPoint&);
-};
-
-
 /*=============================================================================
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
@@ -98,14 +88,10 @@ AlarmListView::AlarmListView(QWidget* parent, const char* name)
 	setColumnWidthMode(mTypeColumn, Q3ListView::Manual);
 
 	mInstanceList.append(this);
-
-	mTooltip = new AlarmListTooltip(viewport());
 }
 
 AlarmListView::~AlarmListView()
 {
-	delete mTooltip;
-	mTooltip = 0;
 	mInstanceList.remove(this);
 }
 
@@ -332,6 +318,41 @@ void AlarmListView::contentsMouseReleaseEvent(QMouseEvent *e)
 	Q3ListView::contentsMouseReleaseEvent(e);
 	mMousePressed = false;
 	mDragging     = false;
+}
+
+/******************************************************************************
+*  Called when any event occurs.
+*  Displays the full alarm text in a tooltip, if not all the text is displayed.
+*/
+bool AlarmListView::event(QEvent *e)
+{
+	if (e->type() == QEvent::ToolTip)
+	{
+		QHelpEvent* he = (QHelpEvent*)e;
+		QPoint pt = he->pos();
+		int xOffset = contentsX();
+		if (header()->sectionAt(pt.x() + xOffset) == mMessageColumn)
+		{
+			AlarmListViewItem* item = (AlarmListViewItem*)itemAt(pt);
+			if (item)
+			{
+				int columnX = header()->sectionPos(mMessageColumn) - xOffset;
+				int colWidth = columnWidth(mMessageColumn);
+				int widthNeeded = item->messageColWidthNeeded();
+				if (!item->messageTruncated()  &&  colWidth >= widthNeeded)
+				{
+					if (columnX + widthNeeded <= viewport()->width())
+						return false;
+				}
+//				QRect rect = itemRect(item);
+//				rect.setLeft(columnX);
+//				rect.setWidth(colWidth);
+				kdDebug(5950) << "AlarmListView::event(): display\n";
+				QToolTip::showText(pt, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
+			}
+		}
+	}
+	return false;
 }
 
 
@@ -580,7 +601,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 */
 int AlarmListViewItem::typeIconWidth(AlarmListView* v)
 {
-	return iconWidth() +  2 * v->style().pixelMetric(QStyle::PM_DefaultFrameWidth);
+	return iconWidth() +  2 * v->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 }
 
 /******************************************************************************
@@ -600,40 +621,3 @@ QString AlarmListViewItem::key(int column, bool) const
 		return mTypeOrder;
 	return text(column).lower();
 }
-
-
-/*=============================================================================
-=  Class: AlarmListTooltip
-=  Displays the full alarm text in a tooltip when necessary.
-=============================================================================*/
-
-/******************************************************************************
-*  Displays the full alarm text in a tooltip, if not all the text is displayed.
-*/
-void AlarmListTooltip::maybeTip(const QPoint& pt)
-{
-	AlarmListView* listView = (AlarmListView*)parentWidget()->parentWidget();
-	int column = listView->messageColumn();
-	int xOffset = listView->contentsX();
-	if (listView->header()->sectionAt(pt.x() + xOffset) == column)
-	{
-		AlarmListViewItem* item = (AlarmListViewItem*)listView->itemAt(pt);
-		if (item)
-		{
-			int columnX = listView->header()->sectionPos(column) - xOffset;
-			int columnWidth = listView->columnWidth(column);
-			int widthNeeded = item->messageColWidthNeeded();
-			if (!item->messageTruncated()  &&  columnWidth >= widthNeeded)
-			{
-				if (columnX + widthNeeded <= listView->viewport()->width())
-					return;
-			}
-			QRect rect = listView->itemRect(item);
-			rect.setLeft(columnX);
-			rect.setWidth(columnWidth);
-			kdDebug(5950) << "AlarmListTooltip::maybeTip(): display\n";
-			tip(rect, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
-		}
-	}
-}
-

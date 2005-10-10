@@ -35,6 +35,7 @@ class Q3Frame;
 class QLabel;
 class QShowEvent;
 class QResizeEvent;
+class QAbstractButton;
 class Q3Button;
 class Q3GroupBox;
 class QComboBox;
