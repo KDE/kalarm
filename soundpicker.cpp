@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,22 +78,21 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 
 	// Sound type
 	mTypeGroup = new ButtonGroup(this);
-	mTypeGroup->hide();
-	connect(mTypeGroup, SIGNAL(buttonSet(int)), SLOT(slotTypeChanged(int)));
+	connect(mTypeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTypeChanged(QAbstractButton*)));
 
 	// Beep radio button
-	mBeepRadio = new RadioButton(i18n_Beep(), this, "beepButton");
+	mBeepRadio = new RadioButton(i18n_Beep(), this);
 	mBeepRadio->setFixedSize(mBeepRadio->sizeHint());
 	Q3WhatsThis::add(mBeepRadio, i18n("If checked, a beep will sound when the alarm is displayed."));
-	mTypeGroup->insert(mBeepRadio, BEEP);
+	mTypeGroup->addButton(mBeepRadio);
 	soundLayout->addWidget(mBeepRadio);
 
 	// File radio button
 	Q3HBox* box = new Q3HBox(this);
-	mFileRadio = new RadioButton(i18n_File(), box, "audioFileButton");
+	mFileRadio = new RadioButton(i18n_File(), box);
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	Q3WhatsThis::add(mFileRadio, i18n("If checked, a sound file will be played when the alarm is displayed."));
-	mTypeGroup->insert(mFileRadio, PLAY_FILE);
+	mTypeGroup->addButton(mFileRadio);
 
 	// Sound file picker button
 	mFilePicker = new PushButton(box);
@@ -106,10 +105,10 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	box->setFocusProxy(mFileRadio);
 
 	// Speak radio button
-	mSpeakRadio = new RadioButton(i18n_p_Speak(), this, "speakButton");
+	mSpeakRadio = new RadioButton(i18n_p_Speak(), this);
 	mSpeakRadio->setFixedSize(mSpeakRadio->sizeHint());
 	Q3WhatsThis::add(mSpeakRadio, i18n("If checked, the message will be spoken when the alarm is displayed."));
-	mTypeGroup->insert(mSpeakRadio, SPEAK);
+	mTypeGroup->addButton(mSpeakRadio);
 	soundLayout->addWidget(mSpeakRadio);
 
 	if (!theApp()->speechEnabled())
@@ -171,7 +170,8 @@ bool SoundPicker::sound() const
 */
 SoundPicker::Type SoundPicker::type() const
 {
-	return static_cast<SoundPicker::Type>(mTypeGroup->selectedId());
+	QAbstractButton* button = mTypeGroup->checkedButton();
+	return (button == mSpeakRadio) ? SPEAK : (button == mFileRadio) ? PLAY_FILE : BEEP;
 }
 
 /******************************************************************************
@@ -235,7 +235,7 @@ void SoundPicker::set(bool sound, SoundPicker::Type defaultType, const QString& 
 {
 	if (defaultType == PLAY_FILE  &&  f.isEmpty())
 		defaultType = BEEP;
-	mLastType    = static_cast<Type>(0);
+	mLastButton  = 0;
 	mFile        = f;
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
@@ -243,7 +243,15 @@ void SoundPicker::set(bool sound, SoundPicker::Type defaultType, const QString& 
 	mRepeat      = repeat;
 	QToolTip::add(mFilePicker, mFile);
 	mCheckbox->setChecked(sound);
-	mTypeGroup->setButton(defaultType);
+	RadioButton* button;
+	switch (defaultType)
+	{
+		case PLAY_FILE:  button = mFileRadio;  break;
+		case SPEAK:      button = mSpeakRadio; break;
+		case BEEP:
+		default:         button = mBeepRadio;  break;
+	}
+	button->setChecked(true);
 }
 
 /******************************************************************************
@@ -264,14 +272,13 @@ void SoundPicker::slotSoundToggled(bool on)
 /******************************************************************************
 * Called when the sound option is changed.
 */
-void SoundPicker::slotTypeChanged(int id)
+void SoundPicker::slotTypeChanged(QAbstractButton* button)
 {
-	Type newType = static_cast<Type>(id);
-	if (newType == mLastType  ||  mRevertType)
+	if (button == mLastButton  ||  mRevertType)
 		return;
-	if (mLastType == PLAY_FILE)
+	if (mLastButton == mFileRadio)
 		mFilePicker->setEnabled(false);
-	else if (newType == PLAY_FILE)
+	else if (button == mFileRadio)
 	{
 		if (mFile.isEmpty())
 		{
@@ -281,7 +288,7 @@ void SoundPicker::slotTypeChanged(int id)
 		}
 		mFilePicker->setEnabled(mCheckbox->isChecked());
 	}
-	mLastType = newType;
+	mLastButton = static_cast<RadioButton*>(button);
 }
 
 /******************************************************************************
@@ -331,7 +338,7 @@ void SoundPicker::slotPickFile()
 */
 void SoundPicker::setLastType()
 {
-	mTypeGroup->setButton(mLastType);
+	mLastButton->setChecked(true);
 	mRevertType = false;
 }
 

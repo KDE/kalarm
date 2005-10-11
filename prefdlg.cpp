@@ -54,6 +54,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
+#include "buttongroup.h"
 #include "editdlg.h"
 #include "fontcolour.h"
 #include "functions.h"
@@ -584,14 +585,13 @@ EmailPrefTab::EmailPrefTab(Q3VBox* frame)
 	box->setSpacing(2*KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Email client:"), box);
 	mEmailClient = new ButtonGroup(box);
-	mEmailClient->hide();
-	RadioButton* radio = new RadioButton(i18n("&KMail"), box, "kmail");
-	radio->setMinimumSize(radio->sizeHint());
-	mEmailClient->insert(radio, Preferences::KMAIL);
-	radio = new RadioButton(i18n("&Sendmail"), box, "sendmail");
-	radio->setMinimumSize(radio->sizeHint());
-	mEmailClient->insert(radio, Preferences::SENDMAIL);
-	connect(mEmailClient, SIGNAL(buttonSet(int)), SLOT(slotEmailClientChanged(int)));
+	mKMailButton = new RadioButton(i18n("&KMail"), box);
+	mKMailButton->setMinimumSize(mKMailButton->sizeHint());
+	mEmailClient->addButton(mKMailButton);
+	mSendmailButton = new RadioButton(i18n("&Sendmail"), box);
+	mSendmailButton->setMinimumSize(mSendmailButton->sizeHint());
+	mEmailClient->addButton(mSendmailButton);
+	connect(mEmailClient, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotEmailClientChanged(QAbstractButton*)));
 	box->setFixedHeight(box->sizeHint().height());
 	Q3WhatsThis::add(box,
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
@@ -619,40 +619,39 @@ EmailPrefTab::EmailPrefTab(Q3VBox* frame)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mFromAddressGroup = new ButtonGroup(group);
-	mFromAddressGroup->hide();
-	connect(mFromAddressGroup, SIGNAL(buttonSet(int)), SLOT(slotFromAddrChanged(int)));
+	connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));
 
 	// Line edit to enter a 'From' email address
-	radio = new RadioButton(group);
-	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_ADDR);
-	radio->setFixedSize(radio->sizeHint());
-	label->setBuddy(radio);
-	grid->addWidget(radio, 1, 1);
+	mFromAddrButton = new RadioButton(group);
+	mFromAddressGroup->addButton(mFromAddrButton);
+	mFromAddrButton->setFixedSize(mFromAddrButton->sizeHint());
+	label->setBuddy(mFromAddrButton);
+	grid->addWidget(mFromAddrButton, 1, 1);
 	mEmailAddress = new QLineEdit(group);
 	connect(mEmailAddress, SIGNAL(textChanged(const QString&)), SLOT(slotAddressChanged()));
 	QString whatsThis = i18n("Your email address, used to identify you as the sender when sending email alarms.");
-	Q3WhatsThis::add(radio, whatsThis);
+	Q3WhatsThis::add(mFromAddrButton, whatsThis);
 	Q3WhatsThis::add(mEmailAddress, whatsThis);
-	radio->setFocusWidget(mEmailAddress);
+	mFromAddrButton->setFocusWidget(mEmailAddress);
 	grid->addWidget(mEmailAddress, 1, 2);
 
 	// 'From' email address to be taken from Control Centre
-	radio = new RadioButton(i18n("&Use address from Control Center"), group);
-	radio->setFixedSize(radio->sizeHint());
-	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
-	Q3WhatsThis::add(radio,
+	mFromCCentreButton = new RadioButton(i18n("&Use address from Control Center"), group);
+	mFromCCentreButton->setFixedSize(mFromCCentreButton->sizeHint());
+	mFromAddressGroup->addButton(mFromCCentreButton);
+	Q3WhatsThis::add(mFromCCentreButton,
 	      i18n("Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
-	grid->addMultiCellWidget(radio, 2, 2, 1, 2, Qt::AlignLeft);
+	grid->addMultiCellWidget(mFromCCentreButton, 2, 2, 1, 2, Qt::AlignLeft);
 
 	// 'From' email address to be picked from KMail's identities when the email alarm is configured
-	radio = new RadioButton(i18n("Use KMail &identities"), group);
-	radio->setFixedSize(radio->sizeHint());
-	mFromAddressGroup->insert(radio, Preferences::MAIL_FROM_KMAIL);
-	Q3WhatsThis::add(radio,
+	mFromKMailButton = new RadioButton(i18n("Use KMail &identities"), group);
+	mFromKMailButton->setFixedSize(mFromKMailButton->sizeHint());
+	mFromAddressGroup->addButton(mFromKMailButton);
+	Q3WhatsThis::add(mFromKMailButton,
 	      i18n("Check to use KMail's email identities to identify you as the sender when sending email alarms. "
 	           "For existing email alarms, KMail's default identity will be used. "
 	           "For new email alarms, you will be able to pick which of KMail's identities to use."));
-	grid->addMultiCellWidget(radio, 3, 3, 1, 2, Qt::AlignLeft);
+	grid->addMultiCellWidget(mFromKMailButton, 3, 3, 1, 2, Qt::AlignLeft);
 
 	// 'Bcc' email address controls ...
 	grid->addRowSpacing(4, KDialog::spacingHint());
@@ -660,30 +659,29 @@ EmailPrefTab::EmailPrefTab(Q3VBox* frame)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 5, 0);
 	mBccAddressGroup = new ButtonGroup(group);
-	mBccAddressGroup->hide();
-	connect(mBccAddressGroup, SIGNAL(buttonSet(int)), SLOT(slotBccAddrChanged(int)));
+	connect(mBccAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotBccAddrChanged(QAbstractButton*)));
 
 	// Line edit to enter a 'Bcc' email address
-	radio = new RadioButton(group);
-	radio->setFixedSize(radio->sizeHint());
-	mBccAddressGroup->insert(radio, Preferences::MAIL_FROM_ADDR);
-	label->setBuddy(radio);
-	grid->addWidget(radio, 5, 1);
+	mBccAddrButton = new RadioButton(group);
+	mBccAddrButton->setFixedSize(mBccAddrButton->sizeHint());
+	mBccAddressGroup->addButton(mBccAddrButton);
+	label->setBuddy(mBccAddrButton);
+	grid->addWidget(mBccAddrButton, 5, 1);
 	mEmailBccAddress = new QLineEdit(group);
 	whatsThis = i18n("Your email address, used for blind copying email alarms to yourself. "
 	                 "If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name.");
-	Q3WhatsThis::add(radio, whatsThis);
+	Q3WhatsThis::add(mBccAddrButton, whatsThis);
 	Q3WhatsThis::add(mEmailBccAddress, whatsThis);
-	radio->setFocusWidget(mEmailBccAddress);
+	mBccAddrButton->setFocusWidget(mEmailBccAddress);
 	grid->addWidget(mEmailBccAddress, 5, 2);
 
 	// 'Bcc' email address to be taken from Control Centre
-	radio = new RadioButton(i18n("Us&e address from Control Center"), group);
-	radio->setFixedSize(radio->sizeHint());
-	mBccAddressGroup->insert(radio, Preferences::MAIL_FROM_CONTROL_CENTRE);
-	Q3WhatsThis::add(radio,
+	mBccCCentreButton = new RadioButton(i18n("Us&e address from Control Center"), group);
+	mBccCCentreButton->setFixedSize(mBccCCentreButton->sizeHint());
+	mBccAddressGroup->addButton(mBccCCentreButton);
+	Q3WhatsThis::add(mBccCCentreButton,
 	      i18n("Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
-	grid->addMultiCellWidget(radio, 6, 6, 1, 2, Qt::AlignLeft);
+	grid->addMultiCellWidget(mBccCCentreButton, 6, 6, 1, 2, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -701,7 +699,8 @@ EmailPrefTab::EmailPrefTab(Q3VBox* frame)
 
 void EmailPrefTab::restore()
 {
-	mEmailClient->setButton(Preferences::mEmailClient);
+	RadioButton* button = (Preferences::mEmailClient == Preferences::KMAIL) ? mKMailButton : mSendmailButton;
+	button->setChecked(true);
 	mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
 	setEmailAddress(Preferences::mEmailFrom, Preferences::mEmailAddress);
 	setEmailBccAddress((Preferences::mEmailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::mEmailBccAddress);
@@ -711,18 +710,21 @@ void EmailPrefTab::restore()
 
 void EmailPrefTab::apply(bool syncToDisc)
 {
-	int client = mEmailClient->id(mEmailClient->selected());
-	Preferences::mEmailClient = (client >= 0) ? Preferences::MailClient(client) : Preferences::default_emailClient;
+	QAbstractButton* button = mEmailClient->checkedButton();
+	Preferences::mEmailClient = (button == mKMailButton)    ? Preferences::KMAIL
+	                          : (button == mSendmailButton) ? Preferences::SENDMAIL
+	                          :                               Preferences::default_emailClient;
 	Preferences::mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
-	Preferences::setEmailAddress(static_cast<Preferences::MailFrom>(mFromAddressGroup->selectedId()), mEmailAddress->text().stripWhiteSpace());
-	Preferences::setEmailBccAddress((mBccAddressGroup->selectedId() == Preferences::MAIL_FROM_CONTROL_CENTRE), mEmailBccAddress->text().stripWhiteSpace());
+	Preferences::setEmailAddress(fromAddressType(), mEmailAddress->text().stripWhiteSpace());
+	Preferences::setEmailBccAddress((mBccAddressGroup->checkedButton() == mBccCCentreButton), mEmailBccAddress->text().stripWhiteSpace());
 	Preferences::setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void EmailPrefTab::setDefaults()
 {
-	mEmailClient->setButton(Preferences::default_emailClient);
+	RadioButton* button = (Preferences::default_emailClient == Preferences::KMAIL) ? mKMailButton : mSendmailButton;
+	button->setChecked(true);
 	setEmailAddress(Preferences::default_emailFrom(), Preferences::default_emailAddress);
 	setEmailBccAddress((Preferences::default_emailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::default_emailBccAddress);
 	mEmailQueuedNotify->setChecked(Preferences::default_emailQueuedNotify);
@@ -730,30 +732,54 @@ void EmailPrefTab::setDefaults()
 
 void EmailPrefTab::setEmailAddress(Preferences::MailFrom from, const QString& address)
 {
-	mFromAddressGroup->setButton(from);
+	RadioButton* button;
+	switch (from)
+	{
+		case Preferences::MAIL_FROM_CONTROL_CENTRE:  button = mFromCCentreButton;  break;
+		case Preferences::MAIL_FROM_KMAIL:           button = mFromKMailButton;  break;
+		case Preferences::MAIL_FROM_ADDR:
+		default:                                     button = mFromAddrButton;  break;
+	}
+	button->setChecked(true);
 	mEmailAddress->setText(from == Preferences::MAIL_FROM_ADDR ? address.stripWhiteSpace() : QString());
 }
 
 void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
 {
-	mBccAddressGroup->setButton(useControlCentre ? Preferences::MAIL_FROM_CONTROL_CENTRE : Preferences::MAIL_FROM_ADDR);
+	RadioButton* button = useControlCentre ? mBccCCentreButton : mBccAddrButton;
+	button->setChecked(true);
 	mEmailBccAddress->setText(useControlCentre ? QString() : address.stripWhiteSpace());
 }
 
-void EmailPrefTab::slotEmailClientChanged(int id)
+Preferences::MailFrom EmailPrefTab::fromAddressType() const
 {
-	mEmailCopyToKMail->setEnabled(id == Preferences::SENDMAIL);
+	QAbstractButton* button = mFromAddressGroup->checkedButton();
+	return (button == mFromCCentreButton) ? Preferences::MAIL_FROM_CONTROL_CENTRE
+	     : (button == mFromKMailButton)   ? Preferences::MAIL_FROM_KMAIL
+	     :                                  Preferences::MAIL_FROM_ADDR;
 }
 
-void EmailPrefTab::slotFromAddrChanged(int id)
+Preferences::MailFrom EmailPrefTab::bccAddressType() const
 {
-	mEmailAddress->setEnabled(id == Preferences::MAIL_FROM_ADDR);
+	QAbstractButton* button = mBccAddressGroup->checkedButton();
+	return (button == mBccCCentreButton) ? Preferences::MAIL_FROM_CONTROL_CENTRE
+	     :                                 Preferences::MAIL_FROM_ADDR;
+}
+
+void EmailPrefTab::slotEmailClientChanged(QAbstractButton* button)
+{
+	mEmailCopyToKMail->setEnabled(button == mSendmailButton);
+}
+
+void EmailPrefTab::slotFromAddrChanged(QAbstractButton* button)
+{
+	mEmailAddress->setEnabled(button == mFromAddrButton);
 	mAddressChanged = true;
 }
 
-void EmailPrefTab::slotBccAddrChanged(int id)
+void EmailPrefTab::slotBccAddrChanged(QAbstractButton* button)
 {
-	mEmailBccAddress->setEnabled(id == Preferences::MAIL_FROM_ADDR);
+	mEmailBccAddress->setEnabled(button == mBccAddrButton);
 	mBccAddressChanged = true;
 }
 
@@ -762,22 +788,22 @@ QString EmailPrefTab::validate()
 	if (mAddressChanged)
 	{
 		mAddressChanged = false;
-		QString errmsg = validateAddr(mFromAddressGroup, mEmailAddress, KAMail::i18n_NeedFromEmailAddress());
+		QString errmsg = validateAddr(fromAddressType(), mEmailAddress, KAMail::i18n_NeedFromEmailAddress());
 		if (!errmsg.isEmpty())
 			return errmsg;
 	}
 	if (mBccAddressChanged)
 	{
 		mBccAddressChanged = false;
-		return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
+		return validateAddr(bccAddressType(), mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
 	}
 	return QString::null;
 }
 
-QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
+QString EmailPrefTab::validateAddr(Preferences::MailFrom from, QLineEdit* addr, const QString& msg)
 {
 	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(msg);
-	switch (group->selectedId())
+	switch (from)
 	{
 		case Preferences::MAIL_FROM_CONTROL_CENTRE:
 			if (!KAMail::controlCentreAddress().isEmpty())
@@ -1082,7 +1108,7 @@ void EditPrefTab::restore()
 	mSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
 #endif
 	mCmdScript->setChecked(Preferences::mDefaultCmdScript);
-	mCmdXterm->setChecked(Preferences::mDefaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
+	mCmdXterm->setChecked(Preferences::mDefaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
 	mEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
 	mCopyToKOrganizer->setChecked(Preferences::mDefaultCopyToKOrganizer);
 	mLateCancel->setChecked(Preferences::mDefaultLateCancel);
@@ -1106,7 +1132,7 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
 #endif
 	Preferences::mDefaultCmdScript        = mCmdScript->isChecked();
-	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
+	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? Preferences::EXEC_IN_TERMINAL : Preferences::DISCARD_OUTPUT);
 	Preferences::mDefaultEmailBcc         = mEmailBcc->isChecked();
 	Preferences::mDefaultCopyToKOrganizer = mCopyToKOrganizer->isChecked();
 	Preferences::mDefaultLateCancel       = mLateCancel->isChecked() ? 1 : 0;
@@ -1139,7 +1165,7 @@ void EditPrefTab::setDefaults()
 	mSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
 #endif
 	mCmdScript->setChecked(Preferences::default_defaultCmdScript);
-	mCmdXterm->setChecked(Preferences::default_defaultCmdLogType == EditAlarmDlg::EXEC_IN_TERMINAL);
+	mCmdXterm->setChecked(Preferences::default_defaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
 	mEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
 	mCopyToKOrganizer->setChecked(Preferences::default_defaultCopyToKOrganizer);
 	mLateCancel->setChecked(Preferences::default_defaultLateCancel);
@@ -1298,7 +1324,7 @@ ViewPrefTab::ViewPrefTab(Q3VBox* frame)
 	box = new Q3HBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
-	mDaemonTrayCheckInterval = new SpinBox(1, 9999, 1, box, "daemonCheck");
+	mDaemonTrayCheckInterval = new SpinBox(1, 9999, 1, box);
 	mDaemonTrayCheckInterval->setSingleShiftStep(10);
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
 	label->setBuddy(mDaemonTrayCheckInterval);

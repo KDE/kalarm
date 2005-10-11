@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <kurl.h>
 
 class ButtonGroup;
+class QAbstractButton;
 class CheckBox;
 class PushButton;
 class RadioButton;
@@ -123,12 +124,11 @@ class SoundPicker : public Q3Frame
 
 	private slots:
 		void           slotSoundToggled(bool on);
-		void           slotTypeChanged(int id);
+		void           slotTypeChanged(QAbstractButton*);
 		void           slotPickFile();
 		void           setLastType();
 
 	private:
-
 		CheckBox*      mCheckbox;
 		ButtonGroup*   mTypeGroup;
 		RadioButton*   mBeepRadio;
@@ -140,7 +140,7 @@ class SoundPicker : public Q3Frame
 		float          mVolume;       // volume for file, or < 0 to not set volume
 		float          mFadeVolume;   // initial volume for file, or < 0 for no fading
 		int            mFadeSeconds;  // fade interval in seconds
-		Type           mLastType;     // last selected sound option
+		RadioButton*   mLastButton;   // last selected sound option
 		bool           mRevertType;   // reverting to last selected sound option
 		bool           mRepeat;       // repeat the sound file
 		bool           mReadOnly;

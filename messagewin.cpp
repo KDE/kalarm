@@ -131,7 +131,10 @@ class MWMimeSourceFactory : public Q3MimeSourceFactory
 
 
 // Basic flags for the window
-static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
+static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
+static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
+static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
+static const Qt::WidgetAttribute WidgetFlags2 = Qt::WA_GroupLeader;
 
 
 Q3ValueList<MessageWin*> MessageWin::mWindowList;
@@ -144,8 +147,8 @@ Q3ValueList<MessageWin*> MessageWin::mWindowList;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
-	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
-	                                         | (Preferences::modalMessages() ? 0 : Qt::WX11BypassWM)),
+	: MainWindowBase(0, "MessageWin",
+	                 static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (Preferences::modalMessages() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event.cleanText()),
 	  mFont(event.font()),
 	  mBgColour(event.bgColour()),
@@ -187,6 +190,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
+	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	// Set to save settings automatically, but don't save window size.
 	// File alarm window size is saved elsewhere.
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"), false);
@@ -198,7 +202,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 *  Construct the message window for a specified error message.
 */
 MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, const QStringList& errmsgs)
-	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp),
+	: MainWindowBase(0, "MessageWin", WFLAGS | WFLAGS2),
 	  mMessage(event.cleanText()),
 	  mDateTime(alarmDateTime),
 	  mEventID(event.id()),
@@ -228,6 +232,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
+	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	initView();
 	mWindowList.append(this);
 }
@@ -252,6 +257,7 @@ MessageWin::MessageWin()
 	  mNoCloseConfirm(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
+	setAttribute(WidgetFlags);
 	mWindowList.append(this);
 }
 

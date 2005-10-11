@@ -31,6 +31,7 @@
 
 class Q3ButtonGroup;
 class QCheckBox;
+class QAbstractButton;
 class QRadioButton;
 class QPushButton;
 class QComboBox;
@@ -154,20 +155,29 @@ class EmailPrefTab : public PrefsTabBase
 		virtual void setDefaults();
 
 	private slots:
-		void         slotEmailClientChanged(int);
-		void         slotFromAddrChanged(int);
-		void         slotBccAddrChanged(int);
+		void         slotEmailClientChanged(QAbstractButton*);
+		void         slotFromAddrChanged(QAbstractButton*);
+		void         slotBccAddrChanged(QAbstractButton*);
 		void         slotAddressChanged()    { mAddressChanged = true; }
 
 	private:
 		void         setEmailAddress(Preferences::MailFrom, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
-		QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
+		Preferences::MailFrom fromAddressType() const;
+		Preferences::MailFrom bccAddressType() const;
+		QString      validateAddr(Preferences::MailFrom, QLineEdit* addr, const QString& msg);
 
 		ButtonGroup*   mEmailClient;
+		RadioButton*   mKMailButton;
+		RadioButton*   mSendmailButton;
 		ButtonGroup*   mFromAddressGroup;
+		RadioButton*   mFromAddrButton;
+		RadioButton*   mFromCCentreButton;
+		RadioButton*   mFromKMailButton;
 		QLineEdit*     mEmailAddress;
 		ButtonGroup*   mBccAddressGroup;
+		RadioButton*   mBccAddrButton;
+		RadioButton*   mBccCCentreButton;
 		QLineEdit*     mEmailBccAddress;
 		QCheckBox*     mEmailQueuedNotify;
 		QCheckBox*     mEmailCopyToKMail;
