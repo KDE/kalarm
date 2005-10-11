@@ -20,23 +20,9 @@
 
 #include "kalarm.h"
 
-#include <qvalidator.h>
 #include <klocale.h>
 
 #include "timespinbox.moc"
-
-
-class TimeSpinBox::TimeValidator : public QValidator
-{
-	public:
-		TimeValidator(int minMin, int maxMin, QWidget* parent, const char* name = 0)
-			: QValidator(parent, name),
-		          minMinute(minMin), maxMinute(maxMin), m12Hour(false), mPm(false) { }
-		virtual State validate(QString&, int&) const;
-		int  minMinute, maxMinute;
-		bool m12Hour;
-		bool mPm;
-};
 
 
 /*=============================================================================
@@ -61,9 +47,6 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
 	  mInvalid(false),
 	  mEnteredSetValue(false)
 {
-	mValidator = new TimeValidator(0, 1439, this, "TimeSpinBox validator");
-	mValidator->m12Hour = m12Hour;
-	setValidator(mValidator);
 	setWrapping(true);
 	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
@@ -81,8 +64,6 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
 	  mInvalid(false),
 	  mEnteredSetValue(false)
 {
-	mValidator = new TimeValidator(minMinute, maxMinute, this, "TimeSpinBox validator");
-	setValidator(mValidator);
 	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
@@ -98,7 +79,7 @@ QTime TimeSpinBox::time() const
 	return QTime(value() / 60, value() % 60);
 }
 
-QString TimeSpinBox::textFromValue(int v)
+QString TimeSpinBox::textFromValue(int v) const
 {
 	if (m12Hour)
 	{
@@ -117,9 +98,9 @@ QString TimeSpinBox::textFromValue(int v)
  * The allowed formats are:
  *    [hour]:[minute], where minute must be non-blank, or
  *    hhmm, 4 digits, where hour < 24.
+ * Reply = 0 if error.
  */
-#warning use t, not cleanText()??
-int TimeSpinBox::valueFromText(const QString& t) const
+int TimeSpinBox::valueFromText(const QString&) const
 {
 	QString text = cleanText();
 	int colon = text.find(':');
@@ -149,11 +130,7 @@ int TimeSpinBox::valueFromText(const QString& t) const
 				}
 				int t = h * 60 + m;
 				if (t >= mMinimumValue  &&  t <= maxValue())
-				{
-					if (ok)
-						*ok = true;
 					return t;
-				}
 			}
 		}
 	}
@@ -177,16 +154,10 @@ int TimeSpinBox::valueFromText(const QString& t) const
 			}
 			int t = h * 60 + m;
 			if (h < 24  &&  m < 60  &&  t >= mMinimumValue  &&  t <= maxValue())
-			{
-				if (ok)
-					*ok = true;
 				return t;
-			}
 		}
 
 	}
-	if (ok)
-		*ok = false;
 	return 0;
 }
 
@@ -266,7 +237,7 @@ bool TimeSpinBox::isValid() const
 
 void TimeSpinBox::slotValueChanged(int value)
 {
-	mPm = mValidator->mPm = (value >= 720);
+	mPm = (value >= 720);
 }
 
 /******************************************************************************
@@ -274,12 +245,13 @@ void TimeSpinBox::slotValueChanged(int value)
  * The entered time must either be 4 digits, or it must contain a colon, but
  * hours may be blank.
  */
-QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cursorPos*/) const
+QValidator::State TimeSpinBox::validate(QString& text, int&) const
 {
 	QString cleanText = text.stripWhiteSpace();
 	if (cleanText.isEmpty())
 		return QValidator::Intermediate;
 	QValidator::State state = QValidator::Acceptable;
+	int maxMinute = maxValue();
 	QString hour;
 	bool ok;
 	int hr = 0;
@@ -332,7 +304,7 @@ QValidator::State TimeSpinBox::TimeValidator::validate(QString& text, int& /*cur
 	if (state == QValidator::Acceptable)
 	{
 		int t = hr * 60 + mn;
-		if (t < minMinute  ||  t > maxMinute)
+		if (t < minValue()  ||  t > maxMinute)
 			return QValidator::Invalid;
 	}
 	return state;

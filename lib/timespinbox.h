@@ -67,6 +67,8 @@ class TimeSpinBox : public SpinBox2
 		 *  If newly valid, the value is set to the minimum value.
 		 */
 		void            setValid(bool);
+		/** Determine whether the current input is valid. */
+		virtual QValidator::State validate(QString&, int& pos) const;
 		/** Returns the current value held in the spin box.
 		 *  If an invalid value is displayed, returns a value lower than the minimum value.
 		 */
@@ -107,7 +109,6 @@ class TimeSpinBox : public SpinBox2
 		void            slotValueChanged(int value);
 	private:
 		class TimeValidator;
-		TimeValidator*  mValidator;
 		int             mMinimumValue;
 		bool            m12Hour;             // use 12-hour clock
 		bool            mPm;                 // use PM for manually entered values (with 12-hour clock)
