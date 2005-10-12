@@ -32,7 +32,7 @@
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaccel.h>
 #include <kaction.h>
 #include <kactionclasses.h>
@@ -351,8 +351,8 @@ void MainWindow::initActions()
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);
 
-	mContextMenu = static_cast<KPopupMenu*>(factory()->container("listContext", this));
-	mActionsMenu = static_cast<KPopupMenu*>(factory()->container("actions", this));
+	mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
+	mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
 	mMenuError = (!mContextMenu  ||  !mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 	connect(mActionUndo->popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
@@ -919,7 +919,7 @@ void MainWindow::slotInitRedoMenu()
 /******************************************************************************
 *  Populate the undo or redo menu.
 */
-void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
+void MainWindow::initUndoMenu(KMenu* menu, Undo::Type type)
 {
 	menu->clear();
 	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;

@@ -21,7 +21,7 @@
 #include "kalarm.h"
 
 #include <kactionclasses.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
@@ -48,7 +48,7 @@ TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon
 */
 void TemplateMenuAction::slotInitMenu()
 {
-	KPopupMenu* menu = popupMenu();
+	KMenu* menu = popupMenu();
 	menu->clear();
 	mOriginalTexts.clear();
 	Q3ValueList<KAEvent> templates = KAlarm::templateList();
@@ -66,7 +66,7 @@ void TemplateMenuAction::slotInitMenu()
 */
 void TemplateMenuAction::slotSelected(int id)
 {
-	KPopupMenu* menu = popupMenu();
+	KMenu* menu = popupMenu();
 	QString item = mOriginalTexts[menu->indexOf(id)];
 	if (!item.isEmpty())
 	{

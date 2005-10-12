@@ -29,7 +29,7 @@ class QEvent;
 class QMouseEvent;
 class QDragEnterEvent;
 class QDropEvent;
-class KPopupMenu;
+class KMenu;
 class KAEvent;
 class MainWindow;
 
@@ -52,7 +52,7 @@ class TrayWindow : public KSystemTray
 		void         deleted();
 
 	protected:
-		virtual void contextMenuAboutToShow(KPopupMenu*);
+		virtual void contextMenuAboutToShow(KMenu*);
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
 		virtual void dragEnterEvent(QDragEnterEvent*);

@@ -43,12 +43,12 @@
 
 // KAlarm-specific options for Find dialog
 enum {
-	FIND_LIVE    = KFindDialog::MinimumUserOption,
-	FIND_EXPIRED = KFindDialog::MinimumUserOption << 1,
-	FIND_MESSAGE = KFindDialog::MinimumUserOption << 2,
-	FIND_FILE    = KFindDialog::MinimumUserOption << 3,
-	FIND_COMMAND = KFindDialog::MinimumUserOption << 4,
-	FIND_EMAIL   = KFindDialog::MinimumUserOption << 5
+	FIND_LIVE    = KFind::MinimumUserOption,
+	FIND_EXPIRED = KFind::MinimumUserOption << 1,
+	FIND_MESSAGE = KFind::MinimumUserOption << 2,
+	FIND_FILE    = KFind::MinimumUserOption << 3,
+	FIND_COMMAND = KFind::MinimumUserOption << 4,
+	FIND_EMAIL   = KFind::MinimumUserOption << 5
 };
 static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 
@@ -232,7 +232,7 @@ void Find::slotFind()
 	}
 
 	// Supply KFind with only those options which relate to the text within alarms
-	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
+	long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
 	if (mFind)
 	{
 		delete mDialog;    // automatically set to 0
@@ -256,7 +256,7 @@ void Find::slotFind()
 		mNoCurrentItem = true;
 		bool fromCurrent = false;
 		EventListViewItemBase* item = 0;
-		if (mOptions & KFindDialog::FromCursor)
+		if (mOptions & KFind::FromCursor)
 		{
 			item = mListView->currentItem();
 			if (item)
@@ -383,7 +383,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward) const
 {
 	Q3ListViewItem* it;
-	if (mOptions & KFindDialog::FindBackwards)
+	if (mOptions & KFind::FindBackwards)
 		forward = !forward;
 	if (forward)
 		it = item ? item->itemBelow() : mListView->firstChild();

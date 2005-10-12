@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kaboutdata.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
@@ -110,7 +110,7 @@ TrayWindow::~TrayWindow()
 * Called just before the context menu is displayed.
 * Update the Alarms Enabled item status.
 */
-void TrayWindow::contextMenuAboutToShow(KPopupMenu* menu)
+void TrayWindow::contextMenuAboutToShow(KMenu* menu)
 {
 	KSystemTray::contextMenuAboutToShow(menu);     // needed for KDE <= 3.1 compatibility
 	Daemon::checkStatus();

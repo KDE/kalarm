@@ -41,6 +41,7 @@
 
 #include <libkcal/calendarlocal.h>
 #include <libkcal/icalformat.h>
+#include <ktoolinvocation.h>
 
 #include "adcalendar.h"
 #include "adconfigdata.h"
@@ -116,7 +117,7 @@ void AlarmDaemon::autostartKAlarm()
 	kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
 	args << QString::fromLatin1("--tray");
-	KApplication::kdeinitExec(QString::fromLatin1("kalarm"), args);
+	KToolInvocation::kdeinitExec(QString::fromLatin1("kalarm"), args);
 
 	startMonitoring();
 #endif

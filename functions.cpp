@@ -42,6 +42,7 @@
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
 #include <libkcal/person.h>
+#include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
@@ -582,7 +583,7 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 	if (!kapp->dcopClient()->isApplicationRegistered(program))
 	{
 		// KOrganizer is not already running, so start it
-		if (KApplication::startServiceByDesktopName(QString::fromLatin1(program), QString::null, &errorMessage, &dcopName))
+		if (KToolInvocation::startServiceByDesktopName(QString::fromLatin1(program), QString::null, &errorMessage, &dcopName))
 		{
 			kdError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;

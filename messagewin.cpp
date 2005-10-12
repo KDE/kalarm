@@ -72,6 +72,7 @@
 #endif
 #include <dcopclient.h>
 #include <kdebug.h>
+#include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
 #include "deferdlg.h"
@@ -804,7 +805,7 @@ void MessageWin::slotSpeak()
 	{
 		// kttsd is not running, so start it
 		QString error;
-		if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error))
+		if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
 		{
 			kdDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
 			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);

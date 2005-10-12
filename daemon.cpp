@@ -30,6 +30,7 @@
 #include <kmessagebox.h>
 #include <dcopclient.h>
 #include <kdebug.h>
+#include <ktoolinvocation.h>
 
 #include "kalarmd/kalarmd.h"
 #include "kalarmd/alarmdaemoniface.h"
@@ -140,7 +141,7 @@ bool Daemon::start()
 				kdError() << "Daemon::startApp(): " DAEMON_APP_NAME " not found" << endl;
 				return false;
 			}
-			KApplication::kdeinitExec(execStr);
+			KToolInvocation::kdeinitExec(execStr);
 			kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
 			mStartTimeout = 5000/startCheckInterval + 1;    // check daemon status for 5 seconds before giving up
 			mStartTimer = new QTimer(mInstance);

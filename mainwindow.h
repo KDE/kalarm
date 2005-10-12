@@ -41,7 +41,7 @@ class Q3ListViewItem;
 class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
-class KPopupMenu;
+class KMenu;
 class ActionAlarmsEnabled;
 class AlarmListView;
 class TemplateDlg;
@@ -147,7 +147,7 @@ class MainWindow : public MainWindowBase
 		void           setEnableText(bool enable);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
-		static void    initUndoMenu(KPopupMenu*, Undo::Type);
+		static void    initUndoMenu(KMenu*, Undo::Type);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 
@@ -173,8 +173,8 @@ class MainWindow : public MainWindowBase
 		KToggleAction*       mActionShowTime;
 		KToggleAction*       mActionShowTimeTo;
 		KToggleAction*       mActionShowExpired;
-		KPopupMenu*          mActionsMenu;
-		KPopupMenu*          mContextMenu;
+		KMenu*          mActionsMenu;
+		KMenu*          mContextMenu;
 		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
 		bool                 mShowExpired;         // include expired alarms in the displayed list

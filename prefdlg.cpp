@@ -51,6 +51,7 @@
 #include <kdebug.h>
 
 #include <kalarmd/kalarmd.h>
+#include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
@@ -102,7 +103,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 {
 	setIconListAllVisible(true);
 
-	Q3VBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
+	KVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
 	mMiscPage = new MiscPrefTab(frame);
 
 	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
@@ -138,7 +139,7 @@ void KAlarmPrefDlg::slotDefault()
 
 void KAlarmPrefDlg::slotHelp()
 {
-	kapp->invokeHelp("preferences");
+	KToolInvocation::invokeHelp("preferences");
 }
 
 // Apply the preferences that are currently selected

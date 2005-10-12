@@ -27,6 +27,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kauthorized.h>
 
 #include "shellprocess.moc"
 
@@ -202,7 +203,7 @@ bool ShellProcess::authorised()
 {
 	if (!mInitialised)
 	{
-		mAuthorised = kapp->authorize("shell_access");
+		mAuthorised = KAuthorized::authorizeKAction("shell_access");
 		mInitialised = true;
 	}
 	return mAuthorised;
