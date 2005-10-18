@@ -122,7 +122,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	QVBoxLayout* ruleLayout = new QVBoxLayout(ruleButtonBox, 0);
 	lay->addWidget(ruleButtonBox);
 	lay->addStretch();    // top-adjust the interval radio buttons
-	ruleButtonGroup = new ButtonGroup(ruleButtonGroup);
+	ruleButtonGroup = new ButtonGroup(ruleButtonBox);
 	connect(ruleButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(periodClicked(QAbstractButton*)));
 
 	mNoneButton = new RadioButton(i18n_Norecur(), ruleButtonBox);
