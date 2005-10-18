@@ -25,6 +25,7 @@
 #include <Q3Frame>
 #include <QShowEvent>
 #include <QMouseEvent>
+#include <QStyleOptionSpinBox>
 
 #include <stdlib.h>
 
@@ -58,7 +59,7 @@ SpinBox2::SpinBox2(QWidget* parent)
 {
 	mUpdown2Frame = new Q3Frame(this);
 	mSpinboxFrame = new Q3Frame(this);
-	mUpdown2 = new ExtraSpinBox(mUpdown2Frame, "updown2");
+	mUpdown2 = new ExtraSpinBox(mUpdown2Frame);
 //	mSpinbox = new MainSpinBox(0, 1, 1, this, mSpinboxFrame);
 	mSpinbox = new MainSpinBox(this, mSpinboxFrame);
 	init();
@@ -70,7 +71,7 @@ SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* par
 {
 	mUpdown2Frame = new Q3Frame(this);
 	mSpinboxFrame = new Q3Frame(this);
-	mUpdown2 = new ExtraSpinBox(minValue, maxValue, step2, mUpdown2Frame, "updown2");
+	mUpdown2 = new ExtraSpinBox(minValue, maxValue, step2, mUpdown2Frame);
 	mSpinbox = new MainSpinBox(minValue, maxValue, step, this, mSpinboxFrame);
 	setSteps(step, step2);
 	init();
@@ -269,10 +270,10 @@ void SpinBox2::updateMirror()
 void SpinBox2::arrange()
 {
 	getMetrics();
-	QRect arrowRect = QStyle::visualRect(QRect(0, 0, wUpdown2, height()), this);
+	QRect arrowRect = style()->visualRect((mReverseLayout ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
 	mUpdown2Frame->setGeometry(arrowRect);
 	mUpdown2->setGeometry(-xUpdown2, 0, mUpdown2->width(), height());
-	mSpinboxFrame->setGeometry(QStyle::visualRect(QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height()), this));
+	mSpinboxFrame->setGeometry(style()->visualRect((mReverseLayout ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height())));
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
 	mSpinMirror->resize(wUpdown2, mUpdown2->height());
 	mSpinMirror->setGeometry(arrowRect);
@@ -286,12 +287,14 @@ void SpinBox2::arrange()
 */
 void SpinBox2::getMetrics() const
 {
-	QRect rect = mUpdown2->style()->querySubControlMetrics(QStyle::CC_SpinWidget, mUpdown2, QStyle::SC_SpinWidgetButtonField);
+	QStyleOptionSpinBox option;
+#warning What about Down?
+	QRect rect = mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
 	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	xUpdown2 = mReverseLayout ? 0 : rect.left();
 	wUpdown2 = mUpdown2->width() - rect.left();
-	xSpinbox = mSpinbox->style()->querySubControlMetrics(QStyle::CC_SpinWidget, mSpinbox, QStyle::SC_SpinWidgetEditField).left();
+	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
 	wGap = 0;
 
 	// Make style-specific adjustments for a better appearance
