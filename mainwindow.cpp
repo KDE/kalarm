@@ -225,6 +225,8 @@ MainWindow* MainWindow::mainMainWindow()
 			return *it;
 	if (tray)
 		return tray;
+	if (!mWindowList.count())
+		return 0;
 	return mWindowList.first();
 }
 
