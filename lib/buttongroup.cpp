@@ -26,7 +26,7 @@
 ButtonGroup::ButtonGroup(QObject* parent)
 	: QButtonGroup(parent)
 {
-	connect(this, SIGNAL(clicked(int)), SIGNAL(buttonSet(int)));
+	connect(this, SIGNAL(buttonClicked(QAbstractButton*)), SIGNAL(buttonSet(QAbstractButton*)));
 }
 
 /******************************************************************************
