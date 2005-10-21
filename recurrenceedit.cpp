@@ -84,6 +84,7 @@ QString RecurrenceEdit::i18n_y_Yearly()          { return i18n("&Yearly"); }
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	: QFrame(parent, name),
+	  mRule(0),
 	  mRuleButtonType(INVALID_RECUR),
 	  mDailyShown(false),
 	  mWeeklyShown(false),
