@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 /**  @file undo.h - undo/redo facility */
 
-#include <q3valuelist.h>
+#include <QList>
 #include <qstringlist.h>
 
 class KAEvent;
@@ -40,15 +40,15 @@ class Undo : public QObject
 		static void        saveAdd(const KAEvent&);
 		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent);
 		static void        saveDelete(const KAEvent&);
-		static void        saveDeletes(const Q3ValueList<KAEvent>&);
+		static void        saveDeletes(const QList<KAEvent>&);
 		static void        saveReactivate(const KAEvent&);
-		static void        saveReactivates(const Q3ValueList<KAEvent>&);
+		static void        saveReactivates(const QList<KAEvent>&);
 		static bool        undo(QWidget* parent, const QString& action)
-		                                      { return undo(mUndoList.begin(), UNDO, parent, action); }
+		                                      { return undo(0, UNDO, parent, action); }
 		static bool        undo(int id, QWidget* parent, const QString& action)
 		                                      { return undo(findItem(id, UNDO), UNDO, parent, action); }
 		static bool        redo(QWidget* parent, const QString& action)
-		                                      { return undo(mRedoList.begin(), REDO, parent, action); }
+		                                      { return undo(0, REDO, parent, action); }
 		static bool        redo(int id, QWidget* parent, const QString& action)
 		                                      { return undo(findItem(id, REDO), REDO, parent, action); }
 		static void        clear();
@@ -57,11 +57,11 @@ class Undo : public QObject
 		static QString     actionText(Type);
 		static QString     actionText(Type, int id);
 		static QString     description(Type, int id);
-		static Q3ValueList<int> ids(Type);
+		static QList<int>  ids(Type);
 		static void        emitChanged();
 
 		// Types for use by UndoItem class and its descendants
-		typedef Q3ValueList<UndoItem*>  List;
+		typedef QList<UndoItem*>  List;
 
 	signals:
 		void               changed(const QString& undo, const QString& redo);
@@ -73,13 +73,11 @@ class Undo : public QObject
 		static void        replace(UndoItem* old, UndoItem* New);
 
 	private:
-		typedef Q3ValueList<UndoItem*>::Iterator Iterator;
-
 		Undo(QObject* parent)  : QObject(parent) { }
 		static void        removeRedos(const QString& eventID);
-		static bool        undo(Iterator, Type, QWidget* parent, const QString& action);
+		static bool        undo(int index, Type, QWidget* parent, const QString& action);
 		static UndoItem*   getItem(int id, Type);
-		static Iterator    findItem(int id, Type);
+		static int         findItem(int id, Type);
 		void               emitChanged(const QString& undo, const QString& redo)
 		                                   { emit changed(undo, redo); }
 

@@ -23,11 +23,8 @@
 #include <stdlib.h>
 
 #include <QToolTip>
-//Added by qt3to4:
 #include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <Q3ValueList>
-#include <QDropEvent>
+#include <QList>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -54,6 +51,7 @@
 #include "preferences.h"
 #include "templatemenuaction.h"
 #include "traywindow.moc"
+
 
 struct TipItem
 {
@@ -110,9 +108,8 @@ TrayWindow::~TrayWindow()
 * Called just before the context menu is displayed.
 * Update the Alarms Enabled item status.
 */
-void TrayWindow::contextMenuAboutToShow(KMenu* menu)
+void TrayWindow::contextMenuAboutToShow(KMenu*)
 {
-	KSystemTray::contextMenuAboutToShow(menu);     // needed for KDE <= 3.1 compatibility
 	Daemon::checkStatus();
 }
 
@@ -219,7 +216,7 @@ void TrayWindow::dropEvent(QDropEvent* e)
 bool TrayWindow::event(QEvent* e)
 {
 	if (e->type() != QEvent::ToolTip)
-		return false;
+		return KSystemTray::event(e);
 	QHelpEvent* he = (QHelpEvent*)e;
 	QString text;
 	if (Daemon::monitoringAlarms())
@@ -245,8 +242,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
-	Q3ValueList<TipItem> items;
-	Q3ValueList<TipItem>::Iterator iit;
+	QList<TipItem> items;
 	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(QDateTime(now.date()), now.addDays(1));
 	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
@@ -293,21 +289,22 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			item.text += AlarmText::summary(event);
 
 			// Insert the item into the list in time-sorted order
-			for (iit = items.begin();  iit != items.end();  ++iit)
+			int i = 0;
+			for (int iend = items.count();  i < iend;  ++i)
 			{
-				if (item.dateTime <= (*iit).dateTime)
+				if (item.dateTime <= items[i].dateTime)
 					break;
 			}
-			items.insert(iit, item);
+			items.insert(i, item);
 		}
         }
 	kdDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
 	int count = 0;
-	for (iit = items.begin();  iit != items.end();  ++iit)
+	for (int i = 0, iend = items.count();  i < iend;  ++i)
 	{
-		kdDebug(5950) << "-- " << (count+1) << ") " << (*iit).text << endl;
+		kdDebug(5950) << "-- " << (count+1) << ") " << items[i].text << endl;
 		text += "\n";
-		text += (*iit).text;
+		text += items[i].text;
 		if (++count == maxCount)
 			break;
 	}

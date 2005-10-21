@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,20 +20,16 @@
 
 #include <qobject.h>
 #include <qwidget.h>
-#include <q3groupbox.h>
-#include <qpushbutton.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QGroupBox>
+#include <QPushButton>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QBoxLayout>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcolordialog.h>
+#include <khbox.h>
 
 #include "kalarmapp.h"
 #include "preferences.h"
@@ -56,15 +52,15 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	QWidget* page = this;
 	if (!frameLabel.isNull())
 	{
-		page = new Q3GroupBox(frameLabel, this);
+		page = new QGroupBox(frameLabel, this);
 		topLayout->addWidget(page);
 		topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+//??		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
 	}
 	if (fg)
 	{
-		QBoxLayout* layout = new QHBoxLayout(topLayout);
-		Q3HBox* box = new Q3HBox(page);    // to group widgets for QWhatsThis text
+		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 		box->setSpacing(KDialog::spacingHint());
 		layout->addWidget(box);
 
@@ -74,12 +70,12 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mFgColourButton->setMinimumSize(mFgColourButton->sizeHint());
 		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
-		Q3WhatsThis::add(box, i18n("Select the alarm message foreground color"));
+		box->setWhatsThis(i18n("Select the alarm message foreground color"));
 		layout->addStretch();
 	}
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
-	Q3HBox* box = new Q3HBox(page);    // to group widgets for QWhatsThis text
+	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 
@@ -89,7 +85,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
 	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
-	Q3WhatsThis::add(box, i18n("Select the alarm message background color"));
+	box->setWhatsThis(i18n("Select the alarm message background color"));
 	layout->addStretch();
 
 	if (editColours)
@@ -98,14 +94,13 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		QPushButton* button = new QPushButton(i18n("Add Co&lor..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
-		Q3WhatsThis::add(button, i18n("Choose a new color to add to the color selection list."));
+		button->setWhatsThis(i18n("Choose a new color to add to the color selection list."));
 		layout->addWidget(button);
 
 		mRemoveColourButton = new QPushButton(i18n("&Remove Color"), page);
 		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
 		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
-		Q3WhatsThis::add(mRemoveColourButton,
-		      i18n("Remove the color currently shown in the background color chooser, from the color selection list."));
+		mRemoveColourButton->setWhatsThis(i18n("Remove the color currently shown in the background color chooser, from the color selection list."));
 		layout->addWidget(mRemoveColourButton);
 	}
 
@@ -115,8 +110,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mDefaultFont = new CheckBox(i18n("Use &default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
-		Q3WhatsThis::add(mDefaultFont,
-		      i18n("Check to use the default font current at the time the alarm is displayed."));
+		mDefaultFont->setWhatsThis(i18n("Check to use the default font current at the time the alarm is displayed."));
 		layout->addWidget(mDefaultFont);
 		layout->addWidget(new QWidget(page));    // left adjust the widget
 	}

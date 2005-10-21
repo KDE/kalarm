@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 #include "kalarm.h"
 
 #include <qobject.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -43,7 +40,7 @@ class UndoItem
 {
 	public:
 		enum Operation { ADD, EDIT, DELETE, REACTIVATE, DEACTIVATE, MULTI };
-		UndoItem();           // needed by QValueList
+		UndoItem();           // needed by QList
 		virtual ~UndoItem();
 		virtual Operation operation() const = 0;
 		virtual QString   actionText() const = 0;
@@ -90,7 +87,7 @@ class UndoMultiBase : public UndoItem
 template <class T> class UndoMulti : public UndoMultiBase
 {
 	public:
-		UndoMulti(Undo::Type, const Q3ValueList<KAEvent>&);
+		UndoMulti(Undo::Type, const QList<KAEvent>&);
 		UndoMulti(Undo::Type t, Undo::List& undos)  : UndoMultiBase(t, undos) { }
 		virtual Operation operation() const     { return MULTI; }
 		virtual UndoItem* restore();
@@ -178,7 +175,7 @@ class UndoDeactivate : public UndoDelete
 class UndoDeletes : public UndoMulti<UndoDelete>
 {
 	public:
-		UndoDeletes(Undo::Type t, const Q3ValueList<KAEvent>& events)
+		UndoDeletes(Undo::Type t, const QList<KAEvent>& events)
 		                  : UndoMulti<UndoDelete>(t, events) { }   // UNDO only
 		UndoDeletes(Undo::Type t, Undo::List& undos)
 		                  : UndoMulti<UndoDelete>(t, undos) { }
@@ -189,7 +186,7 @@ class UndoDeletes : public UndoMulti<UndoDelete>
 class UndoReactivates : public UndoMulti<UndoReactivate>
 {
 	public:
-		UndoReactivates(Undo::Type t, const Q3ValueList<KAEvent>& events)
+		UndoReactivates(Undo::Type t, const QList<KAEvent>& events)
 		                  : UndoMulti<UndoReactivate>(t, events) { }   // UNDO only
 		UndoReactivates(Undo::Type t, Undo::List& undos)
 		                  : UndoMulti<UndoReactivate>(t, undos) { }
@@ -253,16 +250,16 @@ void Undo::saveDelete(const KAEvent& event)
 	emitChanged();
 }
 
-void Undo::saveDeletes(const Q3ValueList<KAEvent>& events)
+void Undo::saveDeletes(const QList<KAEvent>& events)
 {
 	int count = events.count();
 	if (count == 1)
-		saveDelete(events.first());
+		saveDelete(events[0]);
 	else if (count > 1)
 	{
 		new UndoDeletes(UNDO, events);
-		for (Q3ValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
-			removeRedos((*it).id());    // remove any redos which are made invalid by these deletions
+		for (int i = 0, end = events.count();  i < end;  ++i)
+			removeRedos(events[i].id());    // remove any redos which are made invalid by these deletions
 		emitChanged();
 	}
 }
@@ -273,11 +270,11 @@ void Undo::saveReactivate(const KAEvent& event)
 	emitChanged();
 }
 
-void Undo::saveReactivates(const Q3ValueList<KAEvent>& events)
+void Undo::saveReactivates(const QList<KAEvent>& events)
 {
 	int count = events.count();
 	if (count == 1)
-		saveReactivate(events.first());
+		saveReactivate(events[0]);
 	else if (count > 1)
 	{
 		new UndoReactivates(UNDO, events);
@@ -291,9 +288,9 @@ void Undo::saveReactivates(const Q3ValueList<KAEvent>& events)
 void Undo::removeRedos(const QString& eventID)
 {
 	QString id = eventID;
-	for (Iterator it = mRedoList.begin();  it != mRedoList.end();  )
+	for (int i = 0, end = mRedoList.count();  i < end;  )
 	{
-		UndoItem* item = *it;
+		UndoItem* item = mRedoList[i];
 //kdDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<endl;
 		if (item->operation() == UndoItem::MULTI)
 		{
@@ -302,7 +299,8 @@ void Undo::removeRedos(const QString& eventID)
 				// The old multi-redo was replaced with a new single redo
 				delete item;
 			}
-			++it;
+#warning Check for correct index after deletion
+			++i;
 		}
 		else if (item->eventID() == id)
 		{
@@ -310,10 +308,10 @@ void Undo::removeRedos(const QString& eventID)
 				id = item->oldEventID();   // continue looking for its post-edit ID
 			item->setType(NONE);    // prevent the destructor removing it from the list
 			delete item;
-			it = mRedoList.remove(it);
+			mRedoList.removeAt(i);
 		}
 		else
-			++it;
+			++i;
 	}
 }
 
@@ -321,14 +319,15 @@ void Undo::removeRedos(const QString& eventID)
 *  Undo or redo a specified item.
 *  Reply = true if success, or if the item no longer exists.
 */
-bool Undo::undo(Undo::Iterator it, Undo::Type type, QWidget* parent, const QString& action)
+bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 {
 	UndoItem::mRestoreError   = UndoItem::ERR_NONE;
 	UndoItem::mRestoreWarning = UndoItem::WARN_NONE;
-	if (it != mUndoList.end()  &&  it != mRedoList.end()  &&  (*it)->type() == type)
+	List& list = (type == UNDO) ? mUndoList : mRedoList;
+	if (i < list.count()  &&  list[i]->type() == type)
 	{
-		(*it)->restore();
-		delete *it;    // N.B. 'delete' removes the object from its list
+		list[i]->restore();
+		delete list[i];    // N.B. 'delete' removes the object from its list
 		emitChanged();
 	}
 
@@ -391,7 +390,7 @@ void Undo::remove(UndoItem* item, bool undo)
 {
 	List* list = undo ? &mUndoList : &mRedoList;
 	if (!list->isEmpty())
-		list->remove(item);
+		list->removeAt(list->indexOf(item));
 }
 
 /******************************************************************************
@@ -403,11 +402,11 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
 	if (!list)
 		return;
-	Iterator it = list->find(old);
-	if (it != list->end())
+	int i = list->indexOf(old);
+	if (i >= 0)
 	{
 		New->setType(type);    // ensure the item points to the correct list
-		*it = New;
+		(*list)[i] = New;
 		old->setType(NONE);    // mark the old item as no longer being in a list
 	}
 }
@@ -418,7 +417,7 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 QString Undo::actionText(Undo::Type type)
 {
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
-	return (list && !list->isEmpty()) ? list->first()->actionText() : QString::null;
+	return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString::null;
 }
 
 /******************************************************************************
@@ -445,28 +444,28 @@ QString Undo::description(Undo::Type type, int id)
 *  listed, to force dependent undos to be executed in their correct order.
 *  If 'ids' is non-null, also returns a list of their corresponding IDs.
 */
-Q3ValueList<int> Undo::ids(Undo::Type type)
+QList<int> Undo::ids(Undo::Type type)
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	QStringList ignoreIDs;
 //int n=0;
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
 	if (!list)
 		return ids;
-	for (Iterator it = list->begin();  it != list->end();  ++it)
+	for (int i = 0, end = list->count();  i < end;  ++i)
 	{
 		// Check whether this item should be ignored because it is a
 		// deendent undo. If not, add this item's ID to the ignore list.
-		UndoItem* item = *it;
+		UndoItem* item = (*list)[i];
 		bool omit = false;
 		if (item->operation() == UndoItem::MULTI)
 		{
 			// If any item in a multi-undo is disqualified, omit the whole multi-undo
 			QStringList newIDs;
 			const Undo::List& undos = ((UndoMultiBase*)item)->undos();
-			for (Undo::List::ConstIterator u = undos.begin();  u != undos.end();  ++u)
+			for (int u = 0, uend = undos.count();  u  < uend;  ++u)
 			{
-				QString evid = (*u)->eventID();
+				QString evid = undos[u]->eventID();
 				if (ignoreIDs.find(evid) != ignoreIDs.end())
 					omit = true;
 				else if (omit)
@@ -513,10 +512,10 @@ UndoItem* Undo::getItem(int id, Undo::Type type)
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
 	if (list)
 	{
-		for (Iterator it = list->begin();  it != list->end();  ++it)
+		for (int i = 0, end = list->count();  i < end;  ++i)
 		{
-			if ((*it)->id() == id)
-				return *it;
+			if ((*list)[i]->id() == id)
+				return (*list)[i];
 		}
 	}
 	return 0;
@@ -525,16 +524,16 @@ UndoItem* Undo::getItem(int id, Undo::Type type)
 /******************************************************************************
 *  Find an item with the specified ID.
 */
-Undo::Iterator Undo::findItem(int id, Undo::Type type)
+int Undo::findItem(int id, Undo::Type type)
 {
-	List* list = (type == UNDO) ? &mUndoList : &mRedoList;
-	Iterator it;
-	for (it = list->begin();  it != list->end();  ++it)
+	List& list = (type == UNDO) ? mUndoList : mRedoList;
+	int i = 0;
+	for (int end = list.count();  i < end;  ++i)
 	{
-		if ((*it)->id() == id)
+		if (list[i]->id() == id)
 			break;
 	}
-	return it;
+	return i;
 }
 
 
@@ -613,17 +612,17 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 =============================================================================*/
 
 template <class T>
-UndoMulti<T>::UndoMulti(Undo::Type type, const Q3ValueList<KAEvent>& events)
+UndoMulti<T>::UndoMulti(Undo::Type type, const QList<KAEvent>& events)
 	: UndoMultiBase(type)    // UNDO only
 {
-	for (Q3ValueList<KAEvent>::ConstIterator it = events.begin();  it != events.end();  ++it)
-		mUndos.append(new T(Undo::NONE, *it));
+	for (int i = 0, end = events.count();  i < end;  ++i)
+		mUndos.append(new T(Undo::NONE, events[i]));
 }
 
 UndoMultiBase::~UndoMultiBase()
 {
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
-		delete *it;
+	for (int i = 0, end = mUndos.count();  i < end;  ++i)
+		delete mUndos[i];
 }
 
 /******************************************************************************
@@ -636,9 +635,9 @@ template <class T>
 UndoItem* UndoMulti<T>::restore()
 {
 	Undo::List newUndos;
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	for (int i = 0, end = mUndos.count();  i < end;  ++i)
 	{
-		UndoItem* undo = (*it)->restore();
+		UndoItem* undo = mUndos[i]->restore();
 		if (undo)
 			newUndos.append(undo);
 	}
@@ -659,13 +658,13 @@ UndoItem* UndoMulti<T>::restore()
 template <class T>
 bool UndoMulti<T>::deleteID(const QString& id)
 {
-	for (Undo::List::Iterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	for (int i = 0, end = mUndos.count();  i < end;  ++i)
 	{
-		UndoItem* item = *it;
+		UndoItem* item = mUndos[i];
 		if (item->eventID() == id)
 		{
 			// Found a matching entry - remove it
-			mUndos.remove(it);
+			mUndos.removeAt(i);
 			if (mUndos.count() == 1)
 			{
 				// There is only one entry left after removal.
@@ -973,9 +972,9 @@ QString UndoDeletes::actionText() const
 {
 	if (mUndos.isEmpty())
 		return QString::null;
-	for (Undo::List::ConstIterator it = mUndos.begin();  it != mUndos.end();  ++it)
+	for (int i = 0, end = mUndos.count();  i < end;  ++i)
 	{
-		switch ((*it)->calendar())
+		switch (mUndos[i]->calendar())
 		{
 			case KAEvent::ACTIVE:
 				return i18n("Delete multiple alarms");

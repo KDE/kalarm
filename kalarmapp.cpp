@@ -30,8 +30,6 @@
 #include <qfile.h>
 #include <QByteArray>
 #include <QTextStream>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -156,7 +154,7 @@ KAlarmApp::~KAlarmApp()
 {
 	while (!mCommandProcesses.isEmpty())
 	{
-		ProcData* pd = mCommandProcesses.first();
+		ProcData* pd = mCommandProcesses[0];
 		mCommandProcesses.pop_front();
 		delete pd;
 	}
@@ -189,7 +187,7 @@ KAlarmApp* KAlarmApp::getInstance()
 */
 bool KAlarmApp::restoreSession()
 {
-	if (!isRestored())
+	if (!isSessionRestored())
 		return false;
 	if (mFatalError)
 	{
@@ -264,7 +262,7 @@ int KAlarmApp::newInstance()
 	int exitCode = 0;               // default = success
 	static bool firstInstance = true;
 	bool dontRedisplay = false;
-	if (!firstInstance || !isRestored())
+	if (!firstInstance || !isSessionRestored())
 	{
 		QString usage;
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -892,7 +890,7 @@ void KAlarmApp::processQueue()
 		// Process DCOP calls
 		while (!mDcopQueue.isEmpty())
 		{
-			DcopQEntry& entry = mDcopQueue.first();
+			DcopQEntry& entry = mDcopQueue.head();
 			if (entry.eventId.isEmpty())
 			{
 				// It's a new alarm
@@ -910,7 +908,7 @@ void KAlarmApp::processQueue()
 			}
 			else
 				handleEvent(entry.eventId, entry.function);
-			mDcopQueue.pop_front();
+			mDcopQueue.dequeue();
 		}
 
 		// Purge the expired alarms calendar if it's time to do so
@@ -938,7 +936,7 @@ void KAlarmApp::redisplayAlarms()
 		KCal::Event::List events = cal->events();
 		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
-                        KCal::Event* kcalEvent = *it;
+			KCal::Event* kcalEvent = *it;
 			KAEvent event(*kcalEvent);
 			event.setUid(KAEvent::ACTIVE);
 			if (!MessageWin::findEvent(event.id()))
@@ -1198,7 +1196,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 		// Alarm is due for display already.
 		// First execute it once without adding it to the calendar file.
 		if (!mInitialised)
-			mDcopQueue.append(DcopQEntry(event, EVENT_TRIGGER));
+			mDcopQueue.enqueue(DcopQEntry(event, EVENT_TRIGGER));
 		else
 			execAlarm(event, event.firstAlarm(), false);
 		// If it's a recurring alarm, reschedule it for its next occurrence
@@ -1209,7 +1207,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	}
 
 	// Queue the alarm for insertion into the calendar file
-	mDcopQueue.append(DcopQEntry(event));
+	mDcopQueue.enqueue(DcopQEntry(event));
 	if (mInitialised)
 		QTimer::singleShot(0, this, SLOT(processQueue()));
 	return true;
@@ -1230,7 +1228,7 @@ bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 		kdError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
 		return false;
 	}
-	mDcopQueue.append(DcopQEntry(function, eventID));
+	mDcopQueue.enqueue(DcopQEntry(function, eventID));
 	if (mInitialised)
 		QTimer::singleShot(0, this, SLOT(processQueue()));
 	return true;
@@ -1796,7 +1794,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	// Error executing command - report it
 	kdError(5950) << "KAlarmApp::doShellCommand(): command failed to start\n";
 	commandErrorMsg(proc, event, alarm, flags);
-	mCommandProcesses.remove(pd);
+	mCommandProcesses.removeAt(mCommandProcesses.indexOf(pd));
 	delete pd;
 	return 0;
 }
@@ -1836,9 +1834,9 @@ void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
 {
 kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'\n";
 	// Find this command in the command list
-	for (Q3ValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
+	for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
 	{
-		ProcData* pd = *it;
+		ProcData* pd = mCommandProcesses[i];
 		if (pd->process == proc  &&  pd->logProcess)
 		{
 			pd->logProcess->writeStdin(buffer, bufflen);
@@ -1864,9 +1862,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 {
 	kdDebug(5950) << "KAlarmApp::slotCommandExited()\n";
 	// Find this command in the command list
-	for (Q3ValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
+	for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
 	{
-		ProcData* pd = *it;
+		ProcData* pd = mCommandProcesses[i];
 		if (pd->process == proc)
 		{
 			// Found the command
@@ -1881,9 +1879,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 				if (pd->messageBoxParent)
 				{
 					// Close the existing informational KMessageBox for this process
-					QObjectList dialogs = pd->messageBoxParent->queryList("KDialogBase", 0, false, true);
-					KDialogBase* dialog = static_cast<KDialogBase*>(dialogs.first());
-					delete dialog;
+					QList<KDialogBase*> dialogs = pd->messageBoxParent->findChildren<KDialogBase*>();
+					if (!dialogs.isEmpty())
+					    delete dialogs[0];
 					if (!pd->tempFile())
 					{
 						errmsg += "\n";
@@ -1896,7 +1894,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 			}
 			if (pd->preAction())
 				execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
-			mCommandProcesses.remove(it);
+			mCommandProcesses.removeAt(i);
 			delete pd;
 			break;
 		}
@@ -1929,9 +1927,9 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 {
 	// Find this command in the command list
-	for (Q3ValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
+	for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
 	{
-		ProcData* pd = *it;
+		ProcData* pd = mCommandProcesses[i];
 		if (pd->process == proc)
 		{
 			pd->messageBoxParent = parent;

@@ -24,18 +24,15 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include <q3frame.h>
-#include <qdatetime.h>
-#include <q3valuelist.h>
+#include <QFrame>
 
 #include "datetime.h"
 
 class QShowEvent;
-class Q3WidgetStack;
-class Q3GroupBox;
+class QStackedWidget;
+class QGroupBox;
 class QLabel;
 class Q3ListBox;
-class Q3Button;
 class QAbstractButton;
 class QPushButton;
 class SpinBox;
@@ -54,7 +51,7 @@ class MonthlyRule;
 class YearlyRule;
 
 
-class RecurrenceEdit : public Q3Frame
+class RecurrenceEdit : public QFrame
 {
 		Q_OBJECT
 	public:
@@ -120,9 +117,7 @@ class RecurrenceEdit : public Q3Frame
 		void          saveState();
 
 		// Main rule box and choices
-		Q3GroupBox*        recurGroup;
-		Q3Frame*           ruleFrame;
-		Q3WidgetStack*     ruleStack;
+		QStackedWidget*   mRuleStack;
 		Rule*             mRule;         // current rule widget, or 0 if NoRule
 		NoRule*           mNoRule;
 		SubDailyRule*     mSubDailyRule;
@@ -131,7 +126,7 @@ class RecurrenceEdit : public Q3Frame
 		MonthlyRule*      mMonthlyRule;
 		YearlyRule*       mYearlyRule;
 
-		ButtonGroup*      ruleButtonGroup;
+		ButtonGroup*      mRuleButtonGroup;
 		RadioButton*      mNoneButton;
 		RadioButton*      mAtLoginButton;
 		RadioButton*      mSubDailyButton;
@@ -146,7 +141,7 @@ class RecurrenceEdit : public Q3Frame
 		bool              mYearlyShown;      // yearly rule has been displayed at some time or other
 
 		// Range
-		Q3GroupBox*      mRangeButtonBox;
+		QGroupBox*        mRangeButtonBox;
 		ButtonGroup*      mRangeButtonGroup;
 		RadioButton*      mNoEndDateButton;
 		RadioButton*      mRepeatCountButton;
@@ -158,7 +153,7 @@ class RecurrenceEdit : public Q3Frame
 		CheckBox*         mEndAnyTimeCheckBox;
 
 		// Exceptions
-		Q3GroupBox*        mExceptionGroup;
+		QGroupBox*        mExceptionGroup;
 		Q3ListBox*         mExceptionDateList;
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
@@ -167,7 +162,7 @@ class RecurrenceEdit : public Q3Frame
 
 		// Current start date and time
 		QDateTime         mCurrStartDateTime;
-		bool              noEmitTypeChanged;         // suppress typeChanged() signal
+		bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
@@ -175,7 +170,7 @@ class RecurrenceEdit : public Q3Frame
 		QAbstractButton*  mSavedRangeButton;         // which range button was selected
 		int               mSavedRepeatCount;         // repeat count
 		DateTime          mSavedEndDateTime;         // end date/time
-		Q3ValueList<QDate> mSavedExceptionDates;      // exception dates
+		QList<QDate>      mSavedExceptionDates;      // exception dates
 };
 
 #endif // RECURRENCEEDIT_H

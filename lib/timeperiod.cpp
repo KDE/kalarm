@@ -20,8 +20,7 @@
 
 #include "kalarm.h"
 
-#include <q3widgetstack.h>
-#include <q3whatsthis.h>
+#include <QStackedWidget>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -49,25 +48,25 @@ static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:mi
 =============================================================================*/
 
 TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
-	: Q3HBox(parent),
+	: KHBox(parent),
 	  mMaxDays(9999),
 	  mNoHourMinute(!allowHourMinute),
 	  mReadOnly(false)
 {
 	setSpacing(KDialog::spacingHint());
 
-	mSpinStack = new Q3WidgetStack(this);
+	mSpinStack = new QStackedWidget(this);
 	mSpinBox = new SpinBox(mSpinStack);
 	mSpinBox->setSingleStep(1);
 	mSpinBox->setSingleShiftStep(10);
 	mSpinBox->setRange(1, mMaxDays);
 	connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotDaysChanged(int)));
-	mSpinStack->addWidget(mSpinBox, 0);
+	mSpinStack->addWidget(mSpinBox);
 
 	mTimeSpinBox = new TimeSpinBox(0, 99999, mSpinStack);
 	mTimeSpinBox->setRange(1, maxMinutes);    // max 99H59M
 	connect(mTimeSpinBox, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
-	mSpinStack->addWidget(mTimeSpinBox, 1);
+	mSpinStack->addWidget(mTimeSpinBox);
 
 	mSpinStack->setFixedSize(mSpinBox->sizeHint().expandedTo(mTimeSpinBox->sizeHint()));
 	mHourMinuteRaised = mNoHourMinute;
@@ -350,12 +349,12 @@ void TimePeriod::showHourMin(bool hourMinute)
 		mHourMinuteRaised = hourMinute;
 		if (hourMinute)
 		{
-			mSpinStack->raiseWidget(mTimeSpinBox);
+			mSpinStack->setCurrentWidget(mTimeSpinBox);
 			mSpinStack->setFocusProxy(mTimeSpinBox);
 		}
 		else
 		{
-			mSpinStack->raiseWidget(mSpinBox);
+			mSpinStack->setCurrentWidget(mSpinBox);
 			mSpinStack->setFocusProxy(mSpinBox);
 		}
 	}
@@ -366,9 +365,9 @@ void TimePeriod::showHourMin(bool hourMinute)
  * If the hours:minutes text is omitted, both spinboxes are set to the same
  * WhatsThis text.
  */
-void TimePeriod::setWhatsThis(const QString& units, const QString& dayWeek, const QString& hourMin)
+void TimePeriod::setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin)
 {
-	Q3WhatsThis::add(mUnitsCombo, units);
-	Q3WhatsThis::add(mSpinBox, dayWeek);
-	Q3WhatsThis::add(mTimeSpinBox, (hourMin.isNull() ? dayWeek : hourMin));
+	mUnitsCombo->setWhatsThis(units);
+	mSpinBox->setWhatsThis(dayWeek);
+	mTimeSpinBox->setWhatsThis(hourMin.isNull() ? dayWeek : hourMin);
 }

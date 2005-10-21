@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@
 #include "alarmevent.h"
 #include "functions.h"
 #include "templatemenuaction.moc"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 
 TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
@@ -51,10 +49,10 @@ void TemplateMenuAction::slotInitMenu()
 	KMenu* menu = popupMenu();
 	menu->clear();
 	mOriginalTexts.clear();
-	Q3ValueList<KAEvent> templates = KAlarm::templateList();
-	for (Q3ValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+	QList<KAEvent> templates = KAlarm::templateList();
+	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
-		QString name = (*it).templateName();
+		QString name = templates[i].templateName();
 		menu->insertItem(name);
 		mOriginalTexts += name;
 	}

@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 #ifndef TIMEPERIOD_H
 #define TIMEPERIOD_H
 
-#include <q3hbox.h>
-#include <qstring.h>
+#include <QString>
+#include <khbox.h>
 
-class Q3WidgetStack;
+class QStackedWidget;
 class ComboBox;
 class SpinBox;
 class TimeSpinBox;
@@ -47,7 +47,7 @@ class TimeSpinBox;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class TimePeriod : public Q3HBox
+class TimePeriod : public KHBox
 {
 		Q_OBJECT
 	public:
@@ -98,7 +98,7 @@ class TimePeriod : public Q3HBox
 		/** Sets separate WhatsThis texts for the count spin boxes and the units combo box.
 		 *  If @p hourMin is omitted, both spin boxes are set to the same WhatsThis text.
 		 */
-		void          setWhatsThis(const QString& units, const QString& dayWeek, const QString& hourMin = QString::null);
+		void          setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin = QString::null);
 
 		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
 		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
@@ -111,29 +111,29 @@ class TimePeriod : public Q3HBox
 		/** This signal is emitted whenever the value held in the widget changes.
 		 *  @param minutes The current value of the time period, expressed in minutes.
 		 */
-		void          valueChanged(int minutes);   // value has changed
+		void            valueChanged(int minutes);   // value has changed
 
 	private slots:
-		void          slotUnitsSelected(int index);
-		void          slotDaysChanged(int);
-		void          slotTimeChanged(int minutes);
+		void            slotUnitsSelected(int index);
+		void            slotDaysChanged(int);
+		void            slotTimeChanged(int minutes);
 
 	private:
-		Units         setDateOnly(int minutes, bool dateOnly, bool signal);
-		void          setUnitRange();
-		void          showHourMin(bool hourMin);
-		void          adjustDayWeekShown();
+		Units           setDateOnly(int minutes, bool dateOnly, bool signal);
+		void            setUnitRange();
+		void            showHourMin(bool hourMin);
+		void            adjustDayWeekShown();
 
-		Q3WidgetStack* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
-		SpinBox*      mSpinBox;            // the days/weeks value spinbox
-		TimeSpinBox*  mTimeSpinBox;        // the hours:minutes value spinbox
-		ComboBox*     mUnitsCombo;
-		int           mMaxDays;            // maximum day count
-		int           mDateOnlyOffset;     // for mUnitsCombo: 1 if hours/minutes is disabled, else 0
-		Units         mMaxUnitShown;       // for mUnitsCombo: maximum units shown
-		bool          mNoHourMinute;       // hours/minutes cannot be displayed, ever
-		bool          mReadOnly;           // the widget is read only
-		bool          mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
+		QStackedWidget* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
+		SpinBox*        mSpinBox;            // the days/weeks value spinbox
+		TimeSpinBox*    mTimeSpinBox;        // the hours:minutes value spinbox
+		ComboBox*       mUnitsCombo;
+		int             mMaxDays;            // maximum day count
+		int             mDateOnlyOffset;     // for mUnitsCombo: 1 if hours/minutes is disabled, else 0
+		Units           mMaxUnitShown;       // for mUnitsCombo: maximum units shown
+		bool            mNoHourMinute;       // hours/minutes cannot be displayed, ever
+		bool            mReadOnly;           // the widget is read only
+		bool            mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
 };
 
 #endif // TIMEPERIOD_H

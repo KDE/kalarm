@@ -24,10 +24,8 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include <qsize.h>
-#include <q3ptrlist.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include "alarmevent.h"
 
@@ -78,7 +76,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* r
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-Q3ValueList<KAEvent> templateList();
+QList<KAEvent>      templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()

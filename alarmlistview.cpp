@@ -23,11 +23,11 @@
 #include <qtooltip.h>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <q3header.h>
 #include <qregexp.h>
 //Added by qt3to4:
+#include <q3header.h>
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 #include <QMouseEvent>
 
 #include <kglobal.h>
@@ -49,12 +49,12 @@
 =  Class: AlarmListView
 =  Displays the list of outstanding alarms.
 =============================================================================*/
-Q3ValueList<EventListViewBase*>  AlarmListView::mInstanceList;
-bool                            AlarmListView::mDragging = false;
+QList<EventListViewBase*>  AlarmListView::mInstanceList;
+bool                       AlarmListView::mDragging = false;
 
 
-AlarmListView::AlarmListView(QWidget* parent, const char* name)
-	: EventListViewBase(parent, name),
+AlarmListView::AlarmListView(QWidget* parent)
+	: EventListViewBase(parent),
 	  mTimeColumn(0),
 	  mTimeToColumn(1),
 	  mRepeatColumn(2),
@@ -110,9 +110,9 @@ void AlarmListView::populate()
 		if (cal)
 		{
 			events = cal->events();
-                        for (it = events.begin();  it != events.end();  ++it)
+			for (it = events.begin();  it != events.end();  ++it)
 			{
-                                KCal::Event* kcalEvent = *it;
+				KCal::Event* kcalEvent = *it;
 				if (kcalEvent->alarms().count() > 0)
 				{
 					event.set(*kcalEvent);
@@ -122,9 +122,9 @@ void AlarmListView::populate()
 		}
 	}
 	events = AlarmCalendar::activeCalendar()->events();
-        for (it = events.begin();  it != events.end();  ++it)
+	for (it = events.begin();  it != events.end();  ++it)
 	{
-                KCal::Event* kcalEvent = *it;
+		KCal::Event* kcalEvent = *it;
 		event.set(*kcalEvent);
 		if (mShowExpired  ||  !event.expired())
 			addEntry(event, now);
@@ -203,8 +203,8 @@ void AlarmListView::updateTimeToAlarms(bool forceDisplay)
 void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
 {
 	QDateTime now = QDateTime::currentDateTime();
-	for (InstanceListConstIterator it = mInstanceList.begin();  it != mInstanceList.end();  ++it)
-		static_cast<AlarmListView*>(*it)->addEntry(event, now, true, (*it == view));
+	for (int i = 0, end = mInstanceList.count();  i < end;  ++i)
+		static_cast<AlarmListView*>(mInstanceList[i])->addEntry(event, now, true, (mInstanceList[i] == view));
 }
 
 /******************************************************************************
@@ -289,12 +289,12 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		mMousePressed = false;
 		KCal::CalendarLocal cal(QString::fromLatin1("UTC"));
 		cal.setLocalTime();    // write out using local time (i.e. no time zone)
-		Q3ValueList<EventListViewItemBase*> items = selectedItems();
-		if (!items.count())
+		QList<EventListViewItemBase*> items = selectedItems();
+		if (items.isEmpty())
 			return;
-		for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+		for (int i = 0, end = items.count();  i < end;  ++i)
 		{
-			const KAEvent& event = (*it)->event();
+			const KAEvent& event = items[i]->event();
 			KCal::Event* kcalEvent = new KCal::Event;
 			event.updateKCalEvent(*kcalEvent, false, true);
 			kcalEvent->setUid(event.id());
@@ -342,17 +342,18 @@ bool AlarmListView::event(QEvent *e)
 				if (!item->messageTruncated()  &&  colWidth >= widthNeeded)
 				{
 					if (columnX + widthNeeded <= viewport()->width())
-						return false;
+						return EventListViewBase::event(e);
 				}
 //				QRect rect = itemRect(item);
 //				rect.setLeft(columnX);
 //				rect.setWidth(colWidth);
 				kdDebug(5950) << "AlarmListView::event(): display\n";
 				QToolTip::showText(pt, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
+				return true;
 			}
 		}
 	}
-	return false;
+	return EventListViewBase::event(e);
 }
 
 

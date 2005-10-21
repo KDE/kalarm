@@ -85,7 +85,6 @@ class SpinMirror : public Q3CanvasView
 		void         contentsMouseEvent(QMouseEvent*);
 
 		SpinBox*     mSpinbox;        // spinbox whose spin buttons are being mirrored
-		QWidget*     mSpinWidget;     // spin buttons in mSpinbox
 		QPixmap      mNormalButtons;  // image of spin buttons in unpressed state
 		bool         mReadOnly;       // value cannot be changed
 };

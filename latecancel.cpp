@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,14 +20,10 @@
 
 #include "kalarm.h"
 
-#include <q3widgetstack.h>
-#include <qlayout.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QStackedWidget>
 #include <QVBoxLayout>
-#include <Q3Frame>
 #include <QHBoxLayout>
-#include <QBoxLayout>
+
 #include <klocale.h>
 #include <kdialog.h>
 
@@ -44,8 +40,8 @@ QString LateCancelSelector::i18n_AutoCloseWinLC()     { return i18n("Auto-close 
 QString LateCancelSelector::i18n_i_AutoCloseWinLC()   { return i18n("Auto-close w&indow after late-cancelation time"); }
 
 
-LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
+	: QFrame(parent),
 	  mDateOnly(false),
 	  mReadOnly(false),
 	  mAutoCloseShown(false)
@@ -56,38 +52,35 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent, co
 	                         "If unchecked, the alarm will be triggered at the first opportunity after "
 	                         "its scheduled time, regardless of how late it is.");
 
-	setFrameStyle(Q3Frame::NoFrame);
 	mLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
-	mStack = new Q3WidgetStack(this);
-	mCheckboxFrame = new Q3Frame(mStack);
-	mCheckboxFrame->setFrameStyle(Q3Frame::NoFrame);
-	mStack->addWidget(mCheckboxFrame, 1);
-	QBoxLayout* layout = new QVBoxLayout(mCheckboxFrame, 0, 0);
+	mStack = new QStackedWidget(this);
+	mCheckboxFrame = new QFrame(mStack);
+	mStack->addWidget(mCheckboxFrame);
+	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame, 0, 0);
 	mCheckbox = new CheckBox(i18n_n_CancelIfLate(), mCheckboxFrame);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	Q3WhatsThis::add(mCheckbox, whatsThis);
-	layout->addWidget(mCheckbox, 0, Qt::AlignLeft);
+	mCheckbox->setWhatsThis(whatsThis);
+	vlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
-	mTimeSelectorFrame = new Q3Frame(mStack);
-	mTimeSelectorFrame->setFrameStyle(Q3Frame::NoFrame);
-	mStack->addWidget(mTimeSelectorFrame, 2);
-	layout = new QVBoxLayout(mTimeSelectorFrame, 0, 0);
+	mTimeSelectorFrame = new QFrame(mStack);
+	mStack->addWidget(mTimeSelectorFrame);
+	vlayout = new QVBoxLayout(mTimeSelectorFrame, 0, 0);
 	mTimeSelector = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                 whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	layout->addWidget(mTimeSelector);
+	vlayout->addWidget(mTimeSelector);
 	mLayout->addWidget(mStack);
 
-	layout = new QHBoxLayout(mLayout, KDialog::spacingHint());
-	layout->addSpacing(3*KDialog::spacingHint());
+	QHBoxLayout* hlayout = new QHBoxLayout(mLayout, KDialog::spacingHint());
+	hlayout->addSpacing(3*KDialog::spacingHint());
 	mAutoClose = new CheckBox(i18n_AutoCloseWin(), this);
 	mAutoClose->setFixedSize(mAutoClose->sizeHint());
-	Q3WhatsThis::add(mAutoClose, i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));
-	layout->addWidget(mAutoClose);
-	layout->addStretch();
+	mAutoClose->setWhatsThis(i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));
+	hlayout->addWidget(mAutoClose);
+	hlayout->addStretch();
 
 	mAutoClose->hide();
 	mAutoClose->setEnabled(false);
@@ -158,9 +151,9 @@ void LateCancelSelector::slotToggled(bool on)
 	if (on)
 	{
 		mTimeSelector->setDateOnly(mDateOnly);
-		mStack->raiseWidget(mTimeSelectorFrame);
+		mStack->setCurrentWidget(mTimeSelectorFrame);
 	}
 	else
-		mStack->raiseWidget(mCheckboxFrame);
+		mStack->setCurrentWidget(mCheckboxFrame);
 	mAutoClose->setEnabled(on);
 }

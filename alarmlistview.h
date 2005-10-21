@@ -66,7 +66,7 @@ class AlarmListView : public EventListViewBase
 {
 		Q_OBJECT       // needed by QObject::isA() calls
 	public:
-		AlarmListView(QWidget* parent = 0, const char* name = 0);
+		explicit AlarmListView(QWidget* parent = 0);
 		~AlarmListView();
 		void                   showExpired(bool show)      { mShowExpired = show; }
 		bool                   showingExpired() const      { return mShowExpired; }

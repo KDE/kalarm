@@ -21,8 +21,8 @@
 #ifndef SOUNDPICKER_H
 #define SOUNDPICKER_H
 
-#include <q3frame.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 #include <kurl.h>
 
 class ButtonGroup;
@@ -32,7 +32,7 @@ class PushButton;
 class RadioButton;
 
 
-class SoundPicker : public Q3Frame
+class SoundPicker : public QFrame
 {
 		Q_OBJECT
 	public:
@@ -44,9 +44,8 @@ class SoundPicker : public Q3Frame
 		enum Type { BEEP = 1, SPEAK, PLAY_FILE };
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		SoundPicker(QWidget* parent, const char* name = 0);
+		SoundPicker(QWidget* parent);
 		/** Initialises the widget's state.
 		 *  @param sound    True to enable sound.
 		 *  @param defaultType The default option to select when sound is enabled.

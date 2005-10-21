@@ -58,7 +58,7 @@ void Label::setBuddy(QWidget* bud)
 	{
 		while (w->focusProxy())
 			w = w->focusProxy();
-		if (!w->inherits("QRadioButton"))
+		if (!qobject_cast<QRadioButton*>(w))
 			w = 0;
 	}
 	if (!w)

@@ -20,15 +20,11 @@
 
 #include "kalarm.h"
 
-#include <qicon.h>
-//Added by qt3to4:
-#include <q3dragobject.h>
-#include <Q3ValueList>
 #include <QByteArray>
-#include <QCloseEvent>
+#include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
-#include <QDragEnterEvent>
+#include <QCloseEvent>
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -39,12 +35,13 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kxmlguifactory.h>
 #include <kaboutdata.h>
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -138,7 +135,7 @@ MainWindow::MainWindow(bool restored)
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	if (!mShowTimeTo)
 		mShowTime = true;     // ensure at least one time column is visible
-	mListView = new AlarmListView(this, "listView");
+	mListView = new AlarmListView(this);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->showExpired(mShowExpired);
 	setCentralWidget(mListView);
@@ -653,7 +650,7 @@ void MainWindow::slotView()
 */
 void MainWindow::slotDelete()
 {
-	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = items.count();
@@ -667,12 +664,12 @@ void MainWindow::slotDelete()
 	}
 
 	int warnKOrg = 0;
-	Q3ValueList<KAEvent> events;
+	QList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
-		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
+		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
 		KAEvent event = item->event();
 
 		// Delete the event from the calendar and displays
@@ -695,15 +692,15 @@ void MainWindow::slotDelete()
 void MainWindow::slotReactivate()
 {
 	int warnKOrg = 0;
-	Q3ValueList<KAEvent> events;
-	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	QList<KAEvent> events;
+	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	mListView->clearSelection();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		// Add the alarm to the displayed lists and to the calendar file
-		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
+		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
 		KAEvent event = item->event();
 		events.append(event);
 		if (KAlarm::reactivateEvent(event, mListView, true) == KAlarm::UPDATE_KORG_ERR)
@@ -724,11 +721,11 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
-	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
-		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
+		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
 		KAEvent event = item->event();
 
 		// Enable the alarm in the displayed lists and in the calendar file
@@ -785,15 +782,15 @@ void MainWindow::slotBirthdays()
 	BirthdayDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		Q3ValueList<KAEvent> events = dlg.events();
-		if (events.count())
+		QList<KAEvent> events = dlg.events();
+		if (!events.isEmpty())
 		{
 			mListView->clearSelection();
 			int warnKOrg = 0;
-			for (Q3ValueList<KAEvent>::Iterator ev = events.begin();  ev != events.end();  ++ev)
+			for (int i = 0, end = events.count();  i < end;  ++i)
 			{
 				// Add alarm to the displayed lists and to the calendar file
-				if (KAlarm::addEvent(*ev, mListView) == KAlarm::UPDATE_KORG_ERR)
+				if (KAlarm::addEvent(events[i], mListView) == KAlarm::UPDATE_KORG_ERR)
 					++warnKOrg;
 			}
 			if (warnKOrg)
@@ -925,10 +922,10 @@ void MainWindow::initUndoMenu(KMenu* menu, Undo::Type type)
 {
 	menu->clear();
 	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-	Q3ValueList<int> ids = Undo::ids(type);
-	for (Q3ValueList<int>::ConstIterator it = ids.begin();  it != ids.end();  ++it)
+	QList<int> ids = Undo::ids(type);
+	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
-		int id = *it;
+		int id = ids[i];
 		menu->insertItem(i18n("Undo [action]: message", "%1 %2: %3")
 		                       .arg(action).arg(Undo::actionText(type, id)).arg(Undo::description(type, id)), id);
 	}
@@ -1056,11 +1053,12 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 */
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
+	const QMimeData* data = e->mimeData();
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
 	else
-		e->accept(Q3TextDrag::canDecode(e)
-		       || KURLDrag::canDecode(e)
+		e->accept(data->hasText()
+		       || K3URLDrag::canDecode(e)
 		       || KPIM::MailListDrag::canDecode(e));
 }
 
@@ -1085,21 +1083,16 @@ static QString getMailHeader(const char* header, KMime::Content& content)
 */
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
+	const QMimeData* data = e->mimeData();
 	KAEvent::Action action = KAEvent::MESSAGE;
-	QString        text;
-	QByteArray     bytes;
-	AlarmText      alarmText;
-	KPIM::MailList mailList;
-	KURL::List     files;
+	QByteArray      bytes;
+	AlarmText       alarmText;
+	KPIM::MailList  mailList;
+	KURL::List      files;
 	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
-	QByteArray fmts;
-	for (int idbg = 0;  e->format(idbg);  ++idbg)
-	{
-		if (idbg) fmts += ", ";
-		fmts += e->format(idbg);
-	}
+	QString fmts = data->formats().join(", ");
 	kdDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
 #endif
 
@@ -1107,8 +1100,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	 * provide more than one mime type.
 	 * Don't change them without careful thought !!
 	 */
-	if (e->provides("message/rfc822")
-	&&  !(bytes = e->encodedData("message/rfc822")).isEmpty())
+	if (data->hasFormat("message/rfc822")
+	&&  !(bytes = data->data("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
@@ -1118,7 +1111,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		QString body;
 		content.textContent()->decodedText(body, true, true);    // strip trailing newlines & spaces
 		unsigned long sernum = 0;
-		if (e->provides(KPIM::MailListDrag::format())
+		if (data->hasFormat(KPIM::MailListDrag::format())
 		&&  KPIM::MailListDrag::decode(e, mailList)
 		&&  mailList.count())
 		{
@@ -1133,13 +1126,13 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Subject", content),
 				   body, sernum);
 	}
-	else if (KURLDrag::decode(e, files)  &&  files.count())
+	else if (K3URLDrag::decode(e, files)  &&  files.count())
 	{
 		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
 		alarmText.setText(files.first().prettyURL());
 	}
-	else if (e->provides(KPIM::MailListDrag::format())
+	else if (data->hasFormat(KPIM::MailListDrag::format())
 	&&       KPIM::MailListDrag::decode(e, mailList))
 	{
 		// KMail message(s). Ignore all but the first.
@@ -1166,8 +1159,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		}
 		return;
 	}
-	else if (Q3TextDrag::decode(e, text))
+	else if (data->hasText())
 	{
+		QString text = data->text();
 		kdDebug(5950) << "MainWindow::executeDropEvent(text)" << endl;
 		alarmText.setText(text);
 	}
@@ -1185,7 +1179,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 void MainWindow::slotSelection()
 {
 	// Find which item has been selected, and whether more than one is selected
-	Q3ValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	int count = items.count();
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
 	bool enableReactivate = true;
@@ -1193,9 +1187,9 @@ void MainWindow::slotSelection()
 	bool enableEnable = false;
 	bool enableDisable = false;
 	QDateTime now = QDateTime::currentDateTime();
-	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
-		const KAEvent& event = ((AlarmListViewItem*)(*it))->event();
+		const KAEvent& event = ((AlarmListViewItem*)items[i])->event();
 		if (enableReactivate
 		&&  (!event.expired()  ||  !event.occursAfter(now, true)))
 			enableReactivate = false;

@@ -22,7 +22,7 @@
 #define TIMEEDIT_H
 
 #include <QDateTime>
-#include <q3hbox.h>
+#include <khbox.h>
 
 class ComboBox;
 class TimeSpinBox;
@@ -47,7 +47,7 @@ class TimeSpinBox;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class TimeEdit : public Q3HBox
+class TimeEdit : public KHBox
 {
 		Q_OBJECT
 	public:

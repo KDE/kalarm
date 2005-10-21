@@ -23,11 +23,12 @@
 
 #include "kalarm.h"
 
-#include <q3valuelist.h>
+#include <QList>
 #include <klistview.h>
 
 #include "alarmevent.h"
 
+class QEvent;
 class QShowEvent;
 class QResizeEvent;
 class QPixmap;
@@ -39,11 +40,9 @@ class EventListViewBase : public KListView
 {
 		Q_OBJECT
 	public:
-		typedef Q3ValueList<EventListViewBase*>              InstanceList;
-		typedef Q3ValueListIterator<EventListViewBase*>      InstanceListIterator;
-		typedef Q3ValueListConstIterator<EventListViewBase*> InstanceListConstIterator;
+		typedef QList<EventListViewBase*>  InstanceList;
 
-		EventListViewBase(QWidget* parent = 0, const char* name = 0);
+		explicit EventListViewBase(QWidget* parent = 0);
 		virtual ~EventListViewBase()  { }
 		EventListViewItemBase* getEntry(const QString& eventID) const;
 		void                   addEvent(const KAEvent& e)  { addEvent(e, instances(), this); }
@@ -66,7 +65,7 @@ class EventListViewBase : public KListView
 		bool                   anySelected() const;    // are any items selected?
 		const KAEvent*         selectedEvent() const;
 		EventListViewItemBase* selectedItem() const;
-		Q3ValueList<EventListViewItemBase*> selectedItems() const;
+		QList<EventListViewItemBase*> selectedItems() const;
 		int                    selectedCount() const;
 		int                    lastColumn() const     { return mLastColumn; }
 		virtual QString        whatsThisText(int column) const = 0;
@@ -90,6 +89,7 @@ class EventListViewBase : public KListView
 		EventListViewItemBase* addEntry(EventListViewItemBase*, bool setSize, bool reselect);
 		EventListViewItemBase* updateEntry(EventListViewItemBase*, const KAEvent& newEvent, bool setSize = false, bool reselect = false);
 		void                   addLastColumn(const QString& title);
+		virtual bool           event(QEvent*);
 		virtual void           showEvent(QShowEvent*);
 		virtual void           resizeEvent(QResizeEvent*);
 

@@ -23,8 +23,7 @@
 
 /** @file mainwindow.h - main application window */
 
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include "alarmevent.h"
 #include "alarmtext.h"
@@ -139,7 +138,7 @@ class MainWindow : public MainWindowBase
 		void           updateActionsMenu();
 
 	private:
-		typedef Q3ValueList<MainWindow*> WindowList;
+		typedef QList<MainWindow*> WindowList;
 
 		MainWindow(bool restored);
 		void           createListView(bool recreate);

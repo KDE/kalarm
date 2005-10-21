@@ -23,8 +23,6 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QResizeEvent>
-//Added by qt3to4:
-#include <q3whatsthis.h>
 
 #include <klineedit.h>
 #include <kapplication.h>
@@ -42,13 +40,12 @@
 = Button to display the Special Alarm Actions dialogue.
 =============================================================================*/
 
-SpecialActionsButton::SpecialActionsButton(const QString& caption, QWidget* parent, const char* name)
-	: QPushButton(caption, parent, name),
+SpecialActionsButton::SpecialActionsButton(const QString& caption, QWidget* parent)
+	: QPushButton(caption, parent),
 	  mReadOnly(false)
 {
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	Q3WhatsThis::add(this,
-	      i18n("Specify actions to execute before and after the alarm is displayed."));
+	setWhatsThis(i18n("Specify actions to execute before and after the alarm is displayed."));
 }
 
 /******************************************************************************
@@ -132,8 +129,8 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 = Pre- and post-alarm actions widget.
 =============================================================================*/
 
-SpecialActions::SpecialActions(QWidget* parent, const char* name)
-	: QWidget(parent, name),
+SpecialActions::SpecialActions(QWidget* parent)
+	: QWidget(parent),
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
@@ -145,9 +142,8 @@ SpecialActions::SpecialActions(QWidget* parent, const char* name)
 
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
-	Q3WhatsThis::add(mPreAction,
-	      i18n("Enter a shell command to execute before the alarm is displayed. "
-	           "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
+	mPreAction->setWhatsThis(i18n("Enter a shell command to execute before the alarm is displayed. "
+	                              "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
 	topLayout->addWidget(mPreAction);
 	topLayout->addSpacing(KDialog::spacingHint());
 
@@ -158,7 +154,7 @@ SpecialActions::SpecialActions(QWidget* parent, const char* name)
 
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);
-	Q3WhatsThis::add(mPostAction, i18n("Enter a shell command to execute after the alarm window is closed."));
+	mPostAction->setWhatsThis(i18n("Enter a shell command to execute after the alarm window is closed."));
 	topLayout->addWidget(mPostAction);
 }
 

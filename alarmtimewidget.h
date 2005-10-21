@@ -21,7 +21,7 @@
 #ifndef ALARMTIMEWIDGET_H
 #define ALARMTIMEWIDGET_H
 
-#include <QGroupBox>
+#include <QFrame>
 #include "datetime.h"
 
 class QAbstractButton;
@@ -33,7 +33,7 @@ class TimeEdit;
 class TimeSpinBox;
 
 
-class AlarmTimeWidget : public QGroupBox
+class AlarmTimeWidget : public QFrame
 {
 		Q_OBJECT
 	public:
@@ -72,7 +72,7 @@ class AlarmTimeWidget : public QGroupBox
 		void             slotAnyTimeToggled(bool);
 
 	private:
-		void             init(int mode);
+		void             init(QWidget* topWidget, int mode, bool hasTitle);
 		void             setAnyTime();
 		void             setMaxDelayTime(const QDateTime& now);
 		void             setMaxMinTimeIf(const QDateTime& now);

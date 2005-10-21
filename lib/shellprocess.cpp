@@ -103,7 +103,7 @@ void ShellProcess::slotExited(KProcess* proc)
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
 	QByteArray scopy(buffer, bufflen);    // construct a deep copy
-	bool write = !mStdinQueue.count();
+	bool write = mStdinQueue.isEmpty();
 	mStdinQueue.enqueue(scopy);
 	if (write)
 		KProcess::writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
@@ -117,9 +117,9 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 */
 void ShellProcess::writtenStdin(KProcess* proc)
 {
-	if (mStdinQueue.count())
+	if (!mStdinQueue.isEmpty())
 		mStdinQueue.dequeue();   // free the buffer which has now been written
-	if (mStdinQueue.count())
+	if (!mStdinQueue.isEmpty())
 		proc->writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
 	else if (mStdinExit)
 		kill();

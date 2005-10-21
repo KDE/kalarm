@@ -24,8 +24,6 @@
 #include "kalarm.h"
 
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <klistview.h>
 
 #include "eventlistviewbase.h"
@@ -52,7 +50,7 @@ class TemplateListView : public EventListViewBase
 {
 		Q_OBJECT
 	public:
-		explicit TemplateListView(bool includeCmdAlarms, const QString& whatsThisText, QWidget* parent = 0, const char* name = 0);
+		explicit TemplateListView(bool includeCmdAlarms, const QString& whatsThisText, QWidget* parent = 0);
 		~TemplateListView();
 		int                    iconColumn() const     { return mIconColumn; }
 		int                    nameColumn() const     { return mNameColumn; }
@@ -71,7 +69,7 @@ class TemplateListView : public EventListViewBase
 		TemplateListViewItem*  firstChild() const     { return (TemplateListViewItem*)EventListViewBase::firstChild(); }
 		virtual void           setSelected(Q3ListViewItem* item, bool selected)         { EventListViewBase::setSelected(item, selected); }
 		virtual void           setSelected(TemplateListViewItem* item, bool selected)  { EventListViewBase::setSelected(item, selected); }
-		virtual Q3ValueList<EventListViewBase*> instances()   { return mInstanceList; }
+		virtual QList<EventListViewBase*> instances()   { return mInstanceList; }
 
 	protected:
 		virtual void           populate();
@@ -79,7 +77,7 @@ class TemplateListView : public EventListViewBase
 		virtual QString        whatsThisText(int column) const;
 
 	private:
-		static Q3ValueList<EventListViewBase*> mInstanceList;
+		static QList<EventListViewBase*> mInstanceList;
 		QString                mWhatsThisText;    // default QWhatsThis text
 		int                    mIconColumn;       // index to icon column
 		int                    mNameColumn;       // index to template name column

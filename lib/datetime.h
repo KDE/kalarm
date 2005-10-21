@@ -20,7 +20,7 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 
 /**

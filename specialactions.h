@@ -33,7 +33,7 @@ class SpecialActionsButton : public QPushButton
 {
 		Q_OBJECT
 	public:
-		SpecialActionsButton(const QString& caption, QWidget* parent = 0, const char* name = 0);
+		explicit SpecialActionsButton(const QString& caption, QWidget* parent = 0);
 		void           setActions(const QString& pre, const QString& post);
 		const QString& preAction() const      { return mPreAction; }
 		const QString& postAction() const     { return mPostAction; }
@@ -58,7 +58,7 @@ class SpecialActions : public QWidget
 {
 		Q_OBJECT
 	public:
-		SpecialActions(QWidget* parent = 0, const char* name = 0);
+		explicit SpecialActions(QWidget* parent = 0);
 		void         setActions(const QString& pre, const QString& post);
 		QString      preAction() const;
 		QString      postAction() const;

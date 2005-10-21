@@ -23,8 +23,7 @@
 
 /** @file messagewin.h - displays an alarm message */
 
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <kdatastream.h>
 
 #include "mainwindowbase.h"
@@ -101,7 +100,7 @@ class MessageWin : public MainWindowBase
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
 
-		static Q3ValueList<MessageWin*> mWindowList;  // list of existing message windows
+		static QList<MessageWin*> mWindowList;  // list of existing message windows
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;

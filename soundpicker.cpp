@@ -20,14 +20,9 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <qregexp.h>
-#include <qtooltip.h>
-#include <qtimer.h>
-#include <q3hbox.h>
-#include <q3whatsthis.h>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <qtooltip.h>
+#include <QTimer>
 #include <QHBoxLayout>
 
 #include <kglobal.h>
@@ -35,6 +30,7 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <khbox.h>
 #ifndef WITHOUT_ARTS
 #include <arts/kplayobjectfactory.h>
 #endif
@@ -61,19 +57,17 @@ QString SoundPicker::i18n_p_Speak()     { return i18n("S&peak"); }
 QString SoundPicker::i18n_File()        { return i18n("File"); }
 
 
-SoundPicker::SoundPicker(QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+SoundPicker::SoundPicker(QWidget* parent)
+	: QFrame(parent),
 	  mRevertType(false)
 {
 	// Sound checkbox
-	setFrameStyle(Q3Frame::NoFrame);
 	QHBoxLayout* soundLayout = new QHBoxLayout(this, 0, 2*KDialog::spacingHint());
 	soundLayout->setAlignment(Qt::AlignVCenter);
 	mCheckbox = new CheckBox(i18n_s_Sound(), this);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotSoundToggled(bool)));
-	Q3WhatsThis::add(mCheckbox,
-	      i18n("Check to enable sound when the message is displayed. Select the type of sound from the displayed options."));
+	mCheckbox->setWhatsThis(i18n("Check to enable sound when the message is displayed. Select the type of sound from the displayed options."));
 	soundLayout->addWidget(mCheckbox);
 
 	// Sound type
@@ -83,15 +77,15 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	// Beep radio button
 	mBeepRadio = new RadioButton(i18n_Beep(), this);
 	mBeepRadio->setFixedSize(mBeepRadio->sizeHint());
-	Q3WhatsThis::add(mBeepRadio, i18n("If checked, a beep will sound when the alarm is displayed."));
+	mBeepRadio->setWhatsThis(i18n("If checked, a beep will sound when the alarm is displayed."));
 	mTypeGroup->addButton(mBeepRadio);
 	soundLayout->addWidget(mBeepRadio);
 
 	// File radio button
-	Q3HBox* box = new Q3HBox(this);
+	KHBox* box = new KHBox(this);
 	mFileRadio = new RadioButton(i18n_File(), box);
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
-	Q3WhatsThis::add(mFileRadio, i18n("If checked, a sound file will be played when the alarm is displayed."));
+	mFileRadio->setWhatsThis(i18n("If checked, a sound file will be played when the alarm is displayed."));
 	mTypeGroup->addButton(mFileRadio);
 
 	// Sound file picker button
@@ -99,7 +93,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	mFilePicker->setPixmap(SmallIcon("playsound"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
-	Q3WhatsThis::add(mFilePicker, i18n("Configure a sound file to play when the alarm is displayed."));
+	mFilePicker->setWhatsThis(i18n("Configure a sound file to play when the alarm is displayed."));
 	box->setFixedSize(box->sizeHint());
 	soundLayout->addWidget(box);
 	box->setFocusProxy(mFileRadio);
@@ -107,7 +101,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 	// Speak radio button
 	mSpeakRadio = new RadioButton(i18n_p_Speak(), this);
 	mSpeakRadio->setFixedSize(mSpeakRadio->sizeHint());
-	Q3WhatsThis::add(mSpeakRadio, i18n("If checked, the message will be spoken when the alarm is displayed."));
+	mSpeakRadio->setWhatsThis(i18n("If checked, the message will be spoken when the alarm is displayed."));
 	mTypeGroup->addButton(mSpeakRadio);
 	soundLayout->addWidget(mSpeakRadio);
 

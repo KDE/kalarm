@@ -1,7 +1,7 @@
 /*
  *  colourlist.cpp  -  an ordered list of colours
  *  Program:  kalarm
- *  Copyright (C) 2003 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,12 +30,12 @@ ColourList::ColourList(const QColor* colours)
 void ColourList::insert(const QColor& colour)
 {
 	QRgb rgb = colour.rgb();
-	for (Q3ValueListIterator<QRgb> it = mList.begin();  it != mList.end();  ++it)
+	for (int i = 0, end = mList.count();  i < end;  ++i)
 	{
-		if (rgb <= *it)
+		if (rgb <= mList[i])
 		{
-			if (rgb != *it)    // don't insert duplicates
-				mList.insert(it, rgb);
+			if (rgb != mList[i])    // don't insert duplicates
+				mList.insert(i, rgb);
 			return;
 		}
 	}

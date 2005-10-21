@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialogue to choose an alarm template
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,8 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QResizeEvent>
-#include <QBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -42,12 +38,12 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 	: KDialogBase(KDialogBase::Plain, i18n("Choose Alarm Template"), Ok|Cancel, Ok, parent, name)
 {
 	QWidget* topWidget = plainPage();
-	QBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setSpacing(spacingHint());
 
 	// Display the list of templates, but exclude command alarms if in kiosk mode.
 	bool includeCmdAlarms = ShellProcess::authorised();
-	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget, "list");
+	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget);
 	mTemplateList->setSelectionMode(Q3ListView::Single);
 	mTemplateList->refresh();      // populate the template list
 	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));

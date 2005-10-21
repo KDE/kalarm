@@ -22,7 +22,6 @@
 #define EDITDLG_H
 
 #include <qdatetime.h>
-#include <qlineedit.h>
 
 #include <kdialogbase.h>
 
@@ -31,17 +30,17 @@
 #include "datetime.h"
 #include "soundpicker.h"
 
-class Q3Frame;
+class QStackedWidget;
+class QFrame;
 class QLabel;
 class QShowEvent;
 class QResizeEvent;
 class QAbstractButton;
-class Q3Button;
-class Q3GroupBox;
+class QGroupBox;
+class QLineEdit;
 class QComboBox;
 class QTabWidget;
-class Q3VBox;
-class Q3HBox;
+class KHBox;
 class EmailIdCombo;
 class ColourCombo;
 class FontColourButton;
@@ -73,7 +72,7 @@ class EditAlarmDlg : public KDialogBase
 		bool            getEvent(KAEvent&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static ColourCombo* createBgColourChooser(Q3HBox** box, QWidget* parent, const char* name = 0);
+		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent, const char* name = 0);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
@@ -150,7 +149,7 @@ class EditAlarmDlg : public KDialogBase
 		RadioButton*        mCommandRadio;
 		PickAlarmFileRadio* mFileRadio;
 		RadioButton*        mEmailRadio;
-		Q3WidgetStack*       mAlarmTypeStack;
+		QStackedWidget*     mAlarmTypeStack;
 
 		// Templates
 		QLineEdit*          mTemplateName;
@@ -163,9 +162,9 @@ class EditAlarmDlg : public KDialogBase
 		TimeEdit*           mTemplateTime;        // the alarm time which is specified
 
 		// Display alarm options widgets
-		Q3Frame*             mDisplayAlarmsFrame;
-		Q3HBox*              mFileBox;
-		Q3HBox*              mFilePadding;
+		QFrame*             mDisplayAlarmsFrame;
+		KHBox*              mFileBox;
+		KHBox*              mFilePadding;
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
@@ -181,7 +180,7 @@ class EditAlarmDlg : public KDialogBase
 		QPushButton*        mFileBrowseButton;   // text file browse button
 		QString             mFileDefaultDir;     // default directory for browse button
 		// Command alarm widgets
-		Q3Frame*             mCommandFrame;
+		QFrame*             mCommandFrame;
 		CheckBox*           mCmdTypeScript;      // entering a script
 		LineEdit*           mCmdCommandEdit;     // command line edit box
 		TextEdit*           mCmdScriptEdit;      // script edit box
@@ -190,13 +189,13 @@ class EditAlarmDlg : public KDialogBase
 		RadioButton*        mCmdLogToFile;
 		RadioButton*        mCmdDiscardOutput;
 		LineEdit*           mCmdLogFileEdit;     // log file URL edit box
-		QWidget*            mCmdPadding;
+		KHBox*              mCmdPadding;
 		// Email alarm widgets
-		Q3Frame*             mEmailFrame;
+		QFrame*             mEmailFrame;
 		EmailIdCombo*       mEmailFromList;
 		LineEdit*           mEmailToEdit;
 		QPushButton*        mEmailAddressButton; // email open address book button
-		QLineEdit*          mEmailSubjectEdit;
+		LineEdit*           mEmailSubjectEdit;
 		TextEdit*           mEmailMessageEdit;   // email body edit box
 		QComboBox*          mEmailAttachList;
 		QPushButton*        mEmailAddAttachButton;
@@ -204,7 +203,7 @@ class EditAlarmDlg : public KDialogBase
 		CheckBox*           mEmailBcc;
 		QString             mAttachDefaultDir;
 
-		Q3GroupBox*          mDeferGroup;
+		QGroupBox*          mDeferGroup;
 		QLabel*             mDeferTimeLabel;
 		QPushButton*        mDeferChangeButton;
 

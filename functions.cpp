@@ -23,8 +23,6 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <QDesktopWidget>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kaction.h>
@@ -466,9 +464,9 @@ void displayUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
 *  Returns a list of all alarm templates.
 *  If shell commands are disabled, command alarm templates are omitted.
 */
-Q3ValueList<KAEvent> templateList()
+QList<KAEvent> templateList()
 {
-	Q3ValueList<KAEvent> templates;
+	QList<KAEvent> templates;
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{

@@ -28,9 +28,10 @@
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
+#include <klocale.h>
 #include <dcopclient.h>
-#include <kdebug.h>
 #include <ktoolinvocation.h>
+#include <kdebug.h>
 
 #include "kalarmd/kalarmd.h"
 #include "kalarmd/alarmdaemoniface.h"
@@ -613,7 +614,7 @@ void NotificationHandler::registered(bool reregister, int result)
 =  Class: AlarmEnableAction
 =============================================================================*/
 
-AlarmEnableAction::AlarmEnableAction(int accel, QObject* parent, const char* name)
+AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent, const char* name)
 	: KToggleAction(QString::null, accel, parent, name),
 	  mInitialised(false)
 {

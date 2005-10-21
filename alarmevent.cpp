@@ -26,8 +26,6 @@
 #include <qcolor.h>
 #include <qregexp.h>
 #include <QByteArray>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -2175,12 +2173,12 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
 		return false;
-	for (Q3ValueListConstIterator<int> it = days.begin();  it != days.end();  ++it)
-		mRecurrence->addMonthlyDate(*it);
+	for (int i = 0, end = days.count();  i < end;  ++i)
+		mRecurrence->addMonthlyDate(days[i]);
 	return true;
 }
 
@@ -2195,12 +2193,12 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const Q3ValueList<int>& days, int 
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& posns, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
 		return false;
-	for (Q3ValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
-		mRecurrence->addMonthlyPos((*it).weeknum, (*it).days);
+	for (int i = 0, end = posns.count();  i < end;  ++i)
+		mRecurrence->addMonthlyPos(posns[i].weeknum, posns[i].days);
 	return true;
 }
 
@@ -2217,12 +2215,12 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const Q3ValueList<MonthPos>& posns,
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end), feb29))
 		return false;
-	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-		mRecurrence->addYearlyMonth(*it);
+	for (int i = 0, end = months.count();  i < end;  ++i)
+		mRecurrence->addYearlyMonth(months[i]);
 	if (day)
 		mRecurrence->addMonthlyDate(day);
 	return true;
@@ -2240,14 +2238,16 @@ bool KAEvent::setRecurAnnualByDate(int freq, const Q3ValueList<int>& months, int
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
  */
-bool KAEvent::setRecurAnnualByPos(int freq, const Q3ValueList<MonthPos>& posns, const Q3ValueList<int>& months, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end)))
 		return false;
-	for (Q3ValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
-		mRecurrence->addYearlyMonth(*it);
-	for (Q3ValueListConstIterator<MonthPos> it = posns.begin();  it != posns.end();  ++it)
-		mRecurrence->addYearlyPos((*it).weeknum, (*it).days);
+	int i = 0;
+	int iend;
+	for (iend = months.count();  i < iend;  ++i)
+		mRecurrence->addYearlyMonth(months[i]);
+	for (i = 0, iend = posns.count();  i < iend;  ++i)
+		mRecurrence->addYearlyPos(posns[i].weeknum, posns[i].days);
 	return true;
 }
 
@@ -2349,19 +2349,19 @@ int KAEvent::recurInterval() const
 /******************************************************************************
  * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
  */
-Q3ValueList<KAEvent::MonthPos> KAEvent::convRecurPos(const Q3ValueList<KCal::RecurrenceRule::WDayPos>& wdaypos)
+QList<KAEvent::MonthPos> KAEvent::convRecurPos(const QList<KCal::RecurrenceRule::WDayPos>& wdaypos)
 {
-	Q3ValueList<MonthPos> mposns;
-	for (Q3ValueList<KCal::RecurrenceRule::WDayPos>::ConstIterator it = wdaypos.begin();  it != wdaypos.end();  ++it)
+	QList<MonthPos> mposns;
+	for (int i = 0, end = wdaypos.count();  i < end;  ++i)
 	{
-		int daybit  = (*it).day() - 1;
-		int weeknum = (*it).pos();
+		int daybit  = wdaypos[i].day() - 1;
+		int weeknum = wdaypos[i].pos();
 		bool found = false;
-		for (Q3ValueList<MonthPos>::Iterator mit = mposns.begin();  mit != mposns.end();  ++mit)
+		for (int m = 0, mend = mposns.count();  m < mend;  ++m)
 		{
-			if ((*mit).weeknum == weeknum)
+			if (mposns[m].weeknum == weeknum)
 			{
-				(*mit).days.setBit(daybit);
+				mposns[m].days.setBit(daybit);
 				found = true;
 				break;
 			}
@@ -3053,13 +3053,13 @@ void KAAlarmEventBase::dumpDebug() const
  * Sets the list of email addresses, removing any empty addresses.
  * Reply = false if empty addresses were found.
  */
-EmailAddressList& EmailAddressList::operator=(const Q3ValueList<Person>& addresses)
+EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
 {
 	clear();
-	for (Q3ValueList<Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
+	for (int p = 0, end = addresses.count();  p < end;  ++p)
 	{
-		if (!(*it).email().isEmpty())
-			append(*it);
+		if (!addresses[p].email().isEmpty())
+			append(addresses[p]);
 	}
 	return *this;
 }
@@ -3072,7 +3072,7 @@ QString EmailAddressList::join(const QString& separator) const
 {
 	QString result;
 	bool first = true;
-	for (Q3ValueList<Person>::ConstIterator it = begin();  it != end();  ++it)
+	for (int p = 0, end = count();  p < end;  ++p)
 	{
 		if (first)
 			first = false;
@@ -3080,7 +3080,7 @@ QString EmailAddressList::join(const QString& separator) const
 			result += separator;
 
 		bool quote = false;
-		QString name = (*it).name();
+		QString name = (*this)[p].name();
 		if (!name.isEmpty())
 		{
 			// Need to enclose the name in quotes if it has any special characters
@@ -3095,12 +3095,12 @@ QString EmailAddressList::join(const QString& separator) const
 					break;
 				}
 			}
-			result += (*it).name();
+			result += (*this)[p].name();
 			result += (quote ? "\" <" : " <");
 			quote = true;    // need angle brackets round email address
 		}
 
-		result += (*it).email();
+		result += (*this)[p].email();
 		if (quote)
 			result += ">";
 	}

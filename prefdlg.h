@@ -21,21 +21,19 @@
 #ifndef PREFDLG_H
 #define PREFDLG_H
 
-#include <qsize.h>
-#include <qdatetime.h>
 #include <ktabctl.h>
 #include <kdialogbase.h>
 
 #include "preferences.h"
 #include "recurrenceedit.h"
 
-class Q3ButtonGroup;
 class QCheckBox;
 class QAbstractButton;
 class QRadioButton;
 class QPushButton;
 class QComboBox;
 class QLineEdit;
+class KVBox;
 class KColorCombo;
 class FontColourChooser;
 class ButtonGroup;
@@ -81,7 +79,7 @@ class PrefsTabBase : public QWidget
 {
 		Q_OBJECT
 	public:
-		PrefsTabBase(Q3VBox*);
+		PrefsTabBase(KVBox*);
 
 		void         setPreferences();
 		virtual void restore() = 0;
@@ -90,7 +88,7 @@ class PrefsTabBase : public QWidget
 		static int   indentWidth()    { return mIndentWidth; }
 
 	protected:
-		Q3VBox*       mPage;
+		KVBox*       mPage;
 
 	private:
 		static int   mIndentWidth;       // indent width for checkboxes etc.
@@ -102,7 +100,7 @@ class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MiscPrefTab(Q3VBox*);
+		MiscPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -136,7 +134,7 @@ class MiscPrefTab : public PrefsTabBase
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearExpired;
 		TimeEdit*      mStartOfDay;
-		Q3ButtonGroup*  mXtermType;
+		ButtonGroup*   mXtermType;
 		QLineEdit*     mXtermCommand;
 		int            mXtermCount;              // number of terminal window types
 };
@@ -147,7 +145,7 @@ class EmailPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EmailPrefTab(Q3VBox*);
+		EmailPrefTab(KVBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -163,9 +161,7 @@ class EmailPrefTab : public PrefsTabBase
 	private:
 		void         setEmailAddress(Preferences::MailFrom, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
-		Preferences::MailFrom fromAddressType() const;
-		Preferences::MailFrom bccAddressType() const;
-		QString      validateAddr(Preferences::MailFrom, QLineEdit* addr, const QString& msg);
+		QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
 
 		ButtonGroup*   mEmailClient;
 		RadioButton*   mKMailButton;
@@ -191,7 +187,7 @@ class EditPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EditPrefTab(Q3VBox*);
+		EditPrefTab(KVBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -222,7 +218,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mCopyToKOrganizer;
 		QCheckBox*      mLateCancel;
 		QComboBox*      mRecurPeriod;
-		Q3ButtonGroup*   mFeb29;
+		ButtonGroup*    mFeb29;
 
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };
@@ -233,7 +229,7 @@ class ViewPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		ViewPrefTab(Q3VBox*);
+		ViewPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -271,7 +267,7 @@ class FontColourPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		FontColourPrefTab(Q3VBox*);
+		FontColourPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);

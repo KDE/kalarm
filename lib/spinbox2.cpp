@@ -18,22 +18,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qglobal.h>
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QEvent>
-#include <Q3Frame>
-#include <QShowEvent>
-#include <QMouseEvent>
-#include <QStyleOptionSpinBox>
+#include "kalarm.h"
 
 #include <stdlib.h>
+
+#include <qglobal.h>
+#include <QMouseEvent>
+#include <QStyleOptionSpinBox>
+//Added by qt3to4:
+#include <Q3Frame>
 
 #include <qstyle.h>
 #include <qobject.h>
 #include <qapplication.h>
 #include <qpixmap.h>
 #include <qmatrix.h>
+#include <kdebug.h>
 
 #include "spinbox2.moc"
 #include "spinbox2private.moc"
@@ -54,11 +54,11 @@ static bool mirrorStyle(const QStyle*);
 int SpinBox2::mReverseLayout = -1;
 
 SpinBox2::SpinBox2(QWidget* parent)
-	: Q3Frame(parent),
+	: QFrame(parent),
 	  mReverseWithLayout(true)
 {
-	mUpdown2Frame = new Q3Frame(this);
-	mSpinboxFrame = new Q3Frame(this);
+	mUpdown2Frame = new QFrame(this);
+	mSpinboxFrame = new QFrame(this);
 	mUpdown2 = new ExtraSpinBox(mUpdown2Frame);
 //	mSpinbox = new MainSpinBox(0, 1, 1, this, mSpinboxFrame);
 	mSpinbox = new MainSpinBox(this, mSpinboxFrame);
@@ -66,11 +66,11 @@ SpinBox2::SpinBox2(QWidget* parent)
 }
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent)
-	: Q3Frame(parent),
+	: QFrame(parent),
 	  mReverseWithLayout(true)
 {
-	mUpdown2Frame = new Q3Frame(this);
-	mSpinboxFrame = new Q3Frame(this);
+	mUpdown2Frame = new QFrame(this);
+	mSpinboxFrame = new QFrame(this);
 	mUpdown2 = new ExtraSpinBox(minValue, maxValue, step2, mUpdown2Frame);
 	mSpinbox = new MainSpinBox(minValue, maxValue, step, this, mSpinboxFrame);
 	setSteps(step, step2);
@@ -123,7 +123,7 @@ void SpinBox2::setReverseWithLayout(bool reverse)
 
 void SpinBox2::setEnabled(bool enabled)
 {
-	Q3Frame::setEnabled(enabled);
+	QFrame::setEnabled(enabled);
 	updateMirror();
 }
 
@@ -288,8 +288,8 @@ void SpinBox2::arrange()
 void SpinBox2::getMetrics() const
 {
 	QStyleOptionSpinBox option;
-#warning What about Down?
 	QRect rect = mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
+	rect      |= mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	xUpdown2 = mReverseLayout ? 0 : rect.left();
@@ -406,12 +406,6 @@ SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent)
 	setVScrollBarMode(Q3ScrollView::AlwaysOff);
 	setHScrollBarMode(Q3ScrollView::AlwaysOff);
 	setFrameStyle(Q3Frame::NoFrame);
-
-	// Find the spin widget which is part of the spin box, in order to
-	// pass on its shift-button presses.
-#warning Fix this
-	QObjectList spinwidgets = spinbox->queryList("QSpinWidget", 0, false, true);
-	mSpinWidget = (SpinBox*)spinwidgets.first();
 }
 
 void SpinMirror::setNormalButtons(const QPixmap& px)
@@ -445,7 +439,7 @@ void SpinMirror::contentsMouseEvent(QMouseEvent* e)
 	{
 		QPoint pt = contentsToViewport(e->pos());
 		pt.setX(pt.x() + mSpinbox->upRect().left());
-		QApplication::postEvent(mSpinWidget, new QMouseEvent(e->type(), pt, e->button(), e->state()));
+		QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->state()));
 
 		// If the mouse button has been released, display unpressed spin buttons
 		if (e->type() == QEvent::MouseButtonRelease)

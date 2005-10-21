@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,9 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QList>
 #include <QVBoxLayout>
-#include <Q3ValueList>
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QBoxLayout>
@@ -66,26 +63,25 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(slotNew()));
-	Q3WhatsThis::add(button, i18n("Create a new alarm template"));
+	button->setWhatsThis(i18n("Create a new alarm template"));
 	layout->addWidget(button);
 
 	mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
 	mEditButton->setFixedSize(mEditButton->sizeHint());
 	connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
-	Q3WhatsThis::add(mEditButton, i18n("Edit the currently highlighted alarm template"));
+	mEditButton->setWhatsThis(i18n("Edit the currently highlighted alarm template"));
 	layout->addWidget(mEditButton);
 
 	mCopyButton = new QPushButton(i18n("Co&py"), topWidget);
 	mCopyButton->setFixedSize(mCopyButton->sizeHint());
 	connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
-	Q3WhatsThis::add(mCopyButton,
-	      i18n("Create a new alarm template based on a copy of the currently highlighted template"));
+	mCopyButton->setWhatsThis(i18n("Create a new alarm template based on a copy of the currently highlighted template"));
 	layout->addWidget(mCopyButton);
 
 	mDeleteButton = new QPushButton(i18n("&Delete"), topWidget);
 	mDeleteButton->setFixedSize(mDeleteButton->sizeHint());
 	connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
-	Q3WhatsThis::add(mDeleteButton, i18n("Delete the currently highlighted alarm template"));
+	mDeleteButton->setWhatsThis(i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
 
 	mTemplateList->refresh();
@@ -187,7 +183,7 @@ void TemplateDlg::slotEdit()
 */
 void TemplateDlg::slotDelete()
 {
-	Q3ValueList<EventListViewItemBase*> items = mTemplateList->selectedItems();
+	QList<EventListViewItemBase*> items = mTemplateList->selectedItems();
 	int n = items.count();
 	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %n selected alarm templates?", n),
@@ -195,11 +191,11 @@ void TemplateDlg::slotDelete()
 		    != KMessageBox::Continue)
 		return;
 
-	Q3ValueList<KAEvent> events;
+	QList<KAEvent> events;
 	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished
-	for (Q3ValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
-		TemplateListViewItem* item = (TemplateListViewItem*)(*it);
+		TemplateListViewItem* item = (TemplateListViewItem*)items[i];
 		events.append(item->event());
 		KAlarm::deleteTemplate(item->event());
 	}

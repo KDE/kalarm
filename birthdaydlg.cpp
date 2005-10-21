@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,23 +20,20 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <q3groupbox.h>
-#include <q3hbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QGroupBox>
+#include <QLabel>
 #include <QHBoxLayout>
-#include <QBoxLayout>
-#include <Q3ValueList>
 #include <QVBoxLayout>
+//Added by qt3to4:
+#warning Remove #include q3valuelist.h
+#include <q3valuelist.h>
 
 #include <klistview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <khbox.h>
 #include <kabc/addressbook.h>
 #include <kabc/stdaddressbook.h>
 #include <kdebug.h>
@@ -80,7 +77,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	  mSpecialActionsButton(0)
 {
 	QWidget* topWidget = plainPage();
-	QBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setSpacing(spacingHint());
 
 	// Prefix and suffix to the name in the alarm text
@@ -90,30 +87,34 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mPrefixText = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
 	mSuffixText = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
 
-	Q3GroupBox* textGroup = new Q3GroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
+	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
+	QGridLayout* grid = new QGridLayout(textGroup, 2, 2, marginHint(), spacingHint());
 	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
+	grid->addWidget(label, 0, 0);
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
 	connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	Q3WhatsThis::add(mPrefix,
-	      i18n("Enter text to appear before the person's name in the alarm message, "
-	           "including any necessary trailing spaces."));
+	mPrefix->setWhatsThis(i18n("Enter text to appear before the person's name in the alarm message, "
+	                           "including any necessary trailing spaces."));
+	grid->addWidget(mPrefix, 0, 1);
 
 	label = new QLabel(i18n("S&uffix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
+	grid->addWidget(label, 1, 0);
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
 	connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	Q3WhatsThis::add(mSuffix,
-	      i18n("Enter text to appear after the person's name in the alarm message, "
-	           "including any necessary leading spaces."));
+	mSuffix->setWhatsThis(i18n("Enter text to appear after the person's name in the alarm message, "
+	                           "including any necessary leading spaces."));
+	grid->addWidget(mSuffix, 1, 1);
 
-	Q3GroupBox* group = new Q3GroupBox(1, Qt::Horizontal, i18n("Select Birthdays"), topWidget);
+	QGroupBox* group = new QGroupBox(i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
+//?? Does this need a layout?
 	mAddresseeList = new KListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(Q3ListView::Extended);
@@ -122,20 +123,19 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mAddresseeList->addColumn(i18n("Name"));
 	mAddresseeList->addColumn(i18n("Birthday"));
 	connect(mAddresseeList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	Q3WhatsThis::add(mAddresseeList,
-	      i18n("Select birthdays to set alarms for.\n"
-	           "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
-	           "You can select multiple birthdays at one time by dragging the mouse over the list, "
-	           "or by clicking the mouse while pressing Ctrl or Shift."));
+	mAddresseeList->setWhatsThis(i18n("Select birthdays to set alarms for.\n"
+	                                  "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
+	                                  "You can select multiple birthdays at one time by dragging the mouse over the list, "
+	                                  "or by clicking the mouse while pressing Ctrl or Shift."));
 
-	group = new Q3GroupBox(i18n("Alarm Configuration"), topWidget);
+	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
-	QBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
-	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
+	QVBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
+//??	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
 	// Colour choice drop-down list
-	QBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
-	Q3HBox* box;
+	QHBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	KHBox* box;
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(box);
@@ -190,7 +190,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), false, group);
 	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
 	mSimpleRepetition->set(0, 0, true, 364*24*60);
-	Q3WhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
+	mSimpleRepetition->setWhatsThis(i18n("Set up an additional alarm repetition"));
 	layout->addWidget(mSimpleRepetition);
 
 	// Set the values to their defaults
@@ -294,9 +294,9 @@ void BirthdayDlg::updateSelectionList()
 /******************************************************************************
 * Return a list of events for birthdays chosen.
 */
-Q3ValueList<KAEvent> BirthdayDlg::events() const
+QList<KAEvent> BirthdayDlg::events() const
 {
-	Q3ValueList<KAEvent> list;
+	QList<KAEvent> list;
 	QDate today = QDate::currentDate();
 	QDateTime todayNoon(today, QTime(12, 0, 0));
 	int thisYear = today.year();
@@ -322,7 +322,7 @@ Q3ValueList<KAEvent> BirthdayDlg::events() const
 				int   fadeSecs;
 				float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
 				event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
-				Q3ValueList<int> months;
+				QList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
 				event.setNextOccurrence(todayNoon, true);

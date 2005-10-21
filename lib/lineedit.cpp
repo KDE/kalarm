@@ -21,13 +21,12 @@
 #include "kalarm.h"
 
 #include <QRegExp>
-#include <QFocusEvent>
-//Added by qt3to4:
-#include <q3dragobject.h>
+#include <QMimeData>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QFocusEvent>
 
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kurlcompletion.h>
 
 #include <libkdepim/maillistdrag.h>
@@ -94,25 +93,26 @@ void LineEdit::setText(const QString& text)
 
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
+	const QMimeData* data = e->mimeData();
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(false);   // don't accept "text/calendar" objects
-	e->accept(Q3TextDrag::canDecode(e)
-	       || KURLDrag::canDecode(e)
+	e->accept(data->hasText()
+	       || K3URLDrag::canDecode(e)
 	       || mType != Url && KPIM::MailListDrag::canDecode(e)
 	       || mType == Emails && KVCardDrag::canDecode(e));
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
+	const QMimeData* data = e->mimeData();
 	QString               newText;
 	QStringList           newEmails;
-	QString               txt;
 	KPIM::MailList        mailList;
 	KURL::List            files;
 	KABC::Addressee::List addrList;
 
 	if (mType != Url
-	&&  e->provides(KPIM::MailListDrag::format())
+	&&  data->hasFormat(KPIM::MailListDrag::format())
 	&&  KPIM::MailListDrag::decode(e, mailList))
 	{
 		// KMail message(s) - ignore all but the first
@@ -124,7 +124,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				setText(mailList.first().subject());    // replace any existing text
 		}
 	}
-	// This must come before KURLDrag
+	// This must come before K3URLDrag
 	else if (mType == Emails
 	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
 	{
@@ -136,7 +136,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				newEmails.append(em);
 		}
 	}
-	else if (KURLDrag::decode(e, files)  &&  files.count())
+	else if (K3URLDrag::decode(e, files)  &&  files.count())
 	{
 		// URL(s)
 		switch (mType)
@@ -161,9 +161,10 @@ void LineEdit::dropEvent(QDropEvent* e)
 				break;
 		}
 	}
-	else if (Q3TextDrag::decode(e, txt))
+	else if (data->hasText())
 	{
 		// Plain text
+		QString txt = data->text();
 		if (mType == Emails)
 		{
 			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol

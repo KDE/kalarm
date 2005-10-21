@@ -25,6 +25,7 @@
 #include <kurl.h>
 #include <libkcal/calendarlocal.h>
 #include "alarmevent.h"
+class KConfig;
 
 
 /** Provides read and write access to calendar files.

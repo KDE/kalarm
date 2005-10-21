@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,8 +21,7 @@
 #define BIRTHDAYDLG_H
 
 #include <qlineedit.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
@@ -47,7 +46,7 @@ class BirthdayDlg : public KDialogBase
 		Q_OBJECT
 	public:
 		BirthdayDlg(QWidget* parent = 0);
-		Q3ValueList<KAEvent> events() const;
+		QList<KAEvent>    events() const;
 
 	protected slots:
 		virtual void      slotOk();

@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,17 +20,13 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <q3hbox.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QLabel>
 #include <QVBoxLayout>
-#include <Q3Frame>
 #include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <khbox.h>
 #include <kdebug.h>
 
 #include "checkbox.h"
@@ -38,21 +34,20 @@
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
-                           const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+                           const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
+	: QFrame(parent),
 	  mLabel(0),
 	  mReadOnly(false)
 {
-	setFrameStyle(Q3Frame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 	mSelect = new CheckBox(selectText, this);
 	mSelect->setFixedSize(mSelect->sizeHint());
 	connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
-	Q3WhatsThis::add(mSelect, selectWhatsThis);
+	mSelect->setWhatsThis(selectWhatsThis);
 	layout->addWidget(mSelect);
 
-	Q3HBox* box = new Q3HBox(this);    // to group widgets for QWhatsThis text
+	KHBox* box = new KHBox(this);    // to group widgets for QWhatsThis text
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 	mPeriod = new TimePeriod(allowHourMinute, box);
@@ -65,7 +60,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	if (!postfix.isEmpty())
 	{
 		mLabel = new QLabel(postfix, box);
-		Q3WhatsThis::add(box, valueWhatsThis);
+		box->setWhatsThis(valueWhatsThis);
 		mLabel->setEnabled(false);
 	}
 }

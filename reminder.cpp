@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,13 +20,8 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3Frame>
 #include <QHBoxLayout>
-#include <QBoxLayout>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -46,27 +41,26 @@ QString Reminder::i18n_u_first_recurrence_only() { return i18n("Reminder for fir
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
-                   bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name)
-	: Q3Frame(parent, name),
+                   bool allowHourMinute, bool showOnceOnly, QWidget* parent)
+	: QFrame(parent),
 	  mReadOnly(false),
 	  mOnceOnlyEnabled(showOnceOnly)
 {
-	setFrameStyle(Q3Frame::NoFrame);
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
 	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
-	                       valueWhatsThis, allowHourMinute, this, "timeOption");
+	                       valueWhatsThis, allowHourMinute, this);
 	mTime->setFixedSize(mTime->sizeHint());
 	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 	topLayout->addWidget(mTime);
 
 	if (showOnceOnly)
 	{
-		QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 		layout->addSpacing(3*KDialog::spacingHint());
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
-		Q3WhatsThis::add(mOnceOnly, i18n("Display the reminder only before the first time the alarm is scheduled"));
+		mOnceOnly->setWhatsThis(i18n("Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);
 		layout->addStretch();
 	}

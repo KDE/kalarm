@@ -378,8 +378,8 @@ void Preferences::save(bool syncToDisc)
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
 	QStringList colours;
-	for (ColourList::const_iterator it = mMessageColours.begin();  it != mMessageColours.end();  ++it)
-		colours.append(QColor(*it).name());
+	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
+		colours.append(QColor(mMessageColours[i]).name());
 	config->writeEntry(MESSAGE_COLOURS, colours);
 	config->writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
 	config->writeEntry(MESSAGE_FONT, mMessageFont);

@@ -112,7 +112,7 @@ class AlarmEnableAction : public KToggleAction
 {
 		Q_OBJECT
 	public:
-		AlarmEnableAction(int accel, QObject* parent, const char* name = 0);
+		AlarmEnableAction(int accel, KActionCollection* parent, const char* name = 0);
 	public slots:
 		void         setCheckedActual(bool);  // set state and emit switched() signal
 		virtual void setChecked(bool);        // request state change and emit userClicked() signal

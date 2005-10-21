@@ -64,7 +64,7 @@ void ColourCombo::setColours(const ColourList& colours)
 	&&  !mColourList.contains(mSelectedColour))
 	{
 		// The current colour has been deleted
-		mSelectedColour = mColourList.count() ? mColourList.first() : mCustomColour;
+		mSelectedColour = mColourList.count() ? mColourList[0] : mCustomColour;
 	}
 	addColours();
 }
@@ -141,14 +141,16 @@ void ColourCombo::addColours()
 {
 	clear();
 
-	for (ColourList::const_iterator it = mColourList.begin();  ;  ++it)
+	int i;
+	int end = mColourList.count();
+	for (i = 0;  ;  ++i)
 	{
-		if (it == mColourList.end())
+		if (i >= end)
 		{
 			mCustomColour = mSelectedColour;
 			break;
 		}
-		if (mSelectedColour == *it)
+		if (mSelectedColour == mColourList[i])
 			break;
 	}
 
@@ -157,19 +159,18 @@ void ColourCombo::addColours()
 
 	QPainter painter;
 	QPixmap pixmap(rect.width(), rect.height());
-	int i = 1;
-	for (ColourList::const_iterator it = mColourList.begin();  it != mColourList.end();  ++i, ++it)
+	for (i = 0;  i < end;  ++i)
 	{
 		painter.begin(&pixmap);
-		QBrush brush(*it);
+		QBrush brush(mColourList[i]);
 		painter.fillRect(rect, brush);
 		painter.end();
 
 		insertItem(pixmap);
 		pixmap.detach();
 
-		if (*it == mSelectedColour.rgb())
-			setCurrentItem(i);
+		if (mColourList[i] == mSelectedColour.rgb())
+			setCurrentItem(i + 1);
 	}
 }
 

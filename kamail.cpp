@@ -28,6 +28,7 @@
 #include <pwd.h>
 
 #include <qfile.h>
+#include <QList>
 #include <QRegExp>
 #include <QByteArray>
 #include <QTextStream>
@@ -513,9 +514,9 @@ void KAMail::notifyQueued(const KAEvent& event)
 	QString localhost = QString::fromLatin1("localhost");
 	QString hostname  = getHostName();
 	const EmailAddressList& addresses = event.emailAddresses();
-	for (Q3ValueList<KCal::Person>::ConstIterator it = addresses.begin();  it != addresses.end();  ++it)
+	for (int i = 0, end = addresses.count();  i < end;  ++i)
 	{
-		QByteArray email = (*it).email().local8Bit();
+		QByteArray email = addresses[i].email().local8Bit();
 		const char* em = email;
 		if (!email.isEmpty()
 		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))

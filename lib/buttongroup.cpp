@@ -30,13 +30,62 @@ ButtonGroup::ButtonGroup(QObject* parent)
 }
 
 /******************************************************************************
- * Inserts a button in the group.
- * This should really be a virtual method...
+ * Inserts a button into the group.
  */
 void ButtonGroup::addButton(QAbstractButton* button)
 {
 	QButtonGroup::addButton(button);
 	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
+}
+
+/******************************************************************************
+ * Inserts a button into the group.
+ */
+void ButtonGroup::addButton(QAbstractButton* button, int id)
+{
+	addButton(button);
+	mIds[id] = button;
+}
+
+/******************************************************************************
+ * Returns the ID of the specified button.
+ * Reply = -1 if not found.
+ */
+int ButtonGroup::id(QAbstractButton* button) const
+{
+	for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.begin();  it != mIds.end();  ++it)
+		if (it.data() == button)
+			return it.key();
+	return -1;
+}
+
+/******************************************************************************
+ * Returns the button with the specified ID.
+ */
+QAbstractButton* ButtonGroup::find(int id) const
+{
+	QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
+	if (it == mIds.end())
+		return 0;
+	return it.data();
+}
+
+/******************************************************************************
+ * Returns the ID of the currently selected button.
+ */
+int ButtonGroup::selectedId() const
+{
+	return id(checkedButton());
+}
+
+/******************************************************************************
+ * Returns the ID of the currently selected button.
+ */
+void ButtonGroup::setButton(int id)
+{
+	QAbstractButton* button = find(id);
+	if (button)
+		button->setChecked(true);
 }
 
 /******************************************************************************

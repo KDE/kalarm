@@ -22,29 +22,20 @@
 
 #include <limits.h>
 
-#include <qlayout.h>
-#include <q3popupmenu.h>
-#include <q3vbox.h>
-#include <q3groupbox.h>
-#include <q3widgetstack.h>
-#include <q3dragobject.h>
-#include <qlabel.h>
-#include <qmessagebox.h>
-#include <qtabwidget.h>
-#include <qvalidator.h>
-#include <q3whatsthis.h>
+#include <QLabel>
 #include <qtooltip.h>
-#include <qdir.h>
-#include <qstyle.h>
-//Added by qt3to4:
-#include <QBoxLayout>
-#include <QResizeEvent>
-#include <QShowEvent>
-#include <Q3Frame>
+#include <QDir>
+#include <QStyle>
+#include <QFrame>
+#include <QGroupBox>
+#include <QStackedWidget>
+#include <QTabWidget>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
-#include <QHBoxLayout>
+#include <QResizeEvent>
+#include <QShowEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -54,7 +45,7 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
-#include <kurldrag.h>
+#include <khbox.h>
 #include <kurlcompletion.h>
 #include <kwin.h>
 #include <kwinmodule.h>
@@ -193,26 +184,26 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mSavedEvent(0)
 {
 	setButtonText(Default, i18n("Load Template..."));
-	Q3VBox* mainWidget = new Q3VBox(this);
-	mainWidget->setSpacing(spacingHint());
+	QWidget* mainWidget = new QWidget(this);
+	mainWidget->setLayout(new QVBoxLayout(mainWidget, 0, spacingHint()));
 	setMainWidget(mainWidget);
 	if (mTemplate)
 	{
-		Q3HBox* box = new Q3HBox(mainWidget);
+		KHBox* box = new KHBox(mainWidget);
 		box->setSpacing(spacingHint());
 		QLabel* label = new QLabel(i18n("Template name:"), box);
 		label->setFixedSize(label->sizeHint());
 		mTemplateName = new QLineEdit(box);
 		mTemplateName->setReadOnly(mReadOnly);
 		label->setBuddy(mTemplateName);
-		Q3WhatsThis::add(box, i18n("Enter the name of the alarm template"));
+		box->setWhatsThis(i18n("Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
 	mTabs = new QTabWidget(mainWidget);
 	mTabs->setMargin(marginHint());
 
-	Q3VBox* mainPageBox = new Q3VBox(mTabs);
-	mainPageBox->setSpacing(spacingHint());
+	QWidget* mainPageBox = new QWidget(mTabs);
+	mainPageBox->setLayout(new QVBoxLayout(mainPageBox, 0, spacingHint()));
 	mTabs->addTab(mainPageBox, i18n("&Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
@@ -220,8 +211,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, 0, spacingHint());
 
 	// Recurrence tab
-	Q3VBox* recurTab = new Q3VBox(mTabs);
-	mainPageBox->setSpacing(spacingHint());
+	QWidget* recurTab = new QWidget(mTabs);
+	recurTab->setLayout(new QVBoxLayout(recurTab, 0, spacingHint()));
 	mTabs->addTab(recurTab, i18n("&Recurrence"));
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurTab, "recurPage");
@@ -231,18 +222,17 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	// Alarm action
 
-	Q3GroupBox* actionBox = new Q3GroupBox(i18n("Action"), mainPage, "actionGroup");
+	QGroupBox* actionBox = new QGroupBox(i18n("Action"), mainPage);
 	topLayout->addWidget(actionBox, 1);
 	QGridLayout* grid = new QGridLayout(actionBox, 3, 5, marginHint(), spacingHint());
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+//??	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 	mActionGroup = new ButtonGroup(actionBox);
 	connect(mActionGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAlarmTypeChanged(QAbstractButton*)));
 
 	// Message radio button
 	mMessageRadio = new RadioButton(i18n("Te&xt"), actionBox);
 	mMessageRadio->setFixedSize(mMessageRadio->sizeHint());
-	Q3WhatsThis::add(mMessageRadio,
-	      i18n("If checked, the alarm will display a text message."));
+	mMessageRadio->setWhatsThis(i18n("If checked, the alarm will display a text message."));
 	mActionGroup->addButton(mMessageRadio);
 	grid->addWidget(mMessageRadio, 1, 0);
 	grid->setColStretch(1, 1);
@@ -250,8 +240,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// File radio button
 	mFileRadio = new PickAlarmFileRadio(i18n("&File"), mActionGroup, actionBox);
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
-	Q3WhatsThis::add(mFileRadio,
-	      i18n("If checked, the alarm will display the contents of a text or image file."));
+	mFileRadio->setWhatsThis(i18n("If checked, the alarm will display the contents of a text or image file."));
 	mActionGroup->addButton(mFileRadio);
 	grid->addWidget(mFileRadio, 1, 2);
 	grid->setColStretch(3, 1);
@@ -259,8 +248,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// Command radio button
 	mCommandRadio = new RadioButton(i18n("Co&mmand"), actionBox);
 	mCommandRadio->setFixedSize(mCommandRadio->sizeHint());
-	Q3WhatsThis::add(mCommandRadio,
-	      i18n("If checked, the alarm will execute a shell command."));
+	mCommandRadio->setWhatsThis(i18n("If checked, the alarm will execute a shell command."));
 	mActionGroup->addButton(mCommandRadio);
 	grid->addWidget(mCommandRadio, 1, 4);
 	grid->setColStretch(5, 1);
@@ -268,69 +256,69 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// Email radio button
 	mEmailRadio = new RadioButton(i18n("&Email"), actionBox);
 	mEmailRadio->setFixedSize(mEmailRadio->sizeHint());
-	Q3WhatsThis::add(mEmailRadio,
-	      i18n("If checked, the alarm will send an email."));
+	mEmailRadio->setWhatsThis(i18n("If checked, the alarm will send an email."));
 	mActionGroup->addButton(mEmailRadio);
 	grid->addWidget(mEmailRadio, 1, 6);
 
 	initDisplayAlarms(actionBox);
 	initCommand(actionBox);
 	initEmail(actionBox);
-	mAlarmTypeStack = new Q3WidgetStack(actionBox);
+	mAlarmTypeStack = new QStackedWidget(actionBox);
 	grid->addMultiCellWidget(mAlarmTypeStack, 2, 2, 0, 6);
 	grid->setRowStretch(2, 1);
-	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame, 0);
-	mAlarmTypeStack->addWidget(mCommandFrame, 1);
-	mAlarmTypeStack->addWidget(mEmailFrame, 1);
+	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame);
+	mAlarmTypeStack->addWidget(mCommandFrame);
+	mAlarmTypeStack->addWidget(mEmailFrame);
 
 	// Deferred date/time: visible only for a deferred recurring event.
-	mDeferGroup = new Q3GroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
+	mDeferGroup = new QGroupBox(i18n("Deferred Alarm"), mainPage, "deferGroup");
 	topLayout->addWidget(mDeferGroup);
+	QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup, marginHint(), spacingHint());
 	QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
 	label->setFixedSize(label->sizeHint());
+	hlayout->addWidget(label);
 	mDeferTimeLabel = new QLabel(mDeferGroup);
+	hlayout->addWidget(mDeferTimeLabel);
 
 	mDeferChangeButton = new QPushButton(i18n("C&hange..."), mDeferGroup);
 	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
 	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
-	Q3WhatsThis::add(mDeferChangeButton, i18n("Change the alarm's deferred time, or cancel the deferral"));
-	mDeferGroup->addSpace(0);
+	mDeferChangeButton->setWhatsThis(i18n("Change the alarm's deferred time, or cancel the deferral"));
+	hlayout->addWidget(mDeferChangeButton);
+//??	mDeferGroup->addSpace(0);
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
+	hlayout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
 	if (mTemplate)
 	{
-		Q3GroupBox* templateTimeBox = new Q3GroupBox(i18n("Time"), mainPage);
-		layout->addWidget(templateTimeBox);
+		QGroupBox* templateTimeBox = new QGroupBox(i18n("Time"), mainPage);
+		hlayout->addWidget(templateTimeBox);
 		grid = new QGridLayout(templateTimeBox, 2, 2, marginHint(), spacingHint());
-		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+//		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
 		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
 
 		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), templateTimeBox);
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
 		mTemplateDefaultTime->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateDefaultTime,
-		      i18n("Do not specify a start time for alarms based on this template. "
-		           "The normal default start time will be used."));
+		mTemplateDefaultTime->setWhatsThis(i18n("Do not specify a start time for alarms based on this template. "
+		                                        "The normal default start time will be used."));
 		mTemplateTimeGroup->addButton(mTemplateDefaultTime);
 		grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
-		Q3HBox* box = new Q3HBox(templateTimeBox);
-		box->setSpacing(spacingHint());
+		KHBox* box = new KHBox(templateTimeBox);
+		box->setSpacing(KDialog::spacingHint());
 		mTemplateUseTime = new RadioButton(i18n("Time:"), box);
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateUseTime,
-		      i18n("Specify a start time for alarms based on this template."));
+		mTemplateUseTime->setWhatsThis(i18n("Specify a start time for alarms based on this template."));
 		mTemplateTimeGroup->addButton(mTemplateUseTime);
 		mTemplateTime = new TimeEdit(box);
 		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
 		mTemplateTime->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateTime,
-		      QString("%1\n\n%2").arg(i18n("Enter the start time for alarms based on this template."))
-		                         .arg(TimeSpinBox::shiftWhatsThis()));
+		mTemplateTime->setWhatsThis(QString("%1\n\n%2").arg(i18n("Enter the start time for alarms based on this template."))
+		                                               .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 0, 1, Qt::AlignLeft);
@@ -338,31 +326,28 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateAnyTime = new RadioButton(i18n("An&y time"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateAnyTime,
-		      i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
+		mTemplateAnyTime->setWhatsThis(i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
 		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
-		box = new Q3HBox(templateTimeBox);
-		box->setSpacing(spacingHint());
+		box = new KHBox(templateTimeBox);
+		box->setSpacing(KDialog::spacingHint());
 		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateUseTimeAfter,
-		      i18n("Set alarms based on this template to start after the specified time "
-		           "interval from when the alarm is created."));
+		mTemplateUseTimeAfter->setWhatsThis(i18n("Set alarms based on this template to start after the specified time "
+		                                         "interval from when the alarm is created."));
 		mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
 		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, box);
 		mTemplateTimeAfter->setValue(1439);
 		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
 		mTemplateTimeAfter->setReadOnly(mReadOnly);
-		Q3WhatsThis::add(mTemplateTimeAfter,
-		      QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
-		                         .arg(TimeSpinBox::shiftWhatsThis()));
+		mTemplateTimeAfter->setWhatsThis(QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
+		                                                    .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
-		layout->addStretch();
+		hlayout->addStretch();
 	}
 	else
 	{
@@ -372,34 +357,33 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	}
 
 	// Recurrence type display
-	layout = new QHBoxLayout(topLayout, 2*spacingHint());
-	Q3HBox* box = new Q3HBox(mainPage);   // this is to control the QWhatsThis text display area
+	hlayout = new QHBoxLayout(topLayout, 2*spacingHint());
+	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
-	Q3WhatsThis::add(box,
-	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
+	box->setWhatsThis(i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
-	layout->addWidget(box);
+	hlayout->addWidget(box);
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
 	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
 	connect(mSimpleRepetition, SIGNAL(needsInitialisation()), SLOT(slotSetSimpleRepetition()));
 	connect(mSimpleRepetition, SIGNAL(changed()), SLOT(slotRecurFrequencyChange()));
-	Q3WhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
-	layout->addWidget(mSimpleRepetition);
+	mSimpleRepetition->setWhatsThis(i18n("Set up a simple, or additional, alarm repetition"));
+	hlayout->addWidget(mSimpleRepetition);
 
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
 		mShowInKorganizer = new CheckBox(i18n_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
-		Q3WhatsThis::add(mShowInKorganizer, i18n("Check to copy the alarm into KOrganizer's calendar"));
-		layout->addWidget(mShowInKorganizer);
+		mShowInKorganizer->setWhatsThis(i18n("Check to copy the alarm into KOrganizer's calendar"));
+		hlayout->addWidget(mShowInKorganizer);
 	}
-	layout->addStretch();
+	hlayout->addStretch();
 
 	// Late cancel selector - default = allow late display
 	mLateCancel = new LateCancelSelector(true, mainPage);
@@ -432,46 +416,45 @@ EditAlarmDlg::~EditAlarmDlg()
  */
 void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 {
-	mDisplayAlarmsFrame = new Q3Frame(parent);
-	mDisplayAlarmsFrame->setFrameStyle(Q3Frame::NoFrame);
-	QBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame, 0, spacingHint());
+	mDisplayAlarmsFrame = new QFrame(parent);
+	QVBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame, 0, spacingHint());
 
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(mDisplayAlarmsFrame);
-	mTextMessageEdit->setWordWrap(Q3TextEdit::NoWrap);
-	Q3WhatsThis::add(mTextMessageEdit, i18n("Enter the text of the alarm message. It may be multi-line."));
+	mTextMessageEdit->setLineWrapMode(QTextEdit::NoWrap);
+	mTextMessageEdit->setWhatsThis(i18n("Enter the text of the alarm message. It may be multi-line."));
 	frameLayout->addWidget(mTextMessageEdit);
 
 	// File name edit box
-	mFileBox = new Q3HBox(mDisplayAlarmsFrame);
+	mFileBox = new KHBox(mDisplayAlarmsFrame);
 	frameLayout->addWidget(mFileBox);
 	mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
 	mFileMessageEdit->setAcceptDrops(true);
-	Q3WhatsThis::add(mFileMessageEdit, i18n("Enter the name or URL of a text or image file to display."));
+	mFileMessageEdit->setWhatsThis(i18n("Enter the name or URL of a text or image file to display."));
 
 	// File browse button
 	mFileBrowseButton = new QPushButton(mFileBox);
 	mFileBrowseButton->setPixmap(SmallIcon("fileopen"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	QToolTip::add(mFileBrowseButton, i18n("Choose a file"));
-	Q3WhatsThis::add(mFileBrowseButton, i18n("Select a text or image file to display."));
+	mFileBrowseButton->setWhatsThis(i18n("Select a text or image file to display."));
 	mFileRadio->init(mFileBrowseButton, mFileMessageEdit);
 
 	// Colour choice drop-down list
-	QBoxLayout* layout = new QHBoxLayout(frameLayout);
-	Q3HBox* box;
+	QHBoxLayout* hlayout = new QHBoxLayout(frameLayout);
+	KHBox* box;
 	mBgColourChoose = createBgColourChooser(&box, mDisplayAlarmsFrame);
 	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	layout->addWidget(box);
-	layout->addSpacing(2*KDialog::spacingHint());
-	layout->addStretch();
+	hlayout->addWidget(box);
+	hlayout->addSpacing(2*KDialog::spacingHint());
+	hlayout->addStretch();
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(mDisplayAlarmsFrame);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	layout->addWidget(mFontColourButton);
+	hlayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
@@ -488,23 +471,23 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	frameLayout->addWidget(mReminder, 0, Qt::AlignAuto);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(frameLayout);
+	hlayout = new QHBoxLayout(frameLayout);
 	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	layout->addWidget(mConfirmAck);
-	layout->addSpacing(2*KDialog::spacingHint());
-	layout->addStretch();
+	hlayout->addWidget(mConfirmAck);
+	hlayout->addSpacing(2*KDialog::spacingHint());
+	hlayout->addStretch();
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
 		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), mDisplayAlarmsFrame);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
-		layout->addWidget(mSpecialActionsButton);
+		hlayout->addWidget(mSpecialActionsButton);
 	}
 
 	// Top-adjust the controls
-	mFilePadding = new Q3HBox(mDisplayAlarmsFrame);
+	mFilePadding = new KHBox(mDisplayAlarmsFrame);
 	frameLayout->addWidget(mFilePadding);
 	frameLayout->setStretchFactor(mFilePadding, 1);
 }
@@ -514,47 +497,46 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
  */
 void EditAlarmDlg::initCommand(QWidget* parent)
 {
-	mCommandFrame = new Q3Frame(parent);
-	mCommandFrame->setFrameStyle(Q3Frame::NoFrame);
-	QBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame, 0, spacingHint());
+	mCommandFrame = new QFrame(parent);
+	QVBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame, 0, spacingHint());
 
 	mCmdTypeScript = new CheckBox(i18n_p_EnterScript(), mCommandFrame);
 	mCmdTypeScript->setFixedSize(mCmdTypeScript->sizeHint());
 	connect(mCmdTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
-	Q3WhatsThis::add(mCmdTypeScript, i18n("Check to enter the contents of a script instead of a shell command line"));
+	mCmdTypeScript->setWhatsThis(i18n("Check to enter the contents of a script instead of a shell command line"));
 	frameLayout->addWidget(mCmdTypeScript, 0, Qt::AlignAuto);
 
 	mCmdCommandEdit = new LineEdit(LineEdit::Url, mCommandFrame);
-	Q3WhatsThis::add(mCmdCommandEdit, i18n("Enter a shell command to execute."));
+	mCmdCommandEdit->setWhatsThis(i18n("Enter a shell command to execute."));
 	frameLayout->addWidget(mCmdCommandEdit);
 
 	mCmdScriptEdit = new TextEdit(mCommandFrame);
-	Q3WhatsThis::add(mCmdScriptEdit, i18n("Enter the contents of a script to execute"));
+	mCmdScriptEdit->setWhatsThis(i18n("Enter the contents of a script to execute"));
 	frameLayout->addWidget(mCmdScriptEdit);
 
 	// What to do with command output
 
-	Q3GroupBox* cmdOutputBox = new Q3GroupBox(i18n("Command Output"), mCommandFrame);
+	QGroupBox* cmdOutputBox = new QGroupBox(i18n("Command Output"), mCommandFrame);
 	frameLayout->addWidget(cmdOutputBox);
-	QBoxLayout* layout = new QVBoxLayout(cmdOutputBox, marginHint(), spacingHint());
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	QVBoxLayout* vlayout = new QVBoxLayout(cmdOutputBox, marginHint(), spacingHint());
+//	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
 	mCmdOutputGroup = new ButtonGroup(cmdOutputBox);
 
 	// Execute in terminal window
 	mCmdExecInTerm = new RadioButton(i18n_u_ExecInTermWindow(), cmdOutputBox);
 	mCmdExecInTerm->setFixedSize(mCmdExecInTerm->sizeHint());
-	Q3WhatsThis::add(mCmdExecInTerm, i18n("Check to execute the command in a terminal window"));
-	mCmdOutputGroup->addButton(mCmdExecInTerm);
-	layout->addWidget(mCmdExecInTerm, 0, Qt::AlignAuto);
+	mCmdExecInTerm->setWhatsThis(i18n("Check to execute the command in a terminal window"));
+	mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::EXEC_IN_TERMINAL);
+	vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignAuto);
 
 	// Log file name edit box
-	Q3HBox* box = new Q3HBox(cmdOutputBox);
+	KHBox* box = new KHBox(cmdOutputBox);
 #warning Check pixelMetric() / subRect()
 //	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
 	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
-	Q3WhatsThis::add(mCmdLogFileEdit, i18n("Enter the name or path of the log file."));
+	mCmdLogFileEdit->setWhatsThis(i18n("Enter the name or path of the log file."));
 
 	// Log file browse button.
 	// The file browser dialogue is activated by the PickLogFileRadio class.
@@ -562,26 +544,25 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	browseButton->setPixmap(SmallIcon("fileopen"));
 	browseButton->setFixedSize(browseButton->sizeHint());
 	QToolTip::add(browseButton, i18n("Choose a file"));
-	Q3WhatsThis::add(browseButton, i18n("Select a log file."));
+	browseButton->setWhatsThis(i18n("Select a log file."));
 
 	// Log output to file
 	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18n_g_LogToFile(), mCmdOutputGroup, cmdOutputBox);
 	mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
-	Q3WhatsThis::add(mCmdLogToFile,
-	      i18n("Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
-	mCmdOutputGroup->addButton(mCmdLogToFile);
-	layout->addWidget(mCmdLogToFile, 0, Qt::AlignAuto);
-	layout->addWidget(box);
+	mCmdLogToFile->setWhatsThis(i18n("Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
+	mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::LOG_TO_FILE);
+	vlayout->addWidget(mCmdLogToFile, 0, Qt::AlignAuto);
+	vlayout->addWidget(box);
 
 	// Discard output
 	mCmdDiscardOutput = new RadioButton(i18n("Discard"), cmdOutputBox);
 	mCmdDiscardOutput->setFixedSize(mCmdDiscardOutput->sizeHint());
-	Q3WhatsThis::add(mCmdDiscardOutput, i18n("Check to discard command output."));
-	mCmdOutputGroup->addButton(mCmdDiscardOutput);
-	layout->addWidget(mCmdDiscardOutput, 0, Qt::AlignAuto);
+	mCmdDiscardOutput->setWhatsThis(i18n("Check to discard command output."));
+	mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::DISCARD_OUTPUT);
+	vlayout->addWidget(mCmdDiscardOutput, 0, Qt::AlignAuto);
 
 	// Top-adjust the controls
-	mCmdPadding = new Q3HBox(mCommandFrame);
+	mCmdPadding = new KHBox(mCommandFrame);
 	frameLayout->addWidget(mCmdPadding);
 	frameLayout->setStretchFactor(mCmdPadding, 1);
 }
@@ -591,10 +572,9 @@ void EditAlarmDlg::initCommand(QWidget* parent)
  */
 void EditAlarmDlg::initEmail(QWidget* parent)
 {
-	mEmailFrame = new Q3Frame(parent);
-	mEmailFrame->setFrameStyle(Q3Frame::NoFrame);
-	QBoxLayout* layout = new QVBoxLayout(mEmailFrame, 0, spacingHint());
-	QGridLayout* grid = new QGridLayout(layout, 3, 3, spacingHint());
+	mEmailFrame = new QFrame(parent);
+	QVBoxLayout* vlayout = new QVBoxLayout(mEmailFrame, 0, spacingHint());
+	QGridLayout* grid = new QGridLayout(vlayout, 3, 3, spacingHint());
 	grid->setColStretch(1, 1);
 
 	mEmailFromList = 0;
@@ -608,8 +588,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 		mEmailFromList = new EmailIdCombo(KAMail::identityManager(), mEmailFrame);
 		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
 		label->setBuddy(mEmailFromList);
-		Q3WhatsThis::add(mEmailFromList,
-		      i18n("Your email identity, used to identify you as the sender when sending email alarms."));
+		mEmailFromList->setWhatsThis(i18n("Your email identity, used to identify you as the sender when sending email alarms."));
 		grid->addMultiCellWidget(mEmailFromList, 0, 0, 1, 2);
 	}
 
@@ -620,9 +599,8 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 
 	mEmailToEdit = new LineEdit(LineEdit::Emails, mEmailFrame);
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
-	Q3WhatsThis::add(mEmailToEdit,
-	      i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
-	           "commas or semicolons."));
+	mEmailToEdit->setWhatsThis(i18n("Enter the addresses of the email recipients. Separate multiple addresses by "
+	                                "commas or semicolons."));
 	grid->addWidget(mEmailToEdit, 1, 1);
 
 	mEmailAddressButton = new QPushButton(mEmailFrame);
@@ -630,7 +608,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	mEmailAddressButton->setFixedSize(mEmailAddressButton->sizeHint());
 	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
 	QToolTip::add(mEmailAddressButton, i18n("Open address book"));
-	Q3WhatsThis::add(mEmailAddressButton, i18n("Select email addresses from your address book."));
+	mEmailAddressButton->setWhatsThis(i18n("Select email addresses from your address book."));
 	grid->addWidget(mEmailAddressButton, 1, 2);
 
 	// Email subject
@@ -641,16 +619,16 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	mEmailSubjectEdit = new LineEdit(mEmailFrame);
 	mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
 	label->setBuddy(mEmailSubjectEdit);
-	Q3WhatsThis::add(mEmailSubjectEdit, i18n("Enter the email subject."));
+	mEmailSubjectEdit->setWhatsThis(i18n("Enter the email subject."));
 	grid->addMultiCellWidget(mEmailSubjectEdit, 2, 2, 1, 2);
 
 	// Email body
 	mEmailMessageEdit = new TextEdit(mEmailFrame);
-	Q3WhatsThis::add(mEmailMessageEdit, i18n("Enter the email message."));
-	layout->addWidget(mEmailMessageEdit);
+	mEmailMessageEdit->setWhatsThis(i18n("Enter the email message."));
+	vlayout->addWidget(mEmailMessageEdit);
 
 	// Email attachments
-	grid = new QGridLayout(layout, 2, 3, spacingHint());
+	grid = new QGridLayout(vlayout, 2, 3, spacingHint());
 	label = new QLabel(i18n("Attachment&s:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
@@ -662,26 +640,24 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 //QRect rect = list->geometry();
 //list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
 	label->setBuddy(mEmailAttachList);
-	Q3WhatsThis::add(mEmailAttachList,
-	      i18n("Files to send as attachments to the email."));
+	mEmailAttachList->setWhatsThis(i18n("Files to send as attachments to the email."));
 	grid->addWidget(mEmailAttachList, 0, 1);
 	grid->setColStretch(1, 1);
 
 	mEmailAddAttachButton = new QPushButton(i18n("Add..."), mEmailFrame);
 	connect(mEmailAddAttachButton, SIGNAL(clicked()), SLOT(slotAddAttachment()));
-	Q3WhatsThis::add(mEmailAddAttachButton, i18n("Add an attachment to the email."));
+	mEmailAddAttachButton->setWhatsThis(i18n("Add an attachment to the email."));
 	grid->addWidget(mEmailAddAttachButton, 0, 2);
 
 	mEmailRemoveButton = new QPushButton(i18n("Remo&ve"), mEmailFrame);
 	connect(mEmailRemoveButton, SIGNAL(clicked()), SLOT(slotRemoveAttachment()));
-	Q3WhatsThis::add(mEmailRemoveButton, i18n("Remove the highlighted attachment from the email."));
+	mEmailRemoveButton->setWhatsThis(i18n("Remove the highlighted attachment from the email."));
 	grid->addWidget(mEmailRemoveButton, 1, 2);
 
 	// BCC email to sender
 	mEmailBcc = new CheckBox(i18n_s_CopyEmailToSelf(), mEmailFrame);
 	mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
-	Q3WhatsThis::add(mEmailBcc,
-	      i18n("If checked, the email will be blind copied to you."));
+	mEmailBcc->setWhatsThis(i18n("If checked, the email will be blind copied to you."));
 	grid->addMultiCellWidget(mEmailBcc, 1, 1, 0, 1, Qt::AlignAuto);
 }
 
@@ -864,10 +840,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
 		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
-		RadioButton* logType = Preferences::defaultCmdLogType() == Preferences::EXEC_IN_TERMINAL ? mCmdExecInTerm
-		                     : Preferences::defaultCmdLogType() == Preferences::LOG_TO_FILE      ? mCmdLogToFile
-		                     :                                                                     mCmdDiscardOutput;
-		logType->setChecked(true);
+		mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
 		mEmailBcc->setChecked(Preferences::defaultEmailBcc());
 	}
 	slotCmdScriptToggled(mCmdTypeScript->isChecked());
@@ -1010,9 +983,9 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 /******************************************************************************
  * Create a widget to choose the alarm message background colour.
  */
-ColourCombo* EditAlarmDlg::createBgColourChooser(Q3HBox** box, QWidget* parent, const char* name)
+ColourCombo* EditAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent, const char* name)
 {
-	*box = new Q3HBox(parent);   // this is to control the QWhatsThis text display area
+	*box = new KHBox(parent);   // this is to control the QWhatsThis text display area
 	QLabel* label = new QLabel(i18n("&Background color:"), *box);
 	label->setFixedSize(label->sizeHint());
 	ColourCombo* widget = new ColourCombo(*box, name);
@@ -1021,7 +994,7 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(Q3HBox** box, QWidget* parent, 
 	QToolTip::add(widget, i18n("Message color"));
 	label->setBuddy(widget);
 	(*box)->setFixedHeight((*box)->sizeHint().height());
-	Q3WhatsThis::add(*box, i18n("Choose the background color for the alarm message."));
+	(*box)->setWhatsThis(i18n("Choose the background color for the alarm message."));
 	return widget;
 }
 
@@ -1031,8 +1004,7 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(Q3HBox** box, QWidget* parent, 
 CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 {
 	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck(), parent);
-	Q3WhatsThis::add(widget,
-	      i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
+	widget->setWhatsThis(i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	return widget;
 }
 
@@ -1853,7 +1825,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		mFontColourButton->show();
 		mSoundPicker->showSpeak(true);
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
-		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
+		mAlarmTypeStack->setCurrentWidget(mDisplayAlarmsFrame);
 		focus = mTextMessageEdit;
 		displayAlarm = true;
 	}
@@ -1865,7 +1837,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		mFontColourButton->hide();
 		mSoundPicker->showSpeak(false);
 		setButtonWhatsThis(Try, i18n("Display the file now"));
-		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
+		mAlarmTypeStack->setCurrentWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
 		focus = mFileMessageEdit;
 		displayAlarm = true;
@@ -1873,14 +1845,14 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 	else if (mCommandRadio->isOn())
 	{
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
-		mAlarmTypeStack->raiseWidget(mCommandFrame);
+		mAlarmTypeStack->setCurrentWidget(mCommandFrame);
 		mCmdCommandEdit->setNoSelect();
 		focus = mCmdCommandEdit;
 	}
 	else if (mEmailRadio->isOn())
 	{
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
-		mAlarmTypeStack->raiseWidget(mEmailFrame);
+		mAlarmTypeStack->setCurrentWidget(mEmailFrame);
 		mEmailToEdit->setNoSelect();
 		focus = mEmailToEdit;
 	}
@@ -2104,8 +2076,8 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 = A text edit field with a minimum height of 3 text lines.
 = Provides KDE 2 compatibility.
 =============================================================================*/
-TextEdit::TextEdit(QWidget* parent, const char* name)
-	: Q3TextEdit(parent, name)
+TextEdit::TextEdit(QWidget* parent)
+	: QTextEdit(parent)
 {
 	QSize tsize = sizeHint();
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
@@ -2116,5 +2088,5 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(false);   // don't accept "text/calendar" objects
-	Q3TextEdit::dragEnterEvent(e);
+	QTextEdit::dragEnterEvent(e);
 }

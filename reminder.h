@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,18 +21,18 @@
 #ifndef REMINDER_H
 #define REMINDER_H
 
-#include <q3frame.h>
+#include <QFrame>
 
 class TimeSelector;
 class CheckBox;
 
 
-class Reminder : public Q3Frame
+class Reminder : public QFrame
 {
 		Q_OBJECT
 	public:
 		Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
-		         bool allowHourMinute, bool showOnceOnly, QWidget* parent, const char* name = 0);
+		         bool allowHourMinute, bool showOnceOnly, QWidget* parent);
 		bool           isReminder() const;
 		bool           isOnceOnly() const;
 		int            minutes() const;

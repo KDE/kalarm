@@ -21,7 +21,7 @@
 #ifndef RECURRENCEEDITPRIVATE_H
 #define RECURRENCEEDITPRIVATE_H
 
-#include <q3frame.h>
+#include <QFrame>
 #include <q3valuelist.h>
 #include <qbitarray.h>
 
@@ -37,11 +37,10 @@ class TimeSpinBox;
 class QString;
 
 
-class NoRule : public Q3Frame
+class NoRule : public QFrame
 {
 	public:
-		NoRule(QWidget* parent, const char* name = 0) : Q3Frame(parent, name)
-		                                                 { setFrameStyle(Q3Frame::NoFrame); }
+		NoRule(QWidget* parent, const char* name = 0) : QFrame(parent, name) { }
 		virtual int      frequency() const       { return 0; }
 };
 
@@ -169,7 +168,7 @@ class YearlyRule : public MonthYearRule
 		Q_OBJECT
 	public:
 		YearlyRule(bool readOnly, QWidget* parent, const char* name = 0);
-		Q3ValueList<int>  months() const;
+		QList<int>       months() const;
 		void             setMonths(const Q3ValueList<int>& months);
 		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
 		KARecurrence::Feb29Type feb29Type() const;
@@ -188,7 +187,7 @@ class YearlyRule : public MonthYearRule
 		QLabel*          mFeb29Label;
 		ComboBox*        mFeb29Combo;
 		// Saved state of all controls
-		Q3ValueList<int>  mSavedMonths;       // ticked months for yearly rule
+		QList<int>       mSavedMonths;       // ticked months for yearly rule
 		int              mSavedFeb29Type;    // February 29th recurrence type
 };
 

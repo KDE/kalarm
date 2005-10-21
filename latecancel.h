@@ -1,7 +1,7 @@
 /*
  *  latecancel.h  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,49 +21,49 @@
 #ifndef LATECANCEL_H
 #define LATECANCEL_H
 
-#include <q3frame.h>
+#include <QFrame>
 
 #include "timeperiod.h"
 #include "timeselector.h"
 class QBoxLayout;
-class Q3WidgetStack;
+class QStackedWidget;
 class CheckBox;
 
 
-class LateCancelSelector : public Q3Frame
+class LateCancelSelector : public QFrame
 {
 		Q_OBJECT
 	public:
-		LateCancelSelector(bool allowHourMinute, QWidget* parent, const char* name = 0);
-		int            minutes() const;
-		void           setMinutes(int Minutes, bool dateOnly, TimePeriod::Units defaultUnits);
-		void           setDateOnly(bool dateOnly);
-		void           showAutoClose(bool show);
-		bool           isAutoClose() const;
-		void           setAutoClose(bool autoClose);
-		bool           isReadOnly() const     { return mReadOnly; }
-		void           setReadOnly(bool);
+		LateCancelSelector(bool allowHourMinute, QWidget* parent);
+		int             minutes() const;
+		void            setMinutes(int Minutes, bool dateOnly, TimePeriod::Units defaultUnits);
+		void            setDateOnly(bool dateOnly);
+		void            showAutoClose(bool show);
+		bool            isAutoClose() const;
+		void            setAutoClose(bool autoClose);
+		bool            isReadOnly() const     { return mReadOnly; }
+		void            setReadOnly(bool);
 
-		static QString i18n_CancelIfLate();     // plain text of 'Cancel if late' checkbox
-		static QString i18n_n_CancelIfLate();   // text of 'Cancel if late' checkbox, with 'N' shortcut
-		static QString i18n_AutoCloseWin();     // plain text of 'Auto-close window after this time' checkbox
-		static QString i18n_AutoCloseWinLC();   // plain text of 'Auto-close window after late-cancelation time' checkbox
-		static QString i18n_i_AutoCloseWinLC(); // text of 'Auto-close window after late-cancelation time' checkbox, with 'I' shortcut
+		static QString  i18n_CancelIfLate();     // plain text of 'Cancel if late' checkbox
+		static QString  i18n_n_CancelIfLate();   // text of 'Cancel if late' checkbox, with 'N' shortcut
+		static QString  i18n_AutoCloseWin();     // plain text of 'Auto-close window after this time' checkbox
+		static QString  i18n_AutoCloseWinLC();   // plain text of 'Auto-close window after late-cancelation time' checkbox
+		static QString  i18n_i_AutoCloseWinLC(); // text of 'Auto-close window after late-cancelation time' checkbox, with 'I' shortcut
 
 	private slots:
-		void           slotToggled(bool);
+		void            slotToggled(bool);
 
 	private:
-		QBoxLayout*    mLayout;            // overall layout for the widget
-		Q3WidgetStack*  mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
-		Q3Frame*        mCheckboxFrame;
-		CheckBox*      mCheckbox;          // displayed when late cancellation is not selected
-		Q3Frame*        mTimeSelectorFrame;
-		TimeSelector*  mTimeSelector;      // displayed when late cancellation is selected
-		CheckBox*      mAutoClose;
-		bool           mDateOnly;          // hours/minutes units not allowed
-		bool           mReadOnly;          // widget is read-only
-		bool           mAutoCloseShown;    // auto-close checkbox is visible
+		QBoxLayout*     mLayout;            // overall layout for the widget
+		QStackedWidget* mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
+		QFrame*         mCheckboxFrame;
+		CheckBox*       mCheckbox;          // displayed when late cancellation is not selected
+		QFrame*         mTimeSelectorFrame;
+		TimeSelector*   mTimeSelector;      // displayed when late cancellation is selected
+		CheckBox*       mAutoClose;
+		bool            mDateOnly;          // hours/minutes units not allowed
+		bool            mReadOnly;          // widget is read-only
+		bool            mAutoCloseShown;    // auto-close checkbox is visible
 };
 
 #endif // LATECANCEL_H

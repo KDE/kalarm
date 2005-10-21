@@ -1,7 +1,7 @@
 /*
  *  synchtimer.cpp  -  timers which synchronise to time boundaries
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 
 #include "kalarm.h"
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <kdebug.h>
 #include "synchtimer.moc"
 
@@ -48,7 +46,7 @@ SynchTimer::~SynchTimer()
 void SynchTimer::connecT(QObject* receiver, const char* member)
 {
 	Connection connection(receiver, member);
-	if (mConnections.find(connection) != mConnections.end())
+	if (mConnections.contains(connection))
 		return;           // the slot is already connected, so ignore request
 	connect(mTimer, SIGNAL(timeout()), receiver, member);
 	mConnections.append(connection);
@@ -68,15 +66,17 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 	{
 		mTimer->disconnect(receiver, member);
 		if (member)
-			mConnections.remove(Connection(receiver, member));
+		{
+			mConnections.removeAt(mConnections.indexOf(Connection(receiver, member)));
+		}
 		else
 		{
-			for (Q3ValueList<Connection>::Iterator it = mConnections.begin();  it != mConnections.end();  )
+			for (int i = 0;  i < mConnections.count();  )
 			{
-				if ((*it).receiver == receiver)
-					it = mConnections.remove(it);
+				if (mConnections[i].receiver == receiver)
+					mConnections.removeAt(i);
 				else
-					++it;
+					++i;
 			}
 		}
 		if (mConnections.isEmpty())
@@ -121,7 +121,7 @@ void MinuteTimer::slotTimer()
 =  Application-wide timer synchronised to midnight.
 =============================================================================*/
 
-Q3ValueList<DailyTimer*> DailyTimer::mFixedTimers;
+QList<DailyTimer*> DailyTimer::mFixedTimers;
 
 DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
 	: mTime(timeOfDay),
@@ -134,14 +134,14 @@ DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
 DailyTimer::~DailyTimer()
 {
 	if (mFixed)
-		mFixedTimers.remove(this);
+		mFixedTimers.removeAt(mFixedTimers.indexOf(this));
 }
 
 DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
 {
-	for (Q3ValueList<DailyTimer*>::Iterator it = mFixedTimers.begin();  it != mFixedTimers.end();  ++it)
-		if ((*it)->mTime == timeOfDay)
-			return *it;
+	for (int i = 0, end = mFixedTimers.count();  i < end;  ++i)
+		if (mFixedTimers[i]->mTime == timeOfDay)
+			return mFixedTimers[i];
 	return create ? new DailyTimer(timeOfDay, true) : 0;
 }
 

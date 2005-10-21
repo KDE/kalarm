@@ -24,8 +24,8 @@
 /** @file kalarmapp.h - the KAlarm application object */
 
 #include <qpointer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QQueue>
+#include <QList>
 class QTimer;
 class QDateTime;
 
@@ -154,33 +154,33 @@ class KAlarmApp : public KUniqueApplication
 		QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&);
 		void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
 
-		static KAlarmApp*     theInstance;          // the one and only KAlarmApp instance
-		static int            mActiveCount;         // number of active instances without main windows
-		static int            mFatalError;          // a fatal error has occurred - just wait to exit
-		static QString        mFatalMessage;        // fatal error message to output
-		bool                  mInitialised;         // initialisation complete: ready to handle DCOP calls
-		DcopHandler*          mDcopHandler;         // the parent of the main DCOP receiver object
-		TrayWindow*           mTrayWindow;          // active system tray icon
-		QTime                 mStartOfDay;          // start-of-day time currently in use
-		QColor                mPrefsExpiredColour;  // expired alarms text colour
-		int                   mPrefsExpiredKeepDays;// how long expired alarms are being kept
-		Q3ValueList<ProcData*> mCommandProcesses;    // currently active command alarm processes
-		Q3ValueList<DcopQEntry> mDcopQueue;          // DCOP command queue
-		int                   mPendingQuitCode;     // exit code for a pending quit
-		bool                  mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
-		bool                  mProcessingQueue;     // a mDcopQueue entry is currently being processed
-		bool                  mKDEDesktop;          // running on KDE desktop
-		bool                  mNoSystemTray;        // no KDE system tray exists
-		bool                  mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true
-		bool                  mCheckingSystemTray;  // the existence of the system tray is being checked
-		bool                  mSessionClosingDown;  // session manager is closing the application
-		bool                  mOldRunInSystemTray;  // running continuously in system tray was selected
-		bool                  mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
-		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
-		bool                  mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
-		bool                  mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
-		bool                  mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
-		bool                  mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
+		static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance
+		static int         mActiveCount;         // number of active instances without main windows
+		static int         mFatalError;          // a fatal error has occurred - just wait to exit
+		static QString     mFatalMessage;        // fatal error message to output
+		bool               mInitialised;         // initialisation complete: ready to handle DCOP calls
+		DcopHandler*       mDcopHandler;         // the parent of the main DCOP receiver object
+		TrayWindow*        mTrayWindow;          // active system tray icon
+		QTime              mStartOfDay;          // start-of-day time currently in use
+		QColor             mPrefsExpiredColour;  // expired alarms text colour
+		int                mPrefsExpiredKeepDays;// how long expired alarms are being kept
+		QList<ProcData*>   mCommandProcesses;    // currently active command alarm processes
+		QQueue<DcopQEntry> mDcopQueue;           // DCOP command queue
+		int                mPendingQuitCode;     // exit code for a pending quit
+		bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
+		bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
+		bool               mKDEDesktop;          // running on KDE desktop
+		bool               mNoSystemTray;        // no KDE system tray exists
+		bool               mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true
+		bool               mCheckingSystemTray;  // the existence of the system tray is being checked
+		bool               mSessionClosingDown;  // session manager is closing the application
+		bool               mOldRunInSystemTray;  // running continuously in system tray was selected
+		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
+		bool               mRefreshExpiredAlarms; // need to refresh the expired alarms display
+		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
+		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
+		bool               mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
+		bool               mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

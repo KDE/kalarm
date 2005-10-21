@@ -20,21 +20,15 @@
 
 #include "kalarm.h"
 
-#include <qlayout.h>
-#include <q3groupbox.h>
-#include <q3hbox.h>
-#include <qpushbutton.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
+#include <QGroupBox>
 #include <QVBoxLayout>
-#include <Q3Frame>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QBoxLayout>
 
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <khbox.h>
 
 #include "buttongroup.h"
 #include "checkbox.h"
@@ -63,69 +57,67 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 *  Construct a widget with a group box and title.
 */
 AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent)
-	: QGroupBox(groupBoxTitle, parent),
+	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode);
+	QGroupBox* box = new QGroupBox(groupBoxTitle, this);
+	init(box, mode, true);
 }
 
 /******************************************************************************
 *  Construct a widget without a group box or title.
 */
 AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
-	: QGroupBox(parent),
+	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-#warning setFrameStyle() ??
-//	setFrameStyle(Q3Frame::NoFrame);
-	init(mode);
+	init(this, mode, false);
 }
 
-void AlarmTimeWidget::init(int mode)
+void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 {
 	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 
-	mButtonGroup = new ButtonGroup(this);
-	connect(this, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
-	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-	if (!title().isEmpty())
+	mButtonGroup = new ButtonGroup(topWidget);
+	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
+	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, 0, KDialog::spacingHint());
+	if (hasTitle)
 	{
 		topLayout->setMargin(KDialog::marginHint());
 		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
 	}
 
 	// At time radio button/label
-	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), this);
+	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), topWidget);
 	mAtTimeRadio->setFixedSize(mAtTimeRadio->sizeHint());
-	Q3WhatsThis::add(mAtTimeRadio,
-	                ((mode & DEFER_TIME) ? i18n("Reschedule the alarm to the specified date and time.")
-	                                     : i18n("Schedule the alarm at the specified date and time.")));
+	mAtTimeRadio->setWhatsThis((mode & DEFER_TIME) ? i18n("Reschedule the alarm to the specified date and time.")
+	                                               : i18n("Schedule the alarm at the specified date and time."));
+#warning Add widgets to topLayout?
 
 	// Date edit box
-	mDateEdit = new DateEdit(this);
+	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
 	static const QString enterDateText = i18n("Enter the date to schedule the alarm.");
-	Q3WhatsThis::add(mDateEdit, ((mode & DEFER_TIME) ? enterDateText
-	                            : QString("%1\n%2").arg(enterDateText).arg(recurText)));
+	mDateEdit->setWhatsThis((mode & DEFER_TIME) ? enterDateText
+	                                            : QString("%1\n%2").arg(enterDateText).arg(recurText));
 	mAtTimeRadio->setFocusWidget(mDateEdit);
 
 	// Time edit box and Any time checkbox
-	Q3HBox* timeBox = new Q3HBox(this);
+	KHBox* timeBox = new KHBox(topWidget);
 	timeBox->setSpacing(2*KDialog::spacingHint());
 	mTimeEdit = new TimeEdit(timeBox);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");
-	Q3WhatsThis::add(mTimeEdit,
-	                ((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
-	                   : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
+	mTimeEdit->setWhatsThis((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
+	                                            : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 
 	mAnyTime = -1;    // current status is uninitialised
 	if (mode & DEFER_TIME)
@@ -139,24 +131,22 @@ void AlarmTimeWidget::init(int mode)
 		mAnyTimeCheckBox = new CheckBox(i18n("An&y time"), timeBox);
 		mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
 		connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-		Q3WhatsThis::add(mAnyTimeCheckBox, i18n("Schedule the alarm for any time during the day"));
+		mAnyTimeCheckBox->setWhatsThis(i18n("Schedule the alarm for any time during the day"));
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), this);
+	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), topWidget);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
-	Q3WhatsThis::add(mAfterTimeRadio,
-	                ((mode & DEFER_TIME) ? i18n("Reschedule the alarm for the specified time interval after now.")
-	                                     : i18n("Schedule the alarm after the specified time interval from now.")));
+	mAfterTimeRadio->setWhatsThis((mode & DEFER_TIME) ? i18n("Reschedule the alarm for the specified time interval after now.")
+	                                                  : i18n("Schedule the alarm after the specified time interval from now."));
 
 	// Delay time spin box
-	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, this);
+	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-	Q3WhatsThis::add(mDelayTimeEdit,
-	                ((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
-	                                     : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis())));
+	mDelayTimeEdit->setWhatsThis((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
+	                                                 : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
@@ -168,7 +158,7 @@ void AlarmTimeWidget::init(int mode)
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
 		grid->setColStretch(2, 1);
 		topLayout->addStretch();
-		QBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 		layout->addWidget(mAfterTimeRadio);
 		layout->addWidget(mDelayTimeEdit);
 		layout->addStretch();

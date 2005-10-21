@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.cpp  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,11 @@
 
 #include "kalarm.h"
 
-#include <q3whatsthis.h>
-#include <q3header.h>
 //Added by qt3to4:
+#include <q3header.h>
+#include <QWhatsThis>
 #include <QPixmap>
 #include <QShowEvent>
-#include <Q3ValueList>
 #include <QResizeEvent>
 
 #include <kiconloader.h>
@@ -35,31 +34,19 @@
 #include "eventlistviewbase.moc"
 
 
-class EventListWhatsThisBase : public Q3WhatsThis
-{
-	public:
-		EventListWhatsThisBase(EventListViewBase* lv) : Q3WhatsThis(lv), mListView(lv) { }
-		virtual QString text(const QPoint&);
-	private:
-		EventListViewBase* mListView;
-};
-
-
 /*=============================================================================
 =  Class: EventListViewBase
 =  Base class for displaying a list of events.
 =============================================================================*/
 
-EventListViewBase::EventListViewBase(QWidget* parent, const char* name)
-	: KListView(parent, name),
+EventListViewBase::EventListViewBase(QWidget* parent)
+	: KListView(parent),
 	  mFind(0),
 	  mLastColumn(-1),
 	  mLastColumnHeaderWidth(0)
 {
 	setAllColumnsShowFocus(true);
 	setShowSortIndicator(true);
-
-	new EventListWhatsThisBase(this);
 }
 
 void EventListViewBase::addLastColumn(const QString& title)
@@ -110,8 +97,8 @@ EventListViewItemBase* EventListViewBase::getEntry(const QString& eventID) const
 */
 void EventListViewBase::addEvent(const KAEvent& event, const InstanceList& instanceList, EventListViewBase* selectionView)
 {
-	for (InstanceListConstIterator it = instanceList.begin();  it != instanceList.end();  ++it)
-		(*it)->addEntry(event, true, (*it == selectionView));
+	for (int i = 0, end = instanceList.count();  i < end;  ++i)
+		instanceList[i]->addEntry(event, true, (instanceList[i] == selectionView));
 }
 
 /******************************************************************************
@@ -122,9 +109,9 @@ void EventListViewBase::addEvent(const KAEvent& event, const InstanceList& insta
 void EventListViewBase::modifyEvent(const QString& oldEventID, const KAEvent& newEvent,
                                     const InstanceList& instanceList, EventListViewBase* selectionView)
 {
-	for (InstanceListConstIterator it = instanceList.begin();  it != instanceList.end();  ++it)
+	for (int i = 0, end = instanceList.count();  i < end;  ++i)
 	{
-		EventListViewBase* v = *it;
+		EventListViewBase* v = instanceList[i];
 		EventListViewItemBase* item = v->getEntry(oldEventID);
 		if (item)
 			v->deleteEntry(item, false);
@@ -137,9 +124,9 @@ void EventListViewBase::modifyEvent(const QString& oldEventID, const KAEvent& ne
 */
 void EventListViewBase::deleteEvent(const QString& eventID, const InstanceList& instanceList)
 {
-	for (InstanceListConstIterator it = instanceList.begin();  it != instanceList.end();  ++it)
+	for (int i = 0, end = instanceList.count();  i < end;  ++i)
 	{
-		EventListViewBase* v = *it;
+		EventListViewBase* v = instanceList[i];
 		EventListViewItemBase* item = v->getEntry(eventID);
 		if (item)
 			v->deleteEntry(item, true);
@@ -267,9 +254,9 @@ EventListViewItemBase* EventListViewBase::selectedItem() const
 /******************************************************************************
 *  Fetch all selected items.
 */
-Q3ValueList<EventListViewItemBase*> EventListViewBase::selectedItems() const
+QList<EventListViewItemBase*> EventListViewBase::selectedItems() const
 {
-	Q3ValueList<EventListViewItemBase*> items;
+	QList<EventListViewItemBase*> items;
 	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
 	{
 		if (isSelected(item))
@@ -334,6 +321,28 @@ void EventListViewBase::showEvent(QShowEvent* se)
 {
 	KListView::showEvent(se);
 	resizeLastColumn();
+}
+
+/******************************************************************************
+*  Called when any event occurs.
+*  Displays the WhatsThis text for the chosen column.
+*/
+bool EventListViewBase::event(QEvent *e)
+{
+	if (e->type() == QEvent::WhatsThis)
+	{
+		QHelpEvent* he = (QHelpEvent*)e;
+		QPoint pt = he->pos();
+		int column = -1;
+		QPoint viewportPt = viewport()->mapFrom(this, pt);
+		QRect frame = header()->frameGeometry();
+		if (frame.contains(pt)
+		||  itemAt(QPoint(itemMargin(), viewportPt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
+			column = header()->sectionAt(pt.x());
+		QWhatsThis::showText(pt, whatsThisText(column));
+		return true;
+	}
+	return KListView::event(e);
 }
 
 /******************************************************************************
@@ -420,22 +429,5 @@ QPixmap* EventListViewItemBase::eventIcon() const
 		case KAAlarm::MESSAGE:
 		default:                return mTextIcon;
 	}
-}
-
-
-/*=============================================================================
-=  Class: EventListWhatsThisBase
-=  Sets What's This? text depending on where in the list view is clicked.
-=============================================================================*/
-
-QString EventListWhatsThisBase::text(const QPoint& pt)
-{
-	int column = -1;
-	QPoint viewportPt = mListView->viewport()->mapFrom(mListView, pt);
-	QRect frame = mListView->header()->frameGeometry();
-	if (frame.contains(pt)
-	||  mListView->itemAt(QPoint(mListView->itemMargin(), viewportPt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
-		column = mListView->header()->sectionAt(pt.x());
-	return mListView->whatsThisText(column);
 }
 
