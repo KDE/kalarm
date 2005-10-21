@@ -46,6 +46,7 @@
 #include <kfileitem.h>
 #include <kmessagebox.h>
 #include <khbox.h>
+#include <kvbox.h>
 #include <kurlcompletion.h>
 #include <kwin.h>
 #include <kwinmodule.h>
@@ -184,8 +185,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mSavedEvent(0)
 {
 	setButtonText(Default, i18n("Load Template..."));
-	QWidget* mainWidget = new QWidget(this);
-	mainWidget->setLayout(new QVBoxLayout(mainWidget, 0, spacingHint()));
+	KVBox* mainWidget = new KVBox(this);
 	setMainWidget(mainWidget);
 	if (mTemplate)
 	{
@@ -202,8 +202,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mTabs = new QTabWidget(mainWidget);
 	mTabs->setMargin(marginHint());
 
-	QWidget* mainPageBox = new QWidget(mTabs);
-	mainPageBox->setLayout(new QVBoxLayout(mainPageBox, 0, spacingHint()));
+	KVBox* mainPageBox = new KVBox(mTabs);
 	mTabs->addTab(mainPageBox, i18n("&Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
@@ -211,8 +210,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, 0, spacingHint());
 
 	// Recurrence tab
-	QWidget* recurTab = new QWidget(mTabs);
-	recurTab->setLayout(new QVBoxLayout(recurTab, 0, spacingHint()));
+	KVBox* recurTab = new KVBox(mTabs);
 	mTabs->addTab(recurTab, i18n("&Recurrence"));
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurTab, "recurPage");

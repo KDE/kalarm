@@ -85,6 +85,7 @@ QString RecurrenceEdit::i18n_y_Yearly()          { return i18n("&Yearly"); }
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	: QFrame(parent, name),
+	  mRule(0),
 	  mRuleButtonType(INVALID_RECUR),
 	  mDailyShown(false),
 	  mWeeklyShown(false),
@@ -93,6 +94,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	  mNoEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
+	kdDebug(5950) << "RecurrenceEdit::RecurrenceEdit()\n";
 	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
 	/* Create the recurrence rule Group box which holds the recurrence period
@@ -179,12 +181,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	hlayout->addWidget(divider);
 	hlayout->addSpacing(KDialog::marginHint());
 
-	mNoRule       = new NoRule(ruleFrame, "noFrame");
-	mSubDailyRule = new SubDailyRule(mReadOnly, ruleFrame, "subdayFrame");
-	mDailyRule    = new DailyRule(mReadOnly, ruleFrame, "dayFrame");
-	mWeeklyRule   = new WeeklyRule(mReadOnly, ruleFrame, "weekFrame");
-	mMonthlyRule  = new MonthlyRule(mReadOnly, ruleFrame, "monthFrame");
-	mYearlyRule   = new YearlyRule(mReadOnly, ruleFrame, "yearFrame");
+	mRuleStack = new QStackedWidget(ruleFrame);
+	hlayout->addWidget(mRuleStack);
+	hlayout->addStretch(1);
+	mNoRule       = new NoRule(mRuleStack, "noFrame");
+	mSubDailyRule = new SubDailyRule(mReadOnly, mRuleStack, "subdayFrame");
+	mDailyRule    = new DailyRule(mReadOnly, mRuleStack, "dayFrame");
+	mWeeklyRule   = new WeeklyRule(mReadOnly, mRuleStack, "weekFrame");
+	mMonthlyRule  = new MonthlyRule(mReadOnly, mRuleStack, "monthFrame");
+	mYearlyRule   = new YearlyRule(mReadOnly, mRuleStack, "yearFrame");
 
 	connect(mSubDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 	connect(mDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
@@ -192,9 +197,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	connect(mMonthlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 	connect(mYearlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 
-	mRuleStack = new QStackedWidget(ruleFrame);
-	hlayout->addWidget(mRuleStack);
-	hlayout->addStretch(1);
 	mRuleStack->addWidget(mNoRule);
 	mRuleStack->addWidget(mSubDailyRule);
 	mRuleStack->addWidget(mDailyRule);
