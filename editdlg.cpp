@@ -1592,10 +1592,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 	else if (mEmailRadio->isOn())
 		result = mEmailMessageEdit->text();
 	else if (mCommandRadio->isOn())
-	{
-		result = mCommandMessageEdit->text();
-		result.stripWhiteSpace();
-	}
+		result = mCommandMessageEdit->text().stripWhiteSpace();
 	else if (mFileRadio->isOn())
 	{
 		QString alarmtext = mFileMessageEdit->text();

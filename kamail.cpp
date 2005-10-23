@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -586,7 +586,7 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 */
 int KAMail::checkAttachment(QString& attachment, KURL* url)
 {
-	attachment.stripWhiteSpace();
+	attachment = attachment.stripWhiteSpace();
 	if (attachment.isEmpty())
 	{
 		if (url)
