@@ -35,7 +35,7 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <k3urldrag.h>
+#include <kurl.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfig.h>
@@ -217,14 +217,14 @@ MainWindow* MainWindow::mainMainWindow()
 	MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
 	if (tray  &&  tray->isVisible())
 		return tray;
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
-		if ((*it)->isVisible())
-			return *it;
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+		if (mWindowList[i]->isVisible())
+			return mWindowList[i];
 	if (tray)
 		return tray;
-	if (!mWindowList.count())
+	if (mWindowList.isEmpty())
 		return 0;
-	return mWindowList.first();
+	return mWindowList[0];
 }
 
 /******************************************************************************
@@ -240,8 +240,8 @@ bool MainWindow::isTrayParent() const
 */
 void MainWindow::closeAll()
 {
-	while (mWindowList.first())
-		delete mWindowList.first();    // N.B. the destructor removes the window from the list
+	while (!mWindowList.isEmpty())
+		delete mWindowList[0];    // N.B. the destructor removes the window from the list
 }
 
 /******************************************************************************
@@ -394,8 +394,8 @@ void MainWindow::initActions()
 */
 void MainWindow::enableTemplateMenuItem(bool enable)
 {
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
-		(*it)->mActionTemplates->setEnabled(enable);
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+		mWindowList[i]->mActionTemplates->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -404,8 +404,8 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 void MainWindow::refresh()
 {
 	kdDebug(5950) << "MainWindow::refresh()\n";
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
-		(*it)->mListView->refresh();
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+		mWindowList[i]->mListView->refresh();
 }
 
 /******************************************************************************
@@ -417,9 +417,9 @@ void MainWindow::updateExpired()
 {
 	kdDebug(5950) << "MainWindow::updateExpired()\n";
 	bool enableShowExpired = Preferences::expiredKeepDays();
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
-		MainWindow* w = *it;
+		MainWindow* w = mWindowList[i];
 		if (w->mShowExpired)
 		{
 			if (!enableShowExpired)
@@ -448,9 +448,9 @@ void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 		oldTime = true;     // at least one time column must have been displayed
 	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
 	{
-		for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+		for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 		{
-			MainWindow* w = *it;
+			MainWindow* w = mWindowList[i];
 			if (w->mShowTime   == oldTime
 			&&  w->mShowTimeTo == oldTimeTo)
 			{
@@ -475,9 +475,9 @@ void MainWindow::setUpdateTimer()
 	// Check whether any windows need to be updated
 	MainWindow* needTimer = 0;
 	MainWindow* timerWindow = 0;
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
-		MainWindow* w = *it;
+		MainWindow* w = mWindowList[i];
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			needTimer = w;
 		if (w->mMinuteTimerActive)
@@ -505,9 +505,9 @@ void MainWindow::setUpdateTimer()
 void MainWindow::slotUpdateTimeTo()
 {
 	kdDebug(5950) << "MainWindow::slotUpdateTimeTo()" << endl;
-	for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
-		MainWindow* w = *it;
+		MainWindow* w = mWindowList[i];
 		if (w->isVisible()  &&  w->mListView->showingTimeTo())
 			w->mListView->updateTimeToAlarms();
 	}
@@ -1058,7 +1058,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
 	else
 		e->accept(data->hasText()
-		       || K3URLDrag::canDecode(e)
+		       || KURL::List::canDecode(data)
 		       || KPIM::MailListDrag::canDecode(e));
 }
 
@@ -1100,8 +1100,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	 * provide more than one mime type.
 	 * Don't change them without careful thought !!
 	 */
-	if (data->hasFormat("message/rfc822")
-	&&  !(bytes = data->data("message/rfc822")).isEmpty())
+	if (!(bytes = data->data("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
 		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
@@ -1126,7 +1125,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Subject", content),
 				   body, sernum);
 	}
-	else if (K3URLDrag::decode(e, files)  &&  files.count())
+	else if (!(files = KURL::List::fromMimeData(data)).isEmpty())
 	{
 		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
@@ -1279,7 +1278,7 @@ void MainWindow::setEnableText(bool enable)
 */
 MainWindow* MainWindow::toggleWindow(MainWindow* win)
 {
-	if (win  &&  mWindowList.find(win) != mWindowList.end())
+	if (win  &&  mWindowList.indexOf(win) != -1)
 	{
 		// A window is specified (and it exists)
 		if (win->isVisible())

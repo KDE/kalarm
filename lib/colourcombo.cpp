@@ -104,8 +104,8 @@ void ColourCombo::setEnabled(bool enable)
 			rect.setRect(0, 0, width(), fm.height() + 4);
 			QPixmap pm(rect.width(), rect.height());
 			pm.fill(paletteBackgroundColor());
-			insertItem(pm);
-			setCurrentItem(end);
+			addItem(pm, QString());
+			setCurrentIndex(end);
 		}
 		mDisabled = true;
 	}
@@ -166,11 +166,11 @@ void ColourCombo::addColours()
 		painter.fillRect(rect, brush);
 		painter.end();
 
-		insertItem(pixmap);
+		addItem(pixmap, QString());
 		pixmap.detach();
 
 		if (mColourList[i] == mSelectedColour.rgb())
-			setCurrentItem(i + 1);
+			setCurrentIndex(i + 1);
 	}
 }
 
@@ -195,9 +195,9 @@ void ColourCombo::drawCustomItem(QRect& rect, bool insert)
 	painter.end();
 
 	if (insert)
-		insertItem(pixmap);
+		addItem(pixmap, QString());
 	else
-		changeItem(pixmap, 0);
+		setItemIcon(0, pixmap);
 	pixmap.detach();
 }
 

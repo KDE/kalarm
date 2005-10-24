@@ -52,12 +52,13 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                         "If unchecked, the alarm will be triggered at the first opportunity after "
 	                         "its scheduled time, regardless of how late it is.");
 
-	mLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	mLayout = new QVBoxLayout(this);
+	mLayout->setSpacing(KDialog::spacingHint());
 
 	mStack = new QStackedWidget(this);
 	mCheckboxFrame = new QFrame(mStack);
 	mStack->addWidget(mCheckboxFrame);
-	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame, 0, 0);
+	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame);
 	mCheckbox = new CheckBox(i18n_n_CancelIfLate(), mCheckboxFrame);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
@@ -66,7 +67,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 
 	mTimeSelectorFrame = new QFrame(mStack);
 	mStack->addWidget(mTimeSelectorFrame);
-	vlayout = new QVBoxLayout(mTimeSelectorFrame, 0, 0);
+	vlayout = new QVBoxLayout(mTimeSelectorFrame);
 	mTimeSelector = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
 	                                 whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
@@ -74,7 +75,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	vlayout->addWidget(mTimeSelector);
 	mLayout->addWidget(mStack);
 
-	QHBoxLayout* hlayout = new QHBoxLayout(mLayout, KDialog::spacingHint());
+	QHBoxLayout* hlayout = new QHBoxLayout(mLayout);
 	hlayout->addSpacing(3*KDialog::spacingHint());
 	mAutoClose = new CheckBox(i18n_AutoCloseWin(), this);
 	mAutoClose->setFixedSize(mAutoClose->sizeHint());

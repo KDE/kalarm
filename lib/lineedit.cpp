@@ -94,12 +94,18 @@ void LineEdit::setText(const QString& text)
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
+	bool ok;
 	if (KCal::ICalDrag::canDecode(e))
-		e->accept(false);   // don't accept "text/calendar" objects
-	e->accept(data->hasText()
-	       || K3URLDrag::canDecode(e)
-	       || mType != Url && KPIM::MailListDrag::canDecode(e)
-	       || mType == Emails && KVCardDrag::canDecode(e));
+		ok = false;   // don't accept "text/calendar" objects
+	else
+		ok = (data->hasText()
+		   || K3URLDrag::canDecode(e)
+		   || mType != Url && KPIM::MailListDrag::canDecode(e)
+		   || mType == Emails && KVCardDrag::canDecode(e));
+	if (ok)
+		e->accept(rect());
+	else
+		e->ignore(rect());
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
@@ -169,7 +175,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 		{
 			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
 			QString mailto = QString::fromLatin1("mailto:");
-			newEmails = QStringList::split(QRegExp("[\r\n]+"), txt);
+			newEmails = txt.split(QRegExp("[\r\n]+"), QString::SkipEmptyParts);
 			for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
 			{
 				if ((*it).startsWith(mailto))
@@ -181,7 +187,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 		}
 		else
 		{
-			int newline = txt.find('\n');
+			int newline = txt.indexOf(QChar('\n'));
 			newText = (newline >= 0) ? txt.left(newline) : txt;
 		}
 	}

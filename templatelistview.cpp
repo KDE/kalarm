@@ -1,7 +1,7 @@
 /*
  *  templatelistview.cpp  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -126,6 +126,6 @@ QString TemplateListViewItem::key(int column, bool) const
 	TemplateListView* listView = templateListView();
 	if (column == listView->iconColumn())
 		return mIconOrder;
-	return text(column).lower();
+	return text(column).toLower();
 }
 

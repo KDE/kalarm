@@ -90,12 +90,13 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
+	QVBoxLayout* layout = new QVBoxLayout(page);
+	layout->setSpacing(spacingHint());
 
 	mActions = new SpecialActions(page);
 	mActions->setActions(preAction, postAction);
 	layout->addWidget(mActions);
-	layout->addSpacing(KDialog::spacingHint());
+	layout->addSpacing(spacingHint());
 
 	QSize s;
 	if (KAlarm::readConfigWindowSize(SPEC_ACT_DIALOG_NAME, s))
@@ -133,7 +134,8 @@ SpecialActions::SpecialActions(QWidget* parent)
 	: QWidget(parent),
 	  mReadOnly(false)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setSpacing(KDialog::spacingHint());
 
 	// Pre-alarm action
 	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);

@@ -28,7 +28,6 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTextEdit>
-#include <qtooltip.h>
 #include <QPalette>
 #include <QTimer>
 #include <QPixmap>
@@ -292,7 +291,9 @@ void MessageWin::initView()
 	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
 	QWidget* topWidget = new QWidget(this, "messageWinTop");
 	setCentralWidget(topWidget);
-	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, KDialog::marginHint(), KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	topLayout->setMargin(KDialog::marginHint());
+	topLayout->setSpacing(KDialog::spacingHint());
 
 	if (mDateTime.isValid())
 	{
@@ -304,7 +305,9 @@ void MessageWin::initView()
 			frame = new QFrame(topWidget);
 			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-			layout = new QVBoxLayout(frame, leading + frame->frameWidth(), leading);
+			layout = new QVBoxLayout(frame);
+			topLayout->setMargin(leading + frame->frameWidth());
+			topLayout->setSpacing(leading);
 		}
 
 		// Alarm date/time
@@ -463,7 +466,9 @@ void MessageWin::initView()
 				frame->setFrameStyle(QFrame::Box | QFrame::Raised);
 				frame->setWhatsThis(i18n("The email to send"));
 				topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-				QGridLayout* grid = new QGridLayout(frame, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+				QGridLayout* grid = new QGridLayout(frame);
+				grid->setMargin(KDialog::marginHint());
+				grid->setSpacing(KDialog::spacingHint());
 
 				QLabel* label = new QLabel(i18n("Email addressee", "To:"), frame);
 				label->setFixedSize(label->sizeHint());
@@ -511,8 +516,7 @@ void MessageWin::initView()
 		layout->addStretch();
 	}
 
-	QGridLayout* grid = new QGridLayout(1, 4);
-	topLayout->addLayout(grid);
+	QGridLayout* grid = new QGridLayout(topLayout);
 	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
 	int gridIndex = 1;
 
@@ -561,7 +565,7 @@ void MessageWin::initView()
 		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
 		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
-		QToolTip::add(mSilenceButton, i18n("Stop sound"));
+		mSilenceButton->setToolTip(i18n("Stop sound"));
 		mSilenceButton->setWhatsThis(i18n("Stop playing the sound"));
 		// To avoid getting in a mess, disable the button until sound playing has been set up
 		mSilenceButton->setEnabled(false);
@@ -578,7 +582,7 @@ void MessageWin::initView()
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
-		QToolTip::add(mKMailButton, i18n("Locate this email in KMail", "Locate in KMail"));
+		mKMailButton->setToolTip(i18n("Locate this email in KMail", "Locate in KMail"));
 		mKMailButton->setWhatsThis(i18n("Locate and highlight this email in KMail"));
 	}
 	else
@@ -592,7 +596,7 @@ void MessageWin::initView()
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
 	QString actKAlarm = i18n("Activate KAlarm");
-	QToolTip::add(mKAlarmButton, actKAlarm);
+	mKAlarmButton->setToolTip(actKAlarm);
 	mKAlarmButton->setWhatsThis(actKAlarm);
 
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be

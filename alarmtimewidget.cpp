@@ -62,7 +62,9 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
+	QVBoxLayout* layout = new QVBoxLayout(this);
 	QGroupBox* box = new QGroupBox(groupBoxTitle, this);
+	layout->addWidget(box);
 	init(box, mode, true);
 }
 
@@ -86,12 +88,10 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 
 	mButtonGroup = new ButtonGroup(topWidget);
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
-	QVBoxLayout* topLayout = new QVBoxLayout(topWidget, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	topLayout->setSpacing(KDialog::spacingHint());
 	if (hasTitle)
-	{
 		topLayout->setMargin(KDialog::marginHint());
-		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
-	}
 
 	// At time radio button/label
 	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), topWidget);
@@ -152,20 +152,20 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	// Set up the layout, either narrow or wide
 	if (mode & NARROW)
 	{
-		QGridLayout* grid = new QGridLayout(topLayout, 2, 2, KDialog::spacingHint());
+		QGridLayout* grid = new QGridLayout(topLayout);
 		grid->addWidget(mAtTimeRadio, 0, 0);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
 		grid->setColStretch(2, 1);
 		topLayout->addStretch();
-		QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QHBoxLayout* layout = new QHBoxLayout(topLayout);
 		layout->addWidget(mAfterTimeRadio);
 		layout->addWidget(mDelayTimeEdit);
 		layout->addStretch();
 	}
 	else
 	{
-		QGridLayout* grid = new QGridLayout(topLayout, 2, 3, KDialog::spacingHint());
+		QGridLayout* grid = new QGridLayout(topLayout);
 		grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);

@@ -572,8 +572,7 @@ void Preferences::convertOldPrefs()
 
 	bool sync = false;
 	QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
-	if (entries.find(EMAIL_FROM) == entries.end()
-	&&  entries.find(EMAIL_USE_CONTROL_CENTRE) != entries.end())
+	if (!entries.contains(EMAIL_FROM)  &&  entries.contains(EMAIL_USE_CONTROL_CENTRE))
 	{
 		// Preferences were written by KAlarm pre-1.2.1
 		config->setGroup(GENERAL_SECTION);

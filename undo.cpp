@@ -466,7 +466,7 @@ QList<int> Undo::ids(Undo::Type type)
 			for (int u = 0, uend = undos.count();  u  < uend;  ++u)
 			{
 				QString evid = undos[u]->eventID();
-				if (ignoreIDs.find(evid) != ignoreIDs.end())
+				if (ignoreIDs.contains(evid))
 					omit = true;
 				else if (omit)
 					ignoreIDs.append(evid);
@@ -481,7 +481,7 @@ QList<int> Undo::ids(Undo::Type type)
 		}
 		else
 		{
-			omit = (ignoreIDs.find(item->eventID()) != ignoreIDs.end());
+			omit = ignoreIDs.contains(item->eventID());
 			if (!omit)
 				ignoreIDs.append(item->eventID());
 			if (item->operation() == UndoItem::EDIT)

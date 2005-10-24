@@ -32,6 +32,7 @@
 SynchTimer::SynchTimer()
 {
 	mTimer = new QTimer(this);
+	mTimer->setSingleShot(true);
 }
 
 SynchTimer::~SynchTimer()
@@ -112,7 +113,7 @@ void MinuteTimer::slotTimer()
 {
 	kdDebug(5950) << "MinuteTimer::slotTimer()" << endl;
 	int interval = 62 - QTime::currentTime().second();
-	mTimer->start(interval * 1000, true);     // execute a single shot
+	mTimer->start(interval * 1000);     // execute a single shot
 }
 
 
@@ -182,7 +183,7 @@ void DailyTimer::changeTime(const QTime& newTimeOfDay, bool triggerMissed)
 		}
 		mTime = newTimeOfDay;
 		if (triggerNow)
-			mTimer->start(0, true);    // trigger immediately
+			mTimer->start(0);    // trigger immediately
 		else
 			start();
 	}
@@ -213,7 +214,7 @@ void DailyTimer::start()
 	else
 		next = QDateTime(now.date().addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
-	mTimer->start(interval * 1000, true);    // execute a single shot
+	mTimer->start(interval * 1000);    // execute a single shot
 	kdDebug(5950) << "DailyTimer::start(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
 }
 
@@ -230,6 +231,6 @@ void DailyTimer::slotTimer()
 	mLastDate = now.date();
 	QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
-	mTimer->start(interval * 1000, true);    // execute a single shot
+	mTimer->start(interval * 1000);    // execute a single shot
 	kdDebug(5950) << "DailyTimer::slotTimer(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
 }

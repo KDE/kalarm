@@ -654,9 +654,9 @@ QString KAMail::convertAddresses(const QString& items, QStringList& list)
 */
 int KAMail::checkAddress(QString& address)
 {
-	address = address.stripWhiteSpace();
+	address = address.trimmed();
 	// Check that there are no list separator characters present
-	if (address.find(',') >= 0  ||  address.find(';') >= 0)
+	if (address.indexOf(',') >= 0  ||  address.indexOf(';') >= 0)
 		return -1;
 	int n = address.length();
 	if (!n)
@@ -666,16 +666,16 @@ int KAMail::checkAddress(QString& address)
 	if (address[end] == '>')
 	{
 		// The email address is in <...>
-		if ((start = address.find('<')) < 0)
+		if ((start = address.indexOf('<')) < 0)
 			return -1;
 		++start;
 		--end;
 	}
-	int i = address.find('@', start);
+	int i = address.indexOf('@', start);
 	if (i >= 0)
 	{
 		if (i == start  ||  i == end)          // check @ isn't the first or last character
-//		||  address.find('@', i + 1) >= 0)    // check for multiple @ characters
+//		||  address.indexOf('@', i + 1) >= 0)    // check for multiple @ characters
 			return -1;
 	}
 /*	else
@@ -709,15 +709,15 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 	for (int next = 0;  next < length;  )
 	{
 		// Find the first delimiter character (, or ;)
-		int i = items.find(',', next);
+		int i = items.indexOf(',', next);
 		if (i < 0)
 			i = items.length();
-		int sc = items.find(';', next);
+		int sc = items.indexOf(';', next);
 		if (sc < 0)
 			sc = items.length();
 		if (sc < i)
 			i = sc;
-		QString item = items.mid(next, i - next).stripWhiteSpace();
+		QString item = items.mid(next, i - next).trimmed();
 		switch (checkAttachment(item))
 		{
 			case 1:   list += item;  break;
@@ -745,10 +745,10 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 	for (int next = 0;  next < length;  )
 	{
 		// Find the first delimiter character (, or ;)
-		int i = items.find(',', next);
+		int i = items.indexOf(',', next);
 		if (i < 0)
 			i = items.length();
-		int sc = items.find(';', next);
+		int sc = items.indexOf(';', next);
 		if (sc < 0)
 			sc = items.length();
 		if (sc < i)
@@ -776,7 +776,7 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 */
 int KAMail::checkAttachment(QString& attachment, KURL* url)
 {
-	attachment.stripWhiteSpace();
+	attachment = attachment.trimmed();
 	if (attachment.isEmpty())
 	{
 		if (url)

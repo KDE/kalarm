@@ -48,14 +48,16 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	  mColourList(Preferences::messageColours()),
 	  mReadOnly(false)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setSpacing(KDialog::spacingHint());
 	QWidget* page = this;
 	if (!frameLabel.isNull())
 	{
 		page = new QGroupBox(frameLabel, this);
 		topLayout->addWidget(page);
-		topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-//??		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+		topLayout = new QVBoxLayout(page);
+		topLayout->setMargin(KDialog::marginHint());
+		topLayout->setSpacing(KDialog::spacingHint());
 	}
 	if (fg)
 	{

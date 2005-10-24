@@ -103,12 +103,12 @@ QString TimeSpinBox::textFromValue(int v) const
 int TimeSpinBox::valueFromText(const QString&) const
 {
 	QString text = cleanText();
-	int colon = text.find(':');
+	int colon = text.indexOf(QChar(':'));
 	if (colon >= 0)
 	{
 		// [h]:m format for any time value
-		QString hour   = text.left(colon).stripWhiteSpace();
-		QString minute = text.mid(colon + 1).stripWhiteSpace();
+		QString hour   = text.left(colon).trimmed();
+		QString minute = text.mid(colon + 1).trimmed();
 		if (!minute.isEmpty())
 		{
 			bool okmin;
@@ -247,7 +247,7 @@ void TimeSpinBox::slotValueChanged(int value)
  */
 QValidator::State TimeSpinBox::validate(QString& text, int&) const
 {
-	QString cleanText = text.stripWhiteSpace();
+	QString cleanText = text.trimmed();
 	if (cleanText.isEmpty())
 		return QValidator::Intermediate;
 	QValidator::State state = QValidator::Acceptable;
@@ -256,7 +256,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
 	bool ok;
 	int hr = 0;
 	int mn = 0;
-	int colon = cleanText.find(':');
+	int colon = cleanText.indexOf(QChar(':'));
 	if (colon >= 0)
 	{
 		QString minute = cleanText.mid(colon + 1);

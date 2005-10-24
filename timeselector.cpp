@@ -39,8 +39,9 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	  mLabel(0),
 	  mReadOnly(false)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-	QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setSpacing(KDialog::spacingHint());
+	QHBoxLayout* layout = new QHBoxLayout(topLayout);
 	mSelect = new CheckBox(selectText, this);
 	mSelect->setFixedSize(mSelect->sizeHint());
 	connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));

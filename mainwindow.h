@@ -72,7 +72,7 @@ class MainWindow : public MainWindowBase
 		static void        closeAll();
 		static MainWindow* toggleWindow(MainWindow*);
 		static MainWindow* mainMainWindow();
-		static MainWindow* firstWindow()      { return mWindowList.first(); }
+		static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? 0 : mWindowList[0]; }
 		static int         count()            { return mWindowList.count(); }
 
 		static QString i18n_a_ShowAlarmTimes();     // text of 'Show Alarm Times' checkbox, with 'A' shortcut

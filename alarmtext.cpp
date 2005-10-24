@@ -106,7 +106,7 @@ bool AlarmText::isEmpty() const
 */
 bool AlarmText::checkIfEmail(const QString& text)
 {
-	QStringList lines = QStringList::split('\n', text);
+	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	return emailHeaderCount(lines);
 }
 
@@ -140,12 +140,12 @@ int AlarmText::emailHeaderCount(const QStringList& lines)
 */
 QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 {
-	QStringList lines = QStringList::split('\n', text);
+	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	int n = emailHeaderCount(lines);
 	if (!n)
 		return QString::null;
 	if (subjectOnly)
-		return lines[n-1].mid(mSubjectPrefix.length()).stripWhiteSpace();
+		return lines[n-1].mid(mSubjectPrefix.length()).trimmed();
 	QString h = lines[0];
 	for (int i = 1;  i < n;  ++i)
 	{
@@ -163,7 +163,7 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 */
 QString AlarmText::fromCalendarText(const QString& text, bool& email)
 {
-	QStringList lines = QStringList::split('\n', text);
+	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	int maxn = lines.count();
 	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefixEn)
@@ -184,8 +184,8 @@ QString AlarmText::fromCalendarText(const QString& text, bool& email)
 				dispText += mCcPrefix + lines[2].mid(mCcPrefixEn.length()) + '\n';
 			dispText += mDatePrefix + lines[n].mid(mDatePrefixEn.length()) + '\n';
 			dispText += mSubjectPrefix + lines[n+1].mid(mSubjectPrefixEn.length());
-			int i = text.find(mSubjectPrefixEn);
-			i = text.find('\n', i);
+			int i = text.indexOf(mSubjectPrefixEn);
+			i = text.indexOf('\n', i);
 			if (i > 0)
 				dispText += text.mid(i);
 			email = true;
@@ -203,7 +203,7 @@ QString AlarmText::fromCalendarText(const QString& text, bool& email)
 QString AlarmText::toCalendarText(const QString& text)
 {
 	setUpTranslations();
-	QStringList lines = QStringList::split('\n', text);
+	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	int maxn = lines.count();
 	if (maxn >= 4
 	&&  lines[0].startsWith(mFromPrefix)
@@ -224,8 +224,8 @@ QString AlarmText::toCalendarText(const QString& text)
 				calText += mCcPrefixEn + lines[2].mid(mCcPrefix.length()) + '\n';
 			calText += mDatePrefixEn + lines[n].mid(mDatePrefix.length()) + '\n';
 			calText += mSubjectPrefixEn + lines[n+1].mid(mSubjectPrefix.length());
-			int i = text.find(mSubjectPrefix);
-			i = text.find('\n', i);
+			int i = text.indexOf(mSubjectPrefix);
+			i = text.indexOf('\n', i);
 			if (i > 0)
 				calText += text.mid(i);
 			return calText;
@@ -276,7 +276,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 	int newline = -1;
 	for (int i = 0;  i < maxLines;  ++i)
 	{
-		newline = text.find('\n', newline + 1);
+		newline = text.indexOf('\n', newline + 1);
 		if (newline < 0)
 			return text;       // not truncated after all !?!
 	}

@@ -82,7 +82,7 @@ void TimeEdit::setValid(bool valid)
 	{
 		mSpinBox->setValid(valid);
 		if (mAmPm)
-			mAmPm->setCurrentItem(0);
+			mAmPm->setCurrentIndex(0);
 	}
 }
 
@@ -94,7 +94,7 @@ void TimeEdit::setValue(int minutes)
 	if (mAmPm)
 	{
 		int i = (minutes >= 720) ? mPmIndex : mAmIndex;
-		mAmPm->setCurrentItem(i >= 0 ? i : 0);
+		mAmPm->setCurrentIndex(i >= 0 ? i : 0);
 	}
 	mSpinBox->setValue(minutes);
 }
@@ -140,11 +140,11 @@ void TimeEdit::slotValueChanged(int value)
 {
 	if (mAmPm)
 	{
-		bool pm = (mAmPm->currentItem() == mPmIndex);
+		bool pm = (mAmPm->currentIndex() == mPmIndex);
 		if (pm  &&  value < 720)
-			mAmPm->setCurrentItem(mAmIndex);
+			mAmPm->setCurrentIndex(mAmIndex);
 		else if (!pm  &&  value >= 720)
-			mAmPm->setCurrentItem(mPmIndex);
+			mAmPm->setCurrentIndex(mPmIndex);
 	}
 	emit valueChanged(value);
 }
@@ -174,10 +174,10 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 	{
 		// Insert "am"
 		mAmIndex = 0;
-		mAmPm->insertItem(KGlobal::locale()->translate("am"), mAmIndex);
+		mAmPm->insertItem(mAmIndex, KGlobal::locale()->translate("am"));
 		if (mPmIndex >= 0)
 			mPmIndex = 1;
-		mAmPm->setCurrentItem(mPmIndex >= 0 ? mPmIndex : mAmIndex);
+		mAmPm->setCurrentIndex(mPmIndex >= 0 ? mPmIndex : mAmIndex);
 	}
 	else if (am == 0  &&  mAmIndex >= 0)
 	{
@@ -186,22 +186,22 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 		mAmIndex = -1;
 		if (mPmIndex >= 0)
 			mPmIndex = 0;
-		mAmPm->setCurrentItem(mPmIndex);
+		mAmPm->setCurrentIndex(mPmIndex);
 	}
 
 	if (pm > 0  &&  mPmIndex < 0)
 	{
 		// Insert "pm"
 		mPmIndex = mAmIndex + 1;
-		mAmPm->insertItem(KGlobal::locale()->translate("pm"), mPmIndex);
+		mAmPm->insertItem(mPmIndex, KGlobal::locale()->translate("pm"));
 		if (mAmIndex < 0)
-			mAmPm->setCurrentItem(mPmIndex);
+			mAmPm->setCurrentIndex(mPmIndex);
 	}
 	else if (pm == 0  &&  mPmIndex >= 0)
 	{
 		// Remove "pm"
 		mAmPm->removeItem(mPmIndex);
 		mPmIndex = -1;
-		mAmPm->setCurrentItem(mAmIndex);
+		mAmPm->setCurrentIndex(mAmIndex);
 	}
 }

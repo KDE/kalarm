@@ -85,7 +85,7 @@ class SpinBox2 : public QFrame
 		 */
 		void                setReverseWithLayout(bool reverse);
 		/** Returns whether the spin button pairs will be reversed for a right-to-left language. */
-		bool                reverseButtons() const      { return mReverseLayout  &&  !mReverseWithLayout; }
+		bool                reverseButtons() const      { return mRightToLeft  &&  !mReverseWithLayout; }
 
 		/** Returns the spin box's text, including any prefix() and suffix(). */
 		QString             text() const                { return mSpinbox->text(); }
@@ -292,7 +292,7 @@ class SpinBox2 : public QFrame
 
 		enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
-		static int       mReverseLayout;  // widgets are mirrored right to left
+		static int       mRightToLeft;    // widgets are mirrored right to left
 		QFrame*          mUpdown2Frame;   // contains visible part of the extra pair of spin buttons
 		QFrame*          mSpinboxFrame;   // contains the main spin box
 		ExtraSpinBox*    mUpdown2;        // the extra pair of spin buttons

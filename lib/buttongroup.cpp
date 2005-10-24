@@ -54,7 +54,7 @@ void ButtonGroup::addButton(QAbstractButton* button, int id)
 int ButtonGroup::id(QAbstractButton* button) const
 {
 	for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.begin();  it != mIds.end();  ++it)
-		if (it.data() == button)
+		if (it.value() == button)
 			return it.key();
 	return -1;
 }
@@ -67,7 +67,7 @@ QAbstractButton* ButtonGroup::find(int id) const
 	QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
 	if (it == mIds.end())
 		return 0;
-	return it.data();
+	return it.value();
 }
 
 /******************************************************************************

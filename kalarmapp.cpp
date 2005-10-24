@@ -1712,7 +1712,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		// Execute the command in a terminal window.
 		cmd = Preferences::cmdXTermCommand();
 		cmd.replace("%t", aboutData()->programName());     // set the terminal window title
-		if (cmd.find("%C") >= 0)
+		if (cmd.indexOf("%C") >= 0)
 		{
 			// Execute the command from a temporary script file
 			if (flags & ProcData::TEMP_FILE)
@@ -1725,7 +1725,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 				cmd.replace("%C", tmpXtermFile);    // %C indicates where to insert the command
 			}
 		}
-		else if (cmd.find("%W") >= 0)
+		else if (cmd.indexOf("%W") >= 0)
 		{
 			// Execute the command from a temporary script file,
 			// with a sleep after the command is executed
@@ -1734,7 +1734,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 				return 0;
 			cmd.replace("%W", tmpXtermFile);    // %w indicates where to insert the command
 		}
-		else if (cmd.find("%w") >= 0)
+		else if (cmd.indexOf("%w") >= 0)
 		{
 			// Append a sleep to the command.
 			// Quote the command in case it contains characters such as [>|;].
@@ -1746,7 +1746,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 			// Set the command to execute.
 			// Put it in quotes in case it contains characters such as [>|;].
 			QString exec = KShellProcess::quote(command);
-			if (cmd.find("%c") >= 0)
+			if (cmd.indexOf("%c") >= 0)
 				cmd.replace("%c", exec);    // %c indicates where to insert the command string
 			else
 				cmd.append(exec);           // otherwise, simply append the command string
@@ -2122,7 +2122,7 @@ static bool convInterval(QByteArray timeParam, KARecurrence::Type& recurType, in
 			break;
 		case 'M':
 		{
-			int i = timeParam.find('H');
+			int i = timeParam.indexOf('H');
 			if (i < 0)
 			{
 				if (!allowMonthYear)

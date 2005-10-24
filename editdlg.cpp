@@ -23,7 +23,6 @@
 #include <limits.h>
 
 #include <QLabel>
-#include <qtooltip.h>
 #include <QDir>
 #include <QStyle>
 #include <QFrame>
@@ -207,7 +206,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
-	QVBoxLayout* topLayout = new QVBoxLayout(mainPage, 0, spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
+	topLayout->setSpacing(spacingHint());
 
 	// Recurrence tab
 	KVBox* recurTab = new KVBox(mTabs);
@@ -222,8 +222,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	QGroupBox* actionBox = new QGroupBox(i18n("Action"), mainPage);
 	topLayout->addWidget(actionBox, 1);
-	QGridLayout* grid = new QGridLayout(actionBox, 3, 5, marginHint(), spacingHint());
-//??	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	QGridLayout* grid = new QGridLayout(actionBox);
+	grid->setMargin(marginHint());
+	grid->setSpacing(spacingHint());
 	mActionGroup = new ButtonGroup(actionBox);
 	connect(mActionGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAlarmTypeChanged(QAbstractButton*)));
 
@@ -271,7 +272,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// Deferred date/time: visible only for a deferred recurring event.
 	mDeferGroup = new QGroupBox(i18n("Deferred Alarm"), mainPage, "deferGroup");
 	topLayout->addWidget(mDeferGroup);
-	QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup, marginHint(), spacingHint());
+	QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
+	hlayout->setMargin(marginHint());
+	hlayout->setSpacing(spacingHint());
 	QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label);
@@ -292,8 +295,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	{
 		QGroupBox* templateTimeBox = new QGroupBox(i18n("Time"), mainPage);
 		hlayout->addWidget(templateTimeBox);
-		grid = new QGridLayout(templateTimeBox, 2, 2, marginHint(), spacingHint());
-//		grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+		grid = new QGridLayout(templateTimeBox);
+		grid->setMargin(marginHint());
+		grid->setSpacing(spacingHint());
 		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
 
@@ -355,7 +359,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	}
 
 	// Recurrence type display
-	hlayout = new QHBoxLayout(topLayout, 2*spacingHint());
+	hlayout = new QHBoxLayout(topLayout);
+	hlayout->setSpacing(2*spacingHint());
 	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("Recurrence:"), box);
@@ -415,7 +420,8 @@ EditAlarmDlg::~EditAlarmDlg()
 void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 {
 	mDisplayAlarmsFrame = new QFrame(parent);
-	QVBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame, 0, spacingHint());
+	QVBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame);
+	frameLayout->setSpacing(spacingHint());
 
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(mDisplayAlarmsFrame);
@@ -434,7 +440,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mFileBrowseButton = new QPushButton(mFileBox);
 	mFileBrowseButton->setPixmap(SmallIcon("fileopen"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
-	QToolTip::add(mFileBrowseButton, i18n("Choose a file"));
+	mFileBrowseButton->setToolTip(i18n("Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18n("Select a text or image file to display."));
 	mFileRadio->init(mFileBrowseButton, mFileMessageEdit);
 
@@ -496,7 +502,8 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 void EditAlarmDlg::initCommand(QWidget* parent)
 {
 	mCommandFrame = new QFrame(parent);
-	QVBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame, 0, spacingHint());
+	QVBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame);
+	frameLayout->setSpacing(spacingHint());
 
 	mCmdTypeScript = new CheckBox(i18n_p_EnterScript(), mCommandFrame);
 	mCmdTypeScript->setFixedSize(mCmdTypeScript->sizeHint());
@@ -516,8 +523,9 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 
 	QGroupBox* cmdOutputBox = new QGroupBox(i18n("Command Output"), mCommandFrame);
 	frameLayout->addWidget(cmdOutputBox);
-	QVBoxLayout* vlayout = new QVBoxLayout(cmdOutputBox, marginHint(), spacingHint());
-//	vlayout->addSpacing(fontMetrics().lineSpacing()/2);
+	QVBoxLayout* vlayout = new QVBoxLayout(cmdOutputBox);
+	vlayout->setMargin(marginHint());
+	vlayout->setSpacing(spacingHint());
 	mCmdOutputGroup = new ButtonGroup(cmdOutputBox);
 
 	// Execute in terminal window
@@ -541,7 +549,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	QPushButton* browseButton = new QPushButton(box);
 	browseButton->setPixmap(SmallIcon("fileopen"));
 	browseButton->setFixedSize(browseButton->sizeHint());
-	QToolTip::add(browseButton, i18n("Choose a file"));
+	browseButton->setToolTip(i18n("Choose a file"));
 	browseButton->setWhatsThis(i18n("Select a log file."));
 
 	// Log output to file
@@ -571,8 +579,9 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 void EditAlarmDlg::initEmail(QWidget* parent)
 {
 	mEmailFrame = new QFrame(parent);
-	QVBoxLayout* vlayout = new QVBoxLayout(mEmailFrame, 0, spacingHint());
-	QGridLayout* grid = new QGridLayout(vlayout, 3, 3, spacingHint());
+	QVBoxLayout* vlayout = new QVBoxLayout(mEmailFrame);
+	vlayout->setSpacing(spacingHint());
+	QGridLayout* grid = new QGridLayout(vlayout);
 	grid->setColStretch(1, 1);
 
 	mEmailFromList = 0;
@@ -605,7 +614,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	mEmailAddressButton->setPixmap(SmallIcon("contents"));
 	mEmailAddressButton->setFixedSize(mEmailAddressButton->sizeHint());
 	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
-	QToolTip::add(mEmailAddressButton, i18n("Open address book"));
+	mEmailAddressButton->setToolTip(i18n("Open address book"));
 	mEmailAddressButton->setWhatsThis(i18n("Select email addresses from your address book."));
 	grid->addWidget(mEmailAddressButton, 1, 2);
 
@@ -626,7 +635,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	vlayout->addWidget(mEmailMessageEdit);
 
 	// Email attachments
-	grid = new QGridLayout(vlayout, 2, 3, spacingHint());
+	grid = new QGridLayout(vlayout);
 	label = new QLabel(i18n("Attachment&s:"), mEmailFrame);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
@@ -989,7 +998,7 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent, c
 	ColourCombo* widget = new ColourCombo(*box, name);
 	QSize size = widget->sizeHint();
 	widget->setMinimumHeight(size.height() + 4);
-	QToolTip::add(widget, i18n("Message color"));
+	widget->setToolTip(i18n("Message color"));
 	label->setBuddy(widget);
 	(*box)->setFixedHeight((*box)->sizeHint().height());
 	(*box)->setWhatsThis(i18n("Choose the background color for the alarm message."));
@@ -1047,7 +1056,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedEmailTo          = mEmailToEdit->text();
 	mSavedEmailSubject     = mEmailSubjectEdit->text();
 	mSavedEmailAttach.clear();
-	for (int i = 0;  i < mEmailAttachList->count();  ++i)
+	for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
 		mSavedEmailAttach += mEmailAttachList->text(i);
 	mSavedEmailBcc         = mEmailBcc->isChecked();
 	if (mTimeWidget)
@@ -1147,7 +1156,7 @@ bool EditAlarmDlg::stateChanged() const
 	else if (mEmailRadio->isOn())
 	{
 		QStringList emailAttach;
-		for (int i = 0;  i < mEmailAttachList->count();  ++i)
+		for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
 			emailAttach += mEmailAttachList->text(i);
 		if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->currentIdentityName()
 		||  mSavedEmailTo      != mEmailToEdit->text()
@@ -1787,7 +1796,7 @@ bool EditAlarmDlg::checkEmailData()
 		}
 
 		mEmailAttachments.clear();
-		for (int i = 0;  i < mEmailAttachList->count();  ++i)
+		for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
 		{
 			QString att = mEmailAttachList->text(i);
 			switch (KAMail::checkAttachment(att))
@@ -1930,7 +1939,7 @@ void EditAlarmDlg::openAddressBook()
 	if (a.isEmpty())
 		return;
 	Person person(a.realName(), a.preferredEmail());
-	QString addrs = mEmailToEdit->text().stripWhiteSpace();
+	QString addrs = mEmailToEdit->text().trimmed();
 	if (!addrs.isEmpty())
 		addrs += ", ";
 	addrs += person.fullName();
@@ -1947,7 +1956,7 @@ void EditAlarmDlg::slotAddAttachment()
 	if (!url.isEmpty())
 	{
 		mEmailAttachList->insertItem(url);
-		mEmailAttachList->setCurrentItem(mEmailAttachList->count() - 1);   // select the new item
+		mEmailAttachList->setCurrentIndex(mEmailAttachList->count() - 1);   // select the new item
 		mEmailRemoveButton->setEnabled(true);
 		mEmailAttachList->setEnabled(true);
 	}
@@ -1958,11 +1967,11 @@ void EditAlarmDlg::slotAddAttachment()
  */
 void EditAlarmDlg::slotRemoveAttachment()
 {
-	int item = mEmailAttachList->currentItem();
+	int item = mEmailAttachList->currentIndex();
 	mEmailAttachList->removeItem(item);
 	int count = mEmailAttachList->count();
 	if (item >= count)
-		mEmailAttachList->setCurrentItem(count - 1);
+		mEmailAttachList->setCurrentIndex(count - 1);
 	if (!count)
 	{
 		mEmailRemoveButton->setEnabled(false);
@@ -1985,17 +1994,17 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			result = mCmdScriptEdit->text();
 		else
 			result = mCmdCommandEdit->text();
-		result.stripWhiteSpace();
+		result = result.trimmed();
 	}
 	else if (mFileRadio->isOn())
 	{
-		QString alarmtext = mFileMessageEdit->text().stripWhiteSpace();
+		QString alarmtext = mFileMessageEdit->text().trimmed();
 		// Convert any relative file path to absolute
 		// (using home directory as the default)
 		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
 		Err err = NONE;
 		KURL url;
-		int i = alarmtext.find(QString::fromLatin1("/"));
+		int i = alarmtext.indexOf(QChar('/'));
 		if (i > 0  &&  alarmtext[i - 1] == ':')
 		{
 			url = alarmtext;

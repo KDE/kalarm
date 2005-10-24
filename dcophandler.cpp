@@ -396,7 +396,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	if (!start.isValid())
 		return false;
 	QDateTime end;
-	if (endDateTime.find('T') < 0)
+	if (endDateTime.indexOf('T') < 0)
 	{
 		if (!start.isDateOnly())
 		{

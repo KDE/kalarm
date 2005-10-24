@@ -46,7 +46,8 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	  mReadOnly(false),
 	  mOnceOnlyEnabled(showOnceOnly)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setSpacing(KDialog::spacingHint());
 
 	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
 	                       valueWhatsThis, allowHourMinute, this);
@@ -56,7 +57,7 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 
 	if (showOnceOnly)
 	{
-		QHBoxLayout* layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+		QHBoxLayout* layout = new QHBoxLayout(topLayout);
 		layout->addSpacing(3*KDialog::spacingHint());
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());

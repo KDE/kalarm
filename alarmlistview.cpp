@@ -20,10 +20,10 @@
 
 #include "kalarm.h"
 
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qpainter.h>
 #include <qstyle.h>
-#include <qregexp.h>
+#include <QRegExp>
 //Added by qt3to4:
 #include <q3header.h>
 #include <QPixmap>
@@ -457,8 +457,8 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 			if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
 			{
 				QString fmt = locale->timeFormat();
-				int i = fmt.find(QRegExp("%[kl]"));   // check if leading zeroes are omitted
-				if (i >= 0  &&  i == fmt.find('%'))   // and whether the hour is first
+				int i = fmt.indexOf(QRegExp("%[kl]"));   // check if leading zeroes are omitted
+				if (i >= 0  &&  i == fmt.indexOf('%'))   // and whether the hour is first
 					mTimeHourPos = i;             // yes, so need to align
 			}
 		}
@@ -543,7 +543,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		if (mTimeHourPos >= 0)
 		{
 			// Need to pad out spacing to align times without leading zeroes
-			i = str.find(" ~");
+			i = str.indexOf(" ~");
 			if (i >= 0)
 			{
 				if (mDigitWidth < 0)
@@ -620,5 +620,5 @@ QString AlarmListViewItem::key(int column, bool) const
 		return mColourOrder;
 	if (column == listView->typeColumn())
 		return mTypeOrder;
-	return text(column).lower();
+	return text(column).toLower();
 }

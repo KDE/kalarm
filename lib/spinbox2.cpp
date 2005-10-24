@@ -51,7 +51,7 @@ static const char* mirrorStyles[] = {
 static bool mirrorStyle(const QStyle*);
 
 
-int SpinBox2::mReverseLayout = -1;
+int SpinBox2::mRightToLeft = -1;
 
 SpinBox2::SpinBox2(QWidget* parent)
 	: QFrame(parent),
@@ -79,8 +79,8 @@ SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* par
 
 void SpinBox2::init()
 {
-	if (mReverseLayout < 0)
-		mReverseLayout = QApplication::reverseLayout() ? 1 : 0;
+	if (mRightToLeft < 0)
+		mRightToLeft = QApplication::isRightToLeft() ? 1 : 0;
 	mMinValue        = mSpinbox->minValue();
 	mMaxValue        = mSpinbox->maxValue();
 	mSingleStep      = mSpinbox->singleStep();
@@ -270,10 +270,10 @@ void SpinBox2::updateMirror()
 void SpinBox2::arrange()
 {
 	getMetrics();
-	QRect arrowRect = style()->visualRect((mReverseLayout ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
+	QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
 	mUpdown2Frame->setGeometry(arrowRect);
 	mUpdown2->setGeometry(-xUpdown2, 0, mUpdown2->width(), height());
-	mSpinboxFrame->setGeometry(style()->visualRect((mReverseLayout ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height())));
+	mSpinboxFrame->setGeometry(style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height())));
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
 	mSpinMirror->resize(wUpdown2, mUpdown2->height());
 	mSpinMirror->setGeometry(arrowRect);
@@ -292,7 +292,7 @@ void SpinBox2::getMetrics() const
 	rect      |= mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
-	xUpdown2 = mReverseLayout ? 0 : rect.left();
+	xUpdown2 = mRightToLeft ? 0 : rect.left();
 	wUpdown2 = mUpdown2->width() - rect.left();
 	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
 	wGap = 0;
@@ -439,7 +439,7 @@ void SpinMirror::contentsMouseEvent(QMouseEvent* e)
 	{
 		QPoint pt = contentsToViewport(e->pos());
 		pt.setX(pt.x() + mSpinbox->upRect().left());
-		QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->state()));
+		QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
 
 		// If the mouse button has been released, display unpressed spin buttons
 		if (e->type() == QEvent::MouseButtonRelease)

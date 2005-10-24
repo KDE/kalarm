@@ -40,7 +40,7 @@ class QString;
 class NoRule : public QFrame
 {
 	public:
-		NoRule(QWidget* parent, const char* name = 0) : QFrame(parent, name) { }
+		explicit NoRule(QWidget* parent) : QFrame(parent) { }
 		virtual int      frequency() const       { return 0; }
 };
 
@@ -49,7 +49,7 @@ class Rule : public NoRule
 		Q_OBJECT
 	public:
 		Rule(const QString& freqText, const QString& freqWhatsThis, bool time, bool readOnly,
-		     QWidget* parent, const char* name = 0);
+		     QWidget* parent);
 		int              frequency() const;
 		void             setFrequency(int);
 		virtual void     setFrequencyFocus()     { mSpinBox->setFocus(); }
@@ -82,7 +82,7 @@ class DayWeekRule : public Rule
 		Q_OBJECT
 	public:
 		DayWeekRule(const QString& freqText, const QString& freqWhatsThis, const QString& daysWhatsThis,
-		            bool readOnly, QWidget* parent, const char* name = 0);
+		            bool readOnly, QWidget* parent);
 		QBitArray        days() const;
 		void             setDays(bool);
 		void             setDays(QBitArray& days);
@@ -118,7 +118,7 @@ class MonthYearRule : public Rule
 		enum DayPosType { DATE, POS };
 
 		MonthYearRule(const QString& freqText, const QString& freqWhatsThis, bool allowEveryWeek,
-		              bool readOnly, QWidget* parent, const char* name = 0);
+		              bool readOnly, QWidget* parent);
 		DayPosType       type() const;
 		int              date() const;       // if date in month is selected
 		int              week() const;       // if position is selected
@@ -159,7 +159,7 @@ class MonthYearRule : public Rule
 class MonthlyRule : public MonthYearRule
 {
 	public:
-		MonthlyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		MonthlyRule(bool readOnly, QWidget* parent);
 };
 
 // Yearly rule choices
@@ -167,7 +167,7 @@ class YearlyRule : public MonthYearRule
 {
 		Q_OBJECT
 	public:
-		YearlyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		YearlyRule(bool readOnly, QWidget* parent);
 		QList<int>       months() const;
 		void             setMonths(const Q3ValueList<int>& months);
 		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);

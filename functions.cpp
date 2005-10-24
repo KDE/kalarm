@@ -642,7 +642,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
 	//      if the representation returned by this method changes.
 	if (subVersion)
 		*subVersion = QString::null;
-	QStringList nums = QStringList::split(QChar('.'), version, true);
+	QStringList nums = version.split(QChar('.'), QString::KeepEmptyParts);
 	int count = nums.count();
 	if (count < 2  ||  count > 3)
 		return 0;
@@ -687,7 +687,7 @@ FileType fileType(const QString& mimetype)
 
 	if (mimetype.startsWith(QString::fromLatin1("image/")))
 		return Image;
-	int slash = mimetype.find('/');
+	int slash = mimetype.indexOf('/');
 	if (slash < 0)
 		return Unknown;
 	QString type = mimetype.mid(slash + 1);

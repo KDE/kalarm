@@ -245,7 +245,7 @@ void KAEvent::set(const Event& event)
 		{
 			// It's the archive flag plus a reminder time and/or repeat-at-login flag
 			mArchive = true;
-			QStringList list = QStringList::split(';', cats[i].mid(ARCHIVE_CATEGORIES.length()));
+			QStringList list = cats[i].mid(ARCHIVE_CATEGORIES.length()).split(QChar(';'), QString::SkipEmptyParts);
 			for (int j = 0;  j < list.count();  ++j)
 			{
 				if (list[j] == AT_LOGIN_TYPE)
@@ -255,7 +255,8 @@ void KAEvent::set(const Event& event)
 				else
 				{
 					char ch;
-					const char* cat = list[j].latin1();
+					QByteArray catBytes = list[j].toLatin1();
+					const char* cat = catBytes.data();
 					while ((ch = *cat) != 0  &&  (ch < '0' || ch > '9'))
 						++cat;
 					if (ch)
@@ -342,7 +343,7 @@ void KAEvent::set(const Event& event)
 	bool isEmailText = false;
 	for (  ;  it != alarmMap.end();  ++it)
 	{
-		const AlarmData& data = it.data();
+		const AlarmData& data = it.value();
 		switch (data.type)
 		{
 			case KAAlarm::MAIN__ALARM:
@@ -425,7 +426,7 @@ void KAEvent::set(const Event& event)
 				{
 					mNextMainDateTime = alTime;
 					mActionType = data.action;
-					mText = (mActionType == T_COMMAND) ? data.cleanText.stripWhiteSpace() : data.cleanText;
+					mText = (mActionType == T_COMMAND) ? data.cleanText.trimmed() : data.cleanText;
 					switch (data.action)
 					{
 						case T_MESSAGE:
@@ -539,7 +540,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			data.action    = T_MESSAGE;
 			data.cleanText = AlarmText::fromCalendarText(alarm.text(), data.isEmailText);
 			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
-			QStringList list = QStringList::split(QChar(';'), property, true);
+			QStringList list = property.split(QChar(';'), QString::KeepEmptyParts);
 			data.bgColour = QColor(255, 255, 255);   // white
 			data.fgColour = QColor(0, 0, 0);         // black
 			int n = list.count();
@@ -578,7 +579,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 				bool ok;
 				float fadeVolume;
 				int   fadeSecs = 0;
-				QStringList list = QStringList::split(QChar(';'), property, true);
+				QStringList list = property.split(QChar(';'), QString::KeepEmptyParts);
 				data.soundVolume = list[0].toFloat(&ok);
 				if (!ok)
 					data.soundVolume = -1;
@@ -608,8 +609,8 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	data.reminderOnceOnly = false;
 	data.type = KAAlarm::MAIN__ALARM;
 	QString property = alarm.customProperty(APPNAME, TYPE_PROPERTY);
-	QStringList types = QStringList::split(QChar(','), property);
-	for (int i = 0;  i < types.count();  ++i)
+	QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+	for (int i = 0, end = types.count();  i < end;  ++i)
 	{
 		QString type = types[i];
 		if (type == AT_LOGIN_TYPE)
@@ -679,7 +680,7 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 			mActionType = T_MESSAGE;
 			break;
 	}
-	mText                   = (mActionType == T_COMMAND) ? text.stripWhiteSpace() : text;
+	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
 	mEventID                = QString::null;
 	mTemplateName           = QString::null;
 	mPreAction              = QString::null;
@@ -857,22 +858,22 @@ QString KAEvent::uid(const QString& id, Status status)
 	QString result = id;
 	Status oldStatus;
 	int i, len;
-	if ((i = result.find(EXPIRED_UID)) > 0)
+	if ((i = result.indexOf(EXPIRED_UID)) > 0)
 	{
 		oldStatus = EXPIRED;
 		len = EXPIRED_UID.length();
 	}
-	else if ((i = result.find(DISPLAYING_UID)) > 0)
+	else if ((i = result.indexOf(DISPLAYING_UID)) > 0)
 	{
 		oldStatus = DISPLAYING;
 		len = DISPLAYING_UID.length();
 	}
-	else if ((i = result.find(TEMPLATE_UID)) > 0)
+	else if ((i = result.indexOf(TEMPLATE_UID)) > 0)
 	{
 		oldStatus = TEMPLATE;
 		len = TEMPLATE_UID.length();
 	}
-	else if ((i = result.find(KORGANIZER_UID)) > 0)
+	else if ((i = result.indexOf(KORGANIZER_UID)) > 0)
 	{
 		oldStatus = KORGANIZER;
 		len = KORGANIZER_UID.length();
@@ -880,7 +881,7 @@ QString KAEvent::uid(const QString& id, Status status)
 	else
 	{
 		oldStatus = ACTIVE;
-		i = result.findRev('-');
+		i = result.lastIndexOf('-');
 		len = 1;
 	}
 	if (status != oldStatus  &&  i > 0)
@@ -904,13 +905,13 @@ QString KAEvent::uid(const QString& id, Status status)
  */
 KAEvent::Status KAEvent::uidStatus(const QString& uid)
 {
-	if (uid.find(EXPIRED_UID) > 0)
+	if (uid.indexOf(EXPIRED_UID) > 0)
 		return EXPIRED;
-	if (uid.find(DISPLAYING_UID) > 0)
+	if (uid.indexOf(DISPLAYING_UID) > 0)
 		return DISPLAYING;
-	if (uid.find(TEMPLATE_UID) > 0)
+	if (uid.indexOf(TEMPLATE_UID) > 0)
 		return TEMPLATE;
-	if (uid.find(KORGANIZER_UID) > 0)
+	if (uid.indexOf(KORGANIZER_UID) > 0)
 		return KORGANIZER;
 	return ACTIVE;
 }
@@ -2414,8 +2415,8 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
-		const QStringList& cats = event->categories();
-		if (cats.find(DATE_ONLY_CATEGORY) != cats.end())
+		QStringList cats = event->categories();
+		if (cats.contains(DATE_ONLY_CATEGORY))
 		{
 			// It's an untimed event, so fix it
 			QTime oldTime = event->dtStart().time();
@@ -2456,7 +2457,7 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 			readAlarms(*event, &alarmMap);
 			for (AlarmMap::Iterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
 			{
-				const AlarmData& data = it.data();
+				const AlarmData& data = it.value();
 				if ((data.type & KAAlarm::DEFERRED_ALARM)
 				&&  !(data.type & KAAlarm::TIMED_DEFERRAL_FLAG))
 				{
@@ -2585,14 +2586,14 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 					else
 						i = 0;     // invalid prefix
 				}
-				if (txt.find(TEXT_PREFIX, i) == i)
+				if (txt.indexOf(TEXT_PREFIX, i) == i)
 					i += TEXT_PREFIX.length();
-				else if (txt.find(FILE_PREFIX, i) == i)
+				else if (txt.indexOf(FILE_PREFIX, i) == i)
 				{
 					action = T_FILE;
 					i += FILE_PREFIX.length();
 				}
-				else if (txt.find(COMMAND_PREFIX, i) == i)
+				else if (txt.indexOf(COMMAND_PREFIX, i) == i)
 				{
 					action = T_COMMAND;
 					i += COMMAND_PREFIX.length();
@@ -2690,7 +2691,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 				alarm->setStartOffset(start.secsTo(dt));
 			}
 
-			if (cats.count() > 0)
+			if (!cats.isEmpty())
 			{
 				for (alit = alarms.begin();  alit != alarms.end();  ++alit)
 				{
@@ -2699,14 +2700,14 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 						alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						                         QString::fromLatin1("%1;;").arg(cats[0]));
 				}
-				cats.remove(cats.begin());
+				cats.removeAt(0);
 			}
 
-			for (QStringList::Iterator it = cats.begin();  it != cats.end();  ++it)
+			for (int i = 0, end = cats.count();  i < end;  ++i)
 			{
-				if (*it == BEEP_CATEGORY)
+				if (cats[i] == BEEP_CATEGORY)
 				{
-					cats.remove(it);
+					cats.removeAt(i);
 
 					Alarm* alarm = event->newAlarm();
 					alarm->setEnabled(true);
@@ -2719,7 +2720,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 					AlarmMap::ConstIterator it = alarmMap.begin();
 					if (it != alarmMap.end())
 					{
-						dt = it.data().alarm->time();
+						dt = it.value().alarm->time();
 						break;
 					}
 					alarm->setStartOffset(start.secsTo(dt));
@@ -2735,10 +2736,10 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			 * It's a KAlarm pre-1.1.1 calendar file.
 			 * Convert simple LATECANCEL category to LATECANCEL:n where n = minutes late.
 			 */
-			QStringList::Iterator it;
-			while ((it = cats.find(LATE_CANCEL_CAT)) != cats.end())
+			int i;
+			while ((i = cats.indexOf(LATE_CANCEL_CAT)) >= 0)
 			{
-				cats.remove(it);
+				cats.removeAt(i);
 				addLateCancel = true;
 			}
 		}
@@ -2768,10 +2769,10 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			 * It's a KAlarm pre-1.3.0 calendar file.
 			 * Convert simple TMPLDEFTIME category to TMPLAFTTIME:n where n = minutes after.
 			 */
-			QStringList::Iterator it;
-			while ((it = cats.find(TEMPL_DEF_TIME_CAT)) != cats.end())
+			int i;
+			while ((i = cats.indexOf(TEMPL_DEF_TIME_CAT)) >= 0)
 			{
-				cats.remove(it);
+				cats.removeAt(i);
 				cats.append(QString("%1%2").arg(TEMPL_AFTER_TIME_CATEGORY).arg(0));
 			}
 		}
@@ -2782,10 +2783,10 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			 * It's a KAlarm pre-1.3.1 calendar file.
 			 * Convert simple XTERM category to LOG:xterm:
 			 */
-			QStringList::Iterator it;
-			while ((it = cats.find(EXEC_IN_XTERM_CAT)) != cats.end())
+			int i;
+			while ((i = cats.indexOf(EXEC_IN_XTERM_CAT)) >= 0)
 			{
-				cats.remove(it);
+				cats.removeAt(i);
 				cats.append(LOG_CATEGORY + xtermURL);
 			}
 		}

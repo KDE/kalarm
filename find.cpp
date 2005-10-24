@@ -93,11 +93,13 @@ void Find::display()
 		QWidget* kalarmWidgets = mDialog->findExtension();
 
 		// Alarm types
-		QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets, 0, KDialog::spacingHint());
+		QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
+		layout->setSpacing(KDialog::spacingHint());
 		QGroupBox* group = new QGroupBox(i18n("Alarm Type"), kalarmWidgets);
 		layout->addWidget(group);
-		QGridLayout* grid = new QGridLayout(group, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
-//??		grid->addRowSpacing(0, mDialog->fontMetrics().lineSpacing()/2);
+		QGridLayout* grid = new QGridLayout(group);
+		grid->setMargin(KDialog::marginHint());
+		grid->setSpacing(KDialog::spacingHint());
 		grid->setColStretch(1, 1);
 
 		// Live & expired alarm selection

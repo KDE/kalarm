@@ -65,7 +65,7 @@ class ColourCombo : public QComboBox
 		/** Initialises the list of colours to @p list. */
 		void         setColours(const ColourList& list);
 		/** Returns true if the first entry in the list, i.e. the custom colour, is selected. */
-		bool         isCustomColour() const      { return !currentItem(); }
+		bool         isCustomColour() const      { return !currentIndex(); }
 		/** Returns true if the widget is read only. */
 		bool         isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the combo box can be changed by the user.

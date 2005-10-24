@@ -89,7 +89,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
-	QGridLayout* grid = new QGridLayout(textGroup, 2, 2, marginHint(), spacingHint());
+	QGridLayout* grid = new QGridLayout(textGroup);
+	grid->setMargin(marginHint());
+	grid->setSpacing(spacingHint());
 	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
@@ -114,7 +116,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	QGroupBox* group = new QGroupBox(i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
-//?? Does this need a layout?
+	QVBoxLayout* layout = new QVBoxLayout(group);
 	mAddresseeList = new KListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(Q3ListView::Extended);
@@ -127,25 +129,28 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	                                  "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
 	                                  "You can select multiple birthdays at one time by dragging the mouse over the list, "
 	                                  "or by clicking the mouse while pressing Ctrl or Shift."));
+	layout->addWidget(group);
 
 	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
-	QVBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
-//??	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
+	QVBoxLayout* groupLayout = new QVBoxLayout(group);
+	groupLayout->setMargin(marginHint());
+	groupLayout->setSpacing(spacingHint());
 
 	// Colour choice drop-down list
-	QHBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	QHBoxLayout* hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setSpacing(2*spacingHint());
 	KHBox* box;
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	layout->addWidget(box);
-	layout->addStretch();
+	hlayout->addWidget(box);
+	hlayout->addStretch();
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(group);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	layout->addWidget(mFontColourButton);
+	hlayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
@@ -164,34 +169,36 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setSpacing(2*spacingHint());
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	layout->addWidget(mConfirmAck);
-	layout->addSpacing(2*spacingHint());
-	layout->addStretch();
+	hlayout->addWidget(mConfirmAck);
+	hlayout->addSpacing(2*spacingHint());
+	hlayout->addStretch();
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
 		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), group);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
-		layout->addWidget(mSpecialActionsButton);
+		hlayout->addWidget(mSpecialActionsButton);
 	}
 
 	// Late display checkbox - default = allow late display
-	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setSpacing(2*spacingHint());
 	mLateCancel = new LateCancelSelector(false, group);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
-	layout->addWidget(mLateCancel);
-	layout->addStretch();
+	hlayout->addWidget(mLateCancel);
+	hlayout->addStretch();
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), false, group);
 	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
 	mSimpleRepetition->set(0, 0, true, 364*24*60);
 	mSimpleRepetition->setWhatsThis(i18n("Set up an additional alarm repetition"));
-	layout->addWidget(mSimpleRepetition);
+	hlayout->addWidget(mSimpleRepetition);
 
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
@@ -258,7 +265,7 @@ void BirthdayDlg::updateSelectionList()
 				name = addressee.realName();
 			// Check if the birthday already has an alarm
 			QString text = mPrefixText + name + mSuffixText;
-			bool alarmExists = (messageList.find(text) != messageList.end());
+			bool alarmExists = messageList.contains(text);
 			// Check if the birthday is already in the selection list
 			bool inSelectionList = false;
 			AddresseeItem* item = 0;
@@ -429,5 +436,5 @@ QString AddresseeItem::key(int column, bool) const
 {
 	if (column == BIRTHDAY)
 		return mBirthdayOrder;
-	return text(column).lower();
+	return text(column).toLower();
 }

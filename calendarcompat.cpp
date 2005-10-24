@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -83,21 +83,21 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 
 	// Find the KAlarm identifier
 	QString progname = QString::fromLatin1(" KAlarm ");
-	int i = prodid.find(progname, 0, false);
+	int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
 	if (i < 0)
 	{
 		// Older versions used KAlarm's translated name in the product ID, which
 		// could have created problems using a calendar in different locales.
 		progname = QString(" ") + kapp->aboutData()->programName() + " ";
-		i = prodid.find(progname, 0, false);
+		i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
 		if (i < 0)
 			return 0;    // calendar wasn't created by KAlarm
 	}
 
 	// Extract the KAlarm version string
-	QString ver = prodid.mid(i + progname.length()).stripWhiteSpace();
-	i = ver.find('/');
-	int j = ver.find(' ');
+	QString ver = prodid.mid(i + progname.length()).trimmed();
+	i = ver.indexOf('/');
+	int j = ver.indexOf(' ');
 	if (j >= 0  &&  j < i)
 		i = j;
 	if (i <= 0)

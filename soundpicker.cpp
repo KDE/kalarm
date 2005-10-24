@@ -20,8 +20,6 @@
 
 #include "kalarm.h"
 
-//Added by qt3to4:
-#include <qtooltip.h>
 #include <QTimer>
 #include <QHBoxLayout>
 
@@ -62,7 +60,8 @@ SoundPicker::SoundPicker(QWidget* parent)
 	  mRevertType(false)
 {
 	// Sound checkbox
-	QHBoxLayout* soundLayout = new QHBoxLayout(this, 0, 2*KDialog::spacingHint());
+	QHBoxLayout* soundLayout = new QHBoxLayout(this);
+	soundLayout->setSpacing(2*KDialog::spacingHint());
 	soundLayout->setAlignment(Qt::AlignVCenter);
 	mCheckbox = new CheckBox(i18n_s_Sound(), this);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
@@ -235,7 +234,7 @@ void SoundPicker::set(bool sound, SoundPicker::Type defaultType, const QString& 
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
-	QToolTip::add(mFilePicker, mFile);
+	mFilePicker->setToolTip(mFile);
 	mCheckbox->setChecked(sound);
 	RadioButton* button;
 	switch (defaultType)
@@ -317,7 +316,7 @@ void SoundPicker::slotPickFile()
 		mDefaultDir = dlg.defaultDir();
 	}
 #endif
-	QToolTip::add(mFilePicker, mFile);
+	mFilePicker->setToolTip(mFile);
 	if (mFile.isEmpty())
 	{
 		// No audio file is selected, so revert to 'beep'.

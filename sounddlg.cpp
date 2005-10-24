@@ -22,9 +22,8 @@
 
 #include "kalarm.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <QGroupBox>
-#include <qtooltip.h>
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -63,7 +62,8 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
-	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
+	QVBoxLayout* layout = new QVBoxLayout(page);
+	layout->setSpacing(spacingHint());
 
 	// File name edit box
 	KHBox* box = new KHBox(page);
@@ -77,7 +77,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFileBrowseButton->setPixmap(SmallIcon("fileopen"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
-	QToolTip::add(mFileBrowseButton, i18n("Choose a file"));
+	mFileBrowseButton->setToolTip(i18n("Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18n("Select a sound file to play."));
 
 	// Sound repetition checkbox
@@ -89,8 +89,9 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	// Volume
 	QGroupBox* group = new QGroupBox(i18n("Volume"), page);
 	layout->addWidget(group);
-	QGridLayout* grid = new QGridLayout(group, 4, 3, marginHint(), spacingHint());
-//??	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	QGridLayout* grid = new QGridLayout(group);
+	grid->setMargin(marginHint());
+	grid->setSpacing(spacingHint());
 	grid->setColStretch(2, 1);
 	int indentWidth = 3 * KDialog::spacingHint();
 	grid->addColSpacing(0, indentWidth);
