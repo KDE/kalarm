@@ -773,7 +773,7 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 */
 int KAMail::checkAttachment(QString& attachment, KURL* url)
 {
-	attachment.stripWhiteSpace();
+	attachment = attachment.stripWhiteSpace();
 	if (attachment.isEmpty())
 	{
 		if (url)

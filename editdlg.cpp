@@ -1993,7 +1993,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			result = mCmdScriptEdit->text();
 		else
 			result = mCmdCommandEdit->text();
-		result.stripWhiteSpace();
+		result = result.stripWhiteSpace();
 	}
 	else if (mFileRadio->isOn())
 	{
