@@ -73,7 +73,7 @@ class SubDailyRule : public Rule
 {
 		Q_OBJECT
 	public:
-		SubDailyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		SubDailyRule(bool readOnly, QWidget* parent);
 };
 
 // Daily/weekly rule choices base class
@@ -100,14 +100,14 @@ class DayWeekRule : public Rule
 class DailyRule : public DayWeekRule
 {
 	public:
-		DailyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		DailyRule(bool readOnly, QWidget* parent);
 };
 
 // Weekly rule choices
 class WeeklyRule : public DayWeekRule
 {
 	public:
-		WeeklyRule(bool readOnly, QWidget* parent, const char* name = 0);
+		WeeklyRule(bool readOnly, QWidget* parent);
 };
 
 // Monthly/yearly rule choices base class

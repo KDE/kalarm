@@ -185,12 +185,18 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mRuleStack = new QStackedWidget(ruleFrame);
 	hlayout->addWidget(mRuleStack);
 	hlayout->addStretch(1);
-	mNoRule       = new NoRule(mRuleStack, "noFrame");
-	mSubDailyRule = new SubDailyRule(mReadOnly, mRuleStack, "subdayFrame");
-	mDailyRule    = new DailyRule(mReadOnly, mRuleStack, "dayFrame");
-	mWeeklyRule   = new WeeklyRule(mReadOnly, mRuleStack, "weekFrame");
-	mMonthlyRule  = new MonthlyRule(mReadOnly, mRuleStack, "monthFrame");
-	mYearlyRule   = new YearlyRule(mReadOnly, mRuleStack, "yearFrame");
+	mNoRule       = new NoRule(mRuleStack);
+	mNoRule->setObjectName( "noFrame");
+	mSubDailyRule = new SubDailyRule(mReadOnly, mRuleStack);
+	mSubDailyRule->setObjectName( "subdayFrame");
+	mDailyRule    = new DailyRule(mReadOnly, mRuleStack);
+	mDailyRule->setObjectName( "dayFrame");
+	mWeeklyRule   = new WeeklyRule(mReadOnly, mRuleStack);
+	mWeeklyRule->setObjectName( "weekFrame");
+	mMonthlyRule  = new MonthlyRule(mReadOnly, mRuleStack);
+	mMonthlyRule->setObjectName( "monthFrame");
+	mYearlyRule   = new YearlyRule(mReadOnly, mRuleStack);
+	mYearlyRule->setObjectName("yearFrame");
 
 	connect(mSubDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 	connect(mDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
