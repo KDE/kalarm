@@ -63,6 +63,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 	  mMinMaxTimeSet(false)
 {
 	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->setMargin(0);
 	QGroupBox* box = new QGroupBox(groupBoxTitle, this);
 	layout->addWidget(box);
 	init(box, mode, true);
@@ -90,15 +91,13 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setSpacing(KDialog::spacingHint());
-	if (hasTitle)
-		topLayout->setMargin(KDialog::marginHint());
+	topLayout->setMargin(hasTitle ? KDialog::marginHint() : 0);
 
 	// At time radio button/label
 	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), topWidget);
 	mAtTimeRadio->setFixedSize(mAtTimeRadio->sizeHint());
 	mAtTimeRadio->setWhatsThis((mode & DEFER_TIME) ? i18n("Reschedule the alarm to the specified date and time.")
 	                                               : i18n("Schedule the alarm at the specified date and time."));
-#warning Add widgets to topLayout?
 
 	// Date edit box
 	mDateEdit = new DateEdit(topWidget);
@@ -150,9 +149,10 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
+	QGridLayout* grid = new QGridLayout(topLayout);
+	grid->setMargin(0);
 	if (mode & NARROW)
 	{
-		QGridLayout* grid = new QGridLayout(topLayout);
 		grid->addWidget(mAtTimeRadio, 0, 0);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
@@ -165,13 +165,12 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	}
 	else
 	{
-		QGridLayout* grid = new QGridLayout(topLayout);
 		grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);
-		grid->setRowStretch(0, 1);
-		grid->addWidget(mAfterTimeRadio, 1, 0, Qt::AlignLeft);
-		grid->addWidget(mDelayTimeEdit, 1, 1, Qt::AlignLeft);
+		grid->setRowStretch(1, 1);
+		grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
+		grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
 		grid->setColStretch(3, 1);
 		topLayout->addStretch();
 	}

@@ -39,6 +39,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 {
 	QWidget* topWidget = plainPage();
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
 
 	// Display the list of templates, but exclude command alarms if in kiosk mode.

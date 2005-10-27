@@ -49,6 +49,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
 	QWidget* page = this;
 	if (!frameLabel.isNull())
@@ -62,7 +63,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (fg)
 	{
 		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		layout->setMargin(0);
 		KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
+		box->setMargin(0);
 		box->setSpacing(KDialog::spacingHint());
 		layout->addWidget(box);
 
@@ -77,7 +80,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	}
 
 	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	layout->setMargin(0);
 	KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 
@@ -93,6 +98,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (editColours)
 	{
 		layout = new QHBoxLayout(topLayout);
+		layout->setMargin(0);
 		QPushButton* button = new QPushButton(i18n("Add Co&lor..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
@@ -109,6 +115,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	if (defaultFont)
 	{
 		layout = new QHBoxLayout(topLayout);
+		layout->setMargin(0);
 		mDefaultFont = new CheckBox(i18n("Use &default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));

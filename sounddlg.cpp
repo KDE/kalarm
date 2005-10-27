@@ -63,10 +63,12 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);
+	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
 	// File name edit box
 	KHBox* box = new KHBox(page);
+	box->setMargin(0);
 	layout->addWidget(box);
 	mFileEdit = new LineEdit(LineEdit::Url, box);
 	mFileEdit->setAcceptDrops(true);
@@ -99,6 +101,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 
 	// 'Set volume' checkbox
 	box = new KHBox(group);
+	box->setMargin(0);
 	box->setSpacing(spacingHint());
 	grid->addMultiCellWidget(box, 1, 1, 0, 2);
 	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume(), box);
@@ -123,6 +126,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 
 	// Fade time
 	mFadeBox = new KHBox(group);
+	mFadeBox->setMargin(0);
 	mFadeBox->setSpacing(spacingHint());
 	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
 	QLabel* label = new QLabel(i18n("Time period over which to fade the sound", "Fade time:"), mFadeBox);
@@ -137,6 +141,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 
 	// Fade slider
 	mFadeVolumeBox = new KHBox(group);
+	mFadeVolumeBox->setMargin(0);
 	mFadeVolumeBox->setSpacing(spacingHint());
 	grid->addWidget(mFadeVolumeBox, 4, 2);
 	label = new QLabel(i18n("Initial volume:"), mFadeVolumeBox);

@@ -49,6 +49,7 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);
+	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
 	mTimeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page);

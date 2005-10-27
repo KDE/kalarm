@@ -78,6 +78,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 {
 	QWidget* topWidget = plainPage();
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
 
 	// Prefix and suffix to the name in the alarm text
@@ -117,6 +118,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QGroupBox* group = new QGroupBox(i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
+	layout->setMargin(0);
 	mAddresseeList = new KListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(Q3ListView::Extended);
@@ -129,7 +131,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	                                  "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
 	                                  "You can select multiple birthdays at one time by dragging the mouse over the list, "
 	                                  "or by clicking the mouse while pressing Ctrl or Shift."));
-	layout->addWidget(group);
+	layout->addWidget(mAddresseeList);
 
 	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
@@ -139,6 +141,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Colour choice drop-down list
 	QHBoxLayout* hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	KHBox* box;
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
@@ -170,6 +173,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Acknowledgement confirmation required - default = no confirmation
 	hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
@@ -187,6 +191,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Late display checkbox - default = allow late display
 	hlayout = new QHBoxLayout(groupLayout);
+	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	mLateCancel = new LateCancelSelector(false, group);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());

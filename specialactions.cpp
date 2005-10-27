@@ -91,6 +91,7 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);
+	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
 	mActions = new SpecialActions(page);
@@ -135,6 +136,7 @@ SpecialActions::SpecialActions(QWidget* parent)
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	// Pre-alarm action

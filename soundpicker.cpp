@@ -61,6 +61,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 {
 	// Sound checkbox
 	QHBoxLayout* soundLayout = new QHBoxLayout(this);
+	soundLayout->setMargin(0);
 	soundLayout->setSpacing(2*KDialog::spacingHint());
 	soundLayout->setAlignment(Qt::AlignVCenter);
 	mCheckbox = new CheckBox(i18n_s_Sound(), this);
@@ -82,6 +83,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
 	// File radio button
 	KHBox* box = new KHBox(this);
+	box->setMargin(0);
 	mFileRadio = new RadioButton(i18n_File(), box);
 	mFileRadio->setFixedSize(mFileRadio->sizeHint());
 	mFileRadio->setWhatsThis(i18n("If checked, a sound file will be played when the alarm is displayed."));

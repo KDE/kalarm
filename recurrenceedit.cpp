@@ -96,6 +96,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 {
 	kdDebug(5950) << "RecurrenceEdit::RecurrenceEdit()\n";
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	/* Create the recurrence rule Group box which holds the recurrence period
@@ -107,96 +108,84 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 
 	QGroupBox* recurGroup = new QGroupBox(i18n("Recurrence Rule"), this);
 	topLayout->addWidget(recurGroup);
-	QVBoxLayout* vlayout = new QVBoxLayout(recurGroup);
-	QFrame* ruleFrame = new QFrame(recurGroup);
-	vlayout->addWidget(ruleFrame);
-	vlayout = new QVBoxLayout(ruleFrame);
+	QHBoxLayout* hlayout = new QHBoxLayout(recurGroup);
+	hlayout->setMargin(KDialog::marginHint());
+	hlayout->setSpacing(KDialog::marginHint());   // use margin spacing due to vertical divider line
 
-	QHBoxLayout* hlayout = new QHBoxLayout(vlayout);
-	QVBoxLayout* vlay = new QVBoxLayout(hlayout);
-	QWidget* ruleButtonBox = new QWidget(ruleFrame);
-	QVBoxLayout* ruleLayout = new QVBoxLayout(ruleButtonBox);
-	vlay->addWidget(ruleButtonBox);
-	vlay->addStretch();    // top-adjust the interval radio buttons
-	mRuleButtonGroup = new ButtonGroup(ruleButtonBox);
+	// Recurrence period radio buttons
+	QVBoxLayout* vlayout = new QVBoxLayout(hlayout);
+	vlayout->setMargin(0);
+	mRuleButtonGroup = new ButtonGroup(recurGroup);
 	connect(mRuleButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(periodClicked(QAbstractButton*)));
 
-	mNoneButton = new RadioButton(i18n_Norecur(), ruleButtonBox);
+	mNoneButton = new RadioButton(i18n_Norecur(), recurGroup);
 	mNoneButton->setFixedSize(mNoneButton->sizeHint());
 	mNoneButton->setReadOnly(mReadOnly);
 	mNoneButton->setWhatsThis(i18n("Do not repeat the alarm"));
 	mRuleButtonGroup->addButton(mNoneButton);
-	ruleLayout->addWidget(mNoneButton);
+	vlayout->addWidget(mNoneButton);
 
-	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), ruleButtonBox);
+	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), recurGroup);
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	mAtLoginButton->setWhatsThis(i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
 	                                  "Note that it will also be triggered any time the alarm daemon is restarted."));
 	mRuleButtonGroup->addButton(mAtLoginButton);
-	ruleLayout->addWidget(mAtLoginButton);
+	vlayout->addWidget(mAtLoginButton);
 
-	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), ruleButtonBox);
+	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), recurGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
 	mSubDailyButton->setReadOnly(mReadOnly);
 	mSubDailyButton->setWhatsThis(i18n("Repeat the alarm at hourly/minutely intervals"));
 	mRuleButtonGroup->addButton(mSubDailyButton);
-	ruleLayout->addWidget(mSubDailyButton);
+	vlayout->addWidget(mSubDailyButton);
 
-	mDailyButton = new RadioButton(i18n_d_Daily(), ruleButtonBox);
+	mDailyButton = new RadioButton(i18n_d_Daily(), recurGroup);
 	mDailyButton->setFixedSize(mDailyButton->sizeHint());
 	mDailyButton->setReadOnly(mReadOnly);
 	mDailyButton->setWhatsThis(i18n("Repeat the alarm at daily intervals"));
 	mRuleButtonGroup->addButton(mDailyButton);
-	ruleLayout->addWidget(mDailyButton);
+	vlayout->addWidget(mDailyButton);
 
-	mWeeklyButton = new RadioButton(i18n_w_Weekly(), ruleButtonBox);
+	mWeeklyButton = new RadioButton(i18n_w_Weekly(), recurGroup);
 	mWeeklyButton->setFixedSize(mWeeklyButton->sizeHint());
 	mWeeklyButton->setReadOnly(mReadOnly);
 	mWeeklyButton->setWhatsThis(i18n("Repeat the alarm at weekly intervals"));
 	mRuleButtonGroup->addButton(mWeeklyButton);
-	ruleLayout->addWidget(mWeeklyButton);
+	vlayout->addWidget(mWeeklyButton);
 
-	mMonthlyButton = new RadioButton(i18n_m_Monthly(), ruleButtonBox);
+	mMonthlyButton = new RadioButton(i18n_m_Monthly(), recurGroup);
 	mMonthlyButton->setFixedSize(mMonthlyButton->sizeHint());
 	mMonthlyButton->setReadOnly(mReadOnly);
 	mMonthlyButton->setWhatsThis(i18n("Repeat the alarm at monthly intervals"));
 	mRuleButtonGroup->addButton(mMonthlyButton);
-	ruleLayout->addWidget(mMonthlyButton);
+	vlayout->addWidget(mMonthlyButton);
 
-	mYearlyButton = new RadioButton(i18n_y_Yearly(), ruleButtonBox);
+	mYearlyButton = new RadioButton(i18n_y_Yearly(), recurGroup);
 	mYearlyButton->setFixedSize(mYearlyButton->sizeHint());
 	mYearlyButton->setReadOnly(mReadOnly);
 	mYearlyButton->setWhatsThis(i18n("Repeat the alarm at annual intervals"));
 	mRuleButtonGroup->addButton(mYearlyButton);
-	ruleLayout->addWidget(mYearlyButton);
+	vlayout->addWidget(mYearlyButton);
+	vlayout->addStretch();    // top-adjust the interval radio buttons
 
-	vlay = new QVBoxLayout(hlayout);
-
-	vlay->addStretch();
-	hlayout = new QHBoxLayout(vlay);
-
-	hlayout->addSpacing(KDialog::marginHint());
-	QFrame* divider = new QFrame(ruleFrame);
+	// Vertical divider line
+	vlayout = new QVBoxLayout(hlayout);
+	vlayout->setMargin(0);
+	QFrame* divider = new QFrame(recurGroup);
 	divider->setFrameStyle(QFrame::VLine | QFrame::Sunken);
-	hlayout->addWidget(divider);
-	hlayout->addSpacing(KDialog::marginHint());
+	vlayout->addWidget(divider, 1);
 
-	mRuleStack = new QStackedWidget(ruleFrame);
+	// Rule definition stack
+	mRuleStack = new QStackedWidget(recurGroup);
 	hlayout->addWidget(mRuleStack);
 	hlayout->addStretch(1);
 	mNoRule       = new NoRule(mRuleStack);
-	mNoRule->setObjectName( "noFrame");
 	mSubDailyRule = new SubDailyRule(mReadOnly, mRuleStack);
-	mSubDailyRule->setObjectName( "subdayFrame");
 	mDailyRule    = new DailyRule(mReadOnly, mRuleStack);
-	mDailyRule->setObjectName( "dayFrame");
 	mWeeklyRule   = new WeeklyRule(mReadOnly, mRuleStack);
-	mWeeklyRule->setObjectName( "weekFrame");
 	mMonthlyRule  = new MonthlyRule(mReadOnly, mRuleStack);
-	mMonthlyRule->setObjectName( "monthFrame");
 	mYearlyRule   = new YearlyRule(mReadOnly, mRuleStack);
-	mYearlyRule->setObjectName("yearFrame");
 
 	connect(mSubDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 	connect(mDailyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
@@ -228,10 +217,11 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mNoEndDateButton->setReadOnly(mReadOnly);
 	mNoEndDateButton->setWhatsThis(i18n("Repeat the alarm indefinitely"));
 	mRangeButtonGroup->addButton(mNoEndDateButton);
-	vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignAuto);
+	vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignLeft);
 	QSize size = mNoEndDateButton->size();
 
 	hlayout = new QHBoxLayout(vlayout);
+	hlayout->setMargin(0);
 	mRepeatCountButton = new RadioButton(i18n("End a&fter:"), mRangeButtonBox);
 	mRepeatCountButton->setReadOnly(mReadOnly);
 	mRepeatCountButton->setWhatsThis(i18n("Repeat the alarm for the number of times specified"));
@@ -254,6 +244,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	size = size.expandedTo(mRepeatCountButton->sizeHint());
 
 	hlayout = new QHBoxLayout(vlayout);
+	hlayout->setMargin(0);
 	mEndDateButton = new RadioButton(i18n("End &by:"), mRangeButtonBox);
 	mEndDateButton->setReadOnly(mReadOnly);
 	mEndDateButton->setWhatsThis(i18n("Repeat the alarm until the date/time specified"));
@@ -291,11 +282,13 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mExceptionGroup = new QGroupBox(i18n("E&xceptions"), this);
 	topLayout->addWidget(mExceptionGroup);
 	topLayout->setStretchFactor(mExceptionGroup, 2);
-	vlayout = new QVBoxLayout(mExceptionGroup);
-	vlayout->setMargin(KDialog::marginHint());
-	vlayout->setSpacing(KDialog::spacingHint());
-	hlayout = new QHBoxLayout(vlayout);
+//	vlayout = new QVBoxLayout(mExceptionGroup);
+	hlayout = new QHBoxLayout(mExceptionGroup);
+	hlayout->setMargin(KDialog::marginHint());
+	hlayout->setSpacing(KDialog::spacingHint());
+//	hlayout = new QHBoxLayout(vlayout);
 	vlayout = new QVBoxLayout(hlayout);
+	vlayout->setMargin(0);
 
 	mExceptionDateList = new Q3ListBox(mExceptionGroup);
 	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -312,6 +305,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	else
 	{
 		vlayout = new QVBoxLayout(hlayout);
+		vlayout->setMargin(0);
 		mExceptionDateEdit = new DateEdit(mExceptionGroup);
 		mExceptionDateEdit->setFixedSize(mExceptionDateEdit->sizeHint());
 		mExceptionDateEdit->setDate(QDate::currentDate());
@@ -320,6 +314,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		vlayout->addWidget(mExceptionDateEdit);
 
 		hlayout = new QHBoxLayout(vlayout);
+		hlayout->setMargin(0);
 		QPushButton* button = new QPushButton(i18n("Add"), mExceptionGroup);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(addException()));
@@ -954,10 +949,13 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
 	: NoRule(parent)
 {
 	mLayout = new QVBoxLayout(this);
+	mLayout->setMargin(0);
 	mLayout->setSpacing(KDialog::spacingHint());
 	KHBox* freqBox = new KHBox(this);
-	mLayout->addWidget(freqBox);
+	freqBox->setMargin(0);
+	mLayout->addWidget(freqBox, 0, Qt::AlignLeft);
 	KHBox* box = new KHBox(freqBox);    // this is to control the QWhatsThis text display area
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 
 	QLabel* label = new QLabel(i18n("Recur e&very"), box);
@@ -1045,6 +1043,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	  mSavedDays(7)
 {
 	QGridLayout* grid = new QGridLayout(layout());
+	grid->setMargin(0);
 	grid->setRowStretch(0, 1);
 
 	QLabel* label = new QLabel(i18n("On: Tuesday", "O&n:"), this);
@@ -1056,7 +1055,8 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box);
-	grid->setSpacing(KDialog::spacingHint());
+	dgrid->setMargin(0);
+	dgrid->setSpacing(KDialog::spacingHint());
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
@@ -1189,6 +1189,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
 	// Month day selector
 	KHBox* box = new KHBox(this);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
@@ -1214,6 +1215,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
 	// Month position selector
 	box = new KHBox(this);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
@@ -1391,6 +1393,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 {
 	// Set up the month selection widgets
 	QHBoxLayout* hlayout = new QHBoxLayout(layout());
+	hlayout->setMargin(0);
 	QLabel* label = new QLabel(i18n("first week of January", "of:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignLeft | Qt::AlignTop);
@@ -1399,6 +1402,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	QWidget* w = new QWidget(this);   // this is to control the QWhatsThis text display area
 	hlayout->addWidget(w, 1, Qt::AlignLeft);
 	QGridLayout* grid = new QGridLayout(w);
+	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 12;  ++i)
@@ -1414,8 +1418,10 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 
 	// February 29th handling option
 	KHBox* f29box = new KHBox(this);
+	f29box->setMargin(0);
 	layout()->addWidget(f29box);
 	KHBox* box = new KHBox(f29box);    // this is to control the QWhatsThis text display area
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mFeb29Label = new QLabel(i18n("February 2&9th alarm in non-leap years:"), box);
 	mFeb29Label->setFixedSize(mFeb29Label->sizeHint());

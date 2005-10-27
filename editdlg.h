@@ -131,9 +131,9 @@ class EditAlarmDlg : public KDialogBase
 		bool            checkCommandData();
 		bool            checkEmailData();
 
-		void            initDisplayAlarms(QWidget* parent);
-		void            initCommand(QWidget* parent);
-		void            initEmail(QWidget* parent);
+		void            initDisplayAlarms();
+		void            initCommand();
+		void            initEmail();
 		void            saveState(const KAEvent*);
 		bool            stateChanged() const;
 

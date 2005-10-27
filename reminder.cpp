@@ -47,17 +47,19 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	  mOnceOnlyEnabled(showOnceOnly)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
 	                       valueWhatsThis, allowHourMinute, this);
 	mTime->setFixedSize(mTime->sizeHint());
 	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	topLayout->addWidget(mTime);
+	topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
 	if (showOnceOnly)
 	{
 		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		layout->setMargin(0);
 		layout->addSpacing(3*KDialog::spacingHint());
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());

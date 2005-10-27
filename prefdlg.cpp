@@ -97,18 +97,23 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	setIconListAllVisible(true);
 
 	KVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
+	frame->setMargin(0);
 	mMiscPage = new MiscPrefTab(frame);
 
 	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
+	frame->setMargin(0);
 	mEmailPage = new EmailPrefTab(frame);
 
 	frame = addVBoxPage(i18n("View"), i18n("View Settings"), DesktopIcon("view_choose"));
+	frame->setMargin(0);
 	mViewPage = new ViewPrefTab(frame);
 
 	frame = addVBoxPage(i18n("Font & Color"), i18n("Default Font and Color"), DesktopIcon("colorize"));
+	frame->setMargin(0);
 	mFontColourPage = new FontColourPrefTab(frame);
 
 	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
+	frame->setMargin(0);
 	mEditPage = new EditPrefTab(frame);
 
 	restore();
@@ -225,6 +230,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 {
 	// Autostart alarm daemon
 	KHBox* itemBox = new KHBox(mPage);   // this is to allow left adjustment
+	itemBox->setMargin(0);
 	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), itemBox, "startDaemon");
 	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
 	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
@@ -304,7 +310,9 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 
 	// Start-of-day time
 	itemBox = new KHBox(mPage);
+	itemBox->setMargin(0);
 	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
 	mStartOfDay = new TimeEdit(box);
@@ -318,6 +326,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 
 	// Confirm alarm deletion?
 	itemBox = new KHBox(mPage);   // this is to allow left adjustment
+	itemBox->setMargin(0);
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox, "confirmDeletion");
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	mConfirmAlarmDeletion->setWhatsThis(i18n("Check to be prompted for confirmation each time you delete an alarm."));
@@ -338,6 +347,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	grid->addMultiCellWidget(mKeepExpired, 0, 0, 0, 1, Qt::AlignLeft);
 
 	box = new KHBox(group);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mPurgeExpired = new QCheckBox(i18n("Discard ex&pired alarms after:"), box, "purgeExpired");
 	mPurgeExpired->setMinimumSize(mPurgeExpired->sizeHint());
@@ -391,6 +401,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	}
 
 	box = new KHBox(group);
+	box->setMargin(0);
 	grid->addMultiCellWidget(box, row + 1, row + 1, 0, 2, Qt::AlignLeft);
 	QRadioButton* radio = new QRadioButton(i18n("Other:"), box);
 	radio->setFixedSize(radio->sizeHint());
@@ -572,6 +583,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	  mBccAddressChanged(false)
 {
 	KHBox* box = new KHBox(mPage);
+	box->setMargin(0);
 	box->setSpacing(2*KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Email client:"), box);
 	mEmailClient = new ButtonGroup(box);
@@ -591,6 +603,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
 
 	box = new KHBox(mPage);   // this is to allow left adjustment
+	box->setMargin(0);
 	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder").arg(KAMail::i18n_sent_mail()), box);
 	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
 	mEmailCopyToKMail->setWhatsThis(i18n("After sending an email, store a copy in KMail's %1 folder").arg(KAMail::i18n_sent_mail()));
@@ -674,6 +687,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	group->setFixedHeight(group->sizeHint().height());
 
 	box = new KHBox(mPage);   // this is to allow left adjustment
+	box->setMargin(0);
 	mEmailQueuedNotify = new QCheckBox(i18n("&Notify when remote emails are queued"), box);
 	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
 	mEmailQueuedNotify->setWhatsThis(
@@ -794,7 +808,9 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Message Font && Color"), true, false);
 
 	KHBox* layoutBox = new KHBox(mPage);
+	layoutBox->setMargin(0);
 	KHBox* box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label1 = new QLabel(i18n("Di&sabled alarm color:"), box);
 //	label1->setMinimumSize(label1->sizeHint());
@@ -807,7 +823,9 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
 	layoutBox = new KHBox(mPage);
+	layoutBox->setMargin(0);
 	box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label2 = new QLabel(i18n("E&xpired alarm color:"), box);
 //	label2->setMinimumSize(label2->sizeHint());
@@ -886,6 +904,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout->addWidget(mAutoClose, 0, Qt::AlignLeft);
 
 	KHBox* box = new KHBox(group);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	vlayout->addWidget(box);
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
@@ -916,6 +935,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout->addWidget(mSound, 0, Qt::AlignLeft);
 
 	box = new KHBox(bbox);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	vlayout->addWidget(box, 0, Qt::AlignLeft);
 
@@ -939,6 +959,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 
 	box = new KHBox(bbox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mSoundFileLabel = new QLabel(i18n("Sound &file:"), box);
 	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
@@ -967,6 +988,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
 	QHBoxLayout* hlayout = new QHBoxLayout(vlayout);
+	hlayout->setMargin(0);
 
 	mCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group, "defCmdScript");
 	mCmdScript->setMinimumSize(mCmdScript->sizeHint());
@@ -999,6 +1021,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	// Late cancellation
 	box = new KHBox(mPage);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box, "defCancelLate");
 	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
@@ -1007,6 +1030,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	// Recurrence
 	KHBox* itemBox = new KHBox(box);   // this is to control the QWhatsThis text display area
+	itemBox->setMargin(0);
 	itemBox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("&Recurrence:"), itemBox);
 	label->setFixedSize(label->sizeHint());
@@ -1025,10 +1049,12 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	// How to handle February 29th in yearly recurrences
 	KVBox* vbox = new KVBox(mPage);   // this is to control the QWhatsThis text display area
+	vbox->setMargin(0);
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
 	label->setAlignment(Qt::AlignLeft | Qt::TextWordWrap);
 	itemBox = new KHBox(vbox);
+	itemBox->setMargin(0);
 	itemBox->setSpacing(2*KDialog::spacingHint());
 	mFeb29 = new ButtonGroup(itemBox);
 	QWidget* widget = new QWidget(itemBox);
@@ -1223,6 +1249,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	grid->addMultiCellWidget(mTooltipShowAlarms, 0, 0, 0, 2, Qt::AlignLeft);
 
 	KHBox* box = new KHBox(group);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mTooltipMaxAlarms = new QCheckBox(i18n("Ma&ximum number of alarms to show:"), box, "tooltipMax");
 	mTooltipMaxAlarms->setMinimumSize(mTooltipMaxAlarms->sizeHint());
@@ -1248,6 +1275,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	grid->addMultiCellWidget(mTooltipShowTimeTo, 3, 3, 1, 2, Qt::AlignLeft);
 
 	box = new KHBox(group);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mTooltipTimeToPrefixLabel = new QLabel(i18n("&Prefix:"), box);
 	mTooltipTimeToPrefixLabel->setFixedSize(mTooltipTimeToPrefixLabel->sizeHint());
@@ -1271,7 +1299,9 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	mShowExpiredAlarms->setWhatsThis(i18n("Specify whether to show expired alarms in the alarm list"));
 
 	KHBox* itemBox = new KHBox(mPage);   // this is to control the QWhatsThis text display area
+	itemBox->setMargin(0);
 	box = new KHBox(itemBox);
+	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
 	mDaemonTrayCheckInterval = new SpinBox(1, 9999, 1, box);

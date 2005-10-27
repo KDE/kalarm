@@ -1,7 +1,7 @@
 /*
  *  emailidcombo.cpp  -  email identity combo box with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,10 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "emailidcombo.moc"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include "emailidcombo.moc"
 
 
 EmailIdCombo::EmailIdCombo(KPIM::IdentityManager* manager, QWidget* parent, const char* name)

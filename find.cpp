@@ -94,6 +94,7 @@ void Find::display()
 
 		// Alarm types
 		QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
+		layout->setMargin(0);
 		layout->setSpacing(KDialog::spacingHint());
 		QGroupBox* group = new QGroupBox(i18n("Alarm Type"), kalarmWidgets);
 		layout->addWidget(group);
