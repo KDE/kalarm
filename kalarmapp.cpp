@@ -68,6 +68,7 @@
 
 #include <netwm.h>
 #include <QX11Info>
+#include <kglobal.h>
 
 
 static bool convWakeTime(const QByteArray& timeParam, QDateTime&, bool& noTime);
@@ -122,7 +123,7 @@ KAlarmApp::KAlarmApp()
 	{
 		connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
 
-		KConfig* config = kapp->config();
+		KConfig* config = KGlobal::config();
 		config->setGroup(QString::fromLatin1("General"));
 		mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
 		mSavedNoSystemTray      = mNoSystemTray;
@@ -1031,7 +1032,7 @@ bool KAlarmApp::checkSystemTray()
 		// daemon with the correct NOTIFY type. If that happened when there was no system
 		// tray and alarms are disabled when KAlarm is not running, registering with
 		// NO_START_NOTIFY could result in alarms never being seen.
-		KConfig* config = kapp->config();
+		KConfig* config = KGlobal::config();
 		config->setGroup(QString::fromLatin1("General"));
 		config->writeEntry(QString::fromLatin1("NoSystemTray"), mNoSystemTray);
 		config->sync();

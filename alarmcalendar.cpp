@@ -46,6 +46,7 @@ extern "C" {
 #include <libkcal/vcaldrag.h>
 #include <libkcal/vcalformat.h>
 #include <libkcal/icalformat.h>
+#include <kglobal.h>
 
 #include "calendarcompat.h"
 #include "kalarmapp.h"
@@ -82,7 +83,7 @@ AlarmCalendar* AlarmCalendar::mCalendars[NCALS] = { 0, 0, 0, 0 };
 */
 bool AlarmCalendar::initialiseCalendars()
 {
-	KConfig* config = kapp->config();
+	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("General"));
 	QString activeKey   = QString::fromLatin1("Calendar");
 	QString expiredKey  = QString::fromLatin1("ExpiredCalendar");
@@ -395,7 +396,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		// Save the change in the config file.
 		if (!mConfigKey.isNull())
 		{
-			KConfig* config = kapp->config();
+			KConfig* config = KGlobal::config();
 			config->setGroup(QString::fromLatin1("General"));
 			config->writePathEntry(mConfigKey, mICalUrl.path());
 			config->sync();
@@ -474,7 +475,7 @@ void AlarmCalendar::convertToICal()
 	{
 		if (!mConfigKey.isNull())
 		{
-			KConfig* config = kapp->config();
+			KConfig* config = KGlobal::config();
 			config->setGroup(QString::fromLatin1("General"));
 			config->writePathEntry(mConfigKey, mICalUrl.path());
 			config->sync();

@@ -83,7 +83,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Prefix and suffix to the name in the alarm text
 	// Get default prefix and suffix texts from config file
-	KConfig* config = kapp->config();
+	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("General"));
 	mPrefixText = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
 	mSuffixText = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
@@ -357,7 +357,7 @@ QList<KAEvent> BirthdayDlg::events() const
 void BirthdayDlg::slotOk()
 {
 	// Save prefix and suffix texts to use as future defaults
-	KConfig* config = kapp->config();
+	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("General"));
 	config->writeEntry(QString::fromLatin1("BirthdayPrefix"), mPrefix->text());
 	config->writeEntry(QString::fromLatin1("BirthdaySuffix"), mSuffix->text());
