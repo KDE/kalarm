@@ -26,7 +26,7 @@
 #include <QDropEvent>
 #include <QFocusEvent>
 
-#include <k3urldrag.h>
+#include <kurl.h>
 #include <kurlcompletion.h>
 
 #include <libkdepim/maillistdrag.h>
@@ -99,7 +99,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 		ok = false;   // don't accept "text/calendar" objects
 	else
 		ok = (data->hasText()
-		   || K3URLDrag::canDecode(e)
+		   || KURL::List::canDecode(data)
 		   || mType != Url && KPIM::MailListDrag::canDecode(e)
 		   || mType == Emails && KVCardDrag::canDecode(e));
 	if (ok)
@@ -130,7 +130,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				setText(mailList.first().subject());    // replace any existing text
 		}
 	}
-	// This must come before K3URLDrag
+	// This must come before KURL
 	else if (mType == Emails
 	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
 	{
@@ -142,7 +142,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				newEmails.append(em);
 		}
 	}
-	else if (K3URLDrag::decode(e, files)  &&  files.count())
+	else if (!(files = KURL::List::fromMimeData(data)).isEmpty())
 	{
 		// URL(s)
 		switch (mType)
