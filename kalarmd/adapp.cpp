@@ -56,7 +56,7 @@ int AlarmDaemonApp::newInstance()
 	// Check if we are starting up at session startup
 	static bool restored = false;
 	bool autostart = false;
-	if (!restored  &&  isRestored())
+	if (!restored  &&  isSessionRestored())
 		restored = true;       // make sure we restore only once
 	else
 	{
