@@ -723,7 +723,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 {
 	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
 	                   : !defaultDir.isEmpty()  ? defaultDir
-	                   :                          QDir::homeDirPath();
+	                   :                          QDir::homePath();
 	KFileDialog fileDlg(initialDir, filter, parent, name, true);
 	fileDlg.setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
 	fileDlg.setMode(KFile::File | mode);

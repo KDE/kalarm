@@ -1762,7 +1762,7 @@ bool EditAlarmDlg::checkCommandData()
 		// Validate the log file name
 		QString file = mCmdLogFileEdit->text();
 		QFileInfo info(file);
-		QDir::setCurrent(QDir::homeDirPath());
+		QDir::setCurrent(QDir::homePath());
 		bool err = file.isEmpty()  ||  info.isDir();
 		if (!err)
 		{
@@ -1784,7 +1784,7 @@ bool EditAlarmDlg::checkCommandData()
 			return false;
 		}
 		// Convert the log file to an absolute path
-		mCmdLogFileEdit->setText(info.absFilePath());
+		mCmdLogFileEdit->setText(info.absoluteFilePath());
 	}
 	return true;
 }
@@ -2048,8 +2048,8 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		{
 			// It's a local file - convert to absolute path & check validity
 			QFileInfo info(alarmtext);
-			QDir::setCurrent(QDir::homeDirPath());
-			alarmtext = info.absFilePath();
+			QDir::setCurrent(QDir::homePath());
+			alarmtext = info.absoluteFilePath();
 			url.setPath(alarmtext);
 			alarmtext = QString::fromLatin1("file:") + alarmtext;
 			if (!err)

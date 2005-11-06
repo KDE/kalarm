@@ -301,7 +301,7 @@ void AlarmDaemon::checkAlarmsSlot()
 	if (mAlarmTimerSyncing)
 	{
 		// We've synched to the minute boundary. Now set timer to the check interval.
-		mAlarmTimer->changeInterval(DAEMON_CHECK_INTERVAL * 1000);
+		mAlarmTimer->start(DAEMON_CHECK_INTERVAL * 1000);
 		mAlarmTimerSyncing = false;
 		mAlarmTimerSyncCount = 10;    // resynch every 10 minutes, in case of glitches
 	}
@@ -311,7 +311,7 @@ void AlarmDaemon::checkAlarmsSlot()
 		if (interval < DAEMON_CHECK_INTERVAL - 1)
 		{
 			// Need to re-synch to 1 second past the minute
-			mAlarmTimer->changeInterval(interval * 1000);
+			mAlarmTimer->start(interval * 1000);
 			mAlarmTimerSyncing = true;
 			kdDebug(5900) << "Resynching alarm timer" << endl;
 		}

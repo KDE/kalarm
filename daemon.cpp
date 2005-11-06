@@ -465,7 +465,7 @@ void Daemon::timerCheckIfRunning()
 	checkIfRunning();
 	// Limit how long we check at the fast rate
 	if (mStatusTimerCount > 0  &&  --mStatusTimerCount <= 0)
-		mStatusTimer->changeInterval(mStatusTimerInterval * 1000);
+		mStatusTimer->start(mStatusTimerInterval * 1000);
 }
 
 /******************************************************************************
@@ -480,7 +480,7 @@ bool Daemon::checkIfRunning()
 		mRunning = newstatus;
 		int status = mRunning  &&  !mCalendarDisabled;
 		emit mInstance->daemonRunning(status);
-		mStatusTimer->changeInterval(mStatusTimerInterval * 1000);   // exit from fast checking
+		mStatusTimer->start(mStatusTimerInterval * 1000);   // exit from fast checking
 		mStatusTimerCount = 0;
 		if (mRunning)
 		{
@@ -513,7 +513,7 @@ void Daemon::slotPreferencesChanged()
 		// Daemon check interval has changed
 		mStatusTimerInterval = newInterval;
 		if (mStatusTimerCount <= 0)   // don't change if on fast rate
-			mStatusTimer->changeInterval(mStatusTimerInterval * 1000);
+			mStatusTimer->start(mStatusTimerInterval * 1000);
 	}
 }
 
