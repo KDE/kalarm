@@ -23,6 +23,7 @@
 
 #include <qspinbox.h>
 class QEvent;
+class QStyleOptionSpinBox;
 
 
 /**
@@ -99,11 +100,19 @@ class SpinBox : public QSpinBox
 		QRect        upRect() const;
 		/** Returns the rectangle containing the down arrow. */
 		QRect        downRect() const;
+		/** Returns the rectangle containing the up and down arrows. */
+		QRect        upDownRect() const;
+/** Sets whether the edit field is displayed. */
+void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
+		/** Initialise a QStyleOptionSpinBox with this instance's details. */
+		void         initStyleOption(QStyleOptionSpinBox&) const;
+
 	public slots:
 		/** Increments the value of the spin box by the unshifted step increment. */
 		virtual void stepUp();
 		/** Decrements the value of the spin box by the unshifted step increment. */
 		virtual void stepDown();
+
 	signals:
 		/** Signal emitted when the spin box's value is stepped (by the shifted or unshifted increment).
 		 *  @param step The requested step in the spin box's value. Note that the actual change in value
@@ -130,6 +139,7 @@ class SpinBox : public QSpinBox
 		 */
 		virtual void updateDisplay();
 
+virtual void paintEvent(QPaintEvent*);
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseDoubleClickEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
@@ -159,6 +169,7 @@ class SpinBox : public QSpinBox
 		bool         mShiftMinBound;    // true if a temporary minimum bound has been set during shift stepping
 		bool         mShiftMaxBound;    // true if a temporary maximum bound has been set during shift stepping
 		bool         mSelectOnStep;     // select the editor text whenever spin buttons are clicked (default)
+bool         mUpDownOnly;       // true if edit field isn't displayed
 		bool         mReadOnly;         // value cannot be changed
 		bool         mSuppressSignals;
 		bool         mEdited;           // text field has been edited

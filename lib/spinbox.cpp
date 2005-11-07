@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <QStyle>
 #include <QStyleOptionSpinBox>
+#include <QPainter>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
@@ -451,9 +452,11 @@ int SpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 */
 int SpinBox::whichButton(const QPoint& pos)
 {
-	if (upRect().contains(pos))
+	QStyleOptionSpinBox option;
+	initStyleOption(option);
+	if (style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp).contains(pos))
 		return UP;
-	if (downRect().contains(pos))
+	if (style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown).contains(pos))
 		return DOWN;
 	return NO_BUTTON;
 }
@@ -461,11 +464,45 @@ int SpinBox::whichButton(const QPoint& pos)
 QRect SpinBox::upRect() const
 {
 	QStyleOptionSpinBox option;
+	initStyleOption(option);
 	return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
 }
 
 QRect SpinBox::downRect() const
 {
 	QStyleOptionSpinBox option;
+	initStyleOption(option);
 	return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
+}
+
+QRect SpinBox::upDownRect() const
+{
+	QStyleOptionSpinBox option;
+	initStyleOption(option);
+	return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
+	     | style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
+}
+
+void SpinBox::paintEvent(QPaintEvent* pe)
+{
+	if (mUpDownOnly)
+	{
+		QStyleOptionSpinBox option;
+		initStyleOption(option);
+		QPainter painter(this);
+		style()->drawComplexControl(QStyle::CC_SpinBox, &option, &painter, this);
+	}
+	else
+		QSpinBox::paintEvent(pe);
+}
+
+void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
+{
+	so.init(this);
+//	so.activeSubControls = ??;
+	so.subControls   = mUpDownOnly ? QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame
+	                                   : QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField;
+	so.buttonSymbols = buttonSymbols();
+	so.frame         = hasFrame();
+	so.stepEnabled   = stepEnabled();
 }

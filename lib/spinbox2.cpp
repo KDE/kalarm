@@ -288,12 +288,14 @@ void SpinBox2::arrange()
 void SpinBox2::getMetrics() const
 {
 	QStyleOptionSpinBox option;
+	mUpdown2->initStyleOption(option);
 	QRect rect = mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
 	rect      |= mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	xUpdown2 = mRightToLeft ? 0 : rect.left();
 	wUpdown2 = mUpdown2->width() - rect.left();
+	mSpinbox->initStyleOption(option);
 	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
 	wGap = 0;
 
