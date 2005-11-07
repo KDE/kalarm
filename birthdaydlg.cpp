@@ -24,9 +24,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-//Added by qt3to4:
-#warning Remove #include q3valuelist.h
-#include <q3valuelist.h>
 
 #include <klistview.h>
 #include <klocale.h>
