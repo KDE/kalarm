@@ -32,8 +32,6 @@
 #include <QRegExp>
 #include <QByteArray>
 #include <QTextStream>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <dcopclient.h>
@@ -67,7 +65,7 @@ namespace HeaderParsing
 bool parseAddress( const char* & scursor, const char * const send,
                    KMime::Types::Address & result, bool isCRLF=false );
 bool parseAddressList( const char* & scursor, const char * const send,
-                       Q3ValueList<KMime::Types::Address> & result, bool isCRLF=false );
+                       QList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
 namespace
@@ -564,12 +562,12 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 	const char* ad = static_cast<const char*>(addrs);
 
 	// parse an address-list
-	Q3ValueList<KMime::Types::Address> maybeAddressList;
+	QList<KMime::Types::Address> maybeAddressList;
 	if (!HeaderParsing::parseAddressList(ad, ad + addrs.length(), maybeAddressList))
 		return QString::fromLocal8Bit(ad);    // return the address in error
 
 	// extract the mailboxes and complain if there are groups
-	for (Q3ValueList<KMime::Types::Address>::ConstIterator it = maybeAddressList.begin();
+	for (QList<KMime::Types::Address>::ConstIterator it = maybeAddressList.begin();
 	     it != maybeAddressList.end();  ++it)
 	{
 		QString bad = convertAddress(*it, list);
@@ -607,8 +605,8 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 		kdDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"" << endl;
 		return addr.displayName;
 	}
-	const Q3ValueList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
-	for (Q3ValueList<KMime::Types::Mailbox>::ConstIterator mb = mblist.begin();
+	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
+	for (QList<KMime::Types::Mailbox>::ConstIterator mb = mblist.begin();
 	     mb != mblist.end();  ++mb)
 	{
 		QString addrPart = (*mb).addrSpec.localPart;
@@ -1036,7 +1034,7 @@ bool parseAddress( const char* & scursor, const char * const send,
 *  Allow either ',' or ';' to be used as an email address separator.
 */
 bool parseAddressList( const char* & scursor, const char * const send,
-		       Q3ValueList<Address> & result, bool isCRLF ) {
+		       QList<Address> & result, bool isCRLF ) {
   while ( scursor != send ) {
     eatCFWS( scursor, send, isCRLF );
     // end of header: this is OK.
