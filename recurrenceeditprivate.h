@@ -169,7 +169,7 @@ class YearlyRule : public MonthYearRule
 	public:
 		YearlyRule(bool readOnly, QWidget* parent);
 		QList<int>       months() const;
-		void             setMonths(const Q3ValueList<int>& months);
+		void             setMonths(const QList<int>& months);
 		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
 		KARecurrence::Feb29Type feb29Type() const;
 		void             setFeb29Type(KARecurrence::Feb29Type);

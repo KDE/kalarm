@@ -25,7 +25,6 @@
 
 //Added by qt3to4:
 #include <q3listbox.h>
-#include <Q3ValueList>
 #include <QPushButton>
 #include <QLabel>
 #include <QStackedWidget>
@@ -716,7 +715,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 		}
 		case KARecurrence::MONTHLY_POS:    // on nth (Tuesday) of the month
 		{
-			Q3ValueList<RecurrenceRule::WDayPos> posns = recurrence->monthPositions();
+			QList<RecurrenceRule::WDayPos> posns = recurrence->monthPositions();
 			int i = posns.first().pos();
 			if (!i)
 			{
@@ -725,7 +724,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 				mWeeklyButton->setChecked(true);
 				mWeeklyRule->setFrequency(recurrence->frequency());
 				QBitArray rDays(7);
-				for (Q3ValueList<RecurrenceRule::WDayPos>::ConstIterator it = posns.begin();  it != posns.end();  ++it)
+				for (QList<RecurrenceRule::WDayPos>::ConstIterator it = posns.begin();  it != posns.end();  ++it)
 				{
 					if (!(*it).pos())
 						rDays.setBit((*it).day() - 1, 1);
@@ -740,7 +739,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 		case KARecurrence::MONTHLY_DAY:     // on nth day of the month
 		{
 			mMonthlyButton->setChecked(true);
-			Q3ValueList<int> rmd = recurrence->monthDays();
+			QList<int> rmd = recurrence->monthDays();
 			int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 			mMonthlyRule->setDate(day);
 			break;
@@ -751,7 +750,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 			if (rtype == KARecurrence::ANNUAL_DATE)
 			{
 				mYearlyButton->setChecked(true);
-				const Q3ValueList<int> rmd = recurrence->monthDays();
+				const QList<int> rmd = recurrence->monthDays();
 				int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 				mYearlyRule->setDate(day);
 				mYearlyRule->setFeb29Type(recurrence->feb29Type());
@@ -759,7 +758,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 			else if (rtype == KARecurrence::ANNUAL_POS)
 			{
 				mYearlyButton->setChecked(true);
-				Q3ValueList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
+				QList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
 				mYearlyRule->setPosition(posns.first().pos(), posns.first().day());
 			}
 			mYearlyRule->setMonths(recurrence->yearMonths());
@@ -1464,12 +1463,12 @@ QList<int> YearlyRule::months() const
 /******************************************************************************
  * Check/uncheck each month of the year according to the specified list.
  */
-void YearlyRule::setMonths(const Q3ValueList<int>& mnths)
+void YearlyRule::setMonths(const QList<int>& mnths)
 {
 	bool checked[12];
 	for (int i = 0;  i < 12;  ++i)
 		checked[i] = false;
-	for (Q3ValueListConstIterator<int> it = mnths.begin();  it != mnths.end();  ++it)
+	for (QList<int>::ConstIterator it = mnths.begin();  it != mnths.end();  ++it)
 		checked[(*it) - 1] = true;
 	for (int i = 0;  i < 12;  ++i)
 		mMonthBox[i]->setChecked(checked[i]);
