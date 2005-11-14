@@ -22,8 +22,6 @@
 #define ADCALENDAR_H
 
 #include <QByteArray>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <libkcal/calendarlocal.h>
 namespace KIO { class Job; }
 class ADCalendar;
@@ -34,7 +32,7 @@ class ADCalendar : public KCal::CalendarLocal
 {
 		Q_OBJECT
 	public:
-		typedef Q3ValueList<ADCalendar*>::ConstIterator ConstIterator;
+		typedef QList<ADCalendar*>::ConstIterator ConstIterator;
 
 		~ADCalendar();
 
@@ -50,8 +48,8 @@ class ADCalendar : public KCal::CalendarLocal
 		void              setUnregistered(bool u) { mUnregistered = u; }
 		bool              unregistered() const    { return mUnregistered; }
   
-		bool              eventHandled(const KCal::Event*, const Q3ValueList<QDateTime>&);
-		void              setEventHandled(const KCal::Event*, const Q3ValueList<QDateTime>&);
+		bool              eventHandled(const KCal::Event*, const QList<QDateTime>&);
+		void              setEventHandled(const KCal::Event*, const QList<QDateTime>&);
 		void              clearEventsHandled(bool nonexistentOnly = false);
 
 		bool              loadFile(bool reset);
@@ -90,16 +88,16 @@ class ADCalendar : public KCal::CalendarLocal
 		struct EventItem
 		{
 			EventItem() : eventSequence(0) { }
-			EventItem(int seqno, const Q3ValueList<QDateTime>& alarmtimes)
+			EventItem(int seqno, const QList<QDateTime>& alarmtimes)
 			        : eventSequence(seqno), alarmTimes(alarmtimes) {}
 			int                   eventSequence;
-			Q3ValueList<QDateTime> alarmTimes;
+			QList<QDateTime> alarmTimes;
 		};
 
 		typedef QMap<EventKey, EventItem>  EventsMap;   // calendar/event ID, event sequence num
 		static EventsMap               mEventsHandled;  // IDs of already triggered events
 		static QStringList             mCalendarUrls;   // URLs of all calendars ever opened
-		static Q3ValueList<ADCalendar*> mCalendars;      // list of all constructed calendars
+		static QList<ADCalendar*> mCalendars;      // list of all constructed calendars
 
 		ADCalendar(const ADCalendar&);             // prohibit copying
 		ADCalendar& operator=(const ADCalendar&);  // prohibit copying

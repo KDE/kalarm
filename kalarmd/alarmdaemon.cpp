@@ -28,8 +28,6 @@
 #include <qfile.h>
 #include <qdatetime.h>
 #include <QByteArray>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
@@ -345,10 +343,10 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 	QDateTime now  = QDateTime::currentDateTime();
 	QDateTime now1 = now.addSecs(1);
 	kdDebug(5901) << "  To: " << now.toString() << endl;
-	Q3ValueList<KCal::Alarm*> alarms = cal->alarmsTo(now);
+	QList<KCal::Alarm*> alarms = cal->alarmsTo(now);
 	if (!alarms.count())
 		return;
-	for (Q3ValueList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
+	for (QList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
 	{
 		KCal::Event* event = dynamic_cast<KCal::Event*>((*it)->parent());
 		if (!event)
@@ -359,7 +357,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
-		Q3ValueList<QDateTime> alarmtimes;
+		QList<QDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
 		{
