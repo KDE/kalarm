@@ -21,8 +21,11 @@
 #ifndef ADCALENDAR_H
 #define ADCALENDAR_H
 
+#include <QString>
+#include <QList>
 #include <QByteArray>
 #include <libkcal/calendarlocal.h>
+class QDateTime;
 namespace KIO { class Job; }
 class ADCalendar;
 
@@ -32,21 +35,19 @@ class ADCalendar : public KCal::CalendarLocal
 {
 		Q_OBJECT
 	public:
-		typedef QList<ADCalendar*>::ConstIterator ConstIterator;
-
 		~ADCalendar();
 
-		const QString&    urlString() const       { return mUrlString; }
-		const QByteArray& appName() const         { return mAppName; }
+		const QString&    urlString() const        { return mUrlString; }
+		const QByteArray& appName() const          { return mAppName; }
 
 		void              setEnabled(bool enabled) { mEnabled = enabled; }
-		bool              enabled() const         { return mEnabled && !unregistered(); }
-		bool              available() const       { return loaded() && !unregistered(); }
+		bool              enabled() const          { return mEnabled && !unregistered(); }
+		bool              available() const        { return loaded() && !unregistered(); }
 
 		// Client has registered since calendar was constructed, but
 		// has not since added the calendar. Monitoring is disabled.
-		void              setUnregistered(bool u) { mUnregistered = u; }
-		bool              unregistered() const    { return mUnregistered; }
+		void              setUnregistered(bool u)  { mUnregistered = u; }
+		bool              unregistered() const     { return mUnregistered; }
   
 		bool              eventHandled(const KCal::Event*, const QList<QDateTime>&);
 		void              setEventHandled(const KCal::Event*, const QList<QDateTime>&);
@@ -54,13 +55,13 @@ class ADCalendar : public KCal::CalendarLocal
 
 		bool              loadFile(bool reset);
 		bool              setLoadedConnected();     // check status of mLoadedConnected and set it to true
-		bool              downloading() const     { return !mTempFileName.isNull(); }
-		bool              loaded() const          { return mLoaded; }
+		bool              downloading() const      { return !mTempFileName.isNull(); }
+		bool              loaded() const           { return mLoaded; }
 
 
-		static ConstIterator begin()            { return mCalendars.begin(); }
-		static ConstIterator end()              { return mCalendars.end(); }
-		static ADCalendar*   getCalendar(const QString& calendarURL);
+		static ADCalendar* calendar(const QString& calendarURL);
+		static ADCalendar* calendar(int i)         { return mCalendars[i]; }
+		static int         count()                 { return mCalendars.count(); }
 
 	signals:
 		void              loaded(ADCalendar*, bool success);
@@ -90,13 +91,13 @@ class ADCalendar : public KCal::CalendarLocal
 			EventItem() : eventSequence(0) { }
 			EventItem(int seqno, const QList<QDateTime>& alarmtimes)
 			        : eventSequence(seqno), alarmTimes(alarmtimes) {}
-			int                   eventSequence;
+			int              eventSequence;
 			QList<QDateTime> alarmTimes;
 		};
 
-		typedef QMap<EventKey, EventItem>  EventsMap;   // calendar/event ID, event sequence num
-		static EventsMap               mEventsHandled;  // IDs of already triggered events
-		static QStringList             mCalendarUrls;   // URLs of all calendars ever opened
+		typedef QMap<EventKey, EventItem> EventsMap;   // calendar/event ID, event sequence num
+		static EventsMap          mEventsHandled;  // IDs of already triggered events
+		static QStringList        mCalendarUrls;   // URLs of all calendars ever opened
 		static QList<ADCalendar*> mCalendars;      // list of all constructed calendars
 
 		ADCalendar(const ADCalendar&);             // prohibit copying

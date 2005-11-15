@@ -1,7 +1,7 @@
 /*
  *  adcalendar.cpp  -  configuration file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@
 #include "adconfigdata.h"
 
 // Config file key strings
-const QString CLIENT_GROUP(QString::fromLatin1("Client "));
+const QString CLIENT_GROUP(QLatin1String("Client "));
 const QRegExp CLIENT_GROUP_SEARCH("^Client ");
 // Client data file key strings
-const QString CALENDAR_KEY(QString::fromLatin1("Calendar"));
-const QString TITLE_KEY(QString::fromLatin1("Title"));
-const QString DCOP_OBJECT_KEY(QString::fromLatin1("DCOP object"));
-const QString START_CLIENT_KEY(QString::fromLatin1("Start"));
+const QString CALENDAR_KEY(QLatin1String("Calendar"));
+const QString TITLE_KEY(QLatin1String("Title"));
+const QString DCOP_OBJECT_KEY(QLatin1String("DCOP object"));
+const QString START_CLIENT_KEY(QLatin1String("Start"));
 
 
 /******************************************************************************
@@ -57,9 +57,9 @@ void ADConfigData::readConfig()
 		QString client = *cl;
 		client.remove(CLIENT_GROUP_SEARCH);
 		QString  title       = config->readEntry(TITLE_KEY, client);   // read app title (default = app name)
-		QByteArray dcopObject  = config->readEntry(DCOP_OBJECT_KEY).local8Bit();
-		bool     startClient = config->readBoolEntry(START_CLIENT_KEY, false);
-		QString  calendar    = config->readPathEntry(CALENDAR_KEY);
+		QByteArray dcopObject  = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
+		bool       startClient = config->readBoolEntry(START_CLIENT_KEY, false);
+		QString    calendar    = config->readPathEntry(CALENDAR_KEY);
 
 		// Verify the configuration
 		bool ok = false;
@@ -71,7 +71,7 @@ void ADConfigData::readConfig()
 			kdError(5900) << "ADConfigData::readConfig(): no DCOP object specified for '" << client << "'\n";
 		else
 		{
-			ADCalendar* cal = ADCalendar::getCalendar(calendar);
+			ADCalendar* cal = ADCalendar::calendar(calendar);
 			if (cal)
 				kdError(5900) << "ADConfigData::readConfig(): calendar registered by multiple clients: " << calendar << endl;
 			else
@@ -84,7 +84,7 @@ void ADConfigData::readConfig()
 		}
 
 		// Create the client and calendar objects
-		new ClientInfo(client.local8Bit(), title, dcopObject, calendar, startClient);
+		new ClientInfo(client.toLocal8Bit(), title, dcopObject, calendar, startClient);
 		kdDebug(5900) << "ADConfigData::readConfig(): client " << client << " : calendar " << calendar << endl;
 	}
 
@@ -139,8 +139,8 @@ void ADConfigData::enableAutoStart(bool on)
         kdDebug(5900) << "ADConfigData::enableAutoStart(" << on << ")\n";
         KConfig* config = KGlobal::config();
 	config->reparseConfiguration();
-        config->setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
-        config->writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), on);
+        config->setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
+        config->writeEntry(QLatin1String(DAEMON_AUTOSTART_KEY), on);
         config->sync();
 }
 

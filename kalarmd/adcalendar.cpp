@@ -36,7 +36,7 @@ QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder
 
 
 ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
-        : KCal::CalendarLocal(QString::fromLatin1("UTC")),
+        : KCal::CalendarLocal(QLatin1String("UTC")),
 	  mUrlString(url),
 	  mAppName(appname),
 	  mLoaded(false),
@@ -44,7 +44,7 @@ ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
 	  mUnregistered(false),
 	  mEnabled(true)
 {
-	ADCalendar* cal = getCalendar(url);
+	ADCalendar* cal = calendar(url);
 	if (cal)
 	{
 		kdError(5900) << "ADCalendar::ADCalendar(" << url << "): calendar already exists" << endl;
@@ -203,14 +203,14 @@ void ADCalendar::clearEventsHandled(bool nonexistentOnly)
 /******************************************************************************
 * Look up the calendar with the specified full calendar URL.
 */
-ADCalendar* ADCalendar::getCalendar(const QString& calendarURL)
+ADCalendar* ADCalendar::calendar(const QString& calendarURL)
 {
 	if (!calendarURL.isEmpty())
 	{
-		for (ConstIterator it = begin();  it != end();  ++it)
+		for (int i = 0, end = mCalendars.count();  i < end;  ++i)
 		{
-			if ((*it)->urlString() == calendarURL)
-				return *it;
+			if (mCalendars[i]->urlString() == calendarURL)
+				return mCalendars[i];
 		}
 	}
 	return 0;

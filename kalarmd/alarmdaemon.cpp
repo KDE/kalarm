@@ -79,8 +79,8 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 		 * itself and instead will simply open a new window.
 		 */
 		KConfig kaconfig(locate("config", "kalarmrc"));
-		kaconfig.setGroup(QString::fromLatin1("General"));
-		autostart = kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false);
+		kaconfig.setGroup(QLatin1String("General"));
+		autostart = kaconfig.readBoolEntry(QLatin1String("AutostartTray"), false);
 		if (autostart)
 		{
 			kdDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
@@ -114,8 +114,8 @@ void AlarmDaemon::autostartKAlarm()
 	}
 	kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
-	args << QString::fromLatin1("--tray");
-	KToolInvocation::kdeinitExec(QString::fromLatin1("kalarm"), args);
+	args << QLatin1String("--tray");
+	KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
 
 	startMonitoring();
 #endif
@@ -143,7 +143,7 @@ void AlarmDaemon::startMonitoring()
 void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 {
 	kdDebug(5900) << "AlarmDaemon::enableCal(" << urlString << ")" << endl;
-	ADCalendar* cal = ADCalendar::getCalendar(urlString);
+	ADCalendar* cal = ADCalendar::calendar(urlString);
 	if (cal)
 	{
 		cal->setEnabled(enable);
@@ -157,7 +157,7 @@ void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 void AlarmDaemon::reloadCal(const QByteArray& appname, const QString& urlString, bool reset)
 {
 	kdDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
-	ADCalendar* cal = ADCalendar::getCalendar(urlString);
+	ADCalendar* cal = ADCalendar::calendar(urlString);
 	if (!cal  ||  appname != cal->appName())
 		return;
 	reloadCal(cal, reset);
@@ -326,8 +326,8 @@ void AlarmDaemon::checkAlarmsSlot()
 void AlarmDaemon::checkAlarms()
 {
 	kdDebug(5901) << "AlarmDaemon::checkAlarms()" << endl;
-	for (ADCalendar::ConstIterator it = ADCalendar::begin();  it != ADCalendar::end();  ++it)
-		checkAlarms(*it);
+	for (int i = 0, end = ADCalendar::count();  i < end;  ++i)
+		checkAlarms(ADCalendar::calendar(i));
 }
 
 /******************************************************************************
@@ -344,11 +344,11 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 	QDateTime now1 = now.addSecs(1);
 	kdDebug(5901) << "  To: " << now.toString() << endl;
 	QList<KCal::Alarm*> alarms = cal->alarmsTo(now);
-	if (!alarms.count())
+	if (alarms.isEmpty())
 		return;
-	for (QList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
+	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
-		KCal::Event* event = dynamic_cast<KCal::Event*>((*it)->parent());
+		KCal::Event* event = dynamic_cast<KCal::Event*>(alarms[i]->parent());
 		if (!event)
 			continue;
 		const QString& eventID = event->uid();
@@ -456,8 +456,8 @@ void AlarmDaemon::setTimerStatus()
 #endif
 	// Count the number of currently loaded calendars whose names should be displayed
 	int nLoaded = 0;
-	for (ADCalendar::ConstIterator it = ADCalendar::begin();  it != ADCalendar::end();  ++it)
-		if ((*it)->loaded())
+	for (int i = 0, end = ADCalendar::count();  i < end;  ++i)
+		if (ADCalendar::calendar(i)->loaded())
 			++nLoaded;
 
 	// Start or stop the alarm timer if necessary

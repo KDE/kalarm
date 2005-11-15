@@ -1,7 +1,7 @@
 /*
  *  clientinfo.cpp  -  client application information
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #include "adcalendar.h"
 #include "clientinfo.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-QMap<Q3CString, ClientInfo*> ClientInfo::mClients;
+QMap<QByteArray, ClientInfo*> ClientInfo::mClients;
 
 
-ClientInfo::ClientInfo(const Q3CString& appName, const QString& title,
-                       const Q3CString& dcopObj, const QString& calendar, bool startClient)
+ClientInfo::ClientInfo(const QByteArray& appName, const QString& title,
+                       const QByteArray& dcopObj, const QString& calendar, bool startClient)
 	: mAppName(appName),
 	  mTitle(title),
 	  mDcopObject(dcopObj),
@@ -37,8 +35,8 @@ ClientInfo::ClientInfo(const Q3CString& appName, const QString& title,
 	mClients[mAppName] = this;
 }
 
-ClientInfo::ClientInfo(const Q3CString& appName, const QString& title,
-                       const Q3CString& dcopObj, ADCalendar* calendar, bool startClient)
+ClientInfo::ClientInfo(const QByteArray& appName, const QString& title,
+                       const QByteArray& dcopObj, ADCalendar* calendar, bool startClient)
 	: mAppName(appName),
 	  mTitle(title),
 	  mDcopObject(dcopObj),
@@ -70,11 +68,11 @@ ADCalendar* ClientInfo::setCalendar(const QString& url)
 /******************************************************************************
 * Return the ClientInfo object for the specified client application.
 */
-ClientInfo* ClientInfo::get(const Q3CString& appName)
+ClientInfo* ClientInfo::get(const QByteArray& appName)
 {
 	if (appName.isEmpty())
 		return 0;
-	QMap<Q3CString, ClientInfo*>::ConstIterator it = mClients.find(appName);
+	QMap<QByteArray, ClientInfo*>::ConstIterator it = mClients.find(appName);
 	if (it == mClients.end())
 		return 0;
 	return it.data();
@@ -96,7 +94,7 @@ ClientInfo* ClientInfo::get(const ADCalendar* cal)
 */
 void ClientInfo::clear()
 {
-	QMap<Q3CString, ClientInfo*>::Iterator it;
+	QMap<QByteArray, ClientInfo*>::Iterator it;
 	while ((it = mClients.begin()) != mClients.end())
 		delete it.data();
 }
@@ -104,9 +102,9 @@ void ClientInfo::clear()
 /******************************************************************************
 * Delete the client with the specified name.
 */
-void ClientInfo::remove(const Q3CString& appName)
+void ClientInfo::remove(const QByteArray& appName)
 {
-	QMap<Q3CString, ClientInfo*>::Iterator it = mClients.find(appName);
+	QMap<QByteArray, ClientInfo*>::Iterator it = mClients.find(appName);
 	if (it != mClients.end())
 		delete it.data();
 }
