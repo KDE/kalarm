@@ -109,7 +109,7 @@ bool MessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainNam
 		return false;
 	// First check whether there is an existing setting
 	KConfig* config = mConfig ? mConfig : KGlobal::config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
+	config->setGroup(QLatin1String("Notification Messages"));
 	if (config->hasKey(dontShowAgainName))
 		return false;
 
@@ -168,8 +168,8 @@ void MessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesno,
 	if (dontShowAgainName.isEmpty())
 		return;
 	KConfig* config = mConfig ? mConfig : KGlobal::config();
-	config->setGroup(QString::fromLatin1("Notification Messages"));
-	bool global = (dontShowAgainName[0] == ':');
+	config->setGroup(QLatin1String("Notification Messages"));
+	bool global = (dontShowAgainName[0] == QLatin1Char(':'));
 	if (yesno)
 		config->writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), true, global);
 	else

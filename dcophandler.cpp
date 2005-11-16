@@ -316,7 +316,7 @@ DateTime DcopHandler::convertStartDateTime(const QString& startDateTime)
 	{
 		// Check whether a time is specified
 		QString t;
-		if (startDateTime[0] == 'T')
+		if (startDateTime[0] == QLatin1Char('T'))
 			t = startDateTime.mid(1);     // it's a time: remove the leading 'T'
 		else if (!startDateTime[2].isDigit())
 			t = startDateTime;            // it's a time with no leading 'T'
@@ -396,7 +396,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	if (!start.isValid())
 		return false;
 	QDateTime end;
-	if (endDateTime.indexOf('T') < 0)
+	if (endDateTime.indexOf(QLatin1Char('T')) < 0)
 	{
 		if (!start.isDateOnly())
 		{

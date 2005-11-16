@@ -27,7 +27,7 @@
 #include <sys/time.h>
 #include <pwd.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <QList>
 #include <QRegExp>
 #include <QByteArray>
@@ -146,28 +146,28 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	{
 		// Use sendmail to send the message
 		QString textComplete;
-		QString command = KStandardDirs::findExe(QString::fromLatin1("sendmail"),
-		                                         QString::fromLatin1("/sbin:/usr/sbin:/usr/lib"));
+		QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
+		                                         QLatin1String("/sbin:/usr/sbin:/usr/lib"));
 		if (!command.isNull())
 		{
-			command += QString::fromLatin1(" -oi -t ");
+			command += QLatin1String(" -oi -t ");
 			textComplete = initHeaders(data, false);
 		}
 		else
 		{
-			command = KStandardDirs::findExe(QString::fromLatin1("mail"));
+			command = KStandardDirs::findExe(QLatin1String("mail"));
 			if (command.isNull())
 			{
-				errmsgs = errors(i18n("%1 not found").arg(QString::fromLatin1("sendmail"))); // give up
+				errmsgs = errors(i18n("%1 not found").arg(QLatin1String("sendmail"))); // give up
 				return false;
 			}
 
-			command += QString::fromLatin1(" -s ");
+			command += QLatin1String(" -s ");
 			command += KShellProcess::quote(event.emailSubject());
 
 			if (!data.bcc.isEmpty())
 			{
-				command += QString::fromLatin1(" -b ");
+				command += QLatin1String(" -b ");
 				command += KShellProcess::quote(data.bcc);
 			}
 
@@ -185,14 +185,14 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		}
 
 		// Execute the send command
-		FILE* fd = popen(command.local8Bit(), "w");
+		FILE* fd = popen(command.toLocal8Bit(), "w");
 		if (!fd)
 		{
 			kdError(5950) << "KAMail::send(): Unable to open a pipe to " << command << endl;
 			errmsgs = errors();
 			return false;
 		}
-		fwrite(textComplete.local8Bit(), textComplete.length(), 1, fd);
+		fwrite(textComplete.toLocal8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
 
 		if (Preferences::emailCopyToKMail())
@@ -239,7 +239,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 		DCOPCString func = DCOPClient::normalizeFunctionSignature(*it);
 		if (func.left(5) == "bool ")
 		{
-			QString fn = QString::fromLatin1(func.mid(5));
+			QString fn = QLatin1String(func.mid(5));
 			fn.replace(QRegExp(" [0-9A-Za-z_:]+"), "");
 			useSend = (fn.toLatin1() == sendFunction);
 		}
@@ -326,7 +326,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 */
 bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, const DCOPCString& function, const DCOPCString& funcType)
 {
-	QString funcname = QString::fromLatin1(function);
+	QString funcname = QLatin1String(function);
 	funcname.replace(QRegExp("(.+$"), "()");
 	DCOPCString replyType;
 	QByteArray  replyData;
@@ -373,14 +373,14 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 		time_t timenow = tod.tv_sec;
 		char buff[64];
 		strftime(buff, sizeof(buff), "Date: %a, %d %b %Y %H:%M:%S %z", localtime(&timenow));
-		message = QString::fromLatin1(buff);
+		message = QLatin1String(buff);
 		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(data.from);
 	}
-	message += QString::fromLatin1("From: ") + data.from;
-	message += QString::fromLatin1("\nTo: ") + data.event.emailAddresses(", ");
+	message += QLatin1String("From: ") + data.from;
+	message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
 	if (!data.bcc.isEmpty())
-		message += QString::fromLatin1("\nBcc: ") + data.bcc;
-	message += QString::fromLatin1("\nSubject: ") + data.event.emailSubject();
+		message += QLatin1String("\nBcc: ") + data.bcc;
+	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
 	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
 	return message;
 }
@@ -412,7 +412,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		time(&timenow);
 		QString boundary;
 		boundary.sprintf("------------_%lu_-%lx=", 2*timenow, timenow);
-		message += QString::fromLatin1("\nMIME-Version: 1.0");
+		message += QLatin1String("\nMIME-Version: 1.0");
 		message += QString::fromLatin1("\nContent-Type: multipart/mixed;\n  boundary=\"%1\"\n").arg(boundary);
 
 		if (!event.message().isEmpty())
@@ -426,7 +426,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		QString attachError = i18n("Error attaching file:\n%1");
 		for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
 		{
-			QString attachment = (*at).local8Bit();
+			QString attachment = (*at).toLocal8Bit();
 			KURL url(attachment);
 			url.cleanPath();
 			KIO::UDSEntry uds;
@@ -451,7 +451,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 
 			message += QString::fromLatin1("\n--%1").arg(boundary);
 			message += QString::fromLatin1("\nContent-Type: %2; name=\"%3\"").arg(mimeType).arg(fi.text());
-			message += QString::fromLatin1("\nContent-Transfer-Encoding: %1").arg(QString::fromLatin1(text ? "8bit" : "BASE64"));
+			message += QString::fromLatin1("\nContent-Transfer-Encoding: %1").arg(QLatin1String(text ? "8bit" : "BASE64"));
 			message += QString::fromLatin1("\nContent-Disposition: attachment; filename=\"%4\"\n\n").arg(fi.text());
 
 			// Read the file contents
@@ -509,12 +509,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 void KAMail::notifyQueued(const KAEvent& event)
 {
 	KMime::Types::Address addr;
-	QString localhost = QString::fromLatin1("localhost");
+	QString localhost = QLatin1String("localhost");
 	QString hostname  = getHostName();
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (int i = 0, end = addresses.count();  i < end;  ++i)
 	{
-		QByteArray email = addresses[i].email().local8Bit();
+		QByteArray email = addresses[i].email().toLocal8Bit();
 		const char* em = email;
 		if (!email.isEmpty()
 		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
@@ -558,7 +558,7 @@ QString KAMail::controlCentreAddress()
 QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 {
 	list.clear();
-	QByteArray addrs = items.local8Bit();
+	QByteArray addrs = items.toLocal8Bit();
 	const char* ad = static_cast<const char*>(addrs);
 
 	// parse an address-list
@@ -567,10 +567,9 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 		return QString::fromLocal8Bit(ad);    // return the address in error
 
 	// extract the mailboxes and complain if there are groups
-	for (QList<KMime::Types::Address>::ConstIterator it = maybeAddressList.begin();
-	     it != maybeAddressList.end();  ++it)
+	for (int i = 0, end = maybeAddressList.count();  i < end;  ++i)
 	{
-		QString bad = convertAddress(*it, list);
+		QString bad = convertAddress(maybeAddressList[i], list);
 		if (!bad.isEmpty())
 			return bad;
 	}
@@ -585,7 +584,7 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 */
 QString KAMail::convertAddress(const QString& item, EmailAddressList& list)
 {
-	QByteArray addr = item.local8Bit();
+	QByteArray addr = item.toLocal8Bit();
 	const char* ad = static_cast<const char*>(addr);
 	KMime::Types::Address maybeAddress;
 	if (!HeaderParsing::parseAddress(ad, ad + addr.length(), maybeAddress))
@@ -606,16 +605,15 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 		return addr.displayName;
 	}
 	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
-	for (QList<KMime::Types::Mailbox>::ConstIterator mb = mblist.begin();
-	     mb != mblist.end();  ++mb)
+	for (int i = 0, end = mblist.count();  i < end;  ++i)
 	{
-		QString addrPart = (*mb).addrSpec.localPart;
-		if (!(*mb).addrSpec.domain.isEmpty())
+		QString addrPart = mblist[i].addrSpec.localPart;
+		if (!mblist[i].addrSpec.domain.isEmpty())
 		{
-			addrPart += QChar('@');
-			addrPart += (*mb).addrSpec.domain;
+			addrPart += QLatin1Char('@');
+			addrPart += mblist[i].addrSpec.domain;
 		}
-		list += KCal::Person((*mb).displayName, addrPart);
+		list += KCal::Person(mblist[i].displayName, addrPart);
 	}
 	return QString::null;
 }
@@ -629,7 +627,7 @@ QString KAMail::convertAddresses(const QString& items, QStringList& list)
 		return item;
 	for (EmailAddressList::Iterator ad = addrs.begin();  ad != addrs.end();  ++ad)
 	{
-		item = (*ad).fullName().local8Bit();
+		item = (*ad).fullName().toLocal8Bit();
 		switch (checkAddress(item))
 		{
 			case 1:      // OK
@@ -654,37 +652,37 @@ int KAMail::checkAddress(QString& address)
 {
 	address = address.trimmed();
 	// Check that there are no list separator characters present
-	if (address.indexOf(',') >= 0  ||  address.indexOf(';') >= 0)
+	if (address.indexOf(QLatin1Char(',')) >= 0  ||  address.indexOf(QLatin1Char(';')) >= 0)
 		return -1;
 	int n = address.length();
 	if (!n)
 		return 0;
 	int start = 0;
 	int end   = n - 1;
-	if (address[end] == '>')
+	if (address[end] == QLatin1Char('>'))
 	{
 		// The email address is in <...>
-		if ((start = address.indexOf('<')) < 0)
+		if ((start = address.indexOf(QLatin1Char('<'))) < 0)
 			return -1;
 		++start;
 		--end;
 	}
-	int i = address.indexOf('@', start);
+	int i = address.indexOf(QLatin1Char('@'), start);
 	if (i >= 0)
 	{
 		if (i == start  ||  i == end)          // check @ isn't the first or last character
-//		||  address.indexOf('@', i + 1) >= 0)    // check for multiple @ characters
+//		||  address.indexOf(QLatin1Char('@'), i + 1) >= 0)    // check for multiple @ characters
 			return -1;
 	}
 /*	else
 	{
 		// Allow the @ character to be missing if it's a local user
-		if (!getpwnam(address.mid(start, end - start + 1).local8Bit()))
+		if (!getpwnam(address.mid(start, end - start + 1).toLocal8Bit()))
 			return false;
 	}
 	for (int i = start;  i <= end;  ++i)
 	{
-		char ch = address[i].latin1();
+		char ch = address[i].toLatin1();
 		if (ch == '.'  ||  ch == '@'  ||  ch == '-'  ||  ch == '_'
 		||  (ch >= 'A' && ch <= 'Z')  ||  (ch >= 'a' && ch <= 'z')
 		||  (ch >= '0' && ch <= '9'))
@@ -707,10 +705,10 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 	for (int next = 0;  next < length;  )
 	{
 		// Find the first delimiter character (, or ;)
-		int i = items.indexOf(',', next);
+		int i = items.indexOf(QLatin1Char(','), next);
 		if (i < 0)
 			i = items.length();
-		int sc = items.indexOf(';', next);
+		int sc = items.indexOf(QLatin1Char(';'), next);
 		if (sc < 0)
 			sc = items.length();
 		if (sc < i)
@@ -738,15 +736,15 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 {
 	KURL url;
 	list.clear();
-	QByteArray addrs = items.local8Bit();
+	QByteArray addrs = items.toLocal8Bit();
 	int length = items.length();
 	for (int next = 0;  next < length;  )
 	{
 		// Find the first delimiter character (, or ;)
-		int i = items.indexOf(',', next);
+		int i = items.indexOf(QLatin1Char(','), next);
 		if (i < 0)
 			i = items.length();
-		int sc = items.indexOf(';', next);
+		int sc = items.indexOf(QLatin1Char(';'), next);
 		if (sc < 0)
 			sc = items.length();
 		if (sc < i)
@@ -970,7 +968,7 @@ bool parseUserName( const char* & scursor, const char * const send,
       scursor--; // re-set scursor to point to ch again
       tmp = QString::null;
       if ( parseAtom( scursor, send, result, false /* no 8bit */ ) ) {
-        if (getpwnam(result.local8Bit()))
+        if (getpwnam(result.toLocal8Bit()))
           return true;
       }
       return false; // parseAtom can only fail if the first char is non-atext.

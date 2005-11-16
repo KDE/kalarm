@@ -123,7 +123,7 @@ MainWindow::MainWindow(bool restored)
 	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
 	kdDebug(5950) << "MainWindow::MainWindow()\n";
-	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
+	setAutoSaveSettings(QLatin1String("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)
 	{
@@ -188,10 +188,10 @@ MainWindow::~MainWindow()
 */
 void MainWindow::saveProperties(KConfig* config)
 {
-	config->writeEntry(QString::fromLatin1("HiddenTrayParent"), isTrayParent() && isHidden());
-	config->writeEntry(QString::fromLatin1("ShowExpired"), mShowExpired);
-	config->writeEntry(QString::fromLatin1("ShowTime"), mShowTime);
-	config->writeEntry(QString::fromLatin1("ShowTimeTo"), mShowTimeTo);
+	config->writeEntry(QLatin1String("HiddenTrayParent"), isTrayParent() && isHidden());
+	config->writeEntry(QLatin1String("ShowExpired"), mShowExpired);
+	config->writeEntry(QLatin1String("ShowTime"), mShowTime);
+	config->writeEntry(QLatin1String("ShowTimeTo"), mShowTimeTo);
 }
 
 /******************************************************************************
@@ -201,10 +201,10 @@ void MainWindow::saveProperties(KConfig* config)
 */
 void MainWindow::readProperties(KConfig* config)
 {
-	mHiddenTrayParent = config->readBoolEntry(QString::fromLatin1("HiddenTrayParent"));
-	mShowExpired      = config->readBoolEntry(QString::fromLatin1("ShowExpired"));
-	mShowTime         = config->readBoolEntry(QString::fromLatin1("ShowTime"));
-	mShowTimeTo       = config->readBoolEntry(QString::fromLatin1("ShowTimeTo"));
+	mHiddenTrayParent = config->readBoolEntry(QLatin1String("HiddenTrayParent"));
+	mShowExpired      = config->readBoolEntry(QLatin1String("ShowExpired"));
+	mShowTime         = config->readBoolEntry(QLatin1String("ShowTime"));
+	mShowTimeTo       = config->readBoolEntry(QLatin1String("ShowTimeTo"));
 }
 
 /******************************************************************************
@@ -281,7 +281,7 @@ void MainWindow::show()
 		// Show error message now that the main window has been displayed.
 		// Waiting until now lets the user easily associate the message with
 		// the main window which is faulty.
-		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)").arg(QString::fromLatin1(UI_FILE)));
+		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)").arg(QLatin1String(UI_FILE)));
 		mMenuError = false;
 	}
 }
@@ -1089,7 +1089,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
 	KURL::List      files;
-	KCal::CalendarLocal calendar(QString::fromLatin1("UTC"));
+	KCal::CalendarLocal calendar(QLatin1String("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");

@@ -154,7 +154,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 			case Emails:
 			{
 				// Email entry field - ignore all but mailto: URLs
-				QString mailto = QString::fromLatin1("mailto");
+				QString mailto = QLatin1String("mailto");
 				for (KURL::List::Iterator it = files.begin();  it != files.end();  ++it)
 				{
 					if ((*it).protocol() == mailto)
@@ -174,7 +174,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 		if (mType == Emails)
 		{
 			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
-			QString mailto = QString::fromLatin1("mailto:");
+			QString mailto = QLatin1String("mailto:");
 			newEmails = txt.split(QRegExp("[\r\n]+"), QString::SkipEmptyParts);
 			for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
 			{
@@ -187,7 +187,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 		}
 		else
 		{
-			int newline = txt.indexOf(QChar('\n'));
+			int newline = txt.indexOf(QLatin1Char('\n'));
 			newText = (newline >= 0) ? txt.left(newline) : txt;
 		}
 	}

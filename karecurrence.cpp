@@ -20,8 +20,7 @@
 
 #include "kalarm.h"
 
-#include <qbitarray.h>
-//Added by qt3to4:
+#include <QBitArray>
 #include <kdebug.h>
 
 #include <libkcal/icalformat.h>
@@ -148,7 +147,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
  */
 bool KARecurrence::set(const QString& icalRRULE)
 {
-	static QString RRULE = QString::fromLatin1("RRULE:");
+	static QString RRULE = QLatin1String("RRULE:");
 	mCachedType = -1;
 	clear();
 	if (icalRRULE.isEmpty())
@@ -656,9 +655,9 @@ int KARecurrence::longestInterval() const
 			// It recurs only on certain days of the week, so the maximum interval
 			// will be greater than the frequency.
 			bool ds[7] = { false, false, false, false, false, false, false };
-			for (QList<RecurrenceRule::WDayPos>::ConstIterator it = days.begin();  it != days.end();  ++it)
-				if ((*it).pos() == 0)
-					ds[(*it).day() - 1] = true;
+			for (int i = 0, end = days.count();  i < end;  ++i)
+				if (days[i].pos() == 0)
+					ds[days[i].day() - 1] = true;
 			if (freq % 7)
 			{
 				// It will recur on every day of the week in some week or other
@@ -734,17 +733,17 @@ int KARecurrence::longestInterval() const
 				int first = -1;
 				int last  = -1;
 				int maxgap = 0;
-				for (QList<int>::ConstIterator it = months.begin();  it != months.end();  ++it)
+				for (int i = 0, end = months.count();  i < end;  ++i)
 				{
 					if (first < 0)
-						first = *it;
+						first = months[i];
 					else
 					{
-						int span = QDate(2001, last, 1).daysTo(QDate(2001, *it, 1));
+						int span = QDate(2001, last, 1).daysTo(QDate(2001, months[i], 1));
 						if (span > maxgap)
 							maxgap = span;
 					}
-					last = *it;
+					last = months[i];
 				}
 				int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
 				if (freq > 1)
@@ -809,9 +808,9 @@ bool KARecurrence::dailyType(const RecurrenceRule* rrule)
 		return true;
 	// Check that all the positions are zero (i.e. every time)
 	bool found = false;
-	for (QList<RecurrenceRule::WDayPos>::ConstIterator it = days.begin();  it != days.end();  ++it)
+	for (int i = 0, end = days.count();  i < end;  ++i)
 	{
-		if ((*it).pos() != 0)
+		if (days[i].pos() != 0)
 			return false;
 		found = true;
 	}

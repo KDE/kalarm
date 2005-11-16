@@ -45,16 +45,16 @@ const QByteArray APPNAME("KALARM");
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
 // - General alarm properties
 static const QByteArray TYPE_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
-static const QString FILE_TYPE                  = QString::fromLatin1("FILE");
-static const QString AT_LOGIN_TYPE              = QString::fromLatin1("LOGIN");
-static const QString REMINDER_TYPE              = QString::fromLatin1("REMINDER");
-static const QString REMINDER_ONCE_TYPE         = QString::fromLatin1("REMINDER_ONCE");
-static const QString ARCHIVE_REMINDER_ONCE_TYPE = QString::fromLatin1("ONCE");
-static const QString TIME_DEFERRAL_TYPE         = QString::fromLatin1("DEFERRAL");
-static const QString DATE_DEFERRAL_TYPE         = QString::fromLatin1("DATE_DEFERRAL");
-static const QString DISPLAYING_TYPE            = QString::fromLatin1("DISPLAYING");   // used only in displaying calendar
-static const QString PRE_ACTION_TYPE            = QString::fromLatin1("PRE");
-static const QString POST_ACTION_TYPE           = QString::fromLatin1("POST");
+static const QString FILE_TYPE                  = QLatin1String("FILE");
+static const QString AT_LOGIN_TYPE              = QLatin1String("LOGIN");
+static const QString REMINDER_TYPE              = QLatin1String("REMINDER");
+static const QString REMINDER_ONCE_TYPE         = QLatin1String("REMINDER_ONCE");
+static const QString ARCHIVE_REMINDER_ONCE_TYPE = QLatin1String("ONCE");
+static const QString TIME_DEFERRAL_TYPE         = QLatin1String("DEFERRAL");
+static const QString DATE_DEFERRAL_TYPE         = QLatin1String("DATE_DEFERRAL");
+static const QString DISPLAYING_TYPE            = QLatin1String("DISPLAYING");   // used only in displaying calendar
+static const QString PRE_ACTION_TYPE            = QLatin1String("PRE");
+static const QString POST_ACTION_TYPE           = QLatin1String("POST");
 // - Display alarm properties
 static const QByteArray FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
@@ -64,26 +64,26 @@ static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VO
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event categories
-static const QString DATE_ONLY_CATEGORY        = QString::fromLatin1("DATE");
-static const QString EMAIL_BCC_CATEGORY        = QString::fromLatin1("BCC");
-static const QString CONFIRM_ACK_CATEGORY      = QString::fromLatin1("ACKCONF");
-static const QString LATE_CANCEL_CATEGORY      = QString::fromLatin1("LATECANCEL;");
-static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;");
-static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
-static const QString KMAIL_SERNUM_CATEGORY     = QString::fromLatin1("KMAIL:");
-static const QString KORGANIZER_CATEGORY       = QString::fromLatin1("KORG");
-static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
-static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
-static const QString LOG_CATEGORY              = QString::fromLatin1("LOG:");
-static const QString xtermURL = QString::fromLatin1("xterm:");
+static const QString DATE_ONLY_CATEGORY        = QLatin1String("DATE");
+static const QString EMAIL_BCC_CATEGORY        = QLatin1String("BCC");
+static const QString CONFIRM_ACK_CATEGORY      = QLatin1String("ACKCONF");
+static const QString LATE_CANCEL_CATEGORY      = QLatin1String("LATECANCEL;");
+static const QString AUTO_CLOSE_CATEGORY       = QLatin1String("LATECLOSE;");
+static const QString TEMPL_AFTER_TIME_CATEGORY = QLatin1String("TMPLAFTTIME;");
+static const QString KMAIL_SERNUM_CATEGORY     = QLatin1String("KMAIL:");
+static const QString KORGANIZER_CATEGORY       = QLatin1String("KORG");
+static const QString ARCHIVE_CATEGORY          = QLatin1String("SAVE");
+static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
+static const QString LOG_CATEGORY              = QLatin1String("LOG:");
+static const QString xtermURL = QLatin1String("xterm:");
 
 // Event status strings
-static const QString DISABLED_STATUS           = QString::fromLatin1("DISABLED");
+static const QString DISABLED_STATUS           = QLatin1String("DISABLED");
 
-static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
-static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
-static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
-static const QString KORGANIZER_UID = QString::fromLatin1("-korg-");
+static const QString EXPIRED_UID    = QLatin1String("-exp-");
+static const QString DISPLAYING_UID = QLatin1String("-disp-");
+static const QString TEMPLATE_UID   = QLatin1String("-tmpl-");
+static const QString KORGANIZER_UID = QLatin1String("-korg-");
 
 struct AlarmData
 {
@@ -245,7 +245,7 @@ void KAEvent::set(const Event& event)
 		{
 			// It's the archive flag plus a reminder time and/or repeat-at-login flag
 			mArchive = true;
-			QStringList list = cats[i].mid(ARCHIVE_CATEGORIES.length()).split(QChar(';'), QString::SkipEmptyParts);
+			QStringList list = cats[i].mid(ARCHIVE_CATEGORIES.length()).split(QLatin1Char(';'), QString::SkipEmptyParts);
 			for (int j = 0;  j < list.count();  ++j)
 			{
 				if (list[j] == AT_LOGIN_TYPE)
@@ -540,7 +540,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 			data.action    = T_MESSAGE;
 			data.cleanText = AlarmText::fromCalendarText(alarm.text(), data.isEmailText);
 			QString property = alarm.customProperty(APPNAME, FONT_COLOUR_PROPERTY);
-			QStringList list = property.split(QChar(';'), QString::KeepEmptyParts);
+			QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
 			data.bgColour = QColor(255, 255, 255);   // white
 			data.fgColour = QColor(0, 0, 0);         // black
 			int n = list.count();
@@ -579,7 +579,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 				bool ok;
 				float fadeVolume;
 				int   fadeSecs = 0;
-				QStringList list = property.split(QChar(';'), QString::KeepEmptyParts);
+				QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
 				data.soundVolume = list[0].toFloat(&ok);
 				if (!ok)
 					data.soundVolume = -1;
@@ -609,7 +609,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	data.reminderOnceOnly = false;
 	data.type = KAAlarm::MAIN__ALARM;
 	QString property = alarm.customProperty(APPNAME, TYPE_PROPERTY);
-	QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+	QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
 	for (int i = 0, end = types.count();  i < end;  ++i)
 	{
 		QString type = types[i];
@@ -881,7 +881,7 @@ QString KAEvent::uid(const QString& id, Status status)
 	else
 	{
 		oldStatus = ACTIVE;
-		i = result.lastIndexOf('-');
+		i = result.lastIndexOf(QLatin1Char('-'));
 		len = 1;
 	}
 	if (status != oldStatus  &&  i > 0)
@@ -1011,7 +1011,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		if (params.count() > 0)
 		{
 			QString cat = ARCHIVE_CATEGORIES;
-			cat += params.join(QString::fromLatin1(";"));
+			cat += params.join(QLatin1String(";"));
 			cats.append(cat);
 		}
 		else
@@ -1142,7 +1142,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		case KAAlarm::AUDIO_ALARM:
 			alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
 			if (mSpeak)
-				alarm->setCustomProperty(APPNAME, SPEAK_PROPERTY, QString::fromLatin1("Y"));
+				alarm->setCustomProperty(APPNAME, SPEAK_PROPERTY, QLatin1String("Y"));
 			if (mRepeatSound)
 			{
 				alarm->setRepeatCount(-1);
@@ -2490,25 +2490,25 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adjustSummerTime)
 {
 	// KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
-	static const QChar   SEPARATOR        = ';';
-	static const QChar   LATE_CANCEL_CODE = 'C';
-	static const QChar   AT_LOGIN_CODE    = 'L';   // subsidiary alarm at every login
-	static const QChar   DEFERRAL_CODE    = 'D';   // extra deferred alarm
-	static const QString TEXT_PREFIX      = QString::fromLatin1("TEXT:");
-	static const QString FILE_PREFIX      = QString::fromLatin1("FILE:");
-	static const QString COMMAND_PREFIX   = QString::fromLatin1("CMD:");
+	static const QChar   SEPARATOR        = QLatin1Char(';');
+	static const QChar   LATE_CANCEL_CODE = QLatin1Char('C');
+	static const QChar   AT_LOGIN_CODE    = QLatin1Char('L');   // subsidiary alarm at every login
+	static const QChar   DEFERRAL_CODE    = QLatin1Char('D');   // extra deferred alarm
+	static const QString TEXT_PREFIX      = QLatin1String("TEXT:");
+	static const QString FILE_PREFIX      = QLatin1String("FILE:");
+	static const QString COMMAND_PREFIX   = QLatin1String("CMD:");
 
 	// KAlarm pre-0.9.2 codes held in the event's CATEGORY property
-	static const QString BEEP_CATEGORY    = QString::fromLatin1("BEEP");
+	static const QString BEEP_CATEGORY    = QLatin1String("BEEP");
 
 	// KAlarm pre-1.1.1 LATECANCEL category with no parameter
-	static const QString LATE_CANCEL_CAT = QString::fromLatin1("LATECANCEL");
+	static const QString LATE_CANCEL_CAT = QLatin1String("LATECANCEL");
 
 	// KAlarm pre-1.3.0 TMPLDEFTIME category with no parameter
-	static const QString TEMPL_DEF_TIME_CAT = QString::fromLatin1("TMPLDEFTIME");
+	static const QString TEMPL_DEF_TIME_CAT = QLatin1String("TMPLDEFTIME");
 
 	// KAlarm pre-1.3.1 XTERM category
-	static const QString EXEC_IN_XTERM_CAT  = QString::fromLatin1("XTERM");
+	static const QString EXEC_IN_XTERM_CAT  = QLatin1String("XTERM");
 
 	if (version >= KAlarm::Version(1,3,1))
 		return;
@@ -3170,7 +3170,7 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 	}
 
 	// Skip any spaces after the command
-	for ( ;  pos < posMax  &&  commandLine[pos] == ' ';  ++pos) ;
+	for ( ;  pos < posMax  &&  commandLine[pos] == QLatin1Char(' ');  ++pos) ;
 	arguments = commandLine.mid(pos);
 
 	alarm->setProcedureAlarm(command, arguments);

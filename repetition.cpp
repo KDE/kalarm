@@ -302,9 +302,9 @@ int RepetitionDlg::count() const
 	int interval = mTimeSelector->minutes();
 	if (interval)
 	{
-		if (mCountButton->isOn())
+		if (mCountButton->isChecked())
 			return mCount->value();
-		if (mDurationButton->isOn())
+		if (mDurationButton->isChecked())
 			return mDuration->minutes() / interval;
 	}
 	return 0;    // no repetition
@@ -319,7 +319,7 @@ void RepetitionDlg::intervalChanged(int minutes)
 	if (mTimeSelector->isChecked())
 	{
 		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / minutes : MAX_COUNT));
-		if (mCountButton->isOn())
+		if (mCountButton->isChecked())
 			countChanged(mCount->value());
 		else
 			durationChanged(mDuration->minutes());
@@ -367,8 +367,8 @@ void RepetitionDlg::repetitionToggled(bool on)
 	if (mMaxDuration == 0)
 		on = false;
 	mButtonBox->setEnabled(on);
-	mCount->setEnabled(on  &&  mCountButton->isOn());
-	mDuration->setEnabled(on  &&  mDurationButton->isOn());
+	mCount->setEnabled(on  &&  mCountButton->isChecked());
+	mDuration->setEnabled(on  &&  mDurationButton->isChecked());
 }
 
 /******************************************************************************
@@ -378,7 +378,7 @@ void RepetitionDlg::typeClicked()
 {
 	if (mTimeSelector->isChecked())
 	{
-		mCount->setEnabled(mCountButton->isOn());
-		mDuration->setEnabled(mDurationButton->isOn());
+		mCount->setEnabled(mCountButton->isChecked());
+		mDuration->setEnabled(mDurationButton->isChecked());
 	}
 }

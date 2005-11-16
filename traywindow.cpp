@@ -266,7 +266,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			if (Preferences::showTooltipAlarmTime())
 			{
 				item.text += KGlobal::locale()->formatTime(item.dateTime.time());
-				item.text += ' ';
+				item.text += QLatin1Char(' ');
 				space = true;
 			}
 			if (Preferences::showTooltipTimeToAlarm())
@@ -281,11 +281,11 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 					item.text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
 				else
 					item.text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
-				item.text += ' ';
+				item.text += QLatin1Char(' ');
 				space = true;
 			}
 			if (space)
-				item.text += ' ';
+				item.text += QLatin1Char(' ');
 			item.text += AlarmText::summary(event);
 
 			// Insert the item into the list in time-sorted order

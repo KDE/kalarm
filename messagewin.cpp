@@ -194,7 +194,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	// Set to save settings automatically, but don't save window size.
 	// File alarm window size is saved elsewhere.
-	setAutoSaveSettings(QString::fromLatin1("MessageWin"), false);
+	setAutoSaveSettings(QLatin1String("MessageWin"), false);
 	initView();
 	mWindowList.append(this);
 }
@@ -576,7 +576,7 @@ void MessageWin::initView()
 	if (mKMailSerialNumber)
 	{
 		// KMail button
-		QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1("kmail"), KIcon::MainToolbar);
+		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIcon::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setPixmap(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
@@ -589,7 +589,7 @@ void MessageWin::initView()
 		mKMailButton = 0;
 
 	// KAlarm button
-	QPixmap pixmap = iconLoader.loadIcon(QString::fromLatin1(kapp->aboutData()->appName()), KIcon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(QLatin1String(kapp->aboutData()->appName()), KIcon::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setPixmap(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
@@ -673,33 +673,33 @@ void MessageWin::saveProperties(KConfig* config)
 {
 	if (mShown  &&  !mErrorWindow)
 	{
-		config->writeEntry(QString::fromLatin1("EventID"), mEventID);
-		config->writeEntry(QString::fromLatin1("AlarmType"), mAlarmType);
-		config->writeEntry(QString::fromLatin1("Message"), mMessage);
-		config->writeEntry(QString::fromLatin1("Type"), mAction);
-		config->writeEntry(QString::fromLatin1("Font"), mFont);
-		config->writeEntry(QString::fromLatin1("BgColour"), mBgColour);
-		config->writeEntry(QString::fromLatin1("FgColour"), mFgColour);
-		config->writeEntry(QString::fromLatin1("ConfirmAck"), mConfirmAck);
+		config->writeEntry(QLatin1String("EventID"), mEventID);
+		config->writeEntry(QLatin1String("AlarmType"), mAlarmType);
+		config->writeEntry(QLatin1String("Message"), mMessage);
+		config->writeEntry(QLatin1String("Type"), mAction);
+		config->writeEntry(QLatin1String("Font"), mFont);
+		config->writeEntry(QLatin1String("BgColour"), mBgColour);
+		config->writeEntry(QLatin1String("FgColour"), mFgColour);
+		config->writeEntry(QLatin1String("ConfirmAck"), mConfirmAck);
 		if (mDateTime.isValid())
 		{
-			config->writeEntry(QString::fromLatin1("Time"), mDateTime.dateTime());
-			config->writeEntry(QString::fromLatin1("DateOnly"), mDateTime.isDateOnly());
+			config->writeEntry(QLatin1String("Time"), mDateTime.dateTime());
+			config->writeEntry(QLatin1String("DateOnly"), mDateTime.isDateOnly());
 		}
 #ifndef WITHOUT_ARTS
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
 			// Only need to restart sound file playing if it's being repeated
-			config->writePathEntry(QString::fromLatin1("AudioFile"), mAudioFile);
-			config->writeEntry(QString::fromLatin1("Volume"), static_cast<int>(mVolume * 100));
+			config->writePathEntry(QLatin1String("AudioFile"), mAudioFile);
+			config->writeEntry(QLatin1String("Volume"), static_cast<int>(mVolume * 100));
 		}
 #endif
-		config->writeEntry(QString::fromLatin1("Height"), height());
-		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
-		config->writeEntry(QString::fromLatin1("KMailSerial"), mKMailSerialNumber);
+		config->writeEntry(QLatin1String("Height"), height());
+		config->writeEntry(QLatin1String("NoDefer"), mNoDefer);
+		config->writeEntry(QLatin1String("KMailSerial"), mKMailSerialNumber);
 	}
 	else
-		config->writeEntry(QString::fromLatin1("Invalid"), true);
+		config->writeEntry(QLatin1String("Invalid"), true);
 }
 
 /******************************************************************************
@@ -709,30 +709,30 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	mInvalid           = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
-	mEventID           = config->readEntry(QString::fromLatin1("EventID"));
-	mAlarmType         = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
-	mMessage           = config->readEntry(QString::fromLatin1("Message"));
-	mAction            = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
-	mFont              = config->readFontEntry(QString::fromLatin1("Font"));
-	mBgColour          = config->readColorEntry(QString::fromLatin1("BgColour"));
-	mFgColour          = config->readColorEntry(QString::fromLatin1("FgColour"));
-	mConfirmAck        = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
+	mInvalid           = config->readBoolEntry(QLatin1String("Invalid"), false);
+	mEventID           = config->readEntry(QLatin1String("EventID"));
+	mAlarmType         = KAAlarm::Type(config->readNumEntry(QLatin1String("AlarmType")));
+	mMessage           = config->readEntry(QLatin1String("Message"));
+	mAction            = KAEvent::Action(config->readNumEntry(QLatin1String("Type")));
+	mFont              = config->readFontEntry(QLatin1String("Font"));
+	mBgColour          = config->readColorEntry(QLatin1String("BgColour"));
+	mFgColour          = config->readColorEntry(QLatin1String("FgColour"));
+	mConfirmAck        = config->readBoolEntry(QLatin1String("ConfirmAck"));
 	QDateTime invalidDateTime;
-	QDateTime dt       = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
-	bool dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	QDateTime dt       = config->readDateTimeEntry(QLatin1String("Time"), &invalidDateTime);
+	bool dateOnly      = config->readBoolEntry(QLatin1String("DateOnly"));
 	mDateTime.set(dt, dateOnly);
 #ifndef WITHOUT_ARTS
-	mAudioFile         = config->readPathEntry(QString::fromLatin1("AudioFile"));
-	mVolume            = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
+	mAudioFile         = config->readPathEntry(QLatin1String("AudioFile"));
+	mVolume            = static_cast<float>(config->readNumEntry(QLatin1String("Volume"))) / 100;
 	mFadeVolume        = -1;
 	mFadeSeconds       = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
-	mRestoreHeight     = config->readNumEntry(QString::fromLatin1("Height"));
-	mNoDefer           = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	mKMailSerialNumber = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
+	mRestoreHeight     = config->readNumEntry(QLatin1String("Height"));
+	mNoDefer           = config->readBoolEntry(QLatin1String("NoDefer"));
+	mKMailSerialNumber = config->readUnsignedLongNumEntry(QLatin1String("KMailSerial"));
 	mShowEdit          = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
@@ -790,7 +790,7 @@ void MessageWin::playAudio()
 			return;    // ensure zero volume doesn't play anything
 #ifdef WITHOUT_ARTS
 		QString play = mAudioFile;
-		QString file = QString::fromLatin1("file:");
+		QString file = QLatin1String("file:");
 		if (mAudioFile.startsWith(file))
 			play = mAudioFile.mid(file.length());
 		KAudioPlayer::play(QFile::encodeName(play));
@@ -869,7 +869,7 @@ void MessageWin::slotPlayAudio()
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
 			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
-			                         QString::null, QString::fromLatin1("KMixError"));
+			                         QString::null, QLatin1String("KMixError"));
 			kdWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
 		}
 	}
@@ -1582,7 +1582,7 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 	{
 		case KAlarm::TextPlain:
 		case KAlarm::TextFormatted:
-			mMimeType = type.latin1();
+			mMimeType = type.toLatin1();
 			// fall through to 'TextApplication'
 		case KAlarm::TextApplication:
 		default:
@@ -1599,7 +1599,7 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 			view->setText(text);
 			break;
 	}
-	setFilePath(QFileInfo(absPath).dirPath(true));
+	setFilePath(QFileInfo(absPath).absolutePath());
 }
 
 MWMimeSourceFactory::~MWMimeSourceFactory()

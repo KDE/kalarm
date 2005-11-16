@@ -135,7 +135,7 @@ bool Daemon::start()
 				return true;     // we're currently waiting for the daemon to start
 			// Start the alarm daemon. It is a KUniqueApplication, which means that
 			// there is automatically only one instance of the alarm daemon running.
-			QString execStr = locate("exe", QString::fromLatin1(DAEMON_APP_NAME));
+			QString execStr = locate("exe", QLatin1String(DAEMON_APP_NAME));
 			if (execStr.isEmpty())
 			{
 				KMessageBox::error(0, i18n("Alarm daemon not found."));
@@ -214,7 +214,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)")
-			                           .arg(QString::fromLatin1(DAEMON_APP_NAME))
+			                           .arg(QLatin1String(DAEMON_APP_NAME))
 			                           .arg(kapp->aboutData()->appName()));
 			break;
 		case KAlarmd::FAILURE:
@@ -228,7 +228,7 @@ void Daemon::registrationResult(bool reregister, int result)
 				{
 					mRegisterFailMsg = true;
 					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)")
-					                           .arg(QString::fromLatin1(DAEMON_APP_NAME)));
+					                           .arg(QLatin1String(DAEMON_APP_NAME)));
 				}
 			}
 			return;
@@ -269,7 +269,7 @@ void Daemon::checkIfStarted()
 	if (err)
 	{
 		kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
-		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QString::fromLatin1(DAEMON_APP_NAME)));
+		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QLatin1String(DAEMON_APP_NAME)));
 	}
 }
 
@@ -379,8 +379,8 @@ void Daemon::enableAutoStart(bool enable)
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
 		KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
-		adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
-		adconfig.writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), enable);
+		adconfig.setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
+		adconfig.writeEntry(QLatin1String(DAEMON_AUTOSTART_KEY), enable);
 		adconfig.sync();
 	}
 }
@@ -391,8 +391,8 @@ void Daemon::enableAutoStart(bool enable)
 bool Daemon::autoStart(bool defaultAutoStart)
 {
 	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
-	adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
-	return adconfig.readBoolEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), defaultAutoStart);
+	adconfig.setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
+	return adconfig.readBoolEntry(QLatin1String(DAEMON_AUTOSTART_KEY), defaultAutoStart);
 }
 
 /******************************************************************************

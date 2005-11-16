@@ -342,7 +342,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
  */
 QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& errorMessage) const
 {
-	if (mAtLoginButton->isOn())
+	if (mAtLoginButton->isChecked())
 		return 0;
 	const_cast<RecurrenceEdit*>(this)->mCurrStartDateTime = startDateTime;
 	if (mEndDateButton->isChecked())
@@ -449,12 +449,12 @@ void RecurrenceEdit::slotAnyTimeToggled(bool on)
  */
 void RecurrenceEdit::rangeTypeClicked()
 {
-	bool endDate = mEndDateButton->isOn();
+	bool endDate = mEndDateButton->isChecked();
 	mEndDateEdit->setEnabled(endDate);
 	mEndTimeEdit->setEnabled(endDate
-	                         &&  (mAtLoginButton->isOn() && !mEndAnyTimeCheckBox->isChecked()
-	                              ||  mSubDailyButton->isOn()));
-	bool repeatCount = mRepeatCountButton->isOn();
+	                         &&  (mAtLoginButton->isChecked() && !mEndAnyTimeCheckBox->isChecked()
+	                              ||  mSubDailyButton->isChecked()));
+	bool repeatCount = mRepeatCountButton->isChecked();
 	mRepeatCountEntry->setEnabled(repeatCount);
 	mRepeatCountLabel->setEnabled(repeatCount);
 }
@@ -589,7 +589,7 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
  */
 void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 {
-	if (!mEndDateButton->isOn())
+	if (!mEndDateButton->isChecked())
 		mEndDateEdit->setDate(end);
 }
 
@@ -724,10 +724,10 @@ void RecurrenceEdit::set(const KAEvent& event)
 				mWeeklyButton->setChecked(true);
 				mWeeklyRule->setFrequency(recurrence->frequency());
 				QBitArray rDays(7);
-				for (QList<RecurrenceRule::WDayPos>::ConstIterator it = posns.begin();  it != posns.end();  ++it)
+				for (int i = 0, end = posns.count();  i < end;  ++i)
 				{
-					if (!(*it).pos())
-						rDays.setBit((*it).day() - 1, 1);
+					if (!posns[i].pos())
+						rDays.setBit(posns[i].day() - 1, 1);
 				}
 				mWeeklyRule->setDays(rDays);
 				break;
@@ -1468,8 +1468,8 @@ void YearlyRule::setMonths(const QList<int>& mnths)
 	bool checked[12];
 	for (int i = 0;  i < 12;  ++i)
 		checked[i] = false;
-	for (QList<int>::ConstIterator it = mnths.begin();  it != mnths.end();  ++it)
-		checked[(*it) - 1] = true;
+	for (int i = 0, end = mnths.count();  i < end;  ++i)
+		checked[mnths[i] - 1] = true;
 	for (int i = 0;  i < 12;  ++i)
 		mMonthBox[i]->setChecked(checked[i]);
 }

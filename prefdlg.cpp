@@ -77,12 +77,12 @@
 // %C = temporary command file to execute in terminal
 // %W = temporary command file to execute in terminal, with 'sleep 86400' appended
 static QString xtermCommands[] = {
-	QString::fromLatin1("xterm -sb -hold -title %t -e %c"),
-	QString::fromLatin1("konsole --noclose -T %t -e ${SHELL:-sh} -c %c"),
-	QString::fromLatin1("gnome-terminal -t %t -e %W"),
-	QString::fromLatin1("eterm --pause -T %t -e %C"),    // some systems use eterm...
-	QString::fromLatin1("Eterm --pause -T %t -e %C"),    // while some use Eterm
-	QString::fromLatin1("rxvt -title %t -e ${SHELL:-sh} -c %w"),
+	QLatin1String("xterm -sb -hold -title %t -e %c"),
+	QLatin1String("konsole --noclose -T %t -e ${SHELL:-sh} -c %c"),
+	QLatin1String("gnome-terminal -t %t -e %W"),
+	QLatin1String("eterm --pause -T %t -e %C"),    // some systems use eterm...
+	QLatin1String("Eterm --pause -T %t -e %C"),    // while some use Eterm
+	QLatin1String("rxvt -title %t -e ${SHELL:-sh} -c %w"),
 	QString()       // end of list indicator - don't change!
 };
 
@@ -237,7 +237,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	mAutostartDaemon->setWhatsThis(
 	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
 	           "This option should always be checked unless you intend to discontinue use of KAlarm.")
-	          .arg(QString::fromLatin1(DAEMON_APP_NAME)));
+	          .arg(QLatin1String(DAEMON_APP_NAME)));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 
 	QGroupBox* group = new QGroupBox(i18n("Run Mode"), mPage);
@@ -383,7 +383,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
-		int i = cmd.indexOf(' ');    // find the end of the terminal window name
+		int i = cmd.indexOf(QLatin1Char(' '));    // find the end of the terminal window name
 		QString term = cmd.left(i > 0 ? i : 1000);
 		if (KStandardDirs::findExe(term).isEmpty())
 			continue;
@@ -456,7 +456,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
-			int i = cmd.indexOf(' ');    // find the end of the terminal window name
+			int i = cmd.indexOf(QLatin1Char(' '));    // find the end of the terminal window name
 			if (i > 0)
 				cmd = cmd.left(i);
 			if (KStandardDirs::findExe(cmd).isEmpty())
@@ -518,7 +518,7 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 
 void MiscPrefTab::slotRunModeToggled(bool)
 {
-	bool systray = (mRunInSystemTray->isOn());
+	bool systray = (mRunInSystemTray->isChecked());
 	mAutostartTrayIcon2->setEnabled(!systray);
 	mAutostartTrayIcon1->setEnabled(systray);
 	mDisableAlarmsIfStopped->setEnabled(systray);
@@ -1106,9 +1106,9 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::mDefaultPostAction       = mSpecialActions->postAction();
 	Preferences::mDefaultSound            = mSound->isChecked();
 	Preferences::mDefaultSoundFile        = mSoundFile->text();
-	Preferences::mDefaultSoundType        = mSpeak && mSpeak->isOn() ? SoundPicker::SPEAK
-	                                      : mFile->isOn()            ? SoundPicker::PLAY_FILE
-	                                      :                            SoundPicker::BEEP;
+	Preferences::mDefaultSoundType        = mSpeak && mSpeak->isChecked() ? SoundPicker::SPEAK
+	                                      : mFile->isChecked()            ? SoundPicker::PLAY_FILE
+	                                      :                                 SoundPicker::BEEP;
 #ifndef WITHOUT_ARTS
 	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
 #endif
@@ -1200,7 +1200,7 @@ void EditPrefTab::setSoundType(SoundPicker::Type type)
 
 QString EditPrefTab::validate()
 {
-	if (mFile->isOn()  &&  mSoundFile->text().isEmpty())
+	if (mFile->isChecked()  &&  mSoundFile->text().isEmpty())
 	{
 		mSoundFile->setFocus();
 		return i18n("You must enter a sound file when %1 is selected as the default sound type").arg(SoundPicker::i18n_File());;

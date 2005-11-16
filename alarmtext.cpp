@@ -32,17 +32,17 @@ QString AlarmText::mToPrefix;
 QString AlarmText::mCcPrefix;
 QString AlarmText::mDatePrefix;
 QString AlarmText::mSubjectPrefix;
-QString AlarmText::mFromPrefixEn    = QString::fromLatin1("From:");
-QString AlarmText::mToPrefixEn      = QString::fromLatin1("To:");
-QString AlarmText::mCcPrefixEn      = QString::fromLatin1("Cc:");
-QString AlarmText::mDatePrefixEn    = QString::fromLatin1("Date:");
-QString AlarmText::mSubjectPrefixEn = QString::fromLatin1("Subject:");
+QString AlarmText::mFromPrefixEn    = QLatin1String("From:");
+QString AlarmText::mToPrefixEn      = QLatin1String("To:");
+QString AlarmText::mCcPrefixEn      = QLatin1String("Cc:");
+QString AlarmText::mDatePrefixEn    = QLatin1String("Date:");
+QString AlarmText::mSubjectPrefixEn = QLatin1String("Subject:");
 
 
 void AlarmText::setText(const QString& text)
 {
 	mBody     = text;
-	mIsScript = text.startsWith(QString::fromLatin1("#!"));
+	mIsScript = text.startsWith(QLatin1String("#!"));
 	mIsEmail  = false;
 	mTo = mFrom = mCc = mTime = mSubject = QString::null;
 	mKMailSerialNum = 0;
@@ -284,5 +284,5 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 		return text.left(newline);    // text ends in newline
 	if (truncated)
 		*truncated = true;
-	return text.left(newline + (maxLines <= 1 ? 0 : 1)) + QString::fromLatin1("...");
+	return text.left(newline + (maxLines <= 1 ? 0 : 1)) + QLatin1String("...");
 }

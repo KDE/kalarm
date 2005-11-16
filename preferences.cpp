@@ -62,7 +62,7 @@ const bool                       Preferences::default_showTimeToAlarm         = 
 const int                        Preferences::default_tooltipAlarmCount       = 5;
 const bool                       Preferences::default_showTooltipAlarmTime    = true;
 const bool                       Preferences::default_showTooltipTimeToAlarm  = true;
-const QString                    Preferences::default_tooltipTimeToPrefix     = QString::fromLatin1("+");
+const QString                    Preferences::default_tooltipTimeToPrefix     = QLatin1String("+");
 const int                        Preferences::default_daemonTrayCheckInterval = 10;     // (seconds)
 const bool                       Preferences::default_emailCopyToKMail        = false;
 const bool                       Preferences::default_emailQueuedNotify       = false;
@@ -150,70 +150,70 @@ bool                       Preferences::mStartOfDayChanged;
 bool                       Preferences::mOldAutostartDaemon;
 
 
-static const QString defaultFeb29RecurType    = QString::fromLatin1("Mar1");
-static const QString defaultEmailClient       = QString::fromLatin1("kmail");
+static const QString defaultFeb29RecurType    = QLatin1String("Mar1");
+static const QString defaultEmailClient       = QLatin1String("kmail");
 
 // Config file entry names
-static const QString GENERAL_SECTION          = QString::fromLatin1("General");
-static const QString VERSION_NUM              = QString::fromLatin1("Version");
-static const QString MESSAGE_COLOURS          = QString::fromLatin1("MessageColours");
-static const QString MESSAGE_BG_COLOUR        = QString::fromLatin1("MessageBackgroundColour");
-static const QString MESSAGE_FONT             = QString::fromLatin1("MessageFont");
-static const QString RUN_IN_SYSTEM_TRAY       = QString::fromLatin1("RunInSystemTray");
-static const QString DISABLE_IF_STOPPED       = QString::fromLatin1("DisableAlarmsIfStopped");
-static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTray");
-static const QString FEB29_RECUR_TYPE         = QString::fromLatin1("Feb29Recur");
-static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
-static const QString MESSAGE_BUTTON_DELAY     = QString::fromLatin1("MessageButtonDelay");
-static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
-static const QString SHOW_ALARM_TIME          = QString::fromLatin1("ShowAlarmTime");
-static const QString SHOW_TIME_TO_ALARM       = QString::fromLatin1("ShowTimeToAlarm");
-static const QString TOOLTIP_ALARM_COUNT      = QString::fromLatin1("TooltipAlarmCount");
-static const QString TOOLTIP_ALARM_TIME       = QString::fromLatin1("ShowTooltipAlarmTime");
-static const QString TOOLTIP_TIME_TO_ALARM    = QString::fromLatin1("ShowTooltipTimeToAlarm");
-static const QString TOOLTIP_TIME_TO_PREFIX   = QString::fromLatin1("TooltipTimeToPrefix");
-static const QString DAEMON_TRAY_INTERVAL     = QString::fromLatin1("DaemonTrayCheckInterval");
-static const QString EMAIL_CLIENT             = QString::fromLatin1("EmailClient");
-static const QString EMAIL_COPY_TO_KMAIL      = QString::fromLatin1("EmailCopyToKMail");
-static const QString EMAIL_FROM               = QString::fromLatin1("EmailFrom");
-static const QString EMAIL_BCC_ADDRESS        = QString::fromLatin1("EmailBccAddress");
-static const QString CMD_XTERM_COMMAND        = QString::fromLatin1("CmdXTerm");
-static const QString START_OF_DAY             = QString::fromLatin1("StartOfDay");
-static const QString START_OF_DAY_CHECK       = QString::fromLatin1("Sod");
-static const QString DISABLED_COLOUR          = QString::fromLatin1("DisabledColour");
-static const QString EXPIRED_COLOUR           = QString::fromLatin1("ExpiredColour");
-static const QString EXPIRED_KEEP_DAYS        = QString::fromLatin1("ExpiredKeepDays");
-static const QString DEFAULTS_SECTION         = QString::fromLatin1("Defaults");
-static const QString DEF_LATE_CANCEL          = QString::fromLatin1("DefLateCancel");
-static const QString DEF_AUTO_CLOSE           = QString::fromLatin1("DefAutoClose");
-static const QString DEF_CONFIRM_ACK          = QString::fromLatin1("DefConfirmAck");
-static const QString DEF_COPY_TO_KORG         = QString::fromLatin1("DefCopyKOrg");
-static const QString DEF_SOUND                = QString::fromLatin1("DefSound");
-static const QString DEF_SOUND_TYPE           = QString::fromLatin1("DefSoundType");
-static const QString DEF_SOUND_FILE           = QString::fromLatin1("DefSoundFile");
-static const QString DEF_SOUND_VOLUME         = QString::fromLatin1("DefSoundVolume");
-static const QString DEF_SOUND_REPEAT         = QString::fromLatin1("DefSoundRepeat");
-static const QString DEF_CMD_SCRIPT           = QString::fromLatin1("DefCmdScript");
-static const QString DEF_CMD_LOG_TYPE         = QString::fromLatin1("DefCmdLogType");
-static const QString DEF_LOG_FILE             = QString::fromLatin1("DefLogFile");
-static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
-static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
-static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
-static const QString DEF_PRE_ACTION           = QString::fromLatin1("DefPreAction");
-static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostAction");
+static const QString GENERAL_SECTION          = QLatin1String("General");
+static const QString VERSION_NUM              = QLatin1String("Version");
+static const QString MESSAGE_COLOURS          = QLatin1String("MessageColours");
+static const QString MESSAGE_BG_COLOUR        = QLatin1String("MessageBackgroundColour");
+static const QString MESSAGE_FONT             = QLatin1String("MessageFont");
+static const QString RUN_IN_SYSTEM_TRAY       = QLatin1String("RunInSystemTray");
+static const QString DISABLE_IF_STOPPED       = QLatin1String("DisableAlarmsIfStopped");
+static const QString AUTOSTART_TRAY           = QLatin1String("AutostartTray");
+static const QString FEB29_RECUR_TYPE         = QLatin1String("Feb29Recur");
+static const QString MODAL_MESSAGES           = QLatin1String("ModalMessages");
+static const QString MESSAGE_BUTTON_DELAY     = QLatin1String("MessageButtonDelay");
+static const QString SHOW_EXPIRED_ALARMS      = QLatin1String("ShowExpiredAlarms");
+static const QString SHOW_ALARM_TIME          = QLatin1String("ShowAlarmTime");
+static const QString SHOW_TIME_TO_ALARM       = QLatin1String("ShowTimeToAlarm");
+static const QString TOOLTIP_ALARM_COUNT      = QLatin1String("TooltipAlarmCount");
+static const QString TOOLTIP_ALARM_TIME       = QLatin1String("ShowTooltipAlarmTime");
+static const QString TOOLTIP_TIME_TO_ALARM    = QLatin1String("ShowTooltipTimeToAlarm");
+static const QString TOOLTIP_TIME_TO_PREFIX   = QLatin1String("TooltipTimeToPrefix");
+static const QString DAEMON_TRAY_INTERVAL     = QLatin1String("DaemonTrayCheckInterval");
+static const QString EMAIL_CLIENT             = QLatin1String("EmailClient");
+static const QString EMAIL_COPY_TO_KMAIL      = QLatin1String("EmailCopyToKMail");
+static const QString EMAIL_FROM               = QLatin1String("EmailFrom");
+static const QString EMAIL_BCC_ADDRESS        = QLatin1String("EmailBccAddress");
+static const QString CMD_XTERM_COMMAND        = QLatin1String("CmdXTerm");
+static const QString START_OF_DAY             = QLatin1String("StartOfDay");
+static const QString START_OF_DAY_CHECK       = QLatin1String("Sod");
+static const QString DISABLED_COLOUR          = QLatin1String("DisabledColour");
+static const QString EXPIRED_COLOUR           = QLatin1String("ExpiredColour");
+static const QString EXPIRED_KEEP_DAYS        = QLatin1String("ExpiredKeepDays");
+static const QString DEFAULTS_SECTION         = QLatin1String("Defaults");
+static const QString DEF_LATE_CANCEL          = QLatin1String("DefLateCancel");
+static const QString DEF_AUTO_CLOSE           = QLatin1String("DefAutoClose");
+static const QString DEF_CONFIRM_ACK          = QLatin1String("DefConfirmAck");
+static const QString DEF_COPY_TO_KORG         = QLatin1String("DefCopyKOrg");
+static const QString DEF_SOUND                = QLatin1String("DefSound");
+static const QString DEF_SOUND_TYPE           = QLatin1String("DefSoundType");
+static const QString DEF_SOUND_FILE           = QLatin1String("DefSoundFile");
+static const QString DEF_SOUND_VOLUME         = QLatin1String("DefSoundVolume");
+static const QString DEF_SOUND_REPEAT         = QLatin1String("DefSoundRepeat");
+static const QString DEF_CMD_SCRIPT           = QLatin1String("DefCmdScript");
+static const QString DEF_CMD_LOG_TYPE         = QLatin1String("DefCmdLogType");
+static const QString DEF_LOG_FILE             = QLatin1String("DefLogFile");
+static const QString DEF_EMAIL_BCC            = QLatin1String("DefEmailBcc");
+static const QString DEF_RECUR_PERIOD         = QLatin1String("DefRecurPeriod");
+static const QString DEF_REMIND_UNITS         = QLatin1String("DefRemindUnits");
+static const QString DEF_PRE_ACTION           = QLatin1String("DefPreAction");
+static const QString DEF_POST_ACTION          = QLatin1String("DefPostAction");
 // Obsolete - compatibility with pre-1.2.1
-static const QString EMAIL_ADDRESS            = QString::fromLatin1("EmailAddress");
-static const QString EMAIL_USE_CONTROL_CENTRE = QString::fromLatin1("EmailUseControlCenter");
-static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QString::fromLatin1("EmailBccUseControlCenter");
+static const QString EMAIL_ADDRESS            = QLatin1String("EmailAddress");
+static const QString EMAIL_USE_CONTROL_CENTRE = QLatin1String("EmailUseControlCenter");
+static const QString EMAIL_BCC_USE_CONTROL_CENTRE = QLatin1String("EmailBccUseControlCenter");
 
 // Values for EmailFrom entry
-static const QString FROM_CONTROL_CENTRE      = QString::fromLatin1("@ControlCenter");
-static const QString FROM_KMAIL               = QString::fromLatin1("@KMail");
+static const QString FROM_CONTROL_CENTRE      = QLatin1String("@ControlCenter");
+static const QString FROM_KMAIL               = QLatin1String("@KMail");
 
 // Config file entry names for notification messages
-const QString Preferences::QUIT_WARN              = QString::fromLatin1("QuitWarn");
-const QString Preferences::CONFIRM_ALARM_DELETION = QString::fromLatin1("ConfirmAlarmDeletion");
-const QString Preferences::EMAIL_QUEUED_NOTIFY    = QString::fromLatin1("EmailQueuedNotify");
+const QString Preferences::QUIT_WARN              = QLatin1String("QuitWarn");
+const QString Preferences::CONFIRM_ALARM_DELETION = QLatin1String("ConfirmAlarmDeletion");
+const QString Preferences::EMAIL_QUEUED_NOTIFY    = QLatin1String("EmailQueuedNotify");
 
 static const int SODxor = 0x82451630;
 inline int Preferences::startOfDayCheck()
@@ -302,7 +302,7 @@ void Preferences::read()
 	mDaemonTrayCheckInterval  = static_cast<int>(config->readUnsignedNumEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval));
 	if (mDaemonTrayCheckInterval < 1)
 		mDaemonTrayCheckInterval = 1;
-	QByteArray client         = config->readEntry(EMAIL_CLIENT, defaultEmailClient).local8Bit();  // don't use readPathEntry() here (values are hard-coded)
+	QByteArray client         = config->readEntry(EMAIL_CLIENT, defaultEmailClient).toLocal8Bit();  // don't use readPathEntry() here (values are hard-coded)
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
 	mEmailCopyToKMail         = config->readBoolEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
 	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
@@ -351,7 +351,7 @@ void Preferences::read()
 	int recurPeriod           = config->readNumEntry(DEF_RECUR_PERIOD, default_defaultRecurPeriod);
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
-	QByteArray feb29          = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
+	QByteArray feb29          = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).toLocal8Bit();
 	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
 	int reminderUnits         = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
 	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
@@ -593,7 +593,7 @@ void Preferences::convertOldPrefs()
 		sync = true;
 	}
 	// Convert KAlarm 1.2 preferences
-	static const QString DEF_CMD_XTERM = QString::fromLatin1("DefCmdXterm");
+	static const QString DEF_CMD_XTERM = QLatin1String("DefCmdXterm");
 	config->setGroup(DEFAULTS_SECTION);
 	if (config->hasKey(DEF_CMD_XTERM))
 	{

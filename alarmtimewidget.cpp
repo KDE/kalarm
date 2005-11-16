@@ -219,7 +219,7 @@ DateTime AlarmTimeWidget::getDateTime(bool checkExpired, bool showErrorMessage, 
 		*errorWidget = 0;
 	QTime nowt = QTime::currentTime();
 	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
-	if (mAtTimeRadio->isOn())
+	if (mAtTimeRadio->isChecked())
 	{
 		bool anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
 		if (!mDateEdit->isValid()  ||  !mTimeEdit->isValid())
@@ -409,7 +409,7 @@ void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
 void AlarmTimeWidget::setAnyTime()
 {
 	int old = mAnyTime;
-	mAnyTime = (mAtTimeRadio->isOn() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked()) ? 1 : 0;
+	mAnyTime = (mAtTimeRadio->isChecked() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked()) ? 1 : 0;
 	if (mAnyTime != old)
 		emit anyTimeToggled(mAnyTime);
 }
@@ -422,7 +422,7 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 	if (mAnyTimeCheckBox)
 	{
 		mAnyTimeAllowed = enable;
-		bool at = mAtTimeRadio->isOn();
+		bool at = mAtTimeRadio->isChecked();
 		mAnyTimeCheckBox->setEnabled(enable && at);
 		if (at)
 			mTimeEdit->setEnabled(!enable || !mAnyTimeCheckBox->isChecked());
@@ -470,7 +470,7 @@ void AlarmTimeWidget::slotTimer()
 		setMaxDelayTime(now);
 	}
 
-	if (mAtTimeRadio->isOn())
+	if (mAtTimeRadio->isChecked())
 		dateTimeChanged();
 	else
 		delayTimeChanged(mDelayTimeEdit->value());
@@ -483,7 +483,7 @@ void AlarmTimeWidget::slotTimer()
 */
 void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 {
-	bool at = mAtTimeRadio->isOn();
+	bool at = mAtTimeRadio->isChecked();
 	mDateEdit->setEnabled(at);
 	mTimeEdit->setEnabled(at && (!mAnyTimeAllowed || !mAnyTimeCheckBox || !mAnyTimeCheckBox->isChecked()));
 	if (mAnyTimeCheckBox)
@@ -502,7 +502,7 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 */
 void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 {
-	mTimeEdit->setEnabled((!mAnyTimeAllowed || !on) && mAtTimeRadio->isOn());
+	mTimeEdit->setEnabled((!mAnyTimeAllowed || !on) && mAtTimeRadio->isChecked());
 	setAnyTime();
 }
 

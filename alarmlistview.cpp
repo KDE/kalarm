@@ -287,7 +287,7 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		// Create a calendar object containing all the currently selected alarms
 		kdDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
 		mMousePressed = false;
-		KCal::CalendarLocal cal(QString::fromLatin1("UTC"));
+		KCal::CalendarLocal cal(QLatin1String("UTC"));
 		cal.setLocalTime();    // write out using local time (i.e. no time zone)
 		QList<EventListViewItemBase*> items = selectedItems();
 		if (items.isEmpty())
@@ -447,7 +447,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 	QString dateTimeText = locale->formatDate(dateTime.date(), true);
 	if (!dateTime.isDateOnly())
 	{
-		dateTimeText += ' ';
+		dateTimeText += QLatin1Char(' ');
 		QString time = locale->formatTime(dateTime.time());
 		if (mTimeHourPos == -2)
 		{
@@ -458,16 +458,16 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 			{
 				QString fmt = locale->timeFormat();
 				int i = fmt.indexOf(QRegExp("%[kl]"));   // check if leading zeroes are omitted
-				if (i >= 0  &&  i == fmt.indexOf('%'))   // and whether the hour is first
+				if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
 					mTimeHourPos = i;             // yes, so need to align
 			}
 		}
 		if (mTimeHourPos >= 0  &&  (int)time.length() > mTimeHourPos + 1
 		&&  time[mTimeHourPos].isDigit()  &&  !time[mTimeHourPos + 1].isDigit())
-			dateTimeText += '~';     // improve alignment of times with no leading zeroes
+			dateTimeText += QLatin1Char('~');     // improve alignment of times with no leading zeroes
 		dateTimeText += time;
 	}
-	return dateTimeText + ' ';
+	return dateTimeText + QLatin1Char(' ');
 }
 
 /******************************************************************************

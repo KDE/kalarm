@@ -499,7 +499,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 	{
 		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
 		                              QString::null, i18n("Enable"), i18n("Keep Disabled"),
-		                              QString::fromLatin1("EditEnableAlarms"))
+		                              QLatin1String("EditEnableAlarms"))
 		                == KMessageBox::Yes)
 			Daemon::setAlarmsEnabled();
 	}
@@ -581,7 +581,7 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 	if (!kapp->dcopClient()->isApplicationRegistered(program))
 	{
 		// KOrganizer is not already running, so start it
-		if (KToolInvocation::startServiceByDesktopName(QString::fromLatin1(program), QString::null, &errorMessage, &dcopName))
+		if (KToolInvocation::startServiceByDesktopName(QLatin1String(program), QString::null, &errorMessage, &dcopName))
 		{
 			kdError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;
@@ -606,7 +606,7 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 bool readConfigWindowSize(const char* window, QSize& result)
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1(window));
+	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
 	QSize s = QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), 0),
 	                config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), 0));
@@ -623,7 +623,7 @@ bool readConfigWindowSize(const char* window, QSize& result)
 void writeConfigWindowSize(const char* window, const QSize& size)
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1(window));
+	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
 	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
 	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
@@ -642,7 +642,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
 	//      if the representation returned by this method changes.
 	if (subVersion)
 		*subVersion = QString::null;
-	QStringList nums = version.split(QChar('.'), QString::KeepEmptyParts);
+	QStringList nums = version.split(QLatin1Char('.'), QString::KeepEmptyParts);
 	int count = nums.count();
 	if (count < 2  ||  count > 3)
 		return 0;
@@ -685,20 +685,20 @@ FileType fileType(const QString& mimetype)
 	static const char* formattedTextTypes[] = {
 		"html", "xml", 0 };
 
-	if (mimetype.startsWith(QString::fromLatin1("image/")))
+	if (mimetype.startsWith(QLatin1String("image/")))
 		return Image;
-	int slash = mimetype.indexOf('/');
+	int slash = mimetype.indexOf(QLatin1Char('/'));
 	if (slash < 0)
 		return Unknown;
 	QString type = mimetype.mid(slash + 1);
-	const char* typel = type.latin1();
-	if (mimetype.startsWith(QString::fromLatin1("application")))
+	const char* typel = type.toLatin1();
+	if (mimetype.startsWith(QLatin1String("application")))
 	{
 		for (int i = 0;  applicationTypes[i];  ++i)
 			if (!strcmp(typel, applicationTypes[i]))
 				return TextApplication;
 	}
-	else if (mimetype.startsWith(QString::fromLatin1("text")))
+	else if (mimetype.startsWith(QLatin1String("text")))
 	{
 		for (int i = 0;  formattedTextTypes[i];  ++i)
 			if (!strcmp(typel, formattedTextTypes[i]))
@@ -761,11 +761,11 @@ QString stripAccel(const QString& text)
 	QChar *cin   = cout;
 	while (len)
 	{
-		if ( *cin == '&' )
+		if (*cin == QLatin1Char('&'))
 		{
 			++cin;
 			--len;
-			if ( !len )
+			if (!len)
 				break;
 		}
 		*cout = *cin;

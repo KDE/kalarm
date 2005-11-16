@@ -103,7 +103,7 @@ QString TimeSpinBox::textFromValue(int v) const
 int TimeSpinBox::valueFromText(const QString&) const
 {
 	QString text = cleanText();
-	int colon = text.indexOf(QChar(':'));
+	int colon = text.indexOf(QLatin1Char(':'));
 	if (colon >= 0)
 	{
 		// [h]:m format for any time value
@@ -180,7 +180,7 @@ void TimeSpinBox::setValid(bool valid)
 	{
 		mInvalid = true;
 		setMinValue(mMinimumValue - 1);
-		setSpecialValueText(QString::fromLatin1("**:**"));
+		setSpecialValueText(QLatin1String("**:**"));
 		SpinBox2::setValue(mMinimumValue - 1);
 	}
 }
@@ -256,7 +256,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
 	bool ok;
 	int hr = 0;
 	int mn = 0;
-	int colon = cleanText.indexOf(QChar(':'));
+	int colon = cleanText.indexOf(QLatin1Char(':'));
 	if (colon >= 0)
 	{
 		QString minute = cleanText.mid(colon + 1);

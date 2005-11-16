@@ -82,7 +82,7 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 	const QString& prodid = calendar.productId();
 
 	// Find the KAlarm identifier
-	QString progname = QString::fromLatin1(" KAlarm ");
+	QString progname = QLatin1String(" KAlarm ");
 	int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
 	if (i < 0)
 	{
@@ -96,8 +96,8 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 
 	// Extract the KAlarm version string
 	QString ver = prodid.mid(i + progname.length()).trimmed();
-	i = ver.indexOf('/');
-	int j = ver.indexOf(' ');
+	i = ver.indexOf(QLatin1Char('/'));
+	int j = ver.indexOf(QLatin1Char(' '));
 	if (j >= 0  &&  j < i)
 		i = j;
 	if (i <= 0)
@@ -127,7 +127,7 @@ bool CalendarCompat::isUTC(const QString& localFile)
 
 	// Extract the CREATED property for the first VEVENT from the calendar
 	bool result = false;
-	icalcomponent* calendar = icalcomponent_new_from_string(text.local8Bit().data());
+	icalcomponent* calendar = icalcomponent_new_from_string(text.toLocal8Bit().data());
 	if (calendar)
 	{
 		if (icalcomponent_isa(calendar) == ICAL_VCALENDAR_COMPONENT)

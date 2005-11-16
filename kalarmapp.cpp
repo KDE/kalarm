@@ -111,7 +111,7 @@ KAlarmApp::KAlarmApp()
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
-	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
+	                          QLatin1String("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
@@ -124,8 +124,8 @@ KAlarmApp::KAlarmApp()
 		connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
 
 		KConfig* config = KGlobal::config();
-		config->setGroup(QString::fromLatin1("General"));
-		mNoSystemTray           = config->readBoolEntry(QString::fromLatin1("NoSystemTray"), false);
+		config->setGroup(QLatin1String("General"));
+		mNoSystemTray           = config->readBoolEntry(QLatin1String("NoSystemTray"), false);
 		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
@@ -143,7 +143,7 @@ KAlarmApp::KAlarmApp()
 	if (!mSpeechEnabled)
 		kdDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
 	// Check if KOrganizer is installed
-	QString korg = QString::fromLatin1("korganizer");
+	QString korg = QLatin1String("korganizer");
 	mKOrganizerEnabled = !locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
 	if (!mKOrganizerEnabled)
 		kdDebug(5950) << "KAlarmApp::KAlarmApp(): KOrganizer options disabled (KOrganizer not found)" << endl;
@@ -209,7 +209,7 @@ bool KAlarmApp::restoreSession()
 	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
 	{
 		QString type = KMainWindow::classNameOfToplevel(i);
-		if (type == QString::fromLatin1("MainWindow"))
+		if (type == QLatin1String("MainWindow"))
 		{
 			MainWindow* win = MainWindow::create(true);
 			win->restore(i, false);
@@ -218,7 +218,7 @@ bool KAlarmApp::restoreSession()
 			else
 				win->show();
 		}
-		else if (type == QString::fromLatin1("MessageWin"))
+		else if (type == QLatin1String("MessageWin"))
 		{
 			MessageWin* win = new MessageWin;
 			win->restore(i, false);
@@ -333,9 +333,9 @@ int KAlarmApp::newInstance()
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
 				if (!count)
-					USAGE(i18n("%1 requires %2, %3 or %4").arg(QString::fromLatin1("--calendarURL")).arg(QString::fromLatin1("--handleEvent")).arg(QString::fromLatin1("--triggerEvent")).arg(QString::fromLatin1("--cancelEvent")))
+					USAGE(i18n("%1 requires %2, %3 or %4").arg(QLatin1String("--calendarURL")).arg(QLatin1String("--handleEvent")).arg(QLatin1String("--triggerEvent")).arg(QLatin1String("--cancelEvent")))
 				if (count > 1)
-					USAGE(i18n("%1, %2, %3 mutually exclusive").arg(QString::fromLatin1("--handleEvent")).arg(QString::fromLatin1("--triggerEvent")).arg(QString::fromLatin1("--cancelEvent")));
+					USAGE(i18n("%1, %2, %3 mutually exclusive").arg(QLatin1String("--handleEvent")).arg(QLatin1String("--triggerEvent")).arg(QLatin1String("--cancelEvent")));
 				if (!initCheck(true))   // open the calendar, don't register with daemon yet
 				{
 					exitCode = 1;
@@ -345,7 +345,7 @@ int KAlarmApp::newInstance()
 				{
 					QString calendarUrl = args->getOption("calendarURL");
 					if (KURL(calendarUrl).url() != AlarmCalendar::activeCalendar()->urlString())
-						USAGE(i18n("%1: wrong calendar file").arg(QString::fromLatin1("--calendarURL")))
+						USAGE(i18n("%1: wrong calendar file").arg(QLatin1String("--calendarURL")))
 				}
 				QString eventID = args->getOption(option);
 				args->clear();      // free up memory
@@ -370,11 +370,11 @@ int KAlarmApp::newInstance()
 				{
 					kdDebug(5950)<<"KAlarmApp::newInstance(): file\n";
 					if (args->isSet("exec"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--exec")).arg(QString::fromLatin1("--file")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--exec")).arg(QLatin1String("--file")))
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--mail")).arg(QString::fromLatin1("--file")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--mail")).arg(QLatin1String("--file")))
 					if (args->count())
-						USAGE(i18n("message incompatible with %1").arg(QString::fromLatin1("--file")))
+						USAGE(i18n("message incompatible with %1").arg(QLatin1String("--file")))
 					alMessage = args->getOption("file");
 					action = KAEvent::FILE;
 				}
@@ -382,7 +382,7 @@ int KAlarmApp::newInstance()
 				{
 					kdDebug(5950)<<"KAlarmApp::newInstance(): exec\n";
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--mail")).arg(QString::fromLatin1("--exec")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--mail")).arg(QLatin1String("--exec")))
 					alMessage = args->getOption("exec");
 					int n = args->count();
 					for (int i = 0;  i < n;  ++i)
@@ -404,7 +404,7 @@ int KAlarmApp::newInstance()
 					{
 						QString addr = QString::fromLocal8Bit(*i);
 						if (!KAMail::checkAddress(addr))
-							USAGE(i18n("%1: invalid email address").arg(QString::fromLatin1("--mail")))
+							USAGE(i18n("%1: invalid email address").arg(QLatin1String("--mail")))
 						alAddresses += KCal::Person(QString::null, addr);
 					}
 					params = args->getOptionList("attach");
@@ -422,13 +422,13 @@ int KAlarmApp::newInstance()
 				if (action != KAEvent::EMAIL)
 				{
 					if (args->isSet("subject"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--subject")).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--subject")).arg(QLatin1String("--mail")))
 					if (args->isSet("from-id"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--from-id")).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--from-id")).arg(QLatin1String("--mail")))
 					if (args->isSet("attach"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--attach")).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--attach")).arg(QLatin1String("--mail")))
 					if (args->isSet("bcc"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--bcc")).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--bcc")).arg(QLatin1String("--mail")))
 				}
 
 				bool      alarmNoTime = false;
@@ -447,7 +447,7 @@ int KAlarmApp::newInstance()
 						colourText.replace(0, 2, "#");
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--color")))
+						USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--color")))
 				}
 				if (args->isSet("colorfg"))
 				{
@@ -458,14 +458,14 @@ int KAlarmApp::newInstance()
 						colourText.replace(0, 2, "#");
 					fgColour.setNamedColor(colourText);
 					if (!fgColour.isValid())
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--colorfg")))
+						USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--colorfg")))
 				}
 
 				if (args->isSet("time"))
 				{
 					QByteArray dateTime = args->getOption("time");
 					if (!convWakeTime(dateTime, alarmTime, alarmNoTime))
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--time")))
+						USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--time")))
 				}
 				else
 					alarmTime = QDateTime::currentDateTime();
@@ -474,9 +474,9 @@ int KAlarmApp::newInstance()
 				if (haveRecurrence)
 				{
 					if (args->isSet("login"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--recurrence")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--login")).arg(QLatin1String("--recurrence")))
 					if (args->isSet("until"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--recurrence")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--until")).arg(QLatin1String("--recurrence")))
 					QByteArray rule = args->getOption("recurrence");
 					recurrence.set(QString::fromLocal8Bit(static_cast<const char*>(rule)));
 				}
@@ -485,24 +485,24 @@ int KAlarmApp::newInstance()
 					// Repeat count is specified
 					int count;
 					if (args->isSet("login"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--login")).arg(QString::fromLatin1("--interval")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--login")).arg(QLatin1String("--interval")))
 					bool ok;
 					if (args->isSet("repeat"))
 					{
 						count = args->getOption("repeat").toInt(&ok);
 						if (!ok || !count || count < -1 || (count < 0 && haveRecurrence))
-							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--repeat")))
+							USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--repeat")))
 					}
 					else if (haveRecurrence)
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--interval")).arg(QLatin1String("--repeat")))
 					else if (args->isSet("until"))
 					{
 						count = 0;
 						QByteArray dateTime = args->getOption("until");
 						if (!convWakeTime(dateTime, endTime, alarmNoTime))
-							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--until")))
+							USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--until")))
 						if (endTime < alarmTime)
-							USAGE(i18n("%1 earlier than %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--time")))
+							USAGE(i18n("%1 earlier than %2").arg(QLatin1String("--until")).arg(QLatin1String("--time")))
 					}
 					else
 						count = -1;
@@ -512,16 +512,16 @@ int KAlarmApp::newInstance()
 					KARecurrence::Type recurType;
 					if (!convInterval(args->getOption("interval"), recurType, interval, !haveRecurrence)
 					||  interval < 0)
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--interval")))
+						USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--interval")))
 					if (alarmNoTime  &&  recurType == KARecurrence::MINUTELY)
-						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QString::fromLatin1("--interval")))
+						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(QLatin1String("--interval")))
 
 					if (haveRecurrence)
 					{
 						// There is a also a recurrence specified, so set up a simple repetition
 						int longestInterval = recurrence.longestInterval();
 						if (count * interval > longestInterval)
-							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));
+							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QLatin1String("--interval")).arg(QLatin1String("--repeat")).arg(QLatin1String("--recurrence")));
 						repeatCount    = count;
 						repeatInterval = interval;
 					}
@@ -535,9 +535,9 @@ int KAlarmApp::newInstance()
 				else
 				{
 					if (args->isSet("repeat"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--interval")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--repeat")).arg(QLatin1String("--interval")))
 					if (args->isSet("until"))
-						USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--until")).arg(QString::fromLatin1("--interval")))
+						USAGE(i18n("%1 requires %2").arg(QLatin1String("--until")).arg(QLatin1String("--interval")))
 				}
 
 				QByteArray audioFile;
@@ -551,29 +551,29 @@ int KAlarmApp::newInstance()
 				{
 					// Play a sound with the alarm
 					if (audioRepeat  &&  args->isSet("play"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--play")).arg(QLatin1String("--play-repeat")))
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--beep")).arg(QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					if (args->isSet("speak"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--speak")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--speak")).arg(QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
 					if (args->isSet("volume"))
 					{
 						bool ok;
 						int volumepc = args->getOption("volume").toInt(&ok);
 						if (!ok  ||  volumepc < 0  ||  volumepc > 100)
-							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--volume")))
+							USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--volume")))
 						audioVolume = static_cast<float>(volumepc) / 100;
 					}
 				}
 				else if (args->isSet("volume"))
-					USAGE(i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--volume")).arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
+					USAGE(i18n("%1 requires %2 or %3").arg(QLatin1String("--volume")).arg(QLatin1String("--play")).arg(QLatin1String("--play-repeat")))
 				if (args->isSet("speak"))
 				{
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1("--speak")))
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--beep")).arg(QLatin1String("--speak")))
 					if (!mSpeechEnabled)
-						USAGE(i18n("%1 requires speech synthesis to be configured using KTTSD").arg(QString::fromLatin1("--speak")))
+						USAGE(i18n("%1 requires speech synthesis to be configured using KTTSD").arg(QLatin1String("--speak")))
 				}
 				int reminderMinutes = 0;
 				bool onceOnly = args->isSet("reminder-once");
@@ -581,12 +581,12 @@ int KAlarmApp::newInstance()
 				{
 					// Issue a reminder alarm in advance of the main alarm
 					if (onceOnly  &&  args->isSet("reminder"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--reminder")).arg(QString::fromLatin1("--reminder-once")))
-					QString opt = onceOnly ? QString::fromLatin1("--reminder-once") : QString::fromLatin1("--reminder");
+						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--reminder")).arg(QLatin1String("--reminder-once")))
+					QString opt = onceOnly ? QLatin1String("--reminder-once") : QLatin1String("--reminder");
 					if (args->isSet("exec"))
-						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--exec")))
+						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QLatin1String("--exec")))
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--mail")))
+						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QLatin1String("--mail")))
 					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
 					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recurType, reminderMinutes);
@@ -613,10 +613,10 @@ int KAlarmApp::newInstance()
 					KARecurrence::Type recurType;
 					bool ok = convInterval(args->getOption("late-cancel"), recurType, lateCancel, false);
 					if (!ok  ||  lateCancel <= 0)
-						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("late-cancel")))
+						USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("late-cancel")))
 				}
 				else if (args->isSet("auto-close"))
-					USAGE(i18n("%1 requires %2").arg(QString::fromLatin1("--auto-close")).arg(QString::fromLatin1("--late-cancel")))
+					USAGE(i18n("%1 requires %2").arg(QLatin1String("--auto-close")).arg(QLatin1String("--late-cancel")))
 
 				int flags = KAEvent::DEFAULT_FONT;
 				if (args->isSet("ack-confirm"))
@@ -660,52 +660,52 @@ int KAlarmApp::newInstance()
 				// No arguments - run interactively & display the main window
 				kdDebug(5950)<<"KAlarmApp::newInstance(): interactive\n";
 				if (args->isSet("ack-confirm"))
-					usage += QString::fromLatin1("--ack-confirm ");
+					usage += QLatin1String("--ack-confirm ");
 				if (args->isSet("attach"))
-					usage += QString::fromLatin1("--attach ");
+					usage += QLatin1String("--attach ");
 				if (args->isSet("auto-close"))
-					usage += QString::fromLatin1("--auto-close ");
+					usage += QLatin1String("--auto-close ");
 				if (args->isSet("bcc"))
-					usage += QString::fromLatin1("--bcc ");
+					usage += QLatin1String("--bcc ");
 				if (args->isSet("beep"))
-					usage += QString::fromLatin1("--beep ");
+					usage += QLatin1String("--beep ");
 				if (args->isSet("color"))
-					usage += QString::fromLatin1("--color ");
+					usage += QLatin1String("--color ");
 				if (args->isSet("colorfg"))
-					usage += QString::fromLatin1("--colorfg ");
+					usage += QLatin1String("--colorfg ");
 				if (args->isSet("disable"))
-					usage += QString::fromLatin1("--disable ");
+					usage += QLatin1String("--disable ");
 				if (args->isSet("from-id"))
-					usage += QString::fromLatin1("--from-id ");
+					usage += QLatin1String("--from-id ");
 				if (args->isSet("korganizer"))
-					usage += QString::fromLatin1("--korganizer ");
+					usage += QLatin1String("--korganizer ");
 				if (args->isSet("late-cancel"))
-					usage += QString::fromLatin1("--late-cancel ");
+					usage += QLatin1String("--late-cancel ");
 				if (args->isSet("login"))
-					usage += QString::fromLatin1("--login ");
+					usage += QLatin1String("--login ");
 				if (args->isSet("play"))
-					usage += QString::fromLatin1("--play ");
+					usage += QLatin1String("--play ");
 #ifndef WITHOUT_ARTS
 				if (args->isSet("play-repeat"))
-					usage += QString::fromLatin1("--play-repeat ");
+					usage += QLatin1String("--play-repeat ");
 #endif
 				if (args->isSet("reminder"))
-					usage += QString::fromLatin1("--reminder ");
+					usage += QLatin1String("--reminder ");
 				if (args->isSet("reminder-once"))
-					usage += QString::fromLatin1("--reminder-once ");
+					usage += QLatin1String("--reminder-once ");
 				if (args->isSet("speak"))
-					usage += QString::fromLatin1("--speak ");
+					usage += QLatin1String("--speak ");
 				if (args->isSet("subject"))
-					usage += QString::fromLatin1("--subject ");
+					usage += QLatin1String("--subject ");
 				if (args->isSet("time"))
-					usage += QString::fromLatin1("--time ");
+					usage += QLatin1String("--time ");
 #ifndef WITHOUT_ARTS
 				if (args->isSet("volume"))
-					usage += QString::fromLatin1("--volume ");
+					usage += QLatin1String("--volume ");
 #endif
 				if (!usage.isEmpty())
 				{
-					usage += i18n(": option(s) only valid with a message/%1/%2").arg(QString::fromLatin1("--file")).arg(QString::fromLatin1("--exec"));
+					usage += i18n(": option(s) only valid with a message/%1/%2").arg(QLatin1String("--file")).arg(QLatin1String("--exec"));
 					break;
 				}
 
@@ -724,8 +724,8 @@ int KAlarmApp::newInstance()
 		{
 			// Note: we can't use args->usage() since that also quits any other
 			// running 'instances' of the program.
-			std::cerr << usage.local8Bit().data()
-			          << i18n("\nUse --help to get a list of available command line options.\n").local8Bit().data();
+			std::cerr << usage.toLocal8Bit().data()
+			          << i18n("\nUse --help to get a list of available command line options.\n").toLocal8Bit().data();
 			exitCode = 1;
 		}
 	}
@@ -1033,8 +1033,8 @@ bool KAlarmApp::checkSystemTray()
 		// tray and alarms are disabled when KAlarm is not running, registering with
 		// NO_START_NOTIFY could result in alarms never being seen.
 		KConfig* config = KGlobal::config();
-		config->setGroup(QString::fromLatin1("General"));
-		config->writeEntry(QString::fromLatin1("NoSystemTray"), mNoSystemTray);
+		config->setGroup(QLatin1String("General"));
+		config->writeEntry(QLatin1String("NoSystemTray"), mNoSystemTray);
 		config->sync();
 
 		// Update other settings and reregister with the alarm daemon
@@ -1730,7 +1730,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		{
 			// Execute the command from a temporary script file,
 			// with a sleep after the command is executed
-			tmpXtermFile = createTempScriptFile(command + QString::fromLatin1("\nsleep 86400\n"), true, event, *alarm);
+			tmpXtermFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
 			if (tmpXtermFile.isEmpty())
 				return 0;
 			cmd.replace("%W", tmpXtermFile);    // %w indicates where to insert the command
@@ -1739,7 +1739,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		{
 			// Append a sleep to the command.
 			// Quote the command in case it contains characters such as [>|;].
-			QString exec = KShellProcess::quote(command + QString::fromLatin1("; sleep 86400"));
+			QString exec = KShellProcess::quote(command + QLatin1String("; sleep 86400"));
 			cmd.replace("%w", exec);    // %w indicates where to insert the command string
 		}
 		else
@@ -1776,10 +1776,10 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 			QString dateTime = alarm->dateTime().isDateOnly()
 			                 ? KGlobal::locale()->formatDate(alarm->dateTime().date(), true)
 			                 : KGlobal::locale()->formatDateTime(alarm->dateTime().dateTime());
-			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.latin1());
+			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
 		}
 		else
-			heading = QString::fromLatin1("\n******* KAlarm *******\n");
+			heading = QLatin1String("\n******* KAlarm *******\n");
 		QByteArray hdg = heading.toLatin1();
 		logproc->writeStdin(hdg, hdg.length());
 	}

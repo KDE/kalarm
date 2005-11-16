@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,10 +61,10 @@ static const KAEvent::Status eventTypes[AlarmCalendar::NCALS] = {
 	KAEvent::ACTIVE, KAEvent::EXPIRED, KAEvent::DISPLAYING, KAEvent::TEMPLATE
 };
 static const QString calendarNames[AlarmCalendar::NCALS] = {
-	QString::fromLatin1("calendar.ics"),
-	QString::fromLatin1("expired.ics"),
-	QString::fromLatin1("displaying.ics"),
-	QString::fromLatin1("template.ics")
+	QLatin1String("calendar.ics"),
+	QLatin1String("expired.ics"),
+	QLatin1String("displaying.ics"),
+	QLatin1String("template.ics")
 };
 static KStaticDeleter<AlarmCalendar> calendarDeleter[AlarmCalendar::NCALS];    // ensure that the calendar destructors are called
 
@@ -84,10 +84,10 @@ AlarmCalendar* AlarmCalendar::mCalendars[NCALS] = { 0, 0, 0, 0 };
 bool AlarmCalendar::initialiseCalendars()
 {
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	QString activeKey   = QString::fromLatin1("Calendar");
-	QString expiredKey  = QString::fromLatin1("ExpiredCalendar");
-	QString templateKey = QString::fromLatin1("TemplateCalendar");
+	config->setGroup(QLatin1String("General"));
+	QString activeKey   = QLatin1String("Calendar");
+	QString expiredKey  = QLatin1String("ExpiredCalendar");
+	QString templateKey = QLatin1String("TemplateCalendar");
 	QString displayCal, activeCal, expiredCal, templateCal;
 	calendarDeleter[ACTIVE].setObject(mCalendars[ACTIVE], createCalendar(ACTIVE, config, activeCal, activeKey));
 	calendarDeleter[EXPIRED].setObject(mCalendars[EXPIRED], createCalendar(EXPIRED, config, expiredCal, expiredKey));
@@ -145,8 +145,8 @@ bool AlarmCalendar::initialiseCalendars()
 */
 AlarmCalendar* AlarmCalendar::createCalendar(CalID type, KConfig* config, QString& writePath, const QString& configKey)
 {
-	static QRegExp vcsRegExp(QString::fromLatin1("\\.vcs$"));
-	static QString ical = QString::fromLatin1(".ics");
+	static QRegExp vcsRegExp(QLatin1String("\\.vcs$"));
+	static QString ical = QLatin1String(".ics");
 
 	if (configKey.isNull())
 	{
@@ -254,7 +254,7 @@ bool AlarmCalendar::open()
 
 	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	if (!mCalendar)
-		mCalendar = new CalendarLocal(QString::fromLatin1("UTC"));
+		mCalendar = new CalendarLocal(QLatin1String("UTC"));
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
 
 	// Check for file's existence, assuming that it does exist when uncertain,
@@ -397,7 +397,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		if (!mConfigKey.isNull())
 		{
 			KConfig* config = KGlobal::config();
-			config->setGroup(QString::fromLatin1("General"));
+			config->setGroup(QLatin1String("General"));
 			config->writePathEntry(mConfigKey, mICalUrl.path());
 			config->sync();
 		}
@@ -476,7 +476,7 @@ void AlarmCalendar::convertToICal()
 		if (!mConfigKey.isNull())
 		{
 			KConfig* config = KGlobal::config();
-			config->setGroup(QString::fromLatin1("General"));
+			config->setGroup(QLatin1String("General"));
 			config->writePathEntry(mConfigKey, mICalUrl.path());
 			config->sync();
 		}

@@ -81,9 +81,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Prefix and suffix to the name in the alarm text
 	// Get default prefix and suffix texts from config file
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	mPrefixText = config->readEntry(QString::fromLatin1("BirthdayPrefix"), i18n("Birthday: "));
-	mSuffixText = config->readEntry(QString::fromLatin1("BirthdaySuffix"));
+	config->setGroup(QLatin1String("General"));
+	mPrefixText = config->readEntry(QLatin1String("BirthdayPrefix"), i18n("Birthday: "));
+	mSuffixText = config->readEntry(QLatin1String("BirthdaySuffix"));
 
 	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
@@ -137,9 +137,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->setSpacing(spacingHint());
 
 	// Colour choice drop-down list
-	QHBoxLayout* hlayout = new QHBoxLayout(groupLayout);
+	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
+	groupLayout->addLayout(hlayout);
 	KHBox* box;
 	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
@@ -169,9 +170,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	hlayout = new QHBoxLayout(groupLayout);
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
+	groupLayout->addLayout(hlayout);
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	hlayout->addWidget(mConfirmAck);
@@ -187,9 +189,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	}
 
 	// Late display checkbox - default = allow late display
-	hlayout = new QHBoxLayout(groupLayout);
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
+	groupLayout->addLayout(hlayout);
 	mLateCancel = new LateCancelSelector(false, group);
 	mLateCancel->setFixedSize(mLateCancel->sizeHint());
 	hlayout->addWidget(mLateCancel);
@@ -355,9 +358,9 @@ void BirthdayDlg::slotOk()
 {
 	// Save prefix and suffix texts to use as future defaults
 	KConfig* config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	config->writeEntry(QString::fromLatin1("BirthdayPrefix"), mPrefix->text());
-	config->writeEntry(QString::fromLatin1("BirthdaySuffix"), mSuffix->text());
+	config->setGroup(QLatin1String("General"));
+	config->writeEntry(QLatin1String("BirthdayPrefix"), mPrefix->text());
+	config->writeEntry(QLatin1String("BirthdaySuffix"), mSuffix->text());
 	config->sync();
 
 	mFlags = (mSoundPicker->beep()             ? KAEvent::BEEP : 0)

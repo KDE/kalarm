@@ -802,7 +802,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			reminder = event->reminderArchived();
 			mReminderArchived = true;
 		}
-		mReminder->setMinutes(reminder, (mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isOn()));
+		mReminder->setMinutes(reminder, (mTimeWidget ? mTimeWidget->anyTime() : mTemplateAnyTime->isChecked()));
 		mReminder->setOnceOnly(event->reminderOnceOnly());
 		mReminder->enableOnceOnly(event->recurs());
 		if (mSpecialActionsButton)
@@ -1111,8 +1111,8 @@ bool EditAlarmDlg::stateChanged() const
 	{
 		if (mSavedTemplateName     != mTemplateName->text()
 		||  mSavedTemplateTimeType != mTemplateTimeGroup->checkedButton()
-		||  mTemplateUseTime->isOn()  &&  mSavedTemplateTime != mTemplateTime->time()
-		||  mTemplateUseTimeAfter->isOn()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value())
+		||  mTemplateUseTime->isChecked()  &&  mSavedTemplateTime != mTemplateTime->time()
+		||  mTemplateUseTimeAfter->isChecked()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value())
 			return true;
 	}
 	else
@@ -1126,7 +1126,7 @@ bool EditAlarmDlg::stateChanged() const
 	||  mSavedRepeatInterval   != mSimpleRepetition->interval()
 	||  mSavedRepeatCount      != mSimpleRepetition->count())
 		return true;
-	if (mMessageRadio->isOn()  ||  mFileRadio->isOn())
+	if (mMessageRadio->isChecked()  ||  mFileRadio->isChecked())
 	{
 		if (mSavedSound      != mSoundPicker->sound()
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
@@ -1164,7 +1164,7 @@ bool EditAlarmDlg::stateChanged() const
 			}
 		}
 	}
-	else if (mCommandRadio->isOn())
+	else if (mCommandRadio->isChecked())
 	{
 		if (mSavedCmdScript      != mCmdTypeScript->isChecked()
 		||  mSavedCmdOutputRadio != mCmdOutputGroup->checkedButton())
@@ -1175,11 +1175,11 @@ bool EditAlarmDlg::stateChanged() const
 				return true;
 		}
 	}
-	else if (mEmailRadio->isOn())
+	else if (mEmailRadio->isChecked())
 	{
 		QStringList emailAttach;
 		for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
-			emailAttach += mEmailAttachList->text(i);
+			emailAttach += mEmailAttachList->itemText(i);
 		if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->currentIdentityName()
 		||  mSavedEmailTo      != mEmailToEdit->text()
 		||  mSavedEmailSubject != mEmailSubjectEdit->text()
@@ -1235,7 +1235,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	{
 		if (!mTemplate)
 			dt = mAlarmDateTime.dateTime();
-		else if (mTemplateUseTime->isOn())
+		else if (mTemplateUseTime->isChecked())
 			dt.setTime(mTemplateTime->time());
 	}
 	KAEvent::Action type = getAlarmType();
@@ -1304,8 +1304,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mTemplate)
 		{
-			int afterTime = mTemplateDefaultTime->isOn() ? 0
-			              : mTemplateUseTimeAfter->isOn() ? mTemplateTimeAfter->value() : -1;
+			int afterTime = mTemplateDefaultTime->isChecked() ? 0
+			              : mTemplateUseTimeAfter->isChecked() ? mTemplateTimeAfter->value() : -1;
 			event.setTemplate(mTemplateName->text(), afterTime);
 		}
 	}
@@ -1316,9 +1316,9 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
  */
 int EditAlarmDlg::getAlarmFlags() const
 {
-	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
-	bool cmdAlarm     = mCommandRadio->isOn();
-	bool emailAlarm   = mEmailRadio->isOn();
+	bool displayAlarm = mMessageRadio->isChecked() || mFileRadio->isChecked();
+	bool cmdAlarm     = mCommandRadio->isChecked();
+	bool emailAlarm   = mEmailRadio->isChecked();
 	return (displayAlarm && mSoundPicker->beep()                                 ? KAEvent::BEEP : 0)
 	     | (displayAlarm && mSoundPicker->speak()                                ? KAEvent::SPEAK : 0)
 	     | (displayAlarm && mSoundPicker->repeat()                               ? KAEvent::REPEAT_SOUND : 0)
@@ -1329,7 +1329,7 @@ int EditAlarmDlg::getAlarmFlags() const
 	     | (emailAlarm   && mEmailBcc->isChecked()                               ? KAEvent::EMAIL_BCC : 0)
 	     | (mShowInKorganizer && mShowInKorganizer->isChecked()                  ? KAEvent::COPY_KORGANIZER : 0)
 	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN            ? KAEvent::REPEAT_AT_LOGIN : 0)
-	     | ((mTemplate ? mTemplateAnyTime->isOn() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
+	     | ((mTemplate ? mTemplateAnyTime->isChecked() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0)
 	     | (mFontColourButton->defaultFont()                                     ? KAEvent::DEFAULT_FONT : 0);
 }
 
@@ -1338,10 +1338,10 @@ int EditAlarmDlg::getAlarmFlags() const
  */
 KAEvent::Action EditAlarmDlg::getAlarmType() const
 {
-	return mFileRadio->isOn()    ? KAEvent::FILE
-	     : mCommandRadio->isOn() ? KAEvent::COMMAND
-	     : mEmailRadio->isOn()   ? KAEvent::EMAIL
-	     :                         KAEvent::MESSAGE;
+	return mFileRadio->isChecked()    ? KAEvent::FILE
+	     : mCommandRadio->isChecked() ? KAEvent::COMMAND
+	     : mEmailRadio->isChecked()   ? KAEvent::EMAIL
+	     :                              KAEvent::MESSAGE;
 }
 
 /******************************************************************************
@@ -1514,7 +1514,7 @@ void EditAlarmDlg::slotOk()
 				// fall through to NO_RECUR
 			case RecurrenceEdit::NO_RECUR:    // no restriction on repeat duration
 				if (mSimpleRepetition->interval() % 1440
-				&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
+				&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
 				{
 					KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
 					mSimpleRepetition->activate();   // display the alarm repetition dialog again
@@ -1536,7 +1536,7 @@ void EditAlarmDlg::slotTry()
 	QString text;
 	if (checkText(text))
 	{
-		if (mEmailRadio->isOn())
+		if (mEmailRadio->isChecked())
 		{
 			if (!checkEmailData()
 			||  KMessageBox::warningContinueCancel(this, i18n("Do you really want to send the email now to the specified recipient(s)?"),
@@ -1548,13 +1548,13 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc)
 		{
-			if (mCommandRadio->isOn()  &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
+			if (mCommandRadio->isChecked()  &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
 			{
 				theApp()->commandMessage((ShellProcess*)proc, this);
 				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
 				theApp()->commandMessage((ShellProcess*)proc, 0);
 			}
-			else if (mEmailRadio->isOn())
+			else if (mEmailRadio->isChecked())
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
@@ -1735,7 +1735,7 @@ void EditAlarmDlg::slotRecurFrequencyChange()
 */
 void EditAlarmDlg::slotSetSimpleRepetition()
 {
-	bool dateOnly = mTemplate ? mTemplateAnyTime->isOn() : mTimeWidget->anyTime();
+	bool dateOnly = mTemplate ? mTemplateAnyTime->isChecked() : mTimeWidget->anyTime();
 	int maxDuration;
 	switch (mRecurrenceEdit->repeatType())
 	{
@@ -1757,7 +1757,7 @@ void EditAlarmDlg::slotSetSimpleRepetition()
 */
 bool EditAlarmDlg::checkCommandData()
 {
-	if (mCommandRadio->isOn()  &&  mCmdOutputGroup->checkedButton() == mCmdLogToFile)
+	if (mCommandRadio->isChecked()  &&  mCmdOutputGroup->checkedButton() == mCmdLogToFile)
 	{
 		// Validate the log file name
 		QString file = mCmdLogFileEdit->text();
@@ -1772,7 +1772,7 @@ bool EditAlarmDlg::checkCommandData()
 			}
 			else
 			{
-				QFileInfo dirinfo(info.dirPath(true));    // get absolute directory path
+				QFileInfo dirinfo(info.absolutePath());    // get absolute directory path
 				err = (!dirinfo.isDir()  ||  !dirinfo.isWritable());
 			}
 		}
@@ -1795,7 +1795,7 @@ bool EditAlarmDlg::checkCommandData()
 */
 bool EditAlarmDlg::checkEmailData()
 {
-	if (mEmailRadio->isOn())
+	if (mEmailRadio->isChecked())
 	{
 		QString addrs = mEmailToEdit->text();
 		if (addrs.isEmpty())
@@ -1820,7 +1820,7 @@ bool EditAlarmDlg::checkEmailData()
 		mEmailAttachments.clear();
 		for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
 		{
-			QString att = mEmailAttachList->text(i);
+			QString att = mEmailAttachList->itemText(i);
 			switch (KAMail::checkAttachment(att))
 			{
 				case 1:
@@ -1846,7 +1846,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 {
 	bool displayAlarm = false;
 	QWidget* focus = 0;
-	if (mMessageRadio->isOn())
+	if (mMessageRadio->isChecked())
 	{
 		mFileBox->hide();
 		mFilePadding->hide();
@@ -1858,7 +1858,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		focus = mTextMessageEdit;
 		displayAlarm = true;
 	}
-	else if (mFileRadio->isOn())
+	else if (mFileRadio->isChecked())
 	{
 		mTextMessageEdit->hide();
 		mFileBox->show();
@@ -1871,14 +1871,14 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		focus = mFileMessageEdit;
 		displayAlarm = true;
 	}
-	else if (mCommandRadio->isOn())
+	else if (mCommandRadio->isChecked())
 	{
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
 		mAlarmTypeStack->setCurrentWidget(mCommandFrame);
 		mCmdCommandEdit->setNoSelect();
 		focus = mCmdCommandEdit;
 	}
-	else if (mEmailRadio->isOn())
+	else if (mEmailRadio->isChecked())
 	{
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
 		mAlarmTypeStack->setCurrentWidget(mEmailFrame);
@@ -1919,8 +1919,8 @@ void EditAlarmDlg::slotCmdScriptToggled(bool on)
 */
 void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 {
-	mTemplateTime->setEnabled(mTemplateUseTime->isOn());
-	mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isOn());
+	mTemplateTime->setEnabled(mTemplateUseTime->isChecked());
+	mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isChecked());
 }
 
 /******************************************************************************
@@ -2006,11 +2006,11 @@ void EditAlarmDlg::slotRemoveAttachment()
 */
 bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	if (mMessageRadio->isOn())
+	if (mMessageRadio->isChecked())
 		result = mTextMessageEdit->text();
-	else if (mEmailRadio->isOn())
+	else if (mEmailRadio->isChecked())
 		result = mEmailMessageEdit->text();
-	else if (mCommandRadio->isOn())
+	else if (mCommandRadio->isChecked())
 	{
 		if (mCmdTypeScript->isChecked())
 			result = mCmdScriptEdit->text();
@@ -2018,7 +2018,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			result = mCmdCommandEdit->text();
 		result = result.trimmed();
 	}
-	else if (mFileRadio->isOn())
+	else if (mFileRadio->isChecked())
 	{
 		QString alarmtext = mFileMessageEdit->text().trimmed();
 		// Convert any relative file path to absolute
@@ -2026,8 +2026,8 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
 		Err err = NONE;
 		KURL url;
-		int i = alarmtext.indexOf(QChar('/'));
-		if (i > 0  &&  alarmtext[i - 1] == ':')
+		int i = alarmtext.indexOf(QLatin1Char('/'));
+		if (i > 0  &&  alarmtext[i - 1] == QLatin1Char(':'))
 		{
 			url = alarmtext;
 			url.cleanPath();
@@ -2051,7 +2051,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 			QDir::setCurrent(QDir::homePath());
 			alarmtext = info.absoluteFilePath();
 			url.setPath(alarmtext);
-			alarmtext = QString::fromLatin1("file:") + alarmtext;
+			alarmtext = QLatin1String("file:") + alarmtext;
 			if (!err)
 			{
 				if      (info.isDir())        err = DIRECTORY;

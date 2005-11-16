@@ -146,7 +146,7 @@ void SoundPicker::showSpeak(bool show)
 		mSpeakRadio->show();
 	else if (!show  &&  shown)
 	{
-		if (mSpeakRadio->isOn())
+		if (mSpeakRadio->isChecked())
 			mCheckbox->setChecked(false);
 		mSpeakRadio->hide();
 	}
@@ -174,7 +174,7 @@ SoundPicker::Type SoundPicker::type() const
 */
 bool SoundPicker::beep() const
 {
-	return mCheckbox->isChecked()  &&  mBeepRadio->isOn();
+	return mCheckbox->isChecked()  &&  mBeepRadio->isChecked();
 }
 
 /******************************************************************************
@@ -182,7 +182,7 @@ bool SoundPicker::beep() const
 */
 bool SoundPicker::speak() const
 {
-	return mCheckbox->isChecked()  &&  !mSpeakRadio->isHidden()  &&  mSpeakRadio->isOn();
+	return mCheckbox->isChecked()  &&  !mSpeakRadio->isHidden()  &&  mSpeakRadio->isChecked();
 }
 
 /******************************************************************************
@@ -191,7 +191,7 @@ bool SoundPicker::speak() const
 */
 QString SoundPicker::file() const
 {
-	return mCheckbox->isChecked() && mFileRadio->isOn() ? mFile : QString::null;
+	return mCheckbox->isChecked() && mFileRadio->isChecked() ? mFile : QString::null;
 }
 
 /******************************************************************************
@@ -200,7 +200,7 @@ QString SoundPicker::file() const
 */
 float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 {
-	if (mCheckbox->isChecked() && mFileRadio->isOn() && !mFile.isEmpty())
+	if (mCheckbox->isChecked() && mFileRadio->isChecked() && !mFile.isEmpty())
 	{
 		fadeVolume  = mFadeVolume;
 		fadeSeconds = mFadeSeconds;
@@ -220,7 +220,7 @@ float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 */
 bool SoundPicker::repeat() const
 {
-	return mCheckbox->isChecked() && mFileRadio->isOn() && !mFile.isEmpty() && mRepeat;
+	return mCheckbox->isChecked() && mFileRadio->isChecked() && !mFile.isEmpty() && mRepeat;
 }
 
 /******************************************************************************
@@ -257,8 +257,8 @@ void SoundPicker::slotSoundToggled(bool on)
 	mBeepRadio->setEnabled(on);
 	mSpeakRadio->setEnabled(on);
 	mFileRadio->setEnabled(on);
-	mFilePicker->setEnabled(on && mFileRadio->isOn());
-	if (on  &&  mSpeakRadio->isHidden()  &&  mSpeakRadio->isOn())
+	mFilePicker->setEnabled(on && mFileRadio->isChecked());
+	if (on  &&  mSpeakRadio->isHidden()  &&  mSpeakRadio->isChecked())
 		mBeepRadio->setChecked(true);
 	if (on)
 		mBeepRadio->setFocus();

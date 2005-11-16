@@ -21,8 +21,8 @@
 #ifndef RECURRENCEEDITPRIVATE_H
 #define RECURRENCEEDITPRIVATE_H
 
+#include <QList>
 #include <QFrame>
-#include <q3valuelist.h>
 #include <qbitarray.h>
 
 class QLabel;
