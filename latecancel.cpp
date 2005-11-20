@@ -77,9 +77,10 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 	vlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-	QHBoxLayout* hlayout = new QHBoxLayout(mLayout);
+	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->addSpacing(3*KDialog::spacingHint());
+	mLayout->addLayout(hlayout);
 	mAutoClose = new CheckBox(i18n_AutoCloseWin(), this);
 	mAutoClose->setFixedSize(mAutoClose->sizeHint());
 	mAutoClose->setWhatsThis(i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));

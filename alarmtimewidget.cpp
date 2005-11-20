@@ -149,16 +149,18 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
-	QGridLayout* grid = new QGridLayout(topLayout);
+	QGridLayout* grid = new QGridLayout();
 	grid->setMargin(0);
+	topLayout->addLayout(grid);
 	if (mode & NARROW)
 	{
 		grid->addWidget(mAtTimeRadio, 0, 0);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
-		grid->setColStretch(2, 1);
+		grid->setColumnStretch(2, 1);
 		topLayout->addStretch();
-		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBoxLayout* layout = new QHBoxLayout();
+		topLayout->addLayout(layout);
 		layout->addWidget(mAfterTimeRadio);
 		layout->addWidget(mDelayTimeEdit);
 		layout->addStretch();
@@ -171,7 +173,7 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 		grid->setRowStretch(1, 1);
 		grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
 		grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
-		grid->setColStretch(3, 1);
+		grid->setColumnStretch(3, 1);
 		topLayout->addStretch();
 	}
 

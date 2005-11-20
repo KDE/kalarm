@@ -26,6 +26,7 @@
 
 class Event;
 class QMouseEvent;
+class QColorGroup;
 class AlarmListView;
 
 

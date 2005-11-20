@@ -148,9 +148,10 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacing);
 
-	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	QHBoxLayout* layout = new QHBoxLayout();
 	layout->setMargin(0);
 	layout->setSpacing(0);
+	topLayout->addLayout(layout);
 	int hintMargin = 2*marginHint();
 	layout->addSpacing(hintMargin);
 	QLabel* hintLabel = new QLabel(
@@ -161,7 +162,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	hintLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 	hintLabel->setLineWidth(2);
 	hintLabel->setMargin(marginHint());
-	hintLabel->setAlignment(Qt::TextWordWrap);
+	hintLabel->setWordWrap(true);
 #warning Wrapping doesn't work
 //	hintLabel->setTextFormat(Qt::RichText);
 	layout->addWidget(hintLabel);
@@ -186,7 +187,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
 	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-	mButtonBox = new QGroupBox(controls, "buttonGroup");
+	mButtonBox = new QGroupBox(controls);
 	topLayout->addWidget(mButtonBox);
 	mButtonGroup = new ButtonGroup(mButtonBox);
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(typeClicked()));
@@ -194,8 +195,9 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	QVBoxLayout* vlayout = new QVBoxLayout(mButtonBox);
 	vlayout->setMargin(marginHint());
 	vlayout->setSpacing(spacing);
-	layout = new QHBoxLayout(vlayout);
+	layout = new QHBoxLayout();
 	layout->setMargin(0);
+	vlayout->addLayout(layout);
 	mCountButton = new RadioButton(i18n("&Number of repetitions:"), mButtonBox);
 	mCountButton->setFixedSize(mCountButton->sizeHint());
 	mCountButton->setWhatsThis(i18n("Check to specify the number of times the alarm should repeat after each recurrence"));
@@ -211,8 +213,9 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mCountButton->setFocusWidget(mCount);
 	layout->addStretch();
 
-	layout = new QHBoxLayout(vlayout);
+	layout = new QHBoxLayout();
 	layout->setMargin(0);
+	vlayout->addLayout(layout);
 	mDurationButton = new RadioButton(i18n("&Duration:"), mButtonBox);
 	mDurationButton->setFixedSize(mDurationButton->sizeHint());
 	mDurationButton->setWhatsThis(i18n("Check to specify how long the alarm is to be repeated"));

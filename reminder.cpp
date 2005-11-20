@@ -58,9 +58,10 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 
 	if (showOnceOnly)
 	{
-		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(0);
 		layout->addSpacing(3*KDialog::spacingHint());
+		topLayout->addLayout(layout);
 		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
 		mOnceOnly->setWhatsThis(i18n("Display the reminder only before the first time the alarm is scheduled"));

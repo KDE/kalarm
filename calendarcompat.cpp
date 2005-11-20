@@ -122,7 +122,7 @@ bool CalendarCompat::isUTC(const QString& localFile)
 		return false;
 	QTextStream ts(&file);
 	ts.setEncoding(QTextStream::UnicodeUTF8);
-	QString text = ts.read();
+	QString text = ts.readAll();
 	file.close();
 
 	// Extract the CREATED property for the first VEVENT from the calendar

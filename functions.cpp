@@ -98,7 +98,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 		if (!visible  ||  win->isMinimized())
 			win->showNormal();
 		win->raise();
-		win->setActiveWindow();
+		win->activateWindow();
 	}
 	if (win  &&  !eventID.isEmpty())
 		win->selectEvent(eventID);

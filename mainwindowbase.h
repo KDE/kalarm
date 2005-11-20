@@ -38,7 +38,7 @@ class MainWindowBase : public KMainWindow
 		Q_OBJECT
 
 	public:
-		MainWindowBase(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::WType_TopLevel | Qt::WDestructiveClose)
+		MainWindowBase(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = Qt::Window)
 		                    : KMainWindow(parent, name, f), disableQuit(false) { }
 
 	protected:

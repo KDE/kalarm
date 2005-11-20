@@ -174,7 +174,7 @@ void PickFileRadio::slotPickFile()
 void PickFileRadio::setLastButton()
 {
 	if (!mLastButton)
-		setOn(false);    // we don't know the previous selection, so just turn this button off
+		setChecked(false);    // we don't know the previous selection, so just turn this button off
 	else
 		mLastButton->setChecked(true);
 	mRevertButton = false;

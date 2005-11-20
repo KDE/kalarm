@@ -74,7 +74,7 @@ void Find::display()
 		// Set defaults the first time the Find dialog is activated
 		mOptions = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 	bool noExpired = !Preferences::expiredKeepDays();
-	bool showExpired = mListView->isA("AlarmListView") && ((AlarmListView*)mListView)->showingExpired();
+	bool showExpired = mListView->metaObject()->className() == "AlarmListView"  &&  ((AlarmListView*)mListView)->showingExpired();
 	if (noExpired  ||  !showExpired)      // these settings could change between activations
 		mOptions &= ~FIND_EXPIRED;
 
@@ -101,7 +101,7 @@ void Find::display()
 		QGridLayout* grid = new QGridLayout(group);
 		grid->setMargin(KDialog::marginHint());
 		grid->setSpacing(KDialog::spacingHint());
-		grid->setColStretch(1, 1);
+		grid->setColumnStretch(1, 1);
 
 		// Live & expired alarm selection
 		mLive = new QCheckBox(i18n("Acti&ve"), group);
@@ -116,25 +116,25 @@ void Find::display()
 		grid->addWidget(mExpired, 1, 2, Qt::AlignLeft);
 
 		mActiveExpiredSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
-		grid->addMultiCellWidget(mActiveExpiredSep, 2, 2, 0, 2);
+		grid->addWidget(mActiveExpiredSep, 2, 0, 1, 3);
 
 		// Alarm actions
-		mMessageType = new QCheckBox(i18n("Text"), group, "message");
+		mMessageType = new QCheckBox(i18n("Text"), group);
 		mMessageType->setFixedSize(mMessageType->sizeHint());
 		mMessageType->setWhatsThis(i18n("Check to include text message alarms in the search."));
 		grid->addWidget(mMessageType, 3, 0);
 
-		mFileType = new QCheckBox(i18n("Fi&le"), group, "file");
+		mFileType = new QCheckBox(i18n("Fi&le"), group);
 		mFileType->setFixedSize(mFileType->sizeHint());
 		mFileType->setWhatsThis(i18n("Check to include file alarms in the search."));
 		grid->addWidget(mFileType, 3, 2);
 
-		mCommandType = new QCheckBox(i18n("Co&mmand"), group, "command");
+		mCommandType = new QCheckBox(i18n("Co&mmand"), group);
 		mCommandType->setFixedSize(mCommandType->sizeHint());
 		mCommandType->setWhatsThis(i18n("Check to include command alarms in the search."));
 		grid->addWidget(mCommandType, 4, 0);
 
-		mEmailType = new QCheckBox(i18n("&Email"), group, "email");
+		mEmailType = new QCheckBox(i18n("&Email"), group);
 		mEmailType->setFixedSize(mEmailType->sizeHint());
 		mEmailType->setWhatsThis(i18n("Check to include email alarms in the search."));
 		grid->addWidget(mEmailType, 4, 2);

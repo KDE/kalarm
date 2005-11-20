@@ -53,7 +53,7 @@ void TemplateMenuAction::slotInitMenu()
 	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
 		QString name = templates[i].templateName();
-		menu->insertItem(name);
+		menu->addAction(name);
 		mOriginalTexts += name;
 	}
 }

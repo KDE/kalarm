@@ -271,7 +271,7 @@ MessageWin::~MessageWin()
 	stopPlay();
 	delete mWinModule;
 	mWinModule = 0;
-	mWindowList.remove(this);
+	mWindowList.removeAll(this);
 	if (!mRecreating)
 	{
 		if (!mNoPostAction  &&  !mEvent.postAction().isEmpty())
@@ -289,7 +289,7 @@ void MessageWin::initView()
 	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
 	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
-	QWidget* topWidget = new QWidget(this, "messageWinTop");
+	QWidget* topWidget = new QWidget(this);
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setMargin(KDialog::marginHint());
@@ -418,10 +418,11 @@ void MessageWin::initView()
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
-					QHBoxLayout* layout = new QHBoxLayout(topLayout);
+					QHBoxLayout* layout = new QHBoxLayout();
 					layout->addSpacing(hspace);
 					layout->addWidget(text, 1, Qt::AlignHCenter);
 					layout->addSpacing(hspace);
+					topLayout->addLayout(layout);
 				}
 				if (!reminder)
 					topLayout->addStretch();
@@ -495,18 +496,24 @@ void MessageWin::initView()
 	}
 
 	if (!mErrorMsgs.count())
-		topWidget->setBackgroundColor(mBgColour);
+	{
+		QPalette palette;
+		palette.setColor(topWidget->backgroundRole(), mBgColour);
+		topWidget->setPalette(palette);
+	}
 	else
 	{
 		setCaption(i18n("Error"));
-		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(2*KDialog::marginHint());
 		layout->addStretch();
+		topLayout->addLayout(layout);
 		QLabel* label = new QLabel(topWidget);
 		label->setPixmap(DesktopIcon("error"));
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignRight);
-		QVBoxLayout* vlayout = new QVBoxLayout(layout);
+		QVBoxLayout* vlayout = new QVBoxLayout();
+		layout->addLayout(vlayout);
 		for (QStringList::Iterator it = mErrorMsgs.begin();  it != mErrorMsgs.end();  ++it)
 		{
 			label = new QLabel(*it, topWidget);
@@ -516,8 +523,9 @@ void MessageWin::initView()
 		layout->addStretch();
 	}
 
-	QGridLayout* grid = new QGridLayout(topLayout);
-	grid->setColStretch(0, 1);     // keep the buttons right-adjusted in the window
+	QGridLayout* grid = new QGridLayout();
+	grid->setColumnStretch(0, 1);     // keep the buttons right-adjusted in the window
+	topLayout->addLayout(grid);
 	int gridIndex = 1;
 
 	// Close button
@@ -578,7 +586,7 @@ void MessageWin::initView()
 		// KMail button
 		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIcon::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
-		mKMailButton->setPixmap(pixmap);
+		mKMailButton->setIcon(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -591,7 +599,7 @@ void MessageWin::initView()
 	// KAlarm button
 	QPixmap pixmap = iconLoader.loadIcon(QLatin1String(kapp->aboutData()->appName()), KIcon::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
-	mKAlarmButton->setPixmap(pixmap);
+	mKAlarmButton->setIcon(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -1248,7 +1256,7 @@ void MessageWin::showEvent(QShowEvent* se)
 				// Find the enclosing rectangle for the new button positions
 				// and check if the cursor is too near
 				QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
-				buttons.moveBy(rect.left() + x - frame.left(), rect.top() + y - frame.top());
+				buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
 				int minDistance = proximityMultiple * mOkButton->height();
 				if ((abs(cursor.x() - buttons.left()) < minDistance
 				  || abs(cursor.x() - buttons.right()) < minDistance)
@@ -1617,8 +1625,8 @@ const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 			QFile f(abs_name);
 			if (f.open(QIODevice::ReadOnly)  &&  f.size())
 			{
-				QByteArray ba(f.size());
-				f.readBlock(ba.data(), ba.size());
+				QByteArray ba(f.size(), '\0');
+				f.read(ba.data(), ba.size());
 #if 1
 				Q3StoredDrag* sr = new Q3StoredDrag(mMimeType.data());
 				sr->setEncodedData(ba);

@@ -122,13 +122,13 @@ class KAlarmApp : public KUniqueApplication
 			bool                 allowDefer() const  { return flags & ALLOW_DEFER; }
 			bool                 tempFile() const    { return flags & TEMP_FILE; }
 			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
-			ShellProcess*             process;
+			ShellProcess*          process;
 			QPointer<ShellProcess> logProcess;
-			KAEvent*                  event;
-			KAAlarm*                  alarm;
+			KAEvent*               event;
+			KAAlarm*               alarm;
 			QPointer<QWidget>      messageBoxParent;
-			QStringList               tempFiles;
-			int                       flags;
+			QStringList            tempFiles;
+			int                    flags;
 		};
 		struct DcopQEntry
 		{

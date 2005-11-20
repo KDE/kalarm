@@ -58,7 +58,7 @@ class RecurrenceEdit : public QFrame
 		// Don't alter the order of these recurrence types
 		enum RepeatType { INVALID_RECUR = -1, NO_RECUR, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
-		RecurrenceEdit(bool readOnly, QWidget* parent, const char* name = 0);
+		RecurrenceEdit(bool readOnly, QWidget* parent);
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */

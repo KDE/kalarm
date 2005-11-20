@@ -115,7 +115,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-	: MainWindowBase(0, 0, Qt::WGroupLeader | Qt::WStyle_ContextHelp | Qt::WDestructiveClose),
+	: MainWindowBase(0, 0, Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
 	  mShowExpired(Preferences::showExpiredAlarms()),
@@ -123,6 +123,7 @@ MainWindow::MainWindow(bool restored)
 	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
 	kdDebug(5950) << "MainWindow::MainWindow()\n";
+	setAttribute(Qt::WA_DeleteOnClose);
 	setAutoSaveSettings(QLatin1String("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)

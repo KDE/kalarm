@@ -53,16 +53,18 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
 
-	QBoxLayout* layout = new QVBoxLayout(topLayout);
+	QBoxLayout* layout = new QVBoxLayout();
 	layout->setMargin(0);
+	topLayout->addLayout(layout);
 	mTemplateList = new TemplateListView(true, i18n("The list of alarm templates"), topWidget);
 	mTemplateList->setSelectionMode(Q3ListView::Extended);
 	mTemplateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 	layout->addWidget(mTemplateList);
 
-	layout = new QVBoxLayout(topLayout);
+	layout = new QVBoxLayout();
 	layout->setMargin(0);
+	topLayout->addLayout(layout);
 	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
 	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(slotNew()));

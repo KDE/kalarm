@@ -91,7 +91,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
 	// Sound file picker button
 	mFilePicker = new PushButton(box);
-	mFilePicker->setPixmap(SmallIcon("playsound"));
+	mFilePicker->setIcon(SmallIcon("playsound"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFilePicker->setWhatsThis(i18n("Configure a sound file to play when the alarm is displayed."));

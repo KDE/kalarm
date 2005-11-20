@@ -122,7 +122,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 	&&  feb29Type == FEB29_FEB28  ||  feb29Type == FEB29_MAR1)
 	{
 		int year = startdt.date().year();
-		if (!QDate::leapYear(year)
+		if (!QDate::isLeapYear(year)
 		&&  startdt.date().dayOfYear() == (feb29Type == FEB29_MAR1 ? 60 : 59))
 		{
 			// The event start date is February 28th or March 1st, but it
@@ -130,7 +130,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 			// or March 1st in non-leap years). Adjust the start date to
 			// be on February 29th in the last previous leap year.
 //#warning Is this necessary now?
-			while (!QDate::leapYear(--year)) ;
+			while (!QDate::isLeapYear(--year)) ;
 			startdt.setDate(QDate(year, 2, 29));
 		}
 		mFeb29Type = feb29Type;
@@ -300,7 +300,7 @@ void KARecurrence::fix()
 		}
 		// If February is included in the 29th rule, remove it to avoid duplication
 		months = rrules[0]->byMonths();
-		if (months.remove(2))
+		if (months.removeAll(2))
 			rrules[0]->setByMonths(months);
 
 		count = combineDurations(rrules[0], rrules[1], end);
@@ -374,7 +374,7 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 			QList<int> months = rrule->byMonths();
 			QList<int> days   = monthDays();
 			bool special = (mFeb29Type != FEB29_FEB29  &&  !days.isEmpty()
-			                &&  days.first() == 29  &&  months.remove(2));
+			                &&  days.first() == 29  &&  months.removeAll(2));
 			RecurrenceRule* rrule1 = recur.defaultRRule();
 			rrule1->setByMonths(months);
 			rrule1->setByMonthDays(days);
@@ -490,14 +490,14 @@ QDateTime KARecurrence::endDateTime() const
 			d.setYMD(d.year(), d.month(), 28);
 			break;
 		case 28:
-			if (d.month() != 2  ||  mFeb29Type != FEB29_FEB28  ||  QDate::leapYear(d.year()))
+			if (d.month() != 2  ||  mFeb29Type != FEB29_FEB28  ||  QDate::isLeapYear(d.year()))
 			{
 				// Start date is not a recurrence date, so shift it to 27th
 				d.setYMD(d.year(), d.month(), 27);
 			}
 			break;
 		case 1:
-			if (d.month() == 3  &&  mFeb29Type == FEB29_MAR1  &&  !QDate::leapYear(d.year()))
+			if (d.month() == 3  &&  mFeb29Type == FEB29_MAR1  &&  !QDate::isLeapYear(d.year()))
 			{
 				// Start date is a March 1st recurrence date, so shift
 				// start date to the temporary recurrence date of the 28th
@@ -521,7 +521,7 @@ QDateTime KARecurrence::endDateTime() const
 
 	// We've found the end date for a recurrence on the 28th. Unless that date
 	// is a real February 28th recurrence, adjust to the actual recurrence date.
-	if (mFeb29Type == FEB29_FEB28  &&  dt.date().month() == 2  &&  !QDate::leapYear(dt.date().year()))
+	if (mFeb29Type == FEB29_FEB28  &&  dt.date().month() == 2  &&  !QDate::isLeapYear(dt.date().year()))
 		return dt;
 	return dt.addDays(1);
 }
