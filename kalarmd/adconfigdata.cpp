@@ -49,7 +49,7 @@ void ADConfigData::readConfig()
 	kdDebug(5900) << "ADConfigData::readConfig()" << endl;
 	ClientInfo::clear();
 	KConfig* config = KGlobal::config();
-	QStringList clients = config->groupList().grep(CLIENT_GROUP_SEARCH);
+	QStringList clients = config->groupList().filter(CLIENT_GROUP_SEARCH);
 	for (QStringList::Iterator cl = clients.begin();  cl != clients.end();  ++cl)
 	{
 		// Read this client's configuration

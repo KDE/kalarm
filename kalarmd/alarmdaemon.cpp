@@ -55,9 +55,9 @@ static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
 
 
-AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
+AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 	: DCOPObject(name),
-	  QObject(parent, name),
+	  QObject(parent),
 	  mAlarmTimer(0)
 {
 	kdDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
@@ -399,7 +399,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 	{
 		// It's running, but check if it has created our DCOP interface yet
 		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(appname);
-		if (objects.find(client->dcopObject()) == objects.end())
+		if (objects.indexOf(client->dcopObject()) < 0)
 			ready = false;
 	}
 	if (!ready)

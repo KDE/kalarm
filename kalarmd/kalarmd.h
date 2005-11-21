@@ -25,6 +25,8 @@
 #include <config.h>
 #endif
 
+#undef QT3_SUPPORT
+
 #define DAEMON_VERSION            "4.1"         // kalarmd version number
 #define DAEMON_APP_NAME           "kalarmd"     // DCOP name of alarm daemon application
 #define DAEMON_DCOP_OBJECT        "ad"          // DCOP name of kalarmd's DCOP interface
