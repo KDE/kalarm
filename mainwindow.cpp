@@ -174,6 +174,10 @@ MainWindow::~MainWindow()
 	MainWindow* main = mainMainWindow();
 	if (main)
 		KAlarm::writeConfigWindowSize("MainWindow", main->size());
+	KToolBar* tb = toolBar();
+	if (tb)
+		tb->saveSettings(KGlobal::config(), "Toolbars");
+
 	KGlobal::config()->sync();    // save any new window size to disc
 	theApp()->quitIf();
 }
@@ -377,6 +381,10 @@ void MainWindow::initActions()
 	mActionView->setEnabled(false);
 	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
+
+	KToolBar* tb = toolBar();
+	if (tb)
+		tb->applySettings(KGlobal::config(), "Toolbars");
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
@@ -985,7 +993,18 @@ void MainWindow::slotConfigureToolbar()
 {
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	KEditToolbar dlg(factory());
+	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
+}
+
+/******************************************************************************
+*  Called when OK or Apply is clicked in the Configure Toolbars dialog, to save
+*  the new configuration.
+*/
+void MainWindow::slotNewToolbarConfig()
+{
+	createGUI(UI_FILE);
+	applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
 /******************************************************************************

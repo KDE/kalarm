@@ -109,6 +109,7 @@ class MainWindow : public MainWindowBase
 		void           slotPreferences();
 		void           slotConfigureKeys();
 		void           slotConfigureToolbar();
+		void           slotNewToolbarConfig();
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();
