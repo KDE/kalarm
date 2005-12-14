@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.3.5 --- 4 December 2005 ===
+=== Version 1.3.5 --- 14 December 2005 ===
+Fix email attachments being forgotten when saving alarms.
 Fix toolbar configuration being lost after quitting KAlarm.
 
 === Version 1.3.4 --- 2 October 2005 ===
