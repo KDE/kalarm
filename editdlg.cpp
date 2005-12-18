@@ -669,8 +669,8 @@ void EditAlarmDlg::initEmail()
 
 	mEmailAttachList = new QComboBox(mEmailFrame);
 	mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
-	mEmailAttachList->lineEdit()->setReadOnly(true);
 	mEmailAttachList->setEditable(true);
+	mEmailAttachList->lineEdit()->setReadOnly(true);
 //Q3ListBox* list = mEmailAttachList->listBox();
 //QRect rect = list->geometry();
 //list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
