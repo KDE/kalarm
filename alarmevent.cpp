@@ -694,7 +694,7 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mFgColour               = fg;
 	mFont                   = font;
 	mAlarmCount             = 1;
-	mLateCancel             = lateCancel;
+	mLateCancel             = lateCancel;     // do this before set(flags)
 	mDeferral               = NO_DEFERRAL;    // do this before set(flags)
 	set(flags);
 	mKMailSerialNumber      = 0;
@@ -2868,11 +2868,6 @@ KAAlarm::KAAlarm(const KAAlarm& alarm)
 	  mDeferred(alarm.mDeferred)
 { }
 
-void KAAlarm::set(int flags)
-{
-	mDeferred = flags & KAEvent::DEFERRAL;
-}
-
 int KAAlarm::flags() const
 {
 	return KAAlarmEventBase::flags()
@@ -2967,7 +2962,7 @@ void KAAlarmEventBase::set(int flags)
 	mBeep          = (flags & KAEvent::BEEP) && !mSpeak;
 	mRepeatSound   = flags & KAEvent::REPEAT_SOUND;
 	mRepeatAtLogin = flags & KAEvent::REPEAT_AT_LOGIN;
-	mAutoClose     = flags & KAEvent::AUTO_CLOSE;
+	mAutoClose     = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
 	mEmailBcc      = flags & KAEvent::EMAIL_BCC;
 	mConfirmAck    = flags & KAEvent::CONFIRM_ACK;
 	mDisplaying    = flags & KAEvent::DISPLAYING_;
