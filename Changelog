@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.3.6 --- 19 December 2005 ===
+Make autoclose of message windows work.
+
 === Version 1.3.5 --- 14 December 2005 ===
 Fix email attachments being forgotten when saving alarms.
 Fix toolbar configuration being lost after quitting KAlarm.

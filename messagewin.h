@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ class MessageWin : public MainWindowBase
 		QFont               mFont;
 		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
+		QDateTime           mCloseTime;       // time at which window should be auto-closed
 		QString             mEventID;
 		QString             mAudioFile;
 		float               mVolume;

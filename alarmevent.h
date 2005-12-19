@@ -216,8 +216,6 @@ class KAAlarm : public KAAlarmEventBase
 #endif
 
 	private:
-		void               set(int flags);
-
 		SubType            mType;             // alarm type
 		bool               mRecurs;           // there is a recurrence rule for the alarm
 		bool               mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm

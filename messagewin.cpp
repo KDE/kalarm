@@ -182,6 +182,8 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	setAutoSaveSettings(QString::fromLatin1("MessageWin"), false);
 	initView();
 	mWindowList.append(this);
+	if (event.autoClose())
+		mCloseTime = alarm.dateTime().dateTime().addSecs(event.lateCancel() * 60);
 }
 
 /******************************************************************************
@@ -655,6 +657,8 @@ void MessageWin::saveProperties(KConfig* config)
 			config->writeEntry(QString::fromLatin1("Time"), mDateTime.dateTime());
 			config->writeEntry(QString::fromLatin1("DateOnly"), mDateTime.isDateOnly());
 		}
+		if (mCloseTime.isValid())
+			config->writeEntry(QString::fromLatin1("Expiry"), mCloseTime);
 #ifndef WITHOUT_ARTS
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
@@ -691,6 +695,7 @@ void MessageWin::readProperties(KConfig* config)
 	QDateTime dt       = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
 	bool dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
+	mCloseTime         = config->readDateTimeEntry(QString::fromLatin1("Expiry"), &invalidDateTime);
 #ifndef WITHOUT_ARTS
 	mAudioFile         = config->readPathEntry(QString::fromLatin1("AudioFile"));
 	mVolume            = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
@@ -1136,6 +1141,16 @@ void MessageWin::repeat(const KAAlarm& alarm)
 */
 void MessageWin::show()
 {
+	if (mCloseTime.isValid())
+	{
+		// Set a timer to auto-close the window
+		int delay = QDateTime::currentDateTime().secsTo(mCloseTime);
+		if (delay < 0)
+			delay = 0;
+		QTimer::singleShot(delay * 1000, this, SLOT(close()));
+		if (!delay)
+			return;    // don't show the window if auto-closing is already due
+	}
 	if (Preferences::messageButtonDelay() == 0)
 		move(0, 0);
 	MainWindowBase::show();
