@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -177,7 +177,6 @@ MainWindow::~MainWindow()
 	KToolBar* tb = toolBar();
 	if (tb)
 		tb->saveSettings(KGlobal::config(), "Toolbars");
-
 	KGlobal::config()->sync();    // save any new window size to disc
 	theApp()->quitIf();
 }
@@ -222,6 +221,8 @@ MainWindow* MainWindow::mainMainWindow()
 			return *it;
 	if (tray)
 		return tray;
+	if (!mWindowList.count())
+		return 0;
 	return mWindowList.first();
 }
 
