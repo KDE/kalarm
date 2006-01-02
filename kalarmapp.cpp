@@ -405,7 +405,7 @@ int KAlarmApp::newInstance()
 						QString addr = QString::fromLocal8Bit(*i);
 						if (!KAMail::checkAddress(addr))
 							USAGE(i18n("%1: invalid email address").arg(QLatin1String("--mail")))
-						alAddresses += KCal::Person(QString::null, addr);
+						alAddresses += KCal::Person(QString(), addr);
 					}
 					params = args->getOptionList("attach");
 					for (QByteArrayList::Iterator i = params.begin();  i != params.end();  ++i)
@@ -812,7 +812,7 @@ void KAlarmApp::doQuit(QWidget* parent)
 	if (mDisableAlarmsIfStopped
 	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
 	                                      i18n("Quitting will disable alarms\n(once any alarm message windows are closed)."),
-	                                      QString::null, KStdGuiItem::quit(), Preferences::QUIT_WARN
+	                                      QString(), KStdGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
 		return;
 	quitIf(0, true);
@@ -1806,7 +1806,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 */
 QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm)
 {
-	KTempFile tmpFile(QString::null, QString::null, 0700);
+	KTempFile tmpFile(QString(), QString(), 0700);
 	tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
 	QTextStream* stream = tmpFile.textStream();
 	if (!stream)
@@ -1825,7 +1825,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 
 	QStringList errmsgs(i18n("Error creating temporary script file"));
 	(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
-	return QString::null;
+	return QString();
 }
 
 /******************************************************************************

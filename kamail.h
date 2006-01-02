@@ -58,7 +58,7 @@ class KAMail
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, int size, int& outSize);
-		static QStringList errors(const QString& error = QString::null, bool sendfail = true);
+		static QStringList errors(const QString& error = QString(), bool sendfail = true);
 };
 
 #endif // KAMAIL_H

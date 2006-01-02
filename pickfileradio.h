@@ -78,7 +78,7 @@ class PickFileRadio : public RadioButton
 		/** Chooses a file, for example by displaying a file selection dialogue.
 		 *  This method is called when the push button is clicked - the client
 		 *  should not activate a file selection dialogue directly.
-		 *  @return Selected file name, or QString::null if no selection made.
+		 *  @return Selected file name, or QString() if no selection made.
 		 */
 		virtual QString pickFile() = 0;
 		/** Notifies the widget of the currently selected file name.

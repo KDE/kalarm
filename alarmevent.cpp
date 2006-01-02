@@ -197,8 +197,8 @@ void KAEvent::set(const Event& event)
 	// Extract status from the event
 	mEventID                = event.uid();
 	mRevision               = event.revision();
-	mTemplateName           = QString::null;
-	mLogFile                = QString::null;
+	mTemplateName          .clear();
+	mLogFile               .clear();
 	mTemplateAfterTime      = -1;
 	mBeep                   = false;
 	mSpeak                  = false;
@@ -681,10 +681,10 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 			break;
 	}
 	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
-	mEventID                = QString::null;
-	mTemplateName           = QString::null;
-	mPreAction              = QString::null;
-	mPostAction             = QString::null;
+	mEventID               .clear();
+	mTemplateName          .clear();
+	mPreAction             .clear();
+	mPostAction            .clear();
 	mAudioFile              = "";
 	mSoundVolume            = -1;
 	mFadeVolume             = -1;
@@ -1018,7 +1018,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 			cats.append(ARCHIVE_CATEGORY);
 	}
 	ev.setCategories(cats);
-	ev.setCustomStatus(mEnabled ? QString::null : DISABLED_STATUS);
+	ev.setCustomStatus(mEnabled ? QString() : DISABLED_STATUS);
 	ev.setRevision(mRevision);
 	ev.clearAlarms();
 
@@ -1175,7 +1175,7 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						      QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
 										     .arg(mFgColour.name())
-										     .arg(mDefaultFont ? QString::null : mFont.toString()));
+										     .arg(mDefaultFont ? QString() : mFont.toString()));
 					break;
 				case T_COMMAND:
 					if (mCommandScript)
@@ -1984,7 +1984,7 @@ QString KAEvent::recurrenceText(bool brief) const
 				break;
 		}
 	}
-	return brief ? QString::null : i18n("None");
+	return brief ? QString() : i18n("None");
 }
 
 /******************************************************************************
@@ -2007,7 +2007,7 @@ QString KAEvent::repetitionText(bool brief) const
 			return i18n("1 Day", "%n Days", mRepeatInterval/1440);
 		return i18n("1 Week", "%n Weeks", mRepeatInterval/(7*1440));
 	}
-	return brief ? QString::null : i18n("None");
+	return brief ? QString() : i18n("None");
 }
 
 /******************************************************************************
@@ -3115,8 +3115,8 @@ QString EmailAddressList::join(const QString& separator) const
  */
 static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 {
-	QString command   = QString::null;
-	QString arguments = QString::null;
+	QString command= QString();
+	QString arguments= QString();
 	QChar quoteChar;
 	bool quoted = false;
 	uint posMax = commandLine.length();

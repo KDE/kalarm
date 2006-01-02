@@ -131,7 +131,7 @@ void DeferAlarmDlg::slotPastLimit()
 */
 void DeferAlarmDlg::setLimit(const DateTime& limit)
 {
-	mLimitEventID  = QString::null;
+	mLimitEventID .clear();
 	mLimitDateTime = limit;
 	mTimeWidget->setMaxDateTime(mLimitDateTime);
 }

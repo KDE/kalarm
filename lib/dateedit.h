@@ -59,15 +59,15 @@ class DateEdit : public KDateEdit
 		/** Sets the earliest date which can be entered.
 		 *  @param date Earliest date allowed. If invalid, any minimum limit is removed.
 		 *  @param errorDate Error message to be displayed when a date earlier than
-		 *         @p date is entered. Set to QString::null to use the default error message.
+		 *         @p date is entered. Set to QString() to use the default error message.
 		 */
-		void         setMinDate(const QDate& date, const QString& errorDate = QString::null);
+		void         setMinDate(const QDate& date, const QString& errorDate = QString());
 		/** Sets the latest date which can be entered.
 		 *  @param date Latest date allowed. If invalid, any maximum limit is removed.
 		 *  @param errorDate Error message to be displayed when a date later than
-		 *         @p date is entered. Set to QString::null to use the default error message.
+		 *         @p date is entered. Set to QString() to use the default error message.
 		 */
-		void         setMaxDate(const QDate& date, const QString& errorDate = QString::null);
+		void         setMaxDate(const QDate& date, const QString& errorDate = QString());
 		/** Sets the date held in the widget to an invalid date. */
 		void         setInvalid();
 

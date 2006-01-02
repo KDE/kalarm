@@ -29,7 +29,7 @@ class KAEvent;
 class AlarmText
 {
 	public:
-		AlarmText(const QString& text = QString::null)  { setText(text); }
+		AlarmText(const QString& text = QString())  { setText(text); }
 		void           setText(const QString&);
 		void           setScript(const QString& text)   { setText(text);  mIsScript = true; }
 		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
@@ -41,7 +41,7 @@ class AlarmText
 		QString        cc() const                 { return mCc; }
 		QString        time() const               { return mTime; }
 		QString        subject() const            { return mSubject; }
-		QString        body() const               { return mIsEmail ? mBody : QString::null; }
+		QString        body() const               { return mIsEmail ? mBody : QString(); }
 		bool           isEmpty() const;
 		bool           isEmail() const            { return mIsEmail; }
 		bool           isScript() const           { return mIsScript; }

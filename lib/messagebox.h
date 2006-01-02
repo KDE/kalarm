@@ -67,9 +67,9 @@ class MessageBox : public KMessageBox
 		 *    if the user chose Continue last time.
 		 */
 		static int  warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
-		                                  const QString& caption = QString::null,
+		                                  const QString& caption = QString(),
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
-		                                  const QString& dontAskAgainName = QString::null);
+		                                  const QString& dontAskAgainName = QString());
 		/** Displays a Continue/Cancel message box.
 		 *  @param parent Parent widget
 		 *  @param text Message string
@@ -81,9 +81,9 @@ class MessageBox : public KMessageBox
 		 *    @p dontAskAgainName value. If neither method has been used to set a default button,
 		 *    Continue is the default.
 		 */
-		static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString::null,
+		static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
 		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
-		                                  const QString& dontAskAgainName = QString::null);
+		                                  const QString& dontAskAgainName = QString());
 		/** If there is no current setting for whether a non-Yes/No message box should be
 		 *  shown, sets it to @p defaultShow.
 		 *  If a Continue/Cancel message box has Cancel as the default button, either

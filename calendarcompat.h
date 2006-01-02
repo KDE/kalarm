@@ -29,7 +29,7 @@ namespace KCal { class Calendar; }
 class CalendarCompat
 {
 	public:
-		static void fix(KCal::Calendar&, const QString& localFile = QString::null);
+		static void fix(KCal::Calendar&, const QString& localFile = QString());
 
 	private:
 		static int  readKAlarmVersion(KCal::Calendar&, QString& subVersion);

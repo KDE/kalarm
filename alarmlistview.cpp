@@ -70,8 +70,8 @@ AlarmListView::AlarmListView(QWidget* parent)
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Time To"));        // time-to-alarm column
 	addColumn(i18n("Repeat"));         // repeat count column
-	addColumn(QString::null);          // colour column
-	addColumn(QString::null);          // alarm type column
+	addColumn(QString());          // colour column
+	addColumn(QString());          // alarm type column
 	addLastColumn(i18n("Message, File or Command"));
 	setSorting(mTimeColumn);           // sort initially by date/time
 	mTimeColumnHeaderWidth   = columnWidth(mTimeColumn);
@@ -476,7 +476,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
 	if (event().expired())
-		return QString::null;
+		return QString();
 	DateTime dateTime = event().nextDateTime(false);
 	if (dateTime.isDateOnly())
 	{
@@ -485,7 +485,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	}
 	int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
 	if (mins < 0)
-		return QString::null;
+		return QString();
 	char minutes[3] = "00";
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
@@ -507,7 +507,7 @@ void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDispla
 	{
 		if (forceDisplay  ||  mTimeToAlarmShown)
 		{
-			setText(alarmListView()->timeToColumn(), QString::null);
+			setText(alarmListView()->timeToColumn(), QString());
 			mTimeToAlarmShown = false;
 		}
 	}

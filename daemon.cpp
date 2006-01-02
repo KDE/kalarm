@@ -615,7 +615,7 @@ void NotificationHandler::registered(bool reregister, int result)
 =============================================================================*/
 
 AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent, const char* name)
-	: KToggleAction(QString::null, accel, parent, name),
+	: KToggleAction(QString(), accel, parent, name),
 	  mInitialised(false)
 {
 	setCheckedActual(false);    // set the correct text

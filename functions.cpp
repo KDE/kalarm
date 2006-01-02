@@ -498,7 +498,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 	if (!Daemon::monitoringAlarms())
 	{
 		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
-		                              QString::null, i18n("Enable"), i18n("Keep Disabled"),
+		                              QString(), i18n("Enable"), i18n("Keep Disabled"),
 		                              QLatin1String("EditEnableAlarms"))
 		                == KMessageBox::Yes)
 			Daemon::setAlarmsEnabled();
@@ -566,7 +566,7 @@ QString runKMail(bool minimise)
 	QString errmsg;
 	if (!runProgram("kmail", (minimise ? KMAIL_DCOP_WINDOW : ""), dcopName, errmsg))
 		return i18n("Unable to start KMail\n(%1)").arg(errmsg);
-	return QString::null;
+	return QString();
 }
 
 /******************************************************************************
@@ -581,7 +581,7 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 	if (!kapp->dcopClient()->isApplicationRegistered(program))
 	{
 		// KOrganizer is not already running, so start it
-		if (KToolInvocation::startServiceByDesktopName(QLatin1String(program), QString::null, &errorMessage, &dcopName))
+		if (KToolInvocation::startServiceByDesktopName(QLatin1String(program), QString(), &errorMessage, &dcopName))
 		{
 			kdError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;
@@ -589,11 +589,11 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 		// Minimise its window - don't use hide() since this would remove all
 		// trace of it from the panel if it is not configured to be docked in
 		// the system tray.
-		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString::null);
+		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
 	}
 	else if (dcopName.isEmpty())
 		dcopName = program;
-	errorMessage = QString::null;
+	errorMessage.clear();
 	return true;
 }
 
@@ -641,7 +641,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
 	// N.B. Remember to change  Version(int major, int minor, int rev)
 	//      if the representation returned by this method changes.
 	if (subVersion)
-		*subVersion = QString::null;
+		*subVersion = QString();
 	QStringList nums = version.split(QLatin1Char('.'), QString::KeepEmptyParts);
 	int count = nums.count();
 	if (count < 2  ||  count > 3)
@@ -731,7 +731,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 	if (!initialFile.isEmpty())
 		fileDlg.setSelection(initialFile);
 	if (fileDlg.exec() != QDialog::Accepted)
-		return QString::null;
+		return QString();
 	KURL url = fileDlg.selectedURL();
 	defaultDir = url.path();
 	return url.prettyURL();
@@ -810,17 +810,17 @@ bool sendToKOrganizer(const KAEvent& event)
 			             ? Preferences::emailAddress()
 			             : KAMail::identityManager()->identityForName(event.emailFromKMail()).fullEmailAddr();
 			AlarmText atext;
-			atext.setEmail(event.emailAddresses(", "), from, QString::null, QString::null, event.emailSubject(), QString::null);
+			atext.setEmail(event.emailAddresses(", "), from, QString(), QString(), event.emailSubject(), QString());
 			kcalEvent->setSummary(atext.displayText());
 			userEmail = from;
 			break;
 		}
 	}
-	kcalEvent->setOrganizer(KCal::Person(QString::null, userEmail));
+	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
 
 	// Translate the event into string format
 	KCal::ICalFormat format;
-	format.setTimeZone(QString::null, false);
+	format.setTimeZone(QString(), false);
 	QString iCal = format.toICalString(kcalEvent);
 kdDebug(5950)<<"Korg->"<<iCal<<endl;
 	delete kcalEvent;

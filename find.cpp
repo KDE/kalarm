@@ -250,7 +250,7 @@ void Find::slotFind()
 
 		// Set the starting point for the search
 		mListView->sort();     // ensure the whole list is sorted, not just the visible items
-		mStartID       = QString::null;
+		mStartID      .clear();
 		mNoCurrentItem = true;
 		bool fromCurrent = false;
 		EventListViewItemBase* item = 0;
@@ -363,7 +363,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 		{
 			QString msg = forward ? i18n("End of alarm list reached.\nContinue from the beginning?")
 			                      : i18n("Beginning of alarm list reached.\nContinue from the end?");
-			if (KMessageBox::questionYesNo(mListView, msg, QString::null, KStdGuiItem::cont(), KStdGuiItem::cancel()) == KMessageBox::Yes)
+			if (KMessageBox::questionYesNo(mListView, msg, QString(), KStdGuiItem::cont(), KStdGuiItem::cancel()) == KMessageBox::Yes)
 			{
 				findNext(forward, false);
 				return;

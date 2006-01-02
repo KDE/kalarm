@@ -44,10 +44,10 @@ class UndoItem
 		virtual ~UndoItem();
 		virtual Operation operation() const = 0;
 		virtual QString   actionText() const = 0;
-		virtual QString   description() const   { return QString::null; }
-		virtual QString   eventID() const       { return QString::null; }
-		virtual QString   oldEventID() const    { return QString::null; }
-		virtual QString   newEventID() const    { return QString::null; }
+		virtual QString   description() const   { return QString(); }
+		virtual QString   eventID() const       { return QString(); }
+		virtual QString   oldEventID() const    { return QString(); }
+		virtual QString   newEventID() const    { return QString(); }
 		int               id() const            { return mId; }
 		Undo::Type        type() const          { return mType; }
 		void              setType(Undo::Type t) { mType = t; }
@@ -417,7 +417,7 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 QString Undo::actionText(Undo::Type type)
 {
 	List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
-	return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString::null;
+	return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString();
 }
 
 /******************************************************************************
@@ -426,7 +426,7 @@ QString Undo::actionText(Undo::Type type)
 QString Undo::actionText(Undo::Type type, int id)
 {
 	UndoItem* undo = getItem(id, type);
-	return undo ? undo->actionText() : QString::null;
+	return undo ? undo->actionText() : QString();
 }
 
 /******************************************************************************
@@ -435,7 +435,7 @@ QString Undo::actionText(Undo::Type type, int id)
 QString Undo::description(Undo::Type type, int id)
 {
 	UndoItem* undo = getItem(id, type);
-	return undo ? undo->description() : QString::null;
+	return undo ? undo->description() : QString();
 }
 
 /******************************************************************************
@@ -602,7 +602,7 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 		default:
 			break;
 	}
-	return QString::null;
+	return QString();
 }
 
 
@@ -842,7 +842,7 @@ QString UndoEdit::actionText() const
 		default:
 			break;
 	}
-	return QString::null;
+	return QString();
 }
 
 
@@ -971,7 +971,7 @@ UndoItem* UndoDeletes::createRedo(Undo::List& undos)
 QString UndoDeletes::actionText() const
 {
 	if (mUndos.isEmpty())
-		return QString::null;
+		return QString();
 	for (int i = 0, end = mUndos.count();  i < end;  ++i)
 	{
 		switch (mUndos[i]->calendar())
@@ -983,7 +983,7 @@ QString UndoDeletes::actionText() const
 			case KAEvent::EXPIRED:
 				break;    // check if they are ALL expired
 			default:
-				return QString::null;
+				return QString();
 		}
 	}
 	return i18n("Delete multiple expired alarms");

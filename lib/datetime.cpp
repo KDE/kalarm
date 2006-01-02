@@ -43,7 +43,7 @@ QString DateTime::formatLocale(bool shortFormat) const
 	else if (mTimeValid)
 		return KGlobal::locale()->formatDateTime(mDateTime, shortFormat);
 	else
-		return QString::null;
+		return QString();
 }
 
 bool operator==(const DateTime& dt1, const DateTime& dt2)

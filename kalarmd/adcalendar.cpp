@@ -114,7 +114,7 @@ void ADCalendar::slotDownloadJobResult(KIO::Job *job)
 		loadLocalFile(mTempFileName);
 	}
 	unlink(QFile::encodeName(mTempFileName));
-	mTempFileName = QString::null;
+	mTempFileName.clear();
 	emit loaded(this, mLoaded);
 }
 

@@ -103,15 +103,15 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString::null for the current
+	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
 	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString::null for the default message font
+	 *  @param font           The font for the alarm message, or QString() for the default message font
 	 *                        current at the time the message is displayed. The string should be in format
 	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
@@ -128,15 +128,15 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString::null for the current
+	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
 	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString::null for the default message font
+	 *  @param font           The font for the alarm message, or QString() for the default message font
 	 *                        current at the time the message is displayed. The string should be in format
 	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
@@ -155,15 +155,15 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString::null for the current
+	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
 	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString::null for the default message font
+	 *  @param font           The font for the alarm message, or QString() for the default message font
 	 *                        current at the time the message is displayed. The string should be in format
 	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
@@ -183,10 +183,10 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
@@ -202,10 +202,10 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
@@ -222,10 +222,10 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString::null for the
+	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
 	 *                        current default background colour. The string may be in any of the formats
 	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString::null for none.
+	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
@@ -281,7 +281,7 @@ class KAlarmIface : virtual public DCOPObject
 	                             int repeatType, int repeatInterval, const QString& endDateTime) = 0;
 
 	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString::null to use KAlarm's default sender ID.
+	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
 	 *  @param addresses      Comma-separated list of addresses to send the email to.
 	 *  @param subject        Subject line of the email.
 	 *  @param message        Email message's body text.
@@ -299,7 +299,7 @@ class KAlarmIface : virtual public DCOPObject
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           const QString& recurrence, int repeatInterval, int repeatCount) = 0;
 	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString::null to use KAlarm's default sender ID.
+	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
 	 *  @param addresses      Comma-separated list of addresses to send the email to.
 	 *  @param subject        Subject line of the email.
 	 *  @param message        Email message's body text.
@@ -319,7 +319,7 @@ class KAlarmIface : virtual public DCOPObject
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int repeatType, int repeatInterval, int repeatCount) = 0;
 	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString::null to use KAlarm's default sender ID.
+	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
 	 *  @param addresses      Comma-separated list of addresses to send the email to.
 	 *  @param subject        Subject line of the email.
 	 *  @param message        Email message's body text.

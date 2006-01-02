@@ -511,7 +511,7 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 	if (!mAutostartDaemon->isChecked()
 	&&  KMessageBox::warningYesNo(this,
 		                      i18n("You should not uncheck this option unless you intend to discontinue use of KAlarm"),
-		                      QString::null, KStdGuiItem::cont(), KStdGuiItem::cancel()
+		                      QString(), KStdGuiItem::cont(), KStdGuiItem::cancel()
 		                     ) != KMessageBox::Yes)
 		mAutostartDaemon->setChecked(true);	
 }
@@ -771,7 +771,7 @@ QString EmailPrefTab::validate()
 		mBccAddressChanged = false;
 		return validateAddr(mBccAddressGroup, mEmailBccAddress, i18n("No valid 'Bcc' email address is specified."));
 	}
-	return QString::null;
+	return QString();
 }
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
@@ -781,17 +781,17 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
 	{
 		case Preferences::MAIL_FROM_CONTROL_CENTRE:
 			if (!KAMail::controlCentreAddress().isEmpty())
-				return QString::null;
+				return QString();
 			errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
 			break;
 		case Preferences::MAIL_FROM_KMAIL:
 			if (KAMail::identitiesExist())
-				return QString::null;
+				return QString();
 			errmsg = i18n("No KMail identities currently exist. %1").arg(errmsg);
 			break;
 		case Preferences::MAIL_FROM_ADDR:
 			if (!addr->text().trimmed().isEmpty())
-				return QString::null;
+				return QString();
 			break;
 	}
 	return errmsg;
@@ -1207,7 +1207,7 @@ QString EditPrefTab::validate()
 		mSoundFile->setFocus();
 		return i18n("You must enter a sound file when %1 is selected as the default sound type").arg(SoundPicker::i18n_File());;
 	}
-	return QString::null;
+	return QString();
 }
 
 

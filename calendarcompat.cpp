@@ -78,7 +78,7 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 */
 int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVersion)
 {
-	subVersion = QString::null;
+	subVersion.clear();
 	const QString& prodid = calendar.productId();
 
 	// Find the KAlarm identifier

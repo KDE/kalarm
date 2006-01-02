@@ -313,7 +313,7 @@ void MainWindow::initActions()
 	mActionModify          = new KAction(i18n("&Edit..."), "edit", Qt::CTRL+Qt::Key_E, this, SLOT(slotModify()), actions, "modify");
 	mActionDelete          = new KAction(i18n("&Delete"), "editdelete", Qt::Key_Delete, this, SLOT(slotDelete()), actions, "delete");
 	mActionReactivate      = new KAction(i18n("Reac&tivate"), 0, Qt::CTRL+Qt::Key_R, this, SLOT(slotReactivate()), actions, "undelete");
-	mActionEnable          = new KAction(QString::null, 0, Qt::CTRL+Qt::Key_B, this, SLOT(slotEnable()), actions, "disable");
+	mActionEnable          = new KAction(QString(), 0, Qt::CTRL+Qt::Key_B, this, SLOT(slotEnable()), actions, "disable");
 	mActionView            = new KAction(i18n("&View"), "viewmag", Qt::CTRL+Qt::Key_W, this, SLOT(slotView()), actions, "view");
 	mActionShowTime        = new KToggleAction(i18n_a_ShowAlarmTimes(), Qt::CTRL+Qt::Key_M, this, SLOT(slotShowTime()), actions, "showAlarmTimes");
 	mActionShowTime->setCheckedState(i18n("Hide &Alarm Times"));
@@ -1093,7 +1093,7 @@ void MainWindow::dropEvent(QDropEvent* e)
 static QString getMailHeader(const char* header, KMime::Content& content)
 {
 	KMime::Headers::Base* hd = content.getHeaderByType(header);
-	return hd ? hd->asUnicodeString() : QString::null;
+	return hd ? hd->asUnicodeString() : QString();
 }
 
 /******************************************************************************
@@ -1161,7 +1161,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		QDateTime dt;
 		dt.setTime_t(summary.date());
 		QString body = KAMail::getMailBody(summary.serialNumber());
-		alarmText.setEmail(summary.to(), summary.from(), QString::null,
+		alarmText.setEmail(summary.to(), summary.from(), QString(),
 		                   KGlobal::locale()->formatDateTime(dt), summary.subject(),
 		                   body, summary.serialNumber());
 	}

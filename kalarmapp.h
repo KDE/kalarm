@@ -82,9 +82,9 @@ class KAlarmApp : public KUniqueApplication
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KARecurrence& recurrence,
 						 int repeatInterval, int repeatCount,
-		                                 const QString& mailFromID = QString::null,
+		                                 const QString& mailFromID = QString(),
 		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
-		                                 const QString& mailSubject = QString::null,
+		                                 const QString& mailSubject = QString(),
 		                                 const QStringList& mailAttachments = QStringList());
 		bool               handleEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_HANDLE); }
 		bool               triggerEvent(const QString& calendarFile, const QString& eventID)   { return handleEvent(calendarFile, eventID, EVENT_TRIGGER); }

@@ -354,7 +354,7 @@ int EventListViewBase::itemHeight()
 	if (!item)
 	{
 		// The list is empty, so create a temporary item to find its height
-		Q3ListViewItem* item = new Q3ListViewItem(this, QString::null);
+		Q3ListViewItem* item = new Q3ListViewItem(this, QString());
 		int height = item->height();
 		delete item;
 		return height;

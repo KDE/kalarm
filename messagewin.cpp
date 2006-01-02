@@ -882,7 +882,7 @@ void MessageWin::slotPlayAudio()
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
 			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
-			                         QString::null, QLatin1String("KMixError"));
+			                         QString(), QLatin1String("KMixError"));
 			kdWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
 		}
 	}
@@ -1056,7 +1056,7 @@ void MessageWin::stopPlay()
 	if (!mLocalAudioFile.isEmpty())
 	{
 		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
-		mLocalAudioFile = QString::null;
+		mLocalAudioFile.clear();
 	}
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);

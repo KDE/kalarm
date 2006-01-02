@@ -59,9 +59,9 @@ class KAAlarmEventBase
 	public:
 		~KAAlarmEventBase()  { }
 		const QString&     cleanText() const           { return mText; }
-		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString::null; }
-		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString::null; }
-		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString::null; }
+		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString(); }
+		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString(); }
+		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString(); }
 		QString            emailFromKMail() const      { return mEmailFromKMail; }
 		const EmailAddressList& emailAddresses() const { return mEmailAddresses; }
 		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
@@ -198,7 +198,7 @@ class KAAlarm : public KAAlarmEventBase
 		const DateTime&    dateTime() const             { return mNextMainDateTime; }
 		QDate              date() const                 { return mNextMainDateTime.date(); }
 		QTime              time() const                 { return mNextMainDateTime.time(); }
-		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
+		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString(); }
 		float              soundVolume() const          { return (mActionType == T_AUDIO) && !mBeep && !mText.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const           { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && mFadeSeconds && !mBeep && !mText.isEmpty() ? mFadeVolume : -1; }
 		int                fadeSeconds() const          { return (mActionType == T_AUDIO) && mSoundVolume >= 0 && mFadeVolume >= 0 && !mBeep && !mText.isEmpty() ? mFadeSeconds : 0; }
@@ -316,8 +316,8 @@ class KAEvent : public KAAlarmEventBase
 		                            { set(d, filename, bg, fg, f, FILE, lateCancel, flags | ANY_TIME); }
 		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
 		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
-		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
-		void               setCommand(const QDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
+		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString());
+		void               setCommand(const QDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString());
 		void               setEmail(const QDate&, const QString& from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const QDateTime&, const QString& from, const EmailAddressList&, const QString& subject,

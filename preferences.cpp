@@ -69,7 +69,7 @@ const bool                       Preferences::default_emailQueuedNotify       = 
 const QColor                     Preferences::default_disabledColour(Qt::lightGray);
 const QColor                     Preferences::default_expiredColour(Qt::darkRed);
 const int                        Preferences::default_expiredKeepDays         = 7;
-const QString                    Preferences::default_defaultSoundFile        = QString::null;
+const QString                    Preferences::default_defaultSoundFile       = QString();
 const float                      Preferences::default_defaultSoundVolume      = -1;
 const int                        Preferences::default_defaultLateCancel       = 0;
 const bool                       Preferences::default_defaultAutoClose        = false;
@@ -81,8 +81,8 @@ const bool                       Preferences::default_defaultConfirmAck       = 
 const bool                       Preferences::default_defaultCmdScript        = false;
 const Preferences::CmdLogType    Preferences::default_defaultCmdLogType       = Preferences::DISCARD_OUTPUT;
 const bool                       Preferences::default_defaultEmailBcc         = false;
-const QString                    Preferences::default_emailAddress            = QString::null;
-const QString                    Preferences::default_emailBccAddress         = QString::null;
+const QString                    Preferences::default_emailAddress           = QString();
+const QString                    Preferences::default_emailBccAddress        = QString();
 const Preferences::MailClient    Preferences::default_emailClient             = KMAIL;
 const Preferences::MailFrom      Preferences::default_emailBccFrom            = MAIL_FROM_CONTROL_CENTRE;
 const RecurrenceEdit::RepeatType Preferences::default_defaultRecurPeriod      = RecurrenceEdit::NO_RECUR;
@@ -464,9 +464,9 @@ QString Preferences::emailFrom(Preferences::MailFrom from, bool useAddress, bool
 		case MAIL_FROM_CONTROL_CENTRE:
 			return FROM_CONTROL_CENTRE;
 		case MAIL_FROM_ADDR:
-			return useAddress ? (bcc ? mEmailBccAddress : mEmailAddress) : QString::null;
+			return useAddress ? (bcc ? mEmailBccAddress : mEmailAddress) : QString();
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 
@@ -493,7 +493,7 @@ QString Preferences::emailAddress()
 		case MAIL_FROM_ADDR:
 			return mEmailAddress;
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 
@@ -506,7 +506,7 @@ QString Preferences::emailBccAddress()
 		case MAIL_FROM_ADDR:
 			return mEmailBccAddress;
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 

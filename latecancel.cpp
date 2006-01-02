@@ -71,7 +71,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	mTimeSelectorFrame = new QFrame();
 	mStack->addWidget(mTimeSelectorFrame);
 	vlayout = new QVBoxLayout(mTimeSelectorFrame);
-	mTimeSelector = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString::null,
+	mTimeSelector = new TimeSelector(i18n("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString(),
 	                                 whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));

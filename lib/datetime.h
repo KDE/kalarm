@@ -175,7 +175,7 @@ class DateTime
 					else if (mTimeValid)
 						return mDateTime.toString(f);
 					else
-						return QString::null;
+						return QString();
 				}
 		/** Returns the value as a string.
 		 *  If it is a date-time, both time and date are included in the output.
@@ -188,7 +188,7 @@ class DateTime
 					else if (mTimeValid)
 						return mDateTime.toString(format);
 					else
-						return QString::null;
+						return QString();
 				}
 		/** Returns the value as a string, formatted according to the user's locale.
 		 *  If it is a date-time, both time and date are included in the output.

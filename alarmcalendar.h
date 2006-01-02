@@ -83,13 +83,13 @@ class AlarmCalendar : public QObject
 		void                  slotPurge();
 
 	private:
-		AlarmCalendar(const QString& file, CalID, const QString& icalFile = QString::null,
-		              const QString& configKey = QString::null);
+		AlarmCalendar(const QString& file, CalID, const QString& icalFile = QString(),
+		              const QString& configKey = QString());
 		bool                  create();
-		bool                  saveCal(const QString& newFile = QString::null);
+		bool                  saveCal(const QString& newFile = QString());
 		void                  purge(int daysToKeep);
 		void                  startPurgeTimer();
-		static AlarmCalendar* createCalendar(CalID, KConfig*, QString& writePath, const QString& configKey = QString::null);
+		static AlarmCalendar* createCalendar(CalID, KConfig*, QString& writePath, const QString& configKey = QString());
 		static AlarmCalendar* calendarOpen(CalID);
 
 		static AlarmCalendar* mCalendars[NCALS];   // the calendars

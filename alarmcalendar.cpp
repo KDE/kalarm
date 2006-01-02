@@ -224,7 +224,7 @@ const KCal::Event* AlarmCalendar::getEvent(const QString& uniqueID)
 AlarmCalendar::AlarmCalendar(const QString& path, CalID type, const QString& icalPath,
                              const QString& configKey)
 	: mCalendar(0),
-	  mConfigKey(icalPath.isNull() ? QString::null : configKey),
+	  mConfigKey(icalPath.isNull() ? QString() : configKey),
 	  mType(eventTypes[type]),
 	  mPurgeDays(-1),      // default to not purging
 	  mOpen(false),
@@ -318,7 +318,7 @@ int AlarmCalendar::load()
 		return -1;
 	}
 	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-	mCalendar->setTimeZoneId(QString::null);   // default to the local time zone for reading
+	mCalendar->setTimeZoneId(QString());   // default to the local time zone for reading
 	bool loaded = mCalendar->load(tmpFile);
 	mCalendar->setLocalTime();                 // write using local time (i.e. no time zone)
 	if (!loaded)

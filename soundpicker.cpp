@@ -191,7 +191,7 @@ bool SoundPicker::speak() const
 */
 QString SoundPicker::file() const
 {
-	return mCheckbox->isChecked() && mFileRadio->isChecked() ? mFile : QString::null;
+	return mCheckbox->isChecked() && mFileRadio->isChecked() ? mFile : QString();
 }
 
 /******************************************************************************

@@ -256,7 +256,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine,
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount);
+	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount);
 }
 
 /******************************************************************************
@@ -296,7 +296,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
+	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
 }
 
 

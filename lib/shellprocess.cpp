@@ -155,7 +155,7 @@ QString ShellProcess::errorMessage() const
 		case RUNNING:
 		case SUCCESS:
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 

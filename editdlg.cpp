@@ -104,7 +104,7 @@ class PickAlarmFileRadio : public PickFileRadio
 	virtual QString pickFile()    // called when browse button is pressed to select a file to display
 	{
 		return KAlarm::browseFile(i18n("Choose Text or Image File to Display"), mDefaultDir, fileEdit()->text(),
-		                          QString::null, KFile::ExistingOnly, parentWidget(), "pickAlarmFile");
+		                          QString(), KFile::ExistingOnly, parentWidget(), "pickAlarmFile");
 	}
     private:
 	QString mDefaultDir;   // default directory for file browse button
@@ -120,7 +120,7 @@ class PickLogFileRadio : public PickFileRadio
 		: PickFileRadio(b, e, text, group, parent) { }
 	virtual QString pickFile()    // called when browse button is pressed to select a log file
 	{
-		return KAlarm::browseFile(i18n("Choose Log File"), mDefaultDir, fileEdit()->text(), QString::null,
+		return KAlarm::browseFile(i18n("Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
 		                          KFile::LocalOnly, parentWidget(), "pickLogFile");
 	}
     private:
@@ -1643,7 +1643,7 @@ void EditAlarmDlg::slotEditDeferral()
 	if (deferDlg.exec() == QDialog::Accepted)
 	{
 		mDeferDateTime = deferDlg.getDateTime();
-		mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString::null);
+		mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString());
 	}
 }
 
@@ -1981,8 +1981,8 @@ void EditAlarmDlg::openAddressBook()
  */
 void EditAlarmDlg::slotAddAttachment()
 {
-	QString url = KAlarm::browseFile(i18n("Choose File to Attach"), mAttachDefaultDir, QString::null,
-	                                 QString::null, KFile::ExistingOnly, this, "pickAttachFile");
+	QString url = KAlarm::browseFile(i18n("Choose File to Attach"), mAttachDefaultDir, QString(),
+	                                 QString(), KFile::ExistingOnly, this, "pickAttachFile");
 	if (!url.isEmpty())
 	{
 		mEmailAttachList->addItem(url);

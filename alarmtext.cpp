@@ -44,7 +44,7 @@ void AlarmText::setText(const QString& text)
 	mBody     = text;
 	mIsScript = text.startsWith(QLatin1String("#!"));
 	mIsEmail  = false;
-	mTo = mFrom = mCc = mTime = mSubject = QString::null;
+	mTo = mFrom = mCc = mTime = mSubject = QString();
 	mKMailSerialNum = 0;
 }
 
@@ -136,14 +136,14 @@ int AlarmText::emailHeaderCount(const QStringList& lines)
 /******************************************************************************
 *  Check whether a text is an email, and if so return its headers or optionally
 *  only its subject line.
-*  Reply = headers/subject line, or QString::null if not the text of an email.
+*  Reply = headers/subject line, or QString() if not the text of an email.
 */
 QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 {
 	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	int n = emailHeaderCount(lines);
 	if (!n)
-		return QString::null;
+		return QString();
 	if (subjectOnly)
 		return lines[n-1].mid(mSubjectPrefix.length()).trimmed();
 	QString h = lines[0];

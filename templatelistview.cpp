@@ -42,7 +42,7 @@ TemplateListView::TemplateListView(bool includeCmdAlarms, const QString& whatsTh
 	  mNameColumn(1),
 	  mExcludeCmdAlarms(!includeCmdAlarms)
 {
-	addColumn(QString::null);          // icon column
+	addColumn(QString());          // icon column
 	addLastColumn(i18n("Name"));
 	setSorting(mNameColumn);           // sort initially by name
 	setColumnAlignment(mIconColumn, Qt::AlignHCenter);

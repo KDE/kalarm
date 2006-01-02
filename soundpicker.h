@@ -110,7 +110,7 @@ class SoundPicker : public QFrame
 		 *                     If null, no file will be highlighted.
 		 *  @return URL selected, in human readable format. If none is selected, URL.isEmpty() is true.
 		 */
-		static QString browseFile(QString& initialDir, const QString& initialFile = QString::null);
+		static QString browseFile(QString& initialDir, const QString& initialFile = QString());
 
 		static QString i18n_Sound();       // plain text of Sound checkbox
 		static QString i18n_s_Sound();     // text of Sound checkbox, with 'S' shortcut

@@ -137,7 +137,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		return false;
 	}
 	KAMailData data(event, from,
-	                (event.emailBcc() ? Preferences::emailBccAddress() : QString::null),
+	                (event.emailBcc() ? Preferences::emailBccAddress() : QString()),
 	                allowNotify);
 	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
@@ -272,7 +272,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 	}
 	if (data.allowNotify)
 		notifyQueued(data.event);
-	return QString::null;
+	return QString();
 }
 
 /******************************************************************************
@@ -314,7 +314,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		QDataStream arg(&callData, QIODevice::WriteOnly);
 		arg << QString::fromLatin1(folder) << tmpFile.name();
 		if (callKMail(callData, "KMailIface", "dcopAddMessage(QString,QString)", "int"))
-			return QString::null;
+			return QString();
 		err = i18n("Error calling KMail");
 	}
 	kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): " << err << endl;
@@ -499,7 +499,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		}
 		message += QString::fromLatin1("\n--%1--\n.\n").arg(boundary);
 	}
-	return QString::null;
+	return QString();
 }
 
 /******************************************************************************
@@ -525,7 +525,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 				QString text = (Preferences::emailClient() == Preferences::KMAIL)
 				             ? i18n("An email has been queued to be sent by KMail")
 				             : i18n("An email has been queued to be sent");
-				KMessageBox::information(0, text, QString::null, Preferences::EMAIL_QUEUED_NOTIFY);
+				KMessageBox::information(0, text, QString(), Preferences::EMAIL_QUEUED_NOTIFY);
 				return;
 			}
 		}
@@ -573,7 +573,7 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 		if (!bad.isEmpty())
 			return bad;
 	}
-	return QString::null;
+	return QString();
 }
 
 #if 0
@@ -615,7 +615,7 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 		}
 		list += KCal::Person(mblist[i].displayName, addrPart);
 	}
-	return QString::null;
+	return QString();
 }
 
 /*
@@ -639,7 +639,7 @@ QString KAMail::convertAddresses(const QString& items, QStringList& list)
 				return item;
 		}
 	}
-	return QString::null;
+	return QString();
 }*/
 
 /******************************************************************************
@@ -723,7 +723,7 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 		}
 		next = i + 1;
 	}
-	return QString::null;
+	return QString();
 }
 
 #if 0
@@ -759,7 +759,7 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 		}
 		next = i + 1;
 	}
-	return QString::null;
+	return QString();
 }
 #endif
 
@@ -924,7 +924,7 @@ QString getHostName()
 {
         char hname[256];
         if (gethostname(hname, sizeof(hname)))
-                return QString::null;
+                return QString();
         return QString::fromLocal8Bit(hname);
 }
 }
@@ -966,7 +966,7 @@ bool parseUserName( const char* & scursor, const char * const send,
 
     default: // atom
       scursor--; // re-set scursor to point to ch again
-      tmp = QString::null;
+      tmp.clear();
       if ( parseAtom( scursor, send, result, false /* no 8bit */ ) ) {
         if (getpwnam(result.toLocal8Bit()))
           return true;
@@ -994,7 +994,7 @@ bool parseAddress( const char* & scursor, const char * const send,
   const char * oldscursor = scursor;
   if ( parseMailbox( scursor, send, maybeMailbox, isCRLF ) ) {
     // yes, it is:
-    result.displayName = QString::null;
+    result.displayName.clear();
     result.mailboxList.append( maybeMailbox );
     return true;
   }
@@ -1005,10 +1005,10 @@ bool parseAddress( const char* & scursor, const char * const send,
   QString maybeUserName;
   if ( parseUserName( scursor, send, maybeUserName, isCRLF ) ) {
     // yes, it is:
-    maybeMailbox.displayName = QString::null;
+    maybeMailbox.displayName.clear();
     maybeMailbox.addrSpec.localPart = maybeUserName;
-    maybeMailbox.addrSpec.domain = QString::null;
-    result.displayName = QString::null;
+    maybeMailbox.addrSpec.domain.clear();
+    result.displayName.clear();
     result.mailboxList.append( maybeMailbox );
     return true;
   }

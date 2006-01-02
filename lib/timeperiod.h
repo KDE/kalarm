@@ -98,7 +98,7 @@ class TimePeriod : public KHBox
 		/** Sets separate WhatsThis texts for the count spin boxes and the units combo box.
 		 *  If @p hourMin is omitted, both spin boxes are set to the same WhatsThis text.
 		 */
-		void          setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin = QString::null);
+		void          setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin = QString());
 
 		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
 		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
