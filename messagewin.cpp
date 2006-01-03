@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1213,10 +1213,20 @@ void MessageWin::showEvent(QShowEvent* se)
 				 *      See the Qt documentation on window geometry for more details.
 				 */
 				// PROBLEM: The frame size is not known yet!
+
+				/* Find the usable area of the desktop or, if the desktop comprises
+				 * multiple screens, the usable area of the current screen. (If the
+				 * message is displayed on a screen other than that currently being
+				 * worked with, it might not be noticed.)
+				 */
+				QPoint cursor = QCursor::pos();
 				if (!mWinModule)
 					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
 				QRect desk = mWinModule->workArea();
-				QPoint cursor = QCursor::pos();
+				QDesktopWidget* dw = QApplication::desktop();
+				if (dw->numScreens() > 1)
+					desk &= dw->screenGeometry(dw->screenNumber(cursor));
+
 				QRect frame = frameGeometry();
 				QRect rect  = geometry();
 				// Find the offsets from the outside of the frame to the edges of the OK button
