@@ -125,7 +125,7 @@ KAlarmApp::KAlarmApp()
 
 		KConfig* config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
-		mNoSystemTray           = config->readBoolEntry(QLatin1String("NoSystemTray"), false);
+		mNoSystemTray           = config->readEntry(QLatin1String("NoSystemTray"), QVariant(false)).toBool();
 		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();

@@ -80,7 +80,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 		 */
 		KConfig kaconfig(locate("config", "kalarmrc"));
 		kaconfig.setGroup(QLatin1String("General"));
-		autostart = kaconfig.readBoolEntry(QLatin1String("AutostartTray"), false);
+		autostart = kaconfig.readEntry(QLatin1String("AutostartTray"), QVariant(false)).toBool();
 		if (autostart)
 		{
 			kdDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";

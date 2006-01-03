@@ -205,10 +205,10 @@ void MainWindow::saveProperties(KConfig* config)
 */
 void MainWindow::readProperties(KConfig* config)
 {
-	mHiddenTrayParent = config->readBoolEntry(QLatin1String("HiddenTrayParent"));
-	mShowExpired      = config->readBoolEntry(QLatin1String("ShowExpired"));
-	mShowTime         = config->readBoolEntry(QLatin1String("ShowTime"));
-	mShowTimeTo       = config->readBoolEntry(QLatin1String("ShowTimeTo"));
+	mHiddenTrayParent = config->readEntry("HiddenTrayParent", QVariant::Bool).toBool();
+	mShowExpired      = config->readEntry("ShowExpired", QVariant::Bool).toBool();
+	mShowTime         = config->readEntry("ShowTime", QVariant::Bool).toBool();
+	mShowTimeTo       = config->readEntry("ShowTimeTo", QVariant::Bool).toBool();
 }
 
 /******************************************************************************

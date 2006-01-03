@@ -57,8 +57,8 @@ void ADConfigData::readConfig()
 		QString client = *cl;
 		client.remove(CLIENT_GROUP_SEARCH);
 		QString  title       = config->readEntry(TITLE_KEY, client);   // read app title (default = app name)
-		QByteArray dcopObject  = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
-		bool       startClient = config->readBoolEntry(START_CLIENT_KEY, false);
+		QByteArray dcopObject  = config->readEntry(DCOP_OBJECT_KEY, QString()).toLocal8Bit();
+		bool       startClient = config->readEntry(START_CLIENT_KEY, QVariant(false)).toBool();
 		QString    calendar    = config->readPathEntry(CALENDAR_KEY);
 
 		// Verify the configuration

@@ -608,8 +608,8 @@ bool readConfigWindowSize(const char* window, QSize& result)
 	KConfig* config = KGlobal::config();
 	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
-	QSize s = QSize(config->readNumEntry(QString::fromLatin1("Width %1").arg(desktop->width()), 0),
-	                config->readNumEntry(QString::fromLatin1("Height %1").arg(desktop->height()), 0));
+	QSize s = QSize(config->readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), QVariant((int)0)).toInt(),
+	                config->readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), QVariant((int)0)).toInt());
 	if (s.isEmpty())
 		return false;
 	result = s;

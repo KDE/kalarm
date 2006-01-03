@@ -392,7 +392,7 @@ bool Daemon::autoStart(bool defaultAutoStart)
 {
 	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
 	adconfig.setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
-	return adconfig.readBoolEntry(QLatin1String(DAEMON_AUTOSTART_KEY), defaultAutoStart);
+	return adconfig.readEntry(QLatin1String(DAEMON_AUTOSTART_KEY), QVariant(defaultAutoStart)).toBool();
 }
 
 /******************************************************************************
