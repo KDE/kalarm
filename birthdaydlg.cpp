@@ -82,8 +82,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Get default prefix and suffix texts from config file
 	KConfig* config = KGlobal::config();
 	config->setGroup(QLatin1String("General"));
-	mPrefixText = config->readEntry(QLatin1String("BirthdayPrefix"), i18n("Birthday: "));
-	mSuffixText = config->readEntry(QLatin1String("BirthdaySuffix"));
+	mPrefixText = config->readEntry("BirthdayPrefix", i18n("Birthday: "));
+	mSuffixText = config->readEntry("BirthdaySuffix");
 
 	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
@@ -359,8 +359,8 @@ void BirthdayDlg::slotOk()
 	// Save prefix and suffix texts to use as future defaults
 	KConfig* config = KGlobal::config();
 	config->setGroup(QLatin1String("General"));
-	config->writeEntry(QLatin1String("BirthdayPrefix"), mPrefix->text());
-	config->writeEntry(QLatin1String("BirthdaySuffix"), mSuffix->text());
+	config->writeEntry("BirthdayPrefix", mPrefix->text());
+	config->writeEntry("BirthdaySuffix", mSuffix->text());
 	config->sync();
 
 	mFlags = (mSoundPicker->beep()             ? KAEvent::BEEP : 0)
