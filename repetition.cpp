@@ -163,7 +163,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	hintLabel->setLineWidth(2);
 	hintLabel->setMargin(marginHint());
 	hintLabel->setWordWrap(true);
-#warning Wrapping doesn't work
+#warning Wrapping does not work
 //	hintLabel->setTextFormat(Qt::RichText);
 	layout->addWidget(hintLabel);
 	layout->addSpacing(hintMargin);
