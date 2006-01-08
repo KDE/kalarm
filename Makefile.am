@@ -6,7 +6,7 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm \
 	-I$(top_srcdir)/kalarm/lib \
 	-I$(top_builddir)/libkcal/libical/src \
 	-I$(top_srcdir)/libkmime \
-	-I$(top_srcdir)/kleopatra/lib $(all_includes)
+	-I$(top_srcdir)/libkleo $(all_includes)
 
 bin_PROGRAMS = kalarm
 # Don't change the order of the kalarm_SOURCES files without first checking
