@@ -23,8 +23,8 @@
 #include "emailidcombo.moc"
 
 
-EmailIdCombo::EmailIdCombo(KPIM::IdentityManager* manager, QWidget* parent, const char* name)
-	: KPIM::IdentityCombo(manager, parent, name),
+EmailIdCombo::EmailIdCombo(KPIM::IdentityManager* manager, QWidget* parent)
+	: KPIM::IdentityCombo(manager, parent),
 	  mReadOnly(false)
 { }
 

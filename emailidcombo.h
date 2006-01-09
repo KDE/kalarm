@@ -31,7 +31,7 @@ class EmailIdCombo : public KPIM::IdentityCombo
 {
 		Q_OBJECT
 	public:
-		EmailIdCombo(KPIM::IdentityManager*, QWidget* parent = 0, const char* name = 0);
+		EmailIdCombo(KPIM::IdentityManager*, QWidget* parent = 0);
 		void  setReadOnly(bool ro)    { mReadOnly = ro; }
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
