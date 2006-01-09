@@ -684,9 +684,9 @@ void MessageWin::saveProperties(KConfig* config)
 	if (mShown  &&  !mErrorWindow)
 	{
 		config->writeEntry("EventID", mEventID);
-		config->writeEntry("AlarmType", mAlarmType);
+		config->writeEntry("AlarmType", (int)mAlarmType);
 		config->writeEntry("Message", mMessage);
-		config->writeEntry("Type", mAction);
+		config->writeEntry("Type", (int)mAction);
 		config->writeEntry("Font", mFont);
 		config->writeEntry("BgColour", mBgColour);
 		config->writeEntry("FgColour", mFgColour);
@@ -723,29 +723,29 @@ void MessageWin::readProperties(KConfig* config)
 {
 	mInvalid           = config->readEntry("Invalid", QVariant(false)).toBool();
 	mEventID           = config->readEntry("EventID");
-	mAlarmType         = KAAlarm::Type(config->readEntry("AlarmType", QVariant::Int).toInt());
+	mAlarmType         = KAAlarm::Type(config->readEntry("AlarmType", 0));
 	mMessage           = config->readEntry("Message");
-	mAction            = KAEvent::Action(config->readEntry("Type", QVariant::Int).toInt());
-	mFont              = qvariant_cast<QFont>(config->readEntry("Font", QVariant::Font));
+	mAction            = KAEvent::Action(config->readEntry("Type", 0));
+	mFont              = config->readEntry("Font", QFont());
 	mBgColour          = qvariant_cast<QColor>(config->readEntry("BgColour", Qt::white));
 	mFgColour          = qvariant_cast<QColor>(config->readEntry("FgColour", Qt::black));
-	mConfirmAck        = config->readEntry("ConfirmAck", QVariant::Bool).toBool();
+	mConfirmAck        = config->readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
-	QDateTime dt       = config->readEntry("Time", &invalidDateTime).toDateTime();
-	bool dateOnly      = config->readEntry("DateOnly", QVariant::Bool).toBool();
+	QDateTime dt       = config->readEntry("Time", invalidDateTime);
+	bool dateOnly      = config->readEntry("DateOnly", false);
 	mDateTime.set(dt, dateOnly);
-	mCloseTime         = config->readEntry("Expiry", &invalidDateTime).toDateTime();
+	mCloseTime         = config->readEntry("Expiry", invalidDateTime);
 #ifndef WITHOUT_ARTS
 	mAudioFile         = config->readPathEntry(QLatin1String("AudioFile"));
-	mVolume            = static_cast<float>(config->readEntry("Volume", QVariant::Int).toInt()) / 100;
+	mVolume            = static_cast<float>(config->readEntry("Volume", 0)) / 100;
 	mFadeVolume        = -1;
 	mFadeSeconds       = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
-	mRestoreHeight     = config->readEntry("Height", QVariant::Int).toInt();
-	mNoDefer           = config->readEntry("NoDefer", QVariant::Bool).toBool();
-	mKMailSerialNumber = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant::ULongLong).toULongLong());
+	mRestoreHeight     = config->readEntry("Height", 0);
+	mNoDefer           = config->readEntry("NoDefer", false);
+	mKMailSerialNumber = config->readEntry("KMailSerial", 0);
 	mShowEdit          = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{

@@ -37,7 +37,7 @@ class TrayWindow : public KSystemTray
 {
 		Q_OBJECT
 	public:
-		TrayWindow(MainWindow* parent, const char* name = 0);
+		TrayWindow(MainWindow* parent);
 		~TrayWindow();
 		void         removeWindow(MainWindow*);
 		MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }

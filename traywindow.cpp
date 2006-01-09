@@ -65,8 +65,8 @@ struct TipItem
 = The KDE system tray window.
 =============================================================================*/
 
-TrayWindow::TrayWindow(MainWindow* parent, const char* name)
-	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0), name),
+TrayWindow::TrayWindow(MainWindow* parent)
+	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0)),
 	  mAssocMainWindow(parent)
 {
 	kdDebug(5950) << "TrayWindow::TrayWindow()\n";

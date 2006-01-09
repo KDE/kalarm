@@ -126,7 +126,8 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 	else
 		mDefaultFont = 0;
 
-	mFontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
+	mFontChooser = new KFontChooser(page, onlyFixed, fontList, false, visibleListSize);
+	mFontChooser->setObjectName( name );
 	topLayout->addWidget(mFontChooser);
 
 	slotDefaultFontToggled(false);

@@ -169,10 +169,10 @@ void MessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesno,
 		return;
 	KConfig* config = mConfig ? mConfig : KGlobal::config();
 	config->setGroup(QLatin1String("Notification Messages"));
-	bool global = (dontShowAgainName[0] == QLatin1Char(':'));
+	KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
 	if (yesno)
-		config->writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), true, global);
+		config->writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
 	else
-		config->writeEntry(dontShowAgainName, !dontShow, true, global);
+		config->writeEntry(dontShowAgainName, !dontShow, flags);
 	config->sync();
 }

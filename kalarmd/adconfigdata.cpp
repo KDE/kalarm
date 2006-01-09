@@ -79,7 +79,7 @@ void ADConfigData::readConfig()
 		}
 		if (!ok)
 		{
-			config->deleteGroup(*cl, true);
+			config->deleteGroup(*cl, KConfig::NLS);
 			continue;
 		}
 
