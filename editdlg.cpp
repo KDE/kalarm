@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -412,7 +412,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateName->setFocus();
 
 	// Save the initial state of all controls so that we can later tell if they have changed
-	saveState(event);
+	saveState((event && (mTemplate || !event->isTemplate())) ? event : 0);
 
 	// Note the current desktop so that the dialog can be shown on it.
 	// If a main window is visible, the dialog will by KDE default always appear on its
