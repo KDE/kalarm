@@ -1,7 +1,8 @@
 KAlarm
 
-=== Version 1.3.6 --- 3 January 2006 ===
+=== Version 1.3.6 --- 10 January 2006 ===
 Make autoclose of message windows work.
+Fix New From Template not creating alarm if template contents are not changed.
 Ensure that day and month names translations are independent of locale calendar.
 Display alarm message windows within current screen in multi-head systems.
 
