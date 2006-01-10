@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -205,9 +205,9 @@ void MainWindow::saveProperties(KConfig* config)
 */
 void MainWindow::readProperties(KConfig* config)
 {
-	mHiddenTrayParent = config->readEntry("HiddenTrayParent", false);
+	mHiddenTrayParent = config->readEntry("HiddenTrayParent", true);
 	mShowExpired      = config->readEntry("ShowExpired", false);
-	mShowTime         = config->readEntry("ShowTime", false);
+	mShowTime         = config->readEntry("ShowTime", true);
 	mShowTimeTo       = config->readEntry("ShowTimeTo", false);
 }
 
