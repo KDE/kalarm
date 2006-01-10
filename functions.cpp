@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -608,8 +608,8 @@ bool readConfigWindowSize(const char* window, QSize& result)
 	KConfig* config = KGlobal::config();
 	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
-	QSize s = QSize(config->readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), QVariant((int)0)).toInt(),
-	                config->readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), QVariant((int)0)).toInt());
+	QSize s = QSize(config->readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
+	                config->readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), (int)0));
 	if (s.isEmpty())
 		return false;
 	result = s;

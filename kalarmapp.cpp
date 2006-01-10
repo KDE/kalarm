@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,10 +75,10 @@ static bool convWakeTime(const QByteArray& timeParam, QDateTime&, bool& noTime);
 static bool convInterval(QByteArray timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
-* Find the maximum number of seconds late which a late-cancel alarm is allowed
-* to be. This is calculated as the alarm daemon's check interval, plus a few
-* seconds leeway to cater for any timing irregularities.
-*/
+ * Find the maximum number of seconds late which a late-cancel alarm is allowed
+ * to be. This is calculated as the alarm daemon's check interval, plus a few
+ * seconds leeway to cater for any timing irregularities.
+ */
 static inline int maxLateness(int lateCancel)
 {
 	static const int LATENESS_LEEWAY = 5;
@@ -94,24 +94,24 @@ QString     KAlarmApp::mFatalMessage;
 
 
 /******************************************************************************
-* Construct the application.
-*/
-KAlarmApp::KAlarmApp()
-	: KUniqueApplication(),
-	  mInitialised(false),
-	  mDcopHandler(new DcopHandler()),
-	  mTrayWindow(0),
-	  mPendingQuit(false),
-	  mProcessingQueue(false),
-	  mCheckingSystemTray(false),
-	  mSessionClosingDown(false),
-	  mRefreshExpiredAlarms(false),
-	  mSpeechEnabled(false)
+ * Construct the application.
+ */
+	KAlarmApp::KAlarmApp()
+: KUniqueApplication(),
+	mInitialised(false),
+	mDcopHandler(new DcopHandler()),
+	mTrayWindow(0),
+	mPendingQuit(false),
+	mProcessingQueue(false),
+	mCheckingSystemTray(false),
+	mSessionClosingDown(false),
+	mRefreshExpiredAlarms(false),
+	mSpeechEnabled(false)
 {
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
-	                          QLatin1String("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
+			QLatin1String("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
@@ -125,7 +125,7 @@ KAlarmApp::KAlarmApp()
 
 		KConfig* config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
-		mNoSystemTray           = config->readEntry(QLatin1String("NoSystemTray"), QVariant(false)).toBool();
+		mNoSystemTray           = config->readEntry(QLatin1String("NoSystemTray"), false);
 		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();

@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -392,7 +392,7 @@ bool Daemon::autoStart(bool defaultAutoStart)
 {
 	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
 	adconfig.setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
-	return adconfig.readEntry(QLatin1String(DAEMON_AUTOSTART_KEY), QVariant(defaultAutoStart)).toBool();
+	return adconfig.readEntry(QLatin1String(DAEMON_AUTOSTART_KEY), defaultAutoStart);
 }
 
 /******************************************************************************
