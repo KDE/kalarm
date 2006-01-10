@@ -334,10 +334,10 @@ void Preferences::read()
 	mDefaultConfirmAck        = config->readEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultCopyToKOrganizer  = config->readEntry(DEF_COPY_TO_KORG, default_defaultCopyToKOrganizer);
 	mDefaultSound             = config->readEntry(DEF_SOUND, default_defaultSound);
-	int soundType             = config->readEntry(DEF_SOUND_TYPE, (int)default_defaultSoundType);
+	int soundType             = config->readEntry(DEF_SOUND_TYPE, static_cast<int>(default_defaultSoundType));
 	mDefaultSoundType         = (soundType < SoundPicker::BEEP || soundType > SoundPicker::PLAY_FILE)
 	                          ? default_defaultSoundType : (SoundPicker::Type)soundType;
-	mDefaultSoundVolume       = config->readEntry(DEF_SOUND_VOLUME, (int)default_defaultSoundVolume);
+	mDefaultSoundVolume       = static_cast<float>(config->readEntry(DEF_SOUND_VOLUME, static_cast<double>(default_defaultSoundVolume)));
 #ifdef WITHOUT_ARTS
 	mDefaultSoundRepeat       = false;
 #else
@@ -345,19 +345,19 @@ void Preferences::read()
 #endif
 	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultCmdScript         = config->readEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
-	int logType               = config->readEntry(DEF_CMD_LOG_TYPE, (int)default_defaultCmdLogType);
+	int logType               = config->readEntry(DEF_CMD_LOG_TYPE, static_cast<int>(default_defaultCmdLogType));
 	mDefaultCmdLogType        = (logType < DISCARD_OUTPUT || logType > EXEC_IN_TERMINAL)
 	                          ? default_defaultCmdLogType : (CmdLogType)logType;
 	mDefaultCmdLogFile        = config->readPathEntry(DEF_LOG_FILE);
-	mDefaultEmailBcc          = config->readEntry(DEF_EMAIL_BCC, QVariant(default_defaultEmailBcc)).toBool();
-	int recurPeriod           = config->readEntry(DEF_RECUR_PERIOD, (int)default_defaultRecurPeriod);
+	mDefaultEmailBcc          = config->readEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
+	int recurPeriod           = config->readEntry(DEF_RECUR_PERIOD, static_cast<int>(default_defaultRecurPeriod));
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
-	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
+	                          ? default_defaultRecurPeriod : static_cast<RecurrenceEdit::RepeatType>(recurPeriod);
 	QByteArray feb29          = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).toLocal8Bit();
 	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
-	int reminderUnits         = config->readEntry(DEF_REMIND_UNITS, (int)default_defaultReminderUnits);
+	int reminderUnits         = config->readEntry(DEF_REMIND_UNITS, static_cast<int>(default_defaultReminderUnits));
 	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
-	                          ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
+	                          ? default_defaultReminderUnits : static_cast<TimePeriod::Units>(reminderUnits);
 	mDefaultPreAction         = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
 	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	mAutostartDaemon          = Daemon::autoStart(default_autostartDaemon);
@@ -414,17 +414,17 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
 	config->writeEntry(DEF_SOUND, mDefaultSound);
-	config->writeEntry(DEF_SOUND_TYPE, (int)mDefaultSoundType);
+	config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(mDefaultSoundType));
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
 	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
 	config->writeEntry(DEF_CMD_SCRIPT, mDefaultCmdScript);
-	config->writeEntry(DEF_CMD_LOG_TYPE, (int)mDefaultCmdLogType);
+	config->writeEntry(DEF_CMD_LOG_TYPE, static_cast<int>(mDefaultCmdLogType));
 	config->writePathEntry(DEF_LOG_FILE, mDefaultCmdLogFile);
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
-	config->writeEntry(DEF_RECUR_PERIOD, (int)mDefaultRecurPeriod);
+	config->writeEntry(DEF_RECUR_PERIOD, static_cast<int>(mDefaultRecurPeriod));
 	config->writeEntry(FEB29_RECUR_TYPE, (mDefaultFeb29Type == KARecurrence::FEB29_MAR1 ? "Mar1" : mDefaultFeb29Type == KARecurrence::FEB29_FEB28 ? "Feb28" : "None"));
-	config->writeEntry(DEF_REMIND_UNITS, (int)mDefaultReminderUnits);
+	config->writeEntry(DEF_REMIND_UNITS, static_cast<int>(mDefaultReminderUnits));
 	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 	if (syncToDisc)
@@ -585,7 +585,7 @@ void Preferences::convertOldPrefs()
 		useCC = config->readEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
 		// EmailBccUseControlCenter was missing in preferences written by KAlarm pre-0.9.5
 		bccUseCC = config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE)
-		         ? config->readEntry(EMAIL_BCC_USE_CONTROL_CENTRE, QVariant(default_emailBccUseControlCentre)).toBool()
+		         ? config->readEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre)
 			 : useCC;
 		config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS, QString())));
 		config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS, QString())));
@@ -600,7 +600,7 @@ void Preferences::convertOldPrefs()
 	if (config->hasKey(DEF_CMD_XTERM))
 	{
 		config->writeEntry(DEF_CMD_LOG_TYPE,
-			(int)(config->readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
+			static_cast<int>(config->readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
 		config->deleteEntry(DEF_CMD_XTERM);
 		sync = true;
 	}

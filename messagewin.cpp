@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -684,9 +684,9 @@ void MessageWin::saveProperties(KConfig* config)
 	if (mShown  &&  !mErrorWindow)
 	{
 		config->writeEntry("EventID", mEventID);
-		config->writeEntry("AlarmType", (int)mAlarmType);
+		config->writeEntry("AlarmType", static_cast<int>(mAlarmType));
 		config->writeEntry("Message", mMessage);
-		config->writeEntry("Type", (int)mAction);
+		config->writeEntry("Type", static_cast<int>(mAction));
 		config->writeEntry("Font", mFont);
 		config->writeEntry("BgColour", mBgColour);
 		config->writeEntry("FgColour", mFgColour);
@@ -721,14 +721,14 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	mInvalid           = config->readEntry("Invalid", QVariant(false)).toBool();
+	mInvalid           = config->readEntry("Invalid", false);
 	mEventID           = config->readEntry("EventID");
-	mAlarmType         = KAAlarm::Type(config->readEntry("AlarmType", 0));
+	mAlarmType         = static_cast<KAAlarm::Type>(config->readEntry("AlarmType", 0));
 	mMessage           = config->readEntry("Message");
-	mAction            = KAEvent::Action(config->readEntry("Type", 0));
+	mAction            = static_cast<KAEvent::Action>(config->readEntry("Type", 0));
 	mFont              = config->readEntry("Font", QFont());
-	mBgColour          = qvariant_cast<QColor>(config->readEntry("BgColour", Qt::white));
-	mFgColour          = qvariant_cast<QColor>(config->readEntry("FgColour", Qt::black));
+	mBgColour          = config->readEntry("BgColour", Qt::white);
+	mFgColour          = config->readEntry("FgColour", Qt::black);
 	mConfirmAck        = config->readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
 	QDateTime dt       = config->readEntry("Time", invalidDateTime);
@@ -745,7 +745,7 @@ void MessageWin::readProperties(KConfig* config)
 #endif
 	mRestoreHeight     = config->readEntry("Height", 0);
 	mNoDefer           = config->readEntry("NoDefer", false);
-	mKMailSerialNumber = config->readEntry("KMailSerial", 0);
+	mKMailSerialNumber = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
 	mShowEdit          = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
