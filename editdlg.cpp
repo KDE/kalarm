@@ -136,6 +136,7 @@ inline QString recurText(const KAEvent& event)
 // translations across different modules.
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
 QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
+QString EditAlarmDlg::i18n_SpecialActions()     { return i18n("Special Actions..."); }
 QString EditAlarmDlg::i18n_ShowInKOrganizer()   { return i18n("Show in KOrganizer"); }
 QString EditAlarmDlg::i18n_g_ShowInKOrganizer() { return i18n("Show in KOr&ganizer"); }
 QString EditAlarmDlg::i18n_EnterScript()        { return i18n("Enter a script"); }
@@ -503,7 +504,7 @@ void EditAlarmDlg::initDisplayAlarms()
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
-		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), mDisplayAlarmsFrame);
+		mSpecialActionsButton = new SpecialActionsButton(i18n_SpecialActions(), mDisplayAlarmsFrame);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
 	}

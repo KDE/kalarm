@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class FontColourChooser;
 class ButtonGroup;
 class TimeEdit;
 class SpinBox;
-class SpecialActions;
+class SpecialActionsButton;
 
 class FontColourPrefTab;
 class EditPrefTab;
@@ -203,7 +203,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mAutoClose;
 		QCheckBox*      mConfirmAck;
 		QComboBox*      mReminderUnits;
-		SpecialActions* mSpecialActions;
+		SpecialActionsButton* mSpecialActionsButton;
 		QCheckBox*      mCmdScript;
 		QCheckBox*      mCmdXterm;
 		QCheckBox*      mEmailBcc;
