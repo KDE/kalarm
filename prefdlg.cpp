@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -917,9 +917,8 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	      i18n("The default units for the reminder in the alarm edit dialog."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	mSpecialActions = new SpecialActions(group);
-	mSpecialActions->setFixedHeight(mSpecialActions->sizeHint().height());
-	layout->addWidget(mSpecialActions);
+	mSpecialActionsButton = new SpecialActionsButton(EditAlarmDlg::i18n_SpecialActions(), box);
+	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
 	QButtonGroup* bgroup = new QButtonGroup(SoundPicker::i18n_Sound(), mPage, "soundGroup");
@@ -1075,7 +1074,7 @@ void EditPrefTab::restore()
 	mAutoClose->setChecked(Preferences::mDefaultAutoClose);
 	mConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
 	mReminderUnits->setCurrentItem(Preferences::mDefaultReminderUnits);
-	mSpecialActions->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
+	mSpecialActionsButton->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
 	mSound->setChecked(Preferences::mDefaultSound);
 	setSoundType(Preferences::mDefaultSoundType);
 	mSoundFile->setText(Preferences::mDefaultSoundFile);
@@ -1096,8 +1095,8 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::mDefaultAutoClose        = mAutoClose->isChecked();
 	Preferences::mDefaultConfirmAck       = mConfirmAck->isChecked();
 	Preferences::mDefaultReminderUnits    = static_cast<TimePeriod::Units>(mReminderUnits->currentItem());
-	Preferences::mDefaultPreAction        = mSpecialActions->preAction();
-	Preferences::mDefaultPostAction       = mSpecialActions->postAction();
+	Preferences::mDefaultPreAction        = mSpecialActionsButton->preAction();
+	Preferences::mDefaultPostAction       = mSpecialActionsButton->postAction();
 	Preferences::mDefaultSound            = mSound->isChecked();
 	Preferences::mDefaultSoundFile        = mSoundFile->text();
 	Preferences::mDefaultSoundType        = mSpeak && mSpeak->isOn() ? SoundPicker::SPEAK
@@ -1132,7 +1131,7 @@ void EditPrefTab::setDefaults()
 	mAutoClose->setChecked(Preferences::default_defaultAutoClose);
 	mConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mReminderUnits->setCurrentItem(Preferences::default_defaultReminderUnits);
-	mSpecialActions->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
+	mSpecialActionsButton->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
 	mSound->setChecked(Preferences::default_defaultSound);
 	setSoundType(Preferences::default_defaultSoundType);
 	mSoundFile->setText(Preferences::default_defaultSoundFile);
