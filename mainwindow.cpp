@@ -115,7 +115,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-	: MainWindowBase(0, 0, Qt::WGroupLeader | Qt::WStyle_ContextHelp),
+	: MainWindowBase(0, Qt::WGroupLeader | Qt::WStyle_ContextHelp),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
 	  mShowExpired(Preferences::showExpiredAlarms()),
@@ -325,7 +325,7 @@ void MainWindow::initActions()
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	new KAction(i18n("Import &Birthdays..."), 0, this, SLOT(slotBirthdays()), actions, "importBirthdays");
 	new KAction(i18n("&Refresh Alarms"), "reload", 0, this, SLOT(slotResetDaemon()), actions, "refreshAlarms");
-	Daemon::createAlarmEnableAction(actions, "alarmEnable");
+	Daemon::createAlarmEnableAction(actions);
 	if (undoText.isNull())
 	{
 		// Get standard texts, etc., for Undo and Redo actions
@@ -550,7 +550,7 @@ void MainWindow::slotNew()
 */
 void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Action action, const AlarmText& text)
 {
-	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, "editDlg", evnt);
+	EditAlarmDlg editDlg(false, i18n("New Alarm"), win, evnt);
 	if (!text.isEmpty())
 		editDlg.setAction(action, text);
 	if (editDlg.exec() == QDialog::Accepted)
@@ -611,7 +611,7 @@ void MainWindow::slotModify()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, "editDlg", &event);
+		EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &event);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;
@@ -647,7 +647,7 @@ void MainWindow::slotView()
 		KAEvent event = item->event();
 		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Expired Alarm") + " [" + i18n("read-only") + "]"
 		                                             : i18n("View Alarm")),
-		                     this, "editDlg", &event, true);
+		                     this, &event, true);
 		editDlg.exec();
 	}
 }

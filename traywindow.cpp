@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	// Set up the context menu
 	KActionCollection* actcol = actionCollection();
-	AlarmEnableAction* a = Daemon::createAlarmEnableAction(actcol, "tAlarmEnable");
+	AlarmEnableAction* a = Daemon::createAlarmEnableAction(actcol);
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());

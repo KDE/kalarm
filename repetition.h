@@ -1,7 +1,7 @@
 /*
  *  repetition.h  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define REPETITION_H
 
 #include <QPushButton>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QGroupBox;
 class ButtonGroup;
@@ -68,11 +68,11 @@ class RepetitionButton : public QPushButton
 };
 
 
-class RepetitionDlg : public KDialogBase
+class RepetitionDlg : public KDialog
 {
 		Q_OBJECT
 	public:
-		RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0, const char* name = 0);
+		RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
 		void           setReadOnly(bool);
 		void           set(int interval, int count, bool dateOnly = false, int maxDuration = -1);
 		int            interval() const;     // get the interval between repetitions, in minutes

@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ FontColourButton::FontColourButton(QWidget* parent)
 void FontColourButton::slotButtonPressed()
 {
 	FontColourDlg dlg(mBgColour, mFgColour, mFont, mDefaultFont,
-	                  i18n("Choose Alarm Font & Color"), this, "fontColourDlg");
+	                  i18n("Choose Alarm Font & Color"), this);
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
@@ -68,8 +68,8 @@ void FontColourButton::slotButtonPressed()
 =============================================================================*/
 
 FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
-                             bool defaultFont, const QString& caption, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false),
+                             bool defaultFont, const QString& caption, QWidget* parent)
+	: KDialog(parent, caption, Ok|Cancel),
 	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);
@@ -77,7 +77,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 	QVBoxLayout* layout = new QVBoxLayout(page);
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
-	mChooser = new FontColourChooser(page, 0, false, QStringList(), QString(), false, true, true);
+	mChooser = new FontColourChooser(page, false, QStringList(), QString(), false, true, true);
 	mChooser->setBgColour(bgColour);
 	mChooser->setFgColour(fgColour);
 	if (defaultFont)

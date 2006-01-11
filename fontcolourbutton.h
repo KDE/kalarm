@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 #include <qfont.h>
 #include <qcolor.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "pushbutton.h"
 
 class FontColourChooser;
@@ -60,12 +60,12 @@ class FontColourButton : public PushButton
 
 
 // Font and colour selection dialog displayed by the push button
-class FontColourDlg : public KDialogBase
+class FontColourDlg : public KDialog
 {
 		Q_OBJECT
 	public:
 		FontColourDlg(const QColor& bg, const QColor& fg, const QFont&, bool defaultFont,
-		              const QString& caption, QWidget* parent = 0, const char* name = 0);
+		              const QString& caption, QWidget* parent = 0);
 		bool         defaultFont() const   { return mDefaultFont; }
 		QFont        font() const          { return mFont; }
 		QColor       bgColour() const      { return mBgColour; }

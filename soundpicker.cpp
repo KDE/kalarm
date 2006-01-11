@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -297,7 +297,7 @@ void SoundPicker::slotPickFile()
 		mFile = url;
 #else
 	QString file = mFile;
-	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this, "soundDlg");
+	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this);
 	dlg.setReadOnly(mReadOnly);
 	bool accepted = (dlg.exec() == QDialog::Accepted);
 	if (mReadOnly)

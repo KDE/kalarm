@@ -162,11 +162,9 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18n("Email subject", "
  *            = false to edit/create an alarm.
  *   event   != to initialise the dialogue to show the specified event's data.
  */
-EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const char* name,
-                           const KAEvent* event, bool readOnly)
-	: KDialogBase(parent, name, true, caption,
-	              (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
-	              (readOnly ? Cancel : Ok)),
+EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event, bool readOnly)
+	: KDialog(parent, caption,
+	          (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default)),
 	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
@@ -184,6 +182,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
+	setDefaultButton(readOnly ? Cancel : Ok);
 	setButtonText(Default, i18n("Load Template..."));
 	KVBox* mainWidget = new KVBox(this);
 	mainWidget->setMargin(0);
@@ -1020,13 +1019,13 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 /******************************************************************************
  * Create a widget to choose the alarm message background colour.
  */
-ColourCombo* EditAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent, const char* name)
+ColourCombo* EditAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent)
 {
 	*box = new KHBox(parent);   // this is to control the QWhatsThis text display area
 	(*box)->setMargin(0);
 	QLabel* label = new QLabel(i18n("&Background color:"), *box);
 	label->setFixedSize(label->sizeHint());
-	ColourCombo* widget = new ColourCombo(*box, name);
+	ColourCombo* widget = new ColourCombo(*box);
 	QSize size = widget->sizeHint();
 	widget->setMinimumHeight(size.height() + 4);
 	widget->setToolTip(i18n("Message color"));
@@ -1588,7 +1587,7 @@ void EditAlarmDlg::slotCancel()
 */
 void EditAlarmDlg::slotDefault()
 {
-	TemplatePickDlg dlg(this, "templPickDlg");
+	TemplatePickDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
 		initialise(dlg.selectedTemplate());
 }
@@ -1628,7 +1627,7 @@ void EditAlarmDlg::slotEditDeferral()
 
 	bool deferred = mDeferDateTime.isValid();
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(now.addSecs(60))),
-	                       deferred, this, "deferDlg");
+	                       deferred, this);
 	if (limit)
 	{
 		// Don't allow deferral past the next recurrence

@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,8 +65,7 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post)
 */
 void SpecialActionsButton::slotButtonPressed()
 {
-	SpecialActionsDlg dlg(mPreAction, mPostAction,
-	                  i18n("Special Alarm Actions"), this, "actionsDlg");
+	SpecialActionsDlg dlg(mPreAction, mPostAction, i18n("Special Alarm Actions"), this);
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
@@ -85,8 +84,8 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 
 
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
-                                     const QString& caption, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false)
+                                     const QString& caption, QWidget* parent)
+	: KDialog(parent, caption, Ok|Cancel)
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);

@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,11 +38,10 @@
 #include "fontcolour.moc"
 
 
-FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
-          bool onlyFixed, const QStringList &fontList,
-          const QString& frameLabel, bool editColours, bool fg, bool defaultFont,
-          int visibleListSize)
-	: QWidget(parent, name),
+FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
+          const QStringList &fontList, const QString& frameLabel, bool editColours,
+          bool fg, bool defaultFont, int visibleListSize)
+	: QWidget(parent),
 	  mFgColourButton(0),
 	  mRemoveColourButton(0),
 	  mColourList(Preferences::messageColours()),
@@ -127,7 +126,6 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mDefaultFont = 0;
 
 	mFontChooser = new KFontChooser(page, onlyFixed, fontList, false, visibleListSize);
-	mFontChooser->setObjectName( name );
 	topLayout->addWidget(mFontChooser);
 
 	slotDefaultFontToggled(false);

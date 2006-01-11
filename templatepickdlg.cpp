@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialogue to choose an alarm template
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
-TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
-	: KDialogBase(KDialogBase::Plain, i18n("Choose Alarm Template"), Ok|Cancel, Ok, parent, name)
+TemplatePickDlg::TemplatePickDlg(QWidget* parent)
+	: KDialogBase(KDialogBase::Plain, i18n("Choose Alarm Template"), Ok|Cancel, Ok, parent)
 {
 	QWidget* topWidget = plainPage();
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);

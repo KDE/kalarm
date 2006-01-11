@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005, 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,8 +56,8 @@ static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
 
 SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
-                   const QString& caption, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel, Ok, false),
+                   const QString& caption, QWidget* parent)
+	: KDialog(parent, caption, Ok|Cancel),
 	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);

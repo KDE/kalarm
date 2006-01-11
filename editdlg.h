@@ -23,7 +23,7 @@
 
 #include <qdatetime.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "alarmevent.h"
 #include "alarmtext.h"
@@ -60,19 +60,19 @@ class TextEdit;
 class PickAlarmFileRadio;
 
 
-class EditAlarmDlg : public KDialogBase
+class EditAlarmDlg : public KDialog
 {
 		Q_OBJECT
 	public:
 		enum MessageType { MESSAGE, FILE };
 
-		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0, const char* name = 0,
-                     const KAEvent* = 0, bool readOnly = false);
+		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0,
+                             const KAEvent* = 0, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		bool            getEvent(KAEvent&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent, const char* name = 0);
+		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox

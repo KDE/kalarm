@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.h  -  dialogue to choose an alarm template
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ class TemplatePickDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		TemplatePickDlg(QWidget* parent = 0, const char* name = 0);
+		explicit TemplatePickDlg(QWidget* parent = 0);
 		const KAEvent*    selectedTemplate() const;
 	protected:
 		virtual void      resizeEvent(QResizeEvent*);

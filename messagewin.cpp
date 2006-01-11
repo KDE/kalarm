@@ -148,8 +148,7 @@ QList<MessageWin*> MessageWin::mWindowList;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
-	: MainWindowBase(0, "MessageWin",
-	                 static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (Preferences::modalMessages() ? 0 : Qt::X11BypassWindowManagerHint))),
+	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (Preferences::modalMessages() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event.cleanText()),
 	  mFont(event.font()),
 	  mBgColour(event.bgColour()),
@@ -205,7 +204,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 *  Construct the message window for a specified error message.
 */
 MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, const QStringList& errmsgs)
-	: MainWindowBase(0, "MessageWin", WFLAGS | WFLAGS2),
+	: MainWindowBase(0, WFLAGS | WFLAGS2),
 	  mMessage(event.cleanText()),
 	  mDateTime(alarmDateTime),
 	  mEventID(event.id()),
@@ -245,7 +244,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 *  The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
-	: MainWindowBase(0, "MessageWin", WFLAGS),
+	: MainWindowBase(0, WFLAGS),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
 	  mSilenceButton(0),
@@ -1441,7 +1440,7 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, "editDlg", &mEvent);
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &mEvent);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
@@ -1522,7 +1521,7 @@ void MessageWin::checkDeferralLimit()
 void MessageWin::slotDefer()
 {
 	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
-	                              false, this, "deferDlg");
+	                              false, this);
 	mDeferDlg->setLimit(mEventID);
 	if (!Preferences::modalMessages())
 		lower();

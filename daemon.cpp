@@ -520,9 +520,9 @@ void Daemon::slotPreferencesChanged()
 /******************************************************************************
 * Create an "Alarms Enabled/Enable Alarms" action.
 */
-AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions, const char* name)
+AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions)
 {
-	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions, name);
+	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions);
 	connect(a, SIGNAL(userClicked(bool)), mInstance, SLOT(setAlarmsEnabled(bool)));
 	connect(mInstance, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
 	return a;
@@ -614,8 +614,8 @@ void NotificationHandler::registered(bool reregister, int result)
 =  Class: AlarmEnableAction
 =============================================================================*/
 
-AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent, const char* name)
-	: KToggleAction(QString(), accel, parent, name),
+AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent)
+	: KToggleAction(QString(), accel, parent),
 	  mInitialised(false)
 {
 	setCheckedActual(false);    // set the correct text

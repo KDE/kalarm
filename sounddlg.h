@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005, 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define SOUNDDLG_H
 
 #include <QString>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QShowEvent;
 class QResizeEvent;
@@ -34,12 +34,12 @@ class Slider;
 class LineEdit;
 
 
-class SoundDlg : public KDialogBase
+class SoundDlg : public KDialog
 {
 		Q_OBJECT
 	public:
 		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
-		         const QString& caption, QWidget* parent, const char* name = 0);
+		         const QString& caption, QWidget* parent);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
 		QString        getFile() const;

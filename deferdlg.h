@@ -1,7 +1,7 @@
 /*
  *  deferdlg.h  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,18 +21,18 @@
 #ifndef DEFERDLG_H
 #define DEFERDLG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "datetime.h"
 
 class AlarmTimeWidget;
 
 
-class DeferAlarmDlg : public KDialogBase
+class DeferAlarmDlg : public KDialog
 {
 		Q_OBJECT
 	public:
 		DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
-		              bool cancelButton, QWidget* parent = 0, const char* name = 0);
+		              bool cancelButton, QWidget* parent = 0);
 		void             setLimit(const DateTime&);
 		DateTime         setLimit(const QString& eventID);
 		const DateTime&  getDateTime() const  { return mAlarmDateTime; }

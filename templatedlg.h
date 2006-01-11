@@ -1,7 +1,7 @@
 /*
  *  templatedlg.h  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class TemplateDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		static TemplateDlg*  create(QWidget* parent = 0, const char* name = 0);
+		static TemplateDlg*  create(QWidget* parent = 0);
 		~TemplateDlg();
 		static void   createTemplate(const KAEvent* = 0, QWidget* parent = 0, TemplateListView* = 0);
 
@@ -50,7 +50,7 @@ class TemplateDlg : public KDialogBase
 		void          slotSelectionChanged();
 
 	private:
-		TemplateDlg(QWidget* parent, const char* name);
+		TemplateDlg(QWidget* parent);
 
 		static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
 

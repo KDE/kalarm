@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ static const char TMPL_DIALOG_NAME[] = "TemplateDialog";
 TemplateDlg* TemplateDlg::mInstance = 0;
 
 
-TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
-	: KDialogBase(KDialogBase::Plain, i18n("Alarm Templates"), Close, Ok, parent, name, false, true)
+TemplateDlg::TemplateDlg(QWidget* parent)
+	: KDialogBase(KDialogBase::Plain, i18n("Alarm Templates"), Close, Ok, parent, 0, false, true)
 {
 	QWidget* topWidget = plainPage();
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
@@ -108,11 +108,11 @@ TemplateDlg::~TemplateDlg()
 /******************************************************************************
 *  Create an instance, if none already exists.
 */
-TemplateDlg* TemplateDlg::create(QWidget* parent, const char* name)
+TemplateDlg* TemplateDlg::create(QWidget* parent)
 {
 	if (mInstance)
 		return 0;
-	mInstance = new TemplateDlg(parent, name);
+	mInstance = new TemplateDlg(parent);
 	return mInstance;
 }
 
@@ -145,7 +145,7 @@ void TemplateDlg::slotCopy()
 */
 void TemplateDlg::createTemplate(const KAEvent* event, QWidget* parent, TemplateListView* view)
 {
-	EditAlarmDlg editDlg(true, i18n("New Alarm Template"), parent, "editDlg", event);
+	EditAlarmDlg editDlg(true, i18n("New Alarm Template"), parent, event);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
@@ -167,7 +167,7 @@ void TemplateDlg::slotEdit()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg* editDlg = new EditAlarmDlg(true, i18n("Edit Alarm Template"), this, "editDlg", &event);
+		EditAlarmDlg* editDlg = new EditAlarmDlg(true, i18n("Edit Alarm Template"), this, &event);
 		if (editDlg->exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;

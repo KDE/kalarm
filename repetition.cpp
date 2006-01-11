@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -135,8 +135,8 @@ void RepetitionButton::displayDialog()
 static const int MAX_COUNT = 9999;    // maximum range for count spinbox
 
 
-RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent, const char* name)
-	: KDialogBase(parent, name, true, caption, Ok|Cancel),
+RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent)
+	: KDialog(parent, caption, Ok|Cancel),
 	  mMaxDuration(-1),
 	  mDateOnly(false),
 	  mReadOnly(readOnly)
