@@ -113,7 +113,11 @@ void AlarmDaemon::autostartKAlarm()
 	kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
 	args << QString::fromLatin1("--tray");
-	KApplication::kdeinitExec(QString::fromLatin1("kalarm"), args);
+	int ret = KApplication::kdeinitExec(QString::fromLatin1("kalarm"), args);
+	if (ret)
+		kdError(5900) << "AlarmDaemon::autostartKAlarm(): error=" << ret << endl;
+	else
+		kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): success" << endl;
 
 	startMonitoring();
 #endif
