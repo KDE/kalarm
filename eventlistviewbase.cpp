@@ -300,13 +300,24 @@ void EventListViewBase::resizeLastColumn()
 		if (mw > lastColumnWidth)
 			lastColumnWidth = mw;
 	}
-	int x = header()->sectionPos(mLastColumn);
-	int width = visibleWidth() - x;
-	if (width < lastColumnWidth)
-		width = lastColumnWidth;
-	setColumnWidth(mLastColumn, width);
-	if (contentsWidth() > x + width)
-		resizeContents(x + width, contentsHeight());
+	QHeader* head = header();
+	int x = head->sectionPos(mLastColumn);
+	int availableWidth = visibleWidth() - x;
+	int rightColWidth = 0;
+	int index = head->mapToIndex(mLastColumn);
+	if (index < mLastColumn)
+	{
+		// The last column has been dragged by the user to a different position.
+		// Ensure that the columns now to the right of it are still shown.
+		for (int i = index + 1;  i <= mLastColumn;  ++i)
+			rightColWidth += columnWidth(head->mapToSection(i));
+		availableWidth -= rightColWidth;
+	}
+	if (availableWidth < lastColumnWidth)
+		availableWidth = lastColumnWidth;
+	setColumnWidth(mLastColumn, availableWidth);
+	if (contentsWidth() > x + availableWidth + rightColWidth)
+		resizeContents(x + availableWidth + rightColWidth, contentsHeight());
 }
 
 /******************************************************************************
