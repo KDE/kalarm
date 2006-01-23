@@ -65,7 +65,7 @@ void LineEdit::init()
 	if (mType == Url)
 	{
 		setCompletionMode(KGlobalSettings::CompletionShell);
-		KURLCompletion* comp = new KURLCompletion(KURLCompletion::FileCompletion);
+		KUrlCompletion* comp = new KUrlCompletion(KUrlCompletion::FileCompletion);
 		comp->setReplaceHome(true);
 		setCompletionObject(comp);
 		setAutoDeleteCompletionObject(true);
