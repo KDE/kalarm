@@ -80,7 +80,7 @@ bool ADCalendar::loadFile(bool reset)
 		return false;
 	}
 	mLoaded = false;
-	KURL url(mUrlString);
+	KUrl url(mUrlString);
 	if (url.isLocalFile())
 	{
 		// It's a local file
@@ -92,7 +92,7 @@ bool ADCalendar::loadFile(bool reset)
 		// It's a remote file. Download to a temporary file before loading it
 		KTempFile tempFile;
 		mTempFileName = tempFile.name();
-		KURL dest;
+		KUrl dest;
 		dest.setPath(mTempFileName);
 		KIO::FileCopyJob* job = KIO::file_copy(url, dest, -1, true);
 		connect(job, SIGNAL(result(KIO::Job*)), SLOT(slotDownloadJobResult(KIO::Job*)));
@@ -104,7 +104,7 @@ void ADCalendar::slotDownloadJobResult(KIO::Job *job)
 {
 	if (job->error())
 	{
-		KURL url(mUrlString);
+		KUrl url(mUrlString);
 		kdDebug(5900) << "Error downloading calendar from " << url.prettyURL() << endl;
 		job->showErrorDialog(0);
 	}

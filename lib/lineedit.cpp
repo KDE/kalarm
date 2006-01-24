@@ -99,7 +99,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 		ok = false;   // don't accept "text/calendar" objects
 	else
 		ok = (data->hasText()
-		   || KURL::List::canDecode(data)
+		   || KUrl::List::canDecode(data)
 		   || mType != Url && KPIM::MailListDrag::canDecode(e)
 		   || mType == Emails && KVCardDrag::canDecode(e));
 	if (ok)
@@ -114,7 +114,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 	QString               newText;
 	QStringList           newEmails;
 	KPIM::MailList        mailList;
-	KURL::List            files;
+	KUrl::List            files;
 	KABC::Addressee::List addrList;
 
 	if (mType != Url
@@ -142,7 +142,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				newEmails.append(em);
 		}
 	}
-	else if (!(files = KURL::List::fromMimeData(data)).isEmpty())
+	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
 		// URL(s)
 		switch (mType)
@@ -155,7 +155,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 			{
 				// Email entry field - ignore all but mailto: URLs
 				QString mailto = QLatin1String("mailto");
-				for (KURL::List::Iterator it = files.begin();  it != files.end();  ++it)
+				for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
 				{
 					if ((*it).protocol() == mailto)
 						newEmails.append((*it).path());
@@ -180,7 +180,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 			{
 				if ((*it).startsWith(mailto))
 				{
-					KURL url(*it);
+					KUrl url(*it);
 					*it = url.path();
 				}
 			}

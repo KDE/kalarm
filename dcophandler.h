@@ -37,21 +37,21 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins, const QString& recurrence,
+	                             const KUrl& audioFile, int reminderMins, const QString& recurrence,
 	                             int repeatInterval, int repeatCount);
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
+	                             const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins, const QString& recurrence,
+	                             const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins, const QString& recurrence,
 	                          int repeatInterval, int repeatCount);
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
 	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& recurrence, int repeatInterval, int repeatCount);
 	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -71,10 +71,10 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
     private:
 	static bool scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
                                 const QString& bgColor, const QString& fgColor, const QString& fontStr,
-                                const KURL& audioFile, int reminderMins, const KARecurrence&,
+                                const KUrl& audioFile, int reminderMins, const KARecurrence&,
 	                            int repeatInterval = 0, int repeatCount = 0);
-	static bool scheduleFile(const KURL& file, const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
-                             const KURL& audioFile, int reminderMins, const KARecurrence&,
+	static bool scheduleFile(const KUrl& file, const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
+                             const KUrl& audioFile, int reminderMins, const KARecurrence&,
 	                         int repeatInterval = 0, int repeatCount = 0);
 	static bool scheduleCommand(const QString& commandLine, const DateTime& start, int lateCancel, unsigned flags,
                                 const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);

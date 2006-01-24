@@ -1077,7 +1077,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
 	else
 		e->accept(data->hasText()
-		       || KURL::List::canDecode(data)
+		       || KUrl::List::canDecode(data)
 		       || KPIM::MailListDrag::canDecode(e));
 }
 
@@ -1107,7 +1107,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	QByteArray      bytes;
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
-	KURL::List      files;
+	KUrl::List      files;
 	KCal::CalendarLocal calendar(QLatin1String("UTC"));
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
@@ -1144,7 +1144,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Subject", content),
 				   body, sernum);
 	}
-	else if (!(files = KURL::List::fromMimeData(data)).isEmpty())
+	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
 		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;

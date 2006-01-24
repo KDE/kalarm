@@ -95,8 +95,8 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* mCalendars[NCALS];   // the calendars
 
 		KCal::CalendarLocal*  mCalendar;
-		KURL                  mUrl;                // URL of current calendar file
-		KURL                  mICalUrl;            // URL of iCalendar file
+		KUrl                  mUrl;                // URL of current calendar file
+		KUrl                  mICalUrl;            // URL of iCalendar file
 		QString               mLocalFile;          // calendar file, or local copy if it's a remote file
 		QString               mConfigKey;          // config file key for this calendar's URL
 		KAEvent::Status       mType;               // what type of events the calendar file is for

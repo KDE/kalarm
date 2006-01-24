@@ -232,7 +232,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 
 	// KMail is now running. Determine which DCOP call to use.
 	bool useSend = false;
-	QByteArray sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KURL::List)";
+	QByteArray sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KUrl::List)";
 	DCOPCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
 	for (DCOPCStringList::Iterator it = funcs.begin();  it != funcs.end() && !useSend;  ++it)
 	{
@@ -258,7 +258,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 		arg << data.bcc;
 		arg << data.event.emailSubject();
 		arg << data.event.message();
-		arg << KURL::List(data.event.emailAttachments());
+		arg << KUrl::List(data.event.emailAttachments());
 		if (!callKMail(callData, "MailTransportServiceIface", sendFunction, "bool"))
 			return i18n("Error calling KMail");
 	}
@@ -427,7 +427,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
 		{
 			QString attachment = (*at).toLocal8Bit();
-			KURL url(attachment);
+			KUrl url(attachment);
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
@@ -699,7 +699,7 @@ int KAMail::checkAddress(QString& address)
 */
 QString KAMail::convertAttachments(const QString& items, QStringList& list)
 {
-	KURL url;
+	KUrl url;
 	list.clear();
 	int length = items.length();
 	for (int next = 0;  next < length;  )
@@ -729,12 +729,12 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 #if 0
 /******************************************************************************
 *  Convert a comma or semicolon delimited list of attachments into a
-*  KURL::List. The items are checked for validity.
+*  KUrl::List. The items are checked for validity.
 *  Reply = the invalid item if error, else empty string.
 */
-QString KAMail::convertAttachments(const QString& items, KURL::List& list)
+QString KAMail::convertAttachments(const QString& items, KUrl::List& list)
 {
-	KURL url;
+	KUrl url;
 	list.clear();
 	QByteArray addrs = items.toLocal8Bit();
 	int length = items.length();
@@ -765,12 +765,12 @@ QString KAMail::convertAttachments(const QString& items, KURL::List& list)
 
 /******************************************************************************
 *  Check for the existence of the attachment file.
-*  If non-null, '*url' receives the KURL of the attachment.
+*  If non-null, '*url' receives the KUrl of the attachment.
 *  Reply = 1 if attachment exists
 *        = 0 if null name
 *        = -1 if doesn't exist.
 */
-int KAMail::checkAttachment(QString& attachment, KURL* url)
+int KAMail::checkAttachment(QString& attachment, KUrl* url)
 {
 	attachment = attachment.trimmed();
 	if (attachment.isEmpty())
@@ -780,7 +780,7 @@ int KAMail::checkAttachment(QString& attachment, KURL* url)
 		return 0;
 	}
 	// Check that the file exists
-	KURL u = KURL::fromPathOrURL(attachment);
+	KUrl u = KUrl::fromPathOrURL(attachment);
 	u.cleanPath();
 	if (url)
 		*url = u;
@@ -790,7 +790,7 @@ int KAMail::checkAttachment(QString& attachment, KURL* url)
 /******************************************************************************
 *  Check for the existence of the attachment file.
 */
-bool KAMail::checkAttachment(const KURL& url)
+bool KAMail::checkAttachment(const KUrl& url)
 {
 	KIO::UDSEntry uds;
 	if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))

@@ -121,7 +121,7 @@ class KAlarmIface : virtual public DCOPObject
 	 */
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins, const QString& recurrence,
+	                             const KUrl& audioFile, int reminderMins, const QString& recurrence,
 	                             int repeatInterval, int repeatCount) = 0;
 	/** Schedule a message display alarm.
 	 *  @param message        The text of the message to display.
@@ -148,7 +148,7 @@ class KAlarmIface : virtual public DCOPObject
 	 */
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins,
+	                             const KUrl& audioFile, int reminderMins,
 	                             int repeatType, int repeatInterval, int repeatCount) = 0;
 	/** Schedule a message display alarm.
 	 *  @param message        The text of the message to display.
@@ -175,7 +175,7 @@ class KAlarmIface : virtual public DCOPObject
 	 */
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KURL& audioFile, int reminderMins,
+	                             const KUrl& audioFile, int reminderMins,
 	                             int repeatType, int repeatInterval, const QString& endDateTime) = 0;
 	
 	/** Schedule a file display alarm.
@@ -194,8 +194,8 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param repeatCount    Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins, const QString& recurrence,
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins, const QString& recurrence,
 	                          int repeatInterval, int repeatCount) = 0;
 	/** Schedule a file display alarm.
 	 *  @param file           The text or image file to display.
@@ -215,8 +215,8 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param repeatCount    Recurrence count (after the first occurrence), or 0 for no recurrence.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins, int repeatType, int repeatInterval, int repeatCount) = 0;
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins, int repeatType, int repeatInterval, int repeatCount) = 0;
 	/** Schedule a file display alarm.
 	 *  @param file           The text or image file to display.
 	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
@@ -235,8 +235,8 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @param endDateTime    Date/time after which the recurrence will end.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
-	virtual bool scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KURL& audioFile, int reminderMins,
+	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                          const KUrl& audioFile, int reminderMins,
 	                          int repeatType, int repeatInterval, const QString& endDateTime) = 0;
 	
 	/** Schedule a command execution alarm.

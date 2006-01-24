@@ -350,7 +350,7 @@ void MessageWin::initView()
 				bool opened = false;
 				bool dir = false;
 				QString tmpFile;
-				KURL url(mMessage);
+				KUrl url(mMessage);
 				if (KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
 				{
 					QFile qfile(tmpFile);
@@ -857,7 +857,7 @@ void MessageWin::slotPlayAudio()
 #ifndef WITHOUT_ARTS
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	MainWindow* mmw = MainWindow::mainMainWindow();
-	KURL url(mAudioFile);
+	KUrl url(mAudioFile);
 	if (!url.isValid()  ||  !KIO::NetAccess::exists(url, true, mmw)
 	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{

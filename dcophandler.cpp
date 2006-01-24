@@ -61,7 +61,7 @@ bool DcopHandler::triggerEvent(const QString& url,const QString& eventId)
 
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const KURL& audioFile, int reminderMins, const QString& recurrence,
+                                  const KUrl& audioFile, int reminderMins, const QString& recurrence,
                                   int repeatInterval, int repeatCount)
 {
 	DateTime start;
@@ -73,7 +73,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const KURL& audioFile, int reminderMins,
+                                  const KUrl& audioFile, int reminderMins,
                                   int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
@@ -85,7 +85,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const KURL& audioFile, int reminderMins,
+                                  const KUrl& audioFile, int reminderMins,
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
@@ -95,8 +95,8 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const KURL& audioFile, int reminderMins, const QString& recurrence,
+bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const KUrl& audioFile, int reminderMins, const QString& recurrence,
                                int repeatInterval, int repeatCount)
 {
 	DateTime start;
@@ -106,8 +106,8 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const KURL& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount)
+bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
 	KARecurrence recur;
@@ -116,8 +116,8 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const KURL& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
+bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
 	KARecurrence recur;
@@ -197,7 +197,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 */
 bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
-                                  const KURL& audioFile, int reminderMins, const KARecurrence& recurrence,
+                                  const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                   int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
@@ -234,9 +234,9 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 /******************************************************************************
 * Schedule a file alarm, after converting the parameters from strings.
 */
-bool DcopHandler::scheduleFile(const KURL& file,
+bool DcopHandler::scheduleFile(const KUrl& file,
                                const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
-                               const KURL& audioFile, int reminderMins, const KARecurrence& recurrence,
+                               const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);

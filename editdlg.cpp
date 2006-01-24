@@ -2033,7 +2033,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		// (using home directory as the default)
 		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
 		Err err = NONE;
-		KURL url;
+		KUrl url;
 		int i = alarmtext.indexOf(QLatin1Char('/'));
 		if (i > 0  &&  alarmtext[i - 1] == QLatin1Char(':'))
 		{
