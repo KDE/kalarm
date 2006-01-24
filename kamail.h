@@ -37,7 +37,7 @@ class KAMail
 	public:
 		static bool        send(const KAEvent&, QStringList& errmsgs, bool allowNotify = true);
 		static int         checkAddress(QString& address);
-		static int         checkAttachment(QString& attachment, KURL* = 0);
+		static int         checkAttachment(QString& attachment, KUrl* = 0);
 		static bool        checkAttachment(const KURL&);
 		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
