@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <QScrollBar>
+#include <Q3MimeSourceFactory>
 #include <QFile>
 #include <QFileInfo>
 #include <QPushButton>
@@ -1610,7 +1612,7 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 		default:
 			// It's assumed to be a text file
 			mTextFile = absPath;
-			view->Q3TextBrowser::setSource(absPath);
+			view->QTextBrowser::setSource(absPath);
 			break;
 
 		case KAlarm::Image:
