@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.3.8 --- 24 January 2006 ===
+Fix kalarmd hang when triggering late alarm and KAlarm run mode is on-demand.
+
 === Version 1.3.7 --- 22 January 2006 ===
 Fix column widths when main window is resized, if columns have been reordered.
 

@@ -426,7 +426,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 		}
 		p << cmd;
 		p << "--handleEvent" << eventID << "--calendarURL" << calendar->urlString();
-		p.start(KProcess::Block);
+		p.start(KProcess::DontCare);
 		kdDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
 		return true;
 	}
