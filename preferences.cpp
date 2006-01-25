@@ -270,7 +270,7 @@ void Preferences::read()
 
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
-	QStringList cols = config->readListEntry(MESSAGE_COLOURS);
+	QStringList cols = config->readEntry(MESSAGE_COLOURS, QStringList() );
 	if (!cols.count())
 		mMessageColours = default_messageColours;
 	else
