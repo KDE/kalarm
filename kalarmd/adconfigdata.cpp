@@ -34,10 +34,10 @@
 const QString CLIENT_GROUP(QLatin1String("Client "));
 const QRegExp CLIENT_GROUP_SEARCH("^Client ");
 // Client data file key strings
-const QString CALENDAR_KEY(QLatin1String("Calendar"));
-const QString TITLE_KEY(QLatin1String("Title"));
-const QString DCOP_OBJECT_KEY(QLatin1String("DCOP object"));
-const QString START_CLIENT_KEY(QLatin1String("Start"));
+const char* CALENDAR_KEY     = "Calendar";
+const char* TITLE_KEY        = "Title";
+const char* DCOP_OBJECT_KEY  = "DCOP object";
+const char* START_CLIENT_KEY = "Start";
 
 
 /******************************************************************************
