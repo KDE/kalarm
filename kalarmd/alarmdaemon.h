@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.h  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -55,6 +55,7 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    registerApp(const QCString& appName, const QString& appTitle,
 		                    const QCString& dcopObject, const QString& calendarUrl, bool startClient);
 		void    registerChange(const QCString& appName, bool startClient);
+		void    eventHandled(const QCString& appname, const QString& calendarURL, const QString& eventID, bool reload);
 		void    quit();
 		// Other methods
 		void    startMonitoring();

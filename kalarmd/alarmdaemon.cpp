@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -195,6 +195,22 @@ void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
 }
 
 /******************************************************************************
+* DCOP call to notify the daemon that an event has been handled, and optionally
+* to tell it to reload the calendar.
+*/
+void AlarmDaemon::eventHandled(const QCString& appname, const QString& calendarUrl, const QString& eventID, bool reload)
+{
+	QString urlString = expandURL(calendarUrl);
+	kdDebug(5900) << "AlarmDaemon::eventHandled(" << urlString << (reload ? "): reload" : ")") << endl;
+	ADCalendar* cal = ADCalendar::getCalendar(urlString);
+	if (!cal  ||  cal->appName() != appname)
+		return;
+	cal->setEventHandled(eventID);
+	if (reload)
+		reloadCal(cal, false);
+}
+
+/******************************************************************************
 * DCOP call to add an application to the list of client applications,
 * and add it to the config file.
 * N.B. This method must not return a bool because DCOPClient::call() can cause
@@ -372,7 +388,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		if (!cal->eventHandled(event, alarmtimes))
 		{
 			if (notifyEvent(cal, eventID))
-				cal->setEventHandled(event, alarmtimes);
+				cal->setEventPending(event, alarmtimes);
 		}
 	}
 }
@@ -393,6 +409,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 		return false;
 	}
 	kdDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << ", " << eventID << "): notification type=" << client->startClient() << endl;
+	QString id = QString::fromLatin1("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
 	// Check if the client application is running and ready to receive notification
 	bool registered = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname));
@@ -425,7 +442,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 			return true;
 		}
 		p << cmd;
-		p << "--handleEvent" << eventID << "--calendarURL" << calendar->urlString();
+		p << "--handleEvent" << id << "--calendarURL" << calendar->urlString();
 		p.start(KProcess::DontCare);
 		kdDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
 		return true;
@@ -433,7 +450,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 
 	// Notify the client by telling it the calendar URL and event ID
 	AlarmGuiIface_stub stub(appname, client->dcopObject());
-	stub.handleEvent(calendar->urlString(), eventID);
+	stub.handleEvent(calendar->urlString(), id);
 	if (!stub.ok())
 	{
 		kdDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;

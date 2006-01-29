@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,6 +66,8 @@ class NotificationHandler : public QObject, virtual public AlarmGuiIface
 
 Daemon*              Daemon::mInstance = 0;
 NotificationHandler* Daemon::mDcopHandler = 0;
+QValueList<QString>  Daemon::mQueuedEvents;
+QValueList<QString>  Daemon::mSavingEvents;
 QTimer*              Daemon::mStartTimer = 0;
 QTimer*              Daemon::mRegisterTimer = 0;
 QTimer*              Daemon::mStatusTimer = 0;
@@ -532,7 +534,63 @@ AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions, c
 void Daemon::slotCalendarSaved(AlarmCalendar* cal)
 {
 	if (cal == AlarmCalendar::activeCalendar())
-		reload();
+	{
+		int n = mSavingEvents.count();
+		if (n)
+		{
+			// We have just saved a modified event originally triggered by the daemon.
+			// Notify the daemon of the event, and tell it to reload the calendar.
+			for (int i = 0;  i < n - 1;  ++i)
+				notifyEventHandled(mSavingEvents[i], false);
+			notifyEventHandled(mSavingEvents[n - 1], true);
+			mSavingEvents.clear();
+		}
+		else
+			reload();
+	}
+}
+
+/******************************************************************************
+* Note an event ID which has been triggered by the alarm daemon.
+*/
+void Daemon::queueEvent(const QString& eventId)
+{
+	mQueuedEvents += eventId;
+}
+
+/******************************************************************************
+* Note an event ID which is currently being saved in the calendar file, if the
+* event was originally triggered by the alarm daemon.
+*/
+void Daemon::savingEvent(const QString& eventId)
+{
+	if (mQueuedEvents.remove(eventId) > 0)
+		mSavingEvents += eventId;
+}
+
+/******************************************************************************
+* If the event ID has been triggered by the alarm daemon, tell the daemon that
+* it has been processed, and whether to reload its calendar.
+*/
+void Daemon::eventHandled(const QString& eventId, bool reloadCal)
+{
+	if (mQueuedEvents.remove(eventId) > 0)
+		notifyEventHandled(eventId, reloadCal);    // it's a daemon event, so tell daemon that it's been handled
+	else if (reloadCal)
+		reload();    // not a daemon event, so simply tell the daemon to reload the calendar
+}
+
+/******************************************************************************
+* Tell the daemon that an event has been processed, and whether to reload its
+* calendar.
+*/
+void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
+{
+	kdDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
+	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	s.eventHandled(QCString(kapp->aboutData()->appName()), AlarmCalendar::activeCalendar()->urlString(), eventId, reloadCal);
+	if (!s.ok())
+		kdError(5950) << "Daemon::notifyEventHandled(): eventHandled dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -594,7 +652,14 @@ void NotificationHandler::alarmDaemonUpdate(int calendarStatus, const QString& c
  */
 void NotificationHandler::handleEvent(const QString& url, const QString& eventId)
 {
-	theApp()->handleEvent(url, eventId);
+	QString id = eventId;
+	if (id.startsWith(QString::fromLatin1("ad:")))
+	{
+		// It's a notification from the alarm deamon
+		id = id.mid(3);
+		Daemon::queueEvent(id);
+	}
+	theApp()->handleEvent(url, id);
 }
 
 /******************************************************************************

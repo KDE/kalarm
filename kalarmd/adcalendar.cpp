@@ -1,7 +1,7 @@
 /*
  *  adcalendar.cpp  -  calendar file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 QValueList<ADCalendar*> ADCalendar::mCalendars;
 ADCalendar::EventsMap   ADCalendar::mEventsHandled;
+ADCalendar::EventsMap   ADCalendar::mEventsPending;
 QStringList             ADCalendar::mCalendarUrls;    // never delete or reorder anything in this list!
 
 
@@ -160,25 +161,51 @@ bool ADCalendar::eventHandled(const KCal::Event* event, const QValueList<QDateTi
 }
 
 /******************************************************************************
-* Remember that the specified alarms for the event with the given ID have been
-* handled.
+* Remember that the event with the given ID has been handled.
+* It must already be in the pending list.
 */
-void ADCalendar::setEventHandled(const KCal::Event* event, const QValueList<QDateTime>& alarmtimes)
+void ADCalendar::setEventHandled(const QString& eventID)
+{
+	kdDebug(5900) << "ADCalendar::setEventHandled(" << eventID << ")\n";
+	EventKey key(eventID, mUrlIndex);
+
+	// Remove it from the pending list, and add it to the handled list
+	EventsMap::Iterator it = mEventsPending.find(key);
+	if (it != mEventsPending.end())
+	{
+		setEventInMap(mEventsHandled, key, it.data().alarmTimes, it.data().eventSequence);
+		mEventsPending.remove(it);
+	}
+}
+
+/******************************************************************************
+* Remember that the specified alarms for the event with the given ID have been
+* notified to KAlarm, but no reply has come back yet.
+*/
+void ADCalendar::setEventPending(const KCal::Event* event, const QValueList<QDateTime>& alarmtimes)
 {
 	if (event)
 	{
-		kdDebug(5900) << "ADCalendar::setEventHandled(" << event->uid() << ")\n";
+		kdDebug(5900) << "ADCalendar::setEventPending(" << event->uid() << ")\n";
 		EventKey key(event->uid(), mUrlIndex);
-		EventsMap::Iterator it = mEventsHandled.find(key);
-		if (it != mEventsHandled.end())
-		{
-			// Update the existing entry for the event
-			it.data().alarmTimes = alarmtimes;
-			it.data().eventSequence = event->revision();
-		}
-		else
-			mEventsHandled.insert(key, EventItem(event->revision(), alarmtimes));
+		setEventInMap(mEventsPending, key, alarmtimes, event->revision());
 	}
+}
+
+/******************************************************************************
+* Add a specified entry to the events pending or handled list.
+*/
+void ADCalendar::setEventInMap(EventsMap& map, const EventKey& key, const QValueList<QDateTime>& alarmtimes, int sequence)
+{
+	EventsMap::Iterator it = map.find(key);
+	if (it != map.end())
+	{
+		// Update the existing entry for the event
+		it.data().alarmTimes = alarmtimes;
+		it.data().eventSequence = sequence;
+	}
+	else
+		map.insert(key, EventItem(sequence, alarmtimes));
 }
 
 /******************************************************************************
@@ -186,14 +213,23 @@ void ADCalendar::setEventHandled(const KCal::Event* event, const QValueList<QDat
 */
 void ADCalendar::clearEventsHandled(bool nonexistentOnly)
 {
-	for (EventsMap::Iterator it = mEventsHandled.begin();  it != mEventsHandled.end();  )
+	clearEventMap(mEventsPending, nonexistentOnly);
+	clearEventMap(mEventsHandled, nonexistentOnly);
+}
+
+/******************************************************************************
+* Clear the events pending or handled list of all events handled for the calendar.
+*/
+void ADCalendar::clearEventMap(EventsMap& map, bool nonexistentOnly)
+{
+	for (EventsMap::Iterator it = map.begin();  it != map.end();  )
 	{
 		if (it.key().calendarIndex == mUrlIndex
 		&&  (!nonexistentOnly  ||  !event(it.key().eventID)))
 		{
 			EventsMap::Iterator i = it;
 			++it;                      // prevent iterator becoming invalid with remove()
-			mEventsHandled.remove(i);
+			map.remove(i);
 		}
 		else
 			++it;

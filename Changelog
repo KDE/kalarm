@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 1.3.9 --- 29 January 2006 ===
+Notify daemon by DCOP that alarm has been processed: to prevent alarm loss, and
+    to prevent defunct kalarm processes when run mode is on-demand.
+
 === Version 1.3.8 --- 24 January 2006 ===
 Fix kalarmd hang when triggering late alarm and KAlarm run mode is on-demand.
 

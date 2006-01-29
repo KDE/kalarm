@@ -113,8 +113,7 @@ class KAlarmApp : public KUniqueApplication
 		};
 		struct ProcData
 		{
-			ProcData(ShellProcess* p, ShellProcess* logp, KAEvent* e, KAAlarm* a, int f = 0)
-			          : process(p), logProcess(logp), event(e), alarm(a), messageBoxParent(0), flags(f) { }
+			ProcData(ShellProcess* p, ShellProcess* logp, KAEvent* e, KAAlarm* a, int f = 0);
 			~ProcData();
 			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
 			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20 };

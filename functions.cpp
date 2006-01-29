@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -319,8 +319,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive)
 		if (archive  &&  event.toBeArchived())
 			addExpiredEvent(event);     // this changes the event ID to an expired ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-		cal->deleteEvent(id);
-		cal->save();
+		cal->deleteEvent(id, true);    // save calendar after deleting
 	}
 	return ret;
 }
@@ -336,8 +335,7 @@ void deleteTemplate(const KAEvent& event)
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{
-		cal->deleteEvent(id);
-		cal->save();
+		cal->deleteEvent(id, true);    // save calendar after deleting
 		cal->emitEmptyStatus();
 	}
 

@@ -1,7 +1,7 @@
 /*
  *  daemon.h  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +56,10 @@ class Daemon : public QObject
 		static bool      isRegistered()          { return mStatus == REGISTERED; }
 		static void      allowRegisterFailMsg()  { mRegisterFailMsg = false; }
 
+		static void      queueEvent(const QString& eventID);
+		static void      savingEvent(const QString& eventID);
+		static void      eventHandled(const QString& eventID, bool reloadCal);
+
 	signals:
 		void             daemonRunning(bool running);
 
@@ -81,6 +85,7 @@ class Daemon : public QObject
 		static bool      registerWith(bool reregister);
 		static void      registrationResult(bool reregister, int result);
 		static void      reload();
+		static void      notifyEventHandled(const QString& eventID, bool reloadCal);
 		static void      updateRegisteredStatus(bool timeout = false);
 		static void      enableCalendar(bool enable);
 		static void      calendarIsEnabled(bool enabled);
@@ -88,7 +93,9 @@ class Daemon : public QObject
 		static void      setFastCheck();
 
 		static Daemon*   mInstance;            // only one instance allowed
-		static NotificationHandler* mDcopHandler; // handles DCOP requests from daemon
+		static NotificationHandler* mDcopHandler;  // handles DCOP requests from daemon
+		static QValueList<QString>  mQueuedEvents; // IDs of pending events that daemon has triggered
+		static QValueList<QString>  mSavingEvents; // IDs of updated events that are currently being saved
 		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon
 		static QTimer*   mRegisterTimer;       // timer to check whether daemon has sent registration status
 		static QTimer*   mStatusTimer;         // timer for checking daemon status

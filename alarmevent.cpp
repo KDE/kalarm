@@ -1562,7 +1562,7 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 			endTime = reminderTime;
 			ltype = LIMIT_REMINDER;
 		}
-		else if (type == FIRST_OCCURRENCE  &&  !recurs)
+		else if (type == FIRST_OR_ONLY_OCCURRENCE  &&  !recurs)
 			ltype = LIMIT_REPETITION;
 		else
 			ltype = LIMIT_RECURRENCE;
@@ -1739,7 +1739,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 	else if (pre < mNextMainDateTime.dateTime())
 	{
 		result = mNextMainDateTime;
-		type = FIRST_OCCURRENCE;
+		type = FIRST_OR_ONLY_OCCURRENCE;
 	}
 	else
 	{
@@ -1804,7 +1804,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 	if (checkRecur() == KARecurrence::NO_RECUR)
 	{
 		result = mStartDateTime;
-		type = FIRST_OCCURRENCE;
+		type = FIRST_OR_ONLY_OCCURRENCE;
 	}
 	else
 	{
@@ -1817,7 +1817,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 		if (!dt.isValid())
 			return NO_OCCURRENCE;
 		if (dt == recurStart)
-			type = FIRST_OCCURRENCE;
+			type = FIRST_OR_ONLY_OCCURRENCE;
 		else if (mRecurrence->getNextDateTime(dt).isValid())
 			type = result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 		else
@@ -1857,7 +1857,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions)
 {
 	if (preDateTime < mNextMainDateTime.dateTime())
-		return FIRST_OCCURRENCE;    // it might not be the first recurrence - tant pis
+		return FIRST_OR_ONLY_OCCURRENCE;    // it might not be the first recurrence - tant pis
 	QDateTime pre = preDateTime;
 	if (includeRepetitions)
 	{
@@ -1872,7 +1872,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
 	if (pre < mNextMainDateTime.dateTime())
 	{
 		dt = mNextMainDateTime;
-		type = FIRST_OCCURRENCE;   // may not actually be the first occurrence
+		type = FIRST_OR_ONLY_OCCURRENCE;   // may not actually be the first occurrence
 	}
 	else if (checkRecur() != KARecurrence::NO_RECUR)
 	{
@@ -1880,7 +1880,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
 		type = nextRecurrence(pre, dt, remainingCount);
 		if (type == NO_OCCURRENCE)
 			return NO_OCCURRENCE;
-		if (type != FIRST_OCCURRENCE  &&  dt != mNextMainDateTime)
+		if (type != FIRST_OR_ONLY_OCCURRENCE  &&  dt != mNextMainDateTime)
 		{
 			// Need to reschedule the next trigger date/time
 			mNextMainDateTime = dt;
@@ -1939,7 +1939,7 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 	if (dt == recurStart)
 	{
 		remainingCount = mRecurrence->duration();
-		return FIRST_OCCURRENCE;
+		return FIRST_OR_ONLY_OCCURRENCE;
 	}
 	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(dt) + 1;
 	if (remainingCount == 1)
