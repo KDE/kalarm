@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ extern "C" {
 #include <kglobal.h>
 
 #include "calendarcompat.h"
+#include "daemon.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
@@ -631,8 +632,13 @@ void AlarmCalendar::updateEvent(const KAEvent& evnt)
 		{
 			evnt.updateKCalEvent(*kcalEvent);
 			evnt.clearUpdated();
+			if (mType == KAEvent::ACTIVE)
+				Daemon::savingEvent(evnt.id());
+			return;
 		}
 	}
+	if (mType == KAEvent::ACTIVE)
+		Daemon::eventHandled(evnt.id(), false);
 }
 
 /******************************************************************************
@@ -647,10 +653,15 @@ void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 		if (kcalEvent)
 		{
 			mCalendar->deleteEvent(kcalEvent);
+			if (mType == KAEvent::ACTIVE)
+				Daemon::savingEvent(eventID);
 			if (saveit)
 				save();
+			return;
 		}
 	}
+	if (mType == KAEvent::ACTIVE)
+		Daemon::eventHandled(eventID, false);
 }
 
 /******************************************************************************

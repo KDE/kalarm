@@ -125,7 +125,7 @@ QString     KAlarmApp::mFatalMessage;
 
 		KConfig* config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
-		mNoSystemTray           = config->readEntry(QLatin1String("NoSystemTray"), false);
+		mNoSystemTray           = config->readEntry("NoSystemTray", false);
 		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
@@ -329,9 +329,9 @@ int KAlarmApp::newInstance()
 				EventFunc function = EVENT_HANDLE;
 				int count = 0;
 				const char* option = 0;
-				if (args->isSet("handleEvent"))   { function = EVENT_HANDLE;  option = "handleEvent";  ++count; }
+				if (args->isSet("handleEvent"))   { function = EVENT_HANDLE;   option = "handleEvent";   ++count; }
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
-				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;  option = "cancelEvent";  ++count; }
+				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;   option = "cancelEvent";   ++count; }
 				if (!count)
 					USAGE(i18n("%1 requires %2, %3 or %4").arg(QLatin1String("--calendarURL")).arg(QLatin1String("--handleEvent")).arg(QLatin1String("--triggerEvent")).arg(QLatin1String("--cancelEvent")))
 				if (count > 1)
@@ -349,6 +349,12 @@ int KAlarmApp::newInstance()
 				}
 				QString eventID = args->getOption(option);
 				args->clear();      // free up memory
+				if (eventID.startsWith(QLatin1String("ad:")))
+				{
+					// It's a notification from the alarm deamon
+					eventID = eventID.mid(3);
+					Daemon::queueEvent(eventID);
+				}
 				setUpDcop();        // start processing DCOP calls
 				if (!handleEvent(eventID, function))
 				{
@@ -782,22 +788,8 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 		}
 	}
 
-	/* This was the last/only running "instance" of the program, so exit completely.
-	 * First, change the name which we are registered with at the DCOP server. This is
-	 * to ensure that the alarm daemon immediately sees us as not running. It prevents
-	 * the following situation which has been observed:
-	 *
-	 * If KAlarm is not running and, for instance, it has registered more than one
-	 * calendar at some time in the past, when the daemon checks pending alarms, it
-	 * starts KAlarm to notify us of the first event. If this is for a different
-	 * calendar from what KAlarm expects, we exit. But without DCOP re-registration,
-	 * when the daemon then notifies us of the next event (from the correct calendar),
-	 * it will still see KAlarm as registered with DCOP and therefore tells us via a
-	 * DCOP call. The call of course never reaches KAlarm but the daemon sees it as
-	 * successful. The result is that the alarm is never seen.
-	 */
+	// This was the last/only running "instance" of the program, so exit completely.
 	kdDebug(5950) << "KAlarmApp::quitIf(" << exitCode << "): quitting" << endl;
-	dcopClient()->registerAs(QByteArray(aboutData()->appName()) + "-quitting");
 	exit(exitCode);
 }
 
@@ -1227,6 +1219,7 @@ bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 	if (cal  &&  KURL(urlString).url() != cal->urlString())
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
+		Daemon::eventHandled(eventID, false);
 		return false;
 	}
 	mDcopQueue.enqueue(DcopQEntry(function, eventID));
@@ -1250,6 +1243,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 	if (!kcalEvent)
 	{
 		kdError(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
+		Daemon::eventHandled(eventID, false);
 		return false;
 	}
 	KAEvent event(*kcalEvent);
@@ -1265,8 +1259,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			QDateTime now = QDateTime::currentDateTime();
 			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;
-			bool displayAlarmValid = false;
-			KAAlarm displayAlarm;
+			bool alarmToExecuteValid = false;
+			KAAlarm alarmToExecute;
 			// Check all the alarms in turn.
 			// Note that the main alarm is fetched before any other alarms.
 			for (KAAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
@@ -1279,8 +1273,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// If the deferral is not yet due, this prevents the main alarm being
 					// triggered repeatedly. If the deferral is due, this triggers it
 					// in preference to the main alarm.
-					displayAlarm        = KAAlarm();
-					displayAlarmValid   = false;
+					alarmToExecute      = KAAlarm();
+					alarmToExecuteValid = false;
 					updateCalAndDisplay = false;
 				}
 				// Check if the alarm is due yet.
@@ -1306,7 +1300,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 
 					// Check if the main alarm is already being displayed.
 					// (We don't want to display both at the same time.)
-					if (displayAlarm.valid())
+					if (alarmToExecute.valid())
 						continue;
 
 					// Set the time to be shown if it's a display alarm
@@ -1342,7 +1336,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 							KAEvent::OccurType type = event.previousOccurrence(now, next, true);
 							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
-								case KAEvent::FIRST_OCCURRENCE:
+								case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
 								case KAEvent::RECURRENCE_DATE:
 								case KAEvent::RECURRENCE_DATE_TIME:
 								case KAEvent::LAST_RECURRENCE:
@@ -1350,8 +1344,9 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									limit.setTime(Preferences::startOfDay());
 									if (now >= limit)
 									{
-										if (type == KAEvent::LAST_RECURRENCE)
-											cancel = true;
+										if (type == KAEvent::LAST_RECURRENCE
+										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
+											cancel = true;   // last ocurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1365,7 +1360,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					}
 					else
 					{
-						// The alarm is timed. Allow it to be just over a minute late before cancelling it.
+						// The alarm is timed. Allow it to be the permitted amount late before cancelling it.
 						int maxlate = maxLateness(alarm.lateCancel());
 						if (secs > maxlate)
 						{
@@ -1375,14 +1370,15 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 							KAEvent::OccurType type = event.previousOccurrence(now, next, true);
 							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
-								case KAEvent::FIRST_OCCURRENCE:
+								case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
 								case KAEvent::RECURRENCE_DATE:
 								case KAEvent::RECURRENCE_DATE_TIME:
 								case KAEvent::LAST_RECURRENCE:
 									if (next.dateTime().secsTo(now) > maxlate)
 									{
-										if (type == KAEvent::LAST_RECURRENCE)
-											cancel = true;
+										if (type == KAEvent::LAST_RECURRENCE
+										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
+											cancel = true;   // last ocurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1397,7 +1393,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 
 					if (cancel)
 					{
-						// All repetitions are finished, so cancel the event
+						// All recurrences are finished, so cancel the event
 						event.setArchive();
 						cancelAlarm(event, alarm.type(), false);
 						updateCalAndDisplay = true;
@@ -1411,20 +1407,20 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						continue;
 					}
 				}
-				if (!displayAlarmValid)
+				if (!alarmToExecuteValid)
 				{
-					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": display\n";
-					displayAlarm = alarm;             // note the alarm to be displayed
-					displayAlarmValid = true;         // only trigger one alarm for the event
+					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": execute\n";
+					alarmToExecute = alarm;             // note the alarm to be displayed
+					alarmToExecuteValid = true;         // only trigger one alarm for the event
 				}
 				else
 					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": skip\n";
 			}
 
-			// If there is an alarm to display, do this last after rescheduling/cancelling
+			// If there is an alarm to execute, do this last after rescheduling/cancelling
 			// any others. This ensures that the updated event is only saved once to the calendar.
-			if (displayAlarm.valid())
-				execAlarm(event, displayAlarm, true, !displayAlarm.repeatAtLogin());
+			if (alarmToExecute.valid())
+				execAlarm(event, alarmToExecute, true, !alarmToExecute.repeatAtLogin());
 			else
 			{
 				if (function == EVENT_TRIGGER)
@@ -1439,7 +1435,10 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (updateCalAndDisplay)
 					KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
 				else if (function != EVENT_TRIGGER)
+				{
 					kdDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
+					Daemon::eventHandled(eventID, false);
+				}
 			}
 			break;
 		}
@@ -1477,8 +1476,10 @@ void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const Date
 			}
 
 			rescheduleAlarm(event, alarm, true);
+			return;
 		}
 	}
+	Daemon::eventHandled(event.id(), false);
 }
 
 /******************************************************************************
@@ -1543,7 +1544,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 						event.setUpdated();    // note that the calendar file needs to be updated
 					}
 					break;
-				case KAEvent::FIRST_OCCURRENCE:
+				case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
 					// The first occurrence is still due?!?, so don't do anything
 				default:
 					break;
@@ -1562,7 +1563,10 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 		KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
 	}
 	else if (updateDisplay)
+	{
+		Daemon::eventHandled(event.id(), false);
 		AlarmListView::modifyEvent(event, 0);
+	}
 }
 
 /******************************************************************************
@@ -1833,7 +1837,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 */
 void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
 {
-kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'\n";
+//kdDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'\n";
 	// Find this command in the command list
 	for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
 	{

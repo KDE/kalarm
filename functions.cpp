@@ -320,8 +320,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive)
 		if (archive  &&  event.toBeArchived())
 			addExpiredEvent(event);     // this changes the event ID to an expired ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-		cal->deleteEvent(id);
-		cal->save();
+		cal->deleteEvent(id, true);    // save calendar after deleting
 	}
 	return ret;
 }
@@ -337,8 +336,7 @@ void deleteTemplate(const KAEvent& event)
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (cal)
 	{
-		cal->deleteEvent(id);
-		cal->save();
+		cal->deleteEvent(id, true);    // save calendar after deleting
 		cal->emitEmptyStatus();
 	}
 

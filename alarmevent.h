@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -272,15 +272,15 @@ class KAEvent : public KAAlarmEventBase
 		enum OccurType     // what type of occurrence is due
 		{
 			NO_OCCURRENCE               = 0,      // no occurrence is due
-			FIRST_OCCURRENCE            = 0x01,   // the first occurrence (takes precedence over LAST_RECURRENCE)
+			FIRST_OR_ONLY_OCCURRENCE    = 0x01,   // the first occurrence (takes precedence over LAST_RECURRENCE)
 			RECURRENCE_DATE             = 0x02,   // a recurrence with only a date, not a time
 			RECURRENCE_DATE_TIME        = 0x03,   // a recurrence with a date and time
 			LAST_RECURRENCE             = 0x04,   // the last recurrence
 			OCCURRENCE_REPEAT = 0x10,    // (bitmask for a repetition of an occurrence)
-			FIRST_OCCURRENCE_REPEAT     = OCCURRENCE_REPEAT | FIRST_OCCURRENCE,     // a repetition of the first occurrence
-			RECURRENCE_DATE_REPEAT      = OCCURRENCE_REPEAT | RECURRENCE_DATE,      // a repetition of a date-only recurrence
-			RECURRENCE_DATE_TIME_REPEAT = OCCURRENCE_REPEAT | RECURRENCE_DATE_TIME, // a repetition of a date/time recurrence
-			LAST_RECURRENCE_REPEAT      = OCCURRENCE_REPEAT | LAST_RECURRENCE       // a repetition of the last recurrence
+			FIRST_OR_ONLY_OCCURRENCE_REPEAT = OCCURRENCE_REPEAT | FIRST_OR_ONLY_OCCURRENCE,     // a repetition of the first occurrence
+			RECURRENCE_DATE_REPEAT          = OCCURRENCE_REPEAT | RECURRENCE_DATE,      // a repetition of a date-only recurrence
+			RECURRENCE_DATE_TIME_REPEAT     = OCCURRENCE_REPEAT | RECURRENCE_DATE_TIME, // a repetition of a date/time recurrence
+			LAST_RECURRENCE_REPEAT          = OCCURRENCE_REPEAT | LAST_RECURRENCE       // a repetition of the last recurrence
 		};
 		enum OccurOption     // options for nextOccurrence()
 		{
