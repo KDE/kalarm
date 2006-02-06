@@ -12,8 +12,6 @@
   <Action name="edit_redo" />
   <Separator />
   <Action name="edit_find"/>
-  <Action name="edit_find_next"/>
-  <Action name="edit_find_last"/>
  </ToolBar>
  <MenuBar>
   <Menu name="file" >
