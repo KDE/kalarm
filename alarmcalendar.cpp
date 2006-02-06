@@ -104,7 +104,7 @@ bool AlarmCalendar::initialiseCalendars()
 		errorKey1 = templateKey;
 	if (!errorKey1.isNull())
 	{
-		kdError(5950) << "AlarmCalendar::initialiseCalendars(): '" << errorKey1 << "' calendar name = display calendar name\n";
+		kError(5950) << "AlarmCalendar::initialiseCalendars(): '" << errorKey1 << "' calendar name = display calendar name\n";
 		QString file = config->readPathEntry(errorKey1);
 		KAlarmApp::displayFatalError(i18n("%1: file name not permitted: %2").arg(errorKey1).arg(file));
 		return false;
@@ -126,14 +126,14 @@ bool AlarmCalendar::initialiseCalendars()
 	}
 	if (!errorKey1.isNull())
 	{
-		kdError(5950) << "AlarmCalendar::initialiseCalendars(): calendar names clash: " << errorKey1 << ", " << errorKey2 << endl;
+		kError(5950) << "AlarmCalendar::initialiseCalendars(): calendar names clash: " << errorKey1 << ", " << errorKey2 << endl;
 		KAlarmApp::displayFatalError(i18n("%1, %2: file names must be different").arg(errorKey1).arg(errorKey2));
 		return false;
 	}
 	if (!mCalendars[ACTIVE]->valid())
 	{
 		QString path = mCalendars[ACTIVE]->path();
-		kdError(5950) << "AlarmCalendar::initialiseCalendars(): invalid name: " << path << endl;
+		kError(5950) << "AlarmCalendar::initialiseCalendars(): invalid name: " << path << endl;
 		KAlarmApp::displayFatalError(i18n("Invalid calendar file name: %1").arg(path));
 		return false;
 	}
@@ -187,7 +187,7 @@ AlarmCalendar* AlarmCalendar::calendarOpen(CalID id)
 		return 0;     // all events are automatically purged from the calendar
 	if (cal->open())
 		return cal;
-	kdError(5950) << "AlarmCalendar::calendarOpen(" << calendarNames[id] << "): open error\n";
+	kError(5950) << "AlarmCalendar::calendarOpen(" << calendarNames[id] << "): open error\n";
 	return 0;
 }
 
@@ -253,7 +253,7 @@ bool AlarmCalendar::open()
 	if (!mUrl.isValid())
 		return false;
 
-	kdDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
+	kDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyURL() << ")\n";
 	if (!mCalendar)
 		mCalendar = new CalendarLocal(QLatin1String("UTC"));
 	mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
@@ -310,15 +310,15 @@ int AlarmCalendar::load()
 	if (!mCalendar)
 		return -2;
 
-	kdDebug(5950) << "AlarmCalendar::load(): " << mUrl.prettyURL() << endl;
+	kDebug(5950) << "AlarmCalendar::load(): " << mUrl.prettyURL() << endl;
 	QString tmpFile;
 	if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
 	{
-		kdError(5950) << "AlarmCalendar::load(): Load failure" << endl;
+		kError(5950) << "AlarmCalendar::load(): Load failure" << endl;
 		KMessageBox::error(0, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()));
 		return -1;
 	}
-	kdDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
+	kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
 	mCalendar->setTimeZoneId(QString());   // default to the local time zone for reading
 	bool loaded = mCalendar->load(tmpFile);
 	mCalendar->setLocalTime();                 // write using local time (i.e. no time zone)
@@ -331,7 +331,7 @@ int AlarmCalendar::load()
 		KFileItem fi(uds, mUrl);
 		if (!fi.size())
 			return 0;     // file is zero length
-		kdError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
+		kError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
 		KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()));
 		// load() could have partially populated the calendar, so clear it out
 		mCalendar->close();
@@ -355,7 +355,7 @@ bool AlarmCalendar::reload()
 {
 	if (!mCalendar)
 		return false;
-	kdDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyURL() << endl;
+	kDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyURL() << endl;
 	close();
 	bool result = open();
 	return result;
@@ -370,13 +370,13 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 	if (!mCalendar  ||  !mOpen && newFile.isNull())
 		return false;
 
-	kdDebug(5950) << "AlarmCalendar::saveCal(\"" << newFile << "\", " << mType << ")\n";
+	kDebug(5950) << "AlarmCalendar::saveCal(\"" << newFile << "\", " << mType << ")\n";
 	QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
 	if (mVCal  &&  newFile.isNull()  &&  mUrl.isLocalFile())
 		saveFilename = mICalUrl.path();
 	if (!mCalendar->save(saveFilename, new ICalFormat))
 	{
-		kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
+		kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
 		KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()));
 		return false;
 	}
@@ -385,7 +385,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 	{
 		if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
 		{
-			kdError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
+			kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
 			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mICalUrl.prettyURL()));
 			return false;
 		}
@@ -547,7 +547,7 @@ void AlarmCalendar::purgeIfQueued()
 	{
 		if (open())
 		{
-			kdDebug(5950) << "AlarmCalendar::purgeIfQueued(" << mPurgeDaysQueued << ")\n";
+			kDebug(5950) << "AlarmCalendar::purgeIfQueued(" << mPurgeDaysQueued << ")\n";
 			bool changed = false;
 			QDate cutoff = QDate::currentDate().addDays(-mPurgeDaysQueued);
 			Event::List events = mCalendar->rawEvents();
@@ -704,7 +704,7 @@ KCal::Event::List AlarmCalendar::events()
 */
 Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTime& to)
 {
-	kdDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from.toString() << " - " << to.toString() << ")\n";
+	kDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from.toString() << " - " << to.toString() << ")\n";
 	Event::List evnts;
 	if (!mCalendar)
 		return evnts;
@@ -757,7 +757,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 					dt = alarm->time();
 				if (dt >= from  &&  dt <= to)
 				{
-					kdDebug(5950) << "AlarmCalendar::events() '" << e->summary()
+					kDebug(5950) << "AlarmCalendar::events() '" << e->summary()
 					              << "': " << dt.toString() << endl;
 					evnts.append(e);
 					break;

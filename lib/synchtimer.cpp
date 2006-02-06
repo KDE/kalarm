@@ -111,7 +111,7 @@ MinuteTimer* MinuteTimer::instance()
 */
 void MinuteTimer::slotTimer()
 {
-	kdDebug(5950) << "MinuteTimer::slotTimer()" << endl;
+	kDebug(5950) << "MinuteTimer::slotTimer()" << endl;
 	int interval = 62 - QTime::currentTime().second();
 	mTimer->start(interval * 1000);     // execute a single shot
 }
@@ -215,7 +215,7 @@ void DailyTimer::start()
 		next = QDateTime(now.date().addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
 	mTimer->start(interval * 1000);    // execute a single shot
-	kdDebug(5950) << "DailyTimer::start(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
+	kDebug(5950) << "DailyTimer::start(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
 }
 
 /******************************************************************************
@@ -232,5 +232,5 @@ void DailyTimer::slotTimer()
 	QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
 	mTimer->start(interval * 1000);    // execute a single shot
-	kdDebug(5950) << "DailyTimer::slotTimer(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
+	kDebug(5950) << "DailyTimer::slotTimer(at " << mTime.hour() << ":" << mTime.minute() << "): interval = " << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60 << endl;
 }

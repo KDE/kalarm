@@ -127,7 +127,7 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 // Restore all defaults in the options...
 void KAlarmPrefDlg::slotDefault()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
+	kDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
 	mFontColourPage->setDefaults();
 	mEmailPage->setDefaults();
 	mViewPage->setDefaults();
@@ -143,7 +143,7 @@ void KAlarmPrefDlg::slotHelp()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
+	kDebug(5950) << "KAlarmPrefDlg::slotApply()" << endl;
 	QString errmsg = mEmailPage->validate();
 	if (!errmsg.isEmpty())
 	{
@@ -174,7 +174,7 @@ void KAlarmPrefDlg::slotApply()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
+	kDebug(5950) << "KAlarmPrefDlg::slotOk()" << endl;
 	mValid = true;
 	slotApply();
 	if (mValid)
@@ -184,7 +184,7 @@ void KAlarmPrefDlg::slotOk()
 // Discard the current preferences and close the dialogue
 void KAlarmPrefDlg::slotCancel()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
+	kDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
 	restore();
 	KDialogBase::slotCancel();
 }
@@ -192,7 +192,7 @@ void KAlarmPrefDlg::slotCancel()
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore()
 {
-	kdDebug(5950) << "KAlarmPrefDlg::restore()" << endl;
+	kDebug(5950) << "KAlarmPrefDlg::restore()" << endl;
 	mFontColourPage->restore();
 	mEmailPage->restore();
 	mViewPage->restore();

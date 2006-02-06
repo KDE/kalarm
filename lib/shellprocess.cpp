@@ -75,12 +75,12 @@ bool ShellProcess::start(Communication comm)
 */
 void ShellProcess::slotExited(KProcess* proc)
 {
-	kdDebug(5950) << "ShellProcess::slotExited()\n";
+	kDebug(5950) << "ShellProcess::slotExited()\n";
 	mStdinQueue.clear();
 	mStatus = SUCCESS;
 	if (!proc->normalExit())
 	{
-		kdWarning(5950) << "ShellProcess::slotExited(" << mCommand << ") " << mShellName << ": died/killed\n";
+		kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ") " << mShellName << ": died/killed\n";
 		mStatus = DIED;
 	}
 	else
@@ -90,7 +90,7 @@ void ShellProcess::slotExited(KProcess* proc)
 		if (mShellName == "bash"  &&  (status == 126 || status == 127)
 		||  mShellName == "ksh"  &&  status == 127)
 		{
-			kdWarning(5950) << "ShellProcess::slotExited(" << mCommand << ") " << mShellName << ": not found or not executable\n";
+			kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ") " << mShellName << ": not found or not executable\n";
 			mStatus = NOT_FOUND;
 		}
 	}

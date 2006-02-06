@@ -191,7 +191,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mPositioning(false),
 	  mNoCloseConfirm(false)
 {
-	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
+	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	// Set to save settings automatically, but don't save window size.
 	// File alarm window size is saved elsewhere.
@@ -235,7 +235,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mPositioning(false),
 	  mNoCloseConfirm(false)
 {
-	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
+	kDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	initView();
 	mWindowList.append(this);
@@ -260,7 +260,7 @@ MessageWin::MessageWin()
 	  mPositioning(false),
 	  mNoCloseConfirm(false)
 {
-	kdDebug(5950) << "MessageWin::MessageWin()\n";
+	kDebug(5950) << "MessageWin::MessageWin()\n";
 	setAttribute(WidgetFlags);
 	mWindowList.append(this);
 }
@@ -270,7 +270,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-	kdDebug(5950) << "MessageWin::~MessageWin()\n";
+	kDebug(5950) << "MessageWin::~MessageWin()\n";
 	stopPlay();
 	delete mWinModule;
 	mWinModule = 0;
@@ -835,7 +835,7 @@ void MessageWin::slotSpeak()
 		QString error;
 		if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
 		{
-			kdDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
+			kDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
 			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
 			return;
 		}
@@ -845,7 +845,7 @@ void MessageWin::slotSpeak()
 	arg << mMessage << QString();
 	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
 	{
-		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
+		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
 		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP Call sayMessage failed"));
 	}
 }
@@ -863,7 +863,7 @@ void MessageWin::slotPlayAudio()
 	if (!url.isValid()  ||  !KIO::NetAccess::exists(url, true, mmw)
 	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{
-		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
+		kError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
 		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile));
 		return;
 	}
@@ -884,7 +884,7 @@ void MessageWin::slotPlayAudio()
 			// (Outputting it earlier would delay things until it is acknowledged.)
 			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
 			                         QString(), QLatin1String("KMixError"));
-			kdWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
+			kWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
 		}
 	}
 #endif
@@ -962,7 +962,7 @@ void MessageWin::checkAudioPlay()
 		}
 
 		// Start playing the file, either for the first time or again
-		kdDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
+		kDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
 		if (!mPlayedOnce)
 		{
 			// Start playing the file for the first time
@@ -1016,7 +1016,7 @@ void MessageWin::checkAudioPlay()
 	int time = 1000*(overall.seconds - current.seconds) + overall.ms - current.ms;
 	if (time < 0)
 		time = 0;
-	kdDebug(5950) << "MessageWin::checkAudioPlay(): wait for " << (time+100) << "ms\n";
+	kDebug(5950) << "MessageWin::checkAudioPlay(): wait for " << (time+100) << "ms\n";
 	mPlayTimer->start(time + 100, true);
 #endif
 }
@@ -1083,14 +1083,14 @@ void MessageWin::slotFade()
 		mFadeTimer = 0;
 		if (!mVolume)
 		{
-			kdDebug(5950) << "MessageWin::slotFade(0)\n";
+			kDebug(5950) << "MessageWin::slotFade(0)\n";
 			stopPlay();
 			return;
 		}
 	}
 	else
 		volume = mFadeVolume  +  ((mVolume - mFadeVolume) * elapsed) / mFadeSeconds;
-	kdDebug(5950) << "MessageWin::slotFade(" << volume << ")\n";
+	kDebug(5950) << "MessageWin::slotFade(" << volume << ")\n";
 	if (mArtsDispatcher)
 	{
 		if (mUsingKMix)
@@ -1138,7 +1138,7 @@ void MessageWin::setKMixVolume(int percent)
 	QDataStream arg(data, QIODevice::WriteOnly);
 	arg << percent;
 	if (!kapp->dcopClient()->send(mKMixName, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
-		kdError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
+		kError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
 }
 #endif
 
@@ -1410,7 +1410,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 */
 void MessageWin::slotShowKMailMessage()
 {
-	kdDebug(5950) << "MessageWin::slotShowKMailMessage()\n";
+	kDebug(5950) << "MessageWin::slotShowKMailMessage()\n";
 	if (!mKMailSerialNumber)
 		return;
 	QString err = KAlarm::runKMail(false);
@@ -1432,7 +1432,7 @@ void MessageWin::slotShowKMailMessage()
 		if (result)
 			return;    // success
 	}
-	kdError(5950) << "MessageWin::slotShowKMailMessage(): kmail dcop call failed\n";
+	kError(5950) << "MessageWin::slotShowKMailMessage(): kmail dcop call failed\n";
 	KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
 }
 

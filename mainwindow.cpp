@@ -122,7 +122,7 @@ MainWindow::MainWindow(bool restored)
 	  mShowTime(Preferences::showAlarmTime()),
 	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
-	kdDebug(5950) << "MainWindow::MainWindow()\n";
+	kDebug(5950) << "MainWindow::MainWindow()\n";
 	setAttribute(Qt::WA_DeleteOnClose);
 	setAutoSaveSettings(QLatin1String("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
@@ -164,7 +164,7 @@ MainWindow::MainWindow(bool restored)
 
 MainWindow::~MainWindow()
 {
-	kdDebug(5950) << "MainWindow::~MainWindow()\n";
+	kDebug(5950) << "MainWindow::~MainWindow()\n";
 	mWindowList.remove(this);
 	if (theApp()->trayWindow())
 	{
@@ -411,7 +411,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 */
 void MainWindow::refresh()
 {
-	kdDebug(5950) << "MainWindow::refresh()\n";
+	kDebug(5950) << "MainWindow::refresh()\n";
 	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 		mWindowList[i]->mListView->refresh();
 }
@@ -423,7 +423,7 @@ void MainWindow::refresh()
 */
 void MainWindow::updateExpired()
 {
-	kdDebug(5950) << "MainWindow::updateExpired()\n";
+	kDebug(5950) << "MainWindow::updateExpired()\n";
 	bool enableShowExpired = Preferences::expiredKeepDays();
 	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
@@ -447,7 +447,7 @@ void MainWindow::updateExpired()
 */
 void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 {
-	kdDebug(5950) << "MainWindow::updateShowAlarmTimes()\n";
+	kDebug(5950) << "MainWindow::updateShowAlarmTimes()\n";
 	bool newTime   = Preferences::showAlarmTime();
 	bool newTimeTo = Preferences::showTimeToAlarm();
 	if (!newTime  &&  !newTimeTo)
@@ -498,13 +498,13 @@ void MainWindow::setUpdateTimer()
 		// Timeout every minute.
 		needTimer->mMinuteTimerActive = true;
 		MinuteTimer::connect(needTimer, SLOT(slotUpdateTimeTo()));
-		kdDebug(5950) << "MainWindow::setUpdateTimer(): started timer" << endl;
+		kDebug(5950) << "MainWindow::setUpdateTimer(): started timer" << endl;
 	}
 	else if (!needTimer  &&  timerWindow)
 	{
 		timerWindow->mMinuteTimerActive = false;
 		MinuteTimer::disconnect(timerWindow);
-		kdDebug(5950) << "MainWindow::setUpdateTimer(): stopped timer" << endl;
+		kDebug(5950) << "MainWindow::setUpdateTimer(): stopped timer" << endl;
 	}
 }
 /******************************************************************************
@@ -512,7 +512,7 @@ void MainWindow::setUpdateTimer()
 */
 void MainWindow::slotUpdateTimeTo()
 {
-	kdDebug(5950) << "MainWindow::slotUpdateTimeTo()" << endl;
+	kDebug(5950) << "MainWindow::slotUpdateTimeTo()" << endl;
 	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
 		MainWindow* w = mWindowList[i];
@@ -1047,7 +1047,7 @@ void MainWindow::slotDeletion()
 {
 	if (!mListView->selectedCount())
 	{
-		kdDebug(5950) << "MainWindow::slotDeletion(true)\n";
+		kDebug(5950) << "MainWindow::slotDeletion(true)\n";
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);
 		mActionModify->setEnabled(false);
@@ -1112,7 +1112,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	calendar.setLocalTime();    // default to local time (i.e. no time zone)
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
-	kdDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
+	kDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
 #endif
 
 	/* The order of the tests below matters, since some dropped objects
@@ -1122,7 +1122,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	if (!(bytes = data->data("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
-		kdDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
+		kDebug(5950) << "MainWindow::executeDropEvent(email)" << endl;
 		KMime::Content content;
 		content.setContent(bytes);
 		content.parse();
@@ -1146,7 +1146,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	}
 	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
-		kdDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
+		kDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
 		alarmText.setText(files.first().prettyURL());
 	}
@@ -1154,7 +1154,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	&&       KPIM::MailListDrag::decode(e, mailList))
 	{
 		// KMail message(s). Ignore all but the first.
-		kdDebug(5950) << "MainWindow::executeDropEvent(KMail_list)" << endl;
+		kDebug(5950) << "MainWindow::executeDropEvent(KMail_list)" << endl;
 		if (!mailList.count())
 			return;
 		KPIM::MailSummary& summary = mailList.first();
@@ -1168,7 +1168,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (KCal::ICalDrag::decode(e, &calendar))
 	{
 		// iCalendar - ignore all but the first event
-		kdDebug(5950) << "MainWindow::executeDropEvent(iCalendar)" << endl;
+		kDebug(5950) << "MainWindow::executeDropEvent(iCalendar)" << endl;
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
@@ -1180,7 +1180,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (data->hasText())
 	{
 		QString text = data->text();
-		kdDebug(5950) << "MainWindow::executeDropEvent(text)" << endl;
+		kDebug(5950) << "MainWindow::executeDropEvent(text)" << endl;
 		alarmText.setText(text);
 	}
 	else
@@ -1225,7 +1225,7 @@ void MainWindow::slotSelection()
 		}
 	}
 
-	kdDebug(5950) << "MainWindow::slotSelection(true)\n";
+	kDebug(5950) << "MainWindow::slotSelection(true)\n";
 	mActionCreateTemplate->setEnabled(count == 1);
 	mActionCopy->setEnabled(count == 1);
 	mActionModify->setEnabled(item && !mListView->expired(item));
@@ -1246,13 +1246,13 @@ void MainWindow::slotMouseClicked(int button, Q3ListViewItem* item, const QPoint
 {
 	if (button == Qt::RightButton)
 	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(right)\n";
+		kDebug(5950) << "MainWindow::slotMouseClicked(right)\n";
 		if (mContextMenu)
 			mContextMenu->popup(pt);
 	}
 	else if (!item)
 	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
+		kDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
 		mListView->clearSelection();
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);
@@ -1270,7 +1270,7 @@ void MainWindow::slotMouseClicked(int button, Q3ListViewItem* item, const QPoint
 */
 void MainWindow::slotDoubleClicked(Q3ListViewItem* item)
 {
-	kdDebug(5950) << "MainWindow::slotDoubleClicked()\n";
+	kDebug(5950) << "MainWindow::slotDoubleClicked()\n";
 	if (item)
 	{
 		if (mListView->expired((AlarmListViewItem*)item))

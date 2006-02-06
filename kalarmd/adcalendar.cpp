@@ -48,7 +48,7 @@ ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
 	ADCalendar* cal = calendar(url);
 	if (cal)
 	{
-		kdError(5900) << "ADCalendar::ADCalendar(" << url << "): calendar already exists" << endl;
+		kError(5900) << "ADCalendar::ADCalendar(" << url << "): calendar already exists" << endl;
 		assert(0);
 	}
 	mUrlIndex = mCalendarUrls.findIndex(url);    // get unique index for this URL
@@ -77,7 +77,7 @@ bool ADCalendar::loadFile(bool reset)
 	if (!mTempFileName.isNull())
 	{
 		// Don't try to load the file if already downloading it
-		kdError(5900) << "ADCalendar::loadFile(): already downloading another file\n";
+		kError(5900) << "ADCalendar::loadFile(): already downloading another file\n";
 		return false;
 	}
 	mLoaded = false;
@@ -106,12 +106,12 @@ void ADCalendar::slotDownloadJobResult(KIO::Job *job)
 	if (job->error())
 	{
 		KUrl url(mUrlString);
-		kdDebug(5900) << "Error downloading calendar from " << url.prettyURL() << endl;
+		kDebug(5900) << "Error downloading calendar from " << url.prettyURL() << endl;
 		job->showErrorDialog(0);
 	}
 	else
 	{
-		kdDebug(5900) << "--- Downloaded to " << mTempFileName << endl;
+		kDebug(5900) << "--- Downloaded to " << mTempFileName << endl;
 		loadLocalFile(mTempFileName);
 	}
 	unlink(QFile::encodeName(mTempFileName));
@@ -123,7 +123,7 @@ void ADCalendar::loadLocalFile(const QString& filename)
 {
 	mLoaded = load(filename);
 	if (!mLoaded)
-		kdDebug(5900) << "ADCalendar::loadLocalFile(): Error loading calendar file '" << filename << "'\n";
+		kDebug(5900) << "ADCalendar::loadLocalFile(): Error loading calendar file '" << filename << "'\n";
 	else
 		clearEventsHandled(true);   // remove all events which no longer exist from handled list
 }
@@ -166,7 +166,7 @@ bool ADCalendar::eventHandled(const KCal::Event* event, const QList<QDateTime>& 
 */
 void ADCalendar::setEventHandled(const QString& eventID)
 {
-	kdDebug(5900) << "ADCalendar::setEventHandled(" << eventID << ")\n";
+	kDebug(5900) << "ADCalendar::setEventHandled(" << eventID << ")\n";
 	EventKey key(eventID, mUrlIndex);
 
 	// Remove it from the pending list, and add it to the handled list
@@ -186,7 +186,7 @@ void ADCalendar::setEventPending(const KCal::Event* event, const QList<QDateTime
 {
 	if (event)
 	{
-		kdDebug(5900) << "ADCalendar::setEventPending(" << event->uid() << ")\n";
+		kDebug(5900) << "ADCalendar::setEventPending(" << event->uid() << ")\n";
 		EventKey key(event->uid(), mUrlIndex);
 		setEventInMap(mEventsPending, key, alarmtimes, event->revision());
 	}

@@ -38,7 +38,7 @@ AlarmDaemonApp::AlarmDaemonApp()
 
 int AlarmDaemonApp::newInstance()
 {
-	kdDebug(5900) << "AlarmDaemonApp::newInstance()" << endl;
+	kDebug(5900) << "AlarmDaemonApp::newInstance()" << endl;
 
 	/* Prevent the application being restored automatically by the session manager
 	 * at session startup. Instead, the KDE autostart facility is used to start

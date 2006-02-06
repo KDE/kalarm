@@ -139,7 +139,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	KAMailData data(event, from,
 	                (event.emailBcc() ? Preferences::emailBccAddress() : QString()),
 	                allowNotify);
-	kdDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
+	kDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
 	if (Preferences::emailClient() == Preferences::SENDMAIL)
@@ -188,7 +188,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		FILE* fd = popen(command.toLocal8Bit(), "w");
 		if (!fd)
 		{
-			kdError(5950) << "KAMail::send(): Unable to open a pipe to " << command << endl;
+			kError(5950) << "KAMail::send(): Unable to open a pipe to " << command << endl;
 			errmsgs = errors();
 			return false;
 		}
@@ -247,7 +247,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 
 	QByteArray  callData;
 	QDataStream arg(&callData, QIODevice::WriteOnly);
-	kdDebug(5950) << "KAMail::sendKMail(): using " << (useSend ? "sendMessage()" : "dcopAddMessage()") << endl;
+	kDebug(5950) << "KAMail::sendKMail(): using " << (useSend ? "sendMessage()" : "dcopAddMessage()") << endl;
 	if (useSend)
 	{
 		// This version of KMail has the sendMessage() function,
@@ -298,14 +298,14 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		QTextStream* stream = tmpFile.textStream();
 		if (!stream)
 		{
-			kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
+			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
 			return QString("");
 		}
 		*stream << message;
 		tmpFile.close();
 		if (tmpFile.status())
 		{
-			kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
+			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
 			return QString("");
 		}
 
@@ -317,7 +317,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 			return QString();
 		err = i18n("Error calling KMail");
 	}
-	kdError(5950) << "KAMail::addToKMailFolder(" << folder << "): " << err << endl;
+	kError(5950) << "KAMail::addToKMailFolder(" << folder << "): " << err << endl;
 	return err;
 }
 
@@ -333,7 +333,7 @@ bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, con
 	if (!kapp->dcopClient()->call("kmail", iface, function, callData, replyType, replyData)
 	||  replyType != funcType)
 	{
-		kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call failed\n";;
+		kError(5950) << "KAMail::callKMail(): kmail " << funcname << " call failed\n";;
 		return false;
 	}
 	QDataStream replyStream(&replyData, QIODevice::ReadOnly);
@@ -343,7 +343,7 @@ bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, con
 		replyStream >> result;
 		if (result <= 0)
 		{
-			kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error code = " << result << endl;
+			kError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error code = " << result << endl;
 			return false;
 		}
 	}
@@ -353,7 +353,7 @@ bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, con
 		replyStream >> result;
 		if (!result)
 		{
-			kdError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error\n";
+			kError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error\n";
 			return false;
 		}
 	}
@@ -431,12 +431,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
-				kdError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
+				kError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
 				return i18n("Attachment not found:\n%1").arg(attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
-				kdError(5950) << "KAMail::appendBodyAttachments(): not file/not readable: " << attachment << endl;
+				kError(5950) << "KAMail::appendBodyAttachments(): not file/not readable: " << attachment << endl;
 				return attachError.arg(attachment);
 			}
 
@@ -457,12 +457,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			// Read the file contents
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
-				kdError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
+				kError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
 				return attachError.arg(attachment);
 			}
 			QFile file(tmpFile);
 			if (!file.open(QIODevice::ReadOnly) ) {
-				kdDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
+				kDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
 				return attachError.arg(attachment);
 			}
 			qint64 size = file.size();
@@ -472,7 +472,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			contents[size] = 0;
 			bool atterror = false;
 			if (bytes == (qint64)-1  ||  bytes < size) {
-				kdDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
+				kDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
 				atterror = true;
 			}
 			else if (text)
@@ -486,7 +486,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 				int base64Size;
 				char* base64 = base64Encode(contents, static_cast<int>(size), base64Size);
 				if (base64Size == -1) {
-					kdDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
+					kDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
 					atterror = true;
 				}
 				else
@@ -601,7 +601,7 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 {
 	if (!addr.displayName.isEmpty())
 	{
-		kdDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"" << endl;
+		kDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"" << endl;
 		return addr.displayName;
 	}
 	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
@@ -911,7 +911,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 		reply_stream >> body;
 	}
 	else
-		kdDebug(5950) << "KAMail::getMailBody(): kmail getDecodedBodyPart() call failed\n";
+		kDebug(5950) << "KAMail::getMailBody(): kmail getDecodedBodyPart() call failed\n";
 	return body;
 }
 

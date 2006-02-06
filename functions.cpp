@@ -130,7 +130,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* r
 */
 UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID, bool allowKOrgUpdate)
 {
-	kdDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
+	kDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
 	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
 		return UPDATE_ERROR;
 
@@ -157,7 +157,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEven
 */
 bool addExpiredEvent(KAEvent& event)
 {
-	kdDebug(5950) << "KAlarm::addExpiredEvent(" << event.id() << ")\n";
+	kDebug(5950) << "KAlarm::addExpiredEvent(" << event.id() << ")\n";
 	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
 	if (!cal)
 		return false;
@@ -184,7 +184,7 @@ bool addExpiredEvent(KAEvent& event)
 */
 bool addTemplate(KAEvent& event, TemplateListView* selectionView)
 {
-	kdDebug(5950) << "KAlarm::addTemplate(): " << event.id() << endl;
+	kDebug(5950) << "KAlarm::addTemplate(): " << event.id() << endl;
 
 	// Add the template to the calendar file
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
@@ -208,7 +208,7 @@ bool addTemplate(KAEvent& event, TemplateListView* selectionView)
 */
 UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView)
 {
-	kdDebug(5950) << "KAlarm::modifyEvent(): '" << oldEvent.id() << endl;
+	kDebug(5950) << "KAlarm::modifyEvent(): '" << oldEvent.id() << endl;
 
 	if (!newEvent.valid())
 		return deleteEvent(oldEvent, true);
@@ -252,7 +252,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListVi
 */
 void updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDelete, bool incRevision)
 {
-	kdDebug(5950) << "KAlarm::updateEvent(): " << event.id() << endl;
+	kDebug(5950) << "KAlarm::updateEvent(): " << event.id() << endl;
 
 	if (!event.valid())
 		deleteEvent(event, archiveOnDelete);
@@ -294,7 +294,7 @@ void updateTemplate(const KAEvent& event, TemplateListView* selectionView)
 UpdateStatus deleteEvent(KAEvent& event, bool archive)
 {
 	QString id = event.id();
-	kdDebug(5950) << "KAlarm::deleteEvent(): " << id << endl;
+	kDebug(5950) << "KAlarm::deleteEvent(): " << id << endl;
 
 	// Update the window lists
 	AlarmListView::deleteEvent(id);
@@ -349,7 +349,7 @@ void deleteTemplate(const KAEvent& event)
 */
 void deleteDisplayEvent(const QString& eventID)
 {
-	kdDebug(5950) << "KAlarm::deleteDisplayEvent(" << eventID << ")\n";
+	kDebug(5950) << "KAlarm::deleteDisplayEvent(" << eventID << ")\n";
 
 	if (KAEvent::uidStatus(eventID) == KAEvent::DISPLAYING)
 	{
@@ -368,7 +368,7 @@ void deleteDisplayEvent(const QString& eventID)
 UpdateStatus reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID)
 {
 	QString id = event.id();
-	kdDebug(5950) << "KAlarm::reactivateEvent(): " << id << endl;
+	kDebug(5950) << "KAlarm::reactivateEvent(): " << id << endl;
 
 	// Delete the event from the expired calendar file
 	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
@@ -412,7 +412,7 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool 
 */
 void enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
 {
-	kdDebug(5950) << "KAlarm::enableEvent(" << enable << "): " << event.id() << endl;
+	kDebug(5950) << "KAlarm::enableEvent(" << enable << "): " << event.id() << endl;
 
 	if (enable != event.enabled())
 	{
@@ -509,7 +509,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 */
 void resetDaemon()
 {
-	kdDebug(5950) << "KAlarm::resetDaemon()" << endl;
+	kDebug(5950) << "KAlarm::resetDaemon()" << endl;
 	if (!resetDaemonQueued)
 	{
 		resetDaemonQueued = true;
@@ -528,7 +528,7 @@ void resetDaemonIfQueued()
 {
 	if (resetDaemonQueued)
 	{
-		kdDebug(5950) << "KAlarm::resetDaemonIfNeeded()" << endl;
+		kDebug(5950) << "KAlarm::resetDaemonIfNeeded()" << endl;
 		AlarmCalendar::activeCalendar()->reload();
 		AlarmCalendar::expiredCalendar()->reload();
 
@@ -581,7 +581,7 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 		// KOrganizer is not already running, so start it
 		if (KToolInvocation::startServiceByDesktopName(QLatin1String(program), QString(), &errorMessage, &dcopName))
 		{
-			kdError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
+			kError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;
 		}
 		// Minimise its window - don't use hide() since this would remove all
@@ -820,7 +820,7 @@ bool sendToKOrganizer(const KAEvent& event)
 	KCal::ICalFormat format;
 	format.setTimeZone(QString(), false);
 	QString iCal = format.toICalString(kcalEvent);
-kdDebug(5950)<<"Korg->"<<iCal<<endl;
+kDebug(5950)<<"Korg->"<<iCal<<endl;
 	delete kcalEvent;
 
 	// Send the event to KOrganizer
@@ -838,11 +838,11 @@ kdDebug(5950)<<"Korg->"<<iCal<<endl;
 		reply >> result;
 		if (result)
 		{
-			kdDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
+			kDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
 			return true;
 		}
 	}
-	kdError(5950) << "sendToKOrganizer(): KOrganizer addEvent(" << uid << ") dcop call failed\n";
+	kError(5950) << "sendToKOrganizer(): KOrganizer addEvent(" << uid << ") dcop call failed\n";
 	return false;
 }
 
@@ -866,11 +866,11 @@ bool deleteFromKOrganizer(const QString& eventID)
 		reply >> result;
 		if (result)
 		{
-			kdDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
+			kDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
 			return true;
 		}
 	}
-	kdError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
+	kError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
 	return false;
 }
 

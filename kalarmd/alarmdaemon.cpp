@@ -60,7 +60,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 	  QObject(parent),
 	  mAlarmTimer(0)
 {
-	kdDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
+	kDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
 	ADConfigData::readConfig();
 
 	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
@@ -83,7 +83,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 		autostart = kaconfig.readEntry("AutostartTray", false);
 		if (autostart)
 		{
-			kdDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
+			kDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
 			QTimer::singleShot(KALARM_AUTOSTART_TIMEOUT * 1000, this, SLOT(autostartKAlarm()));
 		}
 	}
@@ -97,7 +97,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 */
 void AlarmDaemon::quit()
 {
-	kdDebug(5900) << "AlarmDaemon::quit()" << endl;
+	kDebug(5900) << "AlarmDaemon::quit()" << endl;
 	exit(0);
 }
 
@@ -109,17 +109,17 @@ void AlarmDaemon::autostartKAlarm()
 #ifdef AUTOSTART_KALARM
 	if (mAlarmTimer)
 	{
-		kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): KAlarm already registered\n";
+		kDebug(5900) << "AlarmDaemon::autostartKAlarm(): KAlarm already registered\n";
 		return;    // KAlarm has already registered with us
 	}
-	kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
+	kDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
 	args << QLatin1String("--tray");
 	int ret = KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
 	if (ret)
-		kdError(5900) << "AlarmDaemon::autostartKAlarm(): error=" << ret << endl;
+		kError(5900) << "AlarmDaemon::autostartKAlarm(): error=" << ret << endl;
 	else
-		kdDebug(5900) << "AlarmDaemon::autostartKAlarm(): success" << endl;
+		kDebug(5900) << "AlarmDaemon::autostartKAlarm(): success" << endl;
 
 	startMonitoring();
 #endif
@@ -146,7 +146,7 @@ void AlarmDaemon::startMonitoring()
 */
 void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 {
-	kdDebug(5900) << "AlarmDaemon::enableCal(" << urlString << ")" << endl;
+	kDebug(5900) << "AlarmDaemon::enableCal(" << urlString << ")" << endl;
 	ADCalendar* cal = ADCalendar::calendar(urlString);
 	if (cal)
 	{
@@ -160,7 +160,7 @@ void AlarmDaemon::enableCal(const QString& urlString, bool enable)
 */
 void AlarmDaemon::reloadCal(const QByteArray& appname, const QString& urlString, bool reset)
 {
-	kdDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
+	kDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
 	ADCalendar* cal = ADCalendar::calendar(urlString);
 	if (!cal  ||  appname != cal->appName())
 		return;
@@ -173,7 +173,7 @@ void AlarmDaemon::reloadCal(const QByteArray& appname, const QString& urlString,
 */
 void AlarmDaemon::reloadCal(ADCalendar* cal, bool reset)
 {
-	kdDebug(5900) << "AlarmDaemon::reloadCal(): calendar" << endl;
+	kDebug(5900) << "AlarmDaemon::reloadCal(): calendar" << endl;
 	if (!cal)
 		return;
 	if (!cal->downloading())
@@ -190,7 +190,7 @@ void AlarmDaemon::reloadCal(ADCalendar* cal, bool reset)
 void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
 {
 	if (success)
-		kdDebug(5900) << "Calendar reloaded" << endl;
+		kDebug(5900) << "Calendar reloaded" << endl;
 	notifyCalStatus(cal);       // notify KAlarm
 	setTimerStatus();
 	checkAlarms(cal);
@@ -203,7 +203,7 @@ void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
 void AlarmDaemon::eventHandled(const QByteArray& appname, const QString& calendarUrl, const QString& eventID, bool reload)
 {
 	QString urlString = expandURL(calendarUrl);
-	kdDebug(5900) << "AlarmDaemon::eventHandled(" << urlString << (reload ? "): reload" : ")") << endl;
+	kDebug(5900) << "AlarmDaemon::eventHandled(" << urlString << (reload ? "): reload" : ")") << endl;
 	ADCalendar* cal = ADCalendar::calendar(urlString);
 	if (!cal  ||  cal->appName() != appname)
 		return;
@@ -223,14 +223,14 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle
                               const QByteArray& dcopObject, const QString& calendarUrl,
 			      bool startClient)
 {
-	kdDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
 	              <<  dcopObject << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result;
 	if (appName.isEmpty())
 		result = KAlarmd::FAILURE;
 	else if (startClient  &&  KStandardDirs::findExe(appName).isNull())
 	{
-		kdError() << "AlarmDaemon::registerApp(): app not found" << endl;
+		kError() << "AlarmDaemon::registerApp(): app not found" << endl;
 		result = KAlarmd::NOT_FOUND;
 	}
 	else
@@ -265,7 +265,7 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle
 	// Notify the client of whether the call succeeded.
 	AlarmGuiIface_stub stub(appName, dcopObject);
 	stub.registered(false, result);
-	kdDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
+	kDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
 }
 
 /******************************************************************************
@@ -277,14 +277,14 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle
 */
 void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 {
-	kdDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
+	kDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result;
 	ClientInfo* client = ClientInfo::get(appName);
 	if (!client)
 		result = KAlarmd::FAILURE;
 	else if (startClient  &&  KStandardDirs::findExe(appName).isNull())
 	{
-		kdError() << "AlarmDaemon::registerChange(): app not found" << endl;
+		kError() << "AlarmDaemon::registerChange(): app not found" << endl;
 		result = KAlarmd::NOT_FOUND;
 	}
 	else
@@ -297,7 +297,7 @@ void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 	// Notify the client of whether the call succeeded.
 	AlarmGuiIface_stub stub(appName, client->dcopObject());
 	stub.registered(true, result);
-	kdDebug(5900) << "AlarmDaemon::registerChange() -> " << result << endl;
+	kDebug(5900) << "AlarmDaemon::registerChange() -> " << result << endl;
 }
 
 /******************************************************************************
@@ -315,7 +315,7 @@ void AlarmDaemon::enableAutoStart(bool on)
 */
 void AlarmDaemon::checkAlarmsSlot()
 {
-	kdDebug(5901) << "AlarmDaemon::checkAlarmsSlot()" << endl;
+	kDebug(5901) << "AlarmDaemon::checkAlarmsSlot()" << endl;
 	if (mAlarmTimerSyncing)
 	{
 		// We've synched to the minute boundary. Now set timer to the check interval.
@@ -331,7 +331,7 @@ void AlarmDaemon::checkAlarmsSlot()
 			// Need to re-synch to 1 second past the minute
 			mAlarmTimer->start(interval * 1000);
 			mAlarmTimerSyncing = true;
-			kdDebug(5900) << "Resynching alarm timer" << endl;
+			kDebug(5900) << "Resynching alarm timer" << endl;
 		}
 		else
 			mAlarmTimerSyncCount = 10;
@@ -345,7 +345,7 @@ void AlarmDaemon::checkAlarmsSlot()
 */
 void AlarmDaemon::checkAlarms()
 {
-	kdDebug(5901) << "AlarmDaemon::checkAlarms()" << endl;
+	kDebug(5901) << "AlarmDaemon::checkAlarms()" << endl;
 	for (int i = 0, end = ADCalendar::count();  i < end;  ++i)
 		checkAlarms(ADCalendar::calendar(i));
 }
@@ -356,13 +356,13 @@ void AlarmDaemon::checkAlarms()
 */
 void AlarmDaemon::checkAlarms(ADCalendar* cal)
 {
-	kdDebug(5901) << "AlarmDaemons::checkAlarms(" << cal->urlString() << ")" << endl;
+	kDebug(5901) << "AlarmDaemons::checkAlarms(" << cal->urlString() << ")" << endl;
 	if (!cal->loaded()  ||  !cal->enabled())
 		return;
 
 	QDateTime now  = QDateTime::currentDateTime();
 	QDateTime now1 = now.addSecs(1);
-	kdDebug(5901) << "  To: " << now.toString() << endl;
+	kDebug(5901) << "  To: " << now.toString() << endl;
 	QList<KCal::Alarm*> alarms = cal->alarmsTo(now);
 	if (alarms.isEmpty())
 		return;
@@ -372,7 +372,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		if (!event)
 			continue;
 		const QString& eventID = event->uid();
-		kdDebug(5901) << "AlarmDaemon::checkAlarms(): event " << eventID  << endl;
+		kDebug(5901) << "AlarmDaemon::checkAlarms(): event " << eventID  << endl;
 
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
@@ -407,10 +407,10 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 	const ClientInfo* client = ClientInfo::get(appname);
 	if (!client)
 	{
-		kdDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << "): unknown client" << endl;
+		kDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << "): unknown client" << endl;
 		return false;
 	}
-	kdDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << ", " << eventID << "): notification type=" << client->startClient() << endl;
+	kDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << ", " << eventID << "): notification type=" << client->startClient() << endl;
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
 	// Check if the client application is running and ready to receive notification
@@ -429,9 +429,9 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 		if (!client->startClient())
 		{
 			if (registered)
-				kdDebug(5900) << "AlarmDaemon::notifyEvent(): client not ready\n";
+				kDebug(5900) << "AlarmDaemon::notifyEvent(): client not ready\n";
 			else
-				kdDebug(5900) << "AlarmDaemon::notifyEvent(): don't start client\n";
+				kDebug(5900) << "AlarmDaemon::notifyEvent(): don't start client\n";
 			return false;
 		}
 
@@ -440,13 +440,13 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 		QString cmd = locate("exe", appname);
 		if (cmd.isEmpty())
 		{
-			kdDebug(5900) << "AlarmDaemon::notifyEvent(): '" << appname << "' not found" << endl;
+			kDebug(5900) << "AlarmDaemon::notifyEvent(): '" << appname << "' not found" << endl;
 			return true;
 		}
 		p << cmd;
 		p << "--handleEvent" << id << "--calendarURL" << calendar->urlString();
 		p.start(KProcess::Block);
-		kdDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
+		kDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
 		return true;
 	}
 
@@ -455,7 +455,7 @@ bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
 	stub.handleEvent(calendar->urlString(), id);
 	if (!stub.ok())
 	{
-		kdDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;
+		kDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;
 		return false;
 	}
 	return true;
@@ -489,12 +489,12 @@ void AlarmDaemon::setTimerStatus()
 		int firstInterval = DAEMON_CHECK_INTERVAL + 1 - QTime::currentTime().second();
 		mAlarmTimer->start(1000 * firstInterval);
 		mAlarmTimerSyncing = (firstInterval != DAEMON_CHECK_INTERVAL);
-		kdDebug(5900) << "Started alarm timer" << endl;
+		kDebug(5900) << "Started alarm timer" << endl;
 	}
 	else if (mAlarmTimer->isActive()  &&  !nLoaded)
 	{
 		mAlarmTimer->stop();
-		kdDebug(5900) << "Stopped alarm timer" << endl;
+		kDebug(5900) << "Stopped alarm timer" << endl;
 	}
 }
 
@@ -512,11 +512,11 @@ void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
 	{
 		KAlarmd::CalendarStatus change = cal->available() ? (cal->enabled() ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED)
 		                                                  : KAlarmd::CALENDAR_UNAVAILABLE;
-		kdDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << appname << " -> " << change << endl;
+		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << appname << " -> " << change << endl;
 		AlarmGuiIface_stub stub(appname, client->dcopObject());
 		stub.alarmDaemonUpdate(change, cal->urlString());
 		if (!stub.ok())
-			kdError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << appname << endl;
+			kError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << appname << endl;
 	}
 }
 

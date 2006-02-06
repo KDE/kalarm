@@ -285,7 +285,7 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 	&&  (mMousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
 	{
 		// Create a calendar object containing all the currently selected alarms
-		kdDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
+		kDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
 		mMousePressed = false;
 		KCal::CalendarLocal cal(QLatin1String("UTC"));
 		cal.setLocalTime();    // write out using local time (i.e. no time zone)
@@ -347,7 +347,7 @@ bool AlarmListView::event(QEvent *e)
 //				QRect rect = itemRect(item);
 //				rect.setLeft(columnX);
 //				rect.setWidth(colWidth);
-				kdDebug(5950) << "AlarmListView::event(): display\n";
+				kDebug(5950) << "AlarmListView::event(): display\n";
 				QToolTip::showText(pt, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
 				return true;
 			}

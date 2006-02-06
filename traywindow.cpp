@@ -69,7 +69,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0)),
 	  mAssocMainWindow(parent)
 {
-	kdDebug(5950) << "TrayWindow::TrayWindow()\n";
+	kDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
 	mPixmapEnabled  = loadIcon("kalarm");
 	mPixmapDisabled = loadIcon("kalarm_disabled");
@@ -99,7 +99,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 TrayWindow::~TrayWindow()
 {
-	kdDebug(5950) << "TrayWindow::~TrayWindow()\n";
+	kDebug(5950) << "TrayWindow::~TrayWindow()\n";
 	theApp()->removeWindow(this);
 	emit deleted();
 }
@@ -152,7 +152,7 @@ void TrayWindow::slotQuit()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-	kdDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")\n";
+	kDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")\n";
 	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
 }
 
@@ -223,7 +223,7 @@ bool TrayWindow::event(QEvent* e)
 		text = kapp->aboutData()->programName();
 	else
 		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
-	kdDebug(5950) << "TrayWindow::event(): " << text << endl;
+	kDebug(5950) << "TrayWindow::event(): " << text << endl;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
 	QToolTip::showText(he->pos(), text);
@@ -298,11 +298,11 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			items.insert(i, item);
 		}
         }
-	kdDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
+	kDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
 	int count = 0;
 	for (int i = 0, iend = items.count();  i < iend;  ++i)
 	{
-		kdDebug(5950) << "-- " << (count+1) << ") " << items[i].text << endl;
+		kDebug(5950) << "-- " << (count+1) << ") " << items[i].text << endl;
 		text += "\n";
 		text += items[i].text;
 		if (++count == maxCount)

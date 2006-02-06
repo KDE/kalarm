@@ -45,7 +45,7 @@ DcopHandler::DcopHandler()
 	: DCOPObject(DCOP_OBJECT_NAME),
 	  QWidget()
 {
-	kdDebug(5950) << "DcopHandler::DcopHandler()\n";
+	kDebug(5950) << "DcopHandler::DcopHandler()\n";
 }
 
 
@@ -212,7 +212,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 		fg.setNamedColor(fgColor);
 		if (!fg.isValid())
 		{
-			kdError(5950) << "DCOP call: invalid foreground color: " << fgColor << endl;
+			kError(5950) << "DCOP call: invalid foreground color: " << fgColor << endl;
 			return false;
 		}
 	}
@@ -223,7 +223,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 	{
 		if (!font.fromString(fontStr))    // N.B. this doesn't do good validation
 		{
-			kdError(5950) << "DCOP call: invalid font: " << fontStr << endl;
+			kError(5950) << "DCOP call: invalid font: " << fontStr << endl;
 			return false;
 		}
 	}
@@ -272,7 +272,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	{
 		if (KAMail::identityManager()->identityForName(fromID).isNull())
 		{
-			kdError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
+			kError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
 			return false;
 		}
 	}
@@ -280,19 +280,19 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	QString bad = KAMail::convertAddresses(addresses, addrs);
 	if (!bad.isEmpty())
 	{
-		kdError(5950) << "DCOP call scheduleEmail(): invalid email addresses: " << bad << endl;
+		kError(5950) << "DCOP call scheduleEmail(): invalid email addresses: " << bad << endl;
 		return false;
 	}
 	if (addrs.isEmpty())
 	{
-		kdError(5950) << "DCOP call scheduleEmail(): no email address\n";
+		kError(5950) << "DCOP call scheduleEmail(): no email address\n";
 		return false;
 	}
 	QStringList atts;
 	bad = KAMail::convertAttachments(attachments, atts);
 	if (!bad.isEmpty())
 	{
-		kdError(5950) << "DCOP call scheduleEmail(): invalid email attachment: " << bad << endl;
+		kError(5950) << "DCOP call scheduleEmail(): invalid email attachment: " << bad << endl;
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
@@ -333,7 +333,7 @@ DateTime DcopHandler::convertStartDateTime(const QString& startDateTime)
 		}
 	}
 	if (!start.isValid())
-		kdError(5950) << "DCOP call: invalid start date/time: " << startDateTime << endl;
+		kError(5950) << "DCOP call: invalid start date/time: " << startDateTime << endl;
 	return start;
 }
 
@@ -367,7 +367,7 @@ QColor DcopHandler::convertBgColour(const QString& bgColor)
 		return Preferences::defaultBgColour();
 	QColor bg(bgColor);
 	if (!bg.isValid())
-			kdError(5950) << "DCOP call: invalid background color: " << bgColor << endl;
+			kError(5950) << "DCOP call: invalid background color: " << bgColor << endl;
 	return bg;
 }
 
@@ -400,7 +400,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	{
 		if (!start.isDateOnly())
 		{
-			kdError(5950) << "DCOP call: alarm is date-only, but recurrence end is date/time" << endl;
+			kError(5950) << "DCOP call: alarm is date-only, but recurrence end is date/time" << endl;
 			return false;
 		}
 		end.setDate(QDate::fromString(endDateTime, Qt::ISODate));
@@ -409,14 +409,14 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	{
 		if (start.isDateOnly())
 		{
-			kdError(5950) << "DCOP call: alarm is timed, but recurrence end is date-only" << endl;
+			kError(5950) << "DCOP call: alarm is timed, but recurrence end is date-only" << endl;
 			return false;
 		}
 		end = QDateTime::fromString(endDateTime, Qt::ISODate);
 	}
 	if (!end.isValid())
 	{
-		kdError(5950) << "DCOP call: invalid recurrence end date/time: " << endDateTime << endl;
+		kError(5950) << "DCOP call: invalid recurrence end date/time: " << endDateTime << endl;
 		return false;
 	}
 	return convertRecurrence(recurrence, start, recurType, recurInterval, 0, end);
@@ -435,7 +435,7 @@ bool DcopHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& st
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
 			break;
 		default:
-			kdError(5950) << "DCOP call: invalid repeat type: " << recurType << endl;
+			kError(5950) << "DCOP call: invalid repeat type: " << recurType << endl;
 			return false;
 	}
 	recurrence.set(type, recurInterval, recurCount, start, end);

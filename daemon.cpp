@@ -127,7 +127,7 @@ void Daemon::createDcopHandler()
 */
 bool Daemon::start()
 {
-	kdDebug(5950) << "Daemon::start()\n";
+	kDebug(5950) << "Daemon::start()\n";
 	updateRegisteredStatus();
 	switch (mStatus)
 	{
@@ -141,11 +141,11 @@ bool Daemon::start()
 			if (execStr.isEmpty())
 			{
 				KMessageBox::error(0, i18n("Alarm daemon not found."));
-				kdError() << "Daemon::startApp(): " DAEMON_APP_NAME " not found" << endl;
+				kError() << "Daemon::startApp(): " DAEMON_APP_NAME " not found" << endl;
 				return false;
 			}
 			KToolInvocation::kdeinitExec(execStr);
-			kdDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
+			kDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
 			mStartTimeout = 5000/startCheckInterval + 1;    // check daemon status for 5 seconds before giving up
 			mStartTimer = new QTimer(mInstance);
 			connect(mStartTimer, SIGNAL(timeout()), mInstance, SLOT(checkIfStarted()));
@@ -182,7 +182,7 @@ bool Daemon::registerWith(bool reregister)
 		return true;
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
-	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
+	kDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
 	QByteArray appname  = kapp->aboutData()->appName();
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	if (reregister)
@@ -205,7 +205,7 @@ bool Daemon::registerWith(bool reregister)
 */
 void Daemon::registrationResult(bool reregister, int result)
 {
-	kdDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
+	kDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
 	switch (result)
@@ -213,7 +213,7 @@ void Daemon::registrationResult(bool reregister, int result)
 		case KAlarmd::SUCCESS:
 			break;
 		case KAlarmd::NOT_FOUND:
-			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
+			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)")
 			                           .arg(QLatin1String(DAEMON_APP_NAME))
@@ -221,7 +221,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			break;
 		case KAlarmd::FAILURE:
 		default:
-			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
+			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
 			if (!reregister)
 			{
 				if (mStatus == REGISTERED)
@@ -241,7 +241,7 @@ void Daemon::registrationResult(bool reregister, int result)
 		// The alarm daemon has loaded the calendar
 		mStatus = REGISTERED;
 		mRegisterFailMsg = false;
-		kdDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
+		kDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
 	}
 }
 
@@ -270,7 +270,7 @@ void Daemon::checkIfStarted()
 	mStartTimer = 0;
 	if (err)
 	{
-		kdError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
+		kError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
 		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QLatin1String(DAEMON_APP_NAME)));
 	}
 }
@@ -308,7 +308,7 @@ void Daemon::updateRegisteredStatus(bool timeout)
 				break;
 		}
 	}
-	kdDebug(5950) << "Daemon::updateRegisteredStatus() -> " << mStatus << endl;
+	kDebug(5950) << "Daemon::updateRegisteredStatus() -> " << mStatus << endl;
 }
 
 /******************************************************************************
@@ -316,14 +316,14 @@ void Daemon::updateRegisteredStatus(bool timeout)
 */
 bool Daemon::stop()
 {
-	kdDebug(5950) << "Daemon::stop()" << endl;
+	kDebug(5950) << "Daemon::stop()" << endl;
 	if (kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 	{
 		AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 		s.quit();
 		if (!s.ok())
 		{
-			kdError(5950) << "Daemon::stop(): dcop call failed" << endl;
+			kError(5950) << "Daemon::stop(): dcop call failed" << endl;
 			return false;
 		}
 	}
@@ -337,13 +337,13 @@ bool Daemon::stop()
 */
 bool Daemon::reset()
 {
-	kdDebug(5950) << "Daemon::reset()" << endl;
+	kDebug(5950) << "Daemon::reset()" << endl;
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		return false;
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.resetCalendar(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
-		kdError(5950) << "Daemon::reset(): resetCalendar dcop send failed" << endl;
+		kError(5950) << "Daemon::reset(): resetCalendar dcop send failed" << endl;
 	return true;
 }
 
@@ -352,11 +352,11 @@ bool Daemon::reset()
 */
 void Daemon::reload()
 {
-	kdDebug(5950) << "Daemon::reload()\n";
+	kDebug(5950) << "Daemon::reload()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.reloadCalendar(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString());
 	if (!s.ok())
-		kdError(5950) << "Daemon::reload(): reloadCalendar dcop send failed" << endl;
+		kError(5950) << "Daemon::reload(): reloadCalendar dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -413,7 +413,7 @@ void Daemon::calendarIsEnabled(bool enabled)
 */
 void Daemon::setAlarmsEnabled(bool enable)
 {
-	kdDebug(5950) << "Daemon::setAlarmsEnabled(" << enable << ")\n";
+	kDebug(5950) << "Daemon::setAlarmsEnabled(" << enable << ")\n";
 	if (enable  &&  !checkIfRunning())
 	{
 		// The daemon is not running, so start it
@@ -589,11 +589,11 @@ void Daemon::eventHandled(const QString& eventId, bool reloadCal)
 */
 void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
 {
-	kdDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
+	kDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.eventHandled(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString(), eventId, reloadCal);
 	if (!s.ok())
-		kdError(5950) << "Daemon::notifyEventHandled(): eventHandled dcop send failed" << endl;
+		kError(5950) << "Daemon::notifyEventHandled(): eventHandled dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -614,7 +614,7 @@ NotificationHandler::NotificationHandler()
 	: DCOPObject(NOTIFY_DCOP_OBJECT), 
 	  QObject()
 {
-	kdDebug(5950) << "NotificationHandler::NotificationHandler()\n";
+	kDebug(5950) << "NotificationHandler::NotificationHandler()\n";
 }
 
 /******************************************************************************
@@ -624,7 +624,7 @@ NotificationHandler::NotificationHandler()
  */
 void NotificationHandler::alarmDaemonUpdate(int calendarStatus, const QString& calendarURL)
 {
-	kdDebug(5950) << "NotificationHandler::alarmDaemonUpdate(" << calendarStatus << ")\n";
+	kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(" << calendarStatus << ")\n";
 	KAlarmd::CalendarStatus status = KAlarmd::CalendarStatus(calendarStatus);
 	if (expandURL(calendarURL) != AlarmCalendar::activeCalendar()->urlString())
 		return;     // it's not a notification about KAlarm's calendar
@@ -633,15 +633,15 @@ void NotificationHandler::alarmDaemonUpdate(int calendarStatus, const QString& c
 	{
 		case KAlarmd::CALENDAR_UNAVAILABLE:
 			// Calendar is not available for monitoring
-			kdDebug(5950) << "NotificationHandler::alarmDaemonUpdate(CALENDAR_UNAVAILABLE)\n";
+			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(CALENDAR_UNAVAILABLE)\n";
 			break;
 		case KAlarmd::CALENDAR_DISABLED:
 			// Calendar is available for monitoring but is not currently being monitored
-			kdDebug(5950) << "NotificationHandler::alarmDaemonUpdate(DISABLE_CALENDAR)\n";
+			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(DISABLE_CALENDAR)\n";
 			break;
 		case KAlarmd::CALENDAR_ENABLED:
 			// Calendar is currently being monitored
-			kdDebug(5950) << "NotificationHandler::alarmDaemonUpdate(ENABLE_CALENDAR)\n";
+			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(ENABLE_CALENDAR)\n";
 			enabled = true;
 			break;
 		default:
@@ -692,7 +692,7 @@ AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent)
 */
 void AlarmEnableAction::setCheckedActual(bool running)
 {
-	kdDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
+	kDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
 	if (running != isChecked()  ||  !mInitialised)
 	{
 		setText(running ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
@@ -707,7 +707,7 @@ void AlarmEnableAction::setCheckedActual(bool running)
 */
 void AlarmEnableAction::setChecked(bool check)
 {
-	kdDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
+	kDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
 	if (check != isChecked())
 	{
 		if (check)

@@ -46,7 +46,7 @@ const char* START_CLIENT_KEY = "Start";
 */
 void ADConfigData::readConfig()
 {
-	kdDebug(5900) << "ADConfigData::readConfig()" << endl;
+	kDebug(5900) << "ADConfigData::readConfig()" << endl;
 	ClientInfo::clear();
 	KConfig* config = KGlobal::config();
 	QStringList clients = config->groupList().filter(CLIENT_GROUP_SEARCH);
@@ -64,16 +64,16 @@ void ADConfigData::readConfig()
 		// Verify the configuration
 		bool ok = false;
 		if (client.isEmpty()  ||  KStandardDirs::findExe(client).isNull())
-			kdError(5900) << "ADConfigData::readConfig(): group '" << *cl << "' deleted (client app not found)\n";
+			kError(5900) << "ADConfigData::readConfig(): group '" << *cl << "' deleted (client app not found)\n";
 		else if (calendar.isEmpty())
-			kdError(5900) << "ADConfigData::readConfig(): no calendar specified for '" << client << "'\n";
+			kError(5900) << "ADConfigData::readConfig(): no calendar specified for '" << client << "'\n";
 		else if (dcopObject.isEmpty())
-			kdError(5900) << "ADConfigData::readConfig(): no DCOP object specified for '" << client << "'\n";
+			kError(5900) << "ADConfigData::readConfig(): no DCOP object specified for '" << client << "'\n";
 		else
 		{
 			ADCalendar* cal = ADCalendar::calendar(calendar);
 			if (cal)
-				kdError(5900) << "ADConfigData::readConfig(): calendar registered by multiple clients: " << calendar << endl;
+				kError(5900) << "ADConfigData::readConfig(): calendar registered by multiple clients: " << calendar << endl;
 			else
 				ok = true;
 		}
@@ -85,7 +85,7 @@ void ADConfigData::readConfig()
 
 		// Create the client and calendar objects
 		new ClientInfo(client.toLocal8Bit(), title, dcopObject, calendar, startClient);
-		kdDebug(5900) << "ADConfigData::readConfig(): client " << client << " : calendar " << calendar << endl;
+		kDebug(5900) << "ADConfigData::readConfig(): client " << client << " : calendar " << calendar << endl;
 	}
 
 	// Remove obsolete CheckInterval entry (if it exists)
@@ -136,7 +136,7 @@ void ADConfigData::setCalendar(const QByteArray& appName, ADCalendar* cal)
 */
 void ADConfigData::enableAutoStart(bool on)
 {
-        kdDebug(5900) << "ADConfigData::enableAutoStart(" << on << ")\n";
+        kDebug(5900) << "ADConfigData::enableAutoStart(" << on << ")\n";
         KConfig* config = KGlobal::config();
 	config->reparseConfiguration();
         config->setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
