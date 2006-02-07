@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -342,6 +342,8 @@ void MainWindow::initActions()
 	KStdAction::find(mListView, SLOT(slotFind()), actions);
 	mActionFindNext = KStdAction::findNext(mListView, SLOT(slotFindNext()), actions);
 	mActionFindPrev = KStdAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
+	KStdAction::selectAll(mListView, SLOT(slotSelectAll()), actions);
+	KStdAction::deselect(mListView, SLOT(slotDeselect()), actions);
 	KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);

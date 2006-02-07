@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
+#include <kaccel.h>
 #include <kdebug.h>
 
 #include "editdlg.h"
@@ -81,6 +82,11 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 	connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
 	QWhatsThis::add(mDeleteButton, i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
+
+	KAccel* accel = new KAccel(this);
+	accel->insert(KStdAccel::SelectAll, mTemplateList, SLOT(slotSelectAll()));
+	accel->insert(KStdAccel::Deselect, mTemplateList, SLOT(slotDeselect()));
+	accel->readSettings();
 
 	mTemplateList->refresh();
 	slotSelectionChanged();          // enable/disable buttons as appropriate
