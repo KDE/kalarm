@@ -524,7 +524,7 @@ void Daemon::slotPreferencesChanged()
 */
 AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions)
 {
-	AlarmEnableAction* a = new AlarmEnableAction(Qt::CTRL+Qt::Key_A, actions);
+	AlarmEnableAction* a = new AlarmEnableAction(0, actions);
 	connect(a, SIGNAL(userClicked(bool)), mInstance, SLOT(setAlarmsEnabled(bool)));
 	connect(mInstance, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
 	return a;

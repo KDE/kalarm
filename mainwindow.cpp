@@ -347,6 +347,8 @@ void MainWindow::initActions()
 	KStdAction::find(mListView, SLOT(slotFind()), actions);
 	mActionFindNext = KStdAction::findNext(mListView, SLOT(slotFindNext()), actions);
 	mActionFindPrev = KStdAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
+	KStdAction::selectAll(mListView, SLOT(slotSelectAll()), actions);
+	KStdAction::deselect(mListView, SLOT(slotDeselect()), actions);
 	KStdAction::quit(this, SLOT(slotQuit()), actions);
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);

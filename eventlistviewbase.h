@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.h  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,6 +76,8 @@ class EventListViewBase : public KListView
 		virtual void           slotFind();
 		virtual void           slotFindNext()         { findNext(true); }
 		virtual void           slotFindPrev()         { findNext(false); }
+		virtual void           slotSelectAll();
+		virtual void           slotDeselect();
 
 	signals:
 		void                   itemDeleted();

@@ -1,7 +1,7 @@
 /*
  *  eventlistviewbase.cpp  -  base classes for widget showing list of events
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -203,6 +203,25 @@ void EventListViewBase::findNext(bool forward)
 {
 	if (mFind)
 		mFind->findNext(forward);
+}
+
+/******************************************************************************
+ * *  Called when the Select All action is selected.
+ * *  Select all items in the list.
+ * */
+void EventListViewBase::slotSelectAll()
+{
+	if (selectionModeExt() == Multi  ||  selectionModeExt() == Extended)
+		selectAll(true);
+}
+
+/******************************************************************************
+ * *  Called when the Deselect action is selected.
+ * *  Deselect all items in the list.
+ * */
+void EventListViewBase::slotDeselect()
+{
+	selectAll(false);
 }
 
 /******************************************************************************
