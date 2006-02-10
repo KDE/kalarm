@@ -75,7 +75,7 @@ ClientInfo* ClientInfo::get(const QByteArray& appName)
 	QMap<QByteArray, ClientInfo*>::ConstIterator it = mClients.find(appName);
 	if (it == mClients.end())
 		return 0;
-	return it.data();
+	return it.value();
 }
 
 /******************************************************************************
@@ -84,8 +84,8 @@ ClientInfo* ClientInfo::get(const QByteArray& appName)
 ClientInfo* ClientInfo::get(const ADCalendar* cal)
 {
 	for (ClientInfo::ConstIterator it = ClientInfo::begin();  it != ClientInfo::end();  ++it)
-		if (it.data()->calendar() == cal)
-			return it.data();
+		if (it.value()->calendar() == cal)
+			return it.value();
 	return 0;
 }
 
@@ -96,7 +96,7 @@ void ClientInfo::clear()
 {
 	QMap<QByteArray, ClientInfo*>::Iterator it;
 	while ((it = mClients.begin()) != mClients.end())
-		delete it.data();
+		delete it.value();
 }
 
 /******************************************************************************
@@ -106,5 +106,5 @@ void ClientInfo::remove(const QByteArray& appName)
 {
 	QMap<QByteArray, ClientInfo*>::Iterator it = mClients.find(appName);
 	if (it != mClients.end())
-		delete it.data();
+		delete it.value();
 }

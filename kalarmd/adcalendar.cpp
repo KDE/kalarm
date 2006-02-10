@@ -146,15 +146,15 @@ bool ADCalendar::eventHandled(const KCal::Event* event, const QList<QDateTime>& 
 	if (it == mEventsHandled.end())
 		return false;
 
-	int oldCount = it.data().alarmTimes.count();
+	int oldCount = it.value().alarmTimes.count();
 	int count = alarmtimes.count();
 	for (int i = 0;  i < count;  ++i)
 	{
 		if (alarmtimes[i].isValid()
 		&&  (i >= oldCount                             // is it an additional alarm?
-		     || !it.data().alarmTimes[i].isValid()     // or has it just become due?
-		     || it.data().alarmTimes[i].isValid()      // or has it changed?
-		        && alarmtimes[i] != it.data().alarmTimes[i]))
+		     || !it.value().alarmTimes[i].isValid()     // or has it just become due?
+		     || it.value().alarmTimes[i].isValid()      // or has it changed?
+		        && alarmtimes[i] != it.value().alarmTimes[i]))
 			return false;     // this alarm has changed
 	}
 	return true;
@@ -173,7 +173,7 @@ void ADCalendar::setEventHandled(const QString& eventID)
 	EventsMap::Iterator it = mEventsPending.find(key);
 	if (it != mEventsPending.end())
 	{
-		setEventInMap(mEventsHandled, key, it.data().alarmTimes, it.data().eventSequence);
+		setEventInMap(mEventsHandled, key, it.value().alarmTimes, it.value().eventSequence);
 		mEventsPending.remove(it);
 	}
 }
@@ -201,8 +201,8 @@ void ADCalendar::setEventInMap(EventsMap& map, const EventKey& key, const QList<
 	if (it != map.end())
 	{
 		// Update the existing entry for the event
-		it.data().alarmTimes = alarmtimes;
-		it.data().eventSequence = sequence;
+		it.value().alarmTimes = alarmtimes;
+		it.value().eventSequence = sequence;
 	}
 	else
 		map.insert(key, EventItem(sequence, alarmtimes));
