@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #ifndef TRAYWINDOW_H
 #define TRAYWINDOW_H
 
-//Added by qt3to4:
 #include <QPixmap>
 #include <ksystemtray.h>
 
