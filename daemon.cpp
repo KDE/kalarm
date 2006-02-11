@@ -567,7 +567,7 @@ void Daemon::queueEvent(const QString& eventId)
 */
 void Daemon::savingEvent(const QString& eventId)
 {
-	if (mQueuedEvents.remove(eventId) > 0)
+	if (mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId)) > 0)
 		mSavingEvents += eventId;
 }
 
@@ -577,7 +577,7 @@ void Daemon::savingEvent(const QString& eventId)
 */
 void Daemon::eventHandled(const QString& eventId, bool reloadCal)
 {
-	if (mQueuedEvents.remove(eventId) > 0)
+	if (mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId)) > 0)
 		notifyEventHandled(eventId, reloadCal);    // it's a daemon event, so tell daemon that it's been handled
 	else if (reloadCal)
 		reload();    // not a daemon event, so simply tell the daemon to reload the calendar

@@ -201,7 +201,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		box->setFixedHeight(box->sizeHint().height());
 	}
 	mTabs = new QTabWidget(mainWidget);
-	mTabs->setMargin(marginHint());
+//	mTabs->setMargin(marginHint());
 
 	KVBox* mainPageBox = new KVBox(0/*mTabs*/);
 	mainPageBox->setMargin(marginHint());
@@ -2124,6 +2124,6 @@ TextEdit::TextEdit(QWidget* parent)
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (KCal::ICalDrag::canDecode(e))
-		e->accept(false);   // don't accept "text/calendar" objects
+		e->ignore();   // don't accept "text/calendar" objects
 	QTextEdit::dragEnterEvent(e);
 }

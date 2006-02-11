@@ -692,7 +692,7 @@ KCal::Event::List AlarmCalendar::events()
 	while (it != list.end())
 	{
 		if ((*it)->alarms().isEmpty())
-			it = list.remove(it);
+			it = list.erase(it);
 		else
 			++it;
 	}

@@ -92,7 +92,7 @@ AlarmListView::AlarmListView(QWidget* parent)
 
 AlarmListView::~AlarmListView()
 {
-	mInstanceList.remove(this);
+	mInstanceList.removeAt(mInstanceList.indexOf(this));
 }
 
 /******************************************************************************

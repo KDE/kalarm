@@ -121,7 +121,7 @@ bool CalendarCompat::isUTC(const QString& localFile)
 	if (!file.open(QIODevice::ReadOnly))
 		return false;
 	QTextStream ts(&file);
-	ts.setEncoding(QTextStream::UnicodeUTF8);
+	ts.setCodec("ISO 8859-1");
 	QString text = ts.readAll();
 	file.close();
 
