@@ -53,7 +53,7 @@ TemplateListView::TemplateListView(bool includeCmdAlarms, const QString& whatsTh
 
 TemplateListView::~TemplateListView()
 {
-	mInstanceList.remove(this);
+	mInstanceList.removeAt(mInstanceList.indexOf(this));
 }
 
 /******************************************************************************

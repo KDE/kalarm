@@ -1620,7 +1620,7 @@ MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* v
 			QString text = "<img source=\"";
 			text += absPath;
 			text += "\">";
-			view->setText(text);
+			view->setHtml(text);
 			break;
 	}
 	setFilePath(QFileInfo(absPath).absolutePath());

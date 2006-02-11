@@ -115,7 +115,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-	: MainWindowBase(0, Qt::WGroupLeader | Qt::WStyle_ContextHelp),
+	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
 	  mShowExpired(Preferences::showExpiredAlarms()),
@@ -124,6 +124,7 @@ MainWindow::MainWindow(bool restored)
 {
 	kDebug(5950) << "MainWindow::MainWindow()\n";
 	setAttribute(Qt::WA_DeleteOnClose);
+	setWindowModality(Qt::WindowModal);
 	setAutoSaveSettings(QLatin1String("MainWindow"));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)
@@ -165,7 +166,7 @@ MainWindow::MainWindow(bool restored)
 MainWindow::~MainWindow()
 {
 	kDebug(5950) << "MainWindow::~MainWindow()\n";
-	mWindowList.remove(this);
+	mWindowList.removeAt(mWindowList.indexOf(this));
 	if (theApp()->trayWindow())
 	{
 		if (isTrayParent())
@@ -1075,12 +1076,14 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
-	if (KCal::ICalDrag::canDecode(e))
-		e->accept(!AlarmListView::dragging());   // don't accept "text/calendar" objects from KAlarm
+	bool accept = KCal::ICalDrag::canDecode(e) ? !AlarmListView::dragging()   // don't accept "text/calendar" objects from KAlarm
+	                                           :    data->hasText()
+	                                             || KUrl::List::canDecode(data)
+	                                             || KPIM::MailListDrag::canDecode(e);
+	if (accept)
+		e->accept();
 	else
-		e->accept(data->hasText()
-		       || KUrl::List::canDecode(data)
-		       || KPIM::MailListDrag::canDecode(e));
+		e->ignore();
 }
 
 /******************************************************************************
@@ -1314,7 +1317,7 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 			win->hide();        // in case it's on a different desktop
 			win->showNormal();
 			win->raise();
-			win->setActiveWindow();
+			win->activateWindow();
 			return win;
 		}
 	}
