@@ -567,8 +567,11 @@ void Daemon::queueEvent(const QString& eventId)
 */
 void Daemon::savingEvent(const QString& eventId)
 {
-	if (mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId)) > 0)
+	if (mQueuedEvents.indexOf(eventId) > 0)
+	{
+		mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId));
 		mSavingEvents += eventId;
+	}
 }
 
 /******************************************************************************
@@ -577,8 +580,11 @@ void Daemon::savingEvent(const QString& eventId)
 */
 void Daemon::eventHandled(const QString& eventId, bool reloadCal)
 {
-	if (mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId)) > 0)
+	if (mQueuedEvents.indexOf(eventId) > 0)
+	{
+		mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId));
 		notifyEventHandled(eventId, reloadCal);    // it's a daemon event, so tell daemon that it's been handled
+	}
 	else if (reloadCal)
 		reload();    // not a daemon event, so simply tell the daemon to reload the calendar
 }
@@ -726,5 +732,5 @@ QString expandURL(const QString& urlString)
 {
 	if (urlString.isEmpty())
 		return QString();
-	return KURL(urlString).url();
+	return KUrl(urlString).url();
 }
