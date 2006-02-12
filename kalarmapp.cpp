@@ -344,7 +344,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("calendarURL"))
 				{
 					QString calendarUrl = args->getOption("calendarURL");
-					if (KURL(calendarUrl).url() != AlarmCalendar::activeCalendar()->urlString())
+					if (KUrl(calendarUrl).url() != AlarmCalendar::activeCalendar()->urlString())
 						USAGE(i18n("%1: wrong calendar file").arg(QLatin1String("--calendarURL")))
 				}
 				QString eventID = args->getOption(option);
@@ -1216,7 +1216,7 @@ bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 {
 	kDebug(5950) << "KAlarmApp::handleEvent(DCOP): " << eventID << endl;
 	AlarmCalendar* cal = AlarmCalendar::activeCalendar();     // this can be called before calendars have been initialised
-	if (cal  &&  KURL(urlString).url() != cal->urlString())
+	if (cal  &&  KUrl(urlString).url() != cal->urlString())
 	{
 		kError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
 		Daemon::eventHandled(eventID, false);

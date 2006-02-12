@@ -776,7 +776,7 @@ int KAMail::checkAttachment(QString& attachment, KUrl* url)
 	if (attachment.isEmpty())
 	{
 		if (url)
-			*url = KURL();
+			*url = KUrl();
 		return 0;
 	}
 	// Check that the file exists

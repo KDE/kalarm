@@ -529,5 +529,5 @@ QString AlarmDaemon::expandURL(const QString& urlString)
 {
 	if (urlString.isEmpty())
 		return QString();
-	return KURL(urlString).url();
+	return KUrl(urlString).url();
 }
