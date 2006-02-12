@@ -567,9 +567,10 @@ void Daemon::queueEvent(const QString& eventId)
 */
 void Daemon::savingEvent(const QString& eventId)
 {
-	if (mQueuedEvents.indexOf(eventId) > 0)
+	int i = mQueuedEvents.indexOf(eventId);
+	if (i >= 0)
 	{
-		mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId));
+		mQueuedEvents.removeAt(i);
 		mSavingEvents += eventId;
 	}
 }
@@ -580,9 +581,10 @@ void Daemon::savingEvent(const QString& eventId)
 */
 void Daemon::eventHandled(const QString& eventId, bool reloadCal)
 {
-	if (mQueuedEvents.indexOf(eventId) > 0)
+	int i = mQueuedEvents.indexOf(eventId);
+	if (i >= 0)
 	{
-		mQueuedEvents.removeAt(mQueuedEvents.indexOf(eventId));
+		mQueuedEvents.removeAt(i);
 		notifyEventHandled(eventId, reloadCal);    // it's a daemon event, so tell daemon that it's been handled
 	}
 	else if (reloadCal)
