@@ -517,6 +517,7 @@ void MiscPrefTab::slotRunModeToggled(bool)
 	mAutostartTrayIcon2->setEnabled(!systray);
 	mAutostartTrayIcon1->setEnabled(systray);
 	mDisableAlarmsIfStopped->setEnabled(systray);
+	slotDisableIfStoppedToggled(true);
 }
 
 /******************************************************************************
@@ -533,8 +534,8 @@ void MiscPrefTab::slotAutostartToggled(bool)
 
 void MiscPrefTab::slotDisableIfStoppedToggled(bool)
 {
-	bool disable = (mDisableAlarmsIfStopped->isChecked());
-	mQuitWarn->setEnabled(disable);
+	bool enable = mDisableAlarmsIfStopped->isEnabled()  &&  mDisableAlarmsIfStopped->isChecked();
+	mQuitWarn->setEnabled(enable);
 }
 
 void MiscPrefTab::setExpiredControls(int purgeDays)
