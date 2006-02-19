@@ -8,6 +8,7 @@ Icon=kalarm
 Type=Application
 DocPath=kalarm/index.html
 Comment=Personal Alarm Scheduler: start as system tray icon
+Comment[fr]=Planificateur d'alarme personnel : démarre dans la boîte à miniatures
 Comment[x-test]=xxPersonal Alarm Scheduler: start as system tray iconxx
 Terminal=false
 X-KDE-autostart-phase=2

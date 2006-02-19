@@ -8,6 +8,7 @@ Exec=kalarm -caption "%c" %i
 Icon=kalarm
 DocPath=kalarm/index.html
 GenericName=Personal Alarm Scheduler
+GenericName[fr]=Planificateur d'alarme personnel
 GenericName[x-test]=xxPersonal Alarm Schedulerxx
 Terminal=false
 X-DCOP-ServiceType=Unique
