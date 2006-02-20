@@ -130,7 +130,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				setText(mailList.first().subject());    // replace any existing text
 		}
 	}
-	// This must come before KURL
+	// This must come before KUrl
 	else if (mType == Emails
 	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
 	{
