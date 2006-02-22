@@ -51,7 +51,7 @@ ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
 		kError(5900) << "ADCalendar::ADCalendar(" << url << "): calendar already exists" << endl;
 		assert(0);
 	}
-	mUrlIndex = mCalendarUrls.findIndex(url);    // get unique index for this URL
+	mUrlIndex = mCalendarUrls.indexOf(url);    // get unique index for this URL
 	if (mUrlIndex < 0)
 	{
 		mUrlIndex = static_cast<int>(mCalendarUrls.count());
