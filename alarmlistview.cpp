@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -588,7 +588,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 		if (!selected  &&  listView->drawMessageInColour())
 		{
 			painter->fillRect(box, event().bgColour());
-			painter->setBackgroundColor(event().bgColour());
+			painter->setBackground(event().bgColour());
 //			painter->setPen(event().fgColour());
 		}
 		QString txt = text(column);
