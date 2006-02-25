@@ -68,7 +68,7 @@ FileType            fileType(const QString& mimetype);
 inline int          Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
 int                 getVersionNumber(const QString& version, QString* subVersion = 0);
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
-                               const QString& filter = QString(), int mode = 0, QWidget* parent = 0, const char* name = 0);
+                               const QString& filter = QString(), int mode = 0, QWidget* parent = 0);
 /** Create a "New Alarm" KAction */
 KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
 /** Create a "New From Template" KAction */

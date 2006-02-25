@@ -104,7 +104,7 @@ class PickAlarmFileRadio : public PickFileRadio
 	virtual QString pickFile()    // called when browse button is pressed to select a file to display
 	{
 		return KAlarm::browseFile(i18n("Choose Text or Image File to Display"), mDefaultDir, fileEdit()->text(),
-		                          QString(), KFile::ExistingOnly, parentWidget(), "pickAlarmFile");
+		                          QString(), KFile::ExistingOnly, parentWidget());
 	}
     private:
 	QString mDefaultDir;   // default directory for file browse button
@@ -121,7 +121,7 @@ class PickLogFileRadio : public PickFileRadio
 	virtual QString pickFile()    // called when browse button is pressed to select a log file
 	{
 		return KAlarm::browseFile(i18n("Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
-		                          KFile::LocalOnly, parentWidget(), "pickLogFile");
+		                          KFile::LocalOnly, parentWidget());
 	}
     private:
 	QString mDefaultDir;   // default directory for log file browse button
@@ -1982,7 +1982,7 @@ void EditAlarmDlg::openAddressBook()
 void EditAlarmDlg::slotAddAttachment()
 {
 	QString url = KAlarm::browseFile(i18n("Choose File to Attach"), mAttachDefaultDir, QString(),
-	                                 QString(), KFile::ExistingOnly, this, "pickAttachFile");
+	                                 QString(), KFile::ExistingOnly, this);
 	if (!url.isEmpty())
 	{
 		mEmailAttachList->addItem(url);

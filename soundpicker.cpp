@@ -357,5 +357,5 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 #else
 	QString filter = KDE::PlayObjectFactory::mimeTypes().join(" ");
 #endif
-	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0, "pickSoundFile");
+	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }

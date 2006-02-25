@@ -717,13 +717,12 @@ FileType fileType(const QString& mimetype)
 * Reply = URL selected. If none is selected, URL.isEmpty() is true.
 */
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
-                   const QString& filter, int mode, QWidget* parent, const char* name)
+                   const QString& filter, int mode, QWidget* parent)
 {
 	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
 	                   : !defaultDir.isEmpty()  ? defaultDir
 	                   :                          QDir::homePath();
 	KFileDialog fileDlg(initialDir, filter, parent);
-	fileDlg.setObjectName(name);
 	fileDlg.setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
 	fileDlg.setMode(KFile::File | mode);
 	fileDlg.setCaption(caption);
