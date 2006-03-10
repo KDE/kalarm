@@ -1,6 +1,7 @@
 kde4_header()
 
-add_subdirectory( kalarmd ) 
+MESSAGE(STATUS "readd kalarmd !")
+#add_subdirectory( kalarmd ) 
 add_subdirectory( lib ) 
 add_subdirectory( pixmaps ) 
 
@@ -8,8 +9,30 @@ include_directories( ${CMAKE_SOURCE_DIR}/kalarm ${CMAKE_SOURCE_DIR}/kalarm/lib $
 
 
 ########### next target ###############
+set(libkalarm_SRCS
+	${CMAKE_SOURCE_DIR}/kalarm/lib/buttongroup.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/checkbox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/colourcombo.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/colourlist.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/combobox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/dateedit.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/datetime.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/label.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/messagebox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/pushbutton.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/radiobutton.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/timeedit.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/timespinbox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/timeperiod.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/shellprocess.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/slider.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/spinbox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/spinbox2.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/lineedit.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/synchtimer.cpp
+)
 
-set(kalarm_SRCS 
+set(kalarm_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    main.cpp 
    alarmevent.cpp 
