@@ -28,7 +28,7 @@
 
 class QFocusEvent;
 class QCheckBox;
-class KListView;
+class K3ListView;
 class CheckBox;
 class ColourCombo;
 class FontColourButton;
@@ -62,7 +62,7 @@ class BirthdayDlg : public KDialogBase
 		void              loadAddressBook();
 
 		static const KABC::AddressBook* mAddressBook;
-		KListView*               mAddresseeList;
+		K3ListView*               mAddresseeList;
 		BLineEdit*               mPrefix;
 		BLineEdit*               mSuffix;
 		Reminder*                mReminder;

@@ -24,7 +24,7 @@
 #include "kalarm.h"
 
 #include <qmap.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "eventlistviewbase.h"
 

@@ -24,7 +24,7 @@
 #include "kalarm.h"
 
 #include <QList>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "alarmevent.h"
 
@@ -36,7 +36,7 @@ class EventListViewItemBase;
 class Find;
 
 
-class EventListViewBase : public KListView
+class EventListViewBase : public K3ListView
 {
 		Q_OBJECT
 	public:
@@ -60,8 +60,8 @@ class EventListViewBase : public KListView
 		                                              { modifyEvent(oldEventID, event, list, selectionView); }
 		void                   resizeLastColumn();
 		int                    itemHeight();
-		EventListViewItemBase* currentItem() const    { return (EventListViewItemBase*)KListView::currentItem(); }
-		EventListViewItemBase* firstChild() const     { return (EventListViewItemBase*)KListView::firstChild(); }
+		EventListViewItemBase* currentItem() const    { return (EventListViewItemBase*)K3ListView::currentItem(); }
+		EventListViewItemBase* firstChild() const     { return (EventListViewItemBase*)K3ListView::firstChild(); }
 		bool                   anySelected() const;    // are any items selected?
 		const KAEvent*         selectedEvent() const;
 		EventListViewItemBase* selectedItem() const;

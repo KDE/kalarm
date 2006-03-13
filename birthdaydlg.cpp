@@ -25,7 +25,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -116,7 +116,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(0);
-	mAddresseeList = new KListView(group);
+	mAddresseeList = new K3ListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(Q3ListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);

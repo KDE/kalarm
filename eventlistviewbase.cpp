@@ -40,7 +40,7 @@
 =============================================================================*/
 
 EventListViewBase::EventListViewBase(QWidget* parent)
-	: KListView(parent),
+	: K3ListView(parent),
 	  mFind(0),
 	  mLastColumn(-1),
 	  mLastColumnHeaderWidth(0)
@@ -229,7 +229,7 @@ void EventListViewBase::slotDeselect()
 */
 bool EventListViewBase::anySelected() const
 {
-	for (Q3ListViewItem* item = KListView::firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = K3ListView::firstChild();  item;  item = item->nextSibling())
 		if (isSelected(item))
 			return true;
 	return false;
@@ -255,7 +255,7 @@ const KAEvent* EventListViewBase::selectedEvent() const
 EventListViewItemBase* EventListViewBase::selectedItem() const
 {
 	if (selectionMode() == Q3ListView::Single)
-		return (EventListViewItemBase*)KListView::selectedItem();
+		return (EventListViewItemBase*)K3ListView::selectedItem();
 
 	Q3ListViewItem* item = 0;
 	for (Q3ListViewItem* it = firstChild();  it;  it = it->nextSibling())
@@ -327,7 +327,7 @@ void EventListViewBase::resizeLastColumn()
 */
 void EventListViewBase::resizeEvent(QResizeEvent* re)
 {
-	KListView::resizeEvent(re);
+	K3ListView::resizeEvent(re);
 	resizeLastColumn();
 }
 
@@ -338,7 +338,7 @@ void EventListViewBase::resizeEvent(QResizeEvent* re)
 */
 void EventListViewBase::showEvent(QShowEvent* se)
 {
-	KListView::showEvent(se);
+	K3ListView::showEvent(se);
 	resizeLastColumn();
 }
 
@@ -361,7 +361,7 @@ bool EventListViewBase::event(QEvent *e)
 		QWhatsThis::showText(pt, whatsThisText(column));
 		return true;
 	}
-	return KListView::event(e);
+	return K3ListView::event(e);
 }
 
 /******************************************************************************
