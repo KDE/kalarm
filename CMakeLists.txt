@@ -1,7 +1,6 @@
 kde4_header()
 
-MESSAGE(STATUS "readd kalarmd !")
-#add_subdirectory( kalarmd ) 
+add_subdirectory( kalarmd ) 
 add_subdirectory( lib ) 
 add_subdirectory( pixmaps ) 
 
