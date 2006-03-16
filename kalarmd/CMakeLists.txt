@@ -17,7 +17,7 @@ set(kalarmd_SRCS
 	clientinfo.cpp 
 )
 
-kde4_add_dcop_skels(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h alarmdaemoniface.h )
+kde4_add_dcop_skels(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )
 
 kde4_automoc(${kalarmd_SRCS})
 
