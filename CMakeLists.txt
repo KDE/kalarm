@@ -81,7 +81,7 @@ kde4_add_dcop_skels(kalarm_SRCS kalarmiface.h alarmguiiface.h )
 
 kde4_add_executable(kalarm ${kalarm_SRCS})
 
-target_link_libraries(kalarm  ${QT_AND_KDECORE_LIBS} kalarm kcal kmime kalarmd kdepim kpimidentities kabc kutils kdeui )
+target_link_libraries(kalarm  ${KDE4_KDECORE_LIBS} kalarm kcal kmime kalarmd kdepim kpimidentities kabc kutils kdeui )
 
 install_targets(/bin kalarm )
 
