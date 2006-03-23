@@ -74,11 +74,11 @@ using namespace KCal;
 static const char* UI_FILE = "kalarmui.rc";
 QString   undoText;
 QString   undoTextStripped;
-QString   undoIcon;
+QIcon     undoIcon;
 KShortcut undoShortcut;
 QString   redoText;
 QString   redoTextStripped;
-QString   redoIcon;
+QIcon     redoIcon;
 KShortcut redoShortcut;
 
 

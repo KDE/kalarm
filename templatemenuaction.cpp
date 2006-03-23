@@ -32,7 +32,7 @@
 
 TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
                                        const char* slot, KActionCollection* actions, const char* name)
-	: KActionMenu(label, icon, actions, name)
+	: KActionMenu( KIcon( icon ), label, actions, name)
 {
 	setDelayed(false);
 	connect(popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
