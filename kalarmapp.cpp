@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,10 +113,8 @@ KAlarmApp::KAlarmApp()
 	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
-	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
-	NETRootInfo nri(qt_xdisplay(), NET::SupportingWMCheck);
-	const char* wmname = nri.wmName();
-	mKDEDesktop = wmname && !strcmp(wmname, "KWin");
+	// Check if the system tray is supported by this window manager
+	mHaveSystemTray = true;   // assume yes in lieu of a test which works
 
 	if (AlarmCalendar::initialiseCalendars())
 	{
@@ -304,7 +302,7 @@ int KAlarmApp::newInstance()
 				// Display only the system tray icon
 				kdDebug(5950)<<"KAlarmApp::newInstance(): tray\n";
 				args->clear();      // free up memory
-				if (!mKDEDesktop)
+				if (!mHaveSystemTray)
 				{
 					exitCode = 1;
 					break;
@@ -961,7 +959,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 	{
 		if (!mTrayWindow  &&  !creating)
 		{
-			if (!mKDEDesktop)
+			if (!mHaveSystemTray)
 				return false;
 			if (!MainWindow::count()  &&  wantRunInSystemTray())
 			{
@@ -1145,7 +1143,7 @@ void KAlarmApp::slotExpiredPurged()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return Preferences::runInSystemTray()  &&  mKDEDesktop;
+	return Preferences::runInSystemTray()  &&  mHaveSystemTray;
 }
 
 /******************************************************************************

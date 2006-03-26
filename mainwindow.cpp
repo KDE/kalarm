@@ -848,7 +848,7 @@ void MainWindow::slotToggleTrayIcon()
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(theApp()->KDEDesktop() && !theApp()->wantRunInSystemTray());
+	mActionToggleTrayIcon->setEnabled(theApp()->haveSystemTray() && !theApp()->wantRunInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
