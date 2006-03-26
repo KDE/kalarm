@@ -58,10 +58,11 @@ class UndoItem
 		virtual bool      deleteID(const QString& /*id*/)  { return false; }
 
 		enum Error   { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_EXPIRED };
-		enum Warning { WARN_NONE, WARN_KORG_ADD, WARN_KORG_MODIFY, WARN_KORG_DELETE, WARN_MULTI = 0x100 };
+		enum Warning { WARN_NONE, WARN_KORG_ADD, WARN_KORG_MODIFY, WARN_KORG_DELETE };
 		static int        mLastId;
-		static Error      mRestoreError;     // error code valid only if restore() returns 0
-		static Warning    mRestoreWarning;   // warning code set by restore()
+		static Error      mRestoreError;         // error code valid only if restore() returns 0
+		static Warning    mRestoreWarning;       // warning code set by restore()
+		static int        mRestoreWarningCount;  // item count for mRestoreWarning (to allow i18n messages to work correctly)
 
 	protected:
 		UndoItem(Undo::Type);
@@ -323,6 +324,7 @@ bool Undo::undo(Undo::Iterator it, Undo::Type type, QWidget* parent, const QStri
 {
 	UndoItem::mRestoreError   = UndoItem::ERR_NONE;
 	UndoItem::mRestoreWarning = UndoItem::WARN_NONE;
+	UndoItem::mRestoreWarningCount = 0;
 	if (it != mUndoList.end()  &&  it != mRedoList.end()  &&  (*it)->type() == type)
 	{
 		(*it)->restore();
@@ -336,7 +338,7 @@ bool Undo::undo(Undo::Iterator it, Undo::Type type, QWidget* parent, const QStri
 		case UndoItem::ERR_NONE:
 		{
 			KAlarm::UpdateError errcode;
-			switch (UndoItem::mRestoreWarning & ~UndoItem::WARN_MULTI)
+			switch (UndoItem::mRestoreWarning)
 			{
 				case UndoItem::WARN_KORG_ADD:     errcode = KAlarm::KORG_ERR_ADD;  break;
 				case UndoItem::WARN_KORG_MODIFY:  errcode = KAlarm::KORG_ERR_MODIFY;  break;
@@ -345,7 +347,7 @@ bool Undo::undo(Undo::Iterator it, Undo::Type type, QWidget* parent, const QStri
 				default:
 					return true;
 			}
-			KAlarm::displayKOrgUpdateError(parent, errcode, (UndoItem::mRestoreWarning & UndoItem::WARN_MULTI));
+			KAlarm::displayKOrgUpdateError(parent, errcode, UndoItem::mRestoreWarningCount);
 			return true;
 		}
 		case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
@@ -543,6 +545,7 @@ Undo::Iterator Undo::findItem(int id, Undo::Type type)
 int               UndoItem::mLastId = 0;
 UndoItem::Error   UndoItem::mRestoreError;
 UndoItem::Warning UndoItem::mRestoreWarning;
+int               UndoItem::mRestoreWarningCount;
 
 /******************************************************************************
 *  Constructor.
@@ -731,9 +734,10 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 				event.setArchive();
 			// Archive it if it has already triggered
 			if (KAlarm::deleteEvent(event, true) == KAlarm::UPDATE_KORG_ERR)
-				mRestoreWarning = (mRestoreWarning == WARN_KORG_DELETE)
-				                ? static_cast<UndoItem::Warning>(WARN_KORG_DELETE | WARN_MULTI)
-				                : WARN_KORG_DELETE;
+			{
+				mRestoreWarning = WARN_KORG_DELETE;
+				++mRestoreWarningCount;
+			}
 			break;
 		case KAEvent::TEMPLATE:
 			KAlarm::deleteTemplate(event);
@@ -811,9 +815,10 @@ UndoItem* UndoEdit::restore()
 	{
 		case KAEvent::ACTIVE:
 			if (KAlarm::modifyEvent(newEvent, *mOldEvent, 0) == KAlarm::UPDATE_KORG_ERR)
-				mRestoreWarning = (mRestoreWarning == WARN_KORG_MODIFY)
-				                ? static_cast<UndoItem::Warning>(WARN_KORG_MODIFY | WARN_MULTI)
-				                : WARN_KORG_MODIFY;
+			{
+				mRestoreWarning = WARN_KORG_MODIFY;
+				++mRestoreWarningCount;
+			}
 			break;
 		case KAEvent::TEMPLATE:
 			KAlarm::updateTemplate(*mOldEvent, 0);
@@ -881,9 +886,8 @@ UndoItem* UndoDelete::restore()
 				switch (KAlarm::reactivateEvent(*mEvent, 0, true))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
-						mRestoreWarning = (mRestoreWarning == WARN_KORG_ADD)
-						                ? static_cast<UndoItem::Warning>(WARN_KORG_ADD | WARN_MULTI)
-				                                : WARN_KORG_ADD;
+						mRestoreWarning = WARN_KORG_ADD;
+						++mRestoreWarningCount;
 						break;
 					case KAlarm::UPDATE_ERROR:
 						mRestoreError = ERR_EXPIRED;
@@ -897,9 +901,8 @@ UndoItem* UndoDelete::restore()
 				switch (KAlarm::addEvent(*mEvent, 0, true))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
-						mRestoreWarning = (mRestoreWarning == WARN_KORG_ADD)
-						                ? static_cast<UndoItem::Warning>(WARN_KORG_ADD | WARN_MULTI)
-						                : WARN_KORG_ADD;
+						mRestoreWarning = WARN_KORG_ADD;
+						++mRestoreWarningCount;
 						break;
 					case KAlarm::UPDATE_ERROR:
 						mRestoreError = ERR_CREATE;

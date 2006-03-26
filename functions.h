@@ -93,7 +93,7 @@ void                deleteTemplate(const KAEvent&);
 void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
 void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, bool multipleAlarms = false);
+void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);
 
 QString             stripAccel(const QString&);
 

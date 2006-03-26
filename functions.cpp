@@ -314,7 +314,8 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive)
 			// The event was shown in KOrganizer, so tell KOrganizer to
 			// delete it. But ignore errors, because the user could have
 			// manually deleted it from KOrganizer since it was set up.
-			deleteFromKOrganizer(event.id());
+			if (!deleteFromKOrganizer(event.id()))
+				ret = UPDATE_KORG_ERR;
 		}
 		if (archive  &&  event.toBeArchived())
 			addExpiredEvent(event);     // this changes the event ID to an expired ID
@@ -437,21 +438,19 @@ void enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 {
 	QString errmsg;
 	switch (code)
 	{
 		case KORG_ERR_ADD:
-			errmsg = multipleAlarms ? i18n("Unable to show alarms in KOrganizer")
-			                        : i18n("Unable to show alarm in KOrganizer");
+			errmsg = i18n("Unable to show alarm in KOrganizer", "Unable to show alarms in KOrganizer", nAlarms);
 			break;
 		case KORG_ERR_MODIFY:
 			errmsg = i18n("Unable to update alarm in KOrganizer");
 			break;
 		case KORG_ERR_DELETE:
-			errmsg = multipleAlarms ? i18n("Unable to delete alarms from KOrganizer")
-			                        : i18n("Unable to delete alarm from KOrganizer");
+			errmsg = i18n("Unable to delete alarm from KOrganizer", "Unable to delete alarms from KOrganizer", nAlarms);
 			break;
 	}
 	KMessageBox::error(parent, errmsg);

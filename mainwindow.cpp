@@ -557,7 +557,7 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 
 		// Add the alarm to the displayed lists and to the calendar file
 		if (KAlarm::addEvent(event, (win ? win->mListView : 0)) == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_ADD);
+			KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_ADD, 1);
 		Undo::saveAdd(event);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
@@ -623,7 +623,7 @@ void MainWindow::slotModify()
 			else
 			{
 				if (KAlarm::modifyEvent(event, newEvent, mListView) == KAlarm::UPDATE_KORG_ERR)
-					KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY);
+					KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY, 1);
 			}
 			Undo::saveEdit(event, newEvent);
 
@@ -687,7 +687,7 @@ void MainWindow::slotDelete()
 	Undo::saveDeletes(events);
 
 	if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, (warnKOrg > 1));
+		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, warnKOrg);
 }
 
 /******************************************************************************
@@ -716,7 +716,7 @@ void MainWindow::slotReactivate()
 	Undo::saveReactivates(events);
 
 	if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
+		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 }
 
 /******************************************************************************
@@ -799,7 +799,7 @@ void MainWindow::slotBirthdays()
 					++warnKOrg;
 			}
 			if (warnKOrg)
-				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
+				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 			KAlarm::outputAlarmWarnings(&dlg);
 		}
 	}
