@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1436,7 +1436,7 @@ void MessageWin::slotEdit()
 		}
 
 		if (status == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayUpdateError(this, KAlarm::KORG_ERR_MODIFY);
+			KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY);
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
 
 		// Close the alarm window
