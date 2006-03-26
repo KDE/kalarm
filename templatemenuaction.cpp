@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 
 TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
                                        const char* slot, KActionCollection* actions, const char* name)
-	: KActionMenu( KIcon( icon ), label, actions, name)
+	: KActionMenu(KIcon(icon), label, actions, name)
 {
 	setDelayed(false);
 	connect(popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
