@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ class KAlarmApp : public KUniqueApplication
 		virtual int        newInstance();
 		static KAlarmApp*  getInstance();
 		bool               checkCalendarDaemon()           { return initCheck(); }
-		bool               KDEDesktop() const              { return mKDEDesktop; }
+		bool               haveSystemTray() const          { return mHaveSystemTray; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
 		bool               speechEnabled() const           { return mSpeechEnabled; }
@@ -169,7 +169,7 @@ class KAlarmApp : public KUniqueApplication
 		int                mPendingQuitCode;     // exit code for a pending quit
 		bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
 		bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
-		bool               mKDEDesktop;          // running on KDE desktop
+		bool               mHaveSystemTray;      // whether there is a system tray
 		bool               mNoSystemTray;        // no KDE system tray exists
 		bool               mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true
 		bool               mCheckingSystemTray;  // the existence of the system tray is being checked
