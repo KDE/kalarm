@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ enum UpdateStatus {
 	UPDATE_ERROR,       // update failed completely
 	UPDATE_KORG_ERR     // update succeeded, but KOrganizer update failed
 };
-/** Error codes supplied as parameter to displayUpdateError() */
+/** Error codes supplied as parameter to displayKOrgUpdateError() */
 enum UpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
 
 
@@ -94,7 +94,7 @@ void                deleteTemplate(const KAEvent&);
 void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
 void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
-void                displayUpdateError(QWidget* parent, UpdateError, bool multipleAlarms = false);
+void                displayKOrgUpdateError(QWidget* parent, UpdateError, bool multipleAlarms = false);
 
 QString             stripAccel(const QString&);
 

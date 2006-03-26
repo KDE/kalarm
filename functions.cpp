@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -438,7 +438,7 @@ void enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, bool multipleAlarms)
 {
 	QString errmsg;
 	switch (code)

@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -346,7 +346,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 				default:
 					return true;
 			}
-			KAlarm::displayUpdateError(parent, errcode, (UndoItem::mRestoreWarning & UndoItem::WARN_MULTI));
+			KAlarm::displayKOrgUpdateError(parent, errcode, (UndoItem::mRestoreWarning & UndoItem::WARN_MULTI));
 			return true;
 		}
 		case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
