@@ -331,20 +331,20 @@ void MainWindow::initActions()
 	{
 		// Get standard texts, etc., for Undo and Redo actions
 		KAction* act = KStdAction::undo(this, 0, actions);
-		undoIcon         = act->icon();
+//		undoIcon         = act->icon();
 		undoShortcut     = act->shortcut();
 		undoText         = act->text();
 		undoTextStripped = KAlarm::stripAccel(undoText);
 		delete act;
 		act = KStdAction::redo(this, 0, actions);
-		redoIcon         = act->icon();
+//		redoIcon         = act->icon();
 		redoShortcut     = act->shortcut();
 		redoText         = act->text();
 		redoTextStripped = KAlarm::stripAccel(redoText);
 		delete act;
 	}
-	mActionUndo = new KToolBarPopupAction(undoText, undoIcon, undoShortcut, this, SLOT(slotUndo()), actions, "edit_undo");
-	mActionRedo = new KToolBarPopupAction(redoText, redoIcon, redoShortcut, this, SLOT(slotRedo()), actions, "edit_redo");
+	mActionUndo = new KToolBarPopupAction(undoText, "undo", undoShortcut, this, SLOT(slotUndo()), actions, "edit_undo");
+	mActionRedo = new KToolBarPopupAction(redoText, "redo", redoShortcut, this, SLOT(slotRedo()), actions, "edit_redo");
 	KStdAction::find(mListView, SLOT(slotFind()), actions);
 	mActionFindNext = KStdAction::findNext(mListView, SLOT(slotFindNext()), actions);
 	mActionFindPrev = KStdAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
@@ -563,7 +563,7 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 
 		// Add the alarm to the displayed lists and to the calendar file
 		if (KAlarm::addEvent(event, (win ? win->mListView : 0)) == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_ADD);
+			KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_ADD, 1);
 		Undo::saveAdd(event);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
@@ -629,7 +629,7 @@ void MainWindow::slotModify()
 			else
 			{
 				if (KAlarm::modifyEvent(event, newEvent, mListView) == KAlarm::UPDATE_KORG_ERR)
-					KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY);
+					KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY, 1);
 			}
 			Undo::saveEdit(event, newEvent);
 
@@ -693,7 +693,7 @@ void MainWindow::slotDelete()
 	Undo::saveDeletes(events);
 
 	if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, (warnKOrg > 1));
+		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, warnKOrg);
 }
 
 /******************************************************************************
@@ -722,7 +722,7 @@ void MainWindow::slotReactivate()
 	Undo::saveReactivates(events);
 
 	if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
+		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 }
 
 /******************************************************************************
@@ -805,7 +805,7 @@ void MainWindow::slotBirthdays()
 					++warnKOrg;
 			}
 			if (warnKOrg)
-				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, (warnKOrg > 1));
+				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 			KAlarm::outputAlarmWarnings(&dlg);
 		}
 	}
