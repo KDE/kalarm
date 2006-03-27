@@ -89,7 +89,6 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	// Replace the default handler for the Quit context menu item
 	const char* quitName = KStdAction::name(KStdAction::Quit);
 	delete actcol->action(quitName);
-	actcol->accel()->remove(quitName);
 	KStdAction::quit(this, SLOT(slotQuit()), actcol);
 
 	// Set icon to correspond with the alarms enabled menu status
