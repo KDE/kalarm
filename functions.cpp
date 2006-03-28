@@ -313,7 +313,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive)
 		if (event.copyToKOrganizer())
 		{
 			// The event was shown in KOrganizer, so tell KOrganizer to
-			// delete it. But ignore errors, because the user could have
+			// delete it. Note that an error could occur if the user
 			// manually deleted it from KOrganizer since it was set up.
 			if (!deleteFromKOrganizer(event.id()))
 				ret = UPDATE_KORG_ERR;
