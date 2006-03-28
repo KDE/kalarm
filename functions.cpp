@@ -312,7 +312,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive)
 		if (event.copyToKOrganizer())
 		{
 			// The event was shown in KOrganizer, so tell KOrganizer to
-			// delete it. But ignore errors, because the user could have
+			// delete it. Note that an error could occur if the user
 			// manually deleted it from KOrganizer since it was set up.
 			if (!deleteFromKOrganizer(event.id()))
 				ret = UPDATE_KORG_ERR;
@@ -444,13 +444,15 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 	switch (code)
 	{
 		case KORG_ERR_ADD:
-			errmsg = i18n("Unable to show alarm in KOrganizer", "Unable to show alarms in KOrganizer", nAlarms);
+			errmsg = (nAlarms > 1) ? i18n("Unable to show alarms in KOrganizer")
+			                       : i18n("Unable to show alarm in KOrganizer");
 			break;
 		case KORG_ERR_MODIFY:
 			errmsg = i18n("Unable to update alarm in KOrganizer");
 			break;
 		case KORG_ERR_DELETE:
-			errmsg = i18n("Unable to delete alarm from KOrganizer", "Unable to delete alarms from KOrganizer", nAlarms);
+			errmsg = (nAlarms > 1) ? i18n("Unable to delete alarms from KOrganizer")
+			                       : i18n("Unable to delete alarm from KOrganizer");
 			break;
 	}
 	KMessageBox::error(parent, errmsg);
