@@ -1422,14 +1422,16 @@ void EditAlarmDlg::slotOk()
 		{
 			QDateTime now = QDateTime::currentDateTime();
 			if (mAlarmDateTime.date() < now.date()
-			||  !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+			||  mAlarmDateTime.date() == now.date()
+			    && !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
 				KAEvent event;
 				getEvent(event);     // this may adjust mAlarmDateTime
-				if ((mAlarmDateTime.date() < now.date()
-				     ||  !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+				if ((  mAlarmDateTime.date() < now.date()
+				    || mAlarmDateTime.date() == now.date()
+				       && !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
