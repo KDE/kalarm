@@ -553,14 +553,14 @@ int KAlarmApp::newInstance()
 				if (audioRepeat  ||  args->isSet("play"))
 				{
 					// Play a sound with the alarm
+					if (audioRepeat  &&  args->isSet("play"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					if (args->isSet("beep"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
 					if (args->isSet("speak"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--speak")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
-#ifndef WITHOUT_ARTS
-					if (audioRepeat  &&  args->isSet("play"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
+#ifndef WITHOUT_ARTS
 					if (args->isSet("volume"))
 					{
 						bool ok;
