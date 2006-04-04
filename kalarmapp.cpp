@@ -561,6 +561,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("speak"))
 						USAGE(i18n("%1 incompatible with %2").arg(QLatin1String("--speak")).arg(QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
+#ifndef WITHOUT_ARTS
 					if (args->isSet("volume"))
 					{
 						bool ok;
@@ -569,9 +570,12 @@ int KAlarmApp::newInstance()
 							USAGE(i18n("Invalid %1 parameter").arg(QLatin1String("--volume")))
 						audioVolume = static_cast<float>(volumepc) / 100;
 					}
+#endif
 				}
+#ifndef WITHOUT_ARTS
 				else if (args->isSet("volume"))
 					USAGE(i18n("%1 requires %2 or %3").arg(QLatin1String("--volume")).arg(QLatin1String("--play")).arg(QLatin1String("--play-repeat")))
+#endif
 				if (args->isSet("speak"))
 				{
 					if (args->isSet("beep"))
