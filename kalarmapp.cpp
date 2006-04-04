@@ -553,12 +553,13 @@ int KAlarmApp::newInstance()
 				if (audioRepeat  ||  args->isSet("play"))
 				{
 					// Play a sound with the alarm
-					if (audioRepeat  &&  args->isSet("play"))
-						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					if (args->isSet("beep"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--beep")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
 					if (args->isSet("speak"))
 						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--speak")).arg(QString::fromLatin1(audioRepeat ? "--play-repeat" : "--play")))
+#ifndef WITHOUT_ARTS
+					if (audioRepeat  &&  args->isSet("play"))
+						USAGE(i18n("%1 incompatible with %2").arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
 					if (args->isSet("volume"))
 					{
@@ -568,9 +569,12 @@ int KAlarmApp::newInstance()
 							USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("--volume")))
 						audioVolume = static_cast<float>(volumepc) / 100;
 					}
+#endif
 				}
+#ifndef WITHOUT_ARTS
 				else if (args->isSet("volume"))
 					USAGE(i18n("%1 requires %2 or %3").arg(QString::fromLatin1("--volume")).arg(QString::fromLatin1("--play")).arg(QString::fromLatin1("--play-repeat")))
+#endif
 				if (args->isSet("speak"))
 				{
 					if (args->isSet("beep"))
