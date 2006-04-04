@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ void                deleteTemplate(const KAEvent&);
 void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
 void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms = 1);
+void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);
 
 QString             stripAccel(const QString&);
 
