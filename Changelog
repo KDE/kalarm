@@ -1,5 +1,9 @@
 KAlarm
 
+=== Version 1.1.9 --- 4 April 2006 ===
+Fix erroneous adjustment of recurrence start date when saving alarm.
+Fix crash when --play command line option is used, if compiled without aRts.
+
 === Version 1.1.8 --- 12 June 2005 ===
 Prevent multiple "Failed to start Alarm Daemon" error messages at startup.
 Fix alarms not triggering if IDs are duplicated in different calendar files.
