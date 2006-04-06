@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -438,6 +438,8 @@ class KAEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
+		static int         calVersion();
+		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
 		static void        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
 

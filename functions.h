@@ -65,8 +65,13 @@ void                writeConfigWindowSize(const char* window, const QSize&);
  *  If a text file, its type is distinguished.
  */
 FileType            fileType(const QString& mimetype);
+/** Return current KAlarm version number */
+int                 Version();
 inline int          Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
 int                 getVersionNumber(const QString& version, QString* subVersion = 0);
+/** Return which version of KAlarm was the first to use the current calendar/event format */
+inline int          currentCalendarVersion()        { return KAEvent::calVersion(); }
+inline QString      currentCalendarVersionString()  { return KAEvent::calVersionString(); }
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), int mode = 0, QWidget* parent = 0);
 bool                edit(const QString& eventID);

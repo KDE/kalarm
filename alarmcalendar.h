@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ class AlarmCalendar : public QObject
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
 
+		static QString        icalProductId();
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
 		static AlarmCalendar* activeCalendar()        { return mCalendars[ACTIVE]; }

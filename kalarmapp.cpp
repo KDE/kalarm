@@ -110,8 +110,7 @@ QString     KAlarmApp::mFatalMessage;
 {
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
-	KCal::CalFormat::setApplication(aboutData()->programName(),
-			QLatin1String("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
+	KCal::CalFormat::setApplication(aboutData()->programName(), AlarmCalendar::icalProductId());
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if it's a KDE desktop by comparing the window manager name to "KWin"

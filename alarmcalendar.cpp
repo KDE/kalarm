@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ extern "C" {
 
 #include "calendarcompat.h"
 #include "daemon.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
@@ -57,6 +58,11 @@ extern "C" {
 #include "alarmcalendar.moc"
 
 using namespace KCal;
+
+QString AlarmCalendar::icalProductId()
+{
+	return QLatin1String("-//K Desktop Environment//NONSGML " KALARM_NAME " %1//EN").arg(KAlarm::currentCalendarVersionString());
+}
 
 static const KAEvent::Status eventTypes[AlarmCalendar::NCALS] = {
 	KAEvent::ACTIVE, KAEvent::EXPIRED, KAEvent::DISPLAYING, KAEvent::TEMPLATE

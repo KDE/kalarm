@@ -685,6 +685,17 @@ void writeConfigWindowSize(const char* window, const QSize& size)
 }
 
 /******************************************************************************
+* Return the current KAlarm version number.
+*/
+int Version()
+{
+	static int version = 0;
+	if (!version)
+		version = getVersionNumber(KALARM_VERSION);
+	return version;
+}
+
+/******************************************************************************
 * Convert the supplied KAlarm version string to a version number.
 * Reply = version number (double digit for each of major, minor & issue number,
 *         e.g. 010203 for 1.2.3

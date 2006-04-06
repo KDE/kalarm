@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,12 @@ using namespace KCal;
 
 
 const QByteArray APPNAME("KALARM");
+
+// KAlarm version which first used the current calendar/event format.
+// If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
+// The string version is the KAlarm version string used in the calendar file.
+QString KAEvent::calVersionString()  { return QString::fromLatin1("1.3.1"); }
+int     KAEvent::calVersion()        { return KAlarm::Version(1,3,1); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -2510,7 +2516,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	// KAlarm pre-1.3.1 XTERM category
 	static const QString EXEC_IN_XTERM_CAT  = QLatin1String("XTERM");
 
-	if (version >= KAlarm::Version(1,3,1))
+	if (version >= calVersion())
 		return;
 
 	kDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version " << version << endl;
@@ -2521,6 +2527,8 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	bool pre_1_2_1 = (version < KAlarm::Version(1,2,1));
 	bool pre_1_3_0 = (version < KAlarm::Version(1,3,0));
 	bool pre_1_3_1 = (version < KAlarm::Version(1,3,1));
+	Q_ASSERT(calVersion() == KAlarm::Version(1,3,1));
+
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::startOfDay();
 

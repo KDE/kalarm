@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -103,8 +103,8 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 	if (i <= 0)
 		return 0;    // missing version string
 	ver = ver.left(i);     // ver now contains the KAlarm version string
-	if (ver == KALARM_VERSION)
-		return 0;      // the calendar was created by the current KAlarm version
+	if (ver == KAlarm::currentCalendarVersionString())
+		return 0;      // the calendar is in the current KAlarm format
 	return KAlarm::getVersionNumber(ver, &subVersion);
 }
 
