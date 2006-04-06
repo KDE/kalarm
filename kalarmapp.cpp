@@ -361,6 +361,35 @@ int KAlarmApp::newInstance()
 				}
 			}
 			else
+			if (args->isSet("edit"))
+			{
+				QString eventID = args->getOption("edit");
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				if (!KAlarm::edit(eventID))
+				{
+					USAGE(i18n("%1: Event %2 not found, or not editable").arg(QString::fromLatin1("--edit")).arg(eventID))
+					exitCode = 1;
+					break;
+				}
+			}
+			else
+			if (args->isSet("edit-new")  ||  args->isSet("edit-new-preset"))
+			{
+				QString templ;
+				if (args->isSet("edit-new-preset"))
+					templ = args->getOption("edit-new-preset");
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				KAlarm::editNew(templ);
+			}
+			else
 			if (args->isSet("file")  ||  args->isSet("exec")  ||  args->isSet("mail")  ||  args->count())
 			{
 				// Display a message or file, execute a command, or send an email

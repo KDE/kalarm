@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ class MainWindow : public MainWindowBase
 		                                      { executeNew(w, 0, a, t); }
 		static void        executeNew(const KAEvent& e, MainWindow* w = 0)
 		                                      { executeNew(w, &e); }
+		static void        executeEdit(KAEvent&, MainWindow* = 0);
 		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
 		static void        closeAll();

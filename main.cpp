@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,6 +53,10 @@ static KCmdLineOptions options[] =
 	{ "disable", I18N_NOOP("Disable the alarm"), 0 },
 	{ "e", 0, 0 },
 	{ "!exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
+	{ "edit <eventID>", I18N_NOOP("Display the alarm edit dialog to edit the specified alarm"), 0 },
+	{ "n", 0, 0 },
+	{ "edit-new", I18N_NOOP("Display the alarm edit dialog to edit a new alarm"), 0 },
+	{ "edit-new-preset <templateName>", I18N_NOOP("Display the alarm edit dialog, preset with a template"), 0 },
 	{ "f", 0, 0 },
 	{ "file <url>", I18N_NOOP("File to display"), 0 },
 	{ "F", 0, 0 },
@@ -106,7 +110,7 @@ int main(int argc, char *argv[])
 	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
 		I18N_NOOP("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
-		"(c) 2001 - 2005, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
+		"(c) 2001-2006, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);

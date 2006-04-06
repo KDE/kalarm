@@ -614,27 +614,36 @@ void MainWindow::slotModify()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &event);
-		if (editDlg.exec() == QDialog::Accepted)
+		executeEdit(event, this);
+	}
+}
+
+/******************************************************************************
+*  Open the Edit Alarm dialogue to edit the specified alarm.
+*/
+void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
+{
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), win, &event);
+	if (editDlg.exec() == QDialog::Accepted)
+	{
+		KAEvent newEvent;
+		bool changeDeferral = !editDlg.getEvent(newEvent);
+
+		// Update the event in the displays and in the calendar file
+		AlarmListView* view = win ? win->mListView : 0;
+		if (changeDeferral)
 		{
-			KAEvent newEvent;
-			bool changeDeferral = !editDlg.getEvent(newEvent);
-
-			// Update the event in the displays and in the calendar file
-			if (changeDeferral)
-			{
-				// The only change has been to an existing deferral
-				KAlarm::updateEvent(newEvent, mListView, true, false);   // keep the same event ID
-			}
-			else
-			{
-				if (KAlarm::modifyEvent(event, newEvent, mListView) == KAlarm::UPDATE_KORG_ERR)
-					KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY, 1);
-			}
-			Undo::saveEdit(event, newEvent);
-
-			KAlarm::outputAlarmWarnings(&editDlg, &newEvent);
+			// The only change has been to an existing deferral
+			KAlarm::updateEvent(newEvent, view, true, false);   // keep the same event ID
 		}
+		else
+		{
+			if (KAlarm::modifyEvent(event, newEvent, view) == KAlarm::UPDATE_KORG_ERR)
+				KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_MODIFY, 1);
+		}
+		Undo::saveEdit(event, newEvent);
+
+		KAlarm::outputAlarmWarnings(&editDlg, &newEvent);
 	}
 }
 
