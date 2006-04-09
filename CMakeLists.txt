@@ -77,7 +77,7 @@ set(kalarm_SRCS ${libkalarm_SRCS}
 
 kde4_automoc(${kalarm_SRCS})
 
-kde4_add_dcop_skels(kalarm_SRCS kalarmiface.h alarmguiiface.h )
+kde4_add_dcop_skels(kalarm_SRCS kalarmiface.h kalarmd/alarmguiiface.h )
 
 kde4_add_executable(kalarm ${kalarm_SRCS})
 
