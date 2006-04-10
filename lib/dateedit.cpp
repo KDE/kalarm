@@ -60,20 +60,20 @@ bool DateEdit::assignDate(const QDate& newDate)
 		if (mMinDate.isValid()  &&  newDate < mMinDate)
 		{
 			pastLimitMessage(mMinDate, mMinDateErrString,
-					 i18n("Date cannot be earlier than %1"));
+					 ki18n("Date cannot be earlier than %1"));
 			return false;
 		}
 		if (mMaxDate.isValid()  &&  newDate > mMaxDate)
 		{
 			pastLimitMessage(mMaxDate, mMaxDateErrString,
-					 i18n("Date cannot be later than %1"));
+					 ki18n("Date cannot be later than %1"));
 			return false;
 		}
 	}
 	return KDateEdit::assignDate(newDate);
 }
 
-void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError)
+void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const KLocalizedString& defaultError)
 {
 	QString errString = error;
 	if (errString.isNull())
@@ -82,7 +82,7 @@ void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const 
 			errString = i18n("today");
 		else
 			errString = KGlobal::locale()->formatDate(limit, true);
-		errString = defaultError.arg(errString);
+		errString = defaultError.subs(errString).toString();
 	}
 	KMessageBox::sorry(this, errString);
 }

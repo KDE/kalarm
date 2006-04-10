@@ -112,7 +112,7 @@ bool AlarmCalendar::initialiseCalendars()
 	{
 		kError(5950) << "AlarmCalendar::initialiseCalendars(): '" << errorKey1 << "' calendar name = display calendar name\n";
 		QString file = config->readPathEntry(errorKey1);
-		KAlarmApp::displayFatalError(i18n("%1: file name not permitted: %2").arg(errorKey1).arg(file));
+		KAlarmApp::displayFatalError(i18n("%1: file name not permitted: %2", errorKey1, file));
 		return false;
 	}
 	if (activeCal == expiredCal)
@@ -133,14 +133,14 @@ bool AlarmCalendar::initialiseCalendars()
 	if (!errorKey1.isNull())
 	{
 		kError(5950) << "AlarmCalendar::initialiseCalendars(): calendar names clash: " << errorKey1 << ", " << errorKey2 << endl;
-		KAlarmApp::displayFatalError(i18n("%1, %2: file names must be different").arg(errorKey1).arg(errorKey2));
+		KAlarmApp::displayFatalError(i18n("%1, %2: file names must be different", errorKey1, errorKey2));
 		return false;
 	}
 	if (!mCalendars[ACTIVE]->valid())
 	{
 		QString path = mCalendars[ACTIVE]->path();
 		kError(5950) << "AlarmCalendar::initialiseCalendars(): invalid name: " << path << endl;
-		KAlarmApp::displayFatalError(i18n("Invalid calendar file name: %1").arg(path));
+		KAlarmApp::displayFatalError(i18n("Invalid calendar file name: %1", path));
 		return false;
 	}
 	return true;
@@ -321,7 +321,7 @@ int AlarmCalendar::load()
 	if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
 	{
 		kError(5950) << "AlarmCalendar::load(): Load failure" << endl;
-		KMessageBox::error(0, i18n("Cannot open calendar:\n%1").arg(mUrl.prettyURL()));
+		KMessageBox::error(0, i18n("Cannot open calendar:\n%1", mUrl.prettyURL()));
 		return -1;
 	}
 	kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
@@ -338,7 +338,7 @@ int AlarmCalendar::load()
 		if (!fi.size())
 			return 0;     // file is zero length
 		kError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
-		KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.").arg(mUrl.prettyURL()));
+		KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.", mUrl.prettyURL()));
 		// load() could have partially populated the calendar, so clear it out
 		mCalendar->close();
 		delete mCalendar;
@@ -383,7 +383,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 	if (!mCalendar->save(saveFilename, new ICalFormat))
 	{
 		kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
-		KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'").arg(mICalUrl.prettyURL()));
+		KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'", mICalUrl.prettyURL()));
 		return false;
 	}
 
@@ -392,7 +392,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
 		{
 			kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
-			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'").arg(mICalUrl.prettyURL()));
+			KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'", mICalUrl.prettyURL()));
 			return false;
 		}
 	}

@@ -88,7 +88,7 @@ QString KAMail::i18n_NeedFromEmailAddress()
 { return i18n("A 'From' email address must be configured in order to execute email alarms."); }
 
 QString KAMail::i18n_sent_mail()
-{ return i18n("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
+{ return i18nc("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
 KPIM::IdentityManager* KAMail::mIdentityManager = 0;
 KPIM::IdentityManager* KAMail::identityManager()
@@ -115,7 +115,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
 		if (from.isEmpty())
 		{
-			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.").arg(event.emailFromKMail()));
+			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.", event.emailFromKMail()));
 			return false;
 		}
 	}
@@ -158,7 +158,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 			command = KStandardDirs::findExe(QLatin1String("mail"));
 			if (command.isNull())
 			{
-				errmsgs = errors(i18n("%1 not found").arg(QLatin1String("sendmail"))); // give up
+				errmsgs = errors(i18n("%1 not found", QLatin1String("sendmail"))); // give up
 				return false;
 			}
 
@@ -423,21 +423,21 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		}
 
 		// Append each attachment in turn
-		QString attachError = i18n("Error attaching file:\n%1");
 		for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
 		{
 			QString attachment = (*at).toLocal8Bit();
 			KUrl url(attachment);
+			QString attachError = i18n("Error attaching file:\n%1", attachment);
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
 				kError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
-				return i18n("Attachment not found:\n%1").arg(attachment);
+				return i18n("Attachment not found:\n%1", attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
 				kError(5950) << "KAMail::appendBodyAttachments(): not file/not readable: " << attachment << endl;
-				return attachError.arg(attachment);
+				return attachError;
 			}
 
 			// Check if the attachment is a text file
@@ -458,12 +458,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
 				kError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
-				return attachError.arg(attachment);
+				return attachError;
 			}
 			QFile file(tmpFile);
 			if (!file.open(QIODevice::ReadOnly) ) {
 				kDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
-				return attachError.arg(attachment);
+				return attachError;
 			}
 			qint64 size = file.size();
 			char* contents = new char [size + 1];
@@ -495,7 +495,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			}
 			delete[] contents;
 			if (atterror)
-				return attachError.arg(attachment);
+				return attachError;
 		}
 		message += QString::fromLatin1("\n--%1--\n.\n").arg(boundary);
 	}
@@ -883,7 +883,7 @@ char* KAMail::base64Encode(const char* in, int size, int& outSize)
 QStringList KAMail::errors(const QString& err, bool sendfail)
 {
 	QString error1 = sendfail ? i18n("Failed to send email")
-	                          : i18n("Error copying sent email to KMail %1 folder").arg(i18n_sent_mail());
+	                          : i18n("Error copying sent email to KMail %1 folder", i18n_sent_mail());
 	if (err.isEmpty())
 		return QStringList(error1);
 	QStringList errs(QString::fromLatin1("%1:").arg(error1));

@@ -46,8 +46,8 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString SoundPicker::i18n_Sound()       { return i18n("An audio sound", "Sound"); }
-QString SoundPicker::i18n_s_Sound()     { return i18n("An audio sound", "&Sound"); }
+QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"); }
+QString SoundPicker::i18n_s_Sound()     { return i18nc("An audio sound", "&Sound"); }
 QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
 QString SoundPicker::i18n_b_Beep()      { return i18n("&Beep"); }
 QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }

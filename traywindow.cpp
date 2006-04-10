@@ -221,7 +221,7 @@ bool TrayWindow::event(QEvent* e)
 	if (Daemon::monitoringAlarms())
 		text = kapp->aboutData()->programName();
 	else
-		text = i18n("%1 - disabled").arg(kapp->aboutData()->programName());
+		text = i18n("%1 - disabled", kapp->aboutData()->programName());
 	kDebug(5950) << "TrayWindow::event(): " << text << endl;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
@@ -277,9 +277,9 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
 				if (Preferences::showTooltipAlarmTime())
-					item.text += i18n("prefix + hours:minutes", "(%1%2:%3)").arg(prefix).arg(mins/60).arg(minutes);
+					item.text += i18nc("prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
 				else
-					item.text += i18n("prefix + hours:minutes", "%1%2:%3").arg(prefix).arg(mins/60).arg(minutes);
+					item.text += i18nc("prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
 				item.text += QLatin1Char(' ');
 				space = true;
 			}

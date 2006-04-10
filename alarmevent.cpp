@@ -1961,7 +1961,7 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 QString KAEvent::recurrenceText(bool brief) const
 {
 	if (mRepeatAtLogin)
-		return brief ? i18n("Brief form of 'At Login'", "Login") : i18n("At login");
+		return brief ? i18nc("Brief form of 'At Login'", "Login") : i18n("At login");
 	if (mRecurrence)
 	{
 		int frequency = mRecurrence->frequency();
@@ -1969,22 +1969,22 @@ QString KAEvent::recurrenceText(bool brief) const
 		{
 			case RecurrenceRule::rMinutely:
 				if (frequency < 60)
-					return i18n("1 Minute", "%n Minutes", frequency);
+					return i18np("1 Minute", "%n Minutes", frequency);
 				else if (frequency % 60 == 0)
-					return i18n("1 Hour", "%n Hours", frequency/60);
+					return i18np("1 Hour", "%n Hours", frequency/60);
 				else
 				{
 					QString mins;
-					return i18n("Hours and Minutes", "%1H %2M").arg(QString::number(frequency/60)).arg(mins.sprintf("%02d", frequency%60));
+					return i18nc("Hours and Minutes", "%1H %2M", frequency/60, mins.sprintf("%02d", frequency%60));
 				}
 			case RecurrenceRule::rDaily:
-				return i18n("1 Day", "%n Days", frequency);
+				return i18np("1 Day", "%n Days", frequency);
 			case RecurrenceRule::rWeekly:
-				return i18n("1 Week", "%n Weeks", frequency);
+				return i18np("1 Week", "%n Weeks", frequency);
 			case RecurrenceRule::rMonthly:
-				return i18n("1 Month", "%n Months", frequency);
+				return i18np("1 Month", "%n Months", frequency);
 			case RecurrenceRule::rYearly:
-				return i18n("1 Year", "%n Years", frequency);
+				return i18np("1 Year", "%n Years", frequency);
 			case RecurrenceRule::rNone:
 			default:
 				break;
@@ -2003,15 +2003,15 @@ QString KAEvent::repetitionText(bool brief) const
 		if (mRepeatInterval % 1440)
 		{
 			if (mRepeatInterval < 60)
-				return i18n("1 Minute", "%n Minutes", mRepeatInterval);
+				return i18np("1 Minute", "%n Minutes", mRepeatInterval);
 			if (mRepeatInterval % 60 == 0)
-				return i18n("1 Hour", "%n Hours", mRepeatInterval/60);
+				return i18np("1 Hour", "%n Hours", mRepeatInterval/60);
 			QString mins;
-			return i18n("Hours and Minutes", "%1H %2M").arg(QString::number(mRepeatInterval/60)).arg(mins.sprintf("%02d", mRepeatInterval%60));
+			return i18nc("Hours and Minutes", "%1H %2M", mRepeatInterval/60, mins.sprintf("%02d", mRepeatInterval%60));
 		}
 		if (mRepeatInterval % (7*1440))
-			return i18n("1 Day", "%n Days", mRepeatInterval/1440);
-		return i18n("1 Week", "%n Weeks", mRepeatInterval/(7*1440));
+			return i18np("1 Day", "%n Days", mRepeatInterval/1440);
+		return i18np("1 Week", "%n Weeks", mRepeatInterval/(7*1440));
 	}
 	return brief ? QString() : i18n("None");
 }

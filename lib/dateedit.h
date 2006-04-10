@@ -83,7 +83,7 @@ class DateEdit : public KDateEdit
 		virtual bool assignDate(const QDate& date);
 
 	private:
-		void         pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError);
+		void         pastLimitMessage(const QDate& limit, const QString& error, const KLocalizedString& defaultError);
 
 		QDate        mMinDate;             // minimum allowed date, or invalid for no minimum
 		QDate        mMaxDate;             // maximum allowed date, or invalid for no maximum

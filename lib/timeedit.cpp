@@ -174,7 +174,7 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 	{
 		// Insert "am"
 		mAmIndex = 0;
-		mAmPm->insertItem(mAmIndex, KGlobal::locale()->translate("am"));
+		mAmPm->insertItem(mAmIndex, i18n("am"));
 		if (mPmIndex >= 0)
 			mPmIndex = 1;
 		mAmPm->setCurrentIndex(mPmIndex >= 0 ? mPmIndex : mAmIndex);
@@ -193,7 +193,7 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 	{
 		// Insert "pm"
 		mPmIndex = mAmIndex + 1;
-		mAmPm->insertItem(mPmIndex, KGlobal::locale()->translate("pm"));
+		mAmPm->insertItem(mPmIndex, i18n("pm"));
 		if (mAmIndex < 0)
 			mAmPm->setCurrentIndex(mPmIndex);
 	}

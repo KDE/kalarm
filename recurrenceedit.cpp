@@ -581,7 +581,7 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 		}
 		else
 		{
-			const QString startString = i18n("Date cannot be earlier than start date", "start date");
+			const QString startString = i18nc("Date cannot be earlier than start date", "start date");
 			mEndDateEdit->setMinDate(start, startString);
 			if (mExceptionDateEdit)
 				mExceptionDateEdit->setMinDate(start, startString);
@@ -1051,7 +1051,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	grid->setRowStretch(0, 1);
 	layout()->addLayout(grid);
 
-	QLabel* label = new QLabel(i18n("On: Tuesday", "O&n:"), this);
+	QLabel* label = new QLabel(i18nc("On: Tuesday", "O&n:"), this);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
 	grid->setColumnMinimumWidth(1, KDialog::spacingHint());
@@ -1198,7 +1198,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mDayButton = new RadioButton(i18n("On day number in the month", "O&n day"), box);
+	mDayButton = new RadioButton(i18nc("On day number in the month", "O&n day"), box);
 	mDayButton->setFixedSize(mDayButton->sizeHint());
 	mDayButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mDayButton);
@@ -1208,7 +1208,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mDayCombo->setMaxVisibleItems(11);
 	for (int i = 0;  i < 31;  ++i)
 		mDayCombo->addItem(QString::number(i + 1));
-	mDayCombo->addItem(i18n("Last day of month", "Last"));
+	mDayCombo->addItem(i18nc("Last day of month", "Last"));
 	mDayCombo->setFixedSize(mDayCombo->sizeHint());
 	mDayCombo->setReadOnly(readOnly);
 	mDayCombo->setWhatsThis(i18n("Select the day of the month on which to repeat the alarm"));
@@ -1224,7 +1224,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mPosButton = new RadioButton(i18n("On the 1st Tuesday", "On t&he"), box);
+	mPosButton = new RadioButton(i18nc("On the 1st Tuesday", "On t&he"), box);
 	mPosButton->setFixedSize(mPosButton->sizeHint());
 	mPosButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mPosButton);
@@ -1236,14 +1236,14 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mWeekCombo->addItem(i18n("3rd"));
 	mWeekCombo->addItem(i18n("4th"));
 	mWeekCombo->addItem(i18n("5th"));
-	mWeekCombo->addItem(i18n("Last Monday in March", "Last"));
+	mWeekCombo->addItem(i18nc("Last Monday in March", "Last"));
 	mWeekCombo->addItem(i18n("2nd Last"));
 	mWeekCombo->addItem(i18n("3rd Last"));
 	mWeekCombo->addItem(i18n("4th Last"));
 	mWeekCombo->addItem(i18n("5th Last"));
 	if (mEveryWeek)
 	{
-		mWeekCombo->addItem(i18n("Every (Monday...) in month", "Every"));
+		mWeekCombo->addItem(i18nc("Every (Monday...) in month", "Every"));
 		mWeekCombo->setMaxVisibleItems(11);
 	}
 	mWeekCombo->setWhatsThis(i18n("Select the week of the month in which to repeat the alarm"));
@@ -1400,7 +1400,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	layout()->addLayout(hlayout);
-	QLabel* label = new QLabel(i18n("first week of January", "of:"), this);
+	QLabel* label = new QLabel(i18nc("first week of January", "of:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignLeft | Qt::AlignTop);
 
@@ -1411,18 +1411,18 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
 	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(locale->translate("January"), w);
-	mMonthBox[1] = new CheckBox(locale->translate("February"), w);
-	mMonthBox[2] = new CheckBox(locale->translate("March"), w);
-	mMonthBox[3] = new CheckBox(locale->translate("April"), w);
-	mMonthBox[4] = new CheckBox(locale->translate("May"), w);
-	mMonthBox[5] = new CheckBox(locale->translate("June"), w);
-	mMonthBox[6] = new CheckBox(locale->translate("July"), w);
-	mMonthBox[7] = new CheckBox(locale->translate("August"), w);
-	mMonthBox[8] = new CheckBox(locale->translate("September"), w);
-	mMonthBox[9] = new CheckBox(locale->translate("October"), w);
-	mMonthBox[10] = new CheckBox(locale->translate("November"), w);
-	mMonthBox[11] = new CheckBox(locale->translate("December"), w);
+	mMonthBox[0] = new CheckBox(ki18n("January").toString(locale), w);
+	mMonthBox[1] = new CheckBox(ki18n("February").toString(locale), w);
+	mMonthBox[2] = new CheckBox(ki18n("March").toString(locale), w);
+	mMonthBox[3] = new CheckBox(ki18n("April").toString(locale), w);
+	mMonthBox[4] = new CheckBox(ki18n("May").toString(locale), w);
+	mMonthBox[5] = new CheckBox(ki18n("June").toString(locale), w);
+	mMonthBox[6] = new CheckBox(ki18n("July").toString(locale), w);
+	mMonthBox[7] = new CheckBox(ki18n("August").toString(locale), w);
+	mMonthBox[8] = new CheckBox(ki18n("September").toString(locale), w);
+	mMonthBox[9] = new CheckBox(ki18n("October").toString(locale), w);
+	mMonthBox[10] = new CheckBox(ki18n("November").toString(locale), w);
+	mMonthBox[11] = new CheckBox(ki18n("December").toString(locale), w);
 	for (int i = 0;  i < 12;  ++i)
 	{
 		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
@@ -1443,9 +1443,9 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	mFeb29Label = new QLabel(i18n("February 2&9th alarm in non-leap years:"), box);
 	mFeb29Label->setFixedSize(mFeb29Label->sizeHint());
 	mFeb29Combo = new ComboBox(false, box);
-	mFeb29Combo->addItem(i18n("No date", "None"));
-	mFeb29Combo->addItem(i18n("1st March (short form)", "1 Mar"));
-	mFeb29Combo->addItem(i18n("28th February (short form)", "28 Feb"));
+	mFeb29Combo->addItem(i18nc("No date", "None"));
+	mFeb29Combo->addItem(i18nc("1st March (short form)", "1 Mar"));
+	mFeb29Combo->addItem(i18nc("28th February (short form)", "28 Feb"));
 	mFeb29Combo->setFixedSize(mFeb29Combo->sizeHint());
 	mFeb29Combo->setReadOnly(readOnly);
 	mFeb29Label->setBuddy(mFeb29Combo);
@@ -1597,13 +1597,13 @@ QString weekDayName(int day, const KLocale* locale)
 {
 	switch (day)
 	{
-		case 1: return locale->translate("Monday");
-		case 2: return locale->translate("Tuesday");
-		case 3: return locale->translate("Wednesday");
-		case 4: return locale->translate("Thursday");
-		case 5: return locale->translate("Friday");
-		case 6: return locale->translate("Saturday");
-		case 7: return locale->translate("Sunday");
+		case 1: return ki18n("Monday").toString(locale);
+		case 2: return ki18n("Tuesday").toString(locale);
+		case 3: return ki18n("Wednesday").toString(locale);
+		case 4: return ki18n("Thursday").toString(locale);
+		case 5: return ki18n("Friday").toString(locale);
+		case 6: return ki18n("Saturday").toString(locale);
+		case 7: return ki18n("Sunday").toString(locale);
 	}
 	return QString();
 }

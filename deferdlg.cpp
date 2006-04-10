@@ -95,23 +95,27 @@ void DeferAlarmDlg::slotOk()
 		switch (limitType)
 		{
 			case KAEvent::LIMIT_REPETITION:
-				text = i18n("This refers to simple repetitions set up using the Simple Repetition dialog",
-				            "Cannot defer past the alarm's next repetition (currently %1)");
+				text = i18nc("This refers to simple repetitions set up using the Simple Repetition dialog",
+				             "Cannot defer past the alarm's next repetition (currently %1)",
+				             endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_RECURRENCE:
-				text = i18n("This refers to recurrences set up using the Recurrence tab",
-				            "Cannot defer past the alarm's next recurrence (currently %1)");
+				text = i18nc("This refers to recurrences set up using the Recurrence tab",
+				             "Cannot defer past the alarm's next recurrence (currently %1)",
+				             endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_REMINDER:
-				text = i18n("Cannot defer past the alarm's next reminder (currently %1)");
+				text = i18n("Cannot defer past the alarm's next reminder (currently %1)",
+				            endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_MAIN:
-				text = i18n("Cannot defer reminder past the main alarm time (%1)");
+				text = i18n("Cannot defer reminder past the main alarm time (%1)",
+				            endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_NONE:
 				break;   // can't happen with a valid endTime
 		}
-		KMessageBox::sorry(this, text.arg(endTime.formatLocale()));
+		KMessageBox::sorry(this, text);
 	}
 	else
 		accept();

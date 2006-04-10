@@ -474,14 +474,14 @@ void MessageWin::initView()
 				grid->setMargin(KDialog::marginHint());
 				grid->setSpacing(KDialog::spacingHint());
 
-				QLabel* label = new QLabel(i18n("Email addressee", "To:"), frame);
+				QLabel* label = new QLabel(i18nc("Email addressee", "To:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailAddresses("\n"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
-				label = new QLabel(i18n("Email subject", "Subject:"), frame);
+				label = new QLabel(i18nc("Email subject", "Subject:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 1, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailSubject(), frame);
@@ -593,7 +593,7 @@ void MessageWin::initView()
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
-		mKMailButton->setToolTip(i18n("Locate this email in KMail", "Locate in KMail"));
+		mKMailButton->setToolTip(i18nc("Locate this email in KMail", "Locate in KMail"));
 		mKMailButton->setWhatsThis(i18n("Locate and highlight this email in KMail"));
 	}
 	else
@@ -650,9 +650,9 @@ void MessageWin::setRemainingTextDay()
 		if (days == 0)
 			text = i18n("Today");
 		else if (days % 7)
-			text = i18n("Tomorrow", "in %n days' time", days);
+			text = i18np("Tomorrow", "in %n days' time", days);
 		else
-			text = i18n("in 1 week's time", "in %n weeks' time", days/7);
+			text = i18np("in 1 week's time", "in %n weeks' time", days/7);
 	}
 	mRemainingText->setText(text);
 }
@@ -666,13 +666,13 @@ void MessageWin::setRemainingTextMinute()
 	QString text;
 	int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
 	if (mins < 60)
-		text = i18n("in 1 minute's time", "in %n minutes' time", mins);
+		text = i18np("in 1 minute's time", "in %n minutes' time", mins);
 	else if (mins % 60 == 0)
-		text = i18n("in 1 hour's time", "in %n hours' time", mins/60);
+		text = i18np("in 1 hour's time", "in %n hours' time", mins/60);
 	else if (mins % 60 == 1)
-		text = i18n("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
+		text = i18np("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
 	else
-		text = i18n("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60).arg(mins%60);
+		text = i18np("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60, mins%60);
 	mRemainingText->setText(text);
 }
 
@@ -864,7 +864,7 @@ void MessageWin::slotPlayAudio()
 	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{
 		kError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
-		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile));
+		KMessageBox::error(this, i18n("Cannot open audio file:\n%1", mAudioFile));
 		return;
 	}
 	if (!mArtsDispatcher)
@@ -882,7 +882,7 @@ void MessageWin::slotPlayAudio()
 		{
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
-			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
+			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)", mKMixError),
 			                         QString(), QLatin1String("KMixError"));
 			kWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
 		}

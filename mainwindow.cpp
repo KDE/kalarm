@@ -286,7 +286,7 @@ void MainWindow::show()
 		// Show error message now that the main window has been displayed.
 		// Waiting until now lets the user easily associate the message with
 		// the main window which is faulty.
-		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)").arg(QLatin1String(UI_FILE)));
+		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)", QLatin1String(UI_FILE)));
 		mMenuError = false;
 	}
 }
@@ -674,9 +674,9 @@ void MainWindow::slotDelete()
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = items.count();
-		if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm?",
+		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
 		                                                  "Do you really want to delete the %n selected alarms?", n),
-		                                       i18n("Delete Alarm", "Delete Alarms", n),
+		                                       i18np("Delete Alarm", "Delete Alarms", n),
 		                                       KGuiItem(i18n("&Delete"), "editdelete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
@@ -946,8 +946,8 @@ void MainWindow::initUndoMenu(KMenu* menu, Undo::Type type)
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		int id = ids[i];
-		menu->insertItem(i18n("Undo [action]: message", "%1 %2: %3")
-		                       .arg(action).arg(Undo::actionText(type, id)).arg(Undo::description(type, id)), id);
+		menu->insertItem(i18nc("Undo [action]: message", "%1 %2: %3",
+		                        action, Undo::actionText(type, id), Undo::description(type, id)), id);
 	}
 }
 

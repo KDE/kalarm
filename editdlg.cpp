@@ -148,11 +148,11 @@ QString EditAlarmDlg::i18n_g_LogToFile()        { return i18n("Lo&g to file"); }
 QString EditAlarmDlg::i18n_CopyEmailToSelf()    { return i18n("Copy email to self"); }
 QString EditAlarmDlg::i18n_e_CopyEmailToSelf()  { return i18n("Copy &email to self"); }
 QString EditAlarmDlg::i18n_s_CopyEmailToSelf()  { return i18n("Copy email to &self"); }
-QString EditAlarmDlg::i18n_EmailFrom()          { return i18n("'From' email address", "From:"); }
-QString EditAlarmDlg::i18n_f_EmailFrom()        { return i18n("'From' email address", "&From:"); }
-QString EditAlarmDlg::i18n_EmailTo()            { return i18n("Email addressee", "To:"); }
-QString EditAlarmDlg::i18n_EmailSubject()       { return i18n("Email subject", "Subject:"); }
-QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18n("Email subject", "Sub&ject:"); }
+QString EditAlarmDlg::i18n_EmailFrom()          { return i18nc("'From' email address", "From:"); }
+QString EditAlarmDlg::i18n_f_EmailFrom()        { return i18nc("'From' email address", "&From:"); }
+QString EditAlarmDlg::i18n_EmailTo()            { return i18nc("Email addressee", "To:"); }
+QString EditAlarmDlg::i18n_EmailSubject()       { return i18nc("Email subject", "Subject:"); }
+QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18nc("Email subject", "Sub&ject:"); }
 
 
 /******************************************************************************
@@ -336,7 +336,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mTemplateAnyTime = new RadioButton(i18n("An&y time"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
-		mTemplateAnyTime->setWhatsThis(i18n("Set the '%1' option for alarms based on this template.").arg(i18n("Any time")));
+		mTemplateAnyTime->setWhatsThis(i18n("Set the '%1' option for alarms based on this template.", i18n("Any time")));
 		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
@@ -1495,7 +1495,7 @@ void EditAlarmDlg::slotOk()
 					mTabs->setCurrentIndex(mMainPageIndex);
 					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
-					                             ).arg(Reminder::i18n_first_recurrence_only()));
+					                             , Reminder::i18n_first_recurrence_only()));
 					return;
 				}
 			}
@@ -1561,15 +1561,15 @@ void EditAlarmDlg::slotTry()
 			if (mCommandRadio->isChecked()  &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
 			{
 				theApp()->commandMessage((ShellProcess*)proc, this);
-				KMessageBox::information(this, i18n("Command executed:\n%1").arg(text));
+				KMessageBox::information(this, i18n("Command executed:\n%1", text));
 				theApp()->commandMessage((ShellProcess*)proc, 0);
 			}
 			else if (mEmailRadio->isChecked())
 			{
 				QString bcc;
 				if (mEmailBcc->isChecked())
-					bcc = i18n("\nBcc: %1").arg(Preferences::emailBccAddress());
-				KMessageBox::information(this, i18n("Email sent to:\n%1%2").arg(mEmailAddresses.join("\n")).arg(bcc));
+					bcc = i18n("\nBcc: %1", Preferences::emailBccAddress());
+				KMessageBox::information(this, i18n("Email sent to:\n%1%2", mEmailAddresses.join("\n"), bcc));
 			}
 		}
 	}
@@ -1816,7 +1816,7 @@ bool EditAlarmDlg::checkEmailData()
 			if (!bad.isEmpty())
 			{
 				mEmailToEdit->setFocus();
-				KMessageBox::error(this, i18n("Invalid email address:\n%1").arg(bad));
+				KMessageBox::error(this, i18n("Invalid email address:\n%1", bad));
 				return false;
 			}
 		}
@@ -1840,7 +1840,7 @@ bool EditAlarmDlg::checkEmailData()
 					break;      // empty
 				case -1:
 					mEmailAttachList->setFocus();
-					KMessageBox::error(this, i18n("Invalid email attachment:\n%1").arg(att));
+					KMessageBox::error(this, i18n("Invalid email attachment:\n%1", att));
 					return false;
 			}
 		}
@@ -2092,15 +2092,15 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 				case BLANK:
 					KMessageBox::sorry(const_cast<EditAlarmDlg*>(this), i18n("Please select a file to display"));
 					return false;
-				case NONEXISTENT:     errmsg = i18n("%1\nnot found");  break;
-				case DIRECTORY:       errmsg = i18n("%1\nis a folder");  break;
-				case UNREADABLE:      errmsg = i18n("%1\nis not readable");  break;
-				case NOT_TEXT_IMAGE:  errmsg = i18n("%1\nappears not to be a text or image file");  break;
+				case NONEXISTENT:     errmsg = i18n("%1\nnot found", alarmtext);  break;
+				case DIRECTORY:       errmsg = i18n("%1\nis a folder", alarmtext);  break;
+				case UNREADABLE:      errmsg = i18n("%1\nis not readable", alarmtext);  break;
+				case NOT_TEXT_IMAGE:  errmsg = i18n("%1\nappears not to be a text or image file", alarmtext);  break;
 				case NONE:
 				default:
 					break;
 			}
-			if (KMessageBox::warningContinueCancel(const_cast<EditAlarmDlg*>(this), errmsg.arg(alarmtext))
+			if (KMessageBox::warningContinueCancel(const_cast<EditAlarmDlg*>(this), errmsg)
 			    == KMessageBox::Cancel)
 				return false;
 		}

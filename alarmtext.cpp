@@ -243,7 +243,7 @@ void AlarmText::setUpTranslations()
 	{
 		mFromPrefix    = EditAlarmDlg::i18n_EmailFrom();
 		mToPrefix      = EditAlarmDlg::i18n_EmailTo();
-		mCcPrefix      = i18n("Copy-to in email headers", "Cc:");
+		mCcPrefix      = i18nc("Copy-to in email headers", "Cc:");
 		mDatePrefix    = i18n("Date:");
 		mSubjectPrefix = EditAlarmDlg::i18n_EmailSubject();
 	}

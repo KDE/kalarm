@@ -236,8 +236,8 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
 	mAutostartDaemon->setWhatsThis(
 	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
-	           "This option should always be checked unless you intend to discontinue use of KAlarm.")
-	          .arg(QLatin1String(DAEMON_APP_NAME)));
+	           "This option should always be checked unless you intend to discontinue use of KAlarm.",
+	           QLatin1String(DAEMON_APP_NAME)));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 
 	QGroupBox* group = new QGroupBox(i18n("Run Mode"), mPage);
@@ -378,7 +378,6 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	row = 0;
 
 	mXtermType = new ButtonGroup(group);
-	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Check to execute command alarms in a terminal window by '%1'");
 	int index = 0;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
@@ -395,7 +394,9 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 		cmd.replace("%w", "<command; sleep>");
 		cmd.replace("%C", "[command]");
 		cmd.replace("%W", "[command; sleep]");
-		radio->setWhatsThis(whatsThis.arg(cmd));
+		radio->setWhatsThis(
+                        i18nc("The parameter is a command line, e.g. 'xterm -e'",
+                              "Check to execute command alarms in a terminal window by '%1'", cmd));
 		grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);
 		++index;
 	}
@@ -462,7 +463,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 			if (KStandardDirs::findExe(cmd).isEmpty())
 			{
 				mXtermCommand->setFocus();
-				if (KMessageBox::warningContinueCancel(this, i18n("Command to invoke terminal window not found:\n%1").arg(cmd))
+				if (KMessageBox::warningContinueCancel(this, i18n("Command to invoke terminal window not found:\n%1", cmd))
 				                != KMessageBox::Continue)
 					return;
 			}
@@ -605,9 +606,9 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 
 	box = new KHBox(mPage);   // this is to allow left adjustment
 	box->setMargin(0);
-	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder").arg(KAMail::i18n_sent_mail()), box);
+	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder", KAMail::i18n_sent_mail()), box);
 	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
-	mEmailCopyToKMail->setWhatsThis(i18n("After sending an email, store a copy in KMail's %1 folder").arg(KAMail::i18n_sent_mail()));
+	mEmailCopyToKMail->setWhatsThis(i18n("After sending an email, store a copy in KMail's %1 folder", KAMail::i18n_sent_mail()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
@@ -658,7 +659,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 
 	// 'Bcc' email address controls ...
 	grid->setRowMinimumHeight(4, KDialog::spacingHint());
-	label = new Label(i18n("'Bcc' email address", "&Bcc:"), group);
+	label = new Label(i18nc("'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 5, 0);
 	mBccAddressGroup = new ButtonGroup(group);
@@ -777,18 +778,18 @@ QString EmailPrefTab::validate()
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
 {
-	QString errmsg = i18n("%1\nAre you sure you want to save your changes?").arg(msg);
+	QString errmsg = i18n("%1\nAre you sure you want to save your changes?", msg);
 	switch (group->selectedId())
 	{
 		case Preferences::MAIL_FROM_CONTROL_CENTRE:
 			if (!KAMail::controlCentreAddress().isEmpty())
 				return QString();
-			errmsg = i18n("No email address is currently set in the KDE Control Center. %1").arg(errmsg);
+			errmsg = i18n("No email address is currently set in the KDE Control Center. %1", errmsg);
 			break;
 		case Preferences::MAIL_FROM_KMAIL:
 			if (KAMail::identitiesExist())
 				return QString();
-			errmsg = i18n("No KMail identities currently exist. %1").arg(errmsg);
+			errmsg = i18n("No KMail identities currently exist. %1", errmsg);
 			break;
 		case Preferences::MAIL_FROM_ADDR:
 			if (!addr->text().trimmed().isEmpty())
@@ -885,8 +886,8 @@ void FontColourPrefTab::setDefaults()
 EditPrefTab::EditPrefTab(KVBox* frame)
 	: PrefsTabBase(frame)
 {
-	QString defsetting   = i18n("The default setting for \"%1\" in the alarm edit dialog.");
-	QString soundSetting = i18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
+	KLocalizedString defsetting   = ki18n("The default setting for \"%1\" in the alarm edit dialog.");
+	KLocalizedString soundSetting = ki18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
 
 	// DISPLAY ALARMS
 	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), mPage);
@@ -896,12 +897,12 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	mConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group);
 	mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
-	mConfirmAck->setWhatsThis(defsetting.arg(EditAlarmDlg::i18n_ConfirmAck()));
+	mConfirmAck->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ConfirmAck()).toString());
 	vlayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	mAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), group);
 	mAutoClose->setMinimumSize(mAutoClose->sizeHint());
-	mAutoClose->setWhatsThis(defsetting.arg(LateCancelSelector::i18n_AutoCloseWin()));
+	mAutoClose->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_AutoCloseWin()).toString());
 	vlayout->addWidget(mAutoClose, 0, Qt::AlignLeft);
 
 	KHBox* box = new KHBox(group);
@@ -931,7 +932,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	mSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bbox);
 	mSound->setMinimumSize(mSound->sizeHint());
-	mSound->setWhatsThis(defsetting.arg(SoundPicker::i18n_Sound()));
+	mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_Sound()).toString());
 	vlayout->addWidget(mSound, 0, Qt::AlignLeft);
 
 	box = new KHBox(bbox);
@@ -942,16 +943,16 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	mBeep = new QRadioButton(SoundPicker::i18n_b_Beep(), box);
 	bgroup->addButton(mBeep);
 	mBeep->setMinimumSize(mBeep->sizeHint());
-	mBeep->setWhatsThis(soundSetting.arg(SoundPicker::i18n_Beep()).arg(SoundPicker::i18n_Sound()));
+	mBeep->setWhatsThis(soundSetting.subs(SoundPicker::i18n_Beep()).subs(SoundPicker::i18n_Sound()).toString());
 	mFile = new QRadioButton(SoundPicker::i18n_File(), box);
 	bgroup->addButton(mFile);
 	mFile->setMinimumSize(mFile->sizeHint());
-	mFile->setWhatsThis(soundSetting.arg(SoundPicker::i18n_File()).arg(SoundPicker::i18n_Sound()));
+	mFile->setWhatsThis(soundSetting.subs(SoundPicker::i18n_File()).subs(SoundPicker::i18n_Sound()).toString());
 	if (theApp()->speechEnabled())
 	{
 		mSpeak = new QRadioButton(SoundPicker::i18n_Speak(), box);
 		mSpeak->setMinimumSize(mSpeak->sizeHint());
-		mSpeak->setWhatsThis(soundSetting.arg(SoundPicker::i18n_Speak()).arg(SoundPicker::i18n_Sound()));
+		mSpeak->setWhatsThis(soundSetting.subs(SoundPicker::i18n_Speak()).subs(SoundPicker::i18n_Sound()).toString());
 		bgroup->addButton(mSpeak);
 	}
 	else
@@ -977,7 +978,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 #ifndef WITHOUT_ARTS
 	mSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bbox);
 	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
-	mSoundRepeat->setWhatsThis(i18n("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.").arg(SoundDlg::i18n_Repeat()));
+	mSoundRepeat->setWhatsThis(i18nc("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.", SoundDlg::i18n_Repeat()));
 	vlayout->addWidget(mSoundRepeat, 0, Qt::AlignLeft);
 #endif
 	bbox->setFixedHeight(bbox->sizeHint().height());
@@ -993,13 +994,13 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	mCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group);
 	mCmdScript->setMinimumSize(mCmdScript->sizeHint());
-	mCmdScript->setWhatsThis(defsetting.arg(EditAlarmDlg::i18n_EnterScript()));
+	mCmdScript->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_EnterScript()).toString());
 	hlayout->addWidget(mCmdScript);
 	hlayout->addStretch();
 
 	mCmdXterm = new QCheckBox(EditAlarmDlg::i18n_w_ExecInTermWindow(), group);
 	mCmdXterm->setMinimumSize(mCmdXterm->sizeHint());
-	mCmdXterm->setWhatsThis(defsetting.arg(EditAlarmDlg::i18n_ExecInTermWindow()));
+	mCmdXterm->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ExecInTermWindow()).toString());
 	hlayout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
@@ -1011,14 +1012,14 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	// BCC email to sender
 	mEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), group);
 	mEmailBcc->setMinimumSize(mEmailBcc->sizeHint());
-	mEmailBcc->setWhatsThis(defsetting.arg(EditAlarmDlg::i18n_CopyEmailToSelf()));
+	mEmailBcc->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_CopyEmailToSelf()).toString());
 	vlayout->addWidget(mEmailBcc, 0, Qt::AlignLeft);
 
 	// MISCELLANEOUS
 	// Show in KOrganizer
 	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), mPage);
 	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
-	mCopyToKOrganizer->setWhatsThis(defsetting.arg(EditAlarmDlg::i18n_ShowInKOrganizer()));
+	mCopyToKOrganizer->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ShowInKOrganizer()).toString());
 
 	// Late cancellation
 	box = new KHBox(mPage);
@@ -1026,7 +1027,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	box->setSpacing(KDialog::spacingHint());
 	mLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box);
 	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
-	mLateCancel->setWhatsThis(defsetting.arg(LateCancelSelector::i18n_CancelIfLate()));
+	mLateCancel->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_CancelIfLate()).toString());
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
 	// Recurrence
@@ -1205,7 +1206,7 @@ QString EditPrefTab::validate()
 	if (mFile->isChecked()  &&  mSoundFile->text().isEmpty())
 	{
 		mSoundFile->setFocus();
-		return i18n("You must enter a sound file when %1 is selected as the default sound type").arg(SoundPicker::i18n_File());;
+		return i18n("You must enter a sound file when %1 is selected as the default sound type", SoundPicker::i18n_File());;
 	}
 	return QString();
 }

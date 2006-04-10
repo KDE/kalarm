@@ -129,7 +129,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFadeBox->setMargin(0);
 	mFadeBox->setSpacing(spacingHint());
 	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
-	QLabel* label = new QLabel(i18n("Time period over which to fade the sound", "Fade time:"), mFadeBox);
+	QLabel* label = new QLabel(i18nc("Time period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeTime = new SpinBox(1, 999, 1, mFadeBox);
 	mFadeTime->setSingleShiftStep(10);

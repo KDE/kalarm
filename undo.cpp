@@ -357,7 +357,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 		case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
 		default:                       err = i18n("Unknown error");  break;
 	}
-	KMessageBox::sorry(parent, i18n("Undo-action: message", "%1: %2").arg(action).arg(err));
+	KMessageBox::sorry(parent, i18nc("Undo-action: message", "%1: %2", action, err));
 	return false;
 }
 
@@ -592,14 +592,14 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 	{
 		case KAEvent::ACTIVE:
 			if (add)
-				return i18n("Action to create a new alarm", "New alarm");
+				return i18nc("Action to create a new alarm", "New alarm");
 			else
-				return i18n("Action to delete an alarm", "Delete alarm");
+				return i18nc("Action to delete an alarm", "Delete alarm");
 		case KAEvent::TEMPLATE:
 			if (add)
-				return i18n("Action to create a new alarm template", "New template");
+				return i18nc("Action to create a new alarm template", "New template");
 			else
-				return i18n("Action to delete an alarm template", "Delete template");
+				return i18nc("Action to delete an alarm template", "Delete template");
 		case KAEvent::EXPIRED:
 			return i18n("Delete expired alarm");
 		default:
@@ -841,9 +841,9 @@ QString UndoEdit::actionText() const
 	switch (calendar())
 	{
 		case KAEvent::ACTIVE:
-			return i18n("Action to edit an alarm", "Edit alarm");
+			return i18nc("Action to edit an alarm", "Edit alarm");
 		case KAEvent::TEMPLATE:
-			return i18n("Action to edit an alarm template", "Edit template");
+			return i18nc("Action to edit an alarm template", "Edit template");
 		default:
 			break;
 	}

@@ -196,9 +196,9 @@ void TemplateDlg::slotDelete()
 {
 	QList<EventListViewItemBase*> items = mTemplateList->selectedItems();
 	int n = items.count();
-	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete the selected alarm template?",
+	if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %n selected alarm templates?", n),
-	                                       i18n("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem(i18n("&Delete"), "editdelete"))
+	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
 

@@ -481,7 +481,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
-		return i18n("n days", " %1d ").arg(days);
+		return i18nc("n days", " %1d ", days);
 	}
 	int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
 	if (mins < 0)
@@ -490,10 +490,10 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
 	if (mins < 24*60)
-		return i18n("hours:minutes", " %1:%2 ").arg(mins/60).arg(minutes);
+		return i18nc("hours:minutes", " %1:%2 ", mins/60, minutes);
 	int days = mins / (24*60);
 	mins = mins % (24*60);
-	return i18n("days hours:minutes", " %1d %2:%3 ").arg(days).arg(mins/60).arg(minutes);
+	return i18nc("days hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
 }
 
 /******************************************************************************

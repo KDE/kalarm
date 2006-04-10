@@ -215,9 +215,9 @@ void Daemon::registrationResult(bool reregister, int result)
 		case KAlarmd::NOT_FOUND:
 			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
-			                           "(Installation or configuration error: %1 cannot locate %2 executable.)")
-			                           .arg(QLatin1String(DAEMON_APP_NAME))
-			                           .arg(kapp->aboutData()->appName()));
+			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
+			                            QLatin1String(DAEMON_APP_NAME),
+			                            kapp->aboutData()->appName()));
 			break;
 		case KAlarmd::FAILURE:
 		default:
@@ -229,8 +229,8 @@ void Daemon::registrationResult(bool reregister, int result)
 				if (!mRegisterFailMsg)
 				{
 					mRegisterFailMsg = true;
-					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)")
-					                           .arg(QLatin1String(DAEMON_APP_NAME)));
+					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)",
+					                            QLatin1String(DAEMON_APP_NAME)));
 				}
 			}
 			return;
@@ -271,7 +271,7 @@ void Daemon::checkIfStarted()
 	if (err)
 	{
 		kError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
-		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)").arg(QLatin1String(DAEMON_APP_NAME)));
+		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)", QLatin1String(DAEMON_APP_NAME)));
 	}
 }
 
