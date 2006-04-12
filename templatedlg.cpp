@@ -31,6 +31,7 @@
 #include <kguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kstdaccel.h>
 
 #include "editdlg.h"
 #include "alarmcalendar.h"
@@ -89,10 +90,11 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	mDeleteButton->setWhatsThis(i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
 
-	KAccel* accel = new KAccel(this);
-	accel->insert(KStdAccel::SelectAll, mTemplateList, SLOT(slotSelectAll()));
-	accel->insert(KStdAccel::Deselect, mTemplateList, SLOT(slotDeselect()));
-	accel->readSettings();
+#warning Port me!
+//	KAccel* accel = new KAccel(this);
+//	accel->insert(KStdAccel::SelectAll, mTemplateList, SLOT(slotSelectAll()));
+//	accel->insert(KStdAccel::Deselect, mTemplateList, SLOT(slotDeselect()));
+//	accel->readSettings();
 
 	mTemplateList->refresh();
 	slotSelectionChanged();          // enable/disable buttons as appropriate

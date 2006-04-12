@@ -88,10 +88,11 @@ set(kalarm_SRCS ${libkalarm_SRCS}
 kde4_automoc(${kalarm_SRCS})
 
 kde4_add_dcop_skels(kalarm_SRCS kalarmiface.h kalarmd/alarmguiiface.h )
+kde4_add_dcop_stubs(kalarm_SRCS kalarmd/alarmdaemoniface.h )
 
 kde4_add_executable(kalarm ${kalarm_SRCS})
 
-target_link_libraries(kalarm  ${KDE4_KDECORE_LIBS} kalarm kcal kmime kalarmd kdepim kpimidentities kabc kutils kdeui )
+target_link_libraries(kalarm  ${KDE4_KDECORE_LIBS} kalarm kcal kmime kdepim kpimidentities kabc kutils kdeui )
 
 install_targets(/bin kalarm )
 
