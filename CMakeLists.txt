@@ -4,7 +4,7 @@ add_subdirectory( kalarmd )
 add_subdirectory( lib ) 
 add_subdirectory( pixmaps ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kalarm ${CMAKE_SOURCE_DIR}/kalarm/lib ${CMAKE_SOURCE_DIR}/libkmime ${CMAKE_SOURCE_DIR}/libkleo ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libkcal ${CMAKE_SOURCE_DIR}/kalarm ${CMAKE_SOURCE_DIR}/kalarm/lib ${CMAKE_SOURCE_DIR}/libkmime ${CMAKE_SOURCE_DIR}/libkleo ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
 
 ########### next target ###############

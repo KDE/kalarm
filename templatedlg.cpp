@@ -30,7 +30,6 @@
 #include <klocale.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
-#include <kaccel.h>
 #include <kdebug.h>
 
 #include "editdlg.h"
