@@ -35,7 +35,6 @@
 #include <kstandarddirs.h>
 #include <kstdaction.h>
 #include <kstdguiitem.h>
-#include <kaccel.h>
 #include <kconfig.h>
 #include <kdebug.h>
 

@@ -29,7 +29,6 @@
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kmenu.h>
-#include <kaccel.h>
 #include <kaction.h>
 #include <kactionclasses.h>
 #include <kstdaction.h>
@@ -1001,7 +1000,7 @@ void MainWindow::slotPreferences()
 */
 void MainWindow::slotConfigureKeys()
 {
-	KKeyDialog::configure(actionCollection(), this);
+	KKeyDialog::configure(actionCollection(), KKeyChooser::LetterShortcutsAllowed, this);
 }
 
 /******************************************************************************
