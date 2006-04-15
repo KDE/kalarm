@@ -40,7 +40,7 @@ set(libkalarm_SRCS
 	${CMAKE_SOURCE_DIR}/kalarm/lib/synchtimer.cpp
 )
 
-set(kalarm_SRCS ${libkalarm_SRCS}
+set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    main.cpp 
    alarmevent.cpp 
@@ -84,16 +84,17 @@ set(kalarm_SRCS ${libkalarm_SRCS}
    pickfileradio.cpp 
    calendarcompat.cpp )
 
-kde4_automoc(${kalarm_SRCS})
+kde4_automoc(${kalarm_bin_SRCS})
 
-kde4_add_dcop_skels(kalarm_SRCS kalarmiface.h kalarmd/alarmguiiface.h )
-kde4_add_dcop_stubs(kalarm_SRCS kalarmd/alarmdaemoniface.h )
+kde4_add_dcop_skels(kalarm_bin_SRCS kalarmiface.h kalarmd/alarmguiiface.h )
+kde4_add_dcop_stubs(kalarm_bin_SRCS kalarmd/alarmdaemoniface.h )
 
-kde4_add_executable(kalarm ${kalarm_SRCS})
+kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
+set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm  ${KDE4_KDECORE_LIBS} kalarm kcal kmime kdepim kpimidentities kabc kutils kdeui )
+target_link_libraries(kalarm_bin  ${KDE4_KDEUI_LIBS} kcal kmime kdepim kpimidentities kabc kutils )
 
-install_targets(/bin kalarm )
+install_targets(/bin kalarm_bin )
 
 
 ########### install files ###############
