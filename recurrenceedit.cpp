@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -479,8 +479,8 @@ void RecurrenceEdit::showEvent(QShowEvent*)
  */
 void RecurrenceEdit::repeatCountChanged(int value)
 {
-	if (value > 0  &&  mRepeatCountEntry->minValue() == 0)
-		mRepeatCountEntry->setMinValue(1);
+	if (value > 0  &&  mRepeatCountEntry->minimum() == 0)
+		mRepeatCountEntry->setMinimum(1);
 }
 
 /******************************************************************************
@@ -785,7 +785,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 		mRepeatCountButton->setChecked(true);
 		if (event.mainExpired())
 		{
-			mRepeatCountEntry->setMinValue(0);
+			mRepeatCountEntry->setMinimum(0);
 			repeatDuration = 0;
 		}
 		mRepeatCountEntry->setValue(repeatDuration);

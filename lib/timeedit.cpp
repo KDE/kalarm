@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,28 +109,28 @@ void TimeEdit::setWrapping(bool on)
 	mSpinBox->setWrapping(on);
 }
 
-int TimeEdit::minValue() const
+int TimeEdit::minimum() const
 {
-	return mSpinBox->minValue();
+	return mSpinBox->minimum();
 }
 
-int TimeEdit::maxValue() const
+int TimeEdit::maximum() const
 {
-	return mSpinBox->maxValue();
+	return mSpinBox->maximum();
 }
 
-void TimeEdit::setMinValue(int minutes)
+void TimeEdit::setMinimum(int minutes)
 {
 	if (mAmPm)
 		setAmPmCombo((minutes < 720 ? 1 : 0), -1);   // insert/remove "am" in combo box
-	mSpinBox->setMinValue(minutes);
+	mSpinBox->setMinimum(minutes);
 }
 
-void TimeEdit::setMaxValue(int minutes)
+void TimeEdit::setMaximum(int minutes)
 {
 	if (mAmPm)
 		setAmPmCombo(-1, (minutes < 720 ? 0 : 1));   // insert/remove "pm" in combo box
-	mSpinBox->setMaxValue(minutes);
+	mSpinBox->setMaximum(minutes);
 }
 
 /******************************************************************************

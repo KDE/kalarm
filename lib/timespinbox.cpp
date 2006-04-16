@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ int TimeSpinBox::valueFromText(const QString&) const
 						h += 12;     // convert to PM
 				}
 				int t = h * 60 + m;
-				if (t >= mMinimumValue  &&  t <= maxValue())
+				if (t >= mMinimumValue  &&  t <= maximum())
 					return t;
 			}
 		}
@@ -153,7 +153,7 @@ int TimeSpinBox::valueFromText(const QString&) const
 					h += 12;    // convert to PM
 			}
 			int t = h * 60 + m;
-			if (h < 24  &&  m < 60  &&  t >= mMinimumValue  &&  t <= maxValue())
+			if (h < 24  &&  m < 60  &&  t >= mMinimumValue  &&  t <= maximum())
 				return t;
 		}
 
@@ -174,12 +174,12 @@ void TimeSpinBox::setValid(bool valid)
 		if (value() < mMinimumValue)
 			SpinBox2::setValue(mMinimumValue);
 		setSpecialValueText(QString());
-		setMinValue(mMinimumValue);
+		setMinimum(mMinimumValue);
 	}
 	else if (!valid  &&  !mInvalid)
 	{
 		mInvalid = true;
-		setMinValue(mMinimumValue - 1);
+		setMinimum(mMinimumValue - 1);
 		setSpecialValueText(QLatin1String("**:**"));
 		SpinBox2::setValue(mMinimumValue - 1);
 	}
@@ -194,7 +194,7 @@ void TimeSpinBox::setValue(int minutes)
 	{
 		mEnteredSetValue = true;
 		mPm = (minutes >= 720);
-		if (minutes > maxValue())
+		if (minutes > maximum())
 			setValid(false);
 		else
 		{
@@ -202,7 +202,7 @@ void TimeSpinBox::setValue(int minutes)
 			{
 				mInvalid = false;
 				setSpecialValueText(QString());
-				setMinValue(mMinimumValue);
+				setMinimum(mMinimumValue);
 			}
 			SpinBox2::setValue(minutes);
 			mEnteredSetValue = false;
@@ -251,7 +251,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
 	if (cleanText.isEmpty())
 		return QValidator::Intermediate;
 	QValidator::State state = QValidator::Acceptable;
-	int maxMinute = maxValue();
+	int maxMinute = maximum();
 	QString hour;
 	bool ok;
 	int hr = 0;
@@ -304,7 +304,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
 	if (state == QValidator::Acceptable)
 	{
 		int t = hr * 60 + mn;
-		if (t < minValue()  ||  t > maxMinute)
+		if (t < minimum()  ||  t > maxMinute)
 			return QValidator::Invalid;
 	}
 	return state;

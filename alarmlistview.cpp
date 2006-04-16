@@ -529,10 +529,10 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	int    margin = listView->itemMargin();
 	QRect  box(margin, margin, width - margin*2, height() - margin*2);   // area within which to draw
 	bool   selected = isSelected();
-	QColor bgColour = selected ? cg.highlight() : cg.base();
-	QColor fgColour = selected ? cg.highlightedText()
+	QColor bgColour = selected ? cg.QPalette::highlight().color() : cg.QPalette::base().color();
+	QColor fgColour = selected ? cg.QPalette::highlightedText().color()
 	                : !event().enabled() ? Preferences::disabledColour()
-	                : event().expired() ? Preferences::expiredColour() : cg.text();
+	                : event().expired() ? Preferences::expiredColour() : cg.QPalette::text().color();
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 

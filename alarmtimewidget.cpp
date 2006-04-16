@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -381,8 +381,8 @@ void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
 			mMinMaxTimeSet = true;
 		}
 	}
-	mTimeEdit->setMinValue(mint);
-	mTimeEdit->setMaxValue(maxt);
+	mTimeEdit->setMinimum(mint);
+	mTimeEdit->setMaximum(maxt);
 	mTimeEdit->setWrapping(!mint  &&  maxt == time_23_59);
 }
 
@@ -402,7 +402,7 @@ void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
 				maxVal = maxDelayTime;
 		}
 	}
-	mDelayTimeEdit->setMaxValue(maxVal);
+	mDelayTimeEdit->setMaximum(maxVal);
 }
 
 /******************************************************************************
@@ -518,7 +518,7 @@ void AlarmTimeWidget::dateTimeChanged()
 	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
 	bool blocked = mDelayTimeEdit->signalsBlocked();
 	mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
-	if (minutes <= 0  ||  minutes > mDelayTimeEdit->maxValue())
+	if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
 		mDelayTimeEdit->setValid(false);
 	else
 		mDelayTimeEdit->setValue(minutes);

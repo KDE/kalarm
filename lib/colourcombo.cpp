@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -103,7 +103,7 @@ void ColourCombo::setEnabled(bool enable)
 			QRect rect;
 			rect.setRect(0, 0, width(), fm.height() + 4);
 			QPixmap pm(rect.width(), rect.height());
-			pm.fill(paletteBackgroundColor());
+			pm.fill(palette().color(QPalette::Window));
 			addItem(pm, QString());
 			setCurrentIndex(end);
 		}

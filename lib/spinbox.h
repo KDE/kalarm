@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,15 +69,15 @@ class SpinBox : public QSpinBox
 		/** Adds a value to the current value of the spin box. */
 		void         addValue(int change)                  { addValue(change, false); }
 		/** Returns the minimum value of the spin box. */
-		int          minValue() const                      { return mMinValue; }
+		int          minimum() const                       { return mMinValue; }
 		/** Returns the maximum value of the spin box. */
-		int          maxValue() const                      { return mMaxValue; }
+		int          maximum() const                       { return mMaxValue; }
 		/** Sets the minimum value of the spin box. */
-		void         setMinValue(int val);
+		void         setMinimum(int val);
 		/** Sets the maximum value of the spin box. */
-		void         setMaxValue(int val);
+		void         setMaximum(int val);
 		/** Sets the minimum and maximum values of the spin box. */
-		void         setRange(int minValue, int maxValue)  { setMinValue(minValue);  setMaxValue(maxValue); }
+		void         setRange(int minValue, int maxValue)  { setMinimum(minValue);  setMaximum(maxValue); }
 		/** Returns the specified value clamped to the range of the spin box. */
 		int          bound(int val) const;
 		/** Returns the unshifted step increment, i.e. the amount by which the spin box value

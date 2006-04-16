@@ -76,11 +76,11 @@ class TimeSpinBox : public SpinBox2
 		/** Sets the maximum value which can be held in the spin box.
 		 *  @param minutes The maximum value expressed in minutes.
 		 */
-		void            setMaxValue(int minutes)     { SpinBox2::setMaxValue(minutes); }
+		void            setMaximum(int minutes)      { SpinBox2::setMaximum(minutes); }
 		/** Sets the maximum value which can be held in the spin box. */
-		void            setMaxValue(const QTime& t)  { SpinBox2::setMaxValue(t.hour()*60 + t.minute()); }
+		void            setMaximum(const QTime& t)   { SpinBox2::setMaximum(t.hour()*60 + t.minute()); }
 		/** Returns the maximum value which can be held in the spin box. */
-		QTime           maxTime() const              { int mv = maxValue();  return QTime(mv/60, mv%60); }
+		QTime           maxTime() const              { int mv = maximum();  return QTime(mv/60, mv%60); }
 		/** Returns a text describing use of the shift key as an accelerator for
 		 *  the spin buttons, designed for incorporation into WhatsThis texts.
 		 */

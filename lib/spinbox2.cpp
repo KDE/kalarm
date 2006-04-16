@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ void SpinBox2::init()
 {
 	if (mRightToLeft < 0)
 		mRightToLeft = QApplication::isRightToLeft() ? 1 : 0;
-	mMinValue        = mSpinbox->minValue();
-	mMaxValue        = mSpinbox->maxValue();
+	mMinValue        = mSpinbox->minimum();
+	mMaxValue        = mSpinbox->maximum();
 	mSingleStep      = mSpinbox->singleStep();
 	mSingleShiftStep = mSpinbox->singleShiftStep();
 	mPageStep        = mUpdown2->singleStep();
@@ -197,18 +197,18 @@ int SpinBox2::bound(int val) const
 	return (val < mMinValue) ? mMinValue : (val > mMaxValue) ? mMaxValue : val;
 }
 
-void SpinBox2::setMinValue(int val)
+void SpinBox2::setMinimum(int val)
 {
 	mMinValue = val;
-	mSpinbox->setMinValue(val);
-	mUpdown2->setMinValue(val);
+	mSpinbox->setMinimum(val);
+	mUpdown2->setMinimum(val);
 }
 
-void SpinBox2::setMaxValue(int val)
+void SpinBox2::setMaximum(int val)
 {
 	mMaxValue = val;
-	mSpinbox->setMaxValue(val);
-	mUpdown2->setMaxValue(val);
+	mSpinbox->setMaximum(val);
+	mUpdown2->setMaximum(val);
 }
 
 void SpinBox2::valueChange()
@@ -333,8 +333,8 @@ void SpinBox2::stepPage(int step)
 		}
 		int adjust = mSpinbox->shiftStepAdjustment(oldValue, step);
 		if (adjust == -step
-		&&  (step > 0  &&  oldValue + step >= mSpinbox->maxValue()
-		  || step < 0  &&  oldValue + step <= mSpinbox->minValue()))
+		&&  (step > 0  &&  oldValue + step >= mSpinbox->maximum()
+		  || step < 0  &&  oldValue + step <= mSpinbox->minimum()))
 			adjust = 0;    // allow stepping to the minimum or maximum value
 		mSpinbox->addValue(adjust + step);
 	}

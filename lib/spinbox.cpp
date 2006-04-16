@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright (C) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <kdeversion.h>
 #include <qlineedit.h>
 #include <qobject.h>
+#include <QApplication>
 #include <QStyle>
 #include <QStyleOptionSpinBox>
 #include <QPainter>
@@ -33,8 +34,8 @@
 
 SpinBox::SpinBox(QWidget* parent)
 	: QSpinBox(0, 99999, 1, parent),
-	  mMinValue(QSpinBox::minValue()),
-	  mMaxValue(QSpinBox::maxValue())
+	  mMinValue(QSpinBox::minimum()),
+	  mMaxValue(QSpinBox::maximum())
 {
 	init();
 }
@@ -84,17 +85,17 @@ int SpinBox::bound(int val) const
 	return (val < mMinValue) ? mMinValue : (val > mMaxValue) ? mMaxValue : val;
 }
 
-void SpinBox::setMinValue(int val)
+void SpinBox::setMinimum(int val)
 {
 	mMinValue = val;
-	QSpinBox::setMinValue(val);
+	QSpinBox::setMinimum(val);
 	mShiftMinBound = false;
 }
 
-void SpinBox::setMaxValue(int val)
+void SpinBox::setMaximum(int val)
 {
 	mMaxValue = val;
-	QSpinBox::setMaxValue(val);
+	QSpinBox::setMaximum(val);
 	mShiftMaxBound = false;
 }
 
@@ -134,8 +135,8 @@ void SpinBox::stepDown()
 void SpinBox::addValue(int change, bool current)
 {
 	int newval = value() + change;
-	int maxval = current ? QSpinBox::maxValue() : mMaxValue;
-	int minval = current ? QSpinBox::minValue() : mMinValue;
+	int maxval = current ? QSpinBox::maximum() : mMaxValue;
+	int minval = current ? QSpinBox::minimum() : mMinValue;
 	if (wrapping())
 	{
 		int range = maxval - minval + 1;
@@ -162,13 +163,13 @@ void SpinBox::valueChange()
 		if (mShiftMinBound  &&  val >= mMinValue)
 		{
 			// Reinstate the minimum bound now that the value has returned to the normal range.
-			QSpinBox::setMinValue(mMinValue);
+			QSpinBox::setMinimum(mMinValue);
 			mShiftMinBound = false;
 		}
 		if (mShiftMaxBound  &&  val <= mMaxValue)
 		{
 			// Reinstate the maximum bound now that the value has returned to the normal range.
-			QSpinBox::setMaxValue(mMaxValue);
+			QSpinBox::setMaximum(mMaxValue);
 			mShiftMaxBound = false;
 		}
 
@@ -214,7 +215,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 				if (mReadOnly)
 					return true;    // discard up/down arrow keys
 				int step;
-				if ((ke->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
+				if ((ke->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
 				{
 					// Shift stepping
 					int val = value();
@@ -262,7 +263,7 @@ bool SpinBox::clickEvent(QMouseEvent* e)
 		mCurrentButton = whichButton(e->pos());
 		if (mCurrentButton == NO_BUTTON)
 			return true;
-		bool shift = (e->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+		bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 		if (setShiftStepping(shift))
 			return true;     // hide the event from the spin widget
 	}
@@ -278,7 +279,7 @@ void SpinBox::mouseReleaseEvent(QMouseEvent* e)
 
 void SpinBox::mouseMoveEvent(QMouseEvent* e)
 {
-	if (e->state() & Qt::LeftButton)
+	if (e->buttons() & Qt::LeftButton)
 	{
 		// The left button is down. Track which spin button it's in.
 		if (mReadOnly)
@@ -289,7 +290,7 @@ void SpinBox::mouseMoveEvent(QMouseEvent* e)
 			// The mouse has moved to a new spin button.
 			// Set normal or shift stepping as appropriate.
 			mCurrentButton = newButton;
-			bool shift = (e->state() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+			bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 			if (setShiftStepping(shift))
 				return;     // hide the event from the spin widget
 		}
@@ -312,8 +313,8 @@ void SpinBox::keyReleaseEvent(QKeyEvent* e)
 bool SpinBox::keyEvent(QKeyEvent* e)
 {
 	int key   = e->key();
-	int state = e->state();
-	if ((state & Qt::LeftButton)
+	int state = e->modifiers();
+	if ((QApplication::mouseButtons() & Qt::LeftButton)
 	&&  (key == Qt::Key_Shift  ||  key == Qt::Key_Alt))
 	{
 		// The left mouse button is down, and the Shift or Alt key has changed
@@ -383,12 +384,12 @@ bool SpinBox::setShiftStepping(bool shift)
 				int tempval = val + adjust;
 				if (tempval < mMinValue)
 				{
-					QSpinBox::setMinValue(tempval);
+					QSpinBox::setMinimum(tempval);
 					mShiftMinBound = true;
 				}
 				else if (tempval > mMaxValue)
 				{
-					QSpinBox::setMaxValue(tempval);
+					QSpinBox::setMaximum(tempval);
 					mShiftMaxBound = true;
 				}
 			}
@@ -407,8 +408,8 @@ bool SpinBox::setShiftStepping(bool shift)
 	{
 		// Reinstate to normal (non-shift) stepping
 		QSpinBox::setSingleStep(mLineStep);
-		QSpinBox::setMinValue(mMinValue);
-		QSpinBox::setMaxValue(mMaxValue);
+		QSpinBox::setMinimum(mMinValue);
+		QSpinBox::setMaximum(mMaxValue);
 		mShiftMinBound = mShiftMaxBound = false;
 		mShiftMouse = false;
 	}

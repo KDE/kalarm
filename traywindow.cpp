@@ -182,7 +182,7 @@ void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
 	if (e->button() == Qt::LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
 	{
 		mAssocMainWindow->raise();
-		mAssocMainWindow->setActiveWindow();
+		mAssocMainWindow->activateWindow();
 	}
 	else
 		KSystemTray::mouseReleaseEvent(e);

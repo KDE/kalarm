@@ -353,7 +353,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	mPurgeExpired->setMinimumSize(mPurgeExpired->sizeHint());
 	connect(mPurgeExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
 	mPurgeAfter = new SpinBox(box);
-	mPurgeAfter->setMinValue(1);
+	mPurgeAfter->setMinimum(1);
 	mPurgeAfter->setSingleShiftStep(10);
 	mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());
 	mPurgeAfterLabel = new QLabel(i18n("da&ys"), box);

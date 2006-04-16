@@ -64,7 +64,7 @@ ADCalendar::ADCalendar(const QString& url, const QByteArray& appname)
 ADCalendar::~ADCalendar()
 {
 	clearEventsHandled();
-	mCalendars.remove(this);
+	mCalendars.removeAll(this);
 }
 
 /******************************************************************************
@@ -174,7 +174,7 @@ void ADCalendar::setEventHandled(const QString& eventID)
 	if (it != mEventsPending.end())
 	{
 		setEventInMap(mEventsHandled, key, it.value().alarmTimes, it.value().eventSequence);
-		mEventsPending.remove(it);
+		mEventsPending.erase(it);
 	}
 }
 
@@ -229,7 +229,7 @@ void ADCalendar::clearEventMap(EventsMap& map, bool nonexistentOnly)
 		{
 			EventsMap::Iterator i = it;
 			++it;                      // prevent iterator becoming invalid with remove()
-			map.remove(i);
+			map.erase(i);
 		}
 		else
 			++it;

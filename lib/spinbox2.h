@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -97,11 +97,11 @@ class SpinBox2 : public QFrame
 		virtual QString     cleanText() const           { return mSpinbox->cleanText(); }
 
 		/** Sets the special-value text which, if non-null, is displayed instead of a numeric
-		 *  value when the current value is equal to minValue().
+		 *  value when the current value is equal to minimum().
 		 */
 		virtual void        setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
 		/** Returns the special-value text which, if non-null, is displayed instead of a numeric
-		 *  value when the current value is equal to minValue().
+		 *  value when the current value is equal to minimum().
 		 */
 		QString             specialValueText() const    { return mSpinbox->specialValueText(); }
 
@@ -126,15 +126,15 @@ class SpinBox2 : public QFrame
 		virtual QSize       minimumSizeHint() const;
 
 		/** Returns the minimum value of the spin box. */
-		int                 minValue() const            { return mMinValue; }
+		int                 minimum() const             { return mMinValue; }
 		/** Returns the maximum value of the spin box. */
-		int                 maxValue() const            { return mMaxValue; }
+		int                 maximum() const             { return mMaxValue; }
 		/** Sets the minimum value of the spin box. */
-		void                setMinValue(int val);
+		void                setMinimum(int val);
 		/** Sets the maximum value of the spin box. */
-		void                setMaxValue(int val);
+		void                setMaximum(int val);
 		/** Sets the minimum and maximum values of the spin box. */
-		void                setRange(int minValue, int maxValue)   { setMinValue(minValue);  setMaxValue(maxValue); }
+		void                setRange(int minValue, int maxValue)   { setMinimum(minValue);  setMaximum(maxValue); }
 		/** Returns the current value of the spin box. */
 		int                 value() const               { return mSpinbox->value(); }
 		/** Returns the specified value clamped to the range of the spin box. */

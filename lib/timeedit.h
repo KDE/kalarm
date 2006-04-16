@@ -1,7 +1,7 @@
 /*
  *  timeedit.h  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,17 +82,17 @@ class TimeEdit : public KHBox
 		 */
 		void          setWrapping(bool on);
 		/** Returns the minimum value of the widget in minutes. */
-		int           minValue() const;
+		int           minimum() const;
 		/** Returns the maximum value of the widget in minutes. */
-		int           maxValue() const;
+		int           maximum() const;
 		/** Returns the maximum value of the widget as a QTime value. */
-		QTime         maxTime() const              { int mv = maxValue();  return QTime(mv/60, mv%60); }
+		QTime         maxTime() const              { int mv = maximum();  return QTime(mv/60, mv%60); }
 		/** Sets the minimum value of the widget. */
-		void          setMinValue(int minutes);
+		void          setMinimum(int minutes);
 		/** Sets the maximum value of the widget. */
-		void          setMaxValue(int minutes);
+		void          setMaximum(int minutes);
 		/** Sets the maximum value of the widget. */
-		void          setMaxValue(const QTime& time)  { setMaxValue(time.hour()*60 + time.minute()); }
+		void          setMaximum(const QTime& time)  { setMaximum(time.hour()*60 + time.minute()); }
 	public slots:
 		/** Sets the value of the widget. */
 		virtual void  setValue(int minutes);
