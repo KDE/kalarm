@@ -35,7 +35,7 @@
 
 #include "kalarmd/kalarmd.h"
 #include "kalarmd/alarmdaemoniface.h"
-#include "kalarmd/alarmdaemoniface_stub.h"
+#include "alarmdaemoniface_stub.h"
 #include "kalarmd/alarmguiiface.h"
 
 #include "alarmcalendar.h"
