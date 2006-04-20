@@ -177,7 +177,7 @@ void SpinBox::valueChange()
 		}
 
 #warning Fix this
-// 		bool focus = !mSelectOnStep && hasFocus();
+//??? 		bool focus = !mSelectOnStep && hasFocus();
 //		if (focus)
 //			clearFocus();     // prevent selection of the spin box text
 //		QSpinBox::valueChange();
@@ -432,7 +432,7 @@ bool SpinBox::setShiftStepping(bool shift)
 */
 int SpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 {
-	if (oldValue == 0)
+	if (oldValue == 0  ||  shiftStep == 0)
 		return 0;
 	if (shiftStep > 0)
 	{

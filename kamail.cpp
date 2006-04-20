@@ -953,7 +953,7 @@ bool parseUserName( const char* & scursor, const char * const send,
   QString maybeLocalPart;
   QString tmp;
 
-  while ( scursor != send ) {
+  if ( scursor != send ) {
     // first, eat any whitespace
     eatCFWS( scursor, send, isCRLF );
 
