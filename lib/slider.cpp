@@ -33,9 +33,13 @@ Slider::Slider(Qt::Orientation o, QWidget* parent)
 { }
 
 Slider::Slider(int minval, int maxval, int pageStep, int value, Qt::Orientation o, QWidget* parent)
-	: QSlider(minval, maxval, pageStep, value, o, parent),
+	: QSlider(o, parent),
 	  mReadOnly(false)
-{ }
+{ 
+  setRange( minval, maxval);
+  setPageStep( pageStep );
+  setValue ( value );
+}
 
 /******************************************************************************
 *  Set the read-only status. If read-only, the slider can be moved by the
