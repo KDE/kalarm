@@ -60,20 +60,20 @@ SpinBox2::SpinBox2(QWidget* parent)
 	mUpdown2Frame = new QFrame(this);
 	mSpinboxFrame = new QFrame(this);
 	mUpdown2 = new ExtraSpinBox(mUpdown2Frame);
-//	mSpinbox = new MainSpinBox(0, 1, 1, this, mSpinboxFrame);
+//	mSpinbox = new MainSpinBox(0, 1, this, mSpinboxFrame);
 	mSpinbox = new MainSpinBox(this, mSpinboxFrame);
 	init();
 }
 
-SpinBox2::SpinBox2(int minValue, int maxValue, int step, int step2, QWidget* parent)
+SpinBox2::SpinBox2(int minValue, int maxValue, int pageStep, QWidget* parent)
 	: QFrame(parent),
 	  mReverseWithLayout(true)
 {
 	mUpdown2Frame = new QFrame(this);
 	mSpinboxFrame = new QFrame(this);
-	mUpdown2 = new ExtraSpinBox(minValue, maxValue, step2, mUpdown2Frame);
-	mSpinbox = new MainSpinBox(minValue, maxValue, step, this, mSpinboxFrame);
-	setSteps(step, step2);
+	mUpdown2 = new ExtraSpinBox(minValue, maxValue, mUpdown2Frame);
+	mSpinbox = new MainSpinBox(minValue, maxValue, this, mSpinboxFrame);
+	setSteps(1, pageStep);
 	init();
 }
 

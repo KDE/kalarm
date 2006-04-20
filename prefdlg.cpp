@@ -1257,7 +1257,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	mTooltipMaxAlarms = new QCheckBox(i18n("Ma&ximum number of alarms to show:"), box);
 	mTooltipMaxAlarms->setMinimumSize(mTooltipMaxAlarms->sizeHint());
 	connect(mTooltipMaxAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipMaxToggled(bool)));
-	mTooltipMaxAlarmCount = new SpinBox(1, 99, 1, box);
+	mTooltipMaxAlarmCount = new SpinBox(1, 99, box);
 	mTooltipMaxAlarmCount->setSingleShiftStep(5);
 	mTooltipMaxAlarmCount->setMinimumSize(mTooltipMaxAlarmCount->sizeHint());
 	box->setWhatsThis(
@@ -1307,7 +1307,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("System tray icon &update interval:"), box);
-	mDaemonTrayCheckInterval = new SpinBox(1, 9999, 1, box);
+	mDaemonTrayCheckInterval = new SpinBox(1, 9999, box);
 	mDaemonTrayCheckInterval->setSingleShiftStep(10);
 	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
 	label->setBuddy(mDaemonTrayCheckInterval);

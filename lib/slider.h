@@ -1,7 +1,7 @@
 /*
  *  slider.h  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,11 +54,10 @@ class Slider : public QSlider
 		 *  @param minValue The minimum value which the slider can have.
 		 *  @param maxValue The maximum value which the slider can have.
 		 *  @param pageStep The page step increment.
-		 *  @param value The initial value for the slider.
 		 *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
 		 *  @param parent The parent object of this widget.
 		 */
-		Slider(int minValue, int maxValue, int pageStep, int value, Qt::Orientation orient,
+		Slider(int minValue, int maxValue, int pageStep, Qt::Orientation orient,
 		       QWidget* parent = 0);
 		/** Returns true if the slider is read only. */
 		bool         isReadOnly() const  { return mReadOnly; }

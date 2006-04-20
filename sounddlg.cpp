@@ -110,7 +110,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mVolumeCheckbox->setWhatsThis(i18n("Select to choose the volume for playing the sound file."));
 
 	// Volume slider
-	mVolumeSlider = new Slider(0, 100, 10, 0, Qt::Horizontal, box);
+	mVolumeSlider = new Slider(0, 100, 10, Qt::Horizontal, box);
 	mVolumeSlider->setTickPosition(QSlider::TicksBelow);
 	mVolumeSlider->setTickInterval(10);
 	mVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -131,7 +131,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
 	QLabel* label = new QLabel(i18nc("Time period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
-	mFadeTime = new SpinBox(1, 999, 1, mFadeBox);
+	mFadeTime = new SpinBox(1, 999, mFadeBox);
 	mFadeTime->setSingleShiftStep(10);
 	mFadeTime->setFixedSize(mFadeTime->sizeHint());
 	label->setBuddy(mFadeTime);
@@ -146,7 +146,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	grid->addWidget(mFadeVolumeBox, 4, 2);
 	label = new QLabel(i18n("Initial volume:"), mFadeVolumeBox);
 	label->setFixedSize(label->sizeHint());
-	mFadeSlider = new Slider(0, 100, 10, 0, Qt::Horizontal, mFadeVolumeBox);
+	mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
 	mFadeSlider->setTickPosition(QSlider::TicksBelow);
 	mFadeSlider->setTickInterval(10);
 	mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));

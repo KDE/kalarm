@@ -228,7 +228,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mRepeatCountButton->setReadOnly(mReadOnly);
 	mRepeatCountButton->setWhatsThis(i18n("Repeat the alarm for the number of times specified"));
 	mRangeButtonGroup->addButton(mRepeatCountButton);
-	mRepeatCountEntry = new SpinBox(1, 9999, 1, mRangeButtonBox);
+	mRepeatCountEntry = new SpinBox(1, 9999, mRangeButtonBox);
 	mRepeatCountEntry->setFixedSize(mRepeatCountEntry->sizeHint());
 	mRepeatCountEntry->setSingleShiftStep(10);
 	mRepeatCountEntry->setSelectOnStep(false);
@@ -974,7 +974,7 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
 	else
 	{
 		mTimeSpinBox = 0;
-		mSpinBox = mIntSpinBox = new SpinBox(1, 999, 1, box);
+		mSpinBox = mIntSpinBox = new SpinBox(1, 999, box);
 		mIntSpinBox->setFixedSize(mIntSpinBox->sizeHint());
 		mIntSpinBox->setReadOnly(readOnly);
 	}

@@ -37,17 +37,16 @@ SpinBox::SpinBox(QWidget* parent)
 	  mMinValue(QSpinBox::minimum()),
 	  mMaxValue(QSpinBox::maximum())
 {
-  setRange(0, 99999);
+	setRange(0, 99999);
 	init();
 }
 
-SpinBox::SpinBox(int minValue, int maxValue, int step, QWidget* parent)
+SpinBox::SpinBox(int minValue, int maxValue, QWidget* parent)
 	: QSpinBox(parent),
 	  mMinValue(minValue),
 	  mMaxValue(maxValue)
 {
-  setRange(minValue, maxValue);
-  setSingleStep(step);
+	setRange(minValue, maxValue);
 	init();
 }
 

@@ -203,7 +203,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mCountButton->setWhatsThis(i18n("Check to specify the number of times the alarm should repeat after each recurrence"));
 	mButtonGroup->addButton(mCountButton);
 	layout->addWidget(mCountButton);
-	mCount = new SpinBox(1, MAX_COUNT, 1, mButtonBox);
+	mCount = new SpinBox(1, MAX_COUNT, mButtonBox);
 	mCount->setFixedSize(mCount->sizeHint());
 	mCount->setSingleShiftStep(10);
 	mCount->setSelectOnStep(false);

@@ -42,8 +42,8 @@ class ExtraSpinBox : public SpinBox
 	public:
 		ExtraSpinBox(QWidget* parent)
 		             : SpinBox(parent), mNewStylePending(false) { }
-		ExtraSpinBox(int minValue, int maxValue, int step, QWidget* parent)
-		             : SpinBox(minValue, maxValue, step, parent), mNewStylePending(false) { }
+		ExtraSpinBox(int minValue, int maxValue, QWidget* parent)
+		             : SpinBox(minValue, maxValue, parent), mNewStylePending(false) { }
 	signals:
 		void         styleUpdated();
 	protected:

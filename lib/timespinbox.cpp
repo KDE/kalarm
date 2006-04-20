@@ -40,7 +40,7 @@
  * Construct a wrapping 00:00 - 23:59, or 12:00 - 11:59 time spin box.
  */
 TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
-	: SpinBox2(0, 1439, 1, 60, parent),
+	: SpinBox2(0, 1439, 60, parent),
 	  mMinimumValue(0),
 	  m12Hour(!use24hour),
 	  mPm(false),
@@ -58,7 +58,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
  * Construct a non-wrapping time spin box.
  */
 TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
-	: SpinBox2(minMinute, maxMinute, 1, 60, parent),
+	: SpinBox2(minMinute, maxMinute, 60, parent),
 	  mMinimumValue(minMinute),
 	  m12Hour(false),
 	  mInvalid(false),
