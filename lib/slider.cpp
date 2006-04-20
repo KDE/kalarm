@@ -36,9 +36,9 @@ Slider::Slider(int minval, int maxval, int pageStep, int value, Qt::Orientation 
 	: QSlider(o, parent),
 	  mReadOnly(false)
 { 
-  setRange( minval, maxval);
-  setPageStep( pageStep );
-  setValue ( value );
+	setRange(minval, maxval);
+	setPageStep(pageStep);
+	setValue(value);
 }
 
 /******************************************************************************
