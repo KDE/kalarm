@@ -30,11 +30,6 @@ ComboBox::ComboBox(QWidget* parent)
 	  mReadOnly(false)
 { }
 
-ComboBox::ComboBox(bool rw, QWidget* parent)
-	: QComboBox(rw, parent),
-	  mReadOnly(false)
-{ }
-
 void ComboBox::setReadOnly(bool ro)
 {
 	if ((int)ro != (int)mReadOnly)

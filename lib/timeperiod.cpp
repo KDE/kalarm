@@ -72,7 +72,8 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
 	mHourMinuteRaised = mNoHourMinute;
 	showHourMin(!mNoHourMinute);
 
-	mUnitsCombo = new ComboBox(false, this);
+	mUnitsCombo = new ComboBox(this);
+	mUnitsCombo->setEditable( false );
 	if (mNoHourMinute)
 		mDateOnlyOffset = 1;
 	else

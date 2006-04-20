@@ -1204,7 +1204,8 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mButtonGroup->addButton(mDayButton);
 	mDayButton->setWhatsThis(i18n("Repeat the alarm on the selected day of the month"));
 
-	mDayCombo = new ComboBox(false, box);
+	mDayCombo = new ComboBox(box);
+	mDayCombo->setEditable(false);
 	mDayCombo->setMaxVisibleItems(11);
 	for (int i = 0;  i < 31;  ++i)
 		mDayCombo->addItem(QString::number(i + 1));
@@ -1230,7 +1231,8 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mButtonGroup->addButton(mPosButton);
 	mPosButton->setWhatsThis(i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
 
-	mWeekCombo = new ComboBox(false, box);
+	mWeekCombo = new ComboBox(box);
+	mWeekCombo->setEditable(false);
 	mWeekCombo->addItem(i18n("1st"));
 	mWeekCombo->addItem(i18n("2nd"));
 	mWeekCombo->addItem(i18n("3rd"));
@@ -1251,7 +1253,8 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mWeekCombo->setReadOnly(readOnly);
 	mPosButton->setFocusWidget(mWeekCombo);
 
-	mDayOfWeekCombo = new ComboBox(false, box);
+	mDayOfWeekCombo = new ComboBox(box);
+	mDayOfWeekCombo->setEditable(false);
 	const KLocale* locale = KGlobal::locale();
 	for (int i = 0;  i < 7;  ++i)
 	{
@@ -1442,7 +1445,8 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	box->setSpacing(KDialog::spacingHint());
 	mFeb29Label = new QLabel(i18n("February 2&9th alarm in non-leap years:"), box);
 	mFeb29Label->setFixedSize(mFeb29Label->sizeHint());
-	mFeb29Combo = new ComboBox(false, box);
+	mFeb29Combo = new ComboBox(box);
+	mFeb29Combo->setEditable(false);
 	mFeb29Combo->addItem(i18nc("No date", "None"));
 	mFeb29Combo->addItem(i18nc("1st March (short form)", "1 Mar"));
 	mFeb29Combo->addItem(i18nc("28th February (short form)", "28 Feb"));
