@@ -279,8 +279,8 @@ void AlarmDaemon::registerChange(const QCString& appName, bool startClient)
 	KAlarmd::RegisterResult result;
 	ClientInfo* client = ClientInfo::get(appName);
 	if (!client)
-		result = KAlarmd::FAILURE;
-	else if (startClient  &&  KStandardDirs::findExe(appName).isNull())
+		return;    // can't access client to tell it the result
+	if (startClient  &&  KStandardDirs::findExe(appName).isNull())
 	{
 		kdError() << "AlarmDaemon::registerChange(): app not found" << endl;
 		result = KAlarmd::NOT_FOUND;
