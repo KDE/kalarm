@@ -116,7 +116,7 @@ KAction* createNewAlarmAction(const QString& label, QObject* receiver, const cha
 /******************************************************************************
 * Create a New From Template KAction.
 */
-TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
+TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const QString& name)
 {
 	return new TemplateMenuAction(label, "new_from_template", receiver, slot, actions, name);
 }
