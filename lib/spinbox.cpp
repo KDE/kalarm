@@ -33,18 +33,21 @@
 
 
 SpinBox::SpinBox(QWidget* parent)
-	: QSpinBox(0, 99999, 1, parent),
+	: QSpinBox(parent),
 	  mMinValue(QSpinBox::minimum()),
 	  mMaxValue(QSpinBox::maximum())
 {
+  setRange(0, 99999);
 	init();
 }
 
 SpinBox::SpinBox(int minValue, int maxValue, int step, QWidget* parent)
-	: QSpinBox(minValue, maxValue, step, parent),
+	: QSpinBox(parent),
 	  mMinValue(minValue),
 	  mMaxValue(maxValue)
 {
+  setRange(minValue, maxValue);
+  setSingleStep(step);
 	init();
 }
 
@@ -173,8 +176,8 @@ void SpinBox::valueChange()
 			mShiftMaxBound = false;
 		}
 
-		bool focus = !mSelectOnStep && hasFocus();
 #warning Fix this
+// 		bool focus = !mSelectOnStep && hasFocus();
 //		if (focus)
 //			clearFocus();     // prevent selection of the spin box text
 //		QSpinBox::valueChange();
