@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
 	showHourMin(!mNoHourMinute);
 
 	mUnitsCombo = new ComboBox(this);
-	mUnitsCombo->setEditable( false );
+	mUnitsCombo->setEditable(false);
 	if (mNoHourMinute)
 		mDateOnlyOffset = 1;
 	else
