@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -23,11 +23,10 @@
 
 #include "kalarm.h"
 
-//Added by qt3to4:
-#include <q3listbox.h>
 #include <QPushButton>
 #include <QLabel>
 #include <QStackedWidget>
+#include <QListWidget>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -292,9 +291,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	vlayout->setMargin(0);
 	hlayout->addLayout(vlayout);
 
-	mExceptionDateList = new Q3ListBox(mExceptionGroup);
+	mExceptionDateList = new QListWidget(mExceptionGroup);
 	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	connect(mExceptionDateList, SIGNAL(selectionChanged()), SLOT(enableExceptionButtons()));
+	connect(mExceptionDateList, SIGNAL(itemSelectionChanged()), SLOT(enableExceptionButtons()));
 	mExceptionDateList->setWhatsThis(i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
 	vlayout->addWidget(mExceptionDateList);
 
@@ -506,9 +505,9 @@ void RecurrenceEdit::addException()
 	if (insert)
 	{
 		mExceptionDates.insert(it, date);
-		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(date), index);
+		mExceptionDateList->insertItem(index, new QListWidgetItem(KGlobal::locale()->formatDate(date)));
 	}
-	mExceptionDateList->setCurrentItem(index);
+	mExceptionDateList->setCurrentItem(mExceptionDateList->item(index));
 	enableExceptionButtons();
 }
 
@@ -520,15 +519,16 @@ void RecurrenceEdit::changeException()
 {
 	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
 		return;
-	int index = mExceptionDateList->currentItem();
-	if (index >= 0  &&  mExceptionDateList->isSelected(index))
+	QListWidgetItem* item = mExceptionDateList->currentItem();
+	if (item  &&  mExceptionDateList->isItemSelected(item))
 	{
+		int index = mExceptionDateList->row(item);
 		QDate olddate = mExceptionDates[index];
 		QDate newdate = mExceptionDateEdit->date();
 		if (newdate != olddate)
 		{
 			mExceptionDates.removeAt(index);
-			mExceptionDateList->removeItem(index);
+			mExceptionDateList->takeItem(index);
 			addException();
 		}
 	}
@@ -539,11 +539,12 @@ void RecurrenceEdit::changeException()
  */
 void RecurrenceEdit::deleteException()
 {
-	int index = mExceptionDateList->currentItem();
-	if (index >= 0  &&  mExceptionDateList->isSelected(index))
+	QListWidgetItem* item = mExceptionDateList->currentItem();
+	if (item  &&  mExceptionDateList->isItemSelected(item))
 	{
+		int index = mExceptionDateList->row(item);
 		mExceptionDates.removeAt(index);
-		mExceptionDateList->removeItem(index);
+		mExceptionDateList->takeItem(index);
 		enableExceptionButtons();
 	}
 }
@@ -554,8 +555,8 @@ void RecurrenceEdit::deleteException()
  */
 void RecurrenceEdit::enableExceptionButtons()
 {
-	int index = mExceptionDateList->currentItem();
-	bool enable = (index >= 0  &&  mExceptionDateList->isSelected(index));
+	QListWidgetItem* item = mExceptionDateList->currentItem();
+	bool enable = (item  &&  mExceptionDateList->isItemSelected(item));
 	if (mDeleteExceptionButton)
 		mDeleteExceptionButton->setEnabled(enable);
 	if (mChangeExceptionButton)
@@ -803,7 +804,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	qSort(mExceptionDates);
 	mExceptionDateList->clear();
 	for (DateList::ConstIterator it = mExceptionDates.begin();  it != mExceptionDates.end();  ++it)
-		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(*it));
+		new QListWidgetItem(KGlobal::locale()->formatDate(*it), mExceptionDateList);
 	enableExceptionButtons();
 
 	rangeTypeClicked();

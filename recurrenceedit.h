@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -32,7 +32,7 @@ class QShowEvent;
 class QStackedWidget;
 class QGroupBox;
 class QLabel;
-class Q3ListBox;
+class QListWidget;
 class QAbstractButton;
 class QPushButton;
 class SpinBox;
@@ -154,7 +154,7 @@ class RecurrenceEdit : public QFrame
 
 		// Exceptions
 		QGroupBox*        mExceptionGroup;
-		Q3ListBox*         mExceptionDateList;
+		QListWidget*      mExceptionDateList;
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
