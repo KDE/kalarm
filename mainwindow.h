@@ -112,6 +112,7 @@ class MainWindow : public MainWindowBase
 		void           slotEnable();
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
+		void           slotImportAlarms();
 		void           slotBirthdays();
 		void           slotTemplates();
 		void           slotTemplatesEnd();

@@ -17,6 +17,7 @@
   <Menu name="file" >
    <text>&amp;File</text>
    <Action name="templates" />
+   <Action name="importAlarms" />
    <Action name="importBirthdays" />
   </Menu>
   <Menu name="view" >

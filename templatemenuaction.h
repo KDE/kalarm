@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.h  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,8 +30,7 @@ class TemplateMenuAction : public KActionMenu
 {
 		Q_OBJECT
 	public:
-		TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
-		                   const char* slot, KActionCollection* parent, const QString& name);
+		TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* parent, const QString& name);
 
 	signals:
 		void   selected(const KAEvent&);

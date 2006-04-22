@@ -30,14 +30,12 @@
 #include "templatemenuaction.moc"
 
 
-TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon, QObject* receiver,
-                                       const char* slot, KActionCollection* actions, const QString& name)
-	: KActionMenu(KIcon(icon), label, actions, name)
+TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* actions, const QString& name)
+	: KActionMenu(icon, label, actions, name)
 {
 	setDelayed(false);
 	connect(popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
 	connect(popupMenu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
-	connect(this, SIGNAL(selected(const KAEvent&)), receiver, slot);
 }
 
 /******************************************************************************

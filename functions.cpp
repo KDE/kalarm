@@ -108,17 +108,19 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 /******************************************************************************
 * Create a New Alarm KAction.
 */
-KAction* createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const char* name)
+KAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	return new KAction(label, "filenew", KStdAccel::openNew(), receiver, slot, actions, name);
+	KAction* action =  new KAction(KIcon(QLatin1String("filenew")), label, actions, name);
+	action->setShortcut(KStdAccel::openNew());
+	return action;
 }
 
 /******************************************************************************
 * Create a New From Template KAction.
 */
-TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection* actions, const QString& name)
+TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	return new TemplateMenuAction(label, "new_from_template", receiver, slot, actions, name);
+	return new TemplateMenuAction(KIcon(QLatin1String("new_from_template")), label, actions, name);
 }
 
 /******************************************************************************

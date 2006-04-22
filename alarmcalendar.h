@@ -71,6 +71,7 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* expiredCalendarOpen()   { return calendarOpen(EXPIRED); }
 		static AlarmCalendar* displayCalendarOpen()   { return calendarOpen(DISPLAY); }
 		static AlarmCalendar* templateCalendarOpen()  { return calendarOpen(TEMPLATE); }
+		static bool           importAlarms(QWidget*);
 		static const KCal::Event* getEvent(const QString& uniqueID);
 
 		enum CalID { ACTIVE, EXPIRED, DISPLAY, TEMPLATE, NCALS };

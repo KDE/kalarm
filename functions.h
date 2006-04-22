@@ -77,9 +77,9 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
 bool                edit(const QString& eventID);
 bool                editNew(const QString& templateName = QString::null);
 /** Create a "New Alarm" KAction */
-KAction*            createNewAlarmAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const char* name);
+KAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
 /** Create a "New From Template" KAction */
-TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* receiver, const char* slot, KActionCollection*, const QString& name);
+TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */

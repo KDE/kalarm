@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,11 +78,15 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	// Set up the context menu
 	KActionCollection* actcol = actionCollection();
-	AlarmEnableAction* a = Daemon::createAlarmEnableAction(actcol);
+	KAction* a = Daemon::createAlarmEnableAction(actcol);
 	a->plug(contextMenu());
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
-	KAlarm::createNewAlarmAction(i18n("&New Alarm..."), this, SLOT(slotNewAlarm()), actcol, "tNew")->plug(contextMenu());
-	KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), this, SLOT(slotNewFromTemplate(const KAEvent&)), actcol, "tNewFromTempl")->plug(contextMenu());
+	a = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actcol, QLatin1String("tNew"));
+	a->plug(contextMenu());
+	connect(a, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
+	a = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
+	a->plug(contextMenu());
+	connect(a, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 	KStdAction::preferences(this, SLOT(slotPreferences()), actcol)->plug(contextMenu());
 
 	// Replace the default handler for the Quit context menu item
