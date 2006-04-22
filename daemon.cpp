@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -524,7 +524,7 @@ void Daemon::slotPreferencesChanged()
 */
 AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions)
 {
-	AlarmEnableAction* a = new AlarmEnableAction(0, actions);
+	AlarmEnableAction* a = new AlarmEnableAction(actions, QLatin1String("alEnable"));
 	connect(a, SIGNAL(userClicked(bool)), mInstance, SLOT(setAlarmsEnabled(bool)));
 	connect(mInstance, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
 	return a;
@@ -687,8 +687,8 @@ void NotificationHandler::registered(bool reregister, int result)
 =  Class: AlarmEnableAction
 =============================================================================*/
 
-AlarmEnableAction::AlarmEnableAction(int accel, KActionCollection* parent)
-	: KToggleAction(QString(), accel, parent),
+AlarmEnableAction::AlarmEnableAction(KActionCollection* parent, const QString& name)
+	: KToggleAction(parent, name),
 	  mInitialised(false)
 {
 	setCheckedActual(false);    // set the correct text

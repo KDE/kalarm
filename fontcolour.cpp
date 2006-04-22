@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (c) 2001-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qobject.h>
-#include <qwidget.h>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QLabel>
@@ -28,6 +26,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <khbox.h>
 
@@ -61,8 +60,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
 	}
 	if (fg)
 	{
-		QHBoxLayout* layout = new QHBoxLayout(topLayout);
+		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(0);
+		topLayout->addLayout(layout);
 		KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 		box->setMargin(0);
 		box->setSpacing(KDialog::spacingHint());
@@ -78,8 +78,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
 		layout->addStretch();
 	}
 
-	QHBoxLayout* layout = new QHBoxLayout(topLayout);
+	QHBoxLayout* layout = new QHBoxLayout();
 	layout->setMargin(0);
+	topLayout->addLayout(layout);
 	KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
@@ -96,8 +97,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
 
 	if (editColours)
 	{
-		layout = new QHBoxLayout(topLayout);
+		layout = new QHBoxLayout();
 		layout->setMargin(0);
+		topLayout->addLayout(layout);
 		QPushButton* button = new QPushButton(i18n("Add Co&lor..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
@@ -113,8 +115,9 @@ FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
 
 	if (defaultFont)
 	{
-		layout = new QHBoxLayout(topLayout);
+		layout = new QHBoxLayout();
 		layout->setMargin(0);
+		topLayout->addLayout(layout);
 		mDefaultFont = new CheckBox(i18n("Use &default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));

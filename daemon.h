@@ -1,7 +1,7 @@
 /*
  *  daemon.h  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ class AlarmEnableAction : public KToggleAction
 {
 		Q_OBJECT
 	public:
-		AlarmEnableAction(int accel, KActionCollection* parent);
+		AlarmEnableAction(KActionCollection* parent, const QString& name);
 	public slots:
 		void         setCheckedActual(bool);  // set state and emit switched() signal
 		virtual void setChecked(bool);        // request state change and emit userClicked() signal

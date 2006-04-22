@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (c) 2001, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,15 +21,15 @@
 #ifndef FONTCOLOUR_H
 #define FONTCOLOUR_H
 
+#include <QWidget>
+#include <QStringList>
 #include <kdeversion.h>
-#include <qwidget.h>
-#include <qstringlist.h>
-#include <kfontdialog.h>
 #include "colourlist.h"
 
-class ColourCombo;
 class QPushButton;
+class KFontChooser;
 class CheckBox;
+class ColourCombo;
 
 
 class FontColourChooser : public QWidget
