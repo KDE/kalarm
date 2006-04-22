@@ -726,14 +726,14 @@ int getVersionNumber(const QString& version, QString* subVersion)
 		// Issue number: allow other characters to follow the last digit
 		QString issue = nums[2];
 		int n = issue.length();
-		if (!n  ||  !issue.at(0).isDigit())
+		if (!n  ||  !issue[0].isDigit())
 			return 0;
 		v = issue.toInt();   // issue number
 		vernum += (v < 99 ? v : 99);
 		if (subVersion)
 		{
 			int i;
-			for (i = 1;  i < n && const_cast<const QString&>(issue).at(i).isDigit();  ++i) ;
+			for (i = 1;  i < n && issue[i].isDigit();  ++i) ;
 			*subVersion = issue.mid(i);
 		}
 	}
