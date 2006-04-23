@@ -166,11 +166,11 @@ void TemplateDlg::slotEdit()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg* editDlg = new EditAlarmDlg(true, i18n("Edit Alarm Template"), this, "editDlg", &event);
-		if (editDlg->exec() == QDialog::Accepted)
+		EditAlarmDlg editDlg(true, i18n("Edit Alarm Template"), this, "editDlg", &event);
+		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;
-			editDlg->getEvent(newEvent);
+			editDlg.getEvent(newEvent);
 			QString id = event.id();
 			newEvent.setEventID(id);
 
