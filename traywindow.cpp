@@ -322,7 +322,7 @@ void TrayWindow::removeWindow(MainWindow* win)
 }
 
 
-#ifdef HAVE_X11_HEADERS
+#if defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
 	#include <X11/X.h>
 	#include <X11/Xlib.h>
 	#include <X11/Xutil.h>
@@ -339,7 +339,7 @@ void TrayWindow::removeWindow(MainWindow* win)
 */
 bool TrayWindow::inSystemTray() const
 {
-#ifdef HAVE_X11_HEADERS
+#if defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
 	Window  xParent;    // receives parent window
 	Window  root;
 	Window* children = 0;
