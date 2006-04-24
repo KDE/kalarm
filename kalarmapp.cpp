@@ -67,7 +67,6 @@
 #include "kalarmapp.moc"
 
 #include <netwm.h>
-#include <QX11Info>
 #include <kglobal.h>
 
 
