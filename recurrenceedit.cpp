@@ -293,7 +293,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 
 	mExceptionDateList = new QListWidget(mExceptionGroup);
 	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	connect(mExceptionDateList, SIGNAL(itemSelectionChanged()), SLOT(enableExceptionButtons()));
+	connect(mExceptionDateList, SIGNAL(currentRowChanged(int)), SLOT(enableExceptionButtons()));
 	mExceptionDateList->setWhatsThis(i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
 	vlayout->addWidget(mExceptionDateList);
 
@@ -556,7 +556,7 @@ void RecurrenceEdit::deleteException()
 void RecurrenceEdit::enableExceptionButtons()
 {
 	QListWidgetItem* item = mExceptionDateList->currentItem();
-	bool enable = (item  &&  mExceptionDateList->isItemSelected(item));
+	bool enable = item;
 	if (mDeleteExceptionButton)
 		mDeleteExceptionButton->setEnabled(enable);
 	if (mChangeExceptionButton)

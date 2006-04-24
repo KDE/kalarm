@@ -579,26 +579,30 @@ void AlarmCalendar::startUpdate()
 * Flag the end of a group of calendar update calls.
 * The calendar is saved if appropriate.
 */
-void AlarmCalendar::endUpdate()
+bool AlarmCalendar::endUpdate()
 {
 	if (mUpdateCount > 0)
 		--mUpdateCount;
 	if (!mUpdateCount)
 	{
 		if (mUpdateSave)
-			saveCal();
+			return saveCal();
 	}
+	return true;
 }
 
 /******************************************************************************
 * Save the calendar, or flag it for saving if in a group of calendar update calls.
 */
-void AlarmCalendar::save()
+bool AlarmCalendar::save()
 {
 	if (mUpdateCount)
+	{
 		mUpdateSave = true;
+		return true;
+	}
 	else
-		saveCal();
+		return saveCal();
 }
 
 #if 0
@@ -781,7 +785,7 @@ void AlarmCalendar::updateEvent(const KAEvent& evnt)
 * Delete the specified event from the calendar, if it exists.
 * The calendar is then optionally saved.
 */
-void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
+bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
 	if (mOpen)
 	{
@@ -792,12 +796,13 @@ void AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 			if (mType == KAEvent::ACTIVE)
 				Daemon::savingEvent(eventID);
 			if (saveit)
-				save();
-			return;
+				return save();
+			return true;
 		}
 	}
 	if (mType == KAEvent::ACTIVE)
 		Daemon::eventHandled(eventID, false);
+	return false;
 }
 
 /******************************************************************************

@@ -47,14 +47,19 @@ namespace KAlarm
 
 /** Return codes from fileType() */
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
-/** Return codes from calendar update functions */
+/** Return codes from calendar update functions.
+ *  The codes are ordered by severity.
+ */
 enum UpdateStatus {
 	UPDATE_OK,          // update succeeded
-	UPDATE_ERROR,       // update failed completely
-	UPDATE_KORG_ERR     // update succeeded, but KOrganizer update failed
+	UPDATE_KORG_ERR,    // update succeeded, but KOrganizer update failed
+	UPDATE_ERROR,       // update failed partially
+	SAVE_FAILED         // calendar was updated in memory, but save failed
 };
+/** Error codes supplied as parameter to displayUpdateError() */
+enum UpdateError { ERR_ADD, ERR_REACTIVATE, ERR_TEMPLATE };
 /** Error codes supplied as parameter to displayKOrgUpdateError() */
-enum UpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
+enum KOrgUpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
 
 
 /** Display a main window with the specified event selected */
@@ -90,18 +95,19 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPCString& dcopName, QString& errorMessage);
 
-UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true);
+UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true, QWidget* errmsgParent = 0);
 bool                addExpiredEvent(KAEvent&);
-bool                addTemplate(KAEvent&, TemplateListView* selectionView);
-UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView);
-void                updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true);
-void                updateTemplate(const KAEvent&, TemplateListView* selectionView);
-UpdateStatus        deleteEvent(KAEvent&, bool archive = true);
-void                deleteTemplate(const KAEvent&);
+UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
+UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent = 0);
+UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true, QWidget* errmsgParent = 0);
+UpdateStatus        updateTemplate(const KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
+UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* errmsgParent = 0);
+UpdateStatus        deleteTemplate(const KAEvent&);
 void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false);
-void                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);
+bool                enableEvent(KAEvent&, AlarmListView* selectionView, bool enable);
+void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms);
+void                displayKOrgUpdateError(QWidget* parent, KOrgUpdateError, int nAlarms);
 
 QString             stripAccel(const QString&);
 

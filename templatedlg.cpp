@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -160,7 +160,7 @@ void TemplateDlg::createTemplate(const KAEvent* event, QWidget* parent, Template
 		editDlg.getEvent(event);
 
 		// Add the template to the displayed lists and to the calendar file
-		KAlarm::addTemplate(event, view);
+		KAlarm::addTemplate(event, view, &editDlg);
 		Undo::saveAdd(event);
 	}
 }
@@ -175,16 +175,16 @@ void TemplateDlg::slotEdit()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg* editDlg = new EditAlarmDlg(true, i18n("Edit Alarm Template"), this, &event);
-		if (editDlg->exec() == QDialog::Accepted)
+		EditAlarmDlg editDlg(true, i18n("Edit Alarm Template"), this, &event);
+		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;
-			editDlg->getEvent(newEvent);
+			editDlg.getEvent(newEvent);
 			QString id = event.id();
 			newEvent.setEventID(id);
 
 			// Update the event in the displays and in the calendar file
-			KAlarm::updateTemplate(newEvent, mTemplateList);
+			KAlarm::updateTemplate(newEvent, mTemplateList, &editDlg);
 			Undo::saveEdit(event, newEvent);
 		}
 	}
@@ -204,16 +204,29 @@ void TemplateDlg::slotDelete()
 		    != KMessageBox::Continue)
 		return;
 
+	int warnErr = 0;
+	KAlarm::UpdateStatus status = KAlarm::UPDATE_OK;
 	QList<KAEvent> events;
 	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished
 	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		TemplateListViewItem* item = (TemplateListViewItem*)items[i];
 		events.append(item->event());
-		KAlarm::deleteTemplate(item->event());
+		KAlarm::UpdateStatus st = KAlarm::deleteTemplate(item->event());
+		if (st != KAlarm::UPDATE_OK)
+		{
+			status = st;
+			++warnErr;
+		}
 	}
-	AlarmCalendar::templateCalendar()->endUpdate();    // save the calendar now
+	if (!AlarmCalendar::templateCalendar()->endUpdate())    // save the calendar now
+	{
+		status = KAlarm::SAVE_FAILED;
+		warnErr = items.count();
+	}
 	Undo::saveDeletes(events);
+	if (warnErr)
+		displayUpdateError(this, status, KAlarm::ERR_TEMPLATE, warnErr);
 }
 
 /******************************************************************************

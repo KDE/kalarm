@@ -614,8 +614,8 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 		editDlg.getEvent(event);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		if (KAlarm::addEvent(event, (win ? win->mListView : 0)) == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_ADD, 1);
+		if (KAlarm::addEvent(event, (win ? win->mListView : 0), &editDlg) == KAlarm::UPDATE_KORG_ERR)
+			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_ADD, 1);
 		Undo::saveAdd(event);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
@@ -686,12 +686,13 @@ void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
-			KAlarm::updateEvent(newEvent, view, true, false);   // keep the same event ID
+			if (KAlarm::updateEvent(newEvent, view, true, false, &editDlg) != KAlarm::UPDATE_OK)   // keep the same event ID
+				return;   // failed to save event
 		}
 		else
 		{
-			if (KAlarm::modifyEvent(event, newEvent, view) == KAlarm::UPDATE_KORG_ERR)
-				KAlarm::displayKOrgUpdateError(win, KAlarm::KORG_ERR_MODIFY, 1);
+			if (KAlarm::modifyEvent(event, newEvent, view, &editDlg) == KAlarm::UPDATE_KORG_ERR)
+				KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_MODIFY, 1);
 		}
 		Undo::saveEdit(event, newEvent);
 
@@ -735,6 +736,7 @@ void MainWindow::slotDelete()
 			return;
 	}
 
+	int warnErr = 0;
 	int warnKOrg = 0;
 	QList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
@@ -746,14 +748,27 @@ void MainWindow::slotDelete()
 
 		// Delete the event from the calendar and displays
 		events.append(event);
-		if (KAlarm::deleteEvent(event) == KAlarm::UPDATE_KORG_ERR)
-			++warnKOrg;
+		switch (KAlarm::deleteEvent(event))
+		{
+			case KAlarm::UPDATE_ERROR:
+			case KAlarm::SAVE_FAILED:
+				++warnErr;
+				break;
+			case KAlarm::UPDATE_KORG_ERR:
+				++warnKOrg;
+				break;
+			default:
+				break;
+		}
 	}
-	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
+	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
+		warnErr = items.count();
 	AlarmCalendar::expiredCalendar()->endUpdate();
 	Undo::saveDeletes(events);
 
-	if (warnKOrg)
+	if (warnErr)
+		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
+	else if (warnKOrg)
 		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, warnKOrg);
 }
 
@@ -763,6 +778,7 @@ void MainWindow::slotDelete()
 */
 void MainWindow::slotReactivate()
 {
+	int warnErr = 0;
 	int warnKOrg = 0;
 	QList<KAEvent> events;
 	QList<EventListViewItemBase*> items = mListView->selectedItems();
@@ -775,14 +791,27 @@ void MainWindow::slotReactivate()
 		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
 		KAEvent event = item->event();
 		events.append(event);
-		if (KAlarm::reactivateEvent(event, mListView, true) == KAlarm::UPDATE_KORG_ERR)
-			++warnKOrg;
+		switch (KAlarm::reactivateEvent(event, mListView, true))
+		{
+			case KAlarm::UPDATE_ERROR:
+			case KAlarm::SAVE_FAILED:
+				++warnErr;
+				break;
+			case KAlarm::UPDATE_KORG_ERR:
+				++warnKOrg;
+				break;
+			default:
+				break;
+		}
 	}
-	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
+	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
+		warnErr = items.count();
 	AlarmCalendar::expiredCalendar()->endUpdate();
 	Undo::saveReactivates(events);
 
-	if (warnKOrg)
+	if (warnErr)
+		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_REACTIVATE, warnErr);
+	else if (warnKOrg)
 		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 }
 
@@ -793,6 +822,7 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
+	int warnErr = 0;
 	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	for (int i = 0, end = items.count();  i < end;  ++i)
@@ -801,9 +831,14 @@ void MainWindow::slotEnable()
 		KAEvent event = item->event();
 
 		// Enable the alarm in the displayed lists and in the calendar file
-		KAlarm::enableEvent(event, mListView, enable);
+		if (KAlarm::enableEvent(event, mListView, enable) != KAlarm::UPDATE_OK)
+			++warnErr;
 	}
-	AlarmCalendar::activeCalendar()->endUpdate();      // save the calendars now
+	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
+		warnErr = items.count();
+
+	if (warnErr)
+		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
 }
 
 /******************************************************************************
@@ -868,14 +903,27 @@ void MainWindow::slotBirthdays()
 		if (!events.isEmpty())
 		{
 			mListView->clearSelection();
+			int warnErr = 0;
 			int warnKOrg = 0;
 			for (int i = 0, end = events.count();  i < end;  ++i)
 			{
 				// Add alarm to the displayed lists and to the calendar file
-				if (KAlarm::addEvent(events[i], mListView) == KAlarm::UPDATE_KORG_ERR)
-					++warnKOrg;
+				switch (KAlarm::addEvent(events[i], mListView))
+				{
+					case KAlarm::UPDATE_ERROR:
+					case KAlarm::SAVE_FAILED:
+						++warnErr;
+						break;
+					case KAlarm::UPDATE_KORG_ERR:
+						++warnKOrg;
+						break;
+					default:
+						break;
+				}
 			}
-			if (warnKOrg)
+			if (warnErr)
+				KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
+			else if (warnKOrg)
 				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
 			KAlarm::outputAlarmWarnings(&dlg);
 		}
