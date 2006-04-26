@@ -42,6 +42,7 @@
 #include <QCloseEvent>
 //Added by qt3to4:
 #include <q3dragobject.h>
+#include <QDesktopWidget>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -415,11 +416,13 @@ void MessageWin::initView()
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
+#ifdef Q_WS_X11
 				if (!mWinModule)
 					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
 				if (text->sizeHint().width() >= mWinModule->workArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
+#endif
 				{
 					QHBoxLayout* layout = new QHBoxLayout();
 					layout->addSpacing(hspace);
@@ -1203,11 +1206,15 @@ QSize MessageWin::sizeHint() const
 {
 	if (mAction != KAEvent::MESSAGE)
 		return MainWindowBase::sizeHint();
+#ifdef Q_WS_X11
 	if (!mWinModule)
 		mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
+	QSize desktop  = mWinModule->workArea().size();
+#else
+	QSize desktop  = qApp->desktop()->availableGeometry().size();
+#endif
 	QSize frame = frameGeometry().size();
 	QSize contents = geometry().size();
-	QSize desktop  = mWinModule->workArea().size();
 	QSize maxSize(desktop.width() - (frame.width() - contents.width()),
 	              desktop.height() - (frame.height() - contents.height()));
 	return MainWindowBase::sizeHint().boundedTo(maxSize);
@@ -1251,9 +1258,13 @@ void MessageWin::showEvent(QShowEvent* se)
 				 *      See the Qt documentation on window geometry for more details.
 				 */
 				// PROBLEM: The frame size is not known yet!
+#ifdef Q_WS_X11
 				if (!mWinModule)
 					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
 				QRect desk = mWinModule->workArea();
+#else
+				QRect desk = qApp->desktop()->availableGeometry();
+#endif
 				QPoint cursor = QCursor::pos();
 				QRect frame = frameGeometry();
 				QRect rect  = geometry();
