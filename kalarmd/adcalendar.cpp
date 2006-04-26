@@ -96,18 +96,18 @@ bool ADCalendar::loadFile(bool reset)
 		KUrl dest;
 		dest.setPath(mTempFileName);
 		KIO::FileCopyJob* job = KIO::file_copy(url, dest, -1, true);
-		connect(job, SIGNAL(result(KIO::Job*)), SLOT(slotDownloadJobResult(KIO::Job*)));
+		connect(job, SIGNAL(result(KJob*)), SLOT(slotDownloadJobResult(KJob*)));
 	}
 	return true;
 }
 
-void ADCalendar::slotDownloadJobResult(KIO::Job *job)
+void ADCalendar::slotDownloadJobResult(KJob *job)
 {
 	if (job->error())
 	{
 		KUrl url(mUrlString);
 		kDebug(5900) << "Error downloading calendar from " << url.prettyURL() << endl;
-		job->showErrorDialog(0);
+		static_cast<KIO::Job*>(job)->showErrorDialog(0);
 	}
 	else
 	{

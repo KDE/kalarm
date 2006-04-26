@@ -28,7 +28,7 @@
 class QDateTime;
 namespace KIO { class Job; }
 class ADCalendar;
-
+class KJob;
 
 // Alarm Daemon calendar access
 class ADCalendar : public KCal::CalendarLocal
@@ -73,7 +73,7 @@ class ADCalendar : public KCal::CalendarLocal
 		ADCalendar(const QString& url, const QByteArray& appname);
 
 	private slots:
-		void              slotDownloadJobResult(KIO::Job*);
+		void              slotDownloadJobResult(KJob*);
 
 	private:
 		struct EventKey
