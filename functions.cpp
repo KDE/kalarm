@@ -459,6 +459,61 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 }
 
 /******************************************************************************
+* Display the alarm edit dialogue to edit a specified alarm.
+*/
+bool edit(const QString& eventID)
+{
+	AlarmCalendar* cal;
+	switch (KAEvent::uidStatus(eventID))
+	{
+		case KAEvent::ACTIVE:
+			cal = AlarmCalendar::activeCalendar();
+			break;
+		case KAEvent::TEMPLATE:
+			cal = AlarmCalendar::templateCalendarOpen();
+			break;
+		default:
+			kdError(5950) << "KAlarm::edit(" << eventID << "): event not active or template" << endl;
+			return false;
+	}
+	KCal::Event* kcalEvent = cal->event(eventID);
+	if (!kcalEvent)
+	{
+		kdError(5950) << "KAlarm::edit(): event ID not found: " << eventID << endl;
+		return false;
+	}
+	KAEvent event(*kcalEvent);
+	MainWindow::executeEdit(event);
+	return true;
+}
+
+/******************************************************************************
+* Display the alarm edit dialogue to edit a new alarm, optionally preset with
+* a template.
+*/
+bool editNew(const QString& templateName)
+{
+	bool result = true;
+	if (!templateName.isEmpty())
+	{
+		AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+		if (cal)
+		{
+			KAEvent templateEvent = KAEvent::findTemplateName(*cal, templateName);
+			if (templateEvent.valid())
+			{
+				MainWindow::executeNew(templateEvent);
+				return true;
+			}
+			kdWarning(5950) << "KAlarm::editNew(" << templateName << "): template not found" << endl;
+		}
+		result = false;
+	}
+	MainWindow::executeNew();
+	return result;
+}
+
+/******************************************************************************
 *  Returns a list of all alarm templates.
 *  If shell commands are disabled, command alarm templates are omitted.
 */

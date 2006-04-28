@@ -1,7 +1,7 @@
 /*
  *  dcophandler.h  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright (C) 2001, 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,6 +67,8 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int recurType, int recurInterval, const QString& endDateTime);
+	virtual bool edit(const QString& eventID);
+	virtual bool editNew(const QString& templateName);
 
     private:
 	static bool scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,

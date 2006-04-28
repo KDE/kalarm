@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,10 +27,13 @@
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
 
+#include "alarmcalendar.h"
 #include "daemon.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "karecurrence.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "dcophandler.moc"
 
@@ -192,6 +195,16 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
+}
+
+bool DcopHandler::edit(const QString& eventID)
+{
+	return KAlarm::edit(eventID);
+}
+
+bool DcopHandler::editNew(const QString& templateName)
+{
+	return KAlarm::editNew(templateName);
 }
 
 
@@ -710,7 +723,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 					arg >> reminderMinutes;
 			}
 			if (function & (REP_COUNT | REP_END))
-			{
+			{			
 				KARecurrence::Type recurType;
 				Q_INT32 recurCount = 0;
 				Q_INT32 recurInterval;

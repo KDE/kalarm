@@ -1,7 +1,7 @@
 /*
  *  kalarmiface.h  -  DCOP interface to KAlarm
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -338,6 +338,18 @@ class KAlarmIface : virtual public DCOPObject
 	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int repeatType, int repeatInterval, const QString& endDateTime) = 0;
+	/** Open the alarm edit dialog to edit an existing alarm.
+	 *  @param eventId       The unique ID of the event to be edited, or QString::null to create a new alarm.
+	 *  @return false if the alarm could not be found or is read-only, true otherwise.
+	 */
+	virtual bool edit(const QString& eventID) = 0;
+	/** Open the alarm edit dialog to edit a new alarm.
+	 *  @param templateName  Name of the alarm template to base the new alarm on, or QString::null if none.
+	 *                       If a template is specified but cannot be found, the alarm edit dialog is still
+	 *                       opened but is (obviously) not preset with the template.
+	 *  @return false if an alarm template was specified but could not be found, true otherwise.
+	 */
+	virtual bool editNew(const QString& templateName) = 0;
 };
 
 #endif // KALARMIFACE_H

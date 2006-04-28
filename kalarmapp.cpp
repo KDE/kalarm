@@ -110,7 +110,7 @@ KAlarmApp::KAlarmApp()
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KCal::CalFormat::setApplication(aboutData()->programName(),
-	                          QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
+	                                QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if the system tray is supported by this window manager
@@ -358,6 +358,35 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
+			}
+			else
+			if (args->isSet("edit"))
+			{
+				QString eventID = args->getOption("edit");
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				if (!KAlarm::edit(eventID))
+				{
+					USAGE(i18n("%1: Event %2 not found, or not editable").arg(QString::fromLatin1("--edit")).arg(eventID))
+					exitCode = 1;
+					break;
+				}
+			}
+			else
+			if (args->isSet("edit-new")  ||  args->isSet("edit-new-preset"))
+			{
+				QString templ;
+				if (args->isSet("edit-new-preset"))
+					templ = args->getOption("edit-new-preset");
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				KAlarm::editNew(templ);
 			}
 			else
 			if (args->isSet("file")  ||  args->isSet("exec")  ||  args->isSet("mail")  ||  args->count())
