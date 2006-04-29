@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright  2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -561,13 +561,13 @@ bool edit(const QString& eventID)
 			cal = AlarmCalendar::templateCalendarOpen();
 			break;
 		default:
-			kdError(5950) << "KAlarm::edit(" << eventID << "): event not active or template" << endl;
+			kError(5950) << "KAlarm::edit(" << eventID << "): event not active or template" << endl;
 			return false;
 	}
 	KCal::Event* kcalEvent = cal->event(eventID);
 	if (!kcalEvent)
 	{
-		kdError(5950) << "KAlarm::edit(): event ID not found: " << eventID << endl;
+		kError(5950) << "KAlarm::edit(): event ID not found: " << eventID << endl;
 		return false;
 	}
 	KAEvent event(*kcalEvent);
@@ -593,7 +593,7 @@ bool editNew(const QString& templateName)
 				MainWindow::executeNew(templateEvent);
 				return true;
 			}
-			kdWarning(5950) << "KAlarm::editNew(" << templateName << "): template not found" << endl;
+			kWarning(5950) << "KAlarm::editNew(" << templateName << "): template not found" << endl;
 		}
 		result = false;
 	}

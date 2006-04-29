@@ -450,15 +450,15 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 	                                   QString::fromLatin1("*.vcs *.ics|%1").arg(i18n("Calendar Files")), parent);
 	if (url.isEmpty())
 	{
-		kdError(5950) << "AlarmCalendar::importAlarms(): Empty URL" << endl;
+		kError(5950) << "AlarmCalendar::importAlarms(): Empty URL" << endl;
 		return false;
 	}
 	if (!url.isValid())
 	{
-		kdDebug(5950) << "AlarmCalendar::importAlarms(): Invalid URL" << endl;
+		kDebug(5950) << "AlarmCalendar::importAlarms(): Invalid URL" << endl;
 		return false;
 	}
-	kdDebug(5950) << "AlarmCalendar::importAlarms(" << url.prettyURL() << ")" << endl;
+	kDebug(5950) << "AlarmCalendar::importAlarms(" << url.prettyURL() << ")" << endl;
 
 	bool success = true;
 	QString filename;
@@ -468,7 +468,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 		filename = url.path();
 		if (!KStandardDirs::exists(filename))
 		{
-			kdDebug(5950) << "AlarmCalendar::importAlarms(): File '" << url.prettyURL() << "' not found" << endl;
+			kDebug(5950) << "AlarmCalendar::importAlarms(): File '" << url.prettyURL() << "' not found" << endl;
 			KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyURL()));
 			return false;
 		}
@@ -477,11 +477,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 	{
 		if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
 		{
-			kdError(5950) << "AlarmCalendar::importAlarms(): Download failure" << endl;
+			kError(5950) << "AlarmCalendar::importAlarms(): Download failure" << endl;
 			KMessageBox::error(parent, i18n("Cannot download calendar:\n%1", url.prettyURL()));
 			return false;
 		}
-		kdDebug(5950) << "--- Downloaded to " << filename << endl;
+		kDebug(5950) << "--- Downloaded to " << filename << endl;
 	}
 
 	// Read the calendar and add its alarms to the current calendars
@@ -490,7 +490,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 	success = cal.load(filename);
 	if (!success)
 	{
-		kdDebug(5950) << "AlarmCalendar::importAlarms(): error loading calendar '" << filename << "'" << endl;
+		kDebug(5950) << "AlarmCalendar::importAlarms(): error loading calendar '" << filename << "'" << endl;
 		KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyURL()));
 	}
 	else
