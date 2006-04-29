@@ -469,7 +469,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 		if (!KStandardDirs::exists(filename))
 		{
 			kdDebug(5950) << "AlarmCalendar::importAlarms(): File '" << url.prettyURL() << "' not found" << endl;
-			KMessageBox::error(parent, i18n("Could not load calendar '%1'.").arg(url.prettyURL()));
+			KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyURL()));
 			return false;
 		}
 	}
@@ -478,7 +478,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 		if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
 		{
 			kdError(5950) << "AlarmCalendar::importAlarms(): Download failure" << endl;
-			KMessageBox::error(parent, i18n("Cannot download calendar:\n%1").arg(url.prettyURL()));
+			KMessageBox::error(parent, i18n("Cannot download calendar:\n%1", url.prettyURL()));
 			return false;
 		}
 		kdDebug(5950) << "--- Downloaded to " << filename << endl;
@@ -491,7 +491,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 	if (!success)
 	{
 		kdDebug(5950) << "AlarmCalendar::importAlarms(): error loading calendar '" << filename << "'" << endl;
-		KMessageBox::error(parent, i18n("Could not load calendar '%1'.").arg(url.prettyURL()));
+		KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyURL()));
 	}
 	else
 	{
