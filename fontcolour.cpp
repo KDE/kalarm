@@ -186,7 +186,7 @@ QColor FontColourChooser::fgColour() const
 	{
 		QColor bg = mBgColourButton->color();
 		QPalette pal(bg, bg);
-		return pal.color(QPalette::Active, QColorGroup::Text);
+		return pal.color(QPalette::Active, QPalette::Text);
 	}
 }
 
