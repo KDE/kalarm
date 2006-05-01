@@ -105,8 +105,6 @@ install_files( ${DATA_INSTALL_DIR}/kalarm FILES kalarmui.rc )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_create_doxygen_docs( REFERENCES libkcal  )
-
 kde4_footer()
 
 
