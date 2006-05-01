@@ -64,9 +64,6 @@ KDE_ICON = AUTO
 rcdir = $(kde_datadir)/kalarm
 rc_DATA = kalarmui.rc
 
-messages: rc.cpp
-	$(EXTRACTRC) *.rc >> rc.cpp
-	$(XGETTEXT) *.h *.cpp lib/*.h lib/*.cpp kalarmd/*.cpp -o $(podir)/kalarm.pot
 
 DOXYGEN_REFERENCES = libkcal
 include $(top_srcdir)/admin/Doxyfile.am
