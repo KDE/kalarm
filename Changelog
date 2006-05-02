@@ -1,7 +1,8 @@
 KAlarm
 
-=== Version 1.3.10 --- 28 April 2006 ===
+=== Version 1.3.10 --- 1 May 2006 ===
 Add DCOP calls and command line options to display the edit alarm dialogue.
+Add Select All and Deselect actions & shortcuts for import birthdays list.
 Make system tray icon appear in non-KDE window managers.
 Output error message if deleting copy of alarm from KOrganizer fails.
 Fix erroneous date adjustment of start of recurrence when saving alarm.

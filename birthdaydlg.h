@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2004,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #define BIRTHDAYDLG_H
 
 #include <qlineedit.h>
+#include <klistview.h>
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
@@ -37,6 +38,7 @@ class LateCancelSelector;
 class Reminder;
 namespace KABC { class AddressBook; }
 class BLineEdit;
+class BListView;
 
 
 class BirthdayDlg : public KDialogBase
@@ -60,7 +62,7 @@ class BirthdayDlg : public KDialogBase
 		void              loadAddressBook();
 
 		static const KABC::AddressBook* mAddressBook;
-		KListView*               mAddresseeList;
+		BListView*               mAddresseeList;
 		BLineEdit*               mPrefix;
 		BLineEdit*               mSuffix;
 		Reminder*                mReminder;
@@ -82,13 +84,23 @@ class BLineEdit : public QLineEdit
 		Q_OBJECT
 	public:
 		BLineEdit(QWidget* parent = 0, const char* name = 0)
-			     : QLineEdit(parent, name) { }
+			     : QLineEdit(parent, name) {}
 		BLineEdit(const QString& text, QWidget* parent = 0, const char* name = 0)
-			     : QLineEdit(text, parent, name) { }
+			     : QLineEdit(text, parent, name) {}
 	signals:
 		void         focusLost();
 	protected:
 		virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
+};
+
+class BListView : public KListView
+{
+		Q_OBJECT
+	public:
+		BListView(QWidget* parent = 0, const char* name = 0);
+	public slots:
+		virtual void slotSelectAll()   { selectAll(true); }
+		virtual void slotDeselect()    { selectAll(false); }
 };
 
 #endif // BIRTHDAYDLG_H

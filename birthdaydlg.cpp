@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,11 +27,11 @@
 #include <qlineedit.h>
 #include <qwhatsthis.h>
 
-#include <klistview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kaccel.h>
 #include <kabc/addressbook.h>
 #include <kabc/stdaddressbook.h>
 #include <kdebug.h>
@@ -109,7 +109,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	QGroupBox* group = new QGroupBox(1, Qt::Horizontal, i18n("Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
-	mAddresseeList = new KListView(group);
+	mAddresseeList = new BListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(QListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);
@@ -431,4 +431,18 @@ QString AddresseeItem::key(int column, bool) const
 	if (column == BIRTHDAY)
 		return mBirthdayOrder;
 	return text(column).lower();
+}
+
+
+/*=============================================================================
+= Class: BListView
+=============================================================================*/
+
+BListView::BListView(QWidget* parent, const char* name)
+	: KListView(parent, name)
+{
+	KAccel* accel = new KAccel(this);
+	accel->insert(KStdAccel::SelectAll, this, SLOT(slotSelectAll()));
+	accel->insert(KStdAccel::Deselect, this, SLOT(slotDeselect()));
+	accel->readSettings();
 }
