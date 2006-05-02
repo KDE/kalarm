@@ -1,7 +1,7 @@
 /*
  *  adcalendar.h  -  calendar file access
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <QByteArray>
 #include <libkcal/calendarlocal.h>
 class QDateTime;
-namespace KIO { class Job; }
 class ADCalendar;
 class KJob;
 
