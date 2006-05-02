@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,11 +25,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kstdaction.h>
+#include <kactioncollection.h>
 #include <khbox.h>
 #include <kabc/addressbook.h>
 #include <kabc/stdaddressbook.h>
@@ -116,7 +117,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(0);
-	mAddresseeList = new K3ListView(group);
+	mAddresseeList = new BListView(group);
 	mAddresseeList->setMultiSelection(true);
 	mAddresseeList->setSelectionMode(Q3ListView::Extended);
 	mAddresseeList->setAllColumnsShowFocus(true);
@@ -442,4 +443,19 @@ QString AddresseeItem::key(int column, bool) const
 	if (column == BIRTHDAY)
 		return mBirthdayOrder;
 	return text(column).toLower();
+}
+
+
+/*=============================================================================
+= Class: BListView
+=============================================================================*/
+
+BListView::BListView(QWidget* parent)
+	: K3ListView(parent)
+{
+#warning Test select all/deselect
+	KActionCollection* actcol = new KActionCollection(this);
+	actcol->setAssociatedWidget(this);
+	KStdAction::selectAll(actcol);
+	KStdAction::deselect(this, SLOT(slotDeselect()), actcol);
 }

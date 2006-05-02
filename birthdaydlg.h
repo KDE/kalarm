@@ -22,6 +22,7 @@
 
 #include <qlineedit.h>
 #include <QList>
+#include <k3listview.h>
 #include <kdialogbase.h>
 
 #include "alarmevent.h"
@@ -39,6 +40,7 @@ class LateCancelSelector;
 class Reminder;
 namespace KABC { class AddressBook; }
 class BLineEdit;
+class BListView;
 
 
 class BirthdayDlg : public KDialogBase
@@ -62,7 +64,7 @@ class BirthdayDlg : public KDialogBase
 		void              loadAddressBook();
 
 		static const KABC::AddressBook* mAddressBook;
-		K3ListView*               mAddresseeList;
+		BListView*               mAddresseeList;
 		BLineEdit*               mPrefix;
 		BLineEdit*               mSuffix;
 		Reminder*                mReminder;
@@ -89,6 +91,16 @@ class BLineEdit : public QLineEdit
 		void         focusLost();
 	protected:
 		virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
+};
+
+class BListView : public K3ListView
+{
+		Q_OBJECT
+	public:
+		BListView(QWidget* parent = 0);
+	public slots:
+		virtual void slotSelectAll()   { selectAll(true); }
+		virtual void slotDeselect()    { selectAll(false); }
 };
 
 #endif // BIRTHDAYDLG_H
