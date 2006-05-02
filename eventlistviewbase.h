@@ -62,8 +62,10 @@ class EventListViewBase : public K3ListView
 		int                    itemHeight();
 		EventListViewItemBase* currentItem() const    { return (EventListViewItemBase*)K3ListView::currentItem(); }
 		EventListViewItemBase* firstChild() const     { return (EventListViewItemBase*)K3ListView::firstChild(); }
+		void                   select(const QString& eventID);
 		bool                   anySelected() const;    // are any items selected?
 		const KAEvent*         selectedEvent() const;
+		QList<const KAEvent*>  selectedEvents() const;
 		EventListViewItemBase* selectedItem() const;
 		QList<EventListViewItemBase*> selectedItems() const;
 		int                    selectedCount() const;

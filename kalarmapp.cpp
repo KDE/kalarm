@@ -45,8 +45,6 @@
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
-#include <libkcal/calformat.h>
-
 #include <kalarmd/clientinfo.h>
 
 #include "alarmcalendar.h"
@@ -109,10 +107,9 @@ QString     KAlarmApp::mFatalMessage;
 {
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
-	KCal::CalFormat::setApplication(aboutData()->programName(), AlarmCalendar::icalProductId());
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
-	// Check if it's a KDE desktop by comparing the window manager name to "KWin"
+	// Check if the system tray is supported by this window manager
 	mHaveSystemTray = true;   // assume yes in lieu of a test which works
 
 	if (AlarmCalendar::initialiseCalendars())

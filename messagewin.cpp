@@ -110,7 +110,7 @@ class MessageText : public QTextEdit
 		}
 		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
 		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
-#warning Restore the following line
+//TODO: Restore the following line
 //		virtual QSize sizeHint() const  { return QSize(contentsWidth() + scrollBarWidth(), contentsHeight() + scrollBarHeight()); }
 };
 
@@ -1475,7 +1475,7 @@ void MessageWin::slotEdit()
 		}
 
 		if (status == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_MODIFY, 1);
+			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_MODIFY, 1);
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
 
 		// Close the alarm window

@@ -306,7 +306,7 @@ void KAEvent::set(const Event& event)
 	mStartDateTime.set(event.dtStart(), floats);
 	mNextMainDateTime = mStartDateTime;
 	mSaveDateTime     = event.created();
-	if (uidStatus() == TEMPLATE)
+	if (category() == TEMPLATE)
 		mTemplateName = event.summary();
 	if (event.statusStr() == DISABLED_STATUS)
 		mEnabled = false;
@@ -1028,10 +1028,15 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	ev.setRevision(mRevision);
 	ev.clearAlarms();
 
-	// Always set DTSTART as date/time, since alarm times can only be specified
-	// in local time (instead of UTC) if they are relative to a DTSTART or DTEND
-	// which is also specified in local time. Instead of calling setFloats() to
-	// indicate a date-only event, the category "DATE" is included.
+	/* Always set DTSTART as date/time, and use the category "DATE" to indicate
+	 * a date-only event, instead of calling setFloats(). This is necessary to
+	 * allow the alarm to float within the 24-hour period defined by the
+	 * start-of-day time rather than midnight to midnight.
+	 * RFC2445 states that alarm trigger times specified in absolute terms
+	 * (rather than relative to DTSTART or DTEND) can only be specified as a
+	 * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
+	 * an absolute time.
+	 */
 	ev.setDtStart(mStartDateTime.dateTime());
 	ev.setFloats(false);
 	ev.setHasEndDate(false);
@@ -1138,8 +1143,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	QStringList alltypes;
 	Alarm* alarm = event.newAlarm();
 	alarm->setEnabled(true);
-	// RFC2445 specifies that absolute alarm times must be stored as UTC.
-	// So, in order to store local times, set the alarm time as an offset to DTSTART.
+	// RFC2445 specifies that absolute alarm times must be stored as a UTC DATE-TIME value.
+	// Set the alarm time as an offset to DTSTART for the reasons described in updateKCalEvent().
 	alarm->setStartOffset(dt.isDateOnly() ? mStartDateTime.secsTo(dt)
 	                                      : mStartDateTime.dateTime().secsTo(dt.dateTime()));
 
@@ -2492,8 +2497,9 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
  * If the calendar was written by a previous version of KAlarm, do any
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.
+ * Reply = true if any conversions were done.
  */
-void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adjustSummerTime)
+bool KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adjustSummerTime)
 {
 	// KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
 	static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -2517,7 +2523,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	static const QString EXEC_IN_XTERM_CAT  = QLatin1String("XTERM");
 
 	if (version >= calVersion())
-		return;
+		return false;
 
 	kDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version " << version << endl;
 	bool pre_0_7   = (version < KAlarm::Version(0,7,0));
@@ -2532,6 +2538,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::startOfDay();
 
+	bool converted = false;
 	Event::List events = calendar.rawEvents();
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
@@ -2547,6 +2554,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			// It's a KAlarm pre-0.7 calendar file.
 			// Ensure that when the calendar is saved, the alarm time isn't lost.
 			event->setFloats(false);
+			converted = true;
 		}
 
 		if (pre_0_9)
@@ -2665,6 +2673,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 						alarm->setTime(dt);
 					}
 				}
+				converted = true;
 			}
 		}
 
@@ -2735,7 +2744,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 					break;
 				}
 			}
-
+			converted = true;
 		}
 
 		if (pre_1_1_1)
@@ -2749,6 +2758,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			{
 				cats.removeAt(i);
 				addLateCancel = true;
+				converted = true;
 			}
 		}
 
@@ -2766,7 +2776,10 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 					QString oldtext = alarm->text();
 					QString newtext = AlarmText::toCalendarText(oldtext);
 					if (oldtext != newtext)
+					{
 						alarm->setDisplayAlarm(newtext);
+						converted = true;
+					}
 				}
 			}
 		}
@@ -2782,6 +2795,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			{
 				cats.removeAt(i);
 				cats.append(QString("%1%2").arg(TEMPL_AFTER_TIME_CATEGORY).arg(0));
+				converted = true;
 			}
 		}
 
@@ -2796,6 +2810,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			{
 				cats.removeAt(i);
 				cats.append(LOG_CATEGORY + xtermURL);
+				converted = true;
 			}
 		}
 
@@ -2804,6 +2819,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 
 		event->setCategories(cats);
 	}
+	return converted;
 }
 
 #ifndef NDEBUG

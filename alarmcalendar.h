@@ -50,6 +50,7 @@ class AlarmCalendar : public QObject
 		KCal::Event::List     events();
 		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to);
 		KCal::Event*          addEvent(KAEvent&, bool useEventID = false);
+		bool                  modifyEvent(const QString& oldEventId, KAEvent& newEvent);
 		void                  updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();

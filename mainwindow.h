@@ -146,6 +146,7 @@ class MainWindow : public MainWindowBase
 		MainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
+		void           selectionCleared();
 		void           setEnableText(bool enable);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
@@ -157,6 +158,8 @@ class MainWindow : public MainWindowBase
 		static TemplateDlg*  mTemplateDlg;  // the one and only template dialogue
 
 		AlarmListView*       mListView;
+		KAction*             mActionImportAlarms;
+		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
 		KAction*             mActionNew;
 		TemplateMenuAction*  mActionNewFromTemplate;
@@ -175,8 +178,8 @@ class MainWindow : public MainWindowBase
 		KToggleAction*       mActionShowTime;
 		KToggleAction*       mActionShowTimeTo;
 		KToggleAction*       mActionShowExpired;
-		KMenu*          mActionsMenu;
-		KMenu*          mContextMenu;
+		KMenu*               mActionsMenu;
+		KMenu*               mContextMenu;
 		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
 		bool                 mShowExpired;         // include expired alarms in the displayed list

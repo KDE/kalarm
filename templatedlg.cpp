@@ -196,37 +196,25 @@ void TemplateDlg::slotEdit()
 */
 void TemplateDlg::slotDelete()
 {
-	QList<EventListViewItemBase*> items = mTemplateList->selectedItems();
-	int n = items.count();
+	QList<const KAEvent*> events = mTemplateList->selectedEvents();
+	int end = events.count();
 	if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm template?",
-	                                                  "Do you really want to delete the %n selected alarm templates?", n),
-	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", n), KGuiItem(i18n("&Delete"), "editdelete"))
+	                                                  "Do you really want to delete the %n selected alarm templates?", end),
+	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", end),
+	                                       KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
 
-	int warnErr = 0;
-	KAlarm::UpdateStatus status = KAlarm::UPDATE_OK;
-	QList<KAEvent> events;
-	AlarmCalendar::templateCalendar()->startUpdate();    // prevent multiple saves of the calendar until we're finished
-	for (int i = 0, end = items.count();  i < end;  ++i)
+	QStringList eventIDs;
+	QList<KAEvent> undos;
+	for (int i = 0;  i < end;  ++i)
 	{
-		TemplateListViewItem* item = (TemplateListViewItem*)items[i];
-		events.append(item->event());
-		KAlarm::UpdateStatus st = KAlarm::deleteTemplate(item->event());
-		if (st != KAlarm::UPDATE_OK)
-		{
-			status = st;
-			++warnErr;
-		}
+		const KAEvent* event = events[i];
+		eventIDs.append(event->id());
+		undos.append(*event);
 	}
-	if (!AlarmCalendar::templateCalendar()->endUpdate())    // save the calendar now
-	{
-		status = KAlarm::SAVE_FAILED;
-		warnErr = items.count();
-	}
-	Undo::saveDeletes(events);
-	if (warnErr)
-		displayUpdateError(this, status, KAlarm::ERR_TEMPLATE, warnErr);
+	KAlarm::deleteTemplates(eventIDs, this);
+	Undo::saveDeletes(undos);
 }
 
 /******************************************************************************

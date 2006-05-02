@@ -363,13 +363,13 @@ void MainWindow::initActions()
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	KAction* action = new KAction(i18n("Import &Alarms..."), actions, QLatin1String("importAlarms"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
+	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), actions, QLatin1String("importAlarms"));
+	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
-	action = new KAction(i18n("Import &Birthdays..."), actions, QLatin1String("importBirthdays"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
+	mActionImportBirthdays = new KAction(i18n("Import &Birthdays..."), actions, QLatin1String("importBirthdays"));
+	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	action = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), actions, QLatin1String("refreshAlarms"));
+	KAction* action = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), actions, QLatin1String("refreshAlarms"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
 	Daemon::createAlarmEnableAction(actions);
@@ -615,7 +615,7 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 
 		// Add the alarm to the displayed lists and to the calendar file
 		if (KAlarm::addEvent(event, (win ? win->mListView : 0), &editDlg) == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_ADD, 1);
+			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_ADD, 1);
 		Undo::saveAdd(event);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
@@ -692,7 +692,7 @@ void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 		else
 		{
 			if (KAlarm::modifyEvent(event, newEvent, view, &editDlg) == KAlarm::UPDATE_KORG_ERR)
-				KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_MODIFY, 1);
+				KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_MODIFY, 1);
 		}
 		Undo::saveEdit(event, newEvent);
 
@@ -723,10 +723,10 @@ void MainWindow::slotView()
 */
 void MainWindow::slotDelete()
 {
-	QList<EventListViewItemBase*> items = mListView->selectedItems();
+	QList<const KAEvent*> events = mListView->selectedEvents();
 	if (Preferences::confirmAlarmDeletion())
 	{
-		int n = items.count();
+		int n = events.count();
 		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
 		                                                  "Do you really want to delete the %n selected alarms?", n),
 		                                       i18np("Delete Alarm", "Delete Alarms", n),
@@ -736,40 +736,17 @@ void MainWindow::slotDelete()
 			return;
 	}
 
-	int warnErr = 0;
-	int warnKOrg = 0;
-	QList<KAEvent> events;
-	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
-	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (int i = 0, end = items.count();  i < end;  ++i)
+	// Delete the events from the calendar and displays
+	QList<KAEvent> eventCopies;
+	QList<KAEvent> undos;
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
-		KAEvent event = item->event();
-
-		// Delete the event from the calendar and displays
-		events.append(event);
-		switch (KAlarm::deleteEvent(event))
-		{
-			case KAlarm::UPDATE_ERROR:
-			case KAlarm::SAVE_FAILED:
-				++warnErr;
-				break;
-			case KAlarm::UPDATE_KORG_ERR:
-				++warnKOrg;
-				break;
-			default:
-				break;
-		}
+		const KAEvent* event = events[i];
+		eventCopies.append(*event);
+		undos.append(*event);
 	}
-	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
-		warnErr = items.count();
-	AlarmCalendar::expiredCalendar()->endUpdate();
-	Undo::saveDeletes(events);
-
-	if (warnErr)
-		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
-	else if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, warnKOrg);
+	KAlarm::deleteEvents(eventCopies, true, this);
+	Undo::saveDeletes(undos);
 }
 
 /******************************************************************************
@@ -778,41 +755,25 @@ void MainWindow::slotDelete()
 */
 void MainWindow::slotReactivate()
 {
-	int warnErr = 0;
-	int warnKOrg = 0;
-	QList<KAEvent> events;
-	QList<EventListViewItemBase*> items = mListView->selectedItems();
+	int i, end;
+	QList<const KAEvent*> events = mListView->selectedEvents();
 	mListView->clearSelection();
-	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
-	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (int i = 0, end = items.count();  i < end;  ++i)
-	{
-		// Add the alarm to the displayed lists and to the calendar file
-		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
-		KAEvent event = item->event();
-		events.append(event);
-		switch (KAlarm::reactivateEvent(event, mListView, true))
-		{
-			case KAlarm::UPDATE_ERROR:
-			case KAlarm::SAVE_FAILED:
-				++warnErr;
-				break;
-			case KAlarm::UPDATE_KORG_ERR:
-				++warnKOrg;
-				break;
-			default:
-				break;
-		}
-	}
-	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
-		warnErr = items.count();
-	AlarmCalendar::expiredCalendar()->endUpdate();
-	Undo::saveReactivates(events);
 
-	if (warnErr)
-		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_REACTIVATE, warnErr);
-	else if (warnKOrg)
-		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
+	// Add the alarms to the displayed lists and to the calendar file
+	QList<KAEvent> eventCopies;
+	QList<KAEvent> undos;
+	QStringList ineligibleIDs;
+	for (i = 0, end = events.count();  i < end;  ++i)
+		eventCopies.append(*events[i]);
+	KAlarm::reactivateEvents(eventCopies, ineligibleIDs, mListView, this);
+
+	// Create the undo list, excluding ineligible events
+	for (i = 0, end = eventCopies.count();  i < end;  ++i)
+	{
+		if (!ineligibleIDs.contains(eventCopies[i].id()))
+			undos.append(eventCopies[i]);
+	}
+	Undo::saveReactivates(undos);
 }
 
 /******************************************************************************
@@ -822,23 +783,11 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-	int warnErr = 0;
-	QList<EventListViewItemBase*> items = mListView->selectedItems();
-	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
-	for (int i = 0, end = items.count();  i < end;  ++i)
-	{
-		AlarmListViewItem* item = (AlarmListViewItem*)items[i];
-		KAEvent event = item->event();
-
-		// Enable the alarm in the displayed lists and in the calendar file
-		if (KAlarm::enableEvent(event, mListView, enable) != KAlarm::UPDATE_OK)
-			++warnErr;
-	}
-	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
-		warnErr = items.count();
-
-	if (warnErr)
-		KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
+	QList<const KAEvent*> events = mListView->selectedEvents();
+	QList<KAEvent> eventCopies;
+	for (int i = 0, end = events.count();  i < end;  ++i)
+		eventCopies += *events[i];
+	KAlarm::enableEvents(eventCopies, mListView, enable, this);
 }
 
 /******************************************************************************
@@ -903,29 +852,16 @@ void MainWindow::slotBirthdays()
 		if (!events.isEmpty())
 		{
 			mListView->clearSelection();
-			int warnErr = 0;
-			int warnKOrg = 0;
+			// Add alarm to the displayed lists and to the calendar file
+			KAlarm::UpdateStatus status = KAlarm::addEvents(events, mListView, true, &dlg, true);
+
+			QList<KAEvent> undos;
 			for (int i = 0, end = events.count();  i < end;  ++i)
-			{
-				// Add alarm to the displayed lists and to the calendar file
-				switch (KAlarm::addEvent(events[i], mListView))
-				{
-					case KAlarm::UPDATE_ERROR:
-					case KAlarm::SAVE_FAILED:
-						++warnErr;
-						break;
-					case KAlarm::UPDATE_KORG_ERR:
-						++warnKOrg;
-						break;
-					default:
-						break;
-				}
-			}
-			if (warnErr)
-				KAlarm::displayUpdateError(this, KAlarm::UPDATE_ERROR, KAlarm::ERR_ADD, warnErr);
-			else if (warnKOrg)
-				KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_ADD, warnKOrg);
-			KAlarm::outputAlarmWarnings(&dlg);
+				undos.append(events[i]);
+			Undo::saveAdds(undos, i18n("Import birthdays"));
+
+			if (status != KAlarm::UPDATE_FAILED)
+				KAlarm::outputAlarmWarnings(&dlg);
 		}
 	}
 }
@@ -1170,13 +1106,7 @@ void MainWindow::slotDeletion()
 	if (!mListView->selectedCount())
 	{
 		kDebug(5950) << "MainWindow::slotDeletion(true)\n";
-		mActionCreateTemplate->setEnabled(false);
-		mActionCopy->setEnabled(false);
-		mActionModify->setEnabled(false);
-		mActionView->setEnabled(false);
-		mActionDelete->setEnabled(false);
-		mActionReactivate->setEnabled(false);
-		mActionEnable->setEnabled(false);
+		selectionCleared();    // disable actions
 	}
 }
 
@@ -1324,6 +1254,12 @@ void MainWindow::slotSelection()
 	// Find which item has been selected, and whether more than one is selected
 	QList<EventListViewItemBase*> items = mListView->selectedItems();
 	int count = items.count();
+	if (!count)
+	{
+		selectionCleared();    // disable actions
+		return;
+	}
+
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
 	bool enableReactivate = true;
 	bool enableEnableDisable = true;
@@ -1333,12 +1269,13 @@ void MainWindow::slotSelection()
 	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)items[i])->event();
+		bool expired = event.expired();
 		if (enableReactivate
-		&&  (!event.expired()  ||  !event.occursAfter(now, true)))
+		&&  (!expired  ||  !event.occursAfter(now, true)))
 			enableReactivate = false;
 		if (enableEnableDisable)
 		{
-			if (event.expired())
+			if (expired)
 				enableEnableDisable = enableEnable = enableDisable = false;
 			else
 			{
@@ -1379,14 +1316,22 @@ void MainWindow::slotMouseClicked(int button, Q3ListViewItem* item, const QPoint
 	{
 		kDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
 		mListView->clearSelection();
-		mActionCreateTemplate->setEnabled(false);
-		mActionCopy->setEnabled(false);
-		mActionModify->setEnabled(false);
-		mActionView->setEnabled(false);
-		mActionDelete->setEnabled(false);
-		mActionReactivate->setEnabled(false);
-		mActionEnable->setEnabled(false);
+		selectionCleared();    // disable actions
 	}
+}
+
+/******************************************************************************
+*  Disables actions when no item is selected.
+*/
+void MainWindow::selectionCleared()
+{
+	mActionCreateTemplate->setEnabled(false);
+	mActionCopy->setEnabled(false);
+	mActionModify->setEnabled(false);
+	mActionView->setEnabled(false);
+	mActionDelete->setEnabled(false);
+	mActionReactivate->setEnabled(false);
+	mActionEnable->setEnabled(false);
 }
 
 /******************************************************************************
@@ -1400,7 +1345,7 @@ void MainWindow::slotDoubleClicked(Q3ListViewItem* item)
 	{
 		if (mListView->expired((AlarmListViewItem*)item))
 			slotView();
-		else
+		else if (mActionModify->isEnabled())
 			slotModify();
 	}
 	else

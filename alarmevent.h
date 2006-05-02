@@ -29,10 +29,7 @@
 
 #include <libkcal/person.h>
 #include <libkcal/event.h>
-namespace KCal {
-	class Calendar;
-	class Recurrence;
-}
+namespace KCal { class Calendar; }
 
 #include "datetime.h"
 #include "karecurrence.h"
@@ -411,7 +408,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
 		bool               expired() const                { return mDisplaying && mMainExpired  ||  uidStatus(mEventID) == EXPIRED; }
-		Status             uidStatus() const              { return uidStatus(mEventID); }
+		Status             category() const               { return uidStatus(mEventID); }
 		static Status      uidStatus(const QString& uid);
 		static QString     uid(const QString& id, Status);
 		static KAEvent     findTemplateName(AlarmCalendar&, const QString& name);
@@ -441,7 +438,7 @@ class KAEvent : public KAAlarmEventBase
 		static int         calVersion();
 		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
-		static void        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
+		static bool        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
 
 	private:
 		enum DeferType {

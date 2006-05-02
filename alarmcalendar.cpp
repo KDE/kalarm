@@ -760,6 +760,27 @@ Event* AlarmCalendar::addEvent(KAEvent& event, bool useEventID)
 }
 
 /******************************************************************************
+* Modify the specified event in the calendar with its new contents.
+* The new event must have a different event ID from the old one.
+*/
+bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
+
+{
+	QString newId = newEvent.id();
+	if (!newId.isEmpty()  &&  oldEventId == newId)
+	{
+		kError(5950) << "AlarmCalendar::modifyEvent(): same IDs" << endl;
+		return false;
+	}
+	if (!mOpen  ||  newEvent.category() != mType  ||  KAEvent::uidStatus(oldEventId) != mType)
+		return false;
+	if (!addEvent(newEvent, true))
+		return false;
+	deleteEvent(oldEventId);
+	return true;
+}
+
+/******************************************************************************
 * Update the specified event in the calendar with its new contents.
 * The event retains the same ID.
 */

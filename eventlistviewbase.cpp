@@ -206,9 +206,9 @@ void EventListViewBase::findNext(bool forward)
 }
 
 /******************************************************************************
- * *  Called when the Select All action is selected.
- * *  Select all items in the list.
- * */
+*  Called when the Select All action is selected.
+*  Select all items in the list.
+*/
 void EventListViewBase::slotSelectAll()
 {
 	if (selectionModeExt() == Multi  ||  selectionModeExt() == Extended)
@@ -216,12 +216,25 @@ void EventListViewBase::slotSelectAll()
 }
 
 /******************************************************************************
- * *  Called when the Deselect action is selected.
- * *  Deselect all items in the list.
- * */
+*  Called when the Deselect action is selected.
+*  Deselect all items in the list.
+*/
 void EventListViewBase::slotDeselect()
 {
 	selectAll(false);
+}
+
+/******************************************************************************
+*  Select the specified event ID instead of any current selection.
+*/
+void EventListViewBase::select(const QString& eventID)
+{
+	EventListViewItemBase* item = getEntry(eventID);
+	if (item)
+	{
+		clearSelection();
+		setSelected(item, true);
+	}
 }
 
 /******************************************************************************
@@ -229,7 +242,7 @@ void EventListViewBase::slotDeselect()
 */
 bool EventListViewBase::anySelected() const
 {
-	for (Q3ListViewItem* item = K3ListView::firstChild();  item;  item = item->nextSibling())
+	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
 		if (isSelected(item))
 			return true;
 	return false;
@@ -244,6 +257,21 @@ const KAEvent* EventListViewBase::selectedEvent() const
 {
 	EventListViewItemBase* sel = selectedItem();
 	return sel ? &sel->event() : 0;
+}
+
+/******************************************************************************
+*  Get all selected events.
+*  The KAEvent instances in the returned list belong to the EventListViewBase.
+*/
+QList<const KAEvent*> EventListViewBase::selectedEvents() const
+{
+	QList<const KAEvent*> events;
+	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
+	{
+		if (isSelected(item))
+			events.append(&static_cast<EventListViewItemBase*>(item)->event());
+	}
+	return events;
 }
 
 /******************************************************************************

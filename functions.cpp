@@ -130,18 +130,19 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCol
 * event in that listView instance.
 * 'event' is updated with the actual event ID.
 */
-UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID, bool allowKOrgUpdate, QWidget* errmsgParent)
+UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID,
+                      bool allowKOrgUpdate, QWidget* errmsgParent, bool showKOrgErr)
 {
 	kDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
 	UpdateStatus status = UPDATE_OK;
 	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
-		status = UPDATE_ERROR;
+		status = UPDATE_FAILED;
 	else
 	{
 		// Save the event details in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
 		if (!cal->addEvent(event, useEventID))
-			status = UPDATE_ERROR;
+			status = UPDATE_FAILED;
 		else if (!cal->save())
 			status = SAVE_FAILED;
 	}
@@ -155,11 +156,72 @@ UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEven
 
 		// Update the window lists
 		AlarmListView::addEvent(event, selectionView);
-		return status;
 	}
 
-	if (errmsgParent)
-		displayUpdateError(errmsgParent, status, ERR_ADD, 1);
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_ADD, 1, 1, showKOrgErr);
+	return status;
+}
+
+/******************************************************************************
+* Add a list of new active (non-expired) alarms.
+* Save them in the calendar file and add them to every main window instance.
+* If 'selectionView' is non-null, the selection highlight is moved to the last
+* new event in that listView instance.
+* The events are updated with their actual event IDs.
+*/
+UpdateStatus addEvents(QList<KAEvent>& events, AlarmListView* selectionView, bool allowKOrgUpdate,
+                       QWidget* errmsgParent, bool showKOrgErr)
+{
+	kDebug(5950) << "KAlarm::addEvents(" << events.count() << ")\n";
+	if (events.isEmpty())
+		return UPDATE_OK;
+	int warnErr = 0;
+	int warnKOrg = 0;
+	UpdateStatus status = UPDATE_OK;
+	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
+		status = UPDATE_FAILED;
+	else
+	{
+		QString selectID;
+		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+		for (int i = 0, end = events.count();  i < end;  ++i)
+		{
+			// Save the event details in the calendar file, and get the new event ID
+			KAEvent& event = events[i];
+			if (!cal->addEvent(event, false))
+			{
+				status = UPDATE_ERROR;
+				++warnErr;
+				continue;
+			}
+			if (allowKOrgUpdate  &&  event.copyToKOrganizer())
+			{
+				if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
+				{
+					++warnKOrg;
+					if (status == UPDATE_OK)
+						status = UPDATE_KORG_ERR;
+				}
+			}
+
+			// Update the window lists, but not yet which item is selected
+			AlarmListView::addEvent(event, 0);
+			selectID = event.id();
+		}
+		if (warnErr == static_cast<int>(events.count()))
+			status = UPDATE_FAILED;
+		else if (!cal->save())
+		{
+			status = SAVE_FAILED;
+			warnErr = 0;    // everything failed
+		}
+		else if (selectionView  &&  !selectID.isEmpty())
+			selectionView->select(selectID);    // select the last added event
+	}
+
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_ADD, (warnErr ? warnErr : events.count()), warnKOrg, showKOrgErr);
 	return status;
 }
 
@@ -173,16 +235,23 @@ bool addExpiredEvent(KAEvent& event)
 	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
 	if (!cal)
 		return false;
-	bool archiving = (KAEvent::uidStatus(event.id()) == KAEvent::ACTIVE);
+	KAEvent oldEvent = event;     // so that we can reinstate the event if there's an error
+	bool archiving = (event.category() == KAEvent::ACTIVE);
 	if (archiving)
 		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
 	KCal::Event* kcalEvent = cal->addEvent(event);
-	cal->save();
+	if (!kcalEvent)
+	{
+		event = oldEvent;     // failed to add to calendar - revert event to its original state
+		return false;
+	}
+	if (!cal->save())
+		return false;
 
 	// Update window lists
 	if (!archiving)
 		AlarmListView::addEvent(event, 0);
-	else if (kcalEvent)
+	else
 		AlarmListView::modifyEvent(KAEvent(*kcalEvent), 0);
 	return true;
 }
@@ -201,10 +270,8 @@ UpdateStatus addTemplate(KAEvent& event, TemplateListView* selectionView, QWidge
 
 	// Add the template to the calendar file
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-	if (!cal)
-		status = UPDATE_ERROR;
-	else if (!cal->addEvent(event))
-		status = UPDATE_ERROR;
+	if (!cal  ||  !cal->addEvent(event))
+		status = UPDATE_FAILED;
 	else if (!cal->save())
 		status = SAVE_FAILED;
 	else
@@ -224,11 +291,12 @@ UpdateStatus addTemplate(KAEvent& event, TemplateListView* selectionView, QWidge
 /******************************************************************************
 * Modify an active (non-expired) alarm in the calendar file and in every main
 * window instance.
-* The new event will have a different event ID from the old one.
+* The new event must have a different event ID from the old one.
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * modified event in that listView instance.
 */
-UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent)
+UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView,
+                         QWidget* errmsgParent, bool showKOrgErr)
 {
 	kDebug(5950) << "KAlarm::modifyEvent(): '" << oldEvent.id() << endl;
 
@@ -236,23 +304,23 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListVi
 	if (!newEvent.valid())
 	{
 		deleteEvent(oldEvent, true);
-		status = UPDATE_ERROR;
+		status = UPDATE_FAILED;
 	}
 	else
 	{
+		QString oldId = oldEvent.id();
 		if (oldEvent.copyToKOrganizer())
 		{
 			// Tell KOrganizer to delete its old event.
 			// But ignore errors, because the user could have manually
 			// deleted it since KAlarm asked KOrganizer to set it up.
-			deleteFromKOrganizer(oldEvent.id());
+			deleteFromKOrganizer(oldId);
 		}
 
 		// Update the event in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-		if (!cal->deleteEvent(oldEvent.id())
-		||  !cal->addEvent(const_cast<KAEvent&>(newEvent), true))
-			status = UPDATE_ERROR;
+		if (!cal->modifyEvent(oldId, const_cast<KAEvent&>(newEvent)))
+			status = UPDATE_FAILED;
 		else if (!cal->save())
 			status = SAVE_FAILED;
 		if (status == UPDATE_OK)
@@ -264,13 +332,12 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListVi
 			}
 
 			// Update the window lists
-			AlarmListView::modifyEvent(oldEvent.id(), newEvent, selectionView);
-			return status;
+			AlarmListView::modifyEvent(oldId, newEvent, selectionView);
 		}
 	}
 
-	if (errmsgParent)
-		displayUpdateError(errmsgParent, status, ERR_ADD, 1);
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_MODIFY, 1, 1, showKOrgErr);
 	return status;
 }
 
@@ -338,71 +405,151 @@ UpdateStatus updateTemplate(const KAEvent& event, TemplateListView* selectionVie
 }
 
 /******************************************************************************
-* Delete an alarm from the calendar file and from every main window instance.
-* If the event is archived, the event's ID is changed to an expired ID if necessary.
+* Delete alarms from the calendar file and from every main window instance.
+* If the events are archived, the events' IDs are changed to expired IDs if necessary.
 */
-UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* errmsgParent)
+UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* errmsgParent, bool showKOrgErr)
 {
-	QString id = event.id();
-	kDebug(5950) << "KAlarm::deleteEvent(): " << id << endl;
+	QList<KAEvent> events;
+	events += event;
+	return deleteEvents(events, archive, errmsgParent, showKOrgErr);
+}
 
-	// Update the window lists
-	AlarmListView::deleteEvent(id);
-
+UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* errmsgParent, bool showKOrgErr)
+{
+	kDebug(5950) << "KAlarm::deleteEvents(" << events.count() << ")\n";
+	if (events.isEmpty())
+		return UPDATE_OK;
+	int warnActiveErr = 0;
+	int warnExpiredErr = 0;
+	int warnKOrg = 0;
 	UpdateStatus status = UPDATE_OK;
-	AlarmCalendar* cal;
-
-	// Delete the event from the calendar file
-	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
+	int expiredCount = 0;
+	bool saveActive  = false;
+	bool saveExpired = false;
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		cal = AlarmCalendar::expiredCalendarOpen();
-		if (!cal)
+		// Save the event details in the calendar file, and get the new event ID
+		KAEvent& event = events[i];
+		QString id = event.id();
+
+		// Update the window lists
+		AlarmListView::deleteEvent(id);
+
+		// Delete the event from the calendar file
+		AlarmCalendar* cal;
+		if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
+		{
+			++expiredCount;
+			cal = AlarmCalendar::expiredCalendarOpen();
+			if (!cal)
+			{
+				status = UPDATE_ERROR;
+				++warnExpiredErr;
+				continue;
+			}
+			saveExpired = true;
+		}
+		else
+		{
+			if (event.copyToKOrganizer())
+			{
+				// The event was shown in KOrganizer, so tell KOrganizer to
+				// delete it. Note that an error could occur if the user
+				// manually deleted it from KOrganizer since it was set up.
+				if (!deleteFromKOrganizer(event.id()))
+				{
+					++warnKOrg;
+					if (status == UPDATE_OK)
+						status = UPDATE_KORG_ERR;
+				}
+			}
+			if (archive  &&  event.toBeArchived())
+				addExpiredEvent(event);     // this changes the event ID to an expired ID
+			cal = AlarmCalendar::activeCalendar();
+			saveActive = true;
+		}
+
+		if (!cal->deleteEvent(id, false))   // don't save calendar after deleting
+		{
 			status = UPDATE_ERROR;
+			if (cal == AlarmCalendar::activeCalendar())
+				++warnActiveErr;
+			else
+				++warnExpiredErr;
+		}
 	}
+
+	int warnErr = warnActiveErr + warnExpiredErr;
+	if (warnErr == static_cast<int>(events.count()))
+		status = UPDATE_FAILED;
 	else
 	{
-		if (event.copyToKOrganizer())
-		{
-			// The event was shown in KOrganizer, so tell KOrganizer to
-			// delete it. Note that an error could occur if the user
-			// manually deleted it from KOrganizer since it was set up.
-			if (!deleteFromKOrganizer(event.id()))
-				status = UPDATE_KORG_ERR;
-		}
-		if (archive  &&  event.toBeArchived())
-			addExpiredEvent(event);     // this changes the event ID to an expired ID
-		cal = AlarmCalendar::activeCalendar();
+		// Save the calendars now
+		if (saveActive  &&  !AlarmCalendar::activeCalendar()->save())
+			warnActiveErr = events.count() - expiredCount;
+		if (saveExpired  &&  !AlarmCalendar::expiredCalendar()->save())
+			warnExpiredErr = expiredCount;
+		warnErr = warnActiveErr + warnExpiredErr;
+		if (warnErr == static_cast<int>(events.count()))
+			status = UPDATE_FAILED;
 	}
-
-	if (status == UPDATE_OK)
-	{
-		if (cal->deleteEvent(id, true))   // save calendar after deleting
-			return UPDATE_OK;
-		status = SAVE_FAILED;
-	}
-	if (errmsgParent)
-		displayUpdateError(errmsgParent, status, ERR_ADD, 1);
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_DELETE, warnErr, warnKOrg, showKOrgErr);
 	return status;
 }
 
 /******************************************************************************
 * Delete a template from the calendar file and from every template list view.
 */
-UpdateStatus deleteTemplate(const KAEvent& event)
+UpdateStatus deleteTemplate(const QString& eventID, QWidget* errmsgParent)
 {
-	QString id = event.id();
+	QStringList ids(eventID);
+	return deleteTemplates(ids, errmsgParent);
+}
 
-	// Delete the template from the calendar file
+/******************************************************************************
+* Delete templates from the calendar file and from every template list view.
+*/
+UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* errmsgParent)
+{
+	kDebug(5950) << "KAlarm::deleteTemplates(" << eventIDs.count() << ")\n";
+	if (eventIDs.isEmpty())
+		return UPDATE_OK;
+	int warnErr = 0;
+	UpdateStatus status = UPDATE_OK;
 	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
 	if (!cal)
-		return UPDATE_ERROR;
-	if (!cal->deleteEvent(id, true))    // save calendar after deleting
-		return SAVE_FAILED;
-	cal->emitEmptyStatus();
+		status = UPDATE_FAILED;
+	else
+	{
+		for (int i = 0, end = eventIDs.count();  i < end;  ++i)
+		{
+			// Delete the template from the calendar file
+			QString id = eventIDs[i];
+			if (!cal->deleteEvent(id, false))    // don't save calendar after deleting
+			{
+				status = UPDATE_ERROR;
+				++warnErr;
+			}
 
-	// Update the window lists
-	TemplateListView::deleteEvent(id);
-	return UPDATE_OK;
+			// Update the window lists
+			TemplateListView::deleteEvent(id);
+		}
+
+		if (warnErr == static_cast<int>(eventIDs.count()))
+			status = UPDATE_FAILED;
+		else if (!cal->save())      // save the calendars now
+		{
+			status = SAVE_FAILED;
+			warnErr = eventIDs.count();
+		}
+		cal->emitEmptyStatus();
+	}
+
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_TEMPLATE, warnErr);
+	return status;
 }
 
 /******************************************************************************
@@ -421,127 +568,200 @@ void deleteDisplayEvent(const QString& eventID)
 }
 
 /******************************************************************************
-* Undelete an expired alarm, and update every main window instance.
-* The archive bit is set to ensure that it gets re-archived if it is deleted again.
+* Undelete expired alarms, and update every main window instance.
+* The archive bit is set to ensure that they get re-archived if deleted again.
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * restored event in that listView instance.
+* 'ineligibleIDs' is filled in with the IDs of any ineligible events.
 */
-UpdateStatus reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID)
+UpdateStatus reactivateEvent(KAEvent& event, AlarmListView* selectionView, QWidget* errmsgParent, bool showKOrgErr)
 {
-	QString id = event.id();
-	kDebug(5950) << "KAlarm::reactivateEvent(): " << id << endl;
-
-	// Delete the event from the expired calendar file
-	if (KAEvent::uidStatus(id) == KAEvent::EXPIRED)
-	{
-		QDateTime now = QDateTime::currentDateTime();
-		if (event.occursAfter(now, true))
-		{
-			if (event.recurs())
-				event.setNextOccurrence(now, true);   // skip any recurrences in the past
-			event.setArchive();    // ensure that it gets re-archived if it is deleted
-
-			// Save the event details in the calendar file, and get the new event ID
-			AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-			if (!cal->addEvent(event, useEventID))
-				return UPDATE_ERROR;
-			if (!cal->save())
-				return SAVE_FAILED;
-
-			UpdateStatus status = UPDATE_OK;
-			if (event.copyToKOrganizer())
-			{
-				if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
-					status = UPDATE_KORG_ERR;
-			}
-
-			// Update the window lists
-			AlarmListView::undeleteEvent(id, event, selectionView);
-
-			cal = AlarmCalendar::expiredCalendarOpen();
-			if (cal)
-				cal->deleteEvent(id, true);   // save calendar after deleting
-			return status;
-		}
-	}
-	return UPDATE_ERROR;
+	QStringList ids;
+	QList<KAEvent> events;
+	events += event;
+	return reactivateEvents(events, ids, selectionView, errmsgParent, showKOrgErr);
 }
 
-/******************************************************************************
-* Enable or disable an alarm in the calendar file and in every main window instance.
-* The new event will have the same event ID as the old one.
-* If 'selectionView' is non-null, the selection highlight is moved to the
-* updated event in that listView instance.
-*/
-bool enableEvent(KAEvent& event, AlarmListView* selectionView, bool enable)
+UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs, AlarmListView* selectionView,
+                              QWidget* errmsgParent, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::enableEvent(" << enable << "): " << event.id() << endl;
-
-	if (enable != event.enabled())
+	kDebug(5950) << "KAlarm::reactivateEvents(" << events.count() << ")\n";
+	ineligibleIDs.clear();
+	if (events.isEmpty())
+		return UPDATE_OK;
+	int warnErr = 0;
+	int warnKOrg = 0;
+	UpdateStatus status = UPDATE_OK;
+	QString selectID;
+	int count = 0;
+	AlarmCalendar* expcal = 0;
+	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+	QDateTime now = QDateTime::currentDateTime();
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		event.setEnabled(enable);
-
-		// Update the event in the calendar file
-		AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-		cal->updateEvent(event);
-		if (!cal->save())
-			return false;
-
-		// If we're disabling a display alarm, close any message window
-		if (!enable  &&  event.displayAction())
+		// Delete the event from the expired calendar file
+		KAEvent& event = events[i];
+		if (event.category() != KAEvent::EXPIRED
+		||  !event.occursAfter(now, true))
 		{
-			MessageWin* win = MessageWin::findEvent(event.id());
-			delete win;
+			ineligibleIDs += event.id();
+			continue;
+		}
+		++count;
+
+		KAEvent oldEvent = event;    // so that we can reinstate the event if there's an error
+		QString oldid = event.id();
+		if (event.recurs())
+			event.setNextOccurrence(now, true);   // skip any recurrences in the past
+		event.setArchive();    // ensure that it gets re-archived if it is deleted
+
+		// Save the event details in the calendar file.
+		// This converts the event ID.
+		if (!cal->addEvent(event, true))
+		{
+			event = oldEvent;     // failed to add to calendar - revert event to its original state
+			status = UPDATE_ERROR;
+			++warnErr;
+			continue;
+		}
+		if (event.copyToKOrganizer())
+		{
+			if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
+			{
+				++warnKOrg;
+				if (status == UPDATE_OK)
+					status = UPDATE_KORG_ERR;
+			}
 		}
 
 		// Update the window lists
-		AlarmListView::modifyEvent(event, selectionView);
+		AlarmListView::undeleteEvent(oldid, event, 0);
+		selectID = event.id();
+
+		if (!expcal)
+			expcal = AlarmCalendar::expiredCalendarOpen();
+		if (expcal)
+		{
+			if (!expcal->deleteEvent(oldid, false))   // don't save calendar after deleting
+			{
+				status = UPDATE_ERROR;
+				++warnErr;
+			}
+		}
 	}
-	return true;
+	if (selectionView  &&  !selectID.isEmpty())
+		selectionView->select(selectID);    // select the last added event
+
+	if (warnErr == count)
+		status = UPDATE_FAILED;
+	// Save the calendars, even if all events failed, since more than one calendar was updated
+	if ((!cal->save()  ||  !expcal  ||  !expcal->save())
+	&&  status != UPDATE_FAILED)
+	{
+		status = SAVE_FAILED;
+		warnErr = count;
+	}
+
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_REACTIVATE, warnErr, warnKOrg, showKOrgErr);
+	return status;
 }
 
 /******************************************************************************
- * Display an error message about an error saving an event.
- */
-void displayUpdateError(QWidget* parent, UpdateStatus, UpdateError code, int nAlarms)
+* Enable or disable alarms in the calendar file and in every main window instance.
+* The new events will have the same event IDs as the old ones.
+* If 'selectionView' is non-null, the selection highlight is moved to the
+* updated event in that listView instance.
+*/
+UpdateStatus enableEvents(QList<KAEvent>& events, AlarmListView* selectionView, bool enable, QWidget* errmsgParent)
+{
+	kDebug(5950) << "KAlarm::enableEvents(" << events.count() << ")\n";
+	if (events.isEmpty())
+		return UPDATE_OK;
+	UpdateStatus status = UPDATE_OK;
+	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
+	for (int i = 0, end = events.count();  i < end;  ++i)
+	{
+		KAEvent& event = events[i];
+		if (enable != event.enabled())
+		{
+			event.setEnabled(enable);
+
+			// Update the event in the calendar file
+			cal->updateEvent(event);
+
+			// If we're disabling a display alarm, close any message window
+			if (!enable  &&  event.displayAction())
+			{
+				MessageWin* win = MessageWin::findEvent(event.id());
+				delete win;
+			}
+
+			// Update the window lists
+			AlarmListView::modifyEvent(event, selectionView);
+		}
+	}
+
+	if (!cal->save())
+		status = SAVE_FAILED;
+	if (status != UPDATE_OK  &&  errmsgParent)
+		displayUpdateError(errmsgParent, status, ERR_ADD, events.count(), 0);
+	return status;
+}
+
+/******************************************************************************
+* Display an error message about an error when saving an event.
+*/
+void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, int nAlarms, int nKOrgAlarms, bool showKOrgError)
 {
 	QString errmsg;
-	switch (code)
+	if (status > UPDATE_KORG_ERR)
 	{
-		case ERR_ADD:
-			errmsg = (nAlarms > 1) ? i18n("Error saving alarms")
-			                       : i18n("Error saving alarm");
-			break;
-		case ERR_REACTIVATE:
-			errmsg = (nAlarms > 1) ? i18n("Error saving reactivated alarms")
-			                       : i18n("Error saving reactivated alarm");
-			break;
-		case ERR_TEMPLATE:
-			errmsg = i18n("Error saving alarm template");
-			break;
+		switch (code)
+		{
+			case ERR_ADD:
+			case ERR_MODIFY:
+			case ERR_DELETE:
+				errmsg = (nAlarms > 1) ? i18n("Error saving alarms")
+				                       : i18n("Error saving alarm");
+				break;
+			case ERR_REACTIVATE:
+				errmsg = (nAlarms > 1) ? i18n("Error saving reactivated alarms")
+				                       : i18n("Error saving reactivated alarm");
+				break;
+			case ERR_TEMPLATE:
+				errmsg = (nAlarms > 1) ? i18n("Error saving alarm templates")
+				                       : i18n("Error saving alarm template");
+				break;
+		}
+		KMessageBox::error(parent, errmsg);
 	}
-	KMessageBox::error(parent, errmsg);
+	else if (showKOrgError)
+		displayKOrgUpdateError(parent, code, nKOrgAlarms);
 }
 
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, KOrgUpdateError code, int nAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 {
 	QString errmsg;
 	switch (code)
 	{
-		case KORG_ERR_ADD:
+		case ERR_ADD:
+		case ERR_REACTIVATE:
 			errmsg = (nAlarms > 1) ? i18n("Unable to show alarms in KOrganizer")
 			                       : i18n("Unable to show alarm in KOrganizer");
 			break;
-		case KORG_ERR_MODIFY:
+		case ERR_MODIFY:
 			errmsg = i18n("Unable to update alarm in KOrganizer");
 			break;
-		case KORG_ERR_DELETE:
+		case ERR_DELETE:
 			errmsg = (nAlarms > 1) ? i18n("Unable to delete alarms from KOrganizer")
 			                       : i18n("Unable to delete alarm from KOrganizer");
 			break;
+		case ERR_TEMPLATE:
+			return;
 	}
 	KMessageBox::error(parent, errmsg);
 }
@@ -908,7 +1128,7 @@ int localeFirstDayOfWeek()
 QString stripAccel(const QString& text)
 {
 	int len = text.length();
-	QString out = text;
+	QString out(text.unicode(), len);
 	QChar *corig = (QChar*)out.unicode();
 	QChar *cout  = corig;
 	QChar *cin   = cout;
@@ -975,7 +1195,6 @@ bool sendToKOrganizer(const KAEvent& event)
 	KCal::ICalFormat format;
 	format.setTimeZone(QString(), false);
 	QString iCal = format.toICalString(kcalEvent);
-kDebug(5950)<<"Korg->"<<iCal<<endl;
 	delete kcalEvent;
 
 	// Send the event to KOrganizer

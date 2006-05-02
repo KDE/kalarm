@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,12 +37,13 @@ class Undo : public QObject
 		enum Type { NONE, UNDO, REDO };
 
 		static Undo*       instance();
-		static void        saveAdd(const KAEvent&);
+		static void        saveAdd(const KAEvent&, const QString& name = QString());
+		static void        saveAdds(const QList<KAEvent>&, const QString& name = QString());
 		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent);
-		static void        saveDelete(const KAEvent&);
-		static void        saveDeletes(const QList<KAEvent>&);
-		static void        saveReactivate(const KAEvent&);
-		static void        saveReactivates(const QList<KAEvent>&);
+		static void        saveDelete(const KAEvent&, const QString& name = QString());
+		static void        saveDeletes(const QList<KAEvent>&, const QString& name = QString());
+		static void        saveReactivate(const KAEvent&, const QString& name = QString());
+		static void        saveReactivates(const QList<KAEvent>&, const QString& name = QString());
 		static bool        undo(QWidget* parent, const QString& action)
 		                                      { return undo(0, UNDO, parent, action); }
 		static bool        undo(int id, QWidget* parent, const QString& action)
