@@ -96,12 +96,12 @@ bool ADCalendar::loadFile(bool reset)
 		KUrl dest;
 		dest.setPath(mTempFileName);
 		KIO::FileCopyJob* job = KIO::file_copy(url, dest, -1, true);
-		connect(job, SIGNAL(result(KJob*)), SLOT(slotDownloadJobResult(KJob*)));
+		connect(job, SIGNAL(result(KIO::Job*)), SLOT(slotDownloadJobResult(KIO::Job*)));
 	}
 	return true;
 }
 
-void ADCalendar::slotDownloadJobResult(KJob *job)
+void ADCalendar::slotDownloadJobResult(KIO::Job *job)
 {
 	if (job->error())
 	{
