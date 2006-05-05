@@ -79,15 +79,15 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	// Set up the context menu
 	KActionCollection* actcol = actionCollection();
 	KAction* a = Daemon::createAlarmEnableAction(actcol);
-	contextMenu()->addAction( a );
+	contextMenu()->addAction(a);
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 	a = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actcol, QLatin1String("tNew"));
-	contextMenu()->addAction( a );
+	contextMenu()->addAction(a);
 	connect(a, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
 	a = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
-	contextMenu()->addAction( a );
+	contextMenu()->addAction(a);
 	connect(a, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
-	contextMenu()->addAction( KStdAction::preferences(this, SLOT(slotPreferences()), actcol));
+	contextMenu()->addAction(KStdAction::preferences(this, SLOT(slotPreferences()), actcol));
 
 	// Replace the default handler for the Quit context menu item
 	const char* quitName = KStdAction::name(KStdAction::Quit);
