@@ -6,6 +6,7 @@ include_directories(
 	${CMAKE_BINARY_DIR}/libkcal/libical/src/
 	${CMAKE_SOURCE_DIR}/kalarm 
 	${CMAKE_SOURCE_DIR}/kalarm/lib 
+	${CMAKE_SOURCE_DIR}/kalarm/resources 
 	${CMAKE_SOURCE_DIR}/libkmime 
 	${CMAKE_SOURCE_DIR}/libkleo 
 	${KDE4_INCLUDES}
@@ -13,6 +14,7 @@ include_directories(
 
 add_subdirectory( kalarmd ) 
 add_subdirectory( lib ) 
+add_subdirectory( resources ) 
 add_subdirectory( pixmaps ) 
 
 
@@ -40,7 +42,24 @@ set(libkalarm_SRCS
 	${CMAKE_SOURCE_DIR}/kalarm/lib/synchtimer.cpp
 )
 
-set(kalarm_bin_SRCS ${libkalarm_SRCS}
+########### next target ###############
+set(libresources_SRCS
+	${CMAKE_SOURCE_DIR}/kalarm/resources/alarmresource.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/alarmresources.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/kcal.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocal.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocal_plugin.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocalwidget.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldir.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldir_plugin.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldirwidget.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremote.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremote_plugin.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremotewidget.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcewidget.cpp 
+)
+
+set(kalarm_bin_SRCS ${libkalarm_SRCS} ${libresources_SRCS}
    birthdaydlg.cpp 
    main.cpp 
    alarmevent.cpp 

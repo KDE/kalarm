@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Alarms in Local Directory
+X-KDE-Library=kalarm_localdir
+Type=Service
+ServiceTypes=KResources/Plugin
+X-KDE-ResourceFamily=alarms
+X-KDE-ResourceType=localdir
