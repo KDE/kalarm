@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.h  -  KAlarm local directory alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright Â© 2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourcelocaldir.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *

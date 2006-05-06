@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright Â© 2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourcelocaldir.cpp in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
