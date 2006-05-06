@@ -1182,7 +1182,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		content.parse();
 		QString body;
                 if (content.textContent())
-			content.textContent()->decodedText(body, true, true);    // strip trailing newlines & spaces
+			body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
 		unsigned long sernum = 0;
 		if (data->hasFormat(KPIM::MailListDrag::format())
 		&&  KPIM::MailListDrag::decode(e, mailList)
