@@ -271,7 +271,7 @@ QString AlarmResource::infoText() const
 {
 	QString txt = "<b>" + resourceName() + "</b>";
 	KRES::Factory* factory = KRES::Factory::self("alarms");
-	txt += "<br>" + i18n("Resource type: %1").arg(factory->typeName(type()));
+	txt += "<br>" + i18n("Resource type: %1", factory->typeName(type()));
 	QString type;
 	switch (mType)
 	{

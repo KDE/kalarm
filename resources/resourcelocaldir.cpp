@@ -305,5 +305,5 @@ bool KAResourceLocalDir::setDirName(const KUrl& newURL)
 QString KAResourceLocalDir::location(bool prefix) const
 {
 	QString loc = mURL.path();
-	return prefix ? i18n("Directory: %1").arg(loc) : loc;
+	return prefix ? i18n("Directory: %1", loc) : loc;
 }

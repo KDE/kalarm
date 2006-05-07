@@ -150,7 +150,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 		if (!url.isValid())
 		{
 			kError(5950) << "AlarmResources::addDefaultResource(): " << configKey << ": invalid name: " << fileName << endl;
-			mConstructionError = i18n("%1: invalid calendar file name: %2").arg(configKey).arg(fileName);
+			mConstructionError = i18n("%1: invalid calendar file name: %2", configKey, fileName);
 			return 0;
 		}
 		if (!url.isLocalFile())
@@ -158,7 +158,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 		else if (fileName == mReservedFile)
 		{
 			kError(5950) << "AlarmResources::addDefaultResource(): " << configKey << ": name not allowed: " << fileName << endl;
-			mConstructionError = i18n("%1: file name not permitted: %2").arg(configKey).arg(fileName);
+			mConstructionError = i18n("%1: file name not permitted: %2", configKey, fileName);
 			return 0;
 		}
 		else

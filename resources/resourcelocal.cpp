@@ -220,5 +220,5 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 QString KAResourceLocal::location(bool prefix) const
 {
 	QString loc = mURL.path();
-	return prefix ? i18n("File: %1").arg(loc) : loc;
+	return prefix ? i18n("File: %1", loc) : loc;
 }
