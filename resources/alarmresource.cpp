@@ -248,6 +248,8 @@ bool AlarmResource::loadResource(bool)
 	return true;
 }
 
+bool AlarmResource::load() {}
+
 bool AlarmResource::refresh()
 {
 	kDebug(5950) << "AlarmResource::refresh()\n";
