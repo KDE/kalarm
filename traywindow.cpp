@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QList>
 
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kstdaction.h>

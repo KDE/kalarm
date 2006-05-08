@@ -23,7 +23,7 @@
 
 #include <qobject.h>
 #include <qdatetime.h>
-#include <kaction.h>
+#include <ktoggleaction.h>
 
 #include <kalarmd/kalarmd.h>
 #include <kalarmd/alarmguiiface.h>

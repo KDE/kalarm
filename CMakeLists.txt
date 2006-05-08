@@ -111,7 +111,7 @@ kde4_add_dcop_stubs(kalarm_bin_SRCS kalarmd/alarmdaemoniface.h )
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin  ${KDE4_KDEUI_LIBS} kcal kmime kdepim kpimidentities kabc kutils )
+target_link_libraries(kalarm_bin  ${KDE4_KDEUI_LIBS} kcal kmime kdepim kpimidentities kabc kutils phononcore )
 
 install_targets(/bin kalarm_bin )
 

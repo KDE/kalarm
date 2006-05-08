@@ -63,7 +63,7 @@
 #include <knotifyclient.h>
 #include <kpushbutton.h>
 #ifdef WITHOUT_ARTS
-#include <kaudioplayer.h>
+#include <phonon/simpleplayer.h>
 #else
 #include <arts/kartsdispatcher.h>
 #include <arts/kartsserver.h>
@@ -810,7 +810,8 @@ void MessageWin::playAudio()
 		QString file = QLatin1String("file:");
 		if (mAudioFile.startsWith(file))
 			play = mAudioFile.mid(file.length());
-		KAudioPlayer::play(QFile::encodeName(play));
+		Phonon::SimplePlayer* player = new Phonon::SimplePlayer(this);
+		player->play(KUrl(QFile::encodeName(play)));
 #else
 		// An audio file is specified. Because loading it may take some time,
 		// call it on a timer to allow the window to display first.
