@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -83,7 +83,6 @@ class MessageWin : public MainWindowBase
 		void                slotPlayAudio();
 		void                checkAudioPlay();
 		void                stopPlay();
-		void                slotFade();
 		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
@@ -91,11 +90,6 @@ class MessageWin : public MainWindowBase
 
 	private:
 		void                initView();
-#ifndef WITHOUT_ARTS
-		void                initAudio(bool firstTime);
-		int                 getKMixVolume();
-		void                setKMixVolume(int percent);
-#endif
 		void                displayComplete();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
@@ -123,18 +117,8 @@ class MessageWin : public MainWindowBase
 		bool                mNoDefer;         // don't display a Defer option
 		bool                mInvalid;         // restored window is invalid
 		// Sound file playing
-		KArtsDispatcher*    mArtsDispatcher;
-		KDE::PlayObject*    mPlayObject;
-		DCOPCString         mKMixName;        // DCOP name for KMix
-		QString             mKMixError;       // error message starting KMix
-		QTimer*             mPlayTimer;       // timer for repeating the sound file
-		QTimer*             mFadeTimer;       // timer for fading the sound volume
-		float               mOldVolume;       // volume before volume was set for sound file
-		QString             mLocalAudioFile;  // local copy of audio file
-		QTime               mAudioFileStart;  // time when audio file loading first started, or when play first started
-		int                 mAudioFileLoadSecs;  // how many seconds it took to load audio file
+		Phonon::MediaObject* mAudioObject;;
 		bool                mPlayedOnce;      // the sound file has started playing at least once
-		bool                mPlayed;          // the PlayObject->play() has been called
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
@@ -159,7 +143,6 @@ class MessageWin : public MainWindowBase
 		bool                mShown;           // true once the window has been displayed
 		bool                mPositioning;     // true when the window is being positioned initially
 		bool                mNoCloseConfirm;  // the Defer or Edit button is closing the dialog
-		bool                mUsingKMix;       // master volume is being set using kmix
 };
 
 #endif // MESSAGEWIN_H

@@ -62,13 +62,13 @@
 #include <kio/netaccess.h>
 #include <knotifyclient.h>
 #include <kpushbutton.h>
-#ifdef WITHOUT_ARTS
+#if 0
 #include <phonon/simpleplayer.h>
 #else
-#include <arts/kartsdispatcher.h>
-#include <arts/kartsserver.h>
-#include <arts/kplayobjectfactory.h>
-#include <arts/kplayobject.h>
+#include <phonon/mediaobject.h>
+#include <phonon/audiopath.h>
+#include <phonon/audiooutput.h>
+#include <phonon/volumefadereffect.h>
 #endif
 #include <dcopclient.h>
 #include <kdebug.h>
@@ -171,9 +171,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mShowEdit(!mEventID.isEmpty()),
 	  mNoDefer(!allowDefer || alarm.repeatAtLogin()),
 	  mInvalid(false),
-	  mArtsDispatcher(0),
-	  mPlayObject(0),
-	  mOldVolume(-1),
+	  mAudioObject(0),
 	  mEvent(event),
 	  mEditButton(0),
 	  mDeferButton(0),
@@ -220,8 +218,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mShowEdit(false),
 	  mNoDefer(true),
 	  mInvalid(false),
-	  mArtsDispatcher(0),
-	  mPlayObject(0),
+	  mAudioObject(0),
 	  mEvent(event),
 	  mEditButton(0),
 	  mDeferButton(0),
@@ -248,8 +245,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
-	  mArtsDispatcher(0),
-	  mPlayObject(0),
+	  mAudioObject(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
 	  mWinModule(0),
@@ -805,16 +801,32 @@ void MessageWin::playAudio()
 	{
 		if (!mVolume  &&  mFadeVolume <= 0)
 			return;    // ensure zero volume doesn't play anything
-#ifdef WITHOUT_ARTS
 		QString play = mAudioFile;
 		QString file = QLatin1String("file:");
 		if (mAudioFile.startsWith(file))
 			play = mAudioFile.mid(file.length());
+#if 0
 		Phonon::SimplePlayer* player = new Phonon::SimplePlayer(this);
 		player->play(KUrl(QFile::encodeName(play)));
 #else
 		// An audio file is specified. Because loading it may take some time,
 		// call it on a timer to allow the window to display first.
+		Phonon::AudioOutput* output = new Phonon::AudioOutput(this);
+		output->setCategory(Phonon::NotificationCategory);
+		output->setVolume(mVolume);
+		Phonon::AudioPath* path = new Phonon::AudioPath(this);
+		path->addOutput(output);
+		mAudioObject = new Phonon::MediaObject(this);
+		mAudioObject->setUrl(KUrl(QFile::encodeName(play)));
+		mAudioObject->addAudioPath(path);
+		if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
+		{
+			Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(this);
+			fader->setVolume(mFadeVolume);
+			fader->fadeIn(mFadeSeconds);
+			path->insertEffect(fader);
+		}
+		connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()));
 		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
 #endif
 	}
@@ -860,89 +872,19 @@ void MessageWin::slotSpeak()
 */
 void MessageWin::slotPlayAudio()
 {
-#ifndef WITHOUT_ARTS
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	MainWindow* mmw = MainWindow::mainMainWindow();
-	KUrl url(mAudioFile);
-	if (!url.isValid()  ||  !KIO::NetAccess::exists(url, true, mmw)
-	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
+#warning Use mmw for error messages
+	if (0)
 	{
 		kError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
 		KMessageBox::error(this, i18n("Cannot open audio file:\n%1", mAudioFile));
 		return;
 	}
-	if (!mArtsDispatcher)
-	{
-		mFadeTimer = 0;
-		mPlayTimer = new QTimer(this);
-		connect(mPlayTimer, SIGNAL(timeout()), SLOT(checkAudioPlay()));
-		mArtsDispatcher = new KArtsDispatcher;
-		mPlayedOnce = false;
-		mAudioFileStart = QTime::currentTime();
-		initAudio(true);
-		if (!mPlayObject->object().isNull())
-			checkAudioPlay();
-		if (!mUsingKMix  &&  mVolume >= 0)
-		{
-			// Output error message now that everything else has been done.
-			// (Outputting it earlier would delay things until it is acknowledged.)
-			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)", mKMixError),
-			                         QString(), QLatin1String("KMixError"));
-			kWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
-		}
-	}
-#endif
-}
-
-#ifndef WITHOUT_ARTS
-/******************************************************************************
-*  Set up the audio file for playing.
-*/
-void MessageWin::initAudio(bool firstTime)
-{
-	KArtsServer aserver;
-	Arts::SoundServerV2 sserver = aserver.server();
-	KDE::PlayObjectFactory factory(sserver);
-	mPlayObject = factory.createPlayObject(mLocalAudioFile, true);
-	if (firstTime)
-	{
-		// Save the existing sound volume setting for restoration afterwards,
-		// and set the desired volume for the alarm.
-		mUsingKMix = false;
-		float volume = mVolume;    // initial volume
-		if (volume >= 0)
-		{
-			// The volume has been specified
-			if (mFadeVolume >= 0)
-				volume = mFadeVolume;    // fading, so adjust the initial volume
-
-			// Get the current master volume from KMix
-			int vol = getKMixVolume();
-			if (vol >= 0)
-			{
-				mOldVolume = vol;    // success
-				mUsingKMix = true;
-				setKMixVolume(static_cast<int>(volume * 100));
-			}
-		}
-		if (!mUsingKMix)
-		{
-			/* Adjust within the current master volume, because either
-			 * a) the volume is not specified, in which case we want to play
-			 *    at 100% of the current master volume setting, or
-			 * b) KMix is not available to set the master volume.
-			 */
-			mOldVolume = sserver.outVolume().scaleFactor();    // save volume for restoration afterwards
-			sserver.outVolume().scaleFactor(volume >= 0 ? volume : 1);
-		}
-	}
+	mPlayedOnce = false;
 	mSilenceButton->setEnabled(true);
-	mPlayed = false;
-	connect(mPlayObject, SIGNAL(playObjectCreated()), SLOT(checkAudioPlay()));
-	if (!mPlayObject->object().isNull())
-		checkAudioPlay();
+	checkAudioPlay();
 }
-#endif
 
 /******************************************************************************
 *  Called when the audio file has loaded and is ready to play, or on a timer
@@ -952,199 +894,36 @@ void MessageWin::initAudio(bool firstTime)
 */
 void MessageWin::checkAudioPlay()
 {
-#ifndef WITHOUT_ARTS
-	if (!mPlayObject)
+	if (!mAudioObject)
 		return;
-	if (mPlayObject->state() == Arts::posIdle)
+	// The file has loaded and is ready to play, or play has completed
+	if (mPlayedOnce  &&  !mAudioRepeat)
 	{
-		// The file has loaded and is ready to play, or play has completed
-		if (mPlayedOnce  &&  !mAudioRepeat)
-		{
-			// Play has completed
-			stopPlay();
-			return;
-		}
-
-		// Start playing the file, either for the first time or again
-		kDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
-		if (!mPlayedOnce)
-		{
-			// Start playing the file for the first time
-			QTime now = QTime::currentTime();
-			mAudioFileLoadSecs = mAudioFileStart.secsTo(now);
-			if (mAudioFileLoadSecs < 0)
-				mAudioFileLoadSecs += 86400;
-			if (mVolume >= 0  &&  mFadeVolume >= 0  &&  mFadeSeconds > 0)
-			{
-				// Set up volume fade
-				mAudioFileStart = now;
-				mFadeTimer = new QTimer(this);
-				connect(mFadeTimer, SIGNAL(timeout()), SLOT(slotFade()));
-				mFadeTimer->start(1000);     // adjust volume every second
-			}
-			mPlayedOnce = true;
-		}
-		if (mAudioFileLoadSecs < 3)
-		{
-			/* The aRts library takes several attempts before a PlayObject can
-			 * be replayed, leaving a gap of perhaps 5 seconds between plays.
-			 * So if loading the file takes a short time, it's better to reload
-			 * the PlayObject rather than try to replay the same PlayObject.
-			 */
-			if (mPlayed)
-			{
-				// Playing has completed. Start playing again.
-				delete mPlayObject;
-				initAudio(false);
-				if (mPlayObject->object().isNull())
-					return;
-			}
-			mPlayed = true;
-			mPlayObject->play();
-		}
-		else
-		{
-			// The file is slow to load, so attempt to replay the PlayObject
-			static Arts::poTime t0((long)0, (long)0, 0, std::string());
-			Arts::poTime current = mPlayObject->currentTime();
-			if (current.seconds || current.ms)
-				mPlayObject->seek(t0);
-			else
-				mPlayObject->play();
-		}
+		// Play has completed
+		stopPlay();
+		return;
 	}
+	mPlayedOnce = true;
 
-	// The sound file is still playing
-	Arts::poTime overall = mPlayObject->overallTime();
-	Arts::poTime current = mPlayObject->currentTime();
-	int time = 1000*(overall.seconds - current.seconds) + overall.ms - current.ms;
-	if (time < 0)
-		time = 0;
-	kDebug(5950) << "MessageWin::checkAudioPlay(): wait for " << (time+100) << "ms\n";
-	mPlayTimer->start(time + 100, true);
-#endif
+	// Start playing the file, either for the first time or again
+	kDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
+	mAudioObject->play();
 }
 
 /******************************************************************************
 *  Called when play completes, the Silence button is clicked, or the window is
-*  closed, to reset the sound volume and terminate audio access.
+*  closed, to terminate audio access.
 */
 void MessageWin::stopPlay()
 {
-#ifndef WITHOUT_ARTS
-	if (mArtsDispatcher)
+	if (mAudioObject)
 	{
-		// Restore the sound volume to what it was before the sound file
-		// was played, provided that nothing else has modified it since.
-		if (!mUsingKMix)
-		{
-			KArtsServer aserver;
-			Arts::StereoVolumeControl svc = aserver.server().outVolume();
-			float currentVolume = svc.scaleFactor();
-			float eventVolume = mVolume;
-			if (eventVolume < 0)
-				eventVolume = 1;
-			if (currentVolume == eventVolume)
-				svc.scaleFactor(mOldVolume);
-		}
-		else if (mVolume >= 0)
-		{
-			int eventVolume = static_cast<int>(mVolume * 100);
-			int currentVolume = getKMixVolume();
-			// Volume returned isn't always exactly equal to volume set
-			if (currentVolume < 0  ||  abs(currentVolume - eventVolume) < 5)
-				setKMixVolume(static_cast<int>(mOldVolume));
-		}
-	}
-	delete mPlayObject;      mPlayObject = 0;
-	delete mArtsDispatcher;  mArtsDispatcher = 0;
-	if (!mLocalAudioFile.isEmpty())
-	{
-		KIO::NetAccess::removeTempFile(mLocalAudioFile);   // removes it only if it IS a temporary file
-		mLocalAudioFile.clear();
+		mAudioObject->stop();
+		delete mAudioObject;
 	}
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);
-#endif
 }
-
-/******************************************************************************
-*  Called every second to fade the volume when the audio file starts playing.
-*/
-void MessageWin::slotFade()
-{
-#ifndef WITHOUT_ARTS
-	QTime now = QTime::currentTime();
-	int elapsed = mAudioFileStart.secsTo(now);
-	if (elapsed < 0)
-		elapsed += 86400;    // it's the next day
-	float volume;
-	if (elapsed >= mFadeSeconds)
-	{
-		// The fade has finished. Set to normal volume.
-		volume = mVolume;
-		delete mFadeTimer;
-		mFadeTimer = 0;
-		if (!mVolume)
-		{
-			kDebug(5950) << "MessageWin::slotFade(0)\n";
-			stopPlay();
-			return;
-		}
-	}
-	else
-		volume = mFadeVolume  +  ((mVolume - mFadeVolume) * elapsed) / mFadeSeconds;
-	kDebug(5950) << "MessageWin::slotFade(" << volume << ")\n";
-	if (mArtsDispatcher)
-	{
-		if (mUsingKMix)
-			setKMixVolume(static_cast<int>(volume * 100));
-		else if (mArtsDispatcher)
-		{
-			KArtsServer aserver;
-			aserver.server().outVolume().scaleFactor(volume);
-		}
-	}
-#endif
-}
-
-#ifndef WITHOUT_ARTS
-/******************************************************************************
-*  Get the master volume from KMix.
-*  Reply < 0 if failure.
-*/
-int MessageWin::getKMixVolume()
-{
-	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
-		return -1;
-	QByteArray  data, replyData;
-	DCOPCString replyType;
-	QDataStream arg(&data, QIODevice::WriteOnly);
-	if (!kapp->dcopClient()->call(mKMixName, KMIX_DCOP_OBJECT, "masterVolume()", data, replyType, replyData)
-	||  replyType != "int")
-		return -1;
-	int result;
-	QDataStream reply(&replyData, QIODevice::ReadOnly);
-	reply >> result;
-	return (result >= 0) ? result : 0;
-}
-
-/******************************************************************************
-*  Set the master volume using KMix.
-*/
-void MessageWin::setKMixVolume(int percent)
-{
-	if (!mUsingKMix)
-		return;
-	if (!KAlarm::runProgram(KMIX_APP_NAME, KMIX_DCOP_WINDOW, mKMixName, mKMixError))   // start KMix if it isn't already running
-		return;
-	QByteArray  data;
-	QDataStream arg(data, QIODevice::WriteOnly);
-	arg << percent;
-	if (!kapp->dcopClient()->send(mKMixName, KMIX_DCOP_OBJECT, "setMasterVolume(int)", data))
-		kError(5950) << "MessageWin::setKMixVolume(): kmix dcop call failed\n";
-}
-#endif
 
 /******************************************************************************
 *  Raise the alarm window, re-output any required audio notification, and
