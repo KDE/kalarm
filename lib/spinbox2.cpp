@@ -22,7 +22,6 @@
 
 #include <stdlib.h>
 
-#include <QGlobal>
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
 //Added by qt3to4:
