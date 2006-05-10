@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright (c) 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include <kdeversion.h>
 #include <QLineEdit>
-#include <qobject.h>
+#include <QObject>
 #include <QApplication>
 #include <QStyle>
 #include <QStyleOptionSpinBox>

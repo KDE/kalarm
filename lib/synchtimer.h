@@ -1,7 +1,7 @@
 /*
  *  synchtimer.h  -  timers which synchronise to time boundaries
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QList>
 #include <QByteArray>
-#include <qdatetime.h>
+#include <QDateTime>
 class QTimer;
 
 /** SynchTimer is a virtual base class for application-wide timers synchronised
