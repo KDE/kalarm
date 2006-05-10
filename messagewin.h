@@ -40,8 +40,7 @@ class QTimer;
 class KWinModule;
 class AlarmTimeWidget;
 class DeferAlarmDlg;
-class KArtsDispatcher;
-namespace KDE { class PlayObject; }
+namespace Phonon { class MediaObject; }
 
 /**
  * MessageWin: A window to display an alarm message
@@ -117,7 +116,7 @@ class MessageWin : public MainWindowBase
 		bool                mNoDefer;         // don't display a Defer option
 		bool                mInvalid;         // restored window is invalid
 		// Sound file playing
-		Phonon::MediaObject* mAudioObject;;
+		Phonon::MediaObject* mAudioObject;
 		bool                mPlayedOnce;      // the sound file has started playing at least once
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
