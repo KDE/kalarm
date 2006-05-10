@@ -24,8 +24,8 @@
 #include <ctype.h>
 #include <iostream>
 
-#include <qobject.h>
-#include <qtimer.h>
+#include <QObject>
+#include <QTimer>
 #include <QRegExp>
 #include <QFile>
 #include <QByteArray>

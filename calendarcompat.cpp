@@ -21,7 +21,7 @@
 #include "kalarm.h"
 
 #include <QFile>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <kapplication.h>
 #include <kaboutdata.h>

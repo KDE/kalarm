@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,9 +24,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <qtimer.h>
+#include <QTimer>
 #include <QFile>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QByteArray>
 
 #include <kapplication.h>

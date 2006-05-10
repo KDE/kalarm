@@ -23,9 +23,9 @@
 #include <time.h>
 
 #include <QFile>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QRegExp>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <klocale.h>
 #include <kmessagebox.h>

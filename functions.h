@@ -23,7 +23,7 @@
 
 /**  @file functions.h - miscellaneous functions */
 
-#include <qsize.h>
+#include <QSize>
 #include <QString>
 #include <QList>
 

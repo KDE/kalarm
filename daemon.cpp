@@ -20,8 +20,8 @@
 
 #include "kalarm.h"
 
-#include <qtimer.h>
-#include <qicon.h>
+#include <QTimer>
+#include <QIcon>
 #include <QByteArray>
 
 #include <kstandarddirs.h>

@@ -21,8 +21,8 @@
 #ifndef DAEMON_H
 #define DAEMON_H
 
-#include <qobject.h>
-#include <qdatetime.h>
+#include <QObject>
+#include <QDateTime>
 #include <ktoggleaction.h>
 
 #include <kalarmd/kalarmd.h>

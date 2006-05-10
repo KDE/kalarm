@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <qobject.h>
+#include <QObject>
 
 #include <kapplication.h>
 #include <klocale.h>

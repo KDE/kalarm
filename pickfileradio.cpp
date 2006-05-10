@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include "kalarm.h"
 
 #include <QPushButton>
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kdebug.h>
 

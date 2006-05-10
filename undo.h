@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright (c) 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 /**  @file undo.h - undo/redo facility */
 
 #include <QList>
-#include <qstringlist.h>
+#include <QStringList>
 
 class KAEvent;
 class UndoItem;

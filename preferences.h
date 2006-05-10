@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@
 
 #include "kalarm.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QColor>
 #include <QFont>
-#include <qdatetime.h>
+#include <QDateTime>
 class QWidget;
 
 #include "colourlist.h"

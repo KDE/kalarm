@@ -24,9 +24,9 @@
 /** @file kalarmiface.h - DCOP interface to KAlarm */
 
 // No forward declarations - dcopidl2cpp won't work
+#include <QStringList>
 #include <dcopobject.h>
 #include <kurl.h>
-#include <qstringlist.h>
 class QString;
 
 /** KAlarmIface provides a DCOP interface for other applications to request

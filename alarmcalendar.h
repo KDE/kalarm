@@ -21,7 +21,7 @@
 #ifndef ALARMCALENDAR_H
 #define ALARMCALENDAR_H
 
-#include <qobject.h>
+#include <QObject>
 #include <kurl.h>
 #include <libkcal/calendarlocal.h>
 #include "alarmevent.h"

@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility 
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 #ifndef FIND_H
 #define FIND_H
 
-#include <qobject.h>
-#include <qpointer.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QPointer>
+#include <QStringList>
 
 class QCheckBox;
 class KFindDialog;
