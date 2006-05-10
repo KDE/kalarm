@@ -22,9 +22,9 @@
 #include <unistd.h>
 #include <time.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qtimer.h>
 
 #include <klocale.h>

@@ -21,8 +21,8 @@
 #ifndef FONTCOLOURBUTTON_H
 #define FONTCOLOURBUTTON_H
 
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <kdialog.h>
 #include "pushbutton.h"
 

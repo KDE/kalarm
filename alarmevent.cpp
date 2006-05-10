@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
-#include <qcolor.h>
-#include <qregexp.h>
+#include <QColor>
+#include <QRegExp>
 #include <QByteArray>
 
 #include <klocale.h>

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #include <qtimer.h>
-#include <qfile.h>
+#include <QFile>
 #include <qdatetime.h>
 #include <QByteArray>
 

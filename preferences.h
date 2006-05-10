@@ -24,8 +24,8 @@
 #include "kalarm.h"
 
 #include <qobject.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qdatetime.h>
 class QWidget;
 

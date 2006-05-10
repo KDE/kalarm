@@ -21,7 +21,7 @@
 #ifndef ALARMTEXT_H
 #define ALARMTEXT_H
 
-#include <qstring.h>
+#include <QString>
 class QStringList;
 class KAEvent;
 

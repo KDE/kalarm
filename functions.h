@@ -24,7 +24,7 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include <qsize.h>
-#include <qstring.h>
+#include <QString>
 #include <QList>
 
 #include "alarmevent.h"

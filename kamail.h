@@ -21,7 +21,7 @@
 #ifndef KAMAIL_H
 #define KAMAIL_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 class DCOPCString;
 class KAEvent;

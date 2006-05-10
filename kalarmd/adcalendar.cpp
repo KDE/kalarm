@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include <ktempfile.h>
 #include <kio/job.h>

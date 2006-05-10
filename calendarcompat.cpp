@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 
 #include <kapplication.h>

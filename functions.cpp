@@ -20,8 +20,8 @@
 
 #include "kalarm.h"
 
-#include <qdir.h>
-#include <qregexp.h>
+#include <QDir>
+#include <QRegExp>
 #include <QDesktopWidget>
 
 #include <kconfig.h>

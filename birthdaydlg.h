@@ -20,7 +20,7 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <QList>
 #include <k3listview.h>
 #include <kdialogbase.h>

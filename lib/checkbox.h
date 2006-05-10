@@ -21,7 +21,7 @@
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 class QMouseEvent;
 class QKeyEvent;
 

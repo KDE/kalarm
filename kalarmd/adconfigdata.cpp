@@ -20,7 +20,7 @@
 
 #include "kalarmd.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <qstringlist.h>
 
 #include <kconfig.h>

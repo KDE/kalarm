@@ -21,7 +21,7 @@
 #ifndef COMBOBOX_H
 #define COMBOBOX_H
 
-#include <qcombobox.h>
+#include <QComboBox>
 class QMouseEvent;
 class QKeyEvent;
 

@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <QList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

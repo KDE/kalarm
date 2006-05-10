@@ -21,7 +21,7 @@
 #ifndef SPINBOX_H
 #define SPINBOX_H
 
-#include <qspinbox.h>
+#include <QSpinBox>
 class QEvent;
 class QStyleOptionSpinBox;
 

@@ -23,8 +23,8 @@
 
 /**  @file alarmevent.h - represents calendar alarms and events */
 
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <QList>
 
 #include <libkcal/person.h>

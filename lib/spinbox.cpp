@@ -19,7 +19,7 @@
  */
 
 #include <kdeversion.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <qobject.h>
 #include <QApplication>
 #include <QStyle>

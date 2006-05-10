@@ -26,8 +26,8 @@
 
 #include <qobject.h>
 #include <qtimer.h>
-#include <qregexp.h>
-#include <qfile.h>
+#include <QRegExp>
+#include <QFile>
 #include <QByteArray>
 #include <QTextStream>
 
