@@ -1357,21 +1357,25 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
-	if (mConfirmAck  &&  !mNoCloseConfirm  &&  !theApp()->sessionClosingDown())
+	// Don't prompt or delete the alarm from the display calendar if the session is closing
+	if (!theApp()->sessionClosingDown())
 	{
-		// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
-		if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
-		                                    i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel())
-		    != KMessageBox::Yes)
+		if (mConfirmAck  &&  !mNoCloseConfirm)
 		{
-			ce->ignore();
-			return;
+			// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
+			if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
+			                                    i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel())
+			    != KMessageBox::Yes)
+			{
+				ce->ignore();
+				return;
+			}
 		}
-	}
-	if (!mEventID.isNull())
-	{
-		// Delete from the display calendar
-		KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+		if (!mEventID.isNull())
+		{
+			// Delete from the display calendar
+			KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+		}
 	}
 	MainWindowBase::closeEvent(ce);
 }
@@ -1414,6 +1418,7 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
+	kdDebug(5950) << "MessageWin::slotEdit()" << endl;
 	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, "editDlg", &mEvent);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
