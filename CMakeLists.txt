@@ -9,7 +9,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kalarm/resources 
 	${CMAKE_SOURCE_DIR}/libkmime 
 	${CMAKE_SOURCE_DIR}/libkleo 
-	${KDE4_INCLUDES}
+	
 ) 
 
 add_subdirectory( kalarmd ) 
