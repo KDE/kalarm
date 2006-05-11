@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.1.9 --- 4 April 2006 ===
+=== Version 1.1.9 --- 11 May 2006 ===
+Fix corruption of alarms displayed at logout and then deferred after login.
 Fix erroneous adjustment of recurrence start date when saving alarm.
 Fix crash when --play command line option is used, if compiled without aRts.
 
