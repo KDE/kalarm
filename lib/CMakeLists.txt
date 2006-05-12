@@ -1,9 +1,7 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kalarm  )
 
 
-kde4_footer()
 
 
 

@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( ${CMAKE_SOURCE_DIR}/kalarm  )
 
@@ -34,7 +33,6 @@ install_targets(/bin kalarmd )
 install_files( ${APPLNK_INSTALL_DIR}/.hidden FILES kalarmd.desktop )
 install_files( /share/autostart FILES kalarmd.autostart.desktop )
 
-kde4_footer()
 
 
 
