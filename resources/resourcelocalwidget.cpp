@@ -45,17 +45,17 @@ ResourceLocalConfigWidget::ResourceLocalConfigWidget(QWidget* parent)
 
 void ResourceLocalConfigWidget::loadSettings(KRES::Resource* resource)
 {
-kDebug(5950)<<"ResourceLocalConfigWidget::loadSettings("<<typeid(resource).name()<<")\n";
+kDebug(5951)<<"ResourceLocalConfigWidget::loadSettings("<<typeid(resource).name()<<")\n";
 //	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
 	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
 	if (!res)
-		kError(5950) << "ResourceLocalConfigWidget::loadSettings(KAResourceLocal): cast failed" << endl;
+		kError(5951) << "ResourceLocalConfigWidget::loadSettings(KAResourceLocal): cast failed" << endl;
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
 		mURL->setURL(res->fileName());
 #ifndef NDEBUG
-		kDebug(5950) << "ResourceLocalConfigWidget::loadSettings(): File " << mURL->url() << " type " << res->typeName() << endl;
+		kDebug(5951) << "ResourceLocalConfigWidget::loadSettings(): File " << mURL->url() << " type " << res->typeName() << endl;
 #endif
 	}
 }
@@ -65,7 +65,7 @@ void ResourceLocalConfigWidget::saveSettings(KRES::Resource* resource)
 //	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
 	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
 	if (!res)
-		kDebug(5950) << "ResourceLocalConfigWidget::saveSettings(KAResourceLocal): cast failed" << endl;
+		kDebug(5951) << "ResourceLocalConfigWidget::saveSettings(KAResourceLocal): cast failed" << endl;
 	else
 		res->setFileName(mURL->url());
 }

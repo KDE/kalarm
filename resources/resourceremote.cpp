@@ -115,13 +115,13 @@ bool KAResourceRemote::loadResource(bool refreshCache)
 {
 	if (refreshCache)
 		return AlarmResource::loadResource();
-	kDebug(5950) << "KAResourceRemote::loadResource(cache)" << endl;
+	kDebug(5951) << "KAResourceRemote::loadResource(cache)" << endl;
 	if (mDownloadJob)
 	{
-		kWarning(5950) << "KAResourceRemote::loadResource(): download still in progress" << endl;
+		kWarning(5951) << "KAResourceRemote::loadResource(): download still in progress" << endl;
 		return false;
 	}
-kDebug(5950)<<"***cacheFile="<<cacheFile()<<endl;
+kDebug(5951)<<"***cacheFile="<<cacheFile()<<endl;
 	mLoadingFromCache = KStandardDirs::exists(cacheFile());
 	bool success = AlarmResource::loadResource(false);
 	mLoadingFromCache = false;
@@ -130,15 +130,15 @@ kDebug(5950)<<"***cacheFile="<<cacheFile()<<endl;
 
 bool KAResourceRemote::doLoad()
 {
-	kDebug(5950) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyURL() << ")" << endl;
+	kDebug(5951) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyURL() << ")" << endl;
 	if (mDownloadJob)
 	{
-		kWarning(5950) << "KAResourceRemote::doLoad(): download still in progress" << endl;
+		kWarning(5951) << "KAResourceRemote::doLoad(): download still in progress" << endl;
 		return false;
 	}
 	if (mUploadJob  &&  !mLoadingFromCache)
 	{
-		kWarning(5950) << "KAResourceRemote::doLoad(): upload still in progress" << endl;
+		kWarning(5951) << "KAResourceRemote::doLoad(): upload still in progress" << endl;
 		return false;
 	}
 	mLoaded = false;
@@ -161,7 +161,7 @@ bool KAResourceRemote::doLoad()
 		slotLoadJobResult(0);
 	else
 	{
-		kDebug(5950) << "Download from: " << mDownloadUrl.prettyURL() << endl;
+		kDebug(5951) << "Download from: " << mDownloadUrl.prettyURL() << endl;
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, mShowProgress);
 		connect(mDownloadJob, SIGNAL(result(KIO::Job*)), SLOT(slotLoadJobResult(KIO::Job*)));
@@ -198,7 +198,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		}
 		else
 		{
-			kDebug(5950) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
+			kDebug(5951) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
 			emit cacheDownloaded(this);
 			disableChangeNotification();
 			loadCache();
@@ -239,17 +239,17 @@ void KAResourceRemote::cancelDownload(bool disable)
 
 bool KAResourceRemote::doSave()
 {
-	kDebug(5950) << "KAResourceRemote::doSave(" << mUploadUrl.prettyURL() << ")" << endl;
+	kDebug(5951) << "KAResourceRemote::doSave(" << mUploadUrl.prettyURL() << ")" << endl;
 	if (readOnly()  ||  !hasChanges())
 		return true;
 	if (mDownloadJob)
 	{
-		kWarning(5950) << "KAResourceRemote::doSave(): download still in progress" << endl;
+		kWarning(5951) << "KAResourceRemote::doSave(): download still in progress" << endl;
 		return false;
 	}
 	if (mUploadJob)
 	{
-		kWarning(5950) << "KAResourceRemote::doSave(): upload still in progress" << endl;
+		kWarning(5951) << "KAResourceRemote::doSave(): upload still in progress" << endl;
 		return false;
 	}
 
@@ -266,7 +266,7 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 		job->showErrorDialog(0);
 	else
 	{
-		kDebug(5950) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyURL() << "): success" << endl;
+		kDebug(5951) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyURL() << "): success" << endl;
 		for(Incidence::List::ConstIterator it = mChangedIncidences.begin();  it != mChangedIncidences.end();  ++it)
 			clearChange(*it);
 		mChangedIncidences.clear();
@@ -287,7 +287,7 @@ bool KAResourceRemote::setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl)
 	if (downloadUrl.equals(mDownloadUrl)
 	&&  uploadUrl.equals(mUploadUrl))
 		return false;
-	kDebug(5950) << "KAResourceRemote::setUrls(" << downloadUrl.prettyURL() << ", " << uploadUrl.prettyURL() << ")\n";
+	kDebug(5951) << "KAResourceRemote::setUrls(" << downloadUrl.prettyURL() << ", " << uploadUrl.prettyURL() << ")\n";
 	if (isOpen())
 		close();
 	bool active = isActive();

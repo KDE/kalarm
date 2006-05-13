@@ -63,7 +63,7 @@ void ResourceRemoteConfigWidget::loadSettings(KRES::Resource* resource)
 //	KAResourceRemote* res = dynamic_cast<KAResourceRemote*>(resource);
 	KAResourceRemote* res = static_cast<KAResourceRemote*>(resource);
 	if (!res)
-		kError(5950) << "ResourceRemoteConfigWidget::loadSettings(KAResourceRemote): cast failed" << endl;
+		kError(5951) << "ResourceRemoteConfigWidget::loadSettings(KAResourceRemote): cast failed" << endl;
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
@@ -72,7 +72,7 @@ void ResourceRemoteConfigWidget::loadSettings(KRES::Resource* resource)
 		mReloadConfig->loadSettings(res);
 		mSaveConfig->loadSettings(res);
 #ifndef NDEBUG
-		kDebug(5950) << "ResourceRemoteConfigWidget::loadSettings(): File " << mDownloadUrl->url() << " type " << res->typeName() << endl;
+		kDebug(5951) << "ResourceRemoteConfigWidget::loadSettings(): File " << mDownloadUrl->url() << " type " << res->typeName() << endl;
 #endif
 	}
 }
@@ -82,7 +82,7 @@ void ResourceRemoteConfigWidget::saveSettings(KRES::Resource* resource)
 //	KAResourceRemote* res = dynamic_cast<KAResourceRemote*>(resource);
 	KAResourceRemote* res = static_cast<KAResourceRemote*>(resource);
 	if (!res)
-		kDebug(5950) << "ResourceRemoteConfigWidget::saveSettings(KAResourceRemote): cast failed" << endl;
+		kDebug(5951) << "ResourceRemoteConfigWidget::saveSettings(KAResourceRemote): cast failed" << endl;
 	else
 	{
 		res->setUrls(KUrl(mDownloadUrl->url()), KUrl(mUploadUrl->url()));
