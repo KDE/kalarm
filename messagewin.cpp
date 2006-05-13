@@ -60,7 +60,7 @@
 #include <kwinmodule.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 #include <kpushbutton.h>
 #if 0
 #include <phonon/simpleplayer.h>
@@ -794,7 +794,7 @@ void MessageWin::playAudio()
 	if (mBeep)
 	{
 		// Beep using two methods, in case the sound card/speakers are switched off or not working
-		KNotifyClient::beep();     // beep through the sound card & speakers
+		KNotification::beep();     // beep through the sound card & speakers
 		QApplication::beep();      // beep through the internal speaker
 	}
 	if (!mAudioFile.isEmpty())
