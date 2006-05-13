@@ -27,11 +27,11 @@
 //Added by qt3to4:
 #include <Q3Frame>
 
-#include <qstyle.h>
-#include <qobject.h>
-#include <qapplication.h>
-#include <qpixmap.h>
-#include <qmatrix.h>
+#include <QStyle>
+#include <QObject>
+#include <QApplication>
+#include <QPixmap>
+#include <QMatrix>
 #include <kdebug.h>
 
 #include "spinbox2.moc"
