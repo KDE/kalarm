@@ -28,7 +28,7 @@
 
 extern "C"
 {
-	void* init_kalarm_localdir()
+	KDE_EXPORT void* init_kalarm_localdir()
 	{
 #ifndef KALARM_STANDALONE
 		KGlobal::locale()->insertCatalog("libkcal");
