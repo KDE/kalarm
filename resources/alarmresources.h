@@ -113,7 +113,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		bool load(AlarmResource*, LoadAction = DefaultLoad);
 
 		/** Set the default cache update action when loading resources. */
-		void setLoadUpdateCache(bool update)   { mLoadCacheUpdate = update; }
+		void setLoadUpdateCache(bool active, bool inactive);
     /**
      * Reloads all incidences from all resources.
      * @par tz The timezone to set.
@@ -365,6 +365,8 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		 */
 		virtual void setTimeZoneIdViewOnly(const QString& tz)  { reload(tz); }
 
+		static void setDebugArea(int area)  { AlarmResource::setDebugArea(area); }
+
   signals:
     /** Signal that the Resource has been modified. */
     void signalResourceModified(AlarmResource*);
@@ -472,7 +474,8 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc);   // post-load function to convert old calendar formats
 		DCOPObject* mDcopObject;      // DCOP object to use to send signals from
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
-		bool        mLoadCacheUpdate; // whether to update cache when loading resources
+		bool        mLoadActiveCacheUpdate;   // whether default load should update cache for active alarm resource
+		bool        mLoadInactiveCacheUpdate; // whether default load should update cache for expired/template resource
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;

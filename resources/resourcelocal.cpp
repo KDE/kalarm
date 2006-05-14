@@ -82,7 +82,7 @@ void KAResourceLocal::startReconfig()
 
 void KAResourceLocal::applyReconfig()
 {
-kDebug(5951)<<"***applyReconfig()"<<endl;
+kDebug(KARES_DEBUG)<<"***applyReconfig()"<<endl;
 	if (mReconfiguring)
 	{
 		AlarmResource::applyReconfig();
@@ -94,7 +94,7 @@ kDebug(5951)<<"***applyReconfig()"<<endl;
 
 void KAResourceLocal::enableResource(bool enable)
 {
-	kDebug(5951) << "KAResourceLocal::enableResource(" << enable << "): " << mURL.path() << endl;
+	kDebug(KARES_DEBUG) << "KAResourceLocal::enableResource(" << enable << "): " << mURL.path() << endl;
 	if (enable)
 	{
 		lock(mURL.path());
@@ -111,7 +111,7 @@ bool KAResourceLocal::doLoad()
 {
 	if (!KStandardDirs::exists(mURL.path()))
 	{
-		kDebug(5951) << "KAResourceLocal::doLoad(): File doesn't exist yet." << endl;
+		kDebug(KARES_DEBUG) << "KAResourceLocal::doLoad(): File doesn't exist yet." << endl;
 		mLoaded = false;
 		mCalendar.close();
 		if (!isActive())
@@ -133,12 +133,12 @@ bool KAResourceLocal::doLoad()
 
 void KAResourceLocal::reload()
 {
-	kDebug(5951) << "KAResourceLocal::reload(" << mURL.path() << ")" << endl;
+	kDebug(KARES_DEBUG) << "KAResourceLocal::reload(" << mURL.path() << ")" << endl;
 	if (!isOpen())
 		return;
 	if (mLastModified == readLastModified())
 	{
-		kDebug(5951) << "KAResourceLocal::reload(): file not modified since last read." << endl;
+		kDebug(KARES_DEBUG) << "KAResourceLocal::reload(): file not modified since last read." << endl;
 		return;
 	}
 	loadFile();
@@ -147,7 +147,7 @@ void KAResourceLocal::reload()
 
 bool KAResourceLocal::loadFile()
 {
-	kDebug(5951) << "KAResourceLocal::loadFile(" << mURL.path() << ")" << endl;
+	kDebug(KARES_DEBUG) << "KAResourceLocal::loadFile(" << mURL.path() << ")" << endl;
 	mLoaded = false;
 	mCalendar.close();
 	if (!isActive())
@@ -168,7 +168,7 @@ bool KAResourceLocal::loadFile()
 
 bool KAResourceLocal::doSave()
 {
-kDebug(5951)<<"***doSave("<<mURL.path()<<")"<<endl;
+kDebug(KARES_DEBUG)<<"***doSave("<<mURL.path()<<")"<<endl;
 	bool success = mCalendar.save(mURL.path());
 	mLastModified = readLastModified();
 	emit resourceSaved(this);
@@ -201,7 +201,7 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 	}
 	if (newURL.path() == mURL.path())
 		return false;
-	kDebug(5951) << "KAResourceLocal::setFileName(" << newURL.path() << ")\n";
+	kDebug(KARES_DEBUG) << "KAResourceLocal::setFileName(" << newURL.path() << ")\n";
 	if (isOpen())
 		close();
 	bool active = isActive();

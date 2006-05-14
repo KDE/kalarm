@@ -39,8 +39,10 @@ KAResourceRemote::KAResourceRemote(const KConfig* config)
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(true),
+	  mDownloaded(false),
 	  mUseCacheFile(true),
-	  mLoadingFromCache(false)
+	  mLoadFromCache(false),
+	  mLoadCachedExecuting(false)
 {
 	if (config)
 	{
@@ -58,8 +60,10 @@ KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUr
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(false),
+	  mDownloaded(false),
 	  mUseCacheFile(false),
-	  mLoadingFromCache(false)
+	  mLoadFromCache(false),
+	  mLoadCachedExecuting(false)
 {
 	init();
 }
@@ -111,34 +115,65 @@ void KAResourceRemote::enableResource(bool enable)
 		cancelDownload(false);
 }
 
-bool KAResourceRemote::loadResource(bool refreshCache)
+bool KAResourceRemote::setLoadUpdateCache(bool update)
 {
-	if (refreshCache)
-		return AlarmResource::loadResource();
-	kDebug(5951) << "KAResourceRemote::loadResource(cache)" << endl;
-	if (mDownloadJob)
-	{
-		kWarning(5951) << "KAResourceRemote::loadResource(): download still in progress" << endl;
+	if (!AlarmResource::setLoadUpdateCache(update))
 		return false;
+	if (update)
+		mDownloaded = false;    // ensure that the resource is downloaded now
+	setLoadingFromCache();
+	return true;
+}
+
+// Set the default cache refresh action for the next load().
+void KAResourceRemote::setLoadingFromCache()
+{
+	if (!mLoadCachedExecuting)
+	{
+		switch (reloadPolicy())
+		{
+			case ReloadNever:
+				mLoadFromCache = true;
+				return;
+			case ReloadInterval:
+				setReloadPolicy(ReloadInterval);     // restart the reload timer
+				// fall through to ReloadOnStartup
+			case ReloadOnStartup:
+				mLoadFromCache = mDownloaded || !loadUpdateCache();
+				break;
+		}
+		if (!mLoadFromCache  &&  !mDownloaded)
+			load();
 	}
-kDebug(5951)<<"***cacheFile="<<cacheFile()<<endl;
-	mLoadingFromCache = KStandardDirs::exists(cacheFile());
-	bool success = AlarmResource::loadResource(false);
-	mLoadingFromCache = false;
+}
+
+bool KAResourceRemote::loadCached(bool refreshCache)
+{
+	if (mLoadCachedExecuting)
+		return false;    // another loadCached() is already in progress
+	mLoadCachedExecuting = true;
+	kDebug(KARES_DEBUG) << "KAResourceRemote::loadCached(" << refreshCache << ")" << endl;
+	mLoadFromCache = !refreshCache && KStandardDirs::exists(cacheFile());
+//if (mLoadFromCache) kDebug(KARES_DEBUG)<<"***cacheFile="<<cacheFile()<<endl;
+	bool success = AlarmResource::load();
+	// Reset the load-from-cache indicator to the default, so that a subsequent
+	// load() works as expected.
+	mLoadCachedExecuting = false;
+	setLoadingFromCache();
 	return success;
 }
 
 bool KAResourceRemote::doLoad()
 {
-	kDebug(5951) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyURL() << ")" << endl;
+	kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyURL() << ")" << endl;
 	if (mDownloadJob)
 	{
-		kWarning(5951) << "KAResourceRemote::doLoad(): download still in progress" << endl;
+		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): download still in progress" << endl;
 		return false;
 	}
-	if (mUploadJob  &&  !mLoadingFromCache)
+	if (mUploadJob  &&  !mLoadFromCache)
 	{
-		kWarning(5951) << "KAResourceRemote::doLoad(): upload still in progress" << endl;
+		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): upload still in progress" << endl;
 		return false;
 	}
 	mLoaded = false;
@@ -147,7 +182,7 @@ bool KAResourceRemote::doLoad()
 		return false;
 	mLoading = true;
 
-	if (mUseCacheFile  ||  mLoadingFromCache)
+	if (mUseCacheFile  ||  mLoadFromCache)
 	{
 		disableChangeNotification();
 		loadCache();
@@ -157,11 +192,16 @@ bool KAResourceRemote::doLoad()
 	clearChanges();
 	emit resourceChanged(this);
 
-	if (mLoadingFromCache)
+	if (mLoadFromCache)
+	{
+		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyURL() << "): from cache" << endl;
 		slotLoadJobResult(0);
+	}
 	else
 	{
-		kDebug(5951) << "Download from: " << mDownloadUrl.prettyURL() << endl;
+		kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
+		mDownloaded = true;    // the resource has now been downloaded at least once
+		kDebug(KARES_DEBUG) << "Download from: " << mDownloadUrl.prettyURL() << "): success"<< endl;
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, mShowProgress);
 		connect(mDownloadJob, SIGNAL(result(KIO::Job*)), SLOT(slotLoadJobResult(KIO::Job*)));
@@ -198,7 +238,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		}
 		else
 		{
-			kDebug(5951) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
+			kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
 			emit cacheDownloaded(this);
 			disableChangeNotification();
 			loadCache();
@@ -239,17 +279,17 @@ void KAResourceRemote::cancelDownload(bool disable)
 
 bool KAResourceRemote::doSave()
 {
-	kDebug(5951) << "KAResourceRemote::doSave(" << mUploadUrl.prettyURL() << ")" << endl;
+	kDebug(KARES_DEBUG) << "KAResourceRemote::doSave(" << mUploadUrl.prettyURL() << ")" << endl;
 	if (readOnly()  ||  !hasChanges())
 		return true;
 	if (mDownloadJob)
 	{
-		kWarning(5951) << "KAResourceRemote::doSave(): download still in progress" << endl;
+		kWarning(KARES_DEBUG) << "KAResourceRemote::doSave(): download still in progress" << endl;
 		return false;
 	}
 	if (mUploadJob)
 	{
-		kWarning(5951) << "KAResourceRemote::doSave(): upload still in progress" << endl;
+		kWarning(KARES_DEBUG) << "KAResourceRemote::doSave(): upload still in progress" << endl;
 		return false;
 	}
 
@@ -266,7 +306,7 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 		job->showErrorDialog(0);
 	else
 	{
-		kDebug(5951) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyURL() << "): success" << endl;
+		kDebug(KARES_DEBUG) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyURL() << "): success" << endl;
 		for(Incidence::List::ConstIterator it = mChangedIncidences.begin();  it != mChangedIncidences.end();  ++it)
 			clearChange(*it);
 		mChangedIncidences.clear();
@@ -287,7 +327,7 @@ bool KAResourceRemote::setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl)
 	if (downloadUrl.equals(mDownloadUrl)
 	&&  uploadUrl.equals(mUploadUrl))
 		return false;
-	kDebug(5951) << "KAResourceRemote::setUrls(" << downloadUrl.prettyURL() << ", " << uploadUrl.prettyURL() << ")\n";
+	kDebug(KARES_DEBUG) << "KAResourceRemote::setUrls(" << downloadUrl.prettyURL() << ", " << uploadUrl.prettyURL() << ")\n";
 	if (isOpen())
 		close();
 	bool active = isActive();

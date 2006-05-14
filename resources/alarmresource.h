@@ -34,6 +34,9 @@ class KConfig;
 using KCal::CalendarLocal;
 
 
+#define KARES_DEBUG AlarmResource::debugArea()
+
+
 /** Base class for a KAlarm alarm calendar resource. */
 class AlarmResource : public KCal::ResourceCached
 {
@@ -89,6 +92,15 @@ class AlarmResource : public KCal::ResourceCached
 		 *  and stored locally in a cache file. */
 		virtual bool cached() const              { return false; }
 
+		/** Set the default cache update action when loading the resource.
+		 *  For remote resources, if @p update is true, and the resource has a
+		 *  reload policy of LoadOnStartup, and the resource has not yet been
+		 *  downloaded, a download is initiated.
+		 *  @return false if nothing changed
+		 */
+		virtual bool setLoadUpdateCache(bool update);
+		bool loadUpdateCache() const             { return mLoadCacheUpdate; }
+
 		/** Return whether the resource is read-only, either because it's marked as
 		 *  read-only, or because it's active but not in the current KAlarm format. */
 		virtual bool readOnly() const;
@@ -101,24 +113,34 @@ class AlarmResource : public KCal::ResourceCached
 		/** Apply the batch of configuration changes since startReconfig() was called. */
 		virtual void applyReconfig();
 
-		/** Load the resource, optionally just from cache.
-		 *  If loading succeeds, the loaded() signal is emitted on completion (but is not
-		 *  emitted if false is returned).
-		 *  loadResource() replaces the inherited load() so that AlarmResources can
-		 *  process the load.
+		/** Load the resource, specifying whether to refresh the cache file first.
+		 *  If loading succeeds, the loaded() signal is emitted on completion (but is
+		 *  not emitted if false is returned).
 		 *  Loading is not performed if the resource is disabled.
-		 *  @param refreshCache if the resource is cached, whether to update the cache file
-		 *                      before loading from the cache file.
+		 *  @param refreshCache if the resource is cached, whether to update the cache
+		 *                      file before loading from the cache file.
 		 *  @return true if loading succeeded at least partially, false if it failed
 		 *          completely
 		 */
-		virtual bool loadResource(bool refreshCache = true);
+		virtual bool loadCached(bool /*refreshCache*/)  { return load(); }
+
+		/** Load the resource.
+		 *  If it's a cached resource, load() uses the default action to either refresh
+		 *  the cache file first or not.
+		 *  If loading succeeds, the loaded() signal is emitted on completion (but is
+		 *  not emitted if false is returned). This allows AlarmResources to process
+		 *  the load.
+		 *  Loading is not performed if the resource is disabled.
+		 *  @return true if loading succeeded at least partially, false if it failed
+		 *          completely
+		 */
+		virtual bool load();
 
 		/** Reload the resource from disc.
 		 *  If the resource is cached, just load from the cache file
 		 *  without updating the cache file first.
 		 */
-		bool refresh();
+		bool     refresh();
 
 		/** Return whether the resource has fully loaded. */
 		bool     isLoaded() const                { return mLoaded; }
@@ -139,6 +161,9 @@ class AlarmResource : public KCal::ResourceCached
 
 		virtual void showProgress(bool)  {}
 
+		static int debugArea()              { return mDebugArea; }
+		static void setDebugArea(int area)  { mDebugArea = area; }
+
 #ifndef NDEBUG
 		QByteArray typeName() const;
 #endif
@@ -151,8 +176,8 @@ class AlarmResource : public KCal::ResourceCached
 		 *  successfully or not.
 		 *  This signal is always emitted after a resource is loaded. */
 		void loaded(AlarmResource*);
-		/** Signal that loading of the resource has completed.
-		 *  This signal is only emitted when loading is done by loadResource(). */
+		/** Signal that loading of the resource been successfully initiated
+		 *  (successfully completed in the case of local resources). */
 		void resLoaded(AlarmResource*);
 		void resourceSaved(AlarmResource*);
 		/** Emitted during download for remote resources. */
@@ -179,20 +204,21 @@ class AlarmResource : public KCal::ResourceCached
 		KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc);
 
 	private:
-		bool load();    // hide load() to force use of loadResource()
+		static int  mDebugArea;       // area for kDebug() output
 
 		KABC::Lock* mLock;
-		Type        mType;         // type of alarm held in this resource
-		bool        mStandard;     // standard resource for this mWriteType
-		bool        mNewReadOnly;  // new read-only status (while mReconfiguring = 1)
-		bool        mOldReadOnly;  // old read-only status (when startReconfig() called)
+		Type        mType;            // type of alarm held in this resource
+		bool        mStandard;        // standard resource for this mWriteType
+		bool        mLoadCacheUpdate; // whether to update cache when loading the resource
+		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
+		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
 		KCalendar::Status mCompatibility; // whether resource is in compatible format
 	protected:
 		typedef QMap<const KCal::Event*, KCalendar::Status>  CompatibilityMap;
 		CompatibilityMap  mCompatibilityMap;   // whether individual events are in compatible format
-		short       mReconfiguring;// a batch of config changes is in progress
-		bool        mLoaded;       // true if resource has finished loading
-		bool        mLoading;      // true if resource is currently loading
+		short       mReconfiguring;   // a batch of config changes is in progress
+		bool        mLoaded;          // true if resource has finished loading
+		bool        mLoading;         // true if resource is currently loading
 };
 
 typedef KRES::Manager<AlarmResource> AlarmResourceManager;

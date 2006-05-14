@@ -30,7 +30,6 @@ extern "C"
 {
 	void* init_kalarm_remote()
 	{
-#warning Add .pot files to Makefile.am
 #ifndef KALARM_STANDALONE
 		KGlobal::locale()->insertCatalog("libkcal");
 		KGlobal::locale()->insertCatalog("kres_remote");

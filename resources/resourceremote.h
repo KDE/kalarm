@@ -60,8 +60,17 @@ class KAResourceRemote : public AlarmResource
 		virtual void writeConfig(KConfig*);
 		virtual void startReconfig();
 		virtual void applyReconfig();
-		virtual bool loadResource(bool refreshCache = true);
+		virtual bool loadCached(bool refreshCache);
+		virtual bool load()                             { return loadCached(loadUpdateCache()); }
 		virtual bool isSaving()                         { return mUploadJob; }
+
+		/** Set the default cache update action when loading the resource.
+		 *  If @p update is true, and the resource has a reload policy of
+		 *  LoadOnStartup, and the resource has not yet been downloaded, a
+		 *  download is initiated.
+		 *  @return false if nothing changed
+		 */
+		virtual bool setLoadUpdateCache(bool update);
 
 		// Override abstract virtual functions
 		virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }
@@ -82,17 +91,20 @@ class KAResourceRemote : public AlarmResource
 
 	private:
 		void init();
+		void setLoadingFromCache();
 
 		KUrl                  mDownloadUrl;
 		KUrl                  mUploadUrl;
 		KIO::FileCopyJob*     mDownloadJob;
 		KIO::FileCopyJob*     mUploadJob;
 		KCal::Incidence::List mChangedIncidences;
-		KUrl                  mNewDownloadUrl;     // new download URL to be applied by applyReconfig()
-		KUrl                  mNewUploadUrl;       // new upload URL to be applied by applyReconfig()
-		bool                  mShowProgress;       // emit download progress signals
-		bool                  mUseCacheFile;       // true to initially use cache until file can be downloaded
-		bool                  mLoadingFromCache;   // true to load from cache without updating cache first
+		KUrl                  mNewDownloadUrl;      // new download URL to be applied by applyReconfig()
+		KUrl                  mNewUploadUrl;        // new upload URL to be applied by applyReconfig()
+		bool                  mShowProgress;        // emit download progress signals
+		bool                  mDownloaded;          // true if resource has been downloaded at least once since last setLoadUpdateCache() call
+		bool                  mUseCacheFile;        // true to initially use cache until file can be downloaded
+		bool                  mLoadFromCache;       // true to load from cache without updating cache first
+		bool                  mLoadCachedExecuting; // a call to loadCached() is in progress
 };
 
 #endif

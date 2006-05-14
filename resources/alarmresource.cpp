@@ -35,12 +35,16 @@ using namespace KCal;
 #include "alarmresource.moc"
 
 
+int AlarmResource::mDebugArea = KARES_DEBUG;
+
+
 AlarmResource::AlarmResource(const KConfig* config)
 	: ResourceCached(config),
 	  mFixFunction(0),
 	  mLock(0),
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
+	  mLoadCacheUpdate(true),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -74,6 +78,7 @@ AlarmResource::AlarmResource(Type type)
 	  mLock(0),
 	  mType(type),
 	  mStandard(false),
+	  mLoadCacheUpdate(true),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -128,7 +133,6 @@ void AlarmResource::applyReconfig()
 void AlarmResource::checkCompatibility(const QString& filename)
 {
 	mCompatibility = KCalendar::Incompatible;   // assume the worst
-kDebug(5951)<<"***checkCompat: fixFunc="<<(bool)mFixFunction<<endl;
 	if (mFixFunction)
 	{
 		// Check whether the version is compatible (and convert it if desired)
@@ -144,7 +148,7 @@ kDebug(5951)<<"***checkCompat: fixFunc="<<(bool)mFixFunction<<endl;
 			return;      // it's in the current KAlarm format
 	}
 	// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
-	kDebug(5951) << "AlarmResource::checkCompatibility(" << resourceName() << "): opened read-only (not current KAlarm format)" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResource::checkCompatibility(" << resourceName() << "): opened read-only (not current KAlarm format)" << endl;
 }
 
 /******************************************************************************
@@ -199,7 +203,7 @@ void AlarmResource::setReadOnly(bool ronly)
 		mNewReadOnly = ronly;
 		return;
 	}
-	kDebug(5951) << "AlarmResource::setReadOnly(" << ronly << ")\n";
+	kDebug(KARES_DEBUG) << "AlarmResource::setReadOnly(" << ronly << ")\n";
 	bool oldRCronly = (mReconfiguring == 2) ? mOldReadOnly : ResourceCached::readOnly();
 	bool oldronly = (oldRCronly || (mCompatibility != KCalendar::Current && mCompatibility != KCalendar::ByEvent));
 	if (!ronly  &&  isActive())
@@ -239,7 +243,15 @@ void AlarmResource::setEnabled(bool enable)
 	}
 }
 
-bool AlarmResource::loadResource(bool)
+bool AlarmResource::setLoadUpdateCache(bool update)
+{
+	if (update == mLoadCacheUpdate)
+		return false;
+	mLoadCacheUpdate = update;
+	return true;
+}
+
+bool AlarmResource::load()
 {
 	mCompatibilityMap.clear();
 	if (!ResourceCached::load())
@@ -248,14 +260,12 @@ bool AlarmResource::loadResource(bool)
 	return true;
 }
 
-bool AlarmResource::load() {}
-
 bool AlarmResource::refresh()
 {
-	kDebug(5951) << "AlarmResource::refresh()\n";
+	kDebug(KARES_DEBUG) << "AlarmResource::refresh()\n";
 	if (!isOpen())
 		return false;
-	bool success = loadResource(false);    // just load from cache (if applicable)
+	bool success = loadCached(false);    // just load from cache (if applicable)
 	emit resourceChanged(this);
 	return success;
 }

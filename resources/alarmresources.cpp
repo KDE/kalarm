@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kurl.h>
+#include <dcopclient.h>
 #include <dcopobject.h>
 #include <kdebug.h>
 
@@ -65,7 +66,8 @@ AlarmResources::AlarmResources(const QString& timeZoneId, DCOPObject* dcopObj, b
 	  mFixFunction(0),
 	  mDcopObject(dcopObj),
 	  mActiveOnly(activeOnly),
-	  mLoadCacheUpdate(true),
+	  mLoadActiveCacheUpdate(true),
+	  mLoadInactiveCacheUpdate(true),
 	  mAskDestination(false),
 	  mShowProgress(false)
 {
@@ -96,16 +98,16 @@ AlarmResources::AlarmResources(const QString& timeZoneId, DCOPObject* dcopObj, b
 		}
 
 #ifndef NDEBUG
-		kDebug(5951) << "AlarmResources used:" << endl;
+		kDebug(KARES_DEBUG) << "AlarmResources used:" << endl;
 		for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
-			kDebug(5951) << "  " << (*it)->resourceName() << endl;
+			kDebug(KARES_DEBUG) << "  " << (*it)->resourceName() << endl;
 #endif
 	}
 }
 
 AlarmResources::~AlarmResources()
 {
-	kDebug(5951) << "AlarmResources::~AlarmResources()" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::~AlarmResources()" << endl;
 	close();
 	delete mManager;
 	theInstance.setObject(mInstance, (AlarmResources*)0);
@@ -149,7 +151,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 		KUrl url(fileName);
 		if (!url.isValid())
 		{
-			kError(5951) << "AlarmResources::addDefaultResource(): " << configKey << ": invalid name: " << fileName << endl;
+			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource(): " << configKey << ": invalid name: " << fileName << endl;
 			mConstructionError = i18n("%1: invalid calendar file name: %2", configKey, fileName);
 			return 0;
 		}
@@ -157,7 +159,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 			resource = new KAResourceRemote(type, url);
 		else if (fileName == mReservedFile)
 		{
-			kError(5951) << "AlarmResources::addDefaultResource(): " << configKey << ": name not allowed: " << fileName << endl;
+			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource(): " << configKey << ": name not allowed: " << fileName << endl;
 			mConstructionError = i18n("%1: file name not permitted: %2", configKey, fileName);
 			return 0;
 		}
@@ -181,17 +183,17 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 
 bool AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent)
 {
-	kDebug(5951) << "AlarmResources::addEvent(" << event->uid() << ")" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::addEvent(" << event->uid() << ")" << endl;
 	AlarmResource* resource = destination(type, promptParent);
 	if (!resource)
 	{
-		kDebug(5951) << "AlarmResources::addEvent(): no resource" << endl;
+		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource" << endl;
 		delete event;
 		return false;
 	}
 	if (!addEvent(event, resource))
 	{
-		kDebug(5951) << "AlarmResources::addEvent(): failed" << endl;
+		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): failed" << endl;
 		return false;    // event was deleted by addEvent()
 	}
 	return true;
@@ -369,11 +371,24 @@ bool AlarmResources::isLoading(AlarmResource::Type type) const
 	return false;
 }
 
+void AlarmResources::setLoadUpdateCache(bool active, bool inactive)
+{
+	mLoadActiveCacheUpdate = active;
+	mLoadInactiveCacheUpdate = inactive;
+	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
+	{
+		AlarmResource* resource = *it;
+		bool update = (resource->alarmType() == AlarmResource::ACTIVE)
+		            ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate;
+		resource->setLoadUpdateCache(update);
+	}
+}
+
 void AlarmResources::load(LoadAction action)
 {
-	kDebug(5951) << "AlarmResources::load()" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::load()" << endl;
 	if (!mManager->standardResource())
-		kDebug(5951) << "Warning! No standard resource yet." << endl;
+		kDebug(KARES_DEBUG) << "Warning! No standard resource yet." << endl;
 
 	// set the timezone for all resources. Otherwise we'll have those terrible tz troubles ;-((
 	// Open all active resources
@@ -401,8 +416,10 @@ void AlarmResources::load(LoadAction action)
 
 bool AlarmResources::load(AlarmResource* resource, LoadAction action)
 {
-	bool update = (action == UpdateCache) ? true : (action == FromCache) ? false : mLoadCacheUpdate;
-	return resource->loadResource(update);
+	bool update = (action == UpdateCache) ? true
+	            : (action == FromCache)   ? false
+	            : (resource->alarmType() == AlarmResource::ACTIVE) ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate;
+	return resource->loadCached(update);
 }
 
 // Called whenever a resource has loaded, to register its events.
@@ -451,7 +468,7 @@ bool AlarmResources::reload(const QString& tz)
 
 void AlarmResources::close()
 {
-	kDebug(5951) << "AlarmResources::close()" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::close()" << endl;
 	if (mOpen)
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -463,7 +480,7 @@ void AlarmResources::close()
 
 void AlarmResources::save()
 {
-	kDebug(5951) << "AlarmResources::save()" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::save()" << endl;
 	if (mOpen  &&  isModified())
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -526,7 +543,7 @@ bool AlarmResources::addEvent(Event* event, AlarmResource* resource)
 
 bool AlarmResources::addEvent(Event* event, QWidget* promptParent)
 {
-	kDebug(5951) << "AlarmResources::addEvent " << this << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::addEvent " << this << endl;
 	AlarmResource* resource = destination(event, promptParent);
 	if (resource)
 	{
@@ -543,13 +560,13 @@ bool AlarmResources::addEvent(Event* event, QWidget* promptParent)
 		mResourceMap.remove(event);
 	}
 	else
-		kDebug(5951) << "AlarmResources::addEvent(): no resource" << endl;
+		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource" << endl;
 	return false;
 }
 
 bool AlarmResources::deleteEvent(Event *event)
 {
-	kDebug(5951) << "AlarmResources::deleteEvent(" << event->uid() << ")" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::deleteEvent(" << event->uid() << ")" << endl;
 	bool status = false;
 	if (mResourceMap.find(event) != mResourceMap.end())
 	{
@@ -606,7 +623,7 @@ Event::List AlarmResources::rawEventsForDate(const QDate &date, EventSortField s
 
 Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, bool inclusive)
 {
-	kDebug(5951) << "AlarmResources::rawEvents(start,end,inclusive)" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents(start,end,inclusive)" << endl;
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEvents(start, end, inclusive), *it);
@@ -615,7 +632,7 @@ Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, bool
 
 Event::List AlarmResources::rawEventsForDate(const QDateTime& qdt)
 {
-	kDebug(5951) << "AlarmResources::rawEventsForDate(qdt)" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::rawEventsForDate(qdt)" << endl;
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEventsForDate(qdt), *it);
@@ -624,7 +641,7 @@ Event::List AlarmResources::rawEventsForDate(const QDateTime& qdt)
 
 Event::List AlarmResources::rawEvents(EventSortField sortField, SortDirection sortDirection)
 {
-	kDebug(5951) << "AlarmResources::rawEvents()" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents()" << endl;
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEvents(EventSortUnsorted), *it);
@@ -649,7 +666,8 @@ void AlarmResources::setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const
 // to initialise it and connect its signals.
 void AlarmResources::connectResource(AlarmResource* resource)
 {
-	kDebug(5951) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
+	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
+	resource->setLoadUpdateCache((resource->alarmType() == AlarmResource::ACTIVE) ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate);
 	resource->setFixFunction(mFixFunction);
 	resource->disconnect(this);   // just in case we're called twice
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
@@ -719,13 +737,13 @@ void AlarmResources::slotSaveError(ResourceCalendar* resource, const QString& er
 
 void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change change)
 {
-	kDebug(5951) << "AlarmResources::slotResourceStatusChanged(" << resource->resourceName() << ", " << (change == Enabled ? "Enabled)" : change == ReadOnly ? "ReadOnly)" : "Location)") << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::slotResourceStatusChanged(" << resource->resourceName() << ", " << (change == Enabled ? "Enabled)" : change == ReadOnly ? "ReadOnly)" : "Location)") << endl;
 	if (!resource->writable())
 	{
 		// The resource is no longer writable, so it can't be a standard resource
 		// N.B. Setting manager's standard resource to 0 does nothing.
-kDebug(5951)<<"***no longer writable***\n";
-kDebug(5951)<<"***active="<<resource->isActive()<<", rc::readOnly="<<resource->KCal::ResourceCached::readOnly()<<", compat="<<resource->compatibility()<<endl;
+kDebug(KARES_DEBUG)<<"***no longer writable***\n";
+kDebug(KARES_DEBUG)<<"***active="<<resource->isActive()<<", rc::readOnly="<<resource->KCal::ResourceCached::readOnly()<<", compat="<<resource->compatibility()<<endl;
 		if (resource->standardResource())
 			resource->setStandardResource(false);
 	}
@@ -759,7 +777,7 @@ AlarmResource* AlarmResources::resource(Incidence* incidence)
 
 void AlarmResources::resourceAdded(AlarmResource* resource)
 {
-	kDebug(5951) << "AlarmResources::resourceAdded(" << resource->resourceName() << ")" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::resourceAdded(" << resource->resourceName() << ")" << endl;
 	connectResource(resource);
 	if (resource->isActive())
 		load(resource);
@@ -769,13 +787,13 @@ void AlarmResources::resourceAdded(AlarmResource* resource)
 
 void AlarmResources::resourceModified(AlarmResource* resource)
 {
-  kDebug(5951) << "AlarmResources::resourceModified(" << resource->resourceName() << ")" << endl;
+  kDebug(KARES_DEBUG) << "AlarmResources::resourceModified(" << resource->resourceName() << ")" << endl;
   emit signalResourceModified(resource);
 }
 
 void AlarmResources::resourceDeleted(AlarmResource* resource)
 {
-	kDebug(5951) << "AlarmResources::resourceDeleted(" << resource->resourceName() << ")" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::resourceDeleted(" << resource->resourceName() << ")" << endl;
 	resource->disconnect(this);
 	emit signalResourceDeleted(resource);
 	emit resourceStatusChanged(resource, Deleted);
@@ -793,10 +811,10 @@ void AlarmResources::doSetTimeZoneId(const QString& timeZoneId)
 
 AlarmResources::Ticket* AlarmResources::requestSaveTicket(AlarmResource* resource)
 {
-  kDebug(5951) << "AlarmResources::requestSaveTicket()" << endl;
+  kDebug(KARES_DEBUG) << "AlarmResources::requestSaveTicket()" << endl;
 
   KABC::Lock* lock = resource->lock();
-kDebug(5951)<<"*** lock="<<(void*)lock<<endl;
+kDebug(KARES_DEBUG)<<"*** lock="<<(void*)lock<<endl;
   if (lock  &&  lock->lock())
     return new Ticket(resource);
   return 0;
@@ -804,12 +822,12 @@ kDebug(5951)<<"*** lock="<<(void*)lock<<endl;
 
 bool AlarmResources::save(Ticket *ticket, Incidence *incidence)
 {
-  kDebug(5951) << "AlarmResources::save(Ticket *)" << endl;
+  kDebug(KARES_DEBUG) << "AlarmResources::save(Ticket *)" << endl;
 
   if (!ticket || !ticket->resource())
     return false;
 
-  kDebug(5951) << "tick " << ticket->resource()->resourceName() << endl;
+  kDebug(KARES_DEBUG) << "tick " << ticket->resource()->resourceName() << endl;
 
     // @TODO: Check if the resource was changed at all. If not, don't save.
   if (ticket->resource()->save(incidence)) {
@@ -828,13 +846,13 @@ void AlarmResources::releaseSaveTicket(Ticket *ticket)
 
 bool AlarmResources::beginChange(Incidence* incidence, QWidget* promptParent)
 {
-  kDebug(5951) << "AlarmResources::beginChange()" << endl;
+  kDebug(KARES_DEBUG) << "AlarmResources::beginChange()" << endl;
 
   AlarmResource* r = resource(incidence);
   if (!r) {
     r = destination(incidence, promptParent);
     if (!r) {
-      kError(5951) << "Unable to get destination resource" << endl;
+      kError(KARES_DEBUG) << "Unable to get destination resource" << endl;
       return false;
     }
     mResourceMap[ incidence ] = r;
@@ -844,7 +862,7 @@ bool AlarmResources::beginChange(Incidence* incidence, QWidget* promptParent)
   if (count == 1) {
     Ticket *ticket = requestSaveTicket(r);
     if (!ticket) {
-      kDebug(5951) << "AlarmResources::beginChange(): unable to get ticket."
+      kDebug(KARES_DEBUG) << "AlarmResources::beginChange(): unable to get ticket."
                     << endl;
       decrementChangeCount(r);
       return false;
@@ -858,7 +876,7 @@ bool AlarmResources::beginChange(Incidence* incidence, QWidget* promptParent)
 
 bool AlarmResources::endChange(Incidence* incidence)
 {
-  kDebug(5951) << "AlarmResources::endChange()" << endl;
+  kDebug(KARES_DEBUG) << "AlarmResources::endChange()" << endl;
 
   AlarmResource* r = resource(incidence);
   if (!r)
@@ -886,13 +904,13 @@ int AlarmResources::incrementChangeCount(AlarmResource* r)
 int AlarmResources::decrementChangeCount(AlarmResource* r)
 {
   if (!mChangeCounts.contains(r)) {
-    kError(5951) << "No change count for resource" << endl;
+    kError(KARES_DEBUG) << "No change count for resource" << endl;
     return 0;
   }
   int count = mChangeCounts[r];
   --count;
   if (count < 0) {
-    kError(5951) << "Can't decrement change count. It already is 0." << endl;
+    kError(KARES_DEBUG) << "Can't decrement change count. It already is 0." << endl;
     count = 0;
   }
   mChangeCounts[r] = count;
