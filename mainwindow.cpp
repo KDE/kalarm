@@ -414,9 +414,9 @@ void MainWindow::initActions()
 	mMenuError = (!mContextMenu  ||  !mActionsMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 	connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
-	connect(mActionUndo->popupMenu(), SIGNAL(activated(int)), SLOT(slotUndoItem(int)));
+	connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
 	connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
-	connect(mActionRedo->popupMenu(), SIGNAL(activated(int)), SLOT(slotRedoItem(int)));
+	connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(updateTrayIconAction()));
@@ -950,16 +950,18 @@ void MainWindow::slotRedo()
 /******************************************************************************
 *  Called when an Undo item is selected.
 */
-void MainWindow::slotUndoItem(int id)
+void MainWindow::slotUndoItem(QAction* action)
 {
+	int id = mUndoMenuIds[action];
 	Undo::undo(id, this, Undo::actionText(Undo::UNDO, id));
 }
 
 /******************************************************************************
 *  Called when a Redo item is selected.
 */
-void MainWindow::slotRedoItem(int id)
+void MainWindow::slotRedoItem(QAction* action)
 {
+	int id = mUndoMenuIds[action];
 	Undo::redo(id, this, Undo::actionText(Undo::REDO, id));
 }
 
@@ -969,7 +971,7 @@ void MainWindow::slotRedoItem(int id)
 */
 void MainWindow::slotInitUndoMenu()
 {
-	initUndoMenu(mActionUndo->popupMenu(), Undo::UNDO);
+	initUndoMenu(mActionUndo->menu(), Undo::UNDO);
 }
 
 /******************************************************************************
@@ -978,22 +980,24 @@ void MainWindow::slotInitUndoMenu()
 */
 void MainWindow::slotInitRedoMenu()
 {
-	initUndoMenu(mActionRedo->popupMenu(), Undo::REDO);
+	initUndoMenu(mActionRedo->menu(), Undo::REDO);
 }
 
 /******************************************************************************
 *  Populate the undo or redo menu.
 */
-void MainWindow::initUndoMenu(KMenu* menu, Undo::Type type)
+void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 {
 	menu->clear();
+	mUndoMenuIds.clear();
 	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
 	QList<int> ids = Undo::ids(type);
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		int id = ids[i];
-		menu->insertItem(i18nc("Undo [action]: message", "%1 %2: %3",
-		                        action, Undo::actionText(type, id), Undo::description(type, id)), id);
+		QAction* act = menu->addAction(i18nc("Undo [action]: message", "%1 %2: %3",
+		                               action, Undo::actionText(type, id), Undo::description(type, id)));
+		mUndoMenuIds[act] = id;
 	}
 }
 

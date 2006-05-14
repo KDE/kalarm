@@ -24,6 +24,7 @@
 /** @file mainwindow.h - main application window */
 
 #include <QList>
+#include <QMap>
 
 #include "alarmevent.h"
 #include "alarmtext.h"
@@ -37,10 +38,10 @@ class QResizeEvent;
 class QDropEvent;
 class QCloseEvent;
 class Q3ListViewItem;
+class QMenu;
 class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
-class KMenu;
 class ActionAlarmsEnabled;
 class AlarmListView;
 class TemplateDlg;
@@ -130,9 +131,9 @@ class MainWindow : public MainWindowBase
 		void           slotShowExpired();
 		void           slotUpdateTimeTo();
 		void           slotUndo();
-		void           slotUndoItem(int id);
+		void           slotUndoItem(QAction* id);
 		void           slotRedo();
-		void           slotRedoItem(int id);
+		void           slotRedoItem(QAction* id);
 		void           slotInitUndoMenu();
 		void           slotInitRedoMenu();
 		void           slotUndoStatus(const QString&, const QString&);
@@ -148,9 +149,9 @@ class MainWindow : public MainWindowBase
 		void           initActions();
 		void           selectionCleared();
 		void           setEnableText(bool enable);
+		void           initUndoMenu(QMenu*, Undo::Type);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
-		static void    initUndoMenu(KMenu*, Undo::Type);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 
@@ -180,6 +181,7 @@ class MainWindow : public MainWindowBase
 		KToggleAction*       mActionShowExpired;
 		KMenu*               mActionsMenu;
 		KMenu*               mContextMenu;
+		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
 		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
 		bool                 mShowExpired;         // include expired alarms in the displayed list
