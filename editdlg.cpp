@@ -1430,7 +1430,7 @@ void EditAlarmDlg::slotOk()
 			return;
 		}
 	}
-	else
+	else if(mTimeWidget)
 	{
 		QWidget* errWidget;
 		mAlarmDateTime = mTimeWidget->getDateTime(!(timedRecurrence || repeated), false, &errWidget);
