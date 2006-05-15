@@ -784,7 +784,7 @@ bool edit(const QString& eventID)
 			kError(5950) << "KAlarm::edit(" << eventID << "): event not active or template" << endl;
 			return false;
 	}
-	KCal::Event* kcalEvent = cal->event(eventID);
+	KCal::Event* kcalEvent = cal ? cal->event(eventID) : 0;
 	if (!kcalEvent)
 	{
 		kError(5950) << "KAlarm::edit(): event ID not found: " << eventID << endl;
