@@ -185,7 +185,7 @@ bool KAResourceRemote::doLoad()
 	if (mUseCacheFile  ||  mLoadFromCache)
 	{
 		disableChangeNotification();
-		loadCache();
+		loadFromCache();
 		mUseCacheFile = false;
 		enableChangeNotification();
 	}
@@ -241,7 +241,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 			kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyURL() << "): success" << endl;
 			emit cacheDownloaded(this);
 			disableChangeNotification();
-			loadCache();
+			loadFromCache();
 			enableChangeNotification();
 			emit resourceChanged(this);
 		}
@@ -294,7 +294,7 @@ bool KAResourceRemote::doSave()
 	}
 
 	mChangedIncidences = allChanges();
-	saveCache();
+	saveToCache();
 	mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true);
 	connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));
 	return true;
