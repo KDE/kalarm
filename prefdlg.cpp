@@ -829,7 +829,7 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label2 = new QLabel(i18n("E&xpired alarm color:"), box);
+	QLabel* label2 = new QLabel(i18n("Archi&ved alarm color:"), box);
 //	label2->setMinimumSize(label2->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);
 	mArchivedColour = new KColorCombo(box);
