@@ -285,9 +285,9 @@ QString AlarmResource::infoText() const
 	QString type;
 	switch (mType)
 	{
-		case ACTIVE:    type = i18n("Active Alarms");  break;
-		case ARCHIVED:  type = i18n("Archived Alarms");  break;
-		case TEMPLATE:  type = i18n("Alarm Templates");  break;
+		case ACTIVE:    type = i18n("Active alarms");  break;
+		case ARCHIVED:  type = i18n("Archived alarms");  break;
+		case TEMPLATE:  type = i18n("Alarm templates");  break;
 		default:        break;
 	}
 	txt += "<br>" + i18nc("Content type (active alarms, etc)", "Contents: %1", type);
