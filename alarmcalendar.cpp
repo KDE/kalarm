@@ -66,7 +66,7 @@ QString AlarmCalendar::icalProductId()
 }
 
 static const KAEvent::Status eventTypes[AlarmCalendar::NCALS] = {
-	KAEvent::ACTIVE, KAEvent::EXPIRED, KAEvent::DISPLAYING, KAEvent::TEMPLATE
+	KAEvent::ACTIVE, KAEvent::ARCHIVED, KAEvent::DISPLAYING, KAEvent::TEMPLATE
 };
 static const QString calendarNames[AlarmCalendar::NCALS] = {
 	QLatin1String("calendar.ics"),
@@ -83,7 +83,7 @@ AlarmCalendar* AlarmCalendar::mCalendars[NCALS] = { 0, 0, 0, 0 };
 * Initialise the alarm calendars, and ensure that their file names are different.
 * There are 4 calendars:
 *  1) A user-independent one containing the active alarms;
-*  2) A historical one containing expired alarms;
+*  2) A historical one containing archived alarms;
 *  3) A user-specific one which contains details of alarms which are currently
 *     being displayed to that user and which have not yet been acknowledged;
 *  4) One containing alarm templates.
@@ -94,19 +94,19 @@ bool AlarmCalendar::initialiseCalendars()
 	KConfig* config = KGlobal::config();
 	config->setGroup(QLatin1String("General"));
 	QString activeKey   = QLatin1String("Calendar");
-	QString expiredKey  = QLatin1String("ExpiredCalendar");
+	QString archivedKey = QLatin1String("ExpiredCalendar");
 	QString templateKey = QLatin1String("TemplateCalendar");
-	QString displayCal, activeCal, expiredCal, templateCal;
+	QString displayCal, activeCal, archiveCal, templateCal;
 	calendarDeleter[ACTIVE].setObject(mCalendars[ACTIVE], createCalendar(ACTIVE, config, activeCal, activeKey));
-	calendarDeleter[EXPIRED].setObject(mCalendars[EXPIRED], createCalendar(EXPIRED, config, expiredCal, expiredKey));
+	calendarDeleter[ARCHIVE].setObject(mCalendars[ARCHIVE], createCalendar(ARCHIVE, config, archiveCal, archivedKey));
 	calendarDeleter[DISPLAY].setObject(mCalendars[DISPLAY], createCalendar(DISPLAY, config, displayCal));
 	calendarDeleter[TEMPLATE].setObject(mCalendars[TEMPLATE], createCalendar(TEMPLATE, config, templateCal, templateKey));
 
 	QString errorKey1, errorKey2;
 	if (activeCal == displayCal)
 		errorKey1 = activeKey;
-	else if (expiredCal == displayCal)
-		errorKey1 = expiredKey;
+	else if (archiveCal == displayCal)
+		errorKey1 = archivedKey;
 	else if (templateCal == displayCal)
 		errorKey1 = templateKey;
 	if (!errorKey1.isNull())
@@ -116,19 +116,19 @@ bool AlarmCalendar::initialiseCalendars()
 		KAlarmApp::displayFatalError(i18n("%1: file name not permitted: %2", errorKey1, file));
 		return false;
 	}
-	if (activeCal == expiredCal)
+	if (activeCal == archiveCal)
 	{
 		errorKey1 = activeKey;
-		errorKey2 = expiredKey;
+		errorKey2 = archivedKey;
 	}
 	else if (activeCal == templateCal)
 	{
 		errorKey1 = activeKey;
 		errorKey2 = templateKey;
 	}
-	else if (expiredCal == templateCal)
+	else if (archiveCal == templateCal)
 	{
-		errorKey1 = expiredKey;
+		errorKey1 = archivedKey;
 		errorKey2 = templateKey;
 	}
 	if (!errorKey1.isNull())
@@ -211,7 +211,7 @@ const KCal::Event* AlarmCalendar::getEvent(const QString& uniqueID)
 	{
 		case KAEvent::ACTIVE:      calID = ACTIVE;  break;
 		case KAEvent::TEMPLATE:    calID = TEMPLATE;  break;
-		case KAEvent::EXPIRED:     calID = EXPIRED;  break;
+		case KAEvent::ARCHIVED:    calID = ARCHIVE;  break;
 		case KAEvent::DISPLAYING:  calID = DISPLAY;  break;
 		default:
 			return 0;
@@ -497,11 +497,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 	{
 		CalendarCompat::fix(cal, filename);
 		bool saveActive   = false;
-		bool saveExpired  = false;
+		bool saveArchived = false;
 		bool saveTemplate = false;
-		AlarmCalendar* active  = activeCalendar();
-		AlarmCalendar* expired = expiredCalendar();
-		AlarmCalendar* templat = 0;
+		AlarmCalendar* active   = activeCalendar();
+		AlarmCalendar* archived = archiveCalendar();
+		AlarmCalendar* templat  = 0;
 		AlarmCalendar* acal;
 		Event::List events = cal.rawEvents();
 		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
@@ -516,9 +516,9 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 					acal = active;
 					saveActive = true;
 					break;
-				case KAEvent::EXPIRED:
-					acal = expired;
-					saveExpired = true;
+				case KAEvent::ARCHIVED:
+					acal = archived;
+					saveArchived = true;
 					break;
 				case KAEvent::TEMPLATE:
 					if (!templat)
@@ -556,8 +556,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 		// Save any calendars which have been modified
 		if (saveActive)
 			active->saveCal();
-		if (saveExpired)
-			expired->saveCal();
+		if (saveArchived)
+			archived->saveCal();
 		if (saveTemplate)
 			templat->saveCal();
 	}
@@ -753,7 +753,7 @@ Event* AlarmCalendar::addEvent(KAEvent& event, bool useEventID)
 		event.setEventID(id);
 		kcalEvent->setUid(id);
 	}
-	event.updateKCalEvent(*kcalEvent, false, (mType == KAEvent::EXPIRED), true);
+	event.updateKCalEvent(*kcalEvent, false, (mType == KAEvent::ARCHIVED), true);
 	mCalendar->addEvent(kcalEvent);
 	event.clearUpdated();
 	return kcalEvent;

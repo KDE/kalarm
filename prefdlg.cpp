@@ -333,25 +333,25 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	// Expired alarms
-	group = new QGroupBox(i18n("Expired Alarms"), mPage);
+	// Archived alarms
+	group = new QGroupBox(i18n("Archived Alarms"), mPage);
 	grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
 	grid->setColumnStretch(1, 1);
 	grid->setColumnMinimumWidth(0, indentWidth());
-	mKeepExpired = new QCheckBox(i18n("Keep alarms after e&xpiry"), group);
-	mKeepExpired->setFixedSize(mKeepExpired->sizeHint());
-	connect(mKeepExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
-	mKeepExpired->setWhatsThis(i18n("Check to store alarms after expiry or deletion (except deleted alarms which were never triggered)."));
-	grid->addWidget(mKeepExpired, 0, 0, 1, 2, Qt::AlignLeft);
+	mKeepArchived = new QCheckBox(i18n("Keep alarms after e&xpiry"), group);
+	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
+	connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
+	mKeepArchived->setWhatsThis(i18n("Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
+	grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
 
 	box = new KHBox(group);
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	mPurgeExpired = new QCheckBox(i18n("Discard ex&pired alarms after:"), box);
-	mPurgeExpired->setMinimumSize(mPurgeExpired->sizeHint());
-	connect(mPurgeExpired, SIGNAL(toggled(bool)), SLOT(slotExpiredToggled(bool)));
+	mPurgeArchived = new QCheckBox(i18n("Discard archi&ved alarms after:"), box);
+	mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
+	connect(mPurgeArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
 	mPurgeAfter = new SpinBox(box);
 	mPurgeAfter->setMinimum(1);
 	mPurgeAfter->setSingleShiftStep(10);
@@ -359,14 +359,14 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	mPurgeAfterLabel = new QLabel(i18n("da&ys"), box);
 	mPurgeAfterLabel->setMinimumSize(mPurgeAfterLabel->sizeHint());
 	mPurgeAfterLabel->setBuddy(mPurgeAfter);
-	box->setWhatsThis(i18n("Uncheck to store expired alarms indefinitely. Check to enter how long expired alarms should be stored."));
+	box->setWhatsThis(i18n("Uncheck to store archived alarms indefinitely. Check to enter how long archived alarms should be stored."));
 	grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
-	mClearExpired = new QPushButton(i18n("Clear Expired Alar&ms"), group);
-	mClearExpired->setFixedSize(mClearExpired->sizeHint());
-	connect(mClearExpired, SIGNAL(clicked()), SLOT(slotClearExpired()));
-	mClearExpired->setWhatsThis(i18n("Delete all existing expired alarms."));
-	grid->addWidget(mClearExpired, 2, 1, Qt::AlignLeft);
+	mClearArchived = new QPushButton(i18n("Clear Archived Alar&ms"), group);
+	mClearArchived->setFixedSize(mClearArchived->sizeHint());
+	connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
+	mClearArchived->setWhatsThis(i18n("Delete all existing archived alarms."));
+	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Terminal window to use for command alarms
@@ -429,7 +429,7 @@ void MiscPrefTab::restore()
 	mAutostartTrayIcon2->setChecked(Preferences::mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	mStartOfDay->setValue(Preferences::mStartOfDay);
-	setExpiredControls(Preferences::mExpiredKeepDays);
+	setArchivedControls(Preferences::mArchivedKeepDays);
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
 	if (!xtermCmd.isEmpty())
@@ -483,8 +483,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
-	Preferences::mExpiredKeepDays = !mKeepExpired->isChecked() ? 0
-	                              : mPurgeExpired->isChecked() ? mPurgeAfter->value() : -1;
+	Preferences::mArchivedKeepDays = !mKeepArchived->isChecked() ? 0
+	                              : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
 	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -501,7 +501,7 @@ void MiscPrefTab::setDefaults()
 	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay);
-	setExpiredControls(Preferences::default_expiredKeepDays);
+	setArchivedControls(Preferences::default_archivedKeepDays);
 	mXtermType->setButton(0);
 	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
@@ -544,27 +544,27 @@ void MiscPrefTab::slotDisableIfStoppedToggled(bool)
 	mQuitWarn->setEnabled(enable);
 }
 
-void MiscPrefTab::setExpiredControls(int purgeDays)
+void MiscPrefTab::setArchivedControls(int purgeDays)
 {
-	mKeepExpired->setChecked(purgeDays);
-	mPurgeExpired->setChecked(purgeDays > 0);
+	mKeepArchived->setChecked(purgeDays);
+	mPurgeArchived->setChecked(purgeDays > 0);
 	mPurgeAfter->setValue(purgeDays > 0 ? purgeDays : 0);
-	slotExpiredToggled(true);
+	slotArchivedToggled(true);
 }
 
-void MiscPrefTab::slotExpiredToggled(bool)
+void MiscPrefTab::slotArchivedToggled(bool)
 {
-	bool keep = mKeepExpired->isChecked();
-	bool after = keep && mPurgeExpired->isChecked();
-	mPurgeExpired->setEnabled(keep);
+	bool keep = mKeepArchived->isChecked();
+	bool after = keep && mPurgeArchived->isChecked();
+	mPurgeArchived->setEnabled(keep);
 	mPurgeAfter->setEnabled(after);
 	mPurgeAfterLabel->setEnabled(keep);
-	mClearExpired->setEnabled(keep);
+	mClearArchived->setEnabled(keep);
 }
 
-void MiscPrefTab::slotClearExpired()
+void MiscPrefTab::slotClearArchived()
 {
-	AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+	AlarmCalendar* cal = AlarmCalendar::archiveCalendarOpen();
 	if (cal)
 		cal->purgeAll();
 }
@@ -832,10 +832,10 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	QLabel* label2 = new QLabel(i18n("E&xpired alarm color:"), box);
 //	label2->setMinimumSize(label2->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);
-	mExpiredColour = new KColorCombo(box);
-	mExpiredColour->setMinimumSize(mExpiredColour->sizeHint());
-	label2->setBuddy(mExpiredColour);
-	box->setWhatsThis(i18n("Choose the text color in the alarm list for expired alarms."));
+	mArchivedColour = new KColorCombo(box);
+	mArchivedColour->setMinimumSize(mArchivedColour->sizeHint());
+	label2->setBuddy(mArchivedColour);
+	box->setWhatsThis(i18n("Choose the text color in the alarm list for archived alarms."));
 	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
 	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
@@ -856,7 +856,7 @@ void FontColourPrefTab::restore()
 	mFontChooser->setColours(Preferences::mMessageColours);
 	mFontChooser->setFont(Preferences::mMessageFont);
 	mDisabledColour->setColor(Preferences::mDisabledColour);
-	mExpiredColour->setColor(Preferences::mExpiredColour);
+	mArchivedColour->setColor(Preferences::mArchivedColour);
 }
 
 void FontColourPrefTab::apply(bool syncToDisc)
@@ -865,7 +865,7 @@ void FontColourPrefTab::apply(bool syncToDisc)
 	Preferences::mMessageColours  = mFontChooser->colours();
 	Preferences::mMessageFont     = mFontChooser->font();
 	Preferences::mDisabledColour  = mDisabledColour->color();
-	Preferences::mExpiredColour   = mExpiredColour->color();
+	Preferences::mArchivedColour  = mArchivedColour->color();
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -875,7 +875,7 @@ void FontColourPrefTab::setDefaults()
 	mFontChooser->setColours(Preferences::default_messageColours);
 	mFontChooser->setFont(Preferences::default_messageFont());
 	mDisabledColour->setColor(Preferences::default_disabledColour);
-	mExpiredColour->setColor(Preferences::default_expiredColour);
+	mArchivedColour->setColor(Preferences::default_archivedColour);
 }
 
 
@@ -1297,9 +1297,9 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(MainWindow::i18n_e_ShowExpiredAlarms(), mPage);
-	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
-	mShowExpiredAlarms->setWhatsThis(i18n("Specify whether to show expired alarms in the alarm list"));
+	mShowArchivedAlarms = new QCheckBox(MainWindow::i18n_e_ShowArchivedAlarms(), mPage);
+	mShowArchivedAlarms->setMinimumSize(mShowArchivedAlarms->sizeHint());
+	mShowArchivedAlarms->setWhatsThis(i18n("Specify whether to show archived alarms in the alarm list"));
 
 	KHBox* itemBox = new KHBox(mPage);   // this is to control the QWhatsThis text display area
 	itemBox->setMargin(0);
@@ -1328,7 +1328,7 @@ void ViewPrefTab::restore()
 	           Preferences::mShowTooltipTimeToAlarm,
 	           Preferences::mTooltipTimeToPrefix);
 	mModalMessages->setChecked(Preferences::mModalMessages);
-	mShowExpiredAlarms->setChecked(Preferences::mShowExpiredAlarms);
+	mShowArchivedAlarms->setChecked(Preferences::mShowArchivedAlarms);
 	mDaemonTrayCheckInterval->setValue(Preferences::mDaemonTrayCheckInterval);
 }
 
@@ -1344,7 +1344,7 @@ void ViewPrefTab::apply(bool syncToDisc)
 	Preferences::mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
 	Preferences::mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
 	Preferences::mModalMessages           = mModalMessages->isChecked();
-	Preferences::mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
+	Preferences::mShowArchivedAlarms      = mShowArchivedAlarms->isChecked();
 	Preferences::mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -1358,7 +1358,7 @@ void ViewPrefTab::setDefaults()
 	           Preferences::default_showTooltipTimeToAlarm,
 	           Preferences::default_tooltipTimeToPrefix);
 	mModalMessages->setChecked(Preferences::default_modalMessages);
-	mShowExpiredAlarms->setChecked(Preferences::default_showExpiredAlarms);
+	mShowArchivedAlarms->setChecked(Preferences::default_showArchivedAlarms);
 	mDaemonTrayCheckInterval->setValue(Preferences::default_daemonTrayCheckInterval);
 }
 

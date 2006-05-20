@@ -57,7 +57,7 @@ class UndoItem
 		virtual UndoItem* restore() = 0;
 		virtual bool      deleteID(const QString& /*id*/)  { return false; }
 
-		enum Error   { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_TEMPLATE, ERR_EXPIRED };
+		enum Error   { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_TEMPLATE, ERR_ARCHIVED };
 		enum Warning { WARN_NONE, WARN_KORG_ADD, WARN_KORG_MODIFY, WARN_KORG_DELETE };
 		static int        mLastId;
 		static Error      mRestoreError;         // error code valid only if restore() returns 0
@@ -377,7 +377,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 		case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
 		case UndoItem::ERR_CREATE:     err = i18n("Error recreating alarm");  break;
 		case UndoItem::ERR_TEMPLATE:   err = i18n("Error recreating alarm template");  break;
-		case UndoItem::ERR_EXPIRED:    err = i18n("Cannot reactivate expired alarm");  break;
+		case UndoItem::ERR_ARCHIVED:   err = i18n("Cannot reactivate archived alarm");  break;
 		case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
 		default:                       err = i18n("Unknown error");  break;
 	}
@@ -625,8 +625,8 @@ QString UndoItem::addDeleteActionText(KAEvent::Status calendar, bool add)
 				return i18nc("Action to create a new alarm template", "New template");
 			else
 				return i18nc("Action to delete an alarm template", "Delete template");
-		case KAEvent::EXPIRED:
-			return i18n("Delete expired alarm");
+		case KAEvent::ARCHIVED:
+			return i18n("Delete archived alarm");
 		default:
 			break;
 	}
@@ -778,7 +778,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 			if (KAlarm::deleteTemplate(event.id()) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
 			break;
-		case KAEvent::EXPIRED:    // redoing the deletion of an expired alarm
+		case KAEvent::ARCHIVED:    // redoing the deletion of an archived alarm
 			KAlarm::deleteEvent(event);
 			break;
 		default:
@@ -892,7 +892,7 @@ UndoItem* UndoEdit::restore()
 			if (KAlarm::updateTemplate(*mOldEvent, 0) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
 			break;
-		case KAEvent::EXPIRED:    // editing of expired events is not allowed
+		case KAEvent::ARCHIVED:    // editing of archived events is not allowed
 		default:
 			delete undo;
 			mRestoreError = ERR_PROG;
@@ -951,7 +951,7 @@ UndoItem* UndoDelete::restore()
 			if (mEvent->toBeArchived())
 			{
 				// It was archived when it was deleted
-				mEvent->setUid(KAEvent::EXPIRED);
+				mEvent->setUid(KAEvent::ARCHIVED);
 				switch (KAlarm::reactivateEvent(*mEvent, 0))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
@@ -961,7 +961,7 @@ UndoItem* UndoDelete::restore()
 					case KAlarm::UPDATE_ERROR:
 					case KAlarm::UPDATE_FAILED:
 					case KAlarm::SAVE_FAILED:
-						mRestoreError = ERR_EXPIRED;
+						mRestoreError = ERR_ARCHIVED;
 						return 0;
 					case KAlarm::UPDATE_OK:
 						break;
@@ -992,8 +992,8 @@ UndoItem* UndoDelete::restore()
 				return 0;
 			}
 			break;
-		case KAEvent::EXPIRED:
-			if (!KAlarm::addExpiredEvent(*mEvent))
+		case KAEvent::ARCHIVED:
+			if (!KAlarm::addArchivedEvent(*mEvent))
 			{
 				mRestoreError = ERR_CREATE;
 				return 0;
@@ -1055,13 +1055,13 @@ QString UndoDeletes::defaultActionText() const
 				return i18n("Delete multiple alarms");
 			case KAEvent::TEMPLATE:
 				return i18n("Delete multiple templates");
-			case KAEvent::EXPIRED:
-				break;    // check if they are ALL expired
+			case KAEvent::ARCHIVED:
+				break;    // check if they are ALL archived
 			default:
 				return QString();
 		}
 	}
-	return i18n("Delete multiple expired alarms");
+	return i18n("Delete multiple archived alarms");
 }
 
 

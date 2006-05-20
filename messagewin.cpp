@@ -1355,7 +1355,7 @@ void MessageWin::slotDefer()
 			KAlarm::addEvent(event, 0, true, false, mDeferDlg);
 			if (kcalEvent)
 			{
-				event.setUid(KAEvent::EXPIRED);
+				event.setUid(KAEvent::ARCHIVED);
 				KAlarm::deleteEvent(event, false);
 			}
 		}

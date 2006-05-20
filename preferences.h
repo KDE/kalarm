@@ -68,7 +68,7 @@ class Preferences : public QObject
 		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
 		static bool              modalMessages()                  { return mModalMessages; }
 		static int               messageButtonDelay()             { return mMessageButtonDelay; }
-		static bool              showExpiredAlarms()              { return mShowExpiredAlarms; }
+		static bool              showArchivedAlarms()             { return mShowArchivedAlarms; }
 		static bool              showAlarmTime()                  { return mShowAlarmTime; }
 		static bool              showTimeToAlarm()                { return mShowTimeToAlarm; }
 		static int               tooltipAlarmCount()              { return mTooltipAlarmCount; }
@@ -86,8 +86,8 @@ class Preferences : public QObject
 		static QString           emailBccAddress();
 		static QString           cmdXTermCommand()                { return mCmdXTermCommand; }
 		static QColor            disabledColour()                 { return mDisabledColour; }
-		static QColor            expiredColour()                  { return mExpiredColour; }
-		static int               expiredKeepDays()                { return mExpiredKeepDays; }
+		static QColor            archivedColour()                 { return mArchivedColour; }
+		static int               archivedKeepDays()               { return mArchivedKeepDays; }
 		static bool              defaultSound()                   { return mDefaultSound; }
 		static SoundPicker::Type defaultSoundType()               { return mDefaultSoundType; }
 		static const QString&    defaultSoundFile()               { return mDefaultSoundFile; }
@@ -128,7 +128,7 @@ class Preferences : public QObject
 		static const bool                       default_confirmAlarmDeletion;
 		static const bool                       default_modalMessages;
 		static const int                        default_messageButtonDelay;
-		static const bool                       default_showExpiredAlarms;
+		static const bool                       default_showArchivedAlarms;
 		static const bool                       default_showAlarmTime;
 		static const bool                       default_showTimeToAlarm;
 		static const int                        default_tooltipAlarmCount;
@@ -144,8 +144,8 @@ class Preferences : public QObject
 		static const QString                    default_emailAddress;
 		static const QString                    default_emailBccAddress;
 		static const QColor                     default_disabledColour;
-		static const QColor                     default_expiredColour;
-		static const int                        default_expiredKeepDays;
+		static const QColor                     default_archivedColour;
+		static const int                        default_archivedKeepDays;
 		static const QString                    default_defaultSoundFile;
 		static const float                      default_defaultSoundVolume;
 		static const int                        default_defaultLateCancel;
@@ -204,7 +204,7 @@ class Preferences : public QObject
 		static bool                mAutostartTrayIcon;
 		static bool                mModalMessages;
 		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-		static bool                mShowExpiredAlarms;
+		static bool                mShowArchivedAlarms;
 		static bool                mShowAlarmTime;
 		static bool                mShowTimeToAlarm;
 		static int                 mTooltipAlarmCount;
@@ -218,8 +218,8 @@ class Preferences : public QObject
 		static bool                mEmailCopyToKMail;
 		static QString             mCmdXTermCommand;
 		static QColor              mDisabledColour;
-		static QColor              mExpiredColour;
-		static int                 mExpiredKeepDays;     // 0 = don't keep, -1 = keep indefinitely
+		static QColor              mArchivedColour;
+		static int                 mArchivedKeepDays;     // 0 = don't keep, -1 = keep indefinitely
 		// Default settings for Edit Alarm dialog
 		static QString             mDefaultSoundFile;
 		static float               mDefaultSoundVolume;

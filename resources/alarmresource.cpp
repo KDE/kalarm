@@ -60,7 +60,7 @@ AlarmResource::AlarmResource(const KConfig* config)
 		switch (type)
 		{
 			case ACTIVE:
-			case EXPIRED:
+			case ARCHIVED:
 			case TEMPLATE:
 				mType = static_cast<Type>(type);
 				mStandard = config->readEntry("Standard", true);
@@ -286,7 +286,7 @@ QString AlarmResource::infoText() const
 	switch (mType)
 	{
 		case ACTIVE:    type = i18n("Active Alarms");  break;
-		case EXPIRED:   type = i18n("Expired Alarms");  break;
+		case ARCHIVED:  type = i18n("Archived Alarms");  break;
 		case TEMPLATE:  type = i18n("Alarm Templates");  break;
 		default:        break;
 	}
@@ -317,7 +317,7 @@ KCalEvent::Status AlarmResource::kcalEventType() const
 	switch (mType)
 	{
 		case ACTIVE:    return KCalEvent::ACTIVE;
-		case EXPIRED:   return KCalEvent::EXPIRED;
+		case ARCHIVED:  return KCalEvent::ARCHIVED;
 		case TEMPLATE:  return KCalEvent::TEMPLATE;
 		default:        return KCalEvent::EMPTY;
 	}
@@ -333,11 +333,11 @@ void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
 		switch (KCalEvent::status(*it))
 		{
 			case KCalEvent::ACTIVE:    mTypes = static_cast<Type>(mTypes | ACTIVE);  break;
-			case KCalEvent::EXPIRED:   mTypes = static_cast<Type>(mTypes | EXPIRED);  break;
+			case KCalEvent::ARCHIVED:  mTypes = static_cast<Type>(mTypes | ARCHIVED);  break;
 			case KCalEvent::TEMPLATE:  mTypes = static_cast<Type>(mTypes | TEMPLATE);  break;
 			default:   break;
 		}
-		if (mTypes == (ACTIVE | EXPIRED | TEMPLATE))
+		if (mTypes == (ACTIVE | ARCHIVED | TEMPLATE))
 			break;
 	}
 }
@@ -349,7 +349,7 @@ QByteArray AlarmResource::typeName() const
 	switch (mType)
 	{
 		case ACTIVE:    return "Active";
-		case EXPIRED:   return "Expired";
+		case ARCHIVED:  return "Archived";
 		case TEMPLATE:  return "Template";
 		default:        return "Empty";
 	}

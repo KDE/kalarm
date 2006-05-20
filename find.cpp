@@ -40,13 +40,13 @@
 // KAlarm-specific options for Find dialog
 enum {
 	FIND_LIVE    = KFind::MinimumUserOption,
-	FIND_EXPIRED = KFind::MinimumUserOption << 1,
+	FIND_ARCHIVED = KFind::MinimumUserOption << 1,
 	FIND_MESSAGE = KFind::MinimumUserOption << 2,
 	FIND_FILE    = KFind::MinimumUserOption << 3,
 	FIND_COMMAND = KFind::MinimumUserOption << 4,
 	FIND_EMAIL   = KFind::MinimumUserOption << 5
 };
-static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
+static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 
 
 Find::Find(EventListViewBase* parent)
@@ -72,11 +72,11 @@ void Find::display()
 {
 	if (!mOptions)
 		// Set defaults the first time the Find dialog is activated
-		mOptions = FIND_LIVE | FIND_EXPIRED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
-	bool noExpired = !Preferences::expiredKeepDays();
-	bool showExpired = mListView->metaObject()->className() == "AlarmListView"  &&  ((AlarmListView*)mListView)->showingExpired();
-	if (noExpired  ||  !showExpired)      // these settings could change between activations
-		mOptions &= ~FIND_EXPIRED;
+		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
+	bool noArchived = !Preferences::archivedKeepDays();
+	bool showArchived = mListView->metaObject()->className() == "AlarmListView"  &&  ((AlarmListView*)mListView)->showingArchived();
+	if (noArchived  ||  !showArchived)      // these settings could change between activations
+		mOptions &= ~FIND_ARCHIVED;
 
 	if (mDialog)
 	{
@@ -103,20 +103,20 @@ void Find::display()
 		grid->setSpacing(KDialog::spacingHint());
 		grid->setColumnStretch(1, 1);
 
-		// Live & expired alarm selection
+		// Live & archived alarm selection
 		mLive = new QCheckBox(i18n("Acti&ve"), group);
 		mLive->setFixedSize(mLive->sizeHint());
 		mLive->setWhatsThis(i18n("Check to include active alarms in the search."));
 		grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
 
-		mExpired = new QCheckBox(i18n("Ex&pired"), group);
-		mExpired->setFixedSize(mExpired->sizeHint());
-		mExpired->setWhatsThis(i18n("Check to include expired alarms in the search. "
-		                            "This option is only available if expired alarms are currently being displayed."));
-		grid->addWidget(mExpired, 1, 2, Qt::AlignLeft);
+		mArchived = new QCheckBox(i18n("A&rchived"), group);
+		mArchived->setFixedSize(mArchived->sizeHint());
+		mArchived->setWhatsThis(i18n("Check to include archived alarms in the search. "
+		                             "This option is only available if archived alarms are currently being displayed."));
+		grid->addWidget(mArchived, 1, 2, Qt::AlignLeft);
 
-		mActiveExpiredSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
-		grid->addWidget(mActiveExpiredSep, 2, 0, 1, 3);
+		mActiveArchivedSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
+		grid->addWidget(mActiveArchivedSep, 2, 0, 1, 3);
 
 		// Alarm actions
 		mMessageType = new QCheckBox(i18n("Text"), group);
@@ -141,7 +141,7 @@ void Find::display()
 
 		// Set defaults
 		mLive->setChecked(mOptions & FIND_LIVE);
-		mExpired->setChecked(mOptions & FIND_EXPIRED);
+		mArchived->setChecked(mOptions & FIND_ARCHIVED);
 		mMessageType->setChecked(mOptions & FIND_MESSAGE);
 		mFileType->setChecked(mOptions & FIND_FILE);
 		mCommandType->setChecked(mOptions & FIND_COMMAND);
@@ -153,32 +153,32 @@ void Find::display()
 		connect(mDialog, SIGNAL(destroyed()), this, SLOT(slotDlgDestroyed()));
 	}
 
-	// Only display active/expired options if expired alarms are being kept
-	if (noExpired)
+	// Only display active/archived options if archived alarms are being kept
+	if (noArchived)
 	{
 		mLive->hide();
-		mExpired->hide();
-		mActiveExpiredSep->hide();
+		mArchived->hide();
+		mActiveArchivedSep->hide();
 	}
 	else
 	{
 		mLive->show();
-		mExpired->show();
-		mActiveExpiredSep->show();
+		mArchived->show();
+		mActiveArchivedSep->show();
 	}
 
 	// Disable options where no displayed alarms match them
-	bool live    = false;
-	bool expired = false;
-	bool text    = false;
-	bool file    = false;
-	bool command = false;
-	bool email   = false;
+	bool live     = false;
+	bool archived = false;
+	bool text     = false;
+	bool file     = false;
+	bool command  = false;
+	bool email    = false;
 	for (EventListViewItemBase* item = mListView->firstChild();  item;  item = item->nextSibling())
 	{
 		const KAEvent& event = item->event();
 		if (event.expired())
-			expired = true;
+			archived = true;
 		else
 			live = true;
 		switch (event.action())
@@ -190,7 +190,7 @@ void Find::display()
 		}
 	}
 	mLive->setEnabled(live);
-	mExpired->setEnabled(expired);
+	mArchived->setEnabled(archived);
 	mMessageType->setEnabled(text);
 	mFileType->setEnabled(file);
 	mCommandType->setEnabled(command);
@@ -217,12 +217,12 @@ void Find::slotFind()
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
 	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
 	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
-	         |  (mExpired->isEnabled()     && mExpired->isChecked()     ? FIND_EXPIRED : 0)
+	         |  (mArchived->isEnabled()    && mArchived->isChecked()    ? FIND_ARCHIVED : 0)
 	         |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
 	         |  (mFileType->isEnabled()    && mFileType->isChecked()    ? FIND_FILE : 0)
 	         |  (mCommandType->isEnabled() && mCommandType->isChecked() ? FIND_COMMAND : 0)
 	         |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0);
-	if (!(mOptions & (FIND_LIVE | FIND_EXPIRED))
+	if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
 	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL)))
 	{
 		KMessageBox::sorry(mDialog, i18n("No alarm types are selected to search"));
@@ -297,7 +297,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 		fromCurrent = false;
 		bool live = !event.expired();
 		if (live  &&  !(mOptions & FIND_LIVE)
-		||  !live  &&  !(mOptions & FIND_EXPIRED))
+		||  !live  &&  !(mOptions & FIND_ARCHIVED))
 			continue;     // we're not searching this type of alarm
 		switch (event.action())
 		{

@@ -254,7 +254,7 @@ class KAEvent : public KAAlarmEventBase
 		enum Status
 		{
 			ACTIVE,      // the event is currently active
-			EXPIRED,     // the event has expired
+			ARCHIVED,    // the event is archived
 			DISPLAYING,  // the event is currently being displayed
 			TEMPLATE,    // the event is an alarm template
 			KORGANIZER   // the event is a copy of a KAlarm event, held by KOrganizer
@@ -407,7 +407,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
-		bool               expired() const                { return mDisplaying && mMainExpired  ||  uidStatus(mEventID) == EXPIRED; }
+		bool               expired() const                { return mDisplaying && mMainExpired  ||  uidStatus(mEventID) == ARCHIVED; }
 		Status             category() const               { return uidStatus(mEventID); }
 		static Status      uidStatus(const QString& uid);
 		static QString     uid(const QString& id, Status);
@@ -466,7 +466,7 @@ class KAEvent : public KAAlarmEventBase
 		QString            mPreAction;        // command to execute before alarm is displayed
 		QString            mPostAction;       // command to execute after alarm window is closed
 		DateTime           mStartDateTime;    // DTSTART and DTEND: start and end time for event
-		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in expired calendar
+		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in archived calendar
 		QDateTime          mAtLoginDateTime;  // repeat-at-login time
 		DateTime           mDeferralTime;     // extra time to trigger alarm (if alarm or reminder deferred)
 		DateTime           mDisplayingTime;   // date/time shown in the alarm currently being displayed
@@ -485,7 +485,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
-		bool               mArchiveRepeatAtLogin; // if now expired, original event was repeat-at-login
+		bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
 		bool               mArchive;          // event has triggered in the past, so archive it when closed
 		bool               mEnabled;          // false if event is disabled
 		mutable bool       mUpdated;          // event has been updated but not written to calendar file

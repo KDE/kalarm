@@ -707,10 +707,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
 	setReadOnly();
 
-	mChanged           = false;
-	mOnlyDeferred      = false;
+	mChanged            = false;
+	mOnlyDeferred       = false;
 	mExpiredRecurrence = false;
-	mKMailSerialNumber = 0;
+	mKMailSerialNumber  = 0;
 	bool deferGroupVisible = false;
 	if (event)
 	{

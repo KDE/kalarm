@@ -97,7 +97,7 @@ bool                runProgram(const DCOPCString& program, const DCOPCString& wi
 UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false,
                              bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        addEvents(QList<KAEvent>&, AlarmListView* selectionView, bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
-bool                addExpiredEvent(KAEvent&);
+bool                addArchivedEvent(KAEvent&);
 UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true, QWidget* errmsgParent = 0);

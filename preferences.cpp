@@ -56,7 +56,7 @@ const bool                       Preferences::default_autostartTrayIcon       = 
 const bool                       Preferences::default_confirmAlarmDeletion    = true;
 const bool                       Preferences::default_modalMessages           = true;
 const int                        Preferences::default_messageButtonDelay      = 0;     // (seconds)
-const bool                       Preferences::default_showExpiredAlarms       = false;
+const bool                       Preferences::default_showArchivedAlarms      = false;
 const bool                       Preferences::default_showAlarmTime           = true;
 const bool                       Preferences::default_showTimeToAlarm         = false;
 const int                        Preferences::default_tooltipAlarmCount       = 5;
@@ -67,8 +67,8 @@ const int                        Preferences::default_daemonTrayCheckInterval = 
 const bool                       Preferences::default_emailCopyToKMail        = false;
 const bool                       Preferences::default_emailQueuedNotify       = false;
 const QColor                     Preferences::default_disabledColour(Qt::lightGray);
-const QColor                     Preferences::default_expiredColour(Qt::darkRed);
-const int                        Preferences::default_expiredKeepDays         = 7;
+const QColor                     Preferences::default_archivedColour(Qt::darkRed);
+const int                        Preferences::default_archivedKeepDays        = 7;
 const QString                    Preferences::default_defaultSoundFile        = QString();
 const float                      Preferences::default_defaultSoundVolume      = -1;
 const int                        Preferences::default_defaultLateCancel       = 0;
@@ -108,7 +108,7 @@ bool                       Preferences::mAutostartTrayIcon;
 KARecurrence::Feb29Type    Preferences::mDefaultFeb29Type;
 bool                       Preferences::mModalMessages;
 int                        Preferences::mMessageButtonDelay;
-bool                       Preferences::mShowExpiredAlarms;
+bool                       Preferences::mShowArchivedAlarms;
 bool                       Preferences::mShowAlarmTime;
 bool                       Preferences::mShowTimeToAlarm;
 int                        Preferences::mTooltipAlarmCount;
@@ -124,8 +124,8 @@ Preferences::MailFrom      Preferences::mEmailBccFrom;
 bool                       Preferences::mEmailCopyToKMail;
 QString                    Preferences::mCmdXTermCommand;
 QColor                     Preferences::mDisabledColour;
-QColor                     Preferences::mExpiredColour;
-int                        Preferences::mExpiredKeepDays;
+QColor                     Preferences::mArchivedColour;
+int                        Preferences::mArchivedKeepDays;
 // Default settings for Edit Alarm dialog
 QString                    Preferences::mDefaultSoundFile;
 float                      Preferences::mDefaultSoundVolume;
@@ -165,7 +165,7 @@ static const QString AUTOSTART_TRAY           = "AutostartTray";
 static const QString FEB29_RECUR_TYPE         = "Feb29Recur";
 static const QString MODAL_MESSAGES           = "ModalMessages";
 static const QString MESSAGE_BUTTON_DELAY     = "MessageButtonDelay";
-static const QString SHOW_EXPIRED_ALARMS      = "ShowExpiredAlarms";
+static const QString SHOW_ARCHIVED_ALARMS     = "ShowExpiredAlarms";
 static const QString SHOW_ALARM_TIME          = "ShowAlarmTime";
 static const QString SHOW_TIME_TO_ALARM       = "ShowTimeToAlarm";
 static const QString TOOLTIP_ALARM_COUNT      = "TooltipAlarmCount";
@@ -181,8 +181,8 @@ static const QString CMD_XTERM_COMMAND        = "CmdXTerm";
 static const QString START_OF_DAY             = "StartOfDay";
 static const QString START_OF_DAY_CHECK       = "Sod";
 static const QString DISABLED_COLOUR          = "DisabledColour";
-static const QString EXPIRED_COLOUR           = "ExpiredColour";
-static const QString EXPIRED_KEEP_DAYS        = "ExpiredKeepDays";
+static const QString ARCHIVED_COLOUR          = "ExpiredColour";
+static const QString ARCHIVED_KEEP_DAYS       = "ExpiredKeepDays";
 static const QString DEFAULTS_SECTION         = "Defaults";
 static const QString DEF_LATE_CANCEL          = "DefLateCancel";
 static const QString DEF_AUTO_CLOSE           = "DefAutoClose";
@@ -290,7 +290,7 @@ void Preferences::read()
 	mAutostartTrayIcon        = config->readEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
 	mModalMessages            = config->readEntry(MODAL_MESSAGES, default_modalMessages);
 	mMessageButtonDelay       = config->readEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
-	mShowExpiredAlarms        = config->readEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
+	mShowArchivedAlarms       = config->readEntry(SHOW_ARCHIVED_ALARMS, default_showArchivedAlarms);
 	mShowTimeToAlarm          = config->readEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readEntry(SHOW_ALARM_TIME, default_showAlarmTime);
 	mTooltipAlarmCount        = config->readEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
@@ -323,8 +323,8 @@ void Preferences::read()
 	if (sod)
 		mOldStartOfDay    = mOldStartOfDay.addMSecs(sod ^ SODxor);
 	mDisabledColour           = config->readEntry(DISABLED_COLOUR, default_disabledColour);
-	mExpiredColour            = config->readEntry(EXPIRED_COLOUR, default_expiredColour);
-	mExpiredKeepDays          = config->readEntry(EXPIRED_KEEP_DAYS, default_expiredKeepDays);
+	mArchivedColour           = config->readEntry(ARCHIVED_COLOUR, default_archivedColour);
+	mArchivedKeepDays         = config->readEntry(ARCHIVED_KEEP_DAYS, default_archivedKeepDays);
 
 	config->setGroup(DEFAULTS_SECTION);
 	mDefaultLateCancel        = config->readEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
@@ -390,7 +390,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
-	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
+	config->writeEntry(SHOW_ARCHIVED_ALARMS, mShowArchivedAlarms);
 	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
 	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
 	config->writeEntry(TOOLTIP_ALARM_COUNT, mTooltipAlarmCount);
@@ -406,8 +406,8 @@ void Preferences::save(bool syncToDisc)
 	config->writePathEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
-	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
-	config->writeEntry(EXPIRED_KEEP_DAYS, mExpiredKeepDays);
+	config->writeEntry(ARCHIVED_COLOUR, mArchivedColour);
+	config->writeEntry(ARCHIVED_KEEP_DAYS, mArchivedKeepDays);
 	config->setGroup(DEFAULTS_SECTION);
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);

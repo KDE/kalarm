@@ -91,7 +91,7 @@ AlarmResources::AlarmResources(const QString& timeZoneId, DCOPObject* dcopObj, b
 		setStandardResource(resource);
 		if (!mActiveOnly)
 		{
-			resource = addDefaultResource(config, AlarmResource::EXPIRED);
+			resource = addDefaultResource(config, AlarmResource::ARCHIVED);
 			setStandardResource(resource);
 			resource = addDefaultResource(config, AlarmResource::TEMPLATE);
 			setStandardResource(resource);
@@ -135,10 +135,10 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 			defaultFile = QString::fromLatin1("template.ics");
 			title       = i18n("Alarm Templates");
 			break;
-		case AlarmResource::EXPIRED:
+		case AlarmResource::ARCHIVED:
 			configKey   = QString::fromLatin1("ExpiredCalendar");
 			defaultFile = QString::fromLatin1("expired.ics");
-			title       = i18n("Expired Alarms");
+			title       = i18n("Archived Alarms");
 			break;
 		default:
 			return 0;
@@ -210,7 +210,7 @@ AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
 				return std;
 			return 0;
 		}
-		case AlarmResource::EXPIRED:
+		case AlarmResource::ARCHIVED:
 		case AlarmResource::TEMPLATE:
 			if (mActiveOnly)
 				return 0;
@@ -293,11 +293,11 @@ AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* prom
 				return 0;
 			calType = AlarmResource::TEMPLATE;
 			break;
-		case KCalEvent::EXPIRED:
+		case KCalEvent::ARCHIVED:
 			if (mActiveOnly)
 				return 0;
-			// Expired alarms are always saved in the default resource
-			return getStandardResource(AlarmResource::EXPIRED);
+			// Archived alarms are always saved in the default resource
+			return getStandardResource(AlarmResource::ARCHIVED);
 		default:
 			return 0;
 	}

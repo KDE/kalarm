@@ -475,7 +475,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		DCOPObject* mDcopObject;      // DCOP object to use to send signals from
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
 		bool        mLoadActiveCacheUpdate;   // whether default load should update cache for active alarm resource
-		bool        mLoadInactiveCacheUpdate; // whether default load should update cache for expired/template resource
+		bool        mLoadInactiveCacheUpdate; // whether default load should update cache for archived/template resource
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;

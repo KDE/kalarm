@@ -25,7 +25,7 @@
    <Action name="showAlarmTimes" />
    <Action name="showTimeToAlarms" />
    <Separator/>
-   <Action name="showExpiredAlarms" />
+   <Action name="showArchivedAlarms" />
    <Action name="showInSystemTray" />
   </Menu>
   <Menu name="actions" >

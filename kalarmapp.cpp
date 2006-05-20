@@ -102,7 +102,7 @@ QString     KAlarmApp::mFatalMessage;
 	mProcessingQueue(false),
 	mCheckingSystemTray(false),
 	mSessionClosingDown(false),
-	mRefreshExpiredAlarms(false),
+	mRefreshArchivedAlarms(false),
 	mSpeechEnabled(false)
 {
 	Preferences::initialise();
@@ -114,7 +114,7 @@ QString     KAlarmApp::mFatalMessage;
 
 	if (AlarmCalendar::initialiseCalendars())
 	{
-		connect(AlarmCalendar::expiredCalendar(), SIGNAL(purged()), SLOT(slotExpiredPurged()));
+		connect(AlarmCalendar::archiveCalendar(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
 
 		KConfig* config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
@@ -125,10 +125,10 @@ QString     KAlarmApp::mFatalMessage;
 		mStartOfDay             = Preferences::startOfDay();
 		if (Preferences::hasStartOfDayChanged())
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
-		mPrefsExpiredColour   = Preferences::expiredColour();
-		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
-		mPrefsShowTime        = Preferences::showAlarmTime();
-		mPrefsShowTimeTo      = Preferences::showTimeToAlarm();
+		mPrefsArchivedColour   = Preferences::archivedColour();
+		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
+		mPrefsShowTime         = Preferences::showAlarmTime();
+		mPrefsShowTimeTo       = Preferences::showTimeToAlarm();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -930,8 +930,8 @@ void KAlarmApp::processQueue()
 			mDcopQueue.dequeue();
 		}
 
-		// Purge the expired alarms calendar if it's time to do so
-		AlarmCalendar::expiredCalendar()->purgeIfQueued();
+		// Purge the archived alarms calendar if it's time to do so
+		AlarmCalendar::archiveCalendar()->purgeIfQueued();
 
 		// Now that the queue has been processed, quit if a quit was queued
 		if (mPendingQuit)
@@ -1121,25 +1121,25 @@ void KAlarmApp::slotPreferencesChanged()
 		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
 	}
 
-	if (Preferences::expiredColour() != mPrefsExpiredColour)
+	if (Preferences::archivedColour() != mPrefsArchivedColour)
 	{
-		// The expired alarms text colour has changed
-		mRefreshExpiredAlarms = true;
-		mPrefsExpiredColour = Preferences::expiredColour();
+		// The archived alarms text colour has changed
+		mRefreshArchivedAlarms = true;
+		mPrefsArchivedColour = Preferences::archivedColour();
 	}
 
-	if (Preferences::expiredKeepDays() != mPrefsExpiredKeepDays)
+	if (Preferences::archivedKeepDays() != mPrefsArchivedKeepDays)
 	{
-		// How long expired alarms are being kept has changed.
+		// How long archived alarms are being kept has changed.
 		// N.B. This also adjusts for any change in start-of-day time.
-		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
-		AlarmCalendar::expiredCalendar()->setPurgeDays(mPrefsExpiredKeepDays);
+		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
+		AlarmCalendar::archiveCalendar()->setPurgeDays(mPrefsArchivedKeepDays);
 	}
 
-	if (mRefreshExpiredAlarms)
+	if (mRefreshArchivedAlarms)
 	{
-		mRefreshExpiredAlarms = false;
-		MainWindow::updateExpired();
+		mRefreshArchivedAlarms = false;
+		MainWindow::updateArchived();
 	}
 }
 
@@ -1158,13 +1158,13 @@ void KAlarmApp::changeStartOfDay()
 }
 
 /******************************************************************************
-*  Called when the expired alarms calendar has been purged.
+*  Called when the archived alarms calendar has been purged.
 *  Updates the alarm list in all main windows.
 */
-void KAlarmApp::slotExpiredPurged()
+void KAlarmApp::slotArchivedPurged()
 {
-	mRefreshExpiredAlarms = false;
-	MainWindow::updateExpired();
+	mRefreshArchivedAlarms = false;
+	MainWindow::updateArchived();
 }
 
 /******************************************************************************
@@ -1192,7 +1192,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 		return false;
 	QDateTime now = QDateTime::currentDateTime();
 	if (lateCancel  &&  dateTime < now.addSecs(-maxLateness(lateCancel)))
-		return true;               // alarm time was already expired too long ago
+		return true;               // alarm time was already archived too long ago
 	QDateTime alarmTime = dateTime;
 	// Round down to the nearest minute to avoid scheduling being messed up
 	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
@@ -1605,9 +1605,9 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	event.cancelCancelledDeferral();
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
-		// The event is being deleted. Save it in the expired calendar file first.
-		QString id = event.id();    // save event ID since KAlarm::addExpiredEvent() changes it
-		KAlarm::addExpiredEvent(event);
+		// The event is being deleted. Save it in the archived calendar file first.
+		QString id = event.id();    // save event ID since KAlarm::addArchivedEvent() changes it
+		KAlarm::addArchivedEvent(event);
 		event.setEventID(id);       // restore event ID
 	}
 	event.removeExpiredAlarm(alarmType);
@@ -2008,13 +2008,13 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 */
 		AlarmCalendar::displayCalendar()->open();
 
-		/* Need to open the expired alarm calendar now, since otherwise if the daemon
+		/* Need to open the archived alarm calendar now, since otherwise if the daemon
 		 * immediately notifies multiple alarms, the second alarm is likely to be
 		 * processed while the calendar is executing open() (but before open() completes),
 		 * which causes a hang!!
 		 */
-		AlarmCalendar::expiredCalendar()->open();
-		AlarmCalendar::expiredCalendar()->setPurgeDays(theInstance->mPrefsExpiredKeepDays);
+		AlarmCalendar::archiveCalendar()->open();
+		AlarmCalendar::archiveCalendar()->setPurgeDays(theInstance->mPrefsArchivedKeepDays);
 
 		startdaemon = true;
 	}

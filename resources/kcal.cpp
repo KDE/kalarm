@@ -40,12 +40,12 @@ using namespace KCal;
 static const QByteArray STATUS_PROPERTY("TYPE");    // X-KDE-KALARM-TYPE property
 static const QString ACTIVE_STATUS              = QString::fromLatin1("ACTIVE");
 static const QString TEMPLATE_STATUS            = QString::fromLatin1("TEMPLATE");
-static const QString EXPIRED_STATUS             = QString::fromLatin1("EXPIRED");
+static const QString ARCHIVED_STATUS            = QString::fromLatin1("ARCHIVED");
 static const QString DISPLAYING_STATUS          = QString::fromLatin1("DISPLAYING");
 static const QString KORGANIZER_STATUS          = QString::fromLatin1("KORG");
 
 // Event ID identifiers
-static const QString EXPIRED_UID    = QString::fromLatin1("-exp-");
+static const QString ARCHIVED_UID   = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
 static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
 static const QString KORGANIZER_UID = QString::fromLatin1("-korg-");
@@ -61,10 +61,10 @@ QString KCalEvent::uid(const QString& id, Status status)
 	QString result = id;
 	Status oldStatus;
 	int i, len;
-	if ((i = result.indexOf(EXPIRED_UID)) > 0)
+	if ((i = result.indexOf(ARCHIVED_UID)) > 0)
 	{
-		oldStatus = EXPIRED;
-		len = EXPIRED_UID.length();
+		oldStatus = ARCHIVED;
+		len = ARCHIVED_UID.length();
 	}
 	else if ((i = result.indexOf(DISPLAYING_UID)) > 0)
 	{
@@ -93,7 +93,7 @@ QString KCalEvent::uid(const QString& id, Status status)
 		switch (status)
 		{
 			case ACTIVE:      part = QString::fromLatin1("-");  break;
-			case EXPIRED:     part = EXPIRED_UID;  break;
+			case ARCHIVED:    part = ARCHIVED_UID;  break;
 			case DISPLAYING:  part = DISPLAYING_UID;  break;
 			case TEMPLATE:    part = TEMPLATE_UID;  break;
 			case KORGANIZER:  part = KORGANIZER_UID;  break;
@@ -106,12 +106,12 @@ QString KCalEvent::uid(const QString& id, Status status)
 }
 
 /******************************************************************************
-* Check an event to determine its type - active, expired, template or empty.
+* Check an event to determine its type - active, archived, template or empty.
 * The default type is active if it contains alarms and there is nothing to
 * indicate otherwise.
 * Note that the mere fact that all an event's alarms have passed does not make
-* an event expired, since it may be that they have not yet been able to be
-* triggered. They will be marked expired once KAlarm tries to handle them.
+* an event be archived, since it may be that they have not yet been able to be
+* triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
 KCalEvent::Status KCalEvent::status(const KCal::Event* event)
@@ -130,14 +130,14 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event)
 	{
 		if (property == ACTIVE_STATUS)      return ACTIVE;
 		if (property == TEMPLATE_STATUS)    return TEMPLATE;
-		if (property == EXPIRED_STATUS)     return EXPIRED;
+		if (property == ARCHIVED_STATUS)    return ARCHIVED;
 		if (property == DISPLAYING_STATUS)  return DISPLAYING;
 		if (property == KORGANIZER_STATUS)  return KORGANIZER;
 	}
 #endif
 	switch (uidStatus(event->uid()))
 	{
-		case EXPIRED:   return EXPIRED;
+		case ARCHIVED:  return ARCHIVED;
 		case TEMPLATE:  return TEMPLATE;
 		default:  break;
 	}
@@ -157,8 +157,8 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event)
 */
 KCalEvent::Status KCalEvent::uidStatus(const QString& uid)
 {
-	if (uid.indexOf(EXPIRED_UID) > 0)
-		return EXPIRED;
+	if (uid.indexOf(ARCHIVED_UID) > 0)
+		return ARCHIVED;
 	if (uid.indexOf(DISPLAYING_UID) > 0)
 		return DISPLAYING;
 	if (uid.indexOf(TEMPLATE_UID) > 0)
@@ -169,7 +169,7 @@ KCalEvent::Status KCalEvent::uidStatus(const QString& uid)
 }
 
 /******************************************************************************
-* Set the event's type - active, expired, template, etc.
+* Set the event's type - active, archived, template, etc.
 */
 void KCalEvent::setStatus(const KCal::Event* event, KCalEvent::Status status)
 {
@@ -181,7 +181,7 @@ void KCalEvent::setStatus(const KCal::Event* event, KCalEvent::Status status)
 	{
 		case ACTIVE:      text = ACTIVE_STATUS;  break;
 		case TEMPLATE:    text = TEMPLATE_STATUS;  break;
-		case EXPIRED:     text = EXPIRED_STATUS;  break;
+		case ARCHIVED:    text = ARCHIVED_STATUS;  break;
 		case DISPLAYING:  text = DISPLAYING_STATUS;  break;
 		case KORGANIZER:  text = KORGANIZER_STATUS;  break;
 		default:

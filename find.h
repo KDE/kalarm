@@ -55,9 +55,9 @@ class Find : public QObject
 
 		EventListViewBase* mListView;        // parent list view
 		QPointer<KFindDialog> mDialog;
-		QCheckBox*         mExpired;
+		QCheckBox*         mArchived;
 		QCheckBox*         mLive;
-		KSeparator*        mActiveExpiredSep;
+		KSeparator*        mActiveArchivedSep;
 		QCheckBox*         mMessageType;
 		QCheckBox*         mFileType;
 		QCheckBox*         mCommandType;

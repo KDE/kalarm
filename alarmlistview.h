@@ -69,12 +69,12 @@ class AlarmListView : public EventListViewBase
 	public:
 		explicit AlarmListView(QWidget* parent = 0);
 		~AlarmListView();
-		void                   showExpired(bool show)      { mShowExpired = show; }
-		bool                   showingExpired() const      { return mShowExpired; }
+		void                   showArchived(bool show)     { mShowArchived = show; }
+		bool                   showingArchived() const     { return mShowArchived; }
 		bool                   showingTimeTo() const	   { return columnWidth(mTimeToColumn); }
 		void                   selectTimeColumns(bool time, bool timeTo);
 		void                   updateTimeToAlarms(bool forceDisplay = false);
-		bool                   expired(AlarmListViewItem*) const;
+		bool                   archived(AlarmListViewItem*) const;
 		bool                   drawMessageInColour() const            { return mDrawMessageInColour; }
 		void                   setDrawMessageInColour(bool inColour)  { mDrawMessageInColour = inColour; }
 		int                    timeColumn() const     { return mTimeColumn; }
@@ -106,7 +106,7 @@ class AlarmListView : public EventListViewBase
 		virtual void           populate();
 		EventListViewItemBase* createItem(const KAEvent&);
 		virtual QString        whatsThisText(int column) const;
-		virtual bool           shouldShowEvent(const KAEvent& e) const  { return mShowExpired || !e.expired(); }
+		virtual bool           shouldShowEvent(const KAEvent& e) const  { return mShowArchived || !e.expired(); }
 		AlarmListViewItem*     addEntry(const KAEvent& e, bool setSize = false)
 		                               { return addEntry(e, QDateTime::currentDateTime(), setSize); }
 		AlarmListViewItem*     updateEntry(AlarmListViewItem* item, const KAEvent& newEvent, bool setSize = false)
@@ -132,7 +132,7 @@ class AlarmListView : public EventListViewBase
 		QPoint                 mMousePressPos;        // where the mouse left button was last pressed
 		bool                   mMousePressed;         // true while the mouse left button is pressed
 		bool                   mDrawMessageInColour;
-		bool                   mShowExpired;          // true to show expired alarms
+		bool                   mShowArchived;         // true to show archived alarms
 };
 
 #endif // ALARMLISTVIEW_H

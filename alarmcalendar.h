@@ -65,17 +65,17 @@ class AlarmCalendar : public QObject
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
 		static AlarmCalendar* activeCalendar()        { return mCalendars[ACTIVE]; }
-		static AlarmCalendar* expiredCalendar()       { return mCalendars[EXPIRED]; }
+		static AlarmCalendar* archiveCalendar()       { return mCalendars[ARCHIVE]; }
 		static AlarmCalendar* displayCalendar()       { return mCalendars[DISPLAY]; }
 		static AlarmCalendar* templateCalendar()      { return mCalendars[TEMPLATE]; }
 		static AlarmCalendar* activeCalendarOpen()    { return calendarOpen(ACTIVE); }
-		static AlarmCalendar* expiredCalendarOpen()   { return calendarOpen(EXPIRED); }
+		static AlarmCalendar* archiveCalendarOpen()   { return calendarOpen(ARCHIVE); }
 		static AlarmCalendar* displayCalendarOpen()   { return calendarOpen(DISPLAY); }
 		static AlarmCalendar* templateCalendarOpen()  { return calendarOpen(TEMPLATE); }
 		static bool           importAlarms(QWidget*);
 		static const KCal::Event* getEvent(const QString& uniqueID);
 
-		enum CalID { ACTIVE, EXPIRED, DISPLAY, TEMPLATE, NCALS };
+		enum CalID { ACTIVE, ARCHIVE, DISPLAY, TEMPLATE, NCALS };
 
 	signals:
 		void                  calendarSaved(AlarmCalendar*);

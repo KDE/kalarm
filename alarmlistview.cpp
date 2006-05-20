@@ -63,7 +63,7 @@ AlarmListView::AlarmListView(QWidget* parent)
 	  mMessageColumn(5),
 	  mMousePressed(false),
 	  mDrawMessageInColour(false),
-	  mShowExpired(false)
+	  mShowArchived(false)
 {
 	setSelectionMode(Q3ListView::Extended);
 
@@ -104,9 +104,9 @@ void AlarmListView::populate()
 	KCal::Event::List events;
 	KCal::Event::List::ConstIterator it;
 	QDateTime now = QDateTime::currentDateTime();
-	if (mShowExpired)
+	if (mShowArchived)
 	{
-		AlarmCalendar* cal = AlarmCalendar::expiredCalendarOpen();
+		AlarmCalendar* cal = AlarmCalendar::archiveCalendarOpen();
 		if (cal)
 		{
 			events = cal->events();
@@ -126,7 +126,7 @@ void AlarmListView::populate()
 	{
 		KCal::Event* kcalEvent = *it;
 		event.set(*kcalEvent);
-		if (mShowExpired  ||  !event.expired())
+		if (mShowArchived  ||  !event.expired())
 			addEntry(event, now);
 	}
 }
@@ -212,7 +212,7 @@ void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
 */
 AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime& now, bool setSize, bool reselect)
 {
-	if (!mShowExpired  &&  event.expired())
+	if (!mShowArchived  &&  event.expired())
 		return 0;
 	AlarmListViewItem* item = new AlarmListViewItem(this, event, now);
 	return static_cast<AlarmListViewItem*>(EventListViewBase::addEntry(item, setSize, reselect));
@@ -227,9 +227,9 @@ EventListViewItemBase* AlarmListView::createItem(const KAEvent& event)
 }
 
 /******************************************************************************
-*  Check whether an item's alarm has expired.
+*  Check whether an item's alarm is archived.
 */
-bool AlarmListView::expired(AlarmListViewItem* item) const
+bool AlarmListView::archived(AlarmListViewItem* item) const
 {
 	return item->event().expired();
 }
@@ -532,7 +532,7 @@ void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int 
 	QColor bgColour = selected ? cg.color(QPalette::Highlight) : cg.color(QPalette::Base);
 	QColor fgColour = selected ? cg.color(QPalette::HighlightedText)
 	                : !event().enabled() ? Preferences::disabledColour()
-	                : event().expired() ? Preferences::expiredColour() : cg.color(QPalette::Text);
+	                : event().expired() ? Preferences::archivedColour() : cg.color(QPalette::Text);
 	painter->setPen(fgColour);
 	painter->fillRect(0, 0, width, height(), bgColour);
 

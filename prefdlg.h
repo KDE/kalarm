@@ -110,15 +110,15 @@ class MiscPrefTab : public PrefsTabBase
 		void         slotAutostartDaemonClicked();
 		void         slotRunModeToggled(bool);
 		void         slotDisableIfStoppedToggled(bool);
-		void         slotExpiredToggled(bool);
-		void         slotClearExpired();
+		void         slotArchivedToggled(bool);
+		void         slotClearArchived();
 		void         slotOtherTerminalToggled(bool);
 //#ifdef AUTOSTART_BY_KALARMD
 		void         slotAutostartToggled(bool);
 //#endif
 
 	private:
-		void         setExpiredControls(int purgeDays);
+		void         setArchivedControls(int purgeDays);
 
 		QCheckBox*     mAutostartDaemon;
 		QRadioButton*  mRunInSystemTray;
@@ -128,11 +128,11 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*     mAutostartTrayIcon1;
 		QCheckBox*     mAutostartTrayIcon2;
 		QCheckBox*     mConfirmAlarmDeletion;
-		QCheckBox*     mKeepExpired;
-		QCheckBox*     mPurgeExpired;
+		QCheckBox*     mKeepArchived;
+		QCheckBox*     mPurgeArchived;
 		SpinBox*       mPurgeAfter;
 		QLabel*        mPurgeAfterLabel;
-		QPushButton*   mClearExpired;
+		QPushButton*   mClearArchived;
 		TimeEdit*      mStartOfDay;
 		ButtonGroup*   mXtermType;
 		QLineEdit*     mXtermCommand;
@@ -257,7 +257,7 @@ class ViewPrefTab : public PrefsTabBase
 		QLineEdit*     mTooltipTimeToPrefix;
 		QLabel*        mTooltipTimeToPrefixLabel;
 		QCheckBox*     mModalMessages;
-		QCheckBox*     mShowExpiredAlarms;
+		QCheckBox*     mShowArchivedAlarms;
 		SpinBox*       mDaemonTrayCheckInterval;
 };
 
@@ -276,7 +276,7 @@ class FontColourPrefTab : public PrefsTabBase
 	private:
 		FontColourChooser*  mFontChooser;
 		KColorCombo*        mDisabledColour;
-		KColorCombo*        mExpiredColour;
+		KColorCombo*        mArchivedColour;
 };
 
 #endif // PREFDLG_H

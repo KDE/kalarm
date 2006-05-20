@@ -57,11 +57,11 @@ class MainWindow : public MainWindowBase
 		~MainWindow();
 		bool               isTrayParent() const;
 		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
-		bool               showingExpired() const       { return mShowExpired; }
+		bool               showingArchived() const       { return mShowArchived; }
 		void               selectEvent(const QString& eventID);
 
 		static void        refresh();
-		static void        updateExpired();
+		static void        updateArchived();
 		static void        updateTimeColumns(bool oldTime, bool oldTimeTo);
 		static void        addEvent(const KAEvent&, MainWindow*);
 		static void        executeNew(MainWindow* w = 0, KAEvent::Action a = KAEvent::MESSAGE, const AlarmText& t = AlarmText())
@@ -83,10 +83,10 @@ class MainWindow : public MainWindowBase
 		static QString i18n_o_ShowTimeToAlarms();   // text of 'Show Time to Alarms' checkbox, with 'O' shortcut
 		static QString i18n_n_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'N' shortcut
 		static QString i18n_l_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'L' shortcut
-		static QString i18n_ShowExpiredAlarms();    // plain text of 'Show Expired Alarms' action
-		static QString i18n_e_ShowExpiredAlarms();  // text of 'Show Expired Alarms' checkbox, with 'E' shortcut
-		static QString i18n_HideExpiredAlarms();    // plain text of 'Hide Expired Alarms' action
-		static QString i18n_e_HideExpiredAlarms();  // text of 'Hide Expired Alarms' action, with 'E' shortcut
+		static QString i18n_ShowArchivedAlarms();   // plain text of 'Show Archived Alarms' action
+		static QString i18n_e_ShowArchivedAlarms(); // text of 'Show Archived Alarms' checkbox, with 'E' shortcut
+		static QString i18n_HideArchivedAlarms();   // plain text of 'Hide Archived Alarms' action
+		static QString i18n_e_HideArchivedAlarms(); // text of 'Hide Archived Alarms' action, with 'E' shortcut
 
 	public slots:
 		virtual void   show();
@@ -128,7 +128,7 @@ class MainWindow : public MainWindowBase
 		void           slotDoubleClicked(Q3ListViewItem*);
 		void           slotShowTime();
 		void           slotShowTimeTo();
-		void           slotShowExpired();
+		void           slotShowArchived();
 		void           slotUpdateTimeTo();
 		void           slotUndo();
 		void           slotUndoItem(QAction* id);
@@ -178,13 +178,13 @@ class MainWindow : public MainWindowBase
 		KToggleAction*       mActionToggleTrayIcon;
 		KToggleAction*       mActionShowTime;
 		KToggleAction*       mActionShowTimeTo;
-		KToggleAction*       mActionShowExpired;
+		KToggleAction*       mActionShowArchived;
 		KMenu*               mActionsMenu;
 		KMenu*               mContextMenu;
 		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
 		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
-		bool                 mShowExpired;         // include expired alarms in the displayed list
+		bool                 mShowArchived;        // include archived alarms in the displayed list
 		bool                 mShowTime;            // show alarm times
 		bool                 mShowTimeTo;          // show time-to-alarms
 		bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"

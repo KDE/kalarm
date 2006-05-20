@@ -47,7 +47,7 @@ class KCalEvent
 		{
 			EMPTY,       // the event has no alarms
 			ACTIVE,      // the event is currently active
-			EXPIRED,     // the event has expired
+			ARCHIVED,    // the event is archived
 			DISPLAYING,  // the event is currently being displayed
 			TEMPLATE,    // the event is an alarm template
 			KORGANIZER   // the event is a copy of a KAlarm event, held by KOrganizer

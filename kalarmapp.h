@@ -102,7 +102,7 @@ class KAlarmApp : public KUniqueApplication
 		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
 		void               slotSystemTrayTimer();
-		void               slotExpiredPurged();
+		void               slotArchivedPurged();
 	private:
 		enum EventFunc
 		{
@@ -162,8 +162,8 @@ class KAlarmApp : public KUniqueApplication
 		DcopHandler*       mDcopHandler;         // the parent of the main DCOP receiver object
 		TrayWindow*        mTrayWindow;          // active system tray icon
 		QTime              mStartOfDay;          // start-of-day time currently in use
-		QColor             mPrefsExpiredColour;  // expired alarms text colour
-		int                mPrefsExpiredKeepDays;// how long expired alarms are being kept
+		QColor             mPrefsArchivedColour; // archived alarms text colour
+		int                mPrefsArchivedKeepDays;// how long archived alarms are being kept
 		QList<ProcData*>   mCommandProcesses;    // currently active command alarm processes
 		QQueue<DcopQEntry> mDcopQueue;           // DCOP command queue
 		int                mPendingQuitCode;     // exit code for a pending quit
@@ -176,7 +176,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               mSessionClosingDown;  // session manager is closing the application
 		bool               mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
-		bool               mRefreshExpiredAlarms; // need to refresh the expired alarms display
+		bool               mRefreshArchivedAlarms; // need to refresh the archived alarms display
 		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
 		bool               mPrefsShowTime;       // Preferences setting for show alarm times in alarm list

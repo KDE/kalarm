@@ -86,7 +86,7 @@ static const QString xtermURL = QLatin1String("xterm:");
 // Event status strings
 static const QString DISABLED_STATUS           = QLatin1String("DISABLED");
 
-static const QString EXPIRED_UID    = QLatin1String("-exp-");
+static const QString ARCHIVED_UID    = QLatin1String("-exp-");
 static const QString DISPLAYING_UID = QLatin1String("-disp-");
 static const QString TEMPLATE_UID   = QLatin1String("-tmpl-");
 static const QString KORGANIZER_UID = QLatin1String("-korg-");
@@ -864,10 +864,10 @@ QString KAEvent::uid(const QString& id, Status status)
 	QString result = id;
 	Status oldStatus;
 	int i, len;
-	if ((i = result.indexOf(EXPIRED_UID)) > 0)
+	if ((i = result.indexOf(ARCHIVED_UID)) > 0)
 	{
-		oldStatus = EXPIRED;
-		len = EXPIRED_UID.length();
+		oldStatus = ARCHIVED;
+		len = ARCHIVED_UID.length();
 	}
 	else if ((i = result.indexOf(DISPLAYING_UID)) > 0)
 	{
@@ -896,7 +896,7 @@ QString KAEvent::uid(const QString& id, Status status)
 		switch (status)
 		{
 			case ACTIVE:      part = "-";  break;
-			case EXPIRED:     part = EXPIRED_UID;  break;
+			case ARCHIVED:     part = ARCHIVED_UID;  break;
 			case DISPLAYING:  part = DISPLAYING_UID;  break;
 			case TEMPLATE:    part = TEMPLATE_UID;  break;
 			case KORGANIZER:  part = KORGANIZER_UID;  break;
@@ -911,8 +911,8 @@ QString KAEvent::uid(const QString& id, Status status)
  */
 KAEvent::Status KAEvent::uidStatus(const QString& uid)
 {
-	if (uid.indexOf(EXPIRED_UID) > 0)
-		return EXPIRED;
+	if (uid.indexOf(ARCHIVED_UID) > 0)
+		return ARCHIVED;
 	if (uid.indexOf(DISPLAYING_UID) > 0)
 		return DISPLAYING;
 	if (uid.indexOf(TEMPLATE_UID) > 0)
@@ -2681,7 +2681,7 @@ bool KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 		{
 			/*
 			 * It's a KAlarm pre-0.9.2 calendar file.
-			 * For the expired calendar, set the CREATED time to the DTEND value.
+			 * For the archive calendar, set the CREATED time to the DTEND value.
 			 * Convert date-only DTSTART to date/time, and add category "DATE".
 			 * Set the DTEND time to the DTSTART time.
 			 * Convert all alarm times to DTSTART offsets.
@@ -2689,7 +2689,7 @@ bool KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			 * X-KDE-KALARM-FONTCOLOUR property.
 			 * Convert BEEP category into an audio alarm with no audio file.
 			 */
-			if (uidStatus(event->uid()) == EXPIRED)
+			if (uidStatus(event->uid()) == ARCHIVED)
 				event->setCreated(event->dtEnd());
 			QDateTime start = event->dtStart();
 			if (event->doesFloat())

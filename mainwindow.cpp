@@ -91,16 +91,16 @@ TemplateDlg*             MainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString MainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
-QString MainWindow::i18n_t_ShowAlarmTime()     { return i18n("Show alarm &time"); }
-QString MainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me"); }
-QString MainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
-QString MainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
-QString MainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
-QString MainWindow::i18n_ShowExpiredAlarms()   { return i18n("Show Expired Alarms"); }
-QString MainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
-QString MainWindow::i18n_HideExpiredAlarms()   { return i18n("Hide Expired Alarms"); }
-QString MainWindow::i18n_e_HideExpiredAlarms() { return i18n("Hide &Expired Alarms"); }
+QString MainWindow::i18n_a_ShowAlarmTimes()     { return i18n("Show &Alarm Times"); }
+QString MainWindow::i18n_t_ShowAlarmTime()      { return i18n("Show alarm &time"); }
+QString MainWindow::i18n_m_ShowAlarmTime()      { return i18n("Show alarm ti&me"); }
+QString MainWindow::i18n_o_ShowTimeToAlarms()   { return i18n("Show Time t&o Alarms"); }
+QString MainWindow::i18n_n_ShowTimeToAlarm()    { return i18n("Show time u&ntil alarm"); }
+QString MainWindow::i18n_l_ShowTimeToAlarm()    { return i18n("Show time unti&l alarm"); }
+QString MainWindow::i18n_ShowArchivedAlarms()   { return i18n("Show Archived Alarms"); }
+QString MainWindow::i18n_e_ShowArchivedAlarms() { return i18n("Show &Archived Alarms"); }
+QString MainWindow::i18n_HideArchivedAlarms()   { return i18n("Hide Archived Alarms"); }
+QString MainWindow::i18n_e_HideArchivedAlarms() { return i18n("Hide &Archived Alarms"); }
 
 
 /******************************************************************************
@@ -118,7 +118,7 @@ MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
-	  mShowExpired(Preferences::showExpiredAlarms()),
+	  mShowArchived(Preferences::showArchivedAlarms()),
 	  mShowTime(Preferences::showAlarmTime()),
 	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
@@ -139,7 +139,7 @@ MainWindow::MainWindow(bool restored)
 		mShowTime = true;     // ensure at least one time column is visible
 	mListView = new AlarmListView(this);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-	mListView->showExpired(mShowExpired);
+	mListView->showArchived(mShowArchived);
 	setCentralWidget(mListView);
 	mListView->refresh();          // populate the alarm list
 	mListView->clearSelection();
@@ -194,7 +194,7 @@ MainWindow::~MainWindow()
 void MainWindow::saveProperties(KConfig* config)
 {
 	config->writeEntry(QLatin1String("HiddenTrayParent"), isTrayParent() && isHidden());
-	config->writeEntry(QLatin1String("ShowExpired"), mShowExpired);
+	config->writeEntry(QLatin1String("ShowArchived"), mShowArchived);
 	config->writeEntry(QLatin1String("ShowTime"), mShowTime);
 	config->writeEntry(QLatin1String("ShowTimeTo"), mShowTimeTo);
 }
@@ -207,7 +207,7 @@ void MainWindow::saveProperties(KConfig* config)
 void MainWindow::readProperties(KConfig* config)
 {
 	mHiddenTrayParent = config->readEntry("HiddenTrayParent", true);
-	mShowExpired      = config->readEntry("ShowExpired", false);
+	mShowArchived     = config->readEntry("ShowArchived", false);
 	mShowTime         = config->readEntry("ShowTime", true);
 	mShowTimeTo       = config->readEntry("ShowTimeTo", false);
 }
@@ -353,10 +353,10 @@ void MainWindow::initActions()
 	mActionShowTimeTo->setCheckedState(i18n("Hide Time t&o Alarms"));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowExpired = new KToggleAction(KIcon("history"), i18n_e_ShowExpiredAlarms(), actions, QLatin1String("showExpiredAlarms"));
-	mActionShowExpired->setShortcut(Qt::CTRL + Qt::Key_P);
-	mActionShowExpired->setCheckedState(i18n_e_HideExpiredAlarms());
-	connect(mActionShowExpired, SIGNAL(triggered(bool)), SLOT(slotShowExpired()));
+	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), actions, QLatin1String("showArchivedAlarms"));
+	mActionShowArchived->setShortcut(Qt::CTRL + Qt::Key_P);
+	mActionShowArchived->setCheckedState(i18n_e_HideArchivedAlarms());
+	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), actions, QLatin1String("showInSystemTray"));
 	mActionToggleTrayIcon->setShortcut(Qt::CTRL + Qt::Key_Y);
@@ -426,9 +426,9 @@ void MainWindow::initActions()
 	setEnableText(true);
 	mActionShowTime->setChecked(mShowTime);
 	mActionShowTimeTo->setChecked(mShowTimeTo);
-	mActionShowExpired->setChecked(mShowExpired);
-	if (!Preferences::expiredKeepDays())
-		mActionShowExpired->setEnabled(false);
+	mActionShowArchived->setChecked(mShowArchived);
+	if (!Preferences::archivedKeepDays())
+		mActionShowArchived->setEnabled(false);
 	updateTrayIconAction();         // set the correct text for this action
 	mActionUndo->setEnabled(Undo::haveUndo());
 	mActionRedo->setEnabled(Undo::haveRedo());
@@ -473,24 +473,24 @@ void MainWindow::refresh()
 
 /******************************************************************************
 * Refresh the alarm list in every main window instance which is displaying
-* expired alarms.
-* Called when an expired alarm setting changes in the user preferences.
+* archived alarms.
+* Called when an archived alarm setting changes in the user preferences.
 */
-void MainWindow::updateExpired()
+void MainWindow::updateArchived()
 {
-	kDebug(5950) << "MainWindow::updateExpired()\n";
-	bool enableShowExpired = Preferences::expiredKeepDays();
+	kDebug(5950) << "MainWindow::updateArchived()\n";
+	bool enableShowArchived = Preferences::archivedKeepDays();
 	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
 	{
 		MainWindow* w = mWindowList[i];
-		if (w->mShowExpired)
+		if (w->mShowArchived)
 		{
-			if (!enableShowExpired)
-				w->slotShowExpired();
+			if (!enableShowArchived)
+				w->slotShowArchived();
 			else
 				w->mListView->refresh();
 		}
-		w->mActionShowExpired->setEnabled(enableShowExpired);
+		w->mActionShowArchived->setEnabled(enableShowArchived);
 	}
 }
 
@@ -710,7 +710,7 @@ void MainWindow::slotView()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Expired Alarm") + " [" + i18n("read-only") + "]"
+		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Archived Alarm") + " [" + i18n("read-only") + "]"
 		                                             : i18n("View Alarm")),
 		                     this, &event, true);
 		editDlg.exec();
@@ -751,7 +751,7 @@ void MainWindow::slotDelete()
 
 /******************************************************************************
 *  Called when the Reactivate button is clicked to reinstate the currently
-*  highlighted expired alarms in the list.
+*  highlighted archived alarms in the list.
 */
 void MainWindow::slotReactivate()
 {
@@ -818,14 +818,14 @@ void MainWindow::slotShowTimeTo()
 }
 
 /******************************************************************************
-*  Called when the Show Expired Alarms menu item is selected or deselected.
+*  Called when the Show Archived Alarms menu item is selected or deselected.
 */
-void MainWindow::slotShowExpired()
+void MainWindow::slotShowArchived()
 {
-	mShowExpired = !mShowExpired;
-	mActionShowExpired->setChecked(mShowExpired);
-	mActionShowExpired->setToolTip(mShowExpired ? i18n_HideExpiredAlarms() : i18n_ShowExpiredAlarms());
-	mListView->showExpired(mShowExpired);
+	mShowArchived = !mShowArchived;
+	mActionShowArchived->setChecked(mShowArchived);
+	mActionShowArchived->setToolTip(mShowArchived ? i18n_HideArchivedAlarms() : i18n_ShowArchivedAlarms());
+	mListView->showArchived(mShowArchived);
 	mListView->refresh();
 }
 
@@ -1273,13 +1273,13 @@ void MainWindow::slotSelection()
 	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)items[i])->event();
-		bool expired = event.expired();
+		bool archived = event.expired();
 		if (enableReactivate
-		&&  (!expired  ||  !event.occursAfter(now, true)))
+		&&  (!archived  ||  !event.occursAfter(now, true)))
 			enableReactivate = false;
 		if (enableEnableDisable)
 		{
-			if (expired)
+			if (archived)
 				enableEnableDisable = enableEnable = enableDisable = false;
 			else
 			{
@@ -1294,7 +1294,7 @@ void MainWindow::slotSelection()
 	kDebug(5950) << "MainWindow::slotSelection(true)\n";
 	mActionCreateTemplate->setEnabled(count == 1);
 	mActionCopy->setEnabled(count == 1);
-	mActionModify->setEnabled(item && !mListView->expired(item));
+	mActionModify->setEnabled(item && !mListView->archived(item));
 	mActionView->setEnabled(count == 1);
 	mActionDelete->setEnabled(count);
 	mActionReactivate->setEnabled(count && enableReactivate);
@@ -1347,7 +1347,7 @@ void MainWindow::slotDoubleClicked(Q3ListViewItem* item)
 	kDebug(5950) << "MainWindow::slotDoubleClicked()\n";
 	if (item)
 	{
-		if (mListView->expired((AlarmListViewItem*)item))
+		if (mListView->archived((AlarmListViewItem*)item))
 			slotView();
 		else if (mActionModify->isEnabled())
 			slotModify();

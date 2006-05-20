@@ -45,7 +45,7 @@ class AlarmResource : public KCal::ResourceCached
 		/** Type of alarms held in this calendar resource. */
 		enum Type {
 			ACTIVE   = 0x01,    // active alarms
-			EXPIRED  = 0x02,    // expired alarms
+			ARCHIVED = 0x02,    // archived alarms
 			TEMPLATE = 0x04     // alarm templates
 		};
 		/** Whether the fix function should convert old format KAlarm calendars. */
