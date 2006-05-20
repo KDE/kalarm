@@ -1235,6 +1235,11 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
 	mListShowTimeTo->setWhatsThis(i18n("Specify whether to show in the alarm list, how long until each alarm is due"));
 	vlayout->addWidget(mListShowTimeTo, 0, Qt::AlignLeft);
+
+	mShowArchivedAlarms = new QCheckBox(MainWindow::i18n_e_ShowArchivedAlarms(), group);
+	mShowArchivedAlarms->setMinimumSize(mShowArchivedAlarms->sizeHint());
+	mShowArchivedAlarms->setWhatsThis(i18n("Specify whether to show archived alarms in the alarm list"));
+	vlayout->addWidget(mShowArchivedAlarms, 0, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
 	group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
@@ -1296,10 +1301,6 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	           "- If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.\n"
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
-
-	mShowArchivedAlarms = new QCheckBox(MainWindow::i18n_e_ShowArchivedAlarms(), mPage);
-	mShowArchivedAlarms->setMinimumSize(mShowArchivedAlarms->sizeHint());
-	mShowArchivedAlarms->setWhatsThis(i18n("Specify whether to show archived alarms in the alarm list"));
 
 	KHBox* itemBox = new KHBox(mPage);   // this is to control the QWhatsThis text display area
 	itemBox->setMargin(0);
