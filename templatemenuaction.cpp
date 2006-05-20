@@ -34,8 +34,8 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 	: KActionMenu(icon, label, actions, name)
 {
 	setDelayed(false);
-	connect(popupMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
-	connect(popupMenu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+	connect(kMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
+	connect(kMenu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
 }
 
 /******************************************************************************
@@ -44,7 +44,7 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 */
 void TemplateMenuAction::slotInitMenu()
 {
-	KMenu* menu = popupMenu();
+	KMenu* menu = kMenu();
 	menu->clear();
 //	mOriginalTexts.clear();
 	QList<KAEvent> templates = KAlarm::templateList();
