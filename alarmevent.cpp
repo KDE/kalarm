@@ -98,6 +98,7 @@ struct AlarmData
 	float                  soundVolume;
 	float                  fadeVolume;
 	int                    fadeSeconds;
+	int                    startOffsetSecs;
 	bool                   speak;
 	KAAlarm::SubType       type;
 	KAAlarmEventBase::Type action;
@@ -335,7 +336,6 @@ void KAEvent::set(const Event& event)
 	// Incorporate the alarms' details into the overall event
 	AlarmMap::ConstIterator it = alarmMap.begin();
 	mAlarmCount = 0;       // initialise as invalid
-	DateTime reminderTime;
 	DateTime alTime;
 	bool set = false;
 	bool isEmailText = false;
@@ -359,8 +359,9 @@ void KAEvent::set(const Event& event)
 				alTime = mAtLoginDateTime;
 				break;
 			case KAAlarm::REMINDER__ALARM:
-				reminderTime.set(data.dateTime, mStartDateTime.isDateOnly());
-				alTime = reminderTime;
+				mReminderMinutes = -(data.startOffsetSecs / 60);
+				if (mReminderMinutes)
+					mArchiveReminderMinutes = 0;
 				break;
 			case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:
 			case KAAlarm::DEFERRED_DATE__ALARM:
@@ -465,12 +466,6 @@ void KAEvent::set(const Event& event)
 	}
 	if (!isEmailText)
 		mKMailSerialNumber = 0;
-	if (reminderTime.isValid())
-	{
-		mReminderMinutes = reminderTime.secsTo(mNextMainDateTime) / 60;
-		if (mReminderMinutes)
-			mArchiveReminderMinutes = 0;
-	}
 	if (mRepeatAtLogin)
 		mArchiveRepeatAtLogin = false;
 
@@ -508,6 +503,7 @@ void KAEvent::readAlarm(const Alarm& alarm, AlarmData& data)
 	// Parse the next alarm's text
 	data.alarm           = &alarm;
 	data.dateTime        = alarm.time();
+	data.startOffsetSecs = alarm.startOffset().asSeconds();    // can have start offset but no valid date/time (e.g. reminder in template)
 	data.displayingFlags = 0;
 	data.isEmailText     = false;
 	data.repeatCount     = alarm.repeatCount();
@@ -1029,12 +1025,15 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	ev.setHasEndDate(false);
 
 	DateTime dtMain = original ? mStartDateTime : mNextMainDateTime;
+	int      ancillaryType = 0;   // 0 = invalid, 1 = time, 2 = offset
 	DateTime ancillaryTime;       // time for ancillary alarms (audio, pre-action, etc)
+	int      ancillaryOffset = 0; // start offset for ancillary alarms
 	if (!mMainExpired  ||  original)
 	{
 		// Add the main alarm
 		initKcalAlarm(ev, dtMain, QStringList(), KAAlarm::MAIN_ALARM);
 		ancillaryTime = dtMain;
+		ancillaryType = dtMain.isValid() ? 1 : 0;
 	}
 
 	// Add subsidiary alarms
@@ -1050,16 +1049,21 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		else
 			dtl = QDateTime::currentDateTime();
 		initKcalAlarm(ev, dtl, AT_LOGIN_TYPE);
-		if (!ancillaryTime.isValid())
+		if (!ancillaryType  &&  dtl.isValid())
+		{
 			ancillaryTime = dtl;
+			ancillaryType = 1;
+		}
 	}
 	if (mReminderMinutes  ||  mArchiveReminderMinutes && original)
 	{
 		int minutes = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
-		DateTime reminderTime = dtMain.addSecs(-minutes * 60);
-		initKcalAlarm(ev, reminderTime, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
-		if (!ancillaryTime.isValid())
-			ancillaryTime = reminderTime;
+		initKcalAlarm(ev, -minutes * 60, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
+		if (!ancillaryType)
+		{
+			ancillaryOffset = -minutes * 60;
+			ancillaryType = 2;
+		}
 	}
 	if (mDeferral > 0  ||  mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer)
 	{
@@ -1071,8 +1075,11 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		if (mDeferral == REMINDER_DEFERRAL)
 			list += mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE;
 		initKcalAlarm(ev, mDeferralTime, list);
-		if (!ancillaryTime.isValid())
+		if (!ancillaryType  &&  mDeferralTime.isValid())
+		{
 			ancillaryTime = mDeferralTime;
+			ancillaryType = 1;
+		}
 	}
 	if (!mTemplateName.isEmpty())
 		ev.setSummary(mTemplateName);
@@ -1091,23 +1098,35 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		if (mDisplayingFlags & REMINDER)
 			list += mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE;
 		initKcalAlarm(ev, mDisplayingTime, list);
-		if (!ancillaryTime.isValid())
+		if (!ancillaryType  &&  mDisplayingTime.isValid())
+		{
 			ancillaryTime = mDisplayingTime;
+			ancillaryType = 1;
+		}
 	}
 	if (mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())
 	{
 		// A sound is specified
-		initKcalAlarm(ev, ancillaryTime, QStringList(), KAAlarm::AUDIO_ALARM);
+		if (ancillaryType == 2)
+			initKcalAlarm(ev, ancillaryOffset, QStringList(), KAAlarm::AUDIO_ALARM);
+		else
+			initKcalAlarm(ev, ancillaryTime, QStringList(), KAAlarm::AUDIO_ALARM);
 	}
 	if (!mPreAction.isEmpty())
 	{
 		// A pre-display action is specified
-		initKcalAlarm(ev, ancillaryTime, QStringList(PRE_ACTION_TYPE), KAAlarm::PRE_ACTION_ALARM);
+		if (ancillaryType == 2)
+			initKcalAlarm(ev, ancillaryOffset, QStringList(PRE_ACTION_TYPE), KAAlarm::PRE_ACTION_ALARM);
+		else
+			initKcalAlarm(ev, ancillaryTime, QStringList(PRE_ACTION_TYPE), KAAlarm::PRE_ACTION_ALARM);
 	}
 	if (!mPostAction.isEmpty())
 	{
 		// A post-display action is specified
-		initKcalAlarm(ev, ancillaryTime, QStringList(POST_ACTION_TYPE), KAAlarm::POST_ACTION_ALARM);
+		if (ancillaryType == 2)
+			initKcalAlarm(ev, ancillaryOffset, QStringList(POST_ACTION_TYPE), KAAlarm::POST_ACTION_ALARM);
+		else
+			initKcalAlarm(ev, ancillaryTime, QStringList(POST_ACTION_TYPE), KAAlarm::POST_ACTION_ALARM);
 	}
 
 	if (mRecurrence)
@@ -1125,15 +1144,21 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
  * alarm action. If 'types' is non-null, it is appended to the X-KDE-KALARM-TYPE
  * property value list.
  */
- Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
+Alarm* KAEvent::initKcalAlarm(Event& event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
+{
+	int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
+	                                  : mStartDateTime.dateTime().secsTo(dt.dateTime());
+	return initKcalAlarm(event, startOffset, types, type);
+}
+
+Alarm* KAEvent::initKcalAlarm(Event& event, int startOffsetSecs, const QStringList& types, KAAlarm::Type type) const
 {
 	QStringList alltypes;
 	Alarm* alarm = event.newAlarm();
 	alarm->setEnabled(true);
 	// RFC2445 specifies that absolute alarm times must be stored as UTC.
 	// So, in order to store local times, set the alarm time as an offset to DTSTART.
-	alarm->setStartOffset(dt.isDateOnly() ? mStartDateTime.secsTo(dt)
-	                                      : mStartDateTime.dateTime().secsTo(dt.dateTime()));
+	alarm->setStartOffset(startOffsetSecs);
 
 	switch (type)
 	{
