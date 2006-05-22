@@ -67,8 +67,8 @@ void ResourceRemoteConfigWidget::loadSettings(KRES::Resource* resource)
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
-		mDownloadUrl->setURL(res->downloadUrl().url());
-		mUploadUrl->setURL(res->uploadUrl().url());
+		mDownloadUrl->setUrl(res->downloadUrl().url());
+		mUploadUrl->setUrl(res->uploadUrl().url());
 		mReloadConfig->loadSettings(res);
 		mSaveConfig->loadSettings(res);
 #ifndef NDEBUG

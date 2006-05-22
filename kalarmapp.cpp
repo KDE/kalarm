@@ -41,7 +41,7 @@
 #include <ktempfile.h>
 #include <kfileitem.h>
 #include <kstdguiitem.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
@@ -132,7 +132,7 @@ QString     KAlarmApp::mFatalMessage;
 	}
 
 	// Check if the speech synthesis daemon is installed
-	mSpeechEnabled = (KTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
+	mSpeechEnabled = (KServiceTypeTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
 	if (!mSpeechEnabled)
 		kDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
 	// Check if KOrganizer is installed

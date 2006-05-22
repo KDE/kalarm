@@ -52,7 +52,7 @@ void ResourceLocalDirConfigWidget::loadSettings(KRES::Resource* resource)
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
-		mURL->setURL(res->dirName());
+		mURL->setUrl(res->dirName());
 		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::loadSettings(): Directory " << mURL->url() << endl;
 	}
 }
@@ -64,5 +64,5 @@ void ResourceLocalDirConfigWidget::saveSettings(KRES::Resource *resource)
 	if (!res)
 		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::saveSettings(KAResourceLocalDir): cast failed" << endl;
 	else
-		res->setDirName(mURL->url());
+		res->setDirName(mURL->url().url());
 }
