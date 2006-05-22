@@ -58,7 +58,7 @@ class AlarmCalendar : public QObject
 		void                  setPurgeDays(int days);
 		void                  purgeIfQueued();    // must only be called from KAlarmApp::processQueue()
 		bool                  isOpen() const                      { return mOpen; }
-		QString               path() const                        { return mUrl.prettyURL(); }
+		QString               path() const                        { return mUrl.prettyUrl(); }
 		QString               urlString() const                   { return mUrl.url(); }
 
 		static QString        icalProductId();

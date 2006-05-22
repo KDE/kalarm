@@ -106,7 +106,7 @@ void ADCalendar::slotDownloadJobResult(KIO::Job *job)
 	if (job->error())
 	{
 		KUrl url(mUrlString);
-		kDebug(5900) << "Error downloading calendar from " << url.prettyURL() << endl;
+		kDebug(5900) << "Error downloading calendar from " << url.prettyUrl() << endl;
 		static_cast<KIO::Job*>(job)->showErrorDialog(0);
 	}
 	else

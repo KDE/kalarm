@@ -1207,7 +1207,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		kDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
-		alarmText.setText(files.first().prettyURL());
+		alarmText.setText(files.first().prettyUrl());
 	}
 	else if (data->hasFormat(KPIM::MailListDrag::format())
 	&&       KPIM::MailListDrag::decode(e, mailList))

@@ -2041,7 +2041,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 		{
 			url = alarmtext;
 			url.cleanPath();
-			alarmtext = url.prettyURL();
+			alarmtext = url.prettyUrl();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
 				err = NONEXISTENT;

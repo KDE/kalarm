@@ -149,7 +149,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 		{
 			case Url:
 				// URL entry field - ignore all but the first dropped URL
-				setText(files.first().prettyURL());    // replace any existing text
+				setText(files.first().prettyUrl());    // replace any existing text
 				break;
 			case Emails:
 			{
@@ -163,7 +163,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 				break;
 			}
 			case Text:
-				newText = files.first().prettyURL();
+				newText = files.first().prettyUrl();
 				break;
 		}
 	}

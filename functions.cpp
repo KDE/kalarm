@@ -1107,7 +1107,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 		return QString();
 	KUrl url = fileDlg.selectedURL();
 	defaultDir = url.path();
-	return url.prettyURL();
+	return url.prettyUrl();
 }
 
 /******************************************************************************

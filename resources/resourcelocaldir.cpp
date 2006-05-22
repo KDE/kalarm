@@ -71,7 +71,7 @@ KAResourceLocalDir::~KAResourceLocalDir()
 
 void KAResourceLocalDir::writeConfig(KConfig* config)
 {
-	config->writePathEntry("CalendarURL", mURL.prettyURL());
+	config->writePathEntry("CalendarURL", mURL.prettyUrl());
 	AlarmResource::writeConfig(config);
 }
 
