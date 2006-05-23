@@ -780,7 +780,7 @@ int KAMail::checkAttachment(QString& attachment, KUrl* url)
 		return 0;
 	}
 	// Check that the file exists
-	KUrl u = KUrl(attachment);
+	KUrl u(attachment);
 	u.cleanPath();
 	if (url)
 		*url = u;
