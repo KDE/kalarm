@@ -326,7 +326,8 @@ QList<KAEvent> BirthdayDlg::events() const
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
-				KAEvent event(QDateTime(date),
+                                QDateTime dt( date );
+				KAEvent event(dt,
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
 				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),

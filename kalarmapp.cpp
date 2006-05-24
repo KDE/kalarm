@@ -1836,7 +1836,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 */
 QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm)
 {
-	KTempFile tmpFile(QString(), QString(), 0700);
+	KTempFile tmpFile(QString::null, QString::null, 0700);
 	tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
 	QTextStream* stream = tmpFile.textStream();
 	if (!stream)
