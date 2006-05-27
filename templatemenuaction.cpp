@@ -46,13 +46,13 @@ void TemplateMenuAction::slotInitMenu()
 {
 	KMenu* menu = kMenu();
 	menu->clear();
-//	mOriginalTexts.clear();
+	mOriginalTexts.clear();
 	QList<KAEvent> templates = KAlarm::templateList();
 	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
 		QString name = templates[i].templateName();
-		menu->addAction(name);
-//		mOriginalTexts += name;
+		QAction* act = menu->addAction(name);
+		mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
 	}
 }
 
@@ -62,16 +62,13 @@ void TemplateMenuAction::slotInitMenu()
 */
 void TemplateMenuAction::slotSelected(QAction* action)
 {
-	QString item = action->text();
-#warning Check if text is plain or includes shortcut symbols
-//	QString item = mOriginalTexts[menu->indexOf(id)];
-	if (!item.isEmpty())
+	QMap<QAction*, QString>::const_iterator it = mOriginalTexts.find(action);
+	if (it == mOriginalTexts.end()  ||  it.value().isEmpty())
+		return;
+	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
+	if (cal)
 	{
-		AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-		if (cal)
-		{
-			KAEvent templ = KAEvent::findTemplateName(*cal, item);
-			emit selected(templ);
-		}
+		KAEvent templ = KAEvent::findTemplateName(*cal, it.value());
+		emit selected(templ);
 	}
 }

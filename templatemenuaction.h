@@ -21,6 +21,7 @@
 #ifndef TEMPLATEMENUACTION_H
 #define TEMPLATEMENUACTION_H
 
+#include <QMap>
 #include <kactionclasses.h>
 class QAction;
 class KAEvent;
@@ -39,8 +40,8 @@ class TemplateMenuAction : public KActionMenu
 		void   slotInitMenu();
 		void   slotSelected(QAction*);
 
-//	private:
-//		QStringList mOriginalTexts;   // menu item texts without added ampersands
+	private:
+		QMap<QAction*, QString> mOriginalTexts;   // menu item texts without added ampersands
 };
 
 #endif // TEMPLATEMENUACTION_H
