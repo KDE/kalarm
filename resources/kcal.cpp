@@ -1,7 +1,7 @@
 /*
  *  kcal.cpp  -  libkcal calendar and event functions
  *  Program:  kalarm
- *  Copyright (c) 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include <QMap>
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -32,6 +33,7 @@ namespace KCalendar
 	QByteArray APPNAME = "KALARM";
 }
 
+#define NEW_EVENT_FORMAT
 
 using namespace KCal;
 
@@ -43,6 +45,8 @@ static const QString TEMPLATE_STATUS            = QString::fromLatin1("TEMPLATE"
 static const QString ARCHIVED_STATUS            = QString::fromLatin1("ARCHIVED");
 static const QString DISPLAYING_STATUS          = QString::fromLatin1("DISPLAYING");
 static const QString KORGANIZER_STATUS          = QString::fromLatin1("KORG");
+typedef QMap<QString, KCalEvent::Status> PropertyMap;
+static PropertyMap properties;
 
 // Event ID identifiers
 static const QString ARCHIVED_UID   = QString::fromLatin1("-exp-");
@@ -51,6 +55,8 @@ static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
 static const QString KORGANIZER_UID = QString::fromLatin1("-korg-");
 
 const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
+
+const QString SC = QString::fromLatin1(";");
 
 
 /******************************************************************************
@@ -114,8 +120,22 @@ QString KCalEvent::uid(const QString& id, Status status)
 * triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
-KCalEvent::Status KCalEvent::status(const KCal::Event* event)
+KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 {
+#ifdef NEW_EVENT_FORMAT
+	// Set up a static quick lookup for type strings
+	if (properties.isEmpty())
+	{
+		properties[ACTIVE_STATUS]     = ACTIVE;
+		properties[TEMPLATE_STATUS]   = TEMPLATE;
+		properties[ARCHIVED_STATUS]   = ARCHIVED;
+		properties[KORGANIZER_STATUS] = KORGANIZER;
+		properties[DISPLAYING_STATUS] = DISPLAYING;
+	}
+#endif
+
+	if (param)
+		*param = QString::null;
 	if (!event)
 		return EMPTY;
 
@@ -124,15 +144,25 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event)
 	Alarm::List alarms = event->alarms();
 	if (alarms.isEmpty())
 		return EMPTY;
+
 #ifdef NEW_EVENT_FORMAT
 	QString property = event->customProperty(KCalendar::APPNAME, STATUS_PROPERTY);
 	if (!property.isEmpty())
 	{
-		if (property == ACTIVE_STATUS)      return ACTIVE;
-		if (property == TEMPLATE_STATUS)    return TEMPLATE;
-		if (property == ARCHIVED_STATUS)    return ARCHIVED;
-		if (property == DISPLAYING_STATUS)  return DISPLAYING;
-		if (property == KORGANIZER_STATUS)  return KORGANIZER;
+		// There's a X-KDE-KALARM-TYPE property.
+		// It consists of the event type, plus an optional parameter.
+		PropertyMap::ConstIterator it = properties.find(property);
+		if (it != properties.end())
+			return it.data();
+		int i = property.find(SC);
+		if (i < 0)
+			return EMPTY;
+		it = properties.find(property.left(i));
+		if (it == properties.end())
+			return EMPTY;
+		if (param)
+			*param = property.mid(i + 1);
+		return it.value();
 	}
 #endif
 	switch (uidStatus(event->uid()))
@@ -170,8 +200,10 @@ KCalEvent::Status KCalEvent::uidStatus(const QString& uid)
 
 /******************************************************************************
 * Set the event's type - active, archived, template, etc.
+* If a parameter is supplied, it will be appended as a second parameter to the
+* custom property.
 */
-void KCalEvent::setStatus(const KCal::Event* event, KCalEvent::Status status)
+void KCalEvent::setStatus(KCal::Event* event, KCalEvent::Status status, const QString& param)
 {
 	if (!event)
 		return;
@@ -188,6 +220,8 @@ void KCalEvent::setStatus(const KCal::Event* event, KCalEvent::Status status)
 			event->removeCustomProperty(KCalendar::APPNAME, STATUS_PROPERTY);
 			return;
 	}
+	if (!param.isEmpty())
+		text += SC + param;
 	event->setCustomProperty(KCalendar::APPNAME, STATUS_PROPERTY, text);
 #endif
 }

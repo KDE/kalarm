@@ -55,8 +55,8 @@ class KCalEvent
 
 		static Status  uidStatus(const QString& uid);
 		static QString uid(const QString& id, Status);
-		static Status  status(const KCal::Event*);
-		static void    setStatus(const KCal::Event*, KCalEvent::Status);
+		static Status  status(const KCal::Event*, QString* param = 0);
+		static void    setStatus(KCal::Event*, Status, const QString& param = QString());
 };
 		
 #endif

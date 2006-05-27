@@ -24,6 +24,8 @@
 
 #include <QDir>
 #include <QFile>
+#include <QtAlgorithms>
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -118,8 +120,10 @@ bool KAResourceLocalDir::doLoad()
 	mLoading = true;
 	mLoaded = false;
 	mCalendar.close();
+	clearChanges();
 	if (!isActive())
 		return false;
+	disableChangeNotification();
 	mCompatibilityMap.clear();
 	QString dirName = mURL.path();
 	bool success = false;
@@ -158,9 +162,7 @@ bool KAResourceLocalDir::doLoad()
 			}
 			else
 			{
-kDebug(KARES_DEBUG) << "%%%doLoad(): '" << fileName << "' checking compat..." << endl;
 				KCalendar::Status compat = checkCompatibility(calendar, fileName, prompt);
-kDebug(KARES_DEBUG) << "%%%doLoad(): '" << fileName << "' compat="<<compat << endl;
 				switch (compat)
 				{
 					case KCalendar::Converted:   // user elected to convert. Don't prompt again.
@@ -193,6 +195,7 @@ kDebug(KARES_DEBUG) << "%%%doLoad(): '" << fileName << "' compat="<<compat << en
 		}
 	}
 	mLoading = false;
+	enableChangeNotification();
 	if (!success)
 		return false;
 	mLoaded = true;
@@ -208,22 +211,31 @@ void KAResourceLocalDir::reload(const QString& file)
 
 bool KAResourceLocalDir::doSave()
 {
+	if (saveInhibited())
+		return true;
+	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(" << mURL.path() << ")" <<endl;
 	bool success = true;
 	Incidence::List list = addedIncidences();
+	list += changedIncidences();
+	qSort(list);
+	Incidence* last = 0;
 	for (Incidence::List::iterator it = list.begin();  it != list.end();  ++it)
-		if (!doSave(*it))
-			success = false;
-	list = changedIncidences();
-	for (Incidence::List::iterator it = list.begin();  it != list.end();  ++it)
-		if (!doSave(*it))
-			success = false;
+	{
+		if (*it != last)
+		{
+			last = *it;
+			if (!doSave(last))
+				success = false;
+		}
+	}
 	emit resourceSaved(this);
 	return success;
 }
 
 bool KAResourceLocalDir::doSave(Incidence* incidence)
 {
-
+	if (saveInhibited())
+		return true;
 	QString fileName = mURL.path() + "/" + incidence->uid();
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
@@ -235,6 +247,7 @@ bool KAResourceLocalDir::doSave(Incidence* incidence)
 		mDirWatch.stopScan();  // prohibit the dirty() signal and a following reload()
 		success = cal.save(fileName);
 		mDirWatch.startScan();
+		clearChange(incidence->uid());
 	}
 	return success;
 }
@@ -252,7 +265,12 @@ bool KAResourceLocalDir::deleteEvent(Event* event)
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::deleteEvent" << endl;
 	if (!deleteIncidenceFile(event))
 		return false;
-	return mCalendar.deleteEvent(event);
+	// Remove event from added/changed lists, to avoid it being recreated in doSave()
+	clearChange(event);
+	disableChangeNotification();    // don't record this deletion as pending
+	bool success = mCalendar.deleteEvent(event);
+	enableChangeNotification();
+	return success;
 }
 
 bool KAResourceLocalDir::deleteIncidenceFile(Incidence* incidence)

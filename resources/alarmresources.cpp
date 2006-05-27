@@ -26,8 +26,6 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kurl.h>
-#include <dcopclient.h>
-#include <dcopobject.h>
 #include <kdebug.h>
 
 #include <kresources/selectdialog.h>
@@ -49,11 +47,11 @@ AlarmResources* AlarmResources::mInstance = 0;
 QString         AlarmResources::mReservedFile;
 QString         AlarmResources::mConstructionError;
 
-AlarmResources* AlarmResources::create(const QString& timeZoneId, DCOPObject* dcopObj, bool activeOnly)
+AlarmResources* AlarmResources::create(const QString& timeZoneId, bool activeOnly)
 {
 	if (mInstance)
 		return 0;
-	AlarmResources* cal = new AlarmResources(timeZoneId, dcopObj, activeOnly);
+	AlarmResources* cal = new AlarmResources(timeZoneId, activeOnly);
 	if (!mConstructionError.isEmpty())
 		delete cal;
 	else
@@ -61,13 +59,13 @@ AlarmResources* AlarmResources::create(const QString& timeZoneId, DCOPObject* dc
 	return mInstance;
 }
 
-AlarmResources::AlarmResources(const QString& timeZoneId, DCOPObject* dcopObj, bool activeOnly)
+AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
 	: Calendar(timeZoneId),
 	  mFixFunction(0),
-	  mDcopObject(dcopObj),
 	  mActiveOnly(activeOnly),
-	  mLoadActiveCacheUpdate(true),
-	  mLoadInactiveCacheUpdate(true),
+	  mInhibitActiveReload(false),
+	  mInhibitInactiveReload(false),
+	  mInhibitSave(false),
 	  mAskDestination(false),
 	  mShowProgress(false)
 {
@@ -373,14 +371,14 @@ bool AlarmResources::isLoading(AlarmResource::Type type) const
 
 void AlarmResources::setLoadUpdateCache(bool active, bool inactive)
 {
-	mLoadActiveCacheUpdate = active;
-	mLoadInactiveCacheUpdate = inactive;
+	mInhibitActiveReload   = active;
+	mInhibitInactiveReload = inactive;
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
 	{
 		AlarmResource* resource = *it;
-		bool update = (resource->alarmType() == AlarmResource::ACTIVE)
-		            ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate;
-		resource->setLoadUpdateCache(update);
+		bool inhibit = (resource->alarmType() == AlarmResource::ACTIVE)
+		             ? mInhibitActiveReload : mInhibitInactiveReload;
+		resource->setLoadUpdateCache(!inhibit);
 	}
 }
 
@@ -390,7 +388,7 @@ void AlarmResources::load(LoadAction action)
 	if (!mManager->standardResource())
 		kDebug(KARES_DEBUG) << "Warning! No standard resource yet." << endl;
 
-	// set the timezone for all resources. Otherwise we'll have those terrible tz troubles ;-((
+	// Set the timezone for all resources. Otherwise we'll have those terrible tz troubles ;-((
 	// Open all active resources
 	QList<AlarmResource*> failed;
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
@@ -416,10 +414,10 @@ void AlarmResources::load(LoadAction action)
 
 bool AlarmResources::load(AlarmResource* resource, LoadAction action)
 {
-	bool update = (action == UpdateCache) ? true
-	            : (action == FromCache)   ? false
-	            : (resource->alarmType() == AlarmResource::ACTIVE) ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate;
-	return resource->loadCached(update);
+	bool inhibit = (action == UpdateCache) ? false
+	            : (action == FromCache)   ? true
+	            : (resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload;
+	return resource->loadCached(!inhibit);
 }
 
 // Called whenever a resource has loaded, to register its events.
@@ -435,16 +433,10 @@ void AlarmResources::slotResLoaded(AlarmResource* resource)
 }
 
 // Called whenever a remote resource download has completed.
-// Emit a DCOP signal to notify other applications that the cache file should be reloaded.
 void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 {
-	if (mDcopObject)
-	{
-		QByteArray data;
-		QDataStream arg(&data, QIODevice::WriteOnly);
-		arg << resource->identifier();
-		mDcopObject->emitDCOPSignal("downloaded(const QString&)", data);
-	}
+	if (resource->isActive())
+		emit cacheDownloaded(resource);
 }
 
 void AlarmResources::remap(AlarmResource* resource)
@@ -485,7 +477,8 @@ void AlarmResources::save()
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		{
-			if (!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
+			if ((!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
+			&&  (*it)->hasChanges())
 				(*it)->save();
 		}
 		setModified(false);
@@ -500,6 +493,13 @@ bool AlarmResources::isSaving()
 			return true;
 	}
 	return false;
+}
+
+void AlarmResources::setInhibitSave(bool inhibit)
+{
+	mInhibitSave = inhibit;
+	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
+		(*it)->setInhibitSave(inhibit);;
 }
 
 void AlarmResources::showProgress(bool show)
@@ -522,8 +522,6 @@ bool AlarmResources::addEvent(Event* event, AlarmResource* resource)
 	}
 	AlarmResource* oldResource = mResourceMap.contains(event) ? mResourceMap[event] : 0;
 	mResourceMap[event] = resource;
-#warning Added local dir: "beginChange(): unable to get ticket", so addEvent() fails
-// Works for resource which was there at KAlarm start, but not for an added resource (lock() == 0)
 	if (validRes  &&  beginChange(event)  &&  resource->addIncidence(event))
 	{
 		//mResourceMap[event] = resource;
@@ -667,7 +665,8 @@ void AlarmResources::setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const
 void AlarmResources::connectResource(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
-	resource->setLoadUpdateCache((resource->alarmType() == AlarmResource::ACTIVE) ? mLoadActiveCacheUpdate : mLoadInactiveCacheUpdate);
+	resource->setLoadUpdateCache((resource->alarmType() == AlarmResource::ACTIVE) ? !mInhibitActiveReload : !mInhibitInactiveReload);
+	resource->setInhibitSave(mInhibitSave);
 	resource->setFixFunction(mFixFunction);
 	resource->disconnect(this);   // just in case we're called twice
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
@@ -697,10 +696,7 @@ void AlarmResources::slotResourceLoaded(AlarmResource* resource)
 void AlarmResources::slotResourceSaved(AlarmResource* resource)
 {
 	if (resource->isActive())
-	{
-		emit calendarSaved();
 		emit resourceSaved(resource);
-	}
 }
 
 void AlarmResources::slotResourceDownloading(AlarmResource* resource, unsigned long percent)
@@ -775,6 +771,7 @@ AlarmResource* AlarmResources::resource(Incidence* incidence)
   return mResourceMap[incidence];
 }
 
+// Called by the resource manager when a resource is added to the collection
 void AlarmResources::resourceAdded(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::resourceAdded(" << resource->resourceName() << ")" << endl;
@@ -814,7 +811,6 @@ AlarmResources::Ticket* AlarmResources::requestSaveTicket(AlarmResource* resourc
   kDebug(KARES_DEBUG) << "AlarmResources::requestSaveTicket()" << endl;
 
   KABC::Lock* lock = resource->lock();
-kDebug(KARES_DEBUG)<<"*** lock="<<(void*)lock<<endl;
   if (lock  &&  lock->lock())
     return new Ticket(resource);
   return 0;

@@ -29,7 +29,7 @@
 #include "alarmresource.h"
 #include "kcal.h"
 
-class DCOPObject;
+class KAResourceIface;
 namespace KCal { class Event; }
 using KCal::CalendarLocal;
 using KCal::ResourceCalendar;
@@ -61,7 +61,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		 *  @return The alarm calendar resources instance, or 0 if either a reserved
 		 *          file name was used or it has already been created.
 		 */
-		static AlarmResources* create(const QString& timeZoneId, DCOPObject*, bool activeOnly = false);
+		static AlarmResources* create(const QString& timeZoneId, bool activeOnly = false);
 		static QString creationError()   { return mConstructionError; }
 		virtual ~AlarmResources();
 		/** Return the alarm calendar resources instance.
@@ -114,6 +114,9 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 
 		/** Set the default cache update action when loading resources. */
 		void setLoadUpdateCache(bool active, bool inactive);
+
+		/** Allow or inhibit saves, for all resources. */
+		void setInhibitSave(bool);
     /**
      * Reloads all incidences from all resources.
      * @par tz The timezone to set.
@@ -384,6 +387,8 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		void standardResourceChange(AlarmResource::Type);
 
 		void resourceSaved(AlarmResource*);
+		/** Signal that a remote resource's cache has completed downloading. */
+		void cacheDownloaded(AlarmResource*);
 		/** Signal that one resource has completed loading. */
 		void resourceLoaded(AlarmResource*, bool success);
 		/** Emitted at start of download only if mShowProgress is true. */
@@ -456,7 +461,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		void slotResourceChanged(ResourceCalendar*);
 
 	private:
-		AlarmResources(const QString& timeZoneId, DCOPObject*, bool activeOnly);
+		AlarmResources(const QString& timeZoneId, bool activeOnly);
 		AlarmResource* addDefaultResource(const KConfig*, AlarmResource::Type);
 		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);
@@ -472,10 +477,10 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		QMap<AlarmResource*, Ticket*>          mTickets;
 		QMap<AlarmResource*, int>              mChangeCounts;
 		KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc);   // post-load function to convert old calendar formats
-		DCOPObject* mDcopObject;      // DCOP object to use to send signals from
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
-		bool        mLoadActiveCacheUpdate;   // whether default load should update cache for active alarm resource
-		bool        mLoadInactiveCacheUpdate; // whether default load should update cache for archived/template resource
+		bool        mInhibitActiveReload;   // cache reload inhibited for default load, for active alarm resource
+		bool        mInhibitInactiveReload; // cache reload inhibited for default load, for archived/template resource
+		bool        mInhibitSave;     // resources save inhibited
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;

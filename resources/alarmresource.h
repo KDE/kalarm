@@ -179,6 +179,11 @@ class AlarmResource : public KCal::ResourceCached
 		/** Signal that loading of the resource been successfully initiated
 		 *  (successfully completed in the case of local resources). */
 		void resLoaded(AlarmResource*);
+		/** Emitted after attempting to save the resource, whether successfully or not.
+		 *  Not emitted if no attempt was made to save it (e.g. if the resource
+		 *  is closed or read-only or there is nothing to save, or if save()
+		 *  returned false).
+		 */
 		void resourceSaved(AlarmResource*);
 		/** Emitted during download for remote resources. */
 		void downloading(AlarmResource*, unsigned long percent);

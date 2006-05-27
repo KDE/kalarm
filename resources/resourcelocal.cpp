@@ -82,7 +82,6 @@ void KAResourceLocal::startReconfig()
 
 void KAResourceLocal::applyReconfig()
 {
-kDebug(KARES_DEBUG)<<"***applyReconfig()"<<endl;
 	if (mReconfiguring)
 	{
 		AlarmResource::applyReconfig();
@@ -114,6 +113,7 @@ bool KAResourceLocal::doLoad()
 		kDebug(KARES_DEBUG) << "KAResourceLocal::doLoad(): File doesn't exist yet." << endl;
 		mLoaded = false;
 		mCalendar.close();
+		clearChanges();
 		if (!isActive())
 			return false;
 		mLoading = true;
@@ -150,6 +150,7 @@ bool KAResourceLocal::loadFile()
 	kDebug(KARES_DEBUG) << "KAResourceLocal::loadFile(" << mURL.path() << ")" << endl;
 	mLoaded = false;
 	mCalendar.close();
+	clearChanges();
 	if (!isActive())
 		return false;
 	mLoading = true;
@@ -168,8 +169,11 @@ bool KAResourceLocal::loadFile()
 
 bool KAResourceLocal::doSave()
 {
+	if (saveInhibited())
+		return true;
 kDebug(KARES_DEBUG)<<"***doSave("<<mURL.path()<<")"<<endl;
 	bool success = mCalendar.save(mURL.path());
+	clearChanges();
 	mLastModified = readLastModified();
 	emit resourceSaved(this);
 	return success;

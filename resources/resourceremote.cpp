@@ -72,7 +72,6 @@ void KAResourceRemote::init()
 {
 	setType("remote");   // set resource type
 	lock(QString(""));   // don't use QString::null !
-	enableChangeNotification();
 }
 
 KAResourceRemote::~KAResourceRemote()
@@ -165,39 +164,32 @@ bool KAResourceRemote::loadCached(bool refreshCache)
 
 bool KAResourceRemote::doLoad()
 {
+	bool updateCache = !mLoadFromCache;
+	if (mUploadJob)
+		updateCache = false;   // still uploading, so the cache is up-to-date
 	kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << ")" << endl;
 	if (mDownloadJob)
 	{
 		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): download still in progress" << endl;
 		return false;
 	}
-	if (mUploadJob  &&  !mLoadFromCache)
-	{
-		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): upload still in progress" << endl;
-		return false;
-	}
 	mLoaded = false;
 	mCalendar.close();
+	clearChanges();
 	if (!isActive())
 		return false;
 	mLoading = true;
 
-	if (mUseCacheFile  ||  mLoadFromCache)
+	if (mUseCacheFile  ||  !updateCache)
 	{
 		disableChangeNotification();
-		loadFromCache();
+		updateCache = !loadFromCache();    // if cache file doesn't exist yet, we need to download
 		mUseCacheFile = false;
 		enableChangeNotification();
 	}
-	clearChanges();
 	emit resourceChanged(this);
 
-	if (mLoadFromCache)
-	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): from cache" << endl;
-		slotLoadJobResult(0);
-	}
-	else
+	if (updateCache)
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyUrl() << "): success" << endl;
 		mDownloaded = true;    // the resource has now been downloaded at least once
@@ -213,6 +205,11 @@ bool KAResourceRemote::doLoad()
 			emit downloading(this, 0);
 		}
 #endif
+	}
+	else
+	{
+		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): from cache" << endl;
+		slotLoadJobResult(0);
 	}
 	return true;
 }
@@ -230,6 +227,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 	if (job)
 	{
 		mCalendar.close();
+		clearChanges();
 		if (job->error())
 		{
 			job->showErrorDialog(0);
@@ -279,6 +277,8 @@ void KAResourceRemote::cancelDownload(bool disable)
 
 bool KAResourceRemote::doSave()
 {
+	if (saveInhibited())
+		return true;
 	kDebug(KARES_DEBUG) << "KAResourceRemote::doSave(" << mUploadUrl.prettyUrl() << ")" << endl;
 	if (readOnly()  ||  !hasChanges())
 		return true;
@@ -295,8 +295,10 @@ bool KAResourceRemote::doSave()
 
 	mChangedIncidences = allChanges();
 	saveToCache();
-	mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true);
-	connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));
+	{
+		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true);
+		connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));
+	}
 	return true;
 }
 
@@ -307,9 +309,10 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 	else
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyUrl() << "): success" << endl;
-		for(Incidence::List::ConstIterator it = mChangedIncidences.begin();  it != mChangedIncidences.end();  ++it)
-			clearChange(*it);
-		mChangedIncidences.clear();
+//		for(Incidence::List::ConstIterator it = mChangedIncidences.begin();  it != mChangedIncidences.end();  ++it)
+//			clearChange(*it);
+//		mChangedIncidences.clear();
+		clearChanges();
 	}
 
 	mUploadJob = 0;

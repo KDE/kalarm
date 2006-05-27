@@ -64,12 +64,12 @@ AlarmResource::AlarmResource(const KConfig* config)
 			case TEMPLATE:
 				mType = static_cast<Type>(type);
 				mStandard = config->readEntry("Standard", true);
-				return;
+				break;
 			default:
 				break;
 		}
 	}
-//	CalFormat::setApplication(QString::fromLatin1(KALARM_NAME), QString::fromLatin1(ICAL_PRODUCT_ID));
+	enableChangeNotification();
 }
 
 AlarmResource::AlarmResource(Type type)
@@ -133,22 +133,22 @@ void AlarmResource::applyReconfig()
 void AlarmResource::checkCompatibility(const QString& filename)
 {
 	mCompatibility = KCalendar::Incompatible;   // assume the worst
-	if (mFixFunction)
+	if (!mFixFunction)
+		return;
+	// Check whether the version is compatible (and convert it if desired)
+	mCompatibility = (*mFixFunction)(mCalendar, filename, this, PROMPT);
+	if (mCompatibility == KCalendar::Converted)
 	{
-		// Check whether the version is compatible (and convert it if desired)
-		mCompatibility = (*mFixFunction)(mCalendar, filename, this, PROMPT);
-		if (mCompatibility == KCalendar::Converted)
-		{
-			// Set mCompatibility first to ensure that readOnly() returns
-			// the correct value and that save() therefore works.
-			mCompatibility = KCalendar::Current;
-			save();
-		}
-		if (mCompatibility == KCalendar::Current  ||  mCompatibility == KCalendar::ByEvent)
-			return;      // it's in the current KAlarm format
+		// Set mCompatibility first to ensure that readOnly() returns
+		// the correct value and that save() therefore works.
+		mCompatibility = KCalendar::Current;
+		save();
 	}
-	// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
-	kDebug(KARES_DEBUG) << "AlarmResource::checkCompatibility(" << resourceName() << "): opened read-only (not current KAlarm format)" << endl;
+	if (mCompatibility != KCalendar::Current  &&  mCompatibility != KCalendar::ByEvent)
+	{
+		// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
+		kDebug(KARES_DEBUG) << "AlarmResource::checkCompatibility(" << resourceName() << "): opened read-only (not current KAlarm format)" << endl;
+	}
 }
 
 /******************************************************************************
