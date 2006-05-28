@@ -80,8 +80,8 @@ class KAResourceRemote : public AlarmResource
 		virtual void cancelDownload(bool disable = true);
 
 	protected:
-		virtual bool doLoad();
-		virtual bool doSave();
+		virtual bool doLoad(bool);
+		virtual bool doSave(bool);
 		virtual void enableResource(bool enable);
 
 	private slots:

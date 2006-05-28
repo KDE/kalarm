@@ -162,7 +162,7 @@ bool KAResourceRemote::loadCached(bool refreshCache)
 	return success;
 }
 
-bool KAResourceRemote::doLoad()
+bool KAResourceRemote::doLoad(bool)
 {
 	bool updateCache = !mLoadFromCache;
 	if (mUploadJob)
@@ -275,7 +275,7 @@ void KAResourceRemote::cancelDownload(bool disable)
 	}
 }
 
-bool KAResourceRemote::doSave()
+bool KAResourceRemote::doSave(bool)
 {
 	if (saveInhibited())
 		return true;

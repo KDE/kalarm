@@ -114,7 +114,7 @@ void KAResourceLocalDir::enableResource(bool enable)
 * Add their events to our calendar, omitting any which contain no alarms.
 * Reply = true if any file in the directory was loaded successfully.
 */
-bool KAResourceLocalDir::doLoad()
+bool KAResourceLocalDir::doLoad(bool)
 {
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(" << mURL.path() << ")" << endl;
 	mLoading = true;
@@ -209,7 +209,7 @@ void KAResourceLocalDir::reload(const QString& file)
 	refresh();
 }
 
-bool KAResourceLocalDir::doSave()
+bool KAResourceLocalDir::doSave(bool)
 {
 	if (saveInhibited())
 		return true;
