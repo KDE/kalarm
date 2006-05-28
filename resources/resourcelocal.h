@@ -62,8 +62,8 @@ class KAResourceLocal : public AlarmResource
 		  @return true if successful, else false. If true is returned,
 			  reload() will emit a resourceChanged() signal.
 		*/
-		virtual bool doLoad();
-		virtual bool doSave();
+		virtual bool doLoad( bool updateCache );
+		virtual bool doSave( bool updateCache );
 		QDateTime    readLastModified();
 		virtual void enableResource(bool enable);
 
