@@ -62,9 +62,9 @@ class KAResourceLocalDir : public AlarmResource
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
 	protected:
-		virtual bool doLoad(bool);
-		virtual bool doSave(bool);
-		bool         doSave(KCal::Incidence*);
+		virtual bool doLoad(bool syncCache);
+		virtual bool doSave(bool syncCache);
+		bool         doSave(bool syncCache, KCal::Incidence*);
 		virtual void enableResource(bool enable);
 
 	protected slots:

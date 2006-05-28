@@ -57,13 +57,8 @@ class KAResourceLocal : public AlarmResource
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
 	protected:
-		/**
-		  Called by reload() to reload the resource, if it is already open.
-		  @return true if successful, else false. If true is returned,
-			  reload() will emit a resourceChanged() signal.
-		*/
-		virtual bool doLoad( bool updateCache );
-		virtual bool doSave( bool updateCache );
+		virtual bool doLoad(bool updateCache);
+		virtual bool doSave(bool updateCache);
 		QDateTime    readLastModified();
 		virtual void enableResource(bool enable);
 

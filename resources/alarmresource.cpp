@@ -28,11 +28,9 @@
 #include <kabc/lock.h>
 #include <kabc/locknull.h>
 
-#include <libkcal/calformat.h>
-
+#include "alarmresource.moc"
 using namespace KCal;
 #include "alarmresources.h"
-#include "alarmresource.moc"
 
 
 int AlarmResource::mDebugArea = KARES_DEBUG;
@@ -44,7 +42,6 @@ AlarmResource::AlarmResource(const KConfig* config)
 	  mLock(0),
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
-	  mLoadCacheUpdate(true),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -78,13 +75,12 @@ AlarmResource::AlarmResource(Type type)
 	  mLock(0),
 	  mType(type),
 	  mStandard(false),
-	  mLoadCacheUpdate(true),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
 	  mLoading(false)
 {
-//	CalFormat::setApplication(QString::fromLatin1(KALARM_NAME), QString::fromLatin1(ICAL_PRODUCT_ID));
+	enableChangeNotification();
 }
 
 AlarmResource::~AlarmResource()
@@ -217,7 +213,11 @@ void AlarmResource::setReadOnly(bool ronly)
 				return;
 			case KCalendar::Convertible:
 				if (mReconfiguring <= 2)
-					refresh();    // give user the option of converting it
+				{
+					if (!isOpen())
+						return;
+					load(NoSyncCache);   // give user the option of converting it
+				}
 				if (mCompatibility != KCalendar::Current)
 					return;    // not converted, so keep as read-only
 				break;
@@ -243,31 +243,13 @@ void AlarmResource::setEnabled(bool enable)
 	}
 }
 
-bool AlarmResource::setLoadUpdateCache(bool update)
-{
-	if (update == mLoadCacheUpdate)
-		return false;
-	mLoadCacheUpdate = update;
-	return true;
-}
-
-bool AlarmResource::load()
+bool AlarmResource::load(CacheAction action)
 {
 	mCompatibilityMap.clear();
-	if (!ResourceCached::load())
+	if (!ResourceCached::load(action))
 		return false;
 	emit resLoaded(this);    // special signal to AlarmResources
 	return true;
-}
-
-bool AlarmResource::refresh()
-{
-	kDebug(KARES_DEBUG) << "AlarmResource::refresh()\n";
-	if (!isOpen())
-		return false;
-	bool success = loadCached(false);    // just load from cache (if applicable)
-	emit resourceChanged(this);
-	return success;
 }
 
 void AlarmResource::doClose()

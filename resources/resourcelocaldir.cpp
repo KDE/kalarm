@@ -206,7 +206,11 @@ bool KAResourceLocalDir::doLoad(bool)
 void KAResourceLocalDir::reload(const QString& file)
 {
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::reload(" << file << ")" << endl;
-	refresh();
+	if (isOpen())
+	{
+		load(NoSyncCache);
+		emit resourceChanged(this);
+	}
 }
 
 bool KAResourceLocalDir::doSave(bool)
@@ -224,7 +228,7 @@ bool KAResourceLocalDir::doSave(bool)
 		if (*it != last)
 		{
 			last = *it;
-			if (!doSave(last))
+			if (!doSave(true, last))
 				success = false;
 		}
 	}
@@ -232,7 +236,7 @@ bool KAResourceLocalDir::doSave(bool)
 	return success;
 }
 
-bool KAResourceLocalDir::doSave(Incidence* incidence)
+bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 {
 	if (saveInhibited())
 		return true;

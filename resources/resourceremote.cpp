@@ -39,10 +39,7 @@ KAResourceRemote::KAResourceRemote(const KConfig* config)
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(true),
-	  mDownloaded(false),
-	  mUseCacheFile(true),
-	  mLoadFromCache(false),
-	  mLoadCachedExecuting(false)
+	  mUseCacheFile(true)
 {
 	if (config)
 	{
@@ -60,10 +57,7 @@ KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUr
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(false),
-	  mDownloaded(false),
-	  mUseCacheFile(false),
-	  mLoadFromCache(false),
-	  mLoadCachedExecuting(false)
+	  mUseCacheFile(false)
 {
 	init();
 }
@@ -114,59 +108,10 @@ void KAResourceRemote::enableResource(bool enable)
 		cancelDownload(false);
 }
 
-bool KAResourceRemote::setLoadUpdateCache(bool update)
+bool KAResourceRemote::doLoad(bool syncCache)
 {
-	if (!AlarmResource::setLoadUpdateCache(update))
-		return false;
-	if (update)
-		mDownloaded = false;    // ensure that the resource is downloaded now
-	setLoadingFromCache();
-	return true;
-}
-
-// Set the default cache refresh action for the next load().
-void KAResourceRemote::setLoadingFromCache()
-{
-	if (!mLoadCachedExecuting)
-	{
-		switch (reloadPolicy())
-		{
-			case ReloadNever:
-				mLoadFromCache = true;
-				return;
-			case ReloadInterval:
-				setReloadPolicy(ReloadInterval);     // restart the reload timer
-				// fall through to ReloadOnStartup
-			case ReloadOnStartup:
-				mLoadFromCache = mDownloaded || !loadUpdateCache();
-				break;
-		}
-		if (!mLoadFromCache  &&  !mDownloaded)
-			load();
-	}
-}
-
-bool KAResourceRemote::loadCached(bool refreshCache)
-{
-	if (mLoadCachedExecuting)
-		return false;    // another loadCached() is already in progress
-	mLoadCachedExecuting = true;
-	kDebug(KARES_DEBUG) << "KAResourceRemote::loadCached(" << refreshCache << ")" << endl;
-	mLoadFromCache = !refreshCache && KStandardDirs::exists(cacheFile());
-//if (mLoadFromCache) kDebug(KARES_DEBUG)<<"***cacheFile="<<cacheFile()<<endl;
-	bool success = AlarmResource::load();
-	// Reset the load-from-cache indicator to the default, so that a subsequent
-	// load() works as expected.
-	mLoadCachedExecuting = false;
-	setLoadingFromCache();
-	return success;
-}
-
-bool KAResourceRemote::doLoad(bool)
-{
-	bool updateCache = !mLoadFromCache;
 	if (mUploadJob)
-		updateCache = false;   // still uploading, so the cache is up-to-date
+		syncCache = false;   // still uploading, so the cache is up-to-date
 	kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << ")" << endl;
 	if (mDownloadJob)
 	{
@@ -180,20 +125,18 @@ bool KAResourceRemote::doLoad(bool)
 		return false;
 	mLoading = true;
 
-	if (mUseCacheFile  ||  !updateCache)
+	if (mUseCacheFile  ||  !syncCache)
 	{
 		disableChangeNotification();
-		updateCache = !loadFromCache();    // if cache file doesn't exist yet, we need to download
+		syncCache = !loadFromCache();    // if cache file doesn't exist yet, we need to download
 		mUseCacheFile = false;
 		enableChangeNotification();
 	}
 	emit resourceChanged(this);
 
-	if (updateCache)
+	if (syncCache)
 	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyUrl() << "): success" << endl;
-		mDownloaded = true;    // the resource has now been downloaded at least once
-		kDebug(KARES_DEBUG) << "Download from: " << mDownloadUrl.prettyUrl() << "): success"<< endl;
+		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading..." << endl;
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, mShowProgress);
 		connect(mDownloadJob, SIGNAL(result(KIO::Job*)), SLOT(slotLoadJobResult(KIO::Job*)));
@@ -237,6 +180,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		else
 		{
 			kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyUrl() << "): success" << endl;
+			setReloaded(true);    // the resource has now been downloaded at least once
 			emit cacheDownloaded(this);
 			disableChangeNotification();
 			loadFromCache();
@@ -275,7 +219,7 @@ void KAResourceRemote::cancelDownload(bool disable)
 	}
 }
 
-bool KAResourceRemote::doSave(bool)
+bool KAResourceRemote::doSave(bool syncCache)
 {
 	if (saveInhibited())
 		return true;
@@ -295,6 +239,7 @@ bool KAResourceRemote::doSave(bool)
 
 	mChangedIncidences = allChanges();
 	saveToCache();
+	if (syncCache)
 	{
 		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true);
 		connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));

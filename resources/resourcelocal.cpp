@@ -106,7 +106,7 @@ void KAResourceLocal::enableResource(bool enable)
 	}
 }
 
-bool KAResourceLocal::doLoad( bool )
+bool KAResourceLocal::doLoad(bool)
 {
 	if (!KStandardDirs::exists(mURL.path()))
 	{
@@ -117,7 +117,7 @@ bool KAResourceLocal::doLoad( bool )
 		if (!isActive())
 			return false;
 		mLoading = true;
-		if (!doSave( true ))   // save the empty calendar, to create the calendar file
+		if (!doSave(true))   // save the empty calendar, to create the calendar file
 		{
 			mLoading = false;
 			return false;
@@ -167,11 +167,11 @@ bool KAResourceLocal::loadFile()
 	return true;
 }
 
-bool KAResourceLocal::doSave( bool )
+bool KAResourceLocal::doSave(bool)
 {
 	if (saveInhibited())
 		return true;
-kDebug(KARES_DEBUG)<<"***doSave("<<mURL.path()<<")"<<endl;
+	kDebug(KARES_DEBUG) << "KAResourceLocal::doSave(" << mURL.path() << ")" <<endl;
 	bool success = mCalendar.save(mURL.path());
 	clearChanges();
 	mLastModified = readLastModified();

@@ -40,7 +40,6 @@
 
 using namespace KCal;
 
-
 static KStaticDeleter<AlarmResources> theInstance;
 
 AlarmResources* AlarmResources::mInstance = 0;
@@ -369,7 +368,7 @@ bool AlarmResources::isLoading(AlarmResource::Type type) const
 	return false;
 }
 
-void AlarmResources::setLoadUpdateCache(bool active, bool inactive)
+void AlarmResources::inhibitDefaultReload(bool active, bool inactive)
 {
 	mInhibitActiveReload   = active;
 	mInhibitInactiveReload = inactive;
@@ -378,11 +377,11 @@ void AlarmResources::setLoadUpdateCache(bool active, bool inactive)
 		AlarmResource* resource = *it;
 		bool inhibit = (resource->alarmType() == AlarmResource::ACTIVE)
 		             ? mInhibitActiveReload : mInhibitInactiveReload;
-		resource->setLoadUpdateCache(!inhibit);
+		resource->inhibitDefaultReload(inhibit);
 	}
 }
 
-void AlarmResources::load(LoadAction action)
+void AlarmResources::load(ResourceCached::CacheAction action)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::load()" << endl;
 	if (!mManager->standardResource())
@@ -412,12 +411,21 @@ void AlarmResources::load(LoadAction action)
 	mOpen = true;
 }
 
-bool AlarmResources::load(AlarmResource* resource, LoadAction action)
+bool AlarmResources::load(AlarmResource* resource, ResourceCached::CacheAction action)
 {
-	bool inhibit = (action == UpdateCache) ? false
-	            : (action == FromCache)   ? true
-	            : (resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload;
-	return resource->loadCached(!inhibit);
+	switch (action)
+	{
+		case ResourceCached::SyncCache:
+		case ResourceCached::NoSyncCache:
+			break;
+		default:
+			if (resource->alarmType() == AlarmResource::ACTIVE)
+				action = mInhibitActiveReload ? ResourceCached::NoSyncCache : ResourceCached::SyncCache;
+			else
+				action = mInhibitInactiveReload ? ResourceCached::NoSyncCache : ResourceCached::SyncCache;
+			break;
+	}
+	return resource->load(action);
 }
 
 // Called whenever a resource has loaded, to register its events.
@@ -437,6 +445,16 @@ void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 {
 	if (resource->isActive())
 		emit cacheDownloaded(resource);
+}
+
+void AlarmResources::loadIfNotReloaded()
+{
+	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
+	{
+		AlarmResource* res = *it;
+		if (!res->reloaded())
+			res->load(ResourceCached::DefaultCache);
+	}
 }
 
 void AlarmResources::remap(AlarmResource* resource)
@@ -665,7 +683,7 @@ void AlarmResources::setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const
 void AlarmResources::connectResource(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
-	resource->setLoadUpdateCache((resource->alarmType() == AlarmResource::ACTIVE) ? !mInhibitActiveReload : !mInhibitInactiveReload);
+	resource->inhibitDefaultReload((resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload);
 	resource->setInhibitSave(mInhibitSave);
 	resource->setFixFunction(mFixFunction);
 	resource->disconnect(this);   // just in case we're called twice
@@ -738,8 +756,6 @@ void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change c
 	{
 		// The resource is no longer writable, so it can't be a standard resource
 		// N.B. Setting manager's standard resource to 0 does nothing.
-kDebug(KARES_DEBUG)<<"***no longer writable***\n";
-kDebug(KARES_DEBUG)<<"***active="<<resource->isActive()<<", rc::readOnly="<<resource->KCal::ResourceCached::readOnly()<<", compat="<<resource->compatibility()<<endl;
 		if (resource->standardResource())
 			resource->setStandardResource(false);
 	}

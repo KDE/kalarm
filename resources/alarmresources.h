@@ -40,11 +40,6 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 {
 		Q_OBJECT
 	public:
-		enum LoadAction {       // whether to update the cache file when loading a resource
-			DefaultLoad,    // use the default action
-			FromCache,      // just reload from cache, without updating the cache
-			UpdateCache     // update the cache file before loading
-		};
 		enum Change { Added, Deleted, Enabled, ReadOnly, Location };
 
 		class Ticket
@@ -109,11 +104,14 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		 *  first using either readConfig(KConfig*), which adds the system
 		 *  resources, or manually using resourceAdded(AlarmResource*).
 		*/
-		void load(LoadAction = DefaultLoad);
-		bool load(AlarmResource*, LoadAction = DefaultLoad);
+		void load(KCal::ResourceCached::CacheAction = KCal::ResourceCached::DefaultCache);
+		bool load(AlarmResource*, KCal::ResourceCached::CacheAction = KCal::ResourceCached::DefaultCache);
 
-		/** Set the default cache update action when loading resources. */
-		void setLoadUpdateCache(bool active, bool inactive);
+		/** Reload cache for all resources which have not yet been reloaded. */
+		void loadIfNotReloaded();
+
+		/** Allow or inhibit cache update when calling load(DefaultCache). */
+		void inhibitDefaultReload(bool active, bool inactive);
 
 		/** Allow or inhibit saves, for all resources. */
 		void setInhibitSave(bool);

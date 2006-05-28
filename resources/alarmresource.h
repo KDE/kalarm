@@ -92,15 +92,6 @@ class AlarmResource : public KCal::ResourceCached
 		 *  and stored locally in a cache file. */
 		virtual bool cached() const              { return false; }
 
-		/** Set the default cache update action when loading the resource.
-		 *  For remote resources, if @p update is true, and the resource has a
-		 *  reload policy of LoadOnStartup, and the resource has not yet been
-		 *  downloaded, a download is initiated.
-		 *  @return false if nothing changed
-		 */
-		virtual bool setLoadUpdateCache(bool update);
-		bool loadUpdateCache() const             { return mLoadCacheUpdate; }
-
 		/** Return whether the resource is read-only, either because it's marked as
 		 *  read-only, or because it's active but not in the current KAlarm format. */
 		virtual bool readOnly() const;
@@ -113,17 +104,6 @@ class AlarmResource : public KCal::ResourceCached
 		/** Apply the batch of configuration changes since startReconfig() was called. */
 		virtual void applyReconfig();
 
-		/** Load the resource, specifying whether to refresh the cache file first.
-		 *  If loading succeeds, the loaded() signal is emitted on completion (but is
-		 *  not emitted if false is returned).
-		 *  Loading is not performed if the resource is disabled.
-		 *  @param refreshCache if the resource is cached, whether to update the cache
-		 *                      file before loading from the cache file.
-		 *  @return true if loading succeeded at least partially, false if it failed
-		 *          completely
-		 */
-		virtual bool loadCached(bool /*refreshCache*/)  { return load(); }
-
 		/** Load the resource.
 		 *  If it's a cached resource, load() uses the default action to either refresh
 		 *  the cache file first or not.
@@ -134,13 +114,7 @@ class AlarmResource : public KCal::ResourceCached
 		 *  @return true if loading succeeded at least partially, false if it failed
 		 *          completely
 		 */
-		virtual bool load();
-
-		/** Reload the resource from disc.
-		 *  If the resource is cached, just load from the cache file
-		 *  without updating the cache file first.
-		 */
-		bool     refresh();
+		virtual bool load(CacheAction);
 
 		/** Return whether the resource has fully loaded. */
 		bool     isLoaded() const                { return mLoaded; }
@@ -214,7 +188,6 @@ class AlarmResource : public KCal::ResourceCached
 		KABC::Lock* mLock;
 		Type        mType;            // type of alarm held in this resource
 		bool        mStandard;        // standard resource for this mWriteType
-		bool        mLoadCacheUpdate; // whether to update cache when loading the resource
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
 		KCalendar::Status mCompatibility; // whether resource is in compatible format
