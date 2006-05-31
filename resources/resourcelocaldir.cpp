@@ -36,6 +36,8 @@
 
 using namespace KCal;
 
+static QDateTime readLastModified(const QString& filePath);
+
 
 KAResourceLocalDir::KAResourceLocalDir(const KConfig* config)
 	: AlarmResource(config)
@@ -56,12 +58,15 @@ void KAResourceLocalDir::init()
 {
 	setType("dir");   // set resource type
 
-	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(reload(const QString&)));
-	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(reload(const QString&)));
-	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(reload(const QString&)));
+	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotReload()));
+	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotReload()));
+	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotReload()));
 
 	mDirWatch.addDir(mURL.path(), true);
 	enableResource(isActive());
+
+	// Initially load all files in the directory, then just load changes
+	setReloadPolicy(ReloadOnStartup);
 }
 
 KAResourceLocalDir::~KAResourceLocalDir()
@@ -110,26 +115,86 @@ void KAResourceLocalDir::enableResource(bool enable)
 }
 
 /******************************************************************************
-* Load all the files in the local directory.
-* Add their events to our calendar, omitting any which contain no alarms.
+* Load the files in the local directory, and add their events to our calendar.
+* If 'syncCache' is true, all files are loaded; if false, only changed files
+* are loaded.
+* Events which contain no alarms are ignored..
 * Reply = true if any file in the directory was loaded successfully.
 */
-bool KAResourceLocalDir::doLoad(bool)
+bool KAResourceLocalDir::doLoad(bool syncCache)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(" << mURL.path() << ")" << endl;
+	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(" << mURL.path() << (syncCache ? "): load all" : "): load changes only") << endl;
+	if (!isActive()  ||  !isOpen())
+		return false;
+	ModifiedMap      oldLastModified;
+	CompatibilityMap oldCompatibilityMap;
+	Incidence::List  changes;
 	mLoading = true;
 	mLoaded = false;
-	mCalendar.close();
-	clearChanges();
-	if (!isActive())
-		return false;
 	disableChangeNotification();
+	setCompatibility(KCalendar::ByEvent);
+	if (syncCache)
+	{
+		mCalendar.close();
+		clearChanges();
+	}
+	else
+	{
+		oldLastModified = mLastModified;
+		oldCompatibilityMap = mCompatibilityMap;
+		changes = changedIncidences();
+	}
+	mLastModified.clear();
 	mCompatibilityMap.clear();
 	QString dirName = mURL.path();
 	bool success = false;
-	bool emptyDir = true;
-	setCompatibility(KCalendar::ByEvent);
-	if (!(KStandardDirs::exists(dirName) || KStandardDirs::exists(dirName + "/")))
+	bool foundFile = false;
+	if (KStandardDirs::exists(dirName)  ||  KStandardDirs::exists(dirName + "/"))
+	{
+		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): opening '" << dirName << "'" << endl;
+		FixFunc prompt = PROMPT_PART;
+		QDir dir(dirName);
+		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
+		for (int i = 0, end = entries.count();  i < end;  ++i)
+		{
+			// Check the next file in the directory
+			QString id = entries[i];
+			if (id.endsWith("~"))   // backup file, ignore it
+				continue;
+			QString fileName = dirName + "/" + id;
+			foundFile = true;
+
+			if (!syncCache)
+			{
+				// Only load new or changed events
+				Event* ev = mCalendar.event(id);
+				if (ev  &&  changes.indexOf(ev) < 0)
+				{
+					ModifiedMap::ConstIterator mit = oldLastModified.find(id);
+					if (mit != oldLastModified.end()  &&  mit.value() == readLastModified(fileName))
+					{
+						// The file hasn't changed, and its event is unchanged
+						// in our calendar, so just transfer the event to the
+						// new maps without rereading the file.
+						mCompatibilityMap[ev] = oldCompatibilityMap[ev];
+						mLastModified[id] = mit.value();
+						success = true;
+						continue;
+					}
+				}
+				// It's either a new file, or it has changed
+				if (ev)
+					mCalendar.deleteEvent(ev);
+			}
+			// Load the file and check whether it's the current KAlarm format.
+			// If not, only prompt the user once whether to convert it.
+			if (loadFile(fileName, id, prompt))
+				success = true;
+		}
+		if (!foundFile)
+			success = true;    // don't return error if there are no files
+	}
+	else if (syncCache)
 	{
 		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): creating '" << dirName << "'" << endl;
 
@@ -138,79 +203,89 @@ bool KAResourceLocalDir::doLoad(bool)
 		// group-shared directories!
 		success = KStandardDirs::makeDir(dirName, 0775);
 	}
-	else
-	{
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): opening '" << dirName << "'" << endl;
-		FixFunc prompt = PROMPT_PART;
-		QDir dir(dirName);
-		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
-		for (QStringList::ConstIterator it = entries.begin();  it != entries.end();  ++it)
-		{
-			if ((*it).endsWith("~"))   // backup file, ignore it
-				continue;
 
-			// Load the next file in the directory, and check whether it's
-			// the current KAlarm format. If not, only prompt the user once
-			// whether to convert it.
-			emptyDir = false;
-			QString fileName = dirName + "/" + *it;
-			CalendarLocal calendar(mCalendar.timeZoneId());
-			if (!calendar.load(fileName))
+	if (!syncCache)
+	{
+		if (mLastModified.isEmpty())
+			mCalendar.close();
+		else
+		{
+			// Delete any events in the calendar for which files were not found
+			Event::List oldEvents = mCalendar.rawEvents();
+			for (int i = 0, end = oldEvents.count();  i < end;  ++i)
 			{
-				// Loading this file failed, but just assume that it's not a calendar file
-				kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): '" << fileName << "' failed" << endl;
-			}
-			else
-			{
-				KCalendar::Status compat = checkCompatibility(calendar, fileName, prompt);
-				switch (compat)
-				{
-					case KCalendar::Converted:   // user elected to convert. Don't prompt again.
-						prompt = CONVERT;
-						compat = KCalendar::Current;
-						break;
-					case KCalendar::Convertible: // user elected not to convert. Don't prompt again.
-						prompt = NO_CONVERT;
-						break;
-					case KCalendar::Current:
-					case KCalendar::Incompatible:
-					case KCalendar::ByEvent:
-						break;
-				}
-				kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): '" << fileName << "': compatibility=" << compat << endl;
-				Event::List events = calendar.rawEvents();
-				for (Event::List::Iterator it = events.begin();  it != events.end();  ++it)
-				{
-					Event* event = *it;
-					Alarm::List alarms = event->alarms();
-					if (!alarms.isEmpty())
-					{
-						Event* ev = event->clone();
-						mCalendar.addEvent(ev);
-						mCompatibilityMap[ev] = compat;
-					}
-				}
-				success = true;     // at least one file has been opened successfully
+				if (!mCompatibilityMap.contains(oldEvents[i]))
+					mCalendar.deleteEvent(oldEvents[i]);
 			}
 		}
 	}
 	mLoading = false;
 	enableChangeNotification();
-	if (!success)
-		return false;
-	mLoaded = true;
-	emit loaded(this);
-	return true;
+	if (success)
+	{
+		mLoaded = true;
+		setReloaded(true);   // the resource has now been loaded at least once
+		emit loaded(this);
+		if (!syncCache)
+			emit resourceChanged(this);
+	}
+	return success;
 }
 
-void KAResourceLocalDir::reload(const QString& file)
+/******************************************************************************
+* Load one file from the local directory, and return its event in 'event'.
+* Any event whose ID is not the same as the file name, or any event not
+* containing alarms, is ignored.
+* Reply = true if the calendar loaded successfully (even if empty).
+*/
+bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::reload(" << file << ")" << endl;
-	if (isOpen())
+	bool success = false;
+	CalendarLocal calendar(mCalendar.timeZoneId());
+	if (!calendar.load(fileName))
 	{
-		load(NoSyncCache);
-		emit resourceChanged(this);
+		// Loading this file failed, but just assume that it's not a calendar file
+		kDebug(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): '" << fileName << "' failed" << endl;
 	}
+	else
+	{
+		KCalendar::Status compat = checkCompatibility(calendar, fileName, prompt);
+		switch (compat)
+		{
+			case KCalendar::Converted:   // user elected to convert. Don't prompt again.
+				prompt = CONVERT;
+				compat = KCalendar::Current;
+				break;
+			case KCalendar::Convertible: // user elected not to convert. Don't prompt again.
+				prompt = NO_CONVERT;
+				break;
+			case KCalendar::Current:
+			case KCalendar::Incompatible:
+			case KCalendar::ByEvent:
+				break;
+		}
+		kDebug(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): '" << fileName << "': compatibility=" << compat << endl;
+		Event::List rawEvents = calendar.rawEvents();
+		for (int i = 0, end = rawEvents.count();  i < end;  ++i)
+		{
+			Event* ev = rawEvents[i];
+			if (ev->uid() != id)
+			{
+				kError(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): wrong event ID (" << ev->uid() << ")" << endl;
+				continue;    // ignore any event with the wrong ID - it shouldn't be there!
+			}
+			Alarm::List alarms = ev->alarms();
+			if (!alarms.isEmpty())
+			{
+				Event* event = ev->clone();
+				mCalendar.addEvent(event);
+				mCompatibilityMap[event] = compat;
+			}
+		}
+		success = true;     // at least one file has been opened successfully
+	}
+	mLastModified[id] = readLastModified(fileName);
+	return success;
 }
 
 bool KAResourceLocalDir::doSave(bool)
@@ -223,11 +298,11 @@ bool KAResourceLocalDir::doSave(bool)
 	list += changedIncidences();
 	qSort(list);
 	Incidence* last = 0;
-	for (Incidence::List::iterator it = list.begin();  it != list.end();  ++it)
+	for (int i = 0, end = list.count();  i < end;  ++i)
 	{
-		if (*it != last)
+		if (list[i] != last)
 		{
-			last = *it;
+			last = list[i];
 			if (!doSave(true, last))
 				success = false;
 		}
@@ -240,18 +315,22 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 {
 	if (saveInhibited())
 		return true;
-	QString fileName = mURL.path() + "/" + incidence->uid();
+	QString id = incidence->uid();
+	QString fileName = mURL.path() + "/" + id;
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
 	CalendarLocal cal(mCalendar.timeZoneId());
 	cal.setCustomProperties(mCalendar.customProperties());   // copy all VCALENDAR custom properties to each file
+	if (mCalIDFunction)
+		(*mCalIDFunction)(cal);                          // write the application ID into the calendar
 	bool success = cal.addIncidence(incidence->clone());
 	if (success)
 	{
-		mDirWatch.stopScan();  // prohibit the dirty() signal and a following reload()
+		mDirWatch.stopScan();  // prohibit the dirty() signal and a following reload
 		success = cal.save(fileName);
 		mDirWatch.startScan();
-		clearChange(incidence->uid());
+		clearChange(id);
+		mLastModified[id] = readLastModified(fileName);
 	}
 	return success;
 }
@@ -328,4 +407,10 @@ QString KAResourceLocalDir::location(bool prefix) const
 {
 	QString loc = mURL.path();
 	return prefix ? i18n("Directory: %1", loc) : loc;
+}
+
+QDateTime readLastModified(const QString& filePath)
+{
+	QFileInfo fi(filePath);
+	return fi.lastModified();
 }

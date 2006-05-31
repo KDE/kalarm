@@ -60,7 +60,6 @@ AlarmResources* AlarmResources::create(const QString& timeZoneId, bool activeOnl
 
 AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
 	: Calendar(timeZoneId),
-	  mFixFunction(0),
 	  mActiveOnly(activeOnly),
 	  mInhibitActiveReload(false),
 	  mInhibitInactiveReload(false),
@@ -108,6 +107,18 @@ AlarmResources::~AlarmResources()
 	close();
 	delete mManager;
 	theInstance.setObject(mInstance, (AlarmResources*)0);
+}
+
+void AlarmResources::setNoGui(bool noGui)
+{
+	if (noGui != mNoGui)
+	{
+		mNoGui = noGui;
+		if (mNoGui)
+			mShowProgress = false;
+		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
+			(*it)->setNoGui(mNoGui);
+	}
 }
 
 AlarmResource* AlarmResources::addDefaultResource(AlarmResource::Type type)
@@ -432,10 +443,10 @@ bool AlarmResources::load(AlarmResource* resource, ResourceCached::CacheAction a
 void AlarmResources::slotResLoaded(AlarmResource* resource)
 {
 	Incidence::List incidences = resource->rawIncidences();
-	for (Incidence::List::Iterator it = incidences.begin();  it != incidences.end();  ++it)
+	for (int i = 0, end = incidences.count();  i < end;  ++i)
 	{
-		(*it)->registerObserver(this);
-		notifyIncidenceAdded(*it);
+		incidences[i]->registerObserver(this);
+		notifyIncidenceAdded(incidences[i]);
 	}
 	emit calendarChanged();
 }
@@ -459,12 +470,12 @@ void AlarmResources::loadIfNotReloaded()
 
 void AlarmResources::remap(AlarmResource* resource)
 {
-	for (QMap<KCal::Incidence*, AlarmResource*>::Iterator it = mResourceMap.begin();  it != mResourceMap.end();  ++it)
+	for (ResourceMap::Iterator it = mResourceMap.begin();  it != mResourceMap.end();  ++it)
 		if (it.value() == resource)
 			mResourceMap.erase(it);
 	Event::List events = resource->rawEvents();
-	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
-		mResourceMap[*it] = resource;
+	for (int i = 0, end = events.count();  i < end;  ++i)
+		mResourceMap[events[i]] = resource;
 }
 
 bool AlarmResources::reload(const QString& tz)
@@ -584,11 +595,12 @@ bool AlarmResources::deleteEvent(Event *event)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::deleteEvent(" << event->uid() << ")" << endl;
 	bool status = false;
-	if (mResourceMap.find(event) != mResourceMap.end())
+	ResourceMap::Iterator rit = mResourceMap.find(event);
+	if (rit != mResourceMap.end())
 	{
-		status = mResourceMap[event]->deleteEvent(event);
+		status = rit.value()->deleteEvent(event);
 		if (status)
-			mResourceMap.remove(event);
+			mResourceMap.erase(rit);
 	}
 	else
 	{
@@ -667,15 +679,8 @@ Event::List AlarmResources::rawEvents(EventSortField sortField, SortDirection so
 void AlarmResources::appendEvents(Event::List& result, const Event::List& events, AlarmResource* resource)
 {
 	result += events;
-	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
-		mResourceMap[*it] = resource;
-}
-
-void AlarmResources::setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc))
-{
-	mFixFunction = f;
-	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
-		(*it)->setFixFunction(f);
+	for (int i = 0, end = events.count();  i < end;  ++i)
+		mResourceMap[events[i]] = resource;
 }
 
 // Called whenever a resource is added to those managed by the AlarmResources,
@@ -683,9 +688,9 @@ void AlarmResources::setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const
 void AlarmResources::connectResource(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
+	resource->setNoGui(mNoGui);
 	resource->inhibitDefaultReload((resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload);
 	resource->setInhibitSave(mInhibitSave);
-	resource->setFixFunction(mFixFunction);
 	resource->disconnect(this);   // just in case we're called twice
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
 	connect(resource, SIGNAL(readOnlyChanged(AlarmResource*)), SLOT(slotReadOnlyChanged(AlarmResource*)));
@@ -782,9 +787,8 @@ AlarmResource* AlarmResources::resourceForIncidence(const QString& incidenceID)
 
 AlarmResource* AlarmResources::resource(Incidence* incidence)
 {
-  if (mResourceMap.find(incidence) == mResourceMap.end())
-    return 0;
-  return mResourceMap[incidence];
+	ResourceMap::Iterator it = mResourceMap.find(incidence);
+	return (it != mResourceMap.end()) ? it.value() : 0;
 }
 
 // Called by the resource manager when a resource is added to the collection

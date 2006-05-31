@@ -67,6 +67,11 @@ class AlarmResource : public KCal::ResourceCached
 		/** Set the type of alarms which the resource can contain. */
 		void     setAlarmType(Type type)         { mType = type; }
 
+		/** Set whether the application has a GUI. This determines whether error or
+		 *  progress messages are displayed. */
+		void setNoGui(bool noGui)                { mNoGui = noGui; }
+		bool hasGui() const                      { return !mNoGui; }
+
 		/** Return the location of the resource (URL, file path, etc.) */
 		virtual QString location(bool prefix = false) const = 0;
 
@@ -122,8 +127,10 @@ class AlarmResource : public KCal::ResourceCached
 		/** Return whether the resource is in the process of loading. */
 		bool     isLoading() const               { return mLoading; }
 
+		/** Set a function to write the application ID into a calendar. */
+		static void setCalIDFunction(void (*f)(CalendarLocal&))    { mCalIDFunction = f; }
 		/** Set a function to fix the calendar once it has been loaded. */
-		void     setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc))
+		static void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc))
 		                                         { mFixFunction = f; }
 		/** Return whether the resource is in a different format from the
 		 *  current KAlarm format, in which case it cannot be written to.
@@ -180,14 +187,16 @@ class AlarmResource : public KCal::ResourceCached
 		virtual void      enableResource(bool enable) = 0;
 		void              lock(const QString& path);
 
-		KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc);
+		static void              (*mCalIDFunction)(CalendarLocal&);
+		static KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc);
 
 	private:
 		static int  mDebugArea;       // area for kDebug() output
 
 		KABC::Lock* mLock;
 		Type        mType;            // type of alarm held in this resource
-		bool        mStandard;        // standard resource for this mWriteType
+		bool        mNoGui;           // application has no GUI, so don't display messages
+		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
 		KCalendar::Status mCompatibility; // whether resource is in compatible format

@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright (c) 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourcelocal.cpp in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -125,6 +125,7 @@ bool KAResourceLocal::doLoad(bool)
 		setCompatibility(KCalendar::Current);
 		mLoading = false;
 		mLoaded = true;
+		setReloaded(true);   // the resource has now been loaded at least once
 		emit loaded(this);
 		return true;
 	}
@@ -154,7 +155,10 @@ bool KAResourceLocal::loadFile()
 	if (!isActive())
 		return false;
 	mLoading = true;
-	if (!mCalendar.load(mURL.path()))
+	disableChangeNotification();
+	bool success = mCalendar.load(mURL.path());
+	enableChangeNotification();
+	if (!success)
 	{
 		mLoading = false;
 		return false;
@@ -163,6 +167,7 @@ bool KAResourceLocal::loadFile()
 	checkCompatibility(fileName());
 	mLoading = false;
 	mLoaded = true;
+	setReloaded(true);   // the resource has now been loaded at least once
 	emit loaded(this);
 	return true;
 }

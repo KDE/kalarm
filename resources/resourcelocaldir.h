@@ -25,6 +25,7 @@
 
 /* @file resourcelocaldir.h - KAlarm local directory alarm calendar resource */
 
+#include <QMap>
 #include <kurl.h>
 #include <kdirwatch.h>
 
@@ -62,22 +63,28 @@ class KAResourceLocalDir : public AlarmResource
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
 	protected:
+		/** Load the resource. If 'syncCache' is true, all files in the directory
+		 *  are reloaded. If 'syncCache' is false, only changed files are reloaded. */
 		virtual bool doLoad(bool syncCache);
+
 		virtual bool doSave(bool syncCache);
 		bool         doSave(bool syncCache, KCal::Incidence*);
 		virtual void enableResource(bool enable);
 
-	protected slots:
-		void         reload(const QString&);
+	private slots:
+		void         slotReload()   { doLoad(false); }
 
 	private:
 		void         init();
 		bool         setDirName(const KUrl&);
+		bool         loadFile(const QString& fileName, const QString& id, FixFunc& prompt);
 		bool         deleteIncidenceFile(KCal::Incidence *incidence);
 
 		KUrl        mURL;
 		KUrl        mNewURL;    // new directory to be applied by applyReconfig()
 		KDirWatch   mDirWatch;
+		typedef QMap<QString, QDateTime> ModifiedMap;
+		ModifiedMap mLastModified;
 };
 
 #endif

@@ -66,6 +66,10 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		/** Set a reserved local calendar file path which can't be used by this class. */
 		static void setReservedFile(const QString& path)     { mReservedFile = path; }
 
+		/** Set whether the application has a GUI. This determines whether error or
+		 *  progress messages are displayed. */
+		void setNoGui(bool);
+
 		/** Return the standard resource for the given alarm type.
 		 *  @return 0 if no standard resource is set.
 		 */
@@ -82,8 +86,12 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		int activeCount(AlarmResource::Type, bool writable);
 
 		void writeConfig();
+		/** Set a function to write the application ID into a calendar. */
+		void setCalIDFunction(void (*f)(CalendarLocal&))
+		                              { AlarmResource::setCalIDFunction(f); }
 		/** Set a function to fix the calendar once it has been loaded. */
-		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc));
+		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc))
+		                              { AlarmResource::setFixFunction(f); }
 
 		/** Add an event to the resource calendar.
 		 *  The resource calendar takes ownership of the event.
@@ -470,12 +478,13 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		static QString         mReservedFile;        // disallowed file path
 		static QString         mConstructionError;   // error string if an error occurred in creating instance
 
-		KRES::Manager<AlarmResource>*          mManager;
-		QMap<KCal::Incidence*, AlarmResource*> mResourceMap;
-		QMap<AlarmResource*, Ticket*>          mTickets;
-		QMap<AlarmResource*, int>              mChangeCounts;
-		KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc);   // post-load function to convert old calendar formats
+		KRES::Manager<AlarmResource>* mManager;
+		typedef QMap<KCal::Incidence*, AlarmResource*> ResourceMap;
+		ResourceMap                   mResourceMap;
+		QMap<AlarmResource*, Ticket*> mTickets;
+		QMap<AlarmResource*, int>     mChangeCounts;
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
+		bool        mNoGui;           // application has no GUI, so don't display messages
 		bool        mInhibitActiveReload;   // cache reload inhibited for default load, for active alarm resource
 		bool        mInhibitInactiveReload; // cache reload inhibited for default load, for archived/template resource
 		bool        mInhibitSave;     // resources save inhibited

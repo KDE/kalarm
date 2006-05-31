@@ -138,10 +138,10 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading..." << endl;
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
-					      false, mShowProgress);
+					      false, (mShowProgress && hasGui()));
 		connect(mDownloadJob, SIGNAL(result(KIO::Job*)), SLOT(slotLoadJobResult(KIO::Job*)));
 #if 0
-		if (mShowProgress)
+		if (mShowProgress  &&  hasGui())
 		{
 			connect(mDownloadJob, SIGNAL(percent(KIO::Job*, unsigned long)),
 					      SLOT(slotPercent(KIO::Job*, unsigned long)));
@@ -173,7 +173,10 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		clearChanges();
 		if (job->error())
 		{
-			job->showErrorDialog(0);
+			if (hasGui())
+				job->showErrorDialog(0);
+			else
+				kError(KARES_DEBUG) << "Resource " << identifier() << " download error: " << job->errorString() << endl;
 			setEnabled(false);
 			err = true;
 		}
@@ -241,7 +244,7 @@ bool KAResourceRemote::doSave(bool syncCache)
 	saveToCache();
 	if (syncCache)
 	{
-		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true);
+		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true, false, hasGui());
 		connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));
 	}
 	return true;
@@ -250,13 +253,15 @@ bool KAResourceRemote::doSave(bool syncCache)
 void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 {
 	if (job->error())
-		job->showErrorDialog(0);
+	{
+		if (hasGui())
+			job->showErrorDialog(0);
+		else
+			kError(KARES_DEBUG) << "Resource " << identifier() << " upload error: " << job->errorString() << endl;
+	}
 	else
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyUrl() << "): success" << endl;
-//		for(Incidence::List::ConstIterator it = mChangedIncidences.begin();  it != mChangedIncidences.end();  ++it)
-//			clearChange(*it);
-//		mChangedIncidences.clear();
 		clearChanges();
 	}
 

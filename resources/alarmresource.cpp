@@ -33,12 +33,13 @@ using namespace KCal;
 #include "alarmresources.h"
 
 
+void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
+KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc) = 0;
 int AlarmResource::mDebugArea = KARES_DEBUG;
 
 
 AlarmResource::AlarmResource(const KConfig* config)
 	: ResourceCached(config),
-	  mFixFunction(0),
 	  mLock(0),
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
@@ -71,7 +72,6 @@ AlarmResource::AlarmResource(const KConfig* config)
 
 AlarmResource::AlarmResource(Type type)
 	: ResourceCached(0),
-	  mFixFunction(0),
 	  mLock(0),
 	  mType(type),
 	  mStandard(false),
@@ -245,7 +245,6 @@ void AlarmResource::setEnabled(bool enable)
 
 bool AlarmResource::load(CacheAction action)
 {
-	mCompatibilityMap.clear();
 	if (!ResourceCached::load(action))
 		return false;
 	emit resLoaded(this);    // special signal to AlarmResources

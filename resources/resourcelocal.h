@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.h  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright (c) 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourcelocal.h in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -57,8 +57,8 @@ class KAResourceLocal : public AlarmResource
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
 	protected:
-		virtual bool doLoad(bool updateCache);
-		virtual bool doSave(bool updateCache);
+		virtual bool doLoad(bool syncCache);
+		virtual bool doSave(bool syncCache);
 		QDateTime    readLastModified();
 		virtual void enableResource(bool enable);
 
