@@ -341,6 +341,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
 		void               cancelCancelledDeferral();
+		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QDateTime&);
 		void               reinstateFromDisplaying(const KAEvent& dispEvent);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
@@ -377,6 +378,7 @@ class KAEvent : public KAAlarmEventBase
 		int                reminderArchived() const       { return mArchiveReminderMinutes; }
 		DateTime           deferDateTime() const          { return mDeferralTime; }
 		DateTime           deferralLimit(DeferLimitType* = 0) const;
+		int                deferDefaultMinutes() const    { return mDeferDefaultMinutes; }
 		DateTime           nextDateTime(bool includeReminders = true) const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
@@ -474,6 +476,7 @@ class KAEvent : public KAAlarmEventBase
 		int                mDisplayingFlags;  // type of alarm which is currently being displayed
 		int                mReminderMinutes;  // how long in advance reminder is to be, or 0 if none
 		int                mArchiveReminderMinutes;  // original reminder period if now expired, or 0 if none
+		int                mDeferDefaultMinutes; // default number of minutes for deferral dialogue, or 0 to select time control
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
 		KARecurrence*      mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely

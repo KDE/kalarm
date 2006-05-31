@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ class AlarmTimeWidget : public QFrame
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0);
-		DateTime         getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
+		DateTime         getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
 		void             setMinDateTime(const QDateTime& = QDateTime());
@@ -53,7 +53,7 @@ class AlarmTimeWidget : public QFrame
 		void             setReadOnly(bool);
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
-		void             selectTimeFromNow();
+		void             selectTimeFromNow(int minutes = 0);
 		QSize            sizeHint() const              { return minimumSizeHint(); }
 
 		static QString   i18n_w_TimeFromNow();     // text of 'Time from now:' radio button, with 'w' shortcut

@@ -1090,7 +1090,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedEmailAttach += mEmailAttachList->itemText(i);
 	mSavedEmailBcc         = mEmailBcc->isChecked();
 	if (mTimeWidget)
-		mSavedDateTime = mTimeWidget->getDateTime(false, false);
+		mSavedDateTime = mTimeWidget->getDateTime(0, false, false);
 	mSavedLateCancel       = mLateCancel->minutes();
 	mSavedAutoClose        = mLateCancel->isAutoClose();
 	if (mShowInKorganizer)
@@ -1124,7 +1124,7 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 	}
 	else
-		if (mSavedDateTime != mTimeWidget->getDateTime(false, false))
+		if (mSavedDateTime != mTimeWidget->getDateTime(0, false, false))
 			return true;
 	if (mSavedTypeRadio        != mActionGroup->checkedButton()
 	||  mSavedLateCancel       != mLateCancel->minutes()
@@ -1433,7 +1433,7 @@ void EditAlarmDlg::slotOk()
 	else if(mTimeWidget)
 	{
 		QWidget* errWidget;
-		mAlarmDateTime = mTimeWidget->getDateTime(!(timedRecurrence || repeated), false, &errWidget);
+		mAlarmDateTime = mTimeWidget->getDateTime(0, !(timedRecurrence || repeated), false, &errWidget);
 		if (errWidget)
 		{
 			// It's more than just an existing deferral being changed, so the time matters
@@ -1603,7 +1603,7 @@ void EditAlarmDlg::slotEditDeferral()
 		return;
 	bool limit = true;
 	int repeatCount = mSimpleRepetition->count();
-	DateTime start = mTimeWidget->getDateTime(!repeatCount, !mExpiredRecurrence);
+	DateTime start = mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
 		if (!mExpiredRecurrence)
@@ -1685,7 +1685,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 	if (!mReadOnly  &&  !mTemplate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
-		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+		mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
 		bool expired = (mAlarmDateTime.dateTime() < now);
 		if (mRecurSetDefaultEndDate)
 		{
@@ -1714,7 +1714,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
 		if (atLogin)
 		{
-			mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+			mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
 			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
 		}
 		mReminder->enableOnceOnly(recurs && !atLogin);

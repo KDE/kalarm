@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,6 +105,7 @@ class MessageWin : public MainWindowBase
 		float               mVolume;
 		float               mFadeVolume;
 		int                 mFadeSeconds;
+		int                 mDefaultDeferMinutes;
 		KAAlarm::Type       mAlarmType;
 		KAEvent::Action     mAction;
 		unsigned long       mKMailSerialNumber; // if email text, message's KMail serial number, else 0

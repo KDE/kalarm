@@ -162,6 +162,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mVolume(event.soundVolume()),
 	  mFadeVolume(event.fadeVolume()),
 	  mFadeSeconds(qMin(event.fadeSeconds(), 86400)),
+	  mDefaultDeferMinutes(event.deferDefaultMinutes()),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
 	  mKMailSerialNumber(event.kmailSerialNumber()),
@@ -707,6 +708,7 @@ void MessageWin::saveProperties(KConfig* config)
 		}
 #endif
 		config->writeEntry("Height", height());
+		config->writeEntry("DeferMins", mDefaultDeferMinutes);
 		config->writeEntry("NoDefer", mNoDefer);
 		config->writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
 	}
@@ -721,32 +723,33 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	mInvalid           = config->readEntry("Invalid", false);
-	mEventID           = config->readEntry("EventID");
-	mAlarmType         = static_cast<KAAlarm::Type>(config->readEntry("AlarmType", 0));
-	mMessage           = config->readEntry("Message");
-	mAction            = static_cast<KAEvent::Action>(config->readEntry("Type", 0));
-	mFont              = config->readEntry("Font", QFont());
-	mBgColour          = config->readEntry("BgColour", Qt::white);
-	mFgColour          = config->readEntry("FgColour", Qt::black);
-	mConfirmAck        = config->readEntry("ConfirmAck", false);
+	mInvalid             = config->readEntry("Invalid", false);
+	mEventID             = config->readEntry("EventID");
+	mAlarmType           = static_cast<KAAlarm::Type>(config->readEntry("AlarmType", 0));
+	mMessage             = config->readEntry("Message");
+	mAction              = static_cast<KAEvent::Action>(config->readEntry("Type", 0));
+	mFont                = config->readEntry("Font", QFont());
+	mBgColour            = config->readEntry("BgColour", Qt::white);
+	mFgColour            = config->readEntry("FgColour", Qt::black);
+	mConfirmAck          = config->readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
-	QDateTime dt       = config->readEntry("Time", invalidDateTime);
-	bool dateOnly      = config->readEntry("DateOnly", false);
+	QDateTime dt         = config->readEntry("Time", invalidDateTime);
+	bool dateOnly        = config->readEntry("DateOnly", false);
 	mDateTime.set(dt, dateOnly);
-	mCloseTime         = config->readEntry("Expiry", invalidDateTime);
+	mCloseTime           = config->readEntry("Expiry", invalidDateTime);
 #ifndef WITHOUT_ARTS
-	mAudioFile         = config->readPathEntry(QLatin1String("AudioFile"));
-	mVolume            = static_cast<float>(config->readEntry("Volume", 0)) / 100;
-	mFadeVolume        = -1;
-	mFadeSeconds       = 0;
+	mAudioFile           = config->readPathEntry(QLatin1String("AudioFile"));
+	mVolume              = static_cast<float>(config->readEntry("Volume", 0)) / 100;
+	mFadeVolume          = -1;
+	mFadeSeconds         = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
-	mRestoreHeight     = config->readEntry("Height", 0);
-	mNoDefer           = config->readEntry("NoDefer", false);
-	mKMailSerialNumber = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
-	mShowEdit          = false;
+	mRestoreHeight       = config->readEntry("Height", 0);
+	mDefaultDeferMinutes = config->readEntry("DeferMins", 0);
+	mNoDefer             = config->readEntry("NoDefer", false);
+	mKMailSerialNumber   = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
+	mShowEdit            = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
@@ -1319,18 +1322,22 @@ void MessageWin::slotDefer()
 {
 	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
 	                              false, this);
+	if (mDefaultDeferMinutes > 0)
+		mDeferDlg->setDeferMinutes(mDefaultDeferMinutes);
 	mDeferDlg->setLimit(mEventID);
 	if (!Preferences::modalMessages())
 		lower();
 	if (mDeferDlg->exec() == QDialog::Accepted)
 	{
-		DateTime dateTime = mDeferDlg->getDateTime();
+		DateTime dateTime  = mDeferDlg->getDateTime();
+		int      delayMins = mDeferDlg->deferMinutes();
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
 			KAEvent event(*kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
+			event.setDeferDefaultMinutes(delayMins);
 			KAlarm::updateEvent(event, 0, true, !repeat, mDeferDlg);
 		}
 		else
@@ -1350,6 +1357,7 @@ void MessageWin::slotDefer()
 				event.setArchive();
 				event.setEventID(mEventID);
 			}
+			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, 0, true, false, mDeferDlg);
