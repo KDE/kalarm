@@ -85,7 +85,7 @@ void ResourceRemoteConfigWidget::saveSettings(KRES::Resource* resource)
 		kDebug(KARES_DEBUG) << "ResourceRemoteConfigWidget::saveSettings(KAResourceRemote): cast failed" << endl;
 	else
 	{
-		res->setUrls(KUrl(mDownloadUrl->url()), KUrl(mUploadUrl->url()));
+		res->setUrls(mDownloadUrl->url(), mUploadUrl->url());
 		mReloadConfig->saveSettings(res);
 		mSaveConfig->saveSettings(res);
 

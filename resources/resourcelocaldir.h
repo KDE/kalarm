@@ -50,8 +50,9 @@ class KAResourceLocalDir : public AlarmResource
 
 		const KUrl&  url() const  { return mURL; }
 		QString      dirName() const;
-		bool         setDirName(const QString& dirName);
+		bool         setDirName(const KUrl&);
 		virtual QString location(bool prefix = false) const;
+		virtual bool setLocation(const QString& dirName, const QString& = QString());
 		virtual bool addEvent(KCal::Event*);
 		virtual bool deleteEvent(KCal::Event*);
 		virtual void writeConfig(KConfig*);
@@ -76,7 +77,6 @@ class KAResourceLocalDir : public AlarmResource
 
 	private:
 		void         init();
-		bool         setDirName(const KUrl&);
 		bool         loadFile(const QString& fileName, const QString& id, FixFunc& prompt);
 		bool         deleteIncidenceFile(KCal::Incidence *incidence);
 

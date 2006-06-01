@@ -67,5 +67,5 @@ void ResourceLocalConfigWidget::saveSettings(KRES::Resource* resource)
 	if (!res)
 		kDebug(KARES_DEBUG) << "ResourceLocalConfigWidget::saveSettings(KAResourceLocal): cast failed" << endl;
 	else
-		res->setFileName(mURL->url().url());
+		res->setFileName(mURL->url());
 }

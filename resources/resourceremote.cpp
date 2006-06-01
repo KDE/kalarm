@@ -295,6 +295,11 @@ bool KAResourceRemote::setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl)
 	return true;
 }
 
+bool KAResourceRemote::setLocation(const QString& downloadUrl, const QString& uploadUrl)
+{
+	return setUrls(KUrl(downloadUrl), KUrl(uploadUrl));
+}
+
 QString KAResourceRemote::location(bool prefix) const
 {
 	QString loc = mDownloadUrl.prettyUrl();

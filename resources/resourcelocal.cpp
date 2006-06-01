@@ -195,12 +195,6 @@ QString KAResourceLocal::fileName() const
 	return mURL.path();
 }
 
-bool KAResourceLocal::setFileName(const QString& fileName)
-{
-	KUrl newURL(fileName);
-	return setFileName(newURL);
-}
-
 bool KAResourceLocal::setFileName(const KUrl& newURL)
 {
 	if (mReconfiguring == 1)
@@ -208,7 +202,7 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 		mNewURL = newURL;
 		return true;
 	}
-	if (newURL.path() == mURL.path())
+	if (newURL.path() == mURL.path()  ||  !newURL.isLocalFile())
 		return false;
 	kDebug(KARES_DEBUG) << "KAResourceLocal::setFileName(" << newURL.path() << ")\n";
 	if (isOpen())
@@ -224,6 +218,12 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 	// Trigger loading the new resource, and ensure that the new configuration is saved
 	emit locationChanged(this);
 	return true;
+}
+
+bool KAResourceLocal::setLocation(const QString& fileName, const QString&)
+{
+	KUrl newURL = KUrl::fromPath(fileName);
+	return setFileName(newURL);
 }
 
 QString KAResourceLocal::location(bool prefix) const

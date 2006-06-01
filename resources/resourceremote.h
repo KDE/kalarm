@@ -54,13 +54,14 @@ class KAResourceRemote : public AlarmResource
 		bool         setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl);
 		KUrl         downloadUrl() const                { return mDownloadUrl; }
 		KUrl         uploadUrl() const                  { return mUploadUrl; }
-		virtual bool cached() const                     { return true; }
 		virtual QString location(bool prefix = false) const;
+		virtual bool setLocation(const QString& downloadUrl, const QString& uploadUrl);
 		virtual void showProgress(bool show)            { mShowProgress = show; }
 		virtual void writeConfig(KConfig*);
 		virtual void startReconfig();
 		virtual void applyReconfig();
 		virtual bool isSaving()                         { return mUploadJob; }
+		virtual bool cached() const                     { return true; }
 
 		// Override abstract virtual functions
 		virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }

@@ -46,8 +46,10 @@ class KAResourceLocal : public AlarmResource
 		virtual ~KAResourceLocal();
 
 		QString      fileName() const;
+		bool         setFileName(const KUrl&);
 		bool         setFileName(const QString& fileName);
 		virtual QString location(bool prefix = false) const;
+		virtual bool setLocation(const QString& fileName, const QString& = QString());
 		virtual void writeConfig(KConfig*);
 		virtual void startReconfig();
 		virtual void applyReconfig();
@@ -68,7 +70,6 @@ class KAResourceLocal : public AlarmResource
 	private:
 		void  init();
 		bool  loadFile();
-		bool  setFileName(const KUrl&);
 
 		KUrl        mURL;
 		KUrl        mNewURL;    // new file name to be applied by applyReconfig()
