@@ -61,6 +61,8 @@ AlarmResources* AlarmResources::create(const QString& timeZoneId, bool activeOnl
 AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
 	: Calendar(timeZoneId),
 	  mActiveOnly(activeOnly),
+	  mPassiveClient(false),
+	  mNoGui(false),
 	  mInhibitActiveReload(false),
 	  mInhibitInactiveReload(false),
 	  mInhibitSave(false),
@@ -111,14 +113,10 @@ AlarmResources::~AlarmResources()
 
 void AlarmResources::setNoGui(bool noGui)
 {
-	if (noGui != mNoGui)
-	{
-		mNoGui = noGui;
-		if (mNoGui)
-			mShowProgress = false;
-		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-			(*it)->setNoGui(mNoGui);
-	}
+	mNoGui = noGui;
+	if (mNoGui)
+		mShowProgress = false;
+	AlarmResource::setNoGui(mNoGui);
 }
 
 AlarmResource* AlarmResources::addDefaultResource(AlarmResource::Type type)
@@ -247,7 +245,7 @@ void AlarmResources::setStandardResource(AlarmResource* resource)
 		if (r->alarmType() == type  &&  r->standardResource())
 		{
 			r->setStandardResource(false);
-			if (!active)
+			if (!active  &&  !mPassiveClient)
 				mManager->change(r);   // save resource's new configuration
 		}
 	}
@@ -255,16 +253,18 @@ void AlarmResources::setStandardResource(AlarmResource* resource)
 	if (active)
 	{
 		mManager->setStandardResource(resource);
-		mManager->writeConfig();
+		if (!mPassiveClient)
+			mManager->writeConfig();
 	}
-	else
+	else if (!mPassiveClient)
 		mManager->change(resource);   // save resource's new configuration
 	emit standardResourceChange(type);
 }
 
 void AlarmResources::writeConfig()
 {
-	mManager->writeConfig();
+	if (!mPassiveClient)
+		mManager->writeConfig();
 }
 
 int AlarmResources::activeCount(AlarmResource::Type type, bool writable)
@@ -688,7 +688,6 @@ void AlarmResources::appendEvents(Event::List& result, const Event::List& events
 void AlarmResources::connectResource(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")\n";
-	resource->setNoGui(mNoGui);
 	resource->inhibitDefaultReload((resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload);
 	resource->setInhibitSave(mInhibitSave);
 	resource->disconnect(this);   // just in case we're called twice
@@ -764,7 +763,8 @@ void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change c
 		if (resource->standardResource())
 			resource->setStandardResource(false);
 	}
-	mManager->change(resource);   // save resource's new configuration
+	if (!mPassiveClient)
+		mManager->change(resource);   // save resource's new configuration
 	emit resourceStatusChanged(resource, change);
 	if (change == Location  &&  resource->isActive())
 		load(resource);
@@ -787,6 +787,8 @@ AlarmResource* AlarmResources::resourceForIncidence(const QString& incidenceID)
 
 AlarmResource* AlarmResources::resource(Incidence* incidence)
 {
+	if (!incidence)
+		return 0;
 	ResourceMap::Iterator it = mResourceMap.find(incidence);
 	return (it != mResourceMap.end()) ? it.value() : 0;
 }
@@ -804,8 +806,8 @@ void AlarmResources::resourceAdded(AlarmResource* resource)
 
 void AlarmResources::resourceModified(AlarmResource* resource)
 {
-  kDebug(KARES_DEBUG) << "AlarmResources::resourceModified(" << resource->resourceName() << ")" << endl;
-  emit signalResourceModified(resource);
+//  kDebug(KARES_DEBUG) << "AlarmResources::resourceModified(" << resource->resourceName() << ")" << endl;
+//  emit signalResourceModified(resource);
 }
 
 void AlarmResources::resourceDeleted(AlarmResource* resource)

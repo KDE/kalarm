@@ -403,7 +403,7 @@ bool KAResourceLocalDir::setLocation(const QString& dirName, const QString&)
 	return setDirName(newURL);
 }
 
-QString KAResourceLocalDir::location(bool prefix) const
+QString KAResourceLocalDir::displayLocation(bool prefix) const
 {
 	QString loc = mURL.path();
 	return prefix ? i18n("Directory: %1", loc) : loc;

@@ -69,11 +69,15 @@ class AlarmResource : public KCal::ResourceCached
 
 		/** Set whether the application has a GUI. This determines whether error or
 		 *  progress messages are displayed. */
-		void setNoGui(bool noGui)                { mNoGui = noGui; }
-		bool hasGui() const                      { return !mNoGui; }
+		static void setNoGui(bool noGui)         { mNoGui = noGui; }
+		static bool hasGui()                     { return !mNoGui; }
 
-		/** Return the location of the resource (URL, file path, etc.) */
-		virtual QString location(bool prefix = false) const = 0;
+		/** Return the location(s) of the resource (URL, file path, etc.) */
+		virtual QStringList location() const = 0;
+
+		/** Return the location of the resource (URL, file path, etc.)
+		 *  for display purposes. */
+		virtual QString displayLocation(bool prefix = false) const = 0;
 
 		/** Return whether the resource is the standard resource for its alarm type. */
 		bool     standardResource() const        { return mStandard; }
@@ -91,7 +95,6 @@ class AlarmResource : public KCal::ResourceCached
 		/** Return whether the event can be written to now, i.e. the resource is
 		 *  active and read-write, and the event is in the current KAlarm format. */
 		bool     writable(const KCal::Event*) const;
-		bool     writable(const QString& eventID) const;
 
 		/** Return whether the resource is cached, i.e. whether it is downloaded
 		 *  and stored locally in a cache file. */
@@ -142,8 +145,8 @@ class AlarmResource : public KCal::ResourceCached
 
 		virtual void showProgress(bool)  {}
 
-		static int debugArea()              { return mDebugArea; }
-		static void setDebugArea(int area)  { mDebugArea = area; }
+		static int debugArea()               { return mDebugArea; }
+		static void setDebugArea(int area)   { mDebugArea = area; }
 
 #ifndef NDEBUG
 		QByteArray typeName() const;
@@ -192,10 +195,10 @@ class AlarmResource : public KCal::ResourceCached
 
 	private:
 		static int  mDebugArea;       // area for kDebug() output
+		static bool mNoGui;           // application has no GUI, so don't display messages
 
 		KABC::Lock* mLock;
 		Type        mType;            // type of alarm held in this resource
-		bool        mNoGui;           // application has no GUI, so don't display messages
 		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)

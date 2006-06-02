@@ -70,6 +70,12 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		 *  progress messages are displayed. */
 		void setNoGui(bool);
 
+		/** Specify that the client is passive, i.e. never makes changes to the
+		 *  resource configuration. This will prevent any configuration changes
+		 *  from being saved. */
+		void   setPassiveClient(bool p)  { mPassiveClient = p; }
+		bool   passiveClient()           { return mPassiveClient; }
+
 		/** Return the standard resource for the given alarm type.
 		 *  @return 0 if no standard resource is set.
 		 */
@@ -374,7 +380,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		 */
 		virtual void setTimeZoneIdViewOnly(const QString& tz)  { reload(tz); }
 
-		static void setDebugArea(int area)  { AlarmResource::setDebugArea(area); }
+		static void setDebugArea(int area)   { AlarmResource::setDebugArea(area); }
 
   signals:
     /** Signal that the Resource has been modified. */
@@ -484,6 +490,7 @@ class AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<Alarm
 		QMap<AlarmResource*, Ticket*> mTickets;
 		QMap<AlarmResource*, int>     mChangeCounts;
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
+		bool        mPassiveClient;   // true if client never initiates changes
 		bool        mNoGui;           // application has no GUI, so don't display messages
 		bool        mInhibitActiveReload;   // cache reload inhibited for default load, for active alarm resource
 		bool        mInhibitInactiveReload; // cache reload inhibited for default load, for archived/template resource

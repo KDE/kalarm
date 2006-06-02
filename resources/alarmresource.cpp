@@ -35,7 +35,8 @@ using namespace KCal;
 
 void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
 KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc) = 0;
-int AlarmResource::mDebugArea = KARES_DEBUG;
+int                 AlarmResource::mDebugArea = KARES_DEBUG;
+bool                AlarmResource::mNoGui = false;
 
 
 AlarmResource::AlarmResource(const KConfig* config)
@@ -272,7 +273,7 @@ QString AlarmResource::infoText() const
 		default:        break;
 	}
 	txt += "<br>" + i18nc("Content type (active alarms, etc)", "Contents: %1", type);
-	txt += "<br>" + location(true);
+	txt += "<br>" + displayLocation(true);
 	type = readOnly() ? i18n("Read-only") : i18n("Read-write");
 	txt += "<br>" + i18nc("Access permissions (read-only, etc)", "Permissions: %1", type);
 	type = isActive() ? i18n("Enabled") : i18n("Disabled");

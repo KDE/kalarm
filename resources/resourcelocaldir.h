@@ -51,8 +51,9 @@ class KAResourceLocalDir : public AlarmResource
 		const KUrl&  url() const  { return mURL; }
 		QString      dirName() const;
 		bool         setDirName(const KUrl&);
-		virtual QString location(bool prefix = false) const;
-		virtual bool setLocation(const QString& dirName, const QString& = QString());
+		virtual QString     displayLocation(bool prefix = false) const;
+		virtual QStringList location() const   { return QStringList(dirName()); }
+		virtual bool        setLocation(const QString& dirName, const QString& = QString());
 		virtual bool addEvent(KCal::Event*);
 		virtual bool deleteEvent(KCal::Event*);
 		virtual void writeConfig(KConfig*);

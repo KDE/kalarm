@@ -112,7 +112,6 @@ bool KAResourceRemote::doLoad(bool syncCache)
 {
 	if (mUploadJob)
 		syncCache = false;   // still uploading, so the cache is up-to-date
-	kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << ")" << endl;
 	if (mDownloadJob)
 	{
 		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): download still in progress" << endl;
@@ -300,7 +299,12 @@ bool KAResourceRemote::setLocation(const QString& downloadUrl, const QString& up
 	return setUrls(KUrl(downloadUrl), KUrl(uploadUrl));
 }
 
-QString KAResourceRemote::location(bool prefix) const
+QStringList KAResourceRemote::location() const
+{
+	return QStringList(downloadUrl().url()) << uploadUrl().url();
+}
+
+QString KAResourceRemote::displayLocation(bool prefix) const
 {
 	QString loc = mDownloadUrl.prettyUrl();
 	return prefix ? i18n("URL: %1", loc) : loc;

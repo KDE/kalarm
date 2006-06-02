@@ -47,9 +47,9 @@ class KAResourceLocal : public AlarmResource
 
 		QString      fileName() const;
 		bool         setFileName(const KUrl&);
-		bool         setFileName(const QString& fileName);
-		virtual QString location(bool prefix = false) const;
-		virtual bool setLocation(const QString& fileName, const QString& = QString());
+		virtual QString     displayLocation(bool prefix = false) const;
+		virtual QStringList location() const   { return QStringList(fileName()); }
+		virtual bool        setLocation(const QString& fileName, const QString& = QString());
 		virtual void writeConfig(KConfig*);
 		virtual void startReconfig();
 		virtual void applyReconfig();
