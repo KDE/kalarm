@@ -447,12 +447,15 @@ void MainWindow::initActions()
 	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
 	KStdAction::preferences(this, SLOT(slotPreferences()), actions);
+	mResourceSelector->initActions(actions);
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);
 
 	mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
 	mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
-	mMenuError = (!mContextMenu  ||  !mActionsMenu);
+	KMenu* resourceMenu = static_cast<KMenu*>(factory()->container("resourceContext", this));
+	mResourceSelector->setContextMenu(resourceMenu);
+	mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
 	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 	connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
 	connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
@@ -959,6 +962,7 @@ void MainWindow::slotToggleResourceSelector()
 	bool show = mActionToggleResourceSel->isChecked();
 	if (show)
 	{
+#warning On first showing, appears with zero width
 		if (mResourcesWidth <= 0)
 		{
 			mResourcesWidth = mResourceSelector->sizeHint().width();

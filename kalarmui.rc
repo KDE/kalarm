@@ -65,5 +65,17 @@
   <Action name="disable" />
   <Action name="createTemplate" />
  </Menu>
+ <Menu name="resourceContext" >
+  <Action name="resReload" />
+  <Action name="resSave" />
+  <Separator/>
+  <Action name="resDetails" />
+  <Action name="resEdit" />
+  <Action name="resRemove" />
+  <Action name="resDefault" />
+  <Separator/>
+  <Action name="resAdd" />
+  <Action name="resImport" />
+ </Menu>
  <ActionProperties/>
 </kpartgui>

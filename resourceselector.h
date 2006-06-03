@@ -34,7 +34,11 @@ class QComboBox;
 class QPushButton;
 class Q3ListViewItem;
 class QResizeEvent;
+class KAction;
+class KActionCollection;
+class KToggleAction;
 class KListView;
+class KMenu;
 class ResourceItem;
 using KCal::ResourceCalendar;
 
@@ -49,6 +53,8 @@ class ResourceSelector : public QFrame
     public:
 	ResourceSelector(AlarmResources*, QWidget* parent = 0);
 	AlarmResources* calendar() const    { return mCalendar; }
+	void  initActions(KActionCollection*);
+	void  setContextMenu(KMenu*);
 	void  queueClose(AlarmResource*);
 
     signals:
@@ -94,6 +100,13 @@ class ResourceSelector : public QFrame
 	QPushButton*    mEditButton;
 	QList<AlarmResource*> mResourcesToClose;
 	AlarmResource::Type mCurrentAlarmType;
+	KMenu*          mContextMenu;
+	KAction*        mActionReload;
+	KAction*        mActionSave;
+	KAction*        mActionShowDetails;
+	KAction*        mActionEdit;
+	KAction*        mActionRemove;
+	KToggleAction*  mActionSetDefault;
 };
 
 #endif

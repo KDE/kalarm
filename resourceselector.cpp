@@ -30,7 +30,6 @@
 #include <QPushButton>
 #include <QTimer>
 #include <Q3Header>
-#include <Q3PopupMenu>
 #include <QPainter>
 #include <QFont>
 #include <QResizeEvent>
@@ -41,6 +40,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <kmenu.h>
 #include <kdebug.h>
 
 #include <libkcal/resourcecalendar.h>
@@ -76,7 +76,8 @@ class ResourceItem : public Q3CheckListItem
 
 ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	: QFrame(parent),
-	  mCalendar(calendar)
+	  mCalendar(calendar),
+	  mContextMenu(0)
 {
 	QBoxLayout* topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(KDialog::spacingHint());   // use spacingHint for the margin
@@ -364,47 +365,81 @@ void ResourceSelector::emitResourcesChanged()
 
 
 /******************************************************************************
+* Initialise the button and context menu actions.
+*/
+void ResourceSelector::initActions(KActionCollection* actions)
+{
+	mActionReload      = new KAction(KIcon("reload"), i18n("Re&load"), actions, QLatin1String("resReload"));
+	connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
+	mActionSave        = new KAction(KIcon("filesave"), i18n("&Save"), actions, QLatin1String("resSave"));
+	connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
+	mActionShowDetails = new KAction(i18n("Show &Details"), actions, QLatin1String("resDetails"));
+	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
+	mActionEdit        = new KAction(KIcon("edit"), i18n("&Edit..."), actions, QLatin1String("resEdit"));
+	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
+	mActionRemove      = new KAction(KIcon("editdelete"), i18n("&Remove"), actions, QLatin1String("resRemove"));
+	connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
+	mActionSetDefault  = new KToggleAction(QString::null, actions, QLatin1String("resDefault"));
+	connect(mActionSetDefault, SIGNAL(triggered(bool)), SLOT(setStandard()));
+	KAction* action = new KAction(KIcon("filenew"), i18n("&Add..."), actions, QLatin1String("resAdd"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(addResource()));
+	action = new KAction(i18n("Im&port..."), actions, QLatin1String("resImport"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(importCalendar()));
+}
+
+void ResourceSelector::setContextMenu(KMenu* menu)
+{
+	mContextMenu = menu;
+}
+
+/******************************************************************************
 * Display the context menu for the selected resource.
 */
 void ResourceSelector::contextMenuRequested(Q3ListViewItem* itm, const QPoint& pos, int)
 {
+	if (!mContextMenu)
+		return;
 	if (!itm)
 		selectionChanged(0);
-	Q3PopupMenu* menu = new Q3PopupMenu(this);
-	connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
+	bool active   = false;
+	bool writable = false;
+	int type = -1;
+	AlarmResource* resource = 0;
 	ResourceItem* item = static_cast<ResourceItem*>(itm);
 	if (item)
 	{
-		AlarmResource* resource = item->resource();
-		bool active = resource->isEnabled();
-		int id = menu->insertItem(i18n("Re&load"), this, SLOT(reloadResource()));
-		menu->setItemEnabled(id, active);
-		id = menu->insertItem(i18n("&Save"), this, SLOT(saveResource()));
-		menu->setItemEnabled(id, active);
-		menu->insertSeparator();
-		menu->insertItem(i18n("Show &Details"), this, SLOT(showInfo()));
-		menu->insertItem(i18n("&Edit..."), this, SLOT(editResource()));
-		menu->insertItem(i18n("&Remove"), this, SLOT(removeResource()));
-		AlarmResource::Type type = resource->alarmType();
-		if (resource->readOnly()  ||  resource != mCalendar->getStandardResource(type))
-		{
-			QString text;
-			switch (type)
-			{
-				case AlarmResource::ACTIVE:   text = i18n("Use as &Default for Active Alarms");  break;
-				case AlarmResource::ARCHIVED: text = i18n("Use as &Default for Archived Alarms");  break;
-				case AlarmResource::TEMPLATE: text = i18n("Use as &Default for Alarm Templates");  break;
-				default:  break;
-			}
-			menu->insertSeparator();
-			id = menu->insertItem(text, this, SLOT(setStandard()));
-			menu->setItemEnabled(id, (active && !resource->readOnly()));
-		}
-		menu->insertSeparator();
+		resource = item->resource();
+		active   = resource->isEnabled();
+		type     = resource->alarmType();
+		writable = resource->writable();
 	}
-	menu->insertItem(i18n("&Add..."), this, SLOT(addResource()));
-	menu->insertItem(i18n("Im&port..."), this, SLOT(importCalendar()));
-	menu->popup(pos);
+	else
+	{
+		switch (mAlarmType->currentIndex())
+		{
+			case 0:  type = AlarmResource::ACTIVE; break;
+			case 1:  type = AlarmResource::ARCHIVED; break;
+			case 2:  type = AlarmResource::TEMPLATE; break;
+		}
+	}
+	mActionReload->setEnabled(active);
+	mActionSave->setEnabled(active && writable);
+	mActionShowDetails->setEnabled(item);
+	mActionEdit->setEnabled(item);
+	mActionRemove->setEnabled(item);
+	QString text;
+	switch (type)
+	{
+		case AlarmResource::ACTIVE:   text = i18n("Use as &Default for Active Alarms");  break;
+		case AlarmResource::ARCHIVED: text = i18n("Use as &Default for Archived Alarms");  break;
+		case AlarmResource::TEMPLATE: text = i18n("Use as &Default for Alarm Templates");  break;
+		default:  break;
+	}
+	mActionSetDefault->setText(text);
+	bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<AlarmResource::Type>(type)));
+	mActionSetDefault->setChecked(active && writable && standard);
+	mActionSetDefault->setEnabled(active && writable && !standard);
+	mContextMenu->popup(pos);
 }
 
 /******************************************************************************
