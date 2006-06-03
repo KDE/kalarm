@@ -83,20 +83,14 @@ class KAlarmIface : virtual public DCOPObject
 
     k_dcop:
 	/** Cancel (delete) an already scheduled alarm.
-	 *  @param url     - The URL (not path) of the calendar file containing the event to be cancelled.
-	 *                   Used only for integrity checking: the call will fail if it is not KAlarm's
-	 *                   current calendar file.
 	 *  @param eventId - The unique ID of the event to be cancelled, as stored in the calendar file @p url.
 	 */
-	virtual bool cancelEvent(const QString& url, const QString& eventId) = 0;
+	virtual bool cancelEvent(const QString& eventId) = 0;
 
 	/** Trigger the immediate display or execution of an alarm, regardless of what time it is scheduled for.
-	 *  @param url     - The URL (not path) of the calendar file containing the event to be triggered.
-	 *                   Used only for integrity checking: the call will fail if it is not KAlarm's
-	 *                   current calendar file.
 	 *  @param eventId - The unique ID of the event to be triggered, as stored in the calendar file @p url.
 	 */
-	virtual bool triggerEvent(const QString& url, const QString& eventId) = 0;
+	virtual bool triggerEvent(const QString& eventId) = 0;
 
 	/** Schedule a message display alarm.
 	 *  @param message        The text of the message to display.

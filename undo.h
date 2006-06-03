@@ -27,6 +27,7 @@
 #include <QStringList>
 
 class KAEvent;
+class AlarmResource;
 class UndoItem;
 
 
@@ -35,15 +36,27 @@ class Undo : public QObject
 		Q_OBJECT
 	public:
 		enum Type { NONE, UNDO, REDO };
+		struct Event
+		{
+			Event() {}
+			Event(const KAEvent& e, AlarmResource* r) : event(e), resource(r) {}
+			KAEvent        event;
+			AlarmResource* resource;
+		};
+		class EventList : public QList<Event>
+		{
+		public:
+			void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
+		};
 
 		static Undo*       instance();
-		static void        saveAdd(const KAEvent&, const QString& name = QString());
-		static void        saveAdds(const QList<KAEvent>&, const QString& name = QString());
-		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent);
-		static void        saveDelete(const KAEvent&, const QString& name = QString());
-		static void        saveDeletes(const QList<KAEvent>&, const QString& name = QString());
-		static void        saveReactivate(const KAEvent&, const QString& name = QString());
-		static void        saveReactivates(const QList<KAEvent>&, const QString& name = QString());
+		static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
+		static void        saveAdds(const EventList&, const QString& name = QString());
+		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent, AlarmResource*);
+		static void        saveDelete(const KAEvent&, AlarmResource*, const QString& name = QString());
+		static void        saveDeletes(const EventList&, const QString& name = QString());
+		static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
+		static void        saveReactivates(const EventList&, const QString& name = QString());
 		static bool        undo(QWidget* parent, const QString& action)
 		                                      { return undo(0, UNDO, parent, action); }
 		static bool        undo(int id, QWidget* parent, const QString& action)

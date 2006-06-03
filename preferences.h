@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ class Preferences : public QObject
 		static void              connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
+		static QString           timeZone(bool reload = false);
 		static const ColourList& messageColours()                 { return mMessageColours; }
 		static QColor            defaultBgColour()                { return mDefaultBgColour; }
 		static QColor            defaultFgColour()                { return default_defaultFgColour; }
@@ -66,11 +67,13 @@ class Preferences : public QObject
 		static bool              autostartTrayIcon()              { return mAutostartTrayIcon; }
 		static bool              confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
 		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
+		static bool              askResource()                    { return mAskResource; }
 		static bool              modalMessages()                  { return mModalMessages; }
 		static int               messageButtonDelay()             { return mMessageButtonDelay; }
 		static bool              showArchivedAlarms()             { return mShowArchivedAlarms; }
 		static bool              showAlarmTime()                  { return mShowAlarmTime; }
 		static bool              showTimeToAlarm()                { return mShowTimeToAlarm; }
+		static bool              showResources()                  { return mShowResources; }
 		static int               tooltipAlarmCount()              { return mTooltipAlarmCount; }
 		static bool              showTooltipAlarmTime()           { return mShowTooltipAlarmTime; }
 		static bool              showTooltipTimeToAlarm()         { return mShowTooltipTimeToAlarm; }
@@ -115,6 +118,7 @@ class Preferences : public QObject
 		static const QString     EMAIL_QUEUED_NOTIFY;
 
 		// Default values for settings
+		static QString                          default_timeZone();
 		static const ColourList                 default_messageColours;
 		static const QColor                     default_defaultBgColour;
 		static const QColor                     default_defaultFgColour;
@@ -126,11 +130,13 @@ class Preferences : public QObject
 		static const bool                       default_quitWarn;
 		static const bool                       default_autostartTrayIcon;
 		static const bool                       default_confirmAlarmDeletion;
+		static const bool                       default_askResource;
 		static const bool                       default_modalMessages;
 		static const int                        default_messageButtonDelay;
 		static const bool                       default_showArchivedAlarms;
 		static const bool                       default_showAlarmTime;
 		static const bool                       default_showTimeToAlarm;
+		static const bool                       default_showResources;
 		static const int                        default_tooltipAlarmCount;
 		static const bool                       default_showTooltipAlarmTime;
 		static const bool                       default_showTooltipTimeToAlarm;
@@ -185,15 +191,18 @@ class Preferences : public QObject
 		static QFont               mDefault_messageFont;
 		static QString             mEmailAddress;
 		static QString             mEmailBccAddress;
+		static QString             mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
 		friend class MiscPrefTab;
+		friend class StorePrefTab;
 		friend class EditPrefTab;
 		friend class ViewPrefTab;
 		friend class FontColourPrefTab;
 		friend class EmailPrefTab;
 		static void                setEmailAddress(MailFrom, const QString& address);
 		static void                setEmailBccAddress(bool useControlCentre, const QString& address);
+		static QString             mUserTimeZone;    // only set if the user explicitly chooses a time zone
 		static ColourList          mMessageColours;
 		static QColor              mDefaultBgColour;
 		static QFont               mMessageFont;
@@ -202,11 +211,13 @@ class Preferences : public QObject
 		static bool                mRunInSystemTray;
 		static bool                mDisableAlarmsIfStopped;
 		static bool                mAutostartTrayIcon;
+		static bool                mAskResource;
 		static bool                mModalMessages;
 		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		static bool                mShowArchivedAlarms;
 		static bool                mShowAlarmTime;
 		static bool                mShowTimeToAlarm;
+		static bool                mShowResources;
 		static int                 mTooltipAlarmCount;
 		static bool                mShowTooltipAlarmTime;
 		static bool                mShowTooltipTimeToAlarm;

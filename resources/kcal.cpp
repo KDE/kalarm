@@ -28,10 +28,7 @@
 
 #include "kcal.h"
 
-namespace KCalendar
-{
-	QByteArray APPNAME = "KALARM";
-}
+QByteArray KCalendar::APPNAME = "KALARM";
 
 #define OLD_EVENT_FORMAT
 

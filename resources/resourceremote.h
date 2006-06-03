@@ -40,7 +40,7 @@ namespace KCal { class CalendarLocal; }
 
 
 /** A KAlarm calendar resource stored as a remote file. */
-class KAResourceRemote : public AlarmResource
+class KDE_EXPORT KAResourceRemote : public AlarmResource
 {
 		Q_OBJECT
 	public:

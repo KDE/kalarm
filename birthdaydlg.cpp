@@ -247,11 +247,11 @@ void BirthdayDlg::updateSelectionList()
 	// Compile a list of all pending alarm messages which look like birthdays
 	QStringList messageList;
 	KAEvent event;
-	Event::List events = AlarmCalendar::activeCalendar()->events();
+	Event::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
 	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 	{
 		Event* kcalEvent = *it;
-		event.set(*kcalEvent);
+		event.set(kcalEvent);
 		if (event.action() == KAEvent::MESSAGE
 		&&  event.recurType() == KARecurrence::ANNUAL_DATE
 		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))

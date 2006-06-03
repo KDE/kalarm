@@ -36,6 +36,7 @@ class KAction;
 class KActionCollection;
 class DCOPCString;
 namespace KCal { class Event; }
+class AlarmResource;
 class KAEvent;
 class MainWindow;
 class AlarmListView;
@@ -63,8 +64,8 @@ enum UpdateError { ERR_ADD, ERR_MODIFY, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE
 
 /** Display a main window with the specified event selected */
 MainWindow*         displayMainWindowSelected(const QString& eventID = QString());
-bool                readConfigWindowSize(const char* window, QSize&);
-void                writeConfigWindowSize(const char* window, const QSize&);
+bool                readConfigWindowSize(const char* window, QSize&, int* splitterWidth = 0);
+void                writeConfigWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 /** Check from its mime type whether a file appears to be a text or image file.
  *  If a text file, its type is distinguished.
  */
@@ -94,22 +95,23 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPCString& dcopName, QString& errorMessage);
 
-UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false,
+UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, bool useEventID = false,
                              bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        addEvents(QList<KAEvent>&, AlarmListView* selectionView, bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
-bool                addArchivedEvent(KAEvent&);
-UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
+bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
+UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* promptParent, AlarmResource* = 0, QWidget* errmsgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true, QWidget* errmsgParent = 0);
 UpdateStatus        updateTemplate(const KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
-UpdateStatus        deleteTemplate(const QString& eventID, QWidget* errmsgParent = 0);
 UpdateStatus        deleteTemplates(const QStringList& eventIDs, QWidget* errmsgParent = 0);
+inline UpdateStatus deleteTemplate(const QString& eventID, QWidget* errmsgParent = 0)
+			{ return deleteTemplates(QStringList(eventID), errmsgParent); }
 void                deleteDisplayEvent(const QString& eventID);
-UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool showKOrgErr = true);
+UpdateStatus        reactivateEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        reactivateEvents(QList<KAEvent>&, QStringList& ineligibleIDs, AlarmListView* selectionView,
-                                     QWidget* errmsgParent = 0, bool showKOrgErr = true);
+                                     AlarmResource* = 0, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        enableEvents(QList<KAEvent>&, AlarmListView* selectionView, bool enable, QWidget* errmsgParent = 0);
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);

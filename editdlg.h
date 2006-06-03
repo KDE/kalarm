@@ -41,6 +41,7 @@ class QLineEdit;
 class QComboBox;
 class QTabWidget;
 class KHBox;
+class AlarmResource;
 class EmailIdCombo;
 class ColourCombo;
 class FontColourButton;
@@ -67,9 +68,9 @@ class EditAlarmDlg : public KDialog
 		enum MessageType { MESSAGE, FILE };
 
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0,
-                             const KAEvent* = 0, bool readOnly = false);
+                             const KAEvent* = 0, bool editResource = false, bool readOnly = false);
 		virtual ~EditAlarmDlg();
-		bool            getEvent(KAEvent&);
+		bool            getEvent(KAEvent&, AlarmResource*&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent);
@@ -221,6 +222,8 @@ class EditAlarmDlg : public KDialog
 		DateTime            mDeferDateTime;
 		EmailAddressList    mEmailAddresses;     // list of addresses to send email to
 		QStringList         mEmailAttachments;   // list of email attachment file names
+		QString             mResourceEventId;    // if non-empty, save alarm in resource containing this event ID
+		AlarmResource*      mResource;           // resource to save event into, or null
 		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		int                 mDeferGroupHeight;   // height added by deferred time widget
 		int                 mDesktop;            // desktop to display the dialog in
@@ -233,41 +236,41 @@ class EditAlarmDlg : public KDialog
 
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;
-		QString             mSavedTemplateName;   // mTemplateName value
+		QString             mSavedTemplateName;     // mTemplateName value
 		QAbstractButton*    mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
-		QTime               mSavedTemplateTime;   // mTemplateTime value
-		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
-		QAbstractButton*    mSavedTypeRadio;      // mMessageRadio, etc
-		SoundPicker::Type   mSavedSoundType;      // mSoundPicker sound type
-		bool                mSavedSound;          // mSoundPicker sound status
-		bool                mSavedRepeatSound;    // mSoundPicker repeat status
-		QString             mSavedSoundFile;      // mSoundPicker sound file
-		float               mSavedSoundVolume;    // mSoundPicker volume
-		float               mSavedSoundFadeVolume;// mSoundPicker fade volume
-		int                 mSavedSoundFadeSeconds;// mSoundPicker fade time
-		bool                mSavedConfirmAck;     // mConfirmAck status
-		QFont               mSavedFont;           // mFontColourButton font
-		QColor              mSavedBgColour;       // mBgColourChoose selection
-		QColor              mSavedFgColour;       // mFontColourButton foreground colour
-		QString             mSavedPreAction;      // mSpecialActionsButton pre-alarm action
-		QString             mSavedPostAction;     // mSpecialActionsButton post-alarm action
-		int                 mSavedReminder;       // mReminder value
-		bool                mSavedOnceOnly;       // mReminder once-only status
+		QTime               mSavedTemplateTime;     // mTemplateTime value
+		int                 mSavedTemplateAfterTime;// mTemplateAfterTime value
+		QAbstractButton*    mSavedTypeRadio;        // mMessageRadio, etc
+		SoundPicker::Type   mSavedSoundType;        // mSoundPicker sound type
+		bool                mSavedSound;            // mSoundPicker sound status
+		bool                mSavedRepeatSound;      // mSoundPicker repeat status
+		QString             mSavedSoundFile;        // mSoundPicker sound file
+		float               mSavedSoundVolume;      // mSoundPicker volume
+		float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
+		int                 mSavedSoundFadeSeconds; // mSoundPicker fade time
+		bool                mSavedConfirmAck;       // mConfirmAck status
+		QFont               mSavedFont;             // mFontColourButton font
+		QColor              mSavedBgColour;         // mBgColourChoose selection
+		QColor              mSavedFgColour;         // mFontColourButton foreground colour
+		QString             mSavedPreAction;        // mSpecialActionsButton pre-alarm action
+		QString             mSavedPostAction;       // mSpecialActionsButton post-alarm action
+		int                 mSavedReminder;         // mReminder value
+		bool                mSavedOnceOnly;         // mReminder once-only status
 		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCmdCommandEdit/mEmailMessageEdit value
-		QString             mSavedEmailFrom;      // mEmailFromList current value
-		QString             mSavedEmailTo;        // mEmailToEdit value
-		QString             mSavedEmailSubject;   // mEmailSubjectEdit value
-		QStringList         mSavedEmailAttach;    // mEmailAttachList values
-		bool                mSavedEmailBcc;       // mEmailBcc status
-		bool                mSavedCmdScript;      // mCmdTypeScript status
-		QAbstractButton*    mSavedCmdOutputRadio; // selected button in mCmdOutputGroup
-		QString             mSavedCmdLogFile;     // mCmdLogFileEdit value
-		DateTime            mSavedDateTime;       // mTimeWidget value
-		int                 mSavedRecurrenceType; // RecurrenceEdit::RepeatType value
-		int                 mSavedRepeatInterval; // alarm repetition interval (via mSimpleRepetition button)
-		int                 mSavedRepeatCount;    // alarm repetition count (via mSimpleRepetition button)
-		int                 mSavedLateCancel;     // mLateCancel value
-		bool                mSavedAutoClose;      // mLateCancel->isAutoClose() value
+		QString             mSavedEmailFrom;        // mEmailFromList current value
+		QString             mSavedEmailTo;          // mEmailToEdit value
+		QString             mSavedEmailSubject;     // mEmailSubjectEdit value
+		QStringList         mSavedEmailAttach;      // mEmailAttachList values
+		bool                mSavedEmailBcc;         // mEmailBcc status
+		bool                mSavedCmdScript;        // mCmdTypeScript status
+		QAbstractButton*    mSavedCmdOutputRadio;   // selected button in mCmdOutputGroup
+		QString             mSavedCmdLogFile;       // mCmdLogFileEdit value
+		DateTime            mSavedDateTime;         // mTimeWidget value
+		int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
+		int                 mSavedRepeatInterval;   // alarm repetition interval (via mSimpleRepetition button)
+		int                 mSavedRepeatCount;      // alarm repetition count (via mSimpleRepetition button)
+		int                 mSavedLateCancel;       // mLateCancel value
+		bool                mSavedAutoClose;        // mLateCancel->isAutoClose() value
 		bool                mSavedShowInKorganizer; // mShowInKorganizer status
 };
 

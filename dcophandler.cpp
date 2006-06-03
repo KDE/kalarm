@@ -52,14 +52,14 @@ DcopHandler::DcopHandler()
 }
 
 
-bool DcopHandler::cancelEvent(const QString& url,const QString& eventId)
+bool DcopHandler::cancelEvent(const QString& eventId)
 {
-	return theApp()->deleteEvent(url, eventId);
+	return theApp()->dcopDeleteEvent(eventId);
 }
 
-bool DcopHandler::triggerEvent(const QString& url,const QString& eventId)
+bool DcopHandler::triggerEvent(const QString& eventId)
 {
-	return theApp()->triggerEvent(url, eventId);
+	return theApp()->dcopTriggerEvent(eventId);
 }
 
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,

@@ -24,7 +24,7 @@
 #include "kalarm.h"
 #include "eventlistviewbase.h"
 
-class Event;
+class QEvent;
 class QMouseEvent;
 class QColorGroup;
 class AlarmListView;

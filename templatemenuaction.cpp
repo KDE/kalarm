@@ -65,10 +65,6 @@ void TemplateMenuAction::slotSelected(QAction* action)
 	QMap<QAction*, QString>::const_iterator it = mOriginalTexts.find(action);
 	if (it == mOriginalTexts.end()  ||  it.value().isEmpty())
 		return;
-	AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-	if (cal)
-	{
-		KAEvent templ = KAEvent::findTemplateName(*cal, it.value());
-		emit selected(templ);
-	}
+	KAEvent templ = AlarmCalendar::resources()->templateEvent(it.value());
+	emit selected(templ);
 }

@@ -41,24 +41,7 @@ set(libkalarm_SRCS
 	${CMAKE_SOURCE_DIR}/kalarm/lib/synchtimer.cpp
 )
 
-########### next target ###############
-set(libresources_SRCS
-	${CMAKE_SOURCE_DIR}/kalarm/resources/alarmresource.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/alarmresources.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/kcal.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocal.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocal_plugin.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocalwidget.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldir.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldir_plugin.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcelocaldirwidget.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremote.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremote_plugin.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourceremotewidget.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/resources/resourcewidget.cpp 
-)
-
-set(kalarm_bin_SRCS ${libkalarm_SRCS} ${libresources_SRCS}
+set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    main.cpp 
    alarmevent.cpp 
@@ -100,7 +83,10 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${libresources_SRCS}
    emailidcombo.cpp 
    find.cpp 
    pickfileradio.cpp 
-   calendarcompat.cpp )
+   calendarcompat.cpp
+   resourceconfigdialog.cpp
+   resourceselector.cpp
+)
 
 kde4_automoc(${kalarm_bin_SRCS})
 
@@ -110,7 +96,7 @@ kde4_add_dcop_stubs(kalarm_bin_SRCS kalarmd/alarmdaemoniface.h )
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin  ${KDE4_KDEUI_LIBS} kcal kmime kdepim kpimidentities kabc kutils phononcore )
+target_link_libraries(kalarm_bin ${KDE4_KDEUI_LIBS} kalarm_resources kcal kmime kdepim kpimidentities kabc kutils phononcore )
 
 install_targets(/bin kalarm_bin )
 

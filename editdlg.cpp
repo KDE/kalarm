@@ -59,6 +59,7 @@
 #include <libkcal/icaldrag.h>
 
 #include "alarmcalendar.h"
+#include "alarmresources.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
 #include "checkbox.h"
@@ -162,7 +163,8 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18nc("Email subject", 
  *            = false to edit/create an alarm.
  *   event   != to initialise the dialogue to show the specified event's data.
  */
-EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event, bool readOnly)
+EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event,
+                           bool useResource, bool readOnly)
 	: KDialog(parent, caption,
 	          (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default)),
 	  mMainPageShown(false),
@@ -176,6 +178,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mDeferGroup(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
+	  mResourceEventId(useResource && event ? event->id() : QString::null),
+	  mResource(0),
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
 	  mDesiredReadOnly(readOnly),
@@ -888,8 +892,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 	mEmailAttachList->setEnabled(enable);
 	if (mEmailRemoveButton)
 		mEmailRemoveButton->setEnabled(enable);
-	AlarmCalendar* cal = AlarmCalendar::templateCalendar();
-	bool empty = cal->isOpen()  &&  !cal->events().count();
+	bool empty = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE).isEmpty();
 	enableButton(Default, !empty);
 }
 
@@ -1208,8 +1211,9 @@ bool EditAlarmDlg::stateChanged() const
  * The data is returned in the supplied KAEvent instance.
  * Reply = false if the only change has been to an existing deferral.
  */
-bool EditAlarmDlg::getEvent(KAEvent& event)
+bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
 {
+	resource = mResource;
 	if (mChanged)
 	{
 		// It's a new event, or the edit controls have changed
@@ -1419,8 +1423,7 @@ void EditAlarmDlg::slotOk()
 			errmsg = i18n("You must enter a name for the alarm template");
 		else if (name != mSavedTemplateName)
 		{
-			AlarmCalendar* cal = AlarmCalendar::templateCalendarOpen();
-			if (cal  &&  KAEvent::findTemplateName(*cal, name).valid())
+			if (AlarmCalendar::resources()->templateEvent(name).valid())
 				errmsg = i18n("Template name is already in use");
 		}
 		if (!errmsg.isEmpty())
@@ -1458,7 +1461,8 @@ void EditAlarmDlg::slotOk()
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
 				KAEvent event;
-				getEvent(event);     // this may adjust mAlarmDateTime
+				AlarmResource* r;
+				getEvent(event, r);     // this may adjust mAlarmDateTime
 				if ((  mAlarmDateTime.date() < now.date()
 				    || mAlarmDateTime.date() == now.date()
 				       && !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
@@ -1534,7 +1538,27 @@ void EditAlarmDlg::slotOk()
 		}
 	}
 	if (checkText(mAlarmMessage))
+	{
+		mResource = 0;
+		if (!mResourceEventId.isEmpty())
+		{
+			mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
+			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
+			if (mResource->alarmType() != type)
+				mResource = 0;   // event may have expired while dialogue was open
+		}
+		if (!mResource  ||  !mResource->writable())
+		{
+			KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
+			mResource = AlarmResources::instance()->destination(type, this);
+		}
+		if (!mResource)
+		{
+			KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
+			return;
+		}
 		accept();
+	}
 }
 
 /******************************************************************************

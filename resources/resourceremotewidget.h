@@ -36,7 +36,7 @@ namespace KCal {
   Configuration widget for remote file alarm calendar resource.
   @see KAResourceRemote
 */
-class ResourceRemoteConfigWidget : public ResourceConfigWidget
+class KDE_EXPORT ResourceRemoteConfigWidget : public ResourceConfigWidget
 { 
 		Q_OBJECT
 	public:

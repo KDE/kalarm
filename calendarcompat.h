@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.h  -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,16 +23,21 @@
 
 /* @file calendarcompat.h - compatibility for old calendar file formats */
 
-namespace KCal { class Calendar; }
+#include "kcal.h"
+
+class AlarmResource;
+namespace KCal { class CalendarLocal; }
 
 
 class CalendarCompat
 {
 	public:
-		static void fix(KCal::Calendar&, const QString& localFile = QString());
+		static void              setID(KCal::CalendarLocal&);
+		static KCalendar::Status fix(KCal::CalendarLocal&, const QString& localFile,
+		                             AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT);
 
 	private:
-		static int  readKAlarmVersion(KCal::Calendar&, QString& subVersion);
+		static int  readKAlarmVersion(KCal::CalendarLocal&, QString& subVersion, QString& versionString);
 		static bool isUTC(const QString& localFile);
 };
 

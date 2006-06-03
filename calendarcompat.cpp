@@ -25,37 +25,53 @@
 
 #include <kapplication.h>
 #include <kaboutdata.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 extern "C" {
 #include <libical/ical.h>
 }
-#include <libkcal/calendar.h>
+#include <libkcal/calendarlocal.h>
 
 #include "alarmevent.h"
+#include "alarmresource.h"
 #include "functions.h"
 #include "preferences.h"
 #include "calendarcompat.h"
 
 using namespace KCal;
 
+static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
+
+
+/******************************************************************************
+* Write the X-KDE-KALARM-VERSION custom property into the calendar.
+*/
+void CalendarCompat::setID(KCal::CalendarLocal& calendar)
+{
+	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
+}
 
 /******************************************************************************
 * Find the version of KAlarm which wrote the calendar file, and do any
-* necessary conversions to the current format. The calendar is not saved - any
-* conversions will only be saved if changes are made later.
+* necessary conversions to the current format. If it is a resource calendar,
+* the user is prompted whether to save the conversions. For a local calendar
+* file, any conversions will only be saved if changes are made later.
+* Reply = true if the calendar file is now in the current format.
 */
-void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
+KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource, AlarmResource::FixFunc conv)
 {
 	bool version057_UTC = false;
-	QString subVersion;
-	int version = readKAlarmVersion(calendar, subVersion);
+	QString subVersion, versionString;
+	int version = readKAlarmVersion(calendar, subVersion, versionString);
 	if (!version)
-	{
-		// The calendar was created either by the current version of KAlarm,
-		// or another program, so don't do any conversions
-		return;
-	}
+		return KCalendar::Current;     // calendar is in current KAlarm format
+	if (version < 0  ||  version > KAlarm::Version())
+		return KCalendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
+
+	// Calendar was created by an earlier version of KAlarm.
+	// Convert it to the current format, and prompt the user whether to update the calendar file.
 	if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
 	{
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
@@ -66,46 +82,78 @@ void CalendarCompat::fix(KCal::Calendar& calendar, const QString& localFile)
 	else
 		kDebug(5950) << "CalendarCompat::fix(): KAlarm version " << version << endl;
 
-	// Convert events to current KAlarm format for when calendar is saved
+	// Convert events to current KAlarm format for if the calendar is saved
 	KAEvent::convertKCalEvents(calendar, version, version057_UTC);
+	if (!resource)
+		return KCalendar::Current;    // update non-shared calendars regardless
+	if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
+		return KCalendar::Convertible;
+	// Update the calendar file now if the user wants it to be read-write
+	if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
+	{
+		QString msg = (conv == AlarmResource::PROMPT)
+		            ? i18n("Resource <b>%1</b> is in an old format (KAlarm version %2), and will be read-only unless "
+		                   "you choose to update it to the current format.", resource->resourceName(), versionString)
+		            : i18n("Some or all of the alarms in resource <b>%1</b> are in an old KAlarm format, and will be read-only unless "
+		                   "you choose to update them to the current format.", resource->resourceName());
+		if (KMessageBox::warningYesNo(0,
+		      i18n("<qt>%1<br><br>"
+		           "WARNING: Do not update the resource if it is shared with other users who run an older version "
+		           "of KAlarm. If you do so, they may be unable to use it any more.<br><br>"
+		           "Do you wish to update the resource?</qt>", msg))
+		    != KMessageBox::Yes)
+			return KCalendar::Convertible;
+	}
+	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
+	return KCalendar::Converted;
 }
 
 /******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
 * The format is, for example, 000507 for 0.5.7.
-* Reply = 0 if the calendar was created by the current version of KAlarm,
-*           KAlarm pre-0.3.5, or another program.
+* Reply = 0 if the calendar was created by the current version of KAlarm
+*       = -1 if it was created by KAlarm pre-0.3.5, or another program
+*       = version number if created by another KAlarm version.
 */
-int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVersion)
+int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& subVersion, QString& versionString)
 {
 	subVersion.clear();
-	const QString prodid = calendar.productId();
-
-	// Find the KAlarm identifier
-	QString progname = QLatin1String(" KAlarm ");
-	int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
-	if (i < 0)
+	versionString = calendar.customProperty(KCalendar::APPNAME, VERSION_PROPERTY);
+	if (versionString.isEmpty())
 	{
-		// Older versions used KAlarm's translated name in the product ID, which
-		// could have created problems using a calendar in different locales.
-		progname = QString(" ") + kapp->aboutData()->programName() + " ";
-		i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
-		if (i < 0)
-			return 0;    // calendar wasn't created by KAlarm
-	}
+		// Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
+		// If another application has written to the file, this may not be present.
+		const QString prodid = calendar.productId();
 
-	// Extract the KAlarm version string
-	QString ver = prodid.mid(i + progname.length()).trimmed();
-	i = ver.indexOf(QLatin1Char('/'));
-	int j = ver.indexOf(QLatin1Char(' '));
-	if (j >= 0  &&  j < i)
-		i = j;
-	if (i <= 0)
-		return 0;    // missing version string
-	ver = ver.left(i);     // ver now contains the KAlarm version string
-	if (ver == KAlarm::currentCalendarVersionString())
+		// Find the KAlarm identifier
+		QString progname = QLatin1String(" KAlarm ");
+		int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
+		if (i < 0)
+		{
+			// Older versions used KAlarm's translated name in the product ID, which
+			// could have created problems using a calendar in different locales.
+			progname = QString(" ") + kapp->aboutData()->programName() + " ";
+			i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
+			if (i < 0)
+				return -1;    // calendar wasn't created by KAlarm
+		}
+
+		// Extract the KAlarm version string
+		versionString = prodid.mid(i + progname.length()).trimmed();
+		i = versionString.indexOf('/');
+		int j = versionString.indexOf(' ');
+		if (j >= 0  &&  j < i)
+			i = j;
+		if (i <= 0)
+			return -1;    // missing version string
+		versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
+	}
+	if (versionString == KAlarm::currentCalendarVersionString())
 		return 0;      // the calendar is in the current KAlarm format
-	return KAlarm::getVersionNumber(ver, &subVersion);
+	int ver = KAlarm::getVersionNumber(versionString, &subVersion);
+	if (ver >= KAlarm::currentCalendarVersion()  &&  ver <= KAlarm::Version())
+		return 0;      // the calendar is in the current KAlarm format
+	return KAlarm::getVersionNumber(versionString, &subVersion);
 }
 
 /******************************************************************************

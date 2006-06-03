@@ -47,7 +47,6 @@ static KCmdLineOptions options[] =
 	{ "colourfg", 0, 0 },
 	{ "C", 0, 0 },
 	{ "colorfg <color>", I18N_NOOP("Message foreground color (name or hex 0xRRGGBB)"), 0 },
-	{ "calendarURL <url>", I18N_NOOP("URL of calendar file"), 0 },
 	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0 },
 	{ "d", 0, 0 },
 	{ "disable", I18N_NOOP("Disable the alarm"), 0 },

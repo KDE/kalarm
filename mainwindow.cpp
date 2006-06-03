@@ -25,6 +25,7 @@
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QCloseEvent>
+#include <QSplitter>
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -53,6 +54,7 @@
 #include "alarmcalendar.h"
 #include "alarmevent.h"
 #include "alarmlistview.h"
+#include "alarmresources.h"
 #include "alarmtext.h"
 #include "birthdaydlg.h"
 #include "daemon.h"
@@ -62,6 +64,7 @@
 #include "kamail.h"
 #include "prefdlg.h"
 #include "preferences.h"
+#include "resourceselector.h"
 #include "synchtimer.h"
 #include "templatedlg.h"
 #include "templatemenuaction.h"
@@ -101,6 +104,7 @@ QString MainWindow::i18n_ShowArchivedAlarms()   { return i18n("Show Archived Ala
 QString MainWindow::i18n_e_ShowArchivedAlarms() { return i18n("Show &Archived Alarms"); }
 QString MainWindow::i18n_HideArchivedAlarms()   { return i18n("Hide Archived Alarms"); }
 QString MainWindow::i18n_e_HideArchivedAlarms() { return i18n("Hide &Archived Alarms"); }
+QString MainWindow::i18n_r_ShowResources()      { return i18n("Show &Resources");}
 
 
 /******************************************************************************
@@ -116,8 +120,10 @@ MainWindow* MainWindow::create(bool restored)
 
 MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
+	  mResourcesWidth(-1),
 	  mMinuteTimerActive(false),
 	  mHiddenTrayParent(false),
+	  mShowResources(Preferences::showResources()),
 	  mShowArchived(Preferences::showArchivedAlarms()),
 	  mShowTime(Preferences::showAlarmTime()),
 	  mShowTimeTo(Preferences::showTimeToAlarm())
@@ -130,25 +136,40 @@ MainWindow::MainWindow(bool restored)
 	if (!restored)
 	{
 		QSize s;
-		if (KAlarm::readConfigWindowSize("MainWindow", s))
+		if (KAlarm::readConfigWindowSize("MainWindow", s, &mResourcesWidth))
 			resize(s);
 	}
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	if (!mShowTimeTo)
 		mShowTime = true;     // ensure at least one time column is visible
-	mListView = new AlarmListView(this);
+
+	mSplitter = new QSplitter(Qt::Horizontal, this);
+	setCentralWidget(mSplitter);
+
+	// Create the calendar resource selector widget
+	AlarmResources* resources = AlarmResources::instance();
+	mResourceSelector = new ResourceSelector(resources, mSplitter);
+	mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
+	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
+
+	// Create the alarm list widget
+	mListView = new AlarmListView(mSplitter);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->showArchived(mShowArchived);
-	setCentralWidget(mListView);
 	mListView->refresh();          // populate the alarm list
 	mListView->clearSelection();
 
 	connect(mListView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
 	connect(mListView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
 	connect(mListView, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint&, int)),
-	        SLOT(slotMouseClicked(int, Q3ListViewItem*, const QPoint&, int)));
+	                   SLOT(slotMouseClicked(int, Q3ListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(executed(Q3ListViewItem*)), SLOT(slotDoubleClicked(Q3ListViewItem*)));
+	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
+	connect(mResourceSelector, SIGNAL(resourcesChanged()), mListView, SLOT(refresh()));
+	connect(resources, SIGNAL(calendarChanged()), mListView, SLOT(refresh()));
+	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
+	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	initActions();
 
 	mWindowList.append(this);
@@ -179,7 +200,7 @@ MainWindow::~MainWindow()
 	setUpdateTimer();
 	MainWindow* main = mainMainWindow();
 	if (main)
-		KAlarm::writeConfigWindowSize("MainWindow", main->size());
+		KAlarm::writeConfigWindowSize("MainWindow", main->size(), mResourcesWidth);
 	KGlobal::config()->sync();    // save any new window size to disc
 	KToolBar* tb = toolBar();
 	if (tb)
@@ -193,10 +214,11 @@ MainWindow::~MainWindow()
 */
 void MainWindow::saveProperties(KConfig* config)
 {
-	config->writeEntry(QLatin1String("HiddenTrayParent"), isTrayParent() && isHidden());
-	config->writeEntry(QLatin1String("ShowArchived"), mShowArchived);
-	config->writeEntry(QLatin1String("ShowTime"), mShowTime);
-	config->writeEntry(QLatin1String("ShowTimeTo"), mShowTimeTo);
+	config->writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
+	config->writeEntry("ShowArchived", mShowArchived);
+	config->writeEntry("ShowTime", mShowTime);
+	config->writeEntry("ShowTimeTo", mShowTimeTo);
+	config->writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
 }
 
 /******************************************************************************
@@ -210,6 +232,8 @@ void MainWindow::readProperties(KConfig* config)
 	mShowArchived     = config->readEntry("ShowArchived", false);
 	mShowTime         = config->readEntry("ShowTime", true);
 	mShowTimeTo       = config->readEntry("ShowTimeTo", false);
+	mResourcesWidth   = config->readEntry("ResourcesWidth", (int)0);
+	mShowResources    = (mResourcesWidth > 0);
 }
 
 /******************************************************************************
@@ -259,8 +283,15 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 {
 	// Save the window's new size only if it's the first main window
 	if (mainMainWindow() == this)
-		KAlarm::writeConfigWindowSize("MainWindow", re->size());
+		KAlarm::writeConfigWindowSize("MainWindow", re->size(), mResourcesWidth);
 	MainWindowBase::resizeEvent(re);
+}
+
+void MainWindow::resourcesResized()
+{
+	QList<int> widths = mSplitter->sizes();
+	if (widths.count() > 1)
+		mResourcesWidth = widths[0];
 }
 
 /******************************************************************************
@@ -270,6 +301,12 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 */
 void MainWindow::showEvent(QShowEvent* se)
 {
+	if (mResourcesWidth > 0)
+	{
+		QList<int> widths;
+		widths.append(mResourcesWidth);
+		mSplitter->setSizes(widths);
+	}
 	setUpdateTimer();
 	slotUpdateTimeTo();
 	MainWindowBase::showEvent(se);
@@ -363,6 +400,10 @@ void MainWindow::initActions()
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
+	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), actions, QLatin1String("showResources"));
+	mActionToggleResourceSel->setCheckedState(i18n("Hide &Resources"));
+	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
+
 	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), actions, QLatin1String("importAlarms"));
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
@@ -429,6 +470,8 @@ void MainWindow::initActions()
 	mActionShowArchived->setChecked(mShowArchived);
 	if (!Preferences::archivedKeepDays())
 		mActionShowArchived->setEnabled(false);
+	mActionToggleResourceSel->setChecked(mShowResources);
+	slotToggleResourceSelector();
 	updateTrayIconAction();         // set the correct text for this action
 	mActionUndo->setEnabled(Undo::haveUndo());
 	mActionRedo->setEnabled(Undo::haveRedo());
@@ -611,12 +654,13 @@ void MainWindow::executeNew(MainWindow* win, const KAEvent* evnt, KAEvent::Actio
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
-		editDlg.getEvent(event);
+		AlarmResource* resource;
+		editDlg.getEvent(event, resource);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		if (KAlarm::addEvent(event, (win ? win->mListView : 0), &editDlg) == KAlarm::UPDATE_KORG_ERR)
+		if (KAlarm::addEvent(event, (win ? win->mListView : 0), resource, &editDlg) == KAlarm::UPDATE_KORG_ERR)
 			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_ADD, 1);
-		Undo::saveAdd(event);
+		Undo::saveAdd(event, resource);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
 	}
@@ -675,11 +719,12 @@ void MainWindow::slotModify()
 */
 void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), win, &event);
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), win, &event, true);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent newEvent;
-		bool changeDeferral = !editDlg.getEvent(newEvent);
+		AlarmResource* resource;
+		bool changeDeferral = !editDlg.getEvent(newEvent, resource);
 
 		// Update the event in the displays and in the calendar file
 		AlarmListView* view = win ? win->mListView : 0;
@@ -694,7 +739,7 @@ void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 			if (KAlarm::modifyEvent(event, newEvent, view, &editDlg) == KAlarm::UPDATE_KORG_ERR)
 				KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_MODIFY, 1);
 		}
-		Undo::saveEdit(event, newEvent);
+		Undo::saveEdit(event, newEvent, resource);
 
 		KAlarm::outputAlarmWarnings(&editDlg, &newEvent);
 	}
@@ -712,7 +757,7 @@ void MainWindow::slotView()
 		KAEvent event = item->event();
 		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Archived Alarm") + " [" + i18n("read-only") + "]"
 		                                             : i18n("View Alarm")),
-		                     this, &event, true);
+		                     this, &event, false, true);
 		editDlg.exec();
 	}
 }
@@ -728,7 +773,7 @@ void MainWindow::slotDelete()
 	{
 		int n = events.count();
 		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
-		                                                  "Do you really want to delete the %n selected alarms?", n),
+		                                                   "Do you really want to delete the %n selected alarms?", n),
 		                                       i18np("Delete Alarm", "Delete Alarms", n),
 		                                       KGuiItem(i18n("&Delete"), "editdelete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
@@ -738,12 +783,13 @@ void MainWindow::slotDelete()
 
 	// Delete the events from the calendar and displays
 	QList<KAEvent> eventCopies;
-	QList<KAEvent> undos;
+	Undo::EventList undos;
+	AlarmResources* resources = AlarmResources::instance();
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		const KAEvent* event = events[i];
 		eventCopies.append(*event);
-		undos.append(*event);
+		undos.append(*event, resources->resourceForIncidence(event->id()));
 	}
 	KAlarm::deleteEvents(eventCopies, true, this);
 	Undo::saveDeletes(undos);
@@ -761,17 +807,19 @@ void MainWindow::slotReactivate()
 
 	// Add the alarms to the displayed lists and to the calendar file
 	QList<KAEvent> eventCopies;
-	QList<KAEvent> undos;
+	Undo::EventList undos;
 	QStringList ineligibleIDs;
+	AlarmResources* resources = AlarmResources::instance();
 	for (i = 0, end = events.count();  i < end;  ++i)
 		eventCopies.append(*events[i]);
-	KAlarm::reactivateEvents(eventCopies, ineligibleIDs, mListView, this);
+	KAlarm::reactivateEvents(eventCopies, ineligibleIDs, mListView, 0, this);
 
 	// Create the undo list, excluding ineligible events
 	for (i = 0, end = eventCopies.count();  i < end;  ++i)
 	{
-		if (!ineligibleIDs.contains(eventCopies[i].id()))
-			undos.append(eventCopies[i]);
+		QString id = eventCopies[i].id();
+		if (!ineligibleIDs.contains(id))
+			undos.append(eventCopies[i], resources->resourceForIncidence(id));
 	}
 	Undo::saveReactivates(undos);
 }
@@ -855,9 +903,10 @@ void MainWindow::slotBirthdays()
 			// Add alarm to the displayed lists and to the calendar file
 			KAlarm::UpdateStatus status = KAlarm::addEvents(events, mListView, true, &dlg, true);
 
-			QList<KAEvent> undos;
+			Undo::EventList undos;
+			AlarmResources* resources = AlarmResources::instance();
 			for (int i = 0, end = events.count();  i < end;  ++i)
-				undos.append(events[i]);
+				undos.append(events[i], resources->resourceForIncidence(events[i].id()));
 			Undo::saveAdds(undos, i18n("Import birthdays"));
 
 			if (status != KAlarm::UPDATE_FAILED)
@@ -900,6 +949,42 @@ void MainWindow::slotTemplatesEnd()
 void MainWindow::slotToggleTrayIcon()
 {
 	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
+}
+
+/******************************************************************************
+*  Called when the Show Resource Selector menu item is selected.
+*/
+void MainWindow::slotToggleResourceSelector()
+{
+	bool show = mActionToggleResourceSel->isChecked();
+	if (show)
+	{
+		if (mResourcesWidth <= 0)
+		{
+			mResourcesWidth = mResourceSelector->sizeHint().width();
+			mResourceSelector->resize(mResourcesWidth, mResourceSelector->height());
+			QList<int> widths = mSplitter->sizes();
+			if (widths.count() == 1)
+			{
+				int listwidth = widths[0] - mSplitter->handleWidth() - mResourcesWidth;
+				mListView->resize(listwidth, mListView->height());
+				widths.append(listwidth);
+				widths[0] = mResourcesWidth;
+			}
+			mSplitter->setSizes(widths);
+		}
+		mResourceSelector->show();
+	}
+	else
+		mResourceSelector->hide();
+}
+
+/******************************************************************************
+* Called when an error occurs in the resource calendar, to display a message.
+*/
+void MainWindow::showErrorMessage(const QString& msg)
+{
+	KMessageBox::error(this, msg);
 }
 
 /******************************************************************************
@@ -1166,8 +1251,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
 	KUrl::List      files;
-	KCal::CalendarLocal calendar(QLatin1String("UTC"));
-	calendar.setLocalTime();    // default to local time (i.e. no time zone)
+	KCal::CalendarLocal calendar(Preferences::timeZone(true));
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
 	kDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
@@ -1231,7 +1315,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
-			KAEvent ev(*events.first());
+			KAEvent ev(events[0]);
 			executeNew(win, &ev);
 		}
 		return;
@@ -1250,6 +1334,31 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 }
 
 /******************************************************************************
+* Called when the status of a resource has changed.
+* Enable or disable actions appropriately.
+*/
+void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change change)
+{
+	// Find whether there are any writable resources
+	AlarmResources* resources = AlarmResources::instance();
+	bool active  = resources->activeCount(AlarmResource::ACTIVE, true);
+	bool templat = resources->activeCount(AlarmResource::TEMPLATE, true);
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+	{
+		MainWindow* w = mWindowList[i];
+		w->mActionImportAlarms->setEnabled(active || templat);
+		w->mActionImportBirthdays->setEnabled(active);
+		w->mActionNew->setEnabled(active);
+		w->mActionNewFromTemplate->setEnabled(active);
+		w->mActionCreateTemplate->setEnabled(templat);
+		w->slotSelection();
+	}
+
+	if (change == AlarmResources::Location)
+		mListView->refresh();
+}
+
+/******************************************************************************
 *  Called when the selected items in the ListView changes.
 *  Selects the new current item, and enables the actions appropriately.
 */
@@ -1264,22 +1373,34 @@ void MainWindow::slotSelection()
 		return;
 	}
 
+	// Find whether there are any writable resources
+	bool active = mActionNew->isEnabled();
+
 	AlarmListViewItem* item = (AlarmListViewItem*)((count == 1) ? items.first() : 0);
+	bool readOnly = false;
+	bool allArchived = true;
 	bool enableReactivate = true;
 	bool enableEnableDisable = true;
 	bool enableEnable = false;
 	bool enableDisable = false;
+	AlarmResources* resources = AlarmResources::instance();
 	QDateTime now = QDateTime::currentDateTime();
 	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)items[i])->event();
-		bool archived = event.expired();
+		bool expired = event.expired();
+		if (!expired)
+			allArchived = false;
+		Event* ev = resources->event(event.id());
+		AlarmResource* resource = resources->resource(ev);
+		if (!resource  ||  !resource->writable(ev))
+			readOnly = true;
 		if (enableReactivate
-		&&  (!archived  ||  !event.occursAfter(now, true)))
+		&&  (!expired  ||  !event.occursAfter(now, true)))
 			enableReactivate = false;
 		if (enableEnableDisable)
 		{
-			if (archived)
+			if (expired)
 				enableEnableDisable = enableEnable = enableDisable = false;
 			else
 			{
@@ -1292,13 +1413,13 @@ void MainWindow::slotSelection()
 	}
 
 	kDebug(5950) << "MainWindow::slotSelection(true)\n";
-	mActionCreateTemplate->setEnabled(count == 1);
-	mActionCopy->setEnabled(count == 1);
-	mActionModify->setEnabled(item && !mListView->archived(item));
+	mActionCreateTemplate->setEnabled((count == 1) && (resources->activeCount(AlarmResource::TEMPLATE, true) > 0));
+	mActionCopy->setEnabled(active && count == 1);
+	mActionModify->setEnabled(active && !readOnly && item && !mListView->archived(item));
 	mActionView->setEnabled(count == 1);
-	mActionDelete->setEnabled(count);
-	mActionReactivate->setEnabled(count && enableReactivate);
-	mActionEnable->setEnabled(enableEnable || enableDisable);
+	mActionDelete->setEnabled(!readOnly && (active || allArchived));
+	mActionReactivate->setEnabled(active && enableReactivate);
+	mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
 	if (enableEnable || enableDisable)
 		setEnableText(enableEnable);
 }

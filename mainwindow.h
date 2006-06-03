@@ -26,7 +26,10 @@
 #include <QList>
 #include <QMap>
 
+#include <libkcal/calendar.h>
+
 #include "alarmevent.h"
+#include "alarmresources.h"
 #include "alarmtext.h"
 #include "mainwindowbase.h"
 #include "undo.h"
@@ -38,6 +41,7 @@ class QResizeEvent;
 class QDropEvent;
 class QCloseEvent;
 class Q3ListViewItem;
+class QSplitter;
 class QMenu;
 class KAction;
 class KToggleAction;
@@ -46,9 +50,11 @@ class ActionAlarmsEnabled;
 class AlarmListView;
 class TemplateDlg;
 class TemplateMenuAction;
+class ResourceSelector;
+class AlarmResources;
 
 
-class MainWindow : public MainWindowBase
+class MainWindow : public MainWindowBase, public KCal::Calendar::Observer
 {
 		Q_OBJECT
 
@@ -66,8 +72,7 @@ class MainWindow : public MainWindowBase
 		static void        addEvent(const KAEvent&, MainWindow*);
 		static void        executeNew(MainWindow* w = 0, KAEvent::Action a = KAEvent::MESSAGE, const AlarmText& t = AlarmText())
 		                                      { executeNew(w, 0, a, t); }
-		static void        executeNew(const KAEvent& e, MainWindow* w = 0)
-		                                      { executeNew(w, &e); }
+		static void        executeNew(const KAEvent& e, MainWindow* w = 0)   { executeNew(w, &e); }
 		static void        executeEdit(KAEvent&, MainWindow* = 0);
 		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
@@ -87,6 +92,7 @@ class MainWindow : public MainWindowBase
 		static QString i18n_e_ShowArchivedAlarms(); // text of 'Show Archived Alarms' checkbox, with 'E' shortcut
 		static QString i18n_HideArchivedAlarms();   // plain text of 'Hide Archived Alarms' action
 		static QString i18n_e_HideArchivedAlarms(); // text of 'Hide Archived Alarms' action, with 'E' shortcut
+		static QString i18n_r_ShowResources();      // text of 'Show Resources' action, with 'R' shortcut
 
 	public slots:
 		virtual void   show();
@@ -140,6 +146,10 @@ class MainWindow : public MainWindowBase
 		void           slotFindActive(bool);
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
+		void           slotToggleResourceSelector();
+		void           slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
+		void           resourcesResized();
+		void           showErrorMessage(const QString&);
 
 	private:
 		typedef QList<MainWindow*> WindowList;
@@ -147,11 +157,13 @@ class MainWindow : public MainWindowBase
 		MainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
+		void           initCalendarResources();
 		void           selectionCleared();
 		void           setEnableText(bool enable);
 		void           initUndoMenu(QMenu*, Undo::Type);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
-		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE, const AlarmText& = AlarmText());
+		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE,
+		                          const AlarmText& = AlarmText());
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 
@@ -159,6 +171,10 @@ class MainWindow : public MainWindowBase
 		static TemplateDlg*  mTemplateDlg;  // the one and only template dialogue
 
 		AlarmListView*       mListView;
+		ResourceSelector*    mResourceSelector;    // resource selector widget
+		QSplitter*           mSplitter;            // splits window into list and resource selector
+		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
+		KToggleAction*       mActionToggleResourceSel;
 		KAction*             mActionImportAlarms;
 		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
@@ -182,8 +198,10 @@ class MainWindow : public MainWindowBase
 		KMenu*               mActionsMenu;
 		KMenu*               mContextMenu;
 		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
+		int                  mResourcesWidth;      // width of resource selector widget
 		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
+		bool                 mShowResources;       // show resource selector
 		bool                 mShowArchived;        // include archived alarms in the displayed list
 		bool                 mShowTime;            // show alarm times
 		bool                 mShowTimeTo;          // show time-to-alarms

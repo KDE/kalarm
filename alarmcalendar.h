@@ -23,12 +23,19 @@
 
 #include <QObject>
 #include <kurl.h>
-#include <libkcal/calendarlocal.h>
 #include "alarmevent.h"
+
 class KConfig;
+namespace KCal {
+  class Calendar;
+  class CalendarLocal;
+}
+class AlarmResource;
+class MainWindow;
+class ProgressDialog;
 
 
-/** Provides read and write access to calendar files.
+/** Provides read and write access to calendar files and resources.
  *  Either vCalendar or iCalendar files may be read, but the calendar is saved
  *  only in iCalendar format to avoid information loss.
  */
@@ -37,45 +44,50 @@ class AlarmCalendar : public QObject
 		Q_OBJECT
 	public:
 		virtual ~AlarmCalendar();
-		bool                  valid() const                       { return mUrl.isValid(); }
-		KAEvent::Status       type() const                        { return mType; }
+		bool                  valid() const          { return (mCalType == RESOURCES) || mUrl.isValid(); }
+		KCalEvent::Status     type() const           { return (mCalType == RESOURCES) ? KCalEvent::EMPTY : mEventType; }
 		bool                  open();
 		int                   load();
+		void                  loadAndDaemonReload(AlarmResource*, QWidget* parent);
 		bool                  reload();
+		void                  reloadFromCache(const QString& resourceID);
 		bool                  save();
 		void                  close();
 		void                  startUpdate();
 		bool                  endUpdate();
+		KCal::Event*          createKCalEvent(const KAEvent& e, bool original = false, bool cancelCancelledDefer = false) const
+		                                             { return createKCalEvent(e, QString(), original, cancelCancelledDefer); }
+		KCal::Event*          createKCalEvent(const KAEvent&, const QString& baseID, bool original = false, bool cancelCancelledDefer = false) const;
 		KCal::Event*          event(const QString& uniqueID);
-		KCal::Event::List     events();
-		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to);
-		KCal::Event*          addEvent(KAEvent&, bool useEventID = false);
+		KAEvent               templateEvent(const QString& templateName);
+		KCal::Event::List     events(KCalEvent::Status = KCalEvent::EMPTY);
+		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to, KCalEvent::Status);
+		bool                  eventReadOnly(const QString& uniqueID) const;
+		KCal::Event*          addEvent(KAEvent&, KCalEvent::Status, QWidget* promptParent = 0,
+		                               bool useEventID = false, AlarmResource* = 0);
 		bool                  modifyEvent(const QString& oldEventId, KAEvent& newEvent);
 		void                  updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
-		void                  purgeAll()                          { purge(0); }
+		void                  purgeAll()             { purge(0); }
 		void                  setPurgeDays(int days);
 		void                  purgeIfQueued();    // must only be called from KAlarmApp::processQueue()
-		bool                  isOpen() const                      { return mOpen; }
-		QString               path() const                        { return mUrl.prettyUrl(); }
-		QString               urlString() const                   { return mUrl.url(); }
+		bool                  isOpen() const         { return mOpen; }
+		bool                  isEmpty() const;
+		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
+		QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
 
 		static QString        icalProductId();
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
-		static AlarmCalendar* activeCalendar()        { return mCalendars[ACTIVE]; }
-		static AlarmCalendar* archiveCalendar()       { return mCalendars[ARCHIVE]; }
-		static AlarmCalendar* displayCalendar()       { return mCalendars[DISPLAY]; }
-		static AlarmCalendar* templateCalendar()      { return mCalendars[TEMPLATE]; }
-		static AlarmCalendar* activeCalendarOpen()    { return calendarOpen(ACTIVE); }
-		static AlarmCalendar* archiveCalendarOpen()   { return calendarOpen(ARCHIVE); }
-		static AlarmCalendar* displayCalendarOpen()   { return calendarOpen(DISPLAY); }
-		static AlarmCalendar* templateCalendarOpen()  { return calendarOpen(TEMPLATE); }
-		static bool           importAlarms(QWidget*);
+		static AlarmCalendar* resources()            { return mResourcesCalendar; }
+		static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
+		static AlarmCalendar* displayCalendarOpen();
+		static bool           importAlarms(QWidget*, AlarmResource* = 0);
 		static const KCal::Event* getEvent(const QString& uniqueID);
 
-		enum CalID { ACTIVE, ARCHIVE, DISPLAY, TEMPLATE, NCALS };
+	public slots:
+		void                  slotDaemonRegistered(bool newStatus);
 
 	signals:
 		void                  calendarSaved(AlarmCalendar*);
@@ -83,32 +95,38 @@ class AlarmCalendar : public QObject
 		void                  emptyStatus(bool empty);
 
 	private slots:
+		void                  slotCacheDownloaded(AlarmResource*);
+		void                  slotResourceLoaded(AlarmResource*, bool success);
 		void                  slotPurge();
 
 	private:
-		AlarmCalendar(const QString& file, CalID, const QString& icalFile = QString(),
-		              const QString& configKey = QString());
-		bool                  create();
+		enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
+
+		AlarmCalendar();
+		AlarmCalendar(const QString& file, KCalEvent::Status);
 		bool                  saveCal(const QString& newFile = QString());
 		void                  purge(int daysToKeep);
 		void                  startPurgeTimer();
-		static AlarmCalendar* createCalendar(CalID, KConfig*, QString& writePath, const QString& configKey = QString());
-		static AlarmCalendar* calendarOpen(CalID);
 
-		static AlarmCalendar* mCalendars[NCALS];   // the calendars
+		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
+		static AlarmCalendar* mDisplayCalendar;    // the display calendar
 
-		KCal::CalendarLocal*  mCalendar;
+		KCal::Calendar*       mCalendar;           // AlarmResources or CalendarLocal
 		KUrl                  mUrl;                // URL of current calendar file
 		KUrl                  mICalUrl;            // URL of iCalendar file
+		QList<AlarmResource*> mDaemonReloads;      // resources which daemon should reload once KAlarm has loaded them
+		typedef QMap<AlarmResource*, ProgressDialog*> ProgressDlgMap;
+		typedef QMap<AlarmResource*, QWidget*> ResourceWidgetMap;
+		ProgressDlgMap        mProgressDlgs;       // download progress dialogues
+		ResourceWidgetMap     mProgressParents;    // parent widgets for download progress dialogues
 		QString               mLocalFile;          // calendar file, or local copy if it's a remote file
-		QString               mConfigKey;          // config file key for this calendar's URL
-		KAEvent::Status       mType;               // what type of events the calendar file is for
-		int                   mPurgeDays;          // how long to keep alarms, 0 = don't keep, -1 = keep indefinitely
+		CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
+		KCalEvent::Status     mEventType;          // what type of events the calendar file is for
+		int                   mArchivedPurgeDays;  // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mPurgeDaysQueued;    // >= 0 to purge the calendar when called from KAlarmApp::processLoop()
 		int                   mUpdateCount;        // nesting level of group of calendar update calls
 		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
-		bool                  mVCal;               // true if calendar file is in VCal format
 };
 
 #endif // ALARMCALENDAR_H

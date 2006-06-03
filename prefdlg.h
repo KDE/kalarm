@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ class FontColourPrefTab;
 class EditPrefTab;
 class EmailPrefTab;
 class ViewPrefTab;
+class StorePrefTab;
 class MiscPrefTab;
 
 
@@ -60,6 +61,7 @@ class KAlarmPrefDlg : public KDialogBase
 		EditPrefTab*       mEditPage;
 		EmailPrefTab*      mEmailPage;
 		ViewPrefTab*       mViewPage;
+		StorePrefTab*      mStorePage;
 		MiscPrefTab*       mMiscPage;
 
 	protected slots:
@@ -110,33 +112,53 @@ class MiscPrefTab : public PrefsTabBase
 		void         slotAutostartDaemonClicked();
 		void         slotRunModeToggled(bool);
 		void         slotDisableIfStoppedToggled(bool);
-		void         slotArchivedToggled(bool);
-		void         slotClearArchived();
 		void         slotOtherTerminalToggled(bool);
 //#ifdef AUTOSTART_BY_KALARMD
 		void         slotAutostartToggled(bool);
 //#endif
 
 	private:
-		void         setArchivedControls(int purgeDays);
-
 		QCheckBox*     mAutostartDaemon;
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
 		QCheckBox*     mDisableAlarmsIfStopped;
 		QCheckBox*     mQuitWarn;
-		QCheckBox*     mAutostartTrayIcon1;
-		QCheckBox*     mAutostartTrayIcon2;
+		QCheckBox*     mAutostartTrayIcon;
 		QCheckBox*     mConfirmAlarmDeletion;
+		TimeEdit*      mStartOfDay;
+		ButtonGroup*   mXtermType;
+		QLineEdit*     mXtermCommand;
+		int            mXtermCount;              // number of terminal window types
+};
+
+
+// Storage tab of the Preferences dialog
+class StorePrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		StorePrefTab(KVBox*);
+
+		virtual void restore();
+		virtual void apply(bool syncToDisc);
+		virtual void setDefaults();
+
+	private slots:
+		void         slotArchivedToggled(bool);
+		void         slotClearArchived();
+
+	private:
+		void         setArchivedControls(int purgeDays);
+
+		QRadioButton*  mDefaultResource;
+		QRadioButton*  mAskResource;
 		QCheckBox*     mKeepArchived;
 		QCheckBox*     mPurgeArchived;
 		SpinBox*       mPurgeAfter;
 		QLabel*        mPurgeAfterLabel;
 		QPushButton*   mClearArchived;
-		TimeEdit*      mStartOfDay;
-		ButtonGroup*   mXtermType;
-		QLineEdit*     mXtermCommand;
-		int            mXtermCount;              // number of terminal window types
+		bool           mOldKeepArchived;    // previous setting of keep-archived
+		bool           mCheckKeepChanges;
 };
 
 
@@ -247,6 +269,7 @@ class ViewPrefTab : public PrefsTabBase
 		void         setList(bool time, bool timeTo);
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
+		QCheckBox*     mShowResources;
 		QCheckBox*     mListShowTime;
 		QCheckBox*     mListShowTimeTo;
 		QCheckBox*     mTooltipShowAlarms;

@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright (c) 2002-2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2004,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,11 +63,14 @@ class TrayWindow : public KSystemTray
 		void         slotNewFromTemplate(const KAEvent&);
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
+		void         slotResourceStatusChanged();
 
 	private:
 
 		MainWindow*  mAssocMainWindow;     // main window associated with this, or null
 		QPixmap      mPixmapEnabled, mPixmapDisabled;
+		KAction*     mActionNew;
+		KAction*     mActionNewFromTemplate;
 };
 
 #endif // TRAYWINDOW_H

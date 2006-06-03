@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@
 #include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
+#include "alarmresources.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
 #include "editdlg.h"
@@ -100,6 +101,10 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	frame->setMargin(0);
 	mMiscPage = new MiscPrefTab(frame);
 
+	frame = addVBoxPage(i18n("Storage"), i18n("Alarm Storage"), DesktopIcon("fileopen"));
+	frame->setMargin(0);
+	mStorePage = new StorePrefTab(frame);
+
 	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
 	frame->setMargin(0);
 	mEmailPage = new EmailPrefTab(frame);
@@ -132,6 +137,7 @@ void KAlarmPrefDlg::slotDefault()
 	mEmailPage->setDefaults();
 	mViewPage->setDefaults();
 	mEditPage->setDefaults();
+	mStorePage->setDefaults();
 	mMiscPage->setDefaults();
 }
 
@@ -167,6 +173,7 @@ void KAlarmPrefDlg::slotApply()
 	mEmailPage->apply(false);
 	mViewPage->apply(false);
 	mEditPage->apply(false);
+	mStorePage->apply(false);
 	mMiscPage->apply(false);
 	Preferences::syncToDisc();
 }
@@ -197,6 +204,7 @@ void KAlarmPrefDlg::restore()
 	mEmailPage->restore();
 	mViewPage->restore();
 	mEditPage->restore();
+	mStorePage->restore();
 	mMiscPage->restore();
 }
 
@@ -228,18 +236,6 @@ void PrefsTabBase::apply(bool syncToDisc)
 MiscPrefTab::MiscPrefTab(KVBox* frame)
 	: PrefsTabBase(frame)
 {
-	// Autostart alarm daemon
-	KHBox* itemBox = new KHBox(mPage);   // this is to allow left adjustment
-	itemBox->setMargin(0);
-	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), itemBox);
-	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
-	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
-	mAutostartDaemon->setWhatsThis(
-	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
-	           "This option should always be checked unless you intend to discontinue use of KAlarm.",
-	           QLatin1String(DAEMON_APP_NAME)));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-
 	QGroupBox* group = new QGroupBox(i18n("Run Mode"), mPage);
 	QButtonGroup* buttonGroup = new QButtonGroup(group);
 	QGridLayout* grid = new QGridLayout(group);
@@ -248,7 +244,18 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	grid->setColumnStretch(2, 1);
 	grid->setColumnMinimumWidth(0, indentWidth());
 	grid->setColumnMinimumWidth(1, indentWidth());
-	int row = 0;
+
+	// Run-on-demand radio button has an ID of 3
+	mRunOnDemand = new QRadioButton(i18n("&Run only on demand"), group);
+	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
+	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
+	mRunOnDemand->setWhatsThis(
+	      i18n("Check to run KAlarm only when required.\n\n"
+	           "Notes:\n"
+	           "1. Alarms are displayed even when KAlarm is not running, since alarm monitoring is done by the alarm daemon.\n"
+	           "2. With this option selected, the system tray icon can be displayed or hidden independently of KAlarm."));
+	buttonGroup->addButton(mRunOnDemand);
+	grid->addWidget(mRunOnDemand, 1, 0, 1, 3, Qt::AlignLeft);
 
 	// Run-in-system-tray radio button has an ID of 0
 	mRunInSystemTray = new QRadioButton(i18n("Run continuously in system &tray"), group);
@@ -261,55 +268,41 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	           "2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon."
 	           " Running in the system tray simply provides easy access and a status indication."));
 	buttonGroup->addButton(mRunInSystemTray);
-	grid->addWidget(mRunInSystemTray, row, 0, 1, 3, Qt::AlignLeft);
-	++row;
-
-	mAutostartTrayIcon1 = new QCheckBox(i18n("Autostart at &login"), group);
-	mAutostartTrayIcon1->setFixedSize(mAutostartTrayIcon1->sizeHint());
-#ifdef AUTOSTART_BY_KALARMD
-	connect(mAutostartTrayIcon1, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
-#endif
-	mAutostartTrayIcon1->setWhatsThis(i18n("Check to run KAlarm whenever you start KDE."));
-	grid->addWidget(mAutostartTrayIcon1, row, 1, 1, 2, Qt::AlignLeft);
-	++row;
+	grid->addWidget(mRunInSystemTray, 2, 0, 1, 3, Qt::AlignLeft);
 
 	mDisableAlarmsIfStopped = new QCheckBox(i18n("Disa&ble alarms while not running"), group);
 	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
 	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
 	mDisableAlarmsIfStopped->setWhatsThis(i18n("Check to disable alarms whenever KAlarm is not running. Alarms will only appear while the system tray icon is visible."));
-	grid->addWidget(mDisableAlarmsIfStopped, row, 1, 1, 2, Qt::AlignLeft);
-	++row;
+	grid->addWidget(mDisableAlarmsIfStopped, 3, 1, 1, 2, Qt::AlignLeft);
 
 	mQuitWarn = new QCheckBox(i18n("Warn before &quitting"), group);
 	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	mQuitWarn->setWhatsThis(i18n("Check to display a warning prompt before quitting KAlarm."));
-	grid->addWidget(mQuitWarn, row, 2, Qt::AlignLeft);
-	++row;
+	grid->addWidget(mQuitWarn, 4, 2, Qt::AlignLeft);
 
-	// Run-on-demand radio button has an ID of 3
-	mRunOnDemand = new QRadioButton(i18n("&Run only on demand"), group);
-	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
-	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
-	mRunOnDemand->setWhatsThis(
-	      i18n("Check to run KAlarm only when required.\n\n"
-	           "Notes:\n"
-	           "1. Alarms are displayed even when KAlarm is not running, since alarm monitoring is done by the alarm daemon.\n"
-	           "2. With this option selected, the system tray icon can be displayed or hidden independently of KAlarm."));
-	buttonGroup->addButton(mRunOnDemand);
-	grid->addWidget(mRunOnDemand, row, 0, 1, 3, Qt::AlignLeft);
-	++row;
-
-	mAutostartTrayIcon2 = new QCheckBox(i18n("Autostart system tray &icon at login"), group);
-	mAutostartTrayIcon2->setFixedSize(mAutostartTrayIcon2->sizeHint());
+	mAutostartTrayIcon = new QCheckBox(i18n("Autostart at &login"), group);
+	mAutostartTrayIcon->setFixedSize(mAutostartTrayIcon->sizeHint());
 #ifdef AUTOSTART_BY_KALARMD
-	connect(mAutostartTrayIcon2, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
+	connect(mAutostartTrayIcon, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
 #endif
-	mAutostartTrayIcon2->setWhatsThis(i18n("Check to display the system tray icon whenever you start KDE."));
-	grid->addWidget(mAutostartTrayIcon2, row, 1, 1, 2, Qt::AlignLeft);
+	mAutostartTrayIcon->setWhatsThis(i18n("Check to run KAlarm whenever you start KDE."));
+	grid->addWidget(mAutostartTrayIcon, 5, 0, 1, 3, Qt::AlignLeft);
+
+	// Autostart alarm daemon
+	mAutostartDaemon = new QCheckBox(i18n("Start alarm monitoring at lo&gin"), group);
+	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
+	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
+	mAutostartDaemon->setWhatsThis(
+	      i18n("Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (%1).\n\n"
+	           "This option should always be checked unless you intend to discontinue use of KAlarm.",
+	           QLatin1String(DAEMON_APP_NAME)));
+	grid->addWidget(mAutostartDaemon, 6, 0, 1, 3, Qt::AlignLeft);
+
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Start-of-day time
-	itemBox = new KHBox(mPage);
+	KHBox* itemBox = new KHBox(mPage);
 	itemBox->setMargin(0);
 	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
@@ -333,49 +326,13 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	// Archived alarms
-	group = new QGroupBox(i18n("Archived Alarms"), mPage);
-	grid = new QGridLayout(group);
-	grid->setMargin(KDialog::marginHint());
-	grid->setSpacing(KDialog::spacingHint());
-	grid->setColumnStretch(1, 1);
-	grid->setColumnMinimumWidth(0, indentWidth());
-	mKeepArchived = new QCheckBox(i18n("Keep alarms after e&xpiry"), group);
-	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
-	connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
-	mKeepArchived->setWhatsThis(i18n("Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
-	grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
-
-	box = new KHBox(group);
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	mPurgeArchived = new QCheckBox(i18n("Discard archi&ved alarms after:"), box);
-	mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
-	connect(mPurgeArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
-	mPurgeAfter = new SpinBox(box);
-	mPurgeAfter->setMinimum(1);
-	mPurgeAfter->setSingleShiftStep(10);
-	mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());
-	mPurgeAfterLabel = new QLabel(i18n("da&ys"), box);
-	mPurgeAfterLabel->setMinimumSize(mPurgeAfterLabel->sizeHint());
-	mPurgeAfterLabel->setBuddy(mPurgeAfter);
-	box->setWhatsThis(i18n("Uncheck to store archived alarms indefinitely. Check to enter how long archived alarms should be stored."));
-	grid->addWidget(box, 1, 1, Qt::AlignLeft);
-
-	mClearArchived = new QPushButton(i18n("Clear Archived Alar&ms"), group);
-	mClearArchived->setFixedSize(mClearArchived->sizeHint());
-	connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
-	mClearArchived->setWhatsThis(i18n("Delete all existing archived alarms."));
-	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
-	group->setFixedHeight(group->sizeHint().height());
-
 	// Terminal window to use for command alarms
 	group = new QGroupBox(i18n("Terminal for Command Alarms"), mPage);
 	group->setWhatsThis(i18n("Choose which application to use when a command alarm is executed in a terminal window"));
 	grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
-	row = 0;
+	int row = 0;
 
 	mXtermType = new ButtonGroup(group);
 	int index = 0;
@@ -425,11 +382,9 @@ void MiscPrefTab::restore()
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(Preferences::mDisableAlarmsIfStopped);
 	mQuitWarn->setChecked(Preferences::quitWarn());
-	mAutostartTrayIcon1->setChecked(Preferences::mAutostartTrayIcon);
-	mAutostartTrayIcon2->setChecked(Preferences::mAutostartTrayIcon);
+	mAutostartTrayIcon->setChecked(Preferences::mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	mStartOfDay->setValue(Preferences::mStartOfDay);
-	setArchivedControls(Preferences::mArchivedKeepDays);
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
 	if (!xtermCmd.isEmpty())
@@ -474,7 +429,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
 	if (mQuitWarn->isEnabled())
 		Preferences::setQuitWarn(mQuitWarn->isChecked());
-	Preferences::mAutostartTrayIcon = systray ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
+	Preferences::mAutostartTrayIcon = mAutostartTrayIcon->isChecked();
 #ifdef AUTOSTART_BY_KALARMD
 	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
 #else
@@ -483,8 +438,6 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
-	Preferences::mArchivedKeepDays = !mKeepArchived->isChecked() ? 0
-	                              : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
 	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	PrefsTabBase::apply(syncToDisc);
 }
@@ -497,11 +450,9 @@ void MiscPrefTab::setDefaults()
 	mRunOnDemand->setChecked(!systray);
 	mDisableAlarmsIfStopped->setChecked(Preferences::default_disableAlarmsIfStopped);
 	mQuitWarn->setChecked(Preferences::default_quitWarn);
-	mAutostartTrayIcon1->setChecked(Preferences::default_autostartTrayIcon);
-	mAutostartTrayIcon2->setChecked(Preferences::default_autostartTrayIcon);
+	mAutostartTrayIcon->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay);
-	setArchivedControls(Preferences::default_archivedKeepDays);
 	mXtermType->setButton(0);
 	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
@@ -519,9 +470,10 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 
 void MiscPrefTab::slotRunModeToggled(bool)
 {
-	bool systray = (mRunInSystemTray->isChecked());
-	mAutostartTrayIcon2->setEnabled(!systray);
-	mAutostartTrayIcon1->setEnabled(systray);
+	bool systray = mRunInSystemTray->isChecked();
+	mAutostartTrayIcon->setText(systray ? i18n("Autostart at &login") : i18n("Autostart system tray &icon at login"));
+	mAutostartTrayIcon->setWhatsThis((systray ? i18n("Check to run KAlarm whenever you start KDE.")
+	                                          : i18n("Check to display the system tray icon whenever you start KDE.")));
 	mDisableAlarmsIfStopped->setEnabled(systray);
 	slotDisableIfStoppedToggled(true);
 }
@@ -533,8 +485,7 @@ void MiscPrefTab::slotRunModeToggled(bool)
 void MiscPrefTab::slotAutostartToggled(bool)
 {
 #ifdef AUTOSTART_BY_KALARMD
-	bool autostart = mRunInSystemTray->isChecked() ? mAutostartTrayIcon1->isChecked() : mAutostartTrayIcon2->isChecked();
-	mAutostartDaemon->setEnabled(!autostart);
+	mAutostartDaemon->setEnabled(!mAutostartTrayIcon->isChecked());
 #endif
 }
 
@@ -544,7 +495,103 @@ void MiscPrefTab::slotDisableIfStoppedToggled(bool)
 	mQuitWarn->setEnabled(enable);
 }
 
-void MiscPrefTab::setArchivedControls(int purgeDays)
+void MiscPrefTab::slotOtherTerminalToggled(bool on)
+{
+	mXtermCommand->setEnabled(on);
+}
+
+
+/*=============================================================================
+= Class StorePrefTab
+=============================================================================*/
+
+StorePrefTab::StorePrefTab(KVBox* frame)
+	: PrefsTabBase(frame),
+	  mCheckKeepChanges(false)
+{
+	// Which resource to save to
+	QGroupBox* group = new QGroupBox(i18n("New Alarms && Templates"), mPage);
+	QButtonGroup* bgroup = new QButtonGroup(group);
+	QBoxLayout* layout = new QVBoxLayout(group);
+	layout->setMargin(KDialog::marginHint());
+	layout->setSpacing(KDialog::spacingHint());
+
+	mDefaultResource = new QRadioButton(i18n("Store in default &resource"), group);
+	bgroup->addButton(mDefaultResource);
+	mDefaultResource->setFixedSize(mDefaultResource->sizeHint());
+	mDefaultResource->setWhatsThis(i18n("Add all new alarms and alarm templates to the default resources, without prompting"));
+	layout->addWidget(mDefaultResource, 0, Qt::AlignLeft);
+	mAskResource = new QRadioButton(i18n("Prompt for &which resource to store in"), group);
+	bgroup->addButton(mAskResource);
+	mAskResource->setFixedSize(mAskResource->sizeHint());
+	mAskResource->setWhatsThis(
+	      i18n("When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.\n\n"
+	           "Note that archived alarms are always stored in the default archived alarm resource."));
+	layout->addWidget(mAskResource, 0, Qt::AlignLeft);
+
+	// Archived alarms
+	group = new QGroupBox(i18n("Archived Alarms"), mPage);
+	QGridLayout* grid = new QGridLayout(group);
+	grid->setMargin(KDialog::marginHint());
+	grid->setSpacing(KDialog::spacingHint());
+	grid->setColumnStretch(1, 1);
+	grid->setColumnMinimumWidth(0, indentWidth());
+	mKeepArchived = new QCheckBox(i18n("Keep alarms after e&xpiry"), group);
+	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
+	connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
+	mKeepArchived->setWhatsThis(i18n("Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
+	grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
+
+	KHBox* box = new KHBox(group);
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	mPurgeArchived = new QCheckBox(i18n("Discard archi&ved alarms after:"), box);
+	mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
+	connect(mPurgeArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
+	mPurgeAfter = new SpinBox(box);
+	mPurgeAfter->setMinimum(1);
+	mPurgeAfter->setSingleShiftStep(10);
+	mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());
+	mPurgeAfterLabel = new QLabel(i18n("da&ys"), box);
+	mPurgeAfterLabel->setMinimumSize(mPurgeAfterLabel->sizeHint());
+	mPurgeAfterLabel->setBuddy(mPurgeAfter);
+	box->setWhatsThis(i18n("Uncheck to store archived alarms indefinitely. Check to enter how long archived alarms should be stored."));
+	grid->addWidget(box, 1, 1, Qt::AlignLeft);
+
+	mClearArchived = new QPushButton(i18n("Clear Archived Alar&ms"), group);
+	mClearArchived->setFixedSize(mClearArchived->sizeHint());
+	connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
+	mClearArchived->setWhatsThis(i18n("Delete all existing archived alarms."));
+	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
+	group->setFixedHeight(group->sizeHint().height());
+
+	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+}
+
+void StorePrefTab::restore()
+{
+	mCheckKeepChanges = false;
+	mAskResource->setChecked(Preferences::mAskResource);
+	mDefaultResource->setChecked(!Preferences::mAskResource);
+	setArchivedControls(Preferences::mArchivedKeepDays);
+	mOldKeepArchived = mKeepArchived->isChecked();
+	mCheckKeepChanges = true;
+}
+
+void StorePrefTab::apply(bool syncToDisc)
+{
+	Preferences::mAskResource = mAskResource->isChecked();
+	Preferences::mArchivedKeepDays = !mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
+	PrefsTabBase::apply(syncToDisc);
+}
+
+void StorePrefTab::setDefaults()
+{
+	mAskResource->setChecked(Preferences::default_askResource);
+	setArchivedControls(Preferences::default_archivedKeepDays);
+}
+
+void StorePrefTab::setArchivedControls(int purgeDays)
 {
 	mKeepArchived->setChecked(purgeDays);
 	mPurgeArchived->setChecked(purgeDays > 0);
@@ -552,26 +599,32 @@ void MiscPrefTab::setArchivedControls(int purgeDays)
 	slotArchivedToggled(true);
 }
 
-void MiscPrefTab::slotArchivedToggled(bool)
+void StorePrefTab::slotArchivedToggled(bool)
 {
 	bool keep = mKeepArchived->isChecked();
-	bool after = keep && mPurgeArchived->isChecked();
+	if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
+	&&  !AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED))
+	{
+		KMessageBox::sorry(this,
+		     i18n("A default resource is required to store archived alarms, but none is currently enabled.\n\n"
+		          "If you wish to keep archived alarms, please first use the resources view to select a default "
+		          "archived alarms resource."));
+		mKeepArchived->setChecked(false);
+		return;
+	}
+	mOldKeepArchived = keep;
 	mPurgeArchived->setEnabled(keep);
-	mPurgeAfter->setEnabled(after);
+	mPurgeAfter->setEnabled(keep && mPurgeArchived->isChecked());
 	mPurgeAfterLabel->setEnabled(keep);
 	mClearArchived->setEnabled(keep);
 }
 
-void MiscPrefTab::slotClearArchived()
+void StorePrefTab::slotClearArchived()
 {
-	AlarmCalendar* cal = AlarmCalendar::archiveCalendarOpen();
-	if (cal)
-		cal->purgeAll();
-}
-
-void MiscPrefTab::slotOtherTerminalToggled(bool on)
-{
-	mXtermCommand->setEnabled(on);
+	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete all archived alarms?"))
+			!= KMessageBox::Continue)
+		return;
+	AlarmCalendar::resources()->purgeAll();
 }
 
 
@@ -599,8 +652,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 	box->setWhatsThis(
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
-	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
-	           "a KMail composer window is displayed to enable you to send the email.\n"
+	           "KMail: The email is sent automatically via KMail. KMail is started first if necessary.\n"
 	           "Sendmail: The email is sent automatically. This option will only work if "
 	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
 
@@ -1219,6 +1271,11 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab(KVBox* frame)
 	: PrefsTabBase(frame)
 {
+	mShowResources = new QCheckBox(MainWindow::i18n_r_ShowResources(), mPage);
+	mShowResources->setMinimumSize(mShowResources->sizeHint());
+	mShowResources->setWhatsThis(
+	      i18n("Specify whether to show the list of alarm resources beside the alarm list"));
+
 	QGroupBox* group = new QGroupBox(i18n("Alarm List"), mPage);
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
@@ -1322,6 +1379,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 
 void ViewPrefTab::restore()
 {
+	mShowResources->setChecked(Preferences::mShowResources);
 	setList(Preferences::mShowAlarmTime,
 	        Preferences::mShowTimeToAlarm);
 	setTooltip(Preferences::mTooltipAlarmCount,
@@ -1335,6 +1393,7 @@ void ViewPrefTab::restore()
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
+	Preferences::mShowResources           = mShowResources->isChecked();
 	Preferences::mShowAlarmTime           = mListShowTime->isChecked();
 	Preferences::mShowTimeToAlarm         = mListShowTimeTo->isChecked();
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
@@ -1352,6 +1411,7 @@ void ViewPrefTab::apply(bool syncToDisc)
 
 void ViewPrefTab::setDefaults()
 {
+	mShowResources->setChecked(Preferences::default_showResources);
 	setList(Preferences::default_showAlarmTime,
 	        Preferences::default_showTimeToAlarm);
 	setTooltip(Preferences::default_tooltipAlarmCount,

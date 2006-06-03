@@ -29,10 +29,11 @@
 
 #include <libkcal/person.h>
 #include <libkcal/event.h>
-namespace KCal { class Calendar; }
+namespace KCal { class CalendarLocal; }
 
 #include "datetime.h"
 #include "karecurrence.h"
+#include "kcal.h"
 
 class AlarmCalendar;
 class KARecurrence;
@@ -297,11 +298,11 @@ class KAEvent : public KAAlarmEventBase
 		KAEvent()          : mRevision(0), mRecurrence(0), mAlarmCount(0) { }
 		KAEvent(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags)
 		                                        : mRecurrence(0) { set(dt, message, bg, fg, f, action, lateCancel, flags); }
-		explicit KAEvent(const KCal::Event& e)  : mRecurrence(0) { set(e); }
+		explicit KAEvent(const KCal::Event* e)  : mRecurrence(0) { set(e); }
 		KAEvent(const KAEvent& e)               : KAAlarmEventBase(e), mRecurrence(0) { copy(e); }
 		~KAEvent()         { delete mRecurrence; }
 		KAEvent&           operator=(const KAEvent& e)       { if (&e != this) copy(e);  return *this; }
-		void               set(const KCal::Event&);
+		void               set(const KCal::Event*);
 		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags)
 		                            { set(d, message, bg, fg, f, action, lateCancel, flags | ANY_TIME); }
 		void               set(const QDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags);
@@ -334,7 +335,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
-		void               setUid(Status s)                                  { mEventID = uid(mEventID, s);  mUpdated = true; }
+		void               setUid(KCalEvent::Status s)                       { mEventID = KCalEvent::uid(mEventID, s);  mUpdated = true; }
 		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
 		void               setLogFile(const QString& logfile);
 		void               setReminder(int minutes, bool onceOnly);
@@ -342,16 +343,16 @@ class KAEvent : public KAAlarmEventBase
 		void               cancelDefer();
 		void               cancelCancelledDeferral();
 		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
-		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QDateTime&);
+		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const QDateTime&);
 		void               reinstateFromDisplaying(const KAEvent& dispEvent);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
 		void               setEnabled(bool enable)                           { mEnabled = enable;  mUpdated = true; }
 		void               setUpdated()                                      { mUpdated = true; }
 		void               clearUpdated() const                              { mUpdated = false; }
+		void               clearResourceID()                                 { mResourceId.clear(); }
 		void               removeExpiredAlarm(KAAlarm::Type);
 		void               incrementRevision()                               { ++mRevision;  mUpdated = true; }
 
-		KCal::Event*       event() const;    // convert to new Event
 		bool               isTemplate() const             { return !mTemplateName.isEmpty(); }
 		const QString&     templateName() const           { return mTemplateName; }
 		bool               usingDefaultTime() const       { return mTemplateAfterTime == 0; }
@@ -361,7 +362,7 @@ class KAEvent : public KAAlarmEventBase
 		KAAlarm            nextAlarm(const KAAlarm& al) const  { return nextAlarm(al.type()); }
 		KAAlarm            nextAlarm(KAAlarm::Type) const;
 		KAAlarm            convertDisplayingAlarm() const;
-		bool               updateKCalEvent(KCal::Event&, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
+		bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
 		Action             action() const                 { return (Action)mActionType; }
 		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE; }
 		const QString&     id() const                     { return mEventID; }
@@ -409,11 +410,9 @@ class KAEvent : public KAAlarmEventBase
 		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
-		bool               expired() const                { return mDisplaying && mMainExpired  ||  uidStatus(mEventID) == ARCHIVED; }
-		Status             category() const               { return uidStatus(mEventID); }
-		static Status      uidStatus(const QString& uid);
-		static QString     uid(const QString& id, Status);
-		static KAEvent     findTemplateName(AlarmCalendar&, const QString& name);
+		bool               expired() const                { return mDisplaying && mMainExpired  ||  KCalEvent::uidStatus(mEventID) == KCalEvent::ARCHIVED; }
+		KCalEvent::Status  category() const               { return (mCategory == KCalEvent::DISPLAYING) ? mCategory : KCalEvent::uidStatus(mEventID); }
+		QString            resourceID() const             { return mResourceId; }
 
 		struct MonthPos
 		{
@@ -437,10 +436,11 @@ class KAEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
+		static QString     uidInsert(const QString& id, const QString& insert);
 		static int         calVersion();
 		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
-		static bool        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
+		static bool        convertKCalEvents(KCal::CalendarLocal&, int version, bool adjustSummerTime);
 
 	private:
 		enum DeferType {
@@ -456,15 +456,16 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence::Type checkRecur() const;
 		OccurType          nextRecurrence(const QDateTime& preDateTime, DateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const QDateTime& afterDateTime, DateTime& result) const;
-		KCal::Alarm*       initKcalAlarm(KCal::Event&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
-		KCal::Alarm*       initKcalAlarm(KCal::Event&, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
-		static void        readAlarms(const KCal::Event&, void* alarmMap);
-		static void        readAlarm(const KCal::Alarm&, AlarmData&);
+		KCal::Alarm*       initKcalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+		KCal::Alarm*       initKcalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+		static void        readAlarms(const KCal::Event*, void* alarmMap);
+		static void        readAlarm(const KCal::Alarm*, AlarmData&);
 		inline void        set_deferral(DeferType);
 		inline void        set_reminder(int minutes);
 		inline void        set_archiveReminder();
 
 		QString            mTemplateName;     // alarm template's name, or null if normal event
+		QString            mResourceId;       // saved resource ID (not the resource the event is in)
 		QString            mAudioFile;        // ATTACH: audio file to play
 		QString            mPreAction;        // command to execute before alarm is displayed
 		QString            mPostAction;       // command to execute after alarm window is closed
@@ -485,6 +486,7 @@ class KAEvent : public KAAlarmEventBase
 		unsigned long      mKMailSerialNumber;// if email text, message's KMail serial number
 		int                mTemplateAfterTime;// time not specified: use n minutes after default time, or -1 (applies to templates only)
 		QString            mLogFile;          // alarm output is to be logged to this URL
+		KCalEvent::Status  mCategory;         // event category (active, archived, template, ...)
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence

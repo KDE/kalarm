@@ -11,9 +11,6 @@ set(kalarmd_SRCS
 	alarmdaemon.cpp 
 	admain.cpp 
 	adapp.cpp 
-	adcalendar.cpp 
-	adconfigdata.cpp 
-	clientinfo.cpp 
 )
 
 kde4_add_dcop_skels(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )
@@ -23,7 +20,7 @@ kde4_automoc(${kalarmd_SRCS})
 
 kde4_add_executable(kalarmd ${kalarmd_SRCS})
 
-target_link_libraries(kalarmd  ${KDE4_KDEUI_LIBS} kcal )
+target_link_libraries(kalarmd ${KDE4_KDEUI_LIBS} kalarm_resources kcal )
 
 install_targets(/bin kalarmd )
 

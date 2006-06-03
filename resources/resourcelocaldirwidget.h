@@ -31,7 +31,7 @@ class KUrlRequester;
   Configuration widget for local directory alarm calendar resource.
   @see KAResourceLocalDir
 */
-class ResourceLocalDirConfigWidget : public ResourceConfigWidget
+class KDE_EXPORT ResourceLocalDirConfigWidget : public ResourceConfigWidget
 { 
 		Q_OBJECT
 	public:

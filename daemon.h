@@ -28,6 +28,8 @@
 #include <kalarmd/kalarmd.h>
 #include <kalarmd/alarmguiiface.h>
 
+#include "alarmresources.h"
+
 class KActionCollection;
 class AlarmCalendar;
 class AlarmEnableAction;
@@ -45,6 +47,8 @@ class Daemon : public QObject
 		static bool      start();
 		static bool      reregister()            { return registerWith(true); }
 		static bool      reset();
+		/** Reload resource, or notify daemon of new inactive status. */
+		static void      reloadResource(const QString& resourceID);
 		static bool      stop();
 		static bool      autoStart(bool defaultSetting);
 		static void      enableAutoStart(bool enable);
@@ -54,17 +58,20 @@ class Daemon : public QObject
 		static bool      isRunning(bool startDaemon = true);
 		static int       maxTimeSinceCheck();
 		static bool      isRegistered()          { return mStatus == REGISTERED; }
+		static void      connectRegistered(QObject* receiver, const char* slot);
 		static void      allowRegisterFailMsg()  { mRegisterFailMsg = false; }
 
 		static void      queueEvent(const QString& eventID);
 		static void      savingEvent(const QString& eventID);
-		static void      eventHandled(const QString& eventID, bool reloadCal);
+		static void      eventHandled(const QString& eventID);
 
 	signals:
+		void             registered(bool newStatus);
 		void             daemonRunning(bool running);
 
 	private slots:
-		void             slotCalendarSaved(AlarmCalendar*);
+		void             slotResourceSaved(AlarmResource*);
+		void             slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 		void             checkIfStarted();
 		void             slotStarted()           { updateRegisteredStatus(true); }
 		void             registerTimerExpired()  { registrationResult((mStatus == REGISTERED), KAlarmd::FAILURE); }
@@ -91,6 +98,7 @@ class Daemon : public QObject
 		static void      calendarIsEnabled(bool enabled);
 		static bool      checkIfRunning();
 		static void      setFastCheck();
+		static void      setStatus(Status);
 
 		static Daemon*   mInstance;            // only one instance allowed
 		static NotificationHandler* mDcopHandler;  // handles DCOP requests from daemon
@@ -103,6 +111,7 @@ class Daemon : public QObject
 		static int       mStatusTimerInterval; // timer interval (seconds) for checking daemon status
 		static int       mStartTimeout;        // remaining number of times to check if alarm daemon has started
 		static Status    mStatus;              // daemon status
+		static bool      mInitialised;         // false until first daemon registration attempt result is known
 		static bool      mRunning;             // whether the alarm daemon is currently running
 		static bool      mCalendarDisabled;    // monitoring of calendar is currently disabled by daemon
 		static bool      mEnableCalPending;    // waiting to tell daemon to enable calendar

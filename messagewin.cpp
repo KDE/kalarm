@@ -169,8 +169,6 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mRestoreHeight(0),
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
-	  mShowEdit(!mEventID.isEmpty()),
-	  mNoDefer(!allowDefer || alarm.repeatAtLogin()),
 	  mInvalid(false),
 	  mAudioObject(0),
 	  mEvent(event),
@@ -193,6 +191,9 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventID);
+	mShowEdit = !mEventID.isEmpty()  &&  !readonly;
+	mNoDefer  = readonly || !allowDefer || alarm.repeatAtLogin();
 	// Set to save settings automatically, but don't save window size.
 	// File alarm window size is saved elsewhere.
 	setAutoSaveSettings(QLatin1String("MessageWin"), false);
@@ -755,18 +756,18 @@ void MessageWin::readProperties(KConfig* config)
 		// Recreate the event from the calendar file (if possible)
 		if (!mEventID.isEmpty())
 		{
-			const Event* kcalEvent = AlarmCalendar::activeCalendar()->event(mEventID);
+			const Event* kcalEvent = AlarmCalendar::resources()->event(mEventID);
 			if (!kcalEvent)
 			{
 				// It's not in the active calendar, so try the displaying calendar
 				AlarmCalendar* cal = AlarmCalendar::displayCalendar();
 				if (cal->isOpen())
-					kcalEvent = cal->event(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+					kcalEvent = cal->event(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
 			}
 			if (kcalEvent)
 			{
-				mEvent.set(*kcalEvent);
-				mEvent.setUid(KAEvent::ACTIVE);    // in case it came from the display calendar
+				mEvent.set(kcalEvent);
+				mEvent.setUid(KCalEvent::ACTIVE);    // in case it came from the display calendar
 				mShowEdit = true;
 			}
 		}
@@ -941,7 +942,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 		delete mDeferDlg;
 		mDeferDlg = 0;
 	}
-	const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
+	const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::resources()->event(mEventID);
 	if (kcalEvent)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
@@ -950,7 +951,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 			raise();
 			playAudio();
 		}
-		KAEvent event(*kcalEvent);
+		KAEvent event(kcalEvent);
 		mDeferButton->setEnabled(true);
 		setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
 		theApp()->alarmShowing(event, mAlarmType, mDateTime);
@@ -1011,85 +1012,84 @@ QSize MessageWin::sizeHint() const
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (!mShown)
+	if (mShown)
+		return;
+	if (mErrorWindow)
+		enableButtons();    // don't bother repositioning error messages
+	else
 	{
-		if (mErrorWindow)
-			enableButtons();    // don't bother repositioning error messages
-		else
+		/* Set the window size.
+		 * Note that the frame thickness is not yet known when this
+		 * method is called, so for large windows the size needs to be
+		 * set again later.
+		 */
+		QSize s = sizeHint();     // fit the window round the message
+		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
+			KAlarm::readConfigWindowSize("FileMessage", s);
+		resize(s);
+
+		mButtonDelay = Preferences::messageButtonDelay() * 1000;
+		if (!mButtonDelay)
 		{
-			/* Set the window size.
-			 * Note that the frame thickness is not yet known when this
-			 * method is called, so for large windows the size needs to be
-			 * set again later.
+			/* Try to ensure that the window can't accidentally be acknowledged
+			 * by the user clicking the mouse just as it appears.
+			 * To achieve this, move the window so that the OK button is as far away
+			 * from the cursor as possible. If the buttons are still too close to the
+			 * cursor, disable the buttons for a short time.
+			 * N.B. This can't be done in show(), since the geometry of the window
+			 *      is not known until it is displayed. Unfortunately by moving the
+			 *      window in showEvent(), a flicker is unavoidable.
+			 *      See the Qt documentation on window geometry for more details.
 			 */
-			QSize s = sizeHint();     // fit the window round the message
-			if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-				KAlarm::readConfigWindowSize("FileMessage", s);
-			resize(s);
-
-			mButtonDelay = Preferences::messageButtonDelay() * 1000;
-			if (!mButtonDelay)
-			{
-				/* Try to ensure that the window can't accidentally be acknowledged
-				 * by the user clicking the mouse just as it appears.
-				 * To achieve this, move the window so that the OK button is as far away
-				 * from the cursor as possible. If the buttons are still too close to the
-				 * cursor, disable the buttons for a short time.
-				 * N.B. This can't be done in show(), since the geometry of the window
-				 *      is not known until it is displayed. Unfortunately by moving the
-				 *      window in showEvent(), a flicker is unavoidable.
-				 *      See the Qt documentation on window geometry for more details.
-				 */
-				// PROBLEM: The frame size is not known yet!
+			// PROBLEM: The frame size is not known yet!
 #ifdef Q_WS_X11
-				if (!mWinModule)
-					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
-				QRect desk = mWinModule->workArea();
+			if (!mWinModule)
+				mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
+			QRect desk = mWinModule->workArea();
 #else
-				QRect desk = qApp->desktop()->availableGeometry();
+			QRect desk = qApp->desktop()->availableGeometry();
 #endif
-				QPoint cursor = QCursor::pos();
-				QRect frame = frameGeometry();
-				QRect rect  = geometry();
-				// Find the offsets from the outside of the frame to the edges of the OK button
-				QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));
-				int buttonLeft   = button.left() + rect.left() - frame.left();
-				int buttonRight  = width() - button.right() + frame.right() - rect.right();
-				int buttonTop    = button.top() + rect.top() - frame.top();
-				int buttonBottom = height() - button.bottom() + frame.bottom() - rect.bottom();
+			QPoint cursor = QCursor::pos();
+			QRect frame = frameGeometry();
+			QRect rect  = geometry();
+			// Find the offsets from the outside of the frame to the edges of the OK button
+			QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));
+			int buttonLeft   = button.left() + rect.left() - frame.left();
+			int buttonRight  = width() - button.right() + frame.right() - rect.right();
+			int buttonTop    = button.top() + rect.top() - frame.top();
+			int buttonBottom = height() - button.bottom() + frame.bottom() - rect.bottom();
 
-				int centrex = (desk.width() + buttonLeft - buttonRight) / 2;
-				int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
-				int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
-				int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
+			int centrex = (desk.width() + buttonLeft - buttonRight) / 2;
+			int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
+			int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
+			int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
 
-				// Find the enclosing rectangle for the new button positions
-				// and check if the cursor is too near
-				QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
-				buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
-				int minDistance = proximityMultiple * mOkButton->height();
-				if ((abs(cursor.x() - buttons.left()) < minDistance
-				  || abs(cursor.x() - buttons.right()) < minDistance)
-				&&  (abs(cursor.y() - buttons.top()) < minDistance
-				  || abs(cursor.y() - buttons.bottom()) < minDistance))
-					mButtonDelay = proximityButtonDelay;    // too near - disable buttons initially
+			// Find the enclosing rectangle for the new button positions
+			// and check if the cursor is too near
+			QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
+			buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
+			int minDistance = proximityMultiple * mOkButton->height();
+			if ((abs(cursor.x() - buttons.left()) < minDistance
+			  || abs(cursor.x() - buttons.right()) < minDistance)
+			&&  (abs(cursor.y() - buttons.top()) < minDistance
+			  || abs(cursor.y() - buttons.bottom()) < minDistance))
+				mButtonDelay = proximityButtonDelay;    // too near - disable buttons initially
 
-				if (x != frame.left()  ||  y != frame.top())
-				{
-					mPositioning = true;
-					move(x, y);
-				}
-			}
-			if (!mPositioning)
-				displayComplete();    // play audio, etc.
-			if (mAction == KAEvent::MESSAGE)
+			if (x != frame.left()  ||  y != frame.top())
 			{
-				// Set the window size once the frame size is known
-				QTimer::singleShot(0, this, SLOT(setMaxSize()));
+				mPositioning = true;
+				move(x, y);
 			}
 		}
-		mShown = true;
+		if (!mPositioning)
+			displayComplete();    // play audio, etc.
+		if (mAction == KAEvent::MESSAGE)
+		{
+			// Set the window size once the frame size is known
+			QTimer::singleShot(0, this, SLOT(setMaxSize()));
+		}
 	}
+	mShown = true;
 }
 
 /******************************************************************************
@@ -1196,7 +1196,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		if (!mEventID.isNull())
 		{
 			// Delete from the display calendar
-			KAlarm::deleteDisplayEvent(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+			KAlarm::deleteDisplayEvent(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
 		}
 	}
 	MainWindowBase::closeEvent(ce);
@@ -1244,21 +1244,22 @@ void MessageWin::slotEdit()
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
-		editDlg.getEvent(event);
+		AlarmResource* resource;
+		editDlg.getEvent(event, resource);
 
 		// Update the displayed lists and the calendar file
 		KAlarm::UpdateStatus status;
-		if (AlarmCalendar::activeCalendar()->event(mEventID))
+		if (AlarmCalendar::resources()->event(mEventID))
 		{
 			// The old alarm hasn't expired yet, so replace it
 			status = KAlarm::modifyEvent(mEvent, event, 0, &editDlg);
-			Undo::saveEdit(mEvent, event);
+			Undo::saveEdit(mEvent, event, resource);
 		}
 		else
 		{
 			// The old event has expired, so simply create a new one
-			status = KAlarm::addEvent(event, 0, &editDlg);
-			Undo::saveAdd(event);
+			status = KAlarm::addEvent(event, 0, resource, &editDlg);
+			Undo::saveAdd(event, resource);
 		}
 
 		if (status == KAlarm::UPDATE_KORG_ERR)
@@ -1331,39 +1332,55 @@ void MessageWin::slotDefer()
 	{
 		DateTime dateTime  = mDeferDlg->getDateTime();
 		int      delayMins = mDeferDlg->deferMinutes();
-		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
+		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::resources()->event(mEventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
-			KAEvent event(*kcalEvent);
+			KAEvent event(kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			KAlarm::updateEvent(event, 0, true, !repeat, mDeferDlg);
 		}
 		else
 		{
+			AlarmResource* resource = 0;
 			KAEvent event;
-			kcalEvent = AlarmCalendar::displayCalendar()->event(KAEvent::uid(mEventID, KAEvent::DISPLAYING));
+			kcalEvent = AlarmCalendar::displayCalendar()->event(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
 			if (kcalEvent)
 			{
-				event.reinstateFromDisplaying(KAEvent(*kcalEvent));
+				event.reinstateFromDisplaying(KAEvent(kcalEvent));
+				resource = AlarmResources::instance()->resourceWithId(event.resourceID());
+				if (resource  &&  !resource->isOpen())
+					resource = 0;
+				event.clearResourceID();
 				event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			}
 			else
 			{
-				// The event doesn't exist any more !?!, so create a new one
-				event.set(dateTime.dateTime(), mMessage, mBgColour, mFgColour, mFont, mAction, mLateCancel, mFlags);
-				event.setAudioFile(mAudioFile, mVolume, mFadeVolume, mFadeSeconds);
+				// The event isn't in the displaying calendar!?!
+				// Try to retrieve it from the archive calendar.
+				kcalEvent = AlarmCalendar::resources()->event(KCalEvent::uid(mEventID, KCalEvent::ARCHIVED));
+				if (!kcalEvent)
+				{
+					// The event doesn't exist any more !?!, so recurrence data,
+					// flags, and more, have been lost.
+					KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18n("Cannot defer alarm:")).arg(i18n("Alarm not found")));
+					raise();
+					delete mDeferDlg;
+					mDeferDlg = 0;
+					return;
+				}
+				event.set(kcalEvent);
 				event.setArchive();
 				event.setEventID(mEventID);
 			}
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
-			KAlarm::addEvent(event, 0, true, false, mDeferDlg);
+			KAlarm::addEvent(event, 0, resource, true, false, mDeferDlg);
 			if (kcalEvent)
 			{
-				event.setUid(KAEvent::ARCHIVED);
+				event.setUid(KCalEvent::ARCHIVED);
 				KAlarm::deleteEvent(event, false);
 			}
 		}

@@ -70,8 +70,8 @@ AlarmListView::AlarmListView(QWidget* parent)
 	addColumn(i18n("Time"));           // date/time column
 	addColumn(i18n("Time To"));        // time-to-alarm column
 	addColumn(i18n("Repeat"));         // repeat count column
-	addColumn(QString());          // colour column
-	addColumn(QString());          // alarm type column
+	addColumn(QString());              // colour column
+	addColumn(QString());              // alarm type column
 	addLastColumn(i18n("Message, File or Command"));
 	setSorting(mTimeColumn);           // sort initially by date/time
 	mTimeColumnHeaderWidth   = columnWidth(mTimeColumn);
@@ -100,32 +100,28 @@ AlarmListView::~AlarmListView()
 */
 void AlarmListView::populate()
 {
+	kDebug(5950) << "AlarmListView::populate()\n";
 	KAEvent event;
 	KCal::Event::List events;
-	KCal::Event::List::ConstIterator it;
 	QDateTime now = QDateTime::currentDateTime();
 	if (mShowArchived)
 	{
-		AlarmCalendar* cal = AlarmCalendar::archiveCalendarOpen();
-		if (cal)
+		events = AlarmCalendar::resources()->events(KCalEvent::ARCHIVED);
+		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
-			events = cal->events();
-			for (it = events.begin();  it != events.end();  ++it)
+			KCal::Event* kcalEvent = events[i];
+			if (!kcalEvent->alarms().isEmpty())
 			{
-				KCal::Event* kcalEvent = *it;
-				if (kcalEvent->alarms().count() > 0)
-				{
-					event.set(*kcalEvent);
-					addEntry(event, now);
-				}
+				event.set(kcalEvent);
+				addEntry(event, now);
 			}
 		}
 	}
-	events = AlarmCalendar::activeCalendar()->events();
-	for (it = events.begin();  it != events.end();  ++it)
+	events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		KCal::Event* kcalEvent = *it;
-		event.set(*kcalEvent);
+		KCal::Event* kcalEvent = events[i];
+		event.set(kcalEvent);
 		if (mShowArchived  ||  !event.expired())
 			addEntry(event, now);
 	}
@@ -292,12 +288,11 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		QList<EventListViewItemBase*> items = selectedItems();
 		if (items.isEmpty())
 			return;
+		AlarmCalendar* resourceCal = AlarmCalendar::resources();
 		for (int i = 0, end = items.count();  i < end;  ++i)
 		{
-			const KAEvent& event = items[i]->event();
-			KCal::Event* kcalEvent = new KCal::Event;
-			event.updateKCalEvent(*kcalEvent, false, true);
-			kcalEvent->setUid(event.id());
+			// Get a copy of the event, keeping any custom properties
+			KCal::Event* kcalEvent = resourceCal->createKCalEvent(items[i]->event(), true);
 			cal.addEvent(kcalEvent);
 		}
 

@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 
 #include "kalarm.h"
 
+#include <time.h>
+#include <unistd.h>
+
 #include <QByteArray>
 
 #include <kglobal.h>
@@ -28,6 +31,8 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <ktimezones.h>
+#include <kdebug.h>
 
 #include <libkpimidentities/identity.h>
 #include <libkpimidentities/identitymanager.h>
@@ -54,11 +59,13 @@ const bool                       Preferences::default_disableAlarmsIfStopped  = 
 const bool                       Preferences::default_quitWarn                = true;
 const bool                       Preferences::default_autostartTrayIcon       = true;
 const bool                       Preferences::default_confirmAlarmDeletion    = true;
+const bool                       Preferences::default_askResource             = true;
 const bool                       Preferences::default_modalMessages           = true;
 const int                        Preferences::default_messageButtonDelay      = 0;     // (seconds)
 const bool                       Preferences::default_showArchivedAlarms      = false;
 const bool                       Preferences::default_showAlarmTime           = true;
 const bool                       Preferences::default_showTimeToAlarm         = false;
+const bool                       Preferences::default_showResources           = false;
 const int                        Preferences::default_tooltipAlarmCount       = 5;
 const bool                       Preferences::default_showTooltipAlarmTime    = true;
 const bool                       Preferences::default_showTooltipTimeToAlarm  = true;
@@ -97,6 +104,8 @@ Preferences::MailFrom Preferences::default_emailFrom()
 }
 
 // Active config file settings
+QString                    Preferences::mSystemTimeZone;
+QString                    Preferences::mUserTimeZone;
 ColourList                 Preferences::mMessageColours;
 QColor                     Preferences::mDefaultBgColour;
 QFont                      Preferences::mMessageFont;
@@ -106,11 +115,13 @@ bool                       Preferences::mRunInSystemTray;
 bool                       Preferences::mDisableAlarmsIfStopped;
 bool                       Preferences::mAutostartTrayIcon;
 KARecurrence::Feb29Type    Preferences::mDefaultFeb29Type;
+bool                       Preferences::mAskResource;
 bool                       Preferences::mModalMessages;
 int                        Preferences::mMessageButtonDelay;
 bool                       Preferences::mShowArchivedAlarms;
 bool                       Preferences::mShowAlarmTime;
 bool                       Preferences::mShowTimeToAlarm;
+bool                       Preferences::mShowResources;
 int                        Preferences::mTooltipAlarmCount;
 bool                       Preferences::mShowTooltipAlarmTime;
 bool                       Preferences::mShowTooltipTimeToAlarm;
@@ -154,57 +165,60 @@ static const QString defaultFeb29RecurType    = QLatin1String("Mar1");
 static const QString defaultEmailClient       = QLatin1String("kmail");
 
 // Config file entry names
-static const QString GENERAL_SECTION          = "General";
-static const QString VERSION_NUM              = "Version";
-static const QString MESSAGE_COLOURS          = "MessageColours";
-static const QString MESSAGE_BG_COLOUR        = "MessageBackgroundColour";
-static const QString MESSAGE_FONT             = "MessageFont";
-static const QString RUN_IN_SYSTEM_TRAY       = "RunInSystemTray";
-static const QString DISABLE_IF_STOPPED       = "DisableAlarmsIfStopped";
-static const QString AUTOSTART_TRAY           = "AutostartTray";
-static const QString FEB29_RECUR_TYPE         = "Feb29Recur";
-static const QString MODAL_MESSAGES           = "ModalMessages";
-static const QString MESSAGE_BUTTON_DELAY     = "MessageButtonDelay";
-static const QString SHOW_ARCHIVED_ALARMS     = "ShowExpiredAlarms";
-static const QString SHOW_ALARM_TIME          = "ShowAlarmTime";
-static const QString SHOW_TIME_TO_ALARM       = "ShowTimeToAlarm";
-static const QString TOOLTIP_ALARM_COUNT      = "TooltipAlarmCount";
-static const QString TOOLTIP_ALARM_TIME       = "ShowTooltipAlarmTime";
-static const QString TOOLTIP_TIME_TO_ALARM    = "ShowTooltipTimeToAlarm";
-static const QString TOOLTIP_TIME_TO_PREFIX   = "TooltipTimeToPrefix";
-static const QString DAEMON_TRAY_INTERVAL     = "DaemonTrayCheckInterval";
-static const QString EMAIL_CLIENT             = "EmailClient";
-static const QString EMAIL_COPY_TO_KMAIL      = "EmailCopyToKMail";
-static const QString EMAIL_FROM               = "EmailFrom";
-static const QString EMAIL_BCC_ADDRESS        = "EmailBccAddress";
-static const QString CMD_XTERM_COMMAND        = "CmdXTerm";
-static const QString START_OF_DAY             = "StartOfDay";
-static const QString START_OF_DAY_CHECK       = "Sod";
-static const QString DISABLED_COLOUR          = "DisabledColour";
-static const QString ARCHIVED_COLOUR          = "ExpiredColour";
-static const QString ARCHIVED_KEEP_DAYS       = "ExpiredKeepDays";
-static const QString DEFAULTS_SECTION         = "Defaults";
-static const QString DEF_LATE_CANCEL          = "DefLateCancel";
-static const QString DEF_AUTO_CLOSE           = "DefAutoClose";
-static const QString DEF_CONFIRM_ACK          = "DefConfirmAck";
-static const QString DEF_COPY_TO_KORG         = "DefCopyKOrg";
-static const QString DEF_SOUND                = "DefSound";
-static const QString DEF_SOUND_TYPE           = "DefSoundType";
-static const QString DEF_SOUND_FILE           = "DefSoundFile";
-static const QString DEF_SOUND_VOLUME         = "DefSoundVolume";
-static const QString DEF_SOUND_REPEAT         = "DefSoundRepeat";
-static const QString DEF_CMD_SCRIPT           = "DefCmdScript";
-static const QString DEF_CMD_LOG_TYPE         = "DefCmdLogType";
-static const QString DEF_LOG_FILE             = "DefLogFile";
-static const QString DEF_EMAIL_BCC            = "DefEmailBcc";
-static const QString DEF_RECUR_PERIOD         = "DefRecurPeriod";
-static const QString DEF_REMIND_UNITS         = "DefRemindUnits";
-static const QString DEF_PRE_ACTION           = "DefPreAction";
-static const QString DEF_POST_ACTION          = "DefPostAction";
+static const char* GENERAL_SECTION          = "General";
+static const char* VERSION_NUM              = "Version";
+static const char* TIMEZONE                 = "TimeZone";
+static const char* MESSAGE_COLOURS          = "MessageColours";
+static const char* MESSAGE_BG_COLOUR        = "MessageBackgroundColour";
+static const char* MESSAGE_FONT             = "MessageFont";
+static const char* RUN_IN_SYSTEM_TRAY       = "RunInSystemTray";
+static const char* DISABLE_IF_STOPPED       = "DisableAlarmsIfStopped";
+static const char* AUTOSTART_TRAY           = "AutostartTray";
+static const char* FEB29_RECUR_TYPE         = "Feb29Recur";
+static const char* ASK_RESOURCE             = "AskResource";
+static const char* MODAL_MESSAGES           = "ModalMessages";
+static const char* MESSAGE_BUTTON_DELAY     = "MessageButtonDelay";
+static const char* SHOW_RESOURCES           = "ShowResources";
+static const char* SHOW_ARCHIVED_ALARMS     = "ShowExpiredAlarms";
+static const char* SHOW_ALARM_TIME          = "ShowAlarmTime";
+static const char* SHOW_TIME_TO_ALARM       = "ShowTimeToAlarm";
+static const char* TOOLTIP_ALARM_COUNT      = "TooltipAlarmCount";
+static const char* TOOLTIP_ALARM_TIME       = "ShowTooltipAlarmTime";
+static const char* TOOLTIP_TIME_TO_ALARM    = "ShowTooltipTimeToAlarm";
+static const char* TOOLTIP_TIME_TO_PREFIX   = "TooltipTimeToPrefix";
+static const char* DAEMON_TRAY_INTERVAL     = "DaemonTrayCheckInterval";
+static const char* EMAIL_CLIENT             = "EmailClient";
+static const char* EMAIL_COPY_TO_KMAIL      = "EmailCopyToKMail";
+static const char* EMAIL_FROM               = "EmailFrom";
+static const char* EMAIL_BCC_ADDRESS        = "EmailBccAddress";
+static const char* CMD_XTERM_COMMAND        = "CmdXTerm";
+static const char* START_OF_DAY             = "StartOfDay";
+static const char* START_OF_DAY_CHECK       = "Sod";
+static const char* DISABLED_COLOUR          = "DisabledColour";
+static const char* ARCHIVED_COLOUR          = "ExpiredColour";
+static const char* ARCHIVED_KEEP_DAYS       = "ExpiredKeepDays";
+static const char* DEFAULTS_SECTION         = "Defaults";
+static const char* DEF_LATE_CANCEL          = "DefLateCancel";
+static const char* DEF_AUTO_CLOSE           = "DefAutoClose";
+static const char* DEF_CONFIRM_ACK          = "DefConfirmAck";
+static const char* DEF_COPY_TO_KORG         = "DefCopyKOrg";
+static const char* DEF_SOUND                = "DefSound";
+static const char* DEF_SOUND_TYPE           = "DefSoundType";
+static const char* DEF_SOUND_FILE           = "DefSoundFile";
+static const char* DEF_SOUND_VOLUME         = "DefSoundVolume";
+static const char* DEF_SOUND_REPEAT         = "DefSoundRepeat";
+static const char* DEF_CMD_SCRIPT           = "DefCmdScript";
+static const char* DEF_CMD_LOG_TYPE         = "DefCmdLogType";
+static const char* DEF_LOG_FILE             = "DefLogFile";
+static const char* DEF_EMAIL_BCC            = "DefEmailBcc";
+static const char* DEF_RECUR_PERIOD         = "DefRecurPeriod";
+static const char* DEF_REMIND_UNITS         = "DefRemindUnits";
+static const char* DEF_PRE_ACTION           = "DefPreAction";
+static const char* DEF_POST_ACTION          = "DefPostAction";
 // Obsolete - compatibility with pre-1.2.1
-static const QString EMAIL_ADDRESS            = "EmailAddress";
-static const QString EMAIL_USE_CONTROL_CENTRE = "EmailUseControlCenter";
-static const QString EMAIL_BCC_USE_CONTROL_CENTRE = "EmailBccUseControlCenter";
+static const char* EMAIL_ADDRESS            = "EmailAddress";
+static const char* EMAIL_USE_CONTROL_CENTRE = "EmailUseControlCenter";
+static const char* EMAIL_BCC_USE_CONTROL_CENTRE = "EmailBccUseControlCenter";
 
 // Values for EmailFrom entry
 static const QString FROM_CONTROL_CENTRE      = QLatin1String("@ControlCenter");
@@ -270,6 +284,7 @@ void Preferences::read()
 
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
+	mUserTimeZone             = config->readEntry(TIMEZONE);
 	QStringList cols = config->readEntry(MESSAGE_COLOURS, QStringList() );
 	if (!cols.count())
 		mMessageColours = default_messageColours;
@@ -288,8 +303,10 @@ void Preferences::read()
 	mRunInSystemTray          = config->readEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
 	mDisableAlarmsIfStopped   = config->readEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
 	mAutostartTrayIcon        = config->readEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
+	mAskResource              = config->readEntry(ASK_RESOURCE, default_askResource);
 	mModalMessages            = config->readEntry(MODAL_MESSAGES, default_modalMessages);
 	mMessageButtonDelay       = config->readEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
+	mShowResources            = config->readEntry(SHOW_RESOURCES, default_showResources);
 	mShowArchivedAlarms       = config->readEntry(SHOW_ARCHIVED_ALARMS, default_showArchivedAlarms);
 	mShowTimeToAlarm          = config->readEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readEntry(SHOW_ALARM_TIME, default_showAlarmTime);
@@ -379,6 +396,7 @@ void Preferences::save(bool syncToDisc)
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
+	config->writeEntry(TIMEZONE, mUserTimeZone);
 	QStringList colours;
 	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
 		colours.append(QColor(mMessageColours[i]).name());
@@ -388,8 +406,10 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
 	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
+	config->writeEntry(ASK_RESOURCE, mAskResource);
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
+	config->writeEntry(SHOW_RESOURCES, mShowResources);
 	config->writeEntry(SHOW_ARCHIVED_ALARMS, mShowArchivedAlarms);
 	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
 	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
@@ -455,6 +475,32 @@ void Preferences::updateStartOfDayCheck()
 	config->writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
 	config->sync();
 	mStartOfDayChanged = false;
+}
+
+/******************************************************************************
+* Get the user's time zone, or if none has been chosen, the system time zone.
+* The value returned may be in various formats (for example,
+* America/New_York or EST) so your program should be prepared to these
+* formats.
+* The Calendar class in libkcal says accepts all time zone codes that are
+* listed in /usr/share/zoneinfo/zone.tab.
+* The system time zone is cached, and the cached value will be returned unless
+* 'reload' is true, in which case the value is re-read from the system.
+*/
+QString Preferences::timeZone(bool reload)
+{
+	if (reload)
+                mSystemTimeZone.clear();
+        if (!mUserTimeZone.isEmpty())
+                return mUserTimeZone;
+        return default_timeZone();
+}
+
+QString Preferences::default_timeZone()
+{
+	if (mSystemTimeZone.isEmpty())
+		mSystemTimeZone = KSystemTimeZones::local()->name();
+	return mSystemTimeZone;
 }
 
 QString Preferences::emailFrom(Preferences::MailFrom from, bool useAddress, bool bcc)

@@ -93,17 +93,17 @@ QString     KAlarmApp::mFatalMessage;
 /******************************************************************************
  * Construct the application.
  */
-	KAlarmApp::KAlarmApp()
-: KUniqueApplication(),
-	mInitialised(false),
-	mDcopHandler(new DcopHandler()),
-	mTrayWindow(0),
-	mPendingQuit(false),
-	mProcessingQueue(false),
-	mCheckingSystemTray(false),
-	mSessionClosingDown(false),
-	mRefreshArchivedAlarms(false),
-	mSpeechEnabled(false)
+KAlarmApp::KAlarmApp()
+	: KUniqueApplication(),
+	  mInitialised(false),
+	  mDcopHandler(new DcopHandler()),
+	  mTrayWindow(0),
+	  mPendingQuit(false),
+	  mProcessingQueue(false),
+	  mCheckingSystemTray(false),
+	  mSessionClosingDown(false),
+	  mRefreshArchivedAlarms(false),
+	  mSpeechEnabled(false)
 {
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
@@ -114,7 +114,7 @@ QString     KAlarmApp::mFatalMessage;
 
 	if (AlarmCalendar::initialiseCalendars())
 	{
-		connect(AlarmCalendar::archiveCalendar(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
+		connect(AlarmCalendar::resources(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
 
 		KConfig* config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
@@ -171,6 +171,7 @@ KAlarmApp* KAlarmApp::getInstance()
 		{
 			// This is here instead of in the constructor to avoid recursion
 			Daemon::initialise();    // calendars must be initialised before calling this
+			Daemon::connectRegistered(AlarmCalendar::resources(), SLOT(slotDaemonRegistered(bool)));
 		}
 	}
 	return theInstance;
@@ -315,7 +316,7 @@ int KAlarmApp::newInstance()
 				}
 			}
 			else
-			if (args->isSet("handleEvent")  ||  args->isSet("triggerEvent")  ||  args->isSet("cancelEvent")  ||  args->isSet("calendarURL"))
+			if (args->isSet("handleEvent")  ||  args->isSet("triggerEvent")  ||  args->isSet("cancelEvent"))
 			{
 				// Display or delete the event with the specified event ID
 				kDebug(5950)<<"KAlarmApp::newInstance(): handle event\n";
@@ -325,20 +326,12 @@ int KAlarmApp::newInstance()
 				if (args->isSet("handleEvent"))   { function = EVENT_HANDLE;   option = "handleEvent";   ++count; }
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;   option = "cancelEvent";   ++count; }
-				if (!count)
-					USAGE(i18n("%1 requires %2, %3 or %4", QLatin1String("--calendarURL"), QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")))
 				if (count > 1)
 					USAGE(i18n("%1, %2, %3 mutually exclusive", QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
 				if (!initCheck(true))   // open the calendar, don't register with daemon yet
 				{
 					exitCode = 1;
 					break;
-				}
-				if (args->isSet("calendarURL"))
-				{
-					QString calendarUrl = args->getOption("calendarURL");
-					if (KUrl(calendarUrl).url() != AlarmCalendar::activeCalendar()->urlString())
-						USAGE(i18n("%1: wrong calendar file", QLatin1String("--calendarURL")))
 				}
 				QString eventID = args->getOption(option);
 				args->clear();      // free up memory
@@ -930,8 +923,8 @@ void KAlarmApp::processQueue()
 			mDcopQueue.dequeue();
 		}
 
-		// Purge the archived alarms calendar if it's time to do so
-		AlarmCalendar::archiveCalendar()->purgeIfQueued();
+		// Purge the archived alarms resources if it's time to do so
+		AlarmCalendar::resources()->purgeIfQueued();
 
 		// Now that the queue has been processed, quit if a quit was queued
 		if (mPendingQuit)
@@ -956,8 +949,8 @@ void KAlarmApp::redisplayAlarms()
 		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
 			KCal::Event* kcalEvent = *it;
-			KAEvent event(*kcalEvent);
-			event.setUid(KAEvent::ACTIVE);
+			KAEvent event(kcalEvent);
+			event.setUid(KCalEvent::ACTIVE);
 			if (!MessageWin::findEvent(event.id()))
 			{
 				// This event should be displayed, but currently isn't being
@@ -1133,7 +1126,7 @@ void KAlarmApp::slotPreferencesChanged()
 		// How long archived alarms are being kept has changed.
 		// N.B. This also adjusts for any change in start-of-day time.
 		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
-		AlarmCalendar::archiveCalendar()->setPurgeDays(mPrefsArchivedKeepDays);
+		AlarmCalendar::resources()->setPurgeDays(mPrefsArchivedKeepDays);
 	}
 
 	if (mRefreshArchivedAlarms)
@@ -1150,15 +1143,15 @@ void KAlarmApp::changeStartOfDay()
 {
 	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
-	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-	if (KAEvent::adjustStartOfDay(cal->events()))
+	AlarmCalendar* cal = AlarmCalendar::resources();
+	if (KAEvent::adjustStartOfDay(cal->events(KCalEvent::ACTIVE)))
 		cal->save();
 	Preferences::updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
 	mStartOfDay = sod;
 }
 
 /******************************************************************************
-*  Called when the archived alarms calendar has been purged.
+*  Called when the archived alarms resources have been purged.
 *  Updates the alarm list in all main windows.
 */
 void KAlarmApp::slotArchivedPurged()
@@ -1238,17 +1231,10 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
-bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, EventFunc function)
+bool KAlarmApp::dcopHandleEvent(const QString& eventID, EventFunc function)
 {
-	kDebug(5950) << "KAlarmApp::handleEvent(DCOP): " << eventID << endl;
-	AlarmCalendar* cal = AlarmCalendar::activeCalendar();     // this can be called before calendars have been initialised
-	if (cal  &&  KUrl(urlString).url() != cal->urlString())
-	{
-		kError(5950) << "KAlarmApp::handleEvent(DCOP): wrong calendar file " << urlString << endl;
-		Daemon::eventHandled(eventID, false);
-		return false;
-	}
-	mDcopQueue.enqueue(DcopQEntry(function, eventID));
+	kDebug(5950) << "KAlarmApp::dcopHandleEvent(" << eventID << ")\n";
+	mDcopQueue.append(DcopQEntry(function, eventID));
 	if (mInitialised)
 		QTimer::singleShot(0, this, SLOT(processQueue()));
 	return true;
@@ -1265,14 +1251,14 @@ bool KAlarmApp::handleEvent(const QString& urlString, const QString& eventID, Ev
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
 	kDebug(5950) << "KAlarmApp::handleEvent(): " << eventID << ", " << (function==EVENT_TRIGGER?"TRIGGER":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?") << endl;
-	KCal::Event* kcalEvent = AlarmCalendar::activeCalendar()->event(eventID);
+	KCal::Event* kcalEvent = AlarmCalendar::resources()->event(eventID);
 	if (!kcalEvent)
 	{
-		kError(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
-		Daemon::eventHandled(eventID, false);
+		kWarning(5950) << "KAlarmApp::handleEvent(): event ID not found: " << eventID << endl;
+		Daemon::eventHandled(eventID);
 		return false;
 	}
-	KAEvent event(*kcalEvent);
+	KAEvent event(kcalEvent);
 	switch (function)
 	{
 		case EVENT_CANCEL:
@@ -1463,7 +1449,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				else if (function != EVENT_TRIGGER)
 				{
 					kDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
-					Daemon::eventHandled(eventID, false);
+					Daemon::eventHandled(eventID);
 				}
 			}
 			break;
@@ -1480,7 +1466,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const DateTime& alarmTime)
 {
 	kDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(alarmType) << ")\n";
-	KCal::Event* kcalEvent = AlarmCalendar::activeCalendar()->event(event.id());
+	KCal::Event* kcalEvent = AlarmCalendar::resources()->event(event.id());
 	if (!kcalEvent)
 		kError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
 	else
@@ -1491,13 +1477,14 @@ void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const Date
 		else
 		{
 			// Copy the alarm to the displaying calendar in case of a crash, etc.
+			AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
 			KAEvent dispEvent;
-			dispEvent.setDisplaying(event, alarmType, alarmTime.dateTime());
+			dispEvent.setDisplaying(event, alarmType, (resource ? resource->identifier() : QString()), alarmTime.dateTime());
 			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
 			if (cal)
 			{
 				cal->deleteEvent(dispEvent.id());   // in case it already exists
-				cal->addEvent(dispEvent);
+				cal->addEvent(dispEvent, KCalEvent::DISPLAYING);
 				cal->save();
 			}
 
@@ -1505,7 +1492,7 @@ void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const Date
 			return;
 		}
 	}
-	Daemon::eventHandled(event.id(), false);
+	Daemon::eventHandled(event.id());
 }
 
 /******************************************************************************
@@ -1590,7 +1577,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	else if (updateDisplay)
 	{
-		Daemon::eventHandled(event.id(), false);
+		Daemon::eventHandled(event.id());
 		AlarmListView::modifyEvent(event, 0);
 	}
 }
@@ -1605,7 +1592,7 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	event.cancelCancelledDeferral();
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
-		// The event is being deleted. Save it in the archived calendar file first.
+		// The event is being deleted. Save it in the archived resources first.
 		QString id = event.id();    // save event ID since KAlarm::addArchivedEvent() changes it
 		KAlarm::addArchivedEvent(event);
 		event.setEventID(id);       // restore event ID
@@ -1988,16 +1975,10 @@ void KAlarmApp::setUpDcop()
 */
 bool KAlarmApp::initCheck(bool calendarOnly)
 {
+	static bool firstTime = true;
 	bool startdaemon;
-	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
-	if (!cal->isOpen())
+	if (firstTime)
 	{
-		kDebug(5950) << "KAlarmApp::initCheck(): opening active calendar\n";
-
-		// First time through. Open the calendar file.
-		if (!cal->open())
-			return false;
-
 		if (!mStartOfDay.isValid())
 			changeStartOfDay();     // start of day time has changed, so adjust date-only alarms
 
@@ -2008,15 +1989,11 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 */
 		AlarmCalendar::displayCalendar()->open();
 
-		/* Need to open the archived alarm calendar now, since otherwise if the daemon
-		 * immediately notifies multiple alarms, the second alarm is likely to be
-		 * processed while the calendar is executing open() (but before open() completes),
-		 * which causes a hang!!
-		 */
-		AlarmCalendar::archiveCalendar()->open();
-		AlarmCalendar::archiveCalendar()->setPurgeDays(theInstance->mPrefsArchivedKeepDays);
+		AlarmCalendar::resources()->setPurgeDays(theInstance->mPrefsArchivedKeepDays);
+		AlarmCalendar::resources()->open();
 
 		startdaemon = true;
+		firstTime = false;
 	}
 	else
 		startdaemon = !Daemon::isRegistered();

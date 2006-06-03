@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -86,9 +86,9 @@ class KAlarmApp : public KUniqueApplication
 		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
 		                                 const QString& mailSubject = QString(),
 		                                 const QStringList& mailAttachments = QStringList());
-		bool               handleEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_HANDLE); }
-		bool               triggerEvent(const QString& calendarFile, const QString& eventID)   { return handleEvent(calendarFile, eventID, EVENT_TRIGGER); }
-		bool               deleteEvent(const QString& calendarFile, const QString& eventID)    { return handleEvent(calendarFile, eventID, EVENT_CANCEL); }
+		bool               dcopHandleEvent(const QString& eventID)    { return dcopHandleEvent(eventID, EVENT_HANDLE); }
+		bool               dcopTriggerEvent(const QString& eventID)   { return dcopHandleEvent(eventID, EVENT_TRIGGER); }
+		bool               dcopDeleteEvent(const QString& eventID)    { return dcopHandleEvent(eventID, EVENT_CANCEL); }
 	public slots:
 		void               processQueue();
 	signals:
@@ -146,7 +146,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               checkSystemTray();
 		void               changeStartOfDay();
 		void               setUpDcop();
-		bool               handleEvent(const QString& calendarFile, const QString& eventID, EventFunc);
+		bool               dcopHandleEvent(const QString& eventID, EventFunc);
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
 		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);

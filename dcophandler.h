@@ -32,8 +32,8 @@ class DcopHandler : public QWidget, virtual public KAlarmIface
 	Q_OBJECT
     public:
 	DcopHandler();
-	virtual bool cancelEvent(const QString& url,const QString& eventId);
-	virtual bool triggerEvent(const QString& url,const QString& eventId);
+	virtual bool cancelEvent(const QString& eventId);
+	virtual bool triggerEvent(const QString& eventId);
 
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                             const QString& bgColor, const QString& fgColor, const QString& font,

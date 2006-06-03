@@ -39,6 +39,7 @@
 #include "kalarmd/alarmguiiface.h"
 
 #include "alarmcalendar.h"
+#include "alarmresources.h"
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "daemon.moc"
@@ -46,8 +47,6 @@
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DCOP_OBJECT  = "notify";    // DCOP name of KAlarm's interface for notification by alarm daemon
-
-static QString expandURL(const QString& urlString);
 
 
 /*=============================================================================
@@ -61,9 +60,10 @@ class NotificationHandler : public QObject, virtual public AlarmGuiIface
 		NotificationHandler();
 	private:
 		// DCOP interface
-		void  alarmDaemonUpdate(int calendarStatus, const QString& calendarURL);
-		void  handleEvent(const QString& calendarURL, const QString& eventID);
+		void  alarmDaemonUpdate(int calendarStatus);
+		void  handleEvent(const QString& eventID);
 		void  registered(bool reregister, int result);
+		void  cacheDownloaded(const QString& resourceID);
 };
 
 
@@ -78,6 +78,7 @@ int                  Daemon::mStatusTimerCount = 0;
 int                  Daemon::mStatusTimerInterval;
 int                  Daemon::mStartTimeout = 0;
 Daemon::Status       Daemon::mStatus = Daemon::STOPPED;
+bool                 Daemon::mInitialised = false;
 bool                 Daemon::mRunning = false;
 bool                 Daemon::mCalendarDisabled = false;
 bool                 Daemon::mEnableCalPending = false;
@@ -98,7 +99,8 @@ void Daemon::initialise()
 {
 	if (!mInstance)
 		mInstance = new Daemon();
-	connect(AlarmCalendar::activeCalendar(), SIGNAL(calendarSaved(AlarmCalendar*)), mInstance, SLOT(slotCalendarSaved(AlarmCalendar*)));
+	connect(AlarmResources::instance(), SIGNAL(resourceSaved(AlarmResource*)), mInstance, SLOT(slotCalendarSaved(AlarmResource*)));
+	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), mInstance, SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 }
 
 /******************************************************************************
@@ -188,7 +190,7 @@ bool Daemon::registerWith(bool reregister)
 	if (reregister)
 		s.registerChange(appname, !disabledIfStopped);
 	else
-		s.registerApp(appname, kapp->aboutData()->programName(), QByteArray(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
+		s.registerApp(appname, QByteArray(NOTIFY_DCOP_OBJECT), !disabledIfStopped);
 	if (!s.ok())
 	{
 		registrationResult(reregister, KAlarmd::FAILURE);
@@ -208,11 +210,16 @@ void Daemon::registrationResult(bool reregister, int result)
 	kDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
+	bool firstTime = !mInitialised;
+	mInitialised = true;
 	switch (result)
 	{
 		case KAlarmd::SUCCESS:
 			break;
 		case KAlarmd::NOT_FOUND:
+			// We've successfully registered with the daemon, but the daemon can't
+			// find the KAlarm executable so won't be able to restart KAlarm if
+			// KAlarm exits.
 			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
@@ -225,7 +232,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			if (!reregister)
 			{
 				if (mStatus == REGISTERED)
-					mStatus = READY;
+					setStatus(READY);
 				if (!mRegisterFailMsg)
 				{
 					mRegisterFailMsg = true;
@@ -233,13 +240,20 @@ void Daemon::registrationResult(bool reregister, int result)
 					                            QLatin1String(DAEMON_APP_NAME)));
 				}
 			}
+			if (firstTime)
+			{
+				// This is the first time we've tried to register with the
+				// daemon, so notify the result. On success, setStatus() does the
+				// notification, but we need to do it manually here on failure.
+				emit mInstance->registered(false);
+			}
 			return;
 	}
 
 	if (!reregister)
 	{
 		// The alarm daemon has loaded the calendar
-		mStatus = REGISTERED;
+		setStatus(REGISTERED);
 		mRegisterFailMsg = false;
 		kDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
 	}
@@ -281,9 +295,10 @@ void Daemon::checkIfStarted()
 */
 void Daemon::updateRegisteredStatus(bool timeout)
 {
+	Status oldStatus = mStatus;
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 	{
-		mStatus = STOPPED;
+		setStatus(STOPPED);
 		mRegisterFailMsg = false;
 	}
 	else
@@ -293,13 +308,13 @@ void Daemon::updateRegisteredStatus(bool timeout)
 			case STOPPED:
 				// The daemon has newly been detected as registered with DCOP.
 				// Wait for a short time to ensure that it is ready for DCOP calls.
-				mStatus = RUNNING;
+				setStatus(RUNNING);
 				QTimer::singleShot(startCheckInterval, mInstance, SLOT(slotStarted()));
 				break;
 			case RUNNING:
 				if (timeout)
 				{
-					mStatus = READY;
+					setStatus(READY);
 					start();
 				}
 				break;
@@ -308,7 +323,32 @@ void Daemon::updateRegisteredStatus(bool timeout)
 				break;
 		}
 	}
-	kDebug(5950) << "Daemon::updateRegisteredStatus() -> " << mStatus << endl;
+	if (mStatus != oldStatus)
+		kDebug(5950) << "Daemon::updateRegisteredStatus() -> " << (mStatus==STOPPED?"STOPPED":mStatus==RUNNING?"RUNNING":mStatus==READY?"READY":mStatus==REGISTERED?"REGISTERED":"??") << endl;
+}
+
+/******************************************************************************
+* Set a new registration status. If appropriate, emit a signal.
+*/
+void Daemon::setStatus(Status newStatus)
+{
+	bool oldreg = (mStatus == REGISTERED);
+	mStatus = newStatus;
+	bool newreg = (newStatus != REGISTERED);
+	if (newreg  &&  !oldreg
+	||  !newreg  &&  oldreg)
+	{
+		// The status has toggled between REGISTERED and another state
+		emit mInstance->registered(newreg);
+	}
+}
+
+/******************************************************************************
+* Connect the registered() signal to a slot.
+*/
+void Daemon::connectRegistered(QObject* receiver, const char* slot)
+{
+	connect(mInstance, SIGNAL(registered(bool)), receiver, slot);
 }
 
 /******************************************************************************
@@ -341,22 +381,34 @@ bool Daemon::reset()
 	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
 		return false;
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.resetCalendar(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString());
+	s.resetResource(QString());
 	if (!s.ok())
-		kError(5950) << "Daemon::reset(): resetCalendar dcop send failed" << endl;
+		kError(5950) << "Daemon::reset(): resetResource dcop send failed" << endl;
 	return true;
 }
 
 /******************************************************************************
-* Tell the alarm daemon to reread the calendar file.
+* Tell the alarm daemon to reread all calendar resources.
 */
 void Daemon::reload()
 {
 	kDebug(5950) << "Daemon::reload()\n";
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.reloadCalendar(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString());
+	s.reloadResource(QString());
 	if (!s.ok())
-		kError(5950) << "Daemon::reload(): reloadCalendar dcop send failed" << endl;
+		kError(5950) << "Daemon::reload(): reloadResource dcop send failed" << endl;
+}
+
+/******************************************************************************
+* Tell the alarm daemon to reread one calendar resource.
+*/
+void Daemon::reloadResource(const QString& resourceID)
+{
+	kDebug(5950) << "Daemon::reloadResource(" << resourceID << ")\n";
+	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	s.reloadResource(resourceID);
+	if (!s.ok())
+		kError(5950) << "Daemon::reloadResource(): reloadResource(" << resourceID << ") dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -365,7 +417,7 @@ void Daemon::reload()
 void Daemon::enableCalendar(bool enable)
 {
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.enableCalendar(AlarmCalendar::activeCalendar()->urlString(), enable);
+	s.enable(enable);
 	mEnableCalPending = false;
 }
 
@@ -531,12 +583,12 @@ AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions)
 }
 
 /******************************************************************************
-* Called when a calendar has been saved.
-* If it's the active alarm calendar, notify the alarm daemon.
+* Called when a resource has been saved.
+* If it's the active alarm resource, notify the alarm daemon.
 */
-void Daemon::slotCalendarSaved(AlarmCalendar* cal)
+void Daemon::slotResourceSaved(AlarmResource* resource)
 {
-	if (cal == AlarmCalendar::activeCalendar())
+	if (resource->alarmType() == AlarmResource::ACTIVE)
 	{
 		int n = mSavingEvents.count();
 		if (n)
@@ -549,7 +601,39 @@ void Daemon::slotCalendarSaved(AlarmCalendar* cal)
 			mSavingEvents.clear();
 		}
 		else
-			reload();
+			reloadResource(resource->identifier());
+	}
+}
+
+/******************************************************************************
+* Called when a resource's status has changed. Notify the alarm daemon.
+*/
+void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
+{
+	switch (change)
+	{
+		case AlarmResources::Enabled:
+		{
+			AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+			s.resourceActive(resource->identifier(), resource->isActive());
+			if (!s.ok())
+				kError(5950) << "Daemon::slotResourceStatusChanged(): resourceActive dcop send failed" << endl;
+			break;
+		}
+		case AlarmResources::Location:
+		{
+			QStringList locs = resource->location();
+			if (locs.isEmpty())
+				break;
+			locs += QString::null;    // to avoid having to check index
+			AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+			s.resourceLocation(resource->identifier(), locs[0], locs[1]);
+			if (!s.ok())
+				kError(5950) << "Daemon::slotResourceStatusChanged(): resourceLocation dcop send failed" << endl;
+			break;
+		}
+		default:
+			break;
 	}
 }
 
@@ -577,18 +661,16 @@ void Daemon::savingEvent(const QString& eventId)
 
 /******************************************************************************
 * If the event ID has been triggered by the alarm daemon, tell the daemon that
-* it has been processed, and whether to reload its calendar.
+* it has been processed.
 */
-void Daemon::eventHandled(const QString& eventId, bool reloadCal)
+void Daemon::eventHandled(const QString& eventId)
 {
 	int i = mQueuedEvents.indexOf(eventId);
 	if (i >= 0)
 	{
 		mQueuedEvents.removeAt(i);
-		notifyEventHandled(eventId, reloadCal);    // it's a daemon event, so tell daemon that it's been handled
+		notifyEventHandled(eventId, false);    // it's a daemon event, so tell daemon that it's been handled
 	}
-	else if (reloadCal)
-		reload();    // not a daemon event, so simply tell the daemon to reload the calendar
 }
 
 /******************************************************************************
@@ -599,7 +681,7 @@ void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
 {
 	kDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.eventHandled(kapp->aboutData()->appName(), AlarmCalendar::activeCalendar()->urlString(), eventId, reloadCal);
+	s.eventHandled(eventId, reloadCal);
 	if (!s.ok())
 		kError(5950) << "Daemon::notifyEventHandled(): eventHandled dcop send failed" << endl;
 }
@@ -630,12 +712,10 @@ NotificationHandler::NotificationHandler()
  * The daemon notifies calendar statuses when we first register as a GUI, and whenever
  * a calendar status changes. So we don't need to read its config files.
  */
-void NotificationHandler::alarmDaemonUpdate(int calendarStatus, const QString& calendarURL)
+void NotificationHandler::alarmDaemonUpdate(int calendarStatus)
 {
 	kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(" << calendarStatus << ")\n";
 	KAlarmd::CalendarStatus status = KAlarmd::CalendarStatus(calendarStatus);
-	if (expandURL(calendarURL) != AlarmCalendar::activeCalendar()->urlString())
-		return;     // it's not a notification about KAlarm's calendar
 	bool enabled = false;
 	switch (status)
 	{
@@ -659,9 +739,9 @@ void NotificationHandler::alarmDaemonUpdate(int calendarStatus, const QString& c
 }
 
 /******************************************************************************
- * DCOP call from the alarm daemon to notify that an alarm is due.
+ * DCOP call to request that an alarm should be triggered if it is due.
  */
-void NotificationHandler::handleEvent(const QString& url, const QString& eventId)
+void NotificationHandler::handleEvent(const QString& eventId)
 {
 	QString id = eventId;
 	if (id.startsWith(QLatin1String("ad:")))
@@ -670,7 +750,7 @@ void NotificationHandler::handleEvent(const QString& url, const QString& eventId
 		id = id.mid(3);
 		Daemon::queueEvent(id);
 	}
-	theApp()->handleEvent(url, id);
+	theApp()->dcopHandleEvent(id);
 }
 
 /******************************************************************************
@@ -680,6 +760,15 @@ void NotificationHandler::handleEvent(const QString& url, const QString& eventId
 void NotificationHandler::registered(bool reregister, int result)
 {
 	Daemon::registrationResult(reregister, result);
+}
+
+/******************************************************************************
+ * DCOP call from the alarm daemon to notify that a remote resource's cache
+ * has been downloaded.
+ */
+void NotificationHandler::cacheDownloaded(const QString& resourceID)
+{
+	AlarmCalendar::resources()->reloadFromCache(resourceID);
 }
 
 
@@ -722,17 +811,4 @@ void AlarmEnableAction::setChecked(bool check)
 			Daemon::allowRegisterFailMsg();
 		emit userClicked(check);
 	}
-}
-
-
-/******************************************************************************
- * Expand a DCOP call parameter URL to a full URL.
- * (We must store full URLs in the calendar data since otherwise later calls to
- *  reload or remove calendars won't necessarily find a match.)
- */
-QString expandURL(const QString& urlString)
-{
-	if (urlString.isEmpty())
-		return QString();
-	return KUrl(urlString).url();
 }

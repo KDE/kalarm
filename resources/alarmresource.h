@@ -38,7 +38,7 @@ using KCal::CalendarLocal;
 
 
 /** Base class for a KAlarm alarm calendar resource. */
-class AlarmResource : public KCal::ResourceCached
+class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 {
 		Q_OBJECT
 	public:
@@ -79,6 +79,8 @@ class AlarmResource : public KCal::ResourceCached
 		 *  for display purposes. */
 		virtual QString displayLocation(bool prefix = false) const = 0;
 
+		/** Change the resource's location. The resource will be reloaded if active. */
+		virtual bool setLocation(const QString& locn, const QString& locn2 = QString()) = 0;
 		/** Return whether the resource is the standard resource for its alarm type. */
 		bool     standardResource() const        { return mStandard; }
 

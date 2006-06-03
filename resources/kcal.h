@@ -26,20 +26,21 @@ namespace KCal {
   class Alarm;
 }
 
-namespace KCalendar
+class KDE_EXPORT KCalendar
 {
-	extern QByteArray APPNAME;
-	/** Compatibility of resource calendar format. */
-	enum Status {
-		Current,       // in current KAlarm format
-		Converted,     // in current KAlarm format, but not yet saved
-		Convertible,   // in an older KAlarm format
-		Incompatible,  // not written by KAlarm, or in a newer KAlarm version
-		ByEvent        // individual events have their own compatibility status
-	};
-}
+	public:
+		static QByteArray APPNAME;
+		/** Compatibility of resource calendar format. */
+		enum Status {
+			Current,       // in current KAlarm format
+			Converted,     // in current KAlarm format, but not yet saved
+			Convertible,   // in an older KAlarm format
+			Incompatible,  // not written by KAlarm, or in a newer KAlarm version
+			ByEvent        // individual events have their own compatibility status
+		};
+};
 
-class KCalEvent
+class KDE_EXPORT KCalEvent
 {
 	public:
 		/** The category of an event, indicated by the middle part of its UID. */

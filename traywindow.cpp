@@ -41,6 +41,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#include "alarmresources.h"
 #include "alarmtext.h"
 #include "daemon.h"
 #include "functions.h"
@@ -82,12 +83,12 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	KAction* a = Daemon::createAlarmEnableAction(actcol);
 	contextMenu()->addAction(a);
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
-	a = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actcol, QLatin1String("tNew"));
-	contextMenu()->addAction(a);
-	connect(a, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
-	a = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
-	contextMenu()->addAction(a);
-	connect(a, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
+	mActionNew = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actcol, QLatin1String("tNew"));
+	contextMenu()->addAction(mActionNew);
+	connect(mActionNew, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
+	contextMenu()->addAction(mActionNewFromTemplate);
+	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 	contextMenu()->addAction(KStdAction::preferences(this, SLOT(slotPreferences()), actcol));
 
 	// Replace the default handler for the Quit context menu item
@@ -98,6 +99,8 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();
 	setEnabledStatus(Daemon::monitoringAlarms());
+
+	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
 }
 
 TrayWindow::~TrayWindow()
@@ -114,6 +117,18 @@ TrayWindow::~TrayWindow()
 void TrayWindow::contextMenuAboutToShow(KMenu*)
 {
 	Daemon::checkStatus();
+}
+
+/******************************************************************************
+* Called when the status of a resource has changed.
+* Enable or disable actions appropriately.
+*/
+void TrayWindow::slotResourceStatusChanged()
+{
+	// Find whether there are any writable active alarm resources
+	bool active = AlarmResources::instance()->activeCount(AlarmResource::ACTIVE, true);
+	mActionNew->setEnabled(active);
+	mActionNewFromTemplate->setEnabled(active);
 }
 
 /******************************************************************************
@@ -172,7 +187,10 @@ void TrayWindow::mousePressEvent(QMouseEvent* e)
 		mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
 	}
 	else if (e->button() == Qt::MidButton)
-		MainWindow::executeNew();    // display a New Alarm dialog
+	{
+		if (mActionNew->isEnabled())
+			mActionNew->trigger();    // display a New Alarm dialog
+	}
 	else
 		KSystemTray::mousePressEvent(e);
 }
@@ -245,12 +263,13 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	QDateTime now = QDateTime::currentDateTime();
 
 	// Get today's and tomorrow's alarms, sorted in time order
+	int i, iend;
 	QList<TipItem> items;
-	KCal::Event::List events = AlarmCalendar::activeCalendar()->eventsWithAlarms(QDateTime(now.date()), now.addDays(1));
-	for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+	KCal::Event::List events = AlarmCalendar::resources()->eventsWithAlarms(QDateTime(now.date()), now.addDays(1), KCalEvent::ACTIVE);
+	for (i = 0, iend = events.count();  i < iend;  ++i)
 	{
-		KCal::Event* kcalEvent = *it;
-		event.set(*kcalEvent);
+		KCal::Event* kcalEvent = events[i];
+		event.set(kcalEvent);
 		if (event.enabled()  &&  !event.expired()  &&  event.action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
@@ -292,18 +311,18 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			item.text += AlarmText::summary(event);
 
 			// Insert the item into the list in time-sorted order
-			int i = 0;
-			for (int iend = items.count();  i < iend;  ++i)
+			int it = 0;
+			for (int itend = items.count();  it < itend;  ++it)
 			{
-				if (item.dateTime <= items[i].dateTime)
+				if (item.dateTime <= items[it].dateTime)
 					break;
 			}
-			items.insert(i, item);
+			items.insert(it, item);
 		}
         }
 	kDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
 	int count = 0;
-	for (int i = 0, iend = items.count();  i < iend;  ++i)
+	for (i = 0, iend = items.count();  i < iend;  ++i)
 	{
 		kDebug(5950) << "-- " << (count+1) << ") " << items[i].text << endl;
 		text += "\n";

@@ -1,7 +1,7 @@
 /*
  *  alarmdaemoniface.h  -  DCOP request interface
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004,2006 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -29,17 +29,18 @@ class QByteArray;
 
 class AlarmDaemonIface : virtual public DCOPObject
 {
-    K_DCOP
-  k_dcop:
-    virtual ASYNC enableAutoStart(bool enable) = 0;
-    virtual ASYNC enableCalendar(const QString& urlString, bool enable) = 0;
-    virtual ASYNC reloadCalendar(const QByteArray& appname, const QString& urlString) = 0;
-    virtual ASYNC resetCalendar(const QByteArray& appname, const QString& urlString) = 0;
-    virtual ASYNC registerApp(const QByteArray& appName, const QString& appTitle,
-                              const QByteArray& dcopObject, const QString& calendarUrl, bool startClient) = 0;
-    virtual ASYNC registerChange(const QByteArray& appName, bool startClient) = 0;
-    virtual ASYNC eventHandled(const QByteArray& appname, const QString& calendarURL, const QString& eventID, bool reload) = 0;
-    virtual ASYNC quit() = 0;
+		K_DCOP
+	k_dcop:
+		virtual ASYNC enableAutoStart(bool enable) = 0;
+		virtual ASYNC enable(bool enabl) = 0;
+		virtual ASYNC reloadResource(const QString& id) = 0;
+		virtual ASYNC resetResource(const QString& id) = 0;
+		virtual ASYNC resourceActive(const QString& id, bool active) = 0;
+		virtual ASYNC resourceLocation(const QString& id, const QString& locn, const QString& locn2) = 0;
+		virtual ASYNC registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient) = 0;
+		virtual ASYNC registerChange(const QByteArray& appName, bool startClient) = 0;
+		virtual ASYNC eventHandled(const QString& eventID, bool reload) = 0;
+		virtual ASYNC quit() = 0;
 };
 
 #endif

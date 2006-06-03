@@ -1,7 +1,7 @@
 /*
  *  alarmguiiface.h  -  DCOP interface which alarm daemon clients must implement
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004,2006 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
@@ -55,16 +55,21 @@ class AlarmGuiIface : virtual public DCOPObject
 		/** Called to notify a change in status of the calendar.
 		    @param calendarStatus new calendar status. Value is of type CalendarStatus.
 		 */
-		virtual ASYNC alarmDaemonUpdate(int calendarStatus, const QString& calendarURL) = 0;
+		virtual ASYNC alarmDaemonUpdate(int calendarStatus) = 0;
 
 		/** Called to notify that an alarm is due.
 		 */
-		virtual ASYNC handleEvent(const QString& calendarURL, const QString& eventID) = 0;
+		virtual ASYNC handleEvent(const QString& eventID) = 0;
 
 		/** Called to indicate success/failure of (re)register() call.
 		    @param result success/failure code. Value is of type RegisterResult.
 		 */
 		virtual ASYNC registered(bool reregister, int result) = 0;
+
+		/** Called to notify that a remote resource's cache has completed downloading.
+		    @param resourceID ID of resource
+		 */
+		virtual ASYNC cacheDownloaded(const QString& resourceID) = 0;
 };
 
 #endif

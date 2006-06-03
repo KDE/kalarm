@@ -36,6 +36,7 @@
 
 #include "editdlg.h"
 #include "alarmcalendar.h"
+#include "alarmresources.h"
 #include "functions.h"
 #include "templatelistview.h"
 #include "undo.h"
@@ -157,11 +158,12 @@ void TemplateDlg::createTemplate(const KAEvent* event, QWidget* parent, Template
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
-		editDlg.getEvent(event);
+		AlarmResource* resource;
+		editDlg.getEvent(event, resource);
 
 		// Add the template to the displayed lists and to the calendar file
-		KAlarm::addTemplate(event, view, &editDlg);
-		Undo::saveAdd(event);
+		KAlarm::addTemplate(event, view, parent, resource, &editDlg);
+		Undo::saveAdd(event, resource);
 	}
 }
 
@@ -175,17 +177,18 @@ void TemplateDlg::slotEdit()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg editDlg(true, i18n("Edit Alarm Template"), this, &event);
+		EditAlarmDlg editDlg(true, i18n("Edit Alarm Template"), this, &event, true);
 		if (editDlg.exec() == QDialog::Accepted)
 		{
 			KAEvent newEvent;
-			editDlg.getEvent(newEvent);
+			AlarmResource* resource;
+			editDlg.getEvent(newEvent, resource);
 			QString id = event.id();
 			newEvent.setEventID(id);
 
 			// Update the event in the displays and in the calendar file
 			KAlarm::updateTemplate(newEvent, mTemplateList, &editDlg);
-			Undo::saveEdit(event, newEvent);
+			Undo::saveEdit(event, newEvent, resource);
 		}
 	}
 }
@@ -197,21 +200,22 @@ void TemplateDlg::slotEdit()
 void TemplateDlg::slotDelete()
 {
 	QList<const KAEvent*> events = mTemplateList->selectedEvents();
-	int end = events.count();
+	int n = events.count();
 	if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm template?",
-	                                                  "Do you really want to delete the %n selected alarm templates?", end),
-	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", end),
+	                                                  "Do you really want to delete the %n selected alarm templates?", n),
+	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", n),
 	                                       KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)
 		return;
 
 	QStringList eventIDs;
-	QList<KAEvent> undos;
-	for (int i = 0;  i < end;  ++i)
+	Undo::EventList undos;
+	AlarmResources* resources = AlarmResources::instance();
+	for (int i = 0;  i < n;  ++i)
 	{
 		const KAEvent* event = events[i];
 		eventIDs.append(event->id());
-		undos.append(*event);
+		undos.append(*event, resources->resourceForIncidence(event->id()));
 	}
 	KAlarm::deleteTemplates(eventIDs, this);
 	Undo::saveDeletes(undos);

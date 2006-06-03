@@ -25,26 +25,24 @@
 #include <stdlib.h>
 
 #include <QTimer>
-#include <QFile>
 #include <QDateTime>
 #include <QByteArray>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
-#include <kio/netaccess.h>
 #include <dcopclient.h>
 #include <kconfig.h>
+#include <ktimezones.h>
 #include <kdebug.h>
 
 #include <libkcal/calendarlocal.h>
 #include <libkcal/icalformat.h>
 #include <ktoolinvocation.h>
 
-#include "adcalendar.h"
-#include "adconfigdata.h"
 #include "alarmguiiface.h"
 #include "alarmguiiface_stub.h"
+#include "resources/alarmresources.h"
 #include "alarmdaemon.moc"
 
 
@@ -54,16 +52,42 @@
 static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
 
+// Config file key strings
+const char* CLIENT_GROUP     = "Client";
+// Client data file key strings
+const char* CLIENT_KEY       = "Client";
+const char* DCOP_OBJECT_KEY  = "DCOP object";
+const char* START_CLIENT_KEY = "Start";
+
+
+AlarmDaemon::EventsMap  AlarmDaemon::mEventsHandled;
+AlarmDaemon::EventsMap  AlarmDaemon::mEventsPending;
+
 
 AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 	: DCOPObject(name),
 	  QObject(parent),
-	  mAlarmTimer(0)
+	  mAlarmTimer(0),
+	  mEnabled(true)
 {
 	kDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
-	ADConfigData::readConfig();
+	AlarmDaemon::readConfig();
+	enableAutoStart(true);    // switch autostart on whenever the program is run
 
-	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
+	// Open the alarm resources, ignoring archived alarms and alarm templates.
+	// The alarm daemon is responsible for downloading remote resources (i.e. for updating
+	// their cache files), while KAlarm simply loads them from cache. This prevents useless
+	// duplication of potentially time-consuming downloads.
+	AlarmResources::setDebugArea(5902);
+	AlarmResources* resources = AlarmResources::create(timezone(), true);   // load active alarms only
+	resources->setPassiveClient(true);   // prevent resource changes being written to config file
+	resources->setNoGui(true);           // dont' try to display messages, or we'll crash
+	// The daemon is responsible for loading calendars (including downloading to cache for remote
+	// resources), which KAlarm is responsible for all updates.
+	resources->setInhibitSave(true);
+	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(resourceLoaded(AlarmResource*)));
+	resources->load();
+	connect(resources, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(cacheDownloaded(AlarmResource*)));
 
 #ifdef AUTOSTART_KALARM
 	if (autostart)
@@ -115,11 +139,7 @@ void AlarmDaemon::autostartKAlarm()
 	kDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm\n";
 	QStringList args;
 	args << QLatin1String("--tray");
-	int ret = KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
-	if (ret)
-		kError(5900) << "AlarmDaemon::autostartKAlarm(): error=" << ret << endl;
-	else
-		kDebug(5900) << "AlarmDaemon::autostartKAlarm(): success" << endl;
+	KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
 
 	startMonitoring();
 #endif
@@ -130,142 +150,158 @@ void AlarmDaemon::autostartKAlarm()
 */
 void AlarmDaemon::startMonitoring()
 {
+	if (mClientName.isEmpty())
+		return;
+
 	// Set up the alarm timer
-	mAlarmTimer = new QTimer(this);
-	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkAlarmsSlot()));
+	if (!mAlarmTimer)
+	{
+		mAlarmTimer = new QTimer(this);
+		connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkAlarmsSlot()));
+	}
 	setTimerStatus();
 
-	// Start monitoring calendar files.
-	// They are monitored until their client application registers, upon which
-	// monitoring ceases until KAlarm tells the daemon to monitor it.
+	// Start monitoring alarms.
 	checkAlarms();
 }
 
 /******************************************************************************
-* DCOP call to enable or disable monitoring of a calendar.
+* DCOP call to enable or disable alarm monitoring.
 */
-void AlarmDaemon::enableCal(const QString& urlString, bool enable)
+void AlarmDaemon::enable(bool enable)
 {
-	kDebug(5900) << "AlarmDaemon::enableCal(" << urlString << ")" << endl;
-	ADCalendar* cal = ADCalendar::calendar(urlString);
-	if (cal)
+	kDebug(5900) << "AlarmDaemon::enable()" << endl;
+	mEnabled = enable;
+	notifyCalStatus();    // notify KAlarm
+}
+
+/******************************************************************************
+* DCOP call to tell the daemon that the active status of a resource has changed.
+* This shouldn't be needed, but KRES::ManagerObserver::resourceModified()
+* which is called when KAlarm has changed the status, doesn't report the new
+* status when it's called in kalarmd. Crap!
+*/
+void AlarmDaemon::resourceActive(const QString& id, bool active)
+{
+	AlarmResource* resource = AlarmResources::instance()->resourceWithId(id);
+	if (resource  &&  active != resource->isActive())
 	{
-		cal->setEnabled(enable);
-		notifyCalStatus(cal);    // notify KAlarm
+		kDebug(5900) << "AlarmDaemon::resourceActive(" << id << ", " << active << ")" << endl;
+		resource->setEnabled(active);
+		if (active)
+			reloadResource(resource, true);
+		else
+			resource->close();
+	}
+}
+
+void AlarmDaemon::resourceLocation(const QString& id, const QString& locn, const QString& locn2)
+{
+	AlarmResource* resource = AlarmResources::instance()->resourceWithId(id);
+	if (resource)
+	{
+		kDebug(5900) << "AlarmDaemon::resourceLocation(" << id << ", " << locn << ")" << endl;
+		resource->setLocation(locn, locn2);
 	}
 }
 
 /******************************************************************************
-* DCOP call to reload, and optionally reset, the specified calendar.
+* DCOP call to reload, and optionally reset, the specified resource or all
+* resources.
+* If 'reset' is true, the data associated with the resource is reset.
 */
-void AlarmDaemon::reloadCal(const QByteArray& appname, const QString& urlString, bool reset)
+void AlarmDaemon::reloadResource(const QString& id, bool check, bool reset)
 {
-	kDebug(5900) << "AlarmDaemon::reloadCal(" << urlString << ")" << endl;
-	ADCalendar* cal = ADCalendar::calendar(urlString);
-	if (!cal  ||  appname != cal->appName())
+	if (check  &&  kapp->dcopClient()->senderId() != mClientName)
 		return;
-	reloadCal(cal, reset);
+	AlarmResources* resources = AlarmResources::instance();
+	if (id.isEmpty())
+	{
+		// Reload all resources
+		kDebug(5900) << "AlarmDaemon::reloadResource(ALL)" << endl;
+		if (reset)
+			clearEventsHandled();
+		// Don't call reload() since that saves the calendar
+		resources->load();
+	}
+	else
+	{
+		kDebug(5900) << "AlarmDaemon::reloadResource(" << id << ")" << endl;
+		AlarmResource* resource = resources->resourceWithId(id);
+		if (resource  &&  resource->isActive())
+			reloadResource(resource, reset);
+		else
+			kError(5900) << "AlarmDaemon::reloadResource(" << id << "): active resource not found" << endl;
+	}
 }
 
 /******************************************************************************
-* Reload the specified calendar.
-* If 'reset' is true, the data associated with the calendar is reset.
+* Reload, and optionally reset, the specified resource.
+* If 'reset' is true, the data associated with the resource is reset.
 */
-void AlarmDaemon::reloadCal(ADCalendar* cal, bool reset)
+void AlarmDaemon::reloadResource(AlarmResource* resource, bool reset)
 {
-	kDebug(5900) << "AlarmDaemon::reloadCal(): calendar" << endl;
-	if (!cal)
-		return;
-	if (!cal->downloading())
-	{
-		cal->close();
-		if (!cal->setLoadedConnected())
-			connect(cal, SIGNAL(loaded(ADCalendar*, bool)), SLOT(calendarLoaded(ADCalendar*, bool)));
-		cal->loadFile(reset);
-	}
-	else if (reset)
-		cal->clearEventsHandled();
+	kDebug(5900) << "AlarmDaemon::reloadResource()" << endl;
+	if (reset)
+		clearEventsHandled(resource);
+	// Don't call reload() since that saves the calendar.
+	// For remote resources, we don't need to download them since KAlarm
+	// has just updated the cache. So just load from cache.
+	resource->load(KCal::ResourceCached::NoSyncCache);
 }
 
-void AlarmDaemon::calendarLoaded(ADCalendar* cal, bool success)
+/******************************************************************************
+*  Called when a remote resource's cache has completed downloading.
+*  Tell KAlarm.
+*/
+void AlarmDaemon::cacheDownloaded(AlarmResource* resource)
 {
-	if (success)
-		kDebug(5900) << "Calendar reloaded" << endl;
-	notifyCalStatus(cal);       // notify KAlarm
+	AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
+	stub.cacheDownloaded(resource->identifier());
+	kDebug(5900) << "AlarmDaemon::cacheDownloaded(" << resource->identifier() << ")\n";
+}
+
+/******************************************************************************
+*  Called when a resource has completed loading.
+*/
+void AlarmDaemon::resourceLoaded(AlarmResource* res)
+{
+	kDebug(5900) << "Resource " << res->identifier() << " (" << res->resourceName() << ") loaded" << endl;
+	clearEventsHandled(res, true);   // remove all its events which no longer exist from handled list
+	notifyCalStatus();       // notify KAlarm
 	setTimerStatus();
-	checkAlarms(cal);
+	checkAlarms();
 }
 
 /******************************************************************************
 * DCOP call to notify the daemon that an event has been handled, and optionally
-* to tell it to reload the calendar.
+* to tell it to reload the resource containing the event.
 */
-void AlarmDaemon::eventHandled(const QByteArray& appname, const QString& calendarUrl, const QString& eventID, bool reload)
+void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 {
-	QString urlString = expandURL(calendarUrl);
-	kDebug(5900) << "AlarmDaemon::eventHandled(" << urlString << (reload ? "): reload" : ")") << endl;
-	ADCalendar* cal = ADCalendar::calendar(urlString);
-	if (!cal  ||  cal->appName() != appname)
+	if (kapp->dcopClient()->senderId() != mClientName)
 		return;
-	cal->setEventHandled(eventID);
+	kDebug(5900) << "AlarmDaemon::eventHandled()" << (reload ? ": reload" : "") << endl;
+	setEventHandled(eventID);
 	if (reload)
-		reloadCal(cal, false);
+	{
+		AlarmResource* resource = AlarmResources::instance()->resourceForIncidence(eventID);
+		if (resource)
+			reloadResource(resource, false);
+	}
 }
 
 /******************************************************************************
-* DCOP call to add an application to the list of client applications,
-* and add it to the config file.
+* DCOP call to register an application as the client application, and write it
+* to the config file.
 * N.B. This method must not return a bool because DCOPClient::call() can cause
 *      a hang if the daemon happens to send a notification to KAlarm at the
-*      same time as KAlarm calls this DCCOP method.
+*      same time as KAlarm calls this DCOP method.
 */
-void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle,
-                              const QByteArray& dcopObject, const QString& calendarUrl,
-			      bool startClient)
+void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
-	              <<  dcopObject << ", " << startClient << ")" << endl;
-	KAlarmd::RegisterResult result;
-	if (appName.isEmpty())
-		result = KAlarmd::FAILURE;
-	else if (startClient  &&  KStandardDirs::findExe(appName).isNull())
-	{
-		kError() << "AlarmDaemon::registerApp(): app not found" << endl;
-		result = KAlarmd::NOT_FOUND;
-	}
-	else
-	{
-		ADCalendar* keepCal = 0;
-		ClientInfo* client = ClientInfo::get(appName);
-		if (client)
-		{
-			// The application is already a client.
-			// If it's the same calendar file, don't delete its calendar object.
-			if (client->calendar()  &&  client->calendar()->urlString() == calendarUrl)
-			{
-				keepCal = client->calendar();
-				client->detachCalendar();
-			}
-			ClientInfo::remove(appName);    // this deletes the calendar if not detached
-		}
-
-		if (keepCal)
-			client = new ClientInfo(appName, appTitle, dcopObject, keepCal, startClient);
-		else
-			client = new ClientInfo(appName, appTitle, dcopObject, calendarUrl, startClient);
-		client->calendar()->setUnregistered(false);
-		ADConfigData::writeClient(appName, client);
-
-		ADConfigData::enableAutoStart(true);
-		setTimerStatus();
-		notifyCalStatus(client->calendar());
-		result = KAlarmd::SUCCESS;
-	}
-
-	// Notify the client of whether the call succeeded.
-	AlarmGuiIface_stub stub(appName, dcopObject);
-	stub.registered(false, result);
-	kDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dcopObject << ", " << startClient << ")" << endl;
+	registerApp(appName, dcopObject, startClient, true);
 }
 
 /******************************************************************************
@@ -278,34 +314,71 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& appTitle
 void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 {
 	kDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
-	KAlarmd::RegisterResult result;
-	ClientInfo* client = ClientInfo::get(appName);
-	if (!client)
-		return;    // can't access client to tell it the result
-	if (startClient  &&  KStandardDirs::findExe(appName).isNull())
+	registerApp(mClientName, mClientDcopObj, startClient, false);
+}
+
+/******************************************************************************
+* DCOP call to register an application as the client application, and write it
+* to the config file.
+* N.B. This method must not return a bool because DCOPClient::call() can cause
+*      a hang if the daemon happens to send a notification to KAlarm at the
+*      same time as KAlarm calls this DCOP method.
+*/
+void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient, bool init)
+{
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dcopObject << ", " << startClient << ")" << endl;
+	KAlarmd::RegisterResult result = KAlarmd::SUCCESS;
+	if (appName.isEmpty())
+		result = KAlarmd::FAILURE;
+	else if (startClient)
 	{
-		kError() << "AlarmDaemon::registerChange(): app not found" << endl;
-		result = KAlarmd::NOT_FOUND;
+		QString exe = KStandardDirs::findExe(appName);
+		if (exe.isNull())
+		{
+			kError(5900) << "AlarmDaemon::registerApp(): '" << appName << "' not found" << endl;
+			result = KAlarmd::NOT_FOUND;
+		}
+		mClientExe = exe;
 	}
-	else
+	if (result == KAlarmd::SUCCESS)
 	{
-		client->setStartClient(startClient);
-		ADConfigData::writeClient(appName, client);
-		result = KAlarmd::SUCCESS;
+		mClientStart   = startClient;
+		mClientName    = appName;
+		mClientDcopObj = dcopObject;
+		mClientStart   = startClient;
+		KConfig* config = KGlobal::config();
+		config->setGroup(CLIENT_GROUP);
+		config->writeEntry(CLIENT_KEY, QString::fromLocal8Bit(mClientName));
+		config->writeEntry(DCOP_OBJECT_KEY, QString::fromLocal8Bit(mClientDcopObj));
+		config->writeEntry(START_CLIENT_KEY, mClientStart);
+		if (init)
+			enableAutoStart(true, false);
+		config->sync();
+		if (init)
+		{
+			setTimerStatus();
+			notifyCalStatus();
+		}
 	}
 
 	// Notify the client of whether the call succeeded.
-	AlarmGuiIface_stub stub(appName, client->dcopObject());
-	stub.registered(true, result);
-	kDebug(5900) << "AlarmDaemon::registerChange() -> " << result << endl;
+	AlarmGuiIface_stub stub(appName, dcopObject);
+	stub.registered(false, result);
+	kDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
 }
 
 /******************************************************************************
 * DCOP call to set autostart at login on or off.
 */
-void AlarmDaemon::enableAutoStart(bool on)
+void AlarmDaemon::enableAutoStart(bool on, bool sync)
 {
-	ADConfigData::enableAutoStart(on);
+        kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")\n";
+        KConfig* config = KGlobal::config();
+	config->reparseConfiguration();
+        config->setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
+        config->writeEntry(QLatin1String(DAEMON_AUTOSTART_KEY), on);
+	if (sync)
+		config->sync();
 }
 
 /******************************************************************************
@@ -340,37 +413,28 @@ void AlarmDaemon::checkAlarmsSlot()
 }
 
 /******************************************************************************
-* Check if any alarms are pending for any enabled calendar, and display the
-* pending alarms.
+* Check if any alarms are pending, and trigger the pending alarms.
 */
 void AlarmDaemon::checkAlarms()
 {
 	kDebug(5901) << "AlarmDaemon::checkAlarms()" << endl;
-	for (int i = 0, end = ADCalendar::count();  i < end;  ++i)
-		checkAlarms(ADCalendar::calendar(i));
-}
-
-/******************************************************************************
-* Check if any alarms are pending for a specified calendar, and display the
-* pending alarms.
-*/
-void AlarmDaemon::checkAlarms(ADCalendar* cal)
-{
-	kDebug(5901) << "AlarmDaemons::checkAlarms(" << cal->urlString() << ")" << endl;
-	if (!cal->loaded()  ||  !cal->enabled())
+	AlarmResources* resources = AlarmResources::instance();
+	if (!mEnabled  ||  !resources->loadedState(AlarmResource::ACTIVE))
 		return;
 
 	QDateTime now  = QDateTime::currentDateTime();
 	QDateTime now1 = now.addSecs(1);
 	kDebug(5901) << "  To: " << now.toString() << endl;
-	QList<KCal::Alarm*> alarms = cal->alarmsTo(now);
+	QList<KCal::Alarm*> alarms = resources->alarmsTo(now);
 	if (alarms.isEmpty())
 		return;
+	QList<KCal::Event*> eventsDone;
 	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
 		KCal::Event* event = dynamic_cast<KCal::Event*>(alarms[i]->parent());
-		if (!event)
-			continue;
+		if (!event  ||  eventsDone.contains(event))
+			continue;   // either not an event, or the event has already been processed
+		eventsDone += event;
 		const QString& eventID = event->uid();
 		kDebug(5901) << "AlarmDaemon::checkAlarms(): event " << eventID  << endl;
 
@@ -387,82 +451,70 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 				dt = alarm->previousRepetition(now1);   // get latest due repetition (if any)
 			alarmtimes.append(dt);
 		}
-		if (!cal->eventHandled(event, alarmtimes))
-		{
-			if (notifyEvent(cal, eventID))
-				cal->setEventPending(event, alarmtimes);
-		}
+		if (!eventHandled(event, alarmtimes))
+			notifyEvent(eventID, event, alarmtimes);
 	}
 }
 
 /******************************************************************************
-* Send a DCOP message to KAlarm telling it that an alarm should now be handled.
-* Reply = false if the event should be held pending until KAlarm can be started.
+* If not already handled, send a DCOP message to KAlarm telling it that an
+* alarm should now be handled.
 */
-bool AlarmDaemon::notifyEvent(ADCalendar* calendar, const QString& eventID)
+void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, const QList<QDateTime>& alarmtimes)
 {
-	if (!calendar)
-		return true;
-	QByteArray appname = calendar->appName();
-	const ClientInfo* client = ClientInfo::get(appname);
-	if (!client)
-	{
-		kDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << "): unknown client" << endl;
-		return false;
-	}
-	kDebug(5900) << "AlarmDaemon::notifyEvent(" << appname << ", " << eventID << "): notification type=" << client->startClient() << endl;
+	kDebug(5900) << "AlarmDaemon::notifyEvent(" << eventID << "): notification type=" << mClientStart << endl;
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
 	// Check if the client application is running and ready to receive notification
-	bool registered = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname));
+	bool registered = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(mClientName));
 	bool ready = registered;
 	if (registered)
 	{
 		// It's running, but check if it has created our DCOP interface yet
-		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(appname);
-		if (objects.indexOf(client->dcopObject()) < 0)
+		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(mClientName);
+		if (objects.indexOf(mClientDcopObj) < 0)
 			ready = false;
 	}
 	if (!ready)
 	{
 		// KAlarm is not running, or is not yet ready to receive notifications.
-		if (!client->startClient())
+		if (!mClientStart)
 		{
 			if (registered)
 				kDebug(5900) << "AlarmDaemon::notifyEvent(): client not ready\n";
 			else
 				kDebug(5900) << "AlarmDaemon::notifyEvent(): don't start client\n";
-			return false;
+			return;
 		}
 
 		// Start KAlarm, using the command line to specify the alarm
 		KProcess p;
-		QString cmd = locate("exe", appname);
-		if (cmd.isEmpty())
+		if (mClientExe.isEmpty())
 		{
-			kDebug(5900) << "AlarmDaemon::notifyEvent(): '" << appname << "' not found" << endl;
-			return true;
+			kDebug(5900) << "AlarmDaemon::notifyEvent(): '" << mClientName << "' not found" << endl;
+			return;
 		}
-		p << cmd;
-		p << "--handleEvent" << id << "--calendarURL" << calendar->urlString();
-		p.start(KProcess::Block);
+		p << mClientExe;
+		p << "--handleEvent" << id;
+		p.start(KProcess::DontCare);
 		kDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
-		return true;
 	}
-
-	// Notify the client by telling it the calendar URL and event ID
-	AlarmGuiIface_stub stub(appname, client->dcopObject());
-	stub.handleEvent(calendar->urlString(), id);
-	if (!stub.ok())
+	else
 	{
-		kDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;
-		return false;
+		// Notify the client by telling it the event ID
+		AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
+		stub.handleEvent(id);
+		if (!stub.ok())
+		{
+			kDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;
+			return;
+		}
 	}
-	return true;
+	setEventPending(event, alarmtimes);
 }
 
 /******************************************************************************
-* Starts or stops the alarm timer as necessary after a calendar is enabled/disabled.
+* Starts or stops the alarm timer as necessary after the calendar is enabled/disabled.
 */
 void AlarmDaemon::setTimerStatus()
 {
@@ -475,14 +527,9 @@ void AlarmDaemon::setTimerStatus()
 	}
 
 #endif
-	// Count the number of currently loaded calendars whose names should be displayed
-	int nLoaded = 0;
-	for (int i = 0, end = ADCalendar::count();  i < end;  ++i)
-		if (ADCalendar::calendar(i)->loaded())
-			++nLoaded;
-
 	// Start or stop the alarm timer if necessary
-	if (!mAlarmTimer->isActive()  &&  nLoaded)
+	bool loaded = AlarmResources::instance()->loadedState(AlarmResource::ACTIVE);
+	if (!mAlarmTimer->isActive()  &&  loaded)
 	{
 		// Timeout every minute.
 		// But first synchronise to one second after the minute boundary.
@@ -491,7 +538,7 @@ void AlarmDaemon::setTimerStatus()
 		mAlarmTimerSyncing = (firstInterval != DAEMON_CHECK_INTERVAL);
 		kDebug(5900) << "Started alarm timer" << endl;
 	}
-	else if (mAlarmTimer->isActive()  &&  !nLoaded)
+	else if (mAlarmTimer->isActive()  &&  !loaded)
 	{
 		mAlarmTimer->stop();
 		kDebug(5900) << "Stopped alarm timer" << endl;
@@ -499,35 +546,165 @@ void AlarmDaemon::setTimerStatus()
 }
 
 /******************************************************************************
-* Send a DCOP message to to the client which owns the specified calendar,
-* notifying it of a change in calendar status.
+* Send a DCOP message to the client, notifying it of a change in calendar status.
 */
-void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
+void AlarmDaemon::notifyCalStatus()
 {
-	ClientInfo* client = ClientInfo::get(cal);
-	if (!client)
+	if (mClientName.isEmpty())
 		return;
-	QByteArray appname = client->appName();
-	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(appname)))
+	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(mClientName)))
 	{
-		KAlarmd::CalendarStatus change = cal->available() ? (cal->enabled() ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED)
-		                                                  : KAlarmd::CALENDAR_UNAVAILABLE;
-		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << appname << " -> " << change << endl;
-		AlarmGuiIface_stub stub(appname, client->dcopObject());
-		stub.alarmDaemonUpdate(change, cal->urlString());
+		bool unloaded = !AlarmResources::instance()->loadedState(AlarmResource::ACTIVE);   // if no resources are loaded
+		KAlarmd::CalendarStatus change = unloaded ? KAlarmd::CALENDAR_UNAVAILABLE
+		                               : mEnabled ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED;
+		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << mClientName << " -> " << change << endl;
+		AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
+		stub.alarmDaemonUpdate(change);
 		if (!stub.ok())
-			kError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << appname << endl;
+			kError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << mClientName << endl;
 	}
 }
 
 /******************************************************************************
-* Expand a DCOP call parameter URL to a full URL.
-* (We must store full URLs in the calendar data since otherwise later calls to
-* reload or remove calendars won't necessarily find a match.)
+* Check whether all the alarms for the event with the given ID have already
+* been handled for this client.
 */
-QString AlarmDaemon::expandURL(const QString& urlString)
+bool AlarmDaemon::eventHandled(const KCal::Event* event, const QList<QDateTime>& alarmtimes)
 {
-	if (urlString.isEmpty())
-		return QString();
-	return KUrl(urlString).url();
+	EventsMap::ConstIterator it = mEventsHandled.find(event->uid());
+	if (it == mEventsHandled.end())
+		return false;
+
+	int oldCount = it.value().alarmTimes.count();
+	int count = alarmtimes.count();
+	for (int i = 0;  i < count;  ++i)
+	{
+		if (alarmtimes[i].isValid()
+		&&  (i >= oldCount                             // is it an additional alarm?
+		     || !it.value().alarmTimes[i].isValid()     // or has it just become due?
+		     || it.value().alarmTimes[i].isValid()      // or has it changed?
+		        && alarmtimes[i] != it.value().alarmTimes[i]))
+			return false;     // this alarm has changed
+	}
+	return true;
+}
+
+/******************************************************************************
+* Remember that the event with the given ID has been handled for this client.
+* It must already be in the pending list.
+*/
+void AlarmDaemon::setEventHandled(const QString& eventID)
+{
+	kDebug(5900) << "AlarmDaemon::setEventHandled(" << eventID << ")\n";
+	// Remove it from the pending list, and add it to the handled list
+	EventsMap::Iterator it = mEventsPending.find(eventID);
+	if (it != mEventsPending.end())
+	{
+		setEventInMap(mEventsHandled, eventID, it.value().alarmTimes, it.value().eventSequence);
+		mEventsPending.erase(it);
+	}
+}
+
+/******************************************************************************
+* Remember that the specified alarms for the event with the given ID have been
+* notified to KAlarm, but no reply has come back yet.
+*/
+void AlarmDaemon::setEventPending(const KCal::Event* event, const QList<QDateTime>& alarmtimes)
+{
+	if (event)
+	{
+		kDebug(5900) << "AlarmDaemon::setEventPending(" << event->uid() << ")\n";
+		setEventInMap(mEventsPending, event->uid(), alarmtimes, event->revision());
+	}
+}
+
+/******************************************************************************
+* Add a specified entry to the events pending or handled list.
+*/
+void AlarmDaemon::setEventInMap(EventsMap& map, const QString& eventID, const QList<QDateTime>& alarmtimes, int sequence)
+{
+	EventsMap::Iterator it = map.find(eventID);
+	if (it != map.end())
+	{
+		// Update the existing entry for the event
+		it.value().alarmTimes = alarmtimes;
+		it.value().eventSequence = sequence;
+	}
+	else
+		map.insert(eventID, EventItem(sequence, alarmtimes));
+}
+
+/******************************************************************************
+* Clear all memory of events pending or handled for this client.
+*/
+void AlarmDaemon::clearEventsHandled(AlarmResource* resource, bool nonexistentOnly)
+{
+	clearEventMap(mEventsPending, resource, nonexistentOnly);
+	clearEventMap(mEventsHandled, resource, nonexistentOnly);
+}
+
+/******************************************************************************
+* Clear either the events pending or events handled list for this client.
+* If 'nonexistentOnly' is true, only events which no longer exist are cleared.
+*/
+void AlarmDaemon::clearEventMap(EventsMap& map, AlarmResource* resource, bool nonexistentOnly)
+{
+	if (!resource  &&  !nonexistentOnly)
+		map.clear();
+	else
+	{
+		AlarmResources* resources = AlarmResources::instance();
+		for (EventsMap::Iterator it = map.begin();  it != map.end();  )
+		{
+			KCal::Event* evnt = resources->event(it.key());
+			if (!evnt
+			||  (!nonexistentOnly  &&  (!resource || resources->resource(evnt) == resource)))
+				it = map.erase(it);
+			else
+				++it;
+		}
+	}
+}
+
+/******************************************************************************
+* Read the client information from the configuration file.
+*/
+void AlarmDaemon::readConfig()
+{
+	KConfig* config = KGlobal::config();
+	config->setGroup(CLIENT_GROUP);
+	QByteArray client = config->readEntry(CLIENT_KEY).toLocal8Bit();
+	mClientDcopObj    = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
+	mClientStart      = config->readEntry(START_CLIENT_KEY, false);
+
+	// Verify the configuration
+	mClientName.clear();
+	if (client.isEmpty()  ||  KStandardDirs::findExe(client).isNull())
+		kError(5900) << "AlarmDaemon::readConfig(): '" << client << "': client app not found\n";
+	else if (mClientDcopObj.isEmpty())
+		kError(5900) << "AlarmDaemon::readConfig(): no DCOP object specified for '" << client << "'\n";
+	else
+	{
+		mClientName = client;
+		kDebug(5900) << "AlarmDaemon::readConfig(): client " << mClientName << endl;
+	}
+
+	// Remove obsolete CheckInterval entry (if it exists)
+        config->setGroup("General");
+	config->deleteEntry("CheckInterval");
+	config->sync();
+}
+
+/******************************************************************************
+* Read the timezone to use. Try to read it from KAlarm's config file. If the
+* entry there is blank, use the system timezone.
+*/
+QString AlarmDaemon::timezone()
+{
+	KConfig kaconfig(locate("config", "kalarmrc"));
+	kaconfig.setGroup("General");
+	QString tz = kaconfig.readEntry("Timezone", QString());
+	if (tz.isEmpty())
+		tz = KSystemTimeZones::local()->name();
+	return tz;
 }
