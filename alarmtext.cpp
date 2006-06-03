@@ -44,7 +44,11 @@ void AlarmText::setText(const QString& text)
 	mBody     = text;
 	mIsScript = text.startsWith(QLatin1String("#!"));
 	mIsEmail  = false;
-	mTo = mFrom = mCc = mTime = mSubject = QString();
+	mTo.clear();
+	mFrom.clear();
+	mCc.clear();
+	mTime.clear();
+	mSubject.clear();
 	mKMailSerialNum = 0;
 }
 

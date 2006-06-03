@@ -3174,8 +3174,8 @@ QString EmailAddressList::join(const QString& separator) const
  */
 static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
 {
-	QString command= QString();
-	QString arguments= QString();
+	QString command;
+	QString arguments;
 	QChar quoteChar;
 	bool quoted = false;
 	uint posMax = commandLine.length();

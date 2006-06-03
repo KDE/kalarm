@@ -333,12 +333,12 @@ class KAlarmIface : virtual public DCOPObject
 	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                           int repeatType, int repeatInterval, const QString& endDateTime) = 0;
 	/** Open the alarm edit dialog to edit an existing alarm.
-	 *  @param eventId       The unique ID of the event to be edited, or QString::null to create a new alarm.
+	 *  @param eventId       The unique ID of the event to be edited, or QString() to create a new alarm.
 	 *  @return false if the alarm could not be found or is read-only, true otherwise.
 	 */
 	virtual bool edit(const QString& eventID) = 0;
 	/** Open the alarm edit dialog to edit a new alarm.
-	 *  @param templateName  Name of the alarm template to base the new alarm on, or QString::null if none.
+	 *  @param templateName  Name of the alarm template to base the new alarm on, or QString() if none.
 	 *                       If a template is specified but cannot be found, the alarm edit dialog is still
 	 *                       opened but is (obviously) not preset with the template.
 	 *  @return false if an alarm template was specified but could not be found, true otherwise.

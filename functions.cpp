@@ -974,7 +974,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
 	// N.B. Remember to change  Version(int major, int minor, int rev)
 	//      if the representation returned by this method changes.
 	if (subVersion)
-		*subVersion = QString();
+		subVersion->clear();
 	QStringList nums = version.split(QLatin1Char('.'), QString::KeepEmptyParts);
 	int count = nums.count();
 	if (count < 2  ||  count > 3)

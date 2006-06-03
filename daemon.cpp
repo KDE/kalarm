@@ -625,7 +625,7 @@ void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::
 			QStringList locs = resource->location();
 			if (locs.isEmpty())
 				break;
-			locs += QString::null;    // to avoid having to check index
+			locs += QString();    // to avoid having to check index
 			AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 			s.resourceLocation(resource->identifier(), locs[0], locs[1]);
 			if (!s.ok())

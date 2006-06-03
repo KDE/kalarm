@@ -178,7 +178,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mDeferGroup(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
-	  mResourceEventId(useResource && event ? event->id() : QString::null),
+	  mResourceEventId(useResource && event ? event->id() : QString()),
 	  mResource(0),
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),

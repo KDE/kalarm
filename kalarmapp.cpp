@@ -45,8 +45,6 @@
 #include <kstaticdeleter.h>
 #include <kdebug.h>
 
-#include <kalarmd/clientinfo.h>
-
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "editdlg.h"

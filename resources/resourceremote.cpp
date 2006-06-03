@@ -65,7 +65,7 @@ KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUr
 void KAResourceRemote::init()
 {
 	setType("remote");   // set resource type
-	lock(QString(""));   // don't use QString::null !
+	lock(QString(""));   // don't use QString() !
 }
 
 KAResourceRemote::~KAResourceRemote()
