@@ -1353,7 +1353,6 @@ void MessageWin::slotDefer()
 				if (resource  &&  !resource->isOpen())
 					resource = 0;
 				event.clearResourceID();
-				event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			}
 			else
 			{
@@ -1368,12 +1367,15 @@ void MessageWin::slotDefer()
 					raise();
 					delete mDeferDlg;
 					mDeferDlg = 0;
+					mDeferButton->setEnabled(false);
+					mEditButton->setEnabled(false);
 					return;
 				}
 				event.set(kcalEvent);
 				event.setArchive();
 				event.setEventID(mEventID);
 			}
+			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
