@@ -502,16 +502,25 @@ void AlarmResources::close()
 void AlarmResources::save()
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::save()" << endl;
-	if (mOpen  &&  isModified())
+	if (!mOpen)
+		return;
+	bool saved = false;
+	if (isModified())
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		{
 			if ((!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
 			&&  (*it)->hasChanges())
+			{
+				kDebug(KARES_DEBUG) << "AlarmResources::save(): saving modified resource " << (*it)->identifier() << endl;
 				(*it)->save();
+				saved = true;
+			}
 		}
 		setModified(false);
 	}
+	if (!saved)
+		kDebug(KARES_DEBUG) << "AlarmResources::save(): no modified resources to save" << endl;
 }
 
 bool AlarmResources::isSaving()
