@@ -191,10 +191,10 @@ void ResourceSelector::addResource()
 	AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
 	if (!resource)
 	{
-		KMessageBox::error(this, i18n("<qt>Unable to create resource of type <b>%1</b>.</qt>").arg(type));
+		KMessageBox::error(this, i18n("<qt>Unable to create resource of type <b>%1</b>.</qt>", type));
 		return;
 	}
-	resource->setResourceName(i18n("%1 resource").arg(type));
+	resource->setResourceName(i18n("%1 resource", type));
 	resource->setAlarmType(mCurrentAlarmType);
 	resource->setActive(false);   // prevent setReadOnly() declaring it as unwritable before we've tried to load it
 
@@ -274,9 +274,10 @@ void ResourceSelector::removeResource()
 			return;
 		}
 	}
-	QString text = std ? i18n("Do you really want to remove your default resource (%1) from the list?")
-	                   : i18n("Do you really want to remove the resource %1 from the list?");
-	text = "<qt>" + text.arg("<b>" + item->text(0) + "</b>") + "</qt>";
+	QString tmp = "<b>" + item->text(0) + "</b>";
+	QString text = std ? i18n("Do you really want to remove your default resource (%1) from the list?", tmp)
+	                   : i18n("Do you really want to remove the resource %1 from the list?", tmp);
+	text = "<qt>" + text + "</qt>";
 	if (KMessageBox::warningContinueCancel(this, text, "", KStdGuiItem::remove()) == KMessageBox::Cancel)
 		return;
 

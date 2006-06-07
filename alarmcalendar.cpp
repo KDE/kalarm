@@ -269,7 +269,7 @@ int AlarmCalendar::load()
 		if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
 		{
 			kError(5950) << "AlarmCalendar::load(): Download failure" << endl;
-			KMessageBox::error(0, i18n("Cannot download calendar:\n%1").arg(mUrl.prettyUrl()));
+			KMessageBox::error(0, i18n("Cannot download calendar:\n%1", mUrl.prettyUrl()));
 			return -1;
 		}
 		kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
