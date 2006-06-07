@@ -240,6 +240,8 @@ bool KAResourceRemote::doSave(bool syncCache)
 	}
 
 	mChangedIncidences = allChanges();
+	if (mCalIDFunction)
+		(*mCalIDFunction)(mCalendar);    // write the application ID into the calendar
 	saveToCache();
 	if (syncCache)
 	{

@@ -177,6 +177,8 @@ bool KAResourceLocal::doSave(bool)
 	if (saveInhibited())
 		return true;
 	kDebug(KARES_DEBUG) << "KAResourceLocal::doSave(" << mURL.path() << ")" <<endl;
+	if (mCalIDFunction)
+		(*mCalIDFunction)(mCalendar);    // write the application ID into the calendar
 	bool success = mCalendar.save(mURL.path());
 	clearChanges();
 	mLastModified = readLastModified();
