@@ -1464,7 +1464,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const DateTime& alarmTime)
 {
 	kDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(alarmType) << ")\n";
-	KCal::Event* kcalEvent = AlarmCalendar::resources()->event(event.id());
+	const KCal::Event* kcalEvent = AlarmCalendar::resources()->event(event.id());
 	if (!kcalEvent)
 		kError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
 	else

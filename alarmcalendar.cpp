@@ -1048,7 +1048,7 @@ bool AlarmCalendar::eventReadOnly(const QString& uniqueID) const
 	if (!mCalendar  ||  mCalType != RESOURCES)
 		return true;
 	AlarmResources* resources = AlarmResources::instance();
-	Event* event = resources->event(uniqueID);
+	const Event* event = resources->event(uniqueID);
 	AlarmResource* resource = resources->resource(event);
 	if (!resource)
 		return true;

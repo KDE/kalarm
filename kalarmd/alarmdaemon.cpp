@@ -656,7 +656,7 @@ void AlarmDaemon::clearEventMap(EventsMap& map, AlarmResource* resource, bool no
 		AlarmResources* resources = AlarmResources::instance();
 		for (EventsMap::Iterator it = map.begin();  it != map.end();  )
 		{
-			KCal::Event* evnt = resources->event(it.key());
+			const KCal::Event* evnt = resources->event(it.key());
 			if (!evnt
 			||  (!nonexistentOnly  &&  (!resource || resources->resource(evnt) == resource)))
 				it = map.erase(it);

@@ -779,7 +779,7 @@ void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change c
 		load(resource);
 }
 
-AlarmResource* AlarmResources::resourceWithId(const QString& resourceID)
+AlarmResource* AlarmResources::resourceWithId(const QString& resourceID) const
 {
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
 	{
@@ -794,11 +794,11 @@ AlarmResource* AlarmResources::resourceForIncidence(const QString& incidenceID)
 	return resource(incidence(incidenceID));
 }
 
-AlarmResource* AlarmResources::resource(Incidence* incidence)
+AlarmResource* AlarmResources::resource(const Incidence* incidence) const
 {
 	if (!incidence)
 		return 0;
-	ResourceMap::Iterator it = mResourceMap.find(incidence);
+	ResourceMap::ConstIterator it = mResourceMap.find(const_cast<Incidence*>(incidence));
 	return (it != mResourceMap.end()) ? it.value() : 0;
 }
 

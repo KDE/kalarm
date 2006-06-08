@@ -1395,7 +1395,7 @@ void MainWindow::slotSelection()
 		bool expired = event.expired();
 		if (!expired)
 			allArchived = false;
-		Event* ev = resources->event(event.id());
+		const Event* ev = resources->event(event.id());
 		AlarmResource* resource = resources->resource(ev);
 		if (!resource  ||  !resource->writable(ev))
 			readOnly = true;

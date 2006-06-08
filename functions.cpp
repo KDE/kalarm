@@ -735,7 +735,7 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 bool edit(const QString& eventID)
 {
 	AlarmResources* resources = AlarmResources::instance();
-	KCal::Event* kcalEvent = resources->event(eventID);
+	const KCal::Event* kcalEvent = resources->event(eventID);
 	if (!kcalEvent)
 	{
 		kError(5950) << "KAlarm::edit(): event ID not found: " << eventID << endl;

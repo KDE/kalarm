@@ -180,7 +180,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 	   @param resourceID the ID of the resource
 	   @return pointer to the resource, or null if not found
 	*/
-	AlarmResource* resourceWithId(const QString& resourceID);
+	AlarmResource* resourceWithId(const QString& resourceID) const;
 
 	/**
 	   Get the resource associated with a specified incidence.
@@ -189,7 +189,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 	   is to be located.
 	   @return a pointer to the resource containing the incidence.
 	*/
-	AlarmResource* resource(KCal::Incidence*);
+	AlarmResource* resource(const KCal::Incidence*) const;
 
 	/**
 	   Get the resource associated with a specified incidence ID.
