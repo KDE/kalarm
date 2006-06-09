@@ -2117,6 +2117,7 @@ bool KAEvent::setRepetition(int interval, int count)
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date/time (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
 {
@@ -2132,6 +2133,7 @@ bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
@@ -2157,6 +2159,7 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QD
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
@@ -2175,6 +2178,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
 {
@@ -2195,6 +2199,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
 {
@@ -2217,6 +2222,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
  *           = -1 to recur indefinitely.
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
@@ -2240,6 +2246,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, 
  *           = -1 to recur indefinitely.
  *           = 0 to use 'end' instead.
  *    end    = end date (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
 {
@@ -2262,6 +2269,7 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const 
  *          = -1 to recur indefinitely.
  *          = 0 to use 'end' instead.
  *    end   = end date/time (invalid to use 'count' instead).
+ * Reply = false if no recurrence was set up.
  */
 bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDateTime& end, KARecurrence::Feb29Type feb29)
 {

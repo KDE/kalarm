@@ -899,6 +899,8 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		event.setNoRecur();
 		return;
 	}
+	if (!event.recurs())
+		return;    // an error occurred setting up the recurrence
 	if (adjustStart)
 		event.setFirstRecurrence();
 
