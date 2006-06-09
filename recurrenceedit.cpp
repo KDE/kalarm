@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -894,6 +894,8 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		event.setNoRecur();
 		return;
 	}
+	if (!event.recurs())
+		return;    // an error occurred setting up the recurrence
 	if (adjustStart)
 		event.setFirstRecurrence();
 
