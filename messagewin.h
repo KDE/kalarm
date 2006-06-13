@@ -24,7 +24,6 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include <QList>
-#include <kdatastream.h>
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
