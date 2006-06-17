@@ -248,6 +248,8 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
 	  mAudioObject(0),
+	  mEditButton(0),
+	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
 	  mWinModule(0),
