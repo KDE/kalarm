@@ -232,6 +232,8 @@ MessageWin::MessageWin()
 	: MainWindowBase(0, "MessageWin", WFLAGS),
 	  mArtsDispatcher(0),
 	  mPlayObject(0),
+	  mEditButton(0),
+	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
 	  mWinModule(0),
