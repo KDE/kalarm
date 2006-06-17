@@ -48,8 +48,14 @@ class MessageWin : public MainWindowBase
 {
 		Q_OBJECT
 	public:
+		enum {                // flags for constructor
+			NO_RESCHEDULE,    // don't reschedule the event once it has displayed
+			NO_DEFER,         // don't display the Defer button
+			NO_INIT_VIEW      // for internal MessageWin use only
+		};
+
 		MessageWin();     // for session management restoration only
-		MessageWin(const KAEvent&, const KAAlarm&, bool reschedule_event = true, bool allowDefer = true);
+		MessageWin(const KAEvent&, const KAAlarm&, int flags);
 		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs);
 		~MessageWin();
 		void                repeat(const KAAlarm&);
@@ -62,6 +68,7 @@ class MessageWin : public MainWindowBase
 		virtual QSize       sizeHint() const;
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
+		static void         redisplayAlarms();
 
 	protected:
 		virtual void        showEvent(QShowEvent*);
@@ -91,6 +98,9 @@ class MessageWin : public MainWindowBase
 		void                displayComplete();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
+		void                alarmShowing(KAEvent&, const KCal::Event* = 0);
+		bool                retrieveEvent(KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
+		static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
 
 		static QList<MessageWin*> mWindowList;  // list of existing message windows
 		// Properties needed by readProperties()
@@ -120,6 +130,7 @@ class MessageWin : public MainWindowBase
 		bool                mPlayedOnce;      // the sound file has started playing at least once
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
+		AlarmResource*      mResource;        // resource which the event comes/came from
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		KPushButton*        mOkButton;
 		QPushButton*        mEditButton;

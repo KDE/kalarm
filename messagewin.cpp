@@ -75,6 +75,7 @@
 #include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
+#include "daemon.h"
 #include "deferdlg.h"
 #include "editdlg.h"
 #include "functions.h"
@@ -150,7 +151,7 @@ QList<MessageWin*> MessageWin::mWindowList;
 *  the whole event needs to be stored for updating the calendar file when it is
 *  displayed.
 */
-MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
+MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (Preferences::modalMessages() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event.cleanText()),
 	  mFont(event.font()),
@@ -172,6 +173,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mInvalid(false),
 	  mAudioObject(0),
 	  mEvent(event),
+	  mResource(AlarmResources::instance()->resourceForIncidence(mEventID)),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -184,20 +186,23 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mRecreating(false),
 	  mBeep(event.beep()),
 	  mSpeak(event.speak()),
-	  mRescheduleEvent(reschedule_event),
+	  mRescheduleEvent(!(flags & NO_RESCHEDULE)),
 	  mShown(false),
 	  mPositioning(false),
 	  mNoCloseConfirm(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
-	bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventID);
-	mShowEdit = !mEventID.isEmpty()  &&  !readonly;
-	mNoDefer  = readonly || !allowDefer || alarm.repeatAtLogin();
+	if (!(flags & NO_INIT_VIEW))
+	{
+		bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventID);
+		mShowEdit = !mEventID.isEmpty()  &&  !readonly;
+		mNoDefer  = readonly || (flags & NO_DEFER) || alarm.repeatAtLogin();
+		initView();
+	}
 	// Set to save settings automatically, but don't save window size.
 	// File alarm window size is saved elsewhere.
 	setAutoSaveSettings(QLatin1String("MessageWin"), false);
-	initView();
 	mWindowList.append(this);
 	if (event.autoClose())
 		mCloseTime = alarm.dateTime().dateTime().addSecs(event.lateCancel() * 60);
@@ -222,6 +227,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mInvalid(false),
 	  mAudioObject(0),
 	  mEvent(event),
+	  mResource(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -753,28 +759,145 @@ void MessageWin::readProperties(KConfig* config)
 	mNoDefer             = config->readEntry("NoDefer", false);
 	mKMailSerialNumber   = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
 	mShowEdit            = false;
+	mResource            = 0;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
 		if (!mEventID.isEmpty())
 		{
 			const Event* kcalEvent = AlarmCalendar::resources()->event(mEventID);
-			if (!kcalEvent)
-			{
-				// It's not in the active calendar, so try the displaying calendar
-				AlarmCalendar* cal = AlarmCalendar::displayCalendar();
-				if (cal->isOpen())
-					kcalEvent = cal->event(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
-			}
 			if (kcalEvent)
 			{
 				mEvent.set(kcalEvent);
-				mEvent.setUid(KCalEvent::ACTIVE);    // in case it came from the display calendar
+				mResource = AlarmResources::instance()->resource(kcalEvent);
 				mShowEdit = true;
+			}
+			else
+			{
+				// It's not in the active calendar, so try the displaying or archive calendars
+				retrieveEvent(mEvent, mResource, mShowEdit, mNoDefer);
+				mNoDefer = !mNoDefer;
 			}
 		}
 		initView();
 	}
+}
+
+/******************************************************************************
+*  Redisplay alarms which were being shown when the program last exited.
+*  Normally, these alarms will have been displayed by session restoration, but
+*  if the program crashed or was killed, we can redisplay them here so that
+*  they won't be lost.
+*/
+void MessageWin::redisplayAlarms()
+{
+	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
+	if (cal->isOpen())
+	{
+		KAEvent event;
+		AlarmResource* resource;
+		KCal::Event::List events = cal->events();
+		for (int i = 0, end = events.count();  i < end;  ++i)
+		{
+			bool showDefer, showEdit;
+			reinstateFromDisplaying(events[i], event, resource, showEdit, showDefer);
+			if (!findEvent(event.id()))
+			{
+				// This event should be displayed, but currently isn't being
+				kDebug(5950) << "MessageWin::redisplayAlarms(): " << event.id() << endl;
+				KAAlarm alarm = event.convertDisplayingAlarm();
+				bool login = alarm.repeatAtLogin();
+				int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
+				MessageWin* win = new MessageWin(event, alarm, flags);
+				win->mResource = resource;
+				bool rw = resource  &&  resource->writable();
+				win->mShowEdit = rw ? showEdit : false;
+				win->mNoDefer  = (rw && !login) ? !showDefer : true;
+				win->initView();
+				win->show();
+			}
+		}
+	}
+}
+
+/******************************************************************************
+*  Retrieves the event with the current ID from the displaying calendar file,
+*  or if not found there, from the archive calendar.
+*/
+bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
+{
+	const Event* kcalEvent = AlarmCalendar::displayCalendar()->event(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
+	if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
+	{
+		// The event isn't in the displaying calendar.
+		// Try to retrieve it from the archive calendar.
+		kcalEvent = AlarmCalendar::resources()->event(KCalEvent::uid(mEventID, KCalEvent::ARCHIVED));
+		if (!kcalEvent)
+			return false;
+		event.set(kcalEvent);
+		event.setArchive();     // ensure that it gets re-archived if it's saved
+		event.setEventID(mEventID);
+		resource  = 0;
+		showEdit  = true;
+		showDefer = true;
+	}
+	return true;
+}
+
+/******************************************************************************
+*  Retrieves the displayed event from the calendar file, or if not found there,
+*  from the displaying calendar.
+*/
+bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
+{
+	if (!kcalEvent)
+		return false;
+	QString resourceID;
+	event.reinstateFromDisplaying(kcalEvent, resourceID, showEdit, showDefer);
+	resource = AlarmResources::instance()->resourceWithId(resourceID);
+	if (resource  &&  !resource->isOpen())
+		resource = 0;
+	event.clearResourceID();
+	return true;
+}
+
+/******************************************************************************
+* Called when an alarm is currently being displayed, to store a copy of the
+* alarm in the displaying calendar, and to reschedule it for its next repetition.
+* If no repetitions remain, cancel it.
+*/
+void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
+{
+	kDebug(5950) << "MessageWin::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(mAlarmType) << ")\n";
+	if (!kcalEvent)
+		kcalEvent = AlarmCalendar::resources()->event(event.id());
+	if (!kcalEvent)
+		kError(5950) << "MessageWin::alarmShowing(): event ID not found: " << event.id() << endl;
+	else
+	{
+		KAAlarm alarm = event.alarm(mAlarmType);
+		if (!alarm.valid())
+			kError(5950) << "MessageWin::alarmShowing(): alarm type not found: " << event.id() << ":" << mAlarmType << endl;
+		else
+		{
+			// Copy the alarm to the displaying calendar in case of a crash, etc.
+			AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
+			KAEvent dispEvent;
+			dispEvent.setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
+			                        mDateTime.dateTime(), mShowEdit, !mNoDefer);
+			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
+			if (cal)
+			{
+				cal->deleteEvent(dispEvent.id());   // in case it already exists
+				cal->addEvent(dispEvent, KCalEvent::DISPLAYING);
+				cal->save();
+			}
+
+			theApp()->rescheduleAlarm(event, alarm);
+			return;
+		}
+	}
+	Daemon::eventHandled(event.id());
 }
 
 /******************************************************************************
@@ -956,7 +1079,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 		KAEvent event(kcalEvent);
 		mDeferButton->setEnabled(true);
 		setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
-		theApp()->alarmShowing(event, mAlarmType, mDateTime);
+		alarmShowing(event);
 	}
 }
 
@@ -1126,7 +1249,7 @@ void MessageWin::displayComplete()
 {
 	playAudio();
 	if (mRescheduleEvent)
-		theApp()->alarmShowing(mEvent, mAlarmType, mDateTime);
+		alarmShowing(mEvent);
 
 	// Enable the window's buttons either now or after the configured delay
 	if (mButtonDelay > 0)
@@ -1242,12 +1365,13 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &mEvent);
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &mEvent, EditAlarmDlg::RES_IGNORE);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent event;
 		AlarmResource* resource;
 		editDlg.getEvent(event, resource);
+		resource = mResource;
 
 		// Update the displayed lists and the calendar file
 		KAlarm::UpdateStatus status;
@@ -1337,7 +1461,7 @@ void MessageWin::slotDefer()
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::resources()->event(mEventID);
 		if (kcalEvent)
 		{
-			// The event still exists in the calendar file.
+			// The event still exists in the active calendar
 			KAEvent event(kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
@@ -1345,48 +1469,29 @@ void MessageWin::slotDefer()
 		}
 		else
 		{
+			// Try to retrieve the event from the displaying or archive calendars
 			AlarmResource* resource = 0;
 			KAEvent event;
-			kcalEvent = AlarmCalendar::displayCalendar()->event(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
-			if (kcalEvent)
+			bool showEdit, showDefer;
+			if (!retrieveEvent(event, resource, showEdit, showDefer))
 			{
-				event.reinstateFromDisplaying(KAEvent(kcalEvent));
-				resource = AlarmResources::instance()->resourceWithId(event.resourceID());
-				if (resource  &&  !resource->isOpen())
-					resource = 0;
-				event.clearResourceID();
-			}
-			else
-			{
-				// The event isn't in the displaying calendar!?!
-				// Try to retrieve it from the archive calendar.
-				kcalEvent = AlarmCalendar::resources()->event(KCalEvent::uid(mEventID, KCalEvent::ARCHIVED));
-				if (!kcalEvent)
-				{
-					// The event doesn't exist any more !?!, so recurrence data,
-					// flags, and more, have been lost.
-					KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18n("Cannot defer alarm:")).arg(i18n("Alarm not found")));
-					raise();
-					delete mDeferDlg;
-					mDeferDlg = 0;
-					mDeferButton->setEnabled(false);
-					mEditButton->setEnabled(false);
-					return;
-				}
-				event.set(kcalEvent);
-				event.setArchive();
-				event.setEventID(mEventID);
+				// The event doesn't exist any more !?!, so recurrence data,
+				// flags, and more, have been lost.
+				KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18n("Cannot defer alarm:")).arg(i18n("Alarm not found")));
+				raise();
+				delete mDeferDlg;
+				mDeferDlg = 0;
+				mDeferButton->setEnabled(false);
+				mEditButton->setEnabled(false);
+				return;
 			}
 			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, 0, resource, true, false, mDeferDlg);
-			if (kcalEvent)
-			{
-				event.setUid(KCalEvent::ARCHIVED);
-				KAlarm::deleteEvent(event, false);
-			}
+			event.setUid(KCalEvent::ARCHIVED);
+			KAlarm::deleteEvent(event, false);
 		}
 		if (theApp()->wantRunInSystemTray())
 		{

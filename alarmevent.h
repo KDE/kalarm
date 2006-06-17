@@ -121,7 +121,7 @@ class KAAlarmEventBase
 		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-		bool               mDisplaying;       // whether the alarm is currently being displayed
+		bool               mDisplaying;       // whether the alarm is currently being displayed (i.e. in displaying calendar)
 		bool               mEmailBcc;         // blind copy the email to the user
 		bool               mConfirmAck;       // alarm acknowledgement requires confirmation by user
 		bool               mDefaultFont;      // use default message font, not mFont
@@ -343,8 +343,8 @@ class KAEvent : public KAAlarmEventBase
 		void               cancelDefer();
 		void               cancelCancelledDeferral();
 		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
-		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const QDateTime&);
-		void               reinstateFromDisplaying(const KAEvent& dispEvent);
+		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const QDateTime&, bool showEdit, bool showDefer);
+		void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
 		void               setEnabled(bool enable)                           { mEnabled = enable;  mUpdated = true; }
 		void               setUpdated()                                      { mUpdated = true; }
@@ -493,6 +493,8 @@ class KAEvent : public KAAlarmEventBase
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
 		bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
 		bool               mArchive;          // event has triggered in the past, so archive it when closed
+		bool               mDisplayingDefer;  // show Defer button (applies to displaying calendar only)
+		bool               mDisplayingEdit;   // show Edit button (applies to displaying calendar only)
 		bool               mEnabled;          // false if event is disabled
 		mutable bool       mUpdated;          // event has been updated but not written to calendar file
 };

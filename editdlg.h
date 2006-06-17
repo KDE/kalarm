@@ -66,9 +66,14 @@ class EditAlarmDlg : public KDialog
 		Q_OBJECT
 	public:
 		enum MessageType { MESSAGE, FILE };
+		enum GetResourceType {
+			RES_PROMPT,        // prompt for resource
+			RES_USE_EVENT_ID,  // use resource containing event, or prompt if not found
+			RES_IGNORE         // don't get resource
+		};
 
 		EditAlarmDlg(bool Template, const QString& caption, QWidget* parent = 0,
-                             const KAEvent* = 0, bool editResource = false, bool readOnly = false);
+                             const KAEvent* = 0, GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		bool            getEvent(KAEvent&, AlarmResource*&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());

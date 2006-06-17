@@ -1572,7 +1572,8 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
  * saved in case their end time expires before the next login.
  * Reply = true if successful, false if alarm was not copied.
  */
-bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const QString& resourceID, const QDateTime& repeatAtLoginTime)
+bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const QString& resourceID, const QDateTime& repeatAtLoginTime,
+                            bool showEdit, bool showDefer)
 {
 	if (!mDisplaying
 	&&  (alarmType == KAAlarm::MAIN_ALARM
@@ -1587,15 +1588,13 @@ bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const
 		{
 			*this = event;
 			// Change the event ID to avoid duplicating the same unique ID as the original event
-			int i = mEventID.lastIndexOf('-');
-			if (i < 0)
-				i = mEventID.length();
-			mEventID.insert(i, DISPLAYING_UID);
-
-			mCategory       = KCalEvent::DISPLAYING;
-			mResourceId     = resourceID;
-			mDisplaying     = true;
-			mDisplayingTime = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime();
+			mEventID         = uidInsert(mEventID, DISPLAYING_UID);
+			mCategory        = KCalEvent::DISPLAYING;
+			mResourceId      = resourceID;
+			mDisplayingDefer = showDefer;
+			mDisplayingEdit  = showEdit;
+			mDisplaying      = true;
+			mDisplayingTime  = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime();
 			switch (al.type())
 			{
 				case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
@@ -1659,17 +1658,20 @@ KAAlarm KAEvent::convertDisplayingAlarm() const
 /******************************************************************************
  * Reinstate the original event from the 'displaying' event.
  */
-void KAEvent::reinstateFromDisplaying(const KAEvent& dispEvent)
+void KAEvent::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
 {
-	if (dispEvent.mDisplaying)
+	set(kcalEvent);
+	if (mDisplaying)
 	{
-		*this = dispEvent;
 		// Retrieve the original event's unique ID
 		int i = mEventID.lastIndexOf(DISPLAYING_UID);
 		if (i >= 0)
 			mEventID.replace(i, DISPLAYING_UID.length(), QString());
 
 		mCategory   = KCalEvent::ACTIVE;
+		resourceID  = mResourceId;
+		showDefer   = mDisplayingDefer;
+		showEdit    = mDisplayingEdit;
 		mDisplaying = false;
 		--mAlarmCount;
 		mUpdated = true;

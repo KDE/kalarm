@@ -164,7 +164,7 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18nc("Email subject", 
  *   event   != to initialise the dialogue to show the specified event's data.
  */
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event,
-                           bool useResource, bool readOnly)
+                           GetResourceType getResource, bool readOnly)
 	: KDialog(parent, caption,
 	          (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default)),
 	  mMainPageShown(false),
@@ -178,7 +178,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mDeferGroup(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
-	  mResourceEventId(useResource && event ? event->id() : QString()),
 	  mResource(0),
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
@@ -186,6 +185,23 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
+	switch (getResource)
+	{
+		case RES_USE_EVENT_ID:
+			if (event)
+			{
+				mResourceEventId = event->id();
+				break;
+			}
+			// fall through to RES_PROMPT
+		case RES_PROMPT:
+			mResourceEventId = QString("");   // empty but non-null
+			break;
+		case RES_IGNORE:
+		default:
+			mResourceEventId.clear();
+			break;
+	}
 	setDefaultButton(readOnly ? Cancel : Ok);
 	setButtonText(Default, i18n("Load Template..."));
 	KVBox* mainWidget = new KVBox(this);
@@ -1540,22 +1556,27 @@ void EditAlarmDlg::slotOk()
 	if (checkText(mAlarmMessage))
 	{
 		mResource = 0;
-		if (!mResourceEventId.isEmpty())
+		// A null resource event ID indicates that the caller already
+		// knows which resource to use.
+		if (!mResourceEventId.isNull())
 		{
-			mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
-			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
-			if (mResource->alarmType() != type)
-				mResource = 0;   // event may have expired while dialogue was open
-		}
-		if (!mResource  ||  !mResource->writable())
-		{
-			KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
-			mResource = AlarmResources::instance()->destination(type, this);
-		}
-		if (!mResource)
-		{
-			KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
-			return;
+			if (!mResourceEventId.isEmpty())
+			{
+				mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
+				AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
+				if (mResource->alarmType() != type)
+					mResource = 0;   // event may have expired while dialogue was open
+			}
+			if (!mResource  ||  !mResource->writable())
+			{
+				KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
+				mResource = AlarmResources::instance()->destination(type, this);
+			}
+			if (!mResource)
+			{
+				KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
+				return;
+			}
 		}
 		accept();
 	}

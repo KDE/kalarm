@@ -72,8 +72,8 @@ class KAlarmApp : public KUniqueApplication
 		virtual void       commitData(QSessionManager&);
 
 		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
-		void               alarmShowing(KAEvent&, KAAlarm::Type, const DateTime&);
 		void               alarmCompleted(const KAEvent&);
+		void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(ShellProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
@@ -142,7 +142,6 @@ class KAlarmApp : public KUniqueApplication
 
 		bool               initCheck(bool calendarOnly = false);
 		void               quitIf(int exitCode, bool force = false);
-		void               redisplayAlarms();
 		bool               checkSystemTray();
 		void               changeStartOfDay();
 		void               setUpDcop();

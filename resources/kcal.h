@@ -50,8 +50,7 @@ class KDE_EXPORT KCalEvent
 			ACTIVE,      // the event is currently active
 			ARCHIVED,    // the event is archived
 			DISPLAYING,  // the event is currently being displayed
-			TEMPLATE,    // the event is an alarm template
-			KORGANIZER   // the event is a copy of a KAlarm event, held by KOrganizer
+			TEMPLATE     // the event is an alarm template
 		};
 
 		static Status  uidStatus(const QString& uid);

@@ -753,7 +753,7 @@ int KAlarmApp::newInstance()
 		}
 	}
 	if (firstInstance  &&  !dontRedisplay  &&  !exitCode)
-		redisplayAlarms();
+		MessageWin::redisplayAlarms();
 
 	--mActiveCount;
 	firstInstance = false;
@@ -929,34 +929,6 @@ void KAlarmApp::processQueue()
 			quitIf(mPendingQuitCode);
 
 		mProcessingQueue = false;
-	}
-}
-
-/******************************************************************************
-*  Redisplay alarms which were being shown when the program last exited.
-*  Normally, these alarms will have been displayed by session restoration, but
-*  if the program crashed or was killed, we can redisplay them here so that
-*  they won't be lost.
-*/
-void KAlarmApp::redisplayAlarms()
-{
-	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
-	if (cal->isOpen())
-	{
-		KCal::Event::List events = cal->events();
-		for (KCal::Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
-		{
-			KCal::Event* kcalEvent = *it;
-			KAEvent event(kcalEvent);
-			event.setUid(KCalEvent::ACTIVE);
-			if (!MessageWin::findEvent(event.id()))
-			{
-				// This event should be displayed, but currently isn't being
-				kDebug(5950) << "KAlarmApp::redisplayAlarms(): " << event.id() << endl;
-				KAAlarm alarm = event.convertDisplayingAlarm();
-				(new MessageWin(event, alarm, false, !alarm.repeatAtLogin()))->show();
-			}
-		}
 	}
 }
 
@@ -1457,43 +1429,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 }
 
 /******************************************************************************
-* Called when an alarm is currently being displayed, to store a copy of the
-* alarm in the displaying calendar, and to reschedule it for its next repetition.
-* If no repetitions remain, cancel it.
-*/
-void KAlarmApp::alarmShowing(KAEvent& event, KAAlarm::Type alarmType, const DateTime& alarmTime)
-{
-	kDebug(5950) << "KAlarmApp::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(alarmType) << ")\n";
-	const KCal::Event* kcalEvent = AlarmCalendar::resources()->event(event.id());
-	if (!kcalEvent)
-		kError(5950) << "KAlarmApp::alarmShowing(): event ID not found: " << event.id() << endl;
-	else
-	{
-		KAAlarm alarm = event.alarm(alarmType);
-		if (!alarm.valid())
-			kError(5950) << "KAlarmApp::alarmShowing(): alarm type not found: " << event.id() << ":" << alarmType << endl;
-		else
-		{
-			// Copy the alarm to the displaying calendar in case of a crash, etc.
-			AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
-			KAEvent dispEvent;
-			dispEvent.setDisplaying(event, alarmType, (resource ? resource->identifier() : QString()), alarmTime.dateTime());
-			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
-			if (cal)
-			{
-				cal->deleteEvent(dispEvent.id());   // in case it already exists
-				cal->addEvent(dispEvent, KCalEvent::DISPLAYING);
-				cal->save();
-			}
-
-			rescheduleAlarm(event, alarm, true);
-			return;
-		}
-	}
-	Daemon::eventHandled(event.id());
-}
-
-/******************************************************************************
 * Called when an alarm action has completed, to perform any post-alarm actions.
 */
 void KAlarmApp::alarmCompleted(const KAEvent& event)
@@ -1651,7 +1586,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				if (win)
 					win->setRecreating();    // prevent post-alarm actions
 				delete win;
-				(new MessageWin(event, alarm, reschedule, allowDefer))->show();
+				int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | (allowDefer ? 0 : MessageWin::NO_DEFER);
+				(new MessageWin(event, alarm, flags))->show();
 			}
 			else
 			{
@@ -1982,8 +1918,8 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 
 		/* Need to open the display calendar now, since otherwise if the daemon
 		 * immediately notifies display alarms, they will often be processed while
-		 * redisplayAlarms() is executing open() (but before open() completes),
-		 * which causes problems!!
+		 * MessageWin::redisplayAlarms() is executing open() (but before open()
+		 * completes), which causes problems!!
 		 */
 		AlarmCalendar::displayCalendar()->open();
 

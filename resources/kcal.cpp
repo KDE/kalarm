@@ -41,7 +41,6 @@ static const QString ACTIVE_STATUS              = QString::fromLatin1("ACTIVE");
 static const QString TEMPLATE_STATUS            = QString::fromLatin1("TEMPLATE");
 static const QString ARCHIVED_STATUS            = QString::fromLatin1("ARCHIVED");
 static const QString DISPLAYING_STATUS          = QString::fromLatin1("DISPLAYING");
-static const QString KORGANIZER_STATUS          = QString::fromLatin1("KORG");
 typedef QMap<QString, KCalEvent::Status> PropertyMap;
 static PropertyMap properties;
 
@@ -50,7 +49,6 @@ static PropertyMap properties;
 static const QString ARCHIVED_UID   = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
 static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
-static const QString KORGANIZER_UID = QString::fromLatin1("-korg-");
 
 const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
 #endif
@@ -82,11 +80,6 @@ QString KCalEvent::uid(const QString& id, Status status)
 		oldStatus = TEMPLATE;
 		len = TEMPLATE_UID.length();
 	}
-	else if ((i = result.indexOf(KORGANIZER_UID)) > 0)
-	{
-		oldStatus = KORGANIZER;
-		len = KORGANIZER_UID.length();
-	}
 	else
 	{
 		oldStatus = ACTIVE;
@@ -102,7 +95,6 @@ QString KCalEvent::uid(const QString& id, Status status)
 			case ARCHIVED:    part = ARCHIVED_UID;  break;
 			case DISPLAYING:  part = DISPLAYING_UID;  break;
 			case TEMPLATE:    part = TEMPLATE_UID;  break;
-			case KORGANIZER:  part = KORGANIZER_UID;  break;
 			case EMPTY:
 			default:          return result;
 		}
@@ -129,7 +121,6 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 		properties[ACTIVE_STATUS]     = ACTIVE;
 		properties[TEMPLATE_STATUS]   = TEMPLATE;
 		properties[ARCHIVED_STATUS]   = ARCHIVED;
-		properties[KORGANIZER_STATUS] = KORGANIZER;
 		properties[DISPLAYING_STATUS] = DISPLAYING;
 	}
 
@@ -190,8 +181,6 @@ KCalEvent::Status KCalEvent::uidStatus(const QString& uid)
 		return DISPLAYING;
 	if (uid.indexOf(TEMPLATE_UID) > 0)
 		return TEMPLATE;
-	if (uid.indexOf(KORGANIZER_UID) > 0)
-		return KORGANIZER;
 	return ACTIVE;
 }
 #endif
@@ -212,7 +201,6 @@ void KCalEvent::setStatus(KCal::Event* event, KCalEvent::Status status, const QS
 		case TEMPLATE:    text = TEMPLATE_STATUS;  break;
 		case ARCHIVED:    text = ARCHIVED_STATUS;  break;
 		case DISPLAYING:  text = DISPLAYING_STATUS;  break;
-		case KORGANIZER:  text = KORGANIZER_STATUS;  break;
 		default:
 			event->removeCustomProperty(KCalendar::APPNAME, STATUS_PROPERTY);
 			return;
