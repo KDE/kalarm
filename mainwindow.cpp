@@ -291,7 +291,13 @@ void MainWindow::resourcesResized()
 {
 	QList<int> widths = mSplitter->sizes();
 	if (widths.count() > 1)
+	{
 		mResourcesWidth = widths[0];
+		// Width is reported as non-zero when resource selector is
+		// actually invisible, so note a zero width in these circumstances.
+		if (mResourcesWidth <= 5)
+			mResourcesWidth = 0;
+	}
 }
 
 /******************************************************************************
@@ -722,7 +728,7 @@ void MainWindow::slotModify()
 */
 void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), win, &event, true);
+	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), win, &event, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg.exec() == QDialog::Accepted)
 	{
 		KAEvent newEvent;
@@ -760,7 +766,7 @@ void MainWindow::slotView()
 		KAEvent event = item->event();
 		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Archived Alarm") + " [" + i18n("read-only") + "]"
 		                                             : i18n("View Alarm")),
-		                     this, &event, false, true);
+		                     this, &event, EditAlarmDlg::RES_PROMPT, true);
 		editDlg.exec();
 	}
 }
@@ -962,7 +968,6 @@ void MainWindow::slotToggleResourceSelector()
 	bool show = mActionToggleResourceSel->isChecked();
 	if (show)
 	{
-#warning On first showing, appears with zero width
 		if (mResourcesWidth <= 0)
 		{
 			mResourcesWidth = mResourceSelector->sizeHint().width();

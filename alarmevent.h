@@ -251,15 +251,6 @@ class KAEvent : public KAAlarmEventBase
 			DISPLAYING_     = 0x80000,
 			READ_ONLY_FLAGS = 0xF0000   // mask for all read-only internal values
 		};
-		/** The category of an event, indicated by the middle part of its UID. */
-		enum Status
-		{
-			ACTIVE,      // the event is currently active
-			ARCHIVED,    // the event is archived
-			DISPLAYING,  // the event is currently being displayed
-			TEMPLATE,    // the event is an alarm template
-			KORGANIZER   // the event is a copy of a KAlarm event, held by KOrganizer
-		};
 		enum Action
 		{
 			MESSAGE = T_MESSAGE,
@@ -322,10 +313,12 @@ class KAEvent : public KAAlarmEventBase
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(const QString& from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
-		void               setTemplate(const QString& name, int afterTime = -1)  { mTemplateName = name;  mTemplateAfterTime = afterTime;  mUpdated = true; }
+		void               setTemplate(const QString& name, int afterTime = -1);
 		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
 		OccurType          setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions = false);
 		void               setFirstRecurrence();
+		void               setCategory(KCalEvent::Status);
+		void               setUid(KCalEvent::Status s)                       { mEventID = KCalEvent::uid(mEventID, s);  mUpdated = true; }
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
 		void               adjustStartDate(const QDate&);
 		void               setDate(const QDate& d)                           { mNextMainDateTime.set(d);  mUpdated = true; }
@@ -335,7 +328,6 @@ class KAEvent : public KAAlarmEventBase
 		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
 		void               set(int flags);
-		void               setUid(KCalEvent::Status s)                       { mEventID = KCalEvent::uid(mEventID, s);  mUpdated = true; }
 		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
 		void               setLogFile(const QString& logfile);
 		void               setReminder(int minutes, bool onceOnly);
@@ -410,8 +402,8 @@ class KAEvent : public KAAlarmEventBase
 		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
-		bool               expired() const                { return mDisplaying && mMainExpired  ||  KCalEvent::uidStatus(mEventID) == KCalEvent::ARCHIVED; }
-		KCalEvent::Status  category() const               { return (mCategory == KCalEvent::DISPLAYING) ? mCategory : KCalEvent::uidStatus(mEventID); }
+		bool               expired() const                { return mDisplaying && mMainExpired  ||  mCategory == KCalEvent::ARCHIVED; }
+		KCalEvent::Status  category() const               { return mCategory; }
 		QString            resourceID() const             { return mResourceId; }
 
 		struct MonthPos
@@ -470,7 +462,7 @@ class KAEvent : public KAAlarmEventBase
 		QString            mPreAction;        // command to execute before alarm is displayed
 		QString            mPostAction;       // command to execute after alarm window is closed
 		DateTime           mStartDateTime;    // DTSTART and DTEND: start and end time for event
-		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in archived calendar
+		QDateTime          mSaveDateTime;     // CREATED: date event was created, or saved in archive calendar
 		QDateTime          mAtLoginDateTime;  // repeat-at-login time
 		DateTime           mDeferralTime;     // extra time to trigger alarm (if alarm or reminder deferred)
 		DateTime           mDisplayingTime;   // date/time shown in the alarm currently being displayed

@@ -144,7 +144,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, AlarmResourc
 	{
 		// Save the event details in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		if (!cal->addEvent(event, KCalEvent::ACTIVE, selectionView, useEventID, resource))
+		if (!cal->addEvent(event, selectionView, useEventID, resource))
 			status = UPDATE_FAILED;
 		else if (!cal->save())
 			status = SAVE_FAILED;
@@ -202,7 +202,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, AlarmListView* selectionView, boo
 		{
 			// Save the event details in the calendar file, and get the new event ID
 			KAEvent& event = events[i];
-			if (!cal->addEvent(event, KCalEvent::ACTIVE, selectionView, false, resource))
+			if (!cal->addEvent(event, selectionView, false, resource))
 			{
 				status = UPDATE_ERROR;
 				++warnErr;
@@ -249,8 +249,11 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	bool archiving = (event.category() == KCalEvent::ACTIVE);
 	if (archiving)
+	{
+		event.setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
 		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
-	KCal::Event* kcalEvent = cal->addEvent(event, KCalEvent::ARCHIVED, 0, false, resource);
+	}
+	KCal::Event* kcalEvent = cal->addEvent(event, 0, false, resource);
 	if (!kcalEvent)
 	{
 		event = oldEvent;     // failed to add to calendar - revert event to its original state
@@ -283,7 +286,7 @@ UpdateStatus addTemplate(KAEvent& event, TemplateListView* selectionView, QWidge
 
 	// Add the template to the calendar file
 	AlarmCalendar* cal = AlarmCalendar::resources();
-	if (!cal->addEvent(event, KCalEvent::TEMPLATE, promptParent, false, resource))
+	if (!cal->addEvent(event, promptParent, false, resource))
 		status = UPDATE_FAILED;
 	else if (!cal->save())
 		status = SAVE_FAILED;
@@ -440,7 +443,7 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* errmsgP
 		AlarmListView::deleteEvent(id);
 
 		// Delete the event from the calendar file
-		if (KCalEvent::uidStatus(id) != KCalEvent::ARCHIVED)
+		if (event.category() != KCalEvent::ARCHIVED)
 		{
 			if (event.copyToKOrganizer())
 			{
@@ -580,13 +583,14 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 
 			KAEvent oldEvent = event;    // so that we can reinstate the event if there's an error
 			QString oldid = event.id();
+			event.setCategory(KCalEvent::ACTIVE);    // this changes the event ID
 			if (event.recurs())
 				event.setNextOccurrence(now, true);   // skip any recurrences in the past
 			event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 			// Save the event details in the calendar file.
 			// This converts the event ID.
-			if (!cal->addEvent(event, KCalEvent::ACTIVE, selectionView, true, resource))
+			if (!cal->addEvent(event, selectionView, true, resource))
 			{
 				event = oldEvent;     // failed to add to calendar - revert event to its original state
 				status = UPDATE_ERROR;

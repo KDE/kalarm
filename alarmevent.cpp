@@ -87,10 +87,12 @@ static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VO
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 
 // Event status strings
-static const QString DISABLED_STATUS           = QLatin1String("DISABLED");
+static const QString DISABLED_STATUS            = QLatin1String("DISABLED");
 
 // Displaying event ID identifier
 static const QString DISPLAYING_UID = QLatin1String("-disp-");
+static const QString DISP_DEFER     = QLatin1String("DEFER");
+static const QString DISP_EDIT      = QLatin1String("EDIT");
 
 static const QString SC = QLatin1String(";");
 
@@ -187,6 +189,8 @@ void KAEvent::copy(const KAEvent& event)
 	mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
 	mArchive                 = event.mArchive;
 	mTemplateAfterTime       = event.mTemplateAfterTime;
+	mDisplayingDefer         = event.mDisplayingDefer;
+	mDisplayingEdit          = event.mDisplayingEdit;
 	mEnabled                 = event.mEnabled;
 	mUpdated                 = event.mUpdated;
 	delete mRecurrence;
@@ -207,6 +211,7 @@ void KAEvent::set(const Event* event)
 	mRevision               = event->revision();
 	mTemplateName          .clear();
 	mLogFile               .clear();
+	mResourceId            .clear();
 	mTemplateAfterTime      = -1;
 	mBeep                   = false;
 	mSpeak                  = false;
@@ -218,6 +223,8 @@ void KAEvent::set(const Event* event)
 	mReminderOnceOnly       = false;
 	mAutoClose              = false;
 	mArchiveRepeatAtLogin   = false;
+	mDisplayingDefer        = false;
+	mDisplayingEdit         = false;
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
@@ -226,6 +233,25 @@ void KAEvent::set(const Event* event)
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
 	mEnabled                = true;
+	QString param;
+	mCategory               = KCalEvent::status(event, &param);
+	if (mCategory == KCalEvent::DISPLAYING)
+	{
+		// It's a displaying calendar event - set values specific to displaying alarms
+		QStringList params = param.split(SC, QString::KeepEmptyParts);
+		int n = params.count();
+		if (n)
+		{
+			mResourceId = params[0];
+			for (int i = 1;  i < n;  ++i)
+			{
+				if (params[i] == DISP_DEFER)
+					mDisplayingDefer = true;
+				if (params[i] == DISP_EDIT)
+					mDisplayingEdit = true;
+			}
+		}
+	}
 	bool ok;
 	bool floats = false;
 	QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
@@ -715,6 +741,8 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mReminderOnceOnly       = false;
 	mDisplaying             = false;
 	mMainExpired            = false;
+	mDisplayingDefer        = false;
+	mDisplayingEdit         = false;
 	mArchive                = false;
 	mUpdated                = false;
 }
@@ -790,6 +818,34 @@ void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolu
 		mFadeVolume  = -1;
 		mFadeSeconds = 0;
 	}
+	mUpdated = true;
+}
+
+/******************************************************************************
+* Change the type of an event.
+* If it is being set to archived, set the archived indication in the event ID;
+* otherwise, remove the archived indication from the event ID.
+*/
+void KAEvent::setCategory(KCalEvent::Status s)
+{
+	if (s == mCategory)
+		return;
+	if (mCategory == KCalEvent::ARCHIVED)
+		mEventID = KCalEvent::uid(mEventID, KCalEvent::ACTIVE);
+	if (s == KCalEvent::ARCHIVED)
+		mEventID = KCalEvent::uid(mEventID, KCalEvent::ARCHIVED);
+	mCategory = s;
+	mUpdated = true;
+}
+
+/******************************************************************************
+* Set the event to be an alarm template.
+*/
+void KAEvent::setTemplate(const QString& name, int afterTime)
+{
+	setCategory(KCalEvent::TEMPLATE);
+	mTemplateName = name;
+	mTemplateAfterTime = afterTime;
 	mUpdated = true;
 }
 
@@ -905,8 +961,16 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	ev->removeCustomProperty(KCalendar::APPNAME, LOG_PROPERTY);
 	ev->removeCustomProperty(KCalendar::APPNAME, ARCHIVE_PROPERTY);
 
-if (mCategory == KCalEvent::DISPLAYING)   // temporary, until all event types are converted to new format
-	KCalEvent::setStatus(ev, mCategory, (mCategory == KCalEvent::DISPLAYING ? mResourceId : QString()));
+	QString param;
+	if (mCategory == KCalEvent::DISPLAYING)
+	{
+		param = mResourceId;
+		if (mDisplayingDefer)
+			param += SC + DISP_DEFER;
+		if (mDisplayingEdit)
+			param += SC + DISP_EDIT;
+	}
+	KCalEvent::setStatus(ev, mCategory, param);
 	QStringList flags;
 	if (mStartDateTime.isDateOnly())
 		flags += DATE_ONLY_FLAG;
@@ -1564,14 +1628,14 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 }
 
 /******************************************************************************
- * Set the event to be a copy of the specified event, making the specified
- * alarm the 'displaying' alarm.
- * The purpose of setting up a 'displaying' alarm is to be able to reinstate
- * the alarm message in case of a crash, or to reinstate it should the user
- * choose to defer the alarm. Note that even repeat-at-login alarms need to be
- * saved in case their end time expires before the next login.
- * Reply = true if successful, false if alarm was not copied.
- */
+* Set the event to be a copy of the specified event, making the specified
+* alarm the 'displaying' alarm.
+* The purpose of setting up a 'displaying' alarm is to be able to reinstate
+* the alarm message in case of a crash, or to reinstate it should the user
+* choose to defer the alarm. Note that even repeat-at-login alarms need to be
+* saved in case their end time expires before the next login.
+* Reply = true if successful, false if alarm was not copied.
+*/
 bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const QString& resourceID, const QDateTime& repeatAtLoginTime,
                             bool showEdit, bool showDefer)
 {
@@ -1626,8 +1690,8 @@ QString KAEvent::uidInsert(const QString& id, const QString& insert)
 }
 
 /******************************************************************************
- * Return the original alarm which the displaying alarm refers to.
- */
+* Return the original alarm which the displaying alarm refers to.
+*/
 KAAlarm KAEvent::convertDisplayingAlarm() const
 {
 	KAAlarm al;
@@ -2913,6 +2977,8 @@ void KAEvent::dumpDebug() const
 	{
 		kDebug(5950) << "-- mDisplayingTime:" << mDisplayingTime.toString() << ":\n";
 		kDebug(5950) << "-- mDisplayingFlags:" << mDisplayingFlags << ":\n";
+		kDebug(5950) << "-- mDisplayingDefer:" << mDisplayingDefer << ":\n";
+		kDebug(5950) << "-- mDisplayingEdit:" << mDisplayingEdit << ":\n";
 	}
 	kDebug(5950) << "-- mRevision:" << mRevision << ":\n";
 	kDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false") << ":\n";

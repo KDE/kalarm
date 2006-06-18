@@ -196,7 +196,7 @@ AlarmCalendar::~AlarmCalendar()
 }
 
 /******************************************************************************
-* Open the calendar file if not already open, and load it into memory.
+* Open the calendar if not already open, and load it into memory.
 */
 bool AlarmCalendar::open()
 {
@@ -328,6 +328,8 @@ bool AlarmCalendar::reload()
 */
 bool AlarmCalendar::saveCal(const QString& newFile)
 {
+	if (!mCalendar)
+		return false;
 	if (mCalType == RESOURCES)
 	{
 		kDebug(5950) << "AlarmCalendar::saveCal(RESOURCES)" << endl;
@@ -733,17 +735,17 @@ void AlarmCalendar::startPurgeTimer()
 /******************************************************************************
 * Add the specified event to the calendar.
 * If it is an active event and 'useEventID' is false, a new event ID is
-* created. In all other cases, the event ID is taken from 'event'.
+* created. In all other cases, the event ID is taken from 'event' (if non-null).
 * 'event' is updated with the actual event ID.
 * Reply = the KCal::Event as written to the calendar
 *       = 0 if an error occurred, in which case 'event' is unchanged.
 */
-Event* AlarmCalendar::addEvent(KAEvent& event, KCalEvent::Status type, QWidget* promptParent, 
-                               bool useEventID, AlarmResource* resource)
+Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEventID, AlarmResource* resource)
 {
 	if (!mOpen)
 		return 0;
 	// Check that the event type is valid for the calendar
+	KCalEvent::Status type = event.category();
 	if (type != mEventType)
 	{
 		switch (type)
@@ -811,6 +813,7 @@ Event* AlarmCalendar::addEvent(KAEvent& event, KCalEvent::Status type, QWidget* 
 /******************************************************************************
 * Modify the specified event in the calendar with its new contents.
 * The new event must have a different event ID from the old one.
+* It is assumed to be of the same event type as the old one (active, etc.)
 */
 bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 
@@ -822,7 +825,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 		kError(5950) << "AlarmCalendar::modifyEvent(): same IDs" << endl;
 		return false;
 	}
-	if (!mOpen  ||  newEvent.category() != KCalEvent::uidStatus(oldEventId))
+	if (!mOpen)
 		return false;
 	if (mCalType == RESOURCES)
 	{
@@ -839,7 +842,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 	}
 	else
 	{
-		if (!addEvent(newEvent, mEventType, 0, true))
+		if (!addEvent(newEvent, 0, true))
 			return false;
 	}
 	deleteEvent(oldEventId);

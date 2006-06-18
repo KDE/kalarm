@@ -116,8 +116,8 @@ class UndoAdd : public UndoItem
 		virtual UndoItem* createRedo(const KAEvent&, AlarmResource*);
 	private:
 		AlarmResource* mResource;  // resource calendar containing the event
-		QString  mEventID;
-		QString  mDescription;
+		QString        mEventID;
+		QString        mDescription;
 };
 
 class UndoEdit : public UndoItem
@@ -136,9 +136,9 @@ class UndoEdit : public UndoItem
 		virtual UndoItem* restore();
 	private:
 		AlarmResource* mResource;  // resource calendar containing the event
-		KAEvent*  mOldEvent;
-		QString   mNewEventID;
-		QString   mDescription;
+		KAEvent*       mOldEvent;
+		QString        mNewEventID;
+		QString        mDescription;
 };
 
 class UndoDelete : public UndoItem
@@ -153,7 +153,7 @@ class UndoDelete : public UndoItem
 		virtual QString   eventID() const       { return mEvent->id(); }
 		virtual QString   oldEventID() const    { return mEvent->id(); }
 		virtual UndoItem* restore();
-		KAEvent*  event() const                 { return mEvent; }
+		KAEvent*          event() const         { return mEvent; }
 	protected:
 		virtual UndoItem* createRedo(const KAEvent&, AlarmResource*);
 	private:
@@ -241,9 +241,9 @@ void Undo::clear()
 	if (!mUndoList.isEmpty()  ||  !mRedoList.isEmpty())
 	{
 		mInstance->blockSignals(true);
-		while (mUndoList.count())
+		while (!mUndoList.isEmpty())
 			delete mUndoList.first();    // N.B. 'delete' removes the object from the list
-		while (mRedoList.count())
+		while (!mRedoList.isEmpty())
 			delete mRedoList.first();    // N.B. 'delete' removes the object from the list
 		mInstance->blockSignals(false);
 		emitChanged();
@@ -324,24 +324,24 @@ void Undo::saveReactivates(const EventList& events, const QString& name)
 void Undo::removeRedos(const QString& eventID)
 {
 	QString id = eventID;
-	for (int i = 0, end = mRedoList.count();  i < end;  )
+	for (int i = 0;  i < mRedoList.count();  )
 	{
 		UndoItem* item = mRedoList[i];
 //kDebug(5950)<<"removeRedos(): "<<item->eventID()<<" (looking for "<<id<<")"<<endl;
 		if (item->operation() == UndoItem::MULTI)
 		{
 			if (item->deleteID(id))
-				delete item;   // the old multi-redo was replaced with a new single redo
-#warning Check for correct index after deletion
-			++i;
+			{
+				// The old multi-redo was replaced with a new single redo
+				delete item;   // N.B. 'delete' removes the object from the list
+			}
 		}
 		else if (item->eventID() == id)
 		{
 			if (item->operation() == UndoItem::EDIT)
 				id = item->oldEventID();   // continue looking for its post-edit ID
 			item->setType(NONE);    // prevent the destructor removing it from the list
-			delete item;
-			mRedoList.removeAt(i);
+			delete item;   // N.B. 'delete' removes the object from the list
 		}
 		else
 			++i;
@@ -965,7 +965,7 @@ UndoItem* UndoDelete::restore()
 			if (mEvent->toBeArchived())
 			{
 				// It was archived when it was deleted
-				mEvent->setUid(KCalEvent::ARCHIVED);
+				mEvent->setCategory(KCalEvent::ARCHIVED);
 				switch (KAlarm::reactivateEvent(*mEvent, 0, mResource))
 				{
 					case KAlarm::UPDATE_KORG_ERR:

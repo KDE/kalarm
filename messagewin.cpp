@@ -170,6 +170,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mRestoreHeight(0),
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
+	  mNoDefer(true),
 	  mInvalid(false),
 	  mAudioObject(0),
 	  mEvent(event),
@@ -708,14 +709,13 @@ void MessageWin::saveProperties(KConfig* config)
 		}
 		if (mCloseTime.isValid())
 			config->writeEntry("Expiry", mCloseTime);
-#ifndef WITHOUT_ARTS
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
 			// Only need to restart sound file playing if it's being repeated
 			config->writePathEntry(QLatin1String("AudioFile"), mAudioFile);
 			config->writeEntry("Volume", static_cast<int>(mVolume * 100));
 		}
-#endif
+		config->writeEntry("Speak", mSpeak);
 		config->writeEntry("Height", height());
 		config->writeEntry("DeferMins", mDefaultDeferMinutes);
 		config->writeEntry("NoDefer", mNoDefer);
@@ -746,14 +746,13 @@ void MessageWin::readProperties(KConfig* config)
 	bool dateOnly        = config->readEntry("DateOnly", false);
 	mDateTime.set(dt, dateOnly);
 	mCloseTime           = config->readEntry("Expiry", invalidDateTime);
-#ifndef WITHOUT_ARTS
 	mAudioFile           = config->readPathEntry(QLatin1String("AudioFile"));
 	mVolume              = static_cast<float>(config->readEntry("Volume", 0)) / 100;
 	mFadeVolume          = -1;
 	mFadeSeconds         = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
-#endif
+	mSpeak               = config->readEntry("Speak", false);
 	mRestoreHeight       = config->readEntry("Height", 0);
 	mDefaultDeferMinutes = config->readEntry("DeferMins", 0);
 	mNoDefer             = config->readEntry("NoDefer", false);
@@ -836,6 +835,9 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 			return false;
 		event.set(kcalEvent);
 		event.setArchive();     // ensure that it gets re-archived if it's saved
+		event.setCategory(KCalEvent::ACTIVE);
+		if (mEventID != event.id())
+			kError(5950) << "MessageWin::retrieveEvent(): wrong event ID" << endl;
 		event.setEventID(mEventID);
 		resource  = 0;
 		showEdit  = true;
@@ -889,7 +891,7 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 			if (cal)
 			{
 				cal->deleteEvent(dispEvent.id());   // in case it already exists
-				cal->addEvent(dispEvent, KCalEvent::DISPLAYING);
+				cal->addEvent(dispEvent);
 				cal->save();
 			}
 
@@ -1458,6 +1460,8 @@ void MessageWin::slotDefer()
 	{
 		DateTime dateTime  = mDeferDlg->getDateTime();
 		int      delayMins = mDeferDlg->deferMinutes();
+		// Fetch the up-to-date alarm from the calendar. Note that it could have
+		// changed since it was displayed.
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::resources()->event(mEventID);
 		if (kcalEvent)
 		{
@@ -1490,7 +1494,7 @@ void MessageWin::slotDefer()
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, 0, resource, true, false, mDeferDlg);
-			event.setUid(KCalEvent::ARCHIVED);
+			event.setCategory(KCalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}
 		if (theApp()->wantRunInSystemTray())
