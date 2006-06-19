@@ -669,6 +669,7 @@ void MessageWin::saveProperties(KConfig* config)
 			config->writeEntry(QString::fromLatin1("Volume"), static_cast<int>(mVolume * 100));
 		}
 #endif
+		config->writeEntry(QString::fromLatin1("Speak"), mSpeak);
 		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
 		config->writeEntry(QString::fromLatin1("KMailSerial"), mKMailSerialNumber);
@@ -706,6 +707,7 @@ void MessageWin::readProperties(KConfig* config)
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
+	mSpeak             = config->readBoolEntry(QString::fromLatin1("Speak"));
 	mRestoreHeight     = config->readNumEntry(QString::fromLatin1("Height"));
 	mNoDefer           = config->readBoolEntry(QString::fromLatin1("NoDefer"));
 	mKMailSerialNumber = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
