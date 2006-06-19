@@ -70,6 +70,7 @@ const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
+QString uidKOrganizer(const QString& eventID);
 inline bool runKOrganizer()   { return KAlarm::runProgram("korganizer", KORG_DCOP_WINDOW, korganizerName, korgStartError); }
 }
 
@@ -1131,7 +1132,7 @@ bool sendToKOrganizer(const KAEvent& event)
 {
 	KCal::Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
 	// Change the event ID to avoid duplicating the same unique ID as the original event
-	QString uid = KAEvent::uidInsert(event.id(), KORGANIZER_UID);
+	QString uid = uidKOrganizer(event.id());
 	kcalEvent->setUid(uid);
 	kcalEvent->clearAlarms();
 	QString userEmail;
@@ -1193,7 +1194,7 @@ bool deleteFromKOrganizer(const QString& eventID)
 {
 	if (!runKOrganizer())     // start KOrganizer if it isn't already running
 		return false;
-	QString newID = KAEvent::uidInsert(eventID, KORGANIZER_UID);
+	QString newID = uidKOrganizer(eventID);
 	QByteArray  data, replyData;
 	DCOPCString replyType;
 	QDataStream arg(&data, QIODevice::WriteOnly);
@@ -1212,6 +1213,18 @@ bool deleteFromKOrganizer(const QString& eventID)
 	}
 	kError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
 	return false;
+}
+
+/******************************************************************************
+* Insert a KOrganizer string after the hyphen in the supplied event ID.
+*/
+QString uidKOrganizer(const QString& id)
+{
+	QString result = id;
+	int i = result.lastIndexOf('-');
+	if (i < 0)
+		i = result.length();
+	return result.insert(i, KORGANIZER_UID);
 }
 
 } // namespace

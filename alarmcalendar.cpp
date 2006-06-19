@@ -540,7 +540,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			KCalEvent::Status type = KCalEvent::status(event);
 			if (type == KCalEvent::TEMPLATE)
 			{
-				// If the event was not created by KAlarm, don't treat it as a template
+				// If we know the event was not created by KAlarm, don't treat it as a template
 				if (caltype == KCalendar::Incompatible)
 					type = KCalEvent::ACTIVE;
 			}
@@ -892,8 +892,8 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 			return true;
 		}
 	}
-	if (KCalEvent::uidStatus(eventID) == KCalEvent::ACTIVE)
-		Daemon::eventHandled(eventID);
+	// Event not found. Tell daemon just in case it was an active event which was triggered.
+	Daemon::eventHandled(eventID);
 	return false;
 }
 

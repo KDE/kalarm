@@ -53,7 +53,6 @@ class KDE_EXPORT KCalEvent
 			TEMPLATE     // the event is an alarm template
 		};
 
-		static Status  uidStatus(const QString& uid);
 		static QString uid(const QString& id, Status);
 		static Status  status(const KCal::Event*, QString* param = 0);
 		static void    setStatus(KCal::Event*, Status, const QString& param = QString());

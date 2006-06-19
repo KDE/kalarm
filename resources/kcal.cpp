@@ -30,8 +30,6 @@
 
 QByteArray KCalendar::APPNAME = "KALARM";
 
-#define OLD_EVENT_FORMAT
-
 using namespace KCal;
 
 // Event custom properties.
@@ -44,19 +42,16 @@ static const QString DISPLAYING_STATUS          = QString::fromLatin1("DISPLAYIN
 typedef QMap<QString, KCalEvent::Status> PropertyMap;
 static PropertyMap properties;
 
-#ifdef OLD_EVENT_FORMAT
 // Event ID identifiers
 static const QString ARCHIVED_UID   = QString::fromLatin1("-exp-");
 static const QString DISPLAYING_UID = QString::fromLatin1("-disp-");
-static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
 
-const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
-#endif
+// Old KAlarm format identifiers
+static const QString TEMPLATE_UID   = QString::fromLatin1("-tmpl-");
 
 const QString SC = QString::fromLatin1(";");
 
 
-#ifdef OLD_EVENT_FORMAT
 /******************************************************************************
 * Convert a unique ID to indicate that the event is in a specified calendar file.
 */
@@ -75,34 +70,35 @@ QString KCalEvent::uid(const QString& id, Status status)
 		oldStatus = DISPLAYING;
 		len = DISPLAYING_UID.length();
 	}
-	else if ((i = result.indexOf(TEMPLATE_UID)) > 0)
-	{
-		oldStatus = TEMPLATE;
-		len = TEMPLATE_UID.length();
-	}
 	else
 	{
 		oldStatus = ACTIVE;
 		i = result.lastIndexOf('-');
 		len = 1;
+		if (i < 0)
+		{
+			i = result.length();
+			len = 0;
+		}
+		else
+			len = 1;
 	}
 	if (status != oldStatus  &&  i > 0)
 	{
 		QString part;
 		switch (status)
 		{
-			case ACTIVE:      part = QString::fromLatin1("-");  break;
 			case ARCHIVED:    part = ARCHIVED_UID;  break;
 			case DISPLAYING:  part = DISPLAYING_UID;  break;
-			case TEMPLATE:    part = TEMPLATE_UID;  break;
+			case ACTIVE:
+			case TEMPLATE:
 			case EMPTY:
-			default:          return result;
+			default:          part = QLatin1String("-");  break;
 		}
 		result.replace(i, len, part);
 	}
 	return result;
 }
-#endif
 
 /******************************************************************************
 * Check an event to determine its type - active, archived, template or empty.
@@ -150,40 +146,18 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 			*param = property.mid(i + 1);
 		return it.value();
 	}
-#ifdef OLD_EVENT_FORMAT
-	switch (uidStatus(event->uid()))
-	{
-		case ARCHIVED:  return ARCHIVED;
-		case TEMPLATE:  return TEMPLATE;
-		default:  break;
-	}
-	if (!event->summary().isEmpty())
-		return TEMPLATE;
-	const QStringList& cats = event->categories();
-	for (int i = 0;  i < cats.count();  ++i)
-	{
-		if (cats[i].startsWith(TEMPL_AFTER_TIME_CATEGORY))
-			return TEMPLATE;
-	}
-#endif
-	return ACTIVE;
-}
 
-#ifdef OLD_EVENT_FORMAT
-/******************************************************************************
-* Get the calendar type for a unique ID.
-*/
-KCalEvent::Status KCalEvent::uidStatus(const QString& uid)
-{
+	// The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
+	// Check first for an old KAlarm format, which indicated the event type in its UID.
+	QString uid = event->uid();
 	if (uid.indexOf(ARCHIVED_UID) > 0)
 		return ARCHIVED;
-	if (uid.indexOf(DISPLAYING_UID) > 0)
-		return DISPLAYING;
 	if (uid.indexOf(TEMPLATE_UID) > 0)
 		return TEMPLATE;
+
+	// Otherwise, assume it's an active alarm
 	return ACTIVE;
 }
-#endif
 
 /******************************************************************************
 * Set the event's type - active, archived, template, etc.

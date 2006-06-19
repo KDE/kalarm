@@ -90,9 +90,8 @@ static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SP
 static const QString DISABLED_STATUS            = QLatin1String("DISABLED");
 
 // Displaying event ID identifier
-static const QString DISPLAYING_UID = QLatin1String("-disp-");
-static const QString DISP_DEFER     = QLatin1String("DEFER");
-static const QString DISP_EDIT      = QLatin1String("EDIT");
+static const QString DISP_DEFER = QLatin1String("DEFER");
+static const QString DISP_EDIT  = QLatin1String("EDIT");
 
 static const QString SC = QLatin1String(";");
 
@@ -830,10 +829,7 @@ void KAEvent::setCategory(KCalEvent::Status s)
 {
 	if (s == mCategory)
 		return;
-	if (mCategory == KCalEvent::ARCHIVED)
-		mEventID = KCalEvent::uid(mEventID, KCalEvent::ACTIVE);
-	if (s == KCalEvent::ARCHIVED)
-		mEventID = KCalEvent::uid(mEventID, KCalEvent::ARCHIVED);
+	mEventID = KCalEvent::uid(mEventID, s);
 	mCategory = s;
 	mUpdated = true;
 }
@@ -1652,8 +1648,7 @@ bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const
 		{
 			*this = event;
 			// Change the event ID to avoid duplicating the same unique ID as the original event
-			mEventID         = uidInsert(mEventID, DISPLAYING_UID);
-			mCategory        = KCalEvent::DISPLAYING;
+			setCategory(KCalEvent::DISPLAYING);
 			mResourceId      = resourceID;
 			mDisplayingDefer = showDefer;
 			mDisplayingEdit  = showEdit;
@@ -1675,18 +1670,6 @@ bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const
 		}
 	}
 	return false;
-}
-
-/******************************************************************************
-* Insert a string after the hyphen in the supplied event ID.
-*/
-QString KAEvent::uidInsert(const QString& id, const QString& insert)
-{
-	QString result = id;
-	int i = result.lastIndexOf('-');
-	if (i < 0)
-		i = result.length();
-	return result.insert(i, insert);
 }
 
 /******************************************************************************
@@ -1728,11 +1711,7 @@ void KAEvent::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceI
 	if (mDisplaying)
 	{
 		// Retrieve the original event's unique ID
-		int i = mEventID.lastIndexOf(DISPLAYING_UID);
-		if (i >= 0)
-			mEventID.replace(i, DISPLAYING_UID.length(), QString());
-
-		mCategory   = KCalEvent::ACTIVE;
+		setCategory(KCalEvent::ACTIVE);
 		resourceID  = mResourceId;
 		showDefer   = mDisplayingDefer;
 		showEdit    = mDisplayingEdit;

@@ -428,7 +428,6 @@ class KAEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
-		static QString     uidInsert(const QString& id, const QString& insert);
 		static int         calVersion();
 		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
