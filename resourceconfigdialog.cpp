@@ -104,7 +104,7 @@ void ResourceConfigDialog::setInEditMode( bool value )
 
 void ResourceConfigDialog::slotNameChanged( const QString &text)
 {
-  enableButtonOK( !text.isEmpty() );
+  enableButtonOk( !text.isEmpty() );
 }
 
 void ResourceConfigDialog::setReadOnly( bool value )

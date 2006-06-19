@@ -134,7 +134,7 @@ void DeferAlarmDlg::setDeferMinutes(int minutes)
 */
 void DeferAlarmDlg::slotPastLimit()
 {
-	enableButtonOK(false);
+	enableButtonOk(false);
 }
 
 /******************************************************************************

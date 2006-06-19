@@ -72,7 +72,7 @@ const KAEvent* TemplatePickDlg::selectedTemplate() const
 */
 void TemplatePickDlg::slotSelectionChanged()
 {
-	enableButtonOK(mTemplateList->selectedItem());
+	enableButtonOk(mTemplateList->selectedItem());
 }
 
 /******************************************************************************

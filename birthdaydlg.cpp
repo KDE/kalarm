@@ -301,7 +301,7 @@ void BirthdayDlg::updateSelectionList()
 			selection = true;
 			break;
 		}
-	enableButtonOK(selection);
+	enableButtonOk(selection);
 }
 
 /******************************************************************************
@@ -382,10 +382,10 @@ void BirthdayDlg::slotSelectionChanged()
 	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
 		if (mAddresseeList->isSelected(item))
 		{
-			enableButtonOK(true);
+			enableButtonOk(true);
 			return;
 		}
-	enableButtonOK(false);
+	enableButtonOk(false);
 
 }
 
