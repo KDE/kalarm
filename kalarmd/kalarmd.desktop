@@ -39,6 +39,7 @@ Name[ta]=கேஅலாரம் டெமான்
 Name[tr]=KAlarm Servis Programı
 Name[uk]=Даемон KAlarm
 Name[zh_CN]=KAlarm 进程
+Name[zh_TW]=KAlarm 守護程式
 Exec=kalarmd
 Icon=kalarmd
 Type=Application

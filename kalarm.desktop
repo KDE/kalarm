@@ -59,6 +59,7 @@ GenericName[tg]=Идоракунии хотиррасониҳои шахсӣ
 GenericName[tr]=Kişisel Alarm
 GenericName[uk]=Персональний планувальник нагадувань
 GenericName[zh_CN]=个人日程提醒
+GenericName[zh_TW]=個人鬧鐘排程程式
 Terminal=false
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=true
