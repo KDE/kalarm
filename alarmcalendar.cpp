@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <ktempfile.h>
+#include <kfiledialog.h>
 #include <dcopclient.h>
 #include <kdebug.h>
 
@@ -49,6 +50,7 @@ extern "C" {
 
 #include "calendarcompat.h"
 #include "daemon.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
@@ -427,6 +429,135 @@ void AlarmCalendar::close()
 		mCalendar = 0;
 	}
 	mOpen = false;
+}
+
+/******************************************************************************
+* Import alarms from an external calendar and merge them into KAlarm's calendar.
+* The alarms are given new unique event IDs.
+* Parameters: parent = parent widget for error message boxes
+* Reply = true if all alarms in the calendar were successfully imported
+*       = false if any alarms failed to be imported.
+*/
+bool AlarmCalendar::importAlarms(QWidget* parent)
+{
+	KURL url = KFileDialog::getOpenURL(QString::fromLatin1(":importalarms"),
+	                                   QString::fromLatin1("*.vcs *.ics|%1").arg(i18n("Calendar Files")), parent);
+	if (url.isEmpty())
+	{
+		kdError(5950) << "AlarmCalendar::importAlarms(): Empty URL" << endl;
+		return false;
+	}
+	if (!url.isValid())
+	{
+		kdDebug(5950) << "AlarmCalendar::importAlarms(): Invalid URL" << endl;
+		return false;
+	}
+	kdDebug(5950) << "AlarmCalendar::importAlarms(" << url.prettyURL() << ")" << endl;
+
+	bool success = true;
+	QString filename;
+	bool local = url.isLocalFile();
+	if (local)
+	{
+		filename = url.path();
+		if (!KStandardDirs::exists(filename))
+		{
+			kdDebug(5950) << "AlarmCalendar::importAlarms(): File '" << url.prettyURL() << "' not found" << endl;
+			KMessageBox::error(parent, i18n("Could not load calendar '%1'.").arg(url.prettyURL()));
+			return false;
+		}
+	}
+	else
+	{
+		if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
+		{
+			kdError(5950) << "AlarmCalendar::importAlarms(): Download failure" << endl;
+			KMessageBox::error(parent, i18n("Cannot download calendar:\n%1").arg(url.prettyURL()));
+			return false;
+		}
+		kdDebug(5950) << "--- Downloaded to " << filename << endl;
+	}
+
+	// Read the calendar and add its alarms to the current calendars
+	CalendarLocal cal(QString::fromLatin1("UTC"));
+	cal.setLocalTime();    // write out using local time (i.e. no time zone)
+	success = cal.load(filename);
+	if (!success)
+	{
+		kdDebug(5950) << "AlarmCalendar::importAlarms(): error loading calendar '" << filename << "'" << endl;
+		KMessageBox::error(parent, i18n("Could not load calendar '%1'.").arg(url.prettyURL()));
+	}
+	else
+	{
+		CalendarCompat::fix(cal, filename);
+		bool saveActive   = false;
+		bool saveExpired  = false;
+		bool saveTemplate = false;
+		AlarmCalendar* active  = activeCalendar();
+		AlarmCalendar* expired = expiredCalendar();
+		AlarmCalendar* templat = 0;
+		AlarmCalendar* acal;
+		Event::List events = cal.rawEvents();
+		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+		{
+			const Event* event = *it;
+			if (event->alarms().isEmpty())
+				continue;    // ignore events without alarms
+			KAEvent::Status type = KAEvent::uidStatus(event->uid());
+			switch (type)
+			{
+				case KAEvent::ACTIVE:
+					acal = active;
+					saveActive = true;
+					break;
+				case KAEvent::EXPIRED:
+					acal = expired;
+					saveExpired = true;
+					break;
+				case KAEvent::TEMPLATE:
+					if (!templat)
+						templat = templateCalendarOpen();
+					acal = templat;
+					saveTemplate = true;
+					break;
+				default:
+					continue;
+			}
+			if (!acal)
+				continue;
+
+			Event* newev = new Event(*event);
+
+			// If there is a display alarm without display text, use the event
+			// summary text instead.
+			if (type == KAEvent::ACTIVE  &&  !newev->summary().isEmpty())
+			{
+				const Alarm::List& alarms = newev->alarms();
+				for (Alarm::List::ConstIterator ait = alarms.begin();  ait != alarms.end();  ++ait)
+				{
+					Alarm* alarm = *ait;
+					if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
+						alarm->setText(newev->summary());
+				}
+				newev->setSummary(QString::null);   // KAlarm only uses summary for template names
+			}
+			// Give the event a new ID and add it to the calendar
+			newev->setUid(KAEvent::uid(CalFormat::createUniqueId(), type));
+			if (!acal->mCalendar->addEvent(newev))
+				success = false;
+		}
+
+		// Save any calendars which have been modified
+		if (saveActive)
+			active->saveCal();
+		if (saveExpired)
+			expired->saveCal();
+		if (saveTemplate)
+			templat->saveCal();
+	}
+	if (!local)
+		KIO::NetAccess::removeTempFile(filename);
+	return success;
 }
 
 /******************************************************************************
