@@ -40,6 +40,7 @@ class Daemon : public QObject
 {
 		Q_OBJECT
 	public:
+		~Daemon();
 		static void      initialise();
 		static void      createDcopHandler();
 		static bool      isDcopHandlerReady()    { return mDcopHandler; }
@@ -99,9 +100,12 @@ class Daemon : public QObject
 		static bool      checkIfRunning();
 		static void      setFastCheck();
 		static void      setStatus(Status);
+		static bool      sendDaemon(const QString& method, const QList<QVariant>& args);
+		static bool      isDaemonRegistered();
 
 		static Daemon*   mInstance;            // only one instance allowed
 		static NotificationHandler* mDcopHandler;  // handles DCOP requests from daemon
+		static QDBusInterface*      mDBusDaemon;   // daemon's D-Bus interface
 		static QList<QString>       mQueuedEvents; // IDs of pending events that daemon has triggered
 		static QList<QString>       mSavingEvents; // IDs of updated events that are currently being saved
 		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon

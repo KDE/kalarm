@@ -23,20 +23,17 @@
 #include <QTimer>
 #include <QIcon>
 #include <QByteArray>
+#include <dbus/qdbus.h>
 
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <dcopclient.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
 
 #include "kalarmd/kalarmd.h"
-#include "kalarmd/alarmdaemoniface.h"
-#include "alarmdaemoniface_stub.h"
-#include "kalarmd/alarmguiiface.h"
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"
@@ -46,29 +43,32 @@
 
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
-static const char*  NOTIFY_DCOP_OBJECT  = "notify";    // DCOP name of KAlarm's interface for notification by alarm daemon
+static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's interface for notification by alarm daemon
+static const char*  DAEMON_DBUS_IFACE   = "org.kde.AlarmDaemon";
 
 
 /*=============================================================================
 =  Class: NotificationHandler
-=  Handles the the alarm daemon's client notification DCOP interface.
+=  Handles the the alarm daemon's client notification D-Bus interface.
 =============================================================================*/
 
-class NotificationHandler : public QObject, virtual public AlarmGuiIface
+class NotificationHandler : public QObject
 {
+		Q_CLASSINFO("D-Bus Interface", "org.kde.NotificationHandler")
 	public:
 		NotificationHandler();
-	private:
-		// DCOP interface
-		void  alarmDaemonUpdate(int calendarStatus);
-		void  handleEvent(const QString& eventID);
-		void  registered(bool reregister, int result);
-		void  cacheDownloaded(const QString& resourceID);
+	public Q_SLOTS:
+		// D-Bus interface
+		Q_SCRIPTABLE void alarmDaemonUpdate(int calendarStatus);
+		Q_SCRIPTABLE void handleEvent(const QString& eventID);
+		Q_SCRIPTABLE void registered(bool reregister, int result);
+		Q_SCRIPTABLE void cacheDownloaded(const QString& resourceID);
 };
 
 
 Daemon*              Daemon::mInstance = 0;
 NotificationHandler* Daemon::mDcopHandler = 0;
+QDBusInterface*      Daemon::mDBusDaemon = 0;
 QList<QString>       Daemon::mQueuedEvents;
 QList<QString>       Daemon::mSavingEvents;
 QTimer*              Daemon::mStartTimer = 0;
@@ -85,10 +85,16 @@ bool                 Daemon::mEnableCalPending = false;
 bool                 Daemon::mRegisterFailMsg = false;
 
 // How frequently to check the daemon's status after starting it.
-// This is equal to the length of time we wait after the daemon is registered with DCOP
-// before we assume that it is ready to accept DCOP calls.
+// This is equal to the length of time we wait after the daemon is registered with D-Bus
+// before we assume that it is ready to accept D-Bus calls.
 static const int startCheckInterval = 500;     // 500 milliseconds
 
+
+Daemon::~Daemon()
+{
+	delete mDBusDaemon;
+	mDBusDaemon = 0;
+}
 
 /******************************************************************************
 * Initialise.
@@ -121,6 +127,22 @@ void Daemon::createDcopHandler()
 	mStatusTimer = new QTimer(mInstance);
 	connect(mStatusTimer, SIGNAL(timeout()), mInstance, SLOT(timerCheckIfRunning()));
 	mStatusTimer->start(mStatusTimerInterval * 1000);  // check regularly if daemon is running
+}
+
+/******************************************************************************
+* Send a message to the daemon, without waiting for a reply.
+*/
+bool Daemon::sendDaemon(const QString& method, const QList<QVariant>& args)
+{
+	if (!mDBusDaemon)
+		mDBusDaemon = QDBus::sessionBus().findInterface(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, DAEMON_DBUS_IFACE);
+	QDBusError err = mDBusDaemon->callWithArgs(method, args, QDBusAbstractInterface::NoWaitForReply);
+	if (err.isValid())
+	{
+		kError(5950) << "Daemon::sendDaemon(" << method << "): D-Bus call failed: " << err.message() << endl;
+		return false;
+	}
+	return true;
 }
 
 /******************************************************************************
@@ -185,13 +207,20 @@ bool Daemon::registerWith(bool reregister)
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
-	QByteArray appname  = kapp->aboutData()->appName();
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	QList<QVariant> args;
+	args << kapp->aboutData()->appName();
+	bool result;
 	if (reregister)
-		s.registerChange(appname, !disabledIfStopped);
+	{
+		args << !disabledIfStopped;
+		result = sendDaemon(QLatin1String("registerChange"), args);
+	}
 	else
-		s.registerApp(appname, QByteArray(NOTIFY_DCOP_OBJECT), !disabledIfStopped);
-	if (!s.ok())
+	{
+		args << QString(NOTIFY_DBUS_OBJECT) << !disabledIfStopped;
+		result = sendDaemon(QLatin1String("registerApp"), args);
+	}
+	if (!result)
 	{
 		registrationResult(reregister, KAlarmd::FAILURE);
 		return false;
@@ -296,7 +325,7 @@ void Daemon::checkIfStarted()
 void Daemon::updateRegisteredStatus(bool timeout)
 {
 	Status oldStatus = mStatus;
-	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	if (!isDaemonRegistered())
 	{
 		setStatus(STOPPED);
 		mRegisterFailMsg = false;
@@ -357,15 +386,10 @@ void Daemon::connectRegistered(QObject* receiver, const char* slot)
 bool Daemon::stop()
 {
 	kDebug(5950) << "Daemon::stop()" << endl;
-	if (kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	if (isDaemonRegistered())
 	{
-		AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-		s.quit();
-		if (!s.ok())
-		{
-			kError(5950) << "Daemon::stop(): dcop call failed" << endl;
+		if (!sendDaemon(QLatin1String("quit"), QList<QVariant>()))
 			return false;
-		}
 	}
 	return true;
 }
@@ -378,12 +402,11 @@ bool Daemon::stop()
 bool Daemon::reset()
 {
 	kDebug(5950) << "Daemon::reset()" << endl;
-	if (!kapp->dcopClient()->isApplicationRegistered(DAEMON_APP_NAME))
+	if (!isDaemonRegistered())
 		return false;
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.resetResource(QString());
-	if (!s.ok())
-		kError(5950) << "Daemon::reset(): resetResource dcop send failed" << endl;
+	QList<QVariant> args;
+	args << QString();
+	sendDaemon(QLatin1String("resetResource"), args);
 	return true;
 }
 
@@ -393,10 +416,9 @@ bool Daemon::reset()
 void Daemon::reload()
 {
 	kDebug(5950) << "Daemon::reload()\n";
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.reloadResource(QString());
-	if (!s.ok())
-		kError(5950) << "Daemon::reload(): reloadResource dcop send failed" << endl;
+	QList<QVariant> args;
+	args << QString();
+	sendDaemon(QLatin1String("reloadResource"), args);
 }
 
 /******************************************************************************
@@ -405,10 +427,10 @@ void Daemon::reload()
 void Daemon::reloadResource(const QString& resourceID)
 {
 	kDebug(5950) << "Daemon::reloadResource(" << resourceID << ")\n";
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.reloadResource(resourceID);
-	if (!s.ok())
-		kError(5950) << "Daemon::reloadResource(): reloadResource(" << resourceID << ") dcop send failed" << endl;
+	QList<QVariant> args;
+	args << resourceID;
+	if (!sendDaemon(QLatin1String("reloadResource"), args))
+		kError(5950) << "Daemon::reloadResource(): reloadResource(" << resourceID << ") D-Bus send failed" << endl;
 }
 
 /******************************************************************************
@@ -416,8 +438,9 @@ void Daemon::reloadResource(const QString& resourceID)
 */
 void Daemon::enableCalendar(bool enable)
 {
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.enable(enable);
+	QList<QVariant> args;
+	args << enable;
+	sendDaemon(QLatin1String("enable"), args);
 	mEnableCalPending = false;
 }
 
@@ -427,9 +450,9 @@ void Daemon::enableCalendar(bool enable)
 void Daemon::enableAutoStart(bool enable)
 {
 	// Tell the alarm daemon in case it is running.
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.enableAutoStart(enable);
-	if (!s.ok())
+	QList<QVariant> args;
+	args << enable;
+	if (!sendDaemon(QLatin1String("enableAutoStart"), args))
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
 		KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
@@ -614,10 +637,9 @@ void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::
 	{
 		case AlarmResources::Enabled:
 		{
-			AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-			s.resourceActive(resource->identifier(), resource->isActive());
-			if (!s.ok())
-				kError(5950) << "Daemon::slotResourceStatusChanged(): resourceActive dcop send failed" << endl;
+			QList<QVariant> args;
+			args << resource->identifier() << resource->isActive();
+			sendDaemon(QLatin1String("resourceActive"), args);
 			break;
 		}
 		case AlarmResources::Location:
@@ -626,10 +648,9 @@ void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::
 			if (locs.isEmpty())
 				break;
 			locs += QString();    // to avoid having to check index
-			AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-			s.resourceLocation(resource->identifier(), locs[0], locs[1]);
-			if (!s.ok())
-				kError(5950) << "Daemon::slotResourceStatusChanged(): resourceLocation dcop send failed" << endl;
+			QList<QVariant> args;
+			args << resource->identifier() << locs[0] << locs[1];
+			sendDaemon(QLatin1String("resourceLocation"), args);
 			break;
 		}
 		default:
@@ -680,10 +701,9 @@ void Daemon::eventHandled(const QString& eventId)
 void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
 {
 	kDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
-	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.eventHandled(eventId, reloadCal);
-	if (!s.ok())
-		kError(5950) << "Daemon::notifyEventHandled(): eventHandled dcop send failed" << endl;
+	QList<QVariant> args;
+	args << eventId << reloadCal;
+	sendDaemon(QLatin1String("eventHandled"), args);
 }
 
 /******************************************************************************
@@ -695,23 +715,34 @@ int Daemon::maxTimeSinceCheck()
 	return DAEMON_CHECK_INTERVAL;
 }
 
+/******************************************************************************
+* Checks whether the daemon is running.
+*/
+bool Daemon::isDaemonRegistered()
+{
+	QDBusReply<QStringList> apps = QDBus::sessionBus().busService()->listNames();
+	if (!apps.isSuccess())
+		return false;
+	return apps.value().contains(DAEMON_DBUS_SERVICE);
+}
+
 
 /*=============================================================================
 =  Class: NotificationHandler
 =============================================================================*/
 
 NotificationHandler::NotificationHandler()
-	: DCOPObject(NOTIFY_DCOP_OBJECT), 
-	  QObject()
+	: QObject()
 {
 	kDebug(5950) << "NotificationHandler::NotificationHandler()\n";
+	QDBus::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this, QDBusConnection::ExportSlots);
 }
 
 /******************************************************************************
- * DCOP call from the alarm daemon to notify a change.
- * The daemon notifies calendar statuses when we first register as a GUI, and whenever
- * a calendar status changes. So we don't need to read its config files.
- */
+* D-Bus call from the alarm daemon to notify a change.
+* The daemon notifies calendar statuses when we first register as a GUI, and whenever
+* a calendar status changes. So we don't need to read its config files.
+*/
 void NotificationHandler::alarmDaemonUpdate(int calendarStatus)
 {
 	kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(" << calendarStatus << ")\n";
@@ -739,8 +770,8 @@ void NotificationHandler::alarmDaemonUpdate(int calendarStatus)
 }
 
 /******************************************************************************
- * DCOP call to request that an alarm should be triggered if it is due.
- */
+* D-Bus call to request that an alarm should be triggered if it is due.
+*/
 void NotificationHandler::handleEvent(const QString& eventId)
 {
 	QString id = eventId;
@@ -754,18 +785,18 @@ void NotificationHandler::handleEvent(const QString& eventId)
 }
 
 /******************************************************************************
- * DCOP call from the alarm daemon to notify the success or failure of a
- * registration request from KAlarm.
- */
+* D-Bus call from the alarm daemon to notify the success or failure of a
+* registration request from KAlarm.
+*/
 void NotificationHandler::registered(bool reregister, int result)
 {
 	Daemon::registrationResult(reregister, result);
 }
 
 /******************************************************************************
- * DCOP call from the alarm daemon to notify that a remote resource's cache
- * has been downloaded.
- */
+* D-Bus call from the alarm daemon to notify that a remote resource's cache
+* has been downloaded.
+*/
 void NotificationHandler::cacheDownloaded(const QString& resourceID)
 {
 	AlarmCalendar::resources()->reloadFromCache(resourceID);
