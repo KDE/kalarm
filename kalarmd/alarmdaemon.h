@@ -26,16 +26,30 @@
 
 #include <libkcal/calendarlocal.h>
 
-#include "alarmdaemoniface.h"
-
+class QDBusInterface;
 class AlarmResource;
 
 
-class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
+class AlarmDaemon : public QObject
 {
 		Q_OBJECT
+		Q_CLASSINFO("D-Bus Interface", "org.kde.AlarmDaemon")
 	public:
-		AlarmDaemon(bool autostart, QObject* parent = 0, const char* name = 0);
+		AlarmDaemon(bool autostart, QObject* parent = 0);
+		~AlarmDaemon();
+
+	public Q_SLOTS:
+		// D-Bus interface
+		Q_SCRIPTABLE void enableAutoStart(bool enable)        { enableAutoStart(enable, true); }
+		Q_SCRIPTABLE void enable(bool);
+		Q_SCRIPTABLE void reloadResource(const QString& id)   { reloadResource(id, true, false); }
+		Q_SCRIPTABLE void resetResource(const QString& id)    { reloadResource(id, true, true); }
+		Q_SCRIPTABLE void resourceActive(const QString& id, bool active);
+		Q_SCRIPTABLE void resourceLocation(const QString& id, const QString& locn, const QString& locn2);
+		Q_SCRIPTABLE void registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient);
+		Q_SCRIPTABLE void registerChange(const QByteArray& appName, bool startClient);
+		Q_SCRIPTABLE void eventHandled(const QString& eventID, bool reload);
+		Q_SCRIPTABLE void quit();
 
 	private slots:
 //#ifdef AUTOSTART_KALARM
@@ -45,18 +59,6 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    resourceLoaded(AlarmResource*);
 		void    checkAlarmsSlot();
 		void    checkAlarms();
-
-		// DCOP interface
-		void    enableAutoStart(bool enable)        { enableAutoStart(enable, true); }
-		void    enable(bool);
-		void    reloadResource(const QString& id)   { reloadResource(id, true, false); }
-		void    resetResource(const QString& id)    { reloadResource(id, true, true); }
-		void    resourceActive(const QString& id, bool active);
-		void    resourceLocation(const QString& id, const QString& locn, const QString& locn2);
-		void    registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient);
-		void    registerChange(const QByteArray& appName, bool startClient);
-		void    eventHandled(const QString& eventID, bool reload);
-		void    quit();
 
 	private:
 		struct EventItem
@@ -72,13 +74,15 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    readConfig();
 		QString timezone();
 		void    startMonitoring();
-		void    registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient, bool init);
+		void    registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient, bool init);
 		void    enableAutoStart(bool on, bool sync);
 		void    reloadResource(const QString& id, bool check, bool reset);
 		void    reloadResource(AlarmResource*, bool reset);
 		void    notifyEvent(const QString& eventID, const KCal::Event*, const QList<QDateTime>& alarmtimes);
 		void    notifyCalStatus();
+		bool    isClientRegistered() const;
 		void    setTimerStatus();
+		bool    kalarmNotify(const QString& method, const QList<QVariant>& args);
 
 		void    setEventPending(const KCal::Event*, const QList<QDateTime>&);
 		void    setEventHandled(const QString& eventID);
@@ -91,8 +95,9 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		static EventsMap  mEventsHandled;  // IDs of already triggered events which have been processed by KAlarm
 		static EventsMap  mEventsPending;  // IDs of already triggered events not yet processed by KAlarm
 
+		QDBusInterface* mDBusNotify;     // client's notification D-Bus interface
 		QByteArray mClientName;          // client's executable and DCOP name
-		QByteArray mClientDcopObj;       // object to receive DCOP messages
+		QString    mClientDBusObj;       // object path to receive D-Bus messages
 		QString    mClientExe;           // client executable path (if mClientStart true)
 		QTimer*    mAlarmTimer;
 		int        mAlarmTimerSyncCount; // countdown to re-synching the alarm timer

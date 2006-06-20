@@ -27,11 +27,11 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QByteArray>
+#include <dbus/qdbus.h>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
-#include <dcopclient.h>
 #include <kconfig.h>
 #include <ktimezones.h>
 #include <kdebug.h>
@@ -41,7 +41,6 @@
 #include <ktoolinvocation.h>
 
 #include "alarmguiiface.h"
-#include "alarmguiiface_stub.h"
 #include "resources/alarmresources.h"
 #include "alarmdaemon.moc"
 
@@ -59,18 +58,23 @@ const char* CLIENT_KEY       = "Client";
 const char* DCOP_OBJECT_KEY  = "DCOP object";
 const char* START_CLIENT_KEY = "Start";
 
+static const char* KALARM_DBUS_SERVICE = "org.kde.kalarm";
+static const char* NOTIFY_DBUS_IFACE   = "org.kde.NotificationHandler";
+static const char* NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's notification interface
+
 
 AlarmDaemon::EventsMap  AlarmDaemon::mEventsHandled;
 AlarmDaemon::EventsMap  AlarmDaemon::mEventsPending;
 
 
-AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
-	: DCOPObject(name),
-	  QObject(parent),
+AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
+	: QObject(parent),
+	  mDBusNotify(0),
 	  mAlarmTimer(0),
 	  mEnabled(true)
 {
 	kDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
+	QDBus::sessionBus().registerObject(DAEMON_DBUS_OBJECT, this, QDBusConnection::ExportSlots);
 	AlarmDaemon::readConfig();
 	enableAutoStart(true);    // switch autostart on whenever the program is run
 
@@ -116,13 +120,34 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char* name)
 		startMonitoring();    // otherwise, start monitoring alarms now
 }
 
+AlarmDaemon::~AlarmDaemon()
+{
+	delete mDBusNotify;
+}
+
 /******************************************************************************
-* DCOP call to quit the program.
+* D-Bus call to quit the program.
 */
 void AlarmDaemon::quit()
 {
 	kDebug(5900) << "AlarmDaemon::quit()" << endl;
 	exit(0);
+}
+
+/******************************************************************************
+* Send a notification to KAlarm, without waiting for a reply.
+*/
+bool AlarmDaemon::kalarmNotify(const QString& method, const QList<QVariant>& args)
+{
+	if (!mDBusNotify)
+		mDBusNotify = QDBus::sessionBus().findInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_IFACE);
+	QDBusError err = mDBusNotify->callWithArgs(method, args, QDBusAbstractInterface::NoWaitForReply);
+	if (err.isValid())
+	{
+		kError(5900) << "AlarmDaemon::kalarmNotify(" << method << "): D-Bus call failed: " << err.message() << endl;
+		return false;
+	}
+	return true;
 }
 
 /******************************************************************************
@@ -166,7 +191,7 @@ void AlarmDaemon::startMonitoring()
 }
 
 /******************************************************************************
-* DCOP call to enable or disable alarm monitoring.
+* D-Bus call to enable or disable alarm monitoring.
 */
 void AlarmDaemon::enable(bool enable)
 {
@@ -176,7 +201,7 @@ void AlarmDaemon::enable(bool enable)
 }
 
 /******************************************************************************
-* DCOP call to tell the daemon that the active status of a resource has changed.
+* D-Bus call to tell the daemon that the active status of a resource has changed.
 * This shouldn't be needed, but KRES::ManagerObserver::resourceModified()
 * which is called when KAlarm has changed the status, doesn't report the new
 * status when it's called in kalarmd. Crap!
@@ -206,7 +231,7 @@ void AlarmDaemon::resourceLocation(const QString& id, const QString& locn, const
 }
 
 /******************************************************************************
-* DCOP call to reload, and optionally reset, the specified resource or all
+* D-Bus call to reload, and optionally reset, the specified resource or all
 * resources.
 * If 'reset' is true, the data associated with the resource is reset.
 */
@@ -256,8 +281,9 @@ void AlarmDaemon::reloadResource(AlarmResource* resource, bool reset)
 */
 void AlarmDaemon::cacheDownloaded(AlarmResource* resource)
 {
-	AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
-	stub.cacheDownloaded(resource->identifier());
+	QList<QVariant> args;
+	args << resource->identifier();
+	kalarmNotify(QLatin1String("cacheDownloaded"), args);
 	kDebug(5900) << "AlarmDaemon::cacheDownloaded(" << resource->identifier() << ")\n";
 }
 
@@ -274,7 +300,7 @@ void AlarmDaemon::resourceLoaded(AlarmResource* res)
 }
 
 /******************************************************************************
-* DCOP call to notify the daemon that an event has been handled, and optionally
+* D-Bus call to notify the daemon that an event has been handled, and optionally
 * to tell it to reload the resource containing the event.
 */
 void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
@@ -292,20 +318,20 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 }
 
 /******************************************************************************
-* DCOP call to register an application as the client application, and write it
+* D-Bus call to register an application as the client application, and write it
 * to the config file.
 * N.B. This method must not return a bool because DCOPClient::call() can cause
 *      a hang if the daemon happens to send a notification to KAlarm at the
-*      same time as KAlarm calls this DCOP method.
+*      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient)
+void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dcopObject << ", " << startClient << ")" << endl;
-	registerApp(appName, dcopObject, startClient, true);
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
+	registerApp(appName, dbusObject, startClient, true);
 }
 
 /******************************************************************************
-* DCOP call to change whether KAlarm should be started when an event needs to
+* D-Bus call to change whether KAlarm should be started when an event needs to
 * be notified to it.
 * N.B. This method must not return a bool because DCOPClient::call() can cause
 *      a hang if the daemon happens to send a notification to KAlarm at the
@@ -314,19 +340,19 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopO
 void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 {
 	kDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
-	registerApp(mClientName, mClientDcopObj, startClient, false);
+	registerApp(mClientName, mClientDBusObj, startClient, false);
 }
 
 /******************************************************************************
-* DCOP call to register an application as the client application, and write it
+* D-Bus call to register an application as the client application, and write it
 * to the config file.
 * N.B. This method must not return a bool because DCOPClient::call() can cause
 *      a hang if the daemon happens to send a notification to KAlarm at the
-*      same time as KAlarm calls this DCOP method.
+*      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopObject, bool startClient, bool init)
+void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient, bool init)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dcopObject << ", " << startClient << ")" << endl;
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result = KAlarmd::SUCCESS;
 	if (appName.isEmpty())
 		result = KAlarmd::FAILURE;
@@ -344,12 +370,12 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopO
 	{
 		mClientStart   = startClient;
 		mClientName    = appName;
-		mClientDcopObj = dcopObject;
+		mClientDBusObj = dbusObject;
 		mClientStart   = startClient;
 		KConfig* config = KGlobal::config();
 		config->setGroup(CLIENT_GROUP);
 		config->writeEntry(CLIENT_KEY, QString::fromLocal8Bit(mClientName));
-		config->writeEntry(DCOP_OBJECT_KEY, QString::fromLocal8Bit(mClientDcopObj));
+		config->writeEntry(DCOP_OBJECT_KEY, mClientDBusObj);
 		config->writeEntry(START_CLIENT_KEY, mClientStart);
 		if (init)
 			enableAutoStart(true, false);
@@ -362,13 +388,14 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QByteArray& dcopO
 	}
 
 	// Notify the client of whether the call succeeded.
-	AlarmGuiIface_stub stub(appName, dcopObject);
-	stub.registered(false, result);
+	QList<QVariant> args;
+	args << false << result;
+	kalarmNotify(QLatin1String("registered"), args);
 	kDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
 }
 
 /******************************************************************************
-* DCOP call to set autostart at login on or off.
+* D-Bus call to set autostart at login on or off.
 */
 void AlarmDaemon::enableAutoStart(bool on, bool sync)
 {
@@ -457,7 +484,7 @@ void AlarmDaemon::checkAlarms()
 }
 
 /******************************************************************************
-* If not already handled, send a DCOP message to KAlarm telling it that an
+* If not already handled, send a D-Bus message to KAlarm telling it that an
 * alarm should now be handled.
 */
 void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, const QList<QDateTime>& alarmtimes)
@@ -466,14 +493,17 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
 	// Check if the client application is running and ready to receive notification
-	bool registered = kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(mClientName));
+	bool registered = isClientRegistered();
 	bool ready = registered;
 	if (registered)
 	{
-		// It's running, but check if it has created our DCOP interface yet
+		// It's running, but check if it has created our D-Bus interface yet
+#warning Check if KAlarm D-Bus interface has been created yet
+#if 0
 		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(mClientName);
-		if (objects.indexOf(mClientDcopObj) < 0)
+		if (objects.indexOf(mClientDBusObj) < 0)
 			ready = false;
+#endif
 	}
 	if (!ready)
 	{
@@ -502,13 +532,10 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	else
 	{
 		// Notify the client by telling it the event ID
-		AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
-		stub.handleEvent(id);
-		if (!stub.ok())
-		{
-			kDebug(5900) << "AlarmDaemon::notifyEvent(): dcop send failed" << endl;
+		QList<QVariant> args;
+		args << id;
+		if (!kalarmNotify(QLatin1String("handleEvent"), args))
 			return;
-		}
 	}
 	setEventPending(event, alarmtimes);
 }
@@ -546,22 +573,21 @@ void AlarmDaemon::setTimerStatus()
 }
 
 /******************************************************************************
-* Send a DCOP message to the client, notifying it of a change in calendar status.
+* Send a D-Bus message to the client, notifying it of a change in calendar status.
 */
 void AlarmDaemon::notifyCalStatus()
 {
 	if (mClientName.isEmpty())
 		return;
-	if (kapp->dcopClient()->isApplicationRegistered(static_cast<const char*>(mClientName)))
+	if (isClientRegistered())
 	{
 		bool unloaded = !AlarmResources::instance()->loadedState(AlarmResource::ACTIVE);   // if no resources are loaded
 		KAlarmd::CalendarStatus change = unloaded ? KAlarmd::CALENDAR_UNAVAILABLE
 		                               : mEnabled ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED;
 		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << mClientName << " -> " << change << endl;
-		AlarmGuiIface_stub stub(mClientName, mClientDcopObj);
-		stub.alarmDaemonUpdate(change);
-		if (!stub.ok())
-			kError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << mClientName << endl;
+		QList<QVariant> args;
+		args << change;
+		kalarmNotify(QLatin1String("alarmDaemonUpdate"), args);
 	}
 }
 
@@ -674,15 +700,15 @@ void AlarmDaemon::readConfig()
 	KConfig* config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP);
 	QByteArray client = config->readEntry(CLIENT_KEY).toLocal8Bit();
-	mClientDcopObj    = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
+	mClientDBusObj    = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
 	mClientStart      = config->readEntry(START_CLIENT_KEY, false);
 
 	// Verify the configuration
 	mClientName.clear();
 	if (client.isEmpty()  ||  KStandardDirs::findExe(client).isNull())
 		kError(5900) << "AlarmDaemon::readConfig(): '" << client << "': client app not found\n";
-	else if (mClientDcopObj.isEmpty())
-		kError(5900) << "AlarmDaemon::readConfig(): no DCOP object specified for '" << client << "'\n";
+	else if (mClientDBusObj.isEmpty())
+		kError(5900) << "AlarmDaemon::readConfig(): no D-Bus object specified for '" << client << "'\n";
 	else
 	{
 		mClientName = client;
@@ -707,4 +733,15 @@ QString AlarmDaemon::timezone()
 	if (tz.isEmpty())
 		tz = KSystemTimeZones::local()->name();
 	return tz;
+}
+
+/******************************************************************************
+* Checks whether the client application is running.
+*/
+bool AlarmDaemon::isClientRegistered() const
+{
+	QDBusReply<QStringList> apps = QDBus::sessionBus().busService()->listNames();
+	if (!apps.isSuccess())
+		return false;
+	return apps.value().contains(mClientName);
 }

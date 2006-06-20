@@ -24,7 +24,6 @@
 #ifndef DAEMONGUIIFACE_H
 #define DAEMONGUIIFACE_H
 
-#include <dcopobject.h>
 
 namespace KAlarmd
 {
@@ -43,6 +42,7 @@ namespace KAlarmd
 	};
 }
 
+#if 0
 /*=============================================================================
 =  Class: AlarmGuiIface
 =  Client applications should inherit from this class to receive notifications
@@ -71,5 +71,6 @@ class AlarmGuiIface : virtual public DCOPObject
 		 */
 		virtual ASYNC cacheDownloaded(const QString& resourceID) = 0;
 };
+#endif
 
 #endif

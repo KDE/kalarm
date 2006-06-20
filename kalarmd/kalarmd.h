@@ -25,9 +25,9 @@
 #include <config.h>
 #endif
 
-#define DAEMON_VERSION            "5.0"         // kalarmd version number
-#define DAEMON_APP_NAME           "kalarmd"     // DCOP name of alarm daemon application
-#define DAEMON_DCOP_OBJECT        "ad"          // DCOP name of kalarmd's DCOP interface
+#define DAEMON_VERSION       "5.0"              // kalarmd version number
+#define DAEMON_DBUS_SERVICE  "org.kde.kalarmd"  // D-Bus service name of alarm daemon application
+#define DAEMON_DBUS_OBJECT   "/daemon"          // object path of kalarmd's D-Bus interface
 
 #define DAEMON_CHECK_INTERVAL     60            // the daemon checks calendar files every minute
 

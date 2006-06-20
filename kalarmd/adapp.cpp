@@ -1,7 +1,7 @@
 /*
  *  adapp.cpp  -  kalarmd application
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -65,7 +65,7 @@ int AlarmDaemonApp::newInstance()
 		args->clear();      // free up memory
 	}
 
-	mAd = new AlarmDaemon(autostart, 0, DAEMON_DCOP_OBJECT);
+	mAd = new AlarmDaemon(autostart);
 
 	return 0;
 }
