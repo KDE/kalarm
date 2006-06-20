@@ -29,6 +29,7 @@
 
 #define KALARM_VERSION "1.9.90"
 #define KALARM_NAME "KAlarm"
+#define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
 #include <kdeversion.h>
 
