@@ -1,5 +1,5 @@
 /*
- *  dcophandler.cpp  -  handler for DCOP calls by other applications
+ *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
  *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 
+#include <dbus/qdbus.h>
 #include <kdebug.h>
 
 #include <libkpimidentities/identitymanager.h>
@@ -35,34 +36,33 @@
 #include "karecurrence.h"
 #include "mainwindow.h"
 #include "preferences.h"
-#include "dcophandler.moc"
+#include "dbushandler.moc"
 
-static const char*  DCOP_OBJECT_NAME = "request";   // DCOP name of KAlarm's request interface
+static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of KAlarm's request interface
 
 
 /*=============================================================================
-= DcopHandler
-= This class's function is to handle DCOP requests by other applications.
+= DBusHandler
+= This class's function is to handle D-Bus requests by other applications.
 =============================================================================*/
-DcopHandler::DcopHandler()
-	: DCOPObject(DCOP_OBJECT_NAME),
-	  QWidget()
+DBusHandler::DBusHandler()
 {
-	kDebug(5950) << "DcopHandler::DcopHandler()\n";
+	kDebug(5950) << "DBusHandler::DBusHandler()\n";
+	QDBus::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this, QDBusConnection::ExportSlots);
 }
 
 
-bool DcopHandler::cancelEvent(const QString& eventId)
+bool DBusHandler::cancelEvent(const QString& eventId)
 {
 	return theApp()->dcopDeleteEvent(eventId);
 }
 
-bool DcopHandler::triggerEvent(const QString& eventId)
+bool DBusHandler::triggerEvent(const QString& eventId)
 {
 	return theApp()->dcopTriggerEvent(eventId);
 }
 
-bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const KUrl& audioFile, int reminderMins, const QString& recurrence,
                                   int repeatInterval, int repeatCount)
@@ -74,7 +74,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const KUrl& audioFile, int reminderMins,
                                   int recurType, int recurInterval, int recurCount)
@@ -86,7 +86,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const KUrl& audioFile, int reminderMins,
                                   int recurType, int recurInterval, const QString& endDateTime)
@@ -98,7 +98,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+bool DBusHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, const QString& recurrence,
                                int repeatInterval, int repeatCount)
 {
@@ -109,7 +109,7 @@ bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, i
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+bool DBusHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
@@ -119,7 +119,7 @@ bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, i
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+bool DBusHandler::scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
@@ -129,7 +129,7 @@ bool DcopHandler::scheduleFile(const KUrl& file, const QString& startDateTime, i
 	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur);
 }
 
-bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& recurrence, int repeatInterval, int repeatCount)
 {
 	DateTime start;
@@ -139,7 +139,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   int recurType, int recurInterval, int recurCount)
 {
 	DateTime start = convertStartDateTime(startDateTime);
@@ -151,7 +151,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
@@ -161,7 +161,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
+bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 const QString& recurrence, int repeatInterval, int repeatCount)
 {
@@ -172,7 +172,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
 }
 
-bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
+bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, int recurCount)
 {
@@ -183,7 +183,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
+bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, const QString& endDateTime)
 {
@@ -194,12 +194,12 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
 }
 
-bool DcopHandler::edit(const QString& eventID)
+bool DBusHandler::edit(const QString& eventID)
 {
 	return KAlarm::edit(eventID);
 }
 
-bool DcopHandler::editNew(const QString& templateName)
+bool DBusHandler::editNew(const QString& templateName)
 {
 	return KAlarm::editNew(templateName);
 }
@@ -208,7 +208,7 @@ bool DcopHandler::editNew(const QString& templateName)
 /******************************************************************************
 * Schedule a message alarm, after converting the parameters from strings.
 */
-bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                   int repeatInterval, int repeatCount)
@@ -225,7 +225,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 		fg.setNamedColor(fgColor);
 		if (!fg.isValid())
 		{
-			kError(5950) << "DCOP call: invalid foreground color: " << fgColor << endl;
+			kError(5950) << "D-Bus call: invalid foreground color: " << fgColor << endl;
 			return false;
 		}
 	}
@@ -236,7 +236,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 	{
 		if (!font.fromString(fontStr))    // N.B. this doesn't do good validation
 		{
-			kError(5950) << "DCOP call: invalid font: " << fontStr << endl;
+			kError(5950) << "D-Bus call: invalid font: " << fontStr << endl;
 			return false;
 		}
 	}
@@ -247,7 +247,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 /******************************************************************************
 * Schedule a file alarm, after converting the parameters from strings.
 */
-bool DcopHandler::scheduleFile(const KUrl& file,
+bool DBusHandler::scheduleFile(const KUrl& file,
                                const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                int repeatInterval, int repeatCount)
@@ -263,7 +263,7 @@ bool DcopHandler::scheduleFile(const KUrl& file,
 /******************************************************************************
 * Schedule a command alarm, after converting the parameters from strings.
 */
-bool DcopHandler::scheduleCommand(const QString& commandLine,
+bool DBusHandler::scheduleCommand(const QString& commandLine,
                                   const DateTime& start, int lateCancel, unsigned flags,
                                   const KARecurrence& recurrence, int repeatInterval, int repeatCount)
 {
@@ -275,7 +275,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine,
 /******************************************************************************
 * Schedule an email alarm, after validating the addresses and attachments.
 */
-bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
+bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
                                 const DateTime& start, int lateCancel, unsigned flags,
                                 const KARecurrence& recurrence, int repeatInterval, int repeatCount)
@@ -285,7 +285,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	{
 		if (KAMail::identityManager()->identityForName(fromID).isNull())
 		{
-			kError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
+			kError(5950) << "D-Bus call scheduleEmail(): unknown sender ID: " << fromID << endl;
 			return false;
 		}
 	}
@@ -293,19 +293,19 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	QString bad = KAMail::convertAddresses(addresses, addrs);
 	if (!bad.isEmpty())
 	{
-		kError(5950) << "DCOP call scheduleEmail(): invalid email addresses: " << bad << endl;
+		kError(5950) << "D-Bus call scheduleEmail(): invalid email addresses: " << bad << endl;
 		return false;
 	}
 	if (addrs.isEmpty())
 	{
-		kError(5950) << "DCOP call scheduleEmail(): no email address\n";
+		kError(5950) << "D-Bus call scheduleEmail(): no email address\n";
 		return false;
 	}
 	QStringList atts;
 	bad = KAMail::convertAttachments(attachments, atts);
 	if (!bad.isEmpty())
 	{
-		kError(5950) << "DCOP call scheduleEmail(): invalid email attachment: " << bad << endl;
+		kError(5950) << "D-Bus call scheduleEmail(): invalid email attachment: " << bad << endl;
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
@@ -317,7 +317,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 * Convert the start date/time string to a DateTime. The date/time string is in
 * the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
 */
-DateTime DcopHandler::convertStartDateTime(const QString& startDateTime)
+DateTime DBusHandler::convertStartDateTime(const QString& startDateTime)
 {
 	DateTime start;
 	if (startDateTime.length() > 10)
@@ -346,14 +346,14 @@ DateTime DcopHandler::convertStartDateTime(const QString& startDateTime)
 		}
 	}
 	if (!start.isValid())
-		kError(5950) << "DCOP call: invalid start date/time: " << startDateTime << endl;
+		kError(5950) << "D-Bus call: invalid start date/time: " << startDateTime << endl;
 	return start;
 }
 
 /******************************************************************************
 * Convert the flag bits to KAEvent flag bits.
 */
-unsigned DcopHandler::convertStartFlags(const DateTime& start, unsigned flags)
+unsigned DBusHandler::convertStartFlags(const DateTime& start, unsigned flags)
 {
 	unsigned kaEventFlags = 0;
 	if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::REPEAT_AT_LOGIN;
@@ -374,17 +374,17 @@ unsigned DcopHandler::convertStartFlags(const DateTime& start, unsigned flags)
 /******************************************************************************
 * Convert the background colour string to a QColor.
 */
-QColor DcopHandler::convertBgColour(const QString& bgColor)
+QColor DBusHandler::convertBgColour(const QString& bgColor)
 {
 	if (bgColor.isEmpty())
 		return Preferences::defaultBgColour();
 	QColor bg(bgColor);
 	if (!bg.isValid())
-			kError(5950) << "DCOP call: invalid background color: " << bgColor << endl;
+			kError(5950) << "D-Bus call: invalid background color: " << bgColor << endl;
 	return bg;
 }
 
-bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, 
+bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, 
                                     const QString& startDateTime, const QString& icalRecurrence)
 {
 	start = convertStartDateTime(startDateTime);
@@ -393,7 +393,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence,
 	return recurrence.set(icalRecurrence);
 }
 
-bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
+bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, int recurCount)
 {
 	start = convertStartDateTime(startDateTime);
@@ -402,7 +402,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	return convertRecurrence(recurrence, start, recurType, recurInterval, recurCount, QDateTime());
 }
 
-bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
+bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, const QString& endDateTime)
 {
 	start = convertStartDateTime(startDateTime);
@@ -413,7 +413,7 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	{
 		if (!start.isDateOnly())
 		{
-			kError(5950) << "DCOP call: alarm is date-only, but recurrence end is date/time" << endl;
+			kError(5950) << "D-Bus call: alarm is date-only, but recurrence end is date/time" << endl;
 			return false;
 		}
 		end.setDate(QDate::fromString(endDateTime, Qt::ISODate));
@@ -422,20 +422,20 @@ bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, c
 	{
 		if (start.isDateOnly())
 		{
-			kError(5950) << "DCOP call: alarm is timed, but recurrence end is date-only" << endl;
+			kError(5950) << "D-Bus call: alarm is timed, but recurrence end is date-only" << endl;
 			return false;
 		}
 		end = QDateTime::fromString(endDateTime, Qt::ISODate);
 	}
 	if (!end.isValid())
 	{
-		kError(5950) << "DCOP call: invalid recurrence end date/time: " << endDateTime << endl;
+		kError(5950) << "D-Bus call: invalid recurrence end date/time: " << endDateTime << endl;
 		return false;
 	}
 	return convertRecurrence(recurrence, start, recurType, recurInterval, 0, end);
 }
 
-bool DcopHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& start, int recurType,
+bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& start, int recurType,
                                     int recurInterval, int recurCount, const QDateTime& end)
 {
 	KARecurrence::Type type;
@@ -448,7 +448,7 @@ bool DcopHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& st
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
 			break;
 		default:
-			kError(5950) << "DCOP call: invalid repeat type: " << recurType << endl;
+			kError(5950) << "D-Bus call: invalid repeat type: " << recurType << endl;
 			return false;
 	}
 	recurrence.set(type, recurInterval, recurCount, start, end);

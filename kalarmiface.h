@@ -1,5 +1,5 @@
 /*
- *  kalarmiface.h  -  DCOP interface to KAlarm
+ *  kalarmiface.h  -  D-Bus interface to KAlarm
  *  Program:  kalarm
  *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
@@ -21,23 +21,16 @@
 #ifndef KALARMIFACE_H
 #define KALARMIFACE_H
 
-/** @file kalarmiface.h - DCOP interface to KAlarm */
+/** @file kalarmiface.h - D-Bus interface to KAlarm */
 
-// No forward declarations - dcopidl2cpp won't work
-#include <QStringList>
-#include <dcopobject.h>
-#include <kurl.h>
-class QString;
-
-/** KAlarmIface provides a DCOP interface for other applications to request
+/** KAlarmIface provides a D-Bus interface for other applications to request
  *  KAlarm actions.
  */
 
-class KAlarmIface : virtual public DCOPObject
+class KAlarmIface
 {
-	K_DCOP
     public:
-	/** Bit values for the @p flags parameter of "scheduleXxxx()" DCOP calls.
+	/** Bit values for the @p flags parameter of "scheduleXxxx()" D-Bus calls.
 	 *  The bit values may be OR'ed together.
 	 *  @li REPEAT_AT_LOGIN - repeat the alarm at every login.
 	 *  @li BEEP            - sound an audible beep when the alarm is displayed.
@@ -65,7 +58,7 @@ class KAlarmIface : virtual public DCOPObject
 		SPEAK           = 0x200,   // speak the alarm message when it is displayed
 		SHOW_IN_KORG    = 0x400    // show the alarm as an event in KOrganizer
 	};
-	/** Values for the @p repeatType parameter of "scheduleXxxx()" DCOP calls.
+	/** Values for the @p repeatType parameter of "scheduleXxxx()" D-Bus calls.
 	 *  @li MINUTELY - the repeat interval is measured in minutes.
 	 *  @li DAILY    - the repeat interval is measured in days.
 	 *  @li WEEKLY   - the repeat interval is measured in weeks.
@@ -81,6 +74,7 @@ class KAlarmIface : virtual public DCOPObject
 		YEARLY   = 5     // the repeat interval is measured in years
 	};
 
+#if 0
     k_dcop:
 	/** Cancel (delete) an already scheduled alarm.
 	 *  @param eventId - The unique ID of the event to be cancelled, as stored in the calendar file @p url.
@@ -344,6 +338,7 @@ class KAlarmIface : virtual public DCOPObject
 	 *  @return false if an alarm template was specified but could not be found, true otherwise.
 	 */
 	virtual bool editNew(const QString& templateName) = 0;
+#endif
 };
 
 #endif // KALARMIFACE_H

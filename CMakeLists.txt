@@ -1,3 +1,4 @@
+include_directories( ${QDBUS_INCLUDE_DIRS} )
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/libkcal/
@@ -58,7 +59,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    preferences.cpp 
    prefdlg.cpp 
    traywindow.cpp 
-   dcophandler.cpp 
+   dbushandler.cpp 
    recurrenceedit.cpp 
    karecurrence.cpp 
    deferdlg.cpp 
@@ -89,9 +90,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 )
 
 kde4_automoc(${kalarm_bin_SRCS})
-
-kde4_add_dcop_skels(kalarm_bin_SRCS kalarmiface.h kalarmd/alarmguiiface.h )
-kde4_add_dcop_stubs(kalarm_bin_SRCS kalarmd/alarmdaemoniface.h )
 
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)

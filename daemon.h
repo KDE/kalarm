@@ -30,6 +30,7 @@
 
 #include "alarmresources.h"
 
+class QDBusInterface;
 class KActionCollection;
 class AlarmCalendar;
 class AlarmEnableAction;
