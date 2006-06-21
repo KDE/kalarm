@@ -74,11 +74,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	: KDialog(parent),
 	  mSpecialActionsButton(0)
 {
-  setCaption( i18n("Import Birthdays From KAddressBook") );
-  setButtons( Ok|Cancel );
-  setDefaultButton( Ok );
+	setCaption(i18n("Import Birthdays From KAddressBook"));
+	setButtons(Ok | Cancel);
+	setDefaultButton(Ok);
 	QWidget* topWidget = new QWidget(this);
-        setMainWidget( topWidget );
+        setMainWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
