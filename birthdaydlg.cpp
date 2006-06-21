@@ -71,10 +71,14 @@ const KABC::AddressBook* BirthdayDlg::mAddressBook = 0;
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
-	: KDialogBase(KDialogBase::Plain, i18n("Import Birthdays From KAddressBook"), Ok|Cancel, Ok, parent),
+	: KDialog(parent),
 	  mSpecialActionsButton(0)
 {
-	QWidget* topWidget = plainPage();
+  setCaption( i18n("Import Birthdays From KAddressBook") );
+  setButtons( Ok|Cancel );
+  setDefaultButton( Ok );
+	QWidget* topWidget = new QWidget(this);
+        setMainWidget( topWidget );
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
@@ -370,7 +374,7 @@ void BirthdayDlg::slotOk()
 	       | (mConfirmAck->isChecked()         ? KAEvent::CONFIRM_ACK : 0)
 	       | (mFontColourButton->defaultFont() ? KAEvent::DEFAULT_FONT : 0)
 	       |                                     KAEvent::ANY_TIME;
-	KDialogBase::slotOk();
+	KDialog::accept();
 }
 
 /******************************************************************************

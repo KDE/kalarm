@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QList>
 #include <k3listview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "alarmevent.h"
 
@@ -43,7 +43,7 @@ class BLineEdit;
 class BListView;
 
 
-class BirthdayDlg : public KDialogBase
+class BirthdayDlg : public KDialog
 {
 		Q_OBJECT
 	public:
