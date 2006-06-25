@@ -57,11 +57,14 @@ static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
 SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
                    const QString& caption, QWidget* parent)
-	: KDialog(parent, caption, Ok|Cancel),
+	: KDialog(parent),
 	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
+	setCaption(caption);
+	setButtons(Ok|Cancel);
+	setDefaultButton(Ok);
 	QVBoxLayout* layout = new QVBoxLayout(page);
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());

@@ -35,9 +35,13 @@ static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
 TemplatePickDlg::TemplatePickDlg(QWidget* parent)
-	: KDialogBase(KDialogBase::Plain, i18n("Choose Alarm Template"), Ok|Cancel, Ok, parent)
+	: KDialog(parent)
 {
-	QWidget* topWidget = plainPage();
+	QWidget* topWidget = new QWidget(this);
+	setMainWidget(topWidget);
+	setCaption(i18n("Choose Alarm Template"));
+	setButtons(Ok|Cancel);
+	setDefaultButton(Ok);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());

@@ -37,7 +37,6 @@
 #include <kfileitem.h>
 #include <ktempfile.h>
 #include <kfiledialog.h>
-#include <dcopclient.h>
 #include <kdebug.h>
 
 extern "C" {

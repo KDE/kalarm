@@ -165,8 +165,7 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18nc("Email subject", 
  */
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event,
                            GetResourceType getResource, bool readOnly)
-	: KDialog(parent, caption,
-	          (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default)),
+	: KDialog(parent),
 	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
@@ -185,6 +184,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
+    setCaption(caption);
+	setButtons((readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
+	setDefaultButton(Cancel);
 	switch (getResource)
 	{
 		case RES_USE_EVENT_ID:

@@ -20,14 +20,14 @@
 #ifndef TEMPLATEPICKDLG_H
 #define TEMPLATEPICKDLG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QResizeEvent;
 class TemplateListView;
 class KAEvent;
 
 
-class TemplatePickDlg : public KDialogBase
+class TemplatePickDlg : public KDialog
 {
 		Q_OBJECT
 	public:
