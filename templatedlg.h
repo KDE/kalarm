@@ -20,7 +20,7 @@
 #ifndef TEMPLATEDLG_H
 #define TEMPLATEDLG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QResizeEvent;
 class QPushButton;
@@ -28,7 +28,7 @@ class TemplateListView;
 class KAEvent;
 
 
-class TemplateDlg : public KDialogBase
+class TemplateDlg : public KDialog
 {
 		Q_OBJECT
 	public:

@@ -24,7 +24,7 @@
 #ifndef RESOURCECONFIGDIALOG_H
 #define RESOURCECONFIGDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KLineEdit;
 class QCheckBox;
@@ -34,7 +34,7 @@ namespace KRES {
 }
 class AlarmResource;
 
-class ResourceConfigDialog : public KDialogBase
+class ResourceConfigDialog : public KDialog
 {
     Q_OBJECT
   public:

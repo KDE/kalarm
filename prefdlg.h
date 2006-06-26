@@ -22,7 +22,7 @@
 #define PREFDLG_H
 
 #include <ktabctl.h>
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include "preferences.h"
 #include "recurrenceedit.h"
@@ -50,7 +50,7 @@ class MiscPrefTab;
 
 
 // The Preferences dialog
-class KAlarmPrefDlg : public KDialogBase
+class KAlarmPrefDlg : public KPageDialog
 {
 		Q_OBJECT
 	public:

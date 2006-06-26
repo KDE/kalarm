@@ -93,36 +93,68 @@ static QString xtermCommands[] = {
 =============================================================================*/
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, 0, true, true)
+	: KPageDialog(0)
 {
-	setIconListAllVisible(true);
+  setCaption( i18n("Preferences") );
+  setButtons( Help | Default | Ok | Apply | Cancel );
+  setDefaultButton( Ok );
+  setFaceType( List );
+  setModal( true );
+  enableButtonSeparator( true );
+  setIconListAllVisible(true);
 
-	KVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
-	frame->setMargin(0);
-	mMiscPage = new MiscPrefTab(frame);
 
-	frame = addVBoxPage(i18n("Storage"), i18n("Alarm Storage"), DesktopIcon("fileopen"));
-	frame->setMargin(0);
-	mStorePage = new StorePrefTab(frame);
+  KVBox* frame = new KVBox();
+  KPageWidgetItem *page = new KPageWidgetItem( frame,i18n("General") );
+  page->setHeader( i18n("General") );
+  page->setIcon( DesktopIcon("misc"));
+  addPage( page );
+  frame->setMargin(0);
+  mMiscPage = new MiscPrefTab(frame);
 
-	frame = addVBoxPage(i18n("Email"), i18n("Email Alarm Settings"), DesktopIcon("mail_generic"));
-	frame->setMargin(0);
-	mEmailPage = new EmailPrefTab(frame);
+  frame = new KVBox();
+  page = new KPageWidgetItem( frame,i18n("Storage") );
+  page->setHeader( i18n("Alarm Storage") );
+  page->setIcon( DesktopIcon("fileopen"));
+  addPage( page );
 
-	frame = addVBoxPage(i18n("View"), i18n("View Settings"), DesktopIcon("view_choose"));
-	frame->setMargin(0);
-	mViewPage = new ViewPrefTab(frame);
+  mStorePage = new StorePrefTab(frame);
 
-	frame = addVBoxPage(i18n("Font & Color"), i18n("Default Font and Color"), DesktopIcon("colorize"));
-	frame->setMargin(0);
-	mFontColourPage = new FontColourPrefTab(frame);
+  frame = new KVBox();
+  page = new KPageWidgetItem( frame,i18n("Email") );
+  page->setHeader( i18n("Email Alarm Settings") );
+  page->setIcon( DesktopIcon("mail_generic"));
+  addPage( page );
+  frame->setMargin(0);
+  mEmailPage = new EmailPrefTab(frame);
 
-	frame = addVBoxPage(i18n("Edit"), i18n("Default Alarm Edit Settings"), DesktopIcon("edit"));
-	frame->setMargin(0);
-	mEditPage = new EditPrefTab(frame);
+  frame = new KVBox();
+  page = new KPageWidgetItem( frame,i18n("View") );
+  page->setHeader( i18n("View Settings") );
+  page->setIcon( DesktopIcon("view_choose"));
+  addPage( page );
 
-	restore();
-	adjustSize();
+  frame->setMargin(0);
+  mViewPage = new ViewPrefTab(frame);
+
+  frame = new KVBox();
+  page = new KPageWidgetItem( frame,i18n("Font & Color") );
+  page->setHeader( i18n("Default Font and Color") );
+  page->setIcon( DesktopIcon("colorize"));
+  addPage( page );
+  frame->setMargin(0);
+  mFontColourPage = new FontColourPrefTab(frame);
+
+  frame = new KVBox();
+  page = new KPageWidgetItem( frame,i18n("Edit") );
+  page->setHeader( i18n("Default Alarm Edit Settings") );
+  page->setIcon( DesktopIcon("edit"));
+  addPage( page );
+  frame->setMargin(0);
+  mEditPage = new EditPrefTab(frame);
+
+  restore();
+  adjustSize();
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
@@ -185,7 +217,7 @@ void KAlarmPrefDlg::slotOk()
 	mValid = true;
 	slotApply();
 	if (mValid)
-		KDialogBase::slotOk();
+		KDialog::accept();
 }
 
 // Discard the current preferences and close the dialogue
@@ -193,7 +225,7 @@ void KAlarmPrefDlg::slotCancel()
 {
 	kDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
 	restore();
-	KDialogBase::slotCancel();
+	KDialog::reject();
 }
 
 // Discard the current preferences and use the present ones
@@ -465,7 +497,7 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 		                      i18n("You should not uncheck this option unless you intend to discontinue use of KAlarm"),
 		                      QString(), KStdGuiItem::cont(), KStdGuiItem::cancel()
 		                     ) != KMessageBox::Yes)
-		mAutostartDaemon->setChecked(true);	
+		mAutostartDaemon->setChecked(true);
 }
 
 void MiscPrefTab::slotRunModeToggled(bool)

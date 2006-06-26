@@ -38,12 +38,16 @@
 using namespace KRES;
 
 ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* resource, const char *name )
-  : KDialogBase( parent, name, true, i18n( "Resource Configuration" ),
-    Ok|Cancel, Ok, false ), mResource( resource )
+  : KDialog( parent ), mResource( resource )
 {
   Factory *factory = Factory::self(QLatin1String("alarms"));
 
-  QFrame *main = makeMainWidget();
+  QFrame *main = new QFrame( this );
+  setMainWidget( main );
+  setCaption( i18n( "Resource Configuration" ) );
+  setButtons( Ok|Cancel );
+  setDefaultButton( Ok );
+  setModal( true );
 
   QVBoxLayout *mainLayout = new QVBoxLayout( main );
   mainLayout->setSpacing( spacingHint() );
@@ -52,7 +56,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
   QGridLayout *gbLayout = new QGridLayout;
   gbLayout->setSpacing( spacingHint() );
   generalGroupBox->setLayout( gbLayout );
-  
+
   generalGroupBox->setTitle( i18n( "General Settings" ) );
 
   gbLayout->addWidget( new QLabel( i18n( "Name:" ), generalGroupBox ), 0, 0 );

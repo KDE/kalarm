@@ -49,9 +49,15 @@ TemplateDlg* TemplateDlg::mInstance = 0;
 
 
 TemplateDlg::TemplateDlg(QWidget* parent)
-	: KDialogBase(KDialogBase::Plain, i18n("Alarm Templates"), Close, Ok, parent, 0, false, true)
+	: KDialog(parent)
 {
-	QWidget* topWidget = plainPage();
+	QWidget* topWidget = new QWidget(this);
+        setMainWidget( topWidget );
+        setButtons(  Close );
+        setDefaultButton( Ok );
+        setModal( false );
+        setCaption( i18n("Alarm Templates") );
+        enableButtonSeparator( true );
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
