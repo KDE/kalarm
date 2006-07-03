@@ -1,4 +1,4 @@
-include_directories( ${QDBUS_INCLUDE_DIRS} )
+include_directories( ${QT_QTDBUS_INCLUDE_DIR} )
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/libkcal/
