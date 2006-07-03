@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#include <dbus/qdbus.h>
+#include <QtDBus>
 #include <kdebug.h>
 
 #include <libkpimidentities/identitymanager.h>

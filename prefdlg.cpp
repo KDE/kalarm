@@ -100,7 +100,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
   setDefaultButton( Ok );
   setFaceType( List );
   setModal( true );
-  enableButtonSeparator( true );
+  showButtonSeparator( true );
   setIconListAllVisible(true);
 
 

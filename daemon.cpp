@@ -23,7 +23,7 @@
 #include <QTimer>
 #include <QIcon>
 #include <QByteArray>
-#include <dbus/qdbus.h>
+#include <QtDBus>
 
 #include <kstandarddirs.h>
 #include <kconfig.h>

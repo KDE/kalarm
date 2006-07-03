@@ -57,7 +57,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
         setDefaultButton( Ok );
         setModal( false );
         setCaption( i18n("Alarm Templates") );
-        enableButtonSeparator( true );
+        showButtonSeparator( true );
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
