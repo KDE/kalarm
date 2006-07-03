@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QByteArray>
-#include <dbus/qdbus.h>
+#include <QtDBus>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
