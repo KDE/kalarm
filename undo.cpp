@@ -854,7 +854,9 @@ UndoEdit::UndoEdit(Undo::Type type, const KAEvent& oldEvent, const QString& newE
 	  mNewEventID(newEventID),
 	  mDescription(description)
 {
-	setCalendar(KCalEvent::uidStatus(mNewEventID));
+	// FIXME
+#warning uidStatus not implemented
+	//setCalendar(KCalEvent::uidStatus(mNewEventID));
 }
 
 UndoEdit::~UndoEdit()
