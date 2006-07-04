@@ -134,7 +134,7 @@ KAlarmApp::KAlarmApp()
 		kDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
 	// Check if KOrganizer is installed
 	QString korg = QLatin1String("korganizer");
-	mKOrganizerEnabled = !locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
+	mKOrganizerEnabled = !KStandardDirs::locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
 	if (!mKOrganizerEnabled)
 		kDebug(5950) << "KAlarmApp::KAlarmApp(): KOrganizer options disabled (KOrganizer not found)" << endl;
 }

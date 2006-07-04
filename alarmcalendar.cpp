@@ -85,7 +85,7 @@ AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
 */
 bool AlarmCalendar::initialiseCalendars()
 {
-	QString displayCal = locateLocal("appdata", displayCalendarName);
+	QString displayCal = KStandardDirs::locateLocal("appdata", displayCalendarName);
 	AlarmResources::setDebugArea(5951);
 	AlarmResources::setReservedFile(displayCal);
 	AlarmResources* resources = AlarmResources::create(Preferences::timeZone(true), false);

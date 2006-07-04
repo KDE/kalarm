@@ -176,7 +176,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 	{
 		// No calendar is specified in config file, or the calendar
 		// specified is invalid - use default file
-		fileName = locateLocal("appdata", defaultFile);
+		fileName = KStandardDirs::locateLocal("appdata", defaultFile);
 		resource = new KAResourceLocal(type, fileName);
 	}
 

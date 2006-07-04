@@ -161,7 +161,7 @@ bool Daemon::start()
 				return true;     // we're currently waiting for the daemon to start
 			// Start the alarm daemon. It is a KUniqueApplication, which means that
 			// there is automatically only one instance of the alarm daemon running.
-			QString execStr = locate("exe", QLatin1String(DAEMON_APP_NAME));
+			QString execStr = KStandardDirs::locate("exe", QLatin1String(DAEMON_APP_NAME));
 			if (execStr.isEmpty())
 			{
 				KMessageBox::error(0, i18n("Alarm daemon not found."));
@@ -455,7 +455,7 @@ void Daemon::enableAutoStart(bool enable)
 	if (!sendDaemon(QLatin1String("enableAutoStart"), args))
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
-		KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
+		KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
 		adconfig.setGroup(DAEMON_AUTOSTART_SECTION);
 		adconfig.writeEntry(DAEMON_AUTOSTART_KEY, enable);
 		adconfig.sync();
@@ -467,7 +467,7 @@ void Daemon::enableAutoStart(bool enable)
 */
 bool Daemon::autoStart(bool defaultAutoStart)
 {
-	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
+	KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
 	adconfig.setGroup(DAEMON_AUTOSTART_SECTION);
 	return adconfig.readEntry(DAEMON_AUTOSTART_KEY, defaultAutoStart);
 }

@@ -106,7 +106,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		 * come in the wrong order, KAlarm won't know that it is supposed to restore
 		 * itself and instead will simply open a new window.
 		 */
-		KConfig kaconfig(locate("config", "kalarmrc"));
+		KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
 		kaconfig.setGroup("General");
 		autostart = kaconfig.readEntry("AutostartTray", false);
 		if (autostart)
@@ -733,7 +733,7 @@ void AlarmDaemon::readConfig()
 */
 QString AlarmDaemon::timezone()
 {
-	KConfig kaconfig(locate("config", "kalarmrc"));
+	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
 	kaconfig.setGroup("General");
 	QString tz = kaconfig.readEntry("Timezone", QString());
 	if (tz.isEmpty())
