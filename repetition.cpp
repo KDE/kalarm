@@ -136,11 +136,13 @@ static const int MAX_COUNT = 9999;    // maximum range for count spinbox
 
 
 RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent)
-	: KDialog(parent, caption, Ok|Cancel),
+	: KDialog(parent),
 	  mMaxDuration(-1),
 	  mDateOnly(false),
 	  mReadOnly(readOnly)
 {
+	setCaption( caption );
+	setButtons( Ok|Cancel );
 	int spacing = spacingHint();
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);

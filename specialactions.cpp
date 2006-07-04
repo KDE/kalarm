@@ -85,8 +85,10 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
                                      const QString& caption, QWidget* parent)
-	: KDialog(parent, caption, Ok|Cancel)
+	: KDialog(parent )
 {
+	setCaption(caption);
+	setButtons(Ok|Cancel);
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);

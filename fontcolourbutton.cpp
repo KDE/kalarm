@@ -69,9 +69,11 @@ void FontColourButton::slotButtonPressed()
 
 FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
                              bool defaultFont, const QString& caption, QWidget* parent)
-	: KDialog(parent, caption, Ok|Cancel),
+	: KDialog(parent),
 	  mReadOnly(false)
 {
+	setCaption(caption);
+	setButtons(Ok|Cancel);
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);
