@@ -135,8 +135,8 @@ void Daemon::createDcopHandler()
 bool Daemon::sendDaemon(const QString& method, const QList<QVariant>& args)
 {
 	if (!mDBusDaemon)
-		mDBusDaemon = QDBus::sessionBus().findInterface(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, DAEMON_DBUS_IFACE);
-	QDBusError err = mDBusDaemon->callWithArgs(method, args, QDBusAbstractInterface::NoWaitForReply);
+		mDBusDaemon = new QDBusInterface(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, DAEMON_DBUS_IFACE);
+	QDBusError err = mDBusDaemon->callWithArgumentList(QDBus::NoBlock, method, args);
 	if (err.isValid())
 	{
 		kError(5950) << "Daemon::sendDaemon(" << method << "): D-Bus call failed: " << err.message() << endl;
@@ -720,10 +720,11 @@ int Daemon::maxTimeSinceCheck()
 */
 bool Daemon::isDaemonRegistered()
 {
-	QDBusReply<QStringList> apps = QDBus::sessionBus().busService()->listNames();
-	if (!apps.isSuccess())
+	QDBusReply<bool> reply = QDBus::sessionBus().interface()->isServiceRegistered(DAEMON_DBUS_SERVICE);
+	if ( reply.isValid() ) 
+		return reply.value();
+	else
 		return false;
-	return apps.value().contains(DAEMON_DBUS_SERVICE);
 }
 
 

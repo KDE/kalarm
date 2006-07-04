@@ -140,8 +140,8 @@ void AlarmDaemon::quit()
 bool AlarmDaemon::kalarmNotify(const QString& method, const QList<QVariant>& args)
 {
 	if (!mDBusNotify)
-		mDBusNotify = QDBus::sessionBus().findInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_IFACE);
-	QDBusError err = mDBusNotify->callWithArgs(method, args, QDBusAbstractInterface::NoWaitForReply);
+		mDBusNotify = new QDBusInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_IFACE);
+	QDBusError err = mDBusNotify->callWithArgumentList(QDBus::NoBlock, method, args );
 	if (err.isValid())
 	{
 		kError(5900) << "AlarmDaemon::kalarmNotify(" << method << "): D-Bus call failed: " << err.message() << endl;
@@ -237,8 +237,11 @@ void AlarmDaemon::resourceLocation(const QString& id, const QString& locn, const
 */
 void AlarmDaemon::reloadResource(const QString& id, bool check, bool reset)
 {
+// FIXME: I don't think this check is possible with dbus
+#if 0
 	if (check  &&  kapp->dcopClient()->senderId() != mClientName)
 		return;
+#endif
 	AlarmResources* resources = AlarmResources::instance();
 	if (id.isEmpty())
 	{
@@ -305,8 +308,11 @@ void AlarmDaemon::resourceLoaded(AlarmResource* res)
 */
 void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 {
+// FIXME I don't think this check can be done with DBus
+#if 0
 	if (kapp->dcopClient()->senderId() != mClientName)
 		return;
+#endif
 	kDebug(5900) << "AlarmDaemon::eventHandled()" << (reload ? ": reload" : "") << endl;
 	setEventHandled(eventID);
 	if (reload)
@@ -740,8 +746,8 @@ QString AlarmDaemon::timezone()
 */
 bool AlarmDaemon::isClientRegistered() const
 {
-	QDBusReply<QStringList> apps = QDBus::sessionBus().busService()->listNames();
-	if (!apps.isSuccess())
+	QDBusReply<bool> isRegistered = QDBus::sessionBus().interface()->isServiceRegistered(mClientName);
+	if (!isRegistered.isValid())
 		return false;
-	return apps.value().contains(mClientName);
+	return isRegistered.value();
 }

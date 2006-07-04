@@ -36,7 +36,6 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
-#include <dcopclient.h>
 #include <kprocess.h>
 #include <ktempfile.h>
 #include <kfileitem.h>
@@ -49,7 +48,7 @@
 #include "alarmlistview.h"
 #include "editdlg.h"
 #include "daemon.h"
-#include "dcophandler.h"
+#include "dbushandler.h"
 #include "functions.h"
 #include "kamail.h"
 #include "karecurrence.h"
@@ -94,7 +93,7 @@ QString     KAlarmApp::mFatalMessage;
 KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mInitialised(false),
-	  mDcopHandler(new DcopHandler()),
+	  mDBusHandler(new DBusHandler()),
 	  mTrayWindow(0),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),

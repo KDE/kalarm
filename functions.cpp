@@ -32,7 +32,6 @@
 #include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#include <dcopclient.h>
 #include <kdebug.h>
 
 #include <libkcal/event.h>

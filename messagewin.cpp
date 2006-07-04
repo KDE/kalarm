@@ -25,6 +25,7 @@
 
 #include <QScrollBar>
 #include <Q3MimeSourceFactory>
+#include <QtDBus>
 #include <QFile>
 #include <QFileInfo>
 #include <QPushButton>
@@ -70,7 +71,6 @@
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
 #endif
-#include <dcopclient.h>
 #include <kdebug.h>
 #include <ktoolinvocation.h>
 
@@ -92,7 +92,14 @@ static const char* KMIX_APP_NAME    = "kmix";
 static const char* KMIX_DCOP_OBJECT = "Mixer0";
 static const char* KMIX_DCOP_WINDOW = "kmix-mainwindow#1";
 #endif
-static const char* KMAIL_DCOP_OBJECT = "KMailIface";
+#warning KTTSD_DBUS_* defines are made up!
+static const char * KTTSD_DBUS_SERVICE_NAME  = "kttsd";
+static const char * KTTDS_DBUS_PATH = "org/kde/kttsd/kttsdiface";
+static const char * KTTSD_DBUS_INTERFACE = "org.kde.kttsd.kttsdiface";
+#warning more made up dbus interface names follow
+static const char * KMAIL_DBUS_SERVICE_NAME = "kmail";
+static const char * KMAIL_DBUS_PATH = "/org/kde/pim/kmail/kmailiface";
+static const char * KMAIL_DBUS_INTERFACE= "org.kde.pim.kmail.kmailiface";
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -942,8 +949,7 @@ void MessageWin::playAudio()
 #else
 		// An audio file is specified. Because loading it may take some time,
 		// call it on a timer to allow the window to display first.
-		Phonon::AudioOutput* output = new Phonon::AudioOutput(this);
-		output->setCategory(Phonon::NotificationCategory);
+		Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, this);
 		output->setVolume(mVolume);
 		Phonon::AudioPath* path = new Phonon::AudioPath(this);
 		path->addOutput(output);
@@ -973,10 +979,12 @@ void MessageWin::playAudio()
 *  Speak the message.
 *  Called asynchronously to avoid delaying the display of the message.
 */
+
 void MessageWin::slotSpeak()
 {
-	DCOPClient* client = kapp->dcopClient();
-	if (!client->isApplicationRegistered("kttsd"))
+	QDBusConnection client = QDBus::sessionBus();
+	
+	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE_NAME))
 	{
 		// kttsd is not running, so start it
 		QString error;
@@ -987,13 +995,13 @@ void MessageWin::slotSpeak()
 			return;
 		}
 	}
-	QByteArray  data;
-	QDataStream arg(&data, QIODevice::WriteOnly);
-	arg << mMessage << QString();
-	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
+	// FIXME: this would be a lot cleaner just using kttsd's dbus stub.
+	QDBusInterface kttsdDBus(KTTSD_DBUS_SERVICE_NAME, KTTDS_DBUS_PATH, KTTSD_DBUS_INTERFACE );
+	QDBusMessage reply = kttsdDBus.call("sayMessage", mMessage, QString());
+	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
-		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
-		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP Call sayMessage failed"));
+		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DBus error" << endl;
+		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DBus call sayMessage failed"));
 	}
 }
 
@@ -1344,21 +1352,15 @@ void MessageWin::slotShowKMailMessage()
 		KMessageBox::sorry(this, err);
 		return;
 	}
-	DCOPCString replyType;
-	QByteArray  data, replyData;
-	QDataStream arg(&data, QIODevice::WriteOnly);
-	arg << (quint32)mKMailSerialNumber << QString();
-	if (kapp->dcopClient()->call("kmail", KMAIL_DCOP_OBJECT, "showMail(quint32,QString)", data, replyType, replyData)
-	&&  replyType == "bool")
-	{
-		bool result;
-		QDataStream replyStream(&replyData, QIODevice::ReadOnly);
-		replyStream >> result;
-		if (result)
-			return;    // success
-	}
-	kError(5950) << "MessageWin::slotShowKMailMessage(): kmail dcop call failed\n";
-	KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
+	QDBusInterface kmailIface( KMAIL_DBUS_SERVICE_NAME, KMAIL_DBUS_PATH, KMAIL_DBUS_INTERFACE );
+	QDBusReply<bool> reply = kmailIface.call( "showMail", (qulonglong)mKMailSerialNumber, QString() );
+	if ( reply.isValid() )
+		if ( reply.value() )
+			return;
+		else
+			KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
+	else
+		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail dbus call to showMail failed\n";
 }
 
 /******************************************************************************

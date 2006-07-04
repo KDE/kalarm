@@ -35,7 +35,7 @@ class KProcess;
 namespace KCal { class Event; }
 
 #include "alarmevent.h"
-class DcopHandler;
+class DBusHandler;
 class AlarmCalendar;
 class MainWindow;
 class AlarmListView;
@@ -158,7 +158,7 @@ class KAlarmApp : public KUniqueApplication
 		static int         mFatalError;          // a fatal error has occurred - just wait to exit
 		static QString     mFatalMessage;        // fatal error message to output
 		bool               mInitialised;         // initialisation complete: ready to handle DCOP calls
-		DcopHandler*       mDcopHandler;         // the parent of the main DCOP receiver object
+		DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
 		TrayWindow*        mTrayWindow;          // active system tray icon
 		QTime              mStartOfDay;          // start-of-day time currently in use
 		QColor             mPrefsArchivedColour; // archived alarms text colour

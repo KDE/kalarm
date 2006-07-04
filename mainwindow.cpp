@@ -43,7 +43,6 @@
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
 #include <kaboutdata.h>
-#include <dcopclient.h>
 #include <kdebug.h>
 
 #include <libkdepim/maillistdrag.h>
