@@ -22,13 +22,13 @@ kde4_add_executable(kalarmd ${kalarmd_SRCS})
 
 target_link_libraries(kalarmd ${KDE4_KDEUI_LIBS} kalarm_resources kcal )
 
-install_targets(/bin kalarmd )
+install(TARGETS kalarmd  DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${APPLNK_INSTALL_DIR}/.hidden FILES kalarmd.desktop )
-install_files( /share/autostart FILES kalarmd.autostart.desktop )
+install( FILES kalarmd.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/.hidden)
+install( FILES kalarmd.autostart.desktop  DESTINATION /share/autostart)
 
 
 

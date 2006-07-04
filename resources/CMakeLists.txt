@@ -26,7 +26,7 @@ kde4_add_library(kalarm_resources SHARED ${kalarm_resources_LIB_SRCS})
 target_link_libraries(kalarm_resources ${KDE4_KDECORE_LIBS} kcal )
 
 set_target_properties(kalarm_resources PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-install_targets(${LIB_INSTALL_DIR} kalarm_resources )
+install(TARGETS kalarm_resources  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -41,9 +41,9 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_local )
 
 target_link_libraries(kalarm_local ${KDE4_KDECORE_LIBS} kalarm_resources )
 
-install_targets(${PLUGIN_INSTALL_DIR} kalarm_local )
+install(TARGETS kalarm_local  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install_files( ${SERVICES_INSTALL_DIR}/kresources/alarms FILES local.desktop )
+install( FILES local.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kresources/alarms)
 
 ########### next target ###############
 
@@ -57,9 +57,9 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_localdir )
 
 target_link_libraries(kalarm_localdir ${KDE4_KDECORE_LIBS} kalarm_resources )
 
-install_targets(${PLUGIN_INSTALL_DIR} kalarm_localdir )
+install(TARGETS kalarm_localdir  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install_files( ${SERVICES_INSTALL_DIR}/kresources/alarms FILES localdir.desktop )
+install( FILES localdir.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kresources/alarms)
 
 ########### next target ###############
 
@@ -73,7 +73,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_remote )
 
 target_link_libraries(kalarm_remote ${KDE4_KDECORE_LIBS} kalarm_resources )
 
-install_targets(${PLUGIN_INSTALL_DIR} kalarm_remote )
+install(TARGETS kalarm_remote  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install_files( ${SERVICES_INSTALL_DIR}/kresources/alarms FILES remote.desktop )
+install( FILES remote.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kresources/alarms)
 

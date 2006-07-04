@@ -97,14 +97,14 @@ set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 target_link_libraries(kalarm_bin ${KDE4_KDEUI_LIBS} kalarm_resources kcal kmime kdepim kpimidentities kabc kutils phononcore )
 
-install_targets(/bin kalarm_bin )
+install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES kalarm.desktop )
-install_files( /share/autostart FILES kalarm.tray.desktop )
-install_files( ${DATA_INSTALL_DIR}/kalarm FILES kalarmui.rc )
+install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES kalarm.tray.desktop  DESTINATION /share/autostart)
+install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
