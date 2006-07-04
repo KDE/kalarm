@@ -64,6 +64,13 @@ class KAlarmPrefDlg : public KPageDialog
 		StorePrefTab*      mStorePage;
 		MiscPrefTab*       mMiscPage;
 
+		KPageWidgetItem *  mFontColourPageItem;
+		KPageWidgetItem *  mEditPageItem;
+		KPageWidgetItem *  mEmailPageItem;
+		KPageWidgetItem *  mViewPageItem;
+		KPageWidgetItem *  mStorePageItem;
+		KPageWidgetItem *  mMiscPageItem;
+
 	protected slots:
 		virtual void slotOk();
 		virtual void slotApply();

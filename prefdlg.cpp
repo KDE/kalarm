@@ -42,6 +42,7 @@
 #include <kcolorcombo.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
+#include <kicon.h>
 
 #include <kalarmd/kalarmd.h>
 #include <ktoolinvocation.h>
@@ -93,7 +94,7 @@ static QString xtermCommands[] = {
 =============================================================================*/
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-	: KPageDialog(0)
+	: KPageDialog(0, 0)
 {
   setCaption( i18n("Preferences") );
   setButtons( Help | Default | Ok | Apply | Cancel );
@@ -101,55 +102,55 @@ KAlarmPrefDlg::KAlarmPrefDlg()
   setFaceType( List );
   setModal( true );
   showButtonSeparator( true );
-  setIconListAllVisible(true);
+  //setIconListAllVisible(true);
 
 
   KVBox* frame = new KVBox();
-  KPageWidgetItem *page = new KPageWidgetItem( frame,i18n("General") );
-  page->setHeader( i18n("General") );
-  page->setIcon( DesktopIcon("misc"));
-  addPage( page );
+  mEditPageItem = new KPageWidgetItem( frame,i18n("General") );
+  mEditPageItem->setHeader( i18n("General") );
+  mEditPageItem->setIcon( KIcon( DesktopIcon("misc") ));
+  addPage( mEditPageItem );
   frame->setMargin(0);
   mMiscPage = new MiscPrefTab(frame);
 
   frame = new KVBox();
-  page = new KPageWidgetItem( frame,i18n("Storage") );
-  page->setHeader( i18n("Alarm Storage") );
-  page->setIcon( DesktopIcon("fileopen"));
-  addPage( page );
+  mStorePageItem = new KPageWidgetItem( frame,i18n("Storage") );
+  mStorePageItem->setHeader( i18n("Alarm Storage") );
+  mStorePageItem->setIcon( KIcon( DesktopIcon("fileopen") ) );
+  addPage( mStorePageItem );
 
   mStorePage = new StorePrefTab(frame);
 
   frame = new KVBox();
-  page = new KPageWidgetItem( frame,i18n("Email") );
-  page->setHeader( i18n("Email Alarm Settings") );
-  page->setIcon( DesktopIcon("mail_generic"));
-  addPage( page );
+  mEmailPageItem = new KPageWidgetItem( frame,i18n("Email") );
+  mEmailPageItem->setHeader( i18n("Email Alarm Settings") );
+  mEmailPageItem->setIcon( KIcon( DesktopIcon("mail_generic") ) );
+  addPage( mEmailPageItem );
   frame->setMargin(0);
   mEmailPage = new EmailPrefTab(frame);
 
   frame = new KVBox();
-  page = new KPageWidgetItem( frame,i18n("View") );
-  page->setHeader( i18n("View Settings") );
-  page->setIcon( DesktopIcon("view_choose"));
-  addPage( page );
+  mViewPageItem = new KPageWidgetItem( frame,i18n("View") );
+  mViewPageItem->setHeader( i18n("View Settings") );
+  mViewPageItem->setIcon( KIcon( DesktopIcon("view_choose") ) );
+  addPage( mViewPageItem );
 
   frame->setMargin(0);
   mViewPage = new ViewPrefTab(frame);
 
   frame = new KVBox();
-  page = new KPageWidgetItem( frame,i18n("Font & Color") );
-  page->setHeader( i18n("Default Font and Color") );
-  page->setIcon( DesktopIcon("colorize"));
-  addPage( page );
+  mFontColourPageItem = new KPageWidgetItem( frame,i18n("Font & Color") );
+  mFontColourPageItem->setHeader( i18n("Default Font and Color") );
+  mFontColourPageItem->setIcon( KIcon( DesktopIcon("colorize") ) );
+  addPage( mFontColourPageItem );
   frame->setMargin(0);
   mFontColourPage = new FontColourPrefTab(frame);
 
   frame = new KVBox();
-  page = new KPageWidgetItem( frame,i18n("Edit") );
-  page->setHeader( i18n("Default Alarm Edit Settings") );
-  page->setIcon( DesktopIcon("edit"));
-  addPage( page );
+  mEditPageItem = new KPageWidgetItem( frame,i18n("Edit") );
+  mEditPageItem->setHeader( i18n("Default Alarm Edit Settings") );
+  mEditPageItem->setIcon( KIcon( DesktopIcon("edit") ) );
+  addPage( mEditPageItem );
   frame->setMargin(0);
   mEditPage = new EditPrefTab(frame);
 
@@ -185,7 +186,7 @@ void KAlarmPrefDlg::slotApply()
 	QString errmsg = mEmailPage->validate();
 	if (!errmsg.isEmpty())
 	{
-		showPage(pageIndex(mEmailPage->parentWidget()));
+		setCurrentPage(mEmailPageItem);
 		if (KMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
 		{
 			mValid = false;
@@ -195,7 +196,7 @@ void KAlarmPrefDlg::slotApply()
 	errmsg = mEditPage->validate();
 	if (!errmsg.isEmpty())
 	{
-		showPage(pageIndex(mEditPage->parentWidget()));
+		setCurrentPage(mEditPageItem);
 		KMessageBox::sorry(this, errmsg);
 		mValid = false;
 		return;
@@ -1051,7 +1052,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	mSoundFile = new QLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
-	mSoundFileBrowse->setIcon(SmallIcon("fileopen"));
+	mSoundFileBrowse->setIcon(KIcon( SmallIcon("fileopen") ) );
 	mSoundFileBrowse->setFixedSize(mSoundFileBrowse->sizeHint());
 	connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
 	mSoundFileBrowse->setToolTip(i18n("Choose a sound file"));
