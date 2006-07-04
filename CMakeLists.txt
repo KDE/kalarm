@@ -88,6 +88,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    resourceconfigdialog.cpp
    resourceselector.cpp
 )
+qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.DBusHandler.xml dbushandler.h DBusHandler )
 
 kde4_automoc(${kalarm_bin_SRCS})
 
