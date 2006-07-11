@@ -37,7 +37,7 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "dbushandler.moc"
-
+#include <dbushandleradaptor.h>
 static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of KAlarm's request interface
 
 

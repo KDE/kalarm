@@ -1070,7 +1070,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 		fileDlg.setSelection(initialFile);
 	if (fileDlg.exec() != QDialog::Accepted)
 		return QString();
-	KUrl url = fileDlg.selectedURL();
+	KUrl url = fileDlg.selectedUrl();
 	defaultDir = url.path();
 	return url.prettyUrl();
 }
