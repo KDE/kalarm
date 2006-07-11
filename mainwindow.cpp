@@ -44,7 +44,8 @@
 #include <kxmlguifactory.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
-
+#include <ktoggleaction.h>
+#include <ktoolbarpopupaction.h>
 #include <libkdepim/maillistdrag.h>
 #include <libkmime/kmime_content.h>
 #include <libkcal/calendarlocal.h>

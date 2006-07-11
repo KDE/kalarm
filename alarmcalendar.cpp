@@ -475,7 +475,7 @@ void AlarmCalendar::slotDaemonRegistered(bool newStatus)
 */
 bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 {
-	KUrl url = KFileDialog::getOpenURL(KUrl("filedialog:///importalarms"),
+	KUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
 	                                   QString::fromLatin1("*.vcs *.ics|%1").arg(i18n("Calendar Files")), parent);
 	if (url.isEmpty())
 	{

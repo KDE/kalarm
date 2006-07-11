@@ -22,17 +22,16 @@
 #define TEMPLATEMENUACTION_H
 
 #include <QMap>
-
+#include <kactionmenu.h>
 class QAction;
 class KAEvent;
-
 
 class TemplateMenuAction : public KActionMenu
 {
 		Q_OBJECT
 	public:
 		TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* parent, const QString& name);
-
+		virtual ~TemplateMenuAction() {}
 	signals:
 		void   selected(const KAEvent&);
 
