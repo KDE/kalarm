@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <kactionclasses.h>
+
 #include <kmenu.h>
 #include <kdebug.h>
 

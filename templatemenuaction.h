@@ -22,7 +22,7 @@
 #define TEMPLATEMENUACTION_H
 
 #include <QMap>
-#include <kactionclasses.h>
+
 class QAction;
 class KAEvent;
 

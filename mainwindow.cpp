@@ -31,7 +31,7 @@
 #include <ktoolbar.h>
 #include <kmenu.h>
 #include <kaction.h>
-#include <kactionclasses.h>
+
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
