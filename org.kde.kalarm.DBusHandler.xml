@@ -1,0 +1,177 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.DBusHandler">
+    <method name="cancelEvent">
+      <arg type="b" direction="out"/>
+      <arg name="eventId" type="s" direction="in"/>
+    </method>
+    <method name="triggerEvent">
+      <arg type="b" direction="out"/>
+      <arg name="eventId" type="s" direction="in"/>
+    </method>
+    <method name="scheduleMessage">
+      <arg type="b" direction="out"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="fgColor" type="s" direction="in"/>
+      <arg name="font" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurrence" type="s" direction="in"/>
+      <arg name="repeatInterval" type="i" direction="in"/>
+      <arg name="repeatCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleMessage">
+      <arg type="b" direction="out"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="fgColor" type="s" direction="in"/>
+      <arg name="font" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleMessage">
+      <arg type="b" direction="out"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="fgColor" type="s" direction="in"/>
+      <arg name="font" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="endDateTime" type="s" direction="in"/>
+    </method>
+    <method name="scheduleFile">
+      <arg type="b" direction="out"/>
+      <arg name="file" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurrence" type="s" direction="in"/>
+      <arg name="repeatInterval" type="i" direction="in"/>
+      <arg name="repeatCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleFile">
+      <arg type="b" direction="out"/>
+      <arg name="file" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleFile">
+      <arg type="b" direction="out"/>
+      <arg name="file" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="bgColor" type="s" direction="in"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="reminderMins" type="i" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="endDateTime" type="s" direction="in"/>
+    </method>
+    <method name="scheduleCommand">
+      <arg type="b" direction="out"/>
+      <arg name="commandLine" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurrence" type="s" direction="in"/>
+      <arg name="repeatInterval" type="i" direction="in"/>
+      <arg name="repeatCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleCommand">
+      <arg type="b" direction="out"/>
+      <arg name="commandLine" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleCommand">
+      <arg type="b" direction="out"/>
+      <arg name="commandLine" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="endDateTime" type="s" direction="in"/>
+    </method>
+    <method name="scheduleEmail">
+      <arg type="b" direction="out"/>
+      <arg name="fromID" type="s" direction="in"/>
+      <arg name="addresses" type="s" direction="in"/>
+      <arg name="subject" type="s" direction="in"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="attachments" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurrence" type="s" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleEmail">
+      <arg type="b" direction="out"/>
+      <arg name="fromID" type="s" direction="in"/>
+      <arg name="addresses" type="s" direction="in"/>
+      <arg name="subject" type="s" direction="in"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="attachments" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleEmail">
+      <arg type="b" direction="out"/>
+      <arg name="fromID" type="s" direction="in"/>
+      <arg name="addresses" type="s" direction="in"/>
+      <arg name="subject" type="s" direction="in"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="attachments" type="s" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="endDateTime" type="s" direction="in"/>
+    </method>
+    <method name="edit">
+      <arg type="b" direction="out"/>
+      <arg name="eventID" type="s" direction="in"/>
+    </method>
+    <method name="editNew">
+      <arg type="b" direction="out"/>
+      <arg name="templateName" type="s" direction="in"/>
+    </method>
+  </interface>
+</node>
