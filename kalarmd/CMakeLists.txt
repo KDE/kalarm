@@ -28,7 +28,7 @@ install(TARGETS kalarmd  DESTINATION ${BIN_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES kalarmd.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/.hidden)
-install( FILES kalarmd.autostart.desktop  DESTINATION /share/autostart)
+install( FILES kalarmd.autostart.desktop  DESTINATION ${DATA_INSTALL_DIR}/autostart)
 
 
 
