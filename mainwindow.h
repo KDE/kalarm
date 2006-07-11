@@ -146,6 +146,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::Observer
 		void           slotFindActive(bool);
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
+		void           columnsReordered();
 		void           slotToggleResourceSelector();
 		void           slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 		void           resourcesResized();
