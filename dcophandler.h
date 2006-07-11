@@ -1,7 +1,7 @@
 /*
  *  dcophandler.h  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright © 2001,2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright Â© 2001,2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
