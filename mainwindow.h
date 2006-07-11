@@ -131,6 +131,7 @@ class MainWindow : public MainWindowBase
 		void           slotFindActive(bool);
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
+		void           columnsReordered();
 
 	private:
 		typedef QValueList<MainWindow*> WindowList;

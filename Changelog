@@ -1,11 +1,12 @@
 KAlarm
 
-=== Version 1.4.3 (KDE 3.5.4) --- 19 June 2006 ===
+=== Version 1.4.3 (KDE 3.5.4) --- 11 July 2006 ===
 Add facility to import alarms from other calendar files.
 Fix Defer dialog time interval maximum to match maximum date/time value.
 Fix crash when a deferred expired recurring alarm is edited from message window.
 Fix crash when a message is redisplayed after login.
 Prevent inapplicable 'Unable to speak' error when alarm redisplayed after login.
+Save main window column order changes to use on restart (except message column).
 
 === Version 1.3.10 (KDE 3.5.3) --- 22 May 2006 ===
 Add DCOP calls and command line options to display the edit alarm dialogue.

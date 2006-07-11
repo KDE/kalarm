@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.h  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,23 +65,24 @@ class AlarmListView : public EventListViewBase
 {
 		Q_OBJECT       // needed by QObject::isA() calls
 	public:
-		AlarmListView(QWidget* parent = 0, const char* name = 0);
+		enum ColumnIndex {    // default column order
+			TIME_COLUMN, TIME_TO_COLUMN, REPEAT_COLUMN, COLOUR_COLUMN, TYPE_COLUMN, MESSAGE_COLUMN,
+			COLUMN_COUNT
+		};
+
+		AlarmListView(const QValueList<int>& order, QWidget* parent = 0, const char* name = 0);
 		~AlarmListView();
 		void                   showExpired(bool show)      { mShowExpired = show; }
 		bool                   showingExpired() const      { return mShowExpired; }
-		bool                   showingTimeTo() const	   { return columnWidth(mTimeToColumn); }
+		bool                   showingTimeTo() const	   { return columnWidth(mColumn[TIME_TO_COLUMN]); }
 		void                   selectTimeColumns(bool time, bool timeTo);
 		void                   updateTimeToAlarms(bool forceDisplay = false);
 		bool                   expired(AlarmListViewItem*) const;
 		bool                   drawMessageInColour() const            { return mDrawMessageInColour; }
 		void                   setDrawMessageInColour(bool inColour)  { mDrawMessageInColour = inColour; }
-		int                    timeColumn() const     { return mTimeColumn; }
-		int                    timeToColumn() const   { return mTimeToColumn; }
-		int                    repeatColumn() const   { return mRepeatColumn; }
-		int                    colourColumn() const   { return mColourColumn; }
-		int                    typeColumn() const     { return mTypeColumn; }
-		int                    messageColumn() const  { return mMessageColumn; }
-		static bool            dragging()             { return mDragging; }
+		QValueList<int>        columnOrder() const;
+		int                    column(ColumnIndex i) const { return mColumn[i]; }
+		static bool            dragging()                  { return mDragging; }
 		// Overridden base class methods
 		static void            addEvent(const KAEvent&, EventListViewBase*);
 		static void            modifyEvent(const KAEvent& e, EventListViewBase* selectionView)
@@ -118,12 +119,7 @@ class AlarmListView : public EventListViewBase
 
 		static InstanceList    mInstanceList;         // all current instances of this class
 		static bool            mDragging;
-		int                    mTimeColumn;           // index to alarm time column
-		int                    mTimeToColumn;         // index to time-to-alarm column
-		int                    mRepeatColumn;         // index to repetition type column
-		int                    mColourColumn;         // index to colour column
-		int                    mTypeColumn;           // index to alarm type column
-		int                    mMessageColumn;        // index to message column
+		int                    mColumn[COLUMN_COUNT]; // initial position of each column
 		int                    mTimeColumnHeaderWidth;
 		int                    mTimeToColumnHeaderWidth;
 		AlarmListTooltip*      mTooltip;              // tooltip for showing full text of alarm messages

@@ -22,6 +22,7 @@
 
 #include <qiconset.h>
 #include <qdragobject.h>
+#include <qheader.h>
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -67,15 +68,17 @@
 
 using namespace KCal;
 
-static const char* UI_FILE = "kalarmui.rc";
-QString   undoText;
-QString   undoTextStripped;
-QString   undoIcon;
-KShortcut undoShortcut;
-QString   redoText;
-QString   redoTextStripped;
-QString   redoIcon;
-KShortcut redoShortcut;
+static const char* UI_FILE     = "kalarmui.rc";
+static const char* WINDOW_NAME = "MainWindow";
+
+static QString   undoText;
+static QString   undoTextStripped;
+static QString   undoIcon;
+static KShortcut undoShortcut;
+static QString   redoText;
+static QString   redoTextStripped;
+static QString   redoIcon;
+static KShortcut redoShortcut;
 
 
 /*=============================================================================
@@ -119,19 +122,22 @@ MainWindow::MainWindow(bool restored)
 	  mShowTimeTo(Preferences::showTimeToAlarm())
 {
 	kdDebug(5950) << "MainWindow::MainWindow()\n";
-	setAutoSaveSettings(QString::fromLatin1("MainWindow"));    // save window sizes etc.
+	setAutoSaveSettings(QString::fromLatin1(WINDOW_NAME));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)
 	{
 		QSize s;
-		if (KAlarm::readConfigWindowSize("MainWindow", s))
+		if (KAlarm::readConfigWindowSize(WINDOW_NAME, s))
 			resize(s);
 	}
+	KConfig* config = KGlobal::config();
+	config->setGroup(QString::fromLatin1(WINDOW_NAME));
+	QValueList<int> order = config->readIntListEntry(QString::fromLatin1("ColumnOrder"));
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	if (!mShowTimeTo)
 		mShowTime = true;     // ensure at least one time column is visible
-	mListView = new AlarmListView(this, "listView");
+	mListView = new AlarmListView(order, this, "listView");
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->showExpired(mShowExpired);
 	setCentralWidget(mListView);
@@ -143,6 +149,7 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
+	connect(mListView->header(), SIGNAL(indexChange(int, int, int)), SLOT(columnsReordered()));
 	initActions();
 
 	mWindowList.append(this);
@@ -173,7 +180,7 @@ MainWindow::~MainWindow()
 	setUpdateTimer();
 	MainWindow* main = mainMainWindow();
 	if (main)
-		KAlarm::writeConfigWindowSize("MainWindow", main->size());
+		KAlarm::writeConfigWindowSize(WINDOW_NAME, main->size());
 	KToolBar* tb = toolBar();
 	if (tb)
 		tb->saveSettings(KGlobal::config(), "Toolbars");
@@ -253,7 +260,7 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 {
 	// Save the window's new size only if it's the first main window
 	if (mainMainWindow() == this)
-		KAlarm::writeConfigWindowSize("MainWindow", re->size());
+		KAlarm::writeConfigWindowSize(WINDOW_NAME, re->size());
 	MainWindowBase::resizeEvent(re);
 }
 
@@ -292,6 +299,18 @@ void MainWindow::hideEvent(QHideEvent* he)
 {
 	setUpdateTimer();
 	MainWindowBase::hideEvent(he);
+}
+
+/******************************************************************************
+*  Called when the list's column order is changed.
+*  Save the new column order as the default the next time the program is run.
+*/
+void MainWindow::columnsReordered()
+{
+	KConfig* config = KGlobal::config();
+	config->setGroup(QString::fromLatin1(WINDOW_NAME));
+	config->writeEntry(QString::fromLatin1("ColumnOrder"), mListView->columnOrder());
+	config->sync();
 }
 
 /******************************************************************************
@@ -1014,7 +1033,7 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-	saveMainWindowSettings(KGlobal::config(), "MainWindow");
+	saveMainWindowSettings(KGlobal::config(), WINDOW_NAME);
 	KEditToolbar dlg(factory());
 	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
@@ -1027,7 +1046,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
 	createGUI(UI_FILE);
-	applyMainWindowSettings(KGlobal::config(), "MainWindow");
+	applyMainWindowSettings(KGlobal::config(), WINDOW_NAME);
 }
 
 /******************************************************************************
