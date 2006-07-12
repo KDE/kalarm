@@ -92,9 +92,9 @@ static const char* KTTSD_DBUS_SERVICE  = "org.kde.KSpeech";
 static const char* KTTDS_DBUS_PATH      = "org/kde/kttsd/kttsdiface";
 static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech.kttsdiface";
 #warning more made up dbus interface names follow
-static const char* KMAIL_DBUS_SERVICE_NAME = "org.kde.kmail";
-static const char* KMAIL_DBUS_PATH         = "/org/kde/pim/kmail/kmailiface";
-static const char* KMAIL_DBUS_INTERFACE    = "org.kde.kmail.kmailiface";
+static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
+static const char* KMAIL_DBUS_PATH      = "/org/kde/pim/kmail/kmailiface";
+static const char* KMAIL_DBUS_INTERFACE = "org.kde.kmail.kmailiface";
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -978,12 +978,11 @@ void MessageWin::playAudio()
 void MessageWin::slotSpeak()
 {
 	QDBusConnection client = QDBus::sessionBus();
-	
 	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
 	{
 		// kttsd is not running, so start it
 		QString error;
-		if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
+		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
 		{
 			kDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
 			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
@@ -992,10 +991,10 @@ void MessageWin::slotSpeak()
 	}
 	// FIXME: this would be a lot cleaner just using kttsd's dbus stub.
 	QDBusInterface kttsdDBus(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, KTTSD_DBUS_INTERFACE );
-	QDBusMessage reply = kttsdDBus.call("sayMessage", mMessage, QString());
+	QDBusMessage reply = kttsdDBus.call(QLatin1String("sayMessage"), mMessage, QString());
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
-		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DBus error" << endl;
+		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() D-Bus error" << endl;
 		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DBus call sayMessage failed"));
 	}
 }
@@ -1347,15 +1346,12 @@ void MessageWin::slotShowKMailMessage()
 		KMessageBox::sorry(this, err);
 		return;
 	}
-	QDBusInterface kmailIface( KMAIL_DBUS_SERVICE_NAME, KMAIL_DBUS_PATH, KMAIL_DBUS_INTERFACE );
-	QDBusReply<bool> reply = kmailIface.call( "showMail", (qulonglong)mKMailSerialNumber, QString() );
-	if ( reply.isValid() )
-		if ( reply.value() )
-			return;
-		else
-			KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
-	else
-		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail dbus call to showMail failed\n";
+	QDBusInterface kmailIface(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, KMAIL_DBUS_INTERFACE );
+	QDBusReply<bool> reply = kmailIface.call(QLatin1String("showMail"), (qulonglong)mKMailSerialNumber, QString() );
+	if (!reply.isValid())
+		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail D-Bus call failed: " << reply.error().message() << endl;
+	else if (!reply.value())
+		KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
 }
 
 /******************************************************************************
