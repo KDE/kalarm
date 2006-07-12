@@ -39,7 +39,7 @@ class MainWindowBase : public KMainWindow
 
 	public:
 		MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window)
-		      : KMainWindow(parent, 0, f), disableQuit(false) { }
+		      : KMainWindow(parent, f), disableQuit(false) { }
 
 	protected:
 		virtual void closeEvent(QCloseEvent*);
