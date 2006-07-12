@@ -23,10 +23,9 @@
 
 #include <QWidget>
 
-#include <kurl.h>
-
 #include "datetime.h"
 #include "kalarmiface.h"
+class KUrl;
 class KARecurrence;
 
 
