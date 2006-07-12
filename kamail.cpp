@@ -34,8 +34,6 @@
 #include <QTextStream>
 
 #include <kstandarddirs.h>
-#include <dcopclient.h>
-#include <dcopref.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <klocale.h>
@@ -231,7 +229,8 @@ QString KAMail::sendKMail(const KAMailData& data)
 		return err;
 
 	// KMail is now running. Determine which DCOP call to use.
-	bool useSend = false;
+#warning Port DCOP usage!
+/*	bool useSend = false;
 	QByteArray sendFunction = "sendMessage(QString,QString,QString,QString,QString,QString,KUrl::List)";
 	DCOPCStringList funcs = kapp->dcopClient()->remoteFunctions("kmail", "MailTransportServiceIface");
 	for (DCOPCStringList::Iterator it = funcs.begin();  it != funcs.end() && !useSend;  ++it)
@@ -269,7 +268,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 		err = addToKMailFolder(data, "outbox", false);
 		if (!err.isNull())
 			return err;
-	}
+	}*/
 	if (data.allowNotify)
 		notifyQueued(data.event);
 	return QString();
@@ -324,11 +323,12 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 /******************************************************************************
 * Call KMail via DCOP. The DCOP function must return an 'int'.
 */
-bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, const DCOPCString& function, const DCOPCString& funcType)
+bool KAMail::callKMail(const QByteArray& callData, const QString& iface, const QString& function, const QString& funcType)
 {
-	QString funcname = QLatin1String(function);
+	QString funcname = function;
 	funcname.replace(QRegExp("(.+$"), "()");
-	DCOPCString replyType;
+#warning Port DCOP usage!
+/*	DCOPCString replyType;
 	QByteArray  replyData;
 	if (!kapp->dcopClient()->call("kmail", iface, function, callData, replyType, replyData)
 	||  replyType != funcType)
@@ -356,7 +356,7 @@ bool KAMail::callKMail(const QByteArray& callData, const DCOPCString& iface, con
 			kError(5950) << "KAMail::callKMail(): kmail " << funcname << " call returned error\n";
 			return false;
 		}
-	}
+	}*/
 	return true;
 }
 
@@ -897,7 +897,8 @@ QStringList KAMail::errors(const QString& err, bool sendfail)
 QString KAMail::getMailBody(quint32 serialNumber)
 {
 	// Get the body of the email from KMail
-	DCOPCString replyType;
+#warning Port DCOP usage!
+/*	DCOPCString replyType;
 	QByteArray  replyData;
 	QByteArray  data;
 	QDataStream arg(&data, QIODevice::WriteOnly);
@@ -912,7 +913,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 	}
 	else
 		kDebug(5950) << "KAMail::getMailBody(): kmail getDecodedBodyPart() call failed\n";
-	return body;
+	return body;*/
 }
 
 namespace

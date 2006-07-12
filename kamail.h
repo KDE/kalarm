@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QStringList>
-class DCOPCString;
 class KAEvent;
 class EmailAddressList;
 namespace KPIM { class IdentityManager; }
@@ -54,7 +53,7 @@ class KAMail
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
 		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
-		static bool        callKMail(const QByteArray& callData, const DCOPCString& iface, const DCOPCString& function, const DCOPCString& funcType);
+		static bool        callKMail(const QByteArray& callData, const QString& iface, const QString& function, const QString& funcType);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, int size, int& outSize);

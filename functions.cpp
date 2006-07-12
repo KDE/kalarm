@@ -60,7 +60,7 @@
 namespace
 {
 bool          resetDaemonQueued = false;
-DCOPCString   korganizerName    = "korganizer";
+QString       korganizerName    = "korganizer";
 QString       korgStartError;
 const char*   KORG_DCOP_OBJECT  = "KOrganizerIface";
 const char*   KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
@@ -884,7 +884,7 @@ void resetDaemonIfQueued()
 */
 QString runKMail(bool minimise)
 {
-	DCOPCString dcopName;
+	QString dcopName;
 	QString errmsg;
 	if (!runProgram("kmail", (minimise ? KMAIL_DCOP_WINDOW : ""), dcopName, errmsg))
 		return i18n("Unable to start KMail\n(%1)", errmsg);
@@ -898,12 +898,13 @@ QString runKMail(bool minimise)
 *  'errorMessage' contains an error message if failure.
 *  Reply = true if the program is now running.
 */
-bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPCString& dcopName, QString& errorMessage)
+bool runProgram(const QString& program, const QString& windowName, QString& dcopName, QString& errorMessage)
 {
-	if (!kapp->dcopClient()->isApplicationRegistered(program))
-	{
+#warning Port me!
+//	if (!kapp->dcopClient()->isApplicationRegistered(program))
+//	{
 		// KOrganizer is not already running, so start it
-		if (KToolInvocation::startServiceByDesktopName(QLatin1String(program), QString(), &errorMessage, &dcopName))
+		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dcopName))
 		{
 			kError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;
@@ -911,8 +912,9 @@ bool runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPC
 		// Minimise its window - don't use hide() since this would remove all
 		// trace of it from the panel if it is not configured to be docked in
 		// the system tray.
-		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
-	}
+#warning Port me!
+//		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
+//	}
 	else if (dcopName.isEmpty())
 		dcopName = program;
 	errorMessage.clear();
@@ -1166,7 +1168,8 @@ bool sendToKOrganizer(const KAEvent& event)
 	// Send the event to KOrganizer
 	if (!runKOrganizer())     // start KOrganizer if it isn't already running
 		return false;
-	QByteArray  data, replyData;
+#warning Port DCOP call!
+	/*QByteArray  data, replyData;
 	DCOPCString replyType;
 	QDataStream arg(&data, QIODevice::WriteOnly);
 	arg << iCal;
@@ -1181,7 +1184,7 @@ bool sendToKOrganizer(const KAEvent& event)
 			kDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
 			return true;
 		}
-	}
+	}*/
 	kError(5950) << "sendToKOrganizer(): KOrganizer addEvent(" << uid << ") dcop call failed\n";
 	return false;
 }
@@ -1194,7 +1197,8 @@ bool deleteFromKOrganizer(const QString& eventID)
 	if (!runKOrganizer())     // start KOrganizer if it isn't already running
 		return false;
 	QString newID = uidKOrganizer(eventID);
-	QByteArray  data, replyData;
+#warning Port DCOP call!
+	/*QByteArray  data, replyData;
 	DCOPCString replyType;
 	QDataStream arg(&data, QIODevice::WriteOnly);
 	arg << newID << true;
@@ -1209,7 +1213,7 @@ bool deleteFromKOrganizer(const QString& eventID)
 			kDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
 			return true;
 		}
-	}
+	}*/
 	kError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
 	return false;
 }

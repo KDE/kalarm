@@ -23,8 +23,11 @@
 
 #include <QWidget>
 
+#include <kurl.h>
+
 #include "datetime.h"
 #include "kalarmiface.h"
+#include "karecurrence.h"
 
 
 class DBusHandler : public QObject, public KAlarmIface

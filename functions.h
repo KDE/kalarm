@@ -93,7 +93,7 @@ void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
-bool                runProgram(const DCOPCString& program, const DCOPCString& windowName, DCOPCString& dcopName, QString& errorMessage);
+bool                runProgram(const QString& program, const QString& windowName, QString& dcopName, QString& errorMessage);
 
 UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, bool useEventID = false,
                              bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
