@@ -1,0 +1,41 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.kalarmd.daemon">
+    <method name="enableAutoStart">
+      <arg name="enable" type="b" direction="in"/>
+    </method>
+    <method name="enable">
+      <arg name="enable" type="b" direction="in"/>
+    </method>
+    <method name="reloadResource">
+      <arg name="id" type="s" direction="in"/>
+    </method>
+    <method name="resetResource">
+      <arg name="id" type="s" direction="in"/>
+    </method>
+    <method name="resourceActive">
+      <arg name="id" type="s" direction="in"/>
+      <arg name="active" type="b" direction="in"/>
+    </method>
+    <method name="resourceLocation">
+      <arg name="id" type="s" direction="in"/>
+      <arg name="locn" type="s" direction="in"/>
+      <arg name="locn2" type="s" direction="in"/>
+    </method>
+    <method name="registerApp">
+      <arg name="appName" type="s" direction="in"/>
+      <arg name="dbusObject" type="s" direction="in"/>
+      <arg name="startClient" type="b" direction="in"/>
+    </method>
+    <method name="registerChange">
+      <arg name="appName" type="s" direction="in"/>
+      <arg name="startClient" type="b" direction="in"/>
+    </method>
+    <method name="eventHandled">
+      <arg name="id" type="s" direction="in"/>
+      <arg name="reload" type="b" direction="in"/>
+    </method>
+    <method name="quit">
+    </method>
+  </interface>
+</node>

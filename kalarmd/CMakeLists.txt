@@ -1,3 +1,4 @@
+include_directories( ${QDBUS_INCLUDE_DIRS} )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kalarm  )
 
@@ -12,6 +13,8 @@ set(kalarmd_SRCS
 	admain.cpp 
 	adapp.cpp 
 )
+
+qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarmd.daemon.xml alarmdaemon.h AlarmDaemon )
 
 #kde4_add_dcop_skels(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )
 #kde4_add_dcop_stubs(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )

@@ -59,7 +59,7 @@ const char* DCOP_OBJECT_KEY  = "DCOP object";
 const char* START_CLIENT_KEY = "Start";
 
 static const char* KALARM_DBUS_SERVICE = "org.kde.kalarm";
-static const char* NOTIFY_DBUS_IFACE   = "org.kde.NotificationHandler";
+static const char* NOTIFY_DBUS_IFACE   = "org.kde.kalarm.notify";
 static const char* NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's notification interface
 
 
@@ -141,7 +141,7 @@ bool AlarmDaemon::kalarmNotify(const QString& method, const QList<QVariant>& arg
 {
 	if (!mDBusNotify)
 		mDBusNotify = new QDBusInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_IFACE);
-	QDBusError err = mDBusNotify->callWithArgumentList(QDBus::NoBlock, method, args );
+	QDBusError err = mDBusNotify->callWithArgumentList(QDBus::NoBlock, method, args);
 	if (err.isValid())
 	{
 		kError(5900) << "AlarmDaemon::kalarmNotify(" << method << "): D-Bus call failed: " << err.message() << endl;
@@ -308,6 +308,7 @@ void AlarmDaemon::resourceLoaded(AlarmResource* res)
 */
 void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 {
+#warning Check client ID
 // FIXME I don't think this check can be done with DBus
 #if 0
 	if (kapp->dcopClient()->senderId() != mClientName)
@@ -330,7 +331,7 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient)
+void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject, bool startClient)
 {
 	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
 	registerApp(appName, dbusObject, startClient, true);
@@ -343,7 +344,7 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObje
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
+void AlarmDaemon::registerChange(const QString& appName, bool startClient)
 {
 	kDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
 	registerApp(mClientName, mClientDBusObj, startClient, false);
@@ -356,7 +357,7 @@ void AlarmDaemon::registerChange(const QByteArray& appName, bool startClient)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObject, bool startClient, bool init)
+void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject, bool startClient, bool init)
 {
 	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result = KAlarmd::SUCCESS;
@@ -380,7 +381,7 @@ void AlarmDaemon::registerApp(const QByteArray& appName, const QString& dbusObje
 		mClientStart   = startClient;
 		KConfig* config = KGlobal::config();
 		config->setGroup(CLIENT_GROUP);
-		config->writeEntry(CLIENT_KEY, QString::fromLocal8Bit(mClientName));
+		config->writeEntry(CLIENT_KEY, mClientName);
 		config->writeEntry(DCOP_OBJECT_KEY, mClientDBusObj);
 		config->writeEntry(START_CLIENT_KEY, mClientStart);
 		if (init)
@@ -705,9 +706,9 @@ void AlarmDaemon::readConfig()
 {
 	KConfig* config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP);
-	QByteArray client = config->readEntry(CLIENT_KEY).toLocal8Bit();
-	mClientDBusObj    = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
-	mClientStart      = config->readEntry(START_CLIENT_KEY, false);
+	QString client = config->readEntry(CLIENT_KEY);
+	mClientDBusObj = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
+	mClientStart   = config->readEntry(START_CLIENT_KEY, false);
 
 	// Verify the configuration
 	mClientName.clear();
@@ -747,7 +748,5 @@ QString AlarmDaemon::timezone()
 bool AlarmDaemon::isClientRegistered() const
 {
 	QDBusReply<bool> isRegistered = QDBus::sessionBus().interface()->isServiceRegistered(mClientName);
-	if (!isRegistered.isValid())
-		return false;
-	return isRegistered.value();
+	return isRegistered.isValid() ? isRegistered.value() : false;
 }
