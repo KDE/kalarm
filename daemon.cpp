@@ -44,7 +44,7 @@
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's interface for notification by alarm daemon
-static const char*  DAEMON_DBUS_IFACE   = "org.kde.AlarmDaemon";
+static const char*  DAEMON_DBUS_IFACE   = "org.kde.kalarmd.daemon";
 
 
 /*=============================================================================
@@ -54,7 +54,7 @@ static const char*  DAEMON_DBUS_IFACE   = "org.kde.AlarmDaemon";
 
 class NotificationHandler : public QObject
 {
-		Q_CLASSINFO("D-Bus Interface", "org.kde.NotificationHandler")
+		Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.notify")
 	public:
 		NotificationHandler();
 	public Q_SLOTS:
@@ -721,10 +721,7 @@ int Daemon::maxTimeSinceCheck()
 bool Daemon::isDaemonRegistered()
 {
 	QDBusReply<bool> reply = QDBus::sessionBus().interface()->isServiceRegistered(DAEMON_DBUS_SERVICE);
-	if ( reply.isValid() ) 
-		return reply.value();
-	else
-		return false;
+	return reply.isValid() ? reply.value() : false;
 }
 
 

@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QRegExp>
 #include <QDesktopWidget>
+#include <QtDBus>
 
 #include <kconfig.h>
 #include <kaction.h>
@@ -62,15 +63,21 @@ namespace
 bool          resetDaemonQueued = false;
 QString       korganizerName    = "korganizer";
 QString       korgStartError;
+QDBusInterface* korgInterface = 0;
+
 const char*   KORG_DCOP_OBJECT  = "KOrganizerIface";
 const char*   KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
 const char*   KMAIL_DCOP_WINDOW = "kmail-mainwindow#1";
+static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
+static const char* KORG_DBUS_SERVICE = "org.kde.korganizer";
+static const char* KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
+static const char* KORG_DBUS_OBJECT  = "/???";    // D-Bus object path of KOrganizer's notification interface
 const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
+bool runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
-inline bool runKOrganizer()   { return KAlarm::runProgram("korganizer", KORG_DCOP_WINDOW, korganizerName, korgStartError); }
 }
 
 
@@ -884,9 +891,9 @@ void resetDaemonIfQueued()
 */
 QString runKMail(bool minimise)
 {
-	QString dcopName;
+	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
-	if (!runProgram("kmail", (minimise ? KMAIL_DCOP_WINDOW : ""), dcopName, errmsg))
+	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DCOP_WINDOW) : QString()), dbusService, errmsg))
 		return i18n("Unable to start KMail\n(%1)", errmsg);
 	return QString();
 }
@@ -894,29 +901,34 @@ QString runKMail(bool minimise)
 /******************************************************************************
 *  Start another program for DCOP access if it isn't already running.
 *  If 'windowName' is not empty, the program's window of that name is iconised.
-*  On exit, 'dcopName' contains the DCOP name to access the application, and
-*  'errorMessage' contains an error message if failure.
+*  On exit, 'errorMessage' contains an error message if failure.
 *  Reply = true if the program is now running.
 */
-bool runProgram(const QString& program, const QString& windowName, QString& dcopName, QString& errorMessage)
+bool runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage)
 {
-#warning Port me!
-//	if (!kapp->dcopClient()->isApplicationRegistered(program))
-//	{
-		// KOrganizer is not already running, so start it
-		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dcopName))
+	QDBusReply<bool> reply = QDBus::sessionBus().interface()->isServiceRegistered(dbusService);
+	if (!reply.isValid()  ||  !reply.value())
+	{
+		// Program is not already running, so start it
+		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dbusService))
 		{
-			kError(5950) << "runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
+			kError(5950) << "KAlarm::runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
 			return false;
 		}
-		// Minimise its window - don't use hide() since this would remove all
-		// trace of it from the panel if it is not configured to be docked in
-		// the system tray.
-#warning Port me!
-//		kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
-//	}
-	else if (dcopName.isEmpty())
-		dcopName = program;
+		if (!windowName.isEmpty())
+		{
+			// Minimise its window - don't use hide() since this would remove all
+			// trace of it from the panel if it is not configured to be docked in
+			// the system tray.
+//kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
+#warning Minimise window
+//			QDBusInterface iface(dbusService, DBUS_OBJECT, DBUS_IFACE);
+			QDBusInterface iface(dbusService, QString(), QString());
+			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("minimize"), QList<QVariant>());
+			if (err.isValid())
+				kError(5950) << "KAlarm::runProgram(" << program << "): minimize D-Bus call failed: " << err.message() << endl;
+		}
+	}
 	errorMessage.clear();
 	return true;
 }
@@ -1166,27 +1178,23 @@ bool sendToKOrganizer(const KAEvent& event)
 	delete kcalEvent;
 
 	// Send the event to KOrganizer
-	if (!runKOrganizer())     // start KOrganizer if it isn't already running
+	if (!runKOrganizer())     // start KOrganizer if it isn't already running, and create its D-Bus interface
 		return false;
-#warning Port DCOP call!
-	/*QByteArray  data, replyData;
-	DCOPCString replyType;
-	QDataStream arg(&data, QIODevice::WriteOnly);
-	arg << iCal;
-	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "addIncidence(QString)", data, replyType, replyData)
-	&&  replyType == "bool")
+	QList<QVariant> args;
+	args << iCal;
+	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("addIncidence"), args);
+	if (!reply.isValid())
 	{
-		bool result;
-		QDataStream reply(&replyData, QIODevice::ReadOnly);
-		reply >> result;
-		if (result)
-		{
-			kDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
-			return true;
-		}
-	}*/
-	kError(5950) << "sendToKOrganizer(): KOrganizer addEvent(" << uid << ") dcop call failed\n";
-	return false;
+		kError(5950) << "sendToKOrganizer(): addIncidence(" << uid << ") D-Bus call failed: " << reply.error().message() << endl;
+		return false;
+	}
+	if (!reply.value())
+	{
+		kError(5950) << "sendToKOrganizer(): addIncidence(" << uid << ") D-Bus call returned false" << endl;
+		return false;
+	}
+	kDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
+	return true;
 }
 
 /******************************************************************************
@@ -1194,28 +1202,42 @@ bool sendToKOrganizer(const KAEvent& event)
 */
 bool deleteFromKOrganizer(const QString& eventID)
 {
-	if (!runKOrganizer())     // start KOrganizer if it isn't already running
+	if (!runKOrganizer())     // start KOrganizer if it isn't already running, and create its D-Bus interface
 		return false;
 	QString newID = uidKOrganizer(eventID);
-#warning Port DCOP call!
-	/*QByteArray  data, replyData;
-	DCOPCString replyType;
-	QDataStream arg(&data, QIODevice::WriteOnly);
-	arg << newID << true;
-	if (kapp->dcopClient()->call(korganizerName, KORG_DCOP_OBJECT, "deleteIncidence(QString,bool)", data, replyType, replyData)
-	&&  replyType == "bool")
+	QList<QVariant> args;
+	args << newID << true;
+	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
+	if (!reply.isValid())
 	{
-		bool result;
-		QDataStream reply(&replyData, QIODevice::ReadOnly);
-		reply >> result;
-		if (result)
-		{
-			kDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
-			return true;
-		}
-	}*/
-	kError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
-	return false;
+		kError(5950) << "deleteFromKOrganizer(): deleteIncidence(" << newID << ") D-Bus call failed: " << reply.error().message() << endl;
+		return false;
+	}
+	if (!reply.value())
+	{
+		kError(5950) << "deleteFromKOrganizer(): deleteIncidence(" << newID << ") D-Bus call returned false" << endl;
+		return false;
+	}
+	kDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
+	return true;
+}
+
+/******************************************************************************
+*  Start KOrganizer if not already running, and create its D-Bus interface.
+*/
+bool runKOrganizer()
+{
+	QString dbusService = KORG_DBUS_SERVICE;
+	if (!KAlarm::runProgram(QLatin1String("korganizer"), KORG_DCOP_WINDOW, dbusService, korgStartError))
+		return false;
+	if (korgInterface  &&  !korgInterface->isValid())
+	{
+		delete korgInterface;
+		korgInterface = 0;
+	}
+	if (!korgInterface)
+		korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_OBJECT, KORG_DBUS_IFACE);
+	return true;
 }
 
 /******************************************************************************

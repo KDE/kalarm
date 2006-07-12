@@ -87,19 +87,14 @@
 
 using namespace KCal;
 
-#ifndef WITHOUT_ARTS
-static const char* KMIX_APP_NAME    = "kmix";
-static const char* KMIX_DCOP_OBJECT = "Mixer0";
-static const char* KMIX_DCOP_WINDOW = "kmix-mainwindow#1";
-#endif
 #warning KTTSD_DBUS_* defines are made up!
-static const char * KTTSD_DBUS_SERVICE_NAME  = "kttsd";
-static const char * KTTDS_DBUS_PATH = "org/kde/kttsd/kttsdiface";
-static const char * KTTSD_DBUS_INTERFACE = "org.kde.kttsd.kttsdiface";
+static const char* KTTSD_DBUS_SERVICE  = "org.kde.KSpeech";
+static const char* KTTDS_DBUS_PATH      = "org/kde/kttsd/kttsdiface";
+static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech.kttsdiface";
 #warning more made up dbus interface names follow
-static const char * KMAIL_DBUS_SERVICE_NAME = "kmail";
-static const char * KMAIL_DBUS_PATH = "/org/kde/pim/kmail/kmailiface";
-static const char * KMAIL_DBUS_INTERFACE= "org.kde.pim.kmail.kmailiface";
+static const char* KMAIL_DBUS_SERVICE_NAME = "org.kde.kmail";
+static const char* KMAIL_DBUS_PATH         = "/org/kde/pim/kmail/kmailiface";
+static const char* KMAIL_DBUS_INTERFACE    = "org.kde.kmail.kmailiface";
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -984,7 +979,7 @@ void MessageWin::slotSpeak()
 {
 	QDBusConnection client = QDBus::sessionBus();
 	
-	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE_NAME))
+	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
 	{
 		// kttsd is not running, so start it
 		QString error;
@@ -996,7 +991,7 @@ void MessageWin::slotSpeak()
 		}
 	}
 	// FIXME: this would be a lot cleaner just using kttsd's dbus stub.
-	QDBusInterface kttsdDBus(KTTSD_DBUS_SERVICE_NAME, KTTDS_DBUS_PATH, KTTSD_DBUS_INTERFACE );
+	QDBusInterface kttsdDBus(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, KTTSD_DBUS_INTERFACE );
 	QDBusMessage reply = kttsdDBus.call("sayMessage", mMessage, QString());
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{

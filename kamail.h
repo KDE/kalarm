@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,6 @@ class KAMail
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
 		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
-		static bool        callKMail(const QByteArray& callData, const QString& iface, const QString& function, const QString& funcType);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		static char*       base64Encode(const char* in, int size, int& outSize);

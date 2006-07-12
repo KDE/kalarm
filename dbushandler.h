@@ -27,13 +27,13 @@
 
 #include "datetime.h"
 #include "kalarmiface.h"
-#include "karecurrence.h"
+class KARecurrence;
 
 
 class DBusHandler : public QObject, public KAlarmIface
 {
 	Q_OBJECT
-	Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.DBusHandler")
+	Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.request")
     public:
 	DBusHandler();
 
@@ -66,7 +66,7 @@ class DBusHandler : public QObject, public KAlarmIface
 	                                  int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-	                                const QString& recurrence, int recurInterval, int recurCount);
+	                                const QString& recurrence, int repeatInterval, int repeatCount);
 	Q_SCRIPTABLE bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                int recurType, int recurInterval, int recurCount);

@@ -1,6 +1,6 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
-  <interface name="org.kde.DBusHandler">
+  <interface name="org.kde.kalarm.request">
     <method name="cancelEvent">
       <arg type="b" direction="out"/>
       <arg name="eventId" type="s" direction="in"/>
@@ -134,8 +134,8 @@
       <arg name="lateCancel" type="i" direction="in"/>
       <arg name="flags" type="u" direction="in"/>
       <arg name="recurrence" type="s" direction="in"/>
-      <arg name="recurInterval" type="i" direction="in"/>
-      <arg name="recurCount" type="i" direction="in"/>
+      <arg name="repeatInterval" type="i" direction="in"/>
+      <arg name="repeatCount" type="i" direction="in"/>
     </method>
     <method name="scheduleEmail">
       <arg type="b" direction="out"/>
