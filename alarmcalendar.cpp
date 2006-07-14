@@ -40,7 +40,7 @@
 #include <kdebug.h>
 
 extern "C" {
-#include <libical/ical.h>
+#include <kcal/ical/ical.h>
 }
 
 #include <kcal/calendarlocal.h>
