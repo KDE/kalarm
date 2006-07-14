@@ -28,7 +28,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <libkcal/resourcecachedconfig.h>
+#include <kcal/resourcecachedconfig.h>
 
 #include "resourceremote.h"
 #include "resourceremotewidget.moc"

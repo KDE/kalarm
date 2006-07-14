@@ -40,7 +40,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <libkcal/event.h>
+#include <kcal/event.h>
 
 #include "alarmevent.h"
 #include "alarmtimewidget.h"

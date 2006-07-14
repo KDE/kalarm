@@ -34,8 +34,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <libkcal/icaldrag.h>
-#include <libkcal/calendarlocal.h>
+#include <kcal/icaldrag.h>
+#include <kcal/calendarlocal.h>
 
 #include "alarmcalendar.h"
 #include "alarmtext.h"

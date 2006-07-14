@@ -21,7 +21,7 @@
 #ifndef KARECURRENCE_H
 #define KARECURRENCE_H
 
-#include <libkcal/recurrence.h>
+#include <kcal/recurrence.h>
 class DateTime;
 
 

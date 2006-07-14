@@ -26,7 +26,7 @@
 #include <QList>
 #include <QMap>
 
-#include <libkcal/calendar.h>
+#include <kcal/calendar.h>
 
 #include "alarmevent.h"
 #include "alarmresources.h"

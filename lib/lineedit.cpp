@@ -31,7 +31,7 @@
 
 #include <libkdepim/maillistdrag.h>
 #include <libkdepim/kvcarddrag.h>
-#include <libkcal/icaldrag.h>
+#include <kcal/icaldrag.h>
 
 #include "lineedit.moc"
 

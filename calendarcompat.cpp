@@ -32,7 +32,7 @@
 extern "C" {
 #include <libical/ical.h>
 }
-#include <libkcal/calendarlocal.h>
+#include <kcal/calendarlocal.h>
 
 #include "alarmevent.h"
 #include "alarmresource.h"

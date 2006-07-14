@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <libkcal/calendarlocal.h>
+#include <kcal/calendarlocal.h>
 
 #include "alarmtext.h"
 #include "functions.h"

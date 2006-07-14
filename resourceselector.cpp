@@ -43,7 +43,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 
-#include <libkcal/resourcecalendar.h>
+#include <kcal/resourcecalendar.h>
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"

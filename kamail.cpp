@@ -47,7 +47,7 @@
 
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
-#include <libkcal/person.h>
+#include <kcal/person.h>
 
 #include <kmime_header_parsing.h>
 

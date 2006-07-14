@@ -27,8 +27,8 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <libkcal/event.h>
-#include <libkcal/recurrence.h>
+#include <kcal/event.h>
+#include <kcal/recurrence.h>
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"

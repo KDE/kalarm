@@ -27,7 +27,7 @@
 
 #include <kurl.h>
 
-#include <libkcal/incidence.h>
+#include <kcal/incidence.h>
 
 #include "alarmresource.h"
 

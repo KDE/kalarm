@@ -1,9 +1,9 @@
 include_directories( ${QT_QTDBUS_INCLUDE_DIR} )
 
 include_directories( 
-	${CMAKE_SOURCE_DIR}/libkcal/
-	${CMAKE_SOURCE_DIR}/libkcal/libical/src/
-	${CMAKE_BINARY_DIR}/libkcal/libical/src/
+	${CMAKE_SOURCE_DIR}/kcal/
+	${CMAKE_SOURCE_DIR}/kcal/libical/src/
+	${CMAKE_BINARY_DIR}/kcal/libical/src/
 	${CMAKE_SOURCE_DIR}/kalarm 
 	${CMAKE_SOURCE_DIR}/kalarm/lib 
 	${CMAKE_SOURCE_DIR}/kalarm/resources 

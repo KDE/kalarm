@@ -24,7 +24,7 @@
 
 #include <QTimer>
 
-#include <libkcal/calendarlocal.h>
+#include <kcal/calendarlocal.h>
 
 class QDBusInterface;
 class AlarmResource;

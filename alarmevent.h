@@ -27,8 +27,8 @@
 #include <QFont>
 #include <QList>
 
-#include <libkcal/person.h>
-#include <libkcal/event.h>
+#include <kcal/person.h>
+#include <kcal/event.h>
 namespace KCal { class CalendarLocal; }
 
 #include "datetime.h"

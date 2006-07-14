@@ -27,7 +27,7 @@
 
 #include <QMap>
 #include <QByteArray>
-#include <libkcal/resourcecached.h>
+#include <kcal/resourcecached.h>
 #include "kcal.h"
 
 class KConfig;

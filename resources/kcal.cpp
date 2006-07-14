@@ -23,8 +23,8 @@
 #include <QMap>
 #include <kdebug.h>
 
-#include <libkcal/event.h>
-#include <libkcal/alarm.h>
+#include <kcal/event.h>
+#include <kcal/alarm.h>
 
 #include "kcal.h"
 

@@ -56,7 +56,7 @@
 
 #include <libkdepim/maillistdrag.h>
 #include <libkdepim/kvcarddrag.h>
-#include <libkcal/icaldrag.h>
+#include <kcal/icaldrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"

@@ -43,10 +43,10 @@ extern "C" {
 #include <libical/ical.h>
 }
 
-#include <libkcal/calendarlocal.h>
-#include <libkcal/vcaldrag.h>
-#include <libkcal/vcalformat.h>
-#include <libkcal/icalformat.h>
+#include <kcal/calendarlocal.h>
+#include <kcal/vcaldrag.h>
+#include <kcal/vcalformat.h>
+#include <kcal/icalformat.h>
 #include <kglobal.h>
 
 #include "alarmresources.h"

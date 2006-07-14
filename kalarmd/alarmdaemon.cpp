@@ -36,8 +36,8 @@
 #include <ktimezones.h>
 #include <kdebug.h>
 
-#include <libkcal/calendarlocal.h>
-#include <libkcal/icalformat.h>
+#include <kcal/calendarlocal.h>
+#include <kcal/icalformat.h>
 #include <ktoolinvocation.h>
 
 #include "alarmguiiface.h"

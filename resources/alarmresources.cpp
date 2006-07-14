@@ -29,8 +29,8 @@
 #include <kdebug.h>
 
 #include <kresources/selectdialog.h>
-#include <libkcal/calformat.h>
-#include <libkcal/event.h>
+#include <kcal/calformat.h>
+#include <kcal/event.h>
 
 #include "alarmresource.h"
 #include "kcal.h"

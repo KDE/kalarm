@@ -23,7 +23,7 @@
 #include <QBitArray>
 #include <kdebug.h>
 
-#include <libkcal/icalformat.h>
+#include <kcal/icalformat.h>
 
 #include "datetime.h"
 #include "functions.h"

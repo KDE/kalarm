@@ -49,8 +49,8 @@
 #include <ktoolbarpopupaction.h>
 #include <libkdepim/maillistdrag.h>
 #include <libkmime/kmime_content.h>
-#include <libkcal/calendarlocal.h>
-#include <libkcal/icaldrag.h>
+#include <kcal/calendarlocal.h>
+#include <kcal/icaldrag.h>
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
