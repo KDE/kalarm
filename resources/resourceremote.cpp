@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kstandarddirs.h>
 #include <kio/jobclasses.h>
 
@@ -173,7 +174,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		if (job->error())
 		{
 			if (hasGui())
-				job->ui()->showErrorDialog();
+				job->ui()->showErrorMessage();
 			else
 				kError(KARES_DEBUG) << "Resource " << identifier() << " download error: " << job->errorString() << endl;
 			setEnabled(false);
@@ -256,7 +257,7 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 	if (job->error())
 	{
 		if (hasGui())
-			job->ui()->showErrorDialog();
+			job->ui()->showErrorMessage();
 		else
 			kError(KARES_DEBUG) << "Resource " << identifier() << " upload error: " << job->errorString() << endl;
 	}
