@@ -37,7 +37,7 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "dbushandler.moc"
-#include <dbushandleradaptor.h>
+#include <requestadaptor.h>
 static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of KAlarm's request interface
 
 
@@ -51,7 +51,7 @@ DBusHandler::DBusHandler()
 	// TODO: How to deal with KUrl's, which are not supported as type by
 	// d-bus, so they need to be marshalled. QtDBus has this functionality,
 	// but the type needs to be registered somehow
-	new DBusHandlerAdaptor(this);
+	new RequestAdaptor(this);
 	QDBus::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
 
