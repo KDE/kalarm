@@ -65,13 +65,12 @@ QString       korganizerName    = "korganizer";
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
 
-const char*   KORG_DCOP_OBJECT  = "KOrganizerIface";
 const char*   KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
 const char*   KMAIL_DCOP_WINDOW = "kmail-mainwindow#1";
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KORG_DBUS_SERVICE = "org.kde.korganizer";
 static const char* KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
-static const char* KORG_DBUS_OBJECT  = "/???";    // D-Bus object path of KOrganizer's notification interface
+static const char* KORG_DBUS_OBJECT  = "/";    // D-Bus object path of KOrganizer's notification interface
 const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
 
 bool sendToKOrganizer(const KAEvent&);

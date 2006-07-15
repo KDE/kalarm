@@ -87,13 +87,12 @@
 
 using namespace KCal;
 
-#warning KTTSD_DBUS_* defines are made up!
-static const char* KTTSD_DBUS_SERVICE  = "org.kde.KSpeech";
-static const char* KTTDS_DBUS_PATH      = "org/kde/kttsd/kttsdiface";
-static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech.kttsdiface";
-#warning more made up dbus interface names follow
+static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
+static const char* KTTDS_DBUS_PATH      = "/KSpeech";
+static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech";
+#warning Fix KMail dbus interface names when they are available
 static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
-static const char* KMAIL_DBUS_PATH      = "/org/kde/pim/kmail/kmailiface";
+static const char* KMAIL_DBUS_PATH      = "/kmailiface";
 static const char* KMAIL_DBUS_INTERFACE = "org.kde.kmail.kmailiface";
 
 // The delay for enabling message window buttons if a zero delay is

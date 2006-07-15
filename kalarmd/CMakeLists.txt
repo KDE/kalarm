@@ -14,7 +14,7 @@ set(kalarmd_SRCS
 	adapp.cpp 
 )
 
-qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarmd.daemon.xml alarmdaemon.h AlarmDaemon )
+qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarmd.Daemon.xml alarmdaemon.h AlarmDaemon )
 
 #kde4_add_dcop_skels(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )
 #kde4_add_dcop_stubs(kalarmd_SRCS alarmdaemoniface.h alarmguiiface.h )
