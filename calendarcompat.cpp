@@ -29,9 +29,6 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-extern "C" {
-#include <kcal/ical/ical.h>
-}
 #include <kcal/calendarlocal.h>
 
 #include "alarmevent.h"
@@ -74,10 +71,10 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 	// Convert it to the current format, and prompt the user whether to update the calendar file.
 	if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
 	{
-		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-		version057_UTC = isUTC(localFile);
-		kDebug(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 (" << (version057_UTC ? "" : "non-") << "UTC)\n";
+		// KAlarm version 0.5.7 - in the KDE 3.0.0 version, times are stored in UTC,
+		// which needs adjustment of summer times.
+		// Because this is so old, we no longer provide backwards compatibility.
+		kWarning(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 calendar: may need adjustment of summer times" << endl;
 	}
 	else
 		kDebug(5950) << "CalendarCompat::fix(): KAlarm version " << version << endl;
@@ -154,45 +151,4 @@ int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& su
 	if (ver >= KAlarm::currentCalendarVersion()  &&  ver <= KAlarm::Version())
 		return 0;      // the calendar is in the current KAlarm format
 	return KAlarm::getVersionNumber(versionString, &subVersion);
-}
-
-/******************************************************************************
- * Check whether the calendar file has its times stored as UTC times,
- * indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
- * Reply = true if times are stored in UTC
- *       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
- */
-bool CalendarCompat::isUTC(const QString& localFile)
-{
-	// Read the calendar file into a QString
-	QFile file(localFile);
-	if (!file.open(QIODevice::ReadOnly))
-		return false;
-	QTextStream ts(&file);
-	ts.setCodec("ISO 8859-1");
-	QString text = ts.readAll();
-	file.close();
-
-	// Extract the CREATED property for the first VEVENT from the calendar
-	bool result = false;
-	icalcomponent* calendar = icalcomponent_new_from_string(text.toLocal8Bit().data());
-	if (calendar)
-	{
-		if (icalcomponent_isa(calendar) == ICAL_VCALENDAR_COMPONENT)
-		{
-			icalcomponent* c = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
-			if (c)
-			{
-				icalproperty* p = icalcomponent_get_first_property(c, ICAL_CREATED_PROPERTY);
-				if (p)
-				{
-					struct icaltimetype datetime = icalproperty_get_created(p);
-					if (datetime.is_utc)
-						result = true;
-				}
-			}
-		}
-		icalcomponent_free(calendar);
-	}
-	return result;
 }

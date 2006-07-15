@@ -38,7 +38,6 @@ class CalendarCompat
 
 	private:
 		static int  readKAlarmVersion(KCal::CalendarLocal&, QString& subVersion, QString& versionString);
-		static bool isUTC(const QString& localFile);
 };
 
 #endif // CALENDARCOMPAT_H
