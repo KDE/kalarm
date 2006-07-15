@@ -39,10 +39,6 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 
-extern "C" {
-#include <kcal/ical/ical.h>
-}
-
 #include <kcal/calendarlocal.h>
 #include <kcal/vcaldrag.h>
 #include <kcal/vcalformat.h>
