@@ -414,19 +414,17 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		void resourceModified(AlarmResource*);
 		void resourceDeleted(AlarmResource*);
 
-    /**
-       Let CalendarResource subclasses set the Time Zone ID.
-
-       First parameter is a string containing a Time Zone ID, which is
-       assumed to be valid. On some systems, /usr/share/zoneinfo/zone.tab
-       may be available for reference.\n
-       @e Example: "Europe/Berlin"
-
-       @warning
-       Do Not pass an empty timeZoneId string as this may cause unintended
-       consequences when storing Incidences into the Calendar.
-    */
-    virtual void doSetTimeZoneId(const QString& timeZoneId);
+		/**
+		   Let CalendarResource subclasses set the Time Zone ID.
+		
+		   First parameter is a string containing a Time Zone ID, which is
+		   assumed to be valid. On some systems, /usr/share/zoneinfo/zone.tab
+		   may be available for reference.\n
+		   @e Example: "Europe/Berlin"
+		
+		   If @p timeZoneId is empty, the reources are set to local time.
+		*/
+		virtual void doSetTimeZoneId(const QString& timeZoneId);
 
     /**
        Increment the number of times this Resource has been changed.

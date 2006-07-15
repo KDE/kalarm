@@ -734,12 +734,16 @@ void AlarmDaemon::readConfig()
 */
 QString AlarmDaemon::timezone()
 {
+#ifdef USE_TIMEZONE
 	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
 	kaconfig.setGroup("General");
 	QString tz = kaconfig.readEntry("Timezone", QString());
 	if (tz.isEmpty())
 		tz = KSystemTimeZones::local()->name();
 	return tz;
+#else
+	return QString();
+#endif
 }
 
 /******************************************************************************

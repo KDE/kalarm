@@ -396,7 +396,9 @@ void Preferences::save(bool syncToDisc)
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
+#ifdef USE_TIMEZONE
 	config->writeEntry(TIMEZONE, mUserTimeZone);
+#endif
 	QStringList colours;
 	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
 		colours.append(QColor(mMessageColours[i]).name());
@@ -491,15 +493,21 @@ QString Preferences::timeZone(bool reload)
 {
 	if (reload)
                 mSystemTimeZone.clear();
+#ifdef USE_TIMEZONE
         if (!mUserTimeZone.isEmpty())
                 return mUserTimeZone;
         return default_timeZone();
+#else
+	return QString();
+#endif
 }
 
 QString Preferences::default_timeZone()
 {
+#ifdef USE_TIMEZONE
 	if (mSystemTimeZone.isEmpty())
 		mSystemTimeZone = KSystemTimeZones::local()->name();
+#endif
 	return mSystemTimeZone;
 }
 

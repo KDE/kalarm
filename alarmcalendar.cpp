@@ -210,8 +210,10 @@ bool AlarmCalendar::open()
 
 		kDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyUrl() << ")\n";
 		if (!mCalendar)
-			mCalendar = new CalendarLocal(QLatin1String("UTC"));
+			mCalendar = new CalendarLocal(Preferences::timeZone(true));
+#ifndef USE_TIMEZONE
 		mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
+#endif
 
 		// Check for file's existence, assuming that it does exist when uncertain,
 		// to avoid overwriting it.
@@ -268,9 +270,11 @@ int AlarmCalendar::load()
 			return -1;
 		}
 		kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-		calendar->setTimeZoneId(QString());   // default to the local time zone for reading
+		calendar->setTimeZoneId(Preferences::timeZone(true));
 		bool loaded = calendar->load(tmpFile);
+#ifndef USE_TIMEZONE
 		calendar->setLocalTime();                 // write using local time (i.e. no time zone)
+#endif
 		if (!loaded)
 		{
 			// Check if the file is zero length

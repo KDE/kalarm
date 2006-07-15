@@ -2571,7 +2571,6 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_2_0_0 = (version < KAlarm::Version(1,9,90));
 	Q_ASSERT(calVersion() == KAlarm::Version(1,9,90));
 
-	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::startOfDay();
 
 	bool converted = false;
@@ -2705,7 +2704,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					// The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
 					// Summer time was ignored when converting to UTC.
 					QDateTime dt = alarm->time();
-					time_t t = dt0.secsTo(dt);
+					time_t t = dt.toTime_t();
 					struct tm* dtm = localtime(&t);
 					if (dtm->tm_isdst)
 					{
@@ -2895,6 +2894,13 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				cats.removeAt(i);
 				converted = true;
 			}
+
+#ifdef USE_TIMEZONE
+			/*
+			 * Convert from local time to the user's timezone.
+			 */
+#warning Check whether we need to convert local time - or is it automatic?
+#endif
 		}
 
 		if (addLateCancel)

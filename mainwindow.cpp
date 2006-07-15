@@ -1280,6 +1280,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KPIM::MailList  mailList;
 	KUrl::List      files;
 	KCal::CalendarLocal calendar(Preferences::timeZone(true));
+#ifndef USE_TIMEZONE
+	calendar.setLocalTime();    // default to local time (i.e. no time zone)
+#endif
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
 	kDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;

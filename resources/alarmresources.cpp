@@ -69,6 +69,9 @@ AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
 	  mAskDestination(false),
 	  mShowProgress(false)
 {
+	if (timeZoneId.isEmpty())
+		setLocalTime();
+
 	mManager = new AlarmResourceManager(QString::fromLatin1("alarms"));
 	mManager->addObserver(this);
 	mAskDestination = true;    // prompt the user for a resource every time an alarm is saved
@@ -181,6 +184,8 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 	}
 
 	resource->setTimeZoneId(timeZoneId());
+	if (isLocalTime())
+		resource->setLocalTime();
 	resource->setResourceName(title);
 	resourceManager()->add(resource);
 	connectResource(resource);
@@ -407,6 +412,8 @@ void AlarmResources::load(ResourceCached::CacheAction action)
 		if (!mActiveOnly  ||  resource->alarmType() == AlarmResource::ACTIVE)
 		{
 			resource->setTimeZoneId(timeZoneId());
+			if (isLocalTime())
+				resource->setLocalTime();
 			if (resource->isActive())
 			{
 				if (!load(resource, action))
@@ -827,14 +834,22 @@ void AlarmResources::resourceDeleted(AlarmResource* resource)
 	emit resourceStatusChanged(resource, Deleted);
 }
 
+/******************************************************************************
+* Set the time zone for all resources.
+* If 'timeZoneId' is empty, set local time.
+*/
 void AlarmResources::doSetTimeZoneId(const QString& timeZoneId)
 {
-  // set the timezone for all resources. Otherwise we'll have those terrible
-  // tz troubles ;-((
-  AlarmResourceManager::Iterator i1;
-  for (i1 = mManager->begin(); i1 != mManager->end(); ++i1) {
-    (*i1)->setTimeZoneId(timeZoneId);
-  }
+	bool local = timeZoneId.isEmpty();
+	if (local)
+		setLocalTime();
+	AlarmResourceManager::Iterator i1;
+	for (i1 = mManager->begin(); i1 != mManager->end(); ++i1)
+	{
+		(*i1)->setTimeZoneId(timeZoneId);
+		if (local)
+			(*i1)->setLocalTime();
+	}
 }
 
 AlarmResources::Ticket* AlarmResources::requestSaveTicket(AlarmResource* resource)
