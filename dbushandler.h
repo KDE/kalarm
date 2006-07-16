@@ -42,21 +42,21 @@ class DBusHandler : public QObject, public KAlarmIface
 
 	Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& bgColor, const QString& fgColor, const QString& font,
-	                                  const KUrl& audioFile, int reminderMins, const QString& recurrence,
+	                                  const QString& audioFile, int reminderMins, const QString& recurrence,
 	                                  int repeatInterval, int repeatCount);
 	Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& bgColor, const QString& fgColor, const QString& font,
-	                                  const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
+	                                  const QString& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
 	Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& bgColor, const QString& fgColor, const QString& font,
-	                                  const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
-	Q_SCRIPTABLE bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                               const KUrl& audioFile, int reminderMins, const QString& recurrence,
+	                                  const QString& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
+	Q_SCRIPTABLE bool scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                               const QString& audioFile, int reminderMins, const QString& recurrence,
 	                               int repeatInterval, int repeatCount);
-	Q_SCRIPTABLE bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                               const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
-	Q_SCRIPTABLE bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                               const KUrl& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
+	Q_SCRIPTABLE bool scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                               const QString& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount);
+	Q_SCRIPTABLE bool scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+	                               const QString& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& recurrence, int repeatInterval, int repeatCount);
 	Q_SCRIPTABLE bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
