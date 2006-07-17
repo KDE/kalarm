@@ -68,69 +68,69 @@ bool DBusHandler::triggerEvent(const QString& eventId)
 
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const QString& audioFile, int reminderMins, const QString& recurrence,
+                                  const QString& audioUrl, int reminderMins, const QString& recurrence,
                                   int repeatInterval, int repeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
-	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioFile), reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur, repeatInterval, repeatCount);
 }
 
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const QString& audioFile, int reminderMins,
+                                  const QString& audioUrl, int reminderMins,
                                   int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
-	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioFile), reminderMins, recur);
+	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur);
 }
 
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
-                                  const QString& audioFile, int reminderMins,
+                                  const QString& audioUrl, int reminderMins,
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
-	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioFile), reminderMins, recur);
+	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur);
 }
 
-bool DBusHandler::scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const QString& audioFile, int reminderMins, const QString& recurrence,
+bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const QString& audioUrl, int reminderMins, const QString& recurrence,
                                int repeatInterval, int repeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
-	return scheduleFile(KUrl(file), start, lateCancel, flags, bgColor, KUrl(audioFile), reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur, repeatInterval, repeatCount);
 }
 
-bool DBusHandler::scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const QString& audioFile, int reminderMins, int recurType, int recurInterval, int recurCount)
+bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const QString& audioUrl, int reminderMins, int recurType, int recurInterval, int recurCount)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
-	return scheduleFile(KUrl(file), start, lateCancel, flags, bgColor, KUrl(audioFile), reminderMins, recur);
+	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur);
 }
 
-bool DBusHandler::scheduleFile(const QString& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-                               const QString& audioFile, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
+bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
+                               const QString& audioUrl, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
 {
 	DateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
-	return scheduleFile(KUrl(file), start, lateCancel, flags, bgColor, KUrl(audioFile), reminderMins, recur);
+	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur);
 }
 
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
