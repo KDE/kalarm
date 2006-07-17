@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KCAL_H
-#define KCAL_H
+#ifndef KCALENDAR_H
+#define KCALENDAR_H
 
 namespace KCal {
   class Event;

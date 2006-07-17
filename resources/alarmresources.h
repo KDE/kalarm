@@ -27,7 +27,7 @@
 #include <kresources/manager.h>
 
 #include "alarmresource.h"
-#include "kcal.h"
+#include "kcalendar.h"
 
 class KAResourceIface;
 namespace KCal { class Event; }

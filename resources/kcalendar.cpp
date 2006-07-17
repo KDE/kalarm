@@ -26,7 +26,7 @@
 #include <kcal/event.h>
 #include <kcal/alarm.h>
 
-#include "kcal.h"
+#include "kcalendar.h"
 
 QByteArray KCalendar::APPNAME = "KALARM";
 

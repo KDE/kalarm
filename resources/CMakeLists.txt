@@ -6,7 +6,7 @@
 set(kalarm_resources_LIB_SRCS
 	alarmresource.cpp 
 	alarmresources.cpp 
-	kcal.cpp 
+	kcalendar.cpp 
 	resourcelocal.cpp 
 	resourcelocal_plugin.cpp 
 	resourcelocalwidget.cpp 

@@ -33,7 +33,7 @@ namespace KCal { class CalendarLocal; }
 
 #include "datetime.h"
 #include "karecurrence.h"
-#include "kcal.h"
+#include "kcalendar.h"
 
 class AlarmCalendar;
 class KARecurrence;

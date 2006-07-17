@@ -28,7 +28,7 @@
 #include <QMap>
 #include <QByteArray>
 #include <kcal/resourcecached.h>
-#include "kcal.h"
+#include "kcalendar.h"
 
 class KConfig;
 using KCal::CalendarLocal;

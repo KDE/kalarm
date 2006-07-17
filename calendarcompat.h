@@ -23,7 +23,7 @@
 
 /* @file calendarcompat.h - compatibility for old calendar file formats */
 
-#include "kcal.h"
+#include "kcalendar.h"
 
 class AlarmResource;
 namespace KCal { class CalendarLocal; }

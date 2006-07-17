@@ -33,7 +33,7 @@
 #include <kcal/event.h>
 
 #include "alarmresource.h"
-#include "kcal.h"
+#include "kcalendar.h"
 #include "resourcelocal.h"
 #include "resourceremote.h"
 #include "alarmresources.moc"
