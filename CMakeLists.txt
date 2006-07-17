@@ -97,7 +97,7 @@ kde4_automoc(${kalarm_bin_SRCS})
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin ${KDE4_KDEUI_LIBS} kalarm_resources kcal kmime kdepim kpimidentities kabc kutils phononcore )
+target_link_libraries(kalarm_bin ${KDE4_KDEUI_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} kmime kdepim kpimidentities kabc kutils phononcore )
 
 install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 

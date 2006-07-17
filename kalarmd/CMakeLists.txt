@@ -23,7 +23,7 @@ kde4_automoc(${kalarmd_SRCS})
 
 kde4_add_executable(kalarmd ${kalarmd_SRCS})
 
-target_link_libraries(kalarmd ${KDE4_KDEUI_LIBS} kalarm_resources kcal )
+target_link_libraries(kalarmd ${KDE4_KDEUI_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} )
 
 install(TARGETS kalarmd  DESTINATION ${BIN_INSTALL_DIR} )
 
