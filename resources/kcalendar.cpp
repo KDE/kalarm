@@ -1,5 +1,5 @@
 /*
- *  kcal.cpp  -  libkcal calendar and event functions
+ *  kcalendar.cpp  -  kcal library calendar and event functions
  *  Program:  kalarm
  *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
  *

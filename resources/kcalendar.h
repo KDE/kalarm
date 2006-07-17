@@ -1,5 +1,5 @@
 /*
- *  kcal.h  -  libkcal calendar and event categorisation
+ *  kcalendar.h  -  kcal library calendar and event categorisation
  *  Program:  kalarm
  *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
  *
