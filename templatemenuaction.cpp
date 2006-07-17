@@ -34,8 +34,8 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 	: KActionMenu(icon, label, actions, name)
 {
 	setDelayed(false);
-	connect(kMenu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
-	connect(kMenu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
+	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
 }
 
 /******************************************************************************
@@ -44,14 +44,13 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 */
 void TemplateMenuAction::slotInitMenu()
 {
-	KMenu* menu = kMenu();
-	menu->clear();
+	menu()->clear();
 	mOriginalTexts.clear();
 	QList<KAEvent> templates = KAlarm::templateList();
 	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
 		QString name = templates[i].templateName();
-		QAction* act = menu->addAction(name);
+		QAction* act = menu()->addAction(name);
 		mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
 	}
 }
