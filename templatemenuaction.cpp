@@ -44,13 +44,14 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 */
 void TemplateMenuAction::slotInitMenu()
 {
-	menu()->clear();
+	KMenu* m = menu();
+	m->clear();
 	mOriginalTexts.clear();
 	QList<KAEvent> templates = KAlarm::templateList();
 	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
 		QString name = templates[i].templateName();
-		QAction* act = menu()->addAction(name);
+		QAction* act = m->addAction(name);
 		mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
 	}
 }
