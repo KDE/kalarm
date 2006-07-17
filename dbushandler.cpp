@@ -48,9 +48,6 @@ static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of K
 DBusHandler::DBusHandler()
 {
 	kDebug(5950) << "DBusHandler::DBusHandler()\n";
-	// TODO: How to deal with KUrl's, which are not supported as type by
-	// d-bus, so they need to be marshalled. QtDBus has this functionality,
-	// but the type needs to be registered somehow
 	new RequestAdaptor(this);
 	QDBus::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
