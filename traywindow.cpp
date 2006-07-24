@@ -67,16 +67,17 @@ struct TipItem
 =============================================================================*/
 
 TrayWindow::TrayWindow(MainWindow* parent)
-	: KSystemTray((theApp()->wantRunInSystemTray() ? parent : 0)),
+	: KSystemTrayIcon((theApp()->wantRunInSystemTray() ? parent : 0)),
 	  mAssocMainWindow(parent)
 {
 	kDebug(5950) << "TrayWindow::TrayWindow()\n";
 	// Set up GUI icons
-	mPixmapEnabled  = loadIcon("kalarm");
-	mPixmapDisabled = loadIcon("kalarm_disabled");
-	if (mPixmapEnabled.isNull() || mPixmapDisabled.isNull())
-		KMessageBox::sorry(this, i18n("Cannot load system tray icon."));
-	setAcceptDrops(true);         // allow drag-and-drop onto this window
+	mIconEnabled  = loadIcon("kalarm");
+	mIconDisabled = loadIcon("kalarm_disabled");
+	if (mIconEnabled.isNull() || mIconDisabled.isNull())
+		KMessageBox::sorry(parent, i18n("Cannot load system tray icon."));
+#warning system tray is an icon no window
+	//setAcceptDrops(true);         // allow drag-and-drop onto this window
 
 	// Set up the context menu
 	KActionCollection* actcol = actionCollection();
@@ -101,6 +102,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	setEnabledStatus(Daemon::monitoringAlarms());
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
+        connect( this, SIGNAL( activated(QSystemTrayIcon::ActivationReason) ), SLOT( slotActivated(QSystemTrayIcon::ActivationReason reason) ) );
 }
 
 TrayWindow::~TrayWindow()
@@ -161,7 +163,7 @@ void TrayWindow::slotPreferences()
 */
 void TrayWindow::slotQuit()
 {
-	theApp()->doQuit(this);
+	theApp()->doQuit(parentWidget());
 }
 
 /******************************************************************************
@@ -171,7 +173,7 @@ void TrayWindow::slotQuit()
 void TrayWindow::setEnabledStatus(bool status)
 {
 	kDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")\n";
-	setPixmap(status ? mPixmapEnabled : mPixmapDisabled);
+	setIcon(status ? mIconEnabled : mIconDisabled);
 }
 
 /******************************************************************************
@@ -179,36 +181,26 @@ void TrayWindow::setEnabledStatus(bool status)
 *  A left click displays the KAlarm main window.
 *  A middle button click displays the New Alarm window.
 */
-void TrayWindow::mousePressEvent(QMouseEvent* e)
+void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 {
-	if (e->button() == Qt::LeftButton  &&  !theApp()->wantRunInSystemTray())
-	{
-		// Left click: display/hide the first main window
-		mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
-	}
-	else if (e->button() == Qt::MidButton)
+        if (reason == QSystemTrayIcon::Trigger )
+        {
+          if ( !theApp()->wantRunInSystemTray() )
+          {
+            // Left click: display/hide the first main window
+            mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
+          }
+          else if ( mAssocMainWindow  &&  mAssocMainWindow->isVisible() )
+          {
+            mAssocMainWindow->raise();
+            mAssocMainWindow->activateWindow();
+          }
+        }
+	else if (reason == QSystemTrayIcon::MiddleClick )
 	{
 		if (mActionNew->isEnabled())
 			mActionNew->trigger();    // display a New Alarm dialog
 	}
-	else
-		KSystemTray::mousePressEvent(e);
-}
-
-/******************************************************************************
-*  Called when the mouse is released over the panel icon.
-*  The main window (if not hidden) is raised and made the active window.
-*  If this is done in mousePressEvent(), it doesn't work.
-*/
-void TrayWindow::mouseReleaseEvent(QMouseEvent* e)
-{
-	if (e->button() == Qt::LeftButton  &&  mAssocMainWindow  &&  mAssocMainWindow->isVisible())
-	{
-		mAssocMainWindow->raise();
-		mAssocMainWindow->activateWindow();
-	}
-	else
-		KSystemTray::mouseReleaseEvent(e);
 }
 
 /******************************************************************************
@@ -237,7 +229,7 @@ void TrayWindow::dropEvent(QDropEvent* e)
 bool TrayWindow::event(QEvent* e)
 {
 	if (e->type() != QEvent::ToolTip)
-		return KSystemTray::event(e);
+		return KSystemTrayIcon::event(e);
 	QHelpEvent* he = (QHelpEvent*)e;
 	QString text;
 	if (Daemon::monitoringAlarms())
@@ -359,7 +351,9 @@ void TrayWindow::removeWindow(MainWindow* win)
 */
 bool TrayWindow::inSystemTray() const
 {
-#if defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
+        return true;
+#warning I don't get what's supposed to happen here - systrays are no longer widgets though
+#if 0 && defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
 	Window  xParent;    // receives parent window
 	Window  root;
 	Window* children = 0;

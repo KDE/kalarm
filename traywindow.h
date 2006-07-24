@@ -21,8 +21,8 @@
 #ifndef TRAYWINDOW_H
 #define TRAYWINDOW_H
 
-#include <QPixmap>
-#include <ksystemtray.h>
+#include <QIcon>
+#include <ksystemtrayicon.h>
 
 class QEvent;
 class QMouseEvent;
@@ -32,7 +32,7 @@ class KMenu;
 class KAEvent;
 class MainWindow;
 
-class TrayWindow : public KSystemTray
+class TrayWindow : public KSystemTrayIcon
 {
 		Q_OBJECT
 	public:
@@ -52,13 +52,12 @@ class TrayWindow : public KSystemTray
 
 	protected:
 		virtual void contextMenuAboutToShow(KMenu*);
-		virtual void mousePressEvent(QMouseEvent*);
-		virtual void mouseReleaseEvent(QMouseEvent*);
 		virtual void dragEnterEvent(QDragEnterEvent*);
 		virtual void dropEvent(QDropEvent*);
 		virtual bool event(QEvent*);
 
 	private slots:
+                void         slotActivated(QSystemTrayIcon::ActivationReason reason);
 		void         slotNewAlarm();
 		void         slotNewFromTemplate(const KAEvent&);
 		void         slotPreferences();
@@ -68,7 +67,7 @@ class TrayWindow : public KSystemTray
 	private:
 
 		MainWindow*  mAssocMainWindow;     // main window associated with this, or null
-		QPixmap      mPixmapEnabled, mPixmapDisabled;
+		QIcon        mIconEnabled, mIconDisabled;
 		KAction*     mActionNew;
 		KAction*     mActionNewFromTemplate;
 };
