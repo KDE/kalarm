@@ -76,7 +76,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mIconDisabled = loadIcon("kalarm_disabled");
 	if (mIconEnabled.isNull() || mIconDisabled.isNull())
 		KMessageBox::sorry(parent, i18n("Cannot load system tray icon."));
-#warning system tray is an icon no window
+#warning How to implement drag-and-drop?
 	//setAcceptDrops(true);         // allow drag-and-drop onto this window
 
 	// Set up the context menu
@@ -102,7 +102,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	setEnabledStatus(Daemon::monitoringAlarms());
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
-        connect( this, SIGNAL( activated(QSystemTrayIcon::ActivationReason) ), SLOT( slotActivated(QSystemTrayIcon::ActivationReason reason) ) );
+	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason reason)));
 }
 
 TrayWindow::~TrayWindow()
@@ -183,20 +183,18 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 {
-        if (reason == QSystemTrayIcon::Trigger )
-        {
-          if ( !theApp()->wantRunInSystemTray() )
-          {
-            // Left click: display/hide the first main window
-            mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
-          }
-          else if ( mAssocMainWindow  &&  mAssocMainWindow->isVisible() )
-          {
-            mAssocMainWindow->raise();
-            mAssocMainWindow->activateWindow();
-          }
-        }
-	else if (reason == QSystemTrayIcon::MiddleClick )
+	if (reason == QSystemTrayIcon::Trigger)
+	{
+		// Left click: display/hide the first main window
+		if (!theApp()->wantRunInSystemTray())
+			mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
+		else if (mAssocMainWindow  &&  mAssocMainWindow->isVisible())
+		{
+			mAssocMainWindow->raise();
+			mAssocMainWindow->activateWindow();
+		}
+	}
+	else if (reason == QSystemTrayIcon::MiddleClick)
 	{
 		if (mActionNew->isEnabled())
 			mActionNew->trigger();    // display a New Alarm dialog
@@ -311,7 +309,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			}
 			items.insert(it, item);
 		}
-        }
+	}
 	kDebug(5950) << "TrayWindow::tooltipAlarmText():\n";
 	int count = 0;
 	for (i = 0, iend = items.count();  i < iend;  ++i)
@@ -351,7 +349,7 @@ void TrayWindow::removeWindow(MainWindow* win)
 */
 bool TrayWindow::inSystemTray() const
 {
-        return true;
+	return true;
 #warning I don't get what's supposed to happen here - systrays are no longer widgets though
 #if 0 && defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
 	Window  xParent;    // receives parent window
