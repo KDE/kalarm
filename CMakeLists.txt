@@ -104,9 +104,9 @@ install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR})
-install( FILES kalarm.tray.desktop  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/autostart)
-install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm)
+install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR} )
+install( FILES kalarm.tray.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR} )
+install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
