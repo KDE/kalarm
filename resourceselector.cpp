@@ -42,6 +42,8 @@
 #include <kinputdialog.h>
 #include <kmenu.h>
 #include <kdebug.h>
+#include <kicon.h>
+
 
 #include <kcal/resourcecalendar.h>
 

@@ -34,6 +34,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
+#include <kicon.h>
 
 #include <kcal/event.h>
 #include <kcal/icalformat.h>
