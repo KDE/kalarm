@@ -74,7 +74,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	  mEnabled(true)
 {
 	kDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
-	QDBus::sessionBus().registerObject(DAEMON_DBUS_OBJECT, this, QDBusConnection::ExportSlots);
+	QDBusConnection::sessionBus().registerObject(DAEMON_DBUS_OBJECT, this, QDBusConnection::ExportScriptableSlots);
 	AlarmDaemon::readConfig();
 	enableAutoStart(true);    // switch autostart on whenever the program is run
 
@@ -751,6 +751,6 @@ QString AlarmDaemon::timezone()
 */
 bool AlarmDaemon::isClientRegistered() const
 {
-	QDBusReply<bool> isRegistered = QDBus::sessionBus().interface()->isServiceRegistered(mClientName);
+	QDBusReply<bool> isRegistered = QDBusConnection::sessionBus().interface()->isServiceRegistered(mClientName);
 	return isRegistered.isValid() ? isRegistered.value() : false;
 }

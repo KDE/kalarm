@@ -976,7 +976,7 @@ void MessageWin::playAudio()
 
 void MessageWin::slotSpeak()
 {
-	QDBusConnection client = QDBus::sessionBus();
+	QDBusConnection client = QDBusConnection::sessionBus();
 	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
 	{
 		// kttsd is not running, so start it

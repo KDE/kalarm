@@ -49,7 +49,7 @@ DBusHandler::DBusHandler()
 {
 	kDebug(5950) << "DBusHandler::DBusHandler()\n";
 	new RequestAdaptor(this);
-	QDBus::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
+	QDBusConnection::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
 
 

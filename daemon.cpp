@@ -720,7 +720,7 @@ int Daemon::maxTimeSinceCheck()
 */
 bool Daemon::isDaemonRegistered()
 {
-	QDBusReply<bool> reply = QDBus::sessionBus().interface()->isServiceRegistered(DAEMON_DBUS_SERVICE);
+	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(DAEMON_DBUS_SERVICE);
 	return reply.isValid() ? reply.value() : false;
 }
 
@@ -733,7 +733,7 @@ NotificationHandler::NotificationHandler()
 	: QObject()
 {
 	kDebug(5950) << "NotificationHandler::NotificationHandler()\n";
-	QDBus::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this, QDBusConnection::ExportSlots);
+	QDBusConnection::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this, QDBusConnection::ExportScriptableSlots);
 }
 
 /******************************************************************************

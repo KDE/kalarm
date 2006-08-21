@@ -906,7 +906,7 @@ QString runKMail(bool minimise)
 */
 bool runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage)
 {
-	QDBusReply<bool> reply = QDBus::sessionBus().interface()->isServiceRegistered(dbusService);
+	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(dbusService);
 	if (!reply.isValid()  ||  !reply.value())
 	{
 		// Program is not already running, so start it
