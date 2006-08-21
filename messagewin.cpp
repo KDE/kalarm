@@ -146,6 +146,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mVolume(event.soundVolume()),
 	  mFadeVolume(event.fadeVolume()),
 	  mFadeSeconds(QMIN(event.fadeSeconds(), 86400)),
+	  mDefaultDeferMinutes(event.deferDefaultMinutes()),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
 	  mKMailSerialNumber(event.kmailSerialNumber()),
@@ -671,6 +672,7 @@ void MessageWin::saveProperties(KConfig* config)
 #endif
 		config->writeEntry(QString::fromLatin1("Speak"), mSpeak);
 		config->writeEntry(QString::fromLatin1("Height"), height());
+		config->writeEntry(QString::fromLatin1("DeferMins"), mDefaultDeferMinutes);
 		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
 		config->writeEntry(QString::fromLatin1("KMailSerial"), mKMailSerialNumber);
 	}
@@ -685,33 +687,34 @@ void MessageWin::saveProperties(KConfig* config)
 */
 void MessageWin::readProperties(KConfig* config)
 {
-	mInvalid           = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
-	mEventID           = config->readEntry(QString::fromLatin1("EventID"));
-	mAlarmType         = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
-	mMessage           = config->readEntry(QString::fromLatin1("Message"));
-	mAction            = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
-	mFont              = config->readFontEntry(QString::fromLatin1("Font"));
-	mBgColour          = config->readColorEntry(QString::fromLatin1("BgColour"));
-	mFgColour          = config->readColorEntry(QString::fromLatin1("FgColour"));
-	mConfirmAck        = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
+	mInvalid             = config->readBoolEntry(QString::fromLatin1("Invalid"), false);
+	mEventID             = config->readEntry(QString::fromLatin1("EventID"));
+	mAlarmType           = KAAlarm::Type(config->readNumEntry(QString::fromLatin1("AlarmType")));
+	mMessage             = config->readEntry(QString::fromLatin1("Message"));
+	mAction              = KAEvent::Action(config->readNumEntry(QString::fromLatin1("Type")));
+	mFont                = config->readFontEntry(QString::fromLatin1("Font"));
+	mBgColour            = config->readColorEntry(QString::fromLatin1("BgColour"));
+	mFgColour            = config->readColorEntry(QString::fromLatin1("FgColour"));
+	mConfirmAck          = config->readBoolEntry(QString::fromLatin1("ConfirmAck"));
 	QDateTime invalidDateTime;
-	QDateTime dt       = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
-	bool dateOnly      = config->readBoolEntry(QString::fromLatin1("DateOnly"));
+	QDateTime dt         = config->readDateTimeEntry(QString::fromLatin1("Time"), &invalidDateTime);
+	bool dateOnly        = config->readBoolEntry(QString::fromLatin1("DateOnly"));
 	mDateTime.set(dt, dateOnly);
-	mCloseTime         = config->readDateTimeEntry(QString::fromLatin1("Expiry"), &invalidDateTime);
+	mCloseTime           = config->readDateTimeEntry(QString::fromLatin1("Expiry"), &invalidDateTime);
 #ifndef WITHOUT_ARTS
-	mAudioFile         = config->readPathEntry(QString::fromLatin1("AudioFile"));
-	mVolume            = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
-	mFadeVolume        = -1;
-	mFadeSeconds       = 0;
+	mAudioFile           = config->readPathEntry(QString::fromLatin1("AudioFile"));
+	mVolume              = static_cast<float>(config->readNumEntry(QString::fromLatin1("Volume"))) / 100;
+	mFadeVolume          = -1;
+	mFadeSeconds         = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
 #endif
-	mSpeak             = config->readBoolEntry(QString::fromLatin1("Speak"));
-	mRestoreHeight     = config->readNumEntry(QString::fromLatin1("Height"));
-	mNoDefer           = config->readBoolEntry(QString::fromLatin1("NoDefer"));
-	mKMailSerialNumber = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
-	mShowEdit          = false;
+	mSpeak               = config->readBoolEntry(QString::fromLatin1("Speak"));
+	mRestoreHeight       = config->readNumEntry(QString::fromLatin1("Height"));
+	mDefaultDeferMinutes = config->readNumEntry(QString::fromLatin1("DeferMins"));
+	mNoDefer             = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	mKMailSerialNumber   = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
+	mShowEdit            = false;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
@@ -1505,18 +1508,22 @@ void MessageWin::slotDefer()
 {
 	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
 	                              false, this, "deferDlg");
+	if (mDefaultDeferMinutes > 0)
+		mDeferDlg->setDeferMinutes(mDefaultDeferMinutes);
 	mDeferDlg->setLimit(mEventID);
 	if (!Preferences::modalMessages())
 		lower();
 	if (mDeferDlg->exec() == QDialog::Accepted)
 	{
-		DateTime dateTime = mDeferDlg->getDateTime();
+		DateTime dateTime  = mDeferDlg->getDateTime();
+		int      delayMins = mDeferDlg->deferMinutes();
 		const Event* kcalEvent = mEventID.isNull() ? 0 : AlarmCalendar::activeCalendar()->event(mEventID);
 		if (kcalEvent)
 		{
 			// The event still exists in the calendar file.
 			KAEvent event(*kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
+			event.setDeferDefaultMinutes(delayMins);
 			KAlarm::updateEvent(event, 0, true, !repeat);
 		}
 		else
@@ -1536,6 +1543,7 @@ void MessageWin::slotDefer()
 				event.setArchive();
 				event.setEventID(mEventID);
 			}
+			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, 0, true, false);

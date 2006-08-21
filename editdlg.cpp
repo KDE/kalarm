@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1060,7 +1060,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedEmailAttach += mEmailAttachList->text(i);
 	mSavedEmailBcc         = mEmailBcc->isChecked();
 	if (mTimeWidget)
-		mSavedDateTime = mTimeWidget->getDateTime(false, false);
+		mSavedDateTime = mTimeWidget->getDateTime(0, false, false);
 	mSavedLateCancel       = mLateCancel->minutes();
 	mSavedAutoClose        = mLateCancel->isAutoClose();
 	if (mShowInKorganizer)
@@ -1094,7 +1094,7 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 	}
 	else
-		if (mSavedDateTime != mTimeWidget->getDateTime(false, false))
+		if (mSavedDateTime != mTimeWidget->getDateTime(0, false, false))
 			return true;
 	if (mSavedTypeRadio        != mActionGroup->selected()
 	||  mSavedLateCancel       != mLateCancel->minutes()
@@ -1403,7 +1403,7 @@ void EditAlarmDlg::slotOk()
 	else
 	{
 		QWidget* errWidget;
-		mAlarmDateTime = mTimeWidget->getDateTime(!(timedRecurrence || repeated), false, &errWidget);
+		mAlarmDateTime = mTimeWidget->getDateTime(0, !(timedRecurrence || repeated), false, &errWidget);
 		if (errWidget)
 		{
 			// It's more than just an existing deferral being changed, so the time matters
@@ -1573,7 +1573,7 @@ void EditAlarmDlg::slotEditDeferral()
 		return;
 	bool limit = true;
 	int repeatCount = mSimpleRepetition->count();
-	DateTime start = mTimeWidget->getDateTime(!repeatCount, !mExpiredRecurrence);
+	DateTime start = mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
 		if (!mExpiredRecurrence)
@@ -1655,7 +1655,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 	if (!mReadOnly  &&  !mTemplate)
 	{
 		QDateTime now = QDateTime::currentDateTime();
-		mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+		mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
 		bool expired = (mAlarmDateTime.dateTime() < now);
 		if (mRecurSetDefaultEndDate)
 		{
@@ -1684,7 +1684,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
 		if (atLogin)
 		{
-			mAlarmDateTime = mTimeWidget->getDateTime(false, false);
+			mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
 			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
 		}
 		mReminder->enableOnceOnly(recurs && !atLogin);

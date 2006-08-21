@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ static const QString AUTO_CLOSE_CATEGORY       = QString::fromLatin1("LATECLOSE;
 static const QString TEMPL_AFTER_TIME_CATEGORY = QString::fromLatin1("TMPLAFTTIME;");
 static const QString KMAIL_SERNUM_CATEGORY     = QString::fromLatin1("KMAIL:");
 static const QString KORGANIZER_CATEGORY       = QString::fromLatin1("KORG");
+static const QString DEFER_CATEGORY            = QString::fromLatin1("DEFER;");
 static const QString ARCHIVE_CATEGORY          = QString::fromLatin1("SAVE");
 static const QString ARCHIVE_CATEGORIES        = QString::fromLatin1("SAVE:");
 static const QString LOG_CATEGORY              = QString::fromLatin1("LOG:");
@@ -167,6 +168,7 @@ void KAEvent::copy(const KAEvent& event)
 	mDisplayingFlags         = event.mDisplayingFlags;
 	mReminderMinutes         = event.mReminderMinutes;
 	mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
+	mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
 	mRevision                = event.mRevision;
 	mRemainingRecurrences    = event.mRemainingRecurrences;
 	mAlarmCount              = event.mAlarmCount;
@@ -211,12 +213,14 @@ void KAEvent::set(const Event& event)
 	mAutoClose              = false;
 	mArchiveRepeatAtLogin   = false;
 	mArchiveReminderMinutes = 0;
+	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
 	mKMailSerialNumber      = 0;
 	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
 	mEnabled                = true;
+	bool ok;
 	bool floats = false;
 	const QStringList& cats = event.categories();
 	for (unsigned int i = 0;  i < cats.count();  ++i)
@@ -273,23 +277,26 @@ void KAEvent::set(const Event& event)
 				}
 			}
 		}
+		else if (cats[i].startsWith(DEFER_CATEGORY))
+		{
+			mDeferDefaultMinutes = static_cast<int>(cats[i].mid(DEFER_CATEGORY.length()).toUInt(&ok));
+			if (!ok)
+				mDeferDefaultMinutes = 0;    // invalid parameter
+		}
 		else if (cats[i].startsWith(TEMPL_AFTER_TIME_CATEGORY))
 		{
-			bool ok;
 			mTemplateAfterTime = static_cast<int>(cats[i].mid(TEMPL_AFTER_TIME_CATEGORY.length()).toUInt(&ok));
 			if (!ok)
 				mTemplateAfterTime = -1;    // invalid parameter
 		}
 		else if (cats[i].startsWith(LATE_CANCEL_CATEGORY))
 		{
-			bool ok;
 			mLateCancel = static_cast<int>(cats[i].mid(LATE_CANCEL_CATEGORY.length()).toUInt(&ok));
 			if (!ok  ||  !mLateCancel)
 				mLateCancel = 1;    // invalid parameter defaults to 1 minute
 		}
 		else if (cats[i].startsWith(AUTO_CLOSE_CATEGORY))
 		{
-			bool ok;
 			mLateCancel = static_cast<int>(cats[i].mid(AUTO_CLOSE_CATEGORY.length()).toUInt(&ok));
 			if (!ok  ||  !mLateCancel)
 				mLateCancel = 1;    // invalid parameter defaults to 1 minute
@@ -694,6 +701,7 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mKMailSerialNumber      = 0;
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
+	mDeferDefaultMinutes    = 0;
 	mRepeatInterval         = 0;
 	mRepeatCount            = 0;
 	mArchiveRepeatAtLogin   = false;
@@ -977,6 +985,8 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 		cats.append(LOG_CATEGORY + mLogFile);
 	if (mLateCancel)
 		cats.append(QString("%1%2").arg(mAutoClose ? AUTO_CLOSE_CATEGORY : LATE_CANCEL_CATEGORY).arg(mLateCancel));
+	if (mDeferDefaultMinutes)
+		cats.append(QString("%1%2").arg(DEFER_CATEGORY).arg(mDeferDefaultMinutes));
 	if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
 		cats.append(QString("%1%2").arg(TEMPL_AFTER_TIME_CATEGORY).arg(mTemplateAfterTime));
 	if (mArchive  &&  !original)
@@ -2869,6 +2879,7 @@ void KAEvent::dumpDebug() const
 	}
 	else if (mDeferral == CANCEL_DEFERRAL)
 		kdDebug(5950) << "-- mDeferral:cancel:\n";
+	kdDebug(5950) << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes << ":\n";
 	if (mDisplaying)
 	{
 		kdDebug(5950) << "-- mDisplayingTime:" << mDisplayingTime.toString() << ":\n";

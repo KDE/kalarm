@@ -53,7 +53,7 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 
 
 /******************************************************************************
-*  Construct a widget with a group box and title.
+* Construct a widget with a group box and title.
 */
 AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, const char* name)
 	: ButtonGroup(groupBoxTitle, parent, name),
@@ -65,7 +65,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 }
 
 /******************************************************************************
-*  Construct a widget without a group box or title.
+* Construct a widget without a group box or title.
 */
 AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, const char* name)
 	: ButtonGroup(parent, name),
@@ -202,21 +202,27 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 /******************************************************************************
 * Select the "Time from now" radio button.
 */
-void AlarmTimeWidget::selectTimeFromNow()
+void AlarmTimeWidget::selectTimeFromNow(int minutes)
 {
 	mAfterTimeRadio->setChecked(true);
 	slotButtonSet(1);
+	if (minutes > 0)
+		mDelayTimeEdit->setValue(minutes);
 }
 
 /******************************************************************************
-*  Fetch the entered date/time.
-*  If 'checkExpired' is true and the entered value <= current time, an error occurs.
-*  In this case, if 'showErrorMessage' is true, output an error message.
-*  'errorWidget' if non-null, is set to point to the widget containing the error.
-*  Reply = invalid date/time if error.
+* Fetch the entered date/time.
+* If 'checkExpired' is true and the entered value <= current time, an error occurs.
+* If 'minsFromNow' is non-null, it is set to the number of minutes' delay selected,
+* or to zero if a date/time was entered.
+* In this case, if 'showErrorMessage' is true, output an error message.
+* 'errorWidget' if non-null, is set to point to the widget containing the error.
+* Reply = invalid date/time if error.
 */
-DateTime AlarmTimeWidget::getDateTime(bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const
+DateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const
 {
+	if (minsFromNow)
+		*minsFromNow = 0;
 	if (errorWidget)
 		*errorWidget = 0;
 	QTime nowt = QTime::currentTime();
@@ -281,12 +287,15 @@ DateTime AlarmTimeWidget::getDateTime(bool checkExpired, bool showErrorMessage, 
 				*errorWidget = mDelayTimeEdit;
 			return DateTime();
 		}
-		return now.addSecs(mDelayTimeEdit->value() * 60);
+		int delayMins = mDelayTimeEdit->value();
+		if (minsFromNow)
+			*minsFromNow = delayMins;
+		return now.addSecs(delayMins * 60);
 	}
 }
 
 /******************************************************************************
-*  Set the date/time.
+* Set the date/time.
 */
 void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
@@ -313,7 +322,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 }
 
 /******************************************************************************
-*  Set the minimum date/time to track the current time.
+* Set the minimum date/time to track the current time.
 */
 void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
@@ -325,8 +334,8 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 }
 
 /******************************************************************************
-*  Set the minimum date/time, adjusting the entered date/time if necessary.
-*  If 'dt' is invalid, any current minimum date/time is cleared.
+* Set the minimum date/time, adjusting the entered date/time if necessary.
+* If 'dt' is invalid, any current minimum date/time is cleared.
 */
 void AlarmTimeWidget::setMinDateTime(const QDateTime& dt)
 {
@@ -337,8 +346,8 @@ void AlarmTimeWidget::setMinDateTime(const QDateTime& dt)
 }
 
 /******************************************************************************
-*  Set the maximum date/time, adjusting the entered date/time if necessary.
-*  If 'dt' is invalid, any current maximum date/time is cleared.
+* Set the maximum date/time, adjusting the entered date/time if necessary.
+* If 'dt' is invalid, any current maximum date/time is cleared.
 */
 void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 {
@@ -354,8 +363,8 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 }
 
 /******************************************************************************
-*  If the minimum and maximum date/times fall on the same date, set the minimum
-*  and maximum times in the time edit box.
+* If the minimum and maximum date/times fall on the same date, set the minimum
+* and maximum times in the time edit box.
 */
 void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
 {
@@ -387,8 +396,8 @@ void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
 }
 
 /******************************************************************************
-*  Set the maximum value for the delay time edit box, depending on the maximum
-*  value for the date/time.
+* Set the maximum value for the delay time edit box, depending on the maximum
+* value for the date/time.
 */
 void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
 {
@@ -407,7 +416,7 @@ void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
 }
 
 /******************************************************************************
-*  Set the status for whether a time is specified, or just a date.
+* Set the status for whether a time is specified, or just a date.
 */
 void AlarmTimeWidget::setAnyTime()
 {
@@ -418,7 +427,7 @@ void AlarmTimeWidget::setAnyTime()
 }
 
 /******************************************************************************
-*  Enable/disable the "any time" checkbox.
+* Enable/disable the "any time" checkbox.
 */
 void AlarmTimeWidget::enableAnyTime(bool enable)
 {
@@ -434,8 +443,8 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 }
 
 /******************************************************************************
-*  Called every minute to update the alarm time data entry fields.
-*  If the maximum date/time has been reached, a 'pastMax()' signal is emitted.
+* Called every minute to update the alarm time data entry fields.
+* If the maximum date/time has been reached, a 'pastMax()' signal is emitted.
 */
 void AlarmTimeWidget::slotTimer()
 {
@@ -481,8 +490,8 @@ void AlarmTimeWidget::slotTimer()
 
 
 /******************************************************************************
-*  Called when the At or After time radio button states have been set.
-*  Updates the appropriate edit box.
+* Called when the At or After time radio button states have been set.
+* Updates the appropriate edit box.
 */
 void AlarmTimeWidget::slotButtonSet(int)
 {
@@ -501,7 +510,7 @@ void AlarmTimeWidget::slotButtonSet(int)
 }
 
 /******************************************************************************
-*  Called after the mAnyTimeCheckBox checkbox has been toggled.
+* Called after the mAnyTimeCheckBox checkbox has been toggled.
 */
 void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 {
@@ -510,8 +519,8 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 }
 
 /******************************************************************************
-*  Called when the date or time edit box values have changed.
-*  Updates the time delay edit box accordingly.
+* Called when the date or time edit box values have changed.
+* Updates the time delay edit box accordingly.
 */
 void AlarmTimeWidget::dateTimeChanged()
 {
@@ -527,8 +536,8 @@ void AlarmTimeWidget::dateTimeChanged()
 }
 
 /******************************************************************************
-*  Called when the delay time edit box value has changed.
-*  Updates the Date and Time edit boxes accordingly.
+* Called when the delay time edit box value has changed.
+* Updates the Date and Time edit boxes accordingly.
 */
 void AlarmTimeWidget::delayTimeChanged(int minutes)
 {

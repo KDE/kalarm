@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,11 +63,11 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 
 
 /******************************************************************************
-*  Called when the OK button is clicked.
+* Called when the OK button is clicked.
 */
 void DeferAlarmDlg::slotOk()
 {
-	mAlarmDateTime = mTimeWidget->getDateTime();
+	mAlarmDateTime = mTimeWidget->getDateTime(&mDeferMinutes);
 	if (!mAlarmDateTime.isValid())
 		return;
 	KAEvent::DeferLimitType limitType;
@@ -116,7 +116,15 @@ void DeferAlarmDlg::slotOk()
 }
 
 /******************************************************************************
-*  Called the maximum date/time for the date/time edit widget has been passed.
+* Select the 'Time from now' radio button and preset its value.
+*/
+void DeferAlarmDlg::setDeferMinutes(int minutes)
+{
+	mTimeWidget->selectTimeFromNow(minutes);
+}
+
+/******************************************************************************
+* Called the maximum date/time for the date/time edit widget has been passed.
 */
 void DeferAlarmDlg::slotPastLimit()
 {
@@ -124,8 +132,8 @@ void DeferAlarmDlg::slotPastLimit()
 }
 
 /******************************************************************************
-*  Set the time limit for deferral based on the next occurrence of the alarm
-*  with the specified ID.
+* Set the time limit for deferral based on the next occurrence of the alarm
+* with the specified ID.
 */
 void DeferAlarmDlg::setLimit(const DateTime& limit)
 {
@@ -135,8 +143,8 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 }
 
 /******************************************************************************
-*  Set the time limit for deferral based on the next occurrence of the alarm
-*  with the specified ID.
+* Set the time limit for deferral based on the next occurrence of the alarm
+* with the specified ID.
 */
 DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 {
@@ -154,7 +162,7 @@ DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 }
 
 /******************************************************************************
-*  Called when the Cancel Deferral button is clicked.
+* Called when the Cancel Deferral button is clicked.
 */
 void DeferAlarmDlg::slotUser1()
 {
@@ -163,7 +171,7 @@ void DeferAlarmDlg::slotUser1()
 }
 
 /******************************************************************************
-*  Called when the Cancel button is clicked.
+* Called when the Cancel button is clicked.
 */
 void DeferAlarmDlg::slotCancel()
 {
