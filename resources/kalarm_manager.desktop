@@ -2,7 +2,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Alarms
-Name[x-test]=xxAlarmsxx
 Type=Service
 ServiceTypes=KResources/Manager
 
