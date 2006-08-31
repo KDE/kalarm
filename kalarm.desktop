@@ -2,11 +2,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KAlarm
+Name[x-test]=xxKAlarmxx
 Type=Application
 Exec=kalarm -caption "%c" %i
 Icon=kalarm
 DocPath=kalarm/index.html
 GenericName=Personal Alarm Scheduler
+GenericName[fr]=Planificateur d'alarme personnel
+GenericName[x-test]=xxPersonal Alarm Schedulerxx
 Terminal=false
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=true
