@@ -28,6 +28,7 @@
 #include <QList>
 
 #include "alarmevent.h"
+#include <kfile.h>
 
 class QObject;
 class QWidget;
@@ -78,7 +79,7 @@ int                 getVersionNumber(const QString& version, QString* subVersion
 inline int          currentCalendarVersion()        { return KAEvent::calVersion(); }
 inline QString      currentCalendarVersionString()  { return KAEvent::calVersionString(); }
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
-                               const QString& filter = QString(), int mode = 0, QWidget* parent = 0);
+                               const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                edit(const QString& eventID);
 bool                editNew(const QString& templateName = QString());
 /** Create a "New Alarm" KAction */
