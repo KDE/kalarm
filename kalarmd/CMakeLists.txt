@@ -1,9 +1,5 @@
-include_directories( ${QDBUS_INCLUDE_DIRS} )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kalarm  )
-
-
-########### next target ###############
 
 
 ########### next target ###############
