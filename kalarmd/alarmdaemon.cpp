@@ -25,7 +25,6 @@
 #include <stdlib.h>
 
 #include <QTimer>
-#include <QDateTime>
 #include <QByteArray>
 #include <QtDBus>
 
@@ -34,6 +33,7 @@
 #include <kprocess.h>
 #include <kconfig.h>
 #include <ktimezones.h>
+#include <kdatetime.h>
 #include <kdebug.h>
 
 #include <kcal/calendarlocal.h>
@@ -83,7 +83,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	// their cache files), while KAlarm simply loads them from cache. This prevents useless
 	// duplication of potentially time-consuming downloads.
 	AlarmResources::setDebugArea(5902);
-	AlarmResources* resources = AlarmResources::create(timezone(), true);   // load active alarms only
+	AlarmResources* resources = AlarmResources::create(timeSpec(), true);   // load active alarms only
 	resources->setPassiveClient(true);   // prevent resource changes being written to config file
 	resources->setNoGui(true);           // dont' try to display messages, or we'll crash
 	// The daemon is responsible for loading calendars (including downloading to cache for remote
@@ -456,9 +456,9 @@ void AlarmDaemon::checkAlarms()
 	if (!mEnabled  ||  !resources->loadedState(AlarmResource::ACTIVE))
 		return;
 
-	QDateTime now  = QDateTime::currentDateTime();
-	QDateTime now1 = now.addSecs(1);
-	kDebug(5901) << "  To: " << now.toString() << endl;
+	KDateTime now  = KDateTime::currentUtcDateTime();
+	KDateTime now1 = now.addSecs(1);
+	kDebug(5901) << "  To: " << now << endl;
 	QList<KCal::Alarm*> alarms = resources->alarmsTo(now);
 	if (alarms.isEmpty())
 		return;
@@ -475,12 +475,12 @@ void AlarmDaemon::checkAlarms()
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
-		QList<QDateTime> alarmtimes;
+		QList<KDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
 		{
 			KCal::Alarm* alarm = *al;
-			QDateTime dt;
+			KDateTime dt;
 			if (alarm->enabled())
 				dt = alarm->previousRepetition(now1);   // get latest due repetition (if any)
 			alarmtimes.append(dt);
@@ -494,7 +494,7 @@ void AlarmDaemon::checkAlarms()
 * If not already handled, send a D-Bus message to KAlarm telling it that an
 * alarm should now be handled.
 */
-void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, const QList<QDateTime>& alarmtimes)
+void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, const QList<KDateTime>& alarmtimes)
 {
 	kDebug(5900) << "AlarmDaemon::notifyEvent(" << eventID << "): notification type=" << mClientStart << endl;
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
@@ -602,7 +602,7 @@ void AlarmDaemon::notifyCalStatus()
 * Check whether all the alarms for the event with the given ID have already
 * been handled for this client.
 */
-bool AlarmDaemon::eventHandled(const KCal::Event* event, const QList<QDateTime>& alarmtimes)
+bool AlarmDaemon::eventHandled(const KCal::Event* event, const QList<KDateTime>& alarmtimes)
 {
 	EventsMap::ConstIterator it = mEventsHandled.find(event->uid());
 	if (it == mEventsHandled.end())
@@ -642,7 +642,7 @@ void AlarmDaemon::setEventHandled(const QString& eventID)
 * Remember that the specified alarms for the event with the given ID have been
 * notified to KAlarm, but no reply has come back yet.
 */
-void AlarmDaemon::setEventPending(const KCal::Event* event, const QList<QDateTime>& alarmtimes)
+void AlarmDaemon::setEventPending(const KCal::Event* event, const QList<KDateTime>& alarmtimes)
 {
 	if (event)
 	{
@@ -654,7 +654,7 @@ void AlarmDaemon::setEventPending(const KCal::Event* event, const QList<QDateTim
 /******************************************************************************
 * Add a specified entry to the events pending or handled list.
 */
-void AlarmDaemon::setEventInMap(EventsMap& map, const QString& eventID, const QList<QDateTime>& alarmtimes, int sequence)
+void AlarmDaemon::setEventInMap(EventsMap& map, const QString& eventID, const QList<KDateTime>& alarmtimes, int sequence)
 {
 	EventsMap::Iterator it = map.find(eventID);
 	if (it != map.end())
@@ -730,20 +730,17 @@ void AlarmDaemon::readConfig()
 
 /******************************************************************************
 * Read the timezone to use. Try to read it from KAlarm's config file. If the
-* entry there is blank, use the system timezone.
+* entry there is blank, use local clock time.
 */
-QString AlarmDaemon::timezone()
+KDateTime::Spec AlarmDaemon::timeSpec()
 {
-#ifdef USE_TIMEZONE
 	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
 	kaconfig.setGroup("General");
-	QString tz = kaconfig.readEntry("Timezone", QString());
-	if (tz.isEmpty())
-		tz = KSystemTimeZones::local()->name();
-	return tz;
-#else
-	return QString();
-#endif
+	QString zone = kaconfig.readEntry("Timezone", QString());
+	if (zone.isEmpty())
+		return KDateTime::ClockTime;
+	const KTimeZone* tz = KSystemTimeZones::zone(zone);
+	return tz ? tz : KSystemTimeZones::local();
 }
 
 /******************************************************************************

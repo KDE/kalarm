@@ -200,11 +200,11 @@ void ResourceSelector::addResource()
 	resource->setAlarmType(mCurrentAlarmType);
 	resource->setActive(false);   // prevent setReadOnly() declaring it as unwritable before we've tried to load it
 
-	ResourceConfigDialog dlg(this, resource, "resourceConfig");
+	ResourceConfigDialog dlg(this, resource);
 	if (dlg.exec())
 	{
 		resource->setActive(true);
-		resource->setTimeZoneId(Preferences::timeZone());
+		resource->setTimeSpec(Preferences::timeSpec());
 		manager->add(resource);
 		manager->writeConfig();
 		mCalendar->resourceAdded(resource);   // load the resource and connect in-process change signals
@@ -226,7 +226,7 @@ void ResourceSelector::editResource()
 		return;
 	AlarmResource* resource = item->resource();
 	bool readOnly = resource->readOnly();
-	ResourceConfigDialog dlg(this, resource, "resourceConfig");
+	ResourceConfigDialog dlg(this, resource);
 	if (dlg.exec())
 	{
 		// Act on any changed settings.

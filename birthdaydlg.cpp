@@ -315,7 +315,7 @@ QList<KAEvent> BirthdayDlg::events() const
 {
 	QList<KAEvent> list;
 	QDate today = QDate::currentDate();
-	QDateTime todayNoon(today, QTime(12, 0, 0));
+	KDateTime todayStart(today, KDateTime::ClockTime);
 	int thisYear = today.year();
 	int reminder = mReminder->minutes();
 
@@ -330,7 +330,7 @@ QList<KAEvent> BirthdayDlg::events() const
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
-                                QDateTime dt( date );
+                                KDateTime dt( date, KDateTime::ClockTime );
 				KAEvent event(dt,
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
@@ -343,7 +343,8 @@ QList<KAEvent> BirthdayDlg::events() const
 				QList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
-				event.setNextOccurrence(todayNoon, true);
+				event.setNextOccurrence(todayStart, true);
+#warning Check that birthdays do not trigger today if they land today
 				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 				if (reminder)
 					event.setReminder(reminder, false);

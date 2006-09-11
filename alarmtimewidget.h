@@ -47,9 +47,9 @@ class AlarmTimeWidget : public QFrame
 		DateTime         getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
-		void             setMinDateTime(const QDateTime& = QDateTime());
+		void             setMinDateTime(const KDateTime& = KDateTime());
 		void             setMaxDateTime(const DateTime& = DateTime());
-		const QDateTime& maxDateTime() const           { return mMaxDateTime; }
+		const KDateTime& maxDateTime() const           { return mMaxDateTime; }
 		void             setReadOnly(bool);
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
@@ -73,9 +73,10 @@ class AlarmTimeWidget : public QFrame
 
 	private:
 		void             init(QWidget* topWidget, int mode, bool hasTitle);
+		KDateTime::Spec  timeSpec() const;
 		void             setAnyTime();
-		void             setMaxDelayTime(const QDateTime& now);
-		void             setMaxMinTimeIf(const QDateTime& now);
+		void             setMaxDelayTime(const KDateTime& now);
+		void             setMaxMinTimeIf(const KDateTime& now);
 
 		ButtonGroup*     mButtonGroup;
 		RadioButton*     mAtTimeRadio;
@@ -84,10 +85,11 @@ class AlarmTimeWidget : public QFrame
 		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;
 		CheckBox*        mAnyTimeCheckBox;
-		QDateTime        mMinDateTime;      // earliest allowed date/time
-		QDateTime        mMaxDateTime;      // latest allowed date/time
+		KDateTime        mMinDateTime;      // earliest allowed date/time
+		KDateTime        mMaxDateTime;      // latest allowed date/time
 		int              mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
 		bool             mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
+		bool             mDeferring;        // being used to enter a deferral time
 		bool             mMinDateTimeIsNow; // earliest allowed date/time is the current time
 		bool             mPastMax;          // current time is past the maximum date/time
 		bool             mMinMaxTimeSet;    // limits have been set for the time edit control

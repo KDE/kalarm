@@ -1,7 +1,7 @@
 /*
- *  datetime.h  -  date/time representation with optional date-only value
+ *  datetime.h  -  date/time with start-of-day time for date-only values 
  *  Program:  kalarm
- *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,19 +20,16 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 
-#include <QDateTime>
+#include <kdatetime.h>
 
 
 /**
- *  @short A QDateTime with date-only option.
+ *  @short A KDateTime with date-only option.
  *
  *  The DateTime class holds a date, with or without a time.
  *
- *  DateTime is very similar to the QDateTime class, with the additional option to
- *  hold a date-only value. This allows a single date-time representation to be used
- *  for both an event having a specific date and time, and an all-day event.
- *
- *  The time assumed for date-only values is the start-of-day time set by setStartOfDay().
+ *  DateTime is very similar to the KDateTime class. The time assumed for date-only values
+ *  is the start-of-day time set by setStartOfDay().
  *
  *  @author David Jarvie <software@astrojar.org.uk>
 */
@@ -42,199 +39,199 @@ class DateTime
 		/** Default constructor.
 		 *  Constructs an invalid date-time.
 		 */
-		DateTime()                     : mDateOnly(false), mTimeValid(false) { }
+		DateTime() { }
 		/** Constructor for a date-only value. */
-		DateTime(const QDate& d)       : mDateTime(d), mDateOnly(true) { }
+		DateTime(const QDate& d, const KDateTime::Spec& spec)
+		                               : mDateTime(d, spec) { }
 		/** Constructor for a date-time value. */
-		DateTime(const QDate& d, const QTime& t)
-		                               : mDateTime(d, t), mDateOnly(false), mTimeValid(true) { }
-		/** Constructor for a date-time or date-only value.
-		 *  @param dt the date and time to use.
-		 *  @param dateOnly True to construct a date-only value; false to construct a date-time value.
-		 */
-		DateTime(const QDateTime& dt, bool dateOnly = false)
-		                               : mDateTime(dt), mDateOnly(dateOnly), mTimeValid(true)
-		                               { if (dateOnly) mDateTime.setTime(QTime()); }
-		/** Assignment operator.
-		 *  Sets the value to a specified date-time or date-only value.
-		 */
-		DateTime& operator=(const DateTime& dt)
-		                               { mDateTime = dt.mDateTime;  mDateOnly = dt.mDateOnly;  mTimeValid = dt.mTimeValid;  return *this; }
+		DateTime(const QDate& d, const QTime& t, const KDateTime::Spec& spec)
+		                               : mDateTime(d, t, spec) { }
+		/** Constructor for a date-time value. */
+		DateTime(const QDateTime& dt, const KDateTime::Spec& spec)
+		                               : mDateTime(dt, spec) { }
+		/** Constructor for a date-time value. */
+		DateTime(const KDateTime& dt)  : mDateTime(dt) { }
+		/** Conversion operator to KDateTime. */
+		operator KDateTime() const     { return mDateTime; }
 		/** Assignment operator.
 		 *  Sets the value to a specified date-time.
 		 */
-		DateTime& operator=(const QDateTime& dt)
-		                               { mDateTime = dt;  mDateOnly = false;  mTimeValid = true;  return *this; }
-		/** Assignment operator.
-		 *  Sets the value to a specified date-only value.
-		 */
-		DateTime& operator=(const QDate& d)
-		                               { mDateTime.setDate(d);  mDateOnly = true;  return *this; }
+		DateTime& operator=(const KDateTime& dt)
+		                           { mDateTime = dt;  return *this; }
 		/** Returns true if the date is null and, if it is a date-time value, the time is also null. */
-		bool      isNull() const       { return mDateTime.date().isNull()  &&  (mDateOnly || mDateTime.time().isNull()); }
+		bool isNull() const        { return mDateTime.isNull(); }
 		/** Returns true if the date is valid and, if it is a date-time value, the time is also valid. */
-		bool      isValid() const      { return mDateTime.date().isValid()  &&  (mDateOnly || mTimeValid && mDateTime.time().isValid()); }
+		bool isValid() const       { return mDateTime.isValid(); }
 		/** Returns true if it is date-only value. */
-		bool      isDateOnly() const   { return mDateOnly; }
-		/** Sets the value to be either date-only or date-time.
-		 *  @param d True to set the value to be date-only; false to set it to a date-time value.
-		 */
-		void      setDateOnly(bool d)  { if (d) mDateTime.setTime(QTime());
-		                                 else if (mDateOnly) mTimeValid = false;
-		                                 mDateOnly = d;
-		                               }
+		bool isDateOnly() const    { return mDateTime.isDateOnly(); }
 		/** Returns the date part of the value. */
-		QDate     date() const         { return mDateTime.date(); }
+		QDate date() const         { return mDateTime.date(); }
+		/** Returns the date and time of the value.
+		 *  If the value is date-only, the time part returned is 00:00:00. */
+		QDateTime actualDateTime() const;
 		/** Returns the time part of the value.
 		 *  If the value is date-only, the time returned is the start-of-day time set by setStartOfDay().
 		 */
-		QTime     time() const;
+		QTime effectiveTime() const;
 		/** Returns the date and time of the value.
 		 *  If the value is date-only, the time part returned is equal to the start-of-day time set
 		 *  by setStartOfDay().
 		 */
-		QDateTime dateTime() const;
-		/** Sets a date-time or date-only value.
-		 *  @param dt the date-time to use.
-		 *  @param dateOnly True to set a date-only value; false to set a date-time value.
+		QDateTime effectiveDateTime() const;
+		/** Returns the date and time of the value.
+		 *  If the value is date-only, the time part returned is equal to the start-of-day time set
+		 *  by setStartOfDay().
 		 */
-		void      set(const QDateTime& dt, bool dateOnly = false)
-				{
-					mDateTime = dt;
-					mDateOnly = dateOnly;
-					if (dateOnly)
-						mDateTime.setTime(QTime());
-					mTimeValid = true;
-				}
-		/** Sets a date-time value. */
-		void      set(const QDate& d, const QTime& t)
-		                               { mDateTime.setDate(d);  mDateTime.setTime(t);  mDateOnly = false;  mTimeValid = true; }
-		/** Sets a date-only value. */
-		void      set(const QDate& d)
-		                               { mDateTime.setDate(d);  mDateTime.setTime(QTime());  mDateOnly = true; }
+		KDateTime effectiveKDateTime() const;
+		/** Returns the time zone of the value. */
+		const KTimeZone* timeZone() const      { return mDateTime.timeZone(); }
+		/** Returns the time specification of the value. */
+		KDateTime::Spec timeSpec() const       { return mDateTime.timeSpec(); }
+		/** Returns the time specification type of the date/time, i.e. whether it is
+		 * UTC, has a time zone, etc. */
+		KDateTime::SpecType timeType() const   { return mDateTime.timeType(); }
+		/** Returns whether the time zone for the date/time is the current local system time zone. */
+		bool isLocalZone() const               { return mDateTime.isLocalZone(); }
+		/** Returns whether the date/time is a local clock time. */
+		bool isClockTime() const               { return mDateTime.isClockTime(); }
+		/** Returns whether the date/time is a UTC time. */
+		bool isUtc() const                     { return mDateTime.isUtc(); }
+		/** Returns whether the date/time is a local time at a fixed offset from UTC. */
+		bool isOffsetFromUtc() const           { return mDateTime.isOffsetFromUtc(); }
+		/** Returns the UTC offset associated with the date/time. */
+		int utcOffset() const                  { return mDateTime.utcOffset(); }
+		/** Returns whether the date/time is the second occurrence of this time. */
+		bool isSecondOccurrence() const        { return mDateTime.isSecondOccurrence(); }
+		/** Returns the time converted to UTC. */
+		DateTime toUtc() const                 { return DateTime(mDateTime.toUtc()); }
+		/** Returns the time expressed as an offset from UTC, using the UTC offset
+		 * associated with this instance's date/time. */
+		DateTime toOffsetFromUtc() const       { return DateTime(mDateTime.toOffsetFromUtc()); }
+		/** Returns the time expressed as a specified offset from UTC. */
+		DateTime toOffsetFromUtc(int utcOffset) const  { return DateTime(mDateTime.toOffsetFromUtc(utcOffset)); }
+		/** Returns the time converted to the current local system time zone. */
+		DateTime toLocalZone() const           { return DateTime(mDateTime.toLocalZone()); }
+		/** Returns the time converted to the local clock time. */
+		DateTime toClockTime() const           { return DateTime(mDateTime.toClockTime()); }
+		/** Returns the time converted to a specified time zone. */
+		DateTime toZone(const KTimeZone *zone) const  { return DateTime(mDateTime.toZone(zone)); }
+		/** Returns the time converted to a new time specification. */
+		DateTime toTimeSpec(const KDateTime::Spec &spec) const  { return DateTime(mDateTime.toTimeSpec(spec)); }
+		/** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
+		 * 1st January 1970 (as returned by time(2)). */
+		uint toTime_t() const                  { return mDateTime.toTime_t(); }
+		/** Sets the value to be either date-only or date-time.
+		 *  @param d True to set the value to be date-only; false to set it to a date-time value.
+		 */
+		void setDateOnly(bool d)               { mDateTime.setDateOnly(d); }
+		/** Sets the date component of the value. */
+		void setDate(const QDate& d)           { mDateTime.setDate(d); }
 		/** Sets the time component of the value.
-		 *  The value is converted if necessary to be a date-time value.
-		 */
-		void      setTime(const QTime& t)  { mDateTime.setTime(t);  mDateOnly = false;  mTimeValid = true; }
+		 *  The value is converted if necessary to be a date-time value. */
+		void setTime(const QTime& t)           { mDateTime.setTime(t); }
+		/** Sets the date/time component of the value. */
+		void setDateTime(const QDateTime& dt)  { mDateTime.setDateTime(dt); }
+		/** Changes the time specification of the value. */
+		void setTimeSpec(const KDateTime::Spec &spec)  { mDateTime.setTimeSpec(spec); }
+		/** Sets whether this is the second occurrence of this date/time. */
+		void setSecondOccurrence(bool second)  { mDateTime.setSecondOccurrence(second); }
 		/** Sets the value to a specified date-time value.
 		 *  @param secs The time_t date-time value, expressed as the number of seconds elapsed
 		 *              since 1970-01-01 00:00:00 UTC.
 		 */
-		void      setTime_t(uint secs)     { mDateTime.setTime_t(secs);  mDateOnly = false;  mTimeValid = true; }
-		/** Returns a DateTime value @p secs seconds later than the value of this object.
-		 *  If this object is date-only, @p secs is first rounded down to a whole number of days
-		 *  before adding the value.
-		 */
-		DateTime  addSecs(int n) const
-				{
-					if (mDateOnly)
-						return DateTime(mDateTime.date().addDays(n / (3600*24)));
-					else
-						return DateTime(mDateTime.addSecs(n), false);
-				}
-		/** Returns a DateTime value @p mins minutes later than the value of this object.
-		 *  If this object is date-only, @p mins is first rounded down to a whole number of days
-		 *  before adding the value.
-		 */
-		DateTime  addMins(int n) const
-				{
-					if (mDateOnly)
-						return DateTime(mDateTime.addDays(n / (60*24)), true);
-					else
-						return DateTime(mDateTime.addSecs(n * 60), false);
-				}
+		void setTime_t(uint secs)              { mDateTime.setTime_t(secs); }
+		/** Returns a DateTime value @p secs seconds later than the value of this object. */
+		DateTime addSecs(qint64 n) const       { return DateTime(mDateTime.addSecs(n)); }
+		/** Returns a DateTime value @p mins minutes later than the value of this object. */
+		DateTime addMins(qint64 n) const       { return DateTime(mDateTime.addSecs(n * 60)); }
 		/** Returns a DateTime value @p n days later than the value of this object. */
-		DateTime  addDays(int n) const    { return DateTime(mDateTime.addDays(n), mDateOnly); }
+		DateTime addDays(int n) const          { return DateTime(mDateTime.addDays(n)); }
 		/** Returns a DateTime value @p n months later than the value of this object. */
-		DateTime  addMonths(int n) const  { return DateTime(mDateTime.addMonths(n), mDateOnly); }
+		DateTime addMonths(int n) const        { return DateTime(mDateTime.addMonths(n)); }
 		/** Returns a DateTime value @p n years later than the value of this object. */
-		DateTime  addYears(int n) const   { return DateTime(mDateTime.addYears(n), mDateOnly); }
+		DateTime addYears(int n) const         { return DateTime(mDateTime.addYears(n)); }
 		/** Returns the number of days from this date or date-time to @p dt. */
-		int       daysTo(const DateTime& dt) const
-		                                  { return (mDateOnly || dt.mDateOnly) ? mDateTime.date().daysTo(dt.date()) : mDateTime.daysTo(dt.mDateTime); }
-		/** Returns the number of minutes from this date or date-time to @p dt.
-		 *  If either of the values is date-only, the result is calculated by simply
-		 *  taking the difference in dates and ignoring the times.
-		 */
-		int       minsTo(const DateTime& dt) const
-		                                  { return (mDateOnly || dt.mDateOnly) ? mDateTime.date().daysTo(dt.date()) * 24*60 : mDateTime.secsTo(dt.mDateTime) / 60; }
-		/** Returns the number of seconds from this date or date-time to @p dt.
-		 *  If either of the values is date-only, the result is calculated by simply
-		 *  taking the difference in dates and ignoring the times.
-		 */
-		int       secsTo(const DateTime& dt) const
-		                                  { return (mDateOnly || dt.mDateOnly) ? mDateTime.date().daysTo(dt.date()) * 24*3600 : mDateTime.secsTo(dt.mDateTime); }
+		int daysTo(const DateTime& dt) const   { return mDateTime.daysTo(dt.mDateTime); }
+		/** Returns the number of minutes from this date or date-time to @p dt. */
+		int minsTo(const DateTime& dt) const   { return mDateTime.secsTo(dt.mDateTime) / 60; }
+		/** Returns the number of seconds from this date or date-time to @p dt. */
+		int secsTo(const DateTime& dt) const   { return mDateTime.secsTo(dt.mDateTime); }
+		int secsTo_long(const DateTime& dt) const   { return mDateTime.secsTo_long(dt.mDateTime); }
 		/** Returns the value as a string.
 		 *  If it is a date-time, both time and date are included in the output.
 		 *  If it is date-only, only the date is included in the output.
 		 */
-		QString   toString(Qt::DateFormat f = Qt::TextDate) const
+		QString toString(Qt::DateFormat f = Qt::TextDate) const
 				{
-					if (mDateOnly)
+					if (mDateTime.isDateOnly())
 						return mDateTime.date().toString(f);
-					else if (mTimeValid)
-						return mDateTime.toString(f);
 					else
-						return QString();
+						return mDateTime.dateTime().toString(f);
 				}
 		/** Returns the value as a string.
 		 *  If it is a date-time, both time and date are included in the output.
 		 *  If it is date-only, only the date is included in the output.
 		 */
-		QString   toString(const QString& format) const
+		QString toString(const QString& format) const
 				{
-					if (mDateOnly)
+					if (mDateTime.isDateOnly())
 						return mDateTime.date().toString(format);
-					else if (mTimeValid)
-						return mDateTime.toString(format);
 					else
-						return QString();
+						return mDateTime.dateTime().toString(format);
 				}
 		/** Returns the value as a string, formatted according to the user's locale.
 		 *  If it is a date-time, both time and date are included in the output.
 		 *  If it is date-only, only the date is included in the output.
 		 */
-		QString   formatLocale(bool shortFormat = true) const;
+		QString formatLocale(bool shortFormat = true) const;
 		/** Sets the start-of-day time.
 		 *  The default value is midnight (0000 hrs).
 		 */
 		static void setStartOfDay(const QTime& sod)  { mStartOfDay = sod; }
+		/** Compare this value with another. */
+		KDateTime::Comparison compare(const DateTime &other) const  { return mDateTime.compare(other.mDateTime); }
 		/** Returns the start-of-day time. */
 		static QTime startOfDay()   { return mStartOfDay; }
 
 		friend bool operator==(const DateTime& dt1, const DateTime& dt2);
+		friend bool operator==(const KDateTime& dt1, const DateTime& dt2);
 		friend bool operator<(const DateTime& dt1, const DateTime& dt2);
+		friend bool operator<(const KDateTime& dt1, const DateTime& dt2);
 
 	private:
 		static QTime mStartOfDay;
-		QDateTime    mDateTime;
-		bool         mDateOnly;
-		bool         mTimeValid;    // whether the time is potentially valid - applicable only if mDateOnly false
+		KDateTime    mDateTime;
 };
 
 /** Returns true if the two values are equal. */
-bool operator==(const DateTime& dt1, const DateTime& dt2);
+inline bool operator==(const DateTime& dt1, const DateTime& dt2)   { return dt1.mDateTime == dt2.mDateTime; }
+inline bool operator==(const KDateTime& dt1, const DateTime& dt2)  { return dt1 == dt2.mDateTime; }
 /** Returns true if the @p dt1 is earlier than @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialogue.
  */
-bool operator<(const DateTime& dt1, const DateTime& dt2);
+inline bool operator<(const DateTime& dt1, const DateTime& dt2)    { return dt1.mDateTime < dt2.mDateTime; }
+inline bool operator<(const KDateTime& dt1, const DateTime& dt2)   { return dt1 < dt2.mDateTime; }
 /** Returns true if the two values are not equal. */
 inline bool operator!=(const DateTime& dt1, const DateTime& dt2)   { return !operator==(dt1, dt2); }
+inline bool operator!=(const KDateTime& dt1, const DateTime& dt2)  { return !operator==(dt1, dt2); }
 /** Returns true if the @p dt1 is later than @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialogue.
  */
 inline bool operator>(const DateTime& dt1, const DateTime& dt2)    { return operator<(dt2, dt1); }
+inline bool operator>(const KDateTime& dt1, const DateTime& dt2)   { return operator<(dt2, dt1); }
 /** Returns true if the @p dt1 is later than or equal to @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialogue.
  */
 inline bool operator>=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt1, dt2); }
+inline bool operator>=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt1, dt2); }
 /** Returns true if the @p dt1 is earlier than or equal to @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialogue.
  */
 inline bool operator<=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt2, dt1); }
+inline bool operator<=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt2, dt1); }
 
 #endif // DATETIME_H

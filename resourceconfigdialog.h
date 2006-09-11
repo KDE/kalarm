@@ -39,14 +39,14 @@ class ResourceConfigDialog : public KDialog
     Q_OBJECT
   public:
     // Resource=0: create new resource
-    ResourceConfigDialog( QWidget *parent, AlarmResource* resource, const char *name = 0);
+    ResourceConfigDialog(QWidget *parent, AlarmResource* resource);
 
-    void setInEditMode( bool value );
+    void setInEditMode(bool value);
 
   protected Q_SLOTS:
     void accept();
-    void setReadOnly( bool value );
-    void slotNameChanged( const QString &text);
+    void setReadOnly(bool value);
+    void slotNameChanged(const QString &text);
 
   private:
     KRES::ConfigWidget *mConfigWidget;

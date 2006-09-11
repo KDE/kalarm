@@ -46,11 +46,11 @@ AlarmResources* AlarmResources::mInstance = 0;
 QString         AlarmResources::mReservedFile;
 QString         AlarmResources::mConstructionError;
 
-AlarmResources* AlarmResources::create(const QString& timeZoneId, bool activeOnly)
+AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool activeOnly)
 {
 	if (mInstance)
 		return 0;
-	AlarmResources* cal = new AlarmResources(timeZoneId, activeOnly);
+	AlarmResources* cal = new AlarmResources(timeSpec, activeOnly);
 	if (!mConstructionError.isEmpty())
 		delete cal;
 	else
@@ -58,8 +58,8 @@ AlarmResources* AlarmResources::create(const QString& timeZoneId, bool activeOnl
 	return mInstance;
 }
 
-AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
-	: Calendar(timeZoneId),
+AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly)
+	: Calendar(timeSpec),
 	  mActiveOnly(activeOnly),
 	  mPassiveClient(false),
 	  mNoGui(false),
@@ -69,9 +69,6 @@ AlarmResources::AlarmResources(const QString& timeZoneId, bool activeOnly)
 	  mAskDestination(false),
 	  mShowProgress(false)
 {
-	if (timeZoneId.isEmpty())
-		setLocalTime();
-
 	mManager = new AlarmResourceManager(QString::fromLatin1("alarms"));
 	mManager->addObserver(this);
 	mAskDestination = true;    // prompt the user for a resource every time an alarm is saved
@@ -183,9 +180,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 		resource = new KAResourceLocal(type, fileName);
 	}
 
-	resource->setTimeZoneId(timeZoneId());
-	if (isLocalTime())
-		resource->setLocalTime();
+	resource->setTimeSpec(timeSpec());
 	resource->setResourceName(title);
 	resourceManager()->add(resource);
 	connectResource(resource);
@@ -411,9 +406,7 @@ void AlarmResources::load(ResourceCached::CacheAction action)
 		AlarmResource* resource = *it;
 		if (!mActiveOnly  ||  resource->alarmType() == AlarmResource::ACTIVE)
 		{
-			resource->setTimeZoneId(timeZoneId());
-			if (isLocalTime())
-				resource->setLocalTime();
+			resource->setTimeSpec(timeSpec());
 			if (resource->isActive())
 			{
 				if (!load(resource, action))
@@ -485,11 +478,10 @@ void AlarmResources::remap(AlarmResource* resource)
 		mResourceMap[events[i]] = resource;
 }
 
-bool AlarmResources::reload(const QString& tz)
+bool AlarmResources::reload()
 {
 	save();
 	close();
-	setTimeZoneId(tz);
 	load();
 	return true;
 }
@@ -641,7 +633,7 @@ Event* AlarmResources::event(const QString& uid)
 	return 0;
 }
 
-Alarm::List AlarmResources::alarmsTo(const QDateTime &to)
+Alarm::List AlarmResources::alarmsTo(const KDateTime &to)
 {
 	Alarm::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -649,7 +641,7 @@ Alarm::List AlarmResources::alarmsTo(const QDateTime &to)
 	return result;
 }
 
-Alarm::List AlarmResources::alarms(const QDateTime &from, const QDateTime &to)
+Alarm::List AlarmResources::alarms(const KDateTime &from, const KDateTime &to)
 {
 	Alarm::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -674,12 +666,12 @@ Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, bool
 	return result;
 }
 
-Event::List AlarmResources::rawEventsForDate(const QDateTime& qdt)
+Event::List AlarmResources::rawEventsForDate(const KDateTime& dt)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::rawEventsForDate(qdt)" << endl;
+	kDebug(KARES_DEBUG) << "AlarmResources::rawEventsForDate(dt)" << endl;
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-		appendEvents(result, (*it)->rawEventsForDate(qdt), *it);
+		appendEvents(result, (*it)->rawEventsForDate(dt), *it);
 	return result;
 }
 
@@ -836,20 +828,12 @@ void AlarmResources::resourceDeleted(AlarmResource* resource)
 
 /******************************************************************************
 * Set the time zone for all resources.
-* If 'timeZoneId' is empty, set local time.
 */
-void AlarmResources::doSetTimeZoneId(const QString& timeZoneId)
+void AlarmResources::doSetTimeSpec(const KDateTime::Spec& timeSpec)
 {
-	bool local = timeZoneId.isEmpty();
-	if (local)
-		setLocalTime();
 	AlarmResourceManager::Iterator i1;
 	for (i1 = mManager->begin(); i1 != mManager->end(); ++i1)
-	{
-		(*i1)->setTimeZoneId(timeZoneId);
-		if (local)
-			(*i1)->setLocalTime();
-	}
+		(*i1)->setTimeSpec(timeSpec);
 }
 
 AlarmResources::Ticket* AlarmResources::requestSaveTicket(AlarmResource* resource)
@@ -957,4 +941,13 @@ int AlarmResources::decrementChangeCount(AlarmResource* r)
   }
   mChangeCounts[r] = count;
   return count;
+}
+
+bool AlarmResources::reload(const QString& tz)
+{
+	save();
+	close();
+	setTimeZoneId(tz);
+	load();
+	return true;
 }

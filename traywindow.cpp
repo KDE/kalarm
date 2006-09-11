@@ -250,12 +250,13 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	KAEvent event;
 	const QString& prefix = Preferences::tooltipTimeToPrefix();
 	int maxCount = Preferences::tooltipAlarmCount();
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentLocalDateTime();
+	KDateTime tomorrow = now.addDays(1);
 
 	// Get today's and tomorrow's alarms, sorted in time order
 	int i, iend;
 	QList<TipItem> items;
-	KCal::Event::List events = AlarmCalendar::resources()->eventsWithAlarms(QDateTime(now.date()), now.addDays(1), KCalEvent::ACTIVE);
+	KCal::Event::List events = AlarmCalendar::resources()->eventsWithAlarms(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KCalEvent::ACTIVE);
 	for (i = 0, iend = events.count();  i < iend;  ++i)
 	{
 		KCal::Event* kcalEvent = events[i];
@@ -263,15 +264,10 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 		if (event.enabled()  &&  !event.expired()  &&  event.action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
-			DateTime dateTime = event.nextDateTime(false);
-			if (dateTime.date() > now.date())
-			{
-				// Ignore alarms after tomorrow at the current clock time
-				if (dateTime.date() != now.date().addDays(1)
-				||  dateTime.time() >= now.time())
-					continue;
-			}
-			item.dateTime = dateTime.dateTime();
+			QDateTime dateTime = event.nextDateTime(false).effectiveKDateTime().toLocalZone().dateTime();
+			if (dateTime > tomorrow.dateTime())
+				continue;   // ignore alarms after tomorrow at the current clock time
+			item.dateTime = dateTime;
 
 			// The alarm is due today, or early tomorrow
 			bool space = false;
@@ -283,7 +279,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			}
 			if (Preferences::showTooltipTimeToAlarm())
 			{
-				int mins = (now.secsTo(item.dateTime) + 59) / 60;
+				int mins = (now.dateTime().secsTo(item.dateTime) + 59) / 60;
 				if (mins < 0)
 					mins = 0;
 				char minutes[3] = "00";

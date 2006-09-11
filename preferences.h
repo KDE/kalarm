@@ -52,7 +52,7 @@ class Preferences : public QObject
 		static void              connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
-		static QString           timeZone(bool reload = false);
+		static KDateTime::Spec   timeSpec(bool reload = false);
 		static const ColourList& messageColours()                 { return mMessageColours; }
 		static QColor            defaultBgColour()                { return mDefaultBgColour; }
 		static QColor            defaultFgColour()                { return default_defaultFgColour; }
@@ -118,7 +118,7 @@ class Preferences : public QObject
 		static const QString     EMAIL_QUEUED_NOTIFY;
 
 		// Default values for settings
-		static QString                          default_timeZone();
+		static const KTimeZone*                 default_timeZone();
 		static const ColourList                 default_messageColours;
 		static const QColor                     default_defaultBgColour;
 		static const QColor                     default_defaultFgColour;
@@ -182,7 +182,7 @@ class Preferences : public QObject
 		static void                read();
 		static void                convertOldPrefs();
 		static int                 startOfDayCheck();
-		static QString	           emailFrom(MailFrom, bool useAddress, bool bcc);
+		static QString	         emailFrom(MailFrom, bool useAddress, bool bcc);
 		static MailFrom            emailFrom(const QString&);
 		static void                setNotify(const QString& messageID, bool notify);
 		static bool                notifying(const QString& messageID);
@@ -191,7 +191,7 @@ class Preferences : public QObject
 		static QFont               mDefault_messageFont;
 		static QString             mEmailAddress;
 		static QString             mEmailBccAddress;
-		static QString             mSystemTimeZone;
+		static const KTimeZone*    mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
 		friend class MiscPrefTab;
@@ -202,7 +202,7 @@ class Preferences : public QObject
 		friend class EmailPrefTab;
 		static void                setEmailAddress(MailFrom, const QString& address);
 		static void                setEmailBccAddress(bool useControlCentre, const QString& address);
-		static QString             mUserTimeZone;    // only set if the user explicitly chooses a time zone
+		static KDateTime::Spec     mTimeSpec;
 		static ColourList          mMessageColours;
 		static QColor              mDefaultBgColour;
 		static QFont               mMessageFont;

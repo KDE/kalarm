@@ -207,7 +207,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	setAutoSaveSettings(QLatin1String("MessageWin"), false);
 	mWindowList.append(this);
 	if (event.autoClose())
-		mCloseTime = alarm.dateTime().dateTime().addSecs(event.lateCancel() * 60);
+		mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event.lateCancel() * 60);
 }
 
 /******************************************************************************
@@ -322,11 +322,11 @@ void MessageWin::initView()
 			topLayout->setSpacing(leading);
 		}
 
-		// Alarm date/time
+		// Alarm date/time.
+		// Display time zone if not local time zone.
 		QLabel* label = new QLabel(frame ? frame : topWidget);
-		label->setText(mDateTime.isDateOnly()
-		               ? KGlobal::locale()->formatDate(mDateTime.date(), true)
-		               : KGlobal::locale()->formatDateTime(mDateTime.dateTime()));
+		label->setText(KGlobal::locale()->formatDateTime(KDateTime(mDateTime), true, false,
+		                                                 !mDateTime.isLocalZone()));
 		if (!frame)
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
@@ -675,7 +675,7 @@ void MessageWin::setRemainingTextDay()
 void MessageWin::setRemainingTextMinute()
 {
 	QString text;
-	int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
+	int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 60)
 		text = i18np("in 1 minute's time", "in %n minutes' time", mins);
 	else if (mins % 60 == 0)
@@ -705,7 +705,8 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry("ConfirmAck", mConfirmAck);
 		if (mDateTime.isValid())
 		{
-			config->writeEntry("Time", mDateTime.dateTime());
+#warning Write KDateTime when it becomes possible
+			config->writeEntry("Time", mDateTime.effectiveDateTime());
 			config->writeEntry("DateOnly", mDateTime.isDateOnly());
 		}
 		if (mCloseTime.isValid())
@@ -745,7 +746,10 @@ void MessageWin::readProperties(KConfig* config)
 	QDateTime invalidDateTime;
 	QDateTime dt         = config->readEntry("Time", invalidDateTime);
 	bool dateOnly        = config->readEntry("DateOnly", false);
-	mDateTime.set(dt, dateOnly);
+	if (dateOnly)
+		mDateTime = KDateTime(dt.date(), KDateTime::LocalZone);
+	else
+		mDateTime = KDateTime(dt, KDateTime::LocalZone);
 	mCloseTime           = config->readEntry("Expiry", invalidDateTime);
 	mAudioFile           = config->readPathEntry(QLatin1String("AudioFile"));
 	mVolume              = static_cast<float>(config->readEntry("Volume", 0)) / 100;
@@ -887,7 +891,7 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 			AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
 			KAEvent dispEvent;
 			dispEvent.setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
-			                        mDateTime.dateTime(), mShowEdit, !mNoDefer);
+			                        mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
 			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
 			if (cal)
 			{
@@ -1399,7 +1403,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 {
 	if (mDeferButton)
 	{
-		mDeferLimit = event.deferralLimit().dateTime();
+		mDeferLimit = event.deferralLimit().effectiveDateTime();
 		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
 		checkDeferralLimit();
 	}
@@ -1441,7 +1445,7 @@ void MessageWin::checkDeferralLimit()
 */
 void MessageWin::slotDefer()
 {
-	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), QDateTime::currentDateTime().addSecs(60),
+	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), KDateTime::currentLocalDateTime().addSecs(60),
 	                              false, this);
 	if (mDefaultDeferMinutes > 0)
 		mDeferDlg->setDeferMinutes(mDefaultDeferMinutes);

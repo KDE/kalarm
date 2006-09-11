@@ -62,18 +62,18 @@ class RecurrenceEdit : public QFrame
 		virtual ~RecurrenceEdit()  { }
 
 		/** Set widgets to default values */
-		void          setDefaults(const QDateTime& from);
+		void          setDefaults(const KDateTime& from);
 		/** Initialise according to a specified event */
 		void          set(const KAEvent&);
 		/** Write recurrence settings into an event */
 		void          updateEvent(KAEvent&, bool adjustStart);
-		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
+		QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
 		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
-		void          setEndDateTime(const DateTime&);
-		DateTime      endDateTime() const;
+		void          setEndDateTime(const KDateTime&);
+		KDateTime     endDateTime() const;
 		bool          stateChanged() const;
 
 		static QString i18n_Norecur();           // text of 'No recurrence' selection, lower case
@@ -92,7 +92,7 @@ class RecurrenceEdit : public QFrame
 		static QString i18n_y_Yearly();          // text of '&Yearly' selection, with 'Y' shortcut
 
 	public slots:
-		void          setDateTime(const QDateTime& start)   { mCurrStartDateTime = start; }
+		void          setDateTime(const KDateTime& start)   { mCurrStartDateTime = start; }
 
 	signals:
 		void          shown();
@@ -161,7 +161,7 @@ class RecurrenceEdit : public QFrame
 		QList<QDate>      mExceptionDates;
 
 		// Current start date and time
-		QDateTime         mCurrStartDateTime;
+		KDateTime         mCurrStartDateTime;
 		bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
 		bool              mReadOnly;
 
@@ -169,7 +169,7 @@ class RecurrenceEdit : public QFrame
 		QAbstractButton*  mSavedRuleButton;          // which rule button was selected
 		QAbstractButton*  mSavedRangeButton;         // which range button was selected
 		int               mSavedRepeatCount;         // repeat count
-		DateTime          mSavedEndDateTime;         // end date/time
+		KDateTime         mSavedEndDateTime;         // end date/time
 		QList<QDate>      mSavedExceptionDates;      // exception dates
 };
 

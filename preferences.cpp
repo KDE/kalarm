@@ -31,7 +31,7 @@
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <ktimezones.h>
+#include <kdatetime.h>
 #include <kdebug.h>
 
 #include <libkpimidentities/identity.h>
@@ -104,8 +104,8 @@ Preferences::MailFrom Preferences::default_emailFrom()
 }
 
 // Active config file settings
-QString                    Preferences::mSystemTimeZone;
-QString                    Preferences::mUserTimeZone;
+const KTimeZone*           Preferences::mSystemTimeZone;
+KDateTime::Spec            Preferences::mTimeSpec;
 ColourList                 Preferences::mMessageColours;
 QColor                     Preferences::mDefaultBgColour;
 QFont                      Preferences::mMessageFont;
@@ -284,7 +284,14 @@ void Preferences::read()
 
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
-	mUserTimeZone             = config->readEntry(TIMEZONE);
+	QString timeZone = config->readEntry(TIMEZONE);
+	if (timeZone.isEmpty())
+		mTimeSpec = KDateTime::ClockTime;
+	else
+	{
+		const KTimeZone* tz = KSystemTimeZones::zone(timeZone);
+		mTimeSpec = tz ? tz : KSystemTimeZones::local();
+	}
 	QStringList cols = config->readEntry(MESSAGE_COLOURS, QStringList() );
 	if (!cols.count())
 		mMessageColours = default_messageColours;
@@ -396,9 +403,7 @@ void Preferences::save(bool syncToDisc)
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
-#ifdef USE_TIMEZONE
-	config->writeEntry(TIMEZONE, mUserTimeZone);
-#endif
+	config->writeEntry(TIMEZONE, (mTimeSpec == KDateTime::ClockTime ? QString() : mTimeSpec.timeZone()->name()));
 	QStringList colours;
 	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
 		colours.append(QColor(mMessageColours[i]).name());
@@ -481,33 +486,22 @@ void Preferences::updateStartOfDayCheck()
 
 /******************************************************************************
 * Get the user's time zone, or if none has been chosen, the system time zone.
-* The value returned may be in various formats (for example,
-* America/New_York or EST) so your program should be prepared to these
-* formats.
-* The Calendar class in libkcal says accepts all time zone codes that are
-* listed in /usr/share/zoneinfo/zone.tab.
 * The system time zone is cached, and the cached value will be returned unless
 * 'reload' is true, in which case the value is re-read from the system.
 */
-QString Preferences::timeZone(bool reload)
+KDateTime::Spec Preferences::timeSpec(bool reload)
 {
 	if (reload)
-                mSystemTimeZone.clear();
-#ifdef USE_TIMEZONE
-        if (!mUserTimeZone.isEmpty())
-                return mUserTimeZone;
-        return default_timeZone();
-#else
-	return QString();
-#endif
+		mSystemTimeZone = 0;
+	if (mTimeSpec.isValid())
+		return mTimeSpec;
+	return default_timeZone();
 }
 
-QString Preferences::default_timeZone()
+const KTimeZone* Preferences::default_timeZone()
 {
-#ifdef USE_TIMEZONE
-	if (mSystemTimeZone.isEmpty())
-		mSystemTimeZone = KSystemTimeZones::local()->name();
-#endif
+	if (!mSystemTimeZone)
+		mSystemTimeZone = KSystemTimeZones::local();
 	return mSystemTimeZone;
 }
 

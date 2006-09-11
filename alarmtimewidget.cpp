@@ -83,10 +83,12 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 
 void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 {
+#warning Add a time zone selection widget if not defer dialogue
 	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 
+	mDeferring = mode & DEFER_TIME;
 	mButtonGroup = new ButtonGroup(topWidget);
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
@@ -94,18 +96,17 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	topLayout->setMargin(hasTitle ? KDialog::marginHint() : 0);
 
 	// At time radio button/label
-	mAtTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("&Defer to date/time:") : i18n("At &date/time:")), topWidget);
+	mAtTimeRadio = new RadioButton((mDeferring ? i18n("&Defer to date/time:") : i18n("At &date/time:")), topWidget);
 	mAtTimeRadio->setFixedSize(mAtTimeRadio->sizeHint());
-	mAtTimeRadio->setWhatsThis((mode & DEFER_TIME) ? i18n("Reschedule the alarm to the specified date and time.")
-	                                               : i18n("Schedule the alarm at the specified date and time."));
+	mAtTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm to the specified date and time.")
+	                                      : i18n("Schedule the alarm at the specified date and time."));
 
 	// Date edit box
 	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
 	static const QString enterDateText = i18n("Enter the date to schedule the alarm.");
-	mDateEdit->setWhatsThis((mode & DEFER_TIME) ? enterDateText
-	                                            : QString("%1\n%2").arg(enterDateText).arg(recurText));
+	mDateEdit->setWhatsThis(mDeferring ? enterDateText : QString("%1\n%2").arg(enterDateText).arg(recurText));
 	mAtTimeRadio->setFocusWidget(mDateEdit);
 
 	// Time edit box and Any time checkbox
@@ -115,11 +116,11 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");
-	mTimeEdit->setWhatsThis((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
-	                                            : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
+	                                   : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 
 	mAnyTime = -1;    // current status is uninitialised
-	if (mode & DEFER_TIME)
+	if (mDeferring)
 	{
 		mAnyTimeAllowed = false;
 		mAnyTimeCheckBox = 0;
@@ -134,18 +135,18 @@ void AlarmTimeWidget::init(QWidget* topWidget, int mode, bool hasTitle)
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton(((mode & DEFER_TIME) ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), topWidget);
+	mAfterTimeRadio = new RadioButton((mDeferring ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), topWidget);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
-	mAfterTimeRadio->setWhatsThis((mode & DEFER_TIME) ? i18n("Reschedule the alarm for the specified time interval after now.")
-	                                                  : i18n("Schedule the alarm after the specified time interval from now."));
+	mAfterTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm for the specified time interval after now.")
+	                                         : i18n("Schedule the alarm after the specified time interval from now."));
 
 	// Delay time spin box
 	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-	mDelayTimeEdit->setWhatsThis((mode & DEFER_TIME) ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
-	                                                 : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mDelayTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
+	                                        : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
 	// Set up the layout, either narrow or wide
@@ -225,8 +226,8 @@ DateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool 
 		*minsFromNow = 0;
 	if (errorWidget)
 		*errorWidget = 0;
-	QTime nowt = QTime::currentTime();
-	QDateTime now(QDate::currentDate(), QTime(nowt.hour(), nowt.minute()));
+	KDateTime now = KDateTime::currentUtcDateTime();
+	now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
 	if (mAtTimeRadio->isChecked())
 	{
 		bool anyTime = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
@@ -253,7 +254,7 @@ DateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool 
 		DateTime result;
 		if (anyTime)
 		{
-			result = mDateEdit->date();
+			result = KDateTime(mDateEdit->date(), timeSpec());
 			if (checkExpired  &&  result.date() < now.date())
 			{
 				if (showErrorMessage)
@@ -265,7 +266,7 @@ DateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool 
 		}
 		else
 		{
-			result.set(mDateEdit->date(), mTimeEdit->time());
+			result = KDateTime(mDateEdit->date(), mTimeEdit->time(), timeSpec());
 			if (checkExpired  &&  result <= now.addSecs(1))
 			{
 				if (showErrorMessage)
@@ -295,13 +296,27 @@ DateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool 
 }
 
 /******************************************************************************
+* Get the time specification to use.
+*/
+KDateTime::Spec AlarmTimeWidget::timeSpec() const
+{
+	if (mDeferring)
+		return KDateTime::LocalZone;
+	else
+	{
+#warning Get time spec from selection widget
+return KDateTime::LocalZone;
+	}
+}
+
+/******************************************************************************
 * Set the date/time.
 */
 void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
 	if (dt.date().isValid())
 	{
-		mTimeEdit->setValue(dt.time());
+		mTimeEdit->setValue(dt.effectiveTime());
 		mDateEdit->setDate(dt.date());
 		dateTimeChanged();     // update the delay time edit box
 	}
@@ -327,8 +342,8 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
 	mMinDateTimeIsNow = true;
-	mMinDateTime = QDateTime();
-	QDateTime now = QDateTime::currentDateTime();
+	mMinDateTime = KDateTime();
+	KDateTime now = KDateTime::currentLocalDateTime().toTimeSpec(timeSpec());
 	mDateEdit->setMinDate(now.date());
 	setMaxMinTimeIf(now);
 }
@@ -337,12 +352,12 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 * Set the minimum date/time, adjusting the entered date/time if necessary.
 * If 'dt' is invalid, any current minimum date/time is cleared.
 */
-void AlarmTimeWidget::setMinDateTime(const QDateTime& dt)
+void AlarmTimeWidget::setMinDateTime(const KDateTime& dt)
 {
 	mMinDateTimeIsNow = false;
 	mMinDateTime = dt;
 	mDateEdit->setMinDate(dt.date());
-	setMaxMinTimeIf(QDateTime::currentDateTime());
+	setMaxMinTimeIf(KDateTime::currentUtcDateTime().toTimeSpec(dt));
 }
 
 /******************************************************************************
@@ -353,11 +368,11 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 {
 	mPastMax = false;
 	if (dt.isValid()  &&  dt.isDateOnly())
-		mMaxDateTime = dt.dateTime().addSecs(24*3600 - 60);
+		mMaxDateTime = dt.effectiveKDateTime().addSecs(24*3600 - 60);
 	else
-		mMaxDateTime = dt.dateTime();
+		mMaxDateTime = dt.effectiveKDateTime();
 	mDateEdit->setMaxDate(mMaxDateTime.date());
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(dt);
 	setMaxMinTimeIf(now);
 	setMaxDelayTime(now);
 }
@@ -366,7 +381,7 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 * If the minimum and maximum date/times fall on the same date, set the minimum
 * and maximum times in the time edit box.
 */
-void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
+void AlarmTimeWidget::setMaxMinTimeIf(const KDateTime& now)
 {
 	int   mint = 0;
 	QTime maxt = time_23_59;
@@ -374,7 +389,7 @@ void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
 	if (mMaxDateTime.isValid())
 	{
 		bool set = true;
-		QDateTime minDT;
+		KDateTime minDT;
 		if (mMinDateTimeIsNow)
 			minDT = now.addSecs(60);
 		else if (mMinDateTime.isValid())
@@ -399,14 +414,15 @@ void AlarmTimeWidget::setMaxMinTimeIf(const QDateTime& now)
 * Set the maximum value for the delay time edit box, depending on the maximum
 * value for the date/time.
 */
-void AlarmTimeWidget::setMaxDelayTime(const QDateTime& now)
+void AlarmTimeWidget::setMaxDelayTime(const KDateTime& now)
 {
 	int maxVal = maxDelayTime;
 	if (mMaxDateTime.isValid())
 	{
 		if (now.date().daysTo(mMaxDateTime.date()) < 100)    // avoid possible 32-bit overflow on secsTo()
 		{
-			QDateTime dt(now.date(), QTime(now.time().hour(), now.time().minute(), 0));   // round down to nearest minute
+			KDateTime dt(now);
+			dt.setTime(QTime(now.time().hour(), now.time().minute(), 0));   // round down to nearest minute
 			maxVal = dt.secsTo(mMaxDateTime) / 60;
 			if (maxVal > maxDelayTime)
 				maxVal = maxDelayTime;
@@ -448,17 +464,17 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 */
 void AlarmTimeWidget::slotTimer()
 {
-	QDateTime now;
+	KDateTime now;
 	if (mMinDateTimeIsNow)
 	{
 		// Make sure that the minimum date is updated when the day changes
-		now = QDateTime::currentDateTime();
+		now = KDateTime::currentUtcDateTime().toTimeSpec(mMinDateTime);
 		mDateEdit->setMinDate(now.date());
 	}
 	if (mMaxDateTime.isValid())
 	{
 		if (!now.isValid())
-			now = QDateTime::currentDateTime();
+			now = KDateTime::currentUtcDateTime().toTimeSpec(mMinDateTime);
 		if (!mPastMax)
 		{
 			// Check whether the maximum date/time has now been reached
@@ -501,8 +517,8 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 	if (mAnyTimeCheckBox)
 		mAnyTimeCheckBox->setEnabled(at && mAnyTimeAllowed);
 	// Ensure that the value of the delay edit box is > 0.
-	QDateTime dt(mDateEdit->date(), mTimeEdit->time());
-	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
+	KDateTime dt(mDateEdit->date(), mTimeEdit->time(), timeSpec());
+	int minutes = (KDateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
 	if (minutes <= 0)
 		mDelayTimeEdit->setValid(true);
 	mDelayTimeEdit->setEnabled(!at);
@@ -524,8 +540,8 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 */
 void AlarmTimeWidget::dateTimeChanged()
 {
-	QDateTime dt(mDateEdit->date(), mTimeEdit->time());
-	int minutes = (QDateTime::currentDateTime().secsTo(dt) + 59) / 60;
+	KDateTime dt(mDateEdit->date(), mTimeEdit->time(), timeSpec());
+	int minutes = (KDateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
 	bool blocked = mDelayTimeEdit->signalsBlocked();
 	mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
 	if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
@@ -543,6 +559,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
 	if (mDelayTimeEdit->isValid())
 	{
+#warning Use KDateTime?
 		QDateTime dt = QDateTime::currentDateTime().addSecs(minutes * 60);
 		bool blockedT = mTimeEdit->signalsBlocked();
 		bool blockedD = mDateEdit->signalsBlocked();

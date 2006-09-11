@@ -64,33 +64,33 @@ class AlarmDaemon : public QObject
 		struct EventItem
 		{
 			EventItem() : eventSequence(0) { }
-			EventItem(int seqno, const QList<QDateTime>& alarmtimes)
+			EventItem(int seqno, const QList<KDateTime>& alarmtimes)
 			        : eventSequence(seqno), alarmTimes(alarmtimes) {}
 			int                   eventSequence;
-			QList<QDateTime> alarmTimes;
+			QList<KDateTime> alarmTimes;
 		};
 		typedef QMap<QString, EventItem>  EventsMap;    // event ID, sequence no/times
 
 		void    readConfig();
-		QString timezone();
+		KDateTime::Spec timeSpec();
 		void    startMonitoring();
 		void    registerApp(const QString& appName, const QString& dbusObject, bool startClient, bool init);
 		void    enableAutoStart(bool on, bool sync);
 		void    reloadResource(const QString& id, bool check, bool reset);
 		void    reloadResource(AlarmResource*, bool reset);
-		void    notifyEvent(const QString& eventID, const KCal::Event*, const QList<QDateTime>& alarmtimes);
+		void    notifyEvent(const QString& eventID, const KCal::Event*, const QList<KDateTime>& alarmtimes);
 		void    notifyCalStatus();
 		bool    isClientRegistered() const;
 		void    setTimerStatus();
 		bool    kalarmNotify(const QString& method, const QList<QVariant>& args);
 
-		void    setEventPending(const KCal::Event*, const QList<QDateTime>&);
+		void    setEventPending(const KCal::Event*, const QList<KDateTime>&);
 		void    setEventHandled(const QString& eventID);
 		void    clearEventsHandled(AlarmResource* = 0, bool nonexistentOnly = false);
-		bool    eventHandled(const KCal::Event*, const QList<QDateTime>&);
+		bool    eventHandled(const KCal::Event*, const QList<KDateTime>&);
 
 		void    clearEventMap(EventsMap&, AlarmResource*, bool nonexistentOnly);
-		void    setEventInMap(EventsMap&, const QString& eventID, const QList<QDateTime>& alarmtimes, int sequence);
+		void    setEventInMap(EventsMap&, const QString& eventID, const QList<KDateTime>& alarmtimes, int sequence);
 
 		static EventsMap  mEventsHandled;  // IDs of already triggered events which have been processed by KAlarm
 		static EventsMap  mEventsPending;  // IDs of already triggered events not yet processed by KAlarm

@@ -76,25 +76,25 @@ class DBusHandler : public QObject, public KAlarmIface
 	Q_SCRIPTABLE bool editNew(const QString& templateName);
 
     private:
-	static bool scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
+	static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
 	                            const QString& bgColor, const QString& fgColor, const QString& fontStr,
 	                            const KUrl& audioFile, int reminderMins, const KARecurrence&,
 	                            int repeatInterval = 0, int repeatCount = 0);
-	static bool scheduleFile(const KUrl& file, const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
+	static bool scheduleFile(const KUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
 	                         const KUrl& audioFile, int reminderMins, const KARecurrence&,
 	                         int repeatInterval = 0, int repeatCount = 0);
-	static bool scheduleCommand(const QString& commandLine, const DateTime& start, int lateCancel, unsigned flags,
+	static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
 	                            const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);
 	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
-	                          const QString& attachments, const DateTime& start, int lateCancel, unsigned flags,
+	                          const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
 	                          const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);
-	static DateTime  convertStartDateTime(const QString& startDateTime);
-	static unsigned  convertStartFlags(const DateTime& start, unsigned flags);
+	static KDateTime convertDateTime(const QString& dateTime, bool start);
+	static unsigned  convertStartFlags(const KDateTime& start, unsigned flags);
 	static QColor    convertBgColour(const QString& bgColor);
-	static bool      convertRecurrence(DateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence);
-	static bool      convertRecurrence(DateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
-	static bool      convertRecurrence(DateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
-	static bool      convertRecurrence(KARecurrence&, const DateTime& start, int recurType, int recurInterval, int recurCount, const QDateTime& end);
+	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence);
+	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
+	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
+	static bool      convertRecurrence(KARecurrence&, const KDateTime& start, int recurType, int recurInterval, int recurCount, const KDateTime& end);
 };
 
 #endif // DBUSHANDLER_H

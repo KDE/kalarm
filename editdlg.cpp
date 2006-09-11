@@ -766,7 +766,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			button->setChecked(true);
 			mTemplateTimeAfter->setValue(afterTime > 0 ? afterTime : 1);
 			if (!noTime && useTime)
-				mTemplateTime->setValue(event->mainDateTime().time());
+				mTemplateTime->setValue(KDateTime(event->mainDateTime()).time());
 			else
 				mTemplateTime->setValue(0);
 		}
@@ -775,7 +775,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			if (event->isTemplate())
 			{
 				// Initialising from an alarm template: use current date
-				QDateTime now = QDateTime::currentDateTime();
+				KDateTime now = KDateTime::currentUtcDateTime();
 				int afterTime = event->templateAfterTime();
 				if (afterTime >= 0)
 				{
@@ -784,12 +784,13 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 				}
 				else
 				{
+					KDateTime dt = event->startDateTime();
+					now = now.toTimeSpec(dt);
 					QDate d = now.date();
-					QTime t = event->startDateTime().time();
-					bool dateOnly = event->startDateTime().isDateOnly();
-					if (!dateOnly  &&  now.time() >= t)
+					if (!dt.isDateOnly()  &&  now.time() >= dt.time())
 						d = d.addDays(1);     // alarm time has already passed, so use tomorrow
-					mTimeWidget->setDateTime(DateTime(QDateTime(d, t), dateOnly));
+					dt.setDate(d);
+					mTimeWidget->setDateTime(dt);
 				}
 			}
 			else
@@ -871,7 +872,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
 		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
-		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
+		KDateTime defaultTime = KDateTime::currentUtcDateTime().addSecs(60);
 		if (mTemplate)
 		{
 			mTemplateDefaultTime->setChecked(true);
@@ -1260,11 +1261,11 @@ bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
 */
 void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 {
-	QDateTime dt;
+	KDateTime dt;
 	if (!trial)
 	{
 		if (!mTemplate)
-			dt = mAlarmDateTime.dateTime();
+			dt = mAlarmDateTime.effectiveKDateTime();
 		else if (mTemplateUseTime->isChecked())
 			dt.setTime(mTemplateTime->time());
 	}
@@ -1320,7 +1321,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 					DateTime remindTime = mAlarmDateTime.addMins(-reminder);
 					if (mDeferDateTime >= remindTime)
 					{
-						if (remindTime > QDateTime::currentDateTime())
+						if (remindTime > KDateTime::currentUtcDateTime())
 							deferral = false;    // ignore deferral if it's after next reminder
 						else if (mDeferDateTime > remindTime)
 							deferReminder = true;    // it's the reminder which is being deferred
@@ -1471,19 +1472,20 @@ void EditAlarmDlg::slotOk()
 	{
 		if (timedRecurrence)
 		{
-			QDateTime now = QDateTime::currentDateTime();
-			if (mAlarmDateTime.date() < now.date()
-			||  mAlarmDateTime.date() == now.date()
-			    && !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+#warning Check this
+			KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(mAlarmDateTime);
+			bool dateOnly = mAlarmDateTime.isDateOnly();
+			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
+			||  !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
 				KAEvent event;
 				AlarmResource* r;
 				getEvent(event, r);     // this may adjust mAlarmDateTime
-				if ((  mAlarmDateTime.date() < now.date()
-				    || mAlarmDateTime.date() == now.date()
-				       && !mAlarmDateTime.isDateOnly() && mAlarmDateTime.time() < now.time())
+				bool dateOnly = mAlarmDateTime.isDateOnly();
+				if ((dateOnly  &&  mAlarmDateTime.date() < now.date()
+				     || !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
@@ -1492,7 +1494,7 @@ void EditAlarmDlg::slotOk()
 			}
 		}
 		QString errmsg;
-		QWidget* errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.dateTime(), errmsg);
+		QWidget* errWidget = mRecurrenceEdit->checkData(mAlarmDateTime.effectiveKDateTime(), errmsg);
 		if (errWidget)
 		{
 			mTabs->setCurrentIndex(mRecurPageIndex);
@@ -1657,7 +1659,7 @@ void EditAlarmDlg::slotEditDeferral()
 			return;
 		limit = false;
 	}
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime();
 	if (limit)
 	{
 		if (repeatCount  &&  start < now)
@@ -1684,7 +1686,7 @@ void EditAlarmDlg::slotEditDeferral()
 		if (reminder)
 		{
 			DateTime remindTime = start.addMins(-reminder);
-			if (QDateTime::currentDateTime() < remindTime)
+			if (KDateTime::currentUtcDateTime() < remindTime)
 				start = remindTime;
 		}
 		deferDlg.setLimit(start.addSecs(-60));
@@ -1731,9 +1733,9 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 	mRecurPageIndex = mTabs->currentIndex();
 	if (!mReadOnly  &&  !mTemplate)
 	{
-		QDateTime now = QDateTime::currentDateTime();
 		mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
-		bool expired = (mAlarmDateTime.dateTime() < now);
+		KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(KDateTime(mAlarmDateTime));
+		bool expired = (mAlarmDateTime.effectiveKDateTime() < now);
 		if (mRecurSetDefaultEndDate)
 		{
 			mRecurrenceEdit->setDefaultEndDate(expired ? now.date() : mAlarmDateTime.date());
@@ -1741,7 +1743,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 		}
 		mRecurrenceEdit->setStartDate(mAlarmDateTime.date(), now.date());
 		if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
-			mRecurrenceEdit->setEndDateTime(expired ? now : mAlarmDateTime);
+			mRecurrenceEdit->setEndDateTime(expired ? now : KDateTime(mAlarmDateTime));
 	}
 	mRecurPageShown = true;
 }
@@ -1762,7 +1764,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		if (atLogin)
 		{
 			mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
-			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.dateTime());
+			mRecurrenceEdit->setEndDateTime(mAlarmDateTime);
 		}
 		mReminder->enableOnceOnly(recurs && !atLogin);
 	}

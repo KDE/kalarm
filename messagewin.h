@@ -108,7 +108,7 @@ class MessageWin : public MainWindowBase
 		QFont               mFont;
 		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
-		QDateTime           mCloseTime;       // time at which window should be auto-closed
+		QDateTime           mCloseTime;       // local time at which window should be auto-closed
 		QString             mEventID;
 		QString             mAudioFile;
 		float               mVolume;

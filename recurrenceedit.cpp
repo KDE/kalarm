@@ -344,7 +344,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
  * Verify the consistency of the entered data.
  * Reply = widget to receive focus on error, or 0 if no error.
  */
-QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& errorMessage) const
+QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& errorMessage) const
 {
 	if (mAtLoginButton->isChecked())
 		return 0;
@@ -356,7 +356,8 @@ QWidget* RecurrenceEdit::checkData(const QDateTime& startDateTime, QString& erro
 		QDate endDate = mEndDateEdit->date();
 		if (endDate < startDateTime.date())
 			errWidget = mEndDateEdit;
-		else if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime)
+#warning End date/time is assumed to be same time spec as start date/time
+		else if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime.dateTime())
 			errWidget = mEndTimeEdit;
 		if (errWidget)
 		{
@@ -599,7 +600,7 @@ void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 		mEndDateEdit->setDate(end);
 }
 
-void RecurrenceEdit::setEndDateTime(const DateTime& end)
+void RecurrenceEdit::setEndDateTime(const KDateTime& end)
 {
 	mEndDateEdit->setDate(end.date());
 	mEndTimeEdit->setValue(end.time());
@@ -607,17 +608,17 @@ void RecurrenceEdit::setEndDateTime(const DateTime& end)
 	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
 }
 
-DateTime RecurrenceEdit::endDateTime() const
+KDateTime RecurrenceEdit::endDateTime() const
 {
 	if (mRuleButtonGroup->checkedButton() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
-		return DateTime(mEndDateEdit->date());
-	return DateTime(mEndDateEdit->date(), mEndTimeEdit->time());
+		return KDateTime(mEndDateEdit->date(), mCurrStartDateTime.timeSpec());
+	return KDateTime(mEndDateEdit->date(), mEndTimeEdit->time(), mCurrStartDateTime.timeSpec());
 }
 
 /******************************************************************************
  * Set all controls to their default values.
  */
-void RecurrenceEdit::setDefaults(const QDateTime& from)
+void RecurrenceEdit::setDefaults(const KDateTime& from)
 {
 	mCurrStartDateTime = from;
 	QDate fromDate = from.date();
@@ -680,7 +681,7 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
  */
 void RecurrenceEdit::set(const KAEvent& event)
 {
-	setDefaults(event.mainDateTime().dateTime());
+	setDefaults(KDateTime(event.mainDateTime()));
 	if (event.repeatAtLogin())
 	{
 		mAtLoginButton->setChecked(true);
@@ -778,7 +779,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	repeatDuration = event.remainingRecurrences();
 
 	// Get range information
-	QDateTime endtime = mCurrStartDateTime;
+	KDateTime endtime = mCurrStartDateTime;
 	if (repeatDuration == -1)
 		mNoEndDateButton->setChecked(true);
 	else if (repeatDuration)
@@ -840,7 +841,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	int frequency = mRule ? mRule->frequency() : 0;
 	if (button == mSubDailyButton)
 	{
-		QDateTime endDateTime(endDate, endTime);
+		KDateTime endDateTime(endDate, endTime, mCurrStartDateTime.timeSpec());
 		event.setRecurMinutely(frequency, repeatCount, endDateTime);
 	}
 	else if (button == mDailyButton)
@@ -921,7 +922,10 @@ void RecurrenceEdit::saveState()
 	if (mSavedRangeButton == mRepeatCountButton)
 		mSavedRepeatCount = mRepeatCountEntry->value();
 	else if (mSavedRangeButton == mEndDateButton)
-		mSavedEndDateTime.set(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked());
+	{
+		mSavedEndDateTime = KDateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mCurrStartDateTime.timeSpec());
+		mSavedEndDateTime.setDateOnly(mEndAnyTimeCheckBox->isChecked());
+	}
 	mSavedExceptionDates = mExceptionDates;
 }
 
@@ -937,9 +941,13 @@ bool RecurrenceEdit::stateChanged() const
 	if (mSavedRangeButton == mRepeatCountButton
 	&&  mSavedRepeatCount != mRepeatCountEntry->value())
 		return true;
-	if (mSavedRangeButton == mEndDateButton
-	&&  mSavedEndDateTime != DateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked()))
-		return true;
+	if (mSavedRangeButton == mEndDateButton)
+	{
+		KDateTime edt(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mCurrStartDateTime.timeSpec());
+		edt.setDateOnly(mEndAnyTimeCheckBox->isChecked());
+		if (mSavedEndDateTime != edt)
+			return true;
+	}
 	if (mSavedExceptionDates != mExceptionDates)
 		return true;
 	return false;

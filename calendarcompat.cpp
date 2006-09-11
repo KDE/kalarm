@@ -71,10 +71,10 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 	// Convert it to the current format, and prompt the user whether to update the calendar file.
 	if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
 	{
-		// KAlarm version 0.5.7 - in the KDE 3.0.0 version, times are stored in UTC,
-		// which needs adjustment of summer times.
-		// Because this is so old, we no longer provide backwards compatibility.
-		kWarning(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 calendar: may need adjustment of summer times" << endl;
+		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
+		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
+		version057_UTC = isUTC(localFile);
+		kDebug(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 (" << (version057_UTC ? "" : "non-") << "UTC)\n";
 	}
 	else
 		kDebug(5950) << "CalendarCompat::fix(): KAlarm version " << version << endl;
@@ -152,3 +152,44 @@ int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& su
 		return 0;      // the calendar is in the current KAlarm format
 	return KAlarm::getVersionNumber(versionString, &subVersion);
 }
+
+/******************************************************************************
+* Check whether the calendar file has its times stored as UTC times,
+* indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
+* Reply = true if times are stored in UTC
+*       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
+*/
+bool CalendarCompat::isUTC(const QString& localFile)
+{
+	// Read the calendar file into a string
+	QFile file(localFile);
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
+	QTextStream ts(&file);
+	ts.setCodec("ISO 8859-1");
+	QByteArray text = ts.readAll().toLocal8Bit();
+	file.close();
+
+	// Extract the CREATED property for the first VEVENT from the calendar
+	QList<QByteArray> lines = text.split('\n');
+	for (int i = 0, end = lines.count();  i < end;  ++i)
+	{
+		if (lines[i].startsWith("BEGIN:VCALENDAR"))
+		{
+			while (++i < end)
+			{
+				if (lines[i].startsWith("BEGIN:VEVENT"))
+				{
+					while (++i < end)
+					{
+						if (lines[i].startsWith("CREATED:"))
+							return lines[i].endsWith("Z");
+					}
+				}
+			}
+			break;
+		}
+	}
+	return false;
+}
+

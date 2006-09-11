@@ -422,7 +422,6 @@ void MainWindow::initActions()
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), actions, QLatin1String("showInSystemTray"));
-	mActionToggleTrayIcon->setShortcut(Qt::CTRL + Qt::Key_Y);
 	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
@@ -1280,10 +1279,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
 	KUrl::List      files;
-	KCal::CalendarLocal calendar(Preferences::timeZone(true));
-#ifndef USE_TIMEZONE
-	calendar.setLocalTime();    // default to local time (i.e. no time zone)
-#endif
+	KCal::CalendarLocal calendar(Preferences::timeSpec(true));
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
 	kDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;
@@ -1416,7 +1412,7 @@ void MainWindow::slotSelection()
 	bool enableEnable = false;
 	bool enableDisable = false;
 	AlarmResources* resources = AlarmResources::instance();
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime();
 	for (int i = 0, end = items.count();  i < end;  ++i)
 	{
 		const KAEvent& event = ((AlarmListViewItem*)items[i])->event();

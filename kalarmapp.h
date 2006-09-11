@@ -27,7 +27,7 @@
 #include <QQueue>
 #include <QList>
 class QTimer;
-class QDateTime;
+class KDateTime;
 
 #include <kuniqueapplication.h>
 #include <kurl.h>
@@ -77,7 +77,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
 		void               commandMessage(ShellProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
-		bool               scheduleEvent(KAEvent::Action, const QString& text, const QDateTime&,
+		bool               scheduleEvent(KAEvent::Action, const QString& text, const KDateTime&,
 		                                 int lateCancel, int flags, const QColor& bg, const QColor& fg,
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KARecurrence& recurrence,

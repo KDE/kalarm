@@ -258,7 +258,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 	if (archiving)
 	{
 		event.setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
-		event.setSaveDateTime(QDateTime::currentDateTime());   // time stamp to control purging
+		event.setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
 	}
 	KCal::Event* kcalEvent = cal->addEvent(event, 0, false, resource);
 	if (!kcalEvent)
@@ -575,7 +575,7 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 		QString selectID;
 		int count = 0;
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		QDateTime now = QDateTime::currentDateTime();
+		KDateTime now = KDateTime::currentUtcDateTime();
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			// Delete the event from the archived resource
@@ -1173,10 +1173,8 @@ bool sendToKOrganizer(const KAEvent& event)
 
 	// Translate the event into string format
 	KCal::ICalFormat format;
-#ifdef USE_TIMEZONE
-#warning TZ: retain original time zone of event
-#endif
-	format.setTimeZone(Preferences::timeZone(true), false);
+#warning Retain original time zone of event
+	format.setTimeSpec(Preferences::timeSpec(true));
 	QString iCal = format.toICalString(kcalEvent);
 	delete kcalEvent;
 

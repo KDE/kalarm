@@ -65,7 +65,7 @@
 #include <kglobal.h>
 
 
-static bool convWakeTime(const QByteArray& timeParam, QDateTime&, bool& noTime);
+static bool convWakeTime(const QByteArray& timeParam, KDateTime&);
 static bool convInterval(QByteArray timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
@@ -449,8 +449,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 requires %2", QLatin1String("--bcc"), QLatin1String("--mail")))
 				}
 
-				bool      alarmNoTime = false;
-				QDateTime alarmTime, endTime;
+				KDateTime alarmTime, endTime;
 				QColor    bgColour = Preferences::defaultBgColour();
 				QColor    fgColour = Preferences::defaultFgColour();
 				KARecurrence recurrence;
@@ -482,11 +481,11 @@ int KAlarmApp::newInstance()
 				if (args->isSet("time"))
 				{
 					QByteArray dateTime = args->getOption("time");
-					if (!convWakeTime(dateTime, alarmTime, alarmNoTime))
+					if (!convWakeTime(dateTime, alarmTime))
 						USAGE(i18n("Invalid %1 parameter", QLatin1String("--time")))
 				}
 				else
-					alarmTime = QDateTime::currentDateTime();
+					alarmTime = KDateTime::currentLocalDateTime();
 
 				bool haveRecurrence = args->isSet("recurrence");
 				if (haveRecurrence)
@@ -517,8 +516,12 @@ int KAlarmApp::newInstance()
 					{
 						count = 0;
 						QByteArray dateTime = args->getOption("until");
-						if (!convWakeTime(dateTime, endTime, alarmNoTime))
+						if (!convWakeTime(dateTime, endTime))
 							USAGE(i18n("Invalid %1 parameter", QLatin1String("--until")))
+						if (alarmTime.isDateOnly()  &&  !endTime.isDateOnly())
+							USAGE(i18n("Invalid %1 parameter for date-only alarm", QLatin1String("--until")))
+						if (!alarmTime.isDateOnly()  &&  endTime.isDateOnly())
+							endTime.setTime(QTime(23,59,59));
 						if (endTime < alarmTime)
 							USAGE(i18n("%1 earlier than %2", QLatin1String("--until"), QLatin1String("--time")))
 					}
@@ -531,7 +534,7 @@ int KAlarmApp::newInstance()
 					if (!convInterval(args->getOption("interval"), recurType, interval, !haveRecurrence)
 					||  interval < 0)
 						USAGE(i18n("Invalid %1 parameter", QLatin1String("--interval")))
-					if (alarmNoTime  &&  recurType == KARecurrence::MINUTELY)
+					if (alarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
 						USAGE(i18n("Invalid %1 parameter for date-only alarm", QLatin1String("--interval")))
 
 					if (haveRecurrence)
@@ -547,7 +550,7 @@ int KAlarmApp::newInstance()
 					{
 						// There is no other recurrence specified, so convert the repetition
 						// parameters into a KCal::Recurrence
-						recurrence.set(recurType, interval, count, DateTime(alarmTime, alarmNoTime), endTime);
+						recurrence.set(recurType, interval, count, alarmTime, endTime);
 					}
 				}
 				else
@@ -617,7 +620,7 @@ int KAlarmApp::newInstance()
 						switch (recurType)
 						{
 							case KARecurrence::MINUTELY:
-								if (alarmNoTime)
+								if (alarmTime.isDateOnly())
 									USAGE(i18n("Invalid %1 parameter for date-only alarm", opt))
 								break;
 							case KARecurrence::DAILY:     reminderMinutes *= 1440;  break;
@@ -659,7 +662,7 @@ int KAlarmApp::newInstance()
 					flags |= KAEvent::REPEAT_AT_LOGIN;
 				if (args->isSet("bcc"))
 					flags |= KAEvent::EMAIL_BCC;
-				if (alarmNoTime)
+				if (alarmTime.isDateOnly())
 					flags |= KAEvent::ANY_TIME;
 				args->clear();      // free up memory
 
@@ -1142,7 +1145,7 @@ bool KAlarmApp::wantRunInSystemTray() const
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const QDateTime& dateTime,
+bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const KDateTime& dateTime,
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
@@ -1152,12 +1155,13 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	kDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;
 	if (!dateTime.isValid())
 		return false;
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime();
 	if (lateCancel  &&  dateTime < now.addSecs(-maxLateness(lateCancel)))
 		return true;               // alarm time was already archived too long ago
-	QDateTime alarmTime = dateTime;
+	KDateTime alarmTime = dateTime;
 	// Round down to the nearest minute to avoid scheduling being messed up
-	alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
+	if (!dateTime.isDateOnly())
+		alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 
 	KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags);
 	if (reminderMinutes)
@@ -1237,7 +1241,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
 		case EVENT_HANDLE:     // handle it if it's due
 		{
-			QDateTime now = QDateTime::currentDateTime();
+			KDateTime now = KDateTime::currentUtcDateTime();
 			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
@@ -1261,6 +1265,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				// Check if the alarm is due yet.
 				// Just in case it's an invalid time during a daylight savings time
 				// shift, check more carefully if it's today.
+#warning Check first/second occurrence
 				int secs = alarm.dateTime().secsTo(now);
 				if (secs < 0
 				&&  (alarm.date() != now.date() || alarm.time() > now.time()))
@@ -1308,7 +1313,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					{
 						// The alarm has no time, so cancel it if its date is too far past
 						int maxlate = alarm.lateCancel() / 1440;    // maximum lateness in days
-						QDateTime limit(alarm.date().addDays(maxlate + 1), Preferences::startOfDay());
+						KDateTime limit(alarm.dateTime().addDays(maxlate + 1).effectiveKDateTime());
 						if (now >= limit)
 						{
 							// It's too late to display the scheduled occurrence.
@@ -1322,7 +1327,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAEvent::RECURRENCE_DATE_TIME:
 								case KAEvent::LAST_RECURRENCE:
 									limit.setDate(next.date().addDays(maxlate + 1));
-									limit.setTime(Preferences::startOfDay());
 									if (now >= limit)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
@@ -1355,7 +1359,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 								case KAEvent::RECURRENCE_DATE:
 								case KAEvent::RECURRENCE_DATE_TIME:
 								case KAEvent::LAST_RECURRENCE:
-									if (next.dateTime().secsTo(now) > maxlate)
+									if (next.effectiveKDateTime().secsTo(now) > maxlate)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
@@ -1464,7 +1468,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	else
 	{
-		QDateTime now = QDateTime::currentDateTime();
+		KDateTime now = KDateTime::currentUtcDateTime();
 		if (event.repeatCount()  &&  event.mainEndRepeatTime() > now)
 			updateDisplay = true;    // there are more repetitions to come, so just update time in alarm list
 		else
@@ -1723,9 +1727,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		QString heading;
 		if (alarm  &&  alarm->dateTime().isValid())
 		{
-			QString dateTime = alarm->dateTime().isDateOnly()
-			                 ? KGlobal::locale()->formatDate(alarm->dateTime().date(), true)
-			                 : KGlobal::locale()->formatDateTime(alarm->dateTime().dateTime());
+			QString dateTime = alarm->dateTime().formatLocale();
 			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
 		}
 		else
@@ -1941,11 +1943,11 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 }
 
 /******************************************************************************
-*  Convert the --time parameter string into a date/time or date value.
+*  Convert the --time parameter string into a local date/time or date value.
 *  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm or yyyy-mm-dd.
 *  Reply = true if successful.
 */
-static bool convWakeTime(const QByteArray& timeParam, QDateTime& dateTime, bool& noTime)
+static bool convWakeTime(const QByteArray& timeParam, KDateTime& dateTime)
 {
 	if (timeParam.length() > 19)
 		return false;
@@ -1954,6 +1956,7 @@ static bool convWakeTime(const QByteArray& timeParam, QDateTime& dateTime, bool&
 	int dt[5] = { -1, -1, -1, -1, -1 };
 	char* s;
 	char* end;
+	bool noTime;
 	// Get the minute value
 	if ((s = strchr(timeStr, ':')) == 0)
 		noTime = true;
@@ -2010,8 +2013,9 @@ static bool convWakeTime(const QByteArray& timeParam, QDateTime& dateTime, bool&
 	if (noTime)
 	{
 		// No time was specified, so the full date must have been specified
-		if (dt[0] < 0)
+		if (dt[0] < 0  ||  !date.isValid())
 			return false;
+		dateTime = KDateTime(date, KDateTime::LocalZone);
 	}
 	else
 	{
@@ -2021,14 +2025,13 @@ static bool convWakeTime(const QByteArray& timeParam, QDateTime& dateTime, bool&
 			date.setYMD(now.date().year(),
 			            (dt[1] < 0 ? now.date().month() : dt[1]),
 			            (dt[2] < 0 ? now.date().day() : dt[2]));
+		if (!date.isValid())
+			return false;
 		time.setHMS(dt[3], dt[4], 0);
 		if (!dateSet  &&  time < now.time())
 			date = date.addDays(1);
+		dateTime = KDateTime(date, time, KDateTime::LocalZone);
 	}
-	if (!date.isValid())
-		return false;
-	dateTime.setDate(date);
-	dateTime.setTime(time);
 	return true;
 }
 

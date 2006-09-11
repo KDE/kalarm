@@ -320,9 +320,6 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
 	CalendarLocal cal(mCalendar.timeZoneId());
-#ifndef USE_TIMEZONE
-	cal.setLocalTime();                 // write using local time (i.e. no time zone)
-#endif
 	cal.setCustomProperties(mCalendar.customProperties());   // copy all VCALENDAR custom properties to each file
 	if (mCalIDFunction)
 		(*mCalIDFunction)(cal);                          // write the application ID into the calendar

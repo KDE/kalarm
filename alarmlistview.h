@@ -27,15 +27,16 @@
 class QEvent;
 class QMouseEvent;
 class QColorGroup;
+class KDateTime;
 class AlarmListView;
 
 
 class AlarmListViewItem : public EventListViewItemBase
 {
 	public:
-		AlarmListViewItem(AlarmListView* parent, const KAEvent&, const QDateTime& now);
+		AlarmListViewItem(AlarmListView* parent, const KAEvent&, const KDateTime& now);
 		QTime               showTimeToAlarm(bool show);
-		void                updateTimeToAlarm(const QDateTime& now, bool forceDisplay = false);
+		void                updateTimeToAlarm(const KDateTime& now, bool forceDisplay = false);
 		virtual void        paintCell(QPainter*, const QColorGroup&, int column, int width, int align);
 		AlarmListView*      alarmListView() const         { return (AlarmListView*)listView(); }
 		bool                messageTruncated() const      { return mMessageTruncated; }
@@ -49,7 +50,7 @@ class AlarmListViewItem : public EventListViewItemBase
 	private:
 		QString             alarmText(const KAEvent&) const;
 		QString             alarmTimeText(const DateTime&) const;
-		QString             timeToAlarmText(const QDateTime& now) const;
+		QString             timeToAlarmText(const KDateTime& now) const;
 
 		static int          mTimeHourPos;       // position of hour within time string, or -1 if leading zeroes included
 		static int          mDigitWidth;        // display width of a digit
@@ -109,7 +110,7 @@ class AlarmListView : public EventListViewBase
 		virtual QString        whatsThisText(int column) const;
 		virtual bool           shouldShowEvent(const KAEvent& e) const  { return mShowArchived || !e.expired(); }
 		AlarmListViewItem*     addEntry(const KAEvent& e, bool setSize = false)
-		                               { return addEntry(e, QDateTime::currentDateTime(), setSize); }
+		                               { return addEntry(e, KDateTime::currentUtcDateTime(), setSize); }
 		AlarmListViewItem*     updateEntry(AlarmListViewItem* item, const KAEvent& newEvent, bool setSize = false)
 		                               { return (AlarmListViewItem*)EventListViewBase::updateEntry(item, newEvent, setSize); }
 		virtual bool           event(QEvent*);
@@ -118,7 +119,7 @@ class AlarmListView : public EventListViewBase
 		virtual void           contentsMouseReleaseEvent(QMouseEvent*);
 
 	private:
-		AlarmListViewItem*     addEntry(const KAEvent&, const QDateTime& now, bool setSize = false, bool reselect = false);
+		AlarmListViewItem*     addEntry(const KAEvent&, const KDateTime& now, bool setSize = false, bool reselect = false);
 
 		static InstanceList    mInstanceList;         // all current instances of this class
 		static bool            mDragging;

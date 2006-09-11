@@ -68,7 +68,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const QString& startDa
                                   const QString& audioUrl, int reminderMins, const QString& recurrence,
                                   int repeatInterval, int repeatCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
@@ -80,7 +80,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const QString& startDa
                                   const QString& audioUrl, int reminderMins,
                                   int recurType, int recurInterval, int recurCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
@@ -92,7 +92,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const QString& startDa
                                   const QString& audioUrl, int reminderMins,
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
@@ -103,7 +103,7 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
                                const QString& audioUrl, int reminderMins, const QString& recurrence,
                                int repeatInterval, int repeatCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
@@ -113,7 +113,7 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
 bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const QString& audioUrl, int reminderMins, int recurType, int recurInterval, int recurCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
@@ -123,7 +123,7 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
 bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const QString& audioUrl, int reminderMins, int recurType, int recurInterval, const QString& endDateTime)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
@@ -133,7 +133,7 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& recurrence, int repeatInterval, int repeatCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
@@ -143,7 +143,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& sta
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   int recurType, int recurInterval, int recurCount)
 {
-	DateTime start = convertStartDateTime(startDateTime);
+	KDateTime start = convertDateTime(startDateTime, true);
 	if (!start.isValid())
 		return false;
 	KARecurrence recur;
@@ -155,7 +155,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& sta
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   int recurType, int recurInterval, const QString& endDateTime)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
@@ -166,7 +166,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 const QString& recurrence, int repeatInterval, int repeatCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence))
 		return false;
@@ -177,7 +177,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, int recurCount)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
 		return false;
@@ -188,7 +188,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
                                 int recurType, int recurInterval, const QString& endDateTime)
 {
-	DateTime start;
+	KDateTime start;
 	KARecurrence recur;
 	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
 		return false;
@@ -209,7 +209,7 @@ bool DBusHandler::editNew(const QString& templateName)
 /******************************************************************************
 * Schedule a message alarm, after converting the parameters from strings.
 */
-bool DBusHandler::scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
+bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                   int repeatInterval, int repeatCount)
@@ -241,7 +241,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const DateTime& start,
 			return false;
 		}
 	}
-	return theApp()->scheduleEvent(KAEvent::MESSAGE, message, start.dateTime(), lateCancel, kaEventFlags, bg, fg, font,
+	return theApp()->scheduleEvent(KAEvent::MESSAGE, message, start, lateCancel, kaEventFlags, bg, fg, font,
 	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
 }
 
@@ -249,7 +249,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const DateTime& start,
 * Schedule a file alarm, after converting the parameters from strings.
 */
 bool DBusHandler::scheduleFile(const KUrl& file,
-                               const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
+                               const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                int repeatInterval, int repeatCount)
 {
@@ -257,7 +257,7 @@ bool DBusHandler::scheduleFile(const KUrl& file,
 	QColor bg = convertBgColour(bgColor);
 	if (!bg.isValid())
 		return false;
-	return theApp()->scheduleEvent(KAEvent::FILE, file.url(), start.dateTime(), lateCancel, kaEventFlags, bg, Qt::black, QFont(),
+	return theApp()->scheduleEvent(KAEvent::FILE, file.url(), start, lateCancel, kaEventFlags, bg, Qt::black, QFont(),
 	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
 }
 
@@ -265,11 +265,11 @@ bool DBusHandler::scheduleFile(const KUrl& file,
 * Schedule a command alarm, after converting the parameters from strings.
 */
 bool DBusHandler::scheduleCommand(const QString& commandLine,
-                                  const DateTime& start, int lateCancel, unsigned flags,
+                                  const KDateTime& start, int lateCancel, unsigned flags,
                                   const KARecurrence& recurrence, int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
-	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
 	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount);
 }
 
@@ -278,7 +278,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine,
 */
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
-                                const DateTime& start, int lateCancel, unsigned flags,
+                                const KDateTime& start, int lateCancel, unsigned flags,
                                 const KARecurrence& recurrence, int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
@@ -309,52 +309,84 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		kError(5950) << "D-Bus call scheduleEmail(): invalid email attachment: " << bad << endl;
 		return false;
 	}
-	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
 	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
 }
 
 
 /******************************************************************************
-* Convert the start date/time string to a DateTime. The date/time string is in
-* the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
+* Convert the start date/time string to a KDateTime. The date/time string is in
+* the format YYYY-MM-DD[THH:MM[:SS]][ TZ] or [T]HH:MM[:SS].
+* The time zone specifier (TZ) is a system time zone name, e.g. "Europe/London".
+* If no time zone is specified, it defaults to the local clock time (which is
+* not the same as the local time zone).
 */
-DateTime DBusHandler::convertStartDateTime(const QString& startDateTime)
+KDateTime DBusHandler::convertDateTime(const QString& dateTime, bool start)
 {
-	DateTime start;
-	if (startDateTime.length() > 10)
+	bool error = false;
+	const KTimeZone* tz = 0;
+	QString dtString;
+	int space = dateTime.indexOf(QChar(' '));
+	if (space > 0)
 	{
-		// Both a date and a time are specified
-		start = QDateTime::fromString(startDateTime, Qt::ISODate);
+		dtString = dateTime.left(space);
+		tz = KSystemTimeZones::zone(dateTime.mid(space).trimmed());
+		error = !tz;
 	}
 	else
+		dtString = dateTime;
+	KDateTime result;
+	if (!error)
 	{
-		// Check whether a time is specified
-		QString t;
-		if (startDateTime[0] == QLatin1Char('T'))
-			t = startDateTime.mid(1);     // it's a time: remove the leading 'T'
-		else if (!startDateTime[2].isDigit())
-			t = startDateTime;            // it's a time with no leading 'T'
-
-		if (t.isEmpty())
+		if (dtString.length() > 10)
 		{
-			// It's a date
-			start = QDate::fromString(startDateTime, Qt::ISODate);
+			// Both a date and a time are specified
+			QDateTime dt = QDateTime::fromString(dtString, Qt::ISODate);
+			if (tz)
+				result = KDateTime(dt, tz);
+			else
+				result = KDateTime(dt, KDateTime::ClockTime);
 		}
 		else
 		{
-			// It's a time, so use today as the date
-			start.set(QDate::currentDate(), QTime::fromString(t, Qt::ISODate));
+			// Check whether a time is specified
+			QString t;
+			if (dtString[0] == QLatin1Char('T'))
+				t = dtString.mid(1);     // it's a time: remove the leading 'T'
+			else if (!dtString[2].isDigit())
+				t = dtString;            // it's a time with no leading 'T'
+
+			if (t.isEmpty())
+			{
+				// It's a date
+				QDate d = QDate::fromString(dtString, Qt::ISODate);
+				if (tz)
+					result = KDateTime(d, tz);
+				else
+					result = KDateTime(d, KDateTime::ClockTime);
+			}
+			else if (start)
+			{
+				// It's a time, so use today as the date
+				if (!tz)
+					result = KDateTime(QDate::currentDate(), QTime::fromString(t, Qt::ISODate), KDateTime::ClockTime);
+			}
 		}
 	}
-	if (!start.isValid())
-		kError(5950) << "D-Bus call: invalid start date/time: " << startDateTime << endl;
-	return start;
+	if (!result.isValid())
+	{
+		if (start)
+			kError(5950) << "D-Bus call: invalid start date/time: '" << dateTime << "'" << endl;
+		else
+			kError(5950) << "D-Bus call: invalid recurrence end date/time: '" << dateTime << "'" << endl;
+	}
+	return result;
 }
 
 /******************************************************************************
 * Convert the flag bits to KAEvent flag bits.
 */
-unsigned DBusHandler::convertStartFlags(const DateTime& start, unsigned flags)
+unsigned DBusHandler::convertStartFlags(const KDateTime& start, unsigned flags)
 {
 	unsigned kaEventFlags = 0;
 	if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::REPEAT_AT_LOGIN;
@@ -385,59 +417,46 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 	return bg;
 }
 
-bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, 
+bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
                                     const QString& startDateTime, const QString& icalRecurrence)
 {
-	start = convertStartDateTime(startDateTime);
+	start = convertDateTime(startDateTime, true);
 	if (!start.isValid())
 		return false;
 	return recurrence.set(icalRecurrence);
 }
 
-bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
+bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, int recurCount)
 {
-	start = convertStartDateTime(startDateTime);
+	start = convertDateTime(startDateTime, true);
 	if (!start.isValid())
 		return false;
-	return convertRecurrence(recurrence, start, recurType, recurInterval, recurCount, QDateTime());
+	return convertRecurrence(recurrence, start, recurType, recurInterval, recurCount, KDateTime());
 }
 
-bool DBusHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
+bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, const QString& endDateTime)
 {
-	start = convertStartDateTime(startDateTime);
+	start = convertDateTime(startDateTime, true);
 	if (!start.isValid())
 		return false;
-	QDateTime end;
-	if (endDateTime.indexOf(QLatin1Char('T')) < 0)
+	KDateTime end = convertDateTime(endDateTime, false);
+	if (end.isDateOnly()  &&  !start.isDateOnly())
 	{
-		if (!start.isDateOnly())
-		{
-			kError(5950) << "D-Bus call: alarm is date-only, but recurrence end is date/time" << endl;
-			return false;
-		}
-		end.setDate(QDate::fromString(endDateTime, Qt::ISODate));
+		kError(5950) << "D-Bus call: alarm is date-only, but recurrence end is date/time" << endl;
+		return false;
 	}
-	else
+	if (!end.isDateOnly()  &&  start.isDateOnly())
 	{
-		if (start.isDateOnly())
-		{
-			kError(5950) << "D-Bus call: alarm is timed, but recurrence end is date-only" << endl;
-			return false;
-		}
-		end = QDateTime::fromString(endDateTime, Qt::ISODate);
-	}
-	if (!end.isValid())
-	{
-		kError(5950) << "D-Bus call: invalid recurrence end date/time: " << endDateTime << endl;
+		kError(5950) << "D-Bus call: alarm is timed, but recurrence end is date-only" << endl;
 		return false;
 	}
 	return convertRecurrence(recurrence, start, recurType, recurInterval, 0, end);
 }
 
-bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& start, int recurType,
-                                    int recurInterval, int recurCount, const QDateTime& end)
+bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KDateTime& start, int recurType,
+                                    int recurInterval, int recurCount, const KDateTime& end)
 {
 	KARecurrence::Type type;
 	switch (recurType)

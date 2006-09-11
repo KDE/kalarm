@@ -100,7 +100,7 @@ struct AlarmData
 	const Alarm*           alarm;
 	QString                cleanText;       // text or audio file name
 	QString                emailFromKMail;
-	QDateTime              dateTime;
+	KDateTime              dateTime;
 	QFont                  font;
 	QColor                 bgColour, fgColour;
 	float                  soundVolume;
@@ -338,7 +338,13 @@ void KAEvent::set(const Event* event)
 			}
 		}
 	}
-	mStartDateTime.set(event->dtStart(), floats);
+	mStartDateTime = event->dtStart();
+	if (floats)
+	{
+		// A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
+		// by a date-only start date/time (for the reasons given in updateKCalEvent()).
+		mStartDateTime.setDateOnly(true);
+	}
 	mNextMainDateTime = mStartDateTime;
 	mSaveDateTime     = event->created();
 	if (category() == KCalEvent::TEMPLATE)
@@ -388,7 +394,8 @@ void KAEvent::set(const Event* event)
 		{
 			case KAAlarm::MAIN__ALARM:
 				mMainExpired = false;
-				alTime.set(data.dateTime, mStartDateTime.isDateOnly());
+				alTime = data.dateTime;
+				alTime.setDateOnly(mStartDateTime.isDateOnly());
 				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime())
 				{
 					mRepeatInterval = data.alarm->snoozeTime();   // values may be adjusted in setRecurrence()
@@ -409,12 +416,14 @@ void KAEvent::set(const Event* event)
 			case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:
 			case KAAlarm::DEFERRED_DATE__ALARM:
 				mDeferral = (data.type == KAAlarm::DEFERRED_REMINDER_DATE__ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
-				mDeferralTime.set(data.dateTime, false);
+				mDeferralTime = data.dateTime;
+				mDeferralTime.setDateOnly(true);
+#warning Fix KDE 3 version
 				break;
 			case KAAlarm::DEFERRED_REMINDER_TIME__ALARM:
 			case KAAlarm::DEFERRED_TIME__ALARM:
 				mDeferral = (data.type == KAAlarm::DEFERRED_REMINDER_TIME__ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
-				mDeferralTime.set(data.dateTime);
+				mDeferralTime = data.dateTime;
 				break;
 			case KAAlarm::DISPLAYING__ALARM:
 			{
@@ -422,7 +431,8 @@ void KAEvent::set(const Event* event)
 				mDisplayingFlags = data.displayingFlags;
 				bool dateOnly = (mDisplayingFlags & DEFERRAL) ? !(mDisplayingFlags & TIMED_FLAG)
 				              : mStartDateTime.isDateOnly();
-				mDisplayingTime.set(data.dateTime, dateOnly);
+				mDisplayingTime = data.dateTime;
+				mDisplayingTime.setDateOnly(dateOnly);
 				alTime = mDisplayingTime;
 				break;
 			}
@@ -693,11 +703,12 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
 /******************************************************************************
  * Initialise the KAEvent with the specified parameters.
  */
-void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
+void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
                   const QFont& font, Action action, int lateCancel, int flags)
 {
 	clearRecur();
-	mStartDateTime.set(dateTime, flags & ANY_TIME);
+	mStartDateTime = dateTime;
+	mStartDateTime.setDateOnly(flags & ANY_TIME);
 	mNextMainDateTime = mStartDateTime;
 	switch (action)
 	{
@@ -757,7 +768,7 @@ void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel,
 	mLogFile = logfile;
 }
 
-void KAEvent::setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
+void KAEvent::setCommand(const KDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
 {
 	if (!logfile.isEmpty())
 		flags &= ~EXEC_IN_XTERM;
@@ -785,7 +796,7 @@ void KAEvent::setEmail(const QDate& d, const QString& from, const EmailAddressLi
 	mEmailAttachments = attachments;
 }
 
-void KAEvent::setEmail(const QDateTime& dt, const QString& from, const EmailAddressList& addresses, const QString& subject,
+void KAEvent::setEmail(const KDateTime& dt, const QString& from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
 	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags);
@@ -858,18 +869,9 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
  */
 void KAEvent::adjustStartDate(const QDate& d)
 {
-	if (mStartDateTime.isDateOnly())
-	{
-		mStartDateTime = d;
-		if (mRecurrence)
-			mRecurrence->setStartDate(d);
-	}
-	else
-	{
-		mStartDateTime.set(d, mStartDateTime.time());
-		if (mRecurrence)
-			mRecurrence->setStartDateTime(mStartDateTime.dateTime());
-	}
+	mStartDateTime.setDate(d);
+	if (mRecurrence)
+		mRecurrence->setStartDateTime(mStartDateTime);
 	mNextMainDateTime = mStartDateTime;
 }
 
@@ -887,18 +889,15 @@ DateTime KAEvent::nextDateTime(bool includeReminders) const
 	DateTime dt = mNextMainDateTime;
 	if (mRepeatCount)
 	{
-		// N.B. This is coded to avoid 32-bit integer overflow which occurs
-		//      in QDateTime::secsTo() for large enough time differences.
-		QDateTime now = QDateTime::currentDateTime();
+		KDateTime now = KDateTime::currentUtcDateTime();
 		if (now > mNextMainDateTime)
 		{
-			dt = mainEndRepeatTime();    // get the last repetition time
-			if (dt > now)
-			{
-				int repeatSecs = mRepeatInterval * 60;
-				int repetition = (mNextMainDateTime.secsTo(now) + repeatSecs - 1) / repeatSecs;
+			// Find the next repetition >= current date/time
+#warning Should this be > current date/time?
+			int repeatSecs = mRepeatInterval * 60;
+			qint64 repetition = (mNextMainDateTime.secsTo_long(now) + repeatSecs - 1) / repeatSecs;
+			if (repetition <= mRepeatCount)
 				dt = mNextMainDateTime.addSecs(repetition * repeatSecs);
-			}
 		}
 	}
 	if (mDeferral > 0
@@ -1035,7 +1034,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	 * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
 	 * an absolute time.
 	 */
-	ev->setDtStart(mStartDateTime.dateTime());
+	ev->setDtStart(mStartDateTime.effectiveKDateTime());
 	ev->setFloats(false);
 	ev->setHasEndDate(false);
 
@@ -1056,13 +1055,13 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	{
 		DateTime dtl;
 		if (mArchiveRepeatAtLogin)
-			dtl = mStartDateTime.dateTime().addDays(-1);
+			dtl = mStartDateTime.effectiveKDateTime().addDays(-1);
 		else if (mAtLoginDateTime.isValid())
 			dtl = mAtLoginDateTime;
 		else if (mStartDateTime.isDateOnly())
-			dtl = QDate::currentDate().addDays(-1);
+			dtl = DateTime(QDate::currentDate().addDays(-1), mStartDateTime.timeSpec());
 		else
-			dtl = QDateTime::currentDateTime();
+			dtl = KDateTime::currentUtcDateTime();
 		initKcalAlarm(ev, dtl, QStringList(AT_LOGIN_TYPE));
 		if (!ancillaryType  &&  dtl.isValid())
 		{
@@ -1162,7 +1161,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 Alarm* KAEvent::initKcalAlarm(Event* event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
 {
 	int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
-	                                  : mStartDateTime.dateTime().secsTo(dt.dateTime());
+	                                  : mStartDateTime.effectiveKDateTime().secsTo(dt.effectiveKDateTime());
 	return initKcalAlarm(event, startOffset, types, type);
 }
 
@@ -1464,7 +1463,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 	{
 		if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
 		{
-			if (dateTime < mNextMainDateTime.dateTime())
+			if (dateTime < mNextMainDateTime.effectiveKDateTime())
 			{
 				set_deferral(REMINDER_DEFERRAL);   // defer reminder alarm
 				mDeferralTime = dateTime;
@@ -1512,7 +1511,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 	else if (reminder)
 	{
 		// Deferring a reminder for a recurring alarm
-		if (dateTime >= mNextMainDateTime.dateTime())
+		if (dateTime >= mNextMainDateTime.effectiveKDateTime())
 			set_deferral(NO_DEFERRAL);    // (error)
 		else
 		{
@@ -1527,7 +1526,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 			set_deferral(NORMAL_DEFERRAL);
 		if (adjustRecurrence)
 		{
-			QDateTime now = QDateTime::currentDateTime();
+			KDateTime now = KDateTime::currentUtcDateTime();
 			if (mainEndRepeatTime() < now)
 			{
 				// The last repetition (if any) of the current recurrence has already passed.
@@ -1554,7 +1553,7 @@ void KAEvent::cancelDefer()
 		// Set the deferral time to be the same as the next recurrence/repetition.
 		// This prevents an immediate retriggering of the alarm.
 		if (mMainExpired
-		||  nextOccurrence(QDateTime::currentDateTime(), mDeferralTime, RETURN_REPETITION) == NO_OCCURRENCE)
+		||  nextOccurrence(KDateTime::currentUtcDateTime(), mDeferralTime, RETURN_REPETITION) == NO_OCCURRENCE)
 		{
 			// The main alarm has expired, so simply delete the deferral
 			mDeferralTime = DateTime();
@@ -1591,7 +1590,7 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 		// It's a repeated alarm. Don't allow it to be deferred past its
 		// next occurrence or repetition.
 		DateTime reminderTime;
-		QDateTime now = QDateTime::currentDateTime();
+		KDateTime now = KDateTime::currentUtcDateTime();
 		OccurType type = nextOccurrence(now, endTime, RETURN_REPETITION);
 		if (type & OCCURRENCE_REPEAT)
 			ltype = LIMIT_REPETITION;
@@ -1608,7 +1607,7 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 			ltype = LIMIT_RECURRENCE;
 	}
 	else if ((mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
-		 &&  QDateTime::currentDateTime() < mNextMainDateTime.dateTime())
+		 &&  KDateTime::currentUtcDateTime() < mNextMainDateTime.effectiveKDateTime())
 	{
 		// It's an reminder alarm. Don't allow it to be deferred past its main alarm time.
 		endTime = mNextMainDateTime;
@@ -1632,7 +1631,7 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 * saved in case their end time expires before the next login.
 * Reply = true if successful, false if alarm was not copied.
 */
-bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const QString& resourceID, const QDateTime& repeatAtLoginTime,
+bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const QString& resourceID, const KDateTime& repeatAtLoginTime,
                             bool showEdit, bool showDefer)
 {
 	if (!mDisplaying
@@ -1653,7 +1652,7 @@ bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const
 			mDisplayingDefer = showDefer;
 			mDisplayingEdit  = showEdit;
 			mDisplaying      = true;
-			mDisplayingTime  = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime();
+			mDisplayingTime  = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : KDateTime(al.dateTime());
 			switch (al.type())
 			{
 				case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
@@ -1726,9 +1725,9 @@ void KAEvent::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceI
  * If 'includeRepetitions' is true and the alarm has a simple repetition, it
  * returns true if any repetitions occur after the specified date/time.
  */
-bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions) const
+bool KAEvent::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
 {
-	QDateTime dt;
+	KDateTime dt;
 	if (checkRecur() != KARecurrence::NO_RECUR)
 	{
 		if (mRecurrence->duration() < 0)
@@ -1736,7 +1735,7 @@ bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions)
 		dt = mRecurrence->endDateTime();
 	}
 	else
-		dt = mNextMainDateTime.dateTime();
+		dt = mNextMainDateTime.effectiveKDateTime();
 	if (mStartDateTime.isDateOnly())
 	{
 		QDate pre = preDateTime.date();
@@ -1762,11 +1761,11 @@ bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions)
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  */
-KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTime& result,
+KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTime& result,
                                            KAEvent::OccurOption includeRepetitions) const
 {
 	int repeatSecs = 0;
-	QDateTime pre = preDateTime;
+	KDateTime pre = preDateTime;
 	if (includeRepetitions != IGNORE_REPETITION)
 	{
 		if (!mRepeatCount)
@@ -1785,7 +1784,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 		int remainingCount;
 		type = nextRecurrence(pre, result, remainingCount);
 	}
-	else if (pre < mNextMainDateTime.dateTime())
+	else if (pre < mNextMainDateTime.effectiveKDateTime())
 	{
 		result = mNextMainDateTime;
 		type = FIRST_OR_ONLY_OCCURRENCE;
@@ -1808,7 +1807,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 			// However, if the intervals between recurrences vary, we could possibly
 			// have missed a later recurrence, which fits the criterion, so check again.
 			DateTime dt;
-			OccurType newType = previousOccurrence(repeatDT.dateTime(), dt, false);
+			OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, false);
 			if (dt > result)
 			{
 				type = newType;
@@ -1840,11 +1839,11 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
  * last previous repetition is returned if appropriate.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
-KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, DateTime& result, bool includeRepetitions) const
+KAEvent::OccurType KAEvent::previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions) const
 {
 	if (mStartDateTime >= afterDateTime)
 	{
-		result = QDateTime();
+		result = KDateTime();
 		return NO_OCCURRENCE;     // the event starts after the specified date/time
 	}
 
@@ -1857,12 +1856,13 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 	}
 	else
 	{
-		QDateTime recurStart = mRecurrence->startDateTime();
-		QDateTime after = afterDateTime;
+		KDateTime recurStart = mRecurrence->startDateTime();
+		KDateTime after = afterDateTime;
 		if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > Preferences::startOfDay())
 			after = after.addDays(1);    // today's recurrence (if today recurs) has passed
-		QDateTime dt = mRecurrence->getPreviousDateTime(after);
-		result.set(dt, mStartDateTime.isDateOnly());
+		KDateTime dt = mRecurrence->getPreviousDateTime(after);
+		result = dt;
+		result.setDateOnly(mStartDateTime.isDateOnly());
 		if (!dt.isValid())
 			return NO_OCCURRENCE;
 		if (dt == recurStart)
@@ -1876,19 +1876,11 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
 	if (includeRepetitions  &&  mRepeatCount)
 	{
 		// Find the latest repetition which is before the specified time.
-		// N.B. This is coded to avoid 32-bit integer overflow which occurs
-		//      in QDateTime::secsTo() for large enough time differences.
 		int repeatSecs = mRepeatInterval * 60;
-		DateTime lastRepetition = result.addSecs(mRepeatCount * repeatSecs);
-		if (lastRepetition < afterDateTime)
-		{
-			result = lastRepetition;
-			return static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-		}
-		int repetition = (result.dateTime().secsTo(afterDateTime) - 1) / repeatSecs;
+		qint64 repetition = (result.effectiveKDateTime().secsTo_long(afterDateTime) - 1) / repeatSecs;
 		if (repetition > 0)
 		{
-			result = result.addSecs(repetition * repeatSecs);
+			result = result.addSecs((repetition < mRepeatCount ? repetition : mRepeatCount) * repeatSecs);
 			return static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 		}
 	}
@@ -1903,11 +1895,11 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
  * a repetition of a previous recurrence occurs after the specified date/time,
  * that previous recurrence is returned instead.
  */
-KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions)
+KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime, bool includeRepetitions)
 {
-	if (preDateTime < mNextMainDateTime.dateTime())
+	if (preDateTime < mNextMainDateTime.effectiveKDateTime())
 		return FIRST_OR_ONLY_OCCURRENCE;    // it might not be the first recurrence - tant pis
-	QDateTime pre = preDateTime;
+	KDateTime pre = preDateTime;
 	if (includeRepetitions)
 	{
 		if (!mRepeatCount)
@@ -1918,7 +1910,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
 
 	DateTime dt;
 	OccurType type;
-	if (pre < mNextMainDateTime.dateTime())
+	if (pre < mNextMainDateTime.effectiveKDateTime())
 	{
 		dt = mNextMainDateTime;
 		type = FIRST_OR_ONLY_OCCURRENCE;   // may not actually be the first occurrence
@@ -1954,7 +1946,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
 	else
 		return NO_OCCURRENCE;
 
-	if (includeRepetitions  &&  dt.dateTime() <= preDateTime)
+	if (includeRepetitions  &&  dt.effectiveKDateTime() <= preDateTime)
 	{
 		// The next occurrence is a simple repetition.
 		type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
@@ -1974,15 +1966,16 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime, bool
  * 'result' = date/time of next occurrence, or invalid date/time if none.
  * 'remainingCount' = number of repetitions due, including the next occurrence.
  */
-KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTime& result, int& remainingCount) const
+KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTime& result, int& remainingCount) const
 {
-	QDateTime recurStart = mRecurrence->startDateTime();
-	QDateTime pre = preDateTime;
+	KDateTime recurStart = mRecurrence->startDateTime();
+	KDateTime pre = preDateTime;
 	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::startOfDay())
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 	remainingCount = 0;
-	QDateTime dt = mRecurrence->getNextDateTime(pre);
-	result.set(dt, mStartDateTime.isDateOnly());
+	KDateTime dt = mRecurrence->getNextDateTime(pre);
+	result = dt;
+	result.setDateOnly(mStartDateTime.isDateOnly());
 	if (!dt.isValid())
 		return NO_OCCURRENCE;
 	if (dt == recurStart)
@@ -2080,7 +2073,7 @@ void KAEvent::setFirstRecurrence()
 		case KARecurrence::MONTHLY_DAY:
 			break;
 	}
-	QDateTime recurStart = mRecurrence->startDateTime();
+	KDateTime recurStart = mRecurrence->startDateTime();
 	if (mRecurrence->recursOn(recurStart.date()))
 		return;           // it already recurs on the start date
 
@@ -2089,12 +2082,12 @@ void KAEvent::setFirstRecurrence()
 	mRecurrence->setFrequency(1);
 	int remainingCount;
 	DateTime next;
-	nextRecurrence(mNextMainDateTime.dateTime(), next, remainingCount);
+	nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next, remainingCount);
 	if (!next.isValid())
 		mRecurrence->setStartDateTime(recurStart);   // reinstate the old value
 	else
 	{
-		mRecurrence->setStartDateTime(next.dateTime());
+		mRecurrence->setStartDateTime(next.effectiveKDateTime());
 		mStartDateTime = mNextMainDateTime = next;
 		mUpdated = true;
 	}
@@ -2112,11 +2105,11 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 	if (recurrence.doesRecur())
 	{
 		mRecurrence = new KARecurrence(recurrence);
-		mRecurrence->setStartDateTime(mStartDateTime.dateTime());
+		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
 		mRecurrence->setFloats(mStartDateTime.isDateOnly());
 		mRemainingRecurrences = mRecurrence->duration();
 		if (mRemainingRecurrences > 0  &&  !isTemplate())
-			mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.dateTime()) - 1;
+			mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.effectiveKDateTime()) - 1;
 	}
 	else
 	{
@@ -2164,7 +2157,7 @@ bool KAEvent::setRepetition(int interval, int count)
  *    end   = end date/time (invalid to use 'count' instead).
  * Reply = false if no recurrence was set up.
  */
-bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
+bool KAEvent::setRecurMinutely(int freq, int count, const KDateTime& end)
 {
 	return setRecur(RecurrenceRule::rMinutely, freq, count, end);
 }
@@ -2182,7 +2175,7 @@ bool KAEvent::setRecurMinutely(int freq, int count, const QDateTime& end)
  */
 bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rDaily, freq, count, QDateTime(end)))
+	if (!setRecur(RecurrenceRule::rDaily, freq, count, end))
 		return false;
 	int n = 0;
 	for (int i = 0;  i < 7;  ++i)
@@ -2208,7 +2201,7 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QD
  */
 bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rWeekly, freq, count, QDateTime(end)))
+	if (!setRecur(RecurrenceRule::rWeekly, freq, count, end))
 		return false;
 	mRecurrence->addWeeklyDays(days);
 	return true;
@@ -2227,7 +2220,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  */
 bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
 	for (int i = 0, end = days.count();  i < end;  ++i)
 		mRecurrence->addMonthlyDate(days[i]);
@@ -2248,7 +2241,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
  */
 bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, QDateTime(end)))
+	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
 		return false;
 	for (int i = 0, end = posns.count();  i < end;  ++i)
 		mRecurrence->addMonthlyPos(posns[i].weeknum, posns[i].days);
@@ -2271,7 +2264,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
  */
 bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end), feb29))
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
 		return false;
 	for (int i = 0, end = months.count();  i < end;  ++i)
 		mRecurrence->addYearlyMonth(months[i]);
@@ -2295,7 +2288,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, 
  */
 bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, QDateTime(end)))
+	if (!setRecur(RecurrenceRule::rYearly, freq, count, end))
 		return false;
 	int i = 0;
 	int iend;
@@ -2316,7 +2309,11 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const 
  *    end   = end date/time (invalid to use 'count' instead).
  * Reply = false if no recurrence was set up.
  */
-bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDateTime& end, KARecurrence::Feb29Type feb29)
+bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate& end, KARecurrence::Feb29Type feb29)
+{
+	return setRecur(recurType, freq, count, KDateTime(end, mNextMainDateTime.timeSpec()), feb29);
+}
+bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type feb29)
 {
 	if (count >= -1  &&  (count || end.date().isValid()))
 	{
@@ -2495,7 +2492,7 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 				&&  !(data.type & KAAlarm::TIMED_DEFERRAL_FLAG))
 				{
 					// Date-only deferral alarm, so adjust its time
-					QDateTime altime = data.alarm->time();
+					KDateTime altime = data.alarm->time();
 					altime.setTime(startOfDay);
 					deferralOffset = data.alarm->startOffset().asSeconds();
 					newDeferralOffset = event->dtStart().secsTo(altime);
@@ -2703,7 +2700,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				{
 					// The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
 					// Summer time was ignored when converting to UTC.
-					QDateTime dt = alarm->time();
+					KDateTime dt = alarm->time();
 					time_t t = dt.toTime_t();
 					struct tm* dtm = localtime(&t);
 					if (dtm->tm_isdst)
@@ -2730,7 +2727,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			 */
 			if (KCalEvent::status(event) == KCalEvent::ARCHIVED)
 				event->setCreated(event->dtEnd());
-			QDateTime start = event->dtStart();
+			KDateTime start = event->dtStart();
 			if (event->doesFloat())
 			{
 				event->setFloats(false);
@@ -2743,7 +2740,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			for (alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
 				Alarm* alarm = *alit;
-				QDateTime dt = alarm->time();
+				KDateTime dt = alarm->time();
 				alarm->setStartOffset(start.secsTo(dt));
 			}
 
@@ -2768,7 +2765,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					Alarm* alarm = event->newAlarm();
 					alarm->setEnabled(true);
 					alarm->setAudioAlarm();
-					QDateTime dt = event->dtStart();    // default
+					KDateTime dt = event->dtStart();    // default
 
 					// Parse and order the alarms to know which one's date/time to use
 					AlarmMap alarmMap;
@@ -2895,12 +2892,10 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				converted = true;
 			}
 
-#ifdef USE_TIMEZONE
 			/*
 			 * Convert from local time to the user's timezone.
 			 */
 #warning Check whether we need to convert local time - or is it automatic?
-#endif
 		}
 
 		if (addLateCancel)

@@ -52,17 +52,17 @@ class KARecurrence : public KCal::Recurrence
 		KARecurrence(const KCal::Recurrence& r) : KCal::Recurrence(r) { fix(); }
 		KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
 		bool        set(const QString& icalRRULE);
-		bool        set(Type t, int freq, int count, const DateTime& start, const QDateTime& end)
+		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end)
 		                        { return set(t, freq, count, -1, start, end); }
-		bool        set(Type t, int freq, int count, const DateTime& start, const QDateTime& end, Feb29Type f29)
+		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
 		                        { return set(t, freq, count, f29, start, end); }
-		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const DateTime& start, const QDateTime& end)
+		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
 		                        { return init(t, freq, count, -1, start, end); }
-		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const DateTime& start, const QDateTime& end, Feb29Type f29)
+		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
 		                        { return init(t, freq, count, f29, start, end); }
 		void        fix();
 		void        writeRecurrence(KCal::Recurrence&) const;
-		QDateTime   endDateTime() const;
+		KDateTime   endDateTime() const;
 		QDate       endDate() const;
 		bool        recursOn(const QDate&) const;
 		int         longestInterval() const;
@@ -74,8 +74,8 @@ class KARecurrence : public KCal::Recurrence
 		static void setDefaultFeb29Type(Feb29Type t)  { mDefaultFeb29 = t; }
 
 	private:
-		bool        set(Type, int freq, int count, int feb29Type, const DateTime& start, const QDateTime& end);
-		bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const DateTime& start, const QDateTime& end);
+		bool        set(Type, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
+		bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
 		int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;
 		int         longestWeeklyInterval(const QBitArray& days, int frequency);
 

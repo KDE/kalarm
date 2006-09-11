@@ -157,7 +157,7 @@ void AlarmListView::populate()
 	kDebug(5950) << "AlarmListView::populate()\n";
 	KAEvent event;
 	KCal::Event::List events;
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime();
 	if (mShowArchived)
 	{
 		events = AlarmCalendar::resources()->events(KCalEvent::ARCHIVED);
@@ -243,7 +243,7 @@ void AlarmListView::updateTimeToAlarms(bool forceDisplay)
 {
 	if (forceDisplay  ||  columnWidth(mColumn[TIME_TO_COLUMN]))
 	{
-		QDateTime now = QDateTime::currentDateTime();
+		KDateTime now = KDateTime::currentUtcDateTime();
 		for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
 			item->updateTimeToAlarm(now, forceDisplay);
 	}
@@ -255,7 +255,7 @@ void AlarmListView::updateTimeToAlarms(bool forceDisplay)
 */
 void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
 {
-	QDateTime now = QDateTime::currentDateTime();
+	KDateTime now = KDateTime::currentUtcDateTime();
 	for (int i = 0, end = mInstanceList.count();  i < end;  ++i)
 		static_cast<AlarmListView*>(mInstanceList[i])->addEntry(event, now, true, (mInstanceList[i] == view));
 }
@@ -263,7 +263,7 @@ void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
 /******************************************************************************
 *  Add a new item to the list.
 */
-AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime& now, bool setSize, bool reselect)
+AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const KDateTime& now, bool setSize, bool reselect)
 {
 	if (!mShowArchived  &&  event.expired())
 		return 0;
@@ -276,7 +276,7 @@ AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const QDateTime
 */
 EventListViewItemBase* AlarmListView::createItem(const KAEvent& event)
 {
-	return new AlarmListViewItem(this, event, QDateTime::currentDateTime());
+	return new AlarmListViewItem(this, event, KDateTime::currentUtcDateTime());
 }
 
 /******************************************************************************
@@ -359,10 +359,7 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		// Create a calendar object containing all the currently selected alarms
 		kDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
 		mMousePressed = false;
-		KCal::CalendarLocal cal(Preferences::timeZone(true));
-#ifndef USE_TIMEZONE
-		cal.setLocalTime();    // write out using local time (i.e. no time zone)
-#endif
+		KCal::CalendarLocal cal(Preferences::timeSpec(true));
 		QList<EventListViewItemBase*> items = selectedItems();
 		if (items.isEmpty())
 			return;
@@ -437,7 +434,7 @@ bool AlarmListView::event(QEvent *e)
 int AlarmListViewItem::mTimeHourPos = -2;
 int AlarmListViewItem::mDigitWidth  = -1;
 
-AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const QDateTime& now)
+AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const KDateTime& now)
 	: EventListViewItemBase(parent, event),
 	  mMessageTruncated(false),
 	  mTimeToAlarmShown(false)
@@ -453,7 +450,7 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 		setText(parent->column(AlarmListView::TIME_TO_COLUMN), tta);
 		mTimeToAlarmShown = !tta.isNull();
 	}
-	QTime t = dateTime.time();
+	QTime t = dateTime.effectiveTime();
 	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
 	                                           t.hour(), t.minute());
 
@@ -521,7 +518,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 	if (!dateTime.isDateOnly())
 	{
 		dateTimeText += QLatin1Char(' ');
-		QString time = locale->formatTime(dateTime.time());
+		QString time = locale->formatTime(dateTime.effectiveTime());
 		if (mTimeHourPos == -2)
 		{
 			// Initialise the position of the hour within the time string, if leading
@@ -546,7 +543,7 @@ QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 /******************************************************************************
 *  Return the time-to-alarm text.
 */
-QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
+QString AlarmListViewItem::timeToAlarmText(const KDateTime& now) const
 {
 	if (event().expired())
 		return QString();
@@ -556,7 +553,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 		int days = now.date().daysTo(dateTime.date());
 		return i18nc("n days", " %1d ", days);
 	}
-	int mins = (now.secsTo(dateTime.dateTime()) + 59) / 60;
+	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 0)
 		return QString();
 	char minutes[3] = "00";
@@ -574,7 +571,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 *  The updated value is only displayed if it is different from the existing value,
 *  or if 'forceDisplay' is true.
 */
-void AlarmListViewItem::updateTimeToAlarm(const QDateTime& now, bool forceDisplay)
+void AlarmListViewItem::updateTimeToAlarm(const KDateTime& now, bool forceDisplay)
 {
 	if (event().expired())
 	{

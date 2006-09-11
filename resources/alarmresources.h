@@ -24,6 +24,7 @@
 #ifndef ALARMRESOURCES_H
 #define ALARMRESOURCES_H
 
+#include <kdatetime.h>
 #include <kresources/manager.h>
 
 #include "alarmresource.h"
@@ -56,7 +57,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		 *  @return The alarm calendar resources instance, or 0 if either a reserved
 		 *          file name was used or it has already been created.
 		 */
-		static AlarmResources* create(const QString& timeZoneId, bool activeOnly = false);
+		static AlarmResources* create(const KDateTime::Spec& timeSpec, bool activeOnly = false);
 		static QString creationError()   { return mConstructionError; }
 		virtual ~AlarmResources();
 		/** Return the alarm calendar resources instance.
@@ -131,10 +132,10 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		void setInhibitSave(bool);
     /**
      * Reloads all incidences from all resources.
-     * @par tz The timezone to set.
      * @return success or failure
      */
-    virtual bool reload(const QString& tz);
+    virtual bool reload();
+    virtual KDE_DEPRECATED bool reload(const QString& tz);
 
     /**
        Clear out the current Calendar, freeing all used memory etc.
@@ -309,11 +310,11 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		   Return an unfiltered list of all Events which occur on the given
 		   timestamp.
 
-		   @param qdt request unfiltered Event list for this QDateTime only.
+		   @param dt request unfiltered Event list for this KDateTime only.
 		   @return the list of unfiltered Events occurring on the specified
 		   timestamp.
 		*/
-		virtual KCal::Event::List rawEventsForDate(const QDateTime& qdt);
+		virtual KCal::Event::List rawEventsForDate(const KDateTime& dt);
 
 		/**
 		   Return an unfiltered list of all Events occurring within a date range.
@@ -361,15 +362,15 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		   @param to is the ending timestamp.
 		   @return the list of Alarms for the for the specified time range.
 		*/
-		virtual KCal::Alarm::List alarms(const QDateTime& from, const QDateTime& to);
+		virtual KCal::Alarm::List alarms(const KDateTime& from, const KDateTime& to);
 
 		/**
 		   Return a list of Alarms that occur before the specified timestamp.
 
 		   @param to is the ending timestamp.
-		   @return the list of Alarms occurring before the specified QDateTime.
+		   @return the list of Alarms occurring before the specified KDateTime.
 		*/
-		KCal::Alarm::List alarmsTo(const QDateTime& to);
+		KCal::Alarm::List alarmsTo(const KDateTime& to);
 
 		/**
 		 * Set the viewing time zone, which requires that all resources are saved,
@@ -415,16 +416,10 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		void resourceDeleted(AlarmResource*);
 
 		/**
-		   Let CalendarResource subclasses set the Time Zone ID.
-		
-		   First parameter is a string containing a Time Zone ID, which is
-		   assumed to be valid. On some systems, /usr/share/zoneinfo/zone.tab
-		   may be available for reference.\n
-		   @e Example: "Europe/Berlin"
-		
-		   If @p timeZoneId is empty, the reources are set to local time.
+		   Let CalendarResource subclasses set the time specification
+		   (time zone, etc.)
 		*/
-		virtual void doSetTimeZoneId(const QString& timeZoneId);
+		virtual void doSetTimeSpec(const KDateTime::Spec& timeSpec);
 
     /**
        Increment the number of times this Resource has been changed.
@@ -471,7 +466,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		void slotResourceChanged(ResourceCalendar*);
 
 	private:
-		AlarmResources(const QString& timeZoneId, bool activeOnly);
+		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly);
 		AlarmResource* addDefaultResource(const KConfig*, AlarmResource::Type);
 		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);

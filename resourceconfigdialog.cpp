@@ -37,7 +37,7 @@
 
 using namespace KRES;
 
-ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* resource, const char *name )
+ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* resource )
   : KDialog( parent ), mResource( resource )
 {
   Factory *factory = Factory::self(QLatin1String("alarms"));

@@ -84,7 +84,7 @@ bool AlarmCalendar::initialiseCalendars()
 	QString displayCal = KStandardDirs::locateLocal("appdata", displayCalendarName);
 	AlarmResources::setDebugArea(5951);
 	AlarmResources::setReservedFile(displayCal);
-	AlarmResources* resources = AlarmResources::create(Preferences::timeZone(true), false);
+	AlarmResources* resources = AlarmResources::create(Preferences::timeSpec(true), false);
 	if (!resources)
 	{
 		if (!AlarmResources::creationError().isEmpty())
@@ -210,10 +210,7 @@ bool AlarmCalendar::open()
 
 		kDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyUrl() << ")\n";
 		if (!mCalendar)
-			mCalendar = new CalendarLocal(Preferences::timeZone(true));
-#ifndef USE_TIMEZONE
-		mCalendar->setLocalTime();    // write out using local time (i.e. no time zone)
-#endif
+			mCalendar = new CalendarLocal(Preferences::timeSpec(true));
 
 		// Check for file's existence, assuming that it does exist when uncertain,
 		// to avoid overwriting it.
@@ -270,12 +267,8 @@ int AlarmCalendar::load()
 			return -1;
 		}
 		kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-		calendar->setTimeZoneId(Preferences::timeZone(true));
-		bool loaded = calendar->load(tmpFile);
-#ifndef USE_TIMEZONE
-		calendar->setLocalTime();                 // write using local time (i.e. no time zone)
-#endif
-		if (!loaded)
+		calendar->setTimeSpec(Preferences::timeSpec(true));
+		if (!calendar->load(tmpFile))
 		{
 			// Check if the file is zero length
 			KIO::NetAccess::removeTempFile(tmpFile);
@@ -311,7 +304,7 @@ bool AlarmCalendar::reload()
 	if (mCalType == RESOURCES)
 	{
 		kDebug(5950) << "AlarmCalendar::reload(RESOURCES)" << endl;
-		return mCalendar->reload(Preferences::timeZone());
+		return mCalendar->reload();
 	}
 	else
 	{
@@ -514,7 +507,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 
 	// Read the calendar and add its alarms to the current calendars
-	CalendarLocal cal(Preferences::timeZone(true));
+	CalendarLocal cal(Preferences::timeSpec(true));
 	success = cal.load(filename);
 	if (!success)
 	{
@@ -974,13 +967,13 @@ KCal::Event::List AlarmCalendar::events(KCalEvent::Status type)
 /******************************************************************************
 * Return all events which have alarms falling within the specified time range.
 */
-Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTime& to, KCalEvent::Status type)
+Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status type)
 {
-	kDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from.toString() << " - " << to.toString() << ")\n";
+	kDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from << " - " << to << ")\n";
 	Event::List evnts;
 	if (!mCalendar)
 		return evnts;
-	QDateTime dt;
+	KDateTime dt;
 	Event::List allEvents = mCalendar->rawEvents();
 	for (int i = 0, end = allEvents.count();  i < end;  ++i)
 	{
@@ -1018,7 +1011,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 							offset = alarm->endOffset().asSeconds() + endOffset;
 						}
 						// Adjust the 'from' date/time and find the next recurrence at or after it
-						QDateTime pre = from.addSecs(-offset - 1);
+						KDateTime pre = from.addSecs(-offset - 1);
 						if (e->doesFloat()  &&  pre.time() < Preferences::startOfDay())
 							pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 						dt = e->recurrence()->getNextDateTime(pre);
@@ -1032,7 +1025,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 				if (dt >= from  &&  dt <= to)
 				{
 					kDebug(5950) << "AlarmCalendar::events() '" << e->summary()
-					              << "': " << dt.toString() << endl;
+					              << "': " << dt << endl;
 					evnts.append(e);
 					break;
 				}

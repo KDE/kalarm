@@ -41,7 +41,7 @@ KARecurrence::Feb29Type KARecurrence::mDefaultFeb29 = KARecurrence::FEB29_FEB29;
 *  Only a restricted subset of recurrence types is allowed.
 *  Reply = true if successful.
 */
-bool KARecurrence::set(Type recurType, int freq, int count, int f29, const DateTime& start, const QDateTime& end)
+bool KARecurrence::set(Type recurType, int freq, int count, int f29, const KDateTime& start, const KDateTime& end)
 {
 	mCachedType = -1;
 	RecurrenceRule::PeriodType rrtype;
@@ -84,8 +84,8 @@ bool KARecurrence::set(Type recurType, int freq, int count, int f29, const DateT
 *  Initialise a KARecurrence from recurrence parameters.
 *  Reply = true if successful.
 */
-bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int count, int f29, const DateTime& start,
-                        const QDateTime& end)
+bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int count, int f29, const KDateTime& start,
+                        const KDateTime& end)
 {
 	mCachedType = -1;
 	Feb29Type feb29Type = (f29 == -1) ? mDefaultFeb29 : static_cast<Feb29Type>(f29);
@@ -117,7 +117,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		setEndDate(end.date());
 	else
 		setEndDateTime(end);
-	QDateTime startdt = start.dateTime();
+	KDateTime startdt = start;
 	if (recurType == RecurrenceRule::rYearly
 	&&  feb29Type == FEB29_FEB28  ||  feb29Type == FEB29_MAR1)
 	{
@@ -433,7 +433,7 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 						 * all. In that case, retain it so that the February 29th characteristic
 						 * is not lost should the user later change the recurrence count.
 						 */
-						QDateTime end = endDateTime();
+						KDateTime end = endDateTime();
 kDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString()<<endl;
 						int count1 = rrule1->durationTo(end)
 						             - (rrule1->recursOn(startDate()) ? 0 : 1);
@@ -461,7 +461,7 @@ kDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString()<<endl;
 /******************************************************************************
 * Return the date/time of the last recurrence.
 */
-QDateTime KARecurrence::endDateTime() const
+KDateTime KARecurrence::endDateTime() const
 {
 	if (mFeb29Type == FEB29_FEB29  ||  duration() <= 1)
 	{
@@ -480,7 +480,7 @@ QDateTime KARecurrence::endDateTime() const
 	 */
 	RecurrenceRule* rrule = new RecurrenceRule();
 	rrule->setRecurrenceType(RecurrenceRule::rYearly);
-	QDateTime dt = startDateTime();
+	KDateTime dt = startDateTime();
 	QDate d = dt.date();
 	switch (d.day())
 	{
@@ -531,7 +531,7 @@ QDateTime KARecurrence::endDateTime() const
 */
 QDate KARecurrence::endDate() const
 {
-	QDateTime end = endDateTime();
+	KDateTime end = endDateTime();
 	return end.isValid() ? end.date() : QDate();
 }
 
@@ -585,8 +585,8 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 	if (!count1  ||  !count2)
 		count1 = count2 = 0;
 	// Get the two rules sorted by end date.
-	QDateTime end1 = rrule1->endDt();
-	QDateTime end2 = rrule2->endDt();
+	KDateTime end1 = rrule1->endDt();
+	KDateTime end2 = rrule2->endDt();
 	if (end1.date() == end2.date())
 	{
 		end = end1.date();
@@ -600,7 +600,7 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 		// Swap the two rules to make rr1 have the earlier end date
 		rr1 = rrule2;
 		rr2 = rrule1;
-		QDateTime e = end1;
+		KDateTime e = end1;
 		end1 = end2;
 		end2 = e;
 	}
@@ -613,7 +613,8 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 	// Get the date of the next occurrence after the end of the earlier ending rule
 	RecurrenceRule rr(*rr1);
 	rr.setDuration(-1);
-	QDateTime next1(rr.getNextDate(end1).date());
+	KDateTime next1(rr.getNextDate(end1));
+	next1.setDateOnly(true);
 	if (!next1.isValid())
 		end = end1.date();
 	else
