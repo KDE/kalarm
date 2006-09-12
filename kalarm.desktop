@@ -15,6 +15,7 @@ Name[sv]=Kalarm
 Name[ta]=Kஅலாரம்
 Name[th]=เตือนการนัดหมาย - K
 Name[ven]=Alamu ya K
+Name[zh_TW]=KAlarm 鬧鐘
 Type=Application
 Exec=kalarm -caption "%c" %i
 Icon=kalarm
