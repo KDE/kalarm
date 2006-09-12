@@ -372,15 +372,6 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		*/
 		KCal::Alarm::List alarmsTo(const KDateTime& to);
 
-		/**
-		 * Set the viewing time zone, which requires that all resources are saved,
-		 * and then reloaded such that the event times are re-interpreted in the new
-		 * timezone. Note that the absolute times of events do not change with this.
-		 * If you want to change the times of the contents of the resources, use
-		 * setTimeZoneId
-		 */
-		virtual void setTimeZoneIdViewOnly(const QString& tz)  { reload(tz); }
-
 		static void setDebugArea(int area)   { AlarmResource::setDebugArea(area); }
 
   signals:
