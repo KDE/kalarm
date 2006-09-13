@@ -135,10 +135,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		}
 		mFeb29Type = feb29Type;
 	}
-	if (dateOnly)
-		setStartDate(startdt.date());
-	else
-		setStartDateTime(startdt);
+	setStartDateTime(startdt);   // sets recurrence floating if date-only
 	return true;
 }
 
