@@ -64,7 +64,7 @@ class KARecurrence : public KCal::Recurrence
 		void        writeRecurrence(KCal::Recurrence&) const;
 		KDateTime   endDateTime() const;
 		QDate       endDate() const;
-		bool        recursOn(const QDate&) const;
+		bool        recursOn(const QDate&, const KDateTime::Spec&) const;
 		int         longestInterval() const;
 		Type        type() const;
 		static Type type(const KCal::RecurrenceRule*);

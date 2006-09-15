@@ -433,13 +433,13 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 						KDateTime end = endDateTime();
 kDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString()<<endl;
 						int count1 = rrule1->durationTo(end)
-						             - (rrule1->recursOn(startDate()) ? 0 : 1);
+						             - (rrule1->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
 						if (count1 > 0)
 							rrule1->setDuration(count1);
 						else
 							rrule1->setEndDt(startDateTime());
 						int count2 = rrule2->durationTo(end)
-						             - (rrule2->recursOn(startDate()) ? 0 : 1);
+						             - (rrule2->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
 						if (count2 > 0)
 							rrule2->setDuration(count2);
 						else
@@ -536,9 +536,9 @@ QDate KARecurrence::endDate() const
 * Return whether the event will recur on the specified date.
 * The start date only returns true if it matches the recurrence rules.
 */
-bool KARecurrence::recursOn(const QDate& dt) const
+bool KARecurrence::recursOn(const QDate& dt, const KDateTime::Spec& timeSpec) const
 {
-	if (!Recurrence::recursOn(dt))
+	if (!Recurrence::recursOn(dt, timeSpec))
 		return false;
 	if (dt != startDate())
 		return true;
@@ -548,7 +548,7 @@ bool KARecurrence::recursOn(const QDate& dt) const
 		return true;
 	RecurrenceRule::List rulelist = rRules();
 	for (RecurrenceRule::List::ConstIterator rr = rulelist.begin();  rr != rulelist.end();  ++rr)
-		if ((*rr)->recursOn(dt))
+		if ((*rr)->recursOn(dt, timeSpec))
 			return true;
 	DateTimeList dtlist = rDateTimes();
 	for (DateTimeList::ConstIterator rdt = dtlist.begin();  rdt != dtlist.end();  ++rdt)

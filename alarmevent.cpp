@@ -2074,7 +2074,7 @@ void KAEvent::setFirstRecurrence()
 			break;
 	}
 	KDateTime recurStart = mRecurrence->startDateTime();
-	if (mRecurrence->recursOn(recurStart.date()))
+	if (mRecurrence->recursOn(recurStart.date(), recurStart.timeSpec()))
 		return;           // it already recurs on the start date
 
 	// Set the frequency to 1 to find the first possible occurrence
