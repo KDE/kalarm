@@ -408,25 +408,25 @@ void MainWindow::initActions()
 
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), actions, QLatin1String("showAlarmTimes"));
 	mActionShowTime->setShortcut(Qt::CTRL + Qt::Key_M);
-	mActionShowTime->setCheckedState(i18n("Hide &Alarm Times"));
+	mActionShowTime->setCheckedState(KGuiItem(i18n("Hide &Alarm Times")));
 	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
 	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), actions, QLatin1String("showTimeToAlarms"));
 	mActionShowTimeTo->setShortcut(Qt::CTRL + Qt::Key_I);
-	mActionShowTimeTo->setCheckedState(i18n("Hide Time t&o Alarms"));
+	mActionShowTimeTo->setCheckedState(KGuiItem(i18n("Hide Time t&o Alarms")));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
 	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), actions, QLatin1String("showArchivedAlarms"));
 	mActionShowArchived->setShortcut(Qt::CTRL + Qt::Key_P);
-	mActionShowArchived->setCheckedState(i18n_e_HideArchivedAlarms());
+	mActionShowArchived->setCheckedState(KGuiItem(i18n_e_HideArchivedAlarms()));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), actions, QLatin1String("showInSystemTray"));
-	mActionToggleTrayIcon->setCheckedState(i18n("Hide From System &Tray"));
+	mActionToggleTrayIcon->setCheckedState(KGuiItem(i18n("Hide From System &Tray")));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
 	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), actions, QLatin1String("showResources"));
-	mActionToggleResourceSel->setCheckedState(i18n("Hide &Resources"));
+	mActionToggleResourceSel->setCheckedState(KGuiItem(i18n("Hide &Resources")));
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
 	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), actions, QLatin1String("importAlarms"));

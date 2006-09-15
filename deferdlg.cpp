@@ -45,7 +45,7 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 {
 	setCaption( caption );
 	setButtons( Ok|Cancel|User1 );
-	setButtonGuiItem( User1, i18n("Cancel &Deferral") );
+	setButtonGuiItem( User1, KGuiItem(i18n("Cancel &Deferral")) );
 	if (!cancelButton)
 		showButton(User1, false);
 

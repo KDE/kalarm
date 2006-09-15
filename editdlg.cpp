@@ -1599,7 +1599,7 @@ void EditAlarmDlg::slotTry()
 		{
 			if (!checkEmailData()
 			||  KMessageBox::warningContinueCancel(this, i18n("Do you really want to send the email now to the specified recipient(s)?"),
-			                                       i18n("Confirm Email"), i18n("&Send")) != KMessageBox::Continue)
+			                                       i18n("Confirm Email"), KGuiItem(i18n("&Send"))) != KMessageBox::Continue)
 				return;
 		}
 		KAEvent event;

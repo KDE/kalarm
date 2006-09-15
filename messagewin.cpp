@@ -1318,7 +1318,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		{
 			// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 			if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
-			                                    i18n("Acknowledge Alarm"), i18n("&Acknowledge"), KStdGuiItem::cancel())
+			                                    i18n("Acknowledge Alarm"), KGuiItem(i18n("&Acknowledge")), KStdGuiItem::cancel())
 			    != KMessageBox::Yes)
 			{
 				ce->ignore();
