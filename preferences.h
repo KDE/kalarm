@@ -91,7 +91,6 @@ class Preferences : public QObject
 		static QColor            disabledColour()                 { return mDisabledColour; }
 		static QColor            archivedColour()                 { return mArchivedColour; }
 		static int               archivedKeepDays()               { return mArchivedKeepDays; }
-		static bool              defaultSound()                   { return mDefaultSound; }
 		static SoundPicker::Type defaultSoundType()               { return mDefaultSoundType; }
 		static const QString&    defaultSoundFile()               { return mDefaultSoundFile; }
 		static float             defaultSoundVolume()             { return mDefaultSoundVolume; }
@@ -157,7 +156,6 @@ class Preferences : public QObject
 		static const int                        default_defaultLateCancel;
 		static const bool                       default_defaultAutoClose;
 		static const bool                       default_defaultCopyToKOrganizer;
-		static const bool                       default_defaultSound;
 		static const SoundPicker::Type          default_defaultSoundType;
 		static const bool                       default_defaultSoundRepeat;
 		static const bool                       default_defaultConfirmAck;
@@ -237,7 +235,6 @@ class Preferences : public QObject
 		static int                 mDefaultLateCancel;
 		static bool                mDefaultAutoClose;
 		static bool                mDefaultCopyToKOrganizer;
-		static bool                mDefaultSound;
 		static SoundPicker::Type   mDefaultSoundType;
 		static bool                mDefaultSoundRepeat;
 		static bool                mDefaultConfirmAck;

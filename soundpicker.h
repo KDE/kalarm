@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,11 +25,9 @@
 #include <QString>
 #include <kurl.h>
 
-class ButtonGroup;
-class QAbstractButton;
-class CheckBox;
+class KHBox;
+class ComboBox;
 class PushButton;
-class RadioButton;
 
 
 class SoundPicker : public QFrame
@@ -37,18 +35,18 @@ class SoundPicker : public QFrame
 		Q_OBJECT
 	public:
 		/** Sound options which can be selected for when the alarm is displayed.
+		 *  @li NONE      - silence.
 		 *  @li BEEP      - a beep will be sounded.
-		 *  @li SPEAK     - the message will be spoken.
 		 *  @li PLAY_FILE - a sound file will be played.
+		 *  @li SPEAK     - the message text will be spoken.
 		 */
-		enum Type { BEEP = 1, SPEAK, PLAY_FILE };
+		enum Type { NONE = 0, BEEP, PLAY_FILE, SPEAK };
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
 		SoundPicker(QWidget* parent);
 		/** Initialises the widget's state.
-		 *  @param sound    True to enable sound.
-		 *  @param defaultType The default option to select when sound is enabled.
+		 *  @param type     The option to select.
 		 *  @param filename The full path or URL of the sound file to select. If the 'file' option is
 		 *                  not initially selected, @p filename provides the default should 'file'
 		 *                  later be selected by the user.
@@ -65,7 +63,7 @@ class SoundPicker : public QFrame
 		 *                  selected, @p repeat provides the default should 'file' later be selected by
 		 *                  the user.
 		 */
-		void           set(bool sound, Type defaultType, const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool repeat);
+		void           set(Type type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool repeat);
 		/** Returns true if the widget is read only for the user. */
 		bool           isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the widget can be changed the user.
@@ -76,14 +74,8 @@ class SoundPicker : public QFrame
 		 *  If it is to be hidden and it is currently selected, sound is turned off.
 		 */
 		void           showSpeak(bool show);
-		/** Returns true if sound is selected. */
-		bool           sound() const;
 		/** Returns the selected option. */
-		Type           type() const;
-		/** Returns true if 'beep' is selected. */
-		bool           beep() const;
-		/** Returns true if 'speak' is selected. */
-		bool           speak() const;
+		Type           sound() const;
 		/** If the 'file' option is selected, returns the URL of the chosen file.
 		 *  Otherwise returns a null string.
 		 */
@@ -112,34 +104,29 @@ class SoundPicker : public QFrame
 		 */
 		static QString browseFile(QString& initialDir, const QString& initialFile = QString());
 
-		static QString i18n_Sound();       // plain text of Sound checkbox
-		static QString i18n_s_Sound();     // text of Sound checkbox, with 'S' shortcut
-		static QString i18n_Beep();        // plain text of Beep radio button
-		static QString i18n_b_Beep();      // text of Beep radio button, with 'B' shortcut
-		static QString i18n_Speak();       // plain text of Speak radio button
-		static QString i18n_p_Speak();     // text of Speak radio button, with 'P' shortcut
-		static QString i18n_File();        // plain text of File radio button
+		static QString i18n_Sound();       // plain text of Sound label
+		static QString i18n_None();        // plain text of Beep combo box item
+		static QString i18n_Beep();        // plain text of Beep combo box item
+		static QString i18n_Speak();       // plain text of Speak combo box item
+		static QString i18n_File();        // plain text of File combo box item
 
 
 	private slots:
-		void           slotSoundToggled(bool on);
-		void           slotTypeChanged(QAbstractButton*);
+		void           slotTypeSelected(int id);
 		void           slotPickFile();
 		void           setLastType();
 
 	private:
-		CheckBox*      mCheckbox;
-		ButtonGroup*   mTypeGroup;
-		RadioButton*   mBeepRadio;
-		RadioButton*   mSpeakRadio;
-		RadioButton*   mFileRadio;
+		ComboBox*      mTypeCombo;
+		KHBox*         mTypeBox;
 		PushButton*    mFilePicker;
 		QString        mDefaultDir;
 		QString        mFile;         // sound file to play when alarm is triggered
 		float          mVolume;       // volume for file, or < 0 to not set volume
 		float          mFadeVolume;   // initial volume for file, or < 0 for no fading
 		int            mFadeSeconds;  // fade interval in seconds
-		RadioButton*   mLastButton;   // last selected sound option
+		Type           mLastType;     // last selected sound option
+		bool           mSpeakShowing; // Speak option is shown in combo box
 		bool           mRevertType;   // reverting to last selected sound option
 		bool           mRepeat;       // repeat the sound file
 		bool           mReadOnly;

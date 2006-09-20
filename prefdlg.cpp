@@ -1013,36 +1013,16 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout = new QVBoxLayout(bbox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
-	QButtonGroup* bgroup = new QButtonGroup(bbox);
 
-	mSound = new QCheckBox(SoundPicker::i18n_s_Sound(), bbox);
+	mSound = new QComboBox(bbox);
+	mSound->addItem(SoundPicker::i18n_None());         // index 0
+	mSound->addItem(SoundPicker::i18n_Beep());         // index 1
+	mSound->addItem(SoundPicker::i18n_File());         // index 2
+	if (theApp()->speechEnabled())
+		mSound->addItem(SoundPicker::i18n_Speak());  // index 3
 	mSound->setMinimumSize(mSound->sizeHint());
 	mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_Sound()).toString());
 	vlayout->addWidget(mSound, 0, Qt::AlignLeft);
-
-	box = new KHBox(bbox);
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	vlayout->addWidget(box, 0, Qt::AlignLeft);
-
-	mBeep = new QRadioButton(SoundPicker::i18n_b_Beep(), box);
-	bgroup->addButton(mBeep);
-	mBeep->setMinimumSize(mBeep->sizeHint());
-	mBeep->setWhatsThis(soundSetting.subs(SoundPicker::i18n_Beep()).subs(SoundPicker::i18n_Sound()).toString());
-	mFile = new QRadioButton(SoundPicker::i18n_File(), box);
-	bgroup->addButton(mFile);
-	mFile->setMinimumSize(mFile->sizeHint());
-	mFile->setWhatsThis(soundSetting.subs(SoundPicker::i18n_File()).subs(SoundPicker::i18n_Sound()).toString());
-	if (theApp()->speechEnabled())
-	{
-		mSpeak = new QRadioButton(SoundPicker::i18n_Speak(), box);
-		mSpeak->setMinimumSize(mSpeak->sizeHint());
-		mSpeak->setWhatsThis(soundSetting.subs(SoundPicker::i18n_Speak()).subs(SoundPicker::i18n_Sound()).toString());
-		bgroup->addButton(mSpeak);
-	}
-	else
-		mSpeak = 0;
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 
 	box = new KHBox(bbox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
@@ -1170,8 +1150,7 @@ void EditPrefTab::restore()
 	mConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
 	mReminderUnits->setCurrentIndex(Preferences::mDefaultReminderUnits);
 	mSpecialActionsButton->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
-	mSound->setChecked(Preferences::mDefaultSound);
-	setSoundType(Preferences::mDefaultSoundType);
+	mSound->setCurrentIndex(Preferences::mDefaultSoundType);
 	mSoundFile->setText(Preferences::mDefaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
@@ -1192,11 +1171,15 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::mDefaultReminderUnits    = static_cast<TimePeriod::Units>(mReminderUnits->currentIndex());
 	Preferences::mDefaultPreAction        = mSpecialActionsButton->preAction();
 	Preferences::mDefaultPostAction       = mSpecialActionsButton->postAction();
-	Preferences::mDefaultSound            = mSound->isChecked();
+	switch (mSound->currentIndex())
+	{
+		case 3:  Preferences::mDefaultSoundType = SoundPicker::SPEAK;      break;
+		case 2:  Preferences::mDefaultSoundType = SoundPicker::PLAY_FILE;  break;
+		case 1:  Preferences::mDefaultSoundType = SoundPicker::BEEP;       break;
+		case 0:
+		default: Preferences::mDefaultSoundType = SoundPicker::NONE;       break;
+	}
 	Preferences::mDefaultSoundFile        = mSoundFile->text();
-	Preferences::mDefaultSoundType        = mSpeak && mSpeak->isChecked() ? SoundPicker::SPEAK
-	                                      : mFile->isChecked()            ? SoundPicker::PLAY_FILE
-	                                      :                                 SoundPicker::BEEP;
 #ifndef WITHOUT_ARTS
 	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
 #endif
@@ -1227,8 +1210,7 @@ void EditPrefTab::setDefaults()
 	mConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
 	mReminderUnits->setCurrentIndex(Preferences::default_defaultReminderUnits);
 	mSpecialActionsButton->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
-	mSound->setChecked(Preferences::default_defaultSound);
-	setSoundType(Preferences::default_defaultSoundType);
+	mSound->setCurrentIndex(soundIndex(Preferences::default_defaultSoundType));
 	mSoundFile->setText(Preferences::default_defaultSoundFile);
 #ifndef WITHOUT_ARTS
 	mSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
@@ -1250,6 +1232,18 @@ void EditPrefTab::slotBrowseSoundFile()
 		mSoundFile->setText(url);
 }
 
+int EditPrefTab::soundIndex(SoundPicker::Type type)
+{
+	switch (type)
+	{
+		case SoundPicker::SPEAK:      return 3;
+		case SoundPicker::PLAY_FILE:  return 2;
+		case SoundPicker::BEEP:       return 1;
+		case SoundPicker::NONE:
+		default:                      return 0;
+	}
+}
+
 int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 {
 	switch (type)
@@ -1265,30 +1259,9 @@ int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
 	}
 }
 
-void EditPrefTab::setSoundType(SoundPicker::Type type)
-{
-	switch (type)
-	{
-		case SoundPicker::PLAY_FILE:
-			mFile->setChecked(true);
-			break;
-		case SoundPicker::SPEAK:
-			if (mSpeak)
-			{
-				mSpeak->setChecked(true);
-				break;
-			}
-			// fall through to BEEP
-		case SoundPicker::BEEP:
-		default:
-			mBeep->setChecked(true);
-			break;
-	}
-}
-
 QString EditPrefTab::validate()
 {
-	if (mFile->isChecked()  &&  mSoundFile->text().isEmpty())
+	if (mSound->currentIndex() == SoundPicker::PLAY_FILE  &&  mSoundFile->text().isEmpty())
 	{
 		mSoundFile->setFocus();
 		return i18n("You must enter a sound file when %1 is selected as the default sound type", SoundPicker::i18n_File());;

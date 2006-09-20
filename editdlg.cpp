@@ -499,9 +499,22 @@ void EditAlarmDlg::initDisplayAlarms()
 	hlayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
+	hlayout = new QHBoxLayout();
+	hlayout->setMargin(0);
+	frameLayout->addLayout(hlayout);
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
+	hlayout->addWidget(mSoundPicker);
+	hlayout->addSpacing(2*KDialog::spacingHint());
+	hlayout->addStretch();
+
+	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
+	{
+		// Special actions button
+		mSpecialActionsButton = new SpecialActionsButton(i18n_SpecialActions(), mDisplayAlarmsFrame);
+		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
+		hlayout->addWidget(mSpecialActionsButton);
+	}
 
 	// Reminder
 	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
@@ -513,22 +526,9 @@ void EditAlarmDlg::initDisplayAlarms()
 	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	hlayout = new QHBoxLayout();
-	hlayout->setMargin(0);
-	frameLayout->addLayout(hlayout);
 	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	hlayout->addWidget(mConfirmAck);
-	hlayout->addSpacing(2*KDialog::spacingHint());
-	hlayout->addStretch();
-
-	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
-	{
-		// Special actions button
-		mSpecialActionsButton = new SpecialActionsButton(i18n_SpecialActions(), mDisplayAlarmsFrame);
-		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
-		hlayout->addWidget(mSpecialActionsButton);
-	}
+	frameLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	// Top-adjust the controls
 	mFilePadding = new KHBox(mDisplayAlarmsFrame);
@@ -841,11 +841,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
 		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		SoundPicker::Type soundType = event->speak()                                ? SoundPicker::SPEAK
-		                            : event->beep() || event->audioFile().isEmpty() ? SoundPicker::BEEP
-		                            :                                                 SoundPicker::PLAY_FILE;
-		mSoundPicker->set((soundType != SoundPicker::BEEP || event->beep()), soundType, event->audioFile(),
-		                  event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
+		SoundPicker::Type soundType = event->speak()                ? SoundPicker::SPEAK
+		                            : event->beep()                 ? SoundPicker::BEEP
+		                            : !event->audioFile().isEmpty() ? SoundPicker::PLAY_FILE
+		                            :                                 SoundPicker::NONE;
+		mSoundPicker->set(soundType, event->audioFile(), event->soundVolume(),
+		                  event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
 		RadioButton* logType = event->commandXterm()       ? mCmdExecInTerm
 		                     : !event->logFile().isEmpty() ? mCmdLogToFile
 		                     :                               mCmdDiscardOutput;
@@ -895,7 +896,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mReminder->setMinutes(0, false);
 		mReminder->enableOnceOnly(mRecurrenceEdit->isTimedRepeatType());   // must be called after mRecurrenceEdit is set up
-		mSoundPicker->set(Preferences::defaultSound(), Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
+		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
 		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
@@ -1083,8 +1084,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedTemplateAfterTime = mTemplateTimeAfter->value();
 	}
 	mSavedTypeRadio        = mActionGroup->checkedButton();
-	mSavedSound            = mSoundPicker->sound();
-	mSavedSoundType        = mSoundPicker->type();
+	mSavedSoundType        = mSoundPicker->sound();
 	mSavedSoundFile        = mSoundPicker->file();
 	mSavedSoundVolume      = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
 	mSavedRepeatSound      = mSoundPicker->repeat();
@@ -1158,7 +1158,7 @@ bool EditAlarmDlg::stateChanged() const
 		return true;
 	if (mMessageRadio->isChecked()  ||  mFileRadio->isChecked())
 	{
-		if (mSavedSound      != mSoundPicker->sound()
+		if (mSavedSoundType  != mSoundPicker->sound()
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
@@ -1173,24 +1173,19 @@ bool EditAlarmDlg::stateChanged() const
 			||  mSavedPostAction != mSpecialActionsButton->postAction())
 				return true;
 		}
-		if (mSavedSound)
+		if (mSavedSoundType == SoundPicker::PLAY_FILE)
 		{
-			if (mSavedSoundType != mSoundPicker->type())
+			if (mSavedSoundFile != mSoundPicker->file())
 				return true;
-			if (mSavedSoundType == SoundPicker::PLAY_FILE)
+			if (!mSavedSoundFile.isEmpty())
 			{
-				if (mSavedSoundFile != mSoundPicker->file())
+				float fadeVolume;
+				int   fadeSecs;
+				if (mSavedRepeatSound != mSoundPicker->repeat()
+				||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
+				||  mSavedSoundFadeVolume != fadeVolume
+				||  mSavedSoundFadeSeconds != fadeSecs)
 					return true;
-				if (!mSavedSoundFile.isEmpty())
-				{
-					float fadeVolume;
-					int   fadeSecs;
-					if (mSavedRepeatSound != mSoundPicker->repeat()
-					||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
-					||  mSavedSoundFadeVolume != fadeVolume
-					||  mSavedSoundFadeSeconds != fadeSecs)
-						return true;
-				}
 			}
 		}
 	}
@@ -1350,8 +1345,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	bool displayAlarm = mMessageRadio->isChecked() || mFileRadio->isChecked();
 	bool cmdAlarm     = mCommandRadio->isChecked();
 	bool emailAlarm   = mEmailRadio->isChecked();
-	return (displayAlarm && mSoundPicker->beep()                                 ? KAEvent::BEEP : 0)
-	     | (displayAlarm && mSoundPicker->speak()                                ? KAEvent::SPEAK : 0)
+	return (displayAlarm && mSoundPicker->sound() == SoundPicker::BEEP           ? KAEvent::BEEP : 0)
+	     | (displayAlarm && mSoundPicker->sound() == SoundPicker::SPEAK          ? KAEvent::SPEAK : 0)
 	     | (displayAlarm && mSoundPicker->repeat()                               ? KAEvent::REPEAT_SOUND : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()                             ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()                           ? KAEvent::AUTO_CLOSE : 0)

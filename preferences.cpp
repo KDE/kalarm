@@ -81,9 +81,8 @@ const float                      Preferences::default_defaultSoundVolume      = 
 const int                        Preferences::default_defaultLateCancel       = 0;
 const bool                       Preferences::default_defaultAutoClose        = false;
 const bool                       Preferences::default_defaultCopyToKOrganizer = false;
-const bool                       Preferences::default_defaultSound            = false;
 const bool                       Preferences::default_defaultSoundRepeat      = false;
-const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::BEEP;
+const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::NONE;
 const bool                       Preferences::default_defaultConfirmAck       = false;
 const bool                       Preferences::default_defaultCmdScript        = false;
 const Preferences::CmdLogType    Preferences::default_defaultCmdLogType       = Preferences::DISCARD_OUTPUT;
@@ -143,7 +142,6 @@ float                      Preferences::mDefaultSoundVolume;
 int                        Preferences::mDefaultLateCancel;
 bool                       Preferences::mDefaultAutoClose;
 bool                       Preferences::mDefaultCopyToKOrganizer;
-bool                       Preferences::mDefaultSound;
 SoundPicker::Type          Preferences::mDefaultSoundType;
 bool                       Preferences::mDefaultSoundRepeat;
 bool                       Preferences::mDefaultConfirmAck;
@@ -202,7 +200,6 @@ static const char* DEF_LATE_CANCEL          = "DefLateCancel";
 static const char* DEF_AUTO_CLOSE           = "DefAutoClose";
 static const char* DEF_CONFIRM_ACK          = "DefConfirmAck";
 static const char* DEF_COPY_TO_KORG         = "DefCopyKOrg";
-static const char* DEF_SOUND                = "DefSound";
 static const char* DEF_SOUND_TYPE           = "DefSoundType";
 static const char* DEF_SOUND_FILE           = "DefSoundFile";
 static const char* DEF_SOUND_VOLUME         = "DefSoundVolume";
@@ -215,10 +212,6 @@ static const char* DEF_RECUR_PERIOD         = "DefRecurPeriod";
 static const char* DEF_REMIND_UNITS         = "DefRemindUnits";
 static const char* DEF_PRE_ACTION           = "DefPreAction";
 static const char* DEF_POST_ACTION          = "DefPostAction";
-// Obsolete - compatibility with pre-1.2.1
-static const char* EMAIL_ADDRESS            = "EmailAddress";
-static const char* EMAIL_USE_CONTROL_CENTRE = "EmailUseControlCenter";
-static const char* EMAIL_BCC_USE_CONTROL_CENTRE = "EmailBccUseControlCenter";
 
 // Values for EmailFrom entry
 static const QString FROM_CONTROL_CENTRE      = QLatin1String("@ControlCenter");
@@ -357,9 +350,8 @@ void Preferences::read()
 	mDefaultAutoClose         = config->readEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
 	mDefaultConfirmAck        = config->readEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
 	mDefaultCopyToKOrganizer  = config->readEntry(DEF_COPY_TO_KORG, default_defaultCopyToKOrganizer);
-	mDefaultSound             = config->readEntry(DEF_SOUND, default_defaultSound);
 	int soundType             = config->readEntry(DEF_SOUND_TYPE, static_cast<int>(default_defaultSoundType));
-	mDefaultSoundType         = (soundType < SoundPicker::BEEP || soundType > SoundPicker::PLAY_FILE)
+	mDefaultSoundType         = (soundType < 0 || soundType > SoundPicker::SPEAK)
 	                          ? default_defaultSoundType : (SoundPicker::Type)soundType;
 	mDefaultSoundVolume       = static_cast<float>(config->readEntry(DEF_SOUND_VOLUME, static_cast<double>(default_defaultSoundVolume)));
 #ifdef WITHOUT_ARTS
@@ -440,7 +432,6 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
 	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
 	config->writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
-	config->writeEntry(DEF_SOUND, mDefaultSound);
 	config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(mDefaultSoundType));
 	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
 	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
@@ -617,41 +608,54 @@ void Preferences::convertOldPrefs()
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM, QString()));
-	if (version >= KAlarm::Version(1,3,0))
+	if (version >= KAlarm::Version(1,4,5))
 		return;     // config format is up to date
 
-	bool sync = false;
-	QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
-	if (!entries.contains(EMAIL_FROM)  &&  entries.contains(EMAIL_USE_CONTROL_CENTRE))
+	// Convert KAlarm pre-1.4.5 preferences
+	static const char* DEF_SOUND = "DefSound";
+	bool sound = config->readEntry(DEF_SOUND, false);
+	if (!sound)
+		config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(SoundPicker::NONE));
+	config->deleteEntry(DEF_SOUND);
+
+	if (version < KAlarm::Version(1,3,0))
 	{
-		// Preferences were written by KAlarm pre-1.2.1
-		config->setGroup(GENERAL_SECTION);
-		bool useCC = false;
-		bool bccUseCC = false;
-		const bool default_emailUseControlCentre    = true;
-		const bool default_emailBccUseControlCentre = true;
-		useCC = config->readEntry(EMAIL_USE_CONTROL_CENTRE, default_emailUseControlCentre);
-		// EmailBccUseControlCenter was missing in preferences written by KAlarm pre-0.9.5
-		bccUseCC = config->hasKey(EMAIL_BCC_USE_CONTROL_CENTRE)
-		         ? config->readEntry(EMAIL_BCC_USE_CONTROL_CENTRE, default_emailBccUseControlCentre)
-			 : useCC;
-		config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS, QString())));
-		config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS, QString())));
-		config->deleteEntry(EMAIL_ADDRESS);
-		config->deleteEntry(EMAIL_BCC_USE_CONTROL_CENTRE);
-		config->deleteEntry(EMAIL_USE_CONTROL_CENTRE);
-		sync = true;
+		// Convert KAlarm pre-1.3 preferences
+		static const char* EMAIL_ADDRESS             = "EmailAddress";
+		static const char* EMAIL_USE_CTRL_CENTRE     = "EmailUseControlCenter";
+		static const char* EMAIL_BCC_USE_CTRL_CENTRE = "EmailBccUseControlCenter";
+		QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
+		if (!entries.contains(EMAIL_FROM)  &&  entries.contains(EMAIL_USE_CTRL_CENTRE))
+		{
+			// Preferences were written by KAlarm pre-1.2.1
+			config->setGroup(GENERAL_SECTION);
+			bool useCC = false;
+			bool bccUseCC = false;
+			const bool default_emailUseControlCentre    = true;
+			const bool default_emailBccUseControlCentre = true;
+			useCC = config->readEntry(EMAIL_USE_CTRL_CENTRE, default_emailUseControlCentre);
+			// EmailBccUseControlCenter was missing in preferences written by KAlarm pre-0.9.5
+			bccUseCC = config->hasKey(EMAIL_BCC_USE_CTRL_CENTRE)
+			         ? config->readEntry(EMAIL_BCC_USE_CTRL_CENTRE, default_emailBccUseControlCentre)
+				 : useCC;
+			config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS, QString())));
+			config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS, QString())));
+			config->deleteEntry(EMAIL_ADDRESS);
+			config->deleteEntry(EMAIL_BCC_USE_CTRL_CENTRE);
+			config->deleteEntry(EMAIL_USE_CTRL_CENTRE);
+		}
+		// Convert KAlarm 1.2 preferences
+		static const char* DEF_CMD_XTERM = "DefCmdXterm";
+		config->setGroup(DEFAULTS_SECTION);
+		if (config->hasKey(DEF_CMD_XTERM))
+		{
+			config->writeEntry(DEF_CMD_LOG_TYPE,
+				static_cast<int>(config->readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
+			config->deleteEntry(DEF_CMD_XTERM);
+		}
 	}
-	// Convert KAlarm 1.2 preferences
-	static const QString DEF_CMD_XTERM = QLatin1String("DefCmdXterm");
-	config->setGroup(DEFAULTS_SECTION);
-	if (config->hasKey(DEF_CMD_XTERM))
-	{
-		config->writeEntry(DEF_CMD_LOG_TYPE,
-			static_cast<int>(config->readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
-		config->deleteEntry(DEF_CMD_XTERM);
-		sync = true;
-	}
-	if (sync)
-		config->sync();
+
+	config->setGroup(GENERAL_SECTION);
+	config->writeEntry(VERSION_NUM, KALARM_VERSION);
+	config->sync();
 }

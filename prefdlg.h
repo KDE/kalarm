@@ -26,6 +26,7 @@
 
 #include "preferences.h"
 #include "recurrenceedit.h"
+#include "soundpicker.h"
 
 class QCheckBox;
 class QAbstractButton;
@@ -227,8 +228,6 @@ class EditPrefTab : public PrefsTabBase
 		void         slotBrowseSoundFile();
 
 	private:
-		void         setSoundType(SoundPicker::Type);
-
 		QCheckBox*      mAutoClose;
 		QCheckBox*      mConfirmAck;
 		QComboBox*      mReminderUnits;
@@ -236,10 +235,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mCmdScript;
 		QCheckBox*      mCmdXterm;
 		QCheckBox*      mEmailBcc;
-		QRadioButton*   mBeep;
-		QRadioButton*   mSpeak;
-		QRadioButton*   mFile;
-		QCheckBox*      mSound;
+		QComboBox*      mSound;
 		QLabel*         mSoundFileLabel;
 		QLineEdit*      mSoundFile;
 		QPushButton*    mSoundFileBrowse;
@@ -249,6 +245,7 @@ class EditPrefTab : public PrefsTabBase
 		QComboBox*      mRecurPeriod;
 		ButtonGroup*    mFeb29;
 
+		static int soundIndex(SoundPicker::Type);
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };
 

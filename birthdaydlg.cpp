@@ -216,7 +216,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
 	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::DAYS);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
-	mSoundPicker->set(Preferences::defaultSound(), Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
+	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 	                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
@@ -370,11 +370,11 @@ void BirthdayDlg::slotOk()
 	config->writeEntry("BirthdaySuffix", mSuffix->text());
 	config->sync();
 
-	mFlags = (mSoundPicker->beep()             ? KAEvent::BEEP : 0)
-	       | (mSoundPicker->repeat()           ? KAEvent::REPEAT_SOUND : 0)
-	       | (mConfirmAck->isChecked()         ? KAEvent::CONFIRM_ACK : 0)
-	       | (mFontColourButton->defaultFont() ? KAEvent::DEFAULT_FONT : 0)
-	       |                                     KAEvent::ANY_TIME;
+	mFlags = (mSoundPicker->sound() == SoundPicker::BEEP ? KAEvent::BEEP : 0)
+	       | (mSoundPicker->repeat()                     ? KAEvent::REPEAT_SOUND : 0)
+	       | (mConfirmAck->isChecked()                   ? KAEvent::CONFIRM_ACK : 0)
+	       | (mFontColourButton->defaultFont()           ? KAEvent::DEFAULT_FONT : 0)
+	       |                                               KAEvent::ANY_TIME;
 	KDialog::accept();
 }
 

@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include <QTimer>
+#include <QLabel>
 #include <QHBoxLayout>
 
 #include <kglobal.h>
@@ -34,12 +35,10 @@
 #endif
 #include <kdebug.h>
 
-#include "buttongroup.h"
-#include "checkbox.h"
+#include "combobox.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "pushbutton.h"
-#include "radiobutton.h"
 #include "sounddlg.h"
 #include "soundpicker.moc"
 
@@ -47,11 +46,9 @@
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"); }
-QString SoundPicker::i18n_s_Sound()     { return i18nc("An audio sound", "&Sound"); }
+QString SoundPicker::i18n_None()        { return i18n("None"); }
 QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
-QString SoundPicker::i18n_b_Beep()      { return i18n("&Beep"); }
 QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }
-QString SoundPicker::i18n_p_Speak()     { return i18n("S&peak"); }
 QString SoundPicker::i18n_File()        { return i18n("File"); }
 
 
@@ -59,63 +56,39 @@ SoundPicker::SoundPicker(QWidget* parent)
 	: QFrame(parent),
 	  mRevertType(false)
 {
-	// Sound checkbox
 	QHBoxLayout* soundLayout = new QHBoxLayout(this);
 	soundLayout->setMargin(0);
 	soundLayout->setSpacing(2*KDialog::spacingHint());
-	soundLayout->setAlignment(Qt::AlignVCenter);
-	mCheckbox = new CheckBox(i18n_s_Sound(), this);
-	mCheckbox->setFixedSize(mCheckbox->sizeHint());
-	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotSoundToggled(bool)));
-	mCheckbox->setWhatsThis(i18n("Check to enable sound when the message is displayed. Select the type of sound from the displayed options."));
-	soundLayout->addWidget(mCheckbox);
+	mTypeBox = new KHBox(this);    // this is to control the QWhatsThis text display area
+	mTypeBox->setMargin(0);
+	mTypeBox->setSpacing(KDialog::spacingHint());
 
-	// Sound type
-	mTypeGroup = new ButtonGroup(this);
-	connect(mTypeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTypeChanged(QAbstractButton*)));
+	QLabel* label = new QLabel(i18nc("An audio sound", "&Sound:"), mTypeBox);
+	label->setFixedSize(label->sizeHint());
 
-	// Beep radio button
-	mBeepRadio = new RadioButton(i18n_Beep(), this);
-	mBeepRadio->setFixedSize(mBeepRadio->sizeHint());
-	mBeepRadio->setWhatsThis(i18n("If checked, a beep will sound when the alarm is displayed."));
-	mTypeGroup->addButton(mBeepRadio);
-	soundLayout->addWidget(mBeepRadio);
-
-	// File radio button
-	KHBox* box = new KHBox(this);
-	box->setMargin(0);
-	mFileRadio = new RadioButton(i18n_File(), box);
-	mFileRadio->setFixedSize(mFileRadio->sizeHint());
-	mFileRadio->setWhatsThis(i18n("If checked, a sound file will be played when the alarm is displayed."));
-	mTypeGroup->addButton(mFileRadio);
+	// Sound type combo box
+	// The order of combo box entries must correspond with the 'Type' enum.
+	mTypeCombo = new ComboBox(mTypeBox);
+	mTypeCombo->addItem(i18n_None());     // index NONE
+	mTypeCombo->addItem(i18n_Beep());     // index BEEP
+	mTypeCombo->addItem(i18n_File());     // index PLAY_FILE
+	mSpeakShowing = !theApp()->speechEnabled();
+	showSpeak(!mSpeakShowing);            // index SPEAK (only displayed if appropriate)
+	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotSoundSelected(int)));
+	label->setBuddy(mTypeCombo);
+	soundLayout->addWidget(mTypeBox);
 
 	// Sound file picker button
-	mFilePicker = new PushButton(box);
+	mFilePicker = new PushButton(this);
 	mFilePicker->setIcon(SmallIcon("playsound"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFilePicker->setWhatsThis(i18n("Configure a sound file to play when the alarm is displayed."));
-	box->setFixedSize(box->sizeHint());
-	soundLayout->addWidget(box);
-	box->setFocusProxy(mFileRadio);
-
-	// Speak radio button
-	mSpeakRadio = new RadioButton(i18n_p_Speak(), this);
-	mSpeakRadio->setFixedSize(mSpeakRadio->sizeHint());
-	mSpeakRadio->setWhatsThis(i18n("If checked, the message will be spoken when the alarm is displayed."));
-	mTypeGroup->addButton(mSpeakRadio);
-	soundLayout->addWidget(mSpeakRadio);
-
-	if (!theApp()->speechEnabled())
-		mSpeakRadio->hide();     // speech capability is not installed
-
-	setTabOrder(mCheckbox, mBeepRadio);
-	setTabOrder(mBeepRadio, mFileRadio);
-	setTabOrder(mFileRadio, mFilePicker);
-	setTabOrder(mFilePicker, mSpeakRadio);
+	soundLayout->addWidget(mFilePicker);
 
 	// Initialise the file picker button state and tooltip
-	slotSoundToggled(false);
+	mTypeCombo->setCurrentIndex(NONE);
+	mFilePicker->setEnabled(false);
 }
 
 /******************************************************************************
@@ -123,13 +96,10 @@ SoundPicker::SoundPicker(QWidget* parent)
 */
 void SoundPicker::setReadOnly(bool readOnly)
 {
-	mCheckbox->setReadOnly(readOnly);
-	mBeepRadio->setReadOnly(readOnly);
-	mFileRadio->setReadOnly(readOnly);
+	mTypeCombo->setReadOnly(readOnly);
 #ifdef WITHOUT_ARTS
 	mFilePicker->setReadOnly(readOnly);
 #endif
-	mSpeakRadio->setReadOnly(readOnly);
 	mReadOnly = readOnly;
 }
 
@@ -139,59 +109,43 @@ void SoundPicker::setReadOnly(bool readOnly)
 void SoundPicker::showSpeak(bool show)
 {
 	if (!theApp()->speechEnabled())
-		return;     // speech capability is not installed
-
-	bool shown = !mSpeakRadio->isHidden();
-	if (show  &&  !shown)
-		mSpeakRadio->show();
-	else if (!show  &&  shown)
+		show = false;    // speech capability is not installed
+	if (show == mSpeakShowing)
+		return;    // no change
+	QString whatsThis = i18n("Choose a sound to play when the message is displayed.\n"
+	                         "%1: the message is displayed silently.\n"
+	                         "%2: a simple beep is sounded.\n"
+	                         "%3: a sound file is played. You will be prompted to choose the file and select play options.",
+	                         "<b>" + i18n_None() + "<\b>",
+	                         "<b>" + i18n_Beep() + "<\b>",
+	                         "<b>" + i18n_File() + "<\b>");
+	if (!show  &&  mTypeCombo->currentIndex() == SPEAK)
+		mTypeCombo->setCurrentIndex(NONE);
+	mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
+	if (show)
 	{
-		if (mSpeakRadio->isChecked())
-			mCheckbox->setChecked(false);
-		mSpeakRadio->hide();
+		mTypeCombo->addItem(i18n_Speak());
+		whatsThis += i18n("%3: the message text is spoken.", "\n<b>" + i18n_Speak() + "<\b>");
 	}
-}
-
-/******************************************************************************
-* Return whether sound is selected.
-*/
-bool SoundPicker::sound() const
-{
-	return mCheckbox->isChecked();
+	mTypeBox->setWhatsThis(whatsThis);
+	mSpeakShowing = show;
 }
 
 /******************************************************************************
 * Return the currently selected option.
 */
-SoundPicker::Type SoundPicker::type() const
+SoundPicker::Type SoundPicker::sound() const
 {
-	QAbstractButton* button = mTypeGroup->checkedButton();
-	return (button == mSpeakRadio) ? SPEAK : (button == mFileRadio) ? PLAY_FILE : BEEP;
+	return static_cast<SoundPicker::Type>(mTypeCombo->currentIndex());
 }
 
 /******************************************************************************
-* Return whether beep is selected.
-*/
-bool SoundPicker::beep() const
-{
-	return mCheckbox->isChecked()  &&  mBeepRadio->isChecked();
-}
-
-/******************************************************************************
-* Return whether speech is selected.
-*/
-bool SoundPicker::speak() const
-{
-	return mCheckbox->isChecked()  &&  !mSpeakRadio->isHidden()  &&  mSpeakRadio->isChecked();
-}
-
-/******************************************************************************
-* Return the selected sound file, if the main checkbox is checked.
-* Returns null string if beep is currently selected.
+* Return the selected sound file, if the File option is selected.
+* Returns null string if File is not currently selected.
 */
 QString SoundPicker::file() const
 {
-	return mCheckbox->isChecked() && mFileRadio->isChecked() ? mFile : QString();
+	return (mTypeCombo->currentIndex() == PLAY_FILE) ? mFile : QString();
 }
 
 /******************************************************************************
@@ -200,7 +154,7 @@ QString SoundPicker::file() const
 */
 float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 {
-	if (mCheckbox->isChecked() && mFileRadio->isChecked() && !mFile.isEmpty())
+	if (mTypeCombo->currentIndex() == PLAY_FILE  &&  !mFile.isEmpty())
 	{
 		fadeVolume  = mFadeVolume;
 		fadeSeconds = mFadeSeconds;
@@ -220,60 +174,38 @@ float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 */
 bool SoundPicker::repeat() const
 {
-	return mCheckbox->isChecked() && mFileRadio->isChecked() && !mFile.isEmpty() && mRepeat;
+	return mTypeCombo->currentIndex() == PLAY_FILE  &&  !mFile.isEmpty()  &&  mRepeat;
 }
 
 /******************************************************************************
 * Initialise the widget's state.
 */
-void SoundPicker::set(bool sound, SoundPicker::Type defaultType, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+void SoundPicker::set(SoundPicker::Type type, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
 {
-	if (defaultType == PLAY_FILE  &&  f.isEmpty())
-		defaultType = BEEP;
-	mLastButton  = 0;
+	if (type == PLAY_FILE  &&  f.isEmpty())
+		type = BEEP;
+	mLastType    = NONE;
 	mFile        = f;
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
 	mFilePicker->setToolTip(mFile);
-	mCheckbox->setChecked(sound);
-	RadioButton* button;
-	switch (defaultType)
-	{
-		case PLAY_FILE:  button = mFileRadio;  break;
-		case SPEAK:      button = mSpeakRadio; break;
-		case BEEP:
-		default:         button = mBeepRadio;  break;
-	}
-	button->setChecked(true);
-}
-
-/******************************************************************************
-* Called when the sound checkbox is toggled.
-*/
-void SoundPicker::slotSoundToggled(bool on)
-{
-	mBeepRadio->setEnabled(on);
-	mSpeakRadio->setEnabled(on);
-	mFileRadio->setEnabled(on);
-	mFilePicker->setEnabled(on && mFileRadio->isChecked());
-	if (on  &&  mSpeakRadio->isHidden()  &&  mSpeakRadio->isChecked())
-		mBeepRadio->setChecked(true);
-	if (on)
-		mBeepRadio->setFocus();
+	mTypeCombo->setCurrentIndex(type);
+	mFilePicker->setEnabled(type == PLAY_FILE);
 }
 
 /******************************************************************************
 * Called when the sound option is changed.
 */
-void SoundPicker::slotTypeChanged(QAbstractButton* button)
+void SoundPicker::slotTypeSelected(int id)
 {
-	if (button == mLastButton  ||  mRevertType)
+	Type newType = static_cast<Type>(id);
+	if (newType == mLastType  ||  mRevertType)
 		return;
-	if (mLastButton == mFileRadio)
+	if (mLastType == PLAY_FILE)
 		mFilePicker->setEnabled(false);
-	else if (button == mFileRadio)
+	else if (newType == PLAY_FILE)
 	{
 		if (mFile.isEmpty())
 		{
@@ -281,9 +213,9 @@ void SoundPicker::slotTypeChanged(QAbstractButton* button)
 			if (mFile.isEmpty())
 				return;    // revert to previously selected type
 		}
-		mFilePicker->setEnabled(mCheckbox->isChecked());
+		mFilePicker->setEnabled(true);
 	}
-	mLastButton = static_cast<RadioButton*>(button);
+	mLastType = newType;
 }
 
 /******************************************************************************
@@ -321,10 +253,15 @@ void SoundPicker::slotPickFile()
 	mFilePicker->setToolTip(mFile);
 	if (mFile.isEmpty())
 	{
-		// No audio file is selected, so revert to 'beep'.
+		// No audio file is selected, so revert to previously selected option
+#if 0
+// Remove mRevertType, setLastType(), #include QTimer
 		// But wait a moment until setting the radio button, or it won't work.
 		mRevertType = true;   // prevent sound dialogue popping up twice
 		QTimer::singleShot(0, this, SLOT(setLastType()));
+#else
+		mTypeCombo->setCurrentIndex(mLastType);
+#endif
 	}
 }
 
@@ -333,7 +270,7 @@ void SoundPicker::slotPickFile()
 */
 void SoundPicker::setLastType()
 {
-	mLastButton->setChecked(true);
+	mTypeCombo->setCurrentIndex(mLastType);
 	mRevertType = false;
 }
 
