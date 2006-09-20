@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -90,7 +90,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	  mWeeklyShown(false),
 	  mMonthlyShown(false),
 	  mYearlyShown(false),
-	  noEmitTypeChanged(true),
+	  mNoEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
 	QBoxLayout* layout;
@@ -103,70 +103,70 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	 * selection of its corresponding radio button.
 	 */
 
-	recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), this, "recurGroup");
+	QGroupBox* recurGroup = new QGroupBox(1, Qt::Vertical, i18n("Recurrence Rule"), this, "recurGroup");
 	topLayout->addWidget(recurGroup);
-	ruleFrame = new QFrame(recurGroup, "ruleFrame");
+	QFrame* ruleFrame = new QFrame(recurGroup, "ruleFrame");
 	layout = new QVBoxLayout(ruleFrame, 0);
 	layout->addSpacing(KDialog::spacingHint()/2);
 
 	layout = new QHBoxLayout(layout, 0);
 	QBoxLayout* lay = new QVBoxLayout(layout, 0);
-	ruleButtonGroup = new ButtonGroup(1, Qt::Horizontal, ruleFrame);
-	ruleButtonGroup->setInsideMargin(0);
-	ruleButtonGroup->setFrameStyle(QFrame::NoFrame);
-	lay->addWidget(ruleButtonGroup);
+	mRuleButtonGroup = new ButtonGroup(1, Qt::Horizontal, ruleFrame);
+	mRuleButtonGroup->setInsideMargin(0);
+	mRuleButtonGroup->setFrameStyle(QFrame::NoFrame);
+	lay->addWidget(mRuleButtonGroup);
 	lay->addStretch();    // top-adjust the interval radio buttons
-	connect(ruleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
+	connect(mRuleButtonGroup, SIGNAL(buttonSet(int)), SLOT(periodClicked(int)));
 
-	mNoneButton = new RadioButton(i18n_Norecur(), ruleButtonGroup);
+	mNoneButton = new RadioButton(i18n_Norecur(), mRuleButtonGroup);
 	mNoneButton->setFixedSize(mNoneButton->sizeHint());
 	mNoneButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mNoneButton, i18n("Do not repeat the alarm"));
 
-	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), ruleButtonGroup);
+	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), mRuleButtonGroup);
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mAtLoginButton,
 	      i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
 	           "Note that it will also be triggered any time the alarm daemon is restarted."));
 
-	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), ruleButtonGroup);
+	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), mRuleButtonGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
 	mSubDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mSubDailyButton,
 	      i18n("Repeat the alarm at hourly/minutely intervals"));
 
-	mDailyButton = new RadioButton(i18n_d_Daily(), ruleButtonGroup);
+	mDailyButton = new RadioButton(i18n_d_Daily(), mRuleButtonGroup);
 	mDailyButton->setFixedSize(mDailyButton->sizeHint());
 	mDailyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mDailyButton,
 	      i18n("Repeat the alarm at daily intervals"));
 
-	mWeeklyButton = new RadioButton(i18n_w_Weekly(), ruleButtonGroup);
+	mWeeklyButton = new RadioButton(i18n_w_Weekly(), mRuleButtonGroup);
 	mWeeklyButton->setFixedSize(mWeeklyButton->sizeHint());
 	mWeeklyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mWeeklyButton,
 	      i18n("Repeat the alarm at weekly intervals"));
 
-	mMonthlyButton = new RadioButton(i18n_m_Monthly(), ruleButtonGroup);
+	mMonthlyButton = new RadioButton(i18n_m_Monthly(), mRuleButtonGroup);
 	mMonthlyButton->setFixedSize(mMonthlyButton->sizeHint());
 	mMonthlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mMonthlyButton,
 	      i18n("Repeat the alarm at monthly intervals"));
 
-	mYearlyButton = new RadioButton(i18n_y_Yearly(), ruleButtonGroup);
+	mYearlyButton = new RadioButton(i18n_y_Yearly(), mRuleButtonGroup);
 	mYearlyButton->setFixedSize(mYearlyButton->sizeHint());
 	mYearlyButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mYearlyButton,
 	      i18n("Repeat the alarm at annual intervals"));
 
-	mNoneButtonId     = ruleButtonGroup->id(mNoneButton);
-	mAtLoginButtonId  = ruleButtonGroup->id(mAtLoginButton);
-	mSubDailyButtonId = ruleButtonGroup->id(mSubDailyButton);
-	mDailyButtonId    = ruleButtonGroup->id(mDailyButton);
-	mWeeklyButtonId   = ruleButtonGroup->id(mWeeklyButton);
-	mMonthlyButtonId  = ruleButtonGroup->id(mMonthlyButton);
-	mYearlyButtonId   = ruleButtonGroup->id(mYearlyButton);
+	mNoneButtonId     = mRuleButtonGroup->id(mNoneButton);
+	mAtLoginButtonId  = mRuleButtonGroup->id(mAtLoginButton);
+	mSubDailyButtonId = mRuleButtonGroup->id(mSubDailyButton);
+	mDailyButtonId    = mRuleButtonGroup->id(mDailyButton);
+	mWeeklyButtonId   = mRuleButtonGroup->id(mWeeklyButton);
+	mMonthlyButtonId  = mRuleButtonGroup->id(mMonthlyButton);
+	mYearlyButtonId   = mRuleButtonGroup->id(mYearlyButton);
 
 	lay = new QVBoxLayout(layout);
 
@@ -192,15 +192,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	connect(mMonthlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 	connect(mYearlyRule, SIGNAL(frequencyChanged()), this, SIGNAL(frequencyChanged()));
 
-	ruleStack = new QWidgetStack(ruleFrame);
-	layout->addWidget(ruleStack);
+	mRuleStack = new QWidgetStack(ruleFrame);
+	layout->addWidget(mRuleStack);
 	layout->addStretch(1);
-	ruleStack->addWidget(mNoRule, 0);
-	ruleStack->addWidget(mSubDailyRule, 1);
-	ruleStack->addWidget(mDailyRule, 2);
-	ruleStack->addWidget(mWeeklyRule, 3);
-	ruleStack->addWidget(mMonthlyRule, 4);
-	ruleStack->addWidget(mYearlyRule, 5);
+	mRuleStack->addWidget(mNoRule, 0);
+	mRuleStack->addWidget(mSubDailyRule, 1);
+	mRuleStack->addWidget(mDailyRule, 2);
+	mRuleStack->addWidget(mWeeklyRule, 3);
+	mRuleStack->addWidget(mMonthlyRule, 4);
+	mRuleStack->addWidget(mYearlyRule, 5);
 	layout->addSpacing(KDialog::marginHint());
 
 	// Create the recurrence range group which contains the controls
@@ -334,7 +334,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		layout->addWidget(mDeleteExceptionButton);
 	}
 
-	noEmitTypeChanged = false;
+	mNoEmitTypeChanged = false;
 }
 
 /******************************************************************************
@@ -422,7 +422,7 @@ void RecurrenceEdit::periodClicked(int id)
 
 	if (mRuleButtonType != oldType)
 	{
-		ruleStack->raiseWidget(mRule ? mRule : mNoRule);
+		mRuleStack->raiseWidget(mRule ? mRule : mNoRule);
 		if (oldType == NO_RECUR  ||  none)
 			mRangeButtonGroup->setEnabled(!none);
 		mExceptionGroup->setEnabled(!(none || atLogin));
@@ -433,14 +433,14 @@ void RecurrenceEdit::periodClicked(int id)
 			mRepeatCountButton->setEnabled(!atLogin);
 		}
 		rangeTypeClicked();
-		if (!noEmitTypeChanged)
+		if (!mNoEmitTypeChanged)
 			emit typeChanged(mRuleButtonType);
 	}
 }
 
 void RecurrenceEdit::slotAnyTimeToggled(bool on)
 {
-	QButton* button = ruleButtonGroup->selected();
+	QButton* button = mRuleButtonGroup->selected();
 	mEndTimeEdit->setEnabled(button == mAtLoginButton && !on
 	                     ||  button == mSubDailyButton && mEndDateButton->isChecked());
 }
@@ -465,7 +465,7 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	if (mRule)
 		mRule->setFrequencyFocus();
 	else
-		ruleButtonGroup->selected()->setFocus();
+		mRuleButtonGroup->selected()->setFocus();
 	emit shown();
 }
 
@@ -604,7 +604,7 @@ void RecurrenceEdit::setEndDateTime(const DateTime& end)
 
 DateTime RecurrenceEdit::endDateTime() const
 {
-	if (ruleButtonGroup->selected() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
+	if (mRuleButtonGroup->selected() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
 		return DateTime(mEndDateEdit->date());
 	return DateTime(mEndDateEdit->date(), mEndTimeEdit->time());
 }
@@ -630,7 +630,7 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 
 	mEndDateEdit->setDate(fromDate);
 
-	noEmitTypeChanged = true;
+	mNoEmitTypeChanged = true;
 	int button;
 	switch (Preferences::defaultRecurPeriod())
 	{
@@ -643,8 +643,8 @@ void RecurrenceEdit::setDefaults(const QDateTime& from)
 		case NO_RECUR:
 		default:       button = mNoneButtonId;     break;
 	}
-	ruleButtonGroup->setButton(button);
-	noEmitTypeChanged = false;
+	mRuleButtonGroup->setButton(button);
+	mNoEmitTypeChanged = false;
 	rangeTypeClicked();
 	enableExceptionButtons();
 
@@ -678,11 +678,11 @@ void RecurrenceEdit::set(const KAEvent& event)
 	setDefaults(event.mainDateTime().dateTime());
 	if (event.repeatAtLogin())
 	{
-		ruleButtonGroup->setButton(mAtLoginButtonId);
+		mRuleButtonGroup->setButton(mAtLoginButtonId);
 		mEndDateButton->setChecked(true);
 		return;
 	}
-	ruleButtonGroup->setButton(mNoneButtonId);
+	mRuleButtonGroup->setButton(mNoneButtonId);
 	int repeatDuration;
 	KARecurrence* recurrence = event.recurrence();
 	if (!recurrence)
@@ -691,12 +691,12 @@ void RecurrenceEdit::set(const KAEvent& event)
 	switch (rtype)
 	{
 		case KARecurrence::MINUTELY:
-			ruleButtonGroup->setButton(mSubDailyButtonId);
+			mRuleButtonGroup->setButton(mSubDailyButtonId);
 			break;
 
 		case KARecurrence::DAILY:
 		{
-			ruleButtonGroup->setButton(mDailyButtonId);
+			mRuleButtonGroup->setButton(mDailyButtonId);
 			QBitArray rDays = recurrence->days();
 			bool set = false;
 			for (int i = 0;  i < 7 && !set;  ++i)
@@ -709,7 +709,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 		}
 		case KARecurrence::WEEKLY:
 		{
-			ruleButtonGroup->setButton(mWeeklyButtonId);
+			mRuleButtonGroup->setButton(mWeeklyButtonId);
 			QBitArray rDays = recurrence->days();
 			mWeeklyRule->setDays(rDays);
 			break;
@@ -722,7 +722,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 			{
 				// It's every (Tuesday) of the month. Convert to a weekly recurrence
 				// (but ignoring any non-every xxxDay positions).
-				ruleButtonGroup->setButton(mWeeklyButtonId);
+				mRuleButtonGroup->setButton(mWeeklyButtonId);
 				mWeeklyRule->setFrequency(recurrence->frequency());
 				QBitArray rDays(7);
 				for (QValueList<RecurrenceRule::WDayPos>::ConstIterator it = posns.begin();  it != posns.end();  ++it)
@@ -733,13 +733,13 @@ void RecurrenceEdit::set(const KAEvent& event)
 				mWeeklyRule->setDays(rDays);
 				break;
 			}
-			ruleButtonGroup->setButton(mMonthlyButtonId);
+			mRuleButtonGroup->setButton(mMonthlyButtonId);
 			mMonthlyRule->setPosition(i, posns.first().day());
 			break;
 		}
 		case KARecurrence::MONTHLY_DAY:     // on nth day of the month
 		{
-			ruleButtonGroup->setButton(mMonthlyButtonId);
+			mRuleButtonGroup->setButton(mMonthlyButtonId);
 			QValueList<int> rmd = recurrence->monthDays();
 			int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 			mMonthlyRule->setDate(day);
@@ -750,7 +750,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 		{
 			if (rtype == KARecurrence::ANNUAL_DATE)
 			{
-				ruleButtonGroup->setButton(mYearlyButtonId);
+				mRuleButtonGroup->setButton(mYearlyButtonId);
 				const QValueList<int> rmd = recurrence->monthDays();
 				int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
 				mYearlyRule->setDate(day);
@@ -758,7 +758,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 			}
 			else if (rtype == KARecurrence::ANNUAL_POS)
 			{
-				ruleButtonGroup->setButton(mYearlyButtonId);
+				mRuleButtonGroup->setButton(mYearlyButtonId);
 				QValueList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
 				mYearlyRule->setPosition(posns.first().pos(), posns.first().day());
 			}
@@ -830,7 +830,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	}
 
 	// Set up the recurrence according to the type selected
-	QButton* button = ruleButtonGroup->selected();
+	QButton* button = mRuleButtonGroup->selected();
 	event.setRepeatAtLogin(button == mAtLoginButton);
 	int frequency = mRule ? mRule->frequency() : 0;
 	if (button == mSubDailyButton)
@@ -909,7 +909,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
  */
 void RecurrenceEdit::saveState()
 {
-	mSavedRuleButton = ruleButtonGroup->selected();
+	mSavedRuleButton = mRuleButtonGroup->selected();
 	if (mRule)
 		mRule->saveState();
 	mSavedRangeButton = mRangeButtonGroup->selected();
@@ -925,7 +925,7 @@ void RecurrenceEdit::saveState()
  */
 bool RecurrenceEdit::stateChanged() const
 {
-	if (mSavedRuleButton  != ruleButtonGroup->selected()
+	if (mSavedRuleButton  != mRuleButtonGroup->selected()
 	||  mSavedRangeButton != mRangeButtonGroup->selected()
 	||  mRule  &&  mRule->stateChanged())
 		return true;

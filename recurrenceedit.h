@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -118,9 +118,7 @@ class RecurrenceEdit : public QFrame
 		void          saveState();
 
 		// Main rule box and choices
-		QGroupBox*        recurGroup;
-		QFrame*           ruleFrame;
-		QWidgetStack*     ruleStack;
+		QWidgetStack*     mRuleStack;
 		Rule*             mRule;         // current rule widget, or 0 if NoRule
 		NoRule*           mNoRule;
 		SubDailyRule*     mSubDailyRule;
@@ -129,7 +127,7 @@ class RecurrenceEdit : public QFrame
 		MonthlyRule*      mMonthlyRule;
 		YearlyRule*       mYearlyRule;
 
-		ButtonGroup*      ruleButtonGroup;
+		ButtonGroup*      mRuleButtonGroup;
 		RadioButton*      mNoneButton;
 		RadioButton*      mAtLoginButton;
 		RadioButton*      mSubDailyButton;
@@ -171,7 +169,7 @@ class RecurrenceEdit : public QFrame
 
 		// Current start date and time
 		QDateTime         mCurrStartDateTime;
-		bool              noEmitTypeChanged;         // suppress typeChanged() signal
+		bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
