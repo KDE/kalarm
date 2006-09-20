@@ -267,7 +267,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	grid->setRowStretch(2, 1);
 	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame, 0);
 	mAlarmTypeStack->addWidget(mCommandFrame, 1);
-	mAlarmTypeStack->addWidget(mEmailFrame, 1);
+	mAlarmTypeStack->addWidget(mEmailFrame, 2);
 
 	// Deferred date/time: visible only for a deferred recurring event.
 	mDeferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
