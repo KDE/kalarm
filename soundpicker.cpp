@@ -47,9 +47,9 @@
 // translations across different modules.
 QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"); }
 QString SoundPicker::i18n_None()        { return i18n("None"); }
-QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
+QString SoundPicker::i18n_Beep()        { return i18nc("(verb)", "Beep"); }
 QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }
-QString SoundPicker::i18n_File()        { return i18n("File"); }
+QString SoundPicker::i18n_File()        { return i18nc("Play an audio file", "Play file"); }
 
 
 SoundPicker::SoundPicker(QWidget* parent)
@@ -115,7 +115,7 @@ void SoundPicker::showSpeak(bool show)
 	QString whatsThis = i18n("Choose a sound to play when the message is displayed.\n"
 	                         "%1: the message is displayed silently.\n"
 	                         "%2: a simple beep is sounded.\n"
-	                         "%3: a sound file is played. You will be prompted to choose the file and select play options.",
+	                         "%3: an audio file is played. You will be prompted to choose the file and select play options.",
 	                         "<b>" + i18n_None() + "<\b>",
 	                         "<b>" + i18n_Beep() + "<\b>",
 	                         "<b>" + i18n_File() + "<\b>");
