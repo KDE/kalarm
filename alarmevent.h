@@ -449,6 +449,8 @@ class KAEvent : public KAAlarmEventBase
 #else
 		void               dumpDebug() const;
 #endif
+		static int         calVersion();
+		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
 		static void        convertKCalEvents(KCal::Calendar&, int version, bool adjustSummerTime);
 

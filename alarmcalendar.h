@@ -61,6 +61,7 @@ class AlarmCalendar : public QObject
 		QString               path() const                        { return mUrl.prettyURL(); }
 		QString               urlString() const                   { return mUrl.url(); }
 
+		static QString        icalProductId();
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
 		static AlarmCalendar* activeCalendar()        { return mCalendars[ACTIVE]; }

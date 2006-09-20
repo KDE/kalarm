@@ -109,8 +109,7 @@ KAlarmApp::KAlarmApp()
 {
 	Preferences::initialise();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
-	KCal::CalFormat::setApplication(aboutData()->programName(),
-	                                QString::fromLatin1("-//K Desktop Environment//NONSGML KAlarm " KALARM_VERSION "//EN"));
+	KCal::CalFormat::setApplication(aboutData()->programName(), AlarmCalendar::icalProductId());
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	// Check if the system tray is supported by this window manager

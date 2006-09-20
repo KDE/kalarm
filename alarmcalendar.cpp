@@ -59,6 +59,11 @@ extern "C" {
 
 using namespace KCal;
 
+QString AlarmCalendar::icalProductId()
+{
+	return QString::fromLatin1("-//K Desktop Environment//NONSGML " KALARM_NAME " %1//EN").arg(KAlarm::currentCalendarVersionString());
+}
+
 static const KAEvent::Status eventTypes[AlarmCalendar::NCALS] = {
 	KAEvent::ACTIVE, KAEvent::EXPIRED, KAEvent::DISPLAYING, KAEvent::TEMPLATE
 };
