@@ -112,22 +112,19 @@ void SoundPicker::showSpeak(bool show)
 		show = false;    // speech capability is not installed
 	if (show == mSpeakShowing)
 		return;    // no change
-	QString whatsThis = i18n("Choose a sound to play when the message is displayed.\n"
-	                         "%1: the message is displayed silently.\n"
-	                         "%2: a simple beep is sounded.\n"
-	                         "%3: an audio file is played. You will be prompted to choose the file and select play options.",
-	                         "<b>" + i18n_None() + "<\b>",
-	                         "<b>" + i18n_Beep() + "<\b>",
-	                         "<b>" + i18n_File() + "<\b>");
+	QString whatsThis = "<p>" + i18n("Choose a sound to play when the message is displayed.")
+	                  + "<br>" + i18n("%1: the message is displayed silently.", "<b>" + i18n_None() + "</b>")
+	                  + "<br>" + i18n("%1: a simple beep is sounded.", "<b>" + i18n_Beep() + "</b>")
+	                  + "<br>" + i18n("%1: an audio file is played. You will be prompted to choose the file and select play options.", "<b>" + i18n_File() + "</b>");
 	if (!show  &&  mTypeCombo->currentIndex() == SPEAK)
 		mTypeCombo->setCurrentIndex(NONE);
 	mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
 	if (show)
 	{
 		mTypeCombo->addItem(i18n_Speak());
-		whatsThis += i18n("%3: the message text is spoken.", "\n<b>" + i18n_Speak() + "<\b>");
+		whatsThis += "<br>" + i18n("%1: the message text is spoken.", "<b>" + i18n_Speak() + "</b>") + "</p>";
 	}
-	mTypeBox->setWhatsThis(whatsThis);
+	mTypeBox->setWhatsThis(whatsThis + "</p>");
 	mSpeakShowing = show;
 }
 
