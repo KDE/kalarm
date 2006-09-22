@@ -96,66 +96,67 @@ static QString xtermCommands[] = {
 KAlarmPrefDlg::KAlarmPrefDlg()
 	: KPageDialog(0, 0)
 {
-  setCaption( i18n("Preferences") );
-  setButtons( Help | Default | Ok | Apply | Cancel );
-  setDefaultButton( Ok );
-  setFaceType( List );
-  setModal( true );
-  showButtonSeparator( true );
-  //setIconListAllVisible(true);
+	setObjectName("PrefDlg");    // used by LikeBack
+	setCaption( i18n("Preferences") );
+	setButtons( Help | Default | Ok | Apply | Cancel );
+	setDefaultButton( Ok );
+	setFaceType( List );
+	setModal( true );
+	showButtonSeparator( true );
+	//setIconListAllVisible(true);
 
 
-  KVBox* frame = new KVBox();
-  mEditPageItem = new KPageWidgetItem( frame,i18n("General") );
-  mEditPageItem->setHeader( i18n("General") );
-  mEditPageItem->setIcon( KIcon( DesktopIcon("misc") ));
-  addPage( mEditPageItem );
-  frame->setMargin(0);
-  mMiscPage = new MiscPrefTab(frame);
+	KVBox* frame = new KVBox();
+	mEditPageItem = new KPageWidgetItem( frame,i18n("General") );
+	mEditPageItem->setHeader( i18n("General") );
+	mEditPageItem->setIcon( KIcon( DesktopIcon("misc") ));
+	addPage( mEditPageItem );
+	frame->setMargin(0);
+	mMiscPage = new MiscPrefTab(frame);
 
-  frame = new KVBox();
-  mStorePageItem = new KPageWidgetItem( frame,i18n("Storage") );
-  mStorePageItem->setHeader( i18n("Alarm Storage") );
-  mStorePageItem->setIcon( KIcon( DesktopIcon("fileopen") ) );
-  addPage( mStorePageItem );
+	frame = new KVBox();
+	mStorePageItem = new KPageWidgetItem( frame,i18n("Storage") );
+	mStorePageItem->setHeader( i18n("Alarm Storage") );
+	mStorePageItem->setIcon( KIcon( DesktopIcon("fileopen") ) );
+	addPage( mStorePageItem );
 
-  mStorePage = new StorePrefTab(frame);
+	mStorePage = new StorePrefTab(frame);
 
-  frame = new KVBox();
-  mEmailPageItem = new KPageWidgetItem( frame,i18n("Email") );
-  mEmailPageItem->setHeader( i18n("Email Alarm Settings") );
-  mEmailPageItem->setIcon( KIcon( DesktopIcon("mail_generic") ) );
-  addPage( mEmailPageItem );
-  frame->setMargin(0);
-  mEmailPage = new EmailPrefTab(frame);
+	frame = new KVBox();
+	mEmailPageItem = new KPageWidgetItem( frame,i18n("Email") );
+	mEmailPageItem->setHeader( i18n("Email Alarm Settings") );
+	mEmailPageItem->setIcon( KIcon( DesktopIcon("mail_generic") ) );
+	addPage( mEmailPageItem );
+	frame->setMargin(0);
+	mEmailPage = new EmailPrefTab(frame);
 
-  frame = new KVBox();
-  mViewPageItem = new KPageWidgetItem( frame,i18n("View") );
-  mViewPageItem->setHeader( i18n("View Settings") );
-  mViewPageItem->setIcon( KIcon( DesktopIcon("view_choose") ) );
-  addPage( mViewPageItem );
+	frame = new KVBox();
+	mViewPageItem = new KPageWidgetItem( frame,i18n("View") );
+	mViewPageItem->setHeader( i18n("View Settings") );
+	mViewPageItem->setIcon( KIcon( DesktopIcon("view_choose") ) );
+	addPage( mViewPageItem );
 
-  frame->setMargin(0);
-  mViewPage = new ViewPrefTab(frame);
+	frame->setMargin(0);
+	mViewPage = new ViewPrefTab(frame);
 
-  frame = new KVBox();
-  mFontColourPageItem = new KPageWidgetItem( frame,i18n("Font & Color") );
-  mFontColourPageItem->setHeader( i18n("Default Font and Color") );
-  mFontColourPageItem->setIcon( KIcon( DesktopIcon("colorize") ) );
-  addPage( mFontColourPageItem );
-  frame->setMargin(0);
-  mFontColourPage = new FontColourPrefTab(frame);
+	frame = new KVBox();
+	mFontColourPageItem = new KPageWidgetItem( frame,i18n("Font & Color") );
+	mFontColourPageItem->setHeader( i18n("Default Font and Color") );
+	mFontColourPageItem->setIcon( KIcon( DesktopIcon("colorize") ) );
+	addPage( mFontColourPageItem );
+	frame->setMargin(0);
+	mFontColourPage = new FontColourPrefTab(frame);
 
-  frame = new KVBox();
-  mEditPageItem = new KPageWidgetItem( frame,i18n("Edit") );
-  mEditPageItem->setHeader( i18n("Default Alarm Edit Settings") );
-  mEditPageItem->setIcon( KIcon( DesktopIcon("edit") ) );
-  addPage( mEditPageItem );
-  frame->setMargin(0);
-  mEditPage = new EditPrefTab(frame);
+	frame = new KVBox();
+	mEditPageItem = new KPageWidgetItem( frame,i18n("Edit") );
+	mEditPageItem->setHeader( i18n("Default Alarm Edit Settings") );
+	mEditPageItem->setIcon( KIcon( DesktopIcon("edit") ) );
+	addPage( mEditPageItem );
+	frame->setMargin(0);
+	mEditPage = new EditPrefTab(frame);
 
-  restore();
-  adjustSize();
+	restore();
+	adjustSize();
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()

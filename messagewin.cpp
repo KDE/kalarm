@@ -195,6 +195,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setObjectName("MessageWin");    // used by LikeBack
 	if (!(flags & NO_INIT_VIEW))
 	{
 		bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventID);
@@ -245,6 +246,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 {
 	kDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setObjectName("ErrorWin");    // used by LikeBack
 	initView();
 	mWindowList.append(this);
 }
@@ -271,6 +273,7 @@ MessageWin::MessageWin()
 {
 	kDebug(5950) << "MessageWin::MessageWin()\n";
 	setAttribute(WidgetFlags);
+	setObjectName("RestoredMsgWin");    // used by LikeBack
 	mWindowList.append(this);
 }
 

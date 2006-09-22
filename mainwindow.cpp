@@ -135,6 +135,7 @@ MainWindow::MainWindow(bool restored)
 	kDebug(5950) << "MainWindow::MainWindow()\n";
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowModality(Qt::WindowModal);
+	setObjectName("MainWin");    // used by LikeBack
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
 	if (!restored)

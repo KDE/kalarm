@@ -184,7 +184,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-    setCaption(caption);
+	setObjectName("EditDlg");    // used by LikeBack
+	setCaption(caption);
 	setButtons((readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
 	setDefaultButton(Cancel);
 	switch (getResource)
