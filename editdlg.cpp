@@ -1675,6 +1675,7 @@ void EditAlarmDlg::slotEditDeferral()
 	bool deferred = mDeferDateTime.isValid();
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(now.addSecs(60))),
 	                       deferred, this);
+	deferDlg.setObjectName("EditDeferDlg");    // used by LikeBack
 	if (limit)
 	{
 		// Don't allow deferral past the next recurrence

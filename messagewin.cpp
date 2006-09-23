@@ -1450,6 +1450,7 @@ void MessageWin::slotDefer()
 {
 	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), KDateTime::currentLocalDateTime().addSecs(60),
 	                              false, this);
+	mDeferDlg->setObjectName("DeferDlg");    // used by LikeBack
 	if (mDefaultDeferMinutes > 0)
 		mDeferDlg->setDeferMinutes(mDefaultDeferMinutes);
 	mDeferDlg->setLimit(mEventID);
