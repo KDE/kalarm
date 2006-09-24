@@ -22,14 +22,12 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qstringlist.h>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
 
-extern "C" {
-#include <libical/ical.h>
-}
 #include <libkcal/calendar.h>
 
 #include "alarmevent.h"
@@ -126,25 +124,27 @@ bool CalendarCompat::isUTC(const QString& localFile)
 	file.close();
 
 	// Extract the CREATED property for the first VEVENT from the calendar
-	bool result = false;
-	icalcomponent* calendar = icalcomponent_new_from_string(text.local8Bit().data());
-	if (calendar)
+	QString VCALENDAR = QString::fromLatin1("BEGIN:VCALENDAR");
+	QString VEVENT    = QString::fromLatin1("BEGIN:VEVENT");
+	QString CREATED   = QString::fromLatin1("CREATED:");
+	QStringList lines = QStringList::split(QChar('\n'), text);
+	for (QStringList::ConstIterator it = lines.begin();  it != lines.end(); ++it)
 	{
-		if (icalcomponent_isa(calendar) == ICAL_VCALENDAR_COMPONENT)
+		if ((*it).startsWith(VCALENDAR))
 		{
-			icalcomponent* c = icalcomponent_get_first_component(calendar, ICAL_VEVENT_COMPONENT);
-			if (c)
+			while (++it != lines.end())
 			{
-				icalproperty* p = icalcomponent_get_first_property(c, ICAL_CREATED_PROPERTY);
-				if (p)
+				if ((*it).startsWith(VEVENT))
 				{
-					struct icaltimetype datetime = icalproperty_get_created(p);
-					if (datetime.is_utc)
-						result = true;
+					while (++it != lines.end())
+					{
+						if ((*it).startsWith(CREATED))
+							return (*it).endsWith("Z");
+					}
 				}
 			}
+			break;
 		}
-		icalcomponent_free(calendar);
 	}
-	return result;
+	return false;
 }
