@@ -2353,7 +2353,7 @@ KARecurrence::Type KAEvent::checkRecur() const
 		KARecurrence::Type type = mRecurrence->type();
 		switch (type)
 		{
-			case KARecurrence::MINUTELY:     // hourly		
+			case KARecurrence::MINUTELY:     // hourly
 			case KARecurrence::DAILY:        // daily
 			case KARecurrence::WEEKLY:       // weekly on multiple days of week
 			case KARecurrence::MONTHLY_DAY:  // monthly on multiple dates in month
@@ -2585,7 +2585,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		bool addLateCancel = false;
 		QStringList flags;
 
-		if (pre_0_7  &&  event->doesFloat())
+		if (pre_0_7  &&  event->floats())
 		{
 			// It's a KAlarm pre-0.7 calendar file.
 			// Ensure that when the calendar is saved, the alarm time isn't lost.
@@ -2728,7 +2728,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			if (KCalEvent::status(event) == KCalEvent::ARCHIVED)
 				event->setCreated(event->dtEnd());
 			KDateTime start = event->dtStart();
-			if (event->doesFloat())
+			if (event->floats())
 			{
 				event->setFloats(false);
 				start.setTime(startOfDay);
