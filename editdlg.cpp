@@ -367,6 +367,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	layout->addWidget(box);
+	layout->addStretch();
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
@@ -376,19 +377,27 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
 	layout->addWidget(mSimpleRepetition);
 
+	// Reminder
+	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
+	mReminder = new Reminder(i18n("Rem&inder:"),
+	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
+	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
+	                         true, true, mainPage);
+	mReminder->setFixedSize(mReminder->sizeHint());
+	topLayout->addWidget(mReminder, 0, Qt::AlignAuto);
+
+	// Late cancel selector - default = allow late display
+	mLateCancel = new LateCancelSelector(true, mainPage);
+	topLayout->addWidget(mLateCancel, 0, Qt::AlignAuto);
+
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
 		mShowInKorganizer = new CheckBox(i18n_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
 		QWhatsThis::add(mShowInKorganizer, i18n("Check to copy the alarm into KOrganizer's calendar"));
-		layout->addWidget(mShowInKorganizer);
+		topLayout->addWidget(mShowInKorganizer);
 	}
-	layout->addStretch();
-
-	// Late cancel selector - default = allow late display
-	mLateCancel = new LateCancelSelector(true, mainPage);
-	topLayout->addWidget(mLateCancel, 0, Qt::AlignAuto);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -462,15 +471,6 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignAuto);
-
-	// Reminder
-	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
-	mReminder = new Reminder(i18n("Rem&inder:"),
-	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
-	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
-	                         true, true, mDisplayAlarmsFrame);
-	mReminder->setFixedSize(mReminder->sizeHint());
-	frameLayout->addWidget(mReminder, 0, Qt::AlignAuto);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	layout = new QHBoxLayout(frameLayout);
@@ -1832,6 +1832,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFilePadding->hide();
 		mTextMessageEdit->show();
 		mFontColourButton->show();
+		mReminder->show();
 		mSoundPicker->showSpeak(true);
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
@@ -1844,6 +1845,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFileBox->show();
 		mFilePadding->show();
 		mFontColourButton->hide();
+		mReminder->show();
 		mSoundPicker->showSpeak(false);
 		setButtonWhatsThis(Try, i18n("Display the file now"));
 		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
@@ -1853,6 +1855,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 	}
 	else if (mCommandRadio->isOn())
 	{
+		mReminder->hide();
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
 		mAlarmTypeStack->raiseWidget(mCommandFrame);
 		mCmdCommandEdit->setNoSelect();
@@ -1860,6 +1863,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 	}
 	else if (mEmailRadio->isOn())
 	{
+		mReminder->hide();
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
 		mAlarmTypeStack->raiseWidget(mEmailFrame);
 		mEmailToEdit->setNoSelect();
