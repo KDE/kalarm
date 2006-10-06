@@ -74,6 +74,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	: KDialog(parent),
 	  mSpecialActionsButton(0)
 {
+	setObjectName("BirthdayDlg");    // used by LikeBack
 	setCaption(i18n("Import Birthdays From KAddressBook"));
 	setButtons(Ok | Cancel);
 	setDefaultButton(Ok);
@@ -330,7 +331,7 @@ QList<KAEvent> BirthdayDlg::events() const
 				date.setYMD(thisYear, date.month(), date.day());
 				if (date <= today)
 					date.setYMD(thisYear + 1, date.month(), date.day());
-                                KDateTime dt( date, KDateTime::ClockTime );
+				KDateTime dt(date, KDateTime::ClockTime);
 				KAEvent event(dt,
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
 				              mBgColourChoose->color(), mFontColourButton->fgColour(),
