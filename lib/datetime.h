@@ -156,7 +156,7 @@ class DateTime
 		int minsTo(const DateTime& dt) const   { return mDateTime.secsTo(dt.mDateTime) / 60; }
 		/** Returns the number of seconds from this date or date-time to @p dt. */
 		int secsTo(const DateTime& dt) const   { return mDateTime.secsTo(dt.mDateTime); }
-		int secsTo_long(const DateTime& dt) const   { return mDateTime.secsTo_long(dt.mDateTime); }
+		qint64 secsTo_long(const DateTime& dt) const   { return mDateTime.secsTo_long(dt.mDateTime); }
 		/** Returns the value as a string.
 		 *  If it is a date-time, both time and date are included in the output.
 		 *  If it is date-only, only the date is included in the output.
