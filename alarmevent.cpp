@@ -2453,7 +2453,7 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 			int adjustment = oldTime.secsTo(startOfDay);
 			if (adjustment)
 			{
-				event->setDtStart(QDateTime(event->dtStart().date(), startOfDay));
+				event->setDtStart(KDateTime(event->dtStart().date(), startOfDay, Preferences::timeSpec()));
 				Alarm::List alarms = event->alarms();
 				int deferralOffset = 0;
 				for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
