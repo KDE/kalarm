@@ -35,7 +35,7 @@
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 
@@ -223,8 +223,10 @@ bool AlarmCalendar::open()
 				created = saveCal(mICalUrl.path());
 			else
 			{
-				KTempFile tmpFile;
-				created = saveCal(tmpFile.name());
+				KTemporaryFile tmpFile;
+				tmpFile.setAutoRemove(false);
+				tmpFile.open();
+				created = saveCal(tmpFile.fileName());
 			}
 			if (created)
 				load();

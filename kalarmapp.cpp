@@ -37,7 +37,7 @@
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kprocess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kfileitem.h>
 #include <kstdguiitem.h>
 #include <kservicetypetrader.h>
@@ -1758,21 +1758,22 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 */
 QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm)
 {
-	KTempFile tmpFile(QString::null, QString::null, 0700);
-	tmpFile.setAutoDelete(false);     // don't delete file when it is destructed
-	QTextStream* stream = tmpFile.textStream();
-	if (!stream)
+	KTemporaryFile tmpFile;
+	tmpFile.setAutoRemove(false);     // don't delete file when it is destructed
+	if (!tmpFile.open())
 		kError(5950) << "KAlarmApp::createTempScript(): Unable to create a temporary script file" << endl;
 	else
 	{
+		tmpFile.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser);
+		QTextStream stream ( &tmpFile );
 		if (insertShell)
-			*stream << "#!" << ShellProcess::shellPath() << "\n";
-		*stream << command;
-		tmpFile.close();
-		if (tmpFile.status())
-			kError(5950) << "KAlarmApp::createTempScript(): Error " << tmpFile.status() << " writing to temporary script file" << endl;
+			stream << "#!" << ShellProcess::shellPath() << "\n";
+		stream << command;
+		stream.flush();
+		if (tmpFile.error()!=QFile::NoError)
+			kError(5950) << "KAlarmApp::createTempScript(): Error " << tmpFile.errorString() << " writing to temporary script file" << endl;
 		else
-			return tmpFile.name();
+			return tmpFile.fileName();
 	}
 
 	QStringList errmsgs(i18n("Error creating temporary script file"));

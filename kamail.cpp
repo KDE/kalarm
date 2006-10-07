@@ -41,7 +41,7 @@
 #include <kaboutdata.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kemailsettings.h>
 #include <kdebug.h>
 
@@ -276,25 +276,24 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 			return err;
 
 		// Write to a temporary file for feeding to KMail
-		KTempFile tmpFile;
-		tmpFile.setAutoDelete(true);     // delete file when it is destructed
-		QTextStream* stream = tmpFile.textStream();
-		if (!stream)
+		KTemporaryFile tmpFile;
+		if (!tmpFile.open())
 		{
 			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
 			return QString("");
 		}
-		*stream << message;
-		tmpFile.close();
-		if (tmpFile.status())
+		QTextStream stream ( &tmpFile );
+		stream << message;
+		stream.flush();
+		if (tmpFile.error()!=QFile::NoError)
 		{
-			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.status() << " writing to temporary mail file" << endl;
+			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.errorString() << " writing to temporary mail file" << endl;
 			return QString("");
 		}
 
 		// Notify KMail of the message in the temporary file
 		QList<QVariant> args;
-		args << QString::fromLatin1(folder) << tmpFile.name();
+		args << QString::fromLatin1(folder) << tmpFile.fileName();
 #warning Set correct DBus interface/object for kmail
 		QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
 		QDBusReply<int> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("dcopAddMessage"), args);
