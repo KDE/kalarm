@@ -241,7 +241,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
 {
 	bool success = false;
-	CalendarLocal calendar(mCalendar.timeZoneId());
+	CalendarLocal calendar(mCalendar.timeSpec());
 	if (!calendar.load(fileName))
 	{
 		// Loading this file failed, but just assume that it's not a calendar file
@@ -319,7 +319,7 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 	QString fileName = mURL.path() + "/" + id;
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
-	CalendarLocal cal(mCalendar.timeZoneId());
+	CalendarLocal cal(mCalendar.timeSpec());
 	cal.setCustomProperties(mCalendar.customProperties());   // copy all VCALENDAR custom properties to each file
 	if (mCalIDFunction)
 		(*mCalIDFunction)(cal);                          // write the application ID into the calendar
