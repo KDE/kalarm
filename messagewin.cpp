@@ -708,9 +708,19 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry("ConfirmAck", mConfirmAck);
 		if (mDateTime.isValid())
 		{
-#warning Write KDateTime when it becomes possible
+//TODO: Write KDateTime when it becomes possible
 			config->writeEntry("Time", mDateTime.effectiveDateTime());
 			config->writeEntry("DateOnly", mDateTime.isDateOnly());
+			QString zone;
+			if (mDateTime.isUtc())
+				zone = QLatin1String("UTC");
+			else
+			{
+				const KTimeZone* tz = mDateTime.timeZone();
+				if (tz)
+					zone = tz->name();
+			}
+			config->writeEntry("TimeZone", zone);
 		}
 		if (mCloseTime.isValid())
 			config->writeEntry("Expiry", mCloseTime);
@@ -748,11 +758,22 @@ void MessageWin::readProperties(KConfig* config)
 	mConfirmAck          = config->readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
 	QDateTime dt         = config->readEntry("Time", invalidDateTime);
+	QString zone         = config->readEntry("TimeZone");
+	if (zone.isEmpty())
+		mDateTime = KDateTime(dt, KDateTime::ClockTime);
+	else if (zone == QString::fromLatin1("UTC"))
+	{
+		dt.setTimeSpec(Qt::UTC);
+		mDateTime = KDateTime(dt, KDateTime::UTC);
+	}
+	else
+	{
+		const KTimeZone* tz = KSystemTimeZones::zone(zone);
+		mDateTime = KDateTime(dt, (tz ? tz : KSystemTimeZones::local()));
+	}
 	bool dateOnly        = config->readEntry("DateOnly", false);
 	if (dateOnly)
-		mDateTime = KDateTime(dt.date(), KDateTime::LocalZone);
-	else
-		mDateTime = KDateTime(dt, KDateTime::LocalZone);
+		mDateTime.setDateOnly(true);
 	mCloseTime           = config->readEntry("Expiry", invalidDateTime);
 	mAudioFile           = config->readPathEntry(QLatin1String("AudioFile"));
 	mVolume              = static_cast<float>(config->readEntry("Volume", 0)) / 100;
