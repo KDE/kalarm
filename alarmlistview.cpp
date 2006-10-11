@@ -359,7 +359,7 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 		// Create a calendar object containing all the currently selected alarms
 		kDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
 		mMousePressed = false;
-		KCal::CalendarLocal cal(Preferences::timeSpec(true));
+		KCal::CalendarLocal cal(Preferences::timeZone(true));
 		QList<EventListViewItemBase*> items = selectedItems();
 		if (items.isEmpty())
 			return;

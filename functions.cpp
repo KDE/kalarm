@@ -1174,7 +1174,7 @@ bool sendToKOrganizer(const KAEvent& event)
 	// Translate the event into string format
 	KCal::ICalFormat format;
 #warning Retain original time zone of event
-	format.setTimeSpec(Preferences::timeSpec(true));
+	format.setTimeSpec(Preferences::timeZone(true));
 	QString iCal = format.toICalString(kcalEvent);
 	delete kcalEvent;
 

@@ -104,7 +104,7 @@ Preferences::MailFrom Preferences::default_emailFrom()
 
 // Active config file settings
 const KTimeZone*           Preferences::mSystemTimeZone;
-KDateTime::Spec            Preferences::mTimeSpec;
+const KTimeZone*           Preferences::mTimeZone;
 ColourList                 Preferences::mMessageColours;
 QColor                     Preferences::mDefaultBgColour;
 QFont                      Preferences::mMessageFont;
@@ -278,13 +278,11 @@ void Preferences::read()
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	QString timeZone = config->readEntry(TIMEZONE);
-	if (timeZone.isEmpty())
-		mTimeSpec = KDateTime::ClockTime;
-	else
-	{
-		const KTimeZone* tz = KSystemTimeZones::zone(timeZone);
-		mTimeSpec = tz ? tz : KSystemTimeZones::local();
-	}
+	mTimeZone = 0;
+	if (!timeZone.isEmpty())
+		mTimeZone = KSystemTimeZones::zone(timeZone);
+	if (!mTimeZone)
+		mTimeZone = KSystemTimeZones::local();
 	QStringList cols = config->readEntry(MESSAGE_COLOURS, QStringList() );
 	if (!cols.count())
 		mMessageColours = default_messageColours;
@@ -395,7 +393,7 @@ void Preferences::save(bool syncToDisc)
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
-	config->writeEntry(TIMEZONE, (mTimeSpec == KDateTime::ClockTime ? QString() : mTimeSpec.timeZone()->name()));
+	config->writeEntry(TIMEZONE, (mTimeZone ? mTimeZone->name() : QString()));
 	QStringList colours;
 	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
 		colours.append(QColor(mMessageColours[i]).name());
@@ -480,12 +478,12 @@ void Preferences::updateStartOfDayCheck()
 * The system time zone is cached, and the cached value will be returned unless
 * 'reload' is true, in which case the value is re-read from the system.
 */
-KDateTime::Spec Preferences::timeSpec(bool reload)
+const KTimeZone* Preferences::timeZone(bool reload)
 {
 	if (reload)
 		mSystemTimeZone = 0;
-	if (mTimeSpec.isValid())
-		return mTimeSpec;
+	if (mTimeZone)
+		return mTimeZone;
 	return default_timeZone();
 }
 

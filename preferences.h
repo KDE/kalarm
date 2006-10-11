@@ -52,7 +52,7 @@ class Preferences : public QObject
 		static void              connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
-		static KDateTime::Spec   timeSpec(bool reload = false);
+		static const KTimeZone*  timeZone(bool reload = false);
 		static const ColourList& messageColours()                 { return mMessageColours; }
 		static QColor            defaultBgColour()                { return mDefaultBgColour; }
 		static QColor            defaultFgColour()                { return default_defaultFgColour; }
@@ -180,7 +180,7 @@ class Preferences : public QObject
 		static void                read();
 		static void                convertOldPrefs();
 		static int                 startOfDayCheck();
-		static QString	         emailFrom(MailFrom, bool useAddress, bool bcc);
+		static QString	           emailFrom(MailFrom, bool useAddress, bool bcc);
 		static MailFrom            emailFrom(const QString&);
 		static void                setNotify(const QString& messageID, bool notify);
 		static bool                notifying(const QString& messageID);
@@ -200,7 +200,7 @@ class Preferences : public QObject
 		friend class EmailPrefTab;
 		static void                setEmailAddress(MailFrom, const QString& address);
 		static void                setEmailBccAddress(bool useControlCentre, const QString& address);
-		static KDateTime::Spec     mTimeSpec;
+		static const KTimeZone*    mTimeZone;
 		static ColourList          mMessageColours;
 		static QColor              mDefaultBgColour;
 		static QFont               mMessageFont;

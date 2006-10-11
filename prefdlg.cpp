@@ -41,6 +41,7 @@
 #include <kiconloader.h>
 #include <kcolorcombo.h>
 #include <kstdguiitem.h>
+#include <ktimezones.h>
 #include <kdebug.h>
 #include <kicon.h>
 
@@ -335,13 +336,28 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 
 	group->setFixedHeight(group->sizeHint().height());
 
-	// Start-of-day time
+	// Default time zone
 	KHBox* itemBox = new KHBox(mPage);
 	itemBox->setMargin(0);
 	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
+	QLabel* label = new QLabel(i18n("Time &zone:"), box);
+	mTimeZone = new QComboBox(box);
+	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
+	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
+		mTimeZone->addItem(it.key());
+	box->setWhatsThis(i18n("Select the default time zone to use."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
+
+	// Start-of-day time
+	itemBox = new KHBox(mPage);
+	itemBox->setMargin(0);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
 	mStartOfDay = new TimeEdit(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
@@ -418,6 +434,7 @@ void MiscPrefTab::restore()
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mAutostartTrayIcon->setChecked(Preferences::mAutostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
+	setTimeZone(Preferences::timeZone());
 	mStartOfDay->setValue(Preferences::mStartOfDay);
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
@@ -470,6 +487,9 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
 #endif
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
+	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
+	if (tz)
+		Preferences::mTimeZone = tz;
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
 	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
@@ -486,10 +506,26 @@ void MiscPrefTab::setDefaults()
 	mQuitWarn->setChecked(Preferences::default_quitWarn);
 	mAutostartTrayIcon->setChecked(Preferences::default_autostartTrayIcon);
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
+	setTimeZone(Preferences::default_timeZone());
 	mStartOfDay->setValue(Preferences::default_startOfDay);
 	mXtermType->setButton(0);
 	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
+}
+
+void MiscPrefTab::setTimeZone(const KTimeZone* tz)
+{
+	int tzindex = 0;
+	if (tz)
+	{
+		QString zone = tz->name();
+		int count = mTimeZone->count();
+		while (tzindex < count  &&  mTimeZone->itemText(tzindex) != zone)
+			++tzindex;
+		if (tzindex >= count)
+			tzindex = 0;
+	}
+	mTimeZone->setCurrentIndex(tzindex);
 }
 
 void MiscPrefTab::slotAutostartDaemonClicked()

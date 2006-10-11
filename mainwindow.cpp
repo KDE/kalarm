@@ -1280,7 +1280,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
 	KUrl::List      files;
-	KCal::CalendarLocal calendar(Preferences::timeSpec(true));
+	KCal::CalendarLocal calendar(Preferences::timeZone(true));
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
 	kDebug(5950) << "MainWindow::executeDropEvent(): " << fmts << endl;

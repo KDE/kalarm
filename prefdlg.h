@@ -34,6 +34,7 @@ class QRadioButton;
 class QPushButton;
 class QComboBox;
 class QLineEdit;
+class KTimeZone;
 class KVBox;
 class KColorCombo;
 class FontColourChooser;
@@ -126,6 +127,8 @@ class MiscPrefTab : public PrefsTabBase
 //#endif
 
 	private:
+		void         setTimeZone(const KTimeZone*);
+
 		QCheckBox*     mAutostartDaemon;
 		QRadioButton*  mRunInSystemTray;
 		QRadioButton*  mRunOnDemand;
@@ -133,6 +136,7 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*     mQuitWarn;
 		QCheckBox*     mAutostartTrayIcon;
 		QCheckBox*     mConfirmAlarmDeletion;
+		QComboBox*     mTimeZone;
 		TimeEdit*      mStartOfDay;
 		ButtonGroup*   mXtermType;
 		QLineEdit*     mXtermCommand;

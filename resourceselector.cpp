@@ -204,7 +204,7 @@ void ResourceSelector::addResource()
 	if (dlg.exec())
 	{
 		resource->setActive(true);
-		resource->setTimeSpec(Preferences::timeSpec());
+		resource->setTimeSpec(Preferences::timeZone());
 		manager->add(resource);
 		manager->writeConfig();
 		mCalendar->resourceAdded(resource);   // load the resource and connect in-process change signals

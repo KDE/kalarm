@@ -84,7 +84,7 @@ bool AlarmCalendar::initialiseCalendars()
 	QString displayCal = KStandardDirs::locateLocal("appdata", displayCalendarName);
 	AlarmResources::setDebugArea(5951);
 	AlarmResources::setReservedFile(displayCal);
-	AlarmResources* resources = AlarmResources::create(Preferences::timeSpec(true), false);
+	AlarmResources* resources = AlarmResources::create(Preferences::timeZone(true), false);
 	if (!resources)
 	{
 		if (!AlarmResources::creationError().isEmpty())
@@ -210,7 +210,7 @@ bool AlarmCalendar::open()
 
 		kDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyUrl() << ")\n";
 		if (!mCalendar)
-			mCalendar = new CalendarLocal(Preferences::timeSpec(true));
+			mCalendar = new CalendarLocal(Preferences::timeZone(true));
 
 		// Check for file's existence, assuming that it does exist when uncertain,
 		// to avoid overwriting it.
@@ -269,7 +269,7 @@ int AlarmCalendar::load()
 			return -1;
 		}
 		kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
-		calendar->setTimeSpec(Preferences::timeSpec(true));
+		calendar->setTimeSpec(Preferences::timeZone(true));
 		if (!calendar->load(tmpFile))
 		{
 			// Check if the file is zero length
@@ -509,7 +509,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 
 	// Read the calendar and add its alarms to the current calendars
-	CalendarLocal cal(Preferences::timeSpec(true));
+	CalendarLocal cal(Preferences::timeZone(true));
 	success = cal.load(filename);
 	if (!success)
 	{
