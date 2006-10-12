@@ -21,7 +21,6 @@
 #ifndef PREFDLG_H
 #define PREFDLG_H
 
-#include <ktabctl.h>
 #include <kpagedialog.h>
 
 #include "preferences.h"
