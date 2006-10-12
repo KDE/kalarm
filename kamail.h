@@ -55,7 +55,6 @@ class KAMail
 		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
-		static char*       base64Encode(const char* in, int size, int& outSize);
 		static QStringList errors(const QString& error = QString(), bool sendfail = true);
 };
 

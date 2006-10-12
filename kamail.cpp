@@ -282,10 +282,10 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
 			return QString("");
 		}
-		QTextStream stream ( &tmpFile );
+		QTextStream stream(&tmpFile);
 		stream << message;
 		stream.flush();
-		if (tmpFile.error()!=QFile::NoError)
+		if (tmpFile.error() != QFile::NoError)
 		{
 			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.errorString() << " writing to temporary mail file" << endl;
 			return QString("");
@@ -410,39 +410,28 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 				return attachError;
 			}
 			QFile file(tmpFile);
-			if (!file.open(QIODevice::ReadOnly) ) {
+			if (!file.open(QIODevice::ReadOnly)) {
 				kDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
 				return attachError;
 			}
 			qint64 size = file.size();
-			char* contents = new char [size + 1];
-			qint64 bytes = file.read(contents, size);
+			QByteArray contents = file.readAll();
 			file.close();
-			contents[size] = 0;
 			bool atterror = false;
-			if (bytes == (qint64)-1  ||  bytes < size) {
+			if (contents.size() < size) {
 				kDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
 				atterror = true;
 			}
 			else if (text)
 			{
 				// Text attachment doesn't need conversion
-				message += contents;
+				message += QString::fromLatin1(contents);
 			}
 			else
 			{
 				// Convert the attachment to BASE64 encoding
-				int base64Size;
-				char* base64 = base64Encode(contents, static_cast<int>(size), base64Size);
-				if (base64Size == -1) {
-					kDebug(5950) << "KAMail::appendBodyAttachments() base64 buffer overflow: " << attachment << endl;
-					atterror = true;
-				}
-				else
-					message += QString::fromLatin1(base64, base64Size);
-				delete[] base64;
+				message += QString::fromLatin1(contents.toBase64());
 			}
-			delete[] contents;
 			if (atterror)
 				return attachError;
 		}
@@ -748,82 +737,6 @@ bool KAMail::checkAttachment(const KUrl& url)
 	if (fi.isDir()  ||  !fi.isReadable())
 		return false;
 	return true;
-}
-
-
-/******************************************************************************
-*  Convert a block of memory to Base64 encoding.
-*  'outSize' is set to the number of bytes used in the returned block, or to
-*            -1 if overflow.
-*  Reply = BASE64 buffer, which the caller must delete[] afterwards.
-*/
-char* KAMail::base64Encode(const char* in, int size, int& outSize)
-{
-	const int MAX_LINELEN = 72;
-	static unsigned char dtable[65] =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz"
-		"0123456789+/";
-
-	char* out = new char [2*size + 5];
-	outSize = -1;
-	int outIndex = 0;
-	int lineLength = 0;
-	for (int inIndex = 0;  inIndex < size;  )
-	{
-		unsigned char igroup[3];
-		int n;
-		for (n = 0;  n < 3;  ++n)
-		{
-			if (inIndex < size)
-				igroup[n] = (unsigned char)in[inIndex++];
-			else
-			{
-				igroup[n] = igroup[2] = 0;
-				break;
-			}
-		}
-
-		if (n > 0)
-		{
-			unsigned char ogroup[4];
-			ogroup[0] = dtable[igroup[0] >> 2];
-			ogroup[1] = dtable[((igroup[0] & 3) << 4) | (igroup[1] >> 4)];
-			ogroup[2] = dtable[((igroup[1] & 0xF) << 2) | (igroup[2] >> 6)];
-			ogroup[3] = dtable[igroup[2] & 0x3F];
-
-			if (n < 3)
-			{
-				ogroup[3] = '=';
-				if (n < 2)
-					ogroup[2] = '=';
-			}
-			if (outIndex >= size*2)
-			{
-				delete[] out;
-				return 0;
-			}
-			for (int i = 0;  i < 4;  ++i)
-			{
-				if (lineLength >= MAX_LINELEN)
-				{
-					out[outIndex++] = '\r';
-					out[outIndex++] = '\n';
-					lineLength = 0;
-				}
-				out[outIndex++] = ogroup[i];
-				++lineLength;
-			}
-		}
-	}
-
-	if (outIndex + 2 < size*2)
-	{
-		out[outIndex++] = '\r';
-		out[outIndex++] = '\n';
-	}
-	outSize = outIndex;
-	return out;
 }
 
 /******************************************************************************
