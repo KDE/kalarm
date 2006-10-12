@@ -348,6 +348,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
 		mTimeZone->addItem(it.key());
 	box->setWhatsThis(i18n("Select the default time zone to use."));
+	label->setBuddy(mTimeZone);
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
