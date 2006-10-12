@@ -1764,13 +1764,13 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 		kError(5950) << "KAlarmApp::createTempScript(): Unable to create a temporary script file" << endl;
 	else
 	{
-		tmpFile.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser);
-		QTextStream stream ( &tmpFile );
+		tmpFile.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser);
+		QTextStream stream(&tmpFile);
 		if (insertShell)
 			stream << "#!" << ShellProcess::shellPath() << "\n";
 		stream << command;
 		stream.flush();
-		if (tmpFile.error()!=QFile::NoError)
+		if (tmpFile.error() != QFile::NoError)
 			kError(5950) << "KAlarmApp::createTempScript(): Error " << tmpFile.errorString() << " writing to temporary script file" << endl;
 		else
 			return tmpFile.fileName();
