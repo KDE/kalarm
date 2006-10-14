@@ -184,7 +184,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-	setObjectName("EditDlg");    // used by LikeBack
+	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
 	setCaption(caption);
 	setButtons((readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
 	setDefaultButton(Cancel);
@@ -874,7 +874,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
 		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
-		KDateTime defaultTime = KDateTime::currentUtcDateTime().addSecs(60);
+		KDateTime defaultTime = KDateTime::currentUtcDateTime().addSecs(60).toTimeSpec(Preferences::timeZone());
 		if (mTemplate)
 		{
 			mTemplateDefaultTime->setChecked(true);
