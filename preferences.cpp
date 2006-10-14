@@ -352,11 +352,7 @@ void Preferences::read()
 	mDefaultSoundType         = (soundType < 0 || soundType > SoundPicker::SPEAK)
 	                          ? default_defaultSoundType : (SoundPicker::Type)soundType;
 	mDefaultSoundVolume       = static_cast<float>(config->readEntry(DEF_SOUND_VOLUME, static_cast<double>(default_defaultSoundVolume)));
-#ifdef WITHOUT_ARTS
-	mDefaultSoundRepeat       = false;
-#else
 	mDefaultSoundRepeat       = config->readEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
-#endif
 	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
 	mDefaultCmdScript         = config->readEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
 	int logType               = config->readEntry(DEF_CMD_LOG_TYPE, static_cast<int>(default_defaultCmdLogType));

@@ -563,11 +563,7 @@ int KAlarmApp::newInstance()
 
 				QByteArray audioFile;
 				float      audioVolume = -1;
-#ifdef WITHOUT_ARTS
-				bool       audioRepeat = false;
-#else
 				bool       audioRepeat = args->isSet("play-repeat");
-#endif
 				if (audioRepeat  ||  args->isSet("play"))
 				{
 					// Play a sound with the alarm
@@ -578,7 +574,6 @@ int KAlarmApp::newInstance()
 					if (args->isSet("speak"))
 						USAGE(i18n("%1 incompatible with %2", QLatin1String("--speak"), QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
-#ifndef WITHOUT_ARTS
 					if (args->isSet("volume"))
 					{
 						bool ok;
@@ -587,12 +582,9 @@ int KAlarmApp::newInstance()
 							USAGE(i18n("Invalid %1 parameter", QLatin1String("--volume")))
 						audioVolume = static_cast<float>(volumepc) / 100;
 					}
-#endif
 				}
-#ifndef WITHOUT_ARTS
 				else if (args->isSet("volume"))
 					USAGE(i18n("%1 requires %2 or %3", QLatin1String("--volume"), QLatin1String("--play"), QLatin1String("--play-repeat")))
-#endif
 				if (args->isSet("speak"))
 				{
 					if (args->isSet("beep"))
@@ -710,10 +702,8 @@ int KAlarmApp::newInstance()
 					usage += QLatin1String("--login ");
 				if (args->isSet("play"))
 					usage += QLatin1String("--play ");
-#ifndef WITHOUT_ARTS
 				if (args->isSet("play-repeat"))
 					usage += QLatin1String("--play-repeat ");
-#endif
 				if (args->isSet("reminder"))
 					usage += QLatin1String("--reminder ");
 				if (args->isSet("reminder-once"))
@@ -724,10 +714,8 @@ int KAlarmApp::newInstance()
 					usage += QLatin1String("--subject ");
 				if (args->isSet("time"))
 					usage += QLatin1String("--time ");
-#ifndef WITHOUT_ARTS
 				if (args->isSet("volume"))
 					usage += QLatin1String("--volume ");
-#endif
 				if (!usage.isEmpty())
 				{
 					usage += i18n(": option(s) only valid with a message/%1/%2", QLatin1String("--file"), QLatin1String("--exec"));

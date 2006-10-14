@@ -30,9 +30,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <khbox.h>
-#ifndef WITHOUT_ARTS
-#include <arts/kplayobjectfactory.h>
-#endif
+#include <phonon/backendcapabilities.h>
 #include <kdebug.h>
 
 #include "combobox.h"
@@ -49,7 +47,7 @@ QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"
 QString SoundPicker::i18n_None()        { return i18n("None"); }
 QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
 QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }
-QString SoundPicker::i18n_File()        { return i18n("Audio file"); }
+QString SoundPicker::i18n_File()        { return i18n("Sound file"); }
 
 
 SoundPicker::SoundPicker(QWidget* parent)
@@ -97,9 +95,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 void SoundPicker::setReadOnly(bool readOnly)
 {
 	mTypeCombo->setReadOnly(readOnly);
-#ifdef WITHOUT_ARTS
 	mFilePicker->setReadOnly(readOnly);
-#endif
 	mReadOnly = readOnly;
 }
 
@@ -220,11 +216,6 @@ void SoundPicker::slotTypeSelected(int id)
 */
 void SoundPicker::slotPickFile()
 {
-#ifdef WITHOUT_ARTS
-	QString url = browseFile(mDefaultDir, mFile);
-	if (!url.isEmpty())
-		mFile = url;
-#else
 	QString file = mFile;
 	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this);
 	dlg.setReadOnly(mReadOnly);
@@ -246,7 +237,6 @@ void SoundPicker::slotPickFile()
 		mFile       = file;
 		mDefaultDir = dlg.defaultDir();
 	}
-#endif
 	mFilePicker->setToolTip(mFile);
 	if (mFile.isEmpty())
 	{
@@ -286,10 +276,6 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 			kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
 		defaultDir = kdeSoundDir;
 	}
-#ifdef WITHOUT_ARTS
-	QString filter = QString::fromLatin1("*.wav *.mp3 *.ogg|%1\n*|%2").arg(i18n("Sound Files")).arg(i18n("All Files"));
-#else
-	QString filter = KDE::PlayObjectFactory::mimeTypes().join(" ");
-#endif
+	QString filter = Phonon::BackendCapabilities::knownMimeTypes().join(" ");
 	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }

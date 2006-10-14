@@ -73,10 +73,8 @@ static KCmdLineOptions options[] =
 	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
 	{ "p", 0, 0 },
 	{ "play <url>", I18N_NOOP("Audio file to play once"), 0 },
-#ifndef WITHOUT_ARTS
 	{ "P", 0, 0 },
 	{ "play-repeat <url>", I18N_NOOP("Audio file to play repeatedly"), 0 },
-#endif
 	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
 	{ "R", 0, 0 },
 	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
@@ -95,10 +93,8 @@ static KCmdLineOptions options[] =
 	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
 	{ "u", 0, 0 },
 	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm, or date yyyy-mm-dd"), 0 },
-#ifndef WITHOUT_ARTS
 	{ "V", 0, 0 },
 	{ "volume <percent>", I18N_NOOP("Volume to play audio file"), 0 },
-#endif
 	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
 	KCmdLineLastOption
 };

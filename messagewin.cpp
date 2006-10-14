@@ -580,7 +580,6 @@ void MessageWin::initView()
 		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 	}
 
-#ifndef WITHOUT_ARTS
 	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
 		// Silence button to stop sound repetition
@@ -595,7 +594,6 @@ void MessageWin::initView()
 		// To avoid getting in a mess, disable the button until sound playing has been set up
 		mSilenceButton->setEnabled(false);
 	}
-#endif
 
 	KIconLoader iconLoader;
 	if (mKMailSerialNumber)

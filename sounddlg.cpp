@@ -18,8 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef WITHOUT_ARTS
-
 #include "kalarm.h"
 
 #include <QLabel>
@@ -140,7 +138,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	label->setBuddy(mFadeTime);
 	label = new QLabel(i18n("seconds"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
-	box->setWhatsThis(i18n("Enter how many seconds to fade the sound before reaching the set volume."));
+	mFadeBox->setWhatsThis(i18n("Enter how many seconds to fade the sound before reaching the set volume."));
 
 	// Fade slider
 	mFadeVolumeBox = new KHBox(group);
@@ -154,7 +152,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFadeSlider->setTickInterval(10);
 	mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 	label->setBuddy(mFadeSlider);
-	box->setWhatsThis(i18n("Choose the initial volume for playing the sound file."));
+	mFadeVolumeBox->setWhatsThis(i18n("Choose the initial volume for playing the sound file."));
 
 	// Restore the dialogue size from last time
 	QSize s;
@@ -280,5 +278,3 @@ void SoundDlg::slotFadeToggled(bool on)
 	mFadeBox->setEnabled(on);
 	mFadeVolumeBox->setEnabled(on);
 }
-
-#endif // #ifndef WITHOUT_ARTS

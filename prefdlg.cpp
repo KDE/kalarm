@@ -63,9 +63,7 @@
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
-#ifndef WITHOUT_ARTS
 #include "sounddlg.h"
-#endif
 #include "soundpicker.h"
 #include "specialactions.h"
 #include "timeedit.h"
@@ -1052,6 +1050,9 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
 
+	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout->setMargin(0);
+	vlayout->addLayout(hlayout);
 	mSound = new QComboBox(bbox);
 	mSound->addItem(SoundPicker::i18n_None());         // index 0
 	mSound->addItem(SoundPicker::i18n_Beep());         // index 1
@@ -1060,7 +1061,13 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 		mSound->addItem(SoundPicker::i18n_Speak());  // index 3
 	mSound->setMinimumSize(mSound->sizeHint());
 	mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_Sound()).toString());
-	vlayout->addWidget(mSound, 0, Qt::AlignLeft);
+	hlayout->addWidget(mSound);
+	hlayout->addStretch();
+
+	mSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bbox);
+	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
+	mSoundRepeat->setWhatsThis(i18nc("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.", SoundDlg::i18n_Repeat()));
+	hlayout->addWidget(mSoundRepeat);
 
 	box = new KHBox(bbox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
@@ -1077,13 +1084,6 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	box->setWhatsThis(i18n("Enter the default sound file to use in the alarm edit dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	vlayout->addWidget(box);
-
-#ifndef WITHOUT_ARTS
-	mSoundRepeat = new QCheckBox(i18n("Repea&t sound file"), bbox);
-	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
-	mSoundRepeat->setWhatsThis(i18nc("sound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.", SoundDlg::i18n_Repeat()));
-	vlayout->addWidget(mSoundRepeat, 0, Qt::AlignLeft);
-#endif
 	bbox->setFixedHeight(bbox->sizeHint().height());
 
 	// COMMAND ALARMS
@@ -1091,7 +1091,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
-	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
 
@@ -1190,9 +1190,7 @@ void EditPrefTab::restore()
 	mSpecialActionsButton->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
 	mSound->setCurrentIndex(Preferences::mDefaultSoundType);
 	mSoundFile->setText(Preferences::mDefaultSoundFile);
-#ifndef WITHOUT_ARTS
 	mSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
-#endif
 	mCmdScript->setChecked(Preferences::mDefaultCmdScript);
 	mCmdXterm->setChecked(Preferences::mDefaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
 	mEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
@@ -1218,9 +1216,7 @@ void EditPrefTab::apply(bool syncToDisc)
 		default: Preferences::mDefaultSoundType = SoundPicker::NONE;       break;
 	}
 	Preferences::mDefaultSoundFile        = mSoundFile->text();
-#ifndef WITHOUT_ARTS
 	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
-#endif
 	Preferences::mDefaultCmdScript        = mCmdScript->isChecked();
 	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? Preferences::EXEC_IN_TERMINAL : Preferences::DISCARD_OUTPUT);
 	Preferences::mDefaultEmailBcc         = mEmailBcc->isChecked();
@@ -1250,9 +1246,7 @@ void EditPrefTab::setDefaults()
 	mSpecialActionsButton->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
 	mSound->setCurrentIndex(soundIndex(Preferences::default_defaultSoundType));
 	mSoundFile->setText(Preferences::default_defaultSoundFile);
-#ifndef WITHOUT_ARTS
 	mSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
-#endif
 	mCmdScript->setChecked(Preferences::default_defaultCmdScript);
 	mCmdXterm->setChecked(Preferences::default_defaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
 	mEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
