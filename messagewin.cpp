@@ -1437,18 +1437,18 @@ void MessageWin::slotEdit()
 		if (AlarmCalendar::activeCalendar()->event(mEventID))
 		{
 			// The old alarm hasn't expired yet, so replace it
-			status = KAlarm::modifyEvent(mEvent, event, 0);
+			status = KAlarm::modifyEvent(mEvent, event, 0, &editDlg);
 			Undo::saveEdit(mEvent, event);
 		}
 		else
 		{
 			// The old event has expired, so simply create a new one
-			status = KAlarm::addEvent(event, 0);
+			status = KAlarm::addEvent(event, 0, &editDlg);
 			Undo::saveAdd(event);
 		}
 
 		if (status == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_MODIFY, 1);
+			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::KORG_ERR_MODIFY, 1);
 		KAlarm::outputAlarmWarnings(&editDlg, &event);
 
 		// Close the alarm window
@@ -1524,7 +1524,7 @@ void MessageWin::slotDefer()
 			KAEvent event(*kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
-			KAlarm::updateEvent(event, 0, true, !repeat);
+			KAlarm::updateEvent(event, 0, true, !repeat, mDeferDlg);
 		}
 		else
 		{
@@ -1546,7 +1546,7 @@ void MessageWin::slotDefer()
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
-			KAlarm::addEvent(event, 0, true, false);
+			KAlarm::addEvent(event, 0, true, false, mDeferDlg);
 			if (kcalEvent)
 			{
 				event.setUid(KAEvent::EXPIRED);

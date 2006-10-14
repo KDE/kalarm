@@ -43,16 +43,16 @@ class AlarmCalendar : public QObject
 		bool                  open();
 		int                   load();
 		bool                  reload();
-		void                  save();
+		bool                  save();
 		void                  close();
 		void                  startUpdate();
-		void                  endUpdate();
+		bool                  endUpdate();
 		KCal::Event*          event(const QString& uniqueID);
 		KCal::Event::List     events();
 		KCal::Event::List     eventsWithAlarms(const QDateTime& from, const QDateTime& to);
 		KCal::Event*          addEvent(KAEvent&, bool useEventID = false);
 		void                  updateEvent(const KAEvent&);
-		void                  deleteEvent(const QString& eventID, bool save = false);
+		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
 		void                  purgeAll()                          { purge(0); }
 		void                  setPurgeDays(int days);
