@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	label->setBuddy(mFadeTime);
 	label = new QLabel(i18n("seconds"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
-	QWhatsThis::add(box, i18n("Enter how many seconds to fade the sound before reaching the set volume."));
+	QWhatsThis::add(mFadeBox, i18n("Enter how many seconds to fade the sound before reaching the set volume."));
 
 	// Fade slider
 	mFadeVolumeBox = new QHBox(group);
@@ -147,7 +147,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFadeSlider->setTickInterval(10);
 	mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 	label->setBuddy(mFadeSlider);
-	QWhatsThis::add(box, i18n("Choose the initial volume for playing the sound file."));
+	QWhatsThis::add(mFadeVolumeBox, i18n("Choose the initial volume for playing the sound file."));
 
 	// Restore the dialogue size from last time
 	QSize s;
