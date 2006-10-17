@@ -24,8 +24,7 @@
 
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
 #include <QStyle>
 #include <QObject>
@@ -406,7 +405,7 @@ SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent)
 {
 	setVScrollBarMode(Q3ScrollView::AlwaysOff);
 	setHScrollBarMode(Q3ScrollView::AlwaysOff);
-	setFrameStyle(Q3Frame::NoFrame);
+	setFrameStyle(QFrame::NoFrame);
 }
 
 void SpinMirror::setNormalButtons(const QPixmap& px)
