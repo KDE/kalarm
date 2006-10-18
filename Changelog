@@ -1,5 +1,10 @@
 KAlarm
 
+=== Version 1.4.6 --- 18 October 2006 ===
+Tidy up alarm edit/preferences dialogue sound type options into a combo box.
+Tidy up preferences dialogue Run mode options.
+Add context help for sound file fade options.
+
 === Version 1.4.5 (KDE 3.5.5) --- 29 September 2006 ===
 Improve edit dialogue layout (Reminder controls moved to below Time box).
 

@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -233,7 +233,6 @@ class EditAlarmDlg : public KDialogBase
 		int                 mSavedTemplateAfterTime; // mTemplateAfterTime value
 		QButton*            mSavedTypeRadio;      // mMessageRadio, etc
 		SoundPicker::Type   mSavedSoundType;      // mSoundPicker sound type
-		bool                mSavedSound;          // mSoundPicker sound status
 		bool                mSavedRepeatSound;    // mSoundPicker repeat status
 		QString             mSavedSoundFile;      // mSoundPicker sound file
 		float               mSavedSoundVolume;    // mSoundPicker volume

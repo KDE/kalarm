@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -90,7 +90,6 @@ class Preferences : public QObject
 		static QColor            disabledColour()                 { return mDisabledColour; }
 		static QColor            expiredColour()                  { return mExpiredColour; }
 		static int               expiredKeepDays()                { return mExpiredKeepDays; }
-		static bool              defaultSound()                   { return mDefaultSound; }
 		static SoundPicker::Type defaultSoundType()               { return mDefaultSoundType; }
 		static const QString&    defaultSoundFile()               { return mDefaultSoundFile; }
 		static float             defaultSoundVolume()             { return mDefaultSoundVolume; }
@@ -154,7 +153,6 @@ class Preferences : public QObject
 		static const int                        default_defaultLateCancel;
 		static const bool                       default_defaultAutoClose;
 		static const bool                       default_defaultCopyToKOrganizer;
-		static const bool                       default_defaultSound;
 		static const SoundPicker::Type          default_defaultSoundType;
 		static const bool                       default_defaultSoundRepeat;
 		static const bool                       default_defaultConfirmAck;
@@ -229,7 +227,6 @@ class Preferences : public QObject
 		static int                 mDefaultLateCancel;
 		static bool                mDefaultAutoClose;
 		static bool                mDefaultCopyToKOrganizer;
-		static bool                mDefaultSound;
 		static SoundPicker::Type   mDefaultSoundType;
 		static bool                mDefaultSoundRepeat;
 		static bool                mDefaultConfirmAck;

@@ -163,7 +163,7 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18n("Email subject", "
  */
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const char* name,
                            const KAEvent* event, bool readOnly)
-	: KDialogBase(parent, name, true, caption,
+	: KDialogBase(parent, (name ? name : Template ? "TemplEditDlg" : "EditDlg"), true, caption,
 	              (readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default),
 	              (readOnly ? Cancel : Ok)),
 	  mMainPageShown(false),
@@ -225,8 +225,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mActionGroup = new ButtonGroup(i18n("Action"), mainPage, "actionGroup");
 	connect(mActionGroup, SIGNAL(buttonSet(int)), SLOT(slotAlarmTypeChanged(int)));
 	topLayout->addWidget(mActionGroup, 1);
-	QGridLayout* grid = new QGridLayout(mActionGroup, 3, 5, marginHint(), spacingHint());
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	QBoxLayout* layout = new QVBoxLayout(mActionGroup, marginHint(), spacingHint());
+	layout->addSpacing(fontMetrics().lineSpacing()/2);
+	QGridLayout* grid = new QGridLayout(layout, 1, 5);
 
 	// Message radio button
 	mMessageRadio = new RadioButton(i18n("Te&xt"), mActionGroup, "messageButton");
@@ -260,14 +261,11 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	grid->addWidget(mEmailRadio, 1, 6);
 
 	initDisplayAlarms(mActionGroup);
+	layout->addWidget(mDisplayAlarmsFrame);
 	initCommand(mActionGroup);
+	layout->addWidget(mCommandFrame);
 	initEmail(mActionGroup);
-	mAlarmTypeStack = new QWidgetStack(mActionGroup);
-	grid->addMultiCellWidget(mAlarmTypeStack, 2, 2, 0, 6);
-	grid->setRowStretch(2, 1);
-	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame, 0);
-	mAlarmTypeStack->addWidget(mCommandFrame, 1);
-	mAlarmTypeStack->addWidget(mEmailFrame, 2);
+	layout->addWidget(mEmailFrame);
 
 	// Deferred date/time: visible only for a deferred recurring event.
 	mDeferGroup = new QGroupBox(1, Qt::Vertical, i18n("Deferred Alarm"), mainPage, "deferGroup");
@@ -282,7 +280,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	QWhatsThis::add(mDeferChangeButton, i18n("Change the alarm's deferred time, or cancel the deferral"));
 	mDeferGroup->addSpace(0);
 
-	QBoxLayout* layout = new QHBoxLayout(topLayout);
+	layout = new QHBoxLayout(topLayout);
 
 	// Date and time entry
 	if (mTemplate)
@@ -367,7 +365,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	layout->addWidget(box);
-	layout->addStretch();
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
@@ -390,13 +387,21 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mLateCancel = new LateCancelSelector(true, mainPage);
 	topLayout->addWidget(mLateCancel, 0, Qt::AlignAuto);
 
+	// Acknowledgement confirmation required - default = no confirmation
+	layout = new QHBoxLayout(topLayout, 0);
+	mConfirmAck = createConfirmAckCheckbox(mainPage);
+	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
+	layout->addWidget(mConfirmAck);
+	layout->addSpacing(2*spacingHint());
+	layout->addStretch();
+
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
 		mShowInKorganizer = new CheckBox(i18n_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
 		QWhatsThis::add(mShowInKorganizer, i18n("Check to copy the alarm into KOrganizer's calendar"));
-		topLayout->addWidget(mShowInKorganizer);
+		layout->addWidget(mShowInKorganizer);
 	}
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
@@ -458,7 +463,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	layout->addWidget(box);
-	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addSpacing(2*spacingHint());
 	layout->addStretch();
 
 	// Font and colour choice drop-down list
@@ -468,16 +473,11 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	layout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
+	layout = new QHBoxLayout(frameLayout);
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	frameLayout->addWidget(mSoundPicker, 0, Qt::AlignAuto);
-
-	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(frameLayout);
-	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	layout->addWidget(mConfirmAck);
-	layout->addSpacing(2*KDialog::spacingHint());
+	layout->addWidget(mSoundPicker);
+	layout->addSpacing(2*spacingHint());
 	layout->addStretch();
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
@@ -789,11 +789,12 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
 		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		SoundPicker::Type soundType = event->speak()                                ? SoundPicker::SPEAK
-		                            : event->beep() || event->audioFile().isEmpty() ? SoundPicker::BEEP
-		                            :                                                 SoundPicker::PLAY_FILE;
-		mSoundPicker->set((soundType != SoundPicker::BEEP || event->beep()), soundType, event->audioFile(),
-		                  event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
+		SoundPicker::Type soundType = event->speak()                ? SoundPicker::SPEAK
+		                            : event->beep()                 ? SoundPicker::BEEP
+		                            : !event->audioFile().isEmpty() ? SoundPicker::PLAY_FILE
+		                            :                                 SoundPicker::NONE;
+		mSoundPicker->set(soundType, event->audioFile(), event->soundVolume(),
+		                  event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
 		CmdLogType logType = event->commandXterm()       ? EXEC_IN_TERMINAL
 		                   : !event->logFile().isEmpty() ? LOG_TO_FILE
 		                   :                               DISCARD_OUTPUT;
@@ -843,7 +844,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		slotRecurFrequencyChange();      // update the Recurrence text
 		mReminder->setMinutes(0, false);
 		mReminder->enableOnceOnly(mRecurrenceEdit->isTimedRepeatType());   // must be called after mRecurrenceEdit is set up
-		mSoundPicker->set(Preferences::defaultSound(), Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
+		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
 		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
@@ -1031,8 +1032,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 		mSavedTemplateAfterTime = mTemplateTimeAfter->value();
 	}
 	mSavedTypeRadio        = mActionGroup->selected();
-	mSavedSound            = mSoundPicker->sound();
-	mSavedSoundType        = mSoundPicker->type();
+	mSavedSoundType        = mSoundPicker->sound();
 	mSavedSoundFile        = mSoundPicker->file();
 	mSavedSoundVolume      = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
 	mSavedRepeatSound      = mSoundPicker->repeat();
@@ -1106,7 +1106,7 @@ bool EditAlarmDlg::stateChanged() const
 		return true;
 	if (mMessageRadio->isOn()  ||  mFileRadio->isOn())
 	{
-		if (mSavedSound      != mSoundPicker->sound()
+		if (mSavedSoundType  != mSoundPicker->sound()
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
@@ -1121,24 +1121,19 @@ bool EditAlarmDlg::stateChanged() const
 			||  mSavedPostAction != mSpecialActionsButton->postAction())
 				return true;
 		}
-		if (mSavedSound)
+		if (mSavedSoundType == SoundPicker::PLAY_FILE)
 		{
-			if (mSavedSoundType != mSoundPicker->type())
+			if (mSavedSoundFile != mSoundPicker->file())
 				return true;
-			if (mSavedSoundType == SoundPicker::PLAY_FILE)
+			if (!mSavedSoundFile.isEmpty())
 			{
-				if (mSavedSoundFile != mSoundPicker->file())
+				float fadeVolume;
+				int   fadeSecs;
+				if (mSavedRepeatSound != mSoundPicker->repeat()
+				||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
+				||  mSavedSoundFadeVolume != fadeVolume
+				||  mSavedSoundFadeSeconds != fadeSecs)
 					return true;
-				if (!mSavedSoundFile.isEmpty())
-				{
-					float fadeVolume;
-					int   fadeSecs;
-					if (mSavedRepeatSound != mSoundPicker->repeat()
-					||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
-					||  mSavedSoundFadeVolume != fadeVolume
-					||  mSavedSoundFadeSeconds != fadeSecs)
-						return true;
-				}
 			}
 		}
 	}
@@ -1297,8 +1292,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	bool displayAlarm = mMessageRadio->isOn() || mFileRadio->isOn();
 	bool cmdAlarm     = mCommandRadio->isOn();
 	bool emailAlarm   = mEmailRadio->isOn();
-	return (displayAlarm && mSoundPicker->beep()                                 ? KAEvent::BEEP : 0)
-	     | (displayAlarm && mSoundPicker->speak()                                ? KAEvent::SPEAK : 0)
+	return (displayAlarm && mSoundPicker->sound() == SoundPicker::BEEP           ? KAEvent::BEEP : 0)
+	     | (displayAlarm && mSoundPicker->sound() == SoundPicker::SPEAK          ? KAEvent::SPEAK : 0)
 	     | (displayAlarm && mSoundPicker->repeat()                               ? KAEvent::REPEAT_SOUND : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()                             ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()                           ? KAEvent::AUTO_CLOSE : 0)
@@ -1599,7 +1594,7 @@ void EditAlarmDlg::slotEditDeferral()
 
 	bool deferred = mDeferDateTime.isValid();
 	DeferAlarmDlg deferDlg(i18n("Defer Alarm"), (deferred ? mDeferDateTime : DateTime(now.addSecs(60))),
-	                       deferred, this, "deferDlg");
+	                       deferred, this, "EditDeferDlg");
 	if (limit)
 	{
 		// Don't allow deferral past the next recurrence
@@ -1832,10 +1827,13 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFilePadding->hide();
 		mTextMessageEdit->show();
 		mFontColourButton->show();
-		mReminder->show();
 		mSoundPicker->showSpeak(true);
+		mDisplayAlarmsFrame->show();
+		mCommandFrame->hide();
+		mEmailFrame->hide();
+		mReminder->show();
+		mConfirmAck->show();
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
-		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		focus = mTextMessageEdit;
 		displayAlarm = true;
 	}
@@ -1845,27 +1843,36 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFileBox->show();
 		mFilePadding->show();
 		mFontColourButton->hide();
-		mReminder->show();
 		mSoundPicker->showSpeak(false);
+		mDisplayAlarmsFrame->show();
+		mCommandFrame->hide();
+		mEmailFrame->hide();
+		mReminder->show();
+		mConfirmAck->show();
 		setButtonWhatsThis(Try, i18n("Display the file now"));
-		mAlarmTypeStack->raiseWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
 		focus = mFileMessageEdit;
 		displayAlarm = true;
 	}
 	else if (mCommandRadio->isOn())
 	{
+		mDisplayAlarmsFrame->hide();
+		mCommandFrame->show();
+		mEmailFrame->hide();
 		mReminder->hide();
+		mConfirmAck->hide();
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
-		mAlarmTypeStack->raiseWidget(mCommandFrame);
 		mCmdCommandEdit->setNoSelect();
 		focus = mCmdCommandEdit;
 	}
 	else if (mEmailRadio->isOn())
 	{
+		mDisplayAlarmsFrame->hide();
+		mCommandFrame->hide();
+		mEmailFrame->show();
 		mReminder->hide();
+		mConfirmAck->hide();
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
-		mAlarmTypeStack->raiseWidget(mEmailFrame);
 		mEmailToEdit->setNoSelect();
 		focus = mEmailToEdit;
 	}

@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 #include "preferences.h"
 #include "recurrenceedit.h"
+#include "soundpicker.h"
 
 class QButtonGroup;
 class QCheckBox;
@@ -192,8 +193,6 @@ class EditPrefTab : public PrefsTabBase
 		void         slotBrowseSoundFile();
 
 	private:
-		void         setSoundType(SoundPicker::Type);
-
 		QCheckBox*      mAutoClose;
 		QCheckBox*      mConfirmAck;
 		QComboBox*      mReminderUnits;
@@ -201,10 +200,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mCmdScript;
 		QCheckBox*      mCmdXterm;
 		QCheckBox*      mEmailBcc;
-		QRadioButton*   mBeep;
-		QRadioButton*   mSpeak;
-		QRadioButton*   mFile;
-		QCheckBox*      mSound;
+		QComboBox*      mSound;
 		QLabel*         mSoundFileLabel;
 		QLineEdit*      mSoundFile;
 		QPushButton*    mSoundFileBrowse;
@@ -214,6 +210,7 @@ class EditPrefTab : public PrefsTabBase
 		QComboBox*      mRecurPeriod;
 		QButtonGroup*   mFeb29;
 
+		static int soundIndex(SoundPicker::Type);
 		static int recurIndex(RecurrenceEdit::RepeatType);
 };
 
