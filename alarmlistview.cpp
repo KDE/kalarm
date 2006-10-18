@@ -514,11 +514,14 @@ QString AlarmListViewItem::alarmText(const KAEvent& event) const
 QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
 {
 	KLocale* locale = KGlobal::locale();
-	QString dateTimeText = locale->formatDate(dateTime.date(), true);
-	if (!dateTime.isDateOnly())
+	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
+	QString dateTimeText = locale->formatDate(kdt.date(), true);
+	if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
 	{
+		// Display the time of day if it's a date/time value, or if it's
+		// a date-only value but it's in a different time zone
 		dateTimeText += QLatin1Char(' ');
-		QString time = locale->formatTime(dateTime.effectiveTime());
+		QString time = locale->formatTime(kdt.time());
 		if (mTimeHourPos == -2)
 		{
 			// Initialise the position of the hour within the time string, if leading
