@@ -1309,7 +1309,7 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab(KVBox* frame)
 	: PrefsTabBase(frame)
 {
-	mShowResources = new QCheckBox(MainWindow::i18n_r_ShowResources(), mPage);
+	mShowResources = new QCheckBox(i18n("Show &resources"), mPage);
 	mShowResources->setMinimumSize(mShowResources->sizeHint());
 	mShowResources->setWhatsThis(
 	      i18n("Specify whether to show the list of alarm resources beside the alarm list"));
