@@ -317,13 +317,10 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 	QString message;
 	if (dateId)
 	{
-		struct timeval tod;
-		gettimeofday(&tod, 0);
-		time_t timenow = tod.tv_sec;
-		char buff[64];
-		strftime(buff, sizeof(buff), "Date: %a, %d %b %Y %H:%M:%S %z", localtime(&timenow));
-		message = QLatin1String(buff);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(data.from);
+		KDateTime now = KDateTime::currentUtcDateTime();
+		message = QLatin1String("Date: ");
+		message += now.toTimeSpec(Preferences::timeZone()).toString(KDateTime::RFCDateDay);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(data.from);
 	}
 	message += QLatin1String("From: ") + data.from;
 	message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
