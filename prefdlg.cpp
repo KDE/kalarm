@@ -675,8 +675,8 @@ void StorePrefTab::slotArchivedToggled(bool)
 	&&  !AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED))
 	{
 		KMessageBox::sorry(this,
-		     i18n("A default resource is required to store archived alarms, but none is currently enabled.\n\n"
-		          "If you wish to keep archived alarms, please first use the resources view to select a default "
+		     i18n("A default resource is required in order to archive alarms, but none is currently enabled.\n\n"
+		          "If you wish to keep expired alarms, please first use the resources view to select a default "
 		          "archived alarms resource."));
 		mKeepArchived->setChecked(false);
 		return;
