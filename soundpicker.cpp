@@ -111,7 +111,7 @@ void SoundPicker::showSpeak(bool show)
 	QString whatsThis = "<p>" + i18n("Choose a sound to play when the message is displayed.")
 	                  + "<br>" + i18n("%1: the message is displayed silently.", "<b>" + i18n_None() + "</b>")
 	                  + "<br>" + i18n("%1: a simple beep is sounded.", "<b>" + i18n_Beep() + "</b>")
-	                  + "<br>" + i18n("%1: an audio file is played. You will be prompted to choose the file and select play options.", "<b>" + i18n_File() + "</b>");
+	                  + "<br>" + i18n("%1: an audio file is played. You will be prompted to choose the file and set play options.", "<b>" + i18n_File() + "</b>");
 	if (!show  &&  mTypeCombo->currentIndex() == SPEAK)
 		mTypeCombo->setCurrentIndex(NONE);
 	mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
@@ -177,15 +177,15 @@ void SoundPicker::set(SoundPicker::Type type, const QString& f, float volume, fl
 {
 	if (type == PLAY_FILE  &&  f.isEmpty())
 		type = BEEP;
-	mLastType    = NONE;
 	mFile        = f;
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
 	mFilePicker->setToolTip(mFile);
-	mTypeCombo->setCurrentIndex(type);
+	mTypeCombo->setCurrentIndex(type);  // this doesn't trigger slotTypeSelected()
 	mFilePicker->setEnabled(type == PLAY_FILE);
+	mLastType = type;
 }
 
 /******************************************************************************
