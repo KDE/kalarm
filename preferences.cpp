@@ -607,6 +607,7 @@ void Preferences::convertOldPrefs()
 
 	// Convert KAlarm pre-1.4.5 preferences
 	static const char* DEF_SOUND = "DefSound";
+	config->setGroup(DEFAULTS_SECTION);
 	bool sound = config->readEntry(DEF_SOUND, false);
 	if (!sound)
 		config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(SoundPicker::NONE));
