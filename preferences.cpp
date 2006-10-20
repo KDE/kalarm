@@ -561,6 +561,7 @@ void Preferences::convertOldPrefs()
 
 	// Convert KAlarm 1.4.5 preferences
 	static const QString DEF_SOUND = QString::fromLatin1("DefSound");
+	config->setGroup(DEFAULTS_SECTION);
 	bool sound = config->readBoolEntry(DEF_SOUND, false);
 	if (!sound)
 		config->writeEntry(DEF_SOUND_TYPE, SoundPicker::NONE);
