@@ -127,8 +127,7 @@ class MiscPrefTab : public PrefsTabBase
 		QRadioButton*  mRunOnDemand;
 		QCheckBox*     mDisableAlarmsIfStopped;
 		QCheckBox*     mQuitWarn;
-		QCheckBox*     mAutostartTrayIcon1;
-		QCheckBox*     mAutostartTrayIcon2;
+		QCheckBox*     mAutostartTrayIcon;
 		QCheckBox*     mConfirmAlarmDeletion;
 		QCheckBox*     mKeepExpired;
 		QCheckBox*     mPurgeExpired;
