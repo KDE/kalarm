@@ -374,24 +374,23 @@ void Daemon::enableAutoStart(bool enable)
 	// Tell the alarm daemon in case it is running.
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
 	s.enableAutoStart(enable);
-	if (!s.ok())
-	{
-		// Failure - the daemon probably isn't running, so rewrite its config file for it
-		KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
-		adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
-		adconfig.writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), enable);
-		adconfig.sync();
-	}
+
+	// The return status doesn't report failure even if the daemon isn't running,
+	// so in case of failure, rewrite the config file in any case.
+	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
+	adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
+	adconfig.writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), enable);
+	adconfig.sync();
 }
 
 /******************************************************************************
 * Read the alarm daemon's autostart-at-login setting.
 */
-bool Daemon::autoStart(bool defaultAutoStart)
+bool Daemon::autoStart()
 {
 	KConfig adconfig(locate("config", DAEMON_APP_NAME"rc"));
 	adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
-	return adconfig.readBoolEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), defaultAutoStart);
+	return adconfig.readBoolEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), true);
 }
 
 /******************************************************************************

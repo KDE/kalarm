@@ -48,6 +48,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
+#include "daemon.h"
 #include "editdlg.h"
 #include "fontcolour.h"
 #include "functions.h"
@@ -396,7 +397,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 
 void MiscPrefTab::restore()
 {
-	mAutostartDaemon->setChecked(Preferences::mAutostartDaemon);
+	mAutostartDaemon->setChecked(Daemon::autoStart());
 	bool systray = Preferences::mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
@@ -452,10 +453,12 @@ void MiscPrefTab::apply(bool syncToDisc)
 		Preferences::setQuitWarn(mQuitWarn->isChecked());
 	Preferences::mAutostartTrayIcon = mAutostartTrayIcon->isChecked();
 #ifdef AUTOSTART_BY_KALARMD
-	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
+	bool newAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
 #else
-	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
+	bool newAutostartDaemon = mAutostartDaemon->isChecked();
 #endif
+	if (newAutostartDaemon != Daemon::autoStart())
+		Daemon::enableAutoStart(newAutostartDaemon);
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	int sod = mStartOfDay->value();
 	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
@@ -467,7 +470,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 
 void MiscPrefTab::setDefaults()
 {
-	mAutostartDaemon->setChecked(Preferences::default_autostartDaemon);
+	mAutostartDaemon->setChecked(true);
 	bool systray = Preferences::default_runInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);

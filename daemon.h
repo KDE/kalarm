@@ -46,7 +46,7 @@ class Daemon : public QObject
 		static bool      reregister()            { return registerWith(true); }
 		static bool      reset();
 		static bool      stop();
-		static bool      autoStart(bool defaultSetting);
+		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }

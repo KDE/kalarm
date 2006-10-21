@@ -46,7 +46,6 @@ const QColor                     Preferences::default_defaultBgColour(Qt::red);
 const QColor                     Preferences::default_defaultFgColour(Qt::black);
 QFont                            Preferences::mDefault_messageFont;    // initialised in constructor
 const QTime                      Preferences::default_startOfDay(0, 0);
-const bool                       Preferences::default_autostartDaemon         = true;
 const bool                       Preferences::default_runInSystemTray         = true;
 const bool                       Preferences::default_disableAlarmsIfStopped  = true;
 const bool                       Preferences::default_quitWarn                = true;
@@ -98,7 +97,6 @@ ColourList                 Preferences::mMessageColours;
 QColor                     Preferences::mDefaultBgColour;
 QFont                      Preferences::mMessageFont;
 QTime                      Preferences::mStartOfDay;
-bool                       Preferences::mAutostartDaemon;
 bool                       Preferences::mRunInSystemTray;
 bool                       Preferences::mDisableAlarmsIfStopped;
 bool                       Preferences::mAutostartTrayIcon;
@@ -143,7 +141,6 @@ QString                    Preferences::mDefaultPostAction;
 // Change tracking
 QTime                      Preferences::mOldStartOfDay;
 bool                       Preferences::mStartOfDayChanged;
-bool                       Preferences::mOldAutostartDaemon;
 
 
 static const QString defaultFeb29RecurType    = QString::fromLatin1("Mar1");
@@ -348,8 +345,6 @@ void Preferences::read()
 	                          ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
 	mDefaultPreAction         = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
 	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
-	mAutostartDaemon          = Daemon::autoStart(default_autostartDaemon);
-	mOldAutostartDaemon       = mAutostartDaemon;
 	mInstance->emitPreferencesChanged();
 	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
 	if (mStartOfDayChanged)
@@ -416,12 +411,6 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 	if (syncToDisc)
 		config->sync();
-	if (mAutostartDaemon != mOldAutostartDaemon)
-	{
-		// The alarm daemon autostart setting has changed.
-		Daemon::enableAutoStart(mAutostartDaemon);
-		mOldAutostartDaemon = mAutostartDaemon;
-	}
 	mInstance->emitPreferencesChanged();
 	if (mStartOfDay != mOldStartOfDay)
 	{
