@@ -193,7 +193,7 @@ void ResourceSelector::addResource()
 	AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
 	if (!resource)
 	{
-		KMessageBox::error(this, i18n("<qt>Unable to create resource of type <b>%1</b>.</qt>", type));
+		KMessageBox::error(this, "<qt>" + i18n("Unable to create resource of type %1.", "<b>" + type + "</b>") + "</qt>");
 		return;
 	}
 	resource->setResourceName(i18n("%1 resource", type));
