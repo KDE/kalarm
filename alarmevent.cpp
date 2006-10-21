@@ -2311,7 +2311,9 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const 
  */
 bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate& end, KARecurrence::Feb29Type feb29)
 {
-	return setRecur(recurType, freq, count, KDateTime(end, mNextMainDateTime.timeSpec()), feb29);
+	KDateTime edt = mNextMainDateTime;
+	edt.setDate(end);
+	return setRecur(recurType, freq, count, edt, feb29);
 }
 bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type feb29)
 {

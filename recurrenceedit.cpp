@@ -602,8 +602,9 @@ void RecurrenceEdit::setDefaultEndDate(const QDate& end)
 
 void RecurrenceEdit::setEndDateTime(const KDateTime& end)
 {
-	mEndDateEdit->setDate(end.date());
-	mEndTimeEdit->setValue(end.time());
+	KDateTime edt = end.toTimeSpec(mCurrStartDateTime.timeSpec());
+	mEndDateEdit->setDate(edt.date());
+	mEndTimeEdit->setValue(edt.time());
 	mEndTimeEdit->setEnabled(!end.isDateOnly());
 	mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
 }
