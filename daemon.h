@@ -52,7 +52,7 @@ class Daemon : public QObject
 		/** Reload resource, or notify daemon of new inactive status. */
 		static void      reloadResource(const QString& resourceID);
 		static bool      stop();
-		static bool      autoStart(bool defaultSetting);
+		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }

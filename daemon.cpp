@@ -453,6 +453,7 @@ void Daemon::enableAutoStart(bool enable)
 	QList<QVariant> args;
 	args << enable;
 	if (!sendDaemon(QLatin1String("enableAutoStart"), args))
+#warning Check that false is returned if daemon isn't running
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
 		KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
@@ -465,11 +466,11 @@ void Daemon::enableAutoStart(bool enable)
 /******************************************************************************
 * Read the alarm daemon's autostart-at-login setting.
 */
-bool Daemon::autoStart(bool defaultAutoStart)
+bool Daemon::autoStart()
 {
 	KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
 	adconfig.setGroup(DAEMON_AUTOSTART_SECTION);
-	return adconfig.readEntry(DAEMON_AUTOSTART_KEY, defaultAutoStart);
+	return adconfig.readEntry(DAEMON_AUTOSTART_KEY, true);
 }
 
 /******************************************************************************

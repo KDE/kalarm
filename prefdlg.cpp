@@ -52,6 +52,7 @@
 #include "alarmresources.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
+#include "daemon.h"
 #include "editdlg.h"
 #include "fontcolour.h"
 #include "functions.h"
@@ -278,7 +279,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	grid->setColumnMinimumWidth(0, indentWidth());
 	grid->setColumnMinimumWidth(1, indentWidth());
 
-	// Run-on-demand radio button has an ID of 3
+	// Run-on-demand radio button
 	mRunOnDemand = new QRadioButton(i18n("&Run only on demand"), group);
 	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
 	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
@@ -290,7 +291,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	buttonGroup->addButton(mRunOnDemand);
 	grid->addWidget(mRunOnDemand, 1, 0, 1, 3, Qt::AlignLeft);
 
-	// Run-in-system-tray radio button has an ID of 0
+	// Run-in-system-tray radio button
 	mRunInSystemTray = new QRadioButton(i18n("Run continuously in system &tray"), group);
 	mRunInSystemTray->setFixedSize(mRunInSystemTray->sizeHint());
 	connect(mRunInSystemTray, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
@@ -425,7 +426,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 
 void MiscPrefTab::restore()
 {
-	mAutostartDaemon->setChecked(Preferences::mAutostartDaemon);
+	mAutostartDaemon->setChecked(Daemon::autoStart());
 	bool systray = Preferences::mRunInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
@@ -481,10 +482,12 @@ void MiscPrefTab::apply(bool syncToDisc)
 		Preferences::setQuitWarn(mQuitWarn->isChecked());
 	Preferences::mAutostartTrayIcon = mAutostartTrayIcon->isChecked();
 #ifdef AUTOSTART_BY_KALARMD
-	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
+	bool newAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
 #else
-	Preferences::mAutostartDaemon = mAutostartDaemon->isChecked();
+	bool newAutostartDaemon = mAutostartDaemon->isChecked();
 #endif
+	if (newAutostartDaemon != Daemon::autoStart())
+		Daemon::enableAutoStart(newAutostartDaemon);
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
 	if (tz)
@@ -497,7 +500,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 
 void MiscPrefTab::setDefaults()
 {
-	mAutostartDaemon->setChecked(Preferences::default_autostartDaemon);
+	mAutostartDaemon->setChecked(true);
 	bool systray = Preferences::default_runInSystemTray;
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
