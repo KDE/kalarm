@@ -106,6 +106,7 @@ class ResourceSelector : public QFrame
 	KAction*        mActionShowDetails;
 	KAction*        mActionEdit;
 	KAction*        mActionRemove;
+	KAction*        mActionImport;
 	KToggleAction*  mActionSetDefault;
 };
 

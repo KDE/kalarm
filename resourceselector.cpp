@@ -384,10 +384,10 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
 	mActionSetDefault  = new KToggleAction(QString::null, actions, QLatin1String("resDefault"));
 	connect(mActionSetDefault, SIGNAL(triggered(bool)), SLOT(setStandard()));
-	KAction* action = new KAction(KIcon("filenew"), i18n("&Add..."), actions, QLatin1String("resAdd"));
+	KAction* action    = new KAction(KIcon("filenew"), i18n("&Add..."), actions, QLatin1String("resAdd"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(addResource()));
-	action = new KAction(i18n("Im&port..."), actions, QLatin1String("resImport"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(importCalendar()));
+	mActionImport      = new KAction(i18n("Im&port..."), actions, QLatin1String("resImport"));
+	connect(mActionImport, SIGNAL(triggered(bool)), SLOT(importCalendar()));
 }
 
 void ResourceSelector::setContextMenu(KMenu* menu)
@@ -430,6 +430,7 @@ void ResourceSelector::contextMenuRequested(Q3ListViewItem* itm, const QPoint& p
 	mActionShowDetails->setEnabled(item);
 	mActionEdit->setEnabled(item);
 	mActionRemove->setEnabled(item);
+	mActionImport->setEnabled(active && writable);
 	QString text;
 	switch (type)
 	{
