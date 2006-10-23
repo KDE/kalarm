@@ -91,7 +91,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.request.xml dbushandler.h DBusHandler )
 #qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml notification.h NotificationHandler )
 
-kde4_automoc(kalarm_bin ${kalarm_bin_SRCS})
+kde4_automoc(${kalarm_bin_SRCS})
 
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)

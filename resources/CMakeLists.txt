@@ -16,7 +16,7 @@ set(kalarm_resources_LIB_SRCS
 	resourcewidget.cpp 
 )
 
-kde4_automoc(kalarm_resources ${kalarm_resources_LIB_SRCS})
+kde4_automoc(${kalarm_resources_LIB_SRCS})
 
 kde4_add_library(kalarm_resources SHARED ${kalarm_resources_LIB_SRCS})
 
@@ -30,7 +30,7 @@ install(TARGETS kalarm_resources  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kalarm_local_PART_SRCS resourcelocal_plugin.cpp )
 
-kde4_automoc(kalarm_local ${kalarm_local_PART_SRCS})
+kde4_automoc(${kalarm_local_PART_SRCS})
 
 kde4_add_plugin(kalarm_local ${kalarm_local_PART_SRCS})
 
@@ -46,7 +46,7 @@ install( FILES local.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kresources/ala
 
 set(kalarm_localdir_PART_SRCS resourcelocaldir_plugin.cpp )
 
-kde4_automoc(kalarm_localdir ${kalarm_localdir_PART_SRCS})
+kde4_automoc(${kalarm_localdir_PART_SRCS})
 
 kde4_add_plugin(kalarm_localdir ${kalarm_localdir_PART_SRCS})
 
@@ -62,7 +62,7 @@ install( FILES localdir.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kresources/
 
 set(kalarm_remote_PART_SRCS resourceremote_plugin.cpp )
 
-kde4_automoc(kalarm_remote ${kalarm_remote_PART_SRCS})
+kde4_automoc(${kalarm_remote_PART_SRCS})
 
 kde4_add_plugin(kalarm_remote ${kalarm_remote_PART_SRCS})
 
