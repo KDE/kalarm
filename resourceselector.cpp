@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
+#include <QToolTip>
 #include <QTimer>
 #include <Q3Header>
 #include <QPainter>
@@ -107,6 +108,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	        SLOT(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)));
 	mListView->setWhatsThis(i18n("List of available resources of the selected type. The checked state shows whether a resource "
 	                             "is enabled (checked) or disabled (unchecked). The default resource is shown in bold."));
+	mListView->installEventFilter(this);
 	topLayout->addWidget(mListView);
 	topLayout->addSpacing(KDialog::spacingHint());
 
@@ -565,6 +567,36 @@ ResourceItem* ResourceSelector::currentItem()
 void ResourceSelector::resizeEvent(QResizeEvent* re)
 {
 	emit resized(re->oldSize(), re->size());
+}
+
+/******************************************************************************
+*  Called when any event occurs in the list view.
+*  Displays the resource details in a tooltip.
+*/
+bool ResourceSelector::eventFilter(QObject* obj, QEvent* e)
+{
+	if (obj != mListView  ||  e->type() != QEvent::ToolTip)
+		return false;    // let mListView handle non-tooltip events
+	QHelpEvent* he = (QHelpEvent*)e;
+	QPoint pt = he->pos();
+	ResourceItem* item = (ResourceItem*)mListView->itemAt(pt);
+	if (!item)
+		return true;
+	QString tipText;
+	AlarmResource* resource = item->resource();
+	if (item->width(mListView->fontMetrics(), mListView, 0) > mListView->viewport()->width())
+		tipText = resource->resourceName() + "\n";
+	tipText += resource->displayLocation(true);
+	bool inactive = !resource->isActive();
+	if (inactive)
+		tipText += "\n" + i18n("Disabled");
+	if (resource->readOnly())
+		tipText += (inactive ? ", " : "\n") + i18n("Read-only");
+
+	QRect rect = mListView->itemRect(item);
+	kDebug(5950) << "ResourceListTooltip::maybeTip(): display\n";
+	QToolTip::showText(pt, tipText);
+	return true;
 }
 
 

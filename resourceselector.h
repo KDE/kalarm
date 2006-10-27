@@ -63,6 +63,7 @@ class ResourceSelector : public QFrame
 	void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
+	bool eventFilter(QObject*, QEvent*);
 	virtual void resizeEvent(QResizeEvent*);
 
     private slots:
