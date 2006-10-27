@@ -153,6 +153,7 @@ MainWindow::MainWindow(bool restored)
 		mShowTime = true;     // ensure at least one time column is visible
 
 	mSplitter = new QSplitter(Qt::Horizontal, this);
+	mSplitter->setChildrenCollapsible(false);
 	setCentralWidget(mSplitter);
 
 	// Create the calendar resource selector widget
