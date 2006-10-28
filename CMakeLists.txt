@@ -34,6 +34,7 @@ set(libkalarm_SRCS
 	${CMAKE_SOURCE_DIR}/kalarm/lib/timeedit.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/timespinbox.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/timeperiod.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/timezonecombo.cpp
 	${CMAKE_SOURCE_DIR}/kalarm/lib/shellprocess.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/slider.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/spinbox.cpp 
