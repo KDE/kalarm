@@ -138,9 +138,9 @@ class EditAlarmDlg : public KDialog
 		bool            checkCommandData();
 		bool            checkEmailData();
 
-		void            initDisplayAlarms();
-		void            initCommand();
-		void            initEmail();
+		void            initDisplayAlarms(QWidget* parent);
+		void            initCommand(QWidget* parent);
+		void            initEmail(QWidget* parent);
 		void            saveState(const KAEvent*);
 		bool            stateChanged() const;
 
@@ -156,7 +156,6 @@ class EditAlarmDlg : public KDialog
 		RadioButton*        mCommandRadio;
 		PickAlarmFileRadio* mFileRadio;
 		RadioButton*        mEmailRadio;
-		QStackedWidget*     mAlarmTypeStack;
 
 		// Templates
 		QLineEdit*          mTemplateName;

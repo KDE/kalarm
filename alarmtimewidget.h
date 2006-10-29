@@ -31,25 +31,26 @@ class CheckBox;
 class DateEdit;
 class TimeEdit;
 class TimeSpinBox;
+class TimeZoneCombo;
 
 
 class AlarmTimeWidget : public QFrame
 {
 		Q_OBJECT
 	public:
-		enum {       // 'mode' values for constructor. May be OR'ed together.
-			AT_TIME      = 0x00,   // "At ..."
-			DEFER_TIME   = 0x01,   // "Defer to ..."
-			NARROW       = 0x02    // make a narrow widget
+		enum {       // 'mode' values for constructor
+			AT_TIME,     // "At ..."
+			DEFER_TIME   // "Defer to ..."
 		};
 		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
 		AlarmTimeWidget(int mode, QWidget* parent = 0);
-		DateTime         getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
+		KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
 		void             setMinDateTime(const KDateTime& = KDateTime());
 		void             setMaxDateTime(const DateTime& = DateTime());
 		const KDateTime& maxDateTime() const           { return mMaxDateTime; }
+		KDateTime::Spec  timeSpec() const;
 		void             setReadOnly(bool);
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
@@ -61,7 +62,7 @@ class AlarmTimeWidget : public QFrame
 		static const int maxDelayTime;    // maximum time from now
 
 	signals:
-		void             anyTimeToggled(bool anyTime);
+		void             dateOnlyToggled(bool anyTime);
 		void             pastMax();
 
 	protected slots:
@@ -69,22 +70,23 @@ class AlarmTimeWidget : public QFrame
 		void             slotButtonSet(QAbstractButton*);
 		void             dateTimeChanged();
 		void             delayTimeChanged(int);
-		void             slotAnyTimeToggled(bool);
+		void             slotTimeZoneToggled(bool);
 
 	private:
-		void             init(QWidget* topWidget, int mode, bool hasTitle);
-		KDateTime::Spec  timeSpec() const;
+		void             init(int mode, bool hasTitle);
 		void             setAnyTime();
 		void             setMaxDelayTime(const KDateTime& now);
 		void             setMaxMinTimeIf(const KDateTime& now);
 
 		ButtonGroup*     mButtonGroup;
-		RadioButton*     mAtTimeRadio;
+		RadioButton*     mDateRadio;
+		RadioButton*     mDateTimeRadio;
 		RadioButton*     mAfterTimeRadio;
 		DateEdit*        mDateEdit;
 		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;
-		CheckBox*        mAnyTimeCheckBox;
+		CheckBox*        mNoTimeZone;
+		TimeZoneCombo*   mTimeZone;
 		KDateTime        mMinDateTime;      // earliest allowed date/time
 		KDateTime        mMaxDateTime;      // latest allowed date/time
 		int              mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised

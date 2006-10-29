@@ -157,12 +157,12 @@ QString EditAlarmDlg::i18n_j_EmailSubject()     { return i18nc("Email subject", 
 
 
 /******************************************************************************
- * Constructor.
- * Parameters:
- *   Template = true to edit/create an alarm template
- *            = false to edit/create an alarm.
- *   event   != to initialise the dialogue to show the specified event's data.
- */
+* Constructor.
+* Parameters:
+*   Template = true to edit/create an alarm template
+*            = false to edit/create an alarm.
+*   event   != to initialise the dialogue to show the specified event's data.
+*/
 EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* parent, const KAEvent* event,
                            GetResourceType getResource, bool readOnly)
 	: KDialog(parent),
@@ -250,9 +250,12 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 	QGroupBox* actionBox = new QGroupBox(i18n("Action"), mainPage);
 	topLayout->addWidget(actionBox, 1);
-	QGridLayout* grid = new QGridLayout(actionBox);
-	grid->setMargin(marginHint());
+	QBoxLayout* layout = new QVBoxLayout(actionBox);
+	layout->setMargin(marginHint());
+	layout->setSpacing(spacingHint());
+	QGridLayout* grid = new QGridLayout();
 	grid->setSpacing(spacingHint());
+	layout->addLayout(grid);
 	mActionGroup = new ButtonGroup(actionBox);
 	connect(mActionGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAlarmTypeChanged(QAbstractButton*)));
 
@@ -287,15 +290,12 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mActionGroup->addButton(mEmailRadio);
 	grid->addWidget(mEmailRadio, 1, 6);
 
-	initDisplayAlarms();
-	initCommand();
-	initEmail();
-	mAlarmTypeStack = new QStackedWidget(actionBox);
-	grid->addWidget(mAlarmTypeStack, 2, 0, 1, 7);
-	grid->setRowStretch(2, 1);
-	mAlarmTypeStack->addWidget(mDisplayAlarmsFrame);
-	mAlarmTypeStack->addWidget(mCommandFrame);
-	mAlarmTypeStack->addWidget(mEmailFrame);
+	initDisplayAlarms(actionBox);
+	layout->addWidget(mDisplayAlarmsFrame);
+	initCommand(actionBox);
+	layout->addWidget(mCommandFrame);
+	initEmail(actionBox);
+	layout->addWidget(mEmailFrame);
 
 	// Deferred date/time: visible only for a deferred recurring event.
 	mDeferGroup = new QGroupBox(i18n("Deferred Alarm"), mainPage);
@@ -341,7 +341,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 		KHBox* box = new KHBox(templateTimeBox);
 		box->setMargin(0);
-		box->setSpacing(KDialog::spacingHint());
+		box->setSpacing(spacingHint());
 		mTemplateUseTime = new RadioButton(i18n("Time:"), box);
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
@@ -365,7 +365,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 
 		box = new KHBox(templateTimeBox);
 		box->setMargin(0);
-		box->setSpacing(KDialog::spacingHint());
+		box->setSpacing(spacingHint());
 		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
@@ -386,7 +386,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	else
 	{
 		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, mainPage);
-		connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
+		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
 
@@ -397,7 +397,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	topLayout->addLayout(hlayout);
 	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(spacingHint());
 	label = new QLabel(i18n("Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
@@ -413,6 +413,28 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mSimpleRepetition->setWhatsThis(i18n("Set up a simple, or additional, alarm repetition"));
 	hlayout->addWidget(mSimpleRepetition);
 
+	// Reminder
+	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
+	mReminder = new Reminder(i18n("Rem&inder:"),
+	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
+	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
+	                         true, true, mainPage);
+	mReminder->setFixedSize(mReminder->sizeHint());
+	topLayout->addWidget(mReminder, 0, Qt::AlignLeft);
+
+	// Late cancel selector - default = allow late display
+	mLateCancel = new LateCancelSelector(true, mainPage);
+	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
+
+	// Acknowledgement confirmation required - default = no confirmation
+	hlayout = new QHBoxLayout();
+	topLayout->addLayout(hlayout);
+	mConfirmAck = createConfirmAckCheckbox(mainPage);
+	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
+	hlayout->addWidget(mConfirmAck);
+	hlayout->addSpacing(2*spacingHint());
+	hlayout->addStretch();
+
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
@@ -421,11 +443,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		mShowInKorganizer->setWhatsThis(i18n("Check to copy the alarm into KOrganizer's calendar"));
 		hlayout->addWidget(mShowInKorganizer);
 	}
-	hlayout->addStretch();
-
-	// Late cancel selector - default = allow late display
-	mLateCancel = new LateCancelSelector(true, mainPage);
-	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
 
@@ -452,9 +469,9 @@ EditAlarmDlg::~EditAlarmDlg()
 /******************************************************************************
  * Set up the dialog controls common to display alarms.
  */
-void EditAlarmDlg::initDisplayAlarms()
+void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 {
-	mDisplayAlarmsFrame = new QFrame();
+	mDisplayAlarmsFrame = new QFrame(parent);
 	QVBoxLayout* frameLayout = new QVBoxLayout(mDisplayAlarmsFrame);
 	frameLayout->setMargin(0);
 	frameLayout->setSpacing(spacingHint());
@@ -490,7 +507,7 @@ void EditAlarmDlg::initDisplayAlarms()
 //	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	hlayout->addWidget(box);
-	hlayout->addSpacing(2*KDialog::spacingHint());
+	hlayout->addSpacing(2*spacingHint());
 	hlayout->addStretch();
 
 	// Font and colour choice drop-down list
@@ -506,7 +523,7 @@ void EditAlarmDlg::initDisplayAlarms()
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	hlayout->addWidget(mSoundPicker);
-	hlayout->addSpacing(2*KDialog::spacingHint());
+	hlayout->addSpacing(2*spacingHint());
 	hlayout->addStretch();
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
@@ -516,20 +533,6 @@ void EditAlarmDlg::initDisplayAlarms()
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
 	}
-
-	// Reminder
-	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
-	mReminder = new Reminder(i18n("Rem&inder:"),
-	                         i18n("Check to additionally display a reminder in advance of the main alarm time(s)."),
-	                         QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
-	                         true, true, mDisplayAlarmsFrame);
-	mReminder->setFixedSize(mReminder->sizeHint());
-	frameLayout->addWidget(mReminder, 0, Qt::AlignLeft);
-
-	// Acknowledgement confirmation required - default = no confirmation
-	mConfirmAck = createConfirmAckCheckbox(mDisplayAlarmsFrame);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
-	frameLayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	// Top-adjust the controls
 	mFilePadding = new KHBox(mDisplayAlarmsFrame);
@@ -541,9 +544,9 @@ void EditAlarmDlg::initDisplayAlarms()
 /******************************************************************************
  * Set up the command alarm dialog controls.
  */
-void EditAlarmDlg::initCommand()
+void EditAlarmDlg::initCommand(QWidget* parent)
 {
-	mCommandFrame = new QFrame();
+	mCommandFrame = new QFrame(parent);
 	QVBoxLayout* frameLayout = new QVBoxLayout(mCommandFrame);
 	frameLayout->setMargin(0);
 	frameLayout->setSpacing(spacingHint());
@@ -621,9 +624,9 @@ void EditAlarmDlg::initCommand()
 /******************************************************************************
  * Set up the email alarm dialog controls.
  */
-void EditAlarmDlg::initEmail()
+void EditAlarmDlg::initEmail(QWidget* parent)
 {
-	mEmailFrame = new QFrame();
+	mEmailFrame = new QFrame(parent);
 	QVBoxLayout* frameLayout = new QVBoxLayout(mEmailFrame);
 	frameLayout->setMargin(0);
 	frameLayout->setSpacing(spacingHint());
@@ -730,10 +733,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReadOnly = true;     // don't allow editing of existing command alarms in kiosk mode
 	setReadOnly();
 
-	mChanged            = false;
-	mOnlyDeferred       = false;
+	mChanged           = false;
+	mOnlyDeferred      = false;
 	mExpiredRecurrence = false;
-	mKMailSerialNumber  = 0;
+	mKMailSerialNumber = 0;
 	bool deferGroupVisible = false;
 	if (event)
 	{
@@ -1389,7 +1392,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 		resize(s);
 	}
 	KWin::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
-	KDialog::showEvent(se);
+	showEvent(se);
 }
 
 /******************************************************************************
@@ -1405,7 +1408,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 		s.setHeight(s.height() - (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
 		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, s);
 	}
-	KDialog::resizeEvent(re);
+	resizeEvent(re);
 }
 
 /******************************************************************************
@@ -1909,8 +1912,12 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		mTextMessageEdit->show();
 		mFontColourButton->show();
 		mSoundPicker->showSpeak(true);
+		mDisplayAlarmsFrame->show();
+		mCommandFrame->hide();
+		mEmailFrame->hide();
+		mReminder->show();
+		mConfirmAck->show();
 		setButtonWhatsThis(Try, i18n("Display the alarm message now"));
-		mAlarmTypeStack->setCurrentWidget(mDisplayAlarmsFrame);
 		focus = mTextMessageEdit;
 		displayAlarm = true;
 	}
@@ -1921,23 +1928,35 @@ void EditAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
 		mFilePadding->show();
 		mFontColourButton->hide();
 		mSoundPicker->showSpeak(false);
+		mDisplayAlarmsFrame->show();
+		mCommandFrame->hide();
+		mEmailFrame->hide();
+		mReminder->show();
+		mConfirmAck->show();
 		setButtonWhatsThis(Try, i18n("Display the file now"));
-		mAlarmTypeStack->setCurrentWidget(mDisplayAlarmsFrame);
 		mFileMessageEdit->setNoSelect();
 		focus = mFileMessageEdit;
 		displayAlarm = true;
 	}
 	else if (mCommandRadio->isChecked())
 	{
+		mDisplayAlarmsFrame->hide();
+		mCommandFrame->show();
+		mEmailFrame->hide();
+		mReminder->hide();
+		mConfirmAck->hide();
 		setButtonWhatsThis(Try, i18n("Execute the specified command now"));
-		mAlarmTypeStack->setCurrentWidget(mCommandFrame);
 		mCmdCommandEdit->setNoSelect();
 		focus = mCmdCommandEdit;
 	}
 	else if (mEmailRadio->isChecked())
 	{
+		mDisplayAlarmsFrame->hide();
+		mCommandFrame->hide();
+		mEmailFrame->show();
+		mReminder->hide();
+		mConfirmAck->hide();
 		setButtonWhatsThis(Try, i18n("Send the email to the specified addressees now"));
-		mAlarmTypeStack->setCurrentWidget(mEmailFrame);
 		mEmailToEdit->setNoSelect();
 		focus = mEmailToEdit;
 	}
