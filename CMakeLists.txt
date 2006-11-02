@@ -9,7 +9,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kalarm 
 	${CMAKE_SOURCE_DIR}/kalarm/lib 
 	${CMAKE_SOURCE_DIR}/kalarm/resources 
-	${CMAKE_SOURCE_DIR}/libkmime 
 	${CMAKE_SOURCE_DIR}/libkleo 
 	
 ) 

@@ -49,7 +49,7 @@
 #include <libkpimidentities/identity.h>
 #include <kcal/person.h>
 
-#include <kmime_header_parsing.h>
+#include <kmime/kmime_header_parsing.h>
 
 #include "alarmevent.h"
 #include "functions.h"

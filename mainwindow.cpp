@@ -48,7 +48,7 @@
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
 #include <libkdepim/maillistdrag.h>
-#include <libkmime/kmime_content.h>
+#include <kmime/kmime_content.h>
 #include <kcal/calendarlocal.h>
 #include <kcal/icaldrag.h>
 #include <kicon.h>
