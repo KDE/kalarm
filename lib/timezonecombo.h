@@ -39,9 +39,8 @@ class TimeZoneCombo : public ComboBox
 	public:
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
 		 */
-		TimeZoneCombo(QWidget* parent = 0);
+		explicit TimeZoneCombo(QWidget* parent = 0);
 		/** Returns the currently selected time zone, or null if none. */
 		const KTimeZone* timeZone() const;
 		/** Selects the specified time zone. */
