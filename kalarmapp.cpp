@@ -1826,7 +1826,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 					    delete dialogs[0];
 					if (!pd->tempFile())
 					{
-						errmsg += "\n";
+						errmsg += '\n';
 						errmsg += proc->command();
 					}
 					KMessageBox::error(pd->messageBoxParent, errmsg);

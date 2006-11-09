@@ -585,11 +585,11 @@ bool ResourceSelector::eventFilter(QObject* obj, QEvent* e)
 	QString tipText;
 	AlarmResource* resource = item->resource();
 	if (item->width(mListView->fontMetrics(), mListView, 0) > mListView->viewport()->width())
-		tipText = resource->resourceName() + "\n";
+		tipText = resource->resourceName() + '\n';
 	tipText += resource->displayLocation(true);
 	bool inactive = !resource->isActive();
 	if (inactive)
-		tipText += "\n" + i18n("Disabled");
+		tipText += '\n' + i18n("Disabled");
 	if (resource->readOnly())
 		tipText += (inactive ? ", " : "\n") + i18n("Read-only");
 

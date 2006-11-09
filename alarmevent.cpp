@@ -567,7 +567,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
 			if (!alarm->programArguments().isEmpty())
 			{
 				if (!data.commandScript)
-					data.cleanText += " ";
+					data.cleanText += ' ';
 				data.cleanText += alarm->programArguments();
 			}
 			break;
@@ -3215,7 +3215,7 @@ QString EmailAddressList::join(const QString& separator) const
 
 		result += (*this)[p].email();
 		if (quote)
-			result += ">";
+			result += '>';
 	}
 	return result;
 }

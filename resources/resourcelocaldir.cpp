@@ -149,7 +149,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	QString dirName = mURL.path();
 	bool success = false;
 	bool foundFile = false;
-	if (KStandardDirs::exists(dirName)  ||  KStandardDirs::exists(dirName + "/"))
+	if (KStandardDirs::exists(dirName)  ||  KStandardDirs::exists(dirName + '/'))
 	{
 		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): opening '" << dirName << "'" << endl;
 		FixFunc prompt = PROMPT_PART;
@@ -161,7 +161,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 			QString id = entries[i];
 			if (id.endsWith("~"))   // backup file, ignore it
 				continue;
-			QString fileName = dirName + "/" + id;
+			QString fileName = dirName + '/' + id;
 			foundFile = true;
 
 			if (!syncCache)
@@ -316,7 +316,7 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 	if (saveInhibited())
 		return true;
 	QString id = incidence->uid();
-	QString fileName = mURL.path() + "/" + id;
+	QString fileName = mURL.path() + '/' + id;
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
 	CalendarLocal cal(mCalendar.timeSpec());
@@ -358,7 +358,7 @@ bool KAResourceLocalDir::deleteEvent(Event* event)
 
 bool KAResourceLocalDir::deleteIncidenceFile(Incidence* incidence)
 {
-	QFile file(mURL.path() + "/" + incidence->uid());
+	QFile file(mURL.path() + '/' + incidence->uid());
 	if (!file.exists())
 		return true;
 	mDirWatch.stopScan();

@@ -173,7 +173,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 				command += KShellProcess::quote(data.bcc);
 			}
 
-			command += " ";
+			command += ' ';
 			command += event.emailAddresses(" "); // locally provided, okay
 		}
 

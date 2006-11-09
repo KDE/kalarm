@@ -312,7 +312,7 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 	for (i = 0, iend = items.count();  i < iend;  ++i)
 	{
 		kDebug(5950) << "-- " << (count+1) << ") " << items[i].text << endl;
-		text += "\n";
+		text += '\n';
 		text += items[i].text;
 		if (++count == maxCount)
 			break;
