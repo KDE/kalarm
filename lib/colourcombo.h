@@ -1,7 +1,7 @@
 /*
  *  colourcombo.h  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class ColourCombo : public QComboBox
 		 *  @param parent The parent object of this widget.
 		 *  @param defaultColour The colour which is selected by default.
 		 */
-		ColourCombo(QWidget* parent = 0, const QColor& defaultColour = 0xFFFFFF);
+		explicit ColourCombo(QWidget* parent = 0, const QColor& defaultColour = 0xFFFFFF);
 		/** Returns the selected colour. */
 		QColor       color() const               { return mSelectedColour; }
 		/** Returns the selected colour. */

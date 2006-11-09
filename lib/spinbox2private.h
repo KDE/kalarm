@@ -1,7 +1,7 @@
 /*
  *  spinbox2private.h  -  private classes for SpinBox2
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class ExtraSpinBox : public SpinBox
 {
 		Q_OBJECT
 	public:
-		ExtraSpinBox(QWidget* parent)
+		explicit ExtraSpinBox(QWidget* parent)
 		             : SpinBox(parent), mNewStylePending(false) { }
 		ExtraSpinBox(int minValue, int maxValue, QWidget* parent)
 		             : SpinBox(minValue, maxValue, parent), mNewStylePending(false) { }
@@ -66,7 +66,7 @@ class SpinMirror : public Q3CanvasView
 {
 		Q_OBJECT
 	public:
-		SpinMirror(SpinBox*, QWidget* parent = 0);
+		explicit SpinMirror(SpinBox*, QWidget* parent = 0);
 		void         setReadOnly(bool ro)        { mReadOnly = ro; }
 		bool         isReadOnly() const          { return mReadOnly; }
 		void         setNormalButtons(const QPixmap&);

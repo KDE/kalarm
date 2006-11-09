@@ -1,7 +1,7 @@
 /*
  *  slider.h  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,12 +44,12 @@ class Slider : public QSlider
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
-		Slider(QWidget* parent = 0);
+		explicit Slider(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
 		 *  @param parent The parent object of this widget.
 		 */
-		Slider(Qt::Orientation orient, QWidget* parent = 0);
+		explicit Slider(Qt::Orientation orient, QWidget* parent = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the slider can have.
 		 *  @param maxValue The maximum value which the slider can have.

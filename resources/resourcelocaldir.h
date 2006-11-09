@@ -43,7 +43,7 @@ class KDE_EXPORT KAResourceLocalDir : public AlarmResource
 		Q_OBJECT
 	public:
 		/** Create resource from configuration information stored in a KConfig object. */
-		KAResourceLocalDir(const KConfig*);
+		explicit KAResourceLocalDir(const KConfig*);
 		/** Create resource for directory named @p dirName. */
 		KAResourceLocalDir(Type, const QString& dirName);
 		virtual ~KAResourceLocalDir();

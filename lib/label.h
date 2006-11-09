@@ -1,7 +1,7 @@
 /*
  *  label.h  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class Label : public QLabel
 		 *  @param parent The parent object of this widget.
 		 *  @param f    Flags. See QWidget constructor for details.
 		 */
-		Label(QWidget* parent, Qt::WFlags f = 0);
+		explicit Label(QWidget* parent, Qt::WFlags f = 0);
 		/** Constructs a label that displays @p text.
 		 *  @param text   Text string to display.
 		 *  @param parent The parent object of this widget.

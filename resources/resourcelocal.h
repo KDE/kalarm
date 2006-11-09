@@ -40,7 +40,7 @@ class KDE_EXPORT KAResourceLocal : public AlarmResource
 		Q_OBJECT
 	public:
 		/** Create resource from configuration information stored in a KConfig object. */
-		KAResourceLocal(const KConfig*);
+		explicit KAResourceLocal(const KConfig*);
 		/** Create resource for file named @a fileName. */
 		KAResourceLocal(Type, const QString& fileName);
 		virtual ~KAResourceLocal();

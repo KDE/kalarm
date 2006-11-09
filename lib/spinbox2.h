@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ class SpinBox2 : public QFrame
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
-		SpinBox2(QWidget* parent = 0);
+		explicit SpinBox2(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the spin box can have.
 		 *  @param maxValue The maximum value which the spin box can have.

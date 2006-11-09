@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class SpinBox : public QSpinBox
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
-		SpinBox(QWidget* parent = 0);
+		explicit SpinBox(QWidget* parent = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the spin box can have.
 		 *  @param maxValue The maximum value which the spin box can have.

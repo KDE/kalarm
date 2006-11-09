@@ -45,7 +45,7 @@ class KDE_EXPORT KAResourceRemote : public AlarmResource
 		Q_OBJECT
 	public:
 		/** Create resource from configuration information stored in a KConfig object. */
-		KAResourceRemote(const KConfig*);
+		explicit KAResourceRemote(const KConfig*);
 		/** Create remote resource.
 		 *  @param downloadUrl URL used to download iCalendar file
 		 *  @param uploadUrl   URL used to upload iCalendar file. */

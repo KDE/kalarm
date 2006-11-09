@@ -1,7 +1,7 @@
 /*
  *  pushbutton.h  -  push button with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002, 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ class PushButton : public QPushButton
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
-		PushButton(QWidget* parent);
+		explicit PushButton(QWidget* parent);
 		/** Constructor for a push button which displays a text.
 		 *  @param text The text to show on the button.
 		 *  @param parent The parent object of this widget.
