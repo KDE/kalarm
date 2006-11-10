@@ -85,9 +85,9 @@ void Find::display()
 	else
 	{
 #ifdef MODAL_FIND
-		mDialog = new KFindDialog(mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
 #else
-		mDialog = new KFindDialog(false, mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(false, mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
 #endif
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
