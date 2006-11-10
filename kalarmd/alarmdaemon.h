@@ -35,7 +35,7 @@ class AlarmDaemon : public QObject
 		Q_OBJECT
 		Q_CLASSINFO("D-Bus Interface", "org.kde.kalarmd.Daemon")
 	public:
-		AlarmDaemon(bool autostart, QObject* parent = 0);
+		explicit AlarmDaemon(bool autostart, QObject* parent = 0);
 		~AlarmDaemon();
 
 	public Q_SLOTS:

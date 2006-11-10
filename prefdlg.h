@@ -89,7 +89,7 @@ class PrefsTabBase : public QWidget
 {
 		Q_OBJECT
 	public:
-		PrefsTabBase(KVBox*);
+		explicit PrefsTabBase(KVBox*);
 
 		void         setPreferences();
 		virtual void restore() = 0;
@@ -110,7 +110,7 @@ class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MiscPrefTab(KVBox*);
+		explicit MiscPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -148,7 +148,7 @@ class StorePrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		StorePrefTab(KVBox*);
+		explicit StorePrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -178,7 +178,7 @@ class EmailPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EmailPrefTab(KVBox*);
+		explicit EmailPrefTab(KVBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -220,7 +220,7 @@ class EditPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EditPrefTab(KVBox*);
+		explicit EditPrefTab(KVBox*);
 
 		QString      validate();
 		virtual void restore();
@@ -258,7 +258,7 @@ class ViewPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		ViewPrefTab(KVBox*);
+		explicit ViewPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -297,7 +297,7 @@ class FontColourPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		FontColourPrefTab(KVBox*);
+		explicit FontColourPrefTab(KVBox*);
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);

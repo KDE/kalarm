@@ -51,7 +51,7 @@ class ResourceSelector : public QFrame
 	Q_OBJECT
 	friend class ResourceItem;
     public:
-	ResourceSelector(AlarmResources*, QWidget* parent = 0);
+	explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
 	AlarmResources* calendar() const    { return mCalendar; }
 	void  initActions(KActionCollection*);
 	void  setContextMenu(KMenu*);

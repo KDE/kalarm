@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (c) 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ class SoundPicker : public QFrame
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
-		SoundPicker(QWidget* parent);
+		explicit SoundPicker(QWidget* parent);
 		/** Initialises the widget's state.
 		 *  @param type     The option to select.
 		 *  @param filename The full path or URL of the sound file to select. If the 'file' option is
