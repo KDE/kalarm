@@ -34,7 +34,7 @@ kde4_automoc(${kalarm_local_PART_SRCS})
 
 kde4_add_plugin(kalarm_local ${kalarm_local_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_local )
+
 
 target_link_libraries(kalarm_local ${KDE4_KDECORE_LIBS} kalarm_resources )
 
@@ -50,7 +50,7 @@ kde4_automoc(${kalarm_localdir_PART_SRCS})
 
 kde4_add_plugin(kalarm_localdir ${kalarm_localdir_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_localdir )
+
 
 target_link_libraries(kalarm_localdir ${KDE4_KDECORE_LIBS} kalarm_resources )
 
@@ -66,7 +66,7 @@ kde4_automoc(${kalarm_remote_PART_SRCS})
 
 kde4_add_plugin(kalarm_remote ${kalarm_remote_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kalarm_remote )
+
 
 target_link_libraries(kalarm_remote ${KDE4_KDECORE_LIBS} kalarm_resources )
 
