@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright  2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1099,6 +1099,67 @@ int localeFirstDayOfWeek()
 	if (!firstDay)
 		firstDay = KGlobal::locale()->weekStartDay();
 	return firstDay;
+}
+
+/******************************************************************************
+* Convert a time zone specifier string and apply it to a given date and/or time.
+* The time zone specifier is a system time zone name, e.g. "Europe/London",
+* "UTC" or "Clock". If no time zone is specified, it defaults to the local time
+* zone.
+* If 'defaultDt' is valid, it supplies the time spec and default date.
+*/
+KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                        bool haveTime, const KDateTime& defaultDt)
+{
+	bool error = false;
+	KDateTime::Spec spec = KDateTime::LocalZone;
+	QString zone = tzstring.trimmed();
+	if (defaultDt.isValid())
+	{
+		// Time spec is supplied - time zone specifier is not allowed
+		if (!zone.isEmpty())
+			error = true;
+		else
+			spec = defaultDt.timeSpec();
+	}
+	else if (!zone.isEmpty())
+	{
+		if (zone == QLatin1String("Clock"))
+			spec = KDateTime::ClockTime;
+		else if (zone == QLatin1String("UTC"))
+			spec = KDateTime::UTC;
+		else
+		{
+			const KTimeZone* tz = KSystemTimeZones::zone(zone);
+			error = !tz;
+			if (tz)
+				spec = tz;
+		}
+	}
+
+	KDateTime result;
+	if (!error)
+	{
+		if (!date.isValid())
+		{
+			// It's a time without a date
+			if (defaultDt.isValid())
+			       result = KDateTime(defaultDt.date(), time, spec);
+			else if (spec == KDateTime::LocalZone  ||  spec == KDateTime::ClockTime)
+				result = KDateTime(QDate::currentDate(), time, spec);
+		}
+		else if (haveTime)
+		{
+			// It's a date and time
+			result = KDateTime(date, time, spec);
+		}
+		else
+		{
+			// It's a date without a time
+			result = KDateTime(date, spec);
+		}
+	}
+	return result;
 }
 
 /******************************************************************************

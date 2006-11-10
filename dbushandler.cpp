@@ -143,7 +143,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& sta
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
                                   int recurType, int recurInterval, int recurCount)
 {
-	KDateTime start = convertDateTime(startDateTime, true);
+	KDateTime start = convertDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
 	KARecurrence recur;
@@ -321,61 +321,52 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 * If no time zone is specified, it defaults to the local clock time (which is
 * not the same as the local time zone).
 */
-KDateTime DBusHandler::convertDateTime(const QString& dateTime, bool start)
+KDateTime DBusHandler::convertDateTime(const QString& dateTime, const KDateTime& defaultDt)
 {
+	int i = dateTime.indexOf(QChar(' '));
+	QString dtString = dateTime.left(i);
+	QString zone = dateTime.mid(i);
+	QDate date;
+	QTime time;
+	bool haveTime = true;
 	bool error = false;
-	const KTimeZone* tz = 0;
-	QString dtString;
-	int space = dateTime.indexOf(QChar(' '));
-	if (space > 0)
+	if (dtString.length() > 10)
 	{
-		dtString = dateTime.left(space);
-		tz = KSystemTimeZones::zone(dateTime.mid(space).trimmed());
-		error = !tz;
+		// Both a date and a time are specified
+		QDateTime dt = QDateTime::fromString(dtString, Qt::ISODate);
+		error = !dt.isValid();
+		date = dt.date();
+		time = dt.time();
 	}
 	else
-		dtString = dateTime;
-	KDateTime result;
-	if (!error)
 	{
-		if (dtString.length() > 10)
+		// Check whether a time is specified
+		QString t;
+		if (dtString[0] == QChar('T'))
+			t = dtString.mid(1);     // it's a time: remove the leading 'T'
+		else if (!dtString[2].isDigit())
+			t = dtString;            // it's a time with no leading 'T'
+
+		if (t.isEmpty())
 		{
-			// Both a date and a time are specified
-			QDateTime dt = QDateTime::fromString(dtString, Qt::ISODate);
-			if (tz)
-				result = KDateTime(dt, tz);
-			else
-				result = KDateTime(dt, KDateTime::ClockTime);
+			// It's a date only
+			date = QDate::fromString(dtString, Qt::ISODate);
+			error = !date.isValid();
+			haveTime = false;
 		}
 		else
 		{
-			// Check whether a time is specified
-			QString t;
-			if (dtString[0] == QLatin1Char('T'))
-				t = dtString.mid(1);     // it's a time: remove the leading 'T'
-			else if (!dtString[2].isDigit())
-				t = dtString;            // it's a time with no leading 'T'
-
-			if (t.isEmpty())
-			{
-				// It's a date
-				QDate d = QDate::fromString(dtString, Qt::ISODate);
-				if (tz)
-					result = KDateTime(d, tz);
-				else
-					result = KDateTime(d, KDateTime::ClockTime);
-			}
-			else if (start)
-			{
-				// It's a time, so use today as the date
-				if (!tz)
-					result = KDateTime(QDate::currentDate(), QTime::fromString(t, Qt::ISODate), KDateTime::ClockTime);
-			}
+			// It's a time only
+			time = QTime::fromString(t, Qt::ISODate);
+			error = !time.isValid();
 		}
 	}
-	if (!result.isValid())
+	KDateTime result;
+	if (!error)
+		result = KAlarm::applyTimeZone(zone, date, time, haveTime, defaultDt);
+	if (error  ||  !result.isValid())
 	{
-		if (start)
+		if (!defaultDt.isValid())
 			kError(5950) << "D-Bus call: invalid start date/time: '" << dateTime << "'" << endl;
 		else
 			kError(5950) << "D-Bus call: invalid recurrence end date/time: '" << dateTime << "'" << endl;
@@ -420,7 +411,7 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
                                     const QString& startDateTime, const QString& icalRecurrence)
 {
-	start = convertDateTime(startDateTime, true);
+	start = convertDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
 	return recurrence.set(icalRecurrence);
@@ -429,7 +420,7 @@ bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence,
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, int recurCount)
 {
-	start = convertDateTime(startDateTime, true);
+	start = convertDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
 	return convertRecurrence(recurrence, start, recurType, recurInterval, recurCount, KDateTime());
@@ -438,10 +429,10 @@ bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, const QString& startDateTime,
                                     int recurType, int recurInterval, const QString& endDateTime)
 {
-	start = convertDateTime(startDateTime, true);
+	start = convertDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
-	KDateTime end = convertDateTime(endDateTime, false);
+	KDateTime end = convertDateTime(endDateTime, start);
 	if (end.isDateOnly()  &&  !start.isDateOnly())
 	{
 		kError(5950) << "D-Bus call: alarm is date-only, but recurrence end is date/time" << endl;

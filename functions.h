@@ -119,6 +119,8 @@ void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAl
 
 QString             stripAccel(const QString&);
 
+KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                                  bool haveTime, const KDateTime& defaultDt = KDateTime());
 int                 localeFirstDayOfWeek();
 
 /* Given a standard KDE day number, return the day number in the week for the user's locale.

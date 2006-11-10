@@ -88,7 +88,7 @@ class DBusHandler : public QObject, public KAlarmIface
 	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                          const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
 	                          const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);
-	static KDateTime convertDateTime(const QString& dateTime, bool start);
+	static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
 	static unsigned  convertStartFlags(const KDateTime& start, unsigned flags);
 	static QColor    convertBgColour(const QString& bgColor);
 	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence);
