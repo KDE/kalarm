@@ -454,7 +454,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 		if (!email.isEmpty()
 		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
 		{
-			QString domain = addr.mailboxList.first().addrSpec.domain;
+			QString domain = addr.mailboxList.first().addrSpec().domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
 				QString text = (Preferences::emailClient() == Preferences::KMAIL)
@@ -542,13 +542,13 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
 	for (int i = 0, end = mblist.count();  i < end;  ++i)
 	{
-		QString addrPart = mblist[i].addrSpec.localPart;
-		if (!mblist[i].addrSpec.domain.isEmpty())
+		QString addrPart = mblist[i].addrSpec().localPart;
+		if (!mblist[i].addrSpec().domain.isEmpty())
 		{
 			addrPart += QLatin1Char('@');
-			addrPart += mblist[i].addrSpec.domain;
+			addrPart += mblist[i].addrSpec().domain;
 		}
-		list += KCal::Person(mblist[i].displayName, addrPart);
+		list += KCal::Person(mblist[i].name(), addrPart);
 	}
 	return QString();
 }
@@ -858,9 +858,11 @@ bool parseAddress( const char* & scursor, const char * const send,
   QString maybeUserName;
   if ( parseUserName( scursor, send, maybeUserName, isCRLF ) ) {
     // yes, it is:
-    maybeMailbox.displayName.clear();
-    maybeMailbox.addrSpec.localPart = maybeUserName;
-    maybeMailbox.addrSpec.domain.clear();
+    maybeMailbox.setName( QString() );
+    AddrSpec addrSpec;
+    addrSpec.localPart = maybeUserName;
+    addrSpec.domain.clear();
+    maybeMailbox.setAddress( addrSpec );
     result.displayName.clear();
     result.mailboxList.append( maybeMailbox );
     return true;
