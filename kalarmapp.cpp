@@ -129,7 +129,7 @@ KAlarmApp::KAlarmApp()
 	}
 
 	// Check if the speech synthesis daemon is installed
-	mSpeechEnabled = (KServiceTypeTrader::self()->query("DCOP/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
+	mSpeechEnabled = (KServiceTypeTrader::self()->query("DBUS/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
 	if (!mSpeechEnabled)
 		kDebug(5950) << "KAlarmApp::KAlarmApp(): speech synthesis disabled (KTTSD not found)" << endl;
 	// Check if KOrganizer is installed
