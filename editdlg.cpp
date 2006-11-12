@@ -1471,8 +1471,7 @@ void EditAlarmDlg::slotOk()
 	{
 		if (timedRecurrence)
 		{
-#warning Check this
-			KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(mAlarmDateTime);
+			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
 			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
 			||  !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
@@ -1482,7 +1481,7 @@ void EditAlarmDlg::slotOk()
 				KAEvent event;
 				AlarmResource* r;
 				getEvent(event, r);     // this may adjust mAlarmDateTime
-				bool dateOnly = mAlarmDateTime.isDateOnly();
+				dateOnly = mAlarmDateTime.isDateOnly();
 				if ((dateOnly  &&  mAlarmDateTime.date() < now.date()
 				     || !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
