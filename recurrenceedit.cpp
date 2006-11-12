@@ -351,12 +351,12 @@ QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& erro
 	const_cast<RecurrenceEdit*>(this)->mCurrStartDateTime = startDateTime;
 	if (mEndDateButton->isChecked())
 	{
+		// N.B. End date/time takes the same time spec as start date/time
 		QWidget* errWidget = 0;
 		bool noTime = !mEndTimeEdit->isEnabled();
 		QDate endDate = mEndDateEdit->date();
 		if (endDate < startDateTime.date())
 			errWidget = mEndDateEdit;
-#warning End date/time is assumed to be same time spec as start date/time
 		else if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime.dateTime())
 			errWidget = mEndTimeEdit;
 		if (errWidget)
