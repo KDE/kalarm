@@ -212,9 +212,24 @@ AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
 		case AlarmResource::ACTIVE:
 		{
 			AlarmResource* std = mManager->standardResource();
-			if (std  &&  std->standardResource()  &&  std->alarmType() == AlarmResource::ACTIVE)
+			if (std  &&  std->standardResource()  &&  std->alarmType() == AlarmResource::ACTIVE  &&  !std->readOnly())
 				return std;
-			return 0;
+			// There's no nominated default active alarm resource.
+			// If there's only one read/write active alarm resource, use it.
+			std = 0;
+			for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
+			{
+				AlarmResource* r = *it;
+				if (r->alarmType() == AlarmResource::ACTIVE  &&  !r->readOnly())
+				{
+					if (std)
+						return 0;   // there's more than one candidate
+					std = r;
+				}
+			}
+			if (std)
+				setStandardResource(std);   // mark it as the standard resource
+			return std;
 		}
 		case AlarmResource::ARCHIVED:
 		case AlarmResource::TEMPLATE:
@@ -419,6 +434,11 @@ void AlarmResources::load(ResourceCached::CacheAction action)
 		failed[i]->setActive(false);
 		emit signalResourceModified(failed[i]);
 	}
+
+	// Ensure that if there is only one active alarm resource,
+	// it is marked as the standard resource.
+	getStandardResource(AlarmResource::ACTIVE);
+
 	mOpen = true;
 }
 

@@ -235,16 +235,20 @@ void ResourceSelector::editResource()
 		// Read-only is handled automatically by AlarmResource::setReadOnly().
 		item->setText(0, resource->resourceName());
 
-kDebug(5950)<<"*** setting resource to read-only="<<resource->ResourceCached::readOnly()<<endl;
 		if (!readOnly  &&  resource->readOnly()  &&  resource->standardResource())
 		{
 			// A standard resource is being made read-only.
-			// Only allow the archived alarms standard resource to be made read-only
-			// if we're not saving archived alarms.
-			if (resource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
+			if (resource->alarmType() == AlarmResource::ACTIVE)
 			{
+				KMessageBox::sorry(this, i18n("You cannot make your default active alarm resource read-only."));
+				resource->setReadOnly(false);
+			}
+			else if (resource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
+			{
+				// Only allow the archived alarms standard resource to be made read-only
+				// if we're not saving archived alarms.
 				KMessageBox::sorry(this, i18n("You cannot make your default archived alarm resource "
-				                              "read-only while expired alarms are configured to be kept"));
+				                              "read-only while expired alarms are configured to be kept."));
 				resource->setReadOnly(false);
 			}
 			else if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to make your default resource read-only?"))
@@ -269,12 +273,17 @@ void ResourceSelector::removeResource()
 	if (std)
 	{
 		// It's the standard resource for its type.
-		// Only allow the archived alarms standard resource to be removed if
-		// we're not saving archived alarms.
+		if (resource->alarmType() == AlarmResource::ACTIVE)
+		{
+			KMessageBox::sorry(this, i18n("You cannot remove your default active alarm resource."));
+			return;
+		}
 		if (resource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
 		{
+			// Only allow the archived alarms standard resource to be removed if
+			// we're not saving archived alarms.
 			KMessageBox::sorry(this, i18n("You cannot remove your default archived alarm resource "
-			                              "while expired alarms are configured to be kept"));
+			                              "while expired alarms are configured to be kept."));
 			return;
 		}
 	}
@@ -378,7 +387,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
 	mActionSave        = new KAction(KIcon("filesave"), i18n("&Save"), actions, QLatin1String("resSave"));
 	connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
-	mActionShowDetails = new KAction(i18n("Show &Details"), actions, QLatin1String("resDetails"));
+	mActionShowDetails = new KAction(KIcon("info"), i18n("Show &Details"), actions, QLatin1String("resDetails"));
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
 	mActionEdit        = new KAction(KIcon("edit"), i18n("&Edit..."), actions, QLatin1String("resEdit"));
 	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
@@ -642,12 +651,19 @@ void ResourceItem::stateChange(bool active)
 		if (mResource->standardResource())
 		{
 			// It's the standard resource for its type.
-			// Only allow the archived alarms standard resource to be disabled if
-			// we're not saving archived alarms.
+			if (mResource->alarmType() == AlarmResource::ACTIVE)
+			{
+				KMessageBox::sorry(mSelector, i18n("You cannot disable your default active alarm resource."));
+				updateActive();
+				return;
+
+			}
 			if (mResource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
 			{
+				// Only allow the archived alarms standard resource to be disabled if
+				// we're not saving archived alarms.
 				KMessageBox::sorry(mSelector, i18n("You cannot disable your default archived alarm resource "
-				                                   "while expired alarms are configured to be kept"));
+				                                   "while expired alarms are configured to be kept."));
 				updateActive();
 				return;
 			}
