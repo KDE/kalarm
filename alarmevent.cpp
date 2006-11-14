@@ -44,8 +44,8 @@ using namespace KCal;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.90"); }
-int     KAEvent::calVersion()        { return KAlarm::Version(1,9,90); }
+QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.2"); }
+int     KAEvent::calVersion()        { return KAlarm::Version(1,9,2); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -891,10 +891,9 @@ DateTime KAEvent::nextDateTime(bool includeReminders) const
 		KDateTime now = KDateTime::currentUtcDateTime();
 		if (now > mNextMainDateTime)
 		{
-			// Find the next repetition >= current date/time
-#warning Should this be > current date/time?
+			// Find the next repetition > current date/time
 			int repeatSecs = mRepeatInterval * 60;
-			qint64 repetition = (mNextMainDateTime.secsTo_long(now) + repeatSecs - 1) / repeatSecs;
+			qint64 repetition = mNextMainDateTime.secsTo_long(now) / repeatSecs + 1;
 			if (repetition <= mRepeatCount)
 				dt = mNextMainDateTime.addSecs(repetition * repeatSecs);
 		}
@@ -2566,10 +2565,14 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_1_2_1 = (version < KAlarm::Version(1,2,1));
 	bool pre_1_3_0 = (version < KAlarm::Version(1,3,0));
 	bool pre_1_3_1 = (version < KAlarm::Version(1,3,1));
-	bool pre_2_0_0 = (version < KAlarm::Version(1,9,90));
-	Q_ASSERT(calVersion() == KAlarm::Version(1,9,90));
+	bool pre_1_9_0 = (version < KAlarm::Version(1,9,0));
+	bool pre_1_9_2 = (version < KAlarm::Version(1,9,2));
+	Q_ASSERT(calVersion() == KAlarm::Version(1,9,2));
 
 	QTime startOfDay = Preferences::startOfDay();
+	const KTimeZone* localZone = 0;
+	if (pre_1_9_2)
+		localZone = KSystemTimeZones::local();
 
 	bool converted = false;
 	Event::List events = calendar.rawEvents();
@@ -2851,7 +2854,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 		}
 
-		if (pre_2_0_0)
+		if (pre_1_9_0)
 		{
 			/*
 			 * It's a KAlarm pre-2.0 calendar file.
@@ -2892,11 +2895,33 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				cats.removeAt(i);
 				converted = true;
 			}
+		}
 
+		if (pre_1_9_2)
+		{
 			/*
-			 * Convert from local time to the user's timezone.
+			 * It's a KAlarm pre-1.9.2 calendar file.
+			 * Convert from clock time to the local system time zone.
 			 */
-#warning Check whether we need to convert local time - or is it automatic?
+			KDateTime dt = event->dtStart();
+			if (dt.isClockTime())
+			{
+				dt.setTimeSpec(localZone);
+				event->setDtStart(dt);
+			}
+			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+			{
+				Alarm* alarm = *alit;
+				if (alarm->hasTime())
+				{
+					dt = alarm->time();
+					if (dt.isClockTime())
+					{
+						dt.setTimeSpec(localZone);
+						alarm->setTime(dt);
+					}
+				}
+			}
 		}
 
 		if (addLateCancel)
