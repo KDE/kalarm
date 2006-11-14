@@ -648,7 +648,7 @@ void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
-			if (KAlarm::updateEvent(newEvent, view, true, false, &editDlg) != KAlarm::UPDATE_OK)   // keep the same event ID
+			if (KAlarm::updateEvent(newEvent, view, &editDlg, true, false) != KAlarm::UPDATE_OK)   // keep the same event ID
 				return;   // failed to save event
 		}
 		else

@@ -94,11 +94,11 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const QCString& program, const QCString& windowName, QCString& dcopName, QString& errorMessage);
 
-UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, bool useEventID = false, bool allowKOrgUpdate = true, QWidget* errmsgParent = 0);
+UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool useEventID = false, bool allowKOrgUpdate = true);
 bool                addExpiredEvent(KAEvent&);
 UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent = 0);
-UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true, QWidget* errmsgParent = 0);
+UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool archiveOnDelete = true, bool incRevision = true);
 UpdateStatus        updateTemplate(const KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* errmsgParent = 0);
 UpdateStatus        deleteTemplate(const KAEvent&);

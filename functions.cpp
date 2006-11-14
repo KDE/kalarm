@@ -127,7 +127,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, QObject* r
 * event in that listView instance.
 * 'event' is updated with the actual event ID.
 */
-UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, bool useEventID, bool allowKOrgUpdate, QWidget* errmsgParent)
+UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, QWidget* errmsgParent, bool useEventID, bool allowKOrgUpdate)
 {
 	kdDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
 	UpdateStatus status = UPDATE_OK;
@@ -278,7 +278,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListVi
 * The event is not updated in KOrganizer, since this function is called when an
 * existing alarm is rescheduled (due to recurrence or deferral).
 */
-UpdateStatus updateEvent(KAEvent& event, AlarmListView* selectionView, bool archiveOnDelete, bool incRevision, QWidget* errmsgParent)
+UpdateStatus updateEvent(KAEvent& event, AlarmListView* selectionView, QWidget* errmsgParent, bool archiveOnDelete, bool incRevision)
 {
 	kdDebug(5950) << "KAlarm::updateEvent(): " << event.id() << endl;
 

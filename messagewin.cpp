@@ -1524,7 +1524,7 @@ void MessageWin::slotDefer()
 			KAEvent event(*kcalEvent);
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
-			KAlarm::updateEvent(event, 0, true, !repeat, mDeferDlg);
+			KAlarm::updateEvent(event, 0, mDeferDlg, true, !repeat);
 		}
 		else
 		{
@@ -1546,7 +1546,7 @@ void MessageWin::slotDefer()
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
-			KAlarm::addEvent(event, 0, true, false, mDeferDlg);
+			KAlarm::addEvent(event, 0, mDeferDlg, true, false);
 			if (kcalEvent)
 			{
 				event.setUid(KAEvent::EXPIRED);
