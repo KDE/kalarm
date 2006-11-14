@@ -418,7 +418,6 @@ void KAEvent::set(const Event* event)
 				mDeferral = (data.type == KAAlarm::DEFERRED_REMINDER_DATE__ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
 				mDeferralTime = data.dateTime;
 				mDeferralTime.setDateOnly(true);
-#warning Fix KDE 3 version
 				break;
 			case KAAlarm::DEFERRED_REMINDER_TIME__ALARM:
 			case KAAlarm::DEFERRED_TIME__ALARM:
