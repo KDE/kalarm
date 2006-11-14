@@ -379,7 +379,7 @@ void KAEvent::set(const Event& event)
 			case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:
 			case KAAlarm::DEFERRED_DATE__ALARM:
 				mDeferral = (data.type == KAAlarm::DEFERRED_REMINDER_DATE__ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
-				mDeferralTime.set(data.dateTime, false);
+				mDeferralTime.set(data.dateTime, true);
 				break;
 			case KAAlarm::DEFERRED_REMINDER_TIME__ALARM:
 			case KAAlarm::DEFERRED_TIME__ALARM:
