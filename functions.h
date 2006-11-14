@@ -96,13 +96,13 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage);
 
-UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, bool useEventID = false,
-                             bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
-UpdateStatus        addEvents(QList<KAEvent>&, AlarmListView* selectionView, bool allowKOrgUpdate = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
+UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, QWidget* errmsgParent = 0,
+                             bool useEventID = false, bool allowKOrgUpdate = true, bool showKOrgErr = true);
+UpdateStatus        addEvents(QList<KAEvent>&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool allowKOrgUpdate = true, bool showKOrgErr = true);
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
 UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* promptParent, AlarmResource* = 0, QWidget* errmsgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool showKOrgErr = true);
-UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, bool archiveOnDelete = true, bool incRevision = true, QWidget* errmsgParent = 0);
+UpdateStatus        updateEvent(KAEvent&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool archiveOnDelete = true, bool incRevision = true);
 UpdateStatus        updateTemplate(const KAEvent&, TemplateListView* selectionView, QWidget* errmsgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* errmsgParent = 0, bool showKOrgErr = true);

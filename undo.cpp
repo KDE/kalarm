@@ -983,7 +983,7 @@ UndoItem* UndoDelete::restore()
 			}
 			else
 			{
-				switch (KAlarm::addEvent(*mEvent, 0, mResource, true))
+				switch (KAlarm::addEvent(*mEvent, 0, mResource, 0, true))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
 						mRestoreWarning = WARN_KORG_ADD;

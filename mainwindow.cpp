@@ -761,7 +761,7 @@ void MainWindow::executeEdit(KAEvent& event, MainWindow* win)
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
-			if (KAlarm::updateEvent(newEvent, view, true, false, &editDlg) != KAlarm::UPDATE_OK)   // keep the same event ID
+			if (KAlarm::updateEvent(newEvent, view, &editDlg, true, false) != KAlarm::UPDATE_OK)   // keep the same event ID
 				return;   // failed to save event
 		}
 		else
@@ -931,7 +931,7 @@ void MainWindow::slotBirthdays()
 		{
 			mListView->clearSelection();
 			// Add alarm to the displayed lists and to the calendar file
-			KAlarm::UpdateStatus status = KAlarm::addEvents(events, mListView, true, &dlg, true);
+			KAlarm::UpdateStatus status = KAlarm::addEvents(events, mListView, &dlg, true, true);
 
 			Undo::EventList undos;
 			AlarmResources* resources = AlarmResources::instance();
