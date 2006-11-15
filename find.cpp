@@ -80,7 +80,9 @@ void Find::display()
 
 	if (mDialog)
 	{
+#ifdef Q_OS_UNIX		
 		KWin::activateWindow(mDialog->winId());
+#endif		
 	}
 	else
 	{
