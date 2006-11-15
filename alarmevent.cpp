@@ -834,16 +834,17 @@ DateTime KAEvent::nextDateTime(bool includeReminders) const
 	DateTime dt = mNextMainDateTime;
 	if (mRepeatCount)
 	{
-		// N.B. This is coded to avoid 32-bit integer overflow which occurs
-		//      in QDateTime::secsTo() for large enough time differences.
 		QDateTime now = QDateTime::currentDateTime();
 		if (now > mNextMainDateTime)
 		{
+			// Find the next repetition > current date/time.
+			// N.B. This is coded to avoid 32-bit integer overflow which occurs
+			//      in QDateTime::secsTo() for large enough time differences.
 			dt = mainEndRepeatTime();    // get the last repetition time
 			if (dt > now)
 			{
 				int repeatSecs = mRepeatInterval * 60;
-				int repetition = (mNextMainDateTime.secsTo(now) + repeatSecs - 1) / repeatSecs;
+				int repetition = mNextMainDateTime.secsTo(now) / repeatSecs + 1;
 				dt = mNextMainDateTime.addSecs(repetition * repeatSecs);
 			}
 		}
