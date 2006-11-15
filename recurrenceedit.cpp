@@ -254,13 +254,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mEndDateEdit = new DateEdit(mRangeButtonBox);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
-	mEndDateEdit->setWhatsThis(i18n("Enter the last date to repeat the alarm"));
+	static const QString tzText = i18n("This uses the same time zone as the start time.");
+	static const QString lastDateText = i18n("Enter the last date to repeat the alarm.");
+	mEndDateEdit->setWhatsThis(QString("%1\n%2").arg(lastDateText).arg(tzText));
 	mEndDateButton->setFocusWidget(mEndDateEdit);
 	mEndTimeEdit = new TimeEdit(mRangeButtonBox);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
 	mEndTimeEdit->setReadOnly(mReadOnly);
 	static const QString lastTimeText = i18n("Enter the last time to repeat the alarm.");
-	mEndTimeEdit->setWhatsThis(QString("%1\n\n%2").arg(lastTimeText).arg(TimeSpinBox::shiftWhatsThis()));
+	mEndTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(lastTimeText).arg(tzText).arg(TimeSpinBox::shiftWhatsThis()));
 	mEndAnyTimeCheckBox = new CheckBox(i18n("Any time"), mRangeButtonBox);
 	mEndAnyTimeCheckBox->setFixedSize(mEndAnyTimeCheckBox->sizeHint());
 	mEndAnyTimeCheckBox->setReadOnly(mReadOnly);
