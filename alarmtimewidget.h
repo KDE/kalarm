@@ -89,6 +89,7 @@ class AlarmTimeWidget : public QFrame
 		TimeZoneCombo*   mTimeZone;
 		KDateTime        mMinDateTime;      // earliest allowed date/time
 		KDateTime        mMaxDateTime;      // latest allowed date/time
+		KDateTime::Spec  mTimeSpec;         // time spec used (if time zone selector widget not shown)
 		int              mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
 		bool             mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
 		bool             mDeferring;        // being used to enter a deferral time

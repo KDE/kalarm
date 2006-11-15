@@ -82,10 +82,10 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 
 void AlarmTimeWidget::init(int mode, bool hasTitle)
 {
-#warning Add a time zone selection widget if not defer dialogue
 	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
+	static const QString tzText = i18n("This uses KAlarm's default time zone, set in the Preferences dialog.");
 
 	mDeferring = mode & DEFER_TIME;
 	mButtonGroup = new ButtonGroup(this);
@@ -106,7 +106,9 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	mAnyTime = -1;    // last status is uninitialised
 	if (mDeferring)
 	{
-		mDateRadio = 0;
+		mDateRadio  = 0;
+		mTimeZone   = 0;
+		mNoTimeZone = 0;
 		mAnyTimeAllowed = false;
 	}
 	else
@@ -126,7 +128,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
 	static const QString enterDateText = i18n("Enter the date to schedule the alarm.");
-	mDateEdit->setWhatsThis(mDeferring ? enterDateText : QString("%1\n%2").arg(enterDateText).arg(recurText));
+	mDateEdit->setWhatsThis(QString("%1\n%2").arg(enterDateText).arg(mDeferring ? tzText : recurText));
 	topLayout->addWidget(mDateEdit, 1, 1, Qt::AlignLeft);
 	mDateTimeRadio->setFocusWidget(mDateEdit);
 	if (mDateRadio)
@@ -137,28 +139,29 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");
-	mTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(enterTimeText).arg(TimeSpinBox::shiftWhatsThis())
-	                                   : QString("%1\n%2\n\n%3").arg(enterTimeText).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(enterTimeText).arg(mDeferring ? tzText : recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	topLayout->addWidget(mTimeEdit, row, (mDateRadio ? 1 : 2), Qt::AlignLeft);
 	++row;
 
-	// Time zone selector
-	mTimeZone = new TimeZoneCombo(this);
-	mTimeZone->setWhatsThis(i18n("Select the time zone to use for this alarm."));
-#warning The column is wrong if deferral
-	topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
+	if (!mDeferring)
+	{
+		// Time zone selector
+		mTimeZone = new TimeZoneCombo(this);
+		mTimeZone->setWhatsThis(i18n("Select the time zone to use for this alarm."));
+		topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
 
-	// Time zone checkbox
-	mNoTimeZone = new CheckBox(i18n("Ignore time &zone"), this);
-	connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
-	mNoTimeZone->setWhatsThis("<qt>" +
-	      i18n("Check to use the local computer time, ignoring time zones.")
-	    + "<p>"
-	    + i18n("You are recommended not to use this option if the alarm has a "
-	           "recurrence specified in hours/minutes. If you do, the alarm may "
-	           "occur at unexpected times after daylight saving time shifts.")
-	    + "</qt>");
-	topLayout->addWidget(mNoTimeZone, 2, 3, Qt::AlignLeft);
+		// Time zone checkbox
+		mNoTimeZone = new CheckBox(i18n("Ignore time &zone"), this);
+		connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
+		mNoTimeZone->setWhatsThis("<qt>" +
+		      i18n("Check to use the local computer time, ignoring time zones.")
+		    + "<p>"
+		    + i18n("You are recommended not to use this option if the alarm has a "
+		           "recurrence specified in hours/minutes. If you do, the alarm may "
+		           "occur at unexpected times after daylight saving time shifts.")
+		    + "</qt>");
+		topLayout->addWidget(mNoTimeZone, 2, 3, Qt::AlignLeft);
+	}
 
 	// 'Time from now' radio button/label
 	mAfterTimeRadio = new RadioButton((mDeferring ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), this);
@@ -196,8 +199,11 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 	mDateTimeRadio->setReadOnly(ro);
 	mDateEdit->setReadOnly(ro);
 	mTimeEdit->setReadOnly(ro);
-	mTimeZone->setReadOnly(ro);
-	mNoTimeZone->setReadOnly(ro);
+	if (!mDeferring)
+	{
+		mTimeZone->setReadOnly(ro);
+		mNoTimeZone->setReadOnly(ro);
+	}
 	mAfterTimeRadio->setReadOnly(ro);
 	mDelayTimeEdit->setReadOnly(ro);
 }
@@ -303,7 +309,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 KDateTime::Spec AlarmTimeWidget::timeSpec() const
 {
 	if (mDeferring)
-		return KDateTime::LocalZone;
+		return mTimeSpec.isValid() ? mTimeSpec : KDateTime::LocalZone;
 	if (mNoTimeZone->isChecked())
 		return KDateTime::ClockTime;
 	const KTimeZone* tz = mTimeZone->timeZone();
@@ -336,9 +342,12 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 		}
 		setAnyTime();
 	}
-	const KTimeZone* tz = dt.timeZone();
-	mNoTimeZone->setChecked(!tz);
-	mTimeZone->setTimeZone(tz ? tz : Preferences::timeZone());
+	if (!mDeferring)
+	{
+		const KTimeZone* tz = dt.timeZone();
+		mNoTimeZone->setChecked(!tz);
+		mTimeZone->setTimeZone(tz ? tz : Preferences::timeZone());
+	}
 }
 
 /******************************************************************************
@@ -348,7 +357,7 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
 	mMinDateTimeIsNow = true;
 	mMinDateTime = KDateTime();
-	KDateTime now = KDateTime::currentLocalDateTime().toTimeSpec(timeSpec());
+	KDateTime now = KDateTime::currentDateTime(timeSpec());
 	mDateEdit->setMinDate(now.date());
 	setMaxMinTimeIf(now);
 }
@@ -362,7 +371,7 @@ void AlarmTimeWidget::setMinDateTime(const KDateTime& dt)
 	mMinDateTimeIsNow = false;
 	mMinDateTime = dt;
 	mDateEdit->setMinDate(dt.date());
-	setMaxMinTimeIf(KDateTime::currentUtcDateTime().toTimeSpec(dt));
+	setMaxMinTimeIf(KDateTime::currentDateTime(dt.timeSpec()));
 }
 
 /******************************************************************************
@@ -377,7 +386,7 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 	else
 		mMaxDateTime = dt.effectiveKDateTime();
 	mDateEdit->setMaxDate(mMaxDateTime.date());
-	KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(dt);
+	KDateTime now = KDateTime::currentDateTime(dt.timeSpec());
 	setMaxMinTimeIf(now);
 	setMaxDelayTime(now);
 }
@@ -472,13 +481,13 @@ void AlarmTimeWidget::slotTimer()
 	if (mMinDateTimeIsNow)
 	{
 		// Make sure that the minimum date is updated when the day changes
-		now = KDateTime::currentUtcDateTime().toTimeSpec(mMinDateTime);
+		now = KDateTime::currentDateTime(mMinDateTime.timeSpec());
 		mDateEdit->setMinDate(now.date());
 	}
 	if (mMaxDateTime.isValid())
 	{
 		if (!now.isValid())
-			now = KDateTime::currentUtcDateTime().toTimeSpec(mMinDateTime);
+			now = KDateTime::currentDateTime(mMinDateTime.timeSpec());
 		if (!mPastMax)
 		{
 			// Check whether the maximum date/time has now been reached
@@ -561,8 +570,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
 	if (mDelayTimeEdit->isValid())
 	{
-#warning Use KDateTime?
-		QDateTime dt = QDateTime::currentDateTime().addSecs(minutes * 60);
+		QDateTime dt = KDateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(timeSpec()).dateTime();
 		bool blockedT = mTimeEdit->signalsBlocked();
 		bool blockedD = mDateEdit->signalsBlocked();
 		mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()

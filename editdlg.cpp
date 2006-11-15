@@ -1733,7 +1733,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 	if (!mReadOnly  &&  !mTemplate)
 	{
 		mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
-		KDateTime now = KDateTime::currentUtcDateTime().toTimeSpec(KDateTime(mAlarmDateTime));
+		KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 		bool expired = (mAlarmDateTime.effectiveKDateTime() < now);
 		if (mRecurSetDefaultEndDate)
 		{

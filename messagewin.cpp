@@ -585,7 +585,7 @@ void MessageWin::initView()
 		// Silence button to stop sound repetition
 		QPixmap pixmap = MainBarIcon("player_stop");
 		mSilenceButton = new QPushButton(topWidget);
-		mSilenceButton->setPixmap(pixmap);
+		mSilenceButton->setIcon(pixmap);
 		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
 		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -1468,7 +1468,7 @@ void MessageWin::checkDeferralLimit()
 */
 void MessageWin::slotDefer()
 {
-	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), KDateTime::currentLocalDateTime().addSecs(60),
+	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60),
 	                              false, this);
 	mDeferDlg->setObjectName("DeferDlg");    // used by LikeBack
 	if (mDefaultDeferMinutes > 0)
