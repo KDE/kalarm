@@ -346,7 +346,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
 		mTimeZone->addItem(it.key());
-	box->setWhatsThis(i18n("Select the time zone which KAlarm should use."));
+	box->setWhatsThis(i18n("Select the time zone which KAlarm should use as its default for displaying and entering dates and times."));
 	label->setBuddy(mTimeZone);
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
