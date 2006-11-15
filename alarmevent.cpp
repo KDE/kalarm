@@ -2903,25 +2903,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			 * It's a KAlarm pre-1.9.2 calendar file.
 			 * Convert from clock time to the local system time zone.
 			 */
-			KDateTime dt = event->dtStart();
-			if (dt.isClockTime())
-			{
-				dt.setTimeSpec(localZone);
-				event->setDtStart(dt);
-			}
-			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
-			{
-				Alarm* alarm = *alit;
-				if (alarm->hasTime())
-				{
-					dt = alarm->time();
-					if (dt.isClockTime())
-					{
-						dt.setTimeSpec(localZone);
-						alarm->setTime(dt);
-					}
-				}
-			}
+			event->shiftTimes(KDateTime::ClockTime, localZone);
 		}
 
 		if (addLateCancel)
