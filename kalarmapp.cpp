@@ -905,7 +905,7 @@ void KAlarmApp::processQueue()
 					execAlarm(entry.event, entry.event.firstAlarm(), false);
 					break;
 				case EVENT_HANDLE:
-					KAlarm::addEvent(entry.event, 0);
+					KAlarm::addEvent(entry.event, 0, 0, 0, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
 					break;
 				case EVENT_CANCEL:
 					break;

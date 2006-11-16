@@ -104,7 +104,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		 *  The resource calendar takes ownership of the event.
 		 *  @return false if error, in which case the event is deleted.
 		 */
-		bool addEvent(KCal::Event*, KCalEvent::Status, QWidget* promptParent = 0);
+		bool addEvent(KCal::Event*, KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
 
 		/** Return whether all, some or none of the active resources are loaded.
 		 *  @return 0 if no resources are loaded,
@@ -218,7 +218,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
     */
     void setAskDestinationPolicy(bool ask)  { mAskDestination = ask; };
 
-		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0);
+		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
 
     /**
        Request ticket for saving the Calendar.  If a ticket is returned the

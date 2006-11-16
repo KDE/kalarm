@@ -141,7 +141,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCol
 * 'event' is updated with the actual event ID.
 */
 UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, AlarmResource* resource, QWidget* errmsgParent,
-                      bool useEventID, bool allowKOrgUpdate, bool showKOrgErr)
+                      int options, bool showKOrgErr)
 {
 	kDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
 	UpdateStatus status = UPDATE_OK;
@@ -151,14 +151,14 @@ UpdateStatus addEvent(KAEvent& event, AlarmListView* selectionView, AlarmResourc
 	{
 		// Save the event details in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		if (!cal->addEvent(event, selectionView, useEventID, resource))
+		if (!cal->addEvent(event, selectionView, (options & USE_EVENT_ID), resource, (options & NO_RESOURCE_PROMPT)))
 			status = UPDATE_FAILED;
 		else if (!cal->save())
 			status = SAVE_FAILED;
 	}
 	if (status == UPDATE_OK)
 	{
-		if (allowKOrgUpdate  &&  event.copyToKOrganizer())
+		if ((options & ALLOW_KORG_UPDATE)  &&  event.copyToKOrganizer())
 		{
 			if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
 				status = UPDATE_KORG_ERR;

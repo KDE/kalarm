@@ -96,8 +96,14 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage);
 
+enum         // 'options' parameter values for addEvent(). May be OR'ed together.
+{
+	USE_EVENT_ID       = 0x01,   // use event ID if it's provided
+	NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
+	ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
+};
 UpdateStatus        addEvent(KAEvent&, AlarmListView* selectionView, AlarmResource* = 0, QWidget* errmsgParent = 0,
-                             bool useEventID = false, bool allowKOrgUpdate = true, bool showKOrgErr = true);
+                             int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
 UpdateStatus        addEvents(QList<KAEvent>&, AlarmListView* selectionView, QWidget* errmsgParent = 0, bool allowKOrgUpdate = true, bool showKOrgErr = true);
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
 UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* promptParent, AlarmResource* = 0, QWidget* errmsgParent = 0);

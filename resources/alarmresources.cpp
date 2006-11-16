@@ -187,10 +187,10 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 	return resource;
 }
 
-bool AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent)
+bool AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::addEvent(" << event->uid() << ")" << endl;
-	AlarmResource* resource = destination(type, promptParent);
+	AlarmResource* resource = destination(type, promptParent, noPrompt);
 	if (!resource)
 	{
 		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource" << endl;
@@ -302,7 +302,7 @@ AlarmResource* AlarmResources::destination(Incidence* incidence, QWidget* prompt
 	return destination(type, promptParent);
 }
 
-AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* promptParent)
+AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
 {
 	AlarmResource* standard;
 	AlarmResource::Type calType;
@@ -325,7 +325,7 @@ AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* prom
 			return 0;
 	}
 	standard = getStandardResource(calType);
-	if (!mAskDestination  &&  standard)
+	if (noPrompt  ||  (!mAskDestination  &&  standard))
 		return standard;
 	QList<KRES::Resource*> list;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)

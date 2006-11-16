@@ -731,10 +731,14 @@ void AlarmCalendar::startPurgeTimer()
 * If it is an active event and 'useEventID' is false, a new event ID is
 * created. In all other cases, the event ID is taken from 'event' (if non-null).
 * 'event' is updated with the actual event ID.
+* The event is added to 'resource' if specified; otherwise the default resource
+* is used or the user is prompted, depending on policy. If 'noPrompt' is true,
+* the user will not be prompted so that if no default resource is defined, the
+* function will fail.
 * Reply = the KCal::Event as written to the calendar
 *       = 0 if an error occurred, in which case 'event' is unchanged.
 */
-Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEventID, AlarmResource* resource)
+Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEventID, AlarmResource* resource, bool noPrompt)
 {
 	if (!mOpen)
 		return 0;
@@ -784,7 +788,7 @@ Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEv
 		if (resource)
 			ok = AlarmResources::instance()->addEvent(kcalEvent, resource);
 		else
-			ok = AlarmResources::instance()->addEvent(kcalEvent, type, promptParent);
+			ok = AlarmResources::instance()->addEvent(kcalEvent, type, promptParent, noPrompt);
 		if (!ok)
 		{
 			event = oldEvent;

@@ -1513,7 +1513,7 @@ void MessageWin::slotDefer()
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
-			KAlarm::addEvent(event, 0, resource, mDeferDlg, true, false);
+			KAlarm::addEvent(event, 0, resource, mDeferDlg, KAlarm::USE_EVENT_ID);
 			event.setCategory(KCalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}
