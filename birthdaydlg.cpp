@@ -344,7 +344,6 @@ QList<KAEvent> BirthdayDlg::events() const
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
 				event.setNextOccurrence(todayStart, true);
-#warning Check that birthdays do not trigger today if they land today
 				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 				if (reminder)
 					event.setReminder(reminder, false);
