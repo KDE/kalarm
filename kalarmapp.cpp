@@ -1256,16 +1256,19 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					updateCalAndDisplay = false;
 				}
 				// Check if the alarm is due yet.
-				// Just in case it's an invalid time during a daylight savings time
-				// shift, check more carefully if it's today.
-#warning Check first/second occurrence
 				int secs = alarm.dateTime().secsTo(now);
-				if (secs < 0
-				&&  (alarm.date() != now.date() || alarm.time() > now.time()))
+				if (secs < 0)
 				{
-					// This alarm is definitely not due yet
-					kDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": not due\n";
-					continue;
+					// The alarm appears to be in the future.
+					// Check if it's an invalid local clock time during a daylight
+					// saving time shift, which has actually passed.
+					if (alarm.dateTime().timeSpec() != KDateTime::ClockTime
+					||  alarm.dateTime() > now.toTimeSpec(KDateTime::ClockTime))
+					{
+						// This alarm is definitely not due yet
+						kDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": not due\n";
+						continue;
+					}
 				}
 				if (alarm.repeatAtLogin())
 				{
