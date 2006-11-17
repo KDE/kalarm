@@ -269,7 +269,7 @@ class EditAlarmDlg : public KDialog
 		bool                mSavedCmdScript;        // mCmdTypeScript status
 		QAbstractButton*    mSavedCmdOutputRadio;   // selected button in mCmdOutputGroup
 		QString             mSavedCmdLogFile;       // mCmdLogFileEdit value
-		DateTime            mSavedDateTime;         // mTimeWidget value
+		KDateTime           mSavedDateTime;         // mTimeWidget value
 		int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
 		int                 mSavedRepeatInterval;   // alarm repetition interval (via mSimpleRepetition button)
 		int                 mSavedRepeatCount;      // alarm repetition count (via mSimpleRepetition button)

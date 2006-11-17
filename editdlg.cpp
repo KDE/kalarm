@@ -1150,8 +1150,11 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 	}
 	else
-		if (mSavedDateTime != mTimeWidget->getDateTime(0, false, false))
+	{
+		KDateTime dt = mTimeWidget->getDateTime(0, false, false);
+		if (mSavedDateTime.timeSpec() != dt.timeSpec()  ||  mSavedDateTime != dt)
 			return true;
+	}
 	if (mSavedTypeRadio        != mActionGroup->checkedButton()
 	||  mSavedLateCancel       != mLateCancel->minutes()
 	||  mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked()
