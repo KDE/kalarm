@@ -1,7 +1,7 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,22 @@
 #include "karecurrence.h"
 
 using namespace KCal;
+
+/*=============================================================================
+= Class KARecurrence
+= The purpose of this class is to represent the restricted range of recurrence
+= types which are handled by KAlarm, and to translate between these and the
+= libkcal Recurrence class. In particular, it handles yearly recurrences on
+= 29th February specially:
+=
+= KARecurrence allows annual 29th February recurrences to fall on 28th
+= February or 1st March, or not at all, in non-leap years. It allows such
+= 29th February recurrences to be combined with the 29th of other months in
+= a simple way, represented simply as the 29th of multiple months including
+= February. For storage in the libkcal calendar, the 29th day of the month
+= recurrence for other months is combined with a last-day-of-February or a
+= 60th-day-of-the-year recurrence rule, thereby conforming to RFC2445.
+=============================================================================*/
 
 
 KARecurrence::Feb29Type KARecurrence::mDefaultFeb29 = KARecurrence::FEB29_FEB29;
@@ -327,6 +343,44 @@ void KARecurrence::fix()
 		setDuration(count);
 	else
 		setEndDate(end);
+}
+
+/******************************************************************************
+* Get the next time the recurrence occurs, strictly after a specified time.
+*/
+KDateTime KARecurrence::getNextDateTime(const KDateTime& preDateTime) const
+{
+	switch (type())
+	{
+		case ANNUAL_DATE:
+		case ANNUAL_POS:
+		{
+			Recurrence recur;
+			writeRecurrence(recur);
+			return recur.getNextDateTime(preDateTime);
+		}
+		default:
+			return Recurrence::getNextDateTime(preDateTime);
+	}
+}
+
+/******************************************************************************
+* Get the previous time the recurrence occurred, strictly before a specified time.
+*/
+KDateTime KARecurrence::getPreviousDateTime(const KDateTime& afterDateTime) const
+{
+	switch (type())
+	{
+		case ANNUAL_DATE:
+		case ANNUAL_POS:
+		{
+			Recurrence recur;
+			writeRecurrence(recur);
+			return recur.getPreviousDateTime(afterDateTime);
+		}
+		default:
+			return Recurrence::getPreviousDateTime(afterDateTime);
+	}
 }
 
 /******************************************************************************
