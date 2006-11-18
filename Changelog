@@ -1,8 +1,9 @@
 KAlarm
 
-=== Version 1.4.6 --- 21 October 2006 ===
+=== Version 1.4.6 --- 18 November 2006 ===
 Fix "Start alarm monitoring at login" value shown in preferences dialogue.
 Fix deselecting "Start alarm monitoring at login" when daemon not running.
+Fix 29th February alarm options for non-leap years.
 Tidy up preferences dialogue Run mode options.
 Tidy up alarm edit/preferences dialogue sound type options into a combo box.
 Add context help for sound file fade options.
