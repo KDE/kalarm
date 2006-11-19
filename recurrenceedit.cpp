@@ -1476,6 +1476,7 @@ void YearlyRule::setMonths(const QValueList<int>& mnths)
 		checked[(*it) - 1] = true;
 	for (int i = 0;  i < 12;  ++i)
 		mMonthBox[i]->setChecked(checked[i]);
+	enableFeb29();
 }
 
 /******************************************************************************
