@@ -672,7 +672,7 @@ void MainWindow::slotView()
 	if (item)
 	{
 		KAEvent event = item->event();
-		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Expired Alarm") + " [" + i18n("read-only") + "]"
+		EditAlarmDlg editDlg(false, (event.expired() ? i18n("Expired Alarm") + " [" + i18n("read-only") + ']'
 		                                             : i18n("View Alarm")),
 		                     this, 0, &event, true);
 		editDlg.exec();

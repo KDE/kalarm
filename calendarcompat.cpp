@@ -86,7 +86,7 @@ int CalendarCompat::readKAlarmVersion(KCal::Calendar& calendar, QString& subVers
 	{
 		// Older versions used KAlarm's translated name in the product ID, which
 		// could have created problems using a calendar in different locales.
-		progname = QString(" ") + kapp->aboutData()->programName() + " ";
+		progname = QString(" ") + kapp->aboutData()->programName() + ' ';
 		i = prodid.find(progname, 0, false);
 		if (i < 0)
 			return 0;    // calendar wasn't created by KAlarm
@@ -119,7 +119,7 @@ bool CalendarCompat::isUTC(const QString& localFile)
 	if (!file.open(IO_ReadOnly))
 		return false;
 	QTextStream ts(&file);
-	ts.setEncoding(QTextStream::UnicodeUTF8);
+	ts.setEncoding(QTextStream::Latin1);
 	QString text = ts.read();
 	file.close();
 
