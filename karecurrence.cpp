@@ -141,11 +141,13 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		if (!QDate::isLeapYear(year)
 		&&  startdt.date().dayOfYear() == (feb29Type == FEB29_MAR1 ? 60 : 59))
 		{
-			// The event start date is February 28th or March 1st, but it
-			// is a recurrence on February 29th (recurring on February 28th
-			// or March 1st in non-leap years). Adjust the start date to
-			// be on February 29th in the last previous leap year.
-//#warning Is this necessary now?
+			/* The event start date is February 28th or March 1st, but it
+			 * is a recurrence on February 29th (recurring on February 28th
+			 * or March 1st in non-leap years). Adjust the start date to
+			 * be on February 29th in the last previous leap year.
+			 * This is necessary because KARecurrence represents all types
+			 * of 29th February recurrences by a simple 29th February.
+			 */
 			while (!QDate::isLeapYear(--year)) ;
 			startdt.setDate(QDate(year, 2, 29));
 		}
