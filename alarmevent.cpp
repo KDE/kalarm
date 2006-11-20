@@ -27,6 +27,7 @@
 #include <QRegExp>
 #include <QByteArray>
 
+#include <ksystemtimezone.h>
 #include <klocale.h>
 #include <kdebug.h>
 

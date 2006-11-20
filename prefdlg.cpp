@@ -41,7 +41,7 @@
 #include <kiconloader.h>
 #include <kcolorcombo.h>
 #include <kstdguiitem.h>
-#include <ktimezones.h>
+#include <ksystemtimezone.h>
 #include <kdebug.h>
 #include <kicon.h>
 

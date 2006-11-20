@@ -32,7 +32,7 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kconfig.h>
-#include <ktimezones.h>
+#include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kdebug.h>
 

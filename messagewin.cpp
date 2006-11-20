@@ -54,6 +54,7 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <ktextbrowser.h>
+#include <ksystemtimezone.h>
 #include <kglobalsettings.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>

@@ -29,6 +29,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <ksystemtimezone.h>
 #include <kstdguiitem.h>
 #include <kstdaccel.h>
 #include <kmessagebox.h>

@@ -32,6 +32,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kdatetime.h>
+#include <ksystemtimezone.h>
 #include <kdebug.h>
 
 #include <libkpimidentities/identity.h>
