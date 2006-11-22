@@ -2192,7 +2192,8 @@ TextEdit::TextEdit(QWidget* parent)
 
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
-	if (KCal::ICalDrag::canDecode(e))
+	const QMimeData *md = e->mimeData();
+	if (KCal::ICalDrag::canDecode(md))
 		e->ignore();   // don't accept "text/calendar" objects
 	QTextEdit::dragEnterEvent(e);
 }

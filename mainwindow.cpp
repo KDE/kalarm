@@ -1244,7 +1244,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
-	bool accept = KCal::ICalDrag::canDecode(e) ? !AlarmListView::dragging()   // don't accept "text/calendar" objects from KAlarm
+	bool accept = KCal::ICalDrag::canDecode(data) ? !AlarmListView::dragging()   // don't accept "text/calendar" objects from KAlarm
 	                                           :    data->hasText()
 	                                             || KUrl::List::canDecode(data)
 	                                             || KPIM::MailListDrag::canDecode(e);
@@ -1338,7 +1338,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   KGlobal::locale()->formatDateTime(dt), summary.subject(),
 		                   body, summary.serialNumber());
 	}
-	else if (KCal::ICalDrag::decode(e, &calendar))
+	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
 	{
 		// iCalendar - ignore all but the first event
 		kDebug(5950) << "MainWindow::executeDropEvent(iCalendar)" << endl;

@@ -36,6 +36,7 @@
 
 #include <kcal/icaldrag.h>
 #include <kcal/calendarlocal.h>
+#include <kcal/dndfactory.h>
 
 #include "alarmcalendar.h"
 #include "alarmtext.h"
@@ -373,8 +374,9 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 
 		// Create the drag object for the destination program to receive
 		mDragging = true;
-		KCal::ICalDrag* dobj = new KCal::ICalDrag(&cal, this);
-		dobj->dragCopy();       // the drag operation will copy the alarms
+		KCal::DndFactory fact( &cal );
+		QDrag* dobj = fact.createDrag( this );
+		dobj->start();       // the drag operation will copy the alarms
 	}
 }
 

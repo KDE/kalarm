@@ -95,7 +95,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
 	bool ok;
-	if (KCal::ICalDrag::canDecode(e))
+	if (KCal::ICalDrag::canDecode(data))
 		ok = false;   // don't accept "text/calendar" objects
 	else
 		ok = (data->hasText()
