@@ -100,8 +100,9 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 	else
 		ok = (data->hasText()
 		   || KUrl::List::canDecode(data)
+#warning Port KPIM::MailListDrag to QMimeData
 		   || mType != Url && KPIM::MailListDrag::canDecode(e)
-		   || mType == Emails && KVCardDrag::canDecode(e));
+		   || mType == Emails && KVCardDrag::canDecode(data));
 	if (ok)
 		e->accept(rect());
 	else
@@ -118,6 +119,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 	KABC::Addressee::List addrList;
 
 	if (mType != Url
+#warning Port KPIM::MailListDrag to QMimeData
 	&&  data->hasFormat(KPIM::MailListDrag::format())
 	&&  KPIM::MailListDrag::decode(e, mailList))
 	{
@@ -132,7 +134,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 	}
 	// This must come before KUrl
 	else if (mType == Emails
-	&&  KVCardDrag::canDecode(e)  &&  KVCardDrag::decode(e, addrList))
+	&&  KVCardDrag::canDecode(data)  &&  KVCardDrag::fromMimeData(data, addrList))
 	{
 		// KAddressBook entries
 		for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
