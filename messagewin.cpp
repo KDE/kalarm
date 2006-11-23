@@ -25,6 +25,7 @@
 
 #include <QScrollBar>
 #include <Q3MimeSourceFactory>
+#include <Q3StoredDrag>
 #include <QtDBus>
 #include <QFile>
 #include <QFileInfo>
@@ -41,8 +42,6 @@
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QCloseEvent>
-//Added by qt3to4:
-#include <q3dragobject.h>
 #include <QDesktopWidget>
 
 #include <kstandarddirs.h>
@@ -1585,6 +1584,7 @@ MWMimeSourceFactory::~MWMimeSourceFactory()
 	delete mLast;
 }
 
+#warning port me to QMimeData (the Qt4 way of doing drag and drop)
 const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 {
 	if (abs_name == mTextFile)
