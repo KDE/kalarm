@@ -1247,7 +1247,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 	bool accept = KCal::ICalDrag::canDecode(data) ? !AlarmListView::dragging()   // don't accept "text/calendar" objects from KAlarm
 	                                           :    data->hasText()
 	                                             || KUrl::List::canDecode(data)
-	                                             || KPIM::MailListDrag::canDecode(e);
+	                                             || KPIM::MailList::canDecode(data);
 	if (accept)
 		e->accept();
 	else
@@ -1302,13 +1302,12 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                 if (content.textContent())
 			body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
 		unsigned long sernum = 0;
-		if (data->hasFormat(KPIM::MailListDrag::format())
-		&&  KPIM::MailListDrag::decode(e, mailList)
-		&&  mailList.count())
-		{
+		if (KPIM::MailList::canDecode( data ) ) {
 			// Get its KMail serial number to allow the KMail message
 			// to be called up from the alarm message window.
-			sernum = mailList.first().serialNumber();
+			mailList = KPIM::MailList::fromMimeData( data );
+			if ( mailList.count() )
+				sernum = mailList.first().serialNumber();
 		}
 		alarmText.setEmail(getMailHeader("To", content),
 		                   getMailHeader("From", content),
@@ -1323,9 +1322,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		action = KAEvent::FILE;
 		alarmText.setText(files.first().prettyUrl());
 	}
-	else if (data->hasFormat(KPIM::MailListDrag::format())
-	&&       KPIM::MailListDrag::decode(e, mailList))
+	else if ( KPIM::MailList::canDecode( data ) )
 	{
+		mailList = KPIM::MailList::fromMimeData(data);
 		// KMail message(s). Ignore all but the first.
 		kDebug(5950) << "MainWindow::executeDropEvent(KMail_list)" << endl;
 		if (!mailList.count())

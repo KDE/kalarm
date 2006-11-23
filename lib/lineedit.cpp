@@ -100,8 +100,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 	else
 		ok = (data->hasText()
 		   || KUrl::List::canDecode(data)
-#warning Port KPIM::MailListDrag to QMimeData
-		   || mType != Url && KPIM::MailListDrag::canDecode(e)
+		   || mType != Url && KPIM::MailList::canDecode(data)
 		   || mType == Emails && KVCardDrag::canDecode(data));
 	if (ok)
 		e->accept(rect());
@@ -114,15 +113,13 @@ void LineEdit::dropEvent(QDropEvent* e)
 	const QMimeData* data = e->mimeData();
 	QString               newText;
 	QStringList           newEmails;
-	KPIM::MailList        mailList;
 	KUrl::List            files;
 	KABC::Addressee::List addrList;
 
 	if (mType != Url
-#warning Port KPIM::MailListDrag to QMimeData
-	&&  data->hasFormat(KPIM::MailListDrag::format())
-	&&  KPIM::MailListDrag::decode(e, mailList))
+	&&  KPIM::MailList::canDecode( data ) )
 	{
+		KPIM::MailList mailList = KPIM::MailList::fromMimeData( data );
 		// KMail message(s) - ignore all but the first
 		if (mailList.count())
 		{
