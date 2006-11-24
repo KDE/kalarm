@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,9 +117,9 @@ void LineEdit::dropEvent(QDropEvent* e)
 	KABC::Addressee::List addrList;
 
 	if (mType != Url
-	&&  KPIM::MailList::canDecode( data ) )
+	&&  KPIM::MailList::canDecode(data))
 	{
-		KPIM::MailList mailList = KPIM::MailList::fromMimeData( data );
+		KPIM::MailList mailList = KPIM::MailList::fromMimeData(data);
 		// KMail message(s) - ignore all but the first
 		if (mailList.count())
 		{
