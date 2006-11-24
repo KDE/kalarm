@@ -374,8 +374,8 @@ void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
 
 		// Create the drag object for the destination program to receive
 		mDragging = true;
-		KCal::DndFactory fact( &cal );
-		QDrag* dobj = fact.createDrag( this );
+		KCal::DndFactory fact(&cal);
+		QDrag* dobj = fact.createDrag(this);
 		dobj->start();       // the drag operation will copy the alarms
 	}
 }
