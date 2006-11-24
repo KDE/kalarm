@@ -385,41 +385,41 @@ void MainWindow::initActions()
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
 	mActionCopy = new KAction(KIcon("editcopy"), i18n("&Copy..."), actions, QLatin1String("copy"));
-	mActionCopy->setShortcut(Qt::SHIFT + Qt::Key_Insert);
+	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
 	mActionModify = new KAction(KIcon("edit"), i18n("&Edit..."), actions, QLatin1String("modify"));
-	mActionModify->setShortcut(Qt::CTRL + Qt::Key_E);
+	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
 	mActionDelete = new KAction(KIcon("editdelete"), i18n("&Delete"), actions, QLatin1String("delete"));
-	mActionDelete->setShortcut(Qt::Key_Delete);
+	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
 
 	mActionReactivate = new KAction(i18n("Reac&tivate"), actions, QLatin1String("undelete"));
-	mActionReactivate->setShortcut(Qt::CTRL + Qt::Key_R);
+	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
 	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
 	mActionEnable = new KAction(QString(), actions, QLatin1String("disable"));
-	mActionEnable->setShortcut(Qt::CTRL + Qt::Key_B);
+	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
 	mActionView = new KAction(KIcon("viewmag"), i18n("&View"), actions, QLatin1String("view"));
-	mActionView->setShortcut(Qt::CTRL + Qt::Key_W);
+	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
 
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), actions, QLatin1String("showAlarmTimes"));
-	mActionShowTime->setShortcut(Qt::CTRL + Qt::Key_M);
+	mActionShowTime->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	mActionShowTime->setCheckedState(KGuiItem(i18n("Hide &Alarm Times")));
 	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
 	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), actions, QLatin1String("showTimeToAlarms"));
-	mActionShowTimeTo->setShortcut(Qt::CTRL + Qt::Key_I);
+	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 	mActionShowTimeTo->setCheckedState(KGuiItem(i18n("Hide Time t&o Alarms")));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
 	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), actions, QLatin1String("showArchivedAlarms"));
-	mActionShowArchived->setShortcut(Qt::CTRL + Qt::Key_P);
+	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	mActionShowArchived->setCheckedState(KGuiItem(i18n_e_HideArchivedAlarms()));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
