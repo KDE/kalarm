@@ -1302,12 +1302,13 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                 if (content.textContent())
 			body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
 		unsigned long sernum = 0;
-		if (KPIM::MailList::canDecode( data ) ) {
+		if (KPIM::MailList::canDecode(data))
+		{
 			// Get its KMail serial number to allow the KMail message
 			// to be called up from the alarm message window.
-			mailList = KPIM::MailList::fromMimeData( data );
-			if ( mailList.count() )
-				sernum = mailList.first().serialNumber();
+			mailList = KPIM::MailList::fromMimeData(data);
+			if (!mailList.isEmpty())
+				sernum = mailList[0].serialNumber();
 		}
 		alarmText.setEmail(getMailHeader("To", content),
 		                   getMailHeader("From", content),
@@ -1320,16 +1321,16 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		kDebug(5950) << "MainWindow::executeDropEvent(URL)" << endl;
 		action = KAEvent::FILE;
-		alarmText.setText(files.first().prettyUrl());
+		alarmText.setText(files[0].prettyUrl());
 	}
-	else if ( KPIM::MailList::canDecode( data ) )
+	else if (KPIM::MailList::canDecode(data))
 	{
 		mailList = KPIM::MailList::fromMimeData(data);
 		// KMail message(s). Ignore all but the first.
 		kDebug(5950) << "MainWindow::executeDropEvent(KMail_list)" << endl;
-		if (!mailList.count())
+		if (mailList.isEmpty())
 			return;
-		KPIM::MailSummary& summary = mailList.first();
+		KPIM::MailSummary& summary = mailList[0];
 		QDateTime dt;
 		dt.setTime_t(summary.date());
 		QString body = KAMail::getMailBody(summary.serialNumber());
