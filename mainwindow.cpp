@@ -799,6 +799,17 @@ void MainWindow::slotView()
 void MainWindow::slotDelete()
 {
 	QList<const KAEvent*> events = mListView->selectedEvents();
+	// Copy the events to be deleted, in case any are deleted by being
+	// triggered while the confirmation prompt is displayed.
+	QList<KAEvent> eventCopies;
+	Undo::EventList undos;
+	AlarmResources* resources = AlarmResources::instance();
+	for (int i = 0, end = events.count();  i < end;  ++i)
+	{
+		const KAEvent* event = events[i];
+		eventCopies.append(*event);
+		undos.append(*event, resources->resourceForIncidence(event->id()));
+	}
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = events.count();
@@ -812,15 +823,6 @@ void MainWindow::slotDelete()
 	}
 
 	// Delete the events from the calendar and displays
-	QList<KAEvent> eventCopies;
-	Undo::EventList undos;
-	AlarmResources* resources = AlarmResources::instance();
-	for (int i = 0, end = events.count();  i < end;  ++i)
-	{
-		const KAEvent* event = events[i];
-		eventCopies.append(*event);
-		undos.append(*event, resources->resourceForIncidence(event->id()));
-	}
 	KAlarm::deleteEvents(eventCopies, true, this);
 	Undo::saveDeletes(undos);
 }
