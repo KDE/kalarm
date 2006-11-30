@@ -686,6 +686,14 @@ void MainWindow::slotView()
 void MainWindow::slotDelete()
 {
 	QValueList<EventListViewItemBase*> items = mListView->selectedItems();
+	// Copy the events to be deleted, in case any are deleted by being
+	// triggered while the confirmation prompt is displayed.
+	QValueList<KAEvent> events;
+	for (QValueList<EventListViewItemBase*>::Iterator iit = items.begin();  iit != items.end();  ++iit)
+	{
+		AlarmListViewItem* item = (AlarmListViewItem*)(*iit);
+		events.append(item->event());
+	}
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = items.count();
@@ -700,17 +708,12 @@ void MainWindow::slotDelete()
 
 	int warnErr = 0;
 	int warnKOrg = 0;
-	QValueList<KAEvent> events;
 	AlarmCalendar::activeCalendar()->startUpdate();    // prevent multiple saves of the calendars until we're finished
 	AlarmCalendar::expiredCalendar()->startUpdate();
-	for (QValueList<EventListViewItemBase*>::Iterator it = items.begin();  it != items.end();  ++it)
+	for (QValueList<KAEvent>::Iterator it = events.begin();  it != events.end();  ++it)
 	{
-		AlarmListViewItem* item = (AlarmListViewItem*)(*it);
-		KAEvent event = item->event();
-
 		// Delete the event from the calendar and displays
-		events.append(event);
-		switch (KAlarm::deleteEvent(event))
+		switch (KAlarm::deleteEvent(*it))
 		{
 			case KAlarm::UPDATE_ERROR:
 			case KAlarm::UPDATE_FAILED:
@@ -725,12 +728,12 @@ void MainWindow::slotDelete()
 		}
 	}
 	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
-		warnErr = items.count();
+		warnErr = events.count();
 	AlarmCalendar::expiredCalendar()->endUpdate();
 	Undo::saveDeletes(events);
 
 	if (warnErr)
-		KAlarm::displayUpdateError(this, KAlarm::UPDATE_FAILED, KAlarm::ERR_ADD, warnErr);
+		KAlarm::displayUpdateError(this, KAlarm::UPDATE_FAILED, KAlarm::ERR_DELETE, warnErr);
 	else if (warnKOrg)
 		KAlarm::displayKOrgUpdateError(this, KAlarm::KORG_ERR_DELETE, warnKOrg);
 }
