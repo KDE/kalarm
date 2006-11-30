@@ -56,7 +56,7 @@ enum UpdateStatus {
 	SAVE_FAILED         // calendar was updated in memory, but save failed
 };
 /** Error codes supplied as parameter to displayUpdateError() */
-enum UpdateError { ERR_ADD, ERR_REACTIVATE, ERR_TEMPLATE };
+enum UpdateError { ERR_ADD, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE };
 /** Error codes supplied as parameter to displayKOrgUpdateError() */
 enum KOrgUpdateError { KORG_ERR_ADD, KORG_ERR_MODIFY, KORG_ERR_DELETE };
 

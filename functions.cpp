@@ -374,7 +374,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* errmsgParent)
 			status = SAVE_FAILED;
 	}
 	if (status > UPDATE_KORG_ERR  &&  errmsgParent)
-		displayUpdateError(errmsgParent, SAVE_FAILED, ERR_ADD, 1);
+		displayUpdateError(errmsgParent, SAVE_FAILED, ERR_DELETE, 1);
 	return status;
 }
 
@@ -504,6 +504,10 @@ void displayUpdateError(QWidget* parent, UpdateStatus, UpdateError code, int nAl
 		case ERR_ADD:
 			errmsg = (nAlarms > 1) ? i18n("Error saving alarms")
 			                       : i18n("Error saving alarm");
+			break;
+		case ERR_DELETE:
+			errmsg = (nAlarms > 1) ? i18n("Error deleting alarms")
+			                       : i18n("Error deleting alarm");
 			break;
 		case ERR_REACTIVATE:
 			errmsg = (nAlarms > 1) ? i18n("Error saving reactivated alarms")
