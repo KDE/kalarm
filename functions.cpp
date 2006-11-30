@@ -696,9 +696,12 @@ void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, 
 		{
 			case ERR_ADD:
 			case ERR_MODIFY:
-			case ERR_DELETE:
 				errmsg = (nAlarms > 1) ? i18n("Error saving alarms")
 				                       : i18n("Error saving alarm");
+				break;
+			case ERR_DELETE:
+				errmsg = (nAlarms > 1) ? i18n("Error deleting alarms")
+				                       : i18n("Error deleting alarm");
 				break;
 			case ERR_REACTIVATE:
 				errmsg = (nAlarms > 1) ? i18n("Error saving reactivated alarms")
