@@ -157,6 +157,12 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 
 	restore();
 	adjustSize();
+        connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+        connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
+        connect(this,SIGNAL(helpClicked()),this,SLOT(slotHelp()));
+        connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
+        connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel())); 
+
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
