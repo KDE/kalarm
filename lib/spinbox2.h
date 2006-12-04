@@ -119,7 +119,7 @@ class SpinBox2 : public QFrame
 		QSpinBox::ButtonSymbols buttonSymbols() const   { return mSpinbox->buttonSymbols(); }
 
 		/** Determine whether the current input is valid. */
-		virtual QValidator::State validate(QString& s, int& pos) const  { return mSpinbox->validate(s, pos); }
+		virtual QValidator::State validate(QString&, int& /*pos*/) const  { return QValidator::Acceptable; }
 
 		virtual QSize       sizeHint() const;
 		virtual QSize       minimumSizeHint() const;
