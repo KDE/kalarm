@@ -1,6 +1,9 @@
 KAlarm
 
-=== Version 1.4.6 --- 19 November 2006 ===
+=== Version 1.4.7 --- 6 December 2006 ===
+
+=== Version 1.4.6 --- 30 November 2006 ===
+Fix crash if an alarm triggers while user is deleting it.
 Fix "Start alarm monitoring at login" value shown in preferences dialogue.
 Fix deselecting "Start alarm monitoring at login" when daemon not running.
 Fix editing of 29th February alarm options for non-leap years.
