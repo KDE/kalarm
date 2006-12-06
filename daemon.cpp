@@ -807,9 +807,10 @@ void NotificationHandler::cacheDownloaded(const QString& resourceID)
 =============================================================================*/
 
 AlarmEnableAction::AlarmEnableAction(KActionCollection* parent, const QString& name)
-	: KToggleAction(parent, name),
+	: KToggleAction(i18n("Enable &Alarms"), parent, name),
 	  mInitialised(false)
 {
+	setCheckedState(KGuiItem(i18n("Disable &Alarms")));
 	setCheckedActual(false);    // set the correct text
 	mInitialised = true;
 }
@@ -822,7 +823,6 @@ void AlarmEnableAction::setCheckedActual(bool running)
 	kDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
 	if (running != isChecked()  ||  !mInitialised)
 	{
-		setText(running ? i18n("&Alarms Enabled") : i18n("Enable &Alarms"));
 		KToggleAction::setChecked(running);
 		emit switched(running);
 	}
