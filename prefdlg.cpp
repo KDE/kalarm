@@ -94,75 +94,55 @@ static QString xtermCommands[] = {
 =============================================================================*/
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-	: KPageDialog(0, 0)
+	: KPageDialog()
 {
 	setObjectName("PrefDlg");    // used by LikeBack
-	setCaption( i18n("Preferences") );
-	setButtons( Help | Default | Ok | Apply | Cancel );
-	setDefaultButton( Ok );
-	setFaceType( List );
-	setModal( true );
-	showButtonSeparator( true );
+	setCaption(i18n("Preferences"));
+	setButtons(Help | Default | Ok | Apply | Cancel);
+	setDefaultButton(Ok);
+	setFaceType(List);
+	setModal(true);
+	showButtonSeparator(true);
 	//setIconListAllVisible(true);
 
+	mMiscPage = new MiscPrefTab;
+	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18n("General"));
+	mMiscPageItem->setHeader(i18n("General"));
+	mMiscPageItem->setIcon(KIcon(DesktopIcon("misc")));
+	addPage(mMiscPageItem);
 
-	KVBox* frame = new KVBox();
-	mEditPageItem = new KPageWidgetItem( frame,i18n("General") );
-	mEditPageItem->setHeader( i18n("General") );
-	mEditPageItem->setIcon( KIcon( DesktopIcon("misc") ));
-	addPage( mEditPageItem );
-	frame->setMargin(0);
-	mMiscPage = new MiscPrefTab(frame);
+	mStorePage = new StorePrefTab;
+	mStorePageItem = new KPageWidgetItem(mStorePage, i18n("Storage"));
+	mStorePageItem->setHeader(i18n("Alarm Storage"));
+	mStorePageItem->setIcon(KIcon(DesktopIcon("fileopen")));
+	addPage(mStorePageItem);
 
-	frame = new KVBox();
-	mStorePageItem = new KPageWidgetItem( frame,i18n("Storage") );
-	mStorePageItem->setHeader( i18n("Alarm Storage") );
-	mStorePageItem->setIcon( KIcon( DesktopIcon("fileopen") ) );
-	addPage( mStorePageItem );
+	mEmailPage = new EmailPrefTab;
+	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18n("Email"));
+	mEmailPageItem->setHeader(i18n("Email Alarm Settings"));
+	mEmailPageItem->setIcon(KIcon(DesktopIcon("mail_generic")));
+	addPage(mEmailPageItem);
 
-	mStorePage = new StorePrefTab(frame);
+	mViewPage = new ViewPrefTab;
+	mViewPageItem = new KPageWidgetItem(mViewPage, i18n("View"));
+	mViewPageItem->setHeader(i18n("View Settings"));
+	mViewPageItem->setIcon(KIcon(DesktopIcon("view_choose")));
+	addPage(mViewPageItem);
 
-	frame = new KVBox();
-	mEmailPageItem = new KPageWidgetItem( frame,i18n("Email") );
-	mEmailPageItem->setHeader( i18n("Email Alarm Settings") );
-	mEmailPageItem->setIcon( KIcon( DesktopIcon("mail_generic") ) );
-	addPage( mEmailPageItem );
-	frame->setMargin(0);
-	mEmailPage = new EmailPrefTab(frame);
+	mFontColourPage = new FontColourPrefTab;
+	mFontColourPageItem = new KPageWidgetItem(mFontColourPage, i18n("Font & Color"));
+	mFontColourPageItem->setHeader(i18n("Default Font and Color"));
+	mFontColourPageItem->setIcon(KIcon(DesktopIcon("colorize")));
+	addPage(mFontColourPageItem);
 
-	frame = new KVBox();
-	mViewPageItem = new KPageWidgetItem( frame,i18n("View") );
-	mViewPageItem->setHeader( i18n("View Settings") );
-	mViewPageItem->setIcon( KIcon( DesktopIcon("view_choose") ) );
-	addPage( mViewPageItem );
-
-	frame->setMargin(0);
-	mViewPage = new ViewPrefTab(frame);
-
-	frame = new KVBox();
-	mFontColourPageItem = new KPageWidgetItem( frame,i18n("Font & Color") );
-	mFontColourPageItem->setHeader( i18n("Default Font and Color") );
-	mFontColourPageItem->setIcon( KIcon( DesktopIcon("colorize") ) );
-	addPage( mFontColourPageItem );
-	frame->setMargin(0);
-	mFontColourPage = new FontColourPrefTab(frame);
-
-	frame = new KVBox();
-	mEditPageItem = new KPageWidgetItem( frame,i18n("Edit") );
-	mEditPageItem->setHeader( i18n("Default Alarm Edit Settings") );
-	mEditPageItem->setIcon( KIcon( DesktopIcon("edit") ) );
-	addPage( mEditPageItem );
-	frame->setMargin(0);
-	mEditPage = new EditPrefTab(frame);
+	mEditPage = new EditPrefTab;
+	mEditPageItem = new KPageWidgetItem(mEditPage, i18n("Edit"));
+	mEditPageItem->setHeader(i18n("Default Alarm Edit Settings"));
+	mEditPageItem->setIcon(KIcon(DesktopIcon("edit")));
+	addPage(mEditPageItem);
 
 	restore();
 	adjustSize();
-        connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-        connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
-        connect(this,SIGNAL(helpClicked()),this,SLOT(slotHelp()));
-        connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
-        connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel())); 
-
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
@@ -254,10 +234,11 @@ void KAlarmPrefDlg::restore()
 =============================================================================*/
 int PrefsTabBase::mIndentWidth = 0;
 
-PrefsTabBase::PrefsTabBase(KVBox* frame)
-	: QWidget(frame),
-	  mPage(frame)
+PrefsTabBase::PrefsTabBase()
+	: KVBox()
 {
+	setMargin(0);
+	setSpacing(KDialog::spacingHint());
 	if (!mIndentWidth)
 		mIndentWidth = 3 * KDialog::spacingHint();
 }
@@ -273,10 +254,10 @@ void PrefsTabBase::apply(bool syncToDisc)
 = Class MiscPrefTab
 =============================================================================*/
 
-MiscPrefTab::MiscPrefTab(KVBox* frame)
-	: PrefsTabBase(frame)
+MiscPrefTab::MiscPrefTab()
+	: PrefsTabBase()
 {
-	QGroupBox* group = new QGroupBox(i18n("Run Mode"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("Run Mode"), this);
 	QButtonGroup* buttonGroup = new QButtonGroup(group);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
@@ -342,7 +323,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	group->setFixedHeight(group->sizeHint().height());
 
 	// Default time zone
-	KHBox* itemBox = new KHBox(mPage);
+	KHBox* itemBox = new KHBox(this);
 	itemBox->setMargin(0);
 	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
@@ -358,7 +339,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	itemBox->setFixedHeight(box->sizeHint().height());
 
 	// Start-of-day time
-	itemBox = new KHBox(mPage);
+	itemBox = new KHBox(this);
 	itemBox->setMargin(0);
 	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
@@ -374,7 +355,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	itemBox->setFixedHeight(box->sizeHint().height());
 
 	// Confirm alarm deletion?
-	itemBox = new KHBox(mPage);   // this is to allow left adjustment
+	itemBox = new KHBox(this);   // this is to allow left adjustment
 	itemBox->setMargin(0);
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox);
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
@@ -383,7 +364,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	itemBox->setFixedHeight(box->sizeHint().height());
 
 	// Terminal window to use for command alarms
-	group = new QGroupBox(i18n("Terminal for Command Alarms"), mPage);
+	group = new QGroupBox(i18n("Terminal for Command Alarms"), this);
 	group->setWhatsThis(i18n("Choose which application to use when a command alarm is executed in a terminal window"));
 	grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
@@ -408,8 +389,8 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 		cmd.replace("%C", "[command]");
 		cmd.replace("%W", "[command; sleep]");
 		radio->setWhatsThis(
-                        i18nc("The parameter is a command line, e.g. 'xterm -e'",
-                              "Check to execute command alarms in a terminal window by '%1'", cmd));
+		        i18nc("The parameter is a command line, e.g. 'xterm -e'",
+		              "Check to execute command alarms in a terminal window by '%1'", cmd));
 		grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);
 		++index;
 	}
@@ -427,7 +408,7 @@ MiscPrefTab::MiscPrefTab(KVBox* frame)
 	           "By default the alarm's command string will be appended to what you enter here. "
 	           "See the KAlarm Handbook for details of special codes to tailor the command line."));
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void MiscPrefTab::restore()
@@ -583,12 +564,12 @@ void MiscPrefTab::slotOtherTerminalToggled(bool on)
 = Class StorePrefTab
 =============================================================================*/
 
-StorePrefTab::StorePrefTab(KVBox* frame)
-	: PrefsTabBase(frame),
+StorePrefTab::StorePrefTab()
+	: PrefsTabBase(),
 	  mCheckKeepChanges(false)
 {
 	// Which resource to save to
-	QGroupBox* group = new QGroupBox(i18n("New Alarms && Templates"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("New Alarms && Templates"), this);
 	QButtonGroup* bgroup = new QButtonGroup(group);
 	QBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(KDialog::marginHint());
@@ -608,7 +589,7 @@ StorePrefTab::StorePrefTab(KVBox* frame)
 	layout->addWidget(mAskResource, 0, Qt::AlignLeft);
 
 	// Archived alarms
-	group = new QGroupBox(i18n("Archived Alarms"), mPage);
+	group = new QGroupBox(i18n("Archived Alarms"), this);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -643,7 +624,7 @@ StorePrefTab::StorePrefTab(KVBox* frame)
 	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void StorePrefTab::restore()
@@ -710,12 +691,12 @@ void StorePrefTab::slotClearArchived()
 = Class EmailPrefTab
 =============================================================================*/
 
-EmailPrefTab::EmailPrefTab(KVBox* frame)
-	: PrefsTabBase(frame),
+EmailPrefTab::EmailPrefTab()
+	: PrefsTabBase(),
 	  mAddressChanged(false),
 	  mBccAddressChanged(false)
 {
-	KHBox* box = new KHBox(mPage);
+	KHBox* box = new KHBox(this);
 	box->setMargin(0);
 	box->setSpacing(2*KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Email client:"), box);
@@ -734,7 +715,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	           "Sendmail: The email is sent automatically. This option will only work if "
 	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
 
-	box = new KHBox(mPage);   // this is to allow left adjustment
+	box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder", KAMail::i18n_sent_mail()), box);
 	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
@@ -743,7 +724,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 
 	// Your Email Address group box
-	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("Your Email Address"), this);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -818,7 +799,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 
 	group->setFixedHeight(group->sizeHint().height());
 
-	box = new KHBox(mPage);   // this is to allow left adjustment
+	box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mEmailQueuedNotify = new QCheckBox(i18n("&Notify when remote emails are queued"), box);
 	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
@@ -828,7 +809,7 @@ EmailPrefTab::EmailPrefTab(KVBox* frame)
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void EmailPrefTab::restore()
@@ -934,12 +915,12 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
 = Class FontColourPrefTab
 =============================================================================*/
 
-FontColourPrefTab::FontColourPrefTab(KVBox* frame)
-	: PrefsTabBase(frame)
+FontColourPrefTab::FontColourPrefTab()
+	: PrefsTabBase()
 {
-	mFontChooser = new FontColourChooser(mPage, false, QStringList(), i18n("Message Font && Color"), true, false);
+	mFontChooser = new FontColourChooser(this, false, QStringList(), i18n("Message Font && Color"), true, false);
 
-	KHBox* layoutBox = new KHBox(mPage);
+	KHBox* layoutBox = new KHBox(this);
 	layoutBox->setMargin(0);
 	KHBox* box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
@@ -954,7 +935,7 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
 	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
-	layoutBox = new KHBox(mPage);
+	layoutBox = new KHBox(this);
 	layoutBox->setMargin(0);
 	box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
@@ -977,7 +958,7 @@ FontColourPrefTab::FontColourPrefTab(KVBox* frame)
 	label1->setFixedSize(size);
 	label2->setFixedSize(size);
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void FontColourPrefTab::restore()
@@ -1013,14 +994,14 @@ void FontColourPrefTab::setDefaults()
 = Class EditPrefTab
 =============================================================================*/
 
-EditPrefTab::EditPrefTab(KVBox* frame)
-	: PrefsTabBase(frame)
+EditPrefTab::EditPrefTab()
+	: PrefsTabBase()
 {
 	KLocalizedString defsetting   = ki18n("The default setting for \"%1\" in the alarm edit dialog.");
 	KLocalizedString soundSetting = ki18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
 
 	// DISPLAY ALARMS
-	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("Display Alarms"), this);
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1054,7 +1035,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
-	QGroupBox* bbox = new QGroupBox(SoundPicker::i18n_Sound(), mPage);
+	QGroupBox* bbox = new QGroupBox(SoundPicker::i18n_Sound(), this);
 	vlayout = new QVBoxLayout(bbox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1096,7 +1077,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	bbox->setFixedHeight(bbox->sizeHint().height());
 
 	// COMMAND ALARMS
-	group = new QGroupBox(i18n("Command Alarms"), mPage);
+	group = new QGroupBox(i18n("Command Alarms"), this);
 	vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1116,7 +1097,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	hlayout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
-	group = new QGroupBox(i18n("Email Alarms"), mPage);
+	group = new QGroupBox(i18n("Email Alarms"), this);
 	vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1129,12 +1110,12 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 
 	// MISCELLANEOUS
 	// Show in KOrganizer
-	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), mPage);
+	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), this);
 	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
 	mCopyToKOrganizer->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ShowInKOrganizer()).toString());
 
 	// Late cancellation
-	box = new KHBox(mPage);
+	box = new KHBox(this);
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box);
@@ -1162,7 +1143,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	box->setFixedHeight(itemBox->sizeHint().height());
 
 	// How to handle February 29th in yearly recurrences
-	KVBox* vbox = new KVBox(mPage);   // this is to control the QWhatsThis text display area
+	KVBox* vbox = new KVBox(this);   // this is to control the QWhatsThis text display area
 	vbox->setMargin(0);
 	vbox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18n("In non-leap years, repeat yearly February 29th alarms on:"), vbox);
@@ -1188,7 +1169,7 @@ EditPrefTab::EditPrefTab(KVBox* frame)
 	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
 	           "Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting."));
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void EditPrefTab::restore()
@@ -1315,15 +1296,15 @@ QString EditPrefTab::validate()
 = Class ViewPrefTab
 =============================================================================*/
 
-ViewPrefTab::ViewPrefTab(KVBox* frame)
-	: PrefsTabBase(frame)
+ViewPrefTab::ViewPrefTab()
+	: PrefsTabBase()
 {
-	mShowResources = new QCheckBox(i18n("Show &resources"), mPage);
+	mShowResources = new QCheckBox(i18n("Show &resources"), this);
 	mShowResources->setMinimumSize(mShowResources->sizeHint());
 	mShowResources->setWhatsThis(
 	      i18n("Specify whether to show the list of alarm resources beside the alarm list"));
 
-	QGroupBox* group = new QGroupBox(i18n("Alarm List"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("Alarm List"), this);
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1346,7 +1327,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	vlayout->addWidget(mShowArchivedAlarms, 0, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
+	group = new QGroupBox(i18n("System Tray Tooltip"), this);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -1398,7 +1379,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	grid->addWidget(box, 4, 2, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	mModalMessages = new QCheckBox(i18n("Message &windows have a title bar and take keyboard focus"), mPage);
+	mModalMessages = new QCheckBox(i18n("Message &windows have a title bar and take keyboard focus"), this);
 	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
 	mModalMessages->setWhatsThis(
 	      i18n("Specify the characteristics of alarm message windows:\n"
@@ -1406,7 +1387,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	KHBox* itemBox = new KHBox(mPage);   // this is to control the QWhatsThis text display area
+	KHBox* itemBox = new KHBox(this);   // this is to control the QWhatsThis text display area
 	itemBox->setMargin(0);
 	box = new KHBox(itemBox);
 	box->setMargin(0);
@@ -1421,7 +1402,7 @@ ViewPrefTab::ViewPrefTab(KVBox* frame)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
 
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
 void ViewPrefTab::restore()

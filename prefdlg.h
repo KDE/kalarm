@@ -22,6 +22,7 @@
 #define PREFDLG_H
 
 #include <kpagedialog.h>
+#include <kvbox.h>
 
 #include "preferences.h"
 #include "recurrenceedit.h"
@@ -34,7 +35,6 @@ class QPushButton;
 class QComboBox;
 class QLineEdit;
 class KTimeZone;
-class KVBox;
 class KColorCombo;
 class FontColourChooser;
 class ButtonGroup;
@@ -58,19 +58,19 @@ class KAlarmPrefDlg : public KPageDialog
 		KAlarmPrefDlg();
 		~KAlarmPrefDlg();
 
-		FontColourPrefTab* mFontColourPage;
+		MiscPrefTab*       mMiscPage;
+		StorePrefTab*      mStorePage;
 		EditPrefTab*       mEditPage;
 		EmailPrefTab*      mEmailPage;
 		ViewPrefTab*       mViewPage;
-		StorePrefTab*      mStorePage;
-		MiscPrefTab*       mMiscPage;
+		FontColourPrefTab* mFontColourPage;
 
-		KPageWidgetItem *  mFontColourPageItem;
-		KPageWidgetItem *  mEditPageItem;
-		KPageWidgetItem *  mEmailPageItem;
-		KPageWidgetItem *  mViewPageItem;
-		KPageWidgetItem *  mStorePageItem;
-		KPageWidgetItem *  mMiscPageItem;
+		KPageWidgetItem*   mMiscPageItem;
+		KPageWidgetItem*   mStorePageItem;
+		KPageWidgetItem*   mEditPageItem;
+		KPageWidgetItem*   mEmailPageItem;
+		KPageWidgetItem*   mViewPageItem;
+		KPageWidgetItem*   mFontColourPageItem;
 
 	protected slots:
 		virtual void slotOk();
@@ -85,20 +85,17 @@ class KAlarmPrefDlg : public KPageDialog
 };
 
 // Base class for each tab in the Preferences dialog
-class PrefsTabBase : public QWidget
+class PrefsTabBase : public KVBox
 {
 		Q_OBJECT
 	public:
-		explicit PrefsTabBase(KVBox*);
+		PrefsTabBase();
 
 		void         setPreferences();
 		virtual void restore() = 0;
 		virtual void apply(bool syncToDisc) = 0;
 		virtual void setDefaults() = 0;
 		static int   indentWidth()    { return mIndentWidth; }
-
-	protected:
-		KVBox*       mPage;
 
 	private:
 		static int   mIndentWidth;       // indent width for checkboxes etc.
@@ -110,7 +107,7 @@ class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit MiscPrefTab(KVBox*);
+		MiscPrefTab();
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -148,7 +145,7 @@ class StorePrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit StorePrefTab(KVBox*);
+		StorePrefTab();
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -178,7 +175,7 @@ class EmailPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit EmailPrefTab(KVBox*);
+		EmailPrefTab();
 
 		QString      validate();
 		virtual void restore();
@@ -220,7 +217,7 @@ class EditPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit EditPrefTab(KVBox*);
+		EditPrefTab();
 
 		QString      validate();
 		virtual void restore();
@@ -258,7 +255,7 @@ class ViewPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit ViewPrefTab(KVBox*);
+		ViewPrefTab();
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
@@ -297,7 +294,7 @@ class FontColourPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		explicit FontColourPrefTab(KVBox*);
+		FontColourPrefTab();
 
 		virtual void restore();
 		virtual void apply(bool syncToDisc);
