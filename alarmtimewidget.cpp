@@ -147,6 +147,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	{
 		// Time zone selector
 		mTimeZone = new TimeZoneCombo(this);
+		mTimeZone->setMaxVisibleItems(15);
 		mTimeZone->setWhatsThis(i18n("Select the time zone to use for this alarm."));
 		topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
 
