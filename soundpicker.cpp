@@ -72,7 +72,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 	mTypeCombo->addItem(i18n_File());     // index PLAY_FILE
 	mSpeakShowing = !theApp()->speechEnabled();
 	showSpeak(!mSpeakShowing);            // index SPEAK (only displayed if appropriate)
-	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotSoundSelected(int)));
+	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotTypeSelected(int)));
 	label->setBuddy(mTypeCombo);
 	soundLayout->addWidget(mTypeBox);
 
