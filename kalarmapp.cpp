@@ -1946,12 +1946,13 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 */
 static bool convWakeTime(const QByteArray& timeParam, KDateTime& dateTime, const KDateTime& defaultDt)
 {
+#define MAX_DT_LEN 19
 	int i = timeParam.indexOf(' ');
-	if (i > 19)
+	if (i > MAX_DT_LEN)
 		return false;
-	QString zone = QString::fromLatin1(timeParam.mid(i));
-	char timeStr[20];
-	strcpy(timeStr, timeParam.left(i));
+	QString zone = (i >= 0) ? QString::fromLatin1(timeParam.mid(i)) : QString();
+	char timeStr[MAX_DT_LEN+1];
+	strcpy(timeStr, timeParam.left(i >= 0 ? i : MAX_DT_LEN));
 	int dt[5] = { -1, -1, -1, -1, -1 };
 	char* s;
 	char* end;
