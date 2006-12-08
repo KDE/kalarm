@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (c) 2005, 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	setCaption(caption);
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+
 	QVBoxLayout* layout = new QVBoxLayout(page);
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());

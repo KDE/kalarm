@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,6 +78,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	setCaption(i18n("Import Birthdays From KAddressBook"));
 	setButtons(Ok | Cancel);
 	setDefaultButton(Ok);
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+
 	QWidget* topWidget = new QWidget(this);
         setMainWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);

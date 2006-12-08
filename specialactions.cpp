@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,6 +89,9 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 {
 	setCaption(caption);
 	setButtons(Ok|Cancel);
+	setDefaultButton(Ok);
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page);

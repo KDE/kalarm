@@ -48,6 +48,8 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
 	setButtonGuiItem(User1, KGuiItem(i18n("Cancel &Deferral")));
 	if (!cancelButton)
 		showButton(User1, false);
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+	connect(this, SIGNAL(user1Clicked()), SLOT(slotCancelDeferral()));
 
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
@@ -173,16 +175,8 @@ DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 /******************************************************************************
 *  Called when the Cancel Deferral button is clicked.
 */
-void DeferAlarmDlg::slotUser1()
+void DeferAlarmDlg::slotCancelDeferral()
 {
 	mAlarmDateTime = DateTime();
 	accept();
-}
-
-/******************************************************************************
-*  Called when the Cancel button is clicked.
-*/
-void DeferAlarmDlg::slotCancel()
-{
-	reject();
 }
