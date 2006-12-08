@@ -41,8 +41,7 @@ class DeferAlarmDlg : public KDialog
 
 	protected slots:
 		virtual void     slotOk();
-		virtual void     slotCancel();
-		virtual void     slotUser1();
+		virtual void     slotCancelDeferral();
 
 	private slots:
 		void             slotPastLimit();
