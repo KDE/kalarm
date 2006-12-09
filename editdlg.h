@@ -106,7 +106,6 @@ class EditAlarmDlg : public KDialog
 		virtual void    showEvent(QShowEvent*);
 	protected slots:
 		virtual void    slotOk();
-		virtual void    slotCancel();
 		virtual void    slotTry();
 		virtual void    slotDefault();   // Load Template
 	private slots:
