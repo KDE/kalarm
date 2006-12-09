@@ -330,6 +330,7 @@ MiscPrefTab::MiscPrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18n("Time &zone:"), box);
 	mTimeZone = new QComboBox(box);
+	mTimeZone->setMaxVisibleItems(15);
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
 		mTimeZone->addItem(it.key());
