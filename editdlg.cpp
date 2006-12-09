@@ -187,7 +187,11 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
 	setCaption(caption);
 	setButtons((readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
-	setDefaultButton(Cancel);
+	setDefaultButton(readOnly ? Cancel : Ok);
+	setButtonText(Default, i18n("Load Template..."));
+	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
+	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	switch (getResource)
 	{
 		case RES_USE_EVENT_ID:
@@ -205,8 +209,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 			mResourceEventId.clear();
 			break;
 	}
-	setDefaultButton(readOnly ? Cancel : Ok);
-	setButtonText(Default, i18n("Load Template..."));
 	KVBox* mainWidget = new KVBox(this);
 	mainWidget->setMargin(0);
 	setMainWidget(mainWidget);
@@ -226,7 +228,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	mTabs = new QTabWidget(mainWidget);
 //	mTabs->setMargin(marginHint());
 
-	KVBox* mainPageBox = new KVBox(0/*mTabs*/);
+	KVBox* mainPageBox = new KVBox;
 	mainPageBox->setMargin(marginHint());
 	mTabs->addTab(mainPageBox, i18n("&Alarm"));
 	mMainPageIndex = 0;
@@ -237,7 +239,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	topLayout->setSpacing(spacingHint());
 
 	// Recurrence tab
-	KVBox* recurTab = new KVBox(0/*mTabs*/);
+	KVBox* recurTab = new KVBox;
 	recurTab->setMargin(marginHint());
 	mTabs->addTab(recurTab, i18n("&Recurrence"));
 	mRecurPageIndex = 1;
@@ -1395,7 +1397,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 		resize(s);
 	}
 	KWin::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
-	showEvent(se);
+	KDialog::showEvent(se);
 }
 
 /******************************************************************************
@@ -1411,7 +1413,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 		s.setHeight(s.height() - (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
 		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, s);
 	}
-	resizeEvent(re);
+	KDialog::resizeEvent(re);
 }
 
 /******************************************************************************
@@ -1623,14 +1625,6 @@ void EditAlarmDlg::slotTry()
 			}
 		}
 	}
-}
-
-/******************************************************************************
-*  Called when the Cancel button is clicked.
-*/
-void EditAlarmDlg::slotCancel()
-{
-	reject();
 }
 
 /******************************************************************************
