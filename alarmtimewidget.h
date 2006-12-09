@@ -73,7 +73,7 @@ class AlarmTimeWidget : public QFrame
 		void             slotTimeZoneToggled(bool);
 
 	private:
-		void             init(int mode, bool hasTitle);
+		void             init(int mode, const QString& groupBoxTitle = QString());
 		void             setAnyTime();
 		void             setMaxDelayTime(const KDateTime& now);
 		void             setMaxMinTimeIf(const KDateTime& now);

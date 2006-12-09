@@ -61,11 +61,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->setMargin(0);
-	QGroupBox* box = new QGroupBox(groupBoxTitle, this);
-	layout->addWidget(box);
-	init(mode, true);
+	init(mode, groupBoxTitle);
 }
 
 /******************************************************************************
@@ -77,25 +73,36 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode, false);
+	init(mode);
 }
 
-void AlarmTimeWidget::init(int mode, bool hasTitle)
+void AlarmTimeWidget::init(int mode, const QString& title)
 {
 	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
 	static const QString tzText = i18n("This uses KAlarm's default time zone, set in the Preferences dialog.");
 
+	QWidget* topWidget;
+	if (title.isEmpty())
+		topWidget = this;
+	else
+	{
+		QBoxLayout* layout = new QVBoxLayout(this);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		topWidget = new QGroupBox(title, this);
+		layout->addWidget(topWidget);
+	}
 	mDeferring = mode & DEFER_TIME;
 	mButtonGroup = new ButtonGroup(this);
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
-	QGridLayout* topLayout = new QGridLayout(this);
+	QGridLayout* topLayout = new QGridLayout(topWidget);
 	topLayout->setSpacing(KDialog::spacingHint());
-	topLayout->setMargin(hasTitle ? KDialog::marginHint() : 0);
+	topLayout->setMargin(title.isEmpty() ? 0 : KDialog::marginHint());
 
 	// At time radio button
-	mDateTimeRadio = new RadioButton((mDeferring ? i18n("&Defer to date/time:") : i18n("&Date/time")), this);
+	mDateTimeRadio = new RadioButton((mDeferring ? i18n("&Defer to date/time:") : i18n("&Date/time")), topWidget);
 	mDateTimeRadio->setFixedSize(mDateTimeRadio->sizeHint());
 	mDateTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm to the specified date and time.")
 	                                        : i18n("Schedule the alarm at the specified date and time."));
@@ -114,7 +121,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	else
 	{
 		// Date radio button
-		mDateRadio = new RadioButton(i18n("Date"), this);
+		mDateRadio = new RadioButton(i18n("Date"), topWidget);
 		mDateRadio->setFixedSize(mDateRadio->sizeHint());
 		mDateRadio->setWhatsThis(i18n("Schedule the alarm on the specified date."));
 		mButtonGroup->addButton(mDateRadio);
@@ -124,7 +131,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	}
 
 	// Date edit box
-	mDateEdit = new DateEdit(this);
+	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
 	static const QString enterDateText = i18n("Enter the date to schedule the alarm.");
@@ -135,7 +142,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 		mDateRadio->setFocusWidget(mDateEdit);
 
 	// Time edit box
-	mTimeEdit = new TimeEdit(this);
+	mTimeEdit = new TimeEdit(topWidget);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
 	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");
@@ -146,13 +153,13 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	if (!mDeferring)
 	{
 		// Time zone selector
-		mTimeZone = new TimeZoneCombo(this);
+		mTimeZone = new TimeZoneCombo(topWidget);
 		mTimeZone->setMaxVisibleItems(15);
 		mTimeZone->setWhatsThis(i18n("Select the time zone to use for this alarm."));
 		topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
 
 		// Time zone checkbox
-		mNoTimeZone = new CheckBox(i18n("Ignore time &zone"), this);
+		mNoTimeZone = new CheckBox(i18n("Ignore time &zone"), topWidget);
 		connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
 		mNoTimeZone->setWhatsThis("<qt>" +
 		      i18n("Check to use the local computer time, ignoring time zones.")
@@ -165,7 +172,7 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton((mDeferring ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), this);
+	mAfterTimeRadio = new RadioButton((mDeferring ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), topWidget);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
 	mAfterTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm for the specified time interval after now.")
 	                                         : i18n("Schedule the alarm after the specified time interval from now."));
@@ -173,13 +180,14 @@ void AlarmTimeWidget::init(int mode, bool hasTitle)
 	topLayout->addWidget(mAfterTimeRadio, row, 0, Qt::AlignLeft);
 
 	// Delay time spin box
-	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, this);
+	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	mDelayTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
 	                                        : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
+	topLayout->addWidget(mDelayTimeEdit, row, 1, Qt::AlignLeft);
 
 	topLayout->setColumnStretch(2, 1);
 
