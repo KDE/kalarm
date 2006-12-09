@@ -103,7 +103,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	setEnabledStatus(Daemon::monitoringAlarms());
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
-	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason reason)));
+	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 TrayWindow::~TrayWindow()
