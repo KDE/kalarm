@@ -365,6 +365,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	layout->addWidget(box);
+	layout->addStretch();
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
