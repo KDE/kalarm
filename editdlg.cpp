@@ -1022,6 +1022,7 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* na
  */
 void EditAlarmDlg::saveState(const KAEvent* event)
 {
+	delete mSavedEvent;
 	mSavedEvent = 0;
 	if (event)
 		mSavedEvent = new KAEvent(*event);
