@@ -406,6 +406,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	box->setWhatsThis(i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	hlayout->addWidget(box);
+	hlayout->addStretch();
 
 	// Simple repetition button
 	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
@@ -1079,6 +1080,7 @@ CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
  */
 void EditAlarmDlg::saveState(const KAEvent* event)
 {
+	delete mSavedEvent;
 	mSavedEvent = 0;
 	if (event)
 		mSavedEvent = new KAEvent(*event);
