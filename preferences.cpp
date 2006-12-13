@@ -194,6 +194,9 @@ static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUn
 static const QString DEF_PRE_ACTION           = QString::fromLatin1("DefPreAction");
 static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostAction");
 
+// Config file entry name for temporary use
+static const QString TEMP                     = QString::fromLatin1("Temp");
+
 // Values for EmailFrom entry
 static const QString FROM_CONTROL_CENTRE      = QString::fromLatin1("@ControlCenter");
 static const QString FROM_KMAIL               = QString::fromLatin1("@KMail");
@@ -303,7 +306,7 @@ void Preferences::read()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
-	mCmdXTermCommand          = config->readPathEntry(CMD_XTERM_COMMAND);
+	mCmdXTermCommand          = config->readEntry(CMD_XTERM_COMMAND);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay               = config->readDateTimeEntry(START_OF_DAY, &defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
@@ -352,6 +355,23 @@ void Preferences::read()
 		mInstance->emitStartOfDayChanged();
 		mOldStartOfDay = mStartOfDay;
 	}
+
+	// Translate X terminal command path from storage in config file.
+	// Need to remove command parameters from the string before translation,
+	// since otherwise KConfig::readPathEntry() could possibly crash on some systems.
+	QString cmd = mCmdXTermCommand;
+	QString params;
+	int i = cmd.find(' ');
+	if (i > 0)
+	{
+		params = cmd.mid(i);
+		cmd = cmd.left(i);
+	}
+	config->setGroup(GENERAL_SECTION);
+	config->writeEntry(TEMP, cmd);
+	cmd = config->readPathEntry(TEMP);
+	config->deleteEntry(TEMP);
+	mCmdXTermCommand = cmd + params;
 }
 
 /******************************************************************************
@@ -386,7 +406,6 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
 	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
-	config->writePathEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
 	config->writeEntry(EXPIRED_COLOUR, mExpiredColour);
@@ -409,6 +428,23 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
 	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
+	// Translate X terminal command path for storage in config file.
+	// Need to remove command parameters from the string before translation,
+	// since otherwise KConfig::writePathEntry() crashes on some systems.
+	QString cmd = mCmdXTermCommand;
+	QString params;
+	int i = cmd.find(' ');
+	if (i > 0)
+	{
+		params = cmd.mid(i);
+		cmd = cmd.left(i);
+	}
+	config->setGroup(GENERAL_SECTION);
+	config->writePathEntry(TEMP, cmd);
+	cmd = config->readEntry(TEMP);
+	config->deleteEntry(TEMP);
+	config->writeEntry(CMD_XTERM_COMMAND, cmd + params);
+
 	if (syncToDisc)
 		config->sync();
 	mInstance->emitPreferencesChanged();
