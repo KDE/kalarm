@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.7 --- 6 December 2006 ===
+=== Version 1.4.7 --- 14 December 2006 ===
+Fix crash saving Preferences dialogue (due to command alarm terminal setting).
 
 === Version 1.4.6 --- 30 November 2006 ===
 Fix crash if an alarm triggers while user is deleting it.
