@@ -45,6 +45,8 @@
 #include "preferences.moc"
 
 
+static QString translateXTermPath(KConfig*, const QString& cmdline, bool write);
+
 Preferences* Preferences::mInstance = 0;
 
 // Default config file settings
@@ -211,6 +213,9 @@ static const char* DEF_REMIND_UNITS         = "DefRemindUnits";
 static const char* DEF_PRE_ACTION           = "DefPreAction";
 static const char* DEF_POST_ACTION          = "DefPostAction";
 
+// Config file entry name for temporary use
+static const char* TEMP                     = "Temp";
+
 // Values for EmailFrom entry
 static const QString FROM_CONTROL_CENTRE      = QLatin1String("@ControlCenter");
 static const QString FROM_KMAIL               = QLatin1String("@KMail");
@@ -328,7 +333,7 @@ void Preferences::read()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
-	mCmdXTermCommand          = config->readPathEntry(CMD_XTERM_COMMAND);
+	mCmdXTermCommand          = translateXTermPath(config, config->readEntry(CMD_XTERM_COMMAND, QString()), false);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay               = config->readEntry(START_OF_DAY, defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
@@ -411,12 +416,13 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
 	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
 	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
+	config->writeEntry(CMD_XTERM_COMMAND, translateXTermPath(config, mCmdXTermCommand, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
-	config->writePathEntry(CMD_XTERM_COMMAND, mCmdXTermCommand);
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
 	config->writeEntry(ARCHIVED_COLOUR, mArchivedColour);
 	config->writeEntry(ARCHIVED_KEEP_DAYS, mArchivedKeepDays);
+
 	config->setGroup(DEFAULTS_SECTION);
 	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
 	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
@@ -435,6 +441,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_REMIND_UNITS, static_cast<int>(mDefaultReminderUnits));
 	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
+
 	if (syncToDisc)
 		config->sync();
 	mInstance->emitPreferencesChanged();
@@ -643,4 +650,66 @@ void Preferences::convertOldPrefs()
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
 	config->sync();
+}
+
+/******************************************************************************
+* Translate an X terminal command path to/from config file format.
+* Note that only a home directory specification at the start of the path is
+* translated, so there's no need to worry about missing out some of the
+* executable's path due to quotes etc.
+* N.B. Calling KConfig::read/writePathEntry() on the entire command line
+*      causes a crash on some systems, so it's necessary to extract the
+*      executable path first before processing.
+*/
+QString translateXTermPath(KConfig* config, const QString& cmdline, bool write)
+{
+	QString params;
+	QString cmd = cmdline;
+	if (cmdline.isEmpty())
+		return cmdline;
+	// Strip any leading quote
+	QChar quote = cmdline[0];
+	char q = quote.toLatin1();
+	bool quoted = (q == '"' || q == '\'');
+	if (quoted)
+		cmd = cmdline.mid(1);
+	// Split the command at the first non-escaped space
+	for (int i = 0, count = cmd.length();  i < count;  ++i)
+	{
+		switch (cmd[i].toLatin1())
+		{
+			case '\\':
+				++i;
+				continue;
+			case '"':
+			case '\'':
+				if (cmd[i] != quote)
+					continue;
+				// fall through to ' '
+			case ' ':
+				params = cmd.mid(i);
+				cmd = cmd.left(i);
+				break;
+			default:
+				continue;
+		}
+		break;
+	}
+	// Translate any home directory specification at the start of the
+	// executable's path.
+	if (write)
+	{
+		config->writePathEntry(TEMP, cmd);
+		cmd = config->readEntry(TEMP, QString());
+	}
+	else
+	{
+		config->writeEntry(TEMP, cmd);
+		cmd = config->readPathEntry(TEMP);
+	}
+	config->deleteEntry(TEMP);
+	if (quoted)
+		return quote + cmd + params;
+	else
+		return cmd + params;
 }
