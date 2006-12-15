@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kshell.h>
 #include <kmessagebox.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -363,11 +364,10 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
-		int i = cmd.find(' ');    // find the end of the terminal window name
-		QString term = cmd.left(i > 0 ? i : 1000);
-		if (KStandardDirs::findExe(term).isEmpty())
+		QStringList args = KShell::splitArgs(cmd);
+		if (args.isEmpty()  ||  KStandardDirs::findExe(args[0]).isEmpty())
 			continue;
-		QRadioButton* radio = new QRadioButton(term, group);
+		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
 		cmd.replace("%t", kapp->aboutData()->programName());
@@ -434,9 +434,8 @@ void MiscPrefTab::apply(bool syncToDisc)
 			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
-			int i = cmd.find(' ');    // find the end of the terminal window name
-			if (i > 0)
-				cmd = cmd.left(i);
+			QStringList args = KShell::splitArgs(cmd);
+			cmd = args.isEmpty() ? QString::null : args[0];
 			if (KStandardDirs::findExe(cmd).isEmpty())
 			{
 				mXtermCommand->setFocus();
