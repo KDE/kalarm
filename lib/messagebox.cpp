@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 #include <kconfig.h>
+#include <kglobal.h>
 #include "messagebox.h"
 
 
