@@ -30,12 +30,12 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaboutdata.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kstdguiitem.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -91,12 +91,12 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
-	contextMenu()->addAction(KStdAction::preferences(this, SLOT(slotPreferences()), actcol));
+	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actcol));
 
 	// Replace the default handler for the Quit context menu item
-	const char* quitName = KStdAction::name(KStdAction::Quit);
+	const char* quitName = KStandardAction::name(KStandardAction::Quit);
 	delete actcol->action(quitName);
-	KStdAction::quit(this, SLOT(slotQuit()), actcol);
+	KStandardAction::quit(this, SLOT(slotQuit()), actcol);
 
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();

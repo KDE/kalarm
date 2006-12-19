@@ -31,7 +31,7 @@
 #include <kguiitem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kactioncollection.h>
 
 #include "editdlg.h"
@@ -101,8 +101,8 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 #warning Test select all/deselect
 	KActionCollection* actcol = new KActionCollection(this);
 	actcol->setAssociatedWidget(this);
-	KStdAction::selectAll(actcol);
-	KStdAction::deselect(mTemplateList, SLOT(slotDeselect()), actcol);
+	KStandardAction::selectAll(actcol);
+	KStandardAction::deselect(mTemplateList, SLOT(slotDeselect()), actcol);
 
 	mTemplateList->refresh();
 	slotSelectionChanged();          // enable/disable buttons as appropriate

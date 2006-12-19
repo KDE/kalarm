@@ -33,7 +33,7 @@
 #include <kmenu.h>
 #include <kaction.h>
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurl.h>
@@ -444,13 +444,13 @@ void MainWindow::initActions()
 	if (undoText.isNull())
 	{
 		// Get standard texts, etc., for Undo and Redo actions
-		KAction* act = KStdAction::undo(this, 0, actions);
+		KAction* act = KStandardAction::undo(this, 0, actions);
 //		undoIcon         = act->icon();
 		undoShortcut     = act->shortcut();
 		undoText         = act->text();
 		undoTextStripped = KAlarm::stripAccel(undoText);
 		delete act;
-		act = KStdAction::redo(this, 0, actions);
+		act = KStandardAction::redo(this, 0, actions);
 //		redoIcon         = act->icon();
 		redoShortcut     = act->shortcut();
 		redoText         = act->text();
@@ -465,15 +465,15 @@ void MainWindow::initActions()
 	mActionRedo->setShortcut(redoShortcut);
 	connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
 
-	KStdAction::find(mListView, SLOT(slotFind()), actions);
-	mActionFindNext = KStdAction::findNext(mListView, SLOT(slotFindNext()), actions);
-	mActionFindPrev = KStdAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
-	KStdAction::selectAll(mListView, SLOT(slotSelectAll()), actions);
-	KStdAction::deselect(mListView, SLOT(slotDeselect()), actions);
-	KStdAction::quit(this, SLOT(slotQuit()), actions);
-	KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
-	KStdAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
-	KStdAction::preferences(this, SLOT(slotPreferences()), actions);
+	KStandardAction::find(mListView, SLOT(slotFind()), actions);
+	mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
+	mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
+	KStandardAction::selectAll(mListView, SLOT(slotSelectAll()), actions);
+	KStandardAction::deselect(mListView, SLOT(slotDeselect()), actions);
+	KStandardAction::quit(this, SLOT(slotQuit()), actions);
+	KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
+	KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
+	KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
 	mResourceSelector->initActions(actions);
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);

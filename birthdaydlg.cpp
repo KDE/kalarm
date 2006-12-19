@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <khbox.h>
 #include <kabc/addressbook.h>
@@ -463,6 +463,6 @@ BListView::BListView(QWidget* parent)
 #warning Test select all/deselect
 	KActionCollection* actcol = new KActionCollection(this);
 	actcol->setAssociatedWidget(this);
-	KStdAction::selectAll(actcol);
-	KStdAction::deselect(this, SLOT(slotDeselect()), actcol);
+	KStandardAction::selectAll(actcol);
+	KStandardAction::deselect(this, SLOT(slotDeselect()), actcol);
 }
