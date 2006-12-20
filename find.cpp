@@ -235,8 +235,9 @@ void Find::slotFind()
 	long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
 	if (mFind)
 	{
-		delete mDialog;    // automatically set to 0
+		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
+		delete mDialog;    // automatically set to 0
 		findNext(true, true, false);
 	}
 	else
