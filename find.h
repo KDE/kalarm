@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility 
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class Find : public QObject
 {
 		Q_OBJECT
 	public:
-		Find(EventListViewBase* parent);
+		explicit Find(EventListViewBase* parent);
 		~Find();
 		void         display();
 		void         findNext(bool forward)     { findNext(forward, true); }
@@ -48,6 +48,7 @@ class Find : public QObject
 	private slots:
 		void         slotFind();
 		void         slotKFindDestroyed()       { emit active(false); }
+		void         slotDlgDestroyed()         { mDialog = 0; }
 
 	private:
 		void         findNext(bool forward, bool sort, bool fromCurrent = false);

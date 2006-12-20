@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility 
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,9 +85,9 @@ void Find::display()
 	else
 	{
 #ifdef MODAL_FIND
-		mDialog = new KFindDialog(mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
 #else
-		mDialog = new KFindDialog(false, mListView, "findDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(false, mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
 #endif
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
@@ -231,8 +231,9 @@ void Find::slotFind()
 	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
 	if (mFind)
 	{
-		delete mDialog;    // automatically set to 0
+		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
+		delete mDialog;    // automatically set to 0
 		findNext(true, true, false);
 	}
 	else
