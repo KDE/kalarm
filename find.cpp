@@ -1,5 +1,5 @@
 /*
- *  find.cpp  -  search facility 
+ *  find.cpp  -  search facility
  *  Program:  kalarm
  *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -80,9 +80,9 @@ void Find::display()
 
 	if (mDialog)
 	{
-#ifdef Q_OS_UNIX		
+#ifdef Q_OS_UNIX
 		KWin::activateWindow(mDialog->winId());
-#endif		
+#endif
 	}
 	else
 	{
@@ -274,6 +274,11 @@ void Find::slotFind()
 		if (mFind)
 			emit active(true);
 	}
+}
+
+void Find::slotDlgDestroyed()
+{
+  mDialog = 0;
 }
 
 /******************************************************************************

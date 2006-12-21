@@ -1,5 +1,5 @@
 /*
- *  find.h  -  search facility 
+ *  find.h  -  search facility
  *  Program:  kalarm
  *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
@@ -48,7 +48,7 @@ class Find : public QObject
 	private slots:
 		void         slotFind();
 		void         slotKFindDestroyed()       { emit active(false); }
-		void         slotDlgDestroyed()         { mDialog = 0; }
+                void         slotDlgDestroyed();
 
 	private:
 		void         findNext(bool forward, bool sort, bool fromCurrent = false);
