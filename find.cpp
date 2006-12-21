@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -152,7 +152,6 @@ void Find::display()
 #ifndef MODAL_FIND
 		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
 #endif
-		connect(mDialog, SIGNAL(destroyed()), this, SLOT(slotDlgDestroyed()));
 	}
 
 	// Only display active/archived options if archived alarms are being kept
@@ -274,11 +273,6 @@ void Find::slotFind()
 		if (mFind)
 			emit active(true);
 	}
-}
-
-void Find::slotDlgDestroyed()
-{
-  mDialog = 0;
 }
 
 /******************************************************************************
