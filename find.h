@@ -48,7 +48,6 @@ class Find : public QObject
 	private slots:
 		void         slotFind();
 		void         slotKFindDestroyed()       { emit active(false); }
-		void         slotDlgDestroyed()         { mDialog = 0; }
 
 	private:
 		void         findNext(bool forward, bool sort, bool fromCurrent = false);

@@ -148,7 +148,6 @@ void Find::display()
 #ifndef MODAL_FIND
 		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
 #endif
-		connect(mDialog, SIGNAL(destroyed()), this, SLOT(slotDlgDestroyed()));
 	}
 
 	// Only display active/expired options if expired alarms are being kept
