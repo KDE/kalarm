@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	aboutData.addAuthor("David Jarvie", I18N_NOOP("Maintainer"), "software@astrojar.org.uk");
 	aboutData.addAuthor("Cornelius Schumacher", I18N_NOOP("Author"), "schumacher@kde.org");
 	aboutData.addAuthor("Preston Brown", I18N_NOOP("Original Author"), "pbrown@kde.org");
-
+	aboutData.setOrganizationDomain("kde.org");
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();

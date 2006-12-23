@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
 		KAboutData::License_GPL,
 		"Copyright 2001-2006, David Jarvie", 0, "http://www.astrojar.org.uk/linux/kalarm.html");
 	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
+        aboutData.setOrganizationDomain("kde.org");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
