@@ -108,5 +108,7 @@ install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR} )
 install( FILES kalarm.tray.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR} )
 install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm )
+install( FILES org.kde.kalarm.notify.xml org.kde.kalarm.request.xml DESTINATION ${DBUS_INTERFACES_DIR} )
+
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )
