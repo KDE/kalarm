@@ -46,7 +46,7 @@
 
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -546,7 +546,7 @@ void MessageWin::initView()
 	int gridIndex = 1;
 
 	// Close button
-	mOkButton = new KPushButton(KStdGuiItem::close(), topWidget);
+	mOkButton = new KPushButton(KStandardGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	mOkButton->clearFocus();
 	mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
@@ -1341,7 +1341,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		{
 			// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
 			if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
-			                                    i18n("Acknowledge Alarm"), KGuiItem(i18n("&Acknowledge")), KStdGuiItem::cancel())
+			                                    i18n("Acknowledge Alarm"), KGuiItem(i18n("&Acknowledge")), KStandardGuiItem::cancel())
 			    != KMessageBox::Yes)
 			{
 				ce->ignore();

@@ -39,7 +39,7 @@
 #include <kprocess.h>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kservicetypetrader.h>
 #include <kstaticdeleter.h>
 #include <kdebug.h>
@@ -816,7 +816,7 @@ void KAlarmApp::doQuit(QWidget* parent)
 	if (mDisableAlarmsIfStopped
 	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
 	                                      i18n("Quitting will disable alarms\n(once any alarm message windows are closed)."),
-	                                      QString(), KStdGuiItem::quit(), Preferences::QUIT_WARN
+	                                      QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
 		return;
 	quitIf(0, true);

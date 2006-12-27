@@ -50,7 +50,7 @@
 #include <kwin.h>
 #include <kwinmodule.h>
 #include <kstandarddirs.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kabc/addresseedialog.h>
 #include <kdebug.h>
 

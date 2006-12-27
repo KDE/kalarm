@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kstandardaction.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kconfig.h>
 #include <kdebug.h>
 

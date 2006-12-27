@@ -30,8 +30,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ksystemtimezone.h>
-#include <kstdguiitem.h>
-#include <kstdaccel.h>
+#include <KStandardGuiItem>
+#include <kstandardshortcut.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
@@ -121,7 +121,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 KAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
 {
 	KAction* action =  new KAction(KIcon(QLatin1String("filenew")), label, actions, name);
-	action->setShortcut(KStdAccel::openNew());
+	action->setShortcut(KStandardShortcut::openNew());
 	return action;
 }
 

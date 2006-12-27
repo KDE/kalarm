@@ -291,7 +291,7 @@ void ResourceSelector::removeResource()
 	QString text = std ? i18n("Do you really want to remove your default resource (%1) from the list?", tmp)
 	                   : i18n("Do you really want to remove the resource %1 from the list?", tmp);
 	text = "<qt>" + text + "</qt>";
-	if (KMessageBox::warningContinueCancel(this, text, "", KStdGuiItem::remove()) == KMessageBox::Cancel)
+	if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
 		return;
 
 	AlarmResourceManager* manager = mCalendar->resourceManager();

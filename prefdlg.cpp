@@ -41,7 +41,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcolorcombo.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -527,7 +527,7 @@ void MiscPrefTab::slotAutostartDaemonClicked()
 	if (!mAutostartDaemon->isChecked()
 	&&  KMessageBox::warningYesNo(this,
 		                      i18n("You should not uncheck this option unless you intend to discontinue use of KAlarm"),
-		                      QString(), KStdGuiItem::cont(), KStdGuiItem::cancel()
+		                      QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()
 		                     ) != KMessageBox::Yes)
 		mAutostartDaemon->setChecked(true);
 }
