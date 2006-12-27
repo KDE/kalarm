@@ -21,7 +21,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <kmessagebox.h>
 
 
@@ -68,7 +68,7 @@ class MessageBox : public KMessageBox
 		 */
 		static int  warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
 		                                  const QString& caption = QString(),
-		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
+		                                  const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
 		                                  const QString& dontAskAgainName = QString());
 		/** Displays a Continue/Cancel message box.
 		 *  @param parent Parent widget
@@ -82,7 +82,7 @@ class MessageBox : public KMessageBox
 		 *    Continue is the default.
 		 */
 		static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
-		                                  const KGuiItem& buttonContinue = KStdGuiItem::cont(),
+		                                  const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
 		                                  const QString& dontAskAgainName = QString());
 		/** If there is no current setting for whether a non-Yes/No message box should be
 		 *  shown, sets it to @p defaultShow.

@@ -93,7 +93,7 @@ int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton,
 			saveDontShowAgain(dontAskAgainName, true, false);
 		}
 	}
-	return warningYesNo(parent, text, caption, buttonContinue, KStdGuiItem::cancel(), dontAskAgainName);
+	return warningYesNo(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 }
 
 /******************************************************************************
