@@ -44,7 +44,7 @@
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's interface for notification by alarm daemon
-static const char*  DAEMON_DBUS_IFACE   = "org.kde.kalarmd.Daemon";
+static const char*  DAEMON_DBUS_IFACE   = "org.kde.kalarm.daemon.Daemon";
 
 
 /*=============================================================================
