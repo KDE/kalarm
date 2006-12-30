@@ -57,7 +57,7 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "kamail.h"
-
+#include "kmailinterface.h"
 
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 
@@ -294,9 +294,8 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		// Notify KMail of the message in the temporary file
 		QList<QVariant> args;
 		args << QString::fromLatin1(folder) << tmpFile.fileName();
-#warning Set correct DBus interface/object for kmail
-		QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
-		QDBusReply<int> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("dcopAddMessage"), args);
+		org::kde::kmail::kmail kmail("org.kde.kmail", "/KMail", QDBusConnection::sessionBus());
+		QDBusReply<int> reply = kmail.dcopAddMessage(QString::fromLatin1(folder),tmpFile.fileName(),QString());
 		if (!reply.isValid())
 			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call failed: " << reply.error().message() << endl;
 		else if (reply.value() <= 0)
