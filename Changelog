@@ -1,6 +1,8 @@
 KAlarm
 
-=== Version 1.4.8 --- 20 December 2006 ===
+=== Version 1.4.9 --- 3 January 2007 ===
+
+=== Version 1.4.8 --- 28 December 2006 ===
 Fix Find always using first search text entered even after entering a new one.
 
 === Version 1.4.7 --- 14 December 2006 ===

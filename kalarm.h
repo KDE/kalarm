@@ -26,7 +26,7 @@
 #include <config.h>
 #endif
 
-#define KALARM_VERSION "1.4.8"
+#define KALARM_VERSION "1.4.9"
 #define KALARM_NAME "KAlarm"
 
 #include <kdeversion.h>
