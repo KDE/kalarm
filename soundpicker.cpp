@@ -114,7 +114,8 @@ void SoundPicker::showSpeak(bool show)
 	                  + "<br>" + i18n("%1: an audio file is played. You will be prompted to choose the file and set play options.", "<b>" + i18n_File() + "</b>");
 	if (!show  &&  mTypeCombo->currentIndex() == SPEAK)
 		mTypeCombo->setCurrentIndex(NONE);
-	mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
+	if (mTypeCombo->count() == SPEAK+1)
+		mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
 	if (show)
 	{
 		mTypeCombo->addItem(i18n_Speak());
