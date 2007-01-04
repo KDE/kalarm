@@ -86,7 +86,7 @@ static KCmdLineOptions options[] =
 	{ "speak", I18N_NOOP("Speak the message when it is displayed"), 0 },
 	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
 	{ "S", 0, 0 },
-	{ "subject ", I18N_NOOP("Email subject line"), 0 },
+	{ "subject", I18N_NOOP("Email subject line"), 0 },
 	{ "t", 0, 0 },
 	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"), 0 },
 	{ "tray", I18N_NOOP("Display system tray icon"), 0 },
