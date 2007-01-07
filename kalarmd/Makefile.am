@@ -3,7 +3,7 @@ INCLUDES= -I$(top_srcdir) -I$(top_srcdir)/kalarm $(all_includes)
 noinst_LTLIBRARIES = libkalarmd.la
 
 libkalarmd_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-libkalarmd_la_LIBADD  = $(LIB_KDECORE)
+libkalarmd_la_LIBADD  = $(LIB_KDECORE) $(top_builddir)/libkcal/libkcal.la
 libkalarmd_la_SOURCES =  alarmdaemoniface.stub alarmguiiface.stub
 
 bin_PROGRAMS = kalarmd
