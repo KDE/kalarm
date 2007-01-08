@@ -179,7 +179,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::Observer
 		KAction*             mActionImportAlarms;
 		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
-		KAction*             mActionNew;
+		QAction*             mActionNew;
 		TemplateMenuAction*  mActionNewFromTemplate;
 		KAction*             mActionCreateTemplate;
 		KAction*             mActionCopy;

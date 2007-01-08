@@ -44,6 +44,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kactioncollection.h>
 
 
 #include <kcal/resourcecalendar.h>
@@ -383,21 +384,29 @@ void ResourceSelector::emitResourcesChanged()
 */
 void ResourceSelector::initActions(KActionCollection* actions)
 {
-	mActionReload      = new KAction(KIcon("reload"), i18n("Re&load"), actions, QLatin1String("resReload"));
+	mActionReload       = new KAction(KIcon("reload"), i18n("Re&load"), this);
+	actions->addAction("resReload", mActionReload      );
 	connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
-	mActionSave        = new KAction(KIcon("filesave"), i18n("&Save"), actions, QLatin1String("resSave"));
+	mActionSave         = new KAction(KIcon("filesave"), i18n("&Save"), this);
+	actions->addAction("resSave", mActionSave        );
 	connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
-	mActionShowDetails = new KAction(KIcon("info"), i18n("Show &Details"), actions, QLatin1String("resDetails"));
+	mActionShowDetails  = new KAction(KIcon("info"), i18n("Show &Details"), this);
+	actions->addAction("resDetails", mActionShowDetails );
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
-	mActionEdit        = new KAction(KIcon("edit"), i18n("&Edit..."), actions, QLatin1String("resEdit"));
+	mActionEdit         = new KAction(KIcon("edit"), i18n("&Edit..."), this);
+	actions->addAction("resEdit", mActionEdit        );
 	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
-	mActionRemove      = new KAction(KIcon("editdelete"), i18n("&Remove"), actions, QLatin1String("resRemove"));
+	mActionRemove       = new KAction(KIcon("editdelete"), i18n("&Remove"), this);
+	actions->addAction("resRemove", mActionRemove      );
 	connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
-	mActionSetDefault  = new KToggleAction(QString::null, actions, QLatin1String("resDefault"));
+	mActionSetDefault  = new KToggleAction(this);
+	actions->addAction(QLatin1String("resDefault"), mActionSetDefault);
 	connect(mActionSetDefault, SIGNAL(triggered(bool)), SLOT(setStandard()));
-	KAction* action    = new KAction(KIcon("filenew"), i18n("&Add..."), actions, QLatin1String("resAdd"));
+	QAction * action     = new KAction(KIcon("filenew"), i18n("&Add..."), this);
+	actions->addAction("resAdd", action    );
 	connect(action, SIGNAL(triggered(bool)), SLOT(addResource()));
-	mActionImport      = new KAction(i18n("Im&port..."), actions, QLatin1String("resImport"));
+	mActionImport       = new KAction(i18n("Im&port..."), this);
+	actions->addAction("resImport", mActionImport      );
 	connect(mActionImport, SIGNAL(triggered(bool)), SLOT(importCalendar()));
 }
 

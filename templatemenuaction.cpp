@@ -24,6 +24,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kactionmenu.h>
+#include <kactioncollection.h>
 #include "alarmcalendar.h"
 #include "alarmevent.h"
 #include "functions.h"
@@ -31,11 +32,12 @@
 
 
 TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* actions, const QString& name)
-	: KActionMenu(icon, label, actions, name)
+	: KActionMenu(icon, label, actions)
 {
 	setDelayed(false);
 	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
 	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+	actions->addAction(name, this);
 }
 
 /******************************************************************************

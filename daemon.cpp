@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
+#include <kactioncollection.h>
 
 #include "kalarmd/kalarmd.h"
 
@@ -807,12 +808,13 @@ void NotificationHandler::cacheDownloaded(const QString& resourceID)
 =============================================================================*/
 
 AlarmEnableAction::AlarmEnableAction(KActionCollection* parent, const QString& name)
-	: KToggleAction(i18n("Enable &Alarms"), parent, name),
+	: KToggleAction(i18n("Enable &Alarms"), parent),
 	  mInitialised(false)
 {
 	setCheckedState(KGuiItem(i18n("Disable &Alarms")));
 	setCheckedActual(false);    // set the correct text
 	mInitialised = true;
+        parent->addAction(name, this);
 }
 
 /******************************************************************************

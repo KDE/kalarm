@@ -68,7 +68,7 @@ class TrayWindow : public KSystemTrayIcon
 
 		MainWindow*  mAssocMainWindow;     // main window associated with this, or null
 		QIcon        mIconEnabled, mIconDisabled;
-		KAction*     mActionNew;
+		QAction*     mActionNew;
 		KAction*     mActionNewFromTemplate;
 };
 

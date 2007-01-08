@@ -36,6 +36,7 @@ class QString;
 class KAction;
 class KActionCollection;
 class DCOPCString;
+class QAction;
 namespace KCal { class Event; }
 class AlarmResource;
 class KAEvent;
@@ -83,7 +84,7 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
 bool                edit(const QString& eventID);
 bool                editNew(const QString& templateName = QString());
 /** Create a "New Alarm" KAction */
-KAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
+QAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
 /** Create a "New From Template" KAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.

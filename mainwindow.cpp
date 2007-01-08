@@ -32,6 +32,7 @@
 #include <ktoolbar.h>
 #include <kmenu.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 
 #include <kstandardaction.h>
 #include <kiconloader.h>
@@ -372,7 +373,8 @@ void MainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 
-	mActionTemplates = new KAction(i18n("&Templates..."), actions, QLatin1String("templates"));
+	mActionTemplates  = new KAction(i18n("&Templates..."), this);
+	actionCollection()->addAction("templates", mActionTemplates );
 	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
 	mActionNew = KAlarm::createNewAlarmAction(i18n("&New..."), actions, QLatin1String("new"));
@@ -381,87 +383,104 @@ void MainWindow::initActions()
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 
-	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), actions, QLatin1String("createTemplate"));
+	mActionCreateTemplate  = new KAction(i18n("Create Tem&plate..."), this);
+	actionCollection()->addAction("createTemplate", mActionCreateTemplate );
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-	mActionCopy = new KAction(KIcon("editcopy"), i18n("&Copy..."), actions, QLatin1String("copy"));
+	mActionCopy  = new KAction(KIcon("editcopy"), i18n("&Copy..."), this);
+	actionCollection()->addAction("copy", mActionCopy );
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify = new KAction(KIcon("edit"), i18n("&Edit..."), actions, QLatin1String("modify"));
+	mActionModify  = new KAction(KIcon("edit"), i18n("&Edit..."), this);
+	actionCollection()->addAction("modify", mActionModify );
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-	mActionDelete = new KAction(KIcon("editdelete"), i18n("&Delete"), actions, QLatin1String("delete"));
+	mActionDelete  = new KAction(KIcon("editdelete"), i18n("&Delete"), this);
+	actionCollection()->addAction("delete", mActionDelete );
 	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
 
-	mActionReactivate = new KAction(i18n("Reac&tivate"), actions, QLatin1String("undelete"));
+	mActionReactivate  = new KAction(i18n("Reac&tivate"), this);
+	actionCollection()->addAction("undelete", mActionReactivate );
 	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
 	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
-	mActionEnable = new KAction(QString(), actions, QLatin1String("disable"));
+	mActionEnable = new KAction(this);
+	actions->addAction(QLatin1String("disable"), mActionEnable);
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	mActionView = new KAction(KIcon("viewmag"), i18n("&View"), actions, QLatin1String("view"));
+	mActionView  = new KAction(KIcon("viewmag"), i18n("&View"), this);
+	actionCollection()->addAction("view", mActionView );
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
 
-	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), actions, QLatin1String("showAlarmTimes"));
+	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
+	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
 	mActionShowTime->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	mActionShowTime->setCheckedState(KGuiItem(i18n("Hide &Alarm Times")));
 	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
-	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), actions, QLatin1String("showTimeToAlarms"));
+	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
+	actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
 	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 	mActionShowTimeTo->setCheckedState(KGuiItem(i18n("Hide Time t&o Alarms")));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), actions, QLatin1String("showArchivedAlarms"));
+	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), this);
+	actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
 	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	mActionShowArchived->setCheckedState(KGuiItem(i18n_e_HideArchivedAlarms()));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
-	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), actions, QLatin1String("showInSystemTray"));
+	mActionToggleTrayIcon  = new KToggleAction(i18n("Show in System &Tray"), this);
+	actionCollection()->addAction("showInSystemTray", mActionToggleTrayIcon );
 	mActionToggleTrayIcon->setCheckedState(KGuiItem(i18n("Hide From System &Tray")));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), actions, QLatin1String("showResources"));
+	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), this);
+	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	mActionToggleResourceSel->setCheckedState(KGuiItem(i18n("Hide &Resources")));
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
-	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), actions, QLatin1String("importAlarms"));
+	mActionImportAlarms  = new KAction(i18n("Import &Alarms..."), this);
+	actionCollection()->addAction("importAlarms", mActionImportAlarms );
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
-	mActionImportBirthdays = new KAction(i18n("Import &Birthdays..."), actions, QLatin1String("importBirthdays"));
+	mActionImportBirthdays  = new KAction(i18n("Import &Birthdays..."), this);
+	actionCollection()->addAction("importBirthdays", mActionImportBirthdays );
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	KAction* action = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), actions, QLatin1String("refreshAlarms"));
+	QAction * action  = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), this);
+	actionCollection()->addAction("refreshAlarms", action );
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
 	Daemon::createAlarmEnableAction(actions);
 	if (undoText.isNull())
 	{
 		// Get standard texts, etc., for Undo and Redo actions
-		KAction* act = KStandardAction::undo(this, 0, actions);
+		QAction * act = KStandardAction::undo(this, 0, actions);
 //		undoIcon         = act->icon();
-		undoShortcut     = act->shortcut();
+		undoShortcut     = KShortcut(act->shortcuts());
 		undoText         = act->text();
 		undoTextStripped = KAlarm::stripAccel(undoText);
 		delete act;
 		act = KStandardAction::redo(this, 0, actions);
 //		redoIcon         = act->icon();
-		redoShortcut     = act->shortcut();
+		redoShortcut     = KShortcut(act->shortcuts());
 		redoText         = act->text();
 		redoTextStripped = KAlarm::stripAccel(redoText);
 		delete act;
 	}
-	mActionUndo = new KToolBarPopupAction(KIcon("undo"), undoText, actions, QLatin1String("edit_undo"));
+	mActionUndo = new KToolBarPopupAction(KIcon("undo"), undoText, this);
+	actions->addAction(QLatin1String("edit_undo"), mActionUndo);
 	mActionUndo->setShortcut(undoShortcut);
 	connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
-	mActionRedo = new KToolBarPopupAction(KIcon("redo"), redoText, actions, QLatin1String("edit_redo"));
+	mActionRedo = new KToolBarPopupAction(KIcon("redo"), redoText, this);
+	actions->addAction(QLatin1String("edit_redo"), mActionRedo);
 	mActionRedo->setShortcut(redoShortcut);
 	connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
 

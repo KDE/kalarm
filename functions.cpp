@@ -27,6 +27,7 @@
 
 #include <kconfig.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <ksystemtimezone.h>
@@ -118,10 +119,12 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 /******************************************************************************
 * Create a New Alarm KAction.
 */
-KAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
+QAction * createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	KAction* action =  new KAction(KIcon(QLatin1String("filenew")), label, actions, name);
-	action->setShortcut(KStandardShortcut::openNew());
+	QAction * action =  actions->addAction(name);
+	action->setIcon(KIcon(QLatin1String("filenew")));
+	action->setText(label);
+	action->setShortcuts(KStandardShortcut::openNew());
 	return action;
 }
 
