@@ -117,11 +117,11 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 }
 
 /******************************************************************************
-* Create a New Alarm KAction.
+* Create a New Alarm QAction.
 */
-QAction * createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
+QAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	QAction * action =  actions->addAction(name);
+	QAction* action = actions->addAction(name);
 	action->setIcon(KIcon(QLatin1String("filenew")));
 	action->setText(label);
 	action->setShortcuts(KStandardShortcut::openNew());
@@ -129,7 +129,7 @@ QAction * createNewAlarmAction(const QString& label, KActionCollection* actions,
 }
 
 /******************************************************************************
-* Create a New From Template KAction.
+* Create a New From Template QAction.
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {

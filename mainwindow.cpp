@@ -374,7 +374,7 @@ void MainWindow::initActions()
 	KActionCollection* actions = actionCollection();
 
 	mActionTemplates  = new KAction(i18n("&Templates..."), this);
-	actionCollection()->addAction("templates", mActionTemplates );
+	actionCollection()->addAction(QLatin1String("templates"), mActionTemplates);
 	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
 	mActionNew = KAlarm::createNewAlarmAction(i18n("&New..."), actions, QLatin1String("new"));
@@ -384,26 +384,26 @@ void MainWindow::initActions()
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 
 	mActionCreateTemplate  = new KAction(i18n("Create Tem&plate..."), this);
-	actionCollection()->addAction("createTemplate", mActionCreateTemplate );
+	actionCollection()->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
 	mActionCopy  = new KAction(KIcon("editcopy"), i18n("&Copy..."), this);
-	actionCollection()->addAction("copy", mActionCopy );
+	actionCollection()->addAction(QLatin1String("copy"), mActionCopy);
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
 	mActionModify  = new KAction(KIcon("edit"), i18n("&Edit..."), this);
-	actionCollection()->addAction("modify", mActionModify );
+	actionCollection()->addAction(QLatin1String("modify"), mActionModify);
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
 	mActionDelete  = new KAction(KIcon("editdelete"), i18n("&Delete"), this);
-	actionCollection()->addAction("delete", mActionDelete );
+	actionCollection()->addAction(QLatin1String("delete"), mActionDelete);
 	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
 
 	mActionReactivate  = new KAction(i18n("Reac&tivate"), this);
-	actionCollection()->addAction("undelete", mActionReactivate );
+	actionCollection()->addAction(QLatin1String("undelete"), mActionReactivate);
 	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
 	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
@@ -413,7 +413,7 @@ void MainWindow::initActions()
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
 	mActionView  = new KAction(KIcon("viewmag"), i18n("&View"), this);
-	actionCollection()->addAction("view", mActionView );
+	actionCollection()->addAction(QLatin1String("view"), mActionView);
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
 
@@ -436,7 +436,7 @@ void MainWindow::initActions()
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
 	mActionToggleTrayIcon  = new KToggleAction(i18n("Show in System &Tray"), this);
-	actionCollection()->addAction("showInSystemTray", mActionToggleTrayIcon );
+	actionCollection()->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	mActionToggleTrayIcon->setCheckedState(KGuiItem(i18n("Hide From System &Tray")));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
@@ -446,15 +446,15 @@ void MainWindow::initActions()
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
 	mActionImportAlarms  = new KAction(i18n("Import &Alarms..."), this);
-	actionCollection()->addAction("importAlarms", mActionImportAlarms );
+	actionCollection()->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
 	mActionImportBirthdays  = new KAction(i18n("Import &Birthdays..."), this);
-	actionCollection()->addAction("importBirthdays", mActionImportBirthdays );
+	actionCollection()->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
 	QAction * action  = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), this);
-	actionCollection()->addAction("refreshAlarms", action );
+	actionCollection()->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
 	Daemon::createAlarmEnableAction(actions);

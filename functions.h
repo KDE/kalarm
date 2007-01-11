@@ -33,7 +33,6 @@
 class QObject;
 class QWidget;
 class QString;
-class KAction;
 class KActionCollection;
 class DCOPCString;
 class QAction;
@@ -83,9 +82,9 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                edit(const QString& eventID);
 bool                editNew(const QString& templateName = QString());
-/** Create a "New Alarm" KAction */
+/** Create a "New Alarm" QAction */
 QAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
-/** Create a "New From Template" KAction */
+/** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
