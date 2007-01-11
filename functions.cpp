@@ -928,7 +928,9 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 			// trace of it from the panel if it is not configured to be docked in
 			// the system tray.
 //kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
+#ifdef __GNUC__
 #warning Minimise window
+#endif
 //			QDBusInterface iface(dbusService, DBUS_OBJECT, DBUS_IFACE);
 			QDBusInterface iface(dbusService, QString(), QString());
 			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("minimize"), QList<QVariant>());

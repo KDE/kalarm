@@ -454,7 +454,9 @@ void Daemon::enableAutoStart(bool enable)
 	QList<QVariant> args;
 	args << enable;
 	if (!sendDaemon(QLatin1String("enableAutoStart"), args))
+#ifdef __GNUC__
 #warning Check that false is returned if daemon isn't running
+#endif
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
 		KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));

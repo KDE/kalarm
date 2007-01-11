@@ -240,9 +240,13 @@ QString KAMail::sendKMail(const KAMailData& data)
 	args << data.bcc;
 	args << data.event.emailSubject();
 	args << data.event.message();
+#ifdef __GNUC__
 #warning Append attachment URL list
+#endif
 //	args << KUrl::List(data.event.emailAttachments());
+#ifdef __GNUC__
 #warning Set correct DBus interface/object for kmail
+#endif
 	QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("MailTransportServiceIface"));
 	QDBusReply<bool> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("sendMessage"), args);
 	if (!reply.isValid())
@@ -756,7 +760,9 @@ QString KAMail::getMailBody(quint32 serialNumber)
 {
 	QList<QVariant> args;
 	args << serialNumber << (int)0;
+#ifdef __GNUC__
 #warning Set correct DBus interface/object for kmail
+#endif
 	QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
 	QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
 	if (!reply.isValid())

@@ -587,7 +587,9 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	// Log file name edit box
 	KHBox* box = new KHBox(cmdOutputBox);
 	box->setMargin(0);
+#ifdef __GNUC__
 #warning Check pixelMetric() / subRect()
+#endif
 //	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
 	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);

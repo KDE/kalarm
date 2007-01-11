@@ -98,7 +98,9 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	mDeleteButton->setWhatsThis(i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
 
+#ifdef __GNUC__
 #warning Test select all/deselect
+#endif
 	KActionCollection* actcol = new KActionCollection(this);
 	actcol->setAssociatedWidget(this);
 	KStandardAction::selectAll(actcol);

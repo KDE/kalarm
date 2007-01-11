@@ -77,7 +77,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mIconDisabled = loadIcon("kalarm_disabled");
 	if (mIconEnabled.isNull() || mIconDisabled.isNull())
 		KMessageBox::sorry(parent, i18n("Cannot load system tray icon."));
+#ifdef __GNUC__
 #warning How to implement drag-and-drop?
+#endif
 	//setAcceptDrops(true);         // allow drag-and-drop onto this window
 
 	// Set up the context menu
@@ -347,7 +349,9 @@ void TrayWindow::removeWindow(MainWindow* win)
 bool TrayWindow::inSystemTray() const
 {
 	return true;
+#ifdef __GNUC__
 #warning I don't get what's supposed to happen here - systrays are no longer widgets though
+#endif
 #if 0 && defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
 	Window  xParent;    // receives parent window
 	Window  root;

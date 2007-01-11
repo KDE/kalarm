@@ -175,7 +175,9 @@ void SpinBox::valueChange()
 			mShiftMaxBound = false;
 		}
 
+#ifdef __GNUC__
 #warning Fix this
+#endif
 //??? 		bool focus = !mSelectOnStep && hasFocus();
 //		if (focus)
 //			clearFocus();     // prevent selection of the spin box text
@@ -196,7 +198,9 @@ void SpinBox::textEdited()
 void SpinBox::updateDisplay()
 {
 	mEdited = false;
+#ifdef __GNUC__
 #warning Fix this
+#endif
 //	QSpinBox::updateDisplay();
 }
 
@@ -241,7 +245,9 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 	return QSpinBox::eventFilter(obj, e);
 }
 
+#ifdef __GNUC__
 #warning What about QEvent::ShortcutOverride??
+#endif
 
 void SpinBox::mousePressEvent(QMouseEvent* e)
 {

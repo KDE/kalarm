@@ -308,7 +308,9 @@ void AlarmDaemon::resourceLoaded(AlarmResource* res)
 */
 void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 {
+#ifdef __GNUC__
 #warning Check client ID
+#endif
 // FIXME I don't think this check can be done with DBus
 #if 0
 	if (kapp->dcopClient()->senderId() != mClientName)
@@ -505,7 +507,9 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	if (registered)
 	{
 		// It's running, but check if it has created our D-Bus interface yet
+#ifdef __GNUC__
 #warning Check if KAlarm D-Bus interface has been created yet
+#endif
 #if 0
 		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(mClientName);
 		if (objects.indexOf(mClientDBusObj) < 0)

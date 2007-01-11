@@ -460,7 +460,9 @@ QString AddresseeItem::key(int column, bool) const
 BListView::BListView(QWidget* parent)
 	: K3ListView(parent)
 {
+#ifdef __GNUC__
 #warning Test select all/deselect
+#endif
 	KActionCollection* actcol = new KActionCollection(this);
 	actcol->setAssociatedWidget(this);
 	KStandardAction::selectAll(actcol);

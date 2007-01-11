@@ -90,7 +90,9 @@ using namespace KCal;
 static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH      = "/KSpeech";
 static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech";
+#ifdef __GNUC__
 #warning Fix KMail dbus interface names when they are available
+#endif
 static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
 static const char* KMAIL_DBUS_PATH      = "/kmailiface";
 static const char* KMAIL_DBUS_INTERFACE = "org.kde.kmail.kmailiface";
@@ -1033,7 +1035,9 @@ void MessageWin::slotPlayAudio()
 {
 	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	MainWindow* mmw = MainWindow::mainMainWindow();
+#ifdef __GNUC__
 #warning Use mmw for error messages
+#endif
 	if (0)
 	{
 		kError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
@@ -1584,7 +1588,9 @@ MWMimeSourceFactory::~MWMimeSourceFactory()
 	delete mLast;
 }
 
+#ifdef __GNUC__
 #warning port me to QMimeData (the Qt4 way of doing drag and drop)
+#endif
 const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
 {
 	if (abs_name == mTextFile)
