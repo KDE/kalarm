@@ -88,6 +88,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 		mChooser->setFont(font);
 	layout->addWidget(mChooser);
 	layout->addSpacing(KDialog::spacingHint());
+	connect(this,SIGNAL(okClicked()),SLOT(slotOk()));
 }
 
 /******************************************************************************

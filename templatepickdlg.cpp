@@ -60,6 +60,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 	QSize s;
 	if (KAlarm::readConfigWindowSize(TMPL_PICK_DIALOG_NAME, s))
 		resize(s);
+	connect(this,SIGNAL(okClicked()),SLOT(slotOk()));
 }
 
 /******************************************************************************
