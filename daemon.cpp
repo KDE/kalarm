@@ -106,7 +106,7 @@ void Daemon::initialise()
 {
 	if (!mInstance)
 		mInstance = new Daemon();
-	connect(AlarmResources::instance(), SIGNAL(resourceSaved(AlarmResource*)), mInstance, SLOT(slotCalendarSaved(AlarmResource*)));
+	connect(AlarmResources::instance(), SIGNAL(resourceSaved(AlarmResource*)), mInstance, SLOT(slotResourceSaved(AlarmResource*)));
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), mInstance, SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 }
 
