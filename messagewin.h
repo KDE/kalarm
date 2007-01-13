@@ -49,9 +49,9 @@ class MessageWin : public MainWindowBase
 		Q_OBJECT
 	public:
 		enum {                // flags for constructor
-			NO_RESCHEDULE,    // don't reschedule the event once it has displayed
-			NO_DEFER,         // don't display the Defer button
-			NO_INIT_VIEW      // for internal MessageWin use only
+			NO_RESCHEDULE = 0x01,    // don't reschedule the event once it has displayed
+			NO_DEFER      = 0x02,    // don't display the Defer button
+			NO_INIT_VIEW  = 0x04     // for internal MessageWin use only
 		};
 
 		MessageWin();     // for session management restoration only
