@@ -107,10 +107,12 @@ class MessageText : public QTextEdit
 {
 	public:
 		MessageText(const QString& text, QWidget* parent = 0)
-			: QTextEdit(text, parent)
+			: QTextEdit(parent)
 		{
+			insertPlainText(text);
 			setReadOnly(true);
-			setLineWrapMode(QTextEdit::NoWrap);
+			setFrameStyle(NoFrame);
+			setLineWrapMode(NoWrap);
 		}
 		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
 		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
