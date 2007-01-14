@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -106,10 +106,9 @@ static const int proximityMultiple = 10;         // multiple of button height di
 class MessageText : public QTextEdit
 {
 	public:
-		MessageText(const QString& text, QWidget* parent = 0)
+		MessageText(QWidget* parent = 0)
 			: QTextEdit(parent)
 		{
-			insertPlainText(text);
 			setReadOnly(true);
 			setFrameStyle(NoFrame);
 			setLineWrapMode(NoWrap);
@@ -144,7 +143,11 @@ class MWMimeSourceFactory : public Q3MimeSourceFactory
 static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
 static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
 static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
-static const Qt::WidgetAttribute WidgetFlags2 = Qt::WA_GroupLeader;
+#ifdef __GNUC__
+#warning WA_GroupLeader deprecated and replaced with MainWindowBase::setWindowModality() - check
+#endif
+static const int WidgetFlags2 = 0;//Qt::WA_GroupLeader;
+//static const Qt::WidgetAttribute WidgetFlags2 = 0;//Qt::WA_GroupLeader;
 
 
 QList<MessageWin*> MessageWin::mWindowList;
@@ -408,17 +411,17 @@ void MessageWin::initView()
 			{
 				// Message label
 				// Using MessageText instead of QLabel allows scrolling and mouse copying
-				MessageText* text = new MessageText(mMessage, topWidget);
+				MessageText* text = new MessageText(topWidget);
+				text->setAutoFillBackground(true);
 				QPalette pal = text->palette();
-				pal.setColor(QPalette::Active, QPalette::Background, mBgColour);
-				pal.setColor(QPalette::Inactive, QPalette::Background, mBgColour);
+				pal.setColor(text->backgroundRole(), mBgColour);
 				text->setPalette(pal);
 				pal = text->viewport()->palette();
-				pal.setColor(QPalette::Active, QPalette::Background, mBgColour);
-				pal.setColor(QPalette::Inactive, QPalette::Background, mBgColour);
+				pal.setColor(text->viewport()->backgroundRole(), mBgColour);
 				text->viewport()->setPalette(pal);
 				text->setTextColor(mFgColour);
 				text->setCurrentFont(mFont);
+				text->insertPlainText(mMessage);
 				int lineSpacing = text->fontMetrics().lineSpacing();
 				QSize s = text->sizeHint();
 				int h = s.height();
@@ -518,6 +521,7 @@ void MessageWin::initView()
 
 	if (!mErrorMsgs.count())
 	{
+		topWidget->setAutoFillBackground(true);
 		QPalette palette;
 		palette.setColor(topWidget->backgroundRole(), mBgColour);
 		topWidget->setPalette(palette);
