@@ -1,7 +1,7 @@
 /*
  *  kalarmd.h  -  global header file
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 #define DAEMON_VERSION       "5.0"              // kalarmd version number
 #define DAEMON_APP_NAME      "kalarmd"          // executable name of alarm daemon application
-#define DAEMON_DBUS_SERVICE  "org.kde.kalarm.daemon"  // D-Bus service name of alarm daemon application
+#define DAEMON_DBUS_SERVICE  "org.kde.kalarm.kalarmd"  // D-Bus service name of alarm daemon application
 #define DAEMON_DBUS_OBJECT   "/daemon"          // object path of kalarmd's D-Bus interface
 
 #define DAEMON_CHECK_INTERVAL     60            // the daemon checks calendar files every minute

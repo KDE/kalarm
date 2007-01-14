@@ -1,7 +1,7 @@
 /*
  *  admain.cpp  -  kalarmd main program
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	aboutData.addAuthor("David Jarvie", I18N_NOOP("Maintainer"), "software@astrojar.org.uk");
 	aboutData.addAuthor("Cornelius Schumacher", I18N_NOOP("Author"), "schumacher@kde.org");
 	aboutData.addAuthor("Preston Brown", I18N_NOOP("Original Author"), "pbrown@kde.org");
-	aboutData.setOrganizationDomain("kde.org");
+	aboutData.setOrganizationDomain("kalarm.kde.org");
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();

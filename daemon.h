@@ -30,7 +30,7 @@
 
 #include "alarmresources.h"
 
-class OrgKdeKalarmDaemonDaemonInterface;
+class OrgKdeKalarmKalarmdDaemonInterface;
 class KActionCollection;
 class AlarmCalendar;
 class AlarmEnableAction;
@@ -103,11 +103,11 @@ class Daemon : public QObject
 		static void      setStatus(Status);
 		static bool      isDaemonRegistered();
 		static bool      checkDBusResult(const char* funcname);
-		static OrgKdeKalarmDaemonDaemonInterface* daemonDBus();   // daemon's D-Bus interface
+		static OrgKdeKalarmKalarmdDaemonInterface* daemonDBus();   // daemon's D-Bus interface
 
 		static Daemon*   mInstance;            // only one instance allowed
 		static NotificationHandler* mDBusHandler;  // handles D-Bus requests from daemon
-		static OrgKdeKalarmDaemonDaemonInterface* mDBusDaemon;   // daemon's D-Bus interface
+		static OrgKdeKalarmKalarmdDaemonInterface* mDBusDaemon;   // daemon's D-Bus interface
 		static QList<QString>       mQueuedEvents; // IDs of pending events that daemon has triggered
 		static QList<QString>       mSavingEvents; // IDs of updated events that are currently being saved
 		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon

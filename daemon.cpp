@@ -52,7 +52,7 @@ static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of 
 
 Daemon*              Daemon::mInstance = 0;
 NotificationHandler* Daemon::mDBusHandler = 0;
-OrgKdeKalarmDaemonDaemonInterface* Daemon::mDBusDaemon = 0;
+OrgKdeKalarmKalarmdDaemonInterface* Daemon::mDBusDaemon = 0;
 QList<QString>       Daemon::mQueuedEvents;
 QList<QString>       Daemon::mSavingEvents;
 QTimer*              Daemon::mStartTimer = 0;
@@ -113,10 +113,10 @@ void Daemon::createDcopHandler()
 	mStatusTimer->start(mStatusTimerInterval * 1000);  // check regularly if daemon is running
 }
 
-OrgKdeKalarmDaemonDaemonInterface* Daemon::daemonDBus()
+OrgKdeKalarmKalarmdDaemonInterface* Daemon::daemonDBus()
 {
 	if (!mDBusDaemon)
-		mDBusDaemon = new org::kde::kalarm::daemon::Daemon(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, QDBusConnection::sessionBus());
+		mDBusDaemon = new org::kde::kalarm::kalarmd::Daemon(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, QDBusConnection::sessionBus());
 	return mDBusDaemon;
 }
 

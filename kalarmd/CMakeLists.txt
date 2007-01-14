@@ -10,7 +10,7 @@ set(kalarmd_SRCS
 	adapp.cpp 
 )
 
-qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarm.daemon.Daemon.xml alarmdaemon.h AlarmDaemon )
+qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarm.kalarmd.Daemon.xml alarmdaemon.h AlarmDaemon )
 qt4_add_dbus_interfaces( kalarmd_SRCS ../org.kde.kalarm.notify.xml )
 
 
@@ -27,4 +27,4 @@ install(TARGETS kalarmd  DESTINATION ${BIN_INSTALL_DIR} )
 
 install( FILES kalarmd.desktop  DESTINATION ${XDG_APPS_DIR})
 install( FILES kalarmd.autostart.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR})
-install( FILES org.kde.kalarm.daemon.Daemon.xml DESTINATION ${DBUS_INTERFACES_DIR})
+install( FILES org.kde.kalarm.kalarmd.Daemon.xml DESTINATION ${DBUS_INTERFACES_DIR})
