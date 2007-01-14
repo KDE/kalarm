@@ -43,6 +43,7 @@ DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
                              bool cancelButton, QWidget* parent)
 	: KDialog(parent)
 {
+	setWindowModality(Qt::WindowModal);
 	setCaption(caption);
 	setButtons(Ok | Cancel | User1);
 	setButtonGuiItem(User1, KGuiItem(i18n("Cancel &Deferral")));

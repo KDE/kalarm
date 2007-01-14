@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.cpp  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright (c) 2002, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2003,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,13 @@
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
 
+
+MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
+	: KMainWindow(parent, f),
+	  disableQuit(false)
+{
+	setWindowModality(Qt::WindowModal);
+}
 
 /******************************************************************************
 *  Called when a close event is received.
