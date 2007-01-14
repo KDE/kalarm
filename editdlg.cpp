@@ -2187,8 +2187,6 @@ TextEdit::TextEdit(QWidget* parent)
 	QSize tsize = sizeHint();
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
 	setMinimumSize(tsize);
-	setFrameStyle(NoFrame);
-	setLineWidth(0);
 }
 
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
