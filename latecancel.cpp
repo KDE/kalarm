@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	mTimeSelectorFrame = new QFrame();
 	mStack->addWidget(mTimeSelectorFrame);
 	vlayout = new QVBoxLayout(mTimeSelectorFrame);
+	vlayout->setMargin(0);
 	mTimeSelector = new TimeSelector(i18nc("Cancel if late by 10 minutes", "Ca&ncel if late by"), QString(),
 	                                 whatsThis, i18n("Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
