@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1197,9 +1197,9 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
-bool KAlarmApp::dcopHandleEvent(const QString& eventID, EventFunc function)
+bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 {
-	kDebug(5950) << "KAlarmApp::dcopHandleEvent(" << eventID << ")\n";
+	kDebug(5950) << "KAlarmApp::dbusHandleEvent(" << eventID << ")\n";
 	mDcopQueue.append(DcopQEntry(function, eventID));
 	if (mInitialised)
 		QTimer::singleShot(0, this, SLOT(processQueue()));

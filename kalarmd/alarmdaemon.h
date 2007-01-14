@@ -103,6 +103,7 @@ class AlarmDaemon : public QObject
 		QTimer*    mAlarmTimer;
 		int        mAlarmTimerSyncCount; // countdown to re-synching the alarm timer
 		bool       mAlarmTimerSyncing;   // true while alarm timer interval < 1 minute
+		bool       mAutoStarting;        // true while waiting to autostart KAlarm
 		bool       mClientStart;         // whether to notify events via command line if client app isn't running
 		bool       mEnabled;             // alarms are currently enabled
 };

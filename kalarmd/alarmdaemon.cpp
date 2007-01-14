@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright © 2001,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -71,6 +71,9 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	: QObject(parent),
 	  mDBusNotify(0),
 	  mAlarmTimer(0),
+#ifdef AUTOSTART_KALARM
+	  mAutoStarting(true),
+#endif
 	  mEnabled(true)
 {
 	kDebug(5900) << "AlarmDaemon::AlarmDaemon()" << endl;
@@ -116,8 +119,13 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		}
 	}
 	if (!autostart)
-#endif
+	{
+		mAutoStarting = false;
 		startMonitoring();    // otherwise, start monitoring alarms now
+	}
+#else
+	startMonitoring();    // otherwise, start monitoring alarms now
+#endif
 }
 
 AlarmDaemon::~AlarmDaemon()
@@ -170,6 +178,7 @@ void AlarmDaemon::autostartKAlarm()
 	args << QLatin1String("--tray");
 	KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
 
+	mAutoStarting = false;
 	startMonitoring();
 #endif
 }
@@ -179,6 +188,10 @@ void AlarmDaemon::autostartKAlarm()
 */
 void AlarmDaemon::startMonitoring()
 {
+#ifdef AUTOSTART_KALARM
+	if (mAutoStarting)
+		return;
+#endif
 	if (mClientName.isEmpty())
 		return;
 
@@ -558,6 +571,8 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 void AlarmDaemon::setTimerStatus()
 {
 #ifdef AUTOSTART_KALARM
+	if (mAutoStarting)
+		return;
         if (!mAlarmTimer)
         {
                 // KAlarm is now running, so start monitoring alarms

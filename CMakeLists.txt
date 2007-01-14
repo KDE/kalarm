@@ -91,7 +91,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    resourceselector.cpp
 )
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )
-#qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml notification.h NotificationHandler )
+qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml daemon_p.h NotificationHandler )
 qt4_add_dbus_interfaces(kalarm_bin_SRCS kalarmd/org.kde.kalarm.daemon.Daemon.xml )
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_SOURCE_DIR}/kmail/org.kde.kmail.kmail.xml )
 

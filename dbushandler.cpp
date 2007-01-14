@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,12 +55,12 @@ DBusHandler::DBusHandler()
 
 bool DBusHandler::cancelEvent(const QString& eventId)
 {
-	return theApp()->dcopDeleteEvent(eventId);
+	return theApp()->dbusDeleteEvent(eventId);
 }
 
 bool DBusHandler::triggerEvent(const QString& eventId)
 {
-	return theApp()->dcopTriggerEvent(eventId);
+	return theApp()->dbusTriggerEvent(eventId);
 }
 
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,

@@ -44,7 +44,7 @@ class Daemon : public QObject
 		~Daemon();
 		static void      initialise();
 		static void      createDcopHandler();
-		static bool      isDcopHandlerReady()    { return mDcopHandler; }
+		static bool      isDcopHandlerReady()    { return mDBusHandler; }
 		static AlarmEnableAction* createAlarmEnableAction(KActionCollection*);
 		static bool      start();
 		static bool      reregister()            { return registerWith(true); }
@@ -85,9 +85,9 @@ class Daemon : public QObject
 	private:
 		enum Status    // daemon status.  KEEP IN THIS ORDER!!
 		{
-			STOPPED,     // daemon is not registered with DCOP
-			RUNNING,     // daemon is newly registered with DCOP
-			READY,       // daemon is ready to accept DCOP calls
+			STOPPED,     // daemon is not registered with D-Bus
+			RUNNING,     // daemon is newly registered with D-Bus
+			READY,       // daemon is ready to accept D-Bus calls
 			REGISTERED   // we have registered with the daemon
 		};
 		Daemon() { }
@@ -106,7 +106,7 @@ class Daemon : public QObject
 		static OrgKdeKalarmDaemonDaemonInterface* daemonDBus();   // daemon's D-Bus interface
 
 		static Daemon*   mInstance;            // only one instance allowed
-		static NotificationHandler* mDcopHandler;  // handles DCOP requests from daemon
+		static NotificationHandler* mDBusHandler;  // handles D-Bus requests from daemon
 		static OrgKdeKalarmDaemonDaemonInterface* mDBusDaemon;   // daemon's D-Bus interface
 		static QList<QString>       mQueuedEvents; // IDs of pending events that daemon has triggered
 		static QList<QString>       mSavingEvents; // IDs of updated events that are currently being saved

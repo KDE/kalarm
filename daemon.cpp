@@ -40,35 +40,18 @@
 #include "alarmresources.h"
 #include "daemoninterface.h"
 #include "kalarmapp.h"
+#include "notifyadaptor.h"
 #include "preferences.h"
 #include "daemon.moc"
+#include "daemon_p.moc"
 
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's interface for notification by alarm daemon
 
 
-/*=============================================================================
-=  Class: NotificationHandler
-=  Handles the the alarm daemon's client notification D-Bus interface.
-=============================================================================*/
-
-class NotificationHandler : public QObject
-{
-		Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.notify")
-	public:
-		NotificationHandler();
-	public Q_SLOTS:
-		// D-Bus interface
-		Q_SCRIPTABLE void alarmDaemonUpdate(int calendarStatus);
-		Q_SCRIPTABLE void handleEvent(const QString& eventID);
-		Q_SCRIPTABLE void registered(bool reregister, int result);
-		Q_SCRIPTABLE void cacheDownloaded(const QString& resourceID);
-};
-
-
 Daemon*              Daemon::mInstance = 0;
-NotificationHandler* Daemon::mDcopHandler = 0;
+NotificationHandler* Daemon::mDBusHandler = 0;
 OrgKdeKalarmDaemonDaemonInterface* Daemon::mDBusDaemon = 0;
 QList<QString>       Daemon::mQueuedEvents;
 QList<QString>       Daemon::mSavingEvents;
@@ -115,9 +98,9 @@ void Daemon::initialise()
 */
 void Daemon::createDcopHandler()
 {
-	if (mDcopHandler)
+	if (mDBusHandler)
 		return;
-	mDcopHandler = new NotificationHandler();
+	mDBusHandler = new NotificationHandler();
 	// Check if the alarm daemon is running, but don't start it yet, since
 	// the program is still initialising.
 	mRunning = isRunning(false);
@@ -252,7 +235,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			// We've successfully registered with the daemon, but the daemon can't
 			// find the KAlarm executable so won't be able to restart KAlarm if
 			// KAlarm exits.
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
+			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call: " << kapp->aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
 			                            QLatin1String(DAEMON_APP_NAME),
@@ -260,7 +243,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			break;
 		case KAlarmd::FAILURE:
 		default:
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
+			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call failed -> " << result << endl;
 			if (!reregister)
 			{
 				if (mStatus == REGISTERED)
@@ -728,7 +711,8 @@ NotificationHandler::NotificationHandler()
 	: QObject()
 {
 	kDebug(5950) << "NotificationHandler::NotificationHandler()\n";
-	QDBusConnection::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this, QDBusConnection::ExportScriptableSlots);
+	(void)new NotifyAdaptor(this);
+	QDBusConnection::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this);
 }
 
 /******************************************************************************
@@ -774,7 +758,7 @@ void NotificationHandler::handleEvent(const QString& eventId)
 		id = id.mid(3);
 		Daemon::queueEvent(id);
 	}
-	theApp()->dcopHandleEvent(id);
+	theApp()->dbusHandleEvent(id);
 }
 
 /******************************************************************************
