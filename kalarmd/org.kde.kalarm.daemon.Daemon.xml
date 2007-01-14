@@ -2,40 +2,50 @@
 <node>
   <interface name="org.kde.kalarm.daemon.Daemon">
     <method name="enableAutoStart">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="enable" type="b" direction="in"/>
     </method>
     <method name="enable">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="enable" type="b" direction="in"/>
     </method>
     <method name="reloadResource">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
     </method>
     <method name="resetResource">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
     </method>
     <method name="resourceActive">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
       <arg name="active" type="b" direction="in"/>
     </method>
     <method name="resourceLocation">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
       <arg name="locn" type="s" direction="in"/>
       <arg name="locn2" type="s" direction="in"/>
     </method>
     <method name="registerApp">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="appName" type="s" direction="in"/>
       <arg name="dbusObject" type="s" direction="in"/>
       <arg name="startClient" type="b" direction="in"/>
     </method>
     <method name="registerChange">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="appName" type="s" direction="in"/>
       <arg name="startClient" type="b" direction="in"/>
     </method>
     <method name="eventHandled">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
       <arg name="reload" type="b" direction="in"/>
     </method>
     <method name="quit">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
     </method>
   </interface>
 </node>

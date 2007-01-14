@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"
+#include "daemoninterface.h"
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "daemon.moc"
@@ -45,7 +46,6 @@
 
 static const int    REGISTER_TIMEOUT = 20;     // seconds to wait before assuming registration with daemon has failed
 static const char*  NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's interface for notification by alarm daemon
-static const char*  DAEMON_DBUS_IFACE   = "org.kde.kalarm.daemon.Daemon";
 
 
 /*=============================================================================
@@ -69,7 +69,7 @@ class NotificationHandler : public QObject
 
 Daemon*              Daemon::mInstance = 0;
 NotificationHandler* Daemon::mDcopHandler = 0;
-QDBusInterface*      Daemon::mDBusDaemon = 0;
+OrgKdeKalarmDaemonDaemonInterface* Daemon::mDBusDaemon = 0;
 QList<QString>       Daemon::mQueuedEvents;
 QList<QString>       Daemon::mSavingEvents;
 QTimer*              Daemon::mStartTimer = 0;
@@ -130,20 +130,24 @@ void Daemon::createDcopHandler()
 	mStatusTimer->start(mStatusTimerInterval * 1000);  // check regularly if daemon is running
 }
 
-/******************************************************************************
-* Send a message to the daemon, without waiting for a reply.
-*/
-bool Daemon::sendDaemon(const QString& method, const QList<QVariant>& args)
+OrgKdeKalarmDaemonDaemonInterface* Daemon::daemonDBus()
 {
 	if (!mDBusDaemon)
-		mDBusDaemon = new QDBusInterface(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, DAEMON_DBUS_IFACE);
-	QDBusError err = mDBusDaemon->callWithArgumentList(QDBus::NoBlock, method, args);
-	if (err.isValid())
-	{
-		kError(5950) << "Daemon::sendDaemon(" << method << "): D-Bus call failed: " << err.message() << endl;
-		return false;
-	}
-	return true;
+		mDBusDaemon = new org::kde::kalarm::daemon::Daemon(DAEMON_DBUS_SERVICE, DAEMON_DBUS_OBJECT, QDBusConnection::sessionBus());
+	return mDBusDaemon;
+}
+
+/******************************************************************************
+* Check for and handle any D-Bus error on the last operation.
+* Reply = true if ok, false if error.
+*/
+bool Daemon::checkDBusResult(const char* funcname)
+{
+	QDBusError err = mDBusDaemon->lastError();
+	if (!err.isValid())
+		return true;    // no error
+	kError(5950) << "Daemon: " << funcname << "() D-Bus call failed: " << err.message() << endl;
+	return false;
 }
 
 /******************************************************************************
@@ -208,18 +212,16 @@ bool Daemon::registerWith(bool reregister)
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
-	QList<QVariant> args;
-	args << kapp->aboutData()->appName();
 	bool result;
 	if (reregister)
 	{
-		args << !disabledIfStopped;
-		result = sendDaemon(QLatin1String("registerChange"), args);
+		daemonDBus()->registerChange(kapp->aboutData()->appName(), !disabledIfStopped);
+		result = checkDBusResult("registerChange");
 	}
 	else
 	{
-		args << QString(NOTIFY_DBUS_OBJECT) << !disabledIfStopped;
-		result = sendDaemon(QLatin1String("registerApp"), args);
+		daemonDBus()->registerApp(kapp->aboutData()->appName(), QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
+		result = checkDBusResult("registerApp");
 	}
 	if (!result)
 	{
@@ -387,12 +389,10 @@ void Daemon::connectRegistered(QObject* receiver, const char* slot)
 bool Daemon::stop()
 {
 	kDebug(5950) << "Daemon::stop()" << endl;
-	if (isDaemonRegistered())
-	{
-		if (!sendDaemon(QLatin1String("quit"), QList<QVariant>()))
-			return false;
-	}
-	return true;
+	if (!isDaemonRegistered())
+		return true;
+	daemonDBus()->quit();
+	return checkDBusResult("quit");
 }
 
 /******************************************************************************
@@ -405,9 +405,7 @@ bool Daemon::reset()
 	kDebug(5950) << "Daemon::reset()" << endl;
 	if (!isDaemonRegistered())
 		return false;
-	QList<QVariant> args;
-	args << QString();
-	sendDaemon(QLatin1String("resetResource"), args);
+	daemonDBus()->resetResource(QString());
 	return true;
 }
 
@@ -417,9 +415,8 @@ bool Daemon::reset()
 void Daemon::reload()
 {
 	kDebug(5950) << "Daemon::reload()\n";
-	QList<QVariant> args;
-	args << QString();
-	sendDaemon(QLatin1String("reloadResource"), args);
+	daemonDBus()->reloadResource(QString());
+	checkDBusResult("reloadResource");
 }
 
 /******************************************************************************
@@ -428,9 +425,8 @@ void Daemon::reload()
 void Daemon::reloadResource(const QString& resourceID)
 {
 	kDebug(5950) << "Daemon::reloadResource(" << resourceID << ")\n";
-	QList<QVariant> args;
-	args << resourceID;
-	if (!sendDaemon(QLatin1String("reloadResource"), args))
+	daemonDBus()->reloadResource(resourceID);
+	if (!checkDBusResult("reloadResource"))
 		kError(5950) << "Daemon::reloadResource(): reloadResource(" << resourceID << ") D-Bus send failed" << endl;
 }
 
@@ -439,9 +435,8 @@ void Daemon::reloadResource(const QString& resourceID)
 */
 void Daemon::enableCalendar(bool enable)
 {
-	QList<QVariant> args;
-	args << enable;
-	sendDaemon(QLatin1String("enable"), args);
+	daemonDBus()->enable(enable);
+	checkDBusResult("enable");
 	mEnableCalPending = false;
 }
 
@@ -451,9 +446,8 @@ void Daemon::enableCalendar(bool enable)
 void Daemon::enableAutoStart(bool enable)
 {
 	// Tell the alarm daemon in case it is running.
-	QList<QVariant> args;
-	args << enable;
-	if (!sendDaemon(QLatin1String("enableAutoStart"), args))
+	daemonDBus()->enableAutoStart(enable);
+	if (!checkDBusResult("enableAutoStart"))
 #ifdef __GNUC__
 #warning Check that false is returned if daemon isn't running
 #endif
@@ -641,9 +635,8 @@ void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::
 	{
 		case AlarmResources::Enabled:
 		{
-			QList<QVariant> args;
-			args << resource->identifier() << resource->isActive();
-			sendDaemon(QLatin1String("resourceActive"), args);
+			daemonDBus()->resourceActive(resource->identifier(), resource->isActive());
+			checkDBusResult("resourceActive");
 			break;
 		}
 		case AlarmResources::Location:
@@ -652,9 +645,8 @@ void Daemon::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::
 			if (locs.isEmpty())
 				break;
 			locs += QString();    // to avoid having to check index
-			QList<QVariant> args;
-			args << resource->identifier() << locs[0] << locs[1];
-			sendDaemon(QLatin1String("resourceLocation"), args);
+			daemonDBus()->resourceLocation(resource->identifier(), locs[0], locs[1]);
+			checkDBusResult("resourceLocation");
 			break;
 		}
 		default:
@@ -705,9 +697,8 @@ void Daemon::eventHandled(const QString& eventId)
 void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
 {
 	kDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
-	QList<QVariant> args;
-	args << eventId << reloadCal;
-	sendDaemon(QLatin1String("eventHandled"), args);
+	daemonDBus()->eventHandled(eventId, reloadCal);
+	checkDBusResult("eventHandled");
 }
 
 /******************************************************************************

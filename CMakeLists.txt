@@ -90,8 +90,9 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    resourceconfigdialog.cpp
    resourceselector.cpp
 )
-qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.request.xml dbushandler.h DBusHandler )
+qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )
 #qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml notification.h NotificationHandler )
+qt4_add_dbus_interfaces(kalarm_bin_SRCS kalarmd/org.kde.kalarm.daemon.Daemon.xml )
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_SOURCE_DIR}/kmail/org.kde.kmail.kmail.xml )
 
 kde4_automoc(${kalarm_bin_SRCS})
@@ -109,7 +110,7 @@ install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR} )
 install( FILES kalarm.tray.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR} )
 install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm )
-install( FILES org.kde.kalarm.notify.xml org.kde.kalarm.request.xml DESTINATION ${DBUS_INTERFACES_DIR} )
+install( FILES org.kde.kalarm.notify.xml org.kde.kalarm.kalarm.xml DESTINATION ${DBUS_INTERFACES_DIR} )
 
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

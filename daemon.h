@@ -1,7 +1,7 @@
 /*
  *  daemon.h  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 
 #include "alarmresources.h"
 
-class QDBusInterface;
+class OrgKdeKalarmDaemonDaemonInterface;
 class KActionCollection;
 class AlarmCalendar;
 class AlarmEnableAction;
@@ -101,12 +101,13 @@ class Daemon : public QObject
 		static bool      checkIfRunning();
 		static void      setFastCheck();
 		static void      setStatus(Status);
-		static bool      sendDaemon(const QString& method, const QList<QVariant>& args);
 		static bool      isDaemonRegistered();
+		static bool      checkDBusResult(const char* funcname);
+		static OrgKdeKalarmDaemonDaemonInterface* daemonDBus();   // daemon's D-Bus interface
 
 		static Daemon*   mInstance;            // only one instance allowed
 		static NotificationHandler* mDcopHandler;  // handles DCOP requests from daemon
-		static QDBusInterface*      mDBusDaemon;   // daemon's D-Bus interface
+		static OrgKdeKalarmDaemonDaemonInterface* mDBusDaemon;   // daemon's D-Bus interface
 		static QList<QString>       mQueuedEvents; // IDs of pending events that daemon has triggered
 		static QList<QString>       mSavingEvents; // IDs of updated events that are currently being saved
 		static QTimer*   mStartTimer;          // timer to check daemon status after starting daemon

@@ -32,7 +32,7 @@ class KARecurrence;
 class DBusHandler : public QObject, public KAlarmIface
 {
 	Q_OBJECT
-	Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.request")
+	Q_CLASSINFO("D-Bus Interface", "org.kde.kalarm.kalarm")
     public:
 	DBusHandler();
 

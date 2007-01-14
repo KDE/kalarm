@@ -41,6 +41,7 @@
 #include <ktoolinvocation.h>
 
 #include "alarmguiiface.h"
+#include "notifyinterface.h"
 #include "resources/alarmresources.h"
 #include "alarmdaemon.moc"
 
@@ -59,7 +60,6 @@ const char* DCOP_OBJECT_KEY  = "DCOP object";
 const char* START_CLIENT_KEY = "Start";
 
 static const char* KALARM_DBUS_SERVICE = "org.kde.kalarm";
-static const char* NOTIFY_DBUS_IFACE   = "org.kde.kalarm.notify";
 static const char* NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's notification interface
 
 
@@ -134,20 +134,24 @@ void AlarmDaemon::quit()
 	exit(0);
 }
 
-/******************************************************************************
-* Send a notification to KAlarm, without waiting for a reply.
-*/
-bool AlarmDaemon::kalarmNotify(const QString& method, const QList<QVariant>& args)
+OrgKdeKalarmNotifyInterface* AlarmDaemon::kalarmNotifyDBus()
 {
 	if (!mDBusNotify)
-		mDBusNotify = new QDBusInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_IFACE);
-	QDBusError err = mDBusNotify->callWithArgumentList(QDBus::NoBlock, method, args);
-	if (err.isValid())
-	{
-		kError(5900) << "AlarmDaemon::kalarmNotify(" << method << "): D-Bus call failed: " << err.message() << endl;
-		return false;
-	}
-	return true;
+		mDBusNotify = new org::kde::kalarm::notify(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, QDBusConnection::sessionBus());
+	return mDBusNotify;
+}
+
+/******************************************************************************
+* Check for and handle any D-Bus error on the last operation.
+* Reply = true if ok, false if error.
+*/
+bool AlarmDaemon::checkDBusResult(const char* funcname)
+{
+	QDBusError err = mDBusNotify->lastError();
+	if (!err.isValid())
+		return true;    // no error
+	kError(5950) << "AlarmDaemon: " << funcname << "() D-Bus call failed: " << err.message() << endl;
+	return false;
 }
 
 /******************************************************************************
@@ -284,9 +288,8 @@ void AlarmDaemon::reloadResource(AlarmResource* resource, bool reset)
 */
 void AlarmDaemon::cacheDownloaded(AlarmResource* resource)
 {
-	QList<QVariant> args;
-	args << resource->identifier();
-	kalarmNotify(QLatin1String("cacheDownloaded"), args);
+	kalarmNotifyDBus()->cacheDownloaded(resource->identifier());
+	checkDBusResult("cacheDownloaded");
 	kDebug(5900) << "AlarmDaemon::cacheDownloaded(" << resource->identifier() << ")\n";
 }
 
@@ -397,9 +400,8 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 	}
 
 	// Notify the client of whether the call succeeded.
-	QList<QVariant> args;
-	args << false << result;
-	kalarmNotify(QLatin1String("registered"), args);
+	kalarmNotifyDBus()->registered(false, result);
+	checkDBusResult("registered");
 	kDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
 }
 
@@ -543,9 +545,8 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	else
 	{
 		// Notify the client by telling it the event ID
-		QList<QVariant> args;
-		args << id;
-		if (!kalarmNotify(QLatin1String("handleEvent"), args))
+		kalarmNotifyDBus()->handleEvent(id);
+		if (!checkDBusResult("handleEvent"))
 			return;
 	}
 	setEventPending(event, alarmtimes);
@@ -596,9 +597,8 @@ void AlarmDaemon::notifyCalStatus()
 		KAlarmd::CalendarStatus change = unloaded ? KAlarmd::CALENDAR_UNAVAILABLE
 		                               : mEnabled ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED;
 		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << mClientName << " -> " << change << endl;
-		QList<QVariant> args;
-		args << change;
-		kalarmNotify(QLatin1String("alarmDaemonUpdate"), args);
+		kalarmNotifyDBus()->alarmDaemonUpdate(change);
+		checkDBusResult("alarmDaemonUpdate");
 	}
 }
 

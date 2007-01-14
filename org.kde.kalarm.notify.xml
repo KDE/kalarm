@@ -2,16 +2,20 @@
 <node>
   <interface name="org.kde.kalarm.notify">
     <method name="alarmDaemonUpdate">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="calendarStatus" type="i" direction="in"/>
     </method>
     <method name="handleEvent">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="eventID" type="s" direction="in"/>
     </method>
     <method name="registered">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="reregister" type="b" direction="in"/>
       <arg name="result" type="i" direction="in"/>
     </method>
     <method name="cacheDownloaded">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="resourceID" type="s" direction="in"/>
     </method>
   </interface>

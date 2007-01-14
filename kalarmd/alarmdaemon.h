@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.h  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright © 2001,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 
 #include <kcal/calendarlocal.h>
 
-class QDBusInterface;
+class OrgKdeKalarmNotifyInterface;
 class AlarmResource;
 
 
@@ -82,7 +82,8 @@ class AlarmDaemon : public QObject
 		void    notifyCalStatus();
 		bool    isClientRegistered() const;
 		void    setTimerStatus();
-		bool    kalarmNotify(const QString& method, const QList<QVariant>& args);
+		OrgKdeKalarmNotifyInterface* kalarmNotifyDBus();
+		bool    checkDBusResult(const char* funcname);
 
 		void    setEventPending(const KCal::Event*, const QList<KDateTime>&);
 		void    setEventHandled(const QString& eventID);
@@ -95,7 +96,7 @@ class AlarmDaemon : public QObject
 		static EventsMap  mEventsHandled;  // IDs of already triggered events which have been processed by KAlarm
 		static EventsMap  mEventsPending;  // IDs of already triggered events not yet processed by KAlarm
 
-		QDBusInterface* mDBusNotify;     // client's notification D-Bus interface
+		OrgKdeKalarmNotifyInterface* mDBusNotify;     // client's notification D-Bus interface
 		QString    mClientName;          // client's executable and DCOP name
 		QString    mClientDBusObj;       // object path to receive D-Bus messages
 		QString    mClientExe;           // client executable path (if mClientStart true)

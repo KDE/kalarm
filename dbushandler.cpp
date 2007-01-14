@@ -37,8 +37,8 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "dbushandler.moc"
-#include <requestadaptor.h>
-static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of KAlarm's request interface
+#include <kalarmadaptor.h>
+static const char* REQUEST_DBUS_OBJECT = "/kalarm";   // D-Bus object path of KAlarm's request interface
 
 
 /*=============================================================================
@@ -48,7 +48,7 @@ static const char* REQUEST_DBUS_OBJECT = "/request";   // D-Bus object path of K
 DBusHandler::DBusHandler()
 {
 	kDebug(5950) << "DBusHandler::DBusHandler()\n";
-	new RequestAdaptor(this);
+	new KalarmAdaptor(this);
 	QDBusConnection::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
 
