@@ -951,7 +951,7 @@ KAEvent AlarmCalendar::templateEvent(const QString& templateName)
 
 /******************************************************************************
 * Return all events in the calendar which contain alarms.
-* Optionally the event type can be filtered.
+* Optionally the event type can be filtered, using an OR of event types.
 */
 KCal::Event::List AlarmCalendar::events(KCalEvent::Status type)
 {
@@ -962,7 +962,7 @@ KCal::Event::List AlarmCalendar::events(KCalEvent::Status type)
 	{
 		KCal::Event* event = list[i];
 		if (event->alarms().isEmpty()
-		||  type != KCalEvent::EMPTY  &&  type != KCalEvent::status(event))
+		||  type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event)))
 			list.removeAt(i);
 		else
 			++i;
@@ -972,6 +972,7 @@ KCal::Event::List AlarmCalendar::events(KCalEvent::Status type)
 
 /******************************************************************************
 * Return all events which have alarms falling within the specified time range.
+* 'type' is the OR'ed desired event types.
 */
 Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status type)
 {
@@ -984,7 +985,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 	for (int i = 0, end = allEvents.count();  i < end;  ++i)
 	{
 		Event* e = allEvents[i];
-		if (KCalEvent::status(e) != type)
+		if (type != KCalEvent::EMPTY  &&  !(KCalEvent::status(e) & type))
 			continue;
 		bool recurs = e->doesRecur();
 		int  endOffset = 0;

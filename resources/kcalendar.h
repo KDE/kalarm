@@ -46,11 +46,11 @@ class KDE_EXPORT KCalEvent
 		/** The category of an event, indicated by the middle part of its UID. */
 		enum Status
 		{
-			EMPTY,       // the event has no alarms
-			ACTIVE,      // the event is currently active
-			ARCHIVED,    // the event is archived
-			DISPLAYING,  // the event is currently being displayed
-			TEMPLATE     // the event is an alarm template
+			EMPTY      = 0,       // the event has no alarms
+			ACTIVE     = 0x01,    // the event is currently active
+			ARCHIVED   = 0x02,    // the event is archived
+			TEMPLATE   = 0x04,    // the event is an alarm template
+			DISPLAYING = 0x08     // the event is currently being displayed
 		};
 
 		static QString uid(const QString& id, Status);
