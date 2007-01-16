@@ -44,6 +44,7 @@
 #include <ktemporaryfile.h>
 #include <kemailsettings.h>
 #include <kdebug.h>
+#include <kresolver.h>
 
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
@@ -68,11 +69,6 @@ bool parseAddress( const char* & scursor, const char * const send,
                    KMime::Types::Address & result, bool isCRLF=false );
 bool parseAddressList( const char* & scursor, const char * const send,
                        QList<KMime::Types::Address> & result, bool isCRLF=false );
-}
-
-namespace
-{
-QString getHostName();
 }
 
 struct KAMailData
@@ -448,7 +444,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 {
 	KMime::Types::Address addr;
 	QString localhost = QLatin1String("localhost");
-	QString hostname  = getHostName();
+	QString hostname  = KNetwork::KResolver::localHostName();
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (int i = 0, end = addresses.count();  i < end;  ++i)
 	{
@@ -772,21 +768,6 @@ QString KAMail::getMailBody(quint32 serialNumber)
 	}
 	return reply.value();
 }
-
-namespace
-{
-/******************************************************************************
-* Get the local system's host name.
-*/
-QString getHostName()
-{
-        char hname[256];
-        if (gethostname(hname, sizeof(hname)))
-                return QString();
-        return QString::fromLocal8Bit(hname);
-}
-}
-
 
 /*=============================================================================
 =  HeaderParsing :  modified and additional functions.
