@@ -2,12 +2,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KAlarm Daemon
+Name[el]=Δαίμονας KAlarm
 Name[fr]=Démon d'alarme
 Name[x-test]=xxKAlarm Daemonxx
 Exec=kalarmd --autostart
 Icon=kalarmd
 Type=Application
 Comment=KAlarm alarm daemon autostart at login
+Comment[el]=Αυτόματη εκκίνηση του δαίμονα KAlarm κατά τη σύνδεση
 Comment[fr]=Le démon d'alarme de KOrganizer et de KAlarm démarre automatiquement lors de la connexion
 Comment[x-test]=xxKAlarm alarm daemon autostart at loginxx
 Terminal=false
