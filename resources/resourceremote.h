@@ -31,6 +31,8 @@
 
 #include "alarmresource.h"
 
+class KJob;
+
 namespace KIO {
   class FileCopyJob;
   class Job;
@@ -79,7 +81,7 @@ class KDE_EXPORT KAResourceRemote : public AlarmResource
 	private slots:
 		void slotLoadJobResult(KIO::Job*);
 		void slotSaveJobResult(KIO::Job*);
-		void slotPercent(KIO::Job*, unsigned long percent);
+		void slotPercent(KJob*, unsigned long percent);
 
 	private:
 		void init();

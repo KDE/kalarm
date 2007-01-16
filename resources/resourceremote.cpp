@@ -139,12 +139,18 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading..." << endl;
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, (mShowProgress && hasGui()));
-		connect(mDownloadJob, SIGNAL(result(KIO::Job*)), SLOT(slotLoadJobResult(KIO::Job*)));
+		connect(mDownloadJob, SIGNAL(result(KJob*)), SLOT(slotLoadJobResult(KJob*)));
+
+#ifdef __GNUC__
+#warning If you commented this because of issues with signals/slots, please uncomment the code and you are done
+#warning otherwise delete this warning, thank you (ereslibre)
+#endif
+
 #if 0
 		if (mShowProgress  &&  hasGui())
 		{
-			connect(mDownloadJob, SIGNAL(percent(KIO::Job*, unsigned long)),
-					      SLOT(slotPercent(KIO::Job*, unsigned long)));
+			connect(mDownloadJob, SIGNAL(percent(KJob*, unsigned long)),
+					      SLOT(slotPercent(KJob*, unsigned long)));
 			emit downloading(this, 0);
 		}
 #endif
@@ -157,8 +163,12 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	return true;
 }
 
-void KAResourceRemote::slotPercent(KIO::Job*, unsigned long percent)
+void KAResourceRemote::slotPercent(KJob*, unsigned long percent)
 {
+#ifdef __GNUC__
+#warning same with this (ereslibre)
+#endif
+
 #if 0
 	emit downloading(this, percent);
 #endif
@@ -247,7 +257,7 @@ bool KAResourceRemote::doSave(bool syncCache)
 	if (syncCache)
 	{
 		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true, false, hasGui());
-		connect(mUploadJob, SIGNAL(result(KIO::Job*)), SLOT(slotSaveJobResult(KIO::Job*)));
+		connect(mUploadJob, SIGNAL(result(KJob*)), SLOT(slotSaveJobResult(KJob*)));
 	}
 	return true;
 }
