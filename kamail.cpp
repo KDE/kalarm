@@ -294,7 +294,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		QList<QVariant> args;
 		args << QString::fromLatin1(folder) << tmpFile.fileName();
 		org::kde::kmail::kmail kmail("org.kde.kmail", "/KMail", QDBusConnection::sessionBus());
-		QDBusReply<int> reply = kmail.dcopAddMessage(QString::fromLatin1(folder),tmpFile.fileName(),QString());
+		QDBusReply<int> reply = kmail.dbusAddMessage(QString::fromLatin1(folder),tmpFile.fileName(),QString());
 		if (!reply.isValid())
 			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call failed: " << reply.error().message() << endl;
 		else if (reply.value() <= 0)
