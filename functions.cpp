@@ -68,8 +68,8 @@ QString       korganizerName    = "korganizer";
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
 
-const char*   KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
-const char*   KMAIL_DCOP_WINDOW = "kmail-mainwindow#1";
+const char*   KORG_DCOP_WINDOW  = "MainWindow_1";
+const char*   KMAIL_DCOP_WINDOW = "kmail_mainwindow1";
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KORG_DBUS_SERVICE = "org.kde.korganizer";
 static const char* KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
