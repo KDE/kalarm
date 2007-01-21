@@ -198,7 +198,8 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mRescheduleEvent(!(flags & NO_RESCHEDULE)),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
@@ -249,7 +250,8 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
@@ -276,7 +278,8 @@ MessageWin::MessageWin()
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin()\n";
 	setAttribute(WidgetFlags);
@@ -1305,7 +1308,7 @@ void MessageWin::enableButtons()
 {
 	mOkButton->setEnabled(true);
 	mKAlarmButton->setEnabled(true);
-	if (mDeferButton)
+	if (mDeferButton  &&  !mDisableDeferral)
 		mDeferButton->setEnabled(true);
 	if (mEditButton)
 		mEditButton->setEnabled(true);
@@ -1438,6 +1441,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 	{
 		mDeferLimit = event.deferralLimit().effectiveDateTime();
 		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+		mDisableDeferral = false;
 		checkDeferralLimit();
 	}
 }
@@ -1470,6 +1474,7 @@ void MessageWin::checkDeferralLimit()
 		}
 	}
 	mDeferButton->setEnabled(false);
+	mDisableDeferral = true;
 }
 
 /******************************************************************************

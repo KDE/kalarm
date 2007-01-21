@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -153,6 +153,7 @@ class MessageWin : public MainWindowBase
 		bool                mShown;           // true once the window has been displayed
 		bool                mPositioning;     // true when the window is being positioned initially
 		bool                mNoCloseConfirm;  // the Defer or Edit button is closing the dialog
+		bool                mDisableDeferral; // true if past deferral limit, so don't enable Defer button
 };
 
 #endif // MESSAGEWIN_H
