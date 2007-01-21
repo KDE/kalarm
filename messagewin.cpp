@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -175,7 +175,8 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mRescheduleEvent(reschedule_event),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	// Set to save settings automatically, but don't save window size.
@@ -218,7 +219,8 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	initView();
@@ -244,7 +246,8 @@ MessageWin::MessageWin()
 	  mRescheduleEvent(false),
 	  mShown(false),
 	  mPositioning(false),
-	  mNoCloseConfirm(false)
+	  mNoCloseConfirm(false),
+	  mDisableDeferral(false)
 {
 	kdDebug(5950) << "MessageWin::MessageWin()\n";
 	mWindowList.append(this);
@@ -1325,7 +1328,7 @@ void MessageWin::enableButtons()
 {
 	mOkButton->setEnabled(true);
 	mKAlarmButton->setEnabled(true);
-	if (mDeferButton)
+	if (mDeferButton  &&  !mDisableDeferral)
 		mDeferButton->setEnabled(true);
 	if (mEditButton)
 		mEditButton->setEnabled(true);
@@ -1466,6 +1469,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 	{
 		mDeferLimit = event.deferralLimit().dateTime();
 		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+		mDisableDeferral = false;
 		checkDeferralLimit();
 	}
 }
@@ -1498,6 +1502,7 @@ void MessageWin::checkDeferralLimit()
 		}
 	}
 	mDeferButton->setEnabled(false);
+	mDisableDeferral = true;
 }
 
 /******************************************************************************

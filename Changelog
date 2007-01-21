@@ -1,6 +1,10 @@
 KAlarm
 
-=== Version 1.4.9 --- 3 January 2007 ===
+=== Version 1.4.10 --- 20 January 2007 ===
+Disable Defer button in new message window when deferral limit has been reached.
+
+=== Version 1.4.9 (KDE 3.5.6) --- 3 January 2007 ===
+Minor changes.
 
 === Version 1.4.8 --- 28 December 2006 ===
 Fix Find always using first search text entered even after entering a new one.

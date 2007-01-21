@@ -1,7 +1,7 @@
 /*
  *  kalarm.h  -  global header file
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include <config.h>
 #endif
 
-#define KALARM_VERSION "1.4.9"
+#define KALARM_VERSION "1.4.10"
 #define KALARM_NAME "KAlarm"
 
 #include <kdeversion.h>
