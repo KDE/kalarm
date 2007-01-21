@@ -68,8 +68,8 @@ QString       korganizerName    = "korganizer";
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
 
-const char*   KORG_DCOP_WINDOW  = "MainWindow_1";
-const char*   KMAIL_DCOP_WINDOW = "kmail_mainwindow1";
+const char*   KORG_DBUS_WINDOW  = "MainWindow_1";
+const char*   KMAIL_DBUS_WINDOW = "kmail_mainwindow1";
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KORG_DBUS_SERVICE = "org.kde.korganizer";
 static const char* KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
@@ -900,13 +900,13 @@ QString runKMail(bool minimise)
 {
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
-	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DCOP_WINDOW) : QString()), dbusService, errmsg))
+	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
 		return i18n("Unable to start KMail\n(%1)", errmsg);
 	return QString();
 }
 
 /******************************************************************************
-*  Start another program for DCOP access if it isn't already running.
+*  Start another program for D-Bus access if it isn't already running.
 *  If 'windowName' is not empty, the program's window of that name is iconised.
 *  On exit, 'errorMessage' contains an error message if failure.
 *  Reply = true if the program is now running.
@@ -1298,7 +1298,7 @@ bool deleteFromKOrganizer(const QString& eventID)
 bool runKOrganizer()
 {
 	QString dbusService = KORG_DBUS_SERVICE;
-	if (!KAlarm::runProgram(QLatin1String("korganizer"), KORG_DCOP_WINDOW, dbusService, korgStartError))
+	if (!KAlarm::runProgram(QLatin1String("korganizer"), KORG_DBUS_WINDOW, dbusService, korgStartError))
 		return false;
 	if (korgInterface  &&  !korgInterface->isValid())
 	{
