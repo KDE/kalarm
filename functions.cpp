@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -595,8 +595,8 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 			KAEvent oldEvent = event;    // so that we can reinstate the event if there's an error
 			QString oldid = event.id();
 			event.setCategory(KCalEvent::ACTIVE);    // this changes the event ID
-			if (event.recurs())
-				event.setNextOccurrence(now, true);   // skip any recurrences in the past
+			if (event.recurs()  ||  event.repeatCount())
+				event.setNextOccurrence(now);   // skip any recurrences in the past
 			event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 			// Save the event details in the calendar file.

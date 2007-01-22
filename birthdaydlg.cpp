@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -345,8 +345,8 @@ QList<KAEvent> BirthdayDlg::events() const
 				QList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
-				event.setNextOccurrence(todayStart, true);
 				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
+				event.setNextOccurrence(todayStart);
 				if (reminder)
 					event.setReminder(reminder, false);
 				if (mSpecialActionsButton)
