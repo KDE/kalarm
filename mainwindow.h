@@ -54,7 +54,7 @@ class ResourceSelector;
 class AlarmResources;
 
 
-class MainWindow : public MainWindowBase, public KCal::Calendar::Observer
+class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserver
 {
 		Q_OBJECT
 
