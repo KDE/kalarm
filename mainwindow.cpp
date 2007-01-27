@@ -64,7 +64,6 @@
 #include "alarmtext.h"
 #include "birthdaydlg.h"
 #include "daemon.h"
-#include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"

@@ -30,7 +30,6 @@
 
 #include "alarmevent.h"
 #include "alarmresources.h"
-#include "alarmtext.h"
 #include "mainwindowbase.h"
 #include "undo.h"
 
@@ -41,7 +40,6 @@ class QResizeEvent;
 class QDropEvent;
 class QCloseEvent;
 class QModelIndex;
-class Q3ListViewItem;
 class QSplitter;
 class QMenu;
 class KAction;
@@ -54,7 +52,6 @@ class AlarmListView;
 class TemplateDlg;
 class TemplateMenuAction;
 class ResourceSelector;
-class AlarmResources;
 
 
 class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserver
@@ -66,7 +63,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		~MainWindow();
 		bool               isTrayParent() const;
 		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
-		bool               showingArchived() const       { return mShowArchived; }
+		bool               showingArchived() const      { return mShowArchived; }
 		void               selectEvent(const QString& eventID);
 
 		static void        refresh();
