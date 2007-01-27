@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,680 +20,238 @@
 
 #include "kalarm.h"
 
-#include <QToolTip>
-#include <QPainter>
-#include <QStyle>
-#include <QRegExp>
-//Added by qt3to4:
-#include <q3header.h>
-#include <QPixmap>
-#include <QList>
+#include <QHeaderView>
 #include <QMouseEvent>
+#include <QApplication>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <kcal/icaldrag.h>
-#include <kcal/calendarlocal.h>
-#include <kcal/dndfactory.h>
-
-#include "alarmcalendar.h"
-#include "alarmtext.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "preferences.h"
+#include "eventlistmodel.h"
+#include "alarmlistfiltermodel.h"
 #include "alarmlistview.moc"
 
 
-/*=============================================================================
-=  Class: AlarmListView
-=  Displays the list of outstanding alarms.
-=============================================================================*/
-QList<EventListViewBase*>  AlarmListView::mInstanceList;
-bool                       AlarmListView::mDragging = false;
-
-
-AlarmListView::AlarmListView(const QList<int>& order, QWidget* parent)
-	: EventListViewBase(parent),
-	  mMousePressed(false),
-	  mDrawMessageInColour(false),
-	  mShowArchived(false)
+AlarmListView::AlarmListView(QWidget* parent)
+	: QTreeView(parent)
 {
-	static QString titles[COLUMN_COUNT] = {
-		i18n("Time"),
-		i18n("Time To"),
-		i18n("Repeat"),
-		QString(),
-		QString(),
-		i18n("Message, File or Command")
-	};
+	setRootIsDecorated(false);    // don't show expander icons for child-less items
+	setSortingEnabled(true);
+	setAllColumnsShowFocus(true);
+	setSelectionMode(ExtendedSelection);
+	setSelectionBehavior(SelectRows);
+	setTextElideMode(Qt::ElideRight);
+}
 
-	setSelectionMode(Q3ListView::Extended);
+void AlarmListView::setModel(QAbstractItemModel* model)
+{
+	QTreeView::setModel(model);
+	header()->setMovable(true);
+	header()->setStretchLastSection(false);
+	header()->setResizeMode(EventListModel::TimeColumn, QHeaderView::ResizeToContents);
+	header()->setResizeMode(EventListModel::TimeToColumn, QHeaderView::ResizeToContents);
+	header()->setResizeMode(EventListModel::RepeatColumn, QHeaderView::ResizeToContents);
+	header()->setResizeMode(EventListModel::ColourColumn, QHeaderView::Fixed);
+	header()->setResizeMode(EventListModel::TypeColumn, QHeaderView::Fixed);
+	header()->setResizeMode(EventListModel::TextColumn, QHeaderView::Stretch);
+	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+	header()->resizeSection(EventListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
+	header()->resizeSection(EventListModel::TypeColumn, EventListModel::instance()->iconWidth() + 2*margin + 2);
+}
 
+void AlarmListView::setColumnOrder(const QList<int>& order)
+{
 	// Set the column order
-	int i;
-	bool ok = false;
-	if (order.count() >= COLUMN_COUNT)
+	if (order.count() >= AlarmListFilterModel::ColumnCount)
 	{
 		// The column order is specified
-		bool posns[COLUMN_COUNT];
-		for (i = 0;  i < COLUMN_COUNT;  ++i)
-			posns[i] = false;
-		for (i = 0;  i < COLUMN_COUNT;  ++i)
+		int posn[AlarmListFilterModel::ColumnCount];
+		int i;
+		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
+			posn[i] = -1;
+		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
 		{
 			int ord = order[i];
-			if (ord < COLUMN_COUNT  &&  ord >= 0)
-			{
-				mColumn[i] = ord;
-				posns[ord] = true;
-			}
+			if (ord < AlarmListFilterModel::ColumnCount  &&  ord >= 0)
+				posn[i] = ord;
 		}
-		ok = true;
-		for (i = 0;  i < COLUMN_COUNT;  ++i)
-			if (!posns[i])
-				ok = false;
-		if (ok  &&  mColumn[MESSAGE_COLUMN] != MESSAGE_COLUMN)
+		bool ok = true;
+		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
+			if (posn[i] < 0)
+				ok = false;    // no column is specified at this position
+		if (ok  &&  posn[EventListModel::TextColumn] != EventListModel::TextColumn)
 		{
 			// Shift the message column to be last, since otherwise
 			// column widths get screwed up.
-			int messageCol = mColumn[MESSAGE_COLUMN];
-			for (i = 0;  i < COLUMN_COUNT;  ++i)
-				if (mColumn[i] > messageCol)
-					--mColumn[i];
-			mColumn[MESSAGE_COLUMN] = MESSAGE_COLUMN;
+			int messageCol = posn[EventListModel::TextColumn];
+			for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
+				if (posn[i] > messageCol)
+					--posn[i];
+			posn[EventListModel::TextColumn] = EventListModel::TextColumn;
 		}
-	}
-	if (!ok)
-	{
-		// Either no column order was specified, or it was invalid,
-		// so use the default order
-		for (i = 0;  i < COLUMN_COUNT;  ++i)
-			mColumn[i] = i;
-	}
-
-	// Initialise the columns
-	for (i = 0;  i < COLUMN_COUNT;  ++i)
-	{
-		for (int j = 0;  j < COLUMN_COUNT;  ++j)
-			if (mColumn[j] == i)
-			{
-				if (j != MESSAGE_COLUMN)
-					addColumn(titles[j]);
-				break;
-			}
-	}
-	addLastColumn(titles[MESSAGE_COLUMN]);
-
-	setSorting(mColumn[TIME_COLUMN]);           // sort initially by date/time
-	mTimeColumnHeaderWidth   = columnWidth(mColumn[TIME_COLUMN]);
-	mTimeToColumnHeaderWidth = columnWidth(mColumn[TIME_TO_COLUMN]);
-	setColumnAlignment(mColumn[REPEAT_COLUMN], Qt::AlignHCenter);
-	setColumnWidthMode(mColumn[REPEAT_COLUMN], Q3ListView::Maximum);
-
-	// Set the width of the colour column in proportion to height
-	setColumnWidth(mColumn[COLOUR_COLUMN], itemHeight() * 3/4);
-	setColumnWidthMode(mColumn[COLOUR_COLUMN], Q3ListView::Manual);
-
-	// Set the width of the alarm type column to exactly accommodate the icons.
-	// Don't allow the user to resize it (to avoid refresh problems, and bearing
-	// in mind that resizing doesn't seem very useful anyway).
-	setColumnWidth(mColumn[TYPE_COLUMN], AlarmListViewItem::typeIconWidth(this));
-	setColumnWidthMode(mColumn[TYPE_COLUMN], Q3ListView::Manual);
-	header()->setResizeEnabled(false, mColumn[TYPE_COLUMN]);
-
-	mInstanceList.append(this);
-}
-
-AlarmListView::~AlarmListView()
-{
-	mInstanceList.removeAt(mInstanceList.indexOf(this));
-}
-
-/******************************************************************************
-*  Add all the current alarms to the list.
-*/
-void AlarmListView::populate()
-{
-	kDebug(5950) << "AlarmListView::populate()\n";
-	KAEvent event;
-	KCal::Event::List events;
-	KDateTime now = KDateTime::currentUtcDateTime();
-	if (mShowArchived)
-	{
-		events = AlarmCalendar::resources()->events(KCalEvent::ARCHIVED);
-		for (int i = 0, end = events.count();  i < end;  ++i)
+		if (ok)
 		{
-			KCal::Event* kcalEvent = events[i];
-			if (!kcalEvent->alarms().isEmpty())
+			// Check whether the columns need to be reordered
+			for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
+				if (posn[i] != i)
+				{
+					ok = false;
+					break;
+				}
+			if (!ok)
 			{
-				event.set(kcalEvent);
-				addEntry(event, now);
+				// Reorder the columns
+				for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
+				{
+#warning Reorder the columns
+			//		int j = posn.indexOf(i);
+			//		moveSection(j, i);
+				}
 			}
 		}
 	}
-	events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
-	for (int i = 0, end = events.count();  i < end;  ++i)
-	{
-		KCal::Event* kcalEvent = events[i];
-		event.set(kcalEvent);
-		if (mShowArchived  ||  !event.expired())
-			addEntry(event, now);
-	}
 }
 
 /******************************************************************************
-*  Set which time columns are to be displayed.
-*/
-void AlarmListView::selectTimeColumns(bool time, bool timeTo)
-{
-	if (!time  &&  !timeTo)
-		return;       // always show at least one time column
-	bool changed = false;
-	int w = columnWidth(mColumn[TIME_COLUMN]);
-	if (time  &&  !w)
-	{
-		// Unhide the time column
-		int colWidth = mTimeColumnHeaderWidth;
-		QFontMetrics fm = fontMetrics();
-		for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
-		{
-			int w = item->width(fm, this, mColumn[TIME_COLUMN]);
-			if (w > colWidth)
-				colWidth = w;
-		}
-		setColumnWidth(mColumn[TIME_COLUMN], colWidth);
-		setColumnWidthMode(mColumn[TIME_COLUMN], Q3ListView::Maximum);
-		changed = true;
-	}
-	else if (!time  &&  w)
-	{
-		// Hide the time column
-		setColumnWidthMode(mColumn[TIME_COLUMN], Q3ListView::Manual);
-		setColumnWidth(mColumn[TIME_COLUMN], 0);
-		changed = true;
-	}
-	w = columnWidth(mColumn[TIME_TO_COLUMN]);
-	if (timeTo  &&  !w)
-	{
-		// Unhide the time-to-alarm column
-		setColumnWidthMode(mColumn[TIME_TO_COLUMN], Q3ListView::Maximum);
-		updateTimeToAlarms(true);
-		if (columnWidth(mColumn[TIME_TO_COLUMN]) < mTimeToColumnHeaderWidth)
-			setColumnWidth(mColumn[TIME_TO_COLUMN], mTimeToColumnHeaderWidth);
-		changed = true;
-	}
-	else if (!timeTo  &&  w)
-	{
-		// Hide the time-to-alarm column
-		setColumnWidthMode(mColumn[TIME_TO_COLUMN], Q3ListView::Manual);
-		setColumnWidth(mColumn[TIME_TO_COLUMN], 0);
-		changed = true;
-	}
-	if (changed)
-	{
-		resizeLastColumn();
-		triggerUpdate();   // ensure scroll bar appears if needed
-	}
-}
-
-/******************************************************************************
-*  Update all the values in the time-to-alarm column.
-*/
-void AlarmListView::updateTimeToAlarms(bool forceDisplay)
-{
-	if (forceDisplay  ||  columnWidth(mColumn[TIME_TO_COLUMN]))
-	{
-		KDateTime now = KDateTime::currentUtcDateTime();
-		for (AlarmListViewItem* item = firstChild();  item;  item = item->nextSibling())
-			item->updateTimeToAlarm(now, forceDisplay);
-	}
-}
-
-/******************************************************************************
-*  Add an event to every list instance.
-*  The selection highlight is moved to the new event in the specified instance only.
-*/
-void AlarmListView::addEvent(const KAEvent& event, EventListViewBase* view)
-{
-	KDateTime now = KDateTime::currentUtcDateTime();
-	for (int i = 0, end = mInstanceList.count();  i < end;  ++i)
-		static_cast<AlarmListView*>(mInstanceList[i])->addEntry(event, now, true, (mInstanceList[i] == view));
-}
-
-/******************************************************************************
-*  Add a new item to the list.
-*/
-AlarmListViewItem* AlarmListView::addEntry(const KAEvent& event, const KDateTime& now, bool setSize, bool reselect)
-{
-	if (!mShowArchived  &&  event.expired())
-		return 0;
-	AlarmListViewItem* item = new AlarmListViewItem(this, event, now);
-	return static_cast<AlarmListViewItem*>(EventListViewBase::addEntry(item, setSize, reselect));
-}
-
-/******************************************************************************
-*  Create a new list item for addEntry().
-*/
-EventListViewItemBase* AlarmListView::createItem(const KAEvent& event)
-{
-	return new AlarmListViewItem(this, event, KDateTime::currentUtcDateTime());
-}
-
-/******************************************************************************
-*  Check whether an item's alarm is archived.
-*/
-bool AlarmListView::archived(AlarmListViewItem* item) const
-{
-	return item->event().expired();
-}
-
-/******************************************************************************
-*  Return the column order.
+* Return the column order.
 */
 QList<int> AlarmListView::columnOrder() const
 {
-	Q3Header* hdr = header();
-	int order[COLUMN_COUNT];
-	order[TIME_COLUMN]    = hdr->mapToIndex(mColumn[TIME_COLUMN]);
-	order[TIME_TO_COLUMN] = hdr->mapToIndex(mColumn[TIME_TO_COLUMN]); 
-	order[REPEAT_COLUMN]  = hdr->mapToIndex(mColumn[REPEAT_COLUMN]); 
-	order[COLOUR_COLUMN]  = hdr->mapToIndex(mColumn[COLOUR_COLUMN]); 
-	order[TYPE_COLUMN]    = hdr->mapToIndex(mColumn[TYPE_COLUMN]);
-	order[MESSAGE_COLUMN] = hdr->mapToIndex(mColumn[MESSAGE_COLUMN]);
+	int order[AlarmListFilterModel::ColumnCount];
+	QHeaderView* head = header();
+	order[EventListModel::TimeColumn]   = head->visualIndex(EventListModel::TimeColumn);
+	order[EventListModel::TimeToColumn] = head->visualIndex(EventListModel::TimeToColumn);
+	order[EventListModel::RepeatColumn] = head->visualIndex(EventListModel::RepeatColumn);
+	order[EventListModel::ColourColumn] = head->visualIndex(EventListModel::ColourColumn);
+	order[EventListModel::TypeColumn]   = head->visualIndex(EventListModel::TypeColumn);
+	order[EventListModel::TextColumn]   = head->visualIndex(EventListModel::TextColumn);
 	QList<int> orderList;
-	for (int i = 0;  i < COLUMN_COUNT;  ++i)
+	for (int i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
 		orderList += order[i];
 	return orderList;
 }
 
 /******************************************************************************
-*  Returns the QWhatsThis text for a specified column.
+* Set which time columns are to be displayed.
 */
-QString AlarmListView::whatsThisText(int column) const
+void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 {
-	if (column == mColumn[TIME_COLUMN])
-		return i18n("Next scheduled date and time of the alarm");
-	if (column == mColumn[TIME_TO_COLUMN])
-		return i18n("How long until the next scheduled trigger of the alarm");
-	if (column == mColumn[REPEAT_COLUMN])
-		return i18n("How often the alarm recurs");
-	if (column == mColumn[COLOUR_COLUMN])
-		return i18n("Background color of alarm message");
-	if (column == mColumn[TYPE_COLUMN])
-		return i18n("Alarm type (message, file, command or email)");
-	if (column == mColumn[MESSAGE_COLUMN])
-		return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line");
-	return i18n("List of scheduled alarms");
-}
-
-/******************************************************************************
-*  Called when the mouse button is pressed.
-*  Records the position of the mouse when the left button is pressed, for use
-*  in drag operations.
-*/
-void AlarmListView::contentsMousePressEvent(QMouseEvent* e)
-{
-	Q3ListView::contentsMousePressEvent(e);
-	if (e->button() == Qt::LeftButton)
+	if (!time  &&  !timeTo)
+		return;       // always show at least one time column
+//	bool changed = false;
+	bool hidden = header()->isSectionHidden(EventListModel::TimeColumn);
+	if (time  &&  hidden)
 	{
-		QPoint p(contentsToViewport(e->pos()));
-		if (itemAt(p))
-		{
-			mMousePressPos = e->pos();
-			mMousePressed  = true;
-		}
-		mDragging = false;
+		// Unhide the time column
+		header()->setSectionHidden(EventListModel::TimeColumn, false);
+//		changed = true;
 	}
-}
-
-/******************************************************************************
-*  Called when the mouse is moved.
-*  Creates a drag object when the mouse drags one or more selected items.
-*/
-void AlarmListView::contentsMouseMoveEvent(QMouseEvent* e)
-{
-	Q3ListView::contentsMouseMoveEvent(e);
-	if (mMousePressed
-	&&  (mMousePressPos - e->pos()).manhattanLength() > QApplication::startDragDistance())
+	else if (!time  &&  !hidden)
 	{
-		// Create a calendar object containing all the currently selected alarms
-		kDebug(5950) << "AlarmListView::contentsMouseMoveEvent(): drag started" << endl;
-		mMousePressed = false;
-		KCal::CalendarLocal cal(Preferences::timeZone(true));
-		QList<EventListViewItemBase*> items = selectedItems();
-		if (items.isEmpty())
-			return;
-		AlarmCalendar* resourceCal = AlarmCalendar::resources();
-		for (int i = 0, end = items.count();  i < end;  ++i)
-		{
-			// Get a copy of the event, keeping any custom properties
-			KCal::Event* kcalEvent = resourceCal->createKCalEvent(items[i]->event(), true);
-			cal.addEvent(kcalEvent);
-		}
-
-		// Create the drag object for the destination program to receive
-		mDragging = true;
-		KCal::DndFactory fact(&cal);
-		QDrag* dobj = fact.createDrag(this);
-		dobj->start();       // the drag operation will copy the alarms
+		// Hide the time column
+		header()->setSectionHidden(EventListModel::TimeColumn, true);
+//		changed = true;
 	}
-}
-
-/******************************************************************************
-*  Called when the mouse button is released.
-*  Notes that the mouse left button is no longer pressed, for use in drag
-*  operations.
-*/
-void AlarmListView::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-	Q3ListView::contentsMouseReleaseEvent(e);
-	mMousePressed = false;
-	mDragging     = false;
-}
-
-/******************************************************************************
-*  Called when any event occurs.
-*  Displays the full alarm text in a tooltip, if not all the text is displayed.
-*/
-bool AlarmListView::event(QEvent *e)
-{
-	if (e->type() == QEvent::ToolTip)
+	hidden = header()->isSectionHidden(EventListModel::TimeToColumn);
+	if (timeTo  &&  hidden)
 	{
-		QHelpEvent* he = (QHelpEvent*)e;
-		QPoint pt = he->pos();
-		int xOffset = contentsX();
-		if (header()->sectionAt(pt.x() + xOffset) == mColumn[MESSAGE_COLUMN])
+		// Unhide the time-to-alarm column
+		header()->setSectionHidden(EventListModel::TimeToColumn, false);
+//		changed = true;
+	}
+	else if (!timeTo  &&  !hidden)
+	{
+		// Hide the time-to-alarm column
+		header()->setSectionHidden(EventListModel::TimeToColumn, true);
+//		changed = true;
+	}
+//	if (changed)
+//	{
+//		resizeLastColumn();
+//		triggerUpdate();   // ensure scroll bar appears if needed
+//	}
+}
+
+/******************************************************************************
+* Select one event and make it the current item.
+*/
+void AlarmListView::select(const QString& eventId)
+{
+	select(EventListModel::instance()->eventIndex(eventId));
+}
+
+void AlarmListView::select(const QModelIndex& index)
+{
+	selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+}
+
+/******************************************************************************
+* Return the single selected item.
+* Reply = invalid if no items are selected, or if multiple items are selected.
+*/
+QModelIndex AlarmListView::selectedIndex() const
+{
+	QModelIndexList list = selectionModel()->selectedRows();
+	if (list.count() != 1)
+		return QModelIndex();
+	return list[0];
+}
+
+/******************************************************************************
+* Return the single selected event.
+* Reply = null if no items are selected, or if multiple items are selected.
+*/
+KCal::Event* AlarmListView::selectedEvent() const
+{
+	QModelIndexList list = selectionModel()->selectedRows();
+	if (list.count() != 1)
+		return 0;
+	QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
+	QModelIndex source = proxy->mapToSource(list[0]);
+	return static_cast<KCal::Event*>(source.internalPointer());
+}
+
+/******************************************************************************
+* Return the selected events.
+*/
+KCal::Event::List AlarmListView::selectedEvents() const
+{
+	KCal::Event::List elist;
+	QModelIndexList ilist = selectionModel()->selectedRows();
+	int count = ilist.count();
+	if (count)
+	{
+		QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
+		for (int i = 0;  i < count;  ++i)
 		{
-			AlarmListViewItem* item = (AlarmListViewItem*)itemAt(pt);
-			if (item)
-			{
-				int columnX = header()->sectionPos(mColumn[MESSAGE_COLUMN]) - xOffset;
-				int colWidth = columnWidth(mColumn[MESSAGE_COLUMN]);
-				int widthNeeded = item->messageColWidthNeeded();
-				if (!item->messageTruncated()  &&  colWidth >= widthNeeded)
-				{
-					if (columnX + widthNeeded <= viewport()->width())
-						return EventListViewBase::event(e);
-				}
-//				QRect rect = itemRect(item);
-//				rect.setLeft(columnX);
-//				rect.setWidth(colWidth);
-				kDebug(5950) << "AlarmListView::event(): display\n";
-				QToolTip::showText(pt, AlarmText::summary(item->event(), 10));    // display up to 10 lines of text
-				return true;
-			}
+			QModelIndex source = proxy->mapToSource(ilist[i]);
+			elist += static_cast<KCal::Event*>(source.internalPointer());
 		}
 	}
-	return EventListViewBase::event(e);
+	return elist;
 }
 
-
-/*=============================================================================
-=  Class: AlarmListViewItem
-=  Contains the details of one alarm for display in the AlarmListView.
-=============================================================================*/
-int AlarmListViewItem::mTimeHourPos = -2;
-int AlarmListViewItem::mDigitWidth  = -1;
-
-AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event, const KDateTime& now)
-	: EventListViewItemBase(parent, event),
-	  mMessageTruncated(false),
-	  mTimeToAlarmShown(false)
+/******************************************************************************
+* Called when a mouse button is released.
+*/
+void AlarmListView::mouseReleaseEvent(QMouseEvent* e)
 {
-	setLastColumnText();     // set the message column text
-
-	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime(false);
-	if (parent->column(AlarmListView::TIME_COLUMN) >= 0)
-		setText(parent->column(AlarmListView::TIME_COLUMN), alarmTimeText(dateTime));
-	if (parent->column(AlarmListView::TIME_TO_COLUMN) >= 0)
-	{
-		QString tta = timeToAlarmText(now);
-		setText(parent->column(AlarmListView::TIME_TO_COLUMN), tta);
-		mTimeToAlarmShown = !tta.isNull();
-	}
-	QTime t = dateTime.effectiveTime();
-	mDateTimeOrder.sprintf("%04d%03d%02d%02d", dateTime.date().year(), dateTime.date().dayOfYear(),
-	                                           t.hour(), t.minute());
-
-	int repeatOrder = 0;
-	int repeatInterval = 0;
-	QString repeatText = event.recurrenceText(true);     // text displayed in Repeat column
-	if (repeatText.isEmpty())
-		repeatText = event.repetitionText(true);
-	if (event.repeatAtLogin())
-		repeatOrder = 1;
+	if (e->button() == Qt::RightButton)
+		emit rightButtonClicked(e->globalPos());
 	else
-	{
-		repeatInterval = event.recurInterval();
-		switch (event.recurType())
-		{
-			case KARecurrence::MINUTELY:
-				repeatOrder = 2;
-				break;
-			case KARecurrence::DAILY:
-				repeatOrder = 3;
-				break;
-			case KARecurrence::WEEKLY:
-				repeatOrder = 4;
-				break;
-			case KARecurrence::MONTHLY_DAY:
-			case KARecurrence::MONTHLY_POS:
-				repeatOrder = 5;
-				break;
-			case KARecurrence::ANNUAL_DATE:
-			case KARecurrence::ANNUAL_POS:
-				repeatOrder = 6;
-				break;
-			case KARecurrence::NO_RECUR:
-			default:
-				break;
-		}
-	}
-	setText(parent->column(AlarmListView::REPEAT_COLUMN), repeatText);
-	mRepeatOrder.sprintf("%c%08d", '0' + repeatOrder, repeatInterval);
-
-	bool showColour = (event.action() == KAEvent::MESSAGE || event.action() == KAEvent::FILE);
-	mColourOrder.sprintf("%06u", (showColour ? event.bgColour().rgb() : 0));
-
-	mTypeOrder.sprintf("%02d", event.action());
+		QTreeView::mouseReleaseEvent(e);
+#warning Should base class method be called always, to select the row?
 }
 
-/******************************************************************************
-*  Return the single line alarm summary text.
-*/
-QString AlarmListViewItem::alarmText(const KAEvent& event) const
+void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-	bool truncated;
-	QString text = AlarmText::summary(event, 1, &truncated);
-	mMessageTruncated = truncated;
-	return text;
+/*	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
+	{
+		if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
+			resizeColumnToContents(col);
+	}*/
 }
 
-/******************************************************************************
-*  Return the alarm time text in the form "date time".
-*/
-QString AlarmListViewItem::alarmTimeText(const DateTime& dateTime) const
+/*int AlarmListView::sizeHintForColumn(int column) const
 {
-	KLocale* locale = KGlobal::locale();
-	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
-	QString dateTimeText = locale->formatDate(kdt.date(), true);
-	if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
-	{
-		// Display the time of day if it's a date/time value, or if it's
-		// a date-only value but it's in a different time zone
-		dateTimeText += QLatin1Char(' ');
-		QString time = locale->formatTime(kdt.time());
-		if (mTimeHourPos == -2)
-		{
-			// Initialise the position of the hour within the time string, if leading
-			// zeroes are omitted, so that displayed times can be aligned with each other.
-			mTimeHourPos = -1;     // default = alignment isn't possible/sensible
-			if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
-			{
-				QString fmt = locale->timeFormat();
-				int i = fmt.indexOf(QRegExp("%[kl]"));   // check if leading zeroes are omitted
-				if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
-					mTimeHourPos = i;             // yes, so need to align
-			}
-		}
-		if (mTimeHourPos >= 0  &&  (int)time.length() > mTimeHourPos + 1
-		&&  time[mTimeHourPos].isDigit()  &&  !time[mTimeHourPos + 1].isDigit())
-			dateTimeText += QLatin1Char('~');     // improve alignment of times with no leading zeroes
-		dateTimeText += time;
-	}
-	return dateTimeText + QLatin1Char(' ');
-}
-
-/******************************************************************************
-*  Return the time-to-alarm text.
-*/
-QString AlarmListViewItem::timeToAlarmText(const KDateTime& now) const
-{
-	if (event().expired())
-		return QString();
-	DateTime dateTime = event().nextDateTime(false);
-	if (dateTime.isDateOnly())
-	{
-		int days = now.date().daysTo(dateTime.date());
-		return i18nc("n days", " %1d ", days);
-	}
-	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
-	if (mins < 0)
-		return QString();
-	char minutes[3] = "00";
-	minutes[0] = (mins%60) / 10 + '0';
-	minutes[1] = (mins%60) % 10 + '0';
-	if (mins < 24*60)
-		return i18nc("hours:minutes", " %1:%2 ", mins/60, minutes);
-	int days = mins / (24*60);
-	mins = mins % (24*60);
-	return i18nc("days hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
-}
-
-/******************************************************************************
-*  Update the displayed time-to-alarm value.
-*  The updated value is only displayed if it is different from the existing value,
-*  or if 'forceDisplay' is true.
-*/
-void AlarmListViewItem::updateTimeToAlarm(const KDateTime& now, bool forceDisplay)
-{
-	if (event().expired())
-	{
-		if (forceDisplay  ||  mTimeToAlarmShown)
-		{
-			setText(alarmListView()->column(AlarmListView::TIME_TO_COLUMN), QString());
-			mTimeToAlarmShown = false;
-		}
-	}
-	else
-	{
-		QString tta = timeToAlarmText(now);
-		if (forceDisplay  ||  tta != text(alarmListView()->column(AlarmListView::TIME_TO_COLUMN)))
-			setText(alarmListView()->column(AlarmListView::TIME_TO_COLUMN), tta);
-		mTimeToAlarmShown = !tta.isNull();
-	}
-}
-
-/******************************************************************************
-*  Paint one value in one of the columns in the list view.
-*/
-void AlarmListViewItem::paintCell(QPainter* painter, const QColorGroup& cg, int column, int width, int /*align*/)
-{
-	const AlarmListView* listView = alarmListView();
-	int    margin = listView->itemMargin();
-	QRect  box(margin, margin, width - margin*2, height() - margin*2);   // area within which to draw
-	bool   selected = isSelected();
-	QColor bgColour = selected ? cg.color(QPalette::Highlight) : cg.color(QPalette::Base);
-	QColor fgColour = selected ? cg.color(QPalette::HighlightedText)
-	                : !event().enabled() ? Preferences::disabledColour()
-	                : event().expired() ? Preferences::archivedColour() : cg.color(QPalette::Text);
-	painter->setPen(fgColour);
-	painter->fillRect(0, 0, width, height(), bgColour);
-
-	if (column == listView->column(AlarmListView::TIME_COLUMN))
-	{
-		int i = -1;
-		QString str = text(column);
-		if (mTimeHourPos >= 0)
-		{
-			// Need to pad out spacing to align times without leading zeroes
-			i = str.indexOf(" ~");
-			if (i >= 0)
-			{
-				if (mDigitWidth < 0)
-					mDigitWidth = painter->fontMetrics().width("0");
-				QString date = str.left(i + 1);
-				int w = painter->fontMetrics().width(date) + mDigitWidth;
-				painter->drawText(box, Qt::AlignVCenter, date);
-				box.setLeft(box.left() + w);
-				painter->drawText(box, Qt::AlignVCenter, str.mid(i + 2));
-			}
-		}
-		if (i < 0)
-			painter->drawText(box, Qt::AlignVCenter, str);
-	}
-	else if (column == listView->column(AlarmListView::TIME_TO_COLUMN))
-		painter->drawText(box, Qt::AlignVCenter | Qt::AlignRight, text(column));
-	else if (column == listView->column(AlarmListView::REPEAT_COLUMN))
-		painter->drawText(box, Qt::AlignVCenter | Qt::AlignHCenter, text(column));
-	else if (column == listView->column(AlarmListView::COLOUR_COLUMN))
-	{
-		// Paint the cell the colour of the alarm message
-		if (event().action() == KAEvent::MESSAGE || event().action() == KAEvent::FILE)
-			painter->fillRect(box, event().bgColour());
-	}
-	else if (column == listView->column(AlarmListView::TYPE_COLUMN))
-	{
-		// Display the alarm type icon, horizontally and vertically centred in the cell
-		QPixmap* pixmap = eventIcon();
-		QRect pixmapRect = pixmap->rect();
-		int diff = box.height() - pixmap->height();
-		if (diff < 0)
-		{
-			pixmapRect.setTop(-diff / 2);
-			pixmapRect.setHeight(box.height());
-		}
-		QPoint iconTopLeft(box.left() + (box.width() - pixmapRect.width()) / 2,
-		                   box.top() + (diff > 0 ? diff / 2 : 0));
-		painter->drawPixmap(iconTopLeft, *pixmap, pixmapRect);
-	}
-	else if (column == listView->column(AlarmListView::MESSAGE_COLUMN))
-	{
-		if (!selected  &&  listView->drawMessageInColour())
-		{
-			painter->fillRect(box, event().bgColour());
-			painter->setBackground(event().bgColour());
-//			painter->setPen(event().fgColour());
-		}
-		QString txt = text(column);
-		painter->drawText(box, Qt::AlignVCenter, txt);
-		mMessageColWidth = listView->fontMetrics().boundingRect(txt).width();
-	}
-}
-
-/******************************************************************************
-*  Return the width needed for the icons in the alarm type column.
-*/
-int AlarmListViewItem::typeIconWidth(AlarmListView* v)
-{
-	return iconWidth() +  2 * v->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-}
-
-/******************************************************************************
-*  Return the column sort order for one item in the list.
-*/
-QString AlarmListViewItem::key(int column, bool) const
-{
-	AlarmListView* listView = alarmListView();
-	if (column == listView->column(AlarmListView::TIME_COLUMN)
-	||  column == listView->column(AlarmListView::TIME_TO_COLUMN))
-		return mDateTimeOrder;
-	if (column == listView->column(AlarmListView::REPEAT_COLUMN))
-		return mRepeatOrder;
-	if (column == listView->column(AlarmListView::COLOUR_COLUMN))
-		return mColourOrder;
-	if (column == listView->column(AlarmListView::TYPE_COLUMN))
-		return mTypeOrder;
-	return text(column).toLower();
-}
+	if (column == EventListModel::ColourColumn)
+		return viewOptions().fontMetrics.lineSpacing() * 3 / 4;
+	return QTreeView::sizeHintForColumn(column);
+}*/

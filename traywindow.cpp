@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ void TrayWindow::slotResourceStatusChanged()
 */
 void TrayWindow::slotNewAlarm()
 {
-	MainWindow::executeNew();
+	KAlarm::editNewAlarm();
 }
 
 /******************************************************************************
@@ -149,7 +149,7 @@ void TrayWindow::slotNewAlarm()
 */
 void TrayWindow::slotNewFromTemplate(const KAEvent& event)
 {
-	MainWindow::executeNew(event);
+	KAlarm::editNewAlarm(0, &event);
 }
 
 /******************************************************************************

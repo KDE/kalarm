@@ -73,6 +73,9 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    reminder.cpp 
    startdaytimer.cpp 
    eventlistviewbase.cpp 
+   eventlistmodel.cpp
+   alarmlistfiltermodel.cpp
+   alarmlistdelegate.cpp
    alarmlistview.cpp 
    kamail.cpp 
    timeselector.cpp 

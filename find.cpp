@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#include "eventlistviewbase.h"
 #include "alarmlistview.h"
 #include "preferences.h"
 #include "find.moc"
@@ -70,6 +71,7 @@ Find::~Find()
 */
 void Find::display()
 {
+#ifdef NO_MODEL_VIEW
 	if (!mOptions)
 		// Set defaults the first time the Find dialog is activated
 		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
@@ -206,6 +208,7 @@ void Find::display()
 #else
 	mDialog->show();
 #endif
+#endif
 }
 
 /******************************************************************************
@@ -213,6 +216,7 @@ void Find::display()
 */
 void Find::slotFind()
 {
+#ifdef NO_MODEL_VIEW
 	if (!mDialog)
 		return;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
@@ -273,6 +277,7 @@ void Find::slotFind()
 		if (mFind)
 			emit active(true);
 	}
+#endif
 }
 
 /******************************************************************************
@@ -282,6 +287,7 @@ void Find::slotFind()
 */
 void Find::findNext(bool forward, bool sort, bool fromCurrent)
 {
+#ifdef NO_MODEL_VIEW
 	if (sort)
 		mListView->sort();    // ensure the whole list is sorted, not just the visible items
 
@@ -375,6 +381,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 			mFind->displayFinalDialog();     // display "no match was found"
 		mNoCurrentItem = false;    // restart from the currently highlighted alarm if Find Next etc selected
 	}
+#endif
 }
 
 /******************************************************************************
@@ -382,6 +389,7 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 */
 EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward) const
 {
+#ifdef NO_MODEL_VIEW
 	Q3ListViewItem* it;
 	if (mOptions & KFind::FindBackwards)
 		forward = !forward;
@@ -390,4 +398,7 @@ EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward)
 	else
 		it = item ? item->itemAbove() : mListView->lastItem();
 	return (EventListViewItemBase*)it;
+#else
+	return 0;
+#endif
 }

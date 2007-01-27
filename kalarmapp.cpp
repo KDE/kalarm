@@ -45,6 +45,7 @@
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
+#include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "editdlg.h"
 #include "daemon.h"
@@ -354,7 +355,7 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (!KAlarm::edit(eventID))
+				if (!KAlarm::editAlarm(eventID))
 				{
 					USAGE(i18n("%1: Event %2 not found, or not editable", QString::fromLatin1("--edit"), eventID))
 					exitCode = 1;
@@ -372,7 +373,7 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				KAlarm::editNew(templ);
+				KAlarm::editNewAlarm(templ);
 			}
 			else
 			if (args->isSet("file")  ||  args->isSet("exec")  ||  args->isSet("mail")  ||  args->count())
@@ -905,7 +906,7 @@ void KAlarmApp::processQueue()
 					execAlarm(entry.event, entry.event.firstAlarm(), false);
 					break;
 				case EVENT_HANDLE:
-					KAlarm::addEvent(entry.event, 0, 0, 0, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+					KAlarm::addEvent(entry.event, 0, 0, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
 					break;
 				case EVENT_CANCEL:
 					break;
@@ -1404,7 +1405,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						execAlarm(event, alarm, false);
 				}
 				if (updateCalAndDisplay)
-					KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
+					KAlarm::updateEvent(event);     // update the window lists and calendar file
 				else if (function != EVENT_TRIGGER)
 				{
 					kDebug(5950) << "KAlarmApp::handleEvent(): no action\n";
@@ -1492,12 +1493,12 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	if (update)
 	{
 		event.cancelCancelledDeferral();
-		KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
+		KAlarm::updateEvent(event);     // update the window lists and calendar file
 	}
 	else if (updateDisplay)
 	{
 		Daemon::eventHandled(event.id());
-		AlarmListView::modifyEvent(event, 0);
+		EventListModel::instance()->updateEvent(event.id());
 	}
 }
 
@@ -1520,7 +1521,7 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	if (!event.alarmCount())
 		KAlarm::deleteEvent(event, false);
 	else if (updateCalAndDisplay)
-		KAlarm::updateEvent(event, 0);    // update the window lists and calendar file
+		KAlarm::updateEvent(event);    // update the window lists and calendar file
 }
 
 /******************************************************************************

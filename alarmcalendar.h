@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,8 +64,8 @@ class AlarmCalendar : public QObject
 		KCal::Event::List     eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status);
 		bool                  eventReadOnly(const QString& uniqueID) const;
 		KCal::Event*          addEvent(KAEvent&, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false);
-		bool                  modifyEvent(const QString& oldEventId, KAEvent& newEvent);
-		void                  updateEvent(const KAEvent&);
+		KCal::Event*          modifyEvent(const QString& oldEventId, KAEvent& newEvent);
+		KCal::Event*          updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
 		void                  purgeAll()             { purge(0); }

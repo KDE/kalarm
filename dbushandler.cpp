@@ -197,12 +197,12 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 
 bool DBusHandler::edit(const QString& eventID)
 {
-	return KAlarm::edit(eventID);
+	return KAlarm::editAlarm(eventID);
 }
 
 bool DBusHandler::editNew(const QString& templateName)
 {
-	return KAlarm::editNew(templateName);
+	return KAlarm::editNewAlarm(templateName);
 }
 
 

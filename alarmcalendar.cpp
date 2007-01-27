@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -123,11 +123,11 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 * Find and return the event with the specified ID.
 * The calendar searched is determined by the calendar identifier in the ID.
 */
-const KCal::Event* AlarmCalendar::getEvent(const QString& uniqueID)
+const Event* AlarmCalendar::getEvent(const QString& uniqueID)
 {
 	if (uniqueID.isEmpty())
 		return 0;
-	const KCal::Event* event = mResourcesCalendar->event(uniqueID);
+	const Event* event = mResourcesCalendar->event(uniqueID);
 	if (!event)
 		event = mDisplayCalendar->event(uniqueID);
 	return event;
@@ -812,8 +812,10 @@ Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEv
 * Modify the specified event in the calendar with its new contents.
 * The new event must have a different event ID from the old one.
 * It is assumed to be of the same event type as the old one (active, etc.)
+* Reply = the new KCal::Event as written to the calendar
+*       = 0 if an error occurred.
 */
-bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
+Event* AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 
 {
 	QString newId = newEvent.id();
@@ -821,37 +823,41 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 	if (!noNewId  &&  oldEventId == newId)
 	{
 		kError(5950) << "AlarmCalendar::modifyEvent(): same IDs" << endl;
-		return false;
+		return 0;
 	}
 	if (!mOpen)
-		return false;
+		return 0;
+	Event* kcalEvent = 0;
 	if (mCalType == RESOURCES)
 	{
 		// Create a new KCal::Event, keeping any custom properties from the old event.
 		// Ensure it has a new ID.
-		Event* kcalEvent = createKCalEvent(newEvent, oldEventId, (mEventType == KCalEvent::ARCHIVED), true);
+		kcalEvent = createKCalEvent(newEvent, oldEventId, (mEventType == KCalEvent::ARCHIVED), true);
 		if (noNewId)
 			kcalEvent->setUid(CalFormat::createUniqueId());
 		AlarmResources* resources = AlarmResources::instance();
 		if (!resources->addEvent(kcalEvent, resources->resourceForIncidence(oldEventId)))
-			return false;    // kcalEvent has been deleted by AlarmResources::addEvent()
+			return 0;    // kcalEvent has been deleted by AlarmResources::addEvent()
 		if (noNewId)
 			newEvent.setEventID(kcalEvent->uid());
 	}
 	else
 	{
-		if (!addEvent(newEvent, 0, true))
-			return false;
+		kcalEvent = addEvent(newEvent, 0, true);
+		if (!kcalEvent)
+			return 0;
 	}
 	deleteEvent(oldEventId);
-	return true;
+	return kcalEvent;
 }
 
 /******************************************************************************
 * Update the specified event in the calendar with its new contents.
 * The event retains the same ID.
+* Reply = the KCal::Event as written to the calendar
+*       = 0 if an error occurred.
 */
-void AlarmCalendar::updateEvent(const KAEvent& evnt)
+Event* AlarmCalendar::updateEvent(const KAEvent& evnt)
 {
 	bool active = (evnt.category() == KCalEvent::ACTIVE);
 	if (mOpen)
@@ -863,11 +869,12 @@ void AlarmCalendar::updateEvent(const KAEvent& evnt)
 			evnt.clearUpdated();
 			if (active)
 				Daemon::savingEvent(evnt.id());
-			return;
+			return kcalEvent;
 		}
 	}
 	if (active)
 		Daemon::eventHandled(evnt.id());
+	return 0;
 }
 
 /******************************************************************************
@@ -905,7 +912,7 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 * value instead of its next occurrence, and the expired main alarm is
 * reinstated.
 */
-KCal::Event* AlarmCalendar::createKCalEvent(const KAEvent& ev, const QString& baseID, bool original, bool cancelCancelledDefer) const
+Event* AlarmCalendar::createKCalEvent(const KAEvent& ev, const QString& baseID, bool original, bool cancelCancelledDefer) const
 {
 	if (mCalType != RESOURCES)
 		kFatal(5950) << "AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar" << endl;
@@ -922,7 +929,7 @@ KCal::Event* AlarmCalendar::createKCalEvent(const KAEvent& ev, const QString& ba
 /******************************************************************************
 * Return the event with the specified ID.
 */
-KCal::Event* AlarmCalendar::event(const QString& uniqueID)
+Event* AlarmCalendar::event(const QString& uniqueID)
 {
 	return mCalendar ? mCalendar->event(uniqueID) : 0;
 }
@@ -953,14 +960,14 @@ KAEvent AlarmCalendar::templateEvent(const QString& templateName)
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-KCal::Event::List AlarmCalendar::events(KCalEvent::Status type)
+Event::List AlarmCalendar::events(KCalEvent::Status type)
 {
 	if (!mCalendar)
-		return KCal::Event::List();
-	KCal::Event::List list = mCalendar->rawEvents();
+		return Event::List();
+	Event::List list = mCalendar->rawEvents();
 	for (int i = 0;  i < list.count();  )
 	{
-		KCal::Event* event = list[i];
+		Event* event = list[i];
 		if (event->alarms().isEmpty()
 		||  type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event)))
 			list.removeAt(i);
@@ -1072,7 +1079,7 @@ bool AlarmCalendar::isEmpty() const
 {
 	if (!mCalendar)
 		return true;
-	KCal::Event::List list = mCalendar->rawEvents();
+	Event::List list = mCalendar->rawEvents();
 	if (list.isEmpty())
 		return true;
 	for (int i = 0, end = list.count();  i < end;  ++i)

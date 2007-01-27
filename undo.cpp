@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -886,7 +886,7 @@ UndoItem* UndoEdit::restore()
 	switch (calendar())
 	{
 		case KCalEvent::ACTIVE:
-			switch (KAlarm::modifyEvent(newEvent, *mOldEvent, 0))
+			switch (KAlarm::modifyEvent(newEvent, *mOldEvent))
 			{
 				case KAlarm::UPDATE_ERROR:
 				case KAlarm::UPDATE_FAILED:
@@ -966,7 +966,7 @@ UndoItem* UndoDelete::restore()
 			{
 				// It was archived when it was deleted
 				mEvent->setCategory(KCalEvent::ARCHIVED);
-				switch (KAlarm::reactivateEvent(*mEvent, 0, mResource))
+				switch (KAlarm::reactivateEvent(*mEvent, mResource))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
 						mRestoreWarning = WARN_KORG_ADD;
@@ -983,7 +983,7 @@ UndoItem* UndoDelete::restore()
 			}
 			else
 			{
-				switch (KAlarm::addEvent(*mEvent, 0, mResource, 0, true))
+				switch (KAlarm::addEvent(*mEvent, mResource, 0, true))
 				{
 					case KAlarm::UPDATE_KORG_ERR:
 						mRestoreWarning = WARN_KORG_ADD;

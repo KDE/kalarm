@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ class QShowEvent;
 class QResizeEvent;
 class QDropEvent;
 class QCloseEvent;
+class QModelIndex;
 class Q3ListViewItem;
 class QSplitter;
 class QMenu;
@@ -47,6 +48,8 @@ class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
 class ActionAlarmsEnabled;
+class AlarmListFilterModel;
+class AlarmListDelegate;
 class AlarmListView;
 class TemplateDlg;
 class TemplateMenuAction;
@@ -69,11 +72,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		static void        refresh();
 		static void        updateArchived();
 		static void        updateTimeColumns(bool oldTime, bool oldTimeTo);
-		static void        addEvent(const KAEvent&, MainWindow*);
-		static void        executeNew(MainWindow* w = 0, KAEvent::Action a = KAEvent::MESSAGE, const AlarmText& t = AlarmText())
-		                                      { executeNew(w, 0, a, t); }
-		static void        executeNew(const KAEvent& e, MainWindow* w = 0)   { executeNew(w, &e); }
-		static void        executeEdit(KAEvent&, MainWindow* = 0);
 		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
 		static void        closeAll();
@@ -128,14 +126,12 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotConfigureToolbar();
 		void           slotNewToolbarConfig();
 		void           slotQuit();
-		void           slotDeletion();
 		void           slotSelection();
-		void           slotMouseClicked(int button, Q3ListViewItem* item, const QPoint&, int);
-		void           slotDoubleClicked(Q3ListViewItem*);
+		void           slotRightButtonClicked(const QPoint& globalPos);
+		void           slotDoubleClicked(const QModelIndex&);
 		void           slotShowTime();
 		void           slotShowTimeTo();
 		void           slotShowArchived();
-		void           slotUpdateTimeTo();
 		void           slotUndo();
 		void           slotUndoItem(QAction* id);
 		void           slotRedo();
@@ -163,15 +159,15 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           setEnableText(bool enable);
 		void           initUndoMenu(QMenu*, Undo::Type);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
-		static void    executeNew(MainWindow*, const KAEvent*, KAEvent::Action = KAEvent::MESSAGE,
-		                          const AlarmText& = AlarmText());
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 
 		static WindowList    mWindowList;   // active main windows
 		static TemplateDlg*  mTemplateDlg;  // the one and only template dialogue
 
+		AlarmListFilterModel* mListFilterModel;
 		AlarmListView*       mListView;
+		AlarmListDelegate*   mListDelegate;
 		ResourceSelector*    mResourceSelector;    // resource selector widget
 		QSplitter*           mSplitter;            // splits window into list and resource selector
 		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
