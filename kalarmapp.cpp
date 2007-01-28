@@ -123,6 +123,7 @@ KAlarmApp::KAlarmApp()
 		mStartOfDay             = Preferences::startOfDay();
 		if (Preferences::hasStartOfDayChanged())
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
+		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsArchivedColour   = Preferences::archivedColour();
 		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
 		mPrefsShowTime         = Preferences::showAlarmTime();

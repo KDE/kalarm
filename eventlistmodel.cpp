@@ -417,7 +417,6 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
-//kDebug()<<"date="<<dateTime.effectiveKDateTime().date()<<", "<<dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone()).date()<<endl;
 	QString dateTimeText = locale->formatDate(kdt.date(), true);
 	if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
 	{
