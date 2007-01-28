@@ -1,7 +1,7 @@
 /*
  *  templatelistview.h  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,65 +23,20 @@
 
 #include "kalarm.h"
 
-#include <QMap>
-#include <k3listview.h>
+#include <kcal/event.h>
 
 #include "eventlistviewbase.h"
-
-class TemplateListView;
-
-
-class TemplateListViewItem : public EventListViewItemBase
-{
-	public:
-		TemplateListViewItem(TemplateListView* parent, const KAEvent&);
-		TemplateListView*      templateListView() const  { return (TemplateListView*)listView(); }
-		// Overridden base class methods
-		TemplateListViewItem*  nextSibling() const       { return (TemplateListViewItem*)Q3ListViewItem::nextSibling(); }
-		virtual QString        key(int column, bool ascending) const;
-	protected:
-		virtual QString        lastColumnText() const;
-	private:
-		QString                mIconOrder;        // controls ordering of icon column
-};
 
 
 class TemplateListView : public EventListViewBase
 {
 		Q_OBJECT
 	public:
-		explicit TemplateListView(bool includeCmdAlarms, const QString& whatsThisText, QWidget* parent = 0);
-		~TemplateListView();
-		int                    iconColumn() const     { return mIconColumn; }
-		int                    nameColumn() const     { return mNameColumn; }
-		// Overridden base class methods
-		static void            addEvent(const KAEvent& e, EventListViewBase* v)
-		                             { EventListViewBase::addEvent(e, mInstanceList, v); }
-		static void            modifyEvent(const KAEvent& e, EventListViewBase* v)
-		                             { EventListViewBase::modifyEvent(e.id(), e, mInstanceList, v); }
-		static void            modifyEvent(const QString& oldEventID, const KAEvent& newEvent, EventListViewBase* v)
-		                             { EventListViewBase::modifyEvent(oldEventID, newEvent, mInstanceList, v); }
-		static void            deleteEvent(const QString& eventID)
-		                             { EventListViewBase::deleteEvent(eventID, mInstanceList); }
-		TemplateListViewItem*  getEntry(const QString& eventID)  { return (TemplateListViewItem*)EventListViewBase::getEntry(eventID); }
-		TemplateListViewItem*  selectedItem() const   { return (TemplateListViewItem*)EventListViewBase::selectedItem(); }
-		TemplateListViewItem*  currentItem() const    { return (TemplateListViewItem*)EventListViewBase::currentItem(); }
-		TemplateListViewItem*  firstChild() const     { return (TemplateListViewItem*)EventListViewBase::firstChild(); }
-		virtual void           setSelected(Q3ListViewItem* item, bool selected)         { EventListViewBase::setSelected(item, selected); }
-		virtual void           setSelected(TemplateListViewItem* item, bool selected)  { EventListViewBase::setSelected(item, selected); }
-		virtual QList<EventListViewBase*> instances()   { return mInstanceList; }
+		TemplateListView(QWidget* parent = 0);
+		virtual void setModel(QAbstractItemModel*);
 
-	protected:
-		virtual void           populate();
-		EventListViewItemBase* createItem(const KAEvent&);
-		virtual QString        whatsThisText(int column) const;
-
-	private:
-		static QList<EventListViewBase*> mInstanceList;
-		QString                mWhatsThisText;    // default QWhatsThis text
-		int                    mIconColumn;       // index to icon column
-		int                    mNameColumn;       // index to template name column
-		bool                   mExcludeCmdAlarms; // omit command alarms from the list
+	protected slots:
+		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 };
 
 #endif // TEMPLATELISTVIEW_H

@@ -1,5 +1,5 @@
 /*
- *  alarmlistview.cpp  -  widget showing list of outstanding alarms
+ *  alarmlistview.cpp  -  widget showing list of alarms
  *  Program:  kalarm
  *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -30,19 +30,13 @@
 
 
 AlarmListView::AlarmListView(QWidget* parent)
-	: QTreeView(parent)
+	: EventListViewBase(parent)
 {
-	setRootIsDecorated(false);    // don't show expander icons for child-less items
-	setSortingEnabled(true);
-	setAllColumnsShowFocus(true);
-	setSelectionMode(ExtendedSelection);
-	setSelectionBehavior(SelectRows);
-	setTextElideMode(Qt::ElideRight);
 }
 
 void AlarmListView::setModel(QAbstractItemModel* model)
 {
-	QTreeView::setModel(model);
+	EventListViewBase::setModel(model);
 	header()->setMovable(true);
 	header()->setStretchLastSection(false);
 	header()->setResizeMode(EventListModel::TimeColumn, QHeaderView::ResizeToContents);
@@ -53,7 +47,7 @@ void AlarmListView::setModel(QAbstractItemModel* model)
 	header()->setResizeMode(EventListModel::TextColumn, QHeaderView::Stretch);
 	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
 	header()->resizeSection(EventListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
-	header()->resizeSection(EventListModel::TypeColumn, EventListModel::instance()->iconWidth() + 2*margin + 2);
+	header()->resizeSection(EventListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 }
 
 void AlarmListView::setColumnOrder(const QList<int>& order)
@@ -169,77 +163,6 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 //	}
 }
 
-/******************************************************************************
-* Select one event and make it the current item.
-*/
-void AlarmListView::select(const QString& eventId)
-{
-	select(EventListModel::instance()->eventIndex(eventId));
-}
-
-void AlarmListView::select(const QModelIndex& index)
-{
-	selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
-}
-
-/******************************************************************************
-* Return the single selected item.
-* Reply = invalid if no items are selected, or if multiple items are selected.
-*/
-QModelIndex AlarmListView::selectedIndex() const
-{
-	QModelIndexList list = selectionModel()->selectedRows();
-	if (list.count() != 1)
-		return QModelIndex();
-	return list[0];
-}
-
-/******************************************************************************
-* Return the single selected event.
-* Reply = null if no items are selected, or if multiple items are selected.
-*/
-KCal::Event* AlarmListView::selectedEvent() const
-{
-	QModelIndexList list = selectionModel()->selectedRows();
-	if (list.count() != 1)
-		return 0;
-	QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
-	QModelIndex source = proxy->mapToSource(list[0]);
-	return static_cast<KCal::Event*>(source.internalPointer());
-}
-
-/******************************************************************************
-* Return the selected events.
-*/
-KCal::Event::List AlarmListView::selectedEvents() const
-{
-	KCal::Event::List elist;
-	QModelIndexList ilist = selectionModel()->selectedRows();
-	int count = ilist.count();
-	if (count)
-	{
-		QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
-		for (int i = 0;  i < count;  ++i)
-		{
-			QModelIndex source = proxy->mapToSource(ilist[i]);
-			elist += static_cast<KCal::Event*>(source.internalPointer());
-		}
-	}
-	return elist;
-}
-
-/******************************************************************************
-* Called when a mouse button is released.
-*/
-void AlarmListView::mouseReleaseEvent(QMouseEvent* e)
-{
-	if (e->button() == Qt::RightButton)
-		emit rightButtonClicked(e->globalPos());
-	else
-		QTreeView::mouseReleaseEvent(e);
-#warning Should base class method be called always, to select the row?
-}
-
 void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
 /*	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
@@ -248,10 +171,3 @@ void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
 			resizeColumnToContents(col);
 	}*/
 }
-
-/*int AlarmListView::sizeHintForColumn(int column) const
-{
-	if (column == EventListModel::ColourColumn)
-		return viewOptions().fontMetrics.lineSpacing() * 3 / 4;
-	return QTreeView::sizeHintForColumn(column);
-}*/

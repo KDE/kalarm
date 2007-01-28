@@ -1,5 +1,5 @@
 /*
- *  eventlistviewbase.h  -  base class for widget showing list of alarms
+ *  templatelistfiltermodel.h  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
  *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -18,33 +18,36 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EVENTLISTVIEWBASE_H
-#define EVENTLISTVIEWBASE_H
+#ifndef TEMPLATELISTFILTERMODEL_H
+#define TEMPLATELISTFILTERMODEL_H
 
 #include "kalarm.h"
 
-#include <QTreeView>
+#include <QSortFilterProxyModel>
 
-#include <kcal/event.h>
+#include "resources/kcalendar.h"
 
 
-class EventListViewBase : public QTreeView
+class TemplateListFilterModel : public QSortFilterProxyModel
 {
-		Q_OBJECT
 	public:
-		EventListViewBase(QWidget* parent = 0);
-		void              select(const QString& eventId);
-		void              select(const QModelIndex&);
-		QModelIndex       selectedIndex() const;
-		KCal::Event*      selectedEvent() const;
-		KCal::Event::List selectedEvents() const;
+		enum {   // data columns
+			TypeColumn, TemplateNameColumn,
+			ColumnCount
+		};
 
-	signals:
-		void  rightButtonClicked(const QPoint& globalPos);
+		TemplateListFilterModel(QAbstractItemModel* baseModel, QObject* parent = 0);
+		void setTypeFilter(bool excludeCommandAlarms);
+		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
+		virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
 
 	protected:
-		virtual void mouseReleaseEvent(QMouseEvent*);
+		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
+
+	private:
+		bool mCmdFilter;
 };
 
-#endif // EVENTLISTVIEWBASE_H
+#endif // TEMPLATELISTFILTERMODEL_H
 

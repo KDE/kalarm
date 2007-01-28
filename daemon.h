@@ -45,7 +45,7 @@ class Daemon : public QObject
 		static void      initialise();
 		static void      createDcopHandler();
 		static bool      isDcopHandlerReady()    { return mDBusHandler; }
-		static AlarmEnableAction* createAlarmEnableAction(KActionCollection*);
+		static AlarmEnableAction* createAlarmEnableAction(QObject* parent);
 		static bool      start();
 		static bool      reregister()            { return registerWith(true); }
 		static bool      reset();
@@ -134,7 +134,7 @@ class AlarmEnableAction : public KToggleAction
 {
 		Q_OBJECT
 	public:
-		AlarmEnableAction(KActionCollection* parent, const QString& name);
+		AlarmEnableAction(QObject* parent);
 	public slots:
 		void         setCheckedActual(bool);  // set state and emit switched() signal
 		virtual void setChecked(bool);        // request state change and emit userClicked() signal

@@ -77,12 +77,13 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    alarmlistfiltermodel.cpp
    alarmlistdelegate.cpp
    alarmlistview.cpp 
-   kamail.cpp 
-   timeselector.cpp 
+   templatelistfiltermodel.cpp
    templatelistview.cpp 
    templatepickdlg.cpp 
    templatedlg.cpp 
    templatemenuaction.cpp 
+   kamail.cpp 
+   timeselector.cpp 
    latecancel.cpp 
    repetition.cpp 
    alarmtext.cpp 

@@ -1498,7 +1498,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	else if (updateDisplay)
 	{
 		Daemon::eventHandled(event.id());
-		EventListModel::instance()->updateEvent(event.id());
+		EventListModel::alarms()->updateEvent(event.id());
 	}
 }
 

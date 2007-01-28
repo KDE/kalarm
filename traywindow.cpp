@@ -83,22 +83,23 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	//setAcceptDrops(true);         // allow drag-and-drop onto this window
 
 	// Set up the context menu
-	KActionCollection* actcol = actionCollection();
-	KAction* a = Daemon::createAlarmEnableAction(actcol);
+	KActionCollection* actions = actionCollection();
+	KAction* a = Daemon::createAlarmEnableAction(this);
+	actions->addAction(QLatin1String("tAlarmsEnable"), a);
 	contextMenu()->addAction(a);
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
-	mActionNew = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actcol, QLatin1String("tNew"));
+	mActionNew = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actions, QLatin1String("tNew"));
 	contextMenu()->addAction(mActionNew);
 	connect(mActionNew, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
-	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actcol, QLatin1String("tNewFromTempl"));
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
-	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actcol));
+	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
 
 	// Replace the default handler for the Quit context menu item
 	const char* quitName = KStandardAction::name(KStandardAction::Quit);
-	delete actcol->action(quitName);
-	KStandardAction::quit(this, SLOT(slotQuit()), actcol);
+	delete actions->action(quitName);
+	KStandardAction::quit(this, SLOT(slotQuit()), actions);
 
 	// Set icon to correspond with the alarms enabled menu status
 	Daemon::checkStatus();

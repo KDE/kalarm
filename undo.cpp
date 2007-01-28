@@ -902,7 +902,7 @@ UndoItem* UndoEdit::restore()
 			}
 			break;
 		case KCalEvent::TEMPLATE:
-			if (KAlarm::updateTemplate(*mOldEvent, 0) != KAlarm::UPDATE_OK)
+			if (KAlarm::updateTemplate(*mOldEvent) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
 			break;
 		case KCalEvent::ARCHIVED:    // editing of archived events is not allowed
@@ -1000,7 +1000,7 @@ UndoItem* UndoDelete::restore()
 			}
 			break;
 		case KCalEvent::TEMPLATE:
-			if (KAlarm::addTemplate(*mEvent, 0, 0, mResource) != KAlarm::UPDATE_OK)
+			if (KAlarm::addTemplate(*mEvent, mResource) != KAlarm::UPDATE_OK)
 			{
 				mRestoreError = ERR_CREATE;
 				return 0;

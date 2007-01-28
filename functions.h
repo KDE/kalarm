@@ -37,7 +37,6 @@ class AlarmResource;
 class KAEvent;
 class MainWindow;
 class AlarmText;
-class TemplateListView;
 class TemplateMenuAction;
 
 namespace KAlarm
@@ -81,6 +80,8 @@ void                editNewAlarm(QWidget* parent = 0, const KAEvent* preset = 0,
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent&, QWidget* parent = 0);
 void                viewAlarm(const KAEvent& event, QWidget* parent = 0);
+void                editNewTemplate(QWidget* parent = 0, const KAEvent* preset = 0);
+void                editTemplate(KAEvent&, QWidget* parent = 0);
 /** Create a "New Alarm" QAction */
 QAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
 /** Create a "New From Template" QAction */
@@ -104,10 +105,10 @@ enum         // 'options' parameter values for addEvent(). May be OR'ed together
 UpdateStatus        addEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
 UpdateStatus        addEvents(QList<KAEvent>&, QWidget* msgParent = 0, bool allowKOrgUpdate = true, bool showKOrgErr = true);
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
-UpdateStatus        addTemplate(KAEvent&, TemplateListView* selectionView, QWidget* promptParent, AlarmResource* = 0, QWidget* msgParent = 0);
+UpdateStatus        addTemplate(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        updateEvent(KAEvent&, QWidget* msgParent = 0, bool archiveOnDelete = true, bool incRevision = true);
-UpdateStatus        updateTemplate(const KAEvent&, TemplateListView* selectionView, QWidget* msgParent = 0);
+UpdateStatus        updateTemplate(const KAEvent&, QWidget* msgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteTemplates(const QStringList& eventIDs, QWidget* msgParent = 0);

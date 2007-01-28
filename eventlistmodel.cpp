@@ -36,7 +36,8 @@
 
 // EventListModel contains all active and archived alarms, unsorted.
 
-EventListModel* EventListModel::mInstance = 0;
+EventListModel* EventListModel::mAlarmInstance = 0;
+EventListModel* EventListModel::mTemplateInstance = 0;
 QPixmap* EventListModel::mTextIcon = 0;
 QPixmap* EventListModel::mFileIcon = 0;
 QPixmap* EventListModel::mCommandIcon = 0;
@@ -45,21 +46,29 @@ QSize    EventListModel::mIconSize;
 int      EventListModel::mTimeHourPos = -2;
 
 
-EventListModel* EventListModel::instance()
+EventListModel* EventListModel::alarms()
 {
-	if (!mInstance)
-		mInstance = new EventListModel;
-	return mInstance;
+	if (!mAlarmInstance)
+		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
+	return mAlarmInstance;
 }
 
-EventListModel::EventListModel(QObject* parent)
-	: QAbstractTableModel(parent)
+EventListModel* EventListModel::templates()
+{
+	if (!mTemplateInstance)
+		mTemplateInstance = new EventListModel(KCalEvent::TEMPLATE);
+	return mTemplateInstance;
+}
+
+EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
+	: QAbstractTableModel(parent),
+	  mStatus(status)
 {
 	// Load the current list of alarms.
 	// The list will be updated whenever a signal is received notifying changes.
 	// We need to store the list so that when deletions occur, the deleted alarm's
 	// position in the list can be determined.
-	mEvents = AlarmCalendar::resources()->events(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
+	mEvents = AlarmCalendar::resources()->events(mStatus);
 for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event "<<(void*)mEvents[x]<<endl;
 	if (!mTextIcon)
 	{
@@ -183,6 +192,8 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 				case Qt::AccessibleTextRole:
 #warning Implement this
 					return i18n("");
+				case ValueRole:
+					return static_cast<int>(event.action());
 				case SortRole:
 					return QString("%1").arg(event.action(), 2, 10, QLatin1Char('0'));
 			}
@@ -290,7 +301,7 @@ void EventListModel::reload()
 	beginRemoveRows(QModelIndex(), 0, mEvents.count() - 1);
 	mEvents.clear();
 	endRemoveRows();
-	KCal::Event::List list = AlarmCalendar::resources()->events(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
+	KCal::Event::List list = AlarmCalendar::resources()->events(mStatus);
 	beginInsertRows(QModelIndex(), 0, list.count() - 1);
 	mEvents = list;
 	endInsertRows();
@@ -325,7 +336,7 @@ QModelIndex EventListModel::eventIndex(const KCal::Event* event) const
 */
 void EventListModel::addEvent(KCal::Event* event)
 {
-	if (!(KAEvent(event).category() & (KCalEvent::ACTIVE | KCalEvent::ARCHIVED)))
+	if (!(KAEvent(event).category() & mStatus))
 		return;
 	int row = mEvents.count();
 	beginInsertRows(QModelIndex(), row, row);

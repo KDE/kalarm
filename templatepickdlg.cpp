@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialogue to choose an alarm template
  *  Program:  kalarm
- *  Copyright (c) 2004, 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2006,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "eventlistmodel.h"
 #include "functions.h"
 #include "shellprocess.h"
+#include "templatelistfiltermodel.h"
 #include "templatelistview.h"
 #include "templatepickdlg.moc"
 
@@ -48,12 +50,16 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 
 	// Display the list of templates, but exclude command alarms if in kiosk mode.
 	bool includeCmdAlarms = ShellProcess::authorised();
-	mTemplateList = new TemplateListView(includeCmdAlarms, i18n("Select a template to base the new alarm on."), topWidget);
-	mTemplateList->setSelectionMode(Q3ListView::Single);
-	mTemplateList->refresh();      // populate the template list
-	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	connect(mTemplateList, SIGNAL(executed(Q3ListViewItem*)), SLOT(slotOk()));
-	topLayout->addWidget(mTemplateList);
+	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
+	mListFilterModel->setTypeFilter(!includeCmdAlarms);
+	mListView = new TemplateListView(topWidget);
+	mListView->setModel(mListFilterModel);
+	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
+	mListView->setSelectionMode(QAbstractItemView::SingleSelection);
+	mListView->setWhatsThis(i18n("Select a template to base the new alarm on."));
+	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotOk()));
+	topLayout->addWidget(mListView);
 
 	slotSelectionChanged();        // enable or disable the OK button
 
@@ -66,9 +72,9 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 /******************************************************************************
 * Return the currently selected alarm template, or 0 if none.
 */
-const KAEvent* TemplatePickDlg::selectedTemplate() const
+const KCal::Event* TemplatePickDlg::selectedTemplate() const
 {
-	return mTemplateList->selectedEvent();
+	return mListView->selectedEvent();
 }
 
 /******************************************************************************
@@ -77,7 +83,7 @@ const KAEvent* TemplatePickDlg::selectedTemplate() const
 */
 void TemplatePickDlg::slotSelectionChanged()
 {
-	enableButtonOk(mTemplateList->selectedItem());
+	enableButtonOk(!mListView->selectionModel()->selectedRows().isEmpty());
 }
 
 /******************************************************************************

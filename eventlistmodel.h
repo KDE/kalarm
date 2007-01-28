@@ -27,6 +27,8 @@
 #include <QList>
 #include <QSize>
 
+#include "kcalendar.h"
+
 class QPixmap;
 namespace KCal { class Event; }
 class DateTime;
@@ -44,10 +46,12 @@ class EventListModel : public QAbstractTableModel
 		};
 		enum {   // additional roles
 			StatusRole = Qt::UserRole,  // return ACTIVE/ARCHIVED
+			ValueRole,                  // return numeric value
 			SortRole                    // return the value to use for sorting
 		};
 
-		static EventListModel* instance();
+		static EventListModel* alarms();
+		static EventListModel* templates();
 		virtual int           rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual int           columnCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;
@@ -55,7 +59,7 @@ class EventListModel : public QAbstractTableModel
 		virtual bool          setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole);
 		virtual QVariant      headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
 		virtual Qt::ItemFlags flags(const QModelIndex&) const;
-		int                   iconWidth() const       { return mIconSize.width(); }
+		static int            iconWidth()       { return mIconSize.width(); }
 		QModelIndex           eventIndex(const KCal::Event*) const;
 		QModelIndex           eventIndex(const QString& eventId) const;
 		void                  addEvent(KCal::Event*);
@@ -73,7 +77,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateTimeTo();
 
 	private:
-		EventListModel(QObject* parent = 0);
+		EventListModel(KCalEvent::Status, QObject* parent = 0);
 		void     updateEvent(int row);
 		void     removeEvent(int row);
 		int      findEvent(const QString& eventId) const;
@@ -85,7 +89,8 @@ class EventListModel : public QAbstractTableModel
 		QPixmap* eventIcon(const KAEvent&) const;
 		QString  whatsThisText(int column) const;
 
-		static EventListModel* mInstance;   // the one and only instance of this class
+		static EventListModel* mAlarmInstance;     // the instance containing all alarms
+		static EventListModel* mTemplateInstance;  // the instance containing all templates
 		static QPixmap* mTextIcon;
 		static QPixmap* mFileIcon;
 		static QPixmap* mCommandIcon;
@@ -94,6 +99,7 @@ class EventListModel : public QAbstractTableModel
 		static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
 		QList<KCal::Event*> mEvents;
+		KCalEvent::Status   mStatus;    // types of events contained in this model
 };
 
 #endif // EVENTLISTMODEL_H

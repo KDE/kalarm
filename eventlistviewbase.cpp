@@ -1,7 +1,7 @@
 /*
- *  eventlistviewbase.cpp  -  base classes for widget showing list of events
+ *  eventlistviewbase.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,461 +20,95 @@
 
 #include "kalarm.h"
 
-//Added by qt3to4:
-#include <q3header.h>
-#include <QWhatsThis>
-#include <QPixmap>
-#include <QShowEvent>
-#include <QResizeEvent>
+#include <QHeaderView>
+#include <QMouseEvent>
+#include <QApplication>
 
-#include <kiconloader.h>
 #include <kdebug.h>
 
-#include "find.h"
+#include "eventlistmodel.h"
+#include "templatelistfiltermodel.h"
 #include "eventlistviewbase.moc"
 
 
-/*=============================================================================
-=  Class: EventListViewBase
-=  Base class for displaying a list of events.
-=============================================================================*/
-
 EventListViewBase::EventListViewBase(QWidget* parent)
-	: K3ListView(parent),
-	  mFind(0),
-	  mLastColumn(-1),
-	  mLastColumnHeaderWidth(0)
+	: QTreeView(parent)
 {
+	setRootIsDecorated(false);    // don't show expander icons for child-less items
+	setSortingEnabled(true);
 	setAllColumnsShowFocus(true);
-	setShowSortIndicator(true);
-}
-
-void EventListViewBase::addLastColumn(const QString& title)
-{
-	addColumn(title);
-	mLastColumn = columns() - 1;
-	mLastColumnHeaderWidth = columnWidth(mLastColumn);
-	setColumnWidthMode(mLastColumn, Q3ListView::Maximum);
+	setSelectionMode(ExtendedSelection);
+	setSelectionBehavior(SelectRows);
+	setTextElideMode(Qt::ElideRight);
 }
 
 /******************************************************************************
-*  Refresh the list by clearing it and redisplaying all the current alarms.
+* Select one event and make it the current item.
 */
-void EventListViewBase::refresh()
+void EventListViewBase::select(const QString& eventId)
 {
-	QString currentID;
-	if (currentItem())
-		currentID = currentItem()->event().id();    // save current item for restoration afterwards
-	clear();
-	populate();
-	resizeLastColumn();
-	EventListViewItemBase* current = getEntry(currentID);
-	if (current)
-	{
-		setCurrentItem(current);
-		ensureItemVisible(current);
-	}
+	select(static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel())->eventIndex(eventId));
+}
+
+void EventListViewBase::select(const QModelIndex& index)
+{
+	selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 }
 
 /******************************************************************************
-*  Get the item for a given event ID.
+* Return the single selected item.
+* Reply = invalid if no items are selected, or if multiple items are selected.
 */
-EventListViewItemBase* EventListViewBase::getEntry(const QString& eventID) const
+QModelIndex EventListViewBase::selectedIndex() const
 {
-	if (!eventID.isEmpty())
-	{
-		for (EventListViewItemBase* item = firstChild();  item;  item = item->nextSibling())
-			if (item->event().id() == eventID)
-				return item;
-	}
-	return 0;
+	QModelIndexList list = selectionModel()->selectedRows();
+	if (list.count() != 1)
+		return QModelIndex();
+	return list[0];
 }
 
 /******************************************************************************
-*  Add an event to every list instance.
-*  If 'selectionView' is non-null, the selection highlight is moved to the new
-*  event in that listView instance.
+* Return the single selected event.
+* Reply = null if no items are selected, or if multiple items are selected.
 */
-void EventListViewBase::addEvent(const KAEvent& event, const InstanceList& instanceList, EventListViewBase* selectionView)
+KCal::Event* EventListViewBase::selectedEvent() const
 {
-	for (int i = 0, end = instanceList.count();  i < end;  ++i)
-		instanceList[i]->addEntry(event, true, (instanceList[i] == selectionView));
-}
-
-/******************************************************************************
-*  Modify an event in every list instance.
-*  If 'selectionView' is non-null, the selection highlight is moved to the
-*  modified event in that listView instance.
-*/
-void EventListViewBase::modifyEvent(const QString& oldEventID, const KAEvent& newEvent,
-                                    const InstanceList& instanceList, EventListViewBase* selectionView)
-{
-	for (int i = 0, end = instanceList.count();  i < end;  ++i)
-	{
-		EventListViewBase* v = instanceList[i];
-		EventListViewItemBase* item = v->getEntry(oldEventID);
-		if (item)
-			v->deleteEntry(item, false);
-		v->addEntry(newEvent, true, (v == selectionView));
-	}
-}
-
-/******************************************************************************
-*  Delete an event from every displayed list.
-*/
-void EventListViewBase::deleteEvent(const QString& eventID, const InstanceList& instanceList)
-{
-	for (int i = 0, end = instanceList.count();  i < end;  ++i)
-	{
-		EventListViewBase* v = instanceList[i];
-		EventListViewItemBase* item = v->getEntry(eventID);
-		if (item)
-			v->deleteEntry(item, true);
-		else
-			v->refresh();
-	}
-}
-
-/******************************************************************************
-*  Add a new item to the list.
-*  If 'reselect' is true, select/highlight the new item.
-*/
-EventListViewItemBase* EventListViewBase::addEntry(const KAEvent& event, bool setSize, bool reselect)
-{
-	if (!shouldShowEvent(event))
+	QModelIndexList list = selectionModel()->selectedRows();
+	if (list.count() != 1)
 		return 0;
-	return addEntry(createItem(event), setSize, reselect);
+kDebug()<<"SelectedEvent() count="<<list.count()<<endl;
+	QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
+	QModelIndex source = proxy->mapToSource(list[0]);
+	return static_cast<KCal::Event*>(source.internalPointer());
 }
 
-EventListViewItemBase* EventListViewBase::addEntry(EventListViewItemBase* item, bool setSize, bool reselect)
+/******************************************************************************
+* Return the selected events.
+*/
+KCal::Event::List EventListViewBase::selectedEvents() const
 {
-	if (setSize)
-		resizeLastColumn();
-	if (reselect)
+	KCal::Event::List elist;
+	QModelIndexList ilist = selectionModel()->selectedRows();
+	int count = ilist.count();
+	if (count)
 	{
-		clearSelection();
-		setSelected(item, true);
-	}
-	return item;
-}
-
-/******************************************************************************
-*  Update a specified item in the list.
-*  If 'reselect' is true, select the updated item.
-*/
-EventListViewItemBase* EventListViewBase::updateEntry(EventListViewItemBase* item, const KAEvent& newEvent, bool setSize, bool reselect)
-{
-	deleteEntry(item);
-	return addEntry(newEvent, setSize, reselect);
-}
-
-/******************************************************************************
-*  Delete a specified item from the list.
-*/
-void EventListViewBase::deleteEntry(EventListViewItemBase* item, bool setSize)
-{
-	if (item)
-	{
-		delete item;
-		if (setSize)
-			resizeLastColumn();
-		emit itemDeleted();
-	}
-}
-
-/******************************************************************************
-*  Called when the Find action is selected.
-*  Display the non-modal Find dialog.
-*/
-void EventListViewBase::slotFind()
-{
-	if (!mFind)
-	{
-		mFind = new Find(this);
-		connect(mFind, SIGNAL(active(bool)), SIGNAL(findActive(bool)));
-	}
-	mFind->display();
-}
-
-/******************************************************************************
-*  Called when the Find Next or Find Prev action is selected.
-*/
-void EventListViewBase::findNext(bool forward)
-{
-	if (mFind)
-		mFind->findNext(forward);
-}
-
-/******************************************************************************
-*  Called when the Select All action is selected.
-*  Select all items in the list.
-*/
-void EventListViewBase::slotSelectAll()
-{
-	if (selectionModeExt() == Multi  ||  selectionModeExt() == Extended)
-		selectAll(true);
-}
-
-/******************************************************************************
-*  Called when the Deselect action is selected.
-*  Deselect all items in the list.
-*/
-void EventListViewBase::slotDeselect()
-{
-	selectAll(false);
-}
-
-/******************************************************************************
-*  Select the specified event ID instead of any current selection.
-*/
-void EventListViewBase::select(const QString& eventID)
-{
-	EventListViewItemBase* item = getEntry(eventID);
-	if (item)
-	{
-		clearSelection();
-		setSelected(item, true);
-	}
-}
-
-/******************************************************************************
-*  Check whether there are any selected items.
-*/
-bool EventListViewBase::anySelected() const
-{
-	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
-		if (isSelected(item))
-			return true;
-	return false;
-}
-
-/******************************************************************************
-*  Get the single selected event.
-*  Reply = the event
-*        = 0 if no event is selected or multiple events are selected.
-*/
-const KAEvent* EventListViewBase::selectedEvent() const
-{
-	EventListViewItemBase* sel = selectedItem();
-	return sel ? &sel->event() : 0;
-}
-
-/******************************************************************************
-*  Get all selected events.
-*  The KAEvent instances in the returned list belong to the EventListViewBase.
-*/
-QList<const KAEvent*> EventListViewBase::selectedEvents() const
-{
-	QList<const KAEvent*> events;
-	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			events.append(&static_cast<EventListViewItemBase*>(item)->event());
-	}
-	return events;
-}
-
-/******************************************************************************
-*  Fetch the single selected item.
-*  This method works in both Single and Multi selection mode, unlike
-*  QListView::selectedItem().
-*  Reply = null if no items are selected, or if multiple items are selected.
-*/
-EventListViewItemBase* EventListViewBase::selectedItem() const
-{
-	if (selectionMode() == Q3ListView::Single)
-		return (EventListViewItemBase*)K3ListView::selectedItem();
-
-	Q3ListViewItem* item = 0;
-	for (Q3ListViewItem* it = firstChild();  it;  it = it->nextSibling())
-	{
-		if (isSelected(it))
+		QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
+		for (int i = 0;  i < count;  ++i)
 		{
-			if (item)
-				return 0;
-			item = it;
+			QModelIndex source = proxy->mapToSource(ilist[i]);
+			elist += static_cast<KCal::Event*>(source.internalPointer());
 		}
 	}
-	return (EventListViewItemBase*)item;
+	return elist;
 }
 
 /******************************************************************************
-*  Fetch all selected items.
+* Called when a mouse button is released.
 */
-QList<EventListViewItemBase*> EventListViewBase::selectedItems() const
+void EventListViewBase::mouseReleaseEvent(QMouseEvent* e)
 {
-	QList<EventListViewItemBase*> items;
-	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			items.append((EventListViewItemBase*)item);
-	}
-	return items;
-}
-
-/******************************************************************************
-*  Return how many items are selected.
-*/
-int EventListViewBase::selectedCount() const
-{
-	int count = 0;
-	for (Q3ListViewItem* item = firstChild();  item;  item = item->nextSibling())
-	{
-		if (isSelected(item))
-			++count;
-	}
-	return count;
-}
-
-/******************************************************************************
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
-*/
-void EventListViewBase::resizeLastColumn()
-{
-	int lastColumnWidth = mLastColumnHeaderWidth;
-	for (EventListViewItemBase* item = firstChild();  item;  item = item->nextSibling())
-	{
-		int mw = item->lastColumnWidth();
-		if (mw > lastColumnWidth)
-			lastColumnWidth = mw;
-	}
-	int x = header()->sectionPos(mLastColumn);
-	int width = visibleWidth() - x;
-	if (width < lastColumnWidth)
-		width = lastColumnWidth;
-	setColumnWidth(mLastColumn, width);
-	if (contentsWidth() > x + width)
-		resizeContents(x + width, contentsHeight());
-}
-
-/******************************************************************************
-*  Called when the widget's size has changed (before it is painted).
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
-*/
-void EventListViewBase::resizeEvent(QResizeEvent* re)
-{
-	K3ListView::resizeEvent(re);
-	resizeLastColumn();
-}
-
-/******************************************************************************
-*  Called when the widget is first displayed.
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
-*/
-void EventListViewBase::showEvent(QShowEvent* se)
-{
-	K3ListView::showEvent(se);
-	resizeLastColumn();
-}
-
-/******************************************************************************
-*  Called when any event occurs.
-*  Displays the WhatsThis text for the chosen column.
-*/
-bool EventListViewBase::event(QEvent *e)
-{
-	if (e->type() == QEvent::WhatsThis)
-	{
-		QHelpEvent* he = (QHelpEvent*)e;
-		QPoint pt = he->pos();
-		int column = -1;
-		QPoint viewportPt = viewport()->mapFrom(this, pt);
-		QRect frame = header()->frameGeometry();
-		if (frame.contains(pt)
-		||  itemAt(QPoint(itemMargin(), viewportPt.y())) && frame.contains(QPoint(pt.x(), frame.y())))
-			column = header()->sectionAt(pt.x());
-		QWhatsThis::showText(pt, whatsThisText(column));
-		return true;
-	}
-	return K3ListView::event(e);
-}
-
-/******************************************************************************
-*  Find the height of one list item.
-*/
-int EventListViewBase::itemHeight()
-{
-	EventListViewItemBase* item = firstChild();
-	if (!item)
-	{
-		// The list is empty, so create a temporary item to find its height
-		Q3ListViewItem* item = new Q3ListViewItem(this, QString());
-		int height = item->height();
-		delete item;
-		return height;
-	}
+	if (e->button() == Qt::RightButton)
+		emit rightButtonClicked(e->globalPos());
 	else
-		return item->height();
+		QTreeView::mouseReleaseEvent(e);
 }
-
-
-/*=============================================================================
-=  Class: EventListViewItemBase
-=  Base class containing the details of one event for display in an
-*  EventListViewBase.
-=============================================================================*/
-QPixmap* EventListViewItemBase::mTextIcon;
-QPixmap* EventListViewItemBase::mFileIcon;
-QPixmap* EventListViewItemBase::mCommandIcon;
-QPixmap* EventListViewItemBase::mEmailIcon;
-int      EventListViewItemBase::mIconWidth = 0;
-
-
-EventListViewItemBase::EventListViewItemBase(EventListViewBase* parent, const KAEvent& event)
-	: Q3ListViewItem(parent),
-	  mEvent(event)
-{
-	iconWidth();    // load the icons
-}
-
-/******************************************************************************
-*  Set the text for the last column, and find its width.
-*/
-void EventListViewItemBase::setLastColumnText()
-{
-	EventListViewBase* parent = (EventListViewBase*)listView();
-	setText(parent->lastColumn(), lastColumnText());
-	mLastColumnWidth = width(parent->fontMetrics(), parent, parent->lastColumn());
-}
-
-/******************************************************************************
-*  Return the width of the widest alarm type icon.
-*/
-int EventListViewItemBase::iconWidth()
-{
-	if (!mIconWidth)
-	{
-		mTextIcon    = new QPixmap(SmallIcon("message"));
-		mFileIcon    = new QPixmap(SmallIcon("file"));
-		mCommandIcon = new QPixmap(SmallIcon("exec"));
-		mEmailIcon   = new QPixmap(SmallIcon("mail_generic"));
-		if (mTextIcon)
-			mIconWidth = mTextIcon->width();
-		if (mFileIcon  &&  mFileIcon->width() > mIconWidth)
-			mIconWidth = mFileIcon->width();
-		if (mCommandIcon  &&  mCommandIcon->width() > mIconWidth)
-			mIconWidth = mCommandIcon->width();
-		if (mEmailIcon  &&  mEmailIcon->width() > mIconWidth)
-			mIconWidth = mEmailIcon->width();
-	}
-	return mIconWidth;
-}
-
-/******************************************************************************
-*  Return the icon associated with the event's action.
-*/
-QPixmap* EventListViewItemBase::eventIcon() const
-{
-	switch (mEvent.action())
-	{
-		case KAAlarm::FILE:     return mFileIcon;
-		case KAAlarm::COMMAND:  return mCommandIcon;
-		case KAAlarm::EMAIL:    return mEmailIcon;
-		case KAAlarm::MESSAGE:
-		default:                return mTextIcon;
-	}
-}
-

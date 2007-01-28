@@ -578,9 +578,9 @@ void Daemon::slotPreferencesChanged()
 /******************************************************************************
 * Create an "Alarms Enabled/Enable Alarms" action.
 */
-AlarmEnableAction* Daemon::createAlarmEnableAction(KActionCollection* actions)
+AlarmEnableAction* Daemon::createAlarmEnableAction(QObject* parent)
 {
-	AlarmEnableAction* a = new AlarmEnableAction(actions, QLatin1String("alEnable"));
+	AlarmEnableAction* a = new AlarmEnableAction(parent);
 	connect(a, SIGNAL(userClicked(bool)), mInstance, SLOT(setAlarmsEnabled(bool)));
 	connect(mInstance, SIGNAL(daemonRunning(bool)), a, SLOT(setCheckedActual(bool)));
 	return a;
@@ -784,14 +784,13 @@ void NotificationHandler::cacheDownloaded(const QString& resourceID)
 =  Class: AlarmEnableAction
 =============================================================================*/
 
-AlarmEnableAction::AlarmEnableAction(KActionCollection* parent, const QString& name)
+AlarmEnableAction::AlarmEnableAction(QObject* parent)
 	: KToggleAction(i18n("Enable &Alarms"), parent),
 	  mInitialised(false)
 {
 	setCheckedState(KGuiItem(i18n("Disable &Alarms")));
 	setCheckedActual(false);    // set the correct text
 	mInitialised = true;
-        parent->addAction(name, this);
 }
 
 /******************************************************************************

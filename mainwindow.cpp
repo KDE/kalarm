@@ -48,11 +48,11 @@
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
+#include <kicon.h>
 #include <libkdepim/maillistdrag.h>
 #include <kmime/kmime_content.h>
 #include <kcal/calendarlocal.h>
 #include <kcal/icaldrag.h>
-#include <kicon.h>
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
@@ -165,7 +165,7 @@ MainWindow::MainWindow(bool restored)
 	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
 
 	// Create the alarm list widget
-	mListFilterModel = new AlarmListFilterModel(EventListModel::instance());
+	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms());
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
 	mListView = new AlarmListView(mSplitter);
 	mListView->setModel(mListFilterModel);
@@ -180,8 +180,8 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView->header(), SIGNAL(sectionMoved(int,int,int)), SLOT(columnsReordered()));
 #warning Try to avoid reloading the entire list when resources change?
 #warning Model should be told to reload independently of resource selector?
-//	connect(mResourceSelector, SIGNAL(resourcesChanged()), EventListModel::instance(), SLOT(reload()));
-//	connect(resources, SIGNAL(calendarChanged()), EventListModel::instance(), SLOT(reload()));
+//	connect(mResourceSelector, SIGNAL(resourcesChanged()), EventListModel::alarms(), SLOT(reload()));
+//	connect(resources, SIGNAL(calendarChanged()), EventListModel::alarms(), SLOT(reload()));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
@@ -370,8 +370,8 @@ void MainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 
-	mActionTemplates  = new KAction(i18n("&Templates..."), this);
-	actionCollection()->addAction(QLatin1String("templates"), mActionTemplates);
+	mActionTemplates = new KAction(i18n("&Templates..."), this);
+	actions->addAction(QLatin1String("templates"), mActionTemplates);
 	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
 	mActionNew = KAlarm::createNewAlarmAction(i18n("&New..."), actions, QLatin1String("new"));
@@ -380,27 +380,27 @@ void MainWindow::initActions()
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 
-	mActionCreateTemplate  = new KAction(i18n("Create Tem&plate..."), this);
-	actionCollection()->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
+	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), this);
+	actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-	mActionCopy  = new KAction(KIcon("editcopy"), i18n("&Copy..."), this);
-	actionCollection()->addAction(QLatin1String("copy"), mActionCopy);
+	mActionCopy = new KAction(KIcon("editcopy"), i18n("&Copy..."), this);
+	actions->addAction(QLatin1String("copy"), mActionCopy);
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify  = new KAction(KIcon("edit"), i18n("&Edit..."), this);
-	actionCollection()->addAction(QLatin1String("modify"), mActionModify);
+	mActionModify = new KAction(KIcon("edit"), i18n("&Edit..."), this);
+	actions->addAction(QLatin1String("modify"), mActionModify);
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-	mActionDelete  = new KAction(KIcon("editdelete"), i18n("&Delete"), this);
-	actionCollection()->addAction(QLatin1String("delete"), mActionDelete);
+	mActionDelete = new KAction(KIcon("editdelete"), i18n("&Delete"), this);
+	actions->addAction(QLatin1String("delete"), mActionDelete);
 	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
 
-	mActionReactivate  = new KAction(i18n("Reac&tivate"), this);
-	actionCollection()->addAction(QLatin1String("undelete"), mActionReactivate);
+	mActionReactivate = new KAction(i18n("Reac&tivate"), this);
+	actions->addAction(QLatin1String("undelete"), mActionReactivate);
 	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
 	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
@@ -409,8 +409,8 @@ void MainWindow::initActions()
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	mActionView  = new KAction(KIcon("viewmag"), i18n("&View"), this);
-	actionCollection()->addAction(QLatin1String("view"), mActionView);
+	mActionView = new KAction(KIcon("viewmag"), i18n("&View"), this);
+	actions->addAction(QLatin1String("view"), mActionView);
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
 
@@ -432,8 +432,8 @@ void MainWindow::initActions()
 	mActionShowArchived->setCheckedState(KGuiItem(i18n_e_HideArchivedAlarms()));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
-	mActionToggleTrayIcon  = new KToggleAction(i18n("Show in System &Tray"), this);
-	actionCollection()->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
+	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), this);
+	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	mActionToggleTrayIcon->setCheckedState(KGuiItem(i18n("Hide From System &Tray")));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
@@ -442,19 +442,20 @@ void MainWindow::initActions()
 	mActionToggleResourceSel->setCheckedState(KGuiItem(i18n("Hide &Resources")));
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
-	mActionImportAlarms  = new KAction(i18n("Import &Alarms..."), this);
-	actionCollection()->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
+	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), this);
+	actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
-	mActionImportBirthdays  = new KAction(i18n("Import &Birthdays..."), this);
-	actionCollection()->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
+	mActionImportBirthdays = new KAction(i18n("Import &Birthdays..."), this);
+	actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	QAction * action  = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), this);
-	actionCollection()->addAction(QLatin1String("refreshAlarms"), action);
+	QAction* action = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), this);
+	actions->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
-	Daemon::createAlarmEnableAction(actions);
+	action = Daemon::createAlarmEnableAction(this);
+	actions->addAction(QLatin1String("alarmsEnable"), action);
 #warning Enable alarms action does not show in menu
 	if (undoText.isNull())
 	{
@@ -485,8 +486,8 @@ void MainWindow::initActions()
 	KStandardAction::find(mListView, SLOT(slotFind()), actions);
 	mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
 	mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
-	KStandardAction::selectAll(mListView, SLOT(slotSelectAll()), actions);
-	KStandardAction::deselect(mListView, SLOT(slotDeselect()), actions);
+	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
 	KStandardAction::quit(this, SLOT(slotQuit()), actions);
 	KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -557,7 +558,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 void MainWindow::refresh()
 {
 	kDebug(5950) << "MainWindow::refresh()\n";
-	EventListModel::instance()->reload();
+	EventListModel::alarms()->reload();
 }
 
 /******************************************************************************
@@ -618,7 +619,7 @@ void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
 void MainWindow::selectEvent(const QString& eventID)
 {
 	mListView->clearSelection();
-	QModelIndex index = EventListModel::instance()->eventIndex(eventID);
+	QModelIndex index = EventListModel::alarms()->eventIndex(eventID);
 	if (index.isValid())
 	{
 		mListView->select(index);
@@ -653,7 +654,7 @@ void MainWindow::slotNewTemplate()
 	if (kcalEvent)
 	{
 		KAEvent event(kcalEvent);
-		TemplateDlg::createTemplate(&event, this);
+		KAlarm::editNewTemplate(this, &event);
 	}
 }
 
@@ -819,7 +820,7 @@ void MainWindow::slotShowArchived()
 void MainWindow::slotImportAlarms()
 {
 	if (AlarmCalendar::importAlarms(this))
-		EventListModel::instance()->reload();
+		EventListModel::alarms()->reload();
 #warning Is reload necessary, or can signal tell EventListModel?
 }
 
@@ -1280,7 +1281,7 @@ void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Chang
 	}
 
 	if (change == AlarmResources::Location)
-		EventListModel::instance()->reload();
+		EventListModel::alarms()->reload();
 }
 
 /******************************************************************************

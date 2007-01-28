@@ -1,5 +1,5 @@
 /*
- *  alarmlistview.h  -  widget showing list of outstanding alarms
+ *  alarmlistview.h  -  widget showing list of alarms
  *  Program:  kalarm
  *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -23,12 +23,12 @@
 
 #include "kalarm.h"
 
-#include <QTreeView>
-
 #include <kcal/event.h>
 
+#include "eventlistviewbase.h"
 
-class AlarmListView : public QTreeView
+
+class AlarmListView : public EventListViewBase
 {
 		Q_OBJECT
 	public:
@@ -37,18 +37,6 @@ class AlarmListView : public QTreeView
 		void              setColumnOrder(const QList<int>& order);
 		void              selectTimeColumns(bool time, bool timeTo);
 		QList<int>        columnOrder() const;
-		void              select(const QString& eventId);
-		void              select(const QModelIndex&);
-		QModelIndex       selectedIndex() const;
-		KCal::Event*      selectedEvent() const;
-		KCal::Event::List selectedEvents() const;
-
-	signals:
-		void  rightButtonClicked(const QPoint& globalPos);
-
-	protected:
-//		virtual int  sizeHintForColumn(int column) const;
-		virtual void mouseReleaseEvent(QMouseEvent*);
 
 	protected slots:
 		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);

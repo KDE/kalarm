@@ -1,7 +1,7 @@
 /*
  *  templatelistview.cpp  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,112 +20,37 @@
 
 #include "kalarm.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <QHeaderView>
+#include <QMouseEvent>
+#include <QApplication>
 
-#include "alarmcalendar.h"
-#include "functions.h"
+#include "eventlistmodel.h"
+#include "templatelistfiltermodel.h"
 #include "templatelistview.moc"
 
 
-/*=============================================================================
-=  Class: TemplateListView
-=  Displays the list of outstanding alarms.
-=============================================================================*/
-QList<EventListViewBase*>  TemplateListView::mInstanceList;
-
-
-TemplateListView::TemplateListView(bool includeCmdAlarms, const QString& whatsThisText, QWidget* parent)
-	: EventListViewBase(parent),
-	  mWhatsThisText(whatsThisText),
-	  mIconColumn(0),
-	  mNameColumn(1),
-	  mExcludeCmdAlarms(!includeCmdAlarms)
+TemplateListView::TemplateListView(QWidget* parent)
+	: EventListViewBase(parent)
 {
-	addColumn(QString());          // icon column
-	addLastColumn(i18n("Name"));
-	setSorting(mNameColumn);           // sort initially by name
-	setColumnAlignment(mIconColumn, Qt::AlignHCenter);
-	setColumnWidthMode(mIconColumn, Q3ListView::Maximum);
-
-	mInstanceList.append(this);
 }
 
-TemplateListView::~TemplateListView()
+void TemplateListView::setModel(QAbstractItemModel* model)
 {
-	mInstanceList.removeAt(mInstanceList.indexOf(this));
+	EventListViewBase::setModel(model);
+	header()->setMovable(false);
+	header()->setStretchLastSection(true);
+	header()->setResizeMode(TemplateListFilterModel::TypeColumn, QHeaderView::Fixed);
+	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+	header()->resizeSection(TemplateListFilterModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 }
 
-/******************************************************************************
-*  Add all the templates to the list.
-*/
-void TemplateListView::populate()
+void TemplateListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-	QList<KAEvent> templates = KAlarm::templateList();
-	for (int i = 0, end = templates.count();  i < end;  ++i)
-		addEntry(templates[i]);
-}
-
-/******************************************************************************
-*  Create a new list item for addEntry().
-*/
-EventListViewItemBase* TemplateListView::createItem(const KAEvent& event)
-{
-	return new TemplateListViewItem(this, event);
-}
-
-/******************************************************************************
-*  Returns the QWhatsThis text for a specified column.
-*/
-QString TemplateListView::whatsThisText(int column) const
-{
-	if (column == mIconColumn)
-		return i18n("Alarm type");
-	if (column == mNameColumn)
-		return i18n("Name of the alarm template");
-	return mWhatsThisText;
-}
-
-
-/*=============================================================================
-=  Class: TemplateListViewItem
-=  Contains the details of one alarm for display in the TemplateListView.
-=============================================================================*/
-
-TemplateListViewItem::TemplateListViewItem(TemplateListView* parent, const KAEvent& event)
-	: EventListViewItemBase(parent, event)
-{
-	setLastColumnText();     // set the template name column text
-
-	int index;
-	switch (event.action())
+/*	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
 	{
-		case KAAlarm::FILE:     index = 2;  break;
-		case KAAlarm::COMMAND:  index = 3;  break;
-		case KAAlarm::EMAIL:    index = 4;  break;
-		case KAAlarm::MESSAGE:
-		default:                index = 1;  break;
-	}
-	mIconOrder.sprintf("%01u", index);
-	setPixmap(templateListView()->iconColumn(), *eventIcon());
+		if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
+			resizeColumnToContents(col);
+	}*/
 }
 
-/******************************************************************************
-*  Return the alarm summary text.
-*/
-QString TemplateListViewItem::lastColumnText() const
-{
-	return event().templateName();
-}
-
-/******************************************************************************
-*  Return the column sort order for one item in the list.
-*/
-QString TemplateListViewItem::key(int column, bool) const
-{
-	TemplateListView* listView = templateListView();
-	if (column == listView->iconColumn())
-		return mIconOrder;
-	return text(column).toLower();
-}
-
+#warning Set default whatsthis = i18n("The list of alarm templates")
