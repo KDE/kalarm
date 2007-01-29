@@ -198,12 +198,12 @@ bool Daemon::registerWith(bool reregister)
 	bool result;
 	if (reregister)
 	{
-		daemonDBus()->registerChange(kapp->aboutData()->appName(), !disabledIfStopped);
+		daemonDBus()->registerChange(KGlobal::mainComponent().aboutData()->appName(), !disabledIfStopped);
 		result = checkDBusResult("registerChange");
 	}
 	else
 	{
-		daemonDBus()->registerApp(kapp->aboutData()->appName(), QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
+		daemonDBus()->registerApp(KGlobal::mainComponent().aboutData()->appName(), QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
 		result = checkDBusResult("registerApp");
 	}
 	if (!result)
@@ -235,11 +235,11 @@ void Daemon::registrationResult(bool reregister, int result)
 			// We've successfully registered with the daemon, but the daemon can't
 			// find the KAlarm executable so won't be able to restart KAlarm if
 			// KAlarm exits.
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call: " << kapp->aboutData()->appName() << " not found\n";
+			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call: " << KGlobal::mainComponent().aboutData()->appName() << " not found\n";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
 			                            QLatin1String(DAEMON_APP_NAME),
-			                            kapp->aboutData()->appName()));
+			                            KGlobal::mainComponent().aboutData()->appName()));
 			break;
 		case KAlarmd::FAILURE:
 		default:

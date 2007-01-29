@@ -623,7 +623,7 @@ void MessageWin::initView()
 		mKMailButton = 0;
 
 	// KAlarm button
-	QPixmap pixmap = iconLoader.loadIcon(QLatin1String(kapp->aboutData()->appName()), K3Icon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(QLatin1String(KGlobal::mainComponent().aboutData()->appName()), K3Icon::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setIcon(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());

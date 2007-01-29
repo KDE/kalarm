@@ -278,7 +278,7 @@ void Preferences::read()
 {
 	initialise();
 
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	QString timeZone = config->readEntry(TIMEZONE);
 	mTimeZone = 0;
@@ -333,7 +333,7 @@ void Preferences::read()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
-	mCmdXTermCommand          = translateXTermPath(config, config->readEntry(CMD_XTERM_COMMAND, QString()), false);
+	mCmdXTermCommand          = translateXTermPath(config.data(), config->readEntry(CMD_XTERM_COMMAND, QString()), false);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
 	mStartOfDay               = config->readEntry(START_OF_DAY, defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
@@ -387,7 +387,7 @@ void Preferences::read()
 */
 void Preferences::save(bool syncToDisc)
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(VERSION_NUM, KALARM_VERSION);
 	config->writeEntry(TIMEZONE, (mTimeZone ? mTimeZone->name() : QString()));
@@ -416,7 +416,7 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
 	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
 	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
-	config->writeEntry(CMD_XTERM_COMMAND, translateXTermPath(config, mCmdXTermCommand, true));
+	config->writeEntry(CMD_XTERM_COMMAND, translateXTermPath(config.data(), mCmdXTermCommand, true));
 	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
 	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
@@ -459,7 +459,7 @@ void Preferences::syncToDisc()
 
 void Preferences::updateStartOfDayCheck()
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	config->writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
 	config->sync();
@@ -596,7 +596,7 @@ bool Preferences::notifying(const QString& messageID)
 */
 void Preferences::convertOldPrefs()
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM, QString()));
 	if (version >= KAlarm::Version(1,4,5))

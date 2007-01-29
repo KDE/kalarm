@@ -389,7 +389,7 @@ MiscPrefTab::MiscPrefTab()
 		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->addButton(radio, mXtermCount);
-		cmd.replace("%t", kapp->aboutData()->programName());
+		cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
 		cmd.replace("%C", "[command]");

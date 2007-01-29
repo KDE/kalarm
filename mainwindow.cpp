@@ -139,14 +139,14 @@ MainWindow::MainWindow(bool restored)
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MainWin");    // used by LikeBack
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME));    // save window sizes etc.
-	setPlainCaption(kapp->aboutData()->programName());
+	setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
 	if (!restored)
 	{
 		QSize s;
 		if (KAlarm::readConfigWindowSize(WINDOW_NAME, s, &mResourcesWidth))
 			resize(s);
 	}
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(QString::fromLatin1(WINDOW_NAME));
 	QList<int> order = config->readEntry("ColumnOrder", QList<int>());
 
@@ -215,7 +215,7 @@ MainWindow::~MainWindow()
 	KGlobal::config()->sync();    // save any new window size to disc
 	KToolBar* tb = toolBar();
 	if (tb)
-		tb->saveSettings(KGlobal::config(), "Toolbars");
+		tb->saveSettings(KGlobal::config().data(), "Toolbars");
 	theApp()->quitIf();
 }
 
@@ -357,7 +357,7 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::columnsReordered()
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(WINDOW_NAME);
 	config->writeEntry("ColumnOrder", mListView->columnOrder());
 	config->sync();
@@ -536,7 +536,7 @@ void MainWindow::initActions()
 
 	KToolBar* tb = toolBar();
 	if (tb)
-		tb->applySettings(KGlobal::config(), "Toolbars");
+		tb->applySettings(KGlobal::config().data(), "Toolbars");
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
@@ -1081,7 +1081,7 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-	saveMainWindowSettings(KGlobal::config(), WINDOW_NAME);
+	saveMainWindowSettings(KGlobal::config().data(), WINDOW_NAME);
 	KEditToolbar dlg(factory());
 	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
@@ -1094,7 +1094,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
 	createGUI(UI_FILE);
-	applyMainWindowSettings(KGlobal::config(), WINDOW_NAME);
+	applyMainWindowSettings(KGlobal::config().data(), WINDOW_NAME);
 }
 
 /******************************************************************************

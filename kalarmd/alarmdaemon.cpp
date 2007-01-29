@@ -397,7 +397,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 		mClientName    = appName;
 		mClientDBusObj = dbusObject;
 		mClientStart   = startClient;
-		KConfig* config = KGlobal::config();
+		KSharedConfig::Ptr config = KGlobal::config();
 		config->setGroup(CLIENT_GROUP);
 		config->writeEntry(CLIENT_KEY, mClientName);
 		config->writeEntry(DCOP_OBJECT_KEY, mClientDBusObj);
@@ -424,7 +424,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 void AlarmDaemon::enableAutoStart(bool on, bool sync)
 {
         kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")\n";
-        KConfig* config = KGlobal::config();
+        KSharedConfig::Ptr config = KGlobal::config();
 	config->reparseConfiguration();
         config->setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
         config->writeEntry(QLatin1String(DAEMON_AUTOSTART_KEY), on);
@@ -723,7 +723,7 @@ void AlarmDaemon::clearEventMap(EventsMap& map, AlarmResource* resource, bool no
 */
 void AlarmDaemon::readConfig()
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(CLIENT_GROUP);
 	QString client = config->readEntry(CLIENT_KEY);
 	mClientDBusObj = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();

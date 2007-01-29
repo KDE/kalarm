@@ -129,7 +129,7 @@ int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& su
 		{
 			// Older versions used KAlarm's translated name in the product ID, which
 			// could have created problems using a calendar in different locales.
-			progname = QString(" ") + kapp->aboutData()->programName() + ' ';
+			progname = QString(" ") + KGlobal::mainComponent().aboutData()->programName() + ' ';
 			i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
 			if (i < 0)
 				return -1;    // calendar wasn't created by KAlarm

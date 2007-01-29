@@ -325,7 +325,7 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 	if (!data.bcc.isEmpty())
 		message += QLatin1String("\nBcc: ") + data.bcc;
 	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
 	return message;
 }
 

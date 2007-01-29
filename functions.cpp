@@ -1037,7 +1037,7 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 */
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
 	QSize s = QSize(config->readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
@@ -1056,7 +1056,7 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 */
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(QLatin1String(window));
 	QWidget* desktop = KApplication::desktop();
 	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());

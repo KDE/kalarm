@@ -82,16 +82,16 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly)
 
 	if (mManager->isEmpty())
 	{
-		KConfig* config = KGlobal::config();
+		KSharedConfig::Ptr config = KGlobal::config();
 		config->setGroup(QString::fromLatin1("General"));
 		AlarmResource* resource;
-		resource = addDefaultResource(config, AlarmResource::ACTIVE);
+		resource = addDefaultResource(config.data(), AlarmResource::ACTIVE);
 		setStandardResource(resource);
 		if (!mActiveOnly)
 		{
-			resource = addDefaultResource(config, AlarmResource::ARCHIVED);
+			resource = addDefaultResource(config.data(), AlarmResource::ARCHIVED);
 			setStandardResource(resource);
-			resource = addDefaultResource(config, AlarmResource::TEMPLATE);
+			resource = addDefaultResource(config.data(), AlarmResource::TEMPLATE);
 			setStandardResource(resource);
 		}
 
@@ -121,9 +121,9 @@ void AlarmResources::setNoGui(bool noGui)
 
 AlarmResource* AlarmResources::addDefaultResource(AlarmResource::Type type)
 {
-	KConfig* config = KGlobal::config();
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->setGroup(QString::fromLatin1("General"));
-	return addDefaultResource(config, type);
+	return addDefaultResource(config.data(), type);
 }
 
 AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmResource::Type type)

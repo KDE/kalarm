@@ -114,7 +114,7 @@ KAlarmApp::KAlarmApp()
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
 
-		KConfig* config = KGlobal::config();
+		KSharedConfig::Ptr config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
 		mNoSystemTray           = config->readEntry("NoSystemTray", false);
 		mSavedNoSystemTray      = mNoSystemTray;
@@ -1010,7 +1010,7 @@ bool KAlarmApp::checkSystemTray()
 		// daemon with the correct NOTIFY type. If that happened when there was no system
 		// tray and alarms are disabled when KAlarm is not running, registering with
 		// NO_START_NOTIFY could result in alarms never being seen.
-		KConfig* config = KGlobal::config();
+		KSharedConfig::Ptr config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
 		config->writeEntry(QLatin1String("NoSystemTray"), mNoSystemTray);
 		config->sync();
@@ -1651,7 +1651,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	{
 		// Execute the command in a terminal window.
 		cmd = Preferences::cmdXTermCommand();
-		cmd.replace("%t", aboutData()->programName());     // set the terminal window title
+		cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
 		if (cmd.indexOf("%C") >= 0)
 		{
 			// Execute the command from a temporary script file

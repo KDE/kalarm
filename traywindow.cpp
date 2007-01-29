@@ -235,9 +235,9 @@ bool TrayWindow::event(QEvent* e)
 	QHelpEvent* he = (QHelpEvent*)e;
 	QString text;
 	if (Daemon::monitoringAlarms())
-		text = kapp->aboutData()->programName();
+		text = KGlobal::mainComponent().aboutData()->programName();
 	else
-		text = i18n("%1 - disabled", kapp->aboutData()->programName());
+		text = i18n("%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
 	kDebug(5950) << "TrayWindow::event(): " << text << endl;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
