@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -128,6 +128,7 @@ KAlarmApp::KAlarmApp()
 		mStartOfDay             = Preferences::startOfDay();
 		if (Preferences::hasStartOfDayChanged())
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
+		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsExpiredColour   = Preferences::expiredColour();
 		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
 		mPrefsShowTime        = Preferences::showAlarmTime();
@@ -1918,7 +1919,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 					delete dialogs;
 					if (!pd->tempFile())
 					{
-						errmsg += "\n";
+						errmsg += '\n';
 						errmsg += proc->command();
 					}
 					KMessageBox::error(pd->messageBoxParent, errmsg);
