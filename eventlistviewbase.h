@@ -32,7 +32,7 @@ class EventListViewBase : public QTreeView
 {
 		Q_OBJECT
 	public:
-		EventListViewBase(QWidget* parent = 0);
+		explicit EventListViewBase(QWidget* parent = 0);
 		void              select(const QString& eventId);
 		void              select(const QModelIndex&);
 		QModelIndex       selectedIndex() const;

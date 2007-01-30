@@ -27,20 +27,24 @@
 
 #include "resources/kcalendar.h"
 
+namespace KCal { class Event; }
+
 
 class AlarmListFilterModel : public QSortFilterProxyModel
 {
 	public:
 		enum { ColumnCount = 6 };
 
-		AlarmListFilterModel(QAbstractItemModel* baseModel, QObject* parent = 0);
-		void setStatusFilter(KCalEvent::Status);
+		explicit AlarmListFilterModel(QAbstractItemModel* baseModel, QObject* parent = 0);
+		void                setStatusFilter(KCalEvent::Status);
+		KCalEvent::Status   statusFilter() const   { return mStatusFilter; }
+		KCal::Event*        event(int row) const;
+		KCal::Event*        event(const QModelIndex&) const;
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 
 	protected:
 		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
-//		virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
 	private:
 		KCalEvent::Status mStatusFilter;

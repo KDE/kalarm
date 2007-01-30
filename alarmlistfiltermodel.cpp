@@ -44,6 +44,19 @@ void AlarmListFilterModel::setStatusFilter(KCalEvent::Status type)
 	}
 }
 
+/******************************************************************************
+* Return the event referred to by an index.
+*/
+KCal::Event* AlarmListFilterModel::event(const QModelIndex& index) const
+{
+	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index));
+}
+
+KCal::Event* AlarmListFilterModel::event(int row) const
+{
+	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
+}
+
 bool AlarmListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
 	return sourceModel()->data(sourceModel()->index(sourceRow, 0), EventListModel::StatusRole).toInt() & mStatusFilter;

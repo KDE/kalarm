@@ -63,11 +63,11 @@ class EventListModel : public QAbstractTableModel
 		QModelIndex           eventIndex(const KCal::Event*) const;
 		QModelIndex           eventIndex(const QString& eventId) const;
 		void                  addEvent(KCal::Event*);
-		void                  updateEvent(KCal::Event* event)      { updateEvent(mEvents.indexOf(event)); }
-		void                  updateEvent(const QString& eventId)  { updateEvent(findEvent(eventId)); }
+		void                  updateEvent(KCal::Event* event)       { updateEvent(mEvents.indexOf(event)); }
+		void                  updateEvent(const QString& eventId)   { updateEvent(findEvent(eventId)); }
 		void                  updateEvent(KCal::Event* oldEvent, KCal::Event* newEvent);
 		void                  removeEvent(const KCal::Event* event) { removeEvent(mEvents.indexOf(const_cast<KCal::Event*>(event))); }
-		void                  removeEvent(const QString& eventId)  { removeEvent(findEvent(eventId)); }
+		void                  removeEvent(const QString& eventId)   { removeEvent(findEvent(eventId)); }
 		static KCal::Event*   event(const QModelIndex&);
 
 	public slots:
@@ -77,7 +77,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateTimeTo();
 
 	private:
-		EventListModel(KCalEvent::Status, QObject* parent = 0);
+		explicit EventListModel(KCalEvent::Status, QObject* parent = 0);
 		void     updateEvent(int row);
 		void     removeEvent(int row);
 		int      findEvent(const QString& eventId) const;

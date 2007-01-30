@@ -32,7 +32,7 @@ class AlarmListDelegate : public QItemDelegate
 {
 		Q_OBJECT
 	public:
-		AlarmListDelegate(AlarmListView* parent = 0);
+		explicit AlarmListDelegate(AlarmListView* parent = 0);
 		virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const  { return 0; }
 		virtual void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 		virtual QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const;

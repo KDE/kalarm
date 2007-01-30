@@ -32,7 +32,7 @@ class AlarmListView : public EventListViewBase
 {
 		Q_OBJECT
 	public:
-		AlarmListView(QWidget* parent = 0);
+		explicit AlarmListView(QWidget* parent = 0);
 		virtual void      setModel(QAbstractItemModel*);
 		void              setColumnOrder(const QList<int>& order);
 		void              selectTimeColumns(bool time, bool timeTo);
