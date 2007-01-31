@@ -25,10 +25,10 @@
 
 #include <kcal/event.h>
 
-#include "eventlistviewbase.h"
+#include "eventlistview.h"
 
 
-class AlarmListView : public EventListViewBase
+class AlarmListView : public EventListView
 {
 		Q_OBJECT
 	public:

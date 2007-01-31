@@ -22,6 +22,8 @@
 
 #include <QGroupBox>
 #include <QLabel>
+#include <QTreeView>
+#include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
@@ -32,11 +34,10 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <khbox.h>
-#include <kabc/addressbook.h>
-#include <kabc/stdaddressbook.h>
 #include <kdebug.h>
 
 #include "alarmcalendar.h"
+#include "birthdaymodel.h"
 #include "checkbox.h"
 #include "colourcombo.h"
 #include "editdlg.h"
@@ -54,22 +55,6 @@
 using namespace KCal;
 
 
-class AddresseeItem : public Q3ListViewItem
-{
-	public:
-		enum columns { NAME = 0, BIRTHDAY = 1 };
-		AddresseeItem(Q3ListView* parent, const QString& name, const QDate& birthday);
-		QDate birthday() const   { return mBirthday; }
-		virtual QString key(int column, bool ascending) const;
-	private:
-		QDate     mBirthday;
-		QString   mBirthdayOrder;
-};
-
-
-const KABC::AddressBook* BirthdayDlg::mAddressBook = 0;
-
-
 BirthdayDlg::BirthdayDlg(QWidget* parent)
 	: KDialog(parent),
 	  mSpecialActionsButton(0)
@@ -81,7 +66,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 
 	QWidget* topWidget = new QWidget(this);
-        setMainWidget(topWidget);
+	setMainWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());
@@ -124,19 +109,29 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(0);
-	mAddresseeList = new BListView(group);
-	mAddresseeList->setMultiSelection(true);
-	mAddresseeList->setSelectionMode(Q3ListView::Extended);
-	mAddresseeList->setAllColumnsShowFocus(true);
-	mAddresseeList->setFullWidth(true);
-	mAddresseeList->addColumn(i18n("Name"));
-	mAddresseeList->addColumn(i18n("Birthday"));
-	connect(mAddresseeList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	mAddresseeList->setWhatsThis(i18n("Select birthdays to set alarms for.\n"
-	                                  "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
-	                                  "You can select multiple birthdays at one time by dragging the mouse over the list, "
-	                                  "or by clicking the mouse while pressing Ctrl or Shift."));
-	layout->addWidget(mAddresseeList);
+	BirthdayModel* model = BirthdayModel::instance();
+	connect(model, SIGNAL(addrBookError()), SLOT(addrBookError()));
+	connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)), SLOT(resizeViewColumns()));
+	model->setPrefixSuffix(mPrefixText, mSuffixText);
+	BirthdaySortModel* sortModel = new BirthdaySortModel(model, this);
+	sortModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+	mListView = new QTreeView(group);
+	mListView->setModel(sortModel);
+	mListView->setRootIsDecorated(false);    // don't show expander icons
+	mListView->setSortingEnabled(true);
+	mListView->sortByColumn(BirthdayModel::NameColumn);
+	mListView->setAllColumnsShowFocus(true);
+	mListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	mListView->setSelectionBehavior(QAbstractItemView::SelectRows);
+	mListView->setTextElideMode(Qt::ElideRight);
+	mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
+	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
+	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+	mListView->setWhatsThis(i18n("Select birthdays to set alarms for.\n"
+	                             "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
+	                             "You can select multiple birthdays at one time by dragging the mouse over the list, "
+	                             "or by clicking the mouse while pressing Ctrl or Shift."));
+	layout->addWidget(mListView);
 
 	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
@@ -166,7 +161,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
-	// How much to advance warning to give
+	// How much advance warning to give
 	mReminder = new Reminder(i18n("&Reminder"),
 	                         i18n("Check to display a reminder in advance of the birthday."),
 	                         i18n("Enter the number of days before each birthday to display a reminder. "
@@ -224,91 +219,23 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
 
-	// Initialise the birthday selection list and disable the OK button
-	loadAddressBook();
+#ifdef __GNUC__
+#warning Test select all/deselect
+#endif
+	KActionCollection* actions = new KActionCollection(this);
+	actions->setAssociatedWidget(mListView);
+	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+
+	enableButtonOk(false);     // only enable OK button when something is selected
 }
 
 /******************************************************************************
-* Load the address book in preparation for displaying the birthday selection list.
+* Display an error message about failure to load address book.
 */
-void BirthdayDlg::loadAddressBook()
+void BirthdayDlg::addrBookError()
 {
-	if (!mAddressBook)
-	{
-        	mAddressBook = KABC::StdAddressBook::self(true);
-		if (mAddressBook)
-                	connect(mAddressBook, SIGNAL(addressBookChanged(AddressBook*)), SLOT(updateSelectionList()));
-	}
-	else
-		updateSelectionList();
-        if (!mAddressBook)
-                KMessageBox::error(this, i18n("Error reading address book"));
-}
-
-/******************************************************************************
-* Initialise or update the birthday selection list by fetching all birthdays
-* from the address book and displaying those which do not already have alarms.
-*/
-void BirthdayDlg::updateSelectionList()
-{
-	// Compile a list of all pending alarm messages which look like birthdays
-	QStringList messageList;
-	KAEvent event;
-	Event::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
-	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
-	{
-		Event* kcalEvent = *it;
-		event.set(kcalEvent);
-		if (event.action() == KAEvent::MESSAGE
-		&&  event.recurType() == KARecurrence::ANNUAL_DATE
-		&&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
-			messageList.append(event.message());
-	}
-
-	// Fetch all birthdays from the address book
-	for (KABC::AddressBook::ConstIterator abit = mAddressBook->begin();  abit != mAddressBook->end();  ++abit)
-	{
-		const KABC::Addressee& addressee = *abit;
-		if (addressee.birthday().isValid())
-		{
-			// Create a list entry for this birthday
-			QDate birthday = addressee.birthday().date();
-			QString name = addressee.nickName();
-			if (name.isEmpty())
-				name = addressee.realName();
-			// Check if the birthday already has an alarm
-			QString text = mPrefixText + name + mSuffixText;
-			bool alarmExists = messageList.contains(text);
-			// Check if the birthday is already in the selection list
-			bool inSelectionList = false;
-			AddresseeItem* item = 0;
-			for (Q3ListViewItem* qitem = mAddresseeList->firstChild();  qitem;  qitem = qitem->nextSibling())
-			{
-				item = dynamic_cast<AddresseeItem*>(qitem);
-				if (item  &&  item->text(AddresseeItem::NAME) == name  &&  item->birthday() == birthday)
-				{
-					inSelectionList = true;
-					break;
-				}
-			}
-
-			if (alarmExists  &&  inSelectionList)
-				delete item;     // alarm exists, so remove from selection list
-			else if (!alarmExists  &&  !inSelectionList)
-				new AddresseeItem(mAddresseeList, name, birthday);   // add to list
-		}
-	}
-//	mAddresseeList->setUpdatesEnabled(true);
-
-	// Enable/disable OK button according to whether anything is currently selected
-	bool selection = false;
-	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
-		if (mAddresseeList->isSelected(item))
-		{
-			selection = true;
-			break;
-		}
-	enableButtonOk(selection);
+	KMessageBox::error(this, i18n("Error reading address book"));
 }
 
 /******************************************************************************
@@ -317,44 +244,44 @@ void BirthdayDlg::updateSelectionList()
 QList<KAEvent> BirthdayDlg::events() const
 {
 	QList<KAEvent> list;
+	QModelIndexList indexes = mListView->selectionModel()->selectedRows();
+	int count = indexes.count();
+	if (!count)
+		return list;
 	QDate today = QDate::currentDate();
 	KDateTime todayStart(today, KDateTime::ClockTime);
 	int thisYear = today.year();
 	int reminder = mReminder->minutes();
-
-	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
+	BirthdaySortModel* model = static_cast<const BirthdaySortModel*>(indexes[0].model());
+	for (int i = 0;  i < count;  ++i)
 	{
-		if (mAddresseeList->isSelected(item))
-		{
-			AddresseeItem* aItem = dynamic_cast<AddresseeItem*>(item);
-			if (aItem)
-			{
-				QDate date = aItem->birthday();
-				date.setYMD(thisYear, date.month(), date.day());
-				if (date <= today)
-					date.setYMD(thisYear + 1, date.month(), date.day());
-				KAEvent event(KDateTime(date, KDateTime::ClockTime),
-				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
-				              mBgColourChoose->color(), mFontColourButton->fgColour(),
-				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
-				              mFlags);
-				float fadeVolume;
-				int   fadeSecs;
-				float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-				event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
-				QList<int> months;
-				months.append(date.month());
-				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
-				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
-				event.setNextOccurrence(todayStart);
-				if (reminder)
-					event.setReminder(reminder, false);
-				if (mSpecialActionsButton)
-					event.setActions(mSpecialActionsButton->preAction(),
-					                 mSpecialActionsButton->postAction());
-				list.append(event);
-			}
-		}
+		BirthdayModel::Data* data = model->rowData(indexes[i]);
+		if (!data)
+			continue;
+		QDate date = data->birthday;
+		date.setYMD(thisYear, date.month(), date.day());
+		if (date <= today)
+			date.setYMD(thisYear + 1, date.month(), date.day());
+		KAEvent event(KDateTime(date, KDateTime::ClockTime),
+			      mPrefix->text() + data->name + mSuffix->text(),
+			      mBgColourChoose->color(), mFontColourButton->fgColour(),
+			      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
+			      mFlags);
+		float fadeVolume;
+		int   fadeSecs;
+		float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
+		event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
+		QList<int> months;
+		months.append(date.month());
+		event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
+		event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
+		event.setNextOccurrence(todayStart);
+		if (reminder)
+			event.setReminder(reminder, false);
+		if (mSpecialActionsButton)
+			event.setActions(mSpecialActionsButton->preAction(),
+					 mSpecialActionsButton->postAction());
+		list.append(event);
 	}
 	return list;
 }
@@ -385,14 +312,17 @@ void BirthdayDlg::slotOk()
 */
 void BirthdayDlg::slotSelectionChanged()
 {
-	for (Q3ListViewItem* item = mAddresseeList->firstChild();  item;  item = item->nextSibling())
-		if (mAddresseeList->isSelected(item))
-		{
-			enableButtonOk(true);
-			return;
-		}
-	enableButtonOk(false);
+	enableButtonOk(mListView->selectionModel()->hasSelection());
 
+}
+
+/******************************************************************************
+* Called when the data has changed in the birthday list.
+* Resize the date column.
+*/
+void BirthdayDlg::resizeViewColumns()
+{
+	mListView->resizeColumnToContents(BirthdayModel::DateColumn);
 }
 
 /******************************************************************************
@@ -409,7 +339,7 @@ void BirthdayDlg::slotTextLostFocus()
 		// Text has changed - re-evaluate the selection list
 		mPrefixText = prefix;
 		mSuffixText = suffix;
-		loadAddressBook();
+		BirthdayModel::instance()->setPrefixSuffix(mPrefixText, mSuffixText);
 	}
 }
 
@@ -429,42 +359,4 @@ void BirthdayDlg::slotBgColourSelected(const QColor& colour)
 void BirthdayDlg::slotFontColourSelected()
 {
 	mBgColourChoose->setColour(mFontColourButton->bgColour());
-}
-
-
-/*=============================================================================
-= Class: AddresseeItem
-=============================================================================*/
-
-AddresseeItem::AddresseeItem(Q3ListView* parent, const QString& name, const QDate& birthday)
-	: Q3ListViewItem(parent),
-	  mBirthday(birthday)
-{
-	setText(NAME, name);
-	setText(BIRTHDAY, KGlobal::locale()->formatDate(mBirthday, true));
-	mBirthdayOrder.sprintf("%04d%03d", mBirthday.year(), mBirthday.dayOfYear());
-}
-
-QString AddresseeItem::key(int column, bool) const
-{
-	if (column == BIRTHDAY)
-		return mBirthdayOrder;
-	return text(column).toLower();
-}
-
-
-/*=============================================================================
-= Class: BListView
-=============================================================================*/
-
-BListView::BListView(QWidget* parent)
-	: K3ListView(parent)
-{
-#ifdef __GNUC__
-#warning Test select all/deselect
-#endif
-	KActionCollection* actcol = new KActionCollection(this);
-	actcol->setAssociatedWidget(this);
-	KStandardAction::selectAll(actcol);
-	KStandardAction::deselect(this, SLOT(slotDeselect()), actcol);
 }

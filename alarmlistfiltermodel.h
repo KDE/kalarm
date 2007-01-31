@@ -23,23 +23,19 @@
 
 #include "kalarm.h"
 
-#include <QSortFilterProxyModel>
-
+#include "eventlistmodel.h"
 #include "resources/kcalendar.h"
 
-namespace KCal { class Event; }
 
-
-class AlarmListFilterModel : public QSortFilterProxyModel
+class AlarmListFilterModel : public EventListFilterModel
 {
 	public:
 		enum { ColumnCount = 6 };
 
-		explicit AlarmListFilterModel(QAbstractItemModel* baseModel, QObject* parent = 0);
+		explicit AlarmListFilterModel(EventListModel* baseModel, QObject* parent = 0)
+		               : EventListFilterModel(baseModel, parent) {}
 		void                setStatusFilter(KCalEvent::Status);
 		KCalEvent::Status   statusFilter() const   { return mStatusFilter; }
-		KCal::Event*        event(int row) const;
-		KCal::Event*        event(const QModelIndex&) const;
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 
 	protected:

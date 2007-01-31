@@ -30,13 +30,13 @@
 
 
 TemplateListView::TemplateListView(QWidget* parent)
-	: EventListViewBase(parent)
+	: EventListView(parent)
 {
 }
 
 void TemplateListView::setModel(QAbstractItemModel* model)
 {
-	EventListViewBase::setModel(model);
+	EventListView::setModel(model);
 	header()->setMovable(false);
 	header()->setStretchLastSection(true);
 	header()->setResizeMode(TemplateListFilterModel::TypeColumn, QHeaderView::Fixed);

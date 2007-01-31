@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
 
 #include <QLineEdit>
 #include <QList>
-#include <k3listview.h>
+
 #include <kdialog.h>
 
 #include "alarmevent.h"
 
 class QFocusEvent;
 class QCheckBox;
-class K3ListView;
+class QTreeView;
 class CheckBox;
 class ColourCombo;
 class FontColourButton;
@@ -38,9 +38,7 @@ class SpecialActionsButton;
 class RepetitionButton;
 class LateCancelSelector;
 class Reminder;
-namespace KABC { class AddressBook; }
 class BLineEdit;
-class BListView;
 
 
 class BirthdayDlg : public KDialog
@@ -48,36 +46,34 @@ class BirthdayDlg : public KDialog
 		Q_OBJECT
 	public:
 		BirthdayDlg(QWidget* parent = 0);
-		QList<KAEvent>    events() const;
+		QList<KAEvent> events() const;
 
 	protected slots:
-		virtual void      slotOk();
+		virtual void   slotOk();
 
 	private slots:
-		void              slotSelectionChanged();
-		void              slotTextLostFocus();
-		void              slotFontColourSelected();
-		void              slotBgColourSelected(const QColor&);
-		void              updateSelectionList();
+		void           slotSelectionChanged();
+		void           slotTextLostFocus();
+		void           slotFontColourSelected();
+		void           slotBgColourSelected(const QColor&);
+		void           resizeViewColumns();
+		void           addrBookError();
 
 	private:
-		void              loadAddressBook();
-
-		static const KABC::AddressBook* mAddressBook;
-		BListView*               mAddresseeList;
-		BLineEdit*               mPrefix;
-		BLineEdit*               mSuffix;
-		Reminder*                mReminder;
-		SoundPicker*             mSoundPicker;
-		FontColourButton*        mFontColourButton;
-		ColourCombo*             mBgColourChoose;
-		CheckBox*                mConfirmAck;
-		LateCancelSelector*      mLateCancel;
-		SpecialActionsButton*    mSpecialActionsButton;
-		RepetitionButton*        mSimpleRepetition;
-		QString                  mPrefixText;   // last entered value of prefix text
-		QString                  mSuffixText;   // last entered value of suffix text
-		int                      mFlags;        // event flag bits
+		QTreeView*            mListView;
+		BLineEdit*            mPrefix;
+		BLineEdit*            mSuffix;
+		Reminder*             mReminder;
+		SoundPicker*          mSoundPicker;
+		FontColourButton*     mFontColourButton;
+		ColourCombo*          mBgColourChoose;
+		CheckBox*             mConfirmAck;
+		LateCancelSelector*   mLateCancel;
+		SpecialActionsButton* mSpecialActionsButton;
+		RepetitionButton*     mSimpleRepetition;
+		QString               mPrefixText;   // last entered value of prefix text
+		QString               mSuffixText;   // last entered value of suffix text
+		int                   mFlags;        // event flag bits
 };
 
 
@@ -91,16 +87,6 @@ class BLineEdit : public QLineEdit
 		void         focusLost();
 	protected:
 		virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
-};
-
-class BListView : public K3ListView
-{
-		Q_OBJECT
-	public:
-		BListView(QWidget* parent = 0);
-	public slots:
-		virtual void slotSelectAll()   { selectAll(true); }
-		virtual void slotDeselect()    { selectAll(false); }
 };
 
 #endif // BIRTHDAYDLG_H

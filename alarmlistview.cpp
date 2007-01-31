@@ -30,13 +30,13 @@
 
 
 AlarmListView::AlarmListView(QWidget* parent)
-	: EventListViewBase(parent)
+	: EventListView(parent)
 {
 }
 
 void AlarmListView::setModel(QAbstractItemModel* model)
 {
-	EventListViewBase::setModel(model);
+	EventListView::setModel(model);
 	header()->setMovable(true);
 	header()->setStretchLastSection(false);
 	header()->setResizeMode(EventListModel::TimeColumn, QHeaderView::ResizeToContents);

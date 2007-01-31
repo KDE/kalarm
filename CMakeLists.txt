@@ -46,6 +46,7 @@ set(libkalarm_SRCS
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
+   birthdaymodel.cpp
    main.cpp 
    alarmevent.cpp 
    editdlg.cpp 
@@ -72,7 +73,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    specialactions.cpp 
    reminder.cpp 
    startdaytimer.cpp 
-   eventlistviewbase.cpp 
+   eventlistview.cpp 
    eventlistmodel.cpp
    alarmlistfiltermodel.cpp
    alarmlistdelegate.cpp

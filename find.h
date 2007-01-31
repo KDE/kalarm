@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,36 +24,36 @@
 #include <QObject>
 #include <QPointer>
 #include <QStringList>
+#include <QModelIndex>
 
 class QCheckBox;
 class KFindDialog;
 class KFind;
 class KSeparator;
-class EventListViewBase;
-class EventListViewItemBase;
+class EventListView;
 
 
 class Find : public QObject
 {
 		Q_OBJECT
 	public:
-		explicit Find(EventListViewBase* parent);
+		explicit Find(EventListView* parent);
 		~Find();
-		void         display();
-		void         findNext(bool forward)     { findNext(forward, true); }
+		void        display();
+		void        findNext(bool forward)     { findNext(forward, true); }
 
 	signals:
-		void         active(bool);
+		void        active(bool);
 
 	private slots:
-		void         slotFind();
-		void         slotKFindDestroyed()       { emit active(false); }
+		void        slotFind();
+		void        slotKFindDestroyed()       { emit active(false); }
 
 	private:
-		void         findNext(bool forward, bool sort, bool fromCurrent = false);
-		EventListViewItemBase* nextItem(EventListViewItemBase*, bool forward) const;
+		void        findNext(bool forward, bool sort, bool fromCurrent = false);
+		QModelIndex nextItem(const QModelIndex&, bool forward) const;
 
-		EventListViewBase* mListView;        // parent list view
+		EventListView* mListView;        // parent list view
 		QPointer<KFindDialog> mDialog;
 		QCheckBox*         mArchived;
 		QCheckBox*         mLive;

@@ -28,13 +28,6 @@
 // AlarmListFilterModel provides sorting and filtering for the alarm list model.
 
 
-AlarmListFilterModel::AlarmListFilterModel(QAbstractItemModel* baseModel, QObject* parent)
-	: QSortFilterProxyModel(parent)
-{
-	setSourceModel(baseModel);
-	setSortRole(EventListModel::SortRole);
-}
-
 void AlarmListFilterModel::setStatusFilter(KCalEvent::Status type)
 {
 	if (type != mStatusFilter)
@@ -42,19 +35,6 @@ void AlarmListFilterModel::setStatusFilter(KCalEvent::Status type)
 		mStatusFilter = type;
 		filterChanged();
 	}
-}
-
-/******************************************************************************
-* Return the event referred to by an index.
-*/
-KCal::Event* AlarmListFilterModel::event(const QModelIndex& index) const
-{
-	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index));
-}
-
-KCal::Event* AlarmListFilterModel::event(int row) const
-{
-	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
 }
 
 bool AlarmListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
@@ -71,5 +51,5 @@ QModelIndex AlarmListFilterModel::mapFromSource(const QModelIndex& sourceIndex) 
 {
 	if (sourceIndex.column() == EventListModel::TemplateNameColumn)
 		return QModelIndex();
-	return QSortFilterProxyModel::mapFromSource(sourceIndex);
+	return EventListFilterModel::mapFromSource(sourceIndex);
 }

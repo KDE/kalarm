@@ -24,6 +24,7 @@
 #include "kalarm.h"
 
 #include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 #include <QList>
 #include <QSize>
 
@@ -100,6 +101,15 @@ class EventListModel : public QAbstractTableModel
 
 		QList<KCal::Event*> mEvents;
 		KCalEvent::Status   mStatus;    // types of events contained in this model
+};
+
+
+class EventListFilterModel : public QSortFilterProxyModel
+{
+	public:
+		explicit EventListFilterModel(EventListModel* baseModel, QObject* parent = 0);
+		KCal::Event* event(int row) const;
+		KCal::Event* event(const QModelIndex&) const;
 };
 
 #endif // EVENTLISTMODEL_H

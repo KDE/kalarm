@@ -37,7 +37,7 @@ class QResizeEvent;
 class KAction;
 class KActionCollection;
 class KToggleAction;
-class KListView;
+class K3ListView;
 class KMenu;
 class ResourceItem;
 using KCal::ResourceCalendar;

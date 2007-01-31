@@ -23,18 +23,11 @@
 #include <kdebug.h>
 
 #include "alarmevent.h"
-#include "eventlistmodel.h"
+#include "resources/kcalendar.h"
 #include "templatelistfiltermodel.h"
 
 // TemplateListFilterModel provides sorting and filtering for the alarm list model.
 
-
-TemplateListFilterModel::TemplateListFilterModel(QAbstractItemModel* baseModel, QObject* parent)
-	: QSortFilterProxyModel(parent)
-{
-	setSourceModel(baseModel);
-	setSortRole(EventListModel::SortRole);
-}
 
 void TemplateListFilterModel::setTypeFilter(bool excludeCommandAlarms)
 {
@@ -75,7 +68,7 @@ QModelIndex TemplateListFilterModel::mapFromSource(const QModelIndex& sourceInde
 		default:
 			return QModelIndex();
 	}
-	QModelIndex ix = QSortFilterProxyModel::mapFromSource(sourceIndex);
+	QModelIndex ix = EventListFilterModel::mapFromSource(sourceIndex);
 	return index(ix.row(), proxyColumn, ix.parent());
 }
 
@@ -93,5 +86,5 @@ QModelIndex TemplateListFilterModel::mapToSource(const QModelIndex& proxyIndex) 
 		default:
 			return QModelIndex();
 	}
-	return QSortFilterProxyModel::mapToSource(proxyIndex);
+	return EventListFilterModel::mapToSource(proxyIndex);
 }

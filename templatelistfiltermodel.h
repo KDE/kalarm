@@ -23,12 +23,10 @@
 
 #include "kalarm.h"
 
-#include <QSortFilterProxyModel>
-
-#include "resources/kcalendar.h"
+#include "eventlistmodel.h"
 
 
-class TemplateListFilterModel : public QSortFilterProxyModel
+class TemplateListFilterModel : public EventListFilterModel
 {
 	public:
 		enum {   // data columns
@@ -36,7 +34,8 @@ class TemplateListFilterModel : public QSortFilterProxyModel
 			ColumnCount
 		};
 
-		TemplateListFilterModel(QAbstractItemModel* baseModel, QObject* parent = 0);
+		explicit TemplateListFilterModel(EventListModel* baseModel, QObject* parent = 0)
+		               : EventListFilterModel(baseModel, parent) {}
 		void setTypeFilter(bool excludeCommandAlarms);
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 		virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;

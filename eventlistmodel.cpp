@@ -34,7 +34,11 @@
 #include "synchtimer.h"
 #include "eventlistmodel.moc"
 
-// EventListModel contains all active and archived alarms, unsorted.
+
+/*=============================================================================
+= Class: EventListModel
+= Contains all active/archived alarms, or all alarm templates, unsorted.
+=============================================================================*/
 
 EventListModel* EventListModel::mAlarmInstance = 0;
 EventListModel* EventListModel::mTemplateInstance = 0;
@@ -558,4 +562,30 @@ QString EventListModel::whatsThisText(int column) const
 		default:
 			return i18n("List of scheduled alarms");
 	}
+}
+
+
+/*=============================================================================
+= Class: EventListFilterModel
+= Base class for all filters on EventListModel.
+=============================================================================*/
+
+EventListFilterModel::EventListFilterModel(EventListModel* baseModel, QObject* parent)
+	: QSortFilterProxyModel(parent)
+{
+	setSourceModel(baseModel);
+	setSortRole(EventListModel::SortRole);
+}
+
+/******************************************************************************
+* Return the event referred to by an index.
+*/
+KCal::Event* EventListFilterModel::event(const QModelIndex& index) const
+{
+	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index));
+}
+
+KCal::Event* EventListFilterModel::event(int row) const
+{
+	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
 }

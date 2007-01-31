@@ -1,5 +1,5 @@
 /*
- *  eventlistviewbase.cpp  -  base class for widget showing list of alarms
+ *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
  *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -28,10 +28,10 @@
 
 #include "eventlistmodel.h"
 #include "templatelistfiltermodel.h"
-#include "eventlistviewbase.moc"
+#include "eventlistview.moc"
 
 
-EventListViewBase::EventListViewBase(QWidget* parent)
+EventListView::EventListView(QWidget* parent)
 	: QTreeView(parent)
 {
 	setRootIsDecorated(false);    // don't show expander icons for child-less items
@@ -43,14 +43,27 @@ EventListViewBase::EventListViewBase(QWidget* parent)
 }
 
 /******************************************************************************
-* Select one event and make it the current item.
+* Return the event referred to by an index.
 */
-void EventListViewBase::select(const QString& eventId)
+KCal::Event* EventListView::event(const QModelIndex& index) const
 {
-	select(static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel())->eventIndex(eventId));
+	return eventFilterModel()->event(index);
 }
 
-void EventListViewBase::select(const QModelIndex& index)
+KCal::Event* EventListView::event(int row) const
+{
+	return eventFilterModel()->event(row);
+}
+
+/******************************************************************************
+* Select one event and make it the current item.
+*/
+void EventListView::select(const QString& eventId)
+{
+	select(eventModel()->eventIndex(eventId));
+}
+
+void EventListView::select(const QModelIndex& index)
 {
 	selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 }
@@ -59,7 +72,7 @@ void EventListViewBase::select(const QModelIndex& index)
 * Return the single selected item.
 * Reply = invalid if no items are selected, or if multiple items are selected.
 */
-QModelIndex EventListViewBase::selectedIndex() const
+QModelIndex EventListView::selectedIndex() const
 {
 	QModelIndexList list = selectionModel()->selectedRows();
 	if (list.count() != 1)
@@ -71,7 +84,7 @@ QModelIndex EventListViewBase::selectedIndex() const
 * Return the single selected event.
 * Reply = null if no items are selected, or if multiple items are selected.
 */
-KCal::Event* EventListViewBase::selectedEvent() const
+KCal::Event* EventListView::selectedEvent() const
 {
 	QModelIndexList list = selectionModel()->selectedRows();
 	if (list.count() != 1)
@@ -85,7 +98,7 @@ kDebug()<<"SelectedEvent() count="<<list.count()<<endl;
 /******************************************************************************
 * Return the selected events.
 */
-KCal::Event::List EventListViewBase::selectedEvents() const
+KCal::Event::List EventListView::selectedEvents() const
 {
 	KCal::Event::List elist;
 	QModelIndexList ilist = selectionModel()->selectedRows();
@@ -105,7 +118,7 @@ KCal::Event::List EventListViewBase::selectedEvents() const
 /******************************************************************************
 * Called when a mouse button is released.
 */
-void EventListViewBase::mouseReleaseEvent(QMouseEvent* e)
+void EventListView::mouseReleaseEvent(QMouseEvent* e)
 {
 	if (e->button() == Qt::RightButton)
 		emit rightButtonClicked(e->globalPos());

@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,24 +33,25 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "eventlistviewbase.h"
-#include "alarmlistview.h"
+#include "alarmevent.h"
+#include "alarmlistfiltermodel.h"
+#include "eventlistview.h"
 #include "preferences.h"
 #include "find.moc"
 
 // KAlarm-specific options for Find dialog
 enum {
-	FIND_LIVE    = KFind::MinimumUserOption,
+	FIND_LIVE     = KFind::MinimumUserOption,
 	FIND_ARCHIVED = KFind::MinimumUserOption << 1,
-	FIND_MESSAGE = KFind::MinimumUserOption << 2,
-	FIND_FILE    = KFind::MinimumUserOption << 3,
-	FIND_COMMAND = KFind::MinimumUserOption << 4,
-	FIND_EMAIL   = KFind::MinimumUserOption << 5
+	FIND_MESSAGE  = KFind::MinimumUserOption << 2,
+	FIND_FILE     = KFind::MinimumUserOption << 3,
+	FIND_COMMAND  = KFind::MinimumUserOption << 4,
+	FIND_EMAIL    = KFind::MinimumUserOption << 5
 };
 static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 
 
-Find::Find(EventListViewBase* parent)
+Find::Find(EventListView* parent)
 	: QObject(parent),
 	  mListView(parent),
 	  mDialog(0),
@@ -71,12 +72,12 @@ Find::~Find()
 */
 void Find::display()
 {
-#ifdef NO_MODEL_VIEW
 	if (!mOptions)
 		// Set defaults the first time the Find dialog is activated
 		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 	bool noArchived = !Preferences::archivedKeepDays();
-	bool showArchived = mListView->metaObject()->className() == "AlarmListView"  &&  ((AlarmListView*)mListView)->showingArchived();
+	bool showArchived = mListView->metaObject()->className() == "AlarmListView"
+	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KCalEvent::ARCHIVED);
 	if (noArchived  ||  !showArchived)      // these settings could change between activations
 		mOptions &= ~FIND_ARCHIVED;
 
@@ -89,9 +90,9 @@ void Find::display()
 	else
 	{
 #ifdef MODAL_FIND
-		mDialog = new KFindDialog(mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(mListView, "FindDlg", mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
 #else
-		mDialog = new KFindDialog(false, mListView, "FindDlg", mOptions, mHistory, (mListView->selectedCount() > 1));
+		mDialog = new KFindDialog(false, mListView, "FindDlg", mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
 #endif
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
@@ -177,9 +178,10 @@ void Find::display()
 	bool file     = false;
 	bool command  = false;
 	bool email    = false;
-	for (EventListViewItemBase* item = mListView->firstChild();  item;  item = item->nextSibling())
+	int rowCount = mListView->model()->rowCount();
+	for (int row = 0;  row < rowCount;  ++row)
 	{
-		const KAEvent& event = item->event();
+		const KAEvent event(mListView->event(row));
 		if (event.expired())
 			archived = true;
 		else
@@ -199,7 +201,7 @@ void Find::display()
 	mCommandType->setEnabled(command);
 	mEmailType->setEnabled(email);
 
-	mDialog->setHasCursor(mListView->currentItem());
+	mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
 #ifdef MODAL_FIND
 	if (mDialog->exec() == QDialog::Accepted)
 		slotFind();
@@ -208,7 +210,6 @@ void Find::display()
 #else
 	mDialog->show();
 #endif
-#endif
 }
 
 /******************************************************************************
@@ -216,7 +217,6 @@ void Find::display()
 */
 void Find::slotFind()
 {
-#ifdef NO_MODEL_VIEW
 	if (!mDialog)
 		return;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
@@ -255,17 +255,15 @@ void Find::slotFind()
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
 
 		// Set the starting point for the search
-		mListView->sort();     // ensure the whole list is sorted, not just the visible items
-		mStartID      .clear();
+		mStartID.clear();
 		mNoCurrentItem = true;
 		bool fromCurrent = false;
-		EventListViewItemBase* item = 0;
 		if (mOptions & KFind::FromCursor)
 		{
-			item = mListView->currentItem();
-			if (item)
+			QModelIndex index = mListView->selectionModel()->currentIndex();
+			if (index.isValid())
 			{
-				mStartID       = item->event().id();
+				mStartID       = mListView->event(index)->uid();
 				mNoCurrentItem = false;
 				fromCurrent    = true;
 			}
@@ -277,7 +275,6 @@ void Find::slotFind()
 		if (mFind)
 			emit active(true);
 	}
-#endif
 }
 
 /******************************************************************************
@@ -287,19 +284,17 @@ void Find::slotFind()
 */
 void Find::findNext(bool forward, bool sort, bool fromCurrent)
 {
-#ifdef NO_MODEL_VIEW
-	if (sort)
-		mListView->sort();    // ensure the whole list is sorted, not just the visible items
-
-	EventListViewItemBase* item = mNoCurrentItem ? 0 : mListView->currentItem();
+	QModelIndex index;
+	if (!mNoCurrentItem)
+		index = mListView->selectionModel()->currentIndex();
 	if (!fromCurrent)
-		item = nextItem(item, forward);
+		index = nextItem(index, forward);
 
 	// Search successive alarms until a match is found or the end is reached
 	bool found = false;
-	for ( ;  item;  item = nextItem(item, forward))
+	for ( ;  index.isValid();  index = nextItem(index, forward))
 	{
-		const KAEvent& event = item->event();
+		const KAEvent event(mListView->event(index));
 		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event.id())
 			break;    // we've wrapped round and reached the starting alarm again
 		fromCurrent = false;
@@ -354,15 +349,15 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 	}
 
 	// Process the search result
-	mNoCurrentItem = !item;
+	mNoCurrentItem = !index.isValid();
 	if (found)
 	{
 		// A matching alarm was found - highlight it and make it current
 		mFound = true;
-		mListView->clearSelection();
-		mListView->setSelected(item, true);
-		mListView->setCurrentItem(item);
-		mListView->ensureItemVisible(item);
+		QItemSelectionModel* sel = mListView->selectionModel();
+		sel->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+		sel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+		mListView->scrollTo(index);
 	}
 	else
 	{
@@ -381,24 +376,25 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 			mFind->displayFinalDialog();     // display "no match was found"
 		mNoCurrentItem = false;    // restart from the currently highlighted alarm if Find Next etc selected
 	}
-#endif
 }
 
 /******************************************************************************
 *  Get the next alarm item to search.
 */
-EventListViewItemBase* Find::nextItem(EventListViewItemBase* item, bool forward) const
+QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
 {
-#ifdef NO_MODEL_VIEW
-	Q3ListViewItem* it;
 	if (mOptions & KFind::FindBackwards)
 		forward = !forward;
 	if (forward)
-		it = item ? item->itemBelow() : mListView->firstChild();
+	{
+		if (!index.isValid())
+			return index.sibling(0, 0);
+		return mListView->indexBelow(index);
+	}
 	else
-		it = item ? item->itemAbove() : mListView->lastItem();
-	return (EventListViewItemBase*)it;
-#else
-	return 0;
-#endif
+	{
+		if (!index.isValid())
+			return index.sibling(index.model()->rowCount() - 1, 0);
+		return mListView->indexAbove(index);
+	}
 }

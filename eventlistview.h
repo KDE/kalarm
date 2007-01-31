@@ -1,5 +1,5 @@
 /*
- *  eventlistviewbase.h  -  base class for widget showing list of alarms
+ *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
  *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EVENTLISTVIEWBASE_H
-#define EVENTLISTVIEWBASE_H
+#ifndef EVENTLISTVIEW_H
+#define EVENTLISTVIEW_H
 
 #include "kalarm.h"
 
@@ -27,12 +27,18 @@
 
 #include <kcal/event.h>
 
+#include "eventlistmodel.h"
 
-class EventListViewBase : public QTreeView
+
+class EventListView : public QTreeView
 {
 		Q_OBJECT
 	public:
-		explicit EventListViewBase(QWidget* parent = 0);
+		explicit EventListView(QWidget* parent = 0);
+		EventListFilterModel* eventFilterModel() const   { return static_cast<EventListFilterModel*>(model()); }
+		EventListModel*   eventModel() const   { return static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel()); }
+		KCal::Event*      event(int row) const;
+		KCal::Event*      event(const QModelIndex&) const;
 		void              select(const QString& eventId);
 		void              select(const QModelIndex&);
 		QModelIndex       selectedIndex() const;
@@ -46,5 +52,5 @@ class EventListViewBase : public QTreeView
 		virtual void mouseReleaseEvent(QMouseEvent*);
 };
 
-#endif // EVENTLISTVIEWBASE_H
+#endif // EVENTLISTVIEW_H
 
