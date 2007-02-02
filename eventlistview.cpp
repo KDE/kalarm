@@ -90,7 +90,7 @@ KCal::Event* EventListView::selectedEvent() const
 	if (list.count() != 1)
 		return 0;
 kDebug()<<"SelectedEvent() count="<<list.count()<<endl;
-	QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
+	const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
 	QModelIndex source = proxy->mapToSource(list[0]);
 	return static_cast<KCal::Event*>(source.internalPointer());
 }
@@ -105,7 +105,7 @@ KCal::Event::List EventListView::selectedEvents() const
 	int count = ilist.count();
 	if (count)
 	{
-		QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
+		const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
 		for (int i = 0;  i < count;  ++i)
 		{
 			QModelIndex source = proxy->mapToSource(ilist[i]);
