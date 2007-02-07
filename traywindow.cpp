@@ -331,14 +331,6 @@ void TrayWindow::removeWindow(MainWindow* win)
 		mAssocMainWindow = 0;
 }
 
-
-#if defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
-	#include <X11/X.h>
-	#include <X11/Xlib.h>
-	#include <X11/Xutil.h>
-#include <QX11Info>
-#endif
-
 /******************************************************************************
 * Check whether the widget is in the system tray.
 * Note that it is only sometime AFTER the show event that the system tray
@@ -350,24 +342,4 @@ void TrayWindow::removeWindow(MainWindow* win)
 bool TrayWindow::inSystemTray() const
 {
 	return true;
-#ifdef __GNUC__
-#warning I don't get what's supposed to happen here - systrays are no longer widgets though
-#endif
-#if 0 && defined(HAVE_X11_HEADERS) && defined(Q_WS_X11)
-	Window  xParent;    // receives parent window
-	Window  root;
-	Window* children = 0;
-	unsigned int nchildren;
-	// Find the X parent window of the widget. This is not the same as the Qt parent widget.
-	if (!XQueryTree(QX11Info::display(), winId(), &root, &xParent, &children, &nchildren))
-		return true;    // error determining its parent X window
-	if (children)
-		XFree(children);
-
-	// If it is in the system tray, the system tray window will be its X parent.
-	// Otherwise, the root window will be its X parent.
-	return xParent != root;
-#else
-	return true;
-#endif // HAVE_X11_HEADERS
 }
