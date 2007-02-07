@@ -20,7 +20,6 @@
 
 #include "kalarm.h"
 
-#include <config-kalarm.h>
 #include <stdlib.h>
 
 #include <QToolTip>

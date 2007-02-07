@@ -1,7 +1,5 @@
 project(kalarm)
 
-configure_file(config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h )
-
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kcal/
 	${CMAKE_SOURCE_DIR}/kcal/libical/src/
