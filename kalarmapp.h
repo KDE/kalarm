@@ -52,7 +52,6 @@ class KAlarmApp : public KUniqueApplication
 		virtual int        newInstance();
 		static KAlarmApp*  getInstance();
 		bool               checkCalendarDaemon()           { return initCheck(); }
-		bool               haveSystemTray() const          { return mHaveSystemTray; }
 		bool               wantRunInSystemTray() const;
 		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
 		bool               speechEnabled() const           { return mSpeechEnabled; }
@@ -67,7 +66,7 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*        trayWindow() const              { return mTrayWindow; }
 		MainWindow*        trayMainWindow() const;
 		bool               displayTrayIcon(bool show, MainWindow* = 0);
-		bool               trayIconDisplayed() const       { return !!mTrayWindow; }
+		bool               trayIconDisplayed() const       { return mTrayWindow; }
 		bool               editNewAlarm(MainWindow* = 0);
 		virtual void       commitData(QSessionManager&);
 
@@ -101,7 +100,6 @@ class KAlarmApp : public KUniqueApplication
 		void               slotCommandOutput(KProcess*, char* buffer, int bufflen);
 		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
-		void               slotSystemTrayTimer();
 		void               slotArchivedPurged();
 	private:
 		enum EventFunc
@@ -168,10 +166,7 @@ class KAlarmApp : public KUniqueApplication
 		int                mPendingQuitCode;     // exit code for a pending quit
 		bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
 		bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
-		bool               mHaveSystemTray;      // whether there is a system tray
-		bool               mNoSystemTray;        // no KDE system tray exists
-		bool               mSavedNoSystemTray;   // mNoSystemTray before mCheckingSystemTray was true
-		bool               mCheckingSystemTray;  // the existence of the system tray is being checked
+		bool               mNoSystemTray;        // no system tray exists
 		bool               mSessionClosingDown;  // session manager is closing the application
 		bool               mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running

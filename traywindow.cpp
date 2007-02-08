@@ -329,16 +329,3 @@ void TrayWindow::removeWindow(MainWindow* win)
 	if (win == mAssocMainWindow)
 		mAssocMainWindow = 0;
 }
-
-/******************************************************************************
-* Check whether the widget is in the system tray.
-* Note that it is only sometime AFTER the show event that the system tray
-* becomes the widget's parent. So for a definitive status, call this method
-* only after waiting a bit...
-* Reply = true if the widget is in the system tray, or its status can't be determined.
-*       = false if it is not currently in the system tray.
-*/
-bool TrayWindow::inSystemTray() const
-{
-	return true;
-}

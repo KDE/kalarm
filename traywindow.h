@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2004,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ class TrayWindow : public KSystemTrayIcon
 		void         removeWindow(MainWindow*);
 		MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
 		void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
-		bool         inSystemTray() const;
 		void         tooltipAlarmText(QString& text) const;
 
 	public slots:

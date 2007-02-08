@@ -98,7 +98,6 @@ KAlarmApp::KAlarmApp()
 	  mTrayWindow(0),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
-	  mCheckingSystemTray(false),
 	  mSessionClosingDown(false),
 	  mRefreshArchivedAlarms(false),
 	  mSpeechEnabled(false)
@@ -107,9 +106,6 @@ KAlarmApp::KAlarmApp()
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
-	// Check if the system tray is supported by this window manager
-	mHaveSystemTray = true;   // assume yes in lieu of a test which works
-
 	if (AlarmCalendar::initialiseCalendars())
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
@@ -117,7 +113,6 @@ KAlarmApp::KAlarmApp()
 		KSharedConfig::Ptr config = KGlobal::config();
 		config->setGroup(QLatin1String("General"));
 		mNoSystemTray           = config->readEntry("NoSystemTray", false);
-		mSavedNoSystemTray      = mNoSystemTray;
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
 		mStartOfDay             = Preferences::startOfDay();
@@ -298,7 +293,7 @@ int KAlarmApp::newInstance()
 				// Display only the system tray icon
 				kDebug(5950)<<"KAlarmApp::newInstance(): tray\n";
 				args->clear();      // free up memory
-				if (!mHaveSystemTray)
+				if (!QSystemTrayIcon::isSystemTrayAvailable())
 				{
 					exitCode = 1;
 					break;
@@ -948,7 +943,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 	{
 		if (!mTrayWindow  &&  !creating)
 		{
-			if (!mHaveSystemTray)
+			if (!QSystemTrayIcon::isSystemTrayAvailable())
 				return false;
 			if (!MainWindow::count()  &&  wantRunInSystemTray())
 			{
@@ -961,12 +956,8 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 			mTrayWindow->show();
 			emit trayIconToggled();
 
-			// Set up a timer so that we can check after all events in the window system's
-			// event queue have been processed, whether the system tray actually exists
-			mCheckingSystemTray = true;
-			mSavedNoSystemTray  = mNoSystemTray;
-			mNoSystemTray       = false;
-			QTimer::singleShot(0, this, SLOT(slotSystemTrayTimer()));
+			if (!checkSystemTray())
+				quitIf(0);    // exit the application if there are no open windows
 		}
 	}
 	else if (mTrayWindow)
@@ -978,32 +969,18 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 }
 
 /******************************************************************************
-*  Called by a timer to check whether the system tray icon has been housed in
-*  the system tray. Because there is a delay between the system tray icon show
-*  event and the icon being reparented by the system tray, we have to use a
-*  timer to check whether the system tray has actually grabbed it, or whether
-*  the system tray probably doesn't exist.
-*/
-void KAlarmApp::slotSystemTrayTimer()
-{
-	mCheckingSystemTray = false;
-	if (!checkSystemTray())
-		quitIf(0);    // exit the application if there are no open windows
-}
-
-/******************************************************************************
 *  Check whether the system tray icon has been housed in the system tray.
-*  If the system tray doesn't seem to exist, tell the alarm daemon to notify us
-*  of alarms regardless of whether we're running.
+*  If the system tray doesn't exist, tell the alarm daemon to notify us of
+*  alarms regardless of whether we're running.
 */
 bool KAlarmApp::checkSystemTray()
 {
-	if (mCheckingSystemTray  ||  !mTrayWindow)
+	if (!mTrayWindow)
 		return true;
-	if (mTrayWindow->inSystemTray() != !mSavedNoSystemTray)
+	if (QSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
 	{
-		kDebug(5950) << "KAlarmApp::checkSystemTray(): changed -> " << mSavedNoSystemTray << endl;
-		mNoSystemTray = mSavedNoSystemTray = !mSavedNoSystemTray;
+		kDebug(5950) << "KAlarmApp::checkSystemTray(): changed -> " << mNoSystemTray << endl;
+		mNoSystemTray = !mNoSystemTray;
 
 		// Store the new setting in the config file, so that if KAlarm exits and is then
 		// next activated by the daemon to display a message, it will register with the
@@ -1017,11 +994,6 @@ bool KAlarmApp::checkSystemTray()
 
 		// Update other settings and reregister with the alarm daemon
 		slotPreferencesChanged();
-	}
-	else
-	{
-		kDebug(5950) << "KAlarmApp::checkSystemTray(): no change = " << !mSavedNoSystemTray << endl;
-		mNoSystemTray = mSavedNoSystemTray;
 	}
 	return !mNoSystemTray;
 }
@@ -1132,7 +1104,7 @@ void KAlarmApp::slotArchivedPurged()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return Preferences::runInSystemTray()  &&  mHaveSystemTray;
+	return Preferences::runInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable();
 }
 
 /******************************************************************************
