@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -25,6 +25,7 @@
 #ifndef RESOURCESELECTOR_H
 #define RESOURCESELECTOR_H
 
+#include <QModelIndex>
 #include <QFrame>
 #include <QSize>
 #include "alarmresource.h"
@@ -32,14 +33,12 @@
 
 class QComboBox;
 class QPushButton;
-class Q3ListViewItem;
 class QResizeEvent;
 class KAction;
 class KActionCollection;
 class KToggleAction;
-class K3ListView;
 class KMenu;
-class ResourceItem;
+class ResourceView;
 using KCal::ResourceCalendar;
 
 
@@ -49,13 +48,11 @@ using KCal::ResourceCalendar;
 class ResourceSelector : public QFrame
 {
 	Q_OBJECT
-	friend class ResourceItem;
     public:
 	explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
 	AlarmResources* calendar() const    { return mCalendar; }
 	void  initActions(KActionCollection*);
 	void  setContextMenu(KMenu*);
-	void  queueClose(AlarmResource*);
 
     signals:
 	/** Signal that a resource has been added, removed or its active status changed. */
@@ -63,22 +60,18 @@ class ResourceSelector : public QFrame
 	void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
-	bool eventFilter(QObject*, QEvent*);
+//	bool eventFilter(QObject*, QEvent*);
 	virtual void resizeEvent(QResizeEvent*);
 
     private slots:
-	void  refreshList();
+	void  alarmTypeSelected();
 	void  addResource();
 	void  editResource();
 	void  removeResource();
-	void  addItem(AlarmResource* rc)   { addItem(rc, true); }
-	void  updateItem(AlarmResource*);
-	void  selectionChanged(Q3ListViewItem*);
-	void  clicked(Q3ListViewItem*);
-	void  slotCloseResource(AlarmResource*);
-	void  contextMenuRequested(Q3ListViewItem*, const QPoint&, int);
-	void  slotStandardChanged(AlarmResource::Type);
-	void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
+	void  selectionChanged();
+//	void  slotSelectionChanged()       { selectionChanged(false); }
+//	void  clicked(Q3ListViewItem*);
+	void  contextMenuRequested(const QPoint&);
 	void  reloadResource();
 	void  saveResource();
 	void  setStandard();
@@ -86,16 +79,11 @@ class ResourceSelector : public QFrame
 	void  showInfo();
 
     private:
-	void          addItem(AlarmResource*, bool emitSignal);
-	ResourceItem* findItem(AlarmResource*);
-	ResourceItem* currentItem();
-	// Methods used by ResourceItem
-	int           setNewStandardResource(AlarmResource*);
-	void          emitResourcesChanged();
+	AlarmResource* currentResource() const;
 
 	AlarmResources* mCalendar;
 	QComboBox*      mAlarmType;
-	K3ListView*      mListView;
+	ResourceView*   mListView;
 	QPushButton*    mAddButton;
 	QPushButton*    mDeleteButton;
 	QPushButton*    mEditButton;

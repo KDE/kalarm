@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ AlarmResource::AlarmResource(const KConfig* config)
 	  mLock(0),
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
+	  mCloseAfterSave(false),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -76,6 +77,7 @@ AlarmResource::AlarmResource(Type type)
 	  mLock(0),
 	  mType(type),
 	  mStandard(false),
+	  mCloseAfterSave(false),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -250,6 +252,16 @@ bool AlarmResource::load(CacheAction action)
 		return false;
 	emit resLoaded(this);    // special signal to AlarmResources
 	return true;
+}
+
+bool AlarmResource::saveAndClose(CacheAction action, Incidence* incidence)
+{
+	bool result = save(action, incidence);
+	if (isSaving())
+		mCloseAfterSave = true;   // ensure it's closed if saving is asynchronous
+	else
+		close();
+	return result;
 }
 
 void AlarmResource::doClose()

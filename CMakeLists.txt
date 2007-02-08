@@ -91,6 +91,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    pickfileradio.cpp 
    calendarcompat.cpp
    resourceconfigdialog.cpp
+   resourcemodelview.cpp
    resourceselector.cpp
 )
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )

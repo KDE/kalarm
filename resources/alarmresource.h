@@ -1,7 +1,7 @@
 /*
  *  alarmresource.h  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -132,6 +132,11 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 		/** Return whether the resource is in the process of loading. */
 		bool     isLoading() const               { return mLoading; }
 
+		/** Save the resource and then close it.
+		 *  It will be closed even if saving fails. */
+		bool saveAndClose(CacheAction, KCal::Incidence* = 0);
+		bool saveAndClose(KCal::Incidence* incidence = 0)  { return saveAndClose(DefaultCache, incidence); }
+
 		/** Set a function to write the application ID into a calendar. */
 		static void setCalIDFunction(void (*f)(CalendarLocal&))    { mCalIDFunction = f; }
 		/** Set a function to fix the calendar once it has been loaded. */
@@ -186,6 +191,7 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 
 	protected:
 		virtual void      doClose();
+		bool              closeAfterSave() const    { bool ret = mCloseAfterSave; mCloseAfterSave = false; return ret; }
 		void              setCompatibility(KCalendar::Status c)    { mCompatibility = c; }
 		void              checkCompatibility(const QString&);
 		KCalendar::Status checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc);
@@ -204,6 +210,7 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
+		mutable bool mCloseAfterSave;  // resource is to be closed once save() is complete
 		KCalendar::Status mCompatibility; // whether resource is in compatible format
 	protected:
 		typedef QMap<const KCal::Event*, KCalendar::Status>  CompatibilityMap;
