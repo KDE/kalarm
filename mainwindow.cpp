@@ -931,7 +931,7 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(theApp()->haveSystemTray() && !theApp()->wantRunInSystemTray());
+	mActionToggleTrayIcon->setEnabled(QSystemTrayIcon::isSystemTrayAvailable() && !theApp()->wantRunInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 

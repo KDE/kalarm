@@ -29,6 +29,8 @@
 
 #include "eventlistmodel.h"
 
+class Find;
+
 
 class EventListView : public QTreeView
 {
@@ -45,11 +47,22 @@ class EventListView : public QTreeView
 		KCal::Event*      selectedEvent() const;
 		KCal::Event::List selectedEvents() const;
 
+	public slots:
+		virtual void      slotFind();
+		virtual void      slotFindNext()       { findNext(true); }
+		virtual void      slotFindPrev()       { findNext(false); }
+
 	signals:
-		void  rightButtonClicked(const QPoint& globalPos);
+		void              rightButtonClicked(const QPoint& globalPos);
+		void              findActive(bool);
 
 	protected:
-		virtual void mouseReleaseEvent(QMouseEvent*);
+		virtual void      mouseReleaseEvent(QMouseEvent*);
+
+	private:
+		void              findNext(bool forward);
+
+		Find*             mFind;
 };
 
 #endif // EVENTLISTVIEW_H

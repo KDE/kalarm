@@ -27,12 +27,14 @@
 #include <kdebug.h>
 
 #include "eventlistmodel.h"
+#include "find.h"
 #include "templatelistfiltermodel.h"
 #include "eventlistview.moc"
 
 
 EventListView::EventListView(QWidget* parent)
-	: QTreeView(parent)
+	: QTreeView(parent),
+	  mFind(0)
 {
 	setRootIsDecorated(false);    // don't show expander icons for child-less items
 	setSortingEnabled(true);
@@ -113,6 +115,29 @@ KCal::Event::List EventListView::selectedEvents() const
 		}
 	}
 	return elist;
+}
+
+/******************************************************************************
+*  Called when the Find action is selected.
+*  Display the non-modal Find dialog.
+*/
+void EventListView::slotFind()
+{
+	if (!mFind)
+	{
+		mFind = new Find(this);
+		connect(mFind, SIGNAL(active(bool)), SIGNAL(findActive(bool)));
+	}
+	mFind->display();
+}
+
+/******************************************************************************
+*  Called when the Find Next or Find Prev action is selected.
+*/
+void EventListView::findNext(bool forward)
+{
+	if (mFind)
+		mFind->findNext(forward);
 }
 
 /******************************************************************************
