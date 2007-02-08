@@ -432,7 +432,7 @@ void Daemon::enableAutoStart(bool enable)
 	daemonDBus()->enableAutoStart(enable);
 	if (!checkDBusResult("enableAutoStart"))
 #ifdef __GNUC__
-#warning Check that false is returned if daemon isn't running
+#warning Check that false is returned if daemon is not running
 #endif
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
