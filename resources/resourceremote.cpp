@@ -140,12 +140,6 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, (mShowProgress && hasGui()));
 		connect(mDownloadJob, SIGNAL(result(KJob*)), SLOT(slotLoadJobResult(KJob*)));
-
-#ifdef __GNUC__
-#warning If you commented this because of issues with signals/slots, please uncomment the code and you are done
-#warning otherwise delete this warning, thank you (ereslibre)
-#endif
-
 #if 0
 		if (mShowProgress  &&  hasGui())
 		{
@@ -165,10 +159,6 @@ bool KAResourceRemote::doLoad(bool syncCache)
 
 void KAResourceRemote::slotPercent(KJob*, unsigned long percent)
 {
-#ifdef __GNUC__
-#warning same with this (ereslibre)
-#endif
-
 #if 0
 	emit downloading(this, percent);
 #endif
@@ -279,6 +269,8 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 
 	mUploadJob = 0;
 	emit resourceSaved(this);
+	if (closeAfterSave())
+		close();
 }
 
 bool KAResourceRemote::setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl)
