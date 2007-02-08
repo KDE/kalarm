@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,12 +54,13 @@
 #include "alarmevent.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "kmailinterface.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "kamail.h"
-#include "kmailinterface.h"
 
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
+static const char* KMAIL_DBUS_PATH    = "/KMail";
 
 
 namespace HeaderParsing
@@ -291,7 +292,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		}
 
 		// Notify KMail of the message in the temporary file
-		org::kde::kmail::kmail kmail("org.kde.kmail", "/KMail", QDBusConnection::sessionBus());
+		org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
 		QDBusReply<int> reply = kmail.dbusAddMessage(QString::fromLatin1(folder), tmpFile.fileName(), QString());
 		if (!reply.isValid())
 			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call failed: " << reply.error().message() << endl;
