@@ -109,7 +109,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(0);
-	BirthdayModel* model = BirthdayModel::instance();
+	BirthdayModel* model = BirthdayModel::instance(this);
 	connect(model, SIGNAL(addrBookError()), SLOT(addrBookError()));
 	connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)), SLOT(resizeViewColumns()));
 	model->setPrefixSuffix(mPrefixText, mSuffixText);
