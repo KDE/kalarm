@@ -24,8 +24,6 @@
 #include <string.h>
 
 #include <QScrollBar>
-#include <Q3MimeSourceFactory>
-#include <Q3StoredDrag>
 #include <QtDBus>
 #include <QFile>
 #include <QFileInfo>
@@ -80,6 +78,7 @@
 #include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "kmailinterface.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
@@ -90,12 +89,9 @@ using namespace KCal;
 static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH      = "/KSpeech";
 static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech";
-#ifdef __GNUC__
-#warning Fix KMail dbus interface names when they are available
-#endif
+
 static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
-static const char* KMAIL_DBUS_PATH      = "/kmailiface";
-static const char* KMAIL_DBUS_INTERFACE = "org.kde.kmail.kmailiface";
+static const char* KMAIL_DBUS_PATH      = "/KMail";
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -118,25 +114,6 @@ class MessageText : public QTextEdit
 //TODO: Restore the following line
 //		virtual QSize sizeHint() const  { return QSize(contentsWidth() + scrollBarWidth(), contentsHeight() + scrollBarHeight()); }
 };
-
-
-#if 1
-class MWMimeSourceFactory : public Q3MimeSourceFactory
-{
-	public:
-		MWMimeSourceFactory(const QString& absPath, KTextBrowser*);
-		virtual ~MWMimeSourceFactory();
-		virtual const QMimeSource* data(const QString& abs_name) const;
-	private:
-		// Prohibit the following methods
-		virtual void setData(const QString&, QMimeSource*) {}
-		virtual void setExtensionType(const QString&, const char*) {}
-
-		QString    mTextFile;
-		QByteArray mMimeType;
-		mutable const QMimeSource* mLast;
-};
-#endif
 
 
 // Basic flags for the window
@@ -383,10 +360,15 @@ void MessageWin::initView()
 					{
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
-#if 1
-						MWMimeSourceFactory msf(tmpFile, view);
-#else
 						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
+#warning Check that HTML link paths work
+#if 1
+						if (imageType)
+							view->setHtml("<img source=\"" + tmpFile + "\">");
+						else
+							view->QTextBrowser::setSource(tmpFile);   // if not an image, assume a text file
+//						view->setFilePath(QFileInfo(tmpFile).absolutePath());
+#else
 						view->loadResource((imageType ? QTextDocument::ImageResource : QTextDocument::HtmlResource), tmpFile);
 #endif
 						view->setMinimumSize(view->sizeHint());
@@ -1385,8 +1367,8 @@ void MessageWin::slotShowKMailMessage()
 		KMessageBox::sorry(this, err);
 		return;
 	}
-	QDBusInterface kmailIface(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, KMAIL_DBUS_INTERFACE );
-	QDBusReply<bool> reply = kmailIface.call(QLatin1String("showMail"), (qulonglong)mKMailSerialNumber, QString() );
+	org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
+	QDBusReply<bool> reply = kmail.showMail((qulonglong)mKMailSerialNumber, QString());
 	if (!reply.isValid())
 		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail D-Bus call failed: " << reply.error().message() << endl;
 	else if (!reply.value())
@@ -1555,81 +1537,3 @@ void MessageWin::displayMainWindow()
 {
 	KAlarm::displayMainWindowSelected(mEventID);
 }
-
-
-#if 1
-/*=============================================================================
-= Class MWMimeSourceFactory
-* Gets the mime type of a text file from not only its extension (as per
-* QMimeSourceFactory), but also from its contents. This allows the detection
-* of plain text files without file name extensions.
-=============================================================================*/
-MWMimeSourceFactory::MWMimeSourceFactory(const QString& absPath, KTextBrowser* view)
-	: Q3MimeSourceFactory(),
-	  mMimeType("text/plain"),
-	  mLast(0)
-{
-	QString type = KMimeType::findByPath(absPath)->name();
-	switch (KAlarm::fileType(type))
-	{
-		case KAlarm::TextPlain:
-		case KAlarm::TextFormatted:
-			mMimeType = type.toLatin1();
-			// fall through to 'TextApplication'
-		case KAlarm::TextApplication:
-		default:
-			// It's assumed to be a text file
-			mTextFile = absPath;
-			view->QTextBrowser::setSource(absPath);
-			break;
-
-		case KAlarm::Image:
-			// It's an image file
-			QString text = "<img source=\"";
-			text += absPath;
-			text += "\">";
-			view->setHtml(text);
-			break;
-	}
-	setFilePath(QFileInfo(absPath).absolutePath());
-}
-
-MWMimeSourceFactory::~MWMimeSourceFactory()
-{
-	delete mLast;
-}
-
-#ifdef __GNUC__
-#warning port me to QMimeData (the Qt4 way of doing drag and drop)
-#endif
-const QMimeSource* MWMimeSourceFactory::data(const QString& abs_name) const
-{
-	if (abs_name == mTextFile)
-	{
-		QFileInfo fi(abs_name);
-		if (fi.isReadable())
-		{
-			QFile f(abs_name);
-			if (f.open(QIODevice::ReadOnly)  &&  f.size())
-			{
-				QByteArray ba(f.size(), '\0');
-				f.read(ba.data(), ba.size());
-#if 1
-				Q3StoredDrag* sr = new Q3StoredDrag(mMimeType.data());
-				sr->setEncodedData(ba);
-				delete mLast;
-				mLast = sr;
-				return sr;
-#else
-				QMimeType mt;
-				mt.setData(mMimeType, ba);
-				delete mLast;
-				mLast = mt;
-				return mt;
-#endif
-			}
-		}
-	}
-	return Q3MimeSourceFactory::data(abs_name);
-}
-#endif
