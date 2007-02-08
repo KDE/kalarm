@@ -106,14 +106,9 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	mDeleteButton->setWhatsThis(i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
 
-#ifdef __GNUC__
-#warning Make select all/deselect work without clicking in list view widget
-#endif
 	KActionCollection* actions = new KActionCollection(this);
+	actions->setDefaultShortcutContext(Qt::WindowShortcut);
 	actions->setAssociatedWidget(topLevelWidget());
-//	actions->addAssociatedWidget(topWidget);
-	actions->addAssociatedWidget(mListView);
-//	actions->setEnabled(true);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
 
