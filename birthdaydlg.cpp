@@ -219,9 +219,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
 
-#ifdef __GNUC__
-#warning Test select all/deselect
-#endif
 	KActionCollection* actions = new KActionCollection(this);
 	actions->setAssociatedWidget(mListView);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
