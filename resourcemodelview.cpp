@@ -21,8 +21,12 @@
 #include "kalarm.h"
 
 #include <QApplication>
+#include <QToolTip>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QHelpEvent>
+#include <QTextLayout>
+#include <QTextLine>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -80,18 +84,25 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			return resource->resourceName();
 		case Qt::CheckStateRole:
 			return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
-		case Qt::BackgroundRole:
+		case Qt::ForegroundRole:
 			switch (resource->alarmType())
 			{
 				case AlarmResource::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
 				case AlarmResource::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
 				case AlarmResource::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
 			}
+			break;
+		case Qt::FontRole:
+		{
+			if (!resource->isEnabled()  ||  !resource->standardResource())
+				break;
+			QFont font = mFont;
+			font.setBold(true);
+			return font;
+		}
 		case Qt::ToolTipRole:
 		{
-			QString tipText;
-//			if (item->width(mListView->fontMetrics(), mListView, 0) > mListView->viewport()->width())
-//				tipText = resource->resourceName() + '\n';
+			QString tipText = resource->resourceName() + '\n';
 			tipText += resource->displayLocation(true);
 			bool inactive = !resource->isActive();
 			if (inactive)
@@ -106,9 +117,20 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
+/******************************************************************************
+* Set the font to use for all items, or the checked state of one item.
+* The font must always be set at initialisation.
+*/
 bool ResourceModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
 	mErrorPrompt.clear();
+	if (role == Qt::FontRole)
+	{
+		// Set the font used in all views.
+		// This enables data(index, Qt::FontRole) to return bold when appropriate.
+		mFont = value.value<QFont>();
+		return true;
+	}
 	if (role != Qt::CheckStateRole  ||  !index.isValid())
 		return false;
 	AlarmResource* resource = static_cast<AlarmResource*>(index.internalPointer());
@@ -361,28 +383,17 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 	return model->setData(index, state, Qt::CheckStateRole);
 }
 
-/******************************************************************************
-* Paint a resource entry. Special processing is needed here to display the
-* standard resource in bold.
-*/
-void ResourceDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-	AlarmResource* resource = static_cast<const ResourceFilterModel*>(index.model())->resource(index);
-	if (resource->isEnabled()  &&  resource->standardResource())
-	{
-		QStyleOptionViewItem opt = option;
-		opt.font.setBold(true);    // show standard resources in bold
-		QItemDelegate::paint(painter, opt, index);
-		return;
-	}
-	QItemDelegate::paint(painter, option, index);
-}
-
 
 /*=============================================================================
 = Class: ResourceView
 = View displaying a list of resources.
 =============================================================================*/
+
+void ResourceView::setModel(QAbstractItemModel* model)
+{
+	model->setData(QModelIndex(), viewOptions().font, Qt::FontRole);
+	QListView::setModel(model);
+}
 
 /******************************************************************************
 * Return the resource for a given row.
@@ -408,4 +419,46 @@ void ResourceView::notifyChange(int row) const
 void ResourceView::notifyChange(const QModelIndex& index) const
 {
 	static_cast<ResourceFilterModel*>(model())->notifyChange(index);
+}
+
+/******************************************************************************
+* Called when a ToolTip or WhatsThis event occurs.
+*/
+bool ResourceView::viewportEvent(QEvent* e)
+{
+	if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
+	{
+		QHelpEvent* he = static_cast<QHelpEvent*>(e);
+		QModelIndex index = indexAt(he->pos());
+		QVariant value = model()->data(index, Qt::ToolTipRole);
+		if (qVariantCanConvert<QString>(value))
+		{
+			QString toolTip = value.toString();
+			int i = toolTip.indexOf('\n');
+			if (i > 0)
+			{
+				QString name = toolTip.left(i);
+				value = model()->data(index, Qt::FontRole);
+				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+				int textWidth = fm.boundingRect(name).width() + 1;
+				const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+				QStyleOptionButton opt;
+				opt.QStyleOption::operator=(viewOptions());
+				opt.rect = rectForIndex(index);
+				int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
+				int left = spacing() + 3*margin + checkWidth;   // left offset of text
+				int right = left + textWidth;
+				if (left >= horizontalOffset() + spacing()
+				&&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
+				{
+					// The whole of the resource name is already displayed,
+					// so omit it from the tooltip.
+					toolTip = toolTip.mid(i + 1);
+				}
+			}
+			QToolTip::showText(he->globalPos(), toolTip, this);
+			return true;
+		}
+	}
+	return QListView::viewportEvent(e);
 }

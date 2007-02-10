@@ -28,6 +28,7 @@
 #include <QItemDelegate>
 #include <QListView>
 #include <QList>
+#include <QFont>
 
 #include "resources/alarmresource.h"
 #include "resources/alarmresources.h"
@@ -59,6 +60,7 @@ class ResourceModel : public QAbstractListModel
 		static ResourceModel* mInstance;
 		QList<AlarmResource*> mResources;
 		QString               mErrorPrompt;
+		QFont                 mFont;
 };
 
 
@@ -84,10 +86,14 @@ class ResourceView : public QListView
 {
 	public:
 		ResourceView(QWidget* parent = 0)  : QListView(parent) {}
+		virtual void   setModel(QAbstractItemModel*);
 		AlarmResource* resource(int row) const;
 		AlarmResource* resource(const QModelIndex&) const;
 		void           notifyChange(int row) const;
 		void           notifyChange(const QModelIndex&) const;
+
+	protected:
+		virtual bool   viewportEvent(QEvent*);
 };
 
 
@@ -95,7 +101,6 @@ class ResourceDelegate : public QItemDelegate
 {
 	public:
 		ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
-		virtual void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
 };
 
