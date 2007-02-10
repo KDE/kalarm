@@ -115,8 +115,19 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 	if (!kcalEvent)
 		return QVariant();
 	KAEvent event(static_cast<KCal::Event*>(index.internalPointer()));
-	if (role == StatusRole)
-		return event.category();
+	switch (role)
+	{
+		case Qt::ForegroundRole:
+			if (!event.enabled())
+			       return Preferences::disabledColour();
+			if (event.expired())
+			       return Preferences::archivedColour();
+			break;   // use the default for normal active alarms
+		case StatusRole:
+			return event.category();
+		default:
+			break;
+	}
 	switch (column)
 	{
 		case TimeColumn:

@@ -48,17 +48,20 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 		int i = str.indexOf(" ~");    // look for indicator that leading zeroes are omitted
 		if (i >= 0)
 		{
-			int digitWidth = option.fontMetrics.width("0");
+			QStyleOptionViewItem opt = option;
+			QVariant value;
+			value = index.data(Qt::ForegroundRole);
+			if (value.isValid())
+				opt.palette.setColor(QPalette::Text, value.value<QColor>());
+			int digitWidth = opt.fontMetrics.width("0");
 			QString date = str.left(i + 1);
-			int w = option.fontMetrics.width(date) + digitWidth;
-			drawDisplay(painter, option, option.rect, date);
-			QRect rect(option.rect);
+			int w = opt.fontMetrics.width(date) + digitWidth;
+			drawDisplay(painter, opt, opt.rect, date);
+			QRect rect(opt.rect);
 			rect.setLeft(rect.left() + w);
-			drawDisplay(painter, option, rect, str.mid(i + 2));
+			drawDisplay(painter, opt, rect, str.mid(i + 2));
 			return;
 		}
-		drawDisplay(painter, option, option.rect, str);
-		return;
 	}
 	QItemDelegate::paint(painter, option, index);
 }
