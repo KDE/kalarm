@@ -625,7 +625,9 @@ StorePrefTab::StorePrefTab()
 	mClearArchived = new QPushButton(i18n("Clear Archived Alar&ms"), group);
 	mClearArchived->setFixedSize(mClearArchived->sizeHint());
 	connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
-	mClearArchived->setWhatsThis(i18n("Delete all existing archived alarms."));
+	mClearArchived->setWhatsThis((AlarmResources::instance()->activeCount(AlarmResource::ARCHIVED, false) <= 1)
+	        ? i18n("Delete all existing archived alarms.")
+	        : i18n("Delete all existing archived alarms (from the default archived alarm resource only)."));
 	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
