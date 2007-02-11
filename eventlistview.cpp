@@ -146,8 +146,6 @@ void EventListView::findNext(bool forward)
  * */
 bool EventListView::viewportEvent(QEvent* e)
 {
-kDebug()<<"viewportEvent("<<e->type()<<")"<<endl;
-if (e->type() == QEvent::ToolTip) kDebug()<<"Tooltip..."<<endl;
 	if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
 	{
 		QHelpEvent* he = static_cast<QHelpEvent*>(e);
@@ -166,12 +164,10 @@ if (e->type() == QEvent::ToolTip) kDebug()<<"Tooltip..."<<endl;
 				int textWidth = fm.boundingRect(toolTip).width() + 1;
 				const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
 				QRect rect = visualRect(index);
-kDebug()<<"Rect="<<rect.left()<< " - "<<rect.right()<<", column="<<columnViewportPosition(index.column())<<endl;
 				int left = columnViewportPosition(index.column()) + margin;
 				int right = left + textWidth;
-				if (left >= horizontalOffset()
-				&&  right <= horizontalOffset() + width() - 2*frameWidth())
-					return true;   // no need to display tooltip
+				if (left >= 0  &&  right <= width() - 2*frameWidth())
+					toolTip.clear();    // prevent any tooltip showing
 			}
 			QToolTip::showText(he->globalPos(), toolTip, this);
 			return true;
