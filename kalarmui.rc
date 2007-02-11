@@ -42,7 +42,7 @@
    <Action name="disable" />
    <Action name="createTemplate" />
    <Separator/>
-   <Action name="alarmEnable" />
+   <Action name="alarmsEnable" />
    <Action name="refreshAlarms" />
   </Menu>
   <Menu noMerge="1" name="settings" >

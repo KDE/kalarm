@@ -456,7 +456,6 @@ void MainWindow::initActions()
 
 	action = Daemon::createAlarmEnableAction(this);
 	actions->addAction(QLatin1String("alarmsEnable"), action);
-#warning Enable alarms action does not show in menu
 	if (undoText.isNull())
 	{
 		// Get standard texts, etc., for Undo and Redo actions
