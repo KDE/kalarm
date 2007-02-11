@@ -93,6 +93,7 @@ class ResourceView : public QListView
 		void           notifyChange(const QModelIndex&) const;
 
 	protected:
+		virtual void   mouseReleaseEvent(QMouseEvent*);
 		virtual bool   viewportEvent(QEvent*);
 };
 

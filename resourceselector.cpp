@@ -82,17 +82,13 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	ResourceFilterModel* filterModel = new ResourceFilterModel(model, this);
 	mListView = new ResourceView(this);
 	mListView->setModel(filterModel);
-//	mListView->setResizeMode(Q3ListView::LastColumn);
 	ResourceDelegate* delegate = new ResourceDelegate(mListView);
 	mListView->setItemDelegate(delegate);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(selectionChanged()));
-//	connect(mListView, SIGNAL(clicked(Q3ListViewItem*)), SLOT(clicked(Q3ListViewItem*)));
-//	connect(mListView, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), SLOT(editResource()));
 	mListView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mListView, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenuRequested(const QPoint&)));
 	mListView->setWhatsThis(i18n("List of available resources of the selected type. The checked state shows whether a resource "
 	                             "is enabled (checked) or disabled (unchecked). The default resource is shown in bold."));
-//	mListView->installEventFilter(this);
 	topLayout->addWidget(mListView);
 	topLayout->addSpacing(KDialog::spacingHint());
 
@@ -200,9 +196,6 @@ void ResourceSelector::editResource()
 	{
 		// Act on any changed settings.
 		// Read-only is handled automatically by AlarmResource::setReadOnly().
-#warning Call notifyChanged() to make new resource name be displayed?
-//		item->setText(0, resource->resourceName());
-
 		if (!readOnly  &&  resource->readOnly()  &&  resource->standardResource())
 		{
 			// A standard resource is being made read-only.
@@ -269,19 +262,6 @@ void ResourceSelector::removeResource()
 	emit resourcesChanged();
 }
 
-#warning Deselect currently selected resource when click at end of list
-#if 0
-/******************************************************************************
-* Called when the list is clicked. If no item is clicked, deselect any
-* currently selected item.
-*/
-void ResourceSelector::clicked(Q3ListViewItem* item)
-{
-	if (!item)
-		selectionChanged(true);
-}
-#endif
-
 /******************************************************************************
 * Called when the current selection changes, to enable/disable the
 * Delete and Edit buttons accordingly.
@@ -343,9 +323,8 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 	QModelIndex index = mListView->indexAt(viewportPos);
 	if (index.isValid())
 		resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
-//	else
-#warning Check that context menu after end of list resets Edit & Delete buttons
-//		mListView->clearSelection();
+	else
+		mListView->clearSelection();
 	if (resource)
 	{
 		active   = resource->isEnabled();
@@ -450,35 +429,3 @@ void ResourceSelector::resizeEvent(QResizeEvent* re)
 {
 	emit resized(re->oldSize(), re->size());
 }
-
-#if 0
-/******************************************************************************
-*  Called when any event occurs in the list view.
-*  Displays the resource details in a tooltip.
-*/
-bool ResourceSelector::eventFilter(QObject* obj, QEvent* e)
-{
-	if (obj != mListView  ||  e->type() != QEvent::ToolTip)
-		return false;    // let mListView handle non-tooltip events
-	QHelpEvent* he = (QHelpEvent*)e;
-	QPoint pt = he->pos();
-	ResourceItem* item = (ResourceItem*)mListView->itemAt(pt);
-	if (!item)
-		return true;
-	QString tipText;
-	AlarmResource* resource = item->resource();
-	if (item->width(mListView->fontMetrics(), mListView, 0) > mListView->viewport()->width())
-		tipText = resource->resourceName() + '\n';
-	tipText += resource->displayLocation(true);
-	bool inactive = !resource->isActive();
-	if (inactive)
-		tipText += '\n' + i18n("Disabled");
-	if (resource->readOnly())
-		tipText += (inactive ? ", " : "\n") + i18n("Read-only");
-
-	QRect rect = mListView->itemRect(item);
-	kDebug(5950) << "ResourceListTooltip::maybeTip(): display\n";
-	QToolTip::showText(pt, tipText);
-	return true;
-}
-#endif

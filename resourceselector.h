@@ -60,7 +60,6 @@ class ResourceSelector : public QFrame
 	void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
-//	bool eventFilter(QObject*, QEvent*);
 	virtual void resizeEvent(QResizeEvent*);
 
     private slots:
@@ -69,8 +68,6 @@ class ResourceSelector : public QFrame
 	void  editResource();
 	void  removeResource();
 	void  selectionChanged();
-//	void  slotSelectionChanged()       { selectionChanged(false); }
-//	void  clicked(Q3ListViewItem*);
 	void  contextMenuRequested(const QPoint&);
 	void  reloadResource();
 	void  saveResource();

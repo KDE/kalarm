@@ -422,6 +422,17 @@ void ResourceView::notifyChange(const QModelIndex& index) const
 }
 
 /******************************************************************************
+* Called when a mouse button is released.
+* Any currently selected resource is deselected.
+*/
+void ResourceView::mouseReleaseEvent(QMouseEvent* e)
+{
+	if (!indexAt(e->pos()).isValid())
+		clearSelection();
+	QListView::mouseReleaseEvent(e);
+}
+
+/******************************************************************************
 * Called when a ToolTip or WhatsThis event occurs.
 */
 bool ResourceView::viewportEvent(QEvent* e)
