@@ -240,7 +240,7 @@ bool TrayWindow::event(QEvent* e)
 	kDebug(5950) << "TrayWindow::event(): " << text << endl;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
-	QToolTip::showText(he->pos(), text);
+	QToolTip::showText(he->globalPos(), text);
 	return true;
 }
 
