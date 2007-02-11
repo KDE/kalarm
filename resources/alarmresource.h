@@ -191,7 +191,7 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 
 	protected:
 		virtual void      doClose();
-		bool              closeAfterSave() const    { bool ret = mCloseAfterSave; mCloseAfterSave = false; return ret; }
+		bool              closeAfterSave() const    { return mCloseAfterSave; }
 		void              setCompatibility(KCalendar::Status c)    { mCompatibility = c; }
 		void              checkCompatibility(const QString&);
 		KCalendar::Status checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc);
@@ -210,7 +210,7 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
-		mutable bool mCloseAfterSave;  // resource is to be closed once save() is complete
+		bool        mCloseAfterSave;  // resource is to be closed once save() is complete
 		KCalendar::Status mCompatibility; // whether resource is in compatible format
 	protected:
 		typedef QMap<const KCal::Event*, KCalendar::Status>  CompatibilityMap;
