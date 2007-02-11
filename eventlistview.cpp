@@ -22,6 +22,7 @@
 
 #include <QHeaderView>
 #include <QMouseEvent>
+#include <QToolTip>
 #include <QApplication>
 
 #include <kdebug.h>
@@ -138,6 +139,45 @@ void EventListView::findNext(bool forward)
 {
 	if (mFind)
 		mFind->findNext(forward);
+}
+
+/******************************************************************************
+ * * Called when a ToolTip or WhatsThis event occurs.
+ * */
+bool EventListView::viewportEvent(QEvent* e)
+{
+kDebug()<<"viewportEvent("<<e->type()<<")"<<endl;
+if (e->type() == QEvent::ToolTip) kDebug()<<"Tooltip..."<<endl;
+	if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
+	{
+		QHelpEvent* he = static_cast<QHelpEvent*>(e);
+		QModelIndex index = indexAt(he->pos());
+		QVariant value = model()->data(index, Qt::ToolTipRole);
+		if (qVariantCanConvert<QString>(value))
+		{
+			QString toolTip = value.toString();
+			int i = toolTip.indexOf('\n');
+			if (i < 0)
+			{
+				// Single line tooltip. Only display it if the text column
+				// is truncated in the view display.
+				value = model()->data(index, Qt::FontRole);
+				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+				int textWidth = fm.boundingRect(toolTip).width() + 1;
+				const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+				QRect rect = visualRect(index);
+kDebug()<<"Rect="<<rect.left()<< " - "<<rect.right()<<", column="<<columnViewportPosition(index.column())<<endl;
+				int left = columnViewportPosition(index.column()) + margin;
+				int right = left + textWidth;
+				if (left >= horizontalOffset()
+				&&  right <= horizontalOffset() + width() - 2*frameWidth())
+					return true;   // no need to display tooltip
+			}
+			QToolTip::showText(he->globalPos(), toolTip, this);
+			return true;
+		}
+	}
+	return QTreeView::viewportEvent(e);
 }
 
 /******************************************************************************

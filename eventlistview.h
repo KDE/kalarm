@@ -57,6 +57,7 @@ class EventListView : public QTreeView
 		void              findActive(bool);
 
 	protected:
+		virtual bool      viewportEvent(QEvent*);
 		virtual void      mouseReleaseEvent(QMouseEvent*);
 
 	private:
