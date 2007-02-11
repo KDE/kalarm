@@ -45,10 +45,10 @@ void AlarmListView::setModel(QAbstractItemModel* model)
 	header()->setResizeMode(EventListModel::ColourColumn, QHeaderView::Fixed);
 	header()->setResizeMode(EventListModel::TypeColumn, QHeaderView::Fixed);
 	header()->setResizeMode(EventListModel::TextColumn, QHeaderView::Stretch);
+	header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
 	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
 	header()->resizeSection(EventListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
 	header()->resizeSection(EventListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
-#warning Time column shrinks when Show Archived Alarms is selected
 }
 
 void AlarmListView::setColumnOrder(const QList<int>& order)
