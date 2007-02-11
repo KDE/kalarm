@@ -385,16 +385,16 @@ QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
 {
 	if (mOptions & KFind::FindBackwards)
 		forward = !forward;
+	if (!index.isValid())
+	{
+		QAbstractItemModel* model = mListView->model();
+		if (forward)
+			return model->index(0, 0);
+		else
+			return model->index(model->rowCount() - 1, 0);
+	}
 	if (forward)
-	{
-		if (!index.isValid())
-			return index.sibling(0, 0);
 		return mListView->indexBelow(index);
-	}
 	else
-	{
-		if (!index.isValid())
-			return index.sibling(index.model()->rowCount() - 1, 0);
 		return mListView->indexAbove(index);
-	}
 }
