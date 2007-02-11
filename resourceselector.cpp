@@ -144,9 +144,6 @@ void ResourceSelector::alarmTypeSelected()
 	static_cast<ResourceFilterModel*>(mListView->model())->setFilter(mCurrentAlarmType);
 	mAddButton->setWhatsThis(addTip);
 	mAddButton->setToolTip(addTip);
-#warning Check that Edit & Delete buttons are reset
-//	mListView->clearSelection();
-//	selectionChanged(true);
 	emit resourcesChanged();
 }
 
@@ -272,6 +269,7 @@ void ResourceSelector::removeResource()
 	emit resourcesChanged();
 }
 
+#warning Deselect currently selected resource when click at end of list
 #if 0
 /******************************************************************************
 * Called when the list is clicked. If no item is clicked, deselect any
@@ -290,7 +288,7 @@ void ResourceSelector::clicked(Q3ListViewItem* item)
 */
 void ResourceSelector::selectionChanged()
 {
-	bool state = mListView->selectionModel()->hasSelection();
+	bool state = mListView->selectionModel()->selectedRows().count();
 	mDeleteButton->setEnabled(state);
 	mEditButton->setEnabled(state);
 }
