@@ -290,7 +290,7 @@ QString AlarmResource::infoText() const
 	txt += "<br>" + i18nc("Access permissions (read-only, etc)", "Permissions: %1", type);
 	type = isActive() ? i18n("Enabled") : i18n("Disabled");
 	txt += "<br>" + i18nc("Enabled/disabled status", "Status: %1", type);
-	type = AlarmResources::instance()->getStandardResource(mType) ? i18n("Yes") : i18n("No");
+	type = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18n("Yes") : i18n("No");
 	txt += "<br>" + i18n("Default resource: %1", type);
 	return txt;
 }
