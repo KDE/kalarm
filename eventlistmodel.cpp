@@ -218,17 +218,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			{
 				case Qt::DisplayRole:
 				case SortRole:
-					return alarmText(event);
+					return AlarmText::summary(event, 1);
 				case Qt::ToolTipRole:
-				{
-break;
-#warning How to know if it has been truncated?
-					bool truncated;
-					QString text = alarmText(event, &truncated);
-					if (truncated)
-						return text;
-					break;
-				}
+					return AlarmText::summary(event);
 				default:
 					break;
 			}
@@ -411,18 +403,6 @@ KCal::Event* EventListModel::event(const QModelIndex& index)
 	if (!index.isValid())
 		return 0;
 	return static_cast<KCal::Event*>(index.internalPointer());
-}
-
-/******************************************************************************
-* Return the single line alarm summary text.
-*/
-QString EventListModel::alarmText(const KAEvent& event, bool* truncated) const
-{
-	bool trunc;
-	QString text = AlarmText::summary(event, 1, &trunc);
-	if (truncated)
-		*truncated = trunc;
-	return text;
 }
 
 /******************************************************************************

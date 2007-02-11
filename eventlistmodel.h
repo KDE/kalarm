@@ -82,7 +82,6 @@ class EventListModel : public QAbstractTableModel
 		void     updateEvent(int row);
 		void     removeEvent(int row);
 		int      findEvent(const QString& eventId) const;
-		QString  alarmText(const KAEvent&, bool* truncated = 0) const;
 		QString  alarmTimeText(const DateTime&) const;
 		QString  timeToAlarmText(const DateTime&) const;
 		QString  repeatText(const KAEvent&) const;
