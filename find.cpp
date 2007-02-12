@@ -35,6 +35,7 @@
 
 #include "alarmevent.h"
 #include "alarmlistfiltermodel.h"
+#include "alarmlistview.h"
 #include "eventlistview.h"
 #include "preferences.h"
 #include "find.moc"
