@@ -148,7 +148,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 	private:
 		typedef QList<MainWindow*> WindowList;
 
-		MainWindow(bool restored);
+		explicit MainWindow(bool restored);
 		void           createListView(bool recreate);
 		void           initActions();
 		void           initCalendarResources();
@@ -199,6 +199,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		bool                 mShowArchived;        // include archived alarms in the displayed list
 		bool                 mShowTime;            // show alarm times
 		bool                 mShowTimeTo;          // show time-to-alarms
+		bool                 mShown;               // true once the window has been displayed
 		bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
 		bool                 mMenuError;           // error occurred creating menus: need to show error message
 };

@@ -132,7 +132,8 @@ MainWindow::MainWindow(bool restored)
 	  mShowResources(Preferences::showResources()),
 	  mShowArchived(Preferences::showArchivedAlarms()),
 	  mShowTime(Preferences::showAlarmTime()),
-	  mShowTimeTo(Preferences::showTimeToAlarm())
+	  mShowTimeTo(Preferences::showTimeToAlarm()),
+	  mShown(false)
 {
 	kDebug(5950) << "MainWindow::MainWindow()\n";
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -300,6 +301,8 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 
 void MainWindow::resourcesResized()
 {
+	if (!mShown)
+		return;
 	QList<int> widths = mSplitter->sizes();
 	if (widths.count() > 1)
 	{
@@ -308,6 +311,8 @@ void MainWindow::resourcesResized()
 		// actually invisible, so note a zero width in these circumstances.
 		if (mResourcesWidth <= 5)
 			mResourcesWidth = 0;
+		else if (mainMainWindow() == this)
+			KAlarm::writeConfigWindowSize(WINDOW_NAME, size(), mResourcesWidth);
 	}
 }
 
@@ -322,9 +327,11 @@ void MainWindow::showEvent(QShowEvent* se)
 	{
 		QList<int> widths;
 		widths.append(mResourcesWidth);
+		widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
 		mSplitter->setSizes(widths);
 	}
 	MainWindowBase::showEvent(se);
+	mShown = true;
 }
 
 /******************************************************************************
@@ -1289,7 +1296,6 @@ void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Chang
 */
 void MainWindow::slotSelection()
 {
-kDebug()<<"slotSelection()"<<endl;
 	// Find which events have been selected
 	Event::List events = mListView->selectedEvents();
 	int count = events.count();
