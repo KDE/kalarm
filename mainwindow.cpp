@@ -725,7 +725,7 @@ void MainWindow::slotDelete()
 	{
 		int n = events.count();
 		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
-		                                                   "Do you really want to delete the %n selected alarms?", n),
+		                                                   "Do you really want to delete the %1 selected alarms?", n),
 		                                       i18np("Delete Alarm", "Delete Alarms", n),
 		                                       KGuiItem(i18n("&Delete"), "editdelete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)

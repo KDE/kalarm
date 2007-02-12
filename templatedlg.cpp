@@ -184,7 +184,7 @@ void TemplateDlg::slotDelete()
 	Event::List events = mListView->selectedEvents();
 	int n = events.count();
 	if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm template?",
-	                                                  "Do you really want to delete the %n selected alarm templates?", n),
+	                                                  "Do you really want to delete the %1 selected alarm templates?", n),
 	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", n),
 	                                       KGuiItem(i18n("&Delete"), "editdelete"))
 		    != KMessageBox::Continue)

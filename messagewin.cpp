@@ -656,9 +656,9 @@ void MessageWin::setRemainingTextDay()
 		if (days == 0)
 			text = i18n("Today");
 		else if (days % 7)
-			text = i18np("Tomorrow", "in %n days' time", days);
+			text = i18np("Tomorrow", "in %1 days' time", days);
 		else
-			text = i18np("in 1 week's time", "in %n weeks' time", days/7);
+			text = i18np("in 1 week's time", "in %1 weeks' time", days/7);
 	}
 	mRemainingText->setText(text);
 }
@@ -672,13 +672,13 @@ void MessageWin::setRemainingTextMinute()
 	QString text;
 	int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 60)
-		text = i18np("in 1 minute's time", "in %n minutes' time", mins);
+		text = i18np("in 1 minute's time", "in %1 minutes' time", mins);
 	else if (mins % 60 == 0)
-		text = i18np("in 1 hour's time", "in %n hours' time", mins/60);
+		text = i18np("in 1 hour's time", "in %1 hours' time", mins/60);
 	else if (mins % 60 == 1)
-		text = i18np("in 1 hour 1 minute's time", "in %n hours 1 minute's time", mins/60);
+		text = i18np("in 1 hour 1 minute's time", "in %1 hours 1 minute's time", mins/60);
 	else
-		text = i18np("in 1 hour %1 minutes' time", "in %n hours %1 minutes' time", mins/60, mins%60);
+		text = i18np("in 1 hour %2 minutes' time", "in %1 hours %2 minutes' time", mins/60, mins%60);
 	mRemainingText->setText(text);
 }
 
