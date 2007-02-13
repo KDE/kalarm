@@ -1,7 +1,7 @@
 /*
  *  colourlist.h  -  an ordered list of colours
  *  Program:  kalarm
- *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,8 +61,10 @@ class ColourList
 		void           remove(const QColor& c)               { mList.removeAt(mList.indexOf(c.rgb())); }
 		/** Adds the specified colour @p c to the list. */
 		ColourList&    operator+=(const QColor& c)           { insert(c);  return *this; }
+		ColourList&    operator<<(const QColor& c)           { insert(c);  return *this; }
 		/** Adds the colours in @p list to this list. */
 		ColourList&    operator+=(const ColourList& list)    { mList += list.mList;  qSort(mList);  return *this; }
+		ColourList&    operator<<(const ColourList& list)    { mList += list.mList;  qSort(mList);  return *this; }
 		/** Returns true if the colours in the two lists are the same. */
 		bool           operator==(const ColourList& l) const { return mList == l.mList; }
 		/** Returns true if the colours in the two lists differ. */
