@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -355,8 +355,7 @@ MiscPrefTab::MiscPrefTab()
 	mStartOfDay = new TimeEdit(box);
 	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
-	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm (i.e. "
-	                                           "an alarm with \"any time\" specified) will be triggered.");
+	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm will be triggered.");
 	box->setWhatsThis(QString("%1\n\n%2").arg(startOfDayText).arg(TimeSpinBox::shiftWhatsThis()));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(box->sizeHint().height());
