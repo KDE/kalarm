@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -307,6 +307,10 @@ void Preferences::read()
 	mAskResource              = config->readEntry(ASK_RESOURCE, default_askResource);
 	mModalMessages            = config->readEntry(MODAL_MESSAGES, default_modalMessages);
 	mMessageButtonDelay       = config->readEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
+	if (mMessageButtonDelay > 10)
+		mMessageButtonDelay = 10;    // prevent windows being unusable for a long time
+	if (mMessageButtonDelay < -1)
+		mMessageButtonDelay = -1;
 	mShowResources            = config->readEntry(SHOW_RESOURCES, default_showResources);
 	mShowArchivedAlarms       = config->readEntry(SHOW_ARCHIVED_ALARMS, default_showArchivedAlarms);
 	mShowTimeToAlarm          = config->readEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
