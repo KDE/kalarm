@@ -45,7 +45,7 @@
 #include "preferences.moc"
 
 
-static QString translateXTermPath(KConfig*, const QString& cmdline, bool write);
+static QString translateXTermPath(KConfigGroup&, const QString& cmdline, bool write);
 
 Preferences* Preferences::mInstance = 0;
 
@@ -278,15 +278,14 @@ void Preferences::read()
 {
 	initialise();
 
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(GENERAL_SECTION);
-	QString timeZone = config->readEntry(TIMEZONE);
+	KConfigGroup config(KGlobal::config(), GENERAL_SECTION);
+	QString timeZone = config.readEntry(TIMEZONE);
 	mTimeZone = 0;
 	if (!timeZone.isEmpty())
 		mTimeZone = KSystemTimeZones::zone(timeZone);
 	if (!mTimeZone)
 		mTimeZone = KSystemTimeZones::local();
-	QStringList cols = config->readEntry(MESSAGE_COLOURS, QStringList() );
+	QStringList cols = config.readEntry(MESSAGE_COLOURS, QStringList() );
 	if (!cols.count())
 		mMessageColours = default_messageColours;
 	else
@@ -318,18 +317,18 @@ void Preferences::read()
 	mTooltipAlarmCount        = config->readEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
 	if (mTooltipAlarmCount < 1)
 		mTooltipAlarmCount = 1;
-	mShowTooltipAlarmTime     = config->readEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
-	mShowTooltipTimeToAlarm   = config->readEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
-	mTooltipTimeToPrefix      = config->readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
-	mDaemonTrayCheckInterval  = config->readEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
+	mShowTooltipAlarmTime     = config.readEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
+	mShowTooltipTimeToAlarm   = config.readEntry(TOOLTIP_TIME_TO_ALARM, default_showTooltipTimeToAlarm);
+	mTooltipTimeToPrefix      = config.readEntry(TOOLTIP_TIME_TO_PREFIX, default_tooltipTimeToPrefix);
+	mDaemonTrayCheckInterval  = config.readEntry(DAEMON_TRAY_INTERVAL, default_daemonTrayCheckInterval);
 	if (mDaemonTrayCheckInterval < 1)
 		mDaemonTrayCheckInterval = 1;
-	QByteArray client         = config->readEntry(EMAIL_CLIENT, defaultEmailClient).toLocal8Bit();  // don't use readPathEntry() here (values are hard-coded)
+	QByteArray client         = config.readEntry(EMAIL_CLIENT, defaultEmailClient).toLocal8Bit();  // don't use readPathEntry() here (values are hard-coded)
 	mEmailClient              = (client == "sendmail" ? SENDMAIL : KMAIL);
-	mEmailCopyToKMail         = config->readEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
-	QString from              = config->readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
+	mEmailCopyToKMail         = config.readEntry(EMAIL_COPY_TO_KMAIL, default_emailCopyToKMail);
+	QString from              = config.readEntry(EMAIL_FROM, emailFrom(default_emailFrom(), false, false));
 	mEmailFrom                = emailFrom(from);
-	QString bccFrom           = config->readEntry(EMAIL_BCC_ADDRESS, emailFrom(default_emailBccFrom, false, true));
+	QString bccFrom           = config.readEntry(EMAIL_BCC_ADDRESS, emailFrom(default_emailBccFrom, false, true));
 	mEmailBccFrom             = emailFrom(bccFrom);
 	if (mEmailFrom == MAIL_FROM_CONTROL_CENTRE  ||  mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE)
 		mEmailAddress = mEmailBccAddress = KAMail::controlCentreAddress();
@@ -337,46 +336,46 @@ void Preferences::read()
 		mEmailAddress     = from;
 	if (mEmailBccFrom == MAIL_FROM_ADDR)
 		mEmailBccAddress  = bccFrom;
-	mCmdXTermCommand          = translateXTermPath(config.data(), config->readEntry(CMD_XTERM_COMMAND, QString()), false);
+	mCmdXTermCommand          = translateXTermPath(config, config.readEntry(CMD_XTERM_COMMAND, QString()), false);
 	QDateTime defStartOfDay(QDate(1900,1,1), default_startOfDay);
-	mStartOfDay               = config->readEntry(START_OF_DAY, defStartOfDay).time();
+	mStartOfDay               = config.readEntry(START_OF_DAY, defStartOfDay).time();
 	mOldStartOfDay.setHMS(0,0,0);
-	int sod = config->readEntry(START_OF_DAY_CHECK, 0);
+	int sod = config.readEntry(START_OF_DAY_CHECK, 0);
 	if (sod)
 		mOldStartOfDay    = mOldStartOfDay.addMSecs(sod ^ SODxor);
-	mDisabledColour           = config->readEntry(DISABLED_COLOUR, default_disabledColour);
-	mArchivedColour           = config->readEntry(ARCHIVED_COLOUR, default_archivedColour);
-	mArchivedKeepDays         = config->readEntry(ARCHIVED_KEEP_DAYS, default_archivedKeepDays);
+	mDisabledColour           = config.readEntry(DISABLED_COLOUR, default_disabledColour);
+	mArchivedColour           = config.readEntry(ARCHIVED_COLOUR, default_archivedColour);
+	mArchivedKeepDays         = config.readEntry(ARCHIVED_KEEP_DAYS, default_archivedKeepDays);
 
-	config->setGroup(DEFAULTS_SECTION);
-	mDefaultLateCancel        = config->readEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
+	config.changeGroup(DEFAULTS_SECTION);
+	mDefaultLateCancel        = config.readEntry(DEF_LATE_CANCEL, default_defaultLateCancel);
 	if (mDefaultLateCancel < 0)
 		mDefaultLateCancel = 0;
-	mDefaultAutoClose         = config->readEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
-	mDefaultConfirmAck        = config->readEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
-	mDefaultCopyToKOrganizer  = config->readEntry(DEF_COPY_TO_KORG, default_defaultCopyToKOrganizer);
-	int soundType             = config->readEntry(DEF_SOUND_TYPE, static_cast<int>(default_defaultSoundType));
+	mDefaultAutoClose         = config.readEntry(DEF_AUTO_CLOSE, default_defaultAutoClose);
+	mDefaultConfirmAck        = config.readEntry(DEF_CONFIRM_ACK, default_defaultConfirmAck);
+	mDefaultCopyToKOrganizer  = config.readEntry(DEF_COPY_TO_KORG, default_defaultCopyToKOrganizer);
+	int soundType             = config.readEntry(DEF_SOUND_TYPE, static_cast<int>(default_defaultSoundType));
 	mDefaultSoundType         = (soundType < 0 || soundType > SoundPicker::SPEAK)
 	                          ? default_defaultSoundType : (SoundPicker::Type)soundType;
-	mDefaultSoundVolume       = static_cast<float>(config->readEntry(DEF_SOUND_VOLUME, static_cast<double>(default_defaultSoundVolume)));
-	mDefaultSoundRepeat       = config->readEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
-	mDefaultSoundFile         = config->readPathEntry(DEF_SOUND_FILE);
-	mDefaultCmdScript         = config->readEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
-	int logType               = config->readEntry(DEF_CMD_LOG_TYPE, static_cast<int>(default_defaultCmdLogType));
+	mDefaultSoundVolume       = static_cast<float>(config.readEntry(DEF_SOUND_VOLUME, static_cast<double>(default_defaultSoundVolume)));
+	mDefaultSoundRepeat       = config.readEntry(DEF_SOUND_REPEAT, default_defaultSoundRepeat);
+	mDefaultSoundFile         = config.readPathEntry(DEF_SOUND_FILE);
+	mDefaultCmdScript         = config.readEntry(DEF_CMD_SCRIPT, default_defaultCmdScript);
+	int logType               = config.readEntry(DEF_CMD_LOG_TYPE, static_cast<int>(default_defaultCmdLogType));
 	mDefaultCmdLogType        = (logType < DISCARD_OUTPUT || logType > EXEC_IN_TERMINAL)
 	                          ? default_defaultCmdLogType : (CmdLogType)logType;
-	mDefaultCmdLogFile        = config->readPathEntry(DEF_LOG_FILE);
-	mDefaultEmailBcc          = config->readEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
-	int recurPeriod           = config->readEntry(DEF_RECUR_PERIOD, static_cast<int>(default_defaultRecurPeriod));
+	mDefaultCmdLogFile        = config.readPathEntry(DEF_LOG_FILE);
+	mDefaultEmailBcc          = config.readEntry(DEF_EMAIL_BCC, default_defaultEmailBcc);
+	int recurPeriod           = config.readEntry(DEF_RECUR_PERIOD, static_cast<int>(default_defaultRecurPeriod));
 	mDefaultRecurPeriod       = (recurPeriod < RecurrenceEdit::SUBDAILY || recurPeriod > RecurrenceEdit::ANNUAL)
 	                          ? default_defaultRecurPeriod : static_cast<RecurrenceEdit::RepeatType>(recurPeriod);
-	QByteArray feb29          = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).toLocal8Bit();
+	QByteArray feb29          = config.readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).toLocal8Bit();
 	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
-	int reminderUnits         = config->readEntry(DEF_REMIND_UNITS, static_cast<int>(default_defaultReminderUnits));
+	int reminderUnits         = config.readEntry(DEF_REMIND_UNITS, static_cast<int>(default_defaultReminderUnits));
 	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
 	                          ? default_defaultReminderUnits : static_cast<TimePeriod::Units>(reminderUnits);
-	mDefaultPreAction         = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
-	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
+	mDefaultPreAction         = config.readEntry(DEF_PRE_ACTION, default_defaultPreAction);
+	mDefaultPostAction        = config.readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	mInstance->emitPreferencesChanged();
 	mStartOfDayChanged = (mStartOfDay != mOldStartOfDay);
 	if (mStartOfDayChanged)
@@ -391,63 +390,62 @@ void Preferences::read()
 */
 void Preferences::save(bool syncToDisc)
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(GENERAL_SECTION);
-	config->writeEntry(VERSION_NUM, KALARM_VERSION);
-	config->writeEntry(TIMEZONE, (mTimeZone ? mTimeZone->name() : QString()));
+	KConfigGroup config(KGlobal::config(), GENERAL_SECTION);
+	config.writeEntry(VERSION_NUM, KALARM_VERSION);
+	config.writeEntry(TIMEZONE, (mTimeZone ? mTimeZone->name() : QString()));
 	QStringList colours;
 	for (int i = 0, end = mMessageColours.count();  i < end;  ++i)
 		colours.append(QColor(mMessageColours[i]).name());
-	config->writeEntry(MESSAGE_COLOURS, colours);
-	config->writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
-	config->writeEntry(MESSAGE_FONT, mMessageFont);
-	config->writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
-	config->writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
-	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
-	config->writeEntry(ASK_RESOURCE, mAskResource);
-	config->writeEntry(MODAL_MESSAGES, mModalMessages);
-	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
-	config->writeEntry(SHOW_RESOURCES, mShowResources);
-	config->writeEntry(SHOW_ARCHIVED_ALARMS, mShowArchivedAlarms);
-	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
-	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
-	config->writeEntry(TOOLTIP_ALARM_COUNT, mTooltipAlarmCount);
-	config->writeEntry(TOOLTIP_ALARM_TIME, mShowTooltipAlarmTime);
-	config->writeEntry(TOOLTIP_TIME_TO_ALARM, mShowTooltipTimeToAlarm);
-	config->writeEntry(TOOLTIP_TIME_TO_PREFIX, mTooltipTimeToPrefix);
-	config->writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
-	config->writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
-	config->writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
-	config->writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
-	config->writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
-	config->writeEntry(CMD_XTERM_COMMAND, translateXTermPath(config.data(), mCmdXTermCommand, true));
-	config->writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
+	config.writeEntry(MESSAGE_COLOURS, colours);
+	config.writeEntry(MESSAGE_BG_COLOUR, mDefaultBgColour);
+	config.writeEntry(MESSAGE_FONT, mMessageFont);
+	config.writeEntry(RUN_IN_SYSTEM_TRAY, mRunInSystemTray);
+	config.writeEntry(DISABLE_IF_STOPPED, mDisableAlarmsIfStopped);
+	config.writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
+	config.writeEntry(ASK_RESOURCE, mAskResource);
+	config.writeEntry(MODAL_MESSAGES, mModalMessages);
+	config.writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
+	config.writeEntry(SHOW_RESOURCES, mShowResources);
+	config.writeEntry(SHOW_ARCHIVED_ALARMS, mShowArchivedAlarms);
+	config.writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
+	config.writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
+	config.writeEntry(TOOLTIP_ALARM_COUNT, mTooltipAlarmCount);
+	config.writeEntry(TOOLTIP_ALARM_TIME, mShowTooltipAlarmTime);
+	config.writeEntry(TOOLTIP_TIME_TO_ALARM, mShowTooltipTimeToAlarm);
+	config.writeEntry(TOOLTIP_TIME_TO_PREFIX, mTooltipTimeToPrefix);
+	config.writeEntry(DAEMON_TRAY_INTERVAL, mDaemonTrayCheckInterval);
+	config.writeEntry(EMAIL_CLIENT, (mEmailClient == SENDMAIL ? "sendmail" : "kmail"));
+	config.writeEntry(EMAIL_COPY_TO_KMAIL, mEmailCopyToKMail);
+	config.writeEntry(EMAIL_FROM, emailFrom(mEmailFrom, true, false));
+	config.writeEntry(EMAIL_BCC_ADDRESS, emailFrom(mEmailBccFrom, true, true));
+	config.writeEntry(CMD_XTERM_COMMAND, translateXTermPath(config, mCmdXTermCommand, true));
+	config.writeEntry(START_OF_DAY, QDateTime(QDate(1900,1,1), mStartOfDay));
 	// Start-of-day check value is only written once the start-of-day time has been processed.
-	config->writeEntry(DISABLED_COLOUR, mDisabledColour);
-	config->writeEntry(ARCHIVED_COLOUR, mArchivedColour);
-	config->writeEntry(ARCHIVED_KEEP_DAYS, mArchivedKeepDays);
+	config.writeEntry(DISABLED_COLOUR, mDisabledColour);
+	config.writeEntry(ARCHIVED_COLOUR, mArchivedColour);
+	config.writeEntry(ARCHIVED_KEEP_DAYS, mArchivedKeepDays);
 
-	config->setGroup(DEFAULTS_SECTION);
-	config->writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
-	config->writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
-	config->writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
-	config->writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
-	config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(mDefaultSoundType));
-	config->writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
-	config->writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
-	config->writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
-	config->writeEntry(DEF_CMD_SCRIPT, mDefaultCmdScript);
-	config->writeEntry(DEF_CMD_LOG_TYPE, static_cast<int>(mDefaultCmdLogType));
-	config->writePathEntry(DEF_LOG_FILE, mDefaultCmdLogFile);
-	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
-	config->writeEntry(DEF_RECUR_PERIOD, static_cast<int>(mDefaultRecurPeriod));
-	config->writeEntry(FEB29_RECUR_TYPE, (mDefaultFeb29Type == KARecurrence::FEB29_MAR1 ? "Mar1" : mDefaultFeb29Type == KARecurrence::FEB29_FEB28 ? "Feb28" : "None"));
-	config->writeEntry(DEF_REMIND_UNITS, static_cast<int>(mDefaultReminderUnits));
-	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
-	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
+	config.changeGroup(DEFAULTS_SECTION);
+	config.writeEntry(DEF_LATE_CANCEL, mDefaultLateCancel);
+	config.writeEntry(DEF_AUTO_CLOSE, mDefaultAutoClose);
+	config.writeEntry(DEF_CONFIRM_ACK, mDefaultConfirmAck);
+	config.writeEntry(DEF_COPY_TO_KORG, mDefaultCopyToKOrganizer);
+	config.writeEntry(DEF_SOUND_TYPE, static_cast<int>(mDefaultSoundType));
+	config.writePathEntry(DEF_SOUND_FILE, mDefaultSoundFile);
+	config.writeEntry(DEF_SOUND_VOLUME, static_cast<double>(mDefaultSoundVolume));
+	config.writeEntry(DEF_SOUND_REPEAT, mDefaultSoundRepeat);
+	config.writeEntry(DEF_CMD_SCRIPT, mDefaultCmdScript);
+	config.writeEntry(DEF_CMD_LOG_TYPE, static_cast<int>(mDefaultCmdLogType));
+	config.writePathEntry(DEF_LOG_FILE, mDefaultCmdLogFile);
+	config.writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
+	config.writeEntry(DEF_RECUR_PERIOD, static_cast<int>(mDefaultRecurPeriod));
+	config.writeEntry(FEB29_RECUR_TYPE, (mDefaultFeb29Type == KARecurrence::FEB29_MAR1 ? "Mar1" : mDefaultFeb29Type == KARecurrence::FEB29_FEB28 ? "Feb28" : "None"));
+	config.writeEntry(DEF_REMIND_UNITS, static_cast<int>(mDefaultReminderUnits));
+	config.writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
+	config.writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 
 	if (syncToDisc)
-		config->sync();
+		config.sync();
 	mInstance->emitPreferencesChanged();
 	if (mStartOfDay != mOldStartOfDay)
 	{
@@ -463,10 +461,9 @@ void Preferences::syncToDisc()
 
 void Preferences::updateStartOfDayCheck()
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(GENERAL_SECTION);
-	config->writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
-	config->sync();
+	KConfigGroup config(KGlobal::config(), GENERAL_SECTION);
+	config.writeEntry(START_OF_DAY_CHECK, startOfDayCheck());
+	config.sync();
 	mStartOfDayChanged = false;
 }
 
@@ -600,60 +597,59 @@ bool Preferences::notifying(const QString& messageID)
 */
 void Preferences::convertOldPrefs()
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(GENERAL_SECTION);
-	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM, QString()));
+	KConfigGroup config(KGlobal::config(), GENERAL_SECTION);
+	int version = KAlarm::getVersionNumber(config.readEntry(VERSION_NUM, QString()));
 	if (version >= KAlarm::Version(1,4,5))
 		return;     // config format is up to date
 
 	// Convert KAlarm pre-1.4.5 preferences
 	static const char* DEF_SOUND = "DefSound";
-	config->setGroup(DEFAULTS_SECTION);
-	bool sound = config->readEntry(DEF_SOUND, false);
+	config.changeGroup(DEFAULTS_SECTION);
+	bool sound = config.readEntry(DEF_SOUND, false);
 	if (!sound)
-		config->writeEntry(DEF_SOUND_TYPE, static_cast<int>(SoundPicker::NONE));
-	config->deleteEntry(DEF_SOUND);
+		config.writeEntry(DEF_SOUND_TYPE, static_cast<int>(SoundPicker::NONE));
+	config.deleteEntry(DEF_SOUND);
 
 	if (version < KAlarm::Version(1,3,0))
 	{
+                config.changeGroup(GENERAL_SECTION);
 		// Convert KAlarm pre-1.3 preferences
 		static const char* EMAIL_ADDRESS             = "EmailAddress";
 		static const char* EMAIL_USE_CTRL_CENTRE     = "EmailUseControlCenter";
 		static const char* EMAIL_BCC_USE_CTRL_CENTRE = "EmailBccUseControlCenter";
-		QMap<QString, QString> entries = config->entryMap(GENERAL_SECTION);
+		QMap<QString, QString> entries = config.entryMap();
 		if (!entries.contains(EMAIL_FROM)  &&  entries.contains(EMAIL_USE_CTRL_CENTRE))
 		{
 			// Preferences were written by KAlarm pre-1.2.1
-			config->setGroup(GENERAL_SECTION);
 			bool useCC = false;
 			bool bccUseCC = false;
 			const bool default_emailUseControlCentre    = true;
 			const bool default_emailBccUseControlCentre = true;
-			useCC = config->readEntry(EMAIL_USE_CTRL_CENTRE, default_emailUseControlCentre);
+			useCC = config.readEntry(EMAIL_USE_CTRL_CENTRE, default_emailUseControlCentre);
 			// EmailBccUseControlCenter was missing in preferences written by KAlarm pre-0.9.5
-			bccUseCC = config->hasKey(EMAIL_BCC_USE_CTRL_CENTRE)
-			         ? config->readEntry(EMAIL_BCC_USE_CTRL_CENTRE, default_emailBccUseControlCentre)
+			bccUseCC = config.hasKey(EMAIL_BCC_USE_CTRL_CENTRE)
+			         ? config.readEntry(EMAIL_BCC_USE_CTRL_CENTRE, default_emailBccUseControlCentre)
 				 : useCC;
-			config->writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_ADDRESS, QString())));
-			config->writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config->readEntry(EMAIL_BCC_ADDRESS, QString())));
-			config->deleteEntry(EMAIL_ADDRESS);
-			config->deleteEntry(EMAIL_BCC_USE_CTRL_CENTRE);
-			config->deleteEntry(EMAIL_USE_CTRL_CENTRE);
+			config.writeEntry(EMAIL_FROM, (useCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_ADDRESS, QString())));
+			config.writeEntry(EMAIL_BCC_ADDRESS, (bccUseCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_BCC_ADDRESS, QString())));
+			config.deleteEntry(EMAIL_ADDRESS);
+			config.deleteEntry(EMAIL_BCC_USE_CTRL_CENTRE);
+			config.deleteEntry(EMAIL_USE_CTRL_CENTRE);
 		}
 		// Convert KAlarm 1.2 preferences
 		static const char* DEF_CMD_XTERM = "DefCmdXterm";
-		config->setGroup(DEFAULTS_SECTION);
-		if (config->hasKey(DEF_CMD_XTERM))
+		config.changeGroup(DEFAULTS_SECTION);
+		if (config.hasKey(DEF_CMD_XTERM))
 		{
-			config->writeEntry(DEF_CMD_LOG_TYPE,
-				static_cast<int>(config->readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
-			config->deleteEntry(DEF_CMD_XTERM);
+			config.writeEntry(DEF_CMD_LOG_TYPE,
+				static_cast<int>(config.readEntry(DEF_CMD_XTERM, false) ? EXEC_IN_TERMINAL : DISCARD_OUTPUT));
+			config.deleteEntry(DEF_CMD_XTERM);
 		}
 	}
 
-	config->setGroup(GENERAL_SECTION);
-	config->writeEntry(VERSION_NUM, KALARM_VERSION);
-	config->sync();
+	config.changeGroup(GENERAL_SECTION);
+	config.writeEntry(VERSION_NUM, KALARM_VERSION);
+	config.sync();
 }
 
 /******************************************************************************
@@ -665,7 +661,7 @@ void Preferences::convertOldPrefs()
 *      causes a crash on some systems, so it's necessary to extract the
 *      executable path first before processing.
 */
-QString translateXTermPath(KConfig* config, const QString& cmdline, bool write)
+QString translateXTermPath(KConfigGroup& config, const QString& cmdline, bool write)
 {
 	QString params;
 	QString cmd = cmdline;
@@ -703,15 +699,15 @@ QString translateXTermPath(KConfig* config, const QString& cmdline, bool write)
 	// executable's path.
 	if (write)
 	{
-		config->writePathEntry(TEMP, cmd);
-		cmd = config->readEntry(TEMP, QString());
+		config.writePathEntry(TEMP, cmd);
+		cmd = config.readEntry(TEMP, QString());
 	}
 	else
 	{
-		config->writeEntry(TEMP, cmd);
-		cmd = config->readPathEntry(TEMP);
+		config.writeEntry(TEMP, cmd);
+		cmd = config.readPathEntry(TEMP);
 	}
-	config->deleteEntry(TEMP);
+	config.deleteEntry(TEMP);
 	if (quoted)
 		return quote + cmd + params;
 	else

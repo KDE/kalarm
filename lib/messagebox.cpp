@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kglobal.h>
 #include "messagebox.h"
 

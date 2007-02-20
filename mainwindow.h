@@ -99,8 +99,8 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		virtual void   closeEvent(QCloseEvent*);
 		virtual void   dragEnterEvent(QDragEnterEvent*);
 		virtual void   dropEvent(QDropEvent*);
-		virtual void   saveProperties(KConfig*);
-		virtual void   readProperties(KConfig*);
+		virtual void   saveProperties(KConfigGroup &);
+		virtual void   readProperties(const KConfigGroup &);
 
 	private slots:
 		void           slotNew();

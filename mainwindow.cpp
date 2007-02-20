@@ -215,8 +215,10 @@ MainWindow::~MainWindow()
 		KAlarm::writeConfigWindowSize(WINDOW_NAME, main->size(), mResourcesWidth);
 	KGlobal::config()->sync();    // save any new window size to disc
 	KToolBar* tb = toolBar();
-	if (tb)
-		tb->saveSettings(KGlobal::config().data(), "Toolbars");
+	if (tb) {
+          KConfigGroup cg( KGlobal::config(), "Toolbars");
+          tb->saveSettings(cg );
+        }
 	theApp()->quitIf();
 }
 
@@ -224,13 +226,13 @@ MainWindow::~MainWindow()
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void MainWindow::saveProperties(KConfig* config)
+void MainWindow::saveProperties(KConfigGroup & config)
 {
-	config->writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
-	config->writeEntry("ShowArchived", mShowArchived);
-	config->writeEntry("ShowTime", mShowTime);
-	config->writeEntry("ShowTimeTo", mShowTimeTo);
-	config->writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
+	config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
+	config.writeEntry("ShowArchived", mShowArchived);
+	config.writeEntry("ShowTime", mShowTime);
+	config.writeEntry("ShowTimeTo", mShowTimeTo);
+	config.writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
 }
 
 /******************************************************************************
@@ -238,13 +240,13 @@ void MainWindow::saveProperties(KConfig* config)
 * This function is automatically called whenever the app is being
 * restored. Read in whatever was saved in saveProperties().
 */
-void MainWindow::readProperties(KConfig* config)
+void MainWindow::readProperties(const KConfigGroup &config)
 {
-	mHiddenTrayParent = config->readEntry("HiddenTrayParent", true);
-	mShowArchived     = config->readEntry("ShowArchived", false);
-	mShowTime         = config->readEntry("ShowTime", true);
-	mShowTimeTo       = config->readEntry("ShowTimeTo", false);
-	mResourcesWidth   = config->readEntry("ResourcesWidth", (int)0);
+	mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
+	mShowArchived     = config.readEntry("ShowArchived", false);
+	mShowTime         = config.readEntry("ShowTime", true);
+	mShowTimeTo       = config.readEntry("ShowTimeTo", false);
+	mResourcesWidth   = config.readEntry("ResourcesWidth", (int)0);
 	mShowResources    = (mResourcesWidth > 0);
 }
 
@@ -364,10 +366,9 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::columnsReordered()
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(WINDOW_NAME);
-	config->writeEntry("ColumnOrder", mListView->columnOrder());
-	config->sync();
+	KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+	config.writeEntry("ColumnOrder", mListView->columnOrder());
+	config.sync();
 }
 
 /******************************************************************************
@@ -542,7 +543,7 @@ void MainWindow::initActions()
 
 	KToolBar* tb = toolBar();
 	if (tb)
-		tb->applySettings(KGlobal::config().data(), "Toolbars");
+		tb->applySettings(KGlobal::config()->group( "Toolbars") );
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
@@ -1087,7 +1088,7 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-	saveMainWindowSettings(KGlobal::config().data(), WINDOW_NAME);
+	saveMainWindowSettings(KGlobal::config()->group( WINDOW_NAME) );
 	KEditToolbar dlg(factory());
 	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
@@ -1100,7 +1101,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
 	createGUI(UI_FILE);
-	applyMainWindowSettings(KGlobal::config().data(), WINDOW_NAME);
+	applyMainWindowSettings(KGlobal::config()->group( WINDOW_NAME) );
 }
 
 /******************************************************************************

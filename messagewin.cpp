@@ -633,7 +633,7 @@ void MessageWin::initView()
 	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
-#endif	
+#endif
 }
 
 /******************************************************************************
@@ -686,23 +686,23 @@ void MessageWin::setRemainingTextMinute()
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void MessageWin::saveProperties(KConfig* config)
+void MessageWin::saveProperties(KConfigGroup & config)
 {
 	if (mShown  &&  !mErrorWindow)
 	{
-		config->writeEntry("EventID", mEventID);
-		config->writeEntry("AlarmType", static_cast<int>(mAlarmType));
-		config->writeEntry("Message", mMessage);
-		config->writeEntry("Type", static_cast<int>(mAction));
-		config->writeEntry("Font", mFont);
-		config->writeEntry("BgColour", mBgColour);
-		config->writeEntry("FgColour", mFgColour);
-		config->writeEntry("ConfirmAck", mConfirmAck);
+		config.writeEntry("EventID", mEventID);
+		config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
+		config.writeEntry("Message", mMessage);
+		config.writeEntry("Type", static_cast<int>(mAction));
+		config.writeEntry("Font", mFont);
+		config.writeEntry("BgColour", mBgColour);
+		config.writeEntry("FgColour", mFgColour);
+		config.writeEntry("ConfirmAck", mConfirmAck);
 		if (mDateTime.isValid())
 		{
 //TODO: Write KDateTime when it becomes possible
-			config->writeEntry("Time", mDateTime.effectiveDateTime());
-			config->writeEntry("DateOnly", mDateTime.isDateOnly());
+			config.writeEntry("Time", mDateTime.effectiveDateTime());
+			config.writeEntry("DateOnly", mDateTime.isDateOnly());
 			QString zone;
 			if (mDateTime.isUtc())
 				zone = QLatin1String("UTC");
@@ -712,24 +712,24 @@ void MessageWin::saveProperties(KConfig* config)
 				if (tz)
 					zone = tz->name();
 			}
-			config->writeEntry("TimeZone", zone);
+			config.writeEntry("TimeZone", zone);
 		}
 		if (mCloseTime.isValid())
-			config->writeEntry("Expiry", mCloseTime);
+			config.writeEntry("Expiry", mCloseTime);
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
 			// Only need to restart sound file playing if it's being repeated
-			config->writePathEntry(QLatin1String("AudioFile"), mAudioFile);
-			config->writeEntry("Volume", static_cast<int>(mVolume * 100));
+			config.writePathEntry(QLatin1String("AudioFile"), mAudioFile);
+			config.writeEntry("Volume", static_cast<int>(mVolume * 100));
 		}
-		config->writeEntry("Speak", mSpeak);
-		config->writeEntry("Height", height());
-		config->writeEntry("DeferMins", mDefaultDeferMinutes);
-		config->writeEntry("NoDefer", mNoDefer);
-		config->writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
+		config.writeEntry("Speak", mSpeak);
+		config.writeEntry("Height", height());
+		config.writeEntry("DeferMins", mDefaultDeferMinutes);
+		config.writeEntry("NoDefer", mNoDefer);
+		config.writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
 	}
 	else
-		config->writeEntry("Invalid", true);
+		config.writeEntry("Invalid", true);
 }
 
 /******************************************************************************
@@ -737,20 +737,20 @@ void MessageWin::saveProperties(KConfig* config)
 * This function is automatically called whenever the app is being restored.
 * Read in whatever was saved in saveProperties().
 */
-void MessageWin::readProperties(KConfig* config)
+void MessageWin::readProperties(const KConfigGroup& config)
 {
-	mInvalid             = config->readEntry("Invalid", false);
-	mEventID             = config->readEntry("EventID");
-	mAlarmType           = static_cast<KAAlarm::Type>(config->readEntry("AlarmType", 0));
-	mMessage             = config->readEntry("Message");
-	mAction              = static_cast<KAEvent::Action>(config->readEntry("Type", 0));
-	mFont                = config->readEntry("Font", QFont());
-	mBgColour            = config->readEntry("BgColour", Qt::white);
-	mFgColour            = config->readEntry("FgColour", Qt::black);
-	mConfirmAck          = config->readEntry("ConfirmAck", false);
+	mInvalid             = config.readEntry("Invalid", false);
+	mEventID             = config.readEntry("EventID");
+	mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
+	mMessage             = config.readEntry("Message");
+	mAction              = static_cast<KAEvent::Action>(config.readEntry("Type", 0));
+	mFont                = config.readEntry("Font", QFont());
+	mBgColour            = config.readEntry("BgColour", Qt::white);
+	mFgColour            = config.readEntry("FgColour", Qt::black);
+	mConfirmAck          = config.readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
-	QDateTime dt         = config->readEntry("Time", invalidDateTime);
-	QString zone         = config->readEntry("TimeZone");
+	QDateTime dt         = config.readEntry("Time", invalidDateTime);
+	QString zone         = config.readEntry("TimeZone");
 	if (zone.isEmpty())
 		mDateTime = KDateTime(dt, KDateTime::ClockTime);
 	else if (zone == QString::fromLatin1("UTC"))
@@ -763,21 +763,21 @@ void MessageWin::readProperties(KConfig* config)
 		const KTimeZone* tz = KSystemTimeZones::zone(zone);
 		mDateTime = KDateTime(dt, (tz ? tz : KSystemTimeZones::local()));
 	}
-	bool dateOnly        = config->readEntry("DateOnly", false);
+	bool dateOnly        = config.readEntry("DateOnly", false);
 	if (dateOnly)
 		mDateTime.setDateOnly(true);
-	mCloseTime           = config->readEntry("Expiry", invalidDateTime);
-	mAudioFile           = config->readPathEntry(QLatin1String("AudioFile"));
-	mVolume              = static_cast<float>(config->readEntry("Volume", 0)) / 100;
+	mCloseTime           = config.readEntry("Expiry", invalidDateTime);
+	mAudioFile           = config.readPathEntry(QLatin1String("AudioFile"));
+	mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
 	mFadeVolume          = -1;
 	mFadeSeconds         = 0;
 	if (!mAudioFile.isEmpty())
 		mAudioRepeat = true;
-	mSpeak               = config->readEntry("Speak", false);
-	mRestoreHeight       = config->readEntry("Height", 0);
-	mDefaultDeferMinutes = config->readEntry("DeferMins", 0);
-	mNoDefer             = config->readEntry("NoDefer", false);
-	mKMailSerialNumber   = static_cast<unsigned long>(config->readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
+	mSpeak               = config.readEntry("Speak", false);
+	mRestoreHeight       = config.readEntry("Height", 0);
+	mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
+	mNoDefer             = config.readEntry("NoDefer", false);
+	mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
 	mShowEdit            = false;
 	mResource            = 0;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)

@@ -397,14 +397,13 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 		mClientName    = appName;
 		mClientDBusObj = dbusObject;
 		mClientStart   = startClient;
-		KSharedConfig::Ptr config = KGlobal::config();
-		config->setGroup(CLIENT_GROUP);
-		config->writeEntry(CLIENT_KEY, mClientName);
-		config->writeEntry(DCOP_OBJECT_KEY, mClientDBusObj);
-		config->writeEntry(START_CLIENT_KEY, mClientStart);
+		KConfigGroup config(KGlobal::config(), CLIENT_GROUP);
+		config.writeEntry(CLIENT_KEY, mClientName);
+		config.writeEntry(DCOP_OBJECT_KEY, mClientDBusObj);
+		config.writeEntry(START_CLIENT_KEY, mClientStart);
 		if (init)
 			enableAutoStart(true, false);
-		config->sync();
+		config.sync();
 		if (init)
 		{
 			setTimerStatus();
@@ -723,11 +722,10 @@ void AlarmDaemon::clearEventMap(EventsMap& map, AlarmResource* resource, bool no
 */
 void AlarmDaemon::readConfig()
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(CLIENT_GROUP);
-	QString client = config->readEntry(CLIENT_KEY);
-	mClientDBusObj = config->readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
-	mClientStart   = config->readEntry(START_CLIENT_KEY, false);
+	KConfigGroup config(KGlobal::config(), CLIENT_GROUP);
+	QString client = config.readEntry(CLIENT_KEY);
+	mClientDBusObj = config.readEntry(DCOP_OBJECT_KEY).toLocal8Bit();
+	mClientStart   = config.readEntry(START_CLIENT_KEY, false);
 
 	// Verify the configuration
 	mClientName.clear();
@@ -742,9 +740,9 @@ void AlarmDaemon::readConfig()
 	}
 
 	// Remove obsolete CheckInterval entry (if it exists)
-        config->setGroup("General");
-	config->deleteEntry("CheckInterval");
-	config->sync();
+        config.changeGroup("General");
+	config.deleteEntry("CheckInterval");
+	config.sync();
 }
 
 /******************************************************************************
