@@ -298,23 +298,23 @@ void Preferences::read()
 				mMessageColours.insert(c);
 		}
 	}
-	mDefaultBgColour          = config->readEntry(MESSAGE_BG_COLOUR, default_defaultBgColour);
-	mMessageFont              = config->readEntry(MESSAGE_FONT, mDefault_messageFont);
-	mRunInSystemTray          = config->readEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
-	mDisableAlarmsIfStopped   = config->readEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
-	mAutostartTrayIcon        = config->readEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
-	mAskResource              = config->readEntry(ASK_RESOURCE, default_askResource);
-	mModalMessages            = config->readEntry(MODAL_MESSAGES, default_modalMessages);
-	mMessageButtonDelay       = config->readEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
+	mDefaultBgColour          = config.readEntry(MESSAGE_BG_COLOUR, default_defaultBgColour);
+	mMessageFont              = config.readEntry(MESSAGE_FONT, mDefault_messageFont);
+	mRunInSystemTray          = config.readEntry(RUN_IN_SYSTEM_TRAY, default_runInSystemTray);
+	mDisableAlarmsIfStopped   = config.readEntry(DISABLE_IF_STOPPED, default_disableAlarmsIfStopped);
+	mAutostartTrayIcon        = config.readEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
+	mAskResource              = config.readEntry(ASK_RESOURCE, default_askResource);
+	mModalMessages            = config.readEntry(MODAL_MESSAGES, default_modalMessages);
+	mMessageButtonDelay       = config.readEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
 	if (mMessageButtonDelay > 10)
 		mMessageButtonDelay = 10;    // prevent windows being unusable for a long time
 	if (mMessageButtonDelay < -1)
 		mMessageButtonDelay = -1;
-	mShowResources            = config->readEntry(SHOW_RESOURCES, default_showResources);
-	mShowArchivedAlarms       = config->readEntry(SHOW_ARCHIVED_ALARMS, default_showArchivedAlarms);
-	mShowTimeToAlarm          = config->readEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
-	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readEntry(SHOW_ALARM_TIME, default_showAlarmTime);
-	mTooltipAlarmCount        = config->readEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
+	mShowResources            = config.readEntry(SHOW_RESOURCES, default_showResources);
+	mShowArchivedAlarms       = config.readEntry(SHOW_ARCHIVED_ALARMS, default_showArchivedAlarms);
+	mShowTimeToAlarm          = config.readEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
+	mShowAlarmTime            = !mShowTimeToAlarm ? true : config.readEntry(SHOW_ALARM_TIME, default_showAlarmTime);
+	mTooltipAlarmCount        = config.readEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount);
 	if (mTooltipAlarmCount < 1)
 		mTooltipAlarmCount = 1;
 	mShowTooltipAlarmTime     = config.readEntry(TOOLTIP_ALARM_TIME, default_showTooltipAlarmTime);
