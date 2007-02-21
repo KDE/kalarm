@@ -170,7 +170,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               mSessionClosingDown;  // session manager is closing the application
 		bool               mOldRunInSystemTray;  // running continuously in system tray was selected
 		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
-		bool               mRefreshArchivedAlarms; // need to refresh the archived alarms display
 		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
 		bool               mPrefsShowTime;       // Preferences setting for show alarm times in alarm list

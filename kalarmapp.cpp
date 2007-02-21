@@ -99,7 +99,6 @@ KAlarmApp::KAlarmApp()
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
 	  mSessionClosingDown(false),
-	  mRefreshArchivedAlarms(false),
 	  mSpeechEnabled(false)
 {
 	Preferences::initialise();
@@ -110,9 +109,8 @@ KAlarmApp::KAlarmApp()
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
 
-		KSharedConfig::Ptr config = KGlobal::config();
-		config->setGroup(QLatin1String("General"));
-		mNoSystemTray           = config->readEntry("NoSystemTray", false);
+		KConfigGroup config(KGlobal::config(), "General");
+		mNoSystemTray           = config.readEntry("NoSystemTray", false);
 		mOldRunInSystemTray     = wantRunInSystemTray();
 		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
 		mStartOfDay             = Preferences::startOfDay();
@@ -987,10 +985,9 @@ bool KAlarmApp::checkSystemTray()
 		// daemon with the correct NOTIFY type. If that happened when there was no system
 		// tray and alarms are disabled when KAlarm is not running, registering with
 		// NO_START_NOTIFY could result in alarms never being seen.
-		KSharedConfig::Ptr config = KGlobal::config();
-		config->setGroup(QLatin1String("General"));
-		config->writeEntry(QLatin1String("NoSystemTray"), mNoSystemTray);
-		config->sync();
+		KConfigGroup config(KGlobal::config(), "General");
+		config.writeEntry("NoSystemTray", mNoSystemTray);
+		config.sync();
 
 		// Update other settings and reregister with the alarm daemon
 		slotPreferencesChanged();
@@ -1053,25 +1050,12 @@ void KAlarmApp::slotPreferencesChanged()
 		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
 	}
 
-	if (Preferences::archivedColour() != mPrefsArchivedColour)
-	{
-		// The archived alarms text colour has changed
-		mRefreshArchivedAlarms = true;
-		mPrefsArchivedColour = Preferences::archivedColour();
-	}
-
 	if (Preferences::archivedKeepDays() != mPrefsArchivedKeepDays)
 	{
 		// How long archived alarms are being kept has changed.
 		// N.B. This also adjusts for any change in start-of-day time.
 		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
 		AlarmCalendar::resources()->setPurgeDays(mPrefsArchivedKeepDays);
-	}
-
-	if (mRefreshArchivedAlarms)
-	{
-		mRefreshArchivedAlarms = false;
-		MainWindow::updateArchived();
 	}
 }
 
@@ -1095,7 +1079,6 @@ void KAlarmApp::changeStartOfDay()
 */
 void KAlarmApp::slotArchivedPurged()
 {
-	mRefreshArchivedAlarms = false;
 	MainWindow::updateArchived();
 }
 

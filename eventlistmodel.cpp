@@ -240,7 +240,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
-bool EventListModel::setData(const QModelIndex& ix, const QVariant& value, int role)
+bool EventListModel::setData(const QModelIndex& ix, const QVariant&, int role)
 {
 	if (ix.isValid()  &&  role == Qt::EditRole)
 	{
@@ -297,6 +297,58 @@ void EventListModel::slotUpdateTimeTo()
 	int n = mEvents.count();
 	if (n > 0)
 		emit dataChanged(index(0, TimeToColumn), index(n - 1, TimeToColumn));
+}
+
+/******************************************************************************
+* Called when the colour used to display archived alarms has changed.
+*/
+void EventListModel::slotUpdateArchivedColour(const QColor&)
+{
+	int firstRow = -1;
+	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	{
+		if (KCalEvent::status(mEvents[row]) == KCalEvent::ARCHIVED)
+		{
+			// For efficiency, emit a single signal for each group
+			// of consecutive archived alarms, rather than a separate
+			// signal for each alarm.
+			if (firstRow < 0)
+				firstRow = row;
+		}
+		else if (firstRow >= 0)
+		{
+			emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
+			firstRow = -1;
+		}
+	}
+	if (firstRow >= 0)
+		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
+}
+
+/******************************************************************************
+* Called when the colour used to display disabled alarms has changed.
+*/
+void EventListModel::slotUpdateDisabledColour(const QColor&)
+{
+	int firstRow = -1;
+	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	{
+		if (mEvents[row]->statusStr() == QLatin1String("DISABLED"))
+		{
+			// For efficiency, emit a single signal for each group
+			// of consecutive disabled alarms, rather than a separate
+			// signal for each alarm.
+			if (firstRow < 0)
+				firstRow = row;
+		}
+		else if (firstRow >= 0)
+		{
+			emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
+			firstRow = -1;
+		}
+	}
+	if (firstRow >= 0)
+		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
 }
 
 /******************************************************************************
