@@ -75,8 +75,8 @@ class MessageWin : public MainWindowBase
 		virtual void        moveEvent(QMoveEvent*);
 		virtual void        resizeEvent(QResizeEvent*);
 		virtual void        closeEvent(QCloseEvent*);
-		virtual void        saveProperties(KConfigGroup &);
-		virtual void        readProperties(const KConfigGroup &);
+		virtual void        saveProperties(KConfigGroup&);
+		virtual void        readProperties(const KConfigGroup&);
 
 	private slots:
 		void                slotEdit();
