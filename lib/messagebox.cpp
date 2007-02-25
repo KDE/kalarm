@@ -1,7 +1,7 @@
 /*
  *  messagebox.cpp  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@
  */
 
 #include "kalarm.h"
+#include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
 #include "messagebox.h"
 
 
-KConfig* MessageBox::mConfig = 0;
 QMap<QString, KMessageBox::ButtonCode> MessageBox::mContinueDefaults;
 
 
@@ -109,9 +109,8 @@ bool MessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainNam
     if (dontShowAgainName.isEmpty())
 		return false;
 	// First check whether there is an existing setting
-	KConfig* config = mConfig ? mConfig : KGlobal::config().data();
-	config->setGroup(QLatin1String("Notification Messages"));
-	if (config->hasKey(dontShowAgainName))
+	KConfigGroup config(KGlobal::config(), "Notification Messages");
+	if (config.hasKey(dontShowAgainName))
 		return false;
 
 	// There is no current setting, so write one
@@ -168,12 +167,11 @@ void MessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesno,
 {
 	if (dontShowAgainName.isEmpty())
 		return;
-	KConfig* config = mConfig ? mConfig : KGlobal::config().data();
-	config->setGroup(QLatin1String("Notification Messages"));
+	KConfigGroup config(KGlobal::config(), "Notification Messages");
 	KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
 	if (yesno)
-		config->writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
+		config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
 	else
-		config->writeEntry(dontShowAgainName, !dontShow, flags);
-	config->sync();
+		config.writeEntry(dontShowAgainName, !dontShow, flags);
+	config.sync();
 }

@@ -1,7 +1,7 @@
 /*
  *  messagebox.h  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,12 +113,9 @@ class MessageBox : public KMessageBox
 		 *  @param dontShow If true, the message box will be suppressed and will return Continue.
 		 */
 		static void saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow = true);
-		/** Sets the KConfig object to be used by the MessageBox class. */
-		static void setDontShowAskAgainConfig(KConfig* cfg)    { mConfig = cfg; }
 
 	private:
 		static void saveDontShowAgain(const QString& dontShowAgainName, bool yesno, bool dontShow, const char* yesnoResult = 0);
-		static KConfig*                  mConfig;
 		static QMap<QString, ButtonCode> mContinueDefaults;
 };
 
