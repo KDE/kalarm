@@ -77,7 +77,7 @@ void Find::display()
 		// Set defaults the first time the Find dialog is activated
 		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 	bool noArchived = !Preferences::archivedKeepDays();
-	bool showArchived = qobject_cast<AlarmListView*>( mListView )
+	bool showArchived = qobject_cast<AlarmListView*>(mListView)
 	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KCalEvent::ARCHIVED);
 	if (noArchived  ||  !showArchived)      // these settings could change between activations
 		mOptions &= ~FIND_ARCHIVED;
