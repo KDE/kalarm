@@ -361,16 +361,11 @@ void MessageWin::initView()
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
 						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
-#warning Check that HTML link paths work
-#if 1
+#warning Check that HTML links and link paths work
 						if (imageType)
 							view->setHtml("<img source=\"" + tmpFile + "\">");
 						else
 							view->QTextBrowser::setSource(tmpFile);   // if not an image, assume a text file
-//						view->setFilePath(QFileInfo(tmpFile).absolutePath());
-#else
-						view->loadResource((imageType ? QTextDocument::ImageResource : QTextDocument::HtmlResource), tmpFile);
-#endif
 						view->setMinimumSize(view->sizeHint());
 						topLayout->addWidget(view);
 
@@ -686,7 +681,7 @@ void MessageWin::setRemainingTextMinute()
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void MessageWin::saveProperties(KConfigGroup & config)
+void MessageWin::saveProperties(KConfigGroup& config)
 {
 	if (mShown  &&  !mErrorWindow)
 	{
