@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@
 #include <kvbox.h>
 
 #include "preferences.h"
-#include "recurrenceedit.h"
-#include "soundpicker.h"
 
 class QCheckBox;
 class QAbstractButton;
@@ -38,6 +36,7 @@ class KTimeZone;
 class KColorCombo;
 class FontColourChooser;
 class ButtonGroup;
+class RadioButton;
 class TimeEdit;
 class SpinBox;
 class SpecialActionsButton;
@@ -76,12 +75,12 @@ class KAlarmPrefDlg : public KPageDialog
 		virtual void slotOk();
 		virtual void slotApply();
 		virtual void slotHelp();
-		virtual void slotDefault();
+		virtual void slotDefault()  { restore(true); }
 		virtual void slotCancel();
 
 	private:
-		void            restore();
-		bool            mValid;
+		void         restore(bool defaults);
+		bool         mValid;
 };
 
 // Base class for each tab in the Preferences dialog
@@ -92,9 +91,8 @@ class PrefsTabBase : public KVBox
 		PrefsTabBase();
 
 		void         setPreferences();
-		virtual void restore() = 0;
+		virtual void restore(bool defaults) = 0;
 		virtual void apply(bool syncToDisc) = 0;
-		virtual void setDefaults() = 0;
 		static int   indentWidth()    { return mIndentWidth; }
 
 	private:
@@ -109,9 +107,8 @@ class MiscPrefTab : public PrefsTabBase
 	public:
 		MiscPrefTab();
 
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private slots:
 		void         slotAutostartDaemonClicked();
@@ -125,18 +122,18 @@ class MiscPrefTab : public PrefsTabBase
 	private:
 		void         setTimeZone(const KTimeZone*);
 
-		QCheckBox*     mAutostartDaemon;
-		QRadioButton*  mRunInSystemTray;
-		QRadioButton*  mRunOnDemand;
-		QCheckBox*     mDisableAlarmsIfStopped;
-		QCheckBox*     mQuitWarn;
-		QCheckBox*     mAutostartTrayIcon;
-		QCheckBox*     mConfirmAlarmDeletion;
-		QComboBox*     mTimeZone;
-		TimeEdit*      mStartOfDay;
-		ButtonGroup*   mXtermType;
-		QLineEdit*     mXtermCommand;
-		int            mXtermCount;              // number of terminal window types
+		QCheckBox*    mAutostartDaemon;
+		QRadioButton* mRunInSystemTray;
+		QRadioButton* mRunOnDemand;
+		QCheckBox*    mDisableAlarmsIfStopped;
+		QCheckBox*    mQuitWarn;
+		QCheckBox*    mAutostartTrayIcon;
+		QCheckBox*    mConfirmAlarmDeletion;
+		QComboBox*    mTimeZone;
+		TimeEdit*     mStartOfDay;
+		ButtonGroup*  mXtermType;
+		QLineEdit*    mXtermCommand;
+		int           mXtermCount;              // number of terminal window types
 };
 
 
@@ -147,9 +144,8 @@ class StorePrefTab : public PrefsTabBase
 	public:
 		StorePrefTab();
 
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private slots:
 		void         slotArchivedToggled(bool);
@@ -158,15 +154,15 @@ class StorePrefTab : public PrefsTabBase
 	private:
 		void         setArchivedControls(int purgeDays);
 
-		QRadioButton*  mDefaultResource;
-		QRadioButton*  mAskResource;
-		QCheckBox*     mKeepArchived;
-		QCheckBox*     mPurgeArchived;
-		SpinBox*       mPurgeAfter;
-		QLabel*        mPurgeAfterLabel;
-		QPushButton*   mClearArchived;
-		bool           mOldKeepArchived;    // previous setting of keep-archived
-		bool           mCheckKeepChanges;
+		QRadioButton* mDefaultResource;
+		QRadioButton* mAskResource;
+		QCheckBox*    mKeepArchived;
+		QCheckBox*    mPurgeArchived;
+		SpinBox*      mPurgeAfter;
+		QLabel*       mPurgeAfterLabel;
+		QPushButton*  mClearArchived;
+		bool          mOldKeepArchived;    // previous setting of keep-archived
+		bool          mCheckKeepChanges;
 };
 
 
@@ -178,9 +174,8 @@ class EmailPrefTab : public PrefsTabBase
 		EmailPrefTab();
 
 		QString      validate();
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private slots:
 		void         slotEmailClientChanged(QAbstractButton*);
@@ -193,22 +188,22 @@ class EmailPrefTab : public PrefsTabBase
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
 		QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
 
-		ButtonGroup*   mEmailClient;
-		RadioButton*   mKMailButton;
-		RadioButton*   mSendmailButton;
-		ButtonGroup*   mFromAddressGroup;
-		RadioButton*   mFromAddrButton;
-		RadioButton*   mFromCCentreButton;
-		RadioButton*   mFromKMailButton;
-		QLineEdit*     mEmailAddress;
-		ButtonGroup*   mBccAddressGroup;
-		RadioButton*   mBccAddrButton;
-		RadioButton*   mBccCCentreButton;
-		QLineEdit*     mEmailBccAddress;
-		QCheckBox*     mEmailQueuedNotify;
-		QCheckBox*     mEmailCopyToKMail;
-		bool           mAddressChanged;
-		bool           mBccAddressChanged;
+		ButtonGroup* mEmailClient;
+		RadioButton* mKMailButton;
+		RadioButton* mSendmailButton;
+		ButtonGroup* mFromAddressGroup;
+		RadioButton* mFromAddrButton;
+		RadioButton* mFromCCentreButton;
+		RadioButton* mFromKMailButton;
+		QLineEdit*   mEmailAddress;
+		ButtonGroup* mBccAddressGroup;
+		RadioButton* mBccAddrButton;
+		RadioButton* mBccCCentreButton;
+		QLineEdit*   mEmailBccAddress;
+		QCheckBox*   mEmailQueuedNotify;
+		QCheckBox*   mEmailCopyToKMail;
+		bool         mAddressChanged;
+		bool         mBccAddressChanged;
 };
 
 
@@ -220,9 +215,8 @@ class EditPrefTab : public PrefsTabBase
 		EditPrefTab();
 
 		QString      validate();
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private slots:
 		void         slotBrowseSoundFile();
@@ -245,8 +239,7 @@ class EditPrefTab : public PrefsTabBase
 		QComboBox*      mRecurPeriod;
 		ButtonGroup*    mFeb29;
 
-		static int soundIndex(SoundPicker::Type);
-		static int recurIndex(RecurrenceEdit::RepeatType);
+		static int soundIndex(Preferences::SoundType);
 };
 
 
@@ -257,9 +250,8 @@ class ViewPrefTab : public PrefsTabBase
 	public:
 		ViewPrefTab();
 
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private slots:
 		void         slotListTimeToggled(bool);
@@ -273,19 +265,19 @@ class ViewPrefTab : public PrefsTabBase
 		void         setList(bool time, bool timeTo);
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-		QCheckBox*     mShowResources;
-		QCheckBox*     mListShowTime;
-		QCheckBox*     mListShowTimeTo;
-		QCheckBox*     mTooltipShowAlarms;
-		QCheckBox*     mTooltipMaxAlarms;
-		SpinBox*       mTooltipMaxAlarmCount;
-		QCheckBox*     mTooltipShowTime;
-		QCheckBox*     mTooltipShowTimeTo;
-		QLineEdit*     mTooltipTimeToPrefix;
-		QLabel*        mTooltipTimeToPrefixLabel;
-		QCheckBox*     mModalMessages;
-		QCheckBox*     mShowArchivedAlarms;
-		SpinBox*       mDaemonTrayCheckInterval;
+		QCheckBox*   mShowResources;
+		QCheckBox*   mListShowTime;
+		QCheckBox*   mListShowTimeTo;
+		QCheckBox*   mTooltipShowAlarms;
+		QCheckBox*   mTooltipMaxAlarms;
+		SpinBox*     mTooltipMaxAlarmCount;
+		QCheckBox*   mTooltipShowTime;
+		QCheckBox*   mTooltipShowTimeTo;
+		QLineEdit*   mTooltipTimeToPrefix;
+		QLabel*      mTooltipTimeToPrefixLabel;
+		QCheckBox*   mModalMessages;
+		QCheckBox*   mShowArchivedAlarms;
+		SpinBox*     mDaemonTrayCheckInterval;
 };
 
 
@@ -296,14 +288,13 @@ class FontColourPrefTab : public PrefsTabBase
 	public:
 		FontColourPrefTab();
 
-		virtual void restore();
+		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
-		virtual void setDefaults();
 
 	private:
-		FontColourChooser*  mFontChooser;
-		KColorCombo*        mDisabledColour;
-		KColorCombo*        mArchivedColour;
+		FontColourChooser* mFontChooser;
+		KColorCombo*       mDisabledColour;
+		KColorCombo*       mArchivedColour;
 };
 
 #endif // PREFDLG_H

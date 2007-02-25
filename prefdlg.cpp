@@ -147,24 +147,12 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
 	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));
-	restore();
+	restore(false);
 	adjustSize();
 }
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
 {
-}
-
-// Restore all defaults in the options...
-void KAlarmPrefDlg::slotDefault()
-{
-	kDebug(5950) << "KAlarmPrefDlg::slotDefault()" << endl;
-	mFontColourPage->setDefaults();
-	mEmailPage->setDefaults();
-	mViewPage->setDefaults();
-	mEditPage->setDefaults();
-	mStorePage->setDefaults();
-	mMiscPage->setDefaults();
 }
 
 void KAlarmPrefDlg::slotHelp()
@@ -201,7 +189,7 @@ void KAlarmPrefDlg::slotApply()
 	mEditPage->apply(false);
 	mStorePage->apply(false);
 	mMiscPage->apply(false);
-	Preferences::syncToDisc();
+	Preferences::writeConfig();
 }
 
 // Apply the preferences that are currently selected
@@ -218,20 +206,24 @@ void KAlarmPrefDlg::slotOk()
 void KAlarmPrefDlg::slotCancel()
 {
 	kDebug(5950) << "KAlarmPrefDlg::slotCancel()" << endl;
-	restore();
+	restore(false);
 	KDialog::reject();
 }
 
 // Discard the current preferences and use the present ones
-void KAlarmPrefDlg::restore()
+void KAlarmPrefDlg::restore(bool defaults)
 {
-	kDebug(5950) << "KAlarmPrefDlg::restore()" << endl;
-	mFontColourPage->restore();
-	mEmailPage->restore();
-	mViewPage->restore();
-	mEditPage->restore();
-	mStorePage->restore();
-	mMiscPage->restore();
+	kDebug(5950) << "KAlarmPrefDlg::restore(" << (defaults ? "defaults)" : ")") << endl;
+	if (defaults)
+		Preferences::self()->useDefaults(true);
+	mFontColourPage->restore(defaults);
+	mEmailPage->restore(defaults);
+	mViewPage->restore(defaults);
+	mEditPage->restore(defaults);
+	mStorePage->restore(defaults);
+	mMiscPage->restore(defaults);
+	if (defaults)
+		Preferences::self()->useDefaults(false);
 }
 
 
@@ -251,7 +243,8 @@ PrefsTabBase::PrefsTabBase()
 
 void PrefsTabBase::apply(bool syncToDisc)
 {
-	Preferences::save(syncToDisc);
+	if (syncToDisc)
+		Preferences::writeConfig();
 }
 
 
@@ -416,18 +409,18 @@ MiscPrefTab::MiscPrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void MiscPrefTab::restore()
+void MiscPrefTab::restore(bool defaults)
 {
-	mAutostartDaemon->setChecked(Daemon::autoStart());
-	bool systray = Preferences::mRunInSystemTray;
+	mAutostartDaemon->setChecked(defaults ? true : Daemon::autoStart());
+	bool systray = Preferences::runInSystemTray();
 	mRunInSystemTray->setChecked(systray);
 	mRunOnDemand->setChecked(!systray);
-	mDisableAlarmsIfStopped->setChecked(Preferences::mDisableAlarmsIfStopped);
+	mDisableAlarmsIfStopped->setChecked(Preferences::disableAlarmsIfStopped());
 	mQuitWarn->setChecked(Preferences::quitWarn());
-	mAutostartTrayIcon->setChecked(Preferences::mAutostartTrayIcon);
+	mAutostartTrayIcon->setChecked(Preferences::autostartTrayIcon());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	setTimeZone(Preferences::timeZone());
-	mStartOfDay->setValue(Preferences::mStartOfDay);
+	mStartOfDay->setValue(Preferences::startOfDay());
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
 	if (!xtermCmd.isEmpty())
@@ -467,13 +460,13 @@ void MiscPrefTab::apply(bool syncToDisc)
 		}
 	}
 	bool systray = mRunInSystemTray->isChecked();
-	Preferences::mRunInSystemTray        = systray;
-	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
+	Preferences::setRunInSystemTray(systray);
+	Preferences::setDisableAlarmsIfStopped(mDisableAlarmsIfStopped->isChecked());
 	if (mQuitWarn->isEnabled())
 		Preferences::setQuitWarn(mQuitWarn->isChecked());
-	Preferences::mAutostartTrayIcon = mAutostartTrayIcon->isChecked();
+	Preferences::setAutostartTrayIcon(mAutostartTrayIcon->isChecked());
 #ifdef AUTOSTART_BY_KALARMD
-	bool newAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::mAutostartTrayIcon;
+	bool newAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::autostartTrayIcon();
 #else
 	bool newAutostartDaemon = mAutostartDaemon->isChecked();
 #endif
@@ -482,28 +475,11 @@ void MiscPrefTab::apply(bool syncToDisc)
 	Preferences::setConfirmAlarmDeletion(mConfirmAlarmDeletion->isChecked());
 	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
 	if (tz)
-		Preferences::mTimeZone = tz;
+		Preferences::setTimeZone(tz);
 	int sod = mStartOfDay->value();
-	Preferences::mStartOfDay.setHMS(sod/60, sod%60, 0);
-	Preferences::mCmdXTermCommand = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
+	Preferences::setStartOfDay(QTime(sod/60, sod%60, 0));
+	Preferences::setCmdXTermCommand((xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text());
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void MiscPrefTab::setDefaults()
-{
-	mAutostartDaemon->setChecked(true);
-	bool systray = Preferences::default_runInSystemTray;
-	mRunInSystemTray->setChecked(systray);
-	mRunOnDemand->setChecked(!systray);
-	mDisableAlarmsIfStopped->setChecked(Preferences::default_disableAlarmsIfStopped);
-	mQuitWarn->setChecked(Preferences::default_quitWarn);
-	mAutostartTrayIcon->setChecked(Preferences::default_autostartTrayIcon);
-	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
-	setTimeZone(Preferences::default_timeZone());
-	mStartOfDay->setValue(Preferences::default_startOfDay);
-	mXtermType->setButton(0);
-	mXtermCommand->setEnabled(false);
-	slotDisableIfStoppedToggled(true);
 }
 
 void MiscPrefTab::setTimeZone(const KTimeZone* tz)
@@ -633,27 +609,21 @@ StorePrefTab::StorePrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void StorePrefTab::restore()
+void StorePrefTab::restore(bool defaults)
 {
-	mCheckKeepChanges = false;
-	mAskResource->setChecked(Preferences::mAskResource);
-	mDefaultResource->setChecked(!Preferences::mAskResource);
-	setArchivedControls(Preferences::mArchivedKeepDays);
-	mOldKeepArchived = mKeepArchived->isChecked();
+	mCheckKeepChanges = defaults;
+	mAskResource->setChecked(Preferences::askResource());
+	setArchivedControls(Preferences::archivedKeepDays());
+	if (!defaults)
+		mOldKeepArchived = mKeepArchived->isChecked();
 	mCheckKeepChanges = true;
 }
 
 void StorePrefTab::apply(bool syncToDisc)
 {
-	Preferences::mAskResource = mAskResource->isChecked();
-	Preferences::mArchivedKeepDays = !mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
+	Preferences::setAskResource(mAskResource->isChecked());
+	Preferences::setArchivedKeepDays(!mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1);
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void StorePrefTab::setDefaults()
-{
-	mAskResource->setChecked(Preferences::default_askResource);
-	setArchivedControls(Preferences::default_archivedKeepDays);
 }
 
 void StorePrefTab::setArchivedControls(int purgeDays)
@@ -709,10 +679,10 @@ EmailPrefTab::EmailPrefTab()
 	mEmailClient = new ButtonGroup(box);
 	mKMailButton = new RadioButton(i18n("&KMail"), box);
 	mKMailButton->setMinimumSize(mKMailButton->sizeHint());
-	mEmailClient->addButton(mKMailButton, Preferences::KMAIL);
+	mEmailClient->addButton(mKMailButton, Preferences::kmail);
 	mSendmailButton = new RadioButton(i18n("&Sendmail"), box);
 	mSendmailButton->setMinimumSize(mSendmailButton->sizeHint());
-	mEmailClient->addButton(mSendmailButton, Preferences::SENDMAIL);
+	mEmailClient->addButton(mSendmailButton, Preferences::sendmail);
 	connect(mEmailClient, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotEmailClientChanged(QAbstractButton*)));
 	box->setFixedHeight(box->sizeHint().height());
 	box->setWhatsThis(
@@ -818,33 +788,27 @@ EmailPrefTab::EmailPrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void EmailPrefTab::restore()
+void EmailPrefTab::restore(bool defaults)
 {
-	mEmailClient->setButton(Preferences::mEmailClient);
+	mEmailClient->setButton(Preferences::emailClient());
 	mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
-	setEmailAddress(Preferences::mEmailFrom, Preferences::mEmailAddress);
-	setEmailBccAddress((Preferences::mEmailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::mEmailBccAddress);
+	setEmailAddress(Preferences::emailFrom(), Preferences::emailAddress());
+	setEmailBccAddress((Preferences::emailBccFrom() == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::emailBccAddress());
 	mEmailQueuedNotify->setChecked(Preferences::emailQueuedNotify());
-	mAddressChanged = mBccAddressChanged = false;
+	if (!defaults)
+		mAddressChanged = mBccAddressChanged = false;
 }
 
 void EmailPrefTab::apply(bool syncToDisc)
 {
 	int client = mEmailClient->selectedId();
-	Preferences::mEmailClient = (client >= 0) ? static_cast<Preferences::MailClient>(client) : Preferences::default_emailClient;
-	Preferences::mEmailCopyToKMail = mEmailCopyToKMail->isChecked();
+	if (client >= 0)
+		Preferences::setEmailClient(static_cast<Preferences::MailClient>(client));
+	Preferences::setEmailCopyToKMail(mEmailCopyToKMail->isChecked());
 	Preferences::setEmailAddress(static_cast<Preferences::MailFrom>(mFromAddressGroup->selectedId()), mEmailAddress->text().trimmed());
 	Preferences::setEmailBccAddress((mBccAddressGroup->checkedButton() == mBccCCentreButton), mEmailBccAddress->text().trimmed());
 	Preferences::setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void EmailPrefTab::setDefaults()
-{
-	mEmailClient->setButton(Preferences::default_emailClient);
-	setEmailAddress(Preferences::default_emailFrom(), Preferences::default_emailAddress);
-	setEmailBccAddress((Preferences::default_emailBccFrom == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::default_emailBccAddress);
-	mEmailQueuedNotify->setChecked(Preferences::default_emailQueuedNotify);
 }
 
 void EmailPrefTab::setEmailAddress(Preferences::MailFrom from, const QString& address)
@@ -967,32 +931,23 @@ FontColourPrefTab::FontColourPrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void FontColourPrefTab::restore()
+void FontColourPrefTab::restore(bool)
 {
-	mFontChooser->setBgColour(Preferences::mDefaultBgColour);
-	mFontChooser->setColours(Preferences::mMessageColours);
-	mFontChooser->setFont(Preferences::mMessageFont);
-	mDisabledColour->setColor(Preferences::mDisabledColour);
-	mArchivedColour->setColor(Preferences::mArchivedColour);
+	mFontChooser->setBgColour(Preferences::defaultBgColour());
+	mFontChooser->setColours(Preferences::messageColours());
+	mFontChooser->setFont(Preferences::messageFont());
+	mDisabledColour->setColor(Preferences::disabledColour());
+	mArchivedColour->setColor(Preferences::archivedColour());
 }
 
 void FontColourPrefTab::apply(bool syncToDisc)
 {
-	Preferences::mDefaultBgColour = mFontChooser->bgColour();
-	Preferences::mMessageColours  = mFontChooser->colours();
-	Preferences::mMessageFont     = mFontChooser->font();
-	Preferences::mDisabledColour  = mDisabledColour->color();
-	Preferences::mArchivedColour  = mArchivedColour->color();
+	Preferences::setDefaultBgColour(mFontChooser->bgColour());
+	Preferences::setMessageColours(mFontChooser->colours());
+	Preferences::setMessageFont(mFontChooser->font());
+	Preferences::setDisabledColour(mDisabledColour->color());
+	Preferences::setArchivedColour(mArchivedColour->color());
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void FontColourPrefTab::setDefaults()
-{
-	mFontChooser->setBgColour(Preferences::default_defaultBgColour);
-	mFontChooser->setColours(Preferences::default_messageColours);
-	mFontChooser->setFont(Preferences::default_messageFont());
-	mDisabledColour->setColor(Preferences::default_disabledColour);
-	mArchivedColour->setColor(Preferences::default_archivedColour);
 }
 
 
@@ -1029,9 +984,9 @@ EditPrefTab::EditPrefTab()
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new QComboBox(box);
-	mReminderUnits->addItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
-	mReminderUnits->addItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
-	mReminderUnits->addItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
+	mReminderUnits->addItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HoursMinutes);
+	mReminderUnits->addItem(TimePeriod::i18n_Days(), TimePeriod::Days);
+	mReminderUnits->addItem(TimePeriod::i18n_Weeks(), TimePeriod::Weeks);
 	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
 	label->setBuddy(mReminderUnits);
 	box->setWhatsThis(i18n("The default units for the reminder in the alarm edit dialog."));
@@ -1073,7 +1028,7 @@ EditPrefTab::EditPrefTab()
 	mSoundFile = new QLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
-	mSoundFileBrowse->setIcon(KIcon( SmallIcon("fileopen") ) );
+	mSoundFileBrowse->setIcon(KIcon(SmallIcon("fileopen")));
 	mSoundFileBrowse->setFixedSize(mSoundFileBrowse->sizeHint());
 	connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
 	mSoundFileBrowse->setToolTip(i18n("Choose a sound file"));
@@ -1163,13 +1118,13 @@ EditPrefTab::EditPrefTab()
 	widget->setFixedWidth(3*KDialog::spacingHint());
 	QRadioButton* radio = new QRadioButton(i18n("February 2&8th"), itemBox);
 	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, KARecurrence::FEB29_FEB28);
+	mFeb29->addButton(radio, Preferences::Feb29_Feb28);
 	radio = new QRadioButton(i18n("March &1st"), itemBox);
 	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, KARecurrence::FEB29_MAR1);
+	mFeb29->addButton(radio, Preferences::Feb29_Mar1);
 	radio = new QRadioButton(i18n("Do &not repeat"), itemBox);
 	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, KARecurrence::FEB29_FEB29);
+	mFeb29->addButton(radio, Preferences::Feb29_None);
 	itemBox->setFixedHeight(itemBox->sizeHint().height());
 	vbox->setWhatsThis(
 	      i18n("For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.\n"
@@ -1178,78 +1133,91 @@ EditPrefTab::EditPrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void EditPrefTab::restore()
+void EditPrefTab::restore(bool)
 {
-	mAutoClose->setChecked(Preferences::mDefaultAutoClose);
-	mConfirmAck->setChecked(Preferences::mDefaultConfirmAck);
-	mReminderUnits->setCurrentIndex(Preferences::mDefaultReminderUnits);
-	mSpecialActionsButton->setActions(Preferences::mDefaultPreAction, Preferences::mDefaultPostAction);
-	mSound->setCurrentIndex(Preferences::mDefaultSoundType);
-	mSoundFile->setText(Preferences::mDefaultSoundFile);
-	mSoundRepeat->setChecked(Preferences::mDefaultSoundRepeat);
-	mCmdScript->setChecked(Preferences::mDefaultCmdScript);
-	mCmdXterm->setChecked(Preferences::mDefaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
-	mEmailBcc->setChecked(Preferences::mDefaultEmailBcc);
-	mCopyToKOrganizer->setChecked(Preferences::mDefaultCopyToKOrganizer);
-	mLateCancel->setChecked(Preferences::mDefaultLateCancel);
-	mRecurPeriod->setCurrentIndex(recurIndex(Preferences::mDefaultRecurPeriod));
-	mFeb29->setButton(Preferences::mDefaultFeb29Type);
+	int index;
+	mAutoClose->setChecked(Preferences::defaultAutoClose());
+	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
+	switch (Preferences::defaultReminderUnits())
+	{
+		case TimePeriod::Weeks:        index = 2; break;
+		case TimePeriod::Days:         index = 1; break;
+		case TimePeriod::HoursMinutes:
+		default:                       index = 0; break;
+	}
+	mReminderUnits->setCurrentIndex(index);
+	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
+	mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
+	mSoundFile->setText(Preferences::defaultSoundFile());
+	mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
+	mCmdScript->setChecked(Preferences::defaultCmdScript());
+	mCmdXterm->setChecked(Preferences::defaultCmdLogType() == Preferences::Log_Terminal);
+	mEmailBcc->setChecked(Preferences::defaultEmailBcc());
+	mCopyToKOrganizer->setChecked(Preferences::defaultCopyToKOrganizer());
+	mLateCancel->setChecked(Preferences::defaultLateCancel());
+	switch (Preferences::defaultRecurPeriod())
+	{
+		case Preferences::Recur_Yearly:   index = 6; break;
+		case Preferences::Recur_Monthly:  index = 5; break;
+		case Preferences::Recur_Weekly:   index = 4; break;
+		case Preferences::Recur_Daily:    index = 3; break;
+		case Preferences::Recur_SubDaily: index = 2; break;
+		case Preferences::Recur_Login:    index = 1; break;
+		case Preferences::Recur_None:
+		default:                          index = 0; break;
+	}
+	mRecurPeriod->setCurrentIndex(index);
+	mFeb29->setButton(Preferences::defaultFeb29Type());
 }
 
 void EditPrefTab::apply(bool syncToDisc)
 {
-	Preferences::mDefaultAutoClose        = mAutoClose->isChecked();
-	Preferences::mDefaultConfirmAck       = mConfirmAck->isChecked();
-	Preferences::mDefaultReminderUnits    = static_cast<TimePeriod::Units>(mReminderUnits->currentIndex());
-	Preferences::mDefaultPreAction        = mSpecialActionsButton->preAction();
-	Preferences::mDefaultPostAction       = mSpecialActionsButton->postAction();
+	Preferences::setDefaultAutoClose(mAutoClose->isChecked());
+	Preferences::setDefaultConfirmAck(mConfirmAck->isChecked());
+	TimePeriod::Units units;
+	switch (mReminderUnits->currentIndex())
+	{
+		case 2:  units = TimePeriod::Weeks;        break;
+		case 1:  units = TimePeriod::Days;         break;
+		case 0:
+		default: units = TimePeriod::HoursMinutes; break;
+	}
+	Preferences::setDefaultReminderUnits(units);
+	Preferences::setDefaultPreAction(mSpecialActionsButton->preAction());
+	Preferences::setDefaultPostAction(mSpecialActionsButton->postAction());
 	switch (mSound->currentIndex())
 	{
-		case 3:  Preferences::mDefaultSoundType = SoundPicker::SPEAK;      break;
-		case 2:  Preferences::mDefaultSoundType = SoundPicker::PLAY_FILE;  break;
-		case 1:  Preferences::mDefaultSoundType = SoundPicker::BEEP;       break;
+		case 3:  Preferences::setDefaultSoundType(Preferences::Sound_Speak); break;
+		case 2:  Preferences::setDefaultSoundType(Preferences::Sound_File);  break;
+		case 1:  Preferences::setDefaultSoundType(Preferences::Sound_Beep);  break;
 		case 0:
-		default: Preferences::mDefaultSoundType = SoundPicker::NONE;       break;
+		default: Preferences::setDefaultSoundType(Preferences::Sound_None);  break;
 	}
-	Preferences::mDefaultSoundFile        = mSoundFile->text();
-	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
-	Preferences::mDefaultCmdScript        = mCmdScript->isChecked();
-	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? Preferences::EXEC_IN_TERMINAL : Preferences::DISCARD_OUTPUT);
-	Preferences::mDefaultEmailBcc         = mEmailBcc->isChecked();
-	Preferences::mDefaultCopyToKOrganizer = mCopyToKOrganizer->isChecked();
-	Preferences::mDefaultLateCancel       = mLateCancel->isChecked() ? 1 : 0;
+	Preferences::setDefaultSoundFile(mSoundFile->text());
+	Preferences::setDefaultSoundRepeat(mSoundRepeat->isChecked());
+	Preferences::setDefaultCmdScript(mCmdScript->isChecked());
+#warning KDE 3 change from setDefaultCmdLogFile()
+	Preferences::setDefaultCmdLogType((mCmdXterm->isChecked() ? Preferences::Log_Terminal : Preferences::Log_Discard));
+	Preferences::setDefaultEmailBcc(mEmailBcc->isChecked());
+	Preferences::setDefaultCopyToKOrganizer(mCopyToKOrganizer->isChecked());
+	Preferences::setDefaultLateCancel(mLateCancel->isChecked() ? 1 : 0);
+	Preferences::RecurType period;
 	switch (mRecurPeriod->currentIndex())
 	{
-		case 6:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::ANNUAL;    break;
-		case 5:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::MONTHLY;   break;
-		case 4:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::WEEKLY;    break;
-		case 3:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::DAILY;     break;
-		case 2:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::SUBDAILY;  break;
-		case 1:  Preferences::mDefaultRecurPeriod = RecurrenceEdit::AT_LOGIN;  break;
+		case 6:  period = Preferences::Recur_Yearly;   break;
+		case 5:  period = Preferences::Recur_Monthly;  break;
+		case 4:  period = Preferences::Recur_Weekly;   break;
+		case 3:  period = Preferences::Recur_Daily;    break;
+		case 2:  period = Preferences::Recur_SubDaily; break;
+		case 1:  period = Preferences::Recur_Login;    break;
 		case 0:
-		default: Preferences::mDefaultRecurPeriod = RecurrenceEdit::NO_RECUR;  break;
+		default: period = Preferences::Recur_None;     break;
 	}
+	Preferences::setDefaultRecurPeriod(period);
 	int feb29 = mFeb29->selectedId();
-	Preferences::mDefaultFeb29Type  = (feb29 >= 0) ? static_cast<KARecurrence::Feb29Type>(feb29) : Preferences::default_defaultFeb29Type;
+	if (feb29 >= 0)
+		Preferences::setDefaultFeb29Type(static_cast<Preferences::Feb29Type>(feb29));
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void EditPrefTab::setDefaults()
-{
-	mAutoClose->setChecked(Preferences::default_defaultAutoClose);
-	mConfirmAck->setChecked(Preferences::default_defaultConfirmAck);
-	mReminderUnits->setCurrentIndex(Preferences::default_defaultReminderUnits);
-	mSpecialActionsButton->setActions(Preferences::default_defaultPreAction, Preferences::default_defaultPostAction);
-	mSound->setCurrentIndex(soundIndex(Preferences::default_defaultSoundType));
-	mSoundFile->setText(Preferences::default_defaultSoundFile);
-	mSoundRepeat->setChecked(Preferences::default_defaultSoundRepeat);
-	mCmdScript->setChecked(Preferences::default_defaultCmdScript);
-	mCmdXterm->setChecked(Preferences::default_defaultCmdLogType == Preferences::EXEC_IN_TERMINAL);
-	mEmailBcc->setChecked(Preferences::default_defaultEmailBcc);
-	mCopyToKOrganizer->setChecked(Preferences::default_defaultCopyToKOrganizer);
-	mLateCancel->setChecked(Preferences::default_defaultLateCancel);
-	mRecurPeriod->setCurrentIndex(recurIndex(Preferences::default_defaultRecurPeriod));
-	mFeb29->setButton(Preferences::default_defaultFeb29Type);
 }
 
 void EditPrefTab::slotBrowseSoundFile()
@@ -1260,36 +1228,21 @@ void EditPrefTab::slotBrowseSoundFile()
 		mSoundFile->setText(url);
 }
 
-int EditPrefTab::soundIndex(SoundPicker::Type type)
+int EditPrefTab::soundIndex(Preferences::SoundType type)
 {
 	switch (type)
 	{
-		case SoundPicker::SPEAK:      return 3;
-		case SoundPicker::PLAY_FILE:  return 2;
-		case SoundPicker::BEEP:       return 1;
-		case SoundPicker::NONE:
-		default:                      return 0;
-	}
-}
-
-int EditPrefTab::recurIndex(RecurrenceEdit::RepeatType type)
-{
-	switch (type)
-	{
-		case RecurrenceEdit::ANNUAL:   return 6;
-		case RecurrenceEdit::MONTHLY:  return 5;
-		case RecurrenceEdit::WEEKLY:   return 4;
-		case RecurrenceEdit::DAILY:    return 3;
-		case RecurrenceEdit::SUBDAILY: return 2;
-		case RecurrenceEdit::AT_LOGIN: return 1;
-		case RecurrenceEdit::NO_RECUR:
+		case Preferences::Sound_Speak: return 3;
+		case Preferences::Sound_File:  return 2;
+		case Preferences::Sound_Beep:  return 1;
+		case Preferences::Sound_None:
 		default:                       return 0;
 	}
 }
 
 QString EditPrefTab::validate()
 {
-	if (mSound->currentIndex() == SoundPicker::PLAY_FILE  &&  mSoundFile->text().isEmpty())
+	if (mSound->currentIndex() == soundIndex(Preferences::Sound_File)  &&  mSoundFile->text().isEmpty())
 	{
 		mSoundFile->setFocus();
 		return i18n("You must enter a sound file when %1 is selected as the default sound type", SoundPicker::i18n_File());;
@@ -1411,50 +1364,36 @@ ViewPrefTab::ViewPrefTab()
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
-void ViewPrefTab::restore()
+void ViewPrefTab::restore(bool)
 {
-	mShowResources->setChecked(Preferences::mShowResources);
-	setList(Preferences::mShowAlarmTime,
-	        Preferences::mShowTimeToAlarm);
-	setTooltip(Preferences::mTooltipAlarmCount,
-	           Preferences::mShowTooltipAlarmTime,
-	           Preferences::mShowTooltipTimeToAlarm,
-	           Preferences::mTooltipTimeToPrefix);
-	mModalMessages->setChecked(Preferences::mModalMessages);
-	mShowArchivedAlarms->setChecked(Preferences::mShowArchivedAlarms);
-	mDaemonTrayCheckInterval->setValue(Preferences::mDaemonTrayCheckInterval);
+	mShowResources->setChecked(Preferences::showResources());
+	setList(Preferences::showAlarmTime(),
+	        Preferences::showTimeToAlarm());
+	setTooltip(Preferences::tooltipAlarmCount(),
+	           Preferences::showTooltipAlarmTime(),
+	           Preferences::showTooltipTimeToAlarm(),
+	           Preferences::tooltipTimeToPrefix());
+	mModalMessages->setChecked(Preferences::modalMessages());
+	mShowArchivedAlarms->setChecked(Preferences::showArchivedAlarms());
+	mDaemonTrayCheckInterval->setValue(Preferences::daemonTrayCheckInterval());
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
-	Preferences::mShowResources           = mShowResources->isChecked();
-	Preferences::mShowAlarmTime           = mListShowTime->isChecked();
-	Preferences::mShowTimeToAlarm         = mListShowTimeTo->isChecked();
+	Preferences::setShowResources(mShowResources->isChecked());
+	Preferences::setShowAlarmTime(mListShowTime->isChecked());
+	Preferences::setShowTimeToAlarm(mListShowTimeTo->isChecked());
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
-	Preferences::mTooltipAlarmCount       = n;
-	Preferences::mShowTooltipAlarmTime    = mTooltipShowTime->isChecked();
-	Preferences::mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
-	Preferences::mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
-	Preferences::mModalMessages           = mModalMessages->isChecked();
-	Preferences::mShowArchivedAlarms      = mShowArchivedAlarms->isChecked();
-	Preferences::mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
+	Preferences::setTooltipAlarmCount(n);
+	Preferences::setShowTooltipAlarmTime(mTooltipShowTime->isChecked());
+	Preferences::setShowTooltipTimeToAlarm(mTooltipShowTimeTo->isChecked());
+	Preferences::setTooltipTimeToPrefix(mTooltipTimeToPrefix->text());
+	Preferences::setModalMessages(mModalMessages->isChecked());
+	Preferences::setShowArchivedAlarms(mShowArchivedAlarms->isChecked());
+	Preferences::setDaemonTrayCheckInterval(mDaemonTrayCheckInterval->value());
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void ViewPrefTab::setDefaults()
-{
-	mShowResources->setChecked(Preferences::default_showResources);
-	setList(Preferences::default_showAlarmTime,
-	        Preferences::default_showTimeToAlarm);
-	setTooltip(Preferences::default_tooltipAlarmCount,
-	           Preferences::default_showTooltipAlarmTime,
-	           Preferences::default_showTooltipTimeToAlarm,
-	           Preferences::default_tooltipTimeToPrefix);
-	mModalMessages->setChecked(Preferences::default_modalMessages);
-	mShowArchivedAlarms->setChecked(Preferences::default_showArchivedAlarms);
-	mDaemonTrayCheckInterval->setValue(Preferences::default_daemonTrayCheckInterval);
 }
 
 void ViewPrefTab::setList(bool time, bool timeTo)

@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <QString>
 #include <kurl.h>
 
+#include "preferences.h"
+
 class KHBox;
 class ComboBox;
 class PushButton;
@@ -34,13 +36,6 @@ class SoundPicker : public QFrame
 {
 		Q_OBJECT
 	public:
-		/** Sound options which can be selected for when the alarm is displayed.
-		 *  @li NONE      - silence.
-		 *  @li BEEP      - a beep will be sounded.
-		 *  @li PLAY_FILE - a sound file will be played.
-		 *  @li SPEAK     - the message text will be spoken.
-		 */
-		enum Type { NONE = 0, BEEP, PLAY_FILE, SPEAK };
 		/** Constructor.
 		 *  @param parent The parent object of this widget.
 		 */
@@ -63,7 +58,7 @@ class SoundPicker : public QFrame
 		 *                  selected, @p repeat provides the default should 'file' later be selected by
 		 *                  the user.
 		 */
-		void           set(Type type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool repeat);
+		void           set(Preferences::SoundType type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool repeat);
 		/** Returns true if the widget is read only for the user. */
 		bool           isReadOnly() const          { return mReadOnly; }
 		/** Sets whether the widget can be changed the user.
@@ -75,7 +70,7 @@ class SoundPicker : public QFrame
 		 */
 		void           showSpeak(bool show);
 		/** Returns the selected option. */
-		Type           sound() const;
+		Preferences::SoundType sound() const;
 		/** If the 'file' option is selected, returns the URL of the chosen file.
 		 *  Otherwise returns a null string.
 		 */
@@ -125,7 +120,7 @@ class SoundPicker : public QFrame
 		float          mVolume;       // volume for file, or < 0 to not set volume
 		float          mFadeVolume;   // initial volume for file, or < 0 for no fading
 		int            mFadeSeconds;  // fade interval in seconds
-		Type           mLastType;     // last selected sound option
+		Preferences::SoundType mLastType;     // last selected sound option
 		bool           mSpeakShowing; // Speak option is shown in combo box
 		bool           mRevertType;   // reverting to last selected sound option
 		bool           mRepeat;       // repeat the sound file

@@ -29,7 +29,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
@@ -73,10 +73,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 	// Prefix and suffix to the name in the alarm text
 	// Get default prefix and suffix texts from config file
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QLatin1String("General"));
-	mPrefixText = config->readEntry("BirthdayPrefix", i18n("Birthday: "));
-	mSuffixText = config->readEntry("BirthdaySuffix");
+	KConfigGroup config(KGlobal::config(), "General");
+	mPrefixText = config.readEntry("BirthdayPrefix", i18n("Birthday: "));
+	mSuffixText = config.readEntry("BirthdaySuffix");
 
 	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
@@ -212,7 +211,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
 	mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
-	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::DAYS);
+	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::Days);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 	                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
@@ -289,13 +288,12 @@ QList<KAEvent> BirthdayDlg::events() const
 void BirthdayDlg::slotOk()
 {
 	// Save prefix and suffix texts to use as future defaults
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QLatin1String("General"));
-	config->writeEntry("BirthdayPrefix", mPrefix->text());
-	config->writeEntry("BirthdaySuffix", mSuffix->text());
-	config->sync();
+	KConfigGroup config(KGlobal::config(), "General");
+	config.writeEntry("BirthdayPrefix", mPrefix->text());
+	config.writeEntry("BirthdaySuffix", mSuffix->text());
+	config.sync();
 
-	mFlags = (mSoundPicker->sound() == SoundPicker::BEEP ? KAEvent::BEEP : 0)
+	mFlags = (mSoundPicker->sound() == Preferences::Sound_Beep ? KAEvent::BEEP : 0)
 	       | (mSoundPicker->repeat()                     ? KAEvent::REPEAT_SOUND : 0)
 	       | (mConfirmAck->isChecked()                   ? KAEvent::CONFIRM_ACK : 0)
 	       | (mFontColourButton->defaultFont()           ? KAEvent::DEFAULT_FONT : 0)
@@ -310,7 +308,6 @@ void BirthdayDlg::slotOk()
 void BirthdayDlg::slotSelectionChanged()
 {
 	enableButtonOk(mListView->selectionModel()->hasSelection());
-
 }
 
 /******************************************************************************

@@ -140,7 +140,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	kDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
-	if (Preferences::emailClient() == Preferences::SENDMAIL)
+	if (Preferences::emailClient() == Preferences::sendmail)
 	{
 		// Use sendmail to send the message
 		QString textComplete;
@@ -454,7 +454,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 			QString domain = addr.mailboxList.first().addrSpec().domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
-				QString text = (Preferences::emailClient() == Preferences::KMAIL)
+				QString text = (Preferences::emailClient() == Preferences::kmail)
 				             ? i18n("An email has been queued to be sent by KMail")
 				             : i18n("An email has been queued to be sent");
 				KMessageBox::information(0, text, QString(), Preferences::EMAIL_QUEUED_NOTIFY);

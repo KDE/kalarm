@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright (c) 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@
 #include "soundpicker.moc"
 
 
+static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index
+
+
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"); }
@@ -66,12 +69,20 @@ SoundPicker::SoundPicker(QWidget* parent)
 
 	// Sound type combo box
 	// The order of combo box entries must correspond with the 'Type' enum.
+	if (indexes.isEmpty())
+	{
+		indexes[Preferences::Sound_None]     = 0;
+		indexes[Preferences::Sound_Beep]     = 1;
+		indexes[Preferences::Sound_File] = 2;
+		indexes[Preferences::Sound_Speak]    = 3;
+	}
+
 	mTypeCombo = new ComboBox(mTypeBox);
-	mTypeCombo->addItem(i18n_None());     // index NONE
-	mTypeCombo->addItem(i18n_Beep());     // index BEEP
-	mTypeCombo->addItem(i18n_File());     // index PLAY_FILE
+	mTypeCombo->addItem(i18n_None());     // index None
+	mTypeCombo->addItem(i18n_Beep());     // index Beep
+	mTypeCombo->addItem(i18n_File());     // index PlayFile
 	mSpeakShowing = !theApp()->speechEnabled();
-	showSpeak(!mSpeakShowing);            // index SPEAK (only displayed if appropriate)
+	showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
 	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotTypeSelected(int)));
 	label->setBuddy(mTypeCombo);
 	soundLayout->addWidget(mTypeBox);
@@ -85,7 +96,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 	soundLayout->addWidget(mFilePicker);
 
 	// Initialise the file picker button state and tooltip
-	mTypeCombo->setCurrentIndex(NONE);
+	mTypeCombo->setCurrentIndex(indexes[Preferences::Sound_None]);
 	mFilePicker->setEnabled(false);
 }
 
@@ -112,10 +123,10 @@ void SoundPicker::showSpeak(bool show)
 	                  + "<br>" + i18n("%1: the message is displayed silently.", "<b>" + i18n_None() + "</b>")
 	                  + "<br>" + i18n("%1: a simple beep is sounded.", "<b>" + i18n_Beep() + "</b>")
 	                  + "<br>" + i18n("%1: an audio file is played. You will be prompted to choose the file and set play options.", "<b>" + i18n_File() + "</b>");
-	if (!show  &&  mTypeCombo->currentIndex() == SPEAK)
-		mTypeCombo->setCurrentIndex(NONE);
-	if (mTypeCombo->count() == SPEAK+1)
-		mTypeCombo->removeItem(SPEAK);    // precaution in case of mix-ups
+	if (!show  &&  mTypeCombo->currentIndex() == indexes[Preferences::Sound_Speak])
+		mTypeCombo->setCurrentIndex(indexes[Preferences::Sound_None]);
+	if (mTypeCombo->count() == indexes[Preferences::Sound_Speak]+1)
+		mTypeCombo->removeItem(indexes[Preferences::Sound_Speak]);    // precaution in case of mix-ups
 	if (show)
 	{
 		mTypeCombo->addItem(i18n_Speak());
@@ -128,9 +139,13 @@ void SoundPicker::showSpeak(bool show)
 /******************************************************************************
 * Return the currently selected option.
 */
-SoundPicker::Type SoundPicker::sound() const
+Preferences::SoundType SoundPicker::sound() const
 {
-	return static_cast<SoundPicker::Type>(mTypeCombo->currentIndex());
+	int current = mTypeCombo->currentIndex();
+	for (QMap<Preferences::SoundType, int>::const_iterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
+		if (it.value() == current)
+			return it.key();
+	return Preferences::Sound_None;
 }
 
 /******************************************************************************
@@ -139,7 +154,7 @@ SoundPicker::Type SoundPicker::sound() const
 */
 QString SoundPicker::file() const
 {
-	return (mTypeCombo->currentIndex() == PLAY_FILE) ? mFile : QString();
+	return (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]) ? mFile : QString();
 }
 
 /******************************************************************************
@@ -148,7 +163,7 @@ QString SoundPicker::file() const
 */
 float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 {
-	if (mTypeCombo->currentIndex() == PLAY_FILE  &&  !mFile.isEmpty())
+	if (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]  &&  !mFile.isEmpty())
 	{
 		fadeVolume  = mFadeVolume;
 		fadeSeconds = mFadeSeconds;
@@ -168,24 +183,24 @@ float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 */
 bool SoundPicker::repeat() const
 {
-	return mTypeCombo->currentIndex() == PLAY_FILE  &&  !mFile.isEmpty()  &&  mRepeat;
+	return mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]  &&  !mFile.isEmpty()  &&  mRepeat;
 }
 
 /******************************************************************************
 * Initialise the widget's state.
 */
-void SoundPicker::set(SoundPicker::Type type, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+void SoundPicker::set(Preferences::SoundType type, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
 {
-	if (type == PLAY_FILE  &&  f.isEmpty())
-		type = BEEP;
+	if (type == Preferences::Sound_File  &&  f.isEmpty())
+		type = Preferences::Sound_Beep;
 	mFile        = f;
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
 	mFilePicker->setToolTip(mFile);
-	mTypeCombo->setCurrentIndex(type);  // this doesn't trigger slotTypeSelected()
-	mFilePicker->setEnabled(type == PLAY_FILE);
+	mTypeCombo->setCurrentIndex(indexes[type]);  // this doesn't trigger slotTypeSelected()
+	mFilePicker->setEnabled(type == Preferences::Sound_File);
 	mLastType = type;
 }
 
@@ -194,12 +209,20 @@ void SoundPicker::set(SoundPicker::Type type, const QString& f, float volume, fl
 */
 void SoundPicker::slotTypeSelected(int id)
 {
-	Type newType = static_cast<Type>(id);
+	Preferences::SoundType newType = Preferences::Sound_None;
+	for (QMap<Preferences::SoundType, int>::const_iterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
+	{
+		if (it.value() == id)
+		{
+			newType = it.key();
+			break;
+		}
+	}
 	if (newType == mLastType  ||  mRevertType)
 		return;
-	if (mLastType == PLAY_FILE)
+	if (mLastType == Preferences::Sound_File)
 		mFilePicker->setEnabled(false);
-	else if (newType == PLAY_FILE)
+	else if (newType == Preferences::Sound_File)
 	{
 		if (mFile.isEmpty())
 		{
@@ -248,7 +271,7 @@ void SoundPicker::slotPickFile()
 		mRevertType = true;   // prevent sound dialogue popping up twice
 		QTimer::singleShot(0, this, SLOT(setLastType()));
 #else
-		mTypeCombo->setCurrentIndex(mLastType);
+		mTypeCombo->setCurrentIndex(indexes[mLastType]);
 #endif
 	}
 }
@@ -258,7 +281,7 @@ void SoundPicker::slotPickFile()
 */
 void SoundPicker::setLastType()
 {
-	mTypeCombo->setCurrentIndex(mLastType);
+	mTypeCombo->setCurrentIndex(indexes[mLastType]);
 	mRevertType = false;
 }
 

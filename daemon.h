@@ -80,7 +80,7 @@ class Daemon : public QObject
 
 		void             setAlarmsEnabled(bool enable);
 		void             timerCheckIfRunning();
-		void             slotPreferencesChanged();
+		void             slotCheckIntervalChanged(int);
 
 	private:
 		enum Status    // daemon status.  KEEP IN THIS ORDER!!

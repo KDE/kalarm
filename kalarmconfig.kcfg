@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: David Jarvie <software@astrojar.org.uk> -->
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      file:///home/david/src/svn/trunk/kdelibs/kdecore/kconfig_compiler/kcfg.xsd" >
+<!--      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" > -->
+  <kcfgfile name="kalarmrc"/>
+
+  <include>qfont.h</include>
+  <include>qcolor.h</include>
+  <include>qnamespace.h</include>
+  <include>kglobalsettings.h</include>
+  <include>kamail.h</include>
+  <include>timeperiod.h</include>
+  <code>
+    QStringList defaultColours;
+    defaultColours &lt;&lt; QColor(Qt::red).name() &lt;&lt; QColor(Qt::green).name() &lt;&lt; QColor(Qt::blue).name() &lt;&lt; QColor(Qt::cyan).name() &lt;&lt; QColor(Qt::magenta).name() &lt;&lt; QColor(Qt::yellow).name() &lt;&lt; QColor(Qt::white).name() &lt;&lt; QColor(Qt::lightGray).name() &lt;&lt; QColor(Qt::black).name();
+  </code>
+
+  <signal name="runInSystemTrayChanged">
+    <argument type="Bool">RunInSystemTray</argument>
+  </signal>
+  <signal name="disableAlarmsIfStoppedChanged">
+    <argument type="Bool">DisableAlarmsIfStopped</argument>
+  </signal>
+  <signal name="base_StartOfDayChanged">
+    <argument type="DateTime">Base_StartOfDay</argument>
+  </signal>
+  <signal name="showTimeChanged">
+    <argument type="Bool">Base_ShowAlarmTime</argument>
+    <argument type="Bool">ShowTimeToAlarm</argument>
+  </signal>
+  <signal name="daemonTrayCheckIntervalChanged">
+    <argument type="Int">DaemonTrayCheckInterval</argument>
+  </signal>
+  <signal name="disabledColourChanged">
+    <argument type="Color">DisabledColour</argument>
+  </signal>
+  <signal name="archivedColourChanged">
+    <argument type="Color">ArchivedColour</argument>
+  </signal>
+  <signal name="archivedKeepDaysChanged">
+    <argument type="Int">ArchivedKeepDays</argument>
+  </signal>
+  <signal name="feb29TypeChanged">
+    <argument type="Enum">DefaultFeb29Type</argument>
+  </signal>
+
+  <group name="General">
+    <entry name="Version" type="String" hidden="true">
+      <label>KAlarm version</label>
+      <whatsthis>KAlarm version which wrote this file.</whatsthis>
+    </entry>
+    <entry name="Base_TimeZone" key="TimeZone" type="String">
+      <label>Time zone</label>
+      <whatsthis>Select the time zone which KAlarm should use as its default for displaying and entering dates and times.</whatsthis>
+    </entry>
+    <entry name="Base_MessageColours" key="MessageColours" type="StringList">
+      <label>Color selection list</label>
+      <whatsthis>Comma separated list of color codes presented as choice for alarm messages.</whatsthis>
+      <default>defaultColours</default>
+    </entry>
+    <entry name="DefaultBgColour" key="MessageBackgroundColour" type="Color">
+      <label>Background color</label>
+      <whatsthis>Default background color for alarm message windows.</whatsthis>
+      <default>Qt::red</default>
+    </entry>
+    <entry name="MessageFont" type="Font">
+      <label>Message font</label>
+      <whatsthis>Default font for displaying alarm messages.</whatsthis>
+      <default code="true">QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold)</default>
+    </entry>
+    <entry name="RunInSystemTray" type="Bool">
+      <label>Run continuously in system tray</label>
+      <whatsthis>Whether KAlarm should run continuously in the system tray.
+
+Notes:
+1. With this option selected, closing the system tray icon will quit KAlarm.
+2. You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.</whatsthis>
+      <default>true</default>
+      <emit signal="runInSystemTrayChanged"/>
+    </entry>
+    <entry name="DisableAlarmsIfStopped" type="Bool">
+      <label>Disable alarms while not running</label>
+      <whatsthis>Whether alarms should be disabled when KAlarm is not running. Alarms will only appear while the system tray icon is visible.</whatsthis>
+      <default>true</default>
+      <emit signal="disableAlarmsIfStoppedChanged"/>
+    </entry>
+    <entry name="AutostartTrayIcon" key="AutostartTray" type="Bool">
+      <label>Autostart at login</label>
+      <whatsthis>Whether to start KAlarm in the system tray at login.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="DefaultFeb29Type" key="Feb29Recur" type="Enum">
+      <label>In non-leap years, repeat yearly February 29th alarms on:</label>
+      <whatsthis>For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.
+Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</whatsthis>
+      <choices name="Feb29Type" prefix="Feb29_">
+        <choice name="Feb28"><label>February 28th</label></choice>
+        <choice name="Mar1"><label>March 1st</label></choice>
+        <choice name="None"><label>Do not repeat</label></choice>
+      </choices>
+      <default>Mar1</default>
+      <emit signal="feb29TypeChanged"/>
+    </entry>
+    <entry name="AskResource" type="Bool">
+      <label>Prompt for which resource to store in</label>
+      <whatsthis>When saving a new alarm or alarm template, whether to prompt for which resource to store it in, if there is more than one active resource.
+
+Note that archived alarms are always stored in the default archived alarm resource.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="ModalMessages" type="Bool">
+      <label>Message windows have a title bar and take keyboard focus</label>
+      <whatsthis>Specify the characteristics of alarm message windows:
+- If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.
+- If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="MessageButtonDelay" type="Int">
+      <label>Delay before message window buttons are enabled</label>
+      <whatsthis>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled. 0 to position message windows as far from the cursor as possible with no enable delay, -1 to position in center of screen with no enable delay, >0 to position in center of screen and delay enabling buttons.</whatsthis>
+      <default>0</default>
+      <min>-1</min>
+      <max>10</max>   <!-- Prevent windows being unusable for a long time -->
+    </entry>
+    <entry name="ShowResources" type="Bool">
+      <label>Show resources</label>
+      <whatsthis>Whether to initially show the resources list beside the alarm list.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="ShowArchivedAlarms" key="ShowExpiredAlarms" type="Bool">
+      <label>Show archived alarms</label>
+      <whatsthis>Whether to show archived alarms in the alarm list.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="Base_ShowAlarmTime" key="ShowAlarmTime" type="Bool">
+      <label>Show alarm time</label>
+      <whatsthis>Whether to show in the alarm list, the time at which each alarm is due.</whatsthis>
+      <default>true</default>
+      <emit signal="showTimeChanged"/>
+    </entry>
+    <entry name="ShowTimeToAlarm" type="Bool">
+      <label>Show time to alarm</label>
+      <whatsthis>Whether to show in the alarm list, how long until each alarm is du.</whatsthis>
+      <default>false</default>
+      <emit signal="showTimeChanged"/>
+    </entry>
+    <entry name="TooltipAlarmCount" type="Int">
+      <label>Number of alarms to show in system tray tooltip</label>
+      <whatsthis>How many alarms due in the next 24 hours to show in the system tray tooltip: 0 to display none, -1 to display all, >0 to set a limit.</whatsthis>
+      <default>5</default>
+      <min>-1</min>
+    </entry>
+    <entry name="ShowTooltipAlarmTime" type="Bool">
+      <label>Show alarm times in system tray tooltip</label>
+      <whatsthis>Whether to show in the system tray tooltip, the time at which each alarm is due.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="ShowTooltipTimeToAlarm" type="Bool">
+      <label>Show time to alarms in system tray tooltip</label>
+      <whatsthis>Whether to show in the system tray tooltip, how long until each alarm is due.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="TooltipTimeToPrefix" type="String">
+      <label>Time-to-alarm prefix in system tray tooltip</label>
+      <whatsthis>Text to be displayed in front of the time until the alarm, in the system tray tooltip.</whatsthis>
+      <default code="true">QLatin1String("+")</default>
+    </entry>
+    <entry name="DaemonTrayCheckInterval" type="Int">
+      <label>System tray icon update interval</label>
+      <whatsthis>Interval in seconds between system tray icon updates to indicate whether or not the Alarm Daemon is monitoring alarms.</whatsthis>
+      <default>10</default>
+      <min>1</min>
+      <emit signal="daemonTrayCheckIntervalChanged"/>
+    </entry>
+    <entry name="EmailClient" key="EmailClient" type="Enum">
+      <label>Email client</label>
+      <whatsthis>How to send email when an email alarm is triggered.
+KMail: The email is sent automatically via KMail. KMail is started first if necessary.
+Sendmail: The email is sent automatically. This option will only work if your system is configured to use 'sendmail' or a sendmail compatible mail transport agent.</whatsthis>
+      <choices name="MailClient">
+	      <choice name="sendmail"><label>Sendmail</label></choice>
+	      <choice name="kmail"><label>KMail</label></choice>
+      </choices>
+      <default>kmail</default>
+    </entry>
+    <entry name="Base_EmailCopyToKMail" key="EmailCopyToKMail" type="Bool">
+      <label>Whether to copy sent emails into KMail's Sent folder.</label>
+      <whatsthis>Whether after sending an email to store a copy in KMail's sent-mail folder. Only applies when sendmail is selected as the emaili client.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="Base_EmailFrom" key="EmailFrom" type="String">
+      <label>'From' email address</label>
+      <whatsthis>Your email address, used to identify you as the sender when sending email alarms. Enter "@ControlCenter" to use the email address set in the Control Center, "@KMail" to allow choice of KMail identities, or enter the actual email address otherwise.</whatsthis>
+      <default code="true">KAMail::identitiesExist() ? QLatin1String("@KMail") : QLatin1String("@ControlCenter")</default>
+    </entry>
+    <entry name="Base_EmailBccAddress" key="EmailBccAddress" type="String">
+      <label>'Bcc' email address</label>
+      <whatsthis>Your email address, used for blind copying email alarms to yourself. If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name. Enter "@ControlCenter" to use the email address set in the Control Center, or enter the actual email address otherwise.</whatsthis>
+      <default code="true">QLatin1String("@ControlCenter")</default>
+    </entry>
+    <entry name="Base_CmdXTermCommand" key="CmdXTerm" type="String">
+      <label>Terminal for command alarms</label>
+      <whatsthis>Command line to execute command alarms in a terminal window, including special codes described in the KAlarm handbook.</whatsthis>
+    </entry>
+    <entry name="Base_StartOfDay" key="StartOfDay" type="DateTime">
+      <label>Start of day for date-only alarms</label>
+      <whatsthis>The earliest time of day at which a date-only alarm will be triggered.</whatsthis>
+      <default>QDateTime(QDate(1900,1,1),QTime(0,0))</default>
+      <emit signal="base_StartOfDayChanged"/>
+    </entry>
+    <entry name="Sod" type="Int" hidden="true">
+      <label>Start of day validation</label>
+      <whatsthis>Do not change this value!</whatsthis>
+      <default>0</default>
+    </entry>
+    <entry name="DisabledColour" type="Color">
+      <label>Disabled alarm color</label>
+      <whatsthis>Text color for disabled alarms in the alarm list.</whatsthis>
+      <default>Qt::lightGray</default>
+      <emit signal="disabledColourChanged"/>
+    </entry>
+    <entry name="ArchivedColour" key="ExpiredColour" type="Color">
+      <label>Archived alarm color</label>
+      <whatsthis>Text color for archived alarms in the alarm list.</whatsthis>
+      <default>Qt::darkRed</default>
+      <emit signal="archivedColourChanged"/>
+    </entry>
+    <entry name="ArchivedKeepDays" key="ExpiredKeepDays" type="Int">
+      <label>Days to keep expired alarms</label>
+      <whatsthis>Specify how many days to keep alarms after they expire or are deleted (except deleted alarms which were never triggered): 0 to not keep, -1 to keep indefinitely, >0 number of days to keep.</whatsthis>
+      <default>7</default>
+      <min>-1</min>
+      <emit signal="archivedKeepDaysChanged"/>
+    </entry>
+  </group>
+  <group name="Defaults">
+    <entry name="DefaultLateCancel" key="DefLateCancel" type="Int">
+      <label>Cancel if late (minutes)</label>
+      <whatsthis>Default value in the alarm edit dialog for late cancellation time (in minutes). 0 for no late cancellation, >0 how many minutes before cancelling.</whatsthis>
+      <default>0</default>
+      <min>0</min>
+    </entry>
+    <entry name="DefaultAutoClose" key="DefAutoClose" type="Bool">
+      <label>Auto-close window after late-cancellation time</label>
+      <whatsthis>Default setting in the alarm edit dialog for "auto close if late".</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultConfirmAck" key="DefConfirmAck" type="Bool">
+      <label>Confirm acknowledgement</label>
+      <whatsthis>Default setting in the alarm edit dialog for "confirm alarm acknowledgement".</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultCopyToKOrganizer" key="DefCopyKOrg" type="Bool">
+      <label>Show in KOrganizer</label>
+      <whatsthis>Default setting in the alarm edit dialog for "show in KOrganizer".</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultSoundType" key="DefSoundType" type="Enum">
+      <label>Sound</label>
+      <whatsthis>Default sound type in the alarm edit dialog.</whatsthis>
+      <choices name="SoundType" prefix="Sound_">
+        <choice name="None"></choice>
+        <choice name="Beep"/>
+        <choice name="File"><label>Play File</label></choice>
+        <choice name="Speak"/>
+      </choices>
+      <default>None</default>
+    </entry>
+    <entry name="DefaultSoundFile" key="DefSoundFile" type="Path">
+      <label>Sound file</label>
+      <whatsthis>Default sound file path in the alarm edit dialog.</whatsthis>
+    </entry>
+    <entry name="Base_DefaultSoundVolume" key="DefSoundVolume" type="Int">
+      <label>Sound volume</label>
+      <whatsthis>Default sound volume in the alarm edit dialog. -1 to deselect volume, or 0 - 100 %</whatsthis>
+      <default>-1</default>
+      <min>-1</min>
+      <max>100</max>
+    </entry>
+    <entry name="DefaultSoundRepeat" key="DefSoundRepeat" type="Bool">
+      <label>Repeat sound file</label>
+      <whatsthis>Default setting in the alarm edit dialog for sound repetition.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultCmdScript" key="DefCmdScript" type="Bool">
+      <label>Enter script</label>
+      <whatsthis>Default setting in the alarm edit dialog for command script entry.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultCmdLogType" key="DefCmdLogType" type="Enum">
+      <label>Command output</label>
+      <whatsthis>Default setting in the alarm edit dialog for where to send command alarm output.</whatsthis>
+      <choices name="CmdLogType" prefix="Log_">
+        <choice name="Discard"><label>Discard Output</label></choice>
+        <choice name="File"><label>Log To File</label></choice>
+        <choice name="Terminal"><label>Execute in terminal window</label></choice>
+      </choices>
+      <default>Discard</default>
+    </entry>
+    <entry name="DefaultCmdLogFile" key="DefLogFile" type="Path">
+      <label>Log file</label>
+      <whatsthis>Default log file path for command alarms in the alarm edit dialog.</whatsthis>
+    </entry>
+    <entry name="DefaultEmailBcc" key="DefEmailBcc" type="Bool">
+      <label>Copy email to self</label>
+      <whatsthis>Default setting in the alarm edit dialog for blind copying emails to self.</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry name="DefaultRecurPeriod" key="DefRecurPeriod" type="Enum">
+      <label>Recurrence period</label>
+      <whatsthis>Default recurrence period in the alarm edit dialog.</whatsthis>
+      <choices name="RecurType" prefix="Recur_">
+        <choice name="None"><label>No recurrence</label></choice>
+        <choice name="Login"><label>At login</label></choice>
+        <choice name="SubDaily"><label>Hourly/minutely</label></choice>
+        <choice name="Daily"/>
+        <choice name="Weekly"/>
+        <choice name="Monthly"/>
+        <choice name="Yearly"/>
+      </choices>
+      <default>None</default>
+    </entry>
+    <entry name="DefaultReminderUnits" key="DefRemindUnits" type="Enum">
+      <label>Reminder units</label>
+      <whatsthis>Default reminder time units in the alarm edit dialog.</whatsthis>
+       <choices name="TimePeriod::Units">
+        <choice name="HoursMinutes"><label>Hours/Minutes</label></choice>
+        <choice name="Days"/>
+        <choice name="Weeks"/>
+      </choices>
+      <default>HoursMinutes</default>
+   </entry>
+    <entry name="DefaultPreAction" key="DefPreAction" type="String">
+      <label>Pre-alarm action</label>
+      <whatsthis>Default command to execute before displaying alarms.</whatsthis>
+    </entry>
+    <entry name="DefaultPostAction" key="DefPostAction" type="String">
+      <label>Post-alarm action</label>
+      <whatsthis>Default command to execute after alarm message windows are closed.</whatsthis>
+    </entry>
+  </group>
+
+  <group name="Notification Messages">
+    <entry name="Base_QuitWarn" key="QuitWarn" type="String">
+      <label>Warn before quitting</label>
+      <whatsthis>Whether to display a warning prompt before quitting KAlarm. Enter "yes" to suppress prompt, blank to display prompt.</whatsthis>
+      <default code="true">QString()</default>
+    </entry>
+    <entry name="Base_ConfirmAlarmDeletion" key="ConfirmAlarmDeletion" type="Bool">
+      <label>Confirm alarm deletions</label>
+      <whatsthis>Whether to be prompted for confirmation each time you delete an alarm.</whatsthis>
+      <default>true</default>
+    </entry>
+    <entry name="Base_EmailQueuedNotify" key="EmailQueuedNotify" type="Bool">
+      <label>Notify when remote emails are queued</label>
+      <whatsthis>Whether to display a notification message whenever an email alarm has queued an email for sending to a remote system. This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted.</whatsthis>
+      <default>false</default>
+    </entry>
+  </group>
+</kcfg>
+
+
+<!--
+const bool                       Preferences::default_quitWarn                = true;
+const bool                       Preferences::default_confirmAlarmDeletion    = true;
+const bool                       Preferences::default_emailQueuedNotify       = false;
+-->

@@ -25,7 +25,7 @@
 #include <QDesktopWidget>
 #include <QtDBus>
 
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>
@@ -1037,16 +1037,15 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 */
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QLatin1String(window));
+	KConfigGroup config(KGlobal::config(), window);
 	QWidget* desktop = KApplication::desktop();
-	QSize s = QSize(config->readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
-	                config->readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), (int)0));
+	QSize s = QSize(config.readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
+	                config.readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), (int)0));
 	if (s.isEmpty())
 		return false;
 	result = s;
 	if (splitterWidth)
-		*splitterWidth = config->readEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), -1);
+		*splitterWidth = config.readEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), -1);
 	return true;
 }
 
@@ -1056,14 +1055,13 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 */
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QLatin1String(window));
+	KConfigGroup config(KGlobal::config(), window);
 	QWidget* desktop = KApplication::desktop();
-	config->writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
-	config->writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
+	config.writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
+	config.writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
 	if (splitterWidth >= 0)
-		config->writeEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), splitterWidth);
-	config->sync();
+		config.writeEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), splitterWidth);
+	config.sync();
 }
 
 /******************************************************************************

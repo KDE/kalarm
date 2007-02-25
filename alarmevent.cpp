@@ -2309,7 +2309,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
  *    end    = end date (invalid to use 'count' instead).
  * Reply = false if no recurrence was set up.
  */
-bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, Preferences::Feb29Type feb29, int count, const QDate& end)
 {
 	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
 		return false;
@@ -2356,13 +2356,13 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const 
  *    end   = end date/time (invalid to use 'count' instead).
  * Reply = false if no recurrence was set up.
  */
-bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate& end, KARecurrence::Feb29Type feb29)
+bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate& end, Preferences::Feb29Type feb29)
 {
 	KDateTime edt = mNextMainDateTime;
 	edt.setDate(end);
 	return setRecur(recurType, freq, count, edt, feb29);
 }
-bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type feb29)
+bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const KDateTime& end, Preferences::Feb29Type feb29)
 {
 	if (count >= -1  &&  (count || end.date().isValid()))
 	{
@@ -3157,7 +3157,7 @@ int KAAlarmEventBase::flags() const
 	     | (mCommandScript   ? KAEvent::SCRIPT : 0);
 }
 
-const QFont& KAAlarmEventBase::font() const
+QFont KAAlarmEventBase::font() const
 {
 	return mDefaultFont ? Preferences::messageFont() : mFont;
 }

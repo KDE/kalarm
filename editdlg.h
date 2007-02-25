@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include "alarmevent.h"
 #include "alarmtext.h"
 #include "datetime.h"
-#include "soundpicker.h"
 
 class QStackedWidget;
 class QFrame;
@@ -53,6 +52,7 @@ class LateCancelSelector;
 class AlarmTimeWidget;
 class RecurrenceEdit;
 class Reminder;
+class SoundPicker;
 class SpecialActionsButton;
 class RepetitionButton;
 class TimeSpinBox;
@@ -244,7 +244,7 @@ class EditAlarmDlg : public KDialog
 		QTime               mSavedTemplateTime;     // mTemplateTime value
 		int                 mSavedTemplateAfterTime;// mTemplateAfterTime value
 		QAbstractButton*    mSavedTypeRadio;        // mMessageRadio, etc
-		SoundPicker::Type   mSavedSoundType;        // mSoundPicker sound type
+		Preferences::SoundType mSavedSoundType;        // mSoundPicker sound type
 		bool                mSavedSound;            // mSoundPicker sound status
 		bool                mSavedRepeatSound;      // mSoundPicker repeat status
 		QString             mSavedSoundFile;        // mSoundPicker sound file

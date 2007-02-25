@@ -101,7 +101,7 @@ KAlarmApp::KAlarmApp()
 	  mSessionClosingDown(false),
 	  mSpeechEnabled(false)
 {
-	Preferences::initialise();
+	Preferences::self()->readConfig();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
@@ -1069,7 +1069,7 @@ void KAlarmApp::changeStartOfDay()
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	if (KAEvent::adjustStartOfDay(cal->events(KCalEvent::ACTIVE)))
 		cal->save();
-	Preferences::updateStartOfDayCheck();  // now that calendar is updated, set OK flag in config file
+	Preferences::updateStartOfDayCheck(sod);  // now that calendar is updated, set OK flag in config file
 	mStartOfDay = sod;
 }
 

@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,11 +52,11 @@ class TimePeriod : public KHBox
 		Q_OBJECT
 	public:
 		/** Units for the time period.
-		 *  @li HOURS_MINUTES - the time period is entered as an hours/minutes value.
-		 *  @li DAYS - the time period is entered as a number of days.
-		 *  @li WEEKS - the time period is entered as a number of weeks.
+		 *  @li HoursMinutes - the time period is entered as an hours/minutes value.
+		 *  @li Days - the time period is entered as a number of days.
+		 *  @li Weeks - the time period is entered as a number of weeks.
 		 */
-		enum Units { HOURS_MINUTES, DAYS, WEEKS };
+		enum Units { HoursMinutes, Days, Weeks };
 
 		/** Constructor.
 		 *  @param allowHourMinute Set false to prevent hours/minutes from being allowed

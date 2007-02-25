@@ -40,7 +40,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
@@ -139,7 +139,6 @@ MainWindow::MainWindow(bool restored)
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MainWin");    // used by LikeBack
-	setAutoSaveSettings(QLatin1String(WINDOW_NAME));    // save window sizes etc.
 	setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
 	if (!restored)
 	{
@@ -147,9 +146,8 @@ MainWindow::MainWindow(bool restored)
 		if (KAlarm::readConfigWindowSize(WINDOW_NAME, s, &mResourcesWidth))
 			resize(s);
 	}
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QString::fromLatin1(WINDOW_NAME));
-	QList<int> order = config->readEntry("ColumnOrder", QList<int>());
+	KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+	QList<int> order = config.readEntry("ColumnOrder", QList<int>());
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	if (!mShowTimeTo)
@@ -188,6 +186,7 @@ MainWindow::MainWindow(bool restored)
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
 	initActions();
 
+	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
 	mWindowList.append(this);
 	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
 	{
@@ -214,11 +213,6 @@ MainWindow::~MainWindow()
 	if (main)
 		KAlarm::writeConfigWindowSize(WINDOW_NAME, main->size(), mResourcesWidth);
 	KGlobal::config()->sync();    // save any new window size to disc
-	KToolBar* tb = toolBar();
-	if (tb) {
-          KConfigGroup cg( KGlobal::config(), "Toolbars");
-          tb->saveSettings(cg );
-        }
 	theApp()->quitIf();
 }
 
@@ -226,7 +220,7 @@ MainWindow::~MainWindow()
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
-void MainWindow::saveProperties(KConfigGroup & config)
+void MainWindow::saveProperties(KConfigGroup& config)
 {
 	config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
 	config.writeEntry("ShowArchived", mShowArchived);
@@ -240,7 +234,7 @@ void MainWindow::saveProperties(KConfigGroup & config)
 * This function is automatically called whenever the app is being
 * restored. Read in whatever was saved in saveProperties().
 */
-void MainWindow::readProperties(const KConfigGroup &config)
+void MainWindow::readProperties(const KConfigGroup& config)
 {
 	mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
 	mShowArchived     = config.readEntry("ShowArchived", false);
@@ -543,7 +537,7 @@ void MainWindow::initActions()
 
 	KToolBar* tb = toolBar();
 	if (tb)
-		tb->applySettings(KGlobal::config()->group( "Toolbars") );
+		tb->applySettings(KGlobal::config()->group("Toolbars"));
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
@@ -1088,7 +1082,7 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-	saveMainWindowSettings(KGlobal::config()->group( WINDOW_NAME) );
+	saveMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 	KEditToolbar dlg(factory());
 	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
@@ -1101,7 +1095,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
 	createGUI(UI_FILE);
-	applyMainWindowSettings(KGlobal::config()->group( WINDOW_NAME) );
+	applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 }
 
 /******************************************************************************

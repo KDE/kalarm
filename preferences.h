@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,225 +28,97 @@
 #include <QFont>
 #include <QDateTime>
 class QWidget;
+class KTimeZone;
 
 #include "colourlist.h"
-#include "karecurrence.h"
-#include "recurrenceedit.h"
-#include "soundpicker.h"
-#include "timeperiod.h"
+#include "kalarmconfig.h"
 
 
 // Settings configured in the Preferences dialog
-class Preferences : public QObject
+class Preferences : public PreferencesBase
 {
 		Q_OBJECT
 	public:
-		enum MailClient { SENDMAIL, KMAIL };
 		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_CONTROL_CENTRE, MAIL_FROM_ADDR };
-		enum CmdLogType { DISCARD_OUTPUT, LOG_TO_FILE, EXEC_IN_TERMINAL };
 
-		static void              initialise();
-		static void              save(bool syncToDisc = true);
-		static void              syncToDisc();
-		static void              updateStartOfDayCheck();
-		static void              connect(const char* signal, const QObject* receiver, const char* member);
+		static Preferences*     self();
+		static void             connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
-		static const KTimeZone*  timeZone(bool reload = false);
-		static const ColourList& messageColours()                 { return mMessageColours; }
-		static QColor            defaultBgColour()                { return mDefaultBgColour; }
-		static QColor            defaultFgColour()                { return default_defaultFgColour; }
-		static const QFont&      messageFont()                    { return mMessageFont; }
-		static const QTime&      startOfDay()                     { return mStartOfDay; }
-		static bool              hasStartOfDayChanged()           { return mStartOfDayChanged; }
-		static bool              runInSystemTray()                { return mRunInSystemTray; }
-		static bool              disableAlarmsIfStopped()         { return mDisableAlarmsIfStopped; }
-		static bool              quitWarn()                       { return notifying(QUIT_WARN); }
-		static void              setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
-		static bool              autostartTrayIcon()              { return mAutostartTrayIcon; }
-		static bool              confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
-		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
-		static bool              askResource()                    { return mAskResource; }
-		static bool              modalMessages()                  { return mModalMessages; }
-		static int               messageButtonDelay()             { return mMessageButtonDelay; }
-		static bool              showArchivedAlarms()             { return mShowArchivedAlarms; }
-		static bool              showAlarmTime()                  { return mShowAlarmTime; }
-		static bool              showTimeToAlarm()                { return mShowTimeToAlarm; }
-		static bool              showResources()                  { return mShowResources; }
-		static int               tooltipAlarmCount()              { return mTooltipAlarmCount; }
-		static bool              showTooltipAlarmTime()           { return mShowTooltipAlarmTime; }
-		static bool              showTooltipTimeToAlarm()         { return mShowTooltipTimeToAlarm; }
-		static const QString&    tooltipTimeToPrefix()            { return mTooltipTimeToPrefix; }
-		static int               daemonTrayCheckInterval()        { return mDaemonTrayCheckInterval; }
-		static MailClient        emailClient()                    { return mEmailClient; }
-		static bool              emailCopyToKMail()               { return mEmailCopyToKMail  &&  mEmailClient == SENDMAIL; }
-		static bool              emailQueuedNotify()              { return notifying(EMAIL_QUEUED_NOTIFY); }
-		static void              setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
-		static MailFrom          emailFrom()                      { return mEmailFrom; }
-		static bool              emailBccUseControlCentre()       { return mEmailBccFrom == MAIL_FROM_CONTROL_CENTRE; }
-		static QString           emailAddress();
-		static QString           emailBccAddress();
-		static QString           cmdXTermCommand()                { return mCmdXTermCommand; }
-		static QColor            disabledColour()                 { return mDisabledColour; }
-		static QColor            archivedColour()                 { return mArchivedColour; }
-		static int               archivedKeepDays()               { return mArchivedKeepDays; }
-		static SoundPicker::Type defaultSoundType()               { return mDefaultSoundType; }
-		static const QString&    defaultSoundFile()               { return mDefaultSoundFile; }
-		static float             defaultSoundVolume()             { return mDefaultSoundVolume; }
-		static bool              defaultSoundRepeat()             { return mDefaultSoundRepeat; }
-		static int               defaultLateCancel()              { return mDefaultLateCancel; }
-		static bool              defaultAutoClose()               { return mDefaultAutoClose; }
-		static bool              defaultConfirmAck()              { return mDefaultConfirmAck; }
-		static bool              defaultCopyToKOrganizer()        { return mDefaultCopyToKOrganizer; }
-		static bool              defaultCmdScript()               { return mDefaultCmdScript; }
-		static CmdLogType        defaultCmdLogType()              { return mDefaultCmdLogType; }
-		static QString           defaultCmdLogFile()              { return mDefaultCmdLogFile; }
-		static bool              defaultEmailBcc()                { return mDefaultEmailBcc; }
-		static RecurrenceEdit::RepeatType
-		                         defaultRecurPeriod()             { return mDefaultRecurPeriod; }
-		static KARecurrence::Feb29Type
-		                         defaultFeb29Type()               { return mDefaultFeb29Type; }
-		static TimePeriod::Units defaultReminderUnits()           { return mDefaultReminderUnits; }
-		static const QString&    defaultPreAction()               { return mDefaultPreAction; }
-		static const QString&    defaultPostAction()              { return mDefaultPostAction; }
+		static const KTimeZone* timeZone(bool reload = false);
+		static void             setTimeZone(const KTimeZone*);
+		static ColourList       messageColours();
+		static void             setMessageColours(const ColourList&);
+		static QColor           defaultFgColour()                { return Qt::black; }
+		static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
+		static void             setStartOfDay(const QTime&);
+		static void             updateStartOfDayCheck(const QTime&);
+		static bool             hasStartOfDayChanged()           { return mStartOfDayChanged; }
+		static bool             quitWarn()                       { return notifying(QUIT_WARN); }
+		static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
+		static bool             confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
+		static void             setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
+		static bool             showAlarmTime()                  { return !self()->showTimeToAlarm() || self()->base_ShowAlarmTime(); }
+		static void             setShowAlarmTime(bool yes)       { self()->setBase_ShowAlarmTime(yes); }
+		static bool             emailCopyToKMail()               { return self()->mBase_EmailCopyToKMail  &&  self()->mEmailClient == sendmail; }
+		static void             setEmailCopyToKMail(bool yes)    { self()->setBase_EmailCopyToKMail(yes); }
+		static bool             emailQueuedNotify()              { return notifying(EMAIL_QUEUED_NOTIFY); }
+		static void             setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
+		static MailFrom         emailFrom();
+		static QString          emailAddress();
+		static void             setEmailAddress(MailFrom, const QString& address);
+		static MailFrom         emailBccFrom();
+		static QString          emailBccAddress();
+		static void             setEmailBccAddress(bool useControlCentre, const QString& address);
+		static bool             emailBccUseControlCentre();
+		static QString          cmdXTermCommand();
+		static void             setCmdXTermCommand(const QString& cmd);
+		static float            defaultSoundVolume()             { return static_cast<float>(self()->mBase_DefaultSoundVolume); }
+		static void             setDefaultSoundVolume(float v)   { self()->setBase_DefaultSoundVolume(static_cast<int>(v)); }
 
 		// Config file entry names for notification messages
-		static const QString     QUIT_WARN;
-		static const QString     CONFIRM_ALARM_DELETION;
-		static const QString     EMAIL_QUEUED_NOTIFY;
+		static const char*      QUIT_WARN;
+		static const char*      CONFIRM_ALARM_DELETION;
+		static const char*      EMAIL_QUEUED_NOTIFY;
 
-		// Default values for settings
-		static const KTimeZone*                 default_timeZone();
-		static const ColourList                 default_messageColours;
-		static const QColor                     default_defaultBgColour;
-		static const QColor                     default_defaultFgColour;
-		static const QFont&                     default_messageFont()  { return mDefault_messageFont; };
-		static const QTime                      default_startOfDay;
-		static const bool                       default_runInSystemTray;
-		static const bool                       default_disableAlarmsIfStopped;
-		static const bool                       default_quitWarn;
-		static const bool                       default_autostartTrayIcon;
-		static const bool                       default_confirmAlarmDeletion;
-		static const bool                       default_askResource;
-		static const bool                       default_modalMessages;
-		static const int                        default_messageButtonDelay;
-		static const bool                       default_showArchivedAlarms;
-		static const bool                       default_showAlarmTime;
-		static const bool                       default_showTimeToAlarm;
-		static const bool                       default_showResources;
-		static const int                        default_tooltipAlarmCount;
-		static const bool                       default_showTooltipAlarmTime;
-		static const bool                       default_showTooltipTimeToAlarm;
-		static const QString                    default_tooltipTimeToPrefix;
-		static const int                        default_daemonTrayCheckInterval;
-		static const MailClient                 default_emailClient;
-		static const bool                       default_emailCopyToKMail;
-		static MailFrom                         default_emailFrom();
-		static const bool                       default_emailQueuedNotify;
-		static const MailFrom                   default_emailBccFrom;
-		static const QString                    default_emailAddress;
-		static const QString                    default_emailBccAddress;
-		static const QColor                     default_disabledColour;
-		static const QColor                     default_archivedColour;
-		static const int                        default_archivedKeepDays;
-		static const QString                    default_defaultSoundFile;
-		static const float                      default_defaultSoundVolume;
-		static const int                        default_defaultLateCancel;
-		static const bool                       default_defaultAutoClose;
-		static const bool                       default_defaultCopyToKOrganizer;
-		static const SoundPicker::Type          default_defaultSoundType;
-		static const bool                       default_defaultSoundRepeat;
-		static const bool                       default_defaultConfirmAck;
-		static const bool                       default_defaultCmdScript;
-		static const CmdLogType                 default_defaultCmdLogType;
-		static const bool                       default_defaultEmailBcc;
-		static const RecurrenceEdit::RepeatType default_defaultRecurPeriod;
-		static const KARecurrence::Feb29Type    default_defaultFeb29Type;
-		static const TimePeriod::Units          default_defaultReminderUnits;
-		static const QString                    default_defaultPreAction;
-		static const QString                    default_defaultPostAction;
 
 	signals:
-		void  preferencesChanged();
-		void  startOfDayChanged(const QTime& oldStartOfDay);
+		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
+
+	private slots:
+		void  startDayChange(const QDateTime&);
 
 	private:
-		Preferences()  { }     // only one instance allowed
-		void  emitPreferencesChanged();
-		void  emitStartOfDayChanged();
+		Preferences();         // only one instance allowed
+		virtual void            usrReadConfig();
+		bool                    convertOldPrefs();
 
-		static void                read();
-		static void                convertOldPrefs();
-		static int                 startOfDayCheck();
-		static QString	           emailFrom(MailFrom, bool useAddress, bool bcc);
-		static MailFrom            emailFrom(const QString&);
-		static void                setNotify(const QString& messageID, bool notify);
-		static bool                notifying(const QString& messageID);
+		static int              startOfDayCheck(const QTime&);
+		static void             setNotify(const QString& messageID, bool notify);
+		static bool             notifying(const QString& messageID);
 
-		static Preferences*        mInstance;
-		static QFont               mDefault_messageFont;
-		static QString             mEmailAddress;
-		static QString             mEmailBccAddress;
-		static const KTimeZone*    mSystemTimeZone;
+		static Preferences*     mInstance;
+		static const KTimeZone* mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
-		friend class MiscPrefTab;
-		friend class StorePrefTab;
-		friend class EditPrefTab;
-		friend class ViewPrefTab;
-		friend class FontColourPrefTab;
-		friend class EmailPrefTab;
-		static void                setEmailAddress(MailFrom, const QString& address);
-		static void                setEmailBccAddress(bool useControlCentre, const QString& address);
-		static const KTimeZone*    mTimeZone;
-		static ColourList          mMessageColours;
-		static QColor              mDefaultBgColour;
-		static QFont               mMessageFont;
-		static QTime               mStartOfDay;
-		static bool                mRunInSystemTray;
-		static bool                mDisableAlarmsIfStopped;
-		static bool                mAutostartTrayIcon;
-		static bool                mAskResource;
-		static bool                mModalMessages;
-		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-		static bool                mShowArchivedAlarms;
-		static bool                mShowAlarmTime;
-		static bool                mShowTimeToAlarm;
-		static bool                mShowResources;
-		static int                 mTooltipAlarmCount;
-		static bool                mShowTooltipAlarmTime;
-		static bool                mShowTooltipTimeToAlarm;
-		static QString             mTooltipTimeToPrefix;
-		static int                 mDaemonTrayCheckInterval;
-		static MailClient          mEmailClient;
-		static MailFrom            mEmailFrom;
-		static MailFrom            mEmailBccFrom;
-		static bool                mEmailCopyToKMail;
-		static QString             mCmdXTermCommand;
-		static QColor              mDisabledColour;
-		static QColor              mArchivedColour;
-		static int                 mArchivedKeepDays;     // 0 = don't keep, -1 = keep indefinitely
-		// Default settings for Edit Alarm dialog
-		static QString             mDefaultSoundFile;
-		static float               mDefaultSoundVolume;
-		static int                 mDefaultLateCancel;
-		static bool                mDefaultAutoClose;
-		static bool                mDefaultCopyToKOrganizer;
-		static SoundPicker::Type   mDefaultSoundType;
-		static bool                mDefaultSoundRepeat;
-		static bool                mDefaultConfirmAck;
-		static bool                mDefaultEmailBcc;
-		static bool                mDefaultCmdScript;
-		static CmdLogType          mDefaultCmdLogType;
-		static QString             mDefaultCmdLogFile;
-		static RecurrenceEdit::RepeatType mDefaultRecurPeriod;
-		static KARecurrence::Feb29Type    mDefaultFeb29Type;
-		static TimePeriod::Units   mDefaultReminderUnits;
-		static QString             mDefaultPreAction;
-		static QString             mDefaultPostAction;
-		// Change tracking
-		static QTime               mOldStartOfDay;       // previous start-of-day time
-		static bool                mStartOfDayChanged;   // start-of-day check value doesn't tally with mStartOfDay
+		ColourList          mMessageColours;
+		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
+		static QTime            mOldStartOfDay;       // previous start-of-day time
+		static bool             mStartOfDayChanged;   // start-of-day check value doesn't tally with new StartOfDay
+
+		// Converted values from previous config versions
+		Preferences::SoundType  mConvertedDefSoundType;
+		Preferences::CmdLogType mConvertedDefCmdLogType;
+		Preferences::RecurType  mConvertedRecurPeriod;
+		TimePeriod::Units       mConvertedReminderUnits;
+		QString                 mConvertedEmailFrom;
+		QString                 mConvertedBccAddress;
+		bool                    mConvertDefSoundType;
+		bool                    mConvertDefCmdLogType;
+		bool                    mConvertRecurPeriod;
+		bool                    mConvertReminderUnits;
+		bool                    mConverted;          // true once the config no longer needs to be converted
+		bool                    mConverting;         // true if currently writing converted config
 };
 
 #endif // PREFERENCES_H

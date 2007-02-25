@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -1514,32 +1514,32 @@ void YearlyRule::setMonths(const QList<int>& mnths)
 /******************************************************************************
  * Return the date for February 29th alarms in non-leap years.
  */
-KARecurrence::Feb29Type YearlyRule::feb29Type() const
+Preferences::Feb29Type YearlyRule::feb29Type() const
 {
 	if (mFeb29Combo->isEnabled())
 	{
 		switch (mFeb29Combo->currentIndex())
 		{
-			case 1:   return KARecurrence::FEB29_MAR1;
-			case 2:   return KARecurrence::FEB29_FEB28;
+			case 1:   return Preferences::Feb29_Mar1;
+			case 2:   return Preferences::Feb29_Feb28;
 			default:  break;
 		}
 	}
-	return KARecurrence::FEB29_FEB29;
+	return Preferences::Feb29_None;
 }
 
 /******************************************************************************
  * Set the date for February 29th alarms to trigger in non-leap years.
  */
-void YearlyRule::setFeb29Type(KARecurrence::Feb29Type type)
+void YearlyRule::setFeb29Type(Preferences::Feb29Type type)
 {
 	int index;
 	switch (type)
 	{
 		default:
-		case KARecurrence::FEB29_FEB29:  index = 0;  break;
-		case KARecurrence::FEB29_MAR1:   index = 1;  break;
-		case KARecurrence::FEB29_FEB28:  index = 2;  break;
+		case Preferences::Feb29_None:  index = 0;  break;
+		case Preferences::Feb29_Mar1:  index = 1;  break;
+		case Preferences::Feb29_Feb28: index = 2;  break;
 	}
 	mFeb29Combo->setCurrentIndex(index);
 }

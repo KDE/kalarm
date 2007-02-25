@@ -101,6 +101,8 @@ qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_SOURCE_DIR}/kmail/org.kde.kmail.
 
 kde4_automoc(${kalarm_bin_SRCS})
 
+kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
+
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
@@ -113,8 +115,8 @@ install(TARGETS kalarm_bin  DESTINATION ${BIN_INSTALL_DIR} )
 
 install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_DIR} )
 install( FILES kalarm.tray.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR} )
+install( FILES kalarmconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 install( FILES kalarmui.rc  DESTINATION ${DATA_INSTALL_DIR}/kalarm )
 install( FILES org.kde.kalarm.notify.xml org.kde.kalarm.kalarm.xml DESTINATION ${DBUS_INTERFACES_DIR} )
-
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

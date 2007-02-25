@@ -27,6 +27,7 @@
 
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -106,7 +107,7 @@ void Daemon::createDcopHandler()
 	mRunning = isRunning(false);
 
 	mStatusTimerInterval = Preferences::daemonTrayCheckInterval();
-	Preferences::connect(SIGNAL(preferencesChanged()), mInstance, SLOT(slotPreferencesChanged()));
+	Preferences::connect(SIGNAL(daemonTrayCheckIntervalChanged(int)), mInstance, SLOT(slotCheckIntervalChanged(int)));
 
 	mStatusTimer = new QTimer(mInstance);
 	connect(mStatusTimer, SIGNAL(timeout()), mInstance, SLOT(timerCheckIfRunning()));
@@ -437,9 +438,9 @@ void Daemon::enableAutoStart(bool enable)
 	{
 		// Failure - the daemon probably isn't running, so rewrite its config file for it
 		KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
-		adconfig.setGroup(DAEMON_AUTOSTART_SECTION);
-		adconfig.writeEntry(DAEMON_AUTOSTART_KEY, enable);
-		adconfig.sync();
+		KConfigGroup config(&adconfig, DAEMON_AUTOSTART_SECTION);
+		config.writeEntry(DAEMON_AUTOSTART_KEY, enable);
+		config.sync();
 	}
 }
 
@@ -449,8 +450,8 @@ void Daemon::enableAutoStart(bool enable)
 bool Daemon::autoStart()
 {
 	KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
-	adconfig.setGroup(DAEMON_AUTOSTART_SECTION);
-	return adconfig.readEntry(DAEMON_AUTOSTART_KEY, true);
+	KConfigGroup config(&adconfig, DAEMON_AUTOSTART_SECTION);
+	return config.readEntry(DAEMON_AUTOSTART_KEY, true);
 }
 
 /******************************************************************************
@@ -563,9 +564,8 @@ void Daemon::setFastCheck()
 * Called when a program setting has changed.
 * If the system tray icon update interval has changed, reset the timer.
 */
-void Daemon::slotPreferencesChanged()
+void Daemon::slotCheckIntervalChanged(int newInterval)
 {
-	int newInterval = Preferences::daemonTrayCheckInterval();
 	if (newInterval != mStatusTimerInterval)
 	{
 		// Daemon check interval has changed

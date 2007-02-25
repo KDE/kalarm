@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,8 +141,8 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	  mDateOnly(false),
 	  mReadOnly(readOnly)
 {
-	setCaption( caption );
-	setButtons( Ok|Cancel );
+	setCaption(caption);
+	setButtons(Ok|Cancel);
 	int spacing = spacingHint();
 	QWidget* page = new QWidget(this);
 	setMainWidget(page);
@@ -267,7 +267,7 @@ void RepetitionDlg::set(int interval, int count, bool dateOnly, int maxDuration)
 		mTimeSelector->setChecked(false);
 	else
 	{
-		TimePeriod::Units units = mDateOnly ? TimePeriod::DAYS : TimePeriod::HOURS_MINUTES;
+		TimePeriod::Units units = mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes;
 		mTimeSelector->setMinutes(interval, mDateOnly, units);
 		bool on = mTimeSelector->isChecked();
 		repetitionToggled(on);    // enable/disable controls
@@ -345,7 +345,7 @@ void RepetitionDlg::countChanged(int count)
 		bool blocked = mDuration->signalsBlocked();
 		mDuration->blockSignals(true);
 		mDuration->setMinutes(count * interval, mDateOnly,
-		                      (mDateOnly ? TimePeriod::DAYS : TimePeriod::HOURS_MINUTES));
+		                      (mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes));
 		mDuration->blockSignals(blocked);
 	}
 }

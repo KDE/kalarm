@@ -1,7 +1,7 @@
 /*
  *  karecurrence.h  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #define KARECURRENCE_H
 
 #include <kcal/recurrence.h>
+
+#include "preferences.h"
 class DateTime;
 
 
@@ -41,24 +43,18 @@ class KARecurrence : public KCal::Recurrence
 			ANNUAL_DATE,   // yearly, on a specified date in each of the specified months
 			ANNUAL_POS     // yearly, on specified weekdays in the specified weeks of the specified months
 		};
-		/** The date on which a yearly February 29th recurrence falls in non-leap years */
-		enum Feb29Type {
-			FEB29_FEB29,    // February 29th recurrences are omitted in non-leap years
-			FEB29_MAR1,     // February 29th recurrences are on March 1st in non-leap years
-			FEB29_FEB28     // February 29th recurrences are on February 28th in non-leap years
-		};
 
-		KARecurrence() : KCal::Recurrence(), mFeb29Type(FEB29_FEB29), mCachedType(-1) { }
+		KARecurrence() : KCal::Recurrence(), mFeb29Type(Preferences::Feb29_None), mCachedType(-1) { }
 		KARecurrence(const KCal::Recurrence& r) : KCal::Recurrence(r) { fix(); }
 		KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
 		bool        set(const QString& icalRRULE);
 		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end)
 		                        { return set(t, freq, count, -1, start, end); }
-		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
+		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end, Preferences::Feb29Type f29)
 		                        { return set(t, freq, count, f29, start, end); }
 		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
 		                        { return init(t, freq, count, -1, start, end); }
-		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
+		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Preferences::Feb29Type f29)
 		                        { return init(t, freq, count, f29, start, end); }
 		void        fix();
 		void        writeRecurrence(KCal::Recurrence&) const;
@@ -71,9 +67,9 @@ class KARecurrence : public KCal::Recurrence
 		Type        type() const;
 		static Type type(const KCal::RecurrenceRule*);
 		static bool dailyType(const KCal::RecurrenceRule*);
-		Feb29Type   feb29Type() const                 { return mFeb29Type; }
-		static Feb29Type defaultFeb29Type()           { return mDefaultFeb29; }
-		static void setDefaultFeb29Type(Feb29Type t)  { mDefaultFeb29 = t; }
+		Preferences::Feb29Type feb29Type() const                   { return mFeb29Type; }
+		static Preferences::Feb29Type defaultFeb29Type()           { return mDefaultFeb29; }
+		static void setDefaultFeb29Type(Preferences::Feb29Type t)  { mDefaultFeb29 = t; }
 
 	private:
 		bool        set(Type, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
@@ -81,9 +77,9 @@ class KARecurrence : public KCal::Recurrence
 		int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;
 		int         longestWeeklyInterval(const QBitArray& days, int frequency);
 
-		static Feb29Type mDefaultFeb29;
-		Feb29Type   mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
-		mutable int mCachedType;
+		static Preferences::Feb29Type mDefaultFeb29;
+		Preferences::Feb29Type   mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
+		mutable int              mCachedType;
 };
 
 #endif // KARECURRENCE_H

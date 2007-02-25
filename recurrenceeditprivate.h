@@ -1,7 +1,7 @@
 /*
  *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright © 2003,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -171,8 +171,8 @@ class YearlyRule : public MonthYearRule
 		QList<int>       months() const;
 		void             setMonths(const QList<int>& months);
 		void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
-		KARecurrence::Feb29Type feb29Type() const;
-		void             setFeb29Type(KARecurrence::Feb29Type);
+		Preferences::Feb29Type feb29Type() const;
+		void             setFeb29Type(Preferences::Feb29Type);
 		virtual QWidget* validate(QString& errorMessage);
 		virtual void     saveState();
 		virtual bool     stateChanged() const;

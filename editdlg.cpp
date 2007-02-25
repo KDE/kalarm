@@ -581,7 +581,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	mCmdExecInTerm = new RadioButton(i18n_u_ExecInTermWindow(), cmdOutputBox);
 	mCmdExecInTerm->setFixedSize(mCmdExecInTerm->sizeHint());
 	mCmdExecInTerm->setWhatsThis(i18n("Check to execute the command in a terminal window"));
-	mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::EXEC_IN_TERMINAL);
+	mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::Log_Terminal);
 	vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignLeft);
 
 	// Log file name edit box
@@ -608,7 +608,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18n_g_LogToFile(), mCmdOutputGroup, cmdOutputBox);
 	mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
 	mCmdLogToFile->setWhatsThis(i18n("Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
-	mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::LOG_TO_FILE);
+	mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::Log_File);
 	vlayout->addWidget(mCmdLogToFile, 0, Qt::AlignLeft);
 	vlayout->addWidget(box);
 
@@ -616,7 +616,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	mCmdDiscardOutput = new RadioButton(i18n("Discard"), cmdOutputBox);
 	mCmdDiscardOutput->setFixedSize(mCmdDiscardOutput->sizeHint());
 	mCmdDiscardOutput->setWhatsThis(i18n("Check to discard command output."));
-	mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::DISCARD_OUTPUT);
+	mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::Log_Discard);
 	vlayout->addWidget(mCmdDiscardOutput, 0, Qt::AlignLeft);
 
 	// Top-adjust the controls
@@ -824,7 +824,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			mEmailAttachList->addItems(event->emailAttachments());
 
 		mLateCancel->setMinutes(event->lateCancel(), event->startDateTime().isDateOnly(),
-		                        TimePeriod::HOURS_MINUTES);
+		                        TimePeriod::HoursMinutes);
 		mLateCancel->showAutoClose(action == KAEvent::MESSAGE || action == KAEvent::FILE);
 		mLateCancel->setAutoClose(event->autoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
@@ -850,10 +850,10 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
 		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		SoundPicker::Type soundType = event->speak()                ? SoundPicker::SPEAK
-		                            : event->beep()                 ? SoundPicker::BEEP
-		                            : !event->audioFile().isEmpty() ? SoundPicker::PLAY_FILE
-		                            :                                 SoundPicker::NONE;
+		Preferences::SoundType soundType = event->speak()                ? Preferences::Sound_Speak
+		                                 : event->beep()                 ? Preferences::Sound_Beep
+		                                 : !event->audioFile().isEmpty() ? Preferences::Sound_File
+		                                 :                                 Preferences::Sound_None;
 		mSoundPicker->set(soundType, event->audioFile(), event->soundVolume(),
 		                  event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
 		RadioButton* logType = event->commandXterm()       ? mCmdExecInTerm
@@ -892,7 +892,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		else
 			mTimeWidget->setDateTime(defaultTime);
 		mMessageRadio->setChecked(true);
-		mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HOURS_MINUTES);
+		mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
 		mLateCancel->showAutoClose(true);
 		mLateCancel->setAutoClose(Preferences::defaultAutoClose());
 		mLateCancel->setFixedSize(mLateCancel->sizeHint());
@@ -1186,7 +1186,7 @@ bool EditAlarmDlg::stateChanged() const
 			||  mSavedPostAction != mSpecialActionsButton->postAction())
 				return true;
 		}
-		if (mSavedSoundType == SoundPicker::PLAY_FILE)
+		if (mSavedSoundType == Preferences::Sound_File)
 		{
 			if (mSavedSoundFile != mSoundPicker->file())
 				return true;
@@ -1358,8 +1358,8 @@ int EditAlarmDlg::getAlarmFlags() const
 	bool displayAlarm = mMessageRadio->isChecked() || mFileRadio->isChecked();
 	bool cmdAlarm     = mCommandRadio->isChecked();
 	bool emailAlarm   = mEmailRadio->isChecked();
-	return (displayAlarm && mSoundPicker->sound() == SoundPicker::BEEP           ? KAEvent::BEEP : 0)
-	     | (displayAlarm && mSoundPicker->sound() == SoundPicker::SPEAK          ? KAEvent::SPEAK : 0)
+	return (displayAlarm && mSoundPicker->sound() == Preferences::Sound_Beep     ? KAEvent::BEEP : 0)
+	     | (displayAlarm && mSoundPicker->sound() == Preferences::Sound_Speak    ? KAEvent::SPEAK : 0)
 	     | (displayAlarm && mSoundPicker->repeat()                               ? KAEvent::REPEAT_SOUND : 0)
 	     | (displayAlarm && mConfirmAck->isChecked()                             ? KAEvent::CONFIRM_ACK : 0)
 	     | (displayAlarm && mLateCancel->isAutoClose()                           ? KAEvent::AUTO_CLOSE : 0)

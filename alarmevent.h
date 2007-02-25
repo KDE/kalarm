@@ -34,6 +34,7 @@ namespace KCal { class CalendarLocal; }
 #include "datetime.h"
 #include "karecurrence.h"
 #include "kcalendar.h"
+#include "preferences.h"
 
 class AlarmCalendar;
 class KARecurrence;
@@ -70,7 +71,7 @@ class KAAlarmEventBase
 		const QColor&      bgColour() const            { return mBgColour; }
 		const QColor&      fgColour() const            { return mFgColour; }
 		bool               defaultFont() const         { return mDefaultFont; }
-		const QFont&       font() const;
+		QFont              font() const;
 		int                lateCancel() const          { return mLateCancel; }
 		bool               autoClose() const           { return mAutoClose; }
 		bool               commandScript() const       { return mCommandScript; }
@@ -425,7 +426,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
 		bool               setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end);
 		bool               setRecurMonthlyByPos(int freq, const QList<MonthPos>& pos, int count, const QDate& end);
-		bool               setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
+		bool               setRecurAnnualByDate(int freq, const QList<int>& months, int day, Preferences::Feb29Type, int count, const QDate& end);
 		bool               setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, const QDate& end);
 //		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
 #ifdef NDEBUG
@@ -447,8 +448,8 @@ class KAEvent : public KAAlarmEventBase
 		};
 
 		void               copy(const KAEvent&);
-		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::FEB29_FEB29);
-		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::FEB29_FEB29);
+		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, Preferences::Feb29Type = Preferences::Feb29_None);
+		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, Preferences::Feb29Type = Preferences::Feb29_None);
 		void               clearRecur();
 		KARecurrence::Type checkRecur() const;
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result, int& remainingCount) const;
