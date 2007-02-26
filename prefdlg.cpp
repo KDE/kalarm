@@ -1196,7 +1196,6 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::setDefaultSoundFile(mSoundFile->text());
 	Preferences::setDefaultSoundRepeat(mSoundRepeat->isChecked());
 	Preferences::setDefaultCmdScript(mCmdScript->isChecked());
-#warning KDE 3 change from setDefaultCmdLogFile()
 	Preferences::setDefaultCmdLogType((mCmdXterm->isChecked() ? Preferences::Log_Terminal : Preferences::Log_Discard));
 	Preferences::setDefaultEmailBcc(mEmailBcc->isChecked());
 	Preferences::setDefaultCopyToKOrganizer(mCopyToKOrganizer->isChecked());
