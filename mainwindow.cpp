@@ -23,6 +23,7 @@
 #include <QHeaderView>
 #include <QSplitter>
 #include <QByteArray>
+#include <QDesktopWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
@@ -142,9 +143,8 @@ MainWindow::MainWindow(bool restored)
 	setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
 	if (!restored)
 	{
-		QSize s;
-		if (KAlarm::readConfigWindowSize(WINDOW_NAME, s, &mResourcesWidth))
-			resize(s);
+		KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+		mResourcesWidth = config.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
 	}
 	KConfigGroup config(KGlobal::config(), WINDOW_NAME);
 	QList<int> order = config.readEntry("ColumnOrder", QList<int>());
@@ -160,7 +160,9 @@ MainWindow::MainWindow(bool restored)
 	// Create the calendar resource selector widget
 	AlarmResources* resources = AlarmResources::instance();
 	mResourceSelector = new ResourceSelector(resources, mSplitter);
+#warning Prevent resources being resized when window is resized
 	mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
+	mSplitter->setStretchFactor(1, 1);
 	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
 
 	// Create the alarm list widget
@@ -186,6 +188,7 @@ MainWindow::MainWindow(bool restored)
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
 	initActions();
 
+#warning Does not save to correct group in config file
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
 	mWindowList.append(this);
 	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
@@ -209,9 +212,6 @@ MainWindow::~MainWindow()
 		else
 			theApp()->trayWindow()->removeWindow(this);
 	}
-	MainWindow* main = mainMainWindow();
-	if (main)
-		KAlarm::writeConfigWindowSize(WINDOW_NAME, main->size(), mResourcesWidth);
 	KGlobal::config()->sync();    // save any new window size to disc
 	theApp()->quitIf();
 }
@@ -290,9 +290,14 @@ void MainWindow::closeAll()
 void MainWindow::resizeEvent(QResizeEvent* re)
 {
 	// Save the window's new size only if it's the first main window
-	if (mainMainWindow() == this)
-		KAlarm::writeConfigWindowSize(WINDOW_NAME, re->size(), mResourcesWidth);
 	MainWindowBase::resizeEvent(re);
+/*	if (mResourcesWidth > 0)
+	{
+		QList<int> widths;
+		widths.append(mResourcesWidth);
+		widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
+		mSplitter->setSizes(widths);
+	}*/
 }
 
 void MainWindow::resourcesResized()
@@ -308,7 +313,10 @@ void MainWindow::resourcesResized()
 		if (mResourcesWidth <= 5)
 			mResourcesWidth = 0;
 		else if (mainMainWindow() == this)
-			KAlarm::writeConfigWindowSize(WINDOW_NAME, size(), mResourcesWidth);
+		{
+			KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+			config.writeEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
+		}
 	}
 }
 
