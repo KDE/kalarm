@@ -100,27 +100,12 @@ void Preferences::usrReadConfig()
 {
 	if (mConverting)
 		return;   // prevent recursion
-	bool convert = false;
-	if (!mConverted)
-		convert = convertOldPrefs();    // convert preferences written by previous KAlarm versions
 	PreferencesBase::usrReadConfig();
-	if (convert)
+	if (!mConverted)
 	{
-		// Overwrite values with the conversions from an older config version
 		mConverting = true;
-		if (mConvertDefSoundType)
-			setDefaultSoundType(mConvertedDefSoundType);
-		if (mConvertDefCmdLogType)
-			setDefaultCmdLogType(mConvertedDefCmdLogType);
-		if (mConvertRecurPeriod)
-			setDefaultRecurPeriod(mConvertedRecurPeriod);
-		if (mConvertReminderUnits)
-			setDefaultReminderUnits(mConvertedReminderUnits);
-		if (!mConvertedEmailFrom.isNull())
-			setBase_EmailFrom(mConvertedEmailFrom);
-		if (!mConvertedBccAddress.isNull())
-			setBase_EmailBccAddress(mConvertedBccAddress);
-		writeConfig();
+		if (convertOldPrefs())    // convert preferences written by previous KAlarm versions
+			writeConfig();
 		mConverting = false;
 		mConverted = true;
 	}
@@ -340,76 +325,160 @@ bool Preferences::convertOldPrefs()
 		return false;     // config format is up to date
 
 	// Config file entry names for entries which need to be converted
-	static const char* DEF_SOUND_TYPE    = "DefSoundType";
-	static const char* DEF_CMD_LOG_TYPE  = "DefCmdLogType";
-	static const char* DEF_RECUR_PERIOD  = "DefRecurPeriod";
-	static const char* DEF_REMIND_UNITS  = "DefRemindUnits";
+	static const char* XDEF_LATE_CANCEL  = "DefLateCancel";
+	static const char* XDEF_AUTO_CLOSE   = "DefAutoClose";
+	static const char* XDEF_CONFIRM_ACK  = "DefConfirmAck";
+	static const char* XDEF_COPY_TO_KORG = "DefCopyKOrg";
+	static const char* XDEF_SOUND_TYPE   = "DefSoundType";
+	static const char* XDEF_SOUND_FILE   = "DefSoundFile";
+	static const char* XDEF_SOUND_VOLUME = "DefSoundVolume";
+	static const char* XDEF_SOUND_REPEAT = "DefSoundRepeat";
+	static const char* XDEF_CMD_SCRIPT   = "DefCmdScript";
+	static const char* XDEF_CMD_LOG_TYPE = "DefCmdLogType";
+	static const char* XDEF_LOG_FILE     = "DefLogFile";
+	static const char* XDEF_EMAIL_BCC    = "DefEmailBcc";
+	static const char* XDEF_RECUR_PERIOD = "DefRecurPeriod";
+	static const char* XDEF_REMIND_UNITS = "DefRemindUnits";
+	static const char* XDEF_PRE_ACTION   = "DefPreAction";
+	static const char* XDEF_POST_ACTION  = "DefPostAction";
 	static const char* EMAIL_FROM        = "EmailFrom";
 	static const char* EMAIL_BCC_ADDRESS = "EmailBccAddress";
 	config.changeGroup(DEFAULTS_SECTION);
-	QMap<QString, QString> entries = config.entryMap();
-	if (version >= KAlarm::Version(1,4,6))
+	if (config.hasKey(XDEF_CMD_LOG_TYPE))
 	{
-		// Convert KAlarm 1.9.4 preferences
-		switch (config.readEntry(DEF_SOUND_TYPE, (int)0))
+		CmdLogType type;
+		switch (config.readEntry(XDEF_CMD_LOG_TYPE, (int)0))
 		{
 			default:
-			case 0:  mConvertedDefSoundType = Preferences::Sound_None;  break;
-			case 1:  mConvertedDefSoundType = Preferences::Sound_Beep;  break;
-			case 2:  mConvertedDefSoundType = Preferences::Sound_File;  break;
-			case 3:  mConvertedDefSoundType = Preferences::Sound_Speak; break;
+			case 0:  type = Preferences::Log_Discard;  break;
+			case 1:  type = Preferences::Log_File;     break;
+			case 2:  type = Preferences::Log_Terminal; break;
 		}
-		mConvertDefSoundType = true;
-		config.writeEntry(DEF_SOUND_TYPE, static_cast<int>(mConvertedDefSoundType + 1));   // ensure value is written in usrReadConfig()
-		switch (config.readEntry(DEF_CMD_LOG_TYPE, (int)0))
-		{
-			default:
-			case 0:  mConvertedDefCmdLogType = Preferences::Log_Discard;  break;
-			case 1:  mConvertedDefCmdLogType = Preferences::Log_File;     break;
-			case 2:  mConvertedDefCmdLogType = Preferences::Log_Terminal; break;
-		}
-		mConvertDefCmdLogType = true;
-		config.writeEntry(DEF_CMD_LOG_TYPE, static_cast<int>(mConvertedDefCmdLogType + 1));   // ensure value is written in usrReadConfig()
-		switch (config.readEntry(DEF_RECUR_PERIOD, (int)0))
-		{
-			default:
-			case 0:  mConvertedRecurPeriod = Preferences::Recur_None;     break;
-			case 1:  mConvertedRecurPeriod = Preferences::Recur_Login;    break;
-			case 2:  mConvertedRecurPeriod = Preferences::Recur_SubDaily; break;
-			case 3:  mConvertedRecurPeriod = Preferences::Recur_Daily;    break;
-			case 4:  mConvertedRecurPeriod = Preferences::Recur_Weekly;   break;
-			case 5:  mConvertedRecurPeriod = Preferences::Recur_Monthly;  break;
-			case 6:  mConvertedRecurPeriod = Preferences::Recur_Yearly;   break;
-		}
-		mConvertRecurPeriod = true;
-		config.writeEntry(DEF_RECUR_PERIOD, static_cast<int>(mConvertedRecurPeriod + 1));   // ensure value is written in usrReadConfig()
-		switch (config.readEntry(DEF_REMIND_UNITS, (int)0))
-		{
-			default:
-			case 0:  mConvertedReminderUnits = TimePeriod::HoursMinutes; break;
-			case 1:  mConvertedReminderUnits = TimePeriod::Days;         break;
-			case 2:  mConvertedReminderUnits = TimePeriod::Weeks;        break;
-		}
-		mConvertReminderUnits = true;
-		config.writeEntry(DEF_REMIND_UNITS, static_cast<int>(mConvertedReminderUnits + 1));   // ensure value is written in usrReadConfig()
+		setDefaultCmdLogType(type);
+		config.deleteEntry(XDEF_CMD_LOG_TYPE);
 	}
-	else
+	if (config.hasKey(XDEF_RECUR_PERIOD))
+	{
+		RecurType type;
+		switch (config.readEntry(XDEF_RECUR_PERIOD, (int)0))
+		{
+			default:
+			case 0:  type = Preferences::Recur_None;     break;
+			case 1:  type = Preferences::Recur_Login;    break;
+			case 2:  type = Preferences::Recur_SubDaily; break;
+			case 3:  type = Preferences::Recur_Daily;    break;
+			case 4:  type = Preferences::Recur_Weekly;   break;
+			case 5:  type = Preferences::Recur_Monthly;  break;
+			case 6:  type = Preferences::Recur_Yearly;   break;
+		}
+		setDefaultRecurPeriod(type);
+		config.deleteEntry(XDEF_RECUR_PERIOD);
+	}
+	if (config.hasKey(XDEF_REMIND_UNITS))
+	{
+		TimePeriod::Units type;
+		switch (config.readEntry(XDEF_REMIND_UNITS, (int)0))
+		{
+			default:
+			case 0:  type = TimePeriod::HoursMinutes; break;
+			case 1:  type = TimePeriod::Days;         break;
+			case 2:  type = TimePeriod::Weeks;        break;
+		}
+		setDefaultReminderUnits(type);
+		config.deleteEntry(XDEF_REMIND_UNITS);
+	}
+	if (config.hasKey(XDEF_LATE_CANCEL))
+	{
+		setDefaultLateCancel(config.readEntry(XDEF_LATE_CANCEL, (unsigned)0));
+		config.deleteEntry(XDEF_LATE_CANCEL);
+	}
+	if (config.hasKey(XDEF_AUTO_CLOSE))
+	{
+		setDefaultAutoClose(config.readEntry(XDEF_AUTO_CLOSE, false));
+		config.deleteEntry(XDEF_AUTO_CLOSE);
+	}
+	if (config.hasKey(XDEF_CONFIRM_ACK))
+	{
+		setDefaultConfirmAck(config.readEntry(XDEF_CONFIRM_ACK, false));
+		config.deleteEntry(XDEF_CONFIRM_ACK);
+	}
+	if (config.hasKey(XDEF_COPY_TO_KORG))
+	{
+		setDefaultCopyToKOrganizer(config.readEntry(XDEF_COPY_TO_KORG, false));
+		config.deleteEntry(XDEF_COPY_TO_KORG);
+	}
+	if (config.hasKey(XDEF_SOUND_FILE))
+	{
+		setDefaultSoundFile(config.readPathEntry(XDEF_SOUND_FILE));
+		config.deleteEntry(XDEF_SOUND_FILE);
+	}
+	if (config.hasKey(XDEF_SOUND_VOLUME))
+	{
+		int vol = static_cast<int>(config.readEntry(XDEF_SOUND_VOLUME, (double)0) * 100);
+		setBase_DefaultSoundVolume(vol < 0 ? -1 : vol > 100 ? 100 : vol);
+		config.deleteEntry(XDEF_SOUND_VOLUME);
+	}
+	if (config.hasKey(XDEF_SOUND_REPEAT))
+	{
+		setDefaultSoundRepeat(config.readEntry(XDEF_SOUND_REPEAT, false));
+		config.deleteEntry(XDEF_SOUND_REPEAT);
+	}
+	if (config.hasKey(XDEF_CMD_SCRIPT))
+	{
+		setDefaultCmdScript(config.readEntry(XDEF_CMD_SCRIPT, false));
+		config.deleteEntry(XDEF_CMD_SCRIPT);
+	}
+	if (config.hasKey(XDEF_LOG_FILE))
+	{
+		setDefaultCmdLogFile(config.readPathEntry(XDEF_LOG_FILE));
+		config.deleteEntry(XDEF_LOG_FILE);
+	}
+	if (config.hasKey(XDEF_EMAIL_BCC))
+	{
+		setDefaultEmailBcc(config.readEntry(XDEF_EMAIL_BCC, false));
+		config.deleteEntry(XDEF_EMAIL_BCC);
+	}
+	if (config.hasKey(XDEF_PRE_ACTION))
+	{
+		setDefaultPreAction(config.readEntry(XDEF_PRE_ACTION));
+		config.deleteEntry(XDEF_PRE_ACTION);
+	}
+	if (config.hasKey(XDEF_POST_ACTION))
+	{
+		setDefaultPostAction(config.readEntry(XDEF_POST_ACTION));
+		config.deleteEntry(XDEF_POST_ACTION);
+	}
+	if (version < KAlarm::Version(1,4,6))
 	{
 		// Convert KAlarm pre-1.4.5 preferences
-		static const char* DEF_SOUND = "DefSound";
-		if (entries.contains(DEF_SOUND))
+		static const char* XDEF_SOUND = "DefSound";
+		if (config.hasKey(XDEF_SOUND))
 		{
-			bool sound = config.readEntry(DEF_SOUND, false);
+			bool sound = config.readEntry(XDEF_SOUND, false);
 			if (!sound)
 			{
-				mConvertedDefSoundType = Preferences::Sound_None;
-				mConvertDefSoundType = true;
-				config.writeEntry(DEF_SOUND_TYPE, static_cast<int>(mConvertedDefSoundType + 1));
-				config.writeEntry(DEF_SOUND_TYPE, (int)-1);   // ensure value is written in usrReadConfig()
+				setDefaultSoundType(Preferences::Sound_None);
+				config.deleteEntry(XDEF_SOUND_TYPE);
 			}
-			config.deleteEntry(DEF_SOUND);
+			config.deleteEntry(XDEF_SOUND);
 		}
 	}
+	if (config.hasKey(XDEF_SOUND_TYPE))
+	{
+		// Convert KAlarm 1.9.4 preferences
+		SoundType type;
+		switch (config.readEntry(XDEF_SOUND_TYPE, (int)0))
+		{
+			default:
+			case 0:  type = Preferences::Sound_None;  break;
+			case 1:  type = Preferences::Sound_Beep;  break;
+			case 2:  type = Preferences::Sound_File;  break;
+			case 3:  type = Preferences::Sound_Speak; break;
+		}
+		setDefaultSoundType(type);
+		config.deleteEntry(XDEF_SOUND_TYPE);
+	}
+
 	if (version < KAlarm::Version(1,3,0))
 	{
 		// Convert KAlarm pre-1.3 preferences
@@ -417,7 +486,7 @@ bool Preferences::convertOldPrefs()
 		static const char* EMAIL_USE_CTRL_CENTRE     = "EmailUseControlCenter";
 		static const char* EMAIL_BCC_USE_CTRL_CENTRE = "EmailBccUseControlCenter";
 		config.changeGroup(GENERAL_SECTION);
-		entries = config.entryMap();
+		QMap<QString, QString> entries = config.entryMap();
 		if (!entries.contains(EMAIL_FROM)  &&  entries.contains(EMAIL_USE_CTRL_CENTRE))
 		{
 			// Preferences were written by KAlarm pre-1.2.1
@@ -430,8 +499,8 @@ bool Preferences::convertOldPrefs()
 			bccUseCC = config.hasKey(EMAIL_BCC_USE_CTRL_CENTRE)
 			         ? config.readEntry(EMAIL_BCC_USE_CTRL_CENTRE, default_emailBccUseControlCentre)
 				 : useCC;
-			mConvertedEmailFrom = useCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_ADDRESS, QString());
-			mConvertedBccAddress = bccUseCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_BCC_ADDRESS, QString());
+			setBase_EmailFrom(useCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_ADDRESS, QString()));
+			setBase_EmailBccAddress(bccUseCC ? FROM_CONTROL_CENTRE : config.readEntry(EMAIL_BCC_ADDRESS, QString()));
 			config.deleteEntry(EMAIL_ADDRESS);
 			config.deleteEntry(EMAIL_BCC_USE_CTRL_CENTRE);
 			config.deleteEntry(EMAIL_USE_CTRL_CENTRE);
@@ -441,7 +510,7 @@ bool Preferences::convertOldPrefs()
 		config.changeGroup(DEFAULTS_SECTION);
 		if (config.hasKey(DEF_CMD_XTERM))
 		{
-			mConvertedDefCmdLogType = config.readEntry(DEF_CMD_XTERM, false) ? Preferences::Log_Terminal : Preferences::Log_Discard;
+			setDefaultCmdLogType(config.readEntry(DEF_CMD_XTERM, false) ? Preferences::Log_Terminal : Preferences::Log_Discard);
 			config.deleteEntry(DEF_CMD_XTERM);
 		}
 	}

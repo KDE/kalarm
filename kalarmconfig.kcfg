@@ -3,8 +3,7 @@
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
-      file:///home/david/src/svn/trunk/kdelibs/kdecore/kconfig_compiler/kcfg.xsd" >
-<!--      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" > -->
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="kalarmrc"/>
 
   <include>qfont.h</include>
@@ -91,18 +90,6 @@ Notes:
       <label>Autostart at login</label>
       <whatsthis>Whether to start KAlarm in the system tray at login.</whatsthis>
       <default>true</default>
-    </entry>
-    <entry name="DefaultFeb29Type" key="Feb29Recur" type="Enum">
-      <label>In non-leap years, repeat yearly February 29th alarms on:</label>
-      <whatsthis>For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.
-Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</whatsthis>
-      <choices name="Feb29Type" prefix="Feb29_">
-        <choice name="Feb28"><label>February 28th</label></choice>
-        <choice name="Mar1"><label>March 1st</label></choice>
-        <choice name="None"><label>Do not repeat</label></choice>
-      </choices>
-      <default>Mar1</default>
-      <emit signal="feb29TypeChanged"/>
     </entry>
     <entry name="AskResource" type="Bool">
       <label>Prompt for which resource to store in</label>
@@ -237,28 +224,28 @@ Sendmail: The email is sent automatically. This option will only work if your sy
     </entry>
   </group>
   <group name="Defaults">
-    <entry name="DefaultLateCancel" key="DefLateCancel" type="Int">
+    <entry name="DefaultLateCancel" key="LateCancel" type="Int">
       <label>Cancel if late (minutes)</label>
       <whatsthis>Default value in the alarm edit dialog for late cancellation time (in minutes). 0 for no late cancellation, >0 how many minutes before cancelling.</whatsthis>
       <default>0</default>
       <min>0</min>
     </entry>
-    <entry name="DefaultAutoClose" key="DefAutoClose" type="Bool">
+    <entry name="DefaultAutoClose" key="AutoClose" type="Bool">
       <label>Auto-close window after late-cancellation time</label>
       <whatsthis>Default setting in the alarm edit dialog for "auto close if late".</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultConfirmAck" key="DefConfirmAck" type="Bool">
+    <entry name="DefaultConfirmAck" key="ConfirmAck" type="Bool">
       <label>Confirm acknowledgement</label>
       <whatsthis>Default setting in the alarm edit dialog for "confirm alarm acknowledgement".</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultCopyToKOrganizer" key="DefCopyKOrg" type="Bool">
+    <entry name="DefaultCopyToKOrganizer" key="CopyKOrg" type="Bool">
       <label>Show in KOrganizer</label>
       <whatsthis>Default setting in the alarm edit dialog for "show in KOrganizer".</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultSoundType" key="DefSoundType" type="Enum">
+    <entry name="DefaultSoundType" key="SoundType" type="Enum">
       <label>Sound</label>
       <whatsthis>Default sound type in the alarm edit dialog.</whatsthis>
       <choices name="SoundType" prefix="Sound_">
@@ -269,28 +256,28 @@ Sendmail: The email is sent automatically. This option will only work if your sy
       </choices>
       <default>None</default>
     </entry>
-    <entry name="DefaultSoundFile" key="DefSoundFile" type="Path">
+    <entry name="DefaultSoundFile" key="SoundFile" type="Path">
       <label>Sound file</label>
       <whatsthis>Default sound file path in the alarm edit dialog.</whatsthis>
     </entry>
-    <entry name="Base_DefaultSoundVolume" key="DefSoundVolume" type="Int">
+    <entry name="Base_DefaultSoundVolume" key="SoundVolume" type="Int">
       <label>Sound volume</label>
       <whatsthis>Default sound volume in the alarm edit dialog. -1 to deselect volume, or 0 - 100 %</whatsthis>
       <default>-1</default>
       <min>-1</min>
       <max>100</max>
     </entry>
-    <entry name="DefaultSoundRepeat" key="DefSoundRepeat" type="Bool">
+    <entry name="DefaultSoundRepeat" key="SoundRepeat" type="Bool">
       <label>Repeat sound file</label>
       <whatsthis>Default setting in the alarm edit dialog for sound repetition.</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultCmdScript" key="DefCmdScript" type="Bool">
+    <entry name="DefaultCmdScript" key="CmdScript" type="Bool">
       <label>Enter script</label>
       <whatsthis>Default setting in the alarm edit dialog for command script entry.</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultCmdLogType" key="DefCmdLogType" type="Enum">
+    <entry name="DefaultCmdLogType" key="CmdLogType" type="Enum">
       <label>Command output</label>
       <whatsthis>Default setting in the alarm edit dialog for where to send command alarm output.</whatsthis>
       <choices name="CmdLogType" prefix="Log_">
@@ -300,16 +287,16 @@ Sendmail: The email is sent automatically. This option will only work if your sy
       </choices>
       <default>Discard</default>
     </entry>
-    <entry name="DefaultCmdLogFile" key="DefLogFile" type="Path">
+    <entry name="DefaultCmdLogFile" key="LogFile" type="Path">
       <label>Log file</label>
       <whatsthis>Default log file path for command alarms in the alarm edit dialog.</whatsthis>
     </entry>
-    <entry name="DefaultEmailBcc" key="DefEmailBcc" type="Bool">
+    <entry name="DefaultEmailBcc" key="EmailBcc" type="Bool">
       <label>Copy email to self</label>
       <whatsthis>Default setting in the alarm edit dialog for blind copying emails to self.</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultRecurPeriod" key="DefRecurPeriod" type="Enum">
+    <entry name="DefaultRecurPeriod" key="RecurPeriod" type="Enum">
       <label>Recurrence period</label>
       <whatsthis>Default recurrence period in the alarm edit dialog.</whatsthis>
       <choices name="RecurType" prefix="Recur_">
@@ -323,7 +310,19 @@ Sendmail: The email is sent automatically. This option will only work if your sy
       </choices>
       <default>None</default>
     </entry>
-    <entry name="DefaultReminderUnits" key="DefRemindUnits" type="Enum">
+    <entry name="DefaultFeb29Type" key="Feb29Recur" type="Enum">
+      <label>In non-leap years, repeat yearly February 29th alarms on:</label>
+      <whatsthis>For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.
+Note that the next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</whatsthis>
+      <choices name="Feb29Type" prefix="Feb29_">
+        <choice name="Feb28"><label>February 28th</label></choice>
+        <choice name="Mar1"><label>March 1st</label></choice>
+        <choice name="None"><label>Do not repeat</label></choice>
+      </choices>
+      <default>Mar1</default>
+      <emit signal="feb29TypeChanged"/>
+    </entry>
+    <entry name="DefaultReminderUnits" key="RemindUnits" type="Enum">
       <label>Reminder units</label>
       <whatsthis>Default reminder time units in the alarm edit dialog.</whatsthis>
        <choices name="TimePeriod::Units">
@@ -333,11 +332,11 @@ Sendmail: The email is sent automatically. This option will only work if your sy
       </choices>
       <default>HoursMinutes</default>
    </entry>
-    <entry name="DefaultPreAction" key="DefPreAction" type="String">
+    <entry name="DefaultPreAction" key="PreAction" type="String">
       <label>Pre-alarm action</label>
       <whatsthis>Default command to execute before displaying alarms.</whatsthis>
     </entry>
-    <entry name="DefaultPostAction" key="DefPostAction" type="String">
+    <entry name="DefaultPostAction" key="PostAction" type="String">
       <label>Post-alarm action</label>
       <whatsthis>Default command to execute after alarm message windows are closed.</whatsthis>
     </entry>
@@ -361,10 +360,3 @@ Sendmail: The email is sent automatically. This option will only work if your sy
     </entry>
   </group>
 </kcfg>
-
-
-<!--
-const bool                       Preferences::default_quitWarn                = true;
-const bool                       Preferences::default_confirmAlarmDeletion    = true;
-const bool                       Preferences::default_emailQueuedNotify       = false;
--->

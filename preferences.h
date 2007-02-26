@@ -73,8 +73,8 @@ class Preferences : public PreferencesBase
 		static bool             emailBccUseControlCentre();
 		static QString          cmdXTermCommand();
 		static void             setCmdXTermCommand(const QString& cmd);
-		static float            defaultSoundVolume()             { return static_cast<float>(self()->mBase_DefaultSoundVolume); }
-		static void             setDefaultSoundVolume(float v)   { self()->setBase_DefaultSoundVolume(static_cast<int>(v)); }
+		static float            defaultSoundVolume()             { int vol = self()->mBase_DefaultSoundVolume; return (vol < 0) ? -1 : static_cast<float>(vol) / 100; }
+		static void             setDefaultSoundVolume(float v)   { self()->setBase_DefaultSoundVolume(v < 0 ? -1 : static_cast<int>(v * 100)); }
 
 		// Config file entry names for notification messages
 		static const char*      QUIT_WARN;
