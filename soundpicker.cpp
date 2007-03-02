@@ -150,11 +150,11 @@ Preferences::SoundType SoundPicker::sound() const
 
 /******************************************************************************
 * Return the selected sound file, if the File option is selected.
-* Returns null string if File is not currently selected.
+* Returns empty URL if File is not currently selected.
 */
-QString SoundPicker::file() const
+KUrl SoundPicker::file() const
 {
-	return (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]) ? mFile : QString();
+	return (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]) ? mFile : KUrl();
 }
 
 /******************************************************************************
@@ -193,12 +193,12 @@ void SoundPicker::set(Preferences::SoundType type, const QString& f, float volum
 {
 	if (type == Preferences::Sound_File  &&  f.isEmpty())
 		type = Preferences::Sound_Beep;
-	mFile        = f;
+	mFile        = KUrl(f);
 	mVolume      = volume;
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
-	mFilePicker->setToolTip(mFile);
+	mFilePicker->setToolTip(mFile.prettyUrl());
 	mTypeCombo->setCurrentIndex(indexes[type]);  // this doesn't trigger slotTypeSelected()
 	mFilePicker->setEnabled(type == Preferences::Sound_File);
 	mLastType = type;
@@ -240,8 +240,8 @@ void SoundPicker::slotTypeSelected(int id)
 */
 void SoundPicker::slotPickFile()
 {
-	QString file = mFile;
-	SoundDlg dlg(mFile, mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this);
+	KUrl file = mFile;
+	SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this);
 	dlg.setReadOnly(mReadOnly);
 	bool accepted = (dlg.exec() == QDialog::Accepted);
 	if (mReadOnly)
@@ -261,7 +261,7 @@ void SoundPicker::slotPickFile()
 		mFile       = file;
 		mDefaultDir = dlg.defaultDir();
 	}
-	mFilePicker->setToolTip(mFile);
+	mFilePicker->setToolTip(mFile.prettyUrl());
 	if (mFile.isEmpty())
 	{
 		// No audio file is selected, so revert to previously selected option

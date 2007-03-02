@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (c) 2005, 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,15 @@
 #define SOUNDDLG_H
 
 #include <QString>
+#include <kurl.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 
+class QPushButton;
 class QShowEvent;
 class QResizeEvent;
 class KHBox;
+namespace Phonon { class AudioPlayer; }
 class PushButton;
 class CheckBox;
 class SpinBox;
@@ -40,9 +44,10 @@ class SoundDlg : public KDialog
 	public:
 		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
 		         const QString& caption, QWidget* parent);
+		~SoundDlg();
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
-		QString        getFile() const;
+		KUrl           getFile() const       { return mUrl; }
 		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		QString        defaultDir() const    { return mDefaultDir; }
 
@@ -62,8 +67,13 @@ class SoundDlg : public KDialog
 		void           slotPickFile();
 		void           slotVolumeToggled(bool on);
 		void           slotFadeToggled(bool on);
+		void           playSound();
+		void           playFinished();
 
 	private:
+		bool           checkFile();
+
+		QPushButton*   mFilePlay;
 		LineEdit*      mFileEdit;
 		PushButton*    mFileBrowseButton;
 		CheckBox*      mRepeatCheckbox;
@@ -75,6 +85,8 @@ class SoundDlg : public KDialog
 		KHBox*         mFadeVolumeBox;
 		Slider*        mFadeSlider;
 		QString        mDefaultDir;     // current default directory for mFileEdit
+		KUrl           mUrl;
+		Phonon::AudioPlayer* mPlayer;
 		bool           mReadOnly;
 };
 

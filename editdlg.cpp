@@ -1291,7 +1291,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			float fadeVolume;
 			int   fadeSecs;
 			float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-			event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
+			event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 			if (!trial)
 				event.setReminder(mReminder->minutes(), mReminder->isOnceOnly());
 			if (mSpecialActionsButton)

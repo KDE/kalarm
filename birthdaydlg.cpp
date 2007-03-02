@@ -266,7 +266,7 @@ QList<KAEvent> BirthdayDlg::events() const
 		float fadeVolume;
 		int   fadeSecs;
 		float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-		event.setAudioFile(mSoundPicker->file(), volume, fadeVolume, fadeSecs);
+		event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 		QList<int> months;
 		months.append(date.month());
 		event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());

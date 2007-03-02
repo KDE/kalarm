@@ -24,6 +24,7 @@
 #include <QDateTime>
 
 #include <kdialog.h>
+#include <kurl.h>
 
 #include "alarmevent.h"
 #include "alarmtext.h"
@@ -247,7 +248,7 @@ class EditAlarmDlg : public KDialog
 		Preferences::SoundType mSavedSoundType;        // mSoundPicker sound type
 		bool                mSavedSound;            // mSoundPicker sound status
 		bool                mSavedRepeatSound;      // mSoundPicker repeat status
-		QString             mSavedSoundFile;        // mSoundPicker sound file
+		KUrl                mSavedSoundFile;        // mSoundPicker sound file
 		float               mSavedSoundVolume;      // mSoundPicker volume
 		float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
 		int                 mSavedSoundFadeSeconds; // mSoundPicker fade time

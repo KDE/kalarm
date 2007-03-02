@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include <QLabel>
+#include <QDir>
 #include <QGroupBox>
 #include <QApplication>
 #include <QVBoxLayout>
@@ -32,6 +33,8 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <khbox.h>
+#include <kio/netaccess.h>
+#include <phonon/audioplayer.h>
 
 #include "checkbox.h"
 #include "functions.h"
@@ -56,6 +59,7 @@ static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
                    const QString& caption, QWidget* parent)
 	: KDialog(parent),
+	  mPlayer(0),
 	  mReadOnly(false)
 {
 	QWidget* page = new QWidget(this);
@@ -69,10 +73,18 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
-	// File name edit box
+	// File play button
 	KHBox* box = new KHBox(page);
 	box->setMargin(0);
 	layout->addWidget(box);
+	mFilePlay = new QPushButton(box);
+	mFilePlay->setIcon(SmallIcon("player_play"));
+	mFilePlay->setFixedSize(mFilePlay->sizeHint());
+	connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
+	mFilePlay->setToolTip(i18n("Test the sound"));
+	mFilePlay->setWhatsThis(i18n("Play the selected sound file."));
+
+	// File name edit box
 	mFileEdit = new LineEdit(LineEdit::Url, box);
 	mFileEdit->setAcceptDrops(true);
 	mFileEdit->setWhatsThis(i18n("Enter the name or URL of a sound file to play."));
@@ -172,6 +184,12 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	slotVolumeToggled(volume >= 0);
 }
 
+SoundDlg::~SoundDlg()
+{
+	delete mPlayer;   // this stops playing if not already stopped
+	mPlayer = 0;
+}
+
 /******************************************************************************
  * Set the read-only status of the dialogue.
  */
@@ -189,17 +207,6 @@ void SoundDlg::setReadOnly(bool readOnly)
 		mFadeSlider->setReadOnly(readOnly);
 		mReadOnly = readOnly;
 	}
-}
-
-/******************************************************************************
- * Return the entered repetition and volume settings:
- * 'volume' is in range 0 - 1, or < 0 if volume is not to be set.
- * 'fadeVolume is similar, with 'fadeTime' set to the fade interval in seconds.
- * Reply = whether to repeat or not.
- */
-QString SoundDlg::getFile() const
-{
-	return mFileEdit->text();
 }
 
 /******************************************************************************
@@ -249,6 +256,8 @@ void SoundDlg::slotOk()
 {
 	if (mReadOnly)
 		reject();
+	if (!checkFile())
+		return;
 	accept();
 }
 
@@ -260,6 +269,75 @@ void SoundDlg::slotPickFile()
 	QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
 	if (!url.isEmpty())
 		mFileEdit->setText(url);
+}
+
+/******************************************************************************
+* Called when the file play or stop button is clicked.
+*/
+void SoundDlg::playSound()
+{
+	if (mPlayer)
+	{
+		// The file is currently playing. Stop it.
+		playFinished();
+		return;
+	}
+	if (!checkFile())
+		return;
+	mPlayer = new Phonon::AudioPlayer(Phonon::NotificationCategory);
+	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
+	mFilePlay->setIcon(SmallIcon("player_stop"));   // change the play button to a stop button
+	mPlayer->play(mUrl);
+}
+
+/******************************************************************************
+* Called when playing the file has completed, or to stop playing.
+*/
+void SoundDlg::playFinished()
+{
+	delete mPlayer;   // this stops playing if not already stopped
+	mPlayer = 0;
+	mFilePlay->setIcon(SmallIcon("player_play"));
+}
+
+/******************************************************************************
+* Check whether the specified sound file exists.
+*/
+bool SoundDlg::checkFile()
+{
+	QString file = mFileEdit->text();
+	mUrl = KUrl(file);
+	if (KIO::NetAccess::exists(mUrl, true, this))
+		return true;
+	if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1String("/")))
+	{
+		// It's a relative path.
+		// Find the first sound resource that contains files.
+		QStringList soundDirs = KGlobal::dirs()->resourceDirs("sound");
+		if (!soundDirs.isEmpty())
+		{
+			QDir dir;
+			dir.setFilter(QDir::Files | QDir::Readable);
+			for (int i = 0, end = soundDirs.count();  i < end;  ++i)
+			{
+				dir = soundDirs[i];
+				if (dir.isReadable() && dir.count() > 2)
+				{
+					mUrl.setPath(soundDirs[i]);
+					mUrl.addPath(file);
+					if (KIO::NetAccess::exists(mUrl, true, this))
+						return true;
+				}
+			}
+		}
+		mUrl.setPath(QDir::homePath());
+		mUrl.addPath(file);
+		if (KIO::NetAccess::exists(mUrl, true, this))
+			return true;
+	}
+	KMessageBox::sorry(this, i18n("File not found"));
+	mUrl.clear();
+	return false;
 }
 
 /******************************************************************************

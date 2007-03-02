@@ -72,9 +72,9 @@ class SoundPicker : public QFrame
 		/** Returns the selected option. */
 		Preferences::SoundType sound() const;
 		/** If the 'file' option is selected, returns the URL of the chosen file.
-		 *  Otherwise returns a null string.
+		 *  Otherwise returns an empty URL.
 		 */
-		QString        file() const;
+		KUrl           file() const;
 		/** Returns the volume and fade characteristics for playing a sound file.
 		 *  @param fadeVolume Receives the initial volume if the volume is to be faded, else -1.
 		 *  @param fadeSeconds Receives the number of seconds over which the volume is to be faded, else 0.
@@ -86,7 +86,7 @@ class SoundPicker : public QFrame
 		 */
 		bool           repeat() const;
 		/** Returns the current file URL regardless of whether the 'file' option is selected. */
-		QString        fileSetting() const   { return mFile; }
+		KUrl           fileSetting() const   { return mFile; }
 		/** Returns the current file repetition setting regardless of whether the 'file' option is selected. */
 		bool           repeatSetting() const { return mRepeat; }
 		/** Display a dialogue to choose a sound file, initially highlighting
@@ -116,7 +116,7 @@ class SoundPicker : public QFrame
 		KHBox*         mTypeBox;
 		PushButton*    mFilePicker;
 		QString        mDefaultDir;
-		QString        mFile;         // sound file to play when alarm is triggered
+		KUrl           mFile;         // sound file to play when alarm is triggered
 		float          mVolume;       // volume for file, or < 0 to not set volume
 		float          mFadeVolume;   // initial volume for file, or < 0 for no fading
 		int            mFadeSeconds;  // fade interval in seconds
