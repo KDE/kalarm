@@ -45,7 +45,7 @@ class SoundPicker : public QFrame
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		SoundPicker(QWidget* parent, const char* name = 0);
+		explicit SoundPicker(QWidget* parent, const char* name = 0);
 		/** Initialises the widget's state.
 		 *  @param type     The option to select.
 		 *  @param filename The full path or URL of the sound file to select. If the 'file' option is
