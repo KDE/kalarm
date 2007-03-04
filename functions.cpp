@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -809,14 +809,13 @@ int getVersionNumber(const QString& version, QString* subVersion)
 		QString issue = nums[2];
 		if (!issue.at(0).isDigit())
 			return 0;
-		v = issue.toInt();   // issue number
-		vernum += (v < 99 ? v : 99);
+		count = issue.length();
+		int i;
+		for (i = 0;  i < count && issue.at(i).isDigit();  ++i) ;
 		if (subVersion)
-		{
-			int i;
-			for (i = 1;  const_cast<const QString&>(issue).at(i).isDigit();  ++i) ;
 			*subVersion = issue.mid(i);
-		}
+		v = issue.left(i).toInt();   // issue number
+		vernum += (v < 99 ? v : 99);
 	}
 	return vernum;
 }
