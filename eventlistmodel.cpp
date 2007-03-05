@@ -206,7 +206,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					return mIconSize;
 				case Qt::AccessibleTextRole:
 #warning Implement this
-					return i18n("");
+					return QString();
 				case ValueRole:
 					return static_cast<int>(event.action());
 				case SortRole:
