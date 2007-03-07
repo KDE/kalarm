@@ -63,7 +63,7 @@
     <entry name="DefaultBgColour" key="MessageBackgroundColour" type="Color">
       <label>Background color</label>
       <whatsthis>Default background color for alarm message windows.</whatsthis>
-      <default>Qt::red</default>
+      <default code="true">Qt::red</default>
     </entry>
     <entry name="MessageFont" type="Font">
       <label>Message font</label>
@@ -206,13 +206,13 @@ Sendmail: The email is sent automatically. This option will only work if your sy
     <entry name="DisabledColour" type="Color">
       <label>Disabled alarm color</label>
       <whatsthis>Text color for disabled alarms in the alarm list.</whatsthis>
-      <default>Qt::lightGray</default>
+      <default code="true">Qt::lightGray</default>
       <emit signal="disabledColourChanged"/>
     </entry>
     <entry name="ArchivedColour" key="ExpiredColour" type="Color">
       <label>Archived alarm color</label>
       <whatsthis>Text color for archived alarms in the alarm list.</whatsthis>
-      <default>Qt::darkRed</default>
+      <default code="true">Qt::darkRed</default>
       <emit signal="archivedColourChanged"/>
     </entry>
     <entry name="ArchivedKeepDays" key="ExpiredKeepDays" type="Int">
