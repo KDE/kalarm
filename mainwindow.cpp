@@ -517,7 +517,7 @@ void MainWindow::initActions()
 	connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
-	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(updateTrayIconAction()));
+	Preferences::connect(SIGNAL(runInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
 	// Set menu item states
@@ -940,7 +940,7 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(QSystemTrayIcon::isSystemTrayAvailable() && !theApp()->wantRunInSystemTray());
+	mActionToggleTrayIcon->setEnabled(QSystemTrayIcon::isSystemTrayAvailable() && !Preferences::runInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
