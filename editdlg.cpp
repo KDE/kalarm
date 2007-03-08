@@ -495,7 +495,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 
 	// File browse button
 	mFileBrowseButton = new QPushButton(mFileBox);
-	mFileBrowseButton->setIcon(SmallIcon("fileopen"));
+	mFileBrowseButton->setIcon(SmallIcon("document-open"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	mFileBrowseButton->setToolTip(i18n("Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18n("Select a text or image file to display."));
@@ -599,7 +599,7 @@ void EditAlarmDlg::initCommand(QWidget* parent)
 	// Log file browse button.
 	// The file browser dialogue is activated by the PickLogFileRadio class.
 	QPushButton* browseButton = new QPushButton(box);
-	browseButton->setIcon(SmallIcon("fileopen"));
+	browseButton->setIcon(SmallIcon("document-open"));
 	browseButton->setFixedSize(browseButton->sizeHint());
 	browseButton->setToolTip(i18n("Choose a file"));
 	browseButton->setWhatsThis(i18n("Select a log file."));
@@ -667,7 +667,7 @@ void EditAlarmDlg::initEmail(QWidget* parent)
 	grid->addWidget(mEmailToEdit, 1, 1);
 
 	mEmailAddressButton = new QPushButton(mEmailFrame);
-	mEmailAddressButton->setIcon(SmallIcon("contents"));
+	mEmailAddressButton->setIcon(SmallIcon("help-contents"));
 	mEmailAddressButton->setFixedSize(mEmailAddressButton->sizeHint());
 	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
 	mEmailAddressButton->setToolTip(i18n("Open address book"));

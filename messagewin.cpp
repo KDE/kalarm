@@ -571,7 +571,7 @@ void MessageWin::initView()
 	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
 		// Silence button to stop sound repetition
-		QPixmap pixmap = MainBarIcon("player_stop");
+		QPixmap pixmap = MainBarIcon("media-playback-stop");
 		mSilenceButton = new QPushButton(topWidget);
 		mSilenceButton->setIcon(pixmap);
 		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());

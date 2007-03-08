@@ -78,7 +78,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	box->setMargin(0);
 	layout->addWidget(box);
 	mFilePlay = new QPushButton(box);
-	mFilePlay->setIcon(SmallIcon("player_play"));
+	mFilePlay->setIcon(SmallIcon("media-playback-start"));
 	mFilePlay->setFixedSize(mFilePlay->sizeHint());
 	connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
 	mFilePlay->setToolTip(i18n("Test the sound"));
@@ -91,7 +91,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 
 	// File browse button
 	mFileBrowseButton = new PushButton(box);
-	mFileBrowseButton->setIcon(SmallIcon("fileopen"));
+	mFileBrowseButton->setIcon(SmallIcon("document-open"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFileBrowseButton->setToolTip(i18n("Choose a file"));
@@ -286,7 +286,7 @@ void SoundDlg::playSound()
 		return;
 	mPlayer = new Phonon::AudioPlayer(Phonon::NotificationCategory);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
-	mFilePlay->setIcon(SmallIcon("player_stop"));   // change the play button to a stop button
+	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
 	mPlayer->play(mUrl);
 }
 
@@ -297,7 +297,7 @@ void SoundDlg::playFinished()
 {
 	delete mPlayer;   // this stops playing if not already stopped
 	mPlayer = 0;
-	mFilePlay->setIcon(SmallIcon("player_play"));
+	mFilePlay->setIcon(SmallIcon("media-playback-start"));
 }
 
 /******************************************************************************

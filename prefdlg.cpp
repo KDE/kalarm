@@ -115,13 +115,13 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mStorePage = new StorePrefTab;
 	mStorePageItem = new KPageWidgetItem(mStorePage, i18n("Storage"));
 	mStorePageItem->setHeader(i18n("Alarm Storage"));
-	mStorePageItem->setIcon(KIcon(DesktopIcon("fileopen")));
+	mStorePageItem->setIcon(KIcon(DesktopIcon("document-open")));
 	addPage(mStorePageItem);
 
 	mEmailPage = new EmailPrefTab;
 	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18n("Email"));
 	mEmailPageItem->setHeader(i18n("Email Alarm Settings"));
-	mEmailPageItem->setIcon(KIcon(DesktopIcon("mail_generic")));
+	mEmailPageItem->setIcon(KIcon(DesktopIcon("mail")));
 	addPage(mEmailPageItem);
 
 	mViewPage = new ViewPrefTab;
@@ -1028,7 +1028,7 @@ EditPrefTab::EditPrefTab()
 	mSoundFile = new QLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
-	mSoundFileBrowse->setIcon(KIcon(SmallIcon("fileopen")));
+	mSoundFileBrowse->setIcon(KIcon(SmallIcon("document-open")));
 	mSoundFileBrowse->setFixedSize(mSoundFileBrowse->sizeHint());
 	connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
 	mSoundFileBrowse->setToolTip(i18n("Choose a sound file"));

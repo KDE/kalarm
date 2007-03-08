@@ -124,7 +124,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 QAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
 {
 	QAction* action = actions->addAction(name);
-	action->setIcon(KIcon(QLatin1String("filenew")));
+	action->setIcon(KIcon(QLatin1String("document-new")));
 	action->setText(label);
 	action->setShortcuts(KStandardShortcut::openNew());
 	return action;

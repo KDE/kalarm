@@ -89,7 +89,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
 	// Sound file picker button
 	mFilePicker = new PushButton(this);
-	mFilePicker->setIcon(SmallIcon("fileopen"));
+	mFilePicker->setIcon(SmallIcon("document-open"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFilePicker->setToolTip(i18n("Choose a file"));

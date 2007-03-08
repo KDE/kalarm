@@ -394,7 +394,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-	mActionCopy = new KAction(KIcon("editcopy"), i18n("&Copy..."), this);
+	mActionCopy = new KAction(KIcon("edit-copy"), i18n("&Copy..."), this);
 	actions->addAction(QLatin1String("copy"), mActionCopy);
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
@@ -404,7 +404,7 @@ void MainWindow::initActions()
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-	mActionDelete = new KAction(KIcon("editdelete"), i18n("&Delete"), this);
+	mActionDelete = new KAction(KIcon("edit-delete"), i18n("&Delete"), this);
 	actions->addAction(QLatin1String("delete"), mActionDelete);
 	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
@@ -419,7 +419,7 @@ void MainWindow::initActions()
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	mActionView = new KAction(KIcon("viewmag"), i18n("&View"), this);
+	mActionView = new KAction(KIcon("zoom-original"), i18n("&View"), this);
 	actions->addAction(QLatin1String("view"), mActionView);
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
@@ -460,7 +460,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	QAction* action = new KAction(KIcon("reload"), i18n("&Refresh Alarms"), this);
+	QAction* action = new KAction(KIcon("view-refresh"), i18n("&Refresh Alarms"), this);
 	actions->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
@@ -482,12 +482,12 @@ void MainWindow::initActions()
 		redoTextStripped = KAlarm::stripAccel(redoText);
 		delete act;
 	}
-	mActionUndo = new KToolBarPopupAction(KIcon("undo"), undoText, this);
+	mActionUndo = new KToolBarPopupAction(KIcon("edit-undo"), undoText, this);
 	actions->addAction(QLatin1String("edit_undo"), mActionUndo);
 	mActionUndo->setShortcut(undoShortcut);
 	connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
-	mActionRedo = new KToolBarPopupAction(KIcon("redo"), redoText, this);
+	mActionRedo = new KToolBarPopupAction(KIcon("edit-redo"), redoText, this);
 	actions->addAction(QLatin1String("edit_redo"), mActionRedo);
 	mActionRedo->setShortcut(redoShortcut);
 	connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
@@ -730,7 +730,7 @@ void MainWindow::slotDelete()
 		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
 		                                                   "Do you really want to delete the %1 selected alarms?", n),
 		                                       i18np("Delete Alarm", "Delete Alarms", n),
-		                                       KGuiItem(i18n("&Delete"), "editdelete"),
+		                                       KGuiItem(i18n("&Delete"), "edit-delete"),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
 			return;
