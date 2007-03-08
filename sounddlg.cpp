@@ -192,7 +192,10 @@ void SoundDlg::setReadOnly(bool readOnly)
  */
 QString SoundDlg::getFile() const
 {
-	return mFileEdit->text();
+	QString file = mFileEdit->text();
+	if (file.startsWith("file:///"))
+		file = file.mid(7);
+	return file;
 }
 
 /******************************************************************************
