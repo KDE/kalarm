@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 
 	// Sound file picker button
 	mFilePicker = new PushButton(this);
-	mFilePicker->setPixmap(SmallIcon("playsound"));
+	mFilePicker->setPixmap(SmallIcon("fileopen"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	QWhatsThis::add(mFilePicker, i18n("Configure a sound file to play when the alarm is displayed."));
