@@ -92,6 +92,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 	mFilePicker->setIcon(SmallIcon("fileopen"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
+	mFilePicker->setToolTip(i18n("Choose a file"));
 	mFilePicker->setWhatsThis(i18n("Configure a sound file to play when the alarm is displayed."));
 	soundLayout->addWidget(mFilePicker);
 
@@ -198,9 +199,9 @@ void SoundPicker::set(Preferences::SoundType type, const QString& f, float volum
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
-	mFilePicker->setToolTip(mFile.prettyUrl());
 	mTypeCombo->setCurrentIndex(indexes[type]);  // this doesn't trigger slotTypeSelected()
 	mFilePicker->setEnabled(type == Preferences::Sound_File);
+	mTypeCombo->setToolTip(type == Preferences::Sound_File ? mFile.prettyUrl() : QString());
 	mLastType = type;
 }
 
@@ -221,7 +222,10 @@ void SoundPicker::slotTypeSelected(int id)
 	if (newType == mLastType  ||  mRevertType)
 		return;
 	if (mLastType == Preferences::Sound_File)
+	{
 		mFilePicker->setEnabled(false);
+		mTypeCombo->setToolTip(QString());
+	}
 	else if (newType == Preferences::Sound_File)
 	{
 		if (mFile.isEmpty())
@@ -231,6 +235,7 @@ void SoundPicker::slotTypeSelected(int id)
 				return;    // revert to previously selected type
 		}
 		mFilePicker->setEnabled(true);
+		mTypeCombo->setToolTip(mFile.prettyUrl());
 	}
 	mLastType = newType;
 }
@@ -261,7 +266,6 @@ void SoundPicker::slotPickFile()
 		mFile       = file;
 		mDefaultDir = dlg.defaultDir();
 	}
-	mFilePicker->setToolTip(mFile.prettyUrl());
 	if (mFile.isEmpty())
 	{
 		// No audio file is selected, so revert to previously selected option
@@ -273,7 +277,10 @@ void SoundPicker::slotPickFile()
 #else
 		mTypeCombo->setCurrentIndex(indexes[mLastType]);
 #endif
+		mTypeCombo->setToolTip(QString());
 	}
+	else
+		mTypeCombo->setToolTip(mFile.prettyUrl());
 }
 
 /******************************************************************************
