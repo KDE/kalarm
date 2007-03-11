@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Alarms in Remote File
+Name[es]=Alarmas en archivo remoto
 Name[x-test]=xxAlarms in Remote Filexx
 X-KDE-Library=kalarm_remote
 Type=Service

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Alarms in Local File
+Name[es]=Alarmas en archivo local
 Name[x-test]=xxAlarms in Local Filexx
 X-KDE-Library=kalarm_local
 Type=Service
