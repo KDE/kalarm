@@ -248,7 +248,7 @@ QList<KAEvent> BirthdayDlg::events() const
 	KDateTime todayStart(today, KDateTime::ClockTime);
 	int thisYear = today.year();
 	int reminder = mReminder->minutes();
-	BirthdaySortModel* model = static_cast<const BirthdaySortModel*>(indexes[0].model());
+	const BirthdaySortModel* model = static_cast<const BirthdaySortModel*>(indexes[0].model());
 	for (int i = 0;  i < count;  ++i)
 	{
 		BirthdayModel::Data* data = model->rowData(indexes[i]);
