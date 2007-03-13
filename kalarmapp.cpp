@@ -1451,6 +1451,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 		event.cancelCancelledDeferral();
 		KAlarm::updateEvent(event);     // update the window lists and calendar file
 	}
+#warning updateDisplay is always false (CID 3195)
 	else if (updateDisplay)
 	{
 		Daemon::eventHandled(event.id());
