@@ -1,0 +1,32 @@
+# KAlarm version 1.9.5
+#
+Id=1.9.5
+File=kalarmrc
+
+# Convert pre-1.2.1 email options
+Group=General
+Options=overwrite
+Script=kalarm-1.2.1-general.pl
+
+# Rename [Defaults] keys to remove "Def" prefix.
+# For enum values, replace code numbers by strings.
+Group=Defaults
+Script=kalarm-1.9.5-defaults.pl
+Group=Defaults
+Key=DefLateCancel,LateCancel
+Key=DefAutoClose,AutoClose
+Key=DefConfirmAck,ConfirmAck
+Key=DefCopyKOrg,CopyKOrg
+Key=DefSoundFile,SoundFile
+Key=DefSoundRepeat,SoundRepeat
+Key=DefCmdScript,CmdScript
+Key=DefLogFile,LogFile
+Key=DefEmailBcc,EmailBcc
+Key=DefPreAction,PreAction
+Key=DefPostAction,PostAction
+
+# Write the config version into [General]Version
+Group=General
+Options=overwrite
+ScriptArguments=1.9.5
+Script=kalarm-version.pl

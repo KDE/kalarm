@@ -90,9 +90,6 @@ class Preferences : public PreferencesBase
 
 	private:
 		Preferences();         // only one instance allowed
-		virtual void            usrReadConfig();
-		bool                    convertOldPrefs();
-
 		static int              startOfDayCheck(const QTime&);
 		static void             setNotify(const QString& messageID, bool notify);
 		static bool             notifying(const QString& messageID);
@@ -105,20 +102,6 @@ class Preferences : public PreferencesBase
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		static QTime            mOldStartOfDay;       // previous start-of-day time
 		static bool             mStartOfDayChanged;   // start-of-day check value doesn't tally with new StartOfDay
-
-		// Converted values from previous config versions
-		Preferences::SoundType  mConvertedDefSoundType;
-		Preferences::CmdLogType mConvertedDefCmdLogType;
-		Preferences::RecurType  mConvertedRecurPeriod;
-		TimePeriod::Units       mConvertedReminderUnits;
-		QString                 mConvertedEmailFrom;
-		QString                 mConvertedBccAddress;
-		bool                    mConvertDefSoundType;
-		bool                    mConvertDefCmdLogType;
-		bool                    mConvertRecurPeriod;
-		bool                    mConvertReminderUnits;
-		bool                    mConverted;          // true once the config no longer needs to be converted
-		bool                    mConverting;         // true if currently writing converted config
 };
 
 #endif // PREFERENCES_H
