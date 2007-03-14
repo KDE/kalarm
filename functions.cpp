@@ -254,13 +254,15 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
 	kDebug(5950) << "KAlarm::addArchivedEvent(" << event.id() << ")\n";
 	KAEvent oldEvent = event;     // so that we can reinstate the event if there's an error
-	AlarmCalendar* cal = AlarmCalendar::resources();
 	bool archiving = (event.category() == KCalEvent::ACTIVE);
 	if (archiving)
 	{
+		if (!Preferences::archivedKeepDays())
+			return false;   // expired alarms aren't being kept
 		event.setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
 		event.setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
 	}
+	AlarmCalendar* cal = AlarmCalendar::resources();
 	KCal::Event* kcalEvent = cal->addEvent(event, 0, false, resource);
 	if (!kcalEvent)
 	{
