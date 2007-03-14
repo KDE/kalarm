@@ -612,7 +612,8 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 			EventListModel::alarms()->updateEvent(cal->event(oldid), kcalEvent);
 //			selectID = event.id();
 
-			if (!cal->deleteEvent(oldid, false))   // don't save calendar after deleting
+			if (cal->event(oldid)    // no error if event doesn't exist in archived resource
+			&&  !cal->deleteEvent(oldid, false))   // don't save calendar after deleting
 			{
 				status = UPDATE_ERROR;
 				++warnErr;
