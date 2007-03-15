@@ -740,8 +740,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mMessage             = config.readEntry("Message");
 	mAction              = static_cast<KAEvent::Action>(config.readEntry("Type", 0));
 	mFont                = config.readEntry("Font", QFont());
-	mBgColour            = config.readEntry("BgColour", Qt::white);
-	mFgColour            = config.readEntry("FgColour", Qt::black);
+	mBgColour            = config.readEntry("BgColour", QColor(Qt::white));
+	mFgColour            = config.readEntry("FgColour", QColor(Qt::black));
 	mConfirmAck          = config.readEntry("ConfirmAck", false);
 	QDateTime invalidDateTime;
 	QDateTime dt         = config.readEntry("Time", invalidDateTime);
