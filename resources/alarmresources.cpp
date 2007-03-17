@@ -1,7 +1,7 @@
 /*
  *  alarmresources.cpp  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include "kalarm.h"
 
 #include <kstaticdeleter.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -82,16 +82,15 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly)
 
 	if (mManager->isEmpty())
 	{
-		KSharedConfig::Ptr config = KGlobal::config();
-		config->setGroup(QString::fromLatin1("General"));
+		KConfigGroup config(KGlobal::config(), "General");
 		AlarmResource* resource;
-		resource = addDefaultResource(config.data(), AlarmResource::ACTIVE);
+		resource = addDefaultResource(config, AlarmResource::ACTIVE);
 		setStandardResource(resource);
 		if (!mActiveOnly)
 		{
-			resource = addDefaultResource(config.data(), AlarmResource::ARCHIVED);
+			resource = addDefaultResource(config, AlarmResource::ARCHIVED);
 			setStandardResource(resource);
-			resource = addDefaultResource(config.data(), AlarmResource::TEMPLATE);
+			resource = addDefaultResource(config, AlarmResource::TEMPLATE);
 			setStandardResource(resource);
 		}
 
@@ -121,12 +120,11 @@ void AlarmResources::setNoGui(bool noGui)
 
 AlarmResource* AlarmResources::addDefaultResource(AlarmResource::Type type)
 {
-	KSharedConfig::Ptr config = KGlobal::config();
-	config->setGroup(QString::fromLatin1("General"));
-	return addDefaultResource(config.data(), type);
+	KConfigGroup config(KGlobal::config(), "General");
+	return addDefaultResource(config, type);
 }
 
-AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmResource::Type type)
+AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, AlarmResource::Type type)
 {
 	QString configKey, defaultFile, title;
 	switch (type)
@@ -150,7 +148,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfig* config, AlarmRe
 			return 0;
 	}
 	AlarmResource* resource = 0;
-	QString fileName = config->readPathEntry(configKey);
+	QString fileName = config.readPathEntry(configKey);
 	if (!fileName.isEmpty())
 	{
 		// Calendar is specified in KAlarm config file

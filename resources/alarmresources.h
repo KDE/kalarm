@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -30,6 +30,7 @@
 #include "alarmresource.h"
 #include "kcalendar.h"
 
+class KConfigGroup;
 class KAResourceIface;
 namespace KCal { class Event; }
 using KCal::CalendarLocal;
@@ -458,7 +459,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 
 	private:
 		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly);
-		AlarmResource* addDefaultResource(const KConfig*, AlarmResource::Type);
+		AlarmResource* addDefaultResource(const KConfigGroup&, AlarmResource::Type);
 		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);
 		void  slotResourceStatusChanged(AlarmResource*, Change);

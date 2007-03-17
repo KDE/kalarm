@@ -110,8 +110,8 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		 * itself and instead will simply open a new window.
 		 */
 		KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
-		kaconfig.setGroup("General");
-		autostart = kaconfig.readEntry("AutostartTray", false);
+		const KConfigGroup group = kaconfig.group("General");
+		autostart = group.readEntry("AutostartTray", false);
 		if (autostart)
 		{
 			kDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
@@ -425,8 +425,8 @@ void AlarmDaemon::enableAutoStart(bool on, bool sync)
         kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")\n";
         KSharedConfig::Ptr config = KGlobal::config();
 	config->reparseConfiguration();
-        config->setGroup(QLatin1String(DAEMON_AUTOSTART_SECTION));
-        config->writeEntry(QLatin1String(DAEMON_AUTOSTART_KEY), on);
+	KConfigGroup group(config, DAEMON_AUTOSTART_SECTION);
+        group.writeEntry(DAEMON_AUTOSTART_KEY, on);
 	if (sync)
 		config->sync();
 }
@@ -752,8 +752,8 @@ void AlarmDaemon::readConfig()
 KDateTime::Spec AlarmDaemon::timeSpec()
 {
 	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
-	kaconfig.setGroup("General");
-	QString zone = kaconfig.readEntry("Timezone", QString());
+	const KConfigGroup group = kaconfig.group("General");
+	QString zone = group.readEntry("Timezone", QString());
 	if (zone.isEmpty())
 		return KDateTime::ClockTime;
 	const KTimeZone* tz = KSystemTimeZones::zone(zone);
