@@ -960,12 +960,3 @@ int AlarmResources::decrementChangeCount(AlarmResource* r)
   mChangeCounts[r] = count;
   return count;
 }
-
-bool AlarmResources::reload(const QString& tz)
-{
-	save();
-	close();
-	setTimeZoneId(tz);
-	load();
-	return true;
-}

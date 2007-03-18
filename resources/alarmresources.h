@@ -136,7 +136,6 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
      * @return success or failure
      */
     virtual bool reload();
-    virtual KDE_DEPRECATED bool reload(const QString& tz);
 
     /**
        Clear out the current Calendar, freeing all used memory etc.
