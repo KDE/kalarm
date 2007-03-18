@@ -39,11 +39,16 @@ using namespace KCal;
 static QDateTime readLastModified(const QString& filePath);
 
 
-KAResourceLocalDir::KAResourceLocalDir(const KConfig* config)
-	: AlarmResource(config)
+KAResourceLocalDir::KAResourceLocalDir()
+	: AlarmResource()
 {
-	if (config)
-		mURL = KUrl(config->readPathEntry("CalendarURL"));
+	init();
+}
+
+KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
+	: AlarmResource(group)
+{
+	mURL = KUrl(group.readPathEntry("CalendarURL"));
 	init();
 }
 
@@ -76,10 +81,10 @@ KAResourceLocalDir::~KAResourceLocalDir()
 		close();
 }
 
-void KAResourceLocalDir::writeConfig(KConfig* config)
+void KAResourceLocalDir::writeConfig(KConfigGroup& group)
 {
-	config->writePathEntry("CalendarURL", mURL.prettyUrl());
-	AlarmResource::writeConfig(config);
+	group.writePathEntry("CalendarURL", mURL.prettyUrl());
+	AlarmResource::writeConfig(group);
 }
 
 void KAResourceLocalDir::startReconfig()

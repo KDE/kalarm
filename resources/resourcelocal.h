@@ -39,8 +39,9 @@ class KDE_EXPORT KAResourceLocal : public AlarmResource
 {
 		Q_OBJECT
 	public:
+		KAResourceLocal();
 		/** Create resource from configuration information stored in a KConfig object. */
-		explicit KAResourceLocal(const KConfig*);
+		explicit KAResourceLocal(const KConfigGroup&);
 		/** Create resource for file named @a fileName. */
 		KAResourceLocal(Type, const QString& fileName);
 		virtual ~KAResourceLocal();
@@ -50,7 +51,7 @@ class KDE_EXPORT KAResourceLocal : public AlarmResource
 		virtual QString     displayLocation(bool prefix = false) const;
 		virtual QStringList location() const   { return QStringList(fileName()); }
 		virtual bool        setLocation(const QString& fileName, const QString& = QString());
-		virtual void writeConfig(KConfig*);
+		virtual void writeConfig(KConfigGroup&);
 		virtual void startReconfig();
 		virtual void applyReconfig();
 

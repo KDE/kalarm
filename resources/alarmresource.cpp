@@ -39,8 +39,24 @@ int                 AlarmResource::mDebugArea = KARES_DEBUG;
 bool                AlarmResource::mNoGui = false;
 
 
-AlarmResource::AlarmResource(const KConfig* config)
-	: ResourceCached(config),
+AlarmResource::AlarmResource()
+	: ResourceCached(),
+	  mLock(0),
+	  mType(static_cast<Type>(0)),    // invalid
+	  mStandard(false),
+	  mCloseAfterSave(false),
+	  mCompatibility(KCalendar::Incompatible),
+	  mReconfiguring(0),
+	  mLoaded(false),
+	  mLoading(false)
+{
+	// Prevent individual events being set read-only when loading a read-only resource
+	setNoReadOnlyOnLoad(true);
+	enableChangeNotification();
+}
+
+AlarmResource::AlarmResource(const KConfigGroup& group)
+	: ResourceCached(group),
 	  mLock(0),
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
@@ -53,27 +69,24 @@ AlarmResource::AlarmResource(const KConfig* config)
 	// Prevent individual events being set read-only when loading a read-only resource
 	setNoReadOnlyOnLoad(true);
 
-	if (config)
+	ResourceCached::readConfig(group);
+	int type = group.readEntry("AlarmType", static_cast<int>(ACTIVE));
+	switch (type)
 	{
-		ResourceCached::readConfig(config);
-		int type = config->readEntry("AlarmType", static_cast<int>(ACTIVE));
-		switch (type)
-		{
-			case ACTIVE:
-			case ARCHIVED:
-			case TEMPLATE:
-				mType = static_cast<Type>(type);
-				mStandard = config->readEntry("Standard", true);
-				break;
-			default:
-				break;
-		}
+		case ACTIVE:
+		case ARCHIVED:
+		case TEMPLATE:
+			mType = static_cast<Type>(type);
+			mStandard = group.readEntry("Standard", true);
+			break;
+		default:
+			break;
 	}
 	enableChangeNotification();
 }
 
 AlarmResource::AlarmResource(Type type)
-	: ResourceCached(0),
+	: ResourceCached(),
 	  mLock(0),
 	  mType(type),
 	  mStandard(false),
@@ -91,12 +104,12 @@ AlarmResource::~AlarmResource()
 	delete mLock;
 }
 
-void AlarmResource::writeConfig(KConfig* config)
+void AlarmResource::writeConfig(KConfigGroup& group)
 {
-	config->writeEntry("AlarmType", static_cast<int>(mType));
-	config->writeEntry("Standard", mStandard);
-	ResourceCached::writeConfig(config);
-	ResourceCalendar::writeConfig(config);
+	group.writeEntry("AlarmType", static_cast<int>(mType));
+	group.writeEntry("Standard", mStandard);
+	ResourceCached::writeConfig(group);
+	ResourceCalendar::writeConfig(group);
 }
 
 void AlarmResource::startReconfig()

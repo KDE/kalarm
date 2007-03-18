@@ -30,7 +30,6 @@
 #include <kcal/resourcecached.h>
 #include "kcalendar.h"
 
-class KConfig;
 using KCal::CalendarLocal;
 
 
@@ -51,10 +50,11 @@ class KDE_EXPORT AlarmResource : public KCal::ResourceCached
 		/** Whether the fix function should convert old format KAlarm calendars. */
 		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
-		explicit AlarmResource(const KConfig*);
+		AlarmResource();
+		explicit AlarmResource(const KConfigGroup&);
 		explicit AlarmResource(Type);
 		~AlarmResource();
-		virtual void writeConfig(KConfig*);
+		virtual void writeConfig(KConfigGroup&);
 		virtual QString infoText() const;
 		KABC::Lock*  lock()                      { return mLock; }
 

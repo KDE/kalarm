@@ -35,19 +35,26 @@
 using namespace KCal;
 
 
-KAResourceRemote::KAResourceRemote(const KConfig* config)
-	: AlarmResource(config),
+KAResourceRemote::KAResourceRemote()
+	: AlarmResource(),
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(true),
 	  mUseCacheFile(true)
 {
-	if (config)
-	{
-		mDownloadUrl = KUrl(config->readEntry("DownloadUrl"));
-		mUploadUrl = KUrl(config->readEntry("UploadUrl"));
-		ResourceCached::readConfig(config );
-	}
+	init();
+}
+
+KAResourceRemote::KAResourceRemote(const KConfigGroup& group)
+	: AlarmResource(group),
+	  mDownloadJob(0),
+	  mUploadJob(0),
+	  mShowProgress(true),
+	  mUseCacheFile(true)
+{
+	mDownloadUrl = KUrl(group.readEntry("DownloadUrl"));
+	mUploadUrl = KUrl(group.readEntry("UploadUrl"));
+	ResourceCached::readConfig(group );
 	init();
 }
 
@@ -78,11 +85,11 @@ KAResourceRemote::~KAResourceRemote()
 		mUploadJob->kill();
 }
 
-void KAResourceRemote::writeConfig(KConfig* config)
+void KAResourceRemote::writeConfig(KConfigGroup& group)
 {
-	config->writeEntry("DownloadUrl", mDownloadUrl.url());
-	config->writeEntry("UploadUrl", mUploadUrl.url());
-	AlarmResource::writeConfig(config);
+	group.writeEntry("DownloadUrl", mDownloadUrl.url());
+	group.writeEntry("UploadUrl", mUploadUrl.url());
+	AlarmResource::writeConfig(group);
 }
 
 void KAResourceRemote::startReconfig()

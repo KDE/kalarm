@@ -46,8 +46,9 @@ class KDE_EXPORT KAResourceRemote : public AlarmResource
 {
 		Q_OBJECT
 	public:
+		KAResourceRemote();
 		/** Create resource from configuration information stored in a KConfig object. */
-		explicit KAResourceRemote(const KConfig*);
+		explicit KAResourceRemote(const KConfigGroup&);
 		/** Create remote resource.
 		 *  @param downloadUrl URL used to download iCalendar file
 		 *  @param uploadUrl   URL used to upload iCalendar file. */
@@ -60,7 +61,7 @@ class KDE_EXPORT KAResourceRemote : public AlarmResource
 		virtual QStringList location() const;
 		virtual bool        setLocation(const QString& downloadUrl, const QString& uploadUrl);
 		virtual void showProgress(bool show)            { mShowProgress = show; }
-		virtual void writeConfig(KConfig*);
+		virtual void writeConfig(KConfigGroup&);
 		virtual void startReconfig();
 		virtual void applyReconfig();
 		virtual bool isSaving()                         { return mUploadJob; }

@@ -34,11 +34,16 @@
 using namespace KCal;
 
 
-KAResourceLocal::KAResourceLocal(const KConfig* config)
-	: AlarmResource(config)
+KAResourceLocal::KAResourceLocal()
+	: AlarmResource()
 {
-	if (config)
-		mURL = KUrl(config->readPathEntry("CalendarURL"));
+	init();
+}
+
+KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
+	: AlarmResource(group)
+{
+	mURL = KUrl(group.readPathEntry("CalendarURL"));
 	init();
 }
 
@@ -68,10 +73,10 @@ KAResourceLocal::~KAResourceLocal()
 		close();
 }
 
-void KAResourceLocal::writeConfig(KConfig* config)
+void KAResourceLocal::writeConfig(KConfigGroup& group)
 {
-	config->writePathEntry("CalendarURL", mURL.prettyUrl());
-	AlarmResource::writeConfig(config);
+	group.writePathEntry("CalendarURL", mURL.prettyUrl());
+	AlarmResource::writeConfig(group);
 }
 
 void KAResourceLocal::startReconfig()
