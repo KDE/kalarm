@@ -90,11 +90,8 @@ void Find::display()
 	}
 	else
 	{
-#ifdef MODAL_FIND
-		mDialog = new KFindDialog(mListView, "FindDlg", mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
-#else
 		mDialog = new KFindDialog(false, mListView, "FindDlg", mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
-#endif
+		mDialog->setAttribute(Qt::WA_DeleteOnClose);
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
 
@@ -153,9 +150,7 @@ void Find::display()
 		mCommandType->setChecked(mOptions & FIND_COMMAND);
 		mEmailType->setChecked(mOptions & FIND_EMAIL);
 
-#ifndef MODAL_FIND
 		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
-#endif
 	}
 
 	// Only display active/archived options if archived alarms are being kept
@@ -203,14 +198,7 @@ void Find::display()
 	mEmailType->setEnabled(email);
 
 	mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
-#ifdef MODAL_FIND
-	if (mDialog->exec() == QDialog::Accepted)
-		slotFind();
-	else
-		delete mDialog;
-#else
 	mDialog->show();
-#endif
 }
 
 /******************************************************************************
@@ -241,18 +229,12 @@ void Find::slotFind()
 	{
 		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
-		delete mDialog;    // automatically set to 0
 		findNext(true, true, false);
 	}
 	else
 	{
-#ifdef MODAL_FIND
-		mFind = new KFind(mDialog->pattern(), options, mListView);
-#else
 		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
-#endif
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
-		delete mDialog;                  // close the Find dialogue. Automatically set to 0.
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
 
 		// Set the starting point for the search
