@@ -408,8 +408,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
 		bool               mainExpired() const            { return mMainExpired; }
-		bool               expired() const
-                { return ( mDisplaying && mMainExpired ) ||  mCategory == KCalEvent::ARCHIVED; }
+		bool               expired() const                { return (mDisplaying && mMainExpired)  ||  mCategory == KCalEvent::ARCHIVED; }
 		KCalEvent::Status  category() const               { return mCategory; }
 		QString            resourceID() const             { return mResourceId; }
 
