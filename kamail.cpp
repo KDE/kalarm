@@ -336,8 +336,9 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 {
 	static const char* textMimeTypes[] = {
-		"application/x-shellscript", "application/x-nawk", "application/x-gawk", "application/x-awk",
-		"application/x-perl", "text/x-python", "application/x-desktop",
+		"application/x-sh", "application/x-csh", "application/x-shellscript",
+		"application/x-nawk", "application/x-gawk", "application/x-awk",
+		"application/x-perl", "application/x-desktop",
 		0
 	};
 	QStringList attachments = event.emailAttachments();
