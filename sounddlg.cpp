@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,12 +26,18 @@
 #include <qhbox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
+#include <qfile.h>
+#include <qdir.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kaudioplayer.h>
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
+#include <kdebug.h>
 
 #include "checkbox.h"
 #include "functions.h"
@@ -62,9 +68,17 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	setMainWidget(page);
 	QVBoxLayout* layout = new QVBoxLayout(page, 0, spacingHint());
 
-	// File name edit box
+	// File play button
 	QHBox* box = new QHBox(page);
 	layout->addWidget(box);
+	mFilePlay = new QPushButton(box);
+	mFilePlay->setPixmap(SmallIcon("player_play"));
+	mFilePlay->setFixedSize(mFilePlay->sizeHint());
+	connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
+	QToolTip::add(mFilePlay, i18n("Test the sound"));
+	QWhatsThis::add(mFilePlay, i18n("Play the selected sound file."));
+
+	// File name edit box
 	mFileEdit = new LineEdit(LineEdit::Url, box);
 	mFileEdit->setAcceptDrops(true);
 	QWhatsThis::add(mFileEdit, i18n("Enter the name or URL of a sound file to play."));
@@ -166,8 +180,8 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 }
 
 /******************************************************************************
- * Set the read-only status of the dialogue.
- */
+* Set the read-only status of the dialogue.
+*/
 void SoundDlg::setReadOnly(bool readOnly)
 {
 	if (readOnly != mReadOnly)
@@ -185,25 +199,11 @@ void SoundDlg::setReadOnly(bool readOnly)
 }
 
 /******************************************************************************
- * Return the entered repetition and volume settings:
- * 'volume' is in range 0 - 1, or < 0 if volume is not to be set.
- * 'fadeVolume is similar, with 'fadeTime' set to the fade interval in seconds.
- * Reply = whether to repeat or not.
- */
-QString SoundDlg::getFile() const
-{
-	QString file = mFileEdit->text();
-	if (file.startsWith("file:///"))
-		file = file.mid(7);
-	return file;
-}
-
-/******************************************************************************
- * Return the entered repetition and volume settings:
- * 'volume' is in range 0 - 1, or < 0 if volume is not to be set.
- * 'fadeVolume is similar, with 'fadeTime' set to the fade interval in seconds.
- * Reply = whether to repeat or not.
- */
+* Return the entered repetition and volume settings:
+* 'volume' is in range 0 - 1, or < 0 if volume is not to be set.
+* 'fadeVolume is similar, with 'fadeTime' set to the fade interval in seconds.
+* Reply = whether to repeat or not.
+*/
 bool SoundDlg::getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
 {
 	volume = mVolumeCheckbox->isChecked() ? (float)mVolumeSlider->value() / 100 : -1;
@@ -245,12 +245,14 @@ void SoundDlg::slotOk()
 {
 	if (mReadOnly)
 		reject();
+	if (!checkFile())
+		return;
 	accept();
 }
 
 /******************************************************************************
- * Called when the file browser button is clicked.
- */
+* Called when the file browser button is clicked.
+*/
 void SoundDlg::slotPickFile()
 {
 	QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
@@ -259,8 +261,81 @@ void SoundDlg::slotPickFile()
 }
 
 /******************************************************************************
- * Called when the Set Volume checkbox is toggled.
- */
+* Called when the file play button is clicked.
+*/
+void SoundDlg::playSound()
+{
+	if (checkFile())
+		KAudioPlayer::play(QFile::encodeName(mFileName));
+}
+
+/******************************************************************************
+* Check whether the specified sound file exists.
+* Note that KAudioPlayer::play() can only cope with local files.
+*/
+bool SoundDlg::checkFile()
+{
+	QString file = mFileEdit->text();
+	KURL url;
+	if (KURL::isRelativeURL(file))
+	{
+		// It's not an absolute URL, so check for an absolute path
+		QFileInfo f(file);
+		if (!f.isRelative())
+			url.setPath(file);
+	}
+	else
+		url = KURL::fromPathOrURL(file);   // it's an absolute URL
+	if (!url.isEmpty())
+	{
+		// It's an absolute path or URL.
+		// Only allow local files for KAudioPlayer.
+		if (url.isLocalFile()  &&  KIO::NetAccess::exists(url, true, this))
+		{
+			mFileName = url.path();
+			return true;
+		}
+	}
+	else
+	{
+		// It's a relative path.
+		// Find the first sound resource that contains files.
+		QStringList soundDirs = KGlobal::dirs()->resourceDirs("sound");
+		if (!soundDirs.isEmpty())
+		{
+			QDir dir;
+			dir.setFilter(QDir::Files | QDir::Readable);
+			for (QStringList::ConstIterator it = soundDirs.begin();  it != soundDirs.end();  ++it)
+			{
+				dir = *it;
+				if (dir.isReadable() && dir.count() > 2)
+				{
+					url.setPath(*it);
+					url.addPath(file);
+					if (KIO::NetAccess::exists(url, true, this))
+					{
+						mFileName = url.path();
+						return true;
+					}
+				}
+			}
+		}
+		url.setPath(QDir::homeDirPath());
+		url.addPath(file);
+		if (KIO::NetAccess::exists(url, true, this))
+		{
+			mFileName = url.path();
+			return true;
+		}
+	}
+	KMessageBox::sorry(this, i18n("File not found"));
+	mFileName = QString::null;
+	return false;
+}
+
+/******************************************************************************
+* Called when the Set Volume checkbox is toggled.
+*/
 void SoundDlg::slotVolumeToggled(bool on)
 {
 	mVolumeSlider->setEnabled(on);
@@ -269,8 +344,8 @@ void SoundDlg::slotVolumeToggled(bool on)
 }
 
 /******************************************************************************
- * Called when the Fade checkbox is toggled.
- */
+* Called when the Fade checkbox is toggled.
+*/
 void SoundDlg::slotFadeToggled(bool on)
 {
 	mFadeBox->setEnabled(on);
