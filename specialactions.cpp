@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -131,28 +131,10 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 =============================================================================*/
 
 SpecialActions::SpecialActions(QWidget* parent, const char* name)
-	: QGroupBox(parent, name)
+	: QWidget(parent, name),
+	  mReadOnly(false)
 {
-	setFrameStyle(QFrame::NoFrame);
-	init(QString::null);
-}
-
-SpecialActions::SpecialActions(const QString& frameLabel, QWidget* parent, const char* name)
-	: QGroupBox(frameLabel, parent, name)
-{
-	init(frameLabel);
-}
-
-void SpecialActions::init(const QString& frameLabel)
-{
-	mReadOnly = false;
-
 	QBoxLayout* topLayout = new QVBoxLayout(this, 0, KDialog::spacingHint());
-	if (!frameLabel.isEmpty())
-	{
-		topLayout->setMargin(KDialog::marginHint());
-		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
-	}
 
 	// Pre-alarm action
 	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);
