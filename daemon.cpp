@@ -68,6 +68,7 @@ bool                 Daemon::mRunning = false;
 bool                 Daemon::mCalendarDisabled = false;
 bool                 Daemon::mEnableCalPending = false;
 bool                 Daemon::mRegisterFailMsg = false;
+bool                 Daemon::mNotFoundShown = false;
 
 // How frequently to check the daemon's status after starting it.
 // This is equal to the length of time we wait after the daemon is registered with D-Bus
@@ -153,7 +154,9 @@ bool Daemon::start()
 			QString execStr = KStandardDirs::locate("exe", QLatin1String(DAEMON_APP_NAME));
 			if (execStr.isEmpty())
 			{
-				KMessageBox::error(0, i18n("Alarm daemon not found."));
+				if (!mNotFoundShown)
+					KMessageBox::error(0, i18n("Alarm daemon not found."));
+				mNotFoundShown = true;
 				kError() << "Daemon::startApp(): " DAEMON_APP_NAME " not found" << endl;
 				return false;
 			}
@@ -348,6 +351,8 @@ void Daemon::updateRegisteredStatus(bool timeout)
 */
 void Daemon::setStatus(Status newStatus)
 {
+	if (mStatus == STOPPED  &&  newStatus != STOPPED)
+		mNotFoundShown = false;   // allow "daemon not found" message to be (re-)output
 	bool oldreg = (mStatus == REGISTERED);
 	mStatus = newStatus;
 	bool newreg = (newStatus != REGISTERED);

@@ -122,6 +122,7 @@ class Daemon : public QObject
 		static bool      mCalendarDisabled;    // monitoring of calendar is currently disabled by daemon
 		static bool      mEnableCalPending;    // waiting to tell daemon to enable calendar
 		static bool      mRegisterFailMsg;     // true if registration failure message has been displayed
+		static bool      mNotFoundShown;       // true if "daemon not found" message has been shown
 
 		friend class NotificationHandler;
 };
