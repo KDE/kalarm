@@ -30,7 +30,7 @@
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kconfig.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
@@ -543,7 +543,7 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 		}
 
 		// Start KAlarm, using the command line to specify the alarm
-		KProcess p;
+		K3Process p;
 		if (mClientExe.isEmpty())
 		{
 			kDebug(5900) << "AlarmDaemon::notifyEvent(): '" << mClientName << "' not found" << endl;
@@ -551,7 +551,7 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 		}
 		p << mClientExe;
 		p << "--handleEvent" << id;
-		p.start(KProcess::DontCare);
+		p.start(K3Process::DontCare);
 		kDebug(5900) << "AlarmDaemon::notifyEvent(): used command line" << endl;
 	}
 	else

@@ -25,11 +25,11 @@
 
 #include <QQueue>
 #include <QByteArray>
-#include <kprocess.h>
+#include <k3process.h>
 
 
 /**
- *  @short Enhanced KShellProcess.
+ *  @short Enhanced K3ShellProcess.
  *
  *  The ShellProcess class runs a shell command and interprets the shell exit status
  *  as far as possible. It blocks execution if shell access is prohibited. It buffers
@@ -39,17 +39,17 @@
  *  allowed at all. If not (e.g. if the user is running in kiosk mode), it blocks
  *  execution.
  *
- *  Derived from KShellProcess, this class additionally tries to interpret the shell
+ *  Derived from K3ShellProcess, this class additionally tries to interpret the shell
  *  exit status. Different shells use different exit codes. Currently, if bash or ksh
  *  report that the command could not be found or could not be executed, the NOT_FOUND
  *  status is returned.
  *
- *  Writes to the process's stdin are buffered, so that unlike with KShellProcess, there
+ *  Writes to the process's stdin are buffered, so that unlike with K3ShellProcess, there
  *  is not need to wait for the write to complete before writing again.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ShellProcess : public KShellProcess
+class ShellProcess : public K3ShellProcess
 {
 		Q_OBJECT
 	public:
@@ -117,8 +117,8 @@ class ShellProcess : public KShellProcess
 		void  shellExited(ShellProcess*);
 
 	private slots:
-		void  writtenStdin(KProcess*);
-		void  slotExited(KProcess*);
+		void  writtenStdin(K3Process*);
+		void  slotExited(K3Process*);
 
 	private:
 		// Prohibit the following inherited methods

@@ -35,7 +35,7 @@
 
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kfileitem.h>
@@ -161,12 +161,12 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 			}
 
 			command += QLatin1String(" -s ");
-			command += KShellProcess::quote(event.emailSubject());
+			command += K3ShellProcess::quote(event.emailSubject());
 
 			if (!data.bcc.isEmpty())
 			{
 				command += QLatin1String(" -b ");
-				command += KShellProcess::quote(data.bcc);
+				command += K3ShellProcess::quote(data.bcc);
 			}
 
 			command += ' ';

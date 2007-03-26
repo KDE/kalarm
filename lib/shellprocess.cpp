@@ -39,7 +39,7 @@ bool       ShellProcess::mAuthorised  = false;
 
 
 ShellProcess::ShellProcess(const QString& command)
-	: KShellProcess(shellName()),
+	: K3ShellProcess(shellName()),
 	  mCommand(command),
 	  mStatus(INACTIVE),
 	  mStdinExit(false)
@@ -56,10 +56,10 @@ bool ShellProcess::start(Communication comm)
 		mStatus = UNAUTHORISED;
 		return false;
 	}
-	KShellProcess::operator<<(mCommand);
-	connect(this, SIGNAL(wroteStdin(KProcess*)), SLOT(writtenStdin(KProcess*)));
-	connect(this, SIGNAL(processExited(KProcess*)), SLOT(slotExited(KProcess*)));
-	if (!KShellProcess::start(KProcess::NotifyOnExit, comm))
+	K3ShellProcess::operator<<(mCommand);
+	connect(this, SIGNAL(wroteStdin(K3Process*)), SLOT(writtenStdin(K3Process*)));
+	connect(this, SIGNAL(processExited(K3Process*)), SLOT(slotExited(K3Process*)));
+	if (!K3ShellProcess::start(K3Process::NotifyOnExit, comm))
 	{
 		mStatus = START_FAIL;
 		return false;
@@ -73,7 +73,7 @@ bool ShellProcess::start(Communication comm)
 * Interprets the exit status according to which shell was called, and emits
 * a shellExited() signal.
 */
-void ShellProcess::slotExited(KProcess* proc)
+void ShellProcess::slotExited(K3Process* proc)
 {
 	kDebug(5950) << "ShellProcess::slotExited()\n";
 	mStdinQueue.clear();
@@ -106,7 +106,7 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 	bool write = mStdinQueue.isEmpty();
 	mStdinQueue.enqueue(scopy);
 	if (write)
-		KProcess::writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
+		K3Process::writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
 }
 
 /******************************************************************************
@@ -115,7 +115,7 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 * Note that buffers written to STDIN must not be freed until the writtenStdin()
 * signal has been processed.
 */
-void ShellProcess::writtenStdin(KProcess* proc)
+void ShellProcess::writtenStdin(K3Process* proc)
 {
 	if (!mStdinQueue.isEmpty())
 		mStdinQueue.dequeue();   // free the buffer which has now been written
@@ -161,7 +161,7 @@ QString ShellProcess::errorMessage() const
 
 /******************************************************************************
 * Determine which shell to use.
-* This is a duplication of what KShellProcess does, but we need to know
+* This is a duplication of what K3ShellProcess does, but we need to know
 * which shell is used in order to decide what its exit code means.
 */
 const QByteArray& ShellProcess::shellPath()

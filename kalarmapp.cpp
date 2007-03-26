@@ -36,7 +36,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
 #include <KStandardGuiItem>
@@ -1593,7 +1593,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
-	KProcess::Communication comms = KProcess::NoCommunication;
+	K3Process::Communication comms = K3Process::NoCommunication;
 	QString cmd;
 	QString tmpXtermFile;
 	if (flags & ProcData::EXEC_IN_XTERM)
@@ -1627,14 +1627,14 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		{
 			// Append a sleep to the command.
 			// Quote the command in case it contains characters such as [>|;].
-			QString exec = KShellProcess::quote(command + QLatin1String("; sleep 86400"));
+			QString exec = K3ShellProcess::quote(command + QLatin1String("; sleep 86400"));
 			cmd.replace("%w", exec);    // %w indicates where to insert the command string
 		}
 		else
 		{
 			// Set the command to execute.
 			// Put it in quotes in case it contains characters such as [>|;].
-			QString exec = KShellProcess::quote(command);
+			QString exec = K3ShellProcess::quote(command);
 			if (cmd.indexOf("%c") >= 0)
 				cmd.replace("%c", exec);    // %c indicates where to insert the command string
 			else
@@ -1644,20 +1644,20 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	else
 	{
 		cmd = command;
-		comms = KProcess::AllOutput;
+		comms = K3Process::AllOutput;
 	}
 	ShellProcess* proc = new ShellProcess(cmd);
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 	QPointer<ShellProcess> logproc = 0;
-	if (comms == KProcess::AllOutput  &&  !event.logFile().isEmpty())
+	if (comms == K3Process::AllOutput  &&  !event.logFile().isEmpty())
 	{
 		// Output is to be appended to a log file.
 		// Set up a logging process to write the command's output to.
-		connect(proc, SIGNAL(receivedStdout(KProcess*,char*,int)), SLOT(slotCommandOutput(KProcess*,char*,int)));
-		connect(proc, SIGNAL(receivedStderr(KProcess*,char*,int)), SLOT(slotCommandOutput(KProcess*,char*,int)));
+		connect(proc, SIGNAL(receivedStdout(K3Process*,char*,int)), SLOT(slotCommandOutput(K3Process*,char*,int)));
+		connect(proc, SIGNAL(receivedStderr(K3Process*,char*,int)), SLOT(slotCommandOutput(K3Process*,char*,int)));
 		logproc = new ShellProcess(QString::fromLatin1("cat >>%1").arg(event.logFile()));
 		connect(logproc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotLogProcExited(ShellProcess*)));
-		logproc->start(KProcess::Stdin);
+		logproc->start(K3Process::Stdin);
 		QString heading;
 		if (alarm  &&  alarm->dateTime().isValid())
 		{
@@ -1718,7 +1718,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 /******************************************************************************
 * Called when an executing command alarm sends output to stdout or stderr.
 */
-void KAlarmApp::slotCommandOutput(KProcess* proc, char* buffer, int bufflen)
+void KAlarmApp::slotCommandOutput(K3Process* proc, char* buffer, int bufflen)
 {
 //kDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'\n";
 	// Find this command in the command list

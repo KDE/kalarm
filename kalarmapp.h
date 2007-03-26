@@ -31,7 +31,7 @@ class KDateTime;
 
 #include <kuniqueapplication.h>
 #include <kurl.h>
-class KProcess;
+class K3Process;
 namespace KCal { class Event; }
 
 #include "alarmevent.h"
@@ -97,7 +97,7 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void               quitFatal();
 		void               slotPreferencesChanged();
-		void               slotCommandOutput(KProcess*, char* buffer, int bufflen);
+		void               slotCommandOutput(K3Process*, char* buffer, int bufflen);
 		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
 		void               slotArchivedPurged();

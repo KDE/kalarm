@@ -57,7 +57,7 @@
 #include <kmessagebox.h>
 #include <kwin.h>
 #include <kwinmodule.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>
