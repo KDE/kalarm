@@ -310,7 +310,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	QWhatsThis::add(mConfirmAlarmDeletion,
 	      i18n("Check to be prompted for confirmation each time you delete an alarm."));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
 
 	// Expired alarms
 	group = new QGroupBox(i18n("Expired Alarms"), mPage);
