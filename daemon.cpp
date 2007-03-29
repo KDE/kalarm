@@ -793,13 +793,12 @@ AlarmEnableAction::AlarmEnableAction(QObject* parent)
 	: KToggleAction(i18n("Enable &Alarms"), parent),
 	  mInitialised(false)
 {
-	setCheckedState(KGuiItem(i18n("Disable &Alarms")));
 	setCheckedActual(false);    // set the correct text
 	mInitialised = true;
 }
 
 /******************************************************************************
-*  Set the checked status and the correct text for the Alarms Enabled action.
+*  Set the checked status for the Alarms Enabled action.
 */
 void AlarmEnableAction::setCheckedActual(bool running)
 {

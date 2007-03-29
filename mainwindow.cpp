@@ -427,29 +427,24 @@ void MainWindow::initActions()
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
 	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
 	mActionShowTime->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
-	mActionShowTime->setCheckedState(KGuiItem(i18n("Hide &Alarm Times")));
 	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
 	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
 	actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
 	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-	mActionShowTimeTo->setCheckedState(KGuiItem(i18n("Hide Time t&o Alarms")));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowArchived = new KToggleAction(KIcon("history"), i18n_e_ShowArchivedAlarms(), this);
+	mActionShowArchived = new KToggleAction(i18n_e_ShowArchivedAlarms(), this);
 	actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
 	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
-	mActionShowArchived->setCheckedState(KGuiItem(i18n_e_HideArchivedAlarms()));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
 	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), this);
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
-	mActionToggleTrayIcon->setCheckedState(KGuiItem(i18n("Hide From System &Tray")));
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
 	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
-	mActionToggleResourceSel->setCheckedState(KGuiItem(i18n("Hide &Resources")));
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
 	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), this);
