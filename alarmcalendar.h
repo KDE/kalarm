@@ -68,9 +68,7 @@ class AlarmCalendar : public QObject
 		KCal::Event*          updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
-		void                  purgeAll()             { purge(0); }
-		void                  setPurgeDays(int days);
-		void                  purgeIfQueued();    // must only be called from KAlarmApp::processQueue()
+		void                  purgeEvents(KCal::Event::List);
 		bool                  isOpen() const         { return mOpen; }
 		bool                  isEmpty() const;
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
@@ -90,13 +88,11 @@ class AlarmCalendar : public QObject
 
 	signals:
 		void                  calendarSaved(AlarmCalendar*);
-		void                  purged();
 		void                  emptyStatus(bool empty);
 
 	private slots:
 		void                  slotCacheDownloaded(AlarmResource*);
 		void                  slotResourceLoaded(AlarmResource*, bool success);
-		void                  slotPurge();
 
 	private:
 		enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
@@ -104,8 +100,6 @@ class AlarmCalendar : public QObject
 		AlarmCalendar();
 		AlarmCalendar(const QString& file, KCalEvent::Status);
 		bool                  saveCal(const QString& newFile = QString());
-		void                  purge(int daysToKeep);
-		void                  startPurgeTimer();
 
 		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
 		static AlarmCalendar* mDisplayCalendar;    // the display calendar
@@ -121,9 +115,7 @@ class AlarmCalendar : public QObject
 		QString               mLocalFile;          // calendar file, or local copy if it's a remote file
 		CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
 		KCalEvent::Status     mEventType;          // what type of events the calendar file is for
-		int                   mArchivedPurgeDays;  // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
 		bool                  mOpen;               // true if the calendar file is open
-		int                   mPurgeDaysQueued;    // >= 0 to purge the calendar when called from KAlarmApp::processLoop()
 		int                   mUpdateCount;        // nesting level of group of calendar update calls
 		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
 };

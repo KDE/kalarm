@@ -675,6 +675,35 @@ UpdateStatus enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParen
 }
 
 /******************************************************************************
+* This method must only be called from the main KAlarm queue processing loop,
+* to prevent asynchronous calendar operations interfering with one another.
+*
+* Purge all archived events from the default archived alarm resource whose end
+* time is longer ago than 'purgeDays'. All events are deleted if 'purgeDays' is
+* zero.
+*/
+void purgeArchive(int purgeDays)
+{
+	if (purgeDays < 0)
+		return;
+	kDebug(5950) << "KAlarm::purgeArchive(" << purgeDays << ")\n";
+	QDate cutoff = QDate::currentDate().addDays(-purgeDays);
+	AlarmResource* resource = AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED);
+	if (!resource)
+		return;
+	KCal::Event::List evnts = resource->rawEvents();
+	for (int i = 0;  i < evnts.count();  )
+	{
+		if (purgeDays  &&  evnts[i]->created().date() >= cutoff)
+			evnts.removeAt(i);
+		else
+			EventListModel::alarms()->removeEvent(evnts[i++]);   // update the window lists
+	}
+	if (!evnts.isEmpty())
+		AlarmCalendar::resources()->purgeEvents(evnts);   // delete the events and save the calendar
+}
+
+/******************************************************************************
 * Display an error message about an error when saving an event.
 */
 void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, int nAlarms, int nKOrgAlarms, bool showKOrgError)

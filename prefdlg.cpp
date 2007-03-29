@@ -360,7 +360,7 @@ MiscPrefTab::MiscPrefTab()
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
 	mConfirmAlarmDeletion->setWhatsThis(i18n("Check to be prompted for confirmation each time you delete an alarm."));
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
 
 	// Terminal window to use for command alarms
 	group = new QGroupBox(i18n("Terminal for Command Alarms"), this);
@@ -656,10 +656,12 @@ void StorePrefTab::slotArchivedToggled(bool)
 
 void StorePrefTab::slotClearArchived()
 {
-	if (KMessageBox::warningContinueCancel(this, i18n("Do you really want to delete all archived alarms?"))
+	bool single = AlarmResources::instance()->activeCount(AlarmResource::ARCHIVED, false) <= 1;
+	if (KMessageBox::warningContinueCancel(this, single ? i18n("Do you really want to delete all archived alarms?")
+	                                                    : i18n("Do you really want to delete all alarms in the default archived alarm resource?"))
 			!= KMessageBox::Continue)
 		return;
-	AlarmCalendar::resources()->purgeAll();
+	theApp()->purgeAll();
 }
 
 

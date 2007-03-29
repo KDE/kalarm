@@ -25,7 +25,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QRegExp>
-#include <QTimer>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -52,7 +51,6 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
-#include "startdaytimer.h"
 #include "alarmcalendar.moc"
 
 using namespace KCal;
@@ -141,9 +139,7 @@ AlarmCalendar::AlarmCalendar()
 	: mCalendar(0),
 	  mCalType(RESOURCES),
 	  mEventType(KCalEvent::EMPTY),
-	  mArchivedPurgeDays(-1),      // default to not purging
 	  mOpen(false),
-	  mPurgeDaysQueued(-1),
 	  mUpdateCount(0),
 	  mUpdateSave(false)
 {
@@ -161,9 +157,7 @@ AlarmCalendar::AlarmCalendar()
 AlarmCalendar::AlarmCalendar(const QString& path, KCalEvent::Status type)
 	: mCalendar(0),
 	  mEventType(type),
-	  mArchivedPurgeDays(-1),      // default to not purging
 	  mOpen(false),
-	  mPurgeDaysQueued(-1),
 	  mUpdateCount(0),
 	  mUpdateSave(false)
 {
@@ -631,99 +625,16 @@ bool AlarmCalendar::save()
 }
 
 /******************************************************************************
-* Set the number of days to keep archived alarms.
-* Alarms which are older are purged immediately, and at the start of each day.
-*/
-void AlarmCalendar::setPurgeDays(int days)
-{
-	if (days != mArchivedPurgeDays)
-	{
-		int oldDays = mArchivedPurgeDays;
-		mArchivedPurgeDays = days;
-		if (mArchivedPurgeDays <= 0)
-			StartOfDayTimer::disconnect(this);
-		if (oldDays < 0  ||  days >= 0 && days < oldDays)
-		{
-			// Alarms are now being kept for less long, so purge them
-			if (open())
-				slotPurge();
-		}
-		else if (mArchivedPurgeDays > 0)
-			startPurgeTimer();
-	}
-}
-
-/******************************************************************************
-* Called at the start of each day by the purge timer.
-* Purge all archived events from the calendar whose end time is longer ago than
-* 'mArchivedPurgeDays'.
-*/
-void AlarmCalendar::slotPurge()
-{
-	purge(mArchivedPurgeDays);
-	startPurgeTimer();
-}
-
-/******************************************************************************
-* Purge all archived events from the calendar whose end time is longer ago than
-* 'daysToKeep'. All events are deleted if 'daysToKeep' is zero.
-*/
-void AlarmCalendar::purge(int daysToKeep)
-{
-	if (mPurgeDaysQueued < 0  ||  daysToKeep < mPurgeDaysQueued)
-		mPurgeDaysQueued = daysToKeep;
-
-	// Do the purge once any other current operations are completed
-	theApp()->processQueue();
-}
-
-/******************************************************************************
 * This method must only be called from the main KAlarm queue processing loop,
 * to prevent asynchronous calendar operations interfering with one another.
 *
-* Purge all archived events from the calendar whose end time is longer ago than
-* 'daysToKeep'. All events are deleted if 'daysToKeep' is zero.
-* The calendar must already be open.
+* Purge a list of archived events from the calendar.
 */
-void AlarmCalendar::purgeIfQueued()
+void AlarmCalendar::purgeEvents(Event::List events)
 {
-	if (mPurgeDaysQueued >= 0)
-	{
-		if (open())
-		{
-			kDebug(5950) << "AlarmCalendar::purgeIfQueued(" << mPurgeDaysQueued << ")\n";
-			bool changed = false;
-			QDate cutoff = QDate::currentDate().addDays(-mPurgeDaysQueued);
-			Event::List events = mCalendar->rawEvents();
-			for (int i = 0, end = events.count();  i < end;  ++i)
-			{
-				Event* kcalEvent = events[i];
-				if ((!mPurgeDaysQueued  ||  kcalEvent->created().date() < cutoff)
-				&&  KCalEvent::status(kcalEvent) == KCalEvent::ARCHIVED)
-				{
-					mCalendar->deleteEvent(kcalEvent);
-					changed = true;
-				}
-			}
-			if (changed)
-			{
-				saveCal();
-				emit purged();
-			}
-			mPurgeDaysQueued = -1;
-		}
-	}
-}
-
-
-/******************************************************************************
-* Start the purge timer to expire at the start of the next day (using the user-
-* defined start-of-day time).
-*/
-void AlarmCalendar::startPurgeTimer()
-{
-	if (mArchivedPurgeDays > 0)
-		StartOfDayTimer::connect(this, SLOT(slotPurge()));
+	for (int i = 0, end = events.count();  i < end;  ++i)
+		mCalendar->deleteEvent(events[i]);
+	saveCal();
 }
 
 /******************************************************************************

@@ -74,6 +74,7 @@ class KAlarmApp : public KUniqueApplication
 		void               alarmCompleted(const KAEvent&);
 		void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
+		void               purgeAll()             { purge(0); }
 		void               commandMessage(ShellProcess*, QWidget* parent);
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(KAEvent::Action, const QString& text, const KDateTime&,
@@ -97,10 +98,11 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void               quitFatal();
 		void               slotPreferencesChanged();
+		void               setArchivePurgeDays();
+		void               slotPurge()                     { purge(mArchivedPurgeDays); }
 		void               slotCommandOutput(K3Process*, char* buffer, int bufflen);
 		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
-		void               slotArchivedPurged();
 	private:
 		enum EventFunc
 		{
@@ -150,6 +152,7 @@ class KAlarmApp : public KUniqueApplication
 		ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0);
 		QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&);
 		void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
+		void               purge(int daysToKeep);
 
 		static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance
 		static int         mActiveCount;         // number of active instances without main windows
@@ -160,7 +163,8 @@ class KAlarmApp : public KUniqueApplication
 		TrayWindow*        mTrayWindow;          // active system tray icon
 		QTime              mStartOfDay;          // start-of-day time currently in use
 		QColor             mPrefsArchivedColour; // archived alarms text colour
-		int                mPrefsArchivedKeepDays;// how long archived alarms are being kept
+		int                mArchivedPurgeDays;   // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
+		int                mPurgeDaysQueued;     // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
 		QList<ProcData*>   mCommandProcesses;    // currently active command alarm processes
 		QQueue<DcopQEntry> mDcopQueue;           // DCOP command queue
 		int                mPendingQuitCode;     // exit code for a pending quit

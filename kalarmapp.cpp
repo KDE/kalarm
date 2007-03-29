@@ -59,6 +59,7 @@
 #include "preferences.h"
 #include "prefdlg.h"
 #include "shellprocess.h"
+#include "startdaytimer.h"
 #include "traywindow.h"
 #include "kalarmapp.moc"
 
@@ -96,6 +97,8 @@ KAlarmApp::KAlarmApp()
 	  mInitialised(false),
 	  mDBusHandler(new DBusHandler()),
 	  mTrayWindow(0),
+	  mArchivedPurgeDays(-1),      // default to not purging
+	  mPurgeDaysQueued(-1),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
 	  mSessionClosingDown(false),
@@ -103,12 +106,11 @@ KAlarmApp::KAlarmApp()
 {
 	Preferences::self()->readConfig();
 	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
+	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	if (AlarmCalendar::initialiseCalendars())
 	{
-		connect(AlarmCalendar::resources(), SIGNAL(purged()), SLOT(slotArchivedPurged()));
-
 		KConfigGroup config(KGlobal::config(), "General");
 		mNoSystemTray           = config.readEntry("NoSystemTray", false);
 		mOldRunInSystemTray     = wantRunInSystemTray();
@@ -118,7 +120,6 @@ KAlarmApp::KAlarmApp()
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsArchivedColour   = Preferences::archivedColour();
-		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
 		mPrefsShowTime         = Preferences::showAlarmTime();
 		mPrefsShowTimeTo       = Preferences::showTimeToAlarm();
 	}
@@ -911,8 +912,12 @@ void KAlarmApp::processQueue()
 			mDcopQueue.dequeue();
 		}
 
-		// Purge the archived alarms resources if it's time to do so
-		AlarmCalendar::resources()->purgeIfQueued();
+		// Purge the default archived alarms resource if it's time to do so
+		if (mPurgeDaysQueued >= 0)
+		{
+			KAlarm::purgeArchive(mPurgeDaysQueued);
+			mPurgeDaysQueued = -1;
+		}
 
 		// Now that the queue has been processed, quit if a quit was queued
 		if (mPendingQuit)
@@ -1049,14 +1054,6 @@ void KAlarmApp::slotPreferencesChanged()
 		mPrefsShowTime   = Preferences::showAlarmTime();
 		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
 	}
-
-	if (Preferences::archivedKeepDays() != mPrefsArchivedKeepDays)
-	{
-		// How long archived alarms are being kept has changed.
-		// N.B. This also adjusts for any change in start-of-day time.
-		mPrefsArchivedKeepDays = Preferences::archivedKeepDays();
-		AlarmCalendar::resources()->setPurgeDays(mPrefsArchivedKeepDays);
-	}
 }
 
 /******************************************************************************
@@ -1074,20 +1071,54 @@ void KAlarmApp::changeStartOfDay()
 }
 
 /******************************************************************************
-*  Called when the archived alarms resources have been purged.
-*  Updates the alarm list in all main windows.
-*/
-void KAlarmApp::slotArchivedPurged()
-{
-	MainWindow::updateArchived();
-}
-
-/******************************************************************************
-*  Return whether the program is configured to be running in the system tray.
+* Return whether the program is configured to be running in the system tray.
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
 	return Preferences::runInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable();
+}
+
+/******************************************************************************
+* Called when the length of time to keep archived alarms changes in KAlarm's
+* preferences.
+* Set the number of days to keep archived alarms.
+* Alarms which are older are purged immediately, and at the start of each day.
+*/
+void KAlarmApp::setArchivePurgeDays()
+{
+	int newDays = Preferences::archivedKeepDays();
+	if (newDays != mArchivedPurgeDays)
+	{
+		int oldDays = mArchivedPurgeDays;
+		mArchivedPurgeDays = newDays;
+		if (mArchivedPurgeDays <= 0)
+			StartOfDayTimer::disconnect(this);
+		if (mArchivedPurgeDays < 0)
+			return;   // keep indefinitely, so don't purge
+		if (oldDays < 0  ||  mArchivedPurgeDays < oldDays)
+		{
+			// Alarms are now being kept for less long, so purge them
+			purge(mArchivedPurgeDays);
+			if (!mArchivedPurgeDays)
+				return;   // don't archive any alarms
+		}
+		// Start the purge timer to expire at the start of the next day
+		// (using the user-defined start-of-day time).
+		StartOfDayTimer::connect(this, SLOT(slotPurge()));
+	}
+}
+
+/******************************************************************************
+* Purge all archived events from the calendar whose end time is longer ago than
+* 'daysToKeep'. All events are deleted if 'daysToKeep' is zero.
+*/
+void KAlarmApp::purge(int daysToKeep)
+{
+	if (mPurgeDaysQueued < 0  ||  daysToKeep < mPurgeDaysQueued)
+		mPurgeDaysQueued = daysToKeep;
+
+	// Do the purge once any other current operations are completed
+	processQueue();
 }
 
 /******************************************************************************
@@ -1859,8 +1890,8 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		 */
 		AlarmCalendar::displayCalendar()->open();
 
-		AlarmCalendar::resources()->setPurgeDays(theInstance->mPrefsArchivedKeepDays);
 		AlarmCalendar::resources()->open();
+		setArchivePurgeDays();
 
 		startdaemon = true;
 		firstTime = false;
