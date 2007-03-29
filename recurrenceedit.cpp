@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -1093,7 +1093,7 @@ void DayWeekRule::setDays(bool tick)
 /******************************************************************************
  * Tick/untick each day of the week according to the specified bits.
  */
-void DayWeekRule::setDays(QBitArray& days)
+void DayWeekRule::setDays(const QBitArray& days)
 {
 	for (int i = 0;  i < 7;  ++i)
 	{
