@@ -1117,7 +1117,7 @@ void DayWeekRule::setDays(bool tick)
 /******************************************************************************
  * Tick/untick each day of the week according to the specified bits.
  */
-void DayWeekRule::setDays(QBitArray& days)
+void DayWeekRule::setDays(const QBitArray& days)
 {
 	for (int i = 0;  i < 7;  ++i)
 	{

@@ -85,7 +85,7 @@ class DayWeekRule : public Rule
 		            bool readOnly, QWidget* parent);
 		QBitArray        days() const;
 		void             setDays(bool);
-		void             setDays(QBitArray& days);
+		void             setDays(const QBitArray& days);
 		void             setDay(int dayOfWeek);
 		virtual QWidget* validate(QString& errorMessage);
 		virtual void     saveState();
