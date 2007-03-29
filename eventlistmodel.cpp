@@ -76,8 +76,8 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event "<<(void*)mEvents[x]<<endl;
 	if (!mTextIcon)
 	{
-		mTextIcon    = new QPixmap(SmallIcon("message"));
-		mFileIcon    = new QPixmap(SmallIcon("file"));
+		mTextIcon    = new QPixmap(SmallIcon("text"));
+		mFileIcon    = new QPixmap(SmallIcon("document-open"));
 		mCommandIcon = new QPixmap(SmallIcon("exec"));
 		mEmailIcon   = new QPixmap(SmallIcon("mail"));
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
