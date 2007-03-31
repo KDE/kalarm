@@ -42,7 +42,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
-#include <kkeydialog.h>
+#include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
 #include <kaboutdata.h>
@@ -1077,7 +1077,7 @@ void MainWindow::slotPreferences()
 */
 void MainWindow::slotConfigureKeys()
 {
-	KKeyDialog::configure(actionCollection(), KKeyChooser::LetterShortcutsAllowed, this);
+	KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
 }
 
 /******************************************************************************
