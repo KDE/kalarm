@@ -3,6 +3,7 @@
 Encoding=UTF-8
 Name=Alarms
 Name[es]=Alarmas
+Name[kk]=Ескертулер
 Name[x-test]=xxAlarmsxx
 Type=Service
 ServiceTypes=KResources/Manager
