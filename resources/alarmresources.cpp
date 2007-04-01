@@ -46,11 +46,11 @@ AlarmResources* AlarmResources::mInstance = 0;
 QString         AlarmResources::mReservedFile;
 QString         AlarmResources::mConstructionError;
 
-AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool activeOnly)
+AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient)
 {
 	if (mInstance)
 		return 0;
-	AlarmResources* cal = new AlarmResources(timeSpec, activeOnly);
+	AlarmResources* cal = new AlarmResources(timeSpec, activeOnly, passiveClient);
 	if (!mConstructionError.isEmpty())
 		delete cal;
 	else
@@ -58,16 +58,17 @@ AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool act
 	return mInstance;
 }
 
-AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly)
+AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient)
 	: Calendar(timeSpec),
 	  mActiveOnly(activeOnly),
-	  mPassiveClient(false),
+	  mPassiveClient(passiveClient),
 	  mNoGui(false),
 	  mInhibitActiveReload(false),
 	  mInhibitInactiveReload(false),
 	  mInhibitSave(false),
 	  mAskDestination(false),
-	  mShowProgress(false)
+	  mShowProgress(false),
+	  mOpen(false)
 {
 	mManager = new AlarmResourceManager(QString::fromLatin1("alarms"));
 	mManager->addObserver(this);
@@ -80,7 +81,7 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly)
 			connectResource(*it);
 	}
 
-	if (mManager->isEmpty())
+	if (!mPassiveClient  &&  mManager->isEmpty())
 	{
 		KConfigGroup config(KGlobal::config(), "General");
 		AlarmResource* resource;

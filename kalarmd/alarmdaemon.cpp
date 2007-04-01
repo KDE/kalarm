@@ -81,13 +81,15 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	AlarmDaemon::readConfig();
 	enableAutoStart(true);    // switch autostart on whenever the program is run
 
-	// Open the alarm resources, ignoring archived alarms and alarm templates.
-	// The alarm daemon is responsible for downloading remote resources (i.e. for updating
-	// their cache files), while KAlarm simply loads them from cache. This prevents useless
-	// duplication of potentially time-consuming downloads.
+	/* Open the alarm resources, ignoring archived alarms and alarm templates.
+	 * The alarm daemon is responsible for downloading remote resources (i.e. for updating
+	 * their cache files), while KAlarm simply loads them from cache. This prevents useless
+	 * duplication of potentially time-consuming downloads.
+	 * Open to load active alarms only, and prevent resource changes being written to the
+	 * config file.
+	 */
 	AlarmResources::setDebugArea(5902);
-	AlarmResources* resources = AlarmResources::create(timeSpec(), true);   // load active alarms only
-	resources->setPassiveClient(true);   // prevent resource changes being written to config file
+	AlarmResources* resources = AlarmResources::create(timeSpec(), true, true);
 	resources->setNoGui(true);           // dont' try to display messages, or we'll crash
 	// The daemon is responsible for loading calendars (including downloading to cache for remote
 	// resources), which KAlarm is responsible for all updates.

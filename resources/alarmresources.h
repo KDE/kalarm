@@ -58,7 +58,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		 *  @return The alarm calendar resources instance, or 0 if either a reserved
 		 *          file name was used or it has already been created.
 		 */
-		static AlarmResources* create(const KDateTime::Spec& timeSpec, bool activeOnly = false);
+		static AlarmResources* create(const KDateTime::Spec& timeSpec, bool activeOnly = false, bool passiveClient = false);
 		static QString creationError()   { return mConstructionError; }
 		virtual ~AlarmResources();
 		/** Return the alarm calendar resources instance.
@@ -457,7 +457,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		void slotResourceChanged(ResourceCalendar*);
 
 	private:
-		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly);
+		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient);
 		AlarmResource* addDefaultResource(const KConfigGroup&, AlarmResource::Type);
 		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);
