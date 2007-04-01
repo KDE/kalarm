@@ -726,6 +726,7 @@ void MainWindow::slotDelete()
 		                                                   "Do you really want to delete the %1 selected alarms?", n),
 		                                       i18np("Delete Alarm", "Delete Alarms", n),
 		                                       KGuiItem(i18n("&Delete"), "edit-delete"),
+		                                       KStandardGuiItem::cancel(),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
 			return;

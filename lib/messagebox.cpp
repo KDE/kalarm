@@ -79,7 +79,7 @@ int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton,
 {
 	setContinueDefault(dontAskAgainName, defaultButton);
 	if (defaultButton != Cancel)
-		return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, dontAskAgainName);
+		return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 
 	// Cancel is the default button, so we have to use KMessageBox::warningYesNo()
 	if (!dontAskAgainName.isEmpty())
