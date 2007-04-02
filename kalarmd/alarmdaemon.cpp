@@ -90,9 +90,9 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	 */
 	AlarmResources::setDebugArea(5902);
 	AlarmResources* resources = AlarmResources::create(timeSpec(), true, true);
-	resources->setNoGui(true);           // dont' try to display messages, or we'll crash
+	resources->setNoGui(true);           // don't try to display messages, or we'll crash
 	// The daemon is responsible for loading calendars (including downloading to cache for remote
-	// resources), which KAlarm is responsible for all updates.
+	// resources), while KAlarm is responsible for all updates.
 	resources->setInhibitSave(true);
 	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(resourceLoaded(AlarmResource*)));
 	resources->load();
@@ -351,10 +351,10 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject, bool startClient)
+void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
-	registerApp(appName, dbusObject, startClient, true);
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << serviceName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
+	registerApp(appName, serviceName, dbusObject, startClient, true);
 }
 
 /******************************************************************************
@@ -364,10 +364,11 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this DCCOP method.
 */
-void AlarmDaemon::registerChange(const QString& appName, bool startClient)
+void AlarmDaemon::registerChange(const QString& appName, const QString& serviceName, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerChange(" << appName << ", " << startClient << ")" << endl;
-	registerApp(mClientName, mClientDBusObj, startClient, false);
+	kDebug(5900) << "AlarmDaemon::registerChange(" << serviceName << ", " << startClient << ")" << endl;
+	if (serviceName == mClientName)
+		registerApp(appName, mClientName, mClientDBusObj, startClient, false);
 }
 
 /******************************************************************************
@@ -377,11 +378,11 @@ void AlarmDaemon::registerChange(const QString& appName, bool startClient)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject, bool startClient, bool init)
+void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, bool init)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
+	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << serviceName << ", " <<  dbusObject << ", " << startClient << ")" << endl;
 	KAlarmd::RegisterResult result = KAlarmd::SUCCESS;
-	if (appName.isEmpty())
+	if (serviceName.isEmpty())
 		result = KAlarmd::FAILURE;
 	else if (startClient)
 	{
@@ -396,7 +397,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& dbusObject,
 	if (result == KAlarmd::SUCCESS)
 	{
 		mClientStart   = startClient;
-		mClientName    = appName;
+		mClientName    = serviceName;
 		mClientDBusObj = dbusObject;
 		mClientStart   = startClient;
 		KConfigGroup config(KGlobal::config(), CLIENT_GROUP);

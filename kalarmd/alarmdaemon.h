@@ -46,8 +46,8 @@ class AlarmDaemon : public QObject
 		Q_SCRIPTABLE void resetResource(const QString& id)    { reloadResource(id, true, true); }
 		Q_SCRIPTABLE void resourceActive(const QString& id, bool active);
 		Q_SCRIPTABLE void resourceLocation(const QString& id, const QString& locn, const QString& locn2);
-		Q_SCRIPTABLE void registerApp(const QString& appName, const QString& dbusObject, bool startClient);
-		Q_SCRIPTABLE void registerChange(const QString& appName, bool startClient);
+		Q_SCRIPTABLE void registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient);
+		Q_SCRIPTABLE void registerChange(const QString& appName, const QString& serviceName, bool startClient);
 		Q_SCRIPTABLE void eventHandled(const QString& eventID, bool reload);
 		Q_SCRIPTABLE void quit();
 
@@ -74,7 +74,7 @@ class AlarmDaemon : public QObject
 		void    readConfig();
 		KDateTime::Spec timeSpec();
 		void    startMonitoring();
-		void    registerApp(const QString& appName, const QString& dbusObject, bool startClient, bool init);
+		void    registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, bool init);
 		void    enableAutoStart(bool on, bool sync);
 		void    reloadResource(const QString& id, bool check, bool reset);
 		void    reloadResource(AlarmResource*, bool reset);

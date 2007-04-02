@@ -31,12 +31,14 @@
     <method name="registerApp">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="appName" type="s" direction="in"/>
+      <arg name="serviceName" type="s" direction="in"/>
       <arg name="dbusObject" type="s" direction="in"/>
       <arg name="startClient" type="b" direction="in"/>
     </method>
     <method name="registerChange">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="appName" type="s" direction="in"/>
+      <arg name="serviceName" type="s" direction="in"/>
       <arg name="startClient" type="b" direction="in"/>
     </method>
     <method name="eventHandled">

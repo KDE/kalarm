@@ -202,12 +202,13 @@ bool Daemon::registerWith(bool reregister)
 	bool result;
 	if (reregister)
 	{
-		daemonDBus()->registerChange(KGlobal::mainComponent().aboutData()->appName(), !disabledIfStopped);
+		daemonDBus()->registerChange(KGlobal::mainComponent().aboutData()->appName(), KALARM_DBUS_SERVICE, !disabledIfStopped);
 		result = checkDBusResult("registerChange");
 	}
 	else
 	{
-		daemonDBus()->registerApp(KGlobal::mainComponent().aboutData()->appName(), QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
+		daemonDBus()->registerApp(KGlobal::mainComponent().aboutData()->appName(), KALARM_DBUS_SERVICE,
+		                          QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
 		result = checkDBusResult("registerApp");
 	}
 	if (!result)
