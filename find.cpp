@@ -28,7 +28,7 @@
 #include <kfinddialog.h>
 #include <kfind.h>
 #include <kseparator.h>
-#include <kwin.h>
+#include <kwm.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -85,7 +85,7 @@ void Find::display()
 	if (mDialog)
 	{
 #ifdef Q_OS_UNIX
-		KWin::activateWindow(mDialog->winId());
+		KWM::activateWindow(mDialog->winId());
 #endif
 	}
 	else

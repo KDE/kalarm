@@ -36,7 +36,6 @@ class QPushButton;
 class KPushButton;
 class QLabel;
 class QTimer;
-class KWinModule;
 class AlarmTimeWidget;
 class DeferAlarmDlg;
 namespace Phonon { class MediaObject; }
@@ -140,7 +139,6 @@ class MessageWin : public MainWindowBase
 		QPushButton*        mKMailButton;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
-		mutable KWinModule* mWinModule;
 		int                 mFlags;
 		int                 mLateCancel;
 		int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled

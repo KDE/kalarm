@@ -55,8 +55,7 @@
 #include <kglobalsettings.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
-#include <kwin.h>
-#include <kwinmodule.h>
+#include <kwm.h>
 #include <k3process.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
@@ -164,7 +163,6 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
-	  mWinModule(0),
 	  mFlags(event.flags()),
 	  mLateCancel(event.lateCancel()),
 	  mErrorWindow(false),
@@ -220,7 +218,6 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
-	  mWinModule(0),
 	  mErrorWindow(true),
 	  mNoPostAction(true),
 	  mRecreating(false),
@@ -248,7 +245,6 @@ MessageWin::MessageWin()
 	  mDeferButton(0),
 	  mSilenceButton(0),
 	  mDeferDlg(0),
-	  mWinModule(0),
 	  mErrorWindow(false),
 	  mNoPostAction(true),
 	  mRecreating(false),
@@ -271,8 +267,6 @@ MessageWin::~MessageWin()
 {
 	kDebug(5950) << "MessageWin::~MessageWin()\n";
 	stopPlay();
-	delete mWinModule;
-	mWinModule = 0;
 	mWindowList.removeAll(this);
 	if (!mRecreating)
 	{
@@ -415,9 +409,7 @@ void MessageWin::initView()
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
 #ifdef Q_WS_X11
-				if (!mWinModule)
-					mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
-				if (text->sizeHint().width() >= mWinModule->workArea().width()*2/3)
+				if (text->sizeHint().width() >= KWM::workArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 #endif
@@ -626,8 +618,8 @@ void MessageWin::initView()
 #ifdef Q_OS_UNIX
 	WId winid = winId();
 	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
-	KWin::setState(winid, wstate);
-	KWin::setOnAllDesktops(winid, true);
+	KWM::setState(winid, wstate);
+	KWM::setOnAllDesktops(winid, true);
 #endif
 }
 
@@ -1136,9 +1128,7 @@ QSize MessageWin::sizeHint() const
 	if (mAction != KAEvent::MESSAGE)
 		return MainWindowBase::sizeHint();
 #ifdef Q_WS_X11
-	if (!mWinModule)
-		mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
-	QSize desktop  = mWinModule->workArea().size();
+	QSize desktop  = KWM::workArea().size();
 #else
 	QSize desktop  = qApp->desktop()->availableGeometry().size();
 #endif
@@ -1188,9 +1178,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			 */
 			// PROBLEM: The frame size is not known yet!
 #ifdef Q_WS_X11
-			if (!mWinModule)
-				mWinModule = new KWinModule(0, KWinModule::INFO_DESKTOP);
-			QRect desk = mWinModule->workArea();
+			QRect desk = KWM::workArea();
 #else
 			QRect desk = qApp->desktop()->availableGeometry();
 #endif
