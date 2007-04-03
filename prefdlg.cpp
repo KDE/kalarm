@@ -890,7 +890,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
 FontColourPrefTab::FontColourPrefTab()
 	: PrefsTabBase()
 {
-	mFontChooser = new FontColourChooser(this, false, QStringList(), i18n("Message Font && Color"), true, false);
+	mFontChooser = new FontColourChooser(this, QStringList(), i18n("Message Font && Color"), true, false);
 
 	KHBox* layoutBox = new KHBox(this);
 	layoutBox->setMargin(0);

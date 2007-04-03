@@ -37,7 +37,7 @@
 #include "fontcolour.moc"
 
 
-FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
+FontColourChooser::FontColourChooser(QWidget *parent,
           const QStringList &fontList, const QString& frameLabel, bool editColours,
           bool fg, bool defaultFont, int visibleListSize)
 	: QWidget(parent),
@@ -128,7 +128,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, bool onlyFixed,
 	else
 		mDefaultFont = 0;
 
-	mFontChooser = new KFontChooser(page, onlyFixed, fontList, false, visibleListSize);
+	mFontChooser = new KFontChooser(page, KFontChooser::DisplayFrame, fontList, visibleListSize);
 	topLayout->addWidget(mFontChooser);
 
 	slotDefaultFontToggled(false);
