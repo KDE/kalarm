@@ -43,7 +43,7 @@
 #include <ktemporaryfile.h>
 #include <kemailsettings.h>
 #include <kdebug.h>
-#include <kresolver.h>
+#include <k3resolver.h>
 
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
