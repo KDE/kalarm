@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (c) 2001, 2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2003 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class FontColourChooser : public QWidget
 {
 	Q_OBJECT
 public:
-	FontColourChooser(QWidget* parent = 0, const char* name = 0,
+	explicit FontColourChooser(QWidget* parent = 0, const char* name = 0,
 	       bool onlyFixed = false,
 	       const QStringList& fontList = QStringList(),
 	       const QString& frameLabel = i18n("Requested font"),

@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.h  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright (C) 2002 by David Jarvie  software@astrojar.org.uk
+ *  Copyright © 2002 by David Jarvie  software@astrojar.org.uk
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class MainWindowBase : public KMainWindow
 		Q_OBJECT
 
 	public:
-		MainWindowBase(QWidget* parent = 0, const char* name = 0, WFlags f = WType_TopLevel | WDestructiveClose)
+		explicit MainWindowBase(QWidget* parent = 0, const char* name = 0, WFlags f = WType_TopLevel | WDestructiveClose)
 		                    : KMainWindow(parent, name, f), disableQuit(false) { }
 
 	protected:
