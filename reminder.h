@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,8 +44,7 @@ class Reminder : public QFrame
 		void           setOnceOnly(bool);
 		void           enableOnceOnly(bool enable);
 
-		static QString i18n_first_recurrence_only();    // plain text of 'Reminder for first recurrence only' checkbox
-		static QString i18n_u_first_recurrence_only();  // text of 'Reminder for first recurrence only' checkbox, with 'u' shortcut
+		static QString i18n_FirstRecurrenceOnly();    // plain text of 'Reminder for first recurrence only' checkbox
 
 	protected slots:
 		void           slotReminderToggled(bool);

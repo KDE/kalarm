@@ -34,10 +34,8 @@
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString LateCancelSelector::i18n_CancelIfLate()       { return i18n("Cancel if late"); }
-QString LateCancelSelector::i18n_n_CancelIfLate()     { return i18n("Ca&ncel if late"); }
 QString LateCancelSelector::i18n_AutoCloseWin()       { return i18n("Auto-close window after this time"); }
 QString LateCancelSelector::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancelation time"); }
-QString LateCancelSelector::i18n_i_AutoCloseWinLC()   { return i18n("Auto-close w&indow after late-cancelation time"); }
 
 
 LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
@@ -62,7 +60,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	mStack->addWidget(mCheckboxFrame);
 	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame);
 	vlayout->setMargin(0);
-	mCheckbox = new CheckBox(i18n_n_CancelIfLate(), mCheckboxFrame);
+	mCheckbox = new CheckBox(i18n_CancelIfLate(), mCheckboxFrame);
 	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 	mCheckbox->setWhatsThis(whatsThis);

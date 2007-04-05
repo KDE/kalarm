@@ -969,12 +969,12 @@ EditPrefTab::EditPrefTab()
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
 
-	mConfirmAck = new QCheckBox(EditAlarmDlg::i18n_k_ConfirmAck(), group);
+	mConfirmAck = new QCheckBox(EditAlarmDlg::i18n_ConfirmAck(), group);
 	mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
 	mConfirmAck->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ConfirmAck()).toString());
 	vlayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
-	mAutoClose = new QCheckBox(LateCancelSelector::i18n_i_AutoCloseWinLC(), group);
+	mAutoClose = new QCheckBox(LateCancelSelector::i18n_AutoCloseWinLC(), group);
 	mAutoClose->setMinimumSize(mAutoClose->sizeHint());
 	mAutoClose->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_AutoCloseWin()).toString());
 	vlayout->addWidget(mAutoClose, 0, Qt::AlignLeft);
@@ -1073,7 +1073,7 @@ EditPrefTab::EditPrefTab()
 
 	// MISCELLANEOUS
 	// Show in KOrganizer
-	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_g_ShowInKOrganizer(), this);
+	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_ShowInKOrganizer(), this);
 	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
 	mCopyToKOrganizer->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ShowInKOrganizer()).toString());
 
@@ -1081,7 +1081,7 @@ EditPrefTab::EditPrefTab()
 	box = new KHBox(this);
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	mLateCancel = new QCheckBox(LateCancelSelector::i18n_n_CancelIfLate(), box);
+	mLateCancel = new QCheckBox(LateCancelSelector::i18n_CancelIfLate(), box);
 	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
 	mLateCancel->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_CancelIfLate()).toString());
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control

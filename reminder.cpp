@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,7 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString Reminder::i18n_first_recurrence_only()   { return i18n("Reminder for first recurrence only"); }
-QString Reminder::i18n_u_first_recurrence_only() { return i18n("Reminder for first rec&urrence only"); }
+QString Reminder::i18n_FirstRecurrenceOnly()   { return i18n("Reminder for first recurrence only"); }
 
 
 Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
@@ -62,7 +61,7 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 		layout->setMargin(0);
 		layout->addSpacing(3*KDialog::spacingHint());
 		topLayout->addLayout(layout);
-		mOnceOnly = new CheckBox(i18n_u_first_recurrence_only(), this);
+		mOnceOnly = new CheckBox(i18n_FirstRecurrenceOnly(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
 		mOnceOnly->setWhatsThis(i18n("Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);

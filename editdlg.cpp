@@ -135,10 +135,8 @@ inline QString recurText(const KAEvent& event)
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString EditAlarmDlg::i18n_ConfirmAck()         { return i18n("Confirm acknowledgment"); }
-QString EditAlarmDlg::i18n_k_ConfirmAck()       { return i18n("Confirm ac&knowledgment"); }
 QString EditAlarmDlg::i18n_SpecialActions()     { return i18n("Special Actions..."); }
 QString EditAlarmDlg::i18n_ShowInKOrganizer()   { return i18n("Show in KOrganizer"); }
-QString EditAlarmDlg::i18n_g_ShowInKOrganizer() { return i18n("Show in KOr&ganizer"); }
 QString EditAlarmDlg::i18n_EnterScript()        { return i18n("Enter a script"); }
 QString EditAlarmDlg::i18n_p_EnterScript()      { return i18n("Enter a scri&pt"); }
 QString EditAlarmDlg::i18n_ExecInTermWindow()   { return i18n("Execute in terminal window"); }
@@ -1071,7 +1069,7 @@ ColourCombo* EditAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent)
  */
 CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 {
-	CheckBox* widget = new CheckBox(i18n_k_ConfirmAck(), parent);
+	CheckBox* widget = new CheckBox(i18n_ConfirmAck(), parent);
 	widget->setWhatsThis(i18n("Check to be prompted for confirmation when you acknowledge the alarm."));
 	return widget;
 }
@@ -1525,7 +1523,7 @@ void EditAlarmDlg::slotOk()
 					mTabs->setCurrentIndex(mMainPageIndex);
 					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
-					                             , Reminder::i18n_first_recurrence_only()));
+					                             , Reminder::i18n_FirstRecurrenceOnly()));
 					return;
 				}
 			}

@@ -82,7 +82,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QGridLayout* grid = new QGridLayout(textGroup);
 	grid->setMargin(marginHint());
 	grid->setSpacing(spacingHint());
-	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
+	QLabel* label = new QLabel(i18n("Prefix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
@@ -93,7 +93,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	                           "including any necessary trailing spaces."));
 	grid->addWidget(mPrefix, 0, 1);
 
-	label = new QLabel(i18n("S&uffix:"), textGroup);
+	label = new QLabel(i18n("Suffix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
@@ -161,7 +161,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
 	// How much advance warning to give
-	mReminder = new Reminder(i18n("&Reminder"),
+	mReminder = new Reminder(i18n("Reminder"),
 	                         i18n("Check to display a reminder in advance of the birthday."),
 	                         i18n("Enter the number of days before each birthday to display a reminder. "
 	                              "This is in addition to the alarm which is displayed on the birthday."),

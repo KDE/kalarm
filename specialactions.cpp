@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ SpecialActions::SpecialActions(QWidget* parent)
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	// Pre-alarm action
-	QLabel* label = new QLabel(i18n("Pre-a&larm action:"), this);
+	QLabel* label = new QLabel(i18n("Pre-alarm action:"), this);
 	label->setFixedSize(label->sizeHint());
 	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
@@ -156,7 +156,7 @@ SpecialActions::SpecialActions(QWidget* parent)
 	topLayout->addSpacing(KDialog::spacingHint());
 
 	// Post-alarm action
-	label = new QLabel(i18n("Post-alar&m action:"), this);
+	label = new QLabel(i18n("Post-alarm action:"), this);
 	label->setFixedSize(label->sizeHint());
 	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
