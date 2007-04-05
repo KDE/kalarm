@@ -38,7 +38,7 @@ class MainWindowBase : public KMainWindow
 		Q_OBJECT
 
 	public:
-		MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window);
+		explicit MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window);
 
 	protected:
 		virtual void closeEvent(QCloseEvent*);
