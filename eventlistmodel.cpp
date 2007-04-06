@@ -53,7 +53,11 @@ int      EventListModel::mTimeHourPos = -2;
 EventListModel* EventListModel::alarms()
 {
 	if (!mAlarmInstance)
+	{
 		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
+		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
+		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
+	}
 	return mAlarmInstance;
 }
 
