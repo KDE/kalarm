@@ -67,7 +67,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void               selectEvent(const QString& eventID);
 
 		static void        refresh();
-		static void        updateArchived();
 		static void        updateTimeColumns(bool oldTime, bool oldTimeTo);
 		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
@@ -129,6 +128,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotShowTime();
 		void           slotShowTimeTo();
 		void           slotShowArchived();
+		void           updateKeepArchived(int days);
 		void           slotUndo();
 		void           slotUndoItem(QAction* id);
 		void           slotRedo();

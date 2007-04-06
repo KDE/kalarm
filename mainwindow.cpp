@@ -512,6 +512,7 @@ void MainWindow::initActions()
 	connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
+	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
 	Preferences::connect(SIGNAL(runInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
@@ -566,22 +567,15 @@ void MainWindow::refresh()
 }
 
 /******************************************************************************
-* Refresh the alarm list in every main window instance which is displaying
-* archived alarms.
-* Called when an archived alarm setting changes in the user preferences.
+* Called when the keep archived alarm setting changes in the user preferences.
+* Enable/disable Show archived alarms option.
 */
-void MainWindow::updateArchived()
+void MainWindow::updateKeepArchived(int days)
 {
-	kDebug(5950) << "MainWindow::updateArchived()\n";
-	bool enableShowArchived = Preferences::archivedKeepDays();
-#warning If archived days reduce, ensure archived alarm deletions call model removeEvent()
-	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-	{
-		MainWindow* w = mWindowList[i];
-		if (w->mShowArchived  &&  !enableShowArchived)
-			w->slotShowArchived();   // toggle Show Archived option setting
-		w->mActionShowArchived->setEnabled(enableShowArchived);
-	}
+	kDebug(5950) << "MainWindow::updateKeepArchived(" << (bool)days << ")" << endl;
+	if (mShowArchived  &&  !days)
+		slotShowArchived();   // toggle Show Archived option setting
+	mActionShowArchived->setEnabled(days);
 }
 
 /******************************************************************************
