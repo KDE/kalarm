@@ -81,7 +81,7 @@ void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const 
 		if (limit == QDate::currentDate())
 			errString = i18n("today");
 		else
-			errString = KGlobal::locale()->formatDate(limit, true);
+			errString = KGlobal::locale()->formatDate(limit, KLocale::ShortDate);
 		errString = defaultError.subs(errString).toString();
 	}
 	KMessageBox::sorry(this, errString);

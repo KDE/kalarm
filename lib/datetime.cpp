@@ -55,5 +55,5 @@ KDateTime DateTime::effectiveKDateTime() const
 
 QString DateTime::formatLocale(bool shortFormat) const
 {
-	return KGlobal::locale()->formatDateTime(mDateTime, shortFormat);
+	return KGlobal::locale()->formatDateTime(mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
 }
