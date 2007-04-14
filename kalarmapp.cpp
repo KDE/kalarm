@@ -1362,7 +1362,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1394,7 +1394,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1627,6 +1627,17 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			{
 				// There is no message window currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
+				// Check whether the command is already being executed for this alarm.
+				for (QValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
+				{
+					ProcData* pd = *it;
+					if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
+					{
+						kdDebug(5950) << "KAlarmApp::execAlarm(): already executing pre-DISPLAY command" << endl;
+						return pd->process;   // already executing - don't duplicate the action
+					}
+				}
+
 				QString command = event.preAction();
 				kdDebug(5950) << "KAlarmApp::execAlarm(): pre-DISPLAY command: " << command << endl;
 				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
