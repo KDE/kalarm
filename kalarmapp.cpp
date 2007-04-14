@@ -1305,7 +1305,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1337,7 +1337,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1441,7 +1441,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	else
 	{
-		// Reschedule the alarm for its next ocurrence.
+		// Reschedule the alarm for its next occurrence.
 		KAEvent::OccurType type = event.setNextOccurrence(KDateTime::currentUtcDateTime());
 		switch (type)
 		{
@@ -1534,6 +1534,17 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			{
 				// There is no message window currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
+				// Check whether the command is already being executed for this alarm.
+				for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
+				{
+					ProcData* pd = mCommandProcesses[i];
+					if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
+					{
+						kDebug(5950) << "KAlarmApp::execAlarm(): already executing pre-DISPLAY command" << endl;
+						return pd->process;   // already executing - don't duplicate the action
+					}
+				}
+
 				QString command = event.preAction();
 				kDebug(5950) << "KAlarmApp::execAlarm(): pre-DISPLAY command: " << command << endl;
 				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
