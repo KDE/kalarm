@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.11 --- 7 March 2007 ===
+=== Version 1.4.11 --- 14 April 2007 ===
+Prevent alarm daemon triggering alarms multiple times.
 Show file name as a tooltip on sound type combo box when "file" is selected.
 
 === Version 1.4.10 --- 3 March 2007 ===

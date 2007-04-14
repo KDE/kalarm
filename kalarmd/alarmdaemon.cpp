@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -364,11 +364,13 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 	QValueList<KCal::Alarm*> alarms = cal->alarmsTo(now);
 	if (!alarms.count())
 		return;
+	QValueList<KCal::Event*> eventsDone;
 	for (QValueList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
 	{
 		KCal::Event* event = dynamic_cast<KCal::Event*>((*it)->parent());
-		if (!event)
-			continue;
+		if (!event  ||  eventsDone.find(event) != eventsDone.end())
+			continue;   // either not an event, or the event has already been processed
+		eventsDone += event;
 		const QString& eventID = event->uid();
 		kdDebug(5901) << "AlarmDaemon::checkAlarms(): event " << eventID  << endl;
 
