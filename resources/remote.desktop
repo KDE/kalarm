@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Alarms in Remote File
 Name[es]=Alarmas en archivo remoto
 Name[kk]=Қашықтағы файлдағы ескертулер
+Name[sv]=Alarm i fjärrfil
 Name[x-test]=xxAlarms in Remote Filexx
 X-KDE-Library=kalarm_remote
 Type=Service

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Alarms in Local File
 Name[es]=Alarmas en archivo local
 Name[kk]=Жергілікті файлдағы ескертулер
+Name[sv]=Alarm i lokal fil
 Name[x-test]=xxAlarms in Local Filexx
 X-KDE-Library=kalarm_local
 Type=Service
