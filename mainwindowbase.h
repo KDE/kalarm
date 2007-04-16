@@ -21,7 +21,7 @@
 #ifndef MAINWINDOWBASE_H
 #define MAINWINDOWBASE_H
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 class QCloseEvent;
 
@@ -33,7 +33,7 @@ class QCloseEvent;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class MainWindowBase : public KMainWindow
+class MainWindowBase : public KXmlGuiWindow
 {
 		Q_OBJECT
 

@@ -26,7 +26,7 @@
 
 
 MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
-	: KMainWindow(parent, f),
+	: KXmlGuiWindow(parent, f),
 	  disableQuit(false)
 {
 	setWindowModality(Qt::WindowModal);
