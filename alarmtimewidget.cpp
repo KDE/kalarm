@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -330,6 +330,14 @@ KDateTime::Spec AlarmTimeWidget::timeSpec() const
 */
 void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
+	// Set the time zone first so that the call to dateTimeChanged() works correctly.
+	if (!mDeferring)
+	{
+		const KTimeZone* tz = dt.timeZone();
+		mNoTimeZone->setChecked(!tz);
+		mTimeZone->setTimeZone(tz ? tz : Preferences::timeZone());
+	}
+
 	if (dt.date().isValid())
 	{
 		mTimeEdit->setValue(dt.effectiveTime());
@@ -350,12 +358,6 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 			mDateRadio->setChecked(true);
 		}
 		setAnyTime();
-	}
-	if (!mDeferring)
-	{
-		const KTimeZone* tz = dt.timeZone();
-		mNoTimeZone->setChecked(!tz);
-		mTimeZone->setTimeZone(tz ? tz : Preferences::timeZone());
 	}
 }
 
