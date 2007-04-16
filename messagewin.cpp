@@ -265,7 +265,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-	kDebug(5950) << "MessageWin::~MessageWin()\n";
+	kDebug(5950) << "MessageWin::~MessageWin(" << mEventID << ")" << endl;
 	stopPlay();
 	mWindowList.removeAll(this);
 	if (!mRecreating)
@@ -309,8 +309,7 @@ void MessageWin::initView()
 		// Alarm date/time.
 		// Display time zone if not local time zone.
 		QLabel* label = new QLabel(frame ? frame : topWidget);
-		label->setText(KGlobal::locale()->formatDateTime(KDateTime(mDateTime), true, false,
-		                                                 !mDateTime.isLocalZone()));
+		label->setText(KGlobal::locale()->formatDateTime(KDateTime(mDateTime), KLocale::ShortDate, KLocale::DateTimeFormatOptions(mDateTime.isLocalZone() ? 0 : KLocale::TimeZone)));
 		if (!frame)
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
@@ -767,6 +766,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
 	mShowEdit            = false;
 	mResource            = 0;
+	kDebug(5950) << "MessageWin::readProperties(" << mEventID << ")" << endl;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
