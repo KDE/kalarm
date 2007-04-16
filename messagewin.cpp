@@ -168,7 +168,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mFlags(event.flags()),
 	  mLateCancel(event.lateCancel()),
 	  mErrorWindow(false),
-	  mNoPostAction(false),
+	  mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM),
 	  mRecreating(false),
 	  mBeep(event.beep()),
 	  mSpeak(event.speak()),
@@ -241,7 +241,6 @@ MessageWin::MessageWin()
 	  mDeferDlg(0),
 	  mWinModule(0),
 	  mErrorWindow(false),
-	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
@@ -249,7 +248,7 @@ MessageWin::MessageWin()
 	  mNoCloseConfirm(false),
 	  mDisableDeferral(false)
 {
-	kdDebug(5950) << "MessageWin::MessageWin()\n";
+	kdDebug(5950) << "MessageWin::MessageWin(restore)\n";
 	mWindowList.append(this);
 }
 
@@ -258,7 +257,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-	kdDebug(5950) << "MessageWin::~MessageWin()\n";
+	kdDebug(5950) << "MessageWin::~MessageWin(" << mEventID << ")" << endl;
 	stopPlay();
 	delete mWinModule;
 	mWinModule = 0;
@@ -677,6 +676,7 @@ void MessageWin::saveProperties(KConfig* config)
 		config->writeEntry(QString::fromLatin1("Height"), height());
 		config->writeEntry(QString::fromLatin1("DeferMins"), mDefaultDeferMinutes);
 		config->writeEntry(QString::fromLatin1("NoDefer"), mNoDefer);
+		config->writeEntry(QString::fromLatin1("NoPostAction"), mNoPostAction);
 		config->writeEntry(QString::fromLatin1("KMailSerial"), mKMailSerialNumber);
 	}
 	else
@@ -716,8 +716,10 @@ void MessageWin::readProperties(KConfig* config)
 	mRestoreHeight       = config->readNumEntry(QString::fromLatin1("Height"));
 	mDefaultDeferMinutes = config->readNumEntry(QString::fromLatin1("DeferMins"));
 	mNoDefer             = config->readBoolEntry(QString::fromLatin1("NoDefer"));
+	mNoPostAction        = config->readBoolEntry(QString::fromLatin1("NoPostAction"));
 	mKMailSerialNumber   = config->readUnsignedLongNumEntry(QString::fromLatin1("KMailSerial"));
 	mShowEdit            = false;
+	kdDebug(5950) << "MessageWin::readProperties(" << mEventID << ")" << endl;
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
@@ -1530,6 +1532,8 @@ void MessageWin::slotDefer()
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			KAlarm::updateEvent(event, 0, mDeferDlg, true, !repeat);
+			if (event.deferred())
+				mNoPostAction = true;
 		}
 		else
 		{
@@ -1552,6 +1556,8 @@ void MessageWin::slotDefer()
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, 0, mDeferDlg, true, false);
+			if (event.deferred())
+				mNoPostAction = true;
 			if (kcalEvent)
 			{
 				event.setUid(KAEvent::EXPIRED);

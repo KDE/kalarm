@@ -1,8 +1,11 @@
 KAlarm
 
-=== Version 1.4.11 --- 14 April 2007 ===
+=== Version 1.4.11 --- 16 April 2007 ===
 Prevent pre-alarm actions being executed multiple times when alarm is triggered.
 Prevent alarm daemon triggering alarms multiple times.
+Only execute pre-alarm actions once (not for reminders or deferrals).
+Only execute post-alarm actions once when alarm is finally acknowledged (after
+   any deferrals), and not after reminders.
 Show file name as a tooltip on sound type combo box when "file" is selected.
 
 === Version 1.4.10 --- 3 March 2007 ===

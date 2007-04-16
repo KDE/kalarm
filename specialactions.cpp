@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,7 +144,8 @@ SpecialActions::SpecialActions(QWidget* parent, const char* name)
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
 	QWhatsThis::add(mPreAction,
-	      i18n("Enter a shell command to execute before the alarm is displayed. "
+	      i18n("Enter a shell command to execute before the alarm is displayed.\n"
+                   "Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.\n"
 	           "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
 	topLayout->addWidget(mPreAction);
 	topLayout->addSpacing(KDialog::spacingHint());
@@ -156,7 +157,10 @@ SpecialActions::SpecialActions(QWidget* parent, const char* name)
 
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);
-	QWhatsThis::add(mPostAction, i18n("Enter a shell command to execute after the alarm window is closed."));
+	QWhatsThis::add(mPostAction,
+	      i18n("Enter a shell command to execute after the alarm window is closed.\n"
+	           "Note that it is not executed after closing a reminder window. If you defer "
+	           "the alarm, it is not executed until the alarm is finally acknowledged or closed."));
 	topLayout->addWidget(mPostAction);
 }
 
