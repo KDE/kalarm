@@ -166,7 +166,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mFlags(event.flags()),
 	  mLateCancel(event.lateCancel()),
 	  mErrorWindow(false),
-	  mNoPostAction(false),
+	  mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM),
 	  mRecreating(false),
 	  mBeep(event.beep()),
 	  mSpeak(event.speak()),
@@ -246,7 +246,6 @@ MessageWin::MessageWin()
 	  mSilenceButton(0),
 	  mDeferDlg(0),
 	  mErrorWindow(false),
-	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
@@ -254,7 +253,7 @@ MessageWin::MessageWin()
 	  mNoCloseConfirm(false),
 	  mDisableDeferral(false)
 {
-	kDebug(5950) << "MessageWin::MessageWin()\n";
+	kDebug(5950) << "MessageWin::MessageWin(restore)\n";
 	setAttribute(WidgetFlags);
 	setObjectName("RestoredMsgWin");    // used by LikeBack
 	mWindowList.append(this);
@@ -712,6 +711,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
 		config.writeEntry("Height", height());
 		config.writeEntry("DeferMins", mDefaultDeferMinutes);
 		config.writeEntry("NoDefer", mNoDefer);
+		config.writeEntry("NoPostAction", mNoPostAction);
 		config.writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
 	}
 	else
@@ -763,6 +763,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mRestoreHeight       = config.readEntry("Height", 0);
 	mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
 	mNoDefer             = config.readEntry("NoDefer", false);
+	mNoPostAction        = config.readEntry("NoPostAction", true);
 	mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
 	mShowEdit            = false;
 	mResource            = 0;
@@ -1470,6 +1471,8 @@ void MessageWin::slotDefer()
 			bool repeat = event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			KAlarm::updateEvent(event, mDeferDlg, true, !repeat);
+			if (event.deferred())
+				mNoPostAction = true;
 		}
 		else
 		{
@@ -1494,6 +1497,8 @@ void MessageWin::slotDefer()
 			// Add the event back into the calendar file, retaining its ID
 			// and not updating KOrganizer
 			KAlarm::addEvent(event, resource, mDeferDlg, KAlarm::USE_EVENT_ID);
+			if (event.deferred())
+				mNoPostAction = true;
 			event.setCategory(KCalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}

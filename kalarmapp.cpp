@@ -1530,9 +1530,15 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		{
 			// Display a message or file, provided that the same event isn't already being displayed
 			MessageWin* win = MessageWin::findEvent(event.id());
-			if (!win  &&  !noPreAction  &&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
+			// Find if we're changing a reminder message to the real message
+			bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
+			bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
+			if (!reminder  &&  !event.deferred()
+			&&  (replaceReminder || !win)  &&  !noPreAction
+			&&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
 			{
-				// There is no message window currently displayed for this alarm,
+				// It's not a reminder or a deferred alarm, and there is no message window
+				// (other than a reminder window) currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
 				// Check whether the command is already being executed for this alarm.
 				for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
@@ -1556,7 +1562,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				delete win;        // event is disabled - close its window
 			else if (!win
 			     ||  !win->hasDefer() && !alarm.repeatAtLogin()
-			     ||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
+			     ||  replaceReminder)
 			{
 				// Either there isn't already a message for this event,
 				// or there is a repeat-at-login message with no Defer
@@ -1635,6 +1641,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
+	kDebug(5950) << "KAlarmApp::doShellCommand(" << command << ", " << event.id() << ")" << endl;
 	K3Process::Communication comms = K3Process::NoCommunication;
 	QString cmd;
 	QString tmpXtermFile;
