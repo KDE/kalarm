@@ -107,7 +107,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	layout->addWidget(mDeleteButton);
 
 	KActionCollection* actions = new KActionCollection(this);
-	actions->setDefaultShortcutContext(Qt::WindowShortcut);
+	//actions->setDefaultShortcutContext(Qt::WindowShortcut);
 	actions->setAssociatedWidget(topLevelWidget());
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
