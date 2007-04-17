@@ -468,7 +468,7 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
-	QString dateTimeText = locale->formatDate(kdt.date(), true);
+	QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
 	if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
 	{
 		// Display the time of day if it's a date/time value, or if it's
