@@ -1,7 +1,7 @@
 /*
  *  colourlist.cpp  -  an ordered list of colours
  *  Program:  kalarm
- *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,14 @@
 ColourList::ColourList(const QColor* colours)
 {
 	while (colours->isValid())
-		mList.append((*colours++).rgb());
+		mList << (*colours++).rgb();
+	qSort(mList);
 }
 
 void ColourList::insert(const QColor& colour)
 {
 	QRgb rgb = colour.rgb();
-	for (int i = 0, end = mList.count();  i < end;  ++i)
+	for (int i = 0, count = mList.count();  i < count;  ++i)
 	{
 		if (rgb <= mList[i])
 		{
@@ -40,4 +41,21 @@ void ColourList::insert(const QColor& colour)
 		}
 	}
 	mList.append(rgb);
+}
+
+ColourList& ColourList::operator=(const QList<QColor>& list)
+{
+	mList.clear();
+	for (int i = 0, count = list.count();  i < count;  ++i)
+		mList << list[i].rgb();
+	qSort(mList);
+	return *this;
+}
+
+QList<QColor> ColourList::qcolorList() const
+{
+	QList<QColor> list;
+	for (int i = 0, count = mList.count();  i < count;  ++i)
+		list << QColor(mList[i]);
+	return list;
 }

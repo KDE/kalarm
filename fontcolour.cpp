@@ -170,7 +170,7 @@ void FontColourChooser::setSampleColour()
 	QColor fg = fgColour();
 	mFontChooser->setColor(fg);
 	if (mRemoveColourButton)
-		mRemoveColourButton->setEnabled(!mBgColourButton->isCustomColour());   // no deletion of custom colour
+		mRemoveColourButton->setEnabled(!mBgColourButton->isCustomColor());   // no deletion of custom colour
 }
 
 QColor FontColourChooser::bgColour() const
@@ -245,7 +245,7 @@ void FontColourChooser::slotAddColour()
 
 void FontColourChooser::slotRemoveColour()
 {
-	if (!mBgColourButton->isCustomColour())
+	if (!mBgColourButton->isCustomColor())
 	{
 		mColourList.remove(mBgColourButton->color());
 		mBgColourButton->setColours(mColourList);

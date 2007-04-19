@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (c) 2001-2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001-2003,2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -21,195 +21,45 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QPainter>
-#include <QPixmap>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <kdebug.h>
 
-#include <klocale.h>
-#include <kcolordialog.h>
-
-#include "kalarmapp.h"
 #include "preferences.h"
 #include "colourcombo.moc"
 
 
 ColourCombo::ColourCombo(QWidget* parent, const QColor& defaultColour)
-	: QComboBox(parent),
-	  mColourList(Preferences::messageColours()),
-	  mSelectedColour(defaultColour),
-	  mCustomColour(255, 255, 255),
-	  mReadOnly(false),
-	  mDisabled(false)
+	: KColorCombo(parent),
+	  mReadOnly(false)
 {
-	addColours();
-	connect(this, SIGNAL(activated(int)), SLOT(slotActivated(int)));
-	connect(this, SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
-	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
-}
-
-void ColourCombo::setColour(const QColor& colour)
-{
-	mSelectedColour = colour;
-	addColours();
+	setColours(Preferences::messageColours());
+kDebug()<<"prefcolours="<<Preferences::messageColours().count()<<endl;
+	setColor(defaultColour);
+kDebug()<<"ColourCombo(): colours="<<colors().count()<<endl;
+	Preferences::connect(SIGNAL(messageColoursChanged()), this, SLOT(slotPreferencesChanged()));
 }
 
 /******************************************************************************
-*  Set a new colour selection.
+* Set a new colour selection.
 */
 void ColourCombo::setColours(const ColourList& colours)
 {
-	mColourList = colours;
-	if (mSelectedColour != mCustomColour
-	&&  !mColourList.contains(mSelectedColour))
-	{
-		// The current colour has been deleted
-		mSelectedColour = mColourList.count() ? mColourList[0] : mCustomColour;
-	}
-	addColours();
+kDebug()<<"setColours("<<colours.count()<<")"<<endl;
+	setColors(colours.qcolorList());
 }
 
 /******************************************************************************
-*  Called when the user changes the preference settings.
-*  If the colour list has changed, update the colours displayed.
+* Called when the user changes the colour list in the preference settings.
 */
 void ColourCombo::slotPreferencesChanged()
 {
-	const ColourList& prefColours = Preferences::messageColours();
-	if (prefColours != mColourList)
-		setColours(prefColours);      // update the display with the new colours
-}
-
-/******************************************************************************
-*  Enable or disable the control.
-*  If it is disabled, its colour is set to the dialog background colour.
-*/
-void ColourCombo::setEnabled(bool enable)
-{
-	if (enable  &&  mDisabled)
-	{
-		mDisabled = false;
-		setColour(mSelectedColour);
-	}
-	else if (!enable  &&  !mDisabled)
-	{
-		mSelectedColour = color();
-		int end = count();
-		if (end > 1)
-		{
-			// Add a dialog background colour item
-			QPainter painter;
-			QFontMetrics fm = QFontMetrics(painter.font());
-			QRect rect;
-			rect.setRect(0, 0, width(), fm.height() + 4);
-			QPixmap pm(rect.width(), rect.height());
-			pm.fill(palette().color(QPalette::Window));
-			addItem(pm, QString());
-			setCurrentIndex(end);
-		}
-		mDisabled = true;
-	}
-	QComboBox::setEnabled(enable);
-}
-
-void ColourCombo::slotActivated(int index)
-{
-	if (index)
-		mSelectedColour = mColourList[index - 1];
-	else
-	{
-		if (KColorDialog::getColor(mCustomColour, this) == QDialog::Accepted)
-		{
-			QRect rect;
-			drawCustomItem(rect, false);
-		}
-		mSelectedColour = mCustomColour;
-	}
-	emit activated(mSelectedColour);
-}
-
-void ColourCombo::slotHighlighted(int index)
-{
-	mSelectedColour = index ? mColourList[index - 1] : mCustomColour;
-	emit highlighted(mSelectedColour);
-}
-
-/******************************************************************************
-*  Initialise the items in the combo box to one for each colour in the list.
-*/
-void ColourCombo::addColours()
-{
-	clear();
-
-	int i;
-	int end = mColourList.count();
-	for (i = 0;  ;  ++i)
-	{
-		if (i >= end)
-		{
-			mCustomColour = mSelectedColour;
-			break;
-		}
-		if (mSelectedColour == mColourList[i])
-			break;
-	}
-
-	QRect rect;
-	drawCustomItem(rect, true);
-
-	QPainter painter;
-	QPixmap pixmap(rect.width(), rect.height());
-	for (i = 0;  i < end;  ++i)
-	{
-		painter.begin(&pixmap);
-		QBrush brush(mColourList[i]);
-		painter.fillRect(rect, brush);
-		painter.end();
-
-		addItem(pixmap, QString());
-		pixmap.detach();
-
-		if (mColourList[i] == mSelectedColour.rgb())
-			setCurrentIndex(i + 1);
-	}
-}
-
-void ColourCombo::drawCustomItem(QRect& rect, bool insert)
-{
-	QPen pen;
-	if (qGray(mCustomColour.rgb()) < 128)
-		pen.setColor(Qt::white);
-	else
-		pen.setColor(Qt::black);
-
-	QPainter painter;
-	QFontMetrics fm = QFontMetrics(painter.font());
-	rect.setRect(0, 0, width(), fm.height() + 4);
-	QPixmap pixmap(rect.width(), rect.height());
-
-	painter.begin(&pixmap);
-	QBrush brush(mCustomColour);
-	painter.fillRect(rect, brush);
-	painter.setPen(pen);
-	painter.drawText(2, fm.ascent() + 2, i18n("Custom..."));
-	painter.end();
-
-	if (insert)
-		addItem(pixmap, QString());
-	else
-		setItemIcon(0, pixmap);
-	pixmap.detach();
+	setColors(Preferences::messageColours().qcolorList());
 }
 
 void ColourCombo::setReadOnly(bool ro)
 {
 	mReadOnly = ro;
-}
-
-void ColourCombo::resizeEvent(QResizeEvent* re)
-{
-	QComboBox::resizeEvent(re);
-	addColours();
 }
 
 void ColourCombo::mousePressEvent(QMouseEvent* e)
@@ -220,29 +70,29 @@ void ColourCombo::mousePressEvent(QMouseEvent* e)
 		if (e->button() == Qt::LeftButton)
 			return;
 	}
-	QComboBox::mousePressEvent(e);
+	KColorCombo::mousePressEvent(e);
 }
 
 void ColourCombo::mouseReleaseEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::mouseReleaseEvent(e);
+		KColorCombo::mouseReleaseEvent(e);
 }
 
 void ColourCombo::mouseMoveEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::mouseMoveEvent(e);
+		KColorCombo::mouseMoveEvent(e);
 }
 
 void ColourCombo::keyPressEvent(QKeyEvent* e)
 {
 	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
-		QComboBox::keyPressEvent(e);
+		KColorCombo::keyPressEvent(e);
 }
 
 void ColourCombo::keyReleaseEvent(QKeyEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::keyReleaseEvent(e);
+		KColorCombo::keyReleaseEvent(e);
 }

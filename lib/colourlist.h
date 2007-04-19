@@ -53,6 +53,8 @@ class ColourList
 		ColourList&    operator=(const ColourList& l)        { mList = l.mList;  return *this; }
 		/** Sets the list to comprise the colours in @p list. */
 		ColourList&    operator=(const QList<QRgb>& list)    { mList = list;  qSort(mList);  return *this; }
+		/** Sets the list to comprise the colours in @p list. */
+		ColourList&    operator=(const QList<QColor>& list);
 		/** Removes all values from the list. */
 		void           clear()                               { mList.clear(); }
 		/** Adds the specified colour @p c to the list, in the correct sorted position. */
@@ -81,9 +83,10 @@ class ColourList
 		int            indexOf(const QColor& c, int from = 0) const     { return mList.indexOf(c.rgb(), from); }
 		/** Returns the colour at position @p i in the list. The item must exist. */
 		QColor         operator[](int i) const               { return QColor(mList[i]); }
+		/** Returns the list as a list of QColor objects. */
+		QList<QColor>  qcolorList() const;
 
 	private:
-		void           sort();
 		QList<QRgb>    mList;
 };
 
