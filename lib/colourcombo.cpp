@@ -23,7 +23,6 @@
 
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <kdebug.h>
 
 #include "preferences.h"
 #include "colourcombo.moc"
@@ -34,9 +33,7 @@ ColourCombo::ColourCombo(QWidget* parent, const QColor& defaultColour)
 	  mReadOnly(false)
 {
 	setColours(Preferences::messageColours());
-kDebug()<<"prefcolours="<<Preferences::messageColours().count()<<endl;
 	setColor(defaultColour);
-kDebug()<<"ColourCombo(): colours="<<colors().count()<<endl;
 	Preferences::connect(SIGNAL(messageColoursChanged()), this, SLOT(slotPreferencesChanged()));
 }
 
@@ -45,7 +42,6 @@ kDebug()<<"ColourCombo(): colours="<<colors().count()<<endl;
 */
 void ColourCombo::setColours(const ColourList& colours)
 {
-kDebug()<<"setColours("<<colours.count()<<")"<<endl;
 	setColors(colours.qcolorList());
 }
 
