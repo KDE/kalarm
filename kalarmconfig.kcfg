@@ -12,11 +12,9 @@
   <include>kglobalsettings.h</include>
   <include>kamail.h</include>
   <include>timeperiod.h</include>
-  <code>
-    QStringList defaultColours;
-    defaultColours &lt;&lt; QColor(Qt::red).name() &lt;&lt; QColor(Qt::green).name() &lt;&lt; QColor(Qt::blue).name() &lt;&lt; QColor(Qt::cyan).name() &lt;&lt; QColor(Qt::magenta).name() &lt;&lt; QColor(Qt::yellow).name() &lt;&lt; QColor(Qt::white).name() &lt;&lt; QColor(Qt::lightGray).name() &lt;&lt; QColor(Qt::black).name();
-  </code>
 
+  <signal name="messageColoursChanged">
+  </signal>
   <signal name="runInSystemTrayChanged">
     <argument type="Bool">RunInSystemTray</argument>
   </signal>
@@ -58,7 +56,12 @@
     <entry name="Base_MessageColours" key="MessageColours" type="StringList">
       <label>Color selection list</label>
       <whatsthis>Comma separated list of color codes presented as choice for alarm messages.</whatsthis>
-      <default>defaultColours</default>
+      <code>
+        QStringList defaultColours;
+        defaultColours &lt;&lt; QColor(Qt::red).name() &lt;&lt; QColor(Qt::green).name() &lt;&lt; QColor(Qt::blue).name() &lt;&lt; QColor(Qt::cyan).name() &lt;&lt; QColor(Qt::magenta).name() &lt;&lt; QColor(Qt::yellow).name() &lt;&lt; QColor(Qt::white).name() &lt;&lt; QColor(Qt::lightGray).name() &lt;&lt; QColor(Qt::black).name();
+      </code>
+      <default code="true">defaultColours</default>
+      <emit signal="messageColoursChanged"/>
     </entry>
     <entry name="DefaultBgColour" key="MessageBackgroundColour" type="Color">
       <label>Background color</label>
