@@ -6,6 +6,7 @@ Name[es]=Alarmas
 Name[kk]=Ескертулер
 Name[sv]=Alarm
 Name[x-test]=xxAlarmsxx
+Name[zh_TW]=鬧鐘
 Type=Service
 ServiceTypes=KResources/Manager
 
