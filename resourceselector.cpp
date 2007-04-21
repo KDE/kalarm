@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <QToolTip>
+
 #include <QTimer>
 #include <QPainter>
 #include <QFont>
