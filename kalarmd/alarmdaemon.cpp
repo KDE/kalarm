@@ -377,6 +377,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
+		bool recurs = event->doesRecur();
 		QValueList<QDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
@@ -384,7 +385,24 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 			KCal::Alarm* alarm = *al;
 			QDateTime dt;
 			if (alarm->enabled())
+			{
+				QDateTime dt1;
+				if (recurs  &&  !alarm->hasTime())
+				{
+					// Find the latest recurrence for the alarm.
+					// Need to do this for alarms with offsets in order to detect
+					// reminders due for recurrences.
+					int offset = alarm->hasStartOffset() ? alarm->startOffset().asSeconds()
+					           : alarm->endOffset().asSeconds() + event->dtStart().secsTo(event->dtEnd());
+					if (offset)
+						dt1 = event->recurrence()->getPreviousDateTime(now1.addSecs(-offset));
+				}
 				dt = alarm->previousRepetition(now1);   // get latest due repetition (if any)
+				if (!dt.isValid())
+					dt = dt1;
+				else if (dt1.isValid()  &&  dt1 > dt)
+					dt = dt1;
+			}
 			alarmtimes.append(dt);
 		}
 		if (!cal->eventHandled(event, alarmtimes))
