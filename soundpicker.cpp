@@ -307,6 +307,6 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 			kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
 		defaultDir = kdeSoundDir;
 	}
-	QString filter = Phonon::BackendCapabilities::knownMimeTypes().join(" ");
+	QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(" ");
 	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }
