@@ -55,7 +55,7 @@
 #include <kglobalsettings.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
-#include <kwm.h>
+#include <kwindowsystem.h>
 #include <k3process.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
@@ -407,7 +407,7 @@ void MessageWin::initView()
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
 #ifdef Q_WS_X11
-				if (text->sizeHint().width() >= KWM::workArea().width()*2/3)
+				if (text->sizeHint().width() >= KWindowSystem::workArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 #endif
@@ -616,8 +616,8 @@ void MessageWin::initView()
 #ifdef Q_OS_UNIX
 	WId winid = winId();
 	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
-	KWM::setState(winid, wstate);
-	KWM::setOnAllDesktops(winid, true);
+	KWindowSystem::setState(winid, wstate);
+	KWindowSystem::setOnAllDesktops(winid, true);
 #endif
 }
 
@@ -1129,7 +1129,7 @@ QSize MessageWin::sizeHint() const
 	if (mAction != KAEvent::MESSAGE)
 		return MainWindowBase::sizeHint();
 #ifdef Q_WS_X11
-	QSize desktop  = KWM::workArea().size();
+	QSize desktop  = KWindowSystem::workArea().size();
 #else
 	QSize desktop  = qApp->desktop()->availableGeometry().size();
 #endif
@@ -1179,7 +1179,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			 */
 			// PROBLEM: The frame size is not known yet!
 #ifdef Q_WS_X11
-			QRect desk = KWM::workArea();
+			QRect desk = KWindowSystem::workArea();
 #else
 			QRect desk = qApp->desktop()->availableGeometry();
 #endif

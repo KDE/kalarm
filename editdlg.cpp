@@ -47,7 +47,7 @@
 #include <khbox.h>
 #include <kvbox.h>
 #include <kurlcompletion.h>
-#include <kwm.h>
+#include <kwindowsystem.h>
 #include <kstandarddirs.h>
 #include <KStandardGuiItem>
 #include <kabc/addresseedialog.h>
@@ -458,7 +458,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// If a main window is visible, the dialog will by KDE default always appear on its
 	// desktop. If the user invokes the dialog via the system tray on a different desktop,
 	// that can cause confusion.
-	mDesktop = KWM::currentDesktop();
+	mDesktop = KWindowSystem::currentDesktop();
 }
 
 EditAlarmDlg::~EditAlarmDlg()
@@ -1397,7 +1397,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			s = minimumSize();
 		resize(s);
 	}
-	KWM::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
+	KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
 	KDialog::showEvent(se);
 }
 
