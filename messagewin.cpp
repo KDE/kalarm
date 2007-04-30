@@ -956,7 +956,7 @@ void MessageWin::playAudio()
 		Phonon::AudioPath* path = new Phonon::AudioPath(this);
 		path->addOutput(output);
 		mAudioObject = new Phonon::MediaObject(this);
-		mAudioObject->setUrl(KUrl(QFile::encodeName(play)));
+		mAudioObject->setCurrentSource(play);
 		mAudioObject->addAudioPath(path);
 		if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
 		{
