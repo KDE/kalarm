@@ -277,7 +277,7 @@ void RepetitionDlg::set(int interval, int count, bool dateOnly, int maxDuration)
 		mDuration->setMinutes(count * interval, mDateOnly, units);
 		mCountButton->setChecked(true);
 	}
-	setReadOnly(!mMaxDuration);
+	mTimeSelector->setEnabled(mMaxDuration);
 }
 
 /******************************************************************************
