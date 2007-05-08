@@ -3,6 +3,7 @@ KAlarm
 === Version 1.4.12 --- 5 May 2007 ===
 Display advance reminders for each occurrence of recurring alarms.
 Disable simple repetition controls if repetitions can't fit between recurrences.
+Make the system tray tooltip take account of alarm repetitions.
 
 === Version 1.4.11 --- 16 April 2007 ===
 Prevent pre-alarm actions being executed multiple times when alarm is triggered.
