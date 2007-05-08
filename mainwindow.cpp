@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -689,10 +689,12 @@ void MainWindow::slotDelete()
 	// Copy the events to be deleted, in case any are deleted by being
 	// triggered while the confirmation prompt is displayed.
 	QValueList<KAEvent> events;
+	QValueList<KAEvent> origEvents;
 	for (QValueList<EventListViewItemBase*>::Iterator iit = items.begin();  iit != items.end();  ++iit)
 	{
 		AlarmListViewItem* item = (AlarmListViewItem*)(*iit);
 		events.append(item->event());
+		origEvents.append(item->event());
 	}
 	if (Preferences::confirmAlarmDeletion())
 	{
@@ -730,7 +732,7 @@ void MainWindow::slotDelete()
 	if (!AlarmCalendar::activeCalendar()->endUpdate())      // save the calendars now
 		warnErr = events.count();
 	AlarmCalendar::expiredCalendar()->endUpdate();
-	Undo::saveDeletes(events);
+	Undo::saveDeletes(origEvents);
 
 	if (warnErr)
 		KAlarm::displayUpdateError(this, KAlarm::UPDATE_FAILED, KAlarm::ERR_DELETE, warnErr);
