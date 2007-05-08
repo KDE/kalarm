@@ -542,7 +542,12 @@ void KAEvent::set(const Event* event)
 
 	Recurrence* recur = event->recurrence();
 	if (recur  &&  recur->doesRecur())
+	{
+		int nextRepeat = mNextRepeat;    // setRecurrence() clears mNextRepeat
 		setRecurrence(*recur);
+		if (nextRepeat <= mRepeatCount)
+			mNextRepeat = nextRepeat;
+	}
 
 	mUpdated = false;
 }
