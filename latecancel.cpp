@@ -35,7 +35,7 @@
 // translations across different modules.
 QString LateCancelSelector::i18n_CancelIfLate()       { return i18n("Cancel if late"); }
 QString LateCancelSelector::i18n_AutoCloseWin()       { return i18n("Auto-close window after this time"); }
-QString LateCancelSelector::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancelation time"); }
+QString LateCancelSelector::i18n_AutoCloseWinLC()     { return i18n("Auto-close window after late-cancellation time"); }
 
 
 LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
@@ -82,7 +82,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	mLayout->addLayout(hlayout);
 	mAutoClose = new CheckBox(i18n_AutoCloseWin(), this);
 	mAutoClose->setFixedSize(mAutoClose->sizeHint());
-	mAutoClose->setWhatsThis(i18n("Automatically close the alarm window after the expiry of the late-cancelation period"));
+	mAutoClose->setWhatsThis(i18n("Automatically close the alarm window after the expiry of the late-cancellation period"));
 	hlayout->addWidget(mAutoClose);
 	hlayout->addStretch();
 
