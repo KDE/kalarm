@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.h  -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 /* @file calendarcompat.h - compatibility for old calendar file formats */
 
+#include <qstring.h>
 namespace KCal { class Calendar; }
 
 
