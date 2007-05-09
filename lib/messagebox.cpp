@@ -18,11 +18,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "messagebox.h"
+
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
-#include "messagebox.h"
 
 
 QMap<QString, KMessageBox::ButtonCode> MessageBox::mContinueDefaults;

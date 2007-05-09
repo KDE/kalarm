@@ -18,7 +18,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "kamail.h"
+
+#include "alarmevent.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "kmailinterface.h"
+#include "mainwindow.h"
+#include "preferences.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -51,13 +59,6 @@
 
 #include <kmime/kmime_header_parsing.h>
 
-#include "alarmevent.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "kmailinterface.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "kamail.h"
 
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KMAIL_DBUS_PATH    = "/KMail";

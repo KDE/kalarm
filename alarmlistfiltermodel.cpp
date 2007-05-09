@@ -18,12 +18,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "alarmlistfiltermodel.h"
+
+#include "eventlistmodel.h"
 
 #include <kdebug.h>
 
-#include "eventlistmodel.h"
-#include "alarmlistfiltermodel.h"
 
 // AlarmListFilterModel provides sorting and filtering for the alarm list model.
 

@@ -1,7 +1,7 @@
 /*
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,13 +18,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
-#include <QStringList>
-#include <klocale.h>
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "alarmtext.h"
 
 #include "alarmevent.h"
 #include "editdlg.h"
-#include "alarmtext.h"
+
+#include <QStringList>
+#include <klocale.h>
 
 
 QString AlarmText::mFromPrefix;

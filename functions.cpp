@@ -18,7 +18,24 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "functions.h"
+
+#include "alarmcalendar.h"
+#include "alarmevent.h"
+#include "eventlistmodel.h"
+#include "alarmlistview.h"
+#include "alarmresources.h"
+#include "daemon.h"
+#include "editdlg.h"
+#include "kalarmapp.h"
+#include "kamail.h"
+#include "mainwindow.h"
+#include "messagewin.h"
+#include "preferences.h"
+#include "shellprocess.h"
+#include "templatelistview.h"
+#include "templatemenuaction.h"
 
 #include <QDir>
 #include <QRegExp>
@@ -44,23 +61,6 @@
 #include <libkpimidentities/identity.h>
 #include <kcal/person.h>
 #include <ktoolinvocation.h>
-
-#include "alarmcalendar.h"
-#include "alarmevent.h"
-#include "eventlistmodel.h"
-#include "alarmlistview.h"
-#include "alarmresources.h"
-#include "daemon.h"
-#include "editdlg.h"
-#include "kalarmapp.h"
-#include "kamail.h"
-#include "mainwindow.h"
-#include "messagewin.h"
-#include "preferences.h"
-#include "shellprocess.h"
-#include "templatelistview.h"
-#include "templatemenuaction.h"
-#include "functions.h"
 
 
 namespace

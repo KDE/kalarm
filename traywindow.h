@@ -28,6 +28,8 @@ class QEvent;
 class QMouseEvent;
 class QDragEnterEvent;
 class QDropEvent;
+class QAction;
+class KAction;
 class KMenu;
 class KAEvent;
 class MainWindow;

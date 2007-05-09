@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "calendarcompat.h"
+
+#include "alarmevent.h"
+#include "alarmresource.h"
+#include "functions.h"
+#include "preferences.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -31,11 +37,6 @@
 
 #include <kcal/calendarlocal.h>
 
-#include "alarmevent.h"
-#include "alarmresource.h"
-#include "functions.h"
-#include "preferences.h"
-#include "calendarcompat.h"
 
 using namespace KCal;
 

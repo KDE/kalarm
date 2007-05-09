@@ -18,26 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
-
-#include <stdlib.h>
-
-#include <QToolTip>
-#include <QMouseEvent>
-#include <QList>
-
-#include <kactioncollection.h>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kstandardaction.h>
-#include <kaboutdata.h>
-#include <kmenu.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kstandardaction.h>
-#include <KStandardGuiItem>
-#include <kconfig.h>
-#include <kdebug.h>
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "traywindow.moc"
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
@@ -51,7 +33,24 @@
 #include "prefdlg.h"
 #include "preferences.h"
 #include "templatemenuaction.h"
-#include "traywindow.moc"
+
+#include <stdlib.h>
+
+#include <QToolTip>
+#include <QMouseEvent>
+#include <QList>
+
+#include <kactioncollection.h>
+#include <kapplication.h>
+#include <klocale.h>
+#include <kaboutdata.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kstandardaction.h>
+#include <kstandardguiitem.h>
+#include <kconfig.h>
+#include <kdebug.h>
 
 
 struct TipItem

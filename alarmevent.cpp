@@ -18,7 +18,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "alarmevent.h"
+
+#include "alarmcalendar.h"
+#include "alarmtext.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "preferences.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -33,12 +40,6 @@
 
 #include <kcal/calendarlocal.h>
 
-#include "alarmtext.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "preferences.h"
-#include "alarmcalendar.h"
-#include "alarmevent.h"
 using namespace KCal;
 
 

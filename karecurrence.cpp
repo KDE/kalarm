@@ -18,16 +18,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include "karecurrence.h"
+
+#include "datetime.h"
+#include "functions.h"
 
 #include <QBitArray>
 #include <kdebug.h>
 
 #include <kcal/icalformat.h>
 
-#include "datetime.h"
-#include "functions.h"
-#include "karecurrence.h"
 
 using namespace KCal;
 
