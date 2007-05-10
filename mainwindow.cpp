@@ -19,6 +19,29 @@
  */
 
 #include "kalarm.h"
+#include "mainwindow.moc"
+
+#include "alarmcalendar.h"
+#include "alarmevent.h"
+#include "alarmlistdelegate.h"
+#include "alarmlistfiltermodel.h"
+#include "eventlistmodel.h"
+#include "alarmlistview.h"
+#include "alarmresources.h"
+#include "alarmtext.h"
+#include "birthdaydlg.h"
+#include "daemon.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "kamail.h"
+#include "prefdlg.h"
+#include "preferences.h"
+#include "resourceselector.h"
+#include "synchtimer.h"
+#include "templatedlg.h"
+#include "templatemenuaction.h"
+#include "templatepickdlg.h"
+#include "traywindow.h"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -54,29 +77,6 @@
 #include <kmime/kmime_content.h>
 #include <kcal/calendarlocal.h>
 #include <kcal/icaldrag.h>
-
-#include "alarmcalendar.h"
-#include "alarmevent.h"
-#include "alarmlistdelegate.h"
-#include "alarmlistfiltermodel.h"
-#include "eventlistmodel.h"
-#include "alarmlistview.h"
-#include "alarmresources.h"
-#include "alarmtext.h"
-#include "birthdaydlg.h"
-#include "daemon.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "kamail.h"
-#include "prefdlg.h"
-#include "preferences.h"
-#include "resourceselector.h"
-#include "synchtimer.h"
-#include "templatedlg.h"
-#include "templatemenuaction.h"
-#include "templatepickdlg.h"
-#include "traywindow.h"
-#include "mainwindow.moc"
 
 using namespace KCal;
 
@@ -930,7 +930,7 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(QSystemTrayIcon::isSystemTrayAvailable() && !Preferences::runInSystemTray());
+	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable() && !Preferences::runInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 

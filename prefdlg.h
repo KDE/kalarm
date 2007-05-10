@@ -32,6 +32,7 @@ class QRadioButton;
 class QPushButton;
 class QComboBox;
 class QLineEdit;
+class QLabel;
 class KTimeZone;
 class KColorCombo;
 class FontColourChooser;

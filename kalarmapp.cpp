@@ -19,6 +19,25 @@
  */
 
 #include "kalarm.h"
+#include "kalarmapp.moc"
+
+#include "alarmcalendar.h"
+#include "eventlistmodel.h"
+#include "alarmlistview.h"
+#include "editdlg.h"
+#include "daemon.h"
+#include "dbushandler.h"
+#include "functions.h"
+#include "kamail.h"
+#include "karecurrence.h"
+#include "mainwindow.h"
+#include "messagebox.h"
+#include "messagewin.h"
+#include "preferences.h"
+#include "prefdlg.h"
+#include "shellprocess.h"
+#include "startdaytimer.h"
+#include "traywindow.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -39,32 +58,12 @@
 #include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
-#include <KStandardGuiItem>
+#include <kglobal.h>
+#include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
 #include <kstaticdeleter.h>
-#include <kdebug.h>
-
-#include "alarmcalendar.h"
-#include "eventlistmodel.h"
-#include "alarmlistview.h"
-#include "editdlg.h"
-#include "daemon.h"
-#include "dbushandler.h"
-#include "functions.h"
-#include "kamail.h"
-#include "karecurrence.h"
-#include "mainwindow.h"
-#include "messagebox.h"
-#include "messagewin.h"
-#include "preferences.h"
-#include "prefdlg.h"
-#include "shellprocess.h"
-#include "startdaytimer.h"
-#include "traywindow.h"
-#include "kalarmapp.moc"
-
 #include <netwm.h>
-#include <kglobal.h>
+#include <kdebug.h>
 
 
 static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
@@ -292,7 +291,7 @@ int KAlarmApp::newInstance()
 				// Display only the system tray icon
 				kDebug(5950)<<"KAlarmApp::newInstance(): tray\n";
 				args->clear();      // free up memory
-				if (!QSystemTrayIcon::isSystemTrayAvailable())
+				if (!KSystemTrayIcon::isSystemTrayAvailable())
 				{
 					exitCode = 1;
 					break;
@@ -946,7 +945,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 	{
 		if (!mTrayWindow  &&  !creating)
 		{
-			if (!QSystemTrayIcon::isSystemTrayAvailable())
+			if (!KSystemTrayIcon::isSystemTrayAvailable())
 				return false;
 			if (!MainWindow::count()  &&  wantRunInSystemTray())
 			{
@@ -980,7 +979,7 @@ bool KAlarmApp::checkSystemTray()
 {
 	if (!mTrayWindow)
 		return true;
-	if (QSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
+	if (KSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
 	{
 		kDebug(5950) << "KAlarmApp::checkSystemTray(): changed -> " << mNoSystemTray << endl;
 		mNoSystemTray = !mNoSystemTray;
@@ -1075,7 +1074,7 @@ void KAlarmApp::changeStartOfDay()
 */
 bool KAlarmApp::wantRunInSystemTray() const
 {
-	return Preferences::runInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable();
+	return Preferences::runInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
 }
 
 /******************************************************************************
