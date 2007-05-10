@@ -110,7 +110,7 @@ Note that archived alarms are always stored in the default archived alarm resour
     </entry>
     <entry name="MessageButtonDelay" type="Int">
       <label>Delay before message window buttons are enabled</label>
-      <whatsthis>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled. 0 to position message windows as far from the cursor as possible with no enable delay, -1 to position in center of screen with no enable delay, >0 to position in center of screen and delay enabling buttons.</whatsthis>
+      <whatsthis>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled. 0 to position message windows as far from the cursor as possible with no enable delay, >0 to position in center of screen and delay enabling buttons, -1 for no special positioning with no enable delay.</whatsthis>
       <default>0</default>
       <min>-1</min>
       <max>10</max>   <!-- Prevent windows being unusable for a long time -->
