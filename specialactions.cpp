@@ -44,6 +44,8 @@ SpecialActionsButton::SpecialActionsButton(const QString& caption, QWidget* pare
 	: QPushButton(caption, parent, name),
 	  mReadOnly(false)
 {
+	setToggleButton(true);
+	setOn(false);
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
 	QWhatsThis::add(this,
 	      i18n("Specify actions to execute before and after the alarm is displayed."));
@@ -57,7 +59,7 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post)
 {
 	mPreAction  = pre;
 	mPostAction = post;
-	setDown(!mPreAction.isEmpty() || !mPostAction.isEmpty());
+	setOn(!mPreAction.isEmpty() || !mPostAction.isEmpty());
 }
 
 /******************************************************************************
@@ -71,9 +73,11 @@ void SpecialActionsButton::slotButtonPressed()
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		setActions(dlg.preAction(), dlg.postAction());
+		mPreAction  = dlg.preAction();
+		mPostAction = dlg.postAction();
 		emit selected();
 	}
+	setOn(!mPreAction.isEmpty() || !mPostAction.isEmpty());
 }
 
 

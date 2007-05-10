@@ -1,7 +1,7 @@
 /*
  *  repetition.h  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class RepetitionButton : public QPushButton
 		Q_OBJECT
 	public:
 		RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent, const char* name = 0);
-		void           set(int interval, int count)   { mInterval = interval;  mCount = count; }
+		void           set(int interval, int count);
 		void           set(int interval, int count, bool dateOnly, int maxDuration = -1);
 		void           initialise(int interval, int count, bool dateOnly, int maxDuration = -1);   // use only after needsInitialisation() signal
 		void           activate()               { activate(false); }
