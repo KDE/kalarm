@@ -68,7 +68,7 @@
 
 
 static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
-static bool convInterval(QByteArray timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
  * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -2048,46 +2048,47 @@ static bool convWakeTime(const QByteArray& timeParam, KDateTime& dateTime, const
 *  Convert a time interval command line parameter.
 *  Reply = true if successful.
 */
-static bool convInterval(QByteArray timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
+static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
+	QByteArray timeString = timeParam;
 	// Get the recurrence interval
 	bool ok = true;
 	uint interval = 0;
-	bool negative = (timeParam[0] == '-');
+	bool negative = (timeString[0] == '-');
 	if (negative)
-		timeParam = timeParam.right(1);
-	uint length = timeParam.length();
-	switch (timeParam[length - 1])
+		timeString = timeString.right(1);
+	uint length = timeString.length();
+	switch (timeString[length - 1])
 	{
 		case 'Y':
 			if (!allowMonthYear)
 				ok = false;
 			recurType = KARecurrence::ANNUAL_DATE;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'W':
 			recurType = KARecurrence::WEEKLY;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'D':
 			recurType = KARecurrence::DAILY;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'M':
 		{
-			int i = timeParam.indexOf('H');
+			int i = timeString.indexOf('H');
 			if (i < 0)
 			{
 				if (!allowMonthYear)
 					ok = false;
 				recurType = KARecurrence::MONTHLY_DAY;
-				timeParam = timeParam.left(length - 1);
+				timeString = timeString.left(length - 1);
 			}
 			else
 			{
 				recurType = KARecurrence::MINUTELY;
-				interval = timeParam.left(i).toUInt(&ok) * 60;
-				timeParam = timeParam.mid(i + 1, length - i - 2);
+				interval = timeString.left(i).toUInt(&ok) * 60;
+				timeString = timeString.mid(i + 1, length - i - 2);
 			}
 			break;
 		}
@@ -2096,7 +2097,7 @@ static bool convInterval(QByteArray timeParam, KARecurrence::Type& recurType, in
 			break;
 	}
 	if (ok)
-		interval += timeParam.toUInt(&ok);
+		interval += timeString.toUInt(&ok);
 	timeInterval = static_cast<int>(interval);
 	if (negative)
 		timeInterval = -timeInterval;
