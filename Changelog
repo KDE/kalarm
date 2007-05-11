@@ -1,6 +1,111 @@
 KAlarm
 
-=== Version 1.3.2 --- 27 August 2005 ===
+=== Version 1.9.90 ===
+New facility to use multiple alarm calendar resources.
+Add facility to select time zone for alarm times.
+Handle summer/winter time changes correctly.
+Use custom properties instead of CATEGORIES in calendar events for KAlarm data.
+Don't discard non-KAlarm custom event properties when editing alarms.
+Use kconf_update to convert old config file settings.
+Change numeric codes in config file to strings for long-term maintainability.
+Rename Defaults section options in config file.
+
+=== Version 1.4.12 --- 9 May 2007 ===
+Display advance reminders for each occurrence of recurring alarms.
+Fix Undo of deletion of active alarms.
+Disable simple repetition controls if repetitions can't fit between recurrences.
+Make the system tray tooltip take account of alarm repetitions.
+Show repetition & special action status by button states in alarm edit dialogue.
+
+=== Version 1.4.11 --- 16 April 2007 ===
+Prevent pre-alarm actions being executed multiple times when alarm is triggered.
+Prevent alarm daemon triggering alarms multiple times.
+Only execute pre-alarm actions once (not for reminders or deferrals).
+Only execute post-alarm actions once when alarm is finally acknowledged (after
+    any deferrals), and not after reminders.
+Show file name as a tooltip on sound type combo box when "file" is selected.
+
+=== Version 1.4.10 --- 3 March 2007 ===
+Add play button to sound file selection dialogue.
+Prevent simple repetitions triggering again when KAlarm is restarted.
+Fix recurring alarms being triggered on exception days.
+Fix start-of-day time being ignored for date-only alarms.
+Disable Defer button in new message window when deferral limit has been reached.
+Fix failure to save "Execute in terminal window" option in Preferences dialogue.
+Ensure up-to-date menus are displayed if user has a customised toolbar.
+
+=== Version 1.4.9 (KDE 3.5.6) --- 3 January 2007 ===
+Minor changes.
+
+=== Version 1.4.8 --- 28 December 2006 ===
+Fix Find always using first search text entered even after entering a new one.
+
+=== Version 1.4.7 --- 14 December 2006 ===
+Fix crash saving Preferences dialogue (due to command alarm terminal setting).
+
+=== Version 1.4.6 --- 30 November 2006 ===
+Fix crash if an alarm triggers while user is deleting it.
+Fix "Start alarm monitoring at login" value shown in preferences dialogue.
+Fix deselecting "Start alarm monitoring at login" when daemon not running.
+Fix editing of 29th February alarm options for non-leap years.
+Tidy up preferences dialogue Run mode options.
+Tidy up alarm edit/preferences dialogue sound type options into a combo box.
+Add context help for sound file fade options.
+
+=== Version 1.4.5 (KDE 3.5.5) --- 29 September 2006 ===
+Improve alarm edit dialogue layout (Reminder controls moved to below Time box).
+
+=== Version 1.4.4 --- 11 July 2006 ===
+Use an alarm's previous deferral time interval as default for its next deferral.
+
+=== Version 1.4.3 (KDE 3.5.4) --- 11 July 2006 ===
+Add facility to import alarms from other calendar files.
+Fix Defer dialog time interval maximum to match maximum date/time value.
+Fix crash when a deferred expired recurring alarm is edited from message window.
+Fix crash when a message is redisplayed after login.
+Prevent inapplicable 'Unable to speak' error when alarm redisplayed after login.
+Save main window column order changes to use on restart (except message column).
+
+=== Version 1.3.10 (KDE 3.5.3) --- 22 May 2006 ===
+Add DCOP calls and command line options to display the edit alarm dialogue.
+Add Select All and Deselect actions & shortcuts for import birthdays list.
+Make system tray icon appear in non-KDE window managers.
+Output error message if deleting copy of alarm from KOrganizer fails.
+Fix corruption of alarms displayed at logout and then deferred after login.
+Fix reminder time not being saved in alarm templates.
+Fix erroneous date adjustment of start of recurrence when saving alarm.
+Fix crash when --play command line option is used, if compiled without aRts.
+Don't show disabled alarms in system tray tooltip alarm list.
+
+=== Version 1.3.9 (KDE 3.5.2) --- 7 March 2006 ===
+Notify daemon by DCOP that alarm has been processed: to prevent alarm loss, and
+    to prevent defunct kalarm processes when run mode is on-demand.
+Add Select All and Deselect actions & shortcuts for alarm and template lists.
+
+=== Version 1.3.8 --- 24 January 2006 ===
+Fix kalarmd hang when triggering late alarm and KAlarm run mode is on-demand.
+
+=== Version 1.3.7 --- 22 January 2006 ===
+Fix column widths when main window is resized, if columns have been reordered.
+
+=== Version 1.3.6 (KDE 3.5.1) --- 10 January 2006 ===
+Make autoclose of message windows work.
+Fix New From Template not creating alarm if template contents are not changed.
+Ensure that day and month names translations are independent of locale calendar.
+Display alarm message windows within current screen in multi-head systems.
+Reduce size of Preferences dialog to fit in 1024x768 screen.
+
+=== Version 1.3.5 --- 14 December 2005 ===
+Fix email attachments being forgotten when saving alarms.
+Fix toolbar configuration being lost after quitting KAlarm.
+
+=== Version 1.3.4 (KDE 3.5) --- 30 October 2005 ===
+Fix incorrect recurrence frequency in Alarm Edit dialogue's Alarm tab.
+
+=== Version 1.3.3 --- 22 September 2005 ===
+Add day-of-week selection to daily recurrence dialog.
+
+=== Version 1.3.2 (KDE 3.5 beta 1) --- 10 September 2005 ===
 Add option to show alarms in KOrganizer's active calendar.
 Add option for email text alarms to locate the email in KMail.
 When email alarm triggers and KMail isn't running, start KMail and send mail
@@ -13,25 +118,29 @@ Prevent message windows always being full screen after a big message is shown.
 Prevent message windows being initially larger than the desktop.
 Prevent message windows initially overlapping the KDE panel.
 Prevent session restoration displaying main windows which should be hidden.
+Fix alarms getting stuck if due during a daylight savings clock change.
 Change --volume command line option short form to -V (-v is used by --version).
 Fix reported shell errors when output from command alarm is discarded.
 Use 'KAlarm' untranslated in calendar product ID, to cater for locale changes.
 
 === Version 1.3.1 --- 30 May 2005 ===
 Add Undo/Redo facility for alarm edit/creation/deletion/reactivation.
-Add search facility.
+Add text search facility.
 Add option to speak alarm messages (if speech synthesis is installed).
 Add command line option --speak.
 Add 'New alarm from template' menu option and toolbar button.
 Add 'Time from now' option in alarm templates.
 Add fade option for playing sound files.
 Add option to log command alarm output to a file.
-Add Edit button to alarm message window to allow alarm to be edited.
+Add Edit button to alarm message window to allow the alarm to be edited.
 Enable drag and drop of alarms to other applications.
 Email drag-and-drop from KMail (KDE >= 3.5) now presets alarm edit dialog with
     full From/To/Cc/Subject headers and body text.
 
-=== Version 1.2.7 (KDE 3.4.1) --- 8 April 2005 ===
+=== Version 1.2.8 (KDE 3.4.1) --- 9 May 2005 ===
+Fix failure to enable "Reminder for first recurrence only" checkbox.
+
+=== Version 1.2.7 --- 20 April 2005 ===
 Use a sensible default for terminal window command in Preferences dialog.
 Validate terminal window command entered in Preferences dialog.
 Fix date range no longer being validated in Defer dialog.
@@ -40,7 +149,7 @@ Reset sound volume (if it was set) as soon as audio file playing is complete.
 Don't start KMix when an alarm is displayed if no sound volume is specified.
 Add command script and execute-in-terminal options to DCOP interface.
 
-=== Version 1.2.6 --- 22 February 2005 ===
+=== Version 1.2.6 (KDE 3.4) --- 22 February 2005 ===
 Pop up message windows far from cursor to avoid accidental acknowledgement.
 Start KMix if not already running, for setting alarm sound level.
 Fix alarms not triggering if IDs are duplicated in different calendar files.
@@ -102,7 +211,7 @@ Make weekly/monthly/yearly recurrences scheduled from command line correspond
 Fix start date for monthly/yearly recurrences scheduled from the command line.
 Fix DCOP triggerEvent() call to not reschedule alarm if it isn't due yet.
 
-=== Version 1.1.4 --- 7 August 2004 ===
+=== Version 1.1.4 --- 21 August 2004 ===
 Fix errors when altering or cancelling deferrals of expired recurrences.
 
 === Version 1.1.3 (KDE 3.3) --- 28 July 2004 ===
@@ -155,21 +264,21 @@ Fix email body text not being saved in email alarms.
 Fix loss of --exec command line arguments.
 Remove wasted vertical space from message windows.
 
-=== Version 1.0.6 --- 26 Mar 2004 ===
+=== Version 1.0.6 (KDE 3.2.2) --- 26 March 2004 ===
 Make the Quit menu item in main window quit the program.
 Update time entry field after editing as soon as mouse cursor leaves it.
 Cancel deferral if reminder is set before it, to prevent it becoming stuck.
 Prevent undeleted recurring alarms being triggered immediately.
 Don't allow alarms to be undeleted if they are completely expired.
 
-=== Version 1.0.5 (KDE 3.2.1)--- 24 Feb 2004 ===
+=== Version 1.0.5 (KDE 3.2.1) --- 24 February 2004 ===
 Fix whatsThis text on bottom row of alarm list.
 
-=== Version 1.0.4 --- 21 Feb 2004 ===
-Fix hangup at login when multiple alarms trigger.
+=== Version 1.0.4 --- 22 February 2004 ===
+Fix freeze at login when multiple alarms trigger.
 Show all audio file types in sound file chooser dialogue.
 
-=== Version 1.0.3 --- 15 Feb 2004 ===
+=== Version 1.0.3 --- 15 February 2004 ===
 Prevent email alarms from being sent if no 'From' address is configured.
 Omit 'Bcc' when sending email alarms if no 'Bcc' address is configured.
 Fix freeze when starting the alarm daemon.
@@ -177,13 +286,13 @@ Fix memory leaks displaying dialogs.
 Fix scheduleCommand() and scheduleEmail() DCOP handling.
 Fix errors saving expired alarm calendar.
 
-=== Version 1.0.2 (KDE 3.2) --- 11 Jan 2004 ===
+=== Version 1.0.2 (KDE 3.2) --- 29 January 2004 ===
 Prevent editing alarm and saving without changes from deleting the alarm.
 
-=== Version 1.0.1 --- 4 Jan 2004 ===
+=== Version 1.0.1 --- 4 January 2004 ===
 Fix failure to see alarms if KAlarm is reactivated while restoring session.
 
-=== Version 1.0.0 --- 7 Dec 2003 ===
+=== Version 1.0.0 --- 7 December 2003 ===
 Allow entered start date for timed recurrence events to be earlier than now.
 Prevent attempted entry of recurrence end date earlier than start date or today.
 Fix error displaying time of expired repeat-at-login alarms.
@@ -191,7 +300,7 @@ Fix memory leak when sending emails with attachments.
 Fix error trying to send emails with very small attachments.
 Eliminate duplicate reload-calendar calls to alarm daemon.
 
-=== Version 0.9.6 (KDE 3.2 beta1) --- 7 Nov 2003 ===
+=== Version 0.9.6 (KDE 3.2 beta1) --- 7 November 2003 ===
 Add option to choose foreground colour for alarm messages.
 Create new alarm by dragging KMail email onto main window or system tray icon.
 Set initial recurrence defaults to correspond to alarm start date.
@@ -204,7 +313,7 @@ Fix wrong status in system tray icon if KAlarm starts up with alarms disabled.
 Fix wrong number of days in Time-to-alarm column in main window.
 Fix omission of deferred alarms from system tray tooltip.
 
-=== Version 0.9.5 --- 3 Sep 2003 ===
+=== Version 0.9.5 --- 3 September 2003 ===
 Add option for non-modal alarm message windows.
 Add option to display a notification when an email alarm queues an email.
 Emails via KMail are sent without opening composer window, if KMail is running.
@@ -218,10 +327,10 @@ Add filename completion to file and command alarm edit fields.
 Display alarms-disabled indication in system tray tooltip.
 Enable file alarms to display image files.
 Fix file alarms not dislaying some text files, and improve HTML file display.
-Fix loss of edits of attachment list for email alarms.
+Fix loss of changes to attachment list after editing email alarms.
 Fix wrong recurrence end date being displayed when editing an existing alarm.
 
-=== Version 0.9.4 --- 3 Jul 2003 ===
+=== Version 0.9.4 --- 3 July 2003 ===
 Add time-to-alarm display option to main alarm list.
 Add option to list next 24 hours' alarms in system tray tooltip.
 Create new alarm by dragging text or URL onto main window or system tray icon.
@@ -231,11 +340,11 @@ Edit new alarm by context menu or double click on white space in alarm list.
 Add show expired alarms option to preferences dialog.
 Display HTML files correctly in file display alarms.
 
-=== Version 0.9.3 --- 2 Mar 2003 ===
+=== Version 0.9.3 --- 4 March 2003 ===
 Add preferences option to set default sound file for the Edit Alarm dialog.
 Fix display of "Invalid date" message before Edit Alarm dialog displays.
 
-=== Version 0.9.2 --- 28 Feb 2003 ===
+=== Version 0.9.2 --- 28 February 2003 ===
 Option to set font for individual alarm messages.
 Allow multiple alarm selection in the main window.
 KAlarm icon in alarm message window selects the alarm in the main window.
@@ -248,15 +357,15 @@ Always save alarms in iCalendar format (but vCalendar may still be read).
 Add reminder, recurrence and font parameters to DCOP calls.
 Fix failure to enable alarms when running in on-demand mode.
 
-=== Version 0.9.1 --- 16 Jan 2003 ===
-Add option to set advance reminders for alarms.
+=== Version 0.9.1 --- 16 January 2003 ===
+Add option to set advance reminders for display alarms.
 In run-in-system-tray mode, warn that alarms will be disabled before quitting.
 Fix monthly and yearly recurrences on nth Monday etc. of the month.
 Fix yearly recurrences on February 29th.
 Fix recurrence start times stored in expired calendar file.
 Fix extra empty events being stored in expired calendar file.
 
-=== Version 0.9.0 --- 29 Dec 2002 ===
+=== Version 0.9.0 --- 3 January 2003 ===
 Add facility to import birthdays from KAddressBook
 Add option to send an email instead of displaying an alarm message.
 Add option to store and view expired alarms.
@@ -272,27 +381,27 @@ Alarm message defer dialog: update recurrence deferral time limit in real time.
 Weekly recurrence edit: adhere to user preference for start day of week.
 Use standard action icons.
 
-=== Version 0.8.5 (KDE 3.1.1) --- 21 Feb 2003 ===
+=== Version 0.8.5 (KDE 3.1.1) --- 21 February 2003 ===
 Fix monthly and yearly recurrences on nth Monday etc. of the month.
 Fix yearly recurrences on February 29th.
 Fix failure to enable alarms when running in on-demand mode.
 
-=== Version 0.8.4 (KDE 3.1) --- 8 Jan 2003 ===
+=== Version 0.8.4 (KDE 3.1) --- 8 January 2003 ===
 *Fix monthly and yearly recurrences on nth Monday etc. of the month.
 *Fix yearly recurrences on February 29th.
 Make KAlarm icon in message window bring main window to current desktop.
 Fix detection of KDE desktop.
 Fix entry of yearly recurrences on a specified date in the year.
 
-=== Version 0.8.3 --- 9 Nov 2002 ===
+=== Version 0.8.3 --- 9 November 2002 ===
 Fix no system tray icon being displayed.
 Fix multiple system tray icons being displayed.
 Fix alarms being missed after changing "Disable alarms when not running" status.
 
-=== Version 0.8.2 --- 2 Nov 2002 ===
+=== Version 0.8.2 --- 2 November 2002 ===
 Fix audio files not playing.
 
-=== Version 0.8.1 --- 1 Nov 2002 ===
+=== Version 0.8.1 --- 1 November 2002 ===
 Adhere to KDE single/double click setting when clicking on alarm list.
 Fix possible loss of alarms if KAlarm has previously used another calendar file.
 Fix coordination between "At time" and "After time" values when they change.
@@ -300,23 +409,23 @@ Always remove alarm deferral even when next recurrence triggers instead.
 When alarm triggers, replace any existing repeat-at-login alarm message window.
 Fix deselection of Sound not working after selecting a sound file.
 Fix display of hour spin buttons in time edit spin boxes.
-Prevent time edit spin box buttons selecting the text.
+Prevent time edit spin box buttons from selecting the text.
 Clean up previous alarm list highlight properly when a new alarm is selected.
 Set sensible initial focus when edit alarm dialog pages are displayed.
-Fix Quit double entry in system tray context menu.
+Fix Quit duplicate entry in system tray context menu.
 
-=== Version 0.8 (KDE 3.1 beta2) --- 16 Sep 2002 ===
+=== Version 0.8 (KDE 3.1 beta2) --- 16 September 2002 ===
 Move recurrence edit to separate tab in alarm dialog (now fits 800x600 display).
 Add accelerator keys in dialogs.
 Provide date picker for entering dates.
 
-=== Version 0.7.5 --- 29 Aug 2002 ===
+=== Version 0.7.5 --- 1 September 2002 ===
 Add preferences options to choose default settings for the Edit Alarm dialog.
 Fix right-to-left character sets not being displayed in message edit control.
 Make "Help -> Report Bug" use the KDE bug system (bug #43250).
 Fix session restoration not occurring.
 
-=== Version 0.7.4 --- 5 August 2002 ===
+=== Version 0.7.4 (KDE 3.1 beta1) --- 5 August 2002 ===
 Add option to prompt for confirmation on alarm deletion.
 Add option to prompt for confirmation on alarm acknowedgement.
 Display KAlarm handbook Preferences section when Help clicked in config dialog.
@@ -334,7 +443,7 @@ Partially fix loss of alarm times after saving pre-version 0.7 calendar file.
 === Version 0.7.1 --- 29 June 2002 ===
 Prevent duplicate message windows from being displayed.
 Make Close button on message window not the default button to reduce chance
-  of accidental acknowledgement.
+    of accidental acknowledgement.
 Fix non-ASCII message texts being saved as question marks.
 Fix memory leak with recurrences.
 
@@ -352,7 +461,7 @@ Save and restore window sizes.
 Make click on system tray icon always bring KAlarm to top on current desktop.
 Fix alarms not being triggered (depending on time zone).
 
-=== Version 0.6.0 --- 8 Mar 2002 ===
+=== Version 0.6.0 --- 8 March 2002 ===
 Add option to execute a command instead of displaying an alarm message.
 Add Try button to alarm message edit dialog.
 Add icons in the alarm list to indicate each alarm's type.
@@ -362,14 +471,17 @@ Rename command line option --displayEvent to --triggerEvent.
 Rename DCOP function displayMessage() to triggerEvent().
 Rename DCOP function cancelMessage() to cancelEvent().
 
-=== Version 0.5.8 (KDE 3.0.5) --- 4 Oct 2002 ===
+=== Version 0.5.8 (KDE 3.0.5A) --- 23 November 2002 ===
+Fix detection of KDE desktop.
+
+=== Version 0.5.8 (KDE 3.0.5) --- 4 October 2002 ===
 Fix possible loss of alarms if KAlarm has previously used another calendar file.
 
-=== Version 0.5.8 (KDE 3.0.4) --- 18 Aug 2002 ===
+=== Version 0.5.8 (KDE 3.0.4) --- 18 August 2002 ===
 Make "Help -> Report Bug" use the KDE bug system (bug #43250).
 Fix right-to-left character sets not being displayed in message edit control.
 
-=== Version 0.5.8 (KDE 3.0.3) --- 5 Aug 2002 ===
+=== Version 0.5.8 (KDE 3.0.3) --- 5 August 2002 ===
 Adjust wrong summer times stored by version 0.5.7 (KDE 3.0.0).
 Display KAlarm handbook when Help clicked in configuration dialog.
 Make Close button on message window not the default button to reduce chance
@@ -380,7 +492,7 @@ Fix session restoration often not occurring at login.
 Use local time for alarm times instead of using a time zone.
 Make click on system tray icon always bring KAlarm to top on current desktop.
 
-=== Version 0.5.7 (KDE 3.0) --- 17 Mar 2002 ===
+=== Version 0.5.7 (KDE 3.0) --- 17 March 2002 ===
 Show system tray icon on deferring command line-initiated message (run-in-
     system-tray mode).
 Associate main window with system tray icon when displayed from message window.
@@ -391,22 +503,20 @@ Fix failure to display messages after daemon is restarted (run-on-demand mode).
 Fix possible failure to display command line-initiated message.
 Fix crash in some circumstances on changing run mode to run-on-demand.
 Fix crash on clicking KAlarm icon in command line-initiated message window.
-Fix crash on clicking KAlarm icon in command line-initiated message window.
-Fix crash on clicking KAlarm icon in command line-initiated message window.
 Fix crash on deferring alarm in command line-initiated message window.
 Fix duplication of repeat-at-login alarms at login.
 Fix error displaying text file messages.
 
-=== Version 0.5.4 --- 7 Feb 2002 ===
+=== Version 0.5.4 --- 7 February 2002 ===
 Fix extra window being displayed in session restoration.
 
-=== Version 0.5.2 --- 31 Jan 2002 ===
+=== Version 0.5.2 --- 31 January 2002 ===
 Fix session restore crash if in 'run continuously in system tray' mode.
 
-=== Version 0.5.1 --- 30 Jan 2002 ===
+=== Version 0.5.1 --- 30 January 2002 ===
 Change configuration defaults.
 
-=== Version 0.5 --- 29 Jan 2002 ===
+=== Version 0.5 --- 29 January 2002 ===
 Incorporate system tray icon into KAlarm, add --tray option.
 Add 'run continuously in system tray' operating mode.
 Don't use alarm daemon GUI application.
@@ -419,12 +529,12 @@ Remove keyboard accelerator for Reset Daemon.
 Fix magnified system tray icon.
 Include README, etc. files in installation.
 
-=== Version 0.4 --- 22 Dec 2001 ===
+=== Version 0.4 --- 22 December 2001 ===
 Modify to use split alarm daemon/alarm daemon GUI.
 Prevent a command line error exiting all open KAlarm windows.
 Ensure the program exits after starting with --stop or --reset options.
 
-=== Version 0.3.5 --- 5 Dec 2001 ===
+=== Version 0.3.5 --- 5 December 2001 ===
 Add option to repeat alarms at login.
 Add context help button to main window and message window.
 Fix occasional crash on displaying non-repeating alarms.
@@ -435,23 +545,25 @@ Fix handling of zero-length calendar file.
 Improve error messages.
 Make documentation files installation dependent on KDE version.
 
-=== Version 0.3.1 --- 20 Nov 2001 ===
+=== Version 0.3.1 --- 20 November 2001 ===
 Fix build fault when using ./configure --enable-final
 
-=== Version 0.3 --- 4 Nov 2001 ===
+=== Version 0.3 --- 4 November 2001 ===
 Add option to display a file's contents instead of specifying a message.
 Add dialog option to set an alarm's time as an interval from the current time.
 Add defer option to alarm message window.
 Provide button in alarm message window to activate KAlarm.
 Make dialogs modal only for their parent window.
 
+=== Version 0.2 --- 20 October 2001 ===
+Implement repeating alarms.
 Add extra pair of arrow buttons to time spinbox to change the hour.
 Fix sorting by colour column.
 Better What's This? texts for the main window.
 Remove -r, -s short options (use --reset, --stop instead).
 
-=== Version 0.1.1 --- 1 Sep 2001 ===
+=== Version 0.1.1 --- 1 September 2001 ===
 Fix documentation not being created by build.
 
-=== Version 0.1 --- 31 Aug 2001 ===
+=== Version 0.1 --- 31 August 2001 ===
 Initial release.
