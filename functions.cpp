@@ -19,6 +19,20 @@
  */
 
 #include "kalarm.h"
+#include "functions.h"
+
+#include "alarmcalendar.h"
+#include "alarmevent.h"
+#include "alarmlistview.h"
+#include "daemon.h"
+#include "kalarmapp.h"
+#include "kamail.h"
+#include "mainwindow.h"
+#include "messagewin.h"
+#include "preferences.h"
+#include "shellprocess.h"
+#include "templatelistview.h"
+#include "templatemenuaction.h"
 
 #include <qdeepcopy.h>
 #include <qdir.h>
@@ -40,20 +54,6 @@
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
 #include <libkcal/person.h>
-
-#include "alarmcalendar.h"
-#include "alarmevent.h"
-#include "alarmlistview.h"
-#include "daemon.h"
-#include "kalarmapp.h"
-#include "kamail.h"
-#include "mainwindow.h"
-#include "messagewin.h"
-#include "preferences.h"
-#include "shellprocess.h"
-#include "templatelistview.h"
-#include "templatemenuaction.h"
-#include "functions.h"
 
 
 namespace
@@ -791,30 +791,29 @@ int getVersionNumber(const QString& version, QString* subVersion)
 	//      if the representation returned by this method changes.
 	if (subVersion)
 		*subVersion = QString::null;
-	QStringList nums = QStringList::split(QChar('.'), version, true);
-	int count = nums.count();
-	if (count < 2  ||  count > 3)
+	int count = version.contains('.') + 1;
+	if (count < 2)
 		return 0;
 	bool ok;
-	int vernum = nums[0].toInt(&ok) * 10000;    // major version
+	unsigned vernum = version.section('.', 0, 0).toUInt(&ok) * 10000;  // major version
 	if (!ok)
 		return 0;
-	int v = nums[1].toInt(&ok);                 // minor version
+	unsigned v = version.section('.', 1, 1).toUInt(&ok);               // minor version
 	if (!ok)
 		return 0;
 	vernum += (v < 99 ? v : 99) * 100;
-	if (count == 3)
+	if (count >= 3)
 	{
 		// Issue number: allow other characters to follow the last digit
-		QString issue = nums[2];
+		QString issue = version.section('.', 2);
 		if (!issue.at(0).isDigit())
 			return 0;
-		count = issue.length();
+		int n = issue.length();
 		int i;
-		for (i = 0;  i < count && issue.at(i).isDigit();  ++i) ;
+		for (i = 0;  i < n && issue.at(i).isDigit();  ++i) ;
 		if (subVersion)
 			*subVersion = issue.mid(i);
-		v = issue.left(i).toInt();   // issue number
+		v = issue.left(i).toUInt();   // issue number
 		vernum += (v < 99 ? v : 99);
 	}
 	return vernum;
