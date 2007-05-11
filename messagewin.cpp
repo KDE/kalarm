@@ -603,7 +603,7 @@ void MessageWin::setRemainingTextDay()
 {
 	QString text;
 	int days = QDate::currentDate().daysTo(mDateTime.date());
-	if (days == 0  &&  !mDateTime.isDateOnly())
+	if (days <= 0  &&  !mDateTime.isDateOnly())
 	{
 		// The alarm is due today, so start refreshing every minute
 		MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
@@ -612,7 +612,7 @@ void MessageWin::setRemainingTextDay()
 	}
 	else
 	{
-		if (days == 0)
+		if (days <= 0)
 			text = i18n("Today");
 		else if (days % 7)
 			text = i18n("Tomorrow", "in %n days' time", days);
@@ -631,7 +631,7 @@ void MessageWin::setRemainingTextMinute()
 	QString text;
 	int mins = (QDateTime::currentDateTime().secsTo(mDateTime.dateTime()) + 59) / 60;
 	if (mins < 60)
-		text = i18n("in 1 minute's time", "in %n minutes' time", mins);
+		text = i18n("in 1 minute's time", "in %n minutes' time", (mins > 0 ? mins : 0));
 	else if (mins % 60 == 0)
 		text = i18n("in 1 hour's time", "in %n hours' time", mins/60);
 	else if (mins % 60 == 1)
