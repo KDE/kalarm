@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -238,6 +238,20 @@ bool TimeSpinBox::isValid() const
 void TimeSpinBox::slotValueChanged(int value)
 {
 	mPm = (value >= 720);
+}
+
+QSize TimeSpinBox::sizeHint() const
+{
+	QSize sz = SpinBox2::sizeHint();
+	QFontMetrics fm(font());
+	return QSize(sz.width() + fm.width(":"), sz.height());
+}
+
+QSize TimeSpinBox::minimumSizeHint() const
+{
+	QSize sz = SpinBox2::minimumSizeHint();
+	QFontMetrics fm(font());
+	return QSize(sz.width() + fm.width(":"), sz.height());
 }
 
 /******************************************************************************
