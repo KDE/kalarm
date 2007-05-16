@@ -1,7 +1,7 @@
 /*
  *  timespinbox.h  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ class TimeSpinBox : public SpinBox2
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		TimeSpinBox(bool use24hour, QWidget* parent = 0, const char* name = 0);
+		explicit TimeSpinBox(bool use24hour, QWidget* parent = 0, const char* name = 0);
 		/** Constructor for a non-wrapping time spin box which can be used to enter a length of time.
 		 *  @param minMinute The minimum value which the spin box can hold, in minutes.
 		 *  @param maxMinute  The maximum value which the spin box can hold, in minutes.
@@ -85,6 +85,9 @@ class TimeSpinBox : public SpinBox2
 		 *  the spin buttons, designed for incorporation into WhatsThis texts.
 		 */
 		static QString  shiftWhatsThis();
+
+		virtual QSize   sizeHint() const;
+		virtual QSize   minimumSizeHint() const;
 
 	public slots:
 		/** Sets the value of the spin box.
