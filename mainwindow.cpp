@@ -1063,8 +1063,7 @@ void MainWindow::slotResetDaemon()
 */
 void MainWindow::slotPreferences()
 {
-	KAlarmPrefDlg prefDlg;
-	prefDlg.exec();
+	KAlarmPrefDlg::display();
 }
 
 /******************************************************************************

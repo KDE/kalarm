@@ -55,7 +55,7 @@ class KAlarmPrefDlg : public KPageDialog
 {
 		Q_OBJECT
 	public:
-		KAlarmPrefDlg();
+		static void display();
 		~KAlarmPrefDlg();
 
 		MiscPrefTab*       mMiscPage;
@@ -80,7 +80,10 @@ class KAlarmPrefDlg : public KPageDialog
 		virtual void slotCancel();
 
 	private:
+		KAlarmPrefDlg();
 		void         restore(bool defaults);
+
+		static KAlarmPrefDlg* mInstance;
 		bool         mValid;
 };
 
