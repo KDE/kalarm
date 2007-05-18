@@ -1,12 +1,16 @@
 KAlarm
 
-=== Version 1.4.12 --- 11 May 2007 ===
+=== Version 1.4.13 --- 18 May 2007 ===
+Time value in templates is not stored.
+Expand time spin boxes to make room for all digits.
+
+=== Version 1.4.12 (KDE 3.5.7) --- 11 May 2007 ===
 Display advance reminders for each occurrence of recurring alarms.
 Fix Undo of deletion of active alarms.
 Disable simple repetition controls if repetitions can't fit between recurrences.
 Make the system tray tooltip take account of alarm repetitions.
 Show repetition & special action status by button states in alarm edit dialogue.
-Fix reminder alarms displaying very large numbers for time until alarm is due.
+Fix reminder alarms displaying very big numbers for how long until alarm is due.
 Fix KMail omitting attachments from email alarms (if KMail is the email client).
 
 === Version 1.4.11 --- 16 April 2007 ===
