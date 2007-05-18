@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,9 @@
 #include <kiconloader.h>
 #include <kcolorcombo.h>
 #include <kstdguiitem.h>
+#ifdef Q_WS_X11
+#include <kwin.h>
+#endif
 #include <kdebug.h>
 
 #include <kalarmd/kalarmd.h>
@@ -92,9 +95,31 @@ static QString xtermCommands[] = {
 = Class KAlarmPrefDlg
 =============================================================================*/
 
-KAlarmPrefDlg::KAlarmPrefDlg()
-	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, "PrefDlg", true, true)
+KAlarmPrefDlg* KAlarmPrefDlg::mInstance = 0;
+
+void KAlarmPrefDlg::display()
 {
+	if (!mInstance)
+	{
+		mInstance = new KAlarmPrefDlg;
+		mInstance->show();
+	}
+	else
+	{
+#ifdef Q_WS_X11
+		KWin::WindowInfo info = KWin::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
+		KWin::setCurrentDesktop(info.desktop());
+#endif
+		mInstance->showNormal();   // un-minimise it if necessary
+		mInstance->raise();
+		mInstance->setActiveWindow();
+	}
+}
+
+KAlarmPrefDlg::KAlarmPrefDlg()
+	: KDialogBase(IconList, i18n("Preferences"), Help | Default | Ok | Apply | Cancel, Ok, 0, "PrefDlg", false, true)
+{
+	setWFlags(Qt::WDestructiveClose);
 	setIconListAllVisible(true);
 
 	QVBox* frame = addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("misc"));
@@ -118,6 +143,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
 {
+	mInstance = 0;
 }
 
 // Restore all defaults in the options...

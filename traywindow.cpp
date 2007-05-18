@@ -145,8 +145,7 @@ void TrayWindow::slotNewFromTemplate(const KAEvent& event)
 */
 void TrayWindow::slotPreferences()
 {
-	KAlarmPrefDlg prefDlg;
-	prefDlg.exec();
+	KAlarmPrefDlg::display();
 }
 
 /******************************************************************************

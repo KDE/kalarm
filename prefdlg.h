@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ class KAlarmPrefDlg : public KDialogBase
 {
 		Q_OBJECT
 	public:
-		KAlarmPrefDlg();
+		static void display();
 		~KAlarmPrefDlg();
 
 		FontColourPrefTab* mFontColourPage;
@@ -72,7 +72,10 @@ class KAlarmPrefDlg : public KDialogBase
 		virtual void slotCancel();
 
 	private:
+		KAlarmPrefDlg();
 		void            restore();
+
+		static KAlarmPrefDlg* mInstance;
 		bool            mValid;
 };
 
