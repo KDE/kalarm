@@ -1272,7 +1272,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		if (!mTemplate)
 			dt = mAlarmDateTime.effectiveKDateTime();
 		else if (mTemplateUseTime->isChecked())
-			dt.setTime(mTemplateTime->time());
+			dt = KDateTime(QDate(2000,1,1), mTemplateTime->time());
 	}
 	KAEvent::Action type = getAlarmType();
 	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),
