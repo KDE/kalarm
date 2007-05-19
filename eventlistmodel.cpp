@@ -505,6 +505,7 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
+		// xgettext: no-c-format
 		return i18nc("n days", " %1d ", days);
 	}
 	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
