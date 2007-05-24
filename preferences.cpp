@@ -175,7 +175,7 @@ void Preferences::startDayChange(const QDateTime& dt)
 void Preferences::updateStartOfDayCheck(const QTime& t)
 {
 	self()->setSod(startOfDayCheck(t));
-	writeConfig();
+	self()->writeConfig();
 	mStartOfDayChanged = false;
 }
 

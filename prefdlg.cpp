@@ -215,7 +215,7 @@ void KAlarmPrefDlg::slotApply()
 	mEditPage->apply(false);
 	mStorePage->apply(false);
 	mMiscPage->apply(false);
-	Preferences::writeConfig();
+	Preferences::self()->writeConfig();
 }
 
 // Apply the preferences that are currently selected
@@ -270,7 +270,7 @@ PrefsTabBase::PrefsTabBase()
 void PrefsTabBase::apply(bool syncToDisc)
 {
 	if (syncToDisc)
-		Preferences::writeConfig();
+		Preferences::self()->writeConfig();
 }
 
 
