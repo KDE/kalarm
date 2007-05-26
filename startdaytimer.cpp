@@ -29,7 +29,7 @@ StartOfDayTimer* StartOfDayTimer::mInstance = 0;
 StartOfDayTimer::StartOfDayTimer()
 	: DailyTimer(Preferences::startOfDay(), false)
 {
-	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged(const QTime&)));
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), this, SLOT(startOfDayChanged(const QTime&, const QTime&)));
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()
@@ -43,7 +43,7 @@ StartOfDayTimer* StartOfDayTimer::instance()
 * Called when the start-of-day time has changed.
 * The timer is adjusted and if appropriate timer events are triggered now.
 */
-void StartOfDayTimer::startOfDayChanged(const QTime&)
+void StartOfDayTimer::startOfDayChanged(const QTime&, const QTime&)
 {
 	changeTime(Preferences::startOfDay(), true);
 }

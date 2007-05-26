@@ -56,7 +56,7 @@ class StartOfDayTimer : public DailyTimer
 		static StartOfDayTimer* instance();
 
 	private slots:
-		void        startOfDayChanged(const QTime& oldTime);
+		void        startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
 
 	private:
 		static StartOfDayTimer* mInstance;    // exists solely to receive signals
