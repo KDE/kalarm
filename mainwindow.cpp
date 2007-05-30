@@ -443,7 +443,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(i18n_r_ShowResources(), this);
+	mActionToggleResourceSel = new KToggleAction(KIcon("view_choose"), i18n_r_ShowResources(), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
