@@ -1683,11 +1683,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)" << endl;
 				QString tmpfile = createTempScriptFile(command, false, event, alarm);
 				if (tmpfile.isEmpty())
-				{
-					QStringList errmsgs(i18n("Error creating temporary script file"));
-					(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
 					result = 0;
-				}
 				else
 					result = doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE));
 			}
