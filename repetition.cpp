@@ -53,7 +53,16 @@ RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialis
 	  mWaitForInit(waitForInitialisation),
 	  mReadOnly(false)
 {
+	setCheckable(true);
+	setChecked(false);
 	connect(this, SIGNAL(clicked()), SLOT(slotPressed()));
+}
+
+void RepetitionButton::set(int interval, int count)
+{
+	mInterval = interval;
+	mCount    = count;
+	setChecked(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -65,6 +74,7 @@ void RepetitionButton::set(int interval, int count, bool dateOnly, int maxDurati
 	mCount       = count;
 	mMaxDuration = maxDuration;
 	mDateOnly    = dateOnly;
+	setChecked(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -98,6 +108,8 @@ void RepetitionButton::initialise(int interval, int count, bool dateOnly, int ma
 		mDialog->set(interval, count, dateOnly, maxDuration);
 		displayDialog();    // display the dialog now
 	}
+	else
+		setChecked(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -120,6 +132,7 @@ void RepetitionButton::displayDialog()
 		mInterval = mDialog->interval();
 		emit changed();
 	}
+	setChecked(mInterval && mCount);
 	delete mDialog;
 	mDialog = 0;
 }
