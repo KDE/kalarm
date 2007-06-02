@@ -246,6 +246,7 @@ class KAEvent : public KAAlarmEventBase
 			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
 			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
 		        COPY_KORGANIZER = 0x2000,  // KOrganizer should hold a copy of the event
+			WORK_TIME_ONLY  = 0x4000,  // trigger alarm only during working hours
 			// The following are read-only internal values
 			REMINDER        = 0x10000,
 			DEFERRAL        = 0x20000,
@@ -330,6 +331,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setLateCancel(int lc)                             { mLateCancel = lc;  mUpdated = true; }
 		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
+		void               setWorkTimeOnly(bool wto)                         { mWorkTimeOnly = wto; }
 		void               set(int flags);
 		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
 		void               setLogFile(const QString& logfile);
@@ -378,12 +380,13 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           deferDateTime() const          { return mDeferralTime; }
 		DateTime           deferralLimit(DeferLimitType* = 0) const;
 		int                deferDefaultMinutes() const    { return mDeferDefaultMinutes; }
-		DateTime           nextDateTime(bool includeReminders = true) const;
+		DateTime           displayDateTime() const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
 		unsigned long      kmailSerialNumber() const      { return mKMailSerialNumber; }
 		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
+		bool               workTimeOnly() const           { return mWorkTimeOnly; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
@@ -396,6 +399,7 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence*      recurrence() const             { return mRecurrence; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
 		int                longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : 0; }
+		bool               mayOccurDuringWork() const;
 		QString            recurrenceText(bool brief = false) const;
 		QString            repetitionText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }
@@ -448,6 +452,7 @@ class KAEvent : public KAAlarmEventBase
 		};
 
 		void               copy(const KAEvent&);
+		bool               mayOccurDailyDuringWork(const KDateTime&) const;
 		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, Preferences::Feb29Type = Preferences::Feb29_None);
 		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, Preferences::Feb29Type = Preferences::Feb29_None);
 		void               clearRecur();
@@ -487,6 +492,7 @@ class KAEvent : public KAAlarmEventBase
 		KCalEvent::Status  mCategory;         // event category (active, archived, template, ...)
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
+		bool               mWorkTimeOnly;     // trigger alarm only during working hours
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
 		bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login

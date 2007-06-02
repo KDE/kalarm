@@ -61,7 +61,6 @@ using namespace KCal;
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
 
-static QString weekDayName(int day, const KLocale*);
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -338,6 +337,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		mDeleteExceptionButton->setWhatsThis(i18n("Remove the currently highlighted item from the exceptions list"));
 		hlayout->addWidget(mDeleteExceptionButton);
 	}
+
+	mWorkTimeOnly = new CheckBox(i18n("Only during working hours"), mExceptionGroup);
+	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
+	mWorkTimeOnly->setReadOnly(mReadOnly);
+	mWorkTimeOnly->setWhatsThis(i18n("Only execute the alarm during working hours.\nYou can specify working hours in the Preferences dialog."));
+	vlayout->addWidget(mWorkTimeOnly);
 
 	mNoEmitTypeChanged = false;
 }
@@ -810,6 +815,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	for (DateList::ConstIterator it = mExceptionDates.begin();  it != mExceptionDates.end();  ++it)
 		new QListWidgetItem(KGlobal::locale()->formatDate(*it), mExceptionDateList);
 	enableExceptionButtons();
+	mWorkTimeOnly->setChecked(event.workTimeOnly());
 
 	rangeTypeClicked();
 
@@ -910,6 +916,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
+	event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
 	event.setUpdated();
 }
 
@@ -930,6 +937,7 @@ void RecurrenceEdit::saveState()
 		mSavedEndDateTime.setDateOnly(mEndAnyTimeCheckBox->isChecked());
 	}
 	mSavedExceptionDates = mExceptionDates;
+	mSavedWorkTimeOnly   = mWorkTimeOnly->isChecked();
 }
 
 /******************************************************************************
@@ -951,7 +959,8 @@ bool RecurrenceEdit::stateChanged() const
 		if (mSavedEndDateTime != edt)
 			return true;
 	}
-	if (mSavedExceptionDates != mExceptionDates)
+	if (mSavedExceptionDates != mExceptionDates
+	||  mSavedWorkTimeOnly   != mWorkTimeOnly->isChecked())
 		return true;
 	return false;
 }
@@ -1080,7 +1089,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayBox[i] = new CheckBox(weekDayName(day, locale), box);
+		mDayBox[i] = new CheckBox(KAlarm::weekDayName(day, locale), box);
 		mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
 		mDayBox[i]->setReadOnly(readOnly);
 		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignLeft);
@@ -1273,7 +1282,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayOfWeekCombo->addItem(weekDayName(day, locale));
+		mDayOfWeekCombo->addItem(KAlarm::weekDayName(day, locale));
 	}
 	mDayOfWeekCombo->setReadOnly(readOnly);
 	mDayOfWeekCombo->setWhatsThis(i18n("Select the day of the week on which to repeat the alarm"));
@@ -1610,19 +1619,4 @@ bool YearlyRule::stateChanged() const
 	return (MonthYearRule::stateChanged()
 	    ||  mSavedMonths    != months()
 	    ||  mSavedFeb29Type != feb29Type());
-}
-
-QString weekDayName(int day, const KLocale* locale)
-{
-	switch (day)
-	{
-		case 1: return ki18n("Monday").toString(locale);
-		case 2: return ki18n("Tuesday").toString(locale);
-		case 3: return ki18n("Wednesday").toString(locale);
-		case 4: return ki18n("Thursday").toString(locale);
-		case 5: return ki18n("Friday").toString(locale);
-		case 6: return ki18n("Saturday").toString(locale);
-		case 7: return ki18n("Sunday").toString(locale);
-	}
-	return QString();
 }

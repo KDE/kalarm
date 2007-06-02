@@ -58,6 +58,7 @@ static const QString DATE_ONLY_FLAG        = QLatin1String("DATE");
 static const QString EMAIL_BCC_FLAG        = QLatin1String("BCC");
 static const QString CONFIRM_ACK_FLAG      = QLatin1String("ACKCONF");
 static const QString KORGANIZER_FLAG       = QLatin1String("KORG");
+static const QString WORK_TIME_ONLY_FLAG   = QLatin1String("WORKTIME");
 static const QString DEFER_FLAG            = QLatin1String("DEFER");
 static const QString LATE_CANCEL_FLAG      = QLatin1String("LATECANCEL");
 static const QString AUTO_CLOSE_FLAG       = QLatin1String("LATECLOSE");
@@ -187,6 +188,7 @@ void KAEvent::copy(const KAEvent& event)
 	mCommandXterm            = event.mCommandXterm;
 	mKMailSerialNumber       = event.mKMailSerialNumber;
 	mCopyToKOrganizer        = event.mCopyToKOrganizer;
+	mWorkTimeOnly            = event.mWorkTimeOnly;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
 	mMainExpired             = event.mMainExpired;
 	mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
@@ -221,6 +223,7 @@ void KAEvent::set(const Event* event)
 	mEmailBcc               = false;
 	mCommandXterm           = false;
 	mCopyToKOrganizer       = false;
+	mWorkTimeOnly           = false;
 	mConfirmAck             = false;
 	mArchive                = false;
 	mReminderOnceOnly       = false;
@@ -269,6 +272,8 @@ void KAEvent::set(const Event* event)
 			mEmailBcc = true;
 		else if (flags[i] == KORGANIZER_FLAG)
 			mCopyToKOrganizer = true;
+		else if (flags[i] == WORK_TIME_ONLY_FLAG)
+			mWorkTimeOnly = true;
 		else if (flags[i]== KMAIL_SERNUM_FLAG)
 		{
 			unsigned long n = flags[i + 1].toULong(&ok);
@@ -910,11 +915,12 @@ void KAEvent::adjustStartDate(const QDate& d)
 }
 
 /******************************************************************************
- * Return the time of the next scheduled occurrence of the event.
- * Reminders and deferred reminders can optionally be ignored.
- */
-DateTime KAEvent::nextDateTime(bool includeReminders) const
+* Return the time of the next scheduled occurrence of the event, for display
+* purposes.
+*/
+DateTime KAEvent::displayDateTime() const
 {
+#if 0
 	if (includeReminders  &&  mReminderMinutes)
 	{
 		if (!mReminderOnceOnly  ||  mNextMainDateTime == mStartDateTime)
@@ -923,12 +929,156 @@ DateTime KAEvent::nextDateTime(bool includeReminders) const
 	DateTime dt = mainDateTime(true);
 	if (mDeferral > 0
 	&&  (includeReminders  ||  mDeferral != REMINDER_DEFERRAL))
+#endif
+	bool deferred = (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL);
+	if (deferred  &&  mMainExpired)
+		return mDeferralTime;
+	DateTime dt = mainDateTime(true);
+	if (deferred  &&  mDeferralTime < dt)
+		return mDeferralTime;
+	if (mWorkTimeOnly
+	&&  (mRepeatCount && mRepeatInterval || checkRecur() != KARecurrence::NO_RECUR)
+	&&  !KAlarm::isWorkingTime(dt))
 	{
-		if (mMainExpired)
-			return mDeferralTime;
-		return qMin(mDeferralTime, dt);
+		// The alarm is restricted to working hours. Find the next
+		// occurrence during working hours.
+		QBitArray workDays = Preferences::workDays();
+		if (mRecurrence->type() == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60)
+		||  mRepeatCount  &&  mRepeatInterval % (24*60))
+		{
+			// The recurrence time of day varies
+			QTime startDayPre = Preferences::workDayStart().addSecs(-1);
+			QTime endDay      = Preferences::workDayEnd();
+			KDateTime kdt = dt.effectiveKDateTime();
+			int   firstDay  = kdt.date().dayOfWeek() - 1;   // Monday = 0
+			QTime firstTime = kdt.time();
+			if (firstTime > startDayPre)
+				kdt.setTime(QTime(23,59,59));  // need to step on to next day
+			int day = firstDay;
+			for (int n = 0;  n < 1000;  ++n)
+			{
+#warning This loop can potentially take a significant time to execute
+				if (kdt.time() > startDayPre)
+				{
+					if (kdt.time() < endDay  &&  workDays.testBit(day))
+						return kdt;
+					int i = 1;
+					while (!workDays.testBit((day + i) % 7))
+					{
+						if (++i > 7)
+							return KDateTime();  // no working days are defined
+					}
+					kdt = kdt.addDays(i);
+				}
+				kdt.setTime(startDayPre);
+				DateTime newdt;
+				nextOccurrence(kdt, newdt, RETURN_REPETITION);
+				if (!newdt.isValid())
+					return KDateTime();
+				kdt = newdt.effectiveKDateTime();
+				day = kdt.date().dayOfWeek() - 1;
+				if (day == firstDay  &&  kdt.time() == firstTime)
+					return KDateTime();   // it never occurs during working hours
+			}
+			return KDateTime();  // not found - give up
+		}
+
+		// The alarm always occurs at the same time of day.
+		// Check whether it can ever occur during working hours.
+		KDateTime kdt = dt.effectiveKDateTime();
+		if (!mayOccurDailyDuringWork(kdt))
+			return KDateTime();   // never occurs during working hours
+
+		// Find the next working day it occurs on
+		unsigned days = 0;
+		for ( ; ; )
+		{
+			DateTime newdt;
+			OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
+			if (!newdt.isValid())
+				return KDateTime();
+			kdt = newdt.effectiveKDateTime();
+			int day = kdt.date().dayOfWeek() - 1;
+			if (workDays.testBit(day))
+				break;   // found a working day occurrence
+			// Prevent indefinite looping (which should never happen anyway)
+			if (!(type & OCCURRENCE_REPEAT))
+			{
+				if (days == 0x7F)
+					return KDateTime();  // found a recurrence on every day of the week!?!
+				days |= 1 << day;
+			}
+		}
+		dt.setDate(kdt.date());
 	}
 	return dt;
+}
+
+/******************************************************************************
+* Check whether the alarm can possibly occur during working hours.
+* This does not determine whether it actually does, but rather whether it could
+* potentially given enough repetitions.
+* Reply = false if it can never occur during working hours, true if it might.
+*/
+bool KAEvent::mayOccurDuringWork() const
+{
+	KDateTime kdt = mainDateTime(true);
+	if (KAlarm::isWorkingTime(kdt))
+		return true;
+	if (checkRecur() == KARecurrence::NO_RECUR  &&  (!mRepeatCount || !mRepeatInterval))
+		return false;   // it doesn't recur/repeat
+	if (mRecurrence->type() == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60)
+	||  mRepeatCount  &&  mRepeatInterval % (24*60))
+		return true;   // the recurrence time of day varies, so it could occur
+	// The alarm always occurs at the same time of day
+	return mayOccurDailyDuringWork(kdt);
+}
+
+/******************************************************************************
+* Check whether an alarm which recurs at the same time of day can possibly
+* occur during working hours.
+* This does not determine whether it actually does, but rather whether it could
+* potentially given enough repetitions.
+* Reply = false if it can never occur during working hours, true if it might.
+*/
+bool KAEvent::mayOccurDailyDuringWork(const KDateTime& kdt) const
+{
+	if (!kdt.isDateOnly()
+	&&  (kdt.time() < Preferences::workDayStart() || kdt.time() >= Preferences::workDayEnd()))
+		return false;   // its time is outside working hours
+	// Check if it always occurs on the same day of the week
+	bool weekly = false;
+	switch (mRecurrence->type())
+	{
+		case KARecurrence::MINUTELY:
+			weekly = !(mRecurrence->frequency() % (7*24*60));
+			break;
+		case KARecurrence::DAILY:
+			weekly = !(mRecurrence->frequency() % 7);
+			break;
+		case KARecurrence::WEEKLY:
+			weekly = true;
+		default:
+			break;
+	}
+	if (weekly)
+	{
+		// It recurs weekly
+		if (!mRepeatCount || !(mRepeatInterval % (7*24*60)))
+			return false;   // any repetitions are also weekly
+		// Repetitions are daily. Check if any occur on working days
+		// by checking the first recurrence and up to 6 repetitions.
+		QBitArray workDays = Preferences::workDays();
+		int day = mRecurrence->startDateTime().date().dayOfWeek() - 1;   // Monday = 0
+		int repeatDays = mRepeatInterval / (24*60);
+		int maxRepeat = (mRepeatCount < 6) ? mRepeatCount : 6;
+		for (int i = 0;  !workDays.testBit(day);  ++i, day = (day + repeatDays) % 7)
+		{
+			if (i >= maxRepeat)
+				return false;  // no working day occurrences
+		}
+	}
+	return true;
 }
 
 void KAEvent::set(int flags)
@@ -938,6 +1088,7 @@ void KAEvent::set(int flags)
 	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
 	mCommandXterm     = flags & EXEC_IN_XTERM;
 	mCopyToKOrganizer = flags & COPY_KORGANIZER;
+	mWorkTimeOnly     = flags & WORK_TIME_ONLY;
 	mEnabled          = !(flags & DISABLED);
 	mUpdated          = true;
 }
@@ -949,6 +1100,7 @@ int KAEvent::flags() const
 	     | (mDeferral > 0               ? DEFERRAL : 0)
 	     | (mCommandXterm               ? EXEC_IN_XTERM : 0)
 	     | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
+	     | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
 	     | (mEnabled                    ? 0 : DISABLED);
 }
 
@@ -996,6 +1148,8 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 		flags += EMAIL_BCC_FLAG;
 	if (mCopyToKOrganizer)
 		flags += KORGANIZER_FLAG;
+	if (mWorkTimeOnly)
+		flags += WORK_TIME_ONLY_FLAG;
 	if (mLateCancel)
 		(flags += (mAutoClose ? AUTO_CLOSE_FLAG : LATE_CANCEL_FLAG)) += QString::number(mLateCancel);
 	if (mDeferDefaultMinutes)
@@ -2996,6 +3150,7 @@ void KAEvent::dumpDebug() const
 	}
 	kDebug(5950) << "-- mKMailSerialNumber:" << mKMailSerialNumber << ":\n";
 	kDebug(5950) << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ? "true" : "false") << ":\n";
+	kDebug(5950) << "-- mWorkTimeOnly:" << (mWorkTimeOnly ? "true" : "false") << ":\n";
 	kDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString() << ":\n";
 	kDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime.toString() << ":\n";
 	if (mRepeatAtLogin)

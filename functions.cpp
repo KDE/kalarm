@@ -1213,6 +1213,17 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 }
 
 /******************************************************************************
+* Check whether a date/time is during working hours.
+*/
+bool isWorkingTime(const KDateTime& dt)
+{
+	if (!Preferences::workDays().testBit(dt.date().dayOfWeek() - 1))
+		return false;
+	return dt.isDateOnly()
+	   ||  dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd();
+}
+
+/******************************************************************************
 *  Return the first day of the week for the user's locale.
 *  Reply = 1 (Mon) .. 7 (Sun).
 */
@@ -1222,6 +1233,24 @@ int localeFirstDayOfWeek()
 	if (!firstDay)
 		firstDay = KGlobal::locale()->weekStartDay();
 	return firstDay;
+}
+
+/******************************************************************************
+* Return the week day name (Monday = 1).
+*/
+QString weekDayName(int day, const KLocale* locale)
+{
+	switch (day)
+	{
+		case 1: return ki18n("Monday").toString(locale);
+		case 2: return ki18n("Tuesday").toString(locale);
+		case 3: return ki18n("Wednesday").toString(locale);
+		case 4: return ki18n("Thursday").toString(locale);
+		case 5: return ki18n("Friday").toString(locale);
+		case 6: return ki18n("Saturday").toString(locale);
+		case 7: return ki18n("Sunday").toString(locale);
+	}
+	return QString();
 }
 
 /******************************************************************************

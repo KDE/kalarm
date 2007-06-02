@@ -54,6 +54,12 @@ class Preferences : public PreferencesBase
 		static void             setStartOfDay(const QTime&);
 		static void             updateStartOfDayCheck(const QTime&);
 		static bool             hasStartOfDayChanged()           { return mStartOfDayChanged; }
+		static QTime            workDayStart()                   { return self()->mBase_WorkDayStart.time(); }
+		static QTime            workDayEnd()                     { return self()->mBase_WorkDayEnd.time(); }
+		static QBitArray        workDays();
+		static void             setWorkDayStart(const QTime& t)  { self()->setBase_WorkDayStart(QDateTime(QDate(1900,1,1), t)); }
+		static void             setWorkDayEnd(const QTime& t)    { self()->setBase_WorkDayEnd(QDateTime(QDate(1900,1,1), t)); }
+		static void             setWorkDays(const QBitArray&);
 		static bool             quitWarn()                       { return notifying(QUIT_WARN); }
 		static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
 		static bool             confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
@@ -84,9 +90,11 @@ class Preferences : public PreferencesBase
 
 	signals:
 		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
+		void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
 	private slots:
 		void  startDayChange(const QDateTime&);
+		void  workTimeChange(const QDateTime&, const QDateTime&, int days);
 
 	private:
 		Preferences();         // only one instance allowed

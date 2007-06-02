@@ -1258,7 +1258,17 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						continue;
 					}
 				}
-				if (alarm.repeatAtLogin())
+				bool reschedule = false;
+				if (event.workTimeOnly()  &&  !alarm.deferred())
+				{
+					// The alarm is restricted to working hours (apart from reminders and
+					// deferrals). This needs to be re-evaluated every time it triggers,
+					// since working hours could change.
+					reschedule = !KAlarm::isWorkingTime(nextDT);
+					if (reschedule)
+						kDebug(5950) << "KAlarmApp::handleEvent(): not during working hours" << endl;
+				}
+				if (!reschedule  &&  alarm.repeatAtLogin())
 				{
 					// Alarm is to be displayed at every login.
 					// Check if the alarm has only just been set up.
@@ -1276,11 +1286,10 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// Set the time to display if it's a display alarm
 					alarm.setTime(now);
 				}
-				if (alarm.lateCancel())
+				if (!reschedule  &&  alarm.lateCancel())
 				{
 					// Alarm is due, and it is to be cancelled if too late.
 					kDebug(5950) << "KAlarmApp::handleEvent(): LATE_CANCEL\n";
-					bool late = false;
 					bool cancel = false;
 					if (alarm.dateTime().isDateOnly())
 					{
@@ -1306,12 +1315,12 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
-											late = true;
+											reschedule = true;
 									}
 									break;
 								case KAEvent::NO_OCCURRENCE:
 								default:
-									late = true;
+									reschedule = true;
 									break;
 							}
 						}
@@ -1338,12 +1347,12 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
-											late = true;
+											reschedule = true;
 									}
 									break;
 								case KAEvent::NO_OCCURRENCE:
 								default:
-									late = true;
+									reschedule = true;
 									break;
 							}
 						}
@@ -1357,13 +1366,13 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 						updateCalAndDisplay = true;
 						continue;
 					}
-					if (late)
-					{
-						// The latest repetition was too long ago, so schedule the next one
-						rescheduleAlarm(event, alarm, false);
-						updateCalAndDisplay = true;
-						continue;
-					}
+				}
+				if (reschedule)
+				{
+					// The latest repetition was too long ago, so schedule the next one
+					rescheduleAlarm(event, alarm, false);
+					updateCalAndDisplay = true;
+					continue;
 				}
 				if (!alarmToExecuteValid)
 				{
@@ -1590,11 +1599,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				kDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)" << endl;
 				QString tmpfile = createTempScriptFile(command, false, event, alarm);
 				if (tmpfile.isEmpty())
-				{
-					QStringList errmsgs(i18n("Error creating temporary script file"));
-					(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
 					result = 0;
-				}
 				else
 					result = doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE));
 			}

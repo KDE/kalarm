@@ -57,6 +57,7 @@ EventListModel* EventListModel::alarms()
 		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
 		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
 		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
+		Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), mAlarmInstance, SLOT(:slotUpdateWorkingHours()));
 	}
 	return mAlarmInstance;
 }
@@ -138,13 +139,15 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			switch (role)
 			{
 				case Qt::DisplayRole:
+				{
+					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
+					return alarmTimeText(due);
+				}
 				case SortRole:
 				{
-					DateTime due = event.expired() ? event.startDateTime() : event.nextDateTime(false);
-					if (role == Qt::DisplayRole)
-						return alarmTimeText(due);
-					else
-						return KDateTime(due).toUtc().dateTime();
+					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
+					return due.isValid() ? KDateTime(due).toUtc().dateTime()
+					                     : QDateTime(QDate(9999,12,31), QTime(0,0,0));
 				}
 				default:
 					break;
@@ -156,13 +159,13 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 				case Qt::DisplayRole:
 					if (event.expired())
 						return QString();
-					return timeToAlarmText(event.nextDateTime(false));
+					return timeToAlarmText(event.displayDateTime());
 				case SortRole:
 				{
 					if (event.expired())
 						return -1;
 					KDateTime now = KDateTime::currentUtcDateTime();
-					DateTime due = event.nextDateTime(false);
+					DateTime due = event.displayDateTime();
 					if (due.isDateOnly())
 						return now.date().daysTo(due.date()) * 1440;
 					return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
@@ -204,6 +207,10 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					v.setValue(*eventIcon(event));
 					return v;
 				}
+case Qt::BackgroundRole:
+if (event.action() == KAEvent::COMMAND)
+	return QColor(Qt::red);
+break;
 				case Qt::TextAlignmentRole:
 					return Qt::AlignHCenter;
 				case Qt::SizeHintRole:
@@ -308,6 +315,7 @@ void EventListModel::slotUpdateTimeTo()
 */
 void EventListModel::slotUpdateArchivedColour(const QColor&)
 {
+kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()"<<endl;
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -334,6 +342,7 @@ void EventListModel::slotUpdateArchivedColour(const QColor&)
 */
 void EventListModel::slotUpdateDisabledColour(const QColor&)
 {
+kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()"<<endl;
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -353,6 +362,39 @@ void EventListModel::slotUpdateDisabledColour(const QColor&)
 	}
 	if (firstRow >= 0)
 		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
+}
+
+/******************************************************************************
+* Called when the definition of working hours has changed.
+* Update the next trigger time for all alarms which are set to recur only
+* during working hours.
+*/
+void EventListModel::slotUpdateWorkingHours()
+{
+kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()"<<endl;
+	int firstRow = -1;
+	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	{
+		if (KAEvent(mEvents[row]).workTimeOnly())
+		{
+			// For efficiency, emit a single signal for each group
+			// of consecutive archived alarms, rather than a separate
+			// signal for each alarm.
+			if (firstRow < 0)
+				firstRow = row;
+		}
+		else if (firstRow >= 0)
+		{
+			emit dataChanged(index(firstRow, TimeColumn), index(row - 1, TimeColumn));
+			emit dataChanged(index(firstRow, TimeToColumn), index(row - 1, TimeToColumn));
+			firstRow = -1;
+		}
+	}
+	if (firstRow >= 0)
+	{
+		emit dataChanged(index(firstRow, TimeColumn), index(mEvents.count() - 1, TimeColumn));
+		emit dataChanged(index(firstRow, TimeToColumn), index(mEvents.count() - 1, TimeToColumn));
+	}
 }
 
 /******************************************************************************
@@ -466,6 +508,8 @@ KCal::Event* EventListModel::event(const QModelIndex& index)
 */
 QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
+	if (!dateTime.isValid())
+		return i18n("Never");
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
 	QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
@@ -501,6 +545,8 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 */
 QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 {
+	if (!dateTime.isValid())
+		return i18n("Never");
 	KDateTime now = KDateTime::currentUtcDateTime();
 	if (dateTime.isDateOnly())
 	{

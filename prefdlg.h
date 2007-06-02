@@ -41,12 +41,14 @@ class RadioButton;
 class TimeEdit;
 class SpinBox;
 class SpecialActionsButton;
+class TimeZoneCombo;
 
 class FontColourPrefTab;
 class EditPrefTab;
 class EmailPrefTab;
 class ViewPrefTab;
 class StorePrefTab;
+class TimePrefTab;
 class MiscPrefTab;
 
 
@@ -59,6 +61,7 @@ class KAlarmPrefDlg : public KPageDialog
 		~KAlarmPrefDlg();
 
 		MiscPrefTab*       mMiscPage;
+		TimePrefTab*       mTimePage;
 		StorePrefTab*      mStorePage;
 		EditPrefTab*       mEditPage;
 		EmailPrefTab*      mEmailPage;
@@ -66,6 +69,7 @@ class KAlarmPrefDlg : public KPageDialog
 		FontColourPrefTab* mFontColourPage;
 
 		KPageWidgetItem*   mMiscPageItem;
+		KPageWidgetItem*   mTimePageItem;
 		KPageWidgetItem*   mStorePageItem;
 		KPageWidgetItem*   mEditPageItem;
 		KPageWidgetItem*   mEmailPageItem;
@@ -133,11 +137,30 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*    mQuitWarn;
 		QCheckBox*    mAutostartTrayIcon;
 		QCheckBox*    mConfirmAlarmDeletion;
-		QComboBox*    mTimeZone;
-		TimeEdit*     mStartOfDay;
 		ButtonGroup*  mXtermType;
 		QLineEdit*    mXtermCommand;
 		int           mXtermCount;              // number of terminal window types
+};
+
+
+// Date/time tab of the Preferences dialog
+class TimePrefTab : public PrefsTabBase
+{
+		Q_OBJECT
+	public:
+		TimePrefTab();
+
+		virtual void restore(bool defaults);
+		virtual void apply(bool syncToDisc);
+
+	private:
+		void         setWorkDays(const QBitArray& days);
+
+		TimeZoneCombo* mTimeZone;
+		TimeEdit*     mStartOfDay;
+		QCheckBox*    mWorkDays[7];
+		TimeEdit*     mWorkStart;
+		TimeEdit*     mWorkEnd;
 };
 
 

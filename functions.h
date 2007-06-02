@@ -126,7 +126,9 @@ QString             stripAccel(const QString&);
 
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
+bool                isWorkingTime(const KDateTime&);
 int                 localeFirstDayOfWeek();
+QString             weekDayName(int day, const KLocale*);
 
 /* Given a standard KDE day number, return the day number in the week for the user's locale.
  * Standard day number = 1 (Mon) .. 7 (Sun)

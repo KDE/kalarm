@@ -78,6 +78,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateTimeTo();
 		void     slotUpdateArchivedColour(const QColor&);
 		void     slotUpdateDisabledColour(const QColor&);
+		void     slotUpdateWorkingHours();
 
 	private:
 		explicit EventListModel(KCalEvent::Status, QObject* parent = 0);

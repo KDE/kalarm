@@ -74,6 +74,7 @@
 #include "specialactions.h"
 #include "timeedit.h"
 #include "timespinbox.h"
+#include "timezonecombo.h"
 #include "traywindow.h"
 #include "prefdlg.moc"
 
@@ -136,6 +137,12 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mMiscPageItem->setHeader(i18n("General"));
 	mMiscPageItem->setIcon(KIcon(DesktopIcon("misc")));
 	addPage(mMiscPageItem);
+
+	mTimePage = new TimePrefTab;
+	mTimePageItem = new KPageWidgetItem(mTimePage, i18n("Time & Date"));
+	mTimePageItem->setHeader(i18n("Time and Date"));
+	mTimePageItem->setIcon(KIcon(DesktopIcon("clock")));
+	addPage(mTimePageItem);
 
 	mStorePage = new StorePrefTab;
 	mStorePageItem = new KPageWidgetItem(mStorePage, i18n("Storage"));
@@ -214,6 +221,7 @@ void KAlarmPrefDlg::slotApply()
 	mViewPage->apply(false);
 	mEditPage->apply(false);
 	mStorePage->apply(false);
+	mTimePage->apply(false);
 	mMiscPage->apply(false);
 	Preferences::self()->writeConfig();
 }
@@ -247,6 +255,7 @@ void KAlarmPrefDlg::restore(bool defaults)
 	mViewPage->restore(defaults);
 	mEditPage->restore(defaults);
 	mStorePage->restore(defaults);
+	mTimePage->restore(defaults);
 	mMiscPage->restore(defaults);
 	if (defaults)
 		Preferences::self()->useDefaults(false);
@@ -347,40 +356,8 @@ MiscPrefTab::MiscPrefTab()
 
 	group->setFixedHeight(group->sizeHint().height());
 
-	// Default time zone
-	KHBox* itemBox = new KHBox(this);
-	itemBox->setMargin(0);
-	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("Time &zone:"), box);
-	mTimeZone = new QComboBox(box);
-	mTimeZone->setMaxVisibleItems(15);
-	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
-		mTimeZone->addItem(it.key());
-	box->setWhatsThis(i18n("Select the time zone which KAlarm should use as its default for displaying and entering dates and times."));
-	label->setBuddy(mTimeZone);
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
-
-	// Start-of-day time
-	itemBox = new KHBox(this);
-	itemBox->setMargin(0);
-	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
-	mStartOfDay = new TimeEdit(box);
-	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
-	label->setBuddy(mStartOfDay);
-	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm will be triggered.");
-	box->setWhatsThis(QString("%1\n\n%2").arg(startOfDayText).arg(TimeSpinBox::shiftWhatsThis()));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
-
 	// Confirm alarm deletion?
-	itemBox = new KHBox(this);   // this is to allow left adjustment
+	KHBox* itemBox = new KHBox(this);   // this is to allow left adjustment
 	itemBox->setMargin(0);
 	mConfirmAlarmDeletion = new QCheckBox(i18n("Con&firm alarm deletions"), itemBox);
 	mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
@@ -419,15 +396,15 @@ MiscPrefTab::MiscPrefTab()
 		++index;
 	}
 
-	box = new KHBox(group);
-	box->setMargin(0);
-	grid->addWidget(box, row + 1, 0, 1, 3, Qt::AlignLeft);
-	QRadioButton* radio = new QRadioButton(i18n("Other:"), box);
+	itemBox = new KHBox(group);
+	itemBox->setMargin(0);
+	grid->addWidget(itemBox, row + 1, 0, 1, 3, Qt::AlignLeft);
+	QRadioButton* radio = new QRadioButton(i18n("Other:"), itemBox);
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
-	mXtermCommand = new QLineEdit(box);
-	box->setWhatsThis(
+	mXtermCommand = new QLineEdit(itemBox);
+	itemBox->setWhatsThis(
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
 	           "By default the alarm's command string will be appended to what you enter here. "
 	           "See the KAlarm Handbook for details of special codes to tailor the command line."));
@@ -445,8 +422,6 @@ void MiscPrefTab::restore(bool defaults)
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mAutostartTrayIcon->setChecked(Preferences::autostartTrayIcon());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
-	setTimeZone(Preferences::timeZone());
-	mStartOfDay->setValue(Preferences::startOfDay());
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = 0;
 	if (!xtermCmd.isEmpty())
@@ -511,32 +486,10 @@ void MiscPrefTab::apply(bool syncToDisc)
 	b = mConfirmAlarmDeletion->isChecked();
 	if (b != Preferences::confirmAlarmDeletion())
 		Preferences::setConfirmAlarmDeletion(b);
-	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
-	if (tz  &&  tz != Preferences::timeZone())
-		Preferences::setTimeZone(tz);
-	int sod = mStartOfDay->value();
-	QTime sodt(sod/60, sod%60, 0);
-	if (sodt != Preferences::startOfDay())
-		Preferences::setStartOfDay(sodt);
 	QString text = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	if (text != Preferences::cmdXTermCommand())
 		Preferences::setCmdXTermCommand(text);
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void MiscPrefTab::setTimeZone(const KTimeZone* tz)
-{
-	int tzindex = 0;
-	if (tz)
-	{
-		QString zone = tz->name();
-		int count = mTimeZone->count();
-		while (tzindex < count  &&  mTimeZone->itemText(tzindex) != zone)
-			++tzindex;
-		if (tzindex >= count)
-			tzindex = 0;
-	}
-	mTimeZone->setCurrentIndex(tzindex);
 }
 
 void MiscPrefTab::slotAutostartDaemonClicked()
@@ -579,6 +532,164 @@ void MiscPrefTab::slotDisableIfStoppedToggled(bool)
 void MiscPrefTab::slotOtherTerminalToggled(bool on)
 {
 	mXtermCommand->setEnabled(on);
+}
+
+
+/*=============================================================================
+= Class TimePrefTab
+=============================================================================*/
+
+TimePrefTab::TimePrefTab()
+	: PrefsTabBase()
+{
+	// Default time zone
+	KHBox* itemBox = new KHBox(this);
+	itemBox->setMargin(0);
+	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18n("Time &zone:"), box);
+#if 1
+	mTimeZone = new TimeZoneCombo(box);
+	mTimeZone->setMaxVisibleItems(15);
+#else
+	mTimeZone = new QComboBox(box);
+	mTimeZone->setMaxVisibleItems(15);
+	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
+	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
+		mTimeZone->addItem(it.key());
+#endif
+	box->setWhatsThis(i18n("Select the time zone which KAlarm should use as its default for displaying and entering dates and times."));
+	label->setBuddy(mTimeZone);
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
+
+	// Start-of-day time
+	itemBox = new KHBox(this);
+	itemBox->setMargin(0);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18n("&Start of day for date-only alarms:"), box);
+	mStartOfDay = new TimeEdit(box);
+	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
+	label->setBuddy(mStartOfDay);
+	static const QString startOfDayText = i18n("The earliest time of day at which a date-only alarm will be triggered.");
+	box->setWhatsThis(QString("%1\n\n%2").arg(startOfDayText).arg(TimeSpinBox::shiftWhatsThis()));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(box->sizeHint().height());
+
+
+	// Working hours
+	QGroupBox* group = new QGroupBox(i18n("Working Hours"), this);
+	QBoxLayout* layout = new QVBoxLayout(group);
+	layout->setMargin(KDialog::marginHint());
+	layout->setSpacing(KDialog::spacingHint());
+
+	QWidget* daybox = new QWidget(group);   // this is to control the QWhatsThis text display area
+	layout->addWidget(daybox);
+	QGridLayout* wgrid = new QGridLayout(daybox);
+	wgrid->setSpacing(KDialog::spacingHint());
+	const KLocale* locale = KGlobal::locale();
+	for (int i = 0;  i < 7;  ++i)
+	{
+		int day = KAlarm::localeDayInWeek_to_weekDay(i);
+		mWorkDays[i] = new QCheckBox(KAlarm::weekDayName(day, locale), daybox);
+		mWorkDays[i]->setFixedSize(mWorkDays[i]->sizeHint());
+		wgrid->addWidget(mWorkDays[i], i/4, i%4, Qt::AlignLeft);
+	}
+	daybox->setFixedHeight(daybox->sizeHint().height());
+	daybox->setWhatsThis(i18n("Check the days in the week which are work days"));
+
+	itemBox = new KHBox(group);
+	itemBox->setMargin(0);
+	layout->addWidget(itemBox);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* startLabel = new QLabel(i18n("Daily start time:"), box);
+	mWorkStart = new TimeEdit(box);
+	mWorkStart->setFixedSize(mWorkStart->sizeHint());
+	startLabel->setBuddy(mWorkStart);
+	static const QString workStartText = i18n("Enter the start time of the working day");
+	box->setWhatsThis(QString("%1\n\n%2").arg(workStartText).arg(TimeSpinBox::shiftWhatsThis()));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+
+	itemBox = new KHBox(group);
+	itemBox->setMargin(0);
+	layout->addWidget(itemBox);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* endLabel = new QLabel(i18n("Daily end time:"), box);
+	mWorkEnd = new TimeEdit(box);
+	mWorkEnd->setFixedSize(mWorkEnd->sizeHint());
+	endLabel->setBuddy(mWorkEnd);
+	static const QString workEndText = i18n("Enter the end time of the working day");
+	box->setWhatsThis(QString("%1\n\n%2").arg(workEndText).arg(TimeSpinBox::shiftWhatsThis()));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+	int w = qMax(startLabel->sizeHint().width(), endLabel->sizeHint().width());
+	startLabel->setFixedWidth(w);
+	endLabel->setFixedWidth(w);
+
+	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+}
+
+void TimePrefTab::restore(bool)
+{
+#if 1
+	mTimeZone->setTimeZone(Preferences::timeZone());
+#else
+	int tzindex = 0;
+	const KTimeZone* tz = Preferences::timeZone();
+	if (tz)
+	{
+		QString zone = tz->name();
+		int count = mTimeZone->count();
+		while (tzindex < count  &&  mTimeZone->itemText(tzindex) != zone)
+			++tzindex;
+		if (tzindex >= count)
+			tzindex = 0;
+	}
+	mTimeZone->setCurrentIndex(tzindex);
+#endif
+	mStartOfDay->setValue(Preferences::startOfDay());
+	mWorkStart->setValue(Preferences::workDayStart());
+	mWorkEnd->setValue(Preferences::workDayEnd());
+	QBitArray days = Preferences::workDays();
+	for (int i = 0;  i < 7;  ++i)
+	{
+		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+		mWorkDays[i]->setChecked(x);
+	}
+}
+
+void TimePrefTab::apply(bool syncToDisc)
+{
+#if 1
+	const KTimeZone* tz = mTimeZone->timeZone();
+	if (tz)
+		Preferences::setTimeZone(tz);
+#else
+	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
+	if (tz  &&  tz != Preferences::timeZone())
+		Preferences::setTimeZone(tz);
+#endif
+	int t = mStartOfDay->value();
+	QTime sodt(t/60, t%60, 0);
+	if (sodt != Preferences::startOfDay())
+		Preferences::setStartOfDay(sodt);
+	t = mWorkStart->value();
+	Preferences::setWorkDayStart(QTime(t/60, t%60, 0));
+	t = mWorkEnd->value();
+	Preferences::setWorkDayEnd(QTime(t/60, t%60, 0));
+	QBitArray workDays(7);
+	for (int i = 0;  i < 7;  ++i)
+		if (mWorkDays[i]->isChecked())
+			workDays.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
+	Preferences::setWorkDays(workDays);
+	PrefsTabBase::apply(syncToDisc);
 }
 
 

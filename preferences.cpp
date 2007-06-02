@@ -179,6 +179,33 @@ void Preferences::updateStartOfDayCheck(const QTime& t)
 	mStartOfDayChanged = false;
 }
 
+QBitArray Preferences::workDays()
+{
+	unsigned days = self()->base_WorkDays();
+	QBitArray dayBits(7);
+	for (int i = 0;  i < 7;  ++i)
+		dayBits.setBit(i, days & (1 << i));
+	return dayBits;
+}
+
+void Preferences::setWorkDays(const QBitArray& dayBits)
+{
+	unsigned days = 0;
+	for (int i = 0;  i < 7;  ++i)
+		if (dayBits.testBit(i))
+			days |= 1 << i;
+	self()->setBase_WorkDays(days);
+}
+
+void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, int days)
+{
+	QBitArray dayBits;
+	for (int i = 0;  i < 7;  ++i)
+		if (days & (1 << i))
+			dayBits.setBit(i);
+	emit mInstance->workTimeChanged(start.time(), end.time(), dayBits);
+}
+
 Preferences::MailFrom Preferences::emailFrom()
 {
 	QString from = self()->mBase_EmailFrom;

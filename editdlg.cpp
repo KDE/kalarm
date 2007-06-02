@@ -1477,6 +1477,9 @@ void EditAlarmDlg::slotOk()
 	{
 		if (timedRecurrence)
 		{
+			KAEvent event;
+			AlarmResource* r;
+			getEvent(event, r);     // this may adjust mAlarmDateTime
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
 			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
@@ -1484,9 +1487,6 @@ void EditAlarmDlg::slotOk()
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
-				KAEvent event;
-				AlarmResource* r;
-				getEvent(event, r);     // this may adjust mAlarmDateTime
 				dateOnly = mAlarmDateTime.isDateOnly();
 				if ((dateOnly  &&  mAlarmDateTime.date() < now.date()
 				     || !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
@@ -1494,6 +1494,12 @@ void EditAlarmDlg::slotOk()
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return;
+				}
+				if (event.workTimeOnly()  &&  !event.mayOccurDuringWork())
+				{
+					if (KMessageBox::warningContinueCancel(this, i18n("The alarm will never occur during working hours"))
+					    != KMessageBox::Continue)
+						return;
 				}
 			}
 		}

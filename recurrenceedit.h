@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -158,6 +158,7 @@ class RecurrenceEdit : public QFrame
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
+		CheckBox*         mWorkTimeOnly;
 		QList<QDate>      mExceptionDates;
 
 		// Current start date and time
@@ -171,6 +172,7 @@ class RecurrenceEdit : public QFrame
 		int               mSavedRepeatCount;         // repeat count
 		KDateTime         mSavedEndDateTime;         // end date/time
 		QList<QDate>      mSavedExceptionDates;      // exception dates
+		bool              mSavedWorkTimeOnly;        // only during working hours
 };
 
 #endif // RECURRENCEEDIT_H
