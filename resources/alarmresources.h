@@ -159,7 +159,7 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
     /**
        Sync changes in memory to persistant storage.
     */
-    virtual void save();
+    virtual bool save();
 
     /**
        Determine if the Calendar is currently being saved.
@@ -294,6 +294,11 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		   @note In most cases use deleteIncidence(Incidence*) instead.
 		*/
 		virtual bool deleteEvent(KCal::Event* event);
+
+                /**
+                  Removes all Events from the calendar.
+                */
+                virtual void deleteAllEvents() {}
 
 		/**
 		   Return a sorted, unfiltered list of all Events.
@@ -436,11 +441,13 @@ class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObs
 		// Override unused virtual functions
 		virtual bool addTodo(KCal::Todo*) { return true; }
 		virtual bool deleteTodo(KCal::Todo*) { return true; }
+                virtual void deleteAllTodos() {}
 		virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending) { return KCal::Todo::List(); }
 		virtual KCal::Todo::List rawTodosForDate(const QDate&) { return KCal::Todo::List(); }
 		virtual KCal::Todo* todo(const QString&) { return 0; }
 		virtual bool addJournal(KCal::Journal*) { return true; }
 		virtual bool deleteJournal(KCal::Journal*) { return true; }
+                virtual void deleteAllJournals() {}
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending) { return KCal::Journal::List(); }
 		virtual KCal::Journal::List rawJournalsForDate(const QDate&) { return KCal::Journal::List(); }
 		virtual KCal::Journal* journal(const QString&) { return 0; }

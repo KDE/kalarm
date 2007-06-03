@@ -517,11 +517,11 @@ void AlarmResources::close()
 	}
 }
 
-void AlarmResources::save()
+bool AlarmResources::save()
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::save()" << endl;
 	if (!mOpen)
-		return;
+		return false;
 	bool saved = false;
 	if (isModified())
 	{
@@ -539,6 +539,7 @@ void AlarmResources::save()
 	}
 	if (!saved)
 		kDebug(KARES_DEBUG) << "AlarmResources::save(): no modified resources to save" << endl;
+        return true;
 }
 
 bool AlarmResources::isSaving()
