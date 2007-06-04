@@ -28,7 +28,6 @@
 #include "alarmevent.h"
 
 class QFocusEvent;
-class QCheckBox;
 class QTreeView;
 class CheckBox;
 class ColourCombo;

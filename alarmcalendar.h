@@ -25,13 +25,11 @@
 #include <kurl.h>
 #include "alarmevent.h"
 
-class KConfig;
 namespace KCal {
   class Calendar;
   class CalendarLocal;
 }
 class AlarmResource;
-class MainWindow;
 class ProgressDialog;
 
 

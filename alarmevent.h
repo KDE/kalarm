@@ -36,7 +36,6 @@ namespace KCal { class CalendarLocal; }
 #include "kcalendar.h"
 #include "preferences.h"
 
-class AlarmCalendar;
 class KARecurrence;
 struct AlarmData;
 

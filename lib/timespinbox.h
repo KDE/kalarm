@@ -111,7 +111,6 @@ class TimeSpinBox : public SpinBox2
 	private slots:
 		void            slotValueChanged(int value);
 	private:
-		class TimeValidator;
 		int             mMinimumValue;
 		bool            m12Hour;             // use 12-hour clock
 		bool            mPm;                 // use PM for manually entered values (with 12-hour clock)

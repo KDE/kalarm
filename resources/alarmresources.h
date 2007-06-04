@@ -31,7 +31,6 @@
 #include "kcalendar.h"
 
 class KConfigGroup;
-class KAResourceIface;
 namespace KCal { class Event; }
 using KCal::CalendarLocal;
 using KCal::ResourceCalendar;

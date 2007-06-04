@@ -31,8 +31,6 @@
 #include "alarmresources.h"
 
 class OrgKdeKalarmKalarmdDaemonInterface;
-class KActionCollection;
-class AlarmCalendar;
 class AlarmEnableAction;
 class NotificationHandler;
 

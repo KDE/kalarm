@@ -27,7 +27,6 @@
 #include <QColor>
 #include <QFont>
 #include <QDateTime>
-class QWidget;
 class KTimeZone;
 
 #include "colourlist.h"

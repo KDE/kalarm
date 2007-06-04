@@ -25,7 +25,6 @@
 #include "colourlist.h"
 
 class QMouseEvent;
-class QResizeEvent;
 class QKeyEvent;
 
 

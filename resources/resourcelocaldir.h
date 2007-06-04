@@ -32,8 +32,7 @@
 #include "alarmresource.h"
 
 namespace KCal {
-  class CalendarLocal;
-  class Incidence;
+    class Incidence;
 }
 
 

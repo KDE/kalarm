@@ -30,7 +30,6 @@
 #include "alarmtext.h"
 #include "datetime.h"
 
-class QStackedWidget;
 class QFrame;
 class QLabel;
 class QShowEvent;

@@ -45,7 +45,6 @@ class QMenu;
 class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
-class ActionAlarmsEnabled;
 class AlarmListFilterModel;
 class AlarmListDelegate;
 class AlarmListView;

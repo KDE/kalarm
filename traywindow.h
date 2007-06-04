@@ -25,7 +25,6 @@
 #include <ksystemtrayicon.h>
 
 class QEvent;
-class QMouseEvent;
 class QDragEnterEvent;
 class QDropEvent;
 class QAction;

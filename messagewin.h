@@ -35,8 +35,6 @@ class QCloseEvent;
 class QPushButton;
 class KPushButton;
 class QLabel;
-class QTimer;
-class AlarmTimeWidget;
 class DeferAlarmDlg;
 namespace Phonon { class MediaObject; }
 

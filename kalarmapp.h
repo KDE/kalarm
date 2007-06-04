@@ -26,7 +26,6 @@
 #include <QPointer>
 #include <QQueue>
 #include <QList>
-class QTimer;
 class KDateTime;
 
 #include <kuniqueapplication.h>
@@ -36,10 +35,7 @@ namespace KCal { class Event; }
 
 #include "alarmevent.h"
 class DBusHandler;
-class AlarmCalendar;
 class MainWindow;
-class AlarmListView;
-class MessageWin;
 class TrayWindow;
 class ShellProcess;
 
