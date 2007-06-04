@@ -947,14 +947,15 @@ DateTime KAEvent::displayDateTime() const
 		||  mRepeatCount  &&  mRepeatInterval % (24*60))
 		{
 			// The recurrence time of day varies
+			QTime firstTime;
+			int   firstDay;
+			bool  haveFirstRecur = false;
 			QTime startDayPre = Preferences::workDayStart().addSecs(-1);
 			QTime endDay      = Preferences::workDayEnd();
 			KDateTime kdt = dt.effectiveKDateTime();
-			int   firstDay  = kdt.date().dayOfWeek() - 1;   // Monday = 0
-			QTime firstTime = kdt.time();
-			if (firstTime > startDayPre)
+			int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+			if (kdt.time() > startDayPre)
 				kdt.setTime(QTime(23,59,59));  // need to step on to next day
-			int day = firstDay;
 			for (int n = 0;  n < 1000;  ++n)
 			{
 #warning This loop can potentially take a significant time to execute
@@ -972,13 +973,25 @@ DateTime KAEvent::displayDateTime() const
 				}
 				kdt.setTime(startDayPre);
 				DateTime newdt;
-				nextOccurrence(kdt, newdt, RETURN_REPETITION);
+				OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
 				if (!newdt.isValid())
 					return KDateTime();
 				kdt = newdt.effectiveKDateTime();
 				day = kdt.date().dayOfWeek() - 1;
-				if (day == firstDay  &&  kdt.time() == firstTime)
-					return KDateTime();   // it never occurs during working hours
+				if (!(type & OCCURRENCE_REPEAT))
+				{
+					// It's a recurrence (as opposed to simple repetition)
+					if (!haveFirstRecur)
+					{
+						// Note the time and day of the first recurrence
+						// we've encountered.
+						firstDay = day;
+						firstTime = kdt.time();
+						haveFirstRecur = true;
+					}
+					else if (day == firstDay  &&  kdt.time() == firstTime)
+						return KDateTime();   // it never occurs during working hours
+				}
 			}
 			return KDateTime();  // not found - give up
 		}
@@ -1027,9 +1040,42 @@ bool KAEvent::mayOccurDuringWork() const
 		return true;
 	if (checkRecur() == KARecurrence::NO_RECUR  &&  (!mRepeatCount || !mRepeatInterval))
 		return false;   // it doesn't recur/repeat
-	if (mRecurrence->type() == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60)
-	||  mRepeatCount  &&  mRepeatInterval % (24*60))
-		return true;   // the recurrence time of day varies, so it could occur
+	int recurFreq = (mRecurrence->type() == KARecurrence::MINUTELY) ? (mRecurrence->frequency() % (24*60)) * 60 : 0;
+	int repeatFreq = mRepeatCount ? (mRepeatInterval % (24*60)) * 60 : 0;
+	if (recurFreq  ||  repeatFreq)
+	{
+		// The recurrence time of day varies.
+		// Check in case it has a regular pattern which never occurs during
+		// working hours.
+		QTime startTime;
+		if (recurFreq)
+			startTime = mRecurrence->startDateTime().time();
+		else
+		{
+			startTime = mStartDateTime.effectiveKDateTime().time();
+			recurFreq = repeatFreq;
+			repeatFreq = 0;
+		}
+		QTime startDay  = Preferences::workDayStart();
+		QTime endDay    = Preferences::workDayEnd();
+		QTime time = startTime;
+		do
+		{
+			if (time >= startDay  &&  time < endDay)
+				return true;   // it could occur during the working day
+			if (repeatFreq)
+			{
+				for (int i = 1;  i <= mRepeatCount;  ++i)
+				{
+					QTime t = time.addSecs(repeatFreq * i);
+					if (t >= startDay  &&  t < endDay)
+						return true;   // it could occur during the working day
+				}
+			}
+			time = time.addSecs(recurFreq);
+		} while (time != startTime);
+		return false;   // it's always outside working hours
+	}
 	// The alarm always occurs at the same time of day
 	return mayOccurDailyDuringWork(kdt);
 }
