@@ -351,7 +351,8 @@ void MessageWin::initView()
 					if (!(dir = info.isDir()))
 					{
 						opened = true;
-						KTextBrowser* view = new KTextBrowser(topWidget, "fileContents");
+						KTextBrowser* view = new KTextBrowser(topWidget);
+						view->setObjectName("fileContents");
 						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
 #warning Check that HTML links and link paths work
 						if (imageType)
