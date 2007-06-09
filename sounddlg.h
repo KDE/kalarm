@@ -27,6 +27,8 @@
 
 class QHBox;
 class QPushButton;
+class KArtsDispatcher;
+namespace KDE { class PlayObject; }
 class LineEdit;
 class PushButton;
 class CheckBox;
@@ -40,6 +42,7 @@ class SoundDlg : public KDialogBase
 	public:
 		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
 		         const QString& caption, QWidget* parent, const char* name = 0);
+		~SoundDlg();
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
 		QString        getFile() const       { return mFileName; }
@@ -63,8 +66,10 @@ class SoundDlg : public KDialogBase
 		void           slotVolumeToggled(bool on);
 		void           slotFadeToggled(bool on);
 		void           playSound();
+		void           checkAudioPlay();
 
 	private:
+		void           stopPlay();
 		bool           checkFile();
 
 		QPushButton*   mFilePlay;
@@ -81,6 +86,13 @@ class SoundDlg : public KDialogBase
 		QString        mDefaultDir;     // current default directory for mFileEdit
 		QString        mFileName;
 		bool           mReadOnly;
+		// Sound file playing
+		KArtsDispatcher* mArtsDispatcher;
+		KDE::PlayObject* mPlayObject;
+		QTimer*          mPlayTimer;       // timer for playing the sound file
+		QString          mLocalAudioFile;  // local copy of audio file
+		QTime            mAudioFileStart;  // time when audio file loading started, or when play started
+		bool             mPlayStarted;      // the sound file has started playing
 };
 
 #endif
