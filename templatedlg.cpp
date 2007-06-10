@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 
 #include "editdlg.h"
 #include "alarmcalendar.h"
@@ -107,10 +108,11 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	layout->addWidget(mDeleteButton);
 
 	KActionCollection* actions = new KActionCollection(this);
-	//actions->setDefaultShortcutContext(Qt::WindowShortcut);
 	actions->setAssociatedWidget(topLevelWidget());
-	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
-	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+	KAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+	act->setShortcutContext(Qt::WindowShortcut);
+	act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+	act->setShortcutContext(Qt::WindowShortcut);
 
 	slotSelectionChanged();          // enable/disable buttons as appropriate
 
