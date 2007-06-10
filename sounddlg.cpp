@@ -287,6 +287,8 @@ void SoundDlg::playSound()
 	mPlayer = new Phonon::AudioPlayer(Phonon::NotificationCategory);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
+	mFilePlay->setToolTip(i18n("Stop sound"));
+	mFilePlay->setWhatsThis(i18n("Stop playing the sound"));
 	mPlayer->play(mUrl);
 }
 
@@ -298,6 +300,8 @@ void SoundDlg::playFinished()
 	delete mPlayer;   // this stops playing if not already stopped
 	mPlayer = 0;
 	mFilePlay->setIcon(SmallIcon("media-playback-start"));
+	mFilePlay->setToolTip(i18n("Test the sound"));
+	mFilePlay->setWhatsThis(i18n("Play the selected sound file."));
 }
 
 /******************************************************************************
