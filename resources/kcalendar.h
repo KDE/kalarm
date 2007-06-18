@@ -21,6 +21,7 @@
 #ifndef KCALENDAR_H
 #define KCALENDAR_H
 
+#include "kalarm_export.h"
 #include <QString>
 
 namespace KCal {
@@ -28,7 +29,7 @@ namespace KCal {
   class Alarm;
 }
 
-class KDE_EXPORT KCalendar
+class KALARM_EXPORT KCalendar
 {
 	public:
 		static QByteArray APPNAME;
@@ -42,7 +43,7 @@ class KDE_EXPORT KCalendar
 		};
 };
 
-class KDE_EXPORT KCalEvent
+class KALARM_EXPORT KCalEvent
 {
 	public:
 		/** The category of an event, indicated by the middle part of its UID. */
@@ -59,5 +60,5 @@ class KDE_EXPORT KCalEvent
 		static Status  status(const KCal::Event*, QString* param = 0);
 		static void    setStatus(KCal::Event*, Status, const QString& param = QString());
 };
-		
+
 #endif

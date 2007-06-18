@@ -35,7 +35,7 @@
 
 
 /** A KAlarm calendar resource stored as a local file. */
-class KDE_EXPORT KAResourceLocal : public AlarmResource
+class KALARM_EXPORT KAResourceLocal : public AlarmResource
 {
 		Q_OBJECT
 	public:

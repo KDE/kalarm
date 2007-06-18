@@ -37,7 +37,7 @@ using KCal::CalendarLocal;
 
 
 /** Base class for a KAlarm alarm calendar resource. */
-class KDE_EXPORT AlarmResource : public KCal::ResourceCached
+class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 {
 		Q_OBJECT
 	public:

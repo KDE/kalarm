@@ -37,7 +37,7 @@ using KCal::ResourceCalendar;
 
 
 /** Provides access to all alarm calendar resources. */
-class KDE_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<AlarmResource>
+class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<AlarmResource>
 {
 		Q_OBJECT
 	public:
