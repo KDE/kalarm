@@ -616,12 +616,10 @@ void MessageWin::initView()
 
 	topLayout->activate();
 	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
-#ifdef Q_OS_UNIX
 	WId winid = winId();
 	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
-#endif
 }
 
 /******************************************************************************
