@@ -84,7 +84,7 @@ void Find::display()
 
 	if (mDialog)
 	{
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_X11
 		KWindowSystem::activateWindow(mDialog->winId());
 #endif
 	}

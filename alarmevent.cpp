@@ -958,8 +958,10 @@ DateTime KAEvent::displayDateTime() const
 				kdt.setTime(QTime(23,59,59));  // need to step on to next day
 			for (int n = 0;  n < 1000;  ++n)
 			{
+#ifdef __GNUC__
 #warning This loop can potentially take a significant time to execute
-				if (kdt.time() > startDayPre)
+#endif
+                          if (kdt.time() > startDayPre)
 				{
 					if (kdt.time() < endDay  &&  workDays.testBit(day))
 						return kdt;

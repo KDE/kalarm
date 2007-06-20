@@ -95,7 +95,9 @@ void AlarmListView::setColumnOrder(const QList<int>& order)
 				// Reorder the columns
 				for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
 				{
+#ifdef __GNUC__
 #warning Reorder the columns
+#endif
 			//		int j = posn.indexOf(i);
 			//		moveSection(j, i);
 				}

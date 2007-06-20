@@ -354,7 +354,9 @@ void MessageWin::initView()
 						KTextBrowser* view = new KTextBrowser(topWidget);
 						view->setObjectName("fileContents");
 						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
+#ifdef __GNUC__
 #warning Check that HTML links and link paths work
+#endif
 						if (imageType)
 							view->setHtml("<img source=\"" + tmpFile + "\">");
 						else

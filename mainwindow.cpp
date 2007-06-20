@@ -160,7 +160,9 @@ MainWindow::MainWindow(bool restored)
 	// Create the calendar resource selector widget
 	AlarmResources* resources = AlarmResources::instance();
 	mResourceSelector = new ResourceSelector(resources, mSplitter);
+#ifdef __GNUC__
 #warning Prevent resources being resized when window is resized
+#endif
 	mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
 	mSplitter->setStretchFactor(1, 1);
 	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
@@ -179,8 +181,10 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
 	connect(mListView, SIGNAL(rightButtonClicked(const QPoint&)), SLOT(slotRightButtonClicked(const QPoint&)));
 	connect(mListView->header(), SIGNAL(sectionMoved(int,int,int)), SLOT(columnsReordered()));
+#ifdef __GNUC__
 #warning Try to avoid reloading the entire list when resources change?
 #warning Model should be told to reload independently of resource selector?
+#endif
 //	connect(mResourceSelector, SIGNAL(resourcesChanged()), EventListModel::alarms(), SLOT(reload()));
 //	connect(resources, SIGNAL(calendarChanged()), EventListModel::alarms(), SLOT(reload()));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
@@ -188,7 +192,9 @@ MainWindow::MainWindow(bool restored)
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
 	initActions();
 
+#ifdef __GNUC__
 #warning Does not save to correct group in config file
+#endif
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
 	mWindowList.append(this);
 	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
@@ -820,7 +826,9 @@ void MainWindow::slotImportAlarms()
 {
 	if (AlarmCalendar::importAlarms(this))
 		EventListModel::alarms()->reload();
+#ifdef __GNUC__
 #warning Is reload necessary, or can signal tell EventListModel?
+#endif
 }
 
 /******************************************************************************

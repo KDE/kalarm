@@ -216,7 +216,9 @@ break;
 				case Qt::SizeHintRole:
 					return mIconSize;
 				case Qt::AccessibleTextRole:
+#ifdef __GNUC__
 #warning Implement this
+#endif
 					return QString();
 				case ValueRole:
 					return static_cast<int>(event.action());

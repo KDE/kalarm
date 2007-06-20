@@ -53,4 +53,6 @@ void TemplateListView::dataChanged(const QModelIndex& topLeft, const QModelIndex
 	}*/
 }
 
+#ifdef __GNUC__
 #warning Set default whatsthis = i18n("The list of alarm templates")
+#endif
