@@ -215,7 +215,7 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
        @param ask if true, prompt for which resource to add to, if
        false, add to standard resource.
     */
-    void setAskDestinationPolicy(bool ask)  { mAskDestination = ask; };
+    void setAskDestinationPolicy(bool ask)  { mAskDestination = ask; }
 
 		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
 
