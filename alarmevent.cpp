@@ -961,7 +961,7 @@ DateTime KAEvent::displayDateTime() const
 #ifdef __GNUC__
 #warning This loop can potentially take a significant time to execute
 #endif
-                          if (kdt.time() > startDayPre)
+				if (kdt.time() > startDayPre)
 				{
 					if (kdt.time() < endDay  &&  workDays.testBit(day))
 						return kdt;
