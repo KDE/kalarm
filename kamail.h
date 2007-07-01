@@ -26,7 +26,7 @@
 class KUrl;
 class KAEvent;
 class EmailAddressList;
-namespace KPIM { class IdentityManager; }
+namespace KPIMIdentities { class IdentityManager; }
 namespace KMime { namespace Types { struct Address; } }
 
 struct KAMailData;
@@ -41,7 +41,7 @@ class KAMail
 		static bool        checkAttachment(const KUrl&);
 		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
-		static KPIM::IdentityManager* identityManager();
+		static KPIMIdentities::IdentityManager* identityManager();
 		static bool        identitiesExist();
 		static QString     controlCentreAddress();
 		static QString     getMailBody(quint32 serialNumber);
@@ -49,7 +49,7 @@ class KAMail
 		static QString     i18n_sent_mail();
 
 	private:
-		static KPIM::IdentityManager* mIdentityManager;     // KMail identity manager
+		static KPIMIdentities::IdentityManager* mIdentityManager;     // KMail identity manager
 		static QString     sendKMail(const KAMailData&);
 		static QString     initHeaders(const KAMailData&, bool dateId);
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);

@@ -8,7 +8,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kalarm/lib 
 	${CMAKE_SOURCE_DIR}/kalarm/resources 
 	${CMAKE_SOURCE_DIR}/libkleo 
-	${CMAKE_SOURCE_DIR}/libkpimidentities
 	${CMAKE_SOURCE_DIR}/gpgmepp/
 ) 
 

@@ -31,8 +31,8 @@
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 
-#include <libkpimidentities/identity.h>
-#include <libkpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
+#include <kpimidentities/identitymanager.h>
 
 #include "functions.h"
 #include "kamail.h"

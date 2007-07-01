@@ -57,8 +57,8 @@
 
 #include <kcal/event.h>
 #include <kcal/icalformat.h>
-#include <libkpimidentities/identitymanager.h>
-#include <libkpimidentities/identity.h>
+#include <kpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
 #include <kcal/person.h>
 #include <ktoolinvocation.h>
 

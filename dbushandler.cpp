@@ -25,8 +25,8 @@
 #include <QtDBus>
 #include <kdebug.h>
 
-#include <libkpimidentities/identitymanager.h>
-#include <libkpimidentities/identity.h>
+#include <kpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
 
 #include "alarmcalendar.h"
 #include "daemon.h"

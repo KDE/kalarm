@@ -53,8 +53,8 @@
 #include <kdebug.h>
 #include <k3resolver.h>
 
-#include <libkpimidentities/identitymanager.h>
-#include <libkpimidentities/identity.h>
+#include <kpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
 #include <kcal/person.h>
 
 #include <kmime/kmime_header_parsing.h>
@@ -89,11 +89,11 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18nc("KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-KPIM::IdentityManager* KAMail::mIdentityManager = 0;
-KPIM::IdentityManager* KAMail::identityManager()
+KPIMIdentities::IdentityManager* KAMail::mIdentityManager = 0;
+KPIMIdentities::IdentityManager* KAMail::identityManager()
 {
 	if (!mIdentityManager)
-		mIdentityManager = new KPIM::IdentityManager(true);   // create a read-only kmail identity manager
+		mIdentityManager = new KPIMIdentities::IdentityManager(true);   // create a read-only kmail identity manager
 	return mIdentityManager;
 }
 
