@@ -31,85 +31,82 @@
 
 #define PROGRAM_NAME "kalarm"
 
-static KCmdLineOptions options[] =
-{
-	{ "a", 0, 0 },
-	{ "ack-confirm", I18N_NOOP("Prompt for confirmation when alarm is acknowledged"), 0 },
-	{ "A", 0, 0 },
-	{ "attach <url>", I18N_NOOP("Attach file to email (repeat as needed)"), 0 },
-	{ "auto-close", I18N_NOOP("Auto-close alarm window after --late-cancel period"), 0 },
-	{ "bcc", I18N_NOOP("Blind copy email to self"), 0 },
-	{ "b", 0, 0 },
-	{ "beep", I18N_NOOP("Beep when message is displayed"), 0 },
-	{ "colour", 0, 0 },
-	{ "c", 0, 0 },
-	{ "color <color>", I18N_NOOP("Message background color (name or hex 0xRRGGBB)"), 0 },
-	{ "colourfg", 0, 0 },
-	{ "C", 0, 0 },
-	{ "colorfg <color>", I18N_NOOP("Message foreground color (name or hex 0xRRGGBB)"), 0 },
-	{ "cancelEvent <eventID>", I18N_NOOP("Cancel alarm with the specified event ID"), 0 },
-	{ "d", 0, 0 },
-	{ "disable", I18N_NOOP("Disable the alarm"), 0 },
-	{ "e", 0, 0 },
-	{ "!exec <commandline>", I18N_NOOP("Execute a shell command line"), 0 },
-	{ "edit <eventID>", I18N_NOOP("Display the alarm edit dialog to edit the specified alarm"), 0 },
-	{ "n", 0, 0 },
-	{ "edit-new", I18N_NOOP("Display the alarm edit dialog to edit a new alarm"), 0 },
-	{ "edit-new-preset <templateName>", I18N_NOOP("Display the alarm edit dialog, preset with a template"), 0 },
-	{ "f", 0, 0 },
-	{ "file <url>", I18N_NOOP("File to display"), 0 },
-	{ "F", 0, 0 },
-	{ "from-id <ID>", I18N_NOOP("KMail identity to use as sender of email"), 0 },
-	{ "handleEvent <eventID>", I18N_NOOP("Trigger or cancel alarm with the specified event ID"), 0 },
-	{ "i", 0, 0 },
-	{ "interval <period>", I18N_NOOP("Interval between alarm repetitions"), 0 },
-	{ "k", 0, 0 },
-	{ "korganizer", I18N_NOOP("Show alarm as an event in KOrganizer"), 0 },
-	{ "l", 0, 0 },
-	{ "late-cancel <period>", I18N_NOOP("Cancel alarm if more than 'period' late when triggered"), "1" },
-	{ "L", 0, 0 },
-	{ "login", I18N_NOOP("Repeat alarm at every login"), 0 },
-	{ "m", 0, 0 },
-	{ "mail <address>", I18N_NOOP("Send an email to the given address (repeat as needed)"), 0 },
-	{ "p", 0, 0 },
-	{ "play <url>", I18N_NOOP("Audio file to play once"), 0 },
-	{ "P", 0, 0 },
-	{ "play-repeat <url>", I18N_NOOP("Audio file to play repeatedly"), 0 },
-	{ "recurrence <spec>", I18N_NOOP("Specify alarm recurrence using iCalendar syntax"), 0 },
-	{ "R", 0, 0 },
-	{ "reminder <period>", I18N_NOOP("Display reminder in advance of alarm"), 0 },
-	{ "reminder-once <period>", I18N_NOOP("Display reminder once, before first alarm recurrence"), 0 },
-	{ "r", 0, 0 },
-	{ "repeat <count>", I18N_NOOP("Number of times to repeat alarm (including initial occasion)"), 0 },
-	{ "reset", I18N_NOOP("Reset the alarm scheduling daemon"), 0 },
-	{ "s", 0, 0 },
-	{ "speak", I18N_NOOP("Speak the message when it is displayed"), 0 },
-	{ "stop", I18N_NOOP("Stop the alarm scheduling daemon"), 0 },
-	{ "S", 0, 0 },
-	{ "subject", I18N_NOOP("Email subject line"), 0 },
-	{ "t", 0, 0 },
-	{ "time <time>", I18N_NOOP("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"), 0 },
-	{ "tray", I18N_NOOP("Display system tray icon"), 0 },
-	{ "triggerEvent <eventID>", I18N_NOOP("Trigger alarm with the specified event ID"), 0 },
-	{ "u", 0, 0 },
-	{ "until <time>", I18N_NOOP("Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"), 0 },
-	{ "V", 0, 0 },
-	{ "volume <percent>", I18N_NOOP("Volume to play audio file"), 0 },
-	{ "+[message]", I18N_NOOP("Message text to display"), 0 },
-	KCmdLineLastOption
-};
-
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData(PROGRAM_NAME, I18N_NOOP("KAlarm"), KALARM_VERSION,
-		I18N_NOOP("Personal alarm message, command and email scheduler for KDE"),
+	KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
+		ki18n("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
-		"Copyright 2001-2007, David Jarvie", 0, "http://www.astrojar.org.uk/kalarm");
-	aboutData.addAuthor("David Jarvie", 0, "software@astrojar.org.uk");
+		ki18n("Copyright 2001-2007, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
+	aboutData.addAuthor(ki18n("David Jarvie"), KLocalizedString(), "software@astrojar.org.uk");
         aboutData.setOrganizationDomain("kde.org");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
+
+	KCmdLineOptions options;
+	options.add("a");
+	options.add("ack-confirm", ki18n("Prompt for confirmation when alarm is acknowledged"));
+	options.add("A");
+	options.add("attach <url>", ki18n("Attach file to email (repeat as needed)"));
+	options.add("auto-close", ki18n("Auto-close alarm window after --late-cancel period"));
+	options.add("bcc", ki18n("Blind copy email to self"));
+	options.add("b");
+	options.add("beep", ki18n("Beep when message is displayed"));
+	options.add("colour");
+	options.add("c");
+	options.add("color <color>", ki18n("Message background color (name or hex 0xRRGGBB)"));
+	options.add("colourfg");
+	options.add("C");
+	options.add("colorfg <color>", ki18n("Message foreground color (name or hex 0xRRGGBB)"));
+	options.add("cancelEvent <eventID>", ki18n("Cancel alarm with the specified event ID"));
+	options.add("d");
+	options.add("disable", ki18n("Disable the alarm"));
+	options.add("e");
+	options.add("!exec <commandline>", ki18n("Execute a shell command line"));
+	options.add("edit <eventID>", ki18n("Display the alarm edit dialog to edit the specified alarm"));
+	options.add("n");
+	options.add("edit-new", ki18n("Display the alarm edit dialog to edit a new alarm"));
+	options.add("edit-new-preset <templateName>", ki18n("Display the alarm edit dialog, preset with a template"));
+	options.add("f");
+	options.add("file <url>", ki18n("File to display"));
+	options.add("F");
+	options.add("from-id <ID>", ki18n("KMail identity to use as sender of email"));
+	options.add("handleEvent <eventID>", ki18n("Trigger or cancel alarm with the specified event ID"));
+	options.add("i");
+	options.add("interval <period>", ki18n("Interval between alarm repetitions"));
+	options.add("k");
+	options.add("korganizer", ki18n("Show alarm as an event in KOrganizer"));
+	options.add("l");
+	options.add("late-cancel <period>", ki18n("Cancel alarm if more than 'period' late when triggered"), "1");
+	options.add("L");
+	options.add("login", ki18n("Repeat alarm at every login"));
+	options.add("m");
+	options.add("mail <address>", ki18n("Send an email to the given address (repeat as needed)"));
+	options.add("p");
+	options.add("play <url>", ki18n("Audio file to play once"));
+	options.add("P");
+	options.add("play-repeat <url>", ki18n("Audio file to play repeatedly"));
+	options.add("recurrence <spec>", ki18n("Specify alarm recurrence using iCalendar syntax"));
+	options.add("R");
+	options.add("reminder <period>", ki18n("Display reminder in advance of alarm"));
+	options.add("reminder-once <period>", ki18n("Display reminder once, before first alarm recurrence"));
+	options.add("r");
+	options.add("repeat <count>", ki18n("Number of times to repeat alarm (including initial occasion)"));
+	options.add("reset", ki18n("Reset the alarm scheduling daemon"));
+	options.add("s");
+	options.add("speak", ki18n("Speak the message when it is displayed"));
+	options.add("stop", ki18n("Stop the alarm scheduling daemon"));
+	options.add("S");
+	options.add("subject", ki18n("Email subject line"));
+	options.add("t");
+	options.add("time <time>", ki18n("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"));
+	options.add("tray", ki18n("Display system tray icon"));
+	options.add("triggerEvent <eventID>", ki18n("Trigger alarm with the specified event ID"));
+	options.add("u");
+	options.add("until <time>", ki18n("Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"));
+	options.add("V");
+	options.add("volume <percent>", ki18n("Volume to play audio file"));
+	options.add("+[message]", ki18n("Message text to display"));
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();
 

@@ -31,23 +31,20 @@
 
 #include "adapp.h"
 
-static const KCmdLineOptions options[] =
-{
-	{ "autostart", I18N_NOOP("kalarmd is being autostarted"), 0 },
-	KCmdLineLastOption
-};
-
 int main(int argc, char** argv)
 {
-	KAboutData aboutData(DAEMON_APP_NAME, I18N_NOOP("KAlarm Daemon"),
-	                     DAEMON_VERSION, I18N_NOOP("KAlarm Alarm Daemon"), KAboutData::License_GPL,
-	                     "Copyright 1997-1999 Preston Brown\nCopyright 2000-2001 Cornelius Schumacher\nCopyright 2001,2004-2007 David Jarvie", 0,
+	KAboutData aboutData(DAEMON_APP_NAME, 0, ki18n("KAlarm Daemon"),
+	                     DAEMON_VERSION, ki18n("KAlarm Alarm Daemon"), KAboutData::License_GPL,
+	                     ki18n("Copyright 1997-1999 Preston Brown\nCopyright 2000-2001 Cornelius Schumacher\nCopyright 2001,2004-2007 David Jarvie"), KLocalizedString(),
 	                     "http://www.astrojar.org.uk/kalarm");
-	aboutData.addAuthor("David Jarvie", I18N_NOOP("Maintainer"), "software@astrojar.org.uk");
-	aboutData.addAuthor("Cornelius Schumacher", I18N_NOOP("Author"), "schumacher@kde.org");
-	aboutData.addAuthor("Preston Brown", I18N_NOOP("Original Author"), "pbrown@kde.org");
+	aboutData.addAuthor(ki18n("David Jarvie"), ki18n("Maintainer"), "software@astrojar.org.uk");
+	aboutData.addAuthor(ki18n("Cornelius Schumacher"), ki18n("Author"), "schumacher@kde.org");
+	aboutData.addAuthor(ki18n("Preston Brown"), ki18n("Original Author"), "pbrown@kde.org");
 	aboutData.setOrganizationDomain("kalarm.kde.org");
 	KCmdLineArgs::init(argc, argv, &aboutData);
+
+	KCmdLineOptions options;
+	options.add("autostart", ki18n("kalarmd is being autostarted"));
 	KCmdLineArgs::addCmdLineOptions(options);
 	KUniqueApplication::addCmdLineOptions();
 	KStartupInfo::disableAutoAppStartedSending();

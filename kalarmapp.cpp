@@ -374,11 +374,11 @@ int KAlarmApp::newInstance()
 			{
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
-				QByteArray       alMessage;
-				QByteArray       alFromID;
+				QString          alMessage;
+				QString          alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
-				QByteArray       alSubject;
+				QString          alSubject;
 				if (args->isSet("file"))
 				{
 					kDebug(5950)<<"KAlarmApp::newInstance(): file\n";
@@ -412,17 +412,17 @@ int KAlarmApp::newInstance()
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
 						alFromID = args->getOption("from-id");
-					QByteArrayList params = args->getOptionList("mail");
-					for (QByteArrayList::Iterator i = params.begin();  i != params.end();  ++i)
+					QStringList params = args->getOptionList("mail");
+					for (QStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
-						QString addr = QString::fromLocal8Bit(*i);
+						QString addr = *i;
 						if (!KAMail::checkAddress(addr))
 							USAGE(i18n("%1: invalid email address", QLatin1String("--mail")))
 						alAddresses += KCal::Person(QString(), addr);
 					}
 					params = args->getOptionList("attach");
-					for (QByteArrayList::Iterator i = params.begin();  i != params.end();  ++i)
-						alAttachments += QString::fromLocal8Bit(*i);
+					for (QStringList::Iterator i = params.begin();  i != params.end();  ++i)
+						alAttachments += *i;
 					alMessage = args->arg(0);
 					action = KAEvent::EMAIL;
 				}
@@ -453,9 +453,8 @@ int KAlarmApp::newInstance()
 				if (args->isSet("color"))
 				{
 					// Background colour is specified
-					QByteArray colourText = args->getOption("color");
-					if (static_cast<const char*>(colourText)[0] == '0'
-					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
+					QString colourText = args->getOption("color");
+					if (colourText[0] == '0' && colourText[1].toLower() == 'x')
 						colourText.replace(0, 2, "#");
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
@@ -464,9 +463,8 @@ int KAlarmApp::newInstance()
 				if (args->isSet("colorfg"))
 				{
 					// Foreground colour is specified
-					QByteArray colourText = args->getOption("colorfg");
-					if (static_cast<const char*>(colourText)[0] == '0'
-					&&  tolower(static_cast<const char*>(colourText)[1]) == 'x')
+					QString colourText = args->getOption("colorfg");
+					if (colourText[0] == '0' && colourText[1].toLower() == 'x')
 						colourText.replace(0, 2, "#");
 					fgColour.setNamedColor(colourText);
 					if (!fgColour.isValid())
@@ -475,7 +473,7 @@ int KAlarmApp::newInstance()
 
 				if (args->isSet("time"))
 				{
-					QByteArray dateTime = args->getOption("time");
+					QByteArray dateTime = args->getOption("time").toLocal8Bit();
 					if (!convWakeTime(dateTime, alarmTime))
 						USAGE(i18n("Invalid %1 parameter", QLatin1String("--time")))
 				}
@@ -489,8 +487,8 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2", QLatin1String("--login"), QLatin1String("--recurrence")))
 					if (args->isSet("until"))
 						USAGE(i18n("%1 incompatible with %2", QLatin1String("--until"), QLatin1String("--recurrence")))
-					QByteArray rule = args->getOption("recurrence");
-					recurrence.set(QString::fromLocal8Bit(static_cast<const char*>(rule)));
+					QString rule = args->getOption("recurrence");
+					recurrence.set(rule);
 				}
 				if (args->isSet("interval"))
 				{
@@ -510,7 +508,7 @@ int KAlarmApp::newInstance()
 					else if (args->isSet("until"))
 					{
 						count = 0;
-						QByteArray dateTime = args->getOption("until");
+						QByteArray dateTime = args->getOption("until").toLocal8Bit();
 						bool ok;
 						if (args->isSet("time"))
 							ok = convWakeTime(dateTime, endTime, alarmTime);
@@ -531,7 +529,7 @@ int KAlarmApp::newInstance()
 					// Get the recurrence interval
 					int interval;
 					KARecurrence::Type recurType;
-					if (!convInterval(args->getOption("interval"), recurType, interval, !haveRecurrence)
+					if (!convInterval(args->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence)
 					||  interval < 0)
 						USAGE(i18n("Invalid %1 parameter", QLatin1String("--interval")))
 					if (alarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
@@ -561,7 +559,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 requires %2", QLatin1String("--until"), QLatin1String("--interval")))
 				}
 
-				QByteArray audioFile;
+				QString    audioFile;
 				float      audioVolume = -1;
 				bool       audioRepeat = args->isSet("play-repeat");
 				if (audioRepeat  ||  args->isSet("play"))
@@ -606,7 +604,7 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2", opt, QLatin1String("--mail")))
 					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
-					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recurType, reminderMinutes);
+					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit(), recurType, reminderMinutes);
 					if (ok)
 					{
 						switch (recurType)
@@ -628,7 +626,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("late-cancel"))
 				{
 					KARecurrence::Type recurType;
-					bool ok = convInterval(args->getOption("late-cancel"), recurType, lateCancel, false);
+					bool ok = convInterval(args->getOption("late-cancel").toLocal8Bit(), recurType, lateCancel, false);
 					if (!ok  ||  lateCancel <= 0)
 						USAGE(i18n("Invalid %1 parameter", QLatin1String("late-cancel")))
 				}
