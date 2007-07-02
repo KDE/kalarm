@@ -105,7 +105,7 @@ kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KMIME_LIBS} kdepim kpimidentities ${KDE4_PHONON_LIBS} )
+target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KMIME_LIBS} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_PHONON_LIBS} kdepim)
 
 install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
 
