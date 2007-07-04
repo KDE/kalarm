@@ -103,9 +103,9 @@ class EditAlarmDlg : public KDialog
 		virtual void    resizeEvent(QResizeEvent*);
 		virtual void    showEvent(QShowEvent*);
 	protected slots:
-		virtual void    slotOk();
 		virtual void    slotTry();
 		virtual void    slotDefault();   // Load Template
+		virtual void    slotButtonClicked(int button);
 	private slots:
 		void            slotRecurTypeChange(int repeatType);
 		void            slotRecurFrequencyChange();
@@ -129,6 +129,7 @@ class EditAlarmDlg : public KDialog
 		void            setEvent(KAEvent&, const QString& text, bool trial);
 		KAEvent::Action getAlarmType() const;
 		int             getAlarmFlags() const;
+		bool            validate();
 		bool            checkText(QString& result, bool showErrorMessage = true) const;
 		void            setSoundPicker();
 		void            setRecurTabTitle(const KAEvent* = 0);

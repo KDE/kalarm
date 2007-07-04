@@ -186,7 +186,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	setButtons((readOnly ? Cancel|Try : Template ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
 	setDefaultButton(readOnly ? Cancel : Ok);
 	setButtonText(Default, i18n("Load Template..."));
-	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
 	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	switch (getResource)
@@ -1418,19 +1417,31 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 }
 
 /******************************************************************************
+*  Called when any button is clicked.
+*/
+void EditAlarmDlg::slotButtonClicked(int button)
+{
+	if (button == Ok)
+	{
+		if (validate())
+			accept();
+	}
+	else
+		KDialog::slotButtonClicked(button);
+}
+
+/******************************************************************************
 *  Called when the OK button is clicked.
 *  Validate the input data.
 */
-void EditAlarmDlg::slotOk()
+bool EditAlarmDlg::validate()
 {
 	if (!stateChanged())
 	{
 		// No changes have been made except possibly to an existing deferral
 		if (!mOnlyDeferred)
 			reject();
-		else
-			accept();
-		return;
+		return mOnlyDeferred;
 	}
 	RecurrenceEdit::RepeatType recurType = mRecurrenceEdit->repeatType();
 	if (mTimeWidget
@@ -1454,7 +1465,7 @@ void EditAlarmDlg::slotOk()
 		{
 			mTemplateName->setFocus();
 			KMessageBox::sorry(this, errmsg);
-			return;
+			return false;
 		}
 	}
 	else if(mTimeWidget)
@@ -1467,12 +1478,12 @@ void EditAlarmDlg::slotOk()
 			mTabs->setCurrentIndex(mMainPageIndex);
 			errWidget->setFocus();
 			mTimeWidget->getDateTime();   // display the error message now
-			return;
+			return false;
 		}
 	}
 	if (!checkCommandData()
 	||  !checkEmailData())
-		return;
+		return false;
 	if (!mTemplate)
 	{
 		if (timedRecurrence)
@@ -1493,13 +1504,13 @@ void EditAlarmDlg::slotOk()
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
-					return;
+					return false;
 				}
 				if (event.workTimeOnly()  &&  !event.mayOccurDuringWork())
 				{
 					if (KMessageBox::warningContinueCancel(this, i18n("The alarm will never occur during working hours"))
 					    != KMessageBox::Continue)
-						return;
+						return false;
 				}
 			}
 		}
@@ -1510,7 +1521,7 @@ void EditAlarmDlg::slotOk()
 			mTabs->setCurrentIndex(mRecurPageIndex);
 			errWidget->setFocus();
 			KMessageBox::sorry(this, errmsg);
-			return;
+			return false;
 		}
 	}
 	int longestRecurInterval = -1;
@@ -1530,7 +1541,7 @@ void EditAlarmDlg::slotOk()
 					mReminder->setFocusOnCount();
 					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
 					                             , Reminder::i18n_FirstRecurrenceOnly()));
-					return;
+					return false;
 				}
 			}
 		}
@@ -1553,7 +1564,7 @@ void EditAlarmDlg::slotOk()
 				{
 					KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval minus any reminder period"));
 					mSimpleRepetition->activate();   // display the alarm repetition dialog again
-					return;
+					return false;
 				}
 				// fall through to NO_RECUR
 			case RecurrenceEdit::NO_RECUR:    // no restriction on repeat duration
@@ -1562,38 +1573,38 @@ void EditAlarmDlg::slotOk()
 				{
 					KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
 					mSimpleRepetition->activate();   // display the alarm repetition dialog again
-					return;
+					return false;
 				}
 				break;
 		}
 	}
-	if (checkText(mAlarmMessage))
+	if (!checkText(mAlarmMessage))
+		return false;
+
+	mResource = 0;
+	// A null resource event ID indicates that the caller already
+	// knows which resource to use.
+	if (!mResourceEventId.isNull())
 	{
-		mResource = 0;
-		// A null resource event ID indicates that the caller already
-		// knows which resource to use.
-		if (!mResourceEventId.isNull())
+		if (!mResourceEventId.isEmpty())
 		{
-			if (!mResourceEventId.isEmpty())
-			{
-				mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
-				AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
-				if (mResource->alarmType() != type)
-					mResource = 0;   // event may have expired while dialogue was open
-			}
-			if (!mResource  ||  !mResource->writable())
-			{
-				KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
-				mResource = AlarmResources::instance()->destination(type, this);
-			}
-			if (!mResource)
-			{
-				KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
-				return;
-			}
+			mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
+			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
+			if (mResource->alarmType() != type)
+				mResource = 0;   // event may have expired while dialogue was open
 		}
-		accept();
+		if (!mResource  ||  !mResource->writable())
+		{
+			KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
+			mResource = AlarmResources::instance()->destination(type, this);
+		}
+		if (!mResource)
+		{
+			KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
+			return false;
+		}
 	}
+	return true;
 }
 
 /******************************************************************************
