@@ -196,16 +196,22 @@ void ResourceModel::notifyChange(const QModelIndex& index)
 void ResourceModel::refresh()
 {
 	// This would be better done by a reset(), but the signals are private to QAbstractItemModel
-	beginRemoveRows(QModelIndex(), 0, mResources.count() - 1);
-	mResources.clear();
-	endRemoveRows();
+	if (!mResources.isEmpty())
+	{
+		beginRemoveRows(QModelIndex(), 0, mResources.count() - 1);
+		mResources.clear();
+		endRemoveRows();
+	}
 	QList<AlarmResource*> newResources;
 	AlarmResourceManager* manager = AlarmResources::instance()->resourceManager();
 	for (AlarmResourceManager::Iterator it = manager->begin();  it != manager->end();  ++it)
 		newResources += *it;
-	beginInsertRows(QModelIndex(), 0, newResources.count() - 1);
-	mResources = newResources;
-	endInsertRows();
+	if (!newResources.isEmpty())
+	{
+		beginInsertRows(QModelIndex(), 0, newResources.count() - 1);
+		mResources = newResources;
+		endInsertRows();
+	}
 }
 
 /******************************************************************************

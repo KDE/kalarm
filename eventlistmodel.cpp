@@ -405,13 +405,19 @@ kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()"<<endl;
 void EventListModel::reload()
 {
 	// This would be better done by a reset(), but the signals are private to QAbstractItemModel
-	beginRemoveRows(QModelIndex(), 0, mEvents.count() - 1);
-	mEvents.clear();
-	endRemoveRows();
+	if (!mEvents.isEmpty())
+	{
+		beginRemoveRows(QModelIndex(), 0, mEvents.count() - 1);
+		mEvents.clear();
+		endRemoveRows();
+	}
 	KCal::Event::List list = AlarmCalendar::resources()->events(mStatus);
-	beginInsertRows(QModelIndex(), 0, list.count() - 1);
-	mEvents = list;
-	endInsertRows();
+	if (!list.isEmpty())
+	{
+		beginInsertRows(QModelIndex(), 0, list.count() - 1);
+		mEvents = list;
+		endInsertRows();
+	}
 }
 
 /******************************************************************************
