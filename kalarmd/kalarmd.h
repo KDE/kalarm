@@ -21,9 +21,6 @@
 #ifndef KALARMD_H
 #define KALARMD_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #define DAEMON_VERSION       "5.0"              // kalarmd version number
 #define DAEMON_APP_NAME      "kalarmd"          // executable name of alarm daemon application

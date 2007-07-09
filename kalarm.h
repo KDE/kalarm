@@ -23,10 +23,6 @@
 
 //#undef QT3_SUPPORT
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #define KALARM_VERSION "1.9.90"
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
