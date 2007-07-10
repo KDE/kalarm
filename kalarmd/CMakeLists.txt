@@ -14,7 +14,6 @@ qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarm.kalarmd.Daemon.xml alarmdaemon
 qt4_add_dbus_interfaces( kalarmd_SRCS ../org.kde.kalarm.notify.xml )
 
 
-kde4_automoc(${kalarmd_SRCS})
 
 kde4_add_executable(kalarmd ${kalarmd_SRCS})
 
