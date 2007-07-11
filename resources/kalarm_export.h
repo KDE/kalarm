@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef KALARM_EXPORT
-# if defined(MAKE_KALARM_LIB)
+# if defined(MAKE_KALARM_RESOURCES_LIB)
    /* We are building this library */
 #  define KALARM_EXPORT KDE_EXPORT
 # else
