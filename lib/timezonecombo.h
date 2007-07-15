@@ -42,9 +42,9 @@ class TimeZoneCombo : public ComboBox
 		 */
 		explicit TimeZoneCombo(QWidget* parent = 0);
 		/** Returns the currently selected time zone, or null if none. */
-		const KTimeZone* timeZone() const;
+		KTimeZone timeZone() const;
 		/** Selects the specified time zone. */
-		void setTimeZone(const KTimeZone* tz);
+		void setTimeZone(const KTimeZone& tz);
 };
 
 #endif // TIMEZONECOMBO_H
