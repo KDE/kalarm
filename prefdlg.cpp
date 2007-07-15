@@ -642,10 +642,10 @@ void TimePrefTab::restore(bool)
 	mTimeZone->setTimeZone(Preferences::timeZone());
 #else
 	int tzindex = 0;
-	const KTimeZone* tz = Preferences::timeZone();
-	if (tz)
+	KTimeZone tz = Preferences::timeZone();
+	if (tz.isValid())
 	{
-		QString zone = tz->name();
+		QString zone = tz.name();
 		int count = mTimeZone->count();
 		while (tzindex < count  &&  mTimeZone->itemText(tzindex) != zone)
 			++tzindex;
@@ -668,12 +668,12 @@ void TimePrefTab::restore(bool)
 void TimePrefTab::apply(bool syncToDisc)
 {
 #if 1
-	const KTimeZone* tz = mTimeZone->timeZone();
-	if (tz)
+	KTimeZone tz = mTimeZone->timeZone();
+	if (tz.isValid())
 		Preferences::setTimeZone(tz);
 #else
-	const KTimeZone* tz = KSystemTimeZones::zone(mTimeZone->currentText());
-	if (tz  &&  tz != Preferences::timeZone())
+	KTimeZone tz = KSystemTimeZones::zone(mTimeZone->currentText());
+	if (tz.isValid()  &&  tz != Preferences::timeZone())
 		Preferences::setTimeZone(tz);
 #endif
 	int t = mStartOfDay->value();

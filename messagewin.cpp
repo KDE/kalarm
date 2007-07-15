@@ -694,9 +694,9 @@ void MessageWin::saveProperties(KConfigGroup& config)
 				zone = QLatin1String("UTC");
 			else
 			{
-				const KTimeZone* tz = mDateTime.timeZone();
-				if (tz)
-					zone = tz->name();
+				KTimeZone tz = mDateTime.timeZone();
+				if (tz.isValid())
+					zone = tz.name();
 			}
 			config.writeEntry("TimeZone", zone);
 		}
@@ -747,8 +747,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	}
 	else
 	{
-		const KTimeZone* tz = KSystemTimeZones::zone(zone);
-		mDateTime = KDateTime(dt, (tz ? tz : KSystemTimeZones::local()));
+		KTimeZone tz = KSystemTimeZones::zone(zone);
+		mDateTime = KDateTime(dt, (tz.isValid() ? tz : KSystemTimeZones::local()));
 	}
 	bool dateOnly        = config.readEntry("DateOnly", false);
 	if (dateOnly)

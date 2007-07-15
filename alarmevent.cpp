@@ -420,9 +420,12 @@ void KAEvent::set(const Event* event)
 				mMainExpired = false;
 				alTime = data.dateTime;
 				alTime.setDateOnly(mStartDateTime.isDateOnly());
-				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime())
+#ifdef __GNUC__
+#warning Use Duration::operator bool()
+#endif
+				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime().value())
 				{
-					mRepeatInterval = data.alarm->snoozeTime();   // values may be adjusted in setRecurrence()
+					mRepeatInterval = data.alarm->snoozeTime().asSeconds() / 60;   // values may be adjusted in setRecurrence()
 					mRepeatCount    = data.alarm->repeatCount();
 					mNextRepeat     = data.nextRepeat;
 				}
@@ -2827,7 +2830,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	Q_ASSERT(calVersion() == KAlarm::Version(1,9,2));
 
 	QTime startOfDay = Preferences::startOfDay();
-	const KTimeZone* localZone = 0;
+	KTimeZone localZone;
 	if (pre_1_9_2)
 		localZone = KSystemTimeZones::local();
 
@@ -2950,7 +2953,10 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					Recurrence* recur = event->recurrence();
 					if (recur  &&  recur->doesRecur())
 					{
-						recur->setMinutely(alarm->snoozeTime());
+#ifdef __GNUC__
+#warning Fix snoozeTime() duration
+#endif
+						recur->setMinutely(alarm->snoozeTime().asSeconds() / 60);
 						recur->setDuration(alarm->repeatCount() + 1);
 						alarm->setRepeatCount(0);
 						alarm->setSnoozeTime(0);

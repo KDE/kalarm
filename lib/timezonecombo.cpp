@@ -25,7 +25,7 @@
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 	: ComboBox(parent)
 {
-	QString utc = KTimeZones::utc()->name();
+	QString utc = KTimeZone::utc().name();
 	addItem(utc);   // put UTC at start of list
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
@@ -33,16 +33,16 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 			addItem(it.key());
 }
 
-const KTimeZone* TimeZoneCombo::timeZone() const
+KTimeZone TimeZoneCombo::timeZone() const
 {
 	return KSystemTimeZones::zone(currentText());
 }
 
-void TimeZoneCombo::setTimeZone(const KTimeZone* tz)
+void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
 {
-	if (!tz)
+	if (!tz.isValid())
 		return;
-	QString zone = tz->name();
+	QString zone = tz.name();
 	int limit = count();
 	for (int index = 0;  index < limit;  ++index)
 	{

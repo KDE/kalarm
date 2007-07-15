@@ -1282,9 +1282,9 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 			spec = KDateTime::UTC;
 		else
 		{
-			const KTimeZone* tz = KSystemTimeZones::zone(zone);
-			error = !tz;
-			if (tz)
+			KTimeZone tz = KSystemTimeZones::zone(zone);
+			error = !tz.isValid();
+			if (!error)
 				spec = tz;
 		}
 	}

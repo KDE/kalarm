@@ -321,8 +321,8 @@ KDateTime::Spec AlarmTimeWidget::timeSpec() const
 		return mTimeSpec.isValid() ? mTimeSpec : KDateTime::LocalZone;
 	if (mNoTimeZone->isChecked())
 		return KDateTime::ClockTime;
-	const KTimeZone* tz = mTimeZone->timeZone();
-	return tz ? KDateTime::Spec(tz) : KDateTime::LocalZone;
+	KTimeZone tz = mTimeZone->timeZone();
+	return tz.isValid() ? KDateTime::Spec(tz) : KDateTime::LocalZone;
 }
 
 /******************************************************************************
@@ -333,9 +333,9 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 	// Set the time zone first so that the call to dateTimeChanged() works correctly.
 	if (!mDeferring)
 	{
-		const KTimeZone* tz = dt.timeZone();
-		mNoTimeZone->setChecked(!tz);
-		mTimeZone->setTimeZone(tz ? tz : Preferences::timeZone());
+		KTimeZone tz = dt.timeZone();
+		mNoTimeZone->setChecked(!tz.isValid());
+		mTimeZone->setTimeZone(tz.isValid() ? tz : Preferences::timeZone());
 	}
 
 	if (dt.date().isValid())

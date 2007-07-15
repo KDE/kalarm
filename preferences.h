@@ -44,8 +44,8 @@ class Preferences : public PreferencesBase
 		static void             connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
-		static const KTimeZone* timeZone(bool reload = false);
-		static void             setTimeZone(const KTimeZone*);
+		static KTimeZone        timeZone(bool reload = false);
+		static void             setTimeZone(const KTimeZone&);
 		static ColourList       messageColours();
 		static void             setMessageColours(const ColourList&);
 		static QColor           defaultFgColour()                { return Qt::black; }
@@ -102,7 +102,7 @@ class Preferences : public PreferencesBase
 		static bool             notifying(const QString& messageID);
 
 		static Preferences*     mInstance;
-		static const KTimeZone* mSystemTimeZone;
+		static KTimeZone        mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
 		ColourList          mMessageColours;

@@ -84,7 +84,7 @@ class DateTime
 		 */
 		KDateTime effectiveKDateTime() const;
 		/** Returns the time zone of the value. */
-		const KTimeZone* timeZone() const      { return mDateTime.timeZone(); }
+		KTimeZone timeZone() const      { return mDateTime.timeZone(); }
 		/** Returns the time specification of the value. */
 		KDateTime::Spec timeSpec() const       { return mDateTime.timeSpec(); }
 		/** Returns the time specification type of the date/time, i.e. whether it is
@@ -114,7 +114,7 @@ class DateTime
 		/** Returns the time converted to the local clock time. */
 		DateTime toClockTime() const           { return DateTime(mDateTime.toClockTime()); }
 		/** Returns the time converted to a specified time zone. */
-		DateTime toZone(const KTimeZone *zone) const  { return DateTime(mDateTime.toZone(zone)); }
+		DateTime toZone(const KTimeZone& zone) const  { return DateTime(mDateTime.toZone(zone)); }
 		/** Returns the time converted to a new time specification. */
 		DateTime toTimeSpec(const KDateTime::Spec &spec) const  { return DateTime(mDateTime.toTimeSpec(spec)); }
 		/** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC

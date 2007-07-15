@@ -61,10 +61,10 @@ const bool  default_confirmAlarmDeletion = true;
 static QString translateXTermPath(const QString& cmdline, bool write);
 
 
-Preferences*     Preferences::mInstance = 0;
-const KTimeZone* Preferences::mSystemTimeZone = 0;
-QTime            Preferences::mOldStartOfDay(0, 0, 0);
-bool             Preferences::mStartOfDayChanged = false;
+Preferences* Preferences::mInstance = 0;
+KTimeZone    Preferences::mSystemTimeZone;
+QTime        Preferences::mOldStartOfDay(0, 0, 0);
+bool         Preferences::mStartOfDayChanged = false;
 
 
 Preferences* Preferences::self()
@@ -93,26 +93,26 @@ Preferences::Preferences()
 * The system time zone is cached, and the cached value will be returned unless
 * 'reload' is true, in which case the value is re-read from the system.
 */
-const KTimeZone* Preferences::timeZone(bool reload)
+KTimeZone Preferences::timeZone(bool reload)
 {
 	if (reload)
-		mSystemTimeZone = 0;
+		mSystemTimeZone = KTimeZone();
 	QString timeZone = self()->mBase_TimeZone;
-	const KTimeZone* tz = 0;
+	KTimeZone tz;
 	if (!timeZone.isEmpty())
 		tz = KSystemTimeZones::zone(timeZone);
-	if (!tz)
+	if (!tz.isValid())
 	{
-		if (!mSystemTimeZone)
+		if (!mSystemTimeZone.isValid())
 			mSystemTimeZone = KSystemTimeZones::local();
 		tz = mSystemTimeZone;
 	}
 	return tz;
 }
 
-void Preferences::setTimeZone(const KTimeZone* tz)
+void Preferences::setTimeZone(const KTimeZone& tz)
 {
-	self()->setBase_TimeZone(tz ? tz->name() : QString());
+	self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
 }
 
 ColourList Preferences::messageColours()

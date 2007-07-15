@@ -775,8 +775,8 @@ KDateTime::Spec AlarmDaemon::timeSpec()
 	QString zone = group.readEntry("Timezone", QString());
 	if (zone.isEmpty())
 		return KDateTime::ClockTime;
-	const KTimeZone* tz = KSystemTimeZones::zone(zone);
-	return tz ? tz : KSystemTimeZones::local();
+	KTimeZone tz = KSystemTimeZones::zone(zone);
+	return tz.isValid() ? tz : KSystemTimeZones::local();
 }
 
 /******************************************************************************

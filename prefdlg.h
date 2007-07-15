@@ -128,7 +128,7 @@ class MiscPrefTab : public PrefsTabBase
 //#endif
 
 	private:
-		void         setTimeZone(const KTimeZone*);
+		void         setTimeZone(const KTimeZone&);
 
 		QCheckBox*    mAutostartDaemon;
 		QRadioButton* mRunInSystemTray;
