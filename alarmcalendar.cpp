@@ -930,7 +930,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 						{
 							if (!endOffsetValid)
 							{
-								endOffset = e->hasDuration() ? e->duration() : e->hasEndDate() ? e->dtStart().secsTo(e->dtEnd()) : 0;
+								endOffset = e->hasDuration() ? e->duration().asSeconds() : e->hasEndDate() ? e->dtStart().secsTo(e->dtEnd()) : 0;
 								endOffsetValid = true;
 							}
 							offset = alarm->endOffset().asSeconds() + endOffset;

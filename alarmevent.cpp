@@ -420,10 +420,7 @@ void KAEvent::set(const Event* event)
 				mMainExpired = false;
 				alTime = data.dateTime;
 				alTime.setDateOnly(mStartDateTime.isDateOnly());
-#ifdef __GNUC__
-#warning Use Duration::operator bool()
-#endif
-				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime().value())
+				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime())
 				{
 					mRepeatInterval = data.alarm->snoozeTime().asSeconds() / 60;   // values may be adjusted in setRecurrence()
 					mRepeatCount    = data.alarm->repeatCount();
@@ -2946,7 +2943,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				if (types.count() > 0)
 					alarm->setCustomProperty(KCalendar::APPNAME, TYPE_PROPERTY, types.join(","));
 
-				if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+				if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
 				{
 					// It's a KAlarm pre-0.7 calendar file.
 					// Minutely recurrences were stored differently.
