@@ -64,7 +64,7 @@
 #include <kstaticdeleter.h>
 #include <netwm.h>
 #include <kdebug.h>
-
+#include <kshell.h>
 
 static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
@@ -1678,14 +1678,14 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		{
 			// Append a sleep to the command.
 			// Quote the command in case it contains characters such as [>|;].
-			QString exec = K3ShellProcess::quote(command + QLatin1String("; sleep 86400"));
+			QString exec = KShell::quoteArg(command + QLatin1String("; sleep 86400"));
 			cmd.replace("%w", exec);    // %w indicates where to insert the command string
 		}
 		else
 		{
 			// Set the command to execute.
 			// Put it in quotes in case it contains characters such as [>|;].
-			QString exec = K3ShellProcess::quote(command);
+			QString exec = KShell::quoteArg(command);
 			if (cmd.indexOf("%c") >= 0)
 				cmd.replace("%c", exec);    // %c indicates where to insert the command string
 			else
