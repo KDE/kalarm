@@ -547,7 +547,7 @@ void KAEvent::set(const Event* event)
 		mArchiveRepeatAtLogin = false;
 
 	Recurrence* recur = event->recurrence();
-	if (recur  &&  recur->doesRecur())
+	if (recur  &&  recur->recurs())
 	{
 		int nextRepeat = mNextRepeat;    // setRecurrence() clears mNextRepeat
 		setRecurrence(*recur);
@@ -2356,7 +2356,7 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 {
 	mUpdated = true;
 	delete mRecurrence;
-	if (recurrence.doesRecur())
+	if (recurrence.recurs())
 	{
 		mRecurrence = new KARecurrence(recurrence);
 		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
@@ -2948,7 +2948,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					// It's a KAlarm pre-0.7 calendar file.
 					// Minutely recurrences were stored differently.
 					Recurrence* recur = event->recurrence();
-					if (recur  &&  recur->doesRecur())
+					if (recur  &&  recur->recurs())
 					{
 #ifdef __GNUC__
 #warning Fix snoozeTime() duration

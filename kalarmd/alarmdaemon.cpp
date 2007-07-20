@@ -493,7 +493,7 @@ void AlarmDaemon::checkAlarms()
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
-		bool recurs = event->doesRecur();
+		bool recurs = event->recurs();
 		QList<KDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)

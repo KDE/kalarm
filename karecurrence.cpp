@@ -441,7 +441,7 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 			rrule2->setRecurrenceType(RecurrenceRule::rYearly);
 			rrule2->setFrequency(freq);
 			rrule2->setStartDt(startDateTime());
-			rrule2->setFloats(doesFloat());
+			rrule2->setFloats(floats());
 			if (!count)
 				rrule2->setEndDt(endDateTime());
 			if (mFeb29Type == Preferences::Feb29_Mar1)
@@ -563,7 +563,7 @@ KDateTime KARecurrence::endDateTime() const
 	}
 	dt.setDate(d);
 	rrule->setStartDt(dt);
-	rrule->setFloats(doesFloat());
+	rrule->setFloats(floats());
 	rrule->setFrequency(frequency());
 	rrule->setDuration(duration());
 	QList<int> ds;

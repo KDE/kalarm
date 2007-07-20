@@ -905,7 +905,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 		Event* e = allEvents[i];
 		if (type != KCalEvent::EMPTY  &&  !(KCalEvent::status(e) & type))
 			continue;
-		bool recurs = e->doesRecur();
+		bool recurs = e->recurs();
 		int  endOffset = 0;
 		bool endOffsetValid = false;
 		const Alarm::List& alarms = e->alarms();
