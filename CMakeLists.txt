@@ -100,13 +100,16 @@ qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_SOURCE_DIR}/kmail/org.kde.kmail.
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
+# TODO: remove K3Process dependency
+if (UNIX)
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_PHONON_LIBS} kdepim)
 
-install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
 
+install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
+endif (UNIX)
 
 ########### install files ###############
 
