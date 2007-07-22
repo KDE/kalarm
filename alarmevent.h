@@ -127,7 +127,7 @@ class KAAlarmEventBase
 		bool               mConfirmAck;       // alarm acknowledgement requires confirmation by user
 		bool               mDefaultFont;      // use default message font, not mFont
 
-	friend class AlarmData;
+	friend struct AlarmData;
 };
 
 
