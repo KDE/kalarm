@@ -117,7 +117,7 @@ bool KAResourceLocal::doLoad(bool)
 	{
 		kDebug(KARES_DEBUG) << "KAResourceLocal::doLoad(): File doesn't exist yet." << endl;
 		mLoaded = false;
-		mCalendar.close();
+		calendar()->close();
 		clearChanges();
 		if (!isActive())
 			return false;
@@ -155,13 +155,13 @@ bool KAResourceLocal::loadFile()
 {
 	kDebug(KARES_DEBUG) << "KAResourceLocal::loadFile(" << mURL.path() << ")" << endl;
 	mLoaded = false;
-	mCalendar.close();
+	calendar()->close();
 	clearChanges();
 	if (!isActive())
 		return false;
 	mLoading = true;
 	disableChangeNotification();
-	bool success = mCalendar.load(mURL.path());
+	bool success = calendar()->load(mURL.path());
 	enableChangeNotification();
 	if (!success)
 	{
@@ -183,8 +183,8 @@ bool KAResourceLocal::doSave(bool)
 		return true;
 	kDebug(KARES_DEBUG) << "KAResourceLocal::doSave(" << mURL.path() << ")" <<endl;
 	if (mCalIDFunction)
-		(*mCalIDFunction)(mCalendar);    // write the application ID into the calendar
-	bool success = mCalendar.save(mURL.path());
+		(*mCalIDFunction)(*calendar());    // write the application ID into the calendar
+	bool success = calendar()->save(mURL.path());
 	clearChanges();
 	mLastModified = readLastModified();
 	emit resourceSaved(this);

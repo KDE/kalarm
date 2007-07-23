@@ -126,7 +126,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		return false;
 	}
 	mLoaded = false;
-	mCalendar.close();
+	calendar()->close();
 	clearChanges();
 	if (!isActive())
 		return false;
@@ -176,7 +176,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 	bool err = false;
 	if (job)
 	{
-		mCalendar.close();
+		calendar()->close();
 		clearChanges();
 		if (job->error())
 		{
@@ -249,7 +249,7 @@ bool KAResourceRemote::doSave(bool syncCache)
 
 	mChangedIncidences = allChanges();
 	if (mCalIDFunction)
-		(*mCalIDFunction)(mCalendar);    // write the application ID into the calendar
+		(*mCalIDFunction)(*calendar());    // write the application ID into the calendar
 	saveToCache();
 	if (syncCache)
 	{

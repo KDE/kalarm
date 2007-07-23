@@ -140,7 +140,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	setCompatibility(KCalendar::ByEvent);
 	if (syncCache)
 	{
-		mCalendar.close();
+		calendar()->close();
 		clearChanges();
 	}
 	else
@@ -172,7 +172,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 			if (!syncCache)
 			{
 				// Only load new or changed events
-				Event* ev = mCalendar.event(id);
+				Event* ev = calendar()->event(id);
 				if (ev  &&  changes.indexOf(ev) < 0)
 				{
 					ModifiedMap::ConstIterator mit = oldLastModified.find(id);
@@ -189,7 +189,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 				}
 				// It's either a new file, or it has changed
 				if (ev)
-					mCalendar.deleteEvent(ev);
+					calendar()->deleteEvent(ev);
 			}
 			// Load the file and check whether it's the current KAlarm format.
 			// If not, only prompt the user once whether to convert it.
@@ -212,15 +212,15 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	if (!syncCache)
 	{
 		if (mLastModified.isEmpty())
-			mCalendar.close();
+			calendar()->close();
 		else
 		{
 			// Delete any events in the calendar for which files were not found
-			Event::List oldEvents = mCalendar.rawEvents();
+			Event::List oldEvents = calendar()->rawEvents();
 			for (int i = 0, end = oldEvents.count();  i < end;  ++i)
 			{
 				if (!mCompatibilityMap.contains(oldEvents[i]))
-					mCalendar.deleteEvent(oldEvents[i]);
+					calendar()->deleteEvent(oldEvents[i]);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
 {
 	bool success = false;
-	CalendarLocal calendar(mCalendar.timeSpec());
+	CalendarLocal calendar(calendar()->timeSpec());
 	if (!calendar.load(fileName))
 	{
 		// Loading this file failed, but just assume that it's not a calendar file
@@ -283,7 +283,7 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 			if (!alarms.isEmpty())
 			{
 				Event* event = ev->clone();
-				mCalendar.addEvent(event);
+				calendar()->addEvent(event);
 				mCompatibilityMap[event] = compat;
 			}
 		}
@@ -324,8 +324,8 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 	QString fileName = mURL.path() + '/' + id;
 	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'" << endl;
 
-	CalendarLocal cal(mCalendar.timeSpec());
-	cal.setCustomProperties(mCalendar.customProperties());   // copy all VCALENDAR custom properties to each file
+	CalendarLocal cal(calendar()->timeSpec());
+	cal.setCustomProperties(calendar()->customProperties());   // copy all VCALENDAR custom properties to each file
 	if (mCalIDFunction)
 		(*mCalIDFunction)(cal);                          // write the application ID into the calendar
 	bool success = cal.addIncidence(incidence->clone());
@@ -356,7 +356,7 @@ bool KAResourceLocalDir::deleteEvent(Event* event)
 	// Remove event from added/changed lists, to avoid it being recreated in doSave()
 	clearChange(event);
 	disableChangeNotification();    // don't record this deletion as pending
-	bool success = mCalendar.deleteEvent(event);
+	bool success = calendar()->deleteEvent(event);
 	enableChangeNotification();
 	return success;
 }

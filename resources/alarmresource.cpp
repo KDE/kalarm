@@ -148,7 +148,7 @@ void AlarmResource::checkCompatibility(const QString& filename)
 	if (!mFixFunction)
 		return;
 	// Check whether the version is compatible (and convert it if desired)
-	mCompatibility = (*mFixFunction)(mCalendar, filename, this, PROMPT);
+	mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT);
 	if (mCompatibility == KCalendar::Converted)
 	{
 		// Set mCompatibility first to ensure that readOnly() returns
