@@ -22,6 +22,7 @@
 
 #include "kalarm.h"
 
+#include <kcal/calendarlocal.h>
 #include <klocale.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>

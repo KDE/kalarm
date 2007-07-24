@@ -246,7 +246,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
 {
 	bool success = false;
-	CalendarLocal calendar(calendar()->timeSpec());
+	CalendarLocal calendar(this->calendar()->timeSpec());
 	if (!calendar.load(fileName))
 	{
 		// Loading this file failed, but just assume that it's not a calendar file
@@ -283,7 +283,7 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 			if (!alarms.isEmpty())
 			{
 				Event* event = ev->clone();
-				calendar()->addEvent(event);
+				this->calendar()->addEvent(event);
 				mCompatibilityMap[event] = compat;
 			}
 		}

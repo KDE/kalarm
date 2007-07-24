@@ -27,6 +27,7 @@
 #include <kstandarddirs.h>
 #include <kabc/lock.h>
 #include <kabc/locknull.h>
+#include <kcal/calendarlocal.h>
 
 #include "alarmresource.moc"
 using namespace KCal;
