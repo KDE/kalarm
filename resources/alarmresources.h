@@ -325,12 +325,14 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 
 		   @param start is the starting date.
 		   @param end is the ending date.
+		   @param timespec the time spec to use to interpret @p start and @p end
 		   @param inclusive if true only Events which are completely included
 		   within the date range are returned.
 		   @return the list of unfiltered Events occurring within the specified
 		   date range.
 		*/
 		virtual KCal::Event::List rawEvents(const QDate& start, const QDate& end,
+		                       const KDateTime::Spec& timespec = KDateTime::Spec(),
 				       bool inclusive = false);
 
 		/**
@@ -339,12 +341,14 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		   @a sortDirection.
 
 		   @param date request unfiltered Event list for this QDate only.
+		   @param timespec the time spec to use to interpret @p start and @p end
 		   @param sortField specifies the EventSortField.
 		   @param sortDirection specifies the SortDirection.
 		   @return the list of sorted, unfiltered Events occurring on @a date.
 		*/
 		virtual KCal::Event::List rawEventsForDate(
 		  const QDate& date,
+		  const KDateTime::Spec& timespec = KDateTime::Spec(),
 		  KCal::EventSortField sortField = KCal::EventSortUnsorted,
 		  KCal::SortDirection sortDirection = KCal::SortDirectionAscending);
 

@@ -669,20 +669,20 @@ Alarm::List AlarmResources::alarms(const KDateTime &from, const KDateTime &to)
 	return result;
 }
 
-Event::List AlarmResources::rawEventsForDate(const QDate &date, EventSortField sortField, SortDirection sortDirection)
+Event::List AlarmResources::rawEventsForDate(const QDate &date, const KDateTime::Spec& timespec, EventSortField sortField, SortDirection sortDirection)
 {
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-		appendEvents(result, (*it)->rawEventsForDate(date), *it);
+		appendEvents(result, (*it)->rawEventsForDate(date, timespec), *it);
 	return sortEvents(&result, sortField, sortDirection);
 }
 
-Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, bool inclusive)
+Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, const KDateTime::Spec& timespec, bool inclusive)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents(start,end,inclusive)" << endl;
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-		appendEvents(result, (*it)->rawEvents(start, end, inclusive), *it);
+		appendEvents(result, (*it)->rawEvents(start, end, timespec, inclusive), *it);
 	return result;
 }
 
