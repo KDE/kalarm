@@ -67,7 +67,7 @@ void KAResourceLocalDir::init()
 	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotReload()));
 	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotReload()));
 
-	mDirWatch.addDir(mURL.path(), true);
+	mDirWatch.addDir(mURL.path(), KDirWatch::WatchFiles);
 	enableResource(isActive());
 
 	// Initially load all files in the directory, then just load changes
@@ -394,7 +394,7 @@ bool KAResourceLocalDir::setDirName(const KUrl& newURL)
 		enableResource(false);
 	mDirWatch.removeDir(mURL.path());
 	mURL = newURL;
-	mDirWatch.addDir(mURL.path(), true);
+	mDirWatch.addDir(mURL.path(), KDirWatch::WatchFiles);
 	if (active)
 		enableResource(true);
 	// Trigger loading the new resource, and ensure that the new configuration is saved
