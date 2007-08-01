@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QLabel>
 #include <QTextEdit>
 #include <QPalette>
@@ -162,6 +163,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mFlags(event.flags()),
 	  mLateCancel(event.lateCancel()),
@@ -178,6 +180,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setWindowModality(Qt::WindowModal);
 	setObjectName("MessageWin");    // used by LikeBack
 	if (!(flags & NO_INIT_VIEW))
 	{
@@ -195,9 +198,25 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 }
 
 /******************************************************************************
-*  Construct the message window for a specified error message.
+*  Display an error message window.
+*  If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
+*  that the option is specific to 'event'.
 */
-MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, const QStringList& errmsgs)
+void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
+                           const QStringList& errmsgs, const QString& dontShowAgain)
+{
+	if (dontShowAgain.isEmpty()
+	||  !KAlarm::dontShowErrors(event.id(), dontShowAgain))
+		(new MessageWin(event, alarmDateTime, errmsgs, dontShowAgain))->show();
+}
+
+/******************************************************************************
+*  Construct the message window for a specified error message.
+*  If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
+*  that the option is specific to 'event'.
+*/
+MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime,
+                       const QStringList& errmsgs, const QString& dontShowAgain)
 	: MainWindowBase(0, WFLAGS | WFLAGS2),
 	  mMessage(event.cleanText()),
 	  mDateTime(alarmDateTime),
@@ -206,6 +225,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mAction(event.action()),
 	  mKMailSerialNumber(0),
 	  mErrorMsgs(errmsgs),
+	  mDontShowAgain(dontShowAgain),
 	  mRestoreHeight(0),
 	  mConfirmAck(false),
 	  mShowEdit(false),
@@ -217,6 +237,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mErrorWindow(true),
 	  mNoPostAction(true),
@@ -229,6 +250,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime, cons
 {
 	kDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setWindowModality(Qt::WindowModal);
 	setObjectName("ErrorWin");    // used by LikeBack
 	initView();
 	mWindowList.append(this);
@@ -244,6 +266,7 @@ MessageWin::MessageWin()
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mErrorWindow(false),
 	  mRecreating(false),
@@ -255,6 +278,7 @@ MessageWin::MessageWin()
 {
 	kDebug(5950) << "MessageWin::MessageWin(restore)\n";
 	setAttribute(WidgetFlags);
+	setWindowModality(Qt::WindowModal);
 	setObjectName("RestoredMsgWin");    // used by LikeBack
 	mWindowList.append(this);
 }
@@ -352,7 +376,6 @@ void MessageWin::initView()
 					{
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget);
-						view->setObjectName("fileContents");
 						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
 #ifdef __GNUC__
 #warning Check that HTML links and link paths work
@@ -519,6 +542,12 @@ void MessageWin::initView()
 			vlayout->addWidget(label, 0, Qt::AlignLeft);
 		}
 		layout->addStretch();
+		if (!mDontShowAgain.isEmpty())
+		{
+			mDontShowAgainCheck = new QCheckBox(i18n("Don't display this error message again for this alarm"), topWidget);
+			mDontShowAgainCheck->setFixedSize(mDontShowAgainCheck->sizeHint());
+			topLayout->addWidget(mDontShowAgainCheck, 0, Qt::AlignLeft);
+		}
 	}
 
 	QGridLayout* grid = new QGridLayout();
@@ -532,7 +561,7 @@ void MessageWin::initView()
 	mOkButton->clearFocus();
 	mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 	mOkButton->setFixedSize(mOkButton->sizeHint());
-	connect(mOkButton, SIGNAL(clicked()), SLOT(close()));
+	connect(mOkButton, SIGNAL(clicked()), SLOT(slotOk()));
 	grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
 	mOkButton->setWhatsThis(i18n("Acknowledge the alarm"));
 
@@ -714,6 +743,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
 		config.writeEntry("NoDefer", mNoDefer);
 		config.writeEntry("NoPostAction", mNoPostAction);
 		config.writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
+		config.writeEntry("DontShowAgain", mDontShowAgain);
 	}
 	else
 		config.writeEntry("Invalid", true);
@@ -766,6 +796,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mNoDefer             = config.readEntry("NoDefer", false);
 	mNoPostAction        = config.readEntry("NoPostAction", true);
 	mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
+	mDontShowAgain       = config.readEntry("DontShowAgain", QString());
 	mShowEdit            = false;
 	mResource            = 0;
 	kDebug(5950) << "MessageWin::readProperties(" << mEventID << ")" << endl;
@@ -1338,6 +1369,16 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
+*  Called when the OK button is clicked.
+*/
+void MessageWin::slotOk()
+{
+	if (mDontShowAgainCheck  &&  mDontShowAgainCheck->isChecked())
+		KAlarm::setDontShowErrors(mEventID, mDontShowAgain);
+	close();
+}
+
+/******************************************************************************
 *  Called when the KMail button is clicked.
 *  Tells KMail to display the email message displayed in this message window.
 */
@@ -1379,8 +1420,9 @@ void MessageWin::slotEdit()
 		if (AlarmCalendar::resources()->event(mEventID))
 		{
 			// The old alarm hasn't expired yet, so replace it
+			Undo::Event undo(mEvent, resource);
 			status = KAlarm::modifyEvent(mEvent, event, &editDlg);
-			Undo::saveEdit(mEvent, event, resource);
+			Undo::saveEdit(undo, event);
 		}
 		else
 		{

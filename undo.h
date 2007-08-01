@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,12 +36,16 @@ class Undo : public QObject
 		Q_OBJECT
 	public:
 		enum Type { NONE, UNDO, REDO };
+		// N.B. Event must be constructed before the action for which the
+		// undo is being created is carried out, since the don't-show-errors
+		// status is not contained within the KAEvent itself.
 		struct Event
 		{
 			Event() {}
-			Event(const KAEvent& e, AlarmResource* r) : event(e), resource(r) {}
+			Event(const KAEvent&, AlarmResource*);
 			KAEvent        event;
 			AlarmResource* resource;
+			QStringList    dontShowErrors;
 		};
 		class EventList : public QList<Event>
 		{
@@ -52,8 +56,8 @@ class Undo : public QObject
 		static Undo*       instance();
 		static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
 		static void        saveAdds(const EventList&, const QString& name = QString());
-		static void        saveEdit(const KAEvent& oldEvent, const KAEvent& newEvent, AlarmResource*);
-		static void        saveDelete(const KAEvent&, AlarmResource*, const QString& name = QString());
+		static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
+		static void        saveDelete(const Event&, const QString& name = QString());
 		static void        saveDeletes(const EventList&, const QString& name = QString());
 		static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
 		static void        saveReactivates(const EventList&, const QString& name = QString());

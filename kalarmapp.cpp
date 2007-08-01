@@ -1623,7 +1623,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 					kDebug(5950) << "KAlarmApp::execAlarm(): copy error: " << errmsgs[1] << endl;
 				else
 					kDebug(5950) << "KAlarmApp::execAlarm(): failed: " << errmsgs[1] << endl;
-				(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+				MessageWin::showError(event, alarm.dateTime(), errmsgs);
 			}
 			if (reschedule)
 				rescheduleAlarm(event, alarm, true);
@@ -1762,7 +1762,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 	}
 
 	QStringList errmsgs(i18n("Error creating temporary script file"));
-	(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
+	MessageWin::showError(event, alarm.dateTime(), errmsgs, QLatin1String("Script"));
 	return QString();
 }
 
@@ -1850,14 +1850,23 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
 	QStringList errmsgs;
+	QString dontShowAgain;
 	if (flags & ProcData::PRE_ACTION)
+	{
 		errmsgs += i18n("Pre-alarm action:");
+		dontShowAgain = QLatin1String("Pre");
+	}
 	else if (flags & ProcData::POST_ACTION)
+	{
 		errmsgs += i18n("Post-alarm action:");
+		dontShowAgain = QLatin1String("Post");
+	}
+	else
+		dontShowAgain = QLatin1String("Exec");
 	errmsgs += proc->errorMessage();
 	if (!(flags & ProcData::TEMP_FILE))
 		errmsgs += proc->command();
-	(new MessageWin(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs))->show();
+	MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain + QString::number(proc->status()));
 }
 
 /******************************************************************************

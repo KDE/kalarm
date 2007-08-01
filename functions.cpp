@@ -47,6 +47,7 @@
 #include <kactioncollection.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 #include <ksystemtimezone.h>
 #include <KStandardGuiItem>
 #include <kstandardshortcut.h>
@@ -72,11 +73,14 @@ QDBusInterface* korgInterface = 0;
 
 const char*   KORG_DBUS_WINDOW  = "MainWindow_1";
 const char*   KMAIL_DBUS_WINDOW = "kmail_mainwindow1";
-static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
-static const char* KORG_DBUS_SERVICE = "org.kde.korganizer";
-static const char* KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
-static const char* KORG_DBUS_OBJECT  = "/";    // D-Bus object path of KOrganizer's notification interface
+const char*   KMAIL_DBUS_SERVICE = "org.kde.kmail";
+const char*   KORG_DBUS_SERVICE = "org.kde.korganizer";
+const char*   KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
+const char*   KORG_DBUS_OBJECT  = "/";    // D-Bus object path of KOrganizer's notification interface
 const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
+
+const char*   ALARM_OPTS_FILE        = "alarmopts";
+const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
@@ -354,6 +358,9 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* ms
 					status = UPDATE_KORG_ERR;
 			}
 
+			// Remove "Don't show error messages again" for the old alarm
+			setDontShowErrors(oldId);
+
 			// Update the window lists
 			EventListModel::alarms()->updateEvent(oldKcalEvent, kcalEvent);
 		}
@@ -469,6 +476,9 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 			status = UPDATE_ERROR;
 			++warnErr;
 		}
+
+		// Remove "Don't show error messages again" for this alarm
+		setDontShowErrors(id);
 	}
 
 	if (warnErr == events.count())
@@ -840,6 +850,7 @@ void editAlarm(KAEvent& event, QWidget* parent)
 		bool changeDeferral = !editDlg.getEvent(newEvent, resource);
 
 		// Update the event in the displays and in the calendar file
+		Undo::Event undo(event, resource);
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
@@ -851,7 +862,7 @@ void editAlarm(KAEvent& event, QWidget* parent)
 			if (modifyEvent(event, newEvent, &editDlg) == UPDATE_KORG_ERR)
 				displayKOrgUpdateError(&editDlg, ERR_MODIFY, 1);
 		}
-		Undo::saveEdit(event, newEvent, resource);
+		Undo::saveEdit(undo, newEvent);
 
 		outputAlarmWarnings(&editDlg, &newEvent);
 	}
@@ -904,8 +915,9 @@ void editTemplate(KAEvent& event, QWidget* parent)
 		newEvent.setEventID(id);
 
 		// Update the event in the displays and in the calendar file
+		Undo::Event undo(event, resource);
 		updateTemplate(newEvent, &editDlg);
-		Undo::saveEdit(event, newEvent, resource);
+		Undo::saveEdit(undo, newEvent);
 	}
 }
 
@@ -1059,6 +1071,73 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 	}
 	errorMessage.clear();
 	return true;
+}
+
+/******************************************************************************
+* The "Don't show again" option for error messages is personal to the user on a
+* particular computer. For example, he may want to inhibit error messages only
+* on his laptop. So the status is not stored in the alarm calendar, but in the
+* user's local KAlarm data directory.
+******************************************************************************/
+
+/******************************************************************************
+* Return the Don't-show-again error message tags set for a specified alarm ID.
+*/
+QStringList dontShowErrors(const QString& eventId)
+{
+	if (eventId.isEmpty())
+		return QStringList();
+	KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+	KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+	return group.readEntry(eventId, QStringList());
+}
+
+/******************************************************************************
+* Check whether the specified Don't-show-again error message tag is set for an
+* alarm ID.
+*/
+bool dontShowErrors(const QString& eventId, const QString& tag)
+{
+	if (tag.isEmpty()  ||  eventId.isEmpty())
+		return false;
+	QStringList tags = dontShowErrors(eventId);
+	return tags.indexOf(tag) >= 0;
+}
+
+/******************************************************************************
+* Reset the Don't-show-again error message tags for an alarm ID.
+* If 'tags' is empty, the config entry is deleted.
+*/
+void setDontShowErrors(const QString& eventId, const QStringList& tags)
+{
+	if (eventId.isEmpty())
+		return;
+	KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+	KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+	if (tags.isEmpty())
+		group.deleteEntry(eventId);
+	else
+		group.writeEntry(eventId, tags);
+	group.sync();
+}
+
+/******************************************************************************
+* Set the specified Don't-show-again error message tag for an alarm ID.
+* Existing tags are unaffected.
+*/
+void setDontShowErrors(const QString& eventId, const QString& tag)
+{
+	if (tag.isEmpty()  ||  eventId.isEmpty())
+		return;
+	KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+	KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+	QStringList tags = group.readEntry(eventId, QStringList());
+	if (tags.indexOf(tag) < 0)
+	{
+		tags += tag;
+		group.writeEntry(eventId, tags);
+		group.sync();
+	}
 }
 
 /******************************************************************************

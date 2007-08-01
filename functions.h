@@ -96,6 +96,11 @@ void                resetDaemonIfQueued();    // must only be called from KAlarm
 QString             runKMail(bool minimise);
 bool                runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage);
 
+QStringList         dontShowErrors(const QString& eventId);
+bool                dontShowErrors(const QString& eventId, const QString& tag);
+void                setDontShowErrors(const QString& eventId, const QStringList& tags = QStringList());
+void                setDontShowErrors(const QString& eventId, const QString& tag);
+
 enum         // 'options' parameter values for addEvent(). May be OR'ed together.
 {
 	USE_EVENT_ID       = 0x01,   // use event ID if it's provided

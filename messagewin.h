@@ -34,6 +34,7 @@ class QResizeEvent;
 class QCloseEvent;
 class QPushButton;
 class KPushButton;
+class QCheckBox;
 class QLabel;
 class DeferAlarmDlg;
 namespace Phonon { class MediaObject; }
@@ -53,7 +54,6 @@ class MessageWin : public MainWindowBase
 
 		MessageWin();     // for session management restoration only
 		MessageWin(const KAEvent&, const KAAlarm&, int flags);
-		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs);
 		~MessageWin();
 		void                repeat(const KAAlarm&);
 		void                setRecreating()        { mRecreating = true; }
@@ -66,6 +66,8 @@ class MessageWin : public MainWindowBase
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 		static void         redisplayAlarms();
+		static void         showError(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
+		                              const QString& dontShowAgain = QString());
 
 	protected:
 		virtual void        showEvent(QShowEvent*);
@@ -76,6 +78,7 @@ class MessageWin : public MainWindowBase
 		virtual void        readProperties(const KConfigGroup&);
 
 	private slots:
+		void                slotOk();
 		void                slotEdit();
 		void                slotDefer();
 		void                checkDeferralLimit();
@@ -91,6 +94,8 @@ class MessageWin : public MainWindowBase
 		void                setMaxSize();
 
 	private:
+		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
+		           const QString& dontShowAgain);
 		void                initView();
 		void                displayComplete();
 		void                playAudio();
@@ -116,6 +121,7 @@ class MessageWin : public MainWindowBase
 		KAEvent::Action     mAction;
 		unsigned long       mKMailSerialNumber; // if email text, message's KMail serial number, else 0
 		QStringList         mErrorMsgs;
+		QString             mDontShowAgain;   // non-null for don't-show-again option with error message
 		int                 mRestoreHeight;
 		bool                mAudioRepeat;
 		bool                mConfirmAck;
@@ -135,6 +141,7 @@ class MessageWin : public MainWindowBase
 		QPushButton*        mSilenceButton;
 		QPushButton*        mKAlarmButton;
 		QPushButton*        mKMailButton;
+		QCheckBox*          mDontShowAgainCheck;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
 		int                 mFlags;
