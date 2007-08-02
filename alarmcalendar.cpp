@@ -950,7 +950,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 				if (dt >= from  &&  dt <= to)
 				{
 					kDebug(5950) <<"AlarmCalendar::events() '" << e->summary()
-					              << "': " << dt << endl;
+					              << "':" << dt;
 					evnts.append(e);
 					break;
 				}

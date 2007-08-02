@@ -98,7 +98,7 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 #ifndef NDEBUG
 		kDebug(KARES_DEBUG) <<"AlarmResources used:";
 		for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
-			kDebug(KARES_DEBUG) <<"" << (*it)->resourceName();
+			kDebug(KARES_DEBUG) << (*it)->resourceName();
 #endif
 	}
 }
@@ -908,8 +908,7 @@ bool AlarmResources::beginChange(Incidence* incidence, QWidget* promptParent)
   if (count == 1) {
     Ticket *ticket = requestSaveTicket(r);
     if (!ticket) {
-      kDebug(KARES_DEBUG) <<"AlarmResources::beginChange(): unable to get ticket."
-                    << endl;
+      kDebug(KARES_DEBUG) <<"AlarmResources::beginChange(): unable to get ticket.";
       decrementChangeCount(r);
       return false;
     } else {

@@ -139,7 +139,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	                (event.emailBcc() ? Preferences::emailBccAddress() : QString()),
 	                allowNotify);
 	kDebug(5950) <<"KAlarmApp::sendEmail(): To:" << event.emailAddresses(",")
-	              << "\nSubject: " << event.emailSubject() << endl;
+	              << endl << "Subject:" << event.emailSubject();
 
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
