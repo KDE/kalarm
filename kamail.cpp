@@ -138,7 +138,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 	KAMailData data(event, from,
 	                (event.emailBcc() ? Preferences::emailBccAddress() : QString()),
 	                allowNotify);
-	kDebug(5950) << "KAlarmApp::sendEmail(): To: " << event.emailAddresses(", ")
+	kDebug(5950) <<"KAlarmApp::sendEmail(): To:" << event.emailAddresses(",")
 	              << "\nSubject: " << event.emailSubject() << endl;
 
 	if (Preferences::emailClient() == Preferences::sendmail)
@@ -187,7 +187,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		FILE* fd = popen(command.toLocal8Bit(), "w");
 		if (!fd)
 		{
-			kError(5950) << "KAMail::send(): Unable to open a pipe to " << command << endl;
+			kError(5950) <<"KAMail::send(): Unable to open a pipe to" << command;
 			errmsgs = errors();
 			return false;
 		}
@@ -247,9 +247,9 @@ QString KAMail::sendKMail(const KAMailData& data)
 	QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("MailTransportServiceIface"));
 	QDBusReply<bool> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("sendMessage"), args);
 	if (!reply.isValid())
-		kError(5950) << "KAMail::sendKMail(): D-Bus call failed: " << reply.error().message() << endl;
+		kError(5950) <<"KAMail::sendKMail(): D-Bus call failed:" << reply.error().message();
 	else if (!reply.value())
-		kError(5950) << "KAMail::sendKMail(): D-Bus call returned error" << endl;
+		kError(5950) <<"KAMail::sendKMail(): D-Bus call returned error";
 	else
 	{
 		if (data.allowNotify)
@@ -280,7 +280,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		KTemporaryFile tmpFile;
 		if (!tmpFile.open())
 		{
-			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file" << endl;
+			kError(5950) <<"KAMail::addToKMailFolder(" << folder <<"): Unable to open a temporary mail file";
 			return QString("");
 		}
 		QTextStream stream(&tmpFile);
@@ -288,7 +288,7 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		stream.flush();
 		if (tmpFile.error() != QFile::NoError)
 		{
-			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error " << tmpFile.errorString() << " writing to temporary mail file" << endl;
+			kError(5950) <<"KAMail::addToKMailFolder(" << folder <<"): Error" << tmpFile.errorString() <<" writing to temporary mail file";
 			return QString("");
 		}
 
@@ -296,14 +296,14 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 		org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
 		QDBusReply<int> reply = kmail.dbusAddMessage(QString::fromLatin1(folder), tmpFile.fileName(), QString());
 		if (!reply.isValid())
-			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call failed: " << reply.error().message() << endl;
+			kError(5950) <<"KAMail::addToKMailFolder(): D-Bus call failed:" << reply.error().message();
 		else if (reply.value() <= 0)
-			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call returned error code = " << reply.value() << endl;
+			kError(5950) <<"KAMail::addToKMailFolder(): D-Bus call returned error code =" << reply.value();
 		else
 			return QString();    // success
 		err = i18n("Error calling KMail");
 	}
-	kError(5950) << "KAMail::addToKMailFolder(" << folder << "): " << err << endl;
+	kError(5950) <<"KAMail::addToKMailFolder(" << folder <<"):" << err;
 	return err;
 }
 
@@ -376,12 +376,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
-				kError(5950) << "KAMail::appendBodyAttachments(): not found: " << attachment << endl;
+				kError(5950) <<"KAMail::appendBodyAttachments(): not found:" << attachment;
 				return i18n("Attachment not found:\n%1", attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
-				kError(5950) << "KAMail::appendBodyAttachments(): not file/not readable: " << attachment << endl;
+				kError(5950) <<"KAMail::appendBodyAttachments(): not file/not readable:" << attachment;
 				return attachError;
 			}
 
@@ -402,12 +402,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			// Read the file contents
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
-				kError(5950) << "KAMail::appendBodyAttachments(): load failure: " << attachment << endl;
+				kError(5950) <<"KAMail::appendBodyAttachments(): load failure:" << attachment;
 				return attachError;
 			}
 			QFile file(tmpFile);
 			if (!file.open(QIODevice::ReadOnly)) {
-				kDebug(5950) << "KAMail::appendBodyAttachments() tmp load error: " << attachment << endl;
+				kDebug(5950) <<"KAMail::appendBodyAttachments() tmp load error:" << attachment;
 				return attachError;
 			}
 			qint64 size = file.size();
@@ -415,7 +415,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			file.close();
 			bool atterror = false;
 			if (contents.size() < size) {
-				kDebug(5950) << "KAMail::appendBodyAttachments() read error: " << attachment << endl;
+				kDebug(5950) <<"KAMail::appendBodyAttachments() read error:" << attachment;
 				atterror = true;
 			}
 			else if (text)
@@ -535,7 +535,7 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 {
 	if (!addr.displayName.isEmpty())
 	{
-		kDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"" << endl;
+		kDebug(5950) <<"mailbox groups not allowed! Name: \"" << addr.displayName <<"\"";
 		return addr.displayName;
 	}
 	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
@@ -763,7 +763,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 	QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
 	if (!reply.isValid())
 	{
-		kError(5950) << "KAMail::getMailBody(): D-Bus call failed: " << reply.error().message() << endl;
+		kError(5950) <<"KAMail::getMailBody(): D-Bus call failed:" << reply.error().message();
 		return QString();
 	}
 	return reply.value();

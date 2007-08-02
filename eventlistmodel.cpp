@@ -78,7 +78,7 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	// We need to store the list so that when deletions occur, the deleted alarm's
 	// position in the list can be determined.
 	mEvents = AlarmCalendar::resources()->events(mStatus);
-for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event "<<(void*)mEvents[x]<<endl;
+for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
 	if (!mTextIcon)
 	{
 		mTextIcon    = new QPixmap(SmallIcon("text"));
@@ -317,7 +317,7 @@ void EventListModel::slotUpdateTimeTo()
 */
 void EventListModel::slotUpdateArchivedColour(const QColor&)
 {
-kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()"<<endl;
+kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -344,7 +344,7 @@ kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()"<<endl;
 */
 void EventListModel::slotUpdateDisabledColour(const QColor&)
 {
-kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()"<<endl;
+kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -373,7 +373,7 @@ kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()"<<endl;
 */
 void EventListModel::slotUpdateWorkingHours()
 {
-kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()"<<endl;
+kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{

@@ -48,12 +48,12 @@ void ResourceLocalDirConfigWidget::loadSettings(KRES::Resource* resource)
 //	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
 	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
 	if (!res)
-		kError(KARES_DEBUG) << "ResourceLocalDirConfigWidget::loadSettings(KAResourceLocalDir): cast failed" << endl;
+		kError(KARES_DEBUG) <<"ResourceLocalDirConfigWidget::loadSettings(KAResourceLocalDir): cast failed";
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
 		mURL->setUrl(res->dirName());
-		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::loadSettings(): Directory " << mURL->url() << endl;
+		kDebug(KARES_DEBUG) <<"ResourceLocalDirConfigWidget::loadSettings(): Directory" << mURL->url();
 	}
 }
 
@@ -62,7 +62,7 @@ void ResourceLocalDirConfigWidget::saveSettings(KRES::Resource *resource)
 //	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
 	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
 	if (!res)
-		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::saveSettings(KAResourceLocalDir): cast failed" << endl;
+		kDebug(KARES_DEBUG) <<"ResourceLocalDirConfigWidget::saveSettings(KAResourceLocalDir): cast failed";
 	else
 		res->setDirName(mURL->url());
 }

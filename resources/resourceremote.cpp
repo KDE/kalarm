@@ -123,7 +123,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		syncCache = false;   // still uploading, so the cache is up-to-date
 	if (mDownloadJob)
 	{
-		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): download still in progress" << endl;
+		kWarning(KARES_DEBUG) <<"KAResourceRemote::doLoad(): download still in progress";
 		return false;
 	}
 	mLoaded = false;
@@ -144,7 +144,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 
 	if (syncCache)
 	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading..." << endl;
+		kDebug(KARES_DEBUG) <<"KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() <<"): downloading...";
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
 					      false, (mShowProgress && hasGui()));
 		connect(mDownloadJob, SIGNAL(result(KJob*)), SLOT(slotLoadJobResult(KJob*)));
@@ -159,7 +159,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	}
 	else
 	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): from cache" << endl;
+		kDebug(KARES_DEBUG) <<"KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() <<"): from cache";
 		slotLoadJobResult(0);
 	}
 	return true;
@@ -184,13 +184,13 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 			if (hasGui())
 				job->ui()->showErrorMessage();
 			else
-				kError(KARES_DEBUG) << "Resource " << identifier() << " download error: " << job->errorString() << endl;
+				kError(KARES_DEBUG) <<"Resource" << identifier() <<" download error:" << job->errorString();
 			setEnabled(false);
 			err = true;
 		}
 		else
 		{
-			kDebug(KARES_DEBUG) << "KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyUrl() << "): success" << endl;
+			kDebug(KARES_DEBUG) <<"KAResourceRemote::slotLoadJobResult(" << mDownloadUrl.prettyUrl() <<"): success";
 			setReloaded(true);    // the resource has now been downloaded at least once
 			emit cacheDownloaded(this);
 			disableChangeNotification();
@@ -234,17 +234,17 @@ bool KAResourceRemote::doSave(bool syncCache)
 {
 	if (saveInhibited())
 		return true;
-	kDebug(KARES_DEBUG) << "KAResourceRemote::doSave(" << mUploadUrl.prettyUrl() << ")" << endl;
+	kDebug(KARES_DEBUG) <<"KAResourceRemote::doSave(" << mUploadUrl.prettyUrl() <<")";
 	if (readOnly()  ||  !hasChanges())
 		return true;
 	if (mDownloadJob)
 	{
-		kWarning(KARES_DEBUG) << "KAResourceRemote::doSave(): download still in progress" << endl;
+		kWarning(KARES_DEBUG) <<"KAResourceRemote::doSave(): download still in progress";
 		return false;
 	}
 	if (mUploadJob)
 	{
-		kWarning(KARES_DEBUG) << "KAResourceRemote::doSave(): upload still in progress" << endl;
+		kWarning(KARES_DEBUG) <<"KAResourceRemote::doSave(): upload still in progress";
 		return false;
 	}
 
@@ -267,11 +267,11 @@ void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
 		if (hasGui())
 			job->ui()->showErrorMessage();
 		else
-			kError(KARES_DEBUG) << "Resource " << identifier() << " upload error: " << job->errorString() << endl;
+			kError(KARES_DEBUG) <<"Resource" << identifier() <<" upload error:" << job->errorString();
 	}
 	else
 	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyUrl() << "): success" << endl;
+		kDebug(KARES_DEBUG) <<"KAResourceRemote::slotSaveJobResult(" << mUploadUrl.prettyUrl() <<"): success";
 		clearChanges();
 	}
 
@@ -292,7 +292,7 @@ bool KAResourceRemote::setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl)
 	if (downloadUrl.equals(mDownloadUrl)
 	&&  uploadUrl.equals(mUploadUrl))
 		return false;
-	kDebug(KARES_DEBUG) << "KAResourceRemote::setUrls(" << downloadUrl.prettyUrl() << ", " << uploadUrl.prettyUrl() << ")\n";
+	kDebug(KARES_DEBUG) <<"KAResourceRemote::setUrls(" << downloadUrl.prettyUrl() <<"," << uploadUrl.prettyUrl() <<")";
 	if (isOpen())
 		close();
 	bool active = isActive();

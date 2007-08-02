@@ -160,7 +160,7 @@ void AlarmResource::checkCompatibility(const QString& filename)
 	if (mCompatibility != KCalendar::Current  &&  mCompatibility != KCalendar::ByEvent)
 	{
 		// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
-		kDebug(KARES_DEBUG) << "AlarmResource::checkCompatibility(" << resourceName() << "): opened read-only (not current KAlarm format)" << endl;
+		kDebug(KARES_DEBUG) <<"AlarmResource::checkCompatibility(" << resourceName() <<"): opened read-only (not current KAlarm format)";
 	}
 }
 
@@ -216,7 +216,7 @@ void AlarmResource::setReadOnly(bool ronly)
 		mNewReadOnly = ronly;
 		return;
 	}
-	kDebug(KARES_DEBUG) << "AlarmResource::setReadOnly(" << ronly << ")\n";
+	kDebug(KARES_DEBUG) <<"AlarmResource::setReadOnly(" << ronly <<")";
 	bool oldRCronly = (mReconfiguring == 2) ? mOldReadOnly : ResourceCached::readOnly();
 	bool oldronly = (oldRCronly || (mCompatibility != KCalendar::Current && mCompatibility != KCalendar::ByEvent));
 	if (!ronly  &&  isActive())

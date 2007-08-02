@@ -113,7 +113,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 {
 	if (mDisplayCalendar->open())
 		return mDisplayCalendar;
-	kError(5950) << "AlarmCalendar::displayCalendarOpen(): open error\n";
+	kError(5950) <<"AlarmCalendar::displayCalendarOpen(): open error";
 	return 0;
 }
 
@@ -193,7 +193,7 @@ bool AlarmCalendar::open()
 		return true;
 	if (mCalType == RESOURCES)
 	{
-		kDebug(5950) << "AlarmCalendar::open(RESOURCES)" << endl;
+		kDebug(5950) <<"AlarmCalendar::open(RESOURCES)";
 		mCalendar = AlarmResources::instance();
 		load();
 	}
@@ -202,7 +202,7 @@ bool AlarmCalendar::open()
 		if (!mUrl.isValid())
 			return false;
 
-		kDebug(5950) << "AlarmCalendar::open(" << mUrl.prettyUrl() << ")\n";
+		kDebug(5950) <<"AlarmCalendar::open(" << mUrl.prettyUrl() <<")";
 		if (!mCalendar)
 			mCalendar = new CalendarLocal(Preferences::timeZone(true));
 
@@ -245,7 +245,7 @@ int AlarmCalendar::load()
 {
 	if (mCalType == RESOURCES)
 	{
-		kDebug(5950) << "AlarmCalendar::load(RESOURCES)" << endl;
+		kDebug(5950) <<"AlarmCalendar::load(RESOURCES)";
 		static_cast<AlarmResources*>(mCalendar)->load();
 	}
 	else
@@ -254,15 +254,15 @@ int AlarmCalendar::load()
 			return -2;
 		CalendarLocal* calendar = static_cast<CalendarLocal*>(mCalendar);
 
-		kDebug(5950) << "AlarmCalendar::load(" << mUrl.prettyUrl() << ")\n";
+		kDebug(5950) <<"AlarmCalendar::load(" << mUrl.prettyUrl() <<")";
 		QString tmpFile;
 		if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
 		{
-			kError(5950) << "AlarmCalendar::load(): Download failure" << endl;
+			kError(5950) <<"AlarmCalendar::load(): Download failure";
 			KMessageBox::error(0, i18n("Cannot download calendar:\n%1", mUrl.prettyUrl()));
 			return -1;
 		}
-		kDebug(5950) << "AlarmCalendar::load(): --- Downloaded to " << tmpFile << endl;
+		kDebug(5950) <<"AlarmCalendar::load(): --- Downloaded to" << tmpFile;
 		calendar->setTimeSpec(Preferences::timeZone(true));
 		if (!calendar->load(tmpFile))
 		{
@@ -273,7 +273,7 @@ int AlarmCalendar::load()
 			KFileItem fi(uds, mUrl);
 			if (!fi.size())
 				return 0;     // file is zero length
-			kError(5950) << "AlarmCalendar::load(): Error loading calendar file '" << tmpFile << "'" << endl;
+			kError(5950) <<"AlarmCalendar::load(): Error loading calendar file '" << tmpFile <<"'";
 			KMessageBox::error(0, i18n("Error loading calendar:\n%1\n\nPlease fix or delete the file.", mUrl.prettyUrl()));
 			// load() could have partially populated the calendar, so clear it out
 			calendar->close();
@@ -299,12 +299,12 @@ bool AlarmCalendar::reload()
 		return false;
 	if (mCalType == RESOURCES)
 	{
-		kDebug(5950) << "AlarmCalendar::reload(RESOURCES)" << endl;
+		kDebug(5950) <<"AlarmCalendar::reload(RESOURCES)";
 		return mCalendar->reload();
 	}
 	else
 	{
-		kDebug(5950) << "AlarmCalendar::reload(): " << mUrl.prettyUrl() << endl;
+		kDebug(5950) <<"AlarmCalendar::reload():" << mUrl.prettyUrl();
 		close();
 		return open();
 	}
@@ -320,7 +320,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		return false;
 	if (mCalType == RESOURCES)
 	{
-		kDebug(5950) << "AlarmCalendar::saveCal(RESOURCES)" << endl;
+		kDebug(5950) <<"AlarmCalendar::saveCal(RESOURCES)";
 		mCalendar->save();    // this emits signals resourceSaved(ResourceCalendar*)
 	}
 	else
@@ -328,13 +328,13 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		if (!mOpen && newFile.isNull())
 			return false;
 
-		kDebug(5950) << "AlarmCalendar::saveCal(\"" << newFile << "\", " << mEventType << ")\n";
+		kDebug(5950) <<"AlarmCalendar::saveCal(\"" << newFile <<"\"," << mEventType <<")";
 		QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
 		if (mCalType == LOCAL_VCAL  &&  newFile.isNull()  &&  mUrl.isLocalFile())
 			saveFilename = mICalUrl.path();
 		if (!static_cast<CalendarLocal*>(mCalendar)->save(saveFilename, new ICalFormat))
 		{
-			kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): failed.\n";
+			kError(5950) <<"AlarmCalendar::saveCal(" << saveFilename <<"): failed.";
 			KMessageBox::error(0, i18n("Failed to save calendar to\n'%1'", mICalUrl.prettyUrl()));
 			return false;
 		}
@@ -343,7 +343,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		{
 			if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
 			{
-				kError(5950) << "AlarmCalendar::saveCal(" << saveFilename << "): upload failed.\n";
+				kError(5950) <<"AlarmCalendar::saveCal(" << saveFilename <<"): upload failed.";
 				KMessageBox::error(0, i18n("Cannot upload calendar to\n'%1'", mICalUrl.prettyUrl()));
 				return false;
 			}
@@ -430,7 +430,7 @@ void AlarmCalendar::slotResourceLoaded(AlarmResource* resource, bool success)
 */
 void AlarmCalendar::reloadFromCache(const QString& resourceID)
 {
-	kDebug(5950) << "AlarmCalendar::reloadFromCache(" << resourceID << ")\n";
+	kDebug(5950) <<"AlarmCalendar::reloadFromCache(" << resourceID <<")";
 	if (mCalendar  &&  mCalType == RESOURCES)
 	{
 		AlarmResource* resource = static_cast<AlarmResources*>(mCalendar)->resourceWithId(resourceID);
@@ -450,7 +450,7 @@ void AlarmCalendar::slotDaemonRegistered(bool newStatus)
 	resources->inhibitDefaultReload(true, newStatus);
 	if (!newStatus)
 	{
-		kDebug(5950) << "AlarmCalendar::slotDaemonRegistered(false): reload resources" << endl;
+		kDebug(5950) <<"AlarmCalendar::slotDaemonRegistered(false): reload resources";
 		resources->loadIfNotReloaded();    // reload any resources which need to be downloaded
 	}
 }
@@ -468,15 +468,15 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	                                   QString::fromLatin1("*.vcs *.ics|%1").arg(i18n("Calendar Files")), parent);
 	if (url.isEmpty())
 	{
-		kError(5950) << "AlarmCalendar::importAlarms(): Empty URL" << endl;
+		kError(5950) <<"AlarmCalendar::importAlarms(): Empty URL";
 		return false;
 	}
 	if (!url.isValid())
 	{
-		kDebug(5950) << "AlarmCalendar::importAlarms(): Invalid URL" << endl;
+		kDebug(5950) <<"AlarmCalendar::importAlarms(): Invalid URL";
 		return false;
 	}
-	kDebug(5950) << "AlarmCalendar::importAlarms(" << url.prettyUrl() << ")" << endl;
+	kDebug(5950) <<"AlarmCalendar::importAlarms(" << url.prettyUrl() <<")";
 
 	bool success = true;
 	QString filename;
@@ -486,7 +486,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		filename = url.path();
 		if (!KStandardDirs::exists(filename))
 		{
-			kDebug(5950) << "AlarmCalendar::importAlarms(): File '" << url.prettyUrl() << "' not found" << endl;
+			kDebug(5950) <<"AlarmCalendar::importAlarms(): File '" << url.prettyUrl() <<"' not found";
 			KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyUrl()));
 			return false;
 		}
@@ -495,11 +495,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	{
 		if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
 		{
-			kError(5950) << "AlarmCalendar::importAlarms(): Download failure" << endl;
+			kError(5950) <<"AlarmCalendar::importAlarms(): Download failure";
 			KMessageBox::error(parent, i18n("Cannot download calendar:\n%1", url.prettyUrl()));
 			return false;
 		}
-		kDebug(5950) << "--- Downloaded to " << filename << endl;
+		kDebug(5950) <<"--- Downloaded to" << filename;
 	}
 
 	// Read the calendar and add its alarms to the current calendars
@@ -507,7 +507,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	success = cal.load(filename);
 	if (!success)
 	{
-		kDebug(5950) << "AlarmCalendar::importAlarms(): error loading calendar '" << filename << "'" << endl;
+		kDebug(5950) <<"AlarmCalendar::importAlarms(): error loading calendar '" << filename <<"'";
 		KMessageBox::error(parent, i18n("Could not load calendar '%1'.", url.prettyUrl()));
 	}
 	else
@@ -733,7 +733,7 @@ Event* AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 	bool noNewId = newId.isEmpty();
 	if (!noNewId  &&  oldEventId == newId)
 	{
-		kError(5950) << "AlarmCalendar::modifyEvent(): same IDs" << endl;
+		kError(5950) <<"AlarmCalendar::modifyEvent(): same IDs";
 		return 0;
 	}
 	if (!mOpen)
@@ -826,7 +826,7 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 Event* AlarmCalendar::createKCalEvent(const KAEvent& ev, const QString& baseID, bool original, bool cancelCancelledDefer) const
 {
 	if (mCalType != RESOURCES)
-		kFatal(5950) << "AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar" << endl;
+		kFatal(5950) <<"AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar";
 	// If the event exists in the calendar, we want to keep any custom
 	// properties. So copy the calendar KCal::Event to base the new one on.
 	QString id = baseID.isEmpty() ? ev.id() : baseID;
@@ -894,7 +894,7 @@ Event::List AlarmCalendar::events(KCalEvent::Status type)
 */
 Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status type)
 {
-	kDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from << " - " << to << ")\n";
+	kDebug(5950) <<"AlarmCalendar::eventsWithAlarms(" << from <<" -" << to <<")";
 	Event::List evnts;
 	if (!mCalendar)
 		return evnts;
@@ -949,7 +949,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 					dt = alarm->time();
 				if (dt >= from  &&  dt <= to)
 				{
-					kDebug(5950) << "AlarmCalendar::events() '" << e->summary()
+					kDebug(5950) <<"AlarmCalendar::events() '" << e->summary()
 					              << "': " << dt << endl;
 					evnts.append(e);
 					break;

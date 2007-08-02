@@ -488,7 +488,7 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 						 * is not lost should the user later change the recurrence count.
 						 */
 						KDateTime end = endDateTime();
-kDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString()<<endl;
+kDebug()<<"29th recurrence: count="<<count<<", end date="<<end.toString();
 						int count1 = rrule1->durationTo(end)
 						             - (rrule1->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
 						if (count1 > 0)

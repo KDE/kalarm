@@ -131,7 +131,7 @@ bool Daemon::checkDBusResult(const char* funcname)
 	QDBusError err = mDBusDaemon->lastError();
 	if (!err.isValid())
 		return true;    // no error
-	kError(5950) << "Daemon: " << funcname << "() D-Bus call failed: " << err.message() << endl;
+	kError(5950) <<"Daemon:" << funcname <<"() D-Bus call failed:" << err.message();
 	return false;
 }
 
@@ -141,7 +141,7 @@ bool Daemon::checkDBusResult(const char* funcname)
 */
 bool Daemon::start()
 {
-	kDebug(5950) << "Daemon::start()\n";
+	kDebug(5950) <<"Daemon::start()";
 	updateRegisteredStatus();
 	switch (mStatus)
 	{
@@ -157,11 +157,11 @@ bool Daemon::start()
 				if (!mNotFoundShown)
 					KMessageBox::error(0, i18n("Alarm daemon not found."));
 				mNotFoundShown = true;
-				kError() << "Daemon::startApp(): " DAEMON_APP_NAME " not found" << endl;
+				kError() <<"Daemon::startApp():" DAEMON_APP_NAME" not found";
 				return false;
 			}
 			KToolInvocation::kdeinitExec(execStr);
-			kDebug(5950) << "Daemon::start(): Alarm daemon started" << endl;
+			kDebug(5950) <<"Daemon::start(): Alarm daemon started";
 			mStartTimeout = 5000/startCheckInterval + 1;    // check daemon status for 5 seconds before giving up
 			mStartTimer = new QTimer(mInstance);
 			connect(mStartTimer, SIGNAL(timeout()), mInstance, SLOT(checkIfStarted()));
@@ -198,7 +198,7 @@ bool Daemon::registerWith(bool reregister)
 		return true;
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
-	kDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
+	kDebug(5950) << (reregister ?"Daemon::reregisterWith():" :"Daemon::registerWith():") << (disabledIfStopped ?"NO_START" :"COMMAND_LINE");
 	bool result;
 	if (reregister)
 	{
@@ -227,7 +227,7 @@ bool Daemon::registerWith(bool reregister)
 */
 void Daemon::registrationResult(bool reregister, int result)
 {
-	kDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
+	kDebug(5950) <<"Daemon::registrationResult(" << reregister <<")";
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
 	bool firstTime = !mInitialised;
@@ -240,7 +240,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			// We've successfully registered with the daemon, but the daemon can't
 			// find the KAlarm executable so won't be able to restart KAlarm if
 			// KAlarm exits.
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call: " << KGlobal::mainComponent().aboutData()->appName() << " not found\n";
+			kError(5950) <<"Daemon::registrationResult(" << reregister <<"): registerApp D-Bus call:" << KGlobal::mainComponent().aboutData()->appName() <<" not found";
 			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
 			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
 			                            QLatin1String(DAEMON_APP_NAME),
@@ -248,7 +248,7 @@ void Daemon::registrationResult(bool reregister, int result)
 			break;
 		case KAlarmd::FAILURE:
 		default:
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call failed -> " << result << endl;
+			kError(5950) <<"Daemon::registrationResult(" << reregister <<"): registerApp D-Bus call failed ->" << result;
 			if (!reregister)
 			{
 				if (mStatus == REGISTERED)
@@ -275,7 +275,7 @@ void Daemon::registrationResult(bool reregister, int result)
 		// The alarm daemon has loaded the calendar
 		setStatus(REGISTERED);
 		mRegisterFailMsg = false;
-		kDebug(5950) << "Daemon::start(): daemon startup complete" << endl;
+		kDebug(5950) <<"Daemon::start(): daemon startup complete";
 	}
 }
 
@@ -304,7 +304,7 @@ void Daemon::checkIfStarted()
 	mStartTimer = 0;
 	if (err)
 	{
-		kError(5950) << "Daemon::checkIfStarted(): failed to start daemon" << endl;
+		kError(5950) <<"Daemon::checkIfStarted(): failed to start daemon";
 		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)", QLatin1String(DAEMON_APP_NAME)));
 	}
 }
@@ -344,7 +344,7 @@ void Daemon::updateRegisteredStatus(bool timeout)
 		}
 	}
 	if (mStatus != oldStatus)
-		kDebug(5950) << "Daemon::updateRegisteredStatus() -> " << (mStatus==STOPPED?"STOPPED":mStatus==RUNNING?"RUNNING":mStatus==READY?"READY":mStatus==REGISTERED?"REGISTERED":"??") << endl;
+		kDebug(5950) <<"Daemon::updateRegisteredStatus() ->" << (mStatus==STOPPED?"STOPPED":mStatus==RUNNING?"RUNNING":mStatus==READY?"READY":mStatus==REGISTERED?"REGISTERED":"??");
 }
 
 /******************************************************************************
@@ -378,7 +378,7 @@ void Daemon::connectRegistered(QObject* receiver, const char* slot)
 */
 bool Daemon::stop()
 {
-	kDebug(5950) << "Daemon::stop()" << endl;
+	kDebug(5950) <<"Daemon::stop()";
 	if (!isDaemonRegistered())
 		return true;
 	daemonDBus()->quit();
@@ -392,7 +392,7 @@ bool Daemon::stop()
 */
 bool Daemon::reset()
 {
-	kDebug(5950) << "Daemon::reset()" << endl;
+	kDebug(5950) <<"Daemon::reset()";
 	if (!isDaemonRegistered())
 		return false;
 	daemonDBus()->resetResource(QString());
@@ -404,7 +404,7 @@ bool Daemon::reset()
 */
 void Daemon::reload()
 {
-	kDebug(5950) << "Daemon::reload()\n";
+	kDebug(5950) <<"Daemon::reload()";
 	daemonDBus()->reloadResource(QString());
 	checkDBusResult("reloadResource");
 }
@@ -414,10 +414,10 @@ void Daemon::reload()
 */
 void Daemon::reloadResource(const QString& resourceID)
 {
-	kDebug(5950) << "Daemon::reloadResource(" << resourceID << ")\n";
+	kDebug(5950) <<"Daemon::reloadResource(" << resourceID <<")";
 	daemonDBus()->reloadResource(resourceID);
 	if (!checkDBusResult("reloadResource"))
-		kError(5950) << "Daemon::reloadResource(): reloadResource(" << resourceID << ") D-Bus send failed" << endl;
+		kError(5950) <<"Daemon::reloadResource(): reloadResource(" << resourceID <<") D-Bus send failed";
 }
 
 /******************************************************************************
@@ -476,7 +476,7 @@ void Daemon::calendarIsEnabled(bool enabled)
 */
 void Daemon::setAlarmsEnabled(bool enable)
 {
-	kDebug(5950) << "Daemon::setAlarmsEnabled(" << enable << ")\n";
+	kDebug(5950) <<"Daemon::setAlarmsEnabled(" << enable <<")";
 	if (enable  &&  !checkIfRunning())
 	{
 		// The daemon is not running, so start it
@@ -685,7 +685,7 @@ void Daemon::eventHandled(const QString& eventId)
 */
 void Daemon::notifyEventHandled(const QString& eventId, bool reloadCal)
 {
-	kDebug(5950) << "Daemon::notifyEventHandled(" << eventId << (reloadCal ? "): reload" : ")") << endl;
+	kDebug(5950) <<"Daemon::notifyEventHandled(" << eventId << (reloadCal ?"): reload" :")");
 	daemonDBus()->eventHandled(eventId, reloadCal);
 	checkDBusResult("eventHandled");
 }
@@ -716,7 +716,7 @@ bool Daemon::isDaemonRegistered()
 NotificationHandler::NotificationHandler()
 	: QObject()
 {
-	kDebug(5950) << "NotificationHandler::NotificationHandler()\n";
+	kDebug(5950) <<"NotificationHandler::NotificationHandler()";
 	(void)new NotifyAdaptor(this);
 	QDBusConnection::sessionBus().registerObject(NOTIFY_DBUS_OBJECT, this);
 }
@@ -728,22 +728,22 @@ NotificationHandler::NotificationHandler()
 */
 void NotificationHandler::alarmDaemonUpdate(int calendarStatus)
 {
-	kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(" << calendarStatus << ")\n";
+	kDebug(5950) <<"NotificationHandler::alarmDaemonUpdate(" << calendarStatus <<")";
 	KAlarmd::CalendarStatus status = KAlarmd::CalendarStatus(calendarStatus);
 	bool enabled = false;
 	switch (status)
 	{
 		case KAlarmd::CALENDAR_UNAVAILABLE:
 			// Calendar is not available for monitoring
-			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(CALENDAR_UNAVAILABLE)\n";
+			kDebug(5950) <<"NotificationHandler::alarmDaemonUpdate(CALENDAR_UNAVAILABLE)";
 			break;
 		case KAlarmd::CALENDAR_DISABLED:
 			// Calendar is available for monitoring but is not currently being monitored
-			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(DISABLE_CALENDAR)\n";
+			kDebug(5950) <<"NotificationHandler::alarmDaemonUpdate(DISABLE_CALENDAR)";
 			break;
 		case KAlarmd::CALENDAR_ENABLED:
 			// Calendar is currently being monitored
-			kDebug(5950) << "NotificationHandler::alarmDaemonUpdate(ENABLE_CALENDAR)\n";
+			kDebug(5950) <<"NotificationHandler::alarmDaemonUpdate(ENABLE_CALENDAR)";
 			enabled = true;
 			break;
 		default:
@@ -803,7 +803,7 @@ AlarmEnableAction::AlarmEnableAction(QObject* parent)
 */
 void AlarmEnableAction::setCheckedActual(bool running)
 {
-	kDebug(5950) << "AlarmEnableAction::setCheckedActual(" << running << ")\n";
+	kDebug(5950) <<"AlarmEnableAction::setCheckedActual(" << running <<")";
 	if (running != isChecked()  ||  !mInitialised)
 	{
 		KToggleAction::setChecked(running);
@@ -817,7 +817,7 @@ void AlarmEnableAction::setCheckedActual(bool running)
 */
 void AlarmEnableAction::setChecked(bool check)
 {
-	kDebug(5950) << "AlarmEnableAction::setChecked(" << check << ")\n";
+	kDebug(5950) <<"AlarmEnableAction::setChecked(" << check <<")";
 	if (check != isChecked())
 	{
 		if (check)

@@ -120,13 +120,13 @@ bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 		default:
 			break;
 	}
-	kDebug(5950) << "AlarmListDelegate::editorEvent()" << endl;
+	kDebug(5950) <<"AlarmListDelegate::editorEvent()";
 	AlarmListView* view = static_cast<AlarmListView*>(parent());
 	if (index.isValid())
 	{
 		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
 		KCal::Event* kcalEvent = static_cast<KCal::Event*>(source.internalPointer());
-kDebug()<<"kcalEvent="<<(void*)kcalEvent<<endl;
+kDebug()<<"kcalEvent="<<(void*)kcalEvent;
 		KAEvent event(kcalEvent);
 		if (event.expired()  ||  !AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
 			KAlarm::viewAlarm(event, view);

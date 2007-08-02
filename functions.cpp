@@ -151,7 +151,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCol
 */
 UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParent, int options, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::addEvent(): " << event.id() << endl;
+	kDebug(5950) <<"KAlarm::addEvent():" << event.id();
 	UpdateStatus status = UPDATE_OK;
 	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
 		status = UPDATE_FAILED;
@@ -189,7 +189,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 */
 UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::addEvents(" << events.count() << ")\n";
+	kDebug(5950) <<"KAlarm::addEvents(" << events.count() <<")";
 	if (events.isEmpty())
 		return UPDATE_OK;
 	int warnErr = 0;
@@ -203,7 +203,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
 		if (!resource)
 		{
-			kDebug(5950) << "KAlarm::addEvents(): no resource" << endl;
+			kDebug(5950) <<"KAlarm::addEvents(): no resource";
 			status = UPDATE_FAILED;
 		}
 	}
@@ -256,7 +256,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 */
 bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
-	kDebug(5950) << "KAlarm::addArchivedEvent(" << event.id() << ")\n";
+	kDebug(5950) <<"KAlarm::addArchivedEvent(" << event.id() <<")";
 	KAEvent oldEvent = event;     // so that we can reinstate the event if there's an error
 	bool archiving = (event.category() == KCalEvent::ACTIVE);
 	if (archiving)
@@ -292,7 +292,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 */
 UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgParent)
 {
-	kDebug(5950) << "KAlarm::addTemplate(): " << event.id() << endl;
+	kDebug(5950) <<"KAlarm::addTemplate():" << event.id();
 	UpdateStatus status = UPDATE_OK;
 
 	// Add the template to the calendar file
@@ -323,7 +323,7 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 */
 UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::modifyEvent(): '" << oldEvent.id() << endl;
+	kDebug(5950) <<"KAlarm::modifyEvent(): '" << oldEvent.id();
 
 	UpdateStatus status = UPDATE_OK;
 	if (!newEvent.valid())
@@ -380,7 +380,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* ms
 */
 UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete, bool incRevision)
 {
-	kDebug(5950) << "KAlarm::updateEvent(): " << event.id() << endl;
+	kDebug(5950) <<"KAlarm::updateEvent():" << event.id();
 
 	if (!event.valid())
 		deleteEvent(event, archiveOnDelete);
@@ -437,7 +437,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool 
 
 UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::deleteEvents(" << events.count() << ")\n";
+	kDebug(5950) <<"KAlarm::deleteEvents(" << events.count() <<")";
 	if (events.isEmpty())
 		return UPDATE_OK;
 	int warnErr = 0;
@@ -498,7 +498,7 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 */
 UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 {
-	kDebug(5950) << "KAlarm::deleteTemplates(" << eventIDs.count() << ")\n";
+	kDebug(5950) <<"KAlarm::deleteTemplates(" << eventIDs.count() <<")";
 	if (eventIDs.isEmpty())
 		return UPDATE_OK;
 	int warnErr = 0;
@@ -537,7 +537,7 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 */
 void deleteDisplayEvent(const QString& eventID)
 {
-	kDebug(5950) << "KAlarm::deleteDisplayEvent(" << eventID << ")\n";
+	kDebug(5950) <<"KAlarm::deleteDisplayEvent(" << eventID <<")";
 	AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
 	if (cal)
 		cal->deleteEvent(eventID, true);   // save calendar after deleting
@@ -558,7 +558,7 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* resource, QWidget* m
 
 UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 {
-	kDebug(5950) << "KAlarm::reactivateEvents(" << events.count() << ")\n";
+	kDebug(5950) <<"KAlarm::reactivateEvents(" << events.count() <<")";
 	ineligibleIDs.clear();
 	if (events.isEmpty())
 		return UPDATE_OK;
@@ -569,7 +569,7 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
 	if (!resource)
 	{
-		kDebug(5950) << "KAlarm::reactivateEvents(): no resource" << endl;
+		kDebug(5950) <<"KAlarm::reactivateEvents(): no resource";
 		status = UPDATE_FAILED;
 		warnErr = events.count();
 	}
@@ -650,7 +650,7 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 */
 UpdateStatus enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent)
 {
-	kDebug(5950) << "KAlarm::enableEvents(" << events.count() << ")\n";
+	kDebug(5950) <<"KAlarm::enableEvents(" << events.count() <<")";
 	if (events.isEmpty())
 		return UPDATE_OK;
 	UpdateStatus status = UPDATE_OK;
@@ -696,7 +696,7 @@ void purgeArchive(int purgeDays)
 {
 	if (purgeDays < 0)
 		return;
-	kDebug(5950) << "KAlarm::purgeArchive(" << purgeDays << ")\n";
+	kDebug(5950) <<"KAlarm::purgeArchive(" << purgeDays <<")";
 	QDate cutoff = QDate::currentDate().addDays(-purgeDays);
 	AlarmResource* resource = AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED);
 	if (!resource)
@@ -811,7 +811,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 			editNewAlarm(parent, &templateEvent);
 			return true;
 		}
-		kWarning(5950) << "KAlarm::editNewAlarm(" << templateName << "): template not found" << endl;
+		kWarning(5950) <<"KAlarm::editNewAlarm(" << templateName <<"): template not found";
 		result = false;
 	}
 	editNewAlarm(parent);
@@ -877,13 +877,13 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 	const KCal::Event* kcalEvent = resources->event(eventID);
 	if (!kcalEvent)
 	{
-		kError(5950) << "KAlarm::editAlarm(): event ID not found: " << eventID << endl;
+		kError(5950) <<"KAlarm::editAlarm(): event ID not found:" << eventID;
 		return false;
 	}
 	AlarmResource* resource = resources->resource(kcalEvent);
 	if (!resource  ||  !resource->writable(kcalEvent))
 	{
-		kError(5950) << "KAlarm::editAlarm(" << eventID << "): read-only" << endl;
+		kError(5950) <<"KAlarm::editAlarm(" << eventID <<"): read-only";
 		return false;
 	}
 	switch (KCalEvent::status(kcalEvent))
@@ -892,7 +892,7 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 		case KCalEvent::TEMPLATE:
 			break;
 		default:
-			kError(5950) << "KAlarm::editAlarm(" << eventID << "): event not active or template" << endl;
+			kError(5950) <<"KAlarm::editAlarm(" << eventID <<"): event not active or template";
 			return false;
 	}
 	KAEvent event(kcalEvent);
@@ -979,7 +979,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 */
 void resetDaemon()
 {
-	kDebug(5950) << "KAlarm::resetDaemon()" << endl;
+	kDebug(5950) <<"KAlarm::resetDaemon()";
 	if (!resetDaemonQueued)
 	{
 		resetDaemonQueued = true;
@@ -998,7 +998,7 @@ void resetDaemonIfQueued()
 {
 	if (resetDaemonQueued)
 	{
-		kDebug(5950) << "KAlarm::resetDaemonIfNeeded()" << endl;
+		kDebug(5950) <<"KAlarm::resetDaemonIfNeeded()";
 		AlarmCalendar::resources()->reload();
 
 		// Close any message windows for alarms which are now disabled
@@ -1050,7 +1050,7 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 		// Program is not already running, so start it
 		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dbusService))
 		{
-			kError(5950) << "KAlarm::runProgram(): couldn't start " << program << " (" << errorMessage << ")\n";
+			kError(5950) <<"KAlarm::runProgram(): couldn't start" << program <<" (" << errorMessage <<")";
 			return false;
 		}
 		if (!windowName.isEmpty())
@@ -1066,7 +1066,7 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 			QDBusInterface iface(dbusService, QString(), QString());
 			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("minimize"), QList<QVariant>());
 			if (err.isValid())
-				kError(5950) << "KAlarm::runProgram(" << program << "): minimize D-Bus call failed: " << err.message() << endl;
+				kError(5950) <<"KAlarm::runProgram(" << program <<"): minimize D-Bus call failed:" << err.message();
 		}
 	}
 	errorMessage.clear();
@@ -1477,15 +1477,15 @@ bool sendToKOrganizer(const KAEvent& event)
 	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("addIncidence"), args);
 	if (!reply.isValid())
 	{
-		kError(5950) << "sendToKOrganizer(): addIncidence(" << uid << ") D-Bus call failed: " << reply.error().message() << endl;
+		kError(5950) <<"sendToKOrganizer(): addIncidence(" << uid <<") D-Bus call failed:" << reply.error().message();
 		return false;
 	}
 	if (!reply.value())
 	{
-		kError(5950) << "sendToKOrganizer(): addIncidence(" << uid << ") D-Bus call returned false" << endl;
+		kError(5950) <<"sendToKOrganizer(): addIncidence(" << uid <<") D-Bus call returned false";
 		return false;
 	}
-	kDebug(5950) << "sendToKOrganizer(" << uid << "): success\n";
+	kDebug(5950) <<"sendToKOrganizer(" << uid <<"): success";
 	return true;
 }
 
@@ -1502,15 +1502,15 @@ bool deleteFromKOrganizer(const QString& eventID)
 	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
 	if (!reply.isValid())
 	{
-		kError(5950) << "deleteFromKOrganizer(): deleteIncidence(" << newID << ") D-Bus call failed: " << reply.error().message() << endl;
+		kError(5950) <<"deleteFromKOrganizer(): deleteIncidence(" << newID <<") D-Bus call failed:" << reply.error().message();
 		return false;
 	}
 	if (!reply.value())
 	{
-		kError(5950) << "deleteFromKOrganizer(): deleteIncidence(" << newID << ") D-Bus call returned false" << endl;
+		kError(5950) <<"deleteFromKOrganizer(): deleteIncidence(" << newID <<") D-Bus call returned false";
 		return false;
 	}
-	kDebug(5950) << "deleteFromKOrganizer(" << newID << "): success\n";
+	kDebug(5950) <<"deleteFromKOrganizer(" << newID <<"): success";
 	return true;
 }
 

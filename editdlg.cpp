@@ -1616,7 +1616,7 @@ void EditAlarmDlg::slotTry()
 	QString text;
 	if (checkText(text))
 	{
-kDebug()<<"Text="<<text<<":"<<endl;
+kDebug()<<"Text="<<text<<":";
 		if (mEmailRadio->isChecked())
 		{
 			if (!checkEmailData()

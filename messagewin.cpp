@@ -178,7 +178,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mNoCloseConfirm(false),
 	  mDisableDeferral(false)
 {
-	kDebug(5950) << "MessageWin::MessageWin(event)" << endl;
+	kDebug(5950) <<"MessageWin::MessageWin(event)";
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MessageWin");    // used by LikeBack
@@ -248,7 +248,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime,
 	  mNoCloseConfirm(false),
 	  mDisableDeferral(false)
 {
-	kDebug(5950) << "MessageWin::MessageWin(errmsg)" << endl;
+	kDebug(5950) <<"MessageWin::MessageWin(errmsg)";
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("ErrorWin");    // used by LikeBack
@@ -276,7 +276,7 @@ MessageWin::MessageWin()
 	  mNoCloseConfirm(false),
 	  mDisableDeferral(false)
 {
-	kDebug(5950) << "MessageWin::MessageWin(restore)\n";
+	kDebug(5950) <<"MessageWin::MessageWin(restore)";
 	setAttribute(WidgetFlags);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("RestoredMsgWin");    // used by LikeBack
@@ -288,7 +288,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-	kDebug(5950) << "MessageWin::~MessageWin(" << mEventID << ")" << endl;
+	kDebug(5950) <<"MessageWin::~MessageWin(" << mEventID <<")";
 	stopPlay();
 	mWindowList.removeAll(this);
 	if (!mRecreating)
@@ -799,7 +799,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mDontShowAgain       = config.readEntry("DontShowAgain", QString());
 	mShowEdit            = false;
 	mResource            = 0;
-	kDebug(5950) << "MessageWin::readProperties(" << mEventID << ")" << endl;
+	kDebug(5950) <<"MessageWin::readProperties(" << mEventID <<")";
 	if (mAlarmType != KAAlarm::INVALID_ALARM)
 	{
 		// Recreate the event from the calendar file (if possible)
@@ -844,7 +844,7 @@ void MessageWin::redisplayAlarms()
 			if (!findEvent(event.id()))
 			{
 				// This event should be displayed, but currently isn't being
-				kDebug(5950) << "MessageWin::redisplayAlarms(): " << event.id() << endl;
+				kDebug(5950) <<"MessageWin::redisplayAlarms():" << event.id();
 				KAAlarm alarm = event.convertDisplayingAlarm();
 				bool login = alarm.repeatAtLogin();
 				int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
@@ -878,7 +878,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 		event.setArchive();     // ensure that it gets re-archived if it's saved
 		event.setCategory(KCalEvent::ACTIVE);
 		if (mEventID != event.id())
-			kError(5950) << "MessageWin::retrieveEvent(): wrong event ID" << endl;
+			kError(5950) <<"MessageWin::retrieveEvent(): wrong event ID";
 		event.setEventID(mEventID);
 		resource  = 0;
 		showEdit  = true;
@@ -911,16 +911,16 @@ bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event,
 */
 void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 {
-	kDebug(5950) << "MessageWin::alarmShowing(" << event.id() << ", " << KAAlarm::debugType(mAlarmType) << ")\n";
+	kDebug(5950) <<"MessageWin::alarmShowing(" << event.id() <<"," << KAAlarm::debugType(mAlarmType) <<")";
 	if (!kcalEvent)
 		kcalEvent = AlarmCalendar::resources()->event(event.id());
 	if (!kcalEvent)
-		kError(5950) << "MessageWin::alarmShowing(): event ID not found: " << event.id() << endl;
+		kError(5950) <<"MessageWin::alarmShowing(): event ID not found:" << event.id();
 	else
 	{
 		KAAlarm alarm = event.alarm(mAlarmType);
 		if (!alarm.valid())
-			kError(5950) << "MessageWin::alarmShowing(): alarm type not found: " << event.id() << ":" << mAlarmType << endl;
+			kError(5950) <<"MessageWin::alarmShowing(): alarm type not found:" << event.id() <<":" << mAlarmType;
 		else
 		{
 			// Copy the alarm to the displaying calendar in case of a crash, etc.
@@ -1023,7 +1023,7 @@ void MessageWin::slotSpeak()
 		QString error;
 		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
 		{
-			kDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
+			kDebug(5950) <<"MessageWin::slotSpeak(): failed to start kttsd:" << error;
 			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
 			return;
 		}
@@ -1033,7 +1033,7 @@ void MessageWin::slotSpeak()
 	QDBusMessage reply = kttsdDBus.call(QLatin1String("sayMessage"), mMessage, QString());
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
-		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() D-Bus error" << endl;
+		kDebug(5950) <<"MessageWin::slotSpeak(): sayMessage() D-Bus error";
 		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DBus call sayMessage failed"));
 	}
 }
@@ -1051,7 +1051,7 @@ void MessageWin::slotPlayAudio()
 #endif
 	if (0)
 	{
-		kError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
+		kError(5950) <<"MessageWin::playAudio(): Open failure:" << mAudioFile;
 		KMessageBox::error(this, i18n("Cannot open audio file:\n%1", mAudioFile));
 		return;
 	}
@@ -1080,7 +1080,7 @@ void MessageWin::checkAudioPlay()
 	mPlayedOnce = true;
 
 	// Start playing the file, either for the first time or again
-	kDebug(5950) << "MessageWin::checkAudioPlay(): start\n";
+	kDebug(5950) <<"MessageWin::checkAudioPlay(): start";
 	mAudioObject->play();
 }
 
@@ -1384,7 +1384,7 @@ void MessageWin::slotOk()
 */
 void MessageWin::slotShowKMailMessage()
 {
-	kDebug(5950) << "MessageWin::slotShowKMailMessage()\n";
+	kDebug(5950) <<"MessageWin::slotShowKMailMessage()";
 	if (!mKMailSerialNumber)
 		return;
 	QString err = KAlarm::runKMail(false);
@@ -1396,7 +1396,7 @@ void MessageWin::slotShowKMailMessage()
 	org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
 	QDBusReply<bool> reply = kmail.showMail((qulonglong)mKMailSerialNumber, QString());
 	if (!reply.isValid())
-		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail D-Bus call failed: " << reply.error().message() << endl;
+		kError(5950) <<"MessageWin::slotShowKMailMessage(): kmail D-Bus call failed:" << reply.error().message();
 	else if (!reply.value())
 		KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
 }
