@@ -1297,7 +1297,6 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 		 */
 		if (!original  &&  checkRecur() != KARecurrence::NO_RECUR)
 		{
-#warning Adjust next line for KDE4
 			QDateTime dt = KDateTime(mNextMainDateTime).toTimeSpec(mStartDateTime).dateTime();
 			ev->setCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY,
 			                      dt.toString(mNextMainDateTime.isDateOnly() ? "yyyyMMdd" : "yyyyMMddThhmmss"));
