@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#define DAEMON_VERSION            "4.1.2"       // kalarmd version number
+#define DAEMON_VERSION            "4.1.3"       // kalarmd version number
 #define DAEMON_APP_NAME           "kalarmd"     // DCOP name of alarm daemon application
 #define DAEMON_DCOP_OBJECT        "ad"          // DCOP name of kalarmd's DCOP interface
 

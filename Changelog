@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.14 --- 9 June 2007 ===
+=== Version 1.4.14 --- 5 August 2007 ===
+Fix handling of exception dates in recurrences.
 In sound file dialogue change Play button to a Stop button while playing a file.
 
 === Version 1.4.13 --- 18 May 2007 ===
