@@ -10,12 +10,23 @@ Use kconf_update to convert old config file settings.
 Change numeric codes in config file to strings for long-term maintainability.
 Rename Defaults section options in config file.
 
-=== Version 1.4.12 --- 9 May 2007 ===
+=== Version 1.4.14 --- 5 August 2007 ===
+Fix handling of exception dates in recurrences.
+In sound file dialogue change Play button to a Stop button while playing a file.
+
+=== Version 1.4.13 --- 18 May 2007 ===
+Fix time value in templates not being stored.
+Expand time spin boxes to make room for all digits.
+Make Preferences dialogue non-modal.
+
+=== Version 1.4.12 (KDE 3.5.7) --- 11 May 2007 ===
 Display advance reminders for each occurrence of recurring alarms.
 Fix Undo of deletion of active alarms.
 Disable simple repetition controls if repetitions can't fit between recurrences.
 Make the system tray tooltip take account of alarm repetitions.
 Show repetition & special action status by button states in alarm edit dialogue.
+Fix reminder alarms displaying very big numbers for how long until alarm is due.
+Fix KMail omitting attachments from email alarms (if KMail is the email client).
 
 === Version 1.4.11 --- 16 April 2007 ===
 Prevent pre-alarm actions being executed multiple times when alarm is triggered.

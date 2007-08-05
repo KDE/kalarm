@@ -46,8 +46,8 @@ using namespace KCal;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.2"); }
-int     KAEvent::calVersion()        { return KAlarm::Version(1,9,2); }
+QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.7"); }
+int     KAEvent::calVersion()        { return KAlarm::Version(1,9,7); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -65,6 +65,7 @@ static const QString AUTO_CLOSE_FLAG       = QLatin1String("LATECLOSE");
 static const QString TEMPL_AFTER_TIME_FLAG = QLatin1String("TMPLAFTTIME");
 static const QString KMAIL_SERNUM_FLAG     = QLatin1String("KMAIL");
 
+static const QByteArray NEXT_RECUR_PROPERTY("NEXTRECUR");     // X-KDE-KALARM-NEXTRECUR property
 static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");          // X-KDE-KALARM-SAVE property
 static const QByteArray LOG_PROPERTY("LOG");                  // X-KDE-KALARM-LOG property
 static const QString xtermURL = QLatin1String("xterm:");
@@ -369,7 +370,27 @@ void KAEvent::set(const Event* event)
 		mStartDateTime.setDateOnly(true);
 	}
 	mNextMainDateTime = mStartDateTime;
-	mSaveDateTime     = event->created();
+	prop = event->customProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY);
+	if (prop.length() >= 8)
+	{
+		// The next due recurrence time is specified
+		QDate d(prop.left(4).toInt(), prop.mid(4,2).toInt(), prop.mid(6,2).toInt());
+		if (d.isValid())
+		{
+			if (floats  &&  prop.length() == 8)
+				mNextMainDateTime.setDate(d);
+			else if (!floats  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
+			{
+				QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
+				if (t.isValid())
+				{
+					mNextMainDateTime.setDate(d);
+					mNextMainDateTime.setTime(t);
+				}
+			}
+		}
+	}
+	mSaveDateTime = event->created();
 	if (category() == KCalEvent::TEMPLATE)
 		mTemplateName = event->summary();
 	if (event->statusStr() == DISABLED_STATUS)
@@ -491,16 +512,18 @@ void KAEvent::set(const Event* event)
 				alTime = mDeferralTime;
 				if (mNextMainDateTime == mDeferralTime)
 					mDeferral = CANCEL_DEFERRAL;     // it's a cancelled deferral
-				// fall through to MAIN__ALARM
-			case KAAlarm::MAIN__ALARM:
+				// fall through to AT_LOGIN__ALARM etc.
 			case KAAlarm::AT_LOGIN__ALARM:
 			case KAAlarm::REMINDER__ALARM:
 			case KAAlarm::DISPLAYING__ALARM:
+				if (!set)
+					mNextMainDateTime = alTime;
+				// fall through to MAIN__ALARM
+			case KAAlarm::MAIN__ALARM:
 				// Ensure that the basic fields are set up even if there is no main
 				// alarm in the event (if it has expired and then been deferred)
 				if (!set)
 				{
-					mNextMainDateTime = alTime;
 					mActionType = data.action;
 					mText = (mActionType == T_COMMAND) ? data.cleanText.trimmed() : data.cleanText;
 					switch (data.action)
@@ -1267,10 +1290,22 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	int      ancillaryOffset = 0; // start offset for ancillary alarms
 	if (!mMainExpired  ||  original)
 	{
+		/* The alarm offset must always be zero for the main alarm. To determine
+		 * which recurrence is due, the property X-KDE-KALARM_NEXTRECUR is used.
+		 * If the alarm offset was non-zero, exception dates and rules would not
+		 * work since they apply to the event time, not the alarm time.
+		 */
+		if (!original  &&  checkRecur() != KARecurrence::NO_RECUR)
+		{
+#warning Adjust next line for KDE4
+			QDateTime dt = KDateTime(mNextMainDateTime).toTimeSpec(mStartDateTime).dateTime();
+			ev->setCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY,
+			                      dt.toString(mNextMainDateTime.isDateOnly() ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+		}
 		// Add the main alarm
-		initKcalAlarm(ev, dtMain, QStringList(), KAAlarm::MAIN_ALARM);
-		ancillaryTime = dtMain;
-		ancillaryType = dtMain.isValid() ? 1 : 0;
+		initKcalAlarm(ev, 0, QStringList(), KAAlarm::MAIN_ALARM);
+		ancillaryOffset = 0;
+		ancillaryType = dtMain.isValid() ? 2 : 0;
 	}
 
 	// Add subsidiary alarms
@@ -1304,18 +1339,37 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	}
 	if (mDeferral > 0  ||  mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer)
 	{
+		DateTime nextDateTime = mNextMainDateTime;
+		if (mMainExpired && !original  &&  checkRecur() != KARecurrence::NO_RECUR)
+		{
+			// It's a deferral of an expired recurrence.
+			// Need to ensure that the alarm offset is to an occurrence
+			// which isn't excluded by an exception - otherwise, it will
+			// never be triggered. So choose the first recurrence which
+			// isn't an exception.
+			KDateTime dt = mRecurrence->getNextDateTime(mStartDateTime.addDays(-1));
+			dt.setDateOnly(mStartDateTime.isDateOnly());
+			nextDateTime = dt;
+		}
+		int startOffset;
 		QStringList list;
 		if (mDeferralTime.isDateOnly())
+		{
+			startOffset = nextDateTime.secsTo(mDeferralTime);
 			list += DATE_DEFERRAL_TYPE;
+		}
 		else
+		{
+			startOffset = nextDateTime.effectiveKDateTime().secsTo(mDeferralTime.effectiveKDateTime());
 			list += TIME_DEFERRAL_TYPE;
+		}
 		if (mDeferral == REMINDER_DEFERRAL)
 			list += mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE;
-		initKcalAlarm(ev, mDeferralTime, list);
+		initKcalAlarm(ev, startOffset, list);
 		if (!ancillaryType  &&  mDeferralTime.isValid())
 		{
-			ancillaryTime = mDeferralTime;
-			ancillaryType = 1;
+			ancillaryOffset = startOffset;
+			ancillaryType = 2;
 		}
 	}
 	if (!mTemplateName.isEmpty())
@@ -1393,9 +1447,12 @@ Alarm* KAEvent::initKcalAlarm(Event* event, int startOffsetSecs, const QStringLi
 	QStringList alltypes;
 	Alarm* alarm = event->newAlarm();
 	alarm->setEnabled(true);
-	// RFC2445 specifies that absolute alarm times must be stored as a UTC DATE-TIME value.
-	// Set the alarm time as an offset to DTSTART for the reasons described in updateKCalEvent().
-	alarm->setStartOffset(startOffsetSecs);
+	if (type != KAAlarm::MAIN_ALARM)
+	{
+		// RFC2445 specifies that absolute alarm times must be stored as a UTC DATE-TIME value.
+		// Set the alarm time as an offset to DTSTART for the reasons described in updateKCalEvent().
+		alarm->setStartOffset(startOffsetSecs);
+	}
 
 	switch (type)
 	{
@@ -1782,7 +1839,8 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 	{
 		// The alarm is repeated, and we're deferring to a time before the last repetition.
 		// Set the next scheduled repetition to the one after the deferral.
-		mNextRepeat = mNextMainDateTime.secsTo(mDeferralTime) / (mRepeatInterval * 60) + 1;
+		mNextRepeat = (mNextMainDateTime < mDeferralTime)
+		            ? mNextMainDateTime.secsTo(mDeferralTime) / (mRepeatInterval * 60) + 1 : 0;
 	}
 	mUpdated = true;
 	return result;
@@ -2822,9 +2880,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_1_2_1 = (version < KAlarm::Version(1,2,1));
 	bool pre_1_3_0 = (version < KAlarm::Version(1,3,0));
 	bool pre_1_3_1 = (version < KAlarm::Version(1,3,1));
+	bool pre_1_4_14 = (version < KAlarm::Version(1,4,14));
 	bool pre_1_9_0 = (version < KAlarm::Version(1,9,0));
 	bool pre_1_9_2 = (version < KAlarm::Version(1,9,2));
-	Q_ASSERT(calVersion() == KAlarm::Version(1,9,2));
+	bool pre_1_9_7 = (version < KAlarm::Version(1,9,7));
+	Q_ASSERT(calVersion() == KAlarm::Version(1,9,7));
 
 	QTime startOfDay = Preferences::startOfDay();
 	KTimeZone localZone;
@@ -3171,6 +3231,98 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		if (!flags.isEmpty())
 			event->setCustomProperty(KCalendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
 		event->setCategories(cats);
+
+
+		if ((pre_1_4_14  ||  pre_1_9_7 && !pre_1_9_0)
+		&&  event->recurrence()  &&  event->recurrence()->recurs())
+		{
+			/*
+			 * It's a KAlarm pre-1.4.12 or KAlarm 1.9 series pre-1.9.7 calendar file.
+			 * For recurring events, convert the main alarm offset to an absolute
+			 * time in the X-KDE-KALARM-NEXTRECUR property, and convert main
+			 * alarm offsets to zero and deferral alarm offsets to be relative to
+			 * the next recurrence.
+			 */
+			QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
+			bool floats = flags.contains(DATE_ONLY_FLAG);
+			KDateTime startDateTime = event->dtStart();
+			if (floats)
+				startDateTime.setDateOnly(true);
+			// Convert the main alarm and get the next main trigger time from it
+			KDateTime nextMainDateTime;
+			bool mainExpired = true;
+			for (int i = 0, alend = alarms.count();  i < alend;  ++i)
+			{
+				Alarm* alarm = alarms[i];
+				if (!alarm->hasStartOffset())
+					continue;
+				bool mainAlarm = true;
+				QString property = alarm->customProperty(KCalendar::APPNAME, TYPE_PROPERTY);
+				QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+				for (int i = 0;  i < types.count();  ++i)
+				{
+					QString type = types[i];
+					if (type == AT_LOGIN_TYPE
+					||  type == TIME_DEFERRAL_TYPE
+					||  type == DATE_DEFERRAL_TYPE
+					||  type == REMINDER_TYPE
+					||  type == REMINDER_ONCE_TYPE
+					||  type == DISPLAYING_TYPE
+					||  type == PRE_ACTION_TYPE
+					||  type == POST_ACTION_TYPE)
+						mainAlarm = false;
+				}
+				if (mainAlarm)
+				{
+					mainExpired = false;
+					nextMainDateTime = alarm->time();
+					nextMainDateTime.setDateOnly(floats);
+					nextMainDateTime = nextMainDateTime.toTimeSpec(startDateTime);
+					if (nextMainDateTime != startDateTime)
+					{
+						QDateTime dt = nextMainDateTime.dateTime();
+						event->setCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY,
+						                         dt.toString(floats ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+					}
+					alarm->setStartOffset(0);
+				}
+			}
+			int adjustment;
+			if (mainExpired)
+			{
+				// It's an expired recurrence.
+				// Set the alarm offset relative to the first actual occurrence
+				// (taking account of possible exceptions).
+				KDateTime dt = event->recurrence()->getNextDateTime(startDateTime.addDays(-1));
+				dt.setDateOnly(floats);
+				adjustment = startDateTime.secsTo(dt);
+			}
+			else
+				adjustment = startDateTime.secsTo(nextMainDateTime);
+			if (adjustment)
+			{
+				// Convert deferred alarms
+				for (int i = 0, alend = alarms.count();  i < alend;  ++i)
+				{
+					Alarm* alarm = alarms[i];
+					if (!alarm->hasStartOffset())
+						continue;
+					QString property = alarm->customProperty(KCalendar::APPNAME, TYPE_PROPERTY);
+					QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+					for (int i = 0;  i < types.count();  ++i)
+					{
+						QString type = types[i];
+						if (type == TIME_DEFERRAL_TYPE
+						||  type == DATE_DEFERRAL_TYPE)
+						{
+							alarm->setStartOffset(alarm->startOffset().asSeconds() - adjustment);
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		if (readOnly)
 			event->setReadOnly(true);
 	}
