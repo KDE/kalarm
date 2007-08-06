@@ -3452,60 +3452,60 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 void KAEvent::dumpDebug() const
 {
 	kDebug(5950) <<"KAEvent dump:";
-	kDebug(5950) <<"-- mCategory:" << mCategory <<":";
+	kDebug(5950) <<"-- mCategory:" << mCategory;
 	KAAlarmEventBase::dumpDebug();
 	if (!mTemplateName.isEmpty())
 	{
-		kDebug(5950) <<"-- mTemplateName:" << mTemplateName <<":";
-		kDebug(5950) <<"-- mTemplateAfterTime:" << mTemplateAfterTime <<":";
+		kDebug(5950) <<"-- mTemplateName:" << mTemplateName;
+		kDebug(5950) <<"-- mTemplateAfterTime:" << mTemplateAfterTime;
 	}
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
-		kDebug(5950) <<"-- mAudioFile:" << mAudioFile <<":";
-		kDebug(5950) <<"-- mPreAction:" << mPreAction <<":";
-		kDebug(5950) <<"-- mPostAction:" << mPostAction <<":";
+		kDebug(5950) <<"-- mAudioFile:" << mAudioFile;
+		kDebug(5950) <<"-- mPreAction:" << mPreAction;
+		kDebug(5950) <<"-- mPostAction:" << mPostAction;
 	}
 	else if (mActionType == T_COMMAND)
 	{
-		kDebug(5950) <<"-- mCommandXterm:" << (mCommandXterm ?"true" :"false") <<":";
-		kDebug(5950) <<"-- mLogFile:" << mLogFile <<":";
+		kDebug(5950) <<"-- mCommandXterm:" << (mCommandXterm ?"true" :"false");
+		kDebug(5950) <<"-- mLogFile:" << mLogFile;
 	}
-	kDebug(5950) <<"-- mKMailSerialNumber:" << mKMailSerialNumber <<":";
-	kDebug(5950) <<"-- mCopyToKOrganizer:" << (mCopyToKOrganizer ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mWorkTimeOnly:" << (mWorkTimeOnly ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mStartDateTime:" << mStartDateTime.toString() <<":";
-	kDebug(5950) <<"-- mSaveDateTime:" << mSaveDateTime.toString() <<":";
+	kDebug(5950) <<"-- mKMailSerialNumber:" << mKMailSerialNumber;
+	kDebug(5950) <<"-- mCopyToKOrganizer:" << (mCopyToKOrganizer ?"true" :"false");
+	kDebug(5950) <<"-- mWorkTimeOnly:" << (mWorkTimeOnly ?"true" :"false");
+	kDebug(5950) <<"-- mStartDateTime:" << mStartDateTime;
+	kDebug(5950) <<"-- mSaveDateTime:" << mSaveDateTime;
 	if (mRepeatAtLogin)
-		kDebug(5950) <<"-- mAtLoginDateTime:" << mAtLoginDateTime.toString() <<":";
-	kDebug(5950) <<"-- mArchiveRepeatAtLogin:" << (mArchiveRepeatAtLogin ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mEnabled:" << (mEnabled ?"true" :"false") <<":";
+		kDebug(5950) <<"-- mAtLoginDateTime:" << mAtLoginDateTime;
+	kDebug(5950) <<"-- mArchiveRepeatAtLogin:" << (mArchiveRepeatAtLogin ?"true" :"false");
+	kDebug(5950) <<"-- mEnabled:" << (mEnabled ?"true" :"false");
 	if (mReminderMinutes)
-		kDebug(5950) <<"-- mReminderMinutes:" << mReminderMinutes <<":";
+		kDebug(5950) <<"-- mReminderMinutes:" << mReminderMinutes;
 	if (mArchiveReminderMinutes)
-		kDebug(5950) <<"-- mArchiveReminderMinutes:" << mArchiveReminderMinutes <<":";
+		kDebug(5950) <<"-- mArchiveReminderMinutes:" << mArchiveReminderMinutes;
 	if (mReminderMinutes  ||  mArchiveReminderMinutes)
-		kDebug(5950) <<"-- mReminderOnceOnly:" << mReminderOnceOnly <<":";
+		kDebug(5950) <<"-- mReminderOnceOnly:" << mReminderOnceOnly;
 	else if (mDeferral > 0)
 	{
-		kDebug(5950) <<"-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ?"normal" :"reminder") <<":";
-		kDebug(5950) <<"-- mDeferralTime:" << mDeferralTime.toString() <<":";
+		kDebug(5950) <<"-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ?"normal" :"reminder");
+		kDebug(5950) <<"-- mDeferralTime:" << mDeferralTime;
 	}
 	else if (mDeferral == CANCEL_DEFERRAL)
 		kDebug(5950) <<"-- mDeferral:cancel:";
-	kDebug(5950) <<"-- mDeferDefaultMinutes:" << mDeferDefaultMinutes <<":";
+	kDebug(5950) <<"-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
 	if (mDisplaying)
 	{
-		kDebug(5950) <<"-- mDisplayingTime:" << mDisplayingTime.toString() <<":";
-		kDebug(5950) <<"-- mDisplayingFlags:" << mDisplayingFlags <<":";
-		kDebug(5950) <<"-- mDisplayingDefer:" << mDisplayingDefer <<":";
-		kDebug(5950) <<"-- mDisplayingEdit:" << mDisplayingEdit <<":";
+		kDebug(5950) <<"-- mDisplayingTime:" << mDisplayingTime.toString();
+		kDebug(5950) <<"-- mDisplayingFlags:" << mDisplayingFlags;
+		kDebug(5950) <<"-- mDisplayingDefer:" << mDisplayingDefer;
+		kDebug(5950) <<"-- mDisplayingEdit:" << mDisplayingEdit;
 	}
-	kDebug(5950) <<"-- mRevision:" << mRevision <<":";
-	kDebug(5950) <<"-- mRecurrence:" << (mRecurrence ?"true" :"false") <<":";
+	kDebug(5950) <<"-- mRevision:" << mRevision;
+	kDebug(5950) <<"-- mRecurrence:" << (mRecurrence ?"true" :"false");
 	if (mRecurrence)
-		kDebug(5950) <<"-- mRemainingRecurrences:" << mRemainingRecurrences <<":";
-	kDebug(5950) <<"-- mAlarmCount:" << mAlarmCount <<":";
-	kDebug(5950) <<"-- mMainExpired:" << (mMainExpired ?"true" :"false") <<":";
+		kDebug(5950) <<"-- mRemainingRecurrences:" << mRemainingRecurrences;
+	kDebug(5950) <<"-- mAlarmCount:" << mAlarmCount;
+	kDebug(5950) <<"-- mMainExpired:" << (mMainExpired ?"true" :"false");
 	kDebug(5950) <<"KAEvent dump end";
 }
 #endif
@@ -3551,9 +3551,9 @@ void KAAlarm::dumpDebug() const
 		case POST_ACTION__ALARM:             altype = "POST_ACTION";  break;
 		default:                             altype = "INVALID";  break;
 	}
-	kDebug(5950) <<"-- mType:" << altype <<":";
-	kDebug(5950) <<"-- mRecurs:" << (mRecurs ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mDeferred:" << (mDeferred ?"true" :"false") <<":";
+	kDebug(5950) <<"-- mType:" << altype;
+	kDebug(5950) <<"-- mRecurs:" << (mRecurs ?"true" :"false");
+	kDebug(5950) <<"-- mDeferred:" << (mDeferred ?"true" :"false");
 	kDebug(5950) <<"KAAlarm dump end";
 }
 
@@ -3648,52 +3648,52 @@ QFont KAAlarmEventBase::font() const
 #ifndef NDEBUG
 void KAAlarmEventBase::dumpDebug() const
 {
-	kDebug(5950) <<"-- mEventID:" << mEventID <<":";
-	kDebug(5950) <<"-- mActionType:" << (mActionType == T_MESSAGE ?"MESSAGE" : mActionType == T_FILE ?"FILE" : mActionType == T_COMMAND ?"COMMAND" : mActionType == T_EMAIL ?"EMAIL" : mActionType == T_AUDIO ?"AUDIO" :"??") <<":";
-	kDebug(5950) <<"-- mText:" << mText <<":";
+	kDebug(5950) <<"-- mEventID:" << mEventID;
+	kDebug(5950) <<"-- mActionType:" << (mActionType == T_MESSAGE ?"MESSAGE" : mActionType == T_FILE ?"FILE" : mActionType == T_COMMAND ?"COMMAND" : mActionType == T_EMAIL ?"EMAIL" : mActionType == T_AUDIO ?"AUDIO" :"??");
+	kDebug(5950) <<"-- mText:" << mText;
 	if (mActionType == T_COMMAND)
-		kDebug(5950) <<"-- mCommandScript:" << (mCommandScript ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mNextMainDateTime:" << mNextMainDateTime.toString() <<":";
+		kDebug(5950) <<"-- mCommandScript:" << (mCommandScript ?"true" :"false");
+	kDebug(5950) <<"-- mNextMainDateTime:" << mNextMainDateTime.toString();
 	if (mActionType == T_EMAIL)
 	{
-		kDebug(5950) <<"-- mEmail: FromKMail:" << mEmailFromKMail <<":";
-		kDebug(5950) <<"--         Addresses:" << mEmailAddresses.join(",") <<":";
-		kDebug(5950) <<"--         Subject:" << mEmailSubject <<":";
-		kDebug(5950) <<"--         Attachments:" << mEmailAttachments.join(",") <<":";
-		kDebug(5950) <<"--         Bcc:" << (mEmailBcc ?"true" :"false") <<":";
+		kDebug(5950) <<"-- mEmail: FromKMail:" << mEmailFromKMail;
+		kDebug(5950) <<"--         Addresses:" << mEmailAddresses.join(",");
+		kDebug(5950) <<"--         Subject:" << mEmailSubject;
+		kDebug(5950) <<"--         Attachments:" << mEmailAttachments.join(",");
+		kDebug(5950) <<"--         Bcc:" << (mEmailBcc ?"true" :"false");
 	}
-	kDebug(5950) <<"-- mBgColour:" << mBgColour.name() <<":";
-	kDebug(5950) <<"-- mFgColour:" << mFgColour.name() <<":";
-	kDebug(5950) <<"-- mDefaultFont:" << (mDefaultFont ?"true" :"false") <<":";
+	kDebug(5950) <<"-- mBgColour:" << mBgColour.name();
+	kDebug(5950) <<"-- mFgColour:" << mFgColour.name();
+	kDebug(5950) <<"-- mDefaultFont:" << (mDefaultFont ?"true" :"false");
 	if (!mDefaultFont)
-		kDebug(5950) <<"-- mFont:" << mFont.toString() <<":";
-	kDebug(5950) <<"-- mBeep:" << (mBeep ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mSpeak:" << (mSpeak ?"true" :"false") <<":";
+		kDebug(5950) <<"-- mFont:" << mFont.toString();
+	kDebug(5950) <<"-- mBeep:" << (mBeep ?"true" :"false");
+	kDebug(5950) <<"-- mSpeak:" << (mSpeak ?"true" :"false");
 	if (mActionType == T_AUDIO)
 	{
 		if (mSoundVolume >= 0)
 		{
-			kDebug(5950) <<"-- mSoundVolume:" << mSoundVolume <<":";
+			kDebug(5950) <<"-- mSoundVolume:" << mSoundVolume;
 			if (mFadeVolume >= 0)
 			{
-				kDebug(5950) <<"-- mFadeVolume:" << mFadeVolume <<":";
-				kDebug(5950) <<"-- mFadeSeconds:" << mFadeSeconds <<":";
+				kDebug(5950) <<"-- mFadeVolume:" << mFadeVolume;
+				kDebug(5950) <<"-- mFadeSeconds:" << mFadeSeconds;
 			}
 			else
 				kDebug(5950) <<"-- mFadeVolume:-:";
 		}
 		else
 			kDebug(5950) <<"-- mSoundVolume:-:";
-		kDebug(5950) <<"-- mRepeatSound:" << (mRepeatSound ?"true" :"false") <<":";
+		kDebug(5950) <<"-- mRepeatSound:" << (mRepeatSound ?"true" :"false");
 	}
-	kDebug(5950) <<"-- mConfirmAck:" << (mConfirmAck ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mRepeatAtLogin:" << (mRepeatAtLogin ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mRepeatCount:" << mRepeatCount <<":";
-	kDebug(5950) <<"-- mRepeatInterval:" << mRepeatInterval <<":";
-	kDebug(5950) <<"-- mNextRepeat:" << mNextRepeat <<":";
-	kDebug(5950) <<"-- mDisplaying:" << (mDisplaying ?"true" :"false") <<":";
-	kDebug(5950) <<"-- mLateCancel:" << mLateCancel <<":";
-	kDebug(5950) <<"-- mAutoClose:" << (mAutoClose ?"true" :"false") <<":";
+	kDebug(5950) <<"-- mConfirmAck:" << (mConfirmAck ?"true" :"false");
+	kDebug(5950) <<"-- mRepeatAtLogin:" << (mRepeatAtLogin ?"true" :"false");
+	kDebug(5950) <<"-- mRepeatCount:" << mRepeatCount;
+	kDebug(5950) <<"-- mRepeatInterval:" << mRepeatInterval;
+	kDebug(5950) <<"-- mNextRepeat:" << mNextRepeat;
+	kDebug(5950) <<"-- mDisplaying:" << (mDisplaying ?"true" :"false");
+	kDebug(5950) <<"-- mLateCancel:" << mLateCancel;
+	kDebug(5950) <<"-- mAutoClose:" << (mAutoClose ?"true" :"false");
 }
 #endif
 
