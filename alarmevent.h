@@ -398,7 +398,6 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence*      recurrence() const             { return mRecurrence; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
 		int                longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : 0; }
-		bool               mayOccurDuringWork() const;
 		QString            recurrenceText(bool brief = false) const;
 		QString            repetitionText(bool brief = false) const;
 		int                remainingRecurrences() const   { return mRemainingRecurrences; }

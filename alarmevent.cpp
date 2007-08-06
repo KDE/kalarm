@@ -965,144 +965,264 @@ DateTime KAEvent::displayDateTime() const
 	{
 		// The alarm is restricted to working hours. Find the next
 		// occurrence during working hours.
+
+		/* Note that for alarms which recur at different times of day, it's
+		 * necessary to avoid the performance overhead of Recurrence class
+		 * calls since these can in the worst case cause the program to hang
+		 * for a significant length of time.
+		 */
 		QBitArray workDays = Preferences::workDays();
-		if (mRecurrence->type() == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60)
-		||  mRepeatCount  &&  mRepeatInterval % (24*60))
+		for (int i = 0;  ;  ++i)
 		{
-			// The recurrence time of day varies
-			QTime firstTime;
-			int   firstDay;
-			bool  haveFirstRecur = false;
-			QTime startDayPre = Preferences::workDayStart().addSecs(-1);
-			QTime endDay      = Preferences::workDayEnd();
-			KDateTime kdt = dt.effectiveKDateTime();
-			int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
-			if (kdt.time() > startDayPre)
-				kdt.setTime(QTime(23,59,59));  // need to step on to next day
-			for (int n = 0;  n < 1000;  ++n)
+			if (i >= 7)
+				return KDateTime();   // no working days are defined
+			if (workDays.testBit(i))
+				break;
+		}
+		QTime workStart = Preferences::workDayStart();
+		QTime workEnd   = Preferences::workDayEnd();
+		KARecurrence::Type recurType = checkRecur();
+		KDateTime kdt = dt.effectiveKDateTime();
+		bool recurTimeVaries = (recurType == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60));
+		bool repeatTimeVaries = (mRepeatCount  &&  mRepeatInterval % (24*60));
+		int recurFreq = 0;
+		int recurCount;
+		int repeatFreq = mRepeatCount ? mRepeatInterval * 60 : 0;
+		int repeatCount = mRepeatInterval ? mRepeatCount : 0;
+		KDateTime recurEnd;
+		if (recurTimeVaries)
+		{
+			recurFreq = mRecurrence->frequency() * 60;
+			recurCount = mRecurrence->duration();
+			if (!recurCount)
+				recurEnd = mRecurrence->endDateTime();
+			else if (recurCount > 0)
+				recurEnd = mRecurrence->startDateTime().addSecs((recurCount - 1) * recurFreq);
+		}
+		if (recurTimeVaries  &&  (!mRepeatCount || !mRepeatInterval)
+		||  repeatTimeVaries  &&  recurType == KARecurrence::NO_RECUR)
+		{
+			// The alarm repeats at regular clock intervals, at different
+			// times of day, EITHER by recurrence OR by repetition.
+			int freq, count;
+			KDateTime endDt;
+			if (recurTimeVaries)
 			{
-#ifdef __GNUC__
-#warning This loop can potentially take a significant time to execute
-#endif
-				if (kdt.time() > startDayPre)
+				freq = recurFreq;
+				count = recurCount;
+				endDt = recurEnd;
+			}
+			else
+			{
+				freq = repeatFreq;
+				count = repeatCount + 1;
+				endDt = mStartDateTime.addSecs(freq * mRepeatCount);
+			}
+			QTime firstTime = kdt.time();
+			int firstOffset = kdt.utcOffset();
+			int firstDay = kdt.date().dayOfWeek() - 1;   // Monday = 0
+			int day = firstDay;
+			QDate date = kdt.date();
+			for (int n = 0;  n < 7*24*60;  ++n)
+			{
+				kdt = kdt.addSecs(freq);
+				if (count >= 0  &&  kdt > endDt)
+					return KDateTime();   // reached end of recurrence
+				day = (day + date.daysTo(kdt.date())) % 7;
+				date = kdt.date();
+				QTime t = kdt.time();
+				if (t >= workStart  &&  t < workEnd)
 				{
-					if (kdt.time() < endDay  &&  workDays.testBit(day))
+					if (workDays.testBit(day))
 						return kdt;
-					int i = 1;
-					while (!workDays.testBit((day + i) % 7))
-					{
-						if (++i > 7)
-							return KDateTime();  // no working days are defined
-					}
-					kdt = kdt.addDays(i);
 				}
-				kdt.setTime(startDayPre);
+				if (t == firstTime  &&  day == firstDay)
+				{
+					if (kdt.utcOffset() == firstOffset)
+#ifdef __GNUC__
+#warning Check if it will occur during working hours after seasonal time change
+#endif
+						return KDateTime();
+					firstOffset = kdt.utcOffset();
+				}
+			}
+			return KDateTime();   // too many iterations - can't really happen
+		}
+		else if (recurTimeVaries)
+		{
+			// It's a repetition inside a recurrence, each of which occurs
+			// at different times of day.
+			// Find the previous recurrence (as opposed to simple repetition)
+			DateTime newdt;
+			previousOccurrence(kdt.addSecs(1), newdt, false);
+			if (!newdt.isValid())
+				return KDateTime();   // this should never happen
+			KDateTime kdtRecur = newdt.effectiveKDateTime();
+			QDate dateRecur = kdtRecur.date();
+			int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
+			int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+			kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+
+			// Use the previous recurrence as a base for checking whether
+			// our tests have wrapped round to the same time/day of week.
+			QTime firstTime = kdtRecur.time();
+			int firstOffset = kdtRecur.utcOffset();
+			int firstDay = dayRecur;
+			bool lastRecurrence = false;
+			for (int n = 0;  n < 7*24*60;  ++n)
+			{
+				// Check the simple repetitions for this recurrence
+#ifdef __GNUC__
+#warning Speed this up for the usual case of short repeat interval
+#warning or if !repeatTimeVaries (but remember time zone changes)
+#endif
+				while (++repeatNum <= repeatCount)
+				{
+					kdt = kdt.addSecs(repeatFreq);
+					int day = (dayRecur + dateRecur.daysTo(kdt.date())) % 7;
+					QTime t = kdt.time();
+					if (t >= workStart  &&  t < workEnd)
+					{
+						if (workDays.testBit(day))
+							return kdt;
+					}
+				}
+				repeatNum = 0;
+
+				// Check the next recurrence
+				if (lastRecurrence)
+					return KDateTime();
+				kdtRecur = kdtRecur.addSecs(recurFreq);
+				if (recurCount >= 0  &&  kdtRecur > recurEnd)
+					return KDateTime();   // reached end of recurrence
+				dayRecur = (dayRecur + dateRecur.daysTo(kdtRecur.date())) % 7;
+				dateRecur = kdtRecur.date();
+				QTime t = kdtRecur.time();
+				if (t >= workStart  &&  t < workEnd)
+				{
+					if (workDays.testBit(dayRecur))
+						return kdtRecur;
+				}
+				if (t == firstTime  &&  dayRecur == firstDay)
+				{
+					if (kdtRecur.utcOffset() == firstOffset)
+#ifdef __GNUC__
+#warning Check if it will occur during working hours after seasonal time change
+#endif
+						lastRecurrence = true;
+					else
+						firstOffset = kdtRecur.utcOffset();
+				}
+				kdt = kdtRecur;
+			}
+			return KDateTime();   // too many iterations - can't really happen
+		}
+		else if (repeatTimeVaries) //  && !recurTimeVaries && recurType != KARecurrence::NO_RECUR
+		{
+			// There's a simple repetition which occurs at different times of
+			// day, inside a recurrence which occurs at the same time of day.
+			// Find the previous recurrence (as opposed to simple repetition)
+			DateTime newdt;
+			previousOccurrence(kdt.addSecs(1), newdt, false);
+			if (!newdt.isValid())
+				return KDateTime();   // this should never happen
+			KDateTime kdtRecur = newdt.effectiveKDateTime();
+			QDate dateRecur = kdtRecur.date();
+			bool recurDuringWork = (kdtRecur.time() >= workStart  &&  kdtRecur.time() < workEnd);
+			int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
+			int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+			kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+
+			// Use the previous recurrence as a base for checking whether
+			// our tests have wrapped round to the same time/day of week.
+			bool lastRecurrence = false;
+			int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
+			int repeatsToCheck = repeatCount;
+			unsigned days = 0;
+			for ( ; ; )
+			{
+				// Check the simple repetitions for this recurrence
+#ifdef __GNUC__
+#warning Speed this up for the usual case of short repeat interval
+#warning (but remember time zone changes)
+#endif
+				if (repeatsDuringWork >= 0)
+				{
+					while (++repeatNum <= repeatCount)
+					{
+						kdt = kdt.addSecs(repeatFreq);
+						int day = (dayRecur + dateRecur.daysTo(kdt.date())) % 7;
+						QTime t = kdt.time();
+						if (t >= workStart  &&  t < workEnd)
+						{
+							repeatsDuringWork = 1;
+							if (workDays.testBit(day))
+								return kdt;
+						}
+						else if (!repeatsDuringWork  &&  --repeatsToCheck <= 0)
+						{
+							// Simple repetitions never occur during working hours
+#ifdef __GNUC__
+#warning Check if it will occur during working hours after seasonal time change
+#endif
+							if (!recurDuringWork)
+								return KDateTime();
+							repeatsDuringWork = -1;
+							break;
+						}
+					}
+				}
+				repeatNum = 0;
+
+				// Check the next recurrence
+				if (lastRecurrence)
+					return KDateTime();
+				nextOccurrence(kdt, newdt, IGNORE_REPETITION);
+				if (!newdt.isValid())
+					return KDateTime();
+				kdtRecur = newdt.effectiveKDateTime();
+				dateRecur = kdtRecur.date();
+				dayRecur = dateRecur.dayOfWeek() - 1;
+				if (recurDuringWork  &&  workDays.testBit(dayRecur))
+					return kdtRecur;
+				if (days == 0x7F)
+					return KDateTime();  // found a recurrence on every day of the week!?!
+				days |= 1 << dayRecur;
+				kdt = kdtRecur;
+			}
+			return KDateTime();  // not found - give up
+		}
+		else
+		{
+			// The alarm always occurs at the same time of day.
+			// Check whether it can ever occur during working hours.
+			if (!mayOccurDailyDuringWork(kdt))
+				return KDateTime();   // never occurs during working hours
+
+			// Find the next working day it occurs on
+			unsigned days = 0;
+			for ( ; ; )
+			{
 				DateTime newdt;
 				OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
 				if (!newdt.isValid())
 					return KDateTime();
 				kdt = newdt.effectiveKDateTime();
-				day = kdt.date().dayOfWeek() - 1;
+				int day = kdt.date().dayOfWeek() - 1;
+				if (workDays.testBit(day))
+					break;   // found a working day occurrence
+				// Prevent indefinite looping (which should never happen anyway)
 				if (!(type & OCCURRENCE_REPEAT))
 				{
-					// It's a recurrence (as opposed to simple repetition)
-					if (!haveFirstRecur)
-					{
-						// Note the time and day of the first recurrence
-						// we've encountered.
-						firstDay = day;
-						firstTime = kdt.time();
-						haveFirstRecur = true;
-					}
-					else if (day == firstDay  &&  kdt.time() == firstTime)
-						return KDateTime();   // it never occurs during working hours
+					if (days == 0x7F)
+						return KDateTime();  // found a recurrence on every day of the week!?!
+					days |= 1 << day;
 				}
 			}
-			return KDateTime();  // not found - give up
+			dt.setDate(kdt.date());
 		}
-
-		// The alarm always occurs at the same time of day.
-		// Check whether it can ever occur during working hours.
-		KDateTime kdt = dt.effectiveKDateTime();
-		if (!mayOccurDailyDuringWork(kdt))
-			return KDateTime();   // never occurs during working hours
-
-		// Find the next working day it occurs on
-		unsigned days = 0;
-		for ( ; ; )
-		{
-			DateTime newdt;
-			OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
-			if (!newdt.isValid())
-				return KDateTime();
-			kdt = newdt.effectiveKDateTime();
-			int day = kdt.date().dayOfWeek() - 1;
-			if (workDays.testBit(day))
-				break;   // found a working day occurrence
-			// Prevent indefinite looping (which should never happen anyway)
-			if (!(type & OCCURRENCE_REPEAT))
-			{
-				if (days == 0x7F)
-					return KDateTime();  // found a recurrence on every day of the week!?!
-				days |= 1 << day;
-			}
-		}
-		dt.setDate(kdt.date());
 	}
 	return dt;
-}
-
-/******************************************************************************
-* Check whether the alarm can possibly occur during working hours.
-* This does not determine whether it actually does, but rather whether it could
-* potentially given enough repetitions.
-* Reply = false if it can never occur during working hours, true if it might.
-*/
-bool KAEvent::mayOccurDuringWork() const
-{
-	KDateTime kdt = mainDateTime(true);
-	if (KAlarm::isWorkingTime(kdt))
-		return true;
-	if (checkRecur() == KARecurrence::NO_RECUR  &&  (!mRepeatCount || !mRepeatInterval))
-		return false;   // it doesn't recur/repeat
-	int recurFreq = (mRecurrence->type() == KARecurrence::MINUTELY) ? (mRecurrence->frequency() % (24*60)) * 60 : 0;
-	int repeatFreq = mRepeatCount ? (mRepeatInterval % (24*60)) * 60 : 0;
-	if (recurFreq  ||  repeatFreq)
-	{
-		// The recurrence time of day varies.
-		// Check in case it has a regular pattern which never occurs during
-		// working hours.
-		QTime startTime;
-		if (recurFreq)
-			startTime = mRecurrence->startDateTime().time();
-		else
-		{
-			startTime = mStartDateTime.effectiveKDateTime().time();
-			recurFreq = repeatFreq;
-			repeatFreq = 0;
-		}
-		QTime startDay  = Preferences::workDayStart();
-		QTime endDay    = Preferences::workDayEnd();
-		QTime time = startTime;
-		do
-		{
-			if (time >= startDay  &&  time < endDay)
-				return true;   // it could occur during the working day
-			if (repeatFreq)
-			{
-				for (int i = 1;  i <= mRepeatCount;  ++i)
-				{
-					QTime t = time.addSecs(repeatFreq * i);
-					if (t >= startDay  &&  t < endDay)
-						return true;   // it could occur during the working day
-				}
-			}
-			time = time.addSecs(recurFreq);
-		} while (time != startTime);
-		return false;   // it's always outside working hours
-	}
-	// The alarm always occurs at the same time of day
-	return mayOccurDailyDuringWork(kdt);
 }
 
 /******************************************************************************

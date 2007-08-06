@@ -1506,7 +1506,7 @@ bool EditAlarmDlg::validate()
 					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
 					return false;
 				}
-				if (event.workTimeOnly()  &&  !event.mayOccurDuringWork())
+				if (event.workTimeOnly()  &&  !event.displayDateTime().isValid())
 				{
 					if (KMessageBox::warningContinueCancel(this, i18n("The alarm will never occur during working hours"))
 					    != KMessageBox::Continue)
