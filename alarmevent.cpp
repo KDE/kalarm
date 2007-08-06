@@ -3473,7 +3473,7 @@ void KAEvent::dumpDebug() const
 	kDebug(5950) <<"-- mKMailSerialNumber:" << mKMailSerialNumber;
 	kDebug(5950) <<"-- mCopyToKOrganizer:" << (mCopyToKOrganizer ?"true" :"false");
 	kDebug(5950) <<"-- mWorkTimeOnly:" << (mWorkTimeOnly ?"true" :"false");
-	kDebug(5950) <<"-- mStartDateTime:" << mStartDateTime;
+	kDebug(5950) <<"-- mStartDateTime:" << mStartDateTime.toString();
 	kDebug(5950) <<"-- mSaveDateTime:" << mSaveDateTime;
 	if (mRepeatAtLogin)
 		kDebug(5950) <<"-- mAtLoginDateTime:" << mAtLoginDateTime;
@@ -3488,7 +3488,7 @@ void KAEvent::dumpDebug() const
 	else if (mDeferral > 0)
 	{
 		kDebug(5950) <<"-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ?"normal" :"reminder");
-		kDebug(5950) <<"-- mDeferralTime:" << mDeferralTime;
+		kDebug(5950) <<"-- mDeferralTime:" << mDeferralTime.toString();
 	}
 	else if (mDeferral == CANCEL_DEFERRAL)
 		kDebug(5950) <<"-- mDeferral:cancel:";
