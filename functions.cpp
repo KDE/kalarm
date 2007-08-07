@@ -430,8 +430,8 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmListView* selectionView, bool 
 		QDateTime now = QDateTime::currentDateTime();
 		if (event.occursAfter(now, true))
 		{
-			if (event.recurs())
-				event.setNextOccurrence(now, true);   // skip any recurrences in the past
+			if (event.recurs()  ||  event.repeatCount())
+				event.setNextOccurrence(now);   // skip any recurrences in the past
 			event.setArchive();    // ensure that it gets re-archived if it is deleted
 
 			// Save the event details in the calendar file, and get the new event ID

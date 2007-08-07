@@ -1,6 +1,7 @@
 KAlarm
 
 === Version 1.4.10 --- 3 March 2007 ===
+Prevent simple repetitions triggering again when KAlarm is restarted.
 Fix recurring alarms being triggered on exception days.
 Fix start-of-day time being ignored for date-only alarms.
 Disable Defer button in new message window when deferral limit has been reached.

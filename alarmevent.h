@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,6 +115,7 @@ class KAAlarmEventBase
 		Type               mActionType;       // alarm action type
 		int                mRepeatCount;      // simple repetition count (excluding the first time)
 		int                mRepeatInterval;   // simple repetition interval (minutes)
+		int                mNextRepeat;       // repetition count of next due repetition
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
 		bool               mCommandScript;    // the command text is a script, not a shell command line
@@ -194,7 +195,9 @@ class KAAlarm : public KAAlarmEventBase
 		Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
 		SubType            subType() const              { return mType; }
 		const QString&     eventID() const              { return mEventID; }
-		const DateTime&    dateTime() const             { return mNextMainDateTime; }
+		DateTime           dateTime(bool withRepeats = false) const
+		                                                { return (withRepeats && mNextRepeat && mRepeatInterval)
+		                                                    ? mNextMainDateTime.addSecs(mNextRepeat * mRepeatInterval * 60) : mNextMainDateTime; }
 		QDate              date() const                 { return mNextMainDateTime.date(); }
 		QTime              time() const                 { return mNextMainDateTime.time(); }
 		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString::null; }
@@ -335,7 +338,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1)  { mTemplateName = name;  mTemplateAfterTime = afterTime;  mUpdated = true; }
 		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
-		OccurType          setNextOccurrence(const QDateTime& preDateTime, bool includeRepetitions = false);
+		OccurType          setNextOccurrence(const QDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setEventID(const QString& id)                     { mEventID = id;  mUpdated = true; }
 		void               adjustStartDate(const QDate&);
@@ -380,10 +383,13 @@ class KAEvent : public KAAlarmEventBase
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
 		const DateTime&    startDateTime() const          { return mStartDateTime; }
-		const DateTime&    mainDateTime() const           { return mNextMainDateTime; }
+		DateTime           mainDateTime(bool withRepeats = false) const
+		                                                  { return (withRepeats && mNextRepeat && mRepeatInterval)
+		                                                    ? mNextMainDateTime.addSecs(mNextRepeat * mRepeatInterval * 60) : mNextMainDateTime; }
 		QDate              mainDate() const               { return mNextMainDateTime.date(); }
 		QTime              mainTime() const               { return mNextMainDateTime.time(); }
-		DateTime           mainEndRepeatTime() const      { return mRepeatCount ? mNextMainDateTime.addSecs(mRepeatCount * mRepeatInterval * 60) : mNextMainDateTime; }
+		DateTime           mainEndRepeatTime() const      { return (mRepeatCount > 0 && mRepeatInterval)
+		                                                    ? mNextMainDateTime.addSecs(mRepeatCount * mRepeatInterval * 60) : mNextMainDateTime; }
 		int                reminder() const               { return mReminderMinutes; }
 		bool               reminderOnceOnly() const       { return mReminderOnceOnly; }
 		bool               reminderDeferral() const       { return mDeferral == REMINDER_DEFERRAL; }

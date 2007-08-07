@@ -1224,7 +1224,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 			execAlarm(event, event.firstAlarm(), false);
 		// If it's a recurring alarm, reschedule it for its next occurrence
 		if (!event.recurs()
-		||  event.setNextOccurrence(now, true) == KAEvent::NO_OCCURRENCE)
+		||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
 			return true;
 		// It has recurrences in the future
 	}
@@ -1298,8 +1298,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (alarm.deferred()  &&  event.repeatCount()
 				&&  repeatDT.isValid()  &&  alarm.dateTime() > repeatDT)
 				{
-					// This deferral of a repeated alarm is later than the last occurrence
-					// of the main alarm, so use the deferral alarm instead.
+					// This deferral of a repeated alarm is later than the last previous
+					// occurrence of the main alarm, so use the deferral alarm instead.
 					// If the deferral is not yet due, this prevents the main alarm being
 					// triggered repeatedly. If the deferral is due, this triggers it
 					// in preference to the main alarm.
@@ -1308,11 +1308,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					updateCalAndDisplay = false;
 				}
 				// Check if the alarm is due yet.
-				// Just in case it's an invalid time during a daylight savings time
-				// shift, check more carefully if it's today.
-				int secs = alarm.dateTime().secsTo(now);
-				if (secs < 0
-				&&  (alarm.date() != now.date() || alarm.time() > now.time()))
+				int secs = alarm.dateTime(true).secsTo(now);
+				if (secs < 0)
 				{
 					// This alarm is definitely not due yet
 					kdDebug(5950) << "KAlarmApp::handleEvent(): alarm " << alarm.type() << ": not due\n";
@@ -1333,19 +1330,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					if (alarmToExecute.valid())
 						continue;
 
-					// Set the time to be shown if it's a display alarm
+					// Set the time to display if it's a display alarm
 					alarm.setTime(now);
-				}
-				if (event.repeatCount()  &&  alarm.type() == KAAlarm::MAIN_ALARM)
-				{
-					// Alarm has a simple repetition. Since its time in the calendr remains the same
-					// until its repetitions are finished, adjust its time to the correct repetition
-					KAEvent::OccurType type = event.previousOccurrence(now.addSecs(1), repeatDT, true);
-					if (type & KAEvent::OCCURRENCE_REPEAT)
-					{
-						alarm.setTime(repeatDT);
-						secs = repeatDT.secsTo(now);
-					}
 				}
 				if (alarm.lateCancel())
 				{
@@ -1549,36 +1535,33 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	else
 	{
-		QDateTime now = QDateTime::currentDateTime();
-		if (event.repeatCount()  &&  event.mainEndRepeatTime() > now)
-			updateDisplay = true;    // there are more repetitions to come, so just update time in alarm list
-		else
+		// Reschedule the alarm for its next recurrence.
+		KAEvent::OccurType type = event.setNextOccurrence(QDateTime::currentDateTime());
+		switch (type)
 		{
-			// The alarm's repetitions (if any) are finished.
-			// Reschedule it for its next recurrence.
-			switch (event.setNextOccurrence(now))
-			{
-				case KAEvent::NO_OCCURRENCE:
-					// All repetitions are finished, so cancel the event
-					cancelAlarm(event, alarm.type(), updateCalAndDisplay);
+			case KAEvent::NO_OCCURRENCE:
+				// All repetitions are finished, so cancel the event
+				cancelAlarm(event, alarm.type(), updateCalAndDisplay);
+				break;
+			default:
+				if (!(type & KAEvent::OCCURRENCE_REPEAT))
 					break;
-				case KAEvent::RECURRENCE_DATE:
-				case KAEvent::RECURRENCE_DATE_TIME:
-				case KAEvent::LAST_RECURRENCE:
-					// The event is due by now and repetitions still remain, so rewrite the event
-					if (updateCalAndDisplay)
-						update = true;
-					else
-					{
-						event.cancelCancelledDeferral();
-						event.setUpdated();    // note that the calendar file needs to be updated
-					}
-					break;
-				case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
-					// The first occurrence is still due?!?, so don't do anything
-				default:
-					break;
-			}
+				// Next occurrence is a repeat, so fall through to recurrence handling
+			case KAEvent::RECURRENCE_DATE:
+			case KAEvent::RECURRENCE_DATE_TIME:
+			case KAEvent::LAST_RECURRENCE:
+				// The event is due by now and repetitions still remain, so rewrite the event
+				if (updateCalAndDisplay)
+					update = true;
+				else
+				{
+					event.cancelCancelledDeferral();
+					event.setUpdated();    // note that the calendar file needs to be updated
+				}
+				break;
+			case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
+				// The first occurrence is still due?!?, so don't do anything
+				break;
 		}
 		if (event.deferred())
 		{

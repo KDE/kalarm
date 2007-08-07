@@ -140,7 +140,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedu
 	  mFont(event.font()),
 	  mBgColour(event.bgColour()),
 	  mFgColour(event.fgColour()),
-	  mDateTime((alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime() : alarm.dateTime()),
+	  mDateTime((alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true)),
 	  mEventID(event.id()),
 	  mAudioFile(event.audioFile()),
 	  mVolume(event.soundVolume()),
