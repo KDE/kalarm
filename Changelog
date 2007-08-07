@@ -1,9 +1,11 @@
 KAlarm
 
-=== Version 1.4.10 --- 24 February 2007 ===
-Disable Defer button in new message window when deferral limit has been reached.
+=== Version 1.4.10 --- 3 March 2007 ===
+Fix recurring alarms being triggered on exception days.
 Fix start-of-day time being ignored for date-only alarms.
+Disable Defer button in new message window when deferral limit has been reached.
 Fix failure to save "Execute in terminal window" option in Preferences dialogue.
+Ensure up-to-date menus are displayed if user has a customised toolbar.
 
 === Version 1.4.9 (KDE 3.5.6) --- 3 January 2007 ===
 Minor changes.
