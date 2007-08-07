@@ -1,7 +1,7 @@
 /*
  *  emailidcombo.h  -  email identity combo box with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class EmailIdCombo : public KPIM::IdentityCombo
 {
 		Q_OBJECT
 	public:
-		EmailIdCombo(KPIM::IdentityManager*, QWidget* parent = 0, const char* name = 0);
+		explicit EmailIdCombo(KPIM::IdentityManager*, QWidget* parent = 0, const char* name = 0);
 		void  setReadOnly(bool ro)    { mReadOnly = ro; }
 	protected:
 		virtual void mousePressEvent(QMouseEvent*);
