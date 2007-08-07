@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ const int                        Preferences::default_defaultLateCancel       = 
 const bool                       Preferences::default_defaultAutoClose        = false;
 const bool                       Preferences::default_defaultCopyToKOrganizer = false;
 const bool                       Preferences::default_defaultSoundRepeat      = false;
-const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::BEEP;
+const SoundPicker::Type          Preferences::default_defaultSoundType        = SoundPicker::NONE;
 const bool                       Preferences::default_defaultConfirmAck       = false;
 const bool                       Preferences::default_defaultCmdScript        = false;
 const EditAlarmDlg::CmdLogType   Preferences::default_defaultCmdLogType       = EditAlarmDlg::DISCARD_OUTPUT;
@@ -283,6 +283,10 @@ void Preferences::read()
 	mAutostartTrayIcon        = config->readBoolEntry(AUTOSTART_TRAY, default_autostartTrayIcon);
 	mModalMessages            = config->readBoolEntry(MODAL_MESSAGES, default_modalMessages);
 	mMessageButtonDelay       = config->readNumEntry(MESSAGE_BUTTON_DELAY, default_messageButtonDelay);
+	if (mMessageButtonDelay > 10)
+		mMessageButtonDelay = 10;    // prevent windows being unusable for a long time
+	if (mMessageButtonDelay < -1)
+		mMessageButtonDelay = -1;
 	mShowExpiredAlarms        = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
 	mShowTimeToAlarm          = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
 	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);

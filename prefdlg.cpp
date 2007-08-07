@@ -1074,7 +1074,7 @@ void EditPrefTab::apply(bool syncToDisc)
 	Preferences::mDefaultSoundRepeat      = mSoundRepeat->isChecked();
 #endif
 	Preferences::mDefaultCmdScript        = mCmdScript->isChecked();
-	Preferences::mDefaultCmdLogFile       = (mCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
+	Preferences::mDefaultCmdLogType       = (mCmdXterm->isChecked() ? EditAlarmDlg::EXEC_IN_TERMINAL : EditAlarmDlg::DISCARD_OUTPUT);
 	Preferences::mDefaultEmailBcc         = mEmailBcc->isChecked();
 	Preferences::mDefaultCopyToKOrganizer = mCopyToKOrganizer->isChecked();
 	Preferences::mDefaultLateCancel       = mLateCancel->isChecked() ? 1 : 0;
