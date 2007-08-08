@@ -29,6 +29,7 @@
 #include <QListView>
 #include <QList>
 #include <QFont>
+#include <QColor>
 
 #include "resources/alarmresource.h"
 #include "resources/alarmresources.h"
@@ -103,9 +104,6 @@ class ResourceDelegate : public QItemDelegate
 	public:
 		ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
 		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
-
-	protected:
-		virtual void drawDecoration(QPainter*, const QStyleOptionViewItem&, const QRect&, const QPixmap&) const;
 };
 
 #endif // RESOURCEMODELVIEW_H

@@ -86,7 +86,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
 		case Qt::DecorationRole:
 			if (!resource->colour().isValid())
-				break;
+				return QApplication::palette().color(QPalette::Base);
 			return resource->colour();
 		case Qt::ForegroundRole:
 			switch (resource->alarmType())
@@ -398,24 +398,6 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 		}
 	}
 	return model->setData(index, state, Qt::CheckStateRole);
-}
-
-/******************************************************************************
-* Draw the resource colour icon in the correct colour if the colour is set
-* invalid.
-*/
-void ResourceDelegate::drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const
-{
-	if (pixmap.isNull())
-	{
-//kDebug()<<"draw pixmap: null" << endl;
-		QRect r(QPoint(0, 0), option.decorationSize);
-		QPixmap px(option.decorationSize);
-		px.fill(option.palette.color(QPalette::Window));
-		QItemDelegate::drawDecoration(painter, option, r, px);
-	}
-	else
-		QItemDelegate::drawDecoration(painter, option, rect, pixmap);
 }
 
 
