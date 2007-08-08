@@ -475,7 +475,6 @@ bool ResourceView::viewportEvent(QEvent* e)
 				opt.rect = rectForIndex(index);
 				int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
 				int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
-kDebug()<<"====colour width="<<viewOptions().decorationSize.width()<<", checkwidth="<<checkWidth<<", left="<<left << endl;
 				int right = left + textWidth;
 				if (left >= horizontalOffset() + spacing()
 				&&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
