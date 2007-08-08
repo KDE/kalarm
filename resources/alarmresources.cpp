@@ -722,6 +722,7 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
 	connect(resource, SIGNAL(readOnlyChanged(AlarmResource*)), SLOT(slotReadOnlyChanged(AlarmResource*)));
 	connect(resource, SIGNAL(locationChanged(AlarmResource*)), SLOT(slotLocationChanged(AlarmResource*)));
+	connect(resource, SIGNAL(colourChanged(AlarmResource*)), SLOT(slotColourChanged(AlarmResource*)));
 	connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(resLoaded(AlarmResource*)), SLOT(slotResLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
@@ -783,7 +784,7 @@ void AlarmResources::slotSaveError(ResourceCalendar* resource, const QString& er
 
 void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change change)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::slotResourceStatusChanged(" << resource->resourceName() << "," << (change == Enabled ?"Enabled)" : change == ReadOnly ?"ReadOnly)" :"Location)");
+	kDebug(KARES_DEBUG) << "AlarmResources::slotResourceStatusChanged(" << resource->resourceName() << ", " << (change == Enabled ? "Enabled)" : change == ReadOnly ? "ReadOnly)" : change == Location ? "Location)" : "Colour)");
 	if (!resource->writable())
 	{
 		// The resource is no longer writable, so it can't be a standard resource

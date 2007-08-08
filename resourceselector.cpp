@@ -43,7 +43,7 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
-
+#include <kcolordialog.h>
 
 #include <kcal/resourcecalendar.h>
 
@@ -285,6 +285,12 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionShowDetails = new KAction(KIcon("document-properties"), i18n("Show &Details"), this);
 	actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
+	mActionSetColour   = new KAction(KIcon("color-picker"), i18n("Set &Color"), this);
+	actions->addAction(QLatin1String("resSetColour"), mActionSetColour);
+	connect(mActionSetColour, SIGNAL(triggered(bool)), SLOT(setColour()));
+	mActionClearColour   = new KAction(i18n("Clear C&olor"), this);
+	actions->addAction(QLatin1String("resClearColour"), mActionClearColour);
+	connect(mActionClearColour, SIGNAL(triggered(bool)), SLOT(clearColour()));
 	mActionEdit        = new KAction(KIcon("edit"), i18n("&Edit..."), this);
 	actions->addAction(QLatin1String("resEdit"), mActionEdit);
 	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
@@ -341,6 +347,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 	mActionReload->setEnabled(active);
 	mActionSave->setEnabled(active && writable);
 	mActionShowDetails->setEnabled(resource);
+	mActionSetColour->setEnabled(resource);
+	mActionClearColour->setEnabled(resource);
+	mActionClearColour->setVisible(resource && resource->colour().isValid());
 	mActionEdit->setEnabled(resource);
 	mActionRemove->setEnabled(resource);
 	mActionImport->setEnabled(active && writable);
@@ -400,6 +409,31 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
 	AlarmCalendar::importAlarms(this, currentResource());
+}
+
+/******************************************************************************
+* Called from the context menu to set a colour for the selected resource.
+*/
+void ResourceSelector::setColour()
+{
+	AlarmResource* resource = currentResource();
+	if (resource)
+	{
+		QColor colour = resource->colour();
+		if (KColorDialog::getColor(colour, QColor(), this) == KColorDialog::Accepted)
+			resource->setColour(colour);
+	}
+}
+
+/******************************************************************************
+* Called from the context menu to clear the display colour for the selected
+* resource.
+*/
+void ResourceSelector::clearColour()
+{
+	AlarmResource* resource = currentResource();
+	if (resource)
+		resource->setColour(QColor());
 }
 
 /******************************************************************************

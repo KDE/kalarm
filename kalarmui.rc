@@ -76,6 +76,9 @@
   <Action name="resRemove" />
   <Action name="resDefault" />
   <Separator/>
+  <Action name="resSetColour" />
+  <Action name="resClearColour" />
+  <Separator/>
   <Action name="resAdd" />
   <Action name="resImport" />
  </Menu>

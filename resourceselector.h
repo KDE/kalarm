@@ -72,6 +72,8 @@ class ResourceSelector : public QFrame
 	void  reloadResource();
 	void  saveResource();
 	void  setStandard();
+	void  setColour();
+	void  clearColour();
 	void  importCalendar();
 	void  showInfo();
 
@@ -90,6 +92,8 @@ class ResourceSelector : public QFrame
 	KAction*        mActionReload;
 	KAction*        mActionSave;
 	KAction*        mActionShowDetails;
+	KAction*        mActionSetColour;
+	KAction*        mActionClearColour;
 	KAction*        mActionEdit;
 	KAction*        mActionRemove;
 	KAction*        mActionImport;

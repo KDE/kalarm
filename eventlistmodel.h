@@ -29,6 +29,7 @@
 #include <QSize>
 
 #include "kcalendar.h"
+#include "alarmresources.h"
 
 class QPixmap;
 namespace KCal { class Event; }
@@ -79,6 +80,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateArchivedColour(const QColor&);
 		void     slotUpdateDisabledColour(const QColor&);
 		void     slotUpdateWorkingHours();
+		void     slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 
 	private:
 		explicit EventListModel(KCalEvent::Status, QObject* parent = 0);

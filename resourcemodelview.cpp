@@ -84,6 +84,10 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			return resource->resourceName();
 		case Qt::CheckStateRole:
 			return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
+		case Qt::DecorationRole:
+			if (!resource->colour().isValid())
+				break;
+			return resource->colour();
 		case Qt::ForegroundRole:
 			switch (resource->alarmType())
 			{
@@ -259,9 +263,16 @@ void ResourceModel::slotStandardChanged(AlarmResource::Type type)
 */
 void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 {
-	if (change != AlarmResources::Enabled  &&  change != AlarmResources::ReadOnly)
-		return;    // not interested in other types of change
-	updateResource(resource);
+	switch (change)
+	{
+		case AlarmResources::Enabled:
+		case AlarmResources::ReadOnly:
+		case AlarmResources::Colour:
+			updateResource(resource);
+			break;
+		default:
+			break;
+	}
 }
 
 
@@ -389,6 +400,24 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 	return model->setData(index, state, Qt::CheckStateRole);
 }
 
+/******************************************************************************
+* Draw the resource colour icon in the correct colour if the colour is set
+* invalid.
+*/
+void ResourceDelegate::drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const
+{
+	if (pixmap.isNull())
+	{
+//kDebug()<<"draw pixmap: null" << endl;
+		QRect r(QPoint(0, 0), option.decorationSize);
+		QPixmap px(option.decorationSize);
+		px.fill(option.palette.color(QPalette::Window));
+		QItemDelegate::drawDecoration(painter, option, r, px);
+	}
+	else
+		QItemDelegate::drawDecoration(painter, option, rect, pixmap);
+}
+
 
 /*=============================================================================
 = Class: ResourceView
@@ -463,7 +492,8 @@ bool ResourceView::viewportEvent(QEvent* e)
 				opt.QStyleOption::operator=(viewOptions());
 				opt.rect = rectForIndex(index);
 				int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
-				int left = spacing() + 3*margin + checkWidth;   // left offset of text
+				int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
+kDebug()<<"====colour width="<<viewOptions().decorationSize.width()<<", checkwidth="<<checkWidth<<", left="<<left << endl;
 				int right = left + textWidth;
 				if (left >= horizontalOffset() + spacing()
 				&&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())

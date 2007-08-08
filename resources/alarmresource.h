@@ -107,6 +107,13 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		virtual bool readOnly() const;
 		virtual void setReadOnly(bool);
 
+		/** Return the colour used to display alarms belonging to this resource.
+		 *  @return display colour, or invalid if none specified */
+		QColor   colour() const                  { return mColour; }
+
+		/** Set the colour used to display alarms belonging to this resource.
+		 *  @param color display colour, or invalid to use the default colour */
+		void     setColour(const QColor& color);
 		/** Start a batch of configuration changes.
 		 *  The changes will be stored up until applyReconfig() is called. */
 		virtual void startReconfig();
@@ -188,6 +195,8 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		void locationChanged(AlarmResource*);
 		/** Signal that the resource cannot be set read-write since its format is incompatible. */
 		void notWritable(AlarmResource*);
+		/** Signal that the display colour has changed. */
+		void colourChanged(AlarmResource*);
 
 	protected:
 		virtual void      doClose();
@@ -207,6 +216,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 
 		KABC::Lock* mLock;
 		Type        mType;            // type of alarm held in this resource
+		QColor      mColour;          // background colour for displaying this resource
 		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)

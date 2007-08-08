@@ -27,6 +27,8 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+#include "resources/alarmresource.h"
+#include "resources/alarmresources.h"
 #include "resources/kcalendar.h"
 #include "alarmcalendar.h"
 #include "alarmtext.h"
@@ -88,6 +90,7 @@ for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
+	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 }
 
 int EventListModel::rowCount(const QModelIndex& parent) const
@@ -133,11 +136,15 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 		default:
 			break;
 	}
+	bool resourceColour = false;
 	switch (column)
 	{
 		case TimeColumn:
 			switch (role)
 			{
+				case Qt::BackgroundRole:
+					resourceColour = true;
+					break;
 				case Qt::DisplayRole:
 				{
 					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
@@ -156,6 +163,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 		case TimeToColumn:
 			switch (role)
 			{
+				case Qt::BackgroundRole:
+					resourceColour = true;
+					break;
 				case Qt::DisplayRole:
 					if (event.expired())
 						return QString();
@@ -175,6 +185,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 		case RepeatColumn:
 			switch (role)
 			{
+				case Qt::BackgroundRole:
+					resourceColour = true;
+					break;
 				case Qt::DisplayRole:
 					return repeatText(event);
 				case Qt::TextAlignmentRole:
@@ -229,6 +242,9 @@ break;
 		case TextColumn:
 			switch (role)
 			{
+				case Qt::BackgroundRole:
+					resourceColour = true;
+					break;
 				case Qt::DisplayRole:
 				case SortRole:
 					return AlarmText::summary(event, 1);
@@ -241,6 +257,9 @@ break;
 		case TemplateNameColumn:
 			switch (role)
 			{
+				case Qt::BackgroundRole:
+					resourceColour = true;
+					break;
 				case Qt::DisplayRole:
 					return event.templateName();
 				case SortRole:
@@ -249,6 +268,13 @@ break;
 			break;
 		default:
 			break;
+	}
+
+	if (resourceColour)
+	{
+		AlarmResource* resource = AlarmResources::instance()->resourceForIncidence(event.id());
+		if (resource  &&  resource->colour().isValid())
+			return resource->colour();
 	}
 	return QVariant();
 }
@@ -380,7 +406,7 @@ kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
 		if (KAEvent(mEvents[row]).workTimeOnly())
 		{
 			// For efficiency, emit a single signal for each group
-			// of consecutive archived alarms, rather than a separate
+			// of consecutive alarms to update, rather than a separate
 			// signal for each alarm.
 			if (firstRow < 0)
 				firstRow = row;
@@ -397,6 +423,39 @@ kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
 		emit dataChanged(index(firstRow, TimeColumn), index(mEvents.count() - 1, TimeColumn));
 		emit dataChanged(index(firstRow, TimeToColumn), index(mEvents.count() - 1, TimeToColumn));
 	}
+}
+
+/******************************************************************************
+* Called when a resource status has changed.
+* If the resource's display colour has changed, update all its alarms.
+*/
+void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
+{
+	if (change != AlarmResources::Colour)
+		return;
+kDebug(5950)<<"EventListModel::slotResourceStatusChanged(Colour)"<<endl;
+	AlarmResources* resources = AlarmResources::instance();
+	int firstRow = -1;
+	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	{
+		if (resources->resourceForIncidence(mEvents[row]->uid()) == resource)
+		{
+			// For efficiency, emit a single signal for each group
+			// of consecutive alarms for the resource, rather than a separate
+			// signal for each alarm.
+			if (firstRow < 0)
+				firstRow = row;
+		}
+		else if (firstRow >= 0)
+		{
+			emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
+kDebug()<<"=== changed rows: "<<firstRow<<" - "<<row-1<<endl;
+			firstRow = -1;
+		}
+	}
+	if (firstRow >= 0)
+		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
+if (firstRow >= 0) kDebug()<<"=== changed rows: "<<firstRow<<" - "<<mEvents.count()-1<<endl;
 }
 
 /******************************************************************************

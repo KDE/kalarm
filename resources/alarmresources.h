@@ -41,7 +41,7 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 {
 		Q_OBJECT
 	public:
-		enum Change { Added, Deleted, Enabled, ReadOnly, Location };
+		enum Change { Added, Deleted, Enabled, ReadOnly, Location, Colour };
 
 		class Ticket
 		{
@@ -341,7 +341,7 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		   @a sortDirection.
 
 		   @param date request unfiltered Event list for this QDate only.
-		   @param timespec the time spec to use to interpret @p start and @p end
+		   @param timespec the time spec to use to interpret @p date
 		   @param sortField specifies the EventSortField.
 		   @param sortDirection specifies the SortDirection.
 		   @return the list of sorted, unfiltered Events occurring on @a date.
@@ -459,6 +459,7 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		void slotActiveChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Enabled); }
 		void slotReadOnlyChanged(AlarmResource*);
 		void slotLocationChanged(AlarmResource* r)    { slotResourceStatusChanged(r, Location); }
+		void slotColourChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Colour); }
 		void slotResLoaded(AlarmResource*);
 		void slotResourceLoaded(AlarmResource*);
 		void slotResourceSaved(AlarmResource*);
