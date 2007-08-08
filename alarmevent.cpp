@@ -986,7 +986,7 @@ DateTime KAEvent::displayDateTime() const
 		bool recurTimeVaries = (recurType == KARecurrence::MINUTELY  &&  mRecurrence->frequency() % (24*60));
 		bool repeatTimeVaries = (mRepeatCount  &&  mRepeatInterval % (24*60));
 		int recurFreq = 0;
-		int recurCount;
+		int recurCount = 0;
 		int repeatFreq = mRepeatCount ? mRepeatInterval * 60 : 0;
 		int repeatCount = mRepeatInterval ? mRepeatCount : 0;
 		KDateTime recurEnd;
