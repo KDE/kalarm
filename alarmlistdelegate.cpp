@@ -120,7 +120,7 @@ bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 		default:
 			break;
 	}
-	kDebug(5950) <<"AlarmListDelegate::editorEvent()";
+	kDebug(5950) << "AlarmListDelegate::editorEvent()";
 	AlarmListView* view = static_cast<AlarmListView*>(parent());
 	if (index.isValid())
 	{

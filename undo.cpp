@@ -766,7 +766,7 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, AlarmResource* resource,
 UndoItem* UndoAdd::doRestore(bool setArchive)
 {
 	// Retrieve the current state of the alarm
-	kDebug(5950) <<"UndoAdd::doRestore(" << mEventID <<")";
+	kDebug(5950) << "UndoAdd::doRestore(" << mEventID << ")";
 	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mEventID);
 	if (!kcalEvent)
 	{
@@ -885,7 +885,7 @@ UndoEdit::~UndoEdit()
 */
 UndoItem* UndoEdit::restore()
 {
-	kDebug(5950) <<"UndoEdit::restore(" << mNewEventID <<")";
+	kDebug(5950) << "UndoEdit::restore(" << mNewEventID << ")";
 	// Retrieve the current state of the alarm
 	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mNewEventID);
 	if (!kcalEvent)
@@ -984,7 +984,7 @@ UndoDelete::~UndoDelete()
 */
 UndoItem* UndoDelete::restore()
 {
-	kDebug(5950) <<"UndoDelete::restore(" << mEvent->id() <<")";
+	kDebug(5950) << "UndoDelete::restore(" << mEvent->id() << ")";
 	// Restore the original event
 	switch (calendar())
 	{
@@ -1119,7 +1119,7 @@ QString UndoDeletes::defaultActionText() const
 */
 UndoItem* UndoReactivate::restore()
 {
-	kDebug(5950) <<"UndoReactivate::restore()";
+	kDebug(5950) << "UndoReactivate::restore()";
 	// Validate the alarm's calendar
 	switch (calendar())
 	{
@@ -1162,7 +1162,7 @@ QString UndoReactivate::defaultActionText() const
 */
 UndoItem* UndoDeactivate::restore()
 {
-	kDebug(5950) <<"UndoDeactivate::restore()";
+	kDebug(5950) << "UndoDeactivate::restore()";
 	// Validate the alarm's calendar
 	switch (calendar())
 	{

@@ -75,10 +75,10 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
 		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
 		version057_UTC = isUTC(localFile);
-		kDebug(5950) <<"CalendarCompat::fix(): KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") <<"UTC)";
+		kDebug(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
 	}
 	else
-		kDebug(5950) <<"CalendarCompat::fix(): KAlarm version" << version;
+		kDebug(5950) << "CalendarCompat::fix(): KAlarm version" << version;
 
 	// Convert events to current KAlarm format for if the calendar is saved
 	KAEvent::convertKCalEvents(calendar, version, version057_UTC);

@@ -47,7 +47,7 @@ static const char* REQUEST_DBUS_OBJECT = "/kalarm";   // D-Bus object path of KA
 =============================================================================*/
 DBusHandler::DBusHandler()
 {
-	kDebug(5950) <<"DBusHandler::DBusHandler()";
+	kDebug(5950) << "DBusHandler::DBusHandler()";
 	new KalarmAdaptor(this);
 	QDBusConnection::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
@@ -226,7 +226,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 		fg.setNamedColor(fgColor);
 		if (!fg.isValid())
 		{
-			kError(5950) <<"D-Bus call: invalid foreground color:" << fgColor;
+			kError(5950) << "D-Bus call: invalid foreground color:" << fgColor;
 			return false;
 		}
 	}
@@ -237,7 +237,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 	{
 		if (!font.fromString(fontStr))    // N.B. this doesn't do good validation
 		{
-			kError(5950) <<"D-Bus call: invalid font:" << fontStr;
+			kError(5950) << "D-Bus call: invalid font:" << fontStr;
 			return false;
 		}
 	}
@@ -286,7 +286,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	{
 		if (KAMail::identityManager()->identityForName(fromID).isNull())
 		{
-			kError(5950) <<"D-Bus call scheduleEmail(): unknown sender ID:" << fromID;
+			kError(5950) << "D-Bus call scheduleEmail(): unknown sender ID:" << fromID;
 			return false;
 		}
 	}
@@ -294,19 +294,19 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	QString bad = KAMail::convertAddresses(addresses, addrs);
 	if (!bad.isEmpty())
 	{
-		kError(5950) <<"D-Bus call scheduleEmail(): invalid email addresses:" << bad;
+		kError(5950) << "D-Bus call scheduleEmail(): invalid email addresses:" << bad;
 		return false;
 	}
 	if (addrs.isEmpty())
 	{
-		kError(5950) <<"D-Bus call scheduleEmail(): no email address";
+		kError(5950) << "D-Bus call scheduleEmail(): no email address";
 		return false;
 	}
 	QStringList atts;
 	bad = KAMail::convertAttachments(attachments, atts);
 	if (!bad.isEmpty())
 	{
-		kError(5950) <<"D-Bus call scheduleEmail(): invalid email attachment:" << bad;
+		kError(5950) << "D-Bus call scheduleEmail(): invalid email attachment:" << bad;
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
@@ -367,9 +367,9 @@ KDateTime DBusHandler::convertDateTime(const QString& dateTime, const KDateTime&
 	if (error  ||  !result.isValid())
 	{
 		if (!defaultDt.isValid())
-			kError(5950) <<"D-Bus call: invalid start date/time: '" << dateTime <<"'";
+			kError(5950) << "D-Bus call: invalid start date/time: '" << dateTime << "'";
 		else
-			kError(5950) <<"D-Bus call: invalid recurrence end date/time: '" << dateTime <<"'";
+			kError(5950) << "D-Bus call: invalid recurrence end date/time: '" << dateTime << "'";
 	}
 	return result;
 }
@@ -404,7 +404,7 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 		return Preferences::defaultBgColour();
 	QColor bg(bgColor);
 	if (!bg.isValid())
-			kError(5950) <<"D-Bus call: invalid background color:" << bgColor;
+			kError(5950) << "D-Bus call: invalid background color:" << bgColor;
 	return bg;
 }
 
@@ -435,12 +435,12 @@ bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
 	KDateTime end = convertDateTime(endDateTime, start);
 	if (end.isDateOnly()  &&  !start.isDateOnly())
 	{
-		kError(5950) <<"D-Bus call: alarm is date-only, but recurrence end is date/time";
+		kError(5950) << "D-Bus call: alarm is date-only, but recurrence end is date/time";
 		return false;
 	}
 	if (!end.isDateOnly()  &&  start.isDateOnly())
 	{
-		kError(5950) <<"D-Bus call: alarm is timed, but recurrence end is date-only";
+		kError(5950) << "D-Bus call: alarm is timed, but recurrence end is date-only";
 		return false;
 	}
 	return convertRecurrence(recurrence, start, recurType, recurInterval, 0, end);
@@ -459,7 +459,7 @@ bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KDateTime& s
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
 			break;
 		default:
-			kError(5950) <<"D-Bus call: invalid repeat type:" << recurType;
+			kError(5950) << "D-Bus call: invalid repeat type:" << recurType;
 			return false;
 	}
 	recurrence.set(type, recurInterval, recurCount, start, end);

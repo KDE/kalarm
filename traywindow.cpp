@@ -69,7 +69,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	: KSystemTrayIcon((theApp()->wantRunInSystemTray() ? parent : 0)),
 	  mAssocMainWindow(parent)
 {
-	kDebug(5950) <<"TrayWindow::TrayWindow()";
+	kDebug(5950) << "TrayWindow::TrayWindow()";
 	// Set up GUI icons
 	mIconEnabled  = loadIcon("kalarm");
 	mIconDisabled = loadIcon("kalarm_disabled");
@@ -109,7 +109,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 TrayWindow::~TrayWindow()
 {
-	kDebug(5950) <<"TrayWindow::~TrayWindow()";
+	kDebug(5950) << "TrayWindow::~TrayWindow()";
 	theApp()->removeWindow(this);
 	emit deleted();
 }
@@ -173,7 +173,7 @@ void TrayWindow::slotQuit()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-	kDebug(5950) <<"TrayWindow::setEnabledStatus(" << (int)status <<")";
+	kDebug(5950) << "TrayWindow::setEnabledStatus(" << (int)status << ")";
 	setIcon(status ? mIconEnabled : mIconDisabled);
 }
 
@@ -235,7 +235,7 @@ bool TrayWindow::event(QEvent* e)
 		text = KGlobal::mainComponent().aboutData()->programName();
 	else
 		text = i18n("%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
-	kDebug(5950) <<"TrayWindow::event():" << text;
+	kDebug(5950) << "TrayWindow::event():" << text;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
 	QToolTip::showText(he->globalPos(), text);
@@ -307,11 +307,11 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			items.insert(it, item);
 		}
 	}
-	kDebug(5950) <<"TrayWindow::tooltipAlarmText():";
+	kDebug(5950) << "TrayWindow::tooltipAlarmText():";
 	int count = 0;
 	for (i = 0, iend = items.count();  i < iend;  ++i)
 	{
-		kDebug(5950) <<"--" << (count+1) <<")" << items[i].text;
+		kDebug(5950) << "--" << (count+1) << ")" << items[i].text;
 		text += '\n';
 		text += items[i].text;
 		if (++count == maxCount)
