@@ -69,7 +69,7 @@ class BirthdayDlg : public KDialog
 		CheckBox*             mConfirmAck;
 		LateCancelSelector*   mLateCancel;
 		SpecialActionsButton* mSpecialActionsButton;
-		RepetitionButton*     mSimpleRepetition;
+		RepetitionButton*     mSubRepetition;
 		QString               mPrefixText;   // last entered value of prefix text
 		QString               mSuffixText;   // last entered value of suffix text
 		int                   mFlags;        // event flag bits

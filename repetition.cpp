@@ -20,14 +20,11 @@
 
 #include "kalarm.h"
 
-#include <QTimer>
-#include <QLabel>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #include <kdialog.h>
-#include <kseparator.h>
 #include <klocale.h>
 
 #include "buttongroup.h"
@@ -85,7 +82,7 @@ void RepetitionButton::set(int interval, int count, bool dateOnly, int maxDurati
 void RepetitionButton::activate(bool waitForInitialisation)
 {
 	if (!mDialog)
-		mDialog = new RepetitionDlg(i18n("Alarm Repetition"), mReadOnly, this);
+		mDialog = new RepetitionDlg(i18n("Alarm Sub-Repetition"), mReadOnly, this);
 	mDialog->set(mInterval, mCount, mDateOnly, mMaxDuration);
 	if (waitForInitialisation)
 		emit needsInitialisation();     // request dialog initialisation
@@ -141,8 +138,6 @@ void RepetitionButton::displayDialog()
 /*=============================================================================
 = Class RepetitionDlg
 = Simple alarm repetition dialogue.
-* Note that the displayed repetition count is one greater than the value set or
-* returned in the external methods.
 =============================================================================*/
 
 static const int MAX_COUNT = 9999;    // maximum range for count spinbox
@@ -163,45 +158,18 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacing);
 
-	QHBoxLayout* layout = new QHBoxLayout();
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	topLayout->addLayout(layout);
-	int hintMargin = 2*marginHint();
-	layout->addSpacing(hintMargin);
-	QLabel* hintLabel = new QLabel(
-	     i18n("Use this dialog either:\n"
-	          "- instead of the Recurrence tab, or\n"
-	          "- after using the Recurrence tab, to set up a repetition within a repetition."),
-	     page);
-	hintLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	hintLabel->setLineWidth(2);
-	hintLabel->setMargin(marginHint());
-	hintLabel->setWordWrap(true);
-//	hintLabel->setTextFormat(Qt::RichText);
-	layout->addWidget(hintLabel);
-	layout->addSpacing(hintMargin);
-	topLayout->addSpacing(spacing);
-
-	// Group the other controls together so that the minimum width can be found easily
-	QWidget* controls = new QWidget(page);
-	topLayout->addWidget(controls);
-	topLayout = new QVBoxLayout(controls);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(spacing);
-
 	mTimeSelector = new TimeSelector(i18nc("Repeat every 10 minutes", "Repeat every"), QString(),
 	                  i18n("Check to repeat the alarm each time it recurs. "
 	                       "Instead of the alarm triggering once at each recurrence, "
 	                       "this option makes the alarm trigger multiple times at each recurrence."),
 	                  i18n("Enter the time between repetitions of the alarm"),
-	                  true, controls);
+	                  true, page);
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
 	connect(mTimeSelector, SIGNAL(valueChanged(int)), SLOT(intervalChanged(int)));
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
 	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-	mButtonBox = new QGroupBox(controls);
+	mButtonBox = new QGroupBox(page);
 	topLayout->addWidget(mButtonBox);
 	mButtonGroup = new ButtonGroup(mButtonBox);
 	connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(typeClicked()));
@@ -209,7 +177,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	QVBoxLayout* vlayout = new QVBoxLayout(mButtonBox);
 	vlayout->setMargin(marginHint());
 	vlayout->setSpacing(spacing);
-	layout = new QHBoxLayout();
+	QHBoxLayout* layout = new QHBoxLayout();
 	layout->setMargin(0);
 	vlayout->addLayout(layout);
 	mCountButton = new RadioButton(i18n("Number of repetitions:"), mButtonBox);
@@ -242,8 +210,6 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout->addWidget(mDuration);
 	mDurationButton->setFocusWidget(mDuration);
 	layout->addStretch();
-
-	hintLabel->setMinimumWidth(controls->sizeHint().width() - 2*hintMargin);   // this enables a minimum size for the dialogue
 
 	mCountButton->setChecked(true);
 	repetitionToggled(false);

@@ -41,6 +41,7 @@ class RadioButton;
 class DateEdit;
 class TimeEdit;
 class ButtonGroup;
+class RepetitionButton;
 class KAEvent;
 class Rule;
 class NoRule;
@@ -70,11 +71,14 @@ class RecurrenceEdit : public QFrame
 		QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
+		int           subRepeatCount(int* subRepeatInterval = 0) const;
+		void          setSubRepetition(int reminderMinutes, bool dateOnly);
 		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const KDateTime&);
 		KDateTime     endDateTime() const;
 		bool          stateChanged() const;
+		void          activateSubRepetition();
 
 		static QString i18n_Norecur();           // text of 'No recurrence' selection, lower case
 		static QString i18n_NoRecur();           // text of 'No Recurrence' selection, initial capitals
@@ -98,6 +102,7 @@ class RecurrenceEdit : public QFrame
 		void          shown();
 		void          typeChanged(int recurType);   // returns a RepeatType value
 		void          frequencyChanged();
+		void          repeatNeedsInitialisation();
 
 	protected:
 		virtual void  showEvent(QShowEvent*);
@@ -163,15 +168,18 @@ class RecurrenceEdit : public QFrame
 
 		// Current start date and time
 		KDateTime         mCurrStartDateTime;
+		RepetitionButton* mSubRepetition;
 		bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
 		QAbstractButton*  mSavedRuleButton;          // which rule button was selected
 		QAbstractButton*  mSavedRangeButton;         // which range button was selected
-		int               mSavedRepeatCount;         // repeat count
+		int               mSavedRecurCount;          // recurrence repeat count
 		KDateTime         mSavedEndDateTime;         // end date/time
 		QList<QDate>      mSavedExceptionDates;      // exception dates
+		int               mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
+		int               mSavedRepeatCount;         // sub-repetition count (via mSubRepetition button)
 		bool              mSavedWorkTimeOnly;        // only during working hours
 };
 

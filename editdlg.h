@@ -54,7 +54,6 @@ class RecurrenceEdit;
 class Reminder;
 class SoundPicker;
 class SpecialActionsButton;
-class RepetitionButton;
 class TimeSpinBox;
 class LineEdit;
 class TextEdit;
@@ -120,7 +119,7 @@ class EditAlarmDlg : public KDialog
 		void            slotShowRecurrenceEdit();
 		void            slotAnyTimeToggled(bool anyTime);
 		void            slotTemplateTimeType(QAbstractButton*);
-		void            slotSetSimpleRepetition();
+		void            slotSetSubRepetition();
 		void            slotCmdScriptToggled(bool);
 
 	private:
@@ -215,7 +214,6 @@ class EditAlarmDlg : public KDialog
 		LateCancelSelector* mLateCancel;
 		CheckBox*           mShowInKorganizer;
 
-		RepetitionButton*   mSimpleRepetition;
 		QLabel*             mRecurrenceText;
 		RecurrenceEdit*     mRecurrenceEdit;
 
@@ -269,8 +267,6 @@ class EditAlarmDlg : public KDialog
 		QString             mSavedCmdLogFile;       // mCmdLogFileEdit value
 		KDateTime           mSavedDateTime;         // mTimeWidget value
 		int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
-		int                 mSavedRepeatInterval;   // alarm repetition interval (via mSimpleRepetition button)
-		int                 mSavedRepeatCount;      // alarm repetition count (via mSimpleRepetition button)
 		int                 mSavedLateCancel;       // mLateCancel value
 		bool                mSavedAutoClose;        // mLateCancel->isAutoClose() value
 		bool                mSavedShowInKorganizer; // mShowInKorganizer status

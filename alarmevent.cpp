@@ -1597,7 +1597,7 @@ Alarm* KAEvent::initKcalAlarm(Event* event, int startOffsetSecs, const QStringLi
 			setProcedureAlarm(alarm, mPostAction);
 			break;
 		case KAAlarm::MAIN_ALARM:
-			alarm->setSnoozeTime(mRepeatInterval);
+			alarm->setSnoozeTime(mRepeatInterval * 60);
 			alarm->setRepeatCount(mRepeatCount);
 			if (mRepeatCount)
 				alarm->setCustomProperty(KCalendar::APPNAME, NEXT_REPEAT_PROPERTY,

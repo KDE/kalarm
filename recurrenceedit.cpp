@@ -52,6 +52,7 @@
 #include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
+#include "repetition.h"
 #include "spinbox.h"
 #include "timeedit.h"
 #include "timespinbox.h"
@@ -91,7 +92,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	  mNoEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
-	kDebug(5950) <<"RecurrenceEdit::RecurrenceEdit()";
+	kDebug(5950) << "RecurrenceEdit::RecurrenceEdit()";
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
@@ -344,6 +345,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly->setWhatsThis(i18n("Only execute the alarm during working hours.\nYou can specify working hours in the Preferences dialog."));
 	vlayout->addWidget(mWorkTimeOnly);
 
+	// Simple repetition button
+	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, this);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->setReadOnly(mReadOnly);
+	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
+	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
+	mSubRepetition->setWhatsThis(i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	topLayout->addWidget(mSubRepetition);
+
 	mNoEmitTypeChanged = false;
 }
 
@@ -444,6 +454,7 @@ void RecurrenceEdit::periodClicked(QAbstractButton* button)
 			mRepeatCountButton->setEnabled(!atLogin);
 		}
 		rangeTypeClicked();
+		mSubRepetition->setEnabled(!(none || atLogin));
 		if (!mNoEmitTypeChanged)
 			emit typeChanged(mRuleButtonType);
 	}
@@ -478,6 +489,57 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	else
 		mRuleButtonGroup->checkedButton()->setFocus();
 	emit shown();
+}
+
+/******************************************************************************
+* Return whether there is a sub-repetition within the recurrence.
+*/
+int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
+{
+	int count = mRuleButtonType >= SUBDAILY  &&  mSubRepetition->count();
+	if (subRepeatInterval)
+		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
+	return count;
+}
+
+/******************************************************************************
+*  Called when the Sub-Repetition button has been pressed to display the
+*  sub-repetition dialog.
+*  Alarm repetition has the following restrictions:
+*  1) Not allowed for a repeat-at-login alarm
+*  2) For a date-only alarm, the repeat interval must be a whole number of days.
+*  3) The overall repeat duration must be less than the recurrence interval.
+*/
+void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
+{
+	int maxDuration;
+	switch (mRuleButtonType)
+	{
+		case RecurrenceEdit::NO_RECUR:
+		case RecurrenceEdit::AT_LOGIN:   // alarm repeat not allowed
+			maxDuration = 0;
+			break;
+		default:          // repeat duration must be less than recurrence interval
+		{
+			KAEvent event;
+			updateEvent(event, false);
+			maxDuration = event.longestRecurrenceInterval() - reminderMinutes - 1;
+			break;
+		}
+	}
+#ifdef __GNUC__
+#warning This needs to adjust interval and count if maxDuration is less
+#endif
+	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
+	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
+}
+
+/******************************************************************************
+* Activate the sub-repetition dialog.
+*/
+void RecurrenceEdit::activateSubRepetition()
+{
+	mSubRepetition->activate();
 }
 
 /******************************************************************************
@@ -817,6 +879,9 @@ void RecurrenceEdit::set(const KAEvent& event)
 	enableExceptionButtons();
 	mWorkTimeOnly->setChecked(event.workTimeOnly());
 
+	// Get repetition within recurrence
+	mSubRepetition->set(event.repeatInterval(), event.repeatCount());
+
 	rangeTypeClicked();
 
 	saveState();
@@ -843,6 +908,12 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		endDate = mEndDateEdit->date();
 		endTime = mEndTimeEdit->time();
 	}
+
+	// Set up repetition within the recurrence
+	int count = mSubRepetition->count();
+	if (mRuleButtonType < SUBDAILY)
+		count = 0;
+	event.setRepetition(mSubRepetition->interval(), count);
 
 	// Set up the recurrence according to the type selected
 	QAbstractButton* button = mRuleButtonGroup->checkedButton();
@@ -917,6 +988,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
 	event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
+
 	event.setUpdated();
 }
 
@@ -930,7 +1002,7 @@ void RecurrenceEdit::saveState()
 		mRule->saveState();
 	mSavedRangeButton = mRangeButtonGroup->checkedButton();
 	if (mSavedRangeButton == mRepeatCountButton)
-		mSavedRepeatCount = mRepeatCountEntry->value();
+		mSavedRecurCount = mRepeatCountEntry->value();
 	else if (mSavedRangeButton == mEndDateButton)
 	{
 		mSavedEndDateTime = KDateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mCurrStartDateTime.timeSpec());
@@ -938,6 +1010,8 @@ void RecurrenceEdit::saveState()
 	}
 	mSavedExceptionDates = mExceptionDates;
 	mSavedWorkTimeOnly   = mWorkTimeOnly->isChecked();
+	mSavedRepeatInterval = mSubRepetition->interval();
+	mSavedRepeatCount    = mSubRepetition->count();
 }
 
 /******************************************************************************
@@ -950,7 +1024,7 @@ bool RecurrenceEdit::stateChanged() const
 	||  mRule  &&  mRule->stateChanged())
 		return true;
 	if (mSavedRangeButton == mRepeatCountButton
-	&&  mSavedRepeatCount != mRepeatCountEntry->value())
+	&&  mSavedRecurCount  != mRepeatCountEntry->value())
 		return true;
 	if (mSavedRangeButton == mEndDateButton)
 	{
@@ -960,7 +1034,9 @@ bool RecurrenceEdit::stateChanged() const
 			return true;
 	}
 	if (mSavedExceptionDates != mExceptionDates
-	||  mSavedWorkTimeOnly   != mWorkTimeOnly->isChecked())
+	||  mSavedWorkTimeOnly   != mWorkTimeOnly->isChecked()
+	||  mSavedRepeatInterval != mSubRepetition->interval()
+	||  mSavedRepeatCount    != mSubRepetition->count())
 		return true;
 	return false;
 }
