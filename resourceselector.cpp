@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QFont>
 #include <QResizeEvent>
+#include <QApplication>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -420,6 +421,8 @@ void ResourceSelector::setColour()
 	if (resource)
 	{
 		QColor colour = resource->colour();
+		if (!colour.isValid())
+			colour = QApplication::palette().color(QPalette::Base);
 		if (KColorDialog::getColor(colour, QColor(), this) == KColorDialog::Accepted)
 			resource->setColour(colour);
 	}
