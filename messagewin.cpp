@@ -1028,7 +1028,7 @@ void MessageWin::slotSpeak()
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
 		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() D-Bus error";
-		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DBus call sayMessage failed"));
+		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("D-Bus call sayMessage failed"));
 	}
 }
 
