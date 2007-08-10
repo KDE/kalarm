@@ -30,7 +30,7 @@ class QPushButton;
 class QShowEvent;
 class QResizeEvent;
 class KHBox;
-namespace Phonon { class AudioPlayer; }
+namespace Phonon { class MediaObject; }
 class PushButton;
 class CheckBox;
 class SpinBox;
@@ -86,7 +86,7 @@ class SoundDlg : public KDialog
 		Slider*        mFadeSlider;
 		QString        mDefaultDir;     // current default directory for mFileEdit
 		KUrl           mUrl;
-		Phonon::AudioPlayer* mPlayer;
+		Phonon::MediaObject* mPlayer;
 		bool           mReadOnly;
 };
 

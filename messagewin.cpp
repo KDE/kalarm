@@ -61,14 +61,10 @@
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>
-#if 0
-#include <phonon/simpleplayer.h>
-#else
 #include <phonon/mediaobject.h>
-#include <phonon/audiopath.h>
+#include <phonon/path.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
-#endif
 #include <kdebug.h>
 #include <ktoolinvocation.h>
 
@@ -985,17 +981,15 @@ void MessageWin::playAudio()
 		// call it on a timer to allow the window to display first.
 		Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, this);
 		output->setVolume(mVolume);
-		Phonon::AudioPath* path = new Phonon::AudioPath(this);
-		path->addOutput(output);
 		mAudioObject = new Phonon::MediaObject(this);
 		mAudioObject->setCurrentSource(play);
-		mAudioObject->addAudioPath(path);
+		Phonon::Path path = Phonon::createPath(mAudioObject, output);
 		if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
 		{
 			Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(this);
 			fader->setVolume(mFadeVolume);
 			fader->fadeIn(mFadeSeconds);
-			path->insertEffect(fader);
+			path.insertEffect(fader);
 		}
 		connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()));
 		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));

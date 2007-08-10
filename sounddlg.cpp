@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <khbox.h>
 #include <kio/netaccess.h>
-#include <phonon/audioplayer.h>
+#include <Phonon/MediaObject>
 
 #include "checkbox.h"
 #include "functions.h"
@@ -284,12 +284,12 @@ void SoundDlg::playSound()
 	}
 	if (!checkFile())
 		return;
-	mPlayer = new Phonon::AudioPlayer(Phonon::NotificationCategory);
+	mPlayer = Phonon::createPlayer(Phonon::NotificationCategory, mUrl);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
 	mFilePlay->setToolTip(i18n("Stop sound"));
 	mFilePlay->setWhatsThis(i18n("Stop playing the sound"));
-	mPlayer->play(mUrl);
+	mPlayer->play();
 }
 
 /******************************************************************************
