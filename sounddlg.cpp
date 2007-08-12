@@ -311,7 +311,7 @@ bool SoundDlg::checkFile()
 {
 	QString file = mFileEdit->text();
 	mUrl = KUrl(file);
-	if (KIO::NetAccess::exists(mUrl, true, this))
+	if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, this))
 		return true;
 	if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1String("/")))
 	{
@@ -329,14 +329,14 @@ bool SoundDlg::checkFile()
 				{
 					mUrl.setPath(soundDirs[i]);
 					mUrl.addPath(file);
-					if (KIO::NetAccess::exists(mUrl, true, this))
+					if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, this))
 						return true;
 				}
 			}
 		}
 		mUrl.setPath(QDir::homePath());
 		mUrl.addPath(file);
-		if (KIO::NetAccess::exists(mUrl, true, this))
+		if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, this))
 			return true;
 	}
 	KMessageBox::sorry(this, i18n("File not found"));

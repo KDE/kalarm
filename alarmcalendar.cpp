@@ -208,7 +208,7 @@ bool AlarmCalendar::open()
 
 		// Check for file's existence, assuming that it does exist when uncertain,
 		// to avoid overwriting it.
-		if (!KIO::NetAccess::exists(mUrl, true, MainWindow::mainMainWindow())
+		if (!KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow())
 		||  load() == 0)
 		{
 			// The calendar file doesn't yet exist, or it's zero length, so create a new one
