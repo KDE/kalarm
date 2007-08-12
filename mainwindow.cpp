@@ -34,6 +34,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "resourceselector.h"
@@ -390,8 +391,9 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("templates"), mActionTemplates);
 	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
-	mActionNew = KAlarm::createNewAlarmAction(i18n("&New..."), actions, QLatin1String("new"));
-	connect(mActionNew, SIGNAL(triggered(bool)), SLOT(slotNew()));
+	mActionNew = new NewAlarmAction(false, i18n("&New"), this);
+	actions->addAction(QLatin1String("new"), mActionNew);
+	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNew(KAEvent::Action)));
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
@@ -634,9 +636,9 @@ void MainWindow::selectEvent(const QString& eventID)
 /******************************************************************************
 *  Called when the New button is clicked to edit a new alarm to add to the list.
 */
-void MainWindow::slotNew()
+void MainWindow::slotNew(EditAlarmDlg::Type type)
 {
-	KAlarm::editNewAlarm(mListView);
+	KAlarm::editNewAlarm(type, mListView);
 }
 
 /******************************************************************************
@@ -645,7 +647,7 @@ void MainWindow::slotNew()
 */
 void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
 {
-	KAlarm::editNewAlarm(mListView, &tmplate);
+	KAlarm::editNewAlarm(tmplate, mListView);
 }
 
 /******************************************************************************
@@ -658,7 +660,7 @@ void MainWindow::slotNewTemplate()
 	if (kcalEvent)
 	{
 		KAEvent event(kcalEvent);
-		KAlarm::editNewTemplate(this, &event);
+		KAlarm::editNewTemplate(event, this);
 	}
 }
 
@@ -672,7 +674,7 @@ void MainWindow::slotCopy()
 	if (kcalEvent)
 	{
 		KAEvent event(kcalEvent);
-		KAlarm::editNewAlarm(this, &event);
+		KAlarm::editNewAlarm(event, this);
 	}
 }
 
@@ -1248,7 +1250,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		if (!events.isEmpty())
 		{
 			KAEvent ev(events[0]);
-			KAlarm::editNewAlarm(win, &ev);
+			KAlarm::editNewAlarm(ev, win);
 		}
 		return;
 	}
@@ -1262,7 +1264,17 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		return;
 
 	if (!alarmText.isEmpty())
-		KAlarm::editNewAlarm(win, 0, action, &alarmText);
+	{
+		if (action == KAEvent::MESSAGE)
+		{
+			// If the alarm text could be interpreted as an email or command script,
+			// prompt for which type of alarm to create.
+#warning Prompt for DISPLAY type or:
+			if (alarmText.isEmail()) ;
+			else if (alarmText.isScript()) ;
+		}
+		KAlarm::editNewAlarm(action, win, &alarmText);
+	}
 }
 
 /******************************************************************************
@@ -1383,7 +1395,7 @@ void MainWindow::selectionCleared()
 
 /******************************************************************************
 *  Called when the mouse is double clicked on the ListView.
-*  Displays the Edit Alarm dialog, for the clicked item if applicable.
+*  Displays the Edit Alarm dialog for the clicked item.
 */
 void MainWindow::slotDoubleClicked(const QModelIndex& index)
 {
@@ -1395,8 +1407,6 @@ void MainWindow::slotDoubleClicked(const QModelIndex& index)
 		else if (mActionView->isEnabled())
 			slotView();
 	}
-	else
-		slotNew();
 }
 
 /******************************************************************************
