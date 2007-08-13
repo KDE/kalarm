@@ -30,6 +30,7 @@
 
 #include "alarmevent.h"
 #include "alarmresources.h"
+#include "editdlg.h"
 #include "mainwindowbase.h"
 #include "undo.h"
 
@@ -48,6 +49,7 @@ class KToolBarPopupAction;
 class AlarmListFilterModel;
 class AlarmListDelegate;
 class AlarmListView;
+class NewAlarmAction;
 class TemplateDlg;
 class TemplateMenuAction;
 class ResourceSelector;
@@ -101,7 +103,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		virtual void   readProperties(const KConfigGroup&);
 
 	private slots:
-		void           slotNew();
+		void           slotNew(EditAlarmDlg::Type);
 		void           slotNewFromTemplate(const KAEvent&);
 		void           slotNewTemplate();
 		void           slotCopy();
@@ -171,7 +173,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KAction*             mActionImportAlarms;
 		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
-		QAction*             mActionNew;
+		NewAlarmAction*      mActionNew;
 		TemplateMenuAction*  mActionNewFromTemplate;
 		KAction*             mActionCreateTemplate;
 		KAction*             mActionCopy;

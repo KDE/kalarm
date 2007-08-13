@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,12 +39,11 @@
 #include "deferdlg.moc"
 
 
-DeferAlarmDlg::DeferAlarmDlg(const QString& caption, const DateTime& initialDT,
-                             bool cancelButton, QWidget* parent)
+DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidget* parent)
 	: KDialog(parent)
 {
 	setWindowModality(Qt::WindowModal);
-	setCaption(caption);
+	setCaption(i18nc("@title", "Defer Alarm");
 	setButtons(Ok | Cancel | User1);
 	setButtonGuiItem(User1, KGuiItem(i18n("Cancel &Deferral")));
 	if (!cancelButton)

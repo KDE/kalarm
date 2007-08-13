@@ -40,7 +40,7 @@
 #include "birthdaymodel.h"
 #include "checkbox.h"
 #include "colourcombo.h"
-#include "editdlg.h"
+#include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "kalarmapp.h"
 #include "latecancel.h"
@@ -60,7 +60,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	  mSpecialActionsButton(0)
 {
 	setObjectName("BirthdayDlg");    // used by LikeBack
-	setCaption(i18n("Import Birthdays From KAddressBook"));
+	setCaption(i18nc("@title", "Import Birthdays From KAddressBook"));
 	setButtons(Ok | Cancel);
 	setDefaultButton(Ok);
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -144,7 +144,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	hlayout->setSpacing(2*spacingHint());
 	groupLayout->addLayout(hlayout);
 	KHBox* box;
-	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
+	mBgColourChoose = EditDisplayAlarmDlg::createBgColourChooser(&box, group);
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	hlayout->addWidget(box);
 	hlayout->addStretch();
@@ -176,7 +176,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	groupLayout->addLayout(hlayout);
-	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
+	mConfirmAck = EditDisplayAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	hlayout->addWidget(mConfirmAck);
 	hlayout->addSpacing(2*spacingHint());

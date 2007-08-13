@@ -59,6 +59,7 @@
 #include "buttongroup.h"
 #include "daemon.h"
 #include "editdlg.h"
+#include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -125,7 +126,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setObjectName("PrefDlg");    // used by LikeBack
-	setCaption(i18n("Preferences"));
+	setCaption(i18nc("@title", "Preferences"));
 	setButtons(Help | Default | Ok | Apply | Cancel);
 	setDefaultButton(Ok);
 	setFaceType(List);
@@ -866,7 +867,7 @@ EmailPrefTab::EmailPrefTab()
 	grid->setColumnStretch(1, 1);
 
 	// 'From' email address controls ...
-	label = new Label(EditAlarmDlg::i18n_f_EmailFrom(), group);
+	label = new Label(EditEmailAlarmDlg::i18n_EmailFrom(), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mFromAddressGroup = new ButtonGroup(group);
@@ -1148,9 +1149,9 @@ EditPrefTab::EditPrefTab()
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
 
-	mConfirmAck = new QCheckBox(EditAlarmDlg::i18n_ConfirmAck(), group);
+	mConfirmAck = new QCheckBox(EditDisplayAlarmDlg::i18n_ConfirmAck(), group);
 	mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
-	mConfirmAck->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ConfirmAck()).toString());
+	mConfirmAck->setWhatsThis(defsetting.subs(EditDisplayAlarmDlg::i18n_ConfirmAck()).toString());
 	vlayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	mAutoClose = new QCheckBox(LateCancelSelector::i18n_AutoCloseWinLC(), group);
@@ -1173,7 +1174,7 @@ EditPrefTab::EditPrefTab()
 	box->setWhatsThis(i18n("The default units for the reminder in the alarm edit dialog."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	mSpecialActionsButton = new SpecialActionsButton(EditAlarmDlg::i18n_SpecialActions(), box);
+	mSpecialActionsButton = new SpecialActionsButton(EditDisplayAlarmDlg::i18n_SpecialActions(), box);
 	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
@@ -1227,15 +1228,15 @@ EditPrefTab::EditPrefTab()
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
 
-	mCmdScript = new QCheckBox(EditAlarmDlg::i18n_p_EnterScript(), group);
+	mCmdScript = new QCheckBox(EditCommandAlarmDlg::i18n_EnterScript(), group);
 	mCmdScript->setMinimumSize(mCmdScript->sizeHint());
-	mCmdScript->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_EnterScript()).toString());
+	mCmdScript->setWhatsThis(defsetting.subs(EditCommandAlarmDlg::i18n_EnterScript()).toString());
 	hlayout->addWidget(mCmdScript);
 	hlayout->addStretch();
 
-	mCmdXterm = new QCheckBox(EditAlarmDlg::i18n_w_ExecInTermWindow(), group);
+	mCmdXterm = new QCheckBox(EditCommandAlarmDlg::i18n_ExecInTermWindow(), group);
 	mCmdXterm->setMinimumSize(mCmdXterm->sizeHint());
-	mCmdXterm->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_ExecInTermWindow()).toString());
+	mCmdXterm->setWhatsThis(defsetting.subs(EditCommandAlarmDlg::i18n_ExecInTermWindow()).toString());
 	hlayout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
@@ -1245,9 +1246,9 @@ EditPrefTab::EditPrefTab()
 	vlayout->setSpacing(KDialog::spacingHint());
 
 	// BCC email to sender
-	mEmailBcc = new QCheckBox(EditAlarmDlg::i18n_e_CopyEmailToSelf(), group);
+	mEmailBcc = new QCheckBox(EditEmailAlarmDlg::i18n_CopyEmailToSelf(), group);
 	mEmailBcc->setMinimumSize(mEmailBcc->sizeHint());
-	mEmailBcc->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_CopyEmailToSelf()).toString());
+	mEmailBcc->setWhatsThis(defsetting.subs(EditEmailAlarmDlg::i18n_CopyEmailToSelf()).toString());
 	vlayout->addWidget(mEmailBcc, 0, Qt::AlignLeft);
 
 	// MISCELLANEOUS

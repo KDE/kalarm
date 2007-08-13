@@ -92,6 +92,9 @@ QString uidKOrganizer(const QString& eventID);
 namespace KAlarm
 {
 
+void doEditNewAlarm(EditAlarmDlg*);
+
+
 /******************************************************************************
 *  Display a main window with the specified event selected.
 */
@@ -120,18 +123,6 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 	if (win  &&  !eventID.isEmpty())
 		win->selectEvent(eventID);
 	return win;
-}
-
-/******************************************************************************
-* Create a New Alarm QAction.
-*/
-QAction* createNewAlarmAction(const QString& label, KActionCollection* actions, const QString& name)
-{
-	QAction* action = actions->addAction(name);
-	action->setIcon(KIcon(QLatin1String("document-new")));
-	action->setText(label);
-	action->setShortcuts(KStandardShortcut::openNew());
-	return action;
 }
 
 /******************************************************************************
@@ -774,26 +765,71 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 }
 
 /******************************************************************************
+* Execute a New Alarm dialog for the specified alarm type.
+*/
+void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
+{
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, true, parent);
+	doEditNewAlarm(editDlg);
+	delete editDlg;
+}
+
+/******************************************************************************
+* Execute a New Alarm dialog for the specified alarm type.
+*/
+void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text)
+{
+	bool setAction = false;
+	EditAlarmDlg::Type type;
+	switch (action)
+	{
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:
+			type = EditAlarmDlg::DISPLAY;
+			setAction = true;
+			break;
+		case KAEvent::COMMAND:
+			type = EditAlarmDlg::COMMAND;
+			break;
+		case KAEvent::EMAIL:
+			type = EditAlarmDlg::EMAIL;
+			break;
+	}
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, true, parent);
+	if (setAction  ||  text)
+		editDlg->setAction(action, *text);
+	doEditNewAlarm(editDlg);
+	delete editDlg;
+}
+
+/******************************************************************************
 * Execute a New Alarm dialog, optionally either presetting it to the supplied
 * event, or setting the action and text.
 */
-void editNewAlarm(QWidget* parent, const KAEvent* preset, KAEvent::Action action, const AlarmText* text)
+void editNewAlarm(const KAEvent& preset, QWidget* parent)
 {
-	EditAlarmDlg editDlg(false, i18n("New Alarm"), parent, preset);
-	if (text)
-		editDlg.setAction(action, *text);
-	if (editDlg.exec() == QDialog::Accepted)
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, preset, true, parent);
+	doEditNewAlarm(editDlg);
+	delete editDlg;
+}
+
+/******************************************************************************
+* Common code for editNewAlarm() variants.
+*/
+void doEditNewAlarm(EditAlarmDlg* editDlg)
+{
+	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent event;
 		AlarmResource* resource;
-		editDlg.getEvent(event, resource);
+		editDlg->getEvent(event, resource);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		if (addEvent(event, resource, &editDlg) == UPDATE_KORG_ERR)
-			displayKOrgUpdateError(&editDlg, ERR_ADD, 1);
+		if (addEvent(event, resource, editDlg) == UPDATE_KORG_ERR)
+			displayKOrgUpdateError(editDlg, ERR_ADD, 1);
 		Undo::saveAdd(event, resource);
 
-		outputAlarmWarnings(&editDlg, &event);
+		outputAlarmWarnings(editDlg, &event);
 	}
 }
 
@@ -802,39 +838,55 @@ void editNewAlarm(QWidget* parent, const KAEvent* preset, KAEvent::Action action
 */
 bool editNewAlarm(const QString& templateName, QWidget* parent)
 {
-	bool result = true;
 	if (!templateName.isEmpty())
 	{
 		KAEvent templateEvent = AlarmCalendar::resources()->templateEvent(templateName);
 		if (templateEvent.valid())
 		{
-			editNewAlarm(parent, &templateEvent);
+			editNewAlarm(templateEvent, parent);
 			return true;
 		}
 		kWarning(5950) << "KAlarm::editNewAlarm(" << templateName << "): template not found";
-		result = false;
 	}
-	editNewAlarm(parent);
-	return result;
+	return false;
 }
 
 /******************************************************************************
 * Create a new template.
-* If 'preset' is non-zero, base the new template on an existing event or template.
 */
-void editNewTemplate(QWidget* parent, const KAEvent* preset)
+void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 {
-	EditAlarmDlg editDlg(true, i18n("New Alarm Template"), parent, preset);
-	if (editDlg.exec() == QDialog::Accepted)
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, type, true, parent);
+	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent event;
 		AlarmResource* resource;
-		editDlg.getEvent(event, resource);
+		editDlg->getEvent(event, resource);
 
 		// Add the template to the displayed lists and to the calendar file
-		addTemplate(event, resource, &editDlg);
+		addTemplate(event, resource, editDlg);
 		Undo::saveAdd(event, resource);
 	}
+	delete editDlg;
+}
+
+/******************************************************************************
+* Create a new template, based on an existing event or template.
+*/
+void editNewTemplate(const KAEvent& preset, QWidget* parent)
+{
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, preset, true, parent);
+	if (editDlg->exec() == QDialog::Accepted)
+	{
+		KAEvent event;
+		AlarmResource* resource;
+		editDlg->getEvent(event, resource);
+
+		// Add the template to the displayed lists and to the calendar file
+		addTemplate(event, resource, editDlg);
+		Undo::saveAdd(event, resource);
+	}
+	delete editDlg;
 }
 
 /******************************************************************************
@@ -842,30 +894,31 @@ void editNewTemplate(QWidget* parent, const KAEvent* preset)
 */
 void editAlarm(KAEvent& event, QWidget* parent)
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), parent, &event, EditAlarmDlg::RES_USE_EVENT_ID);
-	if (editDlg.exec() == QDialog::Accepted)
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
+	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent newEvent;
 		AlarmResource* resource;
-		bool changeDeferral = !editDlg.getEvent(newEvent, resource);
+		bool changeDeferral = !editDlg->getEvent(newEvent, resource);
 
 		// Update the event in the displays and in the calendar file
 		Undo::Event undo(event, resource);
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
-			if (updateEvent(newEvent, &editDlg, true, false) != UPDATE_OK)   // keep the same event ID
+			if (updateEvent(newEvent, editDlg, true, false) != UPDATE_OK)   // keep the same event ID
 				return;   // failed to save event
 		}
 		else
 		{
-			if (modifyEvent(event, newEvent, &editDlg) == UPDATE_KORG_ERR)
-				displayKOrgUpdateError(&editDlg, ERR_MODIFY, 1);
+			if (modifyEvent(event, newEvent, editDlg) == UPDATE_KORG_ERR)
+				displayKOrgUpdateError(editDlg, ERR_MODIFY, 1);
 		}
 		Undo::saveEdit(undo, newEvent);
 
-		outputAlarmWarnings(&editDlg, &newEvent);
+		outputAlarmWarnings(editDlg, &newEvent);
 	}
+	delete editDlg;
 }
 
 /******************************************************************************
@@ -905,20 +958,21 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 */
 void editTemplate(KAEvent& event, QWidget* parent)
 {
-	EditAlarmDlg editDlg(true, i18n("Edit Alarm Template"), parent, &event, EditAlarmDlg::RES_USE_EVENT_ID);
-	if (editDlg.exec() == QDialog::Accepted)
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
+	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent newEvent;
 		AlarmResource* resource;
-		editDlg.getEvent(newEvent, resource);
+		editDlg->getEvent(newEvent, resource);
 		QString id = event.id();
 		newEvent.setEventID(id);
 
 		// Update the event in the displays and in the calendar file
 		Undo::Event undo(event, resource);
-		updateTemplate(newEvent, &editDlg);
+		updateTemplate(newEvent, editDlg);
 		Undo::saveEdit(undo, newEvent);
 	}
+	delete editDlg;
 }
 
 /******************************************************************************
@@ -926,10 +980,9 @@ void editTemplate(KAEvent& event, QWidget* parent)
 */
 void viewAlarm(const KAEvent& event, QWidget* parent)
 {
-	EditAlarmDlg editDlg(false, (event.expired() ? i18n("Archived Alarm") + " [" + i18n("read-only") + ']'
-	                                             : i18n("View Alarm")),
-	                     parent, &event, EditAlarmDlg::RES_PROMPT, true);
-	editDlg.exec();
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
+	editDlg->exec();
+	delete editDlg;
 }
 
 /******************************************************************************

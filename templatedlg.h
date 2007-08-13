@@ -21,9 +21,11 @@
 #define TEMPLATEDLG_H
 
 #include <kdialog.h>
+#include "editdlg.h"
 
 class QResizeEvent;
 class QPushButton;
+class NewAlarmAction;
 class TemplateListFilterModel;
 class TemplateListView;
 
@@ -42,7 +44,7 @@ class TemplateDlg : public KDialog
 		virtual void  resizeEvent(QResizeEvent*);
 
 	private slots:
-		void          slotNew();
+		void          slotNew(EditAlarmDlg::Type);
 		void          slotCopy();
 		void          slotEdit();
 		void          slotDelete();
@@ -58,6 +60,7 @@ class TemplateDlg : public KDialog
 		QPushButton*        mEditButton;
 		QPushButton*        mCopyButton;
 		QPushButton*        mDeleteButton;
+		NewAlarmAction*     mNewAction;
 };
 
 #endif // TEMPLATEDLG_H

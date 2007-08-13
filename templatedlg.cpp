@@ -19,6 +19,17 @@
  */
 
 #include "kalarm.h"
+#include "templatedlg.moc"
+
+#include "editdlg.h"
+#include "alarmcalendar.h"
+#include "alarmresources.h"
+#include "eventlistmodel.h"
+#include "functions.h"
+#include "newalarmaction.h"
+#include "templatelistfiltermodel.h"
+#include "templatelistview.h"
+#include "undo.h"
 
 #include <QPushButton>
 #include <QList>
@@ -34,16 +45,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-
-#include "editdlg.h"
-#include "alarmcalendar.h"
-#include "alarmresources.h"
-#include "functions.h"
-#include "eventlistmodel.h"
-#include "templatelistfiltermodel.h"
-#include "templatelistview.h"
-#include "undo.h"
-#include "templatedlg.moc"
+#include <kmenu.h>
 
 using namespace KCal;
 
@@ -61,7 +63,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
         setButtons(Close);
         setDefaultButton(Ok);
         setModal(false);
-        setCaption(i18n("Alarm Templates"));
+        setCaption(i18nc("@title", "Alarm Templates"));
         showButtonSeparator(true);
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
 	topLayout->setMargin(0);
@@ -85,7 +87,9 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	topLayout->addLayout(layout);
 	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
 	button->setFixedSize(button->sizeHint());
-	connect(button, SIGNAL(clicked()), SLOT(slotNew()));
+	mNewAction = new NewAlarmAction(true, i18n("&New"), this);
+	button->setMenu(mNewAction->menu());
+	connect(mNewAction, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
 	button->setWhatsThis(i18n("Create a new alarm template"));
 	layout->addWidget(button);
 
@@ -141,12 +145,11 @@ TemplateDlg* TemplateDlg::create(QWidget* parent)
 }
 
 /******************************************************************************
-*  Called when the New Template button is clicked to create a new template
-*  based on the currently selected alarm.
+*  Called when the New Template button is clicked to create a new template.
 */
-void TemplateDlg::slotNew()
+void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 {
-	KAlarm::editNewTemplate(mListView);
+	KAlarm::editNewTemplate(type, mListView);
 }
 
 /******************************************************************************
@@ -159,7 +162,7 @@ void TemplateDlg::slotCopy()
 	if (kcalEvent)
 	{
 		KAEvent event(kcalEvent);
-		KAlarm::editNewTemplate(mListView, &event);
+		KAlarm::editNewTemplate(event, mListView);
 	}
 }
 

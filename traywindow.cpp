@@ -30,6 +30,7 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagewin.h"
+#include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "templatemenuaction.h"
@@ -86,9 +87,12 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	actions->addAction(QLatin1String("tAlarmsEnable"), a);
 	contextMenu()->addAction(a);
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
-	mActionNew = KAlarm::createNewAlarmAction(i18n("&New Alarm..."), actions, QLatin1String("tNew"));
+
+	mActionNew = new NewAlarmAction(false, i18n("&New Alarm"), this);
+	actions->addAction(QLatin1String("tNew"), mActionNew);
 	contextMenu()->addAction(mActionNew);
-	connect(mActionNew, SIGNAL(triggered(bool)), SLOT(slotNewAlarm()));
+	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNewAlarm(KAEvent::Action)));
+
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
@@ -138,9 +142,9 @@ void TrayWindow::slotResourceStatusChanged()
 /******************************************************************************
 *  Called when the "New Alarm" menu item is selected to edit a new alarm.
 */
-void TrayWindow::slotNewAlarm()
+void TrayWindow::slotNewAlarm(KAEvent::Action action)
 {
-	KAlarm::editNewAlarm();
+	KAlarm::editNewAlarm(action);
 }
 
 /******************************************************************************
@@ -148,7 +152,7 @@ void TrayWindow::slotNewAlarm()
 */
 void TrayWindow::slotNewFromTemplate(const KAEvent& event)
 {
-	KAlarm::editNewAlarm(0, &event);
+	KAlarm::editNewAlarm(event);
 }
 
 /******************************************************************************

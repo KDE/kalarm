@@ -23,15 +23,16 @@
 
 #include <QIcon>
 #include <ksystemtrayicon.h>
+#include "alarmevent.h"
 
 class QEvent;
 class QDragEnterEvent;
 class QDropEvent;
-class QAction;
 class KAction;
 class KMenu;
 class KAEvent;
 class MainWindow;
+class NewAlarmAction;
 
 class TrayWindow : public KSystemTrayIcon
 {
@@ -58,7 +59,7 @@ class TrayWindow : public KSystemTrayIcon
 
 	private slots:
                 void         slotActivated(QSystemTrayIcon::ActivationReason reason);
-		void         slotNewAlarm();
+		void         slotNewAlarm(KAEvent::Action);
 		void         slotNewFromTemplate(const KAEvent&);
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
@@ -66,10 +67,10 @@ class TrayWindow : public KSystemTrayIcon
 
 	private:
 
-		MainWindow*  mAssocMainWindow;     // main window associated with this, or null
-		QIcon        mIconEnabled, mIconDisabled;
-		QAction*     mActionNew;
-		KAction*     mActionNewFromTemplate;
+		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
+		QIcon           mIconEnabled, mIconDisabled;
+		NewAlarmAction* mActionNew;
+		KAction*        mActionNewFromTemplate;
 };
 
 #endif // TRAYWINDOW_H

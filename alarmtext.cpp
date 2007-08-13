@@ -22,7 +22,7 @@
 #include "alarmtext.h"
 
 #include "alarmevent.h"
-#include "editdlg.h"
+#include "editdlgtypes.h"
 
 #include <QStringList>
 #include <klocale.h>
@@ -246,11 +246,11 @@ void AlarmText::setUpTranslations()
 {
 	if (mFromPrefix.isNull())
 	{
-		mFromPrefix    = EditAlarmDlg::i18n_EmailFrom();
-		mToPrefix      = EditAlarmDlg::i18n_EmailTo();
+		mFromPrefix    = EditEmailAlarmDlg::i18n_EmailFrom();
+		mToPrefix      = EditEmailAlarmDlg::i18n_EmailTo();
 		mCcPrefix      = i18nc("Copy-to in email headers", "Cc:");
 		mDatePrefix    = i18n("Date:");
-		mSubjectPrefix = EditAlarmDlg::i18n_EmailSubject();
+		mSubjectPrefix = EditEmailAlarmDlg::i18n_EmailSubject();
 	}
 }
 

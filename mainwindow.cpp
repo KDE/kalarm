@@ -58,6 +58,7 @@
 #include <kmenu.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kinputdialog.h>
 
 #include <kstandardaction.h>
 #include <kiconloader.h>
@@ -1265,13 +1266,25 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 
 	if (!alarmText.isEmpty())
 	{
-		if (action == KAEvent::MESSAGE)
+		if (action == KAEvent::MESSAGE
+		&&  (alarmText.isEmail() || alarmText.isScript()))
 		{
 			// If the alarm text could be interpreted as an email or command script,
 			// prompt for which type of alarm to create.
-#warning Prompt for DISPLAY type or:
-			if (alarmText.isEmail()) ;
-			else if (alarmText.isScript()) ;
+			QStringList types;
+			types += i18n("Display Alarm");
+			if (alarmText.isEmail())
+				types += i18n("Email Alarm");
+			else if (alarmText.isScript())
+				types += i18n("Command Alarm");
+			bool ok = false;
+			QString type = KInputDialog::getItem(i18n("Alarm Type"),
+			                                     i18n("Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
+			if (!ok)
+				return;   // user didn't press OK
+			int i = types.indexOf(type);
+			if (i == 1)
+				action = alarmText.isEmail() ? KAEvent::EMAIL : KAEvent::COMMAND;
 		}
 		KAlarm::editNewAlarm(action, win, &alarmText);
 	}

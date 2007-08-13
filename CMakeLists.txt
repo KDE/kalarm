@@ -46,6 +46,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    main.cpp 
    alarmevent.cpp 
    editdlg.cpp 
+   editdlgtypes.cpp
    soundpicker.cpp 
    sounddlg.cpp 
    alarmcalendar.cpp 
@@ -87,6 +88,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    emailidcombo.cpp 
    find.cpp 
    pickfileradio.cpp 
+   newalarmaction.cpp
    calendarcompat.cpp
    resourceconfigdialog.cpp
    resourcemodelview.cpp

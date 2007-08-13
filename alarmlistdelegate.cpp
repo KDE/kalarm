@@ -133,7 +133,5 @@ kDebug()<<"kcalEvent="<<(void*)kcalEvent;
 		else
 			KAlarm::editAlarm(event, view);
 	}
-	else
-		KAlarm::editNewAlarm(view);
 	return false;   // indicate that the event has not been handled
 }	

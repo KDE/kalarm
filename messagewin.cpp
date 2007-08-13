@@ -303,7 +303,7 @@ void MessageWin::initView()
 {
 	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
-	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("Reminder") : i18n("Message"));
+	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("@title", "Reminder") : i18n("@title", "Message"));
 	QWidget* topWidget = new QWidget(this);
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
@@ -396,7 +396,7 @@ void MessageWin::initView()
 				if (!opened)
 				{
 					// File couldn't be opened
-					bool exists = KIO::NetAccess::exists(url, true, MainWindow::mainMainWindow());
+					bool exists = KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow());
 					mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
 				}
 				break;
@@ -520,7 +520,7 @@ void MessageWin::initView()
 	}
 	else
 	{
-		setCaption(i18n("Error"));
+		setCaption(i18nc("@title", "Error"));
 		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(2*KDialog::marginHint());
 		layout->addStretch();
@@ -1401,12 +1401,12 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-	EditAlarmDlg editDlg(false, i18n("Edit Alarm"), this, &mEvent, EditAlarmDlg::RES_IGNORE);
-	if (editDlg.exec() == QDialog::Accepted)
+	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, mEvent, false, this, EditAlarmDlg::RES_IGNORE);
+	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent event;
 		AlarmResource* resource;
-		editDlg.getEvent(event, resource);
+		editDlg->getEvent(event, resource);
 		resource = mResource;
 
 		// Update the displayed lists and the calendar file
@@ -1415,24 +1415,25 @@ void MessageWin::slotEdit()
 		{
 			// The old alarm hasn't expired yet, so replace it
 			Undo::Event undo(mEvent, resource);
-			status = KAlarm::modifyEvent(mEvent, event, &editDlg);
+			status = KAlarm::modifyEvent(mEvent, event, editDlg);
 			Undo::saveEdit(undo, event);
 		}
 		else
 		{
 			// The old event has expired, so simply create a new one
-			status = KAlarm::addEvent(event, resource, &editDlg);
+			status = KAlarm::addEvent(event, resource, editDlg);
 			Undo::saveAdd(event, resource);
 		}
 
 		if (status == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(&editDlg, KAlarm::ERR_MODIFY, 1);
-		KAlarm::outputAlarmWarnings(&editDlg, &event);
+			KAlarm::displayKOrgUpdateError(editDlg, KAlarm::ERR_MODIFY, 1);
+		KAlarm::outputAlarmWarnings(editDlg, &event);
 
 		// Close the alarm window
 		mNoCloseConfirm = true;   // allow window to close without confirmation prompt
 		close();
 	}
+	delete editDlg;
 }
 
 /******************************************************************************
@@ -1486,8 +1487,7 @@ void MessageWin::checkDeferralLimit()
 */
 void MessageWin::slotDefer()
 {
-	mDeferDlg = new DeferAlarmDlg(i18n("Defer Alarm"), KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60),
-	                              false, this);
+	mDeferDlg = new DeferAlarmDlg(KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60), false, this);
 	mDeferDlg->setObjectName("DeferDlg");    // used by LikeBack
 	if (mDefaultDeferMinutes > 0)
 		mDeferDlg->setDeferMinutes(mDefaultDeferMinutes);

@@ -28,6 +28,7 @@
 #include <QList>
 
 #include "alarmevent.h"
+#include "editdlg.h"
 #include <kfile.h>
 
 class QWidget;
@@ -76,14 +77,15 @@ inline QString      currentCalendarVersionString()  { return KAEvent::calVersion
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
-void                editNewAlarm(QWidget* parent = 0, const KAEvent* preset = 0, KAEvent::Action = KAEvent::MESSAGE, const AlarmText* = 0);
+void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
+void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const AlarmText* = 0);
+void                editNewAlarm(const KAEvent& preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent&, QWidget* parent = 0);
 void                viewAlarm(const KAEvent& event, QWidget* parent = 0);
-void                editNewTemplate(QWidget* parent = 0, const KAEvent* preset = 0);
+void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
+void                editNewTemplate(const KAEvent& preset, QWidget* parent = 0);
 void                editTemplate(KAEvent&, QWidget* parent = 0);
-/** Create a "New Alarm" QAction */
-QAction*            createNewAlarmAction(const QString& label, KActionCollection*, const QString& name);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.
