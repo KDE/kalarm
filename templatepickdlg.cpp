@@ -41,7 +41,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 {
 	QWidget* topWidget = new QWidget(this);
 	setMainWidget(topWidget);
-	setCaption(i18n("Choose Alarm Template"));
+	setCaption(i18nc("@title", "Choose Alarm Template"));
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);

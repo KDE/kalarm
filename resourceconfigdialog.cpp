@@ -44,7 +44,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
 
   QFrame *main = new QFrame( this );
   setMainWidget( main );
-  setCaption( i18n( "Resource Configuration" ) );
+  setCaption( i18nc("@title", "Resource Configuration" ) );
   setButtons( Ok|Cancel );
   setDefaultButton( Ok );
   setModal( true );
