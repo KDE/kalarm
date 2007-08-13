@@ -303,7 +303,7 @@ void MessageWin::initView()
 {
 	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
-	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18n("@title", "Reminder") : i18n("@title", "Message"));
+	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title", "Reminder") : i18nc("@title", "Message"));
 	QWidget* topWidget = new QWidget(this);
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
