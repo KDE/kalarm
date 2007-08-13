@@ -36,7 +36,7 @@ using namespace KCal;
 
 void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
 KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc) = 0;
-int                 AlarmResource::mDebugArea = KARES_DEBUG;
+int                 AlarmResource::mDebugArea = 0;
 bool                AlarmResource::mNoGui = false;
 
 
