@@ -36,10 +36,10 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString Reminder::i18n_FirstRecurrenceOnly()   { return i18n("Reminder for first recurrence only"); }
+QString Reminder::i18n_chk_FirstRecurrenceOnly()   { return i18nc("@option:check", "Reminder for first recurrence only"); }
 
 
-Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
+Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    bool allowHourMinute, bool showOnceOnly, QWidget* parent)
 	: QFrame(parent),
 	  mReadOnly(false),
@@ -49,8 +49,8 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());
 
-	mTime = new TimeSelector(caption, i18n("in advance"), reminderWhatsThis,
-	                       valueWhatsThis, allowHourMinute, this);
+	mTime = new TimeSelector(i18nc("@option:check", "Reminder:"), i18nc("@label", "in advance"),
+	                         reminderWhatsThis, valueWhatsThis, allowHourMinute, this);
 	mTime->setFixedSize(mTime->sizeHint());
 	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 	topLayout->addWidget(mTime, 0, Qt::AlignLeft);
@@ -61,9 +61,9 @@ Reminder::Reminder(const QString& caption, const QString& reminderWhatsThis, con
 		layout->setMargin(0);
 		layout->addSpacing(3*KDialog::spacingHint());
 		topLayout->addLayout(layout);
-		mOnceOnly = new CheckBox(i18n_FirstRecurrenceOnly(), this);
+		mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
 		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
-		mOnceOnly->setWhatsThis(i18n("Display the reminder only before the first time the alarm is scheduled"));
+		mOnceOnly->setWhatsThis(i18nc("@info:whatsthis", "Display the reminder only before the first time the alarm is scheduled"));
 		layout->addWidget(mOnceOnly);
 		layout->addStretch();
 	}

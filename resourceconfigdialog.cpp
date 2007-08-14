@@ -1,7 +1,7 @@
 /*
  *  resourceconfigdialog.cpp  -  KAlarm resource configuration dialog
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on configdialog.cpp in kdelibs/kresources,
  *  Copyright (c) 2002 Tobias Koenig <tokoe@kde.org>
  *  Copyright (c) 2002 Jan-Pascal van Best <janpascal@vanbest.org>
@@ -44,7 +44,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
 
   QFrame *main = new QFrame( this );
   setMainWidget( main );
-  setCaption( i18nc("@title", "Resource Configuration" ) );
+  setCaption(i18nc("@title:window", "Resource Configuration"));
   setButtons( Ok|Cancel );
   setDefaultButton( Ok );
   setModal( true );
@@ -57,14 +57,14 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
   gbLayout->setSpacing( spacingHint() );
   generalGroupBox->setLayout( gbLayout );
 
-  generalGroupBox->setTitle( i18n( "General Settings" ) );
+  generalGroupBox->setTitle(i18nc("@title:group", "General Settings"));
 
-  gbLayout->addWidget( new QLabel( i18n( "Name:" ), generalGroupBox ), 0, 0 );
+  gbLayout->addWidget(new QLabel(i18nc("@label:textbox", "Name:"), generalGroupBox ), 0, 0 );
 
   mName = new KLineEdit();
   gbLayout->addWidget( mName, 0, 1 );
 
-  mReadOnly = new QCheckBox( i18n( "Read-only" ), generalGroupBox );
+  mReadOnly = new QCheckBox(i18nc("@option:check", "Read-only"), generalGroupBox );
   gbLayout->addWidget( mReadOnly, 1, 0 );
 
   mName->setText( mResource->resourceName() );
@@ -77,7 +77,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
   resourceLayout->setSpacing( spacingHint() );
   resourceGroupBox->setLayout( resourceLayout );
 
-  resourceGroupBox->setTitle( i18n( "%1 Resource Settings" ,
+  resourceGroupBox->setTitle(i18nc("@title:group", "<resource>%1</resource> Resource Settings",
                                 factory->typeName( resource->type() ) ) );
   mainLayout->addWidget( resourceGroupBox );
 
@@ -119,7 +119,7 @@ void ResourceConfigDialog::setReadOnly( bool value )
 void ResourceConfigDialog::accept()
 {
   if ( mName->text().isEmpty() ) {
-    KMessageBox::sorry( this, i18n( "Please enter a resource name." ) );
+    KMessageBox::sorry(this, i18nc("@info", "Please enter a resource name."));
     return;
   }
 

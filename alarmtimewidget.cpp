@@ -44,10 +44,10 @@ static const QTime time_23_59(23, 59);
 
 const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
 
-QString AlarmTimeWidget::i18n_w_TimeFromNow()     { return i18n("Time from no&w:"); }
-QString AlarmTimeWidget::i18n_TimeAfterPeriod()
+QString AlarmTimeWidget::i18n_radio_TimeFromNow()   { return i18nc("@option:radio", "Time from now:"); }
+QString AlarmTimeWidget::i18n_what_TimeAfterPeriod()
 {
-	return i18n("Enter the length of time (in hours and minutes) after "
+	return i18nc("@info:whatsthis", "Enter the length of time (in hours and minutes) after "
 	            "the current time to schedule the alarm.");
 }
 
@@ -78,10 +78,12 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 
 void AlarmTimeWidget::init(int mode, const QString& title)
 {
-	static const QString recurText = i18n("For a simple repetition, enter the date/time of the first occurrence.\n"
+	static const QString recurText = i18nc("@info:whatsthis",
+	                                       "For a simple repetition, enter the date/time of the first occurrence.\n"
 	                                      "If a recurrence is configured, the start date/time will be adjusted "
 	                                      "to the first recurrence on or after the entered date/time."); 
-	static const QString tzText = i18n("This uses KAlarm's default time zone, set in the Preferences dialog.");
+	static const QString tzText = i18nc("@info:whatsthis",
+	                                    "This uses <application>KAlarm</application>'s default time zone, set in the Preferences dialog.");
 
 	QWidget* topWidget;
 	if (title.isEmpty())
@@ -102,10 +104,10 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	topLayout->setMargin(title.isEmpty() ? 0 : KDialog::marginHint());
 
 	// At time radio button
-	mDateTimeRadio = new RadioButton((mDeferring ? i18n("&Defer to date/time:") : i18n("&Date/time")), topWidget);
+	mDateTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "&Defer to date/time:") : i18nc("@option:radio", "&Date/time")), topWidget);
 	mDateTimeRadio->setFixedSize(mDateTimeRadio->sizeHint());
-	mDateTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm to the specified date and time.")
-	                                        : i18n("Schedule the alarm at the specified date and time."));
+	mDateTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm to the specified date and time.")
+	                                        : i18nc("@info:whatsthis", "Schedule the alarm at the specified date and time."));
 	mButtonGroup->addButton(mDateTimeRadio);
 	topLayout->addWidget(mDateTimeRadio, 1, 0, Qt::AlignLeft);
 
@@ -121,9 +123,9 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	else
 	{
 		// Date radio button
-		mDateRadio = new RadioButton(i18n("Date"), topWidget);
+		mDateRadio = new RadioButton(i18nc("@option:radio", "Date"), topWidget);
 		mDateRadio->setFixedSize(mDateRadio->sizeHint());
-		mDateRadio->setWhatsThis(i18n("Schedule the alarm on the specified date."));
+		mDateRadio->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm on the specified date."));
 		mButtonGroup->addButton(mDateRadio);
 		topLayout->addWidget(mDateRadio, 2, 0, Qt::AlignLeft);
 		++row;
@@ -134,7 +136,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
-	static const QString enterDateText = i18n("Enter the date to schedule the alarm.");
+	static const QString enterDateText = i18nc("@info:whatsthis", "Enter the date to schedule the alarm.");
 	mDateEdit->setWhatsThis(QString("%1\n%2").arg(enterDateText).arg(mDeferring ? tzText : recurText));
 	topLayout->addWidget(mDateEdit, 1, 1, Qt::AlignLeft);
 	mDateTimeRadio->setFocusWidget(mDateEdit);
@@ -145,7 +147,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mTimeEdit = new TimeEdit(topWidget);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
-	static const QString enterTimeText = i18n("Enter the time to schedule the alarm.");
+	static const QString enterTimeText = i18nc("@info:whatsthis", "Enter the time to schedule the alarm.");
 	mTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(enterTimeText).arg(mDeferring ? tzText : recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	topLayout->addWidget(mTimeEdit, row, (mDateRadio ? 1 : 2), Qt::AlignLeft);
 	++row;
@@ -155,27 +157,25 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 		// Time zone selector
 		mTimeZone = new TimeZoneCombo(topWidget);
 		mTimeZone->setMaxVisibleItems(15);
-		mTimeZone->setWhatsThis(i18n("Select the time zone to use for this alarm."));
+		mTimeZone->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
 		topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
 
 		// Time zone checkbox
-		mNoTimeZone = new CheckBox(i18n("Ignore time &zone"), topWidget);
+		mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time &zone"), topWidget);
 		connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
-		mNoTimeZone->setWhatsThis("<qt>" +
-		      i18n("Check to use the local computer time, ignoring time zones.")
-		    + "<p>"
-		    + i18n("You are recommended not to use this option if the alarm has a "
-		           "recurrence specified in hours/minutes. If you do, the alarm may "
-		           "occur at unexpected times after daylight saving time shifts.")
-		    + "</qt>");
+		mNoTimeZone->setWhatsThis(i18nc("@info:whatsthis",
+		                                "<para>Check to use the local computer time, ignoring time zones.</para>"
+		                                "<para>You are recommended not to use this option if the alarm has a "
+		                                "recurrence specified in hours/minutes. If you do, the alarm may "
+		                                "occur at unexpected times after daylight saving time shifts.</para>"));
 		topLayout->addWidget(mNoTimeZone, 2, 3, Qt::AlignLeft);
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton((mDeferring ? i18n("Defer for time &interval:") : i18n_w_TimeFromNow()), topWidget);
+	mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time &interval:") : i18n_radio_TimeFromNow()), topWidget);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
-	mAfterTimeRadio->setWhatsThis(mDeferring ? i18n("Reschedule the alarm for the specified time interval after now.")
-	                                         : i18n("Schedule the alarm after the specified time interval from now."));
+	mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
+	                                         : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
 	mButtonGroup->addButton(mAfterTimeRadio);
 	topLayout->addWidget(mAfterTimeRadio, row, 0, Qt::AlignLeft);
 
@@ -184,8 +184,8 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-	mDelayTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(i18n_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
-	                                        : QString("%1\n%2\n\n%3").arg(i18n_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mDelayTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(i18n_what_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
+	                                        : QString("%1\n%2\n\n%3").arg(i18n_what_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 	topLayout->addWidget(mDelayTimeEdit, row, 1, Qt::AlignLeft);
 
@@ -250,7 +250,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 		if (!mDelayTimeEdit->isValid())
 		{
 			if (showErrorMessage)
-				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
+				KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
 			if (errorWidget)
 				*errorWidget = mDelayTimeEdit;
 			return KDateTime();
@@ -269,14 +269,14 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 			if (!mDateEdit->isValid())
 			{
 				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid date"));
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
 				if (errorWidget)
 					*errorWidget = mDateEdit;
 			}
 			else
 			{
 				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Invalid time"));
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
 				if (errorWidget)
 					*errorWidget = mTimeEdit;
 			}
@@ -290,7 +290,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 			if (checkExpired  &&  result.date() < now.date())
 			{
 				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm date has already expired"));
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
 				if (errorWidget)
 					*errorWidget = mDateEdit;
 				return KDateTime();
@@ -302,7 +302,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 			if (checkExpired  &&  result <= now.addSecs(1))
 			{
 				if (showErrorMessage)
-					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18n("Alarm time has already expired"));
+					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
 				if (errorWidget)
 					*errorWidget = mTimeEdit;
 				return DateTime();

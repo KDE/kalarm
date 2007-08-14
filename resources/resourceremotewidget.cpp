@@ -39,13 +39,13 @@ ResourceRemoteConfigWidget::ResourceRemoteConfigWidget(QWidget* parent)
 {
 	QGridLayout* layout = new QGridLayout(this);
 
-	QLabel* label = new QLabel(i18n("Download from:"), this);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Download from:"), this);
 	layout->addWidget(label, 1, 0);
 	mDownloadUrl = new KUrlRequester(this);
 	mDownloadUrl->setMode(KFile::File);
 	layout->addWidget(mDownloadUrl, 1, 1);
 
-	label = new QLabel(i18n("Upload to:"), this);
+	label = new QLabel(i18nc("@label:textbox", "Upload to:"), this);
 	layout->addWidget(label, 2, 0);
 	mUploadUrl = new KUrlRequester(this);
 	mUploadUrl->setMode(KFile::File);
@@ -91,7 +91,7 @@ void ResourceRemoteConfigWidget::saveSettings(KRES::Resource* resource)
 
 		if (mUploadUrl->url().isEmpty()  &&  !resource->readOnly())
 		{
-			KMessageBox::information(this, i18n("You have specified no upload URL: the alarm calendar will be read-only."),
+			KMessageBox::information(this, i18nc("@info", "You have specified no upload URL: the alarm calendar will be read-only."),
 			                         "RemoteResourseNoUploadURL");
 			resource->setReadOnly(true);
 		}

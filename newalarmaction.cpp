@@ -33,11 +33,11 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
 	: KActionMenu(KIcon("new"), label, parent)
 {
 	setShortcuts(KStandardShortcut::openNew());
-	QAction* act = menu()->addAction(KIcon(QLatin1String("??")), (templates ? i18n("Display Alarm Template") : i18n("Display Alarm")));
+	QAction* act = menu()->addAction(KIcon(QLatin1String("??")), (templates ? i18nc("@item:inmenu", "Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
 	mTypes[act] = EditAlarmDlg::DISPLAY;
-	mCommandAction = menu()->addAction(KIcon(QLatin1String("exec")), (templates ? i18n("Command Alarm Template") : i18n("Command Alarm")));
+	mCommandAction = menu()->addAction(KIcon(QLatin1String("exec")), (templates ? i18nc("@item:inmenu", "Command Alarm Template") : i18nc("@item:inmenu", "Command Alarm")));
 	mTypes[mCommandAction] = EditAlarmDlg::COMMAND;
-	act = menu()->addAction(KIcon(QLatin1String("mail")), (templates ? i18n("Email Alarm Template") : i18n("Email Alarm")));
+	act = menu()->addAction(KIcon(QLatin1String("mail")), (templates ? i18nc("@item:inmenu", "Email Alarm Template") : i18nc("@item:inmenu", "Email Alarm")));
 	mTypes[act] = EditAlarmDlg::EMAIL;
 	setDelayed(false);
 	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));

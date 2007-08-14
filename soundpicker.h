@@ -99,11 +99,11 @@ class SoundPicker : public QFrame
 		 */
 		static QString browseFile(QString& initialDir, const QString& initialFile = QString());
 
-		static QString i18n_Sound();       // plain text of Sound label
-		static QString i18n_None();        // plain text of Beep combo box item
-		static QString i18n_Beep();        // plain text of Beep combo box item
-		static QString i18n_Speak();       // plain text of Speak combo box item
-		static QString i18n_File();        // plain text of File combo box item
+		static QString i18n_label_Sound();  // text of Sound label
+		static QString i18n_combo_None();   // text of Beep combo box item
+		static QString i18n_combo_Beep();   // text of Beep combo box item
+		static QString i18n_combo_Speak();  // text of Speak combo box item
+		static QString i18n_combo_File();   // text of File combo box item
 
 
 	private slots:

@@ -303,7 +303,7 @@ void MessageWin::initView()
 {
 	bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
 	int leading = fontMetrics().leading();
-	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title", "Reminder") : i18nc("@title", "Message"));
+	setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title:window", "Reminder") : i18nc("@title:window", "Message"));
 	QWidget* topWidget = new QWidget(this);
 	setCentralWidget(topWidget);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
@@ -333,12 +333,12 @@ void MessageWin::initView()
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignHCenter);
-		label->setWhatsThis(i18n("The scheduled date/time for the message (as opposed to the actual time of display)."));
+		label->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
 
 		if (frame)
 		{
 			label = new QLabel(frame);
-			label->setText(i18n("Reminder"));
+			label->setText(i18nc("@info", "Reminder"));
 			label->setFixedSize(label->sizeHint());
 			layout->addWidget(label, 0, Qt::AlignHCenter);
 			frame->setFixedSize(frame->sizeHint());
@@ -356,7 +356,7 @@ void MessageWin::initView()
 				QLabel* label = new QLabel(mMessage, topWidget);
 				label->setFrameStyle(QFrame::Box | QFrame::Raised);
 				label->setFixedSize(label->sizeHint());
-				label->setWhatsThis(i18n("The file whose contents are displayed below"));
+				label->setWhatsThis(i18nc("@info:whatsthis", "The file whose contents are displayed below"));
 				topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
 				// Display contents of file
@@ -389,7 +389,7 @@ void MessageWin::initView()
 						// So there is no need to calculate an accurate size.
 						int h = 20*view->fontMetrics().lineSpacing() + 2*view->frameWidth();
 						view->resize(QSize(h, h).expandedTo(view->sizeHint()));
-						view->setWhatsThis(i18n("The contents of the file to be displayed"));
+						view->setWhatsThis(i18nc("@info:whatsthis", "The contents of the file to be displayed"));
 					}
 					KIO::NetAccess::removeTempFile(tmpFile);
 				}
@@ -397,7 +397,7 @@ void MessageWin::initView()
 				{
 					// File couldn't be opened
 					bool exists = KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow());
-					mErrorMsgs += dir ? i18n("File is a folder") : exists ? i18n("Failed to open file") : i18n("File not found");
+					mErrorMsgs += dir ? i18nc("@info", "File is a folder") : exists ? i18nc("@info", "Failed to open file") : i18nc("@info", "File not found");
 				}
 				break;
 			}
@@ -422,7 +422,7 @@ void MessageWin::initView()
 				text->setMaximumHeight(h + text->scrollBarHeight());
 				text->setMinimumHeight(qMin(h, lineSpacing*4));
 				text->setMaximumWidth(s.width() + text->scrollBarWidth());
-				text->setWhatsThis(i18n("The alarm message"));
+				text->setWhatsThis(i18nc("@info:whatsthis", "The alarm message"));
 				int vspace = lineSpacing/2;
 				int hspace = lineSpacing - KDialog::marginHint();
 				topLayout->addSpacing(vspace);
@@ -481,20 +481,20 @@ void MessageWin::initView()
 				// Display the email addresses and subject.
 				QFrame* frame = new QFrame(topWidget);
 				frame->setFrameStyle(QFrame::Box | QFrame::Raised);
-				frame->setWhatsThis(i18n("The email to send"));
+				frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
 				topLayout->addWidget(frame, 0, Qt::AlignHCenter);
 				QGridLayout* grid = new QGridLayout(frame);
 				grid->setMargin(KDialog::marginHint());
 				grid->setSpacing(KDialog::spacingHint());
 
-				QLabel* label = new QLabel(i18nc("Email addressee", "To:"), frame);
+				QLabel* label = new QLabel(i18nc("@info\nEmail addressee", "To:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailAddresses("\n"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
-				label = new QLabel(i18nc("Email subject", "Subject:"), frame);
+				label = new QLabel(i18nc("@info\nEmail subject", "Subject:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 1, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailSubject(), frame);
@@ -520,7 +520,7 @@ void MessageWin::initView()
 	}
 	else
 	{
-		setCaption(i18nc("@title", "Error"));
+		setCaption(i18nc("@title:window", "Error"));
 		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(2*KDialog::marginHint());
 		layout->addStretch();
@@ -540,7 +540,7 @@ void MessageWin::initView()
 		layout->addStretch();
 		if (!mDontShowAgain.isEmpty())
 		{
-			mDontShowAgainCheck = new QCheckBox(i18n("Don't display this error message again for this alarm"), topWidget);
+			mDontShowAgainCheck = new QCheckBox(i18nc("@option:check", "Don't display this error message again for this alarm"), topWidget);
 			mDontShowAgainCheck->setFixedSize(mDontShowAgainCheck->sizeHint());
 			topLayout->addWidget(mDontShowAgainCheck, 0, Qt::AlignLeft);
 		}
@@ -559,28 +559,28 @@ void MessageWin::initView()
 	mOkButton->setFixedSize(mOkButton->sizeHint());
 	connect(mOkButton, SIGNAL(clicked()), SLOT(slotOk()));
 	grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
-	mOkButton->setWhatsThis(i18n("Acknowledge the alarm"));
+	mOkButton->setWhatsThis(i18nc("@info:whatsthis", "Acknowledge the alarm"));
 
 	if (mShowEdit)
 	{
 		// Edit button
-		mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
+		mEditButton = new QPushButton(i18nc("@action:button", "&Edit..."), topWidget);
 		mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 		mEditButton->setFixedSize(mEditButton->sizeHint());
 		connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
 		grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
-		mEditButton->setWhatsThis(i18n("Edit the alarm."));
+		mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the alarm."));
 	}
 
 	if (!mNoDefer)
 	{
 		// Defer button
-		mDeferButton = new QPushButton(i18n("&Defer..."), topWidget);
+		mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
 		mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 		mDeferButton->setFixedSize(mDeferButton->sizeHint());
 		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
 		grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-		mDeferButton->setWhatsThis(i18n("Defer the alarm until later.\n"
+		mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "Defer the alarm until later.\n"
 		                                "You will be prompted to specify when the alarm should be redisplayed."));
 
 		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
@@ -595,8 +595,8 @@ void MessageWin::initView()
 		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
 		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
-		mSilenceButton->setToolTip(i18n("Stop sound"));
-		mSilenceButton->setWhatsThis(i18n("Stop playing the sound"));
+		mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
+		mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
 		// To avoid getting in a mess, disable the button until sound playing has been set up
 		mSilenceButton->setEnabled(false);
 	}
@@ -611,8 +611,8 @@ void MessageWin::initView()
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
-		mKMailButton->setToolTip(i18nc("Locate this email in KMail", "Locate in KMail"));
-		mKMailButton->setWhatsThis(i18n("Locate and highlight this email in KMail"));
+		mKMailButton->setToolTip(i18nc("@info:tooltip\nLocate this email in KMail", "Locate in <application>KMail<application>"));
+		mKMailButton->setWhatsThis(i18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
 	}
 	else
 		mKMailButton = 0;
@@ -624,9 +624,8 @@ void MessageWin::initView()
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
-	QString actKAlarm = i18n("Activate KAlarm");
-	mKAlarmButton->setToolTip(actKAlarm);
-	mKAlarmButton->setWhatsThis(actKAlarm);
+	mKAlarmButton->setToolTip(i18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
+	mKAlarmButton->setWhatsThis(i18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
 
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be
 	// under the mouse just as the window appears.
@@ -665,11 +664,11 @@ void MessageWin::setRemainingTextDay()
 	else
 	{
 		if (days <= 0)
-			text = i18n("Today");
+			text = i18nc("@info", "Today");
 		else if (days % 7)
-			text = i18np("Tomorrow", "in %1 days' time", days);
+			text = i18ncp("@info", "Tomorrow", "in %1 days' time", days);
 		else
-			text = i18np("in 1 week's time", "in %1 weeks' time", days/7);
+			text = i18ncp("@info", "in 1 week's time", "in %1 weeks' time", days/7);
 	}
 	mRemainingText->setText(text);
 }
@@ -683,13 +682,13 @@ void MessageWin::setRemainingTextMinute()
 	QString text;
 	int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 60)
-		text = i18np("in 1 minute's time", "in %1 minutes' time", (mins > 0 ? mins : 0));
+		text = i18ncp("@info", "in 1 minute's time", "in %1 minutes' time", (mins > 0 ? mins : 0));
 	else if (mins % 60 == 0)
-		text = i18np("in 1 hour's time", "in %1 hours' time", mins/60);
+		text = i18ncp("@info", "in 1 hour's time", "in %1 hours' time", mins/60);
 	else if (mins % 60 == 1)
-		text = i18np("in 1 hour 1 minute's time", "in %1 hours 1 minute's time", mins/60);
+		text = i18ncp("@info", "in 1 hour 1 minute's time", "in %1 hours 1 minute's time", mins/60);
 	else
-		text = i18np("in 1 hour %2 minutes' time", "in %1 hours %2 minutes' time", mins/60, mins%60);
+		text = i18ncp("@info", "in 1 hour %2 minutes' time", "in %1 hours %2 minutes' time", mins/60, mins%60);
 	mRemainingText->setText(text);
 }
 
@@ -1018,7 +1017,7 @@ void MessageWin::slotSpeak()
 		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
 		{
 			kDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd:" << error;
-			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
+			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), error);
 			return;
 		}
 	}
@@ -1028,7 +1027,7 @@ void MessageWin::slotSpeak()
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
 		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() D-Bus error";
-		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("D-Bus call sayMessage failed"));
+		KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call sayMessage failed"));
 	}
 }
 
@@ -1046,7 +1045,7 @@ void MessageWin::slotPlayAudio()
 	if (0)
 	{
 		kError(5950) << "MessageWin::playAudio(): Open failure:" << mAudioFile;
-		KMessageBox::error(this, i18n("Cannot open audio file:\n%1", mAudioFile));
+		KMessageBox::error(this, i18nc("@info", "Cannot open audio file:\n<filename>%1</filename>", mAudioFile));
 		return;
 	}
 	mPlayedOnce = false;
@@ -1345,8 +1344,8 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		if (mConfirmAck  &&  !mNoCloseConfirm)
 		{
 			// Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
-			if (KMessageBox::warningYesNo(this, i18n("Do you really want to acknowledge this alarm?"),
-			                                    i18n("Acknowledge Alarm"), KGuiItem(i18n("&Acknowledge")), KStandardGuiItem::cancel())
+			if (KMessageBox::warningYesNo(this, i18nc("@info", "Do you really want to acknowledge this alarm?"),
+			                                    i18nc("@action:button", "Acknowledge Alarm"), KGuiItem(i18nc("@action:button", "Acknowledge")), KStandardGuiItem::cancel())
 			    != KMessageBox::Yes)
 			{
 				ce->ignore();
@@ -1392,7 +1391,7 @@ void MessageWin::slotShowKMailMessage()
 	if (!reply.isValid())
 		kError(5950) << "MessageWin::slotShowKMailMessage(): kmail D-Bus call failed:" << reply.error().message();
 	else if (!reply.value())
-		KMessageBox::sorry(this, i18n("Unable to locate this email in KMail"));
+		KMessageBox::sorry(this, i18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
 
 /******************************************************************************
@@ -1521,7 +1520,7 @@ void MessageWin::slotDefer()
 			{
 				// The event doesn't exist any more !?!, so recurrence data,
 				// flags, and more, have been lost.
-				KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18n("Cannot defer alarm:")).arg(i18n("Alarm not found")));
+				KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18nc("@info", "Cannot defer alarm:")).arg(i18nc("@info", "Alarm not found")));
 				raise();
 				delete mDeferDlg;
 				mDeferDlg = 0;

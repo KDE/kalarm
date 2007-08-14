@@ -65,20 +65,13 @@ using namespace KCal;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString RecurrenceEdit::i18n_Norecur()           { return i18n("No recurrence"); }
-QString RecurrenceEdit::i18n_NoRecur()           { return i18n("No Recurrence"); }
-QString RecurrenceEdit::i18n_AtLogin()           { return i18n("At Login"); }
-QString RecurrenceEdit::i18n_l_Atlogin()         { return i18n("At &login"); }
-QString RecurrenceEdit::i18n_HourlyMinutely()    { return i18n("Hourly/Minutely"); }
-QString RecurrenceEdit::i18n_u_HourlyMinutely()  { return i18n("Ho&urly/Minutely"); }
-QString RecurrenceEdit::i18n_Daily()             { return i18n("Daily"); }
-QString RecurrenceEdit::i18n_d_Daily()           { return i18n("&Daily"); }
-QString RecurrenceEdit::i18n_Weekly()            { return i18n("Weekly"); }
-QString RecurrenceEdit::i18n_w_Weekly()          { return i18n("&Weekly"); }
-QString RecurrenceEdit::i18n_Monthly()           { return i18n("Monthly"); }
-QString RecurrenceEdit::i18n_m_Monthly()         { return i18n("&Monthly"); }
-QString RecurrenceEdit::i18n_Yearly()            { return i18n("Yearly"); }
-QString RecurrenceEdit::i18n_y_Yearly()          { return i18n("&Yearly"); }
+QString RecurrenceEdit::i18n_combo_NoRecur()        { return i18nc("@item:inlistbox", "No Recurrence"); }
+QString RecurrenceEdit::i18n_combo_AtLogin()        { return i18nc("@item:inlistbox", "At Login"); }
+QString RecurrenceEdit::i18n_combo_HourlyMinutely() { return i18nc("@item:inlistbox", "Hourly/Minutely"); }
+QString RecurrenceEdit::i18n_combo_Daily()          { return i18nc("@item:inlistbox", "Daily"); }
+QString RecurrenceEdit::i18n_combo_Weekly()         { return i18nc("@item:inlistbox", "Weekly"); }
+QString RecurrenceEdit::i18n_combo_Monthly()        { return i18nc("@item:inlistbox", "Monthly"); }
+QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlistbox", "Yearly"); }
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
@@ -104,7 +97,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	 * selection of its corresponding radio button.
 	 */
 
-	QGroupBox* recurGroup = new QGroupBox(i18n("Recurrence Rule"), this);
+	QGroupBox* recurGroup = new QGroupBox(i18nc("@title:group", "Recurrence Rule"), this);
 	topLayout->addWidget(recurGroup);
 	QHBoxLayout* hlayout = new QHBoxLayout(recurGroup);
 	hlayout->setMargin(KDialog::marginHint());
@@ -117,53 +110,54 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mRuleButtonGroup = new ButtonGroup(recurGroup);
 	connect(mRuleButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(periodClicked(QAbstractButton*)));
 
-	mNoneButton = new RadioButton(i18n_Norecur(), recurGroup);
+	mNoneButton = new RadioButton(i18n_combo_NoRecur(), recurGroup);
 	mNoneButton->setFixedSize(mNoneButton->sizeHint());
 	mNoneButton->setReadOnly(mReadOnly);
-	mNoneButton->setWhatsThis(i18n("Do not repeat the alarm"));
+	mNoneButton->setWhatsThis(i18nc("@info:whatsthis", "Do not repeat the alarm"));
 	mRuleButtonGroup->addButton(mNoneButton);
 	vlayout->addWidget(mNoneButton);
 
-	mAtLoginButton = new RadioButton(i18n_l_Atlogin(), recurGroup);
+	mAtLoginButton = new RadioButton(i18n_combo_AtLogin(), recurGroup);
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
-	mAtLoginButton->setWhatsThis(i18n("Trigger the alarm at the specified date/time and at every login until then.\n"
+	mAtLoginButton->setWhatsThis(i18nc("@info:whatsthis",
+	                                  "Trigger the alarm at the specified date/time and at every login until then.\n"
 	                                  "Note that it will also be triggered any time the alarm daemon is restarted."));
 	mRuleButtonGroup->addButton(mAtLoginButton);
 	vlayout->addWidget(mAtLoginButton);
 
-	mSubDailyButton = new RadioButton(i18n_u_HourlyMinutely(), recurGroup);
+	mSubDailyButton = new RadioButton(i18n_combo_HourlyMinutely(), recurGroup);
 	mSubDailyButton->setFixedSize(mSubDailyButton->sizeHint());
 	mSubDailyButton->setReadOnly(mReadOnly);
-	mSubDailyButton->setWhatsThis(i18n("Repeat the alarm at hourly/minutely intervals"));
+	mSubDailyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at hourly/minutely intervals"));
 	mRuleButtonGroup->addButton(mSubDailyButton);
 	vlayout->addWidget(mSubDailyButton);
 
-	mDailyButton = new RadioButton(i18n_d_Daily(), recurGroup);
+	mDailyButton = new RadioButton(i18n_combo_Daily(), recurGroup);
 	mDailyButton->setFixedSize(mDailyButton->sizeHint());
 	mDailyButton->setReadOnly(mReadOnly);
-	mDailyButton->setWhatsThis(i18n("Repeat the alarm at daily intervals"));
+	mDailyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at daily intervals"));
 	mRuleButtonGroup->addButton(mDailyButton);
 	vlayout->addWidget(mDailyButton);
 
-	mWeeklyButton = new RadioButton(i18n_w_Weekly(), recurGroup);
+	mWeeklyButton = new RadioButton(i18n_combo_Weekly(), recurGroup);
 	mWeeklyButton->setFixedSize(mWeeklyButton->sizeHint());
 	mWeeklyButton->setReadOnly(mReadOnly);
-	mWeeklyButton->setWhatsThis(i18n("Repeat the alarm at weekly intervals"));
+	mWeeklyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at weekly intervals"));
 	mRuleButtonGroup->addButton(mWeeklyButton);
 	vlayout->addWidget(mWeeklyButton);
 
-	mMonthlyButton = new RadioButton(i18n_m_Monthly(), recurGroup);
+	mMonthlyButton = new RadioButton(i18n_combo_Monthly(), recurGroup);
 	mMonthlyButton->setFixedSize(mMonthlyButton->sizeHint());
 	mMonthlyButton->setReadOnly(mReadOnly);
-	mMonthlyButton->setWhatsThis(i18n("Repeat the alarm at monthly intervals"));
+	mMonthlyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at monthly intervals"));
 	mRuleButtonGroup->addButton(mMonthlyButton);
 	vlayout->addWidget(mMonthlyButton);
 
-	mYearlyButton = new RadioButton(i18n_y_Yearly(), recurGroup);
+	mYearlyButton = new RadioButton(i18n_combo_Yearly(), recurGroup);
 	mYearlyButton->setFixedSize(mYearlyButton->sizeHint());
 	mYearlyButton->setReadOnly(mReadOnly);
-	mYearlyButton->setWhatsThis(i18n("Repeat the alarm at annual intervals"));
+	mYearlyButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm at annual intervals"));
 	mRuleButtonGroup->addButton(mYearlyButton);
 	vlayout->addWidget(mYearlyButton);
 	vlayout->addStretch();    // top-adjust the interval radio buttons
@@ -204,7 +198,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	// Create the recurrence range group which contains the controls
 	// which specify how long the recurrence is to last.
 
-	mRangeButtonBox = new QGroupBox(i18n("Recurrence End"), this);
+	mRangeButtonBox = new QGroupBox(i18nc("@title:group", "Recurrence End"), this);
 	topLayout->addWidget(mRangeButtonBox);
 	mRangeButtonGroup = new ButtonGroup(mRangeButtonBox);
 	connect(mRangeButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(rangeTypeClicked()));
@@ -212,10 +206,10 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	vlayout = new QVBoxLayout(mRangeButtonBox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
-	mNoEndDateButton = new RadioButton(i18n("No &end"), mRangeButtonBox);
+	mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No &end"), mRangeButtonBox);
 	mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
 	mNoEndDateButton->setReadOnly(mReadOnly);
-	mNoEndDateButton->setWhatsThis(i18n("Repeat the alarm indefinitely"));
+	mNoEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm indefinitely"));
 	mRangeButtonGroup->addButton(mNoEndDateButton);
 	vlayout->addWidget(mNoEndDateButton, 1, Qt::AlignLeft);
 	QSize size = mNoEndDateButton->size();
@@ -223,9 +217,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
-	mRepeatCountButton = new RadioButton(i18n("End a&fter:"), mRangeButtonBox);
+	mRepeatCountButton = new RadioButton(i18nc("@option:radio", "End a&fter:"), mRangeButtonBox);
 	mRepeatCountButton->setReadOnly(mReadOnly);
-	mRepeatCountButton->setWhatsThis(i18n("Repeat the alarm for the number of times specified"));
+	mRepeatCountButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm for the number of times specified"));
 	mRangeButtonGroup->addButton(mRepeatCountButton);
 	mRepeatCountEntry = new SpinBox(1, 9999, mRangeButtonBox);
 	mRepeatCountEntry->setFixedSize(mRepeatCountEntry->sizeHint());
@@ -233,9 +227,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mRepeatCountEntry->setSelectOnStep(false);
 	mRepeatCountEntry->setReadOnly(mReadOnly);
 	connect(mRepeatCountEntry, SIGNAL(valueChanged(int)), SLOT(repeatCountChanged(int)));
-	mRepeatCountEntry->setWhatsThis(i18n("Enter the total number of times to trigger the alarm"));
+	mRepeatCountEntry->setWhatsThis(i18nc("@info:whatsthis", "Enter the total number of times to trigger the alarm"));
 	mRepeatCountButton->setFocusWidget(mRepeatCountEntry);
-	mRepeatCountLabel = new QLabel(i18n("occurrence(s)"), mRangeButtonBox);
+	mRepeatCountLabel = new QLabel(i18nc("@label", "occurrence(s)"), mRangeButtonBox);
 	mRepeatCountLabel->setFixedSize(mRepeatCountLabel->sizeHint());
 	hlayout->addWidget(mRepeatCountButton);
 	hlayout->addSpacing(KDialog::spacingHint());
@@ -247,27 +241,27 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
-	mEndDateButton = new RadioButton(i18n("End &by:"), mRangeButtonBox);
+	mEndDateButton = new RadioButton(i18nc("@option:radio", "End &by:"), mRangeButtonBox);
 	mEndDateButton->setReadOnly(mReadOnly);
-	mEndDateButton->setWhatsThis(i18n("Repeat the alarm until the date/time specified"));
+	mEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm until the date/time specified"));
 	mRangeButtonGroup->addButton(mEndDateButton);
 	mEndDateEdit = new DateEdit(mRangeButtonBox);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
-	static const QString tzText = i18n("This uses the same time zone as the start time.");
-	static const QString lastDateText = i18n("Enter the last date to repeat the alarm.");
+	static const QString tzText = i18nc("@info:whatsthis", "This uses the same time zone as the start time.");
+	static const QString lastDateText = i18nc("@info:whatsthis", "Enter the last date to repeat the alarm.");
 	mEndDateEdit->setWhatsThis(QString("%1\n%2").arg(lastDateText).arg(tzText));
 	mEndDateButton->setFocusWidget(mEndDateEdit);
 	mEndTimeEdit = new TimeEdit(mRangeButtonBox);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
 	mEndTimeEdit->setReadOnly(mReadOnly);
-	static const QString lastTimeText = i18n("Enter the last time to repeat the alarm.");
+	static const QString lastTimeText = i18nc("@info:whatsthis", "Enter the last time to repeat the alarm.");
 	mEndTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(lastTimeText).arg(tzText).arg(TimeSpinBox::shiftWhatsThis()));
-	mEndAnyTimeCheckBox = new CheckBox(i18n("Any time"), mRangeButtonBox);
+	mEndAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), mRangeButtonBox);
 	mEndAnyTimeCheckBox->setFixedSize(mEndAnyTimeCheckBox->sizeHint());
 	mEndAnyTimeCheckBox->setReadOnly(mReadOnly);
 	connect(mEndAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-	mEndAnyTimeCheckBox->setWhatsThis(i18n("Stop repeating the alarm after your first login on or after the specified end date"));
+	mEndAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis", "Stop repeating the alarm after your first login on or after the specified end date"));
 	hlayout->addWidget(mEndDateButton);
 	hlayout->addSpacing(KDialog::spacingHint());
 	hlayout->addWidget(mEndDateEdit);
@@ -283,7 +277,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	// Create the exceptions group which specifies dates to be excluded
 	// from the recurrence.
 
-	mExceptionGroup = new QGroupBox(i18n("E&xceptions"), this);
+	mExceptionGroup = new QGroupBox(i18nc("@title:group", "E&xceptions"), this);
 	topLayout->addWidget(mExceptionGroup);
 	topLayout->setStretchFactor(mExceptionGroup, 2);
 	hlayout = new QHBoxLayout(mExceptionGroup);
@@ -296,7 +290,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mExceptionDateList = new QListWidget(mExceptionGroup);
 	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	connect(mExceptionDateList, SIGNAL(currentRowChanged(int)), SLOT(enableExceptionButtons()));
-	mExceptionDateList->setWhatsThis(i18n("The list of exceptions, i.e. dates/times excluded from the recurrence"));
+	mExceptionDateList->setWhatsThis(i18nc("@info:whatsthis", "The list of exceptions, i.e. dates/times excluded from the recurrence"));
 	vlayout->addWidget(mExceptionDateList);
 
 	if (mReadOnly)
@@ -313,45 +307,46 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		mExceptionDateEdit = new DateEdit(mExceptionGroup);
 		mExceptionDateEdit->setFixedSize(mExceptionDateEdit->sizeHint());
 		mExceptionDateEdit->setDate(QDate::currentDate());
-		mExceptionDateEdit->setWhatsThis(i18n("Enter a date to insert in the exceptions list. "
+		mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a date to insert in the exceptions list. "
 		                                      "Use in conjunction with the Add or Change button below."));
 		vlayout->addWidget(mExceptionDateEdit);
 
 		hlayout = new QHBoxLayout();
 		hlayout->setMargin(0);
 		vlayout->addLayout(hlayout);
-		QPushButton* button = new QPushButton(i18n("Add"), mExceptionGroup);
+		QPushButton* button = new QPushButton(i18nc("@action:button", "Add"), mExceptionGroup);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(addException()));
-		button->setWhatsThis(i18n("Add the date entered above to the exceptions list"));
+		button->setWhatsThis(i18nc("@info:whatsthis", "Add the date entered above to the exceptions list"));
 		hlayout->addWidget(button);
 
-		mChangeExceptionButton = new QPushButton(i18n("Change"), mExceptionGroup);
+		mChangeExceptionButton = new QPushButton(i18nc("@action:button", "Change"), mExceptionGroup);
 		mChangeExceptionButton->setFixedSize(mChangeExceptionButton->sizeHint());
 		connect(mChangeExceptionButton, SIGNAL(clicked()), SLOT(changeException()));
-		mChangeExceptionButton->setWhatsThis(i18n("Replace the currently highlighted item in the exceptions list with the date entered above"));
+		mChangeExceptionButton->setWhatsThis(i18nc("@info:whatsthis", "Replace the currently highlighted item in the exceptions list with the date entered above"));
 		hlayout->addWidget(mChangeExceptionButton);
 
-		mDeleteExceptionButton = new QPushButton(i18n("Delete"), mExceptionGroup);
+		mDeleteExceptionButton = new QPushButton(i18nc("@action:button", "Delete"), mExceptionGroup);
 		mDeleteExceptionButton->setFixedSize(mDeleteExceptionButton->sizeHint());
 		connect(mDeleteExceptionButton, SIGNAL(clicked()), SLOT(deleteException()));
-		mDeleteExceptionButton->setWhatsThis(i18n("Remove the currently highlighted item from the exceptions list"));
+		mDeleteExceptionButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the currently highlighted item from the exceptions list"));
 		hlayout->addWidget(mDeleteExceptionButton);
 	}
 
-	mWorkTimeOnly = new CheckBox(i18n("Only during working hours"), mExceptionGroup);
+	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working hours"), mExceptionGroup);
 	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
 	mWorkTimeOnly->setReadOnly(mReadOnly);
-	mWorkTimeOnly->setWhatsThis(i18n("Only execute the alarm during working hours.\nYou can specify working hours in the Preferences dialog."));
+	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "Only execute the alarm during working hours.\nYou can specify working hours in the Preferences dialog."));
 	vlayout->addWidget(mWorkTimeOnly);
 
 	// Simple repetition button
-	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, this);
+	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), true, this);
 	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
 	mSubRepetition->setReadOnly(mReadOnly);
 	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
 	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
-	mSubRepetition->setWhatsThis(i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	mSubRepetition->setWhatsThis(i18nc("@info:whatsthis",
+	                                   "Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
 	topLayout->addWidget(mSubRepetition);
 
 	mNoEmitTypeChanged = false;
@@ -379,8 +374,8 @@ QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& erro
 		if (errWidget)
 		{
 			errorMessage = noTime
-			             ? i18n("End date is earlier than start date")
-			             : i18n("End date/time is earlier than start date/time");
+			             ? i18nc("@info", "End date is earlier than start date")
+			             : i18nc("@info", "End date/time is earlier than start date/time");
 			return errWidget;
 		}
 	}
@@ -652,7 +647,7 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 		}
 		else
 		{
-			const QString startString = i18nc("Date cannot be earlier than start date", "start date");
+			const QString startString = i18nc("@info\nDate cannot be earlier than start date", "start date");
 			mEndDateEdit->setMinDate(start, startString);
 			if (mExceptionDateEdit)
 				mExceptionDateEdit->setMinDate(start, startString);
@@ -1061,7 +1056,7 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 
-	QLabel* label = new QLabel(i18n("Recur e&very"), box);
+	QLabel* label = new QLabel(i18nc("@label:spinbox", "Recur e&very"), box);
 	label->setFixedSize(label->sizeHint());
 	if (time)
 	{
@@ -1129,8 +1124,8 @@ bool Rule::stateChanged() const
 =============================================================================*/
 
 SubDailyRule::SubDailyRule(bool readOnly, QWidget* parent)
-	: Rule(i18n("hours:minutes"),
-	       i18n("Enter the number of hours and minutes between repetitions of the alarm"),
+	: Rule(i18nc("@label", "hours:minutes"),
+	       i18nc("@info:whatsthis", "Enter the number of hours and minutes between repetitions of the alarm"),
 	       true, readOnly, parent)
 { }
 
@@ -1150,7 +1145,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	grid->setRowStretch(0, 1);
 	layout()->addLayout(grid);
 
-	QLabel* label = new QLabel(i18nc("On: Tuesday", "O&n:"), this);
+	QLabel* label = new QLabel(i18nc("@label\nOn: Tuesday", "O&n:"), this);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
 	grid->setColumnMinimumWidth(1, KDialog::spacingHint());
@@ -1230,7 +1225,7 @@ QWidget* DayWeekRule::validate(QString& errorMessage)
 	for (int i = 0;  i < 7;  ++i)
 		if (mDayBox[i]->isChecked())
 			return 0;
-	errorMessage = i18n("No day selected");
+	errorMessage = i18nc("@info", "No day selected");
 	return mDayBox[0];
 }
 
@@ -1259,9 +1254,9 @@ bool DayWeekRule::stateChanged() const
 =============================================================================*/
 
 DailyRule::DailyRule(bool readOnly, QWidget* parent)
-	: DayWeekRule(i18n("day(s)"),
-	              i18n("Enter the number of days between repetitions of the alarm"),
-	              i18n("Select the days of the week on which the alarm is allowed to occur"),
+	: DayWeekRule(i18nc("@label", "day(s)"),
+	              i18nc("@info:whatsthis", "Enter the number of days between repetitions of the alarm"),
+	              i18nc("@info:whatsthis", "Select the days of the week on which the alarm is allowed to occur"),
 	              readOnly, parent)
 { }
 
@@ -1272,9 +1267,9 @@ DailyRule::DailyRule(bool readOnly, QWidget* parent)
 =============================================================================*/
 
 WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent)
-	: DayWeekRule(i18n("week(s)"),
-	              i18n("Enter the number of weeks between repetitions of the alarm"),
-	              i18n("Select the days of the week on which to repeat the alarm"),
+	: DayWeekRule(i18nc("@label", "week(s)"),
+	              i18nc("@info:whatsthis", "Enter the number of weeks between repetitions of the alarm"),
+	              i18nc("@info:whatsthis", "Select the days of the week on which to repeat the alarm"),
 	              readOnly, parent)
 { }
 
@@ -1297,21 +1292,21 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mDayButton = new RadioButton(i18nc("On day number in the month", "O&n day"), box);
+	mDayButton = new RadioButton(i18nc("@option:radio\nOn day number in the month", "O&n day"), box);
 	mDayButton->setFixedSize(mDayButton->sizeHint());
 	mDayButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mDayButton);
-	mDayButton->setWhatsThis(i18n("Repeat the alarm on the selected day of the month"));
+	mDayButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm on the selected day of the month"));
 
 	mDayCombo = new ComboBox(box);
 	mDayCombo->setEditable(false);
 	mDayCombo->setMaxVisibleItems(11);
 	for (int i = 0;  i < 31;  ++i)
 		mDayCombo->addItem(QString::number(i + 1));
-	mDayCombo->addItem(i18nc("Last day of month", "Last"));
+	mDayCombo->addItem(i18nc("@item:inlistbox\nLast day of month", "Last"));
 	mDayCombo->setFixedSize(mDayCombo->sizeHint());
 	mDayCombo->setReadOnly(readOnly);
-	mDayCombo->setWhatsThis(i18n("Select the day of the month on which to repeat the alarm"));
+	mDayCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the month on which to repeat the alarm"));
 	mDayButton->setFocusWidget(mDayCombo);
 	connect(mDayCombo, SIGNAL(activated(int)), SLOT(slotDaySelected(int)));
 
@@ -1324,30 +1319,30 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mPosButton = new RadioButton(i18nc("On the 1st Tuesday", "On t&he"), box);
+	mPosButton = new RadioButton(i18nc("@option:radio\nOn the 1st Tuesday", "On t&he"), box);
 	mPosButton->setFixedSize(mPosButton->sizeHint());
 	mPosButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mPosButton);
-	mPosButton->setWhatsThis(i18n("Repeat the alarm on one day of the week, in the selected week of the month"));
+	mPosButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm on one day of the week, in the selected week of the month"));
 
 	mWeekCombo = new ComboBox(box);
 	mWeekCombo->setEditable(false);
-	mWeekCombo->addItem(i18n("1st"));
-	mWeekCombo->addItem(i18n("2nd"));
-	mWeekCombo->addItem(i18n("3rd"));
-	mWeekCombo->addItem(i18n("4th"));
-	mWeekCombo->addItem(i18n("5th"));
-	mWeekCombo->addItem(i18nc("Last Monday in March", "Last"));
-	mWeekCombo->addItem(i18n("2nd Last"));
-	mWeekCombo->addItem(i18n("3rd Last"));
-	mWeekCombo->addItem(i18n("4th Last"));
-	mWeekCombo->addItem(i18n("5th Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "1st"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "2nd"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "3rd"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "4th"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "5th"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox\nLast Monday in March", "Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "2nd Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "3rd Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "4th Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox", "5th Last"));
 	if (mEveryWeek)
 	{
-		mWeekCombo->addItem(i18nc("Every (Monday...) in month", "Every"));
+		mWeekCombo->addItem(i18nc("@item:inlistbox\nEvery (Monday...) in month", "Every"));
 		mWeekCombo->setMaxVisibleItems(11);
 	}
-	mWeekCombo->setWhatsThis(i18n("Select the week of the month in which to repeat the alarm"));
+	mWeekCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the week of the month in which to repeat the alarm"));
 	mWeekCombo->setFixedSize(mWeekCombo->sizeHint());
 	mWeekCombo->setReadOnly(readOnly);
 	mPosButton->setFocusWidget(mWeekCombo);
@@ -1361,7 +1356,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 		mDayOfWeekCombo->addItem(KAlarm::weekDayName(day, locale));
 	}
 	mDayOfWeekCombo->setReadOnly(readOnly);
-	mDayOfWeekCombo->setWhatsThis(i18n("Select the day of the week on which to repeat the alarm"));
+	mDayOfWeekCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the week on which to repeat the alarm"));
 
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
@@ -1482,8 +1477,8 @@ bool MonthYearRule::stateChanged() const
 =============================================================================*/
 
 MonthlyRule::MonthlyRule(bool readOnly, QWidget* parent)
-	: MonthYearRule(i18n("month(s)"),
-	       i18n("Enter the number of months between repetitions of the alarm"),
+	: MonthYearRule(i18nc("@label", "month(s)"),
+	       i18nc("@info:whatsthis", "Enter the number of months between repetitions of the alarm"),
 	       false, readOnly, parent)
 { }
 
@@ -1494,15 +1489,15 @@ MonthlyRule::MonthlyRule(bool readOnly, QWidget* parent)
 =============================================================================*/
 
 YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
-	: MonthYearRule(i18n("year(s)"),
-	       i18n("Enter the number of years between repetitions of the alarm"),
+	: MonthYearRule(i18nc("@label", "year(s)"),
+	       i18nc("@info:whatsthis", "Enter the number of years between repetitions of the alarm"),
 	       true, readOnly, parent)
 {
 	// Set up the month selection widgets
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	layout()->addLayout(hlayout);
-	QLabel* label = new QLabel(i18nc("first week of January", "of:"), this);
+	QLabel* label = new QLabel(i18nc("@label\nfirst week of January", "of:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignLeft | Qt::AlignTop);
 
@@ -1533,7 +1528,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	}
 	connect(mMonthBox[1], SIGNAL(toggled(bool)), SLOT(enableFeb29()));
 	w->setFixedHeight(w->sizeHint().height());
-	w->setWhatsThis(i18n("Select the months of the year in which to repeat the alarm"));
+	w->setWhatsThis(i18nc("@info:whatsthis", "Select the months of the year in which to repeat the alarm"));
 
 	// February 29th handling option
 	KHBox* f29box = new KHBox(this);
@@ -1542,18 +1537,18 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	KHBox* box = new KHBox(f29box);    // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	mFeb29Label = new QLabel(i18n("February 2&9th alarm in non-leap years:"), box);
+	mFeb29Label = new QLabel(i18nc("@label:listbox", "February 2&9th alarm in non-leap years:"), box);
 	mFeb29Label->setFixedSize(mFeb29Label->sizeHint());
 	mFeb29Combo = new ComboBox(box);
 	mFeb29Combo->setEditable(false);
-	mFeb29Combo->addItem(i18nc("No date", "None"));
-	mFeb29Combo->addItem(i18nc("1st March (short form)", "1 Mar"));
-	mFeb29Combo->addItem(i18nc("28th February (short form)", "28 Feb"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox\nNo date", "None"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox\n1st March (short form)", "1 Mar"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox\n28th February (short form)", "28 Feb"));
 	mFeb29Combo->setFixedSize(mFeb29Combo->sizeHint());
 	mFeb29Combo->setReadOnly(readOnly);
 	mFeb29Label->setBuddy(mFeb29Combo);
 	box->setFixedSize(box->sizeHint());
-	box->setWhatsThis(i18n("Select which date, if any, the February 29th alarm should trigger in non-leap years"));
+	box->setWhatsThis(i18nc("@info:whatsthis", "Select which date, if any, the February 29th alarm should trigger in non-leap years"));
 	new QWidget(f29box);     // left adjust the visible widgets
 	f29box->setFixedHeight(f29box->sizeHint().height());
 }
@@ -1637,7 +1632,7 @@ QWidget* YearlyRule::validate(QString& errorMessage)
 	for (int i = 0;  i < 12;  ++i)
 		if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
 			return 0;
-	errorMessage = i18n("No month selected");
+	errorMessage = i18nc("@info", "No month selected");
 	return mMonthBox[0];
 }
 

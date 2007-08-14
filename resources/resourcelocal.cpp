@@ -237,5 +237,5 @@ bool KAResourceLocal::setLocation(const QString& fileName, const QString&)
 QString KAResourceLocal::displayLocation(bool prefix) const
 {
 	QString loc = mURL.path();
-	return prefix ? i18n("File: %1", loc) : loc;
+	return prefix ? i18nc("@info", "File: <filename>%1</filename>", loc) : loc;
 }

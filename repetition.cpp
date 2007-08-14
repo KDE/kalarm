@@ -82,7 +82,7 @@ void RepetitionButton::set(int interval, int count, bool dateOnly, int maxDurati
 void RepetitionButton::activate(bool waitForInitialisation)
 {
 	if (!mDialog)
-		mDialog = new RepetitionDlg(i18n("Alarm Sub-Repetition"), mReadOnly, this);
+		mDialog = new RepetitionDlg(i18nc("@title:window", "Alarm Sub-Repetition"), mReadOnly, this);
 	mDialog->set(mInterval, mCount, mDateOnly, mMaxDuration);
 	if (waitForInitialisation)
 		emit needsInitialisation();     // request dialog initialisation
@@ -158,11 +158,11 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacing);
 
-	mTimeSelector = new TimeSelector(i18nc("Repeat every 10 minutes", "Repeat every"), QString(),
-	                  i18n("Check to repeat the alarm each time it recurs. "
+	mTimeSelector = new TimeSelector(i18nc("@option:check\nRepeat every 10 minutes", "Repeat every"), QString(),
+	                  i18nc("@info:whatsthis", "Check to repeat the alarm each time it recurs. "
 	                       "Instead of the alarm triggering once at each recurrence, "
 	                       "this option makes the alarm trigger multiple times at each recurrence."),
-	                  i18n("Enter the time between repetitions of the alarm"),
+	                  i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
 	                  true, page);
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
 	connect(mTimeSelector, SIGNAL(valueChanged(int)), SLOT(intervalChanged(int)));
@@ -180,9 +180,9 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	QHBoxLayout* layout = new QHBoxLayout();
 	layout->setMargin(0);
 	vlayout->addLayout(layout);
-	mCountButton = new RadioButton(i18n("Number of repetitions:"), mButtonBox);
+	mCountButton = new RadioButton(i18nc("@option:radio", "Number of repetitions:"), mButtonBox);
 	mCountButton->setFixedSize(mCountButton->sizeHint());
-	mCountButton->setWhatsThis(i18n("Check to specify the number of times the alarm should repeat after each recurrence"));
+	mCountButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify the number of times the alarm should repeat after each recurrence"));
 	mButtonGroup->addButton(mCountButton);
 	layout->addWidget(mCountButton);
 	mCount = new SpinBox(1, MAX_COUNT, mButtonBox);
@@ -190,7 +190,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	mCount->setSingleShiftStep(10);
 	mCount->setSelectOnStep(false);
 	connect(mCount, SIGNAL(valueChanged(int)), SLOT(countChanged(int)));
-	mCount->setWhatsThis(i18n("Enter the number of times to trigger the alarm after its initial occurrence"));
+	mCount->setWhatsThis(i18nc("@info:whatsthis", "Enter the number of times to trigger the alarm after its initial occurrence"));
 	layout->addWidget(mCount);
 	mCountButton->setFocusWidget(mCount);
 	layout->addStretch();
@@ -198,15 +198,15 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout = new QHBoxLayout();
 	layout->setMargin(0);
 	vlayout->addLayout(layout);
-	mDurationButton = new RadioButton(i18n("Duration:"), mButtonBox);
+	mDurationButton = new RadioButton(i18nc("@option:radio", "Duration:"), mButtonBox);
 	mDurationButton->setFixedSize(mDurationButton->sizeHint());
-	mDurationButton->setWhatsThis(i18n("Check to specify how long the alarm is to be repeated"));
+	mDurationButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify how long the alarm is to be repeated"));
 	mButtonGroup->addButton(mDurationButton);
 	layout->addWidget(mDurationButton);
 	mDuration = new TimePeriod(true, mButtonBox);
 	mDuration->setFixedSize(mDuration->sizeHint());
 	connect(mDuration, SIGNAL(valueChanged(int)), SLOT(durationChanged(int)));
-	mDuration->setWhatsThis(i18n("Enter the length of time to repeat the alarm"));
+	mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
 	layout->addWidget(mDuration);
 	mDurationButton->setFocusWidget(mDuration);
 	layout->addStretch();

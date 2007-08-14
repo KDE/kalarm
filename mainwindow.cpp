@@ -104,17 +104,14 @@ TemplateDlg*             MainWindow::mTemplateDlg = 0;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString MainWindow::i18n_a_ShowAlarmTimes()     { return i18n("Show &Alarm Times"); }
-QString MainWindow::i18n_t_ShowAlarmTime()      { return i18n("Show alarm &time"); }
-QString MainWindow::i18n_m_ShowAlarmTime()      { return i18n("Show alarm ti&me"); }
-QString MainWindow::i18n_o_ShowTimeToAlarms()   { return i18n("Show Time t&o Alarms"); }
-QString MainWindow::i18n_n_ShowTimeToAlarm()    { return i18n("Show time u&ntil alarm"); }
-QString MainWindow::i18n_l_ShowTimeToAlarm()    { return i18n("Show time unti&l alarm"); }
-QString MainWindow::i18n_ShowArchivedAlarms()   { return i18n("Show Archived Alarms"); }
-QString MainWindow::i18n_e_ShowArchivedAlarms() { return i18n("Show &Archived Alarms"); }
-QString MainWindow::i18n_HideArchivedAlarms()   { return i18n("Hide Archived Alarms"); }
-QString MainWindow::i18n_e_HideArchivedAlarms() { return i18n("Hide &Archived Alarms"); }
-QString MainWindow::i18n_r_ShowResources()      { return i18n("Show &Resources");}
+QString MainWindow::i18n_a_ShowAlarmTimes()        { return i18nc("@action", "Show &Alarm Times"); }
+QString MainWindow::i18n_chk_ShowAlarmTime()       { return i18nc("@option:check", "Show alarm time"); }
+QString MainWindow::i18n_o_ShowTimeToAlarms()      { return i18nc("@action", "Show Time t&o Alarms"); }
+QString MainWindow::i18n_chk_ShowTimeToAlarm()     { return i18nc("@option:check", "Show time until alarm"); }
+QString MainWindow::i18n_a_ShowArchivedAlarms()    { return i18nc("@action", "Show &Archived Alarms"); }
+QString MainWindow::i18n_chk_ShowArchivedAlarms()  { return i18nc("@option:check", "Show Archived Alarms"); }
+QString MainWindow::i18n_tip_ShowArchivedAlarms()  { return i18nc("@info:tooltip", "Show Archived Alarms"); }
+QString MainWindow::i18n_tip_HideArchivedAlarms()  { return i18nc("@info:tooltip", "Hide Archived Alarms"); }
 
 
 /******************************************************************************
@@ -357,7 +354,7 @@ void MainWindow::show()
 		// Show error message now that the main window has been displayed.
 		// Waiting until now lets the user easily associate the message with
 		// the main window which is faulty.
-		KMessageBox::error(this, i18n("Failure to create menus\n(perhaps %1 missing or corrupted)", QLatin1String(UI_FILE)));
+		KMessageBox::error(this, i18nc("@info", "Failure to create menus\n(perhaps %1 missing or corrupted)", QLatin1String(UI_FILE)));
 		mMenuError = false;
 	}
 }
@@ -388,37 +385,37 @@ void MainWindow::initActions()
 {
 	KActionCollection* actions = actionCollection();
 
-	mActionTemplates = new KAction(i18n("&Templates..."), this);
+	mActionTemplates = new KAction(i18nc("@action", "&Templates..."), this);
 	actions->addAction(QLatin1String("templates"), mActionTemplates);
 	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
-	mActionNew = new NewAlarmAction(false, i18n("&New"), this);
+	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
 	actions->addAction(QLatin1String("new"), mActionNew);
 	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNew(KAEvent::Action)));
 
-	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New &From Template"), actions, QLatin1String("newFromTempl"));
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 
-	mActionCreateTemplate = new KAction(i18n("Create Tem&plate..."), this);
+	mActionCreateTemplate = new KAction(i18nc("@action", "Create Tem&plate..."), this);
 	actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
 	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-	mActionCopy = new KAction(KIcon("edit-copy"), i18n("&Copy..."), this);
+	mActionCopy = new KAction(KIcon("edit-copy"), i18nc("@action", "&Copy..."), this);
 	actions->addAction(QLatin1String("copy"), mActionCopy);
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify = new KAction(KIcon("edit"), i18n("&Edit..."), this);
+	mActionModify = new KAction(KIcon("edit"), i18nc("@action", "&Edit..."), this);
 	actions->addAction(QLatin1String("modify"), mActionModify);
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-	mActionDelete = new KAction(KIcon("edit-delete"), i18n("&Delete"), this);
+	mActionDelete = new KAction(KIcon("edit-delete"), i18nc("@action", "&Delete"), this);
 	actions->addAction(QLatin1String("delete"), mActionDelete);
 	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
 
-	mActionReactivate = new KAction(i18n("Reac&tivate"), this);
+	mActionReactivate = new KAction(i18nc("@action", "Reac&tivate"), this);
 	actions->addAction(QLatin1String("undelete"), mActionReactivate);
 	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
 	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
@@ -428,7 +425,7 @@ void MainWindow::initActions()
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	mActionView = new KAction(KIcon("zoom-original"), i18n("&View"), this);
+	mActionView = new KAction(KIcon("zoom-original"), i18nc("@action", "&View"), this);
 	actions->addAction(QLatin1String("view"), mActionView);
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
@@ -443,28 +440,28 @@ void MainWindow::initActions()
 	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowArchived = new KToggleAction(i18n_e_ShowArchivedAlarms(), this);
+	mActionShowArchived = new KToggleAction(i18n_a_ShowArchivedAlarms(), this);
 	actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
 	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
-	mActionToggleTrayIcon = new KToggleAction(i18n("Show in System &Tray"), this);
+	mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(KIcon("view_choose"), i18n_r_ShowResources(), this);
+	mActionToggleResourceSel = new KToggleAction(KIcon("view_choose"), i18nc("@action", "Show &Resources"), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
-	mActionImportAlarms = new KAction(i18n("Import &Alarms..."), this);
+	mActionImportAlarms = new KAction(i18nc("@action", "Import &Alarms..."), this);
 	actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
-	mActionImportBirthdays = new KAction(i18n("Import &Birthdays..."), this);
+	mActionImportBirthdays = new KAction(i18nc("@action", "Import &Birthdays..."), this);
 	actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	QAction* action = new KAction(KIcon("view-refresh"), i18n("&Refresh Alarms"), this);
+	QAction* action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
 	actions->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
 
@@ -725,10 +722,10 @@ void MainWindow::slotDelete()
 	if (Preferences::confirmAlarmDeletion())
 	{
 		int n = events.count();
-		if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm?",
+		if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
 		                                                   "Do you really want to delete the %1 selected alarms?", n),
-		                                       i18np("Delete Alarm", "Delete Alarms", n),
-		                                       KGuiItem(i18n("&Delete"), "edit-delete"),
+		                                       i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
+		                                       KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
 		                                       KStandardGuiItem::cancel(),
 		                                       Preferences::CONFIRM_ALARM_DELETION)
 		    != KMessageBox::Continue)
@@ -816,7 +813,7 @@ void MainWindow::slotShowArchived()
 {
 	mShowArchived = !mShowArchived;
 	mActionShowArchived->setChecked(mShowArchived);
-	mActionShowArchived->setToolTip(mShowArchived ? i18n_HideArchivedAlarms() : i18n_ShowArchivedAlarms());
+	mActionShowArchived->setToolTip(mShowArchived ? i18n_tip_HideArchivedAlarms() : i18n_tip_ShowArchivedAlarms());
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
 	mListView->reset();
 }
@@ -854,7 +851,7 @@ void MainWindow::slotBirthdays()
 			AlarmResources* resources = AlarmResources::instance();
 			for (int i = 0, end = events.count();  i < end;  ++i)
 				undos.append(events[i], resources->resourceForIncidence(events[i].id()));
-			Undo::saveAdds(undos, i18n("Import birthdays"));
+			Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
 			if (status != KAlarm::UPDATE_FAILED)
 				KAlarm::outputAlarmWarnings(&dlg);
@@ -1027,7 +1024,7 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		int id = ids[i];
-		QAction* act = menu->addAction(i18nc("Undo [action]: message", "%1 %2: %3",
+		QAction* act = menu->addAction(i18nc("@action\nUndo [action]: message", "%1 %2: %3",
 		                               action, Undo::actionText(type, id), Undo::description(type, id)));
 		mUndoMenuIds[act] = id;
 	}
@@ -1272,14 +1269,14 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 			// If the alarm text could be interpreted as an email or command script,
 			// prompt for which type of alarm to create.
 			QStringList types;
-			types += i18n("Display Alarm");
+			types += i18nc("@item:inlistbox", "Display Alarm");
 			if (alarmText.isEmail())
-				types += i18n("Email Alarm");
+				types += i18nc("@item:inlistbox", "Email Alarm");
 			else if (alarmText.isScript())
-				types += i18n("Command Alarm");
+				types += i18nc("@item:inlistbox", "Command Alarm");
 			bool ok = false;
-			QString type = KInputDialog::getItem(i18n("Alarm Type"),
-			                                     i18n("Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
+			QString type = KInputDialog::getItem(i18nc("@title:window", "Alarm Type"),
+			                                     i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
 			if (!ok)
 				return;   // user didn't press OK
 			int i = types.indexOf(type);
@@ -1428,7 +1425,7 @@ void MainWindow::slotDoubleClicked(const QModelIndex& index)
 void MainWindow::setEnableText(bool enable)
 {
 	mActionEnableEnable = enable;
-	mActionEnable->setText(enable ? i18n("Ena&ble") : i18n("Disa&ble"));
+	mActionEnable->setText(enable ? i18nc("@action", "Ena&ble") : i18nc("@action", "Disa&ble"));
 }
 
 /******************************************************************************

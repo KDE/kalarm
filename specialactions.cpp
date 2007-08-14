@@ -40,14 +40,14 @@
 = Button to display the Special Alarm Actions dialogue.
 =============================================================================*/
 
-SpecialActionsButton::SpecialActionsButton(const QString& caption, QWidget* parent)
-	: QPushButton(caption, parent),
+SpecialActionsButton::SpecialActionsButton(QWidget* parent)
+	: QPushButton(i18nc("@action:button", "Special Actions..."), parent),
 	  mReadOnly(false)
 {
 	setCheckable(true);
 	setChecked(false);
 	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	setWhatsThis(i18n("Specify actions to execute before and after the alarm is displayed."));
+	setWhatsThis(i18nc("@info:whatsthis", "Specify actions to execute before and after the alarm is displayed."));
 }
 
 /******************************************************************************
@@ -67,7 +67,7 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post)
 */
 void SpecialActionsButton::slotButtonPressed()
 {
-	SpecialActionsDlg dlg(mPreAction, mPostAction, i18n("Special Alarm Actions"), this);
+	SpecialActionsDlg dlg(mPreAction, mPostAction, this);
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
@@ -88,10 +88,10 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 
 
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
-                                     const QString& caption, QWidget* parent)
+                                     QWidget* parent)
 	: KDialog(parent )
 {
-	setCaption(caption);
+	setCaption(i18nc("@title:window", "Special Alarm Actions"));
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -148,26 +148,28 @@ SpecialActions::SpecialActions(QWidget* parent)
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	// Pre-alarm action
-	QLabel* label = new QLabel(i18n("Pre-alarm action:"), this);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Pre-alarm action:"), this);
 	label->setFixedSize(label->sizeHint());
 	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
-	mPreAction->setWhatsThis(i18n("Enter a shell command to execute before the alarm is displayed.\n"
+	mPreAction->setWhatsThis(i18nc("@info:whatsthis",
+	                              "Enter a shell command to execute before the alarm is displayed.\n"
 	                              "Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.\n"
 	                              "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
 	topLayout->addWidget(mPreAction);
 	topLayout->addSpacing(KDialog::spacingHint());
 
 	// Post-alarm action
-	label = new QLabel(i18n("Post-alarm action:"), this);
+	label = new QLabel(i18nc("@label:textbox", "Post-alarm action:"), this);
 	label->setFixedSize(label->sizeHint());
 	topLayout->addWidget(label, 0, Qt::AlignLeft);
 
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);
-	mPostAction->setWhatsThis(i18n("Enter a shell command to execute after the alarm window is closed.\n"
+	mPostAction->setWhatsThis(i18nc("@info:whatsthis",
+	                               "Enter a shell command to execute after the alarm window is closed.\n"
 	                               "Note that it is not executed after closing a reminder window. If you defer "
 	                               "the alarm, it is not executed until the alarm is finally acknowledged or closed."));
 	topLayout->addWidget(mPostAction);

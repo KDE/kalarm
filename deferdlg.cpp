@@ -43,9 +43,9 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidg
 	: KDialog(parent)
 {
 	setWindowModality(Qt::WindowModal);
-	setCaption(i18nc("@title", "Defer Alarm"));
+	setCaption(i18nc("@title:window", "Defer Alarm"));
 	setButtons(Ok | Cancel | User1);
-	setButtonGuiItem(User1, KGuiItem(i18n("Cancel &Deferral")));
+	setButtonGuiItem(User1, KGuiItem(i18nc("@action:button", "Cancel &Deferral")));
 	if (!cancelButton)
 		showButton(User1, false);
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -64,8 +64,8 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidg
 	layout->addWidget(mTimeWidget);
 	layout->addSpacing(spacingHint());
 
-	setButtonWhatsThis(Ok, i18n("Defer the alarm until the specified time."));
-	setButtonWhatsThis(User1, i18n("Cancel the deferred alarm. This does not affect future recurrences."));
+	setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Defer the alarm until the specified time."));
+	setButtonWhatsThis(User1, i18nc("@info:whatsthis", "Cancel the deferred alarm. This does not affect future recurrences."));
 }
 
 
@@ -100,21 +100,21 @@ void DeferAlarmDlg::slotOk()
 		switch (limitType)
 		{
 			case KAEvent::LIMIT_REPETITION:
-				text = i18nc("This refers to simple repetitions set up using the Simple Repetition dialog",
+				text = i18nc("@info", "This refers to simple repetitions set up using the Simple Repetition dialog",
 				             "Cannot defer past the alarm's next repetition (currently %1)",
 				             endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_RECURRENCE:
-				text = i18nc("This refers to recurrences set up using the Recurrence tab",
+				text = i18nc("@info", "This refers to recurrences set up using the Recurrence tab",
 				             "Cannot defer past the alarm's next recurrence (currently %1)",
 				             endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_REMINDER:
-				text = i18n("Cannot defer past the alarm's next reminder (currently %1)",
+				text = i18nc("@info", "Cannot defer past the alarm's next reminder (currently %1)",
 				            endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_MAIN:
-				text = i18n("Cannot defer reminder past the main alarm time (%1)",
+				text = i18nc("@info", "Cannot defer reminder past the main alarm time (%1)",
 				            endTime.formatLocale());
 				break;
 			case KAEvent::LIMIT_NONE:

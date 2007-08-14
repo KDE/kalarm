@@ -50,6 +50,6 @@ void ResourceConfigWidget::loadSettings(KRES::Resource* resource)
 */
 void ResourceConfigWidget::slotNotWritable(AlarmResource* resource)
 {
-	QString text = i18n("<qt>Resource <b>%1</b> cannot be made writable since it either was not created by KAlarm, or was created by a newer version of KAlarm</qt>", resource->resourceName());
+	QString text = i18nc("@info", "Resource <resource>%1</resource> cannot be made writable since it either was not created by <application>KAlarm</application>, or was created by a newer version of <application>KAlarm</application>", resource->resourceName());
 	KMessageBox::sorry(this, text);
 }

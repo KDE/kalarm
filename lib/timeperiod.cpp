@@ -33,12 +33,9 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString TimePeriod::i18n_hours_mins()   { return i18n("hours/minutes"); }
-QString TimePeriod::i18n_Hours_Mins()   { return i18n("Hours/Minutes"); }
-QString TimePeriod::i18n_days()         { return i18n("days"); }
-QString TimePeriod::i18n_Days()         { return i18n("Days"); }
-QString TimePeriod::i18n_weeks()        { return i18n("weeks"); }
-QString TimePeriod::i18n_Weeks()        { return i18n("Weeks"); }
+QString TimePeriod::i18n_hours_mins()   { return i18nc("@item:inlistbox", "hours/minutes"); }
+QString TimePeriod::i18n_days()         { return i18nc("@item:inlistbox", "days"); }
+QString TimePeriod::i18n_weeks()        { return i18nc("@item:inlistbox", "weeks"); }
 
 static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:minutes = 99H59M
 

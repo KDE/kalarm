@@ -155,7 +155,7 @@ bool Daemon::start()
 			if (execStr.isEmpty())
 			{
 				if (!mNotFoundShown)
-					KMessageBox::error(0, i18n("Alarm daemon not found."));
+					KMessageBox::error(0, i18nc("@info", "Alarm daemon not found."));
 				mNotFoundShown = true;
 				kError() << "Daemon::startApp():" DAEMON_APP_NAME" not found";
 				return false;
@@ -241,8 +241,8 @@ void Daemon::registrationResult(bool reregister, int result)
 			// find the KAlarm executable so won't be able to restart KAlarm if
 			// KAlarm exits.
 			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call:" << KGlobal::mainComponent().aboutData()->appName() << " not found";
-			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
-			                           "(Installation or configuration error: %1 cannot locate %2 executable.)",
+			KMessageBox::error(0, i18nc("@info", "Alarms will be disabled if you stop <application>KAlarm</application>.\n"
+			                           "(Installation or configuration error: <command>%1</command> cannot locate <command>%2</command> executable.)",
 			                            QLatin1String(DAEMON_APP_NAME),
 			                            KGlobal::mainComponent().aboutData()->appName()));
 			break;
@@ -256,7 +256,7 @@ void Daemon::registrationResult(bool reregister, int result)
 				if (!mRegisterFailMsg)
 				{
 					mRegisterFailMsg = true;
-					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)",
+					KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:\nFailed to register with <application>Alarm Daemon</application> (<command>%1</command>)",
 					                            QLatin1String(DAEMON_APP_NAME)));
 				}
 			}
@@ -305,7 +305,7 @@ void Daemon::checkIfStarted()
 	if (err)
 	{
 		kError(5950) << "Daemon::checkIfStarted(): failed to start daemon";
-		KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to start Alarm Daemon (%1)", QLatin1String(DAEMON_APP_NAME)));
+		KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:\nFailed to start <application>Alarm Daemon</application> (<command>%1</command>)", QLatin1String(DAEMON_APP_NAME)));
 	}
 }
 
@@ -791,7 +791,7 @@ void NotificationHandler::cacheDownloaded(const QString& resourceID)
 =============================================================================*/
 
 AlarmEnableAction::AlarmEnableAction(QObject* parent)
-	: KToggleAction(i18n("Enable &Alarms"), parent),
+	: KToggleAction(i18nc("@action", "Enable &Alarms"), parent),
 	  mInitialised(false)
 {
 	setCheckedActual(false);    // set the correct text

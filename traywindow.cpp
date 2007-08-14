@@ -75,7 +75,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mIconEnabled  = loadIcon("kalarm");
 	mIconDisabled = loadIcon("kalarm_disabled");
 	if (mIconEnabled.isNull() || mIconDisabled.isNull())
-		KMessageBox::sorry(parent, i18n("Cannot load system tray icon."));
+		KMessageBox::sorry(parent, i18nc("@info", "Cannot load system tray icon."));
 #ifdef __GNUC__
 #warning How to implement drag-and-drop?
 #endif
@@ -88,12 +88,12 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	contextMenu()->addAction(a);
 	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
 
-	mActionNew = new NewAlarmAction(false, i18n("&New Alarm"), this);
+	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
 	actions->addAction(QLatin1String("tNew"), mActionNew);
 	contextMenu()->addAction(mActionNew);
 	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNewAlarm(KAEvent::Action)));
 
-	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18n("New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
+	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
@@ -238,7 +238,7 @@ bool TrayWindow::event(QEvent* e)
 	if (Daemon::monitoringAlarms())
 		text = KGlobal::mainComponent().aboutData()->programName();
 	else
-		text = i18n("%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
+		text = i18nc("@info", "%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
 	kDebug(5950) << "TrayWindow::event():" << text;
 	if (Preferences::tooltipAlarmCount())
 		tooltipAlarmText(text);
@@ -291,9 +291,9 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
 				if (Preferences::showTooltipAlarmTime())
-					item.text += i18nc("prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
+					item.text += i18nc("@info:tooltip\nprefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
 				else
-					item.text += i18nc("prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
+					item.text += i18nc("@info:tooltip\nprefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
 				item.text += QLatin1Char(' ');
 				space = true;
 			}

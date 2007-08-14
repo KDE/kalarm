@@ -716,20 +716,20 @@ void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, 
 		{
 			case ERR_ADD:
 			case ERR_MODIFY:
-				errmsg = (nAlarms > 1) ? i18n("Error saving alarms")
-				                       : i18n("Error saving alarm");
+				errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving alarms")
+				                       : i18nc("@info", "Error saving alarm");
 				break;
 			case ERR_DELETE:
-				errmsg = (nAlarms > 1) ? i18n("Error deleting alarms")
-				                       : i18n("Error deleting alarm");
+				errmsg = (nAlarms > 1) ? i18nc("@info", "Error deleting alarms")
+				                       : i18nc("@info", "Error deleting alarm");
 				break;
 			case ERR_REACTIVATE:
-				errmsg = (nAlarms > 1) ? i18n("Error saving reactivated alarms")
-				                       : i18n("Error saving reactivated alarm");
+				errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving reactivated alarms")
+				                       : i18nc("@info", "Error saving reactivated alarm");
 				break;
 			case ERR_TEMPLATE:
-				errmsg = (nAlarms > 1) ? i18n("Error saving alarm templates")
-				                       : i18n("Error saving alarm template");
+				errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving alarm templates")
+				                       : i18nc("@info", "Error saving alarm template");
 				break;
 		}
 		KMessageBox::error(parent, errmsg);
@@ -748,15 +748,15 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 	{
 		case ERR_ADD:
 		case ERR_REACTIVATE:
-			errmsg = (nAlarms > 1) ? i18n("Unable to show alarms in KOrganizer")
-			                       : i18n("Unable to show alarm in KOrganizer");
+			errmsg = (nAlarms > 1) ? i18nc("@info", "Unable to show alarms in KOrganizer")
+			                       : i18nc("@info", "Unable to show alarm in KOrganizer");
 			break;
 		case ERR_MODIFY:
-			errmsg = i18n("Unable to update alarm in KOrganizer");
+			errmsg = i18nc("@info", "Unable to update alarm in KOrganizer");
 			break;
 		case ERR_DELETE:
-			errmsg = (nAlarms > 1) ? i18n("Unable to delete alarms from KOrganizer")
-			                       : i18n("Unable to delete alarm from KOrganizer");
+			errmsg = (nAlarms > 1) ? i18nc("@info", "Unable to delete alarms from KOrganizer")
+			                       : i18nc("@info", "Unable to delete alarm from KOrganizer");
 			break;
 		case ERR_TEMPLATE:
 			return;
@@ -1013,13 +1013,13 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
 	if (event  &&  event->action() == KAEvent::EMAIL
 	&&  Preferences::emailAddress().isEmpty())
-		KMessageBox::information(parent, i18nc("Please set the 'From' email address...",
-		                                       "%1\nPlease set it in the Preferences dialog.", KAMail::i18n_NeedFromEmailAddress()));
+		KMessageBox::information(parent, i18nc("@info\nPlease set the 'From' email address...",
+		                                       "%1\nPlease set it in the Preferences dialog.", KAMail::i18n_msg_NeedFromEmailAddress()));
 
 	if (!Daemon::monitoringAlarms())
 	{
-		if (KMessageBox::warningYesNo(parent, i18n("Alarms are currently disabled.\nDo you want to enable alarms now?"),
-		                              QString(), KGuiItem(i18n("Enable")), KGuiItem(i18n("Keep Disabled")),
+		if (KMessageBox::warningYesNo(parent, i18nc("@info", "Alarms are currently disabled.\nDo you want to enable alarms now?"),
+		                              QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
 		                              QLatin1String("EditEnableAlarms"))
 		                == KMessageBox::Yes)
 			Daemon::setAlarmsEnabled();
@@ -1085,7 +1085,7 @@ QString runKMail(bool minimise)
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
 	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
-		return i18n("Unable to start KMail\n(%1)", errmsg);
+		return i18nc("@info", "Unable to start KMail\n(%1)", errmsg);
 	return QString();
 }
 

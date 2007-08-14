@@ -133,17 +133,17 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 		case AlarmResource::ACTIVE:
 			configKey   = QString::fromLatin1("Calendar");
 			defaultFile = QString::fromLatin1("calendar.ics");
-			title       = i18n("Active Alarms");
+			title       = i18nc("@info/plain", "Active Alarms");
 			break;
 		case AlarmResource::TEMPLATE:
 			configKey   = QString::fromLatin1("TemplateCalendar");
 			defaultFile = QString::fromLatin1("template.ics");
-			title       = i18n("Alarm Templates");
+			title       = i18nc("@info/plain", "Alarm Templates");
 			break;
 		case AlarmResource::ARCHIVED:
 			configKey   = QString::fromLatin1("ExpiredCalendar");
 			defaultFile = QString::fromLatin1("expired.ics");
-			title       = i18n("Archived Alarms");
+			title       = i18nc("@info/plain", "Archived Alarms");
 			break;
 		default:
 			return 0;
@@ -157,7 +157,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 		if (!url.isValid())
 		{
 			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource():" << configKey << ": invalid name:" << fileName;
-			mConstructionError = i18n("%1: invalid calendar file name: %2", configKey, fileName);
+			mConstructionError = i18nc("@info", "%1: invalid calendar file name: <filename>%2</filename>", configKey, fileName);
 			return 0;
 		}
 		if (!url.isLocalFile())
@@ -165,7 +165,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 		else if (fileName == mReservedFile)
 		{
 			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource():" << configKey << ": name not allowed:" << fileName;
-			mConstructionError = i18n("%1: file name not permitted: %2", configKey, fileName);
+			mConstructionError = i18n("%1: file name not permitted: <filename>%2</filename>", configKey, fileName);
 			return 0;
 		}
 		else

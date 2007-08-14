@@ -319,7 +319,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;   option = "cancelEvent";   ++count; }
 				if (count > 1)
-					USAGE(i18n("%1, %2, %3 mutually exclusive", QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
+					USAGE(i18nc("@info/term", "<icode>%1</icode>, <icode>%2</icode>, <icode>%3</icode> mutually exclusive", QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
 				if (!initCheck(true))   // open the calendar, don't register with daemon yet
 				{
 					exitCode = 1;
@@ -351,7 +351,7 @@ int KAlarmApp::newInstance()
 				}
 				if (!KAlarm::editAlarm(eventID))
 				{
-					USAGE(i18n("%1: Event %2 not found, or not editable", QString::fromLatin1("--edit"), eventID))
+					USAGE(i18nc("@info/term", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", QString::fromLatin1("--edit"), eventID))
 					exitCode = 1;
 					break;
 				}
@@ -383,11 +383,11 @@ int KAlarmApp::newInstance()
 				{
 					kDebug(5950) << "KAlarmApp::newInstance(): file";
 					if (args->isSet("exec"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--exec"), QLatin1String("--file")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--exec"), QLatin1String("--file")))
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--mail"), QLatin1String("--file")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--mail"), QLatin1String("--file")))
 					if (args->count())
-						USAGE(i18n("message incompatible with %1", QLatin1String("--file")))
+						USAGE(i18nc("@info/term", "message incompatible with <icode>%1</icode>", QLatin1String("--file")))
 					alMessage = args->getOption("file");
 					action = KAEvent::FILE;
 				}
@@ -395,7 +395,7 @@ int KAlarmApp::newInstance()
 				{
 					kDebug(5950) << "KAlarmApp::newInstance(): exec";
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--mail"), QLatin1String("--exec")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--mail"), QLatin1String("--exec")))
 					alMessage = args->getOption("exec");
 					int n = args->count();
 					for (int i = 0;  i < n;  ++i)
@@ -417,7 +417,7 @@ int KAlarmApp::newInstance()
 					{
 						QString addr = *i;
 						if (!KAMail::checkAddress(addr))
-							USAGE(i18n("%1: invalid email address", QLatin1String("--mail")))
+							USAGE(i18nc("@info/term", "<icode>%1</icode>: invalid email address", QLatin1String("--mail")))
 						alAddresses += KCal::Person(QString(), addr);
 					}
 					params = args->getOptionList("attach");
@@ -435,13 +435,13 @@ int KAlarmApp::newInstance()
 				if (action != KAEvent::EMAIL)
 				{
 					if (args->isSet("subject"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--subject"), QLatin1String("--mail")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--subject"), QLatin1String("--mail")))
 					if (args->isSet("from-id"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--from-id"), QLatin1String("--mail")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--from-id"), QLatin1String("--mail")))
 					if (args->isSet("attach"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--attach"), QLatin1String("--mail")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--attach"), QLatin1String("--mail")))
 					if (args->isSet("bcc"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--bcc"), QLatin1String("--mail")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--bcc"), QLatin1String("--mail")))
 				}
 
 				KDateTime alarmTime, endTime;
@@ -458,7 +458,7 @@ int KAlarmApp::newInstance()
 						colourText.replace(0, 2, "#");
 					bgColour.setNamedColor(colourText);
 					if (!bgColour.isValid())
-						USAGE(i18n("Invalid %1 parameter", QLatin1String("--color")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--color")))
 				}
 				if (args->isSet("colorfg"))
 				{
@@ -468,14 +468,14 @@ int KAlarmApp::newInstance()
 						colourText.replace(0, 2, "#");
 					fgColour.setNamedColor(colourText);
 					if (!fgColour.isValid())
-						USAGE(i18n("Invalid %1 parameter", QLatin1String("--colorfg")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--colorfg")))
 				}
 
 				if (args->isSet("time"))
 				{
 					QByteArray dateTime = args->getOption("time").toLocal8Bit();
 					if (!convWakeTime(dateTime, alarmTime))
-						USAGE(i18n("Invalid %1 parameter", QLatin1String("--time")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--time")))
 				}
 				else
 					alarmTime = KDateTime::currentLocalDateTime();
@@ -484,9 +484,9 @@ int KAlarmApp::newInstance()
 				if (haveRecurrence)
 				{
 					if (args->isSet("login"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--login"), QLatin1String("--recurrence")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--login"), QLatin1String("--recurrence")))
 					if (args->isSet("until"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--until"), QLatin1String("--recurrence")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--until"), QLatin1String("--recurrence")))
 					QString rule = args->getOption("recurrence");
 					recurrence.set(rule);
 				}
@@ -495,16 +495,16 @@ int KAlarmApp::newInstance()
 					// Repeat count is specified
 					int count;
 					if (args->isSet("login"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--login"), QLatin1String("--interval")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--login"), QLatin1String("--interval")))
 					bool ok;
 					if (args->isSet("repeat"))
 					{
 						count = args->getOption("repeat").toInt(&ok);
 						if (!ok || !count || count < -1 || (count < 0 && haveRecurrence))
-							USAGE(i18n("Invalid %1 parameter", QLatin1String("--repeat")))
+							USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--repeat")))
 					}
 					else if (haveRecurrence)
-						USAGE(i18n("%1 requires %2", QLatin1String("--interval"), QLatin1String("--repeat")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--interval"), QLatin1String("--repeat")))
 					else if (args->isSet("until"))
 					{
 						count = 0;
@@ -515,13 +515,13 @@ int KAlarmApp::newInstance()
 						else
 							ok = convWakeTime(dateTime, endTime);
 						if (!ok)
-							USAGE(i18n("Invalid %1 parameter", QLatin1String("--until")))
+							USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--until")))
 						if (alarmTime.isDateOnly()  &&  !endTime.isDateOnly())
-							USAGE(i18n("Invalid %1 parameter for date-only alarm", QLatin1String("--until")))
+							USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String("--until")))
 						if (!alarmTime.isDateOnly()  &&  endTime.isDateOnly())
 							endTime.setTime(QTime(23,59,59));
 						if (endTime < alarmTime)
-							USAGE(i18n("%1 earlier than %2", QLatin1String("--until"), QLatin1String("--time")))
+							USAGE(i18nc("@info/term", "<icode>%1</icode> earlier than <icode>%2</icode>", QLatin1String("--until"), QLatin1String("--time")))
 					}
 					else
 						count = -1;
@@ -531,16 +531,16 @@ int KAlarmApp::newInstance()
 					KARecurrence::Type recurType;
 					if (!convInterval(args->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence)
 					||  interval < 0)
-						USAGE(i18n("Invalid %1 parameter", QLatin1String("--interval")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--interval")))
 					if (alarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
-						USAGE(i18n("Invalid %1 parameter for date-only alarm", QLatin1String("--interval")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String("--interval")))
 
 					if (haveRecurrence)
 					{
 						// There is a also a recurrence specified, so set up a simple repetition
 						int longestInterval = recurrence.longestInterval();
 						if (count * interval > longestInterval)
-							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval", QLatin1String("--interval"), QLatin1String("--repeat"), QLatin1String("--recurrence")));
+							USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is longer than <icode>%3</icode> interval", QLatin1String("--interval"), QLatin1String("--repeat"), QLatin1String("--recurrence")));
 						repeatCount    = count;
 						repeatInterval = interval;
 					}
@@ -554,9 +554,9 @@ int KAlarmApp::newInstance()
 				else
 				{
 					if (args->isSet("repeat"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--repeat"), QLatin1String("--interval")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--repeat"), QLatin1String("--interval")))
 					if (args->isSet("until"))
-						USAGE(i18n("%1 requires %2", QLatin1String("--until"), QLatin1String("--interval")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--until"), QLatin1String("--interval")))
 				}
 
 				QString    audioFile;
@@ -566,29 +566,29 @@ int KAlarmApp::newInstance()
 				{
 					// Play a sound with the alarm
 					if (audioRepeat  &&  args->isSet("play"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--play"), QLatin1String("--play-repeat")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--play"), QLatin1String("--play-repeat")))
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--beep"), QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--beep"), QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					if (args->isSet("speak"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--speak"), QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--speak"), QLatin1String(audioRepeat ? "--play-repeat" : "--play")))
 					audioFile = args->getOption(audioRepeat ? "play-repeat" : "play");
 					if (args->isSet("volume"))
 					{
 						bool ok;
 						int volumepc = args->getOption("volume").toInt(&ok);
 						if (!ok  ||  volumepc < 0  ||  volumepc > 100)
-							USAGE(i18n("Invalid %1 parameter", QLatin1String("--volume")))
+							USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("--volume")))
 						audioVolume = static_cast<float>(volumepc) / 100;
 					}
 				}
 				else if (args->isSet("volume"))
-					USAGE(i18n("%1 requires %2 or %3", QLatin1String("--volume"), QLatin1String("--play"), QLatin1String("--play-repeat")))
+					USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>", QLatin1String("--volume"), QLatin1String("--play"), QLatin1String("--play-repeat")))
 				if (args->isSet("speak"))
 				{
 					if (args->isSet("beep"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--beep"), QLatin1String("--speak")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--beep"), QLatin1String("--speak")))
 					if (!mSpeechEnabled)
-						USAGE(i18n("%1 requires speech synthesis to be configured using KTTSD", QLatin1String("--speak")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> requires speech synthesis to be configured using KTTSD", QLatin1String("--speak")))
 				}
 				int reminderMinutes = 0;
 				bool onceOnly = args->isSet("reminder-once");
@@ -596,12 +596,12 @@ int KAlarmApp::newInstance()
 				{
 					// Issue a reminder alarm in advance of the main alarm
 					if (onceOnly  &&  args->isSet("reminder"))
-						USAGE(i18n("%1 incompatible with %2", QLatin1String("--reminder"), QLatin1String("--reminder-once")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--reminder"), QLatin1String("--reminder-once")))
 					QString opt = onceOnly ? QLatin1String("--reminder-once") : QLatin1String("--reminder");
 					if (args->isSet("exec"))
-						USAGE(i18n("%1 incompatible with %2", opt, QLatin1String("--exec")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", opt, QLatin1String("--exec")))
 					if (args->isSet("mail"))
-						USAGE(i18n("%1 incompatible with %2", opt, QLatin1String("--mail")))
+						USAGE(i18nc("@info/term", "<icode>%1</icode> incompatible with <icode>%2</icode>", opt, QLatin1String("--mail")))
 					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
 					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit(), recurType, reminderMinutes);
@@ -611,7 +611,7 @@ int KAlarmApp::newInstance()
 						{
 							case KARecurrence::MINUTELY:
 								if (alarmTime.isDateOnly())
-									USAGE(i18n("Invalid %1 parameter for date-only alarm", opt))
+									USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter for date-only alarm", opt))
 								break;
 							case KARecurrence::DAILY:     reminderMinutes *= 1440;  break;
 							case KARecurrence::WEEKLY:    reminderMinutes *= 7*1440;  break;
@@ -619,7 +619,7 @@ int KAlarmApp::newInstance()
 						}
 					}
 					if (!ok)
-						USAGE(i18n("Invalid %1 parameter", opt))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", opt))
 				}
 
 				int lateCancel = 0;
@@ -628,10 +628,10 @@ int KAlarmApp::newInstance()
 					KARecurrence::Type recurType;
 					bool ok = convInterval(args->getOption("late-cancel").toLocal8Bit(), recurType, lateCancel, false);
 					if (!ok  ||  lateCancel <= 0)
-						USAGE(i18n("Invalid %1 parameter", QLatin1String("late-cancel")))
+						USAGE(i18nc("@info/term", "Invalid <icode>%1</icode> parameter", QLatin1String("late-cancel")))
 				}
 				else if (args->isSet("auto-close"))
-					USAGE(i18n("%1 requires %2", QLatin1String("--auto-close"), QLatin1String("--late-cancel")))
+					USAGE(i18nc("@info/term", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--auto-close"), QLatin1String("--late-cancel")))
 
 				int flags = KAEvent::DEFAULT_FONT;
 				if (args->isSet("ack-confirm"))
@@ -716,7 +716,7 @@ int KAlarmApp::newInstance()
 					usage += QLatin1String("--volume ");
 				if (!usage.isEmpty())
 				{
-					usage += i18n(": option(s) only valid with a message/%1/%2", QLatin1String("--file"), QLatin1String("--exec"));
+					usage += i18nc("@info/term", ": option(s) only valid with a message/<icode>%1</icode>/<icode>%2</icode>", QLatin1String("--file"), QLatin1String("--exec"));
 					break;
 				}
 
@@ -736,7 +736,7 @@ int KAlarmApp::newInstance()
 			// Note: we can't use args->usage() since that also quits any other
 			// running 'instances' of the program.
 			std::cerr << usage.toLocal8Bit().data()
-			          << i18n("\nUse --help to get a list of available command line options.\n").toLocal8Bit().data();
+			          << i18nc("@info/term", "\nUse --help to get a list of available command line options.\n").toLocal8Bit().data();
 			exitCode = 1;
 		}
 	}
@@ -808,7 +808,7 @@ void KAlarmApp::doQuit(QWidget* parent)
 	kDebug(5950) << "KAlarmApp::doQuit()";
 	if (mDisableAlarmsIfStopped
 	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
-	                                      i18n("Quitting will disable alarms\n(once any alarm message windows are closed)."),
+	                                      i18nc("@info", "Quitting will disable alarms\n(once any alarm message windows are closed)."),
 	                                      QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
 		return;
@@ -1761,7 +1761,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 			return tmpFile.fileName();
 	}
 
-	QStringList errmsgs(i18n("Error creating temporary script file"));
+	QStringList errmsgs(i18nc("@info", "Error creating temporary script file"));
 	MessageWin::showError(event, alarm.dateTime(), errmsgs, QLatin1String("Script"));
 	return QString();
 }
@@ -1853,12 +1853,12 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 	QString dontShowAgain;
 	if (flags & ProcData::PRE_ACTION)
 	{
-		errmsgs += i18n("Pre-alarm action:");
+		errmsgs += i18nc("@info", "Pre-alarm action:");
 		dontShowAgain = QLatin1String("Pre");
 	}
 	else if (flags & ProcData::POST_ACTION)
 	{
-		errmsgs += i18n("Post-alarm action:");
+		errmsgs += i18nc("@info", "Post-alarm action:");
 		dontShowAgain = QLatin1String("Post");
 	}
 	else

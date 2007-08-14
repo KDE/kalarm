@@ -63,7 +63,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
         setButtons(Close);
         setDefaultButton(Ok);
         setModal(false);
-        setCaption(i18nc("@title", "Alarm Templates"));
+        setCaption(i18nc("@title:window", "Alarm Templates"));
         showButtonSeparator(true);
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
 	topLayout->setMargin(0);
@@ -78,37 +78,37 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	mListView->setModel(mListFilterModel);
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
 	mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	mListView->setWhatsThis(i18n("The list of alarm templates"));
+	mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	layout->addWidget(mListView);
 
 	layout = new QVBoxLayout();
 	layout->setMargin(0);
 	topLayout->addLayout(layout);
-	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
+	QPushButton* button = new QPushButton(i18nc("@action:button", "&New..."), topWidget);
 	button->setFixedSize(button->sizeHint());
-	mNewAction = new NewAlarmAction(true, i18n("&New"), this);
+	mNewAction = new NewAlarmAction(true, i18nc("@action", "&New"), this);
 	button->setMenu(mNewAction->menu());
 	connect(mNewAction, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
-	button->setWhatsThis(i18n("Create a new alarm template"));
+	button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
 	layout->addWidget(button);
 
-	mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
+	mEditButton = new QPushButton(i18nc("@action:button", "&Edit..."), topWidget);
 	mEditButton->setFixedSize(mEditButton->sizeHint());
 	connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
-	mEditButton->setWhatsThis(i18n("Edit the currently highlighted alarm template"));
+	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
 	layout->addWidget(mEditButton);
 
-	mCopyButton = new QPushButton(i18n("Co&py"), topWidget);
+	mCopyButton = new QPushButton(i18nc("@action:button", "Co&py"), topWidget);
 	mCopyButton->setFixedSize(mCopyButton->sizeHint());
 	connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
-	mCopyButton->setWhatsThis(i18n("Create a new alarm template based on a copy of the currently highlighted template"));
+	mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
 	layout->addWidget(mCopyButton);
 
-	mDeleteButton = new QPushButton(i18n("&Delete"), topWidget);
+	mDeleteButton = new QPushButton(i18nc("@action:button", "&Delete"), topWidget);
 	mDeleteButton->setFixedSize(mDeleteButton->sizeHint());
 	connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
-	mDeleteButton->setWhatsThis(i18n("Delete the currently highlighted alarm template"));
+	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
 
 	KActionCollection* actions = new KActionCollection(this);
@@ -188,10 +188,10 @@ void TemplateDlg::slotDelete()
 {
 	Event::List events = mListView->selectedEvents();
 	int n = events.count();
-	if (KMessageBox::warningContinueCancel(this, i18np("Do you really want to delete the selected alarm template?",
+	if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %1 selected alarm templates?", n),
-	                                       i18np("Delete Alarm Template", "Delete Alarm Templates", n),
-	                                       KGuiItem(i18n("&Delete"), "edit-delete"))
+	                                       i18ncp("@title:window", "Delete Alarm Template", "Delete Alarm Templates", n),
+	                                       KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"))
 		    != KMessageBox::Continue)
 		return;
 

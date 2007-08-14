@@ -389,14 +389,14 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 			KAlarm::displayKOrgUpdateError(parent, errcode, UndoItem::mRestoreWarningCount);
 			return true;
 		}
-		case UndoItem::ERR_NOT_FOUND:  err = i18n("Alarm not found");  break;
-		case UndoItem::ERR_CREATE:     err = i18n("Error recreating alarm");  break;
-		case UndoItem::ERR_TEMPLATE:   err = i18n("Error recreating alarm template");  break;
-		case UndoItem::ERR_ARCHIVED:   err = i18n("Cannot reactivate archived alarm");  break;
-		case UndoItem::ERR_PROG:       err = i18n("Program error");  break;
-		default:                       err = i18n("Unknown error");  break;
+		case UndoItem::ERR_NOT_FOUND:  err = i18nc("@info", "Alarm not found");  break;
+		case UndoItem::ERR_CREATE:     err = i18nc("@info", "Error recreating alarm");  break;
+		case UndoItem::ERR_TEMPLATE:   err = i18nc("@info", "Error recreating alarm template");  break;
+		case UndoItem::ERR_ARCHIVED:   err = i18nc("@info", "Cannot reactivate archived alarm");  break;
+		case UndoItem::ERR_PROG:       err = i18nc("@info", "Program error");  break;
+		default:                       err = i18nc("@info", "Unknown error");  break;
 	}
-	KMessageBox::sorry(parent, i18nc("Undo-action: message", "%1: %2", action, err));
+	KMessageBox::sorry(parent, i18nc("@info\nUndo-action: message", "%1: %2", action, err));
 	return false;
 }
 
@@ -632,16 +632,16 @@ QString UndoItem::addDeleteActionText(KCalEvent::Status calendar, bool add)
 	{
 		case KCalEvent::ACTIVE:
 			if (add)
-				return i18nc("Action to create a new alarm", "New alarm");
+				return i18nc("@info\nAction to create a new alarm", "New alarm");
 			else
-				return i18nc("Action to delete an alarm", "Delete alarm");
+				return i18nc("@info\nAction to delete an alarm", "Delete alarm");
 		case KCalEvent::TEMPLATE:
 			if (add)
-				return i18nc("Action to create a new alarm template", "New template");
+				return i18nc("@info\nAction to create a new alarm template", "New template");
 			else
-				return i18nc("Action to delete an alarm template", "Delete template");
+				return i18nc("@info\nAction to delete an alarm template", "Delete template");
 		case KCalEvent::ARCHIVED:
-			return i18n("Delete archived alarm");
+			return i18nc("@info", "Delete archived alarm");
 		default:
 			break;
 	}
@@ -852,7 +852,7 @@ UndoItem* UndoAdds::createRedo(Undo::List& undos)
 */
 QString UndoAdds::defaultActionText() const
 {
-	return i18n("Create multiple alarms");
+	return i18nc("@info", "Create multiple alarms");
 }
 
 
@@ -939,9 +939,9 @@ QString UndoEdit::defaultActionText() const
 	switch (calendar())
 	{
 		case KCalEvent::ACTIVE:
-			return i18nc("Action to edit an alarm", "Edit alarm");
+			return i18nc("@info\nAction to edit an alarm", "Edit alarm");
 		case KCalEvent::TEMPLATE:
-			return i18nc("Action to edit an alarm template", "Edit template");
+			return i18nc("@info\nAction to edit an alarm template", "Edit template");
 		default:
 			break;
 	}
@@ -1094,16 +1094,16 @@ QString UndoDeletes::defaultActionText() const
 		switch (mUndos[i]->calendar())
 		{
 			case KCalEvent::ACTIVE:
-				return i18n("Delete multiple alarms");
+				return i18nc("@info", "Delete multiple alarms");
 			case KCalEvent::TEMPLATE:
-				return i18n("Delete multiple templates");
+				return i18nc("@info", "Delete multiple templates");
 			case KCalEvent::ARCHIVED:
 				break;    // check if they are ALL archived
 			default:
 				return QString();
 		}
 	}
-	return i18n("Delete multiple archived alarms");
+	return i18nc("@info", "Delete multiple archived alarms");
 }
 
 
@@ -1146,7 +1146,7 @@ UndoItem* UndoReactivate::createRedo(const KAEvent& event, AlarmResource* resour
 */
 QString UndoReactivate::defaultActionText() const
 {
-	return i18n("Reactivate alarm");
+	return i18nc("@info", "Reactivate alarm");
 }
 
 
@@ -1190,7 +1190,7 @@ UndoItem* UndoDeactivate::createRedo(const KAEvent& event, AlarmResource* resour
 */
 QString UndoDeactivate::defaultActionText() const
 {
-	return i18n("Reactivate alarm");
+	return i18nc("@info", "Reactivate alarm");
 }
 
 
@@ -1213,7 +1213,7 @@ UndoItem* UndoReactivates::createRedo(Undo::List& undos)
 */
 QString UndoReactivates::defaultActionText() const
 {
-	return i18n("Reactivate multiple alarms");
+	return i18nc("@info", "Reactivate multiple alarms");
 }
 
 

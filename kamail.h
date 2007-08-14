@@ -45,7 +45,7 @@ class KAMail
 		static bool        identitiesExist();
 		static QString     controlCentreAddress();
 		static QString     getMailBody(quint32 serialNumber);
-		static QString     i18n_NeedFromEmailAddress();
+		static QString     i18n_msg_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
 	private:

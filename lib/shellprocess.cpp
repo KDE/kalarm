@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -142,12 +142,12 @@ QString ShellProcess::errorMessage() const
 	switch (mStatus)
 	{
 		case UNAUTHORISED:
-			return i18n("Failed to execute command (shell access not authorized):");
+			return i18nc("@info", "Failed to execute command (shell access not authorized):");
 		case START_FAIL:
 		case NOT_FOUND:
-			return i18n("Failed to execute command:");
+			return i18nc("@info", "Failed to execute command:");
 		case DIED:
-			return i18n("Command execution error:");
+			return i18nc("@info", "Command execution error:");
 		case INACTIVE:
 		case RUNNING:
 		case SUCCESS:

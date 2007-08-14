@@ -36,7 +36,7 @@ ResourceLocalDirConfigWidget::ResourceLocalDirConfigWidget(QWidget* parent)
 {
 	QGridLayout* layout = new QGridLayout(this);
 
-	QLabel* label = new QLabel(i18n("Location:"), this);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
 	layout->addWidget(label, 1, 0);
 	mURL = new KUrlRequester(this);
 	mURL->setMode(KFile::Directory | KFile::LocalOnly);

@@ -84,7 +84,7 @@ inline QString recurText(const KAEvent& event)
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString EditAlarmDlg::i18n_ShowInKOrganizer()   { return i18n("Show in KOrganizer"); }
+QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:check", "Show in KOrganizer"); }
 
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWidget* parent, GetResourceType getResource)
@@ -165,14 +165,14 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
 	QString caption;
 	if (mReadOnly)
-		caption = event->expired() ? i18nc("@title", "Archived Alarm") + " [" + i18n("read-only") + ']'
-		                           : i18nc("@title", "View Alarm");
+		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
+		                           : i18nc("@title:window", "View Alarm");
 	else
 		caption = type_caption(newAlarm);
 	setCaption(caption);
 	setButtons((mReadOnly ? Cancel|Try : mTemplate ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
 	setDefaultButton(mReadOnly ? Cancel : Ok);
-	setButtonText(Default, i18n("Load Template..."));
+	setButtonText(Default, i18nc("@action:button", "Load Template..."));
 	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
 	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	switch (getResource)
@@ -200,12 +200,12 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 		KHBox* box = new KHBox(mainWidget);
 		box->setMargin(0);
 		box->setSpacing(spacingHint());
-		QLabel* label = new QLabel(i18n("Template name:"), box);
+		QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"), box);
 		label->setFixedSize(label->sizeHint());
 		mTemplateName = new QLineEdit(box);
 		mTemplateName->setReadOnly(mReadOnly);
 		label->setBuddy(mTemplateName);
-		box->setWhatsThis(i18n("Enter the name of the alarm template"));
+		box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
 	mTabs = new QTabWidget(mainWidget);
@@ -213,7 +213,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 
 	KVBox* mainPageBox = new KVBox;
 	mainPageBox->setMargin(marginHint());
-	mTabs->addTab(mainPageBox, i18n("&Alarm"));
+	mTabs->addTab(mainPageBox, i18nc("@title:tab", "&Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
@@ -224,7 +224,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	// Recurrence tab
 	KVBox* recurTab = new KVBox;
 	recurTab->setMargin(marginHint());
-	mTabs->addTab(recurTab, i18n("&Recurrence"));
+	mTabs->addTab(recurTab, i18nc("@title:tab", "&Recurrence"));
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
@@ -233,7 +233,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	connect(mRecurrenceEdit, SIGNAL(repeatNeedsInitialisation()), SLOT(slotSetSubRepetition()));
 
 	// Controls specific to the alarm type
-	QGroupBox* actionBox = new QGroupBox(i18n("Action"), mainPage);
+	QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
 	topLayout->addWidget(actionBox, 1);
 	QVBoxLayout* layout = new QVBoxLayout(actionBox);
 	layout->setMargin(marginHint());
@@ -242,21 +242,21 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	type_init(actionBox, layout);
 
 	// Deferred date/time: visible only for a deferred recurring event.
-	mDeferGroup = new QGroupBox(i18n("Deferred Alarm"), mainPage);
+	mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
 	topLayout->addWidget(mDeferGroup);
 	QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
 	hlayout->setMargin(marginHint());
 	hlayout->setSpacing(spacingHint());
-	QLabel* label = new QLabel(i18n("Deferred to:"), mDeferGroup);
+	QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label);
 	mDeferTimeLabel = new QLabel(mDeferGroup);
 	hlayout->addWidget(mDeferTimeLabel);
 
-	mDeferChangeButton = new QPushButton(i18n("C&hange..."), mDeferGroup);
+	mDeferChangeButton = new QPushButton(i18nc("@action:button", "C&hange..."), mDeferGroup);
 	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
 	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
-	mDeferChangeButton->setWhatsThis(i18n("Change the alarm's deferred time, or cancel the deferral"));
+	mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
 	hlayout->addWidget(mDeferChangeButton);
 //??	mDeferGroup->addSpace(0);
 
@@ -267,7 +267,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	// Date and time entry
 	if (mTemplate)
 	{
-		QGroupBox* templateTimeBox = new QGroupBox(i18n("Time"), mainPage);
+		QGroupBox* templateTimeBox = new QGroupBox(i18nc("@title:group", "Time"), mainPage);
 		hlayout->addWidget(templateTimeBox);
 		QGridLayout* grid = new QGridLayout(templateTimeBox);
 		grid->setMargin(marginHint());
@@ -275,10 +275,10 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
 
-		mTemplateDefaultTime = new RadioButton(i18n("&Default time"), templateTimeBox);
+		mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "&Default time"), templateTimeBox);
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
 		mTemplateDefaultTime->setReadOnly(mReadOnly);
-		mTemplateDefaultTime->setWhatsThis(i18n("Do not specify a start time for alarms based on this template. "
+		mTemplateDefaultTime->setWhatsThis(i18nc("@info:whatsthis", "Do not specify a start time for alarms based on this template. "
 		                                        "The normal default start time will be used."));
 		mTemplateTimeGroup->addButton(mTemplateDefaultTime);
 		grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
@@ -286,41 +286,42 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 		KHBox* box = new KHBox(templateTimeBox);
 		box->setMargin(0);
 		box->setSpacing(spacingHint());
-		mTemplateUseTime = new RadioButton(i18n("Time:"), box);
+		mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
 		mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
 		mTemplateUseTime->setReadOnly(mReadOnly);
-		mTemplateUseTime->setWhatsThis(i18n("Specify a start time for alarms based on this template."));
+		mTemplateUseTime->setWhatsThis(i18nc("@info:whatsthis", "Specify a start time for alarms based on this template."));
 		mTemplateTimeGroup->addButton(mTemplateUseTime);
 		mTemplateTime = new TimeEdit(box);
 		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
 		mTemplateTime->setReadOnly(mReadOnly);
-		mTemplateTime->setWhatsThis(QString("%1\n\n%2").arg(i18n("Enter the start time for alarms based on this template."))
+		mTemplateTime->setWhatsThis(QString("%1\n\n%2").arg(i18nc("@info:whatsthis", "Enter the start time for alarms based on this template."))
 		                                               .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
-		mTemplateAnyTime = new RadioButton(i18n("An&y time"), templateTimeBox);
+		mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "An&y time"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
-		mTemplateAnyTime->setWhatsThis(i18n("Set the '%1' option for alarms based on this template.", i18n("Any time")));
+		mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the '%1' option for alarms based on this template.", i18n("Any time")));
 		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
 		box = new KHBox(templateTimeBox);
 		box->setMargin(0);
 		box->setSpacing(spacingHint());
-		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_w_TimeFromNow(), box);
+		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_radio_TimeFromNow(), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
-		mTemplateUseTimeAfter->setWhatsThis(i18n("Set alarms based on this template to start after the specified time "
+		mTemplateUseTimeAfter->setWhatsThis(i18nc("@info:whatsthis",
+		                                          "Set alarms based on this template to start after the specified time "
 		                                         "interval from when the alarm is created."));
 		mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
 		mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, box);
 		mTemplateTimeAfter->setValue(1439);
 		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
 		mTemplateTimeAfter->setReadOnly(mReadOnly);
-		mTemplateTimeAfter->setWhatsThis(QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_TimeAfterPeriod())
+		mTemplateTimeAfter->setWhatsThis(QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_what_TimeAfterPeriod())
 		                                                    .arg(TimeSpinBox::shiftWhatsThis()));
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
@@ -329,7 +330,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18n("Time"), AlarmTimeWidget::AT_TIME, mainPage);
+		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
@@ -338,10 +339,10 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(spacingHint());
-	label = new QLabel(i18n("Recurrence:"), box);
+	label = new QLabel(i18nc("@label", "Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
-	box->setWhatsThis(i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
+	box->setWhatsThis(i18nc("@info:whatsthis", "How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
 	box->setFixedHeight(box->sizeHint().height());
 	topLayout->addWidget(box);
 
@@ -373,13 +374,13 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
-		mShowInKorganizer = new CheckBox(i18n_ShowInKOrganizer(), mainPage);
+		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
-		mShowInKorganizer->setWhatsThis(i18n("Check to copy the alarm into KOrganizer's calendar"));
+		mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
 		hlayout->addWidget(mShowInKorganizer);
 	}
 
-	setButtonWhatsThis(Ok, i18n("Schedule the alarm at the specified time."));
+	setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
 
 	// Initialise the state of all controls according to the specified event, if any
 	initValues(event);
@@ -773,11 +774,11 @@ bool EditAlarmDlg::validate()
 		QString errmsg;
 		QString name = mTemplateName->text();
 		if (name.isEmpty())
-			errmsg = i18n("You must enter a name for the alarm template");
+			errmsg = i18nc("@info", "You must enter a name for the alarm template");
 		else if (name != mSavedTemplateName)
 		{
 			if (AlarmCalendar::resources()->templateEvent(name).valid())
-				errmsg = i18n("Template name is already in use");
+				errmsg = i18nc("@info", "Template name is already in use");
 		}
 		if (!errmsg.isEmpty())
 		{
@@ -820,12 +821,12 @@ bool EditAlarmDlg::validate()
 				     || !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
-					KMessageBox::sorry(this, i18n("Recurrence has already expired"));
+					KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
 					return false;
 				}
 				if (event.workTimeOnly()  &&  !event.displayDateTime().isValid())
 				{
-					if (KMessageBox::warningContinueCancel(this, i18n("The alarm will never occur during working hours"))
+					if (KMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
 					    != KMessageBox::Continue)
 						return false;
 				}
@@ -854,8 +855,8 @@ bool EditAlarmDlg::validate()
 			{
 				mTabs->setCurrentIndex(mMainPageIndex);
 				mReminder->setFocusOnCount();
-				KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
-							     , Reminder::i18n_FirstRecurrenceOnly()));
+				KMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless '%1' is checked."
+							     , Reminder::i18n_chk_FirstRecurrenceOnly()));
 				return false;
 			}
 		}
@@ -868,14 +869,14 @@ bool EditAlarmDlg::validate()
 			}
 			if (recurEvent.repeatCount() * recurEvent.repeatInterval() >= longestRecurInterval - reminder)
 			{
-				KMessageBox::sorry(this, i18n("The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+				KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
 				return false;
 			}
 			if (recurEvent.repeatInterval() % 1440
 			&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
 			{
-				KMessageBox::sorry(this, i18n("For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+				KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
 				return false;
 			}
@@ -903,7 +904,7 @@ bool EditAlarmDlg::validate()
 		}
 		if (!mResource)
 		{
-			KMessageBox::sorry(this, i18n("You must select a resource to save the alarm in"));
+			KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
 			return false;
 		}
 	}

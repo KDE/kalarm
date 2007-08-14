@@ -51,10 +51,7 @@ class SoundDlg : public KDialog
 		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		QString        defaultDir() const    { return mDefaultDir; }
 
-		static QString i18n_SetVolume();   // plain text of Set volume checkbox
-		static QString i18n_v_SetVolume(); // text of Set volume checkbox, with 'V' shortcut
-		static QString i18n_Repeat();      // plain text of Repeat checkbox
-		static QString i18n_p_Repeat();    // text of Repeat checkbox, with 'P' shortcut
+		static QString i18n_chk_Repeat();      // text of Repeat checkbox
 
 	protected:
 		virtual void   showEvent(QShowEvent*);

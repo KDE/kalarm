@@ -302,25 +302,25 @@ void AlarmResource::doClose()
 
 QString AlarmResource::infoText() const
 {
-	QString txt = "<b>" + resourceName() + "</b>";
+	QString txt = i18nc("@info", "<resource>%1</resource>", resourceName());
 	KRES::Factory* factory = KRES::Factory::self("alarms");
-	txt += "<br>" + i18n("Resource type: %1", factory->typeName(type()));
+	txt += "<br>" + i18nc("@info", "Resource type: <resource>%1</resource>", factory->typeName(type()));
 	QString type;
 	switch (mType)
 	{
-		case ACTIVE:    type = i18n("Active alarms");  break;
-		case ARCHIVED:  type = i18n("Archived alarms");  break;
-		case TEMPLATE:  type = i18n("Alarm templates");  break;
+		case ACTIVE:    type = i18nc("@info", "Active alarms");  break;
+		case ARCHIVED:  type = i18nc("@info", "Archived alarms");  break;
+		case TEMPLATE:  type = i18nc("@info", "Alarm templates");  break;
 		default:        break;
 	}
-	txt += "<br>" + i18nc("Content type (active alarms, etc)", "Contents: %1", type);
+	txt += "<br>" + i18nc("@info\nContent type (active alarms, etc)", "Contents: <resource>%1</resource>", type);
 	txt += "<br>" + displayLocation(true);
-	type = readOnly() ? i18n("Read-only") : i18n("Read-write");
-	txt += "<br>" + i18nc("Access permissions (read-only, etc)", "Permissions: %1", type);
-	type = isActive() ? i18n("Enabled") : i18n("Disabled");
-	txt += "<br>" + i18nc("Enabled/disabled status", "Status: %1", type);
-	type = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18n("Yes") : i18n("No");
-	txt += "<br>" + i18n("Default resource: %1", type);
+	type = readOnly() ? i18nc("@info", "Read-only") : i18nc("@info", "Read-write");
+	txt += "<br>" + i18nc("@info\nAccess permissions (read-only, etc)", "Permissions: <resource>%1</resource>", type);
+	type = isActive() ? i18nc("@info", "Enabled") : i18nc("@info", "Disabled");
+	txt += "<br>" + i18nc("@info\nEnabled/disabled status", "Status: <resource>%1</resource>", type);
+	type = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info", "Yes") : i18nc("@info", "No");
+	txt += "<br>" + i18nc("@info", "Default resource: <resource>%1</resource>", type);
 	return txt;
 }
 

@@ -41,7 +41,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 {
 	QWidget* topWidget = new QWidget(this);
 	setMainWidget(topWidget);
-	setCaption(i18nc("@title", "Choose Alarm Template"));
+	setCaption(i18nc("@title:window", "Choose Alarm Template"));
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
 	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
@@ -56,7 +56,7 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 	mListView->setModel(mListFilterModel);
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
 	mListView->setSelectionMode(QAbstractItemView::SingleSelection);
-	mListView->setWhatsThis(i18n("Select a template to base the new alarm on."));
+	mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotOk()));
 	topLayout->addWidget(mListView);

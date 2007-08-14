@@ -67,7 +67,7 @@ class EditAlarmDlg : public KDialog
 		bool            getEvent(KAEvent&, AlarmResource*&);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText()) = 0;
 
-		static QString  i18n_ShowInKOrganizer();   // plain text of 'Show in KOrganizer' checkbox
+		static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
 	protected:
 		EditAlarmDlg(bool Template, KAEvent::Action, bool newAlarm, QWidget* parent = 0,

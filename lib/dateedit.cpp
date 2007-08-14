@@ -79,7 +79,7 @@ void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const 
 	if (errString.isNull())
 	{
 		if (limit == QDate::currentDate())
-			errString = i18n("today");
+			errString = i18nc("@info", "today");
 		else
 			errString = KGlobal::locale()->formatDate(limit, KLocale::ShortDate);
 		errString = defaultError.subs(errString).toString();

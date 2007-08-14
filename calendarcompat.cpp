@@ -90,15 +90,15 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 	if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
 	{
 		QString msg = (conv == AlarmResource::PROMPT)
-		            ? i18n("Resource <b>%1</b> is in an old format (KAlarm version %2), and will be read-only unless "
+		            ? i18nc("@info", "Resource <resource>%1</resource> is in an old format (KAlarm version %2), and will be read-only unless "
 		                   "you choose to update it to the current format.", resource->resourceName(), versionString)
-		            : i18n("Some or all of the alarms in resource <b>%1</b> are in an old KAlarm format, and will be read-only unless "
+		            : i18nc("@info", "Some or all of the alarms in resource <resource>%1</resource> are in an old KAlarm format, and will be read-only unless "
 		                   "you choose to update them to the current format.", resource->resourceName());
 		if (KMessageBox::warningYesNo(0,
-		      i18n("<qt>%1<br><br>"
-		           "WARNING: Do not update the resource if it is shared with other users who run an older version "
-		           "of KAlarm. If you do so, they may be unable to use it any more.<br><br>"
-		           "Do you wish to update the resource?</qt>", msg))
+		      i18nc("@info", "<para>%1</para><para>"
+		           "<warning>Do not update the resource if it is shared with other users who run an older version "
+		           "of KAlarm. If you do so, they may be unable to use it any more.</warning></para>"
+		           "<para>Do you wish to update the resource?</para>", msg))
 		    != KMessageBox::Yes)
 			return KCalendar::Convertible;
 	}

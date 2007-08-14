@@ -48,10 +48,7 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString SoundDlg::i18n_SetVolume()   { return i18n("Set volume"); }
-QString SoundDlg::i18n_v_SetVolume() { return i18n("Set &volume"); }
-QString SoundDlg::i18n_Repeat()      { return i18n("Repeat"); }
-QString SoundDlg::i18n_p_Repeat()    { return i18n("Re&peat"); }
+QString SoundDlg::i18n_chk_Repeat()      { return i18nc("@option:check", "Repeat"); }
 
 static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
@@ -81,30 +78,30 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFilePlay->setIcon(SmallIcon("media-playback-start"));
 	mFilePlay->setFixedSize(mFilePlay->sizeHint());
 	connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
-	mFilePlay->setToolTip(i18n("Test the sound"));
-	mFilePlay->setWhatsThis(i18n("Play the selected sound file."));
+	mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
+	mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
 
 	// File name edit box
 	mFileEdit = new LineEdit(LineEdit::Url, box);
 	mFileEdit->setAcceptDrops(true);
-	mFileEdit->setWhatsThis(i18n("Enter the name or URL of a sound file to play."));
+	mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
 
 	// File browse button
 	mFileBrowseButton = new PushButton(box);
 	mFileBrowseButton->setIcon(SmallIcon("document-open"));
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
-	mFileBrowseButton->setToolTip(i18n("Choose a file"));
-	mFileBrowseButton->setWhatsThis(i18n("Select a sound file to play."));
+	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
+	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a sound file to play."));
 
 	// Sound repetition checkbox
-	mRepeatCheckbox = new CheckBox(i18n_p_Repeat(), page);
+	mRepeatCheckbox = new CheckBox(i18n_chk_Repeat(), page);
 	mRepeatCheckbox->setFixedSize(mRepeatCheckbox->sizeHint());
-	mRepeatCheckbox->setWhatsThis(i18n("If checked, the sound file will be played repeatedly for as long as the message is displayed."));
+	mRepeatCheckbox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
 	layout->addWidget(mRepeatCheckbox);
 
 	// Volume
-	QGroupBox* group = new QGroupBox(i18n("Volume"), page);
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Volume"), page);
 	layout->addWidget(group);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(marginHint());
@@ -119,24 +116,24 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	box->setMargin(0);
 	box->setSpacing(spacingHint());
 	grid->addWidget(box, 1, 0, 1, 3);
-	mVolumeCheckbox = new CheckBox(i18n_v_SetVolume(), box);
+	mVolumeCheckbox = new CheckBox(i18nc("@option:check", "Set volume"), box);
 	mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
 	connect(mVolumeCheckbox, SIGNAL(toggled(bool)), SLOT(slotVolumeToggled(bool)));
-	mVolumeCheckbox->setWhatsThis(i18n("Select to choose the volume for playing the sound file."));
+	mVolumeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to choose the volume for playing the sound file."));
 
 	// Volume slider
 	mVolumeSlider = new Slider(0, 100, 10, Qt::Horizontal, box);
 	mVolumeSlider->setTickPosition(QSlider::TicksBelow);
 	mVolumeSlider->setTickInterval(10);
 	mVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-	mVolumeSlider->setWhatsThis(i18n("Choose the volume for playing the sound file."));
+	mVolumeSlider->setWhatsThis(i18nc("@info:whatsthis", "Choose the volume for playing the sound file."));
 	mVolumeCheckbox->setFocusWidget(mVolumeSlider);
 
 	// Fade checkbox
-	mFadeCheckbox = new CheckBox(i18n("Fade"), group);
+	mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
 	mFadeCheckbox->setFixedSize(mFadeCheckbox->sizeHint());
 	connect(mFadeCheckbox, SIGNAL(toggled(bool)), SLOT(slotFadeToggled(bool)));
-	mFadeCheckbox->setWhatsThis(i18n("Select to fade the volume when the sound file first starts to play."));
+	mFadeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to fade the volume when the sound file first starts to play."));
 	grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
 
 	// Fade time
@@ -144,29 +141,29 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	mFadeBox->setMargin(0);
 	mFadeBox->setSpacing(spacingHint());
 	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
-	QLabel* label = new QLabel(i18nc("Time period over which to fade the sound", "Fade time:"), mFadeBox);
+	QLabel* label = new QLabel(i18nc("@label:spinbox\nTime period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeTime = new SpinBox(1, 999, mFadeBox);
 	mFadeTime->setSingleShiftStep(10);
 	mFadeTime->setFixedSize(mFadeTime->sizeHint());
 	label->setBuddy(mFadeTime);
-	label = new QLabel(i18n("seconds"), mFadeBox);
+	label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
-	mFadeBox->setWhatsThis(i18n("Enter how many seconds to fade the sound before reaching the set volume."));
+	mFadeBox->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to fade the sound before reaching the set volume."));
 
 	// Fade slider
 	mFadeVolumeBox = new KHBox(group);
 	mFadeVolumeBox->setMargin(0);
 	mFadeVolumeBox->setSpacing(spacingHint());
 	grid->addWidget(mFadeVolumeBox, 4, 2);
-	label = new QLabel(i18n("Initial volume:"), mFadeVolumeBox);
+	label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
 	mFadeSlider->setTickPosition(QSlider::TicksBelow);
 	mFadeSlider->setTickInterval(10);
 	mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 	label->setBuddy(mFadeSlider);
-	mFadeVolumeBox->setWhatsThis(i18n("Choose the initial volume for playing the sound file."));
+	mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
 
 	// Restore the dialogue size from last time
 	QSize s;
@@ -287,8 +284,8 @@ void SoundDlg::playSound()
 	mPlayer = Phonon::createPlayer(Phonon::NotificationCategory, mUrl);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
-	mFilePlay->setToolTip(i18n("Stop sound"));
-	mFilePlay->setWhatsThis(i18n("Stop playing the sound"));
+	mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
+	mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
 	mPlayer->play();
 }
 
@@ -300,8 +297,8 @@ void SoundDlg::playFinished()
 	delete mPlayer;   // this stops playing if not already stopped
 	mPlayer = 0;
 	mFilePlay->setIcon(SmallIcon("media-playback-start"));
-	mFilePlay->setToolTip(i18n("Test the sound"));
-	mFilePlay->setWhatsThis(i18n("Play the selected sound file."));
+	mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
+	mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
 }
 
 /******************************************************************************
@@ -339,7 +336,7 @@ bool SoundDlg::checkFile()
 		if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, this))
 			return true;
 	}
-	KMessageBox::sorry(this, i18n("File not found"));
+	KMessageBox::sorry(this, i18nc("@info", "File not found"));
 	mUrl.clear();
 	return false;
 }

@@ -60,8 +60,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
 		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent);
 
-		static QString  i18n_ConfirmAck();         // text of 'Confirm acknowledgement' checkbox
-		static QString  i18n_SpecialActions();     // text of 'Special Actions...' button
+		static QString  i18n_chk_ConfirmAck();    // text of 'Confirm acknowledgement' checkbox
 
 	protected:
 		virtual QString type_caption(bool newAlarm) const;
@@ -136,9 +135,9 @@ class EditCommandAlarmDlg : public EditAlarmDlg
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static QString  i18n_EnterScript();        // text of 'Enter a script' checkbox
-		static QString  i18n_ExecInTermWindow();   // text of 'Execute in terminal window' checkbox
-		static QString  i18n_LogToFile();          // text of 'Log to file' radio button
+		static QString  i18n_chk_EnterScript();        // text of 'Enter a script' checkbox
+		static QString  i18n_radio_ExecInTermWindow(); // text of 'Execute in terminal window' radio button
+		static QString  i18n_chk_ExecInTermWindow();   // text of 'Execute in terminal window' checkbox
 
 	protected:
 		virtual QString type_caption(bool newAlarm) const;
@@ -185,10 +184,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static QString  i18n_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
-		static QString  i18n_EmailFrom();          // text of 'From:' (email address)
-		static QString  i18n_EmailTo();            // text of 'To:' (email addressee)
-		static QString  i18n_EmailSubject();       // text of 'Subject:' (email)
+		static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
 
 	protected:
 		virtual QString type_caption(bool newAlarm) const;

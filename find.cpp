@@ -101,7 +101,7 @@ void Find::display()
 		QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
 		layout->setMargin(0);
 		layout->setSpacing(KDialog::spacingHint());
-		QGroupBox* group = new QGroupBox(i18n("Alarm Type"), kalarmWidgets);
+		QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
 		layout->addWidget(group);
 		QGridLayout* grid = new QGridLayout(group);
 		grid->setMargin(KDialog::marginHint());
@@ -109,14 +109,14 @@ void Find::display()
 		grid->setColumnStretch(1, 1);
 
 		// Live & archived alarm selection
-		mLive = new QCheckBox(i18n("Acti&ve"), group);
+		mLive = new QCheckBox(i18nc("@option:check", "Active"), group);
 		mLive->setFixedSize(mLive->sizeHint());
-		mLive->setWhatsThis(i18n("Check to include active alarms in the search."));
+		mLive->setWhatsThis(i18nc("@info:whatsthis", "Check to include active alarms in the search."));
 		grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
 
-		mArchived = new QCheckBox(i18n("A&rchived"), group);
+		mArchived = new QCheckBox(i18nc("@option:check", "Archived"), group);
 		mArchived->setFixedSize(mArchived->sizeHint());
-		mArchived->setWhatsThis(i18n("Check to include archived alarms in the search. "
+		mArchived->setWhatsThis(i18nc("@info:whatsthis", "Check to include archived alarms in the search. "
 		                             "This option is only available if archived alarms are currently being displayed."));
 		grid->addWidget(mArchived, 1, 2, Qt::AlignLeft);
 
@@ -124,24 +124,24 @@ void Find::display()
 		grid->addWidget(mActiveArchivedSep, 2, 0, 1, 3);
 
 		// Alarm actions
-		mMessageType = new QCheckBox(i18n("Text"), group);
+		mMessageType = new QCheckBox(i18nc("@option:check", "Text"), group);
 		mMessageType->setFixedSize(mMessageType->sizeHint());
-		mMessageType->setWhatsThis(i18n("Check to include text message alarms in the search."));
+		mMessageType->setWhatsThis(i18nc("@info:whatsthis", "Check to include text message alarms in the search."));
 		grid->addWidget(mMessageType, 3, 0);
 
-		mFileType = new QCheckBox(i18n("Fi&le"), group);
+		mFileType = new QCheckBox(i18nc("@option:check", "File"), group);
 		mFileType->setFixedSize(mFileType->sizeHint());
-		mFileType->setWhatsThis(i18n("Check to include file alarms in the search."));
+		mFileType->setWhatsThis(i18nc("@info:whatsthis", "Check to include file alarms in the search."));
 		grid->addWidget(mFileType, 3, 2);
 
-		mCommandType = new QCheckBox(i18n("Co&mmand"), group);
+		mCommandType = new QCheckBox(i18nc("@option:check", "Command"), group);
 		mCommandType->setFixedSize(mCommandType->sizeHint());
-		mCommandType->setWhatsThis(i18n("Check to include command alarms in the search."));
+		mCommandType->setWhatsThis(i18nc("@info:whatsthis", "Check to include command alarms in the search."));
 		grid->addWidget(mCommandType, 4, 0);
 
-		mEmailType = new QCheckBox(i18n("&Email"), group);
+		mEmailType = new QCheckBox(i18nc("@option:check", "Email"), group);
 		mEmailType->setFixedSize(mEmailType->sizeHint());
-		mEmailType->setWhatsThis(i18n("Check to include email alarms in the search."));
+		mEmailType->setWhatsThis(i18nc("@info:whatsthis", "Check to include email alarms in the search."));
 		grid->addWidget(mEmailType, 4, 2);
 
 		// Set defaults
@@ -221,7 +221,7 @@ void Find::slotFind()
 	if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
 	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL)))
 	{
-		KMessageBox::sorry(mDialog, i18n("No alarm types are selected to search"));
+		KMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
 		return;
 	}
 
@@ -349,8 +349,8 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 		// No match was found
 		if (mFound)
 		{
-			QString msg = forward ? i18n("End of alarm list reached.\nContinue from the beginning?")
-			                      : i18n("Beginning of alarm list reached.\nContinue from the end?");
+			QString msg = forward ? i18nc("@info", "End of alarm list reached.\nContinue from the beginning?")
+			                      : i18nc("@info", "Beginning of alarm list reached.\nContinue from the end?");
 			if (KMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
 			{
 				findNext(forward, false);

@@ -31,7 +31,7 @@ class Reminder : public QFrame
 {
 		Q_OBJECT
 	public:
-		Reminder(const QString& caption, const QString& reminderWhatsThis, const QString& valueWhatsThis,
+		Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
 		         bool allowHourMinute, bool showOnceOnly, QWidget* parent);
 		bool           isReminder() const;
 		bool           isOnceOnly() const;
@@ -44,7 +44,7 @@ class Reminder : public QFrame
 		void           setOnceOnly(bool);
 		void           enableOnceOnly(bool enable);
 
-		static QString i18n_FirstRecurrenceOnly();    // plain text of 'Reminder for first recurrence only' checkbox
+		static QString i18n_chk_FirstRecurrenceOnly();    // text of 'Reminder for first recurrence only' checkbox
 
 	protected slots:
 		void           slotReminderToggled(bool);

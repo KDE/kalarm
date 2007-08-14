@@ -60,7 +60,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	  mSpecialActionsButton(0)
 {
 	setObjectName("BirthdayDlg");    // used by LikeBack
-	setCaption(i18nc("@title", "Import Birthdays From KAddressBook"));
+	setCaption(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 	setButtons(Ok | Cancel);
 	setDefaultButton(Ok);
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -74,37 +74,37 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Prefix and suffix to the name in the alarm text
 	// Get default prefix and suffix texts from config file
 	KConfigGroup config(KGlobal::config(), "General");
-	mPrefixText = config.readEntry("BirthdayPrefix", i18n("Birthday: "));
+	mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
 	mSuffixText = config.readEntry("BirthdaySuffix");
 
-	QGroupBox* textGroup = new QGroupBox(i18n("Alarm Text"), topWidget);
+	QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
 	QGridLayout* grid = new QGridLayout(textGroup);
 	grid->setMargin(marginHint());
 	grid->setSpacing(spacingHint());
-	QLabel* label = new QLabel(i18n("Prefix:"), textGroup);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
 	connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	mPrefix->setWhatsThis(i18n("Enter text to appear before the person's name in the alarm message, "
+	mPrefix->setWhatsThis(i18nc("@info:whatsthis", "Enter text to appear before the person's name in the alarm message, "
 	                           "including any necessary trailing spaces."));
 	grid->addWidget(mPrefix, 0, 1);
 
-	label = new QLabel(i18n("Suffix:"), textGroup);
+	label = new QLabel(i18nc("@label:textbox", "Suffix:"), textGroup);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
 	connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	mSuffix->setWhatsThis(i18n("Enter text to appear after the person's name in the alarm message, "
+	mSuffix->setWhatsThis(i18nc("@info:whatsthis", "Enter text to appear after the person's name in the alarm message, "
 	                           "including any necessary leading spaces."));
 	grid->addWidget(mSuffix, 1, 1);
 
-	QGroupBox* group = new QGroupBox(i18n("Select Birthdays"), topWidget);
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), topWidget);
 	topLayout->addWidget(group);
 	QVBoxLayout* layout = new QVBoxLayout(group);
 	layout->setMargin(0);
@@ -126,13 +126,13 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
 	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
-	mListView->setWhatsThis(i18n("Select birthdays to set alarms for.\n"
+	mListView->setWhatsThis(i18nc("@info:whatsthis", "Select birthdays to set alarms for.\n"
 	                             "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
 	                             "You can select multiple birthdays at one time by dragging the mouse over the list, "
 	                             "or by clicking the mouse while pressing Ctrl or Shift."));
 	layout->addWidget(mListView);
 
-	group = new QGroupBox(i18n("Alarm Configuration"), topWidget);
+	group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), topWidget);
 	topLayout->addWidget(group);
 	QVBoxLayout* groupLayout = new QVBoxLayout(group);
 	groupLayout->setMargin(marginHint());
@@ -161,9 +161,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
 
 	// How much advance warning to give
-	mReminder = new Reminder(i18n("Reminder"),
-	                         i18n("Check to display a reminder in advance of the birthday."),
-	                         i18n("Enter the number of days before each birthday to display a reminder. "
+	mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of the birthday."),
+	                         i18nc("@info:whatsthis", "Enter the number of days before each birthday to display a reminder. "
 	                              "This is in addition to the alarm which is displayed on the birthday."),
 	                         false, false, group);
 	mReminder->setFixedSize(mReminder->sizeHint());
@@ -185,7 +184,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
-		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), group);
+		mSpecialActionsButton = new SpecialActionsButton(group);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
 	}
@@ -201,10 +200,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	hlayout->addStretch();
 
 	// Simple repetition button
-	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), false, group);
+	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), false, group);
 	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
 	mSubRepetition->set(0, 0, true, 364*24*60);
-	mSubRepetition->setWhatsThis(i18n("Set up an additional alarm repetition"));
+	mSubRepetition->setWhatsThis(i18nc("@info:whatsthis", "Set up an additional alarm repetition"));
 	hlayout->addWidget(mSubRepetition);
 
 	// Set the values to their defaults
@@ -231,7 +230,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 */
 void BirthdayDlg::addrBookError()
 {
-	KMessageBox::error(this, i18n("Error reading address book"));
+	KMessageBox::error(this, i18nc("@info", "Error reading address book"));
 }
 
 /******************************************************************************

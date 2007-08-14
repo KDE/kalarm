@@ -77,17 +77,14 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? 0 : mWindowList[0]; }
 		static int         count()            { return mWindowList.count(); }
 
-		static QString i18n_a_ShowAlarmTimes();     // text of 'Show Alarm Times' checkbox, with 'A' shortcut
-		static QString i18n_t_ShowAlarmTime();      // text of 'Show alarm time' checkbox, with 'T' shortcut
-		static QString i18n_m_ShowAlarmTime();      // text of 'Show alarm time' checkbox, with 'M' shortcut
-		static QString i18n_o_ShowTimeToAlarms();   // text of 'Show Time to Alarms' checkbox, with 'O' shortcut
-		static QString i18n_n_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'N' shortcut
-		static QString i18n_l_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox, with 'L' shortcut
-		static QString i18n_ShowArchivedAlarms();   // plain text of 'Show Archived Alarms' action
-		static QString i18n_e_ShowArchivedAlarms(); // text of 'Show Archived Alarms' checkbox, with 'E' shortcut
-		static QString i18n_HideArchivedAlarms();   // plain text of 'Hide Archived Alarms' action
-		static QString i18n_e_HideArchivedAlarms(); // text of 'Hide Archived Alarms' action, with 'E' shortcut
-		static QString i18n_r_ShowResources();      // text of 'Show Resources' action, with 'R' shortcut
+		static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut
+		static QString i18n_chk_ShowAlarmTime();      // text of 'Show alarm time' checkbox
+		static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
+		static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
+		static QString i18n_a_ShowArchivedAlarms();   // text of 'Show Archived Alarms' action, with 'A' shortcut
+		static QString i18n_chk_ShowArchivedAlarms(); // text of 'Show Archived Alarms' checkbox
+		static QString i18n_tip_ShowArchivedAlarms(); // text of 'Show Archived Alarms' tooltip
+		static QString i18n_tip_HideArchivedAlarms(); // text of 'Hide Archived Alarms' tooltip
 
 	public slots:
 		virtual void   show();

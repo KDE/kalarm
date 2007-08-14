@@ -37,7 +37,7 @@ ResourceLocalConfigWidget::ResourceLocalConfigWidget(QWidget* parent)
 {
 	QGridLayout* layout = new QGridLayout(this);
 
-	QLabel* label = new QLabel(i18n("Location:"), this);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
 	layout->addWidget(label, 1, 0);
 	mURL = new KUrlRequester(this);
 	layout->addWidget(mURL, 1, 1);

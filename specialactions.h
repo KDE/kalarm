@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class SpecialActionsButton : public QPushButton
 {
 		Q_OBJECT
 	public:
-		explicit SpecialActionsButton(const QString& caption, QWidget* parent = 0);
+		explicit SpecialActionsButton(QWidget* parent = 0);
 		void           setActions(const QString& pre, const QString& post);
 		const QString& preAction() const      { return mPreAction; }
 		const QString& postAction() const     { return mPostAction; }
@@ -78,7 +78,7 @@ class SpecialActionsDlg : public KDialog
 		Q_OBJECT
 	public:
 		SpecialActionsDlg(const QString& preAction, const QString& postAction,
-		                  const QString& caption, QWidget* parent = 0);
+		                  QWidget* parent = 0);
 		QString      preAction() const     { return mActions->preAction(); }
 		QString      postAction() const    { return mActions->postAction(); }
 		void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }

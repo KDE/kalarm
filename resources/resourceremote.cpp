@@ -320,5 +320,5 @@ QStringList KAResourceRemote::location() const
 QString KAResourceRemote::displayLocation(bool prefix) const
 {
 	QString loc = mDownloadUrl.prettyUrl();
-	return prefix ? i18n("URL: %1", loc) : loc;
+	return prefix ? i18nc("@info", "URL: <filename>%1</filename>", loc) : loc;
 }

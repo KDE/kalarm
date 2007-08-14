@@ -46,11 +46,11 @@ static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type 
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString SoundPicker::i18n_Sound()       { return i18nc("An audio sound", "Sound"); }
-QString SoundPicker::i18n_None()        { return i18n("None"); }
-QString SoundPicker::i18n_Beep()        { return i18n("Beep"); }
-QString SoundPicker::i18n_Speak()       { return i18n("Speak"); }
-QString SoundPicker::i18n_File()        { return i18n("Sound file"); }
+QString SoundPicker::i18n_label_Sound()   { return i18nc("@label:listbox", "Sound:"); }
+QString SoundPicker::i18n_combo_None()    { return i18nc("@item:inlistbox\nNo sound", "None"); }
+QString SoundPicker::i18n_combo_Beep()    { return i18nc("@item:inlistbox", "Beep"); }
+QString SoundPicker::i18n_combo_Speak()   { return i18nc("@item:inlistbox", "Speak"); }
+QString SoundPicker::i18n_combo_File()    { return i18nc("@item:inlistbox", "Sound file"); }
 
 
 SoundPicker::SoundPicker(QWidget* parent)
@@ -64,7 +64,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 	mTypeBox->setMargin(0);
 	mTypeBox->setSpacing(KDialog::spacingHint());
 
-	QLabel* label = new QLabel(i18nc("An audio sound", "&Sound:"), mTypeBox);
+	QLabel* label = new QLabel(i18n_label_Sound(), mTypeBox);
 	label->setFixedSize(label->sizeHint());
 
 	// Sound type combo box
@@ -78,9 +78,9 @@ SoundPicker::SoundPicker(QWidget* parent)
 	}
 
 	mTypeCombo = new ComboBox(mTypeBox);
-	mTypeCombo->addItem(i18n_None());     // index None
-	mTypeCombo->addItem(i18n_Beep());     // index Beep
-	mTypeCombo->addItem(i18n_File());     // index PlayFile
+	mTypeCombo->addItem(i18n_combo_None());     // index None
+	mTypeCombo->addItem(i18n_combo_Beep());     // index Beep
+	mTypeCombo->addItem(i18n_combo_File());     // index PlayFile
 	mSpeakShowing = !theApp()->speechEnabled();
 	showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
 	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotTypeSelected(int)));
@@ -92,8 +92,8 @@ SoundPicker::SoundPicker(QWidget* parent)
 	mFilePicker->setIcon(SmallIcon("playsound"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
-	mFilePicker->setToolTip(i18n("Configure sound file"));
-	mFilePicker->setWhatsThis(i18n("Configure a sound file to play when the alarm is displayed."));
+	mFilePicker->setToolTip(i18nc("@info:tooltip", "Configure sound file"));
+	mFilePicker->setWhatsThis(i18nc("@info:whatsthis", "Configure a sound file to play when the alarm is displayed."));
 	soundLayout->addWidget(mFilePicker);
 
 	// Initialise the file picker button state and tooltip
@@ -120,18 +120,18 @@ void SoundPicker::showSpeak(bool show)
 		show = false;    // speech capability is not installed
 	if (show == mSpeakShowing)
 		return;    // no change
-	QString whatsThis = "<p>" + i18n("Choose a sound to play when the message is displayed.")
-	                  + "<br>" + i18n("<b>%1</b>: the message is displayed silently.", i18n_None())
-	                  + "<br>" + i18n("<b>%1</b>: a simple beep is sounded.", i18n_Beep())
-	                  + "<br>" + i18n("<b>%1</b>: an audio file is played. You will be prompted to choose the file and set play options.", i18n_File());
+	QString whatsThis = "<p>" + i18nc("@info:whatsthis", "Choose a sound to play when the message is displayed.")
+	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: the message is displayed silently.", i18n_combo_None())
+	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: a simple beep is sounded.", i18n_combo_Beep())
+	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: an audio file is played. You will be prompted to choose the file and set play options.", i18n_combo_File());
 	if (!show  &&  mTypeCombo->currentIndex() == indexes[Preferences::Sound_Speak])
 		mTypeCombo->setCurrentIndex(indexes[Preferences::Sound_None]);
 	if (mTypeCombo->count() == indexes[Preferences::Sound_Speak]+1)
 		mTypeCombo->removeItem(indexes[Preferences::Sound_Speak]);    // precaution in case of mix-ups
 	if (show)
 	{
-		mTypeCombo->addItem(i18n_Speak());
-		whatsThis += "<br>" + i18n("<b>%1</b>: the message text is spoken.", i18n_Speak()) + "</p>";
+		mTypeCombo->addItem(i18n_combo_Speak());
+		whatsThis += "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: the message text is spoken.", i18n_combo_Speak());
 	}
 	mTypeBox->setWhatsThis(whatsThis + "</p>");
 	mSpeakShowing = show;
@@ -246,7 +246,7 @@ void SoundPicker::slotTypeSelected(int id)
 void SoundPicker::slotPickFile()
 {
 	KUrl file = mFile;
-	SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18n("Sound File"), this);
+	SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18nc("@title:window", "Sound File"), this);
 	dlg.setReadOnly(mReadOnly);
 	bool accepted = (dlg.exec() == QDialog::Accepted);
 	if (mReadOnly)
@@ -308,5 +308,5 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 		defaultDir = kdeSoundDir;
 	}
 	QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(" ");
-	return KAlarm::browseFile(i18n("Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
+	return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }

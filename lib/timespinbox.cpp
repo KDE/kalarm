@@ -71,7 +71,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
 
 QString TimeSpinBox::shiftWhatsThis()
 {
-	return i18n("Press the Shift key while clicking the spin buttons to adjust the time by a larger step (6 hours / 5 minutes).");
+	return i18nc("@info:whatsthis", "Press the Shift key while clicking the spin buttons to adjust the time by a larger step (6 hours / 5 minutes).");
 }
 
 QTime TimeSpinBox::time() const

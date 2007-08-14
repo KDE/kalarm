@@ -44,9 +44,9 @@ class LateCancelSelector : public QFrame
 		bool            isReadOnly() const     { return mReadOnly; }
 		void            setReadOnly(bool);
 
-		static QString  i18n_CancelIfLate();     // plain text of 'Cancel if late' checkbox
-		static QString  i18n_AutoCloseWin();     // plain text of 'Auto-close window after this time' checkbox
-		static QString  i18n_AutoCloseWinLC();   // plain text of 'Auto-close window after late-cancellation time' checkbox
+		static QString  i18n_chk_CancelIfLate();     // text of 'Cancel if late' checkbox
+		static QString  i18n_chk_AutoCloseWin();     // text of 'Auto-close window after this time' checkbox
+		static QString  i18n_chk_AutoCloseWinLC();   // text of 'Auto-close window after late-cancellation time' checkbox
 
 	private slots:
 		void            slotToggled(bool);

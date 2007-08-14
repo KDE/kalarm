@@ -100,13 +100,6 @@ class TimePeriod : public KHBox
 		 */
 		void          setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin = QString());
 
-		static QString i18n_hours_mins();  // text of 'hours/minutes' units, lower case
-		static QString i18n_Hours_Mins();  // text of 'Hours/Minutes' units, initial capitals
-		static QString i18n_days();        // text of 'days' units, lower case
-		static QString i18n_Days();        // text of 'Days' units, initial capital
-		static QString i18n_weeks();       // text of 'weeks' units, lower case
-		static QString i18n_Weeks();       // text of 'Weeks' units, initial capital
-
 	signals:
 		/** This signal is emitted whenever the value held in the widget changes.
 		 *  @param minutes The current value of the time period, expressed in minutes.
@@ -123,6 +116,10 @@ class TimePeriod : public KHBox
 		void            setUnitRange();
 		void            showHourMin(bool hourMin);
 		void            adjustDayWeekShown();
+
+		static QString i18n_hours_mins();    // text of 'hours/minutes' units
+		static QString i18n_days();          // text of 'days' units
+		static QString i18n_weeks();         // text of 'weeks' units
 
 		QStackedWidget* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
 		SpinBox*        mSpinBox;            // the days/weeks value spinbox

@@ -110,9 +110,9 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			tipText += resource->displayLocation(true);
 			bool inactive = !resource->isActive();
 			if (inactive)
-				tipText += '\n' + i18n("Disabled");
+				tipText += '\n' + i18nc("@info:tooltip", "Disabled");
 			if (resource->readOnly())
-				tipText += (inactive ? ", " : "\n") + i18n("Read-only");
+				tipText += (inactive ? ", " : "\n") + i18nc("@info:tooltip", "Read-only");
 			return tipText;
 		}
 		default:
@@ -378,7 +378,7 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 			if (resource->alarmType() == AlarmResource::ACTIVE)
 			{
 				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18n("You cannot disable your default active alarm resource."));
+				                   i18nc("@info", "You cannot disable your default active alarm resource."));
 				return false;
 
 			}
@@ -387,12 +387,12 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 				// Only allow the archived alarms standard resource to be disabled if
 				// we're not saving archived alarms.
 				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18n("You cannot disable your default archived alarm resource "
+				                   i18nc("@info", "You cannot disable your default archived alarm resource "
 				                        "while expired alarms are configured to be kept."));
 				return false;
 			}
 			if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-			                                       i18n("Do you really want to disable your default resource?"))
+			                                       i18nc("@info", "Do you really want to disable your default resource?"))
 			           == KMessageBox::Cancel)
 				return false;
 		}

@@ -300,19 +300,19 @@ QVariant EventListModel::headerData(int section, Qt::Orientation orientation, in
 			switch (section)
 			{
 				case TimeColumn:
-					return i18n("Time");
+					return i18nc("@title:column", "Time");
 				case TimeToColumn:
-					return i18n("Time To");
+					return i18nc("@title:column", "Time To");
 				case RepeatColumn:
-					return i18n("Repeat");
+					return i18nc("@title:column", "Repeat");
 				case ColourColumn:
 					return QString();
 				case TypeColumn:
 					return QString();
 				case TextColumn:
-					return i18n("Message, File or Command");
+					return i18nc("@title:column", "Message, File or Command");
 				case TemplateNameColumn:
-					return i18n("Name");
+					return i18nc("@title:column", "Name");
 			}
 		}
 		else if (role == Qt::WhatsThisRole)
@@ -576,7 +576,7 @@ KCal::Event* EventListModel::event(const QModelIndex& index)
 QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18n("Never");
+		return i18nc("@info", "Never");
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
 	QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
@@ -613,13 +613,13 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18n("Never");
+		return i18nc("@info", "Never");
 	KDateTime now = KDateTime::currentUtcDateTime();
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
 		// xgettext: no-c-format
-		return i18nc("n days", " %1d ", days);
+		return i18nc("@info\nn days", " %1d ", days);
 	}
 	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 0)
@@ -628,10 +628,10 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
 	if (mins < 24*60)
-		return i18nc("hours:minutes", " %1:%2 ", mins/60, minutes);
+		return i18nc("@info\nhours:minutes", " %1:%2 ", mins/60, minutes);
 	int days = mins / (24*60);
 	mins = mins % (24*60);
-	return i18nc("days hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
+	return i18nc("@info\ndays hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
 }
 
 /******************************************************************************
@@ -707,21 +707,21 @@ QString EventListModel::whatsThisText(int column) const
 	switch (column)
 	{
 		case TimeColumn:
-			return i18n("Next scheduled date and time of the alarm");
+			return i18nc("@info:whatsthis", "Next scheduled date and time of the alarm");
 		case TimeToColumn:
-			return i18n("How long until the next scheduled trigger of the alarm");
+			return i18nc("@info:whatsthis", "How long until the next scheduled trigger of the alarm");
 		case RepeatColumn:
-			return i18n("How often the alarm recurs");
+			return i18nc("@info:whatsthis", "How often the alarm recurs");
 		case ColourColumn:
-			return i18n("Background color of alarm message");
+			return i18nc("@info:whatsthis", "Background color of alarm message");
 		case TypeColumn:
-			return i18n("Alarm type (message, file, command or email)");
+			return i18nc("@info:whatsthis", "Alarm type (message, file, command or email)");
 		case TextColumn:
-			return i18n("Alarm message text, URL of text file to display, command to execute, or email subject line");
+			return i18nc("@info:whatsthis", "Alarm message text, URL of text file to display, command to execute, or email subject line");
 		case TemplateNameColumn:
-			return i18n("Name of the alarm template");
+			return i18nc("@info:whatsthis", "Name of the alarm template");
 		default:
-			return i18n("List of scheduled alarms");
+			return i18nc("@info:whatsthis", "List of scheduled alarms");
 	}
 }
 
