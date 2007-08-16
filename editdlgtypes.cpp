@@ -65,6 +65,9 @@
 
 using namespace KCal;
 
+enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
+
+
 /*=============================================================================
 = Class PickAlarmFileRadio
 =============================================================================*/
@@ -121,6 +124,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* 
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
+	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(new)";
 }
 
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
@@ -130,6 +134,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bo
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
+	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(event.id())";
 }
 
 /******************************************************************************
@@ -146,27 +151,25 @@ QString EditDisplayAlarmDlg::type_caption(bool newAlarm) const
 */
 void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
-	QGridLayout* grid = new QGridLayout();
-	grid->setSpacing(spacingHint());
-	frameLayout->addLayout(grid);
-	mActionGroup = new ButtonGroup(this);
-	connect(mActionGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAlarmTypeChanged(QAbstractButton*)));
-
-	// Message radio button
-	mMessageRadio = new RadioButton(i18nc("@option:radio", "Te&xt"), this);
-	mMessageRadio->setFixedSize(mMessageRadio->sizeHint());
-	mMessageRadio->setWhatsThis(i18nc("@info:whatsthis", "If checked, the alarm will display a text message."));
-	mActionGroup->addButton(mMessageRadio);
-	grid->addWidget(mMessageRadio, 1, 0);
-	grid->setColumnStretch(1, 1);
-
-	// File radio button
-	mFileRadio = new PickAlarmFileRadio(i18nc("@option:radio", "&File"), mActionGroup, this);
-	mFileRadio->setFixedSize(mFileRadio->sizeHint());
-	mFileRadio->setWhatsThis(i18nc("@info:whatsthis", "If checked, the alarm will display the contents of a text or image file."));
-	mActionGroup->addButton(mFileRadio);
-	grid->addWidget(mFileRadio, 1, 2);
-	grid->setColumnStretch(3, 1);
+	// Display type combo box
+	KHBox* box = new KHBox(parent);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
+	label->setFixedSize(label->sizeHint());
+	mTypeCombo = new ComboBox(box);
+	mTypeCombo->addItem(i18nc("@item:inlistbox", "Text message"));    // index = tTEXT
+	mTypeCombo->addItem(i18nc("@item:inlistbox", "File contents"));   // index = tFILE
+	mTypeCombo->addItem(i18nc("@item:inlistbox", "Command output"));  // index = tCOMMAND
+	mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
+	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
+	label->setBuddy(mTypeCombo);
+	box->setWhatsThis(i18nc("@info:whatsthis", "Select what the alarm should display:"
+	      "<list><item>Text message: the alarm will display the text message you type in.</item>"
+	      "<list><item>File contents: the alarm will display the contents of a text or image file.</item>"
+	      "<list><item>Command output: the alarm will display the output from a command.</item></list>"));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
+	frameLayout->addWidget(box);
 
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(parent);
@@ -188,25 +191,36 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
-	mFileRadio->init(mFileBrowseButton, mFileMessageEdit);
 
 	// Colour choice drop-down list
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
+	hlayout->setSpacing(spacingHint());
 	frameLayout->addLayout(hlayout);
-	KHBox* box;
+#if 0
 	mBgColourChoose = createBgColourChooser(&box, parent);
 //	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
 	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
 	hlayout->addWidget(box);
 	hlayout->addSpacing(2*spacingHint());
 	hlayout->addStretch();
+#endif
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(parent);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
 	hlayout->addWidget(mFontColourButton);
+
+	// Font and colour sample display
+	mFontColourSample = new QLineEdit(parent);
+	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
+	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
+	mFontColourSample->setAlignment(Qt::AlignCenter);
+	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",
+	      "This sample text illustrates the current font and color settings. "
+	      "You may edit it to test special characters."));
+	hlayout->addWidget(mFontColourSample);
 
 	// Sound checkbox and file selector
 	hlayout = new QHBoxLayout();
@@ -292,7 +306,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
-		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
+//		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
 		int reminderMins = event->reminder();
@@ -328,11 +342,11 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 				mSpecialActionsButton->setEnabled(false);
 		}
 		lateCancel()->setAutoClose(Preferences::defaultAutoClose());
-		mMessageRadio->setChecked(true);
+		mTypeCombo->setCurrentIndex(0);
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
-		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
+//		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
 		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
@@ -341,6 +355,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	}
+	slotFontColourSelected();   // set colour & font in sample widget
 
 }
 
@@ -352,14 +367,14 @@ void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& ala
 	QString text = alarmText.displayText();
 	switch (action)
 	{
-		case KAEvent::FILE:
-			mFileRadio->setChecked(true);
-			mFileMessageEdit->setText(text);
-			break;
 		case KAEvent::MESSAGE:
-			mMessageRadio->setChecked(true);
+			mTypeCombo->setCurrentIndex(tTEXT);
 			mTextMessageEdit->setPlainText(text);
 			mKMailSerialNumber = alarmText.isEmail() ? alarmText.kmailSerialNumber() : 0;
+			break;
+		case KAEvent::FILE:
+			mTypeCombo->setCurrentIndex(tFILE);
+			mFileMessageEdit->setText(text);
 			break;
 		default:
 			Q_ASSERT(0);
@@ -372,11 +387,10 @@ void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& ala
 */
 void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 {
-	mMessageRadio->setReadOnly(readOnly);
-	mFileRadio->setReadOnly(readOnly);
+	mTypeCombo->setReadOnly(readOnly);
 	mTextMessageEdit->setReadOnly(readOnly);
 	mFileMessageEdit->setReadOnly(readOnly);
-	mBgColourChoose->setReadOnly(readOnly);
+//	mBgColourChoose->setReadOnly(readOnly);
 	mFontColourButton->setReadOnly(readOnly);
 	mSoundPicker->setReadOnly(readOnly);
 	mConfirmAck->setReadOnly(readOnly);
@@ -409,7 +423,7 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 	mSavedConfirmAck  = mConfirmAck->isChecked();
 	mSavedFont        = mFontColourButton->font();
 	mSavedFgColour    = mFontColourButton->fgColour();
-	mSavedBgColour    = mBgColourChoose->color();
+	mSavedBgColour    = mFontColourButton->bgColour();
 	mSavedReminder    = reminder()->minutes();
 	mSavedOnceOnly    = reminder()->isOnceOnly();
 	mSavedAutoClose   = lateCancel()->isAutoClose();
@@ -432,7 +446,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 	||  mSavedConfirmAck != mConfirmAck->isChecked()
 	||  mSavedFont       != mFontColourButton->font()
 	||  mSavedFgColour   != mFontColourButton->fgColour()
-	||  mSavedBgColour   != mBgColourChoose->color()
+	||  mSavedBgColour   != mFontColourButton->bgColour()
 	||  mSavedReminder   != reminder()->minutes()
 	||  mSavedOnceOnly   != reminder()->isOnceOnly()
 	||  mSavedAutoClose  != lateCancel()->isAutoClose())
@@ -467,8 +481,15 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 */
 void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
 {
-	KAEvent::Action type = mFileRadio->isChecked() ? KAEvent::FILE : KAEvent::MESSAGE;
-	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),
+	KAEvent::Action type;
+	switch (mTypeCombo->currentIndex())
+	{
+		case tTEXT:  type = KAEvent::MESSAGE; break;
+		case tFILE:  type = KAEvent::FILE; break;
+		case tCOMMAND:    // not implemented yet
+		default:    type = KAEvent::MESSAGE; break;
+	}
+	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
 	          type, lateCancel, getAlarmFlags());
 	if (type == KAEvent::MESSAGE)
 	{
@@ -503,29 +524,32 @@ int EditDisplayAlarmDlg::getAlarmFlags() const
 *  Called when one of the alarm action type radio buttons is clicked,
 *  to display the appropriate set of controls for that action type.
 */
-void EditDisplayAlarmDlg::slotAlarmTypeChanged(QAbstractButton*)
+void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 {
 	QWidget* focus = 0;
-	if (mMessageRadio->isChecked())
+	switch (index)
 	{
-		mFileBox->hide();
-		mFilePadding->hide();
-		mTextMessageEdit->show();
-		mFontColourButton->show();
-		mSoundPicker->showSpeak(true);
-		setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
-		focus = mTextMessageEdit;
-	}
-	else if (mFileRadio->isChecked())
-	{
-		mTextMessageEdit->hide();
-		mFileBox->show();
-		mFilePadding->show();
-		mFontColourButton->hide();
-		mSoundPicker->showSpeak(false);
-		setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
-		mFileMessageEdit->setNoSelect();
-		focus = mFileMessageEdit;
+		case tTEXT:    // text message
+			mFileBox->hide();
+			mFilePadding->hide();
+			mTextMessageEdit->show();
+			mFontColourButton->show();
+			mSoundPicker->showSpeak(true);
+			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
+			focus = mTextMessageEdit;
+			break;
+		case tFILE:    // file contents
+			mTextMessageEdit->hide();
+			mFileBox->show();
+			mFilePadding->show();
+			mFontColourButton->hide();
+			mSoundPicker->showSpeak(false);
+			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
+			mFileMessageEdit->setNoSelect();
+			focus = mFileMessageEdit;
+			break;
+		case tCOMMAND:    // command output
+			break;
 	}
 	if (focus)
 		focus->setFocus();
@@ -546,7 +570,14 @@ void EditDisplayAlarmDlg::slotBgColourSelected(const QColor& colour)
 */
 void EditDisplayAlarmDlg::slotFontColourSelected()
 {
+#if 0
 	mBgColourChoose->setColour(mFontColourButton->bgColour());
+#endif
+	QPalette pal = mFontColourSample->palette();
+	pal.setColor(mFontColourSample->backgroundRole(), mFontColourButton->bgColour());
+	pal.setColor(mFontColourSample->foregroundRole(), mFontColourButton->fgColour());
+	mFontColourSample->setPalette(pal);
+	mFontColourSample->setFont(mFontColourButton->font());
 }
 
 /******************************************************************************
@@ -554,85 +585,93 @@ void EditDisplayAlarmDlg::slotFontColourSelected()
 */
 bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	if (mMessageRadio->isChecked())
-		result = mTextMessageEdit->toPlainText();
-	else
+	switch (mTypeCombo->currentIndex())
 	{
-		QString alarmtext = mFileMessageEdit->text().trimmed();
-		// Convert any relative file path to absolute
-		// (using home directory as the default)
-		enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
-		Err err = NONE;
-		KUrl url;
-		int i = alarmtext.indexOf(QLatin1Char('/'));
-		if (i > 0  &&  alarmtext[i - 1] == QLatin1Char(':'))
+		case tTEXT:
+			result = mTextMessageEdit->toPlainText();
+			break;
+
+		case tFILE:
 		{
-			url = alarmtext;
-			url.cleanPath();
-			alarmtext = url.prettyUrl();
-			KIO::UDSEntry uds;
-			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
-				err = NONEXISTENT;
+			QString alarmtext = mFileMessageEdit->text().trimmed();
+			// Convert any relative file path to absolute
+			// (using home directory as the default)
+			enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
+			Err err = NONE;
+			KUrl url;
+			int i = alarmtext.indexOf(QLatin1Char('/'));
+			if (i > 0  &&  alarmtext[i - 1] == QLatin1Char(':'))
+			{
+				url = alarmtext;
+				url.cleanPath();
+				alarmtext = url.prettyUrl();
+				KIO::UDSEntry uds;
+				if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+					err = NONEXISTENT;
+				else
+				{
+					KFileItem fi(uds, url);
+					if (fi.isDir())             err = DIRECTORY;
+					else if (!fi.isReadable())  err = UNREADABLE;
+				}
+			}
+			else if (alarmtext.isEmpty())
+				err = BLANK;    // blank file name
 			else
 			{
-				KFileItem fi(uds, url);
-				if (fi.isDir())             err = DIRECTORY;
-				else if (!fi.isReadable())  err = UNREADABLE;
+				// It's a local file - convert to absolute path & check validity
+				QFileInfo info(alarmtext);
+				QDir::setCurrent(QDir::homePath());
+				alarmtext = info.absoluteFilePath();
+				url.setPath(alarmtext);
+				alarmtext = QLatin1String("file:") + alarmtext;
+				if (!err)
+				{
+					if      (info.isDir())        err = DIRECTORY;
+					else if (!info.exists())      err = NONEXISTENT;
+					else if (!info.isReadable())  err = UNREADABLE;
+				}
 			}
-		}
-		else if (alarmtext.isEmpty())
-			err = BLANK;    // blank file name
-		else
-		{
-			// It's a local file - convert to absolute path & check validity
-			QFileInfo info(alarmtext);
-			QDir::setCurrent(QDir::homePath());
-			alarmtext = info.absoluteFilePath();
-			url.setPath(alarmtext);
-			alarmtext = QLatin1String("file:") + alarmtext;
 			if (!err)
 			{
-				if      (info.isDir())        err = DIRECTORY;
-				else if (!info.exists())      err = NONEXISTENT;
-				else if (!info.isReadable())  err = UNREADABLE;
+				switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
+				{
+					case KAlarm::TextFormatted:
+					case KAlarm::TextPlain:
+					case KAlarm::TextApplication:
+					case KAlarm::Image:
+						break;
+					default:
+						err = NOT_TEXT_IMAGE;
+						break;
+				}
 			}
-		}
-		if (!err)
-		{
-			switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
+			if (err  &&  showErrorMessage)
 			{
-				case KAlarm::TextFormatted:
-				case KAlarm::TextPlain:
-				case KAlarm::TextApplication:
-				case KAlarm::Image:
-					break;
-				default:
-					err = NOT_TEXT_IMAGE;
-					break;
-			}
-		}
-		if (err  &&  showErrorMessage)
-		{
-			mFileMessageEdit->setFocus();
-			QString errmsg;
-			switch (err)
-			{
-				case BLANK:
-					KMessageBox::sorry(const_cast<EditDisplayAlarmDlg*>(this), i18nc("@info", "Please select a file to display"));
+				mFileMessageEdit->setFocus();
+				QString errmsg;
+				switch (err)
+				{
+					case BLANK:
+						KMessageBox::sorry(const_cast<EditDisplayAlarmDlg*>(this), i18nc("@info", "Please select a file to display"));
+						return false;
+					case NONEXISTENT:     errmsg = i18nc("@info", "%1\nnot found", alarmtext);  break;
+					case DIRECTORY:       errmsg = i18nc("@info", "%1\nis a folder", alarmtext);  break;
+					case UNREADABLE:      errmsg = i18nc("@info", "%1\nis not readable", alarmtext);  break;
+					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "%1\nappears not to be a text or image file", alarmtext);  break;
+					case NONE:
+					default:
+						break;
+				}
+				if (KMessageBox::warningContinueCancel(const_cast<EditDisplayAlarmDlg*>(this), errmsg)
+				    == KMessageBox::Cancel)
 					return false;
-				case NONEXISTENT:     errmsg = i18nc("@info", "%1\nnot found", alarmtext);  break;
-				case DIRECTORY:       errmsg = i18nc("@info", "%1\nis a folder", alarmtext);  break;
-				case UNREADABLE:      errmsg = i18nc("@info", "%1\nis not readable", alarmtext);  break;
-				case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "%1\nappears not to be a text or image file", alarmtext);  break;
-				case NONE:
-				default:
-					break;
 			}
-			if (KMessageBox::warningContinueCancel(const_cast<EditDisplayAlarmDlg*>(this), errmsg)
-			    == KMessageBox::Cancel)
-				return false;
+			result = alarmtext;
+			break;
 		}
-		result = alarmtext;
+		case tCOMMAND:
+			break;
 	}
 	return true;
 }
@@ -658,12 +697,14 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::COMMAND, newAlarm, parent, getResource)
 {
+	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(new)";
 }
 
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
+	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(event.id())";
 }
 
 /******************************************************************************
@@ -969,6 +1010,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* pare
 	: EditAlarmDlg(Template, KAEvent::EMAIL, newAlarm, parent, getResource),
 	  mEmailRemoveButton(0)
 {
+	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(new)";
 }
 
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
@@ -976,6 +1018,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool n
 	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
 	  mEmailRemoveButton(0)
 {
+	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(event.id())";
 }
 
 /******************************************************************************

@@ -391,7 +391,7 @@ void MainWindow::initActions()
 
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
 	actions->addAction(QLatin1String("new"), mActionNew);
-	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNew(KAEvent::Action)));
+	connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));

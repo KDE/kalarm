@@ -29,26 +29,27 @@
 
 class QAbstractButton;
 class QComboBox;
+class QLineEdit;
 class KHBox;
 class EmailIdCombo;
+class CheckBox;
 class ColourCombo;
+class ComboBox;
 class FontColourButton;
 class ButtonGroup;
 class RadioButton;
-class CheckBox;
 class Reminder;
 class SoundPicker;
 class SpecialActionsButton;
 class LineEdit;
 class TextEdit;
-class PickAlarmFileRadio;
 
 
 class EditDisplayAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		enum MessageType { MESSAGE, FILE };
+//		enum MessageType { TEXT, FILE, COMMAND };
 
 		EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
@@ -77,7 +78,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
 
 	private slots:
-		void            slotAlarmTypeChanged(QAbstractButton*);
+		void            slotAlarmTypeChanged(int index);
 		void            slotFontColourSelected();
 		void            slotBgColourSelected(const QColor&);
 
@@ -85,15 +86,14 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		void            setSoundPicker();
 
 		// Display alarm options
-		ButtonGroup*        mActionGroup;
-		RadioButton*        mMessageRadio;
-		PickAlarmFileRadio* mFileRadio;
+		ComboBox*           mTypeCombo;
 		KHBox*              mFileBox;
 		KHBox*              mFilePadding;
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
-		ColourCombo*        mBgColourChoose;
+		QLineEdit*          mFontColourSample;
+//		ColourCombo*        mBgColourChoose;
 		SpecialActionsButton* mSpecialActionsButton;
 		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		bool                mReminderDeferral;
