@@ -70,10 +70,11 @@ class EditAlarmDlg : public KDialog
 		static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
 	protected:
-		EditAlarmDlg(bool Template, KAEvent::Action, bool newAlarm, QWidget* parent = 0,
+		EditAlarmDlg(bool Template, KAEvent::Action, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
-		EditAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = 0,
+		EditAlarmDlg(bool Template, const KAEvent&, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT, bool readOnly = false);
+		void            init(const KAEvent* event, bool newAlarm);
 		virtual void    resizeEvent(QResizeEvent*);
 		virtual void    showEvent(QShowEvent*);
 		virtual QString type_caption(bool newAlarm) const = 0;
@@ -112,7 +113,7 @@ class EditAlarmDlg : public KDialog
 		void            slotSetSubRepetition();
 
 	private:
-		void            init(const KAEvent* event, bool newAlarm, GetResourceType getResource);
+		void            init(const KAEvent* event, GetResourceType getResource);
 		void            initValues(const KAEvent*);
 		void            setEvent(KAEvent&, const QString& text, bool trial);
 		bool            validate();

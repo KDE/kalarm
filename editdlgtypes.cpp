@@ -119,22 +119,24 @@ QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:ch
 *   event   != to initialise the dialogue to show the specified event's data.
 */
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
-	: EditAlarmDlg(Template, KAEvent::MESSAGE, newAlarm, parent, getResource),
+	: EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource),
 	  mSpecialActionsButton(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
 	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(new)";
+	init(0, newAlarm);
 }
 
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
+	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
 	  mSpecialActionsButton(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
 	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(event.id())";
+	init(&event, newAlarm);
 }
 
 /******************************************************************************
@@ -695,16 +697,18 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 *   event   != to initialise the dialogue to show the specified event's data.
 */
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
-	: EditAlarmDlg(Template, KAEvent::COMMAND, newAlarm, parent, getResource)
+	: EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
 {
 	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(new)";
+	init(0, newAlarm);
 }
 
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
+	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
 {
 	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(event.id())";
+	init(&event, newAlarm);
 }
 
 /******************************************************************************
@@ -1007,18 +1011,20 @@ QString EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()    { return i18nc("@option
 *   event   != to initialise the dialogue to show the specified event's data.
 */
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
-	: EditAlarmDlg(Template, KAEvent::EMAIL, newAlarm, parent, getResource),
+	: EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
 	  mEmailRemoveButton(0)
 {
 	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(new)";
+	init(0, newAlarm);
 }
 
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
+	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
 	  mEmailRemoveButton(0)
 {
 	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(event.id())";
+	init(&event, newAlarm);
 }
 
 /******************************************************************************

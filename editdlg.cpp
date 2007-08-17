@@ -89,6 +89,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWidget* parent, GetResourceType getResource)
 {
+	kDebug(5950) << "EditAlarmDlg::create()";
 	switch (type)
 	{
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
@@ -119,7 +120,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool new
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialogue to show the specified event's data.
 */
-EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* parent, GetResourceType getResource)
 	: KDialog(parent),
 	  mAlarmType(action),
 	  mMainPageShown(false),
@@ -136,10 +137,10 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, bool newAlarm,
 	  mReadOnly(false),
 	  mSavedEvent(0)
 {
-	init(0, newAlarm, getResource);
+	init(0, getResource);
 }
 
-EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
+EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
 	: KDialog(parent),
 	  mAlarmType(event.action()),
@@ -157,24 +158,11 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, Q
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-	init(&event, newAlarm, getResource);
+	init(&event, getResource);
 }
 
-void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType getResource)
+void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 {
-	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
-	QString caption;
-	if (mReadOnly)
-		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
-		                           : i18nc("@title:window", "View Alarm");
-	else
-		caption = type_caption(newAlarm);
-	setCaption(caption);
-	setButtons((mReadOnly ? Cancel|Try : mTemplate ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
-	setDefaultButton(mReadOnly ? Cancel : Ok);
-	setButtonText(Default, i18nc("@action:button", "Load Template..."));
-	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
-	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	switch (getResource)
 	{
 		case RES_USE_EVENT_ID:
@@ -192,6 +180,23 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm, GetResourceType get
 			mResourceEventId.clear();
 			break;
 	}
+}
+
+void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
+{
+	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
+	QString caption;
+	if (mReadOnly)
+		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
+		                           : i18nc("@title:window", "View Alarm");
+	else
+		caption = type_caption(newAlarm);
+	setCaption(caption);
+	setButtons((mReadOnly ? Cancel|Try : mTemplate ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
+	setDefaultButton(mReadOnly ? Cancel : Ok);
+	setButtonText(Default, i18nc("@action:button", "Load Template..."));
+	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
+	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
 	KVBox* mainWidget = new KVBox(this);
 	mainWidget->setMargin(0);
 	setMainWidget(mainWidget);
