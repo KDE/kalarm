@@ -85,7 +85,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	layout = new QVBoxLayout();
 	layout->setMargin(0);
 	topLayout->addLayout(layout);
-	QPushButton* button = new QPushButton(i18nc("@action:button", "&New..."), topWidget);
+	QPushButton* button = new QPushButton(i18nc("@action:button", "&New"), topWidget);
 	button->setFixedSize(button->sizeHint());
 	mNewAction = new NewAlarmAction(true, i18nc("@action", "&New"), this);
 	button->setMenu(mNewAction->menu());

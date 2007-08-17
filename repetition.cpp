@@ -158,10 +158,9 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacing);
 
-	mTimeSelector = new TimeSelector(i18nc("@option:check\nRepeat every 10 minutes", "Repeat every"), QString(),
-	                  i18nc("@info:whatsthis", "Check to repeat the alarm each time it recurs. "
-	                       "Instead of the alarm triggering once at each recurrence, "
-	                       "this option makes the alarm trigger multiple times at each recurrence."),
+	mTimeSelector = new TimeSelector(i18nc("@option:check Repeat every 10 minutes", "Repeat every"), QString(),
+	                  i18nc("@info:whatsthis", "Instead of the alarm triggering just once at each recurrence, "
+	                       "checking this option makes the alarm trigger multiple times at each recurrence."),
 	                  i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
 	                  true, page);
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());

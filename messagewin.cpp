@@ -487,14 +487,14 @@ void MessageWin::initView()
 				grid->setMargin(KDialog::marginHint());
 				grid->setSpacing(KDialog::spacingHint());
 
-				QLabel* label = new QLabel(i18nc("@info\nEmail addressee", "To:"), frame);
+				QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailAddresses("\n"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
-				label = new QLabel(i18nc("@info\nEmail subject", "Subject:"), frame);
+				label = new QLabel(i18nc("@info Email subject", "Subject:"), frame);
 				label->setFixedSize(label->sizeHint());
 				grid->addWidget(label, 1, 0, Qt::AlignLeft);
 				label = new QLabel(mEvent.emailSubject(), frame);
@@ -611,7 +611,7 @@ void MessageWin::initView()
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
-		mKMailButton->setToolTip(i18nc("@info:tooltip\nLocate this email in KMail", "Locate in <application>KMail<application>"));
+		mKMailButton->setToolTip(i18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail<application>"));
 		mKMailButton->setWhatsThis(i18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
 	}
 	else

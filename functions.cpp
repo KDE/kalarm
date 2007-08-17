@@ -1013,7 +1013,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
 	if (event  &&  event->action() == KAEvent::EMAIL
 	&&  Preferences::emailAddress().isEmpty())
-		KMessageBox::information(parent, i18nc("@info\nPlease set the 'From' email address...",
+		KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
 		                                       "%1\nPlease set it in the Preferences dialog.", KAMail::i18n_msg_NeedFromEmailAddress()));
 
 	if (!Daemon::monitoringAlarms())
@@ -1085,7 +1085,7 @@ QString runKMail(bool minimise)
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
 	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
-		return i18nc("@info", "Unable to start KMail\n(%1)", errmsg);
+		return i18nc("@info", "Unable to start <application>KMail</application>\n(<message>%1</message>)", errmsg);
 	return QString();
 }
 

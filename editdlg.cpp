@@ -79,7 +79,10 @@ static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
 {
-	return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+	if (event.repeatCount())
+		return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+	else
+		return event.recurrenceText();
 }
 
 // Collect these widget labels together to ensure consistent wording and
@@ -347,7 +350,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	label = new QLabel(i18nc("@label", "Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
-	box->setWhatsThis(i18nc("@info:whatsthis", "How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
+	box->setWhatsThis(i18nc("@info:whatsthis", "How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition."));
 	box->setFixedHeight(box->sizeHint().height());
 	topLayout->addWidget(box);
 
@@ -860,7 +863,7 @@ bool EditAlarmDlg::validate()
 			{
 				mTabs->setCurrentIndex(mMainPageIndex);
 				mReminder->setFocusOnCount();
-				KMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless '%1' is checked."
+				KMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked."
 							     , Reminder::i18n_chk_FirstRecurrenceOnly()));
 				return false;
 			}

@@ -29,8 +29,8 @@
 
 class QFocusEvent;
 class QTreeView;
+class QLineEdit;
 class CheckBox;
-class ColourCombo;
 class FontColourButton;
 class SoundPicker;
 class SpecialActionsButton;
@@ -65,7 +65,7 @@ class BirthdayDlg : public KDialog
 		Reminder*             mReminder;
 		SoundPicker*          mSoundPicker;
 		FontColourButton*     mFontColourButton;
-		ColourCombo*          mBgColourChoose;
+		QLineEdit*            mFontColourSample;
 		CheckBox*             mConfirmAck;
 		LateCancelSelector*   mLateCancel;
 		SpecialActionsButton* mSpecialActionsButton;

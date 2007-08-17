@@ -647,7 +647,7 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 		}
 		else
 		{
-			const QString startString = i18nc("@info\nDate cannot be earlier than start date", "start date");
+			const QString startString = i18nc("@info Date cannot be earlier than start date", "start date");
 			mEndDateEdit->setMinDate(start, startString);
 			if (mExceptionDateEdit)
 				mExceptionDateEdit->setMinDate(start, startString);
@@ -1145,7 +1145,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	grid->setRowStretch(0, 1);
 	layout()->addLayout(grid);
 
-	QLabel* label = new QLabel(i18nc("@label\nOn: Tuesday", "O&n:"), this);
+	QLabel* label = new QLabel(i18nc("@label On: Tuesday", "O&n:"), this);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
 	grid->setColumnMinimumWidth(1, KDialog::spacingHint());
@@ -1292,7 +1292,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mDayButton = new RadioButton(i18nc("@option:radio\nOn day number in the month", "O&n day"), box);
+	mDayButton = new RadioButton(i18nc("@option:radio On day number in the month", "O&n day"), box);
 	mDayButton->setFixedSize(mDayButton->sizeHint());
 	mDayButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mDayButton);
@@ -1303,7 +1303,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mDayCombo->setMaxVisibleItems(11);
 	for (int i = 0;  i < 31;  ++i)
 		mDayCombo->addItem(QString::number(i + 1));
-	mDayCombo->addItem(i18nc("@item:inlistbox\nLast day of month", "Last"));
+	mDayCombo->addItem(i18nc("@item:inlistbox Last day of month", "Last"));
 	mDayCombo->setFixedSize(mDayCombo->sizeHint());
 	mDayCombo->setReadOnly(readOnly);
 	mDayCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the month on which to repeat the alarm"));
@@ -1319,7 +1319,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	box->setSpacing(KDialog::spacingHint());
 	layout()->addWidget(box);
 
-	mPosButton = new RadioButton(i18nc("@option:radio\nOn the 1st Tuesday", "On t&he"), box);
+	mPosButton = new RadioButton(i18nc("@option:radio On the 1st Tuesday", "On t&he"), box);
 	mPosButton->setFixedSize(mPosButton->sizeHint());
 	mPosButton->setReadOnly(readOnly);
 	mButtonGroup->addButton(mPosButton);
@@ -1332,14 +1332,14 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "3rd"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "4th"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "5th"));
-	mWeekCombo->addItem(i18nc("@item:inlistbox\nLast Monday in March", "Last"));
+	mWeekCombo->addItem(i18nc("@item:inlistbox Last Monday in March", "Last"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "2nd Last"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "3rd Last"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "4th Last"));
 	mWeekCombo->addItem(i18nc("@item:inlistbox", "5th Last"));
 	if (mEveryWeek)
 	{
-		mWeekCombo->addItem(i18nc("@item:inlistbox\nEvery (Monday...) in month", "Every"));
+		mWeekCombo->addItem(i18nc("@item:inlistbox Every (Monday...) in month", "Every"));
 		mWeekCombo->setMaxVisibleItems(11);
 	}
 	mWeekCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the week of the month in which to repeat the alarm"));
@@ -1497,7 +1497,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	layout()->addLayout(hlayout);
-	QLabel* label = new QLabel(i18nc("@label\nfirst week of January", "of:"), this);
+	QLabel* label = new QLabel(i18nc("@label first week of January", "of:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignLeft | Qt::AlignTop);
 
@@ -1541,9 +1541,9 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	mFeb29Label->setFixedSize(mFeb29Label->sizeHint());
 	mFeb29Combo = new ComboBox(box);
 	mFeb29Combo->setEditable(false);
-	mFeb29Combo->addItem(i18nc("@item:inlistbox\nNo date", "None"));
-	mFeb29Combo->addItem(i18nc("@item:inlistbox\n1st March (short form)", "1 Mar"));
-	mFeb29Combo->addItem(i18nc("@item:inlistbox\n28th February (short form)", "28 Feb"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox No date", "None"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox 1st March (short form)", "1 Mar"));
+	mFeb29Combo->addItem(i18nc("@item:inlistbox 28th February (short form)", "28 Feb"));
 	mFeb29Combo->setFixedSize(mFeb29Combo->sizeHint());
 	mFeb29Combo->setReadOnly(readOnly);
 	mFeb29Label->setBuddy(mFeb29Combo);

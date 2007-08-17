@@ -302,7 +302,7 @@ MiscPrefTab::MiscPrefTab()
 	grid->setColumnMinimumWidth(1, indentWidth());
 
 	// Run-on-demand radio button
-	mRunOnDemand = new QRadioButton(i18nc("@option:radio", "&Run only on demand"), group);
+	mRunOnDemand = new QRadioButton(i18nc("@option:radio", "Run only on demand"), group);
 	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
 	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
 	mRunOnDemand->setWhatsThis(
@@ -392,8 +392,7 @@ MiscPrefTab::MiscPrefTab()
 		cmd.replace("%C", "[command]");
 		cmd.replace("%W", "[command; sleep]");
 		radio->setWhatsThis(
-		        i18nc("@info:whatsthis\nThe parameter is a command line, e.g. 'xterm -e'",
-		              "Check to execute command alarms in a terminal window by '%1'", cmd));
+		        i18nc("@info:whatsthis", "Check to execute command alarms in a terminal window by <icode>%1</icode>", cmd));
 		grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);
 		++index;
 	}
@@ -456,7 +455,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 			if (KStandardDirs::findExe(cmd).isEmpty())
 			{
 				mXtermCommand->setFocus();
-				if (KMessageBox::warningContinueCancel(this, i18nc("@info", "Command to invoke terminal window not found:\n%1", cmd))
+				if (KMessageBox::warningContinueCancel(this, i18nc("@info", "Command to invoke terminal window not found:\n<command>%1</command>", cmd))
 				                != KMessageBox::Continue)
 					return;
 			}
@@ -872,7 +871,7 @@ EmailPrefTab::EmailPrefTab()
 	grid->setColumnStretch(1, 1);
 
 	// 'From' email address controls ...
-	label = new Label(i18nc("@label\n'From' email address", "From:"), group);
+	label = new Label(i18nc("@label 'From' email address", "From:"), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mFromAddressGroup = new ButtonGroup(group);
@@ -912,7 +911,7 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'Bcc' email address controls ...
 	grid->setRowMinimumHeight(4, KDialog::spacingHint());
-	label = new Label(i18nc("@label\n'Bcc' email address", "&Bcc:"), group);
+	label = new Label(i18nc("@label 'Bcc' email address", "&Bcc:"), group);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 5, 0);
 	mBccAddressGroup = new ButtonGroup(group);
@@ -1147,8 +1146,7 @@ void FontColourPrefTab::apply(bool syncToDisc)
 EditPrefTab::EditPrefTab()
 	: PrefsTabBase()
 {
-	KLocalizedString defsetting   = ki18n("The default setting for \"%1\" in the alarm edit dialog.");
-	KLocalizedString soundSetting = ki18n("Check to select %1 as the default setting for \"%2\" in the alarm edit dialog.");
+	KLocalizedString defsetting   = ki18n("The default setting for <interface>%1</interface> in the alarm edit dialog.");
 
 	// DISPLAY ALARMS
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"), this);
@@ -1204,16 +1202,16 @@ EditPrefTab::EditPrefTab()
 	hlayout->addWidget(mSound);
 	hlayout->addStretch();
 
-	mSoundRepeat = new QCheckBox(i18nc("@option:check", "Repea&t sound file"), bbox);
+	mSoundRepeat = new QCheckBox(i18nc("@option:check", "Repeat sound file"), bbox);
 	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
 	mSoundRepeat->setWhatsThis(
-	      i18nc("@info:whatsthis\nsound file \"Repeat\" checkbox", "The default setting for sound file \"%1\" in the alarm edit dialog.", SoundDlg::i18n_chk_Repeat()));
+	      i18nc("@info:whatsthis sound file 'Repeat' checkbox", "The default setting for sound file <interface>%1</interface> in the alarm edit dialog.", SoundDlg::i18n_chk_Repeat()));
 	hlayout->addWidget(mSoundRepeat);
 
 	box = new KHBox(bbox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	mSoundFileLabel = new QLabel(i18nc("@label:textbox", "Sound &file:"), box);
+	mSoundFileLabel = new QLabel(i18nc("@label:textbox", "Sound file:"), box);
 	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
 	mSoundFile = new QLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
@@ -1461,7 +1459,7 @@ QString EditPrefTab::validate()
 	if (mSound->currentIndex() == soundIndex(Preferences::Sound_File)  &&  mSoundFile->text().isEmpty())
 	{
 		mSoundFile->setFocus();
-		return i18nc("@info", "You must enter a sound file when %1 is selected as the default sound type", SoundPicker::i18n_combo_File());;
+		return i18nc("@info", "You must enter a sound file when <interface>%1</interface> is selected as the default sound type", SoundPicker::i18n_combo_File());;
 	}
 	return QString();
 }

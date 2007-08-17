@@ -74,7 +74,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Prefix and suffix to the name in the alarm text
 	// Get default prefix and suffix texts from config file
 	KConfigGroup config(KGlobal::config(), "General");
-	mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
+	mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info/plain", "Birthday: "));
 	mSuffixText = config.readEntry("BirthdaySuffix");
 
 	QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), topWidget);
@@ -89,8 +89,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
 	connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	mPrefix->setWhatsThis(i18nc("@info:whatsthis", "Enter text to appear before the person's name in the alarm message, "
-	                           "including any necessary trailing spaces."));
+	mPrefix->setWhatsThis(i18nc("@info:whatsthis",
+	      "Enter text to appear before the person's name in the alarm message, "
+	      "including any necessary trailing spaces."));
 	grid->addWidget(mPrefix, 0, 1);
 
 	label = new QLabel(i18nc("@label:textbox", "Suffix:"), textGroup);
@@ -100,8 +101,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
 	connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
-	mSuffix->setWhatsThis(i18nc("@info:whatsthis", "Enter text to appear after the person's name in the alarm message, "
-	                           "including any necessary leading spaces."));
+	mSuffix->setWhatsThis(i18nc("@info:whatsthis",
+	      "Enter text to appear after the person's name in the alarm message, "
+	      "including any necessary leading spaces."));
 	grid->addWidget(mSuffix, 1, 1);
 
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), topWidget);
@@ -126,10 +128,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
 	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
-	mListView->setWhatsThis(i18nc("@info:whatsthis", "Select birthdays to set alarms for.\n"
-	                             "This list shows all birthdays in KAddressBook except those for which alarms already exist.\n\n"
-	                             "You can select multiple birthdays at one time by dragging the mouse over the list, "
-	                             "or by clicking the mouse while pressing Ctrl or Shift."));
+	mListView->setWhatsThis(i18nc("@info:whatsthis",
+	      "Select birthdays to set alarms for.\n"
+	      "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.\n\n"
+	      "You can select multiple birthdays at one time by dragging the mouse over the list, "
+	      "or by clicking the mouse while pressing Ctrl or Shift."));
 	layout->addWidget(mListView);
 
 	group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), topWidget);
@@ -141,19 +144,24 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Colour choice drop-down list
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
-	hlayout->setSpacing(2*spacingHint());
+	hlayout->setSpacing(spacingHint());
 	groupLayout->addLayout(hlayout);
-	KHBox* box;
-	mBgColourChoose = EditDisplayAlarmDlg::createBgColourChooser(&box, group);
-	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	hlayout->addWidget(box);
-	hlayout->addStretch();
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(group);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
 	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
 	hlayout->addWidget(mFontColourButton);
+
+	// Font and colour sample display
+	mFontColourSample = new QLineEdit(group);
+	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
+	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
+	mFontColourSample->setAlignment(Qt::AlignCenter);
+	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",
+	      "This sample text illustrates the current font and color settings. "
+	      "You may edit it to test special characters."));
+	hlayout->addWidget(mFontColourSample);
 
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
@@ -209,7 +217,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
-	mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
+	slotFontColourSelected();   // set colour & font in sample widget
 	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::Days);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
@@ -259,7 +267,7 @@ QList<KAEvent> BirthdayDlg::events() const
 			date.setYMD(thisYear + 1, date.month(), date.day());
 		KAEvent event(KDateTime(date, KDateTime::ClockTime),
 			      mPrefix->text() + data->name + mSuffix->text(),
-			      mBgColourChoose->color(), mFontColourButton->fgColour(),
+			      mFontColourButton->bgColour(), mFontColourButton->fgColour(),
 			      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
 			      mFlags);
 		float fadeVolume;
@@ -351,5 +359,9 @@ void BirthdayDlg::slotBgColourSelected(const QColor& colour)
 */
 void BirthdayDlg::slotFontColourSelected()
 {
-	mBgColourChoose->setColour(mFontColourButton->bgColour());
+	QPalette pal = mFontColourSample->palette();
+	pal.setColor(mFontColourSample->backgroundRole(), mFontColourButton->bgColour());
+	pal.setColor(mFontColourSample->foregroundRole(), mFontColourButton->fgColour());
+	mFontColourSample->setPalette(pal);
+	mFontColourSample->setFont(mFontColourButton->font());
 }

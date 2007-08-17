@@ -93,7 +93,6 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
 		QLineEdit*          mFontColourSample;
-//		ColourCombo*        mBgColourChoose;
 		SpecialActionsButton* mSpecialActionsButton;
 		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		bool                mReminderDeferral;

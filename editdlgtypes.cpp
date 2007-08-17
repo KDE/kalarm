@@ -160,16 +160,20 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
 	label->setFixedSize(label->sizeHint());
 	mTypeCombo = new ComboBox(box);
-	mTypeCombo->addItem(i18nc("@item:inlistbox", "Text message"));    // index = tTEXT
-	mTypeCombo->addItem(i18nc("@item:inlistbox", "File contents"));   // index = tFILE
-	mTypeCombo->addItem(i18nc("@item:inlistbox", "Command output"));  // index = tCOMMAND
+	QString textItem    = i18nc("@item:inlistbox", "Text message");
+	QString fileItem    = i18nc("@item:inlistbox", "File contents");
+	QString commandItem = i18nc("@item:inlistbox", "Command output");
+	mTypeCombo->addItem(textItem);     // index = tTEXT
+	mTypeCombo->addItem(fileItem);     // index = tFILE
+	mTypeCombo->addItem(commandItem);  // index = tCOMMAND
 	mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
 	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
 	label->setBuddy(mTypeCombo);
-	box->setWhatsThis(i18nc("@info:whatsthis", "Select what the alarm should display:"
-	      "<list><item>Text message: the alarm will display the text message you type in.</item>"
-	      "<list><item>File contents: the alarm will display the contents of a text or image file.</item>"
-	      "<list><item>Command output: the alarm will display the output from a command.</item></list>"));
+	box->setWhatsThis(i18nc("@info:whatsthis", "<para>Select what the alarm should display:"
+	      "<list><item><interface>%1</interface>: the alarm will display the text message you type in.</item>"
+	      "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
+	      "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
+	      textItem, fileItem, commandItem));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 	frameLayout->addWidget(box);
 
@@ -199,14 +203,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	hlayout->setMargin(0);
 	hlayout->setSpacing(spacingHint());
 	frameLayout->addLayout(hlayout);
-#if 0
-	mBgColourChoose = createBgColourChooser(&box, parent);
-//	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
-	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	hlayout->addWidget(box);
-	hlayout->addSpacing(2*spacingHint());
-	hlayout->addStretch();
-#endif
 
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(parent);
@@ -572,9 +568,6 @@ void EditDisplayAlarmDlg::slotBgColourSelected(const QColor& colour)
 */
 void EditDisplayAlarmDlg::slotFontColourSelected()
 {
-#if 0
-	mBgColourChoose->setColour(mFontColourButton->bgColour());
-#endif
 	QPalette pal = mFontColourSample->palette();
 	pal.setColor(mFontColourSample->backgroundRole(), mFontColourButton->bgColour());
 	pal.setColor(mFontColourSample->foregroundRole(), mFontColourButton->fgColour());
@@ -657,10 +650,10 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 					case BLANK:
 						KMessageBox::sorry(const_cast<EditDisplayAlarmDlg*>(this), i18nc("@info", "Please select a file to display"));
 						return false;
-					case NONEXISTENT:     errmsg = i18nc("@info", "%1\nnot found", alarmtext);  break;
-					case DIRECTORY:       errmsg = i18nc("@info", "%1\nis a folder", alarmtext);  break;
-					case UNREADABLE:      errmsg = i18nc("@info", "%1\nis not readable", alarmtext);  break;
-					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "%1\nappears not to be a text or image file", alarmtext);  break;
+					case NONEXISTENT:     errmsg = i18nc("@info", "<filename>%1</filename>\nnot found", alarmtext);  break;
+					case DIRECTORY:       errmsg = i18nc("@info", "<filename>%1</filename>\nis a folder", alarmtext);  break;
+					case UNREADABLE:      errmsg = i18nc("@info", "<filename>%1</filename>\nis not readable", alarmtext);  break;
+					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "<filename>%1</filename>\nappears not to be a text or image file", alarmtext);  break;
 					case NONE:
 					default:
 						break;
@@ -953,7 +946,7 @@ void EditCommandAlarmDlg::type_trySuccessMessage(ShellProcess* proc, const QStri
 	if (mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
 	{
 		theApp()->commandMessage(proc, this);
-		KMessageBox::information(this, i18nc("@info", "Command executed:\n%1", text));
+		KMessageBox::information(this, i18nc("@info", "Command executed:\n<icode>%1</icode>", text));
 		theApp()->commandMessage(proc, 0);
 	}
 }
@@ -1052,7 +1045,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	if (Preferences::emailFrom() == Preferences::MAIL_FROM_KMAIL)
 	{
 		// Email sender identity
-		QLabel* label = new QLabel(i18nc("@label:listbox\n'From' email address", "From:"), parent);
+		QLabel* label = new QLabel(i18nc("@label:listbox 'From' email address", "From:"), parent);
 		label->setFixedSize(label->sizeHint());
 		grid->addWidget(label, 0, 0);
 
@@ -1064,7 +1057,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	}
 
 	// Email recipients
-	QLabel* label = new QLabel(i18nc("@label:textbox\nEmail addressee", "To:"), parent);
+	QLabel* label = new QLabel(i18nc("@label:textbox Email addressee", "To:"), parent);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 
@@ -1083,7 +1076,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	grid->addWidget(mEmailAddressButton, 1, 2);
 
 	// Email subject
-	label = new QLabel(i18nc("@label:textbox\nEmail subject", "Subject:"), parent);
+	label = new QLabel(i18nc("@label:textbox Email subject", "Subject:"), parent);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 2, 0);
 
@@ -1278,7 +1271,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 		if (!bad.isEmpty())
 		{
 			mEmailToEdit->setFocus();
-			KMessageBox::error(this, i18nc("@info", "Invalid email address:\n%1", bad));
+			KMessageBox::error(this, i18nc("@info", "Invalid email address:\n<email>%1</email>", bad));
 			return false;
 		}
 	}
@@ -1302,7 +1295,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 				break;      // empty
 			case -1:
 				mEmailAttachList->setFocus();
-				KMessageBox::error(this, i18nc("@info", "Invalid email attachment:\n%1", att));
+				KMessageBox::error(this, i18nc("@info", "Invalid email attachment:\n<filename>%1</filename>", att));
 				return false;
 		}
 	}
@@ -1319,7 +1312,7 @@ void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 {
 	QString bcc;
 	if (mEmailBcc->isChecked())
-		bcc = i18nc("@info", "\nBcc: %1", Preferences::emailBccAddress());
+		bcc = i18nc("@info", "\nBcc: <email>%1</email>", Preferences::emailBccAddress());
 	KMessageBox::information(this, i18nc("@info", "Email sent to:\n%1%2", mEmailAddresses.join("\n"), bcc));
 }
 

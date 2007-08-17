@@ -245,11 +245,11 @@ void AlarmText::setUpTranslations()
 {
 	if (mFromPrefix.isNull())
 	{
-		mFromPrefix    = i18nc("@info/plain\n'From' email address", "From:");
-		mToPrefix      = i18nc("@info/plain\nEmail addressee", "To:");
+		mFromPrefix    = i18nc("@info/plain 'From' email address", "From:");
+		mToPrefix      = i18nc("@info/plain Email addressee", "To:");
 		mCcPrefix      = i18nc("@info/plain", "Copy-to in email headers", "Cc:");
 		mDatePrefix    = i18nc("@info/plain", "Date:");
-		mSubjectPrefix = i18nc("@info/plain\nEmail subject", "Subject:");
+		mSubjectPrefix = i18nc("@info/plain Email subject", "Subject:");
 	}
 }
 

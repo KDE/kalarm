@@ -57,6 +57,11 @@ void FontColourButton::slotButtonPressed()
 		mFont        = dlg.font();
 		mBgColour    = dlg.bgColour();
 		mFgColour    = dlg.fgColour();
+/*		QPalette pal = mFontColourSample->palette();
+		pal.setColor(mFontColourSample->backgroundRole(), mBgColour);
+		pal.setColor(mFontColourSample->foregroundRole(), mFgColour);
+		mFontColourSample->setPalette(pal);
+		mFontColourSample->setFont(mFont);*/
 		emit selected();
 	}
 }

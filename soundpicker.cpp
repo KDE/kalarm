@@ -47,7 +47,7 @@ static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString SoundPicker::i18n_label_Sound()   { return i18nc("@label:listbox", "Sound:"); }
-QString SoundPicker::i18n_combo_None()    { return i18nc("@item:inlistbox\nNo sound", "None"); }
+QString SoundPicker::i18n_combo_None()    { return i18nc("@item:inlistbox No sound", "None"); }
 QString SoundPicker::i18n_combo_Beep()    { return i18nc("@item:inlistbox", "Beep"); }
 QString SoundPicker::i18n_combo_Speak()   { return i18nc("@item:inlistbox", "Speak"); }
 QString SoundPicker::i18n_combo_File()    { return i18nc("@item:inlistbox", "Sound file"); }
@@ -120,20 +120,32 @@ void SoundPicker::showSpeak(bool show)
 		show = false;    // speech capability is not installed
 	if (show == mSpeakShowing)
 		return;    // no change
-	QString whatsThis = "<p>" + i18nc("@info:whatsthis", "Choose a sound to play when the message is displayed.")
-	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: the message is displayed silently.", i18n_combo_None())
-	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: a simple beep is sounded.", i18n_combo_Beep())
-	                  + "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: an audio file is played. You will be prompted to choose the file and set play options.", i18n_combo_File());
 	if (!show  &&  mTypeCombo->currentIndex() == indexes[Preferences::Sound_Speak])
 		mTypeCombo->setCurrentIndex(indexes[Preferences::Sound_None]);
 	if (mTypeCombo->count() == indexes[Preferences::Sound_Speak]+1)
 		mTypeCombo->removeItem(indexes[Preferences::Sound_Speak]);    // precaution in case of mix-ups
+	QString whatsThis;
+	QString opt1 = i18nc("@info:whatsthis", "<interface>%1</interface>: the message is displayed silently.", i18n_combo_None());
+	QString opt2 = i18nc("@info:whatsthis", "<interface>%1</interface>: a simple beep is sounded.", i18n_combo_Beep());
+	QString opt3 = i18nc("@info:whatsthis", "<interface>%1</interface>: an audio file is played. You will be prompted to choose the file and set play options.", i18n_combo_File());
 	if (show)
 	{
 		mTypeCombo->addItem(i18n_combo_Speak());
-		whatsThis += "<br>" + i18nc("@info:whatsthis", "<resource>%1</resource>: the message text is spoken.", i18n_combo_Speak());
+		QString opt4 = i18nc("@info:whatsthis", "<interface>%1</interface>: the message text is spoken.", i18n_combo_Speak());
+		whatsThis = i18nc("@info:whatsthis Combination of multiple whatsthis items",
+		                  "<para>Choose a sound to play when the message is displayed:"
+		                  "<list><item>%1</item>"
+		                  "<item>%2</item>"
+		                  "<item>%3</item>"
+		                  "<item>%4</item></list></para>", opt1, opt2, opt3, opt4);
 	}
-	mTypeBox->setWhatsThis(whatsThis + "</p>");
+	else
+		whatsThis = i18nc("@info:whatsthis Combination of multiple whatsthis items",
+		                  "<para>Choose a sound to play when the message is displayed:"
+		                  "<list><item>%1</item>"
+		                  "<item>%2</item>"
+		                  "<item>%3</item></list></para>", opt1, opt2, opt3);
+	mTypeBox->setWhatsThis(whatsThis);
 	mSpeakShowing = show;
 }
 

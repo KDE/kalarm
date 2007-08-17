@@ -27,6 +27,7 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kstandardshortcut.h>
+#include <kdebug.h>
 
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
@@ -58,7 +59,10 @@ void NewAlarmAction::slotInitMenu()
 */
 void NewAlarmAction::slotSelected(QAction* action)
 {
+kDebug(5950)<<"NewAlarmAction::slotSelected()";
 	QMap<QAction*, EditAlarmDlg::Type>::const_iterator it = mTypes.find(action);
 	if (it != mTypes.end())
+{kDebug(5950)<<"NewAlarmAction::slotSelected(): emitted"<<it.value();
 		emit selected(it.value());
+}
 }

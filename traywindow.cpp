@@ -291,9 +291,9 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
 				if (Preferences::showTooltipAlarmTime())
-					item.text += i18nc("@info:tooltip\nprefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
+					item.text += i18nc("@info:tooltip prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
 				else
-					item.text += i18nc("@info:tooltip\nprefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
+					item.text += i18nc("@info:tooltip prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
 				item.text += QLatin1Char(' ');
 				space = true;
 			}

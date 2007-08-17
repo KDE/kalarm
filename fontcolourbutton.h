@@ -26,6 +26,7 @@
 #include <kdialog.h>
 #include "pushbutton.h"
 
+//class QLineEdit;
 class FontColourChooser;
 
 
@@ -54,6 +55,7 @@ class FontColourButton : public PushButton
 	private:
 		QColor    mBgColour, mFgColour;
 		QFont     mFont;
+//		QLineEdit* mFontColourSample;
 		bool      mDefaultFont;
 		bool      mReadOnly;
 };
