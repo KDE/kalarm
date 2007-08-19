@@ -174,7 +174,7 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 	{
 		// Insert "am"
 		mAmIndex = 0;
-		mAmPm->insertItem(mAmIndex, i18nc("@item:inlistbox\nMorning, as in 2am", "am"));
+		mAmPm->insertItem(mAmIndex, i18nc("@item:inlistbox Morning, as in 2am", "am"));
 		if (mPmIndex >= 0)
 			mPmIndex = 1;
 		mAmPm->setCurrentIndex(mPmIndex >= 0 ? mPmIndex : mAmIndex);
@@ -193,7 +193,7 @@ void TimeEdit::setAmPmCombo(int am, int pm)
 	{
 		// Insert "pm"
 		mPmIndex = mAmIndex + 1;
-		mAmPm->insertItem(mPmIndex, i18nc("@item:inlistbox\nAfternoon, as in 2pm", "pm"));
+		mAmPm->insertItem(mPmIndex, i18nc("@item:inlistbox Afternoon, as in 2pm", "pm"));
 		if (mAmIndex < 0)
 			mAmPm->setCurrentIndex(mPmIndex);
 	}
